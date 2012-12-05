@@ -1,0 +1,68 @@
+//oro variables
+@horizontalPadding:               20px;
+@verticalPadding:                 20px;
+@topPading:                       20px;
+@bottomPadding:                   20px;
+@marginBottomBox:                 20px;
+@generalBorderColor:              #ddd;
+@boxBackground:                   #ededed;
+// style
+header{
+  padding: @topPading @horizontalPadding 0;
+}
+footer{
+  text-align: center;
+}
+#aside{
+  padding: 0 @horizontalPadding;
+}
+#sidebar{
+  padding: 0 @horizontalPadding;
+}
+#content{
+  padding: 0 @horizontalPadding;
+}
+.one-column{
+  padding: @horizontalPadding;
+  -webkit-border-radius: @baseBorderRadius;
+  border-radius: @baseBorderRadius;
+  border: 1px solid @generalBorderColor;
+  margin:0 0 @marginBottomBox;
+}
+.row-fluid.one-column{
+  padding: 0;
+}
+#wrapper{
+  -webkit-border-radius: @baseBorderRadius;
+  border-radius: @baseBorderRadius;
+  border: 1px solid @generalBorderColor;
+  padding: @verticalPadding 0;
+  margin:0 0 @marginBottomBox;
+}
+.form-signin{
+  margin: 0 auto 20px;
+  max-width: 300px;
+  padding: 19px 29px 29px;
+  #gradient > .vertical(@navbarBackgroundHighlight, @navbarBackground);
+  border: 1px solid @navbarBorder;
+  .border-radius(@baseBorderRadius);
+  .box-shadow(0 1px 4px rgba(0,0,0,.065));
+}
+.form-pass-reset{
+  margin: 0 auto 20px;
+  max-width: 400px;
+  padding: 19px 29px 29px;
+  #gradient > .vertical(@navbarBackgroundHighlight, @navbarBackground);
+  border: 1px solid @navbarBorder;
+  .border-radius(@baseBorderRadius);
+  .box-shadow(0 1px 4px rgba(0,0,0,.065));
+}
+.form-row{
+  padding: 0 0 @marginBottomBox/2;
+}
+.small-text{
+  font-size: @fontSizeSmall;
+}
+.small-text.checkbox{
+  margin-top: 0 !important;
+}
