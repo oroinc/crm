@@ -5,7 +5,8 @@
 @bottomPadding:                   20px;
 @marginBottomBox:                 20px;
 @generalBorderColor:              #ddd;
-@boxBackground:                   #ededed;
+@widthPage:                       960px;
+@widthPopup:                      @widthPage/2;
 // style
 header{
   padding: @topPading @horizontalPadding 0;
@@ -36,7 +37,6 @@ footer{
   -webkit-border-radius: @baseBorderRadius;
   border-radius: @baseBorderRadius;
   border: 1px solid @generalBorderColor;
-  padding: @verticalPadding 0;
   margin:0 0 @marginBottomBox;
 }
 .form-signin{
@@ -65,4 +65,11 @@ footer{
 }
 .small-text.checkbox{
   margin-top: 0 !important;
+}
+.top-frame{
+  padding-top: @topPading/2;
+}
+.popup-box{
+  width: @widthPopup;
+  margin: 0 auto;
 }

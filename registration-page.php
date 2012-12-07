@@ -3,7 +3,7 @@
 <div id="page">
 
     <div id="top-page">
-        <?php include 'includes/header.php'; ?>
+        <?php include 'includes/header-simple.php'; ?>
 
         <div class="container-fluid" >
             <div class="row-fluid one-column">

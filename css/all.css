@@ -23,3 +23,13 @@ html, body{
 .checkbox{
     margin: 0;
 }
+.new-row input{
+    clear: both;
+    display: block;
+}
+.simple-page{
+    padding: 75px 0 0;
+}
+.test-box{
+    min-height: 500px;
+}

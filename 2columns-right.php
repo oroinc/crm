@@ -8,12 +8,12 @@
         <div class="container-fluid">
             <div class="row-fluid" id="wrapper">
                 <div class="span9">
-                    <div id="sidebar">
+                    <div id="content" class="test-box alert alert-block">
                         Content
                     </div>
                 </div>
                 <div class="span3">
-                    <div id="content">
+                    <div id="sidebar" class="test-box alert alert-success">
                         Sidebar
                     </div>
                 </div>

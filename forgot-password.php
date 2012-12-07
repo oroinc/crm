@@ -3,7 +3,7 @@
 <div id="page">
 
     <div id="top-page">
-        <?php include 'includes/header.php'; ?>
+        <?php include 'includes/header-simple.php'; ?>
         <div class="container">
             <form class="form-pass-reset">
                 <h2 class="form-signin-heading">Password reset Request</h2>
