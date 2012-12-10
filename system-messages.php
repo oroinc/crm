@@ -35,6 +35,116 @@
                                 <a href="#" class="btn btn-danger">Take this action</a> <a href="#" class="btn">Or do this</a>
                             </p>
                         </div>
+                        <h3>Alert messages <small>bootstrap-alert.js</small></h3>
+                        <p>Just add <code>data-dismiss="alert"</code> to your close button to automatically give an alert close functionality.</p>
+                    </div>
+                    <div class="container">
+                        <table class="table table-bordered table-striped">
+                            <thead>
+                            <tr>
+                                <th>Variable</th>
+                                <th>default</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>
+                                    <span class="">@warningText</span>
+                                </td>
+                                <td>
+                                    <code>#c09853;</code>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span class="">@warningBackground</span>
+                                </td>
+                                <td>
+                                    <code>#fcf8e3;</code>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span class="">@warningBorder</span>
+                                </td>
+                                <td>
+                                    <code>darken(spin(@warningBackground, -10), 3%);</code>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span class="">@errorText</span>
+                                </td>
+                                <td>
+                                    <code>#b94a48;</code>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span class="">@errorBackground</span>
+                                </td>
+                                <td>
+                                    <code>#f2dede;</code>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span class="">@errorBorder</span>
+                                </td>
+                                <td>
+                                    <code>darken(spin(@errorBackground, -10), 3%);</code>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span class="">@successText</span>
+                                </td>
+                                <td>
+                                    <code>#468847;</code>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span class="">@successBackground</span>
+                                </td>
+                                <td>
+                                    <code> #dff0d8;</code>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span class="">@successBorder</span>
+                                </td>
+                                <td>
+                                    <code>darken(spin(@successBackground, -10), 5%);</code>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span class="">@infoText</span>
+                                </td>
+                                <td>
+                                    <code>#3a87ad;</code>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span class="">@infoBackground</span>
+                                </td>
+                                <td>
+                                    <code>#d9edf7;</code>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span class="">@infoBorder</span>
+                                </td>
+                                <td>
+                                    <code>darken(spin(@infoBackground, -10), 7%);</code>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>

@@ -263,6 +263,46 @@
                             </div>
                         </div>
                     </div>
+                    <hr />
+                    <div class="container-fluid">
+                        <ul class="pager">
+                            <li><a href="#">Previous</a></li>
+                            <li><a href="#">Next</a></li>
+                        </ul>
+                        <ul class="pager">
+                            <li class="previous"><a href="#"><- Older</a></li>
+                            <li class="next"><a href="#">Newer -></a></li>
+                        </ul>
+                    </div>
+                    <hr />
+                    <div class="container-fluid">
+                        <div class="form-row">
+                            <h2>Buttons <small>bootstrap-button.js</small></h2>
+                            <p>Add <code>data-loading-text="Loading..."</code> to use a loading state on a button.</p>
+                            <button class="btn btn-primary" data-loading-text="loading..." id="fat-btn" type="button">Loading state</button>
+                        </div>
+                        <div class="form-row">
+                            <p>Add <code>data-toggle="button"</code> to activate toggling on a single button.</p>
+                            <button data-toggle="button" class="btn btn-primary" type="button">Single Toggle</button>
+                        </div>
+                        <div class="form-row">
+                            <p>Add <code>data-toggle="buttons-checkbox"</code> for checkbox style toggling on btn-group.</p>
+                            <div data-toggle="buttons-checkbox" class="btn-group">
+                                <button class="btn btn-primary" type="button">Left</button>
+                                <button class="btn btn-primary" type="button">Middle</button>
+                                <button class="btn btn-primary" type="button">Right</button>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <p>Add <code>data-toggle="buttons-radio"</code> for radio style toggling on btn-group.</p>
+                            <div data-toggle="buttons-radio" class="btn-group">
+                                <button class="btn btn-primary" type="button">Left</button>
+                                <button class="btn btn-primary active" type="button">Middle</button>
+                                <button class="btn btn-primary" type="button">Right</button>
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
                     <table class="table table-bordered table-striped">
                         <thead>
                         <tr>

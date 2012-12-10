@@ -29,6 +29,7 @@
                             <li><a href="buttons.php">buttons</a></li>
                             <li><a href="print-page.php">print-page</a></li>
                             <li><a href="tables.php">tables</a></li>
+                            <li><a href="general-elements.php">general-elements</a></li>
                         </ul>
                     </div>
                 </div>
