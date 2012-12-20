@@ -1,6 +1,6 @@
 _welcome:
     pattern:  /
-    defaults: { _controller: OroProductBundle:Default:index }
+    defaults: { _controller: OroProductBundle:Product:index }
 
 oro_product:
     resource: "@OroProductBundle/Controller/"
