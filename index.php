@@ -31,6 +31,11 @@
                             <li><a href="tables.php">tables</a></li>
                             <li><a href="general-elements.php">general-elements</a></li>
                         </ul>
+                        <h3>Js use page</h3>
+                        <ul>
+                            <li><a href="dialog.php">jQuery DialogExtend</a></li>
+                            <li><a href="dialog-styled.php">jQuery DialogExtend styled</a></li>
+                        </ul>
                     </div>
                 </div>
             </div>

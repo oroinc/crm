@@ -40,3 +40,21 @@ html, body{
     float: left;
     margin: 3px 0 0 10px;
 }
+.ui-dialog{
+    position: absolute;
+}
+.ui-widget-content{
+    overflow: auto;
+}
+.ui-dialog .ui-dialog-titlebar{
+    position: relative;
+    padding-right: 30px;
+}
+.ui-dialog .ui-dialog-titlebar-close{
+    position: absolute;
+    right: 10px;
+    top: 10px;
+}
+.ui-dialog-titlebar-close{
+
+}
