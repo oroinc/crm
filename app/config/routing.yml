@@ -12,6 +12,10 @@ oro_manufacturer:
     type:     annotation
     prefix:   /{_locale}/manufacturer/
 
+oro_customer:
+    resource: "@OroCustomerBundle/Controller/"
+    prefix:   /{_locale}/customer/
+
 # Internal routing configuration to handle ESI
 #_internal:
 #    resource: "@FrameworkBundle/Resources/config/routing/internal.xml"

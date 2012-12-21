@@ -22,6 +22,7 @@ class AppKernel extends Kernel
             new Oro\Bundle\DataModelBundle\OroDataModelBundle(),
             new Oro\Bundle\ProductBundle\OroProductBundle(),
             new Oro\Bundle\ManufacturerBundle\OroManufacturerBundle(),
+            new Oro\Bundle\CustomerBundle\OroCustomerBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
