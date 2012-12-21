@@ -6,6 +6,10 @@ POC on product entity design to illustrate attribute management
 TODO
 ====
 
+- clean way to play with backend type and add some new
+
+- use many tables for values ?
+
 - use translatable interface / use a custom translation mecanism in place of doctrine gedmo extension
 
 - use a distinct attribute manager (not mixed with product manager)
@@ -16,10 +20,10 @@ TODO
 
 - sanitize object query results 
 
-- clean way to play with backend type / many tables ?
-
 - complete product / flexibleentity repository
 
 - should be use an extended Doctrine\ORM\Persisters\ to deal with findBy customization ?
 
 - enhance find($id) to load any values in one query ? (no lazy load when get each value)
+
+- add 10k products with 100 attributes to check the impl
