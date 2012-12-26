@@ -184,7 +184,7 @@ TODO
 TODO
 ====
 
-- behavior : timestamp, soft delete, audit, versionning, transalatable / scopable values
+- behavior : timestamp, soft delete, audit, versionning, translatable / scopable values
 
 - clean way to play with backend type and add some new
 
@@ -192,7 +192,7 @@ TODO
 
 - think about value representation (should be loaded in product as key/value)
 
-- demo on options usage
+- option with locale code + demo
 
 - sanitize object query results 
 
