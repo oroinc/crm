@@ -1,11 +1,38 @@
-poc-product-entity-design
-=========================
+Entity design
+=============
 
-POC on product entity design to illustrate attribute management
+POC on entity design to illustrate attribute management.
 
 Based on classic Doctrine 2 classes, entity, repository, entity manager
 
-We add our own SimpleManager, FlexibleManager to be storage agnostic an deals with attribute management.
+Allows to :
+
+- create / use simple entity (no attribute management)
+
+- create / use flexible entity (attribute management)
+
+- customize flexible entity (add your own storage, or custom basic classes)
+
+We add our own SimpleManager and FlexibleManager to be storage agnostic and deals with attribute management.
+
+In Oro\Bundle\DataModelBundle :
+
+- folder Model contains base entities (entity, attribute, value, option, etc) independent of doctrine
+
+- folder Entity contains abstract doctrine entities (as AbstractOrmEntity, etc) with base doctrine mapping, and contains base concret entity too (as OrmEntityAttribute, etc) which can be use by any kind of entity
+
+About "locale scope", each attribute can be defined as translatable, then, for queries or create/update, the locale is retrieved as following :
+
+```php
+    // from http request as app_dev.php/en/customer/customer/view/2
+    $this->localeCode = $this->container->get('request')->getLocale();
+    // if not defined it used the default define in application parameters.yml
+    if (!$this->localeCode) {
+        $localeCode = $this->container->parameters['locale'];
+    }
+```
+
+You can force by using $manager->setLocaleCode($myCode);
 
 Create a simple entity (no attribute management)
 ================================================
@@ -177,8 +204,51 @@ services:
 ```
 
 How to use :
+```php
+// get customer manager
+$cm = $this->container->get('customer_manager');
 
-TODO
+// create an attribute (cf AttributeController for more exemples)
+$att = $cm->getNewAttributeInstance();
+$att->setCode($attCode);
+$att->setTitle('Company');
+$att->setType(AbstractEntityAttribute::TYPE_STRING);
+$att->setTranslatable(false);
+
+// persist and flush
+$cm->getStorageManager()->persist($att);
+$cm->getStorageManager()->flush();
+
+// create customer with basic fields mapped in customer entity (cf ProductController for more exemples)
+$customer = $cm->getNewEntityInstance();
+$customer->setEmail($custEmail);
+$customer->setFirstname('Nicolas');
+$customer->setLastname('Dupont');
+
+// get the customer attribute 'company'
+$attCompany = $cm->getAttributeRepository()->findOneByCode('company');
+
+// add a value
+$value =$cm->getNewAttributeValueInstance();
+$value->setAttribute($attCompany);
+$value->setData('Akeneo');
+$customer->addValue($value);
+
+// persist and flush
+$cm->getStorageManager()->persist($customer);
+$cm->getStorageManager()->flush();
+```
+
+Customize my flexible entity implementation
+===========================================
+
+- extends OrmEntityRepository and define it in my entity classes to add some complex / specific queries, your own scope rules, other business rules
+
+- extends FlexibleEntityManager and define it's use in services.yml file to add some entity behaviour (as versionning) or shortcut methods
+
+- extends OrmEntityAttribute or OrmEntityOption, etc to store your attributes, or options in a custom table (no with other entities)
+
+- use event / listener to plug some custom code
 
 
 TODO
@@ -192,14 +262,12 @@ TODO
 
 - think about value representation (should be loaded in product as key/value)
 
-- option with locale code + demo
+- add shortcut to get entity value, data, datatext (option value)
 
-- sanitize object query results 
-
-- complete product / flexibleentity repository
-
-- should be use an extended Doctrine\ORM\Persisters\ to deal with findBy customization ?
+- flexibleentity repository
 
 - enhance find($id) to load any values in one query ? (no lazy load when get each value)
+
+- clean Abstract (model and entity) classes to refactor some methods (addValue, addOption, etc related to owner side)
 
 - add 10k products with 100 attributes to check the impl
