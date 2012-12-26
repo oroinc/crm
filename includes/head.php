@@ -10,4 +10,5 @@
     <link href="css/all.css" rel="stylesheet" media="all">
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
     <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
 </head>

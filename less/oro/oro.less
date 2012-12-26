@@ -7,6 +7,9 @@
 @generalBorderColor:              #ddd;
 @widthPage:                       960px;
 @widthPopup:                      @widthPage/2;
+@widthPanel:                       25px;
+@widthLeftPanel:                   210px;
+@widthLeftPanel2:                   210;
 // style
 header{
   padding: @topPading @horizontalPadding 0;
@@ -30,8 +33,130 @@ footer{
   border: 1px solid @generalBorderColor;
   margin:0 0 @marginBottomBox;
 }
+.page-container{
+  padding: 0 @widthPanel;
+  height: 1%;
+  position: relative;
+}
+.page-container.left-locked{
+  padding-left: @widthLeftPanel;
+}
+.page-container.right-locked{
+  padding-right: @widthLeftPanel;
+}
+.page-container:after{
+  content: "";
+  clear: both;
+  display: block;
+}
 .row-fluid.one-column{
   padding: 0;
+}
+.left-panel{
+  float: left;
+  width: @widthPanel;
+  margin: 0 0 0 -@widthPanel;
+  display: inline;
+}
+.left-panel.side-nav-open{
+  position:  absolute;
+  top: 0;
+  left: 0;
+  width: (@widthLeftPanel)-20;
+  padding: 10px;
+  margin: 0;
+  background: url("../../img/test-transpatent.png") repeat;
+}
+.left-panel.side-nav-locked{
+  position: relative;
+  width: (@widthLeftPanel)-20;
+  padding: 10px;
+  margin: 0 0 0 -@widthLeftPanel;
+}
+.nav-box{
+  position: absolute;
+  top: 0;
+  left: 25px;
+  width: 475px;
+  z-index: 9999;
+  .nav-title{
+    overflow: hidden;
+    height: 1%;
+    padding: 10px 15px;
+    background: #000;
+    color: #fff;
+    h3 {
+      float: left;
+      margin: 0;
+      font-size: 16px;
+      line-height: 18px;
+      text-transform: uppercase;
+    }
+    .action{
+      float: right;
+      margin: 0 0 0 10px;
+      text-indent: -9999px;
+      font-size: 0;
+      line-height: 0;
+      background-image: url("../../img/glyphicons-halflings-white.png");
+      cursor: pointer;
+    }
+    .close{
+      opacity: 1;
+    }
+    .settings{
+
+    }
+  }
+  .nav-content{
+    padding: 5px;
+  }
+}
+.side-nav-open .nav-box,
+.side-nav-locked .nav-box{
+  display: block !important;
+  position: static;
+  width: 100%;
+}
+.side-nav-open .sn-opener,
+.side-nav-locked .sn-opener{
+  display: none;
+}
+#bar-drop-overlay{
+  display: none;
+  height: 100%;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: 15;
+}
+#bar-drop-overlay.bar-open-overlay{
+  display: block;
+}
+.layout-content{
+  margin: 0 !important;
+}
+.right-panel{
+  display: inline;
+  float: right;
+  width: @widthPanel;
+  margin: 0 -@widthPanel 0 0;
+}
+.right-panel.side-nav-open{
+  position:  absolute;
+  top: 0;
+  right: 0;
+  width: (@widthLeftPanel)-20;
+  padding: 10px;
+  margin: 0;
+  background: url("../../img/test-transpatent.png") repeat;
+}
+.right-panel.side-nav-locked{
+  position: relative;
+  width: (@widthLeftPanel)-20;
+  padding: 10px;
+  margin: 0 -@widthLeftPanel 0 0;
 }
 #wrapper{
   -webkit-border-radius: @baseBorderRadius;

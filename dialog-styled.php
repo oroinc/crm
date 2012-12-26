@@ -6,13 +6,7 @@
 <div class="container-fluid">
     <div class="row-fluid">
         <div class="container-fluid">
-            <button type="button" id="my-button" class="btn btn-large btn-primary">Large button</button>
-            <div class="test-dialog-content" style="display: none;">
-                <p>big button</p>
-                <p> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque vitae eleifend magna. Mauris condimentum posuere nisi convallis faucibus. Nulla facilisi. Suspendisse ut suscipit lacus. Sed a libero ipsum, sit amet interdum lectus. Curabitur sit amet dolor at mi cursus scelerisque consequat viverra urna.</p>
-                <p>. Aliquam nec nulla nunc, ac malesuada lectus. Aliquam aliquam, sapien eget bibendum ullamcorper, lectus elit pellentesque mauris, ac laoreet diam magna quis nisi. Praesent tincidunt euismod malesuada. Quisque nec lobortis leo. Aliquam id nisl lectus, eu rhoncus lorem.</p>
-                <p>Aliquam a turpis at turpis bibendum vulputate eu ac erat. Sed id mauris ante. Proin eget elit lorem, eu elementum dui. Ut ac augue vel lectus tempus auctor at eget quam. Donec a tincidunt nisi. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. In facilisis, velit quis ornare luctus, tortor lectus ullamcorper ante, eu tincidunt leo lectus nec elit. Donec quis dolor a quam blandit adipiscing. </p>
-            </div>
+            <button type="button" id="my-button" class="btn btn-large btn-primary">Open more windows</button>
             <hr />
             <div class="btn-toolbar">
                 <div class="btn-group">
@@ -39,20 +33,26 @@
 </div>
 <script>
     $(function(){
-        var positionNextWindow = 5;
+        var positionNextWindowY = 0;
+        var positionNextWindowX=0;
+        var positionNextWindowCounter = -35;
         function newPositionWindow(){
-            positionNextWindow = positionNextWindow +15;
-            var needPosition = 'center+' + positionNextWindow + ' center+' + positionNextWindow;
-            return needPosition;
+            var TTEmp = positionNextWindowY/15;
+            if( TTEmp > 10){
+                positionNextWindowX = positionNextWindowCounter;
+                positionNextWindowY = 0;
+                positionNextWindowCounter = positionNextWindowCounter -35;
+                var needPosition = 'center+' + positionNextWindowX + ' center+' + positionNextWindowY;
+                return needPosition;
+            }else{
+                positionNextWindowY = positionNextWindowY +15;
+                positionNextWindowX =  positionNextWindowX +15;
+                var needPosition = 'center+' +  positionNextWindowX + ' center+' + positionNextWindowY;
+                return needPosition;
+            }
         }
         var isOpen;
         $("#my-button").click(function(){
-            try{
-                isOpen = $('.test-dialog-content').dialog("isOpen");
-            } catch(e) {
-                isOpen = false;
-            }
-            if (isOpen === false ){
                 var offsetwindow = newPositionWindow();
                 var dialogOptions = {
                     title : "dialog window",
@@ -67,11 +67,12 @@
                 };
                 var dialogExtendOptions = {
                     "maximize" : true,
-                    "minimize" : true
+                    "minimize" : true,
+                    "dblclick": "maximize"
                 };
 
-                $(".test-dialog-content").dialog(dialogOptions).dialogExtend(dialogExtendOptions);
-            }
+                //$(".test-dialog-content").dialog(dialogOptions).dialogExtend(dialogExtendOptions);
+                $("<div>Some text if you need will be here</div>").dialog(dialogOptions).dialogExtend(dialogExtendOptions);
         });
         $("#opener1").click(function(){
             try{
@@ -94,7 +95,8 @@
                 };
                 var dialogExtendOptions = {
                     "maximize" : true,
-                    "minimize" : true
+                    "minimize" : true,
+                    "dblclick": "maximize"
                 };
 
                 $("#opener-content1").dialog(dialogOptions).dialogExtend(dialogExtendOptions);
@@ -121,7 +123,8 @@
                 };
                 var dialogExtendOptions = {
                     "maximize" : true,
-                    "minimize" : true
+                    "minimize" : true,
+                    "dblclick": "maximize"
                 };
 
                 $("#opener-content2").dialog(dialogOptions).dialogExtend(dialogExtendOptions);
@@ -148,7 +151,8 @@
                 };
                 var dialogExtendOptions = {
                     "maximize" : true,
-                    "minimize" : true
+                    "minimize" : true,
+                    "dblclick": "maximize"
                 };
                 $("#opener-content3").dialog(dialogOptions).dialogExtend(dialogExtendOptions);
             }

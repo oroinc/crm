@@ -1,7 +1,6 @@
 <?php include 'includes/head.php'; ?>
 <body>
 <div id="page">
-
     <div id="top-page">
             <div class="container">
                 <div class="row">
@@ -13,6 +12,7 @@
                             <li><a href="2columns-left.php">2columns-left</a></li>
                             <li><a href="2columns-right.php">2columns-right</a></li>
                             <li><a href="3column.php">3column</a></li>
+                            <li><a href="1column-with-toolbar.php">1column with toolbar</a></li>
                         </ul>
                         <h3>Static pages</h3>
                         <ul>

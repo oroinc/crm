@@ -148,14 +148,14 @@
 				// modify dialog with new config
 				.dialog("option", {
 					"resizable" : false,
-					"draggable" : false,
+					//"draggable" : false,
 					"height" : newHeight,
 					"width" : newWidth,
 					"position" : [1, 1]
 				})
 				// disable draggable-handle (for <titlebar=none> only)
 				.dialog("widget")
-					.draggable("option", "handle", null)
+					/*.draggable("option", "disabled")*/
 					.find(".ui-dialog-draggable-handle").css("cursor", "text").end()
 				.find(".ui-dialog-content")
 				// mark new state
