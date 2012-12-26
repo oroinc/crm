@@ -28,7 +28,7 @@ About "locale scope", each attribute can be defined as translatable, then, for q
     $this->localeCode = $this->container->get('request')->getLocale();
     // if not defined it used the default define in application parameters.yml
     if (!$this->localeCode) {
-        $localeCode = $this->container->parameters['locale'];
+        $this->localeCode = $this->container->parameters['locale'];
     }
 ```
 
