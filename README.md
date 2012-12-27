@@ -122,7 +122,7 @@ Create a flexible entity (with attribute management)
 
 Create a customer entity class, extends abstract orm entity which contains basic mapping.
 
-We use the basic entity repository and has to define which value table is used. 
+We use the basic entity repository, and define by mapping which value table to use. 
 
 ```php
 <?php
@@ -172,7 +172,7 @@ class Customer extends AbstractOrmEntity
 
 Then we have to define customer attribute value entity, extends basic one which contains mapping.
 
-We define mapping to basic entity attribute and to defined customer entity.
+We define mapping to basic entity attribute, to basic option (when attribute backend type is list for instance) and to our customer entity.
 ```php
 namespace Oro\Bundle\CustomerBundle\Entity;
 use Oro\Bundle\DataModelBundle\Model\AbstractOrmEntity;
@@ -200,10 +200,19 @@ class CustomerAttributeValue extends AbstractOrmEntityAttributeValue
      */
     protected $entity;
 
+    /**
+     * Store option value, if backend is an option
+     *
+     * @var AbstractOrmEntityAttributeOption $optionvalue
+     *
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\DataModelBundle\Entity\OrmEntityAttributeOption")
+     */
+    protected $option;
+
 }
 ```
 
-Finally we add service declaration in src/Oro/Bundle/CustomerBundle/Resources/config/services.yml :
+Finally we add our service declaration in src/Oro/Bundle/CustomerBundle/Resources/config/services.yml :
 ```yaml
 parameters:
     customer_manager.class:       Oro\Bundle\DataModelBundle\Service\FlexibleEntityManager
@@ -221,7 +230,7 @@ How to use :
 // get customer manager
 $cm = $this->container->get('customer_manager');
 
-// create an attribute (cf AttributeController for more exemples)
+// create an attribute (cf AttributeController for more exemples with options, etc)
 $att = $cm->getNewAttributeInstance();
 $att->setCode($attCode);
 $att->setTitle('Company');
@@ -255,27 +264,45 @@ $cm->getStorageManager()->flush();
 Customize my flexible entity implementation
 ===========================================
 
-- extends OrmEntityRepository and define it in my entity classes to add some complex / specific queries, your own scope rules, other business rules
+- extend OrmEntityRepository and define it in your flexible entity class to add some complex / specific queries, your own scope rules, other business rules
 
-- extends FlexibleEntityManager and define it's use in services.yml file to add some entity behaviour (as versionning) or shortcut methods
+- extend FlexibleEntityManager and define it's use in services.yml file to add some entity behaviour (as versionning), shortcut methods, other storage
 
-- extends OrmEntityAttribute or OrmEntityOption, etc to store your attributes, or options in a custom table (no with other entities)
+- use event / listener to plug some custom code (as for translatable behaviour)
 
-- use event / listener to plug some custom code
+- extend OrmEntityAttribute, OrmEntityAttributeOption, OrmEntityAttributeOptionValue to store your attributes, etc in custom tables (not with other entities)
+```yaml
+# to use another attribute entity
+parameters:
+    product_manager.class:          Oro\Bundle\DataModelBundle\Service\FlexibleEntityManager
+    product_entity.shortname:       OroProductBundle:Product
+    product_value.shortname:        OroProductBundle:ProductAttributeValue
+    # add following lines
+    product_attribute.shortname:    OroProductBundle:ProductAttribute
+    product_option.shortname:       OroProductBundle:ProductAttributeOption
+    product_option_value.shortname: OroProductBundle:ProductAttributeOptionValue
+
+services:
+    product_manager:
+        class:        "%product_manager.class%"
+        arguments:    [@service_container, %product_entity.shortname%, , %product_value.shortname%]
+        # add following calls to use your own impl
+        calls:
+                    - [ setAttributeShortname, [ %product_attribute.shortname% ] ]
+                    - [ setAttributeOptionShortname, [ %product_option.shortname% ] ]
+                    - [ setAttributeOptionValueShortname, [ %product_option_value.shortname% ] ]
+
 
 TODO
 ====
 
 Flexible Entity
-
-- change readme doc for flexible !
-
 - add shortcut to get entity option and entity option value ?
 - enhance find($id) to load any values in one query ? (no lazy load when get each value), play with doctrine cascade ?
 
 Flexible entity repository
 - allow search on attribute with enhanced findBy
-- direct join on option
+- direct join on option ?
 
 Attribute type
 - clean way to play with backend type and add some new
