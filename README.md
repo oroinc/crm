@@ -34,6 +34,19 @@ About "locale scope", each attribute can be defined as translatable, then, for q
 
 You can force by using $manager->setLocaleCode($myCode);
 
+Install and unit tests
+======================
+
+Install as standard symfony 2 app
+
+To run tests :
+```bash
+~/git/poc-product-entity-design$ php app/console doctrine:database:drop --force
+~/git/poc-product-entity-design$ php app/console doctrine:database:create 
+~/git/poc-product-entity-design$ php app/console doctrine:schema:update --force
+~/git/poc-product-entity-design$ phpunit -c app/  --coverage-html=cov/
+```
+
 Create a simple entity (no attribute management)
 ================================================
 
@@ -250,24 +263,25 @@ Customize my flexible entity implementation
 
 - use event / listener to plug some custom code
 
-
 TODO
 ====
 
 Flexible Entity
-- add translatable to entity + setLocale with event / listener postload
-- set entity locale to get only related values
-- add shortcut to get entity value
-- add shortcut to get entity value data
-- add shortcut to get entity option value
 
-- enhance find($id) to load any values in one query ? (no lazy load when get each value)
+- change readme doc for flexible !
+
+- add shortcut to get entity option and entity option value ?
+- enhance find($id) to load any values in one query ? (no lazy load when get each value), play with doctrine cascade ?
 
 Flexible entity repository
 - allow search on attribute with enhanced findBy
+- direct join on option
 
 Attribute type
 - clean way to play with backend type and add some new
+
+Attribute
+- how to extends to add some custom conf (scope for product)
 
 Option and values
 - refactor, get option value related to current locale
