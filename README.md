@@ -254,20 +254,36 @@ Customize my flexible entity implementation
 TODO
 ====
 
-- behavior : timestamp, soft delete, audit, versionning, translatable / scopable values
-
-- clean way to play with backend type and add some new
-
-- use translatable interface / use a custom translation mecanism in place of doctrine gedmo extension
-
-- think about value representation (should be loaded in product as key/value)
-
-- add shortcut to get entity value, data, datatext (option value)
-
-- flexibleentity repository
+Flexible Entity
+- add translatable to entity + setLocale with event / listener postload
+- set entity locale to get only related values
+- add shortcut to get entity value
+- add shortcut to get entity value data
+- add shortcut to get entity option value
 
 - enhance find($id) to load any values in one query ? (no lazy load when get each value)
 
+Flexible entity repository
+- allow search on attribute with enhanced findBy
+
+Attribute type
+- clean way to play with backend type and add some new
+
+Option and values
+- refactor, get option value related to current locale
+
+Translatable behaviour
+- can be optionnal for flexible ? use an interface ?
+- deal with more generic level (basic scope ? locale can be a scope ?)
+
+Refactoring 
 - clean Abstract (model and entity) classes to refactor some methods (addValue, addOption, etc related to owner side)
 
+Others behaviours
+- timestamp, soft delete, audit, versionning, translatable / scopable values
+
+Test
 - add 10k products with 100 attributes to check the impl
+
+Others
+- flattenize eav values
