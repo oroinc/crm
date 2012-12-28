@@ -94,7 +94,7 @@ class Manufacturer
 Define the service manager (src/Oro/Bundle/ManufacturerBundle/Resources/config/services.yml) : 
 ```yaml
 parameters:
-    manufacturer_manager.class:       Oro\Bundle\DataModelBundle\Service\SimpleEntityManager
+    manufacturer_manager.class:       Oro\Bundle\DataModelBundle\Manager\SimpleEntityManager
     manufacturer_entity.shortname:    OroManufacturerBundle:Manufacturer
 
 services:
@@ -125,17 +125,14 @@ Create a customer entity class, extends abstract orm entity which contains basic
 We use the basic entity repository, and define by mapping which value table to use. 
 
 ```php
-<?php
 namespace Oro\Bundle\CustomerBundle\Entity;
 
-use Oro\Bundle\DataModelBundle\Entity\AbstractOrmEntity;
+use Oro\Bundle\DataModelBundle\Entity\Mapping\AbstractOrmEntity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Flexible customer entity
- *
  * @ORM\Table(name="customer_entity")
- * @ORM\Entity(repositoryClass="Oro\Bundle\DataModelBundle\Entity\OrmEntityRepository")
+ * @ORM\Entity(repositoryClass="Oro\Bundle\DataModelBundle\Entity\Repository\OrmEntityRepository")
  */
 class Customer extends AbstractOrmEntity
 {
@@ -174,13 +171,14 @@ Then we have to define customer attribute value entity, extends basic one which 
 
 We define mapping to basic entity attribute, to basic option (when attribute backend type is list for instance) and to our customer entity.
 ```php
+<?php
 namespace Oro\Bundle\CustomerBundle\Entity;
-use Oro\Bundle\DataModelBundle\Model\AbstractOrmEntity;
-use Oro\Bundle\DataModelBundle\Entity\AbstractOrmEntityAttributeValue;
+
+use Oro\Bundle\DataModelBundle\Entity\Mapping\AbstractOrmEntityAttributeValue;
 use Oro\Bundle\DataModelBundle\Entity\OrmEntityAttribute;
+use Doctrine\ORM\Mapping as ORM;
+
 /**
- * Value for a customer attribute
- *
  * @ORM\Table(name="customer_attribute_value")
  * @ORM\Entity
  */
@@ -208,14 +206,14 @@ class CustomerAttributeValue extends AbstractOrmEntityAttributeValue
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\DataModelBundle\Entity\OrmEntityAttributeOption")
      */
     protected $option;
-
 }
+
 ```
 
 Finally we add our service declaration in src/Oro/Bundle/CustomerBundle/Resources/config/services.yml :
 ```yaml
 parameters:
-    customer_manager.class:       Oro\Bundle\DataModelBundle\Service\FlexibleEntityManager
+    customer_manager.class:       Oro\Bundle\DataModelBundle\Manager\FlexibleEntityManager
     customer_entity.shortname:    OroCustomerBundle:Customer
     customer_value.shortname:     OroCustomerBundle:CustomerAttributeValue
 
@@ -274,7 +272,7 @@ Customize my flexible entity implementation
 ```yaml
 # to use another attribute entity
 parameters:
-    product_manager.class:          Oro\Bundle\DataModelBundle\Service\FlexibleEntityManager
+    product_manager.class:          Oro\Bundle\DataModelBundle\Manager\FlexibleEntityManager
     product_entity.shortname:       OroProductBundle:Product
     product_value.shortname:        OroProductBundle:ProductAttributeValue
     # add following lines
@@ -310,20 +308,13 @@ Attribute type
 
 Translatable behavior
 - can be optionnal for flexible ?
-- use an interface + event / listener to inject default locale if implements this interface
 - deal with more generic level (basic scope ? locale can be a scope ?)
 
 Attribute
 - how to extends to add some custom conf (for instance scope for product ?) -> a configuration field with json + create custom table ?
 
-Refactoring 
-- clean Abstract (model and entity) classes to refactor some methods (addValue, addOption, etc related to owner side)
-
 Test
 - add 10k products with 100 attributes to check the impl
-
-Others behaviours to think about (they come after)
-- timestamp, soft delete, audit, versionning, translatable / scopable values
 
 Others
 - flattenize eav values ?
