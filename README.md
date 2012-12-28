@@ -308,14 +308,10 @@ Flexible entity repository
 Attribute type
 - null value for date and datetime ? set up with now()
 
-Translatable behaviour
+Translatable behavior
 - can be optionnal for flexible ?
 - use an interface + event / listener to inject default locale if implements this interface
 - deal with more generic level (basic scope ? locale can be a scope ?)
-
-Timestampable behaviour
-- remove gedmo reference 
-- use an interface + event / listener to inject default locale if implements this interface
 
 Attribute
 - how to extends to add some custom conf (for instance scope for product ?) -> a configuration field with json + create custom table ?
