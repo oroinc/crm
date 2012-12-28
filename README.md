@@ -234,7 +234,7 @@ $cm = $this->container->get('customer_manager');
 $att = $cm->getNewAttributeInstance();
 $att->setCode($attCode);
 $att->setTitle('Company');
-$att->setType(AbstractEntityAttribute::TYPE_STRING);
+$att->setAttributeType(new AttributeTypeString());
 $att->setTranslatable(false);
 
 // persist and flush
@@ -308,15 +308,17 @@ Flexible entity repository
 Attribute type
 - null value for date and datetime ? set up with now()
 
-Third party 
-- remove gedmo reference
+Translatable behaviour
+- can be optionnal for flexible ?
+- use an interface + event / listener to inject default locale if implements this interface
+- deal with more generic level (basic scope ? locale can be a scope ?)
+
+Timestampable behaviour
+- remove gedmo reference 
+- use an interface + event / listener to inject default locale if implements this interface
 
 Attribute
-- how to extends to add some custom conf (for instance scope for product ?)
-
-Translatable behaviour
-- can be optionnal for flexible ? use an interface ?
-- deal with more generic level (basic scope ? locale can be a scope ?)
+- how to extends to add some custom conf (for instance scope for product ?) -> a configuration field with json + create custom table ?
 
 Refactoring 
 - clean Abstract (model and entity) classes to refactor some methods (addValue, addOption, etc related to owner side)
