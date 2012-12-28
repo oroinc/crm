@@ -299,19 +299,20 @@ TODO
 Flexible Entity
 - add shortcut to get entity option and entity option value ?
 - enhance find($id) to load any values in one query ? (no lazy load when get each value), play with doctrine cascade ?
+- provide shortcut to setData / updateData 
 
 Flexible entity repository
 - allow search on attribute with enhanced findBy
 - direct join on option ?
 
 Attribute type
-- clean way to play with backend type and add some new
+- null value for date and datetime ? set up with now()
+
+Third party 
+- remove gedmo reference
 
 Attribute
-- how to extends to add some custom conf (scope for product)
-
-Option and values
-- refactor, get option value related to current locale
+- how to extends to add some custom conf (for instance scope for product ?)
 
 Translatable behaviour
 - can be optionnal for flexible ? use an interface ?
@@ -320,11 +321,11 @@ Translatable behaviour
 Refactoring 
 - clean Abstract (model and entity) classes to refactor some methods (addValue, addOption, etc related to owner side)
 
-Others behaviours
-- timestamp, soft delete, audit, versionning, translatable / scopable values
-
 Test
 - add 10k products with 100 attributes to check the impl
 
+Others behaviours to think about (they come after)
+- timestamp, soft delete, audit, versionning, translatable / scopable values
+
 Others
-- flattenize eav values
+- flattenize eav values ?
