@@ -1,3 +1,7 @@
+<?php /*
+  * this is first prototype without jQuery ui Dialog
+  *
+ */ ?>
 <?php include 'includes/head2.php'; ?>
 <script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
 <script src="js/main.js" type="text/javascript"></script>
@@ -18,8 +22,6 @@
                     var TemmpMe = $(this).parent('.ui-dialog').find('.ui-dialog-title').html();
                     var contentTemp = '<div class="ui-dialog-titlebar ui-dialog-titlebar-min"><span class="re-min">remin</span><span class="close-min">close</span> ' + TemmpMe + '</div>';
                     $(contentTemp).appendTo('#window-holder');
-                    console.clear();
-                    console.log(TemmpMe);
                     jQuery('.ui-dialog-titlebar-min').on('click', function(){
                         myDialogZ.dialog( "open" );
                         $(this).remove();
@@ -48,8 +50,6 @@
                     var TemmpMe = $(this).parent('.ui-dialog').find('.ui-dialog-title').html();
                     var contentTemp = '<div class="ui-dialog-titlebar ui-dialog-titlebar-min"><span class="re-min">remin</span><span class="close-min">close</span> ' + TemmpMe + '</div>';
                     $(contentTemp).appendTo('#window-holder');
-                    console.clear();
-                    console.log(TemmpMe);
                     jQuery('.ui-dialog-titlebar-min').on('click', function(){
                         myDialogZ.dialog( "open" );
                         $(this).remove();

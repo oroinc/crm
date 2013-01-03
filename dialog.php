@@ -6,7 +6,7 @@
 	<link class="jsbin" href="http://code.jquery.com/ui/1.8.22/themes/base/jquery-ui.css" rel="stylesheet" type="text/css" />
 	<script class="jsbin" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 	<script class="jsbin" src="http://code.jquery.com/ui/1.8.22/jquery-ui.min.js"></script>
-	<script type="text/javascript" src="js/jquery.dialogextend.1_0_1.js"></script>
+	<script type="text/javascript" src="lib/jquery.dialogextend.1_0_1.js"></script>
 	<style id="jsbin-css">
 	body { color: #333333; font-family: Times, Helvetica, Arial; font-size: 16px; }
 	.ui-dialog { font-size: 12px; }

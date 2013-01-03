@@ -1,16 +1,15 @@
 $(document).ready(function () {
     /* create overlay for popups */
     $('<div id="bar-drop-overlay"></div>').appendTo('body');
-     console.clear();
     /* dinamic height for central column */
     function changeHeight() {
         var _chWindowHeight = $(window).height();
         var _chMyHeight = _chWindowHeight - $("header").outerHeight() - $("footer").outerHeight() - 3;
         $('div.layout-content').innerHeight(_chMyHeight);
     };
-    // init first time
+    /* init first time*/
     changeHeight();
-    //init when resizw window
+    /* init when resize window */
     $(window).resize(function() {
         changeHeight();
     });
@@ -34,7 +33,6 @@ $(document).ready(function () {
                 $(myParent).height(openBarHeight);
                 var testBarScroll = $(myParent).find('.bar-tools').height();
                 if(openBarHeight < testBarScroll ){
-                    console.log('test');
                     $(myParent).find('.bar-tools').height((openBarHeight - 20)).css({
                         "overflow" : "auto"
                     })
@@ -65,7 +63,7 @@ $(document).ready(function () {
             $(this).toggleClass('lock-bar-locked');
         });
 
-        /* open&close popup for bar iems when bar is minimazed. */
+        /* open&close popup for bar items when bar is minimized. */
         $(this).find('.bar-tools li').each(function () {
             var myItem = $(this);
             $(myItem).find('.sn-opener').click(function () {

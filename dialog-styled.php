@@ -1,6 +1,6 @@
 <?php include 'includes/head2.php'; ?>
 <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>
-<script type="text/javascript" src="js/jquery.dialogextend.1_0_1.js"></script>
+<script type="text/javascript" src="lib/jquery.dialogextend.1_0_1.js"></script>
 <body>
 <?php include 'includes/header.php'; ?>
 <div class="container-fluid">
