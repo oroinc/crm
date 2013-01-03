@@ -6,4 +6,5 @@ build/
 vendor
 composer.phar
 app/config/parameters.yml
+.idea
 .idea/*
