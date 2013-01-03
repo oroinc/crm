@@ -1,7 +1,7 @@
 Entity design
 =============
 
-POC on entity design to illustrate attribute management.
+POC on entity design to illustrate attribute management and translation of values.
 
 Based on classic Doctrine 2 classes, entity, repository, entity manager
 
@@ -9,30 +9,36 @@ Allows to :
 
 - create / use simple entity (no attribute management)
 
-- create / use flexible entity (attribute management)
+- create / use flexible entity (dynamic attribute management by user)
 
 - customize flexible entity (add your own storage, or custom basic classes)
 
-We add our own SimpleManager and FlexibleManager to be storage agnostic and deals with attribute management.
-
 In Oro\Bundle\DataModelBundle :
 
-- folder Model contains base entities (entity, attribute, value, option, etc) independent of doctrine
+- /Model/Entity contains abstract entity models (entity, attribute, value, option, etc) independent of doctrine
+- /Model/Attribute (will/should) contains attribute frontend types, backend types, backend models
+- /Model/Behaviour contains interfaces as timestampable, translatable
 
-- folder Entity contains abstract doctrine entities (as AbstractOrmEntity, etc) with base doctrine mapping, and contains base concret entity too (as OrmEntityAttribute, etc) which can be use by any kind of entity
+- /Entity/Mapping contains abstract doctrine entities (with mapping)
+- /Entity/Repository contains base doctrine repository for flexible entity
+- /Entity contains concrets entities (attribute, option, optionvalue) which can be common for any kind of entity
 
-About "locale scope", each attribute can be defined as translatable, then, for queries or create/update, the locale is retrieved as following :
+- /Manager contains service which allow to manipulate, entity, repository and entity manager with simple manager (classic doctrine entity) or flexible manager (attribute management entity)
+
+- /Listener contains event subscriber/listener to implements some behavior as timestampable or translatable
+
+- /Helper contains classes with utility methods
+
+About "locale scope", each attribute can be defined as translatable, then, for queries or create/update, the locale is retrieved :
 
 ```php
     // from http request as app_dev.php/en/customer/customer/view/2
     $this->localeCode = $this->container->get('request')->getLocale();
     // if not defined it used the default define in application parameters.yml
-    if (!$this->localeCode) {
-        $this->localeCode = $this->container->parameters['locale'];
-    }
+    $this->localeCode = $this->container->parameters['locale'];
 ```
 
-You can force by using $manager->setLocaleCode($myCode);
+We can force locale by using $manager->setLocaleCode($myCode);
 
 Install and unit tests
 ======================
@@ -294,34 +300,19 @@ services:
 TODO
 ====
 
-Romain :
+- implements is_required attribute behavior by using event / subscriber (prePersist, preUpdate an entity)
 
-is_required :
-- add an interface IsRequiredContainerInterface
-- entity implements the interface
-- add a subscriber (as timestampable)
-- when save (prePersist, preUpdate) an entity, check any required value is provided
-- if not raise an exception
+- implements is_unique attribute behavior by using event / subscriber (prePersist, preUpdate a value)
 
-is_unique :
-- add an interface IsUniqueInterface
-- value implements the interface
-- add a subscriber (as timestampable)
-- when save (prePersist, preUpdate) a value, check in table and current manager if value is present
-- if yes raise an exception
+- add a configuration json field in attribute entity (to store custom configuration, for now)
 
-attributes
-- configuration field as json
-- add / update / delete config
+- fix bug with null value for date and datetime because set up with now()
 
-Attribute type
-- bug with null value for date and datetime because set up with now()
-
-
-Nico
+Others topics
+=============
 
 is_scopable :
-- product value can hav a scope
+- product value can have a scope
 - add an interface setScope(string $scope), getScope()
 - product entity implements interface
 - change getValue / setValue when scope is defined for entity
@@ -335,27 +326,20 @@ Flexible Entity
 - provide shortcut to setData / updateData 
 
 Entity/Mapping/
-
-AbstractOrmEntityEAV    @attributeValues
-AbstractOrmEntityFlat   @flatValues
-AbstractOrmEntityHybrid @attributeValues + @flatValues
-
-AbstractOrmEntityAttributeValue
-AbstractOrmEntityFlatValue
+- AbstractOrmEntityEAV    @attributeValues
+- AbstractOrmEntityFlat   @flatValues
+- AbstractOrmEntityHybrid @attributeValues + @flatValues
+- AbstractOrmEntityAttributeValue
+- AbstractOrmEntityFlatValue
 
 Flexible entity repository
-- allow search on attribute with enhanced findBy
 - direct join on option ?
 
 Translatable behavior
 - can be optionnal for flexible ?
-- deal with more generic level (basic scope ? locale can be a scope ?)
 
 Attribute
-- how to extends to add some custom conf (for instance scope for product ?) -> a configuration field with json + create custom table ?
+- how to extends to add some custom conf (for instance scope for product ?)
 
 Test
 - add 10k products with 100 attributes to check the impl
-
-Others
-- flattenize eav values ?
