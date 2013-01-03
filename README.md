@@ -1,4 +1,1 @@
-ui
-==
-
-UI Framework
+symfony ui bundle FE framework
