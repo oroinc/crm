@@ -16,7 +16,7 @@ html, body
 
 body
 {
-    font-size:        14px;
+    font-size:        12px;
     font-family:      "Lucida Sans Unicode", "Lucida Grande", Verdana, Arial, Helvetica, sans-serif;
     color:            #313131;
 }
@@ -109,14 +109,14 @@ ul li
 
 #symfony-wrapper
 {
-    width:  970px;
+    width:  940px;
     margin: 0 auto;
 }
 
 .clear {clear:both;}
 
 .sidebar {
-    width:150px;
+    width:130px;
     float:left;
 }
 

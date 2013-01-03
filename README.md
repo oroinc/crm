@@ -294,17 +294,58 @@ services:
 TODO
 ====
 
+Romain :
+
+is_required :
+- add an interface IsRequiredContainerInterface
+- entity implements the interface
+- add a subscriber (as timestampable)
+- when save (prePersist, preUpdate) an entity, check any required value is provided
+- if not raise an exception
+
+is_unique :
+- add an interface IsUniqueInterface
+- value implements the interface
+- add a subscriber (as timestampable)
+- when save (prePersist, preUpdate) a value, check in table and current manager if value is present
+- if yes raise an exception
+
+attributes
+- configuration field as json
+- add / update / delete config
+
+Attribute type
+- bug with null value for date and datetime because set up with now()
+
+
+Nico
+
+is_scopable :
+- product value can hav a scope
+- add an interface setScope(string $scope), getScope()
+- product entity implements interface
+- change getValue / setValue when scope is defined for entity
+- save / get in locale + scope
+
+prepare product data set
+
 Flexible Entity
 - add shortcut to get entity option and entity option value ?
 - enhance find($id) to load any values in one query ? (no lazy load when get each value), play with doctrine cascade ?
 - provide shortcut to setData / updateData 
 
+Entity/Mapping/
+
+AbstractOrmEntityEAV    @attributeValues
+AbstractOrmEntityFlat   @flatValues
+AbstractOrmEntityHybrid @attributeValues + @flatValues
+
+AbstractOrmEntityAttributeValue
+AbstractOrmEntityFlatValue
+
 Flexible entity repository
 - allow search on attribute with enhanced findBy
 - direct join on option ?
-
-Attribute type
-- null value for date and datetime ? set up with now()
 
 Translatable behavior
 - can be optionnal for flexible ?
