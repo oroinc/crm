@@ -19,7 +19,7 @@ class AppKernel extends Kernel
             new JMS\AopBundle\JMSAopBundle(),
             new JMS\DiExtraBundle\JMSDiExtraBundle($this),
             new JMS\SecurityExtraBundle\JMSSecurityExtraBundle(),
-            new Oro\Bundle\DataModelBundle\OroDataModelBundle(),
+            new Oro\Bundle\FlexibleEntityBundle\OroFlexibleEntityBundle(),
             new Oro\Bundle\ProductBundle\OroProductBundle(),
             new Oro\Bundle\ManufacturerBundle\OroManufacturerBundle(),
             new Oro\Bundle\CustomerBundle\OroCustomerBundle(),
