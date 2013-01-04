@@ -19,10 +19,12 @@ class AppKernel extends Kernel
             new JMS\AopBundle\JMSAopBundle(),
             new JMS\DiExtraBundle\JMSDiExtraBundle($this),
             new JMS\SecurityExtraBundle\JMSSecurityExtraBundle(),
+
             new Oro\Bundle\FlexibleEntityBundle\OroFlexibleEntityBundle(),
+            new Oro\Bundle\CustomerBundle\OroCustomerBundle(),
             new Oro\Bundle\ProductBundle\OroProductBundle(),
             new Oro\Bundle\ManufacturerBundle\OroManufacturerBundle(),
-            new Oro\Bundle\CustomerBundle\OroCustomerBundle(),
+
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
