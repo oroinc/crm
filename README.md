@@ -29,11 +29,6 @@ In Oro\Bundle\FlexibleEntityBundle :
 
 - /Helper contains classes with utility methods
 
-About "locale scope", each attribute can be defined as translatable, in this case the default rule to get the locale to use is by priority :
-- from flexible manager if developer has forced it
-- from http request
-- from application config
-
 Install and unit tests
 ======================
 
@@ -136,8 +131,8 @@ In this case, we can directly use classic way too with :
         
 ```
 
-Create a flexible entity (with attribute management)
-====================================================
+Create a flexible entity (with dynamic attribute management, not translatable)
+==============================================================================
 
 Create a customer entity class, extends abstract orm entity which contains basic mapping.
 
@@ -275,13 +270,13 @@ $cm->getStorageManager()->persist($att);
 $cm->getStorageManager()->flush();
 
 // create customer with basic fields mapped in customer entity  (cf controllers and unit tests for more exemples with options, etc)
-$customer = $cm->getNewEntityInstance();
+$customer = $cm->createEntity();
 $customer->setEmail($custEmail);
 $customer->setFirstname('Nicolas');
 $customer->setLastname('Dupont');
 
 // get the customer attribute 'company'
-$attCompany = $cm->getAttributeRepository()->findOneByCode('company');
+$attCompany = $cm->getEntityRepository()->findAttributeByCode('company');
 
 // add a value
 $value = $cm->createEntityValue();
@@ -294,86 +289,99 @@ $cm->getStorageManager()->persist($customer);
 $cm->getStorageManager()->flush();
 ```
 
+Create a flexible entity (with dynamic attribute management, translatable)
+==========================================================================
 
+Product and ProductValue are defined as for customer.
 
+Flexible manager is define in same way too.
 
+Attribute 'name' and 'description' are defined as translatable (not the case by default) :
+```php
+$pm = $this->container->get('product_manager');
+$attributeCode = 'name';
+$attribute = $pm->createAttribute();
+$attribute->setCode($attributeCode);
+$attribute->setTitle('Description');
+$attribute->setBackendModel(AbstractAttributeType::BACKEND_MODEL_ATTRIBUTE_VALUE);
+$attribute->setBackendType(AbstractAttributeType::BACKEND_TYPE_TEXT);
+$attribute->setTranslatable(true);
+```
 
-TODO : refactor following
-Customize my flexible entity implementation
-===========================================
+About locale, if attribute is defined as translatable, the locale to use is retrieved (by priority) :
+- from flexible manager if developer has forced it with setLocaleCode($code)
+- from http request
+- from application config
 
-- extend OrmEntityRepository and define it in your flexible entity class to add some complex / specific queries, your own scope rules, other business rules
+Base repository is designed to deal with translated values in queries, it knows the asked locale and egt relevant value if attribute is translatable.
 
-- extend FlexibleEntityManager and define it's use in services.yml file to add some entity behaviour (as versionning), shortcut methods, other storage
+Base entity is designed to get values related to asked locale.
 
-- use event / listener to plug some custom code (as for translatable behaviour)
+How to customize my flexible entity implementation
+==================================================
 
-- extend OrmEntityAttribute, OrmEntityAttributeOption, OrmEntityAttributeOptionValue to store your attributes, etc in custom tables (not with other entities)
+Add some custom queries
+-----------------------
+
+- extend OrmEntityRepository in your bundle as :
+```php
+class ProductRepository extends OrmFlexibleEntityRepository
+```
+- write custom queries
+- configure custom repository in your flexible entity class as :
+```php
+/**
+ * Flexible product
+ * @ORM\Table(name="acmeproduct_product")
+ * @ORM\Entity(repositoryClass="Acme\Bundle\ProductBundle\Entity\Repository\ProductRepository")
+ */
+class Product extends AbstractOrmEntity
+```
+
+Add some behavior related to flexible (as audit, log)
+-----------------------------------------------------
+
+- use event / subscriber to plug custom code (as for translatable behavior, see TranslatableListener)
+- if needed, you can retrieve relevant flexible entity manager from entity full qualified class name as : 
+```php
+// get flexible config and manager
+$flexibleConfig = $this->container->getParameter('oro_flexibleentity.entities_config');
+$flexibleManagerName = $flexibleConfig['entities_config'][$flexibleEntityClass]['flexible_manager'];
+$flexibleManager = $this->container->get($flexibleManagerName);
+```
+
+Add some custom attribute configuration for a dedicated entity
+--------------------------------------------------------------
+
+- create a MyEntityAttribute class with one-one relation to BasicEntityAttribute class
+- create your repository to encapsulate the manipulation of basic attribute
+
+Store attributes, option, option values in custom tables
+--------------------------------------------------------
+
+- extend or replace OrmEntityAttribute, OrmEntityAttributeOption, OrmEntityAttributeOptionValue in your bundle
+- define the classes to use in our flexibleentity.yml with properties : 'flexible_attribute_class', 'flexible_attribute_option_class', 'flexible_attribute_option_value_class'
+
+Use flat storage for values
+---------------------------
+
+- use another backend model for attribute, as flatValues (can define this relation in your flexible entity)
+- extends / replace base repository to change queries
+- use event / subscriber to change schema on each attribute insert / update / delete
+
+Use document oriented storage for entity/values
+-----------------------------------------------
+
+- define your document class and flexible manager
+- define manager as other and inject your flexible manager 
 ```yaml
-# to use another attribute entity
 parameters:
-    product_manager.class:          Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleEntityManager
-    product_entity.shortname:       OroProductBundle:Product
-    product_value.shortname:        OroProductBundle:ProductAttributeValue
-    # add following lines
-    product_attribute.shortname:    OroProductBundle:ProductAttribute
-    product_option.shortname:       OroProductBundle:ProductAttributeOption
-    product_option_value.shortname: OroProductBundle:ProductAttributeOptionValue
+    mydoc_manager_class: Acme\Bundle\MyBundle\Manager\MyFlexibleEntityManager
+    mydoc_entity_class:  Acme\Bundle\MyBundle\Document\Mydoc
 
 services:
-    product_manager:
-        class:        "%product_manager.class%"
-        arguments:    [@service_container, %product_entity.shortname%, , %product_value.shortname%]
-        # add following calls to use your own impl
-        calls:
-                    - [ setAttributeShortname, [ %product_attribute.shortname% ] ]
-                    - [ setAttributeOptionShortname, [ %product_option.shortname% ] ]
-                    - [ setAttributeOptionValueShortname, [ %product_option_value.shortname% ] ]
+    customer_manager:
+        class:     "%mydoc_manager_class%"
+        arguments: [@service_container, %mydoc_entity_class%]
+```
 
-
-TODO
-====
-
-- implements is_required attribute behavior by using event / subscriber (prePersist, preUpdate an entity)
-
-- implements is_unique attribute behavior by using event / subscriber (prePersist, preUpdate a value)
-
-- add a configuration json field in attribute entity (to store custom configuration, for now)
-
-- fix bug with null value for date and datetime because set up with now()
-
-Others topics
-=============
-
-is_scopable :
-- product value can have a scope
-- add an interface setScope(string $scope), getScope()
-- product entity implements interface
-- change getValue / setValue when scope is defined for entity
-- save / get in locale + scope
-
-prepare product data set
-
-Flexible Entity
-- add shortcut to get entity option and entity option value ?
-- enhance find($id) to load any values in one query ? (no lazy load when get each value), play with doctrine cascade ?
-- provide shortcut to setData / updateData 
-
-Entity/Mapping/
-- AbstractOrmEntityEAV    @attributeValues
-- AbstractOrmEntityFlat   @flatValues
-- AbstractOrmEntityHybrid @attributeValues + @flatValues
-- AbstractOrmEntityAttributeValue
-- AbstractOrmEntityFlatValue
-
-Flexible entity repository
-- direct join on option ?
-
-Translatable behavior
-- can be optionnal for flexible ?
-
-Attribute
-- how to extends to add some custom conf (for instance scope for product ?)
-
-Test
-- add 10k products with 100 attributes to check the impl
