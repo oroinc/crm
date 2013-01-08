@@ -321,6 +321,39 @@ Base repository is designed to deal with translated values in queries, it knows 
 
 Base entity is designed to get values related to asked locale.
 
+About queries on flexible entity
+================================
+
+We can use classic findBy() method of repository to retrieve entity collection.
+```php
+// get only entities, values and attributes are lazy loaded, you can use any criteria, order you want it's a classic doctrine query
+$products = $this->getProductManager()->getEntityRepository()->findBy(array());
+```
+
+We have added a findByWithAttributes() in flexible repository which have the same signature, just attribute codes list to retrieve as first param.
+
+This method cover the same features than findBy, add basic criteria, order by, limit on field or attribute.
+ 
+```php
+// get all entity fields and values (no lazy loading)
+$products = $this->getProductManager()->getEntityRepository()->findByWithAttributes();
+// select few attributes
+$products = $this->getProductManager()->getEntityRepository()->findByWithAttributes(array('name'));
+// filter on field and attribute values
+$products = $this->getProductManager()->getEntityRepository()->findByWithAttributes(array(), array('sku' => 'sku-2'));
+$products = $this->getProductManager()->getEntityRepository()->findByWithAttributes(array('description', 'size'), array('size' => 175));
+// use order 
+$products = $this->getProductManager()->getEntityRepository()->findByWithAttributes(array('name', 'description'), null, array('description' => 'desc', 'id' => 'asc'));
+// use limit 
+$products = $this->getProductManager()->getEntityRepository()->findByWithAttributes(array('name', 'description'), null, null, 10, 0);
+// force locale to get french values
+$this->getProductManager()->setLocaleCode('fr')->getEntityRepository()->findByWithAttributes(array('name', 'description'));
+
+// more examples in controllers an unit tests
+```
+
+This method should be extended to add other operators like, in, etc, for now you have to define the method in your custom repository.
+
 How to customize my flexible entity implementation
 ==================================================
 

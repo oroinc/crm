@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @license   http://opensource.org/licenses/MIT MIT
  *
  * @ORM\Table(name="acmeproduct_product")
- * @ORM\Entity(repositoryClass="Acme\Bundle\ProductBundle\Entity\Repository\ProductRepository")
+ * @ORM\Entity(repositoryClass="Oro\Bundle\FlexibleEntityBundle\Entity\Repository\OrmFlexibleEntityRepository")
  */
 class Product extends AbstractOrmEntity
 {
