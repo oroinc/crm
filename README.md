@@ -29,8 +29,13 @@ In Oro\Bundle\FlexibleEntityBundle :
 
 - /Helper contains classes with utility methods
 
-Install and unit tests
-======================
+Acme namespace contains some exemples :
+- ManufacturerBundle : a simple entity
+- CustomerBundle : a flexible entity (no translatable attributes)
+- ProductBundle : a flexible entity (with translatable attributes)
+
+Install and run unit tests
+==========================
 
 Install as standard symfony 2 app then :
 ```bash
@@ -109,7 +114,7 @@ How to use :
         $mm = $this->container->get('manufacturer_manager');
         $manufacturers = $mm->getEntityRepository()->findAll();
         // create a new one
-        $manufacturer = $mm->getNewEntityInstance();
+        $manufacturer = $mm->createEntity();
         $manufacturer->setName('Dell');
         // persist
         $mm->getStorageManager()->persist($manufacturer);
@@ -128,7 +133,6 @@ In this case, we can directly use classic way too with :
         // persist
         $em->persist($manufacturer);
         $em->flush();
-        
 ```
 
 Create a flexible entity (with dynamic attribute management, not translatable)
@@ -330,12 +334,14 @@ class ProductRepository extends OrmFlexibleEntityRepository
 - write custom queries
 - configure custom repository in your flexible entity class as :
 ```php
+<?php
 /**
  * Flexible product
  * @ORM\Table(name="acmeproduct_product")
  * @ORM\Entity(repositoryClass="Acme\Bundle\ProductBundle\Entity\Repository\ProductRepository")
  */
 class Product extends AbstractOrmEntity
+{
 ```
 
 Add some behavior related to flexible (as audit, log)
@@ -344,6 +350,7 @@ Add some behavior related to flexible (as audit, log)
 - use event / subscriber to plug custom code (as for translatable behavior, see TranslatableListener)
 - if needed, you can retrieve relevant flexible entity manager from entity full qualified class name as : 
 ```php
+<?php
 // get flexible config and manager
 $flexibleConfig = $this->container->getParameter('oro_flexibleentity.entities_config');
 $flexibleManagerName = $flexibleConfig['entities_config'][$flexibleEntityClass]['flexible_manager'];
@@ -354,7 +361,7 @@ Add some custom attribute configuration for a dedicated entity
 --------------------------------------------------------------
 
 - create a MyEntityAttribute class with one-one relation to BasicEntityAttribute class
-- create your repository to encapsulate the manipulation of basic attribute
+- create your repository to encapsulate the manipulation of basic attribute via myentity attribute
 
 Store attributes, option, option values in custom tables
 --------------------------------------------------------
