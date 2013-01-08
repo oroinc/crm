@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @copyright 2012 Akeneo SAS (http://www.akeneo.com)
  * @license   http://opensource.org/licenses/MIT MIT
  *
- * @ORM\Table(name="acme_product_entity")
+ * @ORM\Table(name="acmeproduct_product")
  * @ORM\Entity(repositoryClass="Acme\Bundle\ProductBundle\Entity\Repository\ProductRepository")
  */
 class Product extends AbstractOrmEntity

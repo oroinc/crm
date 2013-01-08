@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @copyright 2012 Akeneo SAS (http://www.akeneo.com)
  * @license   http://opensource.org/licenses/MIT MIT
  *
- * @ORM\Table(name="acme_product_attribute_value")
+ * @ORM\Table(name="acmeproduct_product_attribute_value")
  * @ORM\Entity
  */
 class ProductAttributeValue extends AbstractOrmEntityAttributeValue

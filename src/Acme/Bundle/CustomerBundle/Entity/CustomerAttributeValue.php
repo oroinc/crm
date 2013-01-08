@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @copyright 2012 Akeneo SAS (http://www.akeneo.com)
  * @license   http://opensource.org/licenses/MIT MIT
  *
- * @ORM\Table(name="acme_customer_attribute_value")
+ * @ORM\Table(name="acmecustomer_customer_attribute_value")
  * @ORM\Entity
  */
 class CustomerAttributeValue extends AbstractOrmEntityAttributeValue
