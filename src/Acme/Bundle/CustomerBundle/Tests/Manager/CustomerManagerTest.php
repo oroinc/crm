@@ -244,7 +244,7 @@ class CustomerManagerTest extends KernelAwareTest
 
         // test filtering and limiting
         $customers = $this->getRepo()->findByWithAttributes(array('company'), array('lastname' => 'Dupont', 'company' => 'Akeneo'), null, 5, 0);
-        $this->assertCount(5, $customers);
+        $this->assertCount(6, $customers);
 
         // test filtering, limiting and ordering
         $customers = $this->getRepo()->findByWithAttributes(array(), array('firstname' => 'Romain'), array('lastname' => 'ASC'), 5, 0);

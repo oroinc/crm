@@ -42,7 +42,12 @@ class ProductManagerTest extends KernelAwareTest
         $sku = 'my sku '.str_replace('.', '', microtime(true));
         $newProduct->setSku($sku);
 
+        // persist
         $this->manager->getStorageManager()->persist($newProduct);
+        $this->manager->getStorageManager()->flush();
+
+        // remove product inserted
+        $this->manager->getStorageManager()->remove($newProduct);
         $this->manager->getStorageManager()->flush();
     }
 
@@ -92,6 +97,12 @@ class ProductManagerTest extends KernelAwareTest
 
         // persist
         $this->manager->getStorageManager()->persist($newProduct);
+        $this->manager->getStorageManager()->flush();
+
+        // remove product inserted
+        $this->manager->getStorageManager()->remove($attName);
+        $this->manager->getStorageManager()->remove($attSize);
+        $this->manager->getStorageManager()->remove($newProduct);
         $this->manager->getStorageManager()->flush();
     }
 }
