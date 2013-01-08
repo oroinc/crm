@@ -45,6 +45,23 @@ class ProductControllerTest extends AbstractControllerTest
     }
 
     /**
+     * Test related method
+     */
+    public function testView()
+    {
+        // insert attributes data then products data
+        $this->client->request('GET', '/en/product/attribute/insert');
+        $this->assertEquals(302, $this->client->getResponse()->getStatusCode());
+        $this->client->request('GET', '/en/product/product/insert');
+        $this->assertEquals(302, $this->client->getResponse()->getStatusCode());
+        $this->client->request('GET', '/en/product/product/translate');
+        $this->assertEquals(302, $this->client->getResponse()->getStatusCode());
+
+        $this->client->request('GET', '/en/product/product/view/1');
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+    }
+
+    /**
      * Test query actions
      */
     public function testQueries()
@@ -53,6 +70,8 @@ class ProductControllerTest extends AbstractControllerTest
         $this->client->request('GET', '/en/product/attribute/insert');
         $this->assertEquals(302, $this->client->getResponse()->getStatusCode());
         $this->client->request('GET', '/en/product/product/insert');
+        $this->assertEquals(302, $this->client->getResponse()->getStatusCode());
+        $this->client->request('GET', '/en/product/product/translate');
         $this->assertEquals(302, $this->client->getResponse()->getStatusCode());
 
         $actions = array(
