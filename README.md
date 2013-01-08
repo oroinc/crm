@@ -126,7 +126,7 @@ In this case, we can directly use classic way too with :
 ```php
         // get list
         $em = $this->container->get('doctrine.orm.entity_manager');
-        $manufacturers = $em->getRepository('AcmeBundle:Manufacturer')->findAll();
+        $manufacturers = $em->getRepository('AcmeManufacturerBundle:Manufacturer')->findAll();
         // create a new one
         $manufacturer = new Manufacturer();
         $manufacturer->setName('Dell');
@@ -266,7 +266,6 @@ $cm = $this->container->get('customer_manager');
 // create an attribute (cf controllers and unit tests for more exemples with options, etc)
 $att = $cm->createAttribute();
 $att->setCode($attCode);
-$att->setTitle('Company');
 $att->setTitle('Company');
 $att->setBackendModel(AbstractAttributeType::BACKEND_MODEL_ATTRIBUTE_VALUE);
 $att->setBackendType(AbstractAttributeType::BACKEND_TYPE_VARCHAR);

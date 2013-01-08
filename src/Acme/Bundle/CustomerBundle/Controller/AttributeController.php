@@ -56,7 +56,7 @@ class AttributeController extends Controller
 
         // attribute company (if not exists)
         $attCode = 'company';
-        $att = $this->getCustomerManager()->getAttributeRepository()->findOneByCode($attCode);
+        $att = $this->getCustomerManager()->getEntityRepository()->findAttributeByCode($attCode);
         if ($att) {
             $messages[]= "Attribute ".$attCode." already exists";
         } else {
@@ -71,7 +71,7 @@ class AttributeController extends Controller
 
         // attribute date of birth (if not exists)
         $attCode = 'dob';
-        $att = $this->getCustomerManager()->getAttributeRepository()->findOneByCode($attCode);
+        $att = $this->getCustomerManager()->getEntityRepository()->findAttributeByCode($attCode);
         if ($att) {
             $messages[]= "Attribute ".$attCode." already exists";
         } else {
@@ -86,7 +86,7 @@ class AttributeController extends Controller
 
         // attribute gender (if not exists)
         $attCode = 'gender';
-        $att = $this->getCustomerManager()->getAttributeRepository()->findOneByCode($attCode);
+        $att = $this->getCustomerManager()->getEntityRepository()->findAttributeByCode($attCode);
         if ($att) {
             $messages[]= "Attribute ".$attCode." already exists";
         } else {

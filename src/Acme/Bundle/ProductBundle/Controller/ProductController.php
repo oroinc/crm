@@ -228,10 +228,10 @@ class ProductController extends Controller
         $this->getProductManager()->setLocaleCode('en');
 
         // get attributes
-        $attName = $this->getProductManager()->getAttributeRepository()->findOneByCode('name');
-        $attDescription = $this->getProductManager()->getAttributeRepository()->findOneByCode('description');
-        $attSize = $this->getProductManager()->getAttributeRepository()->findOneByCode('size');
-        $attColor = $this->getProductManager()->getAttributeRepository()->findOneByCode('color');
+        $attName = $this->getProductManager()->getEntityRepository()->findAttributeByCode('name');
+        $attDescription = $this->getProductManager()->getEntityRepository()->findAttributeByCode('description');
+        $attSize = $this->getProductManager()->getEntityRepository()->findAttributeByCode('size');
+        $attColor = $this->getProductManager()->getEntityRepository()->findAttributeByCode('color');
         // get first attribute option
         $optColor = $this->getProductManager()->getAttributeOptionRepository()->findOneBy(array('attribute' => $attColor));
 
@@ -341,8 +341,8 @@ class ProductController extends Controller
         $this->getProductManager()->setLocaleCode('en');
 
         // get attributes
-        $attName = $this->getProductManager()->getAttributeRepository()->findOneByCode('name');
-        $attDescription = $this->getProductManager()->getAttributeRepository()->findOneByCode('description');
+        $attName = $this->getProductManager()->getEntityRepository()->findAttributeByCode('name');
+        $attDescription = $this->getProductManager()->getEntityRepository()->findAttributeByCode('description');
 
         // get products
         $products = $this->getProductManager()->getEntityRepository()->findByWithAttributes();
@@ -375,7 +375,7 @@ class ProductController extends Controller
         }
 
         // get color attribute options
-        $attColor = $this->getProductManager()->getAttributeRepository()->findOneByCode('color');
+        $attColor = $this->getProductManager()->getEntityRepository()->findAttributeByCode('color');
         $colors = array("Red" => "Rouge", "Blue" => "Bleu", "Green" => "Vert");
         // translate
         foreach ($colors as $colorEn => $colorFr) {

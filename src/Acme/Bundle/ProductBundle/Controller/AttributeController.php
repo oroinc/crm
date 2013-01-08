@@ -59,7 +59,7 @@ class AttributeController extends Controller
 
         // attribute name (if not exists)
         $attributeCode = 'name';
-        $attribute = $this->getProductManager()->getAttributeRepository()->findOneByCode($attributeCode);
+        $attribute = $this->getProductManager()->getEntityRepository()->findAttributeByCode($attributeCode);
         if ($attribute) {
             $messages[]= "Attribute ".$attributeCode." already exists";
         } else {
@@ -76,7 +76,7 @@ class AttributeController extends Controller
 
         // attribute description (if not exists)
         $attributeCode = 'description';
-        $attribute = $this->getProductManager()->getAttributeRepository()->findOneByCode($attributeCode);
+        $attribute = $this->getProductManager()->getEntityRepository()->findAttributeByCode($attributeCode);
         if ($attribute) {
             $messages[]= "Attribute ".$attributeCode." already exists";
         } else {
@@ -92,7 +92,7 @@ class AttributeController extends Controller
 
         // attribute size (if not exists)
         $attributeCode= 'size';
-        $attribute = $this->getProductManager()->getAttributeRepository()->findOneByCode($attributeCode);
+        $attribute = $this->getProductManager()->getEntityRepository()->findAttributeByCode($attributeCode);
         if ($attribute) {
             $messages[]= "Attribute ".$attributeCode." already exists";
         } else {
@@ -107,7 +107,7 @@ class AttributeController extends Controller
 
         // attribute color (if not exists)
         $attributeCode= 'color';
-        $attribute = $this->getProductManager()->getAttributeRepository()->findOneByCode($attributeCode);
+        $attribute = $this->getProductManager()->getEntityRepository()->findAttributeByCode($attributeCode);
         if ($attribute) {
             $messages[]= "Attribute ".$attributeCode." already exists";
         } else {

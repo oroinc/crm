@@ -189,9 +189,9 @@ class CustomerController extends Controller
         $messages = array();
 
         // get attributes
-        $attCompany = $this->getCustomerManager()->getAttributeRepository()->findOneByCode('company');
-        $attDob = $this->getCustomerManager()->getAttributeRepository()->findOneByCode('dob');
-        $attGender = $this->getCustomerManager()->getAttributeRepository()->findOneByCode('gender');
+        $attCompany = $this->getCustomerManager()->getEntityRepository()->findAttributeByCode('company');
+        $attDob = $this->getCustomerManager()->getEntityRepository()->findAttributeByCode('dob');
+        $attGender = $this->getCustomerManager()->getEntityRepository()->findAttributeByCode('gender');
         // get first attribute option
         $optGender = $this->getCustomerManager()->getAttributeOptionRepository()->findOneBy(array('attribute' => $attGender));
 
