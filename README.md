@@ -44,11 +44,8 @@ Install as standard symfony 2 app then :
 ~/git/poc-product-entity-design$ php app/console doctrine:schema:update --force
 ```
 
-To run tests :
+To run tests (a test db is used) :
 ```bash
-~/git/poc-product-entity-design$ php app/console doctrine:database:drop --force --env=test
-~/git/poc-product-entity-design$ php app/console doctrine:database:create --env=test
-~/git/poc-product-entity-design$ php app/console doctrine:schema:update --force --env=test
 ~/git/poc-product-entity-design$ phpunit -c app/  --coverage-html=cov/
 ```
 
@@ -195,7 +192,7 @@ We define mapping to basic entity attribute, to basic option (for attribute of l
 namespace Acme\Bundle\CustomerBundle\Entity;
 
 use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractOrmEntityAttributeValue;
-use Oro\Bundle\FlexibleEntityBundle\Entity\OrmEntityAttribute;
+use Oro\Bundle\FlexibleEntityBundle\Entity\OrmAttribute;
 use Doctrine\ORM\Mapping as ORM;
 /**
 
@@ -207,7 +204,7 @@ class CustomerAttributeValue extends AbstractOrmEntityAttributeValue
     /**
      * @var Attribute $attribute
      *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\FlexibleEntityBundle\Entity\OrmEntityAttribute")
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\FlexibleEntityBundle\Entity\OrmAttribute")
      */
     protected $attribute;
 
@@ -221,15 +218,15 @@ class CustomerAttributeValue extends AbstractOrmEntityAttributeValue
     /**
      * Store option value, if backend is an option
      *
-     * @var AbstractOrmEntityAttributeOption $optionvalue
+     * @var AbstractOrmAttributeOption $optionvalue
      *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\FlexibleEntityBundle\Entity\OrmEntityAttributeOption")
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\FlexibleEntityBundle\Entity\OrmAttributeOption")
      */
     protected $option;
 }
 ```
 
-Then, we configure our flexible entity in src/Oro/Bundle/CustomerBundle/Resources/config/flexibleentity.yml :
+Then, we configure our flexible entity in src/Acme/Bundle/CustomerBundle/Resources/config/flexibleentity.yml :
 ```yaml
 entities_config:
     Acme\Bundle\CustomerBundle\Entity\Customer:
@@ -245,7 +242,7 @@ This config :
 - is accessible as $this->container->getParameter('oro_flexibleentity.entities_config');
 - is known by flexible entity manager and repository
 
-Finally we add our service declaration in src/Oro/Bundle/CustomerBundle/Resources/config/services.yml :
+Finally we add our service declaration in src/Acme/Bundle/CustomerBundle/Resources/config/services.yml :
 ```yaml
 parameters:
     customer_manager_class: Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleEntityManager
@@ -273,7 +270,8 @@ $att->setBackendType(AbstractAttributeType::BACKEND_TYPE_VARCHAR);
 $cm->getStorageManager()->persist($att);
 $cm->getStorageManager()->flush();
 
-// create customer with basic fields mapped in customer entity  (cf controllers and unit tests for more exemples with options, etc)
+// create customer with basic fields mapped in customer entity  (cf controllers and unit tests for
+// more exemples with options, etc)
 $customer = $cm->createEntity();
 $customer->setEmail($custEmail);
 $customer->setFirstname('Nicolas');
@@ -312,14 +310,14 @@ $attribute->setBackendType(AbstractAttributeType::BACKEND_TYPE_TEXT);
 $attribute->setTranslatable(true);
 ```
 
-About locale, if attribute is defined as translatable, the locale to use is retrieved (by priority) :
+About locale, if attribute is defined as translatable, the locale to use (in entity or repository) is retrieved (high to low priority) :
 - from flexible manager if developer has forced it with setLocaleCode($code)
 - from http request
 - from application config
 
-Base repository is designed to deal with translated values in queries, it knows the asked locale and gets relevant value if attribute is translatable.
+Base flexible entity repository is designed to deal with translated values in queries, it knows the asked locale and gets relevant value if attribute is translatable.
 
-Base entity is designed to get values related to asked locale.
+Base flexible entity is designed to gets relevant values too, it knows the asked locale (injected with TranslatableListener).
 
 About queries on flexible entity
 ================================
@@ -333,7 +331,7 @@ $products = $this->getProductManager()->getEntityRepository()->findBy(array());
 We have added a findByWithAttributes() in flexible repository which have the same signature, just attribute codes to select as first param.
 
 This method cover the same features than findBy, add basic criterias, order by, limit on field or attribute.
- 
+
 ```php
 $productRepository = $this->getProductManager()->getEntityRepository();
 // get all entity fields and values (no lazy loading)
@@ -357,6 +355,16 @@ $this->getProductManager()->setLocaleCode('fr')->getEntityRepository()
 ```
 
 This method should be extended to add other operators like, in, etc, for now you have to define the method in your custom repository.
+
+There is also a method to load a flexible entity and all values without lazy loading : 
+
+```php
+// to load one flexible entity with lazy loading, classic way
+$customer = $this->getCustomerManager()->getEntityRepository()->find($id);
+
+// with all values not lazy loaded with new method
+$customer = $this->getCustomerManager()->getEntityRepository()->findWithAttributes($id);
+```
 
 How to customize my flexible entity implementation
 ==================================================
@@ -402,13 +410,13 @@ $flexibleManager = $this->container->get($flexibleManagerName);
 Add some custom attribute configuration for a dedicated entity
 --------------------------------------------------------------
 
-- create a MyEntityAttribute class with one-one relation to BasicEntityAttribute class
-- create your repository to encapsulate the manipulation of basic attribute via myentity attribute
+- for instance, create a ProductAttribute class with one-one relation to OrmAttribute class
+- create a ProductAttributeRepository to encapsulate the manipulation of OrmAttribute
 
 Store attributes, option, option values in custom tables
 --------------------------------------------------------
 
-- extend or replace OrmEntityAttribute, OrmEntityAttributeOption, OrmEntityAttributeOptionValue in your bundle
+- extend or replace OrmAttribute, OrmAttributeOption, OrmAttributeOptionValue in your bundle
 - define the classes to use in our flexibleentity.yml with properties : 'flexible_attribute_class', 'flexible_attribute_option_class', 'flexible_attribute_option_value_class'
 
 Use flat storage for values
@@ -421,13 +429,13 @@ Use flat storage for values
 Use document oriented storage for entity/values
 -----------------------------------------------
 
-- define your document class and flexible manager
-- define manager as other and inject your flexible manager
+- define your document class and flexible manager in your bundle
+- define flexible document manager as basic one and inject it in your flexible service manager as :
 
 ```yaml
 parameters:
     mydoc_manager_class: Acme\Bundle\MyBundle\Manager\MyFlexibleEntityManager
-    mydoc_entity_class:  Acme\Bundle\MyBundle\Document\Mydoc
+    mydoc_entity_class:  Acme\Bundle\MyBundle\Document\MyDocument
 
 services:
     customer_manager:

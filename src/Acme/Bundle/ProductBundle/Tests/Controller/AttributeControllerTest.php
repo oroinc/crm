@@ -17,21 +17,21 @@ class AttributeControllerTest extends AbstractControllerTest
     /**
      * Test related method
      */
-    public function testIndex()
-    {
-        $this->client->request('GET', '/en/product/attribute/index');
-
-        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
-    }
-
-    /**
-     * Test related method
-     */
     public function testInsert()
     {
         $this->client->request('GET', '/en/product/attribute/insert');
 
         $this->assertEquals(302, $this->client->getResponse()->getStatusCode());
+    }
+
+    /**
+     * Test related method
+     */
+    public function testIndex()
+    {
+        $this->client->request('GET', '/en/product/attribute/index');
+
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
     }
 
 }
