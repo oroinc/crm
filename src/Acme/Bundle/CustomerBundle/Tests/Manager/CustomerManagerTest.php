@@ -123,24 +123,6 @@ class CustomerManagerTest extends KernelAwareTest
     }
 
     /**
-     * Create an option for customer attribute
-     * @param multitype $values
-     *
-     * @return OrmEntityAttributeOption
-     */
-//     protected function createOption($values)
-//     {
-//         $opt = $this->manager->createNewAttributeOption();
-//         foreach ($values as $value) {
-//             $optValue = $this->manager->createNewAttributeOptionValue();
-//             $optValue->setValue($value);
-//         }
-//         $opt->addOptionValue($optValue);
-
-//         return $opt;
-//     }
-
-    /**
      * Create customer
      * @param string $firstname Firstname of the customer
      * @param string $lastname  Lastname of the customer
@@ -198,11 +180,11 @@ class CustomerManagerTest extends KernelAwareTest
     /**
      * Create attribute
      *
-     * @param string $code         Attribute code
-     * @param string $title        Attribute title
-     * @param string $backendModel Attribute backend model
-     * @param string $backendType  Attribute backend type
-     * @param multitype $options   Options list
+     * @param string    $code         Attribute code
+     * @param string    $title        Attribute title
+     * @param string    $backendModel Attribute backend model
+     * @param string    $backendType  Attribute backend type
+     * @param multitype $options      Options list
      *
      * @return OrmEntityAttribute
      */
