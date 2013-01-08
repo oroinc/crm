@@ -72,12 +72,13 @@ class CustomerManagerTest extends KernelAwareTest
             AbstractAttributeType::BACKEND_MODEL_ATTRIBUTE_VALUE,
             AbstractAttributeType::BACKEND_TYPE_DATE
         );
-//         $this->attGender = $this->createAttribute(
-//             'gender',
-//             'Gender',
-//             AbstractAttributeType::BACKEND_MODEL_ATTRIBUTE_VALUE,
-//             AbstractAttributeType::BACKEND_TYPE_OPTION
-//         );
+        $this->attGender = $this->createAttribute(
+            'gender',
+            'Gender',
+            AbstractAttributeType::BACKEND_MODEL_ATTRIBUTE_VALUE,
+            AbstractAttributeType::BACKEND_TYPE_OPTION,
+            array('Mr', 'Mrs')
+        );
 
         // create entities
         for ($idx=0; $idx<5; $idx++) {
@@ -96,8 +97,6 @@ class CustomerManagerTest extends KernelAwareTest
      */
     public function tearDown()
     {
-        parent::tearDown();
-
         // remove entities
         foreach ($this->customerList as $customer) {
             $this->manager->getStorageManager()->remove($customer);
@@ -107,10 +106,29 @@ class CustomerManagerTest extends KernelAwareTest
         // remove attributes
         $this->manager->getStorageManager()->remove($this->attCompany);
         $this->manager->getStorageManager()->remove($this->attDob);
-//         $this->manager->getStorageManager()->remove($this->attGender);
+        $this->manager->getStorageManager()->remove($this->attGender);
 
         // commit remove transaction
         $this->manager->getStorageManager()->flush();
+        parent::tearDown();
+    }
+
+    /**
+     * Create an option for customer attribute
+     * @param multitype $values
+     *
+     * @return OrmEntityAttributeOption
+     */
+    protected function createOption($values)
+    {
+        $opt = $this->manager->createNewAttributeOption();
+        foreach ($values as $value) {
+            $optValue = $this->manager->createNewAttributeOptionValue();
+            $optValue->setValue($value);
+        }
+        $opt->addOptionValue($optValue);
+
+        return $opt;
     }
 
     /**

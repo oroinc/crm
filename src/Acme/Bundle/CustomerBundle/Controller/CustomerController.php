@@ -234,6 +234,9 @@ class CustomerController extends Controller
                     $value->setAttribute($attCompany);
                     $value->setData('Akeneo');
                     $customer->addValue($value);
+                }
+                // add date of birth
+                if ($attDob) {
                     $value = $this->getCustomerManager()->createEntityValue();
                     $value->setAttribute($attDob);
                     $value->setData(new \DateTime($this->generateBirthDate()));

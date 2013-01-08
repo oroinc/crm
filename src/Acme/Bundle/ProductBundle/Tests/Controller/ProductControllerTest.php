@@ -2,7 +2,7 @@
 
 namespace Acme\Bundle\ProductBundle\Tests\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Oro\Bundle\FlexibleEntityBundle\Tests\Controller\AbstractControllerTest;
 
 /**
  * Test related class
@@ -12,18 +12,16 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
  * @license   http://opensource.org/licenses/MIT MIT
  *
  */
-class ProductControllerTest extends WebTestCase
+class ProductControllerTest extends AbstractControllerTest
 {
     /**
      * Test related method
      */
     public function testIndex()
     {
-        $client = static::createClient();
+        $this->client->request('GET', '/en/product/product/index');
 
-        $crawler = $client->request('GET', '/en/product/product/index');
-
-        $this->assertEquals(200, $client->getResponse()->getStatusCode());
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
     }
 
     /**
@@ -31,11 +29,9 @@ class ProductControllerTest extends WebTestCase
      */
     public function testInsert()
     {
-        $client = static::createClient();
+        $this->client->request('GET', '/en/product/product/insert');
 
-        $crawler = $client->request('GET', '/en/product/product/insert');
-
-        $this->assertEquals(302, $client->getResponse()->getStatusCode());
+        $this->assertEquals(302, $this->client->getResponse()->getStatusCode());
     }
 
     /**
@@ -43,23 +39,27 @@ class ProductControllerTest extends WebTestCase
      */
     public function testTranslate()
     {
-        $client = static::createClient();
+        $this->client->request('GET', '/en/product/product/translate');
 
-        $crawler = $client->request('GET', '/en/product/product/translate');
-
-        $this->assertEquals(302, $client->getResponse()->getStatusCode());
+        $this->assertEquals(302, $this->client->getResponse()->getStatusCode());
     }
 
     /**
-     * Test related method
+     * Test query actions
      */
     public function testQueries()
     {
-        $client = static::createClient();
+        // insert attributes data then products data
+        $this->client->request('GET', '/en/product/attribute/insert');
+        $this->assertEquals(302, $this->client->getResponse()->getStatusCode());
+        $this->client->request('GET', '/en/product/product/insert');
+        $this->assertEquals(302, $this->client->getResponse()->getStatusCode());
+
         $actions = array(
             '/en/product/product/querylazyload',
             '/en/product/product/queryonlyname',
             '/en/product/product/querynameanddesc',
+            '/en/product/product/querynameanddescforcelocale',
             '/en/product/product/queryfilterskufield',
             '/en/product/product/querynamefilterskufield',
             '/en/product/product/queryfiltersizeattribute',
@@ -68,8 +68,40 @@ class ProductControllerTest extends WebTestCase
             '/en/product/product/querynameanddescorderby',
         );
         foreach ($actions as $action) {
-            $crawler = $client->request('GET', $action);
-            $this->assertEquals(200, $client->getResponse()->getStatusCode());
+            $this->client->request('GET', $action);
+            $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+        }
+    }
+
+    /**
+     * Test query actions without data
+     */
+    public function testQueriesWithoutData()
+    {
+        // actions returning code 200
+        $actions = array(
+            '/en/product/product/querylazyload',
+            '/en/product/product/queryonlyname',
+            '/en/product/product/queryfilterskufield',
+        );
+        foreach ($actions as $action) {
+            $this->client->request('GET', $action);
+            $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+        }
+
+        // actions returning exception
+        $actions = array(
+            '/en/product/product/querynameanddesc',
+            '/en/product/product/querynameanddescforcelocale',
+            '/en/product/product/querynamefilterskufield',
+            '/en/product/product/queryfiltersizeattribute',
+            '/en/product/product/queryfiltersizeanddescattributes',
+            '/en/product/product/querynameanddesclimit',
+            '/en/product/product/querynameanddescorderby',
+        );
+        foreach ($actions as $action) {
+            $this->client->request('GET', $action);
+            $this->assertEquals(500, $this->client->getResponse()->getStatusCode());
         }
     }
 

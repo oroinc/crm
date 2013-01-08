@@ -2,7 +2,7 @@
 
 namespace Acme\Bundle\ManufacturerBundle\Tests\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Oro\Bundle\FlexibleEntityBundle\Tests\Controller\AbstractControllerTest;
 
 /**
  * Test related class
@@ -12,7 +12,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
  * @license   http://opensource.org/licenses/MIT MIT
  *
  */
-class ManufacturerControllerTest extends WebTestCase
+class ManufacturerControllerTest extends AbstractControllerTest
 {
 
     /**
@@ -20,11 +20,9 @@ class ManufacturerControllerTest extends WebTestCase
      */
     public function testInsert()
     {
-        $client = static::createClient();
+        $this->client->request('GET', '/en/manufacturer/manufacturer/insert');
 
-        $crawler = $client->request('GET', '/en/manufacturer/manufacturer/insert');
-
-        $this->assertEquals(302, $client->getResponse()->getStatusCode());
+        $this->assertEquals(302, $this->client->getResponse()->getStatusCode());
     }
 
     /**
@@ -32,10 +30,8 @@ class ManufacturerControllerTest extends WebTestCase
      */
     public function testIndex()
     {
-        $client = static::createClient();
+        $this->client->request('GET', '/en/manufacturer/manufacturer/index');
 
-        $crawler = $client->request('GET', '/en/manufacturer/manufacturer/index');
-
-        $this->assertEquals(200, $client->getResponse()->getStatusCode());
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
     }
 }

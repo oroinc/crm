@@ -2,7 +2,7 @@
 
 namespace Acme\Bundle\ProductBundle\Tests\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Oro\Bundle\FlexibleEntityBundle\Tests\Controller\AbstractControllerTest;
 
 /**
  * Test related class
@@ -12,18 +12,16 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
  * @license   http://opensource.org/licenses/MIT MIT
  *
  */
-class AttributeControllerTest extends WebTestCase
+class AttributeControllerTest extends AbstractControllerTest
 {
     /**
      * Test related method
      */
     public function testIndex()
     {
-        $client = static::createClient();
+        $this->client->request('GET', '/en/product/attribute/index');
 
-        $crawler = $client->request('GET', '/en/product/attribute/index');
-
-        $this->assertEquals(200, $client->getResponse()->getStatusCode());
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
     }
 
     /**
@@ -31,11 +29,9 @@ class AttributeControllerTest extends WebTestCase
      */
     public function testInsert()
     {
-        $client = static::createClient();
+        $this->client->request('GET', '/en/product/attribute/insert');
 
-        $crawler = $client->request('GET', '/en/product/attribute/insert');
-
-        $this->assertEquals(302, $client->getResponse()->getStatusCode());
+        $this->assertEquals(302, $this->client->getResponse()->getStatusCode());
     }
 
 }
