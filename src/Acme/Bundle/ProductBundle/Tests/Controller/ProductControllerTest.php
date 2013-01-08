@@ -81,7 +81,6 @@ class ProductControllerTest extends AbstractControllerTest
         // actions returning code 200
         $actions = array(
             '/en/product/product/querylazyload',
-            '/en/product/product/queryonlyname',
             '/en/product/product/queryfilterskufield',
         );
         foreach ($actions as $action) {
@@ -91,6 +90,7 @@ class ProductControllerTest extends AbstractControllerTest
 
         // actions returning exception
         $actions = array(
+            '/en/product/product/queryonlyname',
             '/en/product/product/querynameanddesc',
             '/en/product/product/querynameanddescforcelocale',
             '/en/product/product/querynamefilterskufield',
