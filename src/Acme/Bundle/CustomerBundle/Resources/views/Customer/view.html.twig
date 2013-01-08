@@ -1,0 +1,21 @@
+{% extends 'AcmeProductBundle::layout.html.twig' %}
+
+{% block content %}
+
+    <ul>
+        <!-- fields -->
+        <li>id: {{customer.id}}</li>
+        <li>email: {{customer.email}}</li>
+        <li>firstname: {{customer.firstname}}</li>
+        <li>lastname: {{customer.lastname}}</li>
+        <li>created: {{customer.created|date('Y-m-d h:i:s')}}</li>
+        <li>updated: {{customer.updated|date('Y-m-d h:i:s')}}</li>
+        <!-- attributes -->
+        <li>Dob : {{ customer.dob|date('Y-m-d')}}</li>
+        <li>Gender : {{ customer.gender }}</li>
+        <li>Company : {{ customer.company }}</li>
+    </ul>
+    
+    <td><a href="{{ path('acme_customer_customer_index') }}">Back to list</a></td>
+
+{% endblock %}

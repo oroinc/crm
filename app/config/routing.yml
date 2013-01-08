@@ -1,19 +1,19 @@
 _welcome:
     pattern:  /{_locale}
-    defaults: { _controller: OroProductBundle:Product:index, _locale: %locale% }
+    defaults: { _controller: AcmeProductBundle:Product:index, _locale: %locale% }
 
 oro_product:
-    resource: "@OroProductBundle/Controller/"
+    resource: "@AcmeProductBundle/Controller/"
     type:     annotation
     prefix:   /{_locale}/product/
 
 oro_manufacturer:
-    resource: "@OroManufacturerBundle/Controller/"
+    resource: "@AcmeManufacturerBundle/Controller/"
     type:     annotation
     prefix:   /{_locale}/manufacturer/
 
 oro_customer:
-    resource: "@OroCustomerBundle/Controller/"
+    resource: "@AcmeCustomerBundle/Controller/"
     prefix:   /{_locale}/customer/
 
 # Internal routing configuration to handle ESI

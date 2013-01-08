@@ -1,0 +1,5 @@
+entities_config:
+    Acme\Bundle\CustomerBundle\Entity\Customer:
+        flexible_manager:            customer_manager
+        flexible_entity_class:       Acme\Bundle\CustomerBundle\Entity\Customer
+        flexible_entity_value_class: Acme\Bundle\CustomerBundle\Entity\CustomerAttributeValue

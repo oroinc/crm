@@ -21,9 +21,9 @@ class AppKernel extends Kernel
             new JMS\SecurityExtraBundle\JMSSecurityExtraBundle(),
 
             new Oro\Bundle\FlexibleEntityBundle\OroFlexibleEntityBundle(),
-            new Oro\Bundle\CustomerBundle\OroCustomerBundle(),
-            new Oro\Bundle\ProductBundle\OroProductBundle(),
-            new Oro\Bundle\ManufacturerBundle\OroManufacturerBundle(),
+            new Acme\Bundle\CustomerBundle\AcmeCustomerBundle(),
+            new Acme\Bundle\ProductBundle\AcmeProductBundle(),
+            new Acme\Bundle\ManufacturerBundle\AcmeManufacturerBundle(),
 
         );
 
