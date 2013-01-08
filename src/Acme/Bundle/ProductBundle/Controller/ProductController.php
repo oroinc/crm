@@ -176,7 +176,7 @@ class ProductController extends Controller
     public function querynameanddesclimitAction()
     {
         // get all entity fields and directly get attributes values
-        $products = $this->getProductManager()->getEntityRepository()->findByWithAttributes(array('name', 'description'), null, null, 10, 1);
+        $products = $this->getProductManager()->getEntityRepository()->findByWithAttributes(array('name', 'description'), null, null, 10, 0);
 
         return array('products' => $products, 'attributes' => array('name', 'description'));
     }
