@@ -317,37 +317,41 @@ About locale, if attribute is defined as translatable, the locale to use is retr
 - from http request
 - from application config
 
-Base repository is designed to deal with translated values in queries, it knows the asked locale and egt relevant value if attribute is translatable.
+Base repository is designed to deal with translated values in queries, it knows the asked locale and gets relevant value if attribute is translatable.
 
 Base entity is designed to get values related to asked locale.
 
 About queries on flexible entity
 ================================
 
-We can use classic findBy() method of repository to retrieve entity collection.
+We can use classic findBy() method of repository to retrieve entity collection (native Symfony shortcurt to build doctrine query)
 ```php
-// get only entities, values and attributes are lazy loaded, you can use any criteria, order you want it's a classic doctrine query
+// get only entities, values and attributes are lazy loaded, you can use any criteria, order, limit 
 $products = $this->getProductManager()->getEntityRepository()->findBy(array());
 ```
 
-We have added a findByWithAttributes() in flexible repository which have the same signature, just attribute codes list to retrieve as first param.
+We have added a findByWithAttributes() in flexible repository which have the same signature, just attribute codes to select as first param.
 
-This method cover the same features than findBy, add basic criteria, order by, limit on field or attribute.
+This method cover the same features than findBy, add basic criterias, order by, limit on field or attribute.
  
 ```php
+$productRepository = $this->getProductManager()->getEntityRepository();
 // get all entity fields and values (no lazy loading)
-$products = $this->getProductManager()->getEntityRepository()->findByWithAttributes();
+$products = $productRepository->findByWithAttributes();
 // select few attributes
-$products = $this->getProductManager()->getEntityRepository()->findByWithAttributes(array('name'));
+$products = $productRepository->findByWithAttributes(array('name'));
 // filter on field and attribute values
-$products = $this->getProductManager()->getEntityRepository()->findByWithAttributes(array(), array('sku' => 'sku-2'));
-$products = $this->getProductManager()->getEntityRepository()->findByWithAttributes(array('description', 'size'), array('size' => 175));
+$products = $productRepository->findByWithAttributes(array(), array('sku' => 'sku-2'));
+$products = $productRepository->findByWithAttributes(array('description', 'size'), array('size' => 175));
 // use order 
-$products = $this->getProductManager()->getEntityRepository()->findByWithAttributes(array('name', 'description'), null, array('description' => 'desc', 'id' => 'asc'));
+$products = $productRepository->findByWithAttributes(
+    array('name', 'description'), null, array('description' => 'desc', 'id' => 'asc')
+);
 // use limit 
-$products = $this->getProductManager()->getEntityRepository()->findByWithAttributes(array('name', 'description'), null, null, 10, 0);
+$products = $productRepository->findByWithAttributes(array('name', 'description'), null, null, 10, 0);
 // force locale to get french values
-$this->getProductManager()->setLocaleCode('fr')->getEntityRepository()->findByWithAttributes(array('name', 'description'));
+$this->getProductManager()->setLocaleCode('fr')->getEntityRepository()
+    ->findByWithAttributes(array('name', 'description'));
 
 // more examples in controllers an unit tests
 ```
@@ -361,11 +365,15 @@ Add some custom queries
 -----------------------
 
 - extend OrmEntityRepository in your bundle as :
+
 ```php
+<?php
 class ProductRepository extends OrmFlexibleEntityRepository
 ```
+
 - write custom queries
 - configure custom repository in your flexible entity class as :
+
 ```php
 <?php
 /**
@@ -381,7 +389,8 @@ Add some behavior related to flexible (as audit, log)
 -----------------------------------------------------
 
 - use event / subscriber to plug custom code (as for translatable behavior, see TranslatableListener)
-- if needed, you can retrieve relevant flexible entity manager from entity full qualified class name as : 
+- if needed, you can retrieve relevant flexible entity manager from entity full qualified class name as :
+ 
 ```php
 <?php
 // get flexible config and manager
@@ -413,7 +422,8 @@ Use document oriented storage for entity/values
 -----------------------------------------------
 
 - define your document class and flexible manager
-- define manager as other and inject your flexible manager 
+- define manager as other and inject your flexible manager
+
 ```yaml
 parameters:
     mydoc_manager_class: Acme\Bundle\MyBundle\Manager\MyFlexibleEntityManager
