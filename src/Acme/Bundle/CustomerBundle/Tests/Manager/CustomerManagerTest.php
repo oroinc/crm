@@ -1,6 +1,8 @@
 <?php
 namespace Acme\Bundle\CustomerBundle\Test\Service;
 
+use Oro\Bundle\FlexibleEntityBundle\Entity\OrmEntityAttributeOption;
+
 use Acme\Bundle\CustomerBundle\Entity\CustomerAttributeValue;
 
 use Oro\Bundle\FlexibleEntityBundle\Model\Attribute\Type\AbstractAttributeType;
@@ -52,6 +54,12 @@ class CustomerManagerTest extends KernelAwareTest
     protected $attGender;
 
     /**
+     * Option gender
+     * @var OrmEntityAttributeOption
+     */
+    protected $option;
+
+    /**
      * UT set up
      */
     public function setUp()
@@ -80,9 +88,10 @@ class CustomerManagerTest extends KernelAwareTest
             array('Mr', 'Mrs')
         );
 
+
         // create entities
         for ($idx=0; $idx<5; $idx++) {
-            $this->customerList[$idx] = $this->createCustomer('Nicolas', 'Dupont', 'Akeneo', '2012-12-25', 'Mr');
+            $this->customerList[$idx] = $this->createCustomer('Nicolas', 'Dupont', 'Akeneo', '2012-12-25', $this->option);
         }
         $this->customerList[$idx++] = $this->createCustomer('Romain', 'Monceau');
         $this->customerList[$idx++] = $this->createCustomer('Romain', 'Dupont', 'Akeneo');
@@ -119,17 +128,17 @@ class CustomerManagerTest extends KernelAwareTest
      *
      * @return OrmEntityAttributeOption
      */
-    protected function createOption($values)
-    {
-        $opt = $this->manager->createNewAttributeOption();
-        foreach ($values as $value) {
-            $optValue = $this->manager->createNewAttributeOptionValue();
-            $optValue->setValue($value);
-        }
-        $opt->addOptionValue($optValue);
+//     protected function createOption($values)
+//     {
+//         $opt = $this->manager->createNewAttributeOption();
+//         foreach ($values as $value) {
+//             $optValue = $this->manager->createNewAttributeOptionValue();
+//             $optValue->setValue($value);
+//         }
+//         $opt->addOptionValue($optValue);
 
-        return $opt;
-    }
+//         return $opt;
+//     }
 
     /**
      * Create customer
@@ -141,12 +150,14 @@ class CustomerManagerTest extends KernelAwareTest
      *
      * @return Customer
      */
-    protected function createCustomer($firstname = "", $lastname = "", $company = "", $dob = "", $gender = "")
+    protected function createCustomer($firstname = "", $lastname = "", $company = "", $dob = "", $gender = null)
     {
         // create values
         $valueCompany = $this->createValue($this->attCompany, $company);
         $valueDob     = $this->createValue($this->attDob, new \DateTime($dob));
-//         $valueGender  = $this->createValue($this->attGender, $gender);
+        if ($gender !== null) {
+            $valueGender  = $this->createValue($this->attGender, $gender);
+        }
 
         // create customer
         $customer = $this->manager->createEntity();
@@ -157,7 +168,9 @@ class CustomerManagerTest extends KernelAwareTest
         // add values
         $customer->addValue($valueCompany);
         $customer->addValue($valueDob);
-//         $customer->addValue($valueGender);
+        if (isset($valueGender)) {
+            $customer->addValue($valueGender);
+        }
 
         // persists customer
         $this->manager->getStorageManager()->persist($customer);
@@ -189,10 +202,11 @@ class CustomerManagerTest extends KernelAwareTest
      * @param string $title        Attribute title
      * @param string $backendModel Attribute backend model
      * @param string $backendType  Attribute backend type
+     * @param multitype $options   Options list
      *
      * @return OrmEntityAttribute
      */
-    protected function createAttribute($code, $title, $backendModel, $backendType)
+    protected function createAttribute($code, $title, $backendModel, $backendType, $options = array())
     {
         // create attribute
         $attribute = $this->manager->createAttribute();
@@ -200,6 +214,15 @@ class CustomerManagerTest extends KernelAwareTest
         $attribute->setTitle($title);
         $attribute->setBackendModel($backendModel);
         $attribute->setBackendType($backendType);
+
+        // create options
+        foreach ($options as $option) {
+            $this->option = $this->manager->createNewAttributeOption();
+            $optVal = $this->manager->createAttributeOptionValue();
+            $optVal->setValue($option);
+            $this->option->addOptionValue($optVal);
+            $attribute->addOption($this->option);
+        }
 
         // persists attribute
         $this->manager->getStorageManager()->persist($attribute);
