@@ -1,7 +1,7 @@
 <?php
 namespace Acme\Bundle\ProductBundle\Entity;
 
-use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractOrmFlexible;
+use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityFlexible;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -14,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="acmeproduct_product")
  * @ORM\Entity(repositoryClass="Oro\Bundle\FlexibleEntityBundle\Entity\Repository\FlexibleEntityRepository")
  */
-class Product extends AbstractOrmFlexible
+class Product extends AbstractEntityFlexible
 {
     /**
      * @var string $sku
