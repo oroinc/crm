@@ -1,7 +1,7 @@
 <?php
 namespace Acme\Bundle\ProductBundle\Entity;
 
-use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractOrmEntityAttributeValue;
+use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractOrmFlexibleAttributeValue;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -14,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="acmeproduct_product_attribute_value")
  * @ORM\Entity
  */
-class ProductAttributeValue extends AbstractOrmEntityAttributeValue
+class ProductAttributeValue extends AbstractOrmFlexibleAttributeValue
 {
     /**
      * @var Oro\Bundle\FlexibleEntityBundle\Model\Entity\AbstractAttribute $attribute

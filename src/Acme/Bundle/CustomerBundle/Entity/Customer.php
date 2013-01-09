@@ -1,7 +1,7 @@
 <?php
 namespace Acme\Bundle\CustomerBundle\Entity;
 
-use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractOrmEntity;
+use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractOrmFlexible;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -12,10 +12,10 @@ use Doctrine\ORM\Mapping as ORM;
  * @license   http://opensource.org/licenses/MIT MIT
  *
  * @ORM\Table(name="acmecustomer_customer")
- * @ORM\Entity(repositoryClass="Oro\Bundle\FlexibleEntityBundle\Entity\Repository\OrmFlexibleEntityRepository")
+ * @ORM\Entity(repositoryClass="Oro\Bundle\FlexibleEntityBundle\Entity\Repository\FlexibleEntityRepository")
  *
  */
-class Customer extends AbstractOrmEntity
+class Customer extends AbstractOrmFlexible
 {
     /**
      * @var string $email

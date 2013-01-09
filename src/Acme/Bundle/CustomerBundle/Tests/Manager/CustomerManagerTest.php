@@ -257,7 +257,7 @@ class CustomerManagerTest extends KernelAwareTest
     }
 
     /**
-     * @return Oro\Bundle\FlexibleEntityBundle\Entity\Repository\OrmFlexibleEntityRepository
+     * @return Oro\Bundle\FlexibleEntityBundle\Entity\Repository\FlexibleEntityRepository
      */
     protected function getRepo()
     {
