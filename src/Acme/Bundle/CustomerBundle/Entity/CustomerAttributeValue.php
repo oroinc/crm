@@ -2,7 +2,6 @@
 namespace Acme\Bundle\CustomerBundle\Entity;
 
 use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityFlexibleAttributeValue;
-use Oro\Bundle\FlexibleEntityBundle\Entity\Attribute;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -18,14 +17,14 @@ use Doctrine\ORM\Mapping as ORM;
 class CustomerAttributeValue extends AbstractEntityFlexibleAttributeValue
 {
     /**
-     * @var Attribute $attribute
+     * @var Oro\Bundle\FlexibleEntityBundle\Entity\Attribute $attribute
      *
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\FlexibleEntityBundle\Entity\Attribute")
      */
     protected $attribute;
 
     /**
-     * @var Entity $entity
+     * @var Customer $entity
      *
      * @ORM\ManyToOne(targetEntity="Customer", inversedBy="values")
      */
@@ -34,7 +33,7 @@ class CustomerAttributeValue extends AbstractEntityFlexibleAttributeValue
     /**
      * Store option value, if backend is an option
      *
-     * @var AbstractEntityAttributeOption $optionvalue
+     * @var Oro\Bundle\FlexibleEntityBundle\Entity\AttributeOption $option
      *
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\FlexibleEntityBundle\Entity\AttributeOption")
      */

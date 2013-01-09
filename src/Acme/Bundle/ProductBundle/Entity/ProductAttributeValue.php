@@ -17,14 +17,14 @@ use Doctrine\ORM\Mapping as ORM;
 class ProductAttributeValue extends AbstractEntityFlexibleAttributeValue
 {
     /**
-     * @var Oro\Bundle\FlexibleEntityBundle\Model\Entity\AbstractAttribute $attribute
+     * @var Oro\Bundle\FlexibleEntityBundle\Entity\Attribute $attribute
      *
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\FlexibleEntityBundle\Entity\Attribute")
      */
     protected $attribute;
 
     /**
-     * @var Oro\Bundle\FlexibleEntityBundle\Model\Entity\AbstractFlexible $entity
+     * @var Product $entity
      *
      * @ORM\ManyToOne(targetEntity="Product", inversedBy="values")
      */
@@ -33,7 +33,7 @@ class ProductAttributeValue extends AbstractEntityFlexibleAttributeValue
     /**
      * Store option value, if backend is an option
      *
-     * @var Oro\Bundle\FlexibleEntityBundle\Model\Entity\AbstractAttributeOption $optionvalue
+     * @var Oro\Bundle\FlexibleEntityBundle\Entity\AttributeOption $option
      *
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\FlexibleEntityBundle\Entity\AttributeOption")
      */
