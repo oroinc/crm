@@ -1,6 +1,0 @@
-entities_config:
-    Acme\Bundle\ProductBundle\Entity\Product:
-        flexible_manager:            product_manager
-        flexible_entity_class:       Acme\Bundle\ProductBundle\Entity\Product
-        flexible_entity_value_class: Acme\Bundle\ProductBundle\Entity\ProductAttributeValue
-        has_translatable_value:      true
