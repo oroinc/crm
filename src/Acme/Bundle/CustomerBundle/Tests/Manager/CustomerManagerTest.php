@@ -1,7 +1,7 @@
 <?php
 namespace Acme\Bundle\CustomerBundle\Test\Service;
 
-use Oro\Bundle\FlexibleEntityBundle\Entity\OrmAttributeOption;
+use Oro\Bundle\FlexibleEntityBundle\Entity\AttributeOption;
 
 use Acme\Bundle\CustomerBundle\Entity\CustomerAttributeValue;
 
@@ -55,7 +55,7 @@ class CustomerManagerTest extends KernelAwareTest
 
     /**
      * Option gender
-     * @var OrmAttributeOption
+     * @var AttributeOption
      */
     protected $option;
 
@@ -162,8 +162,8 @@ class CustomerManagerTest extends KernelAwareTest
 
     /**
      * Create value
-     * @param OrmAttribute $attribute Attribute object
-     * @param mixed        $value     Value of the attribute
+     * @param Attribute $attribute Attribute object
+     * @param mixed     $value     Value of the attribute
      *
      * @return CustomerAttributeValue
      */
@@ -186,7 +186,7 @@ class CustomerManagerTest extends KernelAwareTest
      * @param string    $backendType  Attribute backend type
      * @param multitype $options      Options list
      *
-     * @return OrmAttribute
+     * @return Attribute
      */
     protected function createAttribute($code, $title, $backendModel, $backendType, $options = array())
     {

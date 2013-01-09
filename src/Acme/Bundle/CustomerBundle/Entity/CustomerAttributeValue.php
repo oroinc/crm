@@ -2,7 +2,7 @@
 namespace Acme\Bundle\CustomerBundle\Entity;
 
 use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityFlexibleAttributeValue;
-use Oro\Bundle\FlexibleEntityBundle\Entity\OrmAttribute;
+use Oro\Bundle\FlexibleEntityBundle\Entity\Attribute;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -20,7 +20,7 @@ class CustomerAttributeValue extends AbstractEntityFlexibleAttributeValue
     /**
      * @var Attribute $attribute
      *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\FlexibleEntityBundle\Entity\OrmAttribute")
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\FlexibleEntityBundle\Entity\Attribute")
      */
     protected $attribute;
 
@@ -36,7 +36,7 @@ class CustomerAttributeValue extends AbstractEntityFlexibleAttributeValue
      *
      * @var AbstractEntityAttributeOption $optionvalue
      *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\FlexibleEntityBundle\Entity\OrmAttributeOption")
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\FlexibleEntityBundle\Entity\AttributeOption")
      */
     protected $option;
 }

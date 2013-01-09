@@ -19,7 +19,7 @@ class ProductAttributeValue extends AbstractEntityFlexibleAttributeValue
     /**
      * @var Oro\Bundle\FlexibleEntityBundle\Model\Entity\AbstractAttribute $attribute
      *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\FlexibleEntityBundle\Entity\OrmAttribute")
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\FlexibleEntityBundle\Entity\Attribute")
      */
     protected $attribute;
 
@@ -35,7 +35,7 @@ class ProductAttributeValue extends AbstractEntityFlexibleAttributeValue
      *
      * @var Oro\Bundle\FlexibleEntityBundle\Model\Entity\AbstractAttributeOption $optionvalue
      *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\FlexibleEntityBundle\Entity\OrmAttributeOption")
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\FlexibleEntityBundle\Entity\AttributeOption")
      */
     protected $option;
 }
