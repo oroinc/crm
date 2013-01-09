@@ -1,6 +1,6 @@
 {
-    "name": "symfony/framework-standard-edition",
-    "description": "The \"Symfony Standard Edition\" distribution",
+    "name": "laboro/OroFlexibleEntityBundle",
+    "description": "BAP Flexible Entity Bundle",
     "autoload": {
         "psr-0": { "": "src/" }
     },
