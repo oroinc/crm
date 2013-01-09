@@ -67,7 +67,7 @@ class AttributeController extends Controller
             $attribute->setCode($attributeCode);
             $attribute->setTitle('Name');
             $attribute->setRequired(true);
-            $attribute->setBackendModel(AbstractAttributeType::BACKEND_MODEL_ATTRIBUTE_VALUE);
+            $attribute->setBackendStorage(AbstractAttributeType::BACKEND_STORAGE_ATTRIBUTE_VALUE);
             $attribute->setBackendType(AbstractAttributeType::BACKEND_TYPE_VARCHAR);
             $attribute->setTranslatable(true);
             $this->getProductManager()->getStorageManager()->persist($attribute);
@@ -83,7 +83,7 @@ class AttributeController extends Controller
             $attribute = $this->getProductManager()->createAttribute();
             $attribute->setCode($attributeCode);
             $attribute->setTitle('Description');
-            $attribute->setBackendModel(AbstractAttributeType::BACKEND_MODEL_ATTRIBUTE_VALUE);
+            $attribute->setBackendStorage(AbstractAttributeType::BACKEND_STORAGE_ATTRIBUTE_VALUE);
             $attribute->setBackendType(AbstractAttributeType::BACKEND_TYPE_TEXT);
             $attribute->setTranslatable(true);
             $this->getProductManager()->getStorageManager()->persist($attribute);
@@ -99,7 +99,7 @@ class AttributeController extends Controller
             $attribute = $this->getProductManager()->createAttribute();
             $attribute->setCode($attributeCode);
             $attribute->setTitle('Size');
-            $attribute->setBackendModel(AbstractAttributeType::BACKEND_MODEL_ATTRIBUTE_VALUE);
+            $attribute->setBackendStorage(AbstractAttributeType::BACKEND_STORAGE_ATTRIBUTE_VALUE);
             $attribute->setBackendType(AbstractAttributeType::BACKEND_TYPE_INTEGER);
             $this->getProductManager()->getStorageManager()->persist($attribute);
             $messages[]= "Attribute ".$attributeCode." has been created";
@@ -114,7 +114,7 @@ class AttributeController extends Controller
             $attribute = $this->getProductManager()->createAttribute();
             $attribute->setCode($attributeCode);
             $attribute->setTitle('Color');
-            $attribute->setBackendModel(AbstractAttributeType::BACKEND_MODEL_ATTRIBUTE_VALUE);
+            $attribute->setBackendStorage(AbstractAttributeType::BACKEND_STORAGE_ATTRIBUTE_VALUE);
             $attribute->setBackendType(AbstractAttributeType::BACKEND_TYPE_OPTION);
             $attribute->setTranslatable(false); // only one value but option can be translated in option values
             // add translatable option and related value "Red", "Blue", "Green"

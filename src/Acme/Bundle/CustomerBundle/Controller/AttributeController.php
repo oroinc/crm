@@ -63,7 +63,7 @@ class AttributeController extends Controller
             $att = $this->getCustomerManager()->createAttribute();
             $att->setCode($attCode);
             $att->setTitle('Company');
-            $att->setBackendModel(AbstractAttributeType::BACKEND_MODEL_ATTRIBUTE_VALUE);
+            $att->setBackendStorage(AbstractAttributeType::BACKEND_STORAGE_ATTRIBUTE_VALUE);
             $att->setBackendType(AbstractAttributeType::BACKEND_TYPE_VARCHAR);
             $this->getCustomerManager()->getStorageManager()->persist($att);
             $messages[]= "Attribute ".$attCode." has been created";
@@ -78,7 +78,7 @@ class AttributeController extends Controller
             $att = $this->getCustomerManager()->createAttribute();
             $att->setCode($attCode);
             $att->setTitle('Date of birth');
-            $att->setBackendModel(AbstractAttributeType::BACKEND_MODEL_ATTRIBUTE_VALUE);
+            $att->setBackendStorage(AbstractAttributeType::BACKEND_STORAGE_ATTRIBUTE_VALUE);
             $att->setBackendType(AbstractAttributeType::BACKEND_TYPE_DATE);
             $this->getCustomerManager()->getStorageManager()->persist($att);
             $messages[]= "Attribute ".$attCode." has been created";
@@ -93,7 +93,7 @@ class AttributeController extends Controller
             $att = $this->getCustomerManager()->createAttribute();
             $att->setCode($attCode);
             $att->setTitle('Gender');
-            $att->setBackendModel(AbstractAttributeType::BACKEND_MODEL_ATTRIBUTE_VALUE);
+            $att->setBackendStorage(AbstractAttributeType::BACKEND_STORAGE_ATTRIBUTE_VALUE);
             $att->setBackendType(AbstractAttributeType::BACKEND_TYPE_OPTION);
             // add option and related value
             $opt = $this->getCustomerManager()->createNewAttributeOption();
