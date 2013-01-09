@@ -24,7 +24,7 @@ class ProductAttributeValue extends AbstractOrmEntityAttributeValue
     protected $attribute;
 
     /**
-     * @var Oro\Bundle\FlexibleEntityBundle\Model\Entity\AbstractEntity $entity
+     * @var Oro\Bundle\FlexibleEntityBundle\Model\Entity\AbstractFlexible $entity
      *
      * @ORM\ManyToOne(targetEntity="Product", inversedBy="values")
      */
