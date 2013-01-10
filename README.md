@@ -29,10 +29,10 @@ In Oro\Bundle\FlexibleEntityBundle :
 
 - /Helper contains classes with utility methods
 
-Acme namespace contains some exemples :
-- ManufacturerBundle : a simple entity
-- CustomerBundle : a flexible entity (no translatable attributes)
-- ProductBundle : a flexible entity (with translatable attributes)
+Acme namespace contains some exemples in DemoFlexibleEntityBundle :
+- Manufacturer : a simple entity
+- Customer : a flexible entity (no translatable attributes)
+- Product : a flexible entity (with translatable attributes)
 
 Install and run unit tests
 ==========================
@@ -93,29 +93,29 @@ class Manufacturer
     // ... getter / setter
 ```
 
-Define the service manager (src/Acme/Bundle/ManufacturerBundle/Resources/config/services.yml) : 
+Define the service manager (src/Acme/Bundle/DemoFlexibleEntityBundle/Resources/config/services.yml) : 
 ```yaml
 parameters:
     manufacturer_manager_class: Oro\Bundle\FlexibleEntityBundle\Manager\SimpleEntityManager
-    manufacturer_entity_class:  Acme\Bundle\ManufacturerBundle\Entity\Manufacturer
+    manufacturer_entity_class:  Acme\Bundle\DemoFlexibleEntityBundle\Entity\Manufacturer
 
 services:
     manufacturer_manager:
-        class:        "%manufacturer_manager_class%"
-        arguments:    [@service_container, %manufacturer_entity_class%]
+        class:     "%manufacturer_manager_class%"
+        arguments: [@service_container, %manufacturer_entity_class%]
 ```
 
 How to use :
 ```php
         // get list
-        $mm = $this->container->get('manufacturer_manager');
-        $manufacturers = $mm->getEntityRepository()->findAll();
+        $manager = $this->container->get('manufacturer_manager');
+        $manufacturers = $manager->getEntityRepository()->findAll();
         // create a new one
-        $manufacturer = $mm->createEntity();
+        $manufacturer = $manager->createEntity();
         $manufacturer->setName('Dell');
         // persist
-        $mm->getStorageManager()->persist($manufacturer);
-        $mm->getStorageManager()->flush();
+        $manager->getStorageManager()->persist($manufacturer);
+        $manager->getStorageManager()->flush();
         
 ```
 
@@ -142,7 +142,7 @@ This customer class contains fields mapped at development time, here, email, fir
 We use the basic entity repository, and define by mapping which value table to use. 
 
 ```php
-namespace Oro\Bundle\CustomerBundle\Entity;
+namespace Oro\Bundle\DemoFlexibleEntityBundle\Entity;
 
 use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractOrmEntity;
 use Doctrine\ORM\Mapping as ORM;
@@ -189,7 +189,7 @@ Then we have to define customer attribute value entity, extends basic one which 
 We define mapping to basic entity attribute, to basic option (for attribute of list type) and to our customer entity.
 ```php
 <?php
-namespace Acme\Bundle\CustomerBundle\Entity;
+namespace Acme\Bundle\DemoFlexibleEntityBundle\Entity;
 
 use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractOrmEntityAttributeValue;
 use Oro\Bundle\FlexibleEntityBundle\Entity\OrmAttribute;
@@ -226,13 +226,13 @@ class CustomerAttributeValue extends AbstractOrmEntityAttributeValue
 }
 ```
 
-Then, we configure our flexible entity in src/Acme/Bundle/CustomerBundle/Resources/config/flexibleentity.yml :
+Then, we configure our flexible entity in src/Acme/Bundle/DemoFlexibleEntityBundle/Resources/config/flexibleentity.yml :
 ```yaml
 entities_config:
-    Acme\Bundle\CustomerBundle\Entity\Customer:
+    Acme\Bundle\DemoFlexibleEntityBundle\Entity\Customer:
         flexible_manager:            customer_manager
-        flexible_entity_class:       Acme\Bundle\CustomerBundle\Entity\Customer
-        flexible_entity_value_class: Acme\Bundle\CustomerBundle\Entity\CustomerAttributeValue
+        flexible_entity_class:       Acme\Bundle\DemoFlexibleEntityBundle\Entity\Customer
+        flexible_entity_value_class: Acme\Bundle\DemoFlexibleEntityBundle\Entity\CustomerAttributeValue
         # there is some default values added for basic entity to use for attribute, option, etc and for behavior as translatable  
 ```
 
@@ -242,11 +242,11 @@ This config :
 - is accessible as $this->container->getParameter('oro_flexibleentity.entities_config');
 - is known by flexible entity manager and repository
 
-Finally we add our service declaration in src/Acme/Bundle/CustomerBundle/Resources/config/services.yml :
+Finally we add our service declaration in src/Acme/Bundle/DemoFlexibleEntityBundle/Resources/config/services.yml :
 ```yaml
 parameters:
     customer_manager_class: Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleEntityManager
-    customer_entity_class:  Acme\Bundle\CustomerBundle\Entity\Customer
+    customer_entity_class:  Acme\Bundle\DemoFlexibleEntityBundle\Entity\Customer
 
 services:
     customer_manager:
@@ -387,7 +387,7 @@ class ProductRepository extends OrmFlexibleEntityRepository
 /**
  * Flexible product
  * @ORM\Table(name="acmeproduct_product")
- * @ORM\Entity(repositoryClass="Acme\Bundle\ProductBundle\Entity\Repository\ProductRepository")
+ * @ORM\Entity(repositoryClass="Acme\Bundle\DemoFlexibleEntityBundle\Entity\Repository\ProductRepository")
  */
 class Product extends AbstractOrmEntity
 {
