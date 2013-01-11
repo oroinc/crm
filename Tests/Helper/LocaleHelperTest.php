@@ -19,7 +19,12 @@ class LocaleHelperTest extends \PHPUnit_Framework_TestCase
     /**
      * @staticvar string
      */
-    protected static $localeCode = 'en';
+    protected static $localeCode = 'fr';
+
+    /**
+     * @staticvar string
+     */
+    protected static $localeCodeConfig = 'en';
 
     /**
      * test related method

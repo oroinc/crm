@@ -204,6 +204,7 @@ class AttributeOptionTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(self::$attOptValueClass, $attOptValue);
         $this->assertEquals(self::$localeCode, $attOptValue->getLocaleCode());
         $this->assertEquals(self::$attOptValueEn, $attOptValue->getValue());
+        $this->assertEquals(self::$attOptValueEn, $attOpt->__toString());
 
         // assert remove option value
         $obj = $attOpt->removeOptionValue($attOptValueEn);
@@ -216,6 +217,7 @@ class AttributeOptionTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(self::$attOptValueClass, $attOptValue);
         $this->assertEquals(self::$localeCodeFr, $attOptValue->getLocaleCode());
         $this->assertEquals(self::$attOptValueFr, $attOptValue->getValue());
+        $this->assertEquals(self::$attOptValueFr, $attOpt->__toString());
     }
 
 }
