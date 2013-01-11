@@ -19,8 +19,8 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
     protected $attributeTitle = 'My sku';
 
     /**
-* Test related method
-*/
+     * Test related method
+     */
     public function testGetCode()
     {
         $attribute = new Attribute();
@@ -29,8 +29,8 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-* Test related method
-*/
+     * Test related method
+     */
     public function testGetTitle()
     {
         $attribute = new Attribute();
@@ -40,8 +40,8 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
 
 
     /**
-* Test related method
-*/
+     * Test related method
+     */
     public function testGetOptions()
     {
         // attribute
