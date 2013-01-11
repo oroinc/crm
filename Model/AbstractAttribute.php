@@ -34,7 +34,7 @@ abstract class AbstractAttribute implements TimestampableInterface
     protected $entityType;
 
     /**
-     * Kind of model to store values
+     * Kind of storage to store values
      * @var string $backendStorage
      */
     protected $backendStorage;
@@ -56,9 +56,22 @@ abstract class AbstractAttribute implements TimestampableInterface
     protected $updated;
 
     /**
-    * @var boolean $required
-    */
+     * Is attribute is required
+     * @var boolean $required
+     */
     protected $required;
+
+    /**
+     * Is attribute value is required
+     * @var boolean $unique
+     */
+    protected $unique;
+
+    /**
+     * Default attribute value
+     * @var string $defaultValue
+     */
+    protected $defaultValue;
 
     /**
      * @var boolean $searchable
@@ -145,30 +158,6 @@ abstract class AbstractAttribute implements TimestampableInterface
     public function getEntityType()
     {
         return $this->entityType;
-    }
-
-    /**
-     * Set title
-     *
-     * @param string $title
-     *
-     * @return AbstractAttribute
-     */
-    public function setTitle($title)
-    {
-        $this->title = $title;
-
-        return $this;
-    }
-
-    /**
-     * Get title
-     *
-     * @return string
-     */
-    public function getTitle()
-    {
-        return $this->title;
     }
 
     /**
@@ -270,7 +259,7 @@ abstract class AbstractAttribute implements TimestampableInterface
     /**
      * Set required
      *
-     * @param string $required
+     * @param boolean $required
      *
      * @return AbstractAttribute
      */
@@ -284,11 +273,59 @@ abstract class AbstractAttribute implements TimestampableInterface
     /**
      * Get required
      *
-     * @return string $Required
+     * @return boolean $required
      */
     public function getRequired()
     {
         return $this->required;
+    }
+
+    /**
+     * Set unique
+     *
+     * @param boolean $unique
+     *
+     * @return AbstractAttribute
+     */
+    public function setUnique($unique)
+    {
+        $this->unique = $unique;
+
+        return $this;
+    }
+
+    /**
+     * Get unique
+     *
+     * @return boolean $unique
+     */
+    public function getUnique()
+    {
+        return $this->unique;
+    }
+
+    /**
+     * Set default value
+     *
+     * @param string $default
+     *
+     * @return AbstractAttribute
+     */
+    public function setDefaultValue($default)
+    {
+        $this->defaultValue = $default;
+
+        return $this;
+    }
+
+    /**
+     * Get default value
+     *
+     * @return string $unique
+     */
+    public function getDefaultValue()
+    {
+        return $this->defaultValue;
     }
 
     /**
