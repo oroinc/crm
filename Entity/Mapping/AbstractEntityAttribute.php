@@ -53,13 +53,6 @@ abstract class AbstractEntityAttribute extends AbstractAttribute
     protected $backendStorage;
 
     /**
-     * @var string $title
-     *
-     * @ORM\Column(name="title", type="string", length=255)
-     */
-    protected $title;
-
-    /**
      * @var datetime $created
      *
      * @ORM\Column(type="datetime")
@@ -77,6 +70,16 @@ abstract class AbstractEntityAttribute extends AbstractAttribute
      * @ORM\Column(name="is_required", type="boolean")
      */
     protected $required;
+
+    /**
+     * @ORM\Column(name="is_unique", type="boolean")
+     */
+    protected $unique;
+
+    /**
+     * @ORM\Column(name="default_value", type="string", length=255)
+     */
+    protected $defaultValue;
 
     /**
      * @ORM\Column(name="is_searchable", type="boolean")
@@ -113,6 +116,8 @@ abstract class AbstractEntityAttribute extends AbstractAttribute
     {
         $this->options      = new \Doctrine\Common\Collections\ArrayCollection();
         $this->required     = false;
+        $this->unique       = false;
+        $this->defaultValue = null;
         $this->searchable   = false;
         $this->translatable = false;
         $this->scopable     = false;

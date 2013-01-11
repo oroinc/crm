@@ -29,7 +29,7 @@ In Oro\Bundle\FlexibleEntityBundle :
 
 - /Helper contains classes with utility methods
 
-Acme namespace contains some exemples in DemoFlexibleEntityBundle :
+There are some examples in laboro/bap-standard/tree/master/src/Acme/Bundle/DemoFlexibleEntityBundle :
 - Manufacturer : a simple entity
 - Customer : a flexible entity (no translatable attributes)
 - Product : a flexible entity (with translatable attributes)
@@ -37,16 +37,9 @@ Acme namespace contains some exemples in DemoFlexibleEntityBundle :
 Install and run unit tests
 ==========================
 
-Install as standard symfony 2 app then :
-```bash
-~/git/poc-product-entity-design$ php app/console doctrine:database:drop --force
-~/git/poc-product-entity-design$ php app/console doctrine:database:create 
-~/git/poc-product-entity-design$ php app/console doctrine:schema:update --force
-```
-
 To run tests (a test db is used) :
 ```bash
-~/git/poc-product-entity-design$ phpunit -c app/  --coverage-html=cov/
+$ phpunit -c app/  --coverage-html=cov/
 ```
 
 Create a simple entity (no attribute management)
@@ -132,8 +125,8 @@ In this case, we can directly use classic way too with :
         $em->flush();
 ```
 
-Create a flexible entity (with dynamic attribute management, not translatable)
-==============================================================================
+Create a flexible entity (with dynamic attribute management)
+============================================================
 
 Create a customer entity class, extends abstract orm entity which contains basic mapping.
 
@@ -262,7 +255,6 @@ $cm = $this->container->get('customer_manager');
 // create an attribute (cf controllers and unit tests for more exemples with options, etc)
 $att = $cm->createAttribute();
 $att->setCode($attCode);
-$att->setTitle('Company');
 $att->setBackendModel(AbstractAttributeType::BACKEND_MODEL_ATTRIBUTE_VALUE);
 $att->setBackendType(AbstractAttributeType::BACKEND_TYPE_VARCHAR);
 
@@ -304,7 +296,6 @@ $pm = $this->container->get('product_manager');
 $attributeCode = 'name';
 $attribute = $pm->createAttribute();
 $attribute->setCode($attributeCode);
-$attribute->setTitle('Description');
 $attribute->setBackendModel(AbstractAttributeType::BACKEND_MODEL_ATTRIBUTE_VALUE);
 $attribute->setBackendType(AbstractAttributeType::BACKEND_TYPE_TEXT);
 $attribute->setTranslatable(true);
@@ -407,11 +398,51 @@ $flexibleManagerName = $flexibleConfig['entities_config'][$flexibleEntityClass][
 $flexibleManager = $this->container->get($flexibleManagerName);
 ```
 
-Add some custom attribute configuration for a dedicated entity
---------------------------------------------------------------
+Add some custom attribute configuration for a dedicated entity in a custom table
+--------------------------------------------------------------------------------
 
 - for instance, create a ProductAttribute class with one-one relation to OrmAttribute class
-- create a ProductAttributeRepository to encapsulate the manipulation of OrmAttribute
+```php
+<?php
+namespace Pim\Bundle\FlexibleProductBundle\Entity;
+use Oro\Bundle\FlexibleEntityBundle\Entity\Attribute;
+use Doctrine\ORM\Mapping as ORM;
+/**
+ * Custom properties for a product attribute
+ *
+ * @ORM\Table(name="akeneo_flexibleproduct_product_attribute")
+ * @ORM\Entity
+ */
+class ProductAttribute
+{
+    /**
+     * @var integer $id
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    protected $id;
+
+    /**
+     * @var Oro\Bundle\FlexibleEntityBundle\Entity\Attribute $attribute
+     *
+     * @ORM\OneToOne(targetEntity="Oro\Bundle\FlexibleEntityBundle\Entity\Attribute", cascade={"persist", "merge", "remove"})
+     * @ORM\JoinColumn(name="attribute_id", referencedColumnName="id")
+     */
+    protected $attribute;
+
+    /**
+     * @var string $mycustomattributeproperty
+     *
+     * @ORM\Column(name="mycustomattributeproperty", type="string", length=255)
+     */
+    protected $name;
+    // [...]
+}
+```
+
+- create a ProductAttributeRepository to encapsulate the manipulation of Attribute
 
 Store attributes, option, option values in custom tables
 --------------------------------------------------------
@@ -442,4 +473,14 @@ services:
         class:     "%mydoc_manager_class%"
         arguments: [@service_container, %mydoc_entity_class%]
 ```
+
+TODO
+====
+
+- inject entity manager (optional param to use many connections)
+- is_unique, default_value behavior
+- default fallback
+- discuss about translatable/localizable notion
+- use interface and behavior on concret classes
+
 
