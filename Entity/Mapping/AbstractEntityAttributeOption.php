@@ -175,15 +175,4 @@ abstract class AbstractEntityAttributeOption extends AbstractAttributeOption imp
         return $value;
     }
 
-    /**
-     * To string
-     *
-     * @return string
-     */
-    public function __toString()
-    {
-        $value = $this->getOptionValue();
-
-        return ($value) ? $value->getValue() : '';
-    }
 }
