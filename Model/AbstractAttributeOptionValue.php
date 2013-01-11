@@ -90,10 +90,14 @@ abstract class AbstractAttributeOptionValue
     /**
      * Set used locale
      * @param string $locale
+     *
+     * @return AbstractAttributeOptionValue
      */
     public function setLocaleCode($locale)
     {
         $this->localeCode = $locale;
+
+        return $this;
     }
 
     /**
@@ -101,7 +105,7 @@ abstract class AbstractAttributeOptionValue
      *
      * @param string $value
      *
-     * @return string
+     * @return AbstractAttributeOptionValue
      */
     public function setValue($value)
     {
