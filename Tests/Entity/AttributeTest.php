@@ -28,16 +28,6 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($attribute->getCode(), $this->attributeCode);
     }
 
-    /**
-     * Test related method
-     */
-    public function testGetTitle()
-    {
-        $attribute = new Attribute();
-        $attribute->setTitle($this->attributeTitle);
-        $this->assertEquals($attribute->getTitle(), $this->attributeTitle);
-    }
-
 
     /**
      * Test related method
