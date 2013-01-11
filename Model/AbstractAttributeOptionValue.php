@@ -16,7 +16,7 @@ abstract class AbstractAttributeOptionValue
     protected $id;
 
     /**
-     * @var integer $option
+     * @var AbstractAttributeOption $option
      */
     protected $option;
 
