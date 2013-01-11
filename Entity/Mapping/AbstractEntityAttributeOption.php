@@ -133,10 +133,14 @@ abstract class AbstractEntityAttributeOption extends AbstractAttributeOption imp
      * Remove value
      *
      * @param AbstractAttributeOptionValue $value
+     *
+     * @return AbstractAttributeOption
      */
     public function removeOptionValue(AbstractAttributeOptionValue $value)
     {
         $this->optionValues->removeElement($value);
+
+        return $this;
     }
 
     /**
