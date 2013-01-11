@@ -110,6 +110,8 @@ abstract class AbstractEntityAttributeOption extends AbstractAttributeOption imp
     public function setLocaleCode($locale)
     {
         $this->localeCode = $locale;
+
+        return $this;
     }
 
     /**
