@@ -172,13 +172,20 @@ footer{
   margin:0 0 @marginBottomBox;
 }
 .form-signin{
-  margin: 0 auto 20px;
-  max-width: 300px;
-  padding: 19px 29px 29px;
+  margin: 75px auto 20px;
+  max-width: 400px;
+  padding: 0;
   #gradient > .vertical(@navbarBackgroundHighlight, @navbarBackground);
   border: 1px solid @navbarBorder;
-  .border-radius(@baseBorderRadius);
+  .border-radius(@baseBorderRadius*2);
   .box-shadow(0 1px 4px rgba(0,0,0,.065));
+  fieldset{
+    padding: 30px 40px;
+  }
+  .add-on{
+    padding: 4px 10px;
+    min-width: 70px;
+  }
 }
 .form-pass-reset{
   margin: 0 auto 20px;
@@ -287,3 +294,19 @@ footer{
 /* dialog jQuery DialogExtend without jQuery ui css start */
 
 /* dialog jQuery ui end */
+.title-box{
+  overflow: hidden;
+  padding: 0 15px;
+  color: #fff;
+  .border-radius( @baseBorderRadius*2 @baseBorderRadius*2 0 0);
+  .oro-title{
+    float: left;
+    font-size: 38px;
+    line-height: 40px;
+  }
+  .title{
+    font-size: 30px;
+    line-height: 40px;
+    font-weight: normal;
+  }
+}

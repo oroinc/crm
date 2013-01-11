@@ -193,3 +193,32 @@ header{
     display: block;
     clear: both;
 }
+.title-box{
+    background-color: #47505a;
+    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#47505a), to(#353d45));
+    background: -webkit-linear-gradient(top, #47505a, #353d45);
+    background: -moz-linear-gradient(top, #47505a, #353d45);
+    background: -ms-linear-gradient(top, #47505a, #353d45);
+    background: -o-linear-gradient(top, #47505a, #353d45);
+}
+
+.form-signin .input-prepend{
+    margin-bottom: 10px;
+}
+
+.form-signin .divider-vertical{
+    margin: 0 5px;
+}
+.form-signin .btn{
+    margin: 0 0 25px;
+}
+.title-box .divider-vertical{
+    float: left;
+    background: url("../img/vertical-divider.png") no-repeat;
+    width: 2px;
+    height: 28px;
+    margin-top: 15px;
+}
+.title-box{
+
+}
