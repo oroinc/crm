@@ -1,9 +1,9 @@
 {
-    "name": "laboro/OroFlexibleEntityBundle",
+    "name": "oro/FlexibleEntityBundle",
     "type": "symfony-bundle",
     "description": "BAP Flexible Entity Bundle",
     "keywords": ["BAP"],
-    "homepage": "https://github.com/laboro/OroFlexibleEntityBundle",
+    "homepage": "https://github.com/laboro/FlexibleEntityBundle",
     "license": "MIT",
     "require": {
         "php": ">=5.3.3",
@@ -12,7 +12,6 @@
     "autoload": {
         "psr-0": { "Oro\\Bundle\\FlexibleEntityBundle": "" }
     },
-    "minimum-stability": "dev",
     "target-dir": "Oro/Bundle/FlexibleEntityBundle",
     "minimum-stability": "dev",
     "extra": {
