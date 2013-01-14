@@ -181,6 +181,8 @@ footer{
   .box-shadow(0 1px 4px rgba(0,0,0,.065));
   fieldset{
     padding: 30px 40px;
+    background: #fff;
+    .border-radius(0 0 @baseBorderRadius*2 @baseBorderRadius*2);
   }
   .add-on{
     padding: 4px 10px;
@@ -222,7 +224,6 @@ footer{
 .ui-dialog-titlebar{
   .border-radius(@baseBorderRadius @baseBorderRadius 0 0);
   cursor: move;
-  #gradient > .vertical(@navbarBackgroundHighlight, @navbarBackground);
   padding: @verticalPadding/2 @horizontalPadding;
 }
 .ui-dialog-titlebar-min{
@@ -296,17 +297,67 @@ footer{
 /* dialog jQuery ui end */
 .title-box{
   overflow: hidden;
-  padding: 0 15px;
+  padding: 10px 15px 7px;
   color: #fff;
   .border-radius( @baseBorderRadius*2 @baseBorderRadius*2 0 0);
+  #gradient > .vertical(#47505a, #353d45);
+  .divider-vertical{
+    float: left;
+    background: url("../../img/vertical-divider.png") no-repeat;
+    width: 2px;
+    height: 28px;
+    margin: 5px 10px 0;
+  }
+}
+.form-signin{
   .oro-title{
     float: left;
-    font-size: 38px;
+    font-size: 34px;
     line-height: 40px;
+    text-transform: uppercase;
+    margin: 0;
+    text-shadow: 1px 1px 2px #000000;
+    filter: dropshadow(color=#000000, offx=1, offy=1);
   }
+
   .title{
-    font-size: 30px;
-    line-height: 40px;
-    font-weight: normal;
+    font: 26px/40px Arial, Helvetica, sans-serif;
+    margin: 0;
+    text-shadow: 1px 1px 2px #000000;
+    filter: dropshadow(color=#000000, offx=1, offy=1);
+  }
+  .input-prepend {
+    .add-on{
+      height: 36px;
+      font: bold 14px/36px Arial, Helvetica, sans-serif;
+      color: #5b636d;
+      #gradient > .vertical(#dde0e3, #d2d7db);
+      padding: 0 10px;
+    }
+    input[type="text"],
+    input[type="password"]{
+      height: 36px;
+      font: 14px/36px Arial, Helvetica, sans-serif;
+      color: #000;
+      padding: 0 10px;
+    }
+  }
+  .form-row{
+    padding-top: 4px;
+  }
+  .btn{
+    margin: 0 0 20px;
+  }
+  button.btn.btn-large {
+    #gradient > .vertical(#97cd3f, #4b9047);
+    .border-radius( @baseBorderRadius);
+    border: 1px solid;
+    border-color: #4b9047 #4b9047 #595959;
+    min-width: 120px;
+    text-align: center;
+  }
+  button.btn.btn-large:hover{
+    #gradient > .vertical(#4b9047, #97cd3f);
+    background-image: none;
   }
 }
