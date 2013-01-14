@@ -291,6 +291,7 @@ Product and ProductValue are defined as for customer.
 Flexible manager is define in same way too.
 
 Attribute 'name' and 'description' are defined as translatable (not the case by default) :
+
 ```php
 $pm = $this->container->get('product_manager');
 $attributeCode = 'name';
@@ -314,6 +315,7 @@ Add some custom attribute configuration for a dedicated entity in a custom table
 ==========================================================================
 
 - for instance, create a ProductAttribute class with one-one relation to base Attribute class and add some custom attribute field, as attribute Name, Description, etc :
+
 ```php
 <?php
 namespace Acme\Bundle\DemoFlexibleEntityBundle\Entity;
@@ -370,6 +372,7 @@ class ProductAttribute extends AbstractEntityFlexibleAttribute
 ```
 
 - add flexible_attribute_extended_class in config :
+
 ```yaml
 entities_config:
     Acme\Bundle\DemoFlexibleEntityBundle\Entity\Product:
@@ -380,8 +383,8 @@ entities_config:
 ```
 
 - then you can create / manipulate some custom attribute as following :
-```php
 
+```php
 // create product attribute (cascade to create base attribute too)
 $productAttribute = $this->getProductManager()->createFlexibleAttribute();
 $productAttribute->setName('Name');
@@ -400,11 +403,12 @@ About queries on flexible entity
 ================================
 
 We can use classic findBy() method of repository to retrieve entity collection (native Symfony shortcurt to build doctrine query)
+
 ```php
 // get only entities, values and attributes are lazy loaded, you can use any criteria, order, limit 
 $products = $this->getProductManager()->getEntityRepository()->findBy(array());
-```
 
+```
 We have added a findByWithAttributes() in flexible repository which have the same signature, just attribute codes to select as first param.
 
 This method cover the same features than findBy, add basic criterias, order by, limit on field or attribute.
