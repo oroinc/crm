@@ -34,14 +34,19 @@ class SimpleEntityManager
     /**
      * Constructor
      *
-     * @param ContainerInterface $container  service container
-     * @param string             $entityName entity name
+     * @param ContainerInterface $container      service container
+     * @param string             $entityName     entity name
+     * @param ObjectManager      $storageManager optional storage manager, get default if not provided
      */
-    public function __construct($container, $entityName)
+    public function __construct($container, $entityName, $storageManager = false)
     {
         $this->container  = $container;
         $this->entityName = $entityName;
-        $this->storageManager = $container->get('doctrine.orm.entity_manager');
+        if ($storageManager) {
+            $this->storageManager = $storageManager;
+        } else {
+            $this->storageManager = $container->get('doctrine.orm.entity_manager');
+        }
     }
 
     /**

@@ -34,12 +34,13 @@ class FlexibleEntityManager extends SimpleEntityManager
     /**
      * Constructor
      *
-     * @param ContainerInterface $container  service container
-     * @param string             $entityName entity name
+     * @param ContainerInterface $container      service container
+     * @param string             $entityName     entity name
+     * @param ObjectManager      $storageManager optional storage manager, get default if not provided
      */
-    public function __construct($container, $entityName)
+    public function __construct($container, $entityName, $storageManager = false)
     {
-        parent::__construct($container, $entityName);
+        parent::__construct($container, $entityName, $storageManager);
         // get flexible entity configuration
         $allFlexibleConfig = $this->container->getParameter('oro_flexibleentity.entities_config');
         $this->flexibleConfig = $allFlexibleConfig['entities_config'][$entityName];
@@ -193,6 +194,7 @@ class FlexibleEntityManager extends SimpleEntityManager
         if (!$this->getFlexibleAttributeName()) {
             throw new FlexibleConfigurationException($this->getEntityName().' has no flexible attribute extended class');
         }
+
         return $this->storageManager->getRepository($this->getFlexibleAttributeName());
     }
 
