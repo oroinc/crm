@@ -1,0 +1,23 @@
+{
+    "name": "oro/UserBundle",
+    "type": "symfony-bundle",
+    "description": "BAP User Bundle",
+    "keywords": ["BAP"],
+    "homepage": "https://github.com/laboro/UserBundle",
+    "license": "MIT",
+    "require": {
+        "php": ">=5.3.3",
+        "symfony/symfony": "2.1.*",
+        "friendsofsymfony/user-bundle": "*"
+    },
+    "autoload": {
+        "psr-0": { "Oro\\Bundle\\UserBundle": "" }
+    },
+    "target-dir": "Oro/Bundle/UserBundle",
+    "minimum-stability": "dev",
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0-dev"
+        }
+    }
+}
