@@ -37,9 +37,11 @@ There are some examples in laboro/bap-standard/tree/master/src/Acme/Bundle/DemoF
 Install and run unit tests
 ==========================
 
-To run tests (a test db is used) :
+To run tests :
 ```bash
-$ phpunit -c app/  --coverage-html=cov/
+$ php composer.phar update --dev
+
+$ phpunit --coverage-html=cov/
 ```
 
 Create a simple entity (no attribute management)

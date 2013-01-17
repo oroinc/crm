@@ -29,6 +29,16 @@ class FlexibleEntityRepository extends EntityRepository
     protected $localeCode;
 
     /**
+     * Get flexible entity config
+     *
+     * @return array $config
+     */
+    public function getFlexibleConfig()
+    {
+        return $this->flexibleConfig;
+    }
+
+    /**
      * Set flexible entity config
 
      * @param array $config
