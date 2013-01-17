@@ -33,6 +33,25 @@ class Indexer
     }
 
     /**
+     * @param $searchString
+     *
+     * @return \Oro\Bundle\SearchBundle\Query\Result
+     */
+    public function simpleSearch($searchString, $offset, $maxResults)
+    {
+        $query =  $this->select()
+            ->from('*')
+            ->andWhere('*', '=', $searchString, 'text');
+        if ($offset) {
+            $query->setFirstResult($offset);
+        }
+        if ($maxResults) {
+            $query->setMaxResults($maxResults);
+        }
+        return $this->query($query);
+    }
+
+    /**
      * Get query builder with select instance
      *
      * @return \Oro\Bundle\SearchBundle\Query\Query
@@ -42,6 +61,7 @@ class Indexer
         $query = new Query(Query::SELECT);
         $query->setMappingConfig($this->mappingConfig);
         $query->setEntityManager($this->em);
+
         return $query;
     }
 
@@ -133,7 +153,7 @@ class Indexer
      * Add new queue
      *
      * @param string $entityName
-     * @param int $recordId
+     * @param int    $recordId
      * @param string $event
      */
     public function addNewQueue($entityName, $recordId, $event = Queue::EVENT_SAVE)
@@ -150,7 +170,7 @@ class Indexer
      * Add new save queue
      *
      * @param string $entityName
-     * @param int $recordId
+     * @param int    $recordId
      */
     public function addSaveQueue($entityName, $recordId)
     {
@@ -161,7 +181,7 @@ class Indexer
      * Add new delete queue
      *
      * @param string $entityName
-     * @param int $recordId
+     * @param int    $recordId
      */
     public function addDeleteQueue($entityName, $recordId)
     {

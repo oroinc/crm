@@ -115,7 +115,7 @@ class Query
     /**
      * Insert entities array to query from
      *
-     * @param array $entities
+     * @param array|string $entities
      *
      * @return \Oro\Bundle\SearchBundle\Query\Query
      */
@@ -173,7 +173,7 @@ class Query
      */
     public function where($type, $fieldName, $condition, $fieldValue, $fieldType = null)
     {
-        if (!$this->checkFieldInConfig($fieldName)) {
+        if ($fieldName!='*' && !$this->checkFieldInConfig($fieldName)) {
             throw new \InvalidArgumentException('Field ' . $fieldName . ' does not exists in config');
         }
 

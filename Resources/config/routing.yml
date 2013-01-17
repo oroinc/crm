@@ -1,0 +1,8 @@
+oro_search_api:
+    resource: Oro\Bundle\SearchBundle\Controller\Api\SearchController
+    type: rest
+    prefix: api/rest/{version}/
+    requirements:
+        version: latest|v1
+    defaults:
+        version: latest

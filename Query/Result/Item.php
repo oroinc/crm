@@ -3,21 +3,26 @@
 namespace Oro\Bundle\SearchBundle\Query\Result;
 
 use Doctrine\Common\Persistence\ObjectManager;
+use JMS\Serializer\Annotation\Type;
+use JMS\Serializer\Annotation\Exclude;
 
 class Item
 {
     /**
      * @var string
+     * @Type("string")
      */
     protected $entityName;
 
     /**
      * @var int
+     * @Type("integer")
      */
     protected $recordId;
 
     /**
      * @var \Doctrine\Common\Persistence\ObjectManager
+     * @Exclude
      */
     protected $em;
 
