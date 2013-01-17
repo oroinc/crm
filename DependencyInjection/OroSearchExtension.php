@@ -38,20 +38,24 @@ class OroSearchExtension extends Extension
             );
         } elseif (count($config['config_paths'])) {
             $entitiesConfig = array();
+
             foreach ($config['config_paths'] as $configPath) {
                 $entitiesConfig += Yaml::parse($configPath);
             }
+
             $container->setParameter('oro_search.entities_config', $entitiesConfig);
         } else {
             $entitiesConfig = array();
+
             foreach ($container->getParameter('kernel.bundles') as $bundle) {
                 $reflection = new \ReflectionClass($bundle);
+
                 if (is_file($file = dirname($reflection->getFilename()).'/Resources/config/search.yml')) {
                     $entitiesConfig += Yaml::parse(realpath($file));
                 }
+
                 $container->setParameter('oro_search.entities_config', $entitiesConfig);
             }
-
         }
 
         $loader->load('engine/' . $config['engine'] . '.yml');
@@ -65,6 +69,9 @@ class OroSearchExtension extends Extension
                 )
             );
         }
+
+        $container->setParameter('oro_search.realtime_update', $config['realtime_update']);
+
         $loader->load('services.yml');
     }
 

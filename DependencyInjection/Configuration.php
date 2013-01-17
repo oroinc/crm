@@ -20,21 +20,23 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('oro_search');
+        $rootNode    = $treeBuilder->root('oro_search');
+
         $rootNode->children()
             ->scalarNode('engine')
                 ->isRequired()
                 ->cannotBeEmpty()
                 ->defaultValue('orm')
-                ->end()
+            ->end()
             ->arrayNode('engine_orm')
                 ->prototype('scalar')->end()
             ->end()
-
+            ->booleanNode('realtime_update')
+                ->defaultTrue()
+            ->end()
             ->arrayNode('config_paths')
                 ->prototype('scalar')->end()
-                ->end()
-
+            ->end()
             ->arrayNode('entities_config')
                 ->prototype('array')
                 ->children()

@@ -33,7 +33,9 @@ class Indexer
     }
 
     /**
-     * @param $searchString
+     * @param string $searchString
+     * @param integer $offset
+     * @param integer $maxResults
      *
      * @return \Oro\Bundle\SearchBundle\Query\Result
      */
@@ -59,6 +61,7 @@ class Indexer
     public function select()
     {
         $query = new Query(Query::SELECT);
+
         $query->setMappingConfig($this->mappingConfig);
         $query->setEntityManager($this->em);
 
