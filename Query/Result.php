@@ -17,9 +17,16 @@ class Result extends ArrayCollection
     protected $query;
 
     /**
+     * @Type("integer")
      * @var integer
      */
     protected $recordsCount;
+
+    /**
+     * @Type("integer")
+     * @var integer
+     */
+    protected $count;
 
     /**
      * Initializes a new Result.
@@ -33,6 +40,7 @@ class Result extends ArrayCollection
         $this->query = $query;
         $this->recordsCount = $recordsCount;
         parent::__construct($elements);
+        $this->count = $this->count();
     }
 
     /**
@@ -64,7 +72,9 @@ class Result extends ArrayCollection
         $resultData['records_count'] = $this->recordsCount;
         if ($this->count()) {
             $resultData['count'] = $this->count();
-            $resultData['data'] = $this->toArray();
+            foreach ($this as $resultRecord) {
+               $resultData['data'][] = $resultRecord->toArray();
+            }
         } else {
             $resultData['count'] = 0;
         }

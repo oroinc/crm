@@ -91,4 +91,16 @@ class Item
     {
         return $this->em->getRepository($this->getEntityName())->find($this->getRecordId());
     }
+
+    /**
+     * @return array
+     */
+    public function toArray()
+    {
+        return array(
+            'entity_name' => $this->entityName,
+            'record_id' => $this->recordId,
+            'record_string' => $this->getEntity()->__toString()
+        );
+    }
 }
