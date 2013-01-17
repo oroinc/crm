@@ -41,6 +41,13 @@ class Item
     protected $recordId;
 
     /**
+     * @var bool $changed
+     *
+     * @ORM\Column(name="changed", type="boolean", options={"unsigned"=true})
+     */
+    protected $changed = false;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="created_at", type="datetime")
@@ -88,7 +95,7 @@ class Item
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -110,7 +117,7 @@ class Item
     /**
      * Get entity
      *
-     * @return string 
+     * @return string
      */
     public function getEntity()
     {
@@ -126,17 +133,41 @@ class Item
     public function setRecordId($recordId)
     {
         $this->recordId = $recordId;
+
         return $this;
     }
 
     /**
      * Get recordId
      *
-     * @return integer 
+     * @return integer
      */
     public function getRecordId()
     {
         return $this->recordId;
+    }
+
+    /**
+     * Set changed
+     *
+     * @param boolean $changed
+     * @return Item
+     */
+    public function setChanged($changed)
+    {
+        $this->changed = (bool)$changed;
+
+        return $this;
+    }
+
+    /**
+     * Get changed
+     *
+     * @return boolean
+     */
+    public function getChanged()
+    {
+        return $this->changed;
     }
 
     /**
@@ -164,7 +195,7 @@ class Item
     /**
      * Get integerFields
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getIntegerFields()
     {
@@ -196,7 +227,7 @@ class Item
     /**
      * Get decimalFields
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getDecimalFields()
     {
@@ -264,7 +295,7 @@ class Item
     /**
      * Get text fields
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getTextFields()
     {
@@ -299,20 +330,19 @@ class Item
     public function setCreatedAt(\DateTime $createdAt)
     {
         $this->createdAt = $createdAt;
-    
+
         return $this;
     }
 
     /**
      * Get createdAt
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getCreatedAt()
     {
         return $this->createdAt;
     }
-
 
     /**
      * Set updatedAt
@@ -324,14 +354,14 @@ class Item
     public function setUpdatedAt(\DateTime $updatedAt)
     {
         $this->updatedAt = $updatedAt;
-    
+
         return $this;
     }
 
     /**
      * Get updatedAt
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getUpdatedAt()
     {
