@@ -40,12 +40,28 @@ abstract class AbstractEntityFlexibleAttributeValue extends AbstractFlexibleAttr
     protected $entity;
 
     /**
-     * Locale scope
+     * Locale code
      * @var string $localeCode
      *
-     * @ORM\Column(name="locale", type="string", length=5, nullable=false)
+     * @ORM\Column(name="locale_code", type="string", length=5, nullable=false)
      */
     protected $localeCode;
+
+    /**
+     * Currency code
+     * @var string $currency
+     *
+     * @ORM\Column(name="currency_code", type="string", length=5, nullable=true)
+     */
+    protected $currency;
+
+    /**
+     * Unit code
+     * @var string $unit
+     *
+     * @ORM\Column(name="unit_code", type="string", length=5, nullable=true)
+     */
+    protected $unit;
 
     /**
      * Store varchar value
@@ -165,4 +181,39 @@ abstract class AbstractEntityFlexibleAttributeValue extends AbstractFlexibleAttr
         return $this->option;
     }
 
+    /**
+     * Get used currency
+     * @return string $currency
+     */
+    public function getCurrency()
+    {
+        return $this->currency;
+    }
+
+    /**
+     * Set used currency
+     * @param string $currency
+     */
+    public function setCurrency($currency)
+    {
+        $this->currency = $currency;
+    }
+
+    /**
+     * Get used unit
+     * @return string $unit
+     */
+    public function getUnit()
+    {
+        return $this->unit;
+    }
+
+    /**
+     * Set used unit
+     * @param string $unit
+     */
+    public function setUnit($unit)
+    {
+        $this->unit = $unit;
+    }
 }

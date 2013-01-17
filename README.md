@@ -312,7 +312,7 @@ Base flexible entity repository is designed to deal with translated values in qu
 Base flexible entity is designed to gets relevant values too, it knows the asked locale (injected with TranslatableListener).
 
 Add some custom attribute configuration for a dedicated entity in a custom table
-==========================================================================
+================================================================================
 
 - for instance, create a ProductAttribute class with one-one relation to base Attribute class and add some custom attribute field, as attribute Name, Description, etc :
 
@@ -537,7 +537,7 @@ TODO
 
 - is_unique, default_value behavior
 - default fallback
-- discuss about translatable/localizable notion
 - use interface and behavior on concret classes
+- for price : http://symfony.com/doc/current/cookbook/templating/twig_extension.html
 
 
