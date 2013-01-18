@@ -173,10 +173,6 @@ class FlexibleEntityRepository extends EntityRepository
         // identify kind of query
         $hasSelectedAttributes = (!is_null($attributes) and !empty($attributes));
         $hasCriterias = (!is_null($criteria) and !empty($criteria));
-        if ($hasCriterias) {
-            $attributeCriterias = array_intersect($attributes, array_keys($criteria));
-            $fieldCriterias     = array_diff(array_keys($criteria), $attributes);
-        }
         if ($hasCriterias or $hasSelectedAttributes) {
             $codeToAttribute = $this->getCodeToAttributes($attributes);
         }

@@ -24,11 +24,6 @@ abstract class AbstractAttribute implements TimestampableInterface
     protected $code;
 
     /**
-     * @var string $title
-     */
-    protected $title;
-
-    /**
      * @var string $entityType
      */
     protected $entityType;
