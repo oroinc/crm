@@ -1,0 +1,18 @@
+{% extends 'OroUserBundle::layout.html.twig' %}
+
+{% block content %}
+<form action="{{ path('fos_user_resetting_send_email') }}" method="POST" class="form-pass-reset">
+    <h2 class="form-signin-heading">{{ 'Password reset request'|trans }}</h2>
+    {% if invalid_username is defined %}
+    <p>{{ 'resetting.request.invalid_username'|trans({'%username%': invalid_username}, 'FOSUserBundle') }}</p>
+    {% endif %}
+    <div class="form-row">
+        <label for="username">{{ 'Enter your email'|trans }}</label>
+        <input type="text" id="username" name="username" required="required" />
+    </div>
+    <div>
+        <button class="btn" type="submit">{{ 'Request'|trans }}</button>
+        <button class="btn" type="button">{{ 'Cancel'|trans }}</button>
+    </div>
+</form>
+{% endblock %}

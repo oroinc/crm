@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\UserBundle\DependencyInjection;
+namespace Oro\Bundle\UserBundle\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;

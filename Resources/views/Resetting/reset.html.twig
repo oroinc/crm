@@ -1,0 +1,12 @@
+{% extends 'OroUserBundle::layout.html.twig' %}
+
+{% block content %}
+<form action="{{ path('fos_user_resetting_reset', { token: token }) }}" {{ form_enctype(form) }} method="POST" class="form-pass-reset">
+    <h2 class="form-signin-heading">{{ 'Password reset request'|trans }}</h2>
+    {{ form_widget(form) }}
+    <div>
+        <button class="btn" type="submit">{{ 'Request'|trans }}</button>
+        <button class="btn" type="button">{{ 'Cancel'|trans }}</button>
+    </div>
+</form>
+{% endblock %}

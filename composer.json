@@ -1,5 +1,5 @@
 {
-    "name": "oro/UserBundle",
+    "name": "oro/user-bundle",
     "type": "symfony-bundle",
     "description": "BAP User Bundle",
     "keywords": ["BAP"],

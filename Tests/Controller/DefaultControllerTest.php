@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\UserBundle\Tests\Controller;
+namespace Oro\Bundle\UserBundle\Tests\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
