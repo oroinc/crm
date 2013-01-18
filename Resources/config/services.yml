@@ -1,13 +1,7 @@
 parameters:
-    oro_flexibleentity.locale_helper.class: Oro\Bundle\FlexibleEntityBundle\Helper\LocaleHelper
     oro_flexibleentity.entities_config: ~
 
 services:
-
-    # provide some utility methods to manage locale
-    oro_flexibleentity.locale_helper:
-        class:        "%oro_flexibleentity.locale_helper.class%"
-        arguments:    [%locale%, @service_container]
 
     # deal with translatable behavior
     oro_flexibleentity.translatable_listener:

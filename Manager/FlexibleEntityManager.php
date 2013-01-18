@@ -57,15 +57,6 @@ class FlexibleEntityManager extends SimpleEntityManager
     }
 
     /**
-     * Get locale helper
-     * @return LocaleHelper
-     */
-    public function getLocaleHelper()
-    {
-        return $this->container->get('oro_flexibleentity.locale_helper');
-    }
-
-    /**
      * Return locale code from request or default
      *
      * @return string
