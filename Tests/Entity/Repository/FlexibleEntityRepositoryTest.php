@@ -60,9 +60,7 @@ class FlexibleEntityRepositoryTest extends OrmTestCase
                     'flexible_attribute_extended_class'     => false,
                     'flexible_attribute_class'              => 'Oro\Bundle\FlexibleEntityBundle\Entity\Attribute',
                     'flexible_attribute_option_class'       => 'Oro\Bundle\FlexibleEntityBundle\Entity\AttributeOption',
-                    'flexible_attribute_option_value_class' => 'Oro\Bundle\FlexibleEntityBundle\Entity\AttributeOptionValue',
-                    'has_translatable_value'                => false,
-                    'has_scopable_value'                    => false
+                    'flexible_attribute_option_value_class' => 'Oro\Bundle\FlexibleEntityBundle\Entity\AttributeOptionValue'
                 )
             )
         );

@@ -1,6 +1,7 @@
 <?php
 namespace Oro\Bundle\FlexibleEntityBundle\Manager;
 
+use Oro\Bundle\FlexibleEntityBundle\Model\Attribute\Type\AbstractAttributeType;
 use Oro\Bundle\FlexibleEntityBundle\Model\Entity;
 use Oro\Bundle\FlexibleEntityBundle\Model\EntityAttribute;
 use Oro\Bundle\FlexibleEntityBundle\Model\EntityAttributeValue;
@@ -65,26 +66,6 @@ class FlexibleEntityManager extends SimpleEntityManager
     }
 
     /**
-     * Is translatable flexible entity
-     *
-     * @return boolean
-     */
-    public function isTranslatableEntity()
-    {
-        return $this->flexibleConfig['has_translatable_value'];
-    }
-
-    /**
-     * Is scopable flexible entity
-     *
-     * @return boolean
-     */
-    public function isScopableEntity()
-    {
-        return $this->flexibleConfig['has_scopable_value'];
-    }
-
-    /**
      * Return locale code from request or default
      *
      * @return string
@@ -92,13 +73,8 @@ class FlexibleEntityManager extends SimpleEntityManager
     public function getLocaleCode()
     {
         if (!$this->localeCode) {
-            // get current locale by default if translatable
-            if ($this->isTranslatableEntity()) {
-                $this->localeCode = $this->getLocaleHelper()->getCurrentLocaleCode();
-                // if not get application default locale
-            } else {
-                $this->localeCode = $this->getLocaleHelper()->getDefaultLocaleCode();
-            }
+            // use default locale
+            $this->localeCode = $this->flexibleConfig['default_locale'];
         }
 
         return $this->localeCode;
@@ -247,6 +223,7 @@ class FlexibleEntityManager extends SimpleEntityManager
         $class = $this->getAttributeName();
         $object = new $class();
         $object->setEntityType($this->getEntityName());
+        $object->setBackendStorage(AbstractAttributeType::BACKEND_STORAGE_ATTRIBUTE_VALUE);
 
         return $object;
     }

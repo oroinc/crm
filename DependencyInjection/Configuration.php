@@ -56,13 +56,9 @@ class Configuration implements ConfigurationInterface
                     ->defaultValue('Oro\Bundle\FlexibleEntityBundle\Entity\AttributeOptionValue')
                     ->end()
 
-                    // optional behaviors
-                    ->booleanNode('has_translatable_value')
-                    ->defaultFalse()
-                    ->end()
-
-                    ->booleanNode('has_scopable_value')
-                    ->defaultFalse()
+                    // optional, default locale used for entity values
+                    ->scalarNode('default_locale')
+                    ->defaultValue('en_US')
                     ->end()
 
                 ->end()

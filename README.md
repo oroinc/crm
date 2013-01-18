@@ -257,15 +257,13 @@ $cm = $this->container->get('customer_manager');
 // create an attribute (cf controllers and unit tests for more exemples with options, etc)
 $att = $cm->createAttribute();
 $att->setCode($attCode);
-$att->setBackendModel(AbstractAttributeType::BACKEND_MODEL_ATTRIBUTE_VALUE);
 $att->setBackendType(AbstractAttributeType::BACKEND_TYPE_VARCHAR);
 
 // persist and flush
 $cm->getStorageManager()->persist($att);
 $cm->getStorageManager()->flush();
 
-// create customer with basic fields mapped in customer entity  (cf controllers and unit tests for
-// more exemples with options, etc)
+// create customer with basic fields mapped in customer entity  (cf controllers and unit tests for more exemples)
 $customer = $cm->createEntity();
 $customer->setEmail($custEmail);
 $customer->setFirstname('Nicolas');
@@ -285,12 +283,12 @@ $cm->getStorageManager()->persist($customer);
 $cm->getStorageManager()->flush();
 ```
 
-Define "translatable" values
-============================
+Define translatable values
+==========================
 
-Product and ProductValue are defined as for customer.
+A value can be translated if attribute is defined as translatable.
 
-Flexible manager is define in same way too.
+You can use any locale code you want (fr, fr_FR, other, no checks, depends on application, list of locales is available in Locale Component).
 
 Attribute 'name' and 'description' are defined as translatable (not the case by default) :
 
@@ -299,7 +297,6 @@ $pm = $this->container->get('product_manager');
 $attributeCode = 'name';
 $attribute = $pm->createAttribute();
 $attribute->setCode($attributeCode);
-$attribute->setBackendModel(AbstractAttributeType::BACKEND_MODEL_ATTRIBUTE_VALUE);
 $attribute->setBackendType(AbstractAttributeType::BACKEND_TYPE_TEXT);
 $attribute->setTranslatable(true);
 ```
@@ -312,6 +309,38 @@ About locale, if attribute is defined as translatable, the locale to use (in ent
 Base flexible entity repository is designed to deal with translated values in queries, it knows the asked locale and gets relevant value if attribute is translatable.
 
 Base flexible entity is designed to gets relevant values too, it knows the asked locale (injected with TranslatableListener).
+
+Define values with a currency
+=============================
+
+A value can be related to a currency.
+
+You can use any currency code you want (no checks, depends on application, list of currencies is available in Locale Component).
+
+```php
+$pm = $this->container->get('product_manager');
+$attributeCode = 'price';
+$attribute = $pm->createAttribute();
+$attribute->setCode($attributeCode);
+$attribute->setBackendType(AbstractAttributeType::BACKEND_TYPE_DECIMAL);
+$attribute->setCurrency('EURO');
+```
+
+Define values with a measure unit
+=================================
+
+A value can be related to a unit.
+
+You can use any unit code you want (no checks, depends on application).
+
+```php
+$pm = $this->container->get('product_manager');
+$attributeCode = 'size';
+$attribute = $pm->createAttribute();
+$attribute->setCode($attributeCode);
+$attribute->setBackendType(AbstractAttributeType::BACKEND_TYPE_INTEGER);
+$attribute->setUnit('cm');
+```
 
 Add some custom attribute configuration for a dedicated entity in a custom table
 ================================================================================
@@ -392,7 +421,6 @@ $productAttribute = $this->getProductManager()->createFlexibleAttribute();
 $productAttribute->setName('Name');
 $productAttribute->getAttribute()->setCode($attributeCode);
 $productAttribute->getAttribute()->setRequired(true);
-$productAttribute->getAttribute()->setBackendStorage(AbstractAttributeType::BACKEND_STORAGE_ATTRIBUTE_VALUE);
 $productAttribute->getAttribute()->setBackendType(AbstractAttributeType::BACKEND_TYPE_VARCHAR);
 $productAttribute->getAttribute()->setTranslatable(true);
 $this->getProductManager()->getStorageManager()->persist($productAttribute);
@@ -513,7 +541,7 @@ Store attributes, option, option values in custom tables
 Use flat storage for values
 ---------------------------
 
-- use another backend model for attribute, as flatValues (can define this relation in your flexible entity)
+- use another backend storage for attribute, as flatValues (can define this relation in your flexible entity)
 - extends / replace base repository to change queries
 - use event / subscriber to change schema on each attribute insert / update / delete
 
