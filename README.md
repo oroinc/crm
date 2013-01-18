@@ -417,7 +417,7 @@ entities_config:
 
 ```php
 // create product attribute (cascade to create base attribute too)
-$productAttribute = $this->getProductManager()->createFlexibleAttribute();
+$productAttribute = $this->getProductManager()->createEntityAttribute();
 $productAttribute->setName('Name');
 $productAttribute->getAttribute()->setCode($attributeCode);
 $productAttribute->getAttribute()->setRequired(true);
@@ -426,7 +426,7 @@ $productAttribute->getAttribute()->setTranslatable(true);
 $this->getProductManager()->getStorageManager()->persist($productAttribute);
 
 // to query on product attributes :
-$this->getProductManager()->getFlexibleAttributeRepository();
+$this->getProductManager()->getEntityAttributeRepository();
 ```
 
 About queries on flexible entity

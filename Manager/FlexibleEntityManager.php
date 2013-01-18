@@ -98,7 +98,7 @@ class FlexibleEntityManager extends SimpleEntityManager
      * Return class name that can be used to get the repository or instance
      * @return string
      */
-    public function getFlexibleAttributeName()
+    public function getEntityAttributeName()
     {
         return $this->flexibleConfig['flexible_attribute_extended_class'];
     }
@@ -156,13 +156,13 @@ class FlexibleEntityManager extends SimpleEntityManager
      * Return related repository
      * @return Doctrine\Common\Persistence\ObjectRepository
      */
-    public function getFlexibleAttributeRepository()
+    public function getEntityAttributeRepository()
     {
-        if (!$this->getFlexibleAttributeName()) {
+        if (!$this->getEntityAttributeName()) {
             throw new FlexibleConfigurationException($this->getEntityName().' has no flexible attribute extended class');
         }
 
-        return $this->storageManager->getRepository($this->getFlexibleAttributeName());
+        return $this->storageManager->getRepository($this->getEntityAttributeName());
     }
 
     /**
@@ -223,15 +223,15 @@ class FlexibleEntityManager extends SimpleEntityManager
      * Return a new instance
      * @return Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityFlexibleAttribute
      */
-    public function createFlexibleAttribute()
+    public function createEntityAttribute()
     {
-        if (!$this->getFlexibleAttributeName()) {
+        if (!$this->getEntityAttributeName()) {
             throw new FlexibleConfigurationException($this->getEntityName().' has no flexible attribute extended class');
         }
         // build base attribute
         $attribute = $this->createAttribute();
         // build flexible attribute
-        $class = $this->getFlexibleAttributeName();
+        $class = $this->getEntityAttributeName();
         $object = new $class();
         $object->setAttribute($attribute);
 
