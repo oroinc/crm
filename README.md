@@ -186,7 +186,7 @@ We define mapping to basic entity attribute, to basic option (for attribute of l
 <?php
 namespace Acme\Bundle\DemoFlexibleEntityBundle\Entity;
 
-use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityFlexibleAttributeValue;
+use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityFlexibleValue;
 use Oro\Bundle\FlexibleEntityBundle\Entity\Attribute;
 use Doctrine\ORM\Mapping as ORM;
 /**
@@ -194,7 +194,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="acmecustomer_customer_attribute_value")
  * @ORM\Entity
  */
-class CustomerAttributeValue extends AbstractEntityFlexibleAttributeValue
+class CustomerAttributeValue extends AbstractEntityFlexibleValue
 {
     /**
      * @var Attribute $attribute
@@ -565,9 +565,21 @@ services:
 TODO
 ====
 
+- add model AbstractFlexibleAttribute
+- add shortcut getter / setter in AbstractEntityFlexibleAttribute
+
+- deal with select type and multi options
+- rename option_id field as value_optionid to be similar than other backend type 
+
+- add default scope in configuration
+- add setScope in fexible manager and repo
+- update queries to deal with scope (use default if not provided)
+
+- rename all setLocaleCode to setLocale ?
+
+- move backend type and storage from AbstractAttributeType ? move them in AbstractAttribute class ?
+
 - is_unique, default_value behavior
 - default fallback
 - use interface and behavior on concret classes
 - for price : http://symfony.com/doc/current/cookbook/templating/twig_extension.html
-
-

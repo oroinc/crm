@@ -3,7 +3,7 @@ namespace Oro\Bundle\FlexibleEntityBundle\Entity\Mapping;
 
 use Oro\Bundle\FlexibleEntityBundle\Model\AbstractFlexible;
 use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttribute;
-use Oro\Bundle\FlexibleEntityBundle\Model\AbstractFlexibleAttributeValue;
+use Oro\Bundle\FlexibleEntityBundle\Model\AbstractFlexibleValue;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
