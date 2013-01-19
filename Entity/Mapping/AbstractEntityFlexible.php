@@ -5,6 +5,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Oro\Bundle\FlexibleEntityBundle\Model\AbstractFlexible;
 use Oro\Bundle\FlexibleEntityBundle\Model\AbstractFlexibleValue;
 use Oro\Bundle\FlexibleEntityBundle\Model\Behavior\TranslatableContainerInterface;
+use Oro\Bundle\FlexibleEntityBundle\Model\Behavior\ScopableContainerInterface;
 
 /**
  * Base Doctrine ORM entity
@@ -14,7 +15,7 @@ use Oro\Bundle\FlexibleEntityBundle\Model\Behavior\TranslatableContainerInterfac
  * @license   http://opensource.org/licenses/MIT MIT
  *
  */
-abstract class AbstractEntityFlexible extends AbstractFlexible implements TranslatableContainerInterface
+abstract class AbstractEntityFlexible extends AbstractFlexible implements TranslatableContainerInterface, ScopableContainerInterface
 {
     /**
      * @var integer $id
@@ -44,6 +45,12 @@ abstract class AbstractEntityFlexible extends AbstractFlexible implements Transl
      * @var string $localeCode
      */
     protected $localeCode;
+
+    /**
+     * Not persisted but allow to force scope for values
+     * @var string $scope
+     */
+    protected $scope;
 
     /**
      * @var Value
@@ -79,6 +86,29 @@ abstract class AbstractEntityFlexible extends AbstractFlexible implements Transl
     public function setLocaleCode($locale)
     {
         $this->localeCode = $locale;
+
+        return $this;
+    }
+
+    /**
+     * Get used scope
+     * @return string $scope
+     */
+    public function getScope()
+    {
+        return $this->scope;
+    }
+
+    /**
+     * Set used scope
+     *
+     * @param string $scope
+     *
+     * @return AbstractFlexible
+     */
+    public function setScope($scope)
+    {
+        $this->scope = $scope;
 
         return $this;
     }
@@ -128,12 +158,18 @@ abstract class AbstractEntityFlexible extends AbstractFlexible implements Transl
     public function getValue($attributeCode)
     {
         $locale = $this->getLocaleCode();
-        $values = $this->getValues()->filter(function($value) use ($attributeCode, $locale) {
+        $scope = $this->getScope();
+        $values = $this->getValues()->filter(function($value) use ($attributeCode, $locale, $scope) {
             // related value to asked attribute
             if ($value->getAttribute()->getCode() == $attributeCode) {
                 // return relevant translated value if translatable
                 if ($value->getAttribute()->getTranslatable() and $value->getLocaleCode() == $locale) {
-                    return true;
+                    // check also scope if scopable
+                    if ($value->getAttribute()->getScopable() and $value->getScope() == $scope) {
+                        return true;
+                    } else if (!$value->getAttribute()->getScopable()) {
+                        return true;
+                    }
                 // return the value if not translatable
                 } else if (!$value->getAttribute()->getTranslatable()) {
                     return true;

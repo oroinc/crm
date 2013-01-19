@@ -33,6 +33,11 @@ abstract class AbstractFlexibleValue
     protected $localeCode;
 
     /**
+     * @var string $scope
+     */
+    protected $scope;
+
+    /**
      * Get id
      *
      * @return integer
@@ -106,5 +111,23 @@ abstract class AbstractFlexibleValue
     public function setLocaleCode($locale)
     {
         $this->localeCode = $locale;
+    }
+
+    /**
+     * Get used scope
+     * @return string $scope
+     */
+    public function getScope()
+    {
+        return $this->scope;
+    }
+
+    /**
+     * Set used scope
+     * @param string $locale
+     */
+    public function setScope($scope)
+    {
+        $this->scope = $scope;
     }
 }

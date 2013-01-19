@@ -61,6 +61,11 @@ class Configuration implements ConfigurationInterface
                     ->defaultValue('en_US')
                     ->end()
 
+                    // optional, default scope used for entity values
+                    ->scalarNode('default_scope')
+                    ->defaultValue(null)
+                    ->end()
+
                 ->end()
             ->end();
 

@@ -32,7 +32,7 @@ In Oro\Bundle\FlexibleEntityBundle :
 There are some examples in laboro/bap-standard/tree/master/src/Acme/Bundle/DemoFlexibleEntityBundle :
 - Manufacturer : a simple entity
 - Customer : a flexible entity (no translatable attributes)
-- Product : a flexible entity (with translatable attributes)
+- Product : a flexible entity (with translatable and scopable attributes)
 
 Install and run unit tests
 ==========================
@@ -283,14 +283,12 @@ $cm->getStorageManager()->persist($customer);
 $cm->getStorageManager()->flush();
 ```
 
-Define translatable values
-==========================
+Define translated values
+========================
 
-A value can be translated if attribute is defined as translatable.
+A value can be translated if related attribute is defined as translatable.
 
-You can use any locale code you want (fr, fr_FR, other, no checks, depends on application, list of locales is available in Locale Component).
-
-Attribute 'name' and 'description' are defined as translatable (not the case by default) :
+By default, attribute is defined as not translatable, you have to setup as following :
 
 ```php
 $pm = $this->container->get('product_manager');
@@ -301,17 +299,59 @@ $attribute->setBackendType(AbstractAttributeType::BACKEND_TYPE_TEXT);
 $attribute->setTranslatable(true);
 ```
 
-About locale, if attribute is defined as translatable, the locale to use (in entity or repository) is retrieved (high to low priority) :
-- from flexible manager if developer has forced it with setLocaleCode($code)
-- from http request
-- from application config
+You can choose value locale as following and use any locale code you want (fr, fr_FR, other, no checks, depends on application, list of locales is available in Locale Component) :
+
+```php
+$value = $pm->createEntityValue();
+$value->setAttribute($attribute);
+$value->setData('my data');
+// force locale to use
+$value->setLocaleCode('fr_FR');
+```
+
+If you don't choose locale of value, it's created with locale code (high to low priority) :
+- of flexible entity manager
+- of flexible entity config (see default_locale)
 
 Base flexible entity repository is designed to deal with translated values in queries, it knows the asked locale and gets relevant value if attribute is translatable.
 
 Base flexible entity is designed to gets relevant values too, it knows the asked locale (injected with TranslatableListener).
 
-Define values with a currency
-=============================
+Define a value with a scope
+===========================
+
+A value can also be scoped if related attribute is defined as scopable.
+
+By default, attribute is defined as not scopable, you have to setup as following :
+
+```php
+$pm = $this->container->get('product_manager');
+$attributeCode = 'description';
+$attribute = $pm->createAttribute();
+$attribute->setCode($attributeCode);
+$attribute->setBackendType(AbstractAttributeType::BACKEND_TYPE_TEXT);
+$attribute->setTranslatable(true);
+$attribute->setScopable(true);
+```
+
+Then you can use any scope code you want for value (no checks, depends on application).
+
+```php
+$pm = $this->container->get('product_manager');
+$value = $pm->createEntityValue();
+$value->setScope('my_scope_code');
+$value->setAttribute($attDescription);
+$value->setData('my scoped and translated value');
+```
+
+If you want associate a default scope to any created value, define it in config file with "default_scope" param.
+
+Base flexible entity repository is designed to deal with scoped values in queries, it knows the asked scope and gets relevant value if attribute is scopable.
+
+Base flexible entity is designed to gets relevant values too, it knows the asked scopable (injected with ScopableListener).
+
+Define a value with a currency
+==============================
 
 A value can be related to a currency.
 
@@ -319,31 +359,30 @@ You can use any currency code you want (no checks, depends on application, list 
 
 ```php
 $pm = $this->container->get('product_manager');
-$attributeCode = 'price';
-$attribute = $pm->createAttribute();
-$attribute->setCode($attributeCode);
-$attribute->setBackendType(AbstractAttributeType::BACKEND_TYPE_DECIMAL);
-$attribute->setCurrency('EURO');
+$value = $pm->createEntityValue();
+$value->setAttribute($attPrice);
+$value->setData(100);
+$value->setCurrency('EURO');
 ```
 
-Define values with a measure unit
-=================================
+Define a value with a unit
+==========================
 
-A value can be related to a unit.
+A value can be related to a measure unit.
 
 You can use any unit code you want (no checks, depends on application).
 
 ```php
 $pm = $this->container->get('product_manager');
-$attributeCode = 'size';
-$attribute = $pm->createAttribute();
-$attribute->setCode($attributeCode);
-$attribute->setBackendType(AbstractAttributeType::BACKEND_TYPE_INTEGER);
-$attribute->setUnit('cm');
+$value = $pm->createEntityValue();
+$value->setAttribute($attPrice);
+$value->setData(100);
+$value->setUnit('cm');
+```
 ```
 
-Add some custom attribute configuration for a dedicated entity in a custom table
-================================================================================
+Add some attribute configuration for a dedicated entity in a custom table
+=========================================================================
 
 - for instance, create a ProductAttribute class with one-one relation to base Attribute class and add some custom attribute field, as attribute Name, Description, etc :
 
@@ -459,7 +498,7 @@ $products = $productRepository->findByWithAttributes(
 // use limit 
 $products = $productRepository->findByWithAttributes(array('name', 'description'), null, null, 10, 0);
 // force locale to get french values
-$this->getProductManager()->setLocaleCode('fr')->getEntityRepository()
+$this->getProductManager()->setLocaleCode('fr_FR')->getEntityRepository()
     ->findByWithAttributes(array('name', 'description'));
 
 // more examples in controllers an unit tests
@@ -565,17 +604,15 @@ services:
 TODO
 ====
 
+- options value are scopable ?
+
+- rename all setLocaleCode to setLocale
+
 - add model AbstractFlexibleAttribute
 - add shortcut getter / setter in AbstractEntityFlexibleAttribute
 
 - deal with select type and multi options
 - rename option_id field as value_optionid to be similar than other backend type 
-
-- add default scope in configuration
-- add setScope in fexible manager and repo
-- update queries to deal with scope (use default if not provided)
-
-- rename all setLocaleCode to setLocale ?
 
 - move backend type and storage from AbstractAttributeType ? move them in AbstractAttribute class ?
 

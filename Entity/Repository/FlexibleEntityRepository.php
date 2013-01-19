@@ -29,6 +29,12 @@ class FlexibleEntityRepository extends EntityRepository
     protected $localeCode;
 
     /**
+     * Scope code
+     * @var string
+     */
+    protected $scopeCode;
+
+    /**
      * Get flexible entity config
      *
      * @return array $config
@@ -72,6 +78,30 @@ class FlexibleEntityRepository extends EntityRepository
     public function setLocaleCode($code)
     {
         $this->localeCode = $code;
+
+        return $this;
+    }
+
+    /**
+     * Get scope code
+     *
+     * @return string
+     */
+    public function getScope()
+    {
+        return $this->scope;
+    }
+
+    /**
+     * Set scope code
+     *
+     * @param string $code
+     *
+     * @return FlexibleEntityRepository
+     */
+    public function setScope($code)
+    {
+        $this->scope = $code;
 
         return $this;
     }
@@ -234,6 +264,12 @@ class FlexibleEntityRepository extends EntityRepository
                 $condition .= ' AND '.$joinAlias.'.localeCode = :'.$joinValueLocale;
                 $qb->setParameter($joinValueLocale, $this->getLocaleCode());
             }
+            // add condition to get only scoped value if we use this attribute to order
+            if ($attribute->getScopable() and isset($orderBy[$attributeCode])) {
+                $joinValueScope = 'selectscope'.$attributeCode;
+                $condition .= ' AND '.$joinAlias.'.scope = :'.$joinValueScope;
+                $qb->setParameter($joinValueScope, $this->getScope());
+            }
             // add the join with condition and store alias for next uses
             $qb->leftJoin('Entity.'.$attribute->getBackendStorage(), $joinAlias, 'WITH', $condition);
             $attributeCodeToAlias[$attributeCode]= $joinAlias.'.'.$attribute->getBackendType();
@@ -269,6 +305,12 @@ class FlexibleEntityRepository extends EntityRepository
                     $joinValueLocale = 'filterlocale'.$fieldCode;
                     $condition .= ' AND '.$joinAlias.'.localeCode = :'.$joinValueLocale;
                     $qb->setParameter($joinValueLocale, $this->getLocaleCode());
+                }
+                // add condition on scope if attribute is scopable
+                if ($attribute->getScopable()) {
+                    $joinValueScope = 'filterscope'.$fieldCode;
+                    $condition .= ' AND '.$joinAlias.'.scope = :'.$joinValueScope;
+                    $qb->setParameter($joinValueScope, $this->getScope());
                 }
                 // add inner join to filter lines and store value alias for next uses
                 $qb->innerJoin('Entity.'.$attribute->getBackendStorage(), $joinAlias, 'WITH', $condition)

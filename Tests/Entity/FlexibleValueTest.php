@@ -1,7 +1,7 @@
 <?php
 namespace Oro\Bundle\FlexibleEntityBundle\Test\Entity;
 
-use Oro\Bundle\FlexibleEntityBundle\Tests\Entity\Demo\FlexibleAttributeValue;
+use Oro\Bundle\FlexibleEntityBundle\Tests\Entity\Demo\FlexibleValue;
 use Oro\Bundle\FlexibleEntityBundle\Tests\Entity\Demo\Flexible;
 use Oro\Bundle\FlexibleEntityBundle\Model\Attribute\Type\AbstractAttributeType;
 use Oro\Bundle\FlexibleEntityBundle\Entity\Attribute;
@@ -15,7 +15,7 @@ use Oro\Bundle\FlexibleEntityBundle\Entity\AttributeOption;
  * @license   http://opensource.org/licenses/MIT MIT
  *
  */
-class FlexibleAttributeValueTest extends \PHPUnit_Framework_TestCase
+class FlexibleValueTest extends \PHPUnit_Framework_TestCase
 {
 
     protected $flexible;
@@ -36,7 +36,7 @@ class FlexibleAttributeValueTest extends \PHPUnit_Framework_TestCase
         $this->attribute->setCode('mycode');
         $this->attribute->setBackendType(AbstractAttributeType::BACKEND_TYPE_VARCHAR);
         // create value
-        $this->value = new FlexibleAttributeValue();
+        $this->value = new FlexibleValue();
         $this->value->setAttribute($this->attribute);
         $this->value->setEntity($this->flexible);
     }
@@ -65,6 +65,16 @@ class FlexibleAttributeValueTest extends \PHPUnit_Framework_TestCase
         $code = 'fr_FR';
         $this->value->setLocaleCode($code);
         $this->assertEquals($this->value->getLocaleCode(), $code);
+    }
+
+    /**
+     * Test related method
+     */
+    public function testGetScope()
+    {
+        $code = 'ecommerce';
+        $this->value->setScope($code);
+        $this->assertEquals($this->value->getScope(), $code);
     }
 
     /**

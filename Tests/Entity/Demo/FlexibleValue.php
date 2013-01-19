@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @license   http://opensource.org/licenses/MIT MIT
  *
  */
-class FlexibleAttributeValue extends AbstractEntityFlexibleValue
+class FlexibleValue extends AbstractEntityFlexibleValue
 {
 
 }

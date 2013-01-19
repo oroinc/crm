@@ -11,6 +11,14 @@ services:
         tags:
             - { name: doctrine.event_subscriber }
 
+    # deal with translatable behavior
+    oro_flexibleentity.scopable_listener:
+        class: Oro\Bundle\FlexibleEntityBundle\Listener\ScopableListener
+        calls:
+            - [ setContainer, [ @service_container ] ]
+        tags:
+            - { name: doctrine.event_subscriber }
+
     # deal with timestampable behavior
     oro_flexibleentity.timestampable_listener:
         class: Oro\Bundle\FlexibleEntityBundle\Listener\TimestampableListener

@@ -87,6 +87,16 @@ class FlexibleEntityRepositoryTest extends OrmTestCase
     /**
      * Test related method
      */
+    public function testGetScope()
+    {
+        $code = 'ecommerce';
+        $this->repository->setScope($code);
+        $this->assertEquals($this->repository->getScope(), $code);
+    }
+
+    /**
+     * Test related method
+     */
     public function testgetFlexibleConfig()
     {
         $this->repository->setFlexibleConfig($this->flexibleConfig);
