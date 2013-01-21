@@ -17,7 +17,7 @@ In Oro\Bundle\FlexibleEntityBundle :
 
 - /Model/Entity contains abstract entity models (entity, attribute, value, option, etc) independent of doctrine
 - /Model/Attribute (will/should) contains attribute frontend types, backend types, backend models
-- /Model/Behaviour contains interfaces as timestampable, translatable
+- /Model/Behavior contains interfaces as timestampable, translatable, hasrequiredvalue, hasdefaultvalue
 
 - /Entity/Mapping contains abstract doctrine entities (with mapping)
 - /Entity/Repository contains base doctrine repository for flexible entity
@@ -25,7 +25,7 @@ In Oro\Bundle\FlexibleEntityBundle :
 
 - /Manager contains service which allow to manipulate, entity, repository and entity manager with simple manager (classic doctrine entity) or flexible manager (attribute management entity)
 
-- /Listener contains event subscriber/listener to implements some behavior as timestampable or translatable
+- /Listener contains event subscriber/listener to implements some behavior as timestampable, translatable, etc
 
 - /Helper contains classes with utility methods
 
@@ -140,13 +140,14 @@ We use the basic entity repository, and define by mapping which value table to u
 namespace Acme\Bundle\DemoFlexibleEntityBundle\Entity;
 
 use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityFlexible;
+use Oro\Bundle\FlexibleEntityBundle\Model\Behavior\HasRequiredValueInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="acmecustomer_customer")
  * @ORM\Entity(repositoryClass="Oro\Bundle\FlexibleEntityBundle\Entity\Repository\FlexibleEntityRepository")
  */
-class Customer extends AbstractEntityFlexible
+class Customer extends AbstractEntityFlexible implements HasRequiredValueInterface
 {
     /**
      * @var string $email
@@ -186,6 +187,7 @@ We define mapping to basic entity attribute, to basic option (for attribute of l
 <?php
 namespace Acme\Bundle\DemoFlexibleEntityBundle\Entity;
 
+use Oro\Bundle\FlexibleEntityBundle\Model\Behavior\HasDefaultValueInterface;
 use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityFlexibleValue;
 use Oro\Bundle\FlexibleEntityBundle\Entity\Attribute;
 use Doctrine\ORM\Mapping as ORM;
@@ -194,7 +196,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="acmecustomer_customer_attribute_value")
  * @ORM\Entity
  */
-class CustomerValue extends AbstractEntityFlexibleValue
+class CustomerValue extends AbstractEntityFlexibleValue implements HasDefaultValueInterface
 {
     /**
      * @var Attribute $attribute
@@ -211,13 +213,17 @@ class CustomerValue extends AbstractEntityFlexibleValue
     protected $entity;
 
     /**
-     * Store option value, if backend is an option
+     * Custom backend type to store options and theirs values
      *
-     * @var AbstractEntityAttributeOption $optionvalue
+     * @var options ArrayCollection
      *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\FlexibleEntityBundle\Entity\AttributeOption")
+     * @ORM\ManyToMany(targetEntity="Oro\Bundle\FlexibleEntityBundle\Entity\AttributeOption")
+     * @ORM\JoinTable(name="acmedemoflexibleentity_customer_values_options",
+     *      joinColumns={@ORM\JoinColumn(name="value_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="option_id", referencedColumnName="id")}
+     * )
      */
-    protected $option;
+    protected $options;
 }
 ```
 
@@ -228,7 +234,7 @@ entities_config:
         flexible_manager:            customer_manager
         flexible_entity_class:       Acme\Bundle\DemoFlexibleEntityBundle\Entity\Customer
         flexible_entity_value_class: Acme\Bundle\DemoFlexibleEntityBundle\Entity\CustomerValue
-        # there is some default values added for basic entity to use for attribute, option, etc and for behavior as translatable  
+        # there is some default values added for basic entity to use for attribute, option, etc 
 ```
 
 This config :
@@ -400,7 +406,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="acmeproduct_product_attribute")
  * @ORM\Entity
  */
-class ProductAttribute extends AbstractEntityFlexibleAttribute
+class ProductAttribute extends AbstractEntityFlexibleAttribute 
 {
     /**
      * @var Oro\Bundle\FlexibleEntityBundle\Entity\Attribute $attribute
@@ -470,7 +476,7 @@ $this->getProductManager()->getEntityAttributeRepository();
 
 Note that product attribute mapping provides cascades to create / delet related base attribute too.
 
-AbstractEntityFlexibleAttribute provides equally some shortcuts to base attribute accessors (required, unique, etc) to directly manipulate custom attribute.
+AbstractEntityFlexibleAttribute provides equaly some shortcuts to base attribute accessors (required, unique, etc) to directly manipulate custom attribute.
 
 About queries on flexible entity
 ================================
@@ -509,6 +515,10 @@ $this->getProductManager()->setLocale('fr_FR')->getEntityRepository()
 ```
 
 This method should be extended to add other operators like, in, etc, for now you have to define the method in your custom repository.
+
+Another interesting method is prepareQueryBuilder(), it allows to prepare query builder with attribute to select, criterias, order.
+
+As it returns a QueryBuilder you can get the query add some very custom clauses, add lock mode, change hydration mode, etc. 
 
 There is also a method to load a flexible entity and all values without lazy loading : 
 
@@ -611,8 +621,6 @@ TODO
 - add unit tests on hasrequiredvalue listener
 
 - add is_unique behavior
-
-- add behavior interfaces and move implements to concret classes (not flexible base one)
 
 ENHANCEMENT
 ===========
