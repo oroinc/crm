@@ -19,7 +19,7 @@ class Item
     /**
      * @var int
      * @Type("integer")
-     * @Soap\ComplexType("integer")
+     * @Soap\ComplexType("int")
      */
     protected $recordId;
 

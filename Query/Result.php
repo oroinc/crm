@@ -32,6 +32,11 @@ class Result extends ArrayCollection
     protected $count;
 
     /**
+     * @Soap\ComplexType("Oro\Bundle\SearchBundle\Query\Result\Item[]")
+     */
+    public $elements;
+
+    /**
      * Initializes a new Result.
      *
      * @param Query $query
@@ -44,6 +49,7 @@ class Result extends ArrayCollection
         $this->recordsCount = $recordsCount;
         parent::__construct($elements);
         $this->count = $this->count();
+        $this->elements = $elements;
     }
 
     /**
