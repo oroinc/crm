@@ -11,8 +11,31 @@ use Doctrine\ORM\Mapping as ORM;
  * @copyright 2012 Akeneo SAS (http://www.akeneo.com)
  * @license   http://opensource.org/licenses/MIT MIT
  *
+ * @ORM\Entity()
  */
 class FlexibleValue extends AbstractEntityFlexibleValue
 {
 
+    /**
+     * @var Oro\Bundle\FlexibleEntityBundle\Entity\Attribute $attribute
+     *
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\FlexibleEntityBundle\Entity\Attribute")
+     */
+    protected $attribute;
+
+    /**
+     * @var Product $entity
+     *
+     * @ORM\ManyToOne(targetEntity="Flexible", inversedBy="values")
+     */
+    protected $entity;
+
+    /**
+     * Store option value, if backend is an option
+     *
+     * @var Oro\Bundle\FlexibleEntityBundle\Entity\AttributeOption $option
+     *
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\FlexibleEntityBundle\Entity\AttributeOption")
+     */
+    protected $option;
 }

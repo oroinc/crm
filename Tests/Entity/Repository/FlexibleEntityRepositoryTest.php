@@ -49,7 +49,7 @@ class FlexibleEntityRepositoryTest extends OrmTestCase
     {
         // config
         $this->flexibleClassName      = 'Oro\Bundle\FlexibleEntityBundle\Tests\Entity\Demo\Flexible';
-        $this->flexibleValueClassName = 'Oro\Bundle\FlexibleEntityBundle\Tests\Entity\Demo\FlexibleAttributeValue';
+        $this->flexibleValueClassName = 'Oro\Bundle\FlexibleEntityBundle\Tests\Entity\Demo\FlexibleValue';
         $this->flexibleConfig = array(
             'entities_config' => array(
                 $this->flexibleClassName => array(

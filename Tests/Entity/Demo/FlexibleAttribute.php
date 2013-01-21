@@ -12,9 +12,19 @@ use Doctrine\ORM\Mapping as ORM;
  * @copyright 2012 Akeneo SAS (http://www.akeneo.com)
  * @license   http://opensource.org/licenses/MIT MIT
  *
+ * @ORM\Entity()
  */
 class FlexibleAttribute extends AbstractEntityFlexibleAttribute
 {
+
+    /**
+     * @var Oro\Bundle\FlexibleEntityBundle\Entity\Attribute $attribute
+     *
+     * @ORM\OneToOne(targetEntity="Oro\Bundle\FlexibleEntityBundle\Entity\Attribute", cascade={"persist", "merge", "remove"})
+     * @ORM\JoinColumn(name="attribute_id", referencedColumnName="id")
+     */
+    protected $attribute;
+
     /**
      * @var string $name
      */
