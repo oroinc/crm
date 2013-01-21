@@ -384,7 +384,7 @@ $value->setUnit('cm');
 Add some attribute configuration for a dedicated entity in a custom table
 =========================================================================
 
-- for instance, create a ProductAttribute class with one-one relation to base Attribute class and add some custom attribute field, as attribute Name, Description, etc :
+- for instance, create a ProductAttribute class with one-one relation to base Attribute class and add some custom attribute fields, as Name, Description, etc :
 
 ```php
 <?php
@@ -455,18 +455,22 @@ entities_config:
 - then you can create / manipulate some custom attribute as following :
 
 ```php
-// create product attribute (cascade to create base attribute too)
+// create product attribute
 $productAttribute = $this->getProductManager()->createEntityAttribute();
 $productAttribute->setName('Name');
-$productAttribute->getAttribute()->setCode($attributeCode);
-$productAttribute->getAttribute()->setRequired(true);
-$productAttribute->getAttribute()->setBackendType(AbstractAttributeType::BACKEND_TYPE_VARCHAR);
-$productAttribute->getAttribute()->setTranslatable(true);
+$productAttribute->setCode($attributeCode);
+$productAttribute->setRequired(true);
+$productAttribute->setBackendType(AbstractAttributeType::BACKEND_TYPE_VARCHAR);
+$productAttribute->setTranslatable(true);
 $this->getProductManager()->getStorageManager()->persist($productAttribute);
 
 // to query on product attributes :
 $this->getProductManager()->getEntityAttributeRepository();
 ```
+
+Note that product attribute mapping provides cascades to create / delet related base attribute too.
+
+AbstractEntityFlexibleAttribute provides equally some shortcuts to base attribute accessors (required, unique, etc) to directly manipulate custom attribute.
 
 About queries on flexible entity
 ================================
@@ -609,7 +613,6 @@ TODO
 - options value are scopable ?
 
 - add model AbstractFlexibleAttribute
-- add shortcut getter / setter in AbstractEntityFlexibleAttribute
 
 - move backend type and storage from AbstractAttributeType ? move them in AbstractAttribute class ?
 

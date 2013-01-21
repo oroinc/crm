@@ -1,6 +1,8 @@
 <?php
 namespace Oro\Bundle\FlexibleEntityBundle\Test\Entity;
 
+use Oro\Bundle\FlexibleEntityBundle\Tests\Entity\Demo\FlexibleValue;
+
 use Oro\Bundle\FlexibleEntityBundle\Tests\Entity\Demo\Flexible;
 use Oro\Bundle\FlexibleEntityBundle\Entity\Attribute;
 
@@ -49,6 +51,16 @@ class FlexibleTest extends \PHPUnit_Framework_TestCase
     /**
      * Test related method
      */
+    public function testGetScope()
+    {
+        $code = 'mobile';
+        $this->flexible->setScope($code);
+        $this->assertEquals($this->flexible->getScope(), $code);
+    }
+
+    /**
+     * Test related method
+     */
     public function testGetId()
     {
         $this->assertNull($this->flexible->getId());
@@ -72,6 +84,32 @@ class FlexibleTest extends \PHPUnit_Framework_TestCase
         $date = new \DateTime();
         $this->flexible->setCreated($date);
         $this->assertEquals($this->flexible->getCreated(), $date);
+    }
+
+    /**
+     * Test related method
+     */
+    public function testValues()
+    {
+        // create attribute
+        $att = new Attribute();
+        $code = 'mycode';
+        $att->setCode($code);
+        $att->setBackendType('varchar');
+        // create value
+        $data = 'my test value';
+        $value = new FlexibleValue();
+        $value->setAttribute($att);
+        $value->setData($data);
+        // get / add / remove values
+        $this->assertEquals($this->flexible->getValues()->count(), 0);
+        $this->flexible->addValue($value);
+        $this->assertEquals($this->flexible->getValues()->count(), 1);
+        $this->assertEquals($this->flexible->getValue($code), $value);
+        $this->assertEquals($this->flexible->getValueData($code), $data);
+        $this->assertEquals($this->flexible->mycode, $data);
+        $this->flexible->removeValue($value);
+        $this->assertEquals($this->flexible->getValues()->count(), 0);
     }
 
 }

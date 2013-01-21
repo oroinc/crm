@@ -413,10 +413,14 @@ abstract class AbstractAttribute implements TimestampableInterface
      * Remove option
      *
      * @param AbstractAttributeOption $option
+     *
+     * @return AbstractAttribute
      */
     public function removeOption(AbstractAttributeOption $option)
     {
         $this->options->removeElement($option);
+
+        return $this;
     }
 
     /**
