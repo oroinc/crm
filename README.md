@@ -608,11 +608,11 @@ services:
 TODO
 ====
 
-- add unit tests on repository / listener
-
-- add default_value behavior
+- add unit tests on hasrequiredvalue listener
 
 - add is_unique behavior
+
+- add behavior interfaces and move implements to concret classes (not flexible base one)
 
 ENHANCEMENT
 ===========

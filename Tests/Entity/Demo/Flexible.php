@@ -22,6 +22,7 @@ class Flexible extends AbstractEntityFlexible
 
     /**
      * @var Value
+     * @ORM\OneToMany(targetEntity="FlexibleValue", mappedBy="entity", cascade={"persist", "remove"})
      */
     protected $values;
 

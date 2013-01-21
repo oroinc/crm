@@ -93,13 +93,11 @@ class HasRequiredValueListener implements EventSubscriber
             $flexibleManagerName = $flexibleConfig['entities_config'][$entityClass]['flexible_manager'];
             $flexibleManager = $this->container->get($flexibleManagerName);
 
-            // 1. get required attributes
+            // get required attributes
             $repo = $flexibleManager->getAttributeRepository();
-            $attributes = $repo->findBy(
-                array('entityType' => $entityClass, 'required' => true)
-            );
+            $attributes = $repo->findBy(array('entityType' => $entityClass, 'required' => true));
 
-            // 2. check that value is set for any required attributes
+            // check that value is set for any required attributes
             foreach ($attributes as $attribute) {
                 if (!$entity->getValueData($attribute->getCode())) {
                     throw new HasRequiredValueException('attribute '.$attribute->getCode().' is required');

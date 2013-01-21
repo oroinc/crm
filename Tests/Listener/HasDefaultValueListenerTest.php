@@ -2,15 +2,10 @@
 namespace Oro\Bundle\FlexibleEntityBundle\Tests\Listener;
 
 use Oro\Bundle\FlexibleEntityBundle\Tests\AbstractOrmTest;
-
 use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttributeType;
-
 use Oro\Bundle\FlexibleEntityBundle\Tests\Entity\Demo\FlexibleValue;
-
 use Oro\Bundle\FlexibleEntityBundle\Entity\Attribute;
-
 use Oro\Bundle\FlexibleEntityBundle\Listener\HasDefaultValueListener;
-
 use Doctrine\ORM\Event\LifecycleEventArgs;
 
 /**
