@@ -385,7 +385,6 @@ $value->setAttribute($attPrice);
 $value->setData(100);
 $value->setUnit('cm');
 ```
-```
 
 Add some attribute configuration for a dedicated entity in a custom table
 =========================================================================
