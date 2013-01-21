@@ -188,6 +188,7 @@ abstract class AbstractEntityFlexibleValue extends AbstractFlexibleValue
                 foreach ($data as $item) {
                     $items[]= $item->__toString();
                 }
+
                 return implode(', ', $items);
             }
         }

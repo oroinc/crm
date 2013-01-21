@@ -1,6 +1,8 @@
 <?php
 namespace Oro\Bundle\FlexibleEntityBundle\Model;
 
+use Oro\Bundle\FlexibleEntityBundle\Model\Behavior\HasDataInterface;
+
 /**
  * Abstract entity value, independent of storage
  *
@@ -9,7 +11,7 @@ namespace Oro\Bundle\FlexibleEntityBundle\Model;
  * @license   http://opensource.org/licenses/MIT MIT
  *
  */
-abstract class AbstractFlexibleValue
+abstract class AbstractFlexibleValue implements HasDataInterface
 {
 
     /**
@@ -124,10 +126,19 @@ abstract class AbstractFlexibleValue
 
     /**
      * Set used scope
-     * @param string $locale
+     * @param string $scope
      */
     public function setScope($scope)
     {
         $this->scope = $scope;
+    }
+
+    /**
+     * Has data
+     * @return boolean
+     */
+    public function hasData()
+    {
+        return $this->getData() != null && $this->getData() != '';
     }
 }

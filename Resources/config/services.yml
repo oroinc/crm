@@ -32,3 +32,9 @@ services:
             - [ setContainer, [ @service_container ] ]
         tags:
             - { name: doctrine.event_subscriber }
+
+    # deal with has default value behavior
+    oro_flexibleentity.has_default_value_listener:
+        class: Oro\Bundle\FlexibleEntityBundle\Listener\HasDefaultValueListener
+        tags:
+            - { name: doctrine.event_subscriber }

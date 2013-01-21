@@ -26,6 +26,6 @@ interface ScopableContainerInterface
      *
      * @return ScopableContainerInterface
      */
-    public function setScope($locale);
+    public function setScope($scope);
 
 }
