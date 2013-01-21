@@ -77,11 +77,11 @@ class FlexibleEntityRepositoryTest extends OrmTestCase
     /**
      * Test related method
      */
-    public function testGetLocaleCode()
+    public function testGetLocale()
     {
         $code = 'fr_FR';
-        $this->repository->setLocaleCode($code);
-        $this->assertEquals($this->repository->getLocaleCode(), $code);
+        $this->repository->setLocale($code);
+        $this->assertEquals($this->repository->getLocale(), $code);
     }
 
     /**

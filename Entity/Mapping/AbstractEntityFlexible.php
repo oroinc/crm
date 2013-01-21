@@ -42,9 +42,9 @@ abstract class AbstractEntityFlexible extends AbstractFlexible implements Transl
 
     /**
      * Not persisted but allow to force locale for values
-     * @var string $localeCode
+     * @var string $locale
      */
-    protected $localeCode;
+    protected $locale;
 
     /**
      * Not persisted but allow to force scope for values
@@ -71,9 +71,9 @@ abstract class AbstractEntityFlexible extends AbstractFlexible implements Transl
      * Get used locale
      * @return string $locale
      */
-    public function getLocaleCode()
+    public function getLocale()
     {
-        return $this->localeCode;
+        return $this->locale;
     }
 
     /**
@@ -83,9 +83,9 @@ abstract class AbstractEntityFlexible extends AbstractFlexible implements Transl
      *
      * @return AbstractFlexible
      */
-    public function setLocaleCode($locale)
+    public function setLocale($locale)
     {
-        $this->localeCode = $locale;
+        $this->locale = $locale;
 
         return $this;
     }
@@ -157,13 +157,13 @@ abstract class AbstractEntityFlexible extends AbstractFlexible implements Transl
      */
     public function getValue($attributeCode)
     {
-        $locale = $this->getLocaleCode();
+        $locale = $this->getLocale();
         $scope = $this->getScope();
         $values = $this->getValues()->filter(function($value) use ($attributeCode, $locale, $scope) {
             // related value to asked attribute
             if ($value->getAttribute()->getCode() == $attributeCode) {
                 // return relevant translated value if translatable
-                if ($value->getAttribute()->getTranslatable() and $value->getLocaleCode() == $locale) {
+                if ($value->getAttribute()->getTranslatable() and $value->getLocale() == $locale) {
                     // check also scope if scopable
                     if ($value->getAttribute()->getScopable() and $value->getScope() == $scope) {
                         return true;

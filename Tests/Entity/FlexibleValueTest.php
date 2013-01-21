@@ -60,11 +60,11 @@ class FlexibleValueTest extends \PHPUnit_Framework_TestCase
     /**
      * Test related method
      */
-    public function testGetLocaleCode()
+    public function testGetLocale()
     {
         $code = 'fr_FR';
-        $this->value->setLocaleCode($code);
-        $this->assertEquals($this->value->getLocaleCode(), $code);
+        $this->value->setLocale($code);
+        $this->assertEquals($this->value->getLocale(), $code);
     }
 
     /**

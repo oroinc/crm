@@ -26,7 +26,7 @@ class FlexibleEntityRepository extends EntityRepository
      * Locale code
      * @var string
      */
-    protected $localeCode;
+    protected $locale;
 
     /**
      * Scope code
@@ -63,9 +63,9 @@ class FlexibleEntityRepository extends EntityRepository
      *
      * @return string
      */
-    public function getLocaleCode()
+    public function getLocale()
     {
-        return $this->localeCode;
+        return $this->locale;
     }
 
     /**
@@ -75,9 +75,9 @@ class FlexibleEntityRepository extends EntityRepository
      *
      * @return FlexibleEntityRepository
      */
-    public function setLocaleCode($code)
+    public function setLocale($code)
     {
-        $this->localeCode = $code;
+        $this->locale = $code;
 
         return $this;
     }
@@ -261,8 +261,8 @@ class FlexibleEntityRepository extends EntityRepository
             // add condition to get only translated value if we use this attribute to order
             if ($attribute->getTranslatable() and isset($orderBy[$attributeCode])) {
                 $joinValueLocale = 'selectlocale'.$attributeCode;
-                $condition .= ' AND '.$joinAlias.'.localeCode = :'.$joinValueLocale;
-                $qb->setParameter($joinValueLocale, $this->getLocaleCode());
+                $condition .= ' AND '.$joinAlias.'.locale = :'.$joinValueLocale;
+                $qb->setParameter($joinValueLocale, $this->getLocale());
             }
             // add condition to get only scoped value if we use this attribute to order
             if ($attribute->getScopable() and isset($orderBy[$attributeCode])) {
@@ -303,8 +303,8 @@ class FlexibleEntityRepository extends EntityRepository
                 // add condition on locale if attribute is translatable
                 if ($attribute->getTranslatable()) {
                     $joinValueLocale = 'filterlocale'.$fieldCode;
-                    $condition .= ' AND '.$joinAlias.'.localeCode = :'.$joinValueLocale;
-                    $qb->setParameter($joinValueLocale, $this->getLocaleCode());
+                    $condition .= ' AND '.$joinAlias.'.locale = :'.$joinValueLocale;
+                    $qb->setParameter($joinValueLocale, $this->getLocale());
                 }
                 // add condition on scope if attribute is scopable
                 if ($attribute->getScopable()) {

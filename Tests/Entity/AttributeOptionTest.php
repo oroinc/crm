@@ -19,12 +19,12 @@ class AttributeOptionTest extends \PHPUnit_Framework_TestCase
     /**
      * @staticvar string
      */
-    protected static $localeCode = 'en';
+    protected static $locale = 'en';
 
     /**
      * @staticvar string
      */
-    protected static $localeCodeFr = 'fr';
+    protected static $localeFr = 'fr';
 
     /**
      * @staticvar integer
@@ -122,17 +122,17 @@ class AttributeOptionTest extends \PHPUnit_Framework_TestCase
     /**
      * Test related getter/setter method
      */
-    public function testLocaleCode()
+    public function testgetLocale()
     {
         $attOpt = new AttributeOption();
 
         // assert default value is null
-        $this->assertNull($attOpt->getLocaleCode());
+        $this->assertNull($attOpt->getLocale());
 
         // assert get/set
-        $obj = $attOpt->setLocaleCode(self::$localeCode);
+        $obj = $attOpt->setLocale(self::$locale);
         $this->assertInstanceOf(self::$attOptClass, $obj);
-        $this->assertEquals(self::$localeCode, $attOpt->getLocaleCode());
+        $this->assertEquals(self::$locale, $attOpt->getLocale());
     }
 
     /**
@@ -169,21 +169,21 @@ class AttributeOptionTest extends \PHPUnit_Framework_TestCase
         // assert adding option
         $attOptValueEn = new AttributeOptionValue();
         $attOptValueEn->setValue(self::$attOptValueEn);
-        $attOptValueEn->setLocaleCode(self::$localeCode);
+        $attOptValueEn->setLocale(self::$locale);
         $attOpt->addOptionValue($attOptValueEn);
 
         // assert result
         $attOptValue = $attOpt->getOptionValue();
         $this->assertInstanceOf(self::$attOptValueClass, $attOptValue);
-        $this->assertEquals(self::$localeCode, $attOptValue->getLocaleCode());
+        $this->assertEquals(self::$locale, $attOptValue->getLocale());
         $this->assertEquals(self::$attOptValueEn, $attOptValue->getValue());
 
         // add a second value and define option as translatable
         $attOpt->setTranslatable(true);
         $attOptValueFr = new AttributeOptionValue();
         $attOptValueFr->setValue(self::$attOptValueFr);
-        $attOptValueFr->setLocaleCode(self::$localeCodeFr);
-        $attOpt->setLocaleCode(self::$localeCodeFr);
+        $attOptValueFr->setLocale(self::$localeFr);
+        $attOpt->setLocale(self::$localeFr);
         $obj = $attOpt->addOptionValue($attOptValueFr);
 
         // assertions getter
@@ -193,14 +193,14 @@ class AttributeOptionTest extends \PHPUnit_Framework_TestCase
         // assert option value fr
         $attOptValue = $attOpt->getOptionValue();
         $this->assertInstanceOf(self::$attOptValueClass, $attOptValue);
-        $this->assertEquals(self::$localeCodeFr, $attOptValue->getLocaleCode());
+        $this->assertEquals(self::$localeFr, $attOptValue->getLocale());
         $this->assertEquals(self::$attOptValueFr, $attOptValue->getValue());
 
         // assert option value en
-        $attOpt->setLocaleCode(self::$localeCode);
+        $attOpt->setLocale(self::$locale);
         $attOptValue = $attOpt->getOptionValue();
         $this->assertInstanceOf(self::$attOptValueClass, $attOptValue);
-        $this->assertEquals(self::$localeCode, $attOptValue->getLocaleCode());
+        $this->assertEquals(self::$locale, $attOptValue->getLocale());
         $this->assertEquals(self::$attOptValueEn, $attOptValue->getValue());
         $this->assertEquals(self::$attOptValueEn, $attOpt->__toString());
 
@@ -210,10 +210,10 @@ class AttributeOptionTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(1, $attOpt->getOptionValues());
         $this->assertFalse($attOpt->getOptionValue());
 
-        $attOpt->setLocaleCode(self::$localeCodeFr);
+        $attOpt->setLocale(self::$localeFr);
         $attOptValue = $attOpt->getOptionValue();
         $this->assertInstanceOf(self::$attOptValueClass, $attOptValue);
-        $this->assertEquals(self::$localeCodeFr, $attOptValue->getLocaleCode());
+        $this->assertEquals(self::$localeFr, $attOptValue->getLocale());
         $this->assertEquals(self::$attOptValueFr, $attOptValue->getValue());
         $this->assertEquals(self::$attOptValueFr, $attOpt->__toString());
     }

@@ -74,7 +74,7 @@ class TranslatableListener implements EventSubscriber
                 $flexibleManagerName = $flexibleConfig['entities_config'][$flexibleEntityClass]['flexible_manager'];
                 $flexibleManager = $this->container->get($flexibleManagerName);
                 // set locale setted in manager
-                $entity->setLocaleCode($flexibleManager->getLocaleCode());
+                $entity->setLocale($flexibleManager->getLocale());
             }
         }
     }

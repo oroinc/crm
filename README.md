@@ -306,7 +306,7 @@ $value = $pm->createEntityValue();
 $value->setAttribute($attribute);
 $value->setData('my data');
 // force locale to use
-$value->setLocaleCode('fr_FR');
+$value->setLocale('fr_FR');
 ```
 
 If you don't choose locale of value, it's created with locale code (high to low priority) :
@@ -498,7 +498,7 @@ $products = $productRepository->findByWithAttributes(
 // use limit 
 $products = $productRepository->findByWithAttributes(array('name', 'description'), null, null, 10, 0);
 // force locale to get french values
-$this->getProductManager()->setLocaleCode('fr_FR')->getEntityRepository()
+$this->getProductManager()->setLocale('fr_FR')->getEntityRepository()
     ->findByWithAttributes(array('name', 'description'));
 
 // more examples in controllers an unit tests
@@ -606,7 +606,9 @@ TODO
 
 - options value are scopable ?
 
-- rename all setLocaleCode to setLocale
+- rename all setLocale to setLocale
+
+- rename Acme CustomerAttributeValue to CustomerValue
 
 - add model AbstractFlexibleAttribute
 - add shortcut getter / setter in AbstractEntityFlexibleAttribute

@@ -29,7 +29,7 @@ class FlexibleEntityManager extends SimpleEntityManager
      * Locale code (from config or choose by user)
      * @var string
      */
-    protected $localeCode;
+    protected $locale;
 
     /**
      * Scope code (from config or choose by user)
@@ -66,14 +66,14 @@ class FlexibleEntityManager extends SimpleEntityManager
      *
      * @return string
      */
-    public function getLocaleCode()
+    public function getLocale()
     {
-        if (!$this->localeCode) {
+        if (!$this->locale) {
             // use default locale
-            $this->localeCode = $this->flexibleConfig['default_locale'];
+            $this->locale = $this->flexibleConfig['default_locale'];
         }
 
-        return $this->localeCode;
+        return $this->locale;
     }
 
     /**
@@ -83,9 +83,9 @@ class FlexibleEntityManager extends SimpleEntityManager
      *
      * @return FlexibleEntityManager
      */
-    public function setLocaleCode($code)
+    public function setLocale($code)
     {
-        $this->localeCode = $code;
+        $this->locale = $code;
 
         return $this;
     }
@@ -172,7 +172,7 @@ class FlexibleEntityManager extends SimpleEntityManager
     {
         $repo = $this->storageManager->getRepository($this->getEntityName());
         $repo->setFlexibleConfig($this->flexibleConfig);
-        $repo->setLocaleCode($this->getLocaleCode());
+        $repo->setLocale($this->getLocale());
         $repo->setScope($this->getScope());
 
         return $repo;
@@ -249,7 +249,7 @@ class FlexibleEntityManager extends SimpleEntityManager
     {
         $class = $this->getAttributeOptionName();
         $object = new $class();
-        $object->setLocaleCode($this->getLocaleCode());
+        $object->setLocale($this->getLocale());
 
         return $object;
     }
@@ -262,7 +262,7 @@ class FlexibleEntityManager extends SimpleEntityManager
     {
         $class = $this->getAttributeOptionValueName();
         $object = new $class();
-        $object->setLocaleCode($this->getLocaleCode());
+        $object->setLocale($this->getLocale());
 
         return $object;
     }
@@ -275,7 +275,7 @@ class FlexibleEntityManager extends SimpleEntityManager
     {
         $class = $this->getEntityName();
         $object = new $class();
-        $object->setLocaleCode($this->getLocaleCode());
+        $object->setLocale($this->getLocale());
         $object->setScope($this->getScope());
 
         return $object;
@@ -308,7 +308,7 @@ class FlexibleEntityManager extends SimpleEntityManager
     {
         $class = $this->getEntityValueName();
         $object = new $class();
-        $object->setLocaleCode($this->getLocaleCode());
+        $object->setLocale($this->getLocale());
         $object->setScope($this->getScope());
 
         return $object;

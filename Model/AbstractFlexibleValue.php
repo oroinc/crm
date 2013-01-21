@@ -28,9 +28,9 @@ abstract class AbstractFlexibleValue
     protected $data;
 
     /**
-     * @var string $localeCode
+     * @var string $locale
      */
-    protected $localeCode;
+    protected $locale;
 
     /**
      * @var string $scope
@@ -99,18 +99,18 @@ abstract class AbstractFlexibleValue
      * Get used locale
      * @return string $locale
      */
-    public function getLocaleCode()
+    public function getLocale()
     {
-        return $this->localeCode;
+        return $this->locale;
     }
 
     /**
      * Set used locale
      * @param string $locale
      */
-    public function setLocaleCode($locale)
+    public function setLocale($locale)
     {
-        $this->localeCode = $locale;
+        $this->locale = $locale;
     }
 
     /**

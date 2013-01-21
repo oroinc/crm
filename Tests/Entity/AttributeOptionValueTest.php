@@ -26,7 +26,7 @@ class AttributeOptionValueTest extends \PHPUnit_Framework_TestCase
     /**
      * @staticvar string
      */
-    protected static $localeCode = 'en';
+    protected static $locale = 'en';
 
     /**
      * @staticvar string
@@ -67,17 +67,17 @@ class AttributeOptionValueTest extends \PHPUnit_Framework_TestCase
     /**
      * Test related getter/setter method
      */
-    public function testLocaleCode()
+    public function testGetLocale()
     {
         $attOptValue = new AttributeOptionValue();
 
         // assert default value is null
-        $this->assertNull($attOptValue->getLocaleCode());
+        $this->assertNull($attOptValue->getLocale());
 
         // assert get/set
-        $obj = $attOptValue->setLocaleCode(self::$localeCode);
+        $obj = $attOptValue->setLocale(self::$locale);
         $this->assertInstanceOf(self::$attOptValueClass, $obj);
-        $this->assertEquals(self::$localeCode, $attOptValue->getLocaleCode());
+        $this->assertEquals(self::$locale, $attOptValue->getLocale());
     }
 
     /**
