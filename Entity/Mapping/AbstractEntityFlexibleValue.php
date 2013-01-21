@@ -120,13 +120,24 @@ abstract class AbstractEntityFlexibleValue extends AbstractFlexibleValue
     protected $datetime;
 
     /**
-     * Store option
+     * Store options values
+     * @var options ArrayCollection
      *
-     * @var AbstractEntityAttributeOption $option
-     *
-     * @ORM\ManyToOne(targetEntity="AbstractEntityAttributeOption", inversedBy="attributeValues")
+     * @ORM\ManyToMany(targetEntity="AbstractEntityAttributeOption")
+     * @ORM\JoinTable(name="oroflexibleentity_values_options",
+     *      joinColumns={@ORM\JoinColumn(name="value_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="option_id", referencedColumnName="id")}
+     * )
      */
-    protected $option;
+    protected $options;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->options = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Set entity
@@ -165,28 +176,68 @@ abstract class AbstractEntityFlexibleValue extends AbstractFlexibleValue
     public function getData()
     {
         $backend = $this->attribute->getBackendType();
+        $data    = $this->$backend;
+        // deal with one to many or many to many backend
+        if ($data instanceof \Doctrine\ORM\PersistentCollection) {
+            // one to many
+            if (count($data) <= 1) {
+                return $data->current();;
+            // many to many
+            } else {
+                $items = array();
+                foreach ($data as $item) {
+                    $items[]= $item->__toString();
+                }
+                return implode(', ', $items);
+            }
+        }
 
-        return $this->$backend;
+        return $data;
     }
 
     /**
-     * Set related option
+     * Set option, used for simple select to set single option
      *
      * @param AbstractEntityAttributeOption $option
      */
     public function setOption(AbstractEntityAttributeOption $option)
     {
-        $this->option = $option;
+        $this->options->clear();
+        $this->options[] = $option;
     }
 
     /**
-     * Get related option
+     * Get related option, used for simple select to set single option
      *
      * @return AbstractEntityAttributeOption
      */
     public function getOption()
     {
-        return $this->option;
+        return $this->options->current();
+    }
+
+    /**
+     * Add option, used for multi select to add many options
+     *
+     * @param AbstractEntityAttributeOption $option
+     *
+     * @return AbstractEntityFlexible
+     */
+    public function addOption(AbstractEntityAttributeOption $option)
+    {
+        $this->options[] = $option;
+
+        return $this;
+    }
+
+    /**
+     * Get options, used for multi select to retrieve many options
+     *
+     * @return array
+     */
+    public function getOptions()
+    {
+        return $this->options;
     }
 
     /**

@@ -608,14 +608,14 @@ services:
 TODO
 ====
 
-- deal with select type and multi options
-
 - add unit tests on repository / listener
 
 - add default_value behavior
 
 - add is_unique behavior
 
+ENHANCEMENT
+===========
 
 - use event dispatcher in flexible manager on createAttribute, createEntity, etc to allow to plug some code 
 

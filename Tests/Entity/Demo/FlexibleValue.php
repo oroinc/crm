@@ -31,11 +31,11 @@ class FlexibleValue extends AbstractEntityFlexibleValue
     protected $entity;
 
     /**
-     * Store option value, if backend is an option
+     * Store options values
      *
-     * @var Oro\Bundle\FlexibleEntityBundle\Entity\AttributeOption $option
+     * @var options ArrayCollection
      *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\FlexibleEntityBundle\Entity\AttributeOption")
+     * @ORM\ManyToMany(targetEntity="Oro\Bundle\FlexibleEntityBundle\Entity\AttributeOption")
      */
-    protected $option;
+    protected $options;
 }

@@ -82,8 +82,8 @@ abstract class AbstractFlexibleEntityManagerTest extends AbstractOrmTest
         $this->flexibleClassName             = 'Oro\Bundle\FlexibleEntityBundle\Tests\Entity\Demo\Flexible';
         $this->flexibleValueClassName        = 'Oro\Bundle\FlexibleEntityBundle\Tests\Entity\Demo\FlexibleValue';
         $this->flexibleAttributeClassName    = 'Oro\Bundle\FlexibleEntityBundle\Tests\Entity\Demo\FlexibleAttribute';
-        $this->defaultLocale          = 'en_US';
-        $this->defaultScope           = 'mobile';
+        $this->defaultLocale                 = 'en_US';
+        $this->defaultScope                  = 'mobile';
         $this->flexibleConfig = array(
             'entities_config' => array(
                 $this->flexibleClassName => array(
