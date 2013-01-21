@@ -172,7 +172,7 @@ class Customer extends AbstractEntityFlexible
     /**
      * @var Value
      *
-     * @ORM\OneToMany(targetEntity="CustomerAttributeValue", mappedBy="entity", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="CustomerValue", mappedBy="entity", cascade={"persist", "remove"})
      */
     protected $values;
 
@@ -194,7 +194,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="acmecustomer_customer_attribute_value")
  * @ORM\Entity
  */
-class CustomerAttributeValue extends AbstractEntityFlexibleValue
+class CustomerValue extends AbstractEntityFlexibleValue
 {
     /**
      * @var Attribute $attribute
@@ -227,7 +227,7 @@ entities_config:
     Acme\Bundle\DemoFlexibleEntityBundle\Entity\Customer:
         flexible_manager:            customer_manager
         flexible_entity_class:       Acme\Bundle\DemoFlexibleEntityBundle\Entity\Customer
-        flexible_entity_value_class: Acme\Bundle\DemoFlexibleEntityBundle\Entity\CustomerAttributeValue
+        flexible_entity_value_class: Acme\Bundle\DemoFlexibleEntityBundle\Entity\CustomerValue
         # there is some default values added for basic entity to use for attribute, option, etc and for behavior as translatable  
 ```
 
@@ -448,7 +448,7 @@ entities_config:
     Acme\Bundle\DemoFlexibleEntityBundle\Entity\Product:
         flexible_manager:                  product_manager
         flexible_entity_class:             Acme\Bundle\DemoFlexibleEntityBundle\Entity\Product
-        flexible_entity_value_class:       Acme\Bundle\DemoFlexibleEntityBundle\Entity\ProductAttributeValue
+        flexible_entity_value_class:       Acme\Bundle\DemoFlexibleEntityBundle\Entity\ProductValue
         flexible_attribute_extended_class: Acme\Bundle\DemoFlexibleEntityBundle\Entity\ProductAttribute
 ```
 
@@ -604,21 +604,16 @@ services:
 TODO
 ====
 
+- deal with select type and multi options
+- rename option_id field as value_optionid to be similar than other backend type 
 - options value are scopable ?
-
-- rename all setLocale to setLocale
-
-- rename Acme CustomerAttributeValue to CustomerValue
 
 - add model AbstractFlexibleAttribute
 - add shortcut getter / setter in AbstractEntityFlexibleAttribute
 
-- deal with select type and multi options
-- rename option_id field as value_optionid to be similar than other backend type 
-
 - move backend type and storage from AbstractAttributeType ? move them in AbstractAttribute class ?
 
+- deal with in, like, etc in queries 
+
 - is_unique, default_value behavior
-- default fallback
-- use interface and behavior on concret classes
-- for price : http://symfony.com/doc/current/cookbook/templating/twig_extension.html
+- default fallback in queries
