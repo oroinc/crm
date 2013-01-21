@@ -3,7 +3,6 @@ namespace Oro\Bundle\FlexibleEntityBundle\Tests\Entity\Repository;
 
 use Doctrine\Tests\OrmTestCase;
 use Doctrine\Common\Annotations\AnnotationReader;
-use Doctrine\ORM\Mapping\Driver\DriverChain;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 use Oro\Bundle\FlexibleEntityBundle\Entity\Repository\FlexibleEntityRepository;
 

@@ -612,9 +612,13 @@ TODO
 - rename option_id field as value_optionid to be similar than other backend type 
 - options value are scopable ?
 
-- add model AbstractFlexibleAttribute
+- repository / manager / listener code coverage
 
-- move backend type and storage from AbstractAttributeType ? move them in AbstractAttribute class ?
+- move backend type and storage from AbstractAttributeType ? move them in AbstractAttribute class ? -> move in model root folder ?
+
+- move behavior impl on concret classes
+
+- use event dispatcher in flexible manager on createATtribute, createEntity, etc 
 
 - deal with in, like, etc in queries 
 
