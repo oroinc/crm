@@ -1,5 +1,5 @@
 <?php
-namespace Oro\Bundle\FlexibleEntityBundle\Test\Configuration;
+namespace Oro\Bundle\FlexibleEntityBundle\Tests\DependencyInjection;
 
 use Oro\Bundle\FlexibleEntityBundle\DependencyInjection\Configuration;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;

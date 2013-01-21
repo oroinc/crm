@@ -609,10 +609,12 @@ TODO
 ====
 
 - deal with select type and multi options
-- rename option_id field as value_optionid to be similar than other backend type 
+
+- rename option_id field as value_optionid to be similar than other backend type
+ 
 - options value are scopable ?
 
-- repository / manager / listener code coverage
+- add unit tests on repository / listener
 
 - move backend type and storage from AbstractAttributeType ? move them in AbstractAttribute class ? -> move in model root folder ?
 
@@ -622,5 +624,6 @@ TODO
 
 - deal with in, like, etc in queries 
 
-- is_unique, default_value behavior
+- add is_unique behavior
+- add default_value behavior
 - default fallback in queries

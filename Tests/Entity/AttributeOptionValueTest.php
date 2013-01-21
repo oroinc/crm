@@ -1,5 +1,5 @@
 <?php
-namespace Oro\Bundle\FlexibleEntityBundle\Test\Entity;
+namespace Oro\Bundle\FlexibleEntityBundle\Tests\Entity;
 
 use Oro\Bundle\FlexibleEntityBundle\Entity\AttributeOptionValue;
 

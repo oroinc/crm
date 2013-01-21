@@ -1,5 +1,5 @@
 <?php
-namespace Oro\Bundle\FlexibleEntityBundle\Test\Listener;
+namespace Oro\Bundle\FlexibleEntityBundle\Tests\Listener;
 
 use Doctrine\Tests\OrmTestCase;
 use Doctrine\Common\Annotations\AnnotationReader;
