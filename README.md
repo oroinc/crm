@@ -610,20 +610,15 @@ TODO
 
 - deal with select type and multi options
 
-- rename option_id field as value_optionid to be similar than other backend type
- 
-- options value are scopable ?
-
 - add unit tests on repository / listener
 
-- move backend type and storage from AbstractAttributeType ? move them in AbstractAttribute class ? -> move in model root folder ?
+- add default_value behavior
 
-- move behavior impl on concret classes
+- add is_unique behavior
 
-- use event dispatcher in flexible manager on createATtribute, createEntity, etc 
+
+- use event dispatcher in flexible manager on createAttribute, createEntity, etc to allow to plug some code 
 
 - deal with in, like, etc in queries 
 
-- add is_unique behavior
-- add default_value behavior
-- default fallback in queries
+- default fallback (locale, scope) in queries

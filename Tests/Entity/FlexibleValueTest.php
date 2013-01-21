@@ -3,7 +3,7 @@ namespace Oro\Bundle\FlexibleEntityBundle\Tests\Entity;
 
 use Oro\Bundle\FlexibleEntityBundle\Tests\Entity\Demo\FlexibleValue;
 use Oro\Bundle\FlexibleEntityBundle\Tests\Entity\Demo\Flexible;
-use Oro\Bundle\FlexibleEntityBundle\Model\Attribute\Type\AbstractAttributeType;
+use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttributeType;
 use Oro\Bundle\FlexibleEntityBundle\Entity\Attribute;
 use Oro\Bundle\FlexibleEntityBundle\Entity\AttributeOption;
 

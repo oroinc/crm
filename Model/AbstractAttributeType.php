@@ -1,5 +1,5 @@
 <?php
-namespace Oro\Bundle\FlexibleEntityBundle\Model\Attribute\Type;
+namespace Oro\Bundle\FlexibleEntityBundle\Model;
 
 /**
  * Abstract attribute type
