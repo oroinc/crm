@@ -17,7 +17,7 @@ In Oro\Bundle\FlexibleEntityBundle :
 
 - /Model/Entity contains abstract entity models (entity, attribute, value, option, etc) independent of doctrine
 - /Model/Attribute (will/should) contains attribute frontend types, backend types, backend models
-- /Model/Behaviour contains interfaces as timestampable, translatable
+- /Model/Behavior contains interfaces as timestampable, translatable, hasrequiredvalue, hasdefaultvalue
 
 - /Entity/Mapping contains abstract doctrine entities (with mapping)
 - /Entity/Repository contains base doctrine repository for flexible entity
@@ -25,21 +25,23 @@ In Oro\Bundle\FlexibleEntityBundle :
 
 - /Manager contains service which allow to manipulate, entity, repository and entity manager with simple manager (classic doctrine entity) or flexible manager (attribute management entity)
 
-- /Listener contains event subscriber/listener to implements some behavior as timestampable or translatable
+- /Listener contains event subscriber/listener to implements some behavior as timestampable, translatable, etc
 
 - /Helper contains classes with utility methods
 
 There are some examples in laboro/bap-standard/tree/master/src/Acme/Bundle/DemoFlexibleEntityBundle :
 - Manufacturer : a simple entity
 - Customer : a flexible entity (no translatable attributes)
-- Product : a flexible entity (with translatable attributes)
+- Product : a flexible entity (with translatable and scopable attributes)
 
 Install and run unit tests
 ==========================
 
-To run tests (a test db is used) :
+To run tests :
 ```bash
-$ phpunit -c app/  --coverage-html=cov/
+$ php composer.phar update --dev
+
+$ phpunit --coverage-html=cov/
 ```
 
 Create a simple entity (no attribute management)
@@ -138,13 +140,14 @@ We use the basic entity repository, and define by mapping which value table to u
 namespace Acme\Bundle\DemoFlexibleEntityBundle\Entity;
 
 use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityFlexible;
+use Oro\Bundle\FlexibleEntityBundle\Model\Behavior\HasRequiredValueInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="acmecustomer_customer")
  * @ORM\Entity(repositoryClass="Oro\Bundle\FlexibleEntityBundle\Entity\Repository\FlexibleEntityRepository")
  */
-class Customer extends AbstractEntityFlexible
+class Customer extends AbstractEntityFlexible implements HasRequiredValueInterface
 {
     /**
      * @var string $email
@@ -170,7 +173,7 @@ class Customer extends AbstractEntityFlexible
     /**
      * @var Value
      *
-     * @ORM\OneToMany(targetEntity="CustomerAttributeValue", mappedBy="entity", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="CustomerValue", mappedBy="entity", cascade={"persist", "remove"})
      */
     protected $values;
 
@@ -184,7 +187,8 @@ We define mapping to basic entity attribute, to basic option (for attribute of l
 <?php
 namespace Acme\Bundle\DemoFlexibleEntityBundle\Entity;
 
-use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityFlexibleAttributeValue;
+use Oro\Bundle\FlexibleEntityBundle\Model\Behavior\HasDefaultValueInterface;
+use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityFlexibleValue;
 use Oro\Bundle\FlexibleEntityBundle\Entity\Attribute;
 use Doctrine\ORM\Mapping as ORM;
 /**
@@ -192,7 +196,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="acmecustomer_customer_attribute_value")
  * @ORM\Entity
  */
-class CustomerAttributeValue extends AbstractEntityFlexibleAttributeValue
+class CustomerValue extends AbstractEntityFlexibleValue implements HasDefaultValueInterface
 {
     /**
      * @var Attribute $attribute
@@ -209,13 +213,17 @@ class CustomerAttributeValue extends AbstractEntityFlexibleAttributeValue
     protected $entity;
 
     /**
-     * Store option value, if backend is an option
+     * Custom backend type to store options and theirs values
      *
-     * @var AbstractEntityAttributeOption $optionvalue
+     * @var options ArrayCollection
      *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\FlexibleEntityBundle\Entity\AttributeOption")
+     * @ORM\ManyToMany(targetEntity="Oro\Bundle\FlexibleEntityBundle\Entity\AttributeOption")
+     * @ORM\JoinTable(name="acmedemoflexibleentity_customer_values_options",
+     *      joinColumns={@ORM\JoinColumn(name="value_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="option_id", referencedColumnName="id")}
+     * )
      */
-    protected $option;
+    protected $options;
 }
 ```
 
@@ -225,8 +233,8 @@ entities_config:
     Acme\Bundle\DemoFlexibleEntityBundle\Entity\Customer:
         flexible_manager:            customer_manager
         flexible_entity_class:       Acme\Bundle\DemoFlexibleEntityBundle\Entity\Customer
-        flexible_entity_value_class: Acme\Bundle\DemoFlexibleEntityBundle\Entity\CustomerAttributeValue
-        # there is some default values added for basic entity to use for attribute, option, etc and for behavior as translatable  
+        flexible_entity_value_class: Acme\Bundle\DemoFlexibleEntityBundle\Entity\CustomerValue
+        # there is some default values added for basic entity to use for attribute, option, etc 
 ```
 
 This config :
@@ -255,15 +263,13 @@ $cm = $this->container->get('customer_manager');
 // create an attribute (cf controllers and unit tests for more exemples with options, etc)
 $att = $cm->createAttribute();
 $att->setCode($attCode);
-$att->setBackendModel(AbstractAttributeType::BACKEND_MODEL_ATTRIBUTE_VALUE);
 $att->setBackendType(AbstractAttributeType::BACKEND_TYPE_VARCHAR);
 
 // persist and flush
 $cm->getStorageManager()->persist($att);
 $cm->getStorageManager()->flush();
 
-// create customer with basic fields mapped in customer entity  (cf controllers and unit tests for
-// more exemples with options, etc)
+// create customer with basic fields mapped in customer entity  (cf controllers and unit tests for more exemples)
 $customer = $cm->createEntity();
 $customer->setEmail($custEmail);
 $customer->setFirstname('Nicolas');
@@ -283,38 +289,107 @@ $cm->getStorageManager()->persist($customer);
 $cm->getStorageManager()->flush();
 ```
 
-Define "translatable" values
-============================
+Define translated values
+========================
 
-Product and ProductValue are defined as for customer.
+A value can be translated if related attribute is defined as translatable.
 
-Flexible manager is define in same way too.
-
-Attribute 'name' and 'description' are defined as translatable (not the case by default) :
+By default, attribute is defined as not translatable, you have to setup as following :
 
 ```php
 $pm = $this->container->get('product_manager');
 $attributeCode = 'name';
 $attribute = $pm->createAttribute();
 $attribute->setCode($attributeCode);
-$attribute->setBackendModel(AbstractAttributeType::BACKEND_MODEL_ATTRIBUTE_VALUE);
 $attribute->setBackendType(AbstractAttributeType::BACKEND_TYPE_TEXT);
 $attribute->setTranslatable(true);
 ```
 
-About locale, if attribute is defined as translatable, the locale to use (in entity or repository) is retrieved (high to low priority) :
-- from flexible manager if developer has forced it with setLocaleCode($code)
-- from http request
-- from application config
+You can choose value locale as following and use any locale code you want (fr, fr_FR, other, no checks, depends on application, list of locales is available in Locale Component) :
+
+```php
+$value = $pm->createEntityValue();
+$value->setAttribute($attribute);
+$value->setData('my data');
+// force locale to use
+$value->setLocale('fr_FR');
+```
+
+If you don't choose locale of value, it's created with locale code (high to low priority) :
+- of flexible entity manager
+- of flexible entity config (see default_locale)
 
 Base flexible entity repository is designed to deal with translated values in queries, it knows the asked locale and gets relevant value if attribute is translatable.
 
 Base flexible entity is designed to gets relevant values too, it knows the asked locale (injected with TranslatableListener).
 
-Add some custom attribute configuration for a dedicated entity in a custom table
-==========================================================================
+Define a value with a scope
+===========================
 
-- for instance, create a ProductAttribute class with one-one relation to base Attribute class and add some custom attribute field, as attribute Name, Description, etc :
+A value can also be scoped if related attribute is defined as scopable.
+
+By default, attribute is defined as not scopable, you have to setup as following :
+
+```php
+$pm = $this->container->get('product_manager');
+$attributeCode = 'description';
+$attribute = $pm->createAttribute();
+$attribute->setCode($attributeCode);
+$attribute->setBackendType(AbstractAttributeType::BACKEND_TYPE_TEXT);
+$attribute->setTranslatable(true);
+$attribute->setScopable(true);
+```
+
+Then you can use any scope code you want for value (no checks, depends on application).
+
+```php
+$pm = $this->container->get('product_manager');
+$value = $pm->createEntityValue();
+$value->setScope('my_scope_code');
+$value->setAttribute($attDescription);
+$value->setData('my scoped and translated value');
+```
+
+If you want associate a default scope to any created value, define it in config file with "default_scope" param.
+
+Base flexible entity repository is designed to deal with scoped values in queries, it knows the asked scope and gets relevant value if attribute is scopable.
+
+Base flexible entity is designed to gets relevant values too, it knows the asked scopable (injected with ScopableListener).
+
+Define a value with a currency
+==============================
+
+A value can be related to a currency.
+
+You can use any currency code you want (no checks, depends on application, list of currencies is available in Locale Component).
+
+```php
+$pm = $this->container->get('product_manager');
+$value = $pm->createEntityValue();
+$value->setAttribute($attPrice);
+$value->setData(100);
+$value->setCurrency('EURO');
+```
+
+Define a value with a unit
+==========================
+
+A value can be related to a measure unit.
+
+You can use any unit code you want (no checks, depends on application).
+
+```php
+$pm = $this->container->get('product_manager');
+$value = $pm->createEntityValue();
+$value->setAttribute($attPrice);
+$value->setData(100);
+$value->setUnit('cm');
+```
+
+Add some attribute configuration for a dedicated entity in a custom table
+=========================================================================
+
+- for instance, create a ProductAttribute class with one-one relation to base Attribute class and add some custom attribute fields, as Name, Description, etc :
 
 ```php
 <?php
@@ -330,13 +405,13 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="acmeproduct_product_attribute")
  * @ORM\Entity
  */
-class ProductAttribute extends AbstractEntityFlexibleAttribute
+class ProductAttribute extends AbstractEntityFlexibleAttribute 
 {
     /**
      * @var Oro\Bundle\FlexibleEntityBundle\Entity\Attribute $attribute
      *
      * @ORM\OneToOne(targetEntity="Oro\Bundle\FlexibleEntityBundle\Entity\Attribute", cascade={"persist", "merge", "remove"})
-     * @ORM\JoinColumn(name="attribute_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="attribute_id", referencedColumnName="id", onDelete="cascade")
      */
     protected $attribute;
 
@@ -378,26 +453,29 @@ entities_config:
     Acme\Bundle\DemoFlexibleEntityBundle\Entity\Product:
         flexible_manager:                  product_manager
         flexible_entity_class:             Acme\Bundle\DemoFlexibleEntityBundle\Entity\Product
-        flexible_entity_value_class:       Acme\Bundle\DemoFlexibleEntityBundle\Entity\ProductAttributeValue
+        flexible_entity_value_class:       Acme\Bundle\DemoFlexibleEntityBundle\Entity\ProductValue
         flexible_attribute_extended_class: Acme\Bundle\DemoFlexibleEntityBundle\Entity\ProductAttribute
 ```
 
 - then you can create / manipulate some custom attribute as following :
 
 ```php
-// create product attribute (cascade to create base attribute too)
-$productAttribute = $this->getProductManager()->createFlexibleAttribute();
+// create product attribute
+$productAttribute = $this->getProductManager()->createEntityAttribute();
 $productAttribute->setName('Name');
-$productAttribute->getAttribute()->setCode($attributeCode);
-$productAttribute->getAttribute()->setRequired(true);
-$productAttribute->getAttribute()->setBackendStorage(AbstractAttributeType::BACKEND_STORAGE_ATTRIBUTE_VALUE);
-$productAttribute->getAttribute()->setBackendType(AbstractAttributeType::BACKEND_TYPE_VARCHAR);
-$productAttribute->getAttribute()->setTranslatable(true);
+$productAttribute->setCode($attributeCode);
+$productAttribute->setRequired(true);
+$productAttribute->setBackendType(AbstractAttributeType::BACKEND_TYPE_VARCHAR);
+$productAttribute->setTranslatable(true);
 $this->getProductManager()->getStorageManager()->persist($productAttribute);
 
 // to query on product attributes :
-$this->getProductManager()->getFlexibleAttributeRepository();
+$this->getProductManager()->getEntityAttributeRepository();
 ```
+
+Note that product attribute mapping provides cascades to create / delet related base attribute too.
+
+AbstractEntityFlexibleAttribute provides equaly some shortcuts to base attribute accessors (required, unique, etc) to directly manipulate custom attribute.
 
 About queries on flexible entity
 ================================
@@ -429,13 +507,17 @@ $products = $productRepository->findByWithAttributes(
 // use limit 
 $products = $productRepository->findByWithAttributes(array('name', 'description'), null, null, 10, 0);
 // force locale to get french values
-$this->getProductManager()->setLocaleCode('fr')->getEntityRepository()
+$this->getProductManager()->setLocale('fr_FR')->getEntityRepository()
     ->findByWithAttributes(array('name', 'description'));
 
 // more examples in controllers an unit tests
 ```
 
 This method should be extended to add other operators like, in, etc, for now you have to define the method in your custom repository.
+
+Another interesting method is prepareQueryBuilder(), it allows to prepare query builder with attribute to select, criterias, order.
+
+As it returns a QueryBuilder you can get the query add some very custom clauses, add lock mode, change hydration mode, etc. 
 
 There is also a method to load a flexible entity and all values without lazy loading : 
 
@@ -511,7 +593,7 @@ Store attributes, option, option values in custom tables
 Use flat storage for values
 ---------------------------
 
-- use another backend model for attribute, as flatValues (can define this relation in your flexible entity)
+- use another backend storage for attribute, as flatValues (can define this relation in your flexible entity)
 - extends / replace base repository to change queries
 - use event / subscriber to change schema on each attribute insert / update / delete
 
@@ -535,9 +617,15 @@ services:
 TODO
 ====
 
-- is_unique, default_value behavior
-- default fallback
-- discuss about translatable/localizable notion
-- use interface and behavior on concret classes
+- add unit tests on hasrequiredvalue listener
 
+- add is_unique behavior
 
+ENHANCEMENT
+===========
+
+- use event dispatcher in flexible manager on createAttribute, createEntity, etc to allow to plug some code 
+
+- deal with in, like, etc in queries 
+
+- default fallback (locale, scope) in queries

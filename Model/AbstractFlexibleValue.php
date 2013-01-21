@@ -1,6 +1,8 @@
 <?php
 namespace Oro\Bundle\FlexibleEntityBundle\Model;
 
+use Oro\Bundle\FlexibleEntityBundle\Model\Behavior\FlexibleValueInterface;
+
 /**
  * Abstract entity value, independent of storage
  *
@@ -9,7 +11,7 @@ namespace Oro\Bundle\FlexibleEntityBundle\Model;
  * @license   http://opensource.org/licenses/MIT MIT
  *
  */
-abstract class AbstractFlexibleAttributeValue
+abstract class AbstractFlexibleValue implements FlexibleValueInterface
 {
 
     /**
@@ -28,9 +30,14 @@ abstract class AbstractFlexibleAttributeValue
     protected $data;
 
     /**
-     * @var string $localeCode
+     * @var string $locale
      */
-    protected $localeCode;
+    protected $locale;
+
+    /**
+     * @var string $scope
+     */
+    protected $scope;
 
     /**
      * Get id
@@ -47,7 +54,7 @@ abstract class AbstractFlexibleAttributeValue
      *
      * @param string $data
      *
-     * @return AbstractFlexibleAttributeValue
+     * @return AbstractFlexibleValue
      */
      public function setData($data)
      {
@@ -66,12 +73,21 @@ abstract class AbstractFlexibleAttributeValue
          return $this->data;
      }
 
+     /**
+      * Has data
+      * @return boolean
+      */
+     public function hasData()
+     {
+         return !is_null($this->getData());
+     }
+
     /**
      * Set attribute
      *
      * @param EntityAttribute $attribute
      *
-     * @return AbstractFlexibleAttributeValue
+     * @return AbstractFlexibleValue
      */
     public function setAttribute(AbstractAttribute $attribute = null)
     {
@@ -83,7 +99,7 @@ abstract class AbstractFlexibleAttributeValue
     /**
      * Get attribute
      *
-     * @return AbstractFlexibleAttributeValue
+     * @return AbstractFlexibleValue
      */
     public function getAttribute()
     {
@@ -94,17 +110,36 @@ abstract class AbstractFlexibleAttributeValue
      * Get used locale
      * @return string $locale
      */
-    public function getLocaleCode()
+    public function getLocale()
     {
-        return $this->localeCode;
+        return $this->locale;
     }
 
     /**
      * Set used locale
      * @param string $locale
      */
-    public function setLocaleCode($locale)
+    public function setLocale($locale)
     {
-        $this->localeCode = $locale;
+        $this->locale = $locale;
     }
+
+    /**
+     * Get used scope
+     * @return string $scope
+     */
+    public function getScope()
+    {
+        return $this->scope;
+    }
+
+    /**
+     * Set used scope
+     * @param string $scope
+     */
+    public function setScope($scope)
+    {
+        $this->scope = $scope;
+    }
+
 }

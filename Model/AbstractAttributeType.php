@@ -1,5 +1,5 @@
 <?php
-namespace Oro\Bundle\FlexibleEntityBundle\Model\Attribute\Type;
+namespace Oro\Bundle\FlexibleEntityBundle\Model;
 
 /**
  * Abstract attribute type
@@ -13,10 +13,10 @@ abstract class AbstractAttributeType
 {
 
     /**
-     * Available backend model
+     * Available backend storage
      * @var string
      */
-    const BACKEND_STORAGE_ATTRIBUTE_VALUE = 'values'; // TODO rename in 'attributeValues';
+    const BACKEND_STORAGE_ATTRIBUTE_VALUE = 'values';
     const BACKEND_STORAGE_FLAT_VALUE      = 'flatValues';
 
     /**
@@ -26,9 +26,9 @@ abstract class AbstractAttributeType
     const BACKEND_TYPE_DATE     = 'date';
     const BACKEND_TYPE_DATETIME = 'datetime';
     const BACKEND_TYPE_DECIMAL  = 'decimal';
-    const BACKEND_TYPE_OPTION   = 'option';
     const BACKEND_TYPE_INTEGER  = 'integer';
-    const BACKEND_TYPE_VARCHAR  = 'varchar';
+    const BACKEND_TYPE_OPTION   = 'options';
     const BACKEND_TYPE_TEXT     = 'text';
+    const BACKEND_TYPE_VARCHAR  = 'varchar';
 
 }

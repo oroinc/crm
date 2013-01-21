@@ -40,9 +40,9 @@ abstract class AbstractEntityAttributeOption extends AbstractAttributeOption imp
 
     /**
      * Not persisted, allowe to define the value locale
-     * @var string $localeCode
+     * @var string $locale
      */
-    protected $localeCode;
+    protected $locale;
 
     /**
      * @ORM\Column(name="sort_order", type="integer")
@@ -95,9 +95,9 @@ abstract class AbstractEntityAttributeOption extends AbstractAttributeOption imp
      *
      * @return string $locale
      */
-    public function getLocaleCode()
+    public function getLocale()
     {
-        return $this->localeCode;
+        return $this->locale;
     }
 
     /**
@@ -107,9 +107,9 @@ abstract class AbstractEntityAttributeOption extends AbstractAttributeOption imp
      *
      * @return AbstractAttributeOption
      */
-    public function setLocaleCode($locale)
+    public function setLocale($locale)
     {
-        $this->localeCode = $locale;
+        $this->locale = $locale;
 
         return $this;
     }
@@ -161,10 +161,10 @@ abstract class AbstractEntityAttributeOption extends AbstractAttributeOption imp
     public function getOptionValue()
     {
         $translatable = $this->translatable;
-        $locale = $this->getLocaleCode();
+        $locale = $this->getLocale();
         $values = $this->getOptionValues()->filter(function($value) use ($translatable, $locale) {
             // return relevant translated value
-            if ($translatable and $value->getLocaleCode() == $locale) {
+            if ($translatable and $value->getLocale() == $locale) {
                 return true;
             } else if (!$translatable) {
                 return true;

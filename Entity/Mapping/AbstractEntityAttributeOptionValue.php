@@ -33,11 +33,11 @@ abstract class AbstractEntityAttributeOptionValue extends AbstractAttributeOptio
 
     /**
      * Locale scope
-     * @var string $localeCode
+     * @var string $locale
      *
-     * @ORM\Column(name="locale", type="string", length=5, nullable=false)
+     * @ORM\Column(name="locale_code", type="string", length=5, nullable=false)
      */
-    protected $localeCode;
+    protected $locale;
 
     /**
      * @var string $value

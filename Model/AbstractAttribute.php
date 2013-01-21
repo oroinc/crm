@@ -24,11 +24,6 @@ abstract class AbstractAttribute implements TimestampableInterface
     protected $code;
 
     /**
-     * @var string $title
-     */
-    protected $title;
-
-    /**
      * @var string $entityType
      */
     protected $entityType;
@@ -418,10 +413,14 @@ abstract class AbstractAttribute implements TimestampableInterface
      * Remove option
      *
      * @param AbstractAttributeOption $option
+     *
+     * @return AbstractAttribute
      */
     public function removeOption(AbstractAttributeOption $option)
     {
         $this->options->removeElement($option);
+
+        return $this;
     }
 
     /**

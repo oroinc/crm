@@ -26,9 +26,9 @@ abstract class AbstractAttributeOptionValue
     protected $value;
 
     /**
-     * @var string $localeCode
+     * @var string $locale
      */
-    protected $localeCode;
+    protected $locale;
 
     /**
      * Get id
@@ -82,9 +82,9 @@ abstract class AbstractAttributeOptionValue
      * Get used locale
      * @return string $locale
      */
-    public function getLocaleCode()
+    public function getLocale()
     {
-        return $this->localeCode;
+        return $this->locale;
     }
 
     /**
@@ -93,9 +93,9 @@ abstract class AbstractAttributeOptionValue
      *
      * @return AbstractAttributeOptionValue
      */
-    public function setLocaleCode($locale)
+    public function setLocale($locale)
     {
-        $this->localeCode = $locale;
+        $this->locale = $locale;
 
         return $this;
     }

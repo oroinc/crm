@@ -5,7 +5,7 @@ use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\Common\EventSubscriber;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Oro\Bundle\FlexibleEntityBundle\Model\Behavior\TranslatableContainerInterface;
+use Oro\Bundle\FlexibleEntityBundle\Model\Behavior\ScopableContainerInterface;
 use Oro\Bundle\FlexibleEntityBundle\Model\Behavior\FlexibleEntityInterface;
 
 /**
@@ -15,7 +15,7 @@ use Oro\Bundle\FlexibleEntityBundle\Model\Behavior\FlexibleEntityInterface;
  * @copyright 2012 Akeneo SAS (http://www.akeneo.com)
  * @license   http://opensource.org/licenses/MIT MIT
  */
-class TranslatableListener implements EventSubscriber
+class ScopableListener implements EventSubscriber
 {
 
     /**
@@ -58,14 +58,12 @@ class TranslatableListener implements EventSubscriber
         $entity = $args->getEntity();
 
         // inject selected locale on translatable containers
-        if ($entity instanceof TranslatableContainerInterface) {
+        if ($entity instanceof ScopableContainerInterface) {
 
             // get flexible entity class
             $flexibleEntityClass = false;
             if ($entity instanceof FlexibleEntityInterface) {
                 $flexibleEntityClass = get_class($entity);
-            } else if ($entity instanceof \Oro\Bundle\FlexibleEntityBundle\Entity\AttributeOption) {
-                $flexibleEntityClass = $entity->getAttribute()->getEntityType();
             }
 
             if ($flexibleEntityClass) {
@@ -73,8 +71,8 @@ class TranslatableListener implements EventSubscriber
                 $flexibleConfig = $this->container->getParameter('oro_flexibleentity.entities_config');
                 $flexibleManagerName = $flexibleConfig['entities_config'][$flexibleEntityClass]['flexible_manager'];
                 $flexibleManager = $this->container->get($flexibleManagerName);
-                // set locale setted in manager
-                $entity->setLocale($flexibleManager->getLocale());
+                // set scope setted in manager
+                $entity->setScope($flexibleManager->getScope());
             }
         }
     }

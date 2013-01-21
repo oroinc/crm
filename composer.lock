@@ -1,5 +1,5 @@
 {
-    "hash": "970d78cc71ee90655b981ed7b463eb24",
+    "hash": "3a9c1087477d55ceb5c015461f852511",
     "packages": [
         {
             "name": "doctrine/common",
@@ -164,18 +164,18 @@
             "source": {
                 "type": "git",
                 "url": "git://github.com/fabpot/Twig.git",
-                "reference": "3111e1265db1026323c589a5bd2d152871d7bbab"
+                "reference": "3225226e0be466395414da4b362013531eedb580"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/fabpot/Twig/archive/3111e1265db1026323c589a5bd2d152871d7bbab.zip",
-                "reference": "3111e1265db1026323c589a5bd2d152871d7bbab",
+                "url": "https://github.com/fabpot/Twig/archive/3225226e0be466395414da4b362013531eedb580.zip",
+                "reference": "3225226e0be466395414da4b362013531eedb580",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.2.4"
             },
-            "time": "2013-01-08 16:56:12",
+            "time": "2013-01-16 13:37:25",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -208,7 +208,141 @@
             ]
         }
     ],
-    "packages-dev": null,
+    "packages-dev": [
+        {
+            "name": "doctrine/dbal",
+            "version": "2.3.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/doctrine/dbal",
+                "reference": "4c33f633c48eeafe3408b308f6fc51743a21a3b7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/doctrine/dbal/archive/4c33f633c48eeafe3408b308f6fc51743a21a3b7.zip",
+                "reference": "4c33f633c48eeafe3408b308f6fc51743a21a3b7",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.2",
+                "doctrine/common": "2.3.*"
+            },
+            "time": "2013-01-07 20:03:43",
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.3.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Doctrine\\DBAL": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jonathan Wage",
+                    "email": "jonwage@gmail.com",
+                    "homepage": "http://www.jwage.com/"
+                },
+                {
+                    "name": "Guilherme Blanco",
+                    "email": "guilhermeblanco@gmail.com",
+                    "homepage": "http://www.instaclick.com"
+                },
+                {
+                    "name": "Roman Borschel",
+                    "email": "roman@code-factory.org"
+                },
+                {
+                    "name": "Benjamin Eberlei",
+                    "email": "kontakt@beberlei.de"
+                }
+            ],
+            "description": "Database Abstraction Layer",
+            "homepage": "http://www.doctrine-project.org",
+            "keywords": [
+                "database",
+                "persistence",
+                "dbal",
+                "queryobject"
+            ]
+        },
+        {
+            "name": "doctrine/orm",
+            "version": "2.3.x-dev",
+            "source": {
+                "type": "git",
+                "url": "git://github.com/doctrine/doctrine2.git",
+                "reference": "6829c464e88cccd7a2a0714e42e95f3930b38e37"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/doctrine/doctrine2/archive/6829c464e88cccd7a2a0714e42e95f3930b38e37.zip",
+                "reference": "6829c464e88cccd7a2a0714e42e95f3930b38e37",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.2",
+                "ext-pdo": "*",
+                "symfony/console": "2.*",
+                "doctrine/dbal": "2.3.*"
+            },
+            "suggest": {
+                "symfony/yaml": "If you want to use YAML Metadata Mapping Driver"
+            },
+            "time": "2013-01-12 09:32:44",
+            "bin": [
+                "bin/doctrine",
+                "bin/doctrine.php"
+            ],
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.3.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Doctrine\\ORM": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jonathan Wage",
+                    "email": "jonwage@gmail.com",
+                    "homepage": "http://www.jwage.com/"
+                },
+                {
+                    "name": "Guilherme Blanco",
+                    "email": "guilhermeblanco@gmail.com",
+                    "homepage": "http://www.instaclick.com"
+                },
+                {
+                    "name": "Roman Borschel",
+                    "email": "roman@code-factory.org"
+                },
+                {
+                    "name": "Benjamin Eberlei",
+                    "email": "kontakt@beberlei.de"
+                }
+            ],
+            "description": "Object-Relational-Mapper for PHP",
+            "homepage": "http://www.doctrine-project.org",
+            "keywords": [
+                "database",
+                "orm"
+            ]
+        }
+    ],
     "aliases": [
 
     ],

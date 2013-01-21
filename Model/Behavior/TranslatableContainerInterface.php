@@ -18,7 +18,7 @@ interface TranslatableContainerInterface
      * Get used locale
      * @return string $locale
      */
-    public function getLocaleCode();
+    public function getLocale();
 
     /**
      * Set used locale
@@ -26,6 +26,6 @@ interface TranslatableContainerInterface
      *
      * @return TranslatableContainerInterface
      */
-    public function setLocaleCode($locale);
+    public function setLocale($locale);
 
 }

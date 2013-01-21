@@ -1,17 +1,19 @@
 parameters:
-    oro_flexibleentity.locale_helper.class: Oro\Bundle\FlexibleEntityBundle\Helper\LocaleHelper
     oro_flexibleentity.entities_config: ~
 
 services:
 
-    # provide some utility methods to manage locale
-    oro_flexibleentity.locale_helper:
-        class:        "%oro_flexibleentity.locale_helper.class%"
-        arguments:    [%locale%, @service_container]
-
     # deal with translatable behavior
     oro_flexibleentity.translatable_listener:
         class: Oro\Bundle\FlexibleEntityBundle\Listener\TranslatableListener
+        calls:
+            - [ setContainer, [ @service_container ] ]
+        tags:
+            - { name: doctrine.event_subscriber }
+
+    # deal with translatable behavior
+    oro_flexibleentity.scopable_listener:
+        class: Oro\Bundle\FlexibleEntityBundle\Listener\ScopableListener
         calls:
             - [ setContainer, [ @service_container ] ]
         tags:
@@ -28,5 +30,11 @@ services:
         class: Oro\Bundle\FlexibleEntityBundle\Listener\HasRequiredValueListener
         calls:
             - [ setContainer, [ @service_container ] ]
+        tags:
+            - { name: doctrine.event_subscriber }
+
+    # deal with has default value behavior
+    oro_flexibleentity.has_default_value_listener:
+        class: Oro\Bundle\FlexibleEntityBundle\Listener\HasDefaultValueListener
         tags:
             - { name: doctrine.event_subscriber }

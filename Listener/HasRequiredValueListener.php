@@ -1,7 +1,7 @@
 <?php
 namespace Oro\Bundle\FlexibleEntityBundle\Listener;
 
-use Oro\Bundle\FlexibleEntityBundle\Model\Behavior\FlexibleEntityInterface;
+use Oro\Bundle\FlexibleEntityBundle\Model\Behavior\HasRequiredValueInterface;
 use Oro\Bundle\FlexibleEntityBundle\Exception\HasRequiredValueException;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LifecycleEventArgs;
@@ -84,8 +84,8 @@ class HasRequiredValueListener implements EventSubscriber
     {
         $entity = $args->getEntity();
 
-        // check entity is flexible
-        if ($entity instanceof FlexibleEntityInterface) {
+        // check entity implements "has required value" behavior
+        if ($entity instanceof HasRequiredValueInterface) {
 
             // get flexible config
             $entityClass = get_class($entity);
@@ -93,13 +93,11 @@ class HasRequiredValueListener implements EventSubscriber
             $flexibleManagerName = $flexibleConfig['entities_config'][$entityClass]['flexible_manager'];
             $flexibleManager = $this->container->get($flexibleManagerName);
 
-            // 1. get required attributes
+            // get required attributes
             $repo = $flexibleManager->getAttributeRepository();
-            $attributes = $repo->findBy(
-                array('entityType' => $entityClass, 'required' => true)
-            );
+            $attributes = $repo->findBy(array('entityType' => $entityClass, 'required' => true));
 
-            // 2. check that value is set for any required attributes
+            // check that value is set for any required attributes
             foreach ($attributes as $attribute) {
                 if (!$entity->getValueData($attribute->getCode())) {
                     throw new HasRequiredValueException('attribute '.$attribute->getCode().' is required');

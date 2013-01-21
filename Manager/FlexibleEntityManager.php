@@ -1,6 +1,7 @@
 <?php
 namespace Oro\Bundle\FlexibleEntityBundle\Manager;
 
+use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttributeType;
 use Oro\Bundle\FlexibleEntityBundle\Model\Entity;
 use Oro\Bundle\FlexibleEntityBundle\Model\EntityAttribute;
 use Oro\Bundle\FlexibleEntityBundle\Model\EntityAttributeValue;
@@ -25,11 +26,16 @@ class FlexibleEntityManager extends SimpleEntityManager
     protected $flexibleConfig;
 
     /**
-     * Locale code (from request or choose by user)
-     * @
+     * Locale code (from config or choose by user)
      * @var string
      */
-    protected $localeCode;
+    protected $locale;
+
+    /**
+     * Scope code (from config or choose by user)
+     * @var string
+     */
+    protected $scope;
 
     /**
      * Constructor
@@ -56,52 +62,18 @@ class FlexibleEntityManager extends SimpleEntityManager
     }
 
     /**
-     * Get locale helper
-     * @return LocaleHelper
-     */
-    public function getLocaleHelper()
-    {
-        return $this->container->get('oro_flexibleentity.locale_helper');
-    }
-
-    /**
-     * Is translatable flexible entity
-     *
-     * @return boolean
-     */
-    public function isTranslatableEntity()
-    {
-        return $this->flexibleConfig['has_translatable_value'];
-    }
-
-    /**
-     * Is scopable flexible entity
-     *
-     * @return boolean
-     */
-    public function isScopableEntity()
-    {
-        return $this->flexibleConfig['has_scopable_value'];
-    }
-
-    /**
-     * Return locale code from request or default
+     * Return asked locale code or default one
      *
      * @return string
      */
-    public function getLocaleCode()
+    public function getLocale()
     {
-        if (!$this->localeCode) {
-            // get current locale by default if translatable
-            if ($this->isTranslatableEntity()) {
-                $this->localeCode = $this->getLocaleHelper()->getCurrentLocaleCode();
-                // if not get application default locale
-            } else {
-                $this->localeCode = $this->getLocaleHelper()->getDefaultLocaleCode();
-            }
+        if (!$this->locale) {
+            // use default locale
+            $this->locale = $this->flexibleConfig['default_locale'];
         }
 
-        return $this->localeCode;
+        return $this->locale;
     }
 
     /**
@@ -111,9 +83,38 @@ class FlexibleEntityManager extends SimpleEntityManager
      *
      * @return FlexibleEntityManager
      */
-    public function setLocaleCode($code)
+    public function setLocale($code)
     {
-        $this->localeCode = $code;
+        $this->locale = $code;
+
+        return $this;
+    }
+
+    /**
+     * Return asked scope code or default one
+     *
+     * @return string
+     */
+    public function getScope()
+    {
+        if (!$this->scope) {
+            // use default scope
+            $this->scope = $this->flexibleConfig['default_scope'];
+        }
+
+        return $this->scope;
+    }
+
+    /**
+     * Set scope code, to force it
+     *
+     * @param string $code
+     *
+     * @return FlexibleEntityManager
+     */
+    public function setScope($code)
+    {
+        $this->scope = $code;
 
         return $this;
     }
@@ -131,7 +132,7 @@ class FlexibleEntityManager extends SimpleEntityManager
      * Return class name that can be used to get the repository or instance
      * @return string
      */
-    public function getFlexibleAttributeName()
+    public function getEntityAttributeName()
     {
         return $this->flexibleConfig['flexible_attribute_extended_class'];
     }
@@ -171,7 +172,8 @@ class FlexibleEntityManager extends SimpleEntityManager
     {
         $repo = $this->storageManager->getRepository($this->getEntityName());
         $repo->setFlexibleConfig($this->flexibleConfig);
-        $repo->setLocaleCode($this->getLocaleCode());
+        $repo->setLocale($this->getLocale());
+        $repo->setScope($this->getScope());
 
         return $repo;
     }
@@ -189,13 +191,13 @@ class FlexibleEntityManager extends SimpleEntityManager
      * Return related repository
      * @return Doctrine\Common\Persistence\ObjectRepository
      */
-    public function getFlexibleAttributeRepository()
+    public function getEntityAttributeRepository()
     {
-        if (!$this->getFlexibleAttributeName()) {
+        if (!$this->getEntityAttributeName()) {
             throw new FlexibleConfigurationException($this->getEntityName().' has no flexible attribute extended class');
         }
 
-        return $this->storageManager->getRepository($this->getFlexibleAttributeName());
+        return $this->storageManager->getRepository($this->getEntityAttributeName());
     }
 
     /**
@@ -227,19 +229,6 @@ class FlexibleEntityManager extends SimpleEntityManager
 
     /**
      * Return a new instance
-     * @return Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityFlexible
-     */
-    public function createEntity()
-    {
-        $class = $this->getEntityName();
-        $object = new $class();
-        $object->setLocaleCode($this->getLocaleCode());
-
-        return $object;
-    }
-
-    /**
-     * Return a new instance
      * @return Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityAttribute
      */
     public function createAttribute()
@@ -247,25 +236,7 @@ class FlexibleEntityManager extends SimpleEntityManager
         $class = $this->getAttributeName();
         $object = new $class();
         $object->setEntityType($this->getEntityName());
-
-        return $object;
-    }
-
-    /**
-     * Return a new instance
-     * @return Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityFlexibleAttribute
-     */
-    public function createFlexibleAttribute()
-    {
-        if (!$this->getFlexibleAttributeName()) {
-            throw new FlexibleConfigurationException($this->getEntityName().' has no flexible attribute extended class');
-        }
-        // build base attribute
-        $attribute = $this->createAttribute();
-        // build flexible attribute
-        $class = $this->getFlexibleAttributeName();
-        $object = new $class();
-        $object->setAttribute($attribute);
+        $object->setBackendStorage(AbstractAttributeType::BACKEND_STORAGE_ATTRIBUTE_VALUE);
 
         return $object;
     }
@@ -278,7 +249,7 @@ class FlexibleEntityManager extends SimpleEntityManager
     {
         $class = $this->getAttributeOptionName();
         $object = new $class();
-        $object->setLocaleCode($this->getLocaleCode());
+        $object->setLocale($this->getLocale());
 
         return $object;
     }
@@ -291,20 +262,54 @@ class FlexibleEntityManager extends SimpleEntityManager
     {
         $class = $this->getAttributeOptionValueName();
         $object = new $class();
-        $object->setLocaleCode($this->getLocaleCode());
+        $object->setLocale($this->getLocale());
 
         return $object;
     }
 
     /**
      * Return a new instance
-     * @return Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityFlexibleAttributeValue
+     * @return Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityFlexible
+     */
+    public function createEntity()
+    {
+        $class = $this->getEntityName();
+        $object = new $class();
+        $object->setLocale($this->getLocale());
+        $object->setScope($this->getScope());
+
+        return $object;
+    }
+
+    /**
+     * Return a new instance
+     * @return Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityFlexibleAttribute
+     */
+    public function createEntityAttribute()
+    {
+        if (!$this->getEntityAttributeName()) {
+            throw new FlexibleConfigurationException($this->getEntityName().' has no flexible attribute extended class');
+        }
+        // build base attribute
+        $attribute = $this->createAttribute();
+        // build flexible attribute
+        $class = $this->getEntityAttributeName();
+        $object = new $class();
+        $object->setAttribute($attribute);
+
+        return $object;
+    }
+
+    /**
+     * Return a new instance
+     * @return Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityFlexibleValue
      */
     public function createEntityValue()
     {
         $class = $this->getEntityValueName();
         $object = new $class();
-        $object->setLocaleCode($this->getLocaleCode());
+        $object->setLocale($this->getLocale());
+        $object->setScope($this->getScope());
 
         return $object;
     }
