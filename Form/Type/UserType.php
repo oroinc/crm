@@ -15,17 +15,20 @@ class UserType extends AbstractType
     {
         $builder
             ->add('username', 'text', array(
-                'required'       => true,
+                'required'  => true,
             ))
             ->add('email', 'email', array(
-                'label'          => 'E-mail',
-                'required'       => true,
+                'label'     => 'E-mail',
+                'required'  => true,
             ))
             ->add('enabled', 'checkbox', array(
-                'required'       => false,
+                'required'  => false,
             ))
-            ->add('locked', 'checkbox', array(
-                'required'       => false,
+            ->add('groups', 'entity', array(
+                'class'     => 'OroUserBundle:Group',
+                'property'  => 'name',
+                'multiple'  => true,
+                'required'  => true,
             ))
         ;
 
@@ -34,7 +37,7 @@ class UserType extends AbstractType
          */
         if (!$builder->getData()->getId()) {
             $builder
-                ->add('password', 'repeated', array(
+                ->add('plainPassword', 'repeated', array(
                     'type'           => 'password',
                     'required'       => false,
                     'first_options'  => array('label' => 'Password'),
