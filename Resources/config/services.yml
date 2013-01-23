@@ -1,0 +1,7 @@
+parameters:
+#    oro_data_flow.example.class: Oro\Bundle\DataFlowBundle\Example
+
+services:
+#    oro_data_flow.example:
+#        class: %oro_data_flow.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]
