@@ -9,12 +9,15 @@ use FOS\UserBundle\Model\GroupableInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 
+use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityFlexible;
+use Oro\Bundle\FlexibleEntityBundle\Model\Behavior\HasRequiredValueInterface;
+
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Oro\Bundle\FlexibleEntityBundle\Entity\Repository\FlexibleEntityRepository")
  * @ORM\Table(name="oro_user")
  * @ORM\HasLifecycleCallbacks()
  */
-class User implements UserInterface, GroupableInterface
+class User extends AbstractEntityFlexible implements UserInterface, GroupableInterface, HasRequiredValueInterface
 {
     /**
      * @ORM\Id
@@ -42,7 +45,7 @@ class User implements UserInterface, GroupableInterface
      *
      * @ORM\Column(type="boolean")
      */
-    protected $enabled;
+    protected $enabled = false;
 
     /**
      * The salt to use for hashing
@@ -108,11 +111,17 @@ class User implements UserInterface, GroupableInterface
      */
     protected $groups;
 
+    /**
+     * @var Value
+     *
+     * @ORM\OneToMany(targetEntity="UserValue", mappedBy="entity", cascade={"persist", "remove"})
+     */
+    protected $values;
+
     public function __construct()
     {
-        $this->salt    = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
-        $this->enabled = false;
-        $this->roles   = array();
+        $this->salt  = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
+        $this->roles = array();
     }
 
     /**
@@ -228,6 +237,16 @@ class User implements UserInterface, GroupableInterface
     public function getConfirmationToken()
     {
         return $this->confirmationToken;
+    }
+
+    /**
+     * Gets the enabled state.
+     *
+     * @return boolean
+     */
+    public function getEnabled()
+    {
+        return $this->enabled;
     }
 
     /**

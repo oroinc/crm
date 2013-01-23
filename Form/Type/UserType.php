@@ -5,9 +5,20 @@ namespace Oro\Bundle\UserBundle\Form\Type;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class UserType extends AbstractType
 {
+    /**
+     * @var EventSubscriberInterface
+     */
+    protected $subscriber;
+
+    public function __construct(EventSubscriberInterface $subscriber)
+    {
+        $this->subscriber = $subscriber;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -32,9 +43,6 @@ class UserType extends AbstractType
             ))
         ;
 
-        /**
-         * @todo Mode to form event listener
-         */
         if (!$builder->getData()->getId()) {
             $builder
                 ->add('plainPassword', 'repeated', array(
@@ -44,6 +52,8 @@ class UserType extends AbstractType
                     'second_options' => array('label' => 'Password again'),
                 ));
         }
+
+        $builder->addEventSubscriber($this->subscriber);
     }
 
     /**
@@ -61,6 +71,6 @@ class UserType extends AbstractType
      */
     public function getName()
     {
-        return 'user';
+        return 'oro_user_form';
     }
 }
