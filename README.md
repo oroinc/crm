@@ -8,8 +8,10 @@ Allows to :
 - Add more unit to a family (group of measure units)
 - Create new families
 
+
 General operation
 =================
+
 This bundle to convert a value from a unit to another.
 Some families and units are already defined but it's possible to add others families and units to convert anything.
 
@@ -48,6 +50,7 @@ services:
         arguments: [%oro_measure.measures_config%]
 ```
 
+Configuration file can be seen https://github.com/laboro/MeasureBundle/blob/master/Resources/config/measure.yml
 
 Install and run unit tests
 ==========================
