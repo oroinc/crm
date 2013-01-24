@@ -137,13 +137,17 @@ class CapacitanceMeasure extends AbstractMeasure
 }
 ```
 
+Exceptions thrown
+=================
+
+Exceptions are thrown if we encountered problems during conversion.
+- UnknownFamilyMeasureException if you try to use an unexistent or undefined family.
+- UnknownMeasureException if you try to convert an unexistent or undefined unit for the family used.
+- UnknownOperatorException if you try to use an unexistent operation (authorized add, sub, mul and div)
+
+Divisions by zero don't throw exceptions but are ignored.
 
 Extend converter
 ================
-
-
-
-Exceptions thrown
-=================
 
 
