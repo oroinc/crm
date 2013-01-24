@@ -8,12 +8,35 @@ Allows to :
 - Add more unit to a family (group of measure units)
 - Create new families
 
+General operation
+=================
+
+
+
 Classes and files
 =================
 
 In MeasureBundle :
 
+- Convert/ contains the converter service.
+- DependencyInjection/
+* Configuration : define how to check configuration measure files
+* OroMeasureExtension : define the recovery of the configuration (config files browse and merge configuration).
+- Exception/ contains the exception classes used in converter.
 - Measure/ contains a list of classes. Each class define a family and must contains a constant named FAMILY.
+- Resources/config/
+* measure.yml : define measure configuration with a list of families. Each family define a standard unit measure and a list of unit measures. Each measure of this list is defined by a constant then by a conversion rule (list of ordered operations from unit to standard) and a symbol to display.
+* services.yml : define measure converter service
+
+```yaml
+parameters:
+    oro_measure.measures_config: ~
+
+services:
+    oro_measure.measure_converter:
+        class: Oro\Bundle\MeasureBundle\Convert\MeasureConverter
+        arguments: [%oro_measure.measures_config%]
+```
 
 
 Install and run unit tests
@@ -95,13 +118,13 @@ measures_config:
         units:
             FARAD:
                 convert: [{'mul': 1}]
-                format: F
+                symbol: F
             KILOFARAD:
                 convert: [{'mul': 1000}]
-                format: kF
+                symbol: kF
             MEGAFARAD:
                 convert: [{'mul': 1000000}]
-                format: MF
+                symbol: MF
 ```
 
 ```php
