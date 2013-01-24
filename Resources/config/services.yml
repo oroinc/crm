@@ -1,5 +1,5 @@
 parameters:
-    oro_flexibleentity.entities_config: ~
+    oro_flexibleentity.flexible_config: ~
 
 services:
 
@@ -38,3 +38,9 @@ services:
         class: Oro\Bundle\FlexibleEntityBundle\Listener\HasDefaultValueListener
         tags:
             - { name: doctrine.event_subscriber }
+
+    # aims to generate flexible form
+    #    oro_flexibleentity.flexible_form_listener:
+    #        class: Oro\Bundle\UserBundle\Form\EventListener\FlexibleSubscriber
+    #        arguments: ["@form.factory"]
+

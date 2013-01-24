@@ -68,7 +68,7 @@ class ScopableListener implements EventSubscriber
 
             if ($flexibleEntityClass) {
                 // get flexible config and manager
-                $flexibleConfig = $this->container->getParameter('oro_flexibleentity.entities_config');
+                $flexibleConfig = $this->container->getParameter('oro_flexibleentity.flexible_config');
                 $flexibleManagerName = $flexibleConfig['entities_config'][$flexibleEntityClass]['flexible_manager'];
                 $flexibleManager = $this->container->get($flexibleManagerName);
                 // set scope setted in manager

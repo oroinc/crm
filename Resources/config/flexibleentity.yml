@@ -1,0 +1,58 @@
+attributes_config:
+    Text:
+        backend:
+            storage: values
+            type:    string
+        form_type:
+            field:   text
+            options: ~
+    Email:
+        backend:
+            storage: values
+            type:    string
+        form_type:
+            field:   email
+            options: ~
+    Url:
+        backend:
+            storage: values
+            type:    string
+        form_type:
+            field:   url
+            options: ~
+    Money:
+        backend:
+            storage: values
+            type:    decimal
+        form_type:
+            field:   money
+            options: ~
+    Metric:
+        backend:
+            storage: values
+            type:    decimal
+        form_type:
+            field:   number
+            options: ~
+    TextArea:
+        backend:
+            storage: values
+            type:    text
+        form_type:
+            field:   textarea
+            options: ~
+    Date:
+        backend:
+            storage: values
+            type:    text
+        form_type:
+            field:   textarea
+            options: ~
+    SimpleChoice:
+        backend:
+            storage: values
+            type:    options
+        form_type:
+            field:   choice
+            options: ~
+

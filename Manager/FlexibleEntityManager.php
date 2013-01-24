@@ -48,7 +48,7 @@ class FlexibleEntityManager extends SimpleEntityManager
     {
         parent::__construct($container, $entityName, $storageManager);
         // get flexible entity configuration
-        $allFlexibleConfig = $this->container->getParameter('oro_flexibleentity.entities_config');
+        $allFlexibleConfig = $this->container->getParameter('oro_flexibleentity.flexible_config');
         $this->flexibleConfig = $allFlexibleConfig['entities_config'][$entityName];
     }
 

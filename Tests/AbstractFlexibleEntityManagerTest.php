@@ -100,7 +100,7 @@ abstract class AbstractFlexibleEntityManagerTest extends AbstractOrmTest
             )
         );
         // prepare test container
-        $this->container->setParameter('oro_flexibleentity.entities_config', $this->flexibleConfig);
+        $this->container->setParameter('oro_flexibleentity.flexible_config', $this->flexibleConfig);
         // prepare simple entity manager (use default entity manager)
         $this->manager = new FlexibleEntityManager($this->container, $this->flexibleClassName);
         $this->container->set('demo_manager', $this->manager);

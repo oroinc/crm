@@ -89,7 +89,7 @@ class HasRequiredValueListener implements EventSubscriber
 
             // get flexible config
             $entityClass = get_class($entity);
-            $flexibleConfig = $this->container->getParameter('oro_flexibleentity.entities_config');
+            $flexibleConfig = $this->container->getParameter('oro_flexibleentity.flexible_config');
             $flexibleManagerName = $flexibleConfig['entities_config'][$entityClass]['flexible_manager'];
             $flexibleManager = $this->container->get($flexibleManagerName);
 
