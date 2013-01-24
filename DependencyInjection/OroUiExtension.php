@@ -10,7 +10,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
  *
  * To learn more see {@link http://symfony.com/doc/current/cookbook/bundles/extension.html}
  */
-class OroUIExtension extends Extension
+class OroUiExtension extends Extension
 {
     /**
      * {@inheritDoc}
