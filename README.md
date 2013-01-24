@@ -12,7 +12,6 @@ Classes and files
 =================
 
 In MeasureBundle :
-- 
 
 - Measure/ contains a list of classes. Each class define a family and must contains a constant named FAMILY.
 
@@ -42,7 +41,7 @@ $result = $converter->convert(LengthMeasure::KILOMETER, LengthMeasure::MILE, 1);
 Add unit to an existing family
 ==============================
 
-To define a new family, it's just necessary to define it and their units in a new config file. For example, in our demo bundle, we add the below code :
+To define a new unit in an existing family, it's just necessary to define it and their units in a new config file named measure.yml in your own bundle. For example, in our demo bundle, we add the below code :
 
 ```yaml
 measures_config:
@@ -76,9 +75,67 @@ class MyLengthMeasure extends LengthMeasure
 }
 ```
 
+Then, you can call a conversion to your new unit like this :
+
+```php
+$converter = $this->container->get('oro_measure.measure_converter');
+$converter->setFamily(LengthMeasure::FAMILY);
+$result = $converter->convert(LengthMeasure::KILOMETER, MyLengthMeasure::DONG, 1);
+```
+
 Create a new family
 ===================
 
+To create a new family, it's like to add a unit to an existing family. It's necessary to add configuration in measure.yml file of your bundle and optionally a class defining constants to be used instead of strings.
+
+```yaml
+measures_config:
+    Capacitance:
+        standard: FARAD
+        units:
+            FARAD:
+                convert: [{'mul': 1}]
+                format: F
+            KILOFARAD:
+                convert: [{'mul': 1000}]
+                format: kF
+            MEGAFARAD:
+                convert: [{'mul': 1000000}]
+                format: MF
+```
+
+```php
+use Oro\Bundle\MeasureBundle\Measure\AbstractMeasure;
+
+/**
+ * Capacitance measures constants
+ */
+class CapacitanceMeasure extends AbstractMeasure
+{
+
+    /**
+     * Family measure name
+     * @staticvar string
+     */
+    const FAMILY = 'Capacitance';
+
+    /**
+     * @staticvar string
+     */
+    const FARAD     = 'FARAD';
+
+    /**
+     * @staticvar string
+     */
+    const KILOFARAD = 'KILOFARAD';
+
+    /**
+     * @staticvar string
+     */
+    const MEGAFARAD = 'MEGAFARAD';
+
+}
+```
 
 
 Extend converter
