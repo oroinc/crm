@@ -10,7 +10,17 @@ Allows to :
 
 General operation
 =================
+This bundle to convert a value from a unit to another.
+Some families and units are already defined but it's possible to add others families and units to convert anything.
 
+Converter converts a value from a unit to a standard unit (sort of reference unit) then from standard unit to asked unit.
+This allows to define just one list of operations to convert each unit.
+
+Operations are defined to convert from the unit to the standard unit.
+Converter convert to standard unit with default operations order but reverse order and do the opposite operation (addition <=> substraction and multiplication <=> division).
+We used strings to define operations. 'add', 'sub', mul', 'div' are allowed.
+
+You can add more operations extending bundle.
 
 
 Classes and files
@@ -48,6 +58,7 @@ $ php composer.phar update --dev
 
 $ phpunit --coverage-html=cov/
 ```
+
 
 Convert a value
 ===============
@@ -106,6 +117,7 @@ $converter->setFamily(LengthMeasure::FAMILY);
 $result = $converter->convert(LengthMeasure::KILOMETER, MyLengthMeasure::DONG, 1);
 ```
 
+
 Create a new family
 ===================
 
@@ -160,6 +172,7 @@ class CapacitanceMeasure extends AbstractMeasure
 }
 ```
 
+
 Exceptions thrown
 =================
 
@@ -170,7 +183,8 @@ Exceptions are thrown if we encountered problems during conversion.
 
 Divisions by zero don't throw exceptions but are ignored.
 
+
 Extend converter
 ================
 
-
+This bundle is extensible and we can imaginate config recovering from database or services or use converter for currencies for example.
