@@ -4,287 +4,287 @@ measures_config:
         units:
             ACRE:
                 convert: [{mul: 4046.856422}]
-                format: A
+                symbol: A
             ARE:
                 convert: [{'mul': 100}]
-                format: a
+                symbol: a
             ARPENT:
                 convert: [{'mul': 3418.89}]
-                format: arpent
+                symbol: arpent
             CENTIARE:
                 convert: [{'mul': 1}]
-                format: ca
+                symbol: ca
             HECTARE:
                 convert: [{'mul': 10000}]
-                format: ha
+                symbol: ha
             SQUARE_CENTIMETER:
                 convert: [{'mul': 0.0001}]
-                format: cm²
+                symbol: cm²
             SQUARE_DECIMETER:
                 convert: [{'mul': 0.01}]
-                format: dm²
+                symbol: dm²
             SQUARE_DEKAMETER:
                 convert: [{'mul': 100}]
-                format: dam²
+                symbol: dam²
             SQUARE_FOOT:
                 convert: [{'mul': 0.09290304}]
-                format: ft²
+                symbol: ft²
             SQUARE_FURLONG:
                 convert: [{'mul': 40468.726}]
-                format: fur²
+                symbol: fur²
             SQUARE_HECTOMETER:
                 convert: [{'mul': 10000}]
-                format: hm²
+                symbol: hm²
             SQUARE_INCH:
                 convert: [{'mul': 0.00064516}]
-                format: in²
+                symbol: in²
             SQUARE_KILOMETER:
                 convert: [{'mul': 1000000}]
-                format: km²
+                symbol: km²
             SQUARE_METER:
                 convert: [{'mul': 1}]
-                format: m²
+                symbol: m²
             SQUARE_MIL:
                 convert: [{'mul': 0.00000000064516}]
-                format: sq mil
+                symbol: sq mil
             SQUARE_MILE:
                 convert: [{'mul': 2589988.110336}]
-                format: mi²
+                symbol: mi²
             SQUARE_MILLIMETER:
                 convert: [{'mul': 0.000001}]
-                format: mm²
+                symbol: mm²
             SQUARE_YARD:
                 convert: [{'mul': 0.83612736}]
-                format: yd²
+                symbol: yd²
     Binary:
         standard: BYTE
         units:
             BIT:
                 convert: [{'mul': 0.125}]
-                format: b
+                symbol: b
             BYTE:
                 convert: [{'mul': 1}]
-                format: B
+                symbol: B
             KILOBYTE:
                 convert: [{'mul': 1024}]
-                format: kB
+                symbol: kB
             MEGABYTE:
                 convert: [{'mul': 1048576}]
-                format: MB
+                symbol: MB
             GIGABYTE:
                 convert: [{'mul': 1073741824}]
-                format: GB
+                symbol: GB
             TERABYTE:
                 convert: [{'mul': 1099511627776}]
-                format: TB
+                symbol: TB
     Frequency:
         standard: HERTZ
         units:
             GIGAHERTZ:
                 convert: [{'mul': 1000000000}]
-                format: GHz
+                symbol: GHz
             KILOHERTZ:
                 convert: [{'mul': 1000}]
-                format: kHz
+                symbol: kHz
             MEGAHERTZ:
                 convert: [{'mul': 1000000}]
-                format: MHz
+                symbol: MHz
             TERAHERTZ:
                 convert: [{'mul': 1000000000000}]
-                format: THz
+                symbol: THz
             HERTZ:
                 convert: [{'mul': 1}]
-                format: Hz
+                symbol: Hz
     Length:
         standard: METER
         units:
             CENTIMETER:
                 convert: [{'mul': 0.01}]
-                format: cm
+                symbol: cm
             CHAIN:
                 convert: [{'mul': 20.1168}]
-                format: ch
+                symbol: ch
             DECIMETER:
                 convert: [{'mul': 0.1}]
-                format: dm
+                symbol: dm
             DEKAMETER:
                 convert: [{'mul': 10}]
-                format: dam
+                symbol: dam
             FEET:
                 convert: [{'mul': 0.3048}]
-                format: ft
+                symbol: ft
             FURLONG:
                 convert: [{'mul': 201.168}]
-                format: fur
+                symbol: fur
             INCH:
                 convert: [{'mul': 0.0254}]
-                format: in
+                symbol: in
             HECTOMETER:
                 convert: [{'mul': 100}]
-                format: hm
+                symbol: hm
             KILOMETER:
                 convert: [{'mul': 1000}]
-                format: km
+                symbol: km
             METER:
                 convert: [{'mul': 1}]
-                format: m
+                symbol: m
             MIL:
                 convert: [{'mul': 0.0000254}]
-                format: mil
+                symbol: mil
             MILE:
                 convert: [{'mul': 1609.344}]
-                format: mi
+                symbol: mi
             MILLIMETER:
                 convert: [{'mul': 0.001}]
-                format: mm
+                symbol: mm
             YARD:
                 convert: [{'mul': 0.9144}]
-                format: yd
+                symbol: yd
     Power:
         standard: WATT
         units:
             GIGAWATT:
                 convert: [{'mul': 1000000000}]
-                format: GW
+                symbol: GW
             KILOWATT:
                 convert: [{'mul': 1000}]
-                format: kW
+                symbol: kW
             MEGAWATT:
                 convert: [{'mul': 1000000}]
-                format: MW
+                symbol: MW
             TERAWATT:
                 convert: [{'mul': 1000000000000}]
-                format: TW
+                symbol: TW
             WATT:
                 convert: [{'mul': 1}]
-                format: W
+                symbol: W
     Speed:
         standard: METER_PER_SECOND
         units:
             FOOT_PER_SECOND:
                 convert: [{'mul': 0.3048}]
-                format: ftdivs
+                symbol: ftdivs
             FOOT_PER_HOUR:
                 convert: [{'mul': 0.3048}, {'div': 3600}]
-                format: ftdivh
+                symbol: ftdivh
             KILOMETER_PER_HOUR:
                 convert: [{'mul': 1000}, {'div': 3600}]
-                format: kmdivh
+                symbol: kmdivh
             METER_PER_HOUR:
                 convert: [{'mul': 1}, {'div': 3600}]
-                format: mdivh
+                symbol: mdivh
             METER_PER_MINUTE:
                 convert: [{'div': 60}]
-                format: mdivm
+                symbol: mdivm
             METER_PER_SECOND:
                 convert: [{'mul': 1}]
-                format: mdivs
+                symbol: mdivs
             MILE_PER_HOUR:
                 convert: [{'mul': 1609.344}, {'div': 3600}]
-                format: midivh
+                symbol: midivh
             YARD_PER_HOUR:
                 convert: [{'mul': 0.9144'}, {'div': 3600}]
-                format: yddivh
+                symbol: yddivh
     Temperature:
         standard: KELVIN
         units:
             CELCIUS:
                 convert: [{'add': 273.15}]
-                format: °C
+                symbol: °C
             FAHRENHEIT:
                 convert: [{'sub': 32}, {'div': 1.8}, {'add': 273.15}]
-                format: °F
+                symbol: °F
             KELVIN:
                 convert: [{'mul': 1}]
-                format: °K
+                symbol: °K
             RANKINE:
                 convert: [{'div': 1.8}]
-                format: °R
+                symbol: °R
             REAUMUR:
                 convert: [{'mul': 1.25}, {'add': 273.15}]
-                format: °r
+                symbol: °r
     Volume:
         standard: CUBIC_METER
         units:
             BARREL:
                 convert: [{'mul': 0.16365924}]
-                format: bbl
+                symbol: bbl
             CENTILITER:
                 convert: [{'mul': 0.00001}]
-                format: cl
+                symbol: cl
             CUBIC_CENTIMETER:
                 convert: [{'mul': 0.000001}]
-                format: cl³
+                symbol: cl³
             CUBIC_DECIMETER:
                 convert: [{'mul': 0.001}]
-                format: dl³
+                symbol: dl³
             CUBIC_FOOT:
                 convert: [{'mul': 6.54119159}, {'div': 231}]
-                format: ft³
+                symbol: ft³
             CUBIC_INCH:
                 convert: [{'mul': 0.0037854118}, {'div': 231}]
-                format: in³
+                symbol: in³
             CUBIC_METER:
                 convert: [{'mul': 1}]
-                format: m³
+                symbol: m³
             CUBIC_MILLIMETER:
                 convert: [{'mul': 0.000000001}]
-                format: mm³
+                symbol: mm³
             CUBIC_YARD:
                 convert: [{'mul': 0.764554861}]
-                format: yd³
+                symbol: yd³
             DECILITER:
                 convert: [{'mul': 0.0001}]
-                format: dl
+                symbol: dl
             GALLON:
                 convert: [{'mul': 0.00454609}]
-                format: gal
+                symbol: gal
             LITER:
                 convert: [{'mul': 0.001}]
-                format: l
+                symbol: l
             MILLILITER:
                 convert: [{'mul': 0.000001}]
-                format: ml
+                symbol: ml
             OUNCE:
                 convert: [{'mul': 0.00454609}, {'div': 160}]
-                format: oz
+                symbol: oz
             PINT:
                 convert: [{'mul': 0.00454609}, {'div': 8}]
-                format: pt
+                symbol: pt
     Weight:
         standard: KILOGRAM
         units:
             DENIER:
                 convert: [{'mul': 0.001275}]
-                format: denier
+                symbol: denier
             GRAIN:
                 convert: [{'mul': 0.00006479891}]
-                format: gr
+                symbol: gr
             GRAM:
                 convert: [{'mul': 0.001}]
-                format: g
+                symbol: g
             KILOGRAM:
                 convert: [{'mul': 1}]
-                format: kg
+                symbol: kg
             LIVRE:
                 convert: [{'mul': 0.4895}]
-                format: livre
+                symbol: livre
             MARC:
                 convert: [{'mul': 0.24475}]
-                format: marc
+                symbol: marc
             MILLIGRAM:
                 convert: [{'mul': 0.000001}]
-                format: mg
+                symbol: mg
             ONCE:
                 convert: [{'mul': 0.03059}]
-                format: once
+                symbol: once
             OUNCE:
                 convert: [{'mul': 0.45359237}, {'div': 16}]
-                format: oz
+                symbol: oz
             POUND:
                 convert: [{'mul': 0.45359237}]
-                format: lb
+                symbol: lb
             TON:
                 convert: [{'mul': 1000}]
-                format: t
+                symbol: t
                 

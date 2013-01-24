@@ -62,7 +62,7 @@ class Configuration implements ConfigurationInterface
                         ->end()
                     ->end()
 
-                    ->scalarNode('format')
+                    ->scalarNode('symbol')
                     ->isRequired()
                     ->end()
                 ->end()
