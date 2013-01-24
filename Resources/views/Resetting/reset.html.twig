@@ -1,4 +1,4 @@
-{% extends 'OroUserBundle::layout.html.twig' %}
+{% extends bap.layout is defined ? bap.layout : 'OroUserBundle::layout.html.twig' %}
 
 {% block content %}
 <form action="{{ path('fos_user_resetting_reset', { token: token }) }}" {{ form_enctype(form) }} method="POST" class="form-pass-reset">

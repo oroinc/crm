@@ -1,0 +1,38 @@
+{% extends bap.layout is defined ? bap.layout : 'OroUserBundle::layout.html.twig' %}
+{% import 'OroUserBundle::macros.html.twig' as macros %}
+
+{% set title = form.vars.value.id ? 'Edit user' : 'Add user' %}
+
+{% block title %}{{ title }} - {{ parent() }}{% endblock %}
+
+{% block content %}
+<form action="{{ form.vars.value.id ? path('oro_user_edit', { id: form.vars.value.id }) : path('oro_user_create') }}" {{ form_enctype(form) }} method="POST" class="form-register">
+    <fieldset>
+        <legend>{{ title }}</legend>
+
+        {{ form_widget(form) }}
+
+        <br />
+        <legend>Additional information</legend>
+
+        <div class="form-horizontal">
+            <div class="control-group">
+                <label class="control-label">Created at</label>
+                <div class="controls">
+                    <span class="label">{{ form.vars.value.createdAt ? macros.time(form.vars.value.createdAt) : 'N/A' }}</span>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label">Last login</label>
+                <div class="controls">
+                    <span class="label">{{ form.vars.value.lastLogin ? macros.time(form.vars.value.lastLogin) : 'N/A' }}</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <button class="btn btn-large btn-primary" type="submit">Save</button>
+        </div>
+    </fieldset>
+</form>
+{% endblock %}
