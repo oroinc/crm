@@ -1,0 +1,7 @@
+parameters:
+    oro_measure.measures_config: ~
+
+services:
+    oro_measure.measure_converter:
+        class: Oro\Bundle\MeasureBundle\Convert\MeasureConverter
+        arguments: [%oro_measure.measures_config%]
