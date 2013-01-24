@@ -90,7 +90,7 @@ class UserController extends Controller
 
                 $this->get('session')->getFlashBag()->add('success', 'User successfully saved');
 
-                return $this->redirect($this->generateUrl('acme_demo_user_index'));
+                return $this->redirect($this->generateUrl('oro_user_index'));
             }
         }
 
@@ -112,7 +112,7 @@ class UserController extends Controller
 
         $this->get('session')->getFlashBag()->add('success', 'User successfully removed');
 
-        return $this->redirect($this->generateUrl('acme_demo_user_index'));
+        return $this->redirect($this->generateUrl('oro_user_index'));
     }
 
     /**

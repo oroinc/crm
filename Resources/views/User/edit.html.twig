@@ -23,6 +23,12 @@
                 </div>
             </div>
             <div class="control-group">
+                <label class="control-label">Updated at</label>
+                <div class="controls">
+                    <span class="label">{{ form.vars.value.updatedAt ? macros.time(form.vars.value.updatedAt) : 'N/A' }}</span>
+                </div>
+            </div>
+            <div class="control-group">
                 <label class="control-label">Last login</label>
                 <div class="controls">
                     <span class="label">{{ form.vars.value.lastLogin ? macros.time(form.vars.value.lastLogin) : 'N/A' }}</span>

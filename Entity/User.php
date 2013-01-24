@@ -8,13 +8,14 @@ use FOS\UserBundle\Model\GroupableInterface;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityFlexible;
 use Oro\Bundle\FlexibleEntityBundle\Model\Behavior\HasRequiredValueInterface;
 
 /**
  * @ORM\Entity(repositoryClass="Oro\Bundle\FlexibleEntityBundle\Entity\Repository\FlexibleEntityRepository")
- * @ORM\Table(name="oro_user")
+ * @ORM\Table(name="user")
  * @ORM\HasLifecycleCallbacks()
  */
 class User extends AbstractEntityFlexible implements UserInterface, GroupableInterface, HasRequiredValueInterface
@@ -45,7 +46,7 @@ class User extends AbstractEntityFlexible implements UserInterface, GroupableInt
      *
      * @ORM\Column(type="boolean")
      */
-    protected $enabled = false;
+    protected $enabled = true;
 
     /**
      * The salt to use for hashing
@@ -82,13 +83,6 @@ class User extends AbstractEntityFlexible implements UserInterface, GroupableInt
     protected $confirmationToken;
 
     /**
-     * @var array
-     *
-     * @ORM\Column(name="roles", type="array")
-     */
-    protected $roles;
-
-    /**
      * @var \DateTime
      *
      * @ORM\Column(name="last_login", type="datetime", nullable=true)
@@ -96,15 +90,17 @@ class User extends AbstractEntityFlexible implements UserInterface, GroupableInt
     protected $lastLogin;
 
     /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="created_at", type="datetime")
+     * @ORM\ManyToMany(targetEntity="Role")
+     * @ORM\JoinTable(name="user_access_role",
+     *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="role_id", referencedColumnName="id", onDelete="CASCADE")}
+     * )
      */
-    protected $createdAt;
+    protected $roles;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Oro\Bundle\UserBundle\Entity\Group")
-     * @ORM\JoinTable(name="oro_user_group",
+     * @ORM\ManyToMany(targetEntity="Group")
+     * @ORM\JoinTable(name="user_access_group",
      *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="group_id", referencedColumnName="id", onDelete="CASCADE")}
      * )
@@ -121,7 +117,7 @@ class User extends AbstractEntityFlexible implements UserInterface, GroupableInt
     public function __construct()
     {
         $this->salt  = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
-        $this->roles = array();
+        $this->roles = new ArrayCollection();
     }
 
     /**
@@ -136,12 +132,9 @@ class User extends AbstractEntityFlexible implements UserInterface, GroupableInt
         return serialize(array(
             $this->password,
             $this->salt,
-            $this->usernameCanonical,
             $this->username,
-            $this->expired,
-            $this->locked,
-            $this->credentialsExpired,
             $this->enabled,
+            $this->confirmationToken,
             $this->id,
         ));
     }
@@ -161,12 +154,9 @@ class User extends AbstractEntityFlexible implements UserInterface, GroupableInt
         list(
             $this->password,
             $this->salt,
-            $this->usernameCanonical,
             $this->username,
-            $this->expired,
-            $this->locked,
-            $this->credentialsExpired,
             $this->enabled,
+            $this->confirmationToken,
             $this->id
         ) = $data;
     }
@@ -240,16 +230,6 @@ class User extends AbstractEntityFlexible implements UserInterface, GroupableInt
     }
 
     /**
-     * Gets the enabled state.
-     *
-     * @return boolean
-     */
-    public function getEnabled()
-    {
-        return $this->enabled;
-    }
-
-    /**
      * Gets the last login time.
      *
      * @return \DateTime
@@ -266,7 +246,25 @@ class User extends AbstractEntityFlexible implements UserInterface, GroupableInt
      */
     public function getCreatedAt()
     {
-        return $this->createdAt;
+        return $this->created;
+    }
+
+    /**
+     * Get user last update date/time
+     *
+     * @return \DateTime
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updated;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function isEnabled()
+    {
+        return $this->enabled;
     }
 
     public function isAccountNonExpired()
@@ -276,12 +274,7 @@ class User extends AbstractEntityFlexible implements UserInterface, GroupableInt
 
     public function isAccountNonLocked()
     {
-        return !$this->enabled;
-    }
-
-    public function isEnabled()
-    {
-        return $this->enabled;
+        return $this->isEnabled();
     }
 
     public function isExpired()
@@ -313,9 +306,9 @@ class User extends AbstractEntityFlexible implements UserInterface, GroupableInt
         return $this;
     }
 
-    public function setEnabled($boolean)
+    public function setEnabled($enabled)
     {
-        $this->enabled = (Boolean) $boolean;
+        $this->enabled = (boolean) $enabled;
 
         return $this;
     }
@@ -367,7 +360,20 @@ class User extends AbstractEntityFlexible implements UserInterface, GroupableInt
      */
     public function setCreatedAt(\DateTime $createdAt)
     {
-        $this->createdAt = $createdAt;
+        $this->created = $createdAt;
+
+        return $this;
+    }
+
+    /**
+     * Set updatedAt
+     *
+     * @param \DateTime $updatedAt
+     * @return User
+     */
+    public function setUpdatedAt(\DateTime $updatedAt)
+    {
+        $this->updated = $updatedAt;
 
         return $this;
     }
@@ -379,21 +385,104 @@ class User extends AbstractEntityFlexible implements UserInterface, GroupableInt
      */
     public function getRoles()
     {
-        $roles = $this->roles;
+        // we need to make sure to have at least one role
+        $roles = array_merge($this->roles->toArray(), array(new Role(static::ROLE_DEFAULT)));
 
         foreach ($this->getGroups() as $group) {
             $roles = array_merge($roles, $group->getRoles());
         }
 
-        // we need to make sure to have at least one role
-        $roles[] = static::ROLE_DEFAULT;
-
         return array_unique($roles);
     }
 
+    /**
+     * Returns the true ArrayCollection of Roles.
+     *
+     * @return ArrayCollection
+     */
+    public function getRolesCollection()
+    {
+        return $this->roles;
+    }
+
+    /**
+     * Pass a string, get the desired Role object or null
+     *
+     * @param   string  $role Role name
+     * @return  Role|null
+     */
+    public function getRole($role)
+    {
+        foreach ($this->getRoles() as $item ) {
+            if ($role == $item->getRole()) {
+                return $item;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Never use this to check if this user has access to anything!
+     * Use the SecurityContext, or an implementation of AccessDecisionManager
+     * instead, e.g.
+     *
+     *         $securityContext->isGranted('ROLE_USER');
+     *
+     * @param string $role
+     * @return boolean
+     */
+    public function hasRole($role)
+    {
+        return $this->getRole($role) ? true : false;
+
+    }
+
+    /**
+     * Adds a Role to the ArrayCollection.
+     * Can't type hint due to interface so throws RuntimeException.
+     *
+     * @param   Role    $role
+     * @return  User
+     * @throws  \RuntimeException
+     */
+    public function addRole($role)
+    {
+        if (!$role instanceof Role) {
+            throw new \RuntimeException('addRole takes a Role object as the parameter');
+        }
+
+        if (!$this->hasRole($role->getRole())) {
+            $this->roles->add($role);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Pass a string, remove the Role object from collection
+     *
+     * @param   string  $role
+     */
+    public function removeRole($role)
+    {
+        $item = $this->getRole($role);
+
+        if ($item) {
+            $this->roles->removeElement($item);
+        }
+    }
+
+    /**
+     * Pass an array of Role objects and re-set roles collection with new Roles.
+     * Type hinted array due to interface.
+     *
+     * @param   array   $roles  Array of Role objects
+     * @return  User
+     */
     public function setRoles(array $roles)
     {
-        $this->roles = array();
+        $this->roles->clear();
 
         foreach ($roles as $role) {
             $this->addRole($role);
@@ -403,49 +492,21 @@ class User extends AbstractEntityFlexible implements UserInterface, GroupableInt
     }
 
     /**
-     * Never use this to check if this user has access to anything!
+     * Directly set the ArrayCollection of Roles.
+     * Type hinted as Collection which is the parent of (Array|Persistent)Collection.
      *
-     * Use the SecurityContext, or an implementation of AccessDecisionManager
-     * instead, e.g.
-     *
-     *         $securityContext->isGranted('ROLE_USER');
-     *
-     * @param string $role
-     *
-     * @return boolean
+     * @param   Collection  $collection
+     * @return  User
      */
-    public function hasRole($role)
+    public function setRolesCollection(Collection $collection)
     {
-        return in_array(strtoupper($role), $this->getRoles(), true);
-    }
-
-    public function addRole($role)
-    {
-        $role = strtoupper($role);
-
-        if ($role === static::ROLE_DEFAULT) {
-            return $this;
-        }
-
-        if (!in_array($role, $this->roles, true)) {
-            $this->roles[] = $role;
-        }
-
-        return $this;
-    }
-
-    public function removeRole($role)
-    {
-        if (false !== $key = array_search(strtoupper($role), $this->roles, true)) {
-            unset($this->roles[$key]);
-            $this->roles = array_values($this->roles);
-        }
+        $this->roles = $collection;
 
         return $this;
     }
 
     /**
-     * Gets the groups granted to the user.
+     * Gets the groups granted to the user
      *
      * @return Collection
      */
@@ -457,6 +518,7 @@ class User extends AbstractEntityFlexible implements UserInterface, GroupableInt
     public function getGroupNames()
     {
         $names = array();
+
         foreach ($this->getGroups() as $group) {
             $names[] = $group->getName();
         }
@@ -499,9 +561,19 @@ class User extends AbstractEntityFlexible implements UserInterface, GroupableInt
      */
     public function beforeSave()
     {
-        $this->createdAt = new \DateTime();
+        $this->created =
+        $this->updated = new \DateTime();
     }
 
+    /**
+     * Invoked before the entity is updated.
+     *
+     * @ORM\PreUpdate
+     */
+    public function preUpdate()
+    {
+        $this->updated = new \DateTime();
+    }
 
     /**************************************************************************/
     /*

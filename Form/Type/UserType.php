@@ -35,11 +35,18 @@ class UserType extends AbstractType
             ->add('enabled', 'checkbox', array(
                 'required'  => false,
             ))
+            ->add('rolesCollection', 'entity', array(
+                'label'     => 'Roles',
+                'class'     => 'OroUserBundle:Role',
+                'property'  => 'label',
+                'multiple'  => true,
+                'required'  => true,
+            ))
             ->add('groups', 'entity', array(
                 'class'     => 'OroUserBundle:Group',
                 'property'  => 'name',
                 'multiple'  => true,
-                'required'  => true,
+                'required'  => false,
             ))
         ;
 

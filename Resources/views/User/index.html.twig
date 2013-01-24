@@ -15,6 +15,7 @@
             <th>Username</th>
             <th>Email</th>
             <th style="width: 150px">Created At</th>
+            <th style="width: 150px">Updated At</th>
             <th style="width: 50px">Edit</th>
             <th style="width: 50px">Remove</th>
         </tr>
@@ -26,7 +27,8 @@
             <td><a href="{{ path('oro_user_show', { id: rec.id }) }}">{{ rec.id }}</a></td>
             <td><a href="{{ path('oro_user_show', { id: rec.id }) }}">{{ rec.username }}</a></td>
             <td><a href="{{ path('oro_user_show', { id: rec.id }) }}">{{ rec.email }}</a></td>
-            <td>{{ macros.time(rec.createdAt) }}</td>
+            <td>{{ macros.time(rec.created) }}</td>
+            <td>{{ macros.time(rec.updated) }}</td>
             <td><a href="{{ path('oro_user_edit', { id: rec.id }) }}"><i class="icon-edit"></i></a></td>
             <td><a href="{{ path('oro_user_remove', { id: rec.id }) }}"><i class="icon-remove"></i></a></td>
         </tr>

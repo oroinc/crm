@@ -8,7 +8,7 @@ use Oro\Bundle\FlexibleEntityBundle\Entity\Attribute;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Table(name="oro_user_attribute_value")
+ * @ORM\Table(name="user_attribute_value")
  * @ORM\Entity
  */
 class UserValue extends AbstractEntityFlexibleValue
@@ -33,7 +33,7 @@ class UserValue extends AbstractEntityFlexibleValue
      * @var options ArrayCollection
      *
      * @ORM\ManyToMany(targetEntity="Oro\Bundle\FlexibleEntityBundle\Entity\AttributeOption")
-     * @ORM\JoinTable(name="oro_user_attribute_option_value",
+     * @ORM\JoinTable(name="user_attribute_option_value",
      *      joinColumns={@ORM\JoinColumn(name="value_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="option_id", referencedColumnName="id")}
      * )
