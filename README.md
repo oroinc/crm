@@ -34,13 +34,35 @@ There are some examples in laboro/bap-standard/tree/master/src/Acme/Bundle/DemoF
 - Customer : a flexible entity (no translatable attributes)
 - Product : a flexible entity (with translatable and scopable attributes)
 
-Install and run unit tests
-==========================
+Install
+=======
 
-To run tests :
+To install for dev :
+
 ```bash
 $ php composer.phar update --dev
+```
+To use as dependency, use composer and add bundle in your AppKernel :
 
+```yaml
+    "require": {
+        [...]
+        "oro/FlexibleEntityBundle": "dev-master"
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "git@github.com:laboro/FlexibleEntityBundle.git",
+            "branch": "master"
+        }
+    ]
+
+```
+
+Run unit tests
+==============
+
+```bash
 $ phpunit --coverage-html=cov/
 ```
 
