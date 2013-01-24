@@ -1,5 +1,5 @@
 <?php
-namespace Oro\Bundle\MeasureBundle\Measure;
+namespace Oro\Bundle\MeasureBundle\Family;
 
 /**
  * Area measures constants
@@ -9,7 +9,7 @@ namespace Oro\Bundle\MeasureBundle\Measure;
  * @license   http://opensource.org/licenses/MIT MIT
  *
  */
-class AreaMeasure extends AbstractMeasure
+class AreaFamily extends AbstractFamily
 {
 
     /**

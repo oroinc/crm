@@ -1,46 +1,51 @@
 <?php
-namespace Oro\Bundle\MeasureBundle\Measure;
+namespace Oro\Bundle\MeasureBundle\Family;
 
 /**
- * Temperature measures constants
+ * Binary measures constants
  *
  * @author    Romain Monceau <romain@akeneo.com>
  * @copyright 2012 Akeneo SAS (http://www.akeneo.com)
  * @license   http://opensource.org/licenses/MIT MIT
  *
  */
-class TemperatureMeasure extends AbstractMeasure
+class BinaryFamily extends AbstractFamily
 {
 
     /**
      * Family measure name
      * @staticvar string
      */
-    const FAMILY = 'Temperature';
+    const FAMILY = 'Binary';
 
     /**
      * @staticvar string
      */
-    const CELCIUS    = 'CELCIUS';
+    const BIT      = 'BIT';
 
     /**
      * @staticvar string
      */
-    const FAHRENHEIT = 'FAHRENHEIT';
+    const BYTE     = 'BYTE';
 
     /**
      * @staticvar string
      */
-    const KELVIN     = 'KELVIN';
+    const KILOBYTE = 'KILOBYTE';
 
     /**
      * @staticvar string
      */
-    const RANKINE    = 'RANKINE';
+    const MEGABYTE = 'MEGABYTE';
 
     /**
      * @staticvar string
      */
-    const REAUMUR    = 'REAUMUR';
+    const GIGABYTE = 'GIGABYTE';
+
+    /**
+     * @staticvar string
+     */
+    const TERABYTE = 'TERABYTE';
 
 }

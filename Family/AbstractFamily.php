@@ -1,5 +1,5 @@
 <?php
-namespace Oro\Bundle\MeasureBundle\Measure;
+namespace Oro\Bundle\MeasureBundle\Family;
 
 /**
  * Abstract class for measures
@@ -8,8 +8,9 @@ namespace Oro\Bundle\MeasureBundle\Measure;
  * @copyright 2012 Akeneo SAS (http://www.akeneo.com)
  * @license   http://opensource.org/licenses/MIT MIT
  *
+ * @abstract
  */
-class AbstractMeasure
+class AbstractFamily
 {
 
 }

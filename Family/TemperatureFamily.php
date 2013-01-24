@@ -1,46 +1,46 @@
 <?php
-namespace Oro\Bundle\MeasureBundle\Measure;
+namespace Oro\Bundle\MeasureBundle\Family;
 
 /**
- * Frequency measures constants
+ * Temperature measures constants
  *
  * @author    Romain Monceau <romain@akeneo.com>
  * @copyright 2012 Akeneo SAS (http://www.akeneo.com)
  * @license   http://opensource.org/licenses/MIT MIT
  *
  */
-class FrequencyMeasure extends AbstractMeasure
+class TemperatureFamily extends AbstractFamily
 {
 
     /**
      * Family measure name
      * @staticvar string
      */
-    const FAMILY = 'Frequency';
+    const FAMILY = 'Temperature';
 
     /**
      * @staticvar string
      */
-    const GIGAHERTZ = 'GIGAHERTZ';
+    const CELCIUS    = 'CELCIUS';
 
     /**
      * @staticvar string
      */
-    const KILOHERTZ = 'KILOHERTZ';
+    const FAHRENHEIT = 'FAHRENHEIT';
 
     /**
      * @staticvar string
      */
-    const MEGAHERTZ = 'MEGAHERTZ';
+    const KELVIN     = 'KELVIN';
 
     /**
      * @staticvar string
      */
-    const TERAHERTZ = 'TERAHERTZ';
+    const RANKINE    = 'RANKINE';
 
     /**
      * @staticvar string
      */
-    const HERTZ     = 'HERTZ';
+    const REAUMUR    = 'REAUMUR';
 
 }

@@ -37,32 +37,10 @@ class Configuration implements ConfigurationInterface
                 ->arrayNode('units')
                 ->prototype('array')
                 ->children()
-                    ->arrayNode('convert')
-                        ->requiresAtLeastOneElement()
-                        ->prototype('array')
-                            ->children()
 
-                                ->scalarNode('add')
-                                ->cannotBeEmpty()
-                                ->end()
+                    ->append($this->addConvertNode())
 
-                                ->scalarNode('sub')
-                                ->cannotBeEmpty()
-                                ->end()
-
-                                ->scalarNode('mul')
-                                ->cannotBeEmpty()
-                                ->end()
-
-                                ->scalarNode('div')
-                                ->cannotBeEmpty()
-                                ->end()
-
-                            ->end()
-                        ->end()
-                    ->end()
-
-                    ->scalarNode('format')
+                    ->scalarNode('symbol')
                     ->isRequired()
                     ->end()
                 ->end()
@@ -70,5 +48,41 @@ class Configuration implements ConfigurationInterface
             ->end();
 
         return $treeBuilder;
+    }
+
+    /**
+     * Create a node definition for operations (could be extended to define new operations)
+     * @return \Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition|
+     *         \Symfony\Component\Config\Definition\Builder\NodeDefinition
+     */
+    protected function addConvertNode()
+    {
+        $treeBuilder = new TreeBuilder();
+        $node = $treeBuilder->root('convert');
+
+        $node->requiresAtLeastOneElement()
+            ->prototype('array')
+                ->children()
+
+                    ->scalarNode('add')
+                    ->cannotBeEmpty()
+                    ->end()
+
+                    ->scalarNode('sub')
+                    ->cannotBeEmpty()
+                    ->end()
+
+                    ->scalarNode('mul')
+                    ->cannotBeEmpty()
+                    ->end()
+
+                    ->scalarNode('div')
+                    ->cannotBeEmpty()
+                    ->end()
+
+                ->end()
+            ->end();
+
+        return $node;
     }
 }

@@ -1,5 +1,5 @@
 <?php
-namespace Oro\Bundle\MeasureBundle\Measure;
+namespace Oro\Bundle\MeasureBundle\Family;
 
 /**
  * Speed measures constants
@@ -9,7 +9,7 @@ namespace Oro\Bundle\MeasureBundle\Measure;
  * @license   http://opensource.org/licenses/MIT MIT
  *
  */
-class SpeedMeasure extends AbstractMeasure
+class SpeedFamily extends AbstractFamily
 {
 
     /**

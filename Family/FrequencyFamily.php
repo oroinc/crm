@@ -1,51 +1,46 @@
 <?php
-namespace Oro\Bundle\MeasureBundle\Measure;
+namespace Oro\Bundle\MeasureBundle\Family;
 
 /**
- * Binary measures constants
+ * Frequency measures constants
  *
  * @author    Romain Monceau <romain@akeneo.com>
  * @copyright 2012 Akeneo SAS (http://www.akeneo.com)
  * @license   http://opensource.org/licenses/MIT MIT
  *
  */
-class BinaryMeasure extends AbstractMeasure
+class FrequencyFamily extends AbstractFamily
 {
 
     /**
      * Family measure name
      * @staticvar string
      */
-    const FAMILY = 'Binary';
+    const FAMILY = 'Frequency';
 
     /**
      * @staticvar string
      */
-    const BIT      = 'BIT';
+    const GIGAHERTZ = 'GIGAHERTZ';
 
     /**
      * @staticvar string
      */
-    const BYTE     = 'BYTE';
+    const KILOHERTZ = 'KILOHERTZ';
 
     /**
      * @staticvar string
      */
-    const KILOBYTE = 'KILOBYTE';
+    const MEGAHERTZ = 'MEGAHERTZ';
 
     /**
      * @staticvar string
      */
-    const MEGABYTE = 'MEGABYTE';
+    const TERAHERTZ = 'TERAHERTZ';
 
     /**
      * @staticvar string
      */
-    const GIGABYTE = 'GIGABYTE';
-
-    /**
-     * @staticvar string
-     */
-    const TERABYTE = 'TERABYTE';
+    const HERTZ     = 'HERTZ';
 
 }

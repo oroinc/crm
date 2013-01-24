@@ -1,96 +1,91 @@
 <?php
-namespace Oro\Bundle\MeasureBundle\Measure;
+namespace Oro\Bundle\MeasureBundle\Family;
 
 /**
- * Volume measures constants
+ * Length measures constants
  *
  * @author    Romain Monceau <romain@akeneo.com>
  * @copyright 2012 Akeneo SAS (http://www.akeneo.com)
  * @license   http://opensource.org/licenses/MIT MIT
  *
  */
-class VolumeMeasure extends AbstractMeasure
+class LengthFamily extends AbstractFamily
 {
 
     /**
      * Family measure name
      * @staticvar string
      */
-    const FAMILY = 'Volume';
+    const FAMILY = 'Length';
 
     /**
      * @staticvar string
      */
-    const BARREL           = 'BARREL';
+    const CENTIMETER = 'CENTIMETER';
 
     /**
      * @staticvar string
      */
-    const CENTILITER       = 'CENTILITER';
+    const CHAIN      = 'CHAIN';
 
     /**
      * @staticvar string
      */
-    const CUBIC_CENTIMETER = 'CUBIC_CENTIMETER';
+    const DECIMETER  = 'DECIMETER';
 
     /**
      * @staticvar string
      */
-    const CUBIC_DECIMETER  = 'CUBIC_DECIMETER';
+    const DEKAMETER  = 'DEKAMETER';
 
     /**
      * @staticvar string
      */
-    const CUBIC_FOOT       = 'CUBIC_FOOT';
+    const FEET       = 'FEET';
 
     /**
      * @staticvar string
      */
-    const CUBIC_INCH       = 'CUBIC_INCH';
+    const FURLONG    = 'FURLONG';
 
     /**
      * @staticvar string
      */
-    const CUBIC_METER      = 'CUBIC_METER';
+    const HECTOMETER = 'HECTOMETER';
 
     /**
      * @staticvar string
      */
-    const CUBIC_MILLIMETER = 'CUBIC_MILLIMETER';
+    const INCH       = 'INCH';
 
     /**
      * @staticvar string
      */
-    const CUBIC_YARD       = 'CUBIC_YARD';
+    const KILOMETER  = 'KILOMETER';
 
     /**
      * @staticvar string
      */
-    const DECILITER        = 'DECILITER';
+    const METER      = 'METER';
 
     /**
      * @staticvar string
      */
-    const GALLON           = 'GALLON';
+    const MIL        = 'MIL';
 
     /**
      * @staticvar string
      */
-    const LITER            = 'LITER';
+    const MILE       = 'MILE';
 
     /**
      * @staticvar string
      */
-    const MILLILITER       = 'MILLILITER';
+    const MILLIMETER = 'MILLIMETER';
 
     /**
      * @staticvar string
      */
-    const OUNCE            = 'OUNCE';
-
-    /**
-     * @staticvar string
-     */
-    const PINT             = 'PINT';
+    const YARD       = 'YARD';
 
 }
