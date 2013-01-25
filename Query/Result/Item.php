@@ -5,21 +5,18 @@ namespace Oro\Bundle\SearchBundle\Query\Result;
 use Doctrine\Common\Persistence\ObjectManager;
 use JMS\Serializer\Annotation\Type;
 use JMS\Serializer\Annotation\Exclude;
-use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 
 class Item
 {
     /**
      * @var string
      * @Type("string")
-     * @Soap\ComplexType("string")
      */
     protected $entityName;
 
     /**
      * @var int
      * @Type("integer")
-     * @Soap\ComplexType("int")
      */
     protected $recordId;
 
