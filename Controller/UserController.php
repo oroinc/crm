@@ -99,11 +99,11 @@ class UserController extends Controller
    /**
     * @Route("/remove/{id}", name="oro_user_remove", requirements={"id"="\d+"})
     */
-    public function removeAction(User $user)
+    public function removeAction(User $entity)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $em->remove($user);
+        $em->remove($entity);
         $em->flush();
 
         $this->get('session')->getFlashBag()->add('success', 'User successfully removed');

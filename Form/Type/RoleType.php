@@ -16,24 +16,9 @@ class RoleType extends AbstractType
         $builder
             ->add('role', 'text', array(
                 'required'  => true,
+                'read_only' => $builder->getData()->getId(),
             ))
             ->add('label', 'text', array(
-                'required'  => false,
-            ))
-            ->add('enabled', 'checkbox', array(
-                'required'  => false,
-            ))
-            ->add('rolesCollection', 'entity', array(
-                'label'     => 'Roles',
-                'class'     => 'OroUserBundle:Role',
-                'property'  => 'label',
-                'multiple'  => true,
-                'required'  => true,
-            ))
-            ->add('groups', 'entity', array(
-                'class'     => 'OroUserBundle:Group',
-                'property'  => 'name',
-                'multiple'  => true,
                 'required'  => false,
             ))
         ;

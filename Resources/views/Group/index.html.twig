@@ -10,7 +10,7 @@
 <table class="table table-bordered table-striped table-condensed">
     <thead>
         <tr>
-            <th>ID</th>
+            <th style="width: 20px">ID</th>
             <th>Group name</th>
             <th>Roles</th>
             <th style="width: 50px">Edit</th>
@@ -21,9 +21,12 @@
     <tbody>
         {% for rec in pager %}
         <tr>
-            <td><a href="{{ path('oro_user_group_edit', { id: rec.id }) }}">{{ rec.id }}</a></td>
+            <td><a href="{{ path('oro_user_group_edit', { id: rec.id }) }}" class="pull-right">{{ rec.id }}</a></td>
             <td><a href="{{ path('oro_user_group_edit', { id: rec.id }) }}">{{ rec.name }}</a></td>
-            <td></td>
+            <td>
+                {# Any chance to use GROUP_CONCAT instead of iterating over joined table? #}
+                {% for role in rec.roles %}{{ role.label }}{{ not loop.last ? ', ' : '' }}{% endfor %}
+            </td>
             <td><a href="{{ path('oro_user_group_edit', { id: rec.id }) }}"><i class="icon-edit"></i></a></td>
             <td><a href="{{ path('oro_user_group_remove', { id: rec.id }) }}"><i class="icon-remove"></i></a></td>
         </tr>

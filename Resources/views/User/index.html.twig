@@ -24,7 +24,7 @@
     <tbody>
         {% for rec in pager %}
         <tr>
-            <td><a href="{{ path('oro_user_show', { id: rec.id }) }}">{{ rec.id }}</a></td>
+            <td><a href="{{ path('oro_user_show', { id: rec.id }) }}" class="pull-right">{{ rec.id }}</a></td>
             <td><a href="{{ path('oro_user_show', { id: rec.id }) }}">{{ rec.username }}</a></td>
             <td><a href="{{ path('oro_user_show', { id: rec.id }) }}">{{ rec.email }}</a></td>
             <td>{{ macros.time(rec.created) }}</td>

@@ -10,7 +10,7 @@
 <table class="table table-bordered table-striped table-condensed">
     <thead>
         <tr>
-            <th>ID</th>
+            <th style="width: 20px">ID</th>
             <th>Role name</th>
             <th>Label</th>
             <th style="width: 50px">Edit</th>
@@ -21,7 +21,7 @@
     <tbody>
         {% for rec in pager %}
         <tr>
-            <td><a href="{{ path('oro_user_role_edit', { id: rec.id }) }}">{{ rec.id }}</a></td>
+            <td><a href="{{ path('oro_user_role_edit', { id: rec.id }) }}" class="pull-right">{{ rec.id }}</a></td>
             <td><a href="{{ path('oro_user_role_edit', { id: rec.id }) }}">{{ rec.role }}</a></td>
             <td><a href="{{ path('oro_user_role_edit', { id: rec.id }) }}">{{ rec.label }}</a></td>
             <td><a href="{{ path('oro_user_role_edit', { id: rec.id }) }}"><i class="icon-edit"></i></a></td>

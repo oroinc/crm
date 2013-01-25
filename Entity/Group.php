@@ -2,7 +2,10 @@
 
 namespace Oro\Bundle\UserBundle\Entity;
 
-use FOS\UserBundle\Entity\Group as BaseGroup;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
+
+use FOS\UserBundle\Model\Group as BaseGroup;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -11,35 +14,40 @@ use Doctrine\Common\Collections\Collection;
 /**
  * @ORM\Entity
  * @ORM\Table(name="access_group")
+ * @UniqueEntity("name")
  */
 class Group extends BaseGroup
 {
     /**
      * @ORM\Id
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="smallint", name="id")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-     protected $id;
+    protected $id;
 
     /**
-     * Can't use $roles here due to interface
-     *
+     * @ORM\Column(type="string", unique=true, length=30, nullable=false)
+     * @Assert\MaxLength(30)
+     */
+    protected $name;
+
+    /**
      * @ORM\ManyToMany(targetEntity="Role")
      * @ORM\JoinTable(name="access_group_role",
      *      joinColumns={@ORM\JoinColumn(name="group_id", referencedColumnName="id", onDelete="CASCADE")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="role_id", referencedColumnName="id", onDelete="CASCADE")}
      * )
      */
-    protected $collRoles;
+    protected $roles;
 
     /**
      * @param   string  $name  Group name
      * @param   array   $roles Array of Role objects
      */
-    public function __construct($name, $roles = array())
+    public function __construct($name = '', $roles = array())
     {
-        $this->name      = $name;
-        $this->collRoles = new ArrayCollection();
+        $this->name  = $name;
+        $this->roles = new ArrayCollection();
 
         $this->setRoles($roles);
     }
@@ -51,7 +59,7 @@ class Group extends BaseGroup
      */
     public function getRoles()
     {
-        return $this->collRoles->toArray();
+        return $this->roles->toArray();
     }
 
     /**
@@ -61,7 +69,7 @@ class Group extends BaseGroup
      */
     public function getRolesCollection()
     {
-        return $this->collRoles;
+        return $this->roles;
     }
 
     /**
@@ -106,7 +114,7 @@ class Group extends BaseGroup
         }
 
         if (!$this->hasRole($role->getRole())) {
-            $this->collRoles->add($role);
+            $this->roles->add($role);
         }
 
         return $this;
@@ -123,7 +131,7 @@ class Group extends BaseGroup
         $item = $this->getRole($role);
 
         if ($item) {
-            $this->collRoles->removeElement($item);
+            $this->roles->removeElement($item);
         }
 
         return $this;
@@ -138,7 +146,7 @@ class Group extends BaseGroup
      */
     public function setRoles(array $roles)
     {
-        $this->collRoles->clear();
+        $this->roles->clear();
 
         foreach ($roles as $role) {
             $this->addRole($role);
@@ -156,7 +164,7 @@ class Group extends BaseGroup
      */
     public function setRolesCollection(Collection $collection)
     {
-        $this->collRoles = $collection;
+        $this->roles = $collection;
 
         return $this;
     }

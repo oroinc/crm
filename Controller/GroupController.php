@@ -60,11 +60,11 @@ class GroupController extends Controller
    /**
     * @Route("/remove/{id}", name="oro_user_group_remove", requirements={"id"="\d+"})
     */
-    public function removeAction(Role $user)
+    public function removeAction(Group $entity)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $em->remove($user);
+        $em->remove($entity);
         $em->flush();
 
         $this->get('session')->getFlashBag()->add('success', 'Group successfully removed');
@@ -81,7 +81,7 @@ class GroupController extends Controller
         $query = $this
             ->getDoctrine()
             ->getEntityManager()
-            ->createQuery('SELECT g FROM OroUserBundle:Group g');
+            ->createQuery('SELECT g FROM OroUserBundle:Group g ORDER BY g.id');
 
         return array(
             'pager'  => $this->get('knp_paginator')->paginate($query, $page, $limit),
