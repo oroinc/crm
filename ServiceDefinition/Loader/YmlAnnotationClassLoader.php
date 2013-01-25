@@ -52,7 +52,14 @@ class YmlAnnotationClassLoader extends FileLoader
      */
     public function load($file, $type = null)
     {
+        if (!file_exists($file)) {
+            throw new \InvalidArgumentException(sprintf('File "%s" does not exist.', $file));
+        }
         $yml = Yaml::parse($file);
+
+        if (!isset($yml['classes'])) {
+            throw new \LogicException(sprintf('Variable "classes" does not exists in file "%s"', $file));
+        }
 
         $definition = new Definition\ServiceDefinition();
 
@@ -61,81 +68,89 @@ class YmlAnnotationClassLoader extends FileLoader
                 throw new \InvalidArgumentException(sprintf('Class "%s" does not exist.', $class));
             }
 
-            $class = new \ReflectionClass($class);
+            $this->loadDefinition(new \ReflectionClass($class), $definition);
+        }
 
-            $serviceMethodHeaders = array();
-            foreach ($this->reader->getClassAnnotations($class) as $annotation) {
-                if ($annotation instanceof Annotation\Header) {
-                    $serviceMethodHeaders[$annotation->getValue()] = $annotation;
-                }
+        return $definition;
+    }
+
+    /**
+     * Load definition from class
+     *
+     * @param \ReflectionClass                                         $class
+     * @param \BeSimple\SoapBundle\ServiceDefinition\ServiceDefinition $definition
+     *
+     * @throws \LogicException
+     */
+    private function loadDefinition(\ReflectionClass $class, Definition\ServiceDefinition $definition)
+    {
+        $serviceMethodHeaders = array();
+        foreach ($this->reader->getClassAnnotations($class) as $annotation) {
+            if ($annotation instanceof Annotation\Header) {
+                $serviceMethodHeaders[$annotation->getValue()] = $annotation;
+            }
+        }
+
+        foreach ($class->getMethods() as $method) {
+            $serviceArguments = $serviceHeaders = array();
+            $serviceMethod = $serviceReturn = null;
+
+            foreach ($serviceMethodHeaders as $annotation) {
+                $serviceHeaders[$annotation->getValue()] = new Definition\Header(
+                    $annotation->getValue(),
+                    $this->getArgumentType($method, $annotation)
+                );
             }
 
-            foreach ($class->getMethods() as $method) {
-                $serviceArguments = $serviceHeaders = array();
-                $serviceMethod = $serviceReturn = null;
-
-                foreach ($serviceMethodHeaders as $annotation) {
+            foreach ($this->reader->getMethodAnnotations($method) as $annotation) {
+                if ($annotation instanceof Annotation\Header) {
                     $serviceHeaders[$annotation->getValue()] = new Definition\Header(
                         $annotation->getValue(),
                         $this->getArgumentType($method, $annotation)
                     );
-                }
-
-                foreach ($this->reader->getMethodAnnotations($method) as $annotation) {
-                    if ($annotation instanceof Annotation\Header) {
-                        $serviceHeaders[$annotation->getValue()] = new Definition\Header(
-                            $annotation->getValue(),
-                            $this->getArgumentType($method, $annotation)
-                        );
-                    } elseif ($annotation instanceof Annotation\Param) {
-                        $serviceArguments[] = new Definition\Argument(
-                            $annotation->getValue(),
-                            $this->getArgumentType($method, $annotation)
-                        );
-                    } elseif ($annotation instanceof Annotation\Method) {
-                        if ($serviceMethod) {
-                            throw new \LogicException(sprintf(
-                                '@Soap\Method defined twice for "%s".',
-                                $method->getName()
-                            ));
-                        }
-
-                        $serviceMethod = new Definition\Method(
-                            $annotation->getValue(),
-                            $this->getController($class, $method, $annotation)
-                        );
-                    } elseif ($annotation instanceof Annotation\Result) {
-                        if ($serviceReturn) {
-                            throw new \LogicException(sprintf(
-                                '@Soap\Result defined twice for "%s".',
-                                $method->getName()
-                            ));
-                        }
-
-                        $serviceReturn = new Definition\Type($annotation->getPhpType(), $annotation->getXmlType());
+                } elseif ($annotation instanceof Annotation\Param) {
+                    $serviceArguments[] = new Definition\Argument(
+                        $annotation->getValue(),
+                        $this->getArgumentType($method, $annotation)
+                    );
+                } elseif ($annotation instanceof Annotation\Method) {
+                    if ($serviceMethod) {
+                        throw new \LogicException(sprintf(
+                            '@Soap\Method defined twice for "%s".',
+                            $method->getName()
+                        ));
                     }
-                }
-
-                if (!$serviceMethod && (!empty($serviceArguments) || $serviceReturn)) {
-                    throw new \LogicException(sprintf('@Soap\Method non-existent for "%s".', $method->getName()));
-                }
-
-                if ($serviceMethod) {
-                    $serviceMethod->setArguments($serviceArguments);
-                    $serviceMethod->setHeaders($serviceHeaders);
-
-                    if (!$serviceReturn) {
-                        throw new \LogicException(sprintf('@Soap\Result non-existent for "%s".', $method->getName()));
+                    $serviceMethod = new Definition\Method(
+                        $annotation->getValue(),
+                        $this->getController($class, $method, $annotation)
+                    );
+                } elseif ($annotation instanceof Annotation\Result) {
+                    if ($serviceReturn) {
+                        throw new \LogicException(sprintf(
+                            '@Soap\Result defined twice for "%s".',
+                            $method->getName()
+                        ));
                     }
-
-                    $serviceMethod->setReturn($serviceReturn);
-
-                    $definition->getMethods()->add($serviceMethod);
+                    $serviceReturn = new Definition\Type($annotation->getPhpType(), $annotation->getXmlType());
                 }
             }
-        }
 
-        return $definition;
+            if (!$serviceMethod && (!empty($serviceArguments) || $serviceReturn)) {
+                throw new \LogicException(sprintf('@Soap\Method non-existent for "%s".', $method->getName()));
+            }
+
+            if ($serviceMethod) {
+                $serviceMethod->setArguments($serviceArguments);
+                $serviceMethod->setHeaders($serviceHeaders);
+
+                if (!$serviceReturn) {
+                    throw new \LogicException(sprintf('@Soap\Result non-existent for "%s".', $method->getName()));
+                }
+                $serviceMethod->setReturn($serviceReturn);
+
+                $definition->getMethods()->add($serviceMethod);
+            }
+        }
     }
 
     /**
