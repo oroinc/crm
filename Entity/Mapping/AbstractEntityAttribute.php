@@ -53,6 +53,13 @@ abstract class AbstractEntityAttribute extends AbstractAttribute
     protected $backendStorage;
 
     /**
+     * @var string $frontendType
+     *
+     * @ORM\Column(name="frontend_type", type="string", length=255)
+     */
+    protected $frontendType;
+
+    /**
      * @var datetime $created
      *
      * @ORM\Column(type="datetime")

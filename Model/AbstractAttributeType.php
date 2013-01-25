@@ -31,4 +31,15 @@ abstract class AbstractAttributeType
     const BACKEND_TYPE_TEXT     = 'text';
     const BACKEND_TYPE_VARCHAR  = 'varchar';
 
+    /**
+     * Available frontend types
+     * @var string
+     */
+    const FRONTEND_TYPE_TEXTFIELD = 'Text Field';
+    const FRONTEND_TYPE_TEXTAREA  = 'Text Area';
+    const FRONTEND_TYPE_PRICE     = 'Price';
+    const FRONTEND_TYPE_DATE      = 'Date';
+    const FRONTEND_TYPE_LIST      = 'List';
+    const FRONTEND_TYPE_IMAGE     = 'Image';
+    const FRONTEND_TYPE_FILE      = 'File';
 }

@@ -82,17 +82,17 @@ class AttributeType extends AbstractType
     protected function addFieldFrontendType(FormBuilderInterface $builder)
     {
         $builder->add(
-            'backend_type',
+            'frontend_type',
             'choice',
             array(
                 'choices'  => array(
-                    AbstractAttributeType::BACKEND_TYPE_VARCHAR => self::FRONTEND_TYPE_TEXTFIELD,
-                    AbstractAttributeType::BACKEND_TYPE_TEXT    => self::FRONTEND_TYPE_TEXTAREA,
-                    AbstractAttributeType::BACKEND_TYPE_DECIMAL => self::FRONTEND_TYPE_PRICE,
-                    AbstractAttributeType::BACKEND_TYPE_DATE    => self::FRONTEND_TYPE_DATE,
-                    AbstractAttributeType::BACKEND_TYPE_OPTION  => self::FRONTEND_TYPE_LIST,
-//                     AbstractAttributeType::BACKEND_TYPE_VARCHAR => self::FRONTEND_TYPE_IMAGE,
-//                     AbstractAttributeType::BACKEND_TYPE_VARCHAR => self::FRONTEND_TYPE_FILE
+                    AbstractAttributeType::FRONTEND_TYPE_TEXTFIELD,
+                    AbstractAttributeType::FRONTEND_TYPE_TEXTAREA,
+                    AbstractAttributeType::FRONTEND_TYPE_PRICE,
+                    AbstractAttributeType::FRONTEND_TYPE_DATE,
+                    AbstractAttributeType::FRONTEND_TYPE_LIST,
+                    AbstractAttributeType::FRONTEND_TYPE_IMAGE,
+                    AbstractAttributeType::FRONTEND_TYPE_FILE
                 )
             )
         );

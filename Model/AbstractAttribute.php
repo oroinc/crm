@@ -41,6 +41,12 @@ abstract class AbstractAttribute implements TimestampableInterface
     protected $backendType;
 
     /**
+     * Kind of form field to set value in form
+     * @var string $frontendType
+     */
+    protected $frontendType;
+
+    /**
      * @var datetime $created
      */
     protected $created;
@@ -228,7 +234,7 @@ abstract class AbstractAttribute implements TimestampableInterface
     }
 
     /**
-     * Set type
+     * Set backend type
      *
      * @param string $type
      *
@@ -242,13 +248,55 @@ abstract class AbstractAttribute implements TimestampableInterface
     }
 
     /**
-     * Get type
+     * Get backend type
      *
      * @return string
      */
     public function getBackendType()
     {
         return $this->backendType;
+    }
+
+    /**
+     * Set frontend type
+     *
+     * @param string $type
+     *
+     * @return AbstractAttribute
+     */
+    public function setFrontendType($type)
+    {
+        echo "CALL FRONTEND TYPE";
+        $this->frontendType = $type;
+
+        switch ($type) {
+            case AbstractAttributeType::FRONTEND_TYPE_TEXTFIELD:
+                $this->setBackendStorage(AbstractAttributeType::BACKEND_STORAGE_ATTRIBUTE_VALUE);
+                $this->setBackendType(AbstractAttributeType::BACKEND_TYPE_VARCHAR);
+                break;
+            case AbstractAttributeType::FRONTEND_TYPE_DATE:
+                $this->setBackendStorage(AbstractAttributeType::BACKEND_STORAGE_ATTRIBUTE_VALUE);
+                $this->setBackendType(AbstractAttributeType::BACKEND_TYPE_DATETIME);
+                break;
+            case AbstractAttributeType::FRONTEND_TYPE_LIST:
+                $this->setBackendStorage(AbstractAttributeType::BACKEND_STORAGE_ATTRIBUTE_VALUE);
+                $this->setBackendType(AbstractAttributeType::BACKEND_TYPE_OPTION);
+                break;
+            default:
+                throw new \Exception('not yet implemented');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Get frontend type
+     *
+     * @return string
+     */
+    public function getFrontendType()
+    {
+        return $this->frontendType;
     }
 
     /**
