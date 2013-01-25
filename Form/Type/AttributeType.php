@@ -37,23 +37,18 @@ class AttributeType extends AbstractType
 
         $this->addFieldFrontendType($builder);
 
-        $builder->add('backend_storage', 'hidden', array(
-            'data' => AbstractAttributeType::BACKEND_STORAGE_ATTRIBUTE_VALUE
-        ));
-
         $this->addFieldRequired($builder);
 
         $this->addFieldUnique($builder);
-
-        $this->addFieldDefaultValue($builder);
-
-        $this->addFieldSearchable($builder);
 
         $this->addFieldTranslatable($builder);
 
         $this->addFieldScopable($builder);
 
-        // only on edit
+        $this->addFieldSearchable($builder);
+
+        $this->addFieldDefaultValue($builder);
+
         $this->addFieldOptions($builder);
     }
 
@@ -72,7 +67,8 @@ class AttributeType extends AbstractType
      */
     protected function addFieldCode(FormBuilderInterface $builder)
     {
-        $builder->add('code', 'text', array('required' => true));
+        $options = array('required' => true, 'read_only' => $builder->getData()->getId());
+        $builder->add('code', 'text', $options);
     }
 
     /**
@@ -81,22 +77,11 @@ class AttributeType extends AbstractType
      */
     protected function addFieldFrontendType(FormBuilderInterface $builder)
     {
-        $builder->add(
-            'frontend_type',
-            'choice',
-            array(
-                'choices'  => array(
-                    AbstractAttributeType::FRONTEND_TYPE_TEXTFIELD => AbstractAttributeType::FRONTEND_TYPE_TEXTFIELD,
-                    AbstractAttributeType::FRONTEND_TYPE_TEXTAREA => AbstractAttributeType::FRONTEND_TYPE_TEXTAREA,
-                    AbstractAttributeType::FRONTEND_TYPE_PRICE => AbstractAttributeType::FRONTEND_TYPE_PRICE,
-                    AbstractAttributeType::FRONTEND_TYPE_DATE => AbstractAttributeType::FRONTEND_TYPE_DATE,
-                    AbstractAttributeType::FRONTEND_TYPE_DATETIME => AbstractAttributeType::FRONTEND_TYPE_DATETIME,
-                    AbstractAttributeType::FRONTEND_TYPE_LIST => AbstractAttributeType::FRONTEND_TYPE_LIST,
-//                     'textfield' => AbstractAttributeType::FRONTEND_TYPE_IMAGE,
-//                     'textfield' => AbstractAttributeType::FRONTEND_TYPE_FILE
-                )
-            )
+        $options = array(
+            'choices'  => $this->getFrontendTypeChoices(),
+            'read_only' => $builder->getData()->getId()
         );
+        $builder->add('frontend_type', 'choice', $options);
     }
 
     /**
@@ -150,12 +135,7 @@ class AttributeType extends AbstractType
      */
     protected function addFieldScopable(FormBuilderInterface $builder)
     {
-        $builder->add('scopable', 'choice', array(
-            'choices' => array(
-                'Global',
-                'Channel'
-            )
-        ));
+        $builder->add('scopable', 'checkbox', array('required' => false));
     }
 
     /**
@@ -193,6 +173,25 @@ class AttributeType extends AbstractType
      */
     public function getName()
     {
-        return 'oro_flexibleentity_attributetype';
+        return 'oro_flexibleentity_attribute';
+    }
+
+    /**
+     * Return available frontend type
+     *
+     * @return array
+     */
+    public function getFrontendTypeChoices()
+    {
+        return array(
+            AbstractAttributeType::FRONTEND_TYPE_TEXTFIELD => AbstractAttributeType::FRONTEND_TYPE_TEXTFIELD,
+            AbstractAttributeType::FRONTEND_TYPE_TEXTAREA => AbstractAttributeType::FRONTEND_TYPE_TEXTAREA,
+            AbstractAttributeType::FRONTEND_TYPE_PRICE => AbstractAttributeType::FRONTEND_TYPE_PRICE,
+            AbstractAttributeType::FRONTEND_TYPE_DATE => AbstractAttributeType::FRONTEND_TYPE_DATE,
+            AbstractAttributeType::FRONTEND_TYPE_DATETIME => AbstractAttributeType::FRONTEND_TYPE_DATETIME,
+            AbstractAttributeType::FRONTEND_TYPE_LIST => AbstractAttributeType::FRONTEND_TYPE_LIST,
+            //                     'textfield' => AbstractAttributeType::FRONTEND_TYPE_IMAGE,
+            //                     'textfield' => AbstractAttributeType::FRONTEND_TYPE_FILE
+        );
     }
 }
