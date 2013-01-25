@@ -115,12 +115,17 @@ class Configuration implements ConfigurationInterface
                     ->end()
                 ->end()
 
-                ->arrayNode('form_type')
+                ->arrayNode('frontend')
                     ->children()
-                        ->scalarNode('field')
+                        ->scalarNode('field_type')
                         ->defaultValue('text')
                         ->end()
-                        ->scalarNode('options')
+                        // validate any field type options
+                        ->arrayNode('field_options')
+                            ->children()
+                                ->scalarNode('multiple')->end()
+                                // TODO: add them all ?
+                            ->end()
                         ->end()
                     ->end()
                 ->end()

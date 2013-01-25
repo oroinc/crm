@@ -1,58 +1,56 @@
 attributes_config:
     Text:
         backend:
-            storage: values
-            type:    string
-        form_type:
-            field:   text
-            options: ~
+            type:          string
+        frontend:
+            field_type:    text
+            field_options: ~
     Email:
         backend:
-            storage: values
-            type:    string
-        form_type:
-            field:   email
-            options: ~
+            type:          string
+        frontend:
+            field_type:    email
+            field_options: ~
     Url:
         backend:
-            storage: values
-            type:    string
-        form_type:
-            field:   url
-            options: ~
+            type:          string
+        frontend:
+            field_type:    url
+            field_options: ~
     Money:
         backend:
-            storage: values
-            type:    decimal
-        form_type:
-            field:   money
-            options: ~
+            type:          decimal
+        frontend:
+            field_type:    money
+            field_options: ~
     Metric:
         backend:
-            storage: values
-            type:    decimal
-        form_type:
-            field:   number
-            options: ~
+            type:          decimal
+        frontend:
+            field_type:    number
+            field_options: ~
     TextArea:
         backend:
-            storage: values
-            type:    text
-        form_type:
-            field:   textarea
-            options: ~
+            type:          text
+        frontend:
+            field_type:    textarea
+            field_options: ~
     Date:
         backend:
-            storage: values
-            type:    text
-        form_type:
-            field:   textarea
-            options: ~
+            type:          text
+        frontend:
+            field_type:    textarea
+            field_options: ~
     SimpleChoice:
         backend:
-            storage: values
-            type:    options
-        form_type:
-            field:   choice
-            options: ~
+            type:          options
+        frontend:
+            field_type:    choice
+            field_options: ~
+    MultipleChoice:
+        backend:
+            type:          options
+        frontend:
+            field_type:    choice
+            field_options: {multiple: true}
 
