@@ -6,7 +6,3 @@ oro_search_api:
         version: latest|v1
     defaults:
         version: latest
-
-oro_search_soap_api:
-    resource: "@BeSimpleSoapBundle/Resources/config/routing/webservicecontroller.xml"
-    prefix:   api/soap/
