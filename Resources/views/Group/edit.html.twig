@@ -1,0 +1,19 @@
+{% extends bap.layout is defined ? bap.layout : 'OroUserBundle::layout.html.twig' %}
+
+{% set title = form.vars.value.id ? 'Edit group' : 'Add group' %}
+
+{% block title %}{{ title }} - {{ parent() }}{% endblock %}
+
+{% block content %}
+<form action="{{ form.vars.value.id ? path('oro_user_group_edit', { id: form.vars.value.id }) : path('oro_user_group_create') }}" method="POST" class="form-register">
+    <fieldset>
+        <legend>{{ title }}</legend>
+
+        {{ form_widget(form) }}
+
+        <div class="form-row">
+            <button class="btn btn-large btn-primary" type="submit">Save</button>
+        </div>
+    </fieldset>
+</form>
+{% endblock %}

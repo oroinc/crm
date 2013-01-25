@@ -1,0 +1,40 @@
+{% extends bap.layout is defined ? bap.layout : 'OroUserBundle::layout.html.twig' %}
+
+{% block title %}Roles overview - {{ parent() }}{% endblock %}
+
+{% block content %}
+<h1>Roles overview <a class="btn btn-primary pull-right" href="{{ path('oro_user_role_create') }}">Add new</a></h1>
+
+{{ knp_pagination_render(pager) }}
+
+<table class="table table-bordered table-striped table-condensed">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Role name</th>
+            <th>Label</th>
+            <th style="width: 50px">Edit</th>
+            <th style="width: 50px">Remove</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for rec in pager %}
+        <tr>
+            <td><a href="{{ path('oro_user_role_edit', { id: rec.id }) }}">{{ rec.id }}</a></td>
+            <td><a href="{{ path('oro_user_role_edit', { id: rec.id }) }}">{{ rec.role }}</a></td>
+            <td><a href="{{ path('oro_user_role_edit', { id: rec.id }) }}">{{ rec.label }}</a></td>
+            <td><a href="{{ path('oro_user_role_edit', { id: rec.id }) }}"><i class="icon-edit"></i></a></td>
+            <td><a href="{{ path('oro_user_role_remove', { id: rec.id }) }}"><i class="icon-remove"></i></a></td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="100%">There are no roles.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{{ knp_pagination_render(pager) }}
+
+{% endblock %}

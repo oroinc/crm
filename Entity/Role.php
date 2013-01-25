@@ -44,6 +44,16 @@ class Role implements RoleInterface
     }
 
     /**
+     * Return the role id
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
      * Return the role name field
      *
      * @return string

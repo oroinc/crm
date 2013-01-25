@@ -1,0 +1,40 @@
+{% extends bap.layout is defined ? bap.layout : 'OroUserBundle::layout.html.twig' %}
+
+{% block title %}Groups overview - {{ parent() }}{% endblock %}
+
+{% block content %}
+<h1>Groups overview <a class="btn btn-primary pull-right" href="{{ path('oro_user_group_create') }}">Add new</a></h1>
+
+{{ knp_pagination_render(pager) }}
+
+<table class="table table-bordered table-striped table-condensed">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Group name</th>
+            <th>Roles</th>
+            <th style="width: 50px">Edit</th>
+            <th style="width: 50px">Remove</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for rec in pager %}
+        <tr>
+            <td><a href="{{ path('oro_user_group_edit', { id: rec.id }) }}">{{ rec.id }}</a></td>
+            <td><a href="{{ path('oro_user_group_edit', { id: rec.id }) }}">{{ rec.name }}</a></td>
+            <td></td>
+            <td><a href="{{ path('oro_user_group_edit', { id: rec.id }) }}"><i class="icon-edit"></i></a></td>
+            <td><a href="{{ path('oro_user_group_remove', { id: rec.id }) }}"><i class="icon-remove"></i></a></td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="100%">There are no groups.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{{ knp_pagination_render(pager) }}
+
+{% endblock %}

@@ -3,12 +3,9 @@
 namespace Oro\Bundle\UserBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Response;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-
-use JMS\SecurityExtraBundle\Annotation\Secure;
 
 use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttributeType;
 use Oro\Bundle\UserBundle\Entity\User;
@@ -101,7 +98,6 @@ class UserController extends Controller
 
    /**
     * @Route("/remove/{id}", name="oro_user_remove", requirements={"id"="\d+"})
-    * @Template
     */
     public function removeAction(User $user)
     {
