@@ -1,0 +1,7 @@
+services:
+    besimple.soap.definition.loader.yml_file:
+        class: Oro\Bundle\SoapBundle\ServiceDefinition\Loader\YmlAnnotationClassLoader
+        arguments: [@file_locator, @annotation_reader]
+        public: false
+        tags:
+          - { name: besimple.soap.definition.loader }
