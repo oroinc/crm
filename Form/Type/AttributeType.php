@@ -86,13 +86,13 @@ class AttributeType extends AbstractType
             'choice',
             array(
                 'choices'  => array(
-                    AbstractAttributeType::FRONTEND_TYPE_TEXTFIELD,
-                    AbstractAttributeType::FRONTEND_TYPE_TEXTAREA,
-                    AbstractAttributeType::FRONTEND_TYPE_PRICE,
-                    AbstractAttributeType::FRONTEND_TYPE_DATE,
-                    AbstractAttributeType::FRONTEND_TYPE_LIST,
-                    AbstractAttributeType::FRONTEND_TYPE_IMAGE,
-                    AbstractAttributeType::FRONTEND_TYPE_FILE
+                    'text' => AbstractAttributeType::FRONTEND_TYPE_TEXTFIELD,
+//                     'textarea' => AbstractAttributeType::FRONTEND_TYPE_TEXTAREA,
+//                     'decimal' => AbstractAttributeType::FRONTEND_TYPE_PRICE,
+                    'datetime' => AbstractAttributeType::FRONTEND_TYPE_DATE,
+                    'options' => AbstractAttributeType::FRONTEND_TYPE_LIST,
+//                     'textfield' => AbstractAttributeType::FRONTEND_TYPE_IMAGE,
+//                     'textfield' => AbstractAttributeType::FRONTEND_TYPE_FILE
                 )
             )
         );
