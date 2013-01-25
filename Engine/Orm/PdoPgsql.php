@@ -91,14 +91,18 @@ class PdoPgsql extends BaseDriver
      *
      * @param string $joinAlias
      * @param integer $index
+     * @param bool $useFieldName
      *
      * @return string
      */
-    protected function createStringQuery($joinAlias, $index)
+    protected function createStringQuery($joinAlias, $index, $useFieldName = true)
     {
-        return '(TsvectorTsquery(' .$joinAlias . '.value, :value' .$index. ')) = TRUE
-                        AND ' . $joinAlias . '.name = :field' .$index;
+        $stringQuery = '';
+        if ($useFieldName) {
+            $stringQuery = ' AND ' . $joinAlias . '.field = :field' .$index;
+        }
 
+        return '(TsvectorTsquery(' .$joinAlias . '.value, :value' .$index. ')) = TRUE' . $stringQuery;
     }
 
     /**

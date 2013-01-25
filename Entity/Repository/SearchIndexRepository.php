@@ -38,6 +38,18 @@ class SearchIndexRepository extends EntityRepository
     }
 
     /**
+     * Get count of records without limit parameters in query
+     *
+     * @param \Oro\Bundle\SearchBundle\Query\Query $query
+     *
+     * @return integer
+     */
+    public function getRecordsCount(Query $query)
+    {
+        return $this->getDriverRepo()->getRecordsCount($query);
+    }
+
+    /**
      * Set array with additional drivers
      *
      * @param array $drivers

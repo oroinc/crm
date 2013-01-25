@@ -50,10 +50,15 @@ abstract class AbstractEngine
 
     /**
      * Search query with query builder
+     * Must return array
+     * array(
+     *   'results' - array of Oro\Bundle\SearchBundle\Query\Result\Item objects
+     *   'records_count' - count of records without limit parameters in query
+     * )
      *
      * @param \Oro\Bundle\SearchBundle\Query\Query $query
      *
-     * @return \Oro\Bundle\SearchBundle\Query\Result\Item[]
+     * @return array
      */
     abstract protected function doSearch(Query $query);
 
@@ -66,7 +71,8 @@ abstract class AbstractEngine
      */
     public function search(Query $query)
     {
-        $result = new Result($query, $this->doSearch($query));
+        $searchResult = $this->doSearch($query);
+        $result = new Result($query, $searchResult['results'], $searchResult['records_count']);
         $this->logQuery($result);
         return $result;
     }

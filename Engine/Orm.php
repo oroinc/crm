@@ -54,6 +54,11 @@ class Orm extends AbstractEngine
     {
         $results = array();
         $searchResults = $this->getIndexRepo()->search($query);
+        if ($query->getMaxResults() > 0 || $query->getFirstResult() > 0) {
+            $recordsCount = $this->getIndexRepo()->getRecordsCount($query);
+        } else {
+            $recordsCount = count($searchResults);
+        }
         if ($searchResults) {
             foreach ($searchResults as $item) {
                 /** @var $item \Oro\Bundle\SearchBundle\Entity\Item  */
@@ -61,7 +66,10 @@ class Orm extends AbstractEngine
             }
         }
 
-        return $results;
+        return array(
+            'results' => $results,
+            'records_count' => $recordsCount
+        );
     }
 
     /**

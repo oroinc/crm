@@ -101,14 +101,18 @@ class PdoMysql extends BaseDriver
      *
      * @param string $joinAlias
      * @param integer $index
+     * @param bool $useFieldName
      *
      * @return string
      */
-    protected function createStringQuery($joinAlias, $index)
+    protected function createStringQuery($joinAlias, $index, $useFieldName = true)
     {
-        return 'MATCH_AGAINST(' .$joinAlias . '.value, :value' .$index. ' \'IN BOOLEAN MODE\') >0
-                        AND ' . $joinAlias . '.field = :field' .$index;
+        $stringQuery = '';
+        if ($useFieldName) {
+            $stringQuery = ' AND ' . $joinAlias . '.field = :field' .$index;
+        }
 
+        return 'MATCH_AGAINST(' .$joinAlias . '.value, :value' .$index. ' \'IN BOOLEAN MODE\') >0' . $stringQuery;
     }
 
     /**

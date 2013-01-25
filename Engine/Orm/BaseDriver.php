@@ -54,16 +54,8 @@ abstract class BaseDriver extends FunctionNode
      */
     public function search(Query $query)
     {
-        $qb = $this->createQueryBuilder('search');
-        $qb->andWhere($qb->expr()->in('search.entity', $query->getFrom()));
-
-        foreach ($query->getOptions() as $index => $searchCondition) {
-            if ($searchCondition['fieldType'] == 'text') {
-                $this->addTextField($qb, $index, $searchCondition);
-            } else {
-                $this->addNonTextField($qb, $index, $searchCondition);
-            }
-        }
+        $qb = $this->getRequestQB($query);
+        $qb->distinct(true);
 
         // set max results count
         if ($query->getMaxResults() > 0) {
@@ -80,6 +72,21 @@ abstract class BaseDriver extends FunctionNode
     }
 
     /**
+     * Get count of records without limit parameters in query
+     *
+     * @param \Oro\Bundle\SearchBundle\Query\Query $query
+     *
+     * @return integer
+     */
+    public function getRecordsCount(Query $query)
+    {
+        $qb = $this->getRequestQB($query);
+        $qb->select($qb->expr()->countDistinct('search.id'));
+
+        return (int) $qb->getQuery()->getSingleScalarResult();
+    }
+
+    /**
      * Add text search to qb
      *
      * @param \Doctrine\ORM\QueryBuilder $qb
@@ -90,14 +97,17 @@ abstract class BaseDriver extends FunctionNode
     {
         $joinAlias = 'textFields' . $index;
         $qb->join('search.textFields', $joinAlias);
+        $useFieldName = $searchCondition['fieldName'] == '*' ? false : true;
         if ($searchCondition['type'] == 'and') {
-            $qb->andWhere($this->createStringQuery($joinAlias, $index));
+            $qb->andWhere($this->createStringQuery($joinAlias, $index, $useFieldName));
             $this->setFieldValueStringParameter($qb, $index, $searchCondition['fieldValue']);
         } else {
-            $qb->orWhere($this->createStringQuery($joinAlias, $index));
+            $qb->orWhere($this->createStringQuery($joinAlias, $index, $useFieldName));
             $qb->setParameter('value' . $index, $searchCondition['fieldValue']);
         }
-        $qb->setParameter('field' . $index, $searchCondition['fieldName']);
+        if ($useFieldName) {
+            $qb->setParameter('field' . $index, $searchCondition['fieldName']);
+        }
     }
 
     /**
@@ -105,12 +115,17 @@ abstract class BaseDriver extends FunctionNode
      *
      * @param string  $joinAlias
      * @param integer $index
+     * @param bool    $useFieldName
      *
      * @return string
      */
-    protected function createStringQuery($joinAlias, $index)
+    protected function createStringQuery($joinAlias, $index, $useFieldName = true)
     {
-        return $joinAlias . '.field = :field' . $index . ' AND ' . $joinAlias . '.value LIKE :value' . $index;
+        $stringQuery = '';
+        if ($useFieldName) {
+            $stringQuery = $joinAlias . '.field = :field' . $index . ' AND ';
+        }
+        return $stringQuery . $joinAlias . '.value LIKE :value' . $index;
     }
 
     /**
@@ -158,5 +173,34 @@ abstract class BaseDriver extends FunctionNode
     protected function createNonTextQuery($joinAlias, $index)
     {
         return $joinAlias . '.field= :field' . $index . ' AND ' . $joinAlias . '.value = :value' . $index;
+    }
+
+    /**
+     * @param \Oro\Bundle\SearchBundle\Query\Query $query
+     *
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    protected function getRequestQB(Query $query)
+    {
+        $qb = $this->createQueryBuilder('search');
+        $useFrom = true;
+        foreach ($query->getFrom() as $from) {
+            if ($from == '*') {
+                $useFrom = false;
+            }
+        }
+        if ($useFrom) {
+            $qb->andWhere($qb->expr()->in('search.entity', $query->getFrom()));
+        }
+
+        foreach ($query->getOptions() as $index => $searchCondition) {
+            if ($searchCondition['fieldType'] == 'text') {
+                $this->addTextField($qb, $index, $searchCondition);
+            } else {
+                $this->addNonTextField($qb, $index, $searchCondition);
+            }
+        }
+
+        return $qb;
     }
 }

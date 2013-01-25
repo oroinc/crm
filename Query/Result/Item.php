@@ -3,21 +3,29 @@
 namespace Oro\Bundle\SearchBundle\Query\Result;
 
 use Doctrine\Common\Persistence\ObjectManager;
+use JMS\Serializer\Annotation\Type;
+use JMS\Serializer\Annotation\Exclude;
+use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 
 class Item
 {
     /**
      * @var string
+     * @Type("string")
+     * @Soap\ComplexType("string")
      */
     protected $entityName;
 
     /**
      * @var int
+     * @Type("integer")
+     * @Soap\ComplexType("int")
      */
     protected $recordId;
 
     /**
      * @var \Doctrine\Common\Persistence\ObjectManager
+     * @Exclude
      */
     protected $em;
 
@@ -85,5 +93,17 @@ class Item
     public function getEntity()
     {
         return $this->em->getRepository($this->getEntityName())->find($this->getRecordId());
+    }
+
+    /**
+     * @return array
+     */
+    public function toArray()
+    {
+        return array(
+            'entity_name' => $this->entityName,
+            'record_id' => $this->recordId,
+            'record_string' => $this->getEntity()->__toString()
+        );
     }
 }
