@@ -35,11 +35,11 @@ abstract class AbstractAttributeType
      * Available frontend types
      * @var string
      */
-    const FRONTEND_TYPE_TEXTFIELD = 'Text Field';
-    const FRONTEND_TYPE_TEXTAREA  = 'Text Area';
-    const FRONTEND_TYPE_PRICE     = 'Price';
-    const FRONTEND_TYPE_DATE      = 'Date';
-    const FRONTEND_TYPE_LIST      = 'List';
-    const FRONTEND_TYPE_IMAGE     = 'Image';
-    const FRONTEND_TYPE_FILE      = 'File';
+    const FRONTEND_TYPE_TEXTFIELD = 'text';
+    const FRONTEND_TYPE_TEXTAREA  = 'textarea';
+    const FRONTEND_TYPE_PRICE     = 'money';
+    const FRONTEND_TYPE_DATE      = 'date';
+    const FRONTEND_TYPE_DATETIME  = 'datetime';
+    const FRONTEND_TYPE_LIST      = 'choice';
+
 }
