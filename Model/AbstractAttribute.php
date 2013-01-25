@@ -266,13 +266,16 @@ abstract class AbstractAttribute implements TimestampableInterface
      */
     public function setFrontendType($type)
     {
-        echo "CALL FRONTEND TYPE";
         $this->frontendType = $type;
 
         switch ($type) {
             case AbstractAttributeType::FRONTEND_TYPE_TEXTFIELD:
                 $this->setBackendStorage(AbstractAttributeType::BACKEND_STORAGE_ATTRIBUTE_VALUE);
                 $this->setBackendType(AbstractAttributeType::BACKEND_TYPE_VARCHAR);
+                break;
+            case AbstractAttributeType::FRONTEND_TYPE_TEXTAREA:
+                $this->setBackendStorage(AbstractAttributeType::BACKEND_STORAGE_ATTRIBUTE_VALUE);
+                $this->setBackendType(AbstractAttributeType::BACKEND_TYPE_TEXT);
                 break;
             case AbstractAttributeType::FRONTEND_TYPE_DATE:
                 $this->setBackendStorage(AbstractAttributeType::BACKEND_STORAGE_ATTRIBUTE_VALUE);
@@ -281,6 +284,10 @@ abstract class AbstractAttribute implements TimestampableInterface
             case AbstractAttributeType::FRONTEND_TYPE_DATETIME:
                 $this->setBackendStorage(AbstractAttributeType::BACKEND_STORAGE_ATTRIBUTE_VALUE);
                 $this->setBackendType(AbstractAttributeType::BACKEND_TYPE_DATETIME);
+                break;
+            case AbstractAttributeType::FRONTEND_TYPE_PRICE:
+                $this->setBackendStorage(AbstractAttributeType::BACKEND_STORAGE_ATTRIBUTE_VALUE);
+                $this->setBackendType(AbstractAttributeType::BACKEND_TYPE_DECIMAL);
                 break;
             case AbstractAttributeType::FRONTEND_TYPE_LIST:
                 $this->setBackendStorage(AbstractAttributeType::BACKEND_STORAGE_ATTRIBUTE_VALUE);
