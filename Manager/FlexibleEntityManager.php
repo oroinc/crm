@@ -269,16 +269,39 @@ class FlexibleEntityManager extends SimpleEntityManager
 
     /**
      * Return a new instance
+     * @param boolean $withEmptyValues
+     *
      * @return Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityFlexible
      */
-    public function createEntity()
+    public function createEntity($withEmptyValues = false)
     {
         $class = $this->getEntityName();
         $object = new $class();
         $object->setLocale($this->getLocale());
         $object->setScope($this->getScope());
 
+        // link to empty attribute values
+        if ($generateAttributes) {
+            $this->createEmptyValues($object);
+        }
+
         return $object;
+    }
+
+    /**
+     * Create empty values linked to flexible attributes
+     * @param Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityFlexible $object
+     */
+    protected function createEmptyValues($object)
+    {
+        $values = array();
+        $attributes = $this->getAttributeRepository()->findAll();
+
+        foreach ($attributes as $attribute) {
+            $value = $this->createEntityValue();
+            $value->setAttribute($attribute);
+            $object->addValue($value);
+        }
     }
 
     /**
