@@ -122,6 +122,6 @@ class Role implements RoleInterface
      */
     public function __toString()
     {
-        return (string) $this->name;
+        return (string) $this->role;
     }
 }
