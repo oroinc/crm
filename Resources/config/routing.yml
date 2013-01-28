@@ -1,3 +1,6 @@
 oro_user_bundle:
     resource: "@OroUserBundle/Controller"
     type:     annotation
+
+fos_user_security:
+    resource: "@FOSUserBundle/Resources/config/routing/security.xml"

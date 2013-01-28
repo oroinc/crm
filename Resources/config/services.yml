@@ -14,6 +14,11 @@ services:
         class:                  %user_manager_class%
         arguments:              ["@security.encoder_factory", "@fos_user.util.username_canonicalizer", "@fos_user.util.email_canonicalizer", "@fos_user.entity_manager", %fos_user.model.user.class%]
 
+    oro_user.user_provider:
+        class:                  Oro\Bundle\UserBundle\Security\UserProvider
+        public:                 false
+        arguments:              ["@oro_user.user_manager"]
+
     oro_user.user_form:
         class:                  %user_form_class%
         arguments:              ["@oro_user.user_form_listener"]

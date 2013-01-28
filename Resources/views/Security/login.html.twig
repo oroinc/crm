@@ -3,7 +3,10 @@
 {% block content %}
 <div class="container">
     {% if error %}
-    <div>{{ error|trans({}, 'FOSUserBundle') }}</div>
+    <div class="alert alert-error">
+        <button data-dismiss="alert" class="close" type="button">×</button>
+        <div>{{ error|trans({}, 'FOSUserBundle') }}</div>
+    </div>
     {% endif %}
 
     <form action="{{ path('fos_user_security_check') }}" method="post" class="form-signin">
@@ -14,8 +17,8 @@
         </div>
         <fieldset>
             <div class="input-prepend">
-                <span class="add-on">{{ 'Username'|trans }}</span>
-                <input type="text" id="prependedInput" class="span2" name="_username" value="{{ last_username }}" required="required" placeholder="{{ 'Username'|trans }}" />
+                <span class="add-on">{{ 'Login'|trans }}</span>
+                <input type="text" id="prependedInput" class="span2" name="_username" value="{{ last_username }}" required="required" placeholder="{{ 'Username or Email'|trans }}" />
             </div>
             <div class="input-prepend">
                 <span class="add-on">{{ 'Password'|trans }}</span>
