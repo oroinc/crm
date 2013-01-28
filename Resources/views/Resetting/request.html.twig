@@ -1,5 +1,7 @@
 {% extends bap.layout is defined ? bap.layout : 'OroUserBundle::layout.html.twig' %}
 
+{% block title %}{{ 'Password reset request'|trans }} - {{ parent() }}{% endblock %}
+
 {% block content %}
 <form action="{{ path('fos_user_resetting_send_email') }}" method="POST" class="form-pass-reset">
     <h2 class="form-signin-heading">{{ 'Password reset request'|trans }}</h2>

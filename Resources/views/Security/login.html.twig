@@ -1,5 +1,7 @@
 {% extends bap.layout is defined ? bap.layout : 'OroUserBundle::layout.html.twig' %}
 
+{% block title %}{{ 'Login'|trans }} - {{ parent() }}{% endblock %}
+
 {% block content %}
 <div class="container">
     {% if error %}
@@ -31,9 +33,7 @@
             </div>
             <button type="submit" class="btn btn-large btn-primary" id="_submit" name="_submit">{{ 'Log in'|trans }}</button>
             <div class="form-row">
-                <a href="#">{{ 'Forgot your username?'|trans }}</a>
-                <span class="divider-vertical">|</span>
-                <a href="#">{{ 'Forgot your password?'|trans }}</a>
+                <a href="{{ path('fos_user_resetting_request') }}">{{ 'Forgot your password?'|trans }}</a>
             </div>
         </fieldset>
         <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />

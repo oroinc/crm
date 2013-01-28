@@ -641,7 +641,7 @@ class User extends AbstractEntityFlexible implements UserInterface, GroupableInt
 
     public function isPasswordRequestNonExpired($ttl)
     {
-        return true;
+        return null != $this->getConfirmationToken();
     }
 
     /**

@@ -1,0 +1,9 @@
+{% extends bap.layout is defined ? bap.layout : 'OroUserBundle::layout.html.twig' %}
+
+{% block title %}{{ 'Password reset - check Email'|trans }} - {{ parent() }}{% endblock %}
+
+{% block content %}
+<div class="alert alert-success">
+    {{ 'resetting.check_email'|trans({'%email%': email}, 'FOSUserBundle') }}
+</div>
+{% endblock %}

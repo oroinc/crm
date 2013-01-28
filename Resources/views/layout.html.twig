@@ -41,8 +41,8 @@
                             {% set type = 'success' %}
                             {% set domain = 'FOSUserBundle' %}
                         {% endif %}
-                        <div class="alert{{ type ? ' alert-'~type : '' }} fade in {{ class|default('') }}">
-                        <a class="close" data-dismiss="alert" href="#">×</a>
+                        <div class="alert{{ type ? ' alert-'~type : '' }} fade in">
+                        <a class="close" data-dismiss="alert" href="javascript: void(0);">×</a>
                         {{ message|trans({}, domain|default('messages'))|raw }}
                         </div>
                     {% endfor %}
