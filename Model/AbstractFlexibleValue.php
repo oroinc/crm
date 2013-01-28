@@ -50,6 +50,20 @@ abstract class AbstractFlexibleValue implements FlexibleValueInterface
     }
 
     /**
+     * Set id
+     *
+     * @param integer $id
+     *
+     * @return AbstractFlexibleValue
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    /**
      * Set data
      *
      * @param string $data

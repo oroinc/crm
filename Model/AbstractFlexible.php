@@ -41,6 +41,20 @@ abstract class AbstractFlexible implements FlexibleEntityInterface, Timestampabl
     }
 
     /**
+     * Set id
+     *
+     * @param integer $id
+     *
+     * @return AbstractFlexible
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    /**
      * Get created datetime
      *
      * @return datetime
