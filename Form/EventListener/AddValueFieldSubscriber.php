@@ -1,6 +1,10 @@
 <?php
 namespace Oro\Bundle\FlexibleEntityBundle\Form\EventListener;
 
+use Oro\Bundle\FlexibleEntityBundle\Entity\Attribute;
+
+use Doctrine\ORM\EntityRepository;
+
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -53,65 +57,101 @@ class AddValueFieldSubscriber implements EventSubscriberInterface
      */
     public function preSetData(FormEvent $event)
     {
-        $data = $event->getData();
+        $value = $event->getData();
         $form = $event->getForm();
-
-        // During form creation setData() is called with null as an argument
-        // by the FormBuilder constructor. You're only concerned with when
-        // setData is called with an actual Entity object in it (whether new
-        // or fetched with Doctrine). This if statement lets you skip right
-        // over the null condition.
-        if (null === $data) {
+        // skip form creation with no value
+        if (null === $value) {
             return;
         }
-
         // configure and add relevant form field type
+        $attribute = $value->getAttribute();
+        $fieldName = 'data'; // for classic backend type
         $options = array(
-            'required' => $data->getAttribute()->getRequired(),
+            'required' => $attribute->getRequired(),
             'property_path' => true,
-            'label' => $data->getAttribute()->getCode()
+            'label' => $attribute->getCode()
         );
-
-        switch ($data->getAttribute()->getBackendType()) {
+        // configuration depends on field type
+        switch ($attribute->getFrontendType()) {
             case AbstractAttributeType::FRONTEND_TYPE_DATE:
                 $type = 'date';
-
                 $options['widget'] = 'single_text';
                 $options['input'] = 'datetime';
                 $options['attr'] = array(
                     'class' => 'datepicker input-small',
                     'placeholder' => 'YYYY-MM-DD',
                 );
+                $default = $value->getData();
 
                 break;
-/*
-                case AbstractAttributeType::FRONTEND_TYPE_TEXTFIELD:
-                    $type = 'integer';
 
-                    $options['attr'] = array(
-                        'class' => 'input-small',
-                    );
+            case AbstractAttributeType::FRONTEND_TYPE_DATETIME:
+                $type = 'date';
+                $options['widget'] = 'single_text';
+                $options['input'] = 'datetime';
+                $options['attr'] = array(
+                    'class' => 'datepicker input-small',
+                    'placeholder' => 'YYYY-MM-DD',
+                );
+                $default = $value->getData();
 
-                    break;*/
-/*
-                case AbstractAttributeType::FRONTEND_TYPE_LIST:
-                    $type = 'choice';
+                break;
 
-                    $options['choices'] = array();
 
-                    foreach ($data->getOptions() as $option) {
-                        $options['choices'][$option->getId()] = $option->getValue();
-                    }
+            case AbstractAttributeType::FRONTEND_TYPE_TEXTAREA:
+                $type = 'textarea';
+                $default = $value->getData();
 
-                    break;*/
+                break;
+
+
+            case AbstractAttributeType::FRONTEND_TYPE_PRICE:
+                $type = 'money';
+                $options['currency']= $value->getCurrency();
+                $default = $value->getData();
+
+                break;
+
+            case AbstractAttributeType::FRONTEND_TYPE_LIST:
+
+                $fieldName = 'option';
+                $type = 'entity';
+                // radio buttons (one option)
+                $options['expanded'] = true;
+                $options['multiple'] = false;
+                // TODO : get from flexible manager config ?
+                $options['class'] = 'OroFlexibleEntityBundle:AttributeOption';
+                $options['query_builder'] = function(EntityRepository $er) use ($attribute) {
+                    return $er->createQueryBuilder('opt')->where('opt.attribute = '.$attribute->getId());
+                };
+                $default = $value->getOption();
+
+                break;
+
+            case AbstractAttributeType::FRONTEND_TYPE_MULTILIST:
+
+                $fieldName = 'options';
+                $type = 'entity';
+                // checkbox buttons (many options)
+                $options['expanded'] = true;
+                $options['multiple'] = true;
+                // TODO : get from flexible manager config ?
+                $options['class'] = 'OroFlexibleEntityBundle:AttributeOption';
+                $options['query_builder'] = function(EntityRepository $er) use ($attribute) {
+                    return $er->createQueryBuilder('opt')->where('opt.attribute = '.$attribute->getId());
+                };
+                $default = $value->getOptions();
+
+                break;
 
             case AbstractAttributeType::FRONTEND_TYPE_TEXTFIELD:
             default:
                 $type = 'text';
+                $default = $value->getData();
 
                 break;
         }
 
-        $form->add($this->factory->createNamed('data', $type, $data->getData(), $options));
+        $form->add($this->factory->createNamed($fieldName, $type, $default, $options));
     }
 }

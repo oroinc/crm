@@ -1,5 +1,5 @@
 <?php
-namespace Pim\Bundle\FlexibleProductBundle\Form\Type;
+namespace Oro\Bundle\FlexibleEntityBundle\Form\Type;
 
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
@@ -25,7 +25,7 @@ class AttributeOptionValueType extends AbstractType
     {
         $this->addFieldId($builder);
 
-        $this->addFieldLocaleCode($builder);
+//        $this->addFieldLocaleCode($builder);
 
         $this->addFieldValue($builder);
     }
@@ -74,6 +74,6 @@ class AttributeOptionValueType extends AbstractType
      */
     public function getName()
     {
-        return 'pim_flexibleproduct_productattribute';
+        return 'oro_flexibleentity_attribute_option_value';
     }
 }

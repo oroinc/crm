@@ -1,12 +1,11 @@
 <?php
 namespace Oro\Bundle\FlexibleEntityBundle\Form\Type;
 
-use Oro\Bundle\FlexibleEntityBundle\Form\EventListener\AddValueFieldSubscriber;
-
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Oro\Bundle\FlexibleEntityBundle\Form\EventListener\AddValueFieldSubscriber;
 
 /**
  * Base flexible value form type
@@ -18,6 +17,22 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  */
 class FlexibleValueType extends AbstractType
 {
+
+    /**
+     * @var string
+     */
+    protected $valueClass;
+
+
+    /**
+     * Construct with full name of concrete impl of value class
+     *
+     * @param string $valueClass flexible value class
+     */
+    public function __construct($valueClass)
+    {
+        $this->valueClass = $valueClass;
+    }
 
     /**
      * {@inheritdoc}
@@ -37,7 +52,7 @@ class FlexibleValueType extends AbstractType
     {
         $resolver->setDefaults(
             array(
-                'data_class' => 'Acme\Bundle\DemoFlexibleEntityBundle\Entity\CustomerValue'
+                'data_class' => $this->valueClass
             )
         );
     }

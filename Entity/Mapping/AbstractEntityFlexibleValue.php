@@ -181,7 +181,7 @@ abstract class AbstractEntityFlexibleValue extends AbstractFlexibleValue
         if ($data instanceof \Doctrine\ORM\PersistentCollection) {
             // one to many
             if (count($data) <= 1) {
-                return $data->current();;
+                return $data->current();
             // many to many
             } else {
                 $items = array();
@@ -214,7 +214,7 @@ abstract class AbstractEntityFlexibleValue extends AbstractFlexibleValue
      */
     public function getOption()
     {
-        return $this->options->current();
+        return $this->options->first();
     }
 
     /**

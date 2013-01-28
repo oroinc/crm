@@ -23,13 +23,20 @@ class FlexibleType extends AbstractType
     protected $flexibleClass;
 
     /**
-     * Construct with full name of concrete impl of customer class
-     *
-     * @param string $flexibleClass
+     * @var string
      */
-    public function __construct($flexibleClass)
+    protected $valueClass;
+
+    /**
+     * Construct with full name of concrete impl of flexible entity class
+     *
+     * @param string $flexibleClass flexible entity class
+     * @param string $valueClass    flexible value class
+     */
+    public function __construct($flexibleClass, $valueClass)
     {
         $this->flexibleClass = $flexibleClass;
+        $this->valueClass = $valueClass;
     }
 
     /**
@@ -59,7 +66,7 @@ class FlexibleType extends AbstractType
     public function addDynamicAttributesFields(FormBuilderInterface $builder)
     {
         $builder->add('values', 'collection', array(
-                'type'         => new FlexibleValueType(),
+                'type'         => new FlexibleValueType($this->valueClass),
                 'allow_add'    => true,
                 'allow_delete' => true,
                 'by_reference' => false

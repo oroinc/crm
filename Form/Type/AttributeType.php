@@ -190,6 +190,7 @@ class AttributeType extends AbstractType
             AbstractAttributeType::FRONTEND_TYPE_DATE => AbstractAttributeType::FRONTEND_TYPE_DATE,
             AbstractAttributeType::FRONTEND_TYPE_DATETIME => AbstractAttributeType::FRONTEND_TYPE_DATETIME,
             AbstractAttributeType::FRONTEND_TYPE_LIST => AbstractAttributeType::FRONTEND_TYPE_LIST,
+            AbstractAttributeType::FRONTEND_TYPE_MULTILIST => AbstractAttributeType::FRONTEND_TYPE_LIST,
             //                     'textfield' => AbstractAttributeType::FRONTEND_TYPE_IMAGE,
             //                     'textfield' => AbstractAttributeType::FRONTEND_TYPE_FILE
         );

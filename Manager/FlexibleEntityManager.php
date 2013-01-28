@@ -280,8 +280,8 @@ class FlexibleEntityManager extends SimpleEntityManager
         $object->setLocale($this->getLocale());
         $object->setScope($this->getScope());
 
-        // link to empty attribute values
-        if ($generateAttributes) {
+        // add empty attribute values
+        if ($withEmptyValues) {
             $this->createEmptyValues($object);
         }
 
@@ -295,7 +295,7 @@ class FlexibleEntityManager extends SimpleEntityManager
     protected function createEmptyValues($object)
     {
         $values = array();
-        $attributes = $this->getAttributeRepository()->findAll();
+        $attributes = $this->getAttributeRepository()->findBy(array('entityType' => $this->getEntityName()));
 
         foreach ($attributes as $attribute) {
             $value = $this->createEntityValue();

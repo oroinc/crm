@@ -293,6 +293,10 @@ abstract class AbstractAttribute implements TimestampableInterface
                 $this->setBackendStorage(AbstractAttributeType::BACKEND_STORAGE_ATTRIBUTE_VALUE);
                 $this->setBackendType(AbstractAttributeType::BACKEND_TYPE_OPTION);
                 break;
+            case AbstractAttributeType::FRONTEND_TYPE_MULTILIST:
+                $this->setBackendStorage(AbstractAttributeType::BACKEND_STORAGE_ATTRIBUTE_VALUE);
+                $this->setBackendType(AbstractAttributeType::BACKEND_TYPE_OPTION);
+                break;
             default:
                 throw new \Exception('not yet implemented '.$type);
         }

@@ -41,5 +41,6 @@ abstract class AbstractAttributeType
     const FRONTEND_TYPE_DATE      = 'date';
     const FRONTEND_TYPE_DATETIME  = 'datetime';
     const FRONTEND_TYPE_LIST      = 'choice';
+    const FRONTEND_TYPE_MULTILIST = 'multichoice';
 
 }

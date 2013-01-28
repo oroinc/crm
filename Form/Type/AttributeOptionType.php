@@ -1,5 +1,5 @@
 <?php
-namespace Pim\Bundle\FlexibleProductBundle\Form\Type;
+namespace Oro\Bundle\FlexibleEntityBundle\Form\Type;
 
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
@@ -25,9 +25,9 @@ class AttributeOptionType extends AbstractType
     {
         $this->addFieldId($builder);
 
-        $this->addFieldSortOrder($builder);
+//        $this->addFieldSortOrder($builder);
 
-        $this->addFieldTranslatable($builder);
+//        $this->addFieldTranslatable($builder);
 
         $this->addFieldOptionValues($builder);
     }
@@ -65,6 +65,7 @@ class AttributeOptionType extends AbstractType
      */
     protected function addFieldOptionValues(FormBuilderInterface $builder)
     {
+        /*
         $builder->add(
             'optionValues', 'collection', array(
                 'type'         => new AttributeOptionValueType(),
@@ -73,6 +74,7 @@ class AttributeOptionType extends AbstractType
                 'by_reference' => false
             )
         );
+        */
     }
 
     /**
@@ -92,6 +94,6 @@ class AttributeOptionType extends AbstractType
      */
     public function getName()
     {
-        return 'pim_flexibleproduct_productattribute';
+        return 'oro_flexibleentity_attribute_option';
     }
 }
