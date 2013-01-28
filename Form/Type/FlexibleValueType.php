@@ -1,6 +1,8 @@
 <?php
 namespace Oro\Bundle\FlexibleEntityBundle\Form\Type;
 
+use Oro\Bundle\FlexibleEntityBundle\Form\EventListener\AddValueFieldSubscriber;
+
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -24,28 +26,8 @@ class FlexibleValueType extends AbstractType
     {
         $builder->add('id', 'hidden');
 
-/*
-var_dump($options); exit();
-var_dump($builder->getData()); exit();
-*/
-
-/*        $value = $options['data'];
-        $backendType = $value->getAttribute()->getBackendType();
-        */
-
-        $fieldAlias = 'text';
-/*
-        switch($backendType) {
-
-            case 'varchar':
-                $fieldAlias = 'text'; break;
-            case 'date':
-                $fieldAlias = 'date'; break;
-            default:
-                $fieldAlias = 'text'; break;
-        }
-*/
-        $builder->add('data', $fieldAlias);
+        $subscriber = new AddValueFieldSubscriber($builder->getFormFactory());
+        $builder->addEventSubscriber($subscriber);
     }
 
     /**

@@ -58,9 +58,6 @@ class FlexibleType extends AbstractType
      */
     public function addDynamicAttributesFields(FormBuilderInterface $builder)
     {
-
-// TODO        extends collection type !
-
         $builder->add('values', 'collection', array(
                 'type'         => new FlexibleValueType(),
                 'allow_add'    => true,
@@ -68,15 +65,6 @@ class FlexibleType extends AbstractType
                 'by_reference' => false
             )
         );
-
-        // add dynamic values
-        /*
-         foreach ($builder->getData()->getValues() as $value) {
-
-        echo $value->getAttribute()->getCode();
-
-        }*/
-
     }
 
     /**
