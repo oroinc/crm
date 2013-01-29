@@ -3,6 +3,7 @@ namespace Oro\Bundle\FlexibleEntityBundle\Listener;
 
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LifecycleEventArgs;
+use Oro\Bundle\FlexibleEntityBundle\Model\Behavior\TimestampableInterface;
 
 /**
  * Aims to add timestambable behavior
@@ -33,7 +34,7 @@ class TimestampableListener implements EventSubscriber
     public function prePersist(LifecycleEventArgs $args)
     {
         $entity = $args->getEntity();
-        if ($entity instanceof \Oro\Bundle\FlexibleEntityBundle\Model\Behavior\TimestampableInterface) {
+        if ($entity instanceof TimestampableInterface) {
             $entity->setCreated(new \DateTime());
             $entity->setUpdated(new \DateTime());
         }

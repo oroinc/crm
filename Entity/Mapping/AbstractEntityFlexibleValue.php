@@ -5,6 +5,7 @@ use Oro\Bundle\FlexibleEntityBundle\Model\AbstractFlexible;
 use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttribute;
 use Oro\Bundle\FlexibleEntityBundle\Model\AbstractFlexibleValue;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Base Doctrine ORM entity attribute value
@@ -137,7 +138,7 @@ abstract class AbstractEntityFlexibleValue extends AbstractFlexibleValue
      */
     public function __construct()
     {
-        $this->options = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->options = new ArrayCollection();
     }
 
     /**

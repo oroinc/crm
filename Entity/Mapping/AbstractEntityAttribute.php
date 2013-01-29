@@ -4,6 +4,7 @@ namespace Oro\Bundle\FlexibleEntityBundle\Entity\Mapping;
 use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttribute;
 use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttributeOption;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Base Doctrine ORM entity attribute
@@ -115,7 +116,7 @@ abstract class AbstractEntityAttribute extends AbstractAttribute
      */
     public function __construct()
     {
-        $this->options      = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->options      = new ArrayCollection();
         $this->required     = false;
         $this->unique       = false;
         $this->defaultValue = null;

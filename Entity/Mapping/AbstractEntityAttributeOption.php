@@ -2,6 +2,7 @@
 namespace Oro\Bundle\FlexibleEntityBundle\Entity\Mapping;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttributeOption;
 use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttributeOptionValue;
 use Oro\Bundle\FlexibleEntityBundle\Model\Behavior\TranslatableContainerInterface;
@@ -60,7 +61,7 @@ abstract class AbstractEntityAttributeOption extends AbstractAttributeOption imp
      */
     public function __construct()
     {
-        $this->optionValues = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->optionValues = new ArrayCollection();
         $this->translatable = false;
         $this->sortOrder    = 1;
     }

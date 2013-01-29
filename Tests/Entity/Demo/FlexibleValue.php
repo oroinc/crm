@@ -4,6 +4,7 @@ namespace Oro\Bundle\FlexibleEntityBundle\Tests\Entity\Demo;
 use Oro\Bundle\FlexibleEntityBundle\Model\Behavior\HasDefaultValueInterface;
 use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityFlexibleValue;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * A concret flexible attribue value class
@@ -34,7 +35,7 @@ class FlexibleValue extends AbstractEntityFlexibleValue implements HasDefaultVal
     /**
      * Store options values
      *
-     * @var options ArrayCollection
+     * @var ArrayCollection options
      *
      * @ORM\ManyToMany(targetEntity="Oro\Bundle\FlexibleEntityBundle\Entity\AttributeOption")
      */

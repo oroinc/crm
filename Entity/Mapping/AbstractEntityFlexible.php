@@ -4,6 +4,7 @@ namespace Oro\Bundle\FlexibleEntityBundle\Entity\Mapping;
 use Oro\Bundle\FlexibleEntityBundle\Model\Behavior\FlexibleValueInterface;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 use Oro\Bundle\FlexibleEntityBundle\Model\AbstractFlexible;
 use Oro\Bundle\FlexibleEntityBundle\Model\AbstractFlexibleValue;
 use Oro\Bundle\FlexibleEntityBundle\Model\Behavior\TranslatableContainerInterface;
@@ -66,7 +67,7 @@ abstract class AbstractEntityFlexible extends AbstractFlexible implements Transl
      */
     public function __construct()
     {
-        $this->values = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->values = new ArrayCollection();
     }
 
     /**
