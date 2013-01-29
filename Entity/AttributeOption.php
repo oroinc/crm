@@ -23,7 +23,6 @@ class AttributeOption extends AbstractEntityAttributeOption
      * @var Attribute $attribute
      *
      * @ORM\ManyToOne(targetEntity="Attribute")
-     * @ORM\JoinColumn(name="attribute_id", nullable=false, onDelete="CASCADE", referencedColumnName="id")
      */
     protected $attribute;
 

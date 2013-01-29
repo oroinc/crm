@@ -111,12 +111,6 @@ abstract class AbstractEntityAttribute extends AbstractAttribute
     protected $options;
 
     /**
-     * Used locale to override Translation listener's locale
-     * this is not a mapped attribute of entity metadata, just a simple property
-     */
-    protected $locale;
-
-    /**
      * Constructor
      */
     public function __construct()

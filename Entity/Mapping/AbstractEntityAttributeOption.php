@@ -29,7 +29,6 @@ abstract class AbstractEntityAttributeOption extends AbstractAttributeOption imp
      * @var Attribute $attribute
      *
      * @ORM\ManyToOne(targetEntity="AbstractEntityAttribute")
-     * @ORM\JoinColumn(name="attribute_id", nullable=false, onDelete="CASCADE", referencedColumnName="id")
      */
     protected $attribute;
 

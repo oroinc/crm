@@ -11,4 +11,36 @@ namespace Oro\Bundle\FlexibleEntityBundle\Model\Behavior;
  */
 interface FlexibleEntityInterface
 {
+
+    /**
+     * Add value
+     *
+     * @param FlexibleValueInterface $value
+     *
+     * @return FlexibleEntityInterface
+     */
+    public function addValue(FlexibleValueInterface $value);
+
+    /**
+     * Remove value
+     *
+     * @param FlexibleValueInterface $value
+     */
+    public function removeValue(FlexibleValueInterface $value);
+
+    /**
+     * Get values
+     *
+     * @return \ArrayAccess
+     */
+    public function getValues();
+
+    /**
+     * Get value related to attribute code
+     *
+     * @param string $attributeCode
+     *
+     * @return FlexibleValueInterface
+     */
+    public function getValue($attributeCode);
 }

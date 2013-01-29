@@ -1,6 +1,8 @@
 <?php
 namespace Oro\Bundle\FlexibleEntityBundle\Entity\Mapping;
 
+use Oro\Bundle\FlexibleEntityBundle\Model\Behavior\FlexibleValueInterface;
+
 use Doctrine\ORM\Mapping as ORM;
 use Oro\Bundle\FlexibleEntityBundle\Model\AbstractFlexible;
 use Oro\Bundle\FlexibleEntityBundle\Model\AbstractFlexibleValue;
@@ -116,11 +118,11 @@ abstract class AbstractEntityFlexible extends AbstractFlexible implements Transl
     /**
      * Add value, override to deal with relation owner side
      *
-     * @param AbstractFlexibleValue $value
+     * @param FlexibleValueInterface $value
      *
-     * @return AbstractFlexible
+     * @return AbstractEntityFlexible
      */
-    public function addValue(AbstractFlexibleValue $value)
+    public function addValue(FlexibleValueInterface $value)
     {
         $this->values[] = $value;
         $value->setEntity($this);
@@ -131,9 +133,9 @@ abstract class AbstractEntityFlexible extends AbstractFlexible implements Transl
     /**
      * Remove value
      *
-     * @param EntityAttributeValue $value
+     * @param FlexibleValueInterface $value
      */
-    public function removeValue(AbstractFlexibleValue $value)
+    public function removeValue(FlexibleValueInterface $value)
     {
         $this->values->removeElement($value);
     }
@@ -153,7 +155,7 @@ abstract class AbstractEntityFlexible extends AbstractFlexible implements Transl
      *
      * @param string $attributeCode
      *
-     * @return mixed|NULL
+     * @return FlexibleValueInterface
      */
     public function getValue($attributeCode)
     {

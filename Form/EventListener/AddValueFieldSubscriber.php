@@ -67,9 +67,9 @@ class AddValueFieldSubscriber implements EventSubscriberInterface
         $attribute = $value->getAttribute();
         $fieldName = 'data'; // for classic backend type
         $options = array(
-            'required' => $attribute->getRequired(),
+            'required'      => $attribute->getRequired(),
             'property_path' => true,
-            'label' => $attribute->getCode()
+            'label'         => $attribute->getCode()
         );
         // configuration depends on field type
         switch ($attribute->getFrontendType()) {
@@ -82,6 +82,8 @@ class AddValueFieldSubscriber implements EventSubscriberInterface
                     'placeholder' => 'YYYY-MM-DD',
                 );
                 $default = $value->getData();
+                // set default value from attribute
+                $default = is_null($default) ? $attribute->getDefaultValue() : $default;
 
                 break;
 
@@ -94,6 +96,8 @@ class AddValueFieldSubscriber implements EventSubscriberInterface
                     'placeholder' => 'YYYY-MM-DD',
                 );
                 $default = $value->getData();
+                // set default value from attribute
+                $default = is_null($default) ? $attribute->getDefaultValue() : $default;
 
                 break;
 
@@ -101,6 +105,8 @@ class AddValueFieldSubscriber implements EventSubscriberInterface
             case AbstractAttributeType::FRONTEND_TYPE_TEXTAREA:
                 $type = 'textarea';
                 $default = $value->getData();
+                // set default value from attribute
+                $default = is_null($default) ? $attribute->getDefaultValue() : $default;
 
                 break;
 
@@ -109,6 +115,8 @@ class AddValueFieldSubscriber implements EventSubscriberInterface
                 $type = 'money';
                 $options['currency']= $value->getCurrency();
                 $default = $value->getData();
+                // set default value from attribute
+                $default = is_null($default) ? $attribute->getDefaultValue() : $default;
 
                 break;
 
@@ -148,6 +156,8 @@ class AddValueFieldSubscriber implements EventSubscriberInterface
             default:
                 $type = 'text';
                 $default = $value->getData();
+                // set default value from attribute
+                $default = is_null($default) ? $attribute->getDefaultValue() : $default;
 
                 break;
         }

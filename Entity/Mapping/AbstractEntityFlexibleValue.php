@@ -29,6 +29,7 @@ abstract class AbstractEntityFlexibleValue extends AbstractFlexibleValue
      * @var Attribute $attribute
      *
      * @ORM\ManyToOne(targetEntity="AbstractEntityAttribute")
+     * @ORM\JoinColumn(name="attribute_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected $attribute;
 
