@@ -3,6 +3,7 @@ namespace Oro\Bundle\FlexibleEntityBundle\Model\AttributeType;
 
 use Doctrine\ORM\EntityRepository;
 use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttributeType;
+use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttribute;
 
 /**
  * Multi options attribute type
@@ -21,22 +22,25 @@ class MultiOptionsType extends AbstractAttributeType
     {
         $this->name         = 'Multi-options';
         $this->backendType  = self::BACKEND_TYPE_OPTION;
+        $this->formType     = 'entity';
         $this->fieldName    = 'options';
-        $this->fieldType    = 'entity';
-        $this->fieldOptions = array(
-            'expanded'      => true,
-            'multiple'      => true,
-            'class'         => 'OroFlexibleEntityBundle:AttributeOption'
-        );
-
     }
 
-    public function getFieldOptions($attribute)
+    /**
+     * Get form type options
+     *
+     * @return array
+     */
+    public function prepareFormOptions(AbstractAttribute $attribute)
     {
-        $this->fieldOptions['query_builder'] = function(EntityRepository $er) use ($attribute) {
+        $options = parent::prepareFormOptions($attribute);
+        $options['expanded']      = true;
+        $options['multiple']      = true;
+        $options['class']         = 'OroFlexibleEntityBundle:AttributeOption';
+        $options['query_builder'] = function(EntityRepository $er) use ($attribute) {
             return $er->createQueryBuilder('opt')->where('opt.attribute = '.$attribute->getId());
         };
 
-        return $this->fieldOptions;
+        return $options;
     }
 }

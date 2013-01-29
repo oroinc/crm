@@ -4,6 +4,7 @@ namespace Oro\Bundle\FlexibleEntityBundle\Model\AttributeType;
 use Doctrine\ORM\EntityRepository;
 
 use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttributeType;
+use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttribute;
 
 /**
  * Single option attribute type
@@ -20,28 +21,27 @@ class SingleOptionType extends AbstractAttributeType
      */
     public function __construct()
     {
-        $this->name         = 'Single option';
-        $this->backendType  = self::BACKEND_TYPE_OPTION;
-        $this->fieldName    = 'option';
-        $this->fieldType    = 'entity';
-        $this->fieldOptions = array(
-            'expanded'      => true,
-            'multiple'      => false,
-            'class'         => 'OroFlexibleEntityBundle:AttributeOption'
-        );
-        /*
-        $this->fieldOptions['query_builder'] = function(EntityRepository $er) use ($attribute) {
-            return $er->createQueryBuilder('opt')->where('opt.attribute = '.$attribute->getId());
-        };*/
+        $this->name        = 'Single option';
+        $this->backendType = self::BACKEND_TYPE_OPTION;
+        $this->formType    = 'entity';
+        $this->fieldName   = 'option';
     }
 
-
-    public function getFieldOptions($attribute)
+    /**
+     * Get form type options
+     *
+     * @return array
+     */
+    public function prepareFormOptions(AbstractAttribute $attribute)
     {
-        $this->fieldOptions['query_builder'] = function(EntityRepository $er) use ($attribute) {
+        $options = parent::prepareFormOptions($attribute);
+        $options['expanded']      = true;
+        $options['multiple']      = false;
+        $options['class']         = 'OroFlexibleEntityBundle:AttributeOption';
+        $options['query_builder'] = function(EntityRepository $er) use ($attribute) {
             return $er->createQueryBuilder('opt')->where('opt.attribute = '.$attribute->getId());
         };
 
-        return $this->fieldOptions;
+        return $options;
     }
 }

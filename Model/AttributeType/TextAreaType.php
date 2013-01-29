@@ -2,6 +2,7 @@
 namespace Oro\Bundle\FlexibleEntityBundle\Model\AttributeType;
 
 use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttributeType;
+use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttribute;
 
 /**
  * Text area attribute type
@@ -20,7 +21,7 @@ class TextAreaType extends AbstractAttributeType
     {
         $this->name        = 'Text Area';
         $this->backendType = self::BACKEND_TYPE_TEXT;
-        $this->fieldType   = 'textarea';
+        $this->formType   = 'textarea';
     }
 
 }

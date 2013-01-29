@@ -9,6 +9,10 @@ use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\DateType;
 use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\MetricType;
 use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\MoneyType;
 use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\TextAreaType;
+use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\UrlType;
+use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\NumberType;
+use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\MailType;
+use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Form\AbstractType;
@@ -32,7 +36,7 @@ class AttributeType extends AbstractType
 
         $this->addFieldCode($builder);
 
-        $this->addFieldFrontendType($builder);
+        $this->addFieldAttributeType($builder);
 
         $this->addFieldRequired($builder);
 
@@ -72,13 +76,13 @@ class AttributeType extends AbstractType
      * Add field frontend type to form builder
      * @param FormBuilderInterface $builder
      */
-    protected function addFieldFrontendType(FormBuilderInterface $builder)
+    protected function addFieldAttributeType(FormBuilderInterface $builder)
     {
         $options = array(
-            'choices'  => $this->getFrontendTypeChoices(),
+            'choices'  => $this->getAttributeTypeChoices(),
             'read_only' => $builder->getData()->getId()
         );
-        $builder->add('frontend_type', 'choice', $options);
+        $builder->add('attributeType', 'choice', $options);
     }
 
     /**
@@ -178,16 +182,20 @@ class AttributeType extends AbstractType
      *
      * @return array
      */
-    public function getFrontendTypeChoices()
+    public function getAttributeTypeChoices()
     {
         $availablesTypes = array(
-            new TextType(),
-            new TextAreaType(),
-            new MoneyType(),
-            new MetricType(),
             new DateType(),
+            new IntegerType(),
+            new MailType(),
+            new MetricType(),
+            new MoneyType(),
+            new MultiOptionsType(),
+            new NumberType(),
             new SingleOptionType(),
-            new MultiOptionsType()
+            new TextAreaType(),
+            new TextType(),
+            new UrlType()
         );
         $types = array();
         foreach ($availablesTypes as $type) {

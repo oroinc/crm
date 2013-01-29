@@ -2,6 +2,7 @@
 namespace Oro\Bundle\FlexibleEntityBundle\Model\AttributeType;
 
 use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttributeType;
+use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttribute;
 
 /**
  * Money attribute type
@@ -20,6 +21,6 @@ class MoneyType extends AbstractAttributeType
     {
         $this->name        = 'Money';
         $this->backendType = self::BACKEND_TYPE_DECIMAL;
-        $this->fieldType   = 'money';
+        $this->formType    = 'money';
     }
 }

@@ -2,6 +2,7 @@
 namespace Oro\Bundle\FlexibleEntityBundle\Model\AttributeType;
 
 use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttributeType;
+use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttribute;
 
 /**
  * Metric attribute type
@@ -20,7 +21,7 @@ class MetricType extends AbstractAttributeType
     {
         $this->name        = 'Metric';
         $this->backendType = self::BACKEND_TYPE_DECIMAL;
-        $this->fieldType   = 'number';
+        $this->formType    = 'number';
     }
 
 }

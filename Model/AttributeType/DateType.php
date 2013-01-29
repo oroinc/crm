@@ -2,6 +2,7 @@
 namespace Oro\Bundle\FlexibleEntityBundle\Model\AttributeType;
 
 use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttributeType;
+use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttribute;
 
 /**
  * Date attribute type
@@ -20,14 +21,25 @@ class DateType extends AbstractAttributeType
     {
         $this->name        = 'Date';
         $this->backendType = self::BACKEND_TYPE_DATE;
-        $this->fieldType   = 'date';
-        $this->fieldOptions = array();
-        $this->fieldOptions['widget'] = 'single_text';
-        $this->fieldOptions['input'] = 'datetime';
-        $this->fieldOptions['attr'] = array(
+        $this->formType    = 'date';
+    }
+
+    /**
+     * Get form type options
+     *
+     * @return array
+     */
+    public function prepareFormOptions(AbstractAttribute $attribute)
+    {
+        $options = parent::prepareFormOptions($attribute);
+        $options['widget'] = 'single_text';
+        $options['input'] = 'datetime';
+        $options['attr'] = array(
             'class' => 'datepicker input-small',
             'placeholder' => 'YYYY-MM-DD',
         );
+
+        return $options;
     }
 
 }

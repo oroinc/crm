@@ -14,19 +14,28 @@ abstract class AbstractAttribute implements TimestampableInterface
 {
 
     /**
+     * Attribute id
      * @var integer $id
      */
     protected $id;
 
     /**
+     * Attribute code
      * @var string $code
      */
     protected $code;
 
     /**
+     * Entity type (FQCN)
      * @var string $entityType
      */
     protected $entityType;
+
+    /**
+     * Attribute type (FQCN)
+     * @var string $attributeType
+     */
+    protected $attributeType;
 
     /**
      * Kind of storage to store values
@@ -39,12 +48,6 @@ abstract class AbstractAttribute implements TimestampableInterface
      * @var string $backendType
      */
     protected $backendType;
-
-    /**
-     * Kind of form field to set value in form
-     * @var string $frontendType
-     */
-    protected $frontendType;
 
     /**
      * @var datetime $created
@@ -258,15 +261,15 @@ abstract class AbstractAttribute implements TimestampableInterface
     }
 
     /**
-     * Set frontend type
+     * Set attribute type
      *
      * @param string $type
      *
      * @return AbstractAttribute
      */
-    public function setFrontendType($type)
+    public function setAttributeType($type)
     {
-        $this->frontendType = $type;
+        $this->attributeType = $type;
         // set backedn type from frontend if not already defined
         if (is_null($this->backendType)) {
             $attType = new $type();
@@ -281,9 +284,9 @@ abstract class AbstractAttribute implements TimestampableInterface
      *
      * @return string
      */
-    public function getFrontendType()
+    public function getAttributeType()
     {
-        return $this->frontendType;
+        return $this->attributeType;
     }
 
     /**

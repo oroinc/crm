@@ -1,7 +1,7 @@
 <?php
 namespace Oro\Bundle\FlexibleEntityBundle\Model;
 
-use Symfony\Component\Console\Input\StringInput;
+
 
 /**
  * Abstract attribute type
@@ -34,23 +34,6 @@ abstract class AbstractAttributeType
     const BACKEND_TYPE_VARCHAR  = 'varchar';
 
     /**
-     * Available frontend types
-     * @var string
-     */
-    const FRONTEND_TYPE_TEXT         = 'Text';
-    const FRONTEND_TYPE_TEXTAREA     = 'TextArea';
-    const FRONTEND_TYPE_MONEY        = 'Money';
-    const FRONTEND_TYPE_METRIC       = 'Metric';
-    const FRONTEND_TYPE_NUMBER       = 'Number';
-    const FRONTEND_TYPE_INTEGER      = 'Integer';
-    const FRONTEND_TYPE_DATE         = 'Date';
-    const FRONTEND_TYPE_DATETIME     = 'DateTime';
-    const FRONTEND_TYPE_EMAIL        = 'Email';
-    const FRONTEND_TYPE_URL          = 'Url';
-    const FRONTEND_TYPE_SIMPLECHOICE = 'SimpleChoice';
-    const FRONTEND_TYPE_MULTICHOICE  = 'MultipleChoice';
-
-    /**
      * Attribute name
      *
      * @var string
@@ -65,25 +48,18 @@ abstract class AbstractAttributeType
     protected $backendType = self::BACKEND_TYPE_VARCHAR;
 
     /**
-     * Field type alias, "data" by default
+     * Field type alias, "data" by default, mapped by attribute property or getter/setter
      *
      * @var string
      */
     protected $fieldName = 'data';
 
     /**
-     * Field type alias, "text" by default
+     * Form type alias, "text" by default
      *
      * @var string
      */
-    protected $fieldType = 'text';
-
-    /**
-     * Field type options
-     *
-     * @var string
-     */
-    protected $fieldOptions = array();
+    protected $formType = 'text';
 
     /**
      * Get attribute type name
@@ -116,23 +92,28 @@ abstract class AbstractAttributeType
     }
 
     /**
-     * Get field type (alias)
+     * Get form type (alias)
      *
      * @var string
      */
-    public function getFieldType()
+    public function getFormType()
     {
-        return $this->fieldType;
+        return $this->formType;
     }
 
     /**
-     * Get field options
+     * Get form type options
      *
      * @return array
      */
-    public function getFieldOptions($attribute)
+    public function prepareFormOptions(AbstractAttribute $attribute)
     {
-        return $this->fieldOptions;
+        $options = array(
+            'label'    => $attribute->getCode(),
+            'required' => $attribute->getRequired()
+        );
+
+        return $options;
     }
 
 }

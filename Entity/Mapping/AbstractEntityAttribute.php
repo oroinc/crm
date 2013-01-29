@@ -39,6 +39,13 @@ abstract class AbstractEntityAttribute extends AbstractAttribute
     protected $entityType;
 
     /**
+     * @var string $attributeType
+     *
+     * @ORM\Column(name="attribute_type", type="string", length=255)
+     */
+    protected $attributeType;
+
+    /**
      * @var string $backendType
      *
      * @ORM\Column(name="backend_type", type="string", length=255)
@@ -51,13 +58,6 @@ abstract class AbstractEntityAttribute extends AbstractAttribute
      * @ORM\Column(name="backend_storage", type="string", length=255)
      */
     protected $backendStorage;
-
-    /**
-     * @var string $frontendType
-     *
-     * @ORM\Column(name="frontend_type", type="string", length=255)
-     */
-    protected $frontendType;
 
     /**
      * @var datetime $created
