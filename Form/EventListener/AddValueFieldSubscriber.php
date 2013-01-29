@@ -4,7 +4,6 @@ namespace Oro\Bundle\FlexibleEntityBundle\Form\EventListener;
 use Oro\Bundle\FlexibleEntityBundle\Entity\Attribute;
 
 use Doctrine\ORM\EntityRepository;
-
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -27,11 +26,6 @@ class AddValueFieldSubscriber implements EventSubscriberInterface
     protected $factory;
 
     /**
-     * @var FlexibleEntityManager
-     */
-    protected $manager;
-
-    /**
      * Constructor
      * @param FormFactoryInterface $factory
      */
@@ -42,7 +36,7 @@ class AddValueFieldSubscriber implements EventSubscriberInterface
 
     /**
      * Get subscribed events
-     * @return multitype:string
+     * @return array
      */
     public static function getSubscribedEvents()
     {
@@ -111,7 +105,7 @@ class AddValueFieldSubscriber implements EventSubscriberInterface
                 break;
 
 
-            case AbstractAttributeType::FRONTEND_TYPE_PRICE:
+            case AbstractAttributeType::FRONTEND_TYPE_MONEY:
                 $type = 'money';
                 $options['currency']= $value->getCurrency();
                 $default = $value->getData();
@@ -120,7 +114,7 @@ class AddValueFieldSubscriber implements EventSubscriberInterface
 
                 break;
 
-            case AbstractAttributeType::FRONTEND_TYPE_LIST:
+            case AbstractAttributeType::FRONTEND_TYPE_SIMPLECHOICE:
 
                 $fieldName = 'option';
                 $type = 'entity';
@@ -136,7 +130,7 @@ class AddValueFieldSubscriber implements EventSubscriberInterface
 
                 break;
 
-            case AbstractAttributeType::FRONTEND_TYPE_MULTILIST:
+            case 'choice':
 
                 $fieldName = 'options';
                 $type = 'entity';
@@ -152,7 +146,7 @@ class AddValueFieldSubscriber implements EventSubscriberInterface
 
                 break;
 
-            case AbstractAttributeType::FRONTEND_TYPE_TEXTFIELD:
+            case AbstractAttributeType::FRONTEND_TYPE_TEXT:
             default:
                 $type = 'text';
                 $default = $value->getData();

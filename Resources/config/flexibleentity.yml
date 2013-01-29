@@ -1,19 +1,19 @@
 attributes_config:
     Text:
         backend:
-            type:          string
+            type:          varchar
         frontend:
             field_type:    text
             field_options: ~
     Email:
         backend:
-            type:          string
+            type:          varchar
         frontend:
             field_type:    email
             field_options: ~
     Url:
         backend:
-            type:          string
+            type:          varchar
         frontend:
             field_type:    url
             field_options: ~
@@ -22,6 +22,18 @@ attributes_config:
             type:          decimal
         frontend:
             field_type:    money
+            field_options: ~
+    Number:
+        backend:
+            type:          decimal
+        frontend:
+            field_type:    number
+            field_options: ~
+    Integer:
+        backend:
+            type:          integer
+        frontend:
+            field_type:    integer
             field_options: ~
     Metric:
         backend:
@@ -37,7 +49,13 @@ attributes_config:
             field_options: ~
     Date:
         backend:
-            type:          text
+            type:          date
+        frontend:
+            field_type:    textarea
+            field_options: ~
+    DateTime:
+        backend:
+            type:          datetime
         frontend:
             field_type:    textarea
             field_options: ~
@@ -46,11 +64,11 @@ attributes_config:
             type:          options
         frontend:
             field_type:    choice
-            field_options: ~
+            field_options: {multiple: false, expanded: true}
     MultipleChoice:
         backend:
             type:          options
         frontend:
             field_type:    choice
-            field_options: {multiple: true}
+            field_options: {multiple: true, expanded: true}
 

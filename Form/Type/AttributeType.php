@@ -17,15 +17,6 @@ use Symfony\Component\Form\AbstractType;
  */
 class AttributeType extends AbstractType
 {
-
-    const FRONTEND_TYPE_TEXTFIELD = 'Text Field';
-    const FRONTEND_TYPE_TEXTAREA  = 'Text Area';
-    const FRONTEND_TYPE_PRICE     = 'Price';
-    const FRONTEND_TYPE_DATE      = 'Date';
-    const FRONTEND_TYPE_LIST      = 'List';
-    const FRONTEND_TYPE_IMAGE     = 'Image';
-    const FRONTEND_TYPE_FILE      = 'File';
-
     /**
      * {@inheritdoc}
      */
@@ -184,15 +175,18 @@ class AttributeType extends AbstractType
     public function getFrontendTypeChoices()
     {
         return array(
-            AbstractAttributeType::FRONTEND_TYPE_TEXTFIELD => AbstractAttributeType::FRONTEND_TYPE_TEXTFIELD,
-            AbstractAttributeType::FRONTEND_TYPE_TEXTAREA => AbstractAttributeType::FRONTEND_TYPE_TEXTAREA,
-            AbstractAttributeType::FRONTEND_TYPE_PRICE => AbstractAttributeType::FRONTEND_TYPE_PRICE,
-            AbstractAttributeType::FRONTEND_TYPE_DATE => AbstractAttributeType::FRONTEND_TYPE_DATE,
-            AbstractAttributeType::FRONTEND_TYPE_DATETIME => AbstractAttributeType::FRONTEND_TYPE_DATETIME,
-            AbstractAttributeType::FRONTEND_TYPE_LIST => AbstractAttributeType::FRONTEND_TYPE_LIST,
-            AbstractAttributeType::FRONTEND_TYPE_MULTILIST => AbstractAttributeType::FRONTEND_TYPE_LIST,
-            //                     'textfield' => AbstractAttributeType::FRONTEND_TYPE_IMAGE,
-            //                     'textfield' => AbstractAttributeType::FRONTEND_TYPE_FILE
+            AbstractAttributeType::FRONTEND_TYPE_TEXT         => AbstractAttributeType::FRONTEND_TYPE_TEXT,
+            AbstractAttributeType::FRONTEND_TYPE_TEXTAREA     => AbstractAttributeType::FRONTEND_TYPE_TEXTAREA,
+            AbstractAttributeType::FRONTEND_TYPE_MONEY        => AbstractAttributeType::FRONTEND_TYPE_MONEY,
+            AbstractAttributeType::FRONTEND_TYPE_METRIC       => AbstractAttributeType::FRONTEND_TYPE_METRIC,
+            AbstractAttributeType::FRONTEND_TYPE_NUMBER       => AbstractAttributeType::FRONTEND_TYPE_NUMBER,
+            AbstractAttributeType::FRONTEND_TYPE_INTEGER      => AbstractAttributeType::FRONTEND_TYPE_INTEGER,
+            AbstractAttributeType::FRONTEND_TYPE_DATE         => AbstractAttributeType::FRONTEND_TYPE_DATE,
+            AbstractAttributeType::FRONTEND_TYPE_DATETIME     => AbstractAttributeType::FRONTEND_TYPE_DATETIME,
+            AbstractAttributeType::FRONTEND_TYPE_EMAIL        => AbstractAttributeType::FRONTEND_TYPE_EMAIL,
+            AbstractAttributeType::FRONTEND_TYPE_URL          => AbstractAttributeType::FRONTEND_TYPE_URL,
+            AbstractAttributeType::FRONTEND_TYPE_SIMPLECHOICE => AbstractAttributeType::FRONTEND_TYPE_SIMPLECHOICE,
+            AbstractAttributeType::FRONTEND_TYPE_MULTICHOICE  => AbstractAttributeType::FRONTEND_TYPE_MULTICHOICE
         );
     }
 }

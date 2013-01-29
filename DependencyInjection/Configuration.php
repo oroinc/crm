@@ -124,6 +124,7 @@ class Configuration implements ConfigurationInterface
                         ->arrayNode('field_options')
                             ->children()
                                 ->scalarNode('multiple')->end()
+                                ->scalarNode('expanded')->end()
                                 // TODO: add them all ?
                             ->end()
                         ->end()
