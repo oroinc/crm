@@ -1,6 +1,8 @@
 <?php
 namespace Oro\Bundle\FlexibleEntityBundle\Form\EventListener;
 
+use Oro\Bundle\FlexibleEntityBundle\Entity\AttributeOption;
+
 use Oro\Bundle\FlexibleEntityBundle\Entity\Attribute;
 
 use Doctrine\ORM\EntityRepository;
@@ -57,14 +59,35 @@ class AddValueFieldSubscriber implements EventSubscriberInterface
         if (null === $value) {
             return;
         }
-        // configure and add relevant form field type
+        // prepare basic / default configuration
         $attribute = $value->getAttribute();
-        $fieldName = 'data'; // for classic backend type
         $options = array(
             'required'      => $attribute->getRequired(),
             'property_path' => true,
             'label'         => $attribute->getCode()
         );
+        // get attribute type
+        $attTypeClass = $attribute->getFrontendType();
+        $attType = new $attTypeClass();
+        // merge basic configuration and attribute type configuration
+        $fieldName = $attType->getFieldName();
+        $type      = $attType->getFieldType();
+        $options   = array_merge($options, $attType->getFieldOptions($attribute));
+        // prepare current value
+        if ($fieldName == 'option') {
+            $default = $value->getOption();
+        } else if ($fieldName == 'options') {
+            $default = $value->getOptions();
+        } else {
+            $default = $value->getData();
+        }
+        // get default value
+        $default   = is_null($default) ? $attribute->getDefaultValue() : $default;
+
+
+
+
+        /*
         // configuration depends on field type
         switch ($attribute->getFrontendType()) {
             case AbstractAttributeType::FRONTEND_TYPE_DATE:
@@ -154,7 +177,7 @@ class AddValueFieldSubscriber implements EventSubscriberInterface
                 $default = is_null($default) ? $attribute->getDefaultValue() : $default;
 
                 break;
-        }
+        }*/
 
         $form->add($this->factory->createNamed($fieldName, $type, $default, $options));
     }

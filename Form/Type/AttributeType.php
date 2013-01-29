@@ -2,7 +2,13 @@
 namespace Oro\Bundle\FlexibleEntityBundle\Form\Type;
 
 use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttributeType;
-
+use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\TextType;
+use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\MultiOptionsType;
+use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\SingleOptionType;
+use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\DateType;
+use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\MetricType;
+use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\MoneyType;
+use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\TextAreaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Form\AbstractType;
@@ -174,19 +180,19 @@ class AttributeType extends AbstractType
      */
     public function getFrontendTypeChoices()
     {
-        return array(
-            AbstractAttributeType::FRONTEND_TYPE_TEXT         => AbstractAttributeType::FRONTEND_TYPE_TEXT,
-            AbstractAttributeType::FRONTEND_TYPE_TEXTAREA     => AbstractAttributeType::FRONTEND_TYPE_TEXTAREA,
-            AbstractAttributeType::FRONTEND_TYPE_MONEY        => AbstractAttributeType::FRONTEND_TYPE_MONEY,
-            AbstractAttributeType::FRONTEND_TYPE_METRIC       => AbstractAttributeType::FRONTEND_TYPE_METRIC,
-            AbstractAttributeType::FRONTEND_TYPE_NUMBER       => AbstractAttributeType::FRONTEND_TYPE_NUMBER,
-            AbstractAttributeType::FRONTEND_TYPE_INTEGER      => AbstractAttributeType::FRONTEND_TYPE_INTEGER,
-            AbstractAttributeType::FRONTEND_TYPE_DATE         => AbstractAttributeType::FRONTEND_TYPE_DATE,
-            AbstractAttributeType::FRONTEND_TYPE_DATETIME     => AbstractAttributeType::FRONTEND_TYPE_DATETIME,
-            AbstractAttributeType::FRONTEND_TYPE_EMAIL        => AbstractAttributeType::FRONTEND_TYPE_EMAIL,
-            AbstractAttributeType::FRONTEND_TYPE_URL          => AbstractAttributeType::FRONTEND_TYPE_URL,
-            AbstractAttributeType::FRONTEND_TYPE_SIMPLECHOICE => AbstractAttributeType::FRONTEND_TYPE_SIMPLECHOICE,
-            AbstractAttributeType::FRONTEND_TYPE_MULTICHOICE  => AbstractAttributeType::FRONTEND_TYPE_MULTICHOICE
+        $availablesTypes = array(
+            new TextType(),
+            new TextAreaType(),
+            new MoneyType(),
+            new MetricType(),
+            new DateType(),
+            new SingleOptionType(),
+            new MultiOptionsType()
         );
+        $types = array();
+        foreach ($availablesTypes as $type) {
+            $types[get_class($type)]= $type->getName();
+        }
+        return $types;
     }
 }

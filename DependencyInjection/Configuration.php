@@ -25,8 +25,6 @@ class Configuration implements ConfigurationInterface
 
             ->append($this->addEntityNode())
 
-            ->append($this->addAttributeNode())
-
         ->end();
 
         return $treeBuilder;
@@ -85,52 +83,6 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('default_scope')
                 ->defaultValue(null)
                 ->end()
-            ->end()
-        ->end();
-
-        return $node;
-    }
-
-    /**
-     * Return attribute type configuration
-     * @return \Symfony\Component\Config\Definition\Builder\NodeDefinition
-     */
-    public function addAttributeNode()
-    {
-        $builder = new TreeBuilder();
-        $node = $builder->root('attributes_config');
-
-        $node
-            ->prototype('array')
-            ->children()
-
-                ->arrayNode('backend')
-                    ->children()
-                        ->scalarNode('storage')
-                        ->defaultValue('values')
-                        ->end()
-                        ->scalarNode('type')
-                        ->defaultValue('varchar')
-                        ->end()
-                    ->end()
-                ->end()
-
-                ->arrayNode('frontend')
-                    ->children()
-                        ->scalarNode('field_type')
-                        ->defaultValue('text')
-                        ->end()
-                        // validate any field type options
-                        ->arrayNode('field_options')
-                            ->children()
-                                ->scalarNode('multiple')->end()
-                                ->scalarNode('expanded')->end()
-                                // TODO: add them all ?
-                            ->end()
-                        ->end()
-                    ->end()
-                ->end()
-
             ->end()
         ->end();
 

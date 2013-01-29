@@ -71,7 +71,6 @@ class FlexibleEntityManager extends SimpleEntityManager
         // get flexible entity configuration
         $allFlexibleConfig = $this->container->getParameter('oro_flexibleentity.flexible_config');
         $this->flexibleConfig = $allFlexibleConfig['entities_config'][$entityName];
-        $this->attributeConfig = $allFlexibleConfig['attributes_config'];
     }
 
     /**
@@ -81,19 +80,6 @@ class FlexibleEntityManager extends SimpleEntityManager
     public function getFlexibleConfig()
     {
         return $this->flexibleConfig;
-    }
-
-    /**
-     * Get flexible attribute config
-     * @return array
-     */
-    public function getAttributeConfig($type)
-    {
-        if (!isset($this->attributeConfig[$type])) {
-            throw new FlexibleConfigurationException('Attribute type '.$type.' is unknown');
-        }
-
-        return $this->attributeConfig[$type];
     }
 
     /**
@@ -265,23 +251,22 @@ class FlexibleEntityManager extends SimpleEntityManager
     /**
      * Return a new instance
      *
-     * @param string $type attribute type
+     * @param AbstractAttributeType $type attribute type
      *
      * @return Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityAttribute
      */
-    public function createAttribute($type = AbstractAttributeType::FRONTEND_TYPE_TEXT)
+    public function createAttribute(AbstractAttributeType $type = null)
     {
         // create attribute
         $class = $this->getAttributeName();
         $object = new $class();
         $object->setEntityType($this->getEntityName());
-        // add configuration related to the type
-        $attributeConfig = $this->getAttributeConfig($type);
-        $object->setBackendStorage($attributeConfig['backend']['storage']);
-        $object->setBackendType($attributeConfig['backend']['type']);
-        $object->setFrontendType($attributeConfig['frontend']['field_type']);
-// TODO options !
-//        $object->setFrontendType($attributeConfig['frontend']['field_type']);
+        // add configuration related to the attribute type
+        $object->setBackendStorage(AbstractAttributeType::BACKEND_STORAGE_ATTRIBUTE_VALUE);
+        if ($type) {
+            $object->setBackendType($type->getBackendType());
+            $object->setFrontendType(get_class($type));
+        }
 
         return $object;
     }
@@ -352,11 +337,11 @@ class FlexibleEntityManager extends SimpleEntityManager
     /**
      * Return a new instance
      *
-     * @param string $type attribute type
+     * @param AbstractAttributeType $type attribute type
      *
      * @return Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityFlexibleAttribute
      */
-    public function createEntityAttribute($type = AbstractAttributeType::FRONTEND_TYPE_TEXT)
+    public function createEntityAttribute(AbstractAttributeType $type = null)
     {
         if (!$this->getEntityAttributeName()) {
             throw new FlexibleConfigurationException($this->getEntityName().' has no flexible attribute extended class');

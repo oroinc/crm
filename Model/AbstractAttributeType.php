@@ -1,6 +1,8 @@
 <?php
 namespace Oro\Bundle\FlexibleEntityBundle\Model;
 
+use Symfony\Component\Console\Input\StringInput;
+
 /**
  * Abstract attribute type
  *
@@ -47,5 +49,90 @@ abstract class AbstractAttributeType
     const FRONTEND_TYPE_URL          = 'Url';
     const FRONTEND_TYPE_SIMPLECHOICE = 'SimpleChoice';
     const FRONTEND_TYPE_MULTICHOICE  = 'MultipleChoice';
+
+    /**
+     * Attribute name
+     *
+     * @var string
+     */
+    protected $name;
+
+    /**
+     * Field backend type, "varchar" by default
+     *
+     * @var string
+     */
+    protected $backendType = self::BACKEND_TYPE_VARCHAR;
+
+    /**
+     * Field type alias, "data" by default
+     *
+     * @var string
+     */
+    protected $fieldName = 'data';
+
+    /**
+     * Field type alias, "text" by default
+     *
+     * @var string
+     */
+    protected $fieldType = 'text';
+
+    /**
+     * Field type options
+     *
+     * @var string
+     */
+    protected $fieldOptions = array();
+
+    /**
+     * Get attribute type name
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * Get backend type
+     *
+     * @var string
+     */
+    public function getBackendType()
+    {
+        return $this->backendType;
+    }
+
+    /**
+     * Get field name
+     *
+     * @return string
+     */
+    public function getFieldName()
+    {
+        return $this->fieldName;
+    }
+
+    /**
+     * Get field type (alias)
+     *
+     * @var string
+     */
+    public function getFieldType()
+    {
+        return $this->fieldType;
+    }
+
+    /**
+     * Get field options
+     *
+     * @return array
+     */
+    public function getFieldOptions($attribute)
+    {
+        return $this->fieldOptions;
+    }
 
 }
