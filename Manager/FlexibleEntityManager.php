@@ -20,6 +20,21 @@ class FlexibleEntityManager extends SimpleEntityManager
 {
 
     /**
+     * @staticvar integer
+     */
+    const NO_VALUES = 0;
+
+    /**
+     * @staticvar integer
+     */
+    const REQUIRED_VALUES = 1;
+
+    /**
+     * @staticvar integer
+     */
+    const ALL_VALUES = 2;
+
+    /**
      * Flexible entity config
      * @var array
      */
@@ -281,7 +296,7 @@ class FlexibleEntityManager extends SimpleEntityManager
         $object->setScope($this->getScope());
 
         // add empty attribute values
-        if ($withEmptyValues) {
+        if ($withEmptyValues !== self::NO_VALUES) {
             $this->createEmptyValues($object);
         }
 
