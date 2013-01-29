@@ -85,6 +85,13 @@ class User extends AbstractEntityFlexible implements UserInterface, GroupableInt
     /**
      * @var \DateTime
      *
+     * @ORM\Column(name="password_requested", type="datetime", nullable=true)
+     */
+    protected $passwordRequestedAt;
+
+    /**
+     * @var \DateTime
+     *
      * @ORM\Column(name="last_login", type="datetime", nullable=true)
      */
     protected $lastLogin;
@@ -230,6 +237,16 @@ class User extends AbstractEntityFlexible implements UserInterface, GroupableInt
     }
 
     /**
+     * Gets the timestamp that the user requested a password reset.
+     *
+     * @return null|\DateTime
+     */
+    public function getPasswordRequestedAt()
+    {
+        return $this->passwordRequestedAt;
+    }
+
+    /**
      * Gets the last login time.
      *
      * @return \DateTime
@@ -275,6 +292,12 @@ class User extends AbstractEntityFlexible implements UserInterface, GroupableInt
     public function isAccountNonLocked()
     {
         return $this->isEnabled();
+    }
+
+    public function isPasswordRequestNonExpired($ttl)
+    {
+        return $this->getPasswordRequestedAt() instanceof \DateTime &&
+               $this->getPasswordRequestedAt()->getTimestamp() + $ttl > time();
     }
 
     public function isExpired()
@@ -323,7 +346,7 @@ class User extends AbstractEntityFlexible implements UserInterface, GroupableInt
     public function setSuperAdmin($boolean)
     {
         if (true === $boolean) {
-            $this->addRole(static::ROLE_SUPER_ADMIN);
+            $this->addRole(new Role(static::ROLE_SUPER_ADMIN));
         } else {
             $this->removeRole(static::ROLE_SUPER_ADMIN);
         }
@@ -345,35 +368,16 @@ class User extends AbstractEntityFlexible implements UserInterface, GroupableInt
         return $this;
     }
 
+    public function setPasswordRequestedAt(\DateTime $date = null)
+    {
+        $this->passwordRequestedAt = $date;
+
+        return $this;
+    }
+
     public function setLastLogin(\DateTime $time)
     {
         $this->lastLogin = $time;
-
-        return $this;
-    }
-
-    /**
-     * Set createdAt
-     *
-     * @param \DateTime $createdAt
-     * @return User
-     */
-    public function setCreatedAt(\DateTime $createdAt)
-    {
-        $this->created = $createdAt;
-
-        return $this;
-    }
-
-    /**
-     * Set updatedAt
-     *
-     * @param \DateTime $updatedAt
-     * @return User
-     */
-    public function setUpdatedAt(\DateTime $updatedAt)
-    {
-        $this->updated = $updatedAt;
 
         return $this;
     }
@@ -594,25 +598,7 @@ class User extends AbstractEntityFlexible implements UserInterface, GroupableInt
      */
     public function getEmailCanonical()
     {
-        return $this->emailCanonical;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function setPasswordRequestedAt(\DateTime $date = null)
-    {
-        return $this;
-    }
-
-    /**
-     * Gets the timestamp that the user requested a password reset.
-     *
-     * @return null|\DateTime
-     */
-    public function getPasswordRequestedAt()
-    {
-        return null;
+        return $this->email;
     }
 
     /**
@@ -637,11 +623,6 @@ class User extends AbstractEntityFlexible implements UserInterface, GroupableInt
     public function isLocked()
     {
         return !$this->isAccountNonLocked();
-    }
-
-    public function isPasswordRequestNonExpired($ttl)
-    {
-        return null != $this->getConfirmationToken();
     }
 
     /**
