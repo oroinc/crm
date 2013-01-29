@@ -1,0 +1,21 @@
+{% extends bap.layout is defined ? bap.layout : 'OroUserBundle::layout.html.twig' %}
+
+{% block title %}Acl resources - {{ parent() }}{% endblock %}
+
+{% block content %}
+    <h1>ACL Resources list</h1>
+    <table class="table table-bordered table-striped table-condensed">
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Class</th>
+            <th style="width: 150px">Method</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% include 'OroUserBundle:Acl:_subResource.html.twig' with {'resources': resources, "i": 1, "j": 1 } %}
+        </tbody>
+    </table>
+{% endblock %}

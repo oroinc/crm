@@ -1,0 +1,13 @@
+{% for  resource in resources %}
+    <tr>
+        <td style="padding-left: {{ j }}px;">{{ resource.id }}</td>
+        <td>{{ resource.name }}</td>
+        <td>{{ resource.description }}</td>
+        <td>{{ resource.class }}</td>
+        <td>{{ resource.method }}</td>
+    </tr>
+    {%set i=i+1%}
+    {% if resource.children is defined %}
+        {% include 'OroUserBundle:Acl:_subResource.html.twig' with {'resources': resource.children, "j": j+10, 'i': i}  %}
+    {% endif %}
+{% endfor %}

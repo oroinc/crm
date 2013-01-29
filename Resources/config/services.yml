@@ -4,6 +4,7 @@ parameters:
     user_entity_class:          Oro\Bundle\UserBundle\Entity\User
     user_form_class:            Oro\Bundle\UserBundle\Form\Type\UserType
     user_form_subscriber_class: Oro\Bundle\UserBundle\Form\EventListener\FlexibleSubscriber
+    user_acl_reader_class:      Oro\Bundle\UserBundle\ResourceReader\Reader
 
 services:
     oro_user.flexible_manager:
@@ -28,3 +29,7 @@ services:
     oro_user.user_form_listener:
         class:                  %user_form_subscriber_class%
         arguments:              ["@form.factory", "@oro_user.flexible_manager"]
+
+    oro_user.acl_reader:
+        class:                  %user_acl_reader_class%
+        arguments:              ["@service_container"]
