@@ -1,6 +1,8 @@
 <?php
 namespace Oro\Bundle\FlexibleEntityBundle\Tests\Manager;
 
+use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\TextType;
+
 use Oro\Bundle\FlexibleEntityBundle\Tests\AbstractFlexibleEntityManagerTest;
 use Doctrine\ORM\EntityManager;
 use Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleEntityManager;
@@ -171,7 +173,8 @@ class FlexibleEntityManagerTest extends AbstractFlexibleEntityManagerTest
      */
     public function testCreateAttribute()
     {
-        $this->assertTrue($this->manager->createAttribute() instanceof $this->attributeClassName);
+        $attributeType = new TextType();
+        $this->assertTrue($this->manager->createAttribute($attributeType) instanceof $this->attributeClassName);
     }
 
     /**

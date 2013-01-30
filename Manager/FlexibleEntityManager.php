@@ -302,25 +302,6 @@ class FlexibleEntityManager extends SimpleEntityManager
     }
 
     /**
-     * Create empty values linked to flexible attributes
-     * @param Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityFlexible $object
-     */
-    protected function createEmptyValues($object)
-    {
-
-        //TODO / refacotr and delete
-
-        $values = array();
-        $attributes = $this->getAttributeRepository()->findBy(array('entityType' => $this->getEntityName()));
-
-        foreach ($attributes as $attribute) {
-            $value = $this->createEntityValue();
-            $value->setAttribute($attribute);
-            $object->addValue($value);
-        }
-    }
-
-    /**
      * Return a new instance
      *
      * @param AbstractAttributeType $type attribute type

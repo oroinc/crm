@@ -1,5 +1,5 @@
 <?php
-namespace Oro\Bundle\FlexibleEntityBundle\Listener;
+namespace Oro\Bundle\FlexibleEntityBundle\EventListener;
 
 use Oro\Bundle\FlexibleEntityBundle\Model\Behavior\HasDefaultValueInterface;
 use Doctrine\Common\EventSubscriber;
