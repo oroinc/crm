@@ -25,7 +25,7 @@ class AttributeOptionValueType extends AbstractType
     {
         $this->addFieldId($builder);
 
-//        $this->addFieldLocaleCode($builder);
+        $this->addFieldLocale($builder);
 
         $this->addFieldValue($builder);
     }
@@ -40,12 +40,12 @@ class AttributeOptionValueType extends AbstractType
     }
 
     /**
-     * Add field locale_code to form builder
+     * Add field locale to form builder
      * @param FormBuilderInterface $builder
      */
-    protected function addFieldLocaleCode(FormBuilderInterface $builder)
+    protected function addFieldLocale(FormBuilderInterface $builder)
     {
-        $builder->add('locale_code');
+        $builder->add('locale', 'hidden', array('data' => 'en_US'));
     }
 
     /**
