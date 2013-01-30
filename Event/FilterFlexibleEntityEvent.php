@@ -21,8 +21,8 @@ class FilterFlexibleEntityEvent extends Event
     protected $entity;
 
     /**
-     *
-     * @param FlexibleEntityInterface $flexible
+     * Constructor
+     * @param FlexibleEntityInterface $entity
      */
     public function __construct(FlexibleEntityInterface $entity)
     {

@@ -74,7 +74,7 @@ abstract class AbstractAttributeType
     /**
      * Get backend type
      *
-     * @var string
+     * @return string
      */
     public function getBackendType()
     {
@@ -94,7 +94,7 @@ abstract class AbstractAttributeType
     /**
      * Get form type (alias)
      *
-     * @var string
+     * @return string
      */
     public function getFormType()
     {
@@ -103,6 +103,8 @@ abstract class AbstractAttributeType
 
     /**
      * Get form type options
+     *
+     * @param AbstractAttribute $attribute
      *
      * @return array
      */

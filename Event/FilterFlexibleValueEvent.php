@@ -21,8 +21,8 @@ class FilterFlexibleValueEvent extends Event
     protected $value;
 
     /**
-     *
-     * @param FlexibleValueInterface $flexible
+     * Constructor
+     * @param FlexibleValueInterface $value
      */
     public function __construct(FlexibleValueInterface $value)
     {

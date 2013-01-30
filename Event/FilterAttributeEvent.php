@@ -21,8 +21,8 @@ class FilterAttributeEvent extends Event
     protected $attribute;
 
     /**
-     *
-     * @param AttributeInterface $flexible
+     * Constructor
+     * @param AttributeInterface $attribute
      */
     public function __construct(AttributeInterface $attribute)
     {

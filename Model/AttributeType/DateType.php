@@ -27,6 +27,8 @@ class DateType extends AbstractAttributeType
     /**
      * Get form type options
      *
+     * @param AbstractAttribute $attribute
+     *
      * @return array
      */
     public function prepareFormOptions(AbstractAttribute $attribute)

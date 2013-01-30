@@ -201,6 +201,7 @@ class AttributeType extends AbstractType
         foreach ($availablesTypes as $type) {
             $types[get_class($type)]= $type->getName();
         }
+
         return $types;
     }
 }
