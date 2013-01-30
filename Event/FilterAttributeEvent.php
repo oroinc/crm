@@ -2,7 +2,7 @@
 namespace Oro\Bundle\FlexibleEntityBundle\Event;
 
 use Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleManager;
-use Oro\Bundle\FlexibleEntityBundle\Model\AttributeInterface;
+use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttribute;
 
 /**
  * Filter event allows to know the create flexible attribute
@@ -16,23 +16,23 @@ class FilterAttributeEvent extends AbstractFilterEvent
 {
     /**
      * Flexible attribute
-     * @var AttributeInterface
+     * @var AbstractAttribute
      */
     protected $attribute;
 
     /**
      * Constructor
      * @param FlexibleManager $manager
-     * @param AttributeInterface $attribute
+     * @param AbstractAttribute $attribute
      */
-    public function __construct(FlexibleManager $manager, AttributeInterface $attribute)
+    public function __construct(FlexibleManager $manager, AbstractAttribute $attribute)
     {
         parent::__construct($manager);
         $this->attribute = $attribute;
     }
 
     /**
-     * @return AttributeInterface
+     * @return AbstractAttribute
      */
     public function getAttribute()
     {

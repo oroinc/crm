@@ -18,7 +18,7 @@ abstract class AbstractFlexibleAttribute
     protected $id;
 
     /**
-     * @var AttributeInterface $attribute
+     * @var AbstractAttribute $attribute
      */
     protected $attribute;
 
@@ -35,7 +35,7 @@ abstract class AbstractFlexibleAttribute
     /**
      * Get attribute
      *
-     * @return AttributeInterface
+     * @return AbstractAttribute
      */
     public function getAttribute()
     {
@@ -45,7 +45,7 @@ abstract class AbstractFlexibleAttribute
     /**
      * Set attribute
      *
-     * @param AttributeInterface $attribute
+     * @param AbstractAttribute $attribute
      *
      * @return AbstractFlexibleAttribute
      */

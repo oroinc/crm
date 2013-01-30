@@ -15,7 +15,7 @@ interface FlexibleValueInterface
     /**
      * Get attribute
      *
-     * @return AttributeInterface
+     * @return AbstractAttribute
      */
     public function getAttribute();
 

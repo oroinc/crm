@@ -233,7 +233,7 @@ class FlexibleManager extends SimpleManager
      *
      * @param AbstractAttributeType $type attribute type
      *
-     * @return Oro\Bundle\FlexibleEntityBundle\Model\AttributeInterface
+     * @return Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttribute
      */
     public function createAttribute(AbstractAttributeType $type = null)
     {
