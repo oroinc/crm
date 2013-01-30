@@ -25,9 +25,9 @@ class AttributeOptionType extends AbstractType
     {
         $this->addFieldId($builder);
 
-       $this->addFieldSortOrder($builder);
+        $this->addFieldSortOrder($builder);
 
-       $this->addFieldTranslatable($builder);
+        $this->addFieldTranslatable($builder);
 
         $this->addFieldOptionValues($builder);
     }

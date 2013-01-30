@@ -18,7 +18,7 @@ abstract class AbstractFlexibleValue implements FlexibleValueInterface
     protected $id;
 
     /**
-     * @var EntityAttribute $attribute
+     * @var AttributeInterface $attribute
      */
     protected $attribute;
 
@@ -97,7 +97,7 @@ abstract class AbstractFlexibleValue implements FlexibleValueInterface
     /**
      * Set attribute
      *
-     * @param EntityAttribute $attribute
+     * @param AttributeInterface $attribute
      *
      * @return AbstractFlexibleValue
      */
@@ -111,7 +111,7 @@ abstract class AbstractFlexibleValue implements FlexibleValueInterface
     /**
      * Get attribute
      *
-     * @return AbstractFlexibleValue
+     * @return AttributeInterface
      */
     public function getAttribute()
     {

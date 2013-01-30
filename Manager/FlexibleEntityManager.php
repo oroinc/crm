@@ -4,7 +4,6 @@ namespace Oro\Bundle\FlexibleEntityBundle\Manager;
 use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttributeType;
 use Oro\Bundle\FlexibleEntityBundle\Model\Entity;
 use Oro\Bundle\FlexibleEntityBundle\Model\EntityAttribute;
-use Oro\Bundle\FlexibleEntityBundle\Model\EntityAttributeValue;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Oro\Bundle\FlexibleEntityBundle\FlexibleEntityEvents;
 use Oro\Bundle\FlexibleEntityBundle\Event\FilterAttributeEvent;
@@ -236,7 +235,7 @@ class FlexibleEntityManager extends SimpleEntityManager
      *
      * @param AbstractAttributeType $type attribute type
      *
-     * @return Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityAttribute
+     * @return Oro\Bundle\FlexibleEntityBundle\Model\AttributeInterface
      */
     public function createAttribute(AbstractAttributeType $type = null)
     {
@@ -259,7 +258,7 @@ class FlexibleEntityManager extends SimpleEntityManager
 
     /**
      * Return a new instance
-     * @return Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityAttributeOption
+     * @return Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttributeOption
      */
     public function createAttributeOption()
     {
@@ -272,7 +271,7 @@ class FlexibleEntityManager extends SimpleEntityManager
 
     /**
      * Return a new instance
-     * @return Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityAttributeOptionValue
+     * @return Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttributeOptionValue
      */
     public function createAttributeOptionValue()
     {
@@ -286,7 +285,7 @@ class FlexibleEntityManager extends SimpleEntityManager
     /**
      * Return a new instance
      *
-     * @return Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityFlexible
+     * @return Oro\Bundle\FlexibleEntityBundle\Model\FlexibleEntityInterface
      */
     public function createEntity()
     {
@@ -325,7 +324,7 @@ class FlexibleEntityManager extends SimpleEntityManager
 
     /**
      * Return a new instance
-     * @return Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityFlexibleValue
+     * @return Oro\Bundle\FlexibleEntityBundle\Model\FlexibleValueInterface
      */
     public function createEntityValue()
     {
