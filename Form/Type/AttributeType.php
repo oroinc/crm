@@ -50,7 +50,9 @@ class AttributeType extends AbstractType
 
         $this->addFieldDefaultValue($builder);
 
-        $this->addFieldOptions($builder);
+        if ($builder->getData()->getId()) {
+            $this->addFieldOptions($builder);
+        }
     }
 
     /**
