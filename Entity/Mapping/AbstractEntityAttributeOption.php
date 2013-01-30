@@ -67,30 +67,6 @@ abstract class AbstractEntityAttributeOption extends AbstractAttributeOption imp
     }
 
     /**
-     * Get attribute
-     *
-     * @return AbstractEntityAttribute
-     */
-    public function getAttribute()
-    {
-        return $this->attribute;
-    }
-
-    /**
-     * Set attribute
-     *
-     * @param AbstractEntityAttribute $attribute
-     *
-     * @return EntityAttributeOption
-     */
-    public function setAttribute(AbstractEntityAttribute $attribute = null)
-    {
-        $this->attribute = $attribute;
-
-        return $this;
-    }
-
-    /**
      * Get used locale
      *
      * @return string $locale
@@ -141,16 +117,6 @@ abstract class AbstractEntityAttributeOption extends AbstractAttributeOption imp
         $this->optionValues->removeElement($value);
 
         return $this;
-    }
-
-    /**
-     * Get values
-     *
-     * @return \ArrayAccess
-     */
-    public function getOptionValues()
-    {
-        return $this->optionValues;
     }
 
     /**

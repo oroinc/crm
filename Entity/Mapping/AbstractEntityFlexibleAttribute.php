@@ -60,30 +60,6 @@ abstract class AbstractEntityFlexibleAttribute extends AbstractFlexibleAttribute
     }
 
     /**
-     * Get attribute
-     *
-     * @return AbstractEntityAttribute
-     */
-    public function getAttribute()
-    {
-        return $this->attribute;
-    }
-
-    /**
-     * Set attribute
-     *
-     * @param AbstractEntityAttribute $attribute
-     *
-     * @return AbstractEntityFlexibleAttribute
-     */
-    public function setAttribute(AbstractEntityAttribute $attribute = null)
-    {
-        $this->attribute = $attribute;
-
-        return $this;
-    }
-
-    /**
      * Set code (base attribute shortcut)
      *
      * @param string $code

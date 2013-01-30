@@ -126,7 +126,7 @@ abstract class AbstractEntityAttribute extends AbstractAttribute
     }
 
     /**
-     * Add option
+     * Add option (we do set attribute to deal with natural doctrine owner side and cascade)
      *
      * @param AbstractAttributeOption $option
      *

@@ -16,6 +16,17 @@ abstract class AbstractAttributeOption
     protected $id;
 
     /**
+     * @var AbstractAttribute $attribute
+     *
+     */
+    protected $attribute;
+
+    /**
+     * @var \ArrayAccess $optionValues
+     */
+    protected $optionValues;
+
+    /**
      * @var boolean $translatable
      */
     protected $translatable;
@@ -47,6 +58,40 @@ abstract class AbstractAttributeOption
         $this->id = $id;
 
         return $this;
+    }
+
+    /**
+     * Get attribute
+     *
+     * @return AbstractAttribute
+     */
+    public function getAttribute()
+    {
+        return $this->attribute;
+    }
+
+    /**
+     * Set attribute
+     *
+     * @param AbstractAttribute $attribute
+     *
+     * @return AbstractAttributeOption
+     */
+    public function setAttribute(AbstractAttribute $attribute = null)
+    {
+        $this->attribute = $attribute;
+
+        return $this;
+    }
+
+    /**
+     * Get values
+     *
+     * @return \ArrayAccess
+     */
+    public function getOptionValues()
+    {
+        return $this->optionValues;
     }
 
     /**
