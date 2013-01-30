@@ -50,7 +50,7 @@ class FlexibleSubscriber implements EventSubscriberInterface
         }
 
         // add entity attributes one by one
-        foreach ($this->manager->getEntityRepository()->getCodeToAttributes([]) as $attr) {
+        foreach ($this->manager->getEntityRepository()->getCodeToAttributes(array()) as $attr) {
             $options = [
                 'required'      => $attr->getRequired(),
                 'property_path' => false,

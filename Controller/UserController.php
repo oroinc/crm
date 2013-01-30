@@ -55,7 +55,7 @@ class UserController extends Controller
                  *
                  * @todo move this code to FlexibleEntityBundle
                  */
-                foreach ($fm->getEntityRepository()->getCodeToAttributes([]) as $attr) {
+                foreach ($fm->getEntityRepository()->getCodeToAttributes(array()) as $attr) {
                     $field = $form->get($attr->getCode());
 
                     if ($field) {
