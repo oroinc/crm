@@ -145,7 +145,6 @@ class AttributeType extends AbstractType
      */
     protected function addFieldOptions(FormBuilderInterface $builder)
     {
-        /*
         $builder->add(
             'options', 'collection', array(
                 'type'         => new AttributeOptionType(),
@@ -154,7 +153,6 @@ class AttributeType extends AbstractType
                 'by_reference' => false
             )
         );
-        */
     }
 
     /**
