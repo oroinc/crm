@@ -113,7 +113,7 @@ class Manufacturer
 Define the service manager (src/Acme/Bundle/DemoFlexibleEntityBundle/Resources/config/services.yml) : 
 ```yaml
 parameters:
-    manufacturer_manager_class: Oro\Bundle\FlexibleEntityBundle\Manager\SimpleEntityManager
+    manufacturer_manager_class: Oro\Bundle\FlexibleEntityBundle\Manager\SimpleManager
     manufacturer_entity_class:  Acme\Bundle\DemoFlexibleEntityBundle\Entity\Manufacturer
 
 services:
@@ -268,7 +268,7 @@ This config :
 Finally we add our service declaration in src/Acme/Bundle/DemoFlexibleEntityBundle/Resources/config/services.yml :
 ```yaml
 parameters:
-    customer_manager_class: Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleEntityManager
+    customer_manager_class: Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleManager
     customer_entity_class:  Acme\Bundle\DemoFlexibleEntityBundle\Entity\Customer
 
 services:
@@ -554,7 +554,7 @@ $customer = $this->getCustomerManager()->getEntityRepository()->findWithAttribut
 Use a non default entity manager
 ================================
 
-Used entity manager is the default one "doctrine.orm.entity_manager" (cf SimpleEntityManager)
+Used entity manager is the default one "doctrine.orm.entity_manager" (cf SimpleManager)
 
 If you want to use another one, you can define it with optional parameter as following :
 
@@ -627,7 +627,7 @@ Use document oriented storage for entity/values
 
 ```yaml
 parameters:
-    mydoc_manager_class: Acme\Bundle\MyBundle\Manager\MyFlexibleEntityManager
+    mydoc_manager_class: Acme\Bundle\MyBundle\Manager\MyFlexibleManager
     mydoc_entity_class:  Acme\Bundle\MyBundle\Document\MyDocument
 
 services:

@@ -3,9 +3,9 @@ namespace Oro\Bundle\FlexibleEntityBundle\Tests\Manager;
 
 use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\TextType;
 
-use Oro\Bundle\FlexibleEntityBundle\Tests\AbstractFlexibleEntityManagerTest;
+use Oro\Bundle\FlexibleEntityBundle\Tests\AbstractFlexibleManagerTest;
 use Doctrine\ORM\EntityManager;
-use Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleEntityManager;
+use Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleManager;
 
 /**
  * Test related class
@@ -14,7 +14,7 @@ use Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleEntityManager;
  * @copyright 2012 Akeneo SAS (http://www.akeneo.com)
  * @license   http://opensource.org/licenses/MIT MIT
  */
-class FlexibleEntityManagerTest extends AbstractFlexibleEntityManagerTest
+class FlexibleManagerTest extends AbstractFlexibleManagerTest
 {
 
     /**
@@ -30,7 +30,7 @@ class FlexibleEntityManagerTest extends AbstractFlexibleEntityManagerTest
      */
     public function testConstructWithCustomEntityManager()
     {
-        $myManager = new FlexibleEntityManager($this->container, $this->flexibleClassName, $this->entityManager);
+        $myManager = new FlexibleManager($this->container, $this->flexibleClassName, $this->entityManager);
         $this->assertNotNull($myManager->getStorageManager());
         $this->assertEquals($myManager->getStorageManager(), $this->entityManager);
     }

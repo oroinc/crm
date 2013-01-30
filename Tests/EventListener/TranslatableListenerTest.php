@@ -1,7 +1,7 @@
 <?php
 namespace Oro\Bundle\FlexibleEntityBundle\Tests\EventListener;
 
-use Oro\Bundle\FlexibleEntityBundle\Tests\AbstractFlexibleEntityManagerTest;
+use Oro\Bundle\FlexibleEntityBundle\Tests\AbstractFlexibleManagerTest;
 use Oro\Bundle\FlexibleEntityBundle\Tests\Entity\Demo\Flexible;
 use Oro\Bundle\FlexibleEntityBundle\EventListener\TranslatableListener;
 use Doctrine\ORM\Event\LifecycleEventArgs;
@@ -13,7 +13,7 @@ use Doctrine\ORM\Event\LifecycleEventArgs;
  * @copyright 2012 Akeneo SAS (http://www.akeneo.com)
  * @license   http://opensource.org/licenses/MIT MIT
  */
-class TranslatableListenerTest extends AbstractFlexibleEntityManagerTest
+class TranslatableListenerTest extends AbstractFlexibleManagerTest
 {
     /**
      * @var Flexible

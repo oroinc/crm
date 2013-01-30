@@ -5,7 +5,7 @@ use Doctrine\Tests\OrmTestCase;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 use Symfony\Component\DependencyInjection\Container;
-use Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleEntityManager;
+use Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleManager;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
@@ -16,11 +16,11 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
  * @copyright 2012 Akeneo SAS (http://www.akeneo.com)
  * @license   http://opensource.org/licenses/MIT MIT
  */
-abstract class AbstractFlexibleEntityManagerTest extends AbstractOrmTest
+abstract class AbstractFlexibleManagerTest extends AbstractOrmTest
 {
 
     /**
-     * @var FlexibleEntityManager
+     * @var FlexibleManager
      */
     protected $manager;
 
@@ -102,7 +102,7 @@ abstract class AbstractFlexibleEntityManagerTest extends AbstractOrmTest
         // prepare test container
         $this->container->setParameter('oro_flexibleentity.flexible_config', $this->flexibleConfig);
         // prepare simple entity manager (use default entity manager)
-        $this->manager = new FlexibleEntityManager($this->container, $this->flexibleClassName);
+        $this->manager = new FlexibleManager($this->container, $this->flexibleClassName);
         $this->container->set('demo_manager', $this->manager);
         // mock global event dispatcher 'event_dispatcher'
         $dispatcher = new EventDispatcher();

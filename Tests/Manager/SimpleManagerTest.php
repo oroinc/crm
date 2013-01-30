@@ -3,7 +3,7 @@ namespace Oro\Bundle\FlexibleEntityBundle\Tests\Manager;
 
 use Oro\Bundle\FlexibleEntityBundle\Tests\AbstractOrmTest;
 use Doctrine\ORM\EntityManager;
-use Oro\Bundle\FlexibleEntityBundle\Manager\SimpleEntityManager;
+use Oro\Bundle\FlexibleEntityBundle\Manager\SimpleManager;
 
 /**
  * Test related class
@@ -12,7 +12,7 @@ use Oro\Bundle\FlexibleEntityBundle\Manager\SimpleEntityManager;
  * @copyright 2012 Akeneo SAS (http://www.akeneo.com)
  * @license   http://opensource.org/licenses/MIT MIT
  */
-class SimpleEntityManagerTest extends AbstractOrmTest
+class SimpleManagerTest extends AbstractOrmTest
 {
     /**
      * @var string
@@ -27,7 +27,7 @@ class SimpleEntityManagerTest extends AbstractOrmTest
         parent::setUp();
         // prepare simple entity manager (use default entity manager)
         $this->entityName = 'Oro\Bundle\FlexibleEntityBundle\Tests\Entity\Demo\Simple';
-        $this->manager = new SimpleEntityManager($this->container, $this->entityName);
+        $this->manager = new SimpleManager($this->container, $this->entityName);
     }
 
     /**
@@ -35,7 +35,7 @@ class SimpleEntityManagerTest extends AbstractOrmTest
      */
     public function testConstructWithCustomEntityManager()
     {
-        $myManager = new SimpleEntityManager($this->container, $this->entityName, $this->entityManager);
+        $myManager = new SimpleManager($this->container, $this->entityName, $this->entityManager);
         $this->assertNotNull($myManager->getStorageManager());
         $this->assertEquals($myManager->getStorageManager(), $this->entityManager);
     }

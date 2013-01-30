@@ -13,7 +13,7 @@ use Doctrine\Common\Persistence\ObjectManager;
  * @license   http://opensource.org/licenses/MIT MIT
  *
  */
-class SimpleEntityManager
+class SimpleManager
 {
 
     /**

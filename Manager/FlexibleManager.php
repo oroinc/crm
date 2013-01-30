@@ -2,8 +2,6 @@
 namespace Oro\Bundle\FlexibleEntityBundle\Manager;
 
 use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttributeType;
-use Oro\Bundle\FlexibleEntityBundle\Model\Entity;
-use Oro\Bundle\FlexibleEntityBundle\Model\EntityAttribute;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Oro\Bundle\FlexibleEntityBundle\FlexibleEntityEvents;
 use Oro\Bundle\FlexibleEntityBundle\Event\FilterAttributeEvent;
@@ -20,7 +18,7 @@ use Doctrine\Common\Persistence\ObjectManager;
  * @license   http://opensource.org/licenses/MIT MIT
  *
  */
-class FlexibleEntityManager extends SimpleEntityManager
+class FlexibleManager extends SimpleManager
 {
     /**
      * Flexible entity config
@@ -84,7 +82,7 @@ class FlexibleEntityManager extends SimpleEntityManager
      *
      * @param string $code
      *
-     * @return FlexibleEntityManager
+     * @return FlexibleManager
      */
     public function setLocale($code)
     {
@@ -113,7 +111,7 @@ class FlexibleEntityManager extends SimpleEntityManager
      *
      * @param string $code
      *
-     * @return FlexibleEntityManager
+     * @return FlexibleManager
      */
     public function setScope($code)
     {
@@ -305,7 +303,7 @@ class FlexibleEntityManager extends SimpleEntityManager
      *
      * @param AbstractAttributeType $type attribute type
      *
-     * @return Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityFlexibleAttribute
+     * @return Oro\Bundle\FlexibleEntityBundle\Model\AbstractFlexibleAttribute
      */
     public function createEntityAttribute(AbstractAttributeType $type = null)
     {
