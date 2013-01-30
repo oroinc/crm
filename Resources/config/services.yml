@@ -27,7 +27,7 @@ services:
 
     # deal with has value required behavior
     oro_flexibleentity.has_required_value_listener:
-        class: Oro\Bundle\FlexibleEntityBundle\EventListener\HasRequiredValueListener
+        class: Oro\Bundle\FlexibleEntityBundle\EventListener\RequiredValueListener
         calls:
             - [ setContainer, [ @service_container ] ]
         tags:

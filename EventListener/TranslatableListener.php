@@ -28,7 +28,7 @@ class TranslatableListener implements EventSubscriber
      *
      * @param ContainerInterface $container
      *
-     * @return HasRequiredValueListener
+     * @return TranslatableListener
      */
     public function setContainer($container)
     {

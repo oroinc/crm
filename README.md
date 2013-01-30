@@ -162,14 +162,13 @@ We use the basic entity repository, and define by mapping which value table to u
 namespace Acme\Bundle\DemoFlexibleEntityBundle\Entity;
 
 use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityFlexible;
-use Oro\Bundle\FlexibleEntityBundle\Model\Behavior\HasRequiredValueInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="acmecustomer_customer")
  * @ORM\Entity(repositoryClass="Oro\Bundle\FlexibleEntityBundle\Entity\Repository\FlexibleEntityRepository")
  */
-class Customer extends AbstractEntityFlexible implements HasRequiredValueInterface
+class Customer extends AbstractEntityFlexible
 {
     /**
      * @var string $email

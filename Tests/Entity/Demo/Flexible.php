@@ -1,7 +1,6 @@
 <?php
 namespace Oro\Bundle\FlexibleEntityBundle\Tests\Entity\Demo;
 
-use Oro\Bundle\FlexibleEntityBundle\Model\Behavior\HasRequiredValueInterface;
 use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityFlexible;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -14,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Entity(repositoryClass="Oro\Bundle\FlexibleEntityBundle\Entity\Repository\FlexibleEntityRepository")
  */
-class Flexible extends AbstractEntityFlexible implements HasRequiredValueInterface
+class Flexible extends AbstractEntityFlexible
 {
     /**
      * @var string $myfield

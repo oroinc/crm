@@ -1,21 +1,21 @@
 <?php
 namespace Oro\Bundle\FlexibleEntityBundle\EventListener;
 
-use Oro\Bundle\FlexibleEntityBundle\Model\Behavior\HasRequiredValueInterface;
+use Oro\Bundle\FlexibleEntityBundle\Model\FlexibleEntityInterface;
 use Oro\Bundle\FlexibleEntityBundle\Exception\HasRequiredValueException;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Events;
 
 /**
- * Aims to add has value required behavior
+ * Define required value behavior, throw exception if value related to required attribute is not defined
  *
  * @author    Romain Monceau <romain@akeneo.com>
  * @copyright 2012 Akeneo SAS (http://www.akeneo.com)
  * @license   http://opensource.org/licenses/MIT MIT
  *
  */
-class HasRequiredValueListener implements EventSubscriber
+class RequiredValueListener implements EventSubscriber
 {
 
     /**
@@ -28,7 +28,7 @@ class HasRequiredValueListener implements EventSubscriber
      *
      * @param ContainerInterface $container
      *
-     * @return HasRequiredValueListener
+     * @return RequiredValueListener
      */
     public function setContainer($container)
     {
@@ -84,7 +84,7 @@ class HasRequiredValueListener implements EventSubscriber
     {
         $entity = $args->getEntity();
         // check entity implements "has required value" behavior
-        if ($entity instanceof HasRequiredValueInterface) {
+        if ($entity instanceof FlexibleEntityInterface) {
 
             // get flexible config
             $entityClass = get_class($entity);

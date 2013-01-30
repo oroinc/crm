@@ -28,7 +28,7 @@ class ScopableListener implements EventSubscriber
      *
      * @param ContainerInterface $container
      *
-     * @return HasRequiredValueListener
+     * @return ScopableListener
      */
     public function setContainer($container)
     {
