@@ -1,5 +1,5 @@
 <?php
-namespace Oro\Bundle\FlexibleEntityBundle\Model\Behavior;
+namespace Oro\Bundle\FlexibleEntityBundle\Model;
 
 /**
  * Flexible entity interface

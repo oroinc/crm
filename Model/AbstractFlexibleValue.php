@@ -1,8 +1,6 @@
 <?php
 namespace Oro\Bundle\FlexibleEntityBundle\Model;
 
-use Oro\Bundle\FlexibleEntityBundle\Model\Behavior\FlexibleValueInterface;
-
 /**
  * Abstract entity value, independent of storage
  *

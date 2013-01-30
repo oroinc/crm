@@ -5,6 +5,11 @@ use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttributeType;
 use Oro\Bundle\FlexibleEntityBundle\Model\Entity;
 use Oro\Bundle\FlexibleEntityBundle\Model\EntityAttribute;
 use Oro\Bundle\FlexibleEntityBundle\Model\EntityAttributeValue;
+use Symfony\Component\EventDispatcher\EventDispatcher;
+use Oro\Bundle\FlexibleEntityBundle\FlexibleEntityEvents;
+use Oro\Bundle\FlexibleEntityBundle\Event\FilterAttributeEvent;
+use Oro\Bundle\FlexibleEntityBundle\Event\FilterFlexibleEntityEvent;
+use Oro\Bundle\FlexibleEntityBundle\Event\FilterFlexibleValueEvent;
 use Oro\Bundle\FlexibleEntityBundle\Exception\FlexibleConfigurationException;
 use Doctrine\Common\Persistence\ObjectManager;
 
@@ -18,33 +23,11 @@ use Doctrine\Common\Persistence\ObjectManager;
  */
 class FlexibleEntityManager extends SimpleEntityManager
 {
-
-    /**
-     * @staticvar integer
-     */
-    const NO_VALUES = 0;
-
-    /**
-     * @staticvar integer
-     */
-    const REQUIRED_VALUES = 1;
-
-    /**
-     * @staticvar integer
-     */
-    const ALL_VALUES = 2;
-
     /**
      * Flexible entity config
      * @var array
      */
     protected $flexibleConfig;
-
-    /**
-     * Flexible entity config
-     * @var array
-     */
-    protected $attributeConfig;
 
     /**
      * Locale code (from config or choose by user)
@@ -265,8 +248,11 @@ class FlexibleEntityManager extends SimpleEntityManager
         $object->setBackendStorage(AbstractAttributeType::BACKEND_STORAGE_ATTRIBUTE_VALUE);
         if ($type) {
             $object->setBackendType($type->getBackendType());
-            $object->setFrontendType(get_class($type));
+            $object->setAttributeType(get_class($type));
         }
+        // dispatch event
+        $event = new FilterAttributeEvent($object);
+        $this->container->get('event_dispatcher')->dispatch(FlexibleEntityEvents::CREATE_ATTRIBUTE, $event);
 
         return $object;
     }
@@ -299,21 +285,18 @@ class FlexibleEntityManager extends SimpleEntityManager
 
     /**
      * Return a new instance
-     * @param integer $withEmptyValues
      *
      * @return Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityFlexible
      */
-    public function createEntity($withEmptyValues = self::NO_VALUES)
+    public function createEntity()
     {
         $class = $this->getEntityName();
         $object = new $class();
         $object->setLocale($this->getLocale());
         $object->setScope($this->getScope());
-
-        // add empty attribute values TODO two distinct cases for requirer and all
-        if ($withEmptyValues !== self::NO_VALUES) {
-            $this->createEmptyValues($object);
-        }
+        // dispatch event
+        $event = new FilterFlexibleEntityEvent($object);
+        $this->container->get('event_dispatcher')->dispatch(FlexibleEntityEvents::CREATE_FLEXIBLE_ENTITY, $event);
 
         return $object;
     }
@@ -324,6 +307,9 @@ class FlexibleEntityManager extends SimpleEntityManager
      */
     protected function createEmptyValues($object)
     {
+
+        //TODO / refacotr and delete
+
         $values = array();
         $attributes = $this->getAttributeRepository()->findBy(array('entityType' => $this->getEntityName()));
 
@@ -366,6 +352,9 @@ class FlexibleEntityManager extends SimpleEntityManager
         $object = new $class();
         $object->setLocale($this->getLocale());
         $object->setScope($this->getScope());
+        // dispatch event
+        $event = new FilterFlexibleValueEvent($object);
+        $this->container->get('event_dispatcher')->dispatch(FlexibleEntityEvents::CREATE_FLEXIBLE_VALUE, $event);
 
         return $object;
     }

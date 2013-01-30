@@ -10,7 +10,7 @@ use Oro\Bundle\FlexibleEntityBundle\Model\Behavior\TimestampableInterface;
  * @copyright 2012 Akeneo SAS (http://www.akeneo.com)
  * @license   http://opensource.org/licenses/MIT MIT
  */
-abstract class AbstractAttribute implements TimestampableInterface
+abstract class AbstractAttribute implements AttributeInterface, TimestampableInterface
 {
 
     /**

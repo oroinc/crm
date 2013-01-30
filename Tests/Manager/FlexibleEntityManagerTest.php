@@ -2,7 +2,6 @@
 namespace Oro\Bundle\FlexibleEntityBundle\Tests\Manager;
 
 use Oro\Bundle\FlexibleEntityBundle\Tests\AbstractFlexibleEntityManagerTest;
-
 use Doctrine\ORM\EntityManager;
 use Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleEntityManager;
 

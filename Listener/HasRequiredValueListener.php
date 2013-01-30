@@ -40,7 +40,7 @@ class HasRequiredValueListener implements EventSubscriber
     /**
      * Specifies the list of events to listen
      *
-     * @return multitype:string
+     * @return array
      */
     public function getSubscribedEvents()
     {

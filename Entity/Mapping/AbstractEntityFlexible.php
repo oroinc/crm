@@ -1,11 +1,10 @@
 <?php
 namespace Oro\Bundle\FlexibleEntityBundle\Entity\Mapping;
 
-use Oro\Bundle\FlexibleEntityBundle\Model\Behavior\FlexibleValueInterface;
-
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Oro\Bundle\FlexibleEntityBundle\Model\AbstractFlexible;
+use Oro\Bundle\FlexibleEntityBundle\Model\FlexibleValueInterface;
 use Oro\Bundle\FlexibleEntityBundle\Model\AbstractFlexibleValue;
 use Oro\Bundle\FlexibleEntityBundle\Model\Behavior\TranslatableContainerInterface;
 use Oro\Bundle\FlexibleEntityBundle\Model\Behavior\ScopableContainerInterface;

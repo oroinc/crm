@@ -49,7 +49,7 @@ class ScopableListenerTest extends AbstractFlexibleEntityManagerTest
     public function testPostLoad()
     {
         // check before
-        $this->assertNull($this->flexible->getLocale());
+        $this->assertNull($this->flexible->getScope());
         // call method
         $args = new LifecycleEventArgs($this->flexible, $this->entityManager);
         $this->listener->postLoad($args);

@@ -1,7 +1,6 @@
 <?php
 namespace Oro\Bundle\FlexibleEntityBundle\Model;
 
-use Oro\Bundle\FlexibleEntityBundle\Model\Behavior\FlexibleEntityInterface;
 use Oro\Bundle\FlexibleEntityBundle\Model\Behavior\TimestampableInterface;
 
 /**

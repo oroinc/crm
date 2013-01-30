@@ -1,13 +1,13 @@
 <?php
 namespace Oro\Bundle\FlexibleEntityBundle\Tests;
 
-use Doctrine\ORM\EntityManager;
-
 use Doctrine\Tests\OrmTestCase;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 use Symfony\Component\DependencyInjection\Container;
 use Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleEntityManager;
+use Doctrine\ORM\EntityManager;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 
 /**
  * Test related class
@@ -104,6 +104,9 @@ abstract class AbstractFlexibleEntityManagerTest extends AbstractOrmTest
         // prepare simple entity manager (use default entity manager)
         $this->manager = new FlexibleEntityManager($this->container, $this->flexibleClassName);
         $this->container->set('demo_manager', $this->manager);
+        // mock global event dispatcher 'event_dispatcher'
+        $dispatcher = new EventDispatcher();
+        $this->container->set('event_dispatcher', $dispatcher);
     }
 
 }

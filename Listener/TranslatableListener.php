@@ -6,7 +6,7 @@ use Doctrine\Common\EventSubscriber;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Oro\Bundle\FlexibleEntityBundle\Model\Behavior\TranslatableContainerInterface;
-use Oro\Bundle\FlexibleEntityBundle\Model\Behavior\FlexibleEntityInterface;
+use Oro\Bundle\FlexibleEntityBundle\Model\FlexibleEntityInterface;
 
 /**
  * Aims to inject selected locale into loaded entity

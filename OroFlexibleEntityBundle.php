@@ -1,5 +1,4 @@
 <?php
-
 namespace Oro\Bundle\FlexibleEntityBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
