@@ -1,6 +1,9 @@
 <?php
 namespace Oro\Bundle\FlexibleEntityBundle\Model;
 
+use Oro\Bundle\FlexibleEntityBundle\Model\Behavior\TranslatableInterface;
+use Oro\Bundle\FlexibleEntityBundle\Model\Behavior\ScopableInterface;
+
 /**
  * Abstract entity value, independent of storage
  *
@@ -9,7 +12,7 @@ namespace Oro\Bundle\FlexibleEntityBundle\Model;
  * @license   http://opensource.org/licenses/MIT MIT
  *
  */
-abstract class AbstractFlexibleValue implements FlexibleValueInterface
+abstract class AbstractFlexibleValue implements FlexibleValueInterface, TranslatableInterface, ScopableInterface
 {
 
     /**

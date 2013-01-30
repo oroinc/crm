@@ -5,7 +5,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttributeOption;
 use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttributeOptionValue;
-use Oro\Bundle\FlexibleEntityBundle\Model\Behavior\TranslatableContainerInterface;
 
 /**
  * Base Doctrine ORM entity attribute option
@@ -15,7 +14,7 @@ use Oro\Bundle\FlexibleEntityBundle\Model\Behavior\TranslatableContainerInterfac
  * @license   http://opensource.org/licenses/MIT  MIT
  *
  */
-abstract class AbstractEntityAttributeOption extends AbstractAttributeOption implements TranslatableContainerInterface
+abstract class AbstractEntityAttributeOption extends AbstractAttributeOption
 {
     /**
      * @var integer $id
@@ -39,12 +38,6 @@ abstract class AbstractEntityAttributeOption extends AbstractAttributeOption imp
     protected $translatable;
 
     /**
-     * Not persisted, allowe to define the value locale
-     * @var string $locale
-     */
-    protected $locale;
-
-    /**
      * @ORM\Column(name="sort_order", type="integer")
      */
     protected $sortOrder;
@@ -64,30 +57,6 @@ abstract class AbstractEntityAttributeOption extends AbstractAttributeOption imp
         $this->optionValues = new ArrayCollection();
         $this->translatable = false;
         $this->sortOrder    = 1;
-    }
-
-    /**
-     * Get used locale
-     *
-     * @return string $locale
-     */
-    public function getLocale()
-    {
-        return $this->locale;
-    }
-
-    /**
-     * Set used locale
-     *
-     * @param string $locale
-     *
-     * @return AbstractAttributeOption
-     */
-    public function setLocale($locale)
-    {
-        $this->locale = $locale;
-
-        return $this;
     }
 
     /**

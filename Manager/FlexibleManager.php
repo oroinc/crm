@@ -8,6 +8,8 @@ use Oro\Bundle\FlexibleEntityBundle\Event\FilterAttributeEvent;
 use Oro\Bundle\FlexibleEntityBundle\Event\FilterFlexibleEntityEvent;
 use Oro\Bundle\FlexibleEntityBundle\Event\FilterFlexibleValueEvent;
 use Oro\Bundle\FlexibleEntityBundle\Exception\FlexibleConfigurationException;
+use Oro\Bundle\FlexibleEntityBundle\Model\Behavior\TranslatableInterface;
+use Oro\Bundle\FlexibleEntityBundle\Model\Behavior\ScopableInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 
 /**
@@ -18,7 +20,7 @@ use Doctrine\Common\Persistence\ObjectManager;
  * @license   http://opensource.org/licenses/MIT MIT
  *
  */
-class FlexibleManager extends SimpleManager
+class FlexibleManager extends SimpleManager implements TranslatableInterface, ScopableInterface
 {
     /**
      * Flexible entity config

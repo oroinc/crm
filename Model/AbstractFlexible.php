@@ -1,6 +1,8 @@
 <?php
 namespace Oro\Bundle\FlexibleEntityBundle\Model;
 
+use Oro\Bundle\FlexibleEntityBundle\Model\Behavior\ScopableInterface;
+use Oro\Bundle\FlexibleEntityBundle\Model\Behavior\TranslatableInterface;
 use Oro\Bundle\FlexibleEntityBundle\Model\Behavior\TimestampableInterface;
 
 /**
@@ -11,7 +13,7 @@ use Oro\Bundle\FlexibleEntityBundle\Model\Behavior\TimestampableInterface;
  * @license   http://opensource.org/licenses/MIT MIT
  *
  */
-abstract class AbstractFlexible implements FlexibleEntityInterface, TimestampableInterface
+abstract class AbstractFlexible implements FlexibleEntityInterface, TimestampableInterface, TranslatableInterface, ScopableInterface
 {
 
     /**
@@ -28,6 +30,18 @@ abstract class AbstractFlexible implements FlexibleEntityInterface, Timestampabl
      * @var datetime $created
      */
     protected $updated;
+
+    /**
+     * Not persisted but allow to force locale for values
+     * @var string $locale
+     */
+    protected $locale;
+
+    /**
+     * Not persisted but allow to force scope for values
+     * @var string $scope
+     */
+    protected $scope;
 
     /**
      * Get id
@@ -97,6 +111,52 @@ abstract class AbstractFlexible implements FlexibleEntityInterface, Timestampabl
     public function setUpdated($updated)
     {
         $this->updated = $updated;
+
+        return $this;
+    }
+
+    /**
+     * Get used locale
+     * @return string $locale
+     */
+    public function getLocale()
+    {
+        return $this->locale;
+    }
+
+    /**
+     * Set used locale
+     *
+     * @param string $locale
+     *
+     * @return TranslatableInterface
+     */
+    public function setLocale($locale)
+    {
+        $this->locale = $locale;
+
+        return $this;
+    }
+
+    /**
+     * Get used scope
+     * @return string $scope
+     */
+    public function getScope()
+    {
+        return $this->scope;
+    }
+
+    /**
+     * Set used scope
+     *
+     * @param string $scope
+     *
+     * @return ScopableInterface
+     */
+    public function setScope($scope)
+    {
+        $this->scope = $scope;
 
         return $this;
     }

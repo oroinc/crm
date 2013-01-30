@@ -2,16 +2,14 @@
 namespace Oro\Bundle\FlexibleEntityBundle\Model\Behavior;
 
 /**
- * Scopable container interface, implemented by class which can't be scoped but contains
- * some other scopable content, for instance, a flexible entity is not scopable itself
- * but its values should be
+ * Scopable interface, implemented by class which can be scoped
  *
  * @author    Nicolas Dupont <nicolas@akeneo.com>
  * @copyright 2012 Akeneo SAS (http://www.akeneo.com)
  * @license   http://opensource.org/licenses/MIT MIT
  *
  */
-interface ScopableContainerInterface
+interface ScopableInterface
 {
 
     /**
@@ -24,7 +22,7 @@ interface ScopableContainerInterface
      * Set used scope
      * @param string $scope
      *
-     * @return ScopableContainerInterface
+     * @return ScopableInterface
      */
     public function setScope($scope);
 

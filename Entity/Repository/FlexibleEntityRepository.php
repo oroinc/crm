@@ -2,6 +2,8 @@
 namespace Oro\Bundle\FlexibleEntityBundle\Entity\Repository;
 
 use Oro\Bundle\FlexibleEntityBundle\Exception\UnknownAttributeException;
+use Oro\Bundle\FlexibleEntityBundle\Model\Behavior\TranslatableInterface;
+use Oro\Bundle\FlexibleEntityBundle\Model\Behavior\ScopableInterface;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 
@@ -13,7 +15,7 @@ use Doctrine\ORM\Tools\Pagination\Paginator;
  * @license   http://opensource.org/licenses/MIT MIT
  *
  */
-class FlexibleEntityRepository extends EntityRepository
+class FlexibleEntityRepository extends EntityRepository implements TranslatableInterface, ScopableInterface
 {
 
     /**

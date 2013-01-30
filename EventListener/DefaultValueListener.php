@@ -4,7 +4,6 @@ namespace Oro\Bundle\FlexibleEntityBundle\EventListener;
 use Oro\Bundle\FlexibleEntityBundle\Model\FlexibleValueInterface;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LifecycleEventArgs;
-use Doctrine\ORM\Events;
 
 /**
  * Aims to add  default value data from attribute if defined
@@ -24,7 +23,10 @@ class DefaultValueListener implements EventSubscriber
      */
     public function getSubscribedEvents()
     {
-        return array(Events::prePersist, Events::preUpdate);
+        return array(
+            'prePersist',
+            'preUpdate'
+        );
     }
 
     /**

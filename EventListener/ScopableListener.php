@@ -5,11 +5,11 @@ use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\Common\EventSubscriber;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Oro\Bundle\FlexibleEntityBundle\Model\Behavior\ScopableContainerInterface;
+use Oro\Bundle\FlexibleEntityBundle\Model\Behavior\ScopableInterface;
 use Oro\Bundle\FlexibleEntityBundle\Model\FlexibleEntityInterface;
 
 /**
- * Aims to inject selected locale into loaded entity
+ * Aims to inject selected scope into loaded entity
  *
  * @author    Nicolas Dupont <nicolas@akeneo.com>
  * @copyright 2012 Akeneo SAS (http://www.akeneo.com)
@@ -57,8 +57,8 @@ class ScopableListener implements EventSubscriber
     {
         $entity = $args->getEntity();
 
-        // inject selected locale on translatable containers
-        if ($entity instanceof ScopableContainerInterface) {
+        // inject selected scope on scopable containers
+        if ($entity instanceof ScopableInterface) {
 
             // get flexible entity class
             $flexibleEntityClass = false;

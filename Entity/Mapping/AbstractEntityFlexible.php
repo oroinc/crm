@@ -6,8 +6,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Oro\Bundle\FlexibleEntityBundle\Model\AbstractFlexible;
 use Oro\Bundle\FlexibleEntityBundle\Model\FlexibleValueInterface;
 use Oro\Bundle\FlexibleEntityBundle\Model\AbstractFlexibleValue;
-use Oro\Bundle\FlexibleEntityBundle\Model\Behavior\TranslatableContainerInterface;
-use Oro\Bundle\FlexibleEntityBundle\Model\Behavior\ScopableContainerInterface;
 
 /**
  * Base Doctrine ORM entity
@@ -17,7 +15,7 @@ use Oro\Bundle\FlexibleEntityBundle\Model\Behavior\ScopableContainerInterface;
  * @license   http://opensource.org/licenses/MIT MIT
  *
  */
-abstract class AbstractEntityFlexible extends AbstractFlexible implements TranslatableContainerInterface, ScopableContainerInterface
+abstract class AbstractEntityFlexible extends AbstractFlexible
 {
     /**
      * @var integer $id
@@ -43,18 +41,6 @@ abstract class AbstractEntityFlexible extends AbstractFlexible implements Transl
     protected $updated;
 
     /**
-     * Not persisted but allow to force locale for values
-     * @var string $locale
-     */
-    protected $locale;
-
-    /**
-     * Not persisted but allow to force scope for values
-     * @var string $scope
-     */
-    protected $scope;
-
-    /**
      * @var Value
      *
      * @ORM\OneToMany(targetEntity="AbstractEntityFlexibleValue", mappedBy="entity", cascade={"persist", "remove"})
@@ -67,52 +53,6 @@ abstract class AbstractEntityFlexible extends AbstractFlexible implements Transl
     public function __construct()
     {
         $this->values = new ArrayCollection();
-    }
-
-    /**
-     * Get used locale
-     * @return string $locale
-     */
-    public function getLocale()
-    {
-        return $this->locale;
-    }
-
-    /**
-     * Set used locale
-     *
-     * @param string $locale
-     *
-     * @return AbstractFlexible
-     */
-    public function setLocale($locale)
-    {
-        $this->locale = $locale;
-
-        return $this;
-    }
-
-    /**
-     * Get used scope
-     * @return string $scope
-     */
-    public function getScope()
-    {
-        return $this->scope;
-    }
-
-    /**
-     * Set used scope
-     *
-     * @param string $scope
-     *
-     * @return AbstractFlexible
-     */
-    public function setScope($scope)
-    {
-        $this->scope = $scope;
-
-        return $this;
     }
 
     /**
