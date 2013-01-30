@@ -51,10 +51,10 @@ class FlexibleSubscriber implements EventSubscriberInterface
 
         // add entity attributes one by one
         foreach ($this->manager->getEntityRepository()->getCodeToAttributes(array()) as $attr) {
-            $options = [
+            $options = array(
                 'required'      => $attr->getRequired(),
                 'property_path' => false,
-            ];
+            );
 
             switch ($attr->getBackendType()) {
                 case AbstractAttributeType::BACKEND_TYPE_DATE:
