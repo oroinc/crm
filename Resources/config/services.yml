@@ -39,7 +39,7 @@ services:
 
     # deal with flexible entity initialize values
     oro_flexibleentity.listener.creationvalues:
-        class: Oro\Bundle\FlexibleEntityBundle\EventListener\CreationValuesListener
+        class: Oro\Bundle\FlexibleEntityBundle\EventListener\CreateFlexibleValuesListener
         tags:
             - { name: kernel.event_subscriber}
 

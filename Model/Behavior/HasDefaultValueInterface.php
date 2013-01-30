@@ -11,4 +11,5 @@ namespace Oro\Bundle\FlexibleEntityBundle\Model\Behavior;
  */
 interface HasDefaultValueInterface
 {
+
 }

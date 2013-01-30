@@ -21,7 +21,7 @@ class TextType extends AbstractAttributeType
     {
         $this->name        = 'Text';
         $this->backendType = self::BACKEND_TYPE_VARCHAR;
-        $this->formType    = 'textarea';
+        $this->formType    = 'text';
     }
 
 }

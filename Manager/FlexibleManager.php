@@ -248,7 +248,7 @@ class FlexibleManager extends SimpleManager
             $object->setAttributeType(get_class($type));
         }
         // dispatch event
-        $event = new FilterAttributeEvent($object);
+        $event = new FilterAttributeEvent($this, $object);
         $this->container->get('event_dispatcher')->dispatch(FlexibleEntityEvents::CREATE_ATTRIBUTE, $event);
 
         return $object;
@@ -292,7 +292,7 @@ class FlexibleManager extends SimpleManager
         $object->setLocale($this->getLocale());
         $object->setScope($this->getScope());
         // dispatch event
-        $event = new FilterFlexibleEntityEvent($object);
+        $event = new FilterFlexibleEntityEvent($this, $object);
         $this->container->get('event_dispatcher')->dispatch(FlexibleEntityEvents::CREATE_FLEXIBLE_ENTITY, $event);
 
         return $object;
@@ -331,7 +331,7 @@ class FlexibleManager extends SimpleManager
         $object->setLocale($this->getLocale());
         $object->setScope($this->getScope());
         // dispatch event
-        $event = new FilterFlexibleValueEvent($object);
+        $event = new FilterFlexibleValueEvent($this, $object);
         $this->container->get('event_dispatcher')->dispatch(FlexibleEntityEvents::CREATE_FLEXIBLE_VALUE, $event);
 
         return $object;

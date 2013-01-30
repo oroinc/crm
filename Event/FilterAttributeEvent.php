@@ -1,7 +1,7 @@
 <?php
 namespace Oro\Bundle\FlexibleEntityBundle\Event;
 
-use Symfony\Component\EventDispatcher\Event;
+use Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleManager;
 use Oro\Bundle\FlexibleEntityBundle\Model\AttributeInterface;
 
 /**
@@ -12,7 +12,7 @@ use Oro\Bundle\FlexibleEntityBundle\Model\AttributeInterface;
  * @license   http://opensource.org/licenses/MIT MIT
  *
  */
-class FilterAttributeEvent extends Event
+class FilterAttributeEvent extends AbstractFilterEvent
 {
     /**
      * Flexible attribute
@@ -22,10 +22,12 @@ class FilterAttributeEvent extends Event
 
     /**
      * Constructor
+     * @param FlexibleManager $manager
      * @param AttributeInterface $attribute
      */
-    public function __construct(AttributeInterface $attribute)
+    public function __construct(FlexibleManager $manager, AttributeInterface $attribute)
     {
+        parent::__construct($manager);
         $this->attribute = $attribute;
     }
 
