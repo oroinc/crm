@@ -33,14 +33,14 @@ services:
         tags:
             - { name: doctrine.event_subscriber }
 
-    # deal with has default value behavior
-    oro_flexibleentity.has_default_value_listener:
-        class: Oro\Bundle\FlexibleEntityBundle\EventListener\HasDefaultValueListener
 
-    # deal with flexible entity initialize values
-    oro_flexibleentity.listener.creationvalues:
-        class: Oro\Bundle\FlexibleEntityBundle\EventListener\CreateFlexibleValuesListener
+    # deal with default value behavior
+    oro_flexibleentity.listener.default_value_listener:
+        class: Oro\Bundle\FlexibleEntityBundle\EventListener\DefaultValueListener
+
+    # deal with flexible values initialization mode
+    oro_flexibleentity.listener.initialize_values_listener:
+        class: Oro\Bundle\FlexibleEntityBundle\EventListener\InitializeValuesListener
         tags:
             - { name: kernel.event_subscriber}
-
 

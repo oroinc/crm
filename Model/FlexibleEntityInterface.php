@@ -11,7 +11,6 @@ namespace Oro\Bundle\FlexibleEntityBundle\Model;
  */
 interface FlexibleEntityInterface
 {
-
     /**
      * Add value
      *

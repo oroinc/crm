@@ -209,7 +209,6 @@ We define mapping to basic entity attribute, to basic option (for attribute of l
 <?php
 namespace Acme\Bundle\DemoFlexibleEntityBundle\Entity;
 
-use Oro\Bundle\FlexibleEntityBundle\Model\Behavior\HasDefaultValueInterface;
 use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityFlexibleValue;
 use Oro\Bundle\FlexibleEntityBundle\Entity\Attribute;
 use Doctrine\ORM\Mapping as ORM;
@@ -218,7 +217,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="acmecustomer_customer_attribute_value")
  * @ORM\Entity
  */
-class CustomerValue extends AbstractEntityFlexibleValue implements HasDefaultValueInterface
+class CustomerValue extends AbstractEntityFlexibleValue
 {
     /**
      * @var Attribute $attribute

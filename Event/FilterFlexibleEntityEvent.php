@@ -22,8 +22,9 @@ class FilterFlexibleEntityEvent extends AbstractFilterEvent
 
     /**
      * Constructor
-     * @param FlexibleManager $manager
-     * @param FlexibleEntityInterface $entity
+     *
+     * @param FlexibleManager         $manager the manager
+     * @param FlexibleEntityInterface $entity  the entity
      */
     public function __construct(FlexibleManager $manager, FlexibleEntityInterface $entity)
     {

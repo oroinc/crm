@@ -1,7 +1,6 @@
 <?php
 namespace Oro\Bundle\FlexibleEntityBundle\Tests\Entity\Demo;
 
-use Oro\Bundle\FlexibleEntityBundle\Model\Behavior\HasDefaultValueInterface;
 use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityFlexibleValue;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -15,7 +14,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  *
  * @ORM\Entity()
  */
-class FlexibleValue extends AbstractEntityFlexibleValue implements HasDefaultValueInterface
+class FlexibleValue extends AbstractEntityFlexibleValue
 {
 
     /**

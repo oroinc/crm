@@ -22,8 +22,9 @@ class FilterFlexibleValueEvent extends AbstractFilterEvent
 
     /**
      * Constructor
-     * @param FlexibleManager $manager
-     * @param FlexibleValueInterface $value
+     *
+     * @param FlexibleManager        $manager the manager
+     * @param FlexibleValueInterface $value   the value
      */
     public function __construct(FlexibleManager $manager, FlexibleValueInterface $value)
     {

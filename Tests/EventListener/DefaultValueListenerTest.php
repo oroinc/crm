@@ -5,7 +5,7 @@ use Oro\Bundle\FlexibleEntityBundle\Tests\AbstractOrmTest;
 use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttributeType;
 use Oro\Bundle\FlexibleEntityBundle\Tests\Entity\Demo\FlexibleValue;
 use Oro\Bundle\FlexibleEntityBundle\Entity\Attribute;
-use Oro\Bundle\FlexibleEntityBundle\EventListener\HasDefaultValueListener;
+use Oro\Bundle\FlexibleEntityBundle\EventListener\DefaultValueListener;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 
 /**
@@ -16,7 +16,7 @@ use Doctrine\ORM\Event\LifecycleEventArgs;
  * @license   http://opensource.org/licenses/MIT MIT
  *
  */
-class HasDefaultValueListenerTest extends AbstractOrmTest
+class DefaultValueListenerTest extends AbstractOrmTest
 {
     /**
      * @var Attribute
@@ -29,7 +29,7 @@ class HasDefaultValueListenerTest extends AbstractOrmTest
     protected $value;
 
     /**
-     * @var HasDefaultValueListener
+     * @var DefaultValueListener
      */
     protected $listener;
 
@@ -60,7 +60,7 @@ class HasDefaultValueListenerTest extends AbstractOrmTest
         $this->value->setAttribute($this->attribute);
 
         // create listener
-        $this->listener = new HasDefaultValueListener();
+        $this->listener = new DefaultValueListener();
     }
 
     /**
@@ -117,7 +117,6 @@ class HasDefaultValueListenerTest extends AbstractOrmTest
         // assertions
         $this->assertNotNull($this->value->getData());
         $this->assertEquals($this->defaultValue, $this->value->getData());
-
 
         // change value
         $this->value->setData($this->definedValue);

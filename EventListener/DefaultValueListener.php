@@ -1,19 +1,20 @@
 <?php
 namespace Oro\Bundle\FlexibleEntityBundle\EventListener;
 
-use Oro\Bundle\FlexibleEntityBundle\Model\Behavior\HasDefaultValueInterface;
+use Oro\Bundle\FlexibleEntityBundle\Model\FlexibleValueInterface;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LifecycleEventArgs;
+use Doctrine\ORM\Events;
 
 /**
- * Aims to add a default value behavior
+ * Aims to add  default value data from attribute if defined
  *
  * @author    Romain Monceau <romain@akeneo.com>
  * @copyright 2012 Akeneo SAS (http://www.akeneo.com)
  * @license   http://opensource.org/licenses/MIT MIT
  *
  */
-class HasDefaultValueListener implements EventSubscriber
+class DefaultValueListener implements EventSubscriber
 {
 
     /**
@@ -23,10 +24,7 @@ class HasDefaultValueListener implements EventSubscriber
      */
     public function getSubscribedEvents()
     {
-        return array(
-            'prePersist',
-            'preUpdate'
-        );
+        return array(Events::prePersist, Events::preUpdate);
     }
 
     /**
@@ -56,13 +54,10 @@ class HasDefaultValueListener implements EventSubscriber
     protected function defineDefaultValue(LifecycleEventArgs $args)
     {
         $entity = $args->getEntity();
-
-        // check entity implements "has default value" behavior
-        if ($entity instanceof HasDefaultValueInterface) {
-            // check value has no data and attribute has default value
+        if ($entity instanceof FlexibleValueInterface) {
+            // check that value has no data and attribute has defined default value
             if (!$entity->hasData() and !is_null($entity->getAttribute()->getDefaultValue())) {
-                $defaultValue = $entity->getAttribute()->getDefaultValue();
-                $entity->setData($defaultValue);
+                $entity->setData($entity->getAttribute()->getDefaultValue());
             }
         }
     }

@@ -83,6 +83,15 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('default_scope')
                 ->defaultValue(null)
                 ->end()
+
+                // optional, init mode for flexible (add a value for each attribute or add value for required attributes)
+                ->scalarNode('flexible_init_mode')
+                ->defaultValue('all_attributes')
+                ->validate()
+                ->ifNotInArray(array('all_attributes', 'required_attributes'))
+                ->thenInvalid('Invalid flexible init mode "%s"')
+                ->end()
+                ->end()
             ->end()
         ->end();
 

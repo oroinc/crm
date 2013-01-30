@@ -22,8 +22,9 @@ class FilterAttributeEvent extends AbstractFilterEvent
 
     /**
      * Constructor
-     * @param FlexibleManager $manager
-     * @param AbstractAttribute $attribute
+     *
+     * @param FlexibleManager   $manager   the manager
+     * @param AbstractAttribute $attribute the attribute
      */
     public function __construct(FlexibleManager $manager, AbstractAttribute $attribute)
     {

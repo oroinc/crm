@@ -164,6 +164,7 @@ abstract class AbstractEntityFlexibleValue extends AbstractFlexibleValue
      */
     public function setData($data)
     {
+        parent::setData($data);
         $backend = $this->attribute->getBackendType();
         $this->$backend = $data;
 

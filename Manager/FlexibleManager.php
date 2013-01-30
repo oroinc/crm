@@ -63,6 +63,15 @@ class FlexibleManager extends SimpleManager
     }
 
     /**
+     * Get flexible init mode
+     * @return array
+     */
+    public function getFlexibleInitMode()
+    {
+        return $this->flexibleConfig['flexible_init_mode'];
+    }
+
+    /**
      * Return asked locale code or default one
      *
      * @return string

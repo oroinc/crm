@@ -17,7 +17,7 @@ use Oro\Bundle\FlexibleEntityBundle\FlexibleEntityEvents;
  * @license   http://opensource.org/licenses/MIT MIT
  *
  */
-class CreateFlexibleValuesListener implements EventSubscriberInterface
+class InitializeValuesListener implements EventSubscriberInterface
 {
 
     /**
@@ -43,8 +43,14 @@ class CreateFlexibleValuesListener implements EventSubscriberInterface
 
         if ($flexible instanceof FlexibleEntityInterface) {
 
-            $values = array();
-            $attributes = $manager->getAttributeRepository()->findBy(array('entityType' => $manager->getEntityName(), 'required' => false));
+            // get initialization mode
+            if ($manager->getFlexibleInitMode() === 'required_attributes') {
+                $required = true;
+            } else {
+                $required = false;
+            }
+            // initialize with base values
+            $attributes = $manager->getAttributeRepository()->findBy(array('entityType' => $manager->getEntityName(), 'required' => $required));
             foreach ($attributes as $attribute) {
                 $value = $manager->createEntityValue();
                 $value->setAttribute($attribute);
