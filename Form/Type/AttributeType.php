@@ -27,11 +27,19 @@ use Symfony\Component\Form\AbstractType;
  */
 class AttributeType extends AbstractType
 {
+
+    /**
+     * @var boolean
+     */
+    protected $isEditing;
+
     /**
      * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $this->isEditing = ($builder->getData()->getId() !== null);
+
         $this->addFieldId($builder);
 
         $this->addFieldCode($builder);
@@ -50,7 +58,7 @@ class AttributeType extends AbstractType
 
         $this->addFieldDefaultValue($builder);
 
-        if ($builder->getData()->getId()) {
+        if ($this->isEditing && $builder->getData()->getBackendType() === AbstractAttributeType::BACKEND_TYPE_OPTION) {
             $this->addFieldOptions($builder);
         }
     }
@@ -70,7 +78,11 @@ class AttributeType extends AbstractType
      */
     protected function addFieldCode(FormBuilderInterface $builder)
     {
-        $options = array('required' => true, 'read_only' => $builder->getData()->getId());
+        $options = array(
+            'required'  => true,
+            'disabled'  => $this->isEditing,
+            'read_only' => $this->isEditing
+        );
         $builder->add('code', 'text', $options);
     }
 
@@ -81,8 +93,9 @@ class AttributeType extends AbstractType
     protected function addFieldAttributeType(FormBuilderInterface $builder)
     {
         $options = array(
-            'choices'  => $this->getAttributeTypeChoices(),
-            'read_only' => $builder->getData()->getId()
+            'choices'   => $this->getAttributeTypeChoices(),
+            'disabled'  => $this->isEditing,
+            'read_only' => $this->isEditing
         );
         $builder->add('attributeType', 'choice', $options);
     }
