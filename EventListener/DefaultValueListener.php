@@ -1,7 +1,7 @@
 <?php
 namespace Oro\Bundle\FlexibleEntityBundle\EventListener;
 
-use Oro\Bundle\FlexibleEntityBundle\Model\FlexibleValueInterface;
+use Oro\Bundle\FlexibleEntityBundle\Model\ValueInterface;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 
@@ -56,7 +56,7 @@ class DefaultValueListener implements EventSubscriber
     protected function defineDefaultValue(LifecycleEventArgs $args)
     {
         $entity = $args->getEntity();
-        if ($entity instanceof FlexibleValueInterface) {
+        if ($entity instanceof ValueInterface) {
             // check that value has no data and attribute has defined default value
             if (!$entity->hasData() and !is_null($entity->getAttribute()->getDefaultValue())) {
                 $entity->setData($entity->getAttribute()->getDefaultValue());

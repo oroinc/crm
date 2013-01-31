@@ -1,7 +1,7 @@
 <?php
 namespace Oro\Bundle\FlexibleEntityBundle\EventListener;
 
-use Oro\Bundle\FlexibleEntityBundle\Model\FlexibleEntityInterface;
+use Oro\Bundle\FlexibleEntityBundle\Model\FlexibleInterface;
 use Oro\Bundle\FlexibleEntityBundle\Exception\HasRequiredValueException;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LifecycleEventArgs;
@@ -84,7 +84,7 @@ class RequiredValueListener implements EventSubscriber
     {
         $entity = $args->getEntity();
         // check entity implements "has required value" behavior
-        if ($entity instanceof FlexibleEntityInterface) {
+        if ($entity instanceof FlexibleInterface) {
 
             // get flexible config
             $entityClass = get_class($entity);

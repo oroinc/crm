@@ -1,7 +1,7 @@
 <?php
 namespace Oro\Bundle\FlexibleEntityBundle\Tests\Entity\Demo;
 
-use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityFlexibleValue;
+use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityValue;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 
@@ -14,7 +14,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  *
  * @ORM\Entity()
  */
-class FlexibleValue extends AbstractEntityFlexibleValue
+class FlexibleValue extends AbstractEntityValue
 {
 
     /**

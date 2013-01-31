@@ -1,7 +1,7 @@
 <?php
 namespace Oro\Bundle\FlexibleEntityBundle\Tests\Entity\Demo;
 
-use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityFlexibleAttribute;
+use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityAttributeExtended;
 use Oro\Bundle\FlexibleEntityBundle\Entity\Attribute;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -14,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Entity()
  */
-class FlexibleAttribute extends AbstractEntityFlexibleAttribute
+class FlexibleAttribute extends AbstractEntityAttributeExtended
 {
 
     /**

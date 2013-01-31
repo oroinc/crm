@@ -5,7 +5,7 @@ use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\Common\EventSubscriber;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Oro\Bundle\FlexibleEntityBundle\Model\FlexibleEntityInterface;
+use Oro\Bundle\FlexibleEntityBundle\Model\FlexibleInterface;
 use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttributeOption;
 use Oro\Bundle\FlexibleEntityBundle\Model\Behavior\TranslatableInterface;
 
@@ -64,7 +64,7 @@ class TranslatableListener implements EventSubscriber
 
             // get flexible entity class
             $flexibleEntityClass = false;
-            if ($entity instanceof FlexibleEntityInterface) {
+            if ($entity instanceof FlexibleInterface) {
                 $flexibleEntityClass = get_class($entity);
             } else if ($entity instanceof AbstractAttributeOption) {
                 $flexibleEntityClass = $entity->getAttribute()->getEntityType();

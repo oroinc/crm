@@ -294,7 +294,7 @@ class FlexibleManager extends SimpleManager implements TranslatableInterface, Sc
     /**
      * Return a new instance
      *
-     * @return Oro\Bundle\FlexibleEntityBundle\Model\FlexibleEntityInterface
+     * @return Oro\Bundle\FlexibleEntityBundle\Model\FlexibleInterface
      */
     public function createEntity()
     {
@@ -314,7 +314,7 @@ class FlexibleManager extends SimpleManager implements TranslatableInterface, Sc
      *
      * @param AbstractAttributeType $type attribute type
      *
-     * @return Oro\Bundle\FlexibleEntityBundle\Model\AbstractFlexibleAttribute
+     * @return Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttributeExtended
      */
     public function createEntityAttribute(AbstractAttributeType $type = null)
     {
@@ -333,7 +333,7 @@ class FlexibleManager extends SimpleManager implements TranslatableInterface, Sc
 
     /**
      * Return a new instance
-     * @return Oro\Bundle\FlexibleEntityBundle\Model\FlexibleValueInterface
+     * @return Oro\Bundle\FlexibleEntityBundle\Model\ValueInterface
      */
     public function createEntityValue()
     {

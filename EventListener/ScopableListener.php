@@ -6,7 +6,7 @@ use Doctrine\Common\EventSubscriber;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Oro\Bundle\FlexibleEntityBundle\Model\Behavior\ScopableInterface;
-use Oro\Bundle\FlexibleEntityBundle\Model\FlexibleEntityInterface;
+use Oro\Bundle\FlexibleEntityBundle\Model\FlexibleInterface;
 
 /**
  * Aims to inject selected scope into loaded entity
@@ -62,7 +62,7 @@ class ScopableListener implements EventSubscriber
 
             // get flexible entity class
             $flexibleEntityClass = false;
-            if ($entity instanceof FlexibleEntityInterface) {
+            if ($entity instanceof FlexibleInterface) {
                 $flexibleEntityClass = get_class($entity);
             }
 

@@ -3,7 +3,7 @@ namespace Oro\Bundle\FlexibleEntityBundle\Entity\Mapping;
 
 use Oro\Bundle\FlexibleEntityBundle\Model\AbstractFlexible;
 use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttribute;
-use Oro\Bundle\FlexibleEntityBundle\Model\AbstractFlexibleValue;
+use Oro\Bundle\FlexibleEntityBundle\Model\AbstractValue;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 
@@ -15,7 +15,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @license   http://opensource.org/licenses/MIT  MIT
  *
  */
-abstract class AbstractEntityFlexibleValue extends AbstractFlexibleValue
+abstract class AbstractEntityValue extends AbstractValue
 {
     /**
      * @var integer $id

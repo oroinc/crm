@@ -9,23 +9,23 @@ namespace Oro\Bundle\FlexibleEntityBundle\Model;
  * @license   http://opensource.org/licenses/MIT MIT
  *
  */
-interface FlexibleEntityInterface
+interface FlexibleInterface
 {
     /**
      * Add value
      *
-     * @param FlexibleValueInterface $value
+     * @param ValueInterface $value
      *
-     * @return FlexibleEntityInterface
+     * @return FlexibleInterface
      */
-    public function addValue(FlexibleValueInterface $value);
+    public function addValue(ValueInterface $value);
 
     /**
      * Remove value
      *
-     * @param FlexibleValueInterface $value
+     * @param ValueInterface $value
      */
-    public function removeValue(FlexibleValueInterface $value);
+    public function removeValue(ValueInterface $value);
 
     /**
      * Get values
@@ -39,7 +39,7 @@ interface FlexibleEntityInterface
      *
      * @param string $attributeCode
      *
-     * @return FlexibleValueInterface
+     * @return ValueInterface
      */
     public function getValue($attributeCode);
 }

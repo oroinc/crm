@@ -2,8 +2,8 @@
 namespace Oro\Bundle\FlexibleEntityBundle\Entity\Mapping;
 
 use Oro\Bundle\FlexibleEntityBundle\Model\AbstractFlexible;
-use Oro\Bundle\FlexibleEntityBundle\Model\AbstractFlexibleAttribute;
-use Oro\Bundle\FlexibleEntityBundle\Model\AbstractFlexibleValue;
+use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttributeExtended;
+use Oro\Bundle\FlexibleEntityBundle\Model\AbstractValue;
 use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttribute;
 use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttributeOption;
 use Doctrine\ORM\Mapping as ORM;
@@ -16,7 +16,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @license   http://opensource.org/licenses/MIT  MIT
  *
  */
-abstract class AbstractEntityFlexibleAttribute extends AbstractFlexibleAttribute
+abstract class AbstractEntityAttributeExtended extends AbstractAttributeExtended
 {
     /**
      * @var integer $id
@@ -50,7 +50,7 @@ abstract class AbstractEntityFlexibleAttribute extends AbstractFlexibleAttribute
      *
      * @param integer $id
      *
-     * @return AbstractEntityFlexibleAttribute
+     * @return AbstractEntityAttributeExtended
      */
     public function setId($id)
     {
@@ -64,7 +64,7 @@ abstract class AbstractEntityFlexibleAttribute extends AbstractFlexibleAttribute
      *
      * @param string $code
      *
-     * @return AbstractEntityFlexibleAttribute
+     * @return AbstractEntityAttributeExtended
      */
     public function setCode($code)
     {
@@ -88,7 +88,7 @@ abstract class AbstractEntityFlexibleAttribute extends AbstractFlexibleAttribute
      *
      * @param string $type
      *
-     * @return AbstractEntityFlexibleAttribute
+     * @return AbstractEntityAttributeExtended
      */
     public function setBackendType($type)
     {
@@ -112,7 +112,7 @@ abstract class AbstractEntityFlexibleAttribute extends AbstractFlexibleAttribute
      *
      * @param boolean $required
      *
-     * @return AbstractEntityFlexibleAttribute
+     * @return AbstractEntityAttributeExtended
      */
     public function setRequired($required)
     {
@@ -136,7 +136,7 @@ abstract class AbstractEntityFlexibleAttribute extends AbstractFlexibleAttribute
      *
      * @param boolean $unique
      *
-     * @return AbstractEntityFlexibleAttribute
+     * @return AbstractEntityAttributeExtended
      */
     public function setUnique($unique)
     {
@@ -160,7 +160,7 @@ abstract class AbstractEntityFlexibleAttribute extends AbstractFlexibleAttribute
      *
      * @param string $default
      *
-     * @return AbstractEntityFlexibleAttribute
+     * @return AbstractEntityAttributeExtended
      */
     public function setDefaultValue($default)
     {
@@ -184,7 +184,7 @@ abstract class AbstractEntityFlexibleAttribute extends AbstractFlexibleAttribute
      *
      * @param boolean $searchable
      *
-     * @return AbstractEntityFlexibleAttribute
+     * @return AbstractEntityAttributeExtended
      */
     public function setSearchable($searchable)
     {
@@ -208,7 +208,7 @@ abstract class AbstractEntityFlexibleAttribute extends AbstractFlexibleAttribute
      *
      * @param boolean $translatable
      *
-     * @return AbstractEntityFlexibleAttribute
+     * @return AbstractEntityAttributeExtended
      */
     public function setTranslatable($translatable)
     {
@@ -232,7 +232,7 @@ abstract class AbstractEntityFlexibleAttribute extends AbstractFlexibleAttribute
      *
      * @param boolean $scopable
      *
-     * @return AbstractEntityFlexibleAttribute
+     * @return AbstractEntityAttributeExtended
      */
     public function setScopable($scopable)
     {
@@ -256,7 +256,7 @@ abstract class AbstractEntityFlexibleAttribute extends AbstractFlexibleAttribute
      *
      * @param AbstractAttributeOption $option
      *
-     * @return AbstractEntityFlexibleAttribute
+     * @return AbstractEntityAttributeExtended
      */
     public function addOption(AbstractAttributeOption $option)
     {
@@ -270,7 +270,7 @@ abstract class AbstractEntityFlexibleAttribute extends AbstractFlexibleAttribute
      *
      * @param AbstractAttributeOption $option
      *
-     * @return AbstractEntityFlexibleAttribute
+     * @return AbstractEntityAttributeExtended
      */
     public function removeOption(AbstractAttributeOption $option)
     {

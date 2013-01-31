@@ -2,7 +2,7 @@
 namespace Oro\Bundle\FlexibleEntityBundle\Event;
 
 use Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleManager;
-use Oro\Bundle\FlexibleEntityBundle\Model\FlexibleValueInterface;
+use Oro\Bundle\FlexibleEntityBundle\Model\ValueInterface;
 
 /**
  * Filter event allows to know the create flexible value
@@ -16,7 +16,7 @@ class FilterFlexibleValueEvent extends AbstractFilterEvent
 {
     /**
      * Flexible value
-     * @var FlexibleValueInterface
+     * @var ValueInterface
      */
     protected $value;
 
@@ -24,16 +24,16 @@ class FilterFlexibleValueEvent extends AbstractFilterEvent
      * Constructor
      *
      * @param FlexibleManager        $manager the manager
-     * @param FlexibleValueInterface $value   the value
+     * @param ValueInterface $value   the value
      */
-    public function __construct(FlexibleManager $manager, FlexibleValueInterface $value)
+    public function __construct(FlexibleManager $manager, ValueInterface $value)
     {
         parent::__construct($manager);
         $this->value = $value;
     }
 
     /**
-     * @return FlexibleValueInterface
+     * @return ValueInterface
      */
     public function getValue()
     {

@@ -208,7 +208,7 @@ We define mapping to basic entity attribute, to basic option (for attribute of l
 <?php
 namespace Acme\Bundle\DemoFlexibleEntityBundle\Entity;
 
-use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityFlexibleValue;
+use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityValue;
 use Oro\Bundle\FlexibleEntityBundle\Entity\Attribute;
 use Doctrine\ORM\Mapping as ORM;
 /**
@@ -216,7 +216,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="acmecustomer_customer_attribute_value")
  * @ORM\Entity
  */
-class CustomerValue extends AbstractEntityFlexibleValue
+class CustomerValue extends AbstractEntityValue
 {
     /**
      * @var Attribute $attribute
@@ -415,7 +415,7 @@ Add some attribute configuration for a dedicated entity in a custom table
 <?php
 namespace Acme\Bundle\DemoFlexibleEntityBundle\Entity;
 
-use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityFlexibleAttribute;
+use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityAttributeExtended;
 use Oro\Bundle\FlexibleEntityBundle\Entity\Attribute;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -425,7 +425,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="acmeproduct_product_attribute")
  * @ORM\Entity
  */
-class ProductAttribute extends AbstractEntityFlexibleAttribute 
+class ProductAttribute extends AbstractEntityAttributeExtended 
 {
     /**
      * @var Oro\Bundle\FlexibleEntityBundle\Entity\Attribute $attribute
@@ -495,7 +495,7 @@ $this->getProductManager()->getEntityAttributeRepository();
 
 Note that product attribute mapping provides cascades to create / delet related base attribute too.
 
-AbstractEntityFlexibleAttribute provides equaly some shortcuts to base attribute accessors (required, unique, etc) to directly manipulate custom attribute.
+AbstractEntityAttributeExtended provides equaly some shortcuts to base attribute accessors (required, unique, etc) to directly manipulate custom attribute.
 
 About queries on flexible entity
 ================================

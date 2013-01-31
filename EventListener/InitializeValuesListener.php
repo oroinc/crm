@@ -1,7 +1,7 @@
 <?php
 namespace Oro\Bundle\FlexibleEntityBundle\EventListener;
 
-use Oro\Bundle\FlexibleEntityBundle\Model\FlexibleEntityInterface;
+use Oro\Bundle\FlexibleEntityBundle\Model\FlexibleInterface;
 
 use Oro\Bundle\FlexibleEntityBundle\Event\FilterFlexibleEntityEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -41,7 +41,7 @@ class InitializeValuesListener implements EventSubscriberInterface
         $flexible = $event->getEntity();
         $manager = $event->getManager();
 
-        if ($flexible instanceof FlexibleEntityInterface) {
+        if ($flexible instanceof FlexibleInterface) {
 
             // get initialization mode
             if ($manager->getFlexibleInitMode() === 'required_attributes') {
