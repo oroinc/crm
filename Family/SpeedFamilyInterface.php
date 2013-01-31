@@ -26,11 +26,6 @@ interface SpeedFamilyInterface extends FamilyInterface
     /**
      * @staticvar string
      */
-    const FOOT_PER_MINUTE    = 'FOOT_PER_MINUTE';
-
-    /**
-     * @staticvar string
-     */
     const FOOT_PER_HOUR      = 'FOOT_PER_HOUR';
 
     /**
