@@ -9,7 +9,7 @@ namespace Oro\Bundle\MeasureBundle\Exception;
  * @license   http://opensource.org/licenses/MIT MIT
  *
  */
-class UnknownMeasureException extends \Exception
+class UnknownMeasureException extends MeasureException
 {
 
 }
