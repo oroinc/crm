@@ -9,7 +9,7 @@ namespace Oro\Bundle\MeasureBundle\Family;
  * @license   http://opensource.org/licenses/MIT MIT
  *
  */
-interface VolumeFamilyInterface extends FamilyInterface
+interface VolumeFamilyInterface
 {
 
     /**
