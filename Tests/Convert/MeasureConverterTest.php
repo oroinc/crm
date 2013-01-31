@@ -296,6 +296,52 @@ class MeasureConverterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test convert method for Speed family
+     */
+    public function testConvertSpeed()
+    {
+        $this->converter->setFamily(SpeedFamilyInterface::FAMILY);
+
+        // test km/h to m/s conversion
+        $baseValue = 36;
+        $expectedValue = 10;
+
+        // convert to a final value
+        $convertedValue = $this->converter->convert(SpeedFamilyInterface::KILOMETER_PER_HOUR, SpeedFamilyInterface::METER_PER_SECOND, $baseValue);
+        $this->assertEquals($expectedValue, $convertedValue);
+
+        // convert to the initial value
+        $resultValue = $this->converter->convert(SpeedFamilyInterface::METER_PER_SECOND, SpeedFamilyInterface::KILOMETER_PER_HOUR, $convertedValue);
+        $this->assertEquals($convertedValue, $expectedValue);
+
+
+        // test ft/s to mph conversion
+        $baseValue = 17;
+        $expectedValue = 11.590909090909;
+
+        // convert to a final value
+        $convertedValue = $this->converter->convert(SpeedFamilyInterface::FOOT_PER_SECOND, SpeedFamilyInterface::MILE_PER_HOUR, $baseValue);
+        $this->assertEquals($expectedValue, $convertedValue);
+
+        // convert to the initial value
+        $resultValue = $this->converter->convert(SpeedFamilyInterface::MILE_PER_HOUR, SpeedFamilyInterface::FOOT_PER_SECOND, $convertedValue);
+        $this->assertEquals($convertedValue, $expectedValue);
+
+
+        // test yd/h to m/m conversion
+        $baseValue = 26;
+        $expectedValue = 0.39624;
+
+        // convert to a final value
+        $convertedValue = $this->converter->convert(SpeedFamilyInterface::YARD_PER_HOUR, SpeedFamilyInterface::METER_PER_MINUTE, $baseValue);
+        $this->assertEquals($expectedValue, $convertedValue);
+
+        // convert to the initial value
+        $resultValue = $this->converter->convert(SpeedFamilyInterface::METER_PER_MINUTE, SpeedFamilyInterface::YARD_PER_HOUR, $convertedValue);
+        $this->assertEquals($convertedValue, $expectedValue);
+    }
+
+    /**
      * Test convert method for Temperature family
      */
     public function testConvertTemperature()
