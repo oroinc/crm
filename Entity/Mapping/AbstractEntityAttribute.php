@@ -4,6 +4,7 @@ namespace Oro\Bundle\FlexibleEntityBundle\Entity\Mapping;
 use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttribute;
 use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttributeOption;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Base Doctrine ORM entity attribute
@@ -37,6 +38,13 @@ abstract class AbstractEntityAttribute extends AbstractAttribute
      * @ORM\Column(name="entity_type", type="string", length=255)
      */
     protected $entityType;
+
+    /**
+     * @var string $attributeType
+     *
+     * @ORM\Column(name="attribute_type", type="string", length=255)
+     */
+    protected $attributeType;
 
     /**
      * @var string $backendType
@@ -104,17 +112,11 @@ abstract class AbstractEntityAttribute extends AbstractAttribute
     protected $options;
 
     /**
-     * Used locale to override Translation listener's locale
-     * this is not a mapped attribute of entity metadata, just a simple property
-     */
-    protected $locale;
-
-    /**
      * Constructor
      */
     public function __construct()
     {
-        $this->options      = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->options      = new ArrayCollection();
         $this->required     = false;
         $this->unique       = false;
         $this->defaultValue = null;
@@ -124,7 +126,7 @@ abstract class AbstractEntityAttribute extends AbstractAttribute
     }
 
     /**
-     * Add option
+     * Add option (we do set attribute to deal with natural doctrine owner side and cascade)
      *
      * @param AbstractAttributeOption $option
      *

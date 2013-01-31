@@ -34,13 +34,35 @@ There are some examples in laboro/bap-standard/tree/master/src/Acme/Bundle/DemoF
 - Customer : a flexible entity (no translatable attributes)
 - Product : a flexible entity (with translatable and scopable attributes)
 
-Install and run unit tests
-==========================
+Install
+=======
 
-To run tests :
+To install for dev :
+
 ```bash
 $ php composer.phar update --dev
+```
+To use as dependency, use composer and add bundle in your AppKernel :
 
+```yaml
+    "require": {
+        [...]
+        "oro/FlexibleEntityBundle": "dev-master"
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "git@github.com:laboro/FlexibleEntityBundle.git",
+            "branch": "master"
+        }
+    ]
+
+```
+
+Run unit tests
+==============
+
+```bash
 $ phpunit --coverage-html=cov/
 ```
 
@@ -91,7 +113,7 @@ class Manufacturer
 Define the service manager (src/Acme/Bundle/DemoFlexibleEntityBundle/Resources/config/services.yml) : 
 ```yaml
 parameters:
-    manufacturer_manager_class: Oro\Bundle\FlexibleEntityBundle\Manager\SimpleEntityManager
+    manufacturer_manager_class: Oro\Bundle\FlexibleEntityBundle\Manager\SimpleManager
     manufacturer_entity_class:  Acme\Bundle\DemoFlexibleEntityBundle\Entity\Manufacturer
 
 services:
@@ -106,7 +128,7 @@ How to use :
         $manager = $this->container->get('manufacturer_manager');
         $manufacturers = $manager->getEntityRepository()->findAll();
         // create a new one
-        $manufacturer = $manager->createEntity();
+        $manufacturer = $manager->createFlexible();
         $manufacturer->setName('Dell');
         // persist
         $manager->getStorageManager()->persist($manufacturer);
@@ -140,14 +162,13 @@ We use the basic entity repository, and define by mapping which value table to u
 namespace Acme\Bundle\DemoFlexibleEntityBundle\Entity;
 
 use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityFlexible;
-use Oro\Bundle\FlexibleEntityBundle\Model\Behavior\HasRequiredValueInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="acmecustomer_customer")
  * @ORM\Entity(repositoryClass="Oro\Bundle\FlexibleEntityBundle\Entity\Repository\FlexibleEntityRepository")
  */
-class Customer extends AbstractEntityFlexible implements HasRequiredValueInterface
+class Customer extends AbstractEntityFlexible
 {
     /**
      * @var string $email
@@ -187,7 +208,6 @@ We define mapping to basic entity attribute, to basic option (for attribute of l
 <?php
 namespace Acme\Bundle\DemoFlexibleEntityBundle\Entity;
 
-use Oro\Bundle\FlexibleEntityBundle\Model\Behavior\HasDefaultValueInterface;
 use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityFlexibleValue;
 use Oro\Bundle\FlexibleEntityBundle\Entity\Attribute;
 use Doctrine\ORM\Mapping as ORM;
@@ -196,7 +216,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="acmecustomer_customer_attribute_value")
  * @ORM\Entity
  */
-class CustomerValue extends AbstractEntityFlexibleValue implements HasDefaultValueInterface
+class CustomerValue extends AbstractEntityFlexibleValue
 {
     /**
      * @var Attribute $attribute
@@ -219,8 +239,8 @@ class CustomerValue extends AbstractEntityFlexibleValue implements HasDefaultVal
      *
      * @ORM\ManyToMany(targetEntity="Oro\Bundle\FlexibleEntityBundle\Entity\AttributeOption")
      * @ORM\JoinTable(name="acmedemoflexibleentity_customer_values_options",
-     *      joinColumns={@ORM\JoinColumn(name="value_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="option_id", referencedColumnName="id")}
+     *      joinColumns={@ORM\JoinColumn(name="value_id", referencedColumnName="id", onDelete="CASCADE")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="option_id", referencedColumnName="id", onDelete="CASCADE")}
      * )
      */
     protected $options;
@@ -232,8 +252,8 @@ Then, we configure our flexible entity in src/Acme/Bundle/DemoFlexibleEntityBund
 entities_config:
     Acme\Bundle\DemoFlexibleEntityBundle\Entity\Customer:
         flexible_manager:            customer_manager
-        flexible_entity_class:       Acme\Bundle\DemoFlexibleEntityBundle\Entity\Customer
-        flexible_entity_value_class: Acme\Bundle\DemoFlexibleEntityBundle\Entity\CustomerValue
+        flexible_class:       Acme\Bundle\DemoFlexibleEntityBundle\Entity\Customer
+        flexible_value_class: Acme\Bundle\DemoFlexibleEntityBundle\Entity\CustomerValue
         # there is some default values added for basic entity to use for attribute, option, etc 
 ```
 
@@ -246,7 +266,7 @@ This config :
 Finally we add our service declaration in src/Acme/Bundle/DemoFlexibleEntityBundle/Resources/config/services.yml :
 ```yaml
 parameters:
-    customer_manager_class: Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleEntityManager
+    customer_manager_class: Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleManager
     customer_entity_class:  Acme\Bundle\DemoFlexibleEntityBundle\Entity\Customer
 
 services:
@@ -270,7 +290,7 @@ $cm->getStorageManager()->persist($att);
 $cm->getStorageManager()->flush();
 
 // create customer with basic fields mapped in customer entity  (cf controllers and unit tests for more exemples)
-$customer = $cm->createEntity();
+$customer = $cm->createFlexible();
 $customer->setEmail($custEmail);
 $customer->setFirstname('Nicolas');
 $customer->setLastname('Dupont');
@@ -279,7 +299,7 @@ $customer->setLastname('Dupont');
 $attCompany = $cm->getEntityRepository()->findAttributeByCode('company');
 
 // add a value
-$value = $cm->createEntityValue();
+$value = $cm->createFlexibleValue();
 $value->setAttribute($attCompany);
 $value->setData('Akeneo');
 $customer->addValue($value);
@@ -308,7 +328,7 @@ $attribute->setTranslatable(true);
 You can choose value locale as following and use any locale code you want (fr, fr_FR, other, no checks, depends on application, list of locales is available in Locale Component) :
 
 ```php
-$value = $pm->createEntityValue();
+$value = $pm->createFlexibleValue();
 $value->setAttribute($attribute);
 $value->setData('my data');
 // force locale to use
@@ -344,7 +364,7 @@ Then you can use any scope code you want for value (no checks, depends on applic
 
 ```php
 $pm = $this->container->get('product_manager');
-$value = $pm->createEntityValue();
+$value = $pm->createFlexibleValue();
 $value->setScope('my_scope_code');
 $value->setAttribute($attDescription);
 $value->setData('my scoped and translated value');
@@ -365,7 +385,7 @@ You can use any currency code you want (no checks, depends on application, list 
 
 ```php
 $pm = $this->container->get('product_manager');
-$value = $pm->createEntityValue();
+$value = $pm->createFlexibleValue();
 $value->setAttribute($attPrice);
 $value->setData(100);
 $value->setCurrency('EURO');
@@ -380,7 +400,7 @@ You can use any unit code you want (no checks, depends on application).
 
 ```php
 $pm = $this->container->get('product_manager');
-$value = $pm->createEntityValue();
+$value = $pm->createFlexibleValue();
 $value->setAttribute($attPrice);
 $value->setData(100);
 $value->setUnit('cm');
@@ -395,7 +415,7 @@ Add some attribute configuration for a dedicated entity in a custom table
 <?php
 namespace Acme\Bundle\DemoFlexibleEntityBundle\Entity;
 
-use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityFlexibleAttribute;
+use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityAttributeExtended;
 use Oro\Bundle\FlexibleEntityBundle\Entity\Attribute;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -405,7 +425,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="acmeproduct_product_attribute")
  * @ORM\Entity
  */
-class ProductAttribute extends AbstractEntityFlexibleAttribute 
+class ProductAttribute extends AbstractEntityAttributeExtended 
 {
     /**
      * @var Oro\Bundle\FlexibleEntityBundle\Entity\Attribute $attribute
@@ -446,22 +466,22 @@ class ProductAttribute extends AbstractEntityFlexibleAttribute
 }
 ```
 
-- add flexible_attribute_extended_class in config :
+- add attribute_extended_class in config :
 
 ```yaml
 entities_config:
     Acme\Bundle\DemoFlexibleEntityBundle\Entity\Product:
         flexible_manager:                  product_manager
-        flexible_entity_class:             Acme\Bundle\DemoFlexibleEntityBundle\Entity\Product
-        flexible_entity_value_class:       Acme\Bundle\DemoFlexibleEntityBundle\Entity\ProductValue
-        flexible_attribute_extended_class: Acme\Bundle\DemoFlexibleEntityBundle\Entity\ProductAttribute
+        flexible_class:             Acme\Bundle\DemoFlexibleEntityBundle\Entity\Product
+        flexible_value_class:       Acme\Bundle\DemoFlexibleEntityBundle\Entity\ProductValue
+        attribute_extended_class: Acme\Bundle\DemoFlexibleEntityBundle\Entity\ProductAttribute
 ```
 
 - then you can create / manipulate some custom attribute as following :
 
 ```php
 // create product attribute
-$productAttribute = $this->getProductManager()->createEntityAttribute();
+$productAttribute = $this->getProductManager()->createAttributeExtended();
 $productAttribute->setName('Name');
 $productAttribute->setCode($attributeCode);
 $productAttribute->setRequired(true);
@@ -470,12 +490,12 @@ $productAttribute->setTranslatable(true);
 $this->getProductManager()->getStorageManager()->persist($productAttribute);
 
 // to query on product attributes :
-$this->getProductManager()->getEntityAttributeRepository();
+$this->getProductManager()->getAttributeExtendedRepository();
 ```
 
 Note that product attribute mapping provides cascades to create / delet related base attribute too.
 
-AbstractEntityFlexibleAttribute provides equaly some shortcuts to base attribute accessors (required, unique, etc) to directly manipulate custom attribute.
+AbstractEntityAttributeExtended provides equaly some shortcuts to base attribute accessors (required, unique, etc) to directly manipulate custom attribute.
 
 About queries on flexible entity
 ================================
@@ -532,7 +552,7 @@ $customer = $this->getCustomerManager()->getEntityRepository()->findWithAttribut
 Use a non default entity manager
 ================================
 
-Used entity manager is the default one "doctrine.orm.entity_manager" (cf SimpleEntityManager)
+Used entity manager is the default one "doctrine.orm.entity_manager" (cf SimpleManager)
 
 If you want to use another one, you can define it with optional parameter as following :
 
@@ -588,7 +608,7 @@ Store attributes, option, option values in custom tables
 --------------------------------------------------------
 
 - extend or replace Attribute, AttributeOption, AttributeOptionValue in your bundle
-- define the classes to use in our flexibleentity.yml with properties : 'flexible_attribute_class', 'flexible_attribute_option_class', 'flexible_attribute_option_value_class'
+- define the classes to use in our flexibleentity.yml with properties : 'attribute_class', 'flexible_attribute_option_class', 'attribute_option_value_class'
 
 Use flat storage for values
 ---------------------------
@@ -605,7 +625,7 @@ Use document oriented storage for entity/values
 
 ```yaml
 parameters:
-    mydoc_manager_class: Acme\Bundle\MyBundle\Manager\MyFlexibleEntityManager
+    mydoc_manager_class: Acme\Bundle\MyBundle\Manager\MyFlexibleManager
     mydoc_entity_class:  Acme\Bundle\MyBundle\Document\MyDocument
 
 services:

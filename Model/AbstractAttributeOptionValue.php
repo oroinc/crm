@@ -1,6 +1,8 @@
 <?php
 namespace Oro\Bundle\FlexibleEntityBundle\Model;
 
+use Oro\Bundle\FlexibleEntityBundle\Model\Behavior\TranslatableInterface;
+
 /**
  * Abstract entity attribute option value, independent of storage
  *
@@ -8,7 +10,7 @@ namespace Oro\Bundle\FlexibleEntityBundle\Model;
  * @copyright 2012 Akeneo SAS (http://www.akeneo.com)
  * @license   http://opensource.org/licenses/MIT MIT
  */
-abstract class AbstractAttributeOptionValue
+abstract class AbstractAttributeOptionValue implements TranslatableInterface
 {
     /**
      * @var integer $id

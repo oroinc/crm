@@ -2,6 +2,8 @@
 namespace Oro\Bundle\FlexibleEntityBundle\Entity\Repository;
 
 use Oro\Bundle\FlexibleEntityBundle\Exception\UnknownAttributeException;
+use Oro\Bundle\FlexibleEntityBundle\Model\Behavior\TranslatableInterface;
+use Oro\Bundle\FlexibleEntityBundle\Model\Behavior\ScopableInterface;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 
@@ -13,7 +15,7 @@ use Doctrine\ORM\Tools\Pagination\Paginator;
  * @license   http://opensource.org/licenses/MIT MIT
  *
  */
-class FlexibleEntityRepository extends EntityRepository
+class FlexibleEntityRepository extends EntityRepository implements TranslatableInterface, ScopableInterface
 {
 
     /**
@@ -119,7 +121,7 @@ class FlexibleEntityRepository extends EntityRepository
     {
         // prepare entity attributes query
         $attributeAlias = 'Attribute';
-        $attributeName = $this->flexibleConfig['flexible_attribute_class'];
+        $attributeName = $this->flexibleConfig['attribute_class'];
         $attributeRepo = $this->_em->getRepository($attributeName);
         $qb = $attributeRepo->createQueryBuilder($attributeAlias);
         $qb->andWhere('Attribute.entityType = :type')->setParameter('type', $this->_entityName);
@@ -156,7 +158,7 @@ class FlexibleEntityRepository extends EntityRepository
      */
     public function findAttributeByCode($code)
     {
-        $attributeName = $this->flexibleConfig['flexible_attribute_class'];
+        $attributeName = $this->flexibleConfig['attribute_class'];
         $attributeRepo = $this->_em->getRepository($attributeName);
         $attribute = $attributeRepo->findOneBy(array('entityType' => $this->_entityName, 'code' => $code));
 

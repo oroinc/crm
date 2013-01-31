@@ -1,11 +1,11 @@
 parameters:
-    oro_flexibleentity.entities_config: ~
+    oro_flexibleentity.flexible_config: ~
 
 services:
 
     # deal with translatable behavior
     oro_flexibleentity.translatable_listener:
-        class: Oro\Bundle\FlexibleEntityBundle\Listener\TranslatableListener
+        class: Oro\Bundle\FlexibleEntityBundle\EventListener\TranslatableListener
         calls:
             - [ setContainer, [ @service_container ] ]
         tags:
@@ -13,7 +13,7 @@ services:
 
     # deal with translatable behavior
     oro_flexibleentity.scopable_listener:
-        class: Oro\Bundle\FlexibleEntityBundle\Listener\ScopableListener
+        class: Oro\Bundle\FlexibleEntityBundle\EventListener\ScopableListener
         calls:
             - [ setContainer, [ @service_container ] ]
         tags:
@@ -21,20 +21,25 @@ services:
 
     # deal with timestampable behavior
     oro_flexibleentity.timestampable_listener:
-        class: Oro\Bundle\FlexibleEntityBundle\Listener\TimestampableListener
+        class: Oro\Bundle\FlexibleEntityBundle\EventListener\TimestampableListener
         tags:
             - { name: doctrine.event_subscriber }
 
-    # deal with has value required behavior
+    # deal with required value behavior
     oro_flexibleentity.has_required_value_listener:
-        class: Oro\Bundle\FlexibleEntityBundle\Listener\HasRequiredValueListener
+        class: Oro\Bundle\FlexibleEntityBundle\EventListener\RequiredValueListener
         calls:
             - [ setContainer, [ @service_container ] ]
         tags:
             - { name: doctrine.event_subscriber }
 
-    # deal with has default value behavior
-    oro_flexibleentity.has_default_value_listener:
-        class: Oro\Bundle\FlexibleEntityBundle\Listener\HasDefaultValueListener
+    # deal with default value behavior
+    oro_flexibleentity.listener.default_value_listener:
+        class: Oro\Bundle\FlexibleEntityBundle\EventListener\DefaultValueListener
+
+    # deal with flexible values initialization mode
+    oro_flexibleentity.listener.initialize_values_listener:
+        class: Oro\Bundle\FlexibleEntityBundle\EventListener\InitializeValuesListener
         tags:
-            - { name: doctrine.event_subscriber }
+            - { name: kernel.event_subscriber}
+

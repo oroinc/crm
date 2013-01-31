@@ -5,7 +5,7 @@ use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttributeType;
 
 use Oro\Bundle\FlexibleEntityBundle\Entity\Attribute;
 
-use Oro\Bundle\FlexibleEntityBundle\Tests\AbstractFlexibleEntityManagerTest;
+use Oro\Bundle\FlexibleEntityBundle\Tests\AbstractFlexibleManagerTest;
 use Oro\Bundle\FlexibleEntityBundle\Entity\Repository\FlexibleEntityRepository;
 
 /**
@@ -16,7 +16,7 @@ use Oro\Bundle\FlexibleEntityBundle\Entity\Repository\FlexibleEntityRepository;
  * @license   http://opensource.org/licenses/MIT MIT
  *
  */
-class FlexibleEntityRepositoryTest extends AbstractFlexibleEntityManagerTest
+class FlexibleEntityRepositoryTest extends AbstractFlexibleManagerTest
 {
 
     /**

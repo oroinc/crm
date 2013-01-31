@@ -1,7 +1,8 @@
 <?php
 namespace Oro\Bundle\FlexibleEntityBundle\Model;
 
-use Oro\Bundle\FlexibleEntityBundle\Model\Behavior\FlexibleEntityInterface;
+use Oro\Bundle\FlexibleEntityBundle\Model\Behavior\ScopableInterface;
+use Oro\Bundle\FlexibleEntityBundle\Model\Behavior\TranslatableInterface;
 use Oro\Bundle\FlexibleEntityBundle\Model\Behavior\TimestampableInterface;
 
 /**
@@ -12,7 +13,7 @@ use Oro\Bundle\FlexibleEntityBundle\Model\Behavior\TimestampableInterface;
  * @license   http://opensource.org/licenses/MIT MIT
  *
  */
-abstract class AbstractFlexible implements FlexibleEntityInterface, TimestampableInterface
+abstract class AbstractFlexible implements FlexibleInterface, TimestampableInterface, TranslatableInterface, ScopableInterface
 {
 
     /**
@@ -31,6 +32,18 @@ abstract class AbstractFlexible implements FlexibleEntityInterface, Timestampabl
     protected $updated;
 
     /**
+     * Not persisted but allow to force locale for values
+     * @var string $locale
+     */
+    protected $locale;
+
+    /**
+     * Not persisted but allow to force scope for values
+     * @var string $scope
+     */
+    protected $scope;
+
+    /**
      * Get id
      *
      * @return integer
@@ -38,6 +51,20 @@ abstract class AbstractFlexible implements FlexibleEntityInterface, Timestampabl
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set id
+     *
+     * @param integer $id
+     *
+     * @return AbstractFlexible
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
     }
 
     /**
@@ -84,6 +111,52 @@ abstract class AbstractFlexible implements FlexibleEntityInterface, Timestampabl
     public function setUpdated($updated)
     {
         $this->updated = $updated;
+
+        return $this;
+    }
+
+    /**
+     * Get used locale
+     * @return string $locale
+     */
+    public function getLocale()
+    {
+        return $this->locale;
+    }
+
+    /**
+     * Set used locale
+     *
+     * @param string $locale
+     *
+     * @return TranslatableInterface
+     */
+    public function setLocale($locale)
+    {
+        $this->locale = $locale;
+
+        return $this;
+    }
+
+    /**
+     * Get used scope
+     * @return string $scope
+     */
+    public function getScope()
+    {
+        return $this->scope;
+    }
+
+    /**
+     * Set used scope
+     *
+     * @param string $scope
+     *
+     * @return ScopableInterface
+     */
+    public function setScope($scope)
+    {
+        $this->scope = $scope;
 
         return $this;
     }

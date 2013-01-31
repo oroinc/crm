@@ -1,6 +1,8 @@
 <?php
 namespace Oro\Bundle\FlexibleEntityBundle\Model;
 
+use Oro\Bundle\FlexibleEntityBundle\Model\Behavior\TranslatableInterface;
+
 /**
  * Abstract entity attribute option, independent of storage
  *
@@ -8,7 +10,7 @@ namespace Oro\Bundle\FlexibleEntityBundle\Model;
  * @copyright 2012 Akeneo SAS (http://www.akeneo.com)
  * @license   http://opensource.org/licenses/MIT MIT
  */
-abstract class AbstractAttributeOption
+abstract class AbstractAttributeOption implements TranslatableInterface
 {
     /**
      * @var integer $id
@@ -16,9 +18,26 @@ abstract class AbstractAttributeOption
     protected $id;
 
     /**
+     * @var AbstractAttribute $attribute
+     *
+     */
+    protected $attribute;
+
+    /**
+     * @var \ArrayAccess $optionValues
+     */
+    protected $optionValues;
+
+    /**
      * @var boolean $translatable
      */
     protected $translatable;
+
+    /**
+     * Not persisted, allowe to define the value locale
+     * @var string $locale
+     */
+    protected $locale;
 
     /**
      * @var integer $sortOrder
@@ -45,6 +64,64 @@ abstract class AbstractAttributeOption
     public function setId($id)
     {
         $this->id = $id;
+
+        return $this;
+    }
+
+    /**
+     * Get attribute
+     *
+     * @return AbstractAttribute
+     */
+    public function getAttribute()
+    {
+        return $this->attribute;
+    }
+
+    /**
+     * Set attribute
+     *
+     * @param AbstractAttribute $attribute
+     *
+     * @return AbstractAttributeOption
+     */
+    public function setAttribute(AbstractAttribute $attribute = null)
+    {
+        $this->attribute = $attribute;
+
+        return $this;
+    }
+
+    /**
+     * Get values
+     *
+     * @return \ArrayAccess
+     */
+    public function getOptionValues()
+    {
+        return $this->optionValues;
+    }
+
+    /**
+     * Get used locale
+     *
+     * @return string $locale
+     */
+    public function getLocale()
+    {
+        return $this->locale;
+    }
+
+    /**
+     * Set used locale
+     *
+     * @param string $locale
+     *
+     * @return TranslatableInterface
+     */
+    public function setLocale($locale)
+    {
+        $this->locale = $locale;
 
         return $this;
     }

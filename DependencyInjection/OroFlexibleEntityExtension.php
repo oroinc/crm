@@ -9,9 +9,11 @@ use Symfony\Component\DependencyInjection\Loader;
 use Symfony\Component\Yaml\Yaml;
 
 /**
- * This is the class that loads and manages your bundle configuration
+ * Flexible entity extension
  *
- * To learn more see {@link http://symfony.com/doc/current/cookbook/bundles/extension.html}
+ * @author    Nicolas Dupont <nicolas@akeneo.com>
+ * @copyright 2012 Akeneo SAS (http://www.akeneo.com)
+ * @license   http://opensource.org/licenses/MIT  MIT
  */
 class OroFlexibleEntityExtension extends Extension
 {
@@ -25,18 +27,23 @@ class OroFlexibleEntityExtension extends Extension
         foreach ($container->getParameter('kernel.bundles') as $bundle) {
             $reflection = new \ReflectionClass($bundle);
             if (is_file($file = dirname($reflection->getFilename()).'/Resources/config/flexibleentity.yml')) {
+                $bundleConfig = Yaml::parse(realpath($file));
                 // merge entity configs
-                if (empty($entitiesConfig)) {
-                    $entitiesConfig = Yaml::parse(realpath($file));
-                } else {
-                    $entities = Yaml::parse(realpath($file));
-                    foreach ($entities['entities_config'] as $entity => $entityConfig) {
+                if (isset($bundleConfig['entities_config'])) {
+                    foreach ($bundleConfig['entities_config'] as $entity => $entityConfig) {
                         $entitiesConfig['entities_config'][$entity]= $entityConfig;
+                    }
+                }
+                // merge attributte type configs
+                if (isset($bundleConfig['attributes_config'])) {
+                    foreach ($bundleConfig['attributes_config'] as $attributeType => $attributeConfig) {
+                        $entitiesConfig['attributes_config'][$attributeType]= $attributeConfig;
                     }
                 }
             }
         }
         $configs[]= $entitiesConfig;
+
         // process configurations to validate and merge
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
@@ -44,6 +51,6 @@ class OroFlexibleEntityExtension extends Extension
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
         // set entities config
-        $container->setParameter('oro_flexibleentity.entities_config', $config);
+        $container->setParameter('oro_flexibleentity.flexible_config', $config);
     }
 }

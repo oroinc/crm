@@ -1,13 +1,13 @@
 <?php
 namespace Oro\Bundle\FlexibleEntityBundle\Tests;
 
-use Doctrine\ORM\EntityManager;
-
 use Doctrine\Tests\OrmTestCase;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 use Symfony\Component\DependencyInjection\Container;
-use Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleEntityManager;
+use Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleManager;
+use Doctrine\ORM\EntityManager;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 
 /**
  * Test related class
@@ -16,11 +16,11 @@ use Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleEntityManager;
  * @copyright 2012 Akeneo SAS (http://www.akeneo.com)
  * @license   http://opensource.org/licenses/MIT MIT
  */
-abstract class AbstractFlexibleEntityManagerTest extends AbstractOrmTest
+abstract class AbstractFlexibleManagerTest extends AbstractOrmTest
 {
 
     /**
-     * @var FlexibleEntityManager
+     * @var FlexibleManager
      */
     protected $manager;
 
@@ -87,23 +87,26 @@ abstract class AbstractFlexibleEntityManagerTest extends AbstractOrmTest
         $this->flexibleConfig = array(
             'entities_config' => array(
                 $this->flexibleClassName => array(
-                        'flexible_manager'                      => 'demo_manager',
-                        'flexible_entity_class'                 => $this->flexibleClassName,
-                        'flexible_entity_value_class'           => $this->flexibleValueClassName,
-                        'flexible_attribute_extended_class'     => $this->flexibleAttributeClassName,
-                        'flexible_attribute_class'              => $this->attributeClassName,
-                        'flexible_attribute_option_class'       => $this->attributeOptionClassName,
-                        'flexible_attribute_option_value_class' => $this->attributeOptionValueClassName,
-                        'default_locale'                        => $this->defaultLocale,
-                        'default_scope'                         => $this->defaultScope
+                        'flexible_manager'             => 'demo_manager',
+                        'flexible_class'               => $this->flexibleClassName,
+                        'flexible_value_class'         => $this->flexibleValueClassName,
+                        'attribute_extended_class'     => $this->flexibleAttributeClassName,
+                        'attribute_class'              => $this->attributeClassName,
+                        'attribute_option_class'       => $this->attributeOptionClassName,
+                        'attribute_option_value_class' => $this->attributeOptionValueClassName,
+                        'default_locale'               => $this->defaultLocale,
+                        'default_scope'                => $this->defaultScope
                 )
             )
         );
         // prepare test container
-        $this->container->setParameter('oro_flexibleentity.entities_config', $this->flexibleConfig);
+        $this->container->setParameter('oro_flexibleentity.flexible_config', $this->flexibleConfig);
         // prepare simple entity manager (use default entity manager)
-        $this->manager = new FlexibleEntityManager($this->container, $this->flexibleClassName);
+        $this->manager = new FlexibleManager($this->container, $this->flexibleClassName);
         $this->container->set('demo_manager', $this->manager);
+        // mock global event dispatcher 'event_dispatcher'
+        $dispatcher = new EventDispatcher();
+        $this->container->set('event_dispatcher', $dispatcher);
     }
 
 }

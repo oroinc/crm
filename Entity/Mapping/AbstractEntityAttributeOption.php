@@ -2,9 +2,9 @@
 namespace Oro\Bundle\FlexibleEntityBundle\Entity\Mapping;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttributeOption;
 use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttributeOptionValue;
-use Oro\Bundle\FlexibleEntityBundle\Model\Behavior\TranslatableContainerInterface;
 
 /**
  * Base Doctrine ORM entity attribute option
@@ -14,7 +14,7 @@ use Oro\Bundle\FlexibleEntityBundle\Model\Behavior\TranslatableContainerInterfac
  * @license   http://opensource.org/licenses/MIT  MIT
  *
  */
-abstract class AbstractEntityAttributeOption extends AbstractAttributeOption implements TranslatableContainerInterface
+abstract class AbstractEntityAttributeOption extends AbstractAttributeOption
 {
     /**
      * @var integer $id
@@ -29,7 +29,6 @@ abstract class AbstractEntityAttributeOption extends AbstractAttributeOption imp
      * @var Attribute $attribute
      *
      * @ORM\ManyToOne(targetEntity="AbstractEntityAttribute")
-     * @ORM\JoinColumn(name="attribute_id", nullable=false, onDelete="CASCADE", referencedColumnName="id")
      */
     protected $attribute;
 
@@ -37,12 +36,6 @@ abstract class AbstractEntityAttributeOption extends AbstractAttributeOption imp
      * @ORM\Column(name="is_translatable", type="boolean")
      */
     protected $translatable;
-
-    /**
-     * Not persisted, allowe to define the value locale
-     * @var string $locale
-     */
-    protected $locale;
 
     /**
      * @ORM\Column(name="sort_order", type="integer")
@@ -61,57 +54,9 @@ abstract class AbstractEntityAttributeOption extends AbstractAttributeOption imp
      */
     public function __construct()
     {
-        $this->optionValues = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->optionValues = new ArrayCollection();
         $this->translatable = false;
         $this->sortOrder    = 1;
-    }
-
-    /**
-     * Get attribute
-     *
-     * @return AbstractEntityAttribute
-     */
-    public function getAttribute()
-    {
-        return $this->attribute;
-    }
-
-    /**
-     * Set attribute
-     *
-     * @param AbstractEntityAttribute $attribute
-     *
-     * @return EntityAttributeOption
-     */
-    public function setAttribute(AbstractEntityAttribute $attribute = null)
-    {
-        $this->attribute = $attribute;
-
-        return $this;
-    }
-
-    /**
-     * Get used locale
-     *
-     * @return string $locale
-     */
-    public function getLocale()
-    {
-        return $this->locale;
-    }
-
-    /**
-     * Set used locale
-     *
-     * @param string $locale
-     *
-     * @return AbstractAttributeOption
-     */
-    public function setLocale($locale)
-    {
-        $this->locale = $locale;
-
-        return $this;
     }
 
     /**
@@ -141,16 +86,6 @@ abstract class AbstractEntityAttributeOption extends AbstractAttributeOption imp
         $this->optionValues->removeElement($value);
 
         return $this;
-    }
-
-    /**
-     * Get values
-     *
-     * @return \ArrayAccess
-     */
-    public function getOptionValues()
-    {
-        return $this->optionValues;
     }
 
     /**

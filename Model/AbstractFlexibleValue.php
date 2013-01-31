@@ -1,7 +1,8 @@
 <?php
 namespace Oro\Bundle\FlexibleEntityBundle\Model;
 
-use Oro\Bundle\FlexibleEntityBundle\Model\Behavior\FlexibleValueInterface;
+use Oro\Bundle\FlexibleEntityBundle\Model\Behavior\TranslatableInterface;
+use Oro\Bundle\FlexibleEntityBundle\Model\Behavior\ScopableInterface;
 
 /**
  * Abstract entity value, independent of storage
@@ -11,7 +12,7 @@ use Oro\Bundle\FlexibleEntityBundle\Model\Behavior\FlexibleValueInterface;
  * @license   http://opensource.org/licenses/MIT MIT
  *
  */
-abstract class AbstractFlexibleValue implements FlexibleValueInterface
+abstract class AbstractFlexibleValue implements FlexibleValueInterface, TranslatableInterface, ScopableInterface
 {
 
     /**
@@ -20,7 +21,7 @@ abstract class AbstractFlexibleValue implements FlexibleValueInterface
     protected $id;
 
     /**
-     * @var EntityAttribute $attribute
+     * @var AbstractAttribute $attribute
      */
     protected $attribute;
 
@@ -47,6 +48,20 @@ abstract class AbstractFlexibleValue implements FlexibleValueInterface
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set id
+     *
+     * @param integer $id
+     *
+     * @return AbstractFlexibleValue
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
     }
 
     /**
@@ -85,7 +100,7 @@ abstract class AbstractFlexibleValue implements FlexibleValueInterface
     /**
      * Set attribute
      *
-     * @param EntityAttribute $attribute
+     * @param AbstractAttribute $attribute
      *
      * @return AbstractFlexibleValue
      */
@@ -99,7 +114,7 @@ abstract class AbstractFlexibleValue implements FlexibleValueInterface
     /**
      * Get attribute
      *
-     * @return AbstractFlexibleValue
+     * @return AbstractAttribute
      */
     public function getAttribute()
     {
