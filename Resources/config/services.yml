@@ -1,9 +1,9 @@
 parameters:
-    flexible_manager_class:     Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleEntityManager
+    flexible_manager_class:     Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleManager
     user_manager_class:         Oro\Bundle\UserBundle\Entity\UserManager
     user_entity_class:          Oro\Bundle\UserBundle\Entity\User
+    user_value_class:           Oro\Bundle\UserBundle\Entity\UserValue
     user_form_class:            Oro\Bundle\UserBundle\Form\Type\UserType
-    user_form_subscriber_class: Oro\Bundle\UserBundle\Form\EventListener\FlexibleSubscriber
 
 services:
     oro_user.flexible_manager:
@@ -21,10 +21,7 @@ services:
 
     oro_user.user_form:
         class:                  %user_form_class%
-        arguments:              ["@oro_user.user_form_listener"]
+        arguments:              [%user_entity_class%, %user_value_class%]
         tags:
             - { name: form.type, alias: oro_user_form }
 
-    oro_user.user_form_listener:
-        class:                  %user_form_subscriber_class%
-        arguments:              ["@form.factory", "@oro_user.flexible_manager"]

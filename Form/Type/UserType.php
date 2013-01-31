@@ -2,28 +2,21 @@
 
 namespace Oro\Bundle\UserBundle\Form\Type;
 
-use Symfony\Component\Form\AbstractType;
+use Oro\Bundle\FlexibleEntityBundle\Form\Type\FlexibleType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-class UserType extends AbstractType
+class UserType extends FlexibleType
 {
-    /**
-     * @var EventSubscriberInterface
-     */
-    protected $subscriber;
-
-    public function __construct(EventSubscriberInterface $subscriber)
-    {
-        $this->subscriber = $subscriber;
-    }
 
     /**
-     * {@inheritdoc}
+     * {@inheritdoc}
      */
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function addEntityFields(FormBuilderInterface $builder)
     {
+        // add default flexible fields
+        parent::addEntityFields($builder);
+        // user fields
         $builder
             ->add('username', 'text', array(
                 'required'  => true,
@@ -47,8 +40,7 @@ class UserType extends AbstractType
                 'property'  => 'name',
                 'multiple'  => true,
                 'required'  => false,
-            ))
-        ;
+            ));
 
         if (!$builder->getData()->getId()) {
             $builder
@@ -59,18 +51,6 @@ class UserType extends AbstractType
                     'second_options' => array('label' => 'Password again'),
                 ));
         }
-
-        $builder->addEventSubscriber($this->subscriber);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
-    {
-        $resolver->setDefaults(array(
-            'data_class' => 'Oro\Bundle\UserBundle\Entity\User',
-        ));
     }
 
     /**

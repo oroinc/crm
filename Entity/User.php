@@ -11,14 +11,13 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
 use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityFlexible;
-use Oro\Bundle\FlexibleEntityBundle\Model\Behavior\HasRequiredValueInterface;
 
 /**
  * @ORM\Entity(repositoryClass="Oro\Bundle\FlexibleEntityBundle\Entity\Repository\FlexibleEntityRepository")
  * @ORM\Table(name="user")
  * @ORM\HasLifecycleCallbacks()
  */
-class User extends AbstractEntityFlexible implements UserInterface, GroupableInterface, HasRequiredValueInterface
+class User extends AbstractEntityFlexible implements UserInterface, GroupableInterface
 {
     /**
      * @ORM\Id
