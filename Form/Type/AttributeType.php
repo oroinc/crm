@@ -3,8 +3,10 @@ namespace Oro\Bundle\FlexibleEntityBundle\Form\Type;
 
 use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttributeType;
 use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\TextType;
-use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\MultiOptionsType;
-use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\SingleOptionType;
+use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\OptionSimpleSelectType;
+use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\OptionSimpleRadioType;
+use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\OptionMultiSelectType;
+use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\OptionMultiCheckboxType;
 use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\DateType;
 use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\MetricType;
 use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\MoneyType;
@@ -203,9 +205,11 @@ class AttributeType extends AbstractType
             new MailType(),
             new MetricType(),
             new MoneyType(),
-            new MultiOptionsType(),
+            new OptionMultiCheckboxType(),
+            new OptionMultiSelectType(),
+            new OptionSimpleRadioType(),
+            new OptionSimpleSelectType(),
             new NumberType(),
-            new SingleOptionType(),
             new TextAreaType(),
             new TextType(),
             new UrlType()
@@ -214,6 +218,7 @@ class AttributeType extends AbstractType
         foreach ($availablesTypes as $type) {
             $types[get_class($type)]= $type->getName();
         }
+        asort($types);
 
         return $types;
     }

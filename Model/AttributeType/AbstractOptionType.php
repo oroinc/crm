@@ -7,13 +7,13 @@ use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttributeType;
 use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttribute;
 
 /**
- * Single option attribute type
+ * Abstract option attribute type
  *
  * @author    Nicolas Dupont <nicolas@akeneo.com>
  * @copyright 2012 Akeneo SAS (http://www.akeneo.com)
  * @license   http://opensource.org/licenses/MIT MIT
  */
-class SingleOptionType extends AbstractAttributeType
+abstract class AbstractOptionType extends AbstractAttributeType
 {
 
     /**
@@ -21,7 +21,6 @@ class SingleOptionType extends AbstractAttributeType
      */
     public function __construct()
     {
-        $this->name        = 'Single option';
         $this->backendType = self::BACKEND_TYPE_OPTION;
         $this->formType    = 'entity';
         $this->fieldName   = 'option';
@@ -37,8 +36,6 @@ class SingleOptionType extends AbstractAttributeType
     public function prepareFormOptions(AbstractAttribute $attribute)
     {
         $options = parent::prepareFormOptions($attribute);
-        $options['expanded']      = true;
-        $options['multiple']      = false;
         $options['empty_value']   = false;
         $options['class']         = 'OroFlexibleEntityBundle:AttributeOption';
         $options['query_builder'] = function(EntityRepository $er) use ($attribute) {
