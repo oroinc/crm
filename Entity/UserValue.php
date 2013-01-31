@@ -29,7 +29,7 @@ class UserValue extends AbstractEntityFlexibleValue
     protected $entity;
 
     /**
-     * Store options values
+     * Store values data when backend is option (deal to select, multi-select)
      *
      * @var options ArrayCollection
      *
