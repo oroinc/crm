@@ -1,8 +1,8 @@
 <?php
-namespace Oro\Bundle\MeasureBundle\Family;
+namespace Oro\Bundle\MeasureBundle\Exception;
 
 /**
- * Abstract class for measures
+ * Measure exception
  *
  * @author    Romain Monceau <romain@akeneo.com>
  * @copyright 2012 Akeneo SAS (http://www.akeneo.com)
@@ -10,7 +10,7 @@ namespace Oro\Bundle\MeasureBundle\Family;
  *
  * @abstract
  */
-class AbstractFamily
+abstract class MeasureException extends \Exception
 {
 
 }

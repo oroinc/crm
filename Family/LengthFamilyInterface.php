@@ -2,75 +2,90 @@
 namespace Oro\Bundle\MeasureBundle\Family;
 
 /**
- * Weight measures constants
+ * Length measures constants
  *
  * @author    Romain Monceau <romain@akeneo.com>
  * @copyright 2012 Akeneo SAS (http://www.akeneo.com)
  * @license   http://opensource.org/licenses/MIT MIT
  *
  */
-class WeightFamily extends AbstractFamily
+interface LengthFamilyInterface
 {
 
     /**
      * Family measure name
      * @staticvar string
      */
-    const FAMILY = 'Weight';
+    const FAMILY = 'Length';
 
     /**
      * @staticvar string
      */
-    const DENIER    = 'DENIER';
+    const CENTIMETER = 'CENTIMETER';
 
     /**
      * @staticvar string
      */
-    const GRAIN     = 'GRAIN';
+    const CHAIN      = 'CHAIN';
 
     /**
      * @staticvar string
      */
-    const GRAM      = 'GRAM';
+    const DECIMETER  = 'DECIMETER';
 
     /**
      * @staticvar string
      */
-    const KILOGRAM  = 'KILOGRAM';
+    const DEKAMETER  = 'DEKAMETER';
 
     /**
      * @staticvar string
      */
-    const LIVRE     = 'LIVRE';
+    const FEET       = 'FEET';
 
     /**
      * @staticvar string
      */
-    const MARC      = 'MARC';
+    const FURLONG    = 'FURLONG';
 
     /**
      * @staticvar string
      */
-    const MILLIGRAM = 'MILLIGRAM';
+    const HECTOMETER = 'HECTOMETER';
 
     /**
      * @staticvar string
      */
-    const ONCE      = 'ONCE';
+    const INCH       = 'INCH';
 
     /**
      * @staticvar string
      */
-    const OUNCE     = 'OUNCE';
+    const KILOMETER  = 'KILOMETER';
 
     /**
      * @staticvar string
      */
-    const POUND     = 'POUND';
+    const METER      = 'METER';
 
     /**
      * @staticvar string
      */
-    const TON       = 'TON';
+    const MIL        = 'MIL';
+
+    /**
+     * @staticvar string
+     */
+    const MILE       = 'MILE';
+
+    /**
+     * @staticvar string
+     */
+    const MILLIMETER = 'MILLIMETER';
+
+    /**
+     * @staticvar string
+     */
+    const YARD       = 'YARD';
 
 }

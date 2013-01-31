@@ -9,7 +9,7 @@ namespace Oro\Bundle\MeasureBundle\Exception;
  * @license   http://opensource.org/licenses/MIT MIT
  *
  */
-class UnknownFamilyMeasureException extends \Exception
+class UnknownFamilyMeasureException extends MeasureException
 {
 
 }

@@ -2,45 +2,45 @@
 namespace Oro\Bundle\MeasureBundle\Family;
 
 /**
- * Power measures constants
+ * Frequency measures constants
  *
  * @author    Romain Monceau <romain@akeneo.com>
  * @copyright 2012 Akeneo SAS (http://www.akeneo.com)
  * @license   http://opensource.org/licenses/MIT MIT
  *
  */
-class PowerFamily extends AbstractFamily
+interface FrequencyFamilyInterface
 {
 
     /**
      * Family measure name
      * @staticvar string
      */
-    const FAMILY = 'Power';
+    const FAMILY = 'Frequency';
 
     /**
      * @staticvar string
      */
-    const GIGAWATT = 'GIGAWATT';
+    const GIGAHERTZ = 'GIGAHERTZ';
 
     /**
      * @staticvar string
      */
-    const KILOWATT = 'KILOWATT';
+    const KILOHERTZ = 'KILOHERTZ';
 
     /**
      * @staticvar string
      */
-    const MEGAWATT = 'MEGAWATT';
+    const MEGAHERTZ = 'MEGAHERTZ';
 
     /**
      * @staticvar string
      */
-    const TERAWATT = 'TERAWATT';
+    const TERAHERTZ = 'TERAHERTZ';
 
     /**
      * @staticvar string
      */
-    const WATT     = 'WATT';
+    const HERTZ     = 'HERTZ';
 
 }

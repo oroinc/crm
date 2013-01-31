@@ -9,7 +9,7 @@ namespace Oro\Bundle\MeasureBundle\Family;
  * @license   http://opensource.org/licenses/MIT MIT
  *
  */
-class SpeedFamily extends AbstractFamily
+interface SpeedFamilyInterface
 {
 
     /**
@@ -22,11 +22,6 @@ class SpeedFamily extends AbstractFamily
      * @staticvar string
      */
     const FOOT_PER_SECOND    = 'FOOT_PER_SECOND';
-
-    /**
-     * @staticvar string
-     */
-    const FOOT_PER_MINUTE    = 'FOOT_PER_MINUTE';
 
     /**
      * @staticvar string
