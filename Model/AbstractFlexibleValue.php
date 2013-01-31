@@ -12,7 +12,7 @@ use Oro\Bundle\FlexibleEntityBundle\Model\Behavior\ScopableInterface;
  * @license   http://opensource.org/licenses/MIT MIT
  *
  */
-abstract class AbstractValue implements ValueInterface, TranslatableInterface, ScopableInterface
+abstract class AbstractFlexibleValue implements FlexibleValueInterface, TranslatableInterface, ScopableInterface
 {
 
     /**
@@ -55,7 +55,7 @@ abstract class AbstractValue implements ValueInterface, TranslatableInterface, S
      *
      * @param integer $id
      *
-     * @return AbstractValue
+     * @return AbstractFlexibleValue
      */
     public function setId($id)
     {
@@ -69,7 +69,7 @@ abstract class AbstractValue implements ValueInterface, TranslatableInterface, S
      *
      * @param string $data
      *
-     * @return AbstractValue
+     * @return AbstractFlexibleValue
      */
      public function setData($data)
      {
@@ -102,7 +102,7 @@ abstract class AbstractValue implements ValueInterface, TranslatableInterface, S
      *
      * @param AbstractAttribute $attribute
      *
-     * @return AbstractValue
+     * @return AbstractFlexibleValue
      */
     public function setAttribute(AbstractAttribute $attribute = null)
     {

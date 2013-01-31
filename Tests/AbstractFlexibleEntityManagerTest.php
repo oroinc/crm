@@ -87,15 +87,15 @@ abstract class AbstractFlexibleManagerTest extends AbstractOrmTest
         $this->flexibleConfig = array(
             'entities_config' => array(
                 $this->flexibleClassName => array(
-                        'flexible_manager'                      => 'demo_manager',
-                        'flexible_entity_class'                 => $this->flexibleClassName,
-                        'flexible_entity_value_class'           => $this->flexibleValueClassName,
-                        'flexible_attribute_extended_class'     => $this->flexibleAttributeClassName,
-                        'flexible_attribute_class'              => $this->attributeClassName,
-                        'flexible_attribute_option_class'       => $this->attributeOptionClassName,
-                        'flexible_attribute_option_value_class' => $this->attributeOptionValueClassName,
-                        'default_locale'                        => $this->defaultLocale,
-                        'default_scope'                         => $this->defaultScope
+                        'flexible_manager'             => 'demo_manager',
+                        'flexible_class'               => $this->flexibleClassName,
+                        'flexible_value_class'         => $this->flexibleValueClassName,
+                        'attribute_extended_class'     => $this->flexibleAttributeClassName,
+                        'attribute_class'              => $this->attributeClassName,
+                        'attribute_option_class'       => $this->attributeOptionClassName,
+                        'attribute_option_value_class' => $this->attributeOptionValueClassName,
+                        'default_locale'               => $this->defaultLocale,
+                        'default_scope'                => $this->defaultScope
                 )
             )
         );

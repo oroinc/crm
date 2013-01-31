@@ -48,29 +48,29 @@ class Configuration implements ConfigurationInterface
                 ->isRequired()
                 ->end()
 
-                ->scalarNode('flexible_entity_class')
+                ->scalarNode('flexible_class')
                 ->isRequired()
                 ->end()
 
-                ->scalarNode('flexible_entity_value_class')
+                ->scalarNode('flexible_value_class')
                 ->isRequired()
                 ->end()
 
                 // optional, to define extended flexible attribute
-                ->scalarNode('flexible_attribute_extended_class')
+                ->scalarNode('attribute_extended_class')
                 ->defaultValue(false)
                 ->end()
 
                 // optional, to define customized attribute and option models
-                ->scalarNode('flexible_attribute_class')
+                ->scalarNode('attribute_class')
                 ->defaultValue('Oro\Bundle\FlexibleEntityBundle\Entity\Attribute')
                 ->end()
 
-                ->scalarNode('flexible_attribute_option_class')
+                ->scalarNode('attribute_option_class')
                 ->defaultValue('Oro\Bundle\FlexibleEntityBundle\Entity\AttributeOption')
                 ->end()
 
-                ->scalarNode('flexible_attribute_option_value_class')
+                ->scalarNode('attribute_option_value_class')
                 ->defaultValue('Oro\Bundle\FlexibleEntityBundle\Entity\AttributeOptionValue')
                 ->end()
 

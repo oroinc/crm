@@ -5,11 +5,17 @@ use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttributeType;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Oro\Bundle\FlexibleEntityBundle\FlexibleEntityEvents;
 use Oro\Bundle\FlexibleEntityBundle\Event\FilterAttributeEvent;
-use Oro\Bundle\FlexibleEntityBundle\Event\FilterFlexibleEntityEvent;
+use Oro\Bundle\FlexibleEntityBundle\Event\FilterFlexibleEvent;
 use Oro\Bundle\FlexibleEntityBundle\Event\FilterFlexibleValueEvent;
 use Oro\Bundle\FlexibleEntityBundle\Exception\FlexibleConfigurationException;
+use Oro\Bundle\FlexibleEntityBundle\Model\FlexibleInterface;
+use Oro\Bundle\FlexibleEntityBundle\Model\FlexibleValueInterface;
 use Oro\Bundle\FlexibleEntityBundle\Model\Behavior\TranslatableInterface;
 use Oro\Bundle\FlexibleEntityBundle\Model\Behavior\ScopableInterface;
+use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttribute;
+use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttributeOption;
+use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttributeOptionValue;
+use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttributeExtended;
 use Doctrine\Common\Persistence\ObjectManager;
 
 /**
@@ -20,8 +26,24 @@ use Doctrine\Common\Persistence\ObjectManager;
  * @license   http://opensource.org/licenses/MIT MIT
  *
  */
-class FlexibleManager extends SimpleManager implements TranslatableInterface, ScopableInterface
+class FlexibleManager implements TranslatableInterface, ScopableInterface
 {
+
+    /**
+     * @var ContainerInterface $container
+     */
+    protected $container;
+
+    /**
+     * @var ObjectManager $storageManager
+     */
+    protected $storageManager;
+
+    /**
+     * @var string
+     */
+    protected $flexibleName;
+
     /**
      * Flexible entity config
      * @var array
@@ -44,15 +66,21 @@ class FlexibleManager extends SimpleManager implements TranslatableInterface, Sc
      * Constructor
      *
      * @param ContainerInterface $container      service container
-     * @param string             $entityName     entity name
+     * @param string             $flexibleName   entity name
      * @param ObjectManager      $storageManager optional storage manager, get default if not provided
      */
-    public function __construct($container, $entityName, $storageManager = false)
+    public function __construct($container, $flexibleName, $storageManager = false)
     {
-        parent::__construct($container, $entityName, $storageManager);
+        $this->container    = $container;
+        $this->flexibleName = $flexibleName;
+        if ($storageManager) {
+            $this->storageManager = $storageManager;
+        } else {
+            $this->storageManager = $container->get('doctrine.orm.entity_manager');
+        }
         // get flexible entity configuration
         $allFlexibleConfig = $this->container->getParameter('oro_flexibleentity.flexible_config');
-        $this->flexibleConfig = $allFlexibleConfig['entities_config'][$entityName];
+        $this->flexibleConfig = $allFlexibleConfig['entities_config'][$flexibleName];
     }
 
     /**
@@ -131,22 +159,41 @@ class FlexibleManager extends SimpleManager implements TranslatableInterface, Sc
         return $this;
     }
 
+
     /**
-     * Return class name that can be used to get the repository or instance
+     * Get object manager
+     * @return ObjectManager
+     */
+    public function getStorageManager()
+    {
+        return $this->storageManager;
+    }
+
+    /**
+     * Return implementation class that can be use to instanciate
      * @return string
      */
-    public function getAttributeName()
+    public function getFlexibleName()
     {
-        return $this->flexibleConfig['flexible_attribute_class'];
+        return $this->flexibleName;
     }
 
     /**
      * Return class name that can be used to get the repository or instance
      * @return string
      */
-    public function getEntityAttributeName()
+    public function getAttributeName()
     {
-        return $this->flexibleConfig['flexible_attribute_extended_class'];
+        return $this->flexibleConfig['attribute_class'];
+    }
+
+    /**
+     * Return class name that can be used to get the repository or instance
+     * @return string
+     */
+    public function getAttributeExtendedName()
+    {
+        return $this->flexibleConfig['attribute_extended_class'];
     }
 
     /**
@@ -155,7 +202,7 @@ class FlexibleManager extends SimpleManager implements TranslatableInterface, Sc
      */
     public function getAttributeOptionName()
     {
-        return $this->flexibleConfig['flexible_attribute_option_class'];
+        return $this->flexibleConfig['attribute_option_class'];
     }
 
     /**
@@ -164,25 +211,25 @@ class FlexibleManager extends SimpleManager implements TranslatableInterface, Sc
      */
     public function getAttributeOptionValueName()
     {
-        return $this->flexibleConfig['flexible_attribute_option_value_class'];
+        return $this->flexibleConfig['attribute_option_value_class'];
     }
 
     /**
      * Return class name that can be used to get the repository or instance
      * @return string
      */
-    public function getEntityValueName()
+    public function getFlexibleValueName()
     {
-        return $this->flexibleConfig['flexible_entity_value_class'];
+        return $this->flexibleConfig['flexible_value_class'];
     }
 
     /**
      * Return related repository
      * @return Doctrine\Common\Persistence\ObjectRepository
      */
-    public function getEntityRepository()
+    public function getFlexibleRepository()
     {
-        $repo = $this->storageManager->getRepository($this->getEntityName());
+        $repo = $this->storageManager->getRepository($this->getFlexibleName());
         $repo->setFlexibleConfig($this->flexibleConfig);
         $repo->setLocale($this->getLocale());
         $repo->setScope($this->getScope());
@@ -203,13 +250,13 @@ class FlexibleManager extends SimpleManager implements TranslatableInterface, Sc
      * Return related repository
      * @return Doctrine\Common\Persistence\ObjectRepository
      */
-    public function getEntityAttributeRepository()
+    public function getAttributeExtendedRepository()
     {
-        if (!$this->getEntityAttributeName()) {
-            throw new FlexibleConfigurationException($this->getEntityName().' has no flexible attribute extended class');
+        if (!$this->getAttributeExtendedName()) {
+            throw new FlexibleConfigurationException($this->getFlexibleName().' has no flexible attribute extended class');
         }
 
-        return $this->storageManager->getRepository($this->getEntityAttributeName());
+        return $this->storageManager->getRepository($this->getAttributeExtendedName());
     }
 
     /**
@@ -234,9 +281,9 @@ class FlexibleManager extends SimpleManager implements TranslatableInterface, Sc
      * Return related repository
      * @return Doctrine\Common\Persistence\ObjectRepository
      */
-    public function getEntityValueRepository()
+    public function getFlexibleValueRepository()
     {
-        return $this->storageManager->getRepository($this->getEntityValueName());
+        return $this->storageManager->getRepository($this->getFlexibleValueName());
     }
 
     /**
@@ -244,14 +291,14 @@ class FlexibleManager extends SimpleManager implements TranslatableInterface, Sc
      *
      * @param AbstractAttributeType $type attribute type
      *
-     * @return Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttribute
+     * @return AbstractAttribute
      */
     public function createAttribute(AbstractAttributeType $type = null)
     {
         // create attribute
         $class = $this->getAttributeName();
         $object = new $class();
-        $object->setEntityType($this->getEntityName());
+        $object->setEntityType($this->getFlexibleName());
         // add configuration related to the attribute type
         $object->setBackendStorage(AbstractAttributeType::BACKEND_STORAGE_ATTRIBUTE_VALUE);
         if ($type) {
@@ -267,7 +314,7 @@ class FlexibleManager extends SimpleManager implements TranslatableInterface, Sc
 
     /**
      * Return a new instance
-     * @return Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttributeOption
+     * @return AbstractAttributeOption
      */
     public function createAttributeOption()
     {
@@ -280,7 +327,7 @@ class FlexibleManager extends SimpleManager implements TranslatableInterface, Sc
 
     /**
      * Return a new instance
-     * @return Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttributeOptionValue
+     * @return AbstractAttributeOptionValue
      */
     public function createAttributeOptionValue()
     {
@@ -294,17 +341,17 @@ class FlexibleManager extends SimpleManager implements TranslatableInterface, Sc
     /**
      * Return a new instance
      *
-     * @return Oro\Bundle\FlexibleEntityBundle\Model\FlexibleInterface
+     * @return FlexibleInterface
      */
-    public function createEntity()
+    public function createFlexible()
     {
-        $class = $this->getEntityName();
+        $class = $this->getFlexibleName();
         $object = new $class();
         $object->setLocale($this->getLocale());
         $object->setScope($this->getScope());
         // dispatch event
-        $event = new FilterFlexibleEntityEvent($this, $object);
-        $this->container->get('event_dispatcher')->dispatch(FlexibleEntityEvents::CREATE_FLEXIBLE_ENTITY, $event);
+        $event = new FilterFlexibleEvent($this, $object);
+        $this->container->get('event_dispatcher')->dispatch(FlexibleEntityEvents::CREATE_FLEXIBLE, $event);
 
         return $object;
     }
@@ -314,17 +361,17 @@ class FlexibleManager extends SimpleManager implements TranslatableInterface, Sc
      *
      * @param AbstractAttributeType $type attribute type
      *
-     * @return Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttributeExtended
+     * @return AbstractAttributeExtended
      */
-    public function createEntityAttribute(AbstractAttributeType $type = null)
+    public function createAttributeExtended(AbstractAttributeType $type = null)
     {
-        if (!$this->getEntityAttributeName()) {
-            throw new FlexibleConfigurationException($this->getEntityName().' has no flexible attribute extended class');
+        if (!$this->getAttributeExtendedName()) {
+            throw new FlexibleConfigurationException($this->getFlexibleName().' has no flexible attribute extended class');
         }
         // build base attribute
         $attribute = $this->createAttribute($type);
         // build flexible attribute
-        $class = $this->getEntityAttributeName();
+        $class = $this->getAttributeExtendedName();
         $object = new $class();
         $object->setAttribute($attribute);
 
@@ -333,17 +380,17 @@ class FlexibleManager extends SimpleManager implements TranslatableInterface, Sc
 
     /**
      * Return a new instance
-     * @return Oro\Bundle\FlexibleEntityBundle\Model\ValueInterface
+     * @return FlexibleValueInterface
      */
-    public function createEntityValue()
+    public function createFlexibleValue()
     {
-        $class = $this->getEntityValueName();
+        $class = $this->getFlexibleValueName();
         $object = new $class();
         $object->setLocale($this->getLocale());
         $object->setScope($this->getScope());
         // dispatch event
         $event = new FilterFlexibleValueEvent($this, $object);
-        $this->container->get('event_dispatcher')->dispatch(FlexibleEntityEvents::CREATE_FLEXIBLE_VALUE, $event);
+        $this->container->get('event_dispatcher')->dispatch(FlexibleEntityEvents::CREATE_VALUE, $event);
 
         return $object;
     }

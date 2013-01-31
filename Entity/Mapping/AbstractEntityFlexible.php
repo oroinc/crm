@@ -4,8 +4,8 @@ namespace Oro\Bundle\FlexibleEntityBundle\Entity\Mapping;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Oro\Bundle\FlexibleEntityBundle\Model\AbstractFlexible;
-use Oro\Bundle\FlexibleEntityBundle\Model\ValueInterface;
-use Oro\Bundle\FlexibleEntityBundle\Model\AbstractValue;
+use Oro\Bundle\FlexibleEntityBundle\Model\FlexibleValueInterface;
+use Oro\Bundle\FlexibleEntityBundle\Model\AbstractFlexibleValue;
 
 /**
  * Base Doctrine ORM entity
@@ -43,7 +43,7 @@ abstract class AbstractEntityFlexible extends AbstractFlexible
     /**
      * @var Value
      *
-     * @ORM\OneToMany(targetEntity="AbstractEntityValue", mappedBy="entity", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="AbstractEntityFlexibleValue", mappedBy="entity", cascade={"persist", "remove"})
      */
     protected $values;
 
@@ -58,11 +58,11 @@ abstract class AbstractEntityFlexible extends AbstractFlexible
     /**
      * Add value, override to deal with relation owner side
      *
-     * @param ValueInterface $value
+     * @param FlexibleValueInterface $value
      *
      * @return AbstractEntityFlexible
      */
-    public function addValue(ValueInterface $value)
+    public function addValue(FlexibleValueInterface $value)
     {
         $this->values[] = $value;
         $value->setEntity($this);
@@ -73,9 +73,9 @@ abstract class AbstractEntityFlexible extends AbstractFlexible
     /**
      * Remove value
      *
-     * @param ValueInterface $value
+     * @param FlexibleValueInterface $value
      */
-    public function removeValue(ValueInterface $value)
+    public function removeValue(FlexibleValueInterface $value)
     {
         $this->values->removeElement($value);
     }
@@ -95,7 +95,7 @@ abstract class AbstractEntityFlexible extends AbstractFlexible
      *
      * @param string $attributeCode
      *
-     * @return ValueInterface
+     * @return FlexibleValueInterface
      */
     public function getValue($attributeCode)
     {

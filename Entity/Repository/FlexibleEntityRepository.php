@@ -121,7 +121,7 @@ class FlexibleEntityRepository extends EntityRepository implements TranslatableI
     {
         // prepare entity attributes query
         $attributeAlias = 'Attribute';
-        $attributeName = $this->flexibleConfig['flexible_attribute_class'];
+        $attributeName = $this->flexibleConfig['attribute_class'];
         $attributeRepo = $this->_em->getRepository($attributeName);
         $qb = $attributeRepo->createQueryBuilder($attributeAlias);
         $qb->andWhere('Attribute.entityType = :type')->setParameter('type', $this->_entityName);
@@ -158,7 +158,7 @@ class FlexibleEntityRepository extends EntityRepository implements TranslatableI
      */
     public function findAttributeByCode($code)
     {
-        $attributeName = $this->flexibleConfig['flexible_attribute_class'];
+        $attributeName = $this->flexibleConfig['attribute_class'];
         $attributeRepo = $this->_em->getRepository($attributeName);
         $attribute = $attributeRepo->findOneBy(array('entityType' => $this->_entityName, 'code' => $code));
 

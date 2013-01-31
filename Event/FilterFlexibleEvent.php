@@ -12,7 +12,7 @@ use Oro\Bundle\FlexibleEntityBundle\Model\FlexibleInterface;
  * @license   http://opensource.org/licenses/MIT MIT
  *
  */
-class FilterFlexibleEntityEvent extends AbstractFilterEvent
+class FilterFlexibleEvent extends AbstractFilterEvent
 {
     /**
      * Flexible entity
@@ -23,7 +23,7 @@ class FilterFlexibleEntityEvent extends AbstractFilterEvent
     /**
      * Constructor
      *
-     * @param FlexibleManager         $manager the manager
+     * @param FlexibleManager   $manager the manager
      * @param FlexibleInterface $entity  the entity
      */
     public function __construct(FlexibleManager $manager, FlexibleInterface $entity)

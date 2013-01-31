@@ -13,32 +13,32 @@ final class FlexibleEntityEvents
 {
 
     /**
-     * This event is thrown each time a flexible attribute is created in the system.
+     * This event is thrown each time an attribute is created in the system.
      *
      * The event listener receives an
      * Oro\Bundle\FlexibleEntityBundle\Event\FilterFlexibleEvent instance.
      *
      * @var string
      */
-    const CREATE_ATTRIBUTE          = 'oro_flexible.create_attribute';
+    const CREATE_ATTRIBUTE = 'oro_flexible.create_attribute';
 
     /**
-     * This event is thrown each time a flexible entity is created in the system.
+     * This event is thrown each time a flexible is created in the system.
      *
      * The event listener receives an
      * Oro\Bundle\FlexibleEntityBundle\Event\FilterFlexibleEvent instance.
      *
      * @var string
      */
-    const CREATE_FLEXIBLE_ENTITY    = 'oro_flexible.create_flexible_entity';
+    const CREATE_FLEXIBLE  = 'oro_flexible.create_flexible';
 
     /**
-     * This event is thrown each time a flexible value is created in the system.
+     * This event is thrown each time a value is created in the system.
      *
      * The event listener receives an
      * Oro\Bundle\FlexibleEntityBundle\Event\FilterFlexibleEvent instance.
      *
      * @var string
      */
-    const CREATE_FLEXIBLE_VALUE     = 'oro_flexible.create_flexible_value';
+    const CREATE_VALUE     = 'oro_flexible.create_value';
 }

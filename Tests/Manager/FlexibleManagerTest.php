@@ -91,9 +91,9 @@ class FlexibleManagerTest extends AbstractFlexibleManagerTest
     /**
      * Test related method
      */
-    public function testGetEntityAttributeName()
+    public function testGetAttributeExtendedName()
     {
-        $this->assertEquals($this->manager->getEntityAttributeName(), $this->flexibleAttributeClassName);
+        $this->assertEquals($this->manager->getAttributeExtendedName(), $this->flexibleAttributeClassName);
     }
 
     /**
@@ -115,17 +115,17 @@ class FlexibleManagerTest extends AbstractFlexibleManagerTest
     /**
      * Test related method
      */
-    public function testGetEntityValueName()
+    public function testGetFlexibleValueName()
     {
-        $this->assertEquals($this->manager->getEntityValueName(), $this->flexibleValueClassName);
+        $this->assertEquals($this->manager->getFlexibleValueName(), $this->flexibleValueClassName);
     }
 
     /**
      * Test related method
      */
-    public function testGetEntityRepository()
+    public function testGetFlexibleRepository()
     {
-        $this->assertTrue($this->manager->getEntityRepository() instanceof \Doctrine\ORM\EntityRepository);
+        $this->assertTrue($this->manager->getFlexibleRepository() instanceof \Doctrine\ORM\EntityRepository);
     }
 
     /**
@@ -139,9 +139,9 @@ class FlexibleManagerTest extends AbstractFlexibleManagerTest
     /**
      * Test related method
      */
-    public function testGetEntityAttributeRepository()
+    public function testGetAttributeExtendedRepository()
     {
-        $this->assertTrue($this->manager->getEntityAttributeRepository() instanceof \Doctrine\ORM\EntityRepository);
+        $this->assertTrue($this->manager->getAttributeExtendedRepository() instanceof \Doctrine\ORM\EntityRepository);
     }
 
     /**
@@ -163,9 +163,9 @@ class FlexibleManagerTest extends AbstractFlexibleManagerTest
     /**
      * Test related method
      */
-    public function testGetEntityValueRepository()
+    public function testGetFlexibleValueRepository()
     {
-        $this->assertTrue($this->manager->getEntityValueRepository() instanceof \Doctrine\ORM\EntityRepository);
+        $this->assertTrue($this->manager->getFlexibleValueRepository() instanceof \Doctrine\ORM\EntityRepository);
     }
 
     /**
@@ -196,25 +196,25 @@ class FlexibleManagerTest extends AbstractFlexibleManagerTest
     /**
      * Test related method
      */
-    public function testCreateEntity()
+    public function testCreateFlexible()
     {
-        $this->assertTrue($this->manager->createEntity() instanceof $this->flexibleClassName);
+        $this->assertTrue($this->manager->createFlexible() instanceof $this->flexibleClassName);
     }
 
     /**
      * Test related method
      */
-    public function testCreateEntityAttribute()
+    public function testCreateAttributeExtended()
     {
-        $this->assertTrue($this->manager->createEntityAttribute() instanceof $this->flexibleAttributeClassName);
+        $this->assertTrue($this->manager->createAttributeExtended() instanceof $this->flexibleAttributeClassName);
     }
 
     /**
      * Test related method
      */
-    public function testCreateEntityValue()
+    public function testCreateFlexibleValue()
     {
-        $this->assertTrue($this->manager->createEntityValue() instanceof $this->flexibleValueClassName);
+        $this->assertTrue($this->manager->createFlexibleValue() instanceof $this->flexibleValueClassName);
     }
 
 }

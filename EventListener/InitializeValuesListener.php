@@ -3,7 +3,7 @@ namespace Oro\Bundle\FlexibleEntityBundle\EventListener;
 
 use Oro\Bundle\FlexibleEntityBundle\Model\FlexibleInterface;
 
-use Oro\Bundle\FlexibleEntityBundle\Event\FilterFlexibleEntityEvent;
+use Oro\Bundle\FlexibleEntityBundle\Event\FilterFlexibleEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Oro\Bundle\FlexibleEntityBundle\FlexibleEntityEvents;
 
@@ -28,15 +28,15 @@ class InitializeValuesListener implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-            FlexibleEntityEvents::CREATE_FLEXIBLE_ENTITY => array('onCreateFlexibleEntity'),
+            FlexibleEntityEvents::CREATE_FLEXIBLE => array('onCreateFlexibleEntity'),
         );
     }
 
     /**
      * Add values for each attribute
-     * @param FilterFlexibleEntityEvent $event
+     * @param FilterFlexibleEvent $event
      */
-    public function onCreateFlexibleEntity(FilterFlexibleEntityEvent $event)
+    public function onCreateFlexibleEntity(FilterFlexibleEvent $event)
     {
         $flexible = $event->getEntity();
         $manager = $event->getManager();
@@ -50,9 +50,9 @@ class InitializeValuesListener implements EventSubscriberInterface
                 $required = false;
             }
             // initialize with base values
-            $attributes = $manager->getAttributeRepository()->findBy(array('entityType' => $manager->getEntityName(), 'required' => $required));
+            $attributes = $manager->getAttributeRepository()->findBy(array('entityType' => $manager->getFlexibleName(), 'required' => $required));
             foreach ($attributes as $attribute) {
-                $value = $manager->createEntityValue();
+                $value = $manager->createFlexibleValue();
                 $value->setAttribute($attribute);
                 if ($attribute->getDefaultValue() !== null) {
                     $value->setData($attribute->getDefaultValue());

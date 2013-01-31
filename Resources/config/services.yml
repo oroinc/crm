@@ -25,14 +25,13 @@ services:
         tags:
             - { name: doctrine.event_subscriber }
 
-    # deal with has value required behavior
+    # deal with required value behavior
     oro_flexibleentity.has_required_value_listener:
         class: Oro\Bundle\FlexibleEntityBundle\EventListener\RequiredValueListener
         calls:
             - [ setContainer, [ @service_container ] ]
         tags:
             - { name: doctrine.event_subscriber }
-
 
     # deal with default value behavior
     oro_flexibleentity.listener.default_value_listener:

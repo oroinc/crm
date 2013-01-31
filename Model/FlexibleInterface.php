@@ -14,18 +14,18 @@ interface FlexibleInterface
     /**
      * Add value
      *
-     * @param ValueInterface $value
+     * @param FlexibleValueInterface $value
      *
      * @return FlexibleInterface
      */
-    public function addValue(ValueInterface $value);
+    public function addValue(FlexibleValueInterface $value);
 
     /**
      * Remove value
      *
-     * @param ValueInterface $value
+     * @param FlexibleValueInterface $value
      */
-    public function removeValue(ValueInterface $value);
+    public function removeValue(FlexibleValueInterface $value);
 
     /**
      * Get values
@@ -39,7 +39,7 @@ interface FlexibleInterface
      *
      * @param string $attributeCode
      *
-     * @return ValueInterface
+     * @return FlexibleValueInterface
      */
     public function getValue($attributeCode);
 }

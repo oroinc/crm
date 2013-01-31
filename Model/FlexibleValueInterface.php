@@ -9,7 +9,7 @@ namespace Oro\Bundle\FlexibleEntityBundle\Model;
  * @license   http://opensource.org/licenses/MIT MIT
  *
  */
-interface ValueInterface
+interface FlexibleValueInterface
 {
 
     /**
