@@ -92,391 +92,74 @@ class MeasureConverterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test convert method for Area family
+     * Test converter with data in provider method
+     * @param string $family        MeasureFamily for conversion
+     * @param string $baseUnit      Base unit used by base value
+     * @param string $convertedUnit Converted unit asked
+     * @param number $baseValue     Base value
+     * @param number $expectedValue Expected value after conversion
+     *
+     * @dataProvider provider
      */
-    public function testConvertArea()
+    public function testConvert($family, $baseUnit, $convertedUnit, $baseValue, $expectedValue)
     {
-        $this->converter->setFamily(AreaFamilyInterface::FAMILY);
-
-        // test square_meter to hectare conversion
-        $baseValue = 200;
-        $expectedValue = 0.02;
+        // define family
+        $this->converter->setFamily($family);
 
         // convert to a final value
-        $convertedValue = $this->converter->convert(AreaFamilyInterface::SQUARE_METER, AreaFamilyInterface::HECTARE, $baseValue);
+        $convertedValue = $this->converter->convert($baseUnit, $convertedUnit, $baseValue);
         $this->assertEquals($expectedValue, $convertedValue);
 
         // convert to the initial value
-        $resultValue = $this->converter->convert(AreaFamilyInterface::HECTARE, AreaFamilyInterface::SQUARE_METER, $convertedValue);
-        $this->assertEquals($baseValue, $resultValue);
-
-
-        // test square_inch to square_mil conversion
-        $baseValue = 10;
-        $expectedValue = 10000000;
-
-        // convert to a final value
-        $convertedValue = $this->converter->convert(AreaFamilyInterface::SQUARE_INCH, AreaFamilyInterface::SQUARE_MIL, $baseValue);
-        $this->assertEquals($expectedValue, $convertedValue);
-
-        // convert to the initial value
-        $resultValue = $this->converter->convert(AreaFamilyInterface::SQUARE_MIL, AreaFamilyInterface::SQUARE_INCH, $convertedValue);
-        $this->assertEquals($baseValue, $resultValue);
-
-
-        // test square_furlong to square_mile conversion
-        $baseValue = 100;
-        $expectedValue = 1.5625062462063;
-
-        // convert to a final value
-        $convertedValue = $this->converter->convert(AreaFamilyInterface::SQUARE_FURLONG, AreaFamilyInterface::SQUARE_MILE, $baseValue);
-        $this->assertEquals($expectedValue, $convertedValue);
-
-        // convert to the initial value
-        $resultValue = $this->converter->convert(AreaFamilyInterface::SQUARE_MILE, AreaFamilyInterface::SQUARE_FURLONG, $convertedValue);
+        $resultValue = $this->converter->convert($convertedUnit, $baseUnit, $convertedValue);
         $this->assertEquals($baseValue, $resultValue);
     }
 
     /**
-     * Test convert method for Binary family
+     * Data provider
+     *
+     * @return multitype:multitype:number string
+     *
+     * @static
      */
-    public function testConvertBinary()
+    public static function provider()
     {
-        $this->converter->setFamily(BinaryFamilyInterface::FAMILY);
-
-        // test byte to kilobyte conversion
-        $baseValue = 1024;
-        $expectedValue = 1;
-
-        // convert to a final value
-        $convertedValue = $this->converter->convert(BinaryFamilyInterface::BYTE, BinaryFamilyInterface::KILOBYTE, $baseValue);
-        $this->assertEquals($expectedValue, $convertedValue);
-
-        // convert to the initial value
-        $resultValue = $this->converter->convert(BinaryFamilyInterface::KILOBYTE, BinaryFamilyInterface::BYTE, $convertedValue);
-        $this->assertEquals($baseValue, $resultValue);
-
-
-        // test gigabyte to bit conversion
-        $baseValue = 2;
-        $expectedValue = 17179869184;
-
-        // convert to a final value
-        $convertedValue = $this->converter->convert(BinaryFamilyInterface::GIGABYTE, BinaryFamilyInterface::BIT, $baseValue);
-        $this->assertEquals($expectedValue, $convertedValue);
-
-        // convert to the initial value
-        $resultValue = $this->converter->convert(BinaryFamilyInterface::BIT, BinaryFamilyInterface::GIGABYTE, $convertedValue);
-        $this->assertEquals($baseValue, $resultValue);
-    }
-
-    /**
-     * Test convert method for Frequency family
-     */
-    public function testConvertFrequency()
-    {
-        $this->converter->setFamily(FrequencyFamilyInterface::FAMILY);
-
-        // test hertz to kilohertz conversion
-        $baseValue = 10000;
-        $expectedValue = 10;
-
-        // convert to a final value
-        $convertedValue = $this->converter->convert(FrequencyFamilyInterface::HERTZ, FrequencyFamilyInterface::KILOHERTZ, $baseValue);
-        $this->assertEquals($expectedValue, $convertedValue);
-
-        // convert to the initial value
-        $resultValue = $this->converter->convert(FrequencyFamilyInterface::KILOHERTZ, FrequencyFamilyInterface::HERTZ, $convertedValue);
-        $this->assertEquals($baseValue, $resultValue);
-
-
-        // test terahertz to megahertz conversion
-        $baseValue = 2;
-        $expectedValue = 2000000;
-
-        // convert to a final value
-        $convertedValue = $this->converter->convert(FrequencyFamilyInterface::TERAHERTZ, FrequencyFamilyInterface::MEGAHERTZ, $baseValue);
-        $this->assertEquals($expectedValue, $convertedValue);
-
-        // convert to the initial value
-        $resultValue = $this->converter->convert(FrequencyFamilyInterface::MEGAHERTZ, FrequencyFamilyInterface::TERAHERTZ, $convertedValue);
-        $this->assertEquals($baseValue, $resultValue);
-    }
-
-    /**
-     * Test convert method for Length family
-     */
-    public function testConvertLength()
-    {
-        $this->converter->setFamily(LengthFamilyInterface::FAMILY);
-
-        // test millimeter to centimeter conversion
-        $baseValue = 50;
-        $expectedValue = 5;
-
-        // convert to a final value
-        $convertedValue = $this->converter->convert(LengthFamilyInterface::MILLIMETER, LengthFamilyInterface::CENTIMETER, $baseValue);
-        $this->assertEquals($expectedValue, $convertedValue);
-
-        // convert to the initial value
-        $resultValue = $this->converter->convert(LengthFamilyInterface::CENTIMETER, LengthFamilyInterface::MILLIMETER, $convertedValue);
-        $this->assertEquals($baseValue, $resultValue);
-
-
-        // test inch to mile conversion
-        $baseValue = 15000;
-        $expectedValue = 0.23674242424242;
-
-        // convert to a final value
-        $convertedValue = $this->converter->convert(LengthFamilyInterface::INCH, LengthFamilyInterface::MILE, $baseValue);
-        $this->assertEquals($expectedValue, $convertedValue);
-
-        // convert to the initial value
-        $resultValue = $this->converter->convert(LengthFamilyInterface::MILE, LengthFamilyInterface::INCH, $convertedValue);
-        $this->assertEquals($baseValue, $resultValue);
-
-
-        // test millimeter to centimeter conversion
-        $baseValue = 10;
-        $expectedValue = 10936.132983377;
-
-        // convert to a final value
-        $convertedValue = $this->converter->convert(LengthFamilyInterface::KILOMETER, LengthFamilyInterface::YARD, $baseValue);
-        $this->assertEquals($expectedValue, $convertedValue);
-
-        // convert to the initial value
-        $resultValue = $this->converter->convert(LengthFamilyInterface::YARD, LengthFamilyInterface::KILOMETER, $convertedValue);
-        $this->assertEquals($baseValue, $resultValue);
-    }
-
-    /**
-     * Test convert method for Power family
-     */
-    public function testConvertPower()
-    {
-        $this->converter->setFamily(PowerFamilyInterface::FAMILY);
-
-        // test hertz to kilohertz conversion
-        $baseValue = 10000;
-        $expectedValue = 10;
-
-        // convert to a final value
-        $convertedValue = $this->converter->convert(PowerFamilyInterface::WATT, PowerFamilyInterface::KILOWATT, $baseValue);
-        $this->assertEquals($expectedValue, $convertedValue);
-
-        // convert to the initial value
-        $resultValue = $this->converter->convert(PowerFamilyInterface::KILOWATT, PowerFamilyInterface::WATT, $convertedValue);
-        $this->assertEquals($baseValue, $resultValue);
-
-
-        // test terawatt to megawatt conversion
-        $baseValue = 2;
-        $expectedValue = 2000000;
-
-        // convert to a final value
-        $convertedValue = $this->converter->convert(PowerFamilyInterface::TERAWATT, PowerFamilyInterface::MEGAWATT, $baseValue);
-        $this->assertEquals($expectedValue, $convertedValue);
-
-        // convert to the initial value
-        $resultValue = $this->converter->convert(PowerFamilyInterface::MEGAWATT, PowerFamilyInterface::TERAWATT, $convertedValue);
-        $this->assertEquals($baseValue, $resultValue);
-
-
-        // test gigawatt to terawatt conversion
-        $baseValue = 5;
-        $expectedValue = 0.005;
-
-        // convert to a final value
-        $convertedValue = $this->converter->convert(PowerFamilyInterface::GIGAWATT, PowerFamilyInterface::TERAWATT, $baseValue);
-        $this->assertEquals($expectedValue, $convertedValue);
-
-        // convert to the initial value
-        $resultValue = $this->converter->convert(PowerFamilyInterface::TERAWATT, PowerFamilyInterface::GIGAWATT, $convertedValue);
-        $this->assertEquals($baseValue, $resultValue);
-    }
-
-    /**
-     * Test convert method for Speed family
-     */
-    public function testConvertSpeed()
-    {
-        $this->converter->setFamily(SpeedFamilyInterface::FAMILY);
-
-        // test km/h to m/s conversion
-        $baseValue = 36;
-        $expectedValue = 10;
-
-        // convert to a final value
-        $convertedValue = $this->converter->convert(SpeedFamilyInterface::KILOMETER_PER_HOUR, SpeedFamilyInterface::METER_PER_SECOND, $baseValue);
-        $this->assertEquals($expectedValue, $convertedValue);
-
-        // convert to the initial value
-        $resultValue = $this->converter->convert(SpeedFamilyInterface::METER_PER_SECOND, SpeedFamilyInterface::KILOMETER_PER_HOUR, $convertedValue);
-        $this->assertEquals($convertedValue, $expectedValue);
-
-
-        // test ft/s to mph conversion
-        $baseValue = 17;
-        $expectedValue = 11.590909090909;
-
-        // convert to a final value
-        $convertedValue = $this->converter->convert(SpeedFamilyInterface::FOOT_PER_SECOND, SpeedFamilyInterface::MILE_PER_HOUR, $baseValue);
-        $this->assertEquals($expectedValue, $convertedValue);
-
-        // convert to the initial value
-        $resultValue = $this->converter->convert(SpeedFamilyInterface::MILE_PER_HOUR, SpeedFamilyInterface::FOOT_PER_SECOND, $convertedValue);
-        $this->assertEquals($convertedValue, $expectedValue);
-
-
-        // test yd/h to m/m conversion
-        $baseValue = 26;
-        $expectedValue = 0.39624;
-
-        // convert to a final value
-        $convertedValue = $this->converter->convert(SpeedFamilyInterface::YARD_PER_HOUR, SpeedFamilyInterface::METER_PER_MINUTE, $baseValue);
-        $this->assertEquals($expectedValue, $convertedValue);
-
-        // convert to the initial value
-        $resultValue = $this->converter->convert(SpeedFamilyInterface::METER_PER_MINUTE, SpeedFamilyInterface::YARD_PER_HOUR, $convertedValue);
-        $this->assertEquals($convertedValue, $expectedValue);
-    }
-
-    /**
-     * Test convert method for Temperature family
-     */
-    public function testConvertTemperature()
-    {
-        $this->converter->setFamily(TemperatureFamilyInterface::FAMILY);
-
-        // test celcius to fahrenheit conversion
-        $baseValue = 20;
-        $expectedValue = 68;
-
-        // convert to a final value
-        $convertedValue = $this->converter->convert(TemperatureFamilyInterface::CELCIUS, TemperatureFamilyInterface::FAHRENHEIT, $baseValue);
-        $this->assertEquals($expectedValue, $convertedValue);
-
-        // convert to the initial value
-        $resultValue = $this->converter->convert(TemperatureFamilyInterface::FAHRENHEIT, TemperatureFamilyInterface::CELCIUS, $convertedValue);
-        $this->assertEquals($baseValue, $resultValue);
-
-
-        // test reaumur to rankine conversion
-        $baseValue = 6;
-        $expectedValue = 505.17;
-
-        // convert to a final value
-        $convertedValue = $this->converter->convert(TemperatureFamilyInterface::REAUMUR, TemperatureFamilyInterface::RANKINE, $baseValue);
-        $this->assertEquals($expectedValue, $convertedValue);
-
-        // convert to the initial value
-        $resultValue = $this->converter->convert(TemperatureFamilyInterface::RANKINE, TemperatureFamilyInterface::REAUMUR, $convertedValue);
-        $this->assertEquals($baseValue, $resultValue);
-
-
-        // test fahrenheit to reaumur conversion
-        $baseValue = 26720.33;
-        $expectedValue = 11861.48;
-
-        // convert to a final value
-        $convertedValue = $this->converter->convert(TemperatureFamilyInterface::FAHRENHEIT, TemperatureFamilyInterface::REAUMUR, $baseValue);
-        $this->assertEquals($expectedValue, $convertedValue);
-
-        // convert to the initial value
-        $resultValue = $this->converter->convert(TemperatureFamilyInterface::REAUMUR, TemperatureFamilyInterface::FAHRENHEIT, $convertedValue);
-        $this->assertEquals($baseValue, $resultValue);
-    }
-
-    /**
-     * Test convert method for Volume family
-     */
-    public function testConvertVolume()
-    {
-        $this->converter->setFamily(VolumeFamilyInterface::FAMILY);
-
-        // test cubic meter to liter conversion
-        $baseValue = 5;
-        $expectedValue = 5000;
-
-        // convert to a final value
-        $convertedValue = $this->converter->convert(VolumeFamilyInterface::CUBIC_METER, VolumeFamilyInterface::LITER, $baseValue);
-        $this->assertEquals($expectedValue, $convertedValue);
-
-        // convert to the initial value
-        $resultValue = $this->converter->convert(VolumeFamilyInterface::LITER, VolumeFamilyInterface::CUBIC_METER, $convertedValue);
-        $this->assertEquals($baseValue, $resultValue);
-
-
-        // test milliliter to pint conversion
-        $baseValue = 568.26125;
-        $expectedValue = 1;
-
-        // convert to a final value
-        $convertedValue = $this->converter->convert(VolumeFamilyInterface::MILLILITER, VolumeFamilyInterface::PINT, $baseValue);
-        $this->assertEquals($expectedValue, $convertedValue);
-
-        // convert to the initial value
-        $resultValue = $this->converter->convert(VolumeFamilyInterface::PINT, VolumeFamilyInterface::MILLILITER, $convertedValue);
-        $this->assertEquals($baseValue, $resultValue);
-
-
-        // test cubic inch to ounce conversion
-        $baseValue = 12;
-        $expectedValue = 6.9209283170784;
-
-        // convert to a final value
-        $convertedValue = $this->converter->convert(VolumeFamilyInterface::CUBIC_INCH, VolumeFamilyInterface::OUNCE, $baseValue);
-        $this->assertEquals($expectedValue, $convertedValue);
-
-        // convert to the initial value
-        $resultValue = $this->converter->convert(VolumeFamilyInterface::OUNCE, VolumeFamilyInterface::CUBIC_INCH, $convertedValue);
-        $this->assertEquals($baseValue, $resultValue);
-    }
-
-    /**
-     * Test convert method for Weight family
-     */
-    public function testConvertWeight()
-    {
-        $this->converter->setFamily(WeightFamilyInterface::FAMILY);
-
-        // test gram to ounce conversion
-        $baseValue = 3059;
-        $expectedValue = 107.90304960377;
-
-        // convert to a final value
-        $convertedValue = $this->converter->convert(WeightFamilyInterface::GRAM, WeightFamilyInterface::OUNCE, $baseValue);
-        $this->assertEquals($expectedValue, $convertedValue);
-
-        // convert to the initial value
-        $resultValue = $this->converter->convert(WeightFamilyInterface::OUNCE, WeightFamilyInterface::GRAM, $convertedValue);
-        $this->assertEquals($baseValue, $resultValue);
-
-
-        // test pound to kilogram conversion
-        $baseValue = 2;
-        $expectedValue = 0.90718474;
-
-        // convert to a final value
-        $convertedValue = $this->converter->convert(WeightFamilyInterface::POUND, WeightFamilyInterface::KILOGRAM, $baseValue);
-        $this->assertEquals($expectedValue, $convertedValue);
-
-        // convert to the initial value
-        $resultValue = $this->converter->convert(WeightFamilyInterface::KILOGRAM, WeightFamilyInterface::POUND, $convertedValue);
-        $this->assertEquals($baseValue, $resultValue);
-
-
-        // test grain to marc conversion
-        $baseValue = 500;
-        $expectedValue = 0.13237775280899;
-
-        // convert to a final value
-        $convertedValue = $this->converter->convert(WeightFamilyInterface::GRAIN, WeightFamilyInterface::MARC, $baseValue);
-        $this->assertEquals($expectedValue, $convertedValue);
-
-        // convert to the initial value
-        $resultValue = $this->converter->convert(WeightFamilyInterface::MARC, WeightFamilyInterface::GRAIN, $convertedValue);
-        $this->assertEquals($baseValue, $resultValue);
+        return array(
+            // Area tests
+            array(AreaFamilyInterface::FAMILY, AreaFamilyInterface::SQUARE_METER, AreaFamilyInterface::HECTARE, 200, 0.02),
+            array(AreaFamilyInterface::FAMILY, AreaFamilyInterface::SQUARE_INCH, AreaFamilyInterface::SQUARE_MIL, 10, 10000000),
+            array(AreaFamilyInterface::FAMILY, AreaFamilyInterface::SQUARE_FURLONG, AreaFamilyInterface::SQUARE_MILE, 100, 1.5625062462063),
+            // Binary tests
+            array(BinaryFamilyInterface::FAMILY, BinaryFamilyInterface::BYTE, BinaryFamilyInterface::KILOBYTE, 1024, 1),
+            array(BinaryFamilyInterface::FAMILY, BinaryFamilyInterface::GIGABYTE, BinaryFamilyInterface::BIT, 2, 17179869184),
+            // Frequency tests
+            array(FrequencyFamilyInterface::FAMILY, FrequencyFamilyInterface::HERTZ, FrequencyFamilyInterface::KILOHERTZ, 10000, 10),
+            array(FrequencyFamilyInterface::FAMILY, FrequencyFamilyInterface::TERAHERTZ, FrequencyFamilyInterface::MEGAHERTZ, 2, 2000000),
+            // Length tests
+            array(LengthFamilyInterface::FAMILY, LengthFamilyInterface::MILLIMETER, LengthFamilyInterface::CENTIMETER, 50, 5),
+            array(LengthFamilyInterface::FAMILY, LengthFamilyInterface::INCH, LengthFamilyInterface::MILE, 15000, 0.23674242424242),
+            array(LengthFamilyInterface::FAMILY, LengthFamilyInterface::KILOMETER, LengthFamilyInterface::YARD, 10, 10936.132983377),
+            // Power tests
+            array(PowerFamilyInterface::FAMILY, PowerFamilyInterface::WATT, PowerFamilyInterface::KILOWATT, 10000, 10),
+            array(PowerFamilyInterface::FAMILY, PowerFamilyInterface::TERAWATT, PowerFamilyInterface::MEGAWATT, 2, 2000000),
+            array(PowerFamilyInterface::FAMILY, PowerFamilyInterface::GIGAWATT, PowerFamilyInterface::TERAWATT, 5, 0.005),
+            // Speed tests
+            array(SpeedFamilyInterface::FAMILY, SpeedFamilyInterface::KILOMETER_PER_HOUR, SpeedFamilyInterface::METER_PER_SECOND, 36, 10),
+            array(SpeedFamilyInterface::FAMILY, SpeedFamilyInterface::FOOT_PER_SECOND, SpeedFamilyInterface::MILE_PER_HOUR, 17, 11.590909090909),
+            array(SpeedFamilyInterface::FAMILY, SpeedFamilyInterface::YARD_PER_HOUR, SpeedFamilyInterface::METER_PER_MINUTE, 26, 0.39624),
+            // Temperature tests
+            array(TemperatureFamilyInterface::FAMILY, TemperatureFamilyInterface::CELCIUS, TemperatureFamilyInterface::FAHRENHEIT, 20, 68),
+            array(TemperatureFamilyInterface::FAMILY, TemperatureFamilyInterface::REAUMUR, TemperatureFamilyInterface::RANKINE, 6, 505.17),
+            array(TemperatureFamilyInterface::FAMILY, TemperatureFamilyInterface::FAHRENHEIT, TemperatureFamilyInterface::REAUMUR, 26720.33, 11861.48),
+            // Volume tests
+            array(VolumeFamilyInterface::FAMILY, VolumeFamilyInterface::CUBIC_METER, VolumeFamilyInterface::LITER, 5, 5000),
+            array(VolumeFamilyInterface::FAMILY, VolumeFamilyInterface::MILLILITER, VolumeFamilyInterface::PINT, 568.26125, 1),
+            array(VolumeFamilyInterface::FAMILY, VolumeFamilyInterface::CUBIC_INCH, VolumeFamilyInterface::OUNCE, 12, 6.9209283170784),
+            // Weight tests
+            array(WeightFamilyInterface::FAMILY, WeightFamilyInterface::GRAM, WeightFamilyInterface::OUNCE, 3059, 107.90304960377),
+            array(WeightFamilyInterface::FAMILY, WeightFamilyInterface::POUND, WeightFamilyInterface::KILOGRAM, 2, 0.90718474),
+            array(WeightFamilyInterface::FAMILY, WeightFamilyInterface::GRAIN, WeightFamilyInterface::MARC, 500, 0.13237775280899),
+        );
     }
 
     /**
