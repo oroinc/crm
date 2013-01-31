@@ -35,7 +35,7 @@ In MeasureBundle :
 * Configuration : define how to check configuration measure files
 * OroMeasureExtension : define the recovery of the configuration (config files browse and merge configuration).
 - Exception/ contains the exception classes used in converter.
-- Measure/ contains a list of classes. Each class define a family and must contains a constant named FAMILY.
+- Family/ contains a list of interfaces. Each define a family and must contains a constant named FAMILY.
 - Resources/config/
 * measure.yml : define measure configuration with a list of families. Each family define a standard unit measure and a list of unit measures. Each measure of this list is defined by a constant then by a conversion rule (list of ordered operations from unit to standard) and a symbol to display.
 * services.yml : define measure converter service
@@ -51,6 +51,7 @@ services:
 ```
 
 Configuration file can be seen https://github.com/laboro/MeasureBundle/blob/master/Resources/config/measure.yml
+
 
 Install and run unit tests
 ==========================
@@ -71,8 +72,8 @@ In the example below, we convert a value in kilometers to miles.
 
 ```php
 $converter = $this->container->get('oro_measure.measure_converter');
-$converter->setFamily(LengthFamily::FAMILY);
-$result = $converter->convert(LengthMeasure::KILOMETER, LengthMeasure::MILE, 1);
+$converter->setFamily(LengthFamilyInterface::FAMILY);
+$result = $converter->convert(LengthFamilyInterface::KILOMETER, LengthFamilyInterface::MILE, 1);
 ```
 
 Add unit to an existing family
@@ -93,15 +94,15 @@ measures_config:
 Here, we just had "Dong" unit with his conversion rules from it to standard unit. To have equivalent to 1 dong in meters, you must multiply by 7 and divide by 300.
 A symbol is required too to define unit format to display.
 Optionally but recommended, a new class extending family class can be created. It allows to use converter with constants instead of strings. Contants represent config values.
-Here we created "MyLengthMeasure" new class extending LengthMeasure to add "Dong" unit constant.
+Here we created "MyLengthFamilyInterface" new interface extending LengthFamilyInterface to add "Dong" unit constant.
 
 ```php
-use Oro\Bundle\MeasureBundle\Measure\LengthMeasure;
+use Oro\Bundle\MeasureBundle\Measure\LengthMeasureInterface;
 
 /**
- * Override LengthMeasure class to add Dong measure constant
+ * Override LengthFamily interface to add Dong measure constant
  */
-class MyLengthMeasure extends LengthMeasure
+interface MyLengthFamilyInterface extends LengthFamilyInterface
 {
 
     /**
@@ -116,8 +117,8 @@ Then, you can call a conversion to your new unit like this :
 
 ```php
 $converter = $this->container->get('oro_measure.measure_converter');
-$converter->setFamily(LengthMeasure::FAMILY);
-$result = $converter->convert(LengthMeasure::KILOMETER, MyLengthMeasure::DONG, 1);
+$converter->setFamily(LengthFamilyInterface::FAMILY);
+$result = $converter->convert(LengthFamilyInterface::KILOMETER, MyLengthFamilyInterface::DONG, 1);
 ```
 
 
@@ -143,12 +144,10 @@ measures_config:
 ```
 
 ```php
-use Oro\Bundle\MeasureBundle\Measure\AbstractMeasure;
-
 /**
  * Capacitance measures constants
  */
-class CapacitanceMeasure extends AbstractMeasure
+interface CapacitanceFamilyInterface
 {
 
     /**
