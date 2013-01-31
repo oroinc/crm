@@ -8,34 +8,36 @@ use Oro\Bundle\FlexibleEntityBundle\Entity\Attribute;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Table(name="user_attribute_value")
+ * @ORM\Table(name="user_value")
  * @ORM\Entity
  */
 class UserValue extends AbstractEntityFlexibleValue
 {
     /**
-     * @var Attribute $attribute
+     * @var Oro\Bundle\FlexibleEntityBundle\Entity\Attribute $attribute
      *
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\FlexibleEntityBundle\Entity\Attribute")
+     * @ORM\JoinColumn(name="attribute_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected $attribute;
 
     /**
-     * @var Entity $entity
+     * @var User $entity
      *
      * @ORM\ManyToOne(targetEntity="User", inversedBy="values")
      */
     protected $entity;
 
     /**
-     * Custom backend type to store options and theirs values
+     * Store options values
      *
      * @var options ArrayCollection
      *
      * @ORM\ManyToMany(targetEntity="Oro\Bundle\FlexibleEntityBundle\Entity\AttributeOption")
-     * @ORM\JoinTable(name="user_attribute_option_value",
-     *      joinColumns={@ORM\JoinColumn(name="value_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="option_id", referencedColumnName="id")}
+     * @ORM\JoinTable(
+     *     name="user_value_option",
+     *     joinColumns={@ORM\JoinColumn(name="value_id", referencedColumnName="id", onDelete="CASCADE")},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="option_id", referencedColumnName="id", onDelete="CASCADE")}
      * )
      */
     protected $options;
