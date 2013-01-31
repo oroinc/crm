@@ -9,7 +9,7 @@ namespace Oro\Bundle\MeasureBundle\Family;
  * @license   http://opensource.org/licenses/MIT MIT
  *
  */
-class WeightFamily extends AbstractFamily
+interface WeightFamilyInterface extends FamilyInterface
 {
 
     /**

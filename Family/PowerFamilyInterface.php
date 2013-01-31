@@ -9,7 +9,7 @@ namespace Oro\Bundle\MeasureBundle\Family;
  * @license   http://opensource.org/licenses/MIT MIT
  *
  */
-class PowerFamily extends AbstractFamily
+interface PowerFamilyInterface extends FamilyInterface
 {
 
     /**

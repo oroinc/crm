@@ -1,23 +1,23 @@
 <?php
 namespace Oro\Bundle\MeasureBundle\Tests\Convert;
 
-use Oro\Bundle\MeasureBundle\Family\WeightFamily;
+use Oro\Bundle\MeasureBundle\Family\WeightFamilyInterface;
 
-use Oro\Bundle\MeasureBundle\Family\VolumeFamily;
+use Oro\Bundle\MeasureBundle\Family\VolumeFamilyInterface;
 
-use Oro\Bundle\MeasureBundle\Family\TemperatureFamily;
+use Oro\Bundle\MeasureBundle\Family\TemperatureFamilyInterface;
 
-use Oro\Bundle\MeasureBundle\Family\SpeedFamily;
+use Oro\Bundle\MeasureBundle\Family\SpeedFamilyInterface;
 
-use Oro\Bundle\MeasureBundle\Family\PowerFamily;
+use Oro\Bundle\MeasureBundle\Family\PowerFamilyInterface;
 
-use Oro\Bundle\MeasureBundle\Family\FrequencyFamily;
+use Oro\Bundle\MeasureBundle\Family\FrequencyFamilyInterface;
 
-use Oro\Bundle\MeasureBundle\Family\BinaryFamily;
+use Oro\Bundle\MeasureBundle\Family\BinaryFamilyInterface;
 
-use Oro\Bundle\MeasureBundle\Family\AreaFamily;
+use Oro\Bundle\MeasureBundle\Family\AreaFamilyInterface;
 
-use Oro\Bundle\MeasureBundle\Family\LengthFamily;
+use Oro\Bundle\MeasureBundle\Family\LengthFamilyInterface;
 
 use Oro\Bundle\MeasureBundle\Convert\MeasureConverter;
 
@@ -96,18 +96,18 @@ class MeasureConverterTest extends \PHPUnit_Framework_TestCase
      */
     public function testConvertArea()
     {
-        $this->converter->setFamily(AreaFamily::FAMILY);
+        $this->converter->setFamily(AreaFamilyInterface::FAMILY);
 
         // test square_meter to hectare conversion
         $baseValue = 200;
         $expectedValue = 0.02;
 
         // convert to a final value
-        $convertedValue = $this->converter->convert(AreaFamily::SQUARE_METER, AreaFamily::HECTARE, $baseValue);
+        $convertedValue = $this->converter->convert(AreaFamilyInterface::SQUARE_METER, AreaFamilyInterface::HECTARE, $baseValue);
         $this->assertEquals($expectedValue, $convertedValue);
 
         // convert to the initial value
-        $resultValue = $this->converter->convert(AreaFamily::HECTARE, AreaFamily::SQUARE_METER, $convertedValue);
+        $resultValue = $this->converter->convert(AreaFamilyInterface::HECTARE, AreaFamilyInterface::SQUARE_METER, $convertedValue);
         $this->assertEquals($baseValue, $resultValue);
 
 
@@ -116,11 +116,11 @@ class MeasureConverterTest extends \PHPUnit_Framework_TestCase
         $expectedValue = 10000000;
 
         // convert to a final value
-        $convertedValue = $this->converter->convert(AreaFamily::SQUARE_INCH, AreaFamily::SQUARE_MIL, $baseValue);
+        $convertedValue = $this->converter->convert(AreaFamilyInterface::SQUARE_INCH, AreaFamilyInterface::SQUARE_MIL, $baseValue);
         $this->assertEquals($expectedValue, $convertedValue);
 
         // convert to the initial value
-        $resultValue = $this->converter->convert(AreaFamily::SQUARE_MIL, AreaFamily::SQUARE_INCH, $convertedValue);
+        $resultValue = $this->converter->convert(AreaFamilyInterface::SQUARE_MIL, AreaFamilyInterface::SQUARE_INCH, $convertedValue);
         $this->assertEquals($baseValue, $resultValue);
 
 
@@ -129,11 +129,11 @@ class MeasureConverterTest extends \PHPUnit_Framework_TestCase
         $expectedValue = 1.5625062462063;
 
         // convert to a final value
-        $convertedValue = $this->converter->convert(AreaFamily::SQUARE_FURLONG, AreaFamily::SQUARE_MILE, $baseValue);
+        $convertedValue = $this->converter->convert(AreaFamilyInterface::SQUARE_FURLONG, AreaFamilyInterface::SQUARE_MILE, $baseValue);
         $this->assertEquals($expectedValue, $convertedValue);
 
         // convert to the initial value
-        $resultValue = $this->converter->convert(AreaFamily::SQUARE_MILE, AreaFamily::SQUARE_FURLONG, $convertedValue);
+        $resultValue = $this->converter->convert(AreaFamilyInterface::SQUARE_MILE, AreaFamilyInterface::SQUARE_FURLONG, $convertedValue);
         $this->assertEquals($baseValue, $resultValue);
     }
 
@@ -142,18 +142,18 @@ class MeasureConverterTest extends \PHPUnit_Framework_TestCase
      */
     public function testConvertBinary()
     {
-        $this->converter->setFamily(BinaryFamily::FAMILY);
+        $this->converter->setFamily(BinaryFamilyInterface::FAMILY);
 
         // test byte to kilobyte conversion
         $baseValue = 1024;
         $expectedValue = 1;
 
         // convert to a final value
-        $convertedValue = $this->converter->convert(BinaryFamily::BYTE, BinaryFamily::KILOBYTE, $baseValue);
+        $convertedValue = $this->converter->convert(BinaryFamilyInterface::BYTE, BinaryFamilyInterface::KILOBYTE, $baseValue);
         $this->assertEquals($expectedValue, $convertedValue);
 
         // convert to the initial value
-        $resultValue = $this->converter->convert(BinaryFamily::KILOBYTE, BinaryFamily::BYTE, $convertedValue);
+        $resultValue = $this->converter->convert(BinaryFamilyInterface::KILOBYTE, BinaryFamilyInterface::BYTE, $convertedValue);
         $this->assertEquals($baseValue, $resultValue);
 
 
@@ -162,11 +162,11 @@ class MeasureConverterTest extends \PHPUnit_Framework_TestCase
         $expectedValue = 17179869184;
 
         // convert to a final value
-        $convertedValue = $this->converter->convert(BinaryFamily::GIGABYTE, BinaryFamily::BIT, $baseValue);
+        $convertedValue = $this->converter->convert(BinaryFamilyInterface::GIGABYTE, BinaryFamilyInterface::BIT, $baseValue);
         $this->assertEquals($expectedValue, $convertedValue);
 
         // convert to the initial value
-        $resultValue = $this->converter->convert(BinaryFamily::BIT, BinaryFamily::GIGABYTE, $convertedValue);
+        $resultValue = $this->converter->convert(BinaryFamilyInterface::BIT, BinaryFamilyInterface::GIGABYTE, $convertedValue);
         $this->assertEquals($baseValue, $resultValue);
     }
 
@@ -175,18 +175,18 @@ class MeasureConverterTest extends \PHPUnit_Framework_TestCase
      */
     public function testConvertFrequency()
     {
-        $this->converter->setFamily(FrequencyFamily::FAMILY);
+        $this->converter->setFamily(FrequencyFamilyInterface::FAMILY);
 
         // test hertz to kilohertz conversion
         $baseValue = 10000;
         $expectedValue = 10;
 
         // convert to a final value
-        $convertedValue = $this->converter->convert(FrequencyFamily::HERTZ, FrequencyFamily::KILOHERTZ, $baseValue);
+        $convertedValue = $this->converter->convert(FrequencyFamilyInterface::HERTZ, FrequencyFamilyInterface::KILOHERTZ, $baseValue);
         $this->assertEquals($expectedValue, $convertedValue);
 
         // convert to the initial value
-        $resultValue = $this->converter->convert(FrequencyFamily::KILOHERTZ, FrequencyFamily::HERTZ, $convertedValue);
+        $resultValue = $this->converter->convert(FrequencyFamilyInterface::KILOHERTZ, FrequencyFamilyInterface::HERTZ, $convertedValue);
         $this->assertEquals($baseValue, $resultValue);
 
 
@@ -195,11 +195,11 @@ class MeasureConverterTest extends \PHPUnit_Framework_TestCase
         $expectedValue = 2000000;
 
         // convert to a final value
-        $convertedValue = $this->converter->convert(FrequencyFamily::TERAHERTZ, FrequencyFamily::MEGAHERTZ, $baseValue);
+        $convertedValue = $this->converter->convert(FrequencyFamilyInterface::TERAHERTZ, FrequencyFamilyInterface::MEGAHERTZ, $baseValue);
         $this->assertEquals($expectedValue, $convertedValue);
 
         // convert to the initial value
-        $resultValue = $this->converter->convert(FrequencyFamily::MEGAHERTZ, FrequencyFamily::TERAHERTZ, $convertedValue);
+        $resultValue = $this->converter->convert(FrequencyFamilyInterface::MEGAHERTZ, FrequencyFamilyInterface::TERAHERTZ, $convertedValue);
         $this->assertEquals($baseValue, $resultValue);
     }
 
@@ -208,18 +208,18 @@ class MeasureConverterTest extends \PHPUnit_Framework_TestCase
      */
     public function testConvertLength()
     {
-        $this->converter->setFamily(LengthFamily::FAMILY);
+        $this->converter->setFamily(LengthFamilyInterface::FAMILY);
 
         // test millimeter to centimeter conversion
         $baseValue = 50;
         $expectedValue = 5;
 
         // convert to a final value
-        $convertedValue = $this->converter->convert(LengthFamily::MILLIMETER, LengthFamily::CENTIMETER, $baseValue);
+        $convertedValue = $this->converter->convert(LengthFamilyInterface::MILLIMETER, LengthFamilyInterface::CENTIMETER, $baseValue);
         $this->assertEquals($expectedValue, $convertedValue);
 
         // convert to the initial value
-        $resultValue = $this->converter->convert(LengthFamily::CENTIMETER, LengthFamily::MILLIMETER, $convertedValue);
+        $resultValue = $this->converter->convert(LengthFamilyInterface::CENTIMETER, LengthFamilyInterface::MILLIMETER, $convertedValue);
         $this->assertEquals($baseValue, $resultValue);
 
 
@@ -228,11 +228,11 @@ class MeasureConverterTest extends \PHPUnit_Framework_TestCase
         $expectedValue = 0.23674242424242;
 
         // convert to a final value
-        $convertedValue = $this->converter->convert(LengthFamily::INCH, LengthFamily::MILE, $baseValue);
+        $convertedValue = $this->converter->convert(LengthFamilyInterface::INCH, LengthFamilyInterface::MILE, $baseValue);
         $this->assertEquals($expectedValue, $convertedValue);
 
         // convert to the initial value
-        $resultValue = $this->converter->convert(LengthFamily::MILE, LengthFamily::INCH, $convertedValue);
+        $resultValue = $this->converter->convert(LengthFamilyInterface::MILE, LengthFamilyInterface::INCH, $convertedValue);
         $this->assertEquals($baseValue, $resultValue);
 
 
@@ -241,11 +241,11 @@ class MeasureConverterTest extends \PHPUnit_Framework_TestCase
         $expectedValue = 10936.132983377;
 
         // convert to a final value
-        $convertedValue = $this->converter->convert(LengthFamily::KILOMETER, LengthFamily::YARD, $baseValue);
+        $convertedValue = $this->converter->convert(LengthFamilyInterface::KILOMETER, LengthFamilyInterface::YARD, $baseValue);
         $this->assertEquals($expectedValue, $convertedValue);
 
         // convert to the initial value
-        $resultValue = $this->converter->convert(LengthFamily::YARD, LengthFamily::KILOMETER, $convertedValue);
+        $resultValue = $this->converter->convert(LengthFamilyInterface::YARD, LengthFamilyInterface::KILOMETER, $convertedValue);
         $this->assertEquals($baseValue, $resultValue);
     }
 
@@ -254,18 +254,18 @@ class MeasureConverterTest extends \PHPUnit_Framework_TestCase
      */
     public function testConvertPower()
     {
-        $this->converter->setFamily(PowerFamily::FAMILY);
+        $this->converter->setFamily(PowerFamilyInterface::FAMILY);
 
         // test hertz to kilohertz conversion
         $baseValue = 10000;
         $expectedValue = 10;
 
         // convert to a final value
-        $convertedValue = $this->converter->convert(PowerFamily::WATT, PowerFamily::KILOWATT, $baseValue);
+        $convertedValue = $this->converter->convert(PowerFamilyInterface::WATT, PowerFamilyInterface::KILOWATT, $baseValue);
         $this->assertEquals($expectedValue, $convertedValue);
 
         // convert to the initial value
-        $resultValue = $this->converter->convert(PowerFamily::KILOWATT, PowerFamily::WATT, $convertedValue);
+        $resultValue = $this->converter->convert(PowerFamilyInterface::KILOWATT, PowerFamilyInterface::WATT, $convertedValue);
         $this->assertEquals($baseValue, $resultValue);
 
 
@@ -274,11 +274,11 @@ class MeasureConverterTest extends \PHPUnit_Framework_TestCase
         $expectedValue = 2000000;
 
         // convert to a final value
-        $convertedValue = $this->converter->convert(PowerFamily::TERAWATT, PowerFamily::MEGAWATT, $baseValue);
+        $convertedValue = $this->converter->convert(PowerFamilyInterface::TERAWATT, PowerFamilyInterface::MEGAWATT, $baseValue);
         $this->assertEquals($expectedValue, $convertedValue);
 
         // convert to the initial value
-        $resultValue = $this->converter->convert(PowerFamily::MEGAWATT, PowerFamily::TERAWATT, $convertedValue);
+        $resultValue = $this->converter->convert(PowerFamilyInterface::MEGAWATT, PowerFamilyInterface::TERAWATT, $convertedValue);
         $this->assertEquals($baseValue, $resultValue);
 
 
@@ -287,11 +287,11 @@ class MeasureConverterTest extends \PHPUnit_Framework_TestCase
         $expectedValue = 0.005;
 
         // convert to a final value
-        $convertedValue = $this->converter->convert(PowerFamily::GIGAWATT, PowerFamily::TERAWATT, $baseValue);
+        $convertedValue = $this->converter->convert(PowerFamilyInterface::GIGAWATT, PowerFamilyInterface::TERAWATT, $baseValue);
         $this->assertEquals($expectedValue, $convertedValue);
 
         // convert to the initial value
-        $resultValue = $this->converter->convert(PowerFamily::TERAWATT, PowerFamily::GIGAWATT, $convertedValue);
+        $resultValue = $this->converter->convert(PowerFamilyInterface::TERAWATT, PowerFamilyInterface::GIGAWATT, $convertedValue);
         $this->assertEquals($baseValue, $resultValue);
     }
 
@@ -300,18 +300,18 @@ class MeasureConverterTest extends \PHPUnit_Framework_TestCase
      */
     public function testConvertTemperature()
     {
-        $this->converter->setFamily(TemperatureFamily::FAMILY);
+        $this->converter->setFamily(TemperatureFamilyInterface::FAMILY);
 
         // test celcius to fahrenheit conversion
         $baseValue = 20;
         $expectedValue = 68;
 
         // convert to a final value
-        $convertedValue = $this->converter->convert(TemperatureFamily::CELCIUS, TemperatureFamily::FAHRENHEIT, $baseValue);
+        $convertedValue = $this->converter->convert(TemperatureFamilyInterface::CELCIUS, TemperatureFamilyInterface::FAHRENHEIT, $baseValue);
         $this->assertEquals($expectedValue, $convertedValue);
 
         // convert to the initial value
-        $resultValue = $this->converter->convert(TemperatureFamily::FAHRENHEIT, TemperatureFamily::CELCIUS, $convertedValue);
+        $resultValue = $this->converter->convert(TemperatureFamilyInterface::FAHRENHEIT, TemperatureFamilyInterface::CELCIUS, $convertedValue);
         $this->assertEquals($baseValue, $resultValue);
 
 
@@ -320,11 +320,11 @@ class MeasureConverterTest extends \PHPUnit_Framework_TestCase
         $expectedValue = 505.17;
 
         // convert to a final value
-        $convertedValue = $this->converter->convert(TemperatureFamily::REAUMUR, TemperatureFamily::RANKINE, $baseValue);
+        $convertedValue = $this->converter->convert(TemperatureFamilyInterface::REAUMUR, TemperatureFamilyInterface::RANKINE, $baseValue);
         $this->assertEquals($expectedValue, $convertedValue);
 
         // convert to the initial value
-        $resultValue = $this->converter->convert(TemperatureFamily::RANKINE, TemperatureFamily::REAUMUR, $convertedValue);
+        $resultValue = $this->converter->convert(TemperatureFamilyInterface::RANKINE, TemperatureFamilyInterface::REAUMUR, $convertedValue);
         $this->assertEquals($baseValue, $resultValue);
 
 
@@ -333,11 +333,11 @@ class MeasureConverterTest extends \PHPUnit_Framework_TestCase
         $expectedValue = 11861.48;
 
         // convert to a final value
-        $convertedValue = $this->converter->convert(TemperatureFamily::FAHRENHEIT, TemperatureFamily::REAUMUR, $baseValue);
+        $convertedValue = $this->converter->convert(TemperatureFamilyInterface::FAHRENHEIT, TemperatureFamilyInterface::REAUMUR, $baseValue);
         $this->assertEquals($expectedValue, $convertedValue);
 
         // convert to the initial value
-        $resultValue = $this->converter->convert(TemperatureFamily::REAUMUR, TemperatureFamily::FAHRENHEIT, $convertedValue);
+        $resultValue = $this->converter->convert(TemperatureFamilyInterface::REAUMUR, TemperatureFamilyInterface::FAHRENHEIT, $convertedValue);
         $this->assertEquals($baseValue, $resultValue);
     }
 
@@ -346,18 +346,18 @@ class MeasureConverterTest extends \PHPUnit_Framework_TestCase
      */
     public function testConvertVolume()
     {
-        $this->converter->setFamily(VolumeFamily::FAMILY);
+        $this->converter->setFamily(VolumeFamilyInterface::FAMILY);
 
         // test cubic meter to liter conversion
         $baseValue = 5;
         $expectedValue = 5000;
 
         // convert to a final value
-        $convertedValue = $this->converter->convert(VolumeFamily::CUBIC_METER, VolumeFamily::LITER, $baseValue);
+        $convertedValue = $this->converter->convert(VolumeFamilyInterface::CUBIC_METER, VolumeFamilyInterface::LITER, $baseValue);
         $this->assertEquals($expectedValue, $convertedValue);
 
         // convert to the initial value
-        $resultValue = $this->converter->convert(VolumeFamily::LITER, VolumeFamily::CUBIC_METER, $convertedValue);
+        $resultValue = $this->converter->convert(VolumeFamilyInterface::LITER, VolumeFamilyInterface::CUBIC_METER, $convertedValue);
         $this->assertEquals($baseValue, $resultValue);
 
 
@@ -366,11 +366,11 @@ class MeasureConverterTest extends \PHPUnit_Framework_TestCase
         $expectedValue = 1;
 
         // convert to a final value
-        $convertedValue = $this->converter->convert(VolumeFamily::MILLILITER, VolumeFamily::PINT, $baseValue);
+        $convertedValue = $this->converter->convert(VolumeFamilyInterface::MILLILITER, VolumeFamilyInterface::PINT, $baseValue);
         $this->assertEquals($expectedValue, $convertedValue);
 
         // convert to the initial value
-        $resultValue = $this->converter->convert(VolumeFamily::PINT, VolumeFamily::MILLILITER, $convertedValue);
+        $resultValue = $this->converter->convert(VolumeFamilyInterface::PINT, VolumeFamilyInterface::MILLILITER, $convertedValue);
         $this->assertEquals($baseValue, $resultValue);
 
 
@@ -379,11 +379,11 @@ class MeasureConverterTest extends \PHPUnit_Framework_TestCase
         $expectedValue = 6.9209283170784;
 
         // convert to a final value
-        $convertedValue = $this->converter->convert(VolumeFamily::CUBIC_INCH, VolumeFamily::OUNCE, $baseValue);
+        $convertedValue = $this->converter->convert(VolumeFamilyInterface::CUBIC_INCH, VolumeFamilyInterface::OUNCE, $baseValue);
         $this->assertEquals($expectedValue, $convertedValue);
 
         // convert to the initial value
-        $resultValue = $this->converter->convert(VolumeFamily::OUNCE, VolumeFamily::CUBIC_INCH, $convertedValue);
+        $resultValue = $this->converter->convert(VolumeFamilyInterface::OUNCE, VolumeFamilyInterface::CUBIC_INCH, $convertedValue);
         $this->assertEquals($baseValue, $resultValue);
     }
 
@@ -392,18 +392,18 @@ class MeasureConverterTest extends \PHPUnit_Framework_TestCase
      */
     public function testConvertWeight()
     {
-        $this->converter->setFamily(WeightFamily::FAMILY);
+        $this->converter->setFamily(WeightFamilyInterface::FAMILY);
 
         // test gram to ounce conversion
         $baseValue = 3059;
         $expectedValue = 107.90304960377;
 
         // convert to a final value
-        $convertedValue = $this->converter->convert(WeightFamily::GRAM, WeightFamily::OUNCE, $baseValue);
+        $convertedValue = $this->converter->convert(WeightFamilyInterface::GRAM, WeightFamilyInterface::OUNCE, $baseValue);
         $this->assertEquals($expectedValue, $convertedValue);
 
         // convert to the initial value
-        $resultValue = $this->converter->convert(WeightFamily::OUNCE, WeightFamily::GRAM, $convertedValue);
+        $resultValue = $this->converter->convert(WeightFamilyInterface::OUNCE, WeightFamilyInterface::GRAM, $convertedValue);
         $this->assertEquals($baseValue, $resultValue);
 
 
@@ -412,11 +412,11 @@ class MeasureConverterTest extends \PHPUnit_Framework_TestCase
         $expectedValue = 0.90718474;
 
         // convert to a final value
-        $convertedValue = $this->converter->convert(WeightFamily::POUND, WeightFamily::KILOGRAM, $baseValue);
+        $convertedValue = $this->converter->convert(WeightFamilyInterface::POUND, WeightFamilyInterface::KILOGRAM, $baseValue);
         $this->assertEquals($expectedValue, $convertedValue);
 
         // convert to the initial value
-        $resultValue = $this->converter->convert(WeightFamily::KILOGRAM, WeightFamily::POUND, $convertedValue);
+        $resultValue = $this->converter->convert(WeightFamilyInterface::KILOGRAM, WeightFamilyInterface::POUND, $convertedValue);
         $this->assertEquals($baseValue, $resultValue);
 
 
@@ -425,11 +425,11 @@ class MeasureConverterTest extends \PHPUnit_Framework_TestCase
         $expectedValue = 0.13237775280899;
 
         // convert to a final value
-        $convertedValue = $this->converter->convert(WeightFamily::GRAIN, WeightFamily::MARC, $baseValue);
+        $convertedValue = $this->converter->convert(WeightFamilyInterface::GRAIN, WeightFamilyInterface::MARC, $baseValue);
         $this->assertEquals($expectedValue, $convertedValue);
 
         // convert to the initial value
-        $resultValue = $this->converter->convert(WeightFamily::MARC, WeightFamily::GRAIN, $convertedValue);
+        $resultValue = $this->converter->convert(WeightFamilyInterface::MARC, WeightFamilyInterface::GRAIN, $convertedValue);
         $this->assertEquals($baseValue, $resultValue);
     }
 
@@ -448,8 +448,8 @@ class MeasureConverterTest extends \PHPUnit_Framework_TestCase
      */
     public function testUnknownMeasureExceptionBaseToStandard()
     {
-        $this->converter->setFamily(WeightFamily::FAMILY);
-        $this->converter->convert('test-unit', WeightFamily::GRAM, 50);
+        $this->converter->setFamily(WeightFamilyInterface::FAMILY);
+        $this->converter->convert('test-unit', WeightFamilyInterface::GRAM, 50);
     }
 
     /**
@@ -458,8 +458,8 @@ class MeasureConverterTest extends \PHPUnit_Framework_TestCase
      */
     public function testUnknownMeasureExceptionStandardToFinal()
     {
-        $this->converter->setFamily(WeightFamily::FAMILY);
-        $this->converter->convert(WeightFamily::GRAM, 'test-unit', 50);
+        $this->converter->setFamily(WeightFamilyInterface::FAMILY);
+        $this->converter->convert(WeightFamilyInterface::GRAM, 'test-unit', 50);
     }
 
     /**
@@ -472,8 +472,8 @@ class MeasureConverterTest extends \PHPUnit_Framework_TestCase
         $config = $this->initializeConfig($configFile);
 
         $converter = $this->initializeConverter($config);
-        $converter->setFamily(LengthFamily::FAMILY);
-        $converter->convert(LengthFamily::METER, LengthFamily::CENTIMETER, 100);
+        $converter->setFamily(LengthFamilyInterface::FAMILY);
+        $converter->convert(LengthFamilyInterface::METER, LengthFamilyInterface::CENTIMETER, 100);
     }
 
     /**
@@ -486,8 +486,8 @@ class MeasureConverterTest extends \PHPUnit_Framework_TestCase
         $config = $this->initializeConfig($configFile);
 
         $converter = $this->initializeConverter($config);
-        $converter->setFamily(LengthFamily::FAMILY);
-        $converter->convert(LengthFamily::CENTIMETER, LengthFamily::METER, 100);
+        $converter->setFamily(LengthFamilyInterface::FAMILY);
+        $converter->convert(LengthFamilyInterface::CENTIMETER, LengthFamilyInterface::METER, 100);
     }
 
 }
