@@ -3,7 +3,6 @@
 namespace Oro\Bundle\UserBundle\Entity;
 
 use Symfony\Component\Security\Core\Role\RoleInterface;
-use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -27,14 +26,11 @@ class Role implements RoleInterface
 
     /**
      * @ORM\Column(type="string", unique=true, length=30, nullable=false)
-     * @Assert\MaxLength(30)
-     * @Assert\Regex("/^[a-zA-Z0-9_]+$/")
      */
     protected $role;
 
     /**
      * @ORM\Column(type="string", length=30)
-     * @Assert\MaxLength(30)
      */
     protected $label;
 

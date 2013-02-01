@@ -2,13 +2,13 @@
 
 namespace Oro\Bundle\UserBundle\Form\Type;
 
-use Oro\Bundle\FlexibleEntityBundle\Form\Type\FlexibleType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
+use Oro\Bundle\FlexibleEntityBundle\Form\Type\FlexibleType;
+
 class UserType extends FlexibleType
 {
-
     /**
      * {@inheritdoc}
      */
@@ -16,6 +16,7 @@ class UserType extends FlexibleType
     {
         // add default flexible fields
         parent::addEntityFields($builder);
+
         // user fields
         $builder
             ->add('username', 'text', array(
@@ -42,7 +43,7 @@ class UserType extends FlexibleType
                 'required'  => false,
             ));
 
-        if (!$builder->getData()->getId()) {
+        if (!$builder->getData() || !$builder->getData()->getId()) {
             $builder
                 ->add('plainPassword', 'repeated', array(
                     'type'           => 'password',

@@ -3,7 +3,6 @@
 namespace Oro\Bundle\UserBundle\Entity;
 
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Symfony\Component\Validator\Constraints as Assert;
 
 use FOS\UserBundle\Model\Group as BaseGroup;
 
@@ -27,7 +26,6 @@ class Group extends BaseGroup
 
     /**
      * @ORM\Column(type="string", unique=true, length=30, nullable=false)
-     * @Assert\MaxLength(30)
      */
     protected $name;
 

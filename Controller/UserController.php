@@ -7,7 +7,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
-use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttributeType;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\UserBundle\Form\Type\UserType;
 
@@ -15,11 +14,13 @@ class UserController extends Controller
 {
    /**
     * @Route("/show/{id}", name="oro_user_show", requirements={"id"="\d+"})
-    * @Template("OroUserBundle:User:edit.html.twig")
+    * @Template("OroUserBundle:Profile:show.html.twig")
     */
     public function showAction(User $user)
     {
-        return $this->editAction($user);
+        return array(
+            'user' => $user,
+        );
     }
 
    /**
@@ -51,6 +52,7 @@ class UserController extends Controller
 
             if ($form->isValid()) {
                 $em = $this->get('oro_user.flexible_manager')->getStorageManager();
+
                 $em->persist($entity);
                 $em->flush();
 
