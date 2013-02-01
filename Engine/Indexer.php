@@ -153,45 +153,6 @@ class Indexer
     }
 
     /**
-     * Add new queue
-     *
-     * @param string $entityName
-     * @param int    $recordId
-     * @param string $event
-     */
-    public function addNewQueue($entityName, $recordId, $event = Queue::EVENT_SAVE)
-    {
-        $queue = new Queue();
-        $queue->setEntity($entityName)
-            ->setRecordId($recordId)
-            ->setEvent($event);
-        $this->em->persist($queue);
-        $this->em->flush();
-    }
-
-    /**
-     * Add new save queue
-     *
-     * @param string $entityName
-     * @param int    $recordId
-     */
-    public function addSaveQueue($entityName, $recordId)
-    {
-        $this->addNewQueue($entityName, $recordId, Queue::EVENT_SAVE);
-    }
-
-    /**
-     * Add new delete queue
-     *
-     * @param string $entityName
-     * @param int    $recordId
-     */
-    public function addDeleteQueue($entityName, $recordId)
-    {
-        $this->addNewQueue($entityName, $recordId, Queue::EVENT_DELETE);
-    }
-
-    /**
      * Return Queue repository
      *
      * @return \Oro\Bundle\SearchBundle\Entity\Repository\QueueRepository

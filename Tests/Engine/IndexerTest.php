@@ -4,7 +4,6 @@ namespace Oro\Bundle\SearchBundle\Test\Engine;
 use Doctrine\Common\Persistence\ObjectManager;
 
 use Oro\Bundle\SearchBundle\Engine\Indexer;
-use Oro\Bundle\SearchBundle\Entity\Queue;
 
 class IndexerTest extends \PHPUnit_Framework_TestCase
 {
@@ -37,6 +36,10 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
                  $this->om
             )
         );
+
+        $this->connector->expects($this->any())
+            ->method('doSearch')
+            ->will($this->returnValue(array('results' => array(), 'records_count' => 10)));
 
         $this->connector->expects($this->any())
             ->method('searchQuery')
@@ -86,7 +89,6 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
         ));
     }
 
-
     /**
      * Get query builder with select instance
      */
@@ -109,41 +111,5 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(array()));
 
         $this->indexService->query($select);
-    }
-
-    public function testDelete()
-    {
-        $queue = new Queue();
-        $queue->setEntity('OroTestBundle:test');
-        $queue->setRecordId(10);
-        $queue->setEvent('delete');
-
-        $this->connector->expects($this->once())
-            ->method('delete')
-            ->will($this->returnValue(10));
-
-        $this->om->expects($this->once())->method('remove');
-        $this->om->expects($this->once())->method('flush');
-
-        $result = $this->indexService->delete($queue);
-
-        $this->assertEquals(10, $result['recordId']);
-        $this->assertEquals(Queue::EVENT_DELETE, $result['action']);
-    }
-
-    public function testAddSaveQueue()
-    {
-        $this->om->expects($this->once())->method('persist');
-        $this->om->expects($this->once())->method('flush');
-
-        $this->indexService->addSaveQueue('OroTestBundle:test', 10);
-    }
-
-    public function testAddDeleteQueue()
-    {
-        $this->om->expects($this->once())->method('persist');
-        $this->om->expects($this->once())->method('flush');
-
-        $this->indexService->addDeleteQueue('OroTestBundle:test', 10);
     }
 }

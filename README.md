@@ -84,25 +84,49 @@ To run search queries must be used query builder.
 For example:
 
     $query = $this->getSearchManager()->select()
-            ->from('OroDataBundle:Product')
+            ->from('Oro/Bundle/SearchBundle/Entity:Product')
             ->andWhere('all_data', '=', 'Functions', 'text')
-            ->orWhere('price', '=', 85, 'decimal');
+            ->orWhere('price', '>', 85, 'decimal');
 
 Syntax of Query builder as close to Doctrine 2.
 
-**from()** method takes array or string of entities to search from.
+**from()** method takes array or string of entities to search from. If argument of function was '*', then search wheel be run for all entites.
 
-**andWhere()** method add AND WHERE string
+**andWhere()**, **orWhere()** functions set AND WHERE and OR WHERE functions in search request.
 
-**orWhere()** method add OR WHERE string
+First argument - field name to search from. It can be set to '*' for searching by all fields.
+
+Second argument - operators <, >, =, !=, etc.
+If first argument is for text field, this parameter wheel be ignored.
+
+Third argument - value to search
+
+Fourth argument - field type.
 
 **setFirstResult()** method set the first result offset
 
 **setMaxResults()** method set max results of records in result.
 
+API
+---
+
+REST and SOAP APIs allow to search by all text fields in all entities.
+
+Parameters for APIs requests:
+
+ - **search** - search string
+
+ - **offset** - integer value of offset
+
+ - **max_results** - count  of result records in response
+
+REST API url: http://domail.com/api/rest/latest/search
+
+SOAP function name: search
+
 Run unit tests
 ----------------------------------
 
-To run tests use command
+To run tests for bundle, use command
 
-    phpunit -c app/
+    phpunit -c app src/Oro/Bundle/SearchBundle/
