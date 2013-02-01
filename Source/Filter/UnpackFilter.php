@@ -1,6 +1,8 @@
 <?php
 namespace Oro\Bundle\DataFlowBundle\Source\Filter;
 
+use Oro\Bundle\DataFlowBundle\Source\Filter\FilterInterface;
+
 use Oro\Bundle\DataFlowBundle\Source\SourceInterface;
 
 /**
@@ -11,7 +13,7 @@ use Oro\Bundle\DataFlowBundle\Source\SourceInterface;
  * @license   http://opensource.org/licenses/MIT MIT
  *
  */
-class UnpackFilter extends AbstractFilter
+class UnpackFilter implements FilterInterface
 {
 
     /**
@@ -40,6 +42,14 @@ class UnpackFilter extends AbstractFilter
     public function filter(SourceInterface $source)
     {
         file_put_contents($this->path, readgzfile($source->getPath()));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getName()
+    {
+        return 'unpack';
     }
 
 }

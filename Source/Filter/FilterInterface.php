@@ -20,4 +20,10 @@ interface FilterInterface
      */
     public function filter(SourceInterface $source);
 
+    /**
+     * Get name
+     * @return string
+     */
+    public function getName();
+
 }
