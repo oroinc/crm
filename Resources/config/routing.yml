@@ -4,7 +4,7 @@ oro_user_bundle:
     prefix:       /user
 
 oro_user_api:
-    resource:     "@OroUserBundle/Controller/Api/UserController.php"
+    resource:     "@OroUserBundle/Controller/Api/Rest/UserController.php"
     type:         rest
     prefix:       api/rest/{version}/
     defaults:
