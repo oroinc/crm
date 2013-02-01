@@ -60,8 +60,10 @@ html, body{
     display: none !important;
 }*/
 header{
+/*  FE
     background: #ededed;
     overflow: hidden;
+*/
 }
 .bar-tools{
     margin: 0;
