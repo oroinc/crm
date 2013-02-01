@@ -1,5 +1,247 @@
-Use flexible entity
-===================
+Create a flexible entity
+========================
 
+We illustrate here the easiest way to create a flexible, ie, by extending abstract classes, you can prefer use flexible and value interface.
 
+Here, we create a customer entity class, extends abstract orm entity which contains basic mapping.
+
+This customer class contains fields mapped at development time, here, email, firstname, lastname.
+
+We use the basic entity repository, and define by mapping which value table to use. 
+
+```php
+namespace Acme\Bundle\DemoFlexibleEntityBundle\Entity;
+
+use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityFlexible;
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * @ORM\Table(name="acmedemo_customer")
+ * @ORM\Entity(repositoryClass="Oro\Bundle\FlexibleEntityBundle\Entity\Repository\FlexibleEntityRepository")
+ */
+class Customer extends AbstractEntityFlexible
+{
+    /**
+     * @var string $email
+     *
+     * @ORM\Column(name="email", type="string", length=255, unique=true)
+     */
+    protected $email;
+
+    /**
+     * @var string $firstname
+     *
+     * @ORM\Column(name="firstname", type="string", length=255)
+     */
+    protected $firstname;
+
+    /**
+     * @var string $lastname
+     *
+     * @ORM\Column(name="lastname", type="string", length=255)
+     */
+    protected $lastname;
+
+    /**
+     * @var Value
+     *
+     * @ORM\OneToMany(targetEntity="CustomerValue", mappedBy="entity", cascade={"persist", "remove"})
+     */
+    protected $values;
+
+    // ... getter / setter
+```
+
+Then we have to define customer attribute value entity, extends basic one which contains mapping.
+
+We define mapping to basic entity attribute, to basic option (for attribute of list type) and to our customer entity.
+```php
+<?php
+namespace Acme\Bundle\DemoFlexibleEntityBundle\Entity;
+
+use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityFlexibleValue;
+use Oro\Bundle\FlexibleEntityBundle\Entity\Attribute;
+use Doctrine\ORM\Mapping as ORM;
+/**
+
+ * @ORM\Table(name="acmedemo_customer_attribute_value")
+ * @ORM\Entity
+ */
+class CustomerValue extends AbstractEntityFlexibleValue
+{
+    /**
+     * @var Attribute $attribute
+     *
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\FlexibleEntityBundle\Entity\Attribute")
+     */
+    protected $attribute;
+
+    /**
+     * @var Entity $entity
+     *
+     * @ORM\ManyToOne(targetEntity="Customer", inversedBy="values")
+     */
+    protected $entity;
+
+    /**
+     * Custom backend type to store options and theirs values
+     *
+     * @var options ArrayCollection
+     *
+     * @ORM\ManyToMany(targetEntity="Oro\Bundle\FlexibleEntityBundle\Entity\AttributeOption")
+     * @ORM\JoinTable(name="acmedemoflexibleentity_customer_values_options",
+     *      joinColumns={@ORM\JoinColumn(name="value_id", referencedColumnName="id", onDelete="CASCADE")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="option_id", referencedColumnName="id", onDelete="CASCADE")}
+     * )
+     */
+    protected $options;
+}
+```
+
+Then, we configure our flexible entity in src/Acme/Bundle/DemoFlexibleEntityBundle/Resources/config/flexibleentity.yml :
+```yaml
+entities_config:
+    Acme\Bundle\DemoFlexibleEntityBundle\Entity\Customer:
+        flexible_manager:     customer_manager
+        flexible_class:       Acme\Bundle\DemoBundle\Entity\Customer
+        flexible_value_class: Acme\Bundle\DemoBundle\Entity\CustomerValue
+        # there is some default values added here for attribute, option, etc, see Oro\Bundle\FlexibleEntityBundle\DependencyInjection\Configuration
+```
+
+This config :
+- is validated by Oro\Bundle\FlexibleEntityBundle\DependencyInjection\Configuration
+- is loaded / merged with others by Oro\Bundle\FlexibleEntityBundle\DependencyInjection\OroFlexibleEntityExtension
+- is accessible as $this->container->getParameter('oro_flexibleentity.entities_config');
+- is known by flexible entity manager and repository
+
+Finally we add our service declaration in src/Acme/Bundle/DemoFlexibleEntityBundle/Resources/config/services.yml :
+```yaml
+parameters:
+    customer_manager_class: Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleManager
+    customer_entity_class:  Acme\Bundle\DemoFlexibleEntityBundle\Entity\Customer
+
+services:
+    customer_manager:
+        class:     "%customer_manager_class%"
+        arguments: [@service_container, %customer_entity_class%]
+```
+
+How to use :
+```php
+// get customer manager
+$cm = $this->container->get('customer_manager');
+
+// create an attribute
+$attCode = 'company';
+$att = $cm->createAttribute(new TextType());
+$att->setCode($attCode);
+
+// persist and flush
+$cm->getStorageManager()->persist($att);
+$cm->getStorageManager()->flush();
+
+// create customer with basic fields mapped in customer entity  (cf controllers and unit tests for more exemples)
+$customer = $cm->createFlexible();
+$customer->setEmail('name@mail.com');
+$customer->setFirstname('Nicolas');
+$customer->setLastname('Dupont');
+
+// get the customer attribute 'company'
+$attCompany = $cm->getEntityRepository()->findAttributeByCode('company');
+
+// add a value
+$value = $cm->createFlexibleValue();
+$value->setAttribute($attCompany);
+$value->setData('Akeneo');
+$customer->addValue($value);
+
+// persist and flush
+$cm->getStorageManager()->persist($customer);
+$cm->getStorageManager()->flush();
+```
+
+Create a simple entity
+======================
+
+You can also use this bundle to deal with simple / classic doctrine entity, without attribute management as following.
+
+Create an entity class (classic doctrine way) :
+```php
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Manufacturer entity
+ *
+ * @ORM\Table(name="acmemanufacturer_manufacturer")
+ * @ORM\Entity()
+ */
+class Manufacturer
+{
+    /**
+     * @var integer $id
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var string $name
+     *
+     * @ORM\Column(name="name", type="string", length=255)
+     */
+    private $name;
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+    
+    // ... getter / setter
+```
+
+Define the service manager (src/Acme/Bundle/DemoFlexibleEntityBundle/Resources/config/services.yml) : 
+```yaml
+parameters:
+    manufacturer_manager_class: Oro\Bundle\FlexibleEntityBundle\Manager\SimpleManager
+    manufacturer_entity_class:  Acme\Bundle\DemoFlexibleEntityBundle\Entity\Manufacturer
+
+services:
+    manufacturer_manager:
+        class:     "%manufacturer_manager_class%"
+        arguments: [@service_container, %manufacturer_entity_class%]
+```
+
+How to use :
+```php
+        // get list
+        $manager = $this->container->get('manufacturer_manager');
+        $manufacturers = $manager->getEntityRepository()->findAll();
+        // create a new one
+        $manufacturer = $manager->createEntity();
+        $manufacturer->setName('Dell');
+        // persist
+        $manager->getStorageManager()->persist($manufacturer);
+        $manager->getStorageManager()->flush();
+        
+```
+
+In this case, we can directly use classic way too with :
+```php
+        // get list
+        $em = $this->container->get('doctrine.orm.entity_manager');
+        $manufacturers = $em->getRepository('AcmeManufacturerBundle:Manufacturer')->findAll();
+        // create a new one
+        $manufacturer = new Manufacturer();
+        $manufacturer->setName('Dell');
+        // persist
+        $em->persist($manufacturer);
+        $em->flush();
+```
 
