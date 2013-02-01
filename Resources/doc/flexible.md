@@ -1,11 +1,13 @@
 Create a flexible entity
 ========================
 
-We illustrate here the easiest way to create a flexible, ie, by extending abstract classes, you can prefer use flexible and value interface.
+We illustrate here the easiest way to create a flexible, ie, by extending abstract classes, you can prefer use flexible and value interfaces.
 
 Here, we create a customer entity class, extends abstract orm entity which contains basic mapping.
 
 This customer class contains fields mapped at development time, here, email, firstname, lastname.
+
+We want give possibility to final user add some custom attributes when he'll use application.
 
 We use the basic entity repository, and define by mapping which value table to use. 
 
@@ -131,7 +133,7 @@ How to use :
 // get customer manager
 $cm = $this->container->get('customer_manager');
 
-// create an attribute
+// create an attribute with one of predefined type
 $attCode = 'company';
 $att = $cm->createAttribute(new TextType());
 $att->setCode($attCode);
@@ -225,7 +227,7 @@ How to use :
         $manufacturers = $manager->getEntityRepository()->findAll();
         // create a new one
         $manufacturer = $manager->createEntity();
-        $manufacturer->setName('Dell');
+        $manufacturer->setName('Acme');
         // persist
         $manager->getStorageManager()->persist($manufacturer);
         $manager->getStorageManager()->flush();
@@ -239,7 +241,7 @@ In this case, we can directly use classic way too with :
         $manufacturers = $em->getRepository('AcmeManufacturerBundle:Manufacturer')->findAll();
         // create a new one
         $manufacturer = new Manufacturer();
-        $manufacturer->setName('Dell');
+        $manufacturer->setName('Acme');
         // persist
         $em->persist($manufacturer);
         $em->flush();

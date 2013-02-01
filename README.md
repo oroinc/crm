@@ -53,11 +53,13 @@ How to use ?
 ============
 
 - [Create a flexible entity](Resources/doc/flexible.md)
-- Use flexible repository
-- Dive into flexible value
-- Create a flexible form
-- Create an attribute type
-- [in refactoring](Resources/doc/draft.md)
+- [Use flexible repository](Resources/doc/repository.md)
+- [Dive into flexible value](Resources/doc/value.md)
+- Create a flexible form (TODO)
+- [Customize manager and repository](Resources/doc/customize_manager.md)
+- Create an attribute type (TODO)
+- [Create an extended attribute](Resources/doc/extended_attribute.md)
+- [Others customizations](Resources/doc/customize_others.md)
 
 Todo
 ====
