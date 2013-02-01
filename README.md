@@ -52,12 +52,12 @@ Main classes / concepts
 How to use ?
 ============
 
-- [Create a flexible entity](docs/flexible.md)
+- [Create a flexible entity](Resources/doc/flexible.md)
 - Use flexible repository
 - Dive into flexible value
 - Create a flexible form
 - Create an attribute type
-- [in refactoring](docs/draft.md)
+- [in refactoring](Resources/doc/draft.md)
 
 Todo
 ====
