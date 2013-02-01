@@ -1,23 +1,25 @@
-Flexible entity design
-======================
-
-POC on entity design to illustrate attribute management.
+Flexible entity
+===============
 
 Based on classic Doctrine 2 classes, entity, repository, entity manager
 
 Allows to :
 
-- create / use simple entity (no attribute management) as classic doctrine way (entity manager, repository, entity)
-
-- create / use flexible entity (dynamic attribute management by user)
-
-- customize flexible entity (add your own storage, or custom basic classes)
+- create a flexible entity with dynamic attribute management (attribute can be created by final user)
+- create flexible and attribute forms by using basic form type
+- use behaviors as translatable and scopable values
+- customize a flexible for business needs :
+ - add attribute type
+ - add / change backend storage, backend type
+ - extend any model class (flexible, attribute, value, option)
+ - extend flexible repository to build custom / complex queries
+ - extend flexible manager
 
 In Oro\Bundle\FlexibleEntityBundle :
 
 - /Model/Entity contains abstract entity models (entity, attribute, value, option, etc) independent of doctrine
-- /Model/Attribute (will/should) contains attribute frontend types, backend types, backend models
-- /Model/Behavior contains interfaces as timestampable, translatable, hasrequiredvalue, hasdefaultvalue
+- /Model/Attribute contains attribute frontend types, backend types, backend models
+- /Model/Behavior contains interfaces as timestampable, translatable, scopable
 
 - /Entity/Mapping contains abstract doctrine entities (with mapping)
 - /Entity/Repository contains base doctrine repository for flexible entity
@@ -637,14 +639,10 @@ services:
 TODO
 ====
 
-- add unit tests on hasrequiredvalue listener
-
 - add is_unique behavior
 
 ENHANCEMENT
 ===========
-
-- use event dispatcher in flexible manager on createAttribute, createEntity, etc to allow to plug some code 
 
 - deal with in, like, etc in queries 
 
