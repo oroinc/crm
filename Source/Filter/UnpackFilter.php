@@ -23,11 +23,6 @@ class UnpackFilter implements FilterInterface
     protected $path;
 
     /**
-     * {@inheritdoc}
-     */
-    protected $name = 'unpack';
-
-    /**
      * Unpacker filter constructor
      * @param string $path
      */
