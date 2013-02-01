@@ -1,13 +1,13 @@
 Extended attribute
 ==================
 
-In some case, we wants to add some custom attribute properties / configuration to base attribute in application scope.
+In some case, we want add some custom attribute properties / configuration to base attribute in application scope.
 
-For instance, create a ProductAttribute class with one-one relation to base Attribute class and add some custom attribute fields, as Name, Description, etc :
+For instance, we want to store name and description for any product attribute.
 
 ```php
 <?php
-namespace Acme\Bundle\DemoFlexibleEntityBundle\Entity;
+namespace Acme\Bundle\DemoBundle\Entity;
 
 use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityAttributeExtended;
 use Oro\Bundle\FlexibleEntityBundle\Entity\Attribute;
@@ -64,11 +64,11 @@ class ProductAttribute extends AbstractEntityAttributeExtended
 
 ```yaml
 entities_config:
-    Acme\Bundle\DemoFlexibleEntityBundle\Entity\Product:
+    Acme\Bundle\DemoBundle\Entity\Product:
         flexible_manager:         product_manager
-        flexible_class:           Acme\Bundle\DemoFlexibleEntityBundle\Entity\Product
-        flexible_value_class:     Acme\Bundle\DemoFlexibleEntityBundle\Entity\ProductValue
-        attribute_extended_class: Acme\Bundle\DemoFlexibleEntityBundle\Entity\ProductAttribute
+        flexible_class:           Acme\Bundle\DemoBundle\Entity\Product
+        flexible_value_class:     Acme\Bundle\DemoBundle\Entity\ProductValue
+        attribute_extended_class: Acme\Bundle\DemoBundle\Entity\ProductAttribute
 ```
 
 - then you can create / manipulate some custom attribute as following :

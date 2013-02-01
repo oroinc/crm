@@ -5,7 +5,7 @@ We can use classic findBy() method of repository to retrieve entity collection (
 
 ```php
 // get only entities, values and attributes are lazy loaded, you can use any criteria, order, limit 
-$products = $this->getProductManager()->getEntityRepository()->findBy(array());
+$products = $this->container->get('product_manager')->getEntityRepository()->findBy(array());
 
 ```
 We have added a findByWithAttributes() in flexible repository which have the same signature, just attribute codes to select as first param.

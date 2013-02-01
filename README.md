@@ -43,7 +43,8 @@ $ phpunit --coverage-html=cov/
 Main classes / concepts
 =======================
 
-- Attribute : the smallest entity, a name, a sku, a price, have a type and some configuration (storage, rendering, etc)
+- Attribute : the smallest entity, a name, a sku, a price, have a type and some configuration
+- AttribueType : aims to configure basic attribute configuration as storage, rendering
 - Flexible : the flexible entity, ie, an entity which support usage of dynamic attribute
 - FlexibleValue : the value related to an entity and an attribute
 - FlexibleManager :  the service which allows to easily manipulate flexible entity and provides "glue" between pieces
@@ -55,19 +56,15 @@ How to use ?
 - [Create a flexible entity](Resources/doc/flexible.md)
 - [Use flexible repository](Resources/doc/repository.md)
 - [Dive into flexible value](Resources/doc/value.md)
-- Create a flexible form (TODO)
+- [Create a flexible form](Resources/doc/form.md)
 - [Customize manager and repository](Resources/doc/customize_manager.md)
-- Create an attribute type (TODO)
 - [Create an extended attribute](Resources/doc/extended_attribute.md)
 - [Others customizations](Resources/doc/customize_others.md)
-
-Todo
-====
-
-- add is_unique behavior
 
 Enhancement
 ===========
 
+- add new attributes when load an existing flexible
+- add a default is_unique behavior
 - deal with in, like, etc in queries 
 - default fallback (locale, scope) in queries
