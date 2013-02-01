@@ -30,7 +30,9 @@ class UserController extends Controller
     */
     public function createAction()
     {
-        return $this->editAction(new User());
+        $user = $this->get('oro_user.flexible_manager')->createFlexible();
+
+        return $this->editAction($user);
     }
 
    /**
@@ -48,42 +50,9 @@ class UserController extends Controller
             $form->bind($request);
 
             if ($form->isValid()) {
-                $fm = $this->get('oro_user.flexible_manager');
-
-                /**
-                 * Process all entity attributes manually
-                 *
-                 * @todo move this code to FlexibleEntityBundle
-                 */
-                foreach ($fm->getEntityRepository()->getCodeToAttributes([]) as $attr) {
-                    $field = $form->get($attr->getCode());
-
-                    if ($field) {
-                        $data = $field->getData();
-
-                        if ($attr->getBackendType() == AbstractAttributeType::BACKEND_TYPE_OPTION) {
-                            /**
-                             * @todo how to handle options?
-                             */
-                        } else {
-                            if (!$entity->getId() || !($value = $entity->getValue($attr->getCode()))) {
-                                // add new value
-                                $value = $fm->createEntityValue()->setAttribute($attr);
-
-                                $entity->addValue($value);
-                            }
-
-                            $value->setData($data);
-                        }
-                    }
-                }
-
-                /**
-                 * @todo maybe it is better to use fos_user.user_manager or
-                 *       oro_user.user_manager to manipulate user data?
-                 */
-                $fm->getStorageManager()->persist($entity);
-                $fm->getStorageManager()->flush();
+                $em = $this->get('oro_user.flexible_manager')->getStorageManager();
+                $em->persist($entity);
+                $em->flush();
 
                 $this->get('session')->getFlashBag()->add('success', 'User successfully saved');
 

@@ -6,11 +6,13 @@
     "homepage": "https://github.com/laboro/UserBundle",
     "license": "MIT",
     "require": {
-        "php": ">=5.4",
+        "php": ">=5.3.3",
         "symfony/symfony": "2.1.*",
         "friendsofsymfony/user-bundle": "*",
+        "friendsofsymfony/rest-bundle": "*",
         "oro/FlexibleEntityBundle": "dev-master",
-        "oro/UIBundle": "dev-master"
+        "oro/UIBundle": "dev-master",
+        "oro/SoapBundle": "dev-master"
     },
     "autoload": {
         "psr-0": { "Oro\\Bundle\\UserBundle": "" }

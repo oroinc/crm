@@ -105,12 +105,12 @@ class Group extends BaseGroup
      *
      * @param   Role    $role
      * @return  Group
-     * @throws  \RuntimeException
+     * @throws  \InvalidArgumentException
      */
     public function addRole($role)
     {
         if (!$role instanceof Role) {
-            throw new \RuntimeException('addRole takes a Role object as the parameter');
+            throw new \InvalidArgumentException('addRole takes a Role object as the parameter');
         }
 
         if (!$this->hasRole($role->getRole())) {

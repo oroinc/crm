@@ -1,13 +1,23 @@
 oro_user_bundle:
-    resource: "@OroUserBundle/Controller"
-    type:     annotation
+    resource:     "@OroUserBundle/Controller"
+    type:         annotation
+    prefix:       /user
+
+oro_user_api:
+    resource:     "@OroUserBundle/Controller/Api/UserController.php"
+    type:         rest
+    prefix:       api/rest/{version}/
+    defaults:
+        version:  latest
 
 fos_user_security:
-    resource: "@FOSUserBundle/Resources/config/routing/security.xml"
+    resource:     "@FOSUserBundle/Resources/config/routing/security.xml"
+    prefix:       /user
 
 fos_user_resetting:
-    resource: "@FOSUserBundle/Resources/config/routing/resetting.xml"
+    resource:     "@FOSUserBundle/Resources/config/routing/resetting.xml"
+    prefix:       /user
 
 fos_user_profile:
-    resource: "@FOSUserBundle/Resources/config/routing/profile.xml"
-    prefix:   /profile
+    resource:     "@FOSUserBundle/Resources/config/routing/profile.xml"
+    prefix:       /profile
