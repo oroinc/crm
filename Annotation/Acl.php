@@ -4,7 +4,7 @@ namespace Oro\Bundle\UserBundle\Annotation;
 
 /**
  * @Annotation
- * @Target("METHOD")
+ * @Target({"METHOD", "CLASS"})
  */
 class Acl
 {

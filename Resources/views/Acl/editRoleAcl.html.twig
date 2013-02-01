@@ -1,0 +1,25 @@
+{% extends bap.layout is defined ? bap.layout : 'OroUserBundle::layout.html.twig' %}
+
+{% block title %}Acl resources - {{ parent() }}{% endblock %}
+
+{% block content %}
+    <h1>ACL Resources list for Role: {{ role.role }}</h1>
+    <form action="{{ path('oro_user_acl_save', { id: role.id }) }}" method="POST">
+        <table class="table table-bordered table-striped table-condensed">
+            <thead>
+            <tr>
+                <th style="width: 10px;">Access</th>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Description</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% include 'OroUserBundle:Acl:_subResource.html.twig' with {'resources': resources, "i": 1, "j": 1 } %}
+            </tbody>
+        </table>
+        <div class="form-row">
+            <button class="btn btn-large btn-primary" type="submit">Save</button>
+        </div>
+    </form>
+{% endblock %}

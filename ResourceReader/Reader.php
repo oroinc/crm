@@ -36,7 +36,7 @@ class Reader
      *
      * @return array
      */
-    public function getResourcesTree()
+    public function getResources()
     {
         $directories = $this->getScanDirectories();
         if (!$directories) {
@@ -51,31 +51,7 @@ class Reader
             }
         }
 
-        return $this->buildTree($this->getResources($files));
-    }
-
-    /**
-     * Create tree from array
-     *
-     * @param array $elements
-     * @param string  $parent
-     *
-     * @return array
-     */
-    private function buildTree(array $elements, $parent = null)
-    {
-        $branch = array();
-        foreach ($elements as $element) {
-            if ($element['parent'] == $parent) {
-                $children = $this->buildTree($elements, $element['id']);
-                if ($children) {
-                    $element['children'] = $children;
-                }
-                $branch[$element['id']] = $element;
-            }
-        }
-
-        return $branch;
+        return $this->findResources($files);
     }
 
     /**
@@ -83,25 +59,24 @@ class Reader
      *
      * @param array $files
      *
-     * @return array
+     * @return \Oro\Bundle\UserBundle\Annotation\Acl[]
      */
-    private function getResources(array $files)
+    private function findResources(array $files)
     {
         $aclResources = array();
         foreach ($files as $file) {
             $className = $this->getClassName($file);
             $reflection = new \ReflectionClass($className);
+            //read annotations from class definition
+            $classAcl = $this->reader->getClassAnnotation($reflection, self::ACL_CLASS);
+            if (is_object($classAcl)) {
+                $aclResources[$classAcl->getId()] = $classAcl;
+            }
+            //read annotations from methods
             foreach ($reflection->getMethods() as $reflectionMethod) {
                 $acl = $this->reader->getMethodAnnotation($reflectionMethod, self::ACL_CLASS);
                 if (is_object($acl)) {
-                    $aclResources[$acl->getId()] = array(
-                        'id'          => $acl->getId(),
-                        'class'       => $className,
-                        'method'      => $reflectionMethod->getName(),
-                        'name'        => $acl->getName(),
-                        'description' => $acl->getDescription(),
-                        'parent'      => $acl->getParent(),
-                    );
+                    $aclResources[$acl->getId()] = $acl;
                 }
             }
         }

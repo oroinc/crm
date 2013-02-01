@@ -5,6 +5,9 @@ parameters:
     user_form_class:            Oro\Bundle\UserBundle\Form\Type\UserType
     user_form_subscriber_class: Oro\Bundle\UserBundle\Form\EventListener\FlexibleSubscriber
     user_acl_reader_class:      Oro\Bundle\UserBundle\ResourceReader\Reader
+    user_acl_pointcut_class:    Oro\Bundle\UserBundle\Aop\AclPointcut
+    user_acl_interceptor_class: Oro\Bundle\UserBundle\Aop\AclInterceptor
+    user_acl_manager_class:     Oro\Bundle\UserBundle\Aop\Manager
 
 services:
     oro_user.flexible_manager:
@@ -33,3 +36,17 @@ services:
     oro_user.acl_reader:
         class:                  %user_acl_reader_class%
         arguments:              ["@service_container"]
+
+    oro_user.acl_pointcut:
+        class:                  %user_acl_pointcut_class%
+        arguments:              [@annotation_reader, @logger]
+        tags:
+            - { name: jms_aop.pointcut, interceptor: oro_user.acl_interceptor }
+
+    oro_user.acl_interceptor:
+        class:                  %user_acl_interceptor_class%
+        arguments:              [@security.context, @logger, @service_container]
+
+    oro_user.acl_manager:
+        class:                  %user_acl_manager_class%
+        arguments:              [@service_container]

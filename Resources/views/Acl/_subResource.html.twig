@@ -1,10 +1,15 @@
 {% for  resource in resources %}
     <tr>
+        <td>
+            <input type="checkbox" name="resource[{{ resource.id }}]"
+                {%  if resource.accessRoles|length  and  resource.accessRoles[0].access ==true %}
+                    checked="checked"
+                {% endif %}
+            />
+        </td>
         <td style="padding-left: {{ j }}px;">{{ resource.id }}</td>
         <td>{{ resource.name }}</td>
         <td>{{ resource.description }}</td>
-        <td>{{ resource.class }}</td>
-        <td>{{ resource.method }}</td>
     </tr>
     {%set i=i+1%}
     {% if resource.children is defined %}
