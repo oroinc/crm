@@ -1,6 +1,7 @@
 <?php
 namespace Oro\Bundle\DataFlowBundle\Source;
 
+use Oro\Bundle\DataFlowBundle\Source\SourceInterface;
 
 use Oro\Bundle\DataFlowBundle\Source\Filter\FilterInterface;
 

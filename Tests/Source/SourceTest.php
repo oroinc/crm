@@ -34,7 +34,7 @@ class SourceTest extends \PHPUnit_Framework_TestCase
         $source->addPostFilter($filter);
 
         // Get source
-        $file = $source->getSource();
+        $source->getSource();
     }
 
 }

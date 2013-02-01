@@ -1,6 +1,8 @@
 <?php
 namespace Oro\Bundle\DataFlowBundle\Source\Filter;
 
+use Oro\Bundle\DataFlowBundle\Source\Exception\UnpackException;
+
 use Oro\Bundle\DataFlowBundle\Source\Filter\FilterInterface;
 
 use Oro\Bundle\DataFlowBundle\Source\SourceInterface;
@@ -23,6 +25,11 @@ class UnpackFilter implements FilterInterface
     protected $path;
 
     /**
+     * @staticvar integer
+     */
+    const LENGTH_BYTES = 10000;
+
+    /**
      * Unpacker filter constructor
      * @param string $path
      */
@@ -36,7 +43,22 @@ class UnpackFilter implements FilterInterface
      */
     public function filter(SourceInterface $source)
     {
-        file_put_contents($this->path, readgzfile($source->getPath()));
+        if (!file_exists($source->getPath())) {
+            throw new UnpackException();
+        }
+
+        // open gzip files
+        $gzip = gzopen($source->getPath(), 'rb');
+
+        // write unpack content in a new file
+        $handler = fopen($this->path, 'w');
+        while ($content = gzread($gzip, self::LENGTH_BYTES)) {
+            fputs($handler, $content);
+        }
+
+        // close files
+        gzclose($gzip);
+        fclose($handler);
     }
 
     /**
