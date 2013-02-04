@@ -32,29 +32,48 @@ class Manager
         $this->aclReader  = $container->get('oro_user.acl_reader');
     }
 
-    public function saveRoleAcl(Role $role, array $aclList)
+    /**
+     * Get Acl node path by node id
+     *
+     * @param string $aclId
+     * @return array
+     */
+    public function getAclNodePath($aclId)
+    {
+        return $this->getAclRepo()->getPathWithRoles($this->getAclRepo()->find($aclId));
+    }
+
+    /**
+     * Save roles for ACL Resource
+     *
+     * @param \Oro\Bundle\UserBundle\Entity\Role $role
+     * @param array $aclList
+     */
+    public function saveRoleAcl(Role $role, array $aclList = null)
     {
         $currentAcl = $this->getRoleAclRepo()->findBy(array('role' => $role));
 
-        foreach($currentAcl as $num => $roleAcl) {
-            /** @var \Oro\Bundle\UserBundle\Entity\RoleAcl $roleAcl */
-            if (isset($aclList[$roleAcl->getAclResource()->getId()])) {
-                $roleAcl->setAccess(true);
-                $this->em->persist($roleAcl);
-                unset($currentAcl[$num]);
-                unset($aclList[$roleAcl->getAclResource()->getId()]);
-            }
-        }
-
-        if (count($aclList)) {
-            foreach ($aclList as $aclName => $access) {
-                $aclResource = $this->getAclRepo()->find($aclName);
-                if ($aclResource) {
-                    $roleAcl = new RoleAcl();
+        if (is_array($aclList) && count ($aclList)) {
+            foreach($currentAcl as $num => $roleAcl) {
+                /** @var \Oro\Bundle\UserBundle\Entity\RoleAcl $roleAcl */
+                if (isset($aclList[$roleAcl->getAclResource()->getId()])) {
                     $roleAcl->setAccess(true);
-                    $roleAcl->setRole($role);
-                    $roleAcl->setAclResource($aclResource);
                     $this->em->persist($roleAcl);
+                    unset($currentAcl[$num]);
+                    unset($aclList[$roleAcl->getAclResource()->getId()]);
+                }
+            }
+
+            if (count($aclList)) {
+                foreach ($aclList as $aclName => $access) {
+                    $aclResource = $this->getAclRepo()->find($aclName);
+                    if ($aclResource) {
+                        $roleAcl = new RoleAcl();
+                        $roleAcl->setAccess(true);
+                        $roleAcl->setRole($role);
+                        $roleAcl->setAclResource($aclResource);
+                        $this->em->persist($roleAcl);
+                    }
                 }
             }
         }

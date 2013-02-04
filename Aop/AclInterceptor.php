@@ -11,6 +11,8 @@ use JMS\SecurityExtraBundle\Exception\RuntimeException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+
 class AclInterceptor implements MethodInterceptorInterface
 {
     /**
@@ -32,8 +34,11 @@ class AclInterceptor implements MethodInterceptorInterface
     private $reader;
     private $accessDecisionManager;
 
-    public function __construct(SecurityContextInterface $context, LoggerInterface $logger, ContainerInterface $container)
-    {
+    public function __construct(
+        SecurityContextInterface $context,
+        LoggerInterface $logger,
+        ContainerInterface $container
+    ) {
         $this->securityContext = $context;
         $this->logger = $logger;
         $this->container = $container;
@@ -44,15 +49,48 @@ class AclInterceptor implements MethodInterceptorInterface
 
     public function intercept(MethodInvocation $method)
     {
-        $this->logger->info(sprintf('User invoked class: "%s" method "%s".', $method->reflection->class, $method->reflection->name));
+        $this->logger->info(
+            sprintf('User invoked class: "%s" method "%s".', $method->reflection->class, $method->reflection->name)
+        );
+
         //get acl method resource name
-        $aclAnnotation = $this->reader->getMethodAnnotation($method->reflection, 'Oro\Bundle\UserBundle\Annotation\Acl');
+        $aclAnnotation = $this->reader->getMethodAnnotation(
+            $method->reflection,
+            'Oro\Bundle\UserBundle\Annotation\Acl'
+        );
+
+        $aclPath = $this->getAclManager()->getAclNodePath($aclAnnotation->getId());
+        $accessRoles = array();
+        foreach ($aclPath as $acl) {
+            /** @var \Oro\Bundle\UserBundle\Entity\Acl $acl */
+            $roles = $acl->getAccessRolesNames();
+            $accessRoles = array_unique(array_merge($roles, $accessRoles));
+        }
+
 
         $token = $this->securityContext->getToken();
-        if (false === $this->accessDecisionManager->decide($token, array(ROLE_SUPER_ADMIN), $method)) {
+        if (false === $this->accessDecisionManager->decide($token, $accessRoles, $method)) {
+
+            /** @var $request \Symfony\Component\HttpFoundation\Request */
+            $request = $this->container->get('request');
+
+            //check if we have internal action - show blank
+            if($request->attributes->get('_route') == '_internal') {
+
+                return new Response('');
+            }
             throw new AccessDeniedException('Access denied.');
         }
 
         return $method->proceed();
     }
+
+    /**
+     * @return \Oro\Bundle\UserBundle\Aop\Manager
+     */
+    public function getAclManager()
+    {
+        return $this->container->get('oro_user.acl_manager');
+    }
+
 }

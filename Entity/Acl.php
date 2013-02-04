@@ -342,4 +342,22 @@ class Acl
     {
         return $this->accessRoles;
     }
+
+    /**
+     * Get roles array for resource
+     *
+     * @return array
+     */
+    public function getAccessRolesNames()
+    {
+        $roles = array();
+        foreach ($this->accessRoles as $role)
+        {
+            if ($role->getAccess()) {
+                $roles[] = $role->getRole()->getRole();
+            }
+        }
+
+        return $roles;
+    }
 }
