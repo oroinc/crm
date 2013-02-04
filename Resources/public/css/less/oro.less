@@ -8,10 +8,22 @@
 @widthPage:                       960px;
 @widthPopup:                      @widthPage/2;
 @widthPanel:                       25px;
-@widthLeftPanel:                   210px;
-@widthLeftPanel2:                   210;
-@iconSpritePath:          "../../img/glyphicons-halflings.png";
-@iconWhiteSpritePath:     "../../img/glyphicons-halflings-white.png";
+@widthLeftPanel:                  210px;
+@widthLeftPanel2:                 210;
+@baseBtnBorderRadius:             3px;
+@iconSpritePath:                  "../../img/glyphicons-halflings.png";
+@iconWhiteSpritePath:             "../../img/glyphicons-halflings-white.png";
+@bodyColor:                       #444;
+
+// Links
+// -------------------------
+@linkColor:             #005db4;
+@linkColorHover:        darken(@linkColor, 15%);
+
+body{
+  font-family: 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  color: @bodyColor;
+}
 // style
 header{
   padding: @topPading @horizontalPadding 0;
@@ -352,16 +364,73 @@ footer{
   .btn{
     margin: 0 0 20px;
   }
-  button.btn.btn-large {
-    #gradient > .vertical(#97cd3f, #4b9047);
-    .border-radius( @baseBorderRadius);
-    border: 1px solid;
-    border-color: #4b9047 #4b9047 #595959;
-    min-width: 120px;
-    text-align: center;
-  }
-  button.btn.btn-large:hover{
-    #gradient > .vertical(#4b9047, #97cd3f);
-    background-image: none;
-  }
+
+}
+.btn{
+  .border-radius( @baseBtnBorderRadius);
+  padding: 0 12px;
+  height: 30px;
+  line-height: 30px;
+  font-size: 14px;
+  background-repeat: none;
+  display: inline-block;
+}
+.btn:active,
+.btn:focus,
+.btn:hover{
+  background-position: 0 0 !important;
+}
+.btn-small{
+  height: 24px;
+  line-height: 24px;
+  font-size: 13px;
+}
+.btn-large{
+  font-size: 15px;
+  min-width: 112px;
+  padding: 0 20px;
+  height: 34px;
+  line-height: 34px;
+  font-weight: bold;
+}
+.btn-mini{
+  height: 20px;
+  line-height: 20px;
+  font-size: 11px;
+}
+.btn-primary{
+  #gradient > .vertical(#749ddd, #4875bc);
+  border: 1px solid;
+  border-color: #5387be #5387be #5387be;
+  text-shadow: 1px 1px 2px #00324d;
+  filter: dropshadow(color=#00324d, offx=1, offy=1);
+}
+.btn-primary:hover{
+  #gradient > .vertical(#85ace8, #567fbf);
+  background-image: none;
+}
+.btn-primary:active,
+.btn-primary:focus{
+  #gradient > .vertical(#5680c2, #6b94d4);
+  border-color: #3f5e8e #527ac0 #527ac0;
+}
+.btn .caret{
+  margin-top: 13px;
+}
+.btn-danger{
+  background-color: #f35e3c;
+  #gradient > .vertical(#f35e3c, #d42f13);
+  border-color: #c2270d #c2270d #c2270d;
+  text-shadow: 1px 1px 2px #520e03;
+  filter: dropshadow(color=#520e03, offx=1, offy=1);
+}
+.btn-danger:hover{
+  background-color: #f66952;
+  #gradient > .vertical(#f66952, #e53d20);
+}
+.btn-danger:focus,
+.btn-danger:active{
+  background-color: #c22b11;
+  #gradient > .vertical(#c22b11, #f35d3b);
+  border-color: #9c220d #c2270d #c2270d;
 }

@@ -1,0 +1,11 @@
+.btn-large{
+    width: 112px;
+}
+* +html button.btn-large{
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+}
+* +html .add-on{
+    margin-top: 1px;
+
+}
