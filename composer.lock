@@ -1,6 +1,112 @@
 {
-    "hash": "2fe01be5b4284638bf0e289df1b0bbb8",
+    "hash": "a3b0ab0c8b20467c4b52a6d1debf8af8",
     "packages": [
+        {
+            "name": "ddeboer/data-import",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ddeboer/data-import",
+                "reference": "559936e0720baa14564eaaacaaeffde3b4912f65"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/ddeboer/data-import/archive/559936e0720baa14564eaaacaaeffde3b4912f65.zip",
+                "reference": "559936e0720baa14564eaaacaaeffde3b4912f65",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "symfony/form": "2.*",
+                "phpexcel/phpexcel": "1.7.6",
+                "doctrine/dbal": "@stable",
+                "doctrine/orm": "@stable",
+                "ext-sqlite3": "*",
+                "symfony/console": "@stable"
+            },
+            "suggest": {
+                "phpexcel/phpexcel": "If you want to use the ExcelReader",
+                "symfony/form": "If you want to use the ObjectConverter",
+                "doctrine/dbal": "If you want to use the DbalReader",
+                "symfony/console": "If you want to use the ConsoleProgressWriter",
+                "ext-iconv": "For the CharsetValueConverter",
+                "ext-mbstring": "For the CharsetValueConverter"
+            },
+            "time": "2012-12-08 18:11:33",
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Ddeboer\\DataImport": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "authors": [
+                {
+                    "name": "David de Boer",
+                    "email": "david@ddeboer.nl",
+                    "homepage": "http://ddeboer.nl"
+                }
+            ],
+            "description": "Import data from, and export data to, a range of file formats and media",
+            "keywords": [
+                "data",
+                "excel",
+                "csv",
+                "import",
+                "doctrine",
+                "export"
+            ]
+        },
+        {
+            "name": "ddeboer/data-import-bundle",
+            "version": "dev-master",
+            "target-dir": "Ddeboer/DataImportBundle",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ddeboer/DdeboerDataImportBundle",
+                "reference": "8f42f54b702f0f98c679b3ba575c6b7e120e9146"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/ddeboer/DdeboerDataImportBundle/archive/8f42f54b702f0f98c679b3ba575c6b7e120e9146.zip",
+                "reference": "8f42f54b702f0f98c679b3ba575c6b7e120e9146",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0",
+                "ddeboer/data-import": "dev-master"
+            },
+            "suggest": {
+                "phpexcel/phpexcel": "If you want to use the ExcelReader",
+                "symfony/form": "If you want to use the ObjectConverter"
+            },
+            "time": "2012-07-26 14:15:35",
+            "type": "symfony-bundle",
+            "autoload": {
+                "psr-0": {
+                    "Ddeboer\\DataImportBundle": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "David de Boer",
+                    "email": "david@ddeboer.nl",
+                    "homepage": "http://ddeboer.nl"
+                }
+            ],
+            "description": "A Symfony2 bundle for the ddeboer/data-import library",
+            "homepage": "https://github.com/ddeboer/DdeboerDataImportBundle",
+            "keywords": [
+                "csv",
+                "import"
+            ]
+        },
         {
             "name": "doctrine/common",
             "version": "2.3.x-dev",
@@ -164,18 +270,18 @@
             "source": {
                 "type": "git",
                 "url": "git://github.com/fabpot/Twig.git",
-                "reference": "93c6a8dedc46c73ccdd61342de3d5e761e4412f6"
+                "reference": "c6445fb5cd6823f7bd65108a717064957b6eafd5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/fabpot/Twig/archive/93c6a8dedc46c73ccdd61342de3d5e761e4412f6.zip",
-                "reference": "93c6a8dedc46c73ccdd61342de3d5e761e4412f6",
+                "url": "https://api.github.com/repos/fabpot/Twig/zipball/c6445fb5cd6823f7bd65108a717064957b6eafd5",
+                "reference": "c6445fb5cd6823f7bd65108a717064957b6eafd5",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.2.4"
             },
-            "time": "2013-01-18 09:58:04",
+            "time": "2013-02-01 09:44:45",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -213,7 +319,8 @@
 
     ],
     "minimum-stability": "dev",
-    "stability-flags": [
-
-    ]
+    "stability-flags": {
+        "ddeboer/data-import": 20,
+        "ddeboer/data-import-bundle": 20
+    }
 }

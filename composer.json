@@ -7,7 +7,9 @@
     "license": "MIT",
     "require": {
         "php": ">=5.3.3",
-        "symfony/symfony": "2.1.6"
+        "symfony/symfony": "2.1.6",
+        "ddeboer/data-import": "dev-master",
+        "ddeboer/data-import-bundle": "dev-master"
     },
     "autoload": {
         "psr-0": { "Oro\\Bundle\\DataFlowBundle": "" }

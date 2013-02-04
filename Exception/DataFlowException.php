@@ -1,18 +1,16 @@
 <?php
-
-namespace Oro\Bundle\DataFlowBundle;
-
-use Symfony\Component\HttpKernel\Bundle\Bundle;
+namespace Oro\Bundle\DataFlowBundle\Exception;
 
 /**
- * DataFlow bundle
+ * DataFlow exception
  *
  * @author    Nicolas Dupont <nicolas@akeneo.com>
  * @copyright 2012 Akeneo SAS (http://www.akeneo.com)
  * @license   http://opensource.org/licenses/MIT MIT
  *
+ * @abstract
  */
-class OroDataFlowBundle extends Bundle
+abstract class DataFlowException extends \Exception
 {
 
 }
