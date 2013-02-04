@@ -7,11 +7,8 @@ use Symfony\Component\HttpKernel\Log\LoggerInterface;
 use Symfony\Component\Security\Core\SecurityContextInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-use JMS\SecurityExtraBundle\Exception\RuntimeException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-
-use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
 class AclInterceptor implements MethodInterceptorInterface
 {
@@ -59,14 +56,7 @@ class AclInterceptor implements MethodInterceptorInterface
             'Oro\Bundle\UserBundle\Annotation\Acl'
         );
 
-        $aclPath = $this->getAclManager()->getAclNodePath($aclAnnotation->getId());
-        $accessRoles = array();
-        foreach ($aclPath as $acl) {
-            /** @var \Oro\Bundle\UserBundle\Entity\Acl $acl */
-            $roles = $acl->getAccessRolesNames();
-            $accessRoles = array_unique(array_merge($roles, $accessRoles));
-        }
-
+        $accessRoles = $this->getAclManager()->getCachedAcl($aclAnnotation->getId());
 
         $token = $this->securityContext->getToken();
         if (false === $this->accessDecisionManager->decide($token, $accessRoles, $method)) {
@@ -79,6 +69,7 @@ class AclInterceptor implements MethodInterceptorInterface
 
                 return new Response('');
             }
+
             throw new AccessDeniedException('Access denied.');
         }
 
@@ -92,5 +83,4 @@ class AclInterceptor implements MethodInterceptorInterface
     {
         return $this->container->get('oro_user.acl_manager');
     }
-
 }

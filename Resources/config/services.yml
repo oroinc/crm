@@ -50,4 +50,4 @@ services:
 
     oro_user.acl_manager:
         class:                  %user_acl_manager_class%
-        arguments:              [@service_container]
+        arguments:              [@service_container, %oro_user.cache_dir%]

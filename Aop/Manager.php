@@ -7,6 +7,7 @@ use Oro\Bundle\UserBundle\Entity\Role;
 use Oro\Bundle\UserBundle\Entity\Acl;
 use Oro\Bundle\UserBundle\Entity\RoleAcl;
 use Oro\Bundle\UserBundle\Annotation\Acl as AnnotationAcl;
+use Symfony\Component\Filesystem\Filesystem;
 
 class Manager
 {
@@ -25,11 +26,40 @@ class Manager
      */
     protected $aclReader;
 
-    public function __construct(ContainerInterface $container)
+    protected $cacheDir;
+
+    public function __construct(ContainerInterface $container, $cacheDir)
     {
         $this->em = $container->get('doctrine')->getManager();
         $this->container = $container;
         $this->aclReader  = $container->get('oro_user.acl_reader');
+        $this->cacheDir = $cacheDir;
+    }
+
+    public function getCachedAcl($aclId)
+    {
+        $fs = new Filesystem();
+        $fileName = $this->cacheDir . '/' . $aclId . '.json';
+
+        if (!$fs->exists($fileName)) {
+            if (!$fs->exists($this->cacheDir)) {
+                $fs->mkdir($this->cacheDir);
+            }
+
+            $data = $this->getAclNodePath($aclId);
+            $accessRoles = array();
+            foreach ($data as $acl) {
+                /** @var \Oro\Bundle\UserBundle\Entity\Acl $acl */
+                $roles = $acl->getAccessRolesNames();
+                $accessRoles = array_unique(array_merge($roles, $accessRoles));
+            }
+
+            file_put_contents($fileName, json_encode($accessRoles));
+        } else {
+            $accessRoles = json_decode(file_get_contents($fileName));
+        }
+
+        return $accessRoles;
     }
 
     /**
@@ -51,6 +81,8 @@ class Manager
      */
     public function saveRoleAcl(Role $role, array $aclList = null)
     {
+        $fs = new Filesystem();
+        $fs->remove($this->cacheDir);
         $currentAcl = $this->getRoleAclRepo()->findBy(array('role' => $role));
 
         if (is_array($aclList) && count ($aclList)) {
