@@ -2,6 +2,10 @@
 
 namespace Oro\Bundle\DataFlowBundle;
 
+use Oro\Bundle\DataFlowBundle\CompilerPass\ConnectorCompilerPass;
+
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 /**
@@ -15,4 +19,13 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
 class OroDataFlowBundle extends Bundle
 {
 
+    /**
+     * {@inheritdoc}
+     */
+    public function build(ContainerBuilder $container)
+    {
+        parent::build($container);
+
+        $container->addCompilerPass(new ConnectorCompilerPass());
+    }
 }
