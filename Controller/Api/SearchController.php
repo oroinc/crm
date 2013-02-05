@@ -6,9 +6,11 @@ use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\View\View;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use FOS\RestBundle\Controller\Annotations\RouteResource;
+use FOS\RestBundle\Controller\Annotations\NamePrefix;
 
 /**
  * @RouteResource("search")
+ * @NamePrefix("oro_api_")
  */
 class SearchController extends FOSRestController
 {
