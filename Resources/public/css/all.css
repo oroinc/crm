@@ -119,7 +119,7 @@ header{
 }
 .side-nav-locked,
 .page-container{
-    background: #dee0e2;
+    /*background: #dee0e2; Fe*/
 }
 .lock-bar{
     text-indent: -9999px;
@@ -198,4 +198,19 @@ header{
 
 .form-signin .input-prepend{
     margin-bottom: 10px;
+}
+.login-page{
+    background: url("../img/bg-login.jpg") repeat;
+}
+.logo{
+    font-size: 18px;
+    font-weight: bold;
+    margin: 0;
+    float: left;
+    height: 40px;
+    line-height: 40px;
+}
+.logo a{
+    padding: 0 15px;
+    color: #fff;
 }

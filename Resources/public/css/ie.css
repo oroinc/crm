@@ -1,3 +1,4 @@
+aside, nav, footer, header, section { display: block }
 .btn-large{
     width: 112px;
 }
@@ -7,5 +8,50 @@
 }
 * +html .add-on{
     margin-top: 1px;
-
+}
+header .dropdown-menu li > a{
+    filter: none !important;
+}
+.navbar-inner{
+    background: #323b45 !important;
+    filter: none;
+}
+.btn-group{
+    display: inline;
+}
+.header-search .dropdown-toggle{
+    border-radius: 4px 0 0 4px;
+}
+.badge{
+    border-radius: 6px;
+}
+header .container{
+    width: 100%;
+}
+.header-search .btn-search{
+    border: 0 !important;
+    background-position: -2px -61px !important;
+}
+.header-search .btn-search:hover{
+    background-position: -2px -61px !important;
+}
+* +html .header-search .dropdown-menu input[type="text"]{
+    margin-top: -2px !important;
+}
+* +html .header-search .btn .caret{
+    margin-top: 5px;
+}
+* +html .header-search .btn {
+    line-height: 26px;
+}
+* +html .notifications .after{
+    background: url("../img/general-sprite.png") no-repeat 0 -106px;
+    width: 14px;
+    height: 14px;
+    float: left;
+    margin: 4px 10px 0 0;
+}
+* +html button.btn{
+    padding-top: 0;
+    line-height: 25px;
 }
