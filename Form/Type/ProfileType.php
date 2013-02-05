@@ -3,6 +3,9 @@
 namespace Oro\Bundle\UserBundle\Form\Type;
 
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 use Oro\Bundle\FlexibleEntityBundle\Form\Type\FlexibleType;
 
@@ -41,6 +44,33 @@ class ProfileType extends FlexibleType
                 'multiple'  => true,
                 'required'  => false,
             ));
+
+        $factory = $builder->getFormFactory();
+
+        // add password for "Create user" form
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) use ($factory) {
+            if (!$event->getData() || !$event->getData()->getId()) {
+                $event->getForm()->add(
+                    $factory->createNamed('plainPassword', 'repeated', array(
+                        'type'           => 'password',
+                        'required'       => false,
+                        'first_options'  => array('label' => 'Password'),
+                        'second_options' => array('label' => 'Password again'),
+                    ))
+               );
+            }
+        });
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    {
+        $resolver->setDefaults(array(
+            'data_class' => $this->flexibleClass,
+            'intention'  => 'profile',
+        ));
     }
 
     /**

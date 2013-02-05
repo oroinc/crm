@@ -8,6 +8,22 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class ResetType extends AbstractType
 {
+    /**
+     * @var string
+     */
+    protected $class;
+
+    /**
+     * @param string $class User entity class
+     */
+    public function __construct($class)
+    {
+        $this->class = $сlass;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('plainPassword', 'repeated', array(
@@ -18,14 +34,20 @@ class ResetType extends AbstractType
         ));
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Oro\Bundle\UserBundle\Entity\User',
+            'data_class' => $this->class,
             'intention'  => 'reset',
         ));
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getName()
     {
         return 'oro_user_reset';

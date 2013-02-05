@@ -2,10 +2,6 @@
 namespace Oro\Bundle\UserBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Security\Core\Exception\AccountStatusException;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -56,6 +52,9 @@ class ResetController extends Controller
 
         $this->get('session')->set(static::SESSION_EMAIL, $this->getObfuscatedEmail($user));
 
+        /**
+         * @todo Move to postUpdate lifecycle event handler as service
+         */
         $message = \Swift_Message::newInstance()
             ->setSubject('Reset password')
             ->setFrom($this->container->getParameter('oro_user.email'))
@@ -106,21 +105,20 @@ class ResetController extends Controller
      */
     public function resetAction($token)
     {
-        $user = $this->get('oro_user.manager')->findUserByConfirmationToken($token);
+        $user    = $this->get('oro_user.manager')->findUserByConfirmationToken($token);
+        $session = $this->get('session');
 
         if (null === $user) {
-            throw new NotFoundHttpException(sprintf('The user with "confirmation token" does not exist for value "%s"', $token));
+            throw $this->createNotFoundException(sprintf('The user with "confirmation token" does not exist for value "%s"', $token));
         }
 
         if (!$user->isPasswordRequestNonExpired($this->container->getParameter('oro_user.reset.ttl'))) {
-            $this->get('session')->getFlashBag()->add('warn', 'The password for this user has already been requested within the last 24 hours.');
+            $session->getFlashBag()->add('warn', 'The password for this user has already been requested within the last 24 hours.');
 
             return $this->redirect($this->generateUrl('oro_user_reset_request'));
         }
 
         if ($this->get('oro_user.form.handler.reset')->process($user)) {
-            $session = $this->get('session');
-
             $session->getFlashBag()->add('success', 'The password has been reset successfully. You may login now.');
 
             // force user logout

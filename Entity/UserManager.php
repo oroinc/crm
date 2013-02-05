@@ -43,24 +43,22 @@ class UserManager extends FlexibleManager implements UserProviderInterface
     public function createUser()
     {
         $class = $this->getClass();
-        $user  = new $class;
 
-        return $user;
+        return new $class;
     }
 
     /**
      * Updates a user
      *
      * @param   User    $user
-     * @param   bool    $andFlush Whether to flush the changes (default true)
+     * @param   bool    $flush Whether to flush the changes (default true)
      */
-    public function updateUser(User $user, $andFlush = true)
+    public function updateUser(User $user, $flush = true)
     {
         $this->updatePassword($user);
-
         $this->getStorageManager()->persist($user);
 
-        if ($andFlush) {
+        if ($flush) {
             $this->getStorageManager()->flush();
         }
     }

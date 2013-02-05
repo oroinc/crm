@@ -8,7 +8,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 use Oro\Bundle\UserBundle\Entity\Group;
-use Oro\Bundle\UserBundle\Form\Type\GroupType;
 
 /**
  * @Route("/group")
@@ -34,26 +33,14 @@ class GroupController extends Controller
     */
     public function editAction(Group $entity)
     {
-        $request = $this->getRequest();
-        $form    = $this->createForm(new GroupType(), $entity);
+        if ($this->get('oro_user.form.handler.group')->process($entity)) {
+            $this->get('session')->getFlashBag()->add('success', 'Group successfully saved');
 
-        if ($request->getMethod() == 'POST') {
-            $form->bind($request);
-
-            if ($form->isValid()) {
-                $em = $this->getDoctrine()->getManager();
-
-                $em->persist($entity);
-                $em->flush();
-
-                $this->get('session')->getFlashBag()->add('success', 'Group successfully saved');
-
-                return $this->redirect($this->generateUrl('oro_user_group_index'));
-            }
+            return $this->redirect($this->generateUrl('oro_user_group_index'));
         }
 
         return array(
-            'form' => $form->createView(),
+            'form' => $this->get('oro_user.form.group')->createView(),
         );
     }
 

@@ -8,7 +8,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 use Oro\Bundle\UserBundle\Entity\Role;
-use Oro\Bundle\UserBundle\Form\Type\RoleType;
 
 /**
  * @Route("/role")
@@ -34,26 +33,14 @@ class RoleController extends Controller
     */
     public function editAction(Role $entity)
     {
-        $request = $this->getRequest();
-        $form    = $this->createForm(new RoleType(), $entity);
+        if ($this->get('oro_user.form.handler.role')->process($entity)) {
+            $this->get('session')->getFlashBag()->add('success', 'Role successfully saved');
 
-        if ($request->getMethod() == 'POST') {
-            $form->bind($request);
-
-            if ($form->isValid()) {
-                $em = $this->getDoctrine()->getManager();
-
-                $em->persist($entity);
-                $em->flush();
-
-                $this->get('session')->getFlashBag()->add('success', 'Role successfully saved');
-
-                return $this->redirect($this->generateUrl('oro_user_role_index'));
-            }
+            return $this->redirect($this->generateUrl('oro_user_role_index'));
         }
 
         return array(
-            'form' => $form->createView(),
+            'form' => $this->get('oro_user.form.role')->createView(),
         );
     }
 

@@ -8,6 +8,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 use Oro\Bundle\UserBundle\Entity\User;
+use Oro\Bundle\UserBundle\Entity\UserManager;
 
 class ProfileController extends Controller
 {
@@ -30,7 +31,7 @@ class ProfileController extends Controller
     */
     public function createAction()
     {
-        $user = $this->get('oro_user.manager')->createFlexible();
+        $user = $this->getManager()->createFlexible();
 
         return $this->editAction($user);
     }
@@ -43,22 +44,14 @@ class ProfileController extends Controller
     */
     public function editAction(User $entity)
     {
-        $request = $this->getRequest();
-        $form    = $this->createForm('oro_user_form', $entity);
+        if ($this->get('oro_user.form.handler.profile')->process($entity)) {
+            $this->get('session')->getFlashBag()->add('success', 'User successfully saved');
 
-        if ($request->getMethod() == 'POST') {
-            $form->bind($request);
-
-            if ($form->isValid()) {
-                $this->get('oro_user.manager')->updateUser($entity);
-                $this->get('session')->getFlashBag()->add('success', 'User successfully saved');
-
-                return $this->redirect($this->generateUrl('oro_user_index'));
-            }
+            return $this->redirect($this->generateUrl('oro_user_index'));
         }
 
         return array(
-            'form' => $form->createView(),
+            'form' => $this->get('oro_user.form.profile')->createView(),
         );
     }
 
@@ -67,7 +60,7 @@ class ProfileController extends Controller
     */
     public function removeAction(User $entity)
     {
-        $this->get('oro_user.manager')->deleteUser($entity);
+        $this->getManager()->deleteUser($entity);
         $this->get('session')->getFlashBag()->add('success', 'User successfully removed');
 
         return $this->redirect($this->generateUrl('oro_user_index'));
@@ -87,5 +80,13 @@ class ProfileController extends Controller
         return array(
             'pager'  => $this->get('knp_paginator')->paginate($query, $page, $limit),
         );
+    }
+
+    /**
+     * @return UserManager
+     */
+    protected function getManager()
+    {
+        return $this->get('oro_user.manager');
     }
 }
