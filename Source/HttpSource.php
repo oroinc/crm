@@ -120,7 +120,9 @@ class HttpSource extends Source
             ));
         }
 
-        file_put_contents($target, file_get_contents($this->url, false, $context));
+        $content = (isset($context)) ? file_get_contents($this->url, false, $context) : file_get_contents($this->url);
+
+        file_put_contents($target, $content);
 
         return new \SplFileObject($target);
     }
