@@ -224,15 +224,15 @@ class Manager
     {
         $resource = $resources[$bdResource->getId()];
         if (!$resource->getParent()) {
-            $bdResource->setParent(null);
+            $parentResource = $this->getAclRepo()->find('root');
         } else {
             $parentResource = $this->getAclRepo()->find($resource->getParent());
             if (!$parentResource && isset($resources[$resource->getParent()])) {
                 $parentResource = $this->createResource($resources[$resource->getParent()]);
                 unset($resources[$resource->getParent()]);
             }
-            $bdResource->setParent($parentResource);
         }
+        $bdResource->setParent($parentResource);
 
         return $resources;
     }
