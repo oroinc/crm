@@ -84,7 +84,6 @@ class UserController extends FOSRestController implements ClassResourceInterface
      */
     public function postAction()
     {
-//        $user  = $this->get('oro_user.flexible_manager')->createFlexible();
         $user    = $this->getManager()->createUser();
         $request = $this->getRequest();
         $form    = $this->createForm('oro_user_form', $user, array('csrf_protection' => false));
@@ -157,6 +156,6 @@ class UserController extends FOSRestController implements ClassResourceInterface
      */
     protected function getManager()
     {
-        return $this->get('oro_user.user_manager');
+        return $this->get('oro_user.manager');
     }
 }

@@ -18,11 +18,31 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('oro_user');
+        $rootNode    = $treeBuilder->root('oro_user');
 
-        // Here you should define the parameters that are allowed to
-        // configure your bundle. See the documentation linked above for
-        // more information on that topic.
+        $rootNode->children()
+            ->arrayNode('reset')
+                ->addDefaultsIfNotSet()
+                ->canBeUnset()
+                ->children()
+                    ->scalarNode('ttl')
+                        ->defaultValue(86400)
+                    ->end()
+                ->end()
+            ->end()
+            ->arrayNode('email')
+                ->addDefaultsIfNotSet()
+                ->children()
+                    ->scalarNode('address')
+                        ->defaultValue('no-reply@example.com')
+                        ->cannotBeEmpty()
+                    ->end()
+                    ->scalarNode('name')
+                        ->defaultValue('Oro Admin')
+                        ->cannotBeEmpty()
+                    ->end()
+                ->end()
+            ->end();
 
         return $treeBuilder;
     }

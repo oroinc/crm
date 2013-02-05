@@ -2,9 +2,7 @@
 
 namespace Oro\Bundle\UserBundle\Entity;
 
-use FOS\UserBundle\Model\UserInterface;
-use FOS\UserBundle\Model\GroupInterface;
-use FOS\UserBundle\Model\GroupableInterface;
+use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -17,8 +15,10 @@ use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityFlexible;
  * @ORM\Table(name="user")
  * @ORM\HasLifecycleCallbacks()
  */
-class User extends AbstractEntityFlexible implements UserInterface, GroupableInterface
+class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Serializable
 {
+    const ROLE_DEFAULT = 'ROLE_USER';
+
     /**
      * @ORM\Id
      * @ORM\Column(type="integer")
@@ -128,7 +128,6 @@ class User extends AbstractEntityFlexible implements UserInterface, GroupableInt
 
     /**
      * Serializes the user.
-     *
      * The serialized data have to contain the fields used by the equals method and the username.
      *
      * @return string
@@ -146,17 +145,12 @@ class User extends AbstractEntityFlexible implements UserInterface, GroupableInt
     }
 
     /**
-     * Unserializes the user.
+     * Unserializes the user
      *
      * @param string $serialized
      */
     public function unserialize($serialized)
     {
-        $data = unserialize($serialized);
-        // add a few extra elements in the array to ensure that we have enough keys when unserializing
-        // older data which does not include all properties.
-        $data = array_merge($data, array_fill(0, 2, null));
-
         list(
             $this->password,
             $this->salt,
@@ -164,7 +158,7 @@ class User extends AbstractEntityFlexible implements UserInterface, GroupableInt
             $this->enabled,
             $this->confirmationToken,
             $this->id
-        ) = $data;
+        ) = unserialize($serialized);
     }
 
     /**
@@ -299,21 +293,6 @@ class User extends AbstractEntityFlexible implements UserInterface, GroupableInt
                $this->getPasswordRequestedAt()->getTimestamp() + $ttl > time();
     }
 
-    public function isExpired()
-    {
-        return !$this->isAccountNonExpired();
-    }
-
-    public function isSuperAdmin()
-    {
-        return $this->hasRole(static::ROLE_SUPER_ADMIN);
-    }
-
-    public function isUser(UserInterface $user = null)
-    {
-        return null !== $user && $this->getId() === $user->getId();
-    }
-
     public function setUsername($username)
     {
         $this->username = $username;
@@ -338,17 +317,6 @@ class User extends AbstractEntityFlexible implements UserInterface, GroupableInt
     public function setPassword($password)
     {
         $this->password = $password;
-
-        return $this;
-    }
-
-    public function setSuperAdmin($boolean)
-    {
-        if (true === $boolean) {
-            $this->addRole(new Role(static::ROLE_SUPER_ADMIN));
-        } else {
-            $this->removeRole(static::ROLE_SUPER_ADMIN);
-        }
 
         return $this;
     }
@@ -392,7 +360,7 @@ class User extends AbstractEntityFlexible implements UserInterface, GroupableInt
         $roles = array_merge($this->roles->toArray(), array(new Role(static::ROLE_DEFAULT)));
 
         foreach ($this->getGroups() as $group) {
-            $roles = array_merge($roles, $group->getRoles());
+            $roles = array_merge($roles, $group->getRoles()->toArray());
         }
 
         return array_unique($roles);
@@ -416,7 +384,7 @@ class User extends AbstractEntityFlexible implements UserInterface, GroupableInt
      */
     public function getRole($role)
     {
-        foreach ($this->getRoles() as $item ) {
+        foreach ($this->getRoles() as $item) {
             if ($role == $item->getRole()) {
                 return $item;
             }
@@ -432,13 +400,14 @@ class User extends AbstractEntityFlexible implements UserInterface, GroupableInt
      *
      *         $securityContext->isGranted('ROLE_USER');
      *
-     * @param string $role
-     * @return boolean
+     * @param   Role|string $role
+     * @return  boolean
      */
     public function hasRole($role)
     {
-        return $this->getRole($role) ? true : false;
-
+        return !is_null($this->getRole(
+            $role instanceof Role ? $role->getRole() : $role
+        ));
     }
 
     /**
@@ -498,10 +467,10 @@ class User extends AbstractEntityFlexible implements UserInterface, GroupableInt
      * Directly set the ArrayCollection of Roles.
      * Type hinted as Collection which is the parent of (Array|Persistent)Collection.
      *
-     * @param   Collection  $collection
+     * @param   ArrayCollection  $collection
      * @return  User
      */
-    public function setRolesCollection(Collection $collection)
+    public function setRolesCollection(ArrayCollection $collection)
     {
         $this->roles = $collection;
 
@@ -534,7 +503,7 @@ class User extends AbstractEntityFlexible implements UserInterface, GroupableInt
         return in_array($name, $this->getGroupNames());
     }
 
-    public function addGroup(GroupInterface $group)
+    public function addGroup(Group $group)
     {
         if (!$this->getGroups()->contains($group)) {
             $this->getGroups()->add($group);
@@ -543,13 +512,23 @@ class User extends AbstractEntityFlexible implements UserInterface, GroupableInt
         return $this;
     }
 
-    public function removeGroup(GroupInterface $group)
+    public function removeGroup(Group $group)
     {
         if ($this->getGroups()->contains($group)) {
             $this->getGroups()->removeElement($group);
         }
 
         return $this;
+    }
+
+    /**
+     * Generate unique confirmation token
+     *
+     * @return string Token value
+     */
+    public function generateToken()
+    {
+        return base_convert(bin2hex(hash('sha256', uniqid(mt_rand(), true), true)), 16, 36);
     }
 
     public function __toString()
@@ -578,109 +557,11 @@ class User extends AbstractEntityFlexible implements UserInterface, GroupableInt
         $this->updated = new \DateTime();
     }
 
-    /**************************************************************************/
-    /*
-    /* Not used interface methods
-    /*
-    /**************************************************************************/
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getUsernameCanonical()
-    {
-        return $this->username;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getEmailCanonical()
-    {
-        return $this->email;
-    }
-
     /**
      * {@inheritDoc}
      */
     public function isCredentialsNonExpired()
     {
         return true;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function isCredentialsExpired()
-    {
-        return !$this->isCredentialsNonExpired();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function isLocked()
-    {
-        return !$this->isAccountNonLocked();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function setUsernameCanonical($usernameCanonical)
-    {
-        return $this;
-    }
-
-    /**
-     * @param \DateTime $date
-     *
-     * @return User
-     */
-    public function setCredentialsExpireAt(\DateTime $date)
-    {
-        return $this;
-    }
-
-    /**
-     * @param boolean $boolean
-     *
-     * @return User
-     */
-    public function setCredentialsExpired($boolean)
-    {
-        return $this;
-    }
-
-    public function setEmailCanonical($emailCanonical)
-    {
-        return $this;
-    }
-
-    /**
-     * Sets this user to expired.
-     *
-     * @param Boolean $boolean
-     *
-     * @return User
-     */
-    public function setExpired($boolean)
-    {
-        return $this;
-    }
-
-    /**
-     * @param \DateTime $date
-     *
-     * @return User
-     */
-    public function setExpiresAt(\DateTime $date)
-    {
-        return $this;
-    }
-
-    public function setLocked($boolean)
-    {
-        return $this;
     }
 }

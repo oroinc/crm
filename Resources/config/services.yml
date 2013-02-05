@@ -1,27 +1,59 @@
 parameters:
-    flexible_manager_class:     Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleManager
-    user_manager_class:         Oro\Bundle\UserBundle\Entity\UserManager
-    user_entity_class:          Oro\Bundle\UserBundle\Entity\User
-    user_value_class:           Oro\Bundle\UserBundle\Entity\UserValue
-    user_form_class:            Oro\Bundle\UserBundle\Form\Type\UserType
+    oro_user.manager.class:           Oro\Bundle\UserBundle\Entity\UserManager
+    oro_user.entity.class:            Oro\Bundle\UserBundle\Entity\User
+    oro_user.entity.value.class:      Oro\Bundle\UserBundle\Entity\UserValue
+    oro_user.security.provider.class: Oro\Bundle\UserBundle\Security\UserProvider
+    oro_user.security.login.class:    Oro\Bundle\UserBundle\EventListener\LoginSubscriber
+    oro_user.type.profile.class:      Oro\Bundle\UserBundle\Form\Type\ProfileType
+    oro_user.type.reset.class:        Oro\Bundle\UserBundle\Form\Type\ResetType
+    oro_user.handler.profile.class:   Oro\Bundle\UserBundle\Form\Handler\ProfileHandler
+    oro_user.handler.reset.class:     Oro\Bundle\UserBundle\Form\Handler\ResetHandler
 
 services:
-    oro_user.flexible_manager:
-        class:                  %flexible_manager_class%
-        arguments:              ["@service_container", %user_entity_class%]
+    oro_user.manager:
+        class:                        %oro_user.manager.class%
+        arguments:                    ["@service_container", %oro_user.entity.class%, null, "@security.encoder_factory"]
 
-    oro_user.user_manager:
-        class:                  %user_manager_class%
-        arguments:              ["@security.encoder_factory", "@fos_user.util.username_canonicalizer", "@fos_user.util.email_canonicalizer", "@fos_user.entity_manager", %fos_user.model.user.class%]
+    oro_user.security.provider:
+        class:                        %oro_user.security.provider.class%
+        public:                       false
+        arguments:                    ["@oro_user.manager"]
 
-    oro_user.user_provider:
-        class:                  Oro\Bundle\UserBundle\Security\UserProvider
-        public:                 false
-        arguments:              ["@oro_user.user_manager"]
-
-    oro_user.user_form:
-        class:                  %user_form_class%
-        arguments:              [%user_entity_class%, %user_value_class%]
+    oro_user.security.login:
+        class:                        %oro_user.security.login.class%
+        arguments:                    ["@oro_user.manager"]
         tags:
-            - { name: form.type, alias: oro_user_form }
+            - { name: kernel.event_listener, event: security.interactive_login, method: onLogin }
 
+    oro_user.form.profile:
+        class:                        Symfony\Component\Form\Form
+        factory_method:               createNamed
+        factory_service:              form.factory
+        arguments:                    ["oro_user_profile_form", "oro_user_profile", null, { validation_groups: [ResetPassword, Default] }]
+
+    oro_user.form.reset:
+        class:                        Symfony\Component\Form\Form
+        factory_method:               createNamed
+        factory_service:              form.factory
+        arguments:                    ["oro_user_reset_form", "oro_user_reset", null, { validation_groups: [ResetPassword, Default] }]
+
+    oro_user.form.type.profile:
+        class:                        %oro_user.type.profile.class%
+        arguments:                    [%oro_user.entity.class%, %oro_user.entity.value.class%]
+        tags:
+            - { name: form.type, alias: oro_user_profile }
+
+    oro_user.form.type.reset:
+        class:                        %oro_user.type.reset.class%
+        tags:
+            - { name: form.type, alias: oro_user_reset }
+
+    oro_user.form.handler.profile:
+        class:                        %oro_user.handler.profile.class%
+        scope:                        request
+        arguments:                    ["@oro_user.form.profile", "@request", "@oro_user.manager"]
+
+    oro_user.form.handler.reset:
+        class:                        %oro_user.handler.reset.class%
+        scope:                        request
+        arguments:                    ["@oro_user.form.reset", "@request", "@oro_user.manager"]

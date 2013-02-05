@@ -2,6 +2,8 @@
 
 namespace Oro\Bundle\UserBundle\Tests\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+
 use Oro\Bundle\UserBundle\Entity\Group;
 use Oro\Bundle\UserBundle\Entity\Role;
 
@@ -24,8 +26,7 @@ class GroupTest extends \PHPUnit_Framework_TestCase
         $group = $this->getGroup();
         $role  = new Role('ROLE_FOO');
 
-        $this->assertEmpty($group->getRoles());
-        $this->assertCount(0, $group->getRolesCollection());
+        $this->assertCount(0, $group->getRoles());
         $this->assertNull($group->getRole($role));
         $this->assertFalse($group->hasRole($role));
 
@@ -38,21 +39,11 @@ class GroupTest extends \PHPUnit_Framework_TestCase
 
         $this->assertFalse($group->hasRole($role));
 
-        $roles = array($role);
+        $roles = new ArrayCollection(array($role));
 
         $group->setRoles($roles);
 
         $this->assertEquals($roles, $group->getRoles());
-    }
-
-    public function testRoleException()
-    {
-        $group = $this->getGroup();
-        $role  = new \stdClass();
-
-        $this->setExpectedException('InvalidArgumentException');
-
-        $group->addRole($role);
     }
 
     protected function setUp()

@@ -3,11 +3,10 @@
 namespace Oro\Bundle\UserBundle\Form\Type;
 
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 use Oro\Bundle\FlexibleEntityBundle\Form\Type\FlexibleType;
 
-class UserType extends FlexibleType
+class ProfileType extends FlexibleType
 {
     /**
      * {@inheritdoc}
@@ -42,16 +41,6 @@ class UserType extends FlexibleType
                 'multiple'  => true,
                 'required'  => false,
             ));
-
-        if (!$builder->getData() || !$builder->getData()->getId()) {
-            $builder
-                ->add('plainPassword', 'repeated', array(
-                    'type'           => 'password',
-                    'required'       => false,
-                    'first_options'  => array('label' => 'Password'),
-                    'second_options' => array('label' => 'Password again'),
-                ));
-        }
     }
 
     /**
@@ -59,6 +48,6 @@ class UserType extends FlexibleType
      */
     public function getName()
     {
-        return 'oro_user_form';
+        return 'oro_user_profile';
     }
 }

@@ -4,6 +4,6 @@
 
 {% block content %}
 <div class="alert alert-success">
-    {{ 'resetting.check_email'|trans({'%email%': email}, 'FOSUserBundle') }}
+    {{ 'An email has been sent to %email%. It contains a link you must click to reset your password.'|trans({ '%email%': email }) }}
 </div>
 {% endblock %}

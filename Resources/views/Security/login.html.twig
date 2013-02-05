@@ -7,11 +7,11 @@
     {% if error %}
     <div class="alert alert-error">
         <button data-dismiss="alert" class="close" type="button">×</button>
-        <div>{{ error|trans({}, 'FOSUserBundle') }}</div>
+        <div>{{ error|trans }}</div>
     </div>
     {% endif %}
 
-    <form action="{{ path('fos_user_security_check') }}" method="post" class="form-signin">
+    <form action="{{ path('oro_user_security_check') }}" method="post" class="form-signin">
         <div class="title-box">
             <h1 class="oro-title">Oro</h1>
             <span class="divider-vertical"></span>
@@ -33,7 +33,7 @@
             </div>
             <button type="submit" class="btn btn-large btn-primary" id="_submit" name="_submit">{{ 'Log in'|trans }}</button>
             <div class="form-row">
-                <a href="{{ path('fos_user_resetting_request') }}">{{ 'Forgot your password?'|trans }}</a>
+                <a href="{{ path('oro_user_reset_request') }}">{{ 'Forgot your password?'|trans }}</a>
             </div>
         </fieldset>
         <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />

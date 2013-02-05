@@ -8,13 +8,12 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 use Oro\Bundle\UserBundle\Entity\User;
-use Oro\Bundle\UserBundle\Form\Type\UserType;
 
-class UserController extends Controller
+class ProfileController extends Controller
 {
    /**
     * @Route("/show/{id}", name="oro_user_show", requirements={"id"="\d+"})
-    * @Template("OroUserBundle:Profile:show.html.twig")
+    * @Template
     */
     public function showAction(User $user)
     {
@@ -27,11 +26,11 @@ class UserController extends Controller
     * Create user form
     *
     * @Route("/create", name="oro_user_create")
-    * @Template("OroUserBundle:User:edit.html.twig")
+    * @Template("OroUserBundle:Profile:edit.html.twig")
     */
     public function createAction()
     {
-        $user = $this->get('oro_user.flexible_manager')->createFlexible();
+        $user = $this->get('oro_user.manager')->createFlexible();
 
         return $this->editAction($user);
     }
@@ -51,11 +50,7 @@ class UserController extends Controller
             $form->bind($request);
 
             if ($form->isValid()) {
-                $em = $this->get('oro_user.flexible_manager')->getStorageManager();
-
-                $em->persist($entity);
-                $em->flush();
-
+                $this->get('oro_user.manager')->updateUser($entity);
                 $this->get('session')->getFlashBag()->add('success', 'User successfully saved');
 
                 return $this->redirect($this->generateUrl('oro_user_index'));
@@ -72,11 +67,7 @@ class UserController extends Controller
     */
     public function removeAction(User $entity)
     {
-        $em = $this->getDoctrine()->getManager();
-
-        $em->remove($entity);
-        $em->flush();
-
+        $this->get('oro_user.manager')->deleteUser($entity);
         $this->get('session')->getFlashBag()->add('success', 'User successfully removed');
 
         return $this->redirect($this->generateUrl('oro_user_index'));

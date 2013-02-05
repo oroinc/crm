@@ -9,15 +9,3 @@ oro_user_api:
     prefix:       api/rest/{version}/
     defaults:
         version:  latest
-
-fos_user_security:
-    resource:     "@FOSUserBundle/Resources/config/routing/security.xml"
-    prefix:       /user
-
-fos_user_resetting:
-    resource:     "@FOSUserBundle/Resources/config/routing/resetting.xml"
-    prefix:       /user
-
-fos_user_profile:
-    resource:     "@FOSUserBundle/Resources/config/routing/profile.xml"
-    prefix:       /profile
