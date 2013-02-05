@@ -1,5 +1,5 @@
 <?php
-namespace Oro\Bundle\DataFlowBundle\Source\Exception;
+namespace Oro\Bundle\DataFlowBundle\Exception;
 
 /**
  * Curl exception.
