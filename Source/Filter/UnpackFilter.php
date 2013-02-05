@@ -1,7 +1,7 @@
 <?php
 namespace Oro\Bundle\DataFlowBundle\Source\Filter;
 
-use Oro\Bundle\DataFlowBundle\Source\Exception\UnpackException;
+use Oro\Bundle\DataFlowBundle\Exception\UnpackException;
 
 use Oro\Bundle\DataFlowBundle\Source\Filter\FilterInterface;
 
@@ -44,7 +44,7 @@ class UnpackFilter implements FilterInterface
     public function filter(SourceInterface $source)
     {
         if (!file_exists($source->getPath())) {
-            throw new UnpackException();
+            throw new UnpackException('Archive file does not exist');
         }
 
         // open gzip files

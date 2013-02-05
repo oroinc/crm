@@ -1,7 +1,7 @@
 <?php
 namespace Oro\Bundle\DataFlowBundle\Source;
 
-use Oro\Bundle\DataFlowBundle\Source\Exception\CurlException;
+use Oro\Bundle\DataFlowBundle\Exception\CurlException;
 
 /**
  * Get content from a file with HTTP protocol
@@ -77,31 +77,52 @@ class HttpSource extends Source
     /**
      * Download content from url and write it to locale file defined
      * @throws \Exception
+     *
+     * @return \SplFileObject
      */
     protected function download()
     {
-        $handle = fopen($this->path, 'w+');
+//         $handle = fopen($this->path, 'w+');
 
-        $curl = curl_init($this->url);
-        if (!$curl) {
-            throw new CurlException('Curl not initialize. Verify curl library is enabled or requested url is correct');
+//         $curl = curl_init($this->url);
+//         if (!$curl) {
+//             throw new CurlException('Curl not initialize. Verify curl library is enabled or requested url is correct');
+//         }
+
+//         // if authentication required
+//         if ($this->username && $this->password) {
+//             curl_setopt($curl, CURLOPT_USERPWD, $this->username .':'. $this->password);
+//         }
+
+//         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+//         curl_setopt($curl, CURLOPT_FILE, $handle);
+//         $data = curl_exec($curl);
+
+//         if ($data === false) {
+//             throw new CurlException('Curl error : '. curl_error($curl));
+//         }
+
+//         curl_close($curl);
+//         fclose($handle);
+
+        if (!$this->url) {
+            throw new \Exception('url not defined');
         }
 
-        // if authentication required
+        $target = tempnam('/tmp', 'data_import');
+
         if ($this->username && $this->password) {
-            curl_setopt($curl, CURLOPT_USERPWD, $this->username .':'. $this->password);
+            $context = stream_context_create(array(
+                'http' => array(
+                    'header'  => "Authorization: Basic "
+                    . base64_encode("{$this->username}:{$this->password}")
+                )
+            ));
         }
 
-        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($curl, CURLOPT_FILE, $handle);
-        $data = curl_exec($curl);
+        file_put_contents($target, file_get_contents($this->url, false, $context));
 
-        if ($data === false) {
-            throw new CurlException('Curl error : '. curl_error($curl));
-        }
-
-        curl_close($curl);
-        fclose($handle);
+        return new \SplFileObject($target);
     }
 
 }
