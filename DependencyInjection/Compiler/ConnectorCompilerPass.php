@@ -1,5 +1,5 @@
 <?php
-namespace Oro\Bundle\DataFlowBundle\CompilerPass;
+namespace Oro\Bundle\DataFlowBundle\DependencyInjection\Compiler;
 
 use Symfony\Component\DependencyInjection\Reference;
 
@@ -23,17 +23,15 @@ class ConnectorCompilerPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        if (!$container->hasDefinition('dataflow_connector.chain')) {
+        if (!$container->hasDefinition('oro_dataflow.connectors')) {
             return;
         }
 
-        $definition = $container->getDefinition(
-            'dataflow_connector.chain'
-        );
+        $definition = $container->getDefinition('oro_dataflow.connectors');
 
-        $taggedServices = $container->findTaggedServiceIds('dataflow_connector');
+        $taggedServices = $container->findTaggedServiceIds('oro_dataflow_connector');
 
-        // for each tagged service, call addConnector method on dataflow_connector.chain
+        // for each tagged service, call addConnector method on dataflow.connectors
         foreach ($taggedServices as $id => $attribute) {
             $definition->addMethodCall(
                 'addConnector',

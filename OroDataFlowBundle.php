@@ -2,11 +2,9 @@
 
 namespace Oro\Bundle\DataFlowBundle;
 
-use Oro\Bundle\DataFlowBundle\CompilerPass\ConnectorCompilerPass;
-
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-
 use Symfony\Component\HttpKernel\Bundle\Bundle;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Oro\Bundle\DataFlowBundle\DependencyInjection\Compiler\ConnectorCompilerPass;
 
 /**
  * DataFlow bundle

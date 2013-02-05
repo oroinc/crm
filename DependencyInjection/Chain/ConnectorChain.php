@@ -1,5 +1,5 @@
 <?php
-namespace Oro\Bundle\DataFlowBundle\Chain;
+namespace Oro\Bundle\DataFlowBundle\DependencyInjection\Chain;
 
 use Oro\Bundle\DataFlowBundle\Connector\ConnectorInterface;
 

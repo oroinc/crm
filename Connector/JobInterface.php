@@ -1,5 +1,5 @@
 <?php
-namespace Oro\Bundle\DataFlowBundle\Job;
+namespace Oro\Bundle\DataFlowBundle\Connector;
 
 /**
  * Job interface
