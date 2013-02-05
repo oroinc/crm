@@ -1,7 +1,6 @@
 parameters:
-#    oro_data_flow.example.class: Oro\Bundle\DataFlowBundle\Example
+    dataflow_connector.chain.class: Oro\Bundle\DataFlowBundle\Connector\ConnectorChain
 
 services:
-#    oro_data_flow.example:
-#        class: %oro_data_flow.example.class%
-#        arguments: [@service_id, "plain_value", %parameter%]
+    dataflow_connector.chain:
+        class: "%dataflow_connector.chain.class%"
