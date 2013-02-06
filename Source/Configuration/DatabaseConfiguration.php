@@ -19,6 +19,8 @@ class DatabaseConfiguration implements ConfigurationInterface
     /**
      * Processes configuration
      * @param \ArrayAccess $configuration
+     *
+     * @return \ArrayAccess
      */
     public function process($configuration)
     {

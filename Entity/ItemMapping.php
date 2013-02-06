@@ -55,6 +55,7 @@ class ItemMapping extends ItemMappingModel
      * Add fields
      *
      * @param \Oro\Bundle\DataFlowBundle\Entity\FieldMapping $fields
+     *
      * @return ItemMapping
      */
     public function addField(\Oro\Bundle\DataFlowBundle\Entity\FieldMapping $fields)

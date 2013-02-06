@@ -21,7 +21,7 @@ interface JobInterface
 
     /**
      * Configure
-     * @param \ArrayAccess
+     * @param \ArrayAccess $parameters
      */
     public function configure($parameters);
 

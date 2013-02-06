@@ -78,6 +78,7 @@ class FieldMapping extends FieldMappingModel
      * Set source
      *
      * @param string $source
+     *
      * @return FieldMapping
      */
     public function setSource($source)
@@ -101,6 +102,7 @@ class FieldMapping extends FieldMappingModel
      * Set destination
      *
      * @param string $destination
+     *
      * @return FieldMapping
      */
     public function setDestination($destination)
@@ -124,6 +126,7 @@ class FieldMapping extends FieldMappingModel
      * Set isIdentifier
      *
      * @param boolean $isIdentifier
+     *
      * @return FieldMapping
      */
     public function setIsIdentifier($isIdentifier)
@@ -147,19 +150,20 @@ class FieldMapping extends FieldMappingModel
      * Set item
      *
      * @param \Oro\Bundle\DataFlowBundle\Entity\ItemMapping $item
+     *
      * @return FieldMapping
      */
     public function setItem(\Oro\Bundle\DataFlowBundle\Entity\ItemMapping $item = null)
     {
         $this->item = $item;
-    
+
         return $this;
     }
 
     /**
      * Get item
      *
-     * @return \Oro\Bundle\DataFlowBundle\Entity\ItemMapping 
+     * @return \Oro\Bundle\DataFlowBundle\Entity\ItemMapping
      */
     public function getItem()
     {

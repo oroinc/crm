@@ -49,6 +49,8 @@ class Source
 
     /**
      * Configuration
+     *
+     * @param \ArrayAccess $configuration
      */
     public function __construct($configuration)
     {
