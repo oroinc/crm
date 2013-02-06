@@ -177,7 +177,9 @@ class Manager
         //delete resources
         if (count($bdResources)) {
             foreach ($bdResources as $bdResource) {
-                $this->em->remove($bdResource);
+                if ($bdResource->getId() != 'root') {
+                    $this->em->remove($bdResource);
+                }
             }
         }
 
