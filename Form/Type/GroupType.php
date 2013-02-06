@@ -17,15 +17,14 @@ class GroupType extends AbstractType
             ->add('name', 'text', array(
                 'required'  => true,
             ))
-            ->add('rolesCollection', 'entity', array(
+            ->add('roles', 'entity', array(
                 'label'     => 'Roles',
                 'class'     => 'OroUserBundle:Role',
                 'property'  => 'label',
                 'required'  => true,
                 'multiple'  => true,
                 'required'  => true,
-            ))
-        ;
+            ));
     }
 
     /**
@@ -35,6 +34,7 @@ class GroupType extends AbstractType
     {
         $resolver->setDefaults(array(
             'data_class' => 'Oro\Bundle\UserBundle\Entity\Group',
+            'intention'  => 'group',
         ));
     }
 
@@ -43,6 +43,6 @@ class GroupType extends AbstractType
      */
     public function getName()
     {
-        return 'oro_user_group_form';
+        return 'oro_user_group';
     }
 }

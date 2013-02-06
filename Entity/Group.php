@@ -3,9 +3,6 @@
 namespace Oro\Bundle\UserBundle\Entity;
 
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Symfony\Component\Validator\Constraints as Assert;
-
-use FOS\UserBundle\Model\Group as BaseGroup;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -16,7 +13,7 @@ use Doctrine\Common\Collections\Collection;
  * @ORM\Table(name="access_group")
  * @UniqueEntity("name")
  */
-class Group extends BaseGroup
+class Group
 {
     /**
      * @ORM\Id
@@ -27,7 +24,6 @@ class Group extends BaseGroup
 
     /**
      * @ORM\Column(type="string", unique=true, length=30, nullable=false)
-     * @Assert\MaxLength(30)
      */
     protected $name;
 
@@ -41,33 +37,47 @@ class Group extends BaseGroup
     protected $roles;
 
     /**
-     * @param   string  $name  Group name
-     * @param   array   $roles Array of Role objects
+     * @param string $name [optional] Group name
      */
-    public function __construct($name = '', $roles = array())
+    public function __construct($name = '')
     {
         $this->name  = $name;
         $this->roles = new ArrayCollection();
+    }
 
-        $this->setRoles($roles);
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param   string  $name
+     * @return  Group
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
     }
 
     /**
      * Returns the group roles
      *
-     * @return array The roles
+     * @return ArrayCollection The roles
      */
     public function getRoles()
-    {
-        return $this->roles->toArray();
-    }
-
-    /**
-     * Returns the true ArrayCollection of Roles.
-     *
-     * @return ArrayCollection
-     */
-    public function getRolesCollection()
     {
         return $this->roles;
     }
@@ -96,23 +106,16 @@ class Group extends BaseGroup
     public function hasRole($role)
     {
         return $this->getRole($role) ? true : false;
-
     }
 
     /**
-     * Adds a Role to the ArrayCollection.
-     * Can't type hint due to interface so throws RuntimeException.
+     * Adds a Role to the ArrayCollection
      *
      * @param   Role    $role
      * @return  Group
-     * @throws  \InvalidArgumentException
      */
-    public function addRole($role)
+    public function addRole(Role $role)
     {
-        if (!$role instanceof Role) {
-            throw new \InvalidArgumentException('addRole takes a Role object as the parameter');
-        }
-
         if (!$this->hasRole($role->getRole())) {
             $this->roles->add($role);
         }
@@ -138,33 +141,14 @@ class Group extends BaseGroup
     }
 
     /**
-     * Pass an array of Role objects and reset roles collection with new Roles.
-     * Type hinted array due to interface.
+     * Set new Roles collection
      *
-     * @param   array   $roles  Array of Role objects
+     * @param   Collection  $roles
      * @return  Group
      */
-    public function setRoles(array $roles)
+    public function setRoles(Collection $roles)
     {
-        $this->roles->clear();
-
-        foreach ($roles as $role) {
-            $this->addRole($role);
-        }
-
-        return $this;
-    }
-
-    /**
-     * Directly set the ArrayCollection of Roles.
-     * Type hinted as Collection which is the parent of (Array|Persistent)Collection.
-     *
-     * @param   Collection  $collection
-     * @return  Group
-     */
-    public function setRolesCollection(Collection $collection)
-    {
-        $this->roles = $collection;
+        $this->roles = $roles;
 
         return $this;
     }

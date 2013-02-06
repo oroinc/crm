@@ -1,1 +1,44 @@
+Oro\Bundle\UserBundle\Entity\User:
+    properties:
+        username:
+            - NotBlank:
+                groups:   [Registration, Profile]
+            - Length:
+                min:      3
+                max:      255
+                groups:   [Registration, Profile]
+        email:
+            - NotBlank:
+                groups:   [Registration, Profile]
+            - Length:
+                min:      6
+                max:      255
+                groups:   [Registration, Profile]
+            - Email:
+                groups:   [Registration, Profile]
+        plainPassword:
+            - NotBlank:
+                groups:   [Registration]
+            - Length:
+                min:      2
+                groups:   [Registration, Profile]
 
+Oro\Bundle\UserBundle\Entity\Role:
+    properties:
+        role:
+            - NotBlank:   ~
+            - Length:
+                max:      30
+            - Regex:      "/^[a-zA-Z0-9_]+$/"
+        label:
+            - Length:
+                max:      30
+
+Oro\Bundle\UserBundle\Entity\Group:
+    properties:
+        name:
+            - NotBlank:
+                groups:   [Registration]
+            - Length:
+                max:      30
+                groups:   [Registration]

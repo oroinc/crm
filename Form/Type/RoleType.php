@@ -3,7 +3,10 @@
 namespace Oro\Bundle\UserBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class RoleType extends AbstractType
@@ -15,13 +18,25 @@ class RoleType extends AbstractType
     {
         $builder
             ->add('role', 'text', array(
-                'required'  => true,
-                'read_only' => $builder->getData()->getId(),
+                'required' => true,
             ))
             ->add('label', 'text', array(
-                'required'  => false,
-            ))
-        ;
+                'required' => false,
+            ));
+
+        $factory = $builder->getFormFactory();
+
+        // disable role name edit after role has been created
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) use ($factory) {
+            if ($event->getData() && $event->getData()->getId()) {
+                $form = $event->getForm();
+
+                $form->add($factory->createNamed('role', 'text', null, array_merge(
+                    $form->get('role')->getConfig()->getOptions(),
+                    array('disabled' => true)
+                )));
+            }
+        });
     }
 
     /**
@@ -31,6 +46,7 @@ class RoleType extends AbstractType
     {
         $resolver->setDefaults(array(
             'data_class' => 'Oro\Bundle\UserBundle\Entity\Role',
+            'intention'  => 'role',
         ));
     }
 
@@ -39,6 +55,6 @@ class RoleType extends AbstractType
      */
     public function getName()
     {
-        return 'oro_user_role_form';
+        return 'oro_user_role';
     }
 }

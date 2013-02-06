@@ -4,7 +4,7 @@
 
 {% block content %}
 <div>
-    <p>{{ 'profile.show.username'|trans({}, 'FOSUserBundle') }}: {{ user.username }}</p>
-    <p>{{ 'profile.show.email'|trans({}, 'FOSUserBundle') }}: {{ user.email }}</p>
+    <p>{{ 'Username'|trans }}: {{ user.username }}</p>
+    <p>{{ 'Email'|trans }}: {{ user.email }}</p>
 </div>
 {% endblock content %}

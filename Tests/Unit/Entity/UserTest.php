@@ -18,7 +18,6 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $user->setUsername($name);
 
         $this->assertEquals($name, $user->getUsername());
-        $this->assertEquals($name, $user->getUsernameCanonical());
         $this->assertEquals($name, $user);
     }
 
@@ -32,7 +31,6 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $user->setEmail($mail);
 
         $this->assertEquals($mail, $user->getEmail());
-        $this->assertEquals($mail, $user->getEmailCanonical());
     }
 
     public function testIsPasswordRequestNonExpired()
@@ -85,7 +83,9 @@ class UserTest extends \PHPUnit_Framework_TestCase
     {
         $user  = $this->getUser();
         $role  = new Role('ROLE_FOO');
-        $group = new Group('Users', array($role));
+        $group = new Group('Users');
+
+        $group->addRole($role);
 
         $this->assertNotContains($role, $user->getRoles());
 
@@ -98,25 +98,6 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $user->removeGroup($group);
 
         $this->assertFalse($user->hasRole($role));
-    }
-
-    public function testAdmin()
-    {
-        $user = $this->getUser();
-
-        $this->assertFalse($user->isSuperAdmin());
-
-        $user->setSuperAdmin(true);
-
-        $this->assertTrue($user->isSuperAdmin());
-    }
-
-    public function testIsUser()
-    {
-        $user    = $this->getUser();
-        $newUser = new User();
-
-        $this->assertTrue($user->isUser($newUser));
     }
 
     public function testIsEnabled()

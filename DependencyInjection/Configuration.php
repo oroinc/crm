@@ -18,11 +18,36 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('oro_user')
-            ->children()
-            ->scalarNode('cache_dir')->cannotBeEmpty()->defaultValue('%kernel.cache_dir%/oro_user_acl')->end()
+
+        $rootNode    = $treeBuilder->root('oro_user');
+
+        $rootNode->children()
+            ->arrayNode('reset')
+                ->addDefaultsIfNotSet()
+                ->canBeUnset()
+                ->children()
+                    ->scalarNode('ttl')
+                        ->defaultValue(86400)
+                    ->end()
+                ->end()
             ->end()
-        ;
+            ->arrayNode('email')
+                ->addDefaultsIfNotSet()
+                ->children()
+                    ->scalarNode('address')
+                        ->defaultValue('no-reply@example.com')
+                        ->cannotBeEmpty()
+                    ->end()
+                    ->scalarNode('name')
+                        ->defaultValue('Oro Admin')
+                        ->cannotBeEmpty()
+                    ->end()
+                ->end()
+            ->end()
+            ->scalarNode('cache_dir')
+                ->cannotBeEmpty()
+                ->defaultValue('%kernel.cache_dir%/oro_user_acl')
+            ->end();
 
         return $treeBuilder;
     }

@@ -3,10 +3,10 @@
 {% block title %}{{ 'Password reset request'|trans }} - {{ parent() }}{% endblock %}
 
 {% block content %}
-<form action="{{ path('fos_user_resetting_send_email') }}" method="POST" class="form-pass-reset">
+<form action="{{ path('oro_user_reset_send_email') }}" method="POST" class="form-pass-reset">
     <h2 class="form-signin-heading">{{ 'Password reset request'|trans }}</h2>
     {% if invalid_username is defined %}
-    <p>{{ 'resetting.request.invalid_username'|trans({'%username%': invalid_username}, 'FOSUserBundle') }}</p>
+    <p>{{ 'The username or email address "%username%" does not exist.'|trans({ '%username%': invalid_username }) }}</p>
     {% endif %}
     <div class="form-row">
         <label for="username">{{ 'Enter your email'|trans }}</label>
