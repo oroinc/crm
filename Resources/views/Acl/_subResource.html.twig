@@ -2,7 +2,7 @@
     <tr>
         <td>
             <input type="checkbox" name="resource[{{ resource.id }}]"
-                {%  if resource.accessRoles|length  and  resource.accessRoles[0].access ==true %}
+                {%  if resource.accessRoles|length %}
                     checked="checked"
                 {% endif %}
             />
@@ -13,6 +13,6 @@
     </tr>
     {%set i=i+1%}
     {% if resource.children is defined %}
-        {% include 'OroUserBundle:Acl:_subResource.html.twig' with {'resources': resource.children, "j": j+10, 'i': i}  %}
+        {% include 'OroUserBundle:Acl:_subResource.html.twig' with {'resources': resource.children, "j": j+15, 'i': i}  %}
     {% endif %}
 {% endfor %}

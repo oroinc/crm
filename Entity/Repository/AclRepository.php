@@ -10,6 +10,17 @@ use Oro\Bundle\UserBundle\Entity\Role;
 
 class AclRepository extends NestedTreeRepository
 {
+    public function getResourceWithRoleAccess($resourceId, Role $role)
+    {
+        return $this->createQueryBuilder('acl')
+            //->leftJoin('acl.accessRoles', 'accessRoles')
+            ->where('acl.id = :resourceId')
+            //->setParameter('role', $role)
+            ->setParameter('resourceId', $resourceId)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
     /**
      * Get the Tree path query builder with roles by given $node
      *
@@ -31,10 +42,9 @@ class AclRepository extends NestedTreeRepository
         $left = $wrapped->getPropertyValue($config['left']);
         $right = $wrapped->getPropertyValue($config['right']);
         $qb = $this->_em->createQueryBuilder();
-        $qb->select(array('node', 'acl', 'role'))
+        $qb->select(array('node', 'role'))
             ->from($config['useObjectClass'], 'node')
-            ->leftJoin('node.accessRoles', 'acl')
-            ->leftJoin('acl.role', 'role')
+            ->leftJoin('node.accessRoles', 'role')
             ->where($qb->expr()->lte('node.'.$config['left'], $left))
             ->andWhere($qb->expr()->gte('node.'.$config['right'], $right))
             ->orderBy('node.' . $config['left'], 'ASC')
@@ -61,7 +71,7 @@ class AclRepository extends NestedTreeRepository
     {
         return $this->createQueryBuilder('acl')
             ->select('acl', 'accessRoles')
-            ->leftJoin('acl.accessRoles', 'accessRoles', Expr\Join::WITH, 'accessRoles.role = :role')
+            ->leftJoin('acl.accessRoles', 'accessRoles', Expr\Join::WITH, 'accessRoles.id = :role')
             ->setParameter('role', $role)
             ->getQuery()
             ->getResult();

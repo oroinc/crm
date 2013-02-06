@@ -2,12 +2,12 @@
 namespace Oro\Bundle\UserBundle\Aop;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\Filesystem\Filesystem;
 
 use Oro\Bundle\UserBundle\Entity\Role;
 use Oro\Bundle\UserBundle\Entity\Acl;
 use Oro\Bundle\UserBundle\Entity\RoleAcl;
 use Oro\Bundle\UserBundle\Annotation\Acl as AnnotationAcl;
-use Symfony\Component\Filesystem\Filesystem;
 
 class Manager
 {
@@ -26,6 +26,9 @@ class Manager
      */
     protected $aclReader;
 
+    /**
+     * @var string
+     */
     protected $cacheDir;
 
     public function __construct(ContainerInterface $container, $cacheDir)
@@ -36,6 +39,12 @@ class Manager
         $this->cacheDir = $cacheDir;
     }
 
+    /**
+     * Get roles for ACL resource from cache. If cache file does not exists - create new one.
+     *
+     * @param string $aclId
+     * @return array
+     */
     public function getCachedAcl($aclId)
     {
         $fs = new Filesystem();
@@ -81,38 +90,29 @@ class Manager
      */
     public function saveRoleAcl(Role $role, array $aclList = null)
     {
+
+        $aclRepo = $this->getAclRepo();
         $fs = new Filesystem();
         $fs->remove($this->cacheDir);
-        $currentAcl = $this->getRoleAclRepo()->findBy(array('role' => $role));
 
-        if (is_array($aclList) && count ($aclList)) {
-            foreach($currentAcl as $num => $roleAcl) {
-                /** @var \Oro\Bundle\UserBundle\Entity\RoleAcl $roleAcl */
-                if (isset($aclList[$roleAcl->getAclResource()->getId()])) {
-                    $roleAcl->setAccess(true);
-                    $this->em->persist($roleAcl);
-                    unset($currentAcl[$num]);
-                    unset($aclList[$roleAcl->getAclResource()->getId()]);
-                }
-            }
-
-            if (count($aclList)) {
-                foreach ($aclList as $aclName => $access) {
-                    $aclResource = $this->getAclRepo()->find($aclName);
-                    if ($aclResource) {
-                        $roleAcl = new RoleAcl();
-                        $roleAcl->setAccess(true);
-                        $roleAcl->setRole($role);
-                        $roleAcl->setAclResource($aclResource);
-                        $this->em->persist($roleAcl);
-                    }
-                }
+        $aclCurrentList = $role->getAclResources();
+        if ($aclCurrentList->count()) {
+            foreach ($aclCurrentList as $acl) {
+                $acl->removeAccessRole($role);
+                $this->em->persist($acl);
             }
         }
 
-        if (count($currentAcl)) {
-            foreach ($currentAcl as $acl){
-                $this->em->remove($acl);
+        if (is_array($aclList) && count($aclList)) {
+            foreach ($aclList as $aclId => $access) {
+                /** @var $resource \Oro\Bundle\UserBundle\Entity\Acl */
+                $resource = $aclRepo->getResourceWithRoleAccess($aclId, $role);
+                $resource->addAccessRole($role);
+
+                if ($resource->getParent() && $resource->getParent()->getId() !== 'root') {
+                    $this->clearParentsAcl($resource->getParent(), $role);
+                }
+                $this->em->persist($resource);
             }
         }
 
@@ -123,7 +123,6 @@ class Manager
      * Get Acl tree for role
      *
      * @param \Oro\Bundle\UserBundle\Entity\Role $role
-     *
      * @return array
      */
     public function getRoleAclTree(Role $role)
@@ -195,6 +194,19 @@ class Manager
     protected function getRoleAclRepo()
     {
         return $this->em->getRepository('OroUserBundle:RoleAcl');
+    }
+
+    /**
+     * @param \Oro\Bundle\UserBundle\Entity\Acl  $resource
+     * @param \Oro\Bundle\UserBundle\Entity\Role $role
+     */
+    private function clearParentsAcl(Acl $resource, Role $role)
+    {
+        $resource->removeAccessRole($role);
+        $this->em->persist($resource);
+        if ($resource->getParent() && $resource->getParent()->getId() !== 'root') {
+            $this->clearParentsAcl($resource->getParent(), $role);
+        }
     }
 
     /**

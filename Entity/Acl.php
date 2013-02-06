@@ -46,7 +46,11 @@ class Acl
     protected $description;
 
     /**
-     * @ORM\OneToMany(targetEntity="RoleAcl", mappedBy="aclResource", cascade={"persist", "remove"})
+     * @ORM\ManyToMany(targetEntity="Role", inversedBy="aclResources")
+     * @ORM\JoinTable(name="user_acl_role",
+     *      joinColumns={@ORM\JoinColumn(name="acl_id", referencedColumnName="id", onDelete="CASCADE")},
+     *          inverseJoinColumns={@ORM\JoinColumn(name="role_id", referencedColumnName="id", onDelete="CASCADE")}
+     *      )
      */
     protected $accessRoles;
 
@@ -311,39 +315,6 @@ class Acl
     }
 
     /**
-     * Add accessRoles
-     *
-     * @param \Oro\Bundle\UserBundle\Entity\RoleAcl $accessRoles
-     * @return Acl
-     */
-    public function addAccessRole(RoleAcl $accessRoles)
-    {
-        $this->accessRoles[] = $accessRoles;
-    
-        return $this;
-    }
-
-    /**
-     * Remove accessRoles
-     *
-     * @param \Oro\Bundle\UserBundle\Entity\RoleAcl $accessRoles
-     */
-    public function removeAccessRole(RoleAcl $accessRoles)
-    {
-        $this->accessRoles->removeElement($accessRoles);
-    }
-
-    /**
-     * Get accessRoles
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getAccessRoles()
-    {
-        return $this->accessRoles;
-    }
-
-    /**
      * Get roles array for resource
      *
      * @return array
@@ -354,10 +325,43 @@ class Acl
         foreach ($this->accessRoles as $role)
         {
             if ($role->getAccess()) {
-                $roles[] = $role->getRole()->getRole();
+                $roles[] = $role->getRole();
             }
         }
 
         return $roles;
+    }
+
+    /**
+     * Add accessRoles
+     *
+     * @param \Oro\Bundle\UserBundle\Entity\Role $accessRoles
+     * @return Acl
+     */
+    public function addAccessRole(Role $accessRoles)
+    {
+        $this->accessRoles[] = $accessRoles;
+    
+        return $this;
+    }
+
+    /**
+     * Remove accessRole
+     *
+     * @param \Oro\Bundle\UserBundle\Entity\Role $accessRole
+     */
+    public function removeAccessRole(Role $accessRole)
+    {
+        $this->accessRoles->removeElement($accessRole);
+    }
+
+    /**
+     * Get accessRoles
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getAccessRoles()
+    {
+        return $this->accessRoles;
     }
 }
