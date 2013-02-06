@@ -6,7 +6,6 @@ use Symfony\Component\Filesystem\Filesystem;
 
 use Oro\Bundle\UserBundle\Entity\Role;
 use Oro\Bundle\UserBundle\Entity\Acl;
-use Oro\Bundle\UserBundle\Entity\RoleAcl;
 use Oro\Bundle\UserBundle\Annotation\Acl as AnnotationAcl;
 
 class Manager
@@ -35,7 +34,7 @@ class Manager
     {
         $this->em = $container->get('doctrine')->getManager();
         $this->container = $container;
-        $this->aclReader  = $container->get('oro_user.acl_reader');
+        $this->aclReader = $container->get('oro_user.acl_reader');
         $this->cacheDir = $cacheDir;
     }
 
@@ -43,6 +42,7 @@ class Manager
      * Get roles for ACL resource from cache. If cache file does not exists - create new one.
      *
      * @param string $aclId
+     *
      * @return array
      */
     public function getCachedAcl($aclId)
@@ -55,15 +55,24 @@ class Manager
                 $fs->mkdir($this->cacheDir);
             }
 
-            $data = $this->getAclNodePath($aclId);
-            $accessRoles = array();
-            foreach ($data as $acl) {
-                /** @var \Oro\Bundle\UserBundle\Entity\Acl $acl */
-                $roles = $acl->getAccessRolesNames();
-                $accessRoles = array_unique(array_merge($roles, $accessRoles));
+            //get roles from current resource and parents
+            $accessRoles = $this->getRolesFromAclArray($this->getAclNodePath($aclId));
+
+            $aclResource = $this->getAclRepo()->find($aclId);
+            //get roles from resource children
+            if ($this->getAclRepo()->childCount($aclResource)) {
+                $accessRoles = array_unique(
+                    array_merge(
+                        $this->getRolesFromAclArray(
+                            $this->getAclRepo()->children($aclResource)
+                        ),
+                        $accessRoles
+                    )
+                );
             }
 
             file_put_contents($fileName, json_encode($accessRoles));
+
         } else {
             $accessRoles = json_decode(file_get_contents($fileName));
         }
@@ -75,6 +84,7 @@ class Manager
      * Get Acl node path by node id
      *
      * @param string $aclId
+     *
      * @return array
      */
     public function getAclNodePath($aclId)
@@ -86,7 +96,7 @@ class Manager
      * Save roles for ACL Resource
      *
      * @param \Oro\Bundle\UserBundle\Entity\Role $role
-     * @param array $aclList
+     * @param array                              $aclList
      */
     public function saveRoleAcl(Role $role, array $aclList = null)
     {
@@ -106,7 +116,7 @@ class Manager
         if (is_array($aclList) && count($aclList)) {
             foreach ($aclList as $aclId => $access) {
                 /** @var $resource \Oro\Bundle\UserBundle\Entity\Acl */
-                $resource = $aclRepo->getResourceWithRoleAccess($aclId, $role);
+                $resource = $aclRepo->find($aclId);
                 $resource->addAccessRole($role);
 
                 if ($resource->getParent() && $resource->getParent()->getId() !== 'root') {
@@ -123,6 +133,7 @@ class Manager
      * Get Acl tree for role
      *
      * @param \Oro\Bundle\UserBundle\Entity\Role $role
+     *
      * @return array
      */
     public function getRoleAclTree(Role $role)
@@ -151,8 +162,7 @@ class Manager
         $bdResources = $this->getAclRepo()->findAll();
 
         // update old resources
-        foreach ($bdResources as $num => $bdResource)
-        {
+        foreach ($bdResources as $num => $bdResource) {
             /** @var \Oro\Bundle\UserBundle\Entity\Acl $bdResource */
             if (isset($resources[$bdResource->getId()])) {
                 $resource = $resources[$bdResource->getId()];
@@ -166,7 +176,7 @@ class Manager
 
         //delete resources
         if (count($bdResources)) {
-            foreach ($bdResources as $bdResource){
+            foreach ($bdResources as $bdResource) {
                 $this->em->remove($bdResource);
             }
         }
@@ -210,16 +220,18 @@ class Manager
     }
 
     /**
-     * Create new db ACL Resources
+     * Create new db ACL Resources from array with ACL definition
      *
      * @param array $resources
      */
-    private function createNewResources($resources) {
+    private function createNewResources(array $resources)
+    {
         $resource = reset($resources);
+
         $bdResource = $this->createResource($resource);
         $resources = $this->setResourceParent($resources, $bdResource);
         unset($resources[$bdResource->getId()]);
-        if(count($resources)) {
+        if (count($resources)) {
             $this->createNewResources($resources);
         }
     }
@@ -264,5 +276,22 @@ class Manager
         $this->em->persist($dbResource);
 
         return $dbResource;
+    }
+
+    /**
+     * @param \Oro\Bundle\UserBundle\Entity\Acl[] $data
+     *
+     * @return array
+     */
+    private function getRolesFromAclArray(array $data)
+    {
+        $accessRoles = array();
+        foreach ($data as $acl) {
+            /** @var \Oro\Bundle\UserBundle\Entity\Acl $acl */
+            $roles = $acl->getAccessRolesNames();
+            $accessRoles = array_unique(array_merge($roles, $accessRoles));
+        }
+
+        return $accessRoles;
     }
 }

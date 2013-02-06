@@ -10,17 +10,6 @@ use Oro\Bundle\UserBundle\Entity\Role;
 
 class AclRepository extends NestedTreeRepository
 {
-    public function getResourceWithRoleAccess($resourceId, Role $role)
-    {
-        return $this->createQueryBuilder('acl')
-            //->leftJoin('acl.accessRoles', 'accessRoles')
-            ->where('acl.id = :resourceId')
-            //->setParameter('role', $role)
-            ->setParameter('resourceId', $resourceId)
-            ->getQuery()
-            ->getOneOrNullResult();
-    }
-
     /**
      * Get the Tree path query builder with roles by given $node
      *

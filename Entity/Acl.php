@@ -324,9 +324,7 @@ class Acl
         $roles = array();
         foreach ($this->accessRoles as $role)
         {
-            if ($role->getAccess()) {
-                $roles[] = $role->getRole();
-            }
+            $roles[] = $role->getRole();
         }
 
         return $roles;
