@@ -2,7 +2,6 @@
 namespace Oro\Bundle\UserBundle\Aop;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\Filesystem\Filesystem;
 
 use Oro\Bundle\UserBundle\Entity\Role;
 use Oro\Bundle\UserBundle\Entity\Acl;
@@ -26,16 +25,17 @@ class Manager
     protected $aclReader;
 
     /**
-     * @var string
+     * @var \Doctrine\Common\Cache\CacheProvider
      */
-    protected $cacheDir;
+    protected $cache;
 
     public function __construct(ContainerInterface $container, $cacheDir)
     {
         $this->em = $container->get('doctrine')->getManager();
         $this->container = $container;
         $this->aclReader = $container->get('oro_user.acl_reader');
-        $this->cacheDir = $cacheDir;
+        $this->cache = $container->get('cache');
+        $this->cache->setNamespace('oro_user.cache');
     }
 
     /**
@@ -47,13 +47,8 @@ class Manager
      */
     public function getCachedAcl($aclId)
     {
-        $fs = new Filesystem();
-        $fileName = $this->cacheDir . '/' . $aclId . '.json';
-
-        if (!$fs->exists($fileName)) {
-            if (!$fs->exists($this->cacheDir)) {
-                $fs->mkdir($this->cacheDir);
-            }
+        $accessRoles = $this->cache->fetch($aclId);
+        if ($accessRoles === false) {
 
             //get roles from current resource and parents
             $accessRoles = $this->getRolesFromAclArray($this->getAclNodePath($aclId));
@@ -70,11 +65,7 @@ class Manager
                     )
                 );
             }
-
-            file_put_contents($fileName, json_encode($accessRoles));
-
-        } else {
-            $accessRoles = json_decode(file_get_contents($fileName));
+            $this->cache->save($aclId, $accessRoles);
         }
 
         return $accessRoles;
@@ -100,10 +91,9 @@ class Manager
      */
     public function saveRoleAcl(Role $role, array $aclList = null)
     {
+        $this->cache->deleteAll();
 
         $aclRepo = $this->getAclRepo();
-        $fs = new Filesystem();
-        $fs->remove($this->cacheDir);
 
         $aclCurrentList = $role->getAclResources();
         if ($aclCurrentList->count()) {
