@@ -3,7 +3,7 @@ namespace Oro\Bundle\DataFlowBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-use Oro\Bundle\DataFlowBundle\Model\Mapping\ItemMapping as ItemMappingModel;
+use Oro\Bundle\DataFlowBundle\Transform\Mapping\ItemMapping as ItemMappingModel;
 
 /**
  * Entity ItemMapping

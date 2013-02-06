@@ -1,7 +1,7 @@
 <?php
 namespace Oro\Bundle\DataFlowBundle\Tests\Model\Mapping;
 
-use Oro\Bundle\DataFlowBundle\Model\Mapping\FieldMapping;
+use Oro\Bundle\DataFlowBundle\Transform\Mapping\FieldMapping;
 
 /**
  * Test related class

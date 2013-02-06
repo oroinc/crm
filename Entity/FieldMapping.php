@@ -3,7 +3,7 @@ namespace Oro\Bundle\DataFlowBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-use Oro\Bundle\DataFlowBundle\Model\Mapping\FieldMapping as FieldMappingModel;
+use Oro\Bundle\DataFlowBundle\Transform\Mapping\FieldMapping as FieldMappingModel;
 
 /**
  * Entity FieldMapping

@@ -1,5 +1,5 @@
 <?php
-namespace Oro\Bundle\DataFlowBundle\Model\Mapping;
+namespace Oro\Bundle\DataFlowBundle\Transform\Mapping;
 
 /**
  * Field mapping
