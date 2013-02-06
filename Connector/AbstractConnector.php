@@ -2,6 +2,7 @@
 namespace Oro\Bundle\DataFlowBundle\Connector;
 
 use Oro\Bundle\DataFlowBundle\Connector\Job\JobInterface;
+use Oro\Bundle\DataFlowBundle\Exception\ConfigurationException;
 
 /**
  * Abstract connector
@@ -45,6 +46,10 @@ abstract class AbstractConnector implements ConnectorInterface
      */
     public function getJob($code)
     {
+        if (!isset($this->jobs[$code])) {
+            throw new ConfigurationException('job '.$code.' is unknown');
+        }
+
         return $this->jobs[$code];
     }
 
@@ -57,13 +62,4 @@ abstract class AbstractConnector implements ConnectorInterface
         $this->jobs[$job->getCode()]= $job;
     }
 
-    /**
-     * Process a job
-     * @param string $code
-     */
-    public function process($code)
-    {
-        $job = $this->getJob($code);
-        $job->process();
-    }
 }

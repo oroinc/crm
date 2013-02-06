@@ -11,4 +11,27 @@ namespace Oro\Bundle\DataFlowBundle\Connector\Job;
 abstract class AbstractJob implements JobInterface
 {
 
+    /**
+     * @var string
+     */
+    protected $code;
+
+    /**
+     * @param string $code
+     */
+    public function __construct($code)
+    {
+        $this->code = $code;
+    }
+
+    /**
+     * Get job code
+     *
+     * @return string
+     */
+    public function getCode()
+    {
+        return $this->code;
+    }
+
 }

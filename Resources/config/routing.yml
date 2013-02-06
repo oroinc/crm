@@ -1,0 +1,5 @@
+oro_dataflow_bundle:
+    resource:     "@OroDataFlowBundle/Controller"
+    type:         annotation
+    prefix:       /dataflow
+

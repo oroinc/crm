@@ -37,11 +37,4 @@ interface ConnectorInterface
      */
     public function addJob(JobInterface $job);
 
-    /**
-     * Process a job
-     *
-     * @param string $jobCode the job code
-     */
-    public function process($jobCode);
-
 }

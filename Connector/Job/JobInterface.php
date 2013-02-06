@@ -1,6 +1,8 @@
 <?php
 namespace Oro\Bundle\DataFlowBundle\Connector\Job;
 
+use Oro\Bundle\DataFlowBundle\Connector\AbstractConfiguration;
+
 /**
  * Job interface
  *
@@ -18,8 +20,14 @@ interface JobInterface
     public function getCode();
 
     /**
-     * Process the job
+     * Configure
+     * @param \ArrayAccess
      */
-    public function process();
+    public function configure($parameters);
+
+    /**
+     * Run the job
+     */
+    public function run();
 
 }
