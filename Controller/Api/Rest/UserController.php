@@ -3,6 +3,7 @@
 namespace Oro\Bundle\UserBundle\Controller\Api\Rest;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 use FOS\RestBundle\Controller\Annotations\NamePrefix;
 use FOS\RestBundle\Controller\Annotations\RequestParam;
@@ -84,20 +85,11 @@ class UserController extends FOSRestController implements ClassResourceInterface
      */
     public function postAction()
     {
-        $user    = $this->getManager()->createUser();
-        $request = $this->getRequest();
-        $form    = $this->createForm('oro_user_form', $user, array('csrf_protection' => false));
-
-        $form->bind($request);
-
-        if ($form->isValid()) {
-            var_dump($form);
-            $this->getManager()->updateUser($user);
-
-            $view = RouteRedirectView::create('oro_api_get_user', array('id' => $user->getId()));
-        } else {
-            $view = $this->view('', Codes::HTTP_INTERNAL_SERVER_ERROR);
-        }
+        //'csrf_protection' => false
+        $entity = $this->getManager()->createFlexible();
+        $view   = $this->get('oro_user.form.handler.profile')->process($entity)
+            ? RouteRedirectView::create('oro_api_get_user', array('id' => $entity->getId()))
+            : $this->view('', Codes::HTTP_INTERNAL_SERVER_ERROR);
 
         return $this->handleView($view);
     }
@@ -116,11 +108,17 @@ class UserController extends FOSRestController implements ClassResourceInterface
      */
     public function putAction($id)
     {
-        $data = $this->getManager()->findUserBy(array('id' => (int) $id));
+        $entity = $this->getManager()->findUserBy(array('id' => (int) $id));
 
-        if (!$data) {
+        if (!$entity) {
             return $this->handleView($this->view('', Codes::HTTP_NOT_FOUND));
         }
+
+        $view = $this->get('oro_user.form.handler.profile')->process($entity)
+            ? RouteRedirectView::create('oro_api_get_user', array('id' => $entity->getId()))
+            : $this->view('', Codes::HTTP_INTERNAL_SERVER_ERROR);
+
+        return $this->handleView($view);
     }
 
     /**
@@ -137,16 +135,13 @@ class UserController extends FOSRestController implements ClassResourceInterface
      */
     public function deleteAction($id)
     {
-        $data = $this->getManager()->findUserBy(array('id' => (int) $id));
+        $entity = $this->getManager()->findUserBy(array('id' => (int) $id));
 
-        if (!$data) {
+        if (!$entity) {
             return $this->handleView($this->view('', Codes::HTTP_NOT_FOUND));
         }
 
-        $manager = $this->getDoctrine()->getEntityManager();
-
-        $manager->remove($data);
-        $manager->flush();
+        $this->getManager()->deleteUser($entity);
 
         return $this->handleView($this->view('', Codes::HTTP_NO_CONTENT));
     }
