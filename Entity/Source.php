@@ -12,6 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="oro_dataflow_source")
  * @ORM\Entity
+ * @ORM\HasLifecycleCallbacks()
  */
 class Source
 {
@@ -33,11 +34,27 @@ class Source
     protected $code;
 
     /**
+     * @var string $parameters
+     *
+     * @ORM\Column(name="parameters", type="text", nullable=true)
+     */
+    protected $parameters;
+
+    /**
      * @var string $configuration
      *
-     * @ORM\Column(name="configuration", type="text")
+     * @ORM\Column(name="configuration", type="text", nullable=true)
      */
-    protected $configuration = "";
+    protected $configuration;
+
+    /**
+     * Configuration
+     */
+    public function __construct($configuration)
+    {
+        $this->parameters = array();
+        $this->configuration = $configuration;
+    }
 
     /**
      * Get id
@@ -109,6 +126,55 @@ class Source
         $this->configuration = $configuration;
 
         return $this;
+    }
+
+    /**
+     * Get parameters
+     *
+     * @return string
+     */
+    public function getParameters()
+    {
+        return $this->parameters;
+    }
+
+    /**
+     * Set parameters
+     *
+     * @param string $parameters
+     *
+     * @return Source
+     */
+    public function setParameters($parameters)
+    {
+        $this->parameters = $parameters;
+
+        return $this;
+    }
+
+    /**
+     * @ORM\PrePersist
+     * @ORM\PreUpdate
+     */
+    public function beforeSave()
+    {
+        // process configuration
+        $this->parameters = $this->configuration->process(array('configuration' => $this->parameters));
+        // prepare for saving
+        $this->parameters = json_encode($this->parameters);
+        $this->configuration = get_class($this->configuration);
+    }
+
+    /**
+     * @ORM\PostLoad
+     * @ORM\PostPersist
+     * @ORM\PostUpdate
+     */
+    public function afterLoad()
+    {
+        $this->parameters = json_decode($this->parameters, true);
+        $className = $this->configuration;
+        $this->configuration = new $className();
     }
 
 }
