@@ -36,12 +36,13 @@ class ConnectorCompilerPass implements CompilerPassInterface
         foreach ($taggedServices as $id => $tagAttributes) {
             foreach ($tagAttributes as $attributes) {
                 // retrieve reference to relevant connector and add job into
-                if (!$container->hasDefinition($attributes['connector'])) {
-                    throw new InvalidArgumentException(sprintf('The connector service definition "%s" does not exist.', $attributes['connector']));
+                $connectorId = $attributes['connector'];
+                if (!$container->hasDefinition($connectorId)) {
+                    throw new InvalidArgumentException(sprintf('The connector service definition "%s" does not exist.', $connectorId));
                 }
                 $definition->addMethodCall(
-                    'addToConnector',
-                    array(new Reference($attributes['connector']), new Reference($id))
+                    'addJobToConnector',
+                    array($connectorId, new Reference($connectorId), $id, new Reference($id))
                 );
             }
         }

@@ -15,11 +15,6 @@ interface JobInterface
 {
 
     /**
-     * Get gode
-     */
-    public function getCode();
-
-    /**
      * Configure
      * @param \ArrayAccess $parameters
      */

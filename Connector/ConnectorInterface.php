@@ -14,27 +14,4 @@ use Oro\Bundle\DataFlowBundle\Connector\Job\JobInterface;
 interface ConnectorInterface
 {
 
-    /**
-     * Get jobs
-     *
-     * @return \ArrayAccess
-     */
-    public function getJobs();
-
-    /**
-     * Get jobs
-     *
-     * @param string $jobCode
-     *
-     * @return JobInterface
-     */
-    public function getJob($jobCode);
-
-    /**
-     * Add a job
-     *
-     * @param JobInterface $job the job
-     */
-    public function addJob(JobInterface $job);
-
 }
