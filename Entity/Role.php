@@ -38,7 +38,7 @@ class Role implements RoleInterface
     protected $label;
 
     /**
-     * @var @ORM\ManyToMany(targetEntity="Acl", mappedBy="accessRoles")
+     * @ORM\ManyToMany(targetEntity="Acl", mappedBy="accessRoles")
      */
     protected $aclResources;
 

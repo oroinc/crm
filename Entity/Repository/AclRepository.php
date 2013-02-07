@@ -9,6 +9,50 @@ use Oro\Bundle\UserBundle\Entity\Acl;
 
 class AclRepository extends NestedTreeRepository
 {
+
+    /**
+     *
+     * get array with allowed acl resources for role array
+     * @param array $roles
+     * @return \Oro\Bundle\UserBundle\Entity\Role[] $roles
+     */
+    public function getAllowedAclResourcesForUserRoles(array $roles)
+    {
+        $allowedAcl = array();
+        $qb = $this->createQueryBuilder('acl')
+            ->select('acl.id')
+            ->where('acl.rgt > :left_key')
+            ->andWhere('acl.lft < :right_key')
+            ->orderBy('acl.lft')
+        ;
+
+        foreach ($roles as $role) {
+            $aclList = $role->getAclResources();
+            if (count($aclList)){
+
+                foreach ($aclList as $acl) {
+                    $aclList = $qb->setParameter('left_key', $acl->getLft())
+                        ->setParameter('right_key', $acl->getRgt())
+                        ->getQuery()
+                        ->getScalarResult();
+                    $acls = array();
+                    foreach ($aclList as $scalar) {
+                        $acls[] = $scalar['id'];
+                    }
+
+                    $allowedAcl = array_unique(
+                        array_merge(
+                            $allowedAcl,
+                            $acls
+                        )
+                    );
+                }
+            }
+        }
+
+        return $allowedAcl;
+    }
+
     /**
      * Get full node list with roles for acl resource
      *
@@ -36,7 +80,7 @@ class AclRepository extends NestedTreeRepository
      *
      * @return array
      */
-    public function getRoleAcl(Role $role)
+    public function getAclListWithRoles(Role $role)
     {
         return $this->createQueryBuilder('acl')
             ->select('acl', 'accessRoles')
@@ -55,7 +99,7 @@ class AclRepository extends NestedTreeRepository
      */
     public function getRoleAclTree(Role $role)
     {
-        return $this->toTree($this->getRoleAcl($role));
+        return $this->toTree($this->getAclListWithRoles($role));
     }
 
     /**

@@ -357,7 +357,7 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
     public function getRoles()
     {
         // we need to make sure to have at least one role
-        $roles = array_merge($this->roles->toArray(), array(new Role(static::ROLE_DEFAULT)));
+        $roles = $this->roles->toArray();
 
         foreach ($this->getGroups() as $group) {
             $roles = array_merge($roles, $group->getRoles()->toArray());

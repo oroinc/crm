@@ -5,6 +5,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 use Oro\Bundle\UserBundle\Entity\Role;
 use Oro\Bundle\UserBundle\Entity\Acl;
+use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\UserBundle\Annotation\Acl as AnnotationAcl;
 
 class Manager
@@ -36,6 +37,17 @@ class Manager
         $this->aclReader = $container->get('oro_user.acl_reader');
         $this->cache = $container->get('cache');
         $this->cache->setNamespace('oro_user.cache');
+    }
+
+    /**
+     * get array of resource ids allowed for user
+     *
+     * @param \Oro\Bundle\UserBundle\Entity\User $user
+     * @return array
+     */
+    public function getAclForUser(User $user)
+    {
+        return $this->getAclRepo()->getAllowedAclResourcesForUserRoles($user->getRoles());
     }
 
     /**
@@ -117,7 +129,7 @@ class Manager
     }
 
     /**
-     * Get Acl for role
+     * Get Acl list for role
      *
      * @param \Oro\Bundle\UserBundle\Entity\Role $role
      *
@@ -125,7 +137,7 @@ class Manager
      */
     public function getRoleAcl(Role $role)
     {
-        return $this->getAclRepo()->getRoleAcl($role);
+        return $this->getAclRepo()->getAclListWithRoles($role);
     }
 
     /**
