@@ -87,25 +87,79 @@
             </ul>
         </div>
         <div class=" layout-content">
-            <div class="navbar menu-row">
-                <div class="navbar-inner">
+            <div class="clearfix">
+                <div class="pin-bar clearfix">
+                    <div class="pin-menus">
+                        <span>...</span>
+                        <div class="drop-down">
+                            <div class="tabbable tabs-left">
+                                <ul class="nav nav-tabs">
+                                    <li class="active" ><a data-toggle="tab"href="#lA">Tabs</a></li>
+                                    <li><a data-toggle="tab"  href="#lB">History</a></li>
+                                    <li><a data-toggle="tab"  href="#lC">Most Viewed</a></li>
+                                </ul>
+                                <div class="tab-content">
+                                    <div id="lA" class="tab-pane active">
+                                        <ul class="extra-list">
+                                            <li><button data-dismiss="alert" class="close" type="button">&times;</button><a href="#">Sales filtered Wednesday</a></li>
+                                            <li><button data-dismiss="alert" class="close" type="button">&times;</button><a href="#">Sales filtered Tuesday</a></li>
+                                            <li><button data-dismiss="alert" class="close" type="button">&times;</button><a href="#">Sales filtered Thursday</a></li>
+                                            <li><button data-dismiss="alert" class="close" type="button">&times;</button><a href="#">Sales filtered Friday</a></li>
+                                            <li><button data-dismiss="alert" class="close" type="button">&times;</button><a href="#">Sales filtered Saturday</a></li>
+                                            <li><button data-dismiss="alert" class="close" type="button">&times;</button><a href="#">Sales filtered Tuesday</a></li>
+                                            <li><button data-dismiss="alert" class="close" type="button">&times;</button><a href="#">Sales filtered Thursday</a></li>
+                                            <li><button data-dismiss="alert" class="close" type="button">&times;</button><a href="#">Sales filtered Friday</a></li>
+                                            <li><button data-dismiss="alert" class="close" type="button">&times;</button><a href="#">Sales filtered Saturday</a></li>
+                                        </ul>
+                                    </div>
+                                    <div id="lB" class="tab-pane">
+                                        <p>I'm in Section b.</p>
+                                    </div>
+                                    <div id="lC" class="tab-pane">
+                                        <p>I'm in Section AC.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <ul class="list-bar">
+                        <li class="item">LA Customers</li>
+                        <li class="item">NY Customers</li>
+                        <li><a class="btn-close" href="#">close</a>Yoav asked to do this </li>
+                        <li><a class="btn-close" href="#">close</a>Finish this before lea...</li>
+                        <li><a class="btn-close" href="#">close</a>Jary asked to do this</li>
+                        <li><a class="btn-close" href="#">close</a>Yoav asked to do this</li>
+                        <li><a class="btn-close" href="#">close</a>Portland Office</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="clearfix"><div class="navbar application-menu">
+                <div class="cleearfix">
                     <div class="container">
-                        <a href="#" class="brand">Home</a>
-                        <div class="nav-collapse collapse navbar-responsive-collapse">
-                            <ul class="nav">
-                                <li>
-                                    <ul class="nav nav-tabs" id="myTab">
-                                        <li><a href="#mycrm">My CRM</a></li>
-                                        <li><a href="#mypim">My PIM</a></li>
-                                    </ul>
-                                </li>
+                        <div class=" navbar-responsive-collapse">
+                            <ul class="nav nav-tabs" id="myTab">
+                                <li class="home"><a href="#myhome"><span>Home</span></a></li>
+                                <li><a href="#mycrm">My CRM</a></li>
+                                <li><a href="#mypim">My PIM</a></li>
                             </ul>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="container-fluid clearfix menu-row">
+            </div></div>
+            <div class="clearfix application-menu">
                 <div class="tab-content">
+                    <div class="tab-pane" id="myhome">
+                        <ul class="nav nav-pills">
+                            <li class="active">
+                                <a href="#">Dashboard</a>
+                            </li>
+                            <li><a href="#">Leads</a></li>
+                            <li><a href="#">Customers</a></li>
+                            <li><a href="#">Accounts</a></li>
+                            <li><a href="#">Forecasts</a></li>
+                            <li><a href="#">Reports</a></li>
+                        </ul>
+                    </div>
                     <div class="tab-pane" id="mycrm">
                         <ul class="nav nav-pills">
                             <li class="active">
@@ -130,9 +184,6 @@
                             <li><a href="#">Reports pim</a></li>
                         </ul>
                     </div>
-                </div>
-                <div class="fr">
-                    <a href="#">help</a>
                 </div>
             </div>
             <script>

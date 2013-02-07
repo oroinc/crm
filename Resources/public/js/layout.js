@@ -97,4 +97,7 @@ $(document).ready(function () {
             });
         });
     })
+    $('div.pin-bar .pin-menus > span').click(function(){
+        $(this).parent().toggleClass('open')
+    });
 });

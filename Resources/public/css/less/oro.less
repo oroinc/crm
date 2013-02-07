@@ -155,6 +155,9 @@ header{
     padding: 0 !important;
   }
 }
+header.navbar{
+  margin: 0;
+}
 header:after{
   content: "";
   clear: both;
@@ -655,4 +658,186 @@ footer{
   margin: 10px 7px 0 0;
   border: 0;
   width: 2px;
+}
+.extra-list{
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+/* pin-bar */
+.pin-bar{
+  padding: 0 30px 0 0;
+  #gradient > .vertical(#303944, #323b46);
+  border-bottom: 1px solid #000;
+}
+.pin-bar .pin-menus{
+  float:right;
+  position: relative;
+  width: 30px;
+  height: 24px;
+  margin: 0 -30px 0 0;
+  background: url("../../img/general-sprite.png") no-repeat 0 -133px;
+  border-left: 1px solid #000004;
+  cursor: pointer;
+}
+.pin-bar .pin-menus span{
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.pin-bar .pin-menus:hover,
+.pin-bar .pin-menus.open{
+  background-color: #5e6872;
+  #gradient > .vertical(#5e6872, #2f383f);
+  background-image: url("../../img/general-sprite.png");
+}
+.pin-bar .pin-menus .drop-down{
+  position: absolute;
+  top: 23px;
+  right: 0;
+  width: 375px;
+  padding: 2px 0 0;
+  -webkit-box-shadow:  0px 2px 6px 1px rgba(0, 0, 0, 0.6);
+  box-shadow:  0px 2px 6px 1px rgba(0, 0, 0, 0.6);
+  display: none;
+}
+.pin-bar .pin-menus.open .drop-down{
+  display: block;
+}
+.pin-bar .pin-menus .tabbable{
+  background-color: #eff2f5;
+}
+.pin-bar .tabs-left > .nav-tabs > li{
+  background-image: url("../../img/bg-tab-divider.png");
+  background-repeat: repeat-x;
+}
+.pin-bar .tabs-left > .nav-tabs > li:first-child{
+  background-image: none;
+}
+.pin-bar .tabs-left > .nav-tabs > li > a{
+  margin-bottom: 0;
+  color: #000;
+}
+.pin-bar .tabs-left > .nav-tabs > li.active > a,
+.pin-bar .tabs-left > .nav-tabs > li > a:hover{
+  background-color: #d7e3ef;
+}
+.pin-bar .tabs-left > .nav-tabs{
+  border: 0;
+  margin: 0;
+}
+.pin-bar .tabs-left > .tab-content{
+  border-left: 1px solid #ccd1d7;
+  background-color: #fff;
+  min-height: 120px;
+}
+.pin-bar .list-bar{
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.pin-bar .list-bar li{
+  color: #b2bac2;
+  float: left;
+  text-align: left;
+  text-shadow: -1px 1px 2px #070707;
+  filter: dropshadow(color=#070707, offx=1, offy=1);
+  line-height: 24px;
+  font-size: 11px;
+  padding: 0 11px;
+  border-left: 1px solid #06090c;
+  margin: 0 -1px 0 0;
+  position: relative;
+}
+.pin-bar .list-bar li:first-child{
+  border: 0;
+}
+.pin-bar .list-bar li.item{
+  background-color: #434e5b;
+}
+.pin-bar .btn-close{
+  float:right;
+  text-indent: -9999px;
+  font-size: 0;
+  line-height: 0;
+  width: 10px;
+  height: 11px;
+  margin: 9px 1px 0 11px;
+  background: url("../../img/general-sprite.png") no-repeat 0 -121px;
+}
+.pin-menus .extra-list li{
+  padding: 5px 15px;
+}
+.pin-menus .extra-list > li:hover{
+  background-color: #f4f4f4;
+}
+.pin-menus .extra-list a:hover{
+  text-decoration: none;
+}
+.layout-content{
+  overflow: hidden;
+}
+/* application-menu */
+.application-menu{
+  background-color: #232426;
+  margin: 0;
+}
+.application-menu .container{
+  padding: 6px 5px 0;
+}
+.application-menu .nav-tabs{
+  border-color: #000;
+}
+.application-menu .nav-tabs > li > a{
+  -webkit-border-radius: 5px 5px 0 0;
+  border-radius:  5px 5px 0 0;
+  border: solid #000;
+  border-width: 1px 1px 0 1px;
+  height: 26px;
+  color: #b8b8b8;
+  font-size: 13px;
+  line-height: 26px;
+  text-shadow: 1px 1px 2px #00324d;
+  filter: dropshadow(color=#00324d, offx=1, offy=1);
+  background-color: #232426;
+  padding: 0 15px;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  font-weight: bold;
+}
+.application-menu .nav-tabs > li.active > a,
+.application-menu .nav-tabs > li.active > a:hover,
+.application-menu .nav-tabs > li > a:hover,
+.application-menu .nav-tabs > li > a:focus{
+  height: 26px;
+  border: solid #000;
+  border-width: 1px 1px 0 1px;
+  background-color: #7a95b5;
+  color: #fff;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+.application-menu .tab-content > .tab-pane > .nav a{
+  color: #dedddd;
+  font-size: 13px;
+  font-weight: bold;
+}
+.application-menu .tab-content > .tab-pane > .nav {
+  margin: 0;
+}
+.application-menu .tab-content{
+  background-color: #7a95b5;
+}
+.application-menu .home a{
+  padding: 0 5px !important;
+}
+.application-menu .home span{
+  display: block;
+  margin: 3px 0 0;
+  width: 17px;
+  height: 19px;
+  text-indent: -9999px;
+  font-size: 0;
+  line-height: 0;
+  background: url("../../img/general-sprite.png") no-repeat 0 -156px;
 }
