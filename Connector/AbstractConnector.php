@@ -46,6 +46,8 @@ abstract class AbstractConnector implements ConnectorInterface
      */
     public function getJob($code)
     {
+        var_dump(array_keys($this->jobs)); exit();
+
         if (!isset($this->jobs[$code])) {
             throw new ConfigurationException('job '.$code.' is unknown');
         }

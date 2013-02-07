@@ -1,22 +1,23 @@
 <?php
-namespace Oro\Bundle\DataFlowBundle\DependencyInjection\Chain;
+namespace Oro\Bundle\DataFlowBundle\DependencyInjection\Compiler;
 
+use Oro\Bundle\DataFlowBundle\Connector\Job\JobInterface;
 use Oro\Bundle\DataFlowBundle\Connector\ConnectorInterface;
 
 /**
- * Chain to define all connectors
+ * Aims to register all connectors
  *
  * @author    Romain Monceau <romain@akeneo.com>
  * @copyright 2012 Akeneo SAS (http://www.akeneo.com)
  * @license   http://opensource.org/licenses/MIT MIT
  *
  */
-class ConnectorChain
+class ConnectorRegistry
 {
 
     /**
      *
-     * @var multitype
+     * @var \ArrayAccess
      */
     protected $connectors;
 
@@ -29,13 +30,17 @@ class ConnectorChain
     }
 
     /**
-     * Add a connector
-     * @param ConnectorInterface $connector
+     * Add a job to a connector
      *
-     * @return ConnectorChain
+     * @param ConnectorInterface $connector the connector
+     * @param JobInterface       $job       the job
+     *
+     *
+     * @return ConnectorRegistry
      */
-    public function addConnector(ConnectorInterface $connector)
+    public function addToConnector(ConnectorInterface $connector, JobInterface $job)
     {
+        $connector->addJob($job);
         $this->connectors[] = $connector;
 
         return $this;

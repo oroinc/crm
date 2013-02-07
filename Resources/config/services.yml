@@ -1,5 +1,5 @@
 parameters:
-    oro_dataflow.connectors.class: Oro\Bundle\DataFlowBundle\DependencyInjection\Chain\ConnectorChain
+    oro_dataflow.connectors.class: Oro\Bundle\DataFlowBundle\DependencyInjection\Compiler\ConnectorRegistry
 
 services:
     oro_dataflow.connectors:

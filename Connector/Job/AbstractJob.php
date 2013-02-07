@@ -1,6 +1,8 @@
 <?php
 namespace Oro\Bundle\DataFlowBundle\Connector\Job;
 
+use Oro\Bundle\DataFlowBundle\Connector\Job\JobInterface;
+
 /**
  * Abstract job
  *
