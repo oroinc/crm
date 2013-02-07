@@ -1,25 +1,24 @@
 DataFlowBundle
 ==============
 
-Data import, export, transformation and mapping management
+Deal with data import, export, transformation and mapping management
 
 Main classes /  concepts
-========================
+------------------------
 
-This bundle provides bases classes to manipulate data :
+This bundle uses some basic ETL classes to manipulate data :
 - Extractors : to read data from csv file, xml file, excel file, dbal query, orm query, etc
-- Tranformers : to convert data (row / item or value), as datetime converter, charset converter, object converter, callback converter (allow to easily define a simple transform), etc
-- Loaders : to export / load data to csv, xml, excel file, database table (orm / dbal)
+- Tranformers : to convert data (a row / item or a value), as datetime or charset converters, callback converter, etc
+- Loaders : to write data to csv, xml, excel file, database table (orm / dbal)
 
-It provides a way to add some connectors as services and theirs related jobs :
-- Connector : a service which define its own jobs to provide some useful business actions related to a system (for instance, Magento)
-- Job : use readers, writers, transformers to process a business action (as import products from a csv file, export PIM product to Magento, etc)
+It provides a way to declare some connectors and jobs :
+- Connector : a service which provides some jobs related to a system (for instance, Magento)
+- Job : use readers, writers, transformers to process a business action (as import products from a csv file, export products to Magento, etc)
 
-Create new connector
-====================
+Create a new connector
+----------------------
 
 Connector is a service and it's define as following :
-
 ```php
 <?php
 namespace Acme\Bundle\DemoDataFlowBundle\Connector;
@@ -28,33 +27,33 @@ use Oro\Bundle\DataFlowBundle\Connector\AbstractConnector;
 
 class MagentoConnector extends AbstractConnector
 {
-
+    public function configure(ConfigurationInterface $configuration)
+    {
+        // configure before to use ...
+    }
 }
 ```
 
 And configuration :
-
 ```yaml
     connector.magento_catalog:
         class: Acme\Bundle\DemoDataFlowBundle\Connector\MagentoConnector
 ```
 
 
-Create new job
-==============
+Create a new job
+----------------
 
-Job is a service and it's define as following :
-
+Job is a service and it's defined as following :
 ```php
 <?php
-namespace Acme\Bundle\DemoDataFlowBundle\Connector\Job;
+namespace Acme\Bundle\DemoDataFlowBundle\Job;
 
-use Oro\Bundle\DataFlowBundle\Connector\Job\AbstractJob;
+use Oro\Bundle\DataFlowBundle\Job\AbstractJob;
 
 class ImportAttributesJob extends AbstractJob
 {
-
-    public function configure($parameters)
+    public function configure(ConfigurationInterface $configuration)
     {
         // configure before to use ...
     }
@@ -63,17 +62,33 @@ class ImportAttributesJob extends AbstractJob
     {
         // do some stuff ...
     }
-
 }
 
 ```
 
-And configuration :
-
+And configuration, notice that a job can be attached to one or many connectors :
 ```yaml
     job.import_attributes:
         class: Acme\Bundle\DemoDataFlowBundle\Connector\Job\ImportAttributesJob
-        arguments: [ @product_manager ]
         tags:
             - { name: oro_dataflow_job, connector: connector.magento_catalog}
 ```
+
+Connector registry
+------------------
+
+Registry allows to retrieve references to any connector, job and grab connector to job association :
+```php
+<?php
+    $connectors = $this->container->get('oro_dataflow.connectors');
+```
+
+Define custom configuration
+---------------------------
+Each connector / job have to be configured before to be used.
+
+AbstractConfiguration helps to define specialized configuration for any custom service (based on Symfony Config component).
+
+This configuration can be validated.
+
+
