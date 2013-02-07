@@ -1,23 +1,23 @@
 <?php
-namespace Oro\Bundle\DataFlowBundle\Connector;
+namespace Oro\Bundle\DataFlowBundle\Job;
 
 use Oro\Bundle\DataFlowBundle\Configuration\ConfigurationInterface;
 
 /**
- * Connector interface
+ * Job interface
  *
  * @author    Nicolas Dupont <nicolas@akeneo.com>
  * @copyright 2012 Akeneo SAS (http://www.akeneo.com)
  * @license   http://opensource.org/licenses/MIT MIT
  *
  */
-interface ConnectorInterface
+interface JobInterface
 {
 
     /**
      * Configure
      * @param ConfigurationInterface $configuration
-     * @return ConnectorInterface
+     * @return JobInterface
      */
     public function configure(ConfigurationInterface $configuration);
 
@@ -26,5 +26,10 @@ interface ConnectorInterface
      * @return ConfigurationInterface
      */
     public function getConfiguration();
+
+    /**
+     * Run the job
+     */
+    public function run();
 
 }

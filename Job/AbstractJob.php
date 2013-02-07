@@ -1,18 +1,16 @@
 <?php
-namespace Oro\Bundle\DataFlowBundle\Connector;
+namespace Oro\Bundle\DataFlowBundle\Job;
 
 use Oro\Bundle\DataFlowBundle\Configuration\ConfigurationInterface;
-use Oro\Bundle\DataFlowBundle\Job\JobInterface;
-use Oro\Bundle\DataFlowBundle\Exception\ConfigurationException;
 
 /**
- * Abstract connector
+ * Abstract job
  *
  * @author    Nicolas Dupont <nicolas@akeneo.com>
  * @copyright 2012 Akeneo SAS (http://www.akeneo.com)
  * @license   http://opensource.org/licenses/MIT MIT
  */
-abstract class AbstractConnector implements ConnectorInterface
+abstract class AbstractJob implements JobInterface
 {
 
     /**
@@ -38,5 +36,4 @@ abstract class AbstractConnector implements ConnectorInterface
     {
         return $this->configuration;
     }
-
 }
