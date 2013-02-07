@@ -13,85 +13,67 @@ This bundle provides bases classes to manipulate data :
 
 It provides a way to add some connectors as services and theirs related jobs :
 - Connector : a service which define its own jobs to provide some useful business actions related to a system (for instance, Magento)
-- Job : use source(s), use readers, writers, transformers to process a business action (as import products from a csv file, export PIM product to Magento, etc)
-- SourceType : DatabaseSource, FtpSource, WSSource, etc related to a configuration (ex: host, port, login, passwd, dbname, driver) and allows to validate it
-- Source : a named configuration (ex, code: magento_database) related to a type (ex: DatabaseSource) :
+- Job : use readers, writers, transformers to process a business action (as import products from a csv file, export PIM product to Magento, etc)
 
+Create new connector
+====================
 
-ConfigurationInterface
-
-
-Job ImportAttributeJob :
-- setDbSource(SourceDb $masource)
-- isRunable() -> check que les sources sont bien configurés
-
-
-Magento : 
-- conf db    <- job import attribut : new ImportAttributeJob(SourceDb $masource)
-- ftp        <- job import image
-- webservice <- import stock
-
-Source =
-
-- Code : ma_database_magento
-- Type : DB
-- Configuration : {host, port, login, passwd, dbname, driver}
-
-- Code : mon_ftp_magento
-- Type : FTP
-- Configuration : {host, port, login, passwd, mode[active|passive]} 
-
-
-Source->isValid() (pour une db on teste la connexion)
-
-
-TODO : source and configuration ?
-
-
-Create a connector
-==================
-
-TODO
-
-Create a job
-============
-
-Run a job
-=========
-
-
-
-TODO / Technical use cases
-==========================
-
-Use a connector
----------------
+Connector is a service and it's define as following :
 
 ```php
-$connector = $this->container->get('oro_dataflow.pim_magento_connector');
-// call high level actions, instanciate relevant dataflow, as new MagentoProductImport() and call process()
-$connector->importAttributes();
-$connector->importProducts();
+<?php
+namespace Acme\Bundle\DemoDataFlowBundle\Connector;
+
+use Oro\Bundle\DataFlowBundle\Connector\AbstractConnector;
+
+class MagentoConnector extends AbstractConnector
+{
+
+}
 ```
 
-Define a dataflow
------------------
+And configuration :
+
+```yaml
+    connector.magento_catalog:
+        class: Acme\Bundle\DemoDataFlowBundle\Connector\MagentoConnector
+```
+
+
+Create new job
+==============
+
+Job is a service and it's define as following :
 
 ```php
-// define source
-$source = new FileSource('/tmp/magento-attribute.csv');
-$stream = $source->getStream();
+<?php
+namespace Acme\Bundle\DemoDataFlowBundle\Connector\Job;
 
-// define reader
-$reader = new CsvReader($stream, ';', '"');
+use Oro\Bundle\DataFlowBundle\Connector\Job\AbstractJob;
 
-// declare dataflow
-$dataflow = new Job($reader);
+class ImportAttributesJob extends AbstractJob
+{
 
-$dataflow
-    ->addTransformer('field_code1', new DateTimeTransformer())
-    ->addTransformer('field_code2', new TrimTransformer());
+    public function configure($parameters)
+    {
+        // configure before to use ...
+    }
 
-$dataflow
-    ->addWriter();
+    public function run()
+    {
+        // do some stuff ...
+    }
+
+}
+
+```
+
+And configuration :
+
+```yaml
+    job.import_attributes:
+        class: Acme\Bundle\DemoDataFlowBundle\Connector\Job\ImportAttributesJob
+        arguments: [ @product_manager ]
+        tags:
+            - { name: oro_dataflow_job, connector: connector.magento_catalog}
 ```
