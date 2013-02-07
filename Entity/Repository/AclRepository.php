@@ -3,50 +3,30 @@ namespace Oro\Bundle\UserBundle\Entity\Repository;
 
 use Doctrine\ORM\Query\Expr;
 use Gedmo\Tree\Entity\Repository\NestedTreeRepository;
-use Gedmo\Exception\InvalidArgumentException;
-use Gedmo\Tool\Wrapper\EntityWrapper;
 
 use Oro\Bundle\UserBundle\Entity\Role;
+use Oro\Bundle\UserBundle\Entity\Acl;
 
 class AclRepository extends NestedTreeRepository
 {
     /**
-     * Get the Tree path query builder with roles by given $node
+     * Get full node list with roles for acl resource
      *
-     * @param object $node
-     * @throws InvalidArgumentException - if input is not valid
+     * @param \Oro\Bundle\UserBundle\Entity\Acl $acl
      * @return array
      */
-    public function getPathWithRoles($node)
+    public function getFullNodeWithRoles(Acl $acl)
     {
-        $meta = $this->getClassMetadata();
-        if (!$node instanceof $meta->name) {
-            throw new InvalidArgumentException("Node is not related to this repository");
-        }
-        $config = $this->listener->getConfiguration($this->_em, $meta->name);
-        $wrapped = new EntityWrapper($node, $this->_em);
-        if (!$wrapped->hasValidIdentifier()) {
-            throw new InvalidArgumentException("Node is not managed by UnitOfWork");
-        }
-        $left = $wrapped->getPropertyValue($config['left']);
-        $right = $wrapped->getPropertyValue($config['right']);
-        $qb = $this->_em->createQueryBuilder();
-        $qb->select(array('node', 'role'))
-            ->from($config['useObjectClass'], 'node')
-            ->leftJoin('node.accessRoles', 'role')
-            ->where($qb->expr()->lte('node.'.$config['left'], $left))
-            ->andWhere($qb->expr()->gte('node.'.$config['right'], $right))
-            ->orderBy('node.' . $config['left'], 'ASC')
-        ;
-        if (isset($config['root'])) {
-            $rootId = $wrapped->getPropertyValue($config['root']);
-            $qb->andWhere($rootId === null ?
-                    $qb->expr()->isNull('node.'.$config['root']) :
-                    $qb->expr()->eq('node.'.$config['root'], is_string($rootId) ? $qb->expr()->literal($rootId) : $rootId)
-            );
-        }
-
-        return $qb->getQuery()->getResult();
+        return $this->createQueryBuilder('acl')
+            ->select(array('acl', 'role'))
+            ->leftJoin('acl.accessRoles', 'role')
+            ->where('acl.rgt > :left_key')
+            ->andWhere('acl.lft < :right_key')
+            ->orderBy('acl.lft')
+            ->setParameter('left_key', $acl->getLft())
+            ->setParameter('right_key', $acl->getRgt())
+            ->getQuery()
+            ->getResult();
     }
 
     /**

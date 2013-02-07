@@ -49,22 +49,7 @@ class Manager
     {
         $accessRoles = $this->cache->fetch($aclId);
         if ($accessRoles === false) {
-
-            //get roles from current resource and parents
-            $accessRoles = $this->getRolesFromAclArray($this->getAclNodePath($aclId));
-
-            $aclResource = $this->getAclRepo()->find($aclId);
-            //get roles from resource children
-            if ($this->getAclRepo()->childCount($aclResource)) {
-                $accessRoles = array_unique(
-                    array_merge(
-                        $this->getRolesFromAclArray(
-                            $this->getAclRepo()->children($aclResource)
-                        ),
-                        $accessRoles
-                    )
-                );
-            }
+            $accessRoles = $this->getRolesForAcl($aclId);
             $this->cache->save($aclId, $accessRoles);
         }
 
@@ -271,16 +256,17 @@ class Manager
     }
 
     /**
-     * @param \Oro\Bundle\UserBundle\Entity\Acl[] $data
+     * @param string $aclId
      *
      * @return array
      */
-    private function getRolesFromAclArray(array $data)
+    private function getRolesForAcl($aclId)
     {
         $accessRoles = array();
-        foreach ($data as $acl) {
-            /** @var \Oro\Bundle\UserBundle\Entity\Acl $acl */
-            $roles = $acl->getAccessRolesNames();
+        $acl = $this->getAclRepo()->find($aclId);
+        $aclNodes = $this->getAclRepo()->getFullNodeWithRoles($acl);
+        foreach ($aclNodes as $node) {
+            $roles = $node->getAccessRolesNames();
             $accessRoles = array_unique(array_merge($roles, $accessRoles));
         }
 
