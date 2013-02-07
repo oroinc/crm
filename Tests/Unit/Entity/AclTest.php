@@ -1,5 +1,5 @@
 <?php
-namespace Oro\Bundle\UserBundle\Tests\Entity;
+namespace Oro\Bundle\UserBundle\Tests\Unit\Entity;
 
 use Oro\Bundle\UserBundle\Entity\Acl;
 

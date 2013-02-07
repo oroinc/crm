@@ -1,5 +1,5 @@
 <?php
-namespace Oro\Bundle\UserBundle\Tests\Annotation;
+namespace Oro\Bundle\UserBundle\Tests\Unit\Annotation;
 
 use Oro\Bundle\UserBundle\Annotation\Acl;
 
