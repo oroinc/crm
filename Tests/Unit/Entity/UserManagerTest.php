@@ -21,7 +21,7 @@ class UserManagerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->markTestSkipped('Waiting for interface update');
+        $this->markTestIncomplete('Waiting for interface update');
 
         if (!interface_exists('Doctrine\Common\Persistence\ObjectManager')) {
             $this->markTestSkipped('Doctrine Common has to be installed for this test to run.');
