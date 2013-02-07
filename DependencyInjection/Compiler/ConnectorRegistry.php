@@ -51,7 +51,6 @@ class ConnectorRegistry
      * @param string             $jobId       the job id
      * @param JobInterface       $job         the job
      *
-     *
      * @return ConnectorRegistry
      */
     public function addJobToConnector($connectorId, ConnectorInterface $connector, $jobId, JobInterface $job)
