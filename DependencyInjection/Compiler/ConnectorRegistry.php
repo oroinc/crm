@@ -1,7 +1,7 @@
 <?php
 namespace Oro\Bundle\DataFlowBundle\DependencyInjection\Compiler;
 
-use Oro\Bundle\DataFlowBundle\Connector\Job\JobInterface;
+use Oro\Bundle\DataFlowBundle\Job\JobInterface;
 use Oro\Bundle\DataFlowBundle\Connector\ConnectorInterface;
 
 /**
