@@ -17,6 +17,7 @@ interface JobInterface
     /**
      * Configure
      * @param ConfigurationInterface $configuration
+     *
      * @return JobInterface
      */
     public function configure(ConfigurationInterface $configuration);

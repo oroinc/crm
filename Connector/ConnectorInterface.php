@@ -17,6 +17,7 @@ interface ConnectorInterface
     /**
      * Configure
      * @param ConfigurationInterface $configuration
+     *
      * @return ConnectorInterface
      */
     public function configure(ConfigurationInterface $configuration);
