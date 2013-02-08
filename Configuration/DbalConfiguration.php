@@ -33,7 +33,7 @@ class DbalConfiguration extends AbstractConfiguration
                 ->enumNode('driver')
                     ->cannotBeEmpty()
                     ->isRequired()
-                    ->values(array('pdo_mysql', 'pdo_sqlite', 'pdo_pgsql', 'pdo_oci', 'pdo_sqlsrv', 'oci8'))
+                    ->values(array('pdo_mysql', 'pdo_sqlite', 'pdo_pgsql', 'pdo_oci', 'oci8', 'pdo_sqlsrv'))
                 ->end()
 
                 ->scalarNode('username')
@@ -45,9 +45,9 @@ class DbalConfiguration extends AbstractConfiguration
 
                 ->scalarNode('host')->end()
 
-                ->scalarNode('port')->end()
-
                 ->scalarNode('dbname')->end()
+
+                ->scalarNode('port')->end()
 
                 ->scalarNode('unix_socket')->end()
 
