@@ -1,7 +1,10 @@
 <?php
-namespace Oro\Bundle\UserBundle\Aop;
+namespace Oro\Bundle\UserBundle\Acl;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Common\Cache\CacheProvider;
+use Oro\Bundle\UserBundle\Acl\ResourceReader\Reader;
 
 use Oro\Bundle\UserBundle\Entity\Role;
 use Oro\Bundle\UserBundle\Entity\Acl;
@@ -10,6 +13,8 @@ use Oro\Bundle\UserBundle\Annotation\Acl as AnnotationAcl;
 
 class Manager
 {
+    const ACL_ANNOTATION_CLASS = 'Oro\Bundle\UserBundle\Annotation\Acl';
+
     /**
      * @var \Doctrine\Common\Persistence\ObjectManager
      */
@@ -21,7 +26,7 @@ class Manager
     protected $container;
 
     /**
-     * @var \Oro\Bundle\UserBundle\ResourceReader\Reader
+     * @var \Oro\Bundle\UserBundle\Acl\ResourceReader\Reader
      */
     protected $aclReader;
 
@@ -30,12 +35,11 @@ class Manager
      */
     protected $cache;
 
-    public function __construct(ContainerInterface $container, $cacheDir)
+    public function __construct(ObjectManager $em, Reader $aclReader, CacheProvider $cache)
     {
-        $this->em = $container->get('doctrine')->getManager();
-        $this->container = $container;
-        $this->aclReader = $container->get('oro_user.acl_reader');
-        $this->cache = $container->get('cache');
+        $this->em = $em;
+        $this->aclReader = $aclReader;
+        $this->cache = $cache;
         $this->cache->setNamespace('oro_user.cache');
     }
 
@@ -185,14 +189,6 @@ class Manager
     protected function getAclRepo()
     {
         return $this->em->getRepository('OroUserBundle:Acl');
-    }
-
-    /**
-     * @return \Doctrine\Common\Persistence\ObjectRepository
-     */
-    protected function getRoleAclRepo()
-    {
-        return $this->em->getRepository('OroUserBundle:RoleAcl');
     }
 
     /**

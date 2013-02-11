@@ -1,5 +1,5 @@
 <?php
-namespace Oro\Bundle\UserBundle\ResourceReader;
+namespace Oro\Bundle\UserBundle\Acl\ResourceReader;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 

@@ -12,10 +12,10 @@ parameters:
     oro_user.handler.reset.class:     Oro\Bundle\UserBundle\Form\Handler\ResetHandler
     oro_user.handler.role.class:      Oro\Bundle\UserBundle\Form\Handler\RoleHandler
     oro_user.handler.group.class:     Oro\Bundle\UserBundle\Form\Handler\GroupHandler
-    oro_user.acl.reader.class:        Oro\Bundle\UserBundle\ResourceReader\Reader
-    oro_user.acl.pointcut.class:      Oro\Bundle\UserBundle\Aop\AclPointcut
-    oro_user.acl.interceptor.class:   Oro\Bundle\UserBundle\Aop\AclInterceptor
-    oro_user.acl.manager.class:       Oro\Bundle\UserBundle\Aop\Manager
+    oro_user.acl.reader.class:        Oro\Bundle\UserBundle\Acl\ResourceReader\Reader
+    oro_user.acl.pointcut.class:      Oro\Bundle\UserBundle\Acl\AclPointcut
+    oro_user.acl.interceptor.class:   Oro\Bundle\UserBundle\Acl\AclInterceptor
+    oro_user.acl.manager.class:       Oro\Bundle\UserBundle\Acl\Manager
 
 services:
     oro_user.manager:
@@ -115,4 +115,4 @@ services:
 
     oro_user.acl_manager:
         class:                  %oro_user.acl.manager.class%
-        arguments:              [@service_container, %oro_user.cache_dir%]
+        arguments:              [@doctrine.orm.entity_manager, @oro_user.acl_reader, @cache]

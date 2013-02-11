@@ -15,20 +15,7 @@ use Oro\Bundle\UserBundle\Entity\Role;
 class AclController extends Controller
 {
     /**
-     * Show ACL Resources tree
-     *
-     * @Route("/list", name="oro_user_acl_list")
-     * @Template()
-     */
-    public function getAclResourcesLIstAction()
-    {
-        return array(
-            'resources' => $this->get('oro_user.acl_reader')->getResourcesTree()
-        );
-    }
-
-    /**
-     * Show ACL Resources tree
+     * Show ACL Resources tree for Role
      *
      * @Route("/edit/{id}", name="oro_user_acl_edit", requirements={"id"="\d+"})
      * @param \Oro\Bundle\UserBundle\Entity\Role $role
@@ -54,13 +41,14 @@ class AclController extends Controller
         $request = $this->getRequest();
         if ($request->getMethod() == 'POST') {
             $this->getAclManager()->saveRoleAcl($role, $request->request->get('resource'));
+            $this->get('session')->getFlashBag()->add('success', 'Role ACL successfully saved');
         }
 
         return $this->redirect($this->generateUrl('oro_user_role_index'));
     }
 
     /**
-     * @return \Oro\Bundle\UserBundle\Aop\Manager
+     * @return \Oro\Bundle\UserBundle\Acl\Manager
      */
     protected function getAclManager()
     {

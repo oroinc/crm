@@ -1,5 +1,5 @@
 <?php
-namespace Oro\Bundle\UserBundle\Aop;
+namespace Oro\Bundle\UserBundle\Acl;
 
 use CG\Proxy\MethodInterceptorInterface;
 use CG\Proxy\MethodInvocation;
@@ -9,6 +9,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+
+use Oro\Bundle\UserBundle\Acl\Manager;
 
 class AclInterceptor implements MethodInterceptorInterface
 {
@@ -27,7 +29,6 @@ class AclInterceptor implements MethodInterceptorInterface
      */
     private $container;
 
-    private $em;
     private $reader;
     private $accessDecisionManager;
 
@@ -39,7 +40,6 @@ class AclInterceptor implements MethodInterceptorInterface
         $this->securityContext = $context;
         $this->logger = $logger;
         $this->container = $container;
-        $this->em = $container->get('doctrine')->getManager();
         $this->reader = $container->get('annotation_reader');
         $this->accessDecisionManager = $container->get('security.access.decision_manager');
     }
@@ -47,25 +47,21 @@ class AclInterceptor implements MethodInterceptorInterface
     public function intercept(MethodInvocation $method)
     {
         $this->logger->info(
-            sprintf('User invoked class: "%s" method "%s".', $method->reflection->class, $method->reflection->name)
+            sprintf('User invoked class: "%s", Method: "%s".', $method->reflection->class, $method->reflection->name)
         );
 
         //get acl method resource name
         $aclAnnotation = $this->reader->getMethodAnnotation(
             $method->reflection,
-            'Oro\Bundle\UserBundle\Annotation\Acl'
+            Manager::ACL_ANNOTATION_CLASS
         );
-
         $accessRoles = $this->getAclManager()->getCachedAcl($aclAnnotation->getId());
 
         $token = $this->securityContext->getToken();
         if (false === $this->accessDecisionManager->decide($token, $accessRoles, $method)) {
 
-            /** @var $request \Symfony\Component\HttpFoundation\Request */
-            $request = $this->container->get('request');
-
             //check if we have internal action - show blank
-            if($request->attributes->get('_route') == '_internal') {
+            if($this->container->get('request')->attributes->get('_route') == '_internal') {
 
                 return new Response('');
             }
@@ -77,7 +73,7 @@ class AclInterceptor implements MethodInterceptorInterface
     }
 
     /**
-     * @return \Oro\Bundle\UserBundle\Aop\Manager
+     * @return \Oro\Bundle\UserBundle\Acl\Manager
      */
     public function getAclManager()
     {

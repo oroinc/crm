@@ -22,9 +22,6 @@ class OroUserExtension extends Extension
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
 
-        $cacheDir = $container->getParameterBag()->resolveValue($config['cache_dir']);
-        $container->setParameter('oro_user.cache_dir', $cacheDir);
-
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
 

@@ -43,10 +43,6 @@ class Configuration implements ConfigurationInterface
                         ->cannotBeEmpty()
                     ->end()
                 ->end()
-            ->end()
-            ->scalarNode('cache_dir')
-                ->cannotBeEmpty()
-                ->defaultValue('%kernel.cache_dir%/oro_user_acl')
             ->end();
 
         return $treeBuilder;

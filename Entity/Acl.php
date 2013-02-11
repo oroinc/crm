@@ -7,7 +7,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 use Oro\Bundle\UserBundle\Annotation\Acl as AnnotationAcl;
-use Oro\Bundle\UserBundle\Entity\RoleAcl;
 
 /**
  * @Gedmo\Tree(type="nested")
