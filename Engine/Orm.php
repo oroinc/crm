@@ -62,7 +62,7 @@ class Orm extends AbstractEngine
         if ($searchResults) {
             foreach ($searchResults as $item) {
                 /** @var $item \Oro\Bundle\SearchBundle\Entity\Item  */
-                $results[] = new ResultItem($this->em, $item->getEntity(), $item->getId());
+                $results[] = new ResultItem($this->em, $item->getEntity(), $item->getRecordId());
             }
         }
 

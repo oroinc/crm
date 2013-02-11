@@ -31,22 +31,22 @@ abstract class AbstractEngine
     /**
      * Insert or update record
      *
-     * @param string $objectName
-     * @param $object
+     * @param object $entity
+     * @param bool $realtime
      *
      * @return mixed
      */
-    abstract public function save($objectName, $object);
+    abstract public function save($entity, $realtime = true);
 
     /**
      * Insert or update record
      *
-     * @param string $objectName
-     * @param int $id
+     * @param object $entity
+     * @param bool $realtime
      *
      * @return mixed
      */
-    abstract public function delete($objectName, $id);
+    abstract public function delete($entity, $realtime = true);
 
     /**
      * Search query with query builder
