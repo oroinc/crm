@@ -11,5 +11,4 @@ namespace Oro\Bundle\MeasureBundle\Exception;
  */
 class UnknownMeasureException extends MeasureException
 {
-
 }

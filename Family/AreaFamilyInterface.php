@@ -112,5 +112,4 @@ interface AreaFamilyInterface
      * @staticvar string
      */
     const SQUARE_YARD       = 'SQUARE_YARD';
-
 }

@@ -42,5 +42,4 @@ interface FrequencyFamilyInterface
      * @staticvar string
      */
     const HERTZ     = 'HERTZ';
-
 }

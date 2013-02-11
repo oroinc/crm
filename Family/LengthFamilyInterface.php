@@ -87,5 +87,4 @@ interface LengthFamilyInterface
      * @staticvar string
      */
     const YARD       = 'YARD';
-
 }

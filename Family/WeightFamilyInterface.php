@@ -72,5 +72,4 @@ interface WeightFamilyInterface
      * @staticvar string
      */
     const TON       = 'TON';
-
 }

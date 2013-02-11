@@ -30,7 +30,8 @@ class MeasureConverter
 
     /**
      * Constructor
-     * @param array $config
+     *
+     * @param array $config Configuration parameters
      */
     public function __construct($config = array())
     {
@@ -162,5 +163,4 @@ class MeasureConverter
 
         return $convertedValue;
     }
-
 }
