@@ -41,11 +41,11 @@ Example:
         fields:
             -
                 name: name
-                target_type: string
+                target_type: text
                 target_fields: [name, all_data]
             -
                 name: description
-                target_type: string
+                target_type: text
                 target_fields: [description, all_data]
             -
                 name: manufacturer
@@ -53,7 +53,7 @@ Example:
                 relation_fields:
                     -
                         name: name
-                        target_type: string
+                        target_type: text
                         target_fields: [manufacturer, all_data]
                     -
                         name: id
@@ -65,13 +65,13 @@ Example:
                 relation_fields:
                     -
                         name: name
-                        target_type: string
+                        target_type: text
                         target_fields: [all_data]
 
 Parameters:
 
 - **name**: name of field in entity
-- **target_type**: type of virtual search field. Supported target types: string, integer, double, datetime
+- **target_type**: type of virtual search field. Supported target types: text (string and text fields), integer, double, datetime
 - **target_fields**: array of virtual fields for entity field from 'name' parameter.
 - **relation_type**: indicate that this field is relation field to enother table. Supported relation types: one-to-one, many-to-many, one-to-many, many-to-one.
 - **relation_fields**: array of fields from relarion record we must to index.
@@ -124,6 +124,9 @@ REST API url: http://domail.com/api/rest/latest/search
 
 SOAP function name: search
 
+REST API work with get request only. So, search request to the search must be like example:
+http://domail.com/api/rest/latest/search?max_results=100&offset=0&search=search_string
+
 **Result**
 
 Request return array with next data:
@@ -132,7 +135,7 @@ Request return array with next data:
  - **count** - count of records in current request
  - **data**- array with data.
 
- Data consusts from next values:
+ Data consists from next values:
 
  - **entity_name** - class name of entity
  - **record_id** - id of record from this entity

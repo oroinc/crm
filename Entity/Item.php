@@ -375,10 +375,18 @@ class Item
      */
     public function saveItemData($objectData)
     {
-        $this->saveTextData($objectData['text']);
-        $this->saveIntegerData($objectData['integer']);
-        $this->saveDatetimeData($objectData['datetime']);
-        $this->saveDecimalData($objectData['decimal']);
+        if (isset($objectData['text']) && count($objectData['text'])) {
+            $this->saveTextData($objectData['text']);
+        }
+        if (isset($objectData['integer']) && count($objectData['integer'])) {
+            $this->saveIntegerData($objectData['integer']);
+        }
+        if (isset($objectData['datetime']) && count($objectData['datetime'])) {
+            $this->saveDatetimeData($objectData['datetime']);
+        }
+        if (isset($objectData['decimal']) && count($objectData['decimal'])) {
+            $this->saveDecimalData($objectData['decimal']);
+        }
     }
 
     /**
