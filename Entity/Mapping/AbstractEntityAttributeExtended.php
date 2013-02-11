@@ -108,6 +108,30 @@ abstract class AbstractEntityAttributeExtended extends AbstractAttributeExtended
     }
 
     /**
+     * Set attribute type
+     *
+     * @param string $type
+     *
+     * @return AbstractAttribute
+     */
+    public function setAttributeType($type)
+    {
+        $this->attribute->setAttributeType($type);
+
+        return $this;
+    }
+
+    /**
+     * Get frontend type
+     *
+     * @return string
+     */
+    public function getAttributeType()
+    {
+        return $this->attribute->getAttributeType();
+    }
+
+    /**
      * Set required (base attribute shortcut)
      *
      * @param boolean $required
@@ -287,6 +311,54 @@ abstract class AbstractEntityAttributeExtended extends AbstractAttributeExtended
     public function getOptions()
     {
         return $this->attribute->getOptions();
+    }
+
+    /**
+     * Get created datetime
+     *
+     * @return datetime
+     */
+    public function getCreated()
+    {
+        return $this->attribute->getCreated();
+    }
+
+    /**
+     * Set created datetime
+     *
+     * @param datetime $created
+     *
+     * @return TimestampableInterface
+     */
+    public function setCreated($created)
+    {
+        $this->attribute->setCreated($created);
+
+        return $this;
+    }
+
+    /**
+     * Get updated datetime
+     *
+     * @return datetime
+     */
+    public function getUpdated()
+    {
+        return $this->attribute->getUpdated();
+    }
+
+    /**
+     * Set updated datetime
+     *
+     * @param datetime $updated
+     *
+     * @return TimestampableInterface
+     */
+    public function setUpdated($updated)
+    {
+        $this->attribute->setUpdated($updated);
+
+        return $this;
     }
 
 }
