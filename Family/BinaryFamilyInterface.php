@@ -47,5 +47,4 @@ interface BinaryFamilyInterface
      * @staticvar string
      */
     const TERABYTE = 'TERABYTE';
-
 }

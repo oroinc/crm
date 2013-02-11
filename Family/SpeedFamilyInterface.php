@@ -57,5 +57,4 @@ interface SpeedFamilyInterface
      * @staticvar string
      */
     const YARD_PER_HOUR      = 'YARD_PER_HOUR';
-
 }

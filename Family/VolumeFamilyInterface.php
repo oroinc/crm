@@ -92,5 +92,4 @@ interface VolumeFamilyInterface
      * @staticvar string
      */
     const PINT             = 'PINT';
-
 }

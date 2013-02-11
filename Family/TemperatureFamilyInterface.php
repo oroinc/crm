@@ -42,5 +42,4 @@ interface TemperatureFamilyInterface
      * @staticvar string
      */
     const REAUMUR    = 'REAUMUR';
-
 }

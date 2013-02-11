@@ -23,5 +23,4 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
         $configuration = new Configuration();
         $this->assertTrue($configuration->getConfigTreeBuilder() instanceof TreeBuilder);
     }
-
 }

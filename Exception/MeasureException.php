@@ -12,5 +12,4 @@ namespace Oro\Bundle\MeasureBundle\Exception;
  */
 abstract class MeasureException extends \Exception
 {
-
 }
