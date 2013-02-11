@@ -5,9 +5,16 @@ use Oro\Bundle\UserBundle\Acl\Manager;
 
 class ManagerTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var \Oro\Bundle\UserBundle\Acl\Manager
+     */
     private $manager;
 
     private $user;
+
+    private $repository;
+
+    private $om;
 
     public function setUp()
     {
@@ -15,29 +22,52 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
             $this->markTestSkipped('Doctrine Common has to be installed for this test to run.');
         }
 
-        $om = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
-        $repository = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
+        $this->user = $this->getMock('Oro\Bundle\UserBundle\Entity\User');
+        $this->om = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
+        $this->repository = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
 
-        $om->expects($this->any())
-            ->method('getRepository')
-            ->with($this->equalTo('OroUserBundle:Acl'))
-            ->will($this->returnValue($repository));
+        $this->user->expects($this->any())
+            ->method('getRoles')
+            ->will($this->returnValue(array()));
 
-        $repository->expects($this->any())
+        $this->repository->expects($this->any())
             ->method('getAllowedAclResourcesForUserRoles')
-            ->with($this->equalTo('OroUserBundle:Acl'))
             ->will($this->returnValue(array('test')));
 
-        $reader = $this->getMock('Oro\Bundle\UserBundle\Acl\ResourceReader\Reader');
+        $this->om->expects($this->any())
+            ->method('getRepository')
+            ->will($this->returnValue($this->repository));
 
-        $cache = $this->getMock('Doctrine\Common\Cache\CacheProvider');
+        $reader = $this->getMock(
+            'Oro\Bundle\UserBundle\Acl\ResourceReader\Reader',
+            array(),
+            array(),
+            '',
+            false
+        );
+
+        $sqlExecMock = $this->getMock('Doctrine\ORM\Query\Exec\AbstractSqlExecutor', array('execute'));
+        $sqlExecMock->expects($this->once())
+            ->method('execute')
+            ->will($this->returnValue( 10 ));
+        $parserResultMock = $this->getMock('Doctrine\ORM\Query\ParserResult');
+        $parserResultMock->expects($this->once())
+            ->method('getSqlExecutor')
+            ->will($this->returnValue($sqlExecMock));
+        $cache = $this->getMock('Doctrine\Common\Cache\CacheProvider',
+            array('doFetch', 'doContains', 'doSave', 'doDelete', 'doFlush', 'doGetStats'));
+        $cache->expects($this->at(0))->method('doFetch')->will($this->returnValue(1));
+        $cache->expects($this->at(1))
+            ->method('doFetch')
+            ->with($this->isType('string'))
+            ->will($this->returnValue($parserResultMock));
+        $cache->expects($this->never())
+            ->method('doSave');
         $cache->expects($this->any())
             ->method('setNamespace')
             ->with($this->equalTo('oro_user.cache'));
 
-        $this->user = $this->getMock('Oro\Bundle\UserBundle\Entity\User');
-
-        $this->manager = new Manager($om, $reader, $cache);
+        $this->manager = new Manager($this->om, $reader, $cache);
     }
 
     public function testGetAclForUser()
