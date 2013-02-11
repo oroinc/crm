@@ -2,16 +2,18 @@
 
 namespace Oro\Bundle\UserBundle\Entity;
 
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
+use JMS\Serializer\Annotation\Type;
+use JMS\Serializer\Annotation\Exclude;
+
+use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
+
 /**
  * @ORM\Entity
  * @ORM\Table(name="access_group")
- * @UniqueEntity("name")
  */
 class Group
 {
@@ -19,11 +21,15 @@ class Group
      * @ORM\Id
      * @ORM\Column(type="smallint", name="id")
      * @ORM\GeneratedValue(strategy="AUTO")
+     * @Soap\ComplexType("int")
+     * @Type("integer")
      */
     protected $id;
 
     /**
      * @ORM\Column(type="string", unique=true, length=30, nullable=false)
+     * @Soap\ComplexType("string")
+     * @Type("string")
      */
     protected $name;
 
@@ -33,6 +39,7 @@ class Group
      *      joinColumns={@ORM\JoinColumn(name="group_id", referencedColumnName="id", onDelete="CASCADE")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="role_id", referencedColumnName="id", onDelete="CASCADE")}
      * )
+     * @Exclude
      */
     protected $roles;
 

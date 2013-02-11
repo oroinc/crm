@@ -3,34 +3,41 @@
 namespace Oro\Bundle\UserBundle\Entity;
 
 use Symfony\Component\Security\Core\Role\RoleInterface;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 use Doctrine\ORM\Mapping as ORM;
+
+use JMS\Serializer\Annotation\Type;
+use JMS\Serializer\Annotation\Exclude;
+
+use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 
 /**
  * Role Entity
  *
  * @ORM\Entity
  * @ORM\Table(name="access_role")
- * @UniqueEntity("role")
  */
 class Role implements RoleInterface
 {
-
     /**
      * @ORM\Id
      * @ORM\Column(type="smallint", name="id")
      * @ORM\GeneratedValue(strategy="AUTO")
+     * @Exclude
      */
     protected $id;
 
     /**
      * @ORM\Column(type="string", unique=true, length=30, nullable=false)
+     * @Soap\ComplexType("string")
+     * @Type("string")
      */
     protected $role;
 
     /**
      * @ORM\Column(type="string", length=30)
+     * @Soap\ComplexType("string")
+     * @Type("string")
      */
     protected $label;
 

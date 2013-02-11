@@ -56,6 +56,18 @@ class UserManager extends FlexibleManager implements UserProviderInterface
     public function updateUser(User $user, $flush = true)
     {
         $this->updatePassword($user);
+
+        // we need to make sure to have at least one default role
+        if (!$user->hasRole(User::ROLE_DEFAULT)) {
+            $role = $this->getStorageManager()->getRepository('OroUserBundle:Role')->findOneBy(array('role' => User::ROLE_DEFAULT));
+
+            if (!$role) {
+                throw new \RuntimeException('Default user role not found');
+            }
+
+            $user->addRole($role);
+        }
+
         $this->getStorageManager()->persist($user);
 
         if ($flush) {

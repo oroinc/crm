@@ -21,7 +21,7 @@ use Oro\Bundle\UserBundle\Entity\User;
 /**
  * @NamePrefix("oro_api_")
  */
-class UserController extends FOSRestController implements ClassResourceInterface
+class ProfileController extends FOSRestController implements ClassResourceInterface
 {
     /**
      * Get the list of users
@@ -42,7 +42,7 @@ class UserController extends FOSRestController implements ClassResourceInterface
         $pager = $this->get('knp_paginator')->paginate(
             $this->getDoctrine()
                 ->getEntityManager()
-                ->createQuery('SELECT u FROM OroUserBundle:User u'),
+                ->createQuery('SELECT u FROM OroUserBundle:User u ORDER BY u.id'),
             (int) $page,
             (int) $limit
         );
@@ -67,11 +67,11 @@ class UserController extends FOSRestController implements ClassResourceInterface
      */
     public function getAction($id)
     {
-        $data = $this->getManager()->findUserBy(array('id' => (int) $id));
+        $entity = $this->getManager()->findUserBy(array('id' => (int) $id));
 
         return $this->handleView($this->view(
-            $data,
-            $data ? Codes::HTTP_OK : Codes::HTTP_NOT_FOUND
+            $entity,
+            $entity ? Codes::HTTP_OK : Codes::HTTP_NOT_FOUND
         ));
     }
 
@@ -85,11 +85,10 @@ class UserController extends FOSRestController implements ClassResourceInterface
      */
     public function postAction()
     {
-        //'csrf_protection' => false
         $entity = $this->getManager()->createFlexible();
-        $view   = $this->get('oro_user.form.handler.profile')->process($entity)
+        $view   = $this->get('oro_user.form.handler.profile.api')->process($entity)
             ? RouteRedirectView::create('oro_api_get_user', array('id' => $entity->getId()))
-            : $this->view('', Codes::HTTP_INTERNAL_SERVER_ERROR);
+            : $this->view($this->get('oro_user.form.profile.api'), Codes::HTTP_BAD_REQUEST);
 
         return $this->handleView($view);
     }
@@ -144,6 +143,52 @@ class UserController extends FOSRestController implements ClassResourceInterface
         $this->getManager()->deleteUser($entity);
 
         return $this->handleView($this->view('', Codes::HTTP_NO_CONTENT));
+    }
+
+    /**
+     * Get user roles
+     *
+     * @QueryParam(name="id", requirements="\d+", description="User id")
+     * @ApiDoc(
+     *  description="Get user roles",
+     *  resource=true,
+     *  filters={
+     *      {"name"="id", "dataType"="integer"},
+     *  }
+     * )
+     */
+    public function getRolesAction($id)
+    {
+        $entity = $this->getManager()->findUserBy(array('id' => (int) $id));
+
+        if (!$entity) {
+            return $this->handleView($this->view('', Codes::HTTP_NOT_FOUND));
+        }
+
+        return $this->handleView($this->view($entity->getRoles(), Codes::HTTP_OK));
+    }
+
+    /**
+     * Get user groups
+     *
+     * @QueryParam(name="id", requirements="\d+", description="User id")
+     * @ApiDoc(
+     *  description="Get user groups",
+     *  resource=true,
+     *  filters={
+     *      {"name"="id", "dataType"="integer"},
+     *  }
+     * )
+     */
+    public function getGroupsAction($id)
+    {
+        $entity = $this->getManager()->findUserBy(array('id' => (int) $id));
+
+        if (!$entity) {
+            return $this->handleView($this->view('', Codes::HTTP_NOT_FOUND));
+        }
+
+        return $this->handleView($this->view($entity->getGroups(), Codes::HTTP_OK));
     }
 
     /**

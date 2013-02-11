@@ -49,7 +49,7 @@ class GroupHandler
     {
         $this->form->setData($entity);
 
-        if ('POST' === $this->request->getMethod()) {
+        if (in_array($this->request->getMethod(), array('POST', 'PUT'))) {
             $this->form->bind($this->request);
 
             if ($this->form->isValid()) {
