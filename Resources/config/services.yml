@@ -100,19 +100,19 @@ services:
         arguments:                    ["@oro_user.form.group", "@request", "@doctrine.orm.entity_manager"]
 
     oro_user.acl_reader:
-        class:                  %oro_user.acl.reader.class%
-        arguments:              ["@service_container"]
+        class:                        %oro_user.acl.reader.class%
+        arguments:                    [@kernel, @annotation_reader]
 
     oro_user.acl_pointcut:
-        class:                  %oro_user.acl.pointcut.class%
-        arguments:              [@annotation_reader, @logger]
+        class:                        %oro_user.acl.pointcut.class%
+        arguments:                    [@annotation_reader, @logger]
         tags:
             - { name: jms_aop.pointcut, interceptor: oro_user.acl_interceptor }
 
     oro_user.acl_interceptor:
-        class:                  %oro_user.acl.interceptor.class%
-        arguments:              [@security.context, @logger, @service_container]
+        class:                        %oro_user.acl.interceptor.class%
+        arguments:                    [@security.context, @logger, @service_container]
 
     oro_user.acl_manager:
-        class:                  %oro_user.acl.manager.class%
-        arguments:              [@doctrine.orm.entity_manager, @oro_user.acl_reader, @cache]
+        class:                        %oro_user.acl.manager.class%
+        arguments:                    [@doctrine.orm.entity_manager, @oro_user.acl_reader, @cache]

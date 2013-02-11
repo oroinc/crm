@@ -1,7 +1,8 @@
 <?php
 namespace Oro\Bundle\UserBundle\Acl\ResourceReader;
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpKernel\KernelInterface;
+use Doctrine\Common\Annotations\Reader as AnnotationReader;
 
 use JMS\DiExtraBundle\Finder\PatternFinder;
 
@@ -15,20 +16,16 @@ class Reader
     private $kernel;
 
     /**
-     * @var \Symfony\Component\DependencyInjection\ContainerInterface
-     */
-    private $container;
-
-    /**
      * @var \Doctrine\Common\Annotations\Reader
      */
     private $reader;
 
-    public function __construct(ContainerInterface $container)
+    public function __construct(KernelInterface $kernel, AnnotationReader $reader)
     {
-        $this->kernel = $container->get('kernel');
-        $this->container = $container;
-        $this->reader = $container->get('annotation_reader');
+
+        $this->kernel = $kernel; //$container->get('kernel');
+        $this->reader = $reader; //$container->get('annotation_reader');
+        //var_dump($this->reader);die;
     }
 
     /**
@@ -69,6 +66,8 @@ class Reader
             $reflection = new \ReflectionClass($className);
             //read annotations from class definition
             $classAcl = $this->reader->getClassAnnotation($reflection, self::ACL_CLASS);
+            var_dump($reflection);
+            var_dump($this->reader->getClassAnnotations($reflection));
             if (is_object($classAcl)) {
                 $aclResources[$classAcl->getId()] = $classAcl;
             }
