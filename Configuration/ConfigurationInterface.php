@@ -1,8 +1,6 @@
 <?php
 namespace Oro\Bundle\DataFlowBundle\Configuration;
 
-use Symfony\Component\Config\Definition\ConfigurationInterface as SfConfigurationInterface;
-
 /**
  * Configuration
  *
@@ -11,14 +9,7 @@ use Symfony\Component\Config\Definition\ConfigurationInterface as SfConfiguratio
  * @license   http://opensource.org/licenses/MIT MIT
  *
  */
-interface ConfigurationInterface extends SfConfigurationInterface
+interface ConfigurationInterface
 {
-
-    /**
-     * Process configuration
-     *
-     * @return ConfigurationInterface
-     */
-    public function process();
 
 }
