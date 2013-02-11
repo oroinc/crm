@@ -11,6 +11,7 @@ use Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleManager;
  * @copyright 2012 Akeneo SAS (http://www.akeneo.com)
  * @license   http://opensource.org/licenses/MIT MIT
  *
+ * @abstract
  */
 abstract class AbstractFilterEvent extends Event
 {

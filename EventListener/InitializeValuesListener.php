@@ -42,15 +42,18 @@ class InitializeValuesListener implements EventSubscriberInterface
         $manager = $event->getManager();
 
         if ($flexible instanceof FlexibleInterface) {
-
             // get initialization mode
             if ($manager->getFlexibleInitMode() === 'required_attributes') {
                 $required = true;
             } else {
                 $required = false;
             }
+
             // initialize with base values
-            $attributes = $manager->getAttributeRepository()->findBy(array('entityType' => $manager->getFlexibleName(), 'required' => $required));
+            $attributes = $manager->getAttributeRepository()->findBy(
+                array('entityType' => $manager->getFlexibleName(), 'required' => $required)
+            );
+
             foreach ($attributes as $attribute) {
                 $value = $manager->createFlexibleValue();
                 $value->setAttribute($attribute);
@@ -60,7 +63,5 @@ class InitializeValuesListener implements EventSubscriberInterface
                 $flexible->addValue($value);
             }
         }
-
     }
-
 }

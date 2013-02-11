@@ -66,7 +66,7 @@ class TranslatableListener implements EventSubscriber
             $flexibleEntityClass = false;
             if ($entity instanceof FlexibleInterface) {
                 $flexibleEntityClass = get_class($entity);
-            } else if ($entity instanceof AbstractAttributeOption) {
+            } elseif ($entity instanceof AbstractAttributeOption) {
                 $flexibleEntityClass = $entity->getAttribute()->getEntityType();
             }
 
@@ -80,5 +80,4 @@ class TranslatableListener implements EventSubscriber
             }
         }
     }
-
 }
