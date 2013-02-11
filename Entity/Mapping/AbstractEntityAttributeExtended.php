@@ -108,6 +108,30 @@ abstract class AbstractEntityAttributeExtended extends AbstractAttributeExtended
     }
 
     /**
+     * Set attribute type
+     *
+     * @param string $type
+     *
+     * @return AbstractAttribute
+     */
+    public function setAttributeType($type)
+    {
+        $this->attribute->setAttributeType($type);
+
+        return $this;
+    }
+
+    /**
+     * Get frontend type
+     *
+     * @return string
+     */
+    public function getAttributeType()
+    {
+        return $this->attribute->getAttributeType();
+    }
+
+    /**
      * Set required (base attribute shortcut)
      *
      * @param boolean $required
