@@ -37,13 +37,9 @@
                 <div class="span12">
                 {% for type, messages in app.session.flashbag.all %}
                     {% for message in messages %}
-                        {% if type == 'fos_user_success' %}
-                            {% set type = 'success' %}
-                            {% set domain = 'FOSUserBundle' %}
-                        {% endif %}
                         <div class="alert{{ type ? ' alert-'~type : '' }} fade in">
                         <a class="close" data-dismiss="alert" href="javascript: void(0);">×</a>
-                        {{ message|trans({}, domain|default('messages'))|raw }}
+                        {{ message|trans|raw }}
                         </div>
                     {% endfor %}
                 {% endfor %}
@@ -55,7 +51,6 @@
             {% endblock header %}
 
             {% block content %}
-                {{ block('fos_user_content') }}
             {% endblock content %}
         </div>
     </div>
