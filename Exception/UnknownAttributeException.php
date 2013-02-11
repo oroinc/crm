@@ -11,5 +11,4 @@ namespace Oro\Bundle\FlexibleEntityBundle\Exception;
  */
 class UnknownAttributeException extends \Exception
 {
-
 }

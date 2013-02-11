@@ -65,7 +65,10 @@ class FlexibleType extends AbstractType
      */
     public function addDynamicAttributesFields(FormBuilderInterface $builder)
     {
-        $builder->add('values', 'collection', array(
+        $builder->add(
+            'values',
+            'collection',
+            array(
                 'type'         => new FlexibleValueType($this->valueClass),
                 'allow_add'    => true,
                 'allow_delete' => true,
