@@ -57,7 +57,7 @@ class AclRepository extends NestedTreeRepository
      * Get full node list with roles for acl resource
      *
      * @param \Oro\Bundle\UserBundle\Entity\Acl $acl
-     * @return array
+     * @return \Oro\Bundle\UserBundle\Entity\Acl[]
      */
     public function getFullNodeWithRoles(Acl $acl)
     {

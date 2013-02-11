@@ -73,18 +73,6 @@ class Manager
     }
 
     /**
-     * Get Acl node path by node id
-     *
-     * @param string $aclId
-     *
-     * @return array
-     */
-    public function getAclNodePath($aclId)
-    {
-        return $this->getAclRepo()->getPathWithRoles($this->getAclRepo()->find($aclId));
-    }
-
-    /**
      * Save roles for ACL Resource
      *
      * @param \Oro\Bundle\UserBundle\Entity\Role $role
