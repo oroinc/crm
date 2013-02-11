@@ -360,5 +360,4 @@ abstract class AbstractEntityAttributeExtended extends AbstractAttributeExtended
 
         return $this;
     }
-
 }

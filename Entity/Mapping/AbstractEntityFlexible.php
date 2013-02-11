@@ -101,25 +101,27 @@ abstract class AbstractEntityFlexible extends AbstractFlexible
     {
         $locale = $this->getLocale();
         $scope = $this->getScope();
-        $values = $this->getValues()->filter(function($value) use ($attributeCode, $locale, $scope) {
-            // related value to asked attribute
-            if ($value->getAttribute()->getCode() == $attributeCode) {
-                // return relevant translated value if translatable
-                if ($value->getAttribute()->getTranslatable() and $value->getLocale() == $locale) {
-                    // check also scope if scopable
-                    if ($value->getAttribute()->getScopable() and $value->getScope() == $scope) {
-                        return true;
-                    } else if (!$value->getAttribute()->getScopable()) {
+        $values = $this->getValues()->filter(
+            function ($value) use ($attributeCode, $locale, $scope) {
+                // related value to asked attribute
+                if ($value->getAttribute()->getCode() == $attributeCode) {
+                    // return relevant translated value if translatable
+                    if ($value->getAttribute()->getTranslatable() and $value->getLocale() == $locale) {
+                        // check also scope if scopable
+                        if ($value->getAttribute()->getScopable() and $value->getScope() == $scope) {
+                            return true;
+                        } elseif (!$value->getAttribute()->getScopable()) {
+                            return true;
+                        }
+                    } elseif (!$value->getAttribute()->getTranslatable()) {
+                        // return the value if not translatable
                         return true;
                     }
-                // return the value if not translatable
-                } else if (!$value->getAttribute()->getTranslatable()) {
-                    return true;
                 }
-            }
 
-            return false;
-        });
+                return false;
+            }
+        );
         $value = $values->first();
 
         return $value;
@@ -166,10 +168,9 @@ abstract class AbstractEntityFlexible extends AbstractFlexible
         $methodName = "get{$attCode}";
         if (method_exists($this, $methodName)) {
             return $this->$methodName();
-        // dynamic call to get value data
         } else {
+            // dynamic call to get value data
             return $this->getValueData($attCode);
         }
     }
-
 }

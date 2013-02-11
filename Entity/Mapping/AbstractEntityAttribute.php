@@ -107,7 +107,12 @@ abstract class AbstractEntityAttribute extends AbstractAttribute
     /**
      * @var ArrayCollection $options
      *
-     * @ORM\OneToMany(targetEntity="AbstractEntityAttributeOption", mappedBy="attribute", cascade={"persist", "remove"}, orphanRemoval=true)
+     * @ORM\OneToMany(
+     *     targetEntity="AbstractEntityAttributeOption",
+     *     mappedBy="attribute",
+     *     cascade={"persist", "remove"},
+     *     orphanRemoval=true
+     * )
      */
     protected $options;
 
@@ -139,5 +144,4 @@ abstract class AbstractEntityAttribute extends AbstractAttribute
 
         return $this;
     }
-
 }

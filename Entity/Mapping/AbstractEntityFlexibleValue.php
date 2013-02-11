@@ -182,11 +182,11 @@ abstract class AbstractEntityFlexibleValue extends AbstractFlexibleValue
         $data    = $this->$backend;
         // deal with one to many or many to many backend
         if ($data instanceof \Doctrine\ORM\PersistentCollection) {
-            // one to many
             if (count($data) <= 1) {
+                // one to many
                 return $data->current();
-            // many to many
             } else {
+                // many to many
                 $items = array();
                 foreach ($data as $item) {
                     $items[]= $item->__toString();

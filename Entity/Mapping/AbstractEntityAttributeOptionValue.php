@@ -45,5 +45,4 @@ abstract class AbstractEntityAttributeOptionValue extends AbstractAttributeOptio
      * @ORM\Column(name="value", type="string", length=255)
      */
     protected $value;
-
 }
