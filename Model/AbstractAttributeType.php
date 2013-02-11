@@ -117,5 +117,4 @@ abstract class AbstractAttributeType
 
         return $options;
     }
-
 }

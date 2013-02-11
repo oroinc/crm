@@ -43,5 +43,4 @@ class DateType extends AbstractAttributeType
 
         return $options;
     }
-
 }

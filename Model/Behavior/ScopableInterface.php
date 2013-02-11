@@ -25,5 +25,4 @@ interface ScopableInterface
      * @return ScopableInterface
      */
     public function setScope($scope);
-
 }

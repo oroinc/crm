@@ -25,5 +25,4 @@ interface FlexibleValueInterface
      * @return mixed
      */
     public function getData();
-
 }

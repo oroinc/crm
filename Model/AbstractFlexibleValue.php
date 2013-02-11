@@ -71,31 +71,31 @@ abstract class AbstractFlexibleValue implements FlexibleValueInterface, Translat
      *
      * @return AbstractFlexibleValue
      */
-     public function setData($data)
-     {
-         $this->data = $data;
+    public function setData($data)
+    {
+        $this->data = $data;
 
          return $this;
-     }
+    }
 
     /**
      * Get data
      *
      * @return string
      */
-     public function getData()
-     {
-         return $this->data;
-     }
+    public function getData()
+    {
+        return $this->data;
+    }
 
      /**
       * Has data
       * @return boolean
       */
-     public function hasData()
-     {
-         return !is_null($this->getData());
-     }
+    public function hasData()
+    {
+        return !is_null($this->getData());
+    }
 
     /**
      * Set attribute
@@ -156,5 +156,4 @@ abstract class AbstractFlexibleValue implements FlexibleValueInterface, Translat
     {
         $this->scope = $scope;
     }
-
 }

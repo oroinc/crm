@@ -470,5 +470,4 @@ abstract class AbstractAttribute implements TimestampableInterface
     {
         return $this->options;
     }
-
 }
