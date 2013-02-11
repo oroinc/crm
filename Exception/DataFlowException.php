@@ -12,5 +12,4 @@ namespace Oro\Bundle\DataFlowBundle\Exception;
  */
 abstract class DataFlowException extends \Exception
 {
-
 }

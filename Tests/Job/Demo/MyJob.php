@@ -21,5 +21,4 @@ class MyJob extends AbstractJob
     {
         return true;
     }
-
 }

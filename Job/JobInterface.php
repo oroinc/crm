@@ -32,5 +32,4 @@ interface JobInterface
      * Run the job
      */
     public function run();
-
 }

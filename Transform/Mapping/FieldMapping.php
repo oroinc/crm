@@ -100,5 +100,4 @@ class FieldMapping
     {
         return $this->isIdentifier;
     }
-
 }

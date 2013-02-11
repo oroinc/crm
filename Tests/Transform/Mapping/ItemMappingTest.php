@@ -64,5 +64,4 @@ class ItemMappingTest extends \PHPUnit_Framework_TestCase
         $fields = $this->item->getFields();
         $this->assertCount(2, $fields);
     }
-
 }

@@ -27,11 +27,13 @@ class HttpSource extends Http
 
         // prepare context for authentication
         if ($this->username && $this->password) {
-            $context = stream_context_create(array(
-                'http' => array(
-                    'header'  => "Authorization: Basic ". base64_encode("{$this->username}:{$this->password}")
+            $context = stream_context_create(
+                array(
+                    'http' => array(
+                        'header'  => "Authorization: Basic ". base64_encode("{$this->username}:{$this->password}")
+                    )
                 )
-            ));
+            );
         }
 
         // get remote content
@@ -42,5 +44,4 @@ class HttpSource extends Http
 
         return new \SplFileObject($target);
     }
-
 }

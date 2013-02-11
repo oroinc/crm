@@ -11,5 +11,4 @@ namespace Oro\Bundle\DataFlowBundle\Configuration;
  */
 interface ConfigurationInterface
 {
-
 }

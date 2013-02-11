@@ -44,5 +44,4 @@ class JobTest extends \PHPUnit_Framework_TestCase
         // TODO : test fail if not configured
         $this->assertTrue($this->job->run());
     }
-
 }

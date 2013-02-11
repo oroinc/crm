@@ -35,5 +35,4 @@ class ConnectorTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($this->connector->getConfiguration());
         // TODO use basic configuration
     }
-
 }

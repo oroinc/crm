@@ -11,5 +11,4 @@ namespace Oro\Bundle\DataFlowBundle\Exception;
  */
 class SourceException extends DataFlowException
 {
-
 }

@@ -38,5 +38,4 @@ abstract class AbstractConnector implements ConnectorInterface
     {
         return $this->configuration;
     }
-
 }

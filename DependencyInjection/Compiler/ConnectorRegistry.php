@@ -118,5 +118,4 @@ class ConnectorRegistry
 
         return $repository->findBy(array('typeName' => $type));
     }
-
 }

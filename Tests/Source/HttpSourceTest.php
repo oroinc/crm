@@ -37,5 +37,4 @@ class HttpSourceTest extends \PHPUnit_Framework_TestCase
         $source->downloadFile(self::LOCALE_FILE);
         $this->assertTrue(file_exists(self::LOCALE_FILE));
     }
-
 }

@@ -34,7 +34,7 @@ class ConfigurationHandler
 
     /**
      * Constrcutor
-     * @param Request $request
+     * @param Request       $request
      * @param ObjectManager $manager
      */
     public function __construct(Request $request, ObjectManager $manager)
@@ -46,7 +46,8 @@ class ConfigurationHandler
     /**
      * Process form
      *
-     * @param  FormInterface $form
+     * @param FormInterface $form
+     *
      * @return ConfigurationHandler
      */
     public function setForm(FormInterface $form)
@@ -59,7 +60,8 @@ class ConfigurationHandler
     /**
      * Process form
      *
-     * @param  ConfigurationInterface $entity
+     * @param ConfigurationInterface $entity
+     *
      * @return bool True on successfull processing, false otherwise
      */
     public function process(ConfigurationInterface $entity)

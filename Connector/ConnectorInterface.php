@@ -27,5 +27,4 @@ interface ConnectorInterface
      * @return ConfigurationInterface
      */
     public function getConfiguration();
-
 }

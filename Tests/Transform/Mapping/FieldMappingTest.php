@@ -45,5 +45,4 @@ class FieldMappingTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('test-destination', $this->field->getDestination());
         $this->assertTrue($this->field->getIsIdentifier());
     }
-
 }

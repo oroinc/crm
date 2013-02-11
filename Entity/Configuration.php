@@ -158,5 +158,4 @@ class Configuration
     {
         return $this->data;
     }
-
 }

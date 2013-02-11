@@ -13,5 +13,4 @@ use Oro\Bundle\DataFlowBundle\Connector\AbstractConnector;
  */
 class MyConnector extends AbstractConnector
 {
-
 }
