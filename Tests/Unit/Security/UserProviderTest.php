@@ -18,7 +18,7 @@ class UserProviderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->markTestSkipped('Waiting for interface update');
+        $this->markTestIncomplete('Waiting for interface update');
 
         $this->userManager  = $this->getMock('FOS\UserBundle\Model\UserManagerInterface');
         $this->userProvider = new UserProvider($this->userManager);
