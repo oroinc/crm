@@ -15,6 +15,19 @@ It provides a way to declare some connectors and jobs :
 - Connector : a service which provides some jobs related to a system (for instance, Magento)
 - Job : use readers, writers, transformers to process a business action (as import products from a csv file, export products to Magento, etc)
 
+
+```yaml
+    job.import_attributes:
+        class: Acme\Bundle\DemoDataFlowBundle\Connector\Job\ImportAttributesJob
+        arguments: [ @configuration, @form, @product_manager ]
+        tags:
+            - { name: oro_dataflow_job, connector: connector.magento_catalog}
+```
+
+configure ou prepare (Parameters)
+
+
+
 Create a new connector
 ----------------------
 

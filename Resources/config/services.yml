@@ -1,6 +1,9 @@
 parameters:
     oro_dataflow.connectors.class: Oro\Bundle\DataFlowBundle\DependencyInjection\Compiler\ConnectorRegistry
+    oro_dataflow.connectors_config: ~
+    oro_dataflow.jobs_config: ~
 
 services:
     oro_dataflow.connectors:
         class: "%oro_dataflow.connectors.class%"
+        arguments: [@doctrine.orm.entity_manager]
