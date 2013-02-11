@@ -36,7 +36,10 @@ class OroMeasureExtension extends Extension
                         // merge result with already existing family config to add custom units
                         if (isset($measuresConfig['measures_config'][$family])) {
                             $measuresConfig['measures_config'][$family]['units'] =
-                                array_merge($measuresConfig['measures_config'][$family]['units'], $familyConfig['units']);
+                                array_merge(
+                                    $measuresConfig['measures_config'][$family]['units'],
+                                    $familyConfig['units']
+                                );
                         } else {
                             $measuresConfig['measures_config'][$family]= $familyConfig;
                         }
