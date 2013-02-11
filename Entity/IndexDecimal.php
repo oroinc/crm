@@ -37,7 +37,7 @@ class IndexDecimal
     /**
      * @var float
      *
-     * @ORM\Column(name="value", type="decimal")
+     * @ORM\Column(name="value", type="decimal", scale=2))
      */
     private $value;
 
