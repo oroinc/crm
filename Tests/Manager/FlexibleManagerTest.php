@@ -51,7 +51,10 @@ class FlexibleManagerTest extends AbstractFlexibleManagerTest
     {
         $this->assertNotNull($this->manager->getFlexibleConfig());
         $this->assertNotEmpty($this->manager->getFlexibleConfig());
-        $this->assertEquals($this->manager->getFlexibleConfig(), $this->flexibleConfig['entities_config'][$this->flexibleClassName]);
+        $this->assertEquals(
+            $this->manager->getFlexibleConfig(),
+            $this->flexibleConfig['entities_config'][$this->flexibleClassName]
+        );
     }
 
     /**
@@ -157,7 +160,9 @@ class FlexibleManagerTest extends AbstractFlexibleManagerTest
      */
     public function testGetAttributeOptionValueRepository()
     {
-        $this->assertTrue($this->manager->getAttributeOptionValueRepository() instanceof \Doctrine\ORM\EntityRepository);
+        $this->assertTrue(
+            $this->manager->getAttributeOptionValueRepository() instanceof \Doctrine\ORM\EntityRepository
+        );
     }
 
     /**
@@ -216,5 +221,4 @@ class FlexibleManagerTest extends AbstractFlexibleManagerTest
     {
         $this->assertTrue($this->manager->createFlexibleValue() instanceof $this->flexibleValueClassName);
     }
-
 }

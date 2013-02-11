@@ -49,5 +49,4 @@ class Flexible extends AbstractEntityFlexible
 
         return $this;
     }
-
 }

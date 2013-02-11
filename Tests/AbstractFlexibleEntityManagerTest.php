@@ -108,5 +108,4 @@ abstract class AbstractFlexibleManagerTest extends AbstractOrmTest
         $dispatcher = new EventDispatcher();
         $this->container->set('event_dispatcher', $dispatcher);
     }
-
 }

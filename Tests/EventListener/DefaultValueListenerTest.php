@@ -130,5 +130,4 @@ class DefaultValueListenerTest extends AbstractOrmTest
         $this->assertNotNull($this->value->getData());
         $this->assertEquals($this->definedValue, $this->value->getData());
     }
-
 }

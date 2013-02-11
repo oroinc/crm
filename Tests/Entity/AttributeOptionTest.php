@@ -217,5 +217,4 @@ class AttributeOptionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(self::$attOptValueFr, $attOptValue->getValue());
         $this->assertEquals(self::$attOptValueFr, $attOpt->__toString());
     }
-
 }
