@@ -58,4 +58,9 @@ class MainTestController extends Controller
     {
         return new Response('test');
     }
+
+    public function testNoAclAction()
+    {
+        return new Response('test');
+    }
 }

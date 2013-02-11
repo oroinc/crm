@@ -22,10 +22,8 @@ class Reader
 
     public function __construct(KernelInterface $kernel, AnnotationReader $reader)
     {
-
-        $this->kernel = $kernel; //$container->get('kernel');
-        $this->reader = $reader; //$container->get('annotation_reader');
-        //var_dump($this->reader);die;
+        $this->kernel = $kernel;
+        $this->reader = $reader;
     }
 
     /**
@@ -66,8 +64,6 @@ class Reader
             $reflection = new \ReflectionClass($className);
             //read annotations from class definition
             $classAcl = $this->reader->getClassAnnotation($reflection, self::ACL_CLASS);
-            var_dump($reflection);
-            var_dump($this->reader->getClassAnnotations($reflection));
             if (is_object($classAcl)) {
                 $aclResources[$classAcl->getId()] = $classAcl;
             }
