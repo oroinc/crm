@@ -26,9 +26,10 @@ class Attribute extends AbstractEntityAttribute
      *
      * @var ArrayCollection $options
      *
-     * @ORM\OneToMany(targetEntity="AttributeOption", mappedBy="attribute", cascade={"persist", "remove"}, orphanRemoval=true)
+     * @ORM\OneToMany(
+     *     targetEntity="AttributeOption", mappedBy="attribute", cascade={"persist", "remove"}, orphanRemoval=true
+     * )
      * @ORM\OrderBy({"sortOrder" = "ASC"})
      */
     protected $options;
-
 }

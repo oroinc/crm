@@ -30,8 +30,9 @@ class AttributeOption extends AbstractEntityAttributeOption
     /**
      * @var ArrayCollection $values
      *
-     * @ORM\OneToMany(targetEntity="AttributeOptionValue", mappedBy="option", cascade={"persist", "remove"}, orphanRemoval=true)
+     * @ORM\OneToMany(
+     *     targetEntity="AttributeOptionValue", mappedBy="option", cascade={"persist", "remove"}, orphanRemoval=true
+     * )
      */
     protected $optionValues;
-
 }

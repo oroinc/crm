@@ -26,5 +26,4 @@ class AttributeOptionValue extends AbstractEntityAttributeOptionValue
      * @ORM\JoinColumn(name="option_id", nullable=false, onDelete="CASCADE", referencedColumnName="id")
      */
     protected $option;
-
 }
