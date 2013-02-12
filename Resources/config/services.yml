@@ -15,6 +15,10 @@ parameters:
     oro_user.handler.reset.class:     Oro\Bundle\UserBundle\Form\Handler\ResetHandler
     oro_user.handler.role.class:      Oro\Bundle\UserBundle\Form\Handler\RoleHandler
     oro_user.handler.group.class:     Oro\Bundle\UserBundle\Form\Handler\GroupHandler
+    oro_user.acl.reader.class:        Oro\Bundle\UserBundle\Acl\ResourceReader\Reader
+    oro_user.acl.pointcut.class:      Oro\Bundle\UserBundle\Acl\AclPointcut
+    oro_user.acl.interceptor.class:   Oro\Bundle\UserBundle\Acl\AclInterceptor
+    oro_user.acl.manager.class:       Oro\Bundle\UserBundle\Acl\Manager
 
 services:
     oro_user.manager:
@@ -136,6 +140,24 @@ services:
         class:                        %oro_user.handler.group.class%
         scope:                        request
         arguments:                    ["@oro_user.form.group", "@request", "@doctrine.orm.entity_manager"]
+
+    oro_user.acl_reader:
+        class:                        %oro_user.acl.reader.class%
+        arguments:                    [@kernel, @annotation_reader]
+
+    oro_user.acl_pointcut:
+        class:                        %oro_user.acl.pointcut.class%
+        arguments:                    [@annotation_reader, @logger]
+        tags:
+            - { name: jms_aop.pointcut, interceptor: oro_user.acl_interceptor }
+
+    oro_user.acl_interceptor:
+        class:                        %oro_user.acl.interceptor.class%
+        arguments:                    [@security.context, @logger, @service_container]
+
+    oro_user.acl_manager:
+        class:                        %oro_user.acl.manager.class%
+        arguments:                    [@doctrine.orm.entity_manager, @oro_user.acl_reader, @cache]
 
     oro_user.form.handler.group.api:
         class:                        %oro_user.handler.group.class%

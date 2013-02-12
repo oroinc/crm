@@ -5,6 +5,9 @@ namespace Oro\Bundle\UserBundle\Entity;
 use Symfony\Component\Security\Core\Role\RoleInterface;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+
+use Oro\Bundle\UserBundle\Entity\Acl;
 
 use JMS\Serializer\Annotation\Type;
 use JMS\Serializer\Annotation\Exclude;
@@ -42,6 +45,11 @@ class Role implements RoleInterface
     protected $label;
 
     /**
+     * @ORM\ManyToMany(targetEntity="Acl", mappedBy="accessRoles")
+     */
+    protected $aclResources;
+
+    /**
      * Populate the role field
      *
      * @param string $role ROLE_FOO etc
@@ -50,6 +58,7 @@ class Role implements RoleInterface
     {
         $this->role  =
         $this->label = $role;
+        $this->aclResources = new ArrayCollection();
     }
 
     /**
@@ -126,5 +135,43 @@ class Role implements RoleInterface
     public function __toString()
     {
         return (string) $this->role;
+    }
+
+    /**
+     * Add aclResources
+     *
+     * @param  \Oro\Bundle\UserBundle\Entity\Acl $aclResources
+     * @return Role
+     */
+    public function addAclResource(Acl $aclResources)
+    {
+        $this->aclResources[] = $aclResources;
+
+        return $this;
+    }
+
+    /**
+     * Remove aclResources
+     *
+     * @param \Oro\Bundle\UserBundle\Entity\Acl $aclResources
+     */
+    public function removeAclResource(Acl $aclResources)
+    {
+        $this->aclResources->removeElement($aclResources);
+    }
+
+    /**
+     * Get aclResources
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getAclResources()
+    {
+        return $this->aclResources;
+    }
+
+    public function setAclResources($resources)
+    {
+        $this->aclResources = $resources;
     }
 }
