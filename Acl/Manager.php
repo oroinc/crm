@@ -44,6 +44,49 @@ class Manager
     }
 
     /**
+     * Check permissions for resource for user.
+     *
+     * @param                                    $aclResourceId
+     * @param \Oro\Bundle\UserBundle\Entity\User $user
+     *
+     * @return bool
+     */
+    public function isResourceGranted($aclResourceId, User $user = null)
+    {
+        return $this->checkIsGrant(
+            $this->getUserRoles($user),
+            $this->getAclRoles($aclResourceId)
+        );
+    }
+
+    /**
+     * @param string                             $class
+     * @param string                             $method
+     * @param \Oro\Bundle\UserBundle\Entity\User $user
+     *
+     * @return bool
+     */
+    public function isClassMethodGranted($class, $method, User $user = null)
+    {
+        $acl = $this->getAclRepo()->findOneBy(
+            array(
+                 'class' => $class,
+                 'method' => $method
+            )
+        );
+        if (!$acl) {
+            return false;
+        }
+
+        $accessRoles = $this->getRolesForAcl($acl);
+
+        return $this->checkIsGrant(
+            $this->getUserRoles($user),
+            $accessRoles
+        );
+    }
+
+    /**
      * get array of resource ids allowed for user
      *
      * @param  \Oro\Bundle\UserBundle\Entity\User $user
@@ -61,11 +104,13 @@ class Manager
      *
      * @return array
      */
-    public function getCachedAcl($aclId)
+    public function getAclRoles($aclId)
     {
         $accessRoles = $this->cache->fetch($aclId);
         if ($accessRoles === false) {
-            $accessRoles = $this->getRolesForAcl($aclId);
+            $accessRoles = $this->getRolesForAcl(
+                $this->getAclRepo()->find($aclId)
+            );
             $this->cache->save($aclId, $accessRoles);
         }
 
@@ -138,6 +183,7 @@ class Manager
     public function synchronizeAclResources()
     {
         $resources = $this->aclReader->getResources();
+        //var_dump($resources);die;
         $bdResources = $this->getAclRepo()->findAll();
 
         // update old resources
@@ -226,6 +272,7 @@ class Manager
             $parentResource = $this->getAclRepo()->find($resource->getParent());
             if (!$parentResource && isset($resources[$resource->getParent()])) {
                 $parentResource = $this->createResource($resources[$resource->getParent()]);
+                $resources = $this->setResourceParent($resources, $parentResource);
                 unset($resources[$resource->getParent()]);
             }
         }
@@ -252,14 +299,13 @@ class Manager
     }
 
     /**
-     * @param string $aclId
+     * @param \Oro\Bundle\UserBundle\Entity\Acl $acl
      *
      * @return array
      */
-    private function getRolesForAcl($aclId)
+    private function getRolesForAcl(Acl $acl)
     {
         $accessRoles = array();
-        $acl = $this->getAclRepo()->find($aclId);
         $aclNodes = $this->getAclRepo()->getFullNodeWithRoles($acl);
         foreach ($aclNodes as $node) {
             $roles = $node->getAccessRolesNames();
@@ -267,5 +313,70 @@ class Manager
         }
 
         return $accessRoles;
+    }
+
+    /**
+     * Get user roles
+     * If user was not set in parameters, then user takes from Security Context.
+     * If user was not logged and was not set in parameters, then return IS_AUTHENTICATED_ANONYMOUSLY role
+     *
+     * @param \Oro\Bundle\UserBundle\Entity\User $user
+     *
+     * @return array
+     */
+    private function getUserRoles(User $user = null)
+    {
+        $roles = array();
+        if (null === $user) {
+            $user = $this->getUser();
+        }
+        if ($user) {
+            $rolesObjects = $user->getRoles();
+            foreach ($rolesObjects as $role) {
+                $roles[] = $role->getRole();
+            }
+        } else {
+            $roles = array(User::ROLE_ANONYMOUS);
+        }
+
+        return $roles;
+    }
+
+    /**
+     * Get a user from the Security Context
+     *
+     * @return mixed
+     *
+     * @see Symfony\Component\Security\Core\Authentication\Token\TokenInterface::getUser()
+     */
+    private function getUser()
+    {
+        if (null === $token = $this->container->get('security.context')->getToken()) {
+            return null;
+        }
+
+        if (!is_object($user = $token->getUser())) {
+            return null;
+        }
+
+        return $user;
+    }
+
+    /**
+     * Check is grant access for roles to the acl resource roles
+     * @param array $roles
+     * @param array $aclRoles
+     *
+     * @return bool
+     */
+    private function checkIsGrant(array $roles, array $aclRoles)
+    {
+        foreach ($roles as $role) {
+            if (in_array($role, $aclRoles)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

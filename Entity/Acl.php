@@ -11,7 +11,7 @@ use Oro\Bundle\UserBundle\Annotation\Acl as AnnotationAcl;
 /**
  * @Gedmo\Tree(type="nested")
  * @ORM\Entity(repositoryClass="Oro\Bundle\UserBundle\Entity\Repository\AclRepository")
- * @ORM\Table(name="user_acl")
+ * @ORM\Table(name="user_acl",indexes={@ORM\index(name="class_method_idx", columns={"class", "method"})})
  */
 class Acl
 {
@@ -43,6 +43,16 @@ class Acl
      * @ORM\Column(type="string", length=250)
      */
     protected $description;
+
+    /**
+     * @ORM\Column(type="string", length=250, nullable=true)
+     */
+    protected $class;
+
+    /**
+     * @ORM\Column(type="string", length=250, nullable=true)
+     */
+    protected $method;
 
     /**
      * @ORM\ManyToMany(targetEntity="Role", inversedBy="aclResources")
@@ -160,6 +170,8 @@ class Acl
     public function setData(AnnotationAcl $aclData)
     {
         $this->setName($aclData->getName());
+        $this->setClass($aclData->getClass());
+        $this->setMethod($aclData->getMethod());
         if ($aclData->getDescription()) {
             $this->setDescription($aclData->getDescription());
         }
@@ -359,5 +371,51 @@ class Acl
     public function getAccessRoles()
     {
         return $this->accessRoles;
+    }
+
+    /**
+     * Set class
+     *
+     * @param string $class
+     * @return Acl
+     */
+    public function setClass($class)
+    {
+        $this->class = $class;
+    
+        return $this;
+    }
+
+    /**
+     * Get class
+     *
+     * @return string 
+     */
+    public function getClass()
+    {
+        return $this->class;
+    }
+
+    /**
+     * Set method
+     *
+     * @param string $method
+     * @return Acl
+     */
+    public function setMethod($method)
+    {
+        $this->method = $method;
+    
+        return $this;
+    }
+
+    /**
+     * Get method
+     *
+     * @return string 
+     */
+    public function getMethod()
+    {
+        return $this->method;
     }
 }

@@ -4,6 +4,7 @@ namespace Oro\Bundle\UserBundle\Tests\Unit\Acl;
 use Oro\Bundle\UserBundle\Acl\Manager;
 use Oro\Bundle\UserBundle\Entity\Acl;
 use Oro\Bundle\UserBundle\Entity\Role;
+use Oro\Bundle\UserBundle\Entity\User;
 
 class ManagerTest extends \PHPUnit_Framework_TestCase
 {
@@ -23,6 +24,8 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
     private $testRole;
 
     private $aclObject;
+
+    private $testUser;
 
     public function setUp()
     {
@@ -71,9 +74,10 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
 
         $this->manager = new Manager($this->om, $reader, $this->cache);
 
-        $this->testRole = new Role();
-        $this->testRole->setRole('TEST_ROLE')
-            ->setLabel('test role');
+        $this->testRole = new Role('ROLE_TEST_ROLE');
+
+        $this->testUser = new User();
+        $this->testUser->addRole($this->testRole);
 
         $this->aclObject = new Acl();
         $this->aclObject->setDescription('test_acl')
@@ -82,13 +86,51 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
             ->addAccessRole($this->testRole);
     }
 
+    public function testIsResourceGranted()
+    {
+        $this->cache->expects($this->once())
+            ->method('fetch')
+            ->will($this->returnValue(false));
+
+        $this->repository->expects($this->once())
+            ->method('find')
+            ->will($this->returnValue($this->aclObject));
+
+        $this->repository->expects($this->once())
+            ->method('getFullNodeWithRoles')
+            ->with($this->equalTo($this->aclObject))
+            ->will($this->returnValue(array($this->aclObject)));
+
+        $this->assertEquals(true, $this->manager->isResourceGranted('test_acl', $this->testUser));
+    }
+
+    public function testIsClassMethodGranted()
+    {
+        $this->repository->expects($this->once())
+            ->method('findOneBy')
+            ->with($this->equalTo(
+                array(
+                    'class' => 'test_class',
+                    'method' => 'test_method'
+                )
+            ))
+            ->will($this->returnValue($this->aclObject));
+
+        $this->repository->expects($this->once())
+            ->method('getFullNodeWithRoles')
+            ->with($this->equalTo($this->aclObject))
+            ->will($this->returnValue(array($this->aclObject)));
+
+        $this->assertEquals(true, $this->manager->isClassMethodGranted('test_class', 'test_method', $this->testUser));
+    }
+
     public function testGetAclForUser()
     {
         $result= $this->manager->getAclForUser($this->user);
         $this->assertEquals(array('test'), $result);
     }
 
-    public function testGetCachedAcl()
+    public function testGetAclRoles()
     {
 
         $testAclName = 'test_acl';
@@ -108,7 +150,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             array('ROLE_TEST_ROLE'),
-            $this->manager->getCachedAcl($testAclName)
+            $this->manager->getAclRoles($testAclName)
         );
     }
 }

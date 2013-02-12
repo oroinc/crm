@@ -71,6 +71,8 @@ class Reader
             foreach ($reflection->getMethods() as $reflectionMethod) {
                 $acl = $this->reader->getMethodAnnotation($reflectionMethod, self::ACL_CLASS);
                 if (is_object($acl)) {
+                    $acl->setClass($className);
+                    $acl->setMethod($reflectionMethod->getName());
                     $aclResources[$acl->getId()] = $acl;
                 }
             }

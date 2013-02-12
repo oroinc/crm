@@ -28,6 +28,16 @@ class Acl
      */
     private $parent = null;
 
+    /**
+     * @var string
+     */
+    private $class;
+
+    /**
+     * @var string
+     */
+    private $method;
+
     public function __construct(array $data)
     {
         $this->setId($data['id']);
@@ -103,6 +113,42 @@ class Acl
      */
     public function setParent($parent)
     {
-        $this->parent = $parent;
+        if ($parent) {
+            $this->parent = $parent;
+        } else {
+            $this->parent = false;
+        }
+    }
+
+    /**
+     * @param string $className
+     */
+    public function setClass($className)
+    {
+        $this->class = $className;
+    }
+
+    /**
+     * @return string
+     */
+    public function getClass()
+    {
+        return $this->class;
+    }
+
+    /**
+     * @param string $methodName
+     */
+    public function setMethod($methodName)
+    {
+        $this->method = $methodName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMethod()
+    {
+        return $this->method;
     }
 }

@@ -55,7 +55,7 @@ class AclInterceptor implements MethodInterceptorInterface
             $method->reflection,
             Manager::ACL_ANNOTATION_CLASS
         );
-        $accessRoles = $this->getAclManager()->getCachedAcl($aclAnnotation->getId());
+        $accessRoles = $this->getAclManager()->getAclRoles($aclAnnotation->getId());
 
         $token = $this->securityContext->getToken();
         if (false === $this->accessDecisionManager->decide($token, $accessRoles, $method)) {
