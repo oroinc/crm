@@ -2,22 +2,15 @@
 
 namespace Oro\Bundle\UserBundle\Controller\Api\Rest;
 
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\HttpException;
-
 use FOS\RestBundle\Controller\Annotations\NamePrefix;
-use FOS\RestBundle\Controller\Annotations\RequestParam;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
 use FOS\RestBundle\Controller\FOSRestController;
-use FOS\RestBundle\Controller\Annotations\RouteResource;
-use FOS\RestBundle\Request\ParamFetcher;
 use FOS\RestBundle\Routing\ClassResourceInterface;
 use FOS\Rest\Util\Codes;
 
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
 use Oro\Bundle\UserBundle\Entity\Role;
-use Oro\Bundle\UserBundle\Form\Type\Role\ApiType as RoleType;
 
 /**
  * @NamePrefix("oro_api_")

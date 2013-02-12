@@ -28,9 +28,9 @@ class GroupHandler
 
     /**
      *
-     * @param   FormInterface   $form
-     * @param   Request         $request
-     * @param   ObjectManager   $manager
+     * @param FormInterface $form
+     * @param Request       $request
+     * @param ObjectManager $manager
      */
     public function __construct(FormInterface $form, Request $request, ObjectManager $manager)
     {
@@ -42,8 +42,8 @@ class GroupHandler
     /**
      * Process form
      *
-     * @param   Group   $entity
-     * @return  bool True on successfull processing, false otherwise
+     * @param  Group $entity
+     * @return bool  True on successfull processing, false otherwise
      */
     public function process(Group $entity)
     {

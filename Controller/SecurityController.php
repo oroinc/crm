@@ -24,6 +24,7 @@ class SecurityController extends Controller
             $error = $request->attributes->get(SecurityContext::AUTHENTICATION_ERROR);
         } elseif (null !== $session && $session->has(SecurityContext::AUTHENTICATION_ERROR)) {
             $error = $session->get(SecurityContext::AUTHENTICATION_ERROR);
+
             $session->remove(SecurityContext::AUTHENTICATION_ERROR);
         } else {
             $error = '';
@@ -33,10 +34,10 @@ class SecurityController extends Controller
             // TODO: this is a potential security risk (see http://trac.symfony-project.org/ticket/9523)
             $error = $error->getMessage();
         }
+
         // last username entered by the user
         $lastUsername = (null === $session) ? '' : $session->get(SecurityContext::LAST_USERNAME);
-
-        $csrfToken = $this->get('form.csrf_provider')->generateCsrfToken('authenticate');
+        $csrfToken    = $this->get('form.csrf_provider')->generateCsrfToken('authenticate');
 
         return array(
             'last_username' => $lastUsername,

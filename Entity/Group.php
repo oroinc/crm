@@ -69,8 +69,8 @@ class Group
     }
 
     /**
-     * @param   string  $name
-     * @return  Group
+     * @param  string $name
+     * @return Group
      */
     public function setName($name)
     {
@@ -92,8 +92,8 @@ class Group
     /**
      * Pass a string, get the desired Role object or null
      *
-     * @param   string  $role Role name
-     * @return  Role|null
+     * @param  string    $role Role name
+     * @return Role|null
      */
     public function getRole($role)
     {
@@ -107,8 +107,8 @@ class Group
     }
 
     /**
-     * @param   string  $role
-     * @return  boolean
+     * @param  string  $role
+     * @return boolean
      */
     public function hasRole($role)
     {
@@ -118,8 +118,8 @@ class Group
     /**
      * Adds a Role to the ArrayCollection
      *
-     * @param   Role    $role
-     * @return  Group
+     * @param  Role  $role
+     * @return Group
      */
     public function addRole(Role $role)
     {
@@ -133,8 +133,8 @@ class Group
     /**
      * Pass a string, remove the Role object from collection
      *
-     * @param   string  $role
-     * @return  Group
+     * @param  string $role
+     * @return Group
      */
     public function removeRole($role)
     {
@@ -150,8 +150,8 @@ class Group
     /**
      * Set new Roles collection
      *
-     * @param   Collection  $roles
-     * @return  Group
+     * @param  Collection $roles
+     * @return Group
      */
     public function setRoles(Collection $roles)
     {

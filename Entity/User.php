@@ -405,8 +405,8 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
     /**
      * Pass a string, get the desired Role object or null
      *
-     * @param   string  $role Role name
-     * @return  Role|null
+     * @param  string    $role Role name
+     * @return Role|null
      */
     public function getRole($role)
     {
@@ -426,8 +426,8 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
      *
      *         $securityContext->isGranted('ROLE_USER');
      *
-     * @param   Role|string $role
-     * @return  boolean
+     * @param  Role|string $role
+     * @return boolean
      */
     public function hasRole($role)
     {
@@ -440,9 +440,9 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
      * Adds a Role to the ArrayCollection.
      * Can't type hint due to interface so throws RuntimeException.
      *
-     * @param   Role    $role
-     * @return  User
-     * @throws  \RuntimeException
+     * @param  Role              $role
+     * @return User
+     * @throws \RuntimeException
      */
     public function addRole($role)
     {
@@ -460,7 +460,7 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
     /**
      * Pass a string, remove the Role object from collection
      *
-     * @param   string  $role
+     * @param string $role
      */
     public function removeRole($role)
     {
@@ -475,8 +475,8 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
      * Pass an array of Role objects and re-set roles collection with new Roles.
      * Type hinted array due to interface.
      *
-     * @param   array   $roles  Array of Role objects
-     * @return  User
+     * @param  array $roles Array of Role objects
+     * @return User
      */
     public function setRoles(array $roles)
     {
@@ -493,8 +493,8 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
      * Directly set the ArrayCollection of Roles.
      * Type hinted as Collection which is the parent of (Array|Persistent)Collection.
      *
-     * @param   ArrayCollection  $collection
-     * @return  User
+     * @param  ArrayCollection $collection
+     * @return User
      */
     public function setRolesCollection(ArrayCollection $collection)
     {

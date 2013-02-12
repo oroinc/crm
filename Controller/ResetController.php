@@ -35,9 +35,7 @@ class ResetController extends Controller
         $user     = $this->get('oro_user.manager')->findUserByUsernameOrEmail($username);
 
         if (null === $user) {
-            return $this->render('OroUserBundle:Reset:request.html.twig', array(
-                'invalid_username' => $username
-            ));
+            return $this->render('OroUserBundle:Reset:request.html.twig', array('invalid_username' => $username));
         }
 
         if ($user->isPasswordRequestNonExpired($this->container->getParameter('oro_user.reset.ttl'))) {
@@ -138,8 +136,8 @@ class ResetController extends Controller
      * Get the truncated email displayed when requesting the resetting.
      * The default implementation only keeps the part following @ in the address.
      *
-     * @param   User    $user
-     * @return  string
+     * @param  User   $user
+     * @return string
      */
     protected function getObfuscatedEmail(User $user)
     {

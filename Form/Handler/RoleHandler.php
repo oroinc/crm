@@ -28,9 +28,9 @@ class RoleHandler
 
     /**
      *
-     * @param   FormInterface   $form
-     * @param   Request         $request
-     * @param   ObjectManager   $manager
+     * @param FormInterface $form
+     * @param Request       $request
+     * @param ObjectManager $manager
      */
     public function __construct(FormInterface $form, Request $request, ObjectManager $manager)
     {
@@ -42,8 +42,8 @@ class RoleHandler
     /**
      * Process form
      *
-     * @param   Role    $entity
-     * @return  bool True on successfull processing, false otherwise
+     * @param  Role $entity
+     * @return bool True on successfull processing, false otherwise
      */
     public function process(Role $entity)
     {

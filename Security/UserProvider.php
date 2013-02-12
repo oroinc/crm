@@ -71,8 +71,8 @@ class UserProvider implements UserProviderInterface
      * Finds a user by username.
      * This method is meant to be an extension point for possible child classes.
      *
-     * @param   string  $username
-     * @return  User|null
+     * @param  string    $username
+     * @return User|null
      */
     protected function findUser($username)
     {

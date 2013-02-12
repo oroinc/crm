@@ -85,9 +85,9 @@ class Role implements RoleInterface
     /**
      * Set role name only for newly created role
      *
-     * @param   string  $role  Role name
-     * @return  Role
-     * @throws  \RuntimeException
+     * @param  string            $role Role name
+     * @return Role
+     * @throws \RuntimeException
      */
     public function setRole($role)
     {
@@ -108,8 +108,8 @@ class Role implements RoleInterface
     /**
      * Set the new label for role
      *
-     * @param   string  $label  New label
-     * @return  Role
+     * @param  string $label New label
+     * @return Role
      */
     public function setLabel($label)
     {
