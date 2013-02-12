@@ -13,7 +13,7 @@ class AclRepository extends NestedTreeRepository
     /**
      * Get array with allowed acl resources for role array
      *
-     * @param array $roles
+     * @param  array                                $roles
      * @return \Oro\Bundle\UserBundle\Entity\Role[] $roles
      */
     public function getAllowedAclResourcesForUserRoles(array $roles)
@@ -28,7 +28,7 @@ class AclRepository extends NestedTreeRepository
 
         foreach ($roles as $role) {
             $aclList = $role->getAclResources();
-            if (count($aclList)){
+            if (count($aclList)) {
 
                 foreach ($aclList as $acl) {
                     $aclList = $qb->setParameter('left_key', $acl->getLft())
@@ -56,7 +56,7 @@ class AclRepository extends NestedTreeRepository
     /**
      * Get full node list with roles for acl resource
      *
-     * @param \Oro\Bundle\UserBundle\Entity\Acl $acl
+     * @param  \Oro\Bundle\UserBundle\Entity\Acl   $acl
      * @return \Oro\Bundle\UserBundle\Entity\Acl[]
      */
     public function getFullNodeWithRoles(Acl $acl)

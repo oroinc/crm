@@ -32,7 +32,7 @@ class Acl
      * @ORM\OneToMany(targetEntity="Acl", mappedBy="parent")
      * @ORM\OrderBy({"lft" = "ASC"})
      */
-    protected  $children;
+    protected $children;
 
     /**
      * @ORM\Column(type="string", length=250)
@@ -86,20 +86,20 @@ class Acl
     /**
      * Set id
      *
-     * @param string $id
+     * @param  string $id
      * @return Acl
      */
     public function setId($id)
     {
         $this->id = $id;
-    
+
         return $this;
     }
 
     /**
      * Get id
      *
-     * @return string 
+     * @return string
      */
     public function getId()
     {
@@ -109,20 +109,20 @@ class Acl
     /**
      * Set name
      *
-     * @param string $name
+     * @param  string $name
      * @return Acl
      */
     public function setName($name)
     {
         $this->name = $name;
-    
+
         return $this;
     }
 
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -132,20 +132,20 @@ class Acl
     /**
      * Set description
      *
-     * @param string $description
+     * @param  string $description
      * @return Acl
      */
     public function setDescription($description)
     {
         $this->description = $description;
-    
+
         return $this;
     }
 
     /**
      * Get description
      *
-     * @return string 
+     * @return string
      */
     public function getDescription()
     {
@@ -164,17 +164,17 @@ class Acl
             $this->setDescription($aclData->getDescription());
         }
     }
-    
+
     /**
      * Add children
      *
-     * @param \Oro\Bundle\UserBundle\Entity\Acl $children
+     * @param  \Oro\Bundle\UserBundle\Entity\Acl $children
      * @return Acl
      */
     public function addChildren(Acl $children)
     {
         $this->children[] = $children;
-    
+
         return $this;
     }
 
@@ -191,7 +191,7 @@ class Acl
     /**
      * Get children
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getChildren()
     {
@@ -201,20 +201,20 @@ class Acl
     /**
      * Set parent
      *
-     * @param \Oro\Bundle\UserBundle\Entity\Acl $parent
+     * @param  \Oro\Bundle\UserBundle\Entity\Acl $parent
      * @return Acl
      */
     public function setParent(Acl $parent = null)
     {
         $this->parent = $parent;
-    
+
         return $this;
     }
 
     /**
      * Get parent
      *
-     * @return \Oro\Bundle\UserBundle\Entity\Acl 
+     * @return \Oro\Bundle\UserBundle\Entity\Acl
      */
     public function getParent()
     {
@@ -224,20 +224,20 @@ class Acl
     /**
      * Set lft
      *
-     * @param integer $lft
+     * @param  integer $lft
      * @return Acl
      */
     public function setLft($lft)
     {
         $this->lft = $lft;
-    
+
         return $this;
     }
 
     /**
      * Get lft
      *
-     * @return integer 
+     * @return integer
      */
     public function getLft()
     {
@@ -247,20 +247,20 @@ class Acl
     /**
      * Set lvl
      *
-     * @param integer $lvl
+     * @param  integer $lvl
      * @return Acl
      */
     public function setLvl($lvl)
     {
         $this->lvl = $lvl;
-    
+
         return $this;
     }
 
     /**
      * Get lvl
      *
-     * @return integer 
+     * @return integer
      */
     public function getLvl()
     {
@@ -270,20 +270,20 @@ class Acl
     /**
      * Set rgt
      *
-     * @param integer $rgt
+     * @param  integer $rgt
      * @return Acl
      */
     public function setRgt($rgt)
     {
         $this->rgt = $rgt;
-    
+
         return $this;
     }
 
     /**
      * Get rgt
      *
-     * @return integer 
+     * @return integer
      */
     public function getRgt()
     {
@@ -293,20 +293,20 @@ class Acl
     /**
      * Set root
      *
-     * @param integer $root
+     * @param  integer $root
      * @return Acl
      */
     public function setRoot($root)
     {
         $this->root = $root;
-    
+
         return $this;
     }
 
     /**
      * Get root
      *
-     * @return integer 
+     * @return integer
      */
     public function getRoot()
     {
@@ -321,8 +321,7 @@ class Acl
     public function getAccessRolesNames()
     {
         $roles = array();
-        foreach ($this->accessRoles as $role)
-        {
+        foreach ($this->accessRoles as $role) {
             $roles[] = $role->getRole();
         }
 
@@ -332,13 +331,13 @@ class Acl
     /**
      * Add accessRoles
      *
-     * @param \Oro\Bundle\UserBundle\Entity\Role $accessRoles
+     * @param  \Oro\Bundle\UserBundle\Entity\Role $accessRoles
      * @return Acl
      */
     public function addAccessRole(Role $accessRoles)
     {
         $this->accessRoles[] = $accessRoles;
-    
+
         return $this;
     }
 
@@ -355,7 +354,7 @@ class Acl
     /**
      * Get accessRoles
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getAccessRoles()
     {

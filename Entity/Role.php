@@ -140,13 +140,13 @@ class Role implements RoleInterface
     /**
      * Add aclResources
      *
-     * @param \Oro\Bundle\UserBundle\Entity\Acl $aclResources
+     * @param  \Oro\Bundle\UserBundle\Entity\Acl $aclResources
      * @return Role
      */
     public function addAclResource(Acl $aclResources)
     {
         $this->aclResources[] = $aclResources;
-    
+
         return $this;
     }
 
@@ -163,7 +163,7 @@ class Role implements RoleInterface
     /**
      * Get aclResources
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getAclResources()
     {

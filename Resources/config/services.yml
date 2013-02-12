@@ -168,4 +168,3 @@ services:
         class:                        %oro_user.handler.reset.class%
         scope:                        request
         arguments:                    ["@oro_user.form.reset", "@request", "@oro_user.manager"]
-

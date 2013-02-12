@@ -24,13 +24,12 @@ class AclPointcut implements PointcutInterface
     /**
      * Check method for Acl annotation
      *
-     * @param \ReflectionMethod $method
+     * @param  \ReflectionMethod $method
      * @return bool
      */
     public function matchesMethod(\ReflectionMethod $method)
     {
         if ($this->reader->getMethodAnnotation($method, Manager::ACL_ANNOTATION_CLASS)) {
-
             return true;
         }
 

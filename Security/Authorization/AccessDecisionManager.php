@@ -5,7 +5,6 @@ namespace Oro\Bundle\UserBundle\Security\Authorization;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
 
-
 class AccessDecisionManager implements AccessDecisionManagerInterface
 {
     private $delegate;
@@ -14,7 +13,6 @@ class AccessDecisionManager implements AccessDecisionManagerInterface
     {
         $this->delegate = $delegate;
     }
-
 
     /**
      * Decides whether the access is possible or not.

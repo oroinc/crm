@@ -35,7 +35,6 @@ class ReaderTest extends WebTestCase
             'Symfony\Bundle\FrameworkBundle\FrameworkBundle'
         );
 
-
         $this->kernelMoc = $this->getMock(
             'Symfony\Component\HttpKernel\KernelInterface',
             array()

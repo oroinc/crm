@@ -78,7 +78,7 @@ class UserManager extends FlexibleManager implements UserProviderInterface
     /**
      * Updates a user password if a plain password is set
      *
-     * @param  User $user
+     * @param User $user
      */
     public function updatePassword(User $user)
     {

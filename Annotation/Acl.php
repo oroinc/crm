@@ -68,7 +68,6 @@ class Acl
     public function getParent()
     {
         if ($this->parent) {
-
             return $this->parent;
         }
 
@@ -86,7 +85,8 @@ class Acl
     /**
      * @param string $name
      */
-    public function setName($name){
+    public function setName($name)
+    {
         $this->name = $name;
     }
 

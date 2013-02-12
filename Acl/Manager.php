@@ -46,7 +46,7 @@ class Manager
     /**
      * get array of resource ids allowed for user
      *
-     * @param \Oro\Bundle\UserBundle\Entity\User $user
+     * @param  \Oro\Bundle\UserBundle\Entity\User $user
      * @return array
      */
     public function getAclForUser(User $user)
