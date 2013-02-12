@@ -2,10 +2,28 @@
 
 namespace Oro\Bundle\UserBundle\Form\Type;
 
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+
+use Oro\Bundle\UserBundle\Form\EventListener\ProfileApiSubscriber;
+use Oro\Bundle\UserBundle\Form\EventListener\PatchSubscriber;
 
 class ProfileApiType extends ProfileType
 {
+    /**
+     * {@inheritdoc}
+     */
+    public function addEntityFields(FormBuilderInterface $builder)
+    {
+        // add default flexible fields
+        parent::addEntityFields($builder);
+
+        $builder
+            ->addEventSubscriber(new ProfileApiSubscriber($builder->getFormFactory()))
+            ->addEventSubscriber(new PatchSubscriber());
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -14,7 +32,12 @@ class ProfileApiType extends ProfileType
         parent::setDefaultOptions($resolver);
 
         $resolver->setDefaults(array(
-            'csrf_protection' => false,
+            'csrf_protection'   => false,
+            'validation_groups' => function(FormInterface $form) {
+                return $form->getData() && $form->getData()->getId()
+                    ? array('Api')
+                    : array('Registration', 'Profile', 'Default');
+            },
         ));
     }
 

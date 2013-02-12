@@ -9,22 +9,18 @@ Oro\Bundle\UserBundle\Entity\User:
             - Length:
                 min:      3
                 max:      255
-                groups:   [Registration, Profile]
         email:
             - NotBlank:
                 groups:   [Registration, Profile]
             - Length:
                 min:      6
                 max:      255
-                groups:   [Registration, Profile]
             - Email:
-                groups:   [Registration, Profile]
         plainPassword:
             - NotBlank:
                 groups:   [Registration]
             - Length:
                 min:      2
-                groups:   [Registration, Profile]
 
 Oro\Bundle\UserBundle\Entity\Role:
     constraints:
@@ -44,8 +40,6 @@ Oro\Bundle\UserBundle\Entity\Group:
         - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity: name
     properties:
         name:
-            - NotBlank:
-                groups:   [Registration]
+            - NotBlank:   ~
             - Length:
                 max:      30
-                groups:   [Registration]
