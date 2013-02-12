@@ -125,6 +125,7 @@ abstract class BaseDriver extends FunctionNode
         if ($useFieldName) {
             $stringQuery = $joinAlias . '.field = :field' . $index . ' AND ';
         }
+
         return $stringQuery . $joinAlias . '.value LIKE :value' . $index;
     }
 
@@ -139,7 +140,6 @@ abstract class BaseDriver extends FunctionNode
     {
         $qb->setParameter('value' . $index, '%' . str_replace(' ', '%', $fieldValue) . '%');
     }
-
 
     /**
      * Add non string search to qb

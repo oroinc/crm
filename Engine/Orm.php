@@ -75,10 +75,10 @@ class Orm extends AbstractEngine
     /**
      * Delete record from index
      *
-     * @param   object  $entity     Entity to be removed from index
-     * @param   bool    $realtime   [optional] Perform immediate insert/update to
+     * @param object $entity   Entity to be removed from index
+     * @param bool   $realtime [optional] Perform immediate insert/update to
      *                              search attributes table(s). True by default.
-     * @return  bool|int    Index item id on success, false otherwise
+     * @return bool|int Index item id on success, false otherwise
      */
     public function delete($entity, $realtime = true)
     {
@@ -109,10 +109,10 @@ class Orm extends AbstractEngine
     /**
      * Insert or update record
      *
-     * @param   object  $entity     New/updated entity
-     * @param   bool    $realtime   [optional] Perform immediate insert/update to
+     * @param object $entity   New/updated entity
+     * @param bool   $realtime [optional] Perform immediate insert/update to
      *                              search attributes table(s). True by default.
-     * @return  bool|int    Index item id on success, false otherwise
+     * @return bool|int Index item id on success, false otherwise
      */
     public function save($entity, $realtime = true)
     {
@@ -198,8 +198,8 @@ class Orm extends AbstractEngine
     /**
      * Set related fields values
      *
-     * @param array $objectData
-     * @param array $relationFields
+     * @param array  $objectData
+     * @param array  $relationFields
      * @param object $relationObject
      *
      * @return array
@@ -219,7 +219,7 @@ class Orm extends AbstractEngine
 
     /**
      * @param object|array $objectOrArray
-     * @param string $fieldName
+     * @param string       $fieldName
      *
      * @return mixed
      */

@@ -75,7 +75,7 @@ class Product
     /**
      * Set name
      *
-     * @param string $name
+     * @param  string  $name
      * @return Product
      */
     public function setName($name)
@@ -97,7 +97,7 @@ class Product
     /**
      * Set description
      *
-     * @param string $description
+     * @param  string  $description
      * @return Product
      */
     public function setDescription($description)
@@ -127,7 +127,7 @@ class Product
     /**
      * Set manufacturer
      *
-     * @param \Oro\Bundle\SearchBundle\Tests\Fixture\Entity\Manufacturer $manufacturer
+     * @param  \Oro\Bundle\SearchBundle\Tests\Fixture\Entity\Manufacturer $manufacturer
      * @return Product
      */
     public function setManufacturer(Manufacturer $manufacturer = null)
@@ -150,7 +150,7 @@ class Product
     /**
      * Set price
      *
-     * @param float $price
+     * @param  float   $price
      * @return Product
      */
     public function setPrice($price)
@@ -173,7 +173,7 @@ class Product
     /**
      * Set count
      *
-     * @param integer $count
+     * @param  integer $count
      * @return Product
      */
     public function setCount($count)
@@ -196,7 +196,7 @@ class Product
     /**
      * Set createDate
      *
-     * @param \DateTime $createDate
+     * @param  \DateTime $createDate
      * @return Product
      */
     public function setCreateDate($createDate)

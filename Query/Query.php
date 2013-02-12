@@ -97,7 +97,6 @@ class Query
         $this->em = $em;
     }
 
-
     /**
      * Init query
      *
@@ -245,7 +244,7 @@ class Query
      */
     public function setMaxResults($maxResults)
     {
-        $this->maxResults = (int)$maxResults;
+        $this->maxResults = (int) $maxResults;
 
         return $this;
     }
@@ -269,7 +268,7 @@ class Query
      */
     public function setFirstResult($firstResult)
     {
-        $this->firstResult = (int)$firstResult;
+        $this->firstResult = (int) $firstResult;
 
         return $this;
     }

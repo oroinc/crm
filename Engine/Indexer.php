@@ -33,7 +33,7 @@ class Indexer
     }
 
     /**
-     * @param string $searchString
+     * @param string  $searchString
      * @param integer $offset
      * @param integer $maxResults
      *
@@ -50,6 +50,7 @@ class Indexer
         if ($maxResults) {
             $query->setMaxResults($maxResults);
         }
+
         return $this->query($query);
     }
 
@@ -95,7 +96,6 @@ class Indexer
         $this->em->remove($queue);
         $this->em->flush();
         if ($result) {
-
             return array('recordId' => $result, 'action' => Queue::EVENT_DELETE);
         }
 
@@ -118,7 +118,6 @@ class Indexer
             $this->em->flush();
 
             if ($result) {
-
                 return array('recordId' => $result, 'action' => Queue::EVENT_SAVE);
             }
         }

@@ -41,11 +41,10 @@ class IndexInteger
      */
     private $value;
 
-
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -55,19 +54,20 @@ class IndexInteger
     /**
      * Set field name
      *
-     * @param string $field
+     * @param  string       $field
      * @return IndexInteger
      */
     public function setField($field)
     {
         $this->field = $field;
+
         return $this;
     }
 
     /**
      * Get field name
      *
-     * @return string 
+     * @return string
      */
     public function getField()
     {
@@ -77,19 +77,20 @@ class IndexInteger
     /**
      * Set field value
      *
-     * @param integer $value
+     * @param  integer      $value
      * @return IndexInteger
      */
     public function setValue($value)
     {
         $this->value = $value;
+
         return $this;
     }
 
     /**
      * Get field value
      *
-     * @return integer 
+     * @return integer
      */
     public function getValue()
     {
@@ -99,12 +100,13 @@ class IndexInteger
     /**
      * Set item
      *
-     * @param Item $index
+     * @param  Item         $index
      * @return IndexInteger
      */
     public function setItem(Item $index = null)
     {
         $this->item = $index;
+
         return $this;
     }
 

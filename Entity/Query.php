@@ -50,11 +50,10 @@ class Query
      */
     private $createdAt;
 
-
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -64,20 +63,20 @@ class Query
     /**
      * Set from
      *
-     * @param string $entity
+     * @param  string   $entity
      * @return QueryLog
      */
     public function setEntity($entity)
     {
         $this->entity = $entity;
-    
+
         return $this;
     }
 
     /**
      * Get from
      *
-     * @return string 
+     * @return string
      */
     public function getEntity()
     {
@@ -87,20 +86,20 @@ class Query
     /**
      * Set query
      *
-     * @param string $query
+     * @param  string   $query
      * @return QueryLog
      */
     public function setQuery($query)
     {
         $this->query = $query;
-    
+
         return $this;
     }
 
     /**
      * Get query
      *
-     * @return string 
+     * @return string
      */
     public function getQuery()
     {
@@ -110,20 +109,20 @@ class Query
     /**
      * Set resultCount
      *
-     * @param integer $resultCount
+     * @param  integer  $resultCount
      * @return QueryLog
      */
     public function setResultCount($resultCount)
     {
         $this->resultCount = $resultCount;
-    
+
         return $this;
     }
 
     /**
      * Get resultCount
      *
-     * @return integer 
+     * @return integer
      */
     public function getResultCount()
     {
@@ -142,20 +141,20 @@ class Query
     /**
      * Set createdAt
      *
-     * @param \DateTime $createdAt
+     * @param  \DateTime $createdAt
      * @return Query
      */
     public function setCreatedAt($createdAt)
     {
         $this->createdAt = $createdAt;
-    
+
         return $this;
     }
 
     /**
      * Get createdAt
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getCreatedAt()
     {

@@ -41,11 +41,10 @@ class IndexDecimal
      */
     private $value;
 
-
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -55,12 +54,13 @@ class IndexDecimal
     /**
      * Set item
      *
-     * @param Item $item
+     * @param  Item         $item
      * @return IndexDecimal
      */
     public function setItem(Item $item = null)
     {
         $this->item = $item;
+
         return $this;
     }
 
@@ -77,19 +77,20 @@ class IndexDecimal
     /**
      * Set field name
      *
-     * @param string $field
+     * @param  string       $field
      * @return IndexDecimal
      */
     public function setField($field)
     {
         $this->field = $field;
+
         return $this;
     }
 
     /**
      * Get field name
      *
-     * @return string 
+     * @return string
      */
     public function getField()
     {
@@ -99,19 +100,20 @@ class IndexDecimal
     /**
      * Set field value
      *
-     * @param float $value
+     * @param  float        $value
      * @return IndexDecimal
      */
     public function setValue($value)
     {
         $this->value = $value;
+
         return $this;
     }
 
     /**
      * Get field value
      *
-     * @return float 
+     * @return float
      */
     public function getValue()
     {

@@ -2,7 +2,6 @@
 namespace Oro\Bundle\SearchBundle\Engine\Orm;
 
 use Doctrine\ORM\Query\Lexer;
-use Doctrine\ORM\Query\AST\Functions\FunctionNode;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\ClassMetadata;
@@ -19,7 +18,7 @@ class PdoMysql extends BaseDriver
     public $mode;
 
     /**
-     * @param \Doctrine\ORM\EntityManager $em
+     * @param \Doctrine\ORM\EntityManager         $em
      * @param \Doctrine\ORM\Mapping\ClassMetadata $class
      */
     public function initRepo(EntityManager $em, ClassMetadata $class)
@@ -44,8 +43,7 @@ class PdoMysql extends BaseDriver
         do {
             $this->columns[] = $parser->StateFieldPathExpression();
             $parser->match(Lexer::T_COMMA);
-        }
-        while ($parser->getLexer()->isNextToken(Lexer::T_IDENTIFIER));
+        } while ($parser->getLexer()->isNextToken(Lexer::T_IDENTIFIER));
 
         $this->needle = $parser->InParameter();
 
@@ -76,7 +74,7 @@ class PdoMysql extends BaseDriver
         $query = "MATCH(" . $haystack .
             ") AGAINST (" . $this->needle->dispatch($sqlWalker);
 
-        if($this->mode) {
+        if ($this->mode) {
 
             $query .= " " . str_replace('\'', '', $this->mode->dispatch($sqlWalker)) . " )";
         } else {
@@ -91,7 +89,7 @@ class PdoMysql extends BaseDriver
      *
      * @return string
      */
-    static public function getPlainSql()
+    public static function getPlainSql()
     {
         return "ALTER TABLE `search_index_text` ADD FULLTEXT `value` ( `value`)";
     }
@@ -99,9 +97,9 @@ class PdoMysql extends BaseDriver
     /**
      * Create fulltext search string for string parameters
      *
-     * @param string $joinAlias
+     * @param string  $joinAlias
      * @param integer $index
-     * @param bool $useFieldName
+     * @param bool    $useFieldName
      *
      * @return string
      */
@@ -126,4 +124,4 @@ class PdoMysql extends BaseDriver
     {
         $qb->setParameter('value' . $index,  $fieldValue);
     }
-} 
+}

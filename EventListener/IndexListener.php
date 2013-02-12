@@ -6,8 +6,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 use Doctrine\ORM\Event\LifecycleEventArgs;
 
-use Oro\Bundle\SearchBundle\Entity\Item;
-
 class IndexListener
 {
     /**
@@ -22,7 +20,7 @@ class IndexListener
 
     /**
      * @param ContainerInterface $container
-     * @param array $entities Entities config array from search.yml
+     * @param array              $entities  Entities config array from search.yml
      */
     public function __construct(ContainerInterface $container, $entities)
     {

@@ -41,11 +41,10 @@ class IndexText
      */
     private $value;
 
-
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -55,19 +54,20 @@ class IndexText
     /**
      * Set field name
      *
-     * @param string $field
+     * @param  string    $field
      * @return IndexText
      */
     public function setField($field)
     {
         $this->field = $field;
+
         return $this;
     }
 
     /**
      * Get field name
      *
-     * @return string 
+     * @return string
      */
     public function getField()
     {
@@ -77,19 +77,20 @@ class IndexText
     /**
      * Set field value
      *
-     * @param string $value
+     * @param  string    $value
      * @return IndexText
      */
     public function setValue($value)
     {
         $this->value = $value;
+
         return $this;
     }
 
     /**
      * Get field value
      *
-     * @return string 
+     * @return string
      */
     public function getValue()
     {
@@ -99,12 +100,13 @@ class IndexText
     /**
      * Set item
      *
-     * @param Item $item
+     * @param  Item      $item
      * @return IndexText
      */
     public function setItem(Item $item = null)
     {
         $this->item = $item;
+
         return $this;
     }
 

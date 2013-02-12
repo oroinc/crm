@@ -32,7 +32,7 @@ abstract class AbstractEngine
      * Insert or update record
      *
      * @param object $entity
-     * @param bool $realtime
+     * @param bool   $realtime
      *
      * @return mixed
      */
@@ -42,7 +42,7 @@ abstract class AbstractEngine
      * Insert or update record
      *
      * @param object $entity
-     * @param bool $realtime
+     * @param bool   $realtime
      *
      * @return mixed
      */
@@ -74,6 +74,7 @@ abstract class AbstractEngine
         $searchResult = $this->doSearch($query);
         $result = new Result($query, $searchResult['results'], $searchResult['records_count']);
         $this->logQuery($result);
+
         return $result;
     }
 

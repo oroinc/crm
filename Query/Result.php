@@ -39,8 +39,8 @@ class Result extends ArrayCollection
     /**
      * Initializes a new Result.
      *
-     * @param Query $query
-     * @param array $elements
+     * @param Query   $query
+     * @param array   $elements
      * @param integer $recordsCount
      */
     public function __construct(Query $query, array $elements = array(), $recordsCount = 0)

@@ -33,11 +33,10 @@ class Manufacturer
      */
     private $products;
 
-
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -47,20 +46,20 @@ class Manufacturer
     /**
      * Set name
      *
-     * @param string $name
+     * @param  string       $name
      * @return Manufacturer
      */
     public function setName($name)
     {
         $this->name = $name;
-    
+
         return $this;
     }
 
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -73,17 +72,17 @@ class Manufacturer
     {
         $this->products = new \Doctrine\Common\Collections\ArrayCollection();
     }
-    
+
     /**
      * Add products
      *
-     * @param \Oro\Bundle\SearchBundle\Tests\Fixture\Entity\Product $products
+     * @param  \Oro\Bundle\SearchBundle\Tests\Fixture\Entity\Product $products
      * @return Manufacturer
      */
     public function addProduct(Product $products)
     {
         $this->products[] = $products;
-    
+
         return $this;
     }
 

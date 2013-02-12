@@ -43,7 +43,7 @@ class Item
     /**
      * Set entity name
      *
-     * @param string $entityName
+     * @param  string                                     $entityName
      * @return \Oro\Bundle\SearchBundle\Query\Result\Item
      */
     public function setEntityName($entityName)

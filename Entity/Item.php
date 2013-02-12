@@ -105,12 +105,13 @@ class Item
     /**
      * Set entity
      *
-     * @param string $entity
+     * @param  string $entity
      * @return Item
      */
     public function setEntity($entity)
     {
         $this->entity = $entity;
+
         return $this;
     }
 
@@ -127,7 +128,7 @@ class Item
     /**
      * Set recordId
      *
-     * @param integer $recordId
+     * @param  integer $recordId
      * @return Item
      */
     public function setRecordId($recordId)
@@ -150,12 +151,12 @@ class Item
     /**
      * Set changed
      *
-     * @param boolean $changed
+     * @param  boolean $changed
      * @return Item
      */
     public function setChanged($changed)
     {
-        $this->changed = (bool)$changed;
+        $this->changed = (bool) $changed;
 
         return $this;
     }
@@ -173,12 +174,13 @@ class Item
     /**
      * Add integerFields
      *
-     * @param IndexInteger $integerFields
+     * @param  IndexInteger $integerFields
      * @return Item
      */
     public function addIntegerField(IndexInteger $integerFields)
     {
         $this->integerFields[] = $integerFields;
+
         return $this;
     }
 
@@ -205,12 +207,13 @@ class Item
     /**
      * Add decimalFields
      *
-     * @param IndexDecimal $decimalFields
+     * @param  IndexDecimal $decimalFields
      * @return Item
      */
     public function addDecimalField(IndexDecimal $decimalFields)
     {
         $this->decimalFields[] = $decimalFields;
+
         return $this;
     }
 
@@ -237,24 +240,26 @@ class Item
     /**
      * Add datetimeFields
      *
-     * @param IndexDatetime $datetimeFields
+     * @param  IndexDatetime $datetimeFields
      * @return Item
      */
     public function addDatetimeField(IndexDatetime $datetimeFields)
     {
         $this->datetimeFields[] = $datetimeFields;
+
         return $this;
     }
 
     /**
      * Remove datetimeFields
      *
-     * @param IndexDatetime $datetimeFields
+     * @param  IndexDatetime $datetimeFields
      * @return Item
      */
     public function removeDatetimeField(IndexDatetime $datetimeFields)
     {
         $this->datetimeFields->removeElement($datetimeFields);
+
         return $this;
     }
 
@@ -271,24 +276,26 @@ class Item
     /**
      * Add text fields
      *
-     * @param IndexText $textFields
+     * @param  IndexText $textFields
      * @return Item
      */
     public function addTextField(IndexText $textFields)
     {
         $this->textFields[] = $textFields;
+
         return $this;
     }
 
     /**
      * Remove text fields
      *
-     * @param IndexText $textFields
+     * @param  IndexText $textFields
      * @return Item
      */
     public function removeTextField(IndexText $textFields)
     {
         $this->textFields->removeElement($textFields);
+
         return $this;
     }
 
@@ -324,7 +331,7 @@ class Item
     /**
      * Set createdAt
      *
-     * @param \DateTime $createdAt
+     * @param  \DateTime $createdAt
      * @return Item
      */
     public function setCreatedAt(\DateTime $createdAt)
@@ -546,7 +553,7 @@ class Item
      *
      * @param object $record
      * @param string $fieldName
-     * @param mixed $fieldData
+     * @param mixed  $fieldData
      */
     private function setFieldData($record, $fieldName, $fieldData)
     {

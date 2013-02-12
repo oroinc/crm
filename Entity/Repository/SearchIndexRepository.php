@@ -3,7 +3,6 @@
 namespace Oro\Bundle\SearchBundle\Entity\Repository;
 
 use Doctrine\ORM\EntityRepository;
-use Symfony\Component\DependencyInjection\Container;
 
 use Oro\Bundle\SearchBundle\Query\Query;
 

@@ -2,13 +2,11 @@
 namespace Oro\Bundle\SearchBundle\Engine\Orm;
 
 use Doctrine\ORM\Query\Lexer;
-use Doctrine\ORM\Query\AST\Functions\FunctionNode;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\ClassMetadata;
 
 use Oro\Bundle\SearchBundle\Engine\Orm\BaseDriver;
-
 
 /**
  * "TsvectorTsquery" "(" {StateFieldPathExpression ","}* InParameter ")"
@@ -20,7 +18,7 @@ class PdoPgsql extends BaseDriver
     public $mode;
 
     /**
-     * @param \Doctrine\ORM\EntityManager $em
+     * @param \Doctrine\ORM\EntityManager         $em
      * @param \Doctrine\ORM\Mapping\ClassMetadata $class
      */
     public function initRepo(EntityManager $em, ClassMetadata $class)
@@ -45,8 +43,7 @@ class PdoPgsql extends BaseDriver
         do {
             $this->columns[] = $parser->StateFieldPathExpression();
             $parser->match(Lexer::T_COMMA);
-        }
-        while ($parser->getLexer()->isNextToken(Lexer::T_IDENTIFIER));
+        } while ($parser->getLexer()->isNextToken(Lexer::T_IDENTIFIER));
 
         $this->needle = $parser->InParameter();
 
@@ -81,7 +78,7 @@ class PdoPgsql extends BaseDriver
      *
      * @return string
      */
-    static public function getPlainSql()
+    public static function getPlainSql()
     {
         return "CREATE INDEX string_fts ON string_index USING gin(to_tsvector('english', field_value))";
     }
@@ -89,9 +86,9 @@ class PdoPgsql extends BaseDriver
     /**
      * Create fulltext search string for string parameters
      *
-     * @param string $joinAlias
+     * @param string  $joinAlias
      * @param integer $index
-     * @param bool $useFieldName
+     * @param bool    $useFieldName
      *
      * @return string
      */
@@ -116,4 +113,4 @@ class PdoPgsql extends BaseDriver
     {
         $qb->setParameter('value' . $index,  $fieldValue);
     }
-} 
+}

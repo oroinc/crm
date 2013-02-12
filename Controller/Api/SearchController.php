@@ -28,6 +28,7 @@ class SearchController extends FOSRestController
     public function getAction()
     {
         $view = new View();
+
         return $this->get('fos_rest.view_handler')->handle(
             $view->setData(
                 $this->get('oro_search.index')->simpleSearch(

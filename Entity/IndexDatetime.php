@@ -41,11 +41,10 @@ class IndexDatetime
      */
     protected $value;
 
-
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -55,12 +54,13 @@ class IndexDatetime
     /**
      * Set item
      *
-     * @param Item $item
+     * @param  Item          $item
      * @return IndexDatetime
      */
     public function setItem(Item $item = null)
     {
         $this->item = $item;
+
         return $this;
     }
 
@@ -77,19 +77,20 @@ class IndexDatetime
     /**
      * Set field name
      *
-     * @param string $field
+     * @param  string        $field
      * @return IndexDatetime
      */
     public function setField($field)
     {
         $this->field = $field;
+
         return $this;
     }
 
     /**
      * Get field name
      *
-     * @return string 
+     * @return string
      */
     public function getField()
     {
@@ -99,19 +100,20 @@ class IndexDatetime
     /**
      * Set field value
      *
-     * @param \DateTime $value
+     * @param  \DateTime     $value
      * @return IndexDatetime
      */
     public function setValue(\DateTime $value)
     {
         $this->value = $value;
+
         return $this;
     }
 
     /**
      * Get field value
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getValue()
     {
