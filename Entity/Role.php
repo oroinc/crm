@@ -3,37 +3,44 @@
 namespace Oro\Bundle\UserBundle\Entity;
 
 use Symfony\Component\Security\Core\Role\RoleInterface;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 
 use Oro\Bundle\UserBundle\Entity\Acl;
 
+use JMS\Serializer\Annotation\Type;
+use JMS\Serializer\Annotation\Exclude;
+
+use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
+
 /**
  * Role Entity
  *
  * @ORM\Entity
  * @ORM\Table(name="access_role")
- * @UniqueEntity("role")
  */
 class Role implements RoleInterface
 {
-
     /**
      * @ORM\Id
      * @ORM\Column(type="smallint", name="id")
      * @ORM\GeneratedValue(strategy="AUTO")
+     * @Exclude
      */
     protected $id;
 
     /**
      * @ORM\Column(type="string", unique=true, length=30, nullable=false)
+     * @Soap\ComplexType("string")
+     * @Type("string")
      */
     protected $role;
 
     /**
      * @ORM\Column(type="string", length=30)
+     * @Soap\ComplexType("string")
+     * @Type("string")
      */
     protected $label;
 
@@ -87,9 +94,9 @@ class Role implements RoleInterface
     /**
      * Set role name only for newly created role
      *
-     * @param   string  $role  Role name
-     * @return  Role
-     * @throws  \RuntimeException
+     * @param  string            $role Role name
+     * @return Role
+     * @throws \RuntimeException
      */
     public function setRole($role)
     {
@@ -110,8 +117,8 @@ class Role implements RoleInterface
     /**
      * Set the new label for role
      *
-     * @param   string  $label  New label
-     * @return  Role
+     * @param  string $label New label
+     * @return Role
      */
     public function setLabel($label)
     {

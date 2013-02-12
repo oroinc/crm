@@ -5,9 +5,12 @@ parameters:
     oro_user.security.provider.class: Oro\Bundle\UserBundle\Security\UserProvider
     oro_user.security.login.class:    Oro\Bundle\UserBundle\EventListener\LoginSubscriber
     oro_user.type.profile.class:      Oro\Bundle\UserBundle\Form\Type\ProfileType
+    oro_user.type.profile.api.class:  Oro\Bundle\UserBundle\Form\Type\ProfileApiType
     oro_user.type.reset.class:        Oro\Bundle\UserBundle\Form\Type\ResetType
     oro_user.type.role.class:         Oro\Bundle\UserBundle\Form\Type\RoleType
+    oro_user.type.role.api.class:     Oro\Bundle\UserBundle\Form\Type\RoleApiType
     oro_user.type.group.class:        Oro\Bundle\UserBundle\Form\Type\GroupType
+    oro_user.type.group.api.class:    Oro\Bundle\UserBundle\Form\Type\GroupApiType
     oro_user.handler.profile.class:   Oro\Bundle\UserBundle\Form\Handler\ProfileHandler
     oro_user.handler.reset.class:     Oro\Bundle\UserBundle\Form\Handler\ResetHandler
     oro_user.handler.role.class:      Oro\Bundle\UserBundle\Form\Handler\RoleHandler
@@ -39,11 +42,11 @@ services:
         factory_service:              form.factory
         arguments:                    ["oro_user_profile_form", "oro_user_profile", null, { validation_groups: [Profile, Default] }]
 
-    oro_user.form.reset:
+    oro_user.form.profile.api:
         class:                        Symfony\Component\Form\Form
         factory_method:               createNamed
         factory_service:              form.factory
-        arguments:                    ["oro_user_reset_form", "oro_user_reset", null, { validation_groups: [ResetPassword, Default] }]
+        arguments:                    ["profile", "profile", null, { validation_groups: [Profile, Default] }]
 
     oro_user.form.role:
         class:                        Symfony\Component\Form\Form
@@ -51,11 +54,29 @@ services:
         factory_service:              form.factory
         arguments:                    ["oro_user_role_form", "oro_user_role"]
 
+    oro_user.form.role.api:
+        class:                        Symfony\Component\Form\Form
+        factory_method:               createNamed
+        factory_service:              form.factory
+        arguments:                    ["role", "role", null]
+
     oro_user.form.group:
         class:                        Symfony\Component\Form\Form
         factory_method:               createNamed
         factory_service:              form.factory
         arguments:                    ["oro_user_group_form", "oro_user_group"]
+
+    oro_user.form.group.api:
+        class:                        Symfony\Component\Form\Form
+        factory_method:               createNamed
+        factory_service:              form.factory
+        arguments:                    ["group", "group", null]
+
+    oro_user.form.reset:
+        class:                        Symfony\Component\Form\Form
+        factory_method:               createNamed
+        factory_service:              form.factory
+        arguments:                    ["oro_user_reset_form", "oro_user_reset", null, { validation_groups: [ResetPassword, Default] }]
 
     oro_user.form.type.profile:
         class:                        %oro_user.type.profile.class%
@@ -63,36 +84,57 @@ services:
         tags:
             - { name: form.type, alias: oro_user_profile }
 
-    oro_user.form.type.reset:
-        class:                        %oro_user.type.reset.class%
-        arguments:                    [%oro_user.entity.class%]
+    oro_user.form.type.profile.api:
+        class:                        %oro_user.type.profile.api.class%
+        arguments:                    [%oro_user.entity.class%, %oro_user.entity.value.class%]
         tags:
-            - { name: form.type, alias: oro_user_reset }
+            - { name: form.type, alias: profile }
 
     oro_user.form.type.role:
         class:                        %oro_user.type.role.class%
         tags:
             - { name: form.type, alias: oro_user_role }
 
+    oro_user.form.type.role.api:
+        class:                        %oro_user.type.role.api.class%
+        tags:
+            - { name: form.type, alias: role }
+
     oro_user.form.type.group:
         class:                        %oro_user.type.group.class%
         tags:
             - { name: form.type, alias: oro_user_group }
+
+    oro_user.form.type.group.api:
+        class:                        %oro_user.type.group.api.class%
+        tags:
+            - { name: form.type, alias: group }
+
+    oro_user.form.type.reset:
+        class:                        %oro_user.type.reset.class%
+        arguments:                    [%oro_user.entity.class%]
+        tags:
+            - { name: form.type, alias: oro_user_reset }
 
     oro_user.form.handler.profile:
         class:                        %oro_user.handler.profile.class%
         scope:                        request
         arguments:                    ["@oro_user.form.profile", "@request", "@oro_user.manager"]
 
-    oro_user.form.handler.reset:
-        class:                        %oro_user.handler.reset.class%
+    oro_user.form.handler.profile.api:
+        class:                        %oro_user.handler.profile.class%
         scope:                        request
-        arguments:                    ["@oro_user.form.reset", "@request", "@oro_user.manager"]
+        arguments:                    ["@oro_user.form.profile.api", "@request", "@oro_user.manager"]
 
     oro_user.form.handler.role:
         class:                        %oro_user.handler.role.class%
         scope:                        request
         arguments:                    ["@oro_user.form.role", "@request", "@doctrine.orm.entity_manager"]
+
+    oro_user.form.handler.role.api:
+        class:                        %oro_user.handler.role.class%
+        scope:                        request
+        arguments:                    ["@oro_user.form.role.api", "@request", "@doctrine.orm.entity_manager"]
 
     oro_user.form.handler.group:
         class:                        %oro_user.handler.group.class%
@@ -116,3 +158,14 @@ services:
     oro_user.acl_manager:
         class:                        %oro_user.acl.manager.class%
         arguments:                    [@doctrine.orm.entity_manager, @oro_user.acl_reader, @cache]
+
+    oro_user.form.handler.group.api:
+        class:                        %oro_user.handler.group.class%
+        scope:                        request
+        arguments:                    ["@oro_user.form.group.api", "@request", "@doctrine.orm.entity_manager"]
+
+    oro_user.form.handler.reset:
+        class:                        %oro_user.handler.reset.class%
+        scope:                        request
+        arguments:                    ["@oro_user.form.reset", "@request", "@oro_user.manager"]
+

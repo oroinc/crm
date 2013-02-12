@@ -63,7 +63,6 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $role    = new Role(User::ROLE_DEFAULT);
         $newRole = new Role('ROLE_FOO');
 
-        $this->assertTrue($user->hasRole(User::ROLE_DEFAULT));
         $this->assertFalse($user->hasRole($newRole->getRole()));
 
         $user->addRole($role);

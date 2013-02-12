@@ -8,6 +8,11 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
+use JMS\Serializer\Annotation\Type;
+use JMS\Serializer\Annotation\Exclude;
+
+use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
+
 use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityFlexible;
 
 /**
@@ -23,6 +28,8 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
+     * @Soap\ComplexType("int")
+     * @Type("integer")
      */
     protected $id;
 
@@ -30,6 +37,8 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
      * @var string
      *
      * @ORM\Column(type="string", length=255, unique=true)
+     * @Soap\ComplexType("string")
+     * @Type("string")
      */
     protected $username;
 
@@ -37,6 +46,8 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
      * @var string
      *
      * @ORM\Column(type="string", length=255, unique=true)
+     * @Soap\ComplexType("string")
+     * @Type("string")
      */
     protected $email;
 
@@ -44,6 +55,8 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
      * @var boolean
      *
      * @ORM\Column(type="boolean")
+     * @Soap\ComplexType("boolean")
+     * @Type("boolean")
      */
     protected $enabled = true;
 
@@ -53,6 +66,7 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
      * @var string
      *
      * @ORM\Column(type="string")
+     * @Exclude
      */
     protected $salt;
 
@@ -62,6 +76,7 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
      * @var string
      *
      * @ORM\Column(type="string")
+     * @Exclude
      */
     protected $password;
 
@@ -69,6 +84,7 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
      * Plain password. Used for model validation. Must not be persisted.
      *
      * @var string
+     * @Exclude
      */
     protected $plainPassword;
 
@@ -78,6 +94,7 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
      * @var string
      *
      * @ORM\Column(type="string", nullable=true)
+     * @Exclude
      */
     protected $confirmationToken;
 
@@ -85,6 +102,7 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
      * @var \DateTime
      *
      * @ORM\Column(name="password_requested", type="datetime", nullable=true)
+     * @Exclude
      */
     protected $passwordRequestedAt;
 
@@ -92,31 +110,40 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
      * @var \DateTime
      *
      * @ORM\Column(name="last_login", type="datetime", nullable=true)
+     * @Soap\ComplexType("dateTime", nillable=true)
+     * @Type("dateTime")
      */
     protected $lastLogin;
 
     /**
+     * @var Role[]
+     *
      * @ORM\ManyToMany(targetEntity="Role")
      * @ORM\JoinTable(name="user_access_role",
      *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="role_id", referencedColumnName="id", onDelete="CASCADE")}
      * )
+     * @Exclude
      */
     protected $roles;
 
     /**
+     * @var Group[]
+     *
      * @ORM\ManyToMany(targetEntity="Group")
      * @ORM\JoinTable(name="user_access_group",
      *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="group_id", referencedColumnName="id", onDelete="CASCADE")}
      * )
+     * @Exclude
      */
     protected $groups;
 
     /**
-     * @var Value
+     * @var Oro\Bundle\FlexibleEntityBundle\Model\AbstractFlexibleValue[]
      *
      * @ORM\OneToMany(targetEntity="UserValue", mappedBy="entity", cascade={"persist", "remove"})
+     * @Exclude
      */
     protected $values;
 
@@ -356,7 +383,6 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
      */
     public function getRoles()
     {
-        // we need to make sure to have at least one role
         $roles = $this->roles->toArray();
 
         foreach ($this->getGroups() as $group) {
@@ -379,8 +405,8 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
     /**
      * Pass a string, get the desired Role object or null
      *
-     * @param   string  $role Role name
-     * @return  Role|null
+     * @param  string    $role Role name
+     * @return Role|null
      */
     public function getRole($role)
     {
@@ -400,8 +426,8 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
      *
      *         $securityContext->isGranted('ROLE_USER');
      *
-     * @param   Role|string $role
-     * @return  boolean
+     * @param  Role|string $role
+     * @return boolean
      */
     public function hasRole($role)
     {
@@ -414,9 +440,9 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
      * Adds a Role to the ArrayCollection.
      * Can't type hint due to interface so throws RuntimeException.
      *
-     * @param   Role    $role
-     * @return  User
-     * @throws  \RuntimeException
+     * @param  Role              $role
+     * @return User
+     * @throws \RuntimeException
      */
     public function addRole($role)
     {
@@ -434,7 +460,7 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
     /**
      * Pass a string, remove the Role object from collection
      *
-     * @param   string  $role
+     * @param string $role
      */
     public function removeRole($role)
     {
@@ -449,8 +475,8 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
      * Pass an array of Role objects and re-set roles collection with new Roles.
      * Type hinted array due to interface.
      *
-     * @param   array   $roles  Array of Role objects
-     * @return  User
+     * @param  array $roles Array of Role objects
+     * @return User
      */
     public function setRoles(array $roles)
     {
@@ -467,8 +493,8 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
      * Directly set the ArrayCollection of Roles.
      * Type hinted as Collection which is the parent of (Array|Persistent)Collection.
      *
-     * @param   ArrayCollection  $collection
-     * @return  User
+     * @param  ArrayCollection $collection
+     * @return User
      */
     public function setRolesCollection(ArrayCollection $collection)
     {

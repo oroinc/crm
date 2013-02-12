@@ -27,9 +27,9 @@ abstract class AbstractUserHandler
 
     /**
      *
-     * @param   FormInterface   $form
-     * @param   Request         $request
-     * @param   UserManager     $manager
+     * @param FormInterface $form
+     * @param Request       $request
+     * @param UserManager   $manager
      */
     public function __construct(FormInterface $form, Request $request, UserManager $manager)
     {
@@ -41,14 +41,14 @@ abstract class AbstractUserHandler
     /**
      * Process form
      *
-     * @param   User    $user
-     * @return  bool True on successfull processing, false otherwise
+     * @param  User $user
+     * @return bool True on successfull processing, false otherwise
      */
     public function process(User $user)
     {
         $this->form->setData($user);
 
-        if ('POST' === $this->request->getMethod()) {
+        if (in_array($this->request->getMethod(), array('POST', 'PUT'))) {
             $this->form->bind($this->request);
 
             if ($this->form->isValid()) {

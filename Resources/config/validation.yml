@@ -1,4 +1,7 @@
 Oro\Bundle\UserBundle\Entity\User:
+    constraints:
+        - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity: username
+        - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity: email
     properties:
         username:
             - NotBlank:
@@ -24,17 +27,21 @@ Oro\Bundle\UserBundle\Entity\User:
                 groups:   [Registration, Profile]
 
 Oro\Bundle\UserBundle\Entity\Role:
+    constraints:
+        - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity: role
     properties:
         role:
             - NotBlank:   ~
             - Length:
                 max:      30
-            - Regex:      "/^[a-zA-Z0-9_]+$/"
+            - Regex:      "/^ROLE_[a-zA-Z0-9_]+$/"
         label:
             - Length:
                 max:      30
 
 Oro\Bundle\UserBundle\Entity\Group:
+    constraints:
+        - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity: name
     properties:
         name:
             - NotBlank:

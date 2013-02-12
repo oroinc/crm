@@ -20,10 +20,10 @@ class UserManager extends FlexibleManager implements UserProviderInterface
     /**
      * Constructor
      *
-     * @param   ContainerInterface      $container      service container
-     * @param   string                  $flexibleName   entity name
-     * @param   ObjectManager           $storageManager optional storage manager, get default if not provided
-     * @param   EncoderFactoryInterface $encoderFactory
+     * @param ContainerInterface      $container      service container
+     * @param string                  $flexibleName   entity name
+     * @param ObjectManager           $storageManager optional storage manager, get default if not provided
+     * @param EncoderFactoryInterface $encoderFactory
      */
     public function __construct($container, $flexibleName, $storageManager, EncoderFactoryInterface $encoderFactory)
     {
@@ -50,12 +50,24 @@ class UserManager extends FlexibleManager implements UserProviderInterface
     /**
      * Updates a user
      *
-     * @param   User    $user
-     * @param   bool    $flush Whether to flush the changes (default true)
+     * @param User $user
+     * @param bool $flush Whether to flush the changes (default true)
      */
     public function updateUser(User $user, $flush = true)
     {
         $this->updatePassword($user);
+
+        // we need to make sure to have at least one default role
+        if (!$user->hasRole(User::ROLE_DEFAULT)) {
+            $role = $this->getStorageManager()->getRepository('OroUserBundle:Role')->findOneBy(array('role' => User::ROLE_DEFAULT));
+
+            if (!$role) {
+                throw new \RuntimeException('Default user role not found');
+            }
+
+            $user->addRole($role);
+        }
+
         $this->getStorageManager()->persist($user);
 
         if ($flush) {
@@ -66,8 +78,7 @@ class UserManager extends FlexibleManager implements UserProviderInterface
     /**
      * Updates a user password if a plain password is set
      *
-     * @param   User    $user
-     * @return  void
+     * @param  User $user
      */
     public function updatePassword(User $user)
     {
@@ -93,8 +104,8 @@ class UserManager extends FlexibleManager implements UserProviderInterface
     /**
      * Finds one user by the given criteria
      *
-     * @param   array   $criteria
-     * @return  User
+     * @param  array $criteria
+     * @return User
      */
     public function findUserBy(array $criteria)
     {
@@ -114,8 +125,8 @@ class UserManager extends FlexibleManager implements UserProviderInterface
     /**
      * Finds a user by email
      *
-     * @param   string  $email
-     * @return  User
+     * @param  string $email
+     * @return User
      */
     public function findUserByEmail($email)
     {
@@ -125,8 +136,8 @@ class UserManager extends FlexibleManager implements UserProviderInterface
     /**
      * Finds a user by username
      *
-     * @param   string  $username
-     * @return  User
+     * @param  string $username
+     * @return User
      */
     public function findUserByUsername($username)
     {
@@ -136,8 +147,8 @@ class UserManager extends FlexibleManager implements UserProviderInterface
     /**
      * Finds a user either by email, or username
      *
-     * @param   string  $usernameOrEmail
-     * @return  User
+     * @param  string $usernameOrEmail
+     * @return User
      */
     public function findUserByUsernameOrEmail($usernameOrEmail)
     {
@@ -151,8 +162,8 @@ class UserManager extends FlexibleManager implements UserProviderInterface
     /**
      * Finds a user either by confirmation token
      *
-     * @param   string  $token
-     * @return  User
+     * @param  string $token
+     * @return User
      */
     public function findUserByConfirmationToken($token)
     {
@@ -178,8 +189,8 @@ class UserManager extends FlexibleManager implements UserProviderInterface
      * It is strongly discouraged to use this method manually as it bypasses
      * all ACL checks.
      *
-     * @param   SecurityUserInterface $user
-     * @return  User
+     * @param  SecurityUserInterface $user
+     * @return User
      */
     public function refreshUser(SecurityUserInterface $user)
     {
@@ -207,8 +218,8 @@ class UserManager extends FlexibleManager implements UserProviderInterface
      * It is strongly discouraged to call this method manually as it bypasses
      * all ACL checks.
      *
-     * @param   string  $username
-     * @return  User
+     * @param  string $username
+     * @return User
      */
     public function loadUserByUsername($username)
     {

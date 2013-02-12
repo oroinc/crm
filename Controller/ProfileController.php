@@ -12,10 +12,10 @@ use Oro\Bundle\UserBundle\Entity\UserManager;
 
 class ProfileController extends Controller
 {
-   /**
-    * @Route("/show/{id}", name="oro_user_show", requirements={"id"="\d+"})
-    * @Template
-    */
+    /**
+     * @Route("/show/{id}", name="oro_user_show", requirements={"id"="\d+"})
+     * @Template
+     */
     public function showAction(User $user)
     {
         return array(
@@ -23,12 +23,12 @@ class ProfileController extends Controller
         );
     }
 
-   /**
-    * Create user form
-    *
-    * @Route("/create", name="oro_user_create")
-    * @Template("OroUserBundle:Profile:edit.html.twig")
-    */
+    /**
+     * Create user form
+     *
+     * @Route("/create", name="oro_user_create")
+     * @Template("OroUserBundle:Profile:edit.html.twig")
+     */
     public function createAction()
     {
         $user = $this->getManager()->createFlexible();
@@ -36,12 +36,12 @@ class ProfileController extends Controller
         return $this->editAction($user);
     }
 
-   /**
-    * Edit user form
-    *
-    * @Route("/edit/{id}", name="oro_user_edit", requirements={"id"="\d+"}, defaults={"id"=0})
-    * @Template
-    */
+    /**
+     * Edit user form
+     *
+     * @Route("/edit/{id}", name="oro_user_edit", requirements={"id"="\d+"}, defaults={"id"=0})
+     * @Template
+     */
     public function editAction(User $entity)
     {
         if ($this->get('oro_user.form.handler.profile')->process($entity)) {
