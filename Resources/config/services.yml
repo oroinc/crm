@@ -1,6 +1,7 @@
 parameters:
-    oro_dataflow.connectors.class:            Oro\Bundle\DataFlowBundle\DependencyInjection\Compiler\ConnectorRegistry
-    oro_dataflow.handler.configuration.class: Oro\Bundle\DataFlowBundle\Form\Handler\ConfigurationHandler
+    oro_dataflow.connectors.class:             Oro\Bundle\DataFlowBundle\DependencyInjection\Compiler\ConnectorRegistry
+    oro_dataflow.handler.configuration.class:  Oro\Bundle\DataFlowBundle\Form\Handler\ConfigurationHandler
+    oro_dataflow.handler.serialization_format: json
     oro_dataflow.connectors_config: ~
     oro_dataflow.jobs_config: ~
 
@@ -8,12 +9,12 @@ services:
 
     # connectors registry
     oro_dataflow.connectors:
-        class: "%oro_dataflow.connectors.class%"
+        class: %oro_dataflow.connectors.class%
         arguments: [@doctrine.orm.entity_manager]
 
     # configuration 
     oro_dataflow.form.handler.configuration:
         class: %oro_dataflow.handler.configuration.class%
         scope: request
-        arguments: ["@request", "@doctrine.orm.entity_manager"]
+        arguments: [@request, @doctrine.orm.entity_manager, %oro_dataflow.handler.serialization_format%]
 

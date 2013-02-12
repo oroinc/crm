@@ -17,6 +17,7 @@ use Oro\Bundle\DataFlowBundle\Configuration\ConfigurationInterface;
  */
 class ConfigurationHandler
 {
+
     /**
      * @var FormInterface
      */
@@ -33,18 +34,27 @@ class ConfigurationHandler
     protected $manager;
 
     /**
-     * Constrcutor
-     * @param Request       $request
-     * @param ObjectManager $manager
+     * Format used for serialization
+     * @var string
      */
-    public function __construct(Request $request, ObjectManager $manager)
+    protected $format;
+
+    /**
+     * Constructor
+     *
+     * @param Request       $request the request
+     * @param ObjectManager $manager the manager which deal with configuration persistence
+     * @param string        $format  the format used to serialize data
+     */
+    public function __construct(Request $request, ObjectManager $manager, $format)
     {
         $this->request = $request;
         $this->manager = $manager;
+        $this->format  = $format;
     }
 
     /**
-     * Process form
+     * Set form
      *
      * @param FormInterface $form
      *
@@ -55,6 +65,16 @@ class ConfigurationHandler
         $this->form = $form;
 
         return $this;
+    }
+
+    /**
+     * Return form
+     *
+     * @return FormInterface
+     */
+    public function getForm()
+    {
+        return $this->form;
     }
 
     /**
@@ -88,16 +108,20 @@ class ConfigurationHandler
      */
     protected function onSuccess(ConfigurationInterface $entity)
     {
-        // serialize
-        $format = 'xml';
+        // serialize configuration
         $serializer = \JMS\Serializer\SerializerBuilder::create()->build();
-        $data = $serializer->serialize($entity, $format);
+        $data = $serializer->serialize($entity, $this->format);
 
-        // prepare persist
-        $configuration = new Configuration();
-        $configuration->setDescription('my new conf');
+        // prepare persist of configuration entity
+        if ($entity->getId()) {
+            $repository = $this->manager->getRepository('OroDataFlowBundle:Configuration');
+            $configuration = $repository->find($entity->getId());
+        } else {
+            $configuration = new Configuration();
+        }
+        $configuration->setDescription($entity->getDescription());
         $configuration->setTypeName(get_class($entity));
-        $configuration->setFormat($format);
+        $configuration->setFormat($this->format);
         $configuration->setData($data);
         $this->manager->persist($configuration);
 
