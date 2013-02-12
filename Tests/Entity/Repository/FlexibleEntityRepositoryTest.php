@@ -135,11 +135,11 @@ class FlexibleEntityRepositoryTest extends AbstractFlexibleManagerTest
         $qb = $this->repository->prepareQueryBuilder($attToSelect, $attCriterias);
         $expectedDql = 'SELECT Entity, selectVname, selectVdescription '
             .'FROM Oro\Bundle\FlexibleEntityBundle\Tests\Entity\Demo\Flexible Entity '
-            .'INNER JOIN Entity.values filterVname WITH filterVname.attribute = 1
-                AND filterVname.varchar = :filtervname AND filterVname.locale = :filterLname '
-            .'INNER JOIN Entity.values filterVdescription WITH filterVdescription.attribute = 2
-                AND filterVdescription.text = :filtervdescription AND filterVdescription.locale = :filterLdescription
-                AND filterVdescription.scope = :filterSdescription '
+            .'INNER JOIN Entity.values filterVname WITH filterVname.attribute = 1 '
+            .'AND filterVname.varchar = :filtervname AND filterVname.locale = :filterLname '
+            .'INNER JOIN Entity.values filterVdescription WITH filterVdescription.attribute = 2 '
+            .'AND filterVdescription.text = :filtervdescription AND filterVdescription.locale = :filterLdescription '
+            .'AND filterVdescription.scope = :filterSdescription '
             .'LEFT JOIN Entity.values selectVname WITH selectVname.attribute = 1 '
             .'LEFT JOIN Entity.values selectVdescription WITH selectVdescription.attribute = 2 '
             .'WHERE Entity.id = :id';
@@ -150,8 +150,8 @@ class FlexibleEntityRepositoryTest extends AbstractFlexibleManagerTest
         $expectedDql = 'SELECT Entity, selectVname, selectVdescription '
             .'FROM Oro\Bundle\FlexibleEntityBundle\Tests\Entity\Demo\Flexible Entity '
             .'LEFT JOIN Entity.values selectVname WITH selectVname.attribute = 1 '
-            .'LEFT JOIN Entity.values selectVdescription WITH selectVdescription.attribute = 2
-                AND selectVdescription.locale = :selectLdescription AND selectVdescription.scope = :selectSdescription '
+            .'LEFT JOIN Entity.values selectVdescription WITH selectVdescription.attribute = 2 '
+            .'AND selectVdescription.locale = :selectLdescription AND selectVdescription.scope = :selectSdescription '
             .'ORDER BY selectVdescription.text desc, Entity.id asc';
         $this->assertEquals($expectedDql, $qb->getQuery()->getDql());
     }
