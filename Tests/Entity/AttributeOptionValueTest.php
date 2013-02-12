@@ -110,5 +110,4 @@ class AttributeOptionValueTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(self::$attOptValueClass, $obj);
         $this->assertEquals($attOpt, $attOptValue->getOption());
     }
-
 }

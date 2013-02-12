@@ -45,7 +45,12 @@ abstract class AbstractEntityAttributeOption extends AbstractAttributeOption
     /**
      * @var ArrayCollection $optionValues
      *
-     * @ORM\OneToMany(targetEntity="AbstractEntityAttributeOptionValue", mappedBy="option", cascade={"persist", "remove"}, orphanRemoval=true)
+     * @ORM\OneToMany(
+     *     targetEntity="AbstractEntityAttributeOptionValue",
+     *     mappedBy="option",
+     *     cascade={"persist", "remove"},
+     *     orphanRemoval=true
+     * )
      */
     protected $optionValues;
 
@@ -97,14 +102,16 @@ abstract class AbstractEntityAttributeOption extends AbstractAttributeOption
     {
         $translatable = $this->translatable;
         $locale = $this->getLocale();
-        $values = $this->getOptionValues()->filter(function($value) use ($translatable, $locale) {
-            // return relevant translated value
-            if ($translatable and $value->getLocale() == $locale) {
-                return true;
-            } else if (!$translatable) {
-                return true;
+        $values = $this->getOptionValues()->filter(
+            function ($value) use ($translatable, $locale) {
+                // return relevant translated value
+                if ($translatable and $value->getLocale() == $locale) {
+                    return true;
+                } elseif (!$translatable) {
+                    return true;
+                }
             }
-        });
+        );
         $value = $values->first();
 
         return $value;
@@ -121,5 +128,4 @@ abstract class AbstractEntityAttributeOption extends AbstractAttributeOption
 
         return ($value) ? $value->getValue() : '';
     }
-
 }

@@ -72,7 +72,7 @@ class AddValueFieldSubscriber implements EventSubscriberInterface
         // prepare current value
         if ($fieldName == 'option') {
             $data = $value->getOption();
-        } else if ($fieldName == 'options') {
+        } elseif ($fieldName == 'options') {
             $data = $value->getOptions();
         } else {
             $data = $value->getData();

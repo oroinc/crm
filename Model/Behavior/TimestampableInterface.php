@@ -43,5 +43,4 @@ interface TimestampableInterface
      * @return TimestampableInterface
     */
     public function setUpdated($updated);
-
 }

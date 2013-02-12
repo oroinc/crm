@@ -61,5 +61,4 @@ class TranslatableListenerTest extends AbstractFlexibleManagerTest
         //locale heas been changed by post load
         $this->assertEquals($this->flexible->getLocale(), $code);
     }
-
 }

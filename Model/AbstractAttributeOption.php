@@ -173,5 +173,4 @@ abstract class AbstractAttributeOption implements TranslatableInterface
     {
         return $this->sortOrder;
     }
-
 }

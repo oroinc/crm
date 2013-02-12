@@ -55,5 +55,4 @@ abstract class AbstractAttributeExtended
 
         return $this;
     }
-
 }

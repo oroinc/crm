@@ -88,5 +88,4 @@ class SimpleManager
 
         return new $class();
     }
-
 }

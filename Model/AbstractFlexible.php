@@ -13,7 +13,8 @@ use Oro\Bundle\FlexibleEntityBundle\Model\Behavior\TimestampableInterface;
  * @license   http://opensource.org/licenses/MIT MIT
  *
  */
-abstract class AbstractFlexible implements FlexibleInterface, TimestampableInterface, TranslatableInterface, ScopableInterface
+abstract class AbstractFlexible implements FlexibleInterface, TimestampableInterface,
+TranslatableInterface, ScopableInterface
 {
 
     /**
@@ -160,5 +161,4 @@ abstract class AbstractFlexible implements FlexibleInterface, TimestampableInter
 
         return $this;
     }
-
 }

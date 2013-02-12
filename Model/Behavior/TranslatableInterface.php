@@ -25,5 +25,4 @@ interface TranslatableInterface
      * @return TranslatableInterface
      */
     public function setLocale($locale);
-
 }

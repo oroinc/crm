@@ -76,5 +76,4 @@ class ScopableListener implements EventSubscriber
             }
         }
     }
-
 }

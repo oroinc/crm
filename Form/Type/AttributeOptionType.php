@@ -66,7 +66,9 @@ class AttributeOptionType extends AbstractType
     protected function addFieldOptionValues(FormBuilderInterface $builder)
     {
         $builder->add(
-            'optionValues', 'collection', array(
+            'optionValues',
+            'collection',
+            array(
                 'type'         => new AttributeOptionValueType(),
                 'allow_add'    => true,
                 'allow_delete' => true,

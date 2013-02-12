@@ -253,7 +253,9 @@ class FlexibleManager implements TranslatableInterface, ScopableInterface
     public function getAttributeExtendedRepository()
     {
         if (!$this->getAttributeExtendedName()) {
-            throw new FlexibleConfigurationException($this->getFlexibleName().' has no flexible attribute extended class');
+            throw new FlexibleConfigurationException(
+                $this->getFlexibleName() .' has no flexible attribute extended class'
+            );
         }
 
         return $this->storageManager->getRepository($this->getAttributeExtendedName());
@@ -366,7 +368,9 @@ class FlexibleManager implements TranslatableInterface, ScopableInterface
     public function createAttributeExtended(AbstractAttributeType $type = null)
     {
         if (!$this->getAttributeExtendedName()) {
-            throw new FlexibleConfigurationException($this->getFlexibleName().' has no flexible attribute extended class');
+            throw new FlexibleConfigurationException(
+                $this->getFlexibleName() .' has no flexible attribute extended class'
+            );
         }
         // build base attribute
         $attribute = $this->createAttribute($type);
@@ -394,5 +398,4 @@ class FlexibleManager implements TranslatableInterface, ScopableInterface
 
         return $object;
     }
-
 }

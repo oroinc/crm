@@ -116,5 +116,4 @@ class FlexibleValueTest extends \PHPUnit_Framework_TestCase
         $this->value->setOption($option);
         $this->assertEquals($this->value->getOption(), $option);
     }
-
 }

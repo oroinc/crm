@@ -141,7 +141,9 @@ class FlexibleEntityRepository extends EntityRepository implements TranslatableI
         // raise exception
         if (!empty($attributeCodes) and count($attributeCodes) != count($codeToAttribute)) {
             $missings = array_diff($attributeCodes, array_keys($codeToAttribute));
-            throw new UnknownAttributeException('Attribute(s) with code '.implode(', ', $missings).' not exists for entity '.$this->_entityName);
+            throw new UnknownAttributeException(
+                'Attribute(s) with code '.implode(', ', $missings).' not exists for entity '.$this->_entityName
+            );
         }
 
         return $codeToAttribute;
@@ -215,11 +217,23 @@ class FlexibleEntityRepository extends EntityRepository implements TranslatableI
         // add criterias
         $attributeCodeToAlias = array();
         if ($criteria and !empty($criteria)) {
-            $attributeCodeToAlias = $this->addFieldOrAttributeCriterias($qb, $attributes, $criteria, $codeToAttribute, $attributeCodeToAlias);
+            $attributeCodeToAlias = $this->addFieldOrAttributeCriterias(
+                $qb,
+                $attributes,
+                $criteria,
+                $codeToAttribute,
+                $attributeCodeToAlias
+            );
         }
         // get selected attributes values (but not used as criteria)
         if (!empty($attributes)) {
-            $attributeCodeToAlias = $this->addAttributeToSelect($qb, $attributes, $codeToAttribute, $attributeCodeToAlias, $orderBy);
+            $attributeCodeToAlias = $this->addAttributeToSelect(
+                $qb,
+                $attributes,
+                $codeToAttribute,
+                $attributeCodeToAlias,
+                $orderBy
+            );
         }
         // add order by
         if ($orderBy) {
@@ -336,8 +350,8 @@ class FlexibleEntityRepository extends EntityRepository implements TranslatableI
                 $qb->innerJoin('Entity.'.$attribute->getBackendStorage(), $joinAlias, 'WITH', $condition)
                     ->setParameter($joinValue, $fieldValue);
 
-            // add field criteria
             } else {
+                // add field criteria
                 $qb->andWhere('Entity.'.$fieldCode.' = :'.$fieldCode)->setParameter($fieldCode, $fieldValue);
             }
         }
@@ -378,5 +392,4 @@ class FlexibleEntityRepository extends EntityRepository implements TranslatableI
 
         return current($products);
     }
-
 }

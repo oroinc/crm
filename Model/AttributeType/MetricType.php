@@ -23,5 +23,4 @@ class MetricType extends AbstractAttributeType
         $this->backendType = self::BACKEND_TYPE_DECIMAL;
         $this->formType    = 'number';
     }
-
 }

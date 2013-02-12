@@ -72,5 +72,4 @@ class SimpleManagerTest extends AbstractOrmTest
     {
         $this->assertTrue($this->manager->createEntity() instanceof $this->entityName);
     }
-
 }
