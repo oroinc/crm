@@ -11,7 +11,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/ddeboer/data-import/archive/559936e0720baa14564eaaacaaeffde3b4912f65.zip",
+                "url": "https://api.github.com/repos/ddeboer/data-import/zipball/559936e0720baa14564eaaacaaeffde3b4912f65",
                 "reference": "559936e0720baa14564eaaacaaeffde3b4912f65",
                 "shasum": ""
             },
@@ -19,20 +19,20 @@
                 "php": ">=5.3.0"
             },
             "require-dev": {
-                "symfony/form": "2.*",
-                "phpexcel/phpexcel": "1.7.6",
                 "doctrine/dbal": "@stable",
                 "doctrine/orm": "@stable",
                 "ext-sqlite3": "*",
-                "symfony/console": "@stable"
+                "phpexcel/phpexcel": "1.7.6",
+                "symfony/console": "@stable",
+                "symfony/form": "2.*"
             },
             "suggest": {
-                "phpexcel/phpexcel": "If you want to use the ExcelReader",
-                "symfony/form": "If you want to use the ObjectConverter",
                 "doctrine/dbal": "If you want to use the DbalReader",
-                "symfony/console": "If you want to use the ConsoleProgressWriter",
                 "ext-iconv": "For the CharsetValueConverter",
-                "ext-mbstring": "For the CharsetValueConverter"
+                "ext-mbstring": "For the CharsetValueConverter",
+                "phpexcel/phpexcel": "If you want to use the ExcelReader",
+                "symfony/console": "If you want to use the ConsoleProgressWriter",
+                "symfony/form": "If you want to use the ObjectConverter"
             },
             "time": "2012-12-08 18:11:33",
             "type": "library",
@@ -51,12 +51,12 @@
             ],
             "description": "Import data from, and export data to, a range of file formats and media",
             "keywords": [
-                "data",
-                "excel",
                 "csv",
-                "import",
+                "data",
                 "doctrine",
-                "export"
+                "excel",
+                "export",
+                "import"
             ]
         },
         {
@@ -70,13 +70,13 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/ddeboer/DdeboerDataImportBundle/archive/8f42f54b702f0f98c679b3ba575c6b7e120e9146.zip",
+                "url": "https://api.github.com/repos/ddeboer/DdeboerDataImportBundle/zipball/8f42f54b702f0f98c679b3ba575c6b7e120e9146",
                 "reference": "8f42f54b702f0f98c679b3ba575c6b7e120e9146",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.0",
-                "ddeboer/data-import": "dev-master"
+                "ddeboer/data-import": "dev-master",
+                "php": ">=5.3.0"
             },
             "suggest": {
                 "phpexcel/phpexcel": "If you want to use the ExcelReader",
@@ -117,7 +117,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/doctrine/common/archive/bb0aebbf234db52df476a2b473d434745b34221c.zip",
+                "url": "https://api.github.com/repos/doctrine/common/zipball/bb0aebbf234db52df476a2b473d434745b34221c",
                 "reference": "bb0aebbf234db52df476a2b473d434745b34221c",
                 "shasum": ""
             },
@@ -169,11 +169,11 @@
             "description": "Common Library for Doctrine projects",
             "homepage": "http://www.doctrine-project.org",
             "keywords": [
-                "collections",
-                "spl",
-                "eventmanager",
                 "annotations",
-                "persistence"
+                "collections",
+                "eventmanager",
+                "persistence",
+                "spl"
             ]
         },
         {
@@ -191,50 +191,50 @@
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.3",
                 "doctrine/common": ">2.2,<2.4-dev",
+                "php": ">=5.3.3",
                 "twig/twig": ">=1.9.1,<2.0-dev"
             },
             "replace": {
-                "symfony/doctrine-bridge": "self.version",
-                "symfony/monolog-bridge": "self.version",
-                "symfony/propel1-bridge": "self.version",
-                "symfony/swiftmailer-bridge": "self.version",
-                "symfony/twig-bridge": "self.version",
-                "symfony/framework-bundle": "self.version",
-                "symfony/security-bundle": "self.version",
-                "symfony/twig-bundle": "self.version",
-                "symfony/web-profiler-bundle": "self.version",
                 "symfony/browser-kit": "self.version",
                 "symfony/class-loader": "self.version",
                 "symfony/config": "self.version",
                 "symfony/console": "self.version",
                 "symfony/css-selector": "self.version",
                 "symfony/dependency-injection": "self.version",
+                "symfony/doctrine-bridge": "self.version",
                 "symfony/dom-crawler": "self.version",
                 "symfony/event-dispatcher": "self.version",
                 "symfony/filesystem": "self.version",
                 "symfony/finder": "self.version",
                 "symfony/form": "self.version",
+                "symfony/framework-bundle": "self.version",
                 "symfony/http-foundation": "self.version",
                 "symfony/http-kernel": "self.version",
                 "symfony/locale": "self.version",
+                "symfony/monolog-bridge": "self.version",
                 "symfony/options-resolver": "self.version",
                 "symfony/process": "self.version",
+                "symfony/propel1-bridge": "self.version",
                 "symfony/routing": "self.version",
                 "symfony/security": "self.version",
+                "symfony/security-bundle": "self.version",
                 "symfony/serializer": "self.version",
+                "symfony/swiftmailer-bridge": "self.version",
                 "symfony/templating": "self.version",
                 "symfony/translation": "self.version",
+                "symfony/twig-bridge": "self.version",
+                "symfony/twig-bundle": "self.version",
                 "symfony/validator": "self.version",
+                "symfony/web-profiler-bundle": "self.version",
                 "symfony/yaml": "self.version"
             },
             "require-dev": {
+                "doctrine/data-fixtures": "1.0.*",
                 "doctrine/dbal": ">=2.2,<2.4-dev",
                 "doctrine/orm": ">=2.2.3,<2.4-dev",
-                "doctrine/data-fixtures": "1.0.*",
-                "propel/propel1": "dev-master",
-                "monolog/monolog": "1.*"
+                "monolog/monolog": "1.*",
+                "propel/propel1": "dev-master"
             },
             "time": "2012-12-21 10:24:53",
             "type": "library",
@@ -270,18 +270,18 @@
             "source": {
                 "type": "git",
                 "url": "git://github.com/fabpot/Twig.git",
-                "reference": "c6445fb5cd6823f7bd65108a717064957b6eafd5"
+                "reference": "72c8bb73e90cf6d2e992b01ab508f7fc13e38c8f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fabpot/Twig/zipball/c6445fb5cd6823f7bd65108a717064957b6eafd5",
-                "reference": "c6445fb5cd6823f7bd65108a717064957b6eafd5",
+                "url": "https://api.github.com/repos/fabpot/Twig/zipball/72c8bb73e90cf6d2e992b01ab508f7fc13e38c8f",
+                "reference": "72c8bb73e90cf6d2e992b01ab508f7fc13e38c8f",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.2.4"
             },
-            "time": "2013-02-01 09:44:45",
+            "time": "2013-02-09 18:37:02",
             "type": "library",
             "extra": {
                 "branch-alias": {

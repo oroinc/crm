@@ -2,6 +2,7 @@
 namespace Oro\Bundle\DataFlowBundle\Tests\Connector;
 
 use Oro\Bundle\DataFlowBundle\Tests\Connector\Demo\MyConnector;
+use Oro\Bundle\DataFlowBundle\Tests\Configuration\Demo\MyConfiguration;
 
 /**
  * Test related class
@@ -33,6 +34,8 @@ class ConnectorTest extends \PHPUnit_Framework_TestCase
     public function testConfigure()
     {
         $this->assertNull($this->connector->getConfiguration());
-        // TODO use basic configuration
+        $configuration = new MyConfiguration();
+        $this->connector->configure($configuration);
+        $this->assertEquals($this->connector->getConfiguration(), $configuration);
     }
 }
