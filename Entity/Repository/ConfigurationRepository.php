@@ -14,4 +14,17 @@ use Doctrine\ORM\EntityRepository;
  */
 class ConfigurationRepository extends EntityRepository
 {
+
+    /**
+     * Retrieve configuration
+     *
+     * @param string $typeName    the configuration FQCN
+     * @param string $description the configuration description
+     */
+    public function findOneByTypeAndDescription($typeName, $description)
+    {
+        $criteria = array('typeName' => $typeName, 'description' => $description);
+
+        return $this->findOneBy($criteria);
+    }
 }

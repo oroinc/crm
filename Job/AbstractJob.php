@@ -30,9 +30,10 @@ abstract class AbstractJob implements JobInterface
     /**
      * {@inheritDoc}
      */
-    public function configure(ConfigurationInterface $configuration)
+    public function configure(ConfigurationInterface $connectorConfig, ConfigurationInterface $jobConfig)
     {
-        $this->configuration = $configuration->process();
+        $this->connectorConfiguration = $connectorConfig;
+        $this->configuration          = $jobConfig;
 
         return $this;
     }

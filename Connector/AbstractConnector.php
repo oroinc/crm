@@ -26,7 +26,7 @@ abstract class AbstractConnector implements ConnectorInterface
      */
     public function configure(ConfigurationInterface $configuration)
     {
-        $this->configuration = $configuration->process();
+        $this->configuration = $configuration;
 
         return $this;
     }

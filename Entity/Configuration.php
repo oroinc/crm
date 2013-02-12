@@ -10,7 +10,10 @@ use Doctrine\ORM\Mapping as ORM;
  * @copyright 2012 Akeneo SAS (http://www.akeneo.com)
  * @license   http://opensource.org/licenses/MIT MIT
  *
- * @ORM\Table(name="oro_dataflow_configuration")
+ * @ORM\Table(
+ *     name="oro_dataflow_configuration", indexes={@ORM\Index(name="searchcode_idx", columns={"description"})},
+ *     uniqueConstraints={@ORM\UniqueConstraint(name="searchunique_idx", columns={"description", "type_name"})}
+ * )
  * @ORM\Entity(repositoryClass="Oro\Bundle\DataFlowBundle\Entity\Repository\ConfigurationRepository")
  */
 class Configuration
@@ -26,6 +29,8 @@ class Configuration
     protected $id;
 
     /**
+     * Description is unique per type
+     *
      * @var string
      *
      * @ORM\Column(name="description", type="string", length=255)

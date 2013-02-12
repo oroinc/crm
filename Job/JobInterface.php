@@ -16,11 +16,12 @@ interface JobInterface
 
     /**
      * Configure
-     * @param ConfigurationInterface $configuration
+     * @param ConfigurationInterface $connectorConfig
+     * @param ConfigurationInterface $jobConfig
      *
      * @return JobInterface
      */
-    public function configure(ConfigurationInterface $configuration);
+    public function configure(ConfigurationInterface $connectorConfig, ConfigurationInterface $jobConfig);
 
     /**
      * Get configuration
