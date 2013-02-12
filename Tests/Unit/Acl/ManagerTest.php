@@ -27,11 +27,15 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
 
     private $testUser;
 
+    private $securityContext;
+
     public function setUp()
     {
         if (!interface_exists('Doctrine\Common\Persistence\ObjectManager')) {
             $this->markTestSkipped('Doctrine Common has to be installed for this test to run.');
         }
+
+        $this->securityContext = $this->getMock('Symfony\Component\Security\Core\SecurityContextInterface');
 
         $this->user = $this->getMock('Oro\Bundle\UserBundle\Entity\User');
         $this->om = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
@@ -72,7 +76,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
         $this->cache = $this->getMock('Doctrine\Common\Cache\CacheProvider',
             array('doFetch', 'doContains', 'doSave', 'doDelete', 'doFlush', 'doGetStats', 'fetch', 'save'));
 
-        $this->manager = new Manager($this->om, $reader, $this->cache);
+        $this->manager = new Manager($this->om, $reader, $this->cache, $this->securityContext);
 
         $this->testRole = new Role('ROLE_TEST_ROLE');
 

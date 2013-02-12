@@ -1,10 +1,10 @@
 <?php
 namespace Oro\Bundle\UserBundle\Acl;
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\Cache\CacheProvider;
 use Oro\Bundle\UserBundle\Acl\ResourceReader\Reader;
+use Symfony\Component\Security\Core\SecurityContextInterface;
 
 use Oro\Bundle\UserBundle\Entity\Role;
 use Oro\Bundle\UserBundle\Entity\Acl;
@@ -20,10 +20,7 @@ class Manager
      */
     protected $em;
 
-    /**
-     * @var \Symfony\Component\DependencyInjection\ContainerInterface
-     */
-    protected $container;
+    protected $securityContext;
 
     /**
      * @var \Oro\Bundle\UserBundle\Acl\ResourceReader\Reader
@@ -35,12 +32,18 @@ class Manager
      */
     protected $cache;
 
-    public function __construct(ObjectManager $em, Reader $aclReader, CacheProvider $cache)
+    public function __construct(
+        ObjectManager $em,
+        Reader $aclReader,
+        CacheProvider $cache,
+        SecurityContextInterface $securityContext
+    )
     {
         $this->em = $em;
         $this->aclReader = $aclReader;
         $this->cache = $cache;
         $this->cache->setNamespace('oro_user.cache');
+        $this->securityContext = $securityContext;
     }
 
     /**
@@ -351,7 +354,7 @@ class Manager
      */
     private function getUser()
     {
-        if (null === $token = $this->container->get('security.context')->getToken()) {
+        if (null === $token = $this->securityContext->getToken()) {
             return null;
         }
 
