@@ -82,7 +82,7 @@ class ProfileController extends FOSRestController implements ClassResourceInterf
     {
         $entity = $this->getManager()->createFlexible();
         $view   = $this->get('oro_user.form.handler.profile.api')->process($entity)
-            ? RouteRedirectView::create('oro_api_get_user', array('id' => $entity->getId()))
+            ? RouteRedirectView::create('oro_api_get_profile', array('id' => $entity->getId()), Codes::HTTP_CREATED)
             : $this->view($this->get('oro_user.form.profile.api'), Codes::HTTP_BAD_REQUEST);
 
         return $this->handleView($view);
@@ -102,15 +102,16 @@ class ProfileController extends FOSRestController implements ClassResourceInterf
      */
     public function putAction($id)
     {
+        /* @var $entity \Oro\Bundle\UserBundle\Entity\User */
         $entity = $this->getManager()->findUserBy(array('id' => (int) $id));
 
         if (!$entity) {
             return $this->handleView($this->view('', Codes::HTTP_NOT_FOUND));
         }
 
-        $view = $this->get('oro_user.form.handler.profile')->process($entity)
-            ? RouteRedirectView::create('oro_api_get_user', array('id' => $entity->getId()))
-            : $this->view('', Codes::HTTP_INTERNAL_SERVER_ERROR);
+        $view = $this->get('oro_user.form.handler.profile.api')->process($entity)
+            ? RouteRedirectView::create('oro_api_get_profile', array('id' => $entity->getId()), Codes::HTTP_NO_CONTENT)
+            : $this->view($this->get('oro_user.form.profile.api'), Codes::HTTP_BAD_REQUEST);
 
         return $this->handleView($view);
     }

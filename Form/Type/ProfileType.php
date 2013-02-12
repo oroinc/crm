@@ -3,11 +3,11 @@
 namespace Oro\Bundle\UserBundle\Form\Type;
 
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormEvent;
-use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 use Oro\Bundle\FlexibleEntityBundle\Form\Type\FlexibleType;
+use Oro\Bundle\UserBundle\Form\EventListener\ProfileSubscriber;
 
 class ProfileType extends FlexibleType
 {
@@ -21,6 +21,7 @@ class ProfileType extends FlexibleType
 
         // user fields
         $builder
+            ->addEventSubscriber(new ProfileSubscriber())
             ->add('username', 'text', array(
                 'required'       => true,
             ))
@@ -46,19 +47,10 @@ class ProfileType extends FlexibleType
             ))
             ->add('plainPassword', 'repeated', array(
                 'type'           => 'password',
-                'required'       => false,
+                'required'       => true,
                 'first_options'  => array('label' => 'Password'),
                 'second_options' => array('label' => 'Password again'),
             ));
-
-        $factory = $builder->getFormFactory();
-
-        // leave password only for "Edit user" form
-        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) use ($factory) {
-            if ($event->getData() && $event->getData()->getId()) {
-                $event->getForm()->remove('plainPassword');
-            }
-        });
     }
 
     /**
@@ -67,8 +59,13 @@ class ProfileType extends FlexibleType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => $this->flexibleClass,
-            'intention'  => 'profile',
+            'data_class'        => $this->flexibleClass,
+            'intention'         => 'profile',
+            'validation_groups' => function(FormInterface $form) {
+                return $form->getData() && $form->getData()->getId()
+                    ? array('Profile', 'Default')
+                    : array('Registration', 'Profile', 'Default');
+            },
         ));
     }
 
