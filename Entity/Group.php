@@ -97,7 +97,7 @@ class Group
      */
     public function getRole($role)
     {
-        foreach ($this->getRoles() as $item ) {
+        foreach ($this->getRoles() as $item) {
             if ($role == $item->getRole()) {
                 return $item;
             }
