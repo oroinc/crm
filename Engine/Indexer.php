@@ -44,11 +44,16 @@ class Indexer
         $query =  $this->select()
             ->from('*')
             ->andWhere('*', '=', $searchString, 'text');
-        if ($offset) {
-            $query->setFirstResult($offset);
-        }
-        if ($maxResults) {
+
+        if ($maxResults > 0) {
             $query->setMaxResults($maxResults);
+        }
+        if ($offset > 0) {
+            $query->setFirstResult($offset);
+            //hardcoded for mysql offset without limit
+            if ($maxResults == 0) {
+                $query->setMaxResults(10000000);
+            }
         }
 
         return $this->query($query);
