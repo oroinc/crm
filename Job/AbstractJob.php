@@ -14,7 +14,15 @@ abstract class AbstractJob implements JobInterface
 {
 
     /**
+     * Connector configuration
+     *
+     * @var ConfigurationInterface
+     */
+    protected $connectorConfiguration;
+
+    /**
      * Job configuration
+     *
      * @var ConfigurationInterface
      */
     protected $configuration;
@@ -35,5 +43,13 @@ abstract class AbstractJob implements JobInterface
     public function getConfiguration()
     {
         return $this->configuration;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getConnectorConfiguration()
+    {
+        return $this->connectorConfiguration;
     }
 }

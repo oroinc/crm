@@ -24,6 +24,14 @@ interface JobInterface
 
     /**
      * Get configuration
+     *
+     * @return ConfigurationInterface
+     */
+    public function getConnectorConfiguration();
+
+    /**
+     * Get configuration
+     *
      * @return ConfigurationInterface
      */
     public function getConfiguration();
