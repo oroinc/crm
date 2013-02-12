@@ -47,13 +47,12 @@ class Indexer
 
         if ($maxResults > 0) {
             $query->setMaxResults($maxResults);
+        } else {
+            $query->setMaxResults(10000000);
         }
+
         if ($offset > 0) {
             $query->setFirstResult($offset);
-            //hardcoded for mysql offset without limit
-            if ($maxResults == 0) {
-                $query->setMaxResults(10000000);
-            }
         }
 
         return $this->query($query);
