@@ -157,7 +157,7 @@ services:
 
     oro_user.acl_manager:
         class:                        %oro_user.acl.manager.class%
-        arguments:                    [@doctrine.orm.entity_manager, @oro_user.acl_reader, @cache]
+        arguments:                    [@doctrine.orm.entity_manager, @oro_user.acl_reader, @cache, @security.context]
 
     oro_user.form.handler.group.api:
         class:                        %oro_user.handler.group.class%
