@@ -29,6 +29,12 @@ class Item
      */
     protected $em;
 
+    /**
+     * @Exclude
+     * @Soap\ComplexType("string")
+     */
+    protected $recordString;
+
     public function __construct(ObjectManager $em, $entityName = null, $recordId = 0)
     {
         $this->em = $em;
@@ -38,6 +44,7 @@ class Item
         if ($recordId) {
             $this->setRecordId($recordId);
         }
+        $this->recordString = $this->getEntity()->__toString();
     }
 
     /**

@@ -13,7 +13,7 @@ class SoapController extends ContainerAware
      * @Soap\Param("max_results", phpType = "int")
      * @Soap\Result(phpType = "Oro\Bundle\SearchBundle\Query\Result")
      */
-    public function searchAction($search, $offset, $max_results)
+    public function searchAction($search, $offset = 0, $max_results = 0)
     {
         return $this->container->get('besimple.soap.response')->setReturnValue(
             $this->container->get('oro_search.index')->simpleSearch(
