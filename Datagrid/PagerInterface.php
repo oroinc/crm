@@ -14,5 +14,4 @@ use Sonata\AdminBundle\Datagrid\PagerInterface as BasePagerInterface;
 
 interface PagerInterface extends BasePagerInterface
 {
-
 }

@@ -6,5 +6,4 @@ use Sonata\AdminBundle\Filter\FilterFactoryInterface as BaseFilterFactoryInterfa
 
 interface FilterFactoryInterface extends BaseFilterFactoryInterface
 {
-
 }
