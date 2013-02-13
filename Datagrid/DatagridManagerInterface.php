@@ -1,0 +1,62 @@
+<?php
+
+namespace Oro\Bundle\GridBundle\Datagrid;
+
+use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\Validator\ValidatorInterface;
+use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Component\HttpFoundation\Request;
+
+use Oro\Bundle\GridBundle\Builder\DatagridBuilderInterface;
+use Oro\Bundle\GridBundle\Builder\ListBuilderInterface;
+use Oro\Bundle\GridBundle\Datagrid\QueryManagerInterface;
+
+interface DatagridManagerInterface
+{
+    /**
+     * @param DatagridBuilderInterface $datagridBuilder
+     * @return void
+     */
+    public function setDatagridBuilder(DatagridBuilderInterface $datagridBuilder);
+
+    /**
+     * @param ListBuilderInterface $listBuilder
+     * @return void
+     */
+    public function setListBuilder(ListBuilderInterface $listBuilder);
+
+    /**
+     * @return DatagridInterface
+     */
+    public function getDatagrid();
+
+    /**
+     * @param QueryManagerInterface $queryManager
+     * @return void
+     */
+    public function setQueryManager(QueryManagerInterface $queryManager);
+
+    /**
+     * @param TranslatorInterface $translator
+     * @return void
+     */
+    public function setTranslator(TranslatorInterface $translator);
+
+    /**
+     * @param Request $request
+     * @return void
+     */
+    public function setRequest(Request $request);
+
+    /**
+     * @param FormFactoryInterface $formFactory
+     * @return mixed
+     */
+    public function setFormFactoryInterface(FormFactoryInterface $formFactory);
+
+    /**
+     * @param ValidatorInterface $validator
+     * @return void
+     */
+    public function setValidator(ValidatorInterface $validator);
+}
