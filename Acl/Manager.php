@@ -77,8 +77,9 @@ class Manager
                  'method' => $method
             )
         );
+        // @todo: decide what to return if the resource is not found
         if (!$acl) {
-            return false;
+            return true;
         }
 
         $accessRoles = $this->getRolesForAcl($acl);
