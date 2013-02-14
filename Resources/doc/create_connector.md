@@ -16,8 +16,8 @@ class MagentoConnector extends AbstractConnector
 We declare it as a service with expected configuration FQCN (see configuration section):
 ```yaml
 parameters:
-    connector.magento_catalog.class:           Acme\Bundle\DemoDataFlowBundle\Connector\MagentoConnector
-    configuration.magento_catalog.class:       Acme\Bundle\DemoDataFlowBundle\Configuration\MagentoConfiguration
+    connector.magento_catalog.class:     Acme\Bundle\DemoDataFlowBundle\Connector\MagentoConnector
+    configuration.magento_catalog.class: Acme\Bundle\DemoDataFlowBundle\Configuration\MagentoConfiguration
 
 services:
     connector.magento_catalog:
