@@ -99,13 +99,16 @@ abstract class AbstractFlexibleManagerTest extends AbstractOrmTest
                 )
             )
         );
-        // prepare test container
-        $this->container->setParameter('oro_flexibleentity.flexible_config', $this->flexibleConfig);
-        // prepare simple entity manager (use default entity manager)
-        $this->manager = new FlexibleManager($this->container, $this->flexibleClassName);
-        $this->container->set('demo_manager', $this->manager);
         // mock global event dispatcher 'event_dispatcher'
         $dispatcher = new EventDispatcher();
+
+        // prepare test container
+        $this->container->setParameter('oro_flexibleentity.flexible_config', $this->flexibleConfig);
+
+        // prepare simple entity manager (use default entity manager)
+        $this->manager = new FlexibleManager($this->flexibleClassName, $this->flexibleConfig, $this->entityManager, $dispatcher);
+
+        $this->container->set('demo_manager', $this->manager);
         $this->container->set('event_dispatcher', $dispatcher);
     }
 }
