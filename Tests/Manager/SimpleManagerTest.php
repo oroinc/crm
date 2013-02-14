@@ -27,7 +27,7 @@ class SimpleManagerTest extends AbstractOrmTest
         parent::setUp();
         // prepare simple entity manager (use default entity manager)
         $this->entityName = 'Oro\Bundle\FlexibleEntityBundle\Tests\Entity\Demo\Simple';
-        $this->manager = new SimpleManager($this->container, $this->entityName);
+        $this->manager = new SimpleManager($this->entityName, $this->container->get('doctrine.orm.entity_manager'));
     }
 
     /**
@@ -35,7 +35,7 @@ class SimpleManagerTest extends AbstractOrmTest
      */
     public function testConstructWithCustomEntityManager()
     {
-        $myManager = new SimpleManager($this->container, $this->entityName, $this->entityManager);
+        $myManager = new SimpleManager($this->entityName, $this->entityManager);
         $this->assertNotNull($myManager->getStorageManager());
         $this->assertEquals($myManager->getStorageManager(), $this->entityManager);
     }

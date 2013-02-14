@@ -15,12 +15,6 @@ use Doctrine\Common\Persistence\ObjectManager;
  */
 class SimpleManager
 {
-
-    /**
-     * @var ContainerInterface $container
-     */
-    protected $container;
-
     /**
      * @var ObjectManager $storageManager
      */
@@ -34,19 +28,13 @@ class SimpleManager
     /**
      * Constructor
      *
-     * @param ContainerInterface $container      service container
      * @param string             $entityName     entity name
      * @param ObjectManager      $storageManager optional storage manager, get default if not provided
      */
-    public function __construct($container, $entityName, $storageManager = false)
+    public function __construct($entityName, ObjectManager $storageManager)
     {
-        $this->container  = $container;
-        $this->entityName = $entityName;
-        if ($storageManager) {
-            $this->storageManager = $storageManager;
-        } else {
-            $this->storageManager = $container->get('doctrine.orm.entity_manager');
-        }
+        $this->entityName     = $entityName;
+        $this->storageManager = $storageManager;
     }
 
     /**
