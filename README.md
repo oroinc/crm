@@ -60,6 +60,7 @@ How to use ?
 - [Use connector and job instances](Resources/doc/connector_job_instances.md)
 - [Make your service configuration editable](Resources/doc/configurable_services.md)
 
-
-
+Enhancement
+===========
+- provide useful class to make easiest to load high volume of data
 
