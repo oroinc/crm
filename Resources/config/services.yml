@@ -23,7 +23,7 @@ parameters:
 services:
     oro_user.manager:
         class:                        %oro_user.manager.class%
-        arguments:                    ["@service_container", %oro_user.entity.class%, null, "@security.encoder_factory"]
+        arguments:                    [%oro_user.entity.class%, %oro_flexibleentity.flexible_config%, "@doctrine.orm.entity_manager", "@event_dispatcher", "@security.encoder_factory"]
 
     oro_user.security.provider:
         class:                        %oro_user.security.provider.class%

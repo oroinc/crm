@@ -7,6 +7,7 @@ use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\User\UserInterface as SecurityUserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 use Doctrine\Common\Persistence\ObjectManager;
 
@@ -14,7 +15,14 @@ use Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleManager;
 
 class UserManager extends FlexibleManager implements UserProviderInterface
 {
+    /**
+     * @var EncoderFactoryInterface
+     */
     protected $encoderFactory;
+
+    /**
+     * @var string
+     */
     protected $class;
 
     /**
@@ -25,9 +33,9 @@ class UserManager extends FlexibleManager implements UserProviderInterface
      * @param ObjectManager           $storageManager optional storage manager, get default if not provided
      * @param EncoderFactoryInterface $encoderFactory
      */
-    public function __construct($container, $flexibleName, $storageManager, EncoderFactoryInterface $encoderFactory)
+    public function __construct($flexibleName, $flexibleConfig, ObjectManager $storageManager, EventDispatcherInterface $eventDispatcher, EncoderFactoryInterface $encoderFactory)
     {
-        parent::__construct($container, $flexibleName, $storageManager);
+        parent::__construct($flexibleName, $flexibleConfig, $storageManager, $eventDispatcher);
 
         $metadata = $this->getStorageManager()->getClassMetadata($flexibleName);
 
