@@ -1,4 +1,3 @@
-
 Define a configuration
 ----------------------
 
@@ -47,7 +46,7 @@ class CsvConfiguration extends AbstractConfiguration
 }
 ```
 
-Then you can instanciate to configure a service as :
+Then you can instanciate precedent object to configure a connector service as :
 ```php
 <?php
 $configuration = new CsvConfiguration();
@@ -56,4 +55,4 @@ $connector = $this->container->get('connector.magento_catalog');
 $connector->configure($configuration);
 ```
 
-You can use classic validation.yml file to ensure configuration validation.
+You can also use classic Symfony validation (with yaml file for instance) to ensure the configuration validation.
