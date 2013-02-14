@@ -82,7 +82,9 @@ A configuration can be serialized / unserialized in xml or json format.
 
     $confData      = $configRepo->find($configurationId);
     $serializer    = \JMS\Serializer\SerializerBuilder::create()->build();
-    $configuration = $serializer->deserialize($confData->getData(), $confData->getTypeName(), $confData->getFormat());
+    $configuration = $serializer->deserialize(
+        $confData->getData(), $confData->getTypeName(), $confData->getFormat()
+    );
     $configuration->setId($confData->getId());
     $configuration->setDescription($confData->getDescription());
 ```
