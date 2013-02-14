@@ -57,7 +57,7 @@ class Job
      * @ORM\ManyToOne(targetEntity="Configuration")
      * @ORM\JoinColumn(name="job_configuration_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected $jobConfigurationId;
+    protected $jobConfiguration;
 
     /**
      * Get id
