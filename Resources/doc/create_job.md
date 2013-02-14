@@ -1,7 +1,7 @@
 Create a new job
 ----------------
 
-Job is a service and it's defined as following :
+We begin by defining Job class as following (inherits of configure method) :
 ```php
 <?php
 namespace Acme\Bundle\DemoDataFlowBundle\Job;
@@ -19,7 +19,7 @@ class ImportAttributesJob extends AbstractJob
 
 ```
 
-And configuration, notice that a job can be attached to one or many connectors :
+We define job as service and use tags to declare it to the connectors registry and attach it to a conector :
 ```yaml
 parameters:
     job.type.import_customer.class:            Acme\Bundle\DemoDataFlowBundle\Job\ImportCustomersJob
