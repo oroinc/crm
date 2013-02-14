@@ -40,7 +40,7 @@ class QueryFactory implements QueryFactoryInterface
      */
     public function createQuery()
     {
-        $entityManager = $this->registry->getEntityManager($this->className);
+        $entityManager = $this->registry->getEntityManagerForClass($this->className);
         $queryBuilder  = $entityManager->getRepository($this->className)->createQueryBuilder($this->alias);
 
         return new ProxyQuery($queryBuilder);

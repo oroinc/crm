@@ -1,0 +1,5 @@
+parameters:
+    oro_grid.datagrid.class:           Oro\Bundle\GridBundle\Datagrid\Datagrid
+    oro_grid.orm.query.factory.class:  Oro\Bundle\GridBundle\Datagrid\ORM\QueryFactory
+
+services: ~

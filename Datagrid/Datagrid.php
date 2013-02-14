@@ -4,8 +4,8 @@ namespace Oro\Bundle\GridBundle\Datagrid;
 
 use Symfony\Component\Form\FormBuilderInterface;
 use \Symfony\Component\Form\Form;
-use Sonata\AdminBundle\Datagrid\DatagridInterface as BaseDatagridInterface;
 use Sonata\AdminBundle\Filter\FilterInterface as SonataFilterInterface;
+use Sonata\AdminBundle\Datagrid\PagerInterface as SonataPagerInterface;
 use Oro\Bundle\GridBundle\Filter\FilterInterface;
 use Oro\Bundle\GridBundle\Field\FieldDescriptionCollection;
 
@@ -19,10 +19,9 @@ class Datagrid implements DatagridInterface
     /**
      * @var FieldDescriptionCollection
      */
-    protected $columns;
 
     /**
-     * @var PagerInterface
+     * @var SonataPagerInterface
      */
     protected $pager;
 
@@ -49,14 +48,14 @@ class Datagrid implements DatagridInterface
     /**
      * @param ProxyQueryInterface $query
      * @param FieldDescriptionCollection $columns
-     * @param PagerInterface $pager
+     * @param SonataPagerInterface $pager
      * @param FormBuilderInterface $formBuilder
      * @param array $values
      */
     public function __construct(
         ProxyQueryInterface $query,
         FieldDescriptionCollection $columns,
-        PagerInterface $pager = null,
+        SonataPagerInterface $pager = null,
         FormBuilderInterface $formBuilder = null,
         array $values = array()
     ) {
@@ -87,7 +86,7 @@ class Datagrid implements DatagridInterface
     /**
      * @param string $name
      *
-     * @return \Sonata\AdminBundle\Filter\FilterInterface
+     * @return SonataFilterInterface
      */
     public function getFilter($name)
     {
@@ -126,7 +125,7 @@ class Datagrid implements DatagridInterface
     }
 
     /**
-     * @return PagerInterface
+     * @return SonataPagerInterface
      */
     public function getPager()
     {
