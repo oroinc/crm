@@ -1,4 +1,3 @@
-
 Create a new job
 ----------------
 
@@ -28,7 +27,6 @@ parameters:
 services:
     job.import_attributes:
         class: %job.type.import_attribute.class%
-        arguments: [ @product_manager ]
         tags:
             - { name: oro_dataflow_job, connector: connector.magento_catalog}
 ```
