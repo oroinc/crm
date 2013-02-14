@@ -1,17 +1,21 @@
 <?php
 
-namespace Oro\Bundle\GridBundle\Builder;
+namespace Oro\Bundle\GridBundle\Builder\ORM;
 
+use Oro\Bundle\GridBundle\Builder\ListBuilderInterface;
 use Oro\Bundle\GridBundle\Field\FieldDescriptionCollection;
 use Oro\Bundle\GridBundle\Field\FieldDescriptionInterface;
 
-interface ListBuilderInterface
+class ListBuilder implements ListBuilderInterface
 {
     /**
      * @param array $options
      * @return FieldDescriptionCollection
      */
-    public function getBaseList(array $options = array());
+    public function getBaseList(array $options = array())
+    {
+        return new FieldDescriptionCollection();
+    }
 
     /**
      * Modify a field description to display it in the list view.
@@ -19,7 +23,10 @@ interface ListBuilderInterface
      * @param null|mixed $type
      * @param FieldDescriptionInterface $fieldDescription
      */
-    public function buildField($type = null, FieldDescriptionInterface $fieldDescription = null);
+    public function buildField($type = null, FieldDescriptionInterface $fieldDescription = null)
+    {
+        $fieldDescription->setType($type);
+    }
 
     /**
      * Modify a field description and add it to the displayed columns.
@@ -32,5 +39,8 @@ interface ListBuilderInterface
         FieldDescriptionCollection $list,
         $type = null,
         FieldDescriptionInterface $fieldDescription = null
-    );
+    ) {
+        $this->buildField($type, $fieldDescription);
+        $list->add($fieldDescription);
+    }
 }

@@ -52,7 +52,7 @@ interface DatagridManagerInterface
      * @param FormFactoryInterface $formFactory
      * @return mixed
      */
-    public function setFormFactoryInterface(FormFactoryInterface $formFactory);
+    public function setFormFactory(FormFactoryInterface $formFactory);
 
     /**
      * @param ValidatorInterface $validator
