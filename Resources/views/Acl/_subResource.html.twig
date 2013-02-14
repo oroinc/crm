@@ -1,0 +1,18 @@
+{% for  resource in resources %}
+    <tr>
+        <td>
+            <input type="checkbox" name="resource[{{ resource.id }}]"
+                {%  if resource.accessRoles|length %}
+                    checked="checked"
+                {% endif %}
+            />
+        </td>
+        <td style="padding-left: {{ j }}px;">{{ resource.id }}</td>
+        <td>{{ resource.name }}</td>
+        <td>{{ resource.description }}</td>
+    </tr>
+    {%set i=i+1%}
+    {% if resource.children is defined %}
+        {% include 'OroUserBundle:Acl:_subResource.html.twig' with {'resources': resource.children, "j": j+15, 'i': i}  %}
+    {% endif %}
+{% endfor %}

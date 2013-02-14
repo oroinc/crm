@@ -13,6 +13,7 @@
             <th style="width: 20px">ID</th>
             <th>Role name</th>
             <th>Label</th>
+            <th style="width: 50px">ACL</th>
             <th style="width: 50px">Edit</th>
             <th style="width: 50px">Remove</th>
         </tr>
@@ -24,6 +25,7 @@
             <td><a href="{{ path('oro_user_role_edit', { id: rec.id }) }}" class="pull-right">{{ rec.id }}</a></td>
             <td><a href="{{ path('oro_user_role_edit', { id: rec.id }) }}">{{ rec.role }}</a></td>
             <td><a href="{{ path('oro_user_role_edit', { id: rec.id }) }}">{{ rec.label }}</a></td>
+            <td><a href="{{ path('oro_user_acl_edit', { id: rec.id }) }}"><i class="icon-edit"></i></a></td>
             <td><a href="{{ path('oro_user_role_edit', { id: rec.id }) }}"><i class="icon-edit"></i></a></td>
             <td><a href="{{ path('oro_user_role_remove', { id: rec.id }) }}"><i class="icon-remove"></i></a></td>
         </tr>
