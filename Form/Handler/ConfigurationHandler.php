@@ -6,6 +6,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Common\Persistence\ObjectManager;
 use Oro\Bundle\DataFlowBundle\Entity\Configuration;
 use Oro\Bundle\DataFlowBundle\Configuration\ConfigurationInterface;
+use Symfony\Component\Form\FormError;
 
 /**
  * Configuration form handler
@@ -92,9 +93,9 @@ class ConfigurationHandler
             $this->form->bind($this->request);
 
             if ($this->form->isValid()) {
-                $this->onSuccess($entity);
-
-                return true;
+                if ($this->onSuccess($entity)) {
+                    return true;
+                }
             }
         }
 
@@ -105,6 +106,8 @@ class ConfigurationHandler
      * "Success" form handler
      *
      * @param ConfigurationInterface $entity
+     *
+     * @return boolean
      */
     protected function onSuccess(ConfigurationInterface $entity)
     {
@@ -123,9 +126,18 @@ class ConfigurationHandler
         $configuration->setTypeName(get_class($entity));
         $configuration->setFormat($this->format);
         $configuration->setData($data);
-        $this->manager->persist($configuration);
 
         // save
-        $this->manager->flush();
+        try {
+            $this->manager->persist($configuration);
+            $this->manager->flush();
+            $entity->setId($configuration->getId());
+        } catch (\Doctrine\DBAL\DBALException $e) {
+            $this->form->get('description')->addError(new FormError($e->getMessage()));
+
+            return false;
+        }
+
+        return true;
     }
 }
