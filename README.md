@@ -9,9 +9,9 @@ Main classes /  concepts
 This bundle detects any declared application services which are related to import / export and allows to use them in a generic way.
 
 It makes easy to create your own :
-- Connector : a service which groups several jobs related to an external system (for instance, Magento)
-- Job : a service which use read, transform, write data to process a business action (for instance, import products from a csv file)
-- Configuration : to declare and validate required configuration of connector and job
+- Connector : a service to group several related jobs (for instance, related to Magento)
+- Job : a service which read, transform, write data to process a business operation (for instance, import products from a csv file)
+- Configuration : an object to declare and validate required parameters of connector or job
 
 Job uses some basic ETL classes to manipulate data :
 - Extractors : to read data from csv file, xml file, excel file, dbal query, orm query, etc
