@@ -1,7 +1,7 @@
 Create a new connector
 ----------------------
 
-A minimal connector can be defined as following :
+A minimal connector can be defined as following (note that you can use interface too) :
 ```php
 <?php
 namespace Acme\Bundle\DemoDataFlowBundle\Connector;
@@ -10,15 +10,17 @@ use Oro\Bundle\DataFlowBundle\Connector\AbstractConnector;
 
 class MagentoConnector extends AbstractConnector
 {
-    public function configure(ConfigurationInterface $configuration)
-    {
-        // configure before to use ...
-    }
 }
 ```
 
-We declare it as a service :
+We declare it as a service with expected configuration FQCN (see configuration section):
 ```yaml
+parameters:
+    connector.magento_catalog.class:           Acme\Bundle\DemoDataFlowBundle\Connector\MagentoConnector
+    configuration.magento_catalog.class:       Acme\Bundle\DemoDataFlowBundle\Configuration\MagentoConfiguration
+
+services:
     connector.magento_catalog:
-        class: Acme\Bundle\DemoDataFlowBundle\Connector\MagentoConnector
+        class: %connector.magento_catalog.class%
+        arguments: [%configuration.magento_catalog.class%]
 ```
