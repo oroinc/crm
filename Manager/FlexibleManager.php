@@ -2,7 +2,7 @@
 namespace Oro\Bundle\FlexibleEntityBundle\Manager;
 
 use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttributeType;
-use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Oro\Bundle\FlexibleEntityBundle\FlexibleEntityEvents;
 use Oro\Bundle\FlexibleEntityBundle\Event\FilterAttributeEvent;
 use Oro\Bundle\FlexibleEntityBundle\Event\FilterFlexibleEvent;
@@ -28,17 +28,6 @@ use Doctrine\Common\Persistence\ObjectManager;
  */
 class FlexibleManager implements TranslatableInterface, ScopableInterface
 {
-
-    /**
-     * @var ContainerInterface $container
-     */
-    protected $container;
-
-    /**
-     * @var ObjectManager $storageManager
-     */
-    protected $storageManager;
-
     /**
      * @var string
      */
@@ -49,6 +38,16 @@ class FlexibleManager implements TranslatableInterface, ScopableInterface
      * @var array
      */
     protected $flexibleConfig;
+
+    /**
+     * @var ObjectManager $storageManager
+     */
+    protected $storageManager;
+
+    /**
+     * @var EventDispatcherInterface $eventDispatcher
+     */
+    protected $eventDispatcher;
 
     /**
      * Locale code (from config or choose by user)
@@ -65,22 +64,17 @@ class FlexibleManager implements TranslatableInterface, ScopableInterface
     /**
      * Constructor
      *
-     * @param ContainerInterface $container      service container
-     * @param string             $flexibleName   entity name
-     * @param ObjectManager      $storageManager optional storage manager, get default if not provided
+     * @param string                    $flexibleName    Entity name
+     * @param array                     $flexibleConfig  Global flexible entities configuration array
+     * @param ObjectManager             $storageManager  Storage manager
+     * @param EventDispatcherInterface  $eventDispatcher Event dispatcher
      */
-    public function __construct($container, $flexibleName, $storageManager = false)
+    public function __construct($flexibleName, $flexibleConfig, ObjectManager $storageManager, EventDispatcherInterface $eventDispatcher)
     {
-        $this->container    = $container;
-        $this->flexibleName = $flexibleName;
-        if ($storageManager) {
-            $this->storageManager = $storageManager;
-        } else {
-            $this->storageManager = $container->get('doctrine.orm.entity_manager');
-        }
-        // get flexible entity configuration
-        $allFlexibleConfig = $this->container->getParameter('oro_flexibleentity.flexible_config');
-        $this->flexibleConfig = $allFlexibleConfig['entities_config'][$flexibleName];
+        $this->flexibleName    = $flexibleName;
+        $this->flexibleConfig  = $flexibleConfig['entities_config'][$flexibleName];
+        $this->storageManager  = $storageManager;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     /**
@@ -309,7 +303,7 @@ class FlexibleManager implements TranslatableInterface, ScopableInterface
         }
         // dispatch event
         $event = new FilterAttributeEvent($this, $object);
-        $this->container->get('event_dispatcher')->dispatch(FlexibleEntityEvents::CREATE_ATTRIBUTE, $event);
+        $this->eventDispatcher->dispatch(FlexibleEntityEvents::CREATE_ATTRIBUTE, $event);
 
         return $object;
     }
@@ -353,7 +347,7 @@ class FlexibleManager implements TranslatableInterface, ScopableInterface
         $object->setScope($this->getScope());
         // dispatch event
         $event = new FilterFlexibleEvent($this, $object);
-        $this->container->get('event_dispatcher')->dispatch(FlexibleEntityEvents::CREATE_FLEXIBLE, $event);
+        $this->eventDispatcher->dispatch(FlexibleEntityEvents::CREATE_FLEXIBLE, $event);
 
         return $object;
     }
@@ -394,7 +388,7 @@ class FlexibleManager implements TranslatableInterface, ScopableInterface
         $object->setScope($this->getScope());
         // dispatch event
         $event = new FilterFlexibleValueEvent($this, $object);
-        $this->container->get('event_dispatcher')->dispatch(FlexibleEntityEvents::CREATE_VALUE, $event);
+        $this->eventDispatcher->dispatch(FlexibleEntityEvents::CREATE_VALUE, $event);
 
         return $object;
     }
