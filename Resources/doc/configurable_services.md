@@ -30,7 +30,9 @@ class CsvConnectorType extends AbstractConfigurationType
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $resolver->setDefaults(array('data_class' => 'Acme\Bundle\DemoDataFlowBundle\Configuration\CsvConfiguration'));
+        $resolver->setDefaults(
+            array('data_class' => 'Acme\Bundle\DemoDataFlowBundle\Configuration\CsvConfiguration')
+        );
     }
 
     public function getName()
@@ -42,6 +44,10 @@ class CsvConnectorType extends AbstractConfigurationType
 
 Define form and form type as service :
 ```yaml
+parameters:
+    configuration.type.csv.class:              Acme\Bundle\DemoDataFlowBundle\Form\Type\CsvConnectorType
+
+services:
     configuration.form.csv:
         class: Symfony\Component\Form\Form
         factory_method: createNamed
