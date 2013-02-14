@@ -6,32 +6,22 @@ Deal with data import, export, transformation and mapping management
 Main classes /  concepts
 ------------------------
 
-This bundle uses some basic ETL classes to manipulate data :
+This bundle detects any declared application services which are related to import / export and allows to use them in a generic way.
+
+It makes easy to create your own :
+- Connector : a service which groups several jobs related to an external system (for instance, Magento)
+- Job : a service which use read, transform, write data to process a business action (for instance, import products from a csv file)
+- Configuration : to declare and validate required configuration of connector and job
+
+Job uses some basic ETL classes to manipulate data :
 - Extractors : to read data from csv file, xml file, excel file, dbal query, orm query, etc
 - Tranformers : to convert data (a row / item or a value), as datetime or charset converters, callback converter, etc
 - Loaders : to write data to csv, xml, excel file, database table (orm / dbal)
 
-It provides a way to declare some connectors and jobs :
-- Connector : a service which provides some jobs related to a system (for instance, Magento)
-- Job : use readers, writers, transformers to process a business action (as import products from a csv file, export products to Magento, etc)
-
-
-```yaml
-    job.import_attributes:
-        class: Acme\Bundle\DemoDataFlowBundle\Connector\Job\ImportAttributesJob
-        arguments: [ @configuration, @form, @product_manager ]
-        tags:
-            - { name: oro_dataflow_job, connector: connector.magento_catalog}
-```
-
-configure ou prepare (Parameters)
-
-
-
 Create a new connector
 ----------------------
 
-Connector is a service and it's define as following :
+A minimal connector can be defined as following :
 ```php
 <?php
 namespace Acme\Bundle\DemoDataFlowBundle\Connector;
@@ -47,12 +37,68 @@ class MagentoConnector extends AbstractConnector
 }
 ```
 
-And configuration :
+We declare it as a service :
 ```yaml
     connector.magento_catalog:
         class: Acme\Bundle\DemoDataFlowBundle\Connector\MagentoConnector
 ```
 
+Configure a configuration
+-------------------------
+
+A configuration defines expected parameters required to use a service (connector or job).
+
+It can be defined as following, here we use JMS Serializer to easily serialize and persist any kind of configuration.
+
+```php
+<?php
+namespace Acme\Bundle\DemoDataFlowBundle\Configuration;
+
+use Oro\Bundle\DataFlowBundle\Configuration\AbstractConfiguration;
+use JMS\Serializer\Annotation\Type;
+
+class CsvConfiguration extends AbstractConfiguration
+{
+
+    /**
+     * @Type("string")
+     * @var string
+     */
+    public $delimiter = ';';
+
+    // ...
+
+    /**
+     * @return string
+     */
+    public function getDelimiter()
+    {
+        return $this->delimiter;
+    }
+
+    /**
+     * @param string $delimiter
+     *
+     * @return CsvConfiguration
+     */
+    public function setDelimiter($delimiter)
+    {
+        $this->delimiter = $delimiter;
+
+        return $this;
+    }
+    //...
+}
+```
+
+Then you can instanciate to configure a service as :
+```php
+<?php
+$configuration = new CsvConfiguration();
+$configuration->setDelimiter(',');
+$connector = $this->container->get('connector.magento_catalog');
+$connector->configure($configuration);
+```
 
 Create a new job
 ----------------
