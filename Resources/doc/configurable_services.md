@@ -8,21 +8,15 @@ Make a service configuration editable means provide a way to :
 Define the configuration form
 -----------------------------
 
-Create a form type in classic Symfony way just extending AbstractConfigurationType to ensure presence of basic fields as configuration description :
+Create a form type in classic SF 2 way.
+
+Here we just extending AbstractConfigurationType to ensure presence of basic fields as configuration description :
 ```php
 <?php
 namespace Acme\Bundle\DemoDataFlowBundle\Form\Type;
 
 use Oro\Bundle\DataFlowBundle\Form\Type\AbstractConfigurationType;
 
-/**
- * Configuration form type
- *
- * @author    Nicolas Dupont <nicolas@akeneo.com>
- * @copyright 2012 Akeneo SAS (http://www.akeneo.com)
- * @license   http://opensource.org/licenses/MIT MIT
- *
- */
 class CsvConnectorType extends AbstractConfigurationType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
