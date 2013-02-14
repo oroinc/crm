@@ -55,20 +55,11 @@ How to use ?
 
 - [Add a connector service](Resources/doc/create_connector.md)
 - [Add a job service](Resources/doc/create_job.md)
+- [Use registry](Resources/doc/connector_registry.md)
 - [Use configurations](Resources/doc/create_configuration.md)
 - [Use connector and job instances](Resources/doc/connector_job_instances.md)
 - [Make your service configuration editable](Resources/doc/configurable_services.md)
 
-TODO : refactor following in dedicated sections
-
-Connector registry
-------------------
-
-Registry allows to retrieve references to any connector, job and grab connector to job association :
-```php
-<?php
-    $connectors = $this->container->get('oro_dataflow.connectors');
-```
 
 
 
