@@ -29,10 +29,11 @@ class AclPointcut implements PointcutInterface
      */
     public function matchesMethod(\ReflectionMethod $method)
     {
-        if ($this->reader->getMethodAnnotation($method, Manager::ACL_ANNOTATION_CLASS)) {
+        /*if ($this->reader->getMethodAnnotation($method, Manager::ACL_ANNOTATION_CLASS)) {
             return true;
-        }
-
+        }*/
         return false;
+
+        return true;
     }
 }

@@ -74,6 +74,21 @@ class AclRepository extends NestedTreeRepository
     }
 
     /**
+     * @param string $aclId
+     * @return array
+     */
+    public function getAclRoles($aclId)
+    {
+        return $this->createQueryBuilder('acl')
+            ->select(array('role'))
+            ->leftJoin('acl.accessRoles', 'role')
+            ->where('acl.id > :aclId')
+            ->setParameter('aclId', $aclId)
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
      * Get Acl array for role
      *
      * @param \Oro\Bundle\UserBundle\Entity\Role $role

@@ -17,6 +17,8 @@ use Oro\Bundle\UserBundle\Annotation\Acl as AnnotationAcl;
  */
 class Acl
 {
+    const ROOT_NODE = 'root';
+
     /**
      * @ORM\Id
      * @ORM\Column(type="string", length=50, name="id")

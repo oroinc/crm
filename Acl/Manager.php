@@ -79,10 +79,10 @@ class Manager
         );
         // @todo: decide what to return if the resource is not found
         if (!$acl) {
-            return true;
+            $accessRoles = $this->getAclRepo()->getAclRoles(Acl::ROOT_NODE);
+        } else {
+            $accessRoles = $this->getRolesForAcl($acl);
         }
-
-        $accessRoles = $this->getRolesForAcl($acl);
 
         return $this->checkIsGrant(
             $this->getUserRoles($user),
