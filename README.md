@@ -53,14 +53,13 @@ $ phpunit --coverage-html=cov/
 How to use ?
 ============
 
-- [Create a connector service](Resources/doc/create_connector.md)
-- [Create a job service](Resources/doc/create_job.md)
-- [Define, use and persist a configuration](Resources/doc/create_configuration.md)
+- [Add a connector service](Resources/doc/create_connector.md)
+- [Add a job service](Resources/doc/create_job.md)
+- [Use configurations](Resources/doc/create_configuration.md)
+- [Use connector and job instances](Resources/doc/connector_job_instances.md)
 - [Make your service configuration editable](Resources/doc/configurable_services.md)
 
-
 TODO : refactor following in dedicated sections
-
 
 Connector registry
 ------------------
