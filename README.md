@@ -18,6 +18,50 @@ Job uses some basic ETL classes to manipulate data :
 - Tranformers : to convert data (a row / item or a value), as datetime or charset converters, callback converter, etc
 - Loaders : to write data to csv, xml, excel file, database table (orm / dbal)
 
+Install
+=======
+
+To install for dev :
+
+```bash
+$ php composer.phar update --dev
+```
+To use as dependency, use composer and add bundle in your AppKernel :
+
+```yaml
+    "require": {
+        [...]
+        "oro/DataFlowBundle": "dev-master"
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "git@github.com:laboro/DataFlowBundle.git",
+            "branch": "master"
+        }
+    ]
+
+```
+
+Run unit tests
+==============
+
+```bash
+$ phpunit --coverage-html=cov/
+```
+
+How to use ?
+============
+
+- [Create a connector](Resources/doc/create_connector.md)
+- [Create a job](Resources/doc/create_job.md)
+- [Create a configuration](Resources/doc/create_configuration.md)
+- [Make your service configuration editable](Resources/doc/configurable_services.md)
+
+
+TODO : refactor following in dedicated sections
+
+
 Create a new connector
 ----------------------
 
