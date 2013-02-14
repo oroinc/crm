@@ -2,7 +2,7 @@
 
 namespace Oro\Bundle\GridBundle\Datagrid;
 
-interface QueryManagerInterface
+interface QueryFactoryInterface
 {
     /**
      * @return ProxyQueryInterface

@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 use Oro\Bundle\GridBundle\Builder\DatagridBuilderInterface;
 use Oro\Bundle\GridBundle\Builder\ListBuilderInterface;
-use Oro\Bundle\GridBundle\Datagrid\QueryManagerInterface;
+use Oro\Bundle\GridBundle\Datagrid\QueryFactoryInterface;
 
 interface DatagridManagerInterface
 {
@@ -31,10 +31,10 @@ interface DatagridManagerInterface
     public function getDatagrid();
 
     /**
-     * @param QueryManagerInterface $queryManager
+     * @param QueryFactoryInterface $queryManager
      * @return void
      */
-    public function setQueryManager(QueryManagerInterface $queryManager);
+    public function setQueryManager(QueryFactoryInterface $queryManager);
 
     /**
      * @param TranslatorInterface $translator

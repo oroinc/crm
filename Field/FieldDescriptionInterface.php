@@ -149,21 +149,6 @@ interface FieldDescriptionInterface
      */
     public function getFieldMapping();
 
-    /**
-     * set the parent association mappings information
-     *
-     * @param array $parentAssociationMappings
-     *
-     * @return void
-     */
-    public function setParentAssociationMappings(array $parentAssociationMappings);
-
-    /**
-     * return the parent association mapping definitions
-     *
-     * @return array the parent association mapping definitions
-     */
-    public function getParentAssociationMappings();
 
     /**
      * return true if the FieldDescription is linked to an identifier field
@@ -171,15 +156,6 @@ interface FieldDescriptionInterface
      * @return bool
      */
     public function isIdentifier();
-
-    /**
-     * return the value linked to the description
-     *
-     * @param mixed $object
-     *
-     * @return bool|mixed
-     */
-    public function getValue($object);
 
     /**
      * merge option values related to the provided option name
@@ -237,12 +213,6 @@ interface FieldDescriptionInterface
      */
     public function getSortFieldMapping();
 
-    /**
-     * return the parent association mapping definitions used when sorting
-     *
-     * @return array the parent association mapping definitions
-     */
-    public function getSortParentAssociationMapping();
 
     /**
      *
@@ -251,5 +221,5 @@ interface FieldDescriptionInterface
      *
      * @return mixed
      */
-    public function getFieldValue($object, $fieldName);
+    public function getFieldValue($object);
 }
