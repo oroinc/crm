@@ -21,6 +21,12 @@ abstract class AbstractJob implements JobInterface
     protected $connectorConfiguration;
 
     /**
+     * Connector configuration FQCN
+     * @var string
+     */
+    protected $connectorConfigurationName;
+
+    /**
      * Job configuration
      *
      * @var ConfigurationInterface
@@ -28,15 +34,68 @@ abstract class AbstractJob implements JobInterface
     protected $configuration;
 
     /**
+     * Job configuration FQCN
+     * @var string
+     */
+    protected $configurationName;
+
+    /**
+     * Constructor
+     *
+     * @param string $configurationConnectorClassName the connector conf FQCN
+     * @param string $configurationClassName          the job conf FQCN
+     */
+    public function __construct($configurationConnectorClassName, $configurationClassName)
+    {
+        $this->connectorConfigurationName = $configurationConnectorClassName;
+        $this->configurationName          = $configurationClassName;
+    }
+
+    /**
      * {@inheritDoc}
      */
     public function configure(ConfigurationInterface $connectorConfig, ConfigurationInterface $jobConfig)
     {
+        if (! $connectorConfig instanceof $this->connectorConfigurationName) {
+            throw new ConfigurationException(
+                'Connector configuration expected must be an instance of '.$this->connectorConfigurationName
+            );
+        }
+        if (! $jobConfig instanceof $this->configurationName) {
+            throw new ConfigurationException(
+                'Job Configuration expected must be an instance of '.$this->configurationName
+            );
+        }
         $this->connectorConfiguration = $connectorConfig;
         $this->configuration          = $jobConfig;
 
         return $this;
     }
+
+    /**
+     * Run the job
+     */
+    public function run()
+    {
+        $this->extract();
+        $this->transform();
+        $this->load();
+    }
+
+    /**
+     * Extract data
+     */
+    protected abstract function extract();
+
+    /**
+     * Transform data
+     */
+    protected abstract function transform();
+
+    /**
+     * Load data
+     */
+    protected abstract function load();
 
     /**
      * {@inheritDoc}
@@ -49,8 +108,24 @@ abstract class AbstractJob implements JobInterface
     /**
      * {@inheritDoc}
      */
+    public function getConfigurationName()
+    {
+        return $this->configurationName;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function getConnectorConfiguration()
     {
         return $this->connectorConfiguration;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getConnectorConfigurationName()
+    {
+        return $this->connectorConfigurationName;
     }
 }

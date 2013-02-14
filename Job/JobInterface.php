@@ -9,26 +9,32 @@ use Oro\Bundle\DataFlowBundle\Configuration\ConfigurationInterface;
  * @author    Nicolas Dupont <nicolas@akeneo.com>
  * @copyright 2012 Akeneo SAS (http://www.akeneo.com)
  * @license   http://opensource.org/licenses/MIT MIT
- *
  */
 interface JobInterface
 {
 
     /**
      * Configure
-     * @param ConfigurationInterface $connectorConfig
-     * @param ConfigurationInterface $jobConfig
+     * @param ConfigurationInterface $connectorConfig the connector configuration
+     * @param ConfigurationInterface $jobConfig       the job configuration
      *
      * @return JobInterface
      */
     public function configure(ConfigurationInterface $connectorConfig, ConfigurationInterface $jobConfig);
 
     /**
-     * Get configuration
+     * Get connector configuration
      *
      * @return ConfigurationInterface
      */
     public function getConnectorConfiguration();
+
+    /**
+     * Get connector configuration FQCN
+     *
+     * @return string
+     */
+    public function getConnectorConfigurationName();
 
     /**
      * Get configuration
@@ -36,6 +42,13 @@ interface JobInterface
      * @return ConfigurationInterface
      */
     public function getConfiguration();
+
+    /**
+     * Get configuration FQCN
+     *
+     * @return string
+     */
+    public function getConfigurationName();
 
     /**
      * Run the job
