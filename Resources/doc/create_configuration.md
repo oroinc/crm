@@ -53,6 +53,10 @@ $configuration = new CsvConfiguration();
 $configuration->setDelimiter(',');
 $connector = $this->container->get('connector.magento_catalog');
 $connector->configure($configuration);
+
+$jobConfiguration = new OtherConfiguration();
+$job = $this->container->get('job.import_attributes');
+$job->configure($configuration, $jobConfiguration);
 ```
 
 You can also use classic Symfony validation (with yaml file for instance) to ensure the configuration validation.
