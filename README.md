@@ -55,7 +55,7 @@ How to use ?
 
 - [Create a connector](Resources/doc/create_connector.md)
 - [Create a job](Resources/doc/create_job.md)
-- [Create a configuration](Resources/doc/create_configuration.md)
+- [Define, use and persist a configuration](Resources/doc/create_configuration.md)
 - [Make your service configuration editable](Resources/doc/configurable_services.md)
 
 
