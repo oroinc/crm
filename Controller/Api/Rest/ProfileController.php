@@ -3,7 +3,6 @@
 namespace Oro\Bundle\UserBundle\Controller\Api\Rest;
 
 use FOS\RestBundle\Controller\Annotations\NamePrefix;
-use FOS\RestBundle\Controller\Annotations\QueryParam;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Routing\ClassResourceInterface;
 use FOS\RestBundle\View\RouteRedirectView;
@@ -21,8 +20,8 @@ class ProfileController extends FOSRestController implements ClassResourceInterf
     /**
      * Get the list of users
      *
-     * @QueryParam(name="page", requirements="\d+", default="1", description="Page number, starting from 1. Optional, defaults to 1.")
-     * @QueryParam(name="limit", requirements="\d+", default="10", description="Number of items per page. Optional, defaults to 10.")
+     * @param int $page  [optional] Page number, starting from 1. Defaults to 1.
+     * @param int $limit [optional] Number of items per page. defaults to 10.
      * @ApiDoc(
      *  description="Get the list of users",
      *  resource=true,
@@ -51,7 +50,7 @@ class ProfileController extends FOSRestController implements ClassResourceInterf
     /**
      * Get user data
      *
-     * @QueryParam(name="id", requirements="\d+", description="User id")
+     * @param int $id User id
      * @ApiDoc(
      *  description="Get user data",
      *  resource=true,
@@ -94,7 +93,7 @@ class ProfileController extends FOSRestController implements ClassResourceInterf
     /**
      * Update existing user
      *
-     * @QueryParam(name="id", requirements="\d+", description="User id")
+     * @param int $id User id
      * @ApiDoc(
      *  description="Update existing user",
      *  resource=true,
@@ -124,7 +123,7 @@ class ProfileController extends FOSRestController implements ClassResourceInterf
     /**
      * Delete user
      *
-     * @QueryParam(name="id", requirements="\d+", description="User id")
+     * @param int $id User id
      * @ApiDoc(
      *  description="Delete user",
      *  resource=true,
@@ -149,7 +148,7 @@ class ProfileController extends FOSRestController implements ClassResourceInterf
     /**
      * Get user roles
      *
-     * @QueryParam(name="id", requirements="\d+", description="User id")
+     * @param int $id User id
      * @ApiDoc(
      *  description="Get user roles",
      *  resource=true,
@@ -172,7 +171,7 @@ class ProfileController extends FOSRestController implements ClassResourceInterf
     /**
      * Get user groups
      *
-     * @QueryParam(name="id", requirements="\d+", description="User id")
+     * @param int $id User id
      * @ApiDoc(
      *  description="Get user groups",
      *  resource=true,

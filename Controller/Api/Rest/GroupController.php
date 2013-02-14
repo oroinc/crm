@@ -3,7 +3,6 @@
 namespace Oro\Bundle\UserBundle\Controller\Api\Rest;
 
 use FOS\RestBundle\Controller\Annotations\NamePrefix;
-use FOS\RestBundle\Controller\Annotations\QueryParam;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Routing\ClassResourceInterface;
 use FOS\Rest\Util\Codes;
@@ -38,7 +37,7 @@ class GroupController extends FOSRestController implements ClassResourceInterfac
     /**
      * Get group data
      *
-     * @QueryParam(name="id", requirements="\d+", description="Group id")
+     * @param int $id Group id
      * @ApiDoc(
      *  description="Get group data",
      *  resource=true,
@@ -78,7 +77,7 @@ class GroupController extends FOSRestController implements ClassResourceInterfac
     /**
      * Update existing group
      *
-     * @QueryParam(name="id", requirements="\d+", description="Group id")
+     * @param int $id Group id
      * @ApiDoc(
      *  description="Update existing group",
      *  resource=true,
@@ -105,7 +104,7 @@ class GroupController extends FOSRestController implements ClassResourceInterfac
     /**
      * Delete group
      *
-     * @QueryParam(name="id", requirements="\d+", description="Group id")
+     * @param int $id Group id
      * @ApiDoc(
      *  description="Delete group",
      *  resource=true,
@@ -127,6 +126,29 @@ class GroupController extends FOSRestController implements ClassResourceInterfac
         $em->flush();
 
         return $this->handleView($this->view('', Codes::HTTP_NO_CONTENT));
+    }
+
+    /**
+     * Get group roles
+     *
+     * @param int $id Group id
+     * @ApiDoc(
+     *  description="Get group roles",
+     *  resource=true,
+     *  filters={
+     *      {"name"="id", "dataType"="integer"},
+     *  }
+     * )
+     */
+    public function getRolesAction($id)
+    {
+        $entity = $this->getManager()->find('OroUserBundle:Group', (int) $id);
+
+        if (!$entity) {
+            return $this->handleView($this->view('', Codes::HTTP_NOT_FOUND));
+        }
+
+        return $this->handleView($this->view($entity->getRoles(), Codes::HTTP_OK));
     }
 
     /**

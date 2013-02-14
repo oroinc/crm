@@ -28,7 +28,7 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
-     * @Soap\ComplexType("int")
+     * @Soap\ComplexType("int", nillable=true)
      * @Type("integer")
      */
     protected $id;
@@ -84,6 +84,7 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
      * Plain password. Used for model validation. Must not be persisted.
      *
      * @var string
+     * @Soap\ComplexType("string")
      * @Exclude
      */
     protected $plainPassword;
@@ -123,6 +124,7 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
      *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="role_id", referencedColumnName="id", onDelete="CASCADE")}
      * )
+     * @Soap\ComplexType("int[]", nillable=true)
      * @Exclude
      */
     protected $roles;
@@ -135,6 +137,7 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
      *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="group_id", referencedColumnName="id", onDelete="CASCADE")}
      * )
+     * @Soap\ComplexType("int[]", nillable=true)
      * @Exclude
      */
     protected $groups;
