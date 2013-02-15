@@ -64,10 +64,10 @@ class FlexibleManager implements TranslatableInterface, ScopableInterface
     /**
      * Constructor
      *
-     * @param string                    $flexibleName    Entity name
-     * @param array                     $flexibleConfig  Global flexible entities configuration array
-     * @param ObjectManager             $storageManager  Storage manager
-     * @param EventDispatcherInterface  $eventDispatcher Event dispatcher
+     * @param string                   $flexibleName    Entity name
+     * @param array                    $flexibleConfig  Global flexible entities configuration array
+     * @param ObjectManager            $storageManager  Storage manager
+     * @param EventDispatcherInterface $eventDispatcher Event dispatcher
      */
     public function __construct($flexibleName, $flexibleConfig, ObjectManager $storageManager, EventDispatcherInterface $eventDispatcher)
     {
