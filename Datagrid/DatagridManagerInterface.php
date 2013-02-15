@@ -34,7 +34,7 @@ interface DatagridManagerInterface
      * @param QueryFactoryInterface $queryManager
      * @return void
      */
-    public function setQueryManager(QueryFactoryInterface $queryManager);
+    public function setQueryFactory(QueryFactoryInterface $queryManager);
 
     /**
      * @param TranslatorInterface $translator

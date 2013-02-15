@@ -70,7 +70,7 @@ abstract class DatagridManager implements DatagridManagerInterface
      * @param QueryFactoryInterface $queryManager
      * @return void
      */
-    public function setQueryManager(QueryFactoryInterface $queryManager)
+    public function setQueryFactory(QueryFactoryInterface $queryManager)
     {
         $this->queryManager = $queryManager;
     }

@@ -1,12 +1,13 @@
 <?php
 
-namespace Oro\Bundle\GridBundle\Datagrid\ORM;
+namespace Oro\Bundle\GridBundle\Datagrid\ORM\QueryFactory;
 
 use Oro\Bundle\GridBundle\Datagrid\QueryFactoryInterface;
 use Oro\Bundle\GridBundle\Datagrid\ProxyQueryInterface;
 use Symfony\Bridge\Doctrine\RegistryInterface;
+use Doctrine\ORM\QueryBuilder;
 
-class QueryFactory implements QueryFactoryInterface
+class EntityQueryFactory extends AbstractQueryFactory
 {
     /**
      * @var RegistryInterface
@@ -28,7 +29,7 @@ class QueryFactory implements QueryFactoryInterface
      * @param string $className
      * @param string $alias
      */
-    public function __construct(RegistryInterface $registry, $className, $alias = 'o')
+    public function __construct(RegistryInterface $registry = null, $className = null, $alias = 'o')
     {
         $this->registry  = $registry;
         $this->className = $className;
@@ -36,13 +37,13 @@ class QueryFactory implements QueryFactoryInterface
     }
 
     /**
-     * @return ProxyQuery
+     * @return ProxyQueryInterface
      */
     public function createQuery()
     {
         $entityManager = $this->registry->getEntityManagerForClass($this->className);
-        $queryBuilder  = $entityManager->getRepository($this->className)->createQueryBuilder($this->alias);
+        $this->queryBuilder = $entityManager->getRepository($this->className)->createQueryBuilder($this->alias);
 
-        return new ProxyQuery($queryBuilder);
+        return parent::createQuery();
     }
 }

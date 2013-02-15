@@ -66,12 +66,6 @@ class DatagridBuilder implements DatagridBuilderInterface
      * @param array $values
      * @return DatagridInterface
      */
-
-    /**
-     * @param FieldDescriptionCollection $fieldCollection
-     * @param array $values
-     * @return DatagridInterface
-     */
     public function getBaseDatagrid(FieldDescriptionCollection $fieldCollection, array $values = array())
     {
         // TODO: inject pager instance
