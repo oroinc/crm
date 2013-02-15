@@ -8,6 +8,13 @@ use Oro\Bundle\SearchBundle\Query\Query;
 
 class Indexer
 {
+    const TEXT_ALL_DATA_FIELD = 'all_text';
+
+    const RELATION_ONE_TO_ONE = 'one-to-one';
+    const RELATION_MANY_TO_MANY = 'many-to-many';
+    const RELATION_MANY_TO_ONE = 'many-to-one';
+    const RELATION_ONE_TO_MANY = 'one-to-many';
+
     /**
      * @var \Oro\Bundle\SearchBundle\Engine\AbstractEngine
      */
