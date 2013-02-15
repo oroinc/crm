@@ -19,6 +19,7 @@ class Datagrid implements DatagridInterface
     /**
      * @var FieldDescriptionCollection
      */
+    protected $columns;
 
     /**
      * @var SonataPagerInterface
@@ -122,6 +123,8 @@ class Datagrid implements DatagridInterface
                 return true;
             }
         }
+
+        return false;
     }
 
     /**
@@ -189,7 +192,7 @@ class Datagrid implements DatagridInterface
      */
     public function getResults()
     {
-        // TODO: Implement getResults() method.
+        return $this->getQuery()->execute();
     }
 
     /**

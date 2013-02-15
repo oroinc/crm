@@ -1,0 +1,37 @@
+{% block grid_filter %}
+{% endblock %}
+
+{% block grid_content %}
+<table border="1">
+    {% block grid_header %}
+        <thead>
+            <tr>
+                {% for field in datagrid.columns.elements %}
+                    {% block grid_header_field %}
+                        <th>{{ field.label }}</th>
+                    {% endblock %}
+                {% endfor %}
+            </tr>
+        </thead>
+    {% endblock %}
+    {% block grid_body %}
+        <tbody>
+            {% for row in datagrid.results %}
+                {% block grid_body_row %}
+                    <tr>
+                        {% for field in datagrid.columns.elements %}
+                            {% block grid_body_row_field %}
+                                <td>{{ attribute(row, field.name) }}</td>
+                            {% endblock %}
+                        {% endfor %}
+                    </tr>
+                {% endblock %}
+            {% endfor %}
+        </tbody>
+    {% endblock %}
+    {% block grid_footer %}
+        <tfoot>
+        </tfoot>
+    {% endblock %}
+</table>
+{% endblock %}
