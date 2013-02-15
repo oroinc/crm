@@ -4,7 +4,6 @@ namespace Oro\Bundle\GridBundle\Datagrid;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Translation\TranslatorInterface;
-use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Validator\ValidatorInterface;
 use Oro\Bundle\GridBundle\Builder\DatagridBuilderInterface;
 use Oro\Bundle\GridBundle\Builder\ListBuilderInterface;
@@ -26,7 +25,7 @@ abstract class DatagridManager implements DatagridManagerInterface
     /**
      * @var QueryFactoryInterface
      */
-    protected $queryManager;
+    protected $queryFactory;
 
     /**
      * @var TranslatorInterface
@@ -37,11 +36,6 @@ abstract class DatagridManager implements DatagridManagerInterface
      * @var Request
      */
     protected $request;
-
-    /**
-     * @var FormFactoryInterface
-     */
-    protected $formFactory;
 
     /**
      * @var ValidatorInterface
@@ -72,7 +66,7 @@ abstract class DatagridManager implements DatagridManagerInterface
      */
     public function setQueryFactory(QueryFactoryInterface $queryManager)
     {
-        $this->queryManager = $queryManager;
+        $this->queryFactory = $queryManager;
     }
 
     /**
@@ -91,15 +85,6 @@ abstract class DatagridManager implements DatagridManagerInterface
     public function setRequest(Request $request)
     {
         $this->request = $request;
-    }
-
-    /**
-     * @param FormFactoryInterface $formFactory
-     * @return mixed
-     */
-    public function setFormFactory(FormFactoryInterface $formFactory)
-    {
-        $this->formFactory = $formFactory;
     }
 
     /**
@@ -124,7 +109,7 @@ abstract class DatagridManager implements DatagridManagerInterface
         }
 
         // create datagrid
-        $datagrid = $this->datagridBuilder->getBaseDatagrid($listCollection);
+        $datagrid = $this->datagridBuilder->getBaseDatagrid($this->queryFactory->createQuery(), $listCollection);
 
         // add datagrid filters
         /** @var $fieldDescription FieldDescriptionInterface */

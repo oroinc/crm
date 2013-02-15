@@ -1,5 +1,23 @@
 parameters:
-    oro_grid.datagrid.class:           Oro\Bundle\GridBundle\Datagrid\Datagrid
-    oro_grid.orm.query.factory.class:  Oro\Bundle\GridBundle\Datagrid\ORM\QueryFactory
+    oro_grid.datagrid.class:                 Oro\Bundle\GridBundle\Datagrid\Datagrid
+    oro_grid.datagrid_manager.class:         Oro\Bundle\GridBundle\Datagrid\DatagridManager
 
-services: ~
+    oro_grid.orm.query_factory.entity.class: Oro\Bundle\GridBundle\Datagrid\ORM\QueryFactory\EntityQueryFactory
+    oro_grid.orm.query_factory.query.class:  Oro\Bundle\GridBundle\Datagrid\ORM\QueryFactory\QueryFactory
+
+    oro_grid.builder.datagrid.class:         Oro\Bundle\GridBundle\Builder\ORM\DatagridBuilder
+    oro_grid.builder.list.class:             Oro\Bundle\GridBundle\Builder\ORM\ListBuilder
+
+    oro_grid.filter.factory.class:           Oro\Bundle\GridBundle\Filter\FilterFactory
+
+services:
+    oro_grid.builder.datagrid:
+        class:     %oro_grid.builder.datagrid.class%
+        arguments: ["@form.factory", "@oro_grid.filter.factory"]
+
+    oro_grid.filter.factory:
+        class:     %oro_grid.filter.factory.class%
+        arguments: ["@service_container"]
+
+    oro_grid.builder.list:
+        class: %oro_grid.builder.list.class%

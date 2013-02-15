@@ -2,7 +2,7 @@
 
 namespace Oro\Bundle\GridBundle\Field;
 
-class FieldDescriptionCollection implements \ArrayAccess, \Countable
+class FieldDescriptionCollection implements \ArrayAccess, \Countable, \IteratorAggregate
 {
     protected $elements = array();
 
@@ -105,5 +105,13 @@ class FieldDescriptionCollection implements \ArrayAccess, \Countable
     {
         array_unshift($keys, 'batch');
         $this->elements = array_merge(array_flip($keys), $this->elements);
+    }
+
+    /**
+     * @return \ArrayIterator
+     */
+    public function getIterator()
+    {
+        return new \ArrayIterator($this->elements);
     }
 }

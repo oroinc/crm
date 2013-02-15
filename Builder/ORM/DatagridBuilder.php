@@ -9,7 +9,7 @@ use Oro\Bundle\GridBundle\Builder\DatagridBuilderInterface;
 use Oro\Bundle\GridBundle\Datagrid\Datagrid;
 use Oro\Bundle\GridBundle\Datagrid\DatagridInterface;
 use Oro\Bundle\GridBundle\Filter\FilterFactoryInterface;
-use Oro\Bundle\GridBundle\Datagrid\QueryFactoryInterface;
+use Oro\Bundle\GridBundle\Datagrid\ProxyQueryInterface;
 use Oro\Bundle\GridBundle\Datagrid\PagerInterface;
 
 class DatagridBuilder implements DatagridBuilderInterface
@@ -25,23 +25,15 @@ class DatagridBuilder implements DatagridBuilderInterface
     protected $formFactory;
 
     /**
-     * @var QueryFactoryInterface
-     */
-    protected $queryFactory;
-
-    /**
      * @param FormFactoryInterface $formFactory
      * @param FilterFactoryInterface $filterFactory
-     * @param QueryFactoryInterface $queryFactory
      */
     public function __construct(
         FormFactoryInterface $formFactory,
-        FilterFactoryInterface $filterFactory,
-        QueryFactoryInterface $queryFactory
+        FilterFactoryInterface $filterFactory
     ) {
         $this->formFactory     = $formFactory;
         $this->filterFactory   = $filterFactory;
-        $this->queryFactory    = $queryFactory;
     }
 
     /**
@@ -62,12 +54,16 @@ class DatagridBuilder implements DatagridBuilderInterface
     }
 
     /**
+     * @param ProxyQueryInterface $query
      * @param FieldDescriptionCollection $fieldCollection
      * @param array $values
      * @return DatagridInterface
      */
-    public function getBaseDatagrid(FieldDescriptionCollection $fieldCollection, array $values = array())
-    {
+    public function getBaseDatagrid(
+        ProxyQueryInterface $query,
+        FieldDescriptionCollection $fieldCollection,
+        array $values = array()
+    ) {
         // TODO: inject pager instance
         /** @var $pager PagerInterface */
         $pager = null;
@@ -79,12 +75,6 @@ class DatagridBuilder implements DatagridBuilderInterface
             array('csrf_protection' => false)
         );
 
-        return new Datagrid(
-            $this->queryFactory->createQuery(),
-            $fieldCollection,
-            $pager,
-            $formBuilder,
-            $values
-        );
+        return new Datagrid($query, $fieldCollection, $pager, $formBuilder, $values);
     }
 }

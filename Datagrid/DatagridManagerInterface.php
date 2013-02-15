@@ -49,12 +49,6 @@ interface DatagridManagerInterface
     public function setRequest(Request $request);
 
     /**
-     * @param FormFactoryInterface $formFactory
-     * @return mixed
-     */
-    public function setFormFactory(FormFactoryInterface $formFactory);
-
-    /**
      * @param ValidatorInterface $validator
      * @return void
      */
