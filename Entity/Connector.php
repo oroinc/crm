@@ -2,6 +2,7 @@
 namespace Oro\Bundle\DataFlowBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Entity connector is an instance of a configured connector
@@ -30,17 +31,32 @@ class Connector
      *
      * @var string
      *
-     * @ORM\Column(name="connector_service_id", type="string", length=255)
+     * @ORM\Column(name="service_id", type="string", length=255)
      */
-    protected $connectorService;
+    protected $serviceId;
 
     /**
-     * @var Configuration $connectorConfiguration
+     * @var Configuration $configuration
      *
      * @ORM\ManyToOne(targetEntity="Configuration")
-     * @ORM\JoinColumn(name="connector_configuration_id", referencedColumnName="id", onDelete="CASCADE")
+     * @ORM\JoinColumn(name="configuration_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected $connectorConfiguration;
+    protected $configuration;
+
+    /**
+     * @var Value
+     *
+     * @ORM\OneToMany(targetEntity="Job", mappedBy="connector", cascade={"persist", "remove"})
+     */
+    protected $jobs;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->jobs = new ArrayCollection();
+    }
 
     /**
      * Get id
@@ -55,13 +71,13 @@ class Connector
     /**
      * Set connector service id
      *
-     * @param string $connectorService
+     * @param string $serviceId
      *
      * @return Job
      */
-    public function setConnectorService($connectorService)
+    public function setServiceId($serviceId)
     {
-        $this->connectorService = $connectorService;
+        $this->serviceId = $serviceId;
 
         return $this;
     }
@@ -71,21 +87,21 @@ class Connector
      *
      * @return string
      */
-    public function getConnectorService()
+    public function getServiceId()
     {
-        return $this->connectorService;
+        return $this->serviceId;
     }
 
     /**
      * Set connector configuration
      *
-     * @param Configuration $connectorConfiguration
+     * @param Configuration $configuration
      *
      * @return Job
      */
-    public function setConnectorConfiguration(Configuration $connectorConfiguration)
+    public function setConfiguration(Configuration $configuration)
     {
-        $this->connectorConfiguration = $connectorConfiguration;
+        $this->configuration = $configuration;
 
         return $this;
     }
@@ -95,9 +111,43 @@ class Connector
      *
      * @return Configuration
      */
-    public function getConnectorConfiguration()
+    public function getConfiguration()
     {
-        return $this->connectorConfiguration;
+        return $this->configuration;
     }
 
+    /**
+     * Add job
+     *
+     * @param Job $job
+     *
+     * @return Configuration
+     */
+    public function addJob(Job $job)
+    {
+        $this->jobs[] = $job;
+        $job->setConnector($this);
+
+        return $this;
+    }
+
+    /**
+     * Remove job
+     *
+     * @param Job $value
+     */
+    public function removeJob(Job $job)
+    {
+        $this->jobs->removeElement($job);
+    }
+
+    /**
+     * Get jobs
+     *
+     * @return \ArrayAccess
+     */
+    public function getJobs()
+    {
+        return $this->jobs;
+    }
 }

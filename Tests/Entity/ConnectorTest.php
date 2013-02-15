@@ -3,6 +3,7 @@ namespace Oro\Bundle\DataFlowBundle\Tests\Entity;
 
 use Oro\Bundle\DataFlowBundle\Entity\Configuration;
 use Oro\Bundle\DataFlowBundle\Entity\Connector;
+use Oro\Bundle\DataFlowBundle\Entity\Job;
 
 /**
  * Test related class
@@ -29,19 +30,37 @@ class ConnectorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test related method
+     * Test related methods
      */
     public function testGettersSetters()
     {
         $this->assertNull($this->connector->getId());
-        $this->assertNull($this->connector->getConnectorService());
-        $this->assertNull($this->connector->getConnectorConfiguration());
+        $this->assertNull($this->connector->getServiceId());
+        $this->assertNull($this->connector->getConfiguration());
 
-        $this->connector->setConnectorService('my.connector.id');
+        $this->connector->setServiceId('my.connector.id');
         $configuration = new Configuration();
 
-        $this->connector->setConnectorConfiguration($configuration);
-        $this->assertEquals($this->connector->getConnectorService(), 'my.connector.id');
-        $this->assertEquals($this->connector->getConnectorConfiguration(), $configuration);
+        $this->connector->setConfiguration($configuration);
+        $this->assertEquals($this->connector->getServiceId(), 'my.connector.id');
+        $this->assertEquals($this->connector->getConfiguration(), $configuration);
+    }
+
+    /**
+     * Test related methods
+     */
+    public function testJobs()
+    {
+        $this->assertEquals($this->connector->getJobs()->count(), 0);
+        $job1 = new Job();
+        $this->connector->addJob($job1);
+        $this->assertEquals($this->connector->getJobs()->count(), 1);
+        $this->assertEquals($this->connector->getJobs()->first(), $job1);
+        $job2 = new Job();
+        $this->connector->addJob($job2);
+        $this->assertEquals($this->connector->getJobs()->count(), 2);
+        $this->connector->removeJob($job1);
+        $this->assertEquals($this->connector->getJobs()->count(), 1);
+        $this->assertEquals($this->connector->getJobs()->first(), $job2);
     }
 }

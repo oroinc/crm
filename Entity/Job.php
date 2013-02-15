@@ -26,38 +26,29 @@ class Job
     protected $id;
 
     /**
-     * Connector service id
+     * @var Connector $connector
      *
-     * @var string
-     *
-     * @ORM\Column(name="connector_service_id", type="string", length=255)
+     * @ORM\ManyToOne(targetEntity="Connector")
+     * @ORM\JoinColumn(name="connector_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected $connectorService;
-
-    /**
-     * @var Configuration $connectorConfiguration
-     *
-     * @ORM\ManyToOne(targetEntity="Configuration")
-     * @ORM\JoinColumn(name="connector_configuration_id", referencedColumnName="id", onDelete="CASCADE")
-     */
-    protected $connectorConfiguration;
+    protected $connector;
 
     /**
      * Job service id
      *
      * @var string
      *
-     * @ORM\Column(name="job_service_id", type="string", length=255)
+     * @ORM\Column(name="service_id", type="string", length=255)
      */
-    protected $jobService;
+    protected $serviceId;
 
     /**
      * @var Configuration $connectorConfiguration
      *
      * @ORM\ManyToOne(targetEntity="Configuration")
-     * @ORM\JoinColumn(name="job_configuration_id", referencedColumnName="id", onDelete="CASCADE")
+     * @ORM\JoinColumn(name="configuration_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected $jobConfiguration;
+    protected $configuration;
 
     /**
      * Get id
@@ -70,39 +61,15 @@ class Job
     }
 
     /**
-     * Set connector service id
+     * Set connector
      *
-     * @param string $connectorService
-     *
-     * @return Job
-     */
-    public function setConnectorService($connectorService)
-    {
-        $this->connectorService = $connectorService;
-
-        return $this;
-    }
-
-    /**
-     * Get connector service id
-     *
-     * @return string
-     */
-    public function getConnectorService()
-    {
-        return $this->connectorService;
-    }
-
-    /**
-     * Set connector configuration
-     *
-     * @param Configuration $connectorConfiguration
+     * @param Connector $connectorConfiguration
      *
      * @return Job
      */
-    public function setConnectorConfiguration(Configuration $connectorConfiguration)
+    public function setConnector(Connector $connector)
     {
-        $this->connectorConfiguration = $connectorConfiguration;
+        $this->connector = $connector;
 
         return $this;
     }
@@ -110,11 +77,11 @@ class Job
     /**
      * Get connector configuration
      *
-     * @return Configuration
+     * @return Connector
      */
-    public function getConnectorConfiguration()
+    public function getConnector()
     {
-        return $this->connectorConfiguration;
+        return $this->connector;
     }
 
     /**
@@ -124,9 +91,9 @@ class Job
      *
      * @return Job
      */
-    public function setJobService($jobService)
+    public function setServiceId($serviceId)
     {
-        $this->jobService = $jobService;
+        $this->serviceId = $serviceId;
 
         return $this;
     }
@@ -136,9 +103,9 @@ class Job
      *
      * @return string
      */
-    public function getJobService()
+    public function getServiceId()
     {
-        return $this->jobService;
+        return $this->serviceId;
     }
 
     /**
@@ -148,9 +115,9 @@ class Job
      *
      * @return Job
      */
-    public function setJobConfiguration(Configuration $jobConfiguration)
+    public function setConfiguration(Configuration $configuration)
     {
-        $this->jobConfiguration = $jobConfiguration;
+        $this->configuration = $configuration;
 
         return $this;
     }
@@ -160,9 +127,9 @@ class Job
      *
      * @return Configuration
      */
-    public function getJobConfiguration()
+    public function getConfiguration()
     {
-        return $this->jobConfiguration;
+        return $this->configuration;
     }
 
 }

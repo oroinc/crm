@@ -3,6 +3,7 @@ namespace Oro\Bundle\DataFlowBundle\Tests\Entity;
 
 use Oro\Bundle\DataFlowBundle\Entity\Configuration;
 use Oro\Bundle\DataFlowBundle\Entity\Job;
+use Oro\Bundle\DataFlowBundle\Entity\Connector;
 
 /**
  * Test related class
@@ -29,26 +30,23 @@ class JobTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test related method
+     * Test related methods
      */
     public function testGettersSetters()
     {
         $this->assertNull($this->job->getId());
-        $this->assertNull($this->job->getConnectorService());
-        $this->assertNull($this->job->getConnectorConfiguration());
-        $this->assertNull($this->job->getJobService());
-        $this->assertNull($this->job->getJobConfiguration());
+        $this->assertNull($this->job->getServiceId());
+        $this->assertNull($this->job->getConfiguration());
+        $this->assertNull($this->job->getConnector());
 
-        $configurationCon = new Configuration();
-        $configurationJob = new Configuration();
-        $this->job->setConnectorService('my.connector.id');
-        $this->job->setJobService('my.job.id');
-        $this->job->setConnectorConfiguration($configurationCon);
-        $this->job->setJobConfiguration($configurationJob);
+        $configuration = new Configuration();
+        $connector = new Connector();
+        $this->job->setServiceId('my.job.id');
+        $this->job->setConfiguration($configuration);
+        $this->job->setConnector($connector);
 
-        $this->assertEquals($this->job->getConnectorService(), 'my.connector.id');
-        $this->assertEquals($this->job->getConnectorConfiguration(), $configurationCon);
-        $this->assertEquals($this->job->getJobService(), 'my.job.id');
-        $this->assertEquals($this->job->getJobConfiguration(), $configurationJob);
+        $this->assertEquals($this->job->getServiceId(), 'my.job.id');
+        $this->assertEquals($this->job->getConfiguration(), $configuration);
+        $this->assertEquals($this->job->getConnector(), $connector);
     }
 }
