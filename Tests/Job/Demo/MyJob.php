@@ -21,4 +21,28 @@ class MyJob extends AbstractJob
     {
         return true;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function extract()
+    {
+        return true;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function transform()
+    {
+        return true;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function load()
+    {
+        return true;
+    }
 }

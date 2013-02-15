@@ -25,7 +25,7 @@ class ConnectorTest extends \PHPUnit_Framework_TestCase
      */
     public function setup()
     {
-        $this->connector = new MyConnector();
+        $this->connector = new MyConnector('Oro\Bundle\DataFlowBundle\Tests\Configuration\Demo\MyConfiguration');
     }
 
     /**

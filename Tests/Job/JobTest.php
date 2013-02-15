@@ -25,7 +25,10 @@ class JobTest extends \PHPUnit_Framework_TestCase
      */
     public function setup()
     {
-        $this->job = new MyJob();
+        $this->job = new MyJob(
+            'Oro\Bundle\DataFlowBundle\Tests\Configuration\Demo\MyConfiguration',
+            'Oro\Bundle\DataFlowBundle\Tests\Configuration\Demo\MyConfiguration'
+        );
     }
 
     /**
