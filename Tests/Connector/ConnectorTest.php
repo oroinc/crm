@@ -3,6 +3,7 @@ namespace Oro\Bundle\DataFlowBundle\Tests\Connector;
 
 use Oro\Bundle\DataFlowBundle\Tests\Connector\Demo\MyConnector;
 use Oro\Bundle\DataFlowBundle\Tests\Configuration\Demo\MyConfiguration;
+use Oro\Bundle\DataFlowBundle\Tests\Configuration\Demo\MyOtherConfiguration;
 
 /**
  * Test related class
@@ -21,11 +22,17 @@ class ConnectorTest extends \PHPUnit_Framework_TestCase
     protected $connector;
 
     /**
+     * @var string
+     */
+    protected $configurationName;
+
+    /**
      * Setup
      */
     public function setup()
     {
-        $this->connector = new MyConnector('Oro\Bundle\DataFlowBundle\Tests\Configuration\Demo\MyConfiguration');
+        $this->configurationName = 'Oro\Bundle\DataFlowBundle\Tests\Configuration\Demo\MyConfiguration';
+        $this->connector = new MyConnector($this->configurationName);
     }
 
     /**
@@ -34,8 +41,20 @@ class ConnectorTest extends \PHPUnit_Framework_TestCase
     public function testConfigure()
     {
         $this->assertNull($this->connector->getConfiguration());
+        $this->assertEquals($this->connector->getConfigurationName(), $this->configurationName);
         $configuration = new MyConfiguration();
         $this->connector->configure($configuration);
         $this->assertEquals($this->connector->getConfiguration(), $configuration);
+        $this->assertEquals($this->connector->getConfigurationName(), $this->configurationName);
+    }
+
+    /**
+     * Test related method
+     * @expectedException \Oro\Bundle\DataFlowBundle\Exception\ConfigurationException
+     */
+    public function testConfigureException()
+    {
+        $configuration = new MyOtherConfiguration();
+        $this->connector->configure($configuration);
     }
 }

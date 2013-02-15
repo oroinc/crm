@@ -17,14 +17,6 @@ class MyJob extends AbstractJob
     /**
      * {@inheritDoc}
      */
-    public function run()
-    {
-        return true;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public function extract()
     {
         return true;

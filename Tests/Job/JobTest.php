@@ -3,6 +3,7 @@ namespace Oro\Bundle\DataFlowBundle\Tests\Job;
 
 use Oro\Bundle\DataFlowBundle\Tests\Job\Demo\MyJob;
 use Oro\Bundle\DataFlowBundle\Tests\Configuration\Demo\MyConfiguration;
+use Oro\Bundle\DataFlowBundle\Tests\Configuration\Demo\MyOtherConfiguration;
 
 /**
  * Test related class
@@ -21,14 +22,23 @@ class JobTest extends \PHPUnit_Framework_TestCase
     protected $job;
 
     /**
+     * @var string
+     */
+    protected $conConfName;
+
+    /**
+     * @var string
+     */
+    protected $jobConfName;
+
+    /**
      * Setup
      */
     public function setup()
     {
-        $this->job = new MyJob(
-            'Oro\Bundle\DataFlowBundle\Tests\Configuration\Demo\MyConfiguration',
-            'Oro\Bundle\DataFlowBundle\Tests\Configuration\Demo\MyConfiguration'
-        );
+        $this->conConfName = 'Oro\Bundle\DataFlowBundle\Tests\Configuration\Demo\MyConfiguration';
+        $this->jobConfName = 'Oro\Bundle\DataFlowBundle\Tests\Configuration\Demo\MyConfiguration';
+        $this->job = new MyJob($this->conConfName, $this->jobConfName);
     }
 
     /**
@@ -38,11 +48,39 @@ class JobTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertNull($this->job->getConfiguration());
         $this->assertNull($this->job->getConnectorConfiguration());
+        $this->assertEquals($this->job->getConfigurationName(), $this->jobConfName);
+        $this->assertEquals($this->job->getConnectorConfigurationName(), $this->conConfName);
         $conConfiguration = new MyConfiguration();
         $jobConfiguration = new MyConfiguration();
         $this->job->configure($conConfiguration, $jobConfiguration);
         $this->assertEquals($this->job->getConfiguration(), $jobConfiguration);
         $this->assertEquals($this->job->getConnectorConfiguration(), $conConfiguration);
+        $this->assertEquals($this->job->getConfigurationName(), $this->jobConfName);
+        $this->assertEquals($this->job->getConnectorConfigurationName(), $this->conConfName);
+    }
+
+    /**
+     * Test related method
+     * @expectedException \Oro\Bundle\DataFlowBundle\Exception\ConfigurationException
+     */
+    public function testConfigureConnectorException()
+    {
+        $conConfiguration = new MyConfiguration();
+        $jobConfiguration = new MyOtherConfiguration();
+
+        $this->job->configure($conConfiguration, $jobConfiguration);
+    }
+
+    /**
+     * Test related method
+     * @expectedException \Oro\Bundle\DataFlowBundle\Exception\ConfigurationException
+     */
+    public function testConfigureJobException()
+    {
+        $conConfiguration = new MyOtherConfiguration();
+        $jobConfiguration = new MyConfiguration();
+
+        $this->job->configure($conConfiguration, $jobConfiguration);
     }
 
     /**
@@ -50,7 +88,6 @@ class JobTest extends \PHPUnit_Framework_TestCase
      */
     public function testRun()
     {
-        // TODO : test fail if not configured
-        $this->assertTrue($this->job->run());
+        $this->job->run();
     }
 }

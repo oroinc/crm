@@ -2,6 +2,7 @@
 namespace Oro\Bundle\DataFlowBundle\Job;
 
 use Oro\Bundle\DataFlowBundle\Configuration\ConfigurationInterface;
+use Oro\Bundle\DataFlowBundle\Exception\ConfigurationException;
 
 /**
  * Abstract job

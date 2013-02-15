@@ -37,10 +37,12 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($this->configuration->getTypeName());
         $this->assertNull($this->configuration->getFormat());
         $this->assertNull($this->configuration->getData());
+
         $this->configuration->setDescription('desc');
         $this->configuration->setTypeName('my type');
         $this->configuration->setFormat('json');
         $this->configuration->setData('{test:text}');
+
         $this->assertEquals($this->configuration->getDescription(), 'desc');
         $this->assertEquals($this->configuration->getTypeName(), 'my type');
         $this->assertEquals($this->configuration->getFormat(), 'json');
