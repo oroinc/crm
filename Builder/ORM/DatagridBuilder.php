@@ -11,6 +11,7 @@ use Oro\Bundle\GridBundle\Datagrid\DatagridInterface;
 use Oro\Bundle\GridBundle\Filter\FilterFactoryInterface;
 use Oro\Bundle\GridBundle\Datagrid\ProxyQueryInterface;
 use Oro\Bundle\GridBundle\Datagrid\PagerInterface;
+use Oro\Bundle\GridBundle\Datagrid\ParameterContainerInterface;
 
 class DatagridBuilder implements DatagridBuilderInterface
 {
@@ -56,13 +57,13 @@ class DatagridBuilder implements DatagridBuilderInterface
     /**
      * @param ProxyQueryInterface $query
      * @param FieldDescriptionCollection $fieldCollection
-     * @param array $values
+     * @param ParameterContainerInterface $values
      * @return DatagridInterface
      */
     public function getBaseDatagrid(
         ProxyQueryInterface $query,
         FieldDescriptionCollection $fieldCollection,
-        array $values = array()
+        ParameterContainerInterface $values = null
     ) {
         // TODO: inject pager instance
         /** @var $pager PagerInterface */
