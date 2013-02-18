@@ -15,14 +15,6 @@ class ProxyQuery extends BaseProxyQuery implements ProxyQueryInterface
     /**
      * {@inheritdoc}
      */
-    public function execute(array $params = array(), $hydrationMode = null)
-    {
-        return $this->queryBuilder->getQuery()->execute($params, $hydrationMode);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function entityJoin(array $associationMappings)
     {
         $aliases = $this->queryBuilder->getRootAliases();

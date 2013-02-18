@@ -3,16 +3,18 @@
 namespace Oro\Bundle\GridBundle\Builder\ORM;
 
 use Symfony\Component\Form\FormFactoryInterface;
-use Oro\Bundle\GridBundle\Field\FieldDescriptionInterface;
-use Oro\Bundle\GridBundle\Field\FieldDescriptionCollection;
+
 use Oro\Bundle\GridBundle\Builder\DatagridBuilderInterface;
 use Oro\Bundle\GridBundle\Datagrid\Datagrid;
 use Oro\Bundle\GridBundle\Datagrid\DatagridInterface;
-use Oro\Bundle\GridBundle\Filter\FilterFactoryInterface;
-use Oro\Bundle\GridBundle\Datagrid\ProxyQueryInterface;
 use Oro\Bundle\GridBundle\Datagrid\PagerInterface;
-use Oro\Bundle\GridBundle\Sorter\SorterFactoryInterface;
+use Oro\Bundle\GridBundle\Datagrid\ProxyQueryInterface;
 use Oro\Bundle\GridBundle\Datagrid\ParametersInterface;
+use Oro\Bundle\GridBundle\Datagrid\ORM\Pager;
+use Oro\Bundle\GridBundle\Field\FieldDescriptionInterface;
+use Oro\Bundle\GridBundle\Field\FieldDescriptionCollection;
+use Oro\Bundle\GridBundle\Filter\FilterFactoryInterface;
+use Oro\Bundle\GridBundle\Sorter\SorterFactoryInterface;
 
 class DatagridBuilder implements DatagridBuilderInterface
 {
@@ -85,10 +87,6 @@ class DatagridBuilder implements DatagridBuilderInterface
         FieldDescriptionCollection $fieldCollection,
         ParametersInterface $parameters = null
     ) {
-        // TODO: inject pager instance
-        /** @var $pager PagerInterface */
-        $pager = null;
-
         $formBuilder = $this->formFactory->createNamedBuilder(
             'filter',
             'form',
@@ -96,6 +94,17 @@ class DatagridBuilder implements DatagridBuilderInterface
             array('csrf_protection' => false)
         );
 
-        return new Datagrid($query, $fieldCollection, $pager, $formBuilder, $parameters);
+        return new Datagrid($query, $fieldCollection, $this->createPager($query), $formBuilder, $parameters);
+    }
+
+    /**
+     * @param ProxyQueryInterface $query
+     * @return PagerInterface
+     */
+    protected function createPager(ProxyQueryInterface $query)
+    {
+        $pager = new Pager();
+        $pager->setQuery($query);
+        return $pager;
     }
 }

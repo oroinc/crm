@@ -18,6 +18,7 @@ class AddDependencyCallsCompilerPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
+        // TODO Introduce a constant for tag
         foreach ($container->findTaggedServiceIds('oro_grid.datagrid.manager') as $id => $tags) {
             foreach ($tags as $attributes) {
                 $definition = $container->getDefinition($id);

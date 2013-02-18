@@ -8,7 +8,8 @@ interface ParametersInterface
      * Get parameter name from parameters container
      *
      * @param string $name
+     * @param mixed $default
      * @return mixed
      */
-    public function get($name);
+    public function get($name, $default = null);
 }

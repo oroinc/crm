@@ -5,7 +5,6 @@ namespace Oro\Bundle\GridBundle\Datagrid;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Form;
 use Sonata\AdminBundle\Filter\FilterInterface as SonataFilterInterface;
-use Sonata\AdminBundle\Datagrid\PagerInterface as SonataPagerInterface;
 use Oro\Bundle\GridBundle\Filter\FilterInterface;
 use Oro\Bundle\GridBundle\Field\FieldDescriptionCollection;
 use Oro\Bundle\GridBundle\Sorter\SorterInterface;
@@ -23,7 +22,7 @@ class Datagrid implements DatagridInterface
     protected $columns;
 
     /**
-     * @var SonataPagerInterface
+     * @var PagerInterface
      */
     protected $pager;
 
@@ -31,6 +30,13 @@ class Datagrid implements DatagridInterface
      * @var FormBuilderInterface
      */
     protected $formBuilder;
+
+    /**
+     * Parameters applied flag
+     *
+     * @var bool
+     */
+    protected $parametersApplied = false;
 
     /**
      * @var ParametersInterface
@@ -55,17 +61,18 @@ class Datagrid implements DatagridInterface
     /**
      * @param ProxyQueryInterface $query
      * @param FieldDescriptionCollection $columns
-     * @param SonataPagerInterface $pager
+     * @param PagerInterface $pager
      * @param FormBuilderInterface $formBuilder
      * @param ParametersInterface $parameters
      */
     public function __construct(
         ProxyQueryInterface $query,
         FieldDescriptionCollection $columns,
-        SonataPagerInterface $pager = null,
+        PagerInterface $pager = null,
         FormBuilderInterface $formBuilder = null,
         ParametersInterface $parameters = null
     ) {
+        // TODO Empty $parameters is not acceptible, maybe create default value instead (null object pattern?)
         $this->query       = $query;
         $this->columns     = $columns;
         $this->pager       = $pager;
@@ -125,6 +132,7 @@ class Datagrid implements DatagridInterface
     {
         /** @var $filter FilterInterface */
         foreach ($this->filters as $name => $filter) {
+            // TODO Add method to interface
             if ($filter->isActive()) {
                 return true;
             }
@@ -132,23 +140,7 @@ class Datagrid implements DatagridInterface
 
         return false;
     }
-
-    /**
-     * @return SonataPagerInterface
-     */
-    public function getPager()
-    {
-        return $this->pager;
-    }
-
-    /**
-     * @return void
-     */
-    public function buildPager()
-    {
-        // TODO
-    }
-
+    
     /**
      * @param SorterInterface $sorter
      * @return void
@@ -156,6 +148,27 @@ class Datagrid implements DatagridInterface
     public function addSorter(SorterInterface $sorter)
     {
         $this->sorters[$sorter->getName()] = $sorter;
+    }
+
+    /**
+     * @return PagerInterface
+     */
+    public function getPager()
+    {
+        return $this->pager;
+    }
+
+    protected function applyParameters()
+    {
+        if ($this->parametersApplied) {
+            return;
+        }
+
+        $this->applyFilters();
+        $this->applySorters();
+        $this->applyPager();
+
+        $this->parametersApplied = true;
     }
 
     protected function applyFilters()
@@ -166,25 +179,22 @@ class Datagrid implements DatagridInterface
     protected function applySorters()
     {
         // we should retain an order in which sorters were added
-//        foreach($this->parameters->getSorterParameters() as $requestedSorter) {
-//            if (isset($this->sorters[$requestedSorter["name"]])) {
-//                $this->sorters[$requestedSorter]->apply($this->query, $requestedSorter["direction"]);
-//            }
-//        }
+        /*foreach ($this->parameters->getSorterParameters() as $requestedSorter) {
+            if (isset($this->sorters[$requestedSorter["name"]])) {
+                $this->sorters[$requestedSorter]->apply($this->query, $requestedSorter["direction"]);
+            }
+        }*/
     }
 
     protected function applyPager()
     {
-        $this->buildPager();
+        // TODO Be able to configure parameters names
+        $this->pager->setPage($this->parameters->get('_page', 1));
+        $this->pager->setMaxPerPage($this->parameters->get('_per_page', 10));
+        $this->pager->init();
 
-        // TODO
-    }
-
-    protected function applyParameters()
-    {
-        $this->applyFilters();
-        $this->applySorters();
-        $this->applyPager();
+        $this->formBuilder->add('_page', 'hidden');
+        $this->formBuilder->add('_per_page', 'hidden');
     }
 
     /**
@@ -193,7 +203,6 @@ class Datagrid implements DatagridInterface
     public function getForm()
     {
         $this->applyParameters();
-
         return $this->form;
     }
 
@@ -202,8 +211,6 @@ class Datagrid implements DatagridInterface
      */
     public function getQuery()
     {
-        $this->applyParameters();
-
         return $this->query;
     }
 
@@ -212,15 +219,17 @@ class Datagrid implements DatagridInterface
      */
     public function getResults()
     {
+        $this->applyParameters();
         return $this->getQuery()->execute();
     }
 
     /**
-     * @return array
+     * @deprecated Use applyParameters instead
+     * @return void
      */
-    public function getParameters()
+    public function buildPager()
     {
-        return $this->parameters;
+        $this->applyParameters();
     }
 
     /**
@@ -232,9 +241,16 @@ class Datagrid implements DatagridInterface
     }
 
     /**
-     * @param string $name
-     * @param string $operator
-     * @param mixed  $value
+     * @return array
+     */
+    public function getParameters()
+    {
+        // TODO Interface declare array return type
+        return $this->parameters;
+    }
+
+    /**
+     * {@inheritdoc}
      */
     public function setValue($name, $operator, $value)
     {

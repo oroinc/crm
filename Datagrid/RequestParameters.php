@@ -13,38 +13,27 @@ class RequestParameters implements ParametersInterface
     protected $container;
 
     /**
-     * @var Request
-     */
-    protected $request;
-
-    /**
      * @param ContainerInterface $container
      */
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
     }
-
+    
+    /**
+     * {@inheritdoc}
+     */
+    public function get($name, $default = null)
+    {
+        return $this->getRequest()->get($name, $default);
+    }
+    
     /**
      * @return Request
      */
     protected function getRequest()
     {
-        if (is_null($this->request)) {
-            $this->request = $this->container->get('request');
-        }
-
-        return $this->request;
-    }
-
-    /**
-     * Get parameter name from parameters container
-     *
-     * @param string $name
-     * @return mixed
-     */
-    public function get($name)
-    {
-        return $this->request->get($name);
+        // We should not cache request as it is scopable
+        return $this->container->get('request');
     }
 }
