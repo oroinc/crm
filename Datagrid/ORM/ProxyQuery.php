@@ -40,6 +40,6 @@ class ProxyQuery extends BaseProxyQuery implements ProxyQueryInterface
      */
     public function getQueryBuilder()
     {
-        return $this->getQueryBuilder();
+        return $this->queryBuilder;
     }
 }

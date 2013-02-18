@@ -140,7 +140,7 @@ class Datagrid implements DatagridInterface
 
         return false;
     }
-    
+
     /**
      * @param SorterInterface $sorter
      * @return void
@@ -176,14 +176,28 @@ class Datagrid implements DatagridInterface
         // TODO
     }
 
+    /**
+     * Add sorters on grid and apply requested sorting
+     */
     protected function applySorters()
     {
         // we should retain an order in which sorters were added
-        /*foreach ($this->parameters->getSorterParameters() as $requestedSorter) {
-            if (isset($this->sorters[$requestedSorter["name"]])) {
-                $this->sorters[$requestedSorter]->apply($this->query, $requestedSorter["direction"]);
+
+        $sortBy = $this->parameters->get('_sort_by');
+        $sortOrder = $this->parameters->get('_sort_order');
+
+        $requestedSorters = array_combine(
+            is_array($sortBy) ? $sortBy : array($sortBy),
+            is_array($sortOrder) ? $sortOrder : array($sortOrder)
+        );
+
+        foreach($requestedSorters as $fieldName => $direction) {
+            if (isset($this->sorters[$fieldName])) {
+                $this->sorters[$fieldName]->apply($this->query, $direction);
             }
-        }*/
+        }
+
+        // TODO: add sorters in form builder
     }
 
     protected function applyPager()

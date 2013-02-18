@@ -19,7 +19,7 @@ class RequestParameters implements ParametersInterface
     {
         $this->container = $container;
     }
-    
+
     /**
      * {@inheritdoc}
      */
@@ -27,7 +27,7 @@ class RequestParameters implements ParametersInterface
     {
         return $this->getRequest()->get($name, $default);
     }
-    
+
     /**
      * @return Request
      */
