@@ -8,7 +8,7 @@ Install project
 
 **Update database structure**
 
-MySql, Postgres and other db engines use aditional indexes for sulltext search. To create this indexes use console command
+MySql, Postgres and other db engines use additional indexes for fulltext search. To create this indexes use console command
 
     php app/console oro:build-fulltext
 
@@ -25,7 +25,7 @@ oro_search parameter supports next parameter strings:
 Mapping config
 ----------------------------------
 
-After insert, update or delete entity records, search index must be updated. Seach index consist of data from entities by mapping parameters.
+After insert, update or delete entity records, search index must be updated. Search index consist of data from entities by mapping parameters.
 
 In entity mapping config we map entity fields to virtual search fields in search index.
 
@@ -76,8 +76,8 @@ Parameters:
 - **name**: name of field in entity
 - **target_type**: type of virtual search field. Supported target types: text (string and text fields), integer, double, datetime
 - **target_fields**: array of virtual fields for entity field from 'name' parameter.
-- **relation_type**: indicate that this field is relation field to enother table. Supported relation types: one-to-one, many-to-many, one-to-many, many-to-one.
-- **relation_fields**: array of fields from relarion record we must to index.
+- **relation_type**: indicate that this field is relation field to another table. Supported relation types: one-to-one, many-to-many, one-to-many, many-to-one.
+- **relation_fields**: array of fields from relation record we must to index.
 - **flexible_manager**. If entity has flexible attributes, they can be indexed for search by parameter flexible_manager in mapping config. Value of this parameter
 is the service name for flexible entity. In search index wheel be indexed all the attributes with parameter **searchable** set to true. All text fields data wheel
 be store in **all_text** virtual field. Additionally, all the fields wheel be stored in fieldName virtual fields.
