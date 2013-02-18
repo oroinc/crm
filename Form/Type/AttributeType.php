@@ -1,6 +1,12 @@
 <?php
 namespace Oro\Bundle\FlexibleEntityBundle\Form\Type;
 
+use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\ImageType;
+
+use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\FileType;
+
+use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\BooleanType;
+
 use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttributeType;
 use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\TextType;
 use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\OptionSimpleSelectType;
@@ -202,7 +208,10 @@ class AttributeType extends AbstractType
     public function getAttributeTypeChoices()
     {
         $availablesTypes = array(
+            new BooleanType(),
             new DateType(),
+            new FileType(),
+            new ImageType(),
             new IntegerType(),
             new MailType(),
             new MetricType(),
