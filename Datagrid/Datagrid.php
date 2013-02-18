@@ -46,7 +46,7 @@ class Datagrid implements DatagridInterface
     /**
      * @var array
      */
-    protected $filters;
+    protected $filters = array();
 
     /**
      * @var SorterInterface[]
