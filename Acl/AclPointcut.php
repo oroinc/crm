@@ -18,6 +18,11 @@ class AclPointcut implements PointcutInterface
 
     public function matchesClass(\ReflectionClass $class)
     {
+        /*if (substr($class->getName(), -10, 10) == 'Controller') {
+            return true;
+        }
+
+        return false;*/
         return true;
     }
 
@@ -29,11 +34,13 @@ class AclPointcut implements PointcutInterface
      */
     public function matchesMethod(\ReflectionMethod $method)
     {
-        /*if ($this->reader->getMethodAnnotation($method, Manager::ACL_ANNOTATION_CLASS)) {
-            return true;
-        }*/
-        return false;
 
-        return true;
+        //return true;
+
+        if ($this->reader->getMethodAnnotation($method, Manager::ACL_ANNOTATION_CLASS)) {
+            return true;
+        }
+
+        return false;
     }
 }

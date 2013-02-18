@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 use Oro\Bundle\UserBundle\Acl\Manager;
+use Oro\Bundle\UserBundle\Entity\Acl;
 
 class AclInterceptor implements MethodInterceptorInterface
 {
@@ -55,9 +56,14 @@ class AclInterceptor implements MethodInterceptorInterface
             $method->reflection,
             Manager::ACL_ANNOTATION_CLASS
         );
-        $accessRoles = $this->getAclManager()->getAclRoles($aclAnnotation->getId());
+        if (!$aclAnnotation) {
+            $accessRoles = $this->getAclManager()->getAclRolesWithoutTree(Acl::ROOT_NODE);
+        } else {
+            $accessRoles = $this->getAclManager()->getAclRoles($aclAnnotation->getId());
+        }
 
         $token = $this->securityContext->getToken();
+        //var_dump($accessRoles); var_dump($token->getRoles());
         if (false === $this->accessDecisionManager->decide($token, $accessRoles, $method)) {
 
             //check if we have internal action - show blank
