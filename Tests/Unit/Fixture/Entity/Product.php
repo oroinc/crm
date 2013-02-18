@@ -220,4 +220,9 @@ class Product
     {
         return $this->name;
     }
+
+    public function getValueData($code)
+    {
+        return $code;
+    }
 }

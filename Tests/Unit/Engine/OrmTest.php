@@ -5,6 +5,8 @@ namespace Oro\Bundle\SearchBundle\Tests\Unit\Engine;
 use Oro\Bundle\SearchBundle\Engine\Orm;
 use Oro\Bundle\SearchBundle\Tests\Unit\Fixture\Entity\Product;
 use Oro\Bundle\SearchBundle\Tests\Unit\Fixture\Entity\Manufacturer;
+use Oro\Bundle\SearchBundle\Tests\Unit\Fixture\Entity\Attribute;
+use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttributeType;
 
 class OrmTest extends \PHPUnit_Framework_TestCase
 {
@@ -64,7 +66,8 @@ class OrmTest extends \PHPUnit_Framework_TestCase
                             )
                         )
                     ),
-                )
+                ),
+                'flexible_manager' => 'test_manager'
             )
         );
 
@@ -79,25 +82,54 @@ class OrmTest extends \PHPUnit_Framework_TestCase
             ->setDescription('description')
             ->setCreateDate(new \DateTime());
 
+        $this->flexibleManager = $this
+            ->getMockBuilder('Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleManager')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->attributeRepository = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
+
         $this->orm = new Orm($this->om, $this->container, $this->mappingConfig);
     }
 
     public function testMapObject()
     {
+        $this->container->expects($this->once())
+            ->method('get')
+            ->with($this->equalTo('test_manager'))
+            ->will($this->returnValue($this->flexibleManager));
+
+        $this->flexibleManager->expects($this->once())
+            ->method('getAttributeRepository')
+            ->will($this->returnValue($this->attributeRepository));
+
+        $testTextAttribute = new Attribute();
+        $testTextAttribute->setCode('text_attribute')
+            ->setBackendType(AbstractAttributeType::BACKEND_TYPE_TEXT);
+
+        $testIntegerAttribute = new Attribute();
+        $testIntegerAttribute->setCode('integer_attribute')
+            ->setBackendType(AbstractAttributeType::BACKEND_TYPE_INTEGER);
+
+        $testDatetimeAttribute = new Attribute();
+        $testDatetimeAttribute->setCode('datetime_attribute')
+            ->setBackendType(AbstractAttributeType::BACKEND_TYPE_DATETIME);
+
+        $this->attributeRepository->expects($this->once())
+            ->method('findBy')
+            ->will($this->returnValue(
+                array(
+                     $testTextAttribute,
+                     $testIntegerAttribute,
+                     $testDatetimeAttribute
+                )
+            ));
+
         $mapping = $this->orm->mapObject($this->product);
 
         $this->assertEquals('test product ', $mapping['text']['name']);
         $this->assertEquals(150, $mapping['decimal']['price']);
         $this->assertEquals(10, $mapping['integer']['count']);
+        $this->assertEquals(' text_attribute', $mapping['text']['text_attribute']);
     }
-
-    /*public function testLogSearch()
-    {
-        $logger = new QueryLogger($this->om);
-
-        $this->om->expects($this->once())->method('persist');
-        $this->om->expects($this->once())->method('flush');
-
-        $logger->logSearch(new Query(), array());
-    }*/
 }

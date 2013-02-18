@@ -192,9 +192,9 @@ class Orm extends AbstractEngine
                         $objectData = $this->setDataValue($objectData, $field, $value);
                 }
             }
-            /*if (isset($config['flexible_manager'])) {
+            if (isset($config['flexible_manager'])) {
                 $objectData =  $this->setFlexibleFields($object, $objectData, $config['flexible_manager']);
-            }*/
+            }
         }
 
         return $objectData;

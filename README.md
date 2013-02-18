@@ -29,11 +29,13 @@ After insert, update or delete entity records, search index must be updated. Sea
 
 In entity mapping config we map entity fields to virtual search fields in search index.
 
-Entitiy mapping configuration can be store in main config.yml file (in search bundle config section) or in search.yml files in config directory of the bundle.
+Entity mapping configuration can be store in main config.yml file (in search bundle config section) or in search.yml files in config directory of the bundle.
 
 Configuration is array that contain info about bundle name, entity name and array of fields.
 
 Fields array contain array of field name and field type.
+
+All text fields data wheel be store in **all_text** virtual field. Additionally, all the fields wheel be stored in fieldName virtual fields.
 
 Example:
 
@@ -67,6 +69,7 @@ Example:
                         name: name
                         target_type: text
                         target_fields: [all_data]
+        flexible_manager: demo_product_manager
 
 Parameters:
 
@@ -75,6 +78,9 @@ Parameters:
 - **target_fields**: array of virtual fields for entity field from 'name' parameter.
 - **relation_type**: indicate that this field is relation field to enother table. Supported relation types: one-to-one, many-to-many, one-to-many, many-to-one.
 - **relation_fields**: array of fields from relarion record we must to index.
+- **flexible_manager**. If entity has flexible attributes, they can be indexed for search by parameter flexible_manager in mapping config. Value of this parameter
+is the service name for flexible entity. In search index wheel be indexed all the attributes with parameter **searchable** set to true. All text fields data wheel
+be store in **all_text** virtual field. Additionally, all the fields wheel be stored in fieldName virtual fields.
 
 Query builder
 ----------------------------------
