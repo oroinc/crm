@@ -13,4 +13,11 @@ use Oro\Bundle\DataFlowBundle\Connector\AbstractConnector;
  */
 class MyConnector extends AbstractConnector
 {
+    /**
+     * {@inheritDoc}
+     */
+    public function getFormTypeServiceId()
+    {
+        return 'test';
+    }
 }

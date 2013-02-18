@@ -70,6 +70,20 @@ class Job
     }
 
     /**
+     * Set id
+     *
+     * @param integer $id
+     *
+     * @return Connector
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    /**
      * Set description
      *
      * @param string $description
@@ -96,7 +110,7 @@ class Job
     /**
      * Set connector
      *
-     * @param Connector $connectorConfiguration
+     * @param Connector $connector
      *
      * @return Job
      */
@@ -120,7 +134,7 @@ class Job
     /**
      * Set job service id
      *
-     * @param string $connectorService
+     * @param string $serviceId
      *
      * @return Job
      */
@@ -144,7 +158,7 @@ class Job
     /**
      * Set job configuration
      *
-     * @param Configuration $connectorConfiguration
+     * @param Configuration $configuration
      *
      * @return Job
      */
@@ -164,5 +178,4 @@ class Job
     {
         return $this->configuration;
     }
-
 }

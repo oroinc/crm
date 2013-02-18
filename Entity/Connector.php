@@ -181,7 +181,7 @@ class Connector
     /**
      * Remove job
      *
-     * @param Job $value
+     * @param Job $job
      */
     public function removeJob(Job $job)
     {

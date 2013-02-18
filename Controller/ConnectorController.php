@@ -7,9 +7,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 use Symfony\Component\Form\FormInterface;
 use Oro\Bundle\DataFlowBundle\Form\Type\ConnectorType;
+use Oro\Bundle\DataFlowBundle\Form\Type\JobType;
 use Oro\Bundle\DataFlowBundle\Configuration\ConfigurationInterface;
-use Oro\Bundle\DataFlowBundle\Configuration\EditableConfigurationInterface;
-use Oro\Bundle\DataFlowBundle\Form\Handler\ConfigurationHandler;
 use Oro\Bundle\DataFlowBundle\Entity\Connector;
 use Oro\Bundle\DataFlowBundle\Entity\Job;
 use Oro\Bundle\DataFlowBundle\Entity\Configuration;
@@ -107,10 +106,12 @@ class ConnectorController extends Controller
     /**
      * Create connector
      *
+     * @param string $serviceId
+     *
      * @Route("/create/{serviceId}")
      * @Template("OroDataFlowBundle:Connector:edit.html.twig")
      *
-     * @return null
+     * @return array
      */
     public function createAction($serviceId)
     {
@@ -149,56 +150,32 @@ class ConnectorController extends Controller
     /**
      * Edit connector
      *
+     * @param Connector $entity
+     *
      * @Route("/edit/{id}", requirements={"id"="\d+"}, defaults={"id"=0})
      * @Template
+     *
+     * @return array
      */
     public function editAction(Connector $entity)
     {
-
         $service = $this->container->get($entity->getServiceId());
+        $options = array('configuration_type' => $service->getFormTypeServiceId());
+        $form = $this->createForm(new ConnectorType(), $entity, $options);
 
-        $form = $this->get($service->getConfigurationFormServiceId());
-      //  var_dump($form); exit();
-
-        $type = 'Acme\Bundle\DemoDataFlowBundle\Form\Type\MagentoConnectorType';
-        $form = $this->createForm(new ConnectorType(), $entity, array('configuration_type' => $type));
-
-        /*
-        // prepare configuration
-        $configuration = $entity->getConfiguration()->deserialize();
-        $configuration->setId($entity->getConfiguration()->getId());
-
-        // prepare and process if posted
-        $form = $this->get($service->getConfigurationFormServiceId());
-        $form->setData($configuration);
-*/
         // process form
-        if ('POST' === $this->get('request')->getMethod()) {
-
-            $form->bind($this->get('request'));
-
+        if ($this->get('request')->getMethod() == 'POST') {
+            $form->bindRequest($this->get('request'));
             if ($form->isValid()) {
-
-
-//                die('success');
+                $manager = $this->getDoctrine()->getEntityManager();
+                $manager->persist($entity);
+                $manager->flush();
 
                 $this->get('session')->getFlashBag()->add('success', 'Configuration successfully saved');
                 $url = $this->generateUrl('oro_dataflow_connector_configure', array('id' => $entity->getId()));
 
                 return $this->redirect($url);
-
-
-
             }
-
-            /*
-            $handler = $this->get($service->getConfigurationFormHandlerServiceId());
-            $handler->setForm($form);
-
-            if ($handler->process($configuration)) {
-            */
-
-            //}
         }
 
         // render configuration form
@@ -212,28 +189,27 @@ class ConnectorController extends Controller
     /**
      * Configure connector jobs
      *
+     * @param Connector $entity
+     *
      * @Route("/configure/{id}", requirements={"id"="\d+"}, defaults={"id"=0})
      * @Template
+     *
+     * @return array
      */
     public function configureAction(Connector $entity)
     {
-        // TODO : edit only one job for now
         $job = $entity->getJobs()->first();
         $service = $this->container->get($job->getServiceId());
-        $configuration = $job->getConfiguration()->deserialize();
-        $configuration->setId($job->getConfiguration()->getId());
-
-        // prepare and process if posted
-        $form = $this->get($service->getConfigurationFormServiceId());
-        $form->setData($configuration);
+        $form = $this->createForm(new JobType(), $job, array('configuration_type' => $service->getFormTypeServiceId()));
 
         // process form
-        if ('POST' === $this->get('request')->getMethod()) {
+        if ($this->get('request')->getMethod() == 'POST') {
+            $form->bindRequest($this->get('request'));
+            if ($form->isValid()) {
+                $manager = $this->getDoctrine()->getEntityManager();
+                $manager->persist($job);
+                $manager->flush();
 
-            $handler = $this->get($service->getConfigurationFormHandlerServiceId());
-            $handler->setForm($form);
-
-            if ($handler->process($configuration)) {
                 $this->get('session')->getFlashBag()->add('success', 'Configuration successfully saved');
                 $url = $this->generateUrl('oro_dataflow_connector_run', array('id' => $entity->getId()));
 
@@ -250,9 +226,27 @@ class ConnectorController extends Controller
     }
 
     /**
+     * @param Connector $entity
+     *
+     * @Route("/remove/{id}", requirements={"id"="\d+"})
+     *
+     * @return array
+     */
+    public function removeAction(Connector $entity)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($entity);
+        $em->flush();
+
+        $this->get('session')->getFlashBag()->add('success', 'Connector successfully removed');
+
+        return $this->redirect($this->generateUrl('oro_dataflow_connector_index'));
+    }
+
+    /**
      * Run
      *
-     * @param Connector $connector
+     * @param Connector $entity
      *
      * @Route("/run/{id}", requirements={"id"="\d+"}, defaults={"id"=0})
      * @Template()
@@ -286,5 +280,4 @@ class ConnectorController extends Controller
             'steps'     => $this->getNavigationMenu()
         );
     }
-
 }

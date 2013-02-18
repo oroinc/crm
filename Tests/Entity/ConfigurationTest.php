@@ -2,6 +2,7 @@
 namespace Oro\Bundle\DataFlowBundle\Tests\Entity;
 
 use Oro\Bundle\DataFlowBundle\Entity\Configuration;
+use Oro\Bundle\DataFlowBundle\Tests\Configuration\Demo\MyConfiguration;
 
 /**
  * Test related class
@@ -33,19 +34,16 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
     public function testGettersSetters()
     {
         $this->assertNull($this->configuration->getId());
-        $this->assertNull($this->configuration->getDescription());
         $this->assertNull($this->configuration->getTypeName());
-        $this->assertNull($this->configuration->getFormat());
-        $this->assertNull($this->configuration->getData());
-
-        $this->configuration->setDescription('desc');
-        $this->configuration->setTypeName('my type');
-        $this->configuration->setFormat('json');
-        $this->configuration->setData('{test:text}');
-
-        $this->assertEquals($this->configuration->getDescription(), 'desc');
-        $this->assertEquals($this->configuration->getTypeName(), 'my type');
         $this->assertEquals($this->configuration->getFormat(), 'json');
-        $this->assertEquals($this->configuration->getData(), '{test:text}');
+        $this->assertEmpty($this->configuration->getData());
+
+        $this->configuration->setTypeName('my type');
+        $this->configuration->setFormat('xml');
+        $this->configuration->setData('test:text');
+
+        $this->assertEquals($this->configuration->getTypeName(), 'my type');
+        $this->assertEquals($this->configuration->getFormat(), 'xml');
+        $this->assertEquals($this->configuration->getData(), 'test:text');
     }
 }

@@ -15,13 +15,33 @@ use Oro\Bundle\DataFlowBundle\Configuration\ConfigurationInterface;
  * @license   http://opensource.org/licenses/MIT MIT
  *
  */
-class ConfigurationToEntityTransformer implements DataTransformerInterface
+class EntityToConfigurationTransformer implements DataTransformerInterface
 {
+    /**
+     * @var ObjectManager
+     */
+    protected $om;
+
+    /**
+     * Format used for serialization
+     * @var string
+     */
+    protected $format;
+
+    /**
+     * @param ObjectManager $om     object manager
+     * @param string        $format format
+     */
+    public function __construct(ObjectManager $om, $format = 'json')
+    {
+        $this->om = $om;
+        $this->format = $format;
+    }
 
     /**
      * Transforms an object (entity) to a object (configuration).
      *
-     * @param  Configuration $entity
+     * @param Configuration $entity
      *
      * @return ConfigurationInterface
      */
@@ -40,22 +60,24 @@ class ConfigurationToEntityTransformer implements DataTransformerInterface
     /**
      * Transforms a configuration to an entity.
      *
-     * @param  ConfigurationInterface $configuration
+     * @param ConfigurationInterface $configuration
      *
      * @return Configuration
      */
     public function reverseTransform($configuration)
     {
-        if (!$configuration) {
-            return null;
+        // get / create entity
+        if ($configuration->getId()) {
+            $repository = $this->om->getRepository('OroDataFlowBundle:Configuration');
+            $entity = $repository->find($configuration->getId());
+        } else {
+            $entity = new Configuration();
         }
 
-        $entity = new Configuration();
+        // serialize
         $entity->setTypeName(get_class($configuration));
+        $entity->setFormat($this->format);
         $entity->serialize($configuration);
-//        $entity->setId($configuration->getId());
-
-//        var_dump($entity); exit();
 
         return $entity;
     }

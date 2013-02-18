@@ -20,12 +20,6 @@ abstract class AbstractConfiguration implements ConfigurationInterface
     protected $id;
 
     /**
-     * @Exclude
-     * @var description
-     */
-    protected $description;
-
-    /**
      * {@inheritDoc}
      */
     public function getId()
@@ -42,23 +36,4 @@ abstract class AbstractConfiguration implements ConfigurationInterface
 
         return $this;
     }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getDescription()
-    {
-        return $this->description;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function setDescription($description)
-    {
-        $this->description = $description;
-
-        return $this;
-    }
-
 }

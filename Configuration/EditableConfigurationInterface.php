@@ -13,17 +13,9 @@ interface EditableConfigurationInterface
 {
 
     /**
-     * Get form service id for configuration
+     * Get form type service id for configuration
      *
      * @return string
      */
-    public function getConfigurationFormServiceId();
-
-    /**
-     * Get form handler service id for configuration
-     *
-     * @return string
-     */
-    public function getConfigurationFormHandlerServiceId();
-
+    public function getFormTypeServiceId();
 }

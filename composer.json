@@ -11,6 +11,10 @@
         "ddeboer/data-import": "dev-master",
         "ddeboer/data-import-bundle": "dev-master"
     },
+    "require-dev": {
+        "doctrine/dbal": ">=2.2,<2.4-dev",
+        "doctrine/orm": ">=2.2.3,<2.4-dev"
+    },
     "autoload": {
         "psr-0": { "Oro\\Bundle\\DataFlowBundle": "" }
     },

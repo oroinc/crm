@@ -24,18 +24,4 @@ interface ConfigurationInterface
      * @return ConfigurationInterface
      */
     public function setId($id);
-
-    /**
-     * @param string $description
-     *
-     * @return ConfigurationInterface
-    */
-    public function setDescription($description);
-
-    /**
-     * Get description
-     *
-     * @return string
-     */
-    public function getDescription();
 }

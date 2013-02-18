@@ -37,10 +37,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->configuration->getEnclosure(), '"');
         $this->assertEquals($this->configuration->getEscape(), '\\');
         $this->assertNull($this->configuration->getId());
-        $this->assertNull($this->configuration->getDescription());
         $this->configuration->setId(42);
-        $this->configuration->setDescription('desc');
         $this->assertEquals($this->configuration->getId(), 42);
-        $this->assertEquals($this->configuration->getDescription(), 'desc');
     }
 }

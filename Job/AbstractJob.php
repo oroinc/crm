@@ -2,6 +2,7 @@
 namespace Oro\Bundle\DataFlowBundle\Job;
 
 use Oro\Bundle\DataFlowBundle\Configuration\ConfigurationInterface;
+use Oro\Bundle\DataFlowBundle\Configuration\EditableConfigurationInterface;
 use Oro\Bundle\DataFlowBundle\Exception\ConfigurationException;
 
 /**
@@ -11,7 +12,7 @@ use Oro\Bundle\DataFlowBundle\Exception\ConfigurationException;
  * @copyright 2012 Akeneo SAS (http://www.akeneo.com)
  * @license   http://opensource.org/licenses/MIT MIT
  */
-abstract class AbstractJob implements JobInterface
+abstract class AbstractJob implements JobInterface, EditableConfigurationInterface
 {
 
     /**
@@ -92,17 +93,17 @@ abstract class AbstractJob implements JobInterface
     /**
      * Extract data
      */
-    protected abstract function extract();
+    abstract protected function extract();
 
     /**
      * Transform data
      */
-    protected abstract function transform();
+    abstract protected function transform();
 
     /**
      * Load data
      */
-    protected abstract function load();
+    abstract protected function load();
 
     /**
      * {@inheritDoc}
@@ -143,5 +144,4 @@ abstract class AbstractJob implements JobInterface
     {
         return $this->messages;
     }
-
 }

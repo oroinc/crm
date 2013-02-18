@@ -141,6 +141,8 @@ class Configuration
     /**
      * Serialize data
      *
+     * @param ConfigurationInterface $configuration
+     *
      * @return Configuration
      */
     public function serialize(ConfigurationInterface $configuration)

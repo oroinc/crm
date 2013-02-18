@@ -11,14 +11,14 @@ use Oro\Bundle\DataFlowBundle\Entity\Connector;
 use Oro\Bundle\DataFlowBundle\Form\DataTransformer\EntityToConfigurationTransformer;
 
 /**
- * Base connector type
+ * Base jon type
  *
  * @author    Nicolas Dupont <nicolas@akeneo.com>
  * @copyright 2012 Akeneo SAS (http://www.akeneo.com)
  * @license   http://opensource.org/licenses/MIT MIT
  *
  */
-class ConnectorType extends AbstractType
+class JobType extends AbstractType
 {
     /**
      * {@inheritdoc}
@@ -37,7 +37,7 @@ class ConnectorType extends AbstractType
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $resolver->setDefaults(array('data_class' => 'Oro\Bundle\DataFlowBundle\Entity\Connector'));
+        $resolver->setDefaults(array('data_class' => 'Oro\Bundle\DataFlowBundle\Entity\Job'));
         $resolver->setRequired(array('configuration_type'));
     }
 
@@ -46,6 +46,6 @@ class ConnectorType extends AbstractType
      */
     public function getName()
     {
-        return 'oro_dataflow_connector';
+        return 'oro_dataflow_job';
     }
 }

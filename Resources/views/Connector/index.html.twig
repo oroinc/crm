@@ -16,6 +16,7 @@
                 <ul>
                     <li><a href="{{ path('oro_dataflow_connector_edit', {'id': connector.id}) }}">{{ "Configure" | trans }}</a></li>
                     <li><a href="{{ path('oro_dataflow_connector_run', {'id': connector.id}) }}">{{ "Use" | trans }}</a></li>
+                    <li><a href="{{ path('oro_dataflow_connector_remove', {'id': connector.id}) }}">{{ "Delete" | trans }}</a></li>
                 </ul>
             </li>
         {% endfor %}

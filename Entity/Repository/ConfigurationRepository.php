@@ -20,6 +20,8 @@ class ConfigurationRepository extends EntityRepository
      *
      * @param string $typeName    the configuration FQCN
      * @param string $description the configuration description
+     *
+     * @return object The object
      */
     public function findOneByTypeAndDescription($typeName, $description)
     {

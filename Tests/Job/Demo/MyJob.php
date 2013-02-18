@@ -13,7 +13,6 @@ use Oro\Bundle\DataFlowBundle\Job\AbstractJob;
  */
 class MyJob extends AbstractJob
 {
-
     /**
      * {@inheritDoc}
      */
@@ -36,5 +35,13 @@ class MyJob extends AbstractJob
     public function load()
     {
         return true;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getFormTypeServiceId()
+    {
+        return 'test';
     }
 }
