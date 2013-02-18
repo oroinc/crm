@@ -27,7 +27,7 @@ services:
 
     oro_grid.filter.factory:
         class:     %oro_grid.filter.factory.class%
-        arguments: ["@service_container"]
+        arguments: ["@service_container", ~]
 
     oro_grid.sorter.factory:
         class:     %oro_grid.sorter.factory.class%
