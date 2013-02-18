@@ -49,7 +49,7 @@ class RequestParameters implements ParametersInterface
      */
     protected function initParameters(Request $request, $datagridId)
     {
-        $this->parameters[$datagridId] = array();
+        $this->parameters = array();
 
         $this->initFilterParameters($request, $datagridId);
         $this->initSorterParameters($request, $datagridId);

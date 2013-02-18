@@ -43,14 +43,14 @@ interface DatagridManagerInterface
     public function setTranslator(TranslatorInterface $translator);
 
     /**
-     * @param Request $request
-     * @return void
-     */
-    public function setRequest(Request $request);
-
-    /**
      * @param ValidatorInterface $validator
      * @return void
      */
     public function setValidator(ValidatorInterface $validator);
+
+    /**
+     * @param ParametersInterface $parameters
+     * @return void
+     */
+    public function setParameters(ParametersInterface $parameters);
 }

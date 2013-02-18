@@ -37,12 +37,12 @@ class AddDependencyCallsCompilerPass implements CompilerPassInterface
     public function applyConfigurationFromAttributes(Definition $definition, array $attributes)
     {
         $keys = array(
+            'query_factory',
             'datagrid_builder',
             'list_builder',
-            'query_factory',
+            'parameters',
             'translator',
             'validator',
-            'request',
         );
 
         foreach ($keys as $key) {
@@ -76,10 +76,9 @@ class AddDependencyCallsCompilerPass implements CompilerPassInterface
             'query_factory'    => array($this, 'getDefaultQueryFactoryServiceId'),
             'datagrid_builder' => 'oro_grid.builder.datagrid',
             'list_builder'     => 'oro_grid.builder.list',
+            'parameters'       => 'oro_grid.datagrid.parameters',
             'translator'       => 'translator',
             'validator'        => 'validator',
-            'request'          => 'request',
-
         );
 
         foreach ($defaultAddServices as $attr => $addServiceId) {

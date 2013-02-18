@@ -2,7 +2,6 @@
 
 namespace Oro\Bundle\GridBundle\Datagrid;
 
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\Validator\ValidatorInterface;
 use Oro\Bundle\GridBundle\Builder\DatagridBuilderInterface;
@@ -32,11 +31,6 @@ abstract class DatagridManager implements DatagridManagerInterface
      * @var TranslatorInterface
      */
     protected $translator;
-
-    /**
-     * @var Request
-     */
-    protected $request;
 
     /**
      * @var ValidatorInterface
@@ -83,16 +77,6 @@ abstract class DatagridManager implements DatagridManagerInterface
     {
         $this->translator = $translator;
     }
-
-    /**
-     * @param Request $request
-     * @return void
-     */
-    public function setRequest(Request $request)
-    {
-        $this->request = $request;
-    }
-
     /**
      * @param ValidatorInterface $validator
      * @return void
@@ -125,7 +109,8 @@ abstract class DatagridManager implements DatagridManagerInterface
         // create datagrid
         $datagrid = $this->datagridBuilder->getBaseDatagrid(
             $this->queryFactory->createQuery(),
-            $listCollection
+            $listCollection,
+            $this->parameters->getParameters()
         );
 
         // add datagrid filters
