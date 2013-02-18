@@ -9,6 +9,7 @@ use Oro\Bundle\GridBundle\Builder\DatagridBuilderInterface;
 use Oro\Bundle\GridBundle\Builder\ListBuilderInterface;
 use Oro\Bundle\GridBundle\Field\FieldDescriptionInterface;
 use Oro\Bundle\GridBundle\Filter\FilterInterface;
+use Oro\Bundle\GridBundle\Datagrid\ParametersInterface;
 
 abstract class DatagridManager implements DatagridManagerInterface
 {
@@ -41,6 +42,11 @@ abstract class DatagridManager implements DatagridManagerInterface
      * @var ValidatorInterface
      */
     protected $validator;
+
+    /**
+     * @var ParametersInterface
+     */
+    protected $parameters;
 
     /**
      * @param DatagridBuilderInterface $datagridBuilder
@@ -97,6 +103,14 @@ abstract class DatagridManager implements DatagridManagerInterface
     }
 
     /**
+     * @param ParametersInterface $parameters
+     */
+    public function setParameters(ParametersInterface $parameters)
+    {
+        $this->parameters = $parameters;
+    }
+
+    /**
      * @return DatagridInterface
      */
     public function getDatagrid()
@@ -109,7 +123,10 @@ abstract class DatagridManager implements DatagridManagerInterface
         }
 
         // create datagrid
-        $datagrid = $this->datagridBuilder->getBaseDatagrid($this->queryFactory->createQuery(), $listCollection);
+        $datagrid = $this->datagridBuilder->getBaseDatagrid(
+            $this->queryFactory->createQuery(),
+            $listCollection
+        );
 
         // add datagrid filters
         /** @var $fieldDescription FieldDescriptionInterface */
