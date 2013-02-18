@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\SearchBundle\Tests\Fixture\Entity;
+namespace Oro\Bundle\SearchBundle\Tests\Unit\Fixture\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 

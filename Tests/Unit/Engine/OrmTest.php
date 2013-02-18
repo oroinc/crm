@@ -1,14 +1,17 @@
 <?php
 
-namespace Oro\Bundle\SearchBundle\Test\Engine;
+namespace Oro\Bundle\SearchBundle\Tests\Unit\Engine;
 
 use Oro\Bundle\SearchBundle\Engine\Orm;
-use Oro\Bundle\SearchBundle\Tests\Fixture\Entity\Product;
-use Oro\Bundle\SearchBundle\Tests\Fixture\Entity\Manufacturer;
+use Oro\Bundle\SearchBundle\Tests\Unit\Fixture\Entity\Product;
+use Oro\Bundle\SearchBundle\Tests\Unit\Fixture\Entity\Manufacturer;
 
 class OrmTest extends \PHPUnit_Framework_TestCase
 {
     private $product;
+    /**
+     * @var \Oro\Bundle\SearchBundle\Engine\Orm
+     */
     private $orm;
     private $mappingConfig;
     private $om;
@@ -19,11 +22,11 @@ class OrmTest extends \PHPUnit_Framework_TestCase
         $this->om = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
         $this->container = $this->getMockForAbstractClass('Symfony\Component\DependencyInjection\ContainerInterface');
         $this->mappingConfig =  array(
-            'Oro\Bundle\SearchBundle\Tests\Fixture\Entity\Product' => array(
+            'Oro\Bundle\SearchBundle\Tests\Unit\Fixture\Entity\Product' => array(
                 'fields' => array(
                     array(
                         'name'          => 'name',
-                        'target_type'   => 'string',
+                        'target_type'   => 'text',
                         'target_fields' => array(
                             'name',
                             'all_data'
@@ -31,7 +34,7 @@ class OrmTest extends \PHPUnit_Framework_TestCase
                     ),
                     array(
                         'name'          => 'description',
-                        'target_type'   => 'string',
+                        'target_type'   => 'text',
                         'target_fields' => array(
                             'description',
                             'all_data'
@@ -53,7 +56,7 @@ class OrmTest extends \PHPUnit_Framework_TestCase
                         'relation_fields' => array(
                             array(
                                 'name'          => 'name',
-                                'target_type'   => 'string',
+                                'target_type'   => 'text',
                                 'target_fields' => array(
                                     'manufacturer',
                                     'all_data'
@@ -83,7 +86,7 @@ class OrmTest extends \PHPUnit_Framework_TestCase
     {
         $mapping = $this->orm->mapObject($this->product);
 
-        $this->assertEquals('test product', $mapping['string']['name']);
+        $this->assertEquals('test product ', $mapping['text']['name']);
         $this->assertEquals(150, $mapping['decimal']['price']);
         $this->assertEquals(10, $mapping['integer']['count']);
     }

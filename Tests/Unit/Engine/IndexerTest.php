@@ -1,5 +1,5 @@
 <?php
-namespace Oro\Bundle\SearchBundle\Test\Engine;
+namespace Oro\Bundle\SearchBundle\Tests\Unit\Engine;
 
 use Doctrine\Common\Persistence\ObjectManager;
 
