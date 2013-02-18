@@ -3,7 +3,7 @@
 namespace Oro\Bundle\GridBundle\Datagrid;
 
 use Symfony\Component\Form\FormBuilderInterface;
-use \Symfony\Component\Form\Form;
+use Symfony\Component\Form\Form;
 use Sonata\AdminBundle\Filter\FilterInterface as SonataFilterInterface;
 use Sonata\AdminBundle\Datagrid\PagerInterface as SonataPagerInterface;
 use Oro\Bundle\GridBundle\Filter\FilterInterface;
@@ -51,14 +51,14 @@ class Datagrid implements DatagridInterface
      * @param FieldDescriptionCollection $columns
      * @param SonataPagerInterface $pager
      * @param FormBuilderInterface $formBuilder
-     * @param array $values
+     * @param ParameterContainerInterface $values
      */
     public function __construct(
         ProxyQueryInterface $query,
         FieldDescriptionCollection $columns,
         SonataPagerInterface $pager = null,
         FormBuilderInterface $formBuilder = null,
-        array $values = array()
+        ParameterContainerInterface $values = null
     ) {
         $this->query       = $query;
         $this->columns     = $columns;
