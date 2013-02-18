@@ -177,7 +177,7 @@ class Orm extends AbstractEngine
 
                 switch ($field['relation_type']) {
                     case Indexer::RELATION_ONE_TO_ONE:
-                    case Indexer::RELATION_MANY_TO_MANY:
+                    case Indexer::RELATION_MANY_TO_ONE:
                         $objectData = $this->setRelatedFields($objectData, $field['relation_fields'], $value);
 
                         break;
@@ -192,8 +192,8 @@ class Orm extends AbstractEngine
                         $objectData = $this->setDataValue($objectData, $field, $value);
                 }
             }
-            if (isset($config['flexible'])) {
-                $objectData =  $this->setFlexibleFields($object, $objectData, $config['flexible']);
+            if (isset($config['flexible_manager'])) {
+                $objectData =  $this->setFlexibleFields($object, $objectData, $config['flexible_manager']);
             }
         }
 
@@ -354,12 +354,12 @@ class Orm extends AbstractEngine
                 if (!isset($objectData[$fieldConfig['target_type']][$targetField])) {
                     $objectData[$fieldConfig['target_type']][$targetField] = '';
                 }
+                $objectData[$fieldConfig['target_type']][$targetField] .= $value . ' ';
             }
-            $objectData[$fieldConfig['target_type']][$targetField] .= " " . $value;
             if (!isset($objectData[$fieldConfig['target_type']][Indexer::TEXT_ALL_DATA_FIELD])) {
                 $objectData[$fieldConfig['target_type']][Indexer::TEXT_ALL_DATA_FIELD] = '';
             }
-            $objectData[$fieldConfig['target_type']][Indexer::TEXT_ALL_DATA_FIELD] .= " " . $value;
+            $objectData[$fieldConfig['target_type']][Indexer::TEXT_ALL_DATA_FIELD] .= $value . ' ';
         }
 
         return $objectData;
