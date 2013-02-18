@@ -42,4 +42,12 @@ class ProxyQuery extends BaseProxyQuery implements ProxyQueryInterface
 
         return $alias;
     }
+
+    /**
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function getQueryBuilder()
+    {
+        return $this->getQueryBuilder();
+    }
 }

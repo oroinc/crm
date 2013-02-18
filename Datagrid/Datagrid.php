@@ -8,6 +8,7 @@ use Sonata\AdminBundle\Filter\FilterInterface as SonataFilterInterface;
 use Sonata\AdminBundle\Datagrid\PagerInterface as SonataPagerInterface;
 use Oro\Bundle\GridBundle\Filter\FilterInterface;
 use Oro\Bundle\GridBundle\Field\FieldDescriptionCollection;
+use Oro\Bundle\GridBundle\Sorter\SorterInterface;
 
 class Datagrid implements DatagridInterface
 {
@@ -32,14 +33,19 @@ class Datagrid implements DatagridInterface
     protected $formBuilder;
 
     /**
-     * @var array
+     * @var ParametersInterface
      */
-    protected $values;
+    protected $parameters;
 
     /**
      * @var array
      */
     protected $filters;
+
+    /**
+     * @var SorterInterface[]
+     */
+    protected $sorters = array();
 
     /**
      * @var Form
@@ -51,25 +57,25 @@ class Datagrid implements DatagridInterface
      * @param FieldDescriptionCollection $columns
      * @param SonataPagerInterface $pager
      * @param FormBuilderInterface $formBuilder
-     * @param ParameterContainerInterface $values
+     * @param ParametersInterface $parameters
      */
     public function __construct(
         ProxyQueryInterface $query,
         FieldDescriptionCollection $columns,
         SonataPagerInterface $pager = null,
         FormBuilderInterface $formBuilder = null,
-        ParameterContainerInterface $values = null
+        ParametersInterface $parameters = null
     ) {
         $this->query       = $query;
         $this->columns     = $columns;
         $this->pager       = $pager;
         $this->formBuilder = $formBuilder;
-        $this->values      = $values;
+        $this->parameters  = $parameters;
     }
 
     /**
      * @param SonataFilterInterface $filter
-     * @return SonataFilterInterface
+     * @return void
      */
     public function addFilter(SonataFilterInterface $filter)
     {
@@ -143,6 +149,15 @@ class Datagrid implements DatagridInterface
         // TODO
     }
 
+    /**
+     * @param SorterInterface $sorter
+     * @return void
+     */
+    public function addSorter(SorterInterface $sorter)
+    {
+        $this->sorters[$sorter->getName()] = $sorter;
+    }
+
     protected function applyFilters()
     {
         // TODO
@@ -150,7 +165,12 @@ class Datagrid implements DatagridInterface
 
     protected function applySorters()
     {
-        // TODO
+        // we should retain an order in which sorters were added
+//        foreach($this->parameters->getSorterParameters() as $requestedSorter) {
+//            if (isset($this->sorters[$requestedSorter["name"]])) {
+//                $this->sorters[$requestedSorter]->apply($this->query, $requestedSorter["direction"]);
+//            }
+//        }
     }
 
     protected function applyPager()
@@ -198,9 +218,9 @@ class Datagrid implements DatagridInterface
     /**
      * @return array
      */
-    public function getValues()
+    public function getParameters()
     {
-        return $this->values;
+        return $this->parameters;
     }
 
     /**

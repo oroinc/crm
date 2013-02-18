@@ -13,9 +13,9 @@ class RequestParameters implements ParametersInterface
     protected $container;
 
     /**
-     * @var array
+     * @var Request
      */
-    protected $parameters;
+    protected $request;
 
     /**
      * @param ContainerInterface $container
@@ -26,60 +26,25 @@ class RequestParameters implements ParametersInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @return Request
      */
-    public function getParameters($datagridId = null)
+    protected function getRequest()
     {
-        if (null === $this->parameters) {
-            /** @var $request Request */
-            $request = $this->container->get('request');
-            $this->initParameters($request, $datagridId);
+        if (is_null($this->request)) {
+            $this->request = $this->container->get('request');
         }
 
-        if ($datagridId) {
-            return isset($this->parameters[$datagridId]) ? $this->parameters[$datagridId] : null;
-        }
-
-        return !empty($this->parameters) ? array_shift($this->parameters) : null;
+        return $this->request;
     }
 
     /**
-     * @param Request $request
-     * @param string $datagridId
+     * Get parameter name from parameters container
+     *
+     * @param string $name
+     * @return mixed
      */
-    protected function initParameters(Request $request, $datagridId)
+    public function get($name)
     {
-        $this->parameters = array();
-
-        $this->initFilterParameters($request, $datagridId);
-        $this->initSorterParameters($request, $datagridId);
-        $this->initPagerParameters($request, $datagridId);
-    }
-
-    /**
-     * @param Request $request
-     * @param string $datagridId
-     */
-    protected function initFilterParameters(Request $request, $datagridId)
-    {
-        // TODO
-    }
-
-    /**
-     * @param Request $request
-     * @param string $datagridId
-     */
-    protected function initSorterParameters(Request $request, $datagridId)
-    {
-        // TODO
-    }
-
-    /**
-     * @param Request $request
-     * @param string $datagridId
-     */
-    protected function initPagerParameters(Request $request, $datagridId)
-    {
-        // TODO
+        return $this->request->get($name);
     }
 }

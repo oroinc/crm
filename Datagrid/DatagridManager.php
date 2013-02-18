@@ -110,7 +110,7 @@ abstract class DatagridManager implements DatagridManagerInterface
         $datagrid = $this->datagridBuilder->getBaseDatagrid(
             $this->queryFactory->createQuery(),
             $listCollection,
-            $this->parameters->getParameters()
+            $this->parameters
         );
 
         // add datagrid filters
@@ -120,9 +120,9 @@ abstract class DatagridManager implements DatagridManagerInterface
         }
 
         // add datagrid sorters
-        /** @var $fieldDescription FieldDescriptionInterface */
-        foreach ($this->getSorters() as $fieldDescription) {
-            // TODO: add sorter to datagrid
+        /** @var $sorterField FieldDescriptionInterface */
+        foreach ($this->getSorters() as $sorterField) {
+            $this->datagridBuilder->addSorter($datagrid, $sorterField);
         }
 
         return $datagrid;

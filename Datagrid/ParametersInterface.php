@@ -5,10 +5,10 @@ namespace Oro\Bundle\GridBundle\Datagrid;
 interface ParametersInterface
 {
     /**
-     * Get list of datagrid parameters (filters, sorters etc.)
+     * Get parameter name from parameters container
      *
-     * @param string|null $datagridId
-     * @return ParameterContainerInterface|null
+     * @param string $name
+     * @return mixed
      */
-    public function getParameters($datagridId = null);
+    public function get($name);
 }

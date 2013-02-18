@@ -11,7 +11,8 @@ use Oro\Bundle\GridBundle\Datagrid\DatagridInterface;
 use Oro\Bundle\GridBundle\Filter\FilterFactoryInterface;
 use Oro\Bundle\GridBundle\Datagrid\ProxyQueryInterface;
 use Oro\Bundle\GridBundle\Datagrid\PagerInterface;
-use Oro\Bundle\GridBundle\Datagrid\ParameterContainerInterface;
+use Oro\Bundle\GridBundle\Sorter\SorterFactoryInterface;
+use Oro\Bundle\GridBundle\Datagrid\ParametersInterface;
 
 class DatagridBuilder implements DatagridBuilderInterface
 {
@@ -21,6 +22,11 @@ class DatagridBuilder implements DatagridBuilderInterface
     protected $filterFactory;
 
     /**
+     * @var SorterFactoryInterface
+     */
+    protected $sorterFactory;
+
+    /**
      * @var FormFactoryInterface
      */
     protected $formFactory;
@@ -28,13 +34,16 @@ class DatagridBuilder implements DatagridBuilderInterface
     /**
      * @param FormFactoryInterface $formFactory
      * @param FilterFactoryInterface $filterFactory
+     * @param SorterFactoryInterface $sorterFactory
      */
     public function __construct(
         FormFactoryInterface $formFactory,
-        FilterFactoryInterface $filterFactory
+        FilterFactoryInterface $filterFactory,
+        SorterFactoryInterface $sorterFactory
     ) {
         $this->formFactory     = $formFactory;
         $this->filterFactory   = $filterFactory;
+        $this->sorterFactory   = $sorterFactory;
     }
 
     /**
@@ -55,15 +64,26 @@ class DatagridBuilder implements DatagridBuilderInterface
     }
 
     /**
+     * @param DatagridInterface $datagrid
+     * @param FieldDescriptionInterface $field
+     */
+    public function addSorter(DatagridInterface $datagrid, FieldDescriptionInterface $field)
+    {
+        $sorter = $this->sorterFactory->create($field);
+
+        $datagrid->addSorter($sorter);
+    }
+
+    /**
      * @param ProxyQueryInterface $query
      * @param FieldDescriptionCollection $fieldCollection
-     * @param ParameterContainerInterface $values
+     * @param ParametersInterface $parameters
      * @return DatagridInterface
      */
     public function getBaseDatagrid(
         ProxyQueryInterface $query,
         FieldDescriptionCollection $fieldCollection,
-        ParameterContainerInterface $values = null
+        ParametersInterface $parameters = null
     ) {
         // TODO: inject pager instance
         /** @var $pager PagerInterface */
@@ -76,6 +96,6 @@ class DatagridBuilder implements DatagridBuilderInterface
             array('csrf_protection' => false)
         );
 
-        return new Datagrid($query, $fieldCollection, $pager, $formBuilder, $values);
+        return new Datagrid($query, $fieldCollection, $pager, $formBuilder, $parameters);
     }
 }

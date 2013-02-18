@@ -11,6 +11,8 @@ parameters:
 
     oro_grid.filter.factory.class:           Oro\Bundle\GridBundle\Filter\FilterFactory
 
+    oro_grid.sorter.factory.class:           Oro\Bundle\GridBundle\Sorter\SorterFactory
+
 services:
     oro_grid.datagrid.parameters:
         class:     %oro_grid.datagrid.parameters.class%
@@ -18,7 +20,7 @@ services:
 
     oro_grid.builder.datagrid:
         class:     %oro_grid.builder.datagrid.class%
-        arguments: ["@form.factory", "@oro_grid.filter.factory"]
+        arguments: ["@form.factory", "@oro_grid.filter.factory", "@oro_grid.sorter.factory"]
 
     oro_grid.builder.list:
         class:     %oro_grid.builder.list.class%
@@ -26,3 +28,6 @@ services:
     oro_grid.filter.factory:
         class:     %oro_grid.filter.factory.class%
         arguments: ["@service_container"]
+
+    oro_grid.sorter.factory:
+        class:     %oro_grid.sorter.factory.class%
