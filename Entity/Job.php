@@ -26,6 +26,15 @@ class Job
     protected $id;
 
     /**
+     * Description
+     *
+     * @var string
+     *
+     * @ORM\Column(name="description", type="string", length=255)
+     */
+    protected $description;
+
+    /**
      * @var Connector $connector
      *
      * @ORM\ManyToOne(targetEntity="Connector")
@@ -45,7 +54,7 @@ class Job
     /**
      * @var Configuration $connectorConfiguration
      *
-     * @ORM\ManyToOne(targetEntity="Configuration")
+     * @ORM\ManyToOne(targetEntity="Configuration", cascade={"persist", "remove"})
      * @ORM\JoinColumn(name="configuration_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected $configuration;
@@ -58,6 +67,30 @@ class Job
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set description
+     *
+     * @param string $description
+     *
+     * @return Job
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * Get description
+     *
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
     }
 
     /**

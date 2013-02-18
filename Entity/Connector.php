@@ -36,9 +36,18 @@ class Connector
     protected $serviceId;
 
     /**
+     * Description
+     *
+     * @var string
+     *
+     * @ORM\Column(name="description", type="string", length=255, unique=true)
+     */
+    protected $description;
+
+    /**
      * @var Configuration $configuration
      *
-     * @ORM\ManyToOne(targetEntity="Configuration")
+     * @ORM\ManyToOne(targetEntity="Configuration", cascade={"persist", "remove"})
      * @ORM\JoinColumn(name="configuration_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected $configuration;
@@ -69,11 +78,49 @@ class Connector
     }
 
     /**
+     * Set id
+     *
+     * @param integer $id
+     *
+     * @return Connector
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    /**
+     * Set description
+     *
+     * @param string $description
+     *
+     * @return Connector
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * Get description
+     *
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
      * Set connector service id
      *
      * @param string $serviceId
      *
-     * @return Job
+     * @return Connector
      */
     public function setServiceId($serviceId)
     {
@@ -97,7 +144,7 @@ class Connector
      *
      * @param Configuration $configuration
      *
-     * @return Job
+     * @return Connector
      */
     public function setConfiguration(Configuration $configuration)
     {

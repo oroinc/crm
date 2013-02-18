@@ -51,6 +51,14 @@ interface JobInterface
     public function getConfigurationName();
 
     /**
+     * Get messages
+     * TODO: use configurable logger
+     *
+     * @return string
+     */
+    public function getMessages();
+
+    /**
      * Run the job
      */
     public function run();

@@ -2,6 +2,7 @@
 namespace Oro\Bundle\DataFlowBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Oro\Bundle\DataFlowBundle\Configuration\ConfigurationInterface;
 
 /**
  * Entity configuration
@@ -10,10 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @copyright 2012 Akeneo SAS (http://www.akeneo.com)
  * @license   http://opensource.org/licenses/MIT MIT
  *
- * @ORM\Table(
- *     name="oro_dataflow_configuration", indexes={@ORM\Index(name="searchcode_idx", columns={"description"})},
- *     uniqueConstraints={@ORM\UniqueConstraint(name="searchunique_idx", columns={"description", "type_name"})}
- * )
+ * @ORM\Table(name="oro_dataflow_configuration")
  * @ORM\Entity(repositoryClass="Oro\Bundle\DataFlowBundle\Entity\Repository\ConfigurationRepository")
  */
 class Configuration
@@ -27,15 +25,6 @@ class Configuration
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
-
-    /**
-     * Description is unique per type
-     *
-     * @var string
-     *
-     * @ORM\Column(name="description", type="string", length=255)
-     */
-    protected $description;
 
     /**
      * @var string
@@ -59,6 +48,15 @@ class Configuration
     protected $data;
 
     /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->format = 'json';
+        $this->data   = "";
+    }
+
+    /**
      * Get id
      *
      * @return integer
@@ -66,30 +64,6 @@ class Configuration
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set description
-     *
-     * @param string $description
-     *
-     * @return Configuration
-     */
-    public function setDescription($description)
-    {
-        $this->description = $description;
-
-        return $this;
-    }
-
-    /**
-     * Get description
-     *
-     * @return string
-     */
-    public function getDescription()
-    {
-        return $this->description;
     }
 
     /**
@@ -162,5 +136,31 @@ class Configuration
     public function getData()
     {
         return $this->data;
+    }
+
+    /**
+     * Serialize data
+     *
+     * @return Configuration
+     */
+    public function serialize(ConfigurationInterface $configuration)
+    {
+        $serializer = \JMS\Serializer\SerializerBuilder::create()->build();
+        $this->data = $serializer->serialize($configuration, $this->getFormat());
+
+        return $this;
+    }
+
+    /**
+     * Deserialize data
+     *
+     * @return ConfigurationInterface
+     */
+    public function deserialize()
+    {
+        $serializer = \JMS\Serializer\SerializerBuilder::create()->build();
+        $configuration = $serializer->deserialize($this->getData(), $this->getTypeName(), $this->getFormat());
+
+        return $configuration;
     }
 }

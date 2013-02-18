@@ -7,6 +7,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Oro\Bundle\DataFlowBundle\Form\DataTransformer\ConfigurationToEntityTransformer;
 
 /**
  * Base configuration type
@@ -24,7 +25,8 @@ abstract class AbstractConfigurationType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('id', 'hidden');
-        $builder->add('description', 'text', array('required' => true));
+        /*$transformer = new ConfigurationToEntityTransformer();
+        $builder->addViewTransformer($transformer);*/
     }
 
 }

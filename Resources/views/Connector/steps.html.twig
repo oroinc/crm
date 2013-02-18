@@ -1,0 +1,16 @@
+
+<div class="navbar">
+    <div class="navbar-inner">
+        <ul class="nav dataflow-steps">
+        {% for step in steps %}
+            <li {% if step.class is defined %}class="{{ step.class }}" {% endif %}>
+                {% if step.route != false %}
+                    <a href="{{ path(step.route, step.params) }}">{{ step.label }}</a>
+                {% else %}
+                    <a href="#">{{ step.label }}</a>
+                {% endif %}
+            </li>
+        {% endfor %}
+        </ul>
+    </div>
+</div>

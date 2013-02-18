@@ -41,6 +41,11 @@ abstract class AbstractJob implements JobInterface
     protected $configurationName;
 
     /**
+     * @var \ArrayAccess
+     */
+    protected $messages;
+
+    /**
      * Constructor
      *
      * @param string $configurationConnectorClassName the connector conf FQCN
@@ -50,6 +55,7 @@ abstract class AbstractJob implements JobInterface
     {
         $this->connectorConfigurationName = $configurationConnectorClassName;
         $this->configurationName          = $configurationClassName;
+        $this->messages                   = array();
     }
 
     /**
@@ -129,4 +135,13 @@ abstract class AbstractJob implements JobInterface
     {
         return $this->connectorConfigurationName;
     }
+
+    /**
+     * @return \ArrayAccess
+     */
+    public function getMessages()
+    {
+        return $this->messages;
+    }
+
 }

@@ -1,0 +1,38 @@
+{% extends bap.layout is defined ? bap.layout : 'OroDataFlowBundle::layout.html.twig' %}
+
+{% set title = 'Select connector' %}
+
+{% block title %}{{ parent() }} - {{ title }}{% endblock %}
+
+{% block content %}
+
+    {% include 'OroDataFlowBundle:Connector:steps.html.twig' with {'steps': steps} %}
+
+    <fieldset>
+        <legend>{{ "Use an existing connector" | trans }}</legend>
+        <ul>
+        {% for connector in connectors %}
+            <li>{{ connector.description }} ({{ ("type") | trans }} : {{ (connector.serviceId ~ ".label") | trans }})
+                <ul>
+                    <li><a href="{{ path('oro_dataflow_connector_edit', {'id': connector.id}) }}">{{ "Configure" | trans }}</a></li>
+                    <li><a href="{{ path('oro_dataflow_connector_run', {'id': connector.id}) }}">{{ "Use" | trans }}</a></li>
+                </ul>
+            </li>
+        {% endfor %}
+        </ul>
+    </fieldset>
+
+    <fieldset>
+        <legend>{{ "Add a new connector" | trans }}</legend>
+        <ul>
+        {% for service in serviceIds %}
+            <li>
+                <a href="{{ path('oro_dataflow_connector_create', {'serviceId': service}) }}">
+                    {{ (service ~ ".label") | trans }}
+                </a>
+            </li>
+        {% endfor %}
+        </ul>
+    </fieldset>
+
+{% endblock %}

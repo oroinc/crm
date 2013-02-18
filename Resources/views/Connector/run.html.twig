@@ -1,0 +1,27 @@
+{% extends bap.layout is defined ? bap.layout : 'OroDataFlowBundle::layout.html.twig' %}
+
+{% set title = 'Summary' %}
+
+{% block title %}{{ parent() }} - {{ title }}{% endblock %}
+
+{% block content %}
+
+    {% include 'OroDataFlowBundle:Connector:steps.html.twig' with {'steps': steps} %}
+
+    <form action="{{ path('oro_dataflow_connector_run', { id: connector.id })}}" method="POST">
+
+        <fieldset>
+            <legend>{{ title | trans }}</legend>
+    
+            <ul>
+                <li>{{ "Connector " | trans }} {{ (connector.serviceId ~ ".label") | trans }} {{ "with configuration" | trans }} "{{ connector.description }}" </li>
+            </ul>
+    
+            <div class="form-row">
+                <button class="btn btn-large btn-primary pull-right" type="submit">{{ "Run" | trans }}</button>
+            </div>
+        </fieldset>
+
+    </form>
+
+{% endblock %}

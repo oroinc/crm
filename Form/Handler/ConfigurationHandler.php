@@ -122,21 +122,14 @@ class ConfigurationHandler
         } else {
             $configuration = new Configuration();
         }
-        $configuration->setDescription($entity->getDescription());
         $configuration->setTypeName(get_class($entity));
         $configuration->setFormat($this->format);
         $configuration->setData($data);
 
         // save
-        try {
-            $this->manager->persist($configuration);
-            $this->manager->flush();
-            $entity->setId($configuration->getId());
-        } catch (\Doctrine\DBAL\DBALException $e) {
-            $this->form->get('description')->addError(new FormError($e->getMessage()));
-
-            return false;
-        }
+        $this->manager->persist($configuration);
+        $this->manager->flush();
+        $entity->setId($configuration->getId());
 
         return true;
     }
