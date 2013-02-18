@@ -240,4 +240,12 @@ class Datagrid implements DatagridInterface
     {
         // TODO: Implement setValue() method.
     }
+
+    /**
+     * @return array
+     */
+    public function getValues()
+    {
+        // TODO: Implement getValues() method.
+    }
 }
