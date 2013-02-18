@@ -19,6 +19,7 @@ parameters:
     oro_user.acl.pointcut.class:      Oro\Bundle\UserBundle\Acl\AclPointcut
     oro_user.acl.interceptor.class:   Oro\Bundle\UserBundle\Acl\AclInterceptor
     oro_user.acl.manager.class:       Oro\Bundle\UserBundle\Acl\Manager
+    oro_user.user_menu.builder.class: Oro\Bundle\UserBundle\Menu\UserMenuBuilder
 
 services:
     oro_user.manager:
@@ -168,3 +169,8 @@ services:
         class:                        %oro_user.handler.reset.class%
         scope:                        request
         arguments:                    ["@oro_user.form.reset", "@request", "@oro_user.manager"]
+
+    oro_user.user_menu:
+        class: %oro_user.user_menu.builder.class%
+        tags:
+            - { name: oro_menu.builder, alias: usermenu }
