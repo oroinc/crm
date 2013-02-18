@@ -68,9 +68,9 @@ class Datagrid implements DatagridInterface
     public function __construct(
         ProxyQueryInterface $query,
         FieldDescriptionCollection $columns,
-        PagerInterface $pager = null,
-        FormBuilderInterface $formBuilder = null,
-        ParametersInterface $parameters = null
+        PagerInterface $pager,
+        FormBuilderInterface $formBuilder,
+        ParametersInterface $parameters
     ) {
         // TODO Empty $parameters is not acceptible, maybe create default value instead (null object pattern?)
         $this->query       = $query;

@@ -85,7 +85,7 @@ class DatagridBuilder implements DatagridBuilderInterface
     public function getBaseDatagrid(
         ProxyQueryInterface $query,
         FieldDescriptionCollection $fieldCollection,
-        ParametersInterface $parameters = null
+        ParametersInterface $parameters
     ) {
         $formBuilder = $this->formFactory->createNamedBuilder(
             'filter',
