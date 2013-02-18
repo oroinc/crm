@@ -171,9 +171,18 @@ class Datagrid implements DatagridInterface
         $this->parametersApplied = true;
     }
 
+    /**
+     * Apply filter data to ProxyQuery and add form fields
+     */
     protected function applyFilters()
     {
-        // TODO
+        /** @var $filter Oro\Bundle\GridBundle\Filter\FilterInterface */
+        foreach ($this->getFilters() as $name => $filter) {
+            $filter->apply($this->query, array('value' => $this->parameters->get($name)));
+
+            list($type, $options) = $filter->getRenderSettings();
+            $this->formBuilder->add($filter->getFormName(), $type, $options);
+        }
     }
 
     /**
@@ -191,7 +200,7 @@ class Datagrid implements DatagridInterface
             is_array($sortOrder) ? $sortOrder : array($sortOrder)
         );
 
-        foreach($requestedSorters as $fieldName => $direction) {
+        foreach ($requestedSorters as $fieldName => $direction) {
             if (isset($this->sorters[$fieldName])) {
                 $this->sorters[$fieldName]->apply($this->query, $direction);
             }
