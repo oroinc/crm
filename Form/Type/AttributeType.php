@@ -37,17 +37,10 @@ class AttributeType extends AbstractType
 {
 
     /**
-     * @var boolean
-     */
-    protected $isEditing;
-
-    /**
      * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $this->isEditing = ($builder->getData()->getId() !== null);
-
         $this->addFieldId($builder);
 
         $this->addFieldCode($builder);
@@ -65,10 +58,6 @@ class AttributeType extends AbstractType
         $this->addFieldSearchable($builder);
 
         $this->addFieldDefaultValue($builder);
-
-        if ($this->isEditing && $builder->getData()->getBackendType() === AbstractAttributeType::BACKEND_TYPE_OPTION) {
-            $this->addFieldOptions($builder);
-        }
     }
 
     /**
@@ -87,9 +76,7 @@ class AttributeType extends AbstractType
     protected function addFieldCode(FormBuilderInterface $builder)
     {
         $options = array(
-            'required'  => true,
-            'disabled'  => $this->isEditing,
-            'read_only' => $this->isEditing
+            'required'  => true
         );
         $builder->add('code', 'text', $options);
     }
@@ -101,9 +88,7 @@ class AttributeType extends AbstractType
     protected function addFieldAttributeType(FormBuilderInterface $builder)
     {
         $options = array(
-            'choices'   => $this->getAttributeTypeChoices(),
-            'disabled'  => $this->isEditing,
-            'read_only' => $this->isEditing
+            'choices'   => $this->getAttributeTypeChoices()
         );
         $builder->add('attributeType', 'choice', $options);
     }
@@ -160,24 +145,6 @@ class AttributeType extends AbstractType
     protected function addFieldScopable(FormBuilderInterface $builder)
     {
         $builder->add('scopable', 'checkbox', array('required' => false));
-    }
-
-    /**
-     * Add option fields to form builder
-     * @param FormBuilderInterface $builder
-     */
-    protected function addFieldOptions(FormBuilderInterface $builder)
-    {
-        $builder->add(
-            'options',
-            'collection',
-            array(
-                'type'         => new AttributeOptionType(),
-                'allow_add'    => true,
-                'allow_delete' => true,
-                'by_reference' => false
-            )
-        );
     }
 
     /**

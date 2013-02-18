@@ -47,7 +47,7 @@ class AttributeOptionType extends AbstractType
      */
     protected function addFieldSortOrder(FormBuilderInterface $builder)
     {
-        $builder->add('sort_order', 'text', array('required' => false));
+        $builder->add('sort_order', 'integer', array('required' => false));
     }
 
     /**
