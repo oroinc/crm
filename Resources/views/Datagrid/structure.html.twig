@@ -33,7 +33,25 @@
             <tr>
                 {% for field in datagrid.columns %}
                     {% block grid_header_field %}
-                        <th>{{ field.label }}</th>
+                        <th>
+                            {{ field.label }}
+                            {% if datagrid.getSorter(field.name) %}
+                                {% set sorter = datagrid.getSorter(field.name) %}
+                                &nbsp;
+                                {% if sorter.getDirection() == 'DESC' %}
+                                    <b style="color: green">&uarr;</b>
+                                {% else %}
+                                    &uarr;
+                                {% endif %}
+                                &nbsp;
+                                {% if sorter.getDirection() == 'ASC' %}
+                                    <b style="color: green">&darr;</b>
+                                {% else %}
+                                    &darr;
+                                {% endif %}
+                                &nbsp;
+                            {% endif %}
+                        </th>
                     {% endblock %}
                 {% endfor %}
             </tr>

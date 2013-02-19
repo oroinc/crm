@@ -158,6 +158,27 @@ class Datagrid implements DatagridInterface
     }
 
     /**
+     * @return array
+     */
+    public function getSorters()
+    {
+        return $this->sorters;
+    }
+
+    /**
+     * @param $name
+     * @return null|SorterInterface
+     */
+    public function getSorter($name)
+    {
+       if (isset($this->sorters[$name])) {
+            return $this->sorters[$name];
+       }
+
+       return null;
+    }
+
+    /**
      * @return PagerInterface
      */
     public function getPager()

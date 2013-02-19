@@ -12,4 +12,15 @@ interface DatagridInterface extends BaseDatagridInterface
      * @return void
      */
     public function addSorter(SorterInterface $sorter);
+
+    /**
+     * @return SorterInterface[]
+     */
+    public function getSorters();
+
+    /**
+     * @param string $name
+     * @return null|SorterInterface
+     */
+    public function getSorter($name);
 }

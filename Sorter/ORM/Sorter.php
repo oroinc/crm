@@ -57,12 +57,14 @@ class Sorter implements SorterInterface
      */
     public function setDirection($direction)
     {
-        if (in_array($direction, array(self::DIRECTION_ASC, self::DIRECTION_DESC))) {
-            $this->direction = $direction;
-        } elseif ($direction) {
-            $this->direction = self::DIRECTION_DESC;
-        } else {
-            $this->direction = self::DIRECTION_ASC;
+        if (!is_null($direction)) {
+            if (in_array($direction, array(self::DIRECTION_ASC, self::DIRECTION_DESC))) {
+                $this->direction = $direction;
+            } elseif ($direction) {
+                $this->direction = self::DIRECTION_DESC;
+            } else {
+                $this->direction = self::DIRECTION_ASC;
+            }
         }
     }
 
