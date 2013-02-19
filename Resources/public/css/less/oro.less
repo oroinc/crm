@@ -31,10 +31,14 @@ body{
   color: @bodyColor;
   margin: 0;
   padding: 0;
+  background:#fff url("../../img/bg-login.jpg") repeat;
 }
 html{
   margin: 0;
   padding: 0;
+}
+#top-page > .container-fluid{
+    background: #fff;
 }
 // style
 header{
@@ -43,6 +47,7 @@ header{
   display: block;
   width: 100%;
   clear: both;
+  background: #323b45;
   .extra-divider{
     height: 100%;
     background: url("../../img/vertical-divider-general.gif") repeat-y;
@@ -204,12 +209,13 @@ header:after{
     font-size: 0;
     line-height: 0;
     width: 30px;
+    border: solid #1c2025;
     border-width: 1px 1px 1px 0;
     box-shadow: none !important;
   }
   .btn-search:hover,
   .btn-search:focus{
-    background:#262d33 url("../../img/general-sprite.png") no-repeat 5px -63px !important;
+    background:#262d33 url("../../img/general-sprite.png") no-repeat 3px -63px !important;
   }
 }
 footer{
@@ -617,6 +623,10 @@ footer{
   background-color: #c22b11;
   #gradient > .vertical(#c22b11, #f35d3b);
   border-color: #9c220d #c2270d #c2270d;
+}
+.btn-group.open .btn-primary.dropdown-toggle{
+  #gradient > .vertical(#5680c2, #6b94d4);
+  border-color: #3f5e8e #527ac0 #527ac0;
 }
 /* general style reset */
 .navbar .btn,
