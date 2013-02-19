@@ -38,7 +38,9 @@ class ConnectorCompilerPass implements CompilerPassInterface
                 // retrieve reference to relevant connector and add job into
                 $connectorId = $attributes['connector'];
                 if (!$container->hasDefinition($connectorId)) {
-                    throw new InvalidArgumentException(sprintf('The connector service definition "%s" does not exist.', $connectorId));
+                    throw new InvalidArgumentException(
+                        sprintf('The connector service definition "%s" does not exist.', $connectorId)
+                    );
                 }
                 $definition->addMethodCall(
                     'addJobToConnector',

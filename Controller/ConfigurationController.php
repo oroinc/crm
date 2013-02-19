@@ -53,9 +53,6 @@ class ConfigurationController extends Controller
             }
         }
 
-        return array(
-            'form'          => $form->createView(),
-            'configuration' => $entity
-        );
+        return array('form' => $form->createView(), 'configuration' => $entity);
     }
 }

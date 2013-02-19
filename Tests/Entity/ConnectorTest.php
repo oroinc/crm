@@ -39,11 +39,14 @@ class ConnectorTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($this->connector->getConfiguration());
 
         $this->connector->setServiceId('my.connector.id');
+        $this->connector->setId(1);
+        $this->connector->setDescription('my description');
         $configuration = new Configuration();
 
         $this->connector->setConfiguration($configuration);
         $this->assertEquals($this->connector->getServiceId(), 'my.connector.id');
         $this->assertEquals($this->connector->getConfiguration(), $configuration);
+        $this->assertEquals($this->connector->getDescription(), 'my description');
     }
 
     /**

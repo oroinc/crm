@@ -124,6 +124,6 @@ class MyConfiguration extends AbstractConfiguration
      */
     public function getFormTypeServiceId()
     {
-        return "test";
+        return "my_configuration";
     }
 }

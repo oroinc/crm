@@ -3,6 +3,7 @@ namespace Oro\Bundle\DataFlowBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Oro\Bundle\DataFlowBundle\Configuration\ConfigurationInterface;
+use Oro\Bundle\DataFlowBundle\Exception\ConfigurationException;
 
 /**
  * Entity configuration
@@ -12,7 +13,7 @@ use Oro\Bundle\DataFlowBundle\Configuration\ConfigurationInterface;
  * @license   http://opensource.org/licenses/MIT MIT
  *
  * @ORM\Table(name="oro_dataflow_configuration")
- * @ORM\Entity(repositoryClass="Oro\Bundle\DataFlowBundle\Entity\Repository\ConfigurationRepository")
+ * @ORM\Entity()
  */
 class Configuration
 {
@@ -160,6 +161,9 @@ class Configuration
      */
     public function deserialize()
     {
+        if (!$this->getTypeName()) {
+            throw new ConfigurationException('typeName must be defined to allow deserialization');
+        }
         $serializer = \JMS\Serializer\SerializerBuilder::create()->build();
         $configuration = $serializer->deserialize($this->getData(), $this->getTypeName(), $this->getFormat());
 

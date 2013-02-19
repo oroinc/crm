@@ -36,7 +36,9 @@ class MyConfigurationType extends AbstractConfigurationType
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $resolver->setDefaults(array('data_class' => 'Oro\Bundle\DataFlowBundle\Tests\Configuration\Demo\MyConfiguration'));
+        $resolver->setDefaults(
+            array('data_class' => 'Oro\Bundle\DataFlowBundle\Tests\Configuration\Demo\MyConfiguration')
+        );
     }
 
     /**

@@ -38,15 +38,19 @@ class JobTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($this->job->getServiceId());
         $this->assertNull($this->job->getConfiguration());
         $this->assertNull($this->job->getConnector());
+        $this->assertNull($this->job->getDescription());
 
         $configuration = new Configuration();
         $connector = new Connector();
+        $this->job->setId(1);
         $this->job->setServiceId('my.job.id');
         $this->job->setConfiguration($configuration);
         $this->job->setConnector($connector);
+        $this->job->setDescription('my job description');
 
         $this->assertEquals($this->job->getServiceId(), 'my.job.id');
         $this->assertEquals($this->job->getConfiguration(), $configuration);
         $this->assertEquals($this->job->getConnector(), $connector);
+        $this->assertEquals($this->job->getDescription(), 'my job description');
     }
 }

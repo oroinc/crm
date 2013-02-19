@@ -16,13 +16,6 @@ use Oro\Bundle\DataFlowBundle\Connector\ConnectorInterface;
  */
 class ConnectorRegistry
 {
-
-    /**
-     * Doctrine object manager
-     * @var ObjectManager
-     */
-    protected $objectManager;
-
     /**
      * Connectors references
      * @var \ArrayAccess
@@ -43,11 +36,9 @@ class ConnectorRegistry
 
     /**
      * Constructor
-     * @param ObjectManager $objectManager
      */
-    public function __construct(ObjectManager $objectManager)
+    public function __construct()
     {
-        $this->objectManager   = $objectManager;
         $this->connectors      = array();
         $this->jobs            = array();
         $this->connectorToJobs = array();
@@ -103,19 +94,5 @@ class ConnectorRegistry
     public function getConnectorToJobs()
     {
         return $this->connectorToJobs;
-    }
-
-    /**
-     * Get configurations
-     *
-     * @param string $type
-     *
-     * @return \ArrayAccess
-     */
-    public function getConfigurations($type)
-    {
-        $repository = $this->objectManager->getRepository('OroDataFlowBundle:Configuration');
-
-        return $repository->findBy(array('typeName' => $type));
     }
 }

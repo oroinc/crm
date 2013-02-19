@@ -6,9 +6,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 use Symfony\Component\Form\FormInterface;
-use Oro\Bundle\DataFlowBundle\Form\Type\ConnectorType;
 use Oro\Bundle\DataFlowBundle\Form\Type\JobType;
-use Oro\Bundle\DataFlowBundle\Configuration\ConfigurationInterface;
 use Oro\Bundle\DataFlowBundle\Entity\Connector;
 use Oro\Bundle\DataFlowBundle\Entity\Job;
 use Oro\Bundle\DataFlowBundle\Entity\Configuration;
@@ -76,7 +74,6 @@ class JobController extends Controller
                     $entity->setConfiguration($configuration);
                 }
 
-                // persist
                 $manager = $this->getDoctrine()->getEntityManager();
                 $manager->persist($entity);
                 $manager->flush();
@@ -88,12 +85,7 @@ class JobController extends Controller
             }
         }
 
-        // render configuration form
-        return array(
-            'form'      => $form->createView(),
-            'job'       => $entity,
-            'connector' => $connector
-        );
+        return array('form' => $form->createView(), 'job' => $entity, 'connector' => $connector);
     }
 
     /**

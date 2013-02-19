@@ -6,12 +6,13 @@
 
 {% block content %}
 
-    {% include 'OroDataFlowBundle:Connector:steps.html.twig' with {'steps': steps} %}
-    
     <form action="{{ connector.id ? path('oro_dataflow_connector_edit', { id: connector.id }) : path('oro_dataflow_connector_create', {'serviceId': connector.serviceId}) }}" method="POST">
 
         <fieldset>
-            <legend>{{ title | trans }}</legend>
+            <legend>
+                {{ title | trans }}
+                <a class="btn btn-primary pull-right" href="{{ path('oro_dataflow_connector_index') }}">{{ "Back" | trans }}</a>
+            </legend>
     
             {{ form_widget(form) }}
     

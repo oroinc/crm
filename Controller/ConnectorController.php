@@ -7,10 +7,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 use Symfony\Component\Form\FormInterface;
 use Oro\Bundle\DataFlowBundle\Form\Type\ConnectorType;
-use Oro\Bundle\DataFlowBundle\Form\Type\JobType;
-use Oro\Bundle\DataFlowBundle\Configuration\ConfigurationInterface;
 use Oro\Bundle\DataFlowBundle\Entity\Connector;
-use Oro\Bundle\DataFlowBundle\Entity\Job;
 use Oro\Bundle\DataFlowBundle\Entity\Configuration;
 
 /**
@@ -27,63 +24,6 @@ class ConnectorController extends Controller
 {
 
     /**
-     * Build contextual navigation menu wit steps
-     *
-     * @return \ArrayAccess
-     */
-    public function getNavigationMenu()
-    {
-        // get params
-        $request     = $this->container->get('request');
-        $connectorId = $request->get('id');
-
-        // prepare steps
-        $translator = $this->container->get('translator');
-        $items = array(
-            // select
-            array(
-                'label'  => $translator->trans('(1) Select connector'),
-                'route'  => 'oro_dataflow_connector_index',
-                'params' => array()
-            ),
-            // edit connector
-            array(
-                'label' => $translator->trans('(2) Configure connector'),
-                'route' => 'oro_dataflow_connector_edit',
-                'params' => array('id' => $connectorId)
-            ),
-            /*
-            // configure connector (add job, etc)
-            array(
-                'label'  => $translator->trans('(3) Configure jobs'),
-                'route'  => 'oro_dataflow_connector_configure',
-                'params' => array('id' => $connectorId)
-            ),
-            */
-            // schedule / run
-            array(
-                'label'  => $translator->trans('(4) Run'),
-                'route'  => 'oro_dataflow_connector_run',
-                'params' => array('id' => $connectorId)
-            )
-        );
-
-        // highlight current step, disable following
-        $currentRoute = $request->get('_route');
-        $toDisable    = false;
-        foreach ($items as &$item) {
-            if ($item['route'] == $currentRoute) {
-                $item['class']= 'active';
-                $toDisable = true;
-            } elseif ($toDisable) {
-                $item['route']= false;
-            }
-        }
-
-        return $items;
-    }
-
-    /**
      * Select a connector
      *
      * @Route("/index")
@@ -96,10 +36,7 @@ class ConnectorController extends Controller
         $repository = $this->getDoctrine()->getEntityManager()->getRepository('OroDataFlowBundle:Connector');
         $entities = $repository->findAll();
 
-        return array(
-            'connectors' => $entities,
-            'steps'      => $this->getNavigationMenu()
-        );
+        return array('connectors' => $entities);
     }
 
     /**
@@ -157,12 +94,7 @@ class ConnectorController extends Controller
             }
         }
 
-        // render configuration form
-        return array(
-            'form'      => $form->createView(),
-            'connector' => $entity,
-            'steps'     => $this->getNavigationMenu()
-        );
+        return array('form' => $form->createView(), 'connector' => $entity);
     }
 
     /**
@@ -215,9 +147,6 @@ class ConnectorController extends Controller
             }
         }
 
-        return array(
-            'connector' => $entity,
-            'steps'     => $this->getNavigationMenu()
-        );
+        return array('connector' => $entity);
     }
 }
