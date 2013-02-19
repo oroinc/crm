@@ -14,15 +14,12 @@
                 </table>
 
                 {{ form_widget(form._sort_by) }}
-
-                <input type="hidden" name="filter[_page]" id="filter__page" value="1" />
-
-                {% set foo = form.children['_page'].setRendered() %}
+                {{ form_widget(form._page, {value : 1}) }}
                 {{ form_rest(form) }}
 
-                <input type="submit" value="{{ 'Filter'|trans }}" />
+                <input type="submit" value="{{ 'oro_grid.button.filter'|trans({}, "Datagrid") }}" />
 
-                <a href="{{ path(routeName) }}">{{ 'Reset'|trans }}</a>
+                <a href="{{ path(routeName) }}">{{ 'oro_grid.button.reset'|trans({}, "Datagrid") }}</a>
 
             </fieldset>
         </form>

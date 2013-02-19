@@ -39,6 +39,13 @@ class Datagrid implements DatagridInterface
     protected $parametersApplied = false;
 
     /**
+     * Parameters binded flag
+     *
+     * @var bool
+     */
+    protected $parametersBinded = false;
+
+    /**
      * @var ParametersInterface
      */
     protected $parameters;
@@ -242,9 +249,15 @@ class Datagrid implements DatagridInterface
      */
     protected function bindParameters()
     {
+        if ($this->parametersBinded) {
+            return;
+        }
+
         $formName = $this->formBuilder->getName();
         $parametersData = $this->parameters->get($formName);
         $this->form->bind($parametersData);
+
+        $this->parametersBinded = true;
     }
 
     /**
