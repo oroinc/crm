@@ -77,8 +77,7 @@ class ConnectorController extends Controller
                 // create default configuration
                 if (!$entity->getId()) {
                     $service = $this->container->get($entity->getServiceId());
-                    $configuration = new Configuration();
-                    $configuration->setTypeName($service->getConfigurationName());
+                    $configuration = new Configuration($service->getConfigurationName());
                     $entity->setConfiguration($configuration);
                 }
 

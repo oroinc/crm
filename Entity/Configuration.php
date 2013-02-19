@@ -50,11 +50,14 @@ class Configuration
 
     /**
      * Constructor
+     *
+     * @param string $typeName
      */
-    public function __construct()
+    public function __construct($typeName = null)
     {
-        $this->format = 'json';
-        $this->data   = "";
+        $this->typeName = $typeName;
+        $this->format   = 'json';
+        $this->data     = '';
     }
 
     /**
