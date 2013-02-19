@@ -118,4 +118,12 @@ class MyConfiguration extends AbstractConfiguration
 
         return $this;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getFormTypeServiceId()
+    {
+        return "test";
+    }
 }

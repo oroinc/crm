@@ -1,14 +1,12 @@
 {% extends bap.layout is defined ? bap.layout : 'OroDataFlowBundle::layout.html.twig' %}
 
-{% set title = connector.id ? "Edit connector" : "Create connector" %}
+{% set title = job.id ? "Edit job" : "Create job" %}
 
 {% block title %}{{ parent() }} - {{ title | trans }}{% endblock %}
 
 {% block content %}
 
-    {% include 'OroDataFlowBundle:Connector:steps.html.twig' with {'steps': steps} %}
-    
-    <form action="{{ connector.id ? path('oro_dataflow_connector_edit', { id: connector.id }) : path('oro_dataflow_connector_create', {'serviceId': connector.serviceId}) }}" method="POST">
+    <form action="{{ job.id ? path('oro_dataflow_job_edit', { id: job.id }) : path('oro_dataflow_job_create', { id: connector.id }) }}" method="POST">
 
         <fieldset>
             <legend>{{ title | trans }}</legend>

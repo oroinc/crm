@@ -36,12 +36,4 @@ class MyJob extends AbstractJob
     {
         return true;
     }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getFormTypeServiceId()
-    {
-        return 'test';
-    }
 }

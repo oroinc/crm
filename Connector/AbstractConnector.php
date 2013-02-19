@@ -2,7 +2,6 @@
 namespace Oro\Bundle\DataFlowBundle\Connector;
 
 use Oro\Bundle\DataFlowBundle\Configuration\ConfigurationInterface;
-use Oro\Bundle\DataFlowBundle\Configuration\EditableConfigurationInterface;
 use Oro\Bundle\DataFlowBundle\Job\JobInterface;
 use Oro\Bundle\DataFlowBundle\Exception\ConfigurationException;
 
@@ -13,7 +12,7 @@ use Oro\Bundle\DataFlowBundle\Exception\ConfigurationException;
  * @copyright 2012 Akeneo SAS (http://www.akeneo.com)
  * @license   http://opensource.org/licenses/MIT MIT
  */
-abstract class AbstractConnector implements ConnectorInterface, EditableConfigurationInterface
+abstract class AbstractConnector implements ConnectorInterface
 {
 
     /**

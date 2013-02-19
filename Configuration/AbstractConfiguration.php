@@ -11,7 +11,7 @@ use JMS\Serializer\Annotation\Exclude;
  * @license   http://opensource.org/licenses/MIT MIT
  *
  */
-abstract class AbstractConfiguration implements ConfigurationInterface
+abstract class AbstractConfiguration implements ConfigurationInterface, EditableConfigurationInterface
 {
     /**
      * @Exclude

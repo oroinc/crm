@@ -8,7 +8,6 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Doctrine\Common\Persistence\ObjectManager;
-use Oro\Bundle\DataFlowBundle\Form\DataTransformer\EntityToConfigurationTransformer;
 
 /**
  * Base configuration type
@@ -21,25 +20,10 @@ use Oro\Bundle\DataFlowBundle\Form\DataTransformer\EntityToConfigurationTransfor
 abstract class AbstractConfigurationType extends AbstractType
 {
     /**
-     * @var ObjectManager
-     */
-    protected $om;
-
-    /**
-     * @param ObjectManager $om
-     */
-    public function __construct(ObjectManager $om)
-    {
-        $this->om = $om;
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('id', 'hidden');
-        $transformer = new EntityToConfigurationTransformer($this->om);
-        $builder->addViewTransformer($transformer);
     }
 }

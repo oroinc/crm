@@ -1,14 +1,12 @@
 {% extends bap.layout is defined ? bap.layout : 'OroDataFlowBundle::layout.html.twig' %}
 
-{% set title = connector.id ? "Configure connector" : "Configure new connector" %}
+{% set title = "Configuration" %}
 
 {% block title %}{{ parent() }} - {{ title | trans }}{% endblock %}
 
 {% block content %}
 
-    {% include 'OroDataFlowBundle:Connector:steps.html.twig' with {'steps': steps} %}
-    
-    <form action="{{ path('oro_dataflow_connector_configure', { id: connector.id }) }}" method="POST">
+    <form action="{{ path('oro_dataflow_configuration_edit', { id: configuration.id }) }}" method="POST">
 
         <fieldset>
             <legend>{{ title | trans }}</legend>
@@ -16,7 +14,7 @@
             {{ form_widget(form) }}
     
             <div class="form-row">
-                <button class="btn btn-large btn-primary pull-right" type="submit">{{ "Next" | trans }}</button>
+                <button class="btn btn-large btn-primary pull-right" type="submit">{{ "Save" | trans }}</button>
             </div>
         </fieldset>
     </form>

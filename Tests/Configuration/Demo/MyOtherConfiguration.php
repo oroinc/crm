@@ -14,4 +14,11 @@ use JMS\Serializer\Annotation\Type;
  */
 class MyOtherConfiguration extends AbstractConfiguration
 {
+    /**
+     * {@inheritDoc}
+     */
+    public function getFormTypeServiceId()
+    {
+        return "my_other_configuration";
+    }
 }

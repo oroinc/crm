@@ -32,7 +32,7 @@ class EntityToConfigurationTransformer implements DataTransformerInterface
      * @param ObjectManager $om     object manager
      * @param string        $format format
      */
-    public function __construct(ObjectManager $om, $format = 'json')
+    public function __construct(ObjectManager $om, $format = null)
     {
         $this->om = $om;
         $this->format = $format;
@@ -76,7 +76,9 @@ class EntityToConfigurationTransformer implements DataTransformerInterface
 
         // serialize
         $entity->setTypeName(get_class($configuration));
-        $entity->setFormat($this->format);
+        if ($this->format) {
+            $entity->setFormat($this->format);
+        }
         $entity->serialize($configuration);
 
         return $entity;

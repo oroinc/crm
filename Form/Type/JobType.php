@@ -8,7 +8,6 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Oro\Bundle\DataFlowBundle\Entity\Connector;
-use Oro\Bundle\DataFlowBundle\Form\DataTransformer\EntityToConfigurationTransformer;
 
 /**
  * Base jon type
@@ -27,9 +26,24 @@ class JobType extends AbstractType
     {
         $builder->add('id', 'hidden');
         $builder->add('description', 'text', array('required' => true));
+        //$builder->add('connector', 'hidden');
 
-        $configurationType = $options['configuration_type'];
-        $builder->add($builder->create('configuration', $configurationType));
+        if (isset($options['data'])) {
+            $job = $options['data'];
+
+            // choose connector type during creation
+            if (!$job->getServiceId()) {
+                $serviceIds = $options['serviceIds'];
+                $choices = array();
+                foreach ($serviceIds as $service) {
+                    $choices[$service]= $service.'.label';
+                }
+                $builder->add('service_id', 'choice', array('required' => true, 'choices' => $choices));
+
+            } else {
+                $builder->add('service_id', 'text', array('disabled' => true));
+            }
+        }
     }
 
     /**
@@ -38,7 +52,7 @@ class JobType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array('data_class' => 'Oro\Bundle\DataFlowBundle\Entity\Job'));
-        $resolver->setRequired(array('configuration_type'));
+        $resolver->setRequired(array('serviceIds'));
     }
 
     /**

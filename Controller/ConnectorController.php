@@ -52,12 +52,14 @@ class ConnectorController extends Controller
                 'route' => 'oro_dataflow_connector_edit',
                 'params' => array('id' => $connectorId)
             ),
+            /*
             // configure connector (add job, etc)
             array(
                 'label'  => $translator->trans('(3) Configure jobs'),
                 'route'  => 'oro_dataflow_connector_configure',
                 'params' => array('id' => $connectorId)
             ),
+            */
             // schedule / run
             array(
                 'label'  => $translator->trans('(4) Run'),
@@ -91,13 +93,10 @@ class ConnectorController extends Controller
      */
     public function indexAction()
     {
-        $serviceIds = array_keys($this->container->get('oro_dataflow.connectors')->getConnectorToJobs());
-
         $repository = $this->getDoctrine()->getEntityManager()->getRepository('OroDataFlowBundle:Connector');
         $entities = $repository->findAll();
 
         return array(
-            'serviceIds' => $serviceIds,
             'connectors' => $entities,
             'steps'      => $this->getNavigationMenu()
         );
@@ -106,43 +105,14 @@ class ConnectorController extends Controller
     /**
      * Create connector
      *
-     * @param string $serviceId
-     *
-     * @Route("/create/{serviceId}")
+     * @Route("/create")
      * @Template("OroDataFlowBundle:Connector:edit.html.twig")
      *
      * @return array
      */
-    public function createAction($serviceId)
+    public function createAction()
     {
-        // TODO pass by form to change description
-        $description = time();
-
         $entity = new Connector();
-        $entity->setServiceId($serviceId);
-        $entity->setDescription($description);
-
-        $service = $this->container->get($entity->getServiceId());
-        $configuration = new Configuration();
-        $configuration->setTypeName($service->getConfigurationName());
-        $entity->setConfiguration($configuration);
-
-        // TODO allow to choose many jobs and order them
-        $serviceIds = $this->container->get('oro_dataflow.connectors')->getConnectorToJobs();
-        $jobId = current($serviceIds[$serviceId]);
-        $jobService = $this->container->get($jobId);
-        $job = new Job();
-        $description = time();
-        $configuration = new Configuration();
-        $configuration->setTypeName($jobService->getConfigurationName());
-        $job->setConfiguration($configuration);
-        $job->setServiceId($jobId);
-        $job->setDescription($description);
-
-        $entity->addJob($job);
-        $manager = $this->getDoctrine()->getEntityManager();
-        $manager->persist($entity);
-        $manager->flush();
 
         return $this->editAction($entity);
     }
@@ -159,59 +129,29 @@ class ConnectorController extends Controller
      */
     public function editAction(Connector $entity)
     {
-        $service = $this->container->get($entity->getServiceId());
-        $options = array('configuration_type' => $service->getFormTypeServiceId());
-        $form = $this->createForm(new ConnectorType(), $entity, $options);
+        $serviceIds = array_keys($this->container->get('oro_dataflow.connectors')->getConnectorToJobs());
+        $form = $this->createForm(new ConnectorType(), $entity, array('serviceIds' => $serviceIds));
 
         // process form
-        if ($this->get('request')->getMethod() == 'POST') {
-            $form->bindRequest($this->get('request'));
+        if ($this->getRequest()->getMethod() == 'POST') {
+            $form->bind($this->getRequest());
             if ($form->isValid()) {
+
+                // create default configuration
+                if (!$entity->getId()) {
+                    $service = $this->container->get($entity->getServiceId());
+                    $configuration = new Configuration();
+                    $configuration->setTypeName($service->getConfigurationName());
+                    $entity->setConfiguration($configuration);
+                }
+
+                // persist
                 $manager = $this->getDoctrine()->getEntityManager();
                 $manager->persist($entity);
                 $manager->flush();
 
-                $this->get('session')->getFlashBag()->add('success', 'Configuration successfully saved');
-                $url = $this->generateUrl('oro_dataflow_connector_configure', array('id' => $entity->getId()));
-
-                return $this->redirect($url);
-            }
-        }
-
-        // render configuration form
-        return array(
-            'form'      => $form->createView(),
-            'connector' => $entity,
-            'steps'     => $this->getNavigationMenu()
-        );
-    }
-
-    /**
-     * Configure connector jobs
-     *
-     * @param Connector $entity
-     *
-     * @Route("/configure/{id}", requirements={"id"="\d+"}, defaults={"id"=0})
-     * @Template
-     *
-     * @return array
-     */
-    public function configureAction(Connector $entity)
-    {
-        $job = $entity->getJobs()->first();
-        $service = $this->container->get($job->getServiceId());
-        $form = $this->createForm(new JobType(), $job, array('configuration_type' => $service->getFormTypeServiceId()));
-
-        // process form
-        if ($this->get('request')->getMethod() == 'POST') {
-            $form->bindRequest($this->get('request'));
-            if ($form->isValid()) {
-                $manager = $this->getDoctrine()->getEntityManager();
-                $manager->persist($job);
-                $manager->flush();
-
-                $this->get('session')->getFlashBag()->add('success', 'Configuration successfully saved');
-                $url = $this->generateUrl('oro_dataflow_connector_run', array('id' => $entity->getId()));
+                $this->get('session')->getFlashBag()->add('success', 'Connector successfully saved');
+                $url = $this->generateUrl('oro_dataflow_connector_index');
 
                 return $this->redirect($url);
             }
@@ -255,7 +195,7 @@ class ConnectorController extends Controller
      */
     public function runAction(Connector $entity)
     {
-        if ('POST' === $this->get('request')->getMethod()) {
+        if ('POST' === $this->getRequest()->getMethod()) {
 
             $confConnector = $entity->getConfiguration()->deserialize();
 
