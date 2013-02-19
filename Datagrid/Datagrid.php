@@ -176,9 +176,13 @@ class Datagrid implements DatagridInterface
      */
     protected function applyFilters()
     {
+        $formName = $this->formBuilder->getName();
+        $parametersData = $this->parameters->get($formName);
+
         /** @var $filter Oro\Bundle\GridBundle\Filter\FilterInterface */
         foreach ($this->getFilters() as $name => $filter) {
-            $filter->apply($this->query, array('value' => $this->parameters->get($name)));
+            $filterParameters = $this->getFormParameter($filter->getFormName());
+            $filter->apply($this->query, $filterParameters);
 
             list($type, $options) = $filter->getRenderSettings();
             $this->formBuilder->add($filter->getFormName(), $type, $options);
@@ -221,11 +225,41 @@ class Datagrid implements DatagridInterface
     }
 
     /**
+     * Returns required form parameter value
+     *
+     * @param string $name
+     * @return string|array|null
+     */
+    protected function getFormParameter($name)
+    {
+        $formName = $this->formBuilder->getName();
+        $parametersData = $this->parameters->get($formName);
+        return isset($parametersData[$name]) ? $parametersData[$name] : null;
+    }
+
+    /**
+     * Bind all source parameters
+     */
+    protected function bindParameters()
+    {
+        $formName = $this->formBuilder->getName();
+        $parametersData = $this->parameters->get($formName);
+        $this->form->bind($parametersData);
+    }
+
+    /**
      * @return Form
      */
     public function getForm()
     {
         $this->applyParameters();
+
+        if (!$this->form) {
+            $this->form = $this->formBuilder->getForm();
+        }
+
+        $this->bindParameters();
+
         return $this->form;
     }
 

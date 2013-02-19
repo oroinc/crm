@@ -1,4 +1,30 @@
 {% block grid_filter %}
+    {% if datagrid.filters %}
+        <form action="{{ path(routeName) }}" method="GET">
+            <fieldset>
+
+                <table border="1" style="color: red;">
+                    {% for filter in datagrid.filters %}
+                    <tr>
+                        <td>{{ filter.label|trans }}</td>
+                        <td>{{ form_widget(form.children[filter.formName].children['type']) }}</td>
+                        <td>{{ form_widget(form.children[filter.formName].children['value']) }}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+
+                <input type="hidden" name="filter[_page]" id="filter__page" value="1" />
+
+                {% set foo = form.children['_page'].setRendered() %}
+                {{ form_rest(form) }}
+
+                <input type="submit" value="{{ 'Filter'|trans }}" />
+
+                <a href="{{ path(routeName) }}">{{ 'Reset'|trans }}</a>
+
+            </fieldset>
+        </form>
+    {% endif %}
 {% endblock %}
 
 {% block grid_content %}
