@@ -179,7 +179,7 @@ class Datagrid implements DatagridInterface
         $formName = $this->formBuilder->getName();
         $parametersData = $this->parameters->get($formName);
 
-        /** @var $filter Oro\Bundle\GridBundle\Filter\FilterInterface */
+        /** @var $filter FilterInterface */
         foreach ($this->getFilters() as $name => $filter) {
             $filterParameters = $this->getFormParameter($filter->getFormName());
             $filter->apply($this->query, $filterParameters);
@@ -194,23 +194,23 @@ class Datagrid implements DatagridInterface
      */
     protected function applySorters()
     {
-        // we should retain an order in which sorters were added
+        // TODO Be able to configure parameters names
+        $sortBy = $this->getFormParameter('_sort_by');
 
-        $sortBy = $this->parameters->get('_sort_by');
-        $sortOrder = $this->parameters->get('_sort_order');
-
-        $requestedSorters = array_combine(
-            is_array($sortBy) ? $sortBy : array($sortBy),
-            is_array($sortOrder) ? $sortOrder : array($sortOrder)
-        );
-
-        foreach ($requestedSorters as $fieldName => $direction) {
-            if (isset($this->sorters[$fieldName])) {
-                $this->sorters[$fieldName]->apply($this->query, $direction);
-            }
+        if (!is_array($sortBy)) {
+            $sortBy = array($sortBy);
         }
 
-        // TODO: add sorters in form builder
+        // we should retain an order in which sorters were added
+        // when adding sort to query and when we creating sorters form elements
+        $this->formBuilder->add('_sort_by', 'collection', array('type' => 'hidden'));
+        $sortByField = $this->formBuilder->get('_sort_by');
+        foreach ($sortBy as $fieldName => $direction) {
+            if (isset($this->sorters[$fieldName])) {
+                $this->sorters[$fieldName]->apply($this->query, $direction);
+                $sortByField->add($fieldName, 'hidden');
+            }
+        }
     }
 
     protected function applyPager()

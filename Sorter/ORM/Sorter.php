@@ -55,13 +55,24 @@ class Sorter implements SorterInterface
     /**
      * {@inheritdoc}
      */
+    public function setDirection($direction)
+    {
+        if (in_array($direction, array(self::DIRECTION_ASC, self::DIRECTION_DESC))) {
+            $this->direction = $direction;
+        } elseif ($direction) {
+            $this->direction = self::DIRECTION_DESC;
+        } else {
+            $this->direction = self::DIRECTION_ASC;
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function initialize(FieldDescriptionInterface $field, $direction = null)
     {
         $this->field = $field;
-
-        if (!is_null($direction)) {
-            $this->direction = $direction;
-        }
+        $this->setDirection($direction);
     }
 
     /**
@@ -72,10 +83,30 @@ class Sorter implements SorterInterface
      */
     public function apply(ProxyQueryInterface $queryInterface, $direction = null)
     {
-        if (!is_null($direction)) {
-            $this->direction = $direction;
-        }
+        $this->setDirection($direction);
 
-        $queryInterface->getQueryBuilder()->addOrderBy($this->getName(), $this->getDirection());
+        $alias = $queryInterface->entityJoin($this->getParentAssociationMappings());
+
+        $queryInterface->getQueryBuilder()->addOrderBy(
+            $this->getFieldNameAssociatedWithAlias($alias),
+            $this->getDirection()
+        );
+    }
+
+    /**
+     * @param $alias
+     * @return string
+     */
+    protected function getFieldNameAssociatedWithAlias($alias)
+    {
+        return sprintf('%s.%s', $alias, $this->getField()->getFieldName());
+    }
+
+    /**
+     * @return mixed
+     */
+    protected function getParentAssociationMappings()
+    {
+        return $this->getField()->getOption('parent_association_mappings', array());
     }
 }

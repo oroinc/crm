@@ -13,6 +13,8 @@
                     {% endfor %}
                 </table>
 
+                {{ form_widget(form._sort_by) }}
+
                 <input type="hidden" name="filter[_page]" id="filter__page" value="1" />
 
                 {% set foo = form.children['_page'].setRendered() %}

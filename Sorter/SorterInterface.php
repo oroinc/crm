@@ -23,6 +23,12 @@ interface SorterInterface
     public function getDirection();
 
     /**
+     * @param mixed $direction
+     * @return void
+     */
+    public function setDirection($direction);
+
+    /**
      * @param FieldDescriptionInterface $field
      * @param string $direction
      *
@@ -32,8 +38,9 @@ interface SorterInterface
 
     /**
      * @param ProxyQueryInterface $queryInterface
+     * @param null $direction
      *
      * @return void
      */
-    public function apply(ProxyQueryInterface $queryInterface);
+    public function apply(ProxyQueryInterface $queryInterface, $direction = null);
 }
