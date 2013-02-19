@@ -44,6 +44,7 @@ class AddDependencyCallsCompilerPass implements CompilerPassInterface
             'parameters',
             'translator',
             'validator',
+            'flexible_manager',
         );
 
         foreach ($keys as $key) {
