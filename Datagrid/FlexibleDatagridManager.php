@@ -12,11 +12,18 @@ abstract class FlexibleDatagridManager extends DatagridManager
     protected $flexibleManager;
 
     /**
-     * @param FlexibleManager $flexibleManager
+     * @var string
      */
-    public function setFlexibleManager(FlexibleManager $flexibleManager)
+    protected $flexibleManagerServiceId;
+
+    /**
+     * @param FlexibleManager $flexibleManager
+     * @param string $serviceId
+     */
+    public function setFlexibleManager(FlexibleManager $flexibleManager, $serviceId)
     {
-        $this->flexibleManager = $flexibleManager;
+        $this->flexibleManager          = $flexibleManager;
+        $this->flexibleManagerServiceId = $serviceId;
 
         // TODO: somehow get from parameters interface
         $this->flexibleManager->setLocale('en');

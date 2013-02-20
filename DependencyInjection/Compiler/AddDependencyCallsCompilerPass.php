@@ -21,8 +21,6 @@ class AddDependencyCallsCompilerPass implements CompilerPassInterface
         // TODO Introduce a constant for tag
         foreach ($container->findTaggedServiceIds('oro_grid.datagrid.manager') as $id => $tags) {
             foreach ($tags as $attributes) {
-                $definition = $container->getDefinition($id);
-
                 $this->applyConfigurationFromAttributes($container, $id, $attributes);
                 $this->applyDefaults($container, $id, $attributes);
             }
@@ -51,7 +49,6 @@ class AddDependencyCallsCompilerPass implements CompilerPassInterface
             'parameters',
             'translator',
             'validator',
-            'flexible_manager',
         );
 
         foreach ($keys as $key) {
@@ -65,6 +62,27 @@ class AddDependencyCallsCompilerPass implements CompilerPassInterface
 
         $this->assertAttributesHasKey($serviceId, $attributes, 'datagrid_name');
         $definition->addMethodCall('setName', array($attributes['datagrid_name']));
+
+        // configure flexible manager parameters
+        $this->applyFlexibleConfigurationFromAttributes($definition, $attributes);
+    }
+
+    /**
+     * Configure specific flexible manager parameters
+     *
+     * @param Definition $definition
+     * @param array $attributes
+     */
+    protected function applyFlexibleConfigurationFromAttributes(Definition $definition, array $attributes)
+    {
+        $code   = 'flexible_manager';
+        $method = 'set' . $this->camelize($code);
+
+        if (!isset($attributes[$code]) || $definition->hasMethodCall($method)) {
+            return;
+        }
+
+        $definition->addMethodCall($method, array(new Reference($attributes[$code]), $attributes[$code]));
     }
 
     /**
