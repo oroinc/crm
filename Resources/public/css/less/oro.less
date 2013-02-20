@@ -54,19 +54,14 @@ header{
     width: 2px;
     border: 0 !important;
   }
-  .notifications:after{
-    content: "";
-    display: block;
-    background: url("../../img/general-sprite.png") no-repeat 0 -106px;
-    width: 14px;
-    height: 14px;
-    float: left;
-    margin: 4px 10px 0 0;
-  }
   .notifications{
     padding: 0 0 0 5px !important;
     margin: 10px 10px 0 0;
   }
+  .notifications i{
+    margin: 0 5px 0 0;
+  }
+
   .nav li.dropdown > a{
     color: #fff;
     font-weight: bold;
@@ -150,14 +145,16 @@ header{
   .dark{
     background-color: #fbfbfb;
   }
-  .help{
+  a.help{
+    margin: 0 10px 0 0 !important;
+    padding: 10px 4px !important;
+  }
+  .help i{
     text-indent: -9999px;
     font-size: 0;
     line-height: 0;
-    background: url("../../img/general-sprite.png") no-repeat 0 -91px;
     width: 14px;
     height: 15px;
-    margin: 13px 15px 0 3px;
     padding: 0 !important;
   }
 }
@@ -899,4 +896,10 @@ footer{
 }
 [class^="icon-"], [class*=" icon-"]{
   margin: 0 3px;
+}
+.application-menu .tab-content > .tab-pane > .nav a:hover{
+  background: #98b9ec;
+}
+.application-menu .tab-content > .tab-pane > .nav .active a{
+   background: #527ac0;
 }
