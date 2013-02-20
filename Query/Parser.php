@@ -33,7 +33,7 @@ class Parser
         array(
             Query::TYPE_TEXT,
             Query::TYPE_DATETIME,
-            Query::TYPE_DOUBLE,
+            Query::TYPE_DECIMAL,
             Query::TYPE_INTEGER,
         );
 
@@ -42,6 +42,22 @@ class Parser
             Query::TYPE_TEXT => array(
                 Query::OPERATOR_CONTAINS,
                 Query::OPERATOR_NOT_CONTAINS
+            ),
+            QUERY::TYPE_INTEGER => array(
+                Query::OPERATOR_GREATER_THAN,
+                Query::OPERATOR_GREATER_THAN_EQUALS,
+                Query::OPERATOR_LESS_THAN,
+                Query::OPERATOR_LESS_THAN_EQUALS,
+                Query::OPERATOR_EQUALS,
+                Query::OPERATOR_NOT_EQUALS
+            ),
+            QUERY::TYPE_DECIMAL => array(
+                Query::OPERATOR_GREATER_THAN,
+                Query::OPERATOR_GREATER_THAN_EQUALS,
+                Query::OPERATOR_LESS_THAN,
+                Query::OPERATOR_LESS_THAN_EQUALS,
+                Query::OPERATOR_EQUALS,
+                Query::OPERATOR_NOT_EQUALS
             )
         );
 

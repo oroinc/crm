@@ -23,7 +23,7 @@ class Query
     const TYPE_TEXT = 'text';
     const TYPE_INTEGER = 'integer';
     const TYPE_DATETIME = 'datetime';
-    const TYPE_DOUBLE = 'double';
+    const TYPE_DECIMAL = 'decimal';
 
     /**
      * @var array

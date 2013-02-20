@@ -183,9 +183,9 @@ abstract class BaseDriver extends FunctionNode
         $joinAlias = $joinEntity . $index;
         $qb->join('search.' . $joinEntity, $joinAlias);
         if ($searchCondition['type'] == 'and') {
-            $qb->andWhere($this->createNonTextQuery($joinAlias, $index));
+            $qb->andWhere($this->createNonTextQuery($joinAlias, $index, $searchCondition['condition'] ));
         } else {
-            $qb->orWhere($this->createNonTextQuery($joinAlias, $index));
+            $qb->orWhere($this->createNonTextQuery($joinAlias, $index, $searchCondition['condition']));
         }
         $qb->setParameter('field' . $index, $searchCondition['fieldName'])
             ->setParameter('value' . $index, $searchCondition['fieldValue']);
@@ -196,12 +196,13 @@ abstract class BaseDriver extends FunctionNode
      *
      * @param $joinAlias
      * @param $index
+     * @param $condition
      *
      * @return string
      */
-    protected function createNonTextQuery($joinAlias, $index)
+    protected function createNonTextQuery($joinAlias, $index, $condition)
     {
-        return $joinAlias . '.field= :field' . $index . ' AND ' . $joinAlias . '.value = :value' . $index;
+        return $joinAlias . '.field= :field' . $index . ' AND ' . $joinAlias . '.value ' . $condition . ' :value' . $index;
     }
 
     /**
@@ -223,13 +224,13 @@ abstract class BaseDriver extends FunctionNode
         }
 
         foreach ($query->getOptions() as $index => $searchCondition) {
-            if ($searchCondition['fieldType'] == 'text') {
+            if ($searchCondition['fieldType'] == Query::TYPE_TEXT) {
                 $this->addTextField($qb, $index, $searchCondition);
             } else {
                 $this->addNonTextField($qb, $index, $searchCondition);
             }
         }
-//var_dump($qb->getQuery()->getDQL());die;
+
         return $qb;
     }
 }
