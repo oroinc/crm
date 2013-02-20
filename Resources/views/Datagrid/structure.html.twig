@@ -70,7 +70,16 @@
                         <tr>
                             {% for field in datagrid.columns %}
                                 {% block grid_body_row_field %}
-                                    <td>{{ attribute(row, field.name) }}</td>
+                                    <td>
+                                        {% set value = attribute(row, field.name) %}
+                                        {% if field.type == 'date' %}
+                                            {{ value|date('Y-m-d') }}
+                                        {% elseif field.type == 'datetime' %}
+                                            {{ value|date('Y-m-d H:i:s') }}
+                                        {% else %}
+                                            {{ value }}
+                                        {% endif %}
+                                    </td>
                                 {% endblock %}
                             {% endfor %}
                         </tr>
