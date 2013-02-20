@@ -1,0 +1,4 @@
+oro_menu_config:
+    templates:
+        application_menu:
+            template: 'OroUIBundle:Menu:application_menu.html.twig'
