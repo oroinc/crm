@@ -11,6 +11,7 @@ use Oro\Bundle\GridBundle\Datagrid\PagerInterface;
 use Oro\Bundle\GridBundle\Datagrid\ProxyQueryInterface;
 use Oro\Bundle\GridBundle\Datagrid\ParametersInterface;
 use Oro\Bundle\GridBundle\Datagrid\ORM\Pager;
+use Oro\Bundle\GridBundle\Route\RouteGeneratorInterface;
 use Oro\Bundle\GridBundle\Field\FieldDescriptionInterface;
 use Oro\Bundle\GridBundle\Field\FieldDescriptionCollection;
 use Oro\Bundle\GridBundle\Filter\FilterFactoryInterface;
@@ -43,9 +44,9 @@ class DatagridBuilder implements DatagridBuilderInterface
         FilterFactoryInterface $filterFactory,
         SorterFactoryInterface $sorterFactory
     ) {
-        $this->formFactory     = $formFactory;
-        $this->filterFactory   = $filterFactory;
-        $this->sorterFactory   = $sorterFactory;
+        $this->formFactory   = $formFactory;
+        $this->filterFactory = $filterFactory;
+        $this->sorterFactory = $sorterFactory;
     }
 
     /**
@@ -77,24 +78,44 @@ class DatagridBuilder implements DatagridBuilderInterface
     }
 
     /**
+     * @param string $name
      * @param ProxyQueryInterface $query
      * @param FieldDescriptionCollection $fieldCollection
+     * @param RouteGeneratorInterface $routeGenerator
      * @param ParametersInterface $parameters
      * @return DatagridInterface
      */
     public function getBaseDatagrid(
+        $name,
         ProxyQueryInterface $query,
         FieldDescriptionCollection $fieldCollection,
+        RouteGeneratorInterface $routeGenerator,
         ParametersInterface $parameters
     ) {
         $formBuilder = $this->formFactory->createNamedBuilder(
-            'filter',
+            $this->getFormName($name),
             'form',
             array(),
             array('csrf_protection' => false)
         );
 
-        return new Datagrid($query, $fieldCollection, $this->createPager($query), $formBuilder, $parameters);
+        return new Datagrid(
+            $query,
+            $fieldCollection,
+            $this->createPager($query),
+            $formBuilder,
+            $routeGenerator,
+            $parameters
+        );
+    }
+
+    /**
+     * @param string $datagridName
+     * @return string
+     */
+    protected function getFormName($datagridName)
+    {
+        return $datagridName;
     }
 
     /**

@@ -4,12 +4,21 @@ namespace Oro\Bundle\GridBundle\Datagrid;
 
 interface ParametersInterface
 {
+    const FILTER_PARAMETERS = '_filter';
+    const SORT_PARAMETERS = '_sort_by';
+    const PAGER_PARAMETERS = '_pager';
+
     /**
-     * Get parameter name from parameters container
+     * Get parameter value from parameters container
      *
-     * @param string $name
+     * @param string $type
      * @param mixed $default
-     * @return mixed
+     * @return array
      */
-    public function get($name, $default = null);
+    public function get($type, $default = null);
+
+    /**
+     * @return array
+     */
+    public function toArray();
 }

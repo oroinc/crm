@@ -7,6 +7,7 @@ use Oro\Bundle\GridBundle\Field\FieldDescriptionCollection;
 use Oro\Bundle\GridBundle\Datagrid\ProxyQueryInterface;
 use Oro\Bundle\GridBundle\Datagrid\DatagridInterface;
 use Oro\Bundle\GridBundle\Datagrid\ParametersInterface;
+use Oro\Bundle\GridBundle\Route\RouteGeneratorInterface;
 
 interface DatagridBuilderInterface
 {
@@ -28,14 +29,18 @@ interface DatagridBuilderInterface
     public function addSorter(DatagridInterface $datagrid, FieldDescriptionInterface $field);
 
     /**
+     * @param string $name
      * @param ProxyQueryInterface $query
      * @param FieldDescriptionCollection $fieldCollection
+     * @param RouteGeneratorInterface $routeGenerator,
      * @param ParametersInterface $parameters
      * @return DatagridInterface
      */
     public function getBaseDatagrid(
+        $name,
         ProxyQueryInterface $query,
         FieldDescriptionCollection $fieldCollection,
+        RouteGeneratorInterface $routeGenerator,
         ParametersInterface $parameters
     );
 }

@@ -4,11 +4,13 @@ namespace Oro\Bundle\GridBundle\Datagrid;
 
 use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\Validator\ValidatorInterface;
+
 use Oro\Bundle\GridBundle\Builder\DatagridBuilderInterface;
 use Oro\Bundle\GridBundle\Builder\ListBuilderInterface;
 use Oro\Bundle\GridBundle\Field\FieldDescriptionInterface;
 use Oro\Bundle\GridBundle\Filter\FilterInterface;
 use Oro\Bundle\GridBundle\Datagrid\ParametersInterface;
+use Oro\Bundle\GridBundle\Route\RouteGeneratorInterface;
 
 abstract class DatagridManager implements DatagridManagerInterface
 {
@@ -41,6 +43,16 @@ abstract class DatagridManager implements DatagridManagerInterface
      * @var ParametersInterface
      */
     protected $parameters;
+
+    /**
+     * @var string
+     */
+    protected $name;
+
+    /**
+     * @var RouteGeneratorInterface
+     */
+    protected $routeGenerator;
 
     /**
      * @param DatagridBuilderInterface $datagridBuilder
@@ -87,7 +99,26 @@ abstract class DatagridManager implements DatagridManagerInterface
     }
 
     /**
+     * @param RouteGeneratorInterface $routeGenerator
+     * @return void
+     */
+    public function setRouteGenerator(RouteGeneratorInterface $routeGenerator)
+    {
+        $this->routeGenerator = $routeGenerator;
+    }
+
+    /**
+     * @param string $name
+     * @return void
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+    }
+
+    /**
      * @param ParametersInterface $parameters
+     * @return void
      */
     public function setParameters(ParametersInterface $parameters)
     {
@@ -108,8 +139,10 @@ abstract class DatagridManager implements DatagridManagerInterface
 
         // create datagrid
         $datagrid = $this->datagridBuilder->getBaseDatagrid(
+            $this->name,
             $this->queryFactory->createQuery(),
             $listCollection,
+            $this->routeGenerator,
             $this->parameters
         );
 

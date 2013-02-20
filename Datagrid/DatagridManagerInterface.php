@@ -10,9 +10,18 @@ use Symfony\Component\HttpFoundation\Request;
 use Oro\Bundle\GridBundle\Builder\DatagridBuilderInterface;
 use Oro\Bundle\GridBundle\Builder\ListBuilderInterface;
 use Oro\Bundle\GridBundle\Datagrid\QueryFactoryInterface;
+use Oro\Bundle\GridBundle\Route\RouteGeneratorInterface;
 
 interface DatagridManagerInterface
 {
+    /**
+     * Set unique name
+     *
+     * @param string $name
+     * @return void
+     */
+    public function setName($name);
+
     /**
      * @param DatagridBuilderInterface $datagridBuilder
      * @return void
@@ -47,6 +56,12 @@ interface DatagridManagerInterface
      * @return void
      */
     public function setValidator(ValidatorInterface $validator);
+
+    /**
+     * @param RouteGeneratorInterface $routeGenerator
+     * @return void
+     */
+    public function setRouteGenerator(RouteGeneratorInterface $routeGenerator);
 
     /**
      * @param ParametersInterface $parameters

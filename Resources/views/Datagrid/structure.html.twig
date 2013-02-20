@@ -7,19 +7,19 @@
                     {% for filter in datagrid.filters %}
                     <tr>
                         <td>{{ filter.label|trans }}</td>
-                        <td>{{ form_widget(form.children[filter.formName].children['type']) }}</td>
-                        <td>{{ form_widget(form.children[filter.formName].children['value']) }}</td>
+                        <td>{{ form_widget(form.children['_filter'].children[filter.formName].children['type']) }}</td>
+                        <td>{{ form_widget(form.children['_filter'].children[filter.formName].children['value']) }}</td>
                     </tr>
                     {% endfor %}
                 </table>
 
                 {{ form_widget(form._sort_by) }}
-                {{ form_widget(form._page, {value : 1}) }}
+                {{ form_widget(form.children['_pager']._page, {value : 1}) }}
                 {{ form_rest(form) }}
 
-                <input type="submit" value="{{ 'oro_grid.button.filter'|trans({}, "Datagrid") }}" />
+                <input type="submit" value="{{ 'oro_grid.button.filter'|trans({}, 'OroGridBundle') }}" />
 
-                <a href="{{ path(routeName) }}">{{ 'oro_grid.button.reset'|trans({}, "Datagrid") }}</a>
+                <a href="{{ path(routeName) }}">{{ 'oro_grid.button.reset'|trans({}, 'OroGridBundle') }}</a>
 
             </fieldset>
         </form>
@@ -38,16 +38,26 @@
                             {% if datagrid.getSorter(field.name) %}
                                 {% set sorter = datagrid.getSorter(field.name) %}
                                 &nbsp;
-                                {% if sorter.getDirection() == 'DESC' %}
+                                {% if sorter.direction == 'DESC' %}
                                     <b style="color: green">&uarr;</b>
                                 {% else %}
-                                    &uarr;
+                                    <a href="{{ datagrid.routeGenerator.generateSortUrl(datagrid.parameters, sorter.field, 'DESC') }}"
+                                       title="{{ 'oro_grid.link.sort_desc'|trans({}, 'OroGridBundle') }}"
+                                       style="color: #ffffff"
+                                    >
+                                        &uarr;
+                                    </a>
                                 {% endif %}
                                 &nbsp;
                                 {% if sorter.getDirection() == 'ASC' %}
                                     <b style="color: green">&darr;</b>
                                 {% else %}
-                                    &darr;
+                                    <a href="{{ datagrid.routeGenerator.generateSortUrl(datagrid.parameters, sorter.field, 'ASC') }}"
+                                       title="{{ 'oro_grid.link.sort_asc'|trans({}, 'OroGridBundle') }}"
+                                       style="color: #ffffff"
+                                    >
+                                        &darr;
+                                    </a>
                                 {% endif %}
                                 &nbsp;
                             {% endif %}
@@ -74,6 +84,38 @@
     {% endblock %}
     {% block grid_footer %}
         <tfoot>
+        {% if datagrid.pager.haveToPaginate() %}
+            <tr>
+                <td colspan="{{ datagrid.columns|length }}">
+                    <div class="pagination pagination-centered">
+                        <ul>
+                            {% if datagrid.pager.page != datagrid.pager.firstpage  %}
+                                <li><a href="{{ datagrid.routeGenerator.generatePagerUrl(datagrid.parameters, datagrid.pager.firstpage) }}" title="{{ 'link_first_pager'|trans({}, 'OroGridBundle') }}">&laquo;</a></li>
+                            {% endif %}
+
+                            {% if datagrid.pager.page != datagrid.pager.previouspage %}
+                                <li><a href="{{ datagrid.routeGenerator.generatePagerUrl(datagrid.parameters, datagrid.pager.previouspage) }}" title="{{ 'link_previous_pager'|trans({}, 'OroGridBundle') }}">&lsaquo;</a></li>
+                            {% endif %}
+
+                            {# Set the number of pages to display in the pager #}
+                            {% for page in datagrid.pager.getLinks() %}
+                                <li {% if page == datagrid.pager.page %}class="active"{% endif %}>
+                                    <a href="{{ datagrid.routeGenerator.generatePagerUrl(datagrid.parameters, page) }}">{{ page }}</a>
+                                </li>
+                            {% endfor %}
+
+                            {% if datagrid.pager.page != datagrid.pager.nextpage %}
+                                <li><a href="{{ datagrid.routeGenerator.generatePagerUrl(datagrid.parameters, datagrid.pager.nextpage) }}" title="{{ 'link_next_pager'|trans({}, 'OroGridBundle') }}">&rsaquo;</a></li>
+                            {% endif %}
+
+                            {% if datagrid.pager.page != datagrid.pager.lastpage  %}
+                                <li><a href="{{ datagrid.routeGenerator.generatePagerUrl(datagrid.parameters, datagrid.pager.lastpage) }}" title="{{ 'link_last_pager'|trans({}, 'OroGridBundle') }}">&raquo;</a></li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+        {% endif %}
         </tfoot>
     {% endblock %}
 </table>

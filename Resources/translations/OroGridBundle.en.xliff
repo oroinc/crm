@@ -10,6 +10,14 @@
                 <source>oro_grid.button.reset</source>
                 <target>Reset</target>
             </trans-unit>
+            <trans-unit id="oro_grid.link.sort_desc">
+                <source>oro_grid.link.sort_desc</source>
+                <target>Sort descending</target>
+            </trans-unit>
+            <trans-unit id="oro_grid.link.sort_asc">
+                <source>oro_grid.link.sort_asc</source>
+                <target>Sort ascending</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>
