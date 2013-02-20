@@ -25,11 +25,10 @@ class FlexibleStringFilter extends AbstractFlexibleFilter
 
         /** @var $proxyQuery ProxyQuery */
         $queryBuilder = $proxyQuery->getQueryBuilder();
-        $entityAlias = $proxyQuery->entityJoin($this->getParentAssociationMappings());
 
         /** @var $entityRepository FlexibleEntityRepository */
         $entityRepository = $this->flexibleManager->getFlexibleRepository();
-        $entityRepository->applyFilterByAttribute($queryBuilder, $entityAlias, $field, $value['value']);
+        $entityRepository->applyFilterByAttribute($queryBuilder, $alias, $field, $value['value']);
     }
 
     /**

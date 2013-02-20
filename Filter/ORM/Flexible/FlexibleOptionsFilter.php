@@ -26,7 +26,12 @@ class FlexibleOptionsFilter extends AbstractFlexibleFilter
             return;
         }
 
-        // TODO: apply option filter
+        /** @var $proxyQuery ProxyQuery */
+        $queryBuilder = $proxyQuery->getQueryBuilder();
+
+        /** @var $entityRepository FlexibleEntityRepository */
+        $entityRepository = $this->flexibleManager->getFlexibleRepository();
+        $entityRepository->applyFilterByOptionAttribute($queryBuilder, $field, $value['value']);
     }
 
     /**
