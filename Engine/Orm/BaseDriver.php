@@ -97,14 +97,24 @@ abstract class BaseDriver extends FunctionNode
     {
         $joinAlias = 'textFields' . $index;
         $qb->join('search.textFields', $joinAlias);
+
         $useFieldName = $searchCondition['fieldName'] == '*' ? false : true;
+
         if ($searchCondition['type'] == 'and') {
-            $qb->andWhere($this->createStringQuery($joinAlias, $index, $useFieldName));
-            $this->setFieldValueStringParameter($qb, $index, $searchCondition['fieldValue']);
+            $whereFunc = 'andWhere';
         } else {
-            $qb->orWhere($this->createStringQuery($joinAlias, $index, $useFieldName));
-            $qb->setParameter('value' . $index, $searchCondition['fieldValue']);
+            $whereFunc = 'orWhere';
         }
+
+        if ($searchCondition['condition'] == Query::OPERATOR_EQUALS) {
+            $searchString = $this->createContainsStringQuery($joinAlias, $index, $useFieldName);
+        } else {
+            $searchString = $this->createNotContainsStringQuery($joinAlias, $index, $useFieldName);
+        }
+
+        $qb->$whereFunc($searchString);
+        $this->setFieldValueStringParameter($qb, $index, $searchCondition['fieldValue']);
+
         if ($useFieldName) {
             $qb->setParameter('field' . $index, $searchCondition['fieldName']);
         }
@@ -119,7 +129,7 @@ abstract class BaseDriver extends FunctionNode
      *
      * @return string
      */
-    protected function createStringQuery($joinAlias, $index, $useFieldName = true)
+    protected function createContainsStringQuery($joinAlias, $index, $useFieldName = true)
     {
         $stringQuery = '';
         if ($useFieldName) {
@@ -127,6 +137,25 @@ abstract class BaseDriver extends FunctionNode
         }
 
         return $stringQuery . $joinAlias . '.value LIKE :value' . $index;
+    }
+
+    /**
+     * Create search string for string parameters
+     *
+     * @param string  $joinAlias
+     * @param integer $index
+     * @param bool    $useFieldName
+     *
+     * @return string
+     */
+    protected function createNotContainsStringQuery($joinAlias, $index, $useFieldName = true)
+    {
+        $stringQuery = '';
+        if ($useFieldName) {
+            $stringQuery = $joinAlias . '.field = :field' . $index . ' AND ';
+        }
+
+        return $stringQuery . $joinAlias . '.value NOT LIKE :value' . $index;
     }
 
     /**
@@ -200,7 +229,7 @@ abstract class BaseDriver extends FunctionNode
                 $this->addNonTextField($qb, $index, $searchCondition);
             }
         }
-
+//var_dump($qb->getQuery()->getDQL());die;
         return $qb;
     }
 }

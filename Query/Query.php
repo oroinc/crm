@@ -8,6 +8,23 @@ class Query
 {
     const SELECT = 'select';
 
+    const KEYWORD_AND = 'and';
+    const KEYWORD_OR = 'or';
+
+    const OPERATOR_EQUALS = '=';
+    const OPERATOR_NOT_EQUALS = '!=';
+    const OPERATOR_GREATER_THAN = '>';
+    const OPERATOR_GREATER_THAN_EQUALS = '>=';
+    const OPERATOR_LESS_THAN = '<';
+    const OPERATOR_LESS_THAN_EQUALS = '<=';
+    const OPERATOR_CONTAINS = '~';
+    const OPERATOR_NOT_CONTAINS = '!~';
+
+    const TYPE_TEXT = 'text';
+    const TYPE_INTEGER = 'integer';
+    const TYPE_DATETIME = 'datetime';
+    const TYPE_DOUBLE = 'double';
+
     /**
      * @var array
      */
@@ -140,7 +157,7 @@ class Query
      */
     public function andWhere($fieldName, $condition, $fieldValue, $fieldType = null)
     {
-        return $this->where('and', $fieldName, $condition, $fieldValue, $fieldType);
+        return $this->where(self::KEYWORD_AND, $fieldName, $condition, $fieldValue, $fieldType);
     }
 
     /**
@@ -155,13 +172,13 @@ class Query
      */
     public function orWhere($fieldName, $condition, $fieldValue, $fieldType = null)
     {
-        return $this->where('or', $fieldName, $condition, $fieldValue, $fieldType);
+        return $this->where(self::KEYWORD_OR, $fieldName, $condition, $fieldValue, $fieldType);
     }
 
     /**
      * Add "WHERE" parameter
      *
-     * @param string $type
+     * @param string $keyWord
      * @param string $fieldName
      * @param string $condition
      * @param string $fieldValue
@@ -170,18 +187,18 @@ class Query
      * @return \Oro\Bundle\SearchBundle\Query\Query
      * @throws \InvalidArgumentException
      */
-    public function where($type, $fieldName, $condition, $fieldValue, $fieldType = null)
+    public function where($keyWord, $fieldName, $condition, $fieldValue, $fieldType = null)
     {
-        if ($fieldName!='*' && !$this->checkFieldInConfig($fieldName)) {
-            throw new \InvalidArgumentException('Field ' . $fieldName . ' does not exists in config');
-        }
+        //if ($fieldName!='*' && !$this->checkFieldInConfig($fieldName)) {
+        //    throw new \InvalidArgumentException('Field ' . $fieldName . ' does not exists in config');
+        //}
 
         $this->options[] = array(
             'fieldName'  => $fieldName,
             'condition'  => $condition,
             'fieldValue' => $fieldValue,
             'fieldType'  => $fieldType,
-            'type'       => $type
+            'type'       => $keyWord
         );
 
         return $this;

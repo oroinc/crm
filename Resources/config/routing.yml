@@ -6,3 +6,12 @@ oro_search_api:
         version: latest|v1
     defaults:
         version: latest
+
+oro_advanced_search_api:
+    resource: Oro\Bundle\SearchBundle\Controller\Api\AdvancedSearchController
+    type: rest
+    prefix: api/rest/{version}/
+    requirements:
+        version: latest|v1
+    defaults:
+        version: latest

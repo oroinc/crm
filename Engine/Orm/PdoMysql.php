@@ -7,6 +7,7 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\ClassMetadata;
 
 use Oro\Bundle\SearchBundle\Engine\Orm\BaseDriver;
+use Oro\Bundle\SearchBundle\Query\Query;
 
 /**
  * "MATCH_AGAINST" "(" {StateFieldPathExpression ","}* InParameter {Literal}? ")"
@@ -95,25 +96,6 @@ class PdoMysql extends BaseDriver
     }
 
     /**
-     * Create fulltext search string for string parameters
-     *
-     * @param string  $joinAlias
-     * @param integer $index
-     * @param bool    $useFieldName
-     *
-     * @return string
-     */
-    protected function createStringQuery($joinAlias, $index, $useFieldName = true)
-    {
-        $stringQuery = '';
-        if ($useFieldName) {
-            $stringQuery = ' AND ' . $joinAlias . '.field = :field' .$index;
-        }
-
-        return 'MATCH_AGAINST(' .$joinAlias . '.value, :value' .$index. ' \'IN BOOLEAN MODE\') >0' . $stringQuery;
-    }
-
-    /**
      * Set string parameter for qb
      *
      * @param \Doctrine\ORM\QueryBuilder $qb
@@ -123,5 +105,49 @@ class PdoMysql extends BaseDriver
     protected function setFieldValueStringParameter(QueryBuilder $qb, $index, $fieldValue)
     {
         $qb->setParameter('value' . $index,  $fieldValue);
+    }
+
+    /**
+     * Add text search to qb
+     *
+     * @param \Doctrine\ORM\QueryBuilder $qb
+     * @param integer                    $index
+     * @param array                      $searchCondition
+     */
+    protected function addTextField(QueryBuilder $qb, $index, $searchCondition)
+    {
+        $joinAlias = 'textFields' . $index;
+        $qb->join('search.textFields', $joinAlias);
+
+        $useFieldName = $searchCondition['fieldName'] == '*' ? false : true;
+
+        if ($searchCondition['type'] == 'and') {
+            $whereFunc = 'andWhere';
+        } else {
+            $whereFunc = 'orWhere';
+        }
+
+        $stringQuery = '';
+        if ($useFieldName) {
+            $stringQuery = ' AND ' . $joinAlias . '.field = :field' .$index;
+        }
+
+        if ($searchCondition['condition'] == Query::OPERATOR_CONTAINS) {
+            $qb->$whereFunc( 'MATCH_AGAINST(' .$joinAlias . '.value, :value' .$index. ' \'IN BOOLEAN MODE\') >0' . $stringQuery);
+            if (strpos($searchCondition['fieldValue'], ' ') === false) {
+                $additionalParameter = '*';
+            } else {
+                $additionalParameter = '';
+            }
+            //var_dump($searchCondition['fieldValue'] . $additionalParameter);die;
+            $qb->setParameter('value' . $index, $searchCondition['fieldValue'] . $additionalParameter);
+        } else {
+            $qb->$whereFunc( $joinAlias . '.value NOT LIKE :value' . $index . $stringQuery);
+            $qb->setParameter('value' . $index, '%' . $searchCondition['fieldValue'] . '%' );
+        }
+
+        if ($useFieldName) {
+            $qb->setParameter('field' . $index, $searchCondition['fieldName']);
+        }
     }
 }
