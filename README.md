@@ -62,6 +62,7 @@ How to use ?
 
 Enhancement
 ===========
+- order jobs in a connector
 - store mapping as configuration
 - provide different job classes to deal with different kind of treatment (line by line, massive, etc)
 - provide useful classes to make easiest to load high volume of data
