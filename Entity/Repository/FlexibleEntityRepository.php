@@ -1,11 +1,13 @@
 <?php
 namespace Oro\Bundle\FlexibleEntityBundle\Entity\Repository;
 
+use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Tools\Pagination\Paginator;
+use Doctrine\ORM\QueryBuilder;
 use Oro\Bundle\FlexibleEntityBundle\Exception\UnknownAttributeException;
 use Oro\Bundle\FlexibleEntityBundle\Model\Behavior\TranslatableInterface;
 use Oro\Bundle\FlexibleEntityBundle\Model\Behavior\ScopableInterface;
-use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\Tools\Pagination\Paginator;
+use Oro\Bundle\FlexibleEntityBundle\Entity\Attribute;
 
 /**
  * Base repository for flexible entity
@@ -323,33 +325,18 @@ class FlexibleEntityRepository extends EntityRepository implements TranslatableI
      *
      * @return array $attributeCodeToAlias
      */
-    protected function addFieldOrAttributeCriterias($qb, $attributes, $criteria, $codeToAttribute, $attributeCodeToAlias)
-    {
+    protected function addFieldOrAttributeCriterias(
+        $qb,
+        $attributes,
+        $criteria,
+        $codeToAttribute,
+        $attributeCodeToAlias
+    ) {
         foreach ($criteria as $fieldCode => $fieldValue) {
             // add attribute criteria
             if (in_array($fieldCode, $attributes)) {
-                // prepare condition
                 $attribute = $codeToAttribute[$fieldCode];
-                $joinAlias = 'filterV'.$fieldCode;
-                $joinValue = 'filterv'.$fieldCode;
-                $condition = $joinAlias.'.attribute = '.$attribute->getId()
-                    .' AND '.$joinAlias.'.'.$attribute->getBackendType().' = :'.$joinValue;
-                // add condition on locale if attribute is translatable
-                if ($attribute->getTranslatable()) {
-                    $joinValueLocale = 'filterL'.$fieldCode;
-                    $condition .= ' AND '.$joinAlias.'.locale = :'.$joinValueLocale;
-                    $qb->setParameter($joinValueLocale, $this->getLocale());
-                }
-                // add condition on scope if attribute is scopable
-                if ($attribute->getScopable()) {
-                    $joinValueScope = 'filterS'.$fieldCode;
-                    $condition .= ' AND '.$joinAlias.'.scope = :'.$joinValueScope;
-                    $qb->setParameter($joinValueScope, $this->getScope());
-                }
-                // add inner join to filter lines and store value alias for next uses
-                $qb->innerJoin('Entity.'.$attribute->getBackendStorage(), $joinAlias, 'WITH', $condition)
-                    ->setParameter($joinValue, $fieldValue);
-
+                $this->addAttributeCriteria($qb, 'Entity', $attribute, $fieldCode, $fieldValue);
             } else {
                 // add field criteria
                 $qb->andWhere('Entity.'.$fieldCode.' = :'.$fieldCode)->setParameter($fieldCode, $fieldValue);
@@ -357,6 +344,59 @@ class FlexibleEntityRepository extends EntityRepository implements TranslatableI
         }
 
         return $attributeCodeToAlias;
+    }
+
+    /**
+     * @param QueryBuilder $qb
+     * @param string $alias
+     * @param Attribute $attribute
+     * @param $fieldCode
+     * @param $fieldValue
+     */
+    protected function addAttributeCriteria(QueryBuilder $qb, $alias, $attribute, $fieldCode, $fieldValue)
+    {
+        // prepare condition
+        $joinAlias = 'filterV'.$fieldCode;
+        $joinValue = 'filterv'.$fieldCode;
+        $condition = $joinAlias.'.attribute = '.$attribute->getId()
+            .' AND '.$joinAlias.'.'.$attribute->getBackendType().' = :'.$joinValue;
+        // add condition on locale if attribute is translatable
+        if ($attribute->getTranslatable()) {
+            $joinValueLocale = 'filterL'.$fieldCode;
+            $condition .= ' AND '.$joinAlias.'.locale = :'.$joinValueLocale;
+            $qb->setParameter($joinValueLocale, $this->getLocale());
+        }
+        // add condition on scope if attribute is scopable
+        if ($attribute->getScopable()) {
+            $joinValueScope = 'filterS'.$fieldCode;
+            $condition .= ' AND '.$joinAlias.'.scope = :'.$joinValueScope;
+            $qb->setParameter($joinValueScope, $this->getScope());
+        }
+        // add inner join to filter lines and store value alias for next uses
+        $qb->innerJoin($alias . '.' . $attribute->getBackendStorage(), $joinAlias, 'WITH', $condition)
+            ->setParameter($joinValue, $fieldValue);
+    }
+
+    /**
+     * @param QueryBuilder $queryBuilder
+     * @param string $entityAlias
+     * @param string $attributeCode
+     * @param string $attributeValue
+     */
+    public function applyFilterByAttribute(QueryBuilder $queryBuilder, $entityAlias, $attributeCode, $attributeValue)
+    {
+        $attributes = $this->getCodeToAttributes(array($attributeCode));
+        if ($attributes) {
+            /** @var $attribute Attribute */
+            $attribute = $attributes[$attributeCode];
+            $this->addAttributeCriteria(
+                $queryBuilder,
+                $entityAlias,
+                $attribute,
+                $attribute->getCode(),
+                $attributeValue
+            );
+        }
     }
 
     /**
