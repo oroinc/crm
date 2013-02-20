@@ -10,7 +10,7 @@ Install project
 
 MySql, Postgres and other db engines use additional indexes for fulltext search. To create this indexes use console command
 
-    php app/console oro:build-fulltext
+    php app/console oro:search:create-index
 
 Bundle config
 ----------------------------------

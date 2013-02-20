@@ -19,8 +19,7 @@ class AdvancedSearchController extends FOSRestController
      *  description="Get advanced search result",
      *  resource=true,
      *  filters={
-     *      {"name"="query", "dataType"="string"},
-     *      {"name"="from", "dataType"="string"}
+     *      {"name"="query", "dataType"="string"}
      *  }
      * )
      */
@@ -31,8 +30,7 @@ class AdvancedSearchController extends FOSRestController
         return $this->get('fos_rest.view_handler')->handle(
             $view->setData(
                 $this->get('oro_search.index')->advancedSearch(
-                    $this->getRequest()->get('query'),
-                    $this->getRequest()->get('from')
+                    $this->getRequest()->get('query')
                 )->toSearchResultData()
             )
         );

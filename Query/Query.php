@@ -19,6 +19,7 @@ class Query
     const OPERATOR_LESS_THAN_EQUALS = '<=';
     const OPERATOR_CONTAINS = '~';
     const OPERATOR_NOT_CONTAINS = '!~';
+    const OPERATOR_IN = 'in';
 
     const TYPE_TEXT = 'text';
     const TYPE_INTEGER = 'integer';
@@ -72,6 +73,7 @@ class Query
         }
         $this->options = array();
         $this->maxResults = 0;
+        $this->from = false;
     }
 
     /**

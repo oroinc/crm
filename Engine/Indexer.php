@@ -98,32 +98,13 @@ class Indexer
      * Advanced search from API
      *
      * @param string $searchString
-     * @param string $from
      *
      * @return \Oro\Bundle\SearchBundle\Query\Result
      */
-    public function advancedSearch($searchString, $from = '')
+    public function advancedSearch($searchString)
     {
         $parser = new Parser();
-        $queryArray = $parser->parse($searchString);
-        $searchQuery = $this->select();
 
-        if ($from) {
-            $searchQuery->from($from);
-        } else {
-            $searchQuery->from('*');
-        }
-
-        foreach ($queryArray as $query) {
-            $searchQuery->where(
-                isset($query[Parser::POSITION_KEYWORD])?$query[Parser::POSITION_KEYWORD]:Query::KEYWORD_AND,
-                $query[Parser::POSITION_FIELD],
-                $query[Parser::POSITION_OPERATOR],
-                $query[Parser::POSITION_VALUE],
-                $query[Parser::POSITION_TYPE]
-            );
-        };
-
-        return $this->query($searchQuery);
+        return $this->query($parser->getQueryFromString($searchString));
     }
 }
