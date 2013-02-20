@@ -213,6 +213,9 @@ header{
     padding: 0 15px;
     color: #fff;
 }
+.logo a:hover{
+    text-decoration: none;
+}
 .wb{
     background-color: #FFF;
 }

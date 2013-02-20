@@ -70,6 +70,7 @@ header{
   .nav li.dropdown > a{
     color: #fff;
     font-weight: bold;
+    text-shadow: none;
   }
   .nav li.dropdown > a .caret{
     background: url("../../img/general-sprite.png") no-repeat 0 -56px;
@@ -169,6 +170,8 @@ header:after{
   display: block;
 }
 .header-search{
+  position: relative;
+
   .dropdown-toggle{
     border-color: #1c2025 #020203 #1c2025 #1c2025;
     background-color: #2d353e;
@@ -197,6 +200,7 @@ header:after{
     background-repeat: repeat-x;
     border-right: 0;
     color: #fff;
+    width: 200px;
   }
   input[type="text"]:focus{
     background-color: #fff;
@@ -213,10 +217,52 @@ header:after{
     border-width: 1px 1px 1px 0;
     box-shadow: none !important;
   }
+
   .btn-search:hover,
   .btn-search:focus{
     background:#262d33 url("../../img/general-sprite.png") no-repeat 3px -63px !important;
   }
+  .custom-dropdown{
+    position: absolute;
+    top: 27px;
+    left: 61px;
+    border: 1px solid #ccc;
+    background: #fff;
+    width: 240px;
+    z-index: 105;
+    color: #777;
+    font:12px/14px Arial, Helvetica, sans-serif;
+    display: none;
+    ul{
+      margin: 0;
+      padding: 0;
+    }
+    span{
+      float: left;
+    }
+    li{
+      padding: 5px 10px;
+    }
+    li:hover{
+      background: #f5f5f5;
+      cursor: pointer;
+    }
+  }
+  .avatar{
+    float:right;
+  }
+}
+.header-search-focused .custom-dropdown{
+  display: block;
+}
+.header-search-focused .btn-search,
+.header-search-focused .btn-search:hover,
+.header-search-focused .btn-search:focus{
+  background:#fff url("../../img/general-sprite.png") no-repeat 3px -63px !important;
+}
+.header-search-focused input[type="text"]{
+  -webkit-box-shadow:  none !important;
+  box-shadow: none !important;
 }
 footer{
   text-align: center;
@@ -836,7 +882,7 @@ footer{
   margin: 0;
 }
 .application-menu .tab-content{
-  background-color: #7a95b5;
+  background-color: #7c96b4;
 }
 .application-menu .home a{
   padding: 0 5px !important;
@@ -850,4 +896,7 @@ footer{
   font-size: 0;
   line-height: 0;
   background: url("../../img/general-sprite.png") no-repeat 0 -156px;
+}
+[class^="icon-"], [class*=" icon-"]{
+  margin: 0 3px;
 }
