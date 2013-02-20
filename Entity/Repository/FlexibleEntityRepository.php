@@ -400,6 +400,30 @@ class FlexibleEntityRepository extends EntityRepository implements TranslatableI
     }
 
     /**
+     * @param QueryBuilder $qb
+     * @param string $attributeCode
+     * @param string $attributeValue
+     */
+    public function applyFilterByOptionAttribute(QueryBuilder $qb, $attributeCode, $attributeValue)
+    {
+        $attributes = $this->getCodeToAttributes(array($attributeCode));
+        if ($attributes) {
+            /** @var $attribute Attribute */
+            $attribute = $attributes[$attributeCode];
+            $fieldCode = $attribute->getCode();
+
+            // prepare condition
+            $joinAlias = 'filterV'.$fieldCode;
+            $joinValue = 'filterv'.$fieldCode;
+            $condition = $joinAlias.'.attribute = '.$attribute->getId()
+                .' AND '.$joinAlias.'.id = :'.$joinValue;
+            // add inner join to filter lines and store value alias for next uses
+            $qb->innerJoin('Value.options', $joinAlias, 'WITH', $condition)
+                ->setParameter($joinValue, $attributeValue);
+        }
+    }
+
+    /**
      * Add fields and/or attributes order by
      *
      * @param QueryBuilder $qb                   query builder to update
