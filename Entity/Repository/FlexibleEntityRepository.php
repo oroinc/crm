@@ -354,26 +354,47 @@ class FlexibleEntityRepository extends EntityRepository implements TranslatableI
      */
     protected function addAttributeCriteria(QueryBuilder $qb, $alias, $attribute, $fieldCode, $fieldValue)
     {
-        // prepare condition
+        $aliasPrefix = 'filter';
         $joinAlias = 'filterV'.$fieldCode;
+        $condition = $this->prepareJoinAttributeCondition($qb, $attribute, $fieldCode, $aliasPrefix);
+
+        // prepare condition
         $joinValue = 'filterv'.$fieldCode;
-        $condition = $joinAlias.'.attribute = '.$attribute->getId()
-            .' AND '.$joinAlias.'.'.$attribute->getBackendType().' = :'.$joinValue;
-        // add condition on locale if attribute is translatable
-        if ($attribute->getTranslatable()) {
-            $joinValueLocale = 'filterL'.$fieldCode;
-            $condition .= ' AND '.$joinAlias.'.locale = :'.$joinValueLocale;
-            $qb->setParameter($joinValueLocale, $this->getLocale());
-        }
-        // add condition on scope if attribute is scopable
-        if ($attribute->getScopable()) {
-            $joinValueScope = 'filterS'.$fieldCode;
-            $condition .= ' AND '.$joinAlias.'.scope = :'.$joinValueScope;
-            $qb->setParameter($joinValueScope, $this->getScope());
-        }
+        $condition .= ' AND '.$joinAlias.'.'.$attribute->getBackendType().' = :'.$joinValue;
+
         // add inner join to filter lines and store value alias for next uses
         $qb->innerJoin($alias . '.' . $attribute->getBackendStorage(), $joinAlias, 'WITH', $condition)
             ->setParameter($joinValue, $fieldValue);
+    }
+
+    /**
+     * @param QueryBuilder $qb
+     * @param Attribute $attribute
+     * @param $fieldCode
+     * @param string $aliasPrefix
+     *
+     * @return string
+     */
+    protected function prepareJoinAttributeCondition(QueryBuilder $qb, $attribute, $fieldCode, $aliasPrefix)
+    {
+        $joinAlias = $aliasPrefix . 'V' . $fieldCode;
+        $condition = $joinAlias . '.attribute = ' . $attribute->getId();
+
+        // add condition on locale if attribute is translatable
+        if ($attribute->getTranslatable()) {
+            $joinValueLocale = $aliasPrefix. 'L' . $fieldCode;
+            $condition .= ' AND '.$joinAlias.'.locale = :'.$joinValueLocale;
+            $qb->setParameter($joinValueLocale, $this->getLocale());
+        }
+
+        // add condition on scope if attribute is scopable
+        if ($attribute->getScopable()) {
+            $joinValueScope = $aliasPrefix . 'S' . $fieldCode;
+            $condition .= ' AND '.$joinAlias.'.scope = :'.$joinValueScope;
+            $qb->setParameter($joinValueScope, $this->getScope());
+        }
+
+        return $condition;
     }
 
     /**
@@ -423,6 +444,33 @@ class FlexibleEntityRepository extends EntityRepository implements TranslatableI
             // add inner join to filter lines and store value alias for next uses
             $qb->innerJoin('Value.options', $joinAlias, 'WITH', $joinCondition)
                 ->setParameter($joinParameter, $attributeValues);
+        }
+    }
+
+    /**
+     * @param QueryBuilder $qb
+     * @param string $entityAlias
+     * @param string $attributeCode
+     * @param string $direction
+     *
+     * @return void
+     */
+    public function applySorterByAttribute(QueryBuilder $qb, $entityAlias, $attributeCode, $direction)
+    {
+        $attributes = $this->getCodeToAttributes(array($attributeCode));
+
+        if ($attributes) {
+            /** @var $attribute Attribute */
+            $attribute = $attributes[$attributeCode];
+
+            $aliasPrefix = 'sorter';
+            $joinAlias = $aliasPrefix . 'V' . $attribute->getCode();
+            $condition = $this->prepareJoinAttributeCondition($qb, $attribute, $attribute->getCode(), $aliasPrefix);
+
+            // add inner join to filter lines and store value alias for next uses
+            $qb->leftJoin($entityAlias . '.' . $attribute->getBackendStorage(), $joinAlias, 'WITH', $condition);
+
+            $qb->addOrderBy($joinAlias.'.'.$attribute->getBackendType(), $direction);
         }
     }
 
