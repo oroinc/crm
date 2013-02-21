@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\SearchBundle\Tests\Fixture\Entity;
+namespace Oro\Bundle\SearchBundle\Tests\Unit\Fixture\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -214,5 +214,15 @@ class Product
     public function getCreateDate()
     {
         return $this->createDate;
+    }
+
+    public function __toString()
+    {
+        return $this->name;
+    }
+
+    public function getValueData($code)
+    {
+        return $code;
     }
 }

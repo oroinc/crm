@@ -13,6 +13,8 @@ use JMS\JobQueueBundle\Entity\Job;
 use Oro\Bundle\SearchBundle\Query\Query;
 use Oro\Bundle\SearchBundle\Query\Result\Item as ResultItem;
 use Oro\Bundle\SearchBundle\Entity\Item;
+use Oro\Bundle\SearchBundle\Engine\Indexer;
+use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttributeType;
 
 class Orm extends AbstractEngine
 {
@@ -174,13 +176,13 @@ class Orm extends AbstractEngine
                 $value = $this->getFieldValue($object, $field['name']);
 
                 switch ($field['relation_type']) {
-                    case 'one-to-one':
-                    case 'many-to-one':
+                    case Indexer::RELATION_ONE_TO_ONE:
+                    case Indexer::RELATION_MANY_TO_ONE:
                         $objectData = $this->setRelatedFields($objectData, $field['relation_fields'], $value);
 
                         break;
-                    case 'many-to-many':
-                    case 'one-to-many':
+                    case Indexer::RELATION_MANY_TO_MANY:
+                    case Indexer::RELATION_ONE_TO_MANY:
                         foreach ($value as $relationObject) {
                             $objectData = $this->setRelatedFields($objectData, $field['relation_fields'], $relationObject);
                         }
@@ -190,7 +192,102 @@ class Orm extends AbstractEngine
                         $objectData = $this->setDataValue($objectData, $field, $value);
                 }
             }
+            if (isset($config['flexible_manager'])) {
+                $objectData =  $this->setFlexibleFields($object, $objectData, $config['flexible_manager']);
+            }
         }
+
+        return $objectData;
+    }
+
+    /**
+     * Map Flexible entity fields
+     *
+     * @param $object
+     * @param array $objectData
+     * @param string $managerName
+     *
+     * @return array
+     */
+    protected function setFlexibleFields($object, $objectData, $managerName)
+    {
+        /** @var $flexibleManager \Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleManager */
+        $flexibleManager = $this->container->get($managerName);
+        if ($flexibleManager) {
+            $attributes = $flexibleManager->getAttributeRepository()
+                ->findBy(array('entityType' => $flexibleManager->getFlexibleName()));
+            if (count($attributes)) {
+                /** @var $attribute \Oro\Bundle\FlexibleEntityBundle\Entity\Attribute */
+                foreach ($attributes as $attribute) {
+                    if ($attribute->getSearchable()) {
+                        $value = $object->getValueData($attribute->getCode());
+                        $attributeType = $attribute->getBackendType();
+
+                        switch ($attributeType) {
+                            case AbstractAttributeType::BACKEND_TYPE_TEXT:
+                            case AbstractAttributeType::BACKEND_TYPE_VARCHAR:
+                                $objectData = $this->saveFlexibleTextData($objectData, $attribute->getCode(), $value);
+                                break;
+                            case AbstractAttributeType::BACKEND_TYPE_DATETIME:
+                            case AbstractAttributeType::BACKEND_TYPE_DATE:
+                                $objectData = $this->saveFlexibleData(
+                                    $objectData,
+                                    AbstractAttributeType::BACKEND_TYPE_DATETIME,
+                                    $attribute->getCode(),
+                                    $value
+                                );
+                                break;
+                            default:
+                                $objectData = $this->saveFlexibleData(
+                                    $objectData,
+                                    $attributeType,
+                                    $attribute->getCode(),
+                                    $value
+                                );
+                        }
+
+                    }
+                }
+            }
+        }
+
+        return $objectData;
+    }
+
+    /**
+     * @param array $objectData
+     * @param string $attributeType
+     * @param string $attribute
+     * @param mixed $value
+     *
+     * @return array
+     */
+    protected function saveFlexibleData($objectData, $attributeType, $attribute, $value)
+    {
+        if ($attributeType != AbstractAttributeType::BACKEND_TYPE_OPTION) {
+            $objectData[$attributeType][$attribute] = $value;
+        }
+
+        return $objectData;
+    }
+
+    /**
+     * @param array $objectData
+     * @param string $attribute
+     * @param mixed $value
+     *
+     * @return array
+     */
+    protected function saveFlexibleTextData($objectData, $attribute, $value)
+    {
+        if (!isset($objectData[AbstractAttributeType::BACKEND_TYPE_TEXT][$attribute])) {
+            $objectData[AbstractAttributeType::BACKEND_TYPE_TEXT][$attribute] = '';
+        }
+        $objectData[AbstractAttributeType::BACKEND_TYPE_TEXT][$attribute] .= " " . $value;
+        if (!isset($objectData[AbstractAttributeType::BACKEND_TYPE_TEXT][Indexer::TEXT_ALL_DATA_FIELD])) {
+            $objectData[AbstractAttributeType::BACKEND_TYPE_TEXT][Indexer::TEXT_ALL_DATA_FIELD] = '';
+        }
+        $objectData[AbstractAttributeType::BACKEND_TYPE_TEXT][Indexer::TEXT_ALL_DATA_FIELD] .= " " . $value;
 
         return $objectData;
     }
@@ -257,8 +354,12 @@ class Orm extends AbstractEngine
                 if (!isset($objectData[$fieldConfig['target_type']][$targetField])) {
                     $objectData[$fieldConfig['target_type']][$targetField] = '';
                 }
-                $objectData[$fieldConfig['target_type']][$targetField] .= " " . $value;
+                $objectData[$fieldConfig['target_type']][$targetField] .= $value . ' ';
             }
+            if (!isset($objectData[$fieldConfig['target_type']][Indexer::TEXT_ALL_DATA_FIELD])) {
+                $objectData[$fieldConfig['target_type']][Indexer::TEXT_ALL_DATA_FIELD] = '';
+            }
+            $objectData[$fieldConfig['target_type']][Indexer::TEXT_ALL_DATA_FIELD] .= $value . ' ';
         }
 
         return $objectData;
