@@ -115,33 +115,35 @@
                                     </script>
 
                                     {% block batch_actions %}
-                                        <label class="checkbox" for="{{ datagrid_uniqid }}_all_elements">
-                                            <input type="checkbox" name="all_elements" id="{{ datagrid_uniqid }}_all_elements"/>
-                                            {{ 'oro_grid.all_elements'|trans({}, 'OroGridBundle') }}
-                                        </label>
+                                        {# Batch actions #}
+                                        {#<label class="checkbox" for="{{ datagrid_uniqid }}_all_elements">#}
+                                            {#<input type="checkbox" name="all_elements" id="{{ datagrid_uniqid }}_all_elements"/>#}
+                                            {#{{ 'oro_grid.all_elements'|trans({}, 'OroGridBundle') }}#}
+                                        {#</label>#}
 
-                                        <select name="action" style="width: auto; height: auto">
-                                            {% for action, options in batchactions %}
-                                                <option value="{{ action }}">{{ options.label }}</option>
-                                            {% endfor %}
-                                        </select>
+                                        {#<select name="action" style="width: auto; height: auto">#}
+                                            {#{% for action, options in batchactions %}#}
+                                                {#<option value="{{ action }}">{{ options.label }}</option>#}
+                                            {#{% endfor %}#}
+                                        {#</select>#}
 
-                                        <input type="submit" class="btn btn-small btn-primary" onclick="return false;" value="{{ 'oro_grid.btn_batch'|trans({}, 'OroGridBundle') }}"/>
+                                        {#<input type="submit" class="btn btn-small btn-primary" onclick="return false;" value="{{ 'oro_grid.btn_batch'|trans({}, 'OroGridBundle') }}"/>#}
                                         <div class="pull-right">
+                                            {# Export #}
                                             {# TODO Replace dummies #}
-                                            {% set has_export = true %}
-                                            {% set is_granred_export = true %}
-                                            {% set export_formats = ['json', 'xml', 'csv'] %}
-                                            {% if has_export and is_granred_export and export_formats|length %}
-                                                {{ "oro_grid.label_export_download"|trans({}, "OroGridBundle") }}
-                                                {% for format in export_formats %}
-                                                    {# TODO Replace dummies #}
-                                                    {% set export_url = 'javascript:return false;' %}
-                                                    <a href="{{ export_url }}">{{ format }}</a>{% if not loop.last %},{% endif %}
-                                                {% endfor %}
+                                            {#{% set has_export = true %}#}
+                                            {#{% set is_granred_export = true %}#}
+                                            {#{% set export_formats = ['json', 'xml', 'csv'] %}#}
+                                            {#{% if has_export and is_granred_export and export_formats|length %}#}
+                                                {#{{ "oro_grid.label_export_download"|trans({}, "OroGridBundle") }}#}
+                                                {#{% for format in export_formats %}#}
+                                                    {#&#123;&#35; TODO Replace dummies &#35;&#125;#}
+                                                    {#{% set export_url = 'javascript:return false;' %}#}
+                                                    {#<a href="{{ export_url }}">{{ format }}</a>{% if not loop.last %},{% endif %}#}
+                                                {#{% endfor %}#}
 
-                                                &nbsp;-&nbsp;
-                                            {% endif %}
+                                                {#&nbsp;-&nbsp;#}
+                                            {#{% endif %}#}
 
                                             {{ datagrid.pager.page }} / {{ datagrid.pager.lastpage }}
 
