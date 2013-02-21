@@ -9,7 +9,7 @@ oro_menu_config:
             label: ''
             extras:
                 icon: 'icon-home icon-white'
-            route: 'acme_default'
+            uri: '#'
 
     tree:
         application_menu:
