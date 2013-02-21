@@ -48,6 +48,7 @@ class AddDependencyCallsCompilerPass implements CompilerPassInterface
             'parameters',
             'translator',
             'validator',
+            'flexible_manager'
         );
 
         foreach ($keys as $key) {
@@ -61,6 +62,51 @@ class AddDependencyCallsCompilerPass implements CompilerPassInterface
 
         $this->assertAttributesHasKey($serviceId, $attributes, 'datagrid_name');
         $definition->addMethodCall('setName', array($attributes['datagrid_name']));
+
+        // apply flexible configuration
+        $this->applyFlexibleConfigurationFromAttributes($container, $serviceId, $attributes);
+    }
+
+    /**
+     * This method read the attribute keys and configure grid manager class to use the related dependency
+     *
+     * @param ContainerBuilder $container
+     * @param string $serviceId
+     * @param array $attributes
+     * @throws \LogicException
+     */
+    public function applyFlexibleConfigurationFromAttributes(
+        ContainerBuilder $container,
+        $serviceId,
+        array $attributes
+    ) {
+        $definition = $container->getDefinition($serviceId);
+
+        $managerSetter = 'setFlexibleManager';
+        if ($definition->hasMethodCall($managerSetter)) {
+            return;
+        }
+
+        $flexibleKey = 'flexible';
+        if (!isset($attributes[$flexibleKey]) || !$attributes[$flexibleKey]) {
+            return;
+        }
+
+        $entityKey = 'entity_name';
+        $this->assertAttributesHasKey($serviceId, $attributes, $entityKey);
+
+        $className = $attributes[$entityKey];
+        $flexibleConfig = $container->getParameter('oro_flexibleentity.flexible_config');
+
+        // validate configuration
+        if (!isset($flexibleConfig['entities_config'][$className])
+            || !isset($flexibleConfig['entities_config'][$className]['flexible_manager'])
+        ) {
+            throw new \LogicException('There is no flexible manager configuration for entity ' . $className . '.');
+        }
+
+        $flexibleManagerServiceId = $flexibleConfig['entities_config'][$className]['flexible_manager'];
+        $definition->addMethodCall($managerSetter, array(new Reference($flexibleManagerServiceId)));
     }
 
     /**
@@ -100,33 +146,6 @@ class AddDependencyCallsCompilerPass implements CompilerPassInterface
                 $definition->addMethodCall($method, array(new Reference($addServiceId)));
             }
         }
-
-        $this->applyFlexibleDefaults($container, $serviceId);
-    }
-
-    /**
-     * Configure specific flexible manager parameters
-     *
-     * @param ContainerBuilder $container
-     * @param string $serviceId
-     */
-    protected function applyFlexibleDefaults(
-        ContainerBuilder $container,
-        $serviceId
-    ) {
-        $definition = $container->getDefinition($serviceId);
-        $managerClass = $definition->getClass();
-        if (preg_match('/^%.*%$/i', $managerClass)) {
-            $parameterName = trim($managerClass, '%');
-            $managerClass = $container->getParameter($parameterName);
-        }
-
-        $entityReflection = new \ReflectionClass($managerClass);
-        if (!$entityReflection->isSubclassOf('Oro\Bundle\GridBundle\Datagrid\FlexibleDatagridManager')) {
-            return;
-        }
-
-        $definition->addArgument(new Reference('service_container'));
     }
 
     /**
@@ -161,9 +180,9 @@ class AddDependencyCallsCompilerPass implements CompilerPassInterface
     {
         $arguments = array(new Reference('doctrine'));
 
-        $this->assertAttributesHasKey($serviceId, $attributes, 'query_entity');
+        $this->assertAttributesHasKey($serviceId, $attributes, 'entity_name');
 
-        $arguments[] = $attributes['query_entity'];
+        $arguments[] = $attributes['entity_name'];
 
         if (!empty($attributes['query_entity_alias'])) {
             $arguments[] = $attributes['query_entity_alias'];

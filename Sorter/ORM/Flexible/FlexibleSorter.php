@@ -29,22 +29,27 @@ class FlexibleSorter extends Sorter
         $this->container = $container;
     }
 
+    /**
+     * @param FieldDescriptionInterface $field
+     * @param string $direction
+     * @throws \LogicException
+     */
     public function initialize(FieldDescriptionInterface $field, $direction = null)
     {
         parent::initialize($field, $direction);
 
-        $flexibleManagerServiceId = $field->getOption('flexible_manager');
-        if (!$flexibleManagerServiceId) {
-            throw new \LogicException('Flexible entity sorter must have flexible entity manager code.');
+        $flexibleEntityName = $field->getOption('flexible_name');
+        if (!$flexibleEntityName) {
+            throw new \LogicException('Flexible entity filter must have flexible entity name.');
         }
 
-        if (!$this->container->has($flexibleManagerServiceId)) {
-            throw new \LogicException('There is no flexible entity service ' . $flexibleManagerServiceId . '.');
-        }
-
-        $this->flexibleManager = $this->container->get($flexibleManagerServiceId);
+        $this->flexibleManager = $this->getFlexibleManager($flexibleEntityName);
     }
 
+    /**
+     * @param ProxyQueryInterface $queryInterface
+     * @param string $direction
+     */
     public function apply(ProxyQueryInterface $queryInterface, $direction = null)
     {
         $this->setDirection($direction);
@@ -56,5 +61,27 @@ class FlexibleSorter extends Sorter
         /** @var $entityRepository FlexibleEntityRepository */
         $entityRepository = $this->flexibleManager->getFlexibleRepository();
         $entityRepository->applySorterByAttribute($queryBuilder, $alias, $this->getField()->getFieldName(), $direction);
+    }
+
+    /**
+     * @param string $flexibleEntityName
+     * @return FlexibleManager
+     * @throws \LogicException
+     */
+    protected function getFlexibleManager($flexibleEntityName)
+    {
+        $flexibleConfig = $this->container->getParameter('oro_flexibleentity.flexible_config');
+
+        // validate configuration
+        if (!isset($flexibleConfig['entities_config'][$flexibleEntityName])
+            || !isset($flexibleConfig['entities_config'][$flexibleEntityName]['flexible_manager'])
+        ) {
+            throw new \LogicException(
+                'There is no flexible manager configuration for entity ' . $flexibleEntityName . '.'
+            );
+        }
+
+        $flexibleManagerServiceId = $flexibleConfig['entities_config'][$flexibleEntityName]['flexible_manager'];
+        return $this->container->get($flexibleManagerServiceId);
     }
 }

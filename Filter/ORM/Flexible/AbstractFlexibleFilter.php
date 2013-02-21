@@ -34,15 +34,33 @@ abstract class AbstractFlexibleFilter extends AbstractORMFilter implements Filte
     {
         parent::initialize($name, $options);
 
-        $flexibleManagerServiceId = $this->getOption('flexible_manager');
-        if (!$flexibleManagerServiceId) {
-            throw new \LogicException('Flexible entity filter must have flexible entity manager code.');
+        $flexibleEntityName = $this->getOption('flexible_name');
+        if (!$flexibleEntityName) {
+            throw new \LogicException('Flexible entity filter must have flexible entity name.');
         }
 
-        if (!$this->container->has($flexibleManagerServiceId)) {
-            throw new \LogicException('There is no flexible entity service ' . $flexibleManagerServiceId . '.');
+        $this->flexibleManager = $this->getFlexibleManager($flexibleEntityName);
+    }
+
+    /**
+     * @param string $flexibleEntityName
+     * @return FlexibleManager
+     * @throws \LogicException
+     */
+    protected function getFlexibleManager($flexibleEntityName)
+    {
+        $flexibleConfig = $this->container->getParameter('oro_flexibleentity.flexible_config');
+
+        // validate configuration
+        if (!isset($flexibleConfig['entities_config'][$flexibleEntityName])
+            || !isset($flexibleConfig['entities_config'][$flexibleEntityName]['flexible_manager'])
+        ) {
+            throw new \LogicException(
+                'There is no flexible manager configuration for entity ' . $flexibleEntityName . '.'
+            );
         }
 
-        $this->flexibleManager = $this->container->get($flexibleManagerServiceId);
+        $flexibleManagerServiceId = $flexibleConfig['entities_config'][$flexibleEntityName]['flexible_manager'];
+        return $this->container->get($flexibleManagerServiceId);
     }
 }

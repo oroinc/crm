@@ -52,6 +52,6 @@ class SorterFactory implements SorterFactoryInterface
      */
     protected function isFlexible(FieldDescriptionInterface $field)
     {
-        return $field->getOption('flexible_manager') ? true : false;
+        return $field->getOption('flexible_name') ? true : false;
     }
 }
