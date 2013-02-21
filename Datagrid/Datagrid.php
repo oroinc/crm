@@ -203,8 +203,8 @@ class Datagrid implements DatagridInterface
         }
 
         $this->applyFilters();
-        $this->applySorters();
         $this->applyPager();
+        $this->applySorters();
 
         $this->parametersApplied = true;
     }
