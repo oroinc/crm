@@ -20,6 +20,7 @@ class Query
     const OPERATOR_CONTAINS = '~';
     const OPERATOR_NOT_CONTAINS = '!~';
     const OPERATOR_IN = 'in';
+    const OPERATOR_NOT_IN = '!in';
 
     const TYPE_TEXT = 'text';
     const TYPE_INTEGER = 'integer';

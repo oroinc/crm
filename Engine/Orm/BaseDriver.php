@@ -184,8 +184,8 @@ abstract class BaseDriver extends FunctionNode
         $joinAlias = $joinEntity . $index;
         $qb->join('search.' . $joinEntity, $joinAlias);
 
-        $qb->setParameter('field' . $index, $searchCondition['fieldName'])
-            ->setParameter('value' . $index, $searchCondition['fieldValue']);
+        $qb->setParameter('field' . $index, $searchCondition['fieldName']);
+        $qb->setParameter('value' . $index, $searchCondition['fieldValue']);
 
         return $searchCondition['type'] . ' (' . $this->createNonTextQuery($joinAlias, $index, $searchCondition['condition']) . ')';
     }
@@ -201,7 +201,14 @@ abstract class BaseDriver extends FunctionNode
      */
     protected function createNonTextQuery($joinAlias, $index, $condition)
     {
-        return $joinAlias . '.field= :field' . $index . ' AND ' . $joinAlias . '.value ' . $condition . ' :value' . $index;
+        if ($condition == Query::OPERATOR_IN) {
+            $searchString = $joinAlias . '.field= :field' . $index . ' AND ' . $joinAlias . '.value ' . $condition . ' (:value' . $index . ')';
+        } elseif ($condition == Query::OPERATOR_NOT_IN) {
+            $searchString = $joinAlias . '.field= :field' . $index . ' AND ' . $joinAlias . '.value NOT IN (:value' . $index . ')';
+        } else {
+            $searchString = $joinAlias . '.field= :field' . $index . ' AND ' . $joinAlias . '.value ' . $condition . ' :value' . $index;
+        }
+        return $searchString;
     }
 
     /**
@@ -235,7 +242,7 @@ abstract class BaseDriver extends FunctionNode
         }
 
         $qb->andWhere(implode(' ', $whereExpr));
-
+//var_dump($qb->getDQL());die;
         return $qb;
     }
 }

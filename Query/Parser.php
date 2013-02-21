@@ -39,6 +39,7 @@ class Parser
                 Query::OPERATOR_EQUALS,
                 Query::OPERATOR_NOT_EQUALS,
                 Query::OPERATOR_IN,
+                Query::OPERATOR_NOT_IN,
             ),
             QUERY::TYPE_DECIMAL => array(
                 Query::OPERATOR_GREATER_THAN,
@@ -48,6 +49,7 @@ class Parser
                 Query::OPERATOR_EQUALS,
                 Query::OPERATOR_NOT_EQUALS,
                 Query::OPERATOR_IN,
+                Query::OPERATOR_NOT_IN,
             )
         );
 
@@ -156,10 +158,16 @@ class Parser
         }
         $inputString = $this->trimString($inputString, $operatorWord);
 
-        if (!in_array($operatorWord, array(Query::OPERATOR_IN))) {
+        if (!in_array($operatorWord, array(Query::OPERATOR_IN, Query::OPERATOR_NOT_IN))) {
             $value = $this->getWord($inputString);
             $inputString = $this->trimString($inputString, $value);
+        } else {
+            $fromString = $this->getWord($inputString, ')');
+            $inputString = $this->trimString($inputString, $fromString . ')');
+            $fromString = str_replace(array('(', ')'), '', $fromString);
+            $value = explode(', ', $fromString);
         }
+
         $query->where($keyWord, $fieldName, $operatorWord, $value, $typeWord);
 
         return $inputString;
