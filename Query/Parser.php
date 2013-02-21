@@ -15,6 +15,8 @@ class Parser
             Query::KEYWORD_OR,
             self::KEYWORD_FROM,
             self::KEYWORD_ORDERBY,
+            Query::KEYWORD_OFFSET,
+            Query::KEYWORD_MAX_RESULTS
         );
 
     protected $types =
@@ -81,21 +83,64 @@ class Parser
         } else {
             $inputString = trim(str_replace($keyWord, '', $inputString));
         }
-
         //check if we found 'where' statement
         if (in_array($keyWord, array(Query::KEYWORD_OR, Query::KEYWORD_AND))) {
             $inputString = $this->Where($query, $keyWord, $inputString);
         }
-
         //check if we found 'from' statement
         if ($keyWord == self::KEYWORD_FROM) {
             $inputString = $this->from($query, $inputString);
+        }
+        //keyword offset
+        if ($keyWord == Query::KEYWORD_OFFSET) {
+            $inputString = $this->offset($query, $inputString);
+        }
+        //keyword offset
+        if ($keyWord == Query::KEYWORD_MAX_RESULTS) {
+            $inputString = $this->maxResults($query, $inputString);
         }
 
         // recursion
         if (strlen($inputString)) {
             $this->parseExpression($query, $inputString);
         }
+    }
+
+    /**
+     * OFFSET keyword
+     *
+     * @param Query $query
+     * @param       $inputString
+     *
+     * @return string
+     */
+    private function offset(Query $query, $inputString)
+    {
+        $offset= $this->getWord($inputString);
+        $inputString = $this->trimString($inputString, $offset);
+        $query->setFirstResult($offset);
+        if (!$query->getMaxResults()) {
+            $query->setMaxResults(1000000);
+        }
+
+        return $inputString;
+    }
+
+    /**
+     * MAX RESULTS keyword
+     *
+     * @param Query  $query
+     * @param string $inputString
+     *
+     * @return string
+     */
+    private function maxResults(Query $query, $inputString)
+    {
+        $maxResults= $this->getWord($inputString);
+        $inputString = $this->trimString($inputString, $maxResults);
+        $query->setMaxResults($maxResults);
+
+        return $inputString;
     }
 
     /**

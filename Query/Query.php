@@ -10,6 +10,8 @@ class Query
 
     const KEYWORD_AND = 'and';
     const KEYWORD_OR = 'or';
+    const KEYWORD_OFFSET = 'offset';
+    const KEYWORD_MAX_RESULTS = 'results';
 
     const OPERATOR_EQUALS = '=';
     const OPERATOR_NOT_EQUALS = '!=';
