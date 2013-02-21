@@ -46,4 +46,12 @@ class EntityQueryFactory extends AbstractQueryFactory
 
         return parent::createQuery();
     }
+
+    /**
+     * @return string
+     */
+    public function getClassName()
+    {
+        return $this->className;
+    }
 }

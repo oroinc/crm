@@ -8,7 +8,6 @@ use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Container;
-
 use Symfony\Component\Config\Definition\Exception\InvalidDefinitionException;
 
 class AddDependencyCallsCompilerPass implements CompilerPassInterface
@@ -62,27 +61,6 @@ class AddDependencyCallsCompilerPass implements CompilerPassInterface
 
         $this->assertAttributesHasKey($serviceId, $attributes, 'datagrid_name');
         $definition->addMethodCall('setName', array($attributes['datagrid_name']));
-
-        // configure flexible manager parameters
-        $this->applyFlexibleConfigurationFromAttributes($definition, $attributes);
-    }
-
-    /**
-     * Configure specific flexible manager parameters
-     *
-     * @param Definition $definition
-     * @param array $attributes
-     */
-    protected function applyFlexibleConfigurationFromAttributes(Definition $definition, array $attributes)
-    {
-        $code   = 'flexible_manager';
-        $method = 'set' . $this->camelize($code);
-
-        if (!isset($attributes[$code]) || $definition->hasMethodCall($method)) {
-            return;
-        }
-
-        $definition->addMethodCall($method, array(new Reference($attributes[$code]), $attributes[$code]));
     }
 
     /**
@@ -122,6 +100,33 @@ class AddDependencyCallsCompilerPass implements CompilerPassInterface
                 $definition->addMethodCall($method, array(new Reference($addServiceId)));
             }
         }
+
+        $this->applyFlexibleDefaults($container, $serviceId);
+    }
+
+    /**
+     * Configure specific flexible manager parameters
+     *
+     * @param ContainerBuilder $container
+     * @param string $serviceId
+     */
+    protected function applyFlexibleDefaults(
+        ContainerBuilder $container,
+        $serviceId
+    ) {
+        $definition = $container->getDefinition($serviceId);
+        $managerClass = $definition->getClass();
+        if (preg_match('/^%.*%$/i', $managerClass)) {
+            $parameterName = trim($managerClass, '%');
+            $managerClass = $container->getParameter($parameterName);
+        }
+
+        $entityReflection = new \ReflectionClass($managerClass);
+        if (!$entityReflection->isSubclassOf('Oro\Bundle\GridBundle\Datagrid\FlexibleDatagridManager')) {
+            return;
+        }
+
+        $definition->addArgument(new Reference('service_container'));
     }
 
     /**
