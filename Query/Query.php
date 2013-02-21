@@ -12,6 +12,7 @@ class Query
     const KEYWORD_OR = 'or';
     const KEYWORD_OFFSET = 'offset';
     const KEYWORD_MAX_RESULTS = 'results';
+    const KEYWORD_ORDER_BY = 'order';
 
     const OPERATOR_EQUALS = '=';
     const OPERATOR_NOT_EQUALS = '!=';
@@ -82,6 +83,24 @@ class Query
         $this->options = array();
         $this->maxResults = 0;
         $this->from = false;
+    }
+
+    /**
+     * Get entity class name from alias
+     *
+     * @param $aliasName
+     *
+     * @return bool|string
+     */
+    public function getEntityByAlias($aliasName)
+    {
+        foreach ($this->mappingConfig as $entity => $config) {
+            if (isset($config['alias']) && $config['alias'] == $aliasName) {
+                return $entity;
+            }
+        }
+
+        return false;
     }
 
     /**

@@ -6,7 +6,6 @@ use Oro\Bundle\SearchBundle\Query\Query;
 class Parser
 {
     const KEYWORD_FROM = 'from';
-    const KEYWORD_ORDER_BY = 'order';
     const KEYWORD_WHERE = 'where';
 
     protected $keywords =
@@ -14,7 +13,7 @@ class Parser
             Query::KEYWORD_AND,
             Query::KEYWORD_OR,
             self::KEYWORD_FROM,
-            self::KEYWORD_ORDER_BY,
+            Query::KEYWORD_ORDER_BY,
             Query::KEYWORD_OFFSET,
             Query::KEYWORD_MAX_RESULTS
         );
@@ -99,12 +98,18 @@ class Parser
         if ($keyWord == Query::KEYWORD_MAX_RESULTS) {
             $inputString = $this->maxResults($query, $inputString);
         }
+        //keyword order by
+        if ($keyWord == Query::KEYWORD_ORDER_BY) {
+            $inputString = $this->orderBy($query, $inputString);
+        }
 
         // recursion
         if (strlen($inputString)) {
             $this->parseExpression($query, $inputString);
         }
     }
+
+
 
     /**
      * OFFSET keyword

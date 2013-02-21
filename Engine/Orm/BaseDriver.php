@@ -248,12 +248,21 @@ abstract class BaseDriver extends FunctionNode
         return $qb;
     }
 
+    /**
+     * Set order by for search query
+     *
+     * @param \Oro\Bundle\SearchBundle\Query\Query $query
+     * @param \Doctrine\ORM\QueryBuilder           $qb
+     */
     protected function addOrderBy(Query $query, QueryBuilder $qb)
     {
         $from = $query->getFrom();
         if ($query->getOrderBy() && count($from) == 1 && $from[0] != '*') {
-            $qb->leftJoin('AcmeDemoBundle:Product', 'entity', 'WITH', 'entity.id = search.recordId')
-                ->orderBy('entity.name');
+            $entity = $query->getEntityByAlias($from[0]);
+            if ($entity) {
+                $qb->leftJoin($entity, 'entity', 'WITH', 'entity.id = search.recordId')
+                    ->orderBy('entity.' . $query->getOrderBy());
+            }
         }
     }
 }
