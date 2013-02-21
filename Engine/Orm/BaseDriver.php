@@ -242,7 +242,18 @@ abstract class BaseDriver extends FunctionNode
         }
 
         $qb->andWhere(implode(' ', $whereExpr));
-//var_dump($qb->getDQL());die;
+
+        $this->addOrderBy($query, $qb);
+
         return $qb;
+    }
+
+    protected function addOrderBy(Query $query, QueryBuilder $qb)
+    {
+        $from = $query->getFrom();
+        if ($query->getOrderBy() && count($from) == 1 && $from[0] != '*') {
+            $qb->leftJoin('AcmeDemoBundle:Product', 'entity', 'WITH', 'entity.id = search.recordId')
+                ->orderBy('entity.name');
+        }
     }
 }

@@ -6,7 +6,7 @@ use Oro\Bundle\SearchBundle\Query\Query;
 class Parser
 {
     const KEYWORD_FROM = 'from';
-    const KEYWORD_ORDERBY = 'order by';
+    const KEYWORD_ORDER_BY = 'order';
     const KEYWORD_WHERE = 'where';
 
     protected $keywords =
@@ -14,7 +14,7 @@ class Parser
             Query::KEYWORD_AND,
             Query::KEYWORD_OR,
             self::KEYWORD_FROM,
-            self::KEYWORD_ORDERBY,
+            self::KEYWORD_ORDER_BY,
             Query::KEYWORD_OFFSET,
             Query::KEYWORD_MAX_RESULTS
         );

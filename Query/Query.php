@@ -57,6 +57,11 @@ class Query
     /**
      * @var array
      */
+    protected $orderBy;
+
+    /**
+     * @var array
+     */
     protected $mappingConfig;
 
     /**
@@ -303,6 +308,30 @@ class Query
     public function getFirstResult()
     {
         return $this->firstResult;
+    }
+
+    /**
+     * Set order by
+     *
+     * @param string $fieldName
+     * @param string $direction
+     *
+     * @return Query
+     */
+    public function setOrderBy($fieldName, $direction = "ASC")
+    {
+        $this->orderBy = array($fieldName=>array($direction));
+        return $this;
+    }
+
+    /**
+     * Get order by
+     *
+     * @return array
+     */
+    public function getOrderBy()
+    {
+        return $this->orderBy;
     }
 
     /**
