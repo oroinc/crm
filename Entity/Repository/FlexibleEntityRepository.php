@@ -8,6 +8,7 @@ use Oro\Bundle\FlexibleEntityBundle\Exception\UnknownAttributeException;
 use Oro\Bundle\FlexibleEntityBundle\Model\Behavior\TranslatableInterface;
 use Oro\Bundle\FlexibleEntityBundle\Model\Behavior\ScopableInterface;
 use Oro\Bundle\FlexibleEntityBundle\Entity\Attribute;
+use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttributeType;
 
 /**
  * Base repository for flexible entity
@@ -440,19 +441,26 @@ class FlexibleEntityRepository extends EntityRepository implements TranslatableI
     public function applySorterByAttribute(QueryBuilder $qb, $entityAlias, $attributeCode, $direction)
     {
         $attributes = $this->getCodeToAttributes(array($attributeCode));
+        $attributeCodeToAlias = array();
 
         if ($attributes) {
             /** @var $attribute Attribute */
             $attribute = $attributes[$attributeCode];
 
-            $aliasPrefix = 'sorter';
-            $joinAlias = $aliasPrefix . 'V' . $attribute->getCode();
-            $condition = $this->prepareJoinAttributeCondition($qb, $attribute, $attribute->getCode(), $aliasPrefix);
 
-            // add inner join to filter lines and store value alias for next uses
-            $qb->leftJoin($entityAlias . '.' . $attribute->getBackendStorage(), $joinAlias, 'WITH', $condition);
+            if ($attribute->getBackendType() != AbstractAttributeType::BACKEND_TYPE_OPTION) {
+                $aliasPrefix = 'sorter';
+                $joinAlias = $aliasPrefix . 'V' . $attribute->getCode();
+                $condition = $this->prepareJoinAttributeCondition($qb, $attribute, $attribute->getCode(), $aliasPrefix);
 
-            $qb->addOrderBy($joinAlias.'.'.$attribute->getBackendType(), $direction);
+                // add inner join to filter lines and store value alias for next uses
+                $qb->leftJoin($entityAlias . '.' . $attribute->getBackendStorage(), $joinAlias, 'WITH', $condition);
+
+                $attributeCodeToAlias[$attribute->getCode()] = $joinAlias.'.'.$attribute->getBackendType();
+
+                $orderBy = array($attribute->getCode() => $direction);
+                $this->addFieldOrAttributeOrderBy($qb, $orderBy, $attributeCodeToAlias);
+            }
         }
     }
 
