@@ -12,6 +12,8 @@
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
         <script type="text/javascript" src="{{ asset('bundles/oroui/lib/bootstrap.min.js') }}"></script>
         <script type="text/javascript" src="{{ asset('bundles/oroui/js/layout.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('bundles/oroui/lib/bootstrap/js/bootstrap-tooltip.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('bundles/oroui/lib/bootstrap/js/bootstrap-popover.js') }}"></script>
         <!--[if lte IE 9]>
         <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
         <link href="{{ asset('bundles/oroui/css/ie.css') }}" rel="stylesheet" media="all" />
@@ -34,8 +36,11 @@
         <header class="navbar">
             <div class="navbar-inner"><div class="container">
 
+            {% block logo %}
             <h1 class="logo "><a href="#">ORO</a></h1>
+            {% endblock logo %}
             <div class="navbar-responsive-collapse">
+            {% block shortcuts %}
             <ul class="nav pull-left shortcuts">
                 <li class="divider-vertical extra-divider"></li>
                 <li class="dropdown">
@@ -62,6 +67,8 @@
                     </ul>
                 </li>
             </ul>
+            {% endblock shortcuts %}
+            {% block searchbar %}
             <div class="input-append input-prepend pull-left header-search">
                 <div class="btn-group">
                     <button data-toggle="dropdown" class="btn dropdown-toggle">
@@ -97,22 +104,29 @@
                     });
                 });
             </script>
+            {% endblock searchbar %}
+            {% block section_top_right %}
             <ul class="nav pull-right">
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">bettyusser <b class="caret"></b></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="#">Account</a></li>
-                        <li><a href="#">Admin</a></li>
-                        <li><a href="#">Settings</a></li>
-                        <li class="divider"></li>
-                        <li><a href="#">Log out</a></li>
-                    </ul>
-                </li>
+                {% block user_menu %}
+                    {% if app.user %}
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ app.user.username }} <b class="caret"></b></a>
+                            {{ oro_menu_render('usermenu') }}
+                        </li>
+                    {% else %}
+                        <li><a href="{{ path('oro_user_security_login') }}">Login</a></li>
+                    {% endif %}
+                {% endblock user_menu %}
+                {% block notifications %}
                 <li class="divider-vertical small-divider"></li>
                 <li><a class="notifications" href="#"><i class="icon-bullhorn"></i><span class="badge badge-important">1</span></a></li>
+                {% endblock notifications %}
+                {% block help %}
                 <li class="divider-vertical small-divider"></li>
                 <li><a class="help" href="#"><i class="icon-question-sign">help</i></a></li>
+                {% endblock help %}
             </ul>
+            {% endblock section_top_right %}
 
             </div>
             </div>
@@ -120,48 +134,107 @@
 
         </header>
         {% endblock header %}
-        {% block content %}
 
-        <div class="container" style="background: #fff">
-            <div class="row">
-                <div class="span4">
-                    <hr />
-                    <h3>Layout pages</h3>
-                    <ul>
-                        <li><a href="{{ path('oro_ui_1column') }}">1 column </a></li>
-                        <li><a href="{{ path('oro_ui_1column_toolbar') }}">1 column with toolbar</a></li>
-                        <li><a href="{{ path('oro_ui_1column_menu') }}">1 column with menu</a></li>
-                        <li><a href="{{ path('oro_ui_grid_page') }}">grid page</a></li>
-                        <li><a href="{{ path('oro_ui_2columns_left') }}">2 columns - left</a></li>
-                        <li><a href="{{ path('oro_ui_2columns_right') }}">2 columns - right</a></li>
-                        <li><a href="{{ path('oro_ui_3columns') }}">3 columns</a></li>
-                    </ul>
-                    <h3>Static pages</h3>
-                    <ul>
-                        <li><a href="{{ path('oro_ui_forgot_password') }}">Forgot password</a></li>
-                        <li><a href="{{ path('oro_ui_login') }}">Login page</a></li>
-                        <li><a href="{{ path('oro_ui_registration') }}">Registration page</a></li>
-                        <li><a href="{{ path('oro_ui_404') }}">404</a></li>
-                        <li><a href="{{ path('oro_ui_503') }}">503</a></li>
-                    </ul>
-                    <h3>Example pages</h3>
-                    <ul>
-                        <li><a href="{{ path('oro_ui_form_elements') }}">Form elements</a></li>
-                        <li><a href="{{ path('oro_ui_messages') }}">System messages</a></li>
-                        <li><a href="{{ path('oro_ui_buttons') }}">Buttons</a></li>
-                        <li><a href="#">Print page</a></li>
-                        <li><a href="{{ path('oro_ui_tables') }}">Tables</a></li>
-                        <li><a href="{{ path('oro_ui_general_elements') }}">General elements</a></li>
-                    </ul>
-                    <h3>Js use page</h3>
-                    <ul>
-                        <li><a href="{{ path('oro_ui_dialog') }}">jQuery DialogExtend</a></li>
-                        <li><a href="{{ path('oro_ui_dialog_styled') }}">jQuery DialogExtend styled</a></li>
-                    </ul>
+        <div class="page-container">
+            {% block right_panel %}{% endblock right_panel %}
+            {% block left_panel %}{% endblock left_panel %}
+            <div class=" layout-content">
+                {% block pin_bar %}
+                    <div class="clearfix">
+                        <div class="pin-bar clearfix">
+                            <div class="pin-menus">
+                                <span>...</span>
+                                <div class="drop-down">
+                                    <div class="tabbable tabs-left">
+                                        <ul class="nav nav-tabs">
+                                            <li class="active" ><a data-toggle="tab"href="#lA"><i class="icon-folder-close"></i>Tabs</a></li>
+                                            <li><a data-toggle="tab"  href="#lB"><i class="icon-time"></i>History</a></li>
+                                            <li><a data-toggle="tab"  href="#lC"><i class="icon-star-empty"></i>Most Viewed</a></li>
+                                        </ul>
+                                        <div class="tab-content">
+                                            <div id="lA" class="tab-pane active">
+                                                <ul class="extra-list">
+                                                    <li><button data-dismiss="alert" class="close" type="button">&times;</button><a href="#">Sales filtered Wednesday</a></li>
+                                                    <li><button data-dismiss="alert" class="close" type="button">&times;</button><a href="#">Sales filtered Tuesday</a></li>
+                                                    <li><button data-dismiss="alert" class="close" type="button">&times;</button><a href="#">Sales filtered Thursday</a></li>
+                                                    <li><button data-dismiss="alert" class="close" type="button">&times;</button><a href="#">Sales filtered Friday</a></li>
+                                                    <li><button data-dismiss="alert" class="close" type="button">&times;</button><a href="#">Sales filtered Saturday</a></li>
+                                                    <li><button data-dismiss="alert" class="close" type="button">&times;</button><a href="#">Sales filtered Tuesday</a></li>
+                                                    <li><button data-dismiss="alert" class="close" type="button">&times;</button><a href="#">Sales filtered Thursday</a></li>
+                                                    <li><button data-dismiss="alert" class="close" type="button">&times;</button><a href="#">Sales filtered Friday</a></li>
+                                                    <li><button data-dismiss="alert" class="close" type="button">&times;</button><a href="#">Sales filtered Saturday</a></li>
+                                                </ul>
+                                            </div>
+                                            <div id="lB" class="tab-pane">
+                                                <p>I'm in Section b.</p>
+                                            </div>
+                                            <div id="lC" class="tab-pane">
+                                                <p>I'm in Section AC.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <ul class="list-bar">
+                                <li class="item">LA Customers</li>
+                                <li class="item">NY Customers</li>
+                                <li><a class="btn-close" href="#">close</a>Yoav asked to do this </li>
+                                <li><a class="btn-close" href="#">close</a>Finish this before lea...</li>
+                                <li><a class="btn-close" href="#">close</a>Jary asked to do this</li>
+                                <li><a class="btn-close" href="#">close</a>Yoav asked to do this</li>
+                                <li><a class="btn-close" href="#">close</a>Portland Office</li>
+                            </ul>
+                        </div>
+                    </div>
+                {% endblock pin_bar %}
+                {% block application_menu %}
+                    {{ oro_menu_render('application_menu') }}
+                {% endblock application_menu %}
+                <div class="container-fluid">
+                    {% block content %}
+                        <div class="container" style="background: #fff">
+                            <div class="row">
+                                <div class="span4">
+                                    <hr />
+                                    <h3>Layout pages</h3>
+                                    <ul>
+                                        <li><a href="{{ path('oro_ui_1column') }}">1 column </a></li>
+                                        <li><a href="{{ path('oro_ui_1column_toolbar') }}">1 column with toolbar</a></li>
+                                        <li><a href="{{ path('oro_ui_1column_menu') }}">1 column with menu</a></li>
+                                        <li><a href="{{ path('oro_ui_grid_page') }}">grid page</a></li>
+                                        <li><a href="{{ path('oro_ui_2columns_left') }}">2 columns - left</a></li>
+                                        <li><a href="{{ path('oro_ui_2columns_right') }}">2 columns - right</a></li>
+                                        <li><a href="{{ path('oro_ui_3columns') }}">3 columns</a></li>
+                                    </ul>
+                                    <h3>Static pages</h3>
+                                    <ul>
+                                        <li><a href="{{ path('oro_ui_forgot_password') }}">Forgot password</a></li>
+                                        <li><a href="{{ path('oro_ui_login') }}">Login page</a></li>
+                                        <li><a href="{{ path('oro_ui_registration') }}">Registration page</a></li>
+                                        <li><a href="{{ path('oro_ui_404') }}">404</a></li>
+                                        <li><a href="{{ path('oro_ui_503') }}">503</a></li>
+                                    </ul>
+                                    <h3>Example pages</h3>
+                                    <ul>
+                                        <li><a href="{{ path('oro_ui_form_elements') }}">Form elements</a></li>
+                                        <li><a href="{{ path('oro_ui_messages') }}">System messages</a></li>
+                                        <li><a href="{{ path('oro_ui_buttons') }}">Buttons</a></li>
+                                        <li><a href="#">Print page</a></li>
+                                        <li><a href="{{ path('oro_ui_tables') }}">Tables</a></li>
+                                        <li><a href="{{ path('oro_ui_general_elements') }}">General elements</a></li>
+                                    </ul>
+                                    <h3>Js use page</h3>
+                                    <ul>
+                                        <li><a href="{{ path('oro_ui_dialog') }}">jQuery DialogExtend</a></li>
+                                        <li><a href="{{ path('oro_ui_dialog_styled') }}">jQuery DialogExtend styled</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    {% endblock content %}
                 </div>
             </div>
         </div>
-        {% endblock content %}
     </div>
 </div>
 

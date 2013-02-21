@@ -2,3 +2,17 @@ oro_menu_config:
     templates:
         application_menu:
             template: 'OroUIBundle:Menu:application_menu.html.twig'
+
+    items:
+        home:
+            name: 'Home'
+            label: ''
+            extras:
+                icon: 'icon-home icon-white'
+            route: 'acme_default'
+
+    tree:
+        application_menu:
+            type: application_menu
+            children:
+                home: ~
