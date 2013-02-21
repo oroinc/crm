@@ -1,4 +1,5 @@
 {% extends "OroUIBundle:Default:index.html.twig" %}
+{% block title %}Dashboard | Grid{% endblock title %}
 {% block head %}
     {{ parent() }}
     <script type="text/javascript" src="{{ asset('bundles/oroui/lib/bootstrap/js/bootstrap-tooltip.js') }}"></script>
@@ -6,7 +7,7 @@
 {% endblock %}
 {% block content %}
     <div class="page-container">
-        <div class=" layout-content">
+        <div class="layout-content">
             <div class="clearfix">
                 <div class="pin-bar clearfix">
                     <div class="pin-menus">
@@ -108,7 +109,6 @@
             </div>
             <script>
                 $(function () {
-                    console.clear()
                     $('#myTab a:last').tab('show');
                     $('#myTab a').click(function (e) {
                         e.preventDefault();
@@ -117,6 +117,128 @@
                     $('a.popup-me').popover();
                 })
             </script>
+            <div class="filter-box container-fluid">
+                <div class="btn-group">
+                    <button class="btn dropdown-toggle" data-toggle="dropdown">Account Owner: <strong>Me</strong> <span class="caret"></span></button>
+                    <ul class="dropdown-menu">
+                        <li><a href="#"> Me2</a></li>
+                        <li><a href="#"> M3</a></li>
+                    </ul>
+                </div>
+                <div class="btn-group">
+                    <button class="btn dropdown-toggle" data-toggle="dropdown">Last update: <strong>2012/12/12-2012/12/18</strong><span class="caret"></span></button>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">Last update: <strong>2010/12/12-2013/18/18</strong></a></li>
+                        <li><a href="#">Last update: <strong>2011/12/12-2014/11/18</strong></a></li>
+                    </ul>
+                </div>
+                <div class="btn-group">
+                    <button class="btn dropdown-toggle" data-toggle="dropdown">Status: <strong>All</strong><span class="caret"></span></button>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">only short</a></li>
+                        <li><a href="#">this is long text for test</a></li>
+                    </ul>
+                </div>
+                <div class="btn-group">
+                    <button class="btn dropdown-toggle" data-toggle="dropdown">Billing Country: <strong>United States</strong><span class="caret"></span></button>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">Africa</a></li>
+                        <li><a href="#">Russia</a></li>
+                        <li><a href="#">Ukraine</a></li>
+                        <li><a href="#">Germany</a></li>
+                    </ul>
+                </div>
+                <div class="btn-group">
+                    <button class="btn dropdown-toggle" data-toggle="dropdown">Last update: <strong>2012/12/12-2012/12/18</strong><span class="caret"></span></button>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">Last update: <strong>2010/12/12-2013/18/18</strong></a></li>
+                        <li><a href="#">Last update: <strong>2011/12/12-2014/11/18</strong></a></li>
+                    </ul>
+                </div>
+                <div class="btn-group">
+                    <button class="btn dropdown-toggle" data-toggle="dropdown">Status: <strong>All</strong><span class="caret"></span></button>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">only short</a></li>
+                        <li><a href="#">this is long text for test</a></li>
+                    </ul>
+                </div>
+                <div class="btn-group">
+                    <button class="btn dropdown-toggle" data-toggle="dropdown">Billing Country: <strong>United States</strong><span class="caret"></span></button>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">Africa</a></li>
+                        <li><a href="#">Russia</a></li>
+                        <li><a href="#">Ukraine</a></li>
+                        <li><a href="#">Germany</a></li>
+                    </ul>
+                </div>
+                <div class="btn-group">
+                    <button class="btn dropdown-toggle" data-toggle="dropdown">Last update: <strong>2012/12/12-2012/12/18</strong><span class="caret"></span></button>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">Last update: <strong>2010/12/12-2013/18/18</strong></a></li>
+                        <li><a href="#">Last update: <strong>2011/12/12-2014/11/18</strong></a></li>
+                    </ul>
+                </div>
+                <div class="btn-group">
+                    <button class="btn dropdown-toggle" data-toggle="dropdown">Status: <strong>All</strong><span class="caret"></span></button>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">only short</a></li>
+                        <li><a href="#">this is long text for test</a></li>
+                    </ul>
+                </div>
+                <div class="btn-group">
+                    <button class="btn dropdown-toggle" data-toggle="dropdown">Billing Country: <strong>United States</strong><span class="caret"></span></button>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">Africa</a></li>
+                        <li><a href="#">Russia</a></li>
+                        <li><a href="#">Ukraine</a></li>
+                        <li><a href="#">Germany</a></li>
+                    </ul>
+                </div>
+                <a href="#" class="btn btn-link btn-group">+ Add another</a>
+            </div>
+            <div class="grid-toolbar well-small">
+                <div class="pull-right">
+                    <label class="control-label">View per page:</label>
+                    <div class="btn-group">
+                        <button data-toggle="dropdown" class="btn dropdown-toggle">100<span class="caret"></span></button>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">10</a></li>
+                            <li><a href="#">25</a></li>
+                            <li><a href="#">50</a></li>
+                        </ul>
+                    </div>
+                    <div class="btn-group">
+                        <button class="btn"><i class="icon-eye2-open hide-text">hide</i></button>
+                        <button class="btn"><i class="icon-sort hide-text">copy</i></button>
+                    </div>
+                </div>
+                <div class="pull-left">
+                    <div class="btn-group">
+                        <button class="btn"><i class="icon-edit hide-text">edit</i></button>
+                        <button class="btn"><i class="icon-copy hide-text">copy</i></button>
+                        <button class="btn"><i class="icon-pin hide-text">pin/unpin</i></button>
+                        <button class="btn"><i class="icon-trash hide-text">remove</i></button>
+                    </div>
+                    <div class="btn-group">
+                        <button data-toggle="dropdown" class="btn dropdown-toggle">Status: <strong>All</strong><span class="caret"></span></button>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">only short</a></li>
+                            <li><a href="#">this is long text for test</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="pagination pagination-centered">
+                    <ul>
+                        <li class="disabled"><a href="#">«</a></li>
+                        <li class="active"><a href="#">1</a></li>
+                        <li><a href="#">2</a></li>
+                        <li><a href="#">3</a></li>
+                        <li><a href="#">4</a></li>
+                        <li><a href="#">5</a></li>
+                        <li><a href="#">»</a></li>
+                    </ul>
+                </div>
+            </div>
         </div>
 
     </div>
