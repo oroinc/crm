@@ -113,7 +113,7 @@ entities_config:
 This config :
 - is validated by Oro\Bundle\FlexibleEntityBundle\DependencyInjection\Configuration
 - is loaded / merged with others by Oro\Bundle\FlexibleEntityBundle\DependencyInjection\OroFlexibleEntityExtension
-- is accessible as $this->container->getParameter('oro_flexibleentity.entities_config');
+- is accessible as $this->container->getParameter('oro_flexibleentity.flexible_config');
 - is known by flexible entity manager and repository
 
 Finally we add our service declaration in src/Acme/Bundle/DemoFlexibleEntityBundle/Resources/config/services.yml :
