@@ -19,7 +19,6 @@ use Oro\Bundle\FlexibleEntityBundle\Entity\Attribute;
  */
 class FlexibleEntityRepository extends EntityRepository implements TranslatableInterface, ScopableInterface
 {
-
     /**
      * Flexible entity config
      * @var array
@@ -402,24 +401,28 @@ class FlexibleEntityRepository extends EntityRepository implements TranslatableI
     /**
      * @param QueryBuilder $qb
      * @param string $attributeCode
-     * @param string $attributeValue
+     * @param int|array $attributeValues
      */
-    public function applyFilterByOptionAttribute(QueryBuilder $qb, $attributeCode, $attributeValue)
+    public function applyFilterByOptionAttribute(QueryBuilder $qb, $attributeCode, $attributeValues)
     {
         $attributes = $this->getCodeToAttributes(array($attributeCode));
         if ($attributes) {
             /** @var $attribute Attribute */
-            $attribute = $attributes[$attributeCode];
-            $fieldCode = $attribute->getCode();
+            $attribute     = $attributes[$attributeCode];
+            $fieldCode     = $attribute->getCode();
+            $joinAlias     = 'filterV' . $fieldCode;
+            $joinParameter = 'filterv' . $fieldCode;
 
-            // prepare condition
-            $joinAlias = 'filterV'.$fieldCode;
-            $joinValue = 'filterv'.$fieldCode;
-            $condition = $joinAlias.'.attribute = '.$attribute->getId()
-                .' AND '.$joinAlias.'.id = :'.$joinValue;
+            if (!is_array($attributeValues)) {
+                $attributeValues = array($attributeValues);
+            }
+
+            // prepare join condition
+            $joinCondition = $joinAlias . '.attribute = ' . $attribute->getId()
+                . ' AND ' . $joinAlias . '.id IN (:' . $joinParameter . ')';
             // add inner join to filter lines and store value alias for next uses
-            $qb->innerJoin('Value.options', $joinAlias, 'WITH', $condition)
-                ->setParameter($joinValue, $attributeValue);
+            $qb->innerJoin('Value.options', $joinAlias, 'WITH', $joinCondition)
+                ->setParameter($joinParameter, $attributeValues);
         }
     }
 
