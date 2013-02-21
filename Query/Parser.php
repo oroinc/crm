@@ -54,7 +54,7 @@ class Parser
     public function getQueryFromString($inputString)
     {
         $query = new Query(Query::SELECT);
-        $this->parseExpression($query, trim($inputString), self::POSITION_KEYWORD);
+        $this->parseExpression($query, trim($inputString));
         if (!$query->getFrom()) {
             $query->from('*');
         }

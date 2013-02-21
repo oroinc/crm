@@ -113,6 +113,8 @@ class PdoMysql extends BaseDriver
      * @param \Doctrine\ORM\QueryBuilder $qb
      * @param integer                    $index
      * @param array                      $searchCondition
+     *
+     * @return string
      */
     protected function addTextField(QueryBuilder $qb, $index, $searchCondition)
     {
@@ -121,33 +123,29 @@ class PdoMysql extends BaseDriver
 
         $useFieldName = $searchCondition['fieldName'] == '*' ? false : true;
 
-        if ($searchCondition['type'] == 'and') {
-            $whereFunc = 'andWhere';
-        } else {
-            $whereFunc = 'orWhere';
-        }
-
         $stringQuery = '';
         if ($useFieldName) {
             $stringQuery = ' AND ' . $joinAlias . '.field = :field' .$index;
         }
 
         if ($searchCondition['condition'] == Query::OPERATOR_CONTAINS) {
-            $qb->$whereFunc( 'MATCH_AGAINST(' .$joinAlias . '.value, :value' .$index. ' \'IN BOOLEAN MODE\') >0' . $stringQuery);
+            $whereExpr = $searchCondition['type'] . ' (' . ( 'MATCH_AGAINST(' .$joinAlias . '.value, :value' .$index. ' \'IN BOOLEAN MODE\') >0' . $stringQuery . ')');
             if (strpos($searchCondition['fieldValue'], ' ') === false) {
                 $additionalParameter = '*';
             } else {
                 $additionalParameter = '';
             }
-            //var_dump($searchCondition['fieldValue'] . $additionalParameter);die;
+
             $qb->setParameter('value' . $index, $searchCondition['fieldValue'] . $additionalParameter);
         } else {
-            $qb->$whereFunc( $joinAlias . '.value NOT LIKE :value' . $index . $stringQuery);
+            $whereExpr = $searchCondition['type'] . ' (' .( $joinAlias . '.value NOT LIKE :value' . $index . $stringQuery) . ')';
             $qb->setParameter('value' . $index, '%' . $searchCondition['fieldValue'] . '%' );
         }
 
         if ($useFieldName) {
             $qb->setParameter('field' . $index, $searchCondition['fieldName']);
         }
+
+        return $whereExpr;
     }
 }

@@ -118,6 +118,7 @@ class Orm extends AbstractEngine
      */
     public function save($entity, $realtime = true)
     {
+        $alias = $this->mappingConfig[get_class($entity)]['alias'];
         $data = $this->mapObject($entity);
         $name = get_class($entity);
 
@@ -131,7 +132,8 @@ class Orm extends AbstractEngine
                 $item = new Item();
 
                 $item->setEntity($name)
-                     ->setRecordId($entity->getId());
+                     ->setRecordId($entity->getId())
+                     ->setAlias($alias);
             }
 
             $item->setChanged(!$realtime);
@@ -165,6 +167,7 @@ class Orm extends AbstractEngine
 
         if (is_object($object) && isset($mappingConfig[get_class($object)])) {
             $config = $mappingConfig[get_class($object)];
+            $alias = $config['alias'];
 
             foreach ($config['fields'] as $field) {
 
@@ -178,22 +181,24 @@ class Orm extends AbstractEngine
                 switch ($field['relation_type']) {
                     case Indexer::RELATION_ONE_TO_ONE:
                     case Indexer::RELATION_MANY_TO_ONE:
-                        $objectData = $this->setRelatedFields($objectData, $field['relation_fields'], $value);
+                        $objectData = $this->setRelatedFields($alias, $objectData, $field['relation_fields'], $value, $field['name']);
 
                         break;
                     case Indexer::RELATION_MANY_TO_MANY:
                     case Indexer::RELATION_ONE_TO_MANY:
                         foreach ($value as $relationObject) {
-                            $objectData = $this->setRelatedFields($objectData, $field['relation_fields'], $relationObject);
+                            $objectData = $this->setRelatedFields($alias, $objectData, $field['relation_fields'], $relationObject, $field['name']);
                         }
 
                         break;
                     default:
-                        $objectData = $this->setDataValue($objectData, $field, $value);
+                        if ($value) {
+                            $objectData = $this->setDataValue($alias, $objectData, $field, $value);
+                        }
                 }
             }
             if (isset($config['flexible_manager'])) {
-                $objectData =  $this->setFlexibleFields($object, $objectData, $config['flexible_manager']);
+                $objectData =  $this->setFlexibleFields($alias, $object, $objectData, $config['flexible_manager']);
             }
         }
 
@@ -203,13 +208,14 @@ class Orm extends AbstractEngine
     /**
      * Map Flexible entity fields
      *
+     * @param string $alias
      * @param $object
      * @param array $objectData
      * @param string $managerName
      *
      * @return array
      */
-    protected function setFlexibleFields($object, $objectData, $managerName)
+    protected function setFlexibleFields($alias, $object, $objectData, $managerName)
     {
         /** @var $flexibleManager \Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleManager */
         $flexibleManager = $this->container->get($managerName);
@@ -226,11 +232,12 @@ class Orm extends AbstractEngine
                         switch ($attributeType) {
                             case AbstractAttributeType::BACKEND_TYPE_TEXT:
                             case AbstractAttributeType::BACKEND_TYPE_VARCHAR:
-                                $objectData = $this->saveFlexibleTextData($objectData, $attribute->getCode(), $value);
+                                $objectData = $this->saveFlexibleTextData($alias, $objectData, $attribute->getCode(), $value);
                                 break;
                             case AbstractAttributeType::BACKEND_TYPE_DATETIME:
                             case AbstractAttributeType::BACKEND_TYPE_DATE:
                                 $objectData = $this->saveFlexibleData(
+                                    $alias,
                                     $objectData,
                                     AbstractAttributeType::BACKEND_TYPE_DATETIME,
                                     $attribute->getCode(),
@@ -239,6 +246,7 @@ class Orm extends AbstractEngine
                                 break;
                             default:
                                 $objectData = $this->saveFlexibleData(
+                                    $alias,
                                     $objectData,
                                     $attributeType,
                                     $attribute->getCode(),
@@ -255,6 +263,7 @@ class Orm extends AbstractEngine
     }
 
     /**
+     * @param string $alias
      * @param array $objectData
      * @param string $attributeType
      * @param string $attribute
@@ -262,23 +271,25 @@ class Orm extends AbstractEngine
      *
      * @return array
      */
-    protected function saveFlexibleData($objectData, $attributeType, $attribute, $value)
+    protected function saveFlexibleData($alias, $objectData, $attributeType, $attribute, $value)
     {
         if ($attributeType != AbstractAttributeType::BACKEND_TYPE_OPTION) {
             $objectData[$attributeType][$attribute] = $value;
         }
+        $objectData[AbstractAttributeType::BACKEND_TYPE_TEXT][$alias . '_' . $attribute] = $value;
 
         return $objectData;
     }
 
     /**
+     * @param string $alias
      * @param array $objectData
      * @param string $attribute
      * @param mixed $value
      *
      * @return array
      */
-    protected function saveFlexibleTextData($objectData, $attribute, $value)
+    protected function saveFlexibleTextData($alias, $objectData, $attribute, $value)
     {
         if (!isset($objectData[AbstractAttributeType::BACKEND_TYPE_TEXT][$attribute])) {
             $objectData[AbstractAttributeType::BACKEND_TYPE_TEXT][$attribute] = '';
@@ -288,6 +299,7 @@ class Orm extends AbstractEngine
             $objectData[AbstractAttributeType::BACKEND_TYPE_TEXT][Indexer::TEXT_ALL_DATA_FIELD] = '';
         }
         $objectData[AbstractAttributeType::BACKEND_TYPE_TEXT][Indexer::TEXT_ALL_DATA_FIELD] .= " " . $value;
+        $objectData[AbstractAttributeType::BACKEND_TYPE_TEXT][$alias . '_' . $attribute] = $value;
 
         return $objectData;
     }
@@ -295,20 +307,27 @@ class Orm extends AbstractEngine
     /**
      * Set related fields values
      *
+     * @param string $alias
      * @param array  $objectData
      * @param array  $relationFields
      * @param object $relationObject
+     * @param string $parentName
      *
      * @return array
      */
-    protected function setRelatedFields($objectData, $relationFields, $relationObject)
+    protected function setRelatedFields($alias, $objectData, $relationFields, $relationObject, $parentName)
     {
         foreach ($relationFields as $relationObjectField) {
-            $objectData = $this->setDataValue(
-                $objectData,
-                $relationObjectField,
-                $this->getFieldValue($relationObject, $relationObjectField['name'])
-            );
+            $value = $this->getFieldValue($relationObject, $relationObjectField['name']);
+            if ($value) {
+                $relationObjectField['name'] = $parentName;
+                $objectData = $this->setDataValue(
+                    $alias,
+                    $objectData,
+                    $relationObjectField,
+                    $value
+                );
+            }
         }
 
         return $objectData;
@@ -330,13 +349,14 @@ class Orm extends AbstractEngine
     /**
      * Set value for meta fields by type
      *
-     * @param array $objectData
-     * @param array $fieldConfig
-     * @param mixed $value
+     * @param string $alias
+     * @param array  $objectData
+     * @param array  $fieldConfig
+     * @param mixed  $value
      *
      * @return array
      */
-    protected function setDataValue($objectData, $fieldConfig, $value)
+    protected function setDataValue($alias, $objectData, $fieldConfig, $value)
     {
         //check if field have target_fields parameter
         if (isset($fieldConfig['target_fields']) && count($fieldConfig['target_fields'])) {
@@ -349,6 +369,7 @@ class Orm extends AbstractEngine
             foreach ($targetFields as $targetField) {
                 $objectData[$fieldConfig['target_type']][$targetField] = $value;
             }
+
         } else {
             foreach ($targetFields as $targetField) {
                 if (!isset($objectData[$fieldConfig['target_type']][$targetField])) {
@@ -361,6 +382,8 @@ class Orm extends AbstractEngine
             }
             $objectData[$fieldConfig['target_type']][Indexer::TEXT_ALL_DATA_FIELD] .= $value . ' ';
         }
+
+        $objectData[$fieldConfig['target_type']][$alias . '_' . $fieldConfig['name']] = $value;
 
         return $objectData;
     }

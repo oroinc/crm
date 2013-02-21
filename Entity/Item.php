@@ -10,7 +10,8 @@ use Doctrine\Common\Collections\ArrayCollection;
  *
  * @ORM\Table(
  *  name="search_item",
- *  uniqueConstraints={@ORM\UniqueConstraint(name="IDX_ENTITY", columns={"entity", "record_id"})}
+ *  uniqueConstraints={@ORM\UniqueConstraint(name="IDX_ENTITY", columns={"entity", "record_id"})},
+ *  indexes={@ORM\Index(name="IDX_ALIAS", columns={"alias"})}
  * )
  * @ORM\Entity(repositoryClass="Oro\Bundle\SearchBundle\Entity\Repository\SearchIndexRepository")
  * @ORM\HasLifecycleCallbacks
@@ -32,6 +33,13 @@ class Item
      * @ORM\Column(name="entity", type="string", length=255)
      */
     protected $entity;
+
+    /**
+     * @var string $alias
+     *
+     * @ORM\Column(name="alias", type="string", length=255)
+     */
+    protected $alias;
 
     /**
      * @var integer $record_id
@@ -560,5 +568,28 @@ class Item
         $record->setField($fieldName)
             ->setValue($fieldData)
             ->setItem($this);
+    }
+
+    /**
+     * Set alias
+     *
+     * @param string $alias
+     * @return Item
+     */
+    public function setAlias($alias)
+    {
+        $this->alias = $alias;
+    
+        return $this;
+    }
+
+    /**
+     * Get alias
+     *
+     * @return string 
+     */
+    public function getAlias()
+    {
+        return $this->alias;
     }
 }

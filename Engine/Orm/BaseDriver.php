@@ -92,6 +92,8 @@ abstract class BaseDriver extends FunctionNode
      * @param \Doctrine\ORM\QueryBuilder $qb
      * @param integer                    $index
      * @param array                      $searchCondition
+     *
+     * @return string
      */
     protected function addTextField(QueryBuilder $qb, $index, $searchCondition)
     {
@@ -100,24 +102,21 @@ abstract class BaseDriver extends FunctionNode
 
         $useFieldName = $searchCondition['fieldName'] == '*' ? false : true;
 
-        if ($searchCondition['type'] == 'and') {
-            $whereFunc = 'andWhere';
-        } else {
-            $whereFunc = 'orWhere';
-        }
-
         if ($searchCondition['condition'] == Query::OPERATOR_EQUALS) {
             $searchString = $this->createContainsStringQuery($joinAlias, $index, $useFieldName);
         } else {
             $searchString = $this->createNotContainsStringQuery($joinAlias, $index, $useFieldName);
         }
 
-        $qb->$whereFunc($searchString);
+        $whereExpr = $searchCondition['type'] . ' (' . $searchString . ')';
+
         $this->setFieldValueStringParameter($qb, $index, $searchCondition['fieldValue']);
 
         if ($useFieldName) {
             $qb->setParameter('field' . $index, $searchCondition['fieldName']);
         }
+
+        return $whereExpr;
     }
 
     /**
@@ -176,19 +175,19 @@ abstract class BaseDriver extends FunctionNode
      * @param \Doctrine\ORM\QueryBuilder $qb
      * @param integer                    $index
      * @param array                      $searchCondition
+     *
+     * @return string
      */
     protected function addNonTextField(QueryBuilder $qb, $index, $searchCondition)
     {
         $joinEntity = $searchCondition['fieldType'] . 'Fields';
         $joinAlias = $joinEntity . $index;
         $qb->join('search.' . $joinEntity, $joinAlias);
-        if ($searchCondition['type'] == 'and') {
-            $qb->andWhere($this->createNonTextQuery($joinAlias, $index, $searchCondition['condition'] ));
-        } else {
-            $qb->orWhere($this->createNonTextQuery($joinAlias, $index, $searchCondition['condition']));
-        }
+
         $qb->setParameter('field' . $index, $searchCondition['fieldName'])
             ->setParameter('value' . $index, $searchCondition['fieldValue']);
+
+        return $searchCondition['type'] . ' (' . $this->createNonTextQuery($joinAlias, $index, $searchCondition['condition']) . ')';
     }
 
     /**
@@ -220,16 +219,22 @@ abstract class BaseDriver extends FunctionNode
             }
         }
         if ($useFrom) {
-            $qb->andWhere($qb->expr()->in('search.entity', $query->getFrom()));
+            $qb->andWhere($qb->expr()->in('search.alias', $query->getFrom()));
         }
 
+        $whereExpr = array();
         foreach ($query->getOptions() as $index => $searchCondition) {
             if ($searchCondition['fieldType'] == Query::TYPE_TEXT) {
-                $this->addTextField($qb, $index, $searchCondition);
+                $whereExpr[] = $this->addTextField($qb, $index, $searchCondition);
             } else {
-                $this->addNonTextField($qb, $index, $searchCondition);
+                $whereExpr[] = $this->addNonTextField($qb, $index, $searchCondition);
             }
         }
+        if (substr($whereExpr[0], 0, 3) == 'and') {
+            $whereExpr[0] = substr($whereExpr[0], 3, strlen($whereExpr[0]));
+        }
+
+        $qb->andWhere(implode(' ', $whereExpr));
 
         return $qb;
     }
