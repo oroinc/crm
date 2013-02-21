@@ -14,8 +14,6 @@ parameters:
     oro_grid.filter.factory.class:           Oro\Bundle\GridBundle\Filter\FilterFactory
 
     oro_grid.sorter.factory.class:           Oro\Bundle\GridBundle\Sorter\SorterFactory
-    oro_grid.sorter.class:                   Oro\Bundle\GridBundle\Sorter\ORM\Sorter
-    oro_grid.sorter.flexible.class:          Oro\Bundle\GridBundle\Sorter\ORM\Flexible\FlexibleSorter
 
 services:
     oro_grid.datagrid.parameters:
@@ -35,13 +33,4 @@ services:
 
     oro_grid.sorter.factory:
         class:     %oro_grid.sorter.factory.class%
-        arguments: ["@service_container"]
-
-    oro_grid.sorter:
-        class:     %oro_grid.sorter.class%
-        scope:     prototype
-
-    oro_grid.sorter.flexible:
-        class:     %oro_grid.sorter.flexible.class%
-        scope:     prototype
         arguments: ["@service_container"]
