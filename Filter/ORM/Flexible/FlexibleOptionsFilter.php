@@ -64,7 +64,9 @@ class FlexibleOptionsFilter extends AbstractFlexibleFilter
         /** @var $attributeRepository ObjectRepository */
         $attributeRepository = $this->flexibleManager->getAttributeRepository();
         /** @var $attribute Attribute */
-        $attribute = $attributeRepository->findOneBy(array('code' => $filedName));
+        $attribute = $attributeRepository->findOneBy(
+            array('entityType' => $this->flexibleManager->getFlexibleName(), 'code' => $filedName)
+        );
         if (!$attribute) {
             throw new \LogicException('There is no flexible attribute with name ' . $filedName . '.');
         }
