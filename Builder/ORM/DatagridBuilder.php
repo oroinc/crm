@@ -60,7 +60,7 @@ class DatagridBuilder implements DatagridBuilderInterface
     ) {
         $filter = $this->filterFactory->create(
             $fieldDescription->getName(),
-            $fieldDescription->getType(),
+            $fieldDescription->getOption('filter_type'),
             $fieldDescription->getOptions()
         );
         $datagrid->addFilter($filter);
