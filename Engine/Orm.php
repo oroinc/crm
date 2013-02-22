@@ -168,7 +168,6 @@ class Orm extends AbstractEngine
         if (is_object($object) && isset($mappingConfig[get_class($object)])) {
             $config = $mappingConfig[get_class($object)];
             $alias = $config['alias'];
-
             foreach ($config['fields'] as $field) {
 
                 // check field relation type and set it to null if field doesn't have relations
@@ -342,7 +341,6 @@ class Orm extends AbstractEngine
     protected function getFieldValue($objectOrArray, $fieldName)
     {
         $propertyPath = new PropertyPath($fieldName);
-
         return $propertyPath->getValue($objectOrArray);
     }
 
