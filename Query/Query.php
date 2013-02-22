@@ -12,7 +12,7 @@ class Query
     const KEYWORD_OR = 'or';
     const KEYWORD_OFFSET = 'offset';
     const KEYWORD_MAX_RESULTS = 'results';
-    const KEYWORD_ORDER_BY = 'order';
+    const KEYWORD_ORDER_BY = 'order_by';
 
     const OPERATOR_EQUALS = '=';
     const OPERATOR_NOT_EQUALS = '!=';
@@ -56,10 +56,15 @@ class Query
     protected $from;
 
     /**
-     * @var array
+     * @var string
      */
     protected $orderBy;
 
+    /**
+     * @var string
+     */
+
+    protected $orderDirection;
     /**
      * @var array
      */
@@ -115,20 +120,23 @@ class Query
             foreach ($config['fields'] as $field) {
                 if (isset($field['relation_fields'])) {
                     foreach ($field['relation_fields'] as $relationField) {
-                        foreach ($relationField['target_fields'] as $targetFields) {
+                        if (isset($field['target_fields']) && count($field['target_fields']) > 0) {
+                            foreach ($relationField['target_fields'] as $targetFields) {
+                                if (!isset($fields[$targetFields]) || !in_array($entity, $fields[$targetFields])) {
+                                    $fields[$targetFields][] = $entity;
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    if (isset($field['target_fields']) && count($field['target_fields']) > 0) {
+                        foreach ($field['target_fields'] as $targetFields) {
                             if (!isset($fields[$targetFields]) || !in_array($entity, $fields[$targetFields])) {
                                 $fields[$targetFields][] = $entity;
                             }
                         }
                     }
-                } else {
-                    foreach ($field['target_fields'] as $targetFields) {
-                        if (!isset($fields[$targetFields]) || !in_array($entity, $fields[$targetFields])) {
-                            $fields[$targetFields][] = $entity;
-                        }
-                    }
                 }
-
             }
         }
         $this->fields = $fields;
@@ -339,18 +347,30 @@ class Query
      */
     public function setOrderBy($fieldName, $direction = "ASC")
     {
-        $this->orderBy = array($fieldName=>array($direction));
+        $this->orderBy = $fieldName;
+        $this->orderDirection = $direction;
+
         return $this;
     }
 
     /**
-     * Get order by
+     * Get order by field
      *
      * @return array
      */
     public function getOrderBy()
     {
         return $this->orderBy;
+    }
+
+    /**
+     * Get order by direction
+     *
+     * @return type
+     */
+    public function getOrderDirection()
+    {
+        return $this->orderDirection;
     }
 
     /**

@@ -573,20 +573,20 @@ class Item
     /**
      * Set alias
      *
-     * @param string $alias
+     * @param  string $alias
      * @return Item
      */
     public function setAlias($alias)
     {
         $this->alias = $alias;
-    
+
         return $this;
     }
 
     /**
      * Get alias
      *
-     * @return string 
+     * @return string
      */
     public function getAlias()
     {

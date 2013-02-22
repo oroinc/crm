@@ -208,6 +208,7 @@ abstract class BaseDriver extends FunctionNode
         } else {
             $searchString = $joinAlias . '.field= :field' . $index . ' AND ' . $joinAlias . '.value ' . $condition . ' :value' . $index;
         }
+
         return $searchString;
     }
 
@@ -257,11 +258,13 @@ abstract class BaseDriver extends FunctionNode
     protected function addOrderBy(Query $query, QueryBuilder $qb)
     {
         $from = $query->getFrom();
-        if ($query->getOrderBy() && count($from) == 1 && $from[0] != '*') {
+        $orderBy = $query->getOrderBy();
+
+        if ($orderBy && count($from) == 1 && $from[0] != '*') {
             $entity = $query->getEntityByAlias($from[0]);
             if ($entity) {
                 $qb->leftJoin($entity, 'entity', 'WITH', 'entity.id = search.recordId')
-                    ->orderBy('entity.' . $query->getOrderBy());
+                    ->orderBy('entity.' . $orderBy, $query->getOrderDirection());
             }
         }
     }

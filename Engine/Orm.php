@@ -210,7 +210,7 @@ class Orm extends AbstractEngine
      *
      * @param string $alias
      * @param $object
-     * @param array $objectData
+     * @param array  $objectData
      * @param string $managerName
      *
      * @return array
@@ -264,10 +264,10 @@ class Orm extends AbstractEngine
 
     /**
      * @param string $alias
-     * @param array $objectData
+     * @param array  $objectData
      * @param string $attributeType
      * @param string $attribute
-     * @param mixed $value
+     * @param mixed  $value
      *
      * @return array
      */
@@ -283,9 +283,9 @@ class Orm extends AbstractEngine
 
     /**
      * @param string $alias
-     * @param array $objectData
+     * @param array  $objectData
      * @param string $attribute
-     * @param mixed $value
+     * @param mixed  $value
      *
      * @return array
      */

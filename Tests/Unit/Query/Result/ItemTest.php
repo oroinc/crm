@@ -32,8 +32,6 @@ class ItemTest extends \PHPUnit_Framework_TestCase
             ->method('find')
             ->will($this->returnValue($this->product));
 
-
-
         $this->item = new Item($this->om, 'OroTestBundle:test', 1);
     }
 

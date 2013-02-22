@@ -103,7 +103,7 @@ class Indexer
      */
     public function advancedSearch($searchString)
     {
-        $parser = new Parser();
+        $parser = new Parser($this->mappingConfig);
 
         return $this->query($parser->getQueryFromString($searchString));
     }

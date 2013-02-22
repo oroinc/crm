@@ -8,6 +8,14 @@ class Parser
     const KEYWORD_FROM = 'from';
     const KEYWORD_WHERE = 'where';
 
+    const ORDER_ASC = 'asc';
+    const ORDER_DESC = 'desc';
+
+    protected $orderDirections = array(
+        self::ORDER_ASC,
+        self::ORDER_DESC,
+    );
+
     protected $keywords =
         array(
             Query::KEYWORD_AND,
@@ -54,9 +62,23 @@ class Parser
             )
         );
 
+    private $mappingConfig;
+
+    public function __construct($mappingConfig)
+    {
+        $this->mappingConfig = $mappingConfig;
+    }
+
+    /**
+     * Get query from string
+     *
+     * @param $inputString
+     * @return \Oro\Bundle\SearchBundle\Query\Query
+     */
     public function getQueryFromString($inputString)
     {
         $query = new Query(Query::SELECT);
+        $query->setMappingConfig($this->mappingConfig);
         $this->parseExpression($query, trim($inputString));
         if (!$query->getFrom()) {
             $query->from('*');
@@ -66,10 +88,13 @@ class Parser
     }
 
     /**
+     * Extention parser
+     *
      * @param Query  $query
      * @param string $inputString
      */
-    private function parseExpression(Query $query, $inputString) {
+    private function parseExpression(Query $query, $inputString)
+    {
         $delimiterPosition = strpos($inputString, ' ');
         $keyWord = substr($inputString, 0, $delimiterPosition);
 
@@ -109,7 +134,32 @@ class Parser
         }
     }
 
+    /**
+     * ORDER BY keyword
+     *
+     * @param  \Oro\Bundle\SearchBundle\Query\Query $query
+     * @param  type                                 $inputString
+     * @return string
+     */
+    public function orderBy(Query $query, $inputString)
+    {
+        $orderField = $this->getWord($inputString);
+        $inputString = $this->trimString($inputString, $orderField);
 
+        $orderDirection = $this->getWord($inputString);
+        if (in_array($orderDirection, $this->orderDirections)) {
+            $inputString = $this->trimString($inputString, $orderDirection);
+        } else {
+            $orderDirection = self::ORDER_ASC;
+        }
+
+        $from = $query->getFrom();
+        if (count($from) == 1 && $from[0] != '*') {
+            $query->setOrderBy($orderField, $orderDirection);
+        }
+
+        return $inputString;
+    }
 
     /**
      * OFFSET keyword
@@ -121,7 +171,7 @@ class Parser
      */
     private function offset(Query $query, $inputString)
     {
-        $offset= $this->getWord($inputString);
+        $offset = $this->getWord($inputString);
         $inputString = $this->trimString($inputString, $offset);
         $query->setFirstResult($offset);
         if (!$query->getMaxResults()) {
@@ -151,7 +201,7 @@ class Parser
     /**
      * Parse from statement
      *
-     * @param Query $query
+     * @param Query  $query
      * @param string $inputString
      *
      * @return string
@@ -200,11 +250,7 @@ class Parser
         $operatorWord = $this->getWord($inputString);
         // check operator
         if (!in_array($operatorWord, $this->typeOperators[$typeWord])) {
-            die(
-                'TYPE ' . $typeWord
-                    . ' DOES NOT SUPPORT OPERATOR "'
-                    . $operatorWord . '"'
-            );
+            throw new \InvalidArgumentException('Type ' . $typeWord . ' does not support operator "' . $operatorWord . '"');
         }
         $inputString = $this->trimString($inputString, $operatorWord);
 
@@ -226,8 +272,8 @@ class Parser
     /**
      * Get the next word from string
      *
-     * @param string $inputString
-     * @param string $delimiter
+     * @param  string $inputString
+     * @param  string $delimiter
      * @return string
      */
     private function getWord($inputString, $delimiter = ' ')
@@ -244,8 +290,8 @@ class Parser
     /**
      * Trims input string
      *
-     * @param string $inputString
-     * @param string $trimString
+     * @param  string $inputString
+     * @param  string $trimString
      * @return string
      */
     private function trimString($inputString, $trimString)
