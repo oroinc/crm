@@ -58,6 +58,11 @@ class Query
     /**
      * @var string
      */
+    protected $orderType;
+
+    /**
+     * @var string
+     */
     protected $orderBy;
 
     /**
@@ -342,13 +347,15 @@ class Query
      *
      * @param string $fieldName
      * @param string $direction
+     * @param string $type
      *
      * @return Query
      */
-    public function setOrderBy($fieldName, $direction = "ASC")
+    public function setOrderBy($fieldName, $direction = "ASC", $type = self::TYPE_TEXT)
     {
         $this->orderBy = $fieldName;
         $this->orderDirection = $direction;
+        $this->orderType = $type;
 
         return $this;
     }
@@ -361,6 +368,16 @@ class Query
     public function getOrderBy()
     {
         return $this->orderBy;
+    }
+
+    /**
+     * Get "order by" field type
+     *
+     * @return string
+     */
+    public function getOrderType()
+    {
+        return $this->orderType;
     }
 
     /**

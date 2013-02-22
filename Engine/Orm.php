@@ -169,7 +169,6 @@ class Orm extends AbstractEngine
             $config = $mappingConfig[get_class($object)];
             $alias = $config['alias'];
             foreach ($config['fields'] as $field) {
-
                 // check field relation type and set it to null if field doesn't have relations
                 if (!isset($field['relation_type'])) {
                     $field['relation_type'] = 'none';
@@ -275,7 +274,7 @@ class Orm extends AbstractEngine
         if ($attributeType != AbstractAttributeType::BACKEND_TYPE_OPTION) {
             $objectData[$attributeType][$attribute] = $value;
         }
-        $objectData[AbstractAttributeType::BACKEND_TYPE_TEXT][$alias . '_' . $attribute] = $value;
+        //$objectData[AbstractAttributeType::BACKEND_TYPE_TEXT][$alias . '_' . $attribute] = $value;
 
         return $objectData;
     }
@@ -380,8 +379,6 @@ class Orm extends AbstractEngine
             }
             $objectData[$fieldConfig['target_type']][Indexer::TEXT_ALL_DATA_FIELD] .= $value . ' ';
         }
-
-        $objectData[$fieldConfig['target_type']][$alias . '_' . $fieldConfig['name']] = $value;
 
         return $objectData;
     }

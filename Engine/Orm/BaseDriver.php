@@ -257,15 +257,14 @@ abstract class BaseDriver extends FunctionNode
      */
     protected function addOrderBy(Query $query, QueryBuilder $qb)
     {
-        $from = $query->getFrom();
         $orderBy = $query->getOrderBy();
 
-        if ($orderBy && count($from) == 1 && $from[0] != '*') {
-            $entity = $query->getEntityByAlias($from[0]);
-            if ($entity) {
-                $qb->leftJoin($entity, 'entity', 'WITH', 'entity.id = search.recordId')
-                    ->orderBy('entity.' . $orderBy, $query->getOrderDirection());
-            }
+        if ($orderBy) {
+            $orderRelation = $query->getOrderType() . 'Fields';
+            $qb->leftJoin('search.' . $orderRelation, 'orderTable', 'WITH', 'orderTable.field = :orderField')
+                ->orderBy('orderTable.value', $query->getOrderDirection())
+                ->setParameter('orderField', $orderBy)
+            ;
         }
     }
 }

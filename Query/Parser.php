@@ -143,8 +143,17 @@ class Parser
      */
     public function orderBy(Query $query, $inputString)
     {
-        $orderField = $this->getWord($inputString);
-        $inputString = $this->trimString($inputString, $orderField);
+        $orderType = $this->getWord($inputString);
+        if (!in_array($orderType, $this->types)) {
+            $orderField = $orderType;
+            $orderType = Query::TYPE_TEXT;
+            $inputString = $this->trimString($inputString, $orderType);
+
+        } else {
+            $inputString = $this->trimString($inputString, $orderType);
+            $orderField = $this->getWord($inputString);
+            $inputString = $this->trimString($inputString, $orderField);
+        }
 
         $orderDirection = $this->getWord($inputString);
         if (in_array($orderDirection, $this->orderDirections)) {
@@ -153,10 +162,7 @@ class Parser
             $orderDirection = self::ORDER_ASC;
         }
 
-        $from = $query->getFrom();
-        if (count($from) == 1 && $from[0] != '*') {
-            $query->setOrderBy($orderField, $orderDirection);
-        }
+        $query->setOrderBy($orderField, $orderDirection, $orderType);
 
         return $inputString;
     }

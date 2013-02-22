@@ -9,10 +9,10 @@ use FOS\RestBundle\Controller\Annotations\RouteResource;
 use FOS\RestBundle\Controller\Annotations\NamePrefix;
 
 /**
- * @RouteResource("advanced_search")
+ * @RouteResource("search_advanced")
  * @NamePrefix("oro_api_")
  */
-class AdvancedSearchController extends FOSRestController
+class SearchAdvancedController extends FOSRestController
 {
     /**
      * @ApiDoc(

@@ -8,7 +8,7 @@ oro_search_api:
         version: latest
 
 oro_advanced_search_api:
-    resource: Oro\Bundle\SearchBundle\Controller\Api\AdvancedSearchController
+    resource: Oro\Bundle\SearchBundle\Controller\Api\SearchAdvancedController
     type: rest
     prefix: api/rest/{version}/
     requirements:
