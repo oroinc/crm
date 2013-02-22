@@ -22,7 +22,7 @@
 
                 <input type="submit" class="btn btn-primary" value="{{ 'oro_grid.button.filter'|trans({}, 'OroGridBundle') }}" />
 
-                <a class="btn" href="{{ path(routeName) }}">{{ 'oro_grid.button.reset'|trans({}, 'OroGridBundle') }}</a>
+                <a class="btn" href="{{ datagrid.routeGenerator.generateUrl() }}">{{ 'oro_grid.button.reset'|trans({}, 'OroGridBundle') }}</a>
             </fieldset>
         </form>
     {% endif %}

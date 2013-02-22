@@ -31,9 +31,13 @@ class DefaultRouteGenerator implements RouteGeneratorInterface
     /**
      * {@inheritdoc}
      */
-    public function generateUrl(ParametersInterface $parameters, array $extendParameters = array())
+    public function generateUrl(ParametersInterface $parameters = null, array $extendParameters = array())
     {
-        $routeParameters = array_merge_recursive($parameters->toArray(), $extendParameters);
+        if ($parameters) {
+            $routeParameters = array_merge_recursive($parameters->toArray(), $extendParameters);
+        } else {
+            $routeParameters = $extendParameters;
+        }
         return $this->generate($this->routeName, $routeParameters);
     }
 

@@ -12,7 +12,7 @@ interface RouteGeneratorInterface
      * @param array $extendParameters
      * @return string
      */
-    public function generateUrl(ParametersInterface $parameters, array $extendParameters = array());
+    public function generateUrl(ParametersInterface $parameters = null, array $extendParameters = array());
 
     /**
      * @param ParametersInterface $parameters
