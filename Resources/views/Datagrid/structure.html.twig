@@ -1,3 +1,5 @@
+{% block grid_js %}{% endblock %}
+
 {% block grid_filter %}
     {% if datagrid.filters %}
         <form action="{{ datagrid.routeGenerator.generateUrl(datagrid.parameters) }}" method="GET">

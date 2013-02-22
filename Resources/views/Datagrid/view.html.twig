@@ -1,1 +1,13 @@
 {% extends "OroGridBundle:Datagrid:structure.html.twig" %}
+
+{% block grid_js %}
+    {# TODO move to head #}
+    {% javascripts
+        '@OroUIBundle/Resources/public/lib/underscore.js'
+        '@OroUIBundle/Resources/public/lib/backbone.js'
+        '@OroUIBundle/Resources/public/lib/backgrid/backgrid.js'
+        output='js/acme.grid.js'
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
