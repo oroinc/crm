@@ -7,7 +7,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 use Symfony\Component\Form\FormInterface;
 use Oro\Bundle\DataFlowBundle\Entity\Configuration;
-use Oro\Bundle\DataFlowBundle\Form\DataTransformer\EntityToConfigurationTransformer;
 
 /**
  * Configuration controller
@@ -34,16 +33,15 @@ class ConfigurationController extends Controller
      */
     public function editAction(Configuration $entity)
     {
-        $transformer = new EntityToConfigurationTransformer($this->getDoctrine()->getEntityManager());
-        $configuration = $transformer->transform($entity);
+        $configuration = $entity->deserialize();
 
         $type = $configuration->getFormTypeServiceId();
         $form = $this->createForm($type, $configuration);
 
-        if ($this->getRequest()->getMethod() == 'POST') {
+        if ($this->getRequest()->getMethod() === 'POST') {
             $form->bind($this->getRequest());
             if ($form->isValid()) {
-                $entity = $transformer->reverseTransform($configuration);
+                $configuration = $entity->serialize($configuration);
                 $manager = $this->getDoctrine()->getEntityManager();
                 $manager->persist($entity);
                 $manager->flush();

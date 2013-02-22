@@ -70,7 +70,7 @@ class ConnectorController extends Controller
         $form = $this->createForm(new ConnectorType(), $entity, array('serviceIds' => $serviceIds));
 
         // process form
-        if ($this->getRequest()->getMethod() == 'POST') {
+        if ($this->getRequest()->getMethod() === 'POST') {
             $form->bind($this->getRequest());
             if ($form->isValid()) {
 
@@ -126,7 +126,7 @@ class ConnectorController extends Controller
      */
     public function runAction(Connector $entity)
     {
-        if ('POST' === $this->getRequest()->getMethod()) {
+        if ($this->getRequest()->getMethod() === 'POST') {
 
             $confConnector = $entity->getConfiguration()->deserialize();
 
