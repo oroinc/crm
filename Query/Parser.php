@@ -254,14 +254,23 @@ class Parser
         }
         $inputString = $this->trimString($inputString, $operatorWord);
 
-        if (!in_array($operatorWord, array(Query::OPERATOR_IN, Query::OPERATOR_NOT_IN))) {
-            $value = $this->getWord($inputString);
-            $inputString = $this->trimString($inputString, $value);
-        } else {
+        if (in_array($operatorWord, array(Query::OPERATOR_IN, Query::OPERATOR_NOT_IN))) {
             $fromString = $this->getWord($inputString, ')');
             $inputString = $this->trimString($inputString, $fromString . ')');
             $fromString = str_replace(array('(', ')'), '', $fromString);
             $value = explode(', ', $fromString);
+        } elseif (in_array($operatorWord, array(Query::OPERATOR_CONTAINS, Query::OPERATOR_NOT_CONTAINS))) {
+            if (substr($inputString, 0, 1) == '"') {
+                $inputString = substr($inputString, 1, strlen($inputString));
+                $value = $this->getWord($inputString, '"');
+                $inputString = $this->trimString($inputString, $value . '"');
+            } else {
+                $value = $this->getWord($inputString);
+                $inputString = $this->trimString($inputString, $value);
+            }
+        } else {
+            $value = $this->getWord($inputString);
+            $inputString = $this->trimString($inputString, $value);
         }
 
         $query->where($keyWord, $fieldName, $operatorWord, $value, $typeWord);

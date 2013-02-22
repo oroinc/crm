@@ -130,16 +130,22 @@ class PdoMysql extends BaseDriver
 
         if ($searchCondition['condition'] == Query::OPERATOR_CONTAINS) {
             $whereExpr = $searchCondition['type'] . ' (' . ( 'MATCH_AGAINST(' .$joinAlias . '.value, :value' .$index. ' \'IN BOOLEAN MODE\') >0' . $stringQuery . ')');
-            if (strpos($searchCondition['fieldValue'], ' ') === false) {
-                $additionalParameter = '*';
-            } else {
-                $additionalParameter = '';
-            }
 
-            $qb->setParameter('value' . $index, $searchCondition['fieldValue'] . $additionalParameter);
+            if (strpos($searchCondition['fieldValue'], ' ') !== false) {
+                $stingArray = explode(' ', $searchCondition['fieldValue']);
+                foreach ($stingArray as $stringIndex => $string) {
+                    $stingArray[$stringIndex] = '+' . $string . '*';
+                    $value = implode(' ', $stingArray);
+                }
+            } else {
+                $value = $searchCondition['fieldValue'] . '*';
+            }
+            $qb->setParameter('value' . $index, $value);
         } else {
+            $value = '%' . str_replace(' ', '%', trim($searchCondition['fieldValue'])) . '%';
+
             $whereExpr = $searchCondition['type'] . ' (' .( $joinAlias . '.value NOT LIKE :value' . $index . $stringQuery) . ')';
-            $qb->setParameter('value' . $index, '%' . $searchCondition['fieldValue'] . '%' );
+            $qb->setParameter('value' . $index, $value );
         }
 
         if ($useFieldName) {
