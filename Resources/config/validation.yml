@@ -15,7 +15,7 @@ Oro\Bundle\UserBundle\Entity\User:
             - Length:
                 min:      6
                 max:      255
-            - Email:
+            - Email:      ~
         plainPassword:
             - NotBlank:
                 groups:   [Registration]
