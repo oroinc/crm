@@ -62,7 +62,10 @@ How to use ?
 
 Enhancement
 ===========
-- order jobs in a connector
+- success / error messages
+- refactor controllers to uses handlers
+- refactor configuration to encapsulate serialize / deserialize and use magic getter / setter
+- order jobs in a connector + refactor connector controller
 - store mapping as configuration
 - provide different job classes to deal with different kind of treatment (line by line, massive, etc)
 - provide useful classes to make easiest to load high volume of data
