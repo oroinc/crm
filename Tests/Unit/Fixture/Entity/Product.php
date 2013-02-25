@@ -225,4 +225,9 @@ class Product
     {
         return $code;
     }
+
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
 }

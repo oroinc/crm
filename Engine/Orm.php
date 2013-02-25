@@ -46,35 +46,6 @@ class Orm extends AbstractEngine
     }
 
     /**
-     * Search query with query builder
-     *
-     * @param \Oro\Bundle\SearchBundle\Query\Query $query
-     *
-     * @return array
-     */
-    protected function doSearch(Query $query)
-    {
-        $results = array();
-        $searchResults = $this->getIndexRepo()->search($query);
-        if ($query->getMaxResults() > 0 || $query->getFirstResult() > 0) {
-            $recordsCount = $this->getIndexRepo()->getRecordsCount($query);
-        } else {
-            $recordsCount = count($searchResults);
-        }
-        if ($searchResults) {
-            foreach ($searchResults as $item) {
-                /** @var $item \Oro\Bundle\SearchBundle\Entity\Item  */
-                $results[] = new ResultItem($this->em, $item->getEntity(), $item->getRecordId());
-            }
-        }
-
-        return array(
-            'results' => $results,
-            'records_count' => $recordsCount
-        );
-    }
-
-    /**
      * Delete record from index
      *
      * @param object $entity   Entity to be removed from index
@@ -201,6 +172,35 @@ class Orm extends AbstractEngine
         }
 
         return $objectData;
+    }
+
+    /**
+     * Search query with query builder
+     *
+     * @param \Oro\Bundle\SearchBundle\Query\Query $query
+     *
+     * @return array
+     */
+    protected function doSearch(Query $query)
+    {
+        $results = array();
+        $searchResults = $this->getIndexRepo()->search($query);
+        if ($query->getMaxResults() > 0 || $query->getFirstResult() > 0) {
+            $recordsCount = $this->getIndexRepo()->getRecordsCount($query);
+        } else {
+            $recordsCount = count($searchResults);
+        }
+        if ($searchResults) {
+            foreach ($searchResults as $item) {
+                /** @var $item \Oro\Bundle\SearchBundle\Entity\Item  */
+                $results[] = new ResultItem($this->em, $item->getEntity(), $item->getRecordId());
+            }
+        }
+
+        return array(
+            'results' => $results,
+            'records_count' => $recordsCount
+        );
     }
 
     /**
