@@ -8,10 +8,15 @@ class Query
 {
     const SELECT = 'select';
 
+    const ORDER_ASC = 'asc';
+    const ORDER_DESC = 'desc';
+
+    const KEYWORD_FROM = 'from';
+    const KEYWORD_WHERE = 'where';
     const KEYWORD_AND = 'and';
     const KEYWORD_OR = 'or';
     const KEYWORD_OFFSET = 'offset';
-    const KEYWORD_MAX_RESULTS = 'results';
+    const KEYWORD_MAX_RESULTS = 'max_results';
     const KEYWORD_ORDER_BY = 'order_by';
 
     const OPERATOR_EQUALS = '=';

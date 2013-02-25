@@ -5,22 +5,16 @@ use Oro\Bundle\SearchBundle\Query\Query;
 
 class Parser
 {
-    const KEYWORD_FROM = 'from';
-    const KEYWORD_WHERE = 'where';
-
-    const ORDER_ASC = 'asc';
-    const ORDER_DESC = 'desc';
-
     protected $orderDirections = array(
-        self::ORDER_ASC,
-        self::ORDER_DESC,
+        Query::ORDER_ASC,
+        Query::ORDER_DESC,
     );
 
     protected $keywords =
         array(
             Query::KEYWORD_AND,
             Query::KEYWORD_OR,
-            self::KEYWORD_FROM,
+            Query::KEYWORD_FROM,
             Query::KEYWORD_ORDER_BY,
             Query::KEYWORD_OFFSET,
             Query::KEYWORD_MAX_RESULTS
@@ -51,6 +45,16 @@ class Parser
                 Query::OPERATOR_NOT_IN,
             ),
             QUERY::TYPE_DECIMAL => array(
+                Query::OPERATOR_GREATER_THAN,
+                Query::OPERATOR_GREATER_THAN_EQUALS,
+                Query::OPERATOR_LESS_THAN,
+                Query::OPERATOR_LESS_THAN_EQUALS,
+                Query::OPERATOR_EQUALS,
+                Query::OPERATOR_NOT_EQUALS,
+                Query::OPERATOR_IN,
+                Query::OPERATOR_NOT_IN,
+            ),
+            QUERY::TYPE_DATETIME => array(
                 Query::OPERATOR_GREATER_THAN,
                 Query::OPERATOR_GREATER_THAN_EQUALS,
                 Query::OPERATOR_LESS_THAN,
@@ -100,8 +104,8 @@ class Parser
 
         // check if we can't identify keyword - set keyword to KEYWORD_AND
         if (!in_array($keyWord, $this->keywords)) {
-            if ($keyWord == self::KEYWORD_WHERE) {
-                $inputString = $this->trimString($inputString, self::KEYWORD_WHERE);
+            if ($keyWord == Query::KEYWORD_WHERE) {
+                $inputString = $this->trimString($inputString, Query::KEYWORD_WHERE);
             }
             $keyWord = Query::KEYWORD_AND;
         } else {
@@ -112,7 +116,7 @@ class Parser
             $inputString = $this->Where($query, $keyWord, $inputString);
         }
         //check if we found 'from' statement
-        if ($keyWord == self::KEYWORD_FROM) {
+        if ($keyWord == Query::KEYWORD_FROM) {
             $inputString = $this->from($query, $inputString);
         }
         //keyword offset
@@ -159,7 +163,7 @@ class Parser
         if (in_array($orderDirection, $this->orderDirections)) {
             $inputString = $this->trimString($inputString, $orderDirection);
         } else {
-            $orderDirection = self::ORDER_ASC;
+            $orderDirection = Query::ORDER_ASC;
         }
 
         $query->setOrderBy($orderField, $orderDirection, $orderType);
@@ -265,7 +269,7 @@ class Parser
             $inputString = $this->trimString($inputString, $fromString . ')');
             $fromString = str_replace(array('(', ')'), '', $fromString);
             $value = explode(', ', $fromString);
-        } elseif (in_array($operatorWord, array(Query::OPERATOR_CONTAINS, Query::OPERATOR_NOT_CONTAINS))) {
+        } else {
             if (substr($inputString, 0, 1) == '"') {
                 $inputString = substr($inputString, 1, strlen($inputString));
                 $value = $this->getWord($inputString, '"');
@@ -274,9 +278,6 @@ class Parser
                 $value = $this->getWord($inputString);
                 $inputString = $this->trimString($inputString, $value);
             }
-        } else {
-            $value = $this->getWord($inputString);
-            $inputString = $this->trimString($inputString, $value);
         }
 
         $query->where($keyWord, $fieldName, $operatorWord, $value, $typeWord);

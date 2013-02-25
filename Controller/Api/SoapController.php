@@ -23,4 +23,18 @@ class SoapController extends ContainerAware
             )
         );
     }
+
+    /**
+     * @Soap\Method("advancedSearch")
+     * @Soap\Param("query", phpType = "string")
+     * @Soap\Result(phpType = "Oro\Bundle\SearchBundle\Query\Result")
+     */
+    public function advancedSearchAction($query)
+    {
+        return $this->container->get('besimple.soap.response')->setReturnValue(
+            $this->container->get('oro_search.index')->advancedSearch(
+                $query
+            )
+        );
+    }
 }
