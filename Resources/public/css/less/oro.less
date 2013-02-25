@@ -975,6 +975,10 @@ footer{
   background-position: -96px -166px;
   width: 15px;
 }
+.icon-minimize{
+  background-position: -120px -166px;
+  width: 15px;
+}
 .dib{
   display: inline-block;
   vertical-align: top;
@@ -1035,37 +1039,43 @@ footer{
 .grid-info-frame{
   margin: 0 0 20px;
 }
-.grid .open-tr td{
-  border-bottom: 0;
-  background-color: #f4f4f4;
-}
-.grid .usser-name{
-  font-size: 20px;
-  margin: 0 0 0 12px;
-  font-size: 20px;
-  font-weight: bold;
-}
-.grid .usser-state{
-  font-size: 14px;
-  padding: 0 15px;
-  color: #666;
-}
-.grid  .open-row{
-  background: url("../../img/bg-opener-grid.png") no-repeat;
-  width: 13px;
-  height: 13px;
-  text-indent: -9999px;
-  font-size: 0;
-  line-height: 0;
-  display: block;
-  margin: 5px 0 0 3px;
-  cursor: pointer;
-}
-.grid .open-tr .open-row{
-  background-position: 0 -13px;
-}
-.grid dl{
-  margin: 0 0 15px;
+.grid {
+  .open-tr td{
+    border-bottom: 0;
+    background-color: #f4f4f4;
+  }
+  .usser-name{
+    font-size: 20px;
+    margin: 0 0 0 12px;
+    font-size: 20px;
+    font-weight: bold;
+  }
+  .usser-state{
+    font-size: 14px;
+    padding: 0 15px;
+    color: #666;
+  }
+  .open-row{
+    background: url("../../img/bg-opener-grid.png") no-repeat;
+    width: 13px;
+    height: 13px;
+    text-indent: -9999px;
+    font-size: 0;
+    line-height: 0;
+    display: block;
+    margin: 5px 0 0 3px;
+    cursor: pointer;
+  }
+  .open-tr .open-row{
+    background-position: 0 -13px;
+  }
+  dl{
+    margin: 0 0 15px;
+  }
+  .selected-row td{
+    background-color: #3b6fe5 !important;
+    color: #fff !important;
+  }
 }
 .grid-more-bar{
 
@@ -1125,4 +1135,17 @@ footer{
   margin-right: 15px;
   line-height: 24px;
   color: #444;
+}
+.grid-toolbar .pagination{
+  margin: 0;
+}
+.navigation {
+  position: relative;
+  .top-action-box{
+    position: absolute;
+    right: 0;
+    top: -33px;
+    padding: 2px 14px;
+    background-color: #fff;
+  }
 }

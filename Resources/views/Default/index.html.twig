@@ -137,11 +137,10 @@
 
         </header>
         {% endblock header %}
-
+        {% block main %}
         <div class="container-fluid">
             {% block right_panel %}{% endblock right_panel %}
             {% block left_panel %}{% endblock left_panel %}
-            <div class=" layout-content">
                 {% block pin_bar %}
                     <div class="clearfix">
                         <div class="pin-bar clearfix">
@@ -233,8 +232,8 @@
                         </div>
                     </div>
                 {% endblock content %}
-            </div>
         </div>
+        {% endblock main %}
     </div>
 </div>
 

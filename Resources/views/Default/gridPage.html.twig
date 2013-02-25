@@ -72,6 +72,13 @@
             </script>
             <div class="navigation clearfix">
                 <div class="container-fluid">
+                    <div class="top-action-box">
+                        <div class="btn-group icons-holder">
+                            <button class="btn"><i class="icon-minimize hide-text">minimaze tab</i></button>
+                            <button class="btn"><i class="icon-remove hide-text">Close</i></button>
+                            <button class="btn"><i class="icon-fullscreen hide-text">full screen</i></button>
+                        </div>
+                    </div>
                     <div class="brand-extra pull-left">Customers</div>
                     <div class="divider-vertical pull-left" style="height:100%;"></div>
                     <div class="navbar-responsive-collapse navbar-extra clearfix">
@@ -124,6 +131,13 @@
                         <li><a href="#">Russia</a></li>
                         <li><a href="#">Ukraine</a></li>
                         <li><a href="#">Germany</a></li>
+                    </ul>
+                </div>
+                <div class="btn-group">
+                    <button class="btn dropdown-toggle" data-toggle="dropdown">Last update: <strong>2012/12/12-2012/12/18</strong><span class="caret"></span></button>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">Last update: <strong>2010/12/12-2013/18/18</strong></a></li>
+                        <li><a href="#">Last update: <strong>2011/12/12-2014/11/18</strong></a></li>
                     </ul>
                 </div>
                 <div class="btn-group">
@@ -337,7 +351,7 @@
                     </tr>
                 </thead>
                 <tbody class="">
-                    <tr class="">
+                    <tr class="selected-row ">
                         <td><input type="checkbox" /></td>
                         <td><span class="open-row">open</span></td>
                         <td>Ada Lindsey</td>
@@ -2208,6 +2222,7 @@
                             });
                         }
                     });
+                    /* js for loader show */
                     jQuery('#open-loading').click(function(){
                         jQuery('#loading-wrapper , #loading-frame').css({
                             'display' : 'block'
@@ -2218,6 +2233,25 @@
                             'display' : 'none'
                         })
                     });
+                    /* js for loader show --end */
+                    /* select row */
+                    console.clear();
+                        jQuery('table.grid tbody td > input:checkbox').each(function(){
+                            if(jQuery(this).attr('checked')=='checked'){
+                                jQuery(this).parent().parent().addClass('selected-row');
+                            }
+                            jQuery(this).click(function(){
+                                if(jQuery(this).attr('checked')=='checked'){
+                                    jQuery(this).parent().parent().addClass('selected-row');
+                                }else{
+                                    jQuery(this).parent().parent().removeClass('selected-row');
+                                }
+
+
+                            //    jQuery(this).parent().parent().toggleClass('selected-row');
+                            });
+                        });
+                    /* select row -- end*/
                 });
             </script>
         </div>
@@ -2225,6 +2259,10 @@
     </div>
     <div id="loading-wrapper" style="display: none;"></div>
     <div id="loading-frame" class="loading-frame" style="display: none;">
-        <div class="box well"><img src="{{ asset('bundles/oroui/img/loadinfo.net.gif') }}" alt=""> Loading . . .</div>
+        <div class="box well">
+            <img src="{{ asset('bundles/oroui/img/loadinfo.net.gif') }}" alt="">
+            <img src="{{ asset('bundles/oroui/img/loader.gif') }}" alt="">
+            Loading . . .
+        </div>
     </div>
 {% endblock content %}

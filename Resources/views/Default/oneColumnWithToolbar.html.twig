@@ -1,5 +1,6 @@
 {% extends "OroUIBundle:Default:index.html.twig" %}
-
+{% block main %}
+<div class="page-container">
 {% block right_panel %}
 <div class="side-nav right-panel">
     <div class="clearfix">
@@ -87,9 +88,12 @@
 {% endblock left_panel %}
 
 {% block content %}
-    <div class=" test-box">
-        <div class="fr">test text</div>
-        One column
+    <div class="container-fluid alert alert-info layout-content">
+        <div class=" test-box">
+            <div class="fr">test text</div>
+            One column
+        </div>
     </div>
 {% endblock content %}
-
+</div>
+{% endblock main %}
