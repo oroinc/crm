@@ -155,6 +155,7 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
     {
         $this->salt  = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
         $this->roles = new ArrayCollection();
+        parent::__construct();
     }
 
     /**
