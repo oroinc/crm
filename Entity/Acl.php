@@ -378,20 +378,20 @@ class Acl
     /**
      * Set class
      *
-     * @param string $class
+     * @param  string $class
      * @return Acl
      */
     public function setClass($class)
     {
         $this->class = $class;
-    
+
         return $this;
     }
 
     /**
      * Get class
      *
-     * @return string 
+     * @return string
      */
     public function getClass()
     {
@@ -401,20 +401,20 @@ class Acl
     /**
      * Set method
      *
-     * @param string $method
+     * @param  string $method
      * @return Acl
      */
     public function setMethod($method)
     {
         $this->method = $method;
-    
+
         return $this;
     }
 
     /**
      * Get method
      *
-     * @return string 
+     * @return string
      */
     public function getMethod()
     {

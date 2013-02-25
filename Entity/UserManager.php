@@ -7,40 +7,49 @@ use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\User\UserInterface as SecurityUserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 use Doctrine\Common\Persistence\ObjectManager;
 
 use Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleManager;
 
-class UserManager extends FlexibleManager implements UserProviderInterface
+class UserManager implements UserProviderInterface
 {
-    /**
-     * @var EncoderFactoryInterface
-     */
-    protected $encoderFactory;
-
     /**
      * @var string
      */
     protected $class;
 
     /**
+     * @param ObjectManager
+     */
+    protected $om;
+
+    /**
+     * @param FlexibleManager
+     */
+    protected $flexManager;
+
+    /**
+     * @var EncoderFactoryInterface
+     */
+    protected $encoderFactory;
+
+    /**
      * Constructor
      *
-     * @param ContainerInterface      $container      service container
-     * @param string                  $flexibleName   entity name
-     * @param ObjectManager           $storageManager optional storage manager, get default if not provided
+     * @param string                  $class          Entity name
+     * @param ObjectManager           $om             Object manager
+     * @param FlexibleManager         $flexManager    Proxied flexible manager
      * @param EncoderFactoryInterface $encoderFactory
      */
-    public function __construct($flexibleName, $flexibleConfig, ObjectManager $storageManager, EventDispatcherInterface $eventDispatcher, EncoderFactoryInterface $encoderFactory)
+    public function __construct($class, ObjectManager $om, $flexManager, EncoderFactoryInterface $encoderFactory)
     {
-        parent::__construct($flexibleName, $flexibleConfig, $storageManager, $eventDispatcher);
+        $metadata = $om->getClassMetadata($class);
 
-        $metadata = $this->getStorageManager()->getClassMetadata($flexibleName);
-
-        $this->encoderFactory = $encoderFactory;
         $this->class          = $metadata->getName();
+        $this->om             = $om;
+        $this->flexManager    = $flexManager;
+        $this->encoderFactory = $encoderFactory;
     }
 
     /**
@@ -117,7 +126,7 @@ class UserManager extends FlexibleManager implements UserProviderInterface
      */
     public function findUserBy(array $criteria)
     {
-        return $this->getFlexibleRepository()->findOneBy($criteria);
+        return $this->getRepository()->findOneBy($criteria);
     }
 
     /**
@@ -127,7 +136,7 @@ class UserManager extends FlexibleManager implements UserProviderInterface
      */
     public function findUsers()
     {
-        return $this->getFlexibleRepository()->findAll();
+        return $this->getRepository()->findAll();
     }
 
     /**
@@ -261,5 +270,32 @@ class UserManager extends FlexibleManager implements UserProviderInterface
     protected function getEncoder(User $user)
     {
         return $this->encoderFactory->getEncoder($user);
+    }
+
+    /**
+     * Return related repository
+     *
+     * @return Doctrine\Common\Persistence\ObjectRepository
+     */
+    public function getRepository()
+    {
+        return $this->getStorageManager()->getRepository($this->getClass());
+    }
+
+    /**
+     * @return Doctrine\Common\Persistence\ObjectManager
+     */
+    public function getStorageManager()
+    {
+        return $this->om;
+    }
+
+    public function __call($name, $args)
+    {
+        if (method_exists($this->flexManager, $name)) {
+            return call_user_func_array(array($this->flexManager, $name), $args);
+        }
+
+        throw new \RuntimeException(sprintf('Unknown method "%s"', $name));
     }
 }

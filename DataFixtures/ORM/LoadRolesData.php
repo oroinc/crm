@@ -7,7 +7,7 @@ use Doctrine\Common\Persistence\ObjectManager;
 
 use Oro\Bundle\UserBundle\Entity\Role;
 
-class LoadAccessData extends AbstractFixture
+class LoadRolesData extends AbstractFixture
 {
     /**
      * Load roles
