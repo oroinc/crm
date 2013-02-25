@@ -6,9 +6,12 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
+use Doctrine\ORM\EntityRepository;
+
 use Oro\Bundle\FlexibleEntityBundle\Form\Type\FlexibleType;
 use Oro\Bundle\FlexibleEntityBundle\Form\Type\FlexibleValueType;
 use Oro\Bundle\UserBundle\Form\EventListener\ProfileSubscriber;
+use Oro\Bundle\UserBundle\Entity\User;
 
 class ProfileType extends FlexibleType
 {
@@ -37,6 +40,11 @@ class ProfileType extends FlexibleType
                 'label'          => 'Roles',
                 'class'          => 'OroUserBundle:Role',
                 'property'       => 'label',
+                'query_builder' => function(EntityRepository $er) {
+                    return $er->createQueryBuilder('r')
+                        ->where('r.role <> :anon')
+                        ->setParameter('anon', User::ROLE_ANONYMOUS);
+                },
                 'multiple'       => true,
                 'required'       => true,
             ))
