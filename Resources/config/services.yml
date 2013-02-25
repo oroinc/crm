@@ -174,3 +174,8 @@ services:
     oro_user.acl_manager:
         class:                        %oro_user.acl.manager.class%
         arguments:                    ["@doctrine.orm.entity_manager", "@oro_user.acl_reader", "@cache", "@security.context"]
+
+    oro_user.user_menu:
+        class:                        %oro_user.user_menu.builder.class%
+        tags:
+            - { name: oro_menu.builder, alias: usermenu }

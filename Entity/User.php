@@ -22,7 +22,7 @@ use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityFlexible;
  */
 class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Serializable
 {
-    const ROLE_DEFAULT = 'ROLE_USER';
+    const ROLE_DEFAULT   = 'ROLE_USER';
     const ROLE_ANONYMOUS = 'IS_AUTHENTICATED_ANONYMOUSLY';
 
     /**
