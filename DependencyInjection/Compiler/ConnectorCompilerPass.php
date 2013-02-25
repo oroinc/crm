@@ -26,25 +26,20 @@ class ConnectorCompilerPass implements CompilerPassInterface
             return;
         }
 
-        // get registry
-        $definition = $container->getDefinition('oro_dataflow.connectors');
+        $registryDefinition = $container->getDefinition('oro_dataflow.connectors');
+        $taggedJobServices = $container->findTaggedServiceIds('oro_dataflow_job');
 
-        // get jobs
-        $taggedServices = $container->findTaggedServiceIds('oro_dataflow_job');
-
-        // for each tagged service, call addConnector method on dataflow.connectors
-        foreach ($taggedServices as $id => $tagAttributes) {
+        foreach ($taggedJobServices as $jobId => $tagAttributes) {
             foreach ($tagAttributes as $attributes) {
-                // retrieve reference to relevant connector and add job into
                 $connectorId = $attributes['connector'];
                 if (!$container->hasDefinition($connectorId)) {
                     throw new InvalidArgumentException(
                         sprintf('The connector service definition "%s" does not exist.', $connectorId)
                     );
                 }
-                $definition->addMethodCall(
+                $registryDefinition->addMethodCall(
                     'addJobToConnector',
-                    array($connectorId, new Reference($connectorId), $id, new Reference($id))
+                    array($connectorId, new Reference($connectorId), $jobId, new Reference($jobId))
                 );
             }
         }
