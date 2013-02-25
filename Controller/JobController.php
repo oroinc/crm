@@ -67,7 +67,7 @@ class JobController extends Controller
             if ($form->isValid()) {
 
                 // create default configuration
-                if (!$entity->getId()) {
+                if (is_null($entity->getId())) {
                     $service = $this->container->get($entity->getServiceId());
                     $configuration = new Configuration($service->getConfigurationName());
                     $entity->setConfiguration($configuration);
