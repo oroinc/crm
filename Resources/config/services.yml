@@ -1,5 +1,6 @@
 parameters:
     oro_user.manager.class:           Oro\Bundle\UserBundle\Entity\UserManager
+    oro_user.manager.flexible.class:  Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleManager
     oro_user.entity.class:            Oro\Bundle\UserBundle\Entity\User
     oro_user.entity.value.class:      Oro\Bundle\UserBundle\Entity\UserValue
     oro_user.security.provider.class: Oro\Bundle\UserBundle\Security\UserProvider
@@ -21,9 +22,13 @@ parameters:
     oro_user.acl.manager.class:       Oro\Bundle\UserBundle\Acl\Manager
 
 services:
+    oro_user.manager.flexible:
+        class:                        "%oro_user.manager.flexible.class%"
+        arguments:                    [%oro_user.entity.class%, %oro_flexibleentity.flexible_config%, "@doctrine.orm.entity_manager", "@event_dispatcher"]
+
     oro_user.manager:
         class:                        %oro_user.manager.class%
-        arguments:                    [%oro_user.entity.class%, %oro_flexibleentity.flexible_config%, "@doctrine.orm.entity_manager", "@event_dispatcher", "@security.encoder_factory"]
+        arguments:                    [%oro_user.entity.class%, "@doctrine.orm.entity_manager", "@oro_user.manager.flexible", "@security.encoder_factory"]
 
     oro_user.security.provider:
         class:                        %oro_user.security.provider.class%
@@ -141,24 +146,6 @@ services:
         scope:                        request
         arguments:                    ["@oro_user.form.group", "@request", "@doctrine.orm.entity_manager"]
 
-    oro_user.acl_reader:
-        class:                        %oro_user.acl.reader.class%
-        arguments:                    [@kernel, @annotation_reader]
-
-    oro_user.acl_pointcut:
-        class:                        %oro_user.acl.pointcut.class%
-        arguments:                    [@annotation_reader, @logger]
-        tags:
-            - { name: jms_aop.pointcut, interceptor: oro_user.acl_interceptor }
-
-    oro_user.acl_interceptor:
-        class:                        %oro_user.acl.interceptor.class%
-        arguments:                    [@security.context, @logger, @service_container]
-
-    oro_user.acl_manager:
-        class:                        %oro_user.acl.manager.class%
-        arguments:                    [@doctrine.orm.entity_manager, @oro_user.acl_reader, @cache, @security.context]
-
     oro_user.form.handler.group.api:
         class:                        %oro_user.handler.group.class%
         scope:                        request
@@ -168,3 +155,21 @@ services:
         class:                        %oro_user.handler.reset.class%
         scope:                        request
         arguments:                    ["@oro_user.form.reset", "@request", "@oro_user.manager"]
+
+    oro_user.acl_reader:
+        class:                        %oro_user.acl.reader.class%
+        arguments:                    ["@kernel", "@annotation_reader"]
+
+    oro_user.acl_pointcut:
+        class:                        %oro_user.acl.pointcut.class%
+        arguments:                    ["@annotation_reader", "@logger"]
+        tags:
+            - { name: jms_aop.pointcut, interceptor: oro_user.acl_interceptor }
+
+    oro_user.acl_interceptor:
+        class:                        %oro_user.acl.interceptor.class%
+        arguments:                    ["@security.context", "@logger", "@service_container"]
+
+    oro_user.acl_manager:
+        class:                        %oro_user.acl.manager.class%
+        arguments:                    ["@doctrine.orm.entity_manager", "@oro_user.acl_reader", "@cache", "@security.context"]
