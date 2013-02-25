@@ -193,6 +193,7 @@
                 {% block application_menu %}
                 {% endblock application_menu %}
                 <div class="container-fluid">
+                    {% block page_container %}
                     {% block content %}
                         <div class="container" style="background: #fff">
                             <div class="row">
@@ -234,6 +235,7 @@
                             </div>
                         </div>
                     {% endblock content %}
+                    {% endblock page_container %}
                 </div>
             </div>
         </div>
