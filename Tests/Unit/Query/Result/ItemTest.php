@@ -54,4 +54,12 @@ class ItemTest extends \PHPUnit_Framework_TestCase
 
         $this->item->getEntity();
     }
+
+    public function testToArray()
+    {
+        $result = $this->item->toArray();
+        $this->assertEquals('OroTestBundle:test', $result['entity_name']);
+        $this->assertEquals(1, $result['record_id']);
+        $this->assertEquals('test product', $result['record_string']);
+    }
 }

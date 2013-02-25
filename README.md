@@ -85,7 +85,9 @@ is the service name for flexible entity. In search index wheel be indexed all th
 be store in **all_text** virtual field. Additionally, all the fields wheel be stored in fieldName virtual fields.
 
 [Query builder](Resources/doc/query_builder.md)
+
 [API simple search](Resources/doc/simple_search.md)
+
 [API advanced search](Resources/doc/advanced_search.md)
 
 

@@ -43,4 +43,11 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         $this->item->setUpdatedAt(new \DateTime('2013-01-01'));
         $this->assertEquals('2013-01-01', $this->item->getUpdatedAt()->format('Y-m-d'));
     }
+
+    public function testAlias()
+    {
+        $this->assertNull($this->item->getAlias());
+        $this->item->setAlias('test alias');
+        $this->assertEquals('test alias', $this->item->getAlias());
+    }
 }

@@ -50,7 +50,7 @@ class Indexer
     {
         $query =  $this->select()
             ->from('*')
-            ->andWhere('*', '=', $searchString, 'text');
+            ->andWhere(self::TEXT_ALL_DATA_FIELD, '~', $searchString, 'text');
 
         if ($maxResults > 0) {
             $query->setMaxResults($maxResults);

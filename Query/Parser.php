@@ -145,7 +145,7 @@ class Parser
      * @param  type                                 $inputString
      * @return string
      */
-    public function orderBy(Query $query, $inputString)
+    private function orderBy(Query $query, $inputString)
     {
         $orderType = $this->getWord($inputString);
         if (!in_array($orderType, $this->types)) {

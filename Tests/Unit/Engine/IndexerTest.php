@@ -4,6 +4,7 @@ namespace Oro\Bundle\SearchBundle\Tests\Unit\Engine;
 use Doctrine\Common\Persistence\ObjectManager;
 
 use Oro\Bundle\SearchBundle\Engine\Indexer;
+use Oro\Bundle\SearchBundle\Query\Query;
 
 class IndexerTest extends \PHPUnit_Framework_TestCase
 {
@@ -111,5 +112,69 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(array()));
 
         $this->indexService->query($select);
+    }
+
+    /**
+     * Run simple search
+     */
+    public function testSimpleSearch()
+    {
+        $select = $this->indexService->simpleSearch('test', 0, 0);
+        $query = $select->getQuery();
+        $from = $query->getFrom();
+        $searchCondition = $query->getOptions();
+
+        $this->assertEquals('*', $from[0]);
+        $this->assertEquals(Indexer::TEXT_ALL_DATA_FIELD, $searchCondition[0]['fieldName']);
+        $this->assertEquals(Query::OPERATOR_CONTAINS, $searchCondition[0]['condition']);
+        $this->assertEquals('test', $searchCondition[0]['fieldValue']);
+        $this->assertEquals(Query::TYPE_TEXT, $searchCondition[0]['fieldType']);
+        $this->assertEquals(Query::KEYWORD_AND, $searchCondition[0]['type']);
+    }
+
+    /**
+     * Run advanced search
+     */
+    public function testAdvancedSearch()
+    {
+        $select = $this->indexService->advancedSearch(
+            'from (test_product, test_category)
+            where name ~ "test string" and integer count = 10 and decimal price in (10, 12, 15)
+            order_by name offset 10 max_results 5'
+        );
+        $query = $select->getQuery();
+        $from = $query->getFrom();
+        $searchCondition = $query->getOptions();
+
+        $this->assertEquals('test_product', $from[0]);
+        $this->assertEquals('test_category', $from[1]);
+
+        $this->assertEquals('name', $searchCondition[0]['fieldName']);
+        $this->assertEquals(Query::OPERATOR_CONTAINS, $searchCondition[0]['condition']);
+        $this->assertEquals('test string', $searchCondition[0]['fieldValue']);
+        $this->assertEquals(Query::TYPE_TEXT, $searchCondition[0]['fieldType']);
+        $this->assertEquals(Query::KEYWORD_AND, $searchCondition[0]['type']);
+
+        $this->assertEquals('count', $searchCondition[1]['fieldName']);
+        $this->assertEquals(Query::OPERATOR_EQUALS, $searchCondition[1]['condition']);
+        $this->assertEquals(10, $searchCondition[1]['fieldValue']);
+        $this->assertEquals(Query::TYPE_INTEGER, $searchCondition[1]['fieldType']);
+        $this->assertEquals(Query::KEYWORD_AND, $searchCondition[1]['type']);
+
+        $this->assertEquals('price', $searchCondition[2]['fieldName']);
+        $this->assertEquals(Query::OPERATOR_IN, $searchCondition[2]['condition']);
+        $this->assertEquals(10, $searchCondition[2]['fieldValue'][0]);
+        $this->assertEquals(12, $searchCondition[2]['fieldValue'][1]);
+        $this->assertEquals(15, $searchCondition[2]['fieldValue'][2]);
+        $this->assertEquals(Query::TYPE_DECIMAL, $searchCondition[2]['fieldType']);
+        $this->assertEquals(Query::KEYWORD_AND, $searchCondition[2]['type']);
+
+        $this->assertEquals('name', $query->getOrderBy());
+        $this->assertEquals(Query::TYPE_TEXT, $query->getOrderType());
+        $this->assertEquals(Query::ORDER_ASC, $query->getOrderDirection());
+
+        $this->assertEquals(10, $query->getFirstResult());
+
+        $this->assertEquals(5, $query->getMaxResults());
     }
 }

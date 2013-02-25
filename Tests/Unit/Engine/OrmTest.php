@@ -25,6 +25,7 @@ class OrmTest extends \PHPUnit_Framework_TestCase
         $this->container = $this->getMockForAbstractClass('Symfony\Component\DependencyInjection\ContainerInterface');
         $this->mappingConfig =  array(
             'Oro\Bundle\SearchBundle\Tests\Unit\Fixture\Entity\Product' => array(
+                'alias' => 'test_product',
                 'fields' => array(
                     array(
                         'name'          => 'name',
