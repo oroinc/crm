@@ -6,7 +6,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 use Symfony\Component\Form\FormInterface;
-use Oro\Bundle\DataFlowBundle\Entity\Configuration;
+use Oro\Bundle\DataFlowBundle\Entity\RawConfiguration;
 
 /**
  * Configuration controller
@@ -31,17 +31,15 @@ class ConfigurationController extends Controller
      *
      * @return array
      */
-    public function editAction(Configuration $entity)
+    public function editAction(RawConfiguration $entity)
     {
-        $configuration = $entity->deserialize();
-
+        $configuration = $entity->getConfiguration();
         $type = $configuration->getFormTypeServiceId();
         $form = $this->createForm($type, $configuration);
 
         if ($this->getRequest()->getMethod() === 'POST') {
             $form->bind($this->getRequest());
             if ($form->isValid()) {
-                $configuration = $entity->serialize($configuration);
                 $manager = $this->getDoctrine()->getEntityManager();
                 $manager->persist($entity);
                 $manager->flush();

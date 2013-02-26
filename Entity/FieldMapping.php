@@ -12,7 +12,7 @@ use Oro\Bundle\DataFlowBundle\Transform\Mapping\FieldMapping as FieldMappingMode
  * @copyright 2012 Akeneo SAS (http://www.akeneo.com)
  * @license   http://opensource.org/licenses/MIT MIT
  *
- * @ORM\Table(name="oro_dataflow_mapping_field")
+ * @ORM\Table(name="dataflow_mapping_field")
  * @ORM\Entity
  */
 class FieldMapping extends FieldMappingModel

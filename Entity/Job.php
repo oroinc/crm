@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @copyright 2012 Akeneo SAS (http://www.akeneo.com)
  * @license   http://opensource.org/licenses/MIT MIT
  *
- * @ORM\Table(name="oro_dataflow_job")
+ * @ORM\Table(name="dataflow_job")
  * @ORM\Entity()
  */
 class Job
@@ -52,12 +52,12 @@ class Job
     protected $serviceId;
 
     /**
-     * @var Configuration $connectorConfiguration
+     * @var RawConfiguration $connectorConfiguration
      *
-     * @ORM\ManyToOne(targetEntity="Configuration", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(name="configuration_id", referencedColumnName="id", onDelete="CASCADE")
+     * @ORM\ManyToOne(targetEntity="RawConfiguration", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(name="raw_configuration_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected $configuration;
+    protected $rawConfiguration;
 
     /**
      * Get id
@@ -158,13 +158,13 @@ class Job
     /**
      * Set job configuration
      *
-     * @param Configuration $configuration
+     * @param RawConfiguration $configuration
      *
      * @return Job
      */
-    public function setConfiguration(Configuration $configuration)
+    public function setRawConfiguration(RawConfiguration $configuration)
     {
-        $this->configuration = $configuration;
+        $this->rawConfiguration = $configuration;
 
         return $this;
     }
@@ -172,10 +172,10 @@ class Job
     /**
      * Get job configuration
      *
-     * @return Configuration
+     * @return RawConfiguration
      */
-    public function getConfiguration()
+    public function getRawConfiguration()
     {
-        return $this->configuration;
+        return $this->rawConfiguration;
     }
 }

@@ -9,7 +9,7 @@ use Symfony\Component\Form\FormInterface;
 use Oro\Bundle\DataFlowBundle\Form\Type\JobType;
 use Oro\Bundle\DataFlowBundle\Entity\Connector;
 use Oro\Bundle\DataFlowBundle\Entity\Job;
-use Oro\Bundle\DataFlowBundle\Entity\Configuration;
+use Oro\Bundle\DataFlowBundle\Entity\RawConfiguration;
 
 /**
  * Job controller
@@ -58,19 +58,14 @@ class JobController extends Controller
         $connectorToJobIds = $this->container->get('oro_dataflow.connectors')->getConnectorToJobs();
         $connector = $entity->getConnector();
         $serviceIds = $connectorToJobIds[$connector->getServiceId()];
-
         $form = $this->createForm(new JobType(), $entity, array('serviceIds' => $serviceIds));
 
-        // process form
         if ($this->getRequest()->getMethod() === 'POST') {
             $form->bind($this->getRequest());
             if ($form->isValid()) {
 
-                // create default configuration
-                if (is_null($entity->getId())) {
-                    $service = $this->container->get($entity->getServiceId());
-                    $configuration = new Configuration($service->getConfigurationName());
-                    $entity->setConfiguration($configuration);
+                if (is_null($entity->getRawConfiguration())) {
+                    $this->addDefaultConfiguration($entity);
                 }
 
                 $manager = $this->getDoctrine()->getEntityManager();
@@ -85,6 +80,18 @@ class JobController extends Controller
         }
 
         return array('form' => $form->createView(), 'job' => $entity, 'connector' => $connector);
+    }
+
+    /**
+     * Add a default configuration
+     *
+     * @param Job $entity
+     */
+    protected function addDefaultConfiguration(Job $entity)
+    {
+        $service = $this->container->get($entity->getServiceId());
+        $configurationClassName = $service->getConfigurationName();
+        $entity->setRawConfiguration(new RawConfiguration(new $configurationClassName()));
     }
 
     /**

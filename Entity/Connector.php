@@ -11,7 +11,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @copyright 2012 Akeneo SAS (http://www.akeneo.com)
  * @license   http://opensource.org/licenses/MIT MIT
  *
- * @ORM\Table(name="oro_dataflow_connector")
+ * @ORM\Table(name="dataflow_connector")
  * @ORM\Entity()
  */
 class Connector
@@ -45,12 +45,12 @@ class Connector
     protected $description;
 
     /**
-     * @var Configuration $configuration
+     * @var RawConfiguration $configuration
      *
-     * @ORM\ManyToOne(targetEntity="Configuration", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(name="configuration_id", referencedColumnName="id", onDelete="CASCADE")
+     * @ORM\ManyToOne(targetEntity="RawConfiguration", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(name="raw_configuration_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    protected $configuration;
+    protected $rawConfiguration;
 
     /**
      * @var Value
@@ -142,13 +142,13 @@ class Connector
     /**
      * Set connector configuration
      *
-     * @param Configuration $configuration
+     * @param RawConfiguration $configuration
      *
      * @return Connector
      */
-    public function setConfiguration(Configuration $configuration)
+    public function setRawConfiguration(RawConfiguration $configuration)
     {
-        $this->configuration = $configuration;
+        $this->rawConfiguration = $configuration;
 
         return $this;
     }
@@ -156,11 +156,11 @@ class Connector
     /**
      * Get connector configuration
      *
-     * @return Configuration
+     * @return RawConfiguration
      */
-    public function getConfiguration()
+    public function getRawConfiguration()
     {
-        return $this->configuration;
+        return $this->rawConfiguration;
     }
 
     /**

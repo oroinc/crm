@@ -1,7 +1,7 @@
 <?php
 namespace Oro\Bundle\DataFlowBundle\Tests\Entity;
 
-use Oro\Bundle\DataFlowBundle\Entity\Configuration;
+use Oro\Bundle\DataFlowBundle\Entity\RawConfiguration;
 use Oro\Bundle\DataFlowBundle\Entity\Connector;
 use Oro\Bundle\DataFlowBundle\Entity\Job;
 
@@ -36,16 +36,16 @@ class ConnectorTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertNull($this->connector->getId());
         $this->assertNull($this->connector->getServiceId());
-        $this->assertNull($this->connector->getConfiguration());
+        $this->assertNull($this->connector->getRawConfiguration());
 
         $this->connector->setServiceId('my.connector.id');
         $this->connector->setId(1);
         $this->connector->setDescription('my description');
-        $configuration = new Configuration();
+        $configuration = new RawConfiguration();
+        $this->connector->setRawConfiguration($configuration);
 
-        $this->connector->setConfiguration($configuration);
         $this->assertEquals($this->connector->getServiceId(), 'my.connector.id');
-        $this->assertEquals($this->connector->getConfiguration(), $configuration);
+        $this->assertEquals($this->connector->getRawConfiguration(), $configuration);
         $this->assertEquals($this->connector->getDescription(), 'my description');
     }
 

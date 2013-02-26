@@ -8,7 +8,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\Form\FormInterface;
 use Oro\Bundle\DataFlowBundle\Form\Type\ConnectorType;
 use Oro\Bundle\DataFlowBundle\Entity\Connector;
-use Oro\Bundle\DataFlowBundle\Entity\Configuration;
+use Oro\Bundle\DataFlowBundle\Entity\RawConfiguration;
 
 /**
  * Connector controller
@@ -74,11 +74,8 @@ class ConnectorController extends Controller
             $form->bind($this->getRequest());
             if ($form->isValid()) {
 
-                // create default configuration
-                if (is_null($entity->getId())) {
-                    $service = $this->container->get($entity->getServiceId());
-                    $configuration = new Configuration($service->getConfigurationName());
-                    $entity->setConfiguration($configuration);
+                if (is_null($entity->getRawConfiguration())) {
+                    $this->addDefaultConfiguration($entity);
                 }
 
                 $manager = $this->getDoctrine()->getEntityManager();
@@ -93,6 +90,18 @@ class ConnectorController extends Controller
         }
 
         return array('form' => $form->createView(), 'connector' => $entity);
+    }
+
+    /**
+     * Add a default configuration
+     *
+     * @param Connector $entity
+     */
+    protected function addDefaultConfiguration(Connector $entity)
+    {
+        $service = $this->container->get($entity->getServiceId());
+        $configurationClassName = $service->getConfigurationName();
+        $entity->setRawConfiguration(new RawConfiguration(new $configurationClassName()));
     }
 
     /**

@@ -35,7 +35,7 @@
                     <td>Connector</td>
                     <td>{{ (connector.serviceId ~ ".label") | trans }}</td>
                     <td><a href="{{ path('oro_dataflow_connector_edit', {'id': connector.id}) }}"><i class="icon-edit"></i></a></td>
-                    <td><a href="{{ path('oro_dataflow_configuration_edit', {'id': connector.configuration.id}) }}"><i class="icon-wrench"></i></a></td>
+                    <td><a href="{{ path('oro_dataflow_configuration_edit', {'id': connector.rawConfiguration.id}) }}"><i class="icon-wrench"></i></a></td>
                     <td><a href="{{ path('oro_dataflow_connector_remove', {'id': connector.id}) }}"><i class="icon-remove"></i></a></td>
                     <td><a href="{{ path('oro_dataflow_job_create', {'id': connector.id}) }}"><i class="icon-plus"></i></a></td>
                     <td><a href="{{ path('oro_dataflow_connector_run', {'id': connector.id}) }}"><i class="icon-play"></i></a></td>
@@ -47,7 +47,7 @@
                         <td>Job</td>
                         <td>{{ (job.serviceId ~ ".label") | trans }}</td>
                         <td><a href="{{ path('oro_dataflow_job_edit', {'id': job.id}) }}"><i class="icon-edit"></i></a></td>
-                        <td><a href="{{ path('oro_dataflow_configuration_edit', {'id': job.configuration.id}) }}"><i class="icon-wrench"></i></a></td>
+                        <td><a href="{{ path('oro_dataflow_configuration_edit', {'id': job.rawConfiguration.id}) }}"><i class="icon-wrench"></i></a></td>
                         <td><a href="{{ path('oro_dataflow_job_remove', {'id': job.id}) }}"><i class="icon-remove"></i></a></td>
                         <td></td>
                         <td></td>
