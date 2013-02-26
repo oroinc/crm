@@ -43,6 +43,10 @@ class Indexer
         $this->adapter = $adapter;
         $this->em = $em;
         $this->translator = $translator;
+
+        foreach($this->mappingConfig as $entity=> $config) {
+            $this->mappingConfig[$entity]['label'] = $this->translator->trans($config['label']);
+        }
     }
 
     /**
@@ -56,7 +60,7 @@ class Indexer
         foreach ($this->mappingConfig as $mappingEntity) {
             $entities[] = array(
                 'alias' => $mappingEntity['alias'],
-                'label' => $this->translator->trans($mappingEntity['label']),
+                'label' => $mappingEntity['label'],
             );
         }
 

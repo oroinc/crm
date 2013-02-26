@@ -27,35 +27,22 @@ class OroSearchExtension extends Extension
         $config = $this->processConfiguration($configuration, $configs);
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
 
-        if (count($config['entities_config'])) {
-            $this->remapParameters(
-                $config,
-                $container,
-                array(
-                     'entities_config' => 'oro_search.entities_config'
-                )
-            );
-        } elseif (count($config['config_paths'])) {
-            $entitiesConfig = array();
-
-            foreach ($config['config_paths'] as $configPath) {
-                $entitiesConfig += Yaml::parse($configPath);
-            }
-
-            $container->setParameter('oro_search.entities_config', $entitiesConfig);
-        } else {
-            $entitiesConfig = array();
-
-            foreach ($container->getParameter('kernel.bundles') as $bundle) {
-                $reflection = new \ReflectionClass($bundle);
-
-                if (is_file($file = dirname($reflection->getFilename()).'/Resources/config/search.yml')) {
-                    $entitiesConfig += Yaml::parse(realpath($file));
+        $entitiesConfig = $config['entities_config'];
+        if (!count($entitiesConfig)) {
+            if (count($config['config_paths'])) {
+                foreach ($config['config_paths'] as $configPath) {
+                    $entitiesConfig += Yaml::parse($configPath);
                 }
-
-                $container->setParameter('oro_search.entities_config', $entitiesConfig);
+            } else {
+                foreach ($container->getParameter('kernel.bundles') as $bundle) {
+                    $reflection = new \ReflectionClass($bundle);
+                    if (is_file($file = dirname($reflection->getFilename()).'/Resources/config/search.yml')) {
+                        $entitiesConfig += Yaml::parse(realpath($file));
+                    }
+                }
             }
         }
+        $container->setParameter('oro_search.entities_config', $entitiesConfig);
 
         $loader->load('engine/' . $config['engine'] . '.yml');
 

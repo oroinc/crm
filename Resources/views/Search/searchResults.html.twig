@@ -21,7 +21,7 @@
     {% if searchResults.count > 0 %}
         {% for searchResult in searchResults %}
             <div class="alert alert-success">
-                {{ searchResult.entityName }}, id: {{ searchResult.recordId }}
+                <p><strong>{{ searchResult.entityConfig.label }}</strong></p>
                 <h3><a href="{{ searchResult.recordUrl }}">{{ searchResult.recordTitle }}</a></h3>
                 {{ searchResult.recordText|highlight(searchString)|raw }}
             </div>

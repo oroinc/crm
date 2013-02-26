@@ -41,6 +41,11 @@ class Item
     protected $recordText;
 
     /**
+     * @var array
+     */
+    protected $entityConfig;
+
+    /**
      * @var \Doctrine\Common\Persistence\ObjectManager
      * @Exclude
      */
@@ -52,7 +57,8 @@ class Item
         $recordId = 0,
         $recordTitle = null,
         $recordUrl = null,
-        $recordText
+        $recordText,
+        $entityConfig
     )
     {
         $this->em = $em;
@@ -65,6 +71,7 @@ class Item
         $this->recordTitle = $recordTitle;
         $this->recordUrl = $recordUrl;
         $this->recordText = $recordText;
+        $this->entityConfig = $entityConfig;
     }
 
     /**
@@ -195,6 +202,16 @@ class Item
     }
 
     /**
+     * Get entity mapping config array
+     *
+     * @return array
+     */
+    public function getEntityConfig()
+    {
+        return $this->entityConfig;
+    }
+
+    /**
      * @return array
      */
     public function toArray()
@@ -204,6 +221,7 @@ class Item
             'record_id' => $this->recordId,
             'record_string' => $this->getRecordTitle(),
             'record_url' => $this->getRecordUrl(),
+            'entity_type' => $this->entityConfig['label'],
         );
     }
 }

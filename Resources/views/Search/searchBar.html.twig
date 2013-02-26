@@ -38,10 +38,12 @@
                             for (var i = 0; i < data['count']; i++) {
                                 jQuery('.custom-dropdown ul').append(
                                     '<li>'
-                                    +       '<a href="'+data['data'][i]['record_url']+'">' +
-                                            '<span class="name">' + data['data'][i]['record_string']
-                                    + '</span></a>' +
-                                    '</li>'
+                                    + '<a href="'+data['data'][i]['record_url']+'">'
+                                    + '<span class="name"><strong>' + data['data'][i]['record_string']+ '</strong></span>'
+
+                                    + '</a> <br/>'
+                                    + data['data'][i]['entity_type']
+                                    +'</li>'
                                 );
                             }
                             jQuery("#search-div").addClass('header-search-focused');

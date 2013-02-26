@@ -43,6 +43,12 @@ class Orm extends AbstractEngine
         $this->container = $container;
         $this->em = $em;
         $this->mappingConfig = $mappingConfig;
+
+        //todo: set translated mappingConfig only once
+        $translator = $container->get('translator');
+        foreach($this->mappingConfig as $entity=> $config) {
+            $this->mappingConfig[$entity]['label'] = $translator->trans($config['label']);
+        }
     }
 
     /**
@@ -201,7 +207,8 @@ class Orm extends AbstractEngine
                     $item->getRecordId(),
                     $item->getTitle(),
                     $item->getUrl(),
-                    $item->getRecordText()
+                    $item->getRecordText(),
+                    $this->mappingConfig[$item->getEntity()]
                 );
             }
         }
