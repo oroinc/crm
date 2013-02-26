@@ -4,7 +4,7 @@ namespace Oro\Bundle\UserBundle\Controller\Api\Soap;
 
 use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 
-use Oro\Bundle\UserBundle\Entity\User;
+use Oro\Bundle\UserBundle\Entity\UserSoap;
 
 class ProfileController extends BaseController
 {
@@ -57,7 +57,7 @@ class ProfileController extends BaseController
     /**
      * @Soap\Method("updateUser")
      * @Soap\Param("id", phpType = "int")
-     * @Soap\Param("profile", phpType = "\Oro\Bundle\UserBundle\Entity\User")
+     * @Soap\Param("profile", phpType = "\Oro\Bundle\UserBundle\Entity\UserSoap")
      * @Soap\Result(phpType = "boolean")
      */
     public function updateAction($id, $profile)

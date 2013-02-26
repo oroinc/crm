@@ -4,6 +4,8 @@ namespace Oro\Bundle\UserBundle\Entity;
 
 use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 
+use JMS\Serializer\Annotation\Exclude;
+
 class UserSoap extends User
 {
     /**
@@ -35,6 +37,11 @@ class UserSoap extends User
      * @Soap\ComplexType("dateTime", nillable=true)
      */
     protected $lastLogin;
+
+    /**
+     * @Exclude
+     */
+    protected $roles;
 
     /**
      * @Soap\ComplexType("int[]", nillable=true)
