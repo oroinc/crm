@@ -20,6 +20,6 @@ class MailType extends AbstractAttributeType
     {
         $this->name        = 'E-mail';
         $this->backendType = self::BACKEND_TYPE_VARCHAR;
-        $this->formType    = 'mail';
+        $this->formType    = 'email';
     }
 }
