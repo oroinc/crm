@@ -1,4 +1,6 @@
 {% extends "OroUIBundle:Default:index.html.twig" %}
+{% block header %}
+{% endblock %}
 {% block content %}
     <div class="container-fluid" >
     <div class="row-fluid one-column">
@@ -14,25 +16,25 @@
             <div class="clearfix">
                 <div class="input-prepend">
                     <span class="add-on">@</span>
-                    <input class="span2" id="prependedInput" type="text" placeholder="input-prepend" />
+                    <input class="span10" id="prependedInput" type="text" placeholder="input-prepend" />
                 </div>
             </div>
             <div class="clearfix">
                 <div class="input-prepend input-append">
                     <span class="add-on">$</span>
-                    <input class="span2" id="appendedPrependedInput" type="text" placeholder="Combined" />
+                    <input class="span8" id="appendedPrependedInput" type="text" placeholder="Combined" />
                     <span class="add-on">.00</span>
                 </div>
             </div>
             <div class="clearfix">
                 <div class="input-append">
-                    <input class="span2" id="appendedInput" type="text" placeholder="input-append">
+                    <input class="span10" id="appendedInput" type="text" placeholder="input-append">
                     <span class="add-on">.00</span>
                 </div>
             </div>
             <div class="clearfix">
                 <div class="input-append">
-                    <input class="span2" id="appendedInputButtons" type="text">
+                    <input class="span8" id="appendedInputButtons" type="text">
                     <button class="btn" type="button">Search</button>
                     <button class="btn" type="button">Options</button>
                 </div>
@@ -89,7 +91,7 @@
             <hr />
             <div class="clearfix">
                 <div class="input-append">
-                    <input class="span2" id="appendedDropdownButton" type="text">
+                    <input class="span10" id="appendedDropdownButton" type="text">
                     <div class="btn-group">
                         <button class="btn dropdown-toggle" data-toggle="dropdown">
                             Action

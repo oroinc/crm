@@ -4,36 +4,38 @@
     <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>
     <script type="text/javascript" src="{{ asset('bundles/oroui/lib/jquery.dialogextend.1_0_1.js') }}"></script>
 {% endblock head %}
+{% block header %}
+{% endblock %}
 {% block content %}
     <script type="text/javascript">console.clear();</script>{# this is debag code#}
-    <div class="container-fluid">
-        <div class="row-fluid">
-            <div class="container-fluid">
-                <button type="button" id="my-button" class="btn btn-large btn-primary">Open more windows</button>
-                <hr />
-                <div class="btn-toolbar">
-                    <div class="btn-group">
-                        <button id="opener1" class="btn">Open window 1</button>
-                        <button id="opener2" class="btn">Open window 2</button>
-                        <button id="opener3" class="btn">Open window 3</button>
-                    </div>
+
+    <div class="row-fluid">
+        <div class="container-fluid">
+            <button type="button" id="my-button" class="btn btn-large btn-primary">Open more windows</button>
+            <hr />
+            <div class="btn-toolbar">
+                <div class="btn-group">
+                    <button id="opener1" class="btn">Open window 1</button>
+                    <button id="opener2" class="btn">Open window 2</button>
+                    <button id="opener3" class="btn">Open window 3</button>
                 </div>
-                <div id="opener-content1" style="display: none;">
-                    <p>v quam eu pellentesque. Nam euismod, lectus sit amet tristique imperdiet, metus ligula gravida felis, non dapibus nulla sem a magna.</p>
-                </div>
-                <div id="opener-content2" style="display: none;">
-                    <p>Fusce hendrerit lacinia ligula.</p>
-                    <p>Donec a tincidunt nisi.</p>
-                    <p> Cras eu velit sed nibh feugiat congue lacinia ut urna. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.</p>
-                </div>
-                <div id="opener-content3" style="display: none;">
-                    <p>v quam eu pellentesque. Nam euismod, lectus sit amet tristique imperdiet, metus ligula gravida felis, non dapibus nulla sem a magna.</p>
-                    <p>habitasse platea dictumst. Donec elementum vulputate imperdiet. Fusce sed lectus odio. Etiam cursus fermentum ornare. Phasellus facilisis t</p>
-                    <p> Quisque nec lobortis leo.</p>
-                </div>
+            </div>
+            <div id="opener-content1" style="display: none;">
+                <p>v quam eu pellentesque. Nam euismod, lectus sit amet tristique imperdiet, metus ligula gravida felis, non dapibus nulla sem a magna.</p>
+            </div>
+            <div id="opener-content2" style="display: none;">
+                <p>Fusce hendrerit lacinia ligula.</p>
+                <p>Donec a tincidunt nisi.</p>
+                <p> Cras eu velit sed nibh feugiat congue lacinia ut urna. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.</p>
+            </div>
+            <div id="opener-content3" style="display: none;">
+                <p>v quam eu pellentesque. Nam euismod, lectus sit amet tristique imperdiet, metus ligula gravida felis, non dapibus nulla sem a magna.</p>
+                <p>habitasse platea dictumst. Donec elementum vulputate imperdiet. Fusce sed lectus odio. Etiam cursus fermentum ornare. Phasellus facilisis t</p>
+                <p> Quisque nec lobortis leo.</p>
             </div>
         </div>
     </div>
+
     <script>
         $(function(){
             var positionNextWindowY = 0;

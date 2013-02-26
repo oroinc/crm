@@ -55,3 +55,35 @@ header .container{
     padding-top: 0;
     line-height: 25px;
 }
+#page{
+    display: block;
+}
+.filter-box{
+    display: block;
+    width: 100%;
+}
+table.grid{
+}
+.filter-box .btn-group{
+    float: left;
+}
+.list-bar{
+    width: 100%;
+}
+* +html .list-bar li{
+    display: inline;
+    float: left;
+    position: relative;
+    padding-right: 15px;
+}
+* +html .list-bar a.btn-close{
+    float: left;
+    position: absolute;
+    right: 5px;
+    top: 0;
+}
+*+html .caret{
+    position: relative;
+    top: -5px !important;
+    right: -2px;
+}
