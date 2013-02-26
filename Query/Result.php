@@ -33,6 +33,7 @@ class Result extends ArrayCollection
 
     /**
      * @Soap\ComplexType("Oro\Bundle\SearchBundle\Query\Result\Item[]")
+     * @var \Oro\Bundle\SearchBundle\Query\Result\Item[]
      */
     public $elements;
 

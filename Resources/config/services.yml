@@ -4,7 +4,7 @@
 services:
     oro_search.index:
         class:        Oro\Bundle\SearchBundle\Engine\Indexer
-        arguments:    ["@doctrine.orm.entity_manager", "@oro_search.search.engine", %oro_search.entities_config%]
+        arguments:    ["@doctrine.orm.entity_manager", "@oro_search.search.engine", "@translator", %oro_search.entities_config%]
 
     oro_search.index_listener:
         class:        Oro\Bundle\SearchBundle\EventListener\IndexListener
@@ -13,3 +13,9 @@ services:
             - { name: doctrine.event_listener, event: postPersist }
             - { name: doctrine.event_listener, event: postUpdate }
             - { name: doctrine.event_listener, event: preRemove }
+
+
+    oro_search.twig.highlight_extension:
+        class:        Oro\Bundle\SearchBundle\Twig\HighlightExtension
+        tags:
+            - { name: twig.extension }

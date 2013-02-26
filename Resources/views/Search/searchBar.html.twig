@@ -1,0 +1,57 @@
+<form method="get" action="{{ path('oro_search_results') }}" style="margin: 0">
+    <div id="search-div" class="input-append input-prepend pull-left header-search">
+        <div class="btn-group">
+            <select class="dropdown-toggle" name="from">
+                <option value="">All</option>
+                {% for entity in entities %}
+                    <option value="{{ entity.alias }}">{{ entity.label }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <input type="text" id="search" class="span2" name="search"/>
+        <button type="submit" class="btn btn-search">Search</button>
+        <div class="custom-dropdown">
+            <ul>
+            </ul>
+        </div>
+    </div>
+</form>
+<script type="text/javascript">
+    jQuery(document).ready(function() {
+        jQuery("#search").keyup(function () {
+            var queryString = jQuery(this).val();
+            if (queryString == '' || queryString.length < 3) {
+                jQuery("#search-div").removeClass('header-search-focused');
+                jQuery('.custom-dropdown ul li').remove();
+            } else {
+                jQuery.ajax({
+                    url:"{{ path('oro_api_get_search') }}",
+                    dataType:"json",
+                    data:{
+                        search:queryString
+                    },
+                    success:function (data) {
+                        jQuery("#search-div").removeClass('header-search-focused');
+                        jQuery('.custom-dropdown ul li').remove();
+                        $("#recordsCount").val(data['records_count']);
+                        if (data['count'] > 0) {
+                            for (var i = 0; i < data['count']; i++) {
+                                jQuery('.custom-dropdown ul').append(
+                                    '<li>'
+                                    +       '<a href="'+data['data'][i]['record_url']+'">' +
+                                            '<span class="name">' + data['data'][i]['record_string']
+                                    + '</span></a>' +
+                                    '</li>'
+                                );
+                            }
+                            jQuery("#search-div").addClass('header-search-focused');
+                        }
+                    }
+                });
+            }
+        });
+        jQuery("#search-div").focusout(function(){
+            jQuery("#search-div").removeClass('header-search-focused');
+        });
+    });
+</script>

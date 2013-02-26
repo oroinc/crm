@@ -110,7 +110,9 @@ class Orm extends AbstractEngine
             $item->setChanged(!$realtime);
 
             if ($realtime) {
-                $item->saveItemData($data);
+                $item->setTitle($this->getEntityTitle($entity))
+                    ->setUrl($this->getEntityUrl($entity))
+                    ->saveItemData($data);
             } else {
                 $this->reindexJob();
             }
@@ -193,7 +195,14 @@ class Orm extends AbstractEngine
         if ($searchResults) {
             foreach ($searchResults as $item) {
                 /** @var $item \Oro\Bundle\SearchBundle\Entity\Item  */
-                $results[] = new ResultItem($this->em, $item->getEntity(), $item->getRecordId());
+                $results[] = new ResultItem(
+                    $this->em,
+                    $item->getEntity(),
+                    $item->getRecordId(),
+                    $item->getTitle(),
+                    $item->getUrl(),
+                    $item->getRecordText()
+                );
             }
         }
 
@@ -430,5 +439,46 @@ class Orm extends AbstractEngine
         }
 
         return $this->jobRepo;
+    }
+
+    /**
+     * Get url for entity
+     *
+     * @param object $entity
+     *
+     * @return string
+     */
+    protected function getEntityUrl($entity)
+    {
+        $routeParameters = $this->mappingConfig[get_class($entity)]['route'];
+        $routeData = array();
+        foreach ($routeParameters['parameters'] as $parameter => $field) {
+            $routeData[$parameter] = $this->getFieldValue($entity, $field);
+        }
+
+        return $this->container->get('router')->generate(
+            $routeParameters['name'],
+            $routeData,
+            true
+        );
+    }
+
+    /**
+     * Get entity string
+     *
+     * @param object $entity
+     *
+     * @return string
+     */
+    protected function getEntityTitle($entity)
+    {
+        $fields = $this->mappingConfig[get_class($entity)]['title_fields'];
+        $title = array();
+        foreach ($fields as $field)
+        {
+            $title[] = $this->getFieldValue($entity, $field);
+        }
+
+        return implode(' ', $title);
     }
 }

@@ -1,0 +1,32 @@
+{% extends bap.layout %}
+
+{% block title %}{% trans %}Search results{% endtrans %} - {{ parent() }}{% endblock %}
+
+{% block content %}
+    <h2>{% trans %}Search results{% endtrans %}</h2>
+
+    <form method="get" action="{{ path('oro_search_results') }}" class="form-inline">
+        <select name="from">
+            <option value="">{% trans %}All{% endtrans %}</option>
+            {% for entity in entities %}
+                <option value="{{ entity.alias }}" {% if entity.alias == from %}selected="selected"{% endif %}>
+                    {{ entity.label }}
+                </option>
+            {% endfor %}
+        </select>
+        <input type="text" id="search" class="span2" name="search" value="{{ searchString }}"/>
+        <button type="submit" class="btn btn-search">Search</button>
+    </form>
+
+    {% if searchResults.count > 0 %}
+        {% for searchResult in searchResults %}
+            <div class="alert alert-success">
+                {{ searchResult.entityName }}, id: {{ searchResult.recordId }}
+                <h3><a href="{{ searchResult.recordUrl }}">{{ searchResult.recordTitle }}</a></h3>
+                {{ searchResult.recordText|highlight(searchString)|raw }}
+            </div>
+        {% endfor %}
+    {% else %}
+        <h2>{% trans %}Sorry, where are no results for Your request{% endtrans %}</h2>
+    {% endif %}
+{% endblock %}

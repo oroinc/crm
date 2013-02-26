@@ -24,18 +24,36 @@ class Item
     protected $recordId;
 
     /**
+     * @Soap\ComplexType("string")
+     * @var string
+     */
+    protected $recordTitle;
+
+    /**
+     * @Soap\ComplexType("string")
+     * @var string
+     */
+    protected $recordUrl;
+
+    /**
+     * @var string
+     */
+    protected $recordText;
+
+    /**
      * @var \Doctrine\Common\Persistence\ObjectManager
      * @Exclude
      */
     protected $em;
 
-    /**
-     * @Exclude
-     * @Soap\ComplexType("string")
-     */
-    protected $recordString;
-
-    public function __construct(ObjectManager $em, $entityName = null, $recordId = 0)
+    public function __construct(
+        ObjectManager $em,
+        $entityName = null,
+        $recordId = 0,
+        $recordTitle = null,
+        $recordUrl = null,
+        $recordText
+    )
     {
         $this->em = $em;
         if ($entityName) {
@@ -44,7 +62,9 @@ class Item
         if ($recordId) {
             $this->setRecordId($recordId);
         }
-        $this->recordString = $this->getEntity()->__toString();
+        $this->recordTitle = $recordTitle;
+        $this->recordUrl = $recordUrl;
+        $this->recordText = $recordText;
     }
 
     /**
@@ -103,6 +123,78 @@ class Item
     }
 
     /**
+     * Set record title
+     *
+     * @param string $recordTitle
+     *
+     * @return Item
+     */
+    public function setRecordTitle($recordTitle)
+    {
+        $this->recordTitle = $recordTitle;
+
+        return $this;
+    }
+
+    /**
+     * Get record string
+     *
+     * @return string
+     */
+    public function getRecordTitle()
+    {
+        return $this->recordTitle;
+    }
+
+    /**
+     * Set record string
+     *
+     * @param string $recordUrl
+     *
+     * @return Item
+     */
+    public function setRecordUrl($recordUrl)
+    {
+        $this->recordUrl = $recordUrl;
+
+        return $this;
+    }
+
+    /**
+     * Get record url
+     *
+     * @return string
+     */
+    public function getRecordUrl()
+    {
+        return $this->recordUrl;
+    }
+
+    /**
+     * Set record string data
+     *
+     * @param string $recordText
+     *
+     * @return Item
+     */
+    public function setRecordText($recordText)
+    {
+        $this->recordText = $recordText;
+
+        return $this;
+    }
+
+    /**
+     * Get record string data
+     *
+     * @return string
+     */
+    public function getRecordText()
+    {
+        return $this->recordText;
+    }
+
+    /**
      * @return array
      */
     public function toArray()
@@ -110,7 +202,8 @@ class Item
         return array(
             'entity_name' => $this->entityName,
             'record_id' => $this->recordId,
-            'record_string' => $this->getEntity()->__toString()
+            'record_string' => $this->getRecordTitle(),
+            'record_url' => $this->getRecordUrl(),
         );
     }
 }

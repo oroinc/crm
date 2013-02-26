@@ -8,6 +8,7 @@ use Doctrine\ORM\Query\AST\Functions\FunctionNode;
 use Doctrine\ORM\EntityManager;
 
 use Oro\Bundle\SearchBundle\Query\Query;
+use Oro\Bundle\SearchBundle\Engine\Indexer;
 
 abstract class BaseDriver extends FunctionNode
 {
@@ -219,7 +220,11 @@ abstract class BaseDriver extends FunctionNode
      */
     protected function getRequestQB(Query $query)
     {
-        $qb = $this->createQueryBuilder('search');
+        $qb = $this->createQueryBuilder('search')
+            ->select(array('search', 'text'))
+            ->leftJoin('search.textFields', 'text', 'WITH', 'text.field = :allTextField')
+            ->setParameter('allTextField', Indexer::TEXT_ALL_DATA_FIELD);
+
         $useFrom = true;
         foreach ($query->getFrom() as $from) {
             if ($from == '*') {

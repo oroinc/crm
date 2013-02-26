@@ -48,7 +48,9 @@ class ReindexCommand extends ContainerAwareCommand
 
             if ($entity) {
                 $item->setChanged(false)
-                     ->saveItemData($orm->mapObject($entity));
+                    ->setTitle($this->getEntityTitle($entity))
+                    ->setUrl($this->getEntityUrl($entity))
+                    ->saveItemData($orm->mapObject($entity));
             } else {
                 $em->remove($item);
             }

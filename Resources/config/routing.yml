@@ -1,3 +1,8 @@
+oro_search:
+    resource:     "@OroSearchBundle/Controller"
+    type:         annotation
+    prefix:       /search
+
 oro_search_api:
     resource: Oro\Bundle\SearchBundle\Controller\Api\SearchController
     type: rest

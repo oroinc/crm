@@ -3,6 +3,7 @@
 namespace Oro\Bundle\SearchBundle\Engine;
 
 use Doctrine\Common\Persistence\ObjectManager;
+use Symfony\Component\Translation\Translator;
 
 use Oro\Bundle\SearchBundle\Query\Query;
 use Oro\Bundle\SearchBundle\Query\Parser;
@@ -26,31 +27,61 @@ class Indexer
      */
     protected $mappingConfig;
 
-    /*
-     *
-    * @var \Doctrine\Common\Persistence\ObjectManager
-    */
+    /**
+     * @var \Doctrine\Common\Persistence\ObjectManager
+     */
     private $em;
 
-    public function __construct(ObjectManager $em, $adapter, $mappingConfig)
+    /**
+     * @var \Symfony\Component\Translation\Translator
+     */
+    private $translator;
+
+    public function __construct(ObjectManager $em, $adapter, Translator $translator, $mappingConfig)
     {
         $this->mappingConfig = $mappingConfig;
         $this->adapter = $adapter;
         $this->em = $em;
+        $this->translator = $translator;
+    }
+
+    /**
+     * Get array with entities aliases and labels
+     *
+     * @return array
+     */
+    public function getEntitiesLabels()
+    {
+        $entities = array();
+        foreach ($this->mappingConfig as $mappingEntity) {
+            $entities[] = array(
+                'alias' => $mappingEntity['alias'],
+                'label' => $this->translator->trans($mappingEntity['label']),
+            );
+        }
+
+        return $entities;
     }
 
     /**
      * @param string  $searchString
      * @param integer $offset
      * @param integer $maxResults
+     * @param string  $from
      *
      * @return \Oro\Bundle\SearchBundle\Query\Result
      */
-    public function simpleSearch($searchString, $offset, $maxResults)
+    public function simpleSearch($searchString, $offset = 0, $maxResults = 0, $from = null)
     {
-        $query =  $this->select()
-            ->from('*')
-            ->andWhere(self::TEXT_ALL_DATA_FIELD, '~', $searchString, 'text');
+        $query =  $this->select();
+
+        if ($from) {
+            $query->from($from);
+        } else {
+            $query->from('*');
+        }
+
+        $query->andWhere(self::TEXT_ALL_DATA_FIELD, '~', $searchString, 'text');
 
         if ($maxResults > 0) {
             $query->setMaxResults($maxResults);

@@ -5,6 +5,8 @@ namespace Oro\Bundle\SearchBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 
+use Oro\Bundle\SearchBundle\Engine\Indexer;
+
 /**
  * Search index items that correspond to specific entity record
  *
@@ -47,6 +49,18 @@ class Item
      * @ORM\Column(name="record_id", type="integer")
      */
     protected $recordId;
+
+    /**
+     * @var string $url
+     * @ORM\Column(name="url", type="string", length=255)
+     */
+    protected $url;
+
+    /**
+     * @var string $title
+     * @ORM\Column(name="title", type="string", length=255)
+     */
+    protected $title;
 
     /**
      * @var bool $changed
@@ -387,6 +401,8 @@ class Item
      * Save index item data
      *
      * @param array $objectData
+     *
+     * @return Item
      */
     public function saveItemData($objectData)
     {
@@ -402,6 +418,8 @@ class Item
         if (isset($objectData['decimal']) && count($objectData['decimal'])) {
             $this->saveDecimalData($objectData['decimal']);
         }
+
+        return $this;
     }
 
     /**
@@ -591,5 +609,60 @@ class Item
     public function getAlias()
     {
         return $this->alias;
+    }
+
+    /**
+     * Set url
+     *
+     * @param string $url
+     * @return Item
+     */
+    public function setUrl($url)
+    {
+        $this->url = $url;
+    
+        return $this;
+    }
+
+    /**
+     * Get url
+     *
+     * @return string 
+     */
+    public function getUrl()
+    {
+        return $this->url;
+    }
+
+    /**
+     * Set title
+     *
+     * @param string $title
+     * @return Item
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
+    
+        return $this;
+    }
+
+    /**
+     * Get title
+     *
+     * @return string 
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    public function getRecordText()
+    {
+        foreach ($this->textFields as $textField) {
+            if ($textField->getField() == Indexer::TEXT_ALL_DATA_FIELD) {
+                return $textField->getValue();
+            }
+        }
     }
 }
