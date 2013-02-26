@@ -85,7 +85,7 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
      * Plain password. Used for model validation. Must not be persisted.
      *
      * @var string
-     * @Soap\ComplexType("string")
+     * @Soap\ComplexType("string", nillable=true)
      * @Exclude
      */
     protected $plainPassword;

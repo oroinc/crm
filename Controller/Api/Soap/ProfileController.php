@@ -40,16 +40,14 @@ class ProfileController extends BaseController
 
     /**
      * @Soap\Method("createUser")
-     * @Soap\Param("profile", phpType = "\Oro\Bundle\UserBundle\Entity\User")
+     * @Soap\Param("profile", phpType = "\Oro\Bundle\UserBundle\Entity\UserSoap")
      * @Soap\Result(phpType = "boolean")
      */
     public function createAction($profile)
     {
         $entity = $this->getUserManager()->createFlexible();
-        $form   = $this->container->get('oro_user.form.profile.api')->getName();
 
-        $this->fixRequest($form);
-        $this->fixFlexRequest($entity, $form);
+        $this->container->get('oro_soap.form_fix')->fix($this->container->get('oro_user.form.profile.api')->getName());
 
         return $this->container->get('besimple.soap.response')->setReturnValue(
             $this->container->get('oro_user.form.handler.profile.api')->process($entity)
@@ -65,10 +63,8 @@ class ProfileController extends BaseController
     public function updateAction($id, $profile)
     {
         $entity = $this->getEntity('OroUserBundle:User', $id);
-        $form   = $this->container->get('oro_user.form.profile.api')->getName();
 
-        $this->fixRequest($form);
-        $this->fixFlexRequest($entity, $form);
+        $this->container->get('oro_soap.form_fix')->fix($this->container->get('oro_user.form.profile.api')->getName());
 
         return $this->container->get('besimple.soap.response')->setReturnValue(
             $this->container->get('oro_user.form.handler.profile.api')->process($entity)
@@ -119,45 +115,5 @@ class ProfileController extends BaseController
     protected function getUserManager()
     {
         return $this->container->get('oro_user.manager');
-    }
-
-    /**
-     * This is temporary fix for flexible entity values processing.
-     *
-     * @param User   $user
-     * @param string $name Form name
-     */
-    protected function fixFlexRequest(User $entity, $name)
-    {
-        $request = $this->container->get('request')->request;
-        $data    = $request->get($name, array());
-        $values  = array();
-
-        if (array_key_exists('roles', $data)) {
-            $data['rolesCollection'] = $data['roles'];
-
-            unset($data['roles']);
-        }
-
-        if (array_key_exists('attributes', $data)) {
-            $attrs = $this->getUserManager()->getAttributeRepository()->findBy(array('entityType' => get_class($entity)));
-            $i     = 0;
-
-            // transform simple notation into FlexibleType format
-            foreach ($data['attributes'] as $field => $value) {
-                foreach ($attrs as $attr) {
-                    if ($attr->getCode() == $field) {
-                        $values[$i]['id']   = $attr->getId();
-                        $values[$i]['data'] = $value;
-
-                        $i++;
-                    }
-                }
-            }
-        }
-
-        $data['attributes'] = $values;
-
-        $request->set($name, $data);
     }
 }
