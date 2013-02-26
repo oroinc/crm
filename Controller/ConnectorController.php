@@ -136,12 +136,12 @@ class ConnectorController extends Controller
     {
         if ($this->getRequest()->getMethod() === 'POST') {
 
-            $confConnector = $entity->getConfiguration()->deserialize();
+            $confConnector = $entity->getRawConfiguration()->getConfiguration();
 
             // TODO deal with jobs order (depends on scheduler ?)
             foreach ($entity->getJobs() as $job) {
 
-                $confJob = $job->getConfiguration()->deserialize();
+                $confJob = $job->getRawConfiguration()->getConfiguration();
                 $service = $this->get($job->getServiceId());
                 $service->configure($confConnector, $confJob);
                 $service->run();
