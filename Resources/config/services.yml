@@ -1,7 +1,12 @@
 services:
+    oro_soap.form_fix:
+        class:                        Oro\Bundle\SoapBundle\Form\RequestFix
+        scope:                        request
+        arguments:                    ["@request", "@doctrine.orm.entity_manager"]
+
     besimple.soap.definition.loader.yml_file:
-        class: Oro\Bundle\SoapBundle\ServiceDefinition\Loader\YmlAnnotationClassLoader
-        arguments: [@file_locator, @annotation_reader]
-        public: false
+        class:                        Oro\Bundle\SoapBundle\ServiceDefinition\Loader\YmlAnnotationClassLoader
+        arguments:                    ["@file_locator", "@annotation_reader"]
+        public:                       false
         tags:
           - { name: besimple.soap.definition.loader }
