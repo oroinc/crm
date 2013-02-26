@@ -7,7 +7,12 @@
     "license": "MIT",
     "require": {
         "php": ">=5.3.3",
-        "symfony/symfony": "2.1.6"
+        "symfony/symfony": "2.1.6",
+        "jms/serializer": "dev-master"
+    },
+    "require-dev": {
+        "doctrine/dbal": ">=2.2,<2.4-dev",
+        "doctrine/orm": ">=2.2.3,<2.4-dev"
     },
     "autoload": {
         "psr-0": { "Oro\\Bundle\\DataFlowBundle": "" }
