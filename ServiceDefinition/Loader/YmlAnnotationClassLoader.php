@@ -43,8 +43,8 @@ class YmlAnnotationClassLoader extends FileLoader
     /**
      * Loads a ServiceDefinition from annotations from a yml file.
      *
-     * @param string  $file
-     * @param string  $type
+     * @param string $file
+     * @param string $type
      *
      * @return \BeSimple\SoapBundle\ServiceDefinition\ServiceDefinition
      * @throws \LogicException
