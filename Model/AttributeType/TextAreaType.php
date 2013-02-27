@@ -2,7 +2,6 @@
 namespace Oro\Bundle\FlexibleEntityBundle\Model\AttributeType;
 
 use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttributeType;
-use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttribute;
 
 /**
  * Text area attribute type

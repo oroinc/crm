@@ -28,8 +28,8 @@ class SimpleManager
     /**
      * Constructor
      *
-     * @param string             $entityName     entity name
-     * @param ObjectManager      $storageManager optional storage manager, get default if not provided
+     * @param string        $entityName     entity name
+     * @param ObjectManager $storageManager optional storage manager, get default if not provided
      */
     public function __construct($entityName, ObjectManager $storageManager)
     {
