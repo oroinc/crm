@@ -30,7 +30,12 @@ class FlexibleManagerTest extends AbstractFlexibleManagerTest
      */
     public function testConstructWithCustomEntityManager()
     {
-        $myManager = new FlexibleManager($this->flexibleClassName, $this->container->getParameter('oro_flexibleentity.flexible_config'), $this->entityManager, $this->container->get('event_dispatcher'));
+        $myManager = new FlexibleManager(
+            $this->flexibleClassName,
+            $this->container->getParameter('oro_flexibleentity.flexible_config'),
+            $this->entityManager,
+            $this->container->get('event_dispatcher')
+        );
         $this->assertNotNull($myManager->getStorageManager());
         $this->assertEquals($myManager->getStorageManager(), $this->entityManager);
     }

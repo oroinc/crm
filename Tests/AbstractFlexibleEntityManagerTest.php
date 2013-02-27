@@ -87,15 +87,15 @@ abstract class AbstractFlexibleManagerTest extends AbstractOrmTest
         $this->flexibleConfig = array(
             'entities_config' => array(
                 $this->flexibleClassName => array(
-                        'flexible_manager'             => 'demo_manager',
-                        'flexible_class'               => $this->flexibleClassName,
-                        'flexible_value_class'         => $this->flexibleValueClassName,
-                        'attribute_extended_class'     => $this->flexibleAttributeClassName,
-                        'attribute_class'              => $this->attributeClassName,
-                        'attribute_option_class'       => $this->attributeOptionClassName,
-                        'attribute_option_value_class' => $this->attributeOptionValueClassName,
-                        'default_locale'               => $this->defaultLocale,
-                        'default_scope'                => $this->defaultScope
+                    'flexible_manager'             => 'demo_manager',
+                    'flexible_class'               => $this->flexibleClassName,
+                    'flexible_value_class'         => $this->flexibleValueClassName,
+                    'attribute_extended_class'     => $this->flexibleAttributeClassName,
+                    'attribute_class'              => $this->attributeClassName,
+                    'attribute_option_class'       => $this->attributeOptionClassName,
+                    'attribute_option_value_class' => $this->attributeOptionValueClassName,
+                    'default_locale'               => $this->defaultLocale,
+                    'default_scope'                => $this->defaultScope
                 )
             )
         );
@@ -106,7 +106,12 @@ abstract class AbstractFlexibleManagerTest extends AbstractOrmTest
         $this->container->setParameter('oro_flexibleentity.flexible_config', $this->flexibleConfig);
 
         // prepare simple entity manager (use default entity manager)
-        $this->manager = new FlexibleManager($this->flexibleClassName, $this->flexibleConfig, $this->entityManager, $dispatcher);
+        $this->manager = new FlexibleManager(
+            $this->flexibleClassName,
+            $this->flexibleConfig,
+            $this->entityManager,
+            $dispatcher
+        );
 
         $this->container->set('demo_manager', $this->manager);
         $this->container->set('event_dispatcher', $dispatcher);

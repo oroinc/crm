@@ -2,6 +2,9 @@
 namespace Oro\Bundle\FlexibleEntityBundle\Form\Type;
 
 use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttributeType;
+use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\ImageType;
+use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\FileType;
+use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\BooleanType;
 use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\TextType;
 use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\OptionSimpleSelectType;
 use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\OptionSimpleRadioType;
@@ -15,8 +18,9 @@ use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\UrlType;
 use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\NumberType;
 use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\MailType;
 use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\IntegerType;
-use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Oro\Bundle\FlexibleEntityBundle\Form\EventListener\AttributeTypeSubscriber;
+use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\AbstractType;
 
 /**
@@ -31,17 +35,10 @@ class AttributeType extends AbstractType
 {
 
     /**
-     * @var boolean
-     */
-    protected $isEditing;
-
-    /**
      * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $this->isEditing = ($builder->getData()->getId() !== null);
-
         $this->addFieldId($builder);
 
         $this->addFieldCode($builder);
@@ -60,9 +57,18 @@ class AttributeType extends AbstractType
 
         $this->addFieldDefaultValue($builder);
 
-        if ($this->isEditing && $builder->getData()->getBackendType() === AbstractAttributeType::BACKEND_TYPE_OPTION) {
-            $this->addFieldOptions($builder);
-        }
+        $this->addSubscriber($builder);
+    }
+
+    /**
+     * Add subscriber
+     * @param FormBuilderInterface $builder
+     */
+    protected function addSubscriber(FormBuilderInterface $builder)
+    {
+        $factory = $builder->getFormFactory();
+        $subscriber = new AttributeTypeSubscriber($factory);
+        $builder->addEventSubscriber($subscriber);
     }
 
     /**
@@ -80,12 +86,7 @@ class AttributeType extends AbstractType
      */
     protected function addFieldCode(FormBuilderInterface $builder)
     {
-        $options = array(
-            'required'  => true,
-            'disabled'  => $this->isEditing,
-            'read_only' => $this->isEditing
-        );
-        $builder->add('code', 'text', $options);
+        $builder->add('code', 'text', array('required' => true));
     }
 
     /**
@@ -94,12 +95,7 @@ class AttributeType extends AbstractType
      */
     protected function addFieldAttributeType(FormBuilderInterface $builder)
     {
-        $options = array(
-            'choices'   => $this->getAttributeTypeChoices(),
-            'disabled'  => $this->isEditing,
-            'read_only' => $this->isEditing
-        );
-        $builder->add('attributeType', 'choice', $options);
+        $builder->add('attributeType', 'choice', array('choices' => $this->getAttributeTypeChoices()));
     }
 
     /**
@@ -157,24 +153,6 @@ class AttributeType extends AbstractType
     }
 
     /**
-     * Add option fields to form builder
-     * @param FormBuilderInterface $builder
-     */
-    protected function addFieldOptions(FormBuilderInterface $builder)
-    {
-        $builder->add(
-            'options',
-            'collection',
-            array(
-                'type'         => new AttributeOptionType(),
-                'allow_add'    => true,
-                'allow_delete' => true,
-                'by_reference' => false
-            )
-        );
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
@@ -202,7 +180,10 @@ class AttributeType extends AbstractType
     public function getAttributeTypeChoices()
     {
         $availablesTypes = array(
+            new BooleanType(),
             new DateType(),
+            new FileType(),
+            new ImageType(),
             new IntegerType(),
             new MailType(),
             new MetricType(),

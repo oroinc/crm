@@ -4,13 +4,14 @@ namespace Oro\Bundle\FlexibleEntityBundle\Model\AttributeType;
 use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttributeType;
 
 /**
- * Mail attribute type
+ * Boolean attribute type for Yes/No interaction
  *
- * @author    Nicolas Dupont <nicolas@akeneo.com>
+ * @author    Romain Monceau <romain@akeneo.com>
  * @copyright 2012 Akeneo SAS (http://www.akeneo.com)
  * @license   http://opensource.org/licenses/MIT MIT
+ *
  */
-class MailType extends AbstractAttributeType
+class BooleanType extends AbstractAttributeType
 {
 
     /**
@@ -18,8 +19,8 @@ class MailType extends AbstractAttributeType
      */
     public function __construct()
     {
-        $this->name        = 'E-mail';
-        $this->backendType = self::BACKEND_TYPE_VARCHAR;
-        $this->formType    = 'email';
+        $this->name        = 'Boolean';
+        $this->backendType = self::BACKEND_TYPE_INTEGER;
+        $this->formType    = 'option';
     }
 }

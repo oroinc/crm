@@ -34,6 +34,24 @@ abstract class AbstractAttributeType
     const BACKEND_TYPE_VARCHAR  = 'varchar';
 
     /**
+     * Classes for AttributeType
+     * @staticvar string
+     */
+    const TYPE_DATE_CLASS              = 'Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\DateType';
+    const TYPE_INTEGER_CLASS           = 'Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\IntegerType';
+    const TYPE_MONEY_CLASS             = 'Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\MoneyType';
+    const TYPE_NUMBER_CLASS            = 'Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\NumberType';
+    const TYPE_OPT_MULTI_CB_CLASS      = 'Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\OptionMultiCheckboxType';
+    const TYPE_OPT_MULTI_SELECT_CLASS  = 'Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\OptionMultiSelectType';
+    const TYPE_OPT_SINGLE_RADIO_CLASS  = 'Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\OptionSimpleRadioType';
+    const TYPE_OPT_SINGLE_SELECT_CLASS = 'Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\OptionSimpleSelectType';
+    const TYPE_TEXTAREA_CLASS          = 'Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\TextAreaType';
+    const TYPE_METRIC_CLASS            = 'Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\MetricType';
+    const TYPE_FILE_CLASS              = 'Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\FileType';
+    const TYPE_IMAGE_CLASS             = 'Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\ImageType';
+    const TYPE_TEXT_CLASS              = 'Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\TextType';
+
+    /**
      * Attribute name
      *
      * @var string
