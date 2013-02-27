@@ -47,7 +47,7 @@ class ProfileController extends BaseController
     {
         $entity = $this->getUserManager()->createFlexible();
 
-        $this->container->get('oro_soap.form_fix')->fix($this->container->get('oro_user.form.profile.api')->getName());
+        $this->container->get('oro_soap.request')->fix($this->container->get('oro_user.form.profile.api')->getName());
 
         return $this->container->get('besimple.soap.response')->setReturnValue(
             $this->container->get('oro_user.form.handler.profile.api')->process($entity)
@@ -64,7 +64,7 @@ class ProfileController extends BaseController
     {
         $entity = $this->getEntity('OroUserBundle:User', $id);
 
-        $this->container->get('oro_soap.form_fix')->fix($this->container->get('oro_user.form.profile.api')->getName());
+        $this->container->get('oro_soap.request')->fix($this->container->get('oro_user.form.profile.api')->getName());
 
         return $this->container->get('besimple.soap.response')->setReturnValue(
             $this->container->get('oro_user.form.handler.profile.api')->process($entity)

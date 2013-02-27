@@ -42,7 +42,7 @@ class RoleController extends BaseController
     {
         $entity = new Role();
 
-        $this->fixRequest($this->container->get('oro_user.form.role.api')->getName());
+        $this->container->get('oro_soap.request')->fix($this->container->get('oro_user.form.role.api')->getName());
 
         return $this->container->get('besimple.soap.response')->setReturnValue(
             $this->container->get('oro_user.form.handler.role.api')->process($entity)
@@ -59,7 +59,7 @@ class RoleController extends BaseController
     {
         $entity = $this->getEntity('OroUserBundle:Role', $id);
 
-        $this->fixRequest($this->container->get('oro_user.form.role.api')->getName());
+        $this->container->get('oro_soap.request')->fix($this->container->get('oro_user.form.role.api')->getName());
 
         return $this->container->get('besimple.soap.response')->setReturnValue(
             $this->container->get('oro_user.form.handler.role.api')->process($entity)

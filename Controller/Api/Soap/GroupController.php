@@ -42,7 +42,7 @@ class GroupController extends BaseController
     {
         $entity = new Group();
 
-        $this->fixRequest($this->container->get('oro_user.form.group.api')->getName());
+        $this->container->get('oro_soap.request')->fix($this->container->get('oro_user.form.group.api')->getName());
 
         return $this->container->get('besimple.soap.response')->setReturnValue(
             $this->container->get('oro_user.form.handler.group.api')->process($entity)
@@ -59,7 +59,7 @@ class GroupController extends BaseController
     {
         $entity = $this->getEntity('OroUserBundle:Group', $id);
 
-        $this->fixRequest($this->container->get('oro_user.form.group.api')->getName());
+        $this->container->get('oro_soap.request')->fix($this->container->get('oro_user.form.group.api')->getName());
 
         return $this->container->get('besimple.soap.response')->setReturnValue(
             $this->container->get('oro_user.form.handler.group.api')->process($entity)

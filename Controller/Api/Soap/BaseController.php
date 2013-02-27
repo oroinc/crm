@@ -32,26 +32,4 @@ class BaseController extends ContainerAware
     {
         return $this->container->get('doctrine.orm.entity_manager');
     }
-
-    /**
-     * Fix Request object so forms can be handled correctly
-     *
-     * @param string $name Form name
-     */
-    protected function fixRequest($name)
-    {
-        $data = $this->container->get('request')->get($name);
-
-        if (is_object($data)) {
-            $values = array();
-
-            foreach ((array) $data as $prop => $value) {
-                if (!is_null($value)) {
-                    $values[preg_replace('/[^a-z]+/i', '', $prop)] = $value;
-                }
-            }
-
-            $this->container->get('request')->request->set($name, $values);
-        }
-    }
 }
