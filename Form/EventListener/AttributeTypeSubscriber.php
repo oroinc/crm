@@ -78,10 +78,10 @@ class AttributeTypeSubscriber implements EventSubscriberInterface
                         )
                     )
                 );
-
-                $this->disableField($form, 'code');
-                $this->disableField($form, 'attributeType');
             }
+
+            $this->disableField($form, 'code');
+            $this->disableField($form, 'attributeType');
         }
     }
 
