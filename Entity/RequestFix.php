@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\SoapBundle\Form;
+namespace Oro\Bundle\SoapBundle\Entity;
 
 use Symfony\Component\HttpFoundation\Request;
 
@@ -55,22 +55,30 @@ class RequestFix
         // check if entity has flexible attributes
         if (array_key_exists('attributes', $fields)) {
             $attrDef = $this->om->getRepository('OroFlexibleEntityBundle:Attribute')->findBy(array('entityType' => $entity));
-            $attrVal = new \SimpleXMLElement($this->request->getSoapMessage());
-            $attrVal = $attrVal->xpath('//attributes/*');
-            $i       = 0;
+            $attrVal = $fields['attributes'];
 
             $fields['attributes'] = array();
 
-            if (!empty($attrVal)) {
-                // transform simple notation into FlexibleType format
-                foreach ($attrVal as $field) {
-                    foreach ($attrDef as $attr) {
-                        if ($attr->getCode() == $field->getName()) {
-                            $fields['attributes'][$i]['id']   = $attr->getId();
-                            $fields['attributes'][$i]['data'] = (string) $field;
+            // transform SOAP array notation into FlexibleType format
+            foreach ($attrDef as $i => $attr) {
+                /* @var $attr \Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityAttribute */
+                if ($attr->getBackendType() == 'options') {
+                    $type    = 'option';
+                    $default = $attr->getOptions()->offsetGet(0)->getId();
+                } else {
+                    $type    = 'data';
+                    $default = null;
+                }
 
-                            $i++;
-                        }
+                $fields['attributes'][$i]        = array();
+                $fields['attributes'][$i]['id']  = $attr->getId();
+                $fields['attributes'][$i][$type] = $default;
+
+                foreach ($attrVal as $field) {
+                    if ($attr->getCode() == (string) $field->code) {
+                        $fields['attributes'][$i][$type] = (string) $field->value;
+
+                        break;
                     }
                 }
             }
