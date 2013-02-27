@@ -117,7 +117,7 @@ class PdoMysql extends BaseDriver
      *
      * @return string
      */
-    protected function addTextField(QueryBuilder $qb, $index, $searchCondition, $setOrderBy)
+    protected function addTextField(QueryBuilder $qb, $index, $searchCondition, $setOrderBy = true)
     {
         $useFieldName = $searchCondition['fieldName'] == '*' ? false : true;
 
@@ -147,10 +147,10 @@ class PdoMysql extends BaseDriver
                     array(
                          'search as item',
                          'text',
-                         'MATCH_AGAINST(textField.value, :value' .$index. ') AS stringField'
+                         'MATCH_AGAINST(textField.value, :value' .$index. ') AS rankField'
                     )
                 );
-                $qb->orderBy('stringField', 'DESC');
+                $qb->orderBy('rankField', 'DESC');
             }
 
         } else {

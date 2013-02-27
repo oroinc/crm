@@ -97,7 +97,7 @@ abstract class BaseDriver extends FunctionNode
      *
      * @return string
      */
-    protected function addTextField(QueryBuilder $qb, $index, $searchCondition, $setOrderBy)
+    protected function addTextField(QueryBuilder $qb, $index, $searchCondition, $setOrderBy = true)
     {
         $useFieldName = $searchCondition['fieldName'] == '*' ? false : true;
 
@@ -112,6 +112,10 @@ abstract class BaseDriver extends FunctionNode
 
         if ($useFieldName) {
             $qb->setParameter('field' . $index, $searchCondition['fieldName']);
+        }
+
+        if ($setOrderBy) {
+            $this->setTextOrderBy($qb, $index);
         }
 
         return $whereExpr;
@@ -282,5 +286,15 @@ abstract class BaseDriver extends FunctionNode
                 ->setParameter('orderField', $orderBy)
             ;
         }
+    }
+
+    /**
+     * Set fulltext range order by
+     *
+     * @param \Doctrine\ORM\QueryBuilder $qb
+     * @param int                        $index
+     */
+    protected function setTextOrderBy(QueryBuilder $qb, $index)
+    {
     }
 }

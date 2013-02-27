@@ -26,6 +26,7 @@ class PdoPgsql extends BaseDriver
     {
         $ormConfig = $em->getConfiguration();
         $ormConfig->addCustomStringFunction('TsvectorTsquery', __CLASS__);
+        $ormConfig->addCustomStringFunction('TsRank', 'Oro\Bundle\SearchBundle\Engine\Orm\PdoPgsql\TsRank');
 
         parent::initRepo($em, $class);
     }
@@ -125,14 +126,35 @@ class PdoPgsql extends BaseDriver
      */
     protected function setFieldValueStringParameter(QueryBuilder $qb, $index, $fieldValue, $searchCondition)
     {
-        if ($searchCondition == Query::OPERATOR_CONTAINS) {
-            $qb->setParameter('value' . $index,  str_replace(' ', ' & ', $fieldValue));
-        }else {
-            $searchArray = explode(' ', $fieldValue);
+        $searchArray = explode(' ', $fieldValue);
+        foreach ($searchArray as $index => $string) {
+            $searchArray[$index] = $string . ':*';
+        }
+
+        if ($searchCondition != Query::OPERATOR_CONTAINS) {
             foreach ($searchArray as $index => $string) {
                 $searchArray[$index] = '!' . $string;
             }
-            $qb->setParameter('value' . $index,  implode(' & ', $searchArray));
         }
+
+        $qb->setParameter('value' . $index,  implode(' & ', $searchArray));
+    }
+
+    /**
+     * Set fulltext range order by
+     *
+     * @param \Doctrine\ORM\QueryBuilder $qb
+     * @param int                        $index
+     */
+    protected function setTextOrderBy(QueryBuilder $qb, $index)
+    {
+        $qb->select(
+            array(
+                 'search as item',
+                 'text',
+                 'TsRank(textField.value, :value' .$index. ') AS rankField'
+            )
+        );
+        $qb->orderBy('rankField', 'DESC');
     }
 }
