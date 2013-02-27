@@ -1,0 +1,57 @@
+{% javascripts
+    '@OroGridBundle/Resources/public/lib/backbone-pageable.js'
+    '@OroGridBundle/Resources/public/lib/backgrid/backgrid.js'
+    '@OroGridBundle/Resources/public/lib/backgrid/extensions/paginator/backgrid-paginator.js'
+    '@OroGridBundle/Resources/public/js/app/datagrid.js'
+    '@OroGridBundle/Resources/public/js/app/pageablecollection.js'
+    output='js/acme.grid.js'
+%}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+{% endjavascripts %}
+
+<script type="text/javascript">
+    _.extend(OroApp, {
+        scope: {
+            options: {
+                grid: {
+                    columns: [
+                        {% for column in datagrid.columns %}
+                        {
+                            name: {{ column.name|json_encode|raw }},
+                            label: {{ column.label|json_encode|raw }},
+                            cell:
+                                {% if column.type == 'date' %}
+                                    Backgrid.DateCell
+                                {% elseif column.type == 'datetime' %}
+                                    Backgrid.DatetimeCell
+                                {% elseif column.type == 'integer' %}
+                                    Backgrid.IntegerCell
+                                {% elseif column.type == 'number' or column.type == 'decimal' %}
+                                    Backgrid.NumberCell
+                                {% else %}
+                                    "string"
+                                {% endif %}
+                                ,
+                        }{% if not loop.last %}, {% endif %}
+                        {% endfor %}
+                    ]
+                },
+                collection: {
+                    url: {{ datagrid.routeGenerator.generateUrl(null, {'_format': 'json'})|json_encode|raw }},
+                    state: {
+                        currentPage: {{ datagrid.pager.page|json_encode|raw }},
+                        pageSize: {{ datagrid.pager.maxPerPage|json_encode|raw }},
+                        totalRecords: {{ datagrid.pager.nbResults|json_encode|raw }}
+                    }
+                }
+            }
+        }
+    });
+</script>
+
+{% javascripts
+    '@OroGridBundle/Resources/public/js/setup.js'
+    output='js/acme.grid.js'
+%}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+{% endjavascripts %}

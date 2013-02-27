@@ -2,6 +2,8 @@
 
 namespace Oro\Bundle\GridBundle\Field;
 
+use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttributeType;
+
 class FieldDescription implements FieldDescriptionInterface
 {
     /**
@@ -296,15 +298,36 @@ class FieldDescription implements FieldDescriptionInterface
 
         foreach ($getters as $getter) {
             if (method_exists($object, $getter)) {
-                return call_user_func(array($object, $getter));
+                return $this->convertFieldValue(call_user_func(array($object, $getter)));
             }
         }
 
         if (isset($object->{$fieldName})) {
-            return $object->{$fieldName};
+            return $this->convertFieldValue($object->{$fieldName});
         }
 
         throw new \LogicException(sprintf('Unable to retrieve the value of `%s`', $this->getName()));
+    }
+
+    /**
+     * @param $value
+     * @return mixed
+     */
+    protected function convertFieldValue($value)
+    {
+        if (null === $value) {
+            return $value;
+        }
+        switch ($this->getOption('field_type')) {
+            case AbstractAttributeType::BACKEND_TYPE_DECIMAL:
+                return floatval($value);
+                break;
+            case AbstractAttributeType::BACKEND_TYPE_INTEGER:
+                return intval($value);
+                break;
+            default:
+                return $value;
+        }
     }
 
     /**

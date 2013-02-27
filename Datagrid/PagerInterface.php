@@ -74,4 +74,11 @@ interface PagerInterface extends BasePagerInterface
      * @return boolean
      */
     public function haveToPaginate();
+
+    /**
+     * Returns the number of results.
+     *
+     * @return integer
+     */
+    public function getNbResults();
 }

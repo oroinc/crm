@@ -7,4 +7,11 @@ use Oro\Bundle\GridBundle\Datagrid\PagerInterface;
 
 class Pager extends BasePager implements PagerInterface
 {
+    /**
+     * {@inheritdoc}
+     */
+    public function getNbResults()
+    {
+        return intval(parent::getNbResults());
+    }
 }
