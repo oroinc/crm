@@ -4,6 +4,15 @@ namespace Oro\Bundle\GridBundle\Field;
 
 interface FieldDescriptionInterface
 {
+    /**
+     * Available field types
+     */
+    const TYPE_DATE     = 'date';
+    const TYPE_DATETIME = 'datetime';
+    const TYPE_DECIMAL  = 'decimal';
+    const TYPE_INTEGER  = 'integer';
+    const TYPE_OPTIONS  = 'options';
+    const TYPE_TEXT     = 'text';
 
     /**
      * set the field name

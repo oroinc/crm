@@ -10,48 +10,65 @@
 {% endjavascripts %}
 
 <script type="text/javascript">
+    {% set datagridName = datagrid.name ~ 'Datagrid' %}
+    {% set collectionName = datagridName ~ 'Collection' %}
+
+    {% set constantTypePrefix = 'Oro\\Bundle\\GridBundle\\Field\\FieldDescriptionInterface::' %}
+
     _.extend(OroApp, {
         scope: {
-            options: {
+            {{ datagridName }}: {
                 grid: {
                     columns: [
                         {% for column in datagrid.columns %}
-                        {
-                            name: {{ column.name|json_encode|raw }},
-                            label: {{ column.label|json_encode|raw }},
-                            cell:
-                                {% if column.type == 'date' %}
-                                    Backgrid.DateCell
-                                {% elseif column.type == 'datetime' %}
-                                    Backgrid.DatetimeCell
-                                {% elseif column.type == 'integer' %}
-                                    Backgrid.IntegerCell
-                                {% elseif column.type == 'number' or column.type == 'decimal' %}
-                                    Backgrid.NumberCell
+                            {
+                                name: {{ column.name|json_encode|raw }},
+                                label: {{ column.label|json_encode|raw }},
+                                {% if column.type == constant(constantTypePrefix ~ 'TYPE_DATE') %}
+                                    cell: Backgrid.DateCell
+                                {% elseif column.type == constant(constantTypePrefix ~ 'TYPE_DATETIME') %}
+                                    cell: Backgrid.DatetimeCell
+                                {% elseif column.type == constant(constantTypePrefix ~ 'TYPE_DECIMAL') %}
+                                    cell: Backgrid.NumberCell
+                                {% elseif column.type == constant(constantTypePrefix ~ 'TYPE_INTEGER') %}
+                                    cell: Backgrid.IntegerCell.extend({ orderSeparator: '' })
+                                {% elseif column.type == constant(constantTypePrefix ~ 'TYPE_OPTIONS') %}
+                                    // TODO use Backgrid.SelectCell with source data
+                                    cell: Backgrid.StringCell
                                 {% else %}
-                                    "string"
+                                    cell: Backgrid.StringCell
                                 {% endif %}
-                                ,
-                        }{% if not loop.last %}, {% endif %}
+                                {% if not loop.last %},{% endif %}
+                            }{% if not loop.last %},{% endif %}
                         {% endfor %}
                     ]
                 },
                 collection: {
+                    inputName: "{{ datagrid.name|raw }}",
                     url: {{ datagrid.routeGenerator.generateUrl(null, {'_format': 'json'})|json_encode|raw }},
                     state: {
-                        currentPage: {{ datagrid.pager.page|json_encode|raw }},
-                        pageSize: {{ datagrid.pager.maxPerPage|json_encode|raw }},
+                        currentPage:  {{ datagrid.pager.page|json_encode|raw }},
+                        pageSize:     {{ datagrid.pager.maxPerPage|json_encode|raw }},
                         totalRecords: {{ datagrid.pager.nbResults|json_encode|raw }}
                     }
                 }
             }
         }
     });
-</script>
 
-{% javascripts
-    '@OroGridBundle/Resources/public/js/setup.js'
-    output='js/acme.grid.js'
-%}
-    <script type="text/javascript" src="{{ asset_url }}"></script>
-{% endjavascripts %}
+    $(function() {
+        // Initialize a new collection and grid instance
+        var {{ collectionName }} = new OroApp.PageableCollection(
+            [],
+            OroApp.scope.{{ datagridName }}.collection
+        );
+        var {{ datagridName }} = new OroApp.Datagrid(_.extend(
+            { collection: {{ collectionName }} },
+            OroApp.scope.{{ datagridName }}.grid
+        ));
+
+        // Render the grid and attach the root to your HTML document
+        $("{{ selector }}").append({{ datagridName }}.render().$el);
+        {{ collectionName }}.fetch();
+    });
+</script>

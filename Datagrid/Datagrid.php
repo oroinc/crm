@@ -74,12 +74,18 @@ class Datagrid implements DatagridInterface
     protected $form;
 
     /**
+     * @var string
+     */
+    protected $name;
+
+    /**
      * @param ProxyQueryInterface $query
      * @param FieldDescriptionCollection $columns
      * @param PagerInterface $pager
      * @param FormBuilderInterface $formBuilder
      * @param RouteGeneratorInterface $routeGenerator
      * @param ParametersInterface $parameters
+     * @param string $name
      */
     public function __construct(
         ProxyQueryInterface $query,
@@ -87,7 +93,8 @@ class Datagrid implements DatagridInterface
         PagerInterface $pager,
         FormBuilderInterface $formBuilder,
         RouteGeneratorInterface $routeGenerator,
-        ParametersInterface $parameters
+        ParametersInterface $parameters,
+        $name
     ) {
         $this->query          = $query;
         $this->columns        = $columns;
@@ -95,6 +102,7 @@ class Datagrid implements DatagridInterface
         $this->formBuilder    = $formBuilder;
         $this->routeGenerator = $routeGenerator;
         $this->parameters     = $parameters;
+        $this->name           = $name;
     }
 
     /**
@@ -181,11 +189,11 @@ class Datagrid implements DatagridInterface
      */
     public function getSorter($name)
     {
-       if (isset($this->sorters[$name])) {
+        if (isset($this->sorters[$name])) {
             return $this->sorters[$name];
-       }
+        }
 
-       return null;
+        return null;
     }
 
     /**
@@ -378,5 +386,13 @@ class Datagrid implements DatagridInterface
     public function getRouteGenerator()
     {
         return $this->routeGenerator;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
     }
 }

@@ -105,7 +105,8 @@ class DatagridBuilder implements DatagridBuilderInterface
             $this->createPager($query),
             $formBuilder,
             $routeGenerator,
-            $parameters
+            $parameters,
+            $name
         );
     }
 
