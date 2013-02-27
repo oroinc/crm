@@ -7,6 +7,7 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\ClassMetadata;
 
 use Oro\Bundle\SearchBundle\Engine\Orm\BaseDriver;
+use Oro\Bundle\SearchBundle\Query\Query;
 
 /**
  * "TsvectorTsquery" "(" {StateFieldPathExpression ","}* InParameter ")"
@@ -80,18 +81,18 @@ class PdoPgsql extends BaseDriver
      */
     public static function getPlainSql()
     {
-        return "CREATE INDEX string_fts ON string_index USING gin(to_tsvector('english', field_value))";
+        return "CREATE INDEX string_fts ON search_index_text USING gin(to_tsvector('english', 'value'))";
     }
 
     /**
-     * Create fulltext search string for string parameters
+     * Create fulltext search string for string parameters (contains)
      *
      * @param integer $index
      * @param bool    $useFieldName
      *
      * @return string
      */
-    protected function createStringQuery($index, $useFieldName = true)
+    protected function createContainsStringQuery($index, $useFieldName = true)
     {
         $stringQuery = '';
         if ($useFieldName) {
@@ -102,14 +103,36 @@ class PdoPgsql extends BaseDriver
     }
 
     /**
+     * Create search string for string parameters (not contains)
+     *
+     * @param integer $index
+     * @param bool    $useFieldName
+     *
+     * @return string
+     */
+    protected function createNotContainsStringQuery($index, $useFieldName = true)
+    {
+        return $this->createContainsStringQuery($index, $useFieldName);
+    }
+
+    /**
      * Set string parameter for qb
      *
      * @param \Doctrine\ORM\QueryBuilder $qb
      * @param integer                    $index
      * @param string                     $fieldValue
+     * @param string                     $searchCondition
      */
-    protected function setFieldValueStringParameter(QueryBuilder $qb, $index, $fieldValue)
+    protected function setFieldValueStringParameter(QueryBuilder $qb, $index, $fieldValue, $searchCondition)
     {
-        $qb->setParameter('value' . $index,  $fieldValue);
+        if ($searchCondition == Query::OPERATOR_CONTAINS) {
+            $qb->setParameter('value' . $index,  str_replace(' ', ' & ', $fieldValue));
+        }else {
+            $searchArray = explode(' ', $fieldValue);
+            foreach ($searchArray as $index => $string) {
+                $searchArray[$index] = '!' . $string;
+            }
+            $qb->setParameter('value' . $index,  implode(' & ', $searchArray));
+        }
     }
 }

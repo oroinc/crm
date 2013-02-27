@@ -101,15 +101,14 @@ abstract class BaseDriver extends FunctionNode
     {
         $useFieldName = $searchCondition['fieldName'] == '*' ? false : true;
 
-        if ($searchCondition['condition'] == Query::OPERATOR_EQUALS) {
+        if ($searchCondition['condition'] == Query::OPERATOR_CONTAINS) {
             $searchString = $this->createContainsStringQuery($index, $useFieldName);
         } else {
             $searchString = $this->createNotContainsStringQuery($index, $useFieldName);
         }
-
         $whereExpr = $searchCondition['type'] . ' (' . $searchString . ')';
 
-        $this->setFieldValueStringParameter($qb, $index, $searchCondition['fieldValue']);
+        $this->setFieldValueStringParameter($qb, $index, $searchCondition['fieldValue'], $searchCondition['condition']);
 
         if ($useFieldName) {
             $qb->setParameter('field' . $index, $searchCondition['fieldName']);
@@ -119,7 +118,7 @@ abstract class BaseDriver extends FunctionNode
     }
 
     /**
-     * Create search string for string parameters
+     * Create search string for string parameters (contains)
      *
      * @param integer $index
      * @param bool    $useFieldName
@@ -137,7 +136,7 @@ abstract class BaseDriver extends FunctionNode
     }
 
     /**
-     * Create search string for string parameters
+     * Create search string for string parameters (not contains)
      *
      * @param integer $index
      * @param bool    $useFieldName
@@ -160,8 +159,9 @@ abstract class BaseDriver extends FunctionNode
      * @param \Doctrine\ORM\QueryBuilder $qb
      * @param integer                    $index
      * @param string                     $fieldValue
+     * @param string                     $searchCondition
      */
-    protected function setFieldValueStringParameter(QueryBuilder $qb, $index, $fieldValue)
+    protected function setFieldValueStringParameter(QueryBuilder $qb, $index, $fieldValue, $searchCondition)
     {
         $qb->setParameter('value' . $index, '%' . str_replace(' ', '%', $fieldValue) . '%');
     }
