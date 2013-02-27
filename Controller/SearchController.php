@@ -23,7 +23,7 @@ class SearchController extends Controller
     /**
      * Show search results
      *
-     * @Route("results", name="oro_search_results")
+     * @Route("results", name="oro_search_results", defaults={"limit"=10})
      * @Template
      */
     public function searchResultsAction()
@@ -34,11 +34,16 @@ class SearchController extends Controller
         $from = $request->get('from');
 
         return array(
-            'searchResults' => $searchManager->simpleSearch(
-                $searchString,
-                (int) $request->get('offset'),
-                (int) $request->get('max_results'),
-                $from
+            'searchResults' => $this->get('knp_paginator')->paginate(
+                $searchManager->simpleSearch(
+                    $searchString,
+                    null,
+                    (int) $request->get('limit'),
+                    $from,
+                    (int) $request->get('page')
+                ),
+                $this->get('request')->query->get('page', 1),
+                $request->get('limit')
             ),
             'searchString' => $this->getRequest()->get('search'),
             'entities' => $searchManager->getEntitiesLabels(),

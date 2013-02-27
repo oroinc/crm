@@ -25,7 +25,7 @@ class HighlightExtension extends \Twig_Extension
         $text = strip_tags($text);
         $searchArray = explode(' ', $searchString);
         foreach ($searchArray as $searchWord) {
-            $text = preg_replace("/\w*?$searchWord\w*/i", "<strong>$0</strong>", $text);
+            $text = preg_replace("/\p{L}*?" . preg_quote($searchWord) . "\p{L}*/ui", "<strong>$0</strong>", $text);
         }
 
         return $text;
@@ -59,7 +59,7 @@ class HighlightExtension extends \Twig_Extension
             strripos(substr(stristr($text, $searchString, true), 0, $symbolCount), ' ')
         );
 
-        return strip_tags($strAfter . $strBefore);
+        return strip_tags($strBefore . $strAfter);
     }
 
     /**

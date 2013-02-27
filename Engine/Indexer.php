@@ -44,7 +44,7 @@ class Indexer
         $this->em = $em;
         $this->translator = $translator;
 
-        foreach($this->mappingConfig as $entity=> $config) {
+        foreach ($this->mappingConfig as $entity => $config) {
             $this->mappingConfig[$entity]['label'] = $this->translator->trans($config['label']);
         }
     }
@@ -72,12 +72,13 @@ class Indexer
      * @param integer $offset
      * @param integer $maxResults
      * @param string  $from
+     * @param integer $page
      *
      * @return \Oro\Bundle\SearchBundle\Query\Result
      */
-    public function simpleSearch($searchString, $offset = 0, $maxResults = 0, $from = null)
+    public function simpleSearch($searchString, $offset = 0, $maxResults = 0, $from = null, $page = 0)
     {
-        $query =  $this->select();
+        $query = $this->select();
 
         if ($from) {
             $query->from($from);
@@ -93,7 +94,9 @@ class Indexer
             $query->setMaxResults(10000000);
         }
 
-        if ($offset > 0) {
+        if ($page > 0) {
+            $query->setFirstResult($maxResults * ($page - 1));
+        } elseif ($offset > 0) {
             $query->setFirstResult($offset);
         }
 

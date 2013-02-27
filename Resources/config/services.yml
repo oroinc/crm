@@ -19,3 +19,8 @@ services:
         class:        Oro\Bundle\SearchBundle\Twig\HighlightExtension
         tags:
             - { name: twig.extension }
+
+    oro_search.result.subscriber:
+        class:        Oro\Bundle\SearchBundle\Query\Result\Subscriber\PaginateResultSubscriber
+        tags:
+            - { name: knp_paginator.subscriber }

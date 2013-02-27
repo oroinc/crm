@@ -1,7 +1,7 @@
 <form method="get" action="{{ path('oro_search_results') }}" style="margin: 0">
     <div id="search-div" class="input-append input-prepend pull-left header-search">
         <div class="btn-group">
-            <select class="dropdown-toggle" name="from">
+            <select class="dropdown-toggle" name="from" id="from-select">
                 <option value="">All</option>
                 {% for entity in entities %}
                     <option value="{{ entity.alias }}">{{ entity.label }}</option>
@@ -28,7 +28,9 @@
                     url:"{{ path('oro_api_get_search') }}",
                     dataType:"json",
                     data:{
-                        search:queryString
+                        search:queryString,
+                        from: jQuery("#from-select option:selected").val(),
+                        max_results: 5
                     },
                     success:function (data) {
                         jQuery("#search-div").removeClass('header-search-focused');
@@ -38,11 +40,10 @@
                             for (var i = 0; i < data['count']; i++) {
                                 jQuery('.custom-dropdown ul').append(
                                     '<li>'
-                                    + '<a href="'+data['data'][i]['record_url']+'">'
-                                    + '<span class="name"><strong>' + data['data'][i]['record_string']+ '</strong></span>'
-
-                                    + '</a> <br/>'
-                                    + data['data'][i]['entity_type']
+                                        + '<a href="'+data['data'][i]['record_url']+'">'
+                                            + '<span class="name"><strong>' + data['data'][i]['record_string']+ '</strong></span><br/>'
+                                            + data['data'][i]['entity_type']
+                                        + '</a>'
                                     +'</li>'
                                 );
                             }
