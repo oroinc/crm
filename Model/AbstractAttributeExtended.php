@@ -75,7 +75,7 @@ abstract class AbstractAttributeExtended
      *
      * @param string $code
      *
-     * @return AbstractEntityAttributeExtended
+     * @return AbstractAttributeExtended
      */
     public function setCode($code)
     {
@@ -99,7 +99,7 @@ abstract class AbstractAttributeExtended
      *
      * @param string $type
      *
-     * @return AbstractEntityAttributeExtended
+     * @return AbstractAttributeExtended
      */
     public function setBackendType($type)
     {
@@ -147,7 +147,7 @@ abstract class AbstractAttributeExtended
      *
      * @param boolean $required
      *
-     * @return AbstractEntityAttributeExtended
+     * @return AbstractAttributeExtended
      */
     public function setRequired($required)
     {
@@ -171,7 +171,7 @@ abstract class AbstractAttributeExtended
      *
      * @param boolean $unique
      *
-     * @return AbstractEntityAttributeExtended
+     * @return AbstractAttributeExtended
      */
     public function setUnique($unique)
     {
@@ -195,7 +195,7 @@ abstract class AbstractAttributeExtended
      *
      * @param string $default
      *
-     * @return AbstractEntityAttributeExtended
+     * @return AbstractAttributeExtended
      */
     public function setDefaultValue($default)
     {
@@ -219,7 +219,7 @@ abstract class AbstractAttributeExtended
      *
      * @param boolean $searchable
      *
-     * @return AbstractEntityAttributeExtended
+     * @return AbstractAttributeExtended
      */
     public function setSearchable($searchable)
     {
@@ -243,7 +243,7 @@ abstract class AbstractAttributeExtended
      *
      * @param boolean $translatable
      *
-     * @return AbstractEntityAttributeExtended
+     * @return AbstractAttributeExtended
      */
     public function setTranslatable($translatable)
     {
@@ -267,7 +267,7 @@ abstract class AbstractAttributeExtended
      *
      * @param boolean $scopable
      *
-     * @return AbstractEntityAttributeExtended
+     * @return AbstractAttributeExtended
      */
     public function setScopable($scopable)
     {
@@ -291,7 +291,7 @@ abstract class AbstractAttributeExtended
      *
      * @param AbstractAttributeOption $option
      *
-     * @return AbstractEntityAttributeExtended
+     * @return AbstractAttributeExtended
      */
     public function addOption(AbstractAttributeOption $option)
     {
@@ -305,7 +305,7 @@ abstract class AbstractAttributeExtended
      *
      * @param AbstractAttributeOption $option
      *
-     * @return AbstractEntityAttributeExtended
+     * @return AbstractAttributeExtended
      */
     public function removeOption(AbstractAttributeOption $option)
     {
