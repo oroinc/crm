@@ -1,13 +1,10 @@
 <?php
 namespace Oro\Bundle\FlexibleEntityBundle\Form\Type;
 
-use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\ImageType;
-
-use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\FileType;
-
-use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\BooleanType;
-
 use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttributeType;
+use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\ImageType;
+use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\FileType;
+use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\BooleanType;
 use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\TextType;
 use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\OptionSimpleSelectType;
 use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\OptionSimpleRadioType;
@@ -21,8 +18,9 @@ use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\UrlType;
 use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\NumberType;
 use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\MailType;
 use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\IntegerType;
-use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Oro\Bundle\FlexibleEntityBundle\Form\EventListener\AttributeTypeSubscriber;
+use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\AbstractType;
 
 /**
@@ -58,6 +56,19 @@ class AttributeType extends AbstractType
         $this->addFieldSearchable($builder);
 
         $this->addFieldDefaultValue($builder);
+
+        $this->addSubscriber($builder);
+    }
+
+    /**
+     * Add subscriber
+     * @param FormBuilderInterface $builder
+     */
+    protected function addSubscriber(FormBuilderInterface $builder)
+    {
+        $factory = $builder->getFormFactory();
+        $subscriber = new AttributeTypeSubscriber($factory);
+        $builder->addEventSubscriber($subscriber);
     }
 
     /**
@@ -75,10 +86,7 @@ class AttributeType extends AbstractType
      */
     protected function addFieldCode(FormBuilderInterface $builder)
     {
-        $options = array(
-            'required'  => true
-        );
-        $builder->add('code', 'text', $options);
+        $builder->add('code', 'text', array('required' => true));
     }
 
     /**
@@ -87,10 +95,7 @@ class AttributeType extends AbstractType
      */
     protected function addFieldAttributeType(FormBuilderInterface $builder)
     {
-        $options = array(
-            'choices'   => $this->getAttributeTypeChoices()
-        );
-        $builder->add('attributeType', 'choice', $options);
+        $builder->add('attributeType', 'choice', array('choices' => $this->getAttributeTypeChoices()));
     }
 
     /**
