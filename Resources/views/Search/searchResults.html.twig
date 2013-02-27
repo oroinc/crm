@@ -23,7 +23,7 @@
             <div class="alert alert-success">
                 <p><strong>{{ searchResult.entityConfig.label }}</strong></p>
                 <h3><a href="{{ searchResult.recordUrl }}">{{ searchResult.recordTitle }}</a></h3>
-                {{ searchResult.recordText|highlight(searchString)|raw }}
+                {{ searchResult.recordText|highlight_trim(searchString)|raw }}
             </div>
         {% endfor %}
     {% else %}

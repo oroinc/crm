@@ -15,7 +15,7 @@ services:
             - { name: doctrine.event_listener, event: preRemove }
 
 
-    oro_search.twig.highlight_extension:
+    oro_search.twig.search_extension:
         class:        Oro\Bundle\SearchBundle\Twig\HighlightExtension
         tags:
             - { name: twig.extension }

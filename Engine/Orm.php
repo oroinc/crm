@@ -200,6 +200,9 @@ class Orm extends AbstractEngine
         }
         if ($searchResults) {
             foreach ($searchResults as $item) {
+                if (is_array($item)) {
+                    $item = $item['item'];
+                }
                 /** @var $item \Oro\Bundle\SearchBundle\Entity\Item  */
                 $results[] = new ResultItem(
                     $this->em,

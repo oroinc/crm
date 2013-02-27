@@ -113,24 +113,22 @@ class PdoMysql extends BaseDriver
      * @param \Doctrine\ORM\QueryBuilder $qb
      * @param integer                    $index
      * @param array                      $searchCondition
+     * @param boolean                    $setOrderBy
      *
      * @return string
      */
-    protected function addTextField(QueryBuilder $qb, $index, $searchCondition)
+    protected function addTextField(QueryBuilder $qb, $index, $searchCondition, $setOrderBy)
     {
-        $joinAlias = 'textFields' . $index;
-        $qb->join('search.textFields', $joinAlias);
-
         $useFieldName = $searchCondition['fieldName'] == '*' ? false : true;
 
         $stringQuery = '';
         if ($useFieldName) {
-            $stringQuery = ' AND ' . $joinAlias . '.field = :field' .$index;
+            $stringQuery = ' AND textField.field = :field' .$index;
         }
 
         if ($searchCondition['condition'] == Query::OPERATOR_CONTAINS) {
             $whereExpr = $searchCondition['type'] . ' (' .
-                ( 'MATCH_AGAINST(' .$joinAlias . '.value, :value' .$index. ' \'IN BOOLEAN MODE\') >0' .
+                ( 'MATCH_AGAINST(textField.value, :value' .$index. ' \'IN BOOLEAN MODE\')' . ' >0' .
                     $stringQuery . ')');
 
             if (strpos($searchCondition['fieldValue'], ' ') !== false) {
@@ -143,11 +141,23 @@ class PdoMysql extends BaseDriver
                 $value = $searchCondition['fieldValue'] . '*';
             }
             $qb->setParameter('value' . $index, $value);
+
+            if ($setOrderBy) {
+                $qb->select(
+                    array(
+                         'search as item',
+                         'text',
+                         'MATCH_AGAINST(textField.value, :value' .$index. ') AS stringField'
+                    )
+                );
+                $qb->orderBy('stringField', 'DESC');
+            }
+
         } else {
             $value = '%' . str_replace(' ', '%', trim($searchCondition['fieldValue'])) . '%';
 
             $whereExpr = $searchCondition['type'] . ' ('
-                .( $joinAlias . '.value NOT LIKE :value' . $index . $stringQuery)
+                .('textField.value NOT LIKE :value' . $index . $stringQuery)
                 . ')';
             $qb->setParameter('value' . $index, $value );
         }

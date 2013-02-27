@@ -86,20 +86,19 @@ class PdoPgsql extends BaseDriver
     /**
      * Create fulltext search string for string parameters
      *
-     * @param string  $joinAlias
      * @param integer $index
      * @param bool    $useFieldName
      *
      * @return string
      */
-    protected function createStringQuery($joinAlias, $index, $useFieldName = true)
+    protected function createStringQuery($index, $useFieldName = true)
     {
         $stringQuery = '';
         if ($useFieldName) {
-            $stringQuery = ' AND ' . $joinAlias . '.field = :field' .$index;
+            $stringQuery = ' AND textField.field = :field' .$index;
         }
 
-        return '(TsvectorTsquery(' .$joinAlias . '.value, :value' .$index. ')) = TRUE' . $stringQuery;
+        return '(TsvectorTsquery(textField.value, :value' .$index. ')) = TRUE' . $stringQuery;
     }
 
     /**
