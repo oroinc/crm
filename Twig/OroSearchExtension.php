@@ -1,7 +1,7 @@
 <?php
 namespace Oro\Bundle\SearchBundle\Twig;
 
-class HighlightExtension extends \Twig_Extension
+class OroSearchExtension extends \Twig_Extension
 {
     public function getFilters()
     {

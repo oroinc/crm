@@ -2,6 +2,7 @@
 namespace Oro\Bundle\SearchBundle\Tests\Unit\Entity;
 
 use Oro\Bundle\SearchBundle\Entity\IndexDecimal;
+use Oro\Bundle\SearchBundle\Entity\Item;
 
 class IndexDecimalTest extends \PHPUnit_Framework_TestCase
 {
@@ -27,5 +28,18 @@ class IndexDecimalTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($this->index->getValue());
         $this->index->setValue(55.25);
         $this->assertEquals(55.25, $this->index->getValue());
+    }
+
+    public function testGetId()
+    {
+        $this->assertNull($this->index->getId());
+    }
+
+    public function testItem()
+    {
+        $this->assertNull($this->index->getItem());
+        $item = new Item();
+        $this->index->setItem($item);
+        $this->assertEquals($item, $this->index->getItem());
     }
 }

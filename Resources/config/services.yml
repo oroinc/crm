@@ -16,7 +16,7 @@ services:
 
 
     oro_search.twig.search_extension:
-        class:        Oro\Bundle\SearchBundle\Twig\HighlightExtension
+        class:        Oro\Bundle\SearchBundle\Twig\OroSearchExtension
         tags:
             - { name: twig.extension }
 

@@ -423,6 +423,84 @@ class Item
     }
 
     /**
+     * Set alias
+     *
+     * @param  string $alias
+     * @return Item
+     */
+    public function setAlias($alias)
+    {
+        $this->alias = $alias;
+
+        return $this;
+    }
+
+    /**
+     * Get alias
+     *
+     * @return string
+     */
+    public function getAlias()
+    {
+        return $this->alias;
+    }
+
+    /**
+     * Set url
+     *
+     * @param string $url
+     * @return Item
+     */
+    public function setUrl($url)
+    {
+        $this->url = $url;
+    
+        return $this;
+    }
+
+    /**
+     * Get url
+     *
+     * @return string 
+     */
+    public function getUrl()
+    {
+        return $this->url;
+    }
+
+    /**
+     * Set title
+     *
+     * @param string $title
+     * @return Item
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
+    
+        return $this;
+    }
+
+    /**
+     * Get title
+     *
+     * @return string 
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    public function getRecordText()
+    {
+        foreach ($this->textFields as $textField) {
+            if ($textField->getField() == Indexer::TEXT_ALL_DATA_FIELD) {
+                return $textField->getValue();
+            }
+        }
+    }
+
+    /**
      * Save text data to item
      *
      * @param array $itemData
@@ -586,83 +664,5 @@ class Item
         $record->setField($fieldName)
             ->setValue($fieldData)
             ->setItem($this);
-    }
-
-    /**
-     * Set alias
-     *
-     * @param  string $alias
-     * @return Item
-     */
-    public function setAlias($alias)
-    {
-        $this->alias = $alias;
-
-        return $this;
-    }
-
-    /**
-     * Get alias
-     *
-     * @return string
-     */
-    public function getAlias()
-    {
-        return $this->alias;
-    }
-
-    /**
-     * Set url
-     *
-     * @param string $url
-     * @return Item
-     */
-    public function setUrl($url)
-    {
-        $this->url = $url;
-    
-        return $this;
-    }
-
-    /**
-     * Get url
-     *
-     * @return string 
-     */
-    public function getUrl()
-    {
-        return $this->url;
-    }
-
-    /**
-     * Set title
-     *
-     * @param string $title
-     * @return Item
-     */
-    public function setTitle($title)
-    {
-        $this->title = $title;
-    
-        return $this;
-    }
-
-    /**
-     * Get title
-     *
-     * @return string 
-     */
-    public function getTitle()
-    {
-        return $this->title;
-    }
-
-    public function getRecordText()
-    {
-        foreach ($this->textFields as $textField) {
-            if ($textField->getField() == Indexer::TEXT_ALL_DATA_FIELD) {
-                return $textField->getValue();
-            }
-        }
     }
 }
