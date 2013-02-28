@@ -9,9 +9,6 @@ use Doctrine\ORM\Mapping\ClassMetadata;
 use Oro\Bundle\SearchBundle\Engine\Orm\BaseDriver;
 use Oro\Bundle\SearchBundle\Query\Query;
 
-/**
- * "TsvectorTsquery" "(" {StateFieldPathExpression ","}* InParameter ")"
- */
 class PdoPgsql extends BaseDriver
 {
     public $columns = array();
@@ -25,54 +22,10 @@ class PdoPgsql extends BaseDriver
     public function initRepo(EntityManager $em, ClassMetadata $class)
     {
         $ormConfig = $em->getConfiguration();
-        $ormConfig->addCustomStringFunction('TsvectorTsquery', __CLASS__);
+        $ormConfig->addCustomStringFunction('TsvectorTsquery', 'Oro\Bundle\SearchBundle\Engine\Orm\PdoPgsql\TsvectorTsquery');
         $ormConfig->addCustomStringFunction('TsRank', 'Oro\Bundle\SearchBundle\Engine\Orm\PdoPgsql\TsRank');
 
         parent::initRepo($em, $class);
-    }
-
-    /**
-     * Parse parameters
-     *
-     * @param \Doctrine\ORM\Query\Parser $parser
-     */
-    public function parse(\Doctrine\ORM\Query\Parser $parser)
-    {
-
-        $parser->match(Lexer::T_IDENTIFIER);
-        $parser->match(Lexer::T_OPEN_PARENTHESIS);
-
-        do {
-            $this->columns[] = $parser->StateFieldPathExpression();
-            $parser->match(Lexer::T_COMMA);
-        } while ($parser->getLexer()->isNextToken(Lexer::T_IDENTIFIER));
-
-        $this->needle = $parser->InParameter();
-
-        $parser->match(Lexer::T_CLOSE_PARENTHESIS);
-    }
-
-    /**
-     * Create sql string
-     *
-     * @param \Doctrine\ORM\Query\SqlWalker $sqlWalker
-     *
-     * @return string
-     */
-    public function getSql(\Doctrine\ORM\Query\SqlWalker $sqlWalker)
-    {
-        $haystack = null;
-
-        $first = true;
-        foreach ($this->columns as $column) {
-            $first ? $first = false : $haystack .= ', ';
-            $haystack .= $column->dispatch($sqlWalker);
-        }
-
-        $query = "to_tsvector(" . $haystack .
-            ") @@ to_tsquery (" . $this->needle->dispatch($sqlWalker).   " )";
-
-        return $query;
     }
 
     /**

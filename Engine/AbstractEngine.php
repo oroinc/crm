@@ -19,13 +19,20 @@ abstract class AbstractEngine
     protected $em;
 
     /**
+     * @var bool
+     */
+    protected $logQueries;
+
+    /**
      * Init entity manager
      *
      * @param \Doctrine\Common\Persistence\ObjectManager $em
+     * @param bool                                       $logQueries
      */
-    public function __construct(ObjectManager $em)
+    public function __construct(ObjectManager $em, $logQueries)
     {
         $this->em = $em;
+        $this->logQueries = $logQueries;
     }
 
     /**
@@ -73,7 +80,10 @@ abstract class AbstractEngine
     {
         $searchResult = $this->doSearch($query);
         $result = new Result($query, $searchResult['results'], $searchResult['records_count']);
-        $this->logQuery($result);
+
+        if ($this->logQueries) {
+            $this->logQuery($result);
+        }
 
         return $result;
     }

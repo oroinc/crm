@@ -27,6 +27,8 @@ class OroSearchExtension extends Extension
         $config = $this->processConfiguration($configuration, $configs);
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
 
+        $container->setParameter('oro_search.log_queries', $config['log_queries']);
+
         $entitiesConfig = $config['entities_config'];
         if (!count($entitiesConfig)) {
             if (count($config['config_paths'])) {

@@ -35,6 +35,8 @@ class Query
     const TYPE_DATETIME = 'datetime';
     const TYPE_DECIMAL = 'decimal';
 
+    const INFINITY = 10000000;
+
     /**
      * @var array
      */

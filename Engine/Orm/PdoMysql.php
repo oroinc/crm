@@ -9,9 +9,6 @@ use Doctrine\ORM\Mapping\ClassMetadata;
 use Oro\Bundle\SearchBundle\Engine\Orm\BaseDriver;
 use Oro\Bundle\SearchBundle\Query\Query;
 
-/**
- * "MATCH_AGAINST" "(" {StateFieldPathExpression ","}* InParameter {Literal}? ")"
- */
 class PdoMysql extends BaseDriver
 {
     public $columns = array();
@@ -25,64 +22,9 @@ class PdoMysql extends BaseDriver
     public function initRepo(EntityManager $em, ClassMetadata $class)
     {
         $ormConfig = $em->getConfiguration();
-        $ormConfig->addCustomStringFunction('MATCH_AGAINST', __CLASS__);
+        $ormConfig->addCustomStringFunction('MATCH_AGAINST', 'Oro\Bundle\SearchBundle\Engine\Orm\PdoPgsql\MatchAgainst');
 
         parent::initRepo($em, $class);
-    }
-
-    /**
-     * Parse parameters
-     *
-     * @param \Doctrine\ORM\Query\Parser $parser
-     */
-    public function parse(\Doctrine\ORM\Query\Parser $parser)
-    {
-
-        $parser->match(Lexer::T_IDENTIFIER);
-        $parser->match(Lexer::T_OPEN_PARENTHESIS);
-
-        do {
-            $this->columns[] = $parser->StateFieldPathExpression();
-            $parser->match(Lexer::T_COMMA);
-        } while ($parser->getLexer()->isNextToken(Lexer::T_IDENTIFIER));
-
-        $this->needle = $parser->InParameter();
-
-        while ($parser->getLexer()->isNextToken(Lexer::T_STRING)) {
-            $this->mode = $parser->Literal();
-        }
-
-        $parser->match(Lexer::T_CLOSE_PARENTHESIS);
-    }
-
-    /**
-     * Create sql string
-     *
-     * @param \Doctrine\ORM\Query\SqlWalker $sqlWalker
-     *
-     * @return string
-     */
-    public function getSql(\Doctrine\ORM\Query\SqlWalker $sqlWalker)
-    {
-        $haystack = null;
-
-        $first = true;
-        foreach ($this->columns as $column) {
-            $first ? $first = false : $haystack .= ', ';
-            $haystack .= $column->dispatch($sqlWalker);
-        }
-
-        $query = "MATCH(" . $haystack .
-            ") AGAINST (" . $this->needle->dispatch($sqlWalker);
-
-        if ($this->mode) {
-
-            $query .= " " . str_replace('\'', '', $this->mode->dispatch($sqlWalker)) . " )";
-        } else {
-            $query .= " )";
-        }
-
-        return $query;
     }
 
     /**

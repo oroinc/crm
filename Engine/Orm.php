@@ -38,11 +38,12 @@ class Orm extends AbstractEngine
      */
     protected $jobRepo;
 
-    public function __construct(ObjectManager $em, ContainerInterface $container, $mappingConfig)
+    public function __construct(ObjectManager $em, ContainerInterface $container, $mappingConfig, $logQueries)
     {
         $this->container = $container;
         $this->em = $em;
         $this->mappingConfig = $mappingConfig;
+        $this->logQueries = $logQueries;
 
         //todo: set translated mappingConfig only once
         $translator = $container->get('translator');
@@ -193,7 +194,7 @@ class Orm extends AbstractEngine
     {
         $results = array();
         $searchResults = $this->getIndexRepo()->search($query);
-        if (($query->getMaxResults() > 0 || $query->getFirstResult() > 0) && $query->getMaxResults() < 10000000) {
+        if (($query->getMaxResults() > 0 || $query->getFirstResult() > 0) && $query->getMaxResults() < Query::INFINITY) {
             $recordsCount = $this->getIndexRepo()->getRecordsCount($query);
         } else {
             $recordsCount = count($searchResults);

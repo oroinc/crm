@@ -4,13 +4,12 @@ namespace Oro\Bundle\SearchBundle\Engine\Orm;
 
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Mapping\ClassMetadata;
-use Doctrine\ORM\Query\AST\Functions\FunctionNode;
 use Doctrine\ORM\EntityManager;
 
 use Oro\Bundle\SearchBundle\Query\Query;
 use Oro\Bundle\SearchBundle\Engine\Indexer;
 
-abstract class BaseDriver extends FunctionNode
+abstract class BaseDriver
 {
     /**
      * @var string

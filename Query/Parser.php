@@ -185,7 +185,7 @@ class Parser
         $inputString = $this->trimString($inputString, $offset);
         $query->setFirstResult($offset);
         if (!$query->getMaxResults()) {
-            $query->setMaxResults(10000000);
+            $query->setMaxResults(Query::INFINITY);
         }
 
         return $inputString;

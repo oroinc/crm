@@ -10,4 +10,4 @@ parameters:
 services:
     oro_search.search.engine:
         class: Oro\Bundle\SearchBundle\Engine\Orm
-        arguments: [@doctrine.orm.entity_manager, @service_container, %oro_search.entities_config%]
+        arguments: [@doctrine.orm.entity_manager, @service_container, %oro_search.entities_config%, %oro_search.log_queries%]

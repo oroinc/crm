@@ -91,7 +91,7 @@ class Indexer
         if ($maxResults > 0) {
             $query->setMaxResults($maxResults);
         } else {
-            $query->setMaxResults(10000000);
+            $query->setMaxResults(Query::INFINITY);
         }
 
         if ($page > 0) {
