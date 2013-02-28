@@ -2,18 +2,17 @@ $(document).ready(function () {
     /* create overlay for popups */
     $('<div id="bar-drop-overlay"></div>').appendTo('body');
     /* dinamic height for central column */
+    /* FE
     function changeHeight() {
         var _chWindowHeight = $(window).height();
         var _chMyHeight = _chWindowHeight - $("header").outerHeight() - $("footer").outerHeight() - 3;
         $('div.layout-content').innerHeight(_chMyHeight);
     };
-    /* init first time*/
     changeHeight();
-    /* init when resize window */
     $(window).resize(function() {
         changeHeight();
     });
-
+    */
     /* side bar functionality */
     $('div.side-nav').each(function () {
         var myParent = $(this);

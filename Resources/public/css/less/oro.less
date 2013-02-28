@@ -31,6 +31,7 @@ body{
   color: @bodyColor;
   margin: 0;
   padding: 0;
+  min-width: 880px1;
   background:#fff url("../../img/bg-login.jpg") repeat;
 }
 html{
@@ -48,6 +49,11 @@ header{
   width: 100%;
   clear: both;
   background: #323b45;
+  position: relative;
+  z-index: 120;
+  .btn-group{
+    margin: 0;
+  }
   .extra-divider{
     height: 100%;
     background: url("../../img/vertical-divider-general.gif") repeat-y;
@@ -157,6 +163,9 @@ header{
     height: 15px;
     padding: 0 !important;
   }
+}
+.dark{
+  background-color: #f6f5f5;
 }
 header.navbar{
   margin: 0;
@@ -722,6 +731,8 @@ footer{
   padding: 0 30px 0 0;
   #gradient > .vertical(#303944, #323b46);
   border-bottom: 1px solid #000;
+  position: relative;
+  z-index: 100;
 }
 .pin-bar .pin-menus{
   float:right;
@@ -737,6 +748,9 @@ footer{
   display: block;
   width: 100%;
   height: 100%;
+}
+.pin-bar .nav-tabs > li{
+  height: auto;
 }
 .pin-bar .pin-menus:hover,
 .pin-bar .pin-menus.open{
@@ -897,6 +911,9 @@ footer{
 [class^="icon-"], [class*=" icon-"]{
   margin: 0 3px;
 }
+.icons-holder [class^="icon-"], .icons-holder [class*=" icon-"]{
+  margin: 0 -3px;
+}
 .application-menu .tab-content > .tab-pane > .nav a:hover{
   background: #98b9ec;
 }
@@ -909,4 +926,226 @@ footer{
   box-shadow: none;
   background-color: #7a95b5;
   color: #fff;
+}
+.filter-box{
+  background:#efefef url("../../img/bg-gray-box.png") repeat-x;
+  border: solid #ccc;
+  border-width: 1px 0;
+  padding-top: 15px;
+  padding-bottom: 5px;
+}
+.btn-group + .btn-group{
+  margin-left: 0;
+}
+.btn-group{
+  margin-right: 5px;
+}
+.btn .caret{
+  margin-left: 5px;
+}
+.btn-link{
+  font-weight: bold;
+  font-size: 12px;
+}
+.nav-tabs > li{
+  margin-bottom: 0;
+  height: 26px;
+}
+.nav-tabs > li.active {
+
+}
+.filter-box .btn-group{
+  margin-bottom: 7px;
+}
+.icon-copy{
+  background-position: 0 -166px;
+}
+.icon-pin{
+  background-position: -24px -166px;
+}
+.icon-eye2-open{
+  background-position: -48px -166px;
+  width: 15px;
+}
+.icon-sort{
+  background-position: -72px -166px;
+  width: 15px;
+}
+.icon-window{
+  background-position: -96px -166px;
+  width: 15px;
+}
+.icon-minimize{
+  background-position: -120px -166px;
+  width: 15px;
+}
+.dib{
+  display: inline-block;
+  vertical-align: top;
+  padding: 0 5px;
+  line-height: 32px;
+}
+.grid-toolbar .pagination{
+  margin: 0 0 20px;
+}
+.grid{
+  thead th{
+    background-color: #eee;
+    padding: 5px 10px;
+    #gradient > .vertical(#f5f5f5, #eeeeee);
+  }
+  .account-info{
+    padding: 0 20px 0 105px;
+    .usser-img{
+      position: relative;
+      float: left;
+      width: 75px;
+      margin: 0 0 0 -85px;
+      overflow: hidden;
+      img{
+        width: 75px;
+      }
+    }
+    .col{
+      float: left;
+      width: 50%;
+    }
+    dt{
+      float: left;
+      width: 120px;
+      text-align: right;
+    }
+    dd{
+      clear: right;
+      padding: 0 0 10px 120px;
+    }
+  }
+  tbody td{
+    padding: 5px 10px;
+  }
+}
+.grid thead .caret{
+  margin: 10px 0 0;
+}
+.grid-info{
+
+  td{
+    border-top: 1px dashed #d6d5d5;
+  }
+}
+.table-hover tbody .grid-info:hover >  td{
+  background-color: #fff;
+}
+.grid-info-frame{
+  margin: 0 0 20px;
+}
+.grid {
+  .open-tr td{
+    border-bottom: 0;
+    background-color: #f4f4f4;
+  }
+  .usser-name{
+    font-size: 20px;
+    margin: 0 0 0 12px;
+    font-size: 20px;
+    font-weight: bold;
+  }
+  .usser-state{
+    font-size: 14px;
+    padding: 0 15px;
+    color: #666;
+  }
+  .open-row{
+    background: url("../../img/bg-opener-grid.png") no-repeat;
+    width: 13px;
+    height: 13px;
+    text-indent: -9999px;
+    font-size: 0;
+    line-height: 0;
+    display: block;
+    margin: 5px 0 0 3px;
+    cursor: pointer;
+  }
+  .open-tr .open-row{
+    background-position: 0 -13px;
+  }
+  dl{
+    margin: 0 0 15px;
+  }
+  .selected-row td{
+    background-color: #3b6fe5 !important;
+    color: #fff !important;
+  }
+}
+.grid-more-bar{
+
+}
+.more-bar-holder .dropdown-toggle{
+  color: #444;
+  font-size: 20px;
+  float: left;
+  padding: 0;
+}
+.more-bar-holder .dropdown-toggle:hover{
+  text-decoration: none;
+}
+.more-bar-holder .dropdown-menu .nav{
+  margin: 0;
+}
+.more-bar-holder .dropdown-menu  li{
+  margin: 0 0 5px;
+}
+.more-bar-holder .nav-pills{
+  padding: 0 10px;
+}
+#loading-wrapper{
+  background: #000;
+  opacity: 0.6;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 998;
+}
+.loading-frame{
+  position: absolute;
+  top: 40%;
+  left: 48%;
+  width: 180px;
+  z-index: 999;
+  .box{
+    background: #fff;
+    font-size: 14px;
+    font-weight: bold;
+    line-height:  24px;
+  }
+}
+.holder-height{
+  max-height: 200px;
+  overflow: auto;
+}
+.navbar-extra{
+  padding: 10px 0;
+}
+.brand-extra{
+  font-size: 18px;
+  font-weight: bold;
+  margin-top: 12px;
+  margin-right: 15px;
+  line-height: 24px;
+  color: #444;
+}
+.grid-toolbar .pagination{
+  margin: 0;
+}
+.navigation {
+  position: relative;
+  .top-action-box{
+    position: absolute;
+    right: 0;
+    top: -33px;
+    padding: 2px 14px;
+    background-color: #fff;
+  }
 }
