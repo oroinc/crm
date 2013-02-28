@@ -9,6 +9,8 @@ use Doctrine\ORM\Query\AST\Functions\FunctionNode;
  */
 class MatchAgainst extends FunctionNode
 {
+    public $mode;
+
     /**
      * Parse parameters
      *

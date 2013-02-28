@@ -23,21 +23,21 @@ class IndexDecimal
 
     /**
      * @ORM\ManyToOne(targetEntity="Item", inversedBy="decimalFields")
-     * @ORM\JoinColumn(name="item_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="item_id", referencedColumnName="id", nullable=false)
      */
     private $item;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="field", type="string", length=250)
+     * @ORM\Column(name="field", type="string", length=250, nullable=false)
      */
     private $field;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="value", type="decimal", scale=2))
+     * @ORM\Column(name="value", type="decimal", scale=2, nullable=false))
      */
     private $value;
 

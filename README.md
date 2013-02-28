@@ -42,6 +42,12 @@ Example:
     Acme\DemoBundle\Entity\Product:
         alias: demo_product
         flexible_manager: demo_product_manager
+        label: Demo products
+        route:
+            name: acme_demo_search_product
+            parameters:
+                id: id
+        title_fields: [name]
         fields:
             -
                 name: name
@@ -74,7 +80,9 @@ Example:
 
 Parameters:
 
-- **alias**: alias for 'from' keyfield in advanced search
+- **label**: Label for entity to identify entity in search results
+- **route**: **name** - route name to generate url link tho the entity record, **parameters** - array with parameters for route
+- **alias**: alias for 'from' keyword in advanced search
 - **name**: name of field in entity
 - **target_type**: type of virtual search field. Supported target types: text (string and text fields), integer, double, datetime
 - **target_fields**: array of virtual fields for entity field from 'name' parameter.

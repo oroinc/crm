@@ -12,7 +12,7 @@ class PdoMysql extends BaseDriver
 {
     public $columns = array();
     public $needle;
-    public $mode;
+
 
     /**
      * Init additional doctrine functions
@@ -23,7 +23,7 @@ class PdoMysql extends BaseDriver
     public function initRepo(EntityManager $em, ClassMetadata $class)
     {
         $ormConfig = $em->getConfiguration();
-        $ormConfig->addCustomStringFunction('MATCH_AGAINST', 'Oro\Bundle\SearchBundle\Engine\Orm\PdoPgsql\MatchAgainst');
+        $ormConfig->addCustomStringFunction('MATCH_AGAINST', 'Oro\Bundle\SearchBundle\Engine\Orm\PdoMysql\MatchAgainst');
 
         parent::initRepo($em, $class);
     }
@@ -44,8 +44,9 @@ class PdoMysql extends BaseDriver
      * @param \Doctrine\ORM\QueryBuilder $qb
      * @param integer                    $index
      * @param string                     $fieldValue
+     * @param string                     $searchCondition
      */
-    protected function setFieldValueStringParameter(QueryBuilder $qb, $index, $fieldValue)
+    protected function setFieldValueStringParameter(QueryBuilder $qb, $index, $fieldValue, $searchCondition)
     {
         $qb->setParameter('value' . $index,  $fieldValue);
     }

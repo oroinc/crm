@@ -23,21 +23,21 @@ class IndexText
 
     /**
      * @ORM\ManyToOne(targetEntity="Item", inversedBy="stringFields")
-     * @ORM\JoinColumn(name="item_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="item_id", referencedColumnName="id", nullable=false)
      */
     private $item;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="field", type="string", length=250)
+     * @ORM\Column(name="field", type="string", length=250, nullable=false)
      */
     private $field;
 
     /**
      * @var text
      *
-     * @ORM\Column(name="value", type="text")
+     * @ORM\Column(name="value", type="text", nullable=false)
      */
     private $value;
 
