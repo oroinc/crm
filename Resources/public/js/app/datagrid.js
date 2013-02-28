@@ -1,7 +1,7 @@
 // Oro Application grid prototype
 OroApp.Datagrid = Backgrid.Grid.extend({
-    footer: OroApp.Paginator,
-    initialize: function(options, foo) {
+    initialize: function(options) {
+        delete(options.className);
         Backgrid.Grid.prototype.initialize.apply(this, arguments);
     }
 });

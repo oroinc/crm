@@ -2,7 +2,7 @@
 OroApp.Paginator = Backgrid.Footer.extend({
 
     /** @property */
-    className: "paginator",
+    tagName: 'ul',
 
     /** @property */
     windowSize: 10,
@@ -16,7 +16,7 @@ OroApp.Paginator = Backgrid.Footer.extend({
     },
 
     /** @property */
-    template: _.template('<tr><td colspan="<%= colspan %>"><ul><% _.each(handles, function (handle) { %><li <% if (handle.className) { %>class="<%= handle.className %>"<% } %>><a href="#" <% if (handle.title) {%> title="<%= handle.title %>"<% } %>><%= handle.label %></a></li><% }); %></ul></td></tr>'),
+    template: _.template('<% _.each(handles, function (handle) { %><li <% if (handle.className) { %>class="<%= handle.className %>"<% } %>><a href="#" <% if (handle.title) {%> title="<%= handle.title %>"<% } %>><%= handle.label %></a></li><% }); %>'),
 
     /** @property */
     events: {
@@ -109,6 +109,7 @@ OroApp.Paginator = Backgrid.Footer.extend({
         windowEnd = windowEnd <= lastPage ? windowEnd : lastPage + 1;
 
         if (collection.mode !== "infinite") {
+            /*
             for (var i = windowStart; i < windowEnd; i++) {
                 handles.push({
                     label: i + 1,
@@ -116,6 +117,14 @@ OroApp.Paginator = Backgrid.Footer.extend({
                     className: currentPage === i ? "active" : undefined
                 });
             }
+            */
+
+            // current page element
+            handles.push({
+                label: (currentPage + 1).toString(),
+                title: "Page " + (currentPage + 1),
+                className: undefined
+            });
         }
 
         var ffLabels = this.fastForwardHandleLabels;
@@ -128,12 +137,14 @@ OroApp.Paginator = Backgrid.Footer.extend({
                 });
             }
 
+            /*
             if (ffLabels.first) {
                 handles.unshift({
                     label: ffLabels.first,
                     className: collection.hasPrevious() ? void 0 : "disabled"
                 });
             }
+            */
 
             if (ffLabels.next) {
                 handles.push({
@@ -142,12 +153,14 @@ OroApp.Paginator = Backgrid.Footer.extend({
                 });
             }
 
+            /*
             if (ffLabels.last) {
                 handles.push({
                     label: ffLabels.last,
                     className: collection.hasNext() ? void 0 : "disabled"
                 });
             }
+            */
         }
 
         return handles;
