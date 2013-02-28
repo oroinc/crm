@@ -245,33 +245,34 @@ class Orm extends AbstractEngine
                 foreach ($attributes as $attribute) {
                     if ($attribute->getSearchable()) {
                         $value = $object->getValueData($attribute->getCode());
-                        $attributeType = $attribute->getBackendType();
+                        if ($value) {
+                            $attributeType = $attribute->getBackendType();
 
-                        switch ($attributeType) {
-                            case AbstractAttributeType::BACKEND_TYPE_TEXT:
-                            case AbstractAttributeType::BACKEND_TYPE_VARCHAR:
-                                $objectData = $this->saveFlexibleTextData($alias, $objectData, $attribute->getCode(), $value);
-                                break;
-                            case AbstractAttributeType::BACKEND_TYPE_DATETIME:
-                            case AbstractAttributeType::BACKEND_TYPE_DATE:
-                                $objectData = $this->saveFlexibleData(
-                                    $alias,
-                                    $objectData,
-                                    AbstractAttributeType::BACKEND_TYPE_DATETIME,
-                                    $attribute->getCode(),
-                                    $value
-                                );
-                                break;
-                            default:
-                                $objectData = $this->saveFlexibleData(
-                                    $alias,
-                                    $objectData,
-                                    $attributeType,
-                                    $attribute->getCode(),
-                                    $value
-                                );
+                            switch ($attributeType) {
+                                case AbstractAttributeType::BACKEND_TYPE_TEXT:
+                                case AbstractAttributeType::BACKEND_TYPE_VARCHAR:
+                                    $objectData = $this->saveFlexibleTextData($alias, $objectData, $attribute->getCode(), $value);
+                                    break;
+                                case AbstractAttributeType::BACKEND_TYPE_DATETIME:
+                                case AbstractAttributeType::BACKEND_TYPE_DATE:
+                                    $objectData = $this->saveFlexibleData(
+                                        $alias,
+                                        $objectData,
+                                        AbstractAttributeType::BACKEND_TYPE_DATETIME,
+                                        $attribute->getCode(),
+                                        $value
+                                    );
+                                    break;
+                                default:
+                                    $objectData = $this->saveFlexibleData(
+                                        $alias,
+                                        $objectData,
+                                        $attributeType,
+                                        $attribute->getCode(),
+                                        $value
+                                    );
+                            }
                         }
-
                     }
                 }
             }

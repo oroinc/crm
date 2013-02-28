@@ -35,9 +35,63 @@ class ResultTest extends \PHPUnit_Framework_TestCase
             ->method('find')
             ->will($this->returnValue($this->product));
 
-        $items[] = new Item($this->om, 'OroTestBundle:test', 1);
-        $items[] = new Item($this->om, 'OroTestBundle:test', 2);
-        $items[] = new Item($this->om, 'OroTestBundle:test', 3);
+        $items[] = new Item(
+            $this->om,
+            'OroTestBundle:test',
+            1,
+            'test title',
+            'http://example.com',
+            'test text',
+            array(
+                 'alias' => 'test_product',
+                 'label' => 'test product',
+                 'fields' => array(
+                     array(
+                         'name'          => 'name',
+                         'target_type'   => 'text',
+                     ),
+                 ),
+                 'flexible_manager' => 'test_manager'
+            )
+        );
+        $items[] = new Item(
+            $this->om,
+            'OroTestBundle:test',
+            2,
+            'test title 2',
+            'http://example.com',
+            'test text',
+            array(
+                 'alias' => 'test_product',
+                 'label' => 'test product',
+                 'fields' => array(
+                     array(
+                         'name'          => 'name',
+                         'target_type'   => 'text',
+                     ),
+                 ),
+                 'flexible_manager' => 'test_manager'
+            )
+        );
+        $items[] = new Item(
+            $this->om,
+            'OroTestBundle:test',
+            3,
+            'test title 3',
+            'http://example.com',
+            'test text',
+            array(
+                 'alias' => 'test_product',
+                 'label' => 'test product',
+                 'fields' => array(
+                     array(
+                         'name'          => 'name',
+                         'target_type'   => 'text',
+                     ),
+                 ),
+                 'flexible_manager' => 'test_manager'
+            )
+        );
 
         $query = new Query();
         $query->createQuery(Query::SELECT)
@@ -75,6 +129,6 @@ class ResultTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(3, $resultArray['count']);
         $this->assertEquals('OroTestBundle:test', $resultArray['data'][0]['entity_name']);
         $this->assertEquals(2, $resultArray['data'][1]['record_id']);
-        $this->assertEquals('test product', $resultArray['data'][2]['record_string']);
+        $this->assertEquals('test title 3', $resultArray['data'][2]['record_string']);
     }
 }

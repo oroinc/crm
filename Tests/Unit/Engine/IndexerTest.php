@@ -16,12 +16,17 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
     protected $om;
     protected $repository;
     protected $connector;
+    protected $translator;
 
     public function setUp()
     {
         if (!interface_exists('Doctrine\Common\Persistence\ObjectManager')) {
             $this->markTestSkipped('Doctrine Common has to be installed for this test to run.');
         }
+
+        $this->translator =  $this->getMockBuilder('Symfony\Component\Translation\Translator')
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->om = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
         $this->repository = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
@@ -34,7 +39,8 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
         $this->connector = $this->getMockForAbstractClass(
             'Oro\Bundle\SearchBundle\Engine\AbstractEngine',
             array(
-                 $this->om
+                 $this->om,
+                 false
             )
         );
 
@@ -46,8 +52,9 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
             ->method('searchQuery')
             ->will($this->returnValue(array()));
 
-        $this->indexService = new Indexer($this->om, $this->connector, array(
+        $this->indexService = new Indexer($this->om, $this->connector, $this->translator, array(
             'Oro\Bundle\DataBundle\Entity\Product' => array(
+                'label' => 'test product',
                 'fields' => array(
                     array(
                         'name' => 'name',

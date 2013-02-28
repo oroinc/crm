@@ -16,7 +16,7 @@ class IndexListenerTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->container = $this->getMockForAbstractClass('Symfony\Component\DependencyInjection\ContainerInterface');
-        $this->engine = $this->flexibleManager = $this
+        $this->engine = $this
             ->getMockBuilder('Oro\Bundle\SearchBundle\Engine\Orm')
             ->disableOriginalConstructor()
             ->getMock();

@@ -32,7 +32,26 @@ class ItemTest extends \PHPUnit_Framework_TestCase
             ->method('find')
             ->will($this->returnValue($this->product));
 
-        $this->item = new Item($this->om, 'OroTestBundle:test', 1);
+        $this->item = new Item(
+            $this->om,
+            'OroTestBundle:test',
+            1,
+            'test title',
+            'http://example.com',
+            'test text',
+            array(
+                 'alias' => 'test_product',
+                 'label' => 'test product',
+                 'fields' => array(
+                     array(
+                         'name'          => 'name',
+                         'target_type'   => 'text',
+                     ),
+                 ),
+                 'flexible_manager' => 'test_manager'
+            )
+        );
+
     }
 
     public function testGetEntityName()
@@ -60,6 +79,6 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         $result = $this->item->toArray();
         $this->assertEquals('OroTestBundle:test', $result['entity_name']);
         $this->assertEquals(1, $result['record_id']);
-        $this->assertEquals('test product', $result['record_string']);
+        $this->assertEquals('test title', $result['record_string']);
     }
 }

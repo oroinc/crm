@@ -16,6 +16,8 @@ class PdoMysql extends BaseDriver
     public $mode;
 
     /**
+     * Init additional doctrine functions
+     *
      * @param \Doctrine\ORM\EntityManager         $em
      * @param \Doctrine\ORM\Mapping\ClassMetadata $class
      */

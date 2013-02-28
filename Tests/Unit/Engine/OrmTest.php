@@ -22,6 +22,8 @@ class OrmTest extends \PHPUnit_Framework_TestCase
     private $mappingConfig;
     private $om;
     private $container;
+    private $translator;
+    private $flexibleManager;
 
     public function setUp()
     {
@@ -30,6 +32,12 @@ class OrmTest extends \PHPUnit_Framework_TestCase
         $this->mappingConfig =  array(
             'Oro\Bundle\SearchBundle\Tests\Unit\Fixture\Entity\Product' => array(
                 'alias' => 'test_product',
+                'label' => 'test product',
+                'title_fields' => array('name'),
+                'route' => array(
+                    'name' => 'test_route',
+                    'parameters' => array()
+                ),
                 'fields' => array(
                     array(
                         'name'          => 'name',
@@ -94,20 +102,56 @@ class OrmTest extends \PHPUnit_Framework_TestCase
 
         $this->attributeRepository = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
 
-        $this->orm = new Orm($this->om, $this->container, $this->mappingConfig);
+        $this->flexibleManager->expects($this->any())
+            ->method('getAttributeRepository')
+            ->will($this->returnValue($this->attributeRepository));
+
+        $this->translator =  $this->getMockBuilder('Symfony\Component\Translation\Translator')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->translator->expects($this->any())
+            ->method('trans')
+            ->will($this->returnValue('translated string'));
+
+        $this->route = $this
+            ->getMockBuilder('Symfony\Component\Routing\Router')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->route->expects($this->any())
+            ->method('generate')
+            ->will($this->returnValue('http://example.com'));
+
+        $this->container->expects($this->any())
+            ->method('get')
+            ->with($this->logicalOr(
+                $this->equalTo('translator'),
+                $this->equalTo('test_manager'),
+                $this->equalTo('router')
+            ))
+            ->will($this->returnCallback(
+                function($param) {
+                    switch ($param) {
+                        case 'translator':
+                            return $this->translator;
+                            break;
+                        case 'test_manager':
+                            return $this->flexibleManager;
+                            break;
+                        case 'router':
+                            return $this->route;
+                            break;
+                    }
+                }
+            ));
+
+
+        $this->orm = new Orm($this->om, $this->container, $this->mappingConfig, false);
     }
 
     public function testMapObject()
     {
-        $this->container->expects($this->once())
-            ->method('get')
-            ->with($this->equalTo('test_manager'))
-            ->will($this->returnValue($this->flexibleManager));
-
-        $this->flexibleManager->expects($this->once())
-            ->method('getAttributeRepository')
-            ->will($this->returnValue($this->attributeRepository));
-
         $testTextAttribute = new Attribute();
         $testTextAttribute->setCode('text_attribute')
             ->setBackendType(AbstractAttributeType::BACKEND_TYPE_TEXT);
