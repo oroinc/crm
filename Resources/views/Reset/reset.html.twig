@@ -5,10 +5,12 @@
 {% block content %}
 <form action="{{ path('oro_user_reset_reset', { token: token }) }}" {{ form_enctype(form) }} method="POST" class="form-pass-reset">
     <h2 class="form-signin-heading">{{ 'Password reset form'|trans }}</h2>
+
     {{ form_widget(form) }}
+
     <div>
-        <button class="btn" type="submit">{{ 'Reset'|trans }}</button>
-        <button class="btn" type="button">{{ 'Cancel'|trans }}</button>
+        <button class="btn btn-large btn-primary" type="submit">{{ 'Reset'|trans }}</button>
+        <a href="{{ path('oro_user_security_login') }}" class="btn btn-large">{{ 'Cancel'|trans }}</a>
     </div>
 </form>
 {% endblock %}

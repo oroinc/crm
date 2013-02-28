@@ -18,7 +18,7 @@ class ResetType extends AbstractType
      */
     public function __construct($class)
     {
-        $this->class = $сlass;
+        $this->class = $class;
     }
 
     /**

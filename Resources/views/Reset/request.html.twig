@@ -1,20 +1,28 @@
-{% extends bap.layout is defined ? bap.layout : 'OroUserBundle::layout.html.twig' %}
+{% extends 'OroUserBundle::layout.html.twig' %}
+
+{% block bodyClass %}login-page{% endblock %}
 
 {% block title %}{{ 'Password reset request'|trans }} - {{ parent() }}{% endblock %}
 
 {% block content %}
-<form action="{{ path('oro_user_reset_send_email') }}" method="POST" class="form-pass-reset">
-    <h2 class="form-signin-heading">{{ 'Password reset request'|trans }}</h2>
+<form action="{{ path('oro_user_reset_send_email') }}" method="POST" class="form-signin">
+    <div class="title-box">
+        <h1 class="oro-title">Oro</h1>
+        <span class="divider-vertical"></span>
+        <h2 class="title">{{ 'Forgot password'|trans }}</h2>
+    </div>
     {% if invalid_username is defined %}
     <p>{{ 'The username or email address "%username%" does not exist.'|trans({ '%username%': invalid_username }) }}</p>
     {% endif %}
-    <div class="form-row">
-        <label for="username">{{ 'Enter your email'|trans }}</label>
-        <input type="text" id="username" name="username" required="required" />
-    </div>
-    <div>
-        <button class="btn" type="submit">{{ 'Request'|trans }}</button>
-        <button class="btn" type="button">{{ 'Cancel'|trans }}</button>
-    </div>
+    <fieldset>
+        <div class="input-prepend">
+            <span class="add-on">{{ 'Email'|trans }}</span>
+            <input type="text" id="prependedInput" class="span2" name="username" required="required" placeholder="{{ 'Username or Email'|trans }}" />
+        </div>
+        <div class="form-row">
+            <button type="submit" class="btn btn-large btn-primary">{{ 'Request'|trans }}</button>
+            <a href="{{ path('oro_user_security_login') }}" class="btn btn-large">{{ 'Cancel'|trans }}</a>
+        </div>
+    </fieldset>
 </form>
 {% endblock %}
