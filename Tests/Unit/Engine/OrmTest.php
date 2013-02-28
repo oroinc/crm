@@ -11,7 +11,6 @@ use Oro\Bundle\SearchBundle\Tests\Unit\Fixture\Entity\Product;
 use Oro\Bundle\SearchBundle\Tests\Unit\Fixture\Entity\Manufacturer;
 use Oro\Bundle\SearchBundle\Tests\Unit\Fixture\Entity\Attribute;
 
-
 class OrmTest extends \PHPUnit_Framework_TestCase
 {
     private $product;
@@ -145,7 +144,6 @@ class OrmTest extends \PHPUnit_Framework_TestCase
                     }
                 }
             ));
-
 
         $this->orm = new Orm($this->om, $this->container, $this->mappingConfig, false);
     }

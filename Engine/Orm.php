@@ -47,7 +47,7 @@ class Orm extends AbstractEngine
 
         //todo: set translated mappingConfig only once
         $translator = $container->get('translator');
-        foreach($this->mappingConfig as $entity=> $config) {
+        foreach ($this->mappingConfig as $entity=> $config) {
             $this->mappingConfig[$entity]['label'] = $translator->trans($config['label']);
         }
     }
@@ -296,7 +296,6 @@ class Orm extends AbstractEngine
             $objectData[$attributeType][$attribute] = $value;
         }
         //$objectData[AbstractAttributeType::BACKEND_TYPE_TEXT][$alias . '_' . $attribute] = $value;
-
         return $objectData;
     }
 
@@ -361,6 +360,7 @@ class Orm extends AbstractEngine
     protected function getFieldValue($objectOrArray, $fieldName)
     {
         $propertyPath = new PropertyPath($fieldName);
+
         return $propertyPath->getValue($objectOrArray);
     }
 
@@ -486,8 +486,7 @@ class Orm extends AbstractEngine
     {
         $fields = $this->mappingConfig[get_class($entity)]['title_fields'];
         $title = array();
-        foreach ($fields as $field)
-        {
+        foreach ($fields as $field) {
             $title[] = $this->getFieldValue($entity, $field);
         }
 

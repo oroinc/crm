@@ -1,7 +1,6 @@
 <?php
 namespace Oro\Bundle\SearchBundle\Engine\Orm;
 
-use Doctrine\ORM\Query\Lexer;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\ClassMetadata;

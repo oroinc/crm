@@ -448,20 +448,20 @@ class Item
     /**
      * Set url
      *
-     * @param string $url
+     * @param  string $url
      * @return Item
      */
     public function setUrl($url)
     {
         $this->url = $url;
-    
+
         return $this;
     }
 
     /**
      * Get url
      *
-     * @return string 
+     * @return string
      */
     public function getUrl()
     {
@@ -471,20 +471,20 @@ class Item
     /**
      * Set title
      *
-     * @param string $title
+     * @param  string $title
      * @return Item
      */
     public function setTitle($title)
     {
         $this->title = $title;
-    
+
         return $this;
     }
 
     /**
      * Get title
      *
-     * @return string 
+     * @return string
      */
     public function getTitle()
     {
