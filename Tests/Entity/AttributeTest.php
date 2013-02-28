@@ -168,6 +168,29 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
     /**
      * Test related method
      */
+    public function testConvertDefaultValueToTimestamp()
+    {
+        $date = new \DateTime('now');
+        $this->attribute->setDefaultValue($date);
+        $this->attribute->convertDefaultValueToTimestamp();
+        $this->assertEquals($this->attribute->getDefaultValue(), $date->format('U'));
+    }
+
+    /**
+     * Test related method
+     */
+    public function testConvertDefaultValueToDatetime()
+    {
+        $date = new \DateTime('now');
+        $this->attribute->setDefaultValue($date->format('U'));
+        $this->attribute->setAttributeType('Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\DateType');
+        $this->attribute->convertDefaultValueToDatetime();
+        $this->assertEquals($this->attribute->getDefaultValue()->format('U'), $date->format('U'));
+    }
+
+    /**
+     * Test related method
+     */
     public function testGetOptions()
     {
         // option
