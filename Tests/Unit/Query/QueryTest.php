@@ -78,4 +78,26 @@ class QueryTest extends \PHPUnit_Framework_TestCase
         $query->setMaxResults(10);
         $this->assertEquals(10, $query->getMaxResults());
     }
+
+    public function testOrWhere()
+    {
+        $query = new Query();
+        $query->setMappingConfig($this->config);
+        $query->from('Oro\Bundle\DataBundle\Entity\Product');
+        $query->orWhere('all_data', '=', 'test', 'string');
+        $queryParams = $query->getOptions();
+        $this->assertEquals('or', $queryParams[0]['type']);
+        $this->assertEquals('all_data', $queryParams[0]['fieldName']);
+    }
+
+    public function testWhere()
+    {
+        $query = new Query();
+        $query->setMappingConfig($this->config);
+        $query->from('Oro\Bundle\DataBundle\Entity\Product');
+        $query->where('or','all_data', '=', 'test', 'string');
+        $queryParams = $query->getOptions();
+        $this->assertEquals('or', $queryParams[0]['type']);
+        $this->assertEquals('all_data', $queryParams[0]['fieldName']);
+    }
 }
