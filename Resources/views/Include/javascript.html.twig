@@ -1,13 +1,14 @@
 {% javascripts
-    '@OroGridBundle/Resources/public/lib/backbone-pageable.js'
-    '@OroGridBundle/Resources/public/lib/backgrid/backgrid.js'
-    '@OroGridBundle/Resources/public/js/app/datagrid-pagination.js'
-    '@OroGridBundle/Resources/public/js/app/datagrid-toolbar.js'
-    '@OroGridBundle/Resources/public/js/app/datagrid.js'
-    '@OroGridBundle/Resources/public/js/app/pageablecollection.js'
-    output='js/acme.grid.js'
+'@OroGridBundle/Resources/public/lib/backbone-pageable.js'
+'@OroGridBundle/Resources/public/lib/backgrid/backgrid.js'
+'@OroGridBundle/Resources/public/js/app/datagrid-pagination.js'
+'@OroGridBundle/Resources/public/js/app/datagrid-toolbar.js'
+'@OroGridBundle/Resources/public/js/app/datagrid.js'
+'@OroGridBundle/Resources/public/js/app/pageablecollection.js'
+'@OroGridBundle/Resources/public/js/app/filter.js'
+output='js/acme.grid.js'
 %}
-    <script type="text/javascript" src="{{ asset_url }}"></script>
+<script type="text/javascript" src="{{ asset_url }}"></script>
 {% endjavascripts %}
 
 <script type="text/javascript">
@@ -22,31 +23,40 @@
                 grid: {
                     columns: [
                         {% for column in datagrid.columns %}
-                            {
-                                name: {{ column.name|json_encode|raw }},
-                                label: {{ column.label|json_encode|raw }},
-                                {% if column.type == constant(constantTypePrefix ~ 'TYPE_DATE') %}
-                                    cell: Backgrid.DateCell
-                                {% elseif column.type == constant(constantTypePrefix ~ 'TYPE_DATETIME') %}
-                                    cell: Backgrid.DatetimeCell
-                                {% elseif column.type == constant(constantTypePrefix ~ 'TYPE_DECIMAL') %}
-                                    cell: Backgrid.NumberCell
-                                {% elseif column.type == constant(constantTypePrefix ~ 'TYPE_INTEGER') %}
-                                    cell: Backgrid.IntegerCell.extend({ orderSeparator: '' })
-                                {% elseif column.type == constant(constantTypePrefix ~ 'TYPE_OPTIONS') %}
-                                    // TODO use Backgrid.SelectCell with source data
-                                    cell: Backgrid.StringCell
-                                {% else %}
-                                    cell: Backgrid.StringCell
-                                {% endif %}
-                                {% if not loop.last %},{% endif %}
-                            }{% if not loop.last %},{% endif %}
+                        {
+                            name: {{ column.name|json_encode|raw }},
+                            label: {{ column.label|json_encode|raw }},
+                            {% if column.type == constant(constantTypePrefix ~ 'TYPE_DATE') %}
+                            cell: Backgrid.DateCell
+                            {% elseif column.type == constant(constantTypePrefix ~ 'TYPE_DATETIME') %}
+                            cell: Backgrid.DatetimeCell
+                            {% elseif column.type == constant(constantTypePrefix ~ 'TYPE_DECIMAL') %}
+                            cell: Backgrid.NumberCell
+                            {% elseif column.type == constant(constantTypePrefix ~ 'TYPE_INTEGER') %}
+                            cell: Backgrid.IntegerCell.extend({ orderSeparator: '' })
+                            {% elseif column.type == constant(constantTypePrefix ~ 'TYPE_OPTIONS') %}
+                            // TODO use Backgrid.SelectCell with source data
+                            cell: Backgrid.StringCell
+                            {% else %}
+                            cell: Backgrid.StringCell
+                            {% endif %}
+                            {% if not loop.last %},{% endif %}
+                        }{% if not loop.last %},{% endif %}
+                        {% endfor %}
+                    ],
+                    filters: [
+                        {% for filter in datagrid.filters %}
+                            OroApp.Filter.extend({
+                                inputName : '{{ filter.name }}',
+                                inputHint : '{{ filter.getOption('label') }}'
+                            })
+                            {% if not loop.last %},{% endif %}
                         {% endfor %}
                     ]
                 },
                 collection: {
                     inputName: "{{ datagrid.name|raw }}",
-                    url: {{ datagrid.routeGenerator.generateUrl(null, {'_format': 'json'})|json_encode|raw }},
+                            url: {{ datagrid.routeGenerator.generateUrl(null, {'_format': 'json'})|json_encode|raw }},
                     state: {
                         currentPage:  {{ datagrid.pager.page|json_encode|raw }},
                         pageSize:     {{ datagrid.pager.maxPerPage|json_encode|raw }},
@@ -61,26 +71,39 @@
         var containerSelector = {{ selector|json_encode|raw }};
         var datagridTemplateSelector = {{ ("#" ~ datagridName ~ "GridTemplate")|json_encode|raw }};
         var datagridName = {{ datagridName|json_encode|raw }};
+        var datagridFiltersSelector = {{ ("#" ~ datagridName ~ "Filters")|json_encode|raw }};
         var datagridToolbarSelector = {{ ("#" ~ datagridName ~ "Toolbar")|json_encode|raw }};
         var datagridBodySelector = {{ ("#" ~ datagridName ~ "Body")|json_encode|raw }};
         var datagridOptions = OroApp.scope[datagridName];
 
         var initDatagrid = function(
-            datagridOptions,
-            datagridTemplateSelector,
-            containerSelector,
-            datagridToolbarSelector,
-            datagridBodySelector
-        ) {
+                datagridOptions,
+                datagridTemplateSelector,
+                containerSelector,
+                datagridFiltersSelector,
+                datagridToolbarSelector,
+                datagridBodySelector
+                ) {
             // Initialize a new collection and grid instance
             var datagridCollection = new OroApp.PageableCollection(
-                    [],
-                    datagridOptions.collection
+                [],
+                datagridOptions.collection
             );
-            var datagridParameters = _.extend({
-                collection: datagridCollection,
-                className: 'grid table-hover table table-bordered table-condensed'
-            }, datagridOptions.grid);
+            var datagridParameters = _.extend(
+                {
+                    collection: datagridCollection,
+                    className: 'grid table-hover table table-bordered table-condensed'
+                },
+                datagridOptions.grid
+            );
+            var filterListParameters = _.extend(
+                {
+                    tagName: 'div',
+                    className: 'filter-box container-fluid',
+                    addButtonHint: '+ Add another'
+                },
+                datagridOptions.grid
+            );
 
             // Basic grid template
             var template = _.template($(datagridTemplateSelector).html());
@@ -97,13 +120,25 @@
             };
             var pager = new OroApp.DatagridToolbar(datagridToolbarParameters);
             $(datagridToolbarSelector).append($(pager.render().$el));
-        }
 
-        initDatagrid(datagridOptions, datagridTemplateSelector, containerSelector, datagridToolbarSelector, datagridBodySelector);
+            // Render filters
+            var filtersList = new OroApp.FilterList(filterListParameters);
+            $(datagridFiltersSelector).html(filtersList.render().$el);
+        };
+
+        initDatagrid(
+            datagridOptions,
+            datagridTemplateSelector,
+            containerSelector,
+            datagridFiltersSelector,
+            datagridToolbarSelector,
+            datagridBodySelector
+        );
     });
 </script>
 
 <script type="text/template" id="{{ datagridName }}GridTemplate">
+    <div class="clearfix" id="{{ datagridName }}Filters"></div>
     <div class="clearfix" id="{{ datagridName }}Toolbar"></div>
     <div class="clearfix" id="{{ datagridName }}Body"></div>
 </script>
