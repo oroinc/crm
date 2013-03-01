@@ -26,7 +26,7 @@ OroApp.DatagridPagination = OroApp.View.extend({
                 '</li>' +
             '<% }); %>' +
         '</ul>' +
-        '<label class="dib">of <%= pageSize %> | <%= totalRecords %> records</label>'
+        '<label class="dib">of <%= totalPages %> | <%= totalRecords %> records</label>'
     ),
 
     /** @property */
@@ -150,7 +150,7 @@ OroApp.DatagridPagination = OroApp.View.extend({
 
         this.$el.append($(this.template({
             handles: this.makeHandles(),
-            pageSize: this.collection.state.pageSize,
+            totalPages: this.collection.state.totalPages,
             totalRecords: this.collection.state.totalRecords
         })));
 

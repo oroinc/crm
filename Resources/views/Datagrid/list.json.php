@@ -18,4 +18,11 @@ foreach ($datagrid->getResults() as $object) {
     $data[] = $record;
 }
 
-echo json_encode($data);
+$result = array(
+    'data' => $data,
+    'options' => array(
+        'totalRecords' => $datagrid->getPager()->getNbResults()
+    ),
+);
+
+echo json_encode($result);

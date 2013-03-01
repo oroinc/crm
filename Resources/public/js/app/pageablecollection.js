@@ -41,6 +41,13 @@ OroApp.PageableCollection = Backbone.PageableCollection.extend({
         return data;
     },
 
+    // { data : array, options : server_parameters }
+    parse: function(resp, options) {
+        this.state.totalRecords = resp.options.totalRecords;
+        this.state = this._checkState(this.state);
+        return resp.data;
+    },
+
     // fetch collection data
     fetch: function (options) {
         var BBColProto = Backbone.Collection.prototype;

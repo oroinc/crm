@@ -11,6 +11,8 @@ OroApp.FilterList = Backbone.View.extend({
 
     initialize: function(options)
     {
+        this.collection = options.collection;
+
         if (options.filters) {
             this.filters = options.filters;
         }
@@ -18,10 +20,6 @@ OroApp.FilterList = Backbone.View.extend({
         for (var i = 0; i < this.filters.length; i++) {
             this.filters[i] = new (this.filters[i])();
             this.listenTo(this.filters[i], "changedData", this.reloadCollection);
-        }
-
-        if (options.collection) {
-            this.collection = options.collection;
         }
 
         if (options.addButtonHint) {
