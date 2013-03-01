@@ -81,4 +81,20 @@ class RoleController extends BaseController
 
         return $this->container->get('besimple.soap.response')->setReturnValue(true);
     }
+
+    /**
+     * @Soap\Method("getRoleByName")
+     * @Soap\Param("name", phpType = "string")
+     * @Soap\Result(phpType = "Oro\Bundle\UserBundle\Entity\Role")
+     */
+    public function getBynameAction($name)
+    {
+        $entity = $this->getManager()->getRepository('OroUserBundle:Role')->findOneBy(array('role' => $name));
+
+        if (!$entity) {
+            throw new \SoapFault('NOT_FOUND', sprintf('Role "%s" can not be found', $name));
+        }
+
+        return $this->container->get('besimple.soap.response')->setReturnValue($entity);
+    }
 }

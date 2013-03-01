@@ -80,4 +80,16 @@ class GroupController extends BaseController
 
         return $this->container->get('besimple.soap.response')->setReturnValue(true);
     }
+
+    /**
+     * @Soap\Method("getGroupRoles")
+     * @Soap\Param("id", phpType = "int")
+     * @Soap\Result(phpType = "Oro\Bundle\UserBundle\Entity\Role[]")
+     */
+    public function getRolesAction($id)
+    {
+        $entity = $this->getEntity('OroUserBundle:Group', $id);
+
+        return $this->container->get('besimple.soap.response')->setReturnValue($entity->getRoles()->toArray());
+    }
 }

@@ -21,7 +21,8 @@ class Group
      * @ORM\Id
      * @ORM\Column(type="smallint", name="id")
      * @ORM\GeneratedValue(strategy="AUTO")
-     * @Exclude
+     * @Soap\ComplexType("int", nillable=true)
+     * @Type("integer")
      */
     protected $id;
 

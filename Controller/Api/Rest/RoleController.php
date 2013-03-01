@@ -129,6 +129,28 @@ class RoleController extends FOSRestController implements ClassResourceInterface
     }
 
     /**
+     * Get role by name
+     *
+     * @param string $name Role name
+     * @ApiDoc(
+     *  description="Get role by name",
+     *  resource=true,
+     *  filters={
+     *      {"name"="name", "dataType"="string"},
+     *  }
+     * )
+     */
+    public function getBynameAction($name)
+    {
+        $entity = $this->getManager()->getRepository('OroUserBundle:Role')->findOneBy(array('role' => $name));
+
+        return $this->handleView($this->view(
+            $entity,
+            $entity ? Codes::HTTP_OK : Codes::HTTP_NOT_FOUND
+        ));
+    }
+
+    /**
      * @return \Doctrine\Common\Persistence\ObjectManager
      */
     protected function getManager()
