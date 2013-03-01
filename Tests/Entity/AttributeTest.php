@@ -191,6 +191,34 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
     /**
      * Test related method
      */
+    public function testConvertDefaultValueToInteger()
+    {
+        $this->attribute->convertDefaultValueToInteger();
+        $this->assertNull($this->attribute->getDefaultValue());
+
+        $this->attribute->setDefaultValue(true);
+        $this->attribute->setAttributeType('Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\BooleanType');
+        $this->attribute->convertDefaultValueToInteger();
+        $this->assertEquals($this->attribute->getDefaultValue(), 1);
+    }
+
+    /**
+     * Test related method
+     */
+    public function testConvertDefaultValueToBoolean()
+    {
+        $this->attribute->convertDefaultValueToInteger();
+        $this->assertNull($this->attribute->getDefaultValue());
+
+        $this->attribute->setDefaultValue(1);
+        $this->attribute->setAttributeType('Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\BooleanType');
+        $this->attribute->convertDefaultValueToBoolean();
+        $this->assertEquals($this->attribute->getDefaultValue(), true);
+    }
+
+    /**
+     * Test related method
+     */
     public function testGetOptions()
     {
         // option

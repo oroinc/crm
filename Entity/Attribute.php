@@ -63,4 +63,33 @@ class Attribute extends AbstractEntityAttribute
             }
         }
     }
+
+    /**
+     * Convert defaultValue to integer if attribute type is boolean
+     *
+     * @ORM\PrePersist
+     * @ORM\PreUpdate
+     */
+    public function convertDefaultValueToInteger()
+    {
+        if ($this->getDefaultValue() !== null) {
+            if (strpos($this->getAttributeType(), 'BooleanType') !== false) {
+                $this->setDefaultValue((int) $this->getDefaultValue());
+            }
+        }
+    }
+
+    /**
+     * Convert defaultValue to boolean if attribute type is boolean
+     *
+     * @ORM\PostLoad
+     */
+    public function convertDefaultValueToBoolean()
+    {
+        if ($this->getDefaultValue() !== null) {
+            if (strpos($this->getAttributeType(), 'BooleanType') !== false) {
+                $this->setDefaultValue((bool) $this->getDefaultValue());
+            }
+        }
+    }
 }
