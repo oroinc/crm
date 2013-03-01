@@ -84,7 +84,10 @@
         var {{ datagridName }}PaginatorParameters = _.clone({{ datagridName }}Parameters);
         var paginator = new OroApp.Paginator(_.extend(
             {{ datagridName }}PaginatorParameters,
-            { className: "icons-holder" }
+            {
+                tagName: 'ul',
+                className: "icons-holder"
+            }
         ));
         $(paginator.render().$el).insertAfter("#{{ datagridName }}Paginator");
     });

@@ -2,17 +2,17 @@
 OroApp.Paginator = Backgrid.Footer.extend({
 
     /** @property */
-    tagName: 'ul',
+    tagName: 'paginator',
 
     /** @property */
     windowSize: 10,
 
     /** @property */
     fastForwardHandleLabels: {
-        first: "《",
+        first: undefined,
         prev: "〈",
         next: "〉",
-        last: "》"
+        last: undefined
     },
 
     /** @property */
@@ -137,14 +137,12 @@ OroApp.Paginator = Backgrid.Footer.extend({
                 });
             }
 
-            /*
             if (ffLabels.first) {
                 handles.unshift({
                     label: ffLabels.first,
                     className: collection.hasPrevious() ? void 0 : "disabled"
                 });
             }
-            */
 
             if (ffLabels.next) {
                 handles.push({
@@ -153,14 +151,12 @@ OroApp.Paginator = Backgrid.Footer.extend({
                 });
             }
 
-            /*
             if (ffLabels.last) {
                 handles.push({
                     label: ffLabels.last,
                     className: collection.hasNext() ? void 0 : "disabled"
                 });
             }
-            */
         }
 
         return handles;
