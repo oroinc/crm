@@ -58,42 +58,53 @@
     });
 
     $(function() {
-        // Initialize a new collection and grid instance
-        var {{ collectionName }} = new OroApp.PageableCollection(
-            [],
-            OroApp.scope.{{ datagridName }}.collection
-        );
-        var {{ datagridName }}Parameters = _.extend(
-            {
-                collection: {{ collectionName }},
-                className: 'datagrid grid table-hover table table-bordered table-condensed'
-            },
-            OroApp.scope.{{ datagridName }}.grid
-        );
+        var containerSelector = {{ selector|json_encode|raw }};
+        var datagridTemplateSelector = {{ ("#" ~ datagridName ~ "GridTemplate")|json_encode|raw }};
+        var datagridName = {{ datagridName|json_encode|raw }};
+        var datagridPaginatorSelector = {{ ("#" ~ datagridName ~ "Paginator")|json_encode|raw }};
+        var datagridBodySelector = {{ ("#" ~ datagridName ~ "Body")|json_encode|raw }};
+        var datagridOptions = OroApp.scope[datagridName];
 
-        // Basic template templa
-        var myTemplate = _.template($('#gridTemplate').html());
-        $("{{ selector }}").append(myTemplate);
+        var initDatagrid = function(
+            datagridOptions,
+            datagridTemplateSelector,
+            containerSelector,
+            datagridPaginatorSelector,
+            datagridBodySelector
+        ) {
+            // Initialize a new collection and grid instance
+            var datagridCollection = new OroApp.PageableCollection(
+                    [],
+                    datagridOptions.collection
+            );
+            var datagridParameters = _.extend({
+                collection: datagridCollection,
+                className: 'grid table-hover table table-bordered table-condensed'
+            }, datagridOptions.grid);
 
-        // Render the grid and attach the root to your HTML document
-        var {{ datagridName }} = new OroApp.Datagrid({{ datagridName }}Parameters);
-        $("#{{ datagridName }}Body").html({{ datagridName }}.render().$el);
-        {{ collectionName }}.fetch();
+            // Basic grid template
+            var template = _.template($(datagridTemplateSelector).html());
+            $(containerSelector).append(template);
 
-        // render paginator
-        var {{ datagridName }}PaginatorParameters = _.clone({{ datagridName }}Parameters);
-        var paginator = new OroApp.Paginator(_.extend(
-            {{ datagridName }}PaginatorParameters,
-            {
+            // Render the grid and attach the root to your HTML document
+            var datagrid = new OroApp.Datagrid(datagridParameters);
+            $(datagridBodySelector).html(datagrid.render().$el);
+            datagridCollection.fetch();
+
+            // Render paginator
+            var datagridPaginatorParameters = _.clone(datagridParameters);
+            var paginator = new OroApp.Paginator(_.extend(datagridPaginatorParameters, {
                 tagName: 'ul',
                 className: "icons-holder"
-            }
-        ));
-        $(paginator.render().$el).insertAfter("#{{ datagridName }}Paginator");
+            }));
+            $(paginator.render().$el).insertAfter(datagridPaginatorSelector);
+        }
+
+        initDatagrid(datagridOptions, datagridTemplateSelector, containerSelector, datagridPaginatorSelector, datagridBodySelector);
     });
 </script>
 
-<script type="text/template" id="gridTemplate">
+<script type="text/template" id="{{ datagridName }}GridTemplate">
     <div class="grid-toolbar well-small">
         <div class="pull-right form-horizontal">
             <label class="control-label">View per page: &nbsp;</label>
