@@ -1,4 +1,3 @@
-// Oro Application grid prototype
 OroApp.Datagrid = Backgrid.Grid.extend({
     initialize: function(options) {
         delete(options.className);

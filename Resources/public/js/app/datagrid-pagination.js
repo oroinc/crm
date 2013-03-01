@@ -15,7 +15,7 @@ OroApp.DatagridPagination = OroApp.View.extend({
             '<% _.each(handles, function (handle) { %>' +
                 '<li <% if (handle.className) { %>class="<%= handle.className %>"<% } %>>' +
                     '<a href="#" <% if (handle.title) {%> title="<%= handle.title %>"<% } %>>' +
-                        '<% if (handle.wrap) {%>' +
+                        '<% if (handle.wrapClass) {%>' +
                             '<i <% if (handle.wrapClass) { %>class="<%= handle.wrapClass %>"<% } %>>' +
                                 '<%= handle.label %>' +
                             '</i>' +

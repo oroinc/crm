@@ -2,6 +2,7 @@
 '@OroGridBundle/Resources/public/lib/backbone-pageable.js'
 '@OroGridBundle/Resources/public/lib/backgrid/backgrid.js'
 '@OroGridBundle/Resources/public/js/app/datagrid-pagination.js'
+'@OroGridBundle/Resources/public/js/app/datagrid-pagesize.js'
 '@OroGridBundle/Resources/public/js/app/datagrid-toolbar.js'
 '@OroGridBundle/Resources/public/js/app/datagrid.js'
 '@OroGridBundle/Resources/public/js/app/pageablecollection.js'
@@ -56,7 +57,7 @@ output='js/acme.grid.js'
                 },
                 collection: {
                     inputName: "{{ datagrid.name|raw }}",
-                            url: {{ datagrid.routeGenerator.generateUrl(null, {'_format': 'json'})|json_encode|raw }},
+                    url: {{ datagrid.routeGenerator.generateUrl(null, {'_format': 'json'})|json_encode|raw }},
                     state: {
                         currentPage:  {{ datagrid.pager.page|json_encode|raw }},
                         pageSize:     {{ datagrid.pager.maxPerPage|json_encode|raw }},

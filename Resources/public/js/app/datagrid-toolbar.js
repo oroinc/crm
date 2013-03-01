@@ -3,23 +3,32 @@ OroApp.DatagridToolbar = OroApp.View.extend({
     /** @property */
     template:_.template(
         '<div class="grid-toolbar well-small">' +
-            '<div class="pull-right form-horizontal">' +
-                '<label class="control-label">View per page: &nbsp;</label>' +
+            '<div class="pull-left">' +
+                '<div class="btn-group icons-holder">' +
+                    '<button class="btn"><i class="icon-edit hide-text">edit</i></button>' +
+                    '<button class="btn"><i class="icon-copy hide-text">copy</i></button>' +
+                    '<button class="btn"><i class="icon-pin hide-text">pin/unpin</i></button>' +
+                    '<button class="btn"><i class="icon-trash hide-text">remove</i></button>' +
+                '</div>' +
                 '<div class="btn-group">' +
-                    '<button data-toggle="dropdown" class="btn dropdown-toggle">100<span class="caret"></span></button>' +
-                    '<ul class="dropdown-menu pull-right">' +
-                        '<li><a href="#">10</a></li>' +
-                        '<li><a href="#">25</a></li>' +
-                        '<li><a href="#">50</a></li>' +
+                    '<button data-toggle="dropdown" class="btn dropdown-toggle">Status: <strong>All</strong><span class="caret"></span></button>' +
+                    '<ul class="dropdown-menu">' +
+                        '<li><a href="#">only short</a></li>' +
+                        '<li><a href="#">this is long text for test</a></li>' +
                     '</ul>' +
                 '</div>' +
+                '<button id="open-loading" class="btn">open loading</button>' +
             '</div>' +
+            '<div class="page-size pull-right form-horizontal"></div>' +
             '<div class="pagination pagination-centered"></div>' +
         '</div>'
     ),
 
     /** @property */
     pagination: OroApp.DatagridPagination,
+
+    /** @property */
+    pageSize: OroApp.DatagridPageSize,
 
     /**
      * Initializer.
@@ -33,6 +42,9 @@ OroApp.DatagridToolbar = OroApp.View.extend({
         this.pagination = new this.pagination({
             collection: this.collection
         });
+        this.pageSize = new this.pageSize({
+            collection: this.collection
+        });
         OroApp.View.prototype.initialize.call(this, options);
     },
 
@@ -44,6 +56,7 @@ OroApp.DatagridToolbar = OroApp.View.extend({
 
         this.$el.append(this.template());
         this.$('.pagination').append(this.pagination.render().$el);
+        this.$('.page-size').append(this.pageSize.render().$el);
 
         return this;
     }
