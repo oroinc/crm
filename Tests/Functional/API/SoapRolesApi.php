@@ -79,15 +79,31 @@ class SoapApiTest extends WebTestCase
         //get roles
         $roles = self::$clientSoap->getRoles();
         $roles = $this->classToArray($roles);
-        $roles = $this->classToArray($roles);
         $this->assertEquals(5, count($roles['item']));
         foreach ($roles['item'] as $role) {
             $this->assertEquals($role['role'] . '_UPDATED', strtoupper($role['label']));
         }
     }
 
-    /**0.
-     *
+    /**
+     * @depends testGetRoles
+     */
+    public function testDeleteRoles()
+    {
+        //get roles
+        $roles = self::$clientSoap->getRoles();
+        $roles = $this->classToArray($roles);
+        $this->assertEquals(5, count($roles['item']));
+        foreach ($roles['item'] as $role) {
+            $result = self::$clientSoap->deleteRole($role['id']);
+            $this->assertTrue($result);
+        }
+        $roles = self::$clientSoap->getRoles();
+        $roles = $this->classToArray($roles);
+        $this->assertEmpty($roles);
+    }
+
+    /**
      * Data provider for REST API tests
      *
      * @return array
