@@ -4,9 +4,10 @@
 '@OroGridBundle/Resources/public/js/app/datagrid-pagination.js'
 '@OroGridBundle/Resources/public/js/app/datagrid-pagesize.js'
 '@OroGridBundle/Resources/public/js/app/datagrid-toolbar.js'
+'@OroGridBundle/Resources/public/js/app/datagrid-filter.js'
 '@OroGridBundle/Resources/public/js/app/datagrid.js'
 '@OroGridBundle/Resources/public/js/app/pageablecollection.js'
-'@OroGridBundle/Resources/public/js/app/filter.js'
+
 output='js/acme.grid.js'
 %}
 <script type="text/javascript" src="{{ asset_url }}"></script>
@@ -99,6 +100,7 @@ output='js/acme.grid.js'
             );
             var filterListParameters = _.extend(
                 {
+                    collection: datagridCollection,
                     tagName: 'div',
                     className: 'filter-box container-fluid',
                     addButtonHint: '+ Add another'

@@ -9,11 +9,19 @@ OroApp.FilterList = Backbone.View.extend({
     /** @property */
     addButtonHint: 'Add filter',
 
-    // set list of filters
     initialize: function(options)
     {
         if (options.filters) {
             this.filters = options.filters;
+        }
+
+        for (var i = 0; i < this.filters.length; i++) {
+            this.filters[i] = new (this.filters[i])();
+            this.listenTo(this.filters[i], "changedData", this.reloadCollection);
+        }
+
+        if (options.collection) {
+            this.collection = options.collection;
         }
 
         if (options.addButtonHint) {
@@ -27,8 +35,7 @@ OroApp.FilterList = Backbone.View.extend({
         this.$el.empty();
 
         for (var i = 0; i < this.filters.length; i++) {
-            var filter = new (this.filters[i])();
-            this.$el.append(filter.render().$el);
+            this.$el.append(this.filters[i].render().$el);
         }
 
         this.$el.append(this.addButtonTemplate({
@@ -36,6 +43,19 @@ OroApp.FilterList = Backbone.View.extend({
         }));
 
         return this;
+    },
+
+    reloadCollection: function() {
+        var filterParams = {};
+        for (var i = 0; i < this.filters.length; i++) {
+            var filter = this.filters[i];
+            var parameterValue = filter.getParameterValue();
+            if (parameterValue) {
+                filterParams[filter.inputName] = parameterValue;
+            }
+        }
+        this.collection.state.filters = filterParams;
+        this.collection.fetch();
     }
 });
 
@@ -50,7 +70,8 @@ OroApp.Filter = Backbone.View.extend({
     /** @property */
     template: _.template(
         '<div class="btn">' +
-            '<%= inputHint %>: <input type="text" name="<%= inputName %>"><span class="caret"></span>' +
+            '<%= inputHint %>: <input type="text" name="<%= inputName %>" value="" />' +
+            '<span class="caret"></span>' +
         '</div>'
     ),
 
@@ -59,6 +80,10 @@ OroApp.Filter = Backbone.View.extend({
 
     /** @property */
     inputHint: 'Input Hint',
+
+    events: {
+        "change input": "update"
+    },
 
     render: function () {
         this.$el.empty();
@@ -69,5 +94,14 @@ OroApp.Filter = Backbone.View.extend({
             })
         );
         return this;
+    },
+
+    update: function(e) {
+        e.preventDefault();
+        this.trigger("changedData");
+    },
+
+    getParameterValue: function() {
+        return this.$('input').val();
     }
 });

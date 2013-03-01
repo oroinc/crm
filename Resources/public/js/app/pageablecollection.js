@@ -30,6 +30,17 @@ OroApp.PageableCollection = Backbone.PageableCollection.extend({
         OroApp.Collection.prototype.initialize.apply(this, arguments);
     },
 
+    // {'filter_key' => 'filter_value', ...}
+    processFiltersParams: function(data, state) {
+        if (state.filters) {
+            _.each(state.filters, function(filterValue, filterKey) {
+                var queryParameter = this.inputName + '[_filter][' + filterKey + '][value]';
+                data[queryParameter] = filterValue;
+            }, this);
+        }
+        return data;
+    },
+
     // fetch collection data
     fetch: function (options) {
         var BBColProto = Backbone.Collection.prototype;
@@ -58,6 +69,7 @@ OroApp.PageableCollection = Backbone.PageableCollection.extend({
         options.data = data;
 
         data = this.processQueryParams(data, state);
+        data = this.processFiltersParams(data, state);
 
         var fullCollection = this.fullCollection, links = this.links;
 
