@@ -121,7 +121,11 @@ class OrmTest extends \PHPUnit_Framework_TestCase
         $this->route->expects($this->any())
             ->method('generate')
             ->will($this->returnValue('http://example.com'));
-
+        $params = array(
+            'translator' => $this->translator,
+            'test_manager' => $this->flexibleManager,
+            'router' => $this->route,
+        );
         $this->container->expects($this->any())
             ->method('get')
             ->with($this->logicalOr(
@@ -130,18 +134,8 @@ class OrmTest extends \PHPUnit_Framework_TestCase
                 $this->equalTo('router')
             ))
             ->will($this->returnCallback(
-                function($param) {
-                    switch ($param) {
-                        case 'translator':
-                            return $this->translator;
-                            break;
-                        case 'test_manager':
-                            return $this->flexibleManager;
-                            break;
-                        case 'router':
-                            return $this->route;
-                            break;
-                    }
+                function($param) use (&$params){
+                    return $params[$param];
                 }
             ));
 
