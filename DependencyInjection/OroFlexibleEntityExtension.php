@@ -34,7 +34,7 @@ class OroFlexibleEntityExtension extends Extension
                         $entitiesConfig['entities_config'][$entity]= $entityConfig;
                     }
                 }
-                // merge attributte type configs
+                // merge attribute type configs
                 if (isset($bundleConfig['attributes_config'])) {
                     foreach ($bundleConfig['attributes_config'] as $attributeType => $attributeConfig) {
                         $entitiesConfig['attributes_config'][$attributeType]= $attributeConfig;
