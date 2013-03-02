@@ -21,7 +21,8 @@ class SearchController extends FOSRestController
      *  filters={
      *      {"name"="search", "dataType"="string"},
      *      {"name"="offset", "dataType"="integer"},
-     *      {"name"="max_results", "dataType"="integer"}
+     *      {"name"="max_results", "dataType"="integer"},
+     *      {"name"="from", "dataType"="string"}
      *  }
      * )
      */
@@ -34,7 +35,8 @@ class SearchController extends FOSRestController
                 $this->get('oro_search.index')->simpleSearch(
                     $this->getRequest()->get('search'),
                     (int) $this->getRequest()->get('offset'),
-                    (int) $this->getRequest()->get('max_results')
+                    (int) $this->getRequest()->get('max_results'),
+                    $this->getRequest()->get('from')
                 )->toSearchResultData()
             )
         );

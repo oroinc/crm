@@ -4,7 +4,7 @@
 services:
     oro_search.index:
         class:        Oro\Bundle\SearchBundle\Engine\Indexer
-        arguments:    ["@doctrine.orm.entity_manager", "@oro_search.search.engine", %oro_search.entities_config%]
+        arguments:    ["@doctrine.orm.entity_manager", "@oro_search.search.engine", "@translator", %oro_search.entities_config%]
 
     oro_search.index_listener:
         class:        Oro\Bundle\SearchBundle\EventListener\IndexListener
@@ -13,3 +13,15 @@ services:
             - { name: doctrine.event_listener, event: postPersist }
             - { name: doctrine.event_listener, event: postUpdate }
             - { name: doctrine.event_listener, event: preRemove }
+
+
+    oro_search.twig.search_extension:
+        class:        Oro\Bundle\SearchBundle\Twig\OroSearchExtension
+        arguments:    [@twig, %oro_search.twig.result_template%]
+        tags:
+            - { name: twig.extension }
+
+    oro_search.result.subscriber:
+        class:        Oro\Bundle\SearchBundle\Query\Result\Subscriber\PaginateResultSubscriber
+        tags:
+            - { name: knp_paginator.subscriber }

@@ -43,4 +43,9 @@ class QueryTest extends \PHPUnit_Framework_TestCase
         $this->query->setCreatedAt(new \DateTime('2013-01-01'));
         $this->assertEquals('2013-01-01', $this->query->getCreatedAt()->format('Y-m-d'));
     }
+
+    public function testGetId()
+    {
+        $this->assertNull($this->query->getId());
+    }
 }

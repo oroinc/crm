@@ -4,12 +4,12 @@ namespace Oro\Bundle\SearchBundle\Engine\Orm;
 
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Mapping\ClassMetadata;
-use Doctrine\ORM\Query\AST\Functions\FunctionNode;
 use Doctrine\ORM\EntityManager;
 
 use Oro\Bundle\SearchBundle\Query\Query;
+use Oro\Bundle\SearchBundle\Engine\Indexer;
 
-abstract class BaseDriver extends FunctionNode
+abstract class BaseDriver
 {
     /**
      * @var string
@@ -80,7 +80,7 @@ abstract class BaseDriver extends FunctionNode
      */
     public function getRecordsCount(Query $query)
     {
-        $qb = $this->getRequestQB($query);
+        $qb = $this->getRequestQB($query, false);
         $qb->select($qb->expr()->countDistinct('search.id'));
 
         return (int) $qb->getQuery()->getSingleScalarResult();
@@ -92,41 +92,68 @@ abstract class BaseDriver extends FunctionNode
      * @param \Doctrine\ORM\QueryBuilder $qb
      * @param integer                    $index
      * @param array                      $searchCondition
+     * @param boolean                    $setOrderBy
+     *
+     * @return string
      */
-    protected function addTextField(QueryBuilder $qb, $index, $searchCondition)
+    protected function addTextField(QueryBuilder $qb, $index, $searchCondition, $setOrderBy = true)
     {
-        $joinAlias = 'textFields' . $index;
-        $qb->join('search.textFields', $joinAlias);
         $useFieldName = $searchCondition['fieldName'] == '*' ? false : true;
-        if ($searchCondition['type'] == 'and') {
-            $qb->andWhere($this->createStringQuery($joinAlias, $index, $useFieldName));
-            $this->setFieldValueStringParameter($qb, $index, $searchCondition['fieldValue']);
+
+        if ($searchCondition['condition'] == Query::OPERATOR_CONTAINS) {
+            $searchString = $this->createContainsStringQuery($index, $useFieldName);
         } else {
-            $qb->orWhere($this->createStringQuery($joinAlias, $index, $useFieldName));
-            $qb->setParameter('value' . $index, $searchCondition['fieldValue']);
+            $searchString = $this->createNotContainsStringQuery($index, $useFieldName);
         }
+        $whereExpr = $searchCondition['type'] . ' (' . $searchString . ')';
+
+        $this->setFieldValueStringParameter($qb, $index, $searchCondition['fieldValue'], $searchCondition['condition']);
+
         if ($useFieldName) {
             $qb->setParameter('field' . $index, $searchCondition['fieldName']);
         }
+
+        if ($setOrderBy) {
+            $this->setTextOrderBy($qb, $index);
+        }
+
+        return $whereExpr;
     }
 
     /**
-     * Create search string for string parameters
+     * Create search string for string parameters (contains)
      *
-     * @param string  $joinAlias
      * @param integer $index
      * @param bool    $useFieldName
      *
      * @return string
      */
-    protected function createStringQuery($joinAlias, $index, $useFieldName = true)
+    protected function createContainsStringQuery($index, $useFieldName = true)
     {
         $stringQuery = '';
         if ($useFieldName) {
-            $stringQuery = $joinAlias . '.field = :field' . $index . ' AND ';
+            $stringQuery = 'textField.field = :field' . $index . ' AND ';
         }
 
-        return $stringQuery . $joinAlias . '.value LIKE :value' . $index;
+        return $stringQuery . 'textField.value LIKE :value' . $index;
+    }
+
+    /**
+     * Create search string for string parameters (not contains)
+     *
+     * @param integer $index
+     * @param bool    $useFieldName
+     *
+     * @return string
+     */
+    protected function createNotContainsStringQuery($index, $useFieldName = true)
+    {
+        $stringQuery = '';
+        if ($useFieldName) {
+            $stringQuery = 'textField.field = :field' . $index . ' AND ';
+        }
+
+        return $stringQuery . 'textField.value NOT LIKE :value' . $index;
     }
 
     /**
@@ -135,8 +162,9 @@ abstract class BaseDriver extends FunctionNode
      * @param \Doctrine\ORM\QueryBuilder $qb
      * @param integer                    $index
      * @param string                     $fieldValue
+     * @param string                     $searchCondition
      */
-    protected function setFieldValueStringParameter(QueryBuilder $qb, $index, $fieldValue)
+    protected function setFieldValueStringParameter(QueryBuilder $qb, $index, $fieldValue, $searchCondition)
     {
         $qb->setParameter('value' . $index, '%' . str_replace(' ', '%', $fieldValue) . '%');
     }
@@ -147,19 +175,16 @@ abstract class BaseDriver extends FunctionNode
      * @param \Doctrine\ORM\QueryBuilder $qb
      * @param integer                    $index
      * @param array                      $searchCondition
+     *
+     * @return string
      */
     protected function addNonTextField(QueryBuilder $qb, $index, $searchCondition)
     {
-        $joinEntity = $searchCondition['fieldType'] . 'Fields';
-        $joinAlias = $joinEntity . $index;
-        $qb->join('search.' . $joinEntity, $joinAlias);
-        if ($searchCondition['type'] == 'and') {
-            $qb->andWhere($this->createNonTextQuery($joinAlias, $index));
-        } else {
-            $qb->orWhere($this->createNonTextQuery($joinAlias, $index));
-        }
-        $qb->setParameter('field' . $index, $searchCondition['fieldName'])
-            ->setParameter('value' . $index, $searchCondition['fieldValue']);
+        $joinAlias = $searchCondition['fieldType'] . 'Field';
+        $qb->setParameter('field' . $index, $searchCondition['fieldName']);
+        $qb->setParameter('value' . $index, $searchCondition['fieldValue']);
+
+        return $searchCondition['type'] . ' (' . $this->createNonTextQuery($joinAlias, $index, $searchCondition['condition']) . ')';
     }
 
     /**
@@ -167,22 +192,71 @@ abstract class BaseDriver extends FunctionNode
      *
      * @param $joinAlias
      * @param $index
+     * @param $condition
      *
      * @return string
      */
-    protected function createNonTextQuery($joinAlias, $index)
+    protected function createNonTextQuery($joinAlias, $index, $condition)
     {
-        return $joinAlias . '.field= :field' . $index . ' AND ' . $joinAlias . '.value = :value' . $index;
+        if ($condition == Query::OPERATOR_IN) {
+            $searchString = $joinAlias . '.field= :field' . $index . ' AND ' . $joinAlias . '.value ' . $condition . ' (:value' . $index . ')';
+        } elseif ($condition == Query::OPERATOR_NOT_IN) {
+            $searchString = $joinAlias . '.field= :field' . $index . ' AND ' . $joinAlias . '.value NOT IN (:value' . $index . ')';
+        } else {
+            $searchString = $joinAlias . '.field= :field' . $index . ' AND ' . $joinAlias . '.value ' . $condition . ' :value' . $index;
+        }
+
+        return $searchString;
     }
 
     /**
      * @param \Oro\Bundle\SearchBundle\Query\Query $query
+     * @param boolean                              $setOrderBy
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
-    protected function getRequestQB(Query $query)
+    protected function getRequestQB(Query $query, $setOrderBy = true)
     {
-        $qb = $this->createQueryBuilder('search');
+        $qb = $this->createQueryBuilder('search')
+            ->select(array('search as item', 'text'))
+            ->leftJoin('search.textFields', 'text', 'WITH', 'text.field = :allTextField')
+            ->leftJoin('search.textFields', 'textField')
+            ->leftJoin('search.integerFields', 'integerField')
+            ->leftJoin('search.decimalFields', 'decimalField')
+            ->leftJoin('search.datetimeFields', 'datetimeField')
+            ->setParameter('allTextField', Indexer::TEXT_ALL_DATA_FIELD);
+
+        $this->setFrom($query, $qb);
+
+        $whereExpr = array();
+        foreach ($query->getOptions() as $index => $searchCondition) {
+            if ($searchCondition['fieldType'] == Query::TYPE_TEXT) {
+                $whereExpr[] = $this->addTextField($qb, $index, $searchCondition, $setOrderBy);
+            } else {
+                $whereExpr[] = $this->addNonTextField($qb, $index, $searchCondition);
+            }
+        }
+        if (substr($whereExpr[0], 0, 3) == 'and') {
+            $whereExpr[0] = substr($whereExpr[0], 3, strlen($whereExpr[0]));
+        }
+
+        $qb->andWhere(implode(' ', $whereExpr));
+
+        if ($setOrderBy) {
+            $this->addOrderBy($query, $qb);
+        }
+
+        return $qb;
+    }
+
+    /**
+     * Set from parameters from search query
+     *
+     * @param \Oro\Bundle\SearchBundle\Query\Query $query
+     * @param \Doctrine\ORM\QueryBuilder           $qb
+     */
+    protected function setFrom(Query $query, QueryBuilder $qb)
+    {
         $useFrom = true;
         foreach ($query->getFrom() as $from) {
             if ($from == '*') {
@@ -190,17 +264,36 @@ abstract class BaseDriver extends FunctionNode
             }
         }
         if ($useFrom) {
-            $qb->andWhere($qb->expr()->in('search.entity', $query->getFrom()));
+            $qb->andWhere($qb->expr()->in('search.alias', $query->getFrom()));
         }
+    }
 
-        foreach ($query->getOptions() as $index => $searchCondition) {
-            if ($searchCondition['fieldType'] == 'text') {
-                $this->addTextField($qb, $index, $searchCondition);
-            } else {
-                $this->addNonTextField($qb, $index, $searchCondition);
-            }
+    /**
+     * Set order by for search query
+     *
+     * @param \Oro\Bundle\SearchBundle\Query\Query $query
+     * @param \Doctrine\ORM\QueryBuilder           $qb
+     */
+    protected function addOrderBy(Query $query, QueryBuilder $qb)
+    {
+        $orderBy = $query->getOrderBy();
+
+        if ($orderBy) {
+            $orderRelation = $query->getOrderType() . 'Fields';
+            $qb->leftJoin('search.' . $orderRelation, 'orderTable', 'WITH', 'orderTable.field = :orderField')
+                ->orderBy('orderTable.value', $query->getOrderDirection())
+                ->setParameter('orderField', $orderBy)
+            ;
         }
+    }
 
-        return $qb;
+    /**
+     * Set fulltext range order by
+     *
+     * @param \Doctrine\ORM\QueryBuilder $qb
+     * @param int                        $index
+     */
+    protected function setTextOrderBy(QueryBuilder $qb, $index)
+    {
     }
 }

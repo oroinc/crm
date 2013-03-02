@@ -38,40 +38,18 @@ class Orm extends AbstractEngine
      */
     protected $jobRepo;
 
-    public function __construct(ObjectManager $em, ContainerInterface $container, $mappingConfig)
+    public function __construct(ObjectManager $em, ContainerInterface $container, $mappingConfig, $logQueries)
     {
         $this->container = $container;
         $this->em = $em;
         $this->mappingConfig = $mappingConfig;
-    }
+        $this->logQueries = $logQueries;
 
-    /**
-     * Search query with query builder
-     *
-     * @param \Oro\Bundle\SearchBundle\Query\Query $query
-     *
-     * @return array
-     */
-    protected function doSearch(Query $query)
-    {
-        $results = array();
-        $searchResults = $this->getIndexRepo()->search($query);
-        if ($query->getMaxResults() > 0 || $query->getFirstResult() > 0) {
-            $recordsCount = $this->getIndexRepo()->getRecordsCount($query);
-        } else {
-            $recordsCount = count($searchResults);
+        //todo: set translated mappingConfig only once
+        $translator = $container->get('translator');
+        foreach ($this->mappingConfig as $entity=> $config) {
+            $this->mappingConfig[$entity]['label'] = $translator->trans($config['label']);
         }
-        if ($searchResults) {
-            foreach ($searchResults as $item) {
-                /** @var $item \Oro\Bundle\SearchBundle\Entity\Item  */
-                $results[] = new ResultItem($this->em, $item->getEntity(), $item->getRecordId());
-            }
-        }
-
-        return array(
-            'results' => $results,
-            'records_count' => $recordsCount
-        );
     }
 
     /**
@@ -118,6 +96,7 @@ class Orm extends AbstractEngine
      */
     public function save($entity, $realtime = true)
     {
+        $alias = $this->mappingConfig[get_class($entity)]['alias'];
         $data = $this->mapObject($entity);
         $name = get_class($entity);
 
@@ -131,13 +110,16 @@ class Orm extends AbstractEngine
                 $item = new Item();
 
                 $item->setEntity($name)
-                     ->setRecordId($entity->getId());
+                     ->setRecordId($entity->getId())
+                     ->setAlias($alias);
             }
 
             $item->setChanged(!$realtime);
 
             if ($realtime) {
-                $item->saveItemData($data);
+                $item->setTitle($this->getEntityTitle($entity))
+                    ->setUrl($this->getEntityUrl($entity))
+                    ->saveItemData($data);
             } else {
                 $this->reindexJob();
             }
@@ -165,9 +147,8 @@ class Orm extends AbstractEngine
 
         if (is_object($object) && isset($mappingConfig[get_class($object)])) {
             $config = $mappingConfig[get_class($object)];
-
+            $alias = $config['alias'];
             foreach ($config['fields'] as $field) {
-
                 // check field relation type and set it to null if field doesn't have relations
                 if (!isset($field['relation_type'])) {
                     $field['relation_type'] = 'none';
@@ -178,22 +159,24 @@ class Orm extends AbstractEngine
                 switch ($field['relation_type']) {
                     case Indexer::RELATION_ONE_TO_ONE:
                     case Indexer::RELATION_MANY_TO_ONE:
-                        $objectData = $this->setRelatedFields($objectData, $field['relation_fields'], $value);
+                        $objectData = $this->setRelatedFields($alias, $objectData, $field['relation_fields'], $value, $field['name']);
 
                         break;
                     case Indexer::RELATION_MANY_TO_MANY:
                     case Indexer::RELATION_ONE_TO_MANY:
                         foreach ($value as $relationObject) {
-                            $objectData = $this->setRelatedFields($objectData, $field['relation_fields'], $relationObject);
+                            $objectData = $this->setRelatedFields($alias, $objectData, $field['relation_fields'], $relationObject, $field['name']);
                         }
 
                         break;
                     default:
-                        $objectData = $this->setDataValue($objectData, $field, $value);
+                        if ($value) {
+                            $objectData = $this->setDataValue($alias, $objectData, $field, $value);
+                        }
                 }
             }
             if (isset($config['flexible_manager'])) {
-                $objectData =  $this->setFlexibleFields($object, $objectData, $config['flexible_manager']);
+                $objectData =  $this->setFlexibleFields($alias, $object, $objectData, $config['flexible_manager']);
             }
         }
 
@@ -201,15 +184,56 @@ class Orm extends AbstractEngine
     }
 
     /**
+     * Search query with query builder
+     *
+     * @param \Oro\Bundle\SearchBundle\Query\Query $query
+     *
+     * @return array
+     */
+    protected function doSearch(Query $query)
+    {
+        $results = array();
+        $searchResults = $this->getIndexRepo()->search($query);
+        if (($query->getMaxResults() > 0 || $query->getFirstResult() > 0) && $query->getMaxResults() < Query::INFINITY) {
+            $recordsCount = $this->getIndexRepo()->getRecordsCount($query);
+        } else {
+            $recordsCount = count($searchResults);
+        }
+        if ($searchResults) {
+            foreach ($searchResults as $item) {
+                if (is_array($item)) {
+                    $item = $item['item'];
+                }
+                /** @var $item \Oro\Bundle\SearchBundle\Entity\Item  */
+                $results[] = new ResultItem(
+                    $this->em,
+                    $item->getEntity(),
+                    $item->getRecordId(),
+                    $item->getTitle(),
+                    $item->getUrl(),
+                    $item->getRecordText(),
+                    $this->mappingConfig[$item->getEntity()]
+                );
+            }
+        }
+
+        return array(
+            'results' => $results,
+            'records_count' => $recordsCount
+        );
+    }
+
+    /**
      * Map Flexible entity fields
      *
+     * @param string $alias
      * @param $object
-     * @param array $objectData
+     * @param array  $objectData
      * @param string $managerName
      *
      * @return array
      */
-    protected function setFlexibleFields($object, $objectData, $managerName)
+    protected function setFlexibleFields($alias, $object, $objectData, $managerName)
     {
         /** @var $flexibleManager \Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleManager */
         $flexibleManager = $this->container->get($managerName);
@@ -221,31 +245,34 @@ class Orm extends AbstractEngine
                 foreach ($attributes as $attribute) {
                     if ($attribute->getSearchable()) {
                         $value = $object->getValueData($attribute->getCode());
-                        $attributeType = $attribute->getBackendType();
+                        if ($value) {
+                            $attributeType = $attribute->getBackendType();
 
-                        switch ($attributeType) {
-                            case AbstractAttributeType::BACKEND_TYPE_TEXT:
-                            case AbstractAttributeType::BACKEND_TYPE_VARCHAR:
-                                $objectData = $this->saveFlexibleTextData($objectData, $attribute->getCode(), $value);
-                                break;
-                            case AbstractAttributeType::BACKEND_TYPE_DATETIME:
-                            case AbstractAttributeType::BACKEND_TYPE_DATE:
-                                $objectData = $this->saveFlexibleData(
-                                    $objectData,
-                                    AbstractAttributeType::BACKEND_TYPE_DATETIME,
-                                    $attribute->getCode(),
-                                    $value
-                                );
-                                break;
-                            default:
-                                $objectData = $this->saveFlexibleData(
-                                    $objectData,
-                                    $attributeType,
-                                    $attribute->getCode(),
-                                    $value
-                                );
+                            switch ($attributeType) {
+                                case AbstractAttributeType::BACKEND_TYPE_TEXT:
+                                case AbstractAttributeType::BACKEND_TYPE_VARCHAR:
+                                    $objectData = $this->saveFlexibleTextData($alias, $objectData, $attribute->getCode(), $value);
+                                    break;
+                                case AbstractAttributeType::BACKEND_TYPE_DATETIME:
+                                case AbstractAttributeType::BACKEND_TYPE_DATE:
+                                    $objectData = $this->saveFlexibleData(
+                                        $alias,
+                                        $objectData,
+                                        AbstractAttributeType::BACKEND_TYPE_DATETIME,
+                                        $attribute->getCode(),
+                                        $value
+                                    );
+                                    break;
+                                default:
+                                    $objectData = $this->saveFlexibleData(
+                                        $alias,
+                                        $objectData,
+                                        $attributeType,
+                                        $attribute->getCode(),
+                                        $value
+                                    );
+                            }
                         }
-
                     }
                 }
             }
@@ -255,30 +282,32 @@ class Orm extends AbstractEngine
     }
 
     /**
-     * @param array $objectData
+     * @param string $alias
+     * @param array  $objectData
      * @param string $attributeType
      * @param string $attribute
-     * @param mixed $value
+     * @param mixed  $value
      *
      * @return array
      */
-    protected function saveFlexibleData($objectData, $attributeType, $attribute, $value)
+    protected function saveFlexibleData($alias, $objectData, $attributeType, $attribute, $value)
     {
         if ($attributeType != AbstractAttributeType::BACKEND_TYPE_OPTION) {
             $objectData[$attributeType][$attribute] = $value;
         }
-
+        //$objectData[AbstractAttributeType::BACKEND_TYPE_TEXT][$alias . '_' . $attribute] = $value;
         return $objectData;
     }
 
     /**
-     * @param array $objectData
+     * @param string $alias
+     * @param array  $objectData
      * @param string $attribute
-     * @param mixed $value
+     * @param mixed  $value
      *
      * @return array
      */
-    protected function saveFlexibleTextData($objectData, $attribute, $value)
+    protected function saveFlexibleTextData($alias, $objectData, $attribute, $value)
     {
         if (!isset($objectData[AbstractAttributeType::BACKEND_TYPE_TEXT][$attribute])) {
             $objectData[AbstractAttributeType::BACKEND_TYPE_TEXT][$attribute] = '';
@@ -288,6 +317,7 @@ class Orm extends AbstractEngine
             $objectData[AbstractAttributeType::BACKEND_TYPE_TEXT][Indexer::TEXT_ALL_DATA_FIELD] = '';
         }
         $objectData[AbstractAttributeType::BACKEND_TYPE_TEXT][Indexer::TEXT_ALL_DATA_FIELD] .= " " . $value;
+        $objectData[AbstractAttributeType::BACKEND_TYPE_TEXT][$alias . '_' . $attribute] = $value;
 
         return $objectData;
     }
@@ -295,20 +325,27 @@ class Orm extends AbstractEngine
     /**
      * Set related fields values
      *
+     * @param string $alias
      * @param array  $objectData
      * @param array  $relationFields
      * @param object $relationObject
+     * @param string $parentName
      *
      * @return array
      */
-    protected function setRelatedFields($objectData, $relationFields, $relationObject)
+    protected function setRelatedFields($alias, $objectData, $relationFields, $relationObject, $parentName)
     {
         foreach ($relationFields as $relationObjectField) {
-            $objectData = $this->setDataValue(
-                $objectData,
-                $relationObjectField,
-                $this->getFieldValue($relationObject, $relationObjectField['name'])
-            );
+            $value = $this->getFieldValue($relationObject, $relationObjectField['name']);
+            if ($value) {
+                $relationObjectField['name'] = $parentName;
+                $objectData = $this->setDataValue(
+                    $alias,
+                    $objectData,
+                    $relationObjectField,
+                    $value
+                );
+            }
         }
 
         return $objectData;
@@ -330,13 +367,14 @@ class Orm extends AbstractEngine
     /**
      * Set value for meta fields by type
      *
-     * @param array $objectData
-     * @param array $fieldConfig
-     * @param mixed $value
+     * @param string $alias
+     * @param array  $objectData
+     * @param array  $fieldConfig
+     * @param mixed  $value
      *
      * @return array
      */
-    protected function setDataValue($objectData, $fieldConfig, $value)
+    protected function setDataValue($alias, $objectData, $fieldConfig, $value)
     {
         //check if field have target_fields parameter
         if (isset($fieldConfig['target_fields']) && count($fieldConfig['target_fields'])) {
@@ -349,6 +387,7 @@ class Orm extends AbstractEngine
             foreach ($targetFields as $targetField) {
                 $objectData[$fieldConfig['target_type']][$targetField] = $value;
             }
+
         } else {
             foreach ($targetFields as $targetField) {
                 if (!isset($objectData[$fieldConfig['target_type']][$targetField])) {
@@ -412,5 +451,45 @@ class Orm extends AbstractEngine
         }
 
         return $this->jobRepo;
+    }
+
+    /**
+     * Get url for entity
+     *
+     * @param object $entity
+     *
+     * @return string
+     */
+    protected function getEntityUrl($entity)
+    {
+        $routeParameters = $this->mappingConfig[get_class($entity)]['route'];
+        $routeData = array();
+        foreach ($routeParameters['parameters'] as $parameter => $field) {
+            $routeData[$parameter] = $this->getFieldValue($entity, $field);
+        }
+
+        return $this->container->get('router')->generate(
+            $routeParameters['name'],
+            $routeData,
+            true
+        );
+    }
+
+    /**
+     * Get entity string
+     *
+     * @param object $entity
+     *
+     * @return string
+     */
+    protected function getEntityTitle($entity)
+    {
+        $fields = $this->mappingConfig[get_class($entity)]['title_fields'];
+        $title = array();
+        foreach ($fields as $field) {
+            $title[] = $this->getFieldValue($entity, $field);
+        }
+
+        return implode(' ', $title);
     }
 }

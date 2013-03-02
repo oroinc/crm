@@ -23,21 +23,21 @@ class IndexInteger
 
     /**
      * @ORM\ManyToOne(targetEntity="Item", inversedBy="integerFields")
-     * @ORM\JoinColumn(name="item_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="item_id", referencedColumnName="id", nullable=false)
      */
     private $item;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="field", type="string", length=250)
+     * @ORM\Column(name="field", type="string", length=250, nullable=false)
      */
     private $field;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="value", type="integer")
+     * @ORM\Column(name="value", type="integer", nullable=false)
      */
     private $value;
 

@@ -10,7 +10,7 @@ Install project
 
 MySql, Postgres and other db engines use additional indexes for fulltext search. To create this indexes use console command
 
-    php app/console oro:build-fulltext
+    php app/console oro:search:create-index
 
 Bundle config
 ----------------------------------
@@ -21,6 +21,7 @@ oro_search parameter supports next parameter strings:
 
 - **engine** set engine to use for indexing. Now supports only orm engine
 - **entities_config** set array with mapping entities config.
+- **result_template** set the default template for search result items (By default it has 'OroSearchBundle::searchResult.html.twig' value)
 
 Mapping config
 ----------------------------------
@@ -35,20 +36,27 @@ Configuration is array that contain info about bundle name, entity name and arra
 
 Fields array contain array of field name and field type.
 
-All text fields data wheel be store in **all_text** virtual field. Additionally, all the fields wheel be stored in fieldName virtual fields.
+All text fields data wheel be store in **all_text** virtual field. Additionally, all the fields wheel be stored in fieldName virtual fields, if not set target_fields parameter.
 
 Example:
 
     Acme\DemoBundle\Entity\Product:
+        alias: demo_product
+        flexible_manager: demo_product_manager
+        label: Demo products
+        route:
+            name: acme_demo_search_product
+            parameters:
+                id: id
+        title_fields: [name]
         fields:
             -
                 name: name
                 target_type: text
-                target_fields: [name, all_data]
             -
                 name: description
                 target_type: text
-                target_fields: [description, all_data]
+                target_fields: [description, another_index_name]
             -
                 name: manufacturer
                 relation_type: many-to-one
@@ -69,10 +77,14 @@ Example:
                         name: name
                         target_type: text
                         target_fields: [all_data]
-        flexible_manager: demo_product_manager
+
 
 Parameters:
 
+- **search_template** - template to use in search result page for this entity type
+- **label**: Label for entity to identify entity in search results
+- **route**: **name** - route name to generate url link tho the entity record, **parameters** - array with parameters for route
+- **alias**: alias for 'from' keyword in advanced search
 - **name**: name of field in entity
 - **target_type**: type of virtual search field. Supported target types: text (string and text fields), integer, double, datetime
 - **target_fields**: array of virtual fields for entity field from 'name' parameter.
@@ -82,70 +94,12 @@ Parameters:
 is the service name for flexible entity. In search index wheel be indexed all the attributes with parameter **searchable** set to true. All text fields data wheel
 be store in **all_text** virtual field. Additionally, all the fields wheel be stored in fieldName virtual fields.
 
-Query builder
-----------------------------------
+[Query builder](Resources/doc/query_builder.md)
 
-To run search queries must be used query builder.
+[API simple search](Resources/doc/simple_search.md)
 
-For example:
+[API advanced search](Resources/doc/advanced_search.md)
 
-    $query = $this->getSearchManager()->select()
-            ->from('Oro/Bundle/SearchBundle/Entity:Product')
-            ->andWhere('all_data', '=', 'Functions', 'text')
-            ->orWhere('price', '>', 85, 'decimal');
-
-Syntax of Query builder as close to Doctrine 2.
-
-**from()** method takes array or string of entities to search from. If argument of function was '*', then search wheel be run for all entites.
-
-**andWhere()**, **orWhere()** functions set AND WHERE and OR WHERE functions in search request.
-
-First argument - field name to search from. It can be set to '*' for searching by all fields.
-
-Second argument - operators <, >, =, !=, etc.
-If first argument is for text field, this parameter wheel be ignored.
-
-Third argument - value to search
-
-Fourth argument - field type.
-
-**setFirstResult()** method set the first result offset
-
-**setMaxResults()** method set max results of records in result.
-
-As result of query, wheel wheel be returned Oro\Bundle\SearchBundle\Query\Result class with info about search query and result items.
-
-API
----
-
-REST and SOAP APIs allow to search by all text fields in all entities.
-
-Parameters for APIs requests:
-
- - **search** - search string
- - **offset** - integer value of offset
- - **max_results** - count  of result records in response
-
-REST API url: http://domail.com/api/rest/latest/search
-
-SOAP function name: search
-
-REST API work with get request only. So, search request to the search must be like example:
-http://domail.com/api/rest/latest/search?max_results=100&offset=0&search=search_string
-
-**Result**
-
-Request return array with next data:
-
- - **records_count** - the total number of results (without offset and max_results) parameters
- - **count** - count of records in current request
- - **data**- array with data.
-
- Data consists from next values:
-
- - **entity_name** - class name of entity
- - **record_id** - id of record from this entity
- - **record_string** - the title of this record
 
 Run unit tests
 ----------------------------------

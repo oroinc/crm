@@ -8,6 +8,35 @@ class Query
 {
     const SELECT = 'select';
 
+    const ORDER_ASC = 'asc';
+    const ORDER_DESC = 'desc';
+
+    const KEYWORD_FROM = 'from';
+    const KEYWORD_WHERE = 'where';
+    const KEYWORD_AND = 'and';
+    const KEYWORD_OR = 'or';
+    const KEYWORD_OFFSET = 'offset';
+    const KEYWORD_MAX_RESULTS = 'max_results';
+    const KEYWORD_ORDER_BY = 'order_by';
+
+    const OPERATOR_EQUALS = '=';
+    const OPERATOR_NOT_EQUALS = '!=';
+    const OPERATOR_GREATER_THAN = '>';
+    const OPERATOR_GREATER_THAN_EQUALS = '>=';
+    const OPERATOR_LESS_THAN = '<';
+    const OPERATOR_LESS_THAN_EQUALS = '<=';
+    const OPERATOR_CONTAINS = '~';
+    const OPERATOR_NOT_CONTAINS = '!~';
+    const OPERATOR_IN = 'in';
+    const OPERATOR_NOT_IN = '!in';
+
+    const TYPE_TEXT = 'text';
+    const TYPE_INTEGER = 'integer';
+    const TYPE_DATETIME = 'datetime';
+    const TYPE_DECIMAL = 'decimal';
+
+    const INFINITY = 10000000;
+
     /**
      * @var array
      */
@@ -34,6 +63,21 @@ class Query
     protected $from;
 
     /**
+     * @var string
+     */
+    protected $orderType;
+
+    /**
+     * @var string
+     */
+    protected $orderBy;
+
+    /**
+     * @var string
+     */
+
+    protected $orderDirection;
+    /**
      * @var array
      */
     protected $mappingConfig;
@@ -55,6 +99,25 @@ class Query
         }
         $this->options = array();
         $this->maxResults = 0;
+        $this->from = false;
+    }
+
+    /**
+     * Get entity class name from alias
+     *
+     * @param $aliasName
+     *
+     * @return bool|string
+     */
+    public function getEntityByAlias($aliasName)
+    {
+        foreach ($this->mappingConfig as $entity => $config) {
+            if (isset($config['alias']) && $config['alias'] == $aliasName) {
+                return $entity;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -69,20 +132,23 @@ class Query
             foreach ($config['fields'] as $field) {
                 if (isset($field['relation_fields'])) {
                     foreach ($field['relation_fields'] as $relationField) {
-                        foreach ($relationField['target_fields'] as $targetFields) {
+                        if (isset($field['target_fields']) && count($field['target_fields']) > 0) {
+                            foreach ($relationField['target_fields'] as $targetFields) {
+                                if (!isset($fields[$targetFields]) || !in_array($entity, $fields[$targetFields])) {
+                                    $fields[$targetFields][] = $entity;
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    if (isset($field['target_fields']) && count($field['target_fields']) > 0) {
+                        foreach ($field['target_fields'] as $targetFields) {
                             if (!isset($fields[$targetFields]) || !in_array($entity, $fields[$targetFields])) {
                                 $fields[$targetFields][] = $entity;
                             }
                         }
                     }
-                } else {
-                    foreach ($field['target_fields'] as $targetFields) {
-                        if (!isset($fields[$targetFields]) || !in_array($entity, $fields[$targetFields])) {
-                            $fields[$targetFields][] = $entity;
-                        }
-                    }
                 }
-
             }
         }
         $this->fields = $fields;
@@ -140,7 +206,7 @@ class Query
      */
     public function andWhere($fieldName, $condition, $fieldValue, $fieldType = null)
     {
-        return $this->where('and', $fieldName, $condition, $fieldValue, $fieldType);
+        return $this->where(self::KEYWORD_AND, $fieldName, $condition, $fieldValue, $fieldType);
     }
 
     /**
@@ -155,13 +221,13 @@ class Query
      */
     public function orWhere($fieldName, $condition, $fieldValue, $fieldType = null)
     {
-        return $this->where('or', $fieldName, $condition, $fieldValue, $fieldType);
+        return $this->where(self::KEYWORD_OR, $fieldName, $condition, $fieldValue, $fieldType);
     }
 
     /**
      * Add "WHERE" parameter
      *
-     * @param string $type
+     * @param string $keyWord
      * @param string $fieldName
      * @param string $condition
      * @param string $fieldValue
@@ -170,18 +236,18 @@ class Query
      * @return \Oro\Bundle\SearchBundle\Query\Query
      * @throws \InvalidArgumentException
      */
-    public function where($type, $fieldName, $condition, $fieldValue, $fieldType = null)
+    public function where($keyWord, $fieldName, $condition, $fieldValue, $fieldType = null)
     {
-        if ($fieldName!='*' && !$this->checkFieldInConfig($fieldName)) {
-            throw new \InvalidArgumentException('Field ' . $fieldName . ' does not exists in config');
-        }
+        //if ($fieldName!='*' && !$this->checkFieldInConfig($fieldName)) {
+        //    throw new \InvalidArgumentException('Field ' . $fieldName . ' does not exists in config');
+        //}
 
         $this->options[] = array(
             'fieldName'  => $fieldName,
             'condition'  => $condition,
             'fieldValue' => $fieldValue,
             'fieldType'  => $fieldType,
-            'type'       => $type
+            'type'       => $keyWord
         );
 
         return $this;
@@ -281,6 +347,54 @@ class Query
     public function getFirstResult()
     {
         return $this->firstResult;
+    }
+
+    /**
+     * Set order by
+     *
+     * @param string $fieldName
+     * @param string $direction
+     * @param string $type
+     *
+     * @return Query
+     */
+    public function setOrderBy($fieldName, $direction = "ASC", $type = self::TYPE_TEXT)
+    {
+        $this->orderBy = $fieldName;
+        $this->orderDirection = $direction;
+        $this->orderType = $type;
+
+        return $this;
+    }
+
+    /**
+     * Get order by field
+     *
+     * @return array
+     */
+    public function getOrderBy()
+    {
+        return $this->orderBy;
+    }
+
+    /**
+     * Get "order by" field type
+     *
+     * @return string
+     */
+    public function getOrderType()
+    {
+        return $this->orderType;
+    }
+
+    /**
+     * Get order by direction
+     *
+     * @return type
+     */
+    public function getOrderDirection()
+    {
+        return $this->orderDirection;
     }
 
     /**

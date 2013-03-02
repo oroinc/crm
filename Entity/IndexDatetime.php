@@ -23,21 +23,21 @@ class IndexDatetime
 
     /**
      * @ORM\ManyToOne(targetEntity="Item", inversedBy="datetimeFields")
-     * @ORM\JoinColumn(name="item_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="item_id", referencedColumnName="id", nullable=false)
      */
     protected $item;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="field", type="string", length=250)
+     * @ORM\Column(name="field", type="string", length=250, nullable=false)
      */
     protected $field;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="value", type="datetime")
+     * @ORM\Column(name="value", type="datetime", nullable=false)
      */
     protected $value;
 

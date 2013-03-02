@@ -3,8 +3,10 @@
 namespace Oro\Bundle\SearchBundle\Engine;
 
 use Doctrine\Common\Persistence\ObjectManager;
+use Symfony\Component\Translation\Translator;
 
 use Oro\Bundle\SearchBundle\Query\Query;
+use Oro\Bundle\SearchBundle\Query\Parser;
 
 class Indexer
 {
@@ -25,39 +27,76 @@ class Indexer
      */
     protected $mappingConfig;
 
-    /*
-     *
-    * @var \Doctrine\Common\Persistence\ObjectManager
-    */
+    /**
+     * @var \Doctrine\Common\Persistence\ObjectManager
+     */
     private $em;
 
-    public function __construct(ObjectManager $em, $adapter, $mappingConfig)
+    /**
+     * @var \Symfony\Component\Translation\Translator
+     */
+    private $translator;
+
+    public function __construct(ObjectManager $em, $adapter, Translator $translator, $mappingConfig)
     {
         $this->mappingConfig = $mappingConfig;
         $this->adapter = $adapter;
         $this->em = $em;
+        $this->translator = $translator;
+
+        foreach ($this->mappingConfig as $entity => $config) {
+            $this->mappingConfig[$entity]['label'] = $this->translator->trans($config['label']);
+        }
+    }
+
+    /**
+     * Get array with entities aliases and labels
+     *
+     * @return array
+     */
+    public function getEntitiesLabels()
+    {
+        $entities = array();
+        foreach ($this->mappingConfig as $mappingEntity) {
+            $entities[] = array(
+                'alias' => $mappingEntity['alias'],
+                'label' => $mappingEntity['label'],
+            );
+        }
+
+        return $entities;
     }
 
     /**
      * @param string  $searchString
      * @param integer $offset
      * @param integer $maxResults
+     * @param string  $from
+     * @param integer $page
      *
      * @return \Oro\Bundle\SearchBundle\Query\Result
      */
-    public function simpleSearch($searchString, $offset, $maxResults)
+    public function simpleSearch($searchString, $offset = 0, $maxResults = 0, $from = null, $page = 0)
     {
-        $query =  $this->select()
-            ->from('*')
-            ->andWhere('*', '=', $searchString, 'text');
+        $query = $this->select();
+
+        if ($from) {
+            $query->from($from);
+        } else {
+            $query->from('*');
+        }
+
+        $query->andWhere(self::TEXT_ALL_DATA_FIELD, '~', $searchString, 'text');
 
         if ($maxResults > 0) {
             $query->setMaxResults($maxResults);
         } else {
-            $query->setMaxResults(10000000);
+            $query->setMaxResults(Query::INFINITY);
         }
 
-        if ($offset > 0) {
+        if ($page > 0) {
+            $query->setFirstResult($maxResults * ($page - 1));
+        } elseif ($offset > 0) {
             $query->setFirstResult($offset);
         }
 
@@ -91,5 +130,19 @@ class Indexer
         if ($query->getQuery() == Query::SELECT) {
             return $this->adapter->search($query);
         }
+    }
+
+    /**
+     * Advanced search from API
+     *
+     * @param string $searchString
+     *
+     * @return \Oro\Bundle\SearchBundle\Query\Result
+     */
+    public function advancedSearch($searchString)
+    {
+        $parser = new Parser($this->mappingConfig);
+
+        return $this->query($parser->getQueryFromString($searchString));
     }
 }

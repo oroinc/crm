@@ -1,8 +1,6 @@
 <?php
 namespace Oro\Bundle\SearchBundle\Tests\Unit\Fixture\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-
 class Attribute
 {
     /**
@@ -14,7 +12,6 @@ class Attribute
      * @var string $backendType
      */
     protected $backendType;
-
 
     protected $searchable;
 
@@ -45,12 +42,14 @@ class Attribute
     public function setBackendType($backendType)
     {
         $this->backendType = $backendType;
+
         return $this;
     }
 
     public function setCode($code)
     {
         $this->code = $code;
+
         return $this;
     }
 }

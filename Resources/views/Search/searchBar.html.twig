@@ -1,0 +1,71 @@
+<form method="get" action="{{ path('oro_search_results') }}" style="margin: 0">
+    <div id="search-div" class="input-append input-prepend pull-left header-search">
+        <div class="btn-group">
+            <button data-toggle="dropdown" class="btn dropdown-toggle" id="search-bar-button">
+                All
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" id="search-bar-dropdown">
+                <li data-alias=""><a href="#">{% trans %}All{% endtrans %}</a></li>
+                {% for entity in entities %}
+                    <li data-alias="{{ entity.alias }}"><a href="#">{{ entity.label }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+        <input type="hidden" name="from" id="search-bar-from"/>
+        <input type="text" id="search-bar-search" class="span2" name="search"/>
+        <button type="submit" class="btn btn-search">Search</button>
+        <div class="custom-dropdown">
+            <ul>
+            </ul>
+        </div>
+    </div>
+</form>
+<script type="text/javascript">
+    jQuery(document).ready(function() {
+        jQuery("#search-bar-dropdown li a").click(function(e){
+            jQuery("#search-bar-from").val(jQuery(this).parent().attr('data-alias'));
+            jQuery("#search-bar-button").html(jQuery(this).html() + '<span class="caret"></span>');
+            e.preventDefault();
+        });
+        jQuery("#search-bar-search").keyup(function () {
+            var queryString = jQuery(this).val();
+            if (queryString == '' || queryString.length < 3) {
+                jQuery("#search-div").removeClass('header-search-focused');
+                jQuery('.custom-dropdown ul li').remove();
+            } else {
+                jQuery.ajax({
+                    url:"{{ path('oro_api_get_search') }}",
+                    dataType:"json",
+                    data:{
+                        search:queryString,
+                        from: jQuery("#search-bar-from").val(),
+                        max_results: 5
+                    },
+                    success:function (data) {
+                        jQuery("#search-div").removeClass('header-search-focused');
+                        jQuery('.custom-dropdown ul li').remove();
+                        $("#recordsCount").val(data['records_count']);
+                        if (data['count'] > 0) {
+                            for (var i = 0; i < data['count']; i++) {
+                                jQuery('.custom-dropdown ul').append(
+                                    '<li>'
+                                        + '<a class="dropdown-toggle disabled" href="'+data['data'][i]['record_url']+'">'
+                                            + '<span class="name"><strong>' + data['data'][i]['record_string']+ '</strong></span><br/>'
+                                            + data['data'][i]['entity_type']
+                                        + '</a>'
+                                    +'</li>'
+                                );
+                            }
+                            jQuery("#search-div").addClass('header-search-focused');
+                        }
+                    }
+                });
+            }
+        });
+        jQuery("#search-bar-search").focusout(function(){
+            jQuery("#search-div").removeClass('header-search-focused');
+            e.preventDefault();
+        });
+    });
+</script>
