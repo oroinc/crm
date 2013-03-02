@@ -1,14 +1,19 @@
 <form method="get" action="{{ path('oro_search_results') }}" style="margin: 0">
     <div id="search-div" class="input-append input-prepend pull-left header-search">
         <div class="btn-group">
-            <select class="dropdown-toggle" name="from" id="from-select">
-                <option value="">All</option>
+            <button data-toggle="dropdown" class="btn dropdown-toggle" id="search-bar-button">
+                All
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" id="search-bar-dropdown">
+                <li data-alias=""><a href="#">{% trans %}All{% endtrans %}</a></li>
                 {% for entity in entities %}
-                    <option value="{{ entity.alias }}">{{ entity.label }}</option>
+                    <li data-alias="{{ entity.alias }}"><a href="#">{{ entity.label }}</a></li>
                 {% endfor %}
-            </select>
+            </ul>
         </div>
-        <input type="text" id="search" class="span2" name="search"/>
+        <input type="hidden" name="from" id="search-bar-from"/>
+        <input type="text" id="search-bar-search" class="span2" name="search"/>
         <button type="submit" class="btn btn-search">Search</button>
         <div class="custom-dropdown">
             <ul>
@@ -18,7 +23,12 @@
 </form>
 <script type="text/javascript">
     jQuery(document).ready(function() {
-        jQuery("#search").keyup(function () {
+        jQuery("#search-bar-dropdown li a").click(function(e){
+            jQuery("#search-bar-from").val(jQuery(this).parent().attr('data-alias'));
+            jQuery("#search-bar-button").html(jQuery(this).html() + '<span class="caret"></span>');
+            e.preventDefault();
+        });
+        jQuery("#search-bar-search").keyup(function () {
             var queryString = jQuery(this).val();
             if (queryString == '' || queryString.length < 3) {
                 jQuery("#search-div").removeClass('header-search-focused');
@@ -29,7 +39,7 @@
                     dataType:"json",
                     data:{
                         search:queryString,
-                        from: jQuery("#from-select option:selected").val(),
+                        from: jQuery("#search-bar-from").val(),
                         max_results: 5
                     },
                     success:function (data) {
@@ -40,7 +50,7 @@
                             for (var i = 0; i < data['count']; i++) {
                                 jQuery('.custom-dropdown ul').append(
                                     '<li>'
-                                        + '<a href="'+data['data'][i]['record_url']+'">'
+                                        + '<a class="dropdown-toggle disabled" href="'+data['data'][i]['record_url']+'">'
                                             + '<span class="name"><strong>' + data['data'][i]['record_string']+ '</strong></span><br/>'
                                             + data['data'][i]['entity_type']
                                         + '</a>'
@@ -53,8 +63,9 @@
                 });
             }
         });
-        jQuery("#search").focusout(function(){
+        jQuery("#search-bar-search").focusout(function(){
             jQuery("#search-div").removeClass('header-search-focused');
+            e.preventDefault();
         });
     });
 </script>

@@ -21,6 +21,7 @@ oro_search parameter supports next parameter strings:
 
 - **engine** set engine to use for indexing. Now supports only orm engine
 - **entities_config** set array with mapping entities config.
+- **result_template** set the default template for search result items (By default it has 'OroSearchBundle::searchResult.html.twig' value)
 
 Mapping config
 ----------------------------------
@@ -80,6 +81,7 @@ Example:
 
 Parameters:
 
+- **search_template** - template to use in search result page for this entity type
 - **label**: Label for entity to identify entity in search results
 - **route**: **name** - route name to generate url link tho the entity record, **parameters** - array with parameters for route
 - **alias**: alias for 'from' keyword in advanced search

@@ -61,6 +61,8 @@ class OroSearchExtension extends Extension
         $container->setParameter('oro_search.realtime_update', $config['realtime_update']);
 
         $loader->load('services.yml');
+
+        $container->setParameter('oro_search.twig.result_template', $config['result_template']);
     }
 
     /**

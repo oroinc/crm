@@ -17,14 +17,10 @@
         <input type="text" id="search" class="span2" name="search" value="{{ searchString }}"/>
         <button type="submit" class="btn btn-search">Search</button>
     </form>
-
     {% if searchResults.count > 0 %}
         {% for searchResult in searchResults %}
-            <div class="alert alert-success">
-                <p><strong>{{ searchResult.entityConfig.label }}</strong></p>
-                <h3><a href="{{ searchResult.recordUrl }}">{{ searchResult.recordTitle }}</a></h3>
-                {{ searchResult.recordText|highlight_trim(searchString)|raw }}
-            </div>
+            {% set template = searchResult.entityConfig.search_template is defined ? searchResult.entityConfig.search_template : default__result_template %}
+            {% include template with {'result' : searchResult} %}
         {% endfor %}
         {{ knp_pagination_render(searchResults) }}
     {% else %}

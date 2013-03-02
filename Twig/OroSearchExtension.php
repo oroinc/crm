@@ -3,6 +3,11 @@ namespace Oro\Bundle\SearchBundle\Twig;
 
 class OroSearchExtension extends \Twig_Extension
 {
+    public function __construct($twig, $defaultResultTemplate)
+    {
+        $twig->addGlobal('default__result_template', $defaultResultTemplate);
+    }
+
     public function getFilters()
     {
         return array(
