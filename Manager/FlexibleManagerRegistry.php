@@ -35,7 +35,7 @@ class FlexibleManagerRegistry
     }
 
     /**
-     * Add a job to a connector
+     * Add a manager to the registry
      *
      * @param string          $managerId  the manager id
      * @param FlexibleManager $manager    the manager
