@@ -98,7 +98,12 @@ class Orm extends AbstractEngine
      */
     public function save($entity, $realtime = true)
     {
-        $alias = $this->mappingConfig[get_class($entity)]['alias'];
+        if (isset($this->mappingConfig[get_class($entity)]['alias'])) {
+            $alias = $this->mappingConfig[get_class($entity)]['alias'];
+        } else {
+            $alias = get_class($entity);
+        }
+
         $data = $this->mapObject($entity);
         $name = get_class($entity);
 
@@ -149,7 +154,11 @@ class Orm extends AbstractEngine
 
         if (is_object($object) && isset($mappingConfig[get_class($object)])) {
             $config = $mappingConfig[get_class($object)];
-            $alias = $config['alias'];
+            if (isset($config['alias'])) {
+                $alias = $config['alias'];
+            } else {
+                $alias = get_class($object);
+            }
             foreach ($config['fields'] as $field) {
                 // check field relation type and set it to null if field doesn't have relations
                 if (!isset($field['relation_type'])) {
@@ -466,8 +475,10 @@ class Orm extends AbstractEngine
     {
         $routeParameters = $this->mappingConfig[get_class($entity)]['route'];
         $routeData = array();
-        foreach ($routeParameters['parameters'] as $parameter => $field) {
-            $routeData[$parameter] = $this->getFieldValue($entity, $field);
+        if (isset($routeParameters['parameters']) && count($routeParameters['parameters'])) {
+            foreach ($routeParameters['parameters'] as $parameter => $field) {
+                $routeData[$parameter] = $this->getFieldValue($entity, $field);
+            }
         }
 
         return $this->container->get('router')->generate(
@@ -486,10 +497,14 @@ class Orm extends AbstractEngine
      */
     protected function getEntityTitle($entity)
     {
-        $fields = $this->mappingConfig[get_class($entity)]['title_fields'];
-        $title = array();
-        foreach ($fields as $field) {
-            $title[] = $this->getFieldValue($entity, $field);
+        if (isset($this->mappingConfig[get_class($entity)]['title_fields'])) {
+            $fields = $this->mappingConfig[get_class($entity)]['title_fields'];
+            $title = array();
+            foreach ($fields as $field) {
+                $title[] = $this->getFieldValue($entity, $field);
+            }
+        } else {
+            $title = array((string)$entity);
         }
 
         return implode(' ', $title);
