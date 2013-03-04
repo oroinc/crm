@@ -50,6 +50,65 @@ OroApp.PageableCollection = Backbone.PageableCollection.extend({
         return resp.data;
     },
 
+    /**
+     * @inheritDoc
+     */
+    _checkState: function (state) {
+
+        var mode = this.mode;
+        var links = this.links;
+        var totalRecords = state.totalRecords;
+        var pageSize = state.pageSize;
+        var currentPage = state.currentPage;
+        var firstPage = state.firstPage;
+        var totalPages = state.totalPages;
+
+        if (totalRecords != null && pageSize != null && currentPage != null &&
+            firstPage != null && (mode == "infinite" ? links : true)) {
+
+            totalRecords = this.finiteInt(totalRecords, "totalRecords");
+            pageSize = this.finiteInt(pageSize, "pageSize");
+            currentPage = this.finiteInt(currentPage, "currentPage");
+            firstPage = this.finiteInt(firstPage, "firstPage");
+
+            if (pageSize < 1) {
+                throw new RangeError("`pageSize` must be >= 1");
+            }
+
+            totalPages = state.totalPages = Math.ceil(totalRecords / pageSize);
+
+            if (firstPage < 0 || firstPage > 1) {
+                throw new RangeError("`firstPage must be 0 or 1`");
+            }
+
+            state.lastPage = firstPage === 0 ? totalPages - 1 : totalPages;
+
+            if (mode == "infinite") {
+                if (!links[currentPage + '']) {
+                    throw new RangeError("No link found for page " + currentPage);
+                }
+            }
+            else {
+                if (firstPage === 0 && totalPages > 0 && (currentPage < firstPage || currentPage >= totalPages)) {
+                    throw new RangeError("`currentPage` must be firstPage <= currentPage < totalPages if 0-based. Got " + currentPage + '.');
+                }
+                else if (firstPage === 1 && totalPages > 0 && (currentPage < firstPage || currentPage > totalPages)) {
+                    throw new RangeError("`currentPage` must be firstPage <= currentPage <= totalPages if 1-based. Got " + currentPage + '.');
+                }
+            }
+        }
+
+        return state;
+    },
+
+    finiteInt: function(val, name) {
+        val *= 1;
+        if (!_.isNumber(val) || _.isNaN(val) || !_.isFinite(val) || ~~val !== val) {
+            throw new TypeError("`" + name + "` must be a finite integer");
+        }
+        return val;
+    },
+
     // fetch collection data
     fetch: function (options) {
         var BBColProto = Backbone.Collection.prototype;

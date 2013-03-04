@@ -7,7 +7,6 @@ OroApp.DatagridToolbar = OroApp.View.extend({
                 '<div class="btn-group icons-holder">' +
                     '<button class="btn"><i class="icon-edit hide-text">edit</i></button>' +
                     '<button class="btn"><i class="icon-copy hide-text">copy</i></button>' +
-                    '<button class="btn"><i class="icon-pin hide-text">pin/unpin</i></button>' +
                     '<button class="btn"><i class="icon-trash hide-text">remove</i></button>' +
                 '</div>' +
                 '<div class="btn-group">' +
@@ -25,7 +24,7 @@ OroApp.DatagridToolbar = OroApp.View.extend({
     ),
 
     /** @property */
-    pagination: OroApp.DatagridPagination,
+    pagination: OroApp.DatagridPaginationInput,
 
     /** @property */
     pageSize: OroApp.DatagridPageSize,
