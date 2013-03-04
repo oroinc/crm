@@ -6,10 +6,10 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Yaml\Yaml;
 use Symfony\Component\Finder\Iterator;
 
-class SoapGroupsApiTest extends WebTestCase
+class SoapUsersApiTest extends WebTestCase
 {
     /** Default value for role label */
-    const DEFAULT_VALUE = 'GROUP_LABEL';
+    const DEFAULT_VALUE = 'USER_LABEL';
 
     /** @var CustomSoapClient */
     static private $clientSoap = null;
@@ -31,12 +31,10 @@ class SoapGroupsApiTest extends WebTestCase
      *
      * @dataProvider requestsApi
      */
-    public function testCreateGroup($request, $response)
+    public function testCreateUser($request, $response)
     {
-        //if (is_null($request['roles'])) {
-        //    unset($request['role']);
-        //}
-        $result = self::$clientSoap->createGroup($request);
+        $this->markTestIncomplete("Due to bug in adding Users and attributes");
+        $result = self::$clientSoap->createUser($request);
         $result = $this->classToArray($result);
         $this->assertEqualsResponse($response, $result);
     }
@@ -48,51 +46,51 @@ class SoapGroupsApiTest extends WebTestCase
      * @dataProvider requestsApi
      * @depends testCreateRole
      */
-    public function testUpdateGroup($request, $response)
+    public function testUpdateUser($request, $response)
     {
-        $this->markTestIncomplete("Skipped due to getGroupByName missing!");
+        $this->markTestIncomplete("Skipped due to getUserByName and getUserByEmail missing!");
         $request['name'] .= '_Updated';
-        //get role id
-        $groupId = self::$clientSoap->getGroupByName($request['name']);
-        $groupId = $this->classToArray($groupId);
-        $result = self::$clientSoap->updateGroup($groupId['id'], $request);
+        //get user id
+        $userId = self::$clientSoap->getUserByName($request['name']);
+        $userId = $this->classToArray($userId);
+        $result = self::$clientSoap->updateUser($userId['id'], $request);
         $result = $this->classToArray($result);
         $this->assertEqualsResponse($response, $result);
-        $group = self::$clientSoap->getGroup($groupId['id']);
-        $group = $this->classToArray($group);
-        $this->assertEquals($request['label'], $group['label']);
+        $user = self::$clientSoap->getUser($userId['id']);
+        $user = $this->classToArray($user);
+        $this->assertEquals($request['label'], $user['label']);
     }
 
     /**
      * @depends testUpdateRole
      */
-    public function testGetGroups()
+    public function testGetUsers()
     {
         //get roles
-        $groups = self::$clientSoap->getGroups();
-        $groups = $this->classToArray($groups);
-        $this->assertEquals(5, count($groups['item']));
-        foreach ($groups['item'] as $group) {
-            $this->assertEquals($group['name'] . '_UPDATED', strtoupper($group['label']));
+        $users = self::$clientSoap->getUsers();
+        $users = $this->classToArray($users);
+        $this->assertEquals(5, count($users['item']));
+        foreach ($users['item'] as $user) {
+            $this->assertEquals($user['name'] . '_UPDATED', strtoupper($user['label']));
         }
     }
 
     /**
      * @depends testGetRoles
      */
-    public function testDeleteRoles()
+    public function testDeleteUser()
     {
         //get roles
-        $groups = self::$clientSoap->getGroups();
-        $groups = $this->classToArray($groups);
-        $this->assertEquals(5, count($groups['item']));
-        foreach ($groups['item'] as $group) {
-            $result = self::$clientSoap->deleteGroup($group['id']);
+        $users = self::$clientSoap->getUsers();
+        $users = $this->classToArray($users);
+        $this->assertEquals(5, count($users['item']));
+        foreach ($users['item'] as $user) {
+            $result = self::$clientSoap->deleteUser($user['id']);
             $this->assertTrue($result);
         }
-        $groups = self::$clientSoap->getGroups();
-        $groups = $this->classToArray($groups);
-        $this->assertEmpty($groups);
+        $users = self::$clientSoap->getUsers();
+        $users = $this->classToArray($users);
+        $this->assertEmpty($users);
     }
 
     /**
@@ -104,7 +102,7 @@ class SoapGroupsApiTest extends WebTestCase
     {
         $parameters = array();
         $testFiles = new \RecursiveDirectoryIterator(
-            __DIR__ . DIRECTORY_SEPARATOR . 'GroupRequest',
+            __DIR__ . DIRECTORY_SEPARATOR . 'UserRequest',
             \RecursiveDirectoryIterator::SKIP_DOTS
         );
         foreach ($testFiles as $fileName => $object) {
