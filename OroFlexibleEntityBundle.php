@@ -2,9 +2,11 @@
 namespace Oro\Bundle\FlexibleEntityBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Oro\Bundle\FlexibleEntityBundle\DependencyInjection\Compiler\AddManagerCompilerPass;
 
 /**
- * Data model bundle
+ * Flexible entity bundle
  *
  * @author    Nicolas Dupont <nicolas@akeneo.com>
  * @copyright 2012 Akeneo SAS (http://www.akeneo.com)
@@ -13,4 +15,14 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
  */
 class OroFlexibleEntityBundle extends Bundle
 {
+
+    /**
+     * {@inheritdoc}
+     */
+    public function build(ContainerBuilder $container)
+    {
+        parent::build($container);
+
+        $container->addCompilerPass(new AddManagerCompilerPass());
+    }
 }
