@@ -1,0 +1,25 @@
+{
+    "name": "oro/GridBundle",
+    "type": "symfony-bundle",
+    "description": "BAP User Interface Grid Bundle",
+    "keywords": ["BAP", "UI", "User Interface", "Grid"],
+    "homepage": "https://github.com/laboro/GridBundle",
+    "license": "MIT",
+    "require": {
+        "php": ">=5.3.3",
+        "symfony/symfony": "2.1.6",
+        "oro/UIBundle": "dev-master",
+        "sonata-project/admin-bundle": "2.1.x-dev",
+        "sonata-project/doctrine-orm-admin-bundle": "2.1.x-dev"
+    },
+    "autoload": {
+        "psr-0": { "Oro\\Bundle\\GridBundle": "" }
+    },
+    "target-dir": "Oro/Bundle/GridBundle",
+    "minimum-stability": "dev",
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0-dev"
+        }
+    }
+}
