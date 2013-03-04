@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\UserBundle\Tests\Unit\Acl;
+namespace Oro\Bundle\UserBundle\Tests\Functional\Acl;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 

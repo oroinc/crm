@@ -77,7 +77,7 @@ class Manager
                  'method' => $method
             )
         );
-        // @todo: decide what to return if the resource is not found
+        // todo: decide what to return if the resource is not found
         if (!$acl) {
             $accessRoles = $this->getAclRolesWithoutTree(Acl::ROOT_NODE);
         } else {
@@ -90,6 +90,12 @@ class Manager
         );
     }
 
+    /**
+     * Get roles for acl id
+     *
+     * @param $aclId
+     * @return array
+     */
     public function getAclRolesWithoutTree($aclId)
     {
         return $this->getAclRepo()->getAclRolesWithoutTree($aclId);

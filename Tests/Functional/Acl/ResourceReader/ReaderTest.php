@@ -1,5 +1,5 @@
 <?php
-namespace Oro\Bundle\UserBundle\Tests\Unit\Acl\ResourceReader\ReaderTest;
+namespace Oro\Bundle\UserBundle\Tests\Functional\Acl\ResourceReader\ReaderTest;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
@@ -53,7 +53,7 @@ class ReaderTest extends WebTestCase
 
         $this->testBundle->expects($this->any())
             ->method('getPath')
-            ->will($this->returnValue(realpath(__DIR__ . '/../../Fixture/Controller')));
+            ->will($this->returnValue(realpath(__DIR__ . '/../../../Unit/Fixture/Controller')));
 
         $resultAclList = $this->reader->getResources();
 
