@@ -159,7 +159,9 @@ abstract class AbstractAttributeOption implements TranslatableInterface
      */
     public function setSortOrder($sortOrder)
     {
-        $this->sortOrder = $sortOrder;
+        if ($sortOrder !== null) {
+            $this->sortOrder = $sortOrder;
+        }
 
         return $this;
     }
