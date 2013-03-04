@@ -41,6 +41,7 @@ OroApp.DatagridPageSize = OroApp.View.extend({
      * @param {Event} e
      */
     changePageSize: function (e) {
+        // TODO Fix wrong handle of setting bigger page size when last page is active
         e.preventDefault();
         var pageSize = parseInt($(e.target).text());
         if (pageSize !== this.collection.state.pageSize) {

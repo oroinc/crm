@@ -1,9 +1,14 @@
 {% javascripts
 '@OroGridBundle/Resources/public/lib/backbone-pageable.js'
 '@OroGridBundle/Resources/public/lib/backgrid/backgrid.js'
+
+'@OroGridBundle/Resources/public/js/app/datagrid-headercell.js'
+'@OroGridBundle/Resources/public/js/app/datagrid-header.js'
+
 '@OroGridBundle/Resources/public/js/app/datagrid-pagination.js'
 '@OroGridBundle/Resources/public/js/app/datagrid-pagesize.js'
 '@OroGridBundle/Resources/public/js/app/datagrid-toolbar.js'
+
 '@OroGridBundle/Resources/public/js/app/datagrid-filter.js'
 '@OroGridBundle/Resources/public/js/app/datagrid.js'
 '@OroGridBundle/Resources/public/js/app/pageablecollection.js'
@@ -28,19 +33,20 @@ output='js/acme.grid.js'
                         {
                             name: {{ column.name|json_encode|raw }},
                             label: {{ column.label|json_encode|raw }},
+                            sortable: {{ column.sortable|json_encode|raw }},
                             {% if column.type == constant(constantTypePrefix ~ 'TYPE_DATE') %}
-                            cell: Backgrid.DateCell
+                                cell: Backgrid.DateCell
                             {% elseif column.type == constant(constantTypePrefix ~ 'TYPE_DATETIME') %}
-                            cell: Backgrid.DatetimeCell
+                                cell: Backgrid.DatetimeCell
                             {% elseif column.type == constant(constantTypePrefix ~ 'TYPE_DECIMAL') %}
-                            cell: Backgrid.NumberCell
+                                cell: Backgrid.NumberCell
                             {% elseif column.type == constant(constantTypePrefix ~ 'TYPE_INTEGER') %}
-                            cell: Backgrid.IntegerCell.extend({ orderSeparator: '' })
+                                cell: Backgrid.IntegerCell.extend({ orderSeparator: '' })
                             {% elseif column.type == constant(constantTypePrefix ~ 'TYPE_OPTIONS') %}
-                            // TODO use Backgrid.SelectCell with source data
-                            cell: Backgrid.StringCell
+                                // TODO use Backgrid.SelectCell with source data
+                                cell: Backgrid.StringCell
                             {% else %}
-                            cell: Backgrid.StringCell
+                                cell: Backgrid.StringCell
                             {% endif %}
                             {% if not loop.last %},{% endif %}
                         }{% if not loop.last %},{% endif %}
@@ -93,8 +99,7 @@ output='js/acme.grid.js'
             );
             var datagridParameters = _.extend(
                 {
-                    collection: datagridCollection,
-                    className: 'grid table-hover table table-bordered table-condensed'
+                    collection: datagridCollection
                 },
                 datagridOptions.grid
             );

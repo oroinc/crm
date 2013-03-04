@@ -5,4 +5,26 @@
     filter='cssrewrite'
 %}
     <link rel="stylesheet" type="text/css" href="{{ asset_url }}" />
+    <style type="text/css">
+        table.grid thead th {
+            text-transform: capitalize;
+        }
+
+        table.grid thead th span.caret {
+            display: none;
+            border: none;
+            border-right: 4px solid transparent;
+            border-left: 4px solid transparent;
+        }
+
+        table.grid thead tr th.ascending span.caret {
+            display: inline-block;
+            border-top: 4px solid #000000;
+        }
+
+        table.grid thead tr th.descending span.caret {
+            display: inline-block;
+            border-bottom: 4px solid #000000;
+        }
+    </style>
 {% endstylesheets %}
