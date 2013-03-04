@@ -47,9 +47,9 @@ OroApp.FilterList = Backbone.View.extend({
         var filterParams = {};
         for (var i = 0; i < this.filters.length; i++) {
             var filter = this.filters[i];
-            var parameterValue = filter.getParameterValue();
-            if (parameterValue) {
-                filterParams[filter.inputName] = parameterValue;
+            var parameters = filter.getParameters();
+            if (parameters) {
+                filterParams[filter.inputName] = parameters;
             }
         }
         this.collection.state.filters = filterParams;
@@ -60,15 +60,15 @@ OroApp.FilterList = Backbone.View.extend({
 // basic filter
 OroApp.Filter = Backbone.View.extend({
     /** @property */
-    tagName: "div",
+    tagName: 'div',
 
     /** @property */
-    className: "btn-group",
+    className: 'btn-group',
 
     /** @property */
     template: _.template(
         '<div class="btn">' +
-            '<%= inputHint %>: <input type="text" name="<%= inputName %>" value="" />' +
+            '<%= inputHint %>: <input type="text" value="" style="width:80px;" />' +
             '<span class="caret"></span>' +
         '</div>'
     ),
@@ -79,15 +79,20 @@ OroApp.Filter = Backbone.View.extend({
     /** @property */
     inputHint: 'Input Hint',
 
+    /** @property */
+    parameterSelectors: {
+        value: 'input'
+    },
+
+    /** @property */
     events: {
-        "change input": "update"
+        'change input': 'update'
     },
 
     render: function () {
         this.$el.empty();
         this.$el.append(
             this.template({
-                inputName: this.inputName,
                 inputHint: this.inputHint
             })
         );
@@ -96,10 +101,198 @@ OroApp.Filter = Backbone.View.extend({
 
     update: function(e) {
         e.preventDefault();
-        this.trigger("changedData");
+        this.trigger('changedData');
     },
 
-    getParameterValue: function() {
-        return this.$('input').val();
+    getParameters: function() {
+        return {
+            '[value]': this.$(this.parameterSelectors.value).val()
+        };
+    }
+});
+
+// choice filter: filter type as option + filter value as string
+OroApp.ChoiceFilter = OroApp.Filter.extend({
+    /** @property */
+    template: _.template(
+        '<div class="btn">' +
+            '<%= inputHint %>: <select style="width:150px;">' +
+                '<option value=""></option>' +
+                '<% _.each(choices, function (hint, value) { %><option value="<%= value %>"><%= hint %></option><% }); %>' +
+            '</select>' +
+            '<input type="text" value="" style="width:80px;" />' +
+            '<span class="caret"></span>' +
+        '</div>'
+    ),
+
+    /** @property */
+    parameterSelectors: {
+        type:  'select',
+        value: 'input'
+    },
+
+    /** @property */
+    events: {
+        'change select': 'updateOnSelect',
+        'change input': 'update'
+    },
+
+    /** @property */
+    choices: {},
+
+    render: function () {
+        this.$el.empty();
+        this.$el.append(
+            this.template({
+                inputHint: this.inputHint,
+                choices:   this.choices
+            })
+        );
+        return this;
+    },
+
+    updateOnSelect: function(e) {
+        e.preventDefault();
+        if (this.$(this.parameterSelectors.value).val()) {
+            this.trigger('changedData');
+        }
+    },
+
+    getParameters: function() {
+        return {
+            '[type]':  this.$(this.parameterSelectors.type).val(),
+            '[value]': this.$(this.parameterSelectors.value).val()
+        };
+    }
+});
+
+// date filter: filter type as option + date value as string
+OroApp.DateFilter = OroApp.ChoiceFilter.extend({
+    /** @property */
+    template: _.template(
+        '<div class="btn">' +
+            '<%= inputHint %>: <select style="width:150px;">' +
+                '<option value=""></option>' +
+                '<% _.each(choices, function (hint, value) { %><option value="<%= value %>"><%= hint %></option><% }); %>' +
+            '</select>' +
+            'date is <input type="text" value="" style="width:80px;" />' +
+            '<span class="caret"></span>' +
+        '</div>'
+    )
+});
+
+// datetime filter: filter type as option + datetime value as string
+OroApp.DateTimeFilter = OroApp.DateFilter.extend({
+    /** @property */
+    template: _.template(
+        '<div class="btn">' +
+            '<%= inputHint %>: <select style="width:150px;">' +
+                '<option value=""></option>' +
+                '<% _.each(choices, function (hint, value) { %><option value="<%= value %>"><%= hint %></option><% }); %>' +
+            '</select>' +
+            'datetime is <input type="text" value="" style="width:80px;" />' +
+            '<span class="caret"></span>' +
+        '</div>'
+    )
+});
+
+// date range filter: filter type as option + interval begin and end dates
+OroApp.DateRangeFilter = OroApp.ChoiceFilter.extend({
+    /** @property */
+    template: _.template(
+        '<div class="btn">' +
+            '<%= inputHint %>: <select style="width:150px;">' +
+                '<option value=""></option>' +
+                '<% _.each(choices, function (hint, value) { %><option value="<%= value %>"><%= hint %></option><% }); %>' +
+            '</select>' +
+            'date from <input type="text" name="start" value="" style="width:80px;" />' +
+            'to <input type="text" name="end" value="" style="width:80px;" />' +
+            '<span class="caret"></span>' +
+        '</div>'
+    ),
+
+    /** @property */
+    parameterSelectors: {
+        type: 'select',
+        value_start: 'input[name="start"]',
+        value_end: 'input[name="end"]'
+    },
+
+    /** @property */
+    events: {
+        'change select': 'updateOnSelect',
+        'change input[name="start"]': 'update',
+        'change input[name="end"]': 'update'
+    },
+
+    updateOnSelect: function(e) {
+        e.preventDefault();
+        if (this.$(this.parameterSelectors.value_start).val()
+            || this.$(this.parameterSelectors.value_end).val()
+        ) {
+            this.trigger('changedData');
+        }
+    },
+
+    getParameters: function() {
+        return {
+            '[type]':  this.$(this.parameterSelectors.type).val(),
+            '[value][start]': this.$(this.parameterSelectors.value_start).val(),
+            '[value][end]': this.$(this.parameterSelectors.value_end).val()
+        };
+    }
+});
+
+// datetime range filter: filter type as option + interval begin and end datetimes
+OroApp.DateTimeRangeFilter = OroApp.DateRangeFilter.extend({
+    /** @property */
+    template: _.template(
+        '<div class="btn">' +
+            '<%= inputHint %>: <select style="width:150px;">' +
+                '<option value=""></option>' +
+                '<% _.each(choices, function (hint, value) { %><option value="<%= value %>"><%= hint %></option><% }); %>' +
+            '</select>' +
+            'datetime from <input type="text" name="start" value="" style="width:80px;" />' +
+            'to <input type="text" name="end" value="" style="width:80px;" />' +
+            '<span class="caret"></span>' +
+        '</div>'
+    )
+});
+
+// select filter: filter value as select option
+OroApp.SelectFilter = OroApp.Filter.extend({
+    /** @property */
+    template: _.template(
+        '<div class="btn">' +
+            '<%= inputHint %>: <select style="width:150px;">' +
+                '<option value=""></option>' +
+                '<% _.each(options, function (hint, value) { %><option value="<%= value %>"><%= hint %></option><% }); %>' +
+            '</select>' +
+            '<span class="caret"></span>' +
+        '</div>'
+    ),
+
+    /** @property */
+    parameterSelectors: {
+        value: 'select'
+    },
+
+    /** @property */
+    events: {
+        'change select': 'update'
+    },
+
+    /** @property */
+    options: {},
+
+    render: function () {
+        this.$el.empty();
+        this.$el.append(
+            this.template({
+                inputHint: this.inputHint,
+                options:   this.options
+            })
+        );
+        return this;
     }
 });

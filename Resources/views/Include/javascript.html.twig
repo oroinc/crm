@@ -22,7 +22,8 @@ output='js/acme.grid.js'
     {% set datagridName = datagrid.name ~ 'Datagrid' %}
     {% set collectionName = datagridName ~ 'Collection' %}
 
-    {% set constantTypePrefix = 'Oro\\Bundle\\GridBundle\\Field\\FieldDescriptionInterface::' %}
+    {% set columnTypePrefix = 'Oro\\Bundle\\GridBundle\\Field\\FieldDescriptionInterface::' %}
+    {% set filterTypePrefix = 'Oro\\Bundle\\GridBundle\\Filter\\FilterInterface::' %}
 
     _.extend(OroApp, {
         scope: {
@@ -34,15 +35,15 @@ output='js/acme.grid.js'
                             name: {{ column.name|json_encode|raw }},
                             label: {{ column.label|json_encode|raw }},
                             sortable: {{ column.sortable|json_encode|raw }},
-                            {% if column.type == constant(constantTypePrefix ~ 'TYPE_DATE') %}
+                            {% if column.type == constant(columnTypePrefix ~ 'TYPE_DATE') %}
                                 cell: Backgrid.DateCell
-                            {% elseif column.type == constant(constantTypePrefix ~ 'TYPE_DATETIME') %}
+                            {% elseif column.type == constant(columnTypePrefix ~ 'TYPE_DATETIME') %}
                                 cell: Backgrid.DatetimeCell
-                            {% elseif column.type == constant(constantTypePrefix ~ 'TYPE_DECIMAL') %}
+                            {% elseif column.type == constant(columnTypePrefix ~ 'TYPE_DECIMAL') %}
                                 cell: Backgrid.NumberCell
-                            {% elseif column.type == constant(constantTypePrefix ~ 'TYPE_INTEGER') %}
+                            {% elseif column.type == constant(columnTypePrefix ~ 'TYPE_INTEGER') %}
                                 cell: Backgrid.IntegerCell.extend({ orderSeparator: '' })
-                            {% elseif column.type == constant(constantTypePrefix ~ 'TYPE_OPTIONS') %}
+                            {% elseif column.type == constant(columnTypePrefix ~ 'TYPE_OPTIONS') %}
                                 // TODO use Backgrid.SelectCell with source data
                                 cell: Backgrid.StringCell
                             {% else %}
@@ -54,10 +55,54 @@ output='js/acme.grid.js'
                     ],
                     filters: [
                         {% for filter in datagrid.filters %}
-                            OroApp.Filter.extend({
-                                inputName : '{{ filter.name }}',
-                                inputHint : '{{ filter.getOption('label') }}'
+                            {% set filterType = filter.getOption('filter_type') %}
+                            {% if filterType == constant(filterTypePrefix ~ 'TYPE_CHOICE')
+                                or filterType == constant(filterTypePrefix ~ 'TYPE_NUMBER')
+                                or filterType == constant(filterTypePrefix ~ 'TYPE_STRING')
+                            %}
+                                OroApp.ChoiceFilter.extend({
+                                    inputName : '{{ filter.name }}',
+                                    inputHint : '{{ filter.getOption('label') }}',
+                                    choices:    {{ filter.typeOptions|json_encode|raw }}
+                                })
+                            {% elseif filterType == constant(filterTypePrefix ~ 'TYPE_DATE') %}
+                                OroApp.DateFilter.extend({
+                                    inputName : '{{ filter.name }}',
+                                    inputHint : '{{ filter.getOption('label') }}',
+                                    choices:    {{ filter.typeOptions|json_encode|raw }}
+                                })
+                            {% elseif filterType == constant(filterTypePrefix ~ 'TYPE_DATETIME') %}
+                                OroApp.DateTimeFilter.extend({
+                                    inputName : '{{ filter.name }}',
+                                    inputHint : '{{ filter.getOption('label') }}',
+                                    choices:    {{ filter.typeOptions|json_encode|raw }}
+                                })
+                            {% elseif filterType == constant(filterTypePrefix ~ 'TYPE_DATE_RANGE') %}
+                                OroApp.DateRangeFilter.extend({
+                                    inputName : '{{ filter.name }}',
+                                    inputHint : '{{ filter.getOption('label') }}',
+                                    choices:    {{ filter.typeOptions|json_encode|raw }}
+                                })
+                            {% elseif filterType == constant(filterTypePrefix ~ 'TYPE_DATETIME_RANGE') %}
+                                OroApp.DateTimeRangeFilter.extend({
+                                    inputName : '{{ filter.name }}',
+                                    inputHint : '{{ filter.getOption('label') }}',
+                                    choices:    {{ filter.typeOptions|json_encode|raw }}
+                                })
+                            {% elseif filterType == constant(filterTypePrefix ~ 'TYPE_BOOLEAN')
+                                or filterType == constant(filterTypePrefix ~ 'TYPE_FLEXIBLE_OPTIONS')
+                            %}
+                                OroApp.SelectFilter.extend({
+                                    inputName : '{{ filter.name }}',
+                                    inputHint : '{{ filter.getOption('label') }}',
+                                    options:    {{ filter.valueOptions|json_encode|raw }}
                             })
+                            {% else %}
+                                OroApp.Filter.extend({
+                                    inputName : '{{ filter.name }}',
+                                    inputHint : '{{ filter.getOption('label') }}'
+                                })
+                            {% endif %}
                             {% if not loop.last %},{% endif %}
                         {% endfor %}
                     ]

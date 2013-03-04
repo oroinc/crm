@@ -1,4 +1,16 @@
 services:
+    oro_grid.form.type.date_range:
+        class:     Oro\Bundle\GridBundle\Form\Type\DateRangeType
+        arguments: ["@translator"]
+        tags:
+            - { name: form.type, alias: oro_grid_type_date_range }
+
+    oro_grid.form.type.datetime_range:
+        class:     Oro\Bundle\GridBundle\Form\Type\DateTimeRangeType
+        arguments: ["@translator"]
+        tags:
+            - { name: form.type, alias: oro_grid_type_datetime_range }
+
     oro_grid.form.filter.type.default:
         class:     Oro\Bundle\GridBundle\Form\Type\Filter\DefaultType
         tags:
