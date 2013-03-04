@@ -23,14 +23,19 @@ use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 class Role implements RoleInterface
 {
     /**
+     * @var int
+     *
      * @ORM\Id
      * @ORM\Column(type="smallint", name="id")
      * @ORM\GeneratedValue(strategy="AUTO")
-     * @Exclude
+     * @Soap\ComplexType("int", nillable=true)
+     * @Type("integer")
      */
     protected $id;
 
     /**
+     * @var string
+     *
      * @ORM\Column(type="string", unique=true, length=30, nullable=false)
      * @Soap\ComplexType("string")
      * @Type("string")
@@ -38,6 +43,8 @@ class Role implements RoleInterface
     protected $role;
 
     /**
+     * @var string
+     *
      * @ORM\Column(type="string", length=30)
      * @Soap\ComplexType("string")
      * @Type("string")

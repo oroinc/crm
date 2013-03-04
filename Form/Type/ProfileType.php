@@ -6,8 +6,12 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
+use Doctrine\ORM\EntityRepository;
+
 use Oro\Bundle\FlexibleEntityBundle\Form\Type\FlexibleType;
+use Oro\Bundle\FlexibleEntityBundle\Form\Type\FlexibleValueType;
 use Oro\Bundle\UserBundle\Form\EventListener\ProfileSubscriber;
+use Oro\Bundle\UserBundle\Entity\User;
 
 class ProfileType extends FlexibleType
 {
@@ -36,6 +40,11 @@ class ProfileType extends FlexibleType
                 'label'          => 'Roles',
                 'class'          => 'OroUserBundle:Role',
                 'property'       => 'label',
+                'query_builder' => function(EntityRepository $er) {
+                    return $er->createQueryBuilder('r')
+                        ->where('r.role <> :anon')
+                        ->setParameter('anon', User::ROLE_ANONYMOUS);
+                },
                 'multiple'       => true,
                 'required'       => true,
             ))
@@ -51,6 +60,22 @@ class ProfileType extends FlexibleType
                 'first_options'  => array('label' => 'Password'),
                 'second_options' => array('label' => 'Password again'),
             ));
+    }
+
+    /**
+     * Add entity fields to form builder
+     *
+     * @param FormBuilderInterface $builder
+     */
+    public function addDynamicAttributesFields(FormBuilderInterface $builder)
+    {
+        $builder->add('attributes', 'collection', array(
+            'type'          => new FlexibleValueType($this->valueClass),
+            'property_path' => 'values',
+            'allow_add'     => true,
+            'allow_delete'  => true,
+            'by_reference'  => false
+        ));
     }
 
     /**

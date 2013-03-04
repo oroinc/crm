@@ -2,11 +2,11 @@
 
 namespace Oro\Bundle\UserBundle\Controller\Api\Soap;
 
-use Symfony\Component\DependencyInjection\ContainerAware;
-
 use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 
-class GroupController extends ContainerAware
+use Oro\Bundle\UserBundle\Entity\Group;
+
+class GroupController extends BaseController
 {
     /**
      * @Soap\Method("getGroups")
@@ -28,13 +28,42 @@ class GroupController extends ContainerAware
      */
     public function getAction($id)
     {
-        $entity = $this->getManager()->find('OroUserBundle:Group', (int) $id);
+        return $this->container->get('besimple.soap.response')->setReturnValue(
+            $this->getEntity('OroUserBundle:Group', $id)
+        );
+    }
 
-        if (!$entity) {
-            throw new \SoapFault('NOT_FOUND', sprintf('The group #%u can not be found', $id));
-        }
+    /**
+     * @Soap\Method("createGroup")
+     * @Soap\Param("group", phpType = "\Oro\Bundle\UserBundle\Entity\Group")
+     * @Soap\Result(phpType = "boolean")
+     */
+    public function createAction($group)
+    {
+        $entity = new Group();
 
-        return $this->container->get('besimple.soap.response')->setReturnValue($entity);
+        $this->container->get('oro_soap.request')->fix($this->container->get('oro_user.form.group.api')->getName());
+
+        return $this->container->get('besimple.soap.response')->setReturnValue(
+            $this->container->get('oro_user.form.handler.group.api')->process($entity)
+        );
+    }
+
+    /**
+     * @Soap\Method("updateGroup")
+     * @Soap\Param("id", phpType = "int")
+     * @Soap\Param("group", phpType = "\Oro\Bundle\UserBundle\Entity\Group")
+     * @Soap\Result(phpType = "boolean")
+     */
+    public function updateAction($id, $group)
+    {
+        $entity = $this->getEntity('OroUserBundle:Group', $id);
+
+        $this->container->get('oro_soap.request')->fix($this->container->get('oro_user.form.group.api')->getName());
+
+        return $this->container->get('besimple.soap.response')->setReturnValue(
+            $this->container->get('oro_user.form.handler.group.api')->process($entity)
+        );
     }
 
     /**
@@ -44,12 +73,7 @@ class GroupController extends ContainerAware
      */
     public function deleteAction($id)
     {
-        $em     = $this->getManager();
-        $entity = $em->find('OroUserBundle:Group', (int) $id);
-
-        if (!$entity) {
-            throw new \SoapFault('NOT_FOUND', sprintf('The group #%u can not be found', $id));
-        }
+        $entity = $this->getEntity('OroUserBundle:Group', $id);
 
         $em->remove($entity);
         $em->flush();
@@ -58,10 +82,14 @@ class GroupController extends ContainerAware
     }
 
     /**
-     * @return Doctrine\Common\Persistence\ObjectManager
+     * @Soap\Method("getGroupRoles")
+     * @Soap\Param("id", phpType = "int")
+     * @Soap\Result(phpType = "Oro\Bundle\UserBundle\Entity\Role[]")
      */
-    protected function getManager()
+    public function getRolesAction($id)
     {
-        return $this->container->get('doctrine.orm.entity_manager');
+        $entity = $this->getEntity('OroUserBundle:Group', $id);
+
+        return $this->container->get('besimple.soap.response')->setReturnValue($entity->getRoles()->toArray());
     }
 }

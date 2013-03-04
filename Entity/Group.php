@@ -21,7 +21,7 @@ class Group
      * @ORM\Id
      * @ORM\Column(type="smallint", name="id")
      * @ORM\GeneratedValue(strategy="AUTO")
-     * @Soap\ComplexType("int")
+     * @Soap\ComplexType("int", nillable=true)
      * @Type("integer")
      */
     protected $id;
@@ -39,6 +39,7 @@ class Group
      *      joinColumns={@ORM\JoinColumn(name="group_id", referencedColumnName="id", onDelete="CASCADE")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="role_id", referencedColumnName="id", onDelete="CASCADE")}
      * )
+     * @Soap\ComplexType("int[]")
      * @Exclude
      */
     protected $roles;
@@ -97,7 +98,7 @@ class Group
      */
     public function getRole($role)
     {
-        foreach ($this->getRoles() as $item ) {
+        foreach ($this->getRoles() as $item) {
             if ($role == $item->getRole()) {
                 return $item;
             }

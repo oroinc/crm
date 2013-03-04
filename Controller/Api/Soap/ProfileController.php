@@ -2,11 +2,11 @@
 
 namespace Oro\Bundle\UserBundle\Controller\Api\Soap;
 
-use Symfony\Component\DependencyInjection\ContainerAware;
-
 use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 
-class ProfileController extends ContainerAware
+use Oro\Bundle\UserBundle\Entity\UserSoap;
+
+class ProfileController extends BaseController
 {
     /**
      * @Soap\Method("getUsers")
@@ -33,13 +33,42 @@ class ProfileController extends ContainerAware
      */
     public function getAction($id)
     {
-        $entity = $this->getManager()->findUserBy(array('id' => (int) $id));
+        return $this->container->get('besimple.soap.response')->setReturnValue(
+            $this->getEntity('OroUserBundle:User', $id)
+        );
+    }
 
-        if (!$entity) {
-            throw new \SoapFault('NOT_FOUND', sprintf('The group #%u can not be found', $id));
-        }
+    /**
+     * @Soap\Method("createUser")
+     * @Soap\Param("profile", phpType = "\Oro\Bundle\UserBundle\Entity\UserSoap")
+     * @Soap\Result(phpType = "boolean")
+     */
+    public function createAction($profile)
+    {
+        $entity = $this->getUserManager()->createFlexible();
 
-        return $this->container->get('besimple.soap.response')->setReturnValue($entity);
+        $this->container->get('oro_soap.request')->fix($this->container->get('oro_user.form.profile.api')->getName());
+
+        return $this->container->get('besimple.soap.response')->setReturnValue(
+            $this->container->get('oro_user.form.handler.profile.api')->process($entity)
+        );
+    }
+
+    /**
+     * @Soap\Method("updateUser")
+     * @Soap\Param("id", phpType = "int")
+     * @Soap\Param("profile", phpType = "\Oro\Bundle\UserBundle\Entity\UserSoap")
+     * @Soap\Result(phpType = "boolean")
+     */
+    public function updateAction($id, $profile)
+    {
+        $entity = $this->getEntity('OroUserBundle:User', $id);
+
+        $this->container->get('oro_soap.request')->fix($this->container->get('oro_user.form.profile.api')->getName());
+
+        return $this->container->get('besimple.soap.response')->setReturnValue(
+            $this->container->get('oro_user.form.handler.profile.api')->process($entity)
+        );
     }
 
     /**
@@ -49,13 +78,9 @@ class ProfileController extends ContainerAware
      */
     public function deleteAction($id)
     {
-        $entity = $this->getManager()->findUserBy(array('id' => (int) $id));
+        $entity = $this->getEntity('OroUserBundle:User', $id);
 
-        if (!$entity) {
-            throw new \SoapFault('NOT_FOUND', sprintf('The user #%u can not be found', $id));
-        }
-
-        $this->getManager()->deleteUser($entity);
+        $this->getUserManager()->deleteUser($entity);
 
         return $this->container->get('besimple.soap.response')->setReturnValue(true);
     }
@@ -67,13 +92,9 @@ class ProfileController extends ContainerAware
      */
     public function getRolesAction($id)
     {
-        $entity = $this->getManager()->findUserBy(array('id' => (int) $id));
-
-        if (!$entity) {
-            throw new \SoapFault('NOT_FOUND', sprintf('The user #%u can not be found', $id));
-        }
-
-        return $this->container->get('besimple.soap.response')->setReturnValue($entity->getRoles());
+        return $this->container->get('besimple.soap.response')->setReturnValue(
+            $this->getEntity('OroUserBundle:User', $id)->getRoles()
+        );
     }
 
     /**
@@ -83,19 +104,15 @@ class ProfileController extends ContainerAware
      */
     public function getGroupsAction($id)
     {
-        $entity = $this->getManager()->findUserBy(array('id' => (int) $id));
-
-        if (!$entity) {
-            throw new \SoapFault('NOT_FOUND', sprintf('The user #%u can not be found', $id));
-        }
-
-        return $this->container->get('besimple.soap.response')->setReturnValue($entity->getGroups());
+        return $this->container->get('besimple.soap.response')->setReturnValue(
+            $this->getEntity('OroUserBundle:User', $id)->getGroups()
+        );
     }
 
     /**
      * @return \Oro\Bundle\UserBundle\Entity\UserManager
      */
-    protected function getManager()
+    protected function getUserManager()
     {
         return $this->container->get('oro_user.manager');
     }

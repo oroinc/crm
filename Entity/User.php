@@ -22,14 +22,14 @@ use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityFlexible;
  */
 class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Serializable
 {
-    const ROLE_DEFAULT = 'ROLE_USER';
+    const ROLE_DEFAULT   = 'ROLE_USER';
     const ROLE_ANONYMOUS = 'IS_AUTHENTICATED_ANONYMOUSLY';
 
     /**
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
-     * @Soap\ComplexType("int")
+     * @Soap\ComplexType("int", nillable=true)
      * @Type("integer")
      */
     protected $id;
@@ -85,6 +85,7 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
      * Plain password. Used for model validation. Must not be persisted.
      *
      * @var string
+     * @Soap\ComplexType("string", nillable=true)
      * @Exclude
      */
     protected $plainPassword;
@@ -124,6 +125,7 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
      *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="role_id", referencedColumnName="id", onDelete="CASCADE")}
      * )
+     * @Soap\ComplexType("int[]", nillable=true)
      * @Exclude
      */
     protected $roles;
@@ -136,6 +138,7 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
      *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="group_id", referencedColumnName="id", onDelete="CASCADE")}
      * )
+     * @Soap\ComplexType("int[]", nillable=true)
      * @Exclude
      */
     protected $groups;
@@ -150,6 +153,8 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
 
     public function __construct()
     {
+        parent::__construct();
+
         $this->salt  = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
         $this->roles = new ArrayCollection();
     }

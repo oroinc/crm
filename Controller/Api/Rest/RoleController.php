@@ -3,7 +3,6 @@
 namespace Oro\Bundle\UserBundle\Controller\Api\Rest;
 
 use FOS\RestBundle\Controller\Annotations\NamePrefix;
-use FOS\RestBundle\Controller\Annotations\QueryParam;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Routing\ClassResourceInterface;
 use FOS\Rest\Util\Codes;
@@ -38,7 +37,7 @@ class RoleController extends FOSRestController implements ClassResourceInterface
     /**
      * Get role data
      *
-     * @QueryParam(name="id", requirements="\d+", description="Role id")
+     * @param int $id Role id
      * @ApiDoc(
      *  description="Get role data",
      *  resource=true,
@@ -78,7 +77,7 @@ class RoleController extends FOSRestController implements ClassResourceInterface
     /**
      * Update existing role
      *
-     * @QueryParam(name="id", requirements="\d+", description="Role id")
+     * @param int $id Role id
      * @ApiDoc(
      *  description="Update existing role",
      *  resource=true,
@@ -105,7 +104,7 @@ class RoleController extends FOSRestController implements ClassResourceInterface
     /**
      * Delete role
      *
-     * @QueryParam(name="id", requirements="\d+", description="Role id")
+     * @param int $id Role id
      * @ApiDoc(
      *  description="Delete role",
      *  resource=true,
@@ -127,6 +126,28 @@ class RoleController extends FOSRestController implements ClassResourceInterface
         $em->flush();
 
         return $this->handleView($this->view('', Codes::HTTP_NO_CONTENT));
+    }
+
+    /**
+     * Get role by name
+     *
+     * @param string $name Role name
+     * @ApiDoc(
+     *  description="Get role by name",
+     *  resource=true,
+     *  filters={
+     *      {"name"="name", "dataType"="string"},
+     *  }
+     * )
+     */
+    public function getBynameAction($name)
+    {
+        $entity = $this->getManager()->getRepository('OroUserBundle:Role')->findOneBy(array('role' => $name));
+
+        return $this->handleView($this->view(
+            $entity,
+            $entity ? Codes::HTTP_OK : Codes::HTTP_NOT_FOUND
+        ));
     }
 
     /**

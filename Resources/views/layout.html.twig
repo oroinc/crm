@@ -8,28 +8,44 @@
     <link rel="stylesheet/less" href="{{ asset('bundles/oroui/css/less/main.less') }}" media="all" />
 
     {% stylesheets
-        '@OroUIBundle/Resources/public/css/*'
+        '@OroUIBundle/Resources/public/css/all.css'
 
         filter='cssrewrite'
-        output='css/all.css'
+        output='css/user.all.css'
     %}
-    <link href="{{ asset_url }}" type="text/css" rel="stylesheet" media="screen" />
+    <link href="{{ asset_url }}" type="text/css" rel="stylesheet" media="all" />
     {% endstylesheets %}
 
     {% javascripts
         '//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js'
         '@OroUIBundle/Resources/public/lib/less-1.3.1.min.js'
         '@OroUIBundle/Resources/public/lib/bootstrap.min.js'
+        '@OroUIBundle/Resources/public/lib/bootstrap/js/bootstrap-tooltip.js'
+        '@OroUIBundle/Resources/public/lib/bootstrap/js/bootstrap-popover.js'
         '@OroUIBundle/Resources/public/js/layout.js'
+        '@OroUserBundle/Resources/public/js/form.js'
 
-        output='js/all.js'
+        output='js/user.all.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
+
+    <!--[if lte IE 9]>
+    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <link href="{{ asset('bundles/oroui/css/ie.css') }}" rel="stylesheet" media="all" />
+    <script src="{{ asset('bundles/oroui/js/jquery.placeholder.js') }}"></script>
+    <script type="text/javascript">
+        jQuery(document).ready(function() {
+            jQuery('input, textarea').placeholder();
+        });
+    </script>
+    <![endif]-->
+    <!--[if lte IE 7]>
+        <script src="{{ asset('bundles/oroui/js/ie.js') }}"></script>
+    <![endif]-->
     {% endblock %}
 </head>
-
-<body>
+<body class="{% block bodyClass %}{% endblock %}">
     <div id="page">
         <div id="top-page">
             {% if app.session.flashbag.peekAll|length > 0 %}
@@ -54,5 +70,7 @@
             {% endblock content %}
         </div>
     </div>
+
+    {% block javascripts %}{% endblock %}
 </body>
 </html>

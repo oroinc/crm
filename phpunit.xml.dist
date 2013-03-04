@@ -23,7 +23,9 @@
             <directory suffix=".php">.</directory>
             <exclude>
                 <directory>./vendor</directory>
+                <directory>./Resources</directory>
                 <directory>./Tests</directory>
+                <directory>./Form</directory>
             </exclude>
         </whitelist>
     </filter>

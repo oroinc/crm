@@ -2,13 +2,11 @@
 
 namespace Oro\Bundle\UserBundle\Controller\Api\Soap;
 
-use Symfony\Component\DependencyInjection\ContainerAware;
-
 use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 
 use Oro\Bundle\UserBundle\Entity\Role;
 
-class RoleController extends ContainerAware
+class RoleController extends BaseController
 {
     /**
      * @Soap\Method("getRoles")
@@ -30,13 +28,42 @@ class RoleController extends ContainerAware
      */
     public function getAction($id)
     {
-        $entity = $this->getManager()->find('OroUserBundle:Role', (int) $id);
+        return $this->container->get('besimple.soap.response')->setReturnValue(
+            $this->getEntity('OroUserBundle:Role', $id)
+        );
+    }
 
-        if (!$entity) {
-            throw new \SoapFault('NOT_FOUND', sprintf('The role #%u can not be found', $id));
-        }
+    /**
+     * @Soap\Method("createRole")
+     * @Soap\Param("role", phpType = "\Oro\Bundle\UserBundle\Entity\Role")
+     * @Soap\Result(phpType = "boolean")
+     */
+    public function createAction($role)
+    {
+        $entity = new Role();
 
-        return $this->container->get('besimple.soap.response')->setReturnValue($entity);
+        $this->container->get('oro_soap.request')->fix($this->container->get('oro_user.form.role.api')->getName());
+
+        return $this->container->get('besimple.soap.response')->setReturnValue(
+            $this->container->get('oro_user.form.handler.role.api')->process($entity)
+        );
+    }
+
+    /**
+     * @Soap\Method("updateRole")
+     * @Soap\Param("id", phpType = "int")
+     * @Soap\Param("role", phpType = "\Oro\Bundle\UserBundle\Entity\Role")
+     * @Soap\Result(phpType = "boolean")
+     */
+    public function updateAction($id, $role)
+    {
+        $entity = $this->getEntity('OroUserBundle:Role', $id);
+
+        $this->container->get('oro_soap.request')->fix($this->container->get('oro_user.form.role.api')->getName());
+
+        return $this->container->get('besimple.soap.response')->setReturnValue(
+            $this->container->get('oro_user.form.handler.role.api')->process($entity)
+        );
     }
 
     /**
@@ -47,11 +74,7 @@ class RoleController extends ContainerAware
     public function deleteAction($id)
     {
         $em     = $this->getManager();
-        $entity = $em->find('OroUserBundle:Role', (int) $id);
-
-        if (!$entity) {
-            throw new \SoapFault('NOT_FOUND', sprintf('The role #%u can not be found', $id));
-        }
+        $entity = $this->getEntity('OroUserBundle:Role', $id);
 
         $em->remove($entity);
         $em->flush();
@@ -60,10 +83,18 @@ class RoleController extends ContainerAware
     }
 
     /**
-     * @return Doctrine\Common\Persistence\ObjectManager
+     * @Soap\Method("getRoleByName")
+     * @Soap\Param("name", phpType = "string")
+     * @Soap\Result(phpType = "Oro\Bundle\UserBundle\Entity\Role")
      */
-    protected function getManager()
+    public function getBynameAction($name)
     {
-        return $this->container->get('doctrine.orm.entity_manager');
+        $entity = $this->getManager()->getRepository('OroUserBundle:Role')->findOneBy(array('role' => $name));
+
+        if (!$entity) {
+            throw new \SoapFault('NOT_FOUND', sprintf('Role "%s" can not be found', $name));
+        }
+
+        return $this->container->get('besimple.soap.response')->setReturnValue($entity);
     }
 }
