@@ -99,6 +99,7 @@ class ResultTest extends \PHPUnit_Framework_TestCase
             ->andWhere('name', '~', 'test string', Query::TYPE_TEXT);
 
         $this->result = new Result($query, $items, 3);
+        $this->result1 = new Result($query, array(), 0);
     }
 
     public function testGetQuery()
@@ -130,5 +131,7 @@ class ResultTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('OroTestBundle:test', $resultArray['data'][0]['entity_name']);
         $this->assertEquals(2, $resultArray['data'][1]['record_id']);
         $this->assertEquals('test title 3', $resultArray['data'][2]['record_string']);
+
+        $this->result1->toSearchResultData();
     }
 }

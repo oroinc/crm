@@ -28,6 +28,10 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->translator->expects($this->any())
+            ->method('trans')
+            ->will($this->returnValue('translated test product'));
+
         $this->om = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
         $this->repository = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
 
@@ -54,6 +58,7 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
 
         $this->indexService = new Indexer($this->om, $this->connector, $this->translator, array(
             'Oro\Bundle\DataBundle\Entity\Product' => array(
+                'alias' => 'test_alias',
                 'label' => 'test product',
                 'fields' => array(
                     array(
@@ -137,6 +142,9 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('test', $searchCondition[0]['fieldValue']);
         $this->assertEquals(Query::TYPE_TEXT, $searchCondition[0]['fieldType']);
         $this->assertEquals(Query::KEYWORD_AND, $searchCondition[0]['type']);
+
+        $this->indexService->simpleSearch('test', 0, 10, 'test_product', 2);
+        $this->indexService->simpleSearch('test', 2, 10);
     }
 
     /**
@@ -183,5 +191,12 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(10, $query->getFirstResult());
 
         $this->assertEquals(5, $query->getMaxResults());
+    }
+
+    public function testGetEntitiesLabels()
+    {
+        $data = $this->indexService->getEntitiesLabels();
+        $this->assertEquals('test_alias', $data[0]['alias']);
+        $this->assertEquals('translated test product', $data[0]['label']);
     }
 }

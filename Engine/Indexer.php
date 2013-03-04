@@ -129,9 +129,7 @@ class Indexer
      */
     public function query(Query $query)
     {
-        if ($query->getQuery() == Query::SELECT) {
-            return $this->adapter->search($query);
-        }
+        return $this->adapter->search($query);
     }
 
     /**

@@ -132,7 +132,7 @@ class Query
             foreach ($config['fields'] as $field) {
                 if (isset($field['relation_fields'])) {
                     foreach ($field['relation_fields'] as $relationField) {
-                        if (isset($field['target_fields']) && count($field['target_fields']) > 0) {
+                        if (isset($relationField['target_fields']) && count($relationField['target_fields']) > 0) {
                             foreach ($relationField['target_fields'] as $targetFields) {
                                 if (!isset($fields[$targetFields]) || !in_array($entity, $fields[$targetFields])) {
                                     $fields[$targetFields][] = $entity;
@@ -404,7 +404,7 @@ class Query
      *
      * @return bool
      */
-    private function checkFieldInConfig($fieldName)
+    /*private function checkFieldInConfig($fieldName)
     {
         if (isset($this->fields[$fieldName])) {
             foreach ($this->from as $from) {
@@ -421,5 +421,5 @@ class Query
         }
 
         return false;
-    }
+    }*/
 }

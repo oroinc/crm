@@ -49,5 +49,23 @@ class ParserTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(10, $searchCondition[1]['fieldValue']);
         $this->assertEquals(Query::TYPE_DECIMAL, $searchCondition[1]['fieldType']);
         $this->assertEquals(Query::KEYWORD_OR, $searchCondition[1]['type']);
+
+        $query = $parser->getQueryFromString(
+            'description ~ description order_by integer count desc '
+        );
+        $from = $query->getFrom();
+        $this->assertEquals('*', $from[0]);
+        $this->assertEquals(Query::TYPE_INTEGER, $query->getOrderType());
+
+        $query = $parser->getQueryFromString(
+            'from product where decimal price > 10'
+        );
+        $from = $query->getFrom();
+        $this->assertEquals('product', $from[0]);
+
+        $this->setExpectedException('InvalidArgumentException');
+        $parser->getQueryFromString(
+            'decimal price ~ 10'
+        );
     }
 }
