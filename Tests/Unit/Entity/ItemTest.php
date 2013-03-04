@@ -7,6 +7,7 @@ use Oro\Bundle\SearchBundle\Entity\IndexInteger;
 use Oro\Bundle\SearchBundle\Entity\IndexText;
 use Oro\Bundle\SearchBundle\Entity\IndexDatetime;
 use Oro\Bundle\SearchBundle\Entity\IndexDecimal;
+use Oro\Bundle\SearchBundle\Engine\Indexer;
 
 class ItemTest extends \PHPUnit_Framework_TestCase
 {
@@ -99,12 +100,16 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         $fields = $this->item->getTextFields();
         $this->assertEquals(0, $fields->count());
         $index = new IndexText();
+        $index->setField(Indexer::TEXT_ALL_DATA_FIELD);
+        $index->setValue('test text');
         $this->item->addTextField($index);
         $fields = $this->item->getTextFields();
+        $this->assertEquals('test text', $this->item->getRecordText());
         $this->assertEquals($index, $fields->get(0));
         $this->item->removeTextField($index);
         $fields = $this->item->getTextFields();
         $this->assertEquals(0, $fields->count());
+
     }
 
     public function testDatetimeField()

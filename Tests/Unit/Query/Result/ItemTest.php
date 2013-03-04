@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\SearchBundle\Tests\Unit\Query;
+namespace Oro\Bundle\SearchBundle\Tests\Unit\Query\Result;
 
 use Oro\Bundle\SearchBundle\Query\Result\Item;
 use Oro\Bundle\SearchBundle\Tests\Unit\Fixture\Entity\Product;
@@ -80,5 +80,29 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('OroTestBundle:test', $result['entity_name']);
         $this->assertEquals(1, $result['record_id']);
         $this->assertEquals('test title', $result['record_string']);
+    }
+
+    public function testRecordTitle()
+    {
+        $this->item->setRecordTitle('test title');
+        $this->assertEquals('test title', $this->item->getRecordTitle());
+    }
+
+    public function testRecordUrl()
+    {
+        $this->item->setRecordUrl('http://example.com');
+        $this->assertEquals('http://example.com', $this->item->getRecordUrl());
+    }
+
+    public function testRecordText()
+    {
+        $this->item->setRecordText('test text');
+        $this->assertEquals('test text', $this->item->getRecordText());
+    }
+
+    public function testGetEntityConfig()
+    {
+        $result = $this->item->getEntityConfig();
+        $this->assertEquals('test_product', $result['alias']);
     }
 }

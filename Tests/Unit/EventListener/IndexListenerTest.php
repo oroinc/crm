@@ -42,23 +42,26 @@ class IndexListenerTest extends \PHPUnit_Framework_TestCase
     {
         $this->engine->expects($this->once())
             ->method('save');
-
         $this->listener->postPersist($this->args);
+        $listener = new IndexListener($this->container, array());
+        $listener->postPersist($this->args);
     }
 
     public function testPreRemove()
     {
         $this->engine->expects($this->once())
             ->method('delete');
-
         $this->listener->preRemove($this->args);
+        $listener = new IndexListener($this->container, array());
+        $listener->preRemove($this->args);
     }
 
     public function testPostUpdate()
     {
         $this->engine->expects($this->once())
             ->method('save');
-
         $this->listener->postUpdate($this->args);
+        $listener = new IndexListener($this->container, array());
+        $listener->postUpdate($this->args);
     }
 }

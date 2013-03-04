@@ -493,11 +493,14 @@ class Item
 
     public function getRecordText()
     {
+        $recordText = '';
         foreach ($this->textFields as $textField) {
             if ($textField->getField() == Indexer::TEXT_ALL_DATA_FIELD) {
-                return $textField->getValue();
+                $recordText = $textField->getValue();
             }
         }
+
+        return $recordText;
     }
 
     /**

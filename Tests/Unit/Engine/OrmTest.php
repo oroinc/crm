@@ -35,7 +35,9 @@ class OrmTest extends \PHPUnit_Framework_TestCase
                 'title_fields' => array('name'),
                 'route' => array(
                     'name' => 'test_route',
-                    'parameters' => array()
+                    'parameters' => array(
+                        'id' => 'id'
+                    )
                 ),
                 'fields' => array(
                     array(
@@ -62,7 +64,6 @@ class OrmTest extends \PHPUnit_Framework_TestCase
                     array(
                         'name'          => 'count',
                         'target_type'   => 'integer',
-                        'target_fields' => array('count')
                     ),
                     array(
                         'name'            => 'manufacturer',
@@ -139,7 +140,9 @@ class OrmTest extends \PHPUnit_Framework_TestCase
                 }
             ));
 
-        $this->orm = new Orm($this->om, $this->container, $this->mappingConfig, false);
+
+
+        $this->orm = new Orm($this->om, $this->container, $this->mappingConfig, true);
     }
 
     public function testMapObject()
@@ -190,6 +193,12 @@ class OrmTest extends \PHPUnit_Framework_TestCase
             ->method('getRepository')
             ->with($this->equalTo('OroSearchBundle:Item'))
             ->will($this->returnValue($searchRepo));
+
+        $this->om->expects($this->once())
+            ->method('persist');
+
+        $this->om->expects($this->once())
+            ->method('flush');
 
         $this->container->expects($this->once())
             ->method('getParameter')

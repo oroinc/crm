@@ -22,7 +22,7 @@ class OroSearchExtensionTest extends \PHPUnit_Framework_TestCase
 
     public function testTrimByString()
     {
-        $result = $this->extension->trimByString('Writing Tests for PHPUnit search string The tests', 'search', 15);
+        $result = $this->extension->trimByString('Writing Tests for PHPUnit search string The tests', 'search string', 15);
         $this->assertTrue($result == '...Writing Tests search string...');
     }
 

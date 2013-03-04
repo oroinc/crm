@@ -205,7 +205,7 @@ class Orm extends AbstractEngine
     {
         $results = array();
         $searchResults = $this->getIndexRepo()->search($query);
-        if (($query->getMaxResults() > 0 || $query->getFirstResult() > 0) && $query->getMaxResults() < Query::INFINITY) {
+        if (($query->getMaxResults() > 0 || $query->getFirstResult() > 0)) {
             $recordsCount = $this->getIndexRepo()->getRecordsCount($query);
         } else {
             $recordsCount = count($searchResults);

@@ -8,6 +8,7 @@ class QueryTest extends \PHPUnit_Framework_TestCase
 {
     private $config = array(
         'Oro\Bundle\DataBundle\Entity\Product' => array(
+            'alias' => 'test_alias',
             'fields' => array(
                 array(
                     'name' => 'name',
@@ -99,5 +100,15 @@ class QueryTest extends \PHPUnit_Framework_TestCase
         $queryParams = $query->getOptions();
         $this->assertEquals('or', $queryParams[0]['type']);
         $this->assertEquals('all_data', $queryParams[0]['fieldName']);
+    }
+
+    public function testGetEntityByAlias()
+    {
+        $query = new Query();
+        $query->setMappingConfig($this->config);
+        $result = $query->getEntityByAlias('test_alias');
+        $this->assertEquals('Oro\Bundle\DataBundle\Entity\Product', $result);
+
+        $this->assertFalse($query->getEntityByAlias('bad alias'));
     }
 }
