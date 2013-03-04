@@ -17,6 +17,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  *     uniqueConstraints={@ORM\UniqueConstraint(name="searchunique_idx", columns={"code", "entity_type"})}
  * )
  * @ORM\Entity
+ * @ORM\HasLifecycleCallbacks
  */
 class Attribute extends AbstractEntityAttribute
 {
@@ -32,4 +33,63 @@ class Attribute extends AbstractEntityAttribute
      * @ORM\OrderBy({"sortOrder" = "ASC"})
      */
     protected $options;
+
+    /**
+     * Convert defaultValue to UNIX timestamp if it is a DateTime object
+     *
+     * @ORM\PrePersist
+     * @ORM\PreUpdate
+     */
+    public function convertDefaultValueToTimestamp()
+    {
+        if ($this->getDefaultValue() instanceof \DateTime) {
+            $this->setDefaultValue($this->getDefaultValue()->format('U'));
+        }
+    }
+
+    /**
+     * Convert defaultValue to DateTime if attribute type is date
+     *
+     * @ORM\PostLoad
+     */
+    public function convertDefaultValueToDatetime()
+    {
+        if ($this->getDefaultValue()) {
+            if (strpos($this->getAttributeType(), 'DateType') !== FALSE) {
+                $date = new \DateTime();
+                $date->setTimestamp(intval($this->getDefaultValue()));
+
+                $this->setDefaultValue($date);
+            }
+        }
+    }
+
+    /**
+     * Convert defaultValue to integer if attribute type is boolean
+     *
+     * @ORM\PrePersist
+     * @ORM\PreUpdate
+     */
+    public function convertDefaultValueToInteger()
+    {
+        if ($this->getDefaultValue() !== null) {
+            if (strpos($this->getAttributeType(), 'BooleanType') !== false) {
+                $this->setDefaultValue((int) $this->getDefaultValue());
+            }
+        }
+    }
+
+    /**
+     * Convert defaultValue to boolean if attribute type is boolean
+     *
+     * @ORM\PostLoad
+     */
+    public function convertDefaultValueToBoolean()
+    {
+        if ($this->getDefaultValue() !== null) {
+            if (strpos($this->getAttributeType(), 'BooleanType') !== false) {
+                $this->setDefaultValue((bool) $this->getDefaultValue());
+            }
+        }
+    }
 }

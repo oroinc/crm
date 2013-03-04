@@ -85,7 +85,7 @@ abstract class AbstractEntityAttribute extends AbstractAttribute
     protected $unique;
 
     /**
-     * @ORM\Column(name="default_value", type="string", length=255, nullable=true)
+     * @ORM\Column(name="default_value", type="text", length=65532, nullable=true)
      */
     protected $defaultValue;
 
