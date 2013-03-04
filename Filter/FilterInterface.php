@@ -21,4 +21,3 @@ interface FilterInterface extends BaseFilterInterface
     const TYPE_FLEXIBLE_STRING  = 'oro_grid_orm_flexible_string';
     const TYPE_FLEXIBLE_OPTIONS = 'oro_grid_orm_flexible_options';
 }
-
