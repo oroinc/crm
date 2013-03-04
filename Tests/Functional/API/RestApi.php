@@ -58,7 +58,7 @@ class RestApiTest extends WebTestCase
 
     /**
      * @depends testApiContainRole
-     * @var array
+     * @param int $roleId
      * @return int
      */
     public function testApiUpdateRole($roleId)
@@ -84,7 +84,7 @@ class RestApiTest extends WebTestCase
 
     /**
      * @depends testApiUpdateRole
-     * @var int
+     * @param int $roleId
      */
     public function testApiDeleteRole($roleId)
     {
@@ -109,7 +109,7 @@ class RestApiTest extends WebTestCase
 
     /**
      * @depends testApiCreateGroup
-     * @var array
+     * @param array $requestGroup
      * @return int
      */
     public function testApiContainGroup($requestGroup)
@@ -126,7 +126,7 @@ class RestApiTest extends WebTestCase
 
     /**
      * @depends testApiContainGroup
-     * @var array
+     * @param int $groupId
      * @return int
      */
     public function testApiUpdateGroup($groupId)
@@ -148,7 +148,7 @@ class RestApiTest extends WebTestCase
 
     /**
      * @depends testApiUpdateGroup
-     * @var int
+     * @param int
      */
     public function testApiDeleteGroup($groupId)
     {
