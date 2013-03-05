@@ -1,13 +1,32 @@
 // list of filters
 OroApp.FilterList = Backbone.View.extend({
     /** @property */
-    filters: [],
+    filters: {},
 
     /** @property */
-    addButtonTemplate: _.template('<a href="#" class="btn btn-link btn-group"><%= addButtonHint %></a>'),
+    addButtonTemplate: _.template(
+        '<span id="add-filter-panel">' +
+            '<a href="#" class="btn btn-link btn-group"><%= addButtonHint %></a>' +
+            '<select id="add-filter-select" multiple>' +
+                '<% _.each(filters, function (filter, name) { %>' +
+                    '<option value="<%= name %>" <% if (filter.enabled) { %>selected<% } %>>' +
+                        '<%= filter.hint %>' +
+                    '</option>' +
+                '<% }); %>' +
+            '</select>' +
+        '</span>'
+    ),
+
+    /** @property */
+    filterSelector: '#add-filter-select',
 
     /** @property */
     addButtonHint: 'Add filter',
+
+    /** @property */
+    events: {
+        'change select': 'processFilterStatus'
+    },
 
     initialize: function(options)
     {
@@ -17,9 +36,10 @@ OroApp.FilterList = Backbone.View.extend({
             this.filters = options.filters;
         }
 
-        for (var i = 0; i < this.filters.length; i++) {
-            this.filters[i] = new (this.filters[i])();
-            this.listenTo(this.filters[i], "changedData", this.reloadCollection);
+        for (var name in this.filters) {
+            this.filters[name] = new (this.filters[name])();
+            this.listenTo(this.filters[name], "changedData", this.reloadCollection);
+            this.listenTo(this.filters[name], "disabled", this.disableFilter);
         }
 
         if (options.addButtonHint) {
@@ -29,14 +49,43 @@ OroApp.FilterList = Backbone.View.extend({
         Backbone.View.prototype.initialize.apply(this, arguments);
     },
 
+    processFilterStatus: function(e) {
+        e.preventDefault();
+        var activeFilters = this.$(this.filterSelector).val();
+
+        _.each(this.filters, function(filter, name) {
+            if (!filter.enabled && _.indexOf(activeFilters, name) != -1) {
+                this.enableFilter(filter);
+            } else if (filter.enabled && _.indexOf(activeFilters, name) == -1) {
+                this.disableFilter(filter);
+            }
+        }, this);
+    },
+
+    enableFilter: function(filter) {
+        filter.enable();
+        var optionSelector = this.filterSelector + ' option[value="' + filter.name + '"]';
+        this.$(optionSelector).attr('selected', 'selected');
+    },
+
+    disableFilter : function(filter) {
+        filter.disable();
+        var optionSelector = this.filterSelector + ' option[value="' + filter.name + '"]';
+        this.$(optionSelector).removeAttr('selected');
+    },
+
     render: function () {
         this.$el.empty();
 
-        for (var i = 0; i < this.filters.length; i++) {
-            this.$el.append(this.filters[i].render().$el);
+        for (var name in this.filters) {
+            var filter = this.filters[name];
+            if (filter.enabled) {
+                this.$el.append(filter.render().$el);
+            }
         }
 
         this.$el.append(this.addButtonTemplate({
+            filters: this.filters,
             addButtonHint: this.addButtonHint
         }));
 
@@ -45,14 +94,17 @@ OroApp.FilterList = Backbone.View.extend({
 
     reloadCollection: function() {
         var filterParams = {};
-        for (var i = 0; i < this.filters.length; i++) {
-            var filter = this.filters[i];
-            var parameters = filter.getParameters();
-            if (parameters) {
-                filterParams[filter.inputName] = parameters;
+        for (var name in this.filters) {
+            var filter = this.filters[name];
+            if (filter.enabled) {
+                var parameters = filter.getParameters();
+                if (parameters) {
+                    filterParams[name] = parameters;
+                }
             }
         }
         this.collection.state.filters = filterParams;
+        this.collection.state.currentPage = 1;
         this.collection.fetch();
     }
 });
@@ -68,16 +120,20 @@ OroApp.Filter = Backbone.View.extend({
     /** @property */
     template: _.template(
         '<div class="btn">' +
-            '<%= inputHint %>: <input type="text" value="" style="width:80px;" />' +
+            '<%= hint %>: <input type="text" value="" style="width:80px;" />' +
+            '<a href="#" class="disable-filter">X</a>' +
             '<span class="caret"></span>' +
         '</div>'
     ),
 
     /** @property */
-    inputName: 'input_name',
+    enabled: true,
 
     /** @property */
-    inputHint: 'Input Hint',
+    name: 'input_name',
+
+    /** @property */
+    hint: 'Input Hint',
 
     /** @property */
     parameterSelectors: {
@@ -86,14 +142,15 @@ OroApp.Filter = Backbone.View.extend({
 
     /** @property */
     events: {
-        'change input': 'update'
+        'change input': 'update',
+        'click a.disable-filter': 'disable'
     },
 
     render: function () {
         this.$el.empty();
         this.$el.append(
             this.template({
-                inputHint: this.inputHint
+                hint: this.hint
             })
         );
         return this;
@@ -102,6 +159,39 @@ OroApp.Filter = Backbone.View.extend({
     update: function(e) {
         e.preventDefault();
         this.trigger('changedData');
+    },
+
+    enable: function() {
+        if (!this.enabled) {
+            this.enabled = true;
+            this.show();
+            if (this.hasValue()) {
+                this.trigger('changedData');
+            }
+        }
+    },
+
+    disable: function() {
+        if (this.enabled) {
+            this.enabled = false;
+            this.hide();
+            this.trigger('disabled', this);
+            if (this.hasValue()) {
+                this.trigger('changedData');
+            }
+        }
+    },
+
+    show: function() {
+        this.$el.show();
+    },
+
+    hide: function() {
+        this.$el.hide();
+    },
+
+    hasValue: function() {
+        return this.$(this.parameterSelectors.value).val() != '';
     },
 
     getParameters: function() {
@@ -116,11 +206,14 @@ OroApp.ChoiceFilter = OroApp.Filter.extend({
     /** @property */
     template: _.template(
         '<div class="btn">' +
-            '<%= inputHint %>: <select style="width:150px;">' +
+            '<%= hint %>: <select style="width:150px;">' +
                 '<option value=""></option>' +
-                '<% _.each(choices, function (hint, value) { %><option value="<%= value %>"><%= hint %></option><% }); %>' +
+                '<% _.each(choices, function (hint, value) { %>' +
+                    '<option value="<%= value %>"><%= hint %></option>' +
+                '<% }); %>' +
             '</select>' +
             '<input type="text" value="" style="width:80px;" />' +
+            '<a href="#" class="disable-filter">X</a>' +
             '<span class="caret"></span>' +
         '</div>'
     ),
@@ -134,7 +227,8 @@ OroApp.ChoiceFilter = OroApp.Filter.extend({
     /** @property */
     events: {
         'change select': 'updateOnSelect',
-        'change input': 'update'
+        'change input': 'update',
+        'click a.disable-filter': 'disable'
     },
 
     /** @property */
@@ -144,7 +238,7 @@ OroApp.ChoiceFilter = OroApp.Filter.extend({
         this.$el.empty();
         this.$el.append(
             this.template({
-                inputHint: this.inputHint,
+                hint: this.hint,
                 choices:   this.choices
             })
         );
@@ -153,7 +247,7 @@ OroApp.ChoiceFilter = OroApp.Filter.extend({
 
     updateOnSelect: function(e) {
         e.preventDefault();
-        if (this.$(this.parameterSelectors.value).val()) {
+        if (this.hasValue()) {
             this.trigger('changedData');
         }
     },
@@ -171,11 +265,12 @@ OroApp.DateFilter = OroApp.ChoiceFilter.extend({
     /** @property */
     template: _.template(
         '<div class="btn">' +
-            '<%= inputHint %>: <select style="width:150px;">' +
+            '<%= hint %>: <select style="width:150px;">' +
                 '<option value=""></option>' +
                 '<% _.each(choices, function (hint, value) { %><option value="<%= value %>"><%= hint %></option><% }); %>' +
             '</select>' +
             'date is <input type="text" value="" style="width:80px;" />' +
+            '<a href="#" class="disable-filter">X</a>' +
             '<span class="caret"></span>' +
         '</div>'
     )
@@ -186,11 +281,12 @@ OroApp.DateTimeFilter = OroApp.DateFilter.extend({
     /** @property */
     template: _.template(
         '<div class="btn">' +
-            '<%= inputHint %>: <select style="width:150px;">' +
+            '<%= hint %>: <select style="width:150px;">' +
                 '<option value=""></option>' +
                 '<% _.each(choices, function (hint, value) { %><option value="<%= value %>"><%= hint %></option><% }); %>' +
             '</select>' +
             'datetime is <input type="text" value="" style="width:80px;" />' +
+            '<a href="#" class="disable-filter">X</a>' +
             '<span class="caret"></span>' +
         '</div>'
     )
@@ -201,12 +297,13 @@ OroApp.DateRangeFilter = OroApp.ChoiceFilter.extend({
     /** @property */
     template: _.template(
         '<div class="btn">' +
-            '<%= inputHint %>: <select style="width:150px;">' +
+            '<%= hint %>: <select style="width:150px;">' +
                 '<option value=""></option>' +
                 '<% _.each(choices, function (hint, value) { %><option value="<%= value %>"><%= hint %></option><% }); %>' +
             '</select>' +
             'date from <input type="text" name="start" value="" style="width:80px;" />' +
             'to <input type="text" name="end" value="" style="width:80px;" />' +
+            '<a href="#" class="disable-filter">X</a>' +
             '<span class="caret"></span>' +
         '</div>'
     ),
@@ -222,16 +319,13 @@ OroApp.DateRangeFilter = OroApp.ChoiceFilter.extend({
     events: {
         'change select': 'updateOnSelect',
         'change input[name="start"]': 'update',
-        'change input[name="end"]': 'update'
+        'change input[name="end"]': 'update',
+        'click a.disable-filter': 'disable'
     },
 
-    updateOnSelect: function(e) {
-        e.preventDefault();
-        if (this.$(this.parameterSelectors.value_start).val()
-            || this.$(this.parameterSelectors.value_end).val()
-        ) {
-            this.trigger('changedData');
-        }
+    hasValue: function() {
+        return this.$(this.parameterSelectors.value_start).val() != ''
+            || this.$(this.parameterSelectors.value_end).val() != '';
     },
 
     getParameters: function() {
@@ -248,12 +342,13 @@ OroApp.DateTimeRangeFilter = OroApp.DateRangeFilter.extend({
     /** @property */
     template: _.template(
         '<div class="btn">' +
-            '<%= inputHint %>: <select style="width:150px;">' +
+            '<%= hint %>: <select style="width:150px;">' +
                 '<option value=""></option>' +
                 '<% _.each(choices, function (hint, value) { %><option value="<%= value %>"><%= hint %></option><% }); %>' +
             '</select>' +
             'datetime from <input type="text" name="start" value="" style="width:80px;" />' +
             'to <input type="text" name="end" value="" style="width:80px;" />' +
+            '<a href="#" class="disable-filter">X</a>' +
             '<span class="caret"></span>' +
         '</div>'
     )
@@ -264,10 +359,11 @@ OroApp.SelectFilter = OroApp.Filter.extend({
     /** @property */
     template: _.template(
         '<div class="btn">' +
-            '<%= inputHint %>: <select style="width:150px;">' +
+            '<%= hint %>: <select style="width:150px;">' +
                 '<option value=""></option>' +
                 '<% _.each(options, function (hint, value) { %><option value="<%= value %>"><%= hint %></option><% }); %>' +
             '</select>' +
+            '<a href="#" class="disable-filter">X</a>' +
             '<span class="caret"></span>' +
         '</div>'
     ),
@@ -279,7 +375,8 @@ OroApp.SelectFilter = OroApp.Filter.extend({
 
     /** @property */
     events: {
-        'change select': 'update'
+        'change select': 'update',
+        'click a.disable-filter': 'disable'
     },
 
     /** @property */
@@ -289,7 +386,7 @@ OroApp.SelectFilter = OroApp.Filter.extend({
         this.$el.empty();
         this.$el.append(
             this.template({
-                inputHint: this.inputHint,
+                hint: this.hint,
                 options:   this.options
             })
         );

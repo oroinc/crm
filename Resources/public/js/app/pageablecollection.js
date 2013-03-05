@@ -34,7 +34,7 @@ OroApp.PageableCollection = Backbone.PageableCollection.extend({
     processFiltersParams: function(data, state) {
         if (state.filters) {
             _.each(state.filters, function(filterParameters, filterKey) {
-                for (parameter in filterParameters) {
+                for (var parameter in filterParameters) {
                     var queryParameter = this.inputName + '[_filter][' + filterKey + ']' + parameter;
                     data[queryParameter] = filterParameters[parameter];
                 }

@@ -54,59 +54,60 @@ output='js/acme.grid.js'
                         }{% if not loop.last %},{% endif %}
                         {% endfor %}
                     ],
-                    filters: [
+                    filters: {
                         {% for filter in datagrid.filters %}
+                            '{{ filter.name }}':
                             {% set filterType = filter.getOption('filter_type') %}
                             {% if filterType == constant(filterTypePrefix ~ 'TYPE_CHOICE')
                                 or filterType == constant(filterTypePrefix ~ 'TYPE_NUMBER')
                                 or filterType == constant(filterTypePrefix ~ 'TYPE_STRING')
                             %}
                                 OroApp.ChoiceFilter.extend({
-                                    inputName : '{{ filter.name }}',
-                                    inputHint : '{{ filter.getOption('label') }}',
-                                    choices:    {{ filter.typeOptions|json_encode|raw }}
+                                    name: '{{ filter.name }}',
+                                    hint: '{{ filter.getOption('label') }}',
+                                    choices: {{ filter.typeOptions|json_encode|raw }}
                                 })
                             {% elseif filterType == constant(filterTypePrefix ~ 'TYPE_DATE') %}
                                 OroApp.DateFilter.extend({
-                                    inputName : '{{ filter.name }}',
-                                    inputHint : '{{ filter.getOption('label') }}',
-                                    choices:    {{ filter.typeOptions|json_encode|raw }}
+                                    name: '{{ filter.name }}',
+                                    hint: '{{ filter.getOption('label') }}',
+                                    choices: {{ filter.typeOptions|json_encode|raw }}
                                 })
                             {% elseif filterType == constant(filterTypePrefix ~ 'TYPE_DATETIME') %}
                                 OroApp.DateTimeFilter.extend({
-                                    inputName : '{{ filter.name }}',
-                                    inputHint : '{{ filter.getOption('label') }}',
-                                    choices:    {{ filter.typeOptions|json_encode|raw }}
+                                    name: '{{ filter.name }}',
+                                    hint: '{{ filter.getOption('label') }}',
+                                    choices: {{ filter.typeOptions|json_encode|raw }}
                                 })
                             {% elseif filterType == constant(filterTypePrefix ~ 'TYPE_DATE_RANGE') %}
                                 OroApp.DateRangeFilter.extend({
-                                    inputName : '{{ filter.name }}',
-                                    inputHint : '{{ filter.getOption('label') }}',
-                                    choices:    {{ filter.typeOptions|json_encode|raw }}
+                                    name: '{{ filter.name }}',
+                                    hint: '{{ filter.getOption('label') }}',
+                                    choices: {{ filter.typeOptions|json_encode|raw }}
                                 })
                             {% elseif filterType == constant(filterTypePrefix ~ 'TYPE_DATETIME_RANGE') %}
                                 OroApp.DateTimeRangeFilter.extend({
-                                    inputName : '{{ filter.name }}',
-                                    inputHint : '{{ filter.getOption('label') }}',
-                                    choices:    {{ filter.typeOptions|json_encode|raw }}
+                                    name: '{{ filter.name }}',
+                                    hint: '{{ filter.getOption('label') }}',
+                                    choices: {{ filter.typeOptions|json_encode|raw }}
                                 })
                             {% elseif filterType == constant(filterTypePrefix ~ 'TYPE_BOOLEAN')
                                 or filterType == constant(filterTypePrefix ~ 'TYPE_FLEXIBLE_OPTIONS')
                             %}
                                 OroApp.SelectFilter.extend({
-                                    inputName : '{{ filter.name }}',
-                                    inputHint : '{{ filter.getOption('label') }}',
-                                    options:    {{ filter.valueOptions|json_encode|raw }}
+                                    name: '{{ filter.name }}',
+                                    hint: '{{ filter.getOption('label') }}',
+                                    options: {{ filter.valueOptions|json_encode|raw }}
                             })
                             {% else %}
                                 OroApp.Filter.extend({
-                                    inputName : '{{ filter.name }}',
-                                    inputHint : '{{ filter.getOption('label') }}'
+                                    name: '{{ filter.name }}',
+                                    hint: '{{ filter.getOption('label') }}'
                                 })
                             {% endif %}
                             {% if not loop.last %},{% endif %}
                         {% endfor %}
-                    ]
+                    }
                 },
                 collection: {
                     inputName: "{{ datagrid.name|raw }}",
