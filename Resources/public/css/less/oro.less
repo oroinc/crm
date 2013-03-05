@@ -1097,6 +1097,10 @@ footer{
 .pin-bar .list-bar li.item{
   background-color: #434e5b;
 }
+.pin-bar .list-bar li.active{
+  background-color: #3b6fe5;
+  color: #fff;
+}
 .pin-bar .list-bar .pin-holder{
   position: relative;
   padding: 0 15px 0 0;
@@ -1193,8 +1197,14 @@ footer{
 [class^="icon-"], [class*=" icon-"]{
   margin: 0 3px;
 }
-.icons-holder [class^="icon-"], .icons-holder [class*=" icon-"]{
+.icons-holder [class^="icon-"],
+.icons-holder [class*=" icon-"]{
   margin: 0 -3px;
+}
+.icons-small button.btn{
+  height: 24px;
+  padding: 0 9px;
+  line-height: 20px;
 }
 .application-menu .tab-content > .tab-pane > .nav a:hover{
   background: #98b9ec;
@@ -1458,7 +1468,10 @@ footer{
     position: absolute;
     right: 0;
     top: -33px;
-    padding: 2px 14px;
+    padding: 5px 14px;
     background-color: #fff;
   }
+}
+.scroll-holder{
+  position: relative;
 }
