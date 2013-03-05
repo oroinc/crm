@@ -50,7 +50,7 @@
                             for (var i = 0; i < data['count']; i++) {
                                 jQuery('.custom-dropdown ul').append(
                                     '<li>'
-                                        + '<a class="dropdown-toggle disabled" href="'+data['data'][i]['record_url']+'">'
+                                        + '<a href="'+data['data'][i]['record_url']+'" class="clickable">'
                                             + '<span class="name"><strong>' + data['data'][i]['record_string']+ '</strong></span><br/>'
                                             + data['data'][i]['entity_type']
                                         + '</a>'
@@ -63,9 +63,13 @@
                 });
             }
         });
-        jQuery("#search-bar-search").focusout(function(){
+        jQuery("#search-bar-search").focusout(function(e){
             jQuery("#search-div").removeClass('header-search-focused');
             e.preventDefault();
+        });
+        jQuery(".custom-dropdown ul li").click(function(e){
+            alert('test');
+            e.stopPropagation();
         });
     });
 </script>
