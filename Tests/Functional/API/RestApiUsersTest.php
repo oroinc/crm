@@ -39,7 +39,6 @@ class RestApiUsersTest extends WebTestCase
         $this->client->request('POST', '/api/rest/latest/profile', $request);
         $result = $this->client->getResponse();
         $this->assertJsonResponse($result, 201);
-        $result = json_decode($result->getContent(), true);
 
         return $request;
     }
@@ -57,14 +56,13 @@ class RestApiUsersTest extends WebTestCase
         $this->client->request('PUT', '/api/rest/latest/profiles' . '/' . $userId, $request);
         $result = $this->client->getResponse();
         $this->assertJsonResponse($result, 302);
-        $result = json_decode($result->getContent(), true);
 
         $this->client->request('GET', '/api/rest/latest/profiles' . '/' . $userId);
-        $result = $this->client->getResponse();
         $this->assertJsonResponse($result, 200);
+
         $result = json_decode($result->getContent(), true);
         //compare result
-        $roleId = $this->assertEquals($request, $result);
+        $this->assertEqualsResponse($request, $result);
 
         return $userId;
     }
@@ -75,17 +73,17 @@ class RestApiUsersTest extends WebTestCase
      */
     public function testApiDeleteUser($userId)
     {
+        // Stop here and mark this test as incomplete.
+        $this->markTestIncomplete(
+            'This test has not been implemented yet.'
+        );
+
         $this->client->request('DELETE', '/api/rest/latest/profiles' . '/' . $userId);
         $result = $this->client->getResponse();
         $this->assertJsonResponse($result, 204);
         $this->client->request('GET', '/api/rest/latest/profiles' . '/' . $userId);
         $result = $this->client->getResponse();
         $this->assertEmpty($result);
-
-        // Stop here and mark this test as incomplete.
-        $this->markTestIncomplete(
-            'This test has not been implemented yet.'
-        );
     }
 
     protected function tearDown()
@@ -114,13 +112,8 @@ class RestApiUsersTest extends WebTestCase
      * @param array $result
      * @param array $request
      */
-    protected function assertEquals($request, $result)
+    protected function assertEqualsResponse($request, $result)
     {
-        // Stop here and mark this test as incomplete.
-        $this->markTestIncomplete(
-            'This test has not been implemented yet.'
-        );
-
         $flag = 1;
         foreach ($result as $key => $object) {
             foreach ($request as $role) {
