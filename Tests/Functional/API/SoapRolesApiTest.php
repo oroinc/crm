@@ -26,6 +26,23 @@ class SoapRolesApiTest extends WebTestCase
     }
 
     /**
+     * @depends testGetRoles
+     */
+    public function testClearRoles()
+    {
+        //get roles
+        $roles = self::$clientSoap->getRoles();
+        $roles = $this->classToArray($roles);
+        foreach ($roles['item'] as $role) {
+            $result = self::$clientSoap->deleteRole($role['id']);
+            $this->assertTrue($result);
+        }
+        $roles = self::$clientSoap->getRoles();
+        $roles = $this->classToArray($roles);
+        $this->assertEmpty($roles);
+    }
+
+    /**
      * @param string $request
      * @param array $response
      *
