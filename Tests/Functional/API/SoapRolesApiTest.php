@@ -25,9 +25,6 @@ class SoapRolesApiTest extends WebTestCase
         }
     }
 
-    /**
-     * @depends testGetRoles
-     */
     public function testClearRoles()
     {
         //get roles
