@@ -16,7 +16,6 @@ OroApp.DatagridToolbar = OroApp.View.extend({
                         '<li><a href="#">this is long text for test</a></li>' +
                     '</ul>' +
                 '</div>' +
-                '<button id="open-loading" class="btn">open loading</button>' +
             '</div>' +
             '<div class="page-size pull-right form-horizontal"></div>' +
             '<div class="pagination pagination-centered"></div>' +

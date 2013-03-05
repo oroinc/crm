@@ -54,7 +54,6 @@ OroApp.PageableCollection = Backbone.PageableCollection.extend({
      * @inheritDoc
      */
     _checkState: function (state) {
-
         var mode = this.mode;
         var links = this.links;
         var totalRecords = state.totalRecords;
@@ -81,20 +80,25 @@ OroApp.PageableCollection = Backbone.PageableCollection.extend({
                 throw new RangeError("`firstPage must be 0 or 1`");
             }
 
+            if (totalRecords == 0) {
+                state.currentPage = currentPage = firstPage;
+            }
+
             state.lastPage = firstPage === 0 ? totalPages - 1 : totalPages;
 
             if (mode == "infinite") {
                 if (!links[currentPage + '']) {
                     throw new RangeError("No link found for page " + currentPage);
                 }
-            }
-            else {
-                if (firstPage === 0 && totalPages > 0 && (currentPage < firstPage || currentPage >= totalPages)) {
+            } else if (totalPages > 0) {
+                if (firstPage === 0 && (currentPage < firstPage || currentPage >= totalPages)) {
                     throw new RangeError("`currentPage` must be firstPage <= currentPage < totalPages if 0-based. Got " + currentPage + '.');
                 }
-                else if (firstPage === 1 && totalPages > 0 && (currentPage < firstPage || currentPage > totalPages)) {
+                else if (firstPage === 1 && (currentPage < firstPage || currentPage > totalPages)) {
                     throw new RangeError("`currentPage` must be firstPage <= currentPage <= totalPages if 1-based. Got " + currentPage + '.');
                 }
+            } else if (currentPage !== firstPage ) {
+                throw new RangeError("`currentPage` must be " + firstPage + ". Got " + currentPage + '.');
             }
         }
 

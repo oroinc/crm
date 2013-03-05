@@ -2,8 +2,10 @@ OroApp.DatagridPageSize = OroApp.View.extend({
     /** @property */
     template: _.template(
         '<label class="control-label">View per page: &nbsp;</label>' +
-        '<div class="btn-group">' +
-            '<button data-toggle="dropdown" class="btn dropdown-toggle"><%= pageSize %><span class="caret"></span></button>' +
+        '<div class="btn-group ">' +
+            '<button data-toggle="dropdown" class="btn dropdown-toggle <% if (disabled) { %>disabled<% } %>">' +
+                '<%= collectionState.pageSize %><span class="caret"></span>' +
+            '</button>' +
             '<ul class="dropdown-menu pull-right">' +
                 '<% _.each(items, function (item) { %>' +
                     '<li><a href="#"><%= item %></a></li>' +
@@ -53,7 +55,8 @@ OroApp.DatagridPageSize = OroApp.View.extend({
     render: function() {
         this.$el.empty();
         this.$el.append($(this.template({
-            pageSize: this.collection.state.pageSize,
+            disabled: !this.collection.state.totalRecords,
+            collectionState: this.collection.state,
             items: this.items
         })));
 

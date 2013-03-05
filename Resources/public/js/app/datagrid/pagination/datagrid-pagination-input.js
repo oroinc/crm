@@ -6,7 +6,9 @@ OroApp.DatagridPaginationInput = OroApp.DatagridPagination.extend({
             '<% _.each(handles, function (handle) { %>' +
                 '<li <% if (handle.className) { %>class="<%= handle.className %>"<% } %>>' +
                     '<% if (handle.type == "input") { %>' +
-                        '<input type="text" value="<%= collectionState.firstPage == 0 ? collectionState.currentPage + 1 : collectionState.currentPage  %>" />' +
+                        '<input type="text" value="<%= state.firstPage == 0 ? state.currentPage + 1 : state.currentPage  %>"' +
+                            ' <% if (disabled) { %>disabled="disabled"<% } %>' +
+                        '/>' +
                     '<% } else { %>' +
                         '<a href="#" <% if (handle.title) {%> title="<%= handle.title %>"<% } %>>' +
                             '<% if (handle.wrapClass) {%>' +
@@ -21,7 +23,7 @@ OroApp.DatagridPaginationInput = OroApp.DatagridPagination.extend({
                 '</li>' +
             '<% }); %>' +
         '</ul>' +
-        '<label class="dib">of <%= collectionState.totalPages %> | <%= collectionState.totalRecords %> records</label>'
+        '<label class="dib">of <%= state.totalRecords ? state.totalPages : 1 %> | <%= state.totalRecords %> records</label>'
     ),
 
     /** @property */
