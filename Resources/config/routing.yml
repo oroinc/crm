@@ -76,3 +76,6 @@ oro_ui_dialog_styled:
 oro_ui_grid_page:
     pattern: /grid-page
     defaults: { _controller: FrameworkBundle:Template:template, template: "OroUIBundle:Default:gridPage.html.twig" }
+oro_ui_grid_without_bar_page:
+    pattern: /grid-page-withoutabr
+    defaults: { _controller: FrameworkBundle:Template:template, template: "OroUIBundle:Default:gridPageWithoutBar.html.twig" }
