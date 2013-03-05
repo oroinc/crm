@@ -67,7 +67,7 @@ class AclInterceptor implements MethodInterceptorInterface
             if (!$aclAnnotation) {
                 $aclAnnotation = $this->reader->getMethodAnnotation(
                     $method->reflection,
-                    Manager::ACL_PARENT_ANNOTATION_CLASS
+                    Manager::ACL_ANCESTOR_ANNOTATION_CLASS
                 );
             }
 
@@ -78,6 +78,9 @@ class AclInterceptor implements MethodInterceptorInterface
             }
 
             if (false === $this->accessDecisionManager->decide($token, $accessRoles, $method)) {
+                if ($this->container->get('request')->getRequestFormat() !== 'html') {
+                    throw new \RuntimeException('Access denied.', 403);
+                }
                 //check if we have internal action - show blank
                 if ($this->container->get('request')->attributes->get('_route') == '_internal') {
                     return new Response('');

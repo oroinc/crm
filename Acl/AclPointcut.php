@@ -3,17 +3,16 @@
 namespace Oro\Bundle\UserBundle\Acl;
 
 use JMS\AopBundle\Aop\PointcutInterface;
-use Doctrine\Common\Annotations\Reader;
 
 class AclPointcut implements PointcutInterface
 {
-    private $reader;
 
-    public function __construct(Reader $reader)
-    {
-        $this->reader = $reader;
-    }
-
+    /**
+     * Check class for ACL
+     *
+     * @param \ReflectionClass $class
+     * @return bool
+     */
     public function matchesClass(\ReflectionClass $class)
     {
         $className = $class->getName();
@@ -28,7 +27,7 @@ class AclPointcut implements PointcutInterface
     }
 
     /**
-     * Check method for Acl annotation
+     * Check method for Acl
      *
      * @param  \ReflectionMethod $method
      * @return bool

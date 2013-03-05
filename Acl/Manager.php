@@ -14,7 +14,7 @@ use Oro\Bundle\UserBundle\Annotation\Acl as AnnotationAcl;
 class Manager
 {
     const ACL_ANNOTATION_CLASS = 'Oro\Bundle\UserBundle\Annotation\Acl';
-    const ACL_PARENT_ANNOTATION_CLASS = 'Oro\Bundle\UserBundle\Annotation\AclParent';
+    const ACL_ANCESTOR_ANNOTATION_CLASS = 'Oro\Bundle\UserBundle\Annotation\AclAncestor';
 
     /**
      * @var \Doctrine\Common\Persistence\ObjectManager

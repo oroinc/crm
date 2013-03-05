@@ -6,16 +6,16 @@ namespace Oro\Bundle\UserBundle\Annotation;
  * @Annotation
  * @Target({"METHOD"})
  */
-class AclParent
+class AclAncestor
 {
     /**
      * @var string
      */
     private $id;
 
-    public function __construct($id)
+    public function __construct(array $data)
     {
-        $this->setId($id);
+        $this->setId($data["value"]);
     }
 
     /**

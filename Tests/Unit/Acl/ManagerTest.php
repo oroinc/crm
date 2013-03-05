@@ -92,7 +92,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testIsResourceGranted()
     {
-        $this->cache->expects($this->once())
+        $this->cache->expects($this->any())
             ->method('fetch')
             ->will($this->returnValue(false));
 
@@ -110,6 +110,10 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testIsClassMethodGranted()
     {
+        $this->cache->expects($this->any())
+            ->method('fetch')
+            ->will($this->returnValue(false));
+
         $this->repository->expects($this->once())
             ->method('findOneBy')
             ->with($this->equalTo(
@@ -130,7 +134,11 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testGetAclForUser()
     {
-        $result= $this->manager->getAclForUser($this->user);
+        $this->cache->expects($this->any())
+            ->method('fetch')
+            ->will($this->returnValue(false));
+
+        $result = $this->manager->getAclForUser($this->user);
         $this->assertEquals(array('test'), $result);
     }
 
