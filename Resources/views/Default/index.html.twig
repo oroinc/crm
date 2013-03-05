@@ -263,61 +263,31 @@
                                             <div><a href="#" title="Portland Office">Portland Office</a></div>
                                         </div>
                                     </li>
-                                    <li>
-                                        <div class="pin-holder">
-                                            <a class="btn-close" href="#">close</a>
-                                            <div><a href="#" title="Yoav asked to do this">Yoav asked to do this</a></div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="pin-holder">
-                                            <a class="btn-close" href="#">close</a>
-                                            <div><a href="#" title="Finish this before lea">Finish this before lea</a></div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="pin-holder">
-                                            <a class="btn-close" href="#">close</a>
-                                            <div><a href="#" title="Yoav asked to do this">Yoav asked to do this</a></div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="pin-holder">
-                                            <a class="btn-close" href="#">close</a>
-                                            <div><a href="#" title="Portland Office">Portland Office</a></div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="pin-holder">
-                                            <a class="btn-close" href="#">close</a>
-                                            <div><a href="#" title="Yoav asked to do this">Yoav asked to do this</a></div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="pin-holder">
-                                            <a class="btn-close" href="#">close</a>
-                                            <div><a href="#" title="Yoav asked to do this">Yoav asked to do this</a></div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="pin-holder">
-                                            <a class="btn-close" href="#">close</a>
-                                            <div><a href="#" title="Finish this before lea">Finish this before lea</a></div>
-                                        </div>
-                                    </li>
 
 
                                 </ul>
                                 <script type="text/javascript">
                                     $(document).ready(function() {
                                         function trueWidthPinBar(){
+                                            var _qty = jQuery('div.list-bar li').size();
+                                            var _sizePaddings = (22 +15) * _qty;
+                                            var _size = jQuery(window).width() -30 - 55 - _sizePaddings;
+                                            alert('_size' + _size);
+                                            var _tempWidth = _size / _qty
+                                          /*  jQuery('div.list-bar li').each(function(){
+                                                var _tempWidth = "auto";
+                                                jQuery(this).find('div.pin-holder div').width(_tempWidth);
+                                            });*/
                                             jQuery('div.list-bar li').each(function(){
-                                                var _tempWidth = jQuery(this).find('div.pin-holder div').width();
+                                                /*var _tempWidth = jQuery(this).find('div.pin-holder div').width();*/
                                                 jQuery(this).find('div.pin-holder div').width(_tempWidth);
                                                 jQuery(this).find('div.pin-holder div').addClass('pin-frame');
                                             });
                                         }
                                         trueWidthPinBar()
+                                        jQuery(window).resize(function() {
+                                            trueWidthPinBar()
+                                        });
                                     });
                                 </script>
                             </div>
