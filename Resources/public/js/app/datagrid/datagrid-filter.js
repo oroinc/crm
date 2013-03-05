@@ -210,13 +210,11 @@ OroApp.ChoiceFilter = OroApp.Filter.extend({
     /** @property */
     template: _.template(
         '<div class="btn">' +
-            '<%= hint %>: <select style="width:150px;">' +
-                '<option value=""></option>' +
-                '<% _.each(choices, function (hint, value) { %>' +
-                    '<option value="<%= value %>"><%= hint %></option>' +
-                '<% }); %>' +
-            '</select>' +
-            '<input type="text" value="" style="width:80px;" />' +
+            '<%= hint %>:' +
+            '<% _.each(choices, function (hint, value) { %>' +
+                '<input type="radio" name="type" value="<%= value %>" /><%= hint %>' +
+            '<% }); %>' +
+            '<input type="text" name="value" value="" style="width:80px;" />' +
             '<a href="#" class="disable-filter">X</a>' +
             '<span class="caret"></span>' +
         '</div>'
@@ -224,14 +222,14 @@ OroApp.ChoiceFilter = OroApp.Filter.extend({
 
     /** @property */
     parameterSelectors: {
-        type:  'select',
-        value: 'input'
+        type:  'input[name="type"]:checked',
+        value: 'input[name="value"]'
     },
 
     /** @property */
     events: {
-        'change select': 'updateOnSelect',
-        'change input': 'update',
+        'change input[name="type"]': 'updateOnType',
+        'change input[name="value"]': 'update',
         'click a.disable-filter': 'disable'
     },
 
@@ -249,7 +247,7 @@ OroApp.ChoiceFilter = OroApp.Filter.extend({
         return this;
     },
 
-    updateOnSelect: function(e) {
+    updateOnType: function(e) {
         e.preventDefault();
         if (this.hasValue()) {
             this.trigger('changedData');
@@ -274,11 +272,11 @@ OroApp.DateFilter = OroApp.ChoiceFilter.extend({
     /** @property */
     template: _.template(
         '<div class="btn">' +
-            '<%= hint %>: <select style="width:150px;">' +
-                '<option value=""></option>' +
-                '<% _.each(choices, function (hint, value) { %><option value="<%= value %>"><%= hint %></option><% }); %>' +
-            '</select>' +
-            'date is <input type="text" value="" style="width:80px;" />' +
+            '<%= hint %>:' +
+            '<% _.each(choices, function (hint, value) { %>' +
+                '<input type="radio" name="type" value="<%= value %>" /><%= hint %>' +
+            '<% }); %>' +
+            'date is <input type="text" name="value" value="" style="width:80px;" />' +
             '<a href="#" class="disable-filter">X</a>' +
             '<span class="caret"></span>' +
         '</div>'
@@ -290,11 +288,11 @@ OroApp.DateTimeFilter = OroApp.DateFilter.extend({
     /** @property */
     template: _.template(
         '<div class="btn">' +
-            '<%= hint %>: <select style="width:150px;">' +
-                '<option value=""></option>' +
-                '<% _.each(choices, function (hint, value) { %><option value="<%= value %>"><%= hint %></option><% }); %>' +
-            '</select>' +
-            'datetime is <input type="text" value="" style="width:80px;" />' +
+            '<%= hint %>:' +
+            '<% _.each(choices, function (hint, value) { %>' +
+                '<input type="radio" name="type" value="<%= value %>" /><%= hint %>' +
+            '<% }); %>' +
+            'datetime is <input type="text" name="value" value="" style="width:80px;" />' +
             '<a href="#" class="disable-filter">X</a>' +
             '<span class="caret"></span>' +
         '</div>'
@@ -306,10 +304,10 @@ OroApp.DateRangeFilter = OroApp.ChoiceFilter.extend({
     /** @property */
     template: _.template(
         '<div class="btn">' +
-            '<%= hint %>: <select style="width:150px;">' +
-                '<option value=""></option>' +
-                '<% _.each(choices, function (hint, value) { %><option value="<%= value %>"><%= hint %></option><% }); %>' +
-            '</select>' +
+            '<%= hint %>:' +
+            '<% _.each(choices, function (hint, value) { %>' +
+                '<input type="radio" name="type" value="<%= value %>" /><%= hint %>' +
+            '<% }); %>' +
             'date from <input type="text" name="start" value="" style="width:80px;" />' +
             'to <input type="text" name="end" value="" style="width:80px;" />' +
             '<a href="#" class="disable-filter">X</a>' +
@@ -319,14 +317,14 @@ OroApp.DateRangeFilter = OroApp.ChoiceFilter.extend({
 
     /** @property */
     parameterSelectors: {
-        type: 'select',
+        type:  'input[name="type"]:checked',
         value_start: 'input[name="start"]',
         value_end: 'input[name="end"]'
     },
 
     /** @property */
     events: {
-        'change select': 'updateOnSelect',
+        'change input[name="type"]': 'updateOnType',
         'change input[name="start"]': 'update',
         'change input[name="end"]': 'update',
         'click a.disable-filter': 'disable'
@@ -357,10 +355,10 @@ OroApp.DateTimeRangeFilter = OroApp.DateRangeFilter.extend({
     /** @property */
     template: _.template(
         '<div class="btn">' +
-            '<%= hint %>: <select style="width:150px;">' +
-                '<option value=""></option>' +
-                '<% _.each(choices, function (hint, value) { %><option value="<%= value %>"><%= hint %></option><% }); %>' +
-            '</select>' +
+            '<%= hint %>:' +
+            '<% _.each(choices, function (hint, value) { %>' +
+                '<input type="radio" name="type" value="<%= value %>" /><%= hint %>' +
+            '<% }); %>' +
             'datetime from <input type="text" name="start" value="" style="width:80px;" />' +
             'to <input type="text" name="end" value="" style="width:80px;" />' +
             '<a href="#" class="disable-filter">X</a>' +
@@ -420,13 +418,5 @@ OroApp.MultiSelectFilter = OroApp.SelectFilter.extend({
             '<a href="#" class="disable-filter">X</a>' +
             '<span class="caret"></span>' +
         '</div>'
-    ),
-
-    getParameters: function() {
-        var value = this.$(this.parameterSelectors.value).val();
-
-        return {
-            '[value]': this.$(this.parameterSelectors.value).val()
-        };
-    }
+    )
 });
