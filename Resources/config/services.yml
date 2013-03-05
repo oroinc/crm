@@ -1,7 +1,13 @@
 parameters:
     oro_flexibleentity.flexible_config: ~
+    oro_flexibleentity.flexible_config: ~
+    oro_flexibleentity.registry.class:  Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleManagerRegistry;
 
 services:
+
+    # manager registry
+    oro_flexibleentity.registry:
+        class: Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleManagerRegistry
 
     # deal with translatable behavior
     oro_flexibleentity.translatable_listener:

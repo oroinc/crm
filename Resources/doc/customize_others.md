@@ -6,8 +6,14 @@ Add some behavior related to flexible
  
 ```php
 <?php
-// get flexible config and manager
-$flexibleConfig = $this->container->getParameter('oro_flexibleentity.flexible_config');
+// get manager from registry 
+$registry = $this->container->get('oro_flexibleentity.registry');
+$registry->getManagers();
+$registry->getEntityToManager();
+$registry->getManager($flexibleEntityClass);
+
+// get manager from flexible config
+$flexibleConfig = $this->container->getParameter('oro_flexibleentity.entities_config');
 $flexibleManagerName = $flexibleConfig['entities_config'][$flexibleEntityClass]['flexible_manager'];
 $flexibleManager = $this->container->get($flexibleManagerName);
 ```

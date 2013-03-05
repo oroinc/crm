@@ -125,8 +125,12 @@ parameters:
 services:
     customer_manager:
         class:     "%customer_manager_class%"
-        arguments: [@service_container, %customer_entity_class%]
+        arguments: [%customer_entity_class%, %oro_flexibleentity.flexible_config%, @doctrine.orm.entity_manager, @event_dispatcher]
+        tags:
+            - { name: oro_flexibleentity_manager, entity: %customer_entity_class%}
 ```
+
+Note that tag is not mandatory, it allows to define the flexible manager and entity on registry.
 
 How to use :
 ```php
@@ -217,7 +221,7 @@ parameters:
 services:
     manufacturer_manager:
         class:     "%manufacturer_manager_class%"
-        arguments: [@service_container, %manufacturer_entity_class%]
+        arguments: [%manufacturer_entity_class%, @doctrine.orm.entity_manager]
 ```
 
 How to use :
