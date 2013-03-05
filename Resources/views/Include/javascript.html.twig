@@ -36,6 +36,7 @@ output='js/acme.grid.js'
                             name: {{ column.name|json_encode|raw }},
                             label: {{ column.label|json_encode|raw }},
                             sortable: {{ column.sortable|json_encode|raw }},
+                            editable: false,
                             {% if column.type == constant(columnTypePrefix ~ 'TYPE_DATE') %}
                                 cell: Backgrid.DateCell
                             {% elseif column.type == constant(columnTypePrefix ~ 'TYPE_DATETIME') %}
@@ -50,7 +51,6 @@ output='js/acme.grid.js'
                             {% else %}
                                 cell: Backgrid.StringCell
                             {% endif %}
-                            {% if not loop.last %},{% endif %}
                         }{% if not loop.last %},{% endif %}
                         {% endfor %}
                     ],
