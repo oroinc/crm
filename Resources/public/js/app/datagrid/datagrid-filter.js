@@ -23,7 +23,7 @@ OroApp.FilterList = Backbone.View.extend({
 
     /** @property */
     events: {
-        'change select': 'processFilterStatus'
+        'change #add-filter-select': 'processFilterStatus'
     },
 
     initialize: function(options)
@@ -178,7 +178,12 @@ OroApp.Filter = Backbone.View.extend({
             if (this.hasValue()) {
                 this.trigger('changedData');
             }
+            this.reset();
         }
+    },
+
+    reset: function() {
+        this.$(this.parameterSelectors.value).val('');
     },
 
     show: function() {
@@ -249,6 +254,11 @@ OroApp.ChoiceFilter = OroApp.Filter.extend({
         if (this.hasValue()) {
             this.trigger('changedData');
         }
+    },
+
+    reset: function() {
+        this.$(this.parameterSelectors.type).val('');
+        this.$(this.parameterSelectors.value).val('');
     },
 
     getParameters: function() {
@@ -327,6 +337,12 @@ OroApp.DateRangeFilter = OroApp.ChoiceFilter.extend({
             || this.$(this.parameterSelectors.value_end).val() != '';
     },
 
+    reset: function() {
+        this.$(this.parameterSelectors.type).val('');
+        this.$(this.parameterSelectors.value_start).val('');
+        this.$(this.parameterSelectors.value_end).val('');
+    },
+
     getParameters: function() {
         return {
             '[type]':  this.$(this.parameterSelectors.type).val(),
@@ -386,7 +402,7 @@ OroApp.SelectFilter = OroApp.Filter.extend({
         this.$el.append(
             this.template({
                 hint: this.hint,
-                options:   this.options
+                options: this.options
             })
         );
         return this;
