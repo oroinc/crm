@@ -102,6 +102,7 @@ class AclRepository extends NestedTreeRepository
             ->select('acl', 'accessRoles')
             ->leftJoin('acl.accessRoles', 'accessRoles', Expr\Join::WITH, 'accessRoles.id = :role')
             ->setParameter('role', $role)
+            ->orderBy('acl.root, acl.lft', 'ASC')
             ->getQuery()
             ->getArrayResult();
     }
