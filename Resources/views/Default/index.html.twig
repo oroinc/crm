@@ -177,15 +177,102 @@
                                     </div>
                                 </div>
                             </div>
-                            <ul class="list-bar">
-                                <li class="item">LA Customers</li>
-                                <li class="item">NY Customers</li>
-                                <li><a class="btn-close" href="#">close</a>Yoav asked to do this </li>
-                                <li><a class="btn-close" href="#">close</a>Finish this before lea...</li>
-                                <li><a class="btn-close" href="#">close</a>Jary asked to do this</li>
-                                <li><a class="btn-close" href="#">close</a>Yoav asked to do this</li>
-                                <li><a class="btn-close" href="#">close</a>Portland Office</li>
-                            </ul>
+                            <div class="list-bar">
+                                <ul class="">
+                                    <li>
+                                        <div class="pin-holder">
+                                            <a class="btn-close" href="#">close</a>
+                                            <div title="Yoav asked to do this">Yoav asked to do this</div>
+                                        </div>
+                                    </li>
+                                    <li class="active">
+                                        <div class="pin-holder">
+                                            <a class="btn-close" href="#">close</a>
+                                            <div title="Finish this before lea">Finish this before lea</div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="pin-holder">
+                                            <a class="btn-close" href="#">close</a>
+                                            <div title="Jary asked to do this">Jary asked to do this</div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="pin-holder">
+                                            <a class="btn-close" href="#">close</a>
+                                            <div title="Yoav asked to do this">Yoav asked to do this</div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="pin-holder">
+                                            <a class="btn-close" href="#">close</a>
+                                            <div title="Portland Office">Portland Office</div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="pin-holder">
+                                            <a class="btn-close" href="#">close</a>
+                                            <div title="Yoav asked to do this">Yoav asked to do this</div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="pin-holder">
+                                            <a class="btn-close" href="#">close</a>
+                                            <div title="Yoav asked to do this">Yoav asked to do this</div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="pin-holder">
+                                            <a class="btn-close" href="#">close</a>
+                                            <div title="Finish this before lea">Finish this before lea</div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="pin-holder">
+                                            <a class="btn-close" href="#">close</a>
+                                            <div title="Yoav asked to do this">Yoav asked to do this</div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="pin-holder">
+                                            <a class="btn-close" href="#">close</a>
+                                            <div title="Portland Office">Portland Office</div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="pin-holder">
+                                            <a class="btn-close" href="#">close</a>
+                                            <div title="Yoav asked to do this">Yoav asked to do this</div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="pin-holder">
+                                            <a class="btn-close" href="#">close</a>
+                                            <div title="Yoav asked to do this">Yoav asked to do this</div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="pin-holder">
+                                            <a class="btn-close" href="#">close</a>
+                                            <div title="Finish this before lea">Finish this before lea</div>
+                                        </div>
+                                    </li>
+
+
+                                </ul>
+                                <script type="text/javascript">
+                                    $(document).ready(function() {
+                                        function trueWidthPinBar(){
+                                            jQuery('div.list-bar li').each(function(){
+                                                var _tempWidth = jQuery(this).find('div.pin-holder div').width();
+                                                jQuery(this).find('div.pin-holder div').width(_tempWidth);
+                                                jQuery(this).find('div.pin-holder div').addClass('pin-frame');
+                                            });
+                                        }
+                                        trueWidthPinBar()
+                                    });
+                                </script>
+                            </div>
                         </div>
                     </div>
                 {% endblock pin_bar %}

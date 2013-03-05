@@ -2,7 +2,6 @@ $(document).ready(function () {
     /* create overlay for popups */
     $('<div id="bar-drop-overlay"></div>').appendTo('body');
     /* dinamic height for central column */
-    /* FE
     function changeHeight() {
         var _chWindowHeight = $(window).height();
         var _chMyHeight = _chWindowHeight - $("header").outerHeight() - $("footer").outerHeight() - 3;
@@ -12,10 +11,12 @@ $(document).ready(function () {
     $(window).resize(function() {
         changeHeight();
     });
-    */
+
     /* side bar functionality */
     $('div.side-nav').each(function () {
         var myParent = $(this);
+        var myParentHolder = $(myParent).parent().height() -18;
+        $(myParent).height(myParentHolder);
         /* open close bar */
         $(this).find("span.maximaze-bar").click(function () {
             if (($(myParent).hasClass("side-nav-open")) || ($(myParent).hasClass("side-nav-locked"))) {
@@ -93,6 +94,14 @@ $(document).ready(function () {
                     });
                     $('#bar-drop-overlay').removeClass('bar-open-overlay');
                 }
+            });
+        });
+        /* open content for open bar */
+        $(myParent).find('ul.bar-tools > li').each(function(){
+            var _barLi = $(this);
+            $(_barLi).find('span.open-bar-item').click(function(){
+                $(_barLi).find('div.nav-content').slideToggle();
+                $(_barLi).toggleClass('open-item');
             });
         });
     })

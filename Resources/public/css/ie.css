@@ -87,3 +87,9 @@ table.grid{
     top: -5px !important;
     right: -2px;
 }
+.pin-bar .pin-menus{
+    margin: 0 -31px 0 0;
+}
+.pin-bar{
+    filter: none !important;
+}
