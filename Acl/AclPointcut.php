@@ -5,8 +5,6 @@ namespace Oro\Bundle\UserBundle\Acl;
 use JMS\AopBundle\Aop\PointcutInterface;
 use Doctrine\Common\Annotations\Reader;
 
-use Oro\Bundle\UserBundle\Acl\Manager;
-
 class AclPointcut implements PointcutInterface
 {
     private $reader;
@@ -18,12 +16,15 @@ class AclPointcut implements PointcutInterface
 
     public function matchesClass(\ReflectionClass $class)
     {
-        /*if (substr($class->getName(), -10, 10) == 'Controller') {
+        $className = $class->getName();
+        if (
+            substr($className, -10, 10) == 'Controller' &&
+            strpos($className, 'ExceptionController') === false
+        ) {
             return true;
         }
 
-        return false;*/
-        return true;
+        return false;
     }
 
     /**
@@ -34,10 +35,7 @@ class AclPointcut implements PointcutInterface
      */
     public function matchesMethod(\ReflectionMethod $method)
     {
-
-        //return true;
-
-        if ($this->reader->getMethodAnnotation($method, Manager::ACL_ANNOTATION_CLASS)) {
+        if (substr($method->getName(), -6, 6) == 'Action') {
             return true;
         }
 

@@ -103,7 +103,7 @@ class AclRepository extends NestedTreeRepository
             ->leftJoin('acl.accessRoles', 'accessRoles', Expr\Join::WITH, 'accessRoles.id = :role')
             ->setParameter('role', $role)
             ->getQuery()
-            ->getResult();
+            ->getArrayResult();
     }
 
     /**
@@ -115,30 +115,6 @@ class AclRepository extends NestedTreeRepository
      */
     public function getRoleAclTree(Role $role)
     {
-        return $this->toTree($this->getAclListWithRoles($role));
-    }
-
-    /**
-     * Convert to tree array
-     *
-     * @param array $aclRecords
-     * @param null  $parent
-     *
-     * @return array
-     */
-    protected function toTree(array $aclRecords, $parent = null)
-    {
-        $branch = array();
-        foreach ($aclRecords as $element) {
-            if ($element->getParent() == $parent) {
-                $children = $this->toTree($aclRecords, $element->getId());
-                if ($children) {
-                    $element->addChildren($children);
-                }
-                $branch[$element->getId()] = $element;
-            }
-        }
-
-        return $branch;
+        return $this->buildTree($this->getAclListWithRoles($role));
     }
 }

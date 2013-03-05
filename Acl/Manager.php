@@ -14,6 +14,7 @@ use Oro\Bundle\UserBundle\Annotation\Acl as AnnotationAcl;
 class Manager
 {
     const ACL_ANNOTATION_CLASS = 'Oro\Bundle\UserBundle\Annotation\Acl';
+    const ACL_PARENT_ANNOTATION_CLASS = 'Oro\Bundle\UserBundle\Annotation\AclParent';
 
     /**
      * @var \Doctrine\Common\Persistence\ObjectManager
@@ -98,7 +99,12 @@ class Manager
      */
     public function getAclRolesWithoutTree($aclId)
     {
-        return $this->getAclRepo()->getAclRolesWithoutTree($aclId);
+        $roles = $this->cache->fetch('acl-roles-' . $aclId);
+        if ($roles === false) {
+            $roles = $this->getAclRepo()->getAclRolesWithoutTree($aclId);
+            $this->cache->save('acl-roles-' . $aclId, $roles);
+        }
+        return $roles;
     }
 
     /**
@@ -109,7 +115,12 @@ class Manager
      */
     public function getAclForUser(User $user)
     {
-        return $this->getAclRepo()->getAllowedAclResourcesForUserRoles($user->getRoles());
+        $acl = $this->cache->fetch('user-acl-' . $user->getId());
+        if ($acl === false) {
+            $acl = $this->getAclRepo()->getAllowedAclResourcesForUserRoles($user->getRoles());
+            $this->cache->save('user-acl-' . $user->getId(), $acl);
+        }
+        return $acl;
     }
 
     /**
@@ -341,15 +352,19 @@ class Manager
      */
     private function getUserRoles(User $user = null)
     {
-        $roles = array();
         if (null === $user) {
             $user = $this->getUser();
         }
         if ($user) {
-            $rolesObjects = $user->getRoles();
-            foreach ($rolesObjects as $role) {
-                $roles[] = $role->getRole();
+            $roles = $this->cache->fetch('user-' . $user->getId());
+            if ($roles === false) {
+                $rolesObjects = $user->getRoles();
+                foreach ($rolesObjects as $role) {
+                    $roles[] = $role->getRole();
+                }
+                $this->cache->save('user-' . $user->getId(), $roles);
             }
+
         } else {
             $roles = array(User::ROLE_ANONYMOUS);
         }

@@ -30,7 +30,11 @@ class AclInterceptor implements MethodInterceptorInterface
      */
     private $container;
 
+    /**
+     * @var \Doctrine\Common\Annotations\Reader
+     */
     private $reader;
+
     private $accessDecisionManager;
 
     public function __construct(
@@ -51,27 +55,36 @@ class AclInterceptor implements MethodInterceptorInterface
             sprintf('User invoked class: "%s", Method: "%s".', $method->reflection->class, $method->reflection->name)
         );
 
-        //get acl method resource name
-        $aclAnnotation = $this->reader->getMethodAnnotation(
-            $method->reflection,
-            Manager::ACL_ANNOTATION_CLASS
-        );
-        if (!$aclAnnotation) {
-            $accessRoles = $this->getAclManager()->getAclRolesWithoutTree(Acl::ROOT_NODE);
-        } else {
-            $accessRoles = $this->getAclManager()->getAclRoles($aclAnnotation->getId());
-        }
-
         $token = $this->securityContext->getToken();
-        //var_dump($accessRoles); var_dump($token->getRoles());
-        if (false === $this->accessDecisionManager->decide($token, $accessRoles, $method)) {
 
-            //check if we have internal action - show blank
-            if ($this->container->get('request')->attributes->get('_route') == '_internal') {
-                return new Response('');
+        if ($token) {
+
+            //get acl method resource name
+            $aclAnnotation = $this->reader->getMethodAnnotation(
+                $method->reflection,
+                Manager::ACL_ANNOTATION_CLASS
+            );
+            if (!$aclAnnotation) {
+                $aclAnnotation = $this->reader->getMethodAnnotation(
+                    $method->reflection,
+                    Manager::ACL_PARENT_ANNOTATION_CLASS
+                );
             }
 
-            throw new AccessDeniedException('Access denied.');
+            if (!$aclAnnotation) {
+                $accessRoles = $this->getAclManager()->getAclRolesWithoutTree(Acl::ROOT_NODE);
+            } else {
+                $accessRoles = $this->getAclManager()->getAclRoles($aclAnnotation->getId());
+            }
+
+            if (false === $this->accessDecisionManager->decide($token, $accessRoles, $method)) {
+                //check if we have internal action - show blank
+                if ($this->container->get('request')->attributes->get('_route') == '_internal') {
+                    return new Response('');
+                }
+
+                throw new AccessDeniedException('Access denied.');
+            }
         }
 
         return $method->proceed();
