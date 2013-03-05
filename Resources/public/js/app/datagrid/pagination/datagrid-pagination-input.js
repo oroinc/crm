@@ -29,8 +29,7 @@ OroApp.DatagridPaginationInput = OroApp.DatagridPagination.extend({
     /** @property */
     events: {
         "click a": "changePage",
-        "change input": "changePageByInput",
-        "keypress input": "validatePageInputKey"
+        "change input": "changePageByInput"
     },
 
     windowSize: 0,
@@ -74,20 +73,6 @@ OroApp.DatagridPaginationInput = OroApp.DatagridPagination.extend({
     },
 
     /**
-     * Validate key pressed on page input
-     *
-     * @param {Event} e
-     */
-    validatePageInputKey: function(e) {
-        var keyCode = e.keyCode || e.which;
-        var keyChar = String.fromCharCode(keyCode);
-        if (keyCode !== 13 && !/[0-9]/.test(keyChar)) {
-            e.returnValue = false;
-            e.preventDefault();
-        }
-    },
-
-    /**
      * Internal method to create a list of page handle objects for the template
      * to render them.
      *
@@ -103,5 +88,13 @@ OroApp.DatagridPaginationInput = OroApp.DatagridPagination.extend({
         });
 
         return OroApp.DatagridPagination.prototype.makeHandles.call(this, handles);
+    },
+    /**
+     * Render pagination view and add validation for input with positive integer value
+     */
+    render: function() {
+        OroApp.DatagridPagination.prototype.render.apply(this, arguments);
+        this.$('input').numeric({ decimal: false, negative: false });
+        return this;
     }
 });
