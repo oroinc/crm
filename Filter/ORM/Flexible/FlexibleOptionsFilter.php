@@ -25,9 +25,18 @@ class FlexibleOptionsFilter extends AbstractFlexibleFilter
             return;
         }
 
-        $value['value'] = trim($value['value']);
+        if (!is_array($value['value'])) {
+            $value['value'] = array($value['value']);
+        }
 
-        if (strlen($value['value']) == 0) {
+        foreach ($value['value'] as $key => $data) {
+            $value['value'][$key] = trim($data);
+            if (strlen($value['value'][$key]) == 0) {
+                unset($value['value'][$key]);
+            }
+        }
+
+        if (empty($value['value'])) {
             return;
         }
 
@@ -54,7 +63,10 @@ class FlexibleOptionsFilter extends AbstractFlexibleFilter
     {
         return array('oro_grid_type_filter_flexible_options', array(
             'label'         => $this->getLabel(),
-            'field_options' => array('choices' => $this->getValueOptions()),
+            'field_options' => array(
+                'choices'  => $this->getValueOptions(),
+                'multiple' => $this->getOption('multiple') ? true : false
+            ),
         ));
     }
 

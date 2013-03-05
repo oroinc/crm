@@ -408,3 +408,25 @@ OroApp.SelectFilter = OroApp.Filter.extend({
         return this;
     }
 });
+
+// select filter: filter value as select option
+OroApp.MultiSelectFilter = OroApp.SelectFilter.extend({
+    /** @property */
+    template: _.template(
+        '<div class="btn">' +
+            '<%= hint %>: <select style="width:150px;" multiple>' +
+                '<% _.each(options, function (hint, value) { %><option value="<%= value %>"><%= hint %></option><% }); %>' +
+            '</select>' +
+            '<a href="#" class="disable-filter">X</a>' +
+            '<span class="caret"></span>' +
+        '</div>'
+    ),
+
+    getParameters: function() {
+        var value = this.$(this.parameterSelectors.value).val();
+
+        return {
+            '[value]': this.$(this.parameterSelectors.value).val()
+        };
+    }
+});

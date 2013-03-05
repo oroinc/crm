@@ -99,12 +99,21 @@ output='js/acme.grid.js'
                             {% elseif filterType == constant(filterTypePrefix ~ 'TYPE_BOOLEAN')
                                 or filterType == constant(filterTypePrefix ~ 'TYPE_FLEXIBLE_OPTIONS')
                             %}
-                                OroApp.SelectFilter.extend({
-                                    name: '{{ filter.name }}',
-                                    hint: '{{ filter.getOption('label') }}',
-                                    enabled: {{ filter.getOption('show_filter') ? 'true' : 'false' }},
-                                    options: {{ filter.valueOptions|json_encode|raw }}
-                            })
+                                {% if filter.getOption('multiple') %}
+                                    OroApp.MultiSelectFilter.extend({
+                                        name: '{{ filter.name }}',
+                                        hint: '{{ filter.getOption('label') }}',
+                                        enabled: {{ filter.getOption('show_filter') ? 'true' : 'false' }},
+                                        options: {{ filter.valueOptions|json_encode|raw }}
+                                    })
+                                {% else %}
+                                    OroApp.SelectFilter.extend({
+                                        name: '{{ filter.name }}',
+                                        hint: '{{ filter.getOption('label') }}',
+                                        enabled: {{ filter.getOption('show_filter') ? 'true' : 'false' }},
+                                        options: {{ filter.valueOptions|json_encode|raw }}
+                                    })
+                                {% endif %}
                             {% else %}
                                 OroApp.Filter.extend({
                                     name: '{{ filter.name }}',
