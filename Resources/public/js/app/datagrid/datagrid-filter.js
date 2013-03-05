@@ -5,16 +5,14 @@ OroApp.FilterList = Backbone.View.extend({
 
     /** @property */
     addButtonTemplate: _.template(
-        '<span id="add-filter-panel">' +
-            '<a href="#" class="btn btn-link btn-group"><%= addButtonHint %></a>' +
-            '<select id="add-filter-select" multiple>' +
-                '<% _.each(filters, function (filter, name) { %>' +
-                    '<option value="<%= name %>" <% if (filter.enabled) { %>selected<% } %>>' +
-                        '<%= filter.hint %>' +
-                    '</option>' +
-                '<% }); %>' +
-            '</select>' +
-        '</span>'
+        '<a href="#" class="btn btn-link btn-group"><%= addButtonHint %></a>' +
+        '<select id="add-filter-select" multiple>' +
+            '<% _.each(filters, function (filter, name) { %>' +
+                '<option value="<%= name %>" <% if (filter.enabled) { %>selected<% } %>>' +
+                    '<%= filter.hint %>' +
+                '</option>' +
+            '<% }); %>' +
+        '</select>'
     ),
 
     /** @property */
@@ -78,10 +76,11 @@ OroApp.FilterList = Backbone.View.extend({
         this.$el.empty();
 
         for (var name in this.filters) {
-            var filter = this.filters[name];
-            if (filter.enabled) {
-                this.$el.append(filter.render().$el);
+            this.filters[name].render();
+            if (!this.filters[name].enabled) {
+                this.filters[name].hide();
             }
+            this.$el.append(this.filters[name].$el);
         }
 
         this.$el.append(this.addButtonTemplate({
@@ -127,7 +126,7 @@ OroApp.Filter = Backbone.View.extend({
     ),
 
     /** @property */
-    enabled: true,
+    enabled: false,
 
     /** @property */
     name: 'input_name',
@@ -183,11 +182,11 @@ OroApp.Filter = Backbone.View.extend({
     },
 
     show: function() {
-        this.$el.show();
+        this.$el.css('display', 'inline-block');
     },
 
     hide: function() {
-        this.$el.hide();
+        this.$el.css('display', 'none');
     },
 
     hasValue: function() {

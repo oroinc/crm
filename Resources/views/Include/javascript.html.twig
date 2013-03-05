@@ -65,30 +65,35 @@ output='js/acme.grid.js'
                                 OroApp.ChoiceFilter.extend({
                                     name: '{{ filter.name }}',
                                     hint: '{{ filter.getOption('label') }}',
+                                    enabled: {{ filter.getOption('show_filter') ? 'true' : 'false' }},
                                     choices: {{ filter.typeOptions|json_encode|raw }}
                                 })
                             {% elseif filterType == constant(filterTypePrefix ~ 'TYPE_DATE') %}
                                 OroApp.DateFilter.extend({
                                     name: '{{ filter.name }}',
                                     hint: '{{ filter.getOption('label') }}',
+                                    enabled: {{ filter.getOption('show_filter') ? 'true' : 'false' }},
                                     choices: {{ filter.typeOptions|json_encode|raw }}
                                 })
                             {% elseif filterType == constant(filterTypePrefix ~ 'TYPE_DATETIME') %}
                                 OroApp.DateTimeFilter.extend({
                                     name: '{{ filter.name }}',
                                     hint: '{{ filter.getOption('label') }}',
+                                    enabled: {{ filter.getOption('show_filter') ? 'true' : 'false' }},
                                     choices: {{ filter.typeOptions|json_encode|raw }}
                                 })
                             {% elseif filterType == constant(filterTypePrefix ~ 'TYPE_DATE_RANGE') %}
                                 OroApp.DateRangeFilter.extend({
                                     name: '{{ filter.name }}',
                                     hint: '{{ filter.getOption('label') }}',
+                                    enabled: {{ filter.getOption('show_filter') ? 'true' : 'false' }},
                                     choices: {{ filter.typeOptions|json_encode|raw }}
                                 })
                             {% elseif filterType == constant(filterTypePrefix ~ 'TYPE_DATETIME_RANGE') %}
                                 OroApp.DateTimeRangeFilter.extend({
                                     name: '{{ filter.name }}',
                                     hint: '{{ filter.getOption('label') }}',
+                                    enabled: {{ filter.getOption('show_filter') ? 'true' : 'false' }},
                                     choices: {{ filter.typeOptions|json_encode|raw }}
                                 })
                             {% elseif filterType == constant(filterTypePrefix ~ 'TYPE_BOOLEAN')
@@ -97,12 +102,14 @@ output='js/acme.grid.js'
                                 OroApp.SelectFilter.extend({
                                     name: '{{ filter.name }}',
                                     hint: '{{ filter.getOption('label') }}',
+                                    enabled: {{ filter.getOption('show_filter') ? 'true' : 'false' }},
                                     options: {{ filter.valueOptions|json_encode|raw }}
                             })
                             {% else %}
                                 OroApp.Filter.extend({
                                     name: '{{ filter.name }}',
-                                    hint: '{{ filter.getOption('label') }}'
+                                    hint: '{{ filter.getOption('label') }}',
+                                    enabled: {{ filter.getOption('show_filter') ? 'true' : 'false' }}
                                 })
                             {% endif %}
                             {% if not loop.last %},{% endif %}
