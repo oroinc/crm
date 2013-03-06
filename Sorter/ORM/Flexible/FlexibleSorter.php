@@ -53,14 +53,11 @@ class FlexibleSorter extends Sorter
     public function apply(ProxyQueryInterface $queryInterface, $direction = null)
     {
         $this->setDirection($direction);
-
-        $alias = $queryInterface->entityJoin($this->getParentAssociationMappings());
-
         $queryBuilder = $queryInterface->getQueryBuilder();
 
         /** @var $entityRepository FlexibleEntityRepository */
         $entityRepository = $this->flexibleManager->getFlexibleRepository();
-        $entityRepository->applySorterByAttribute($queryBuilder, $alias, $this->getField()->getFieldName(), $direction);
+        $entityRepository->applySorterByAttribute($queryBuilder, $this->getField()->getFieldName(), $direction);
     }
 
     /**

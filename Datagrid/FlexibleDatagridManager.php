@@ -41,7 +41,7 @@ abstract class FlexibleDatagridManager extends DatagridManager
         $this->flexibleManager = $flexibleManager;
 
         // TODO: somehow get locale and scope from parameters interface
-        $this->flexibleManager->setLocale('en');
+        $this->flexibleManager->setLocale('en_US');
         $this->flexibleManager->setScope('ecommerce');
     }
 

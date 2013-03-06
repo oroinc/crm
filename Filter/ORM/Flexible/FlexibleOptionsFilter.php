@@ -8,6 +8,7 @@ use Oro\Bundle\FlexibleEntityBundle\Entity\Repository\FlexibleEntityRepository;
 use Oro\Bundle\GridBundle\Datagrid\ORM\ProxyQuery;
 use Oro\Bundle\FlexibleEntityBundle\Entity\Attribute;
 use Oro\Bundle\FlexibleEntityBundle\Entity\AttributeOption;
+use Sonata\AdminBundle\Form\Type\Filter\ChoiceType;
 
 class FlexibleOptionsFilter extends AbstractFlexibleFilter
 {
@@ -40,12 +41,38 @@ class FlexibleOptionsFilter extends AbstractFlexibleFilter
             return;
         }
 
+        if (!isset($data['type'])) {
+            if (is_array($value)) {
+                $operator = 'IN';
+            } else {
+                $operator = '=';
+            }
+        } else {
+            $operator = $this->getOperator((int) $data['type']);
+        }
+
         /** @var $proxyQuery ProxyQuery */
         $queryBuilder = $proxyQuery->getQueryBuilder();
 
         /** @var $entityRepository FlexibleEntityRepository */
         $entityRepository = $this->flexibleManager->getFlexibleRepository();
-        $entityRepository->applyFilterByOptionAttribute($queryBuilder, $field, $value['value']);
+        $entityRepository->applyFilterByAttribute($queryBuilder, $field, $value['value'], $operator);
+    }
+
+    /**
+     * @param string $type
+     *
+     * @return bool
+     */
+    private function getOperator($type)
+    {
+        $choices = array(
+            ChoiceType::TYPE_CONTAINS         => 'IN',
+            ChoiceType::TYPE_NOT_CONTAINS     => 'NOT IN',
+            ChoiceType::TYPE_EQUAL            => '=',
+        );
+
+        return isset($choices[$type]) ? $choices[$type] : false;
     }
 
     /**
