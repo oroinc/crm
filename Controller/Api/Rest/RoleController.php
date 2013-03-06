@@ -27,9 +27,7 @@ class RoleController extends FOSRestController implements ClassResourceInterface
     public function cgetAction()
     {
         return $this->handleView($this->view(
-            $this->getManager()
-                ->createQuery('SELECT r FROM OroUserBundle:Role r')
-                ->getArrayResult(),
+            $this->getManager()->getRepository('OroUserBundle:Role')->findAll(),
             Codes::HTTP_OK
         ));
     }
@@ -155,6 +153,6 @@ class RoleController extends FOSRestController implements ClassResourceInterface
      */
     protected function getManager()
     {
-        return $this->getDoctrine()->getEntityManagerForClass('OroUserBundle:Role');
+        return $this->getDoctrine()->getManagerForClass('OroUserBundle:Role');
     }
 }

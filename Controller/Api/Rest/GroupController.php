@@ -27,9 +27,7 @@ class GroupController extends FOSRestController implements ClassResourceInterfac
     public function cgetAction()
     {
         return $this->handleView($this->view(
-            $this->getManager()
-                ->createQuery('SELECT g FROM OroUserBundle:Group g')
-                ->getArrayResult(),
+            $this->getManager()->getRepository('OroUserBundle:Group')->findAll(),
             Codes::HTTP_OK
         ));
     }
@@ -156,6 +154,6 @@ class GroupController extends FOSRestController implements ClassResourceInterfac
      */
     protected function getManager()
     {
-        return $this->getDoctrine()->getEntityManagerForClass('OroUserBundle:Group');
+        return $this->getDoctrine()->getManagerForClass('OroUserBundle:Group');
     }
 }
