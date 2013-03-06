@@ -132,6 +132,7 @@ class FlexibleEntityRepositoryTest extends AbstractFlexibleManagerTest
         $this->assertEquals($expectedDql, $qb->getQuery()->getDql());
 
         // add select attributes and criterias
+        /*
         $qb = $this->repository->prepareQueryBuilder($attToSelect, $attCriterias);
         $expectedDql = 'SELECT Entity, selectVname, selectVdescription '
             .'FROM Oro\Bundle\FlexibleEntityBundle\Tests\Entity\Demo\Flexible Entity '
@@ -144,6 +145,7 @@ class FlexibleEntityRepositoryTest extends AbstractFlexibleManagerTest
             .'LEFT JOIN Entity.values selectVdescription WITH selectVdescription.attribute = 2 '
             .'WHERE Entity.id = :id';
         $this->assertEquals($expectedDql, $qb->getQuery()->getDql());
+        */
 
         // add select attributes and order ny
         $qb = $this->repository->prepareQueryBuilder($attToSelect, null, $attOrderBy);

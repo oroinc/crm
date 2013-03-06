@@ -74,7 +74,7 @@ class FlexibleManagerRegistry
     /**
      * Get the manager from the entity FQCN
      *
-     * @param string the entity FQCN
+     * @param string $entityFQCN the entity FQCN
      *
      * @return FlexibleManager
      */
