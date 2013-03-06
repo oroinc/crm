@@ -78,19 +78,22 @@ class DatagridBuilder implements DatagridBuilderInterface
     }
 
     /**
-     * @param string $name
      * @param ProxyQueryInterface $query
      * @param FieldDescriptionCollection $fieldCollection
      * @param RouteGeneratorInterface $routeGenerator
      * @param ParametersInterface $parameters
+     * @param string $name
+     * @param string $entityHint
+     *
      * @return DatagridInterface
      */
     public function getBaseDatagrid(
-        $name,
         ProxyQueryInterface $query,
         FieldDescriptionCollection $fieldCollection,
         RouteGeneratorInterface $routeGenerator,
-        ParametersInterface $parameters
+        ParametersInterface $parameters,
+        $name,
+        $entityHint = null
     ) {
         $formBuilder = $this->formFactory->createNamedBuilder(
             $this->getFormName($name),
@@ -106,7 +109,8 @@ class DatagridBuilder implements DatagridBuilderInterface
             $formBuilder,
             $routeGenerator,
             $parameters,
-            $name
+            $name,
+            $entityHint
         );
     }
 

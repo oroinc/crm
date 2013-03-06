@@ -38,6 +38,11 @@
                 <source>oro_grid.btn_batch</source>
                 <target>OK</target>
             </trans-unit>
+            <trans-unit id="oro_grid.no_data_hint">
+                <source>oro_grid.no_data_hint %entityHint%</source>
+                <target>No %entityHint% were found to match your search.
+                    Try modifying your search criteria or creating a new ...</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

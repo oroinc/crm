@@ -79,6 +79,11 @@ class Datagrid implements DatagridInterface
     protected $name;
 
     /**
+     * @var string
+     */
+    protected $entityHint;
+
+    /**
      * @param ProxyQueryInterface $query
      * @param FieldDescriptionCollection $columns
      * @param PagerInterface $pager
@@ -86,6 +91,7 @@ class Datagrid implements DatagridInterface
      * @param RouteGeneratorInterface $routeGenerator
      * @param ParametersInterface $parameters
      * @param string $name
+     * @param string $entityHint
      */
     public function __construct(
         ProxyQueryInterface $query,
@@ -94,7 +100,8 @@ class Datagrid implements DatagridInterface
         FormBuilderInterface $formBuilder,
         RouteGeneratorInterface $routeGenerator,
         ParametersInterface $parameters,
-        $name
+        $name,
+        $entityHint = null
     ) {
         $this->query          = $query;
         $this->columns        = $columns;
@@ -103,6 +110,7 @@ class Datagrid implements DatagridInterface
         $this->routeGenerator = $routeGenerator;
         $this->parameters     = $parameters;
         $this->name           = $name;
+        $this->entityHint     = $entityHint;
     }
 
     /**
@@ -394,5 +402,13 @@ class Datagrid implements DatagridInterface
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * @return string
+     */
+    public function getEntityHint()
+    {
+        return $this->entityHint;
     }
 }

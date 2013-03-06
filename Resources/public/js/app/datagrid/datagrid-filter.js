@@ -1,5 +1,10 @@
-// list of filters
-OroApp.FilterList = Backbone.View.extend({
+/**
+ * View that represents all grid filters
+ *
+ * @class   OroApp.DatagridFilterList
+ * @extends Backbone.View
+ */
+OroApp.DatagridFilterList = Backbone.View.extend({
     /** @property */
     filters: {},
 
@@ -23,9 +28,14 @@ OroApp.FilterList = Backbone.View.extend({
 
     /** @property */
     events: {
-        'change #add-filter-select': 'processFilterStatus'
+        'change #add-filter-select': '_processFilterStatus'
     },
 
+    /**
+     * Initialize filter list options
+     *
+     * @param {Object} options
+     */
     initialize: function(options)
     {
         this.collection = options.collection;
@@ -36,7 +46,7 @@ OroApp.FilterList = Backbone.View.extend({
 
         for (var name in this.filters) {
             this.filters[name] = new (this.filters[name])();
-            this.listenTo(this.filters[name], "changedData", this.reloadCollection);
+            this.listenTo(this.filters[name], "changedData", this._reloadCollection);
             this.listenTo(this.filters[name], "disabled", this.disableFilter);
         }
 
@@ -47,8 +57,12 @@ OroApp.FilterList = Backbone.View.extend({
         Backbone.View.prototype.initialize.apply(this, arguments);
     },
 
-    processFilterStatus: function(e) {
-        e.preventDefault();
+    /**
+     * Activate/deactivate all filter depends on its status
+     *
+     * @private
+     */
+    _processFilterStatus: function() {
         var activeFilters = this.$(this.filterSelector).val();
 
         _.each(this.filters, function(filter, name) {
@@ -60,18 +74,33 @@ OroApp.FilterList = Backbone.View.extend({
         }, this);
     },
 
+    /**
+     * Enable filter
+     *
+     * @param {OroApp.DatagridFilter} filter
+     */
     enableFilter: function(filter) {
         filter.enable();
         var optionSelector = this.filterSelector + ' option[value="' + filter.name + '"]';
         this.$(optionSelector).attr('selected', 'selected');
     },
 
+    /**
+     * Disable filter
+     *
+     * @param {OroApp.DatagridFilter} filter
+     */
     disableFilter : function(filter) {
         filter.disable();
         var optionSelector = this.filterSelector + ' option[value="' + filter.name + '"]';
         this.$(optionSelector).removeAttr('selected');
     },
 
+    /**
+     * Render filter list
+     *
+     * @return {*}
+     */
     render: function () {
         this.$el.empty();
 
@@ -88,10 +117,17 @@ OroApp.FilterList = Backbone.View.extend({
             addButtonHint: this.addButtonHint
         }));
 
+        this.trigger("rendered");
+
         return this;
     },
 
-    reloadCollection: function() {
+    /**
+     * Reload collection data with current filters
+     *
+     * @private
+     */
+    _reloadCollection: function() {
         var filterParams = {};
         for (var name in this.filters) {
             var filter = this.filters[name];
@@ -108,8 +144,13 @@ OroApp.FilterList = Backbone.View.extend({
     }
 });
 
-// basic filter
-OroApp.Filter = Backbone.View.extend({
+/**
+ * Basic grid filter
+ *
+ * @class   OroApp.DatagridFilter
+ * @extends Backbone.View
+ */
+OroApp.DatagridFilter = Backbone.View.extend({
     /** @property */
     tagName: 'div',
 
@@ -141,10 +182,15 @@ OroApp.Filter = Backbone.View.extend({
 
     /** @property */
     events: {
-        'change input': 'update',
+        'change input': '_update',
         'click a.disable-filter': 'disable'
     },
 
+    /**
+     * Render filter template
+     *
+     * @return {*}
+     */
     render: function () {
         this.$el.empty();
         this.$el.append(
@@ -155,11 +201,18 @@ OroApp.Filter = Backbone.View.extend({
         return this;
     },
 
-    update: function(e) {
-        e.preventDefault();
+    /**
+     * Filter data was updated
+     *
+     * @private
+     */
+    _update: function() {
         this.trigger('changedData');
     },
 
+    /**
+     * Enable filter
+     */
     enable: function() {
         if (!this.enabled) {
             this.enabled = true;
@@ -170,6 +223,9 @@ OroApp.Filter = Backbone.View.extend({
         }
     },
 
+    /**
+     * Disable filter
+     */
     disable: function() {
         if (this.enabled) {
             this.enabled = false;
@@ -182,22 +238,41 @@ OroApp.Filter = Backbone.View.extend({
         }
     },
 
+    /**
+     * Reset filter form elements
+     */
     reset: function() {
         this.$(this.parameterSelectors.value).val('');
     },
 
+    /**
+     * Show filter
+     */
     show: function() {
         this.$el.css('display', 'inline-block');
     },
 
+    /**
+     * Hide filter
+     */
     hide: function() {
         this.$el.css('display', 'none');
     },
 
+    /**
+     * Check if filter contain value
+     *
+     * @return {Boolean}
+     */
     hasValue: function() {
         return this.$(this.parameterSelectors.value).val() != '';
     },
 
+    /**
+     * Get list of filter parameters
+     *
+     * @return {Object}
+     */
     getParameters: function() {
         return {
             '[value]': this.$(this.parameterSelectors.value).val()
@@ -205,8 +280,13 @@ OroApp.Filter = Backbone.View.extend({
     }
 });
 
-// choice filter: filter type as option + filter value as string
-OroApp.ChoiceFilter = OroApp.Filter.extend({
+/**
+ * Choice filter: filter type as option + filter value as string
+ *
+ * @class   OroApp.DatagridChoiceFilter
+ * @extends OroApp.DatagridFilter
+ */
+OroApp.DatagridChoiceFilter = OroApp.DatagridFilter.extend({
     /** @property */
     template: _.template(
         '<div class="btn">' +
@@ -228,37 +308,54 @@ OroApp.ChoiceFilter = OroApp.Filter.extend({
 
     /** @property */
     events: {
-        'change input[name="type"]': 'updateOnType',
-        'change input[name="value"]': 'update',
+        'change input[name="type"]': '_updateOnType',
+        'change input[name="value"]': '_update',
         'click a.disable-filter': 'disable'
     },
 
     /** @property */
     choices: {},
 
+    /**
+     * Render filter template
+     *
+     * @return {*}
+     */
     render: function () {
         this.$el.empty();
         this.$el.append(
             this.template({
                 hint: this.hint,
-                choices:   this.choices
+                choices: this.choices
             })
         );
         return this;
     },
 
-    updateOnType: function(e) {
-        e.preventDefault();
+    /**
+     * Update grid data when filter type is changed
+     *
+     * @private
+     */
+    _updateOnType: function() {
         if (this.hasValue()) {
             this.trigger('changedData');
         }
     },
 
+    /**
+     * Reset filter form elements
+     */
     reset: function() {
         this.$(this.parameterSelectors.type).val('');
         this.$(this.parameterSelectors.value).val('');
     },
 
+    /**
+     * Get list of filter parameters
+     *
+     * @return {Object}
+     */
     getParameters: function() {
         return {
             '[type]':  this.$(this.parameterSelectors.type).val(),
@@ -267,40 +364,13 @@ OroApp.ChoiceFilter = OroApp.Filter.extend({
     }
 });
 
-// date filter: filter type as option + date value as string
-OroApp.DateFilter = OroApp.ChoiceFilter.extend({
-    /** @property */
-    template: _.template(
-        '<div class="btn">' +
-            '<%= hint %>:' +
-            '<% _.each(choices, function (hint, value) { %>' +
-                '<input type="radio" name="type" value="<%= value %>" /><%= hint %>' +
-            '<% }); %>' +
-            'date is <input type="text" name="value" value="" style="width:80px;" />' +
-            '<a href="#" class="disable-filter">X</a>' +
-            '<span class="caret"></span>' +
-        '</div>'
-    )
-});
-
-// datetime filter: filter type as option + datetime value as string
-OroApp.DateTimeFilter = OroApp.DateFilter.extend({
-    /** @property */
-    template: _.template(
-        '<div class="btn">' +
-            '<%= hint %>:' +
-            '<% _.each(choices, function (hint, value) { %>' +
-                '<input type="radio" name="type" value="<%= value %>" /><%= hint %>' +
-            '<% }); %>' +
-            'datetime is <input type="text" name="value" value="" style="width:80px;" />' +
-            '<a href="#" class="disable-filter">X</a>' +
-            '<span class="caret"></span>' +
-        '</div>'
-    )
-});
-
-// date range filter: filter type as option + interval begin and end dates
-OroApp.DateRangeFilter = OroApp.ChoiceFilter.extend({
+/**
+ * Date filter: filter type as option + interval begin and end dates
+ *
+ * @class   OroApp.DatagridDateFilter
+ * @extends OroApp.DatagridChoiceFilter
+ */
+OroApp.DatagridDateFilter = OroApp.DatagridChoiceFilter.extend({
     /** @property */
     template: _.template(
         '<div class="btn">' +
@@ -324,23 +394,36 @@ OroApp.DateRangeFilter = OroApp.ChoiceFilter.extend({
 
     /** @property */
     events: {
-        'change input[name="type"]': 'updateOnType',
-        'change input[name="start"]': 'update',
-        'change input[name="end"]': 'update',
+        'change input[name="type"]': '_updateOnType',
+        'change input[name="start"]': '_update',
+        'change input[name="end"]': '_update',
         'click a.disable-filter': 'disable'
     },
 
+    /**
+     * Check if filter contain value
+     *
+     * @return {Boolean}
+     */
     hasValue: function() {
         return this.$(this.parameterSelectors.value_start).val() != ''
             || this.$(this.parameterSelectors.value_end).val() != '';
     },
 
+    /**
+     * Reset filter form elements
+     */
     reset: function() {
         this.$(this.parameterSelectors.type).val('');
         this.$(this.parameterSelectors.value_start).val('');
         this.$(this.parameterSelectors.value_end).val('');
     },
 
+    /**
+     * Get list of filter parameters
+     *
+     * @return {Object}
+     */
     getParameters: function() {
         return {
             '[type]':  this.$(this.parameterSelectors.type).val(),
@@ -350,8 +433,13 @@ OroApp.DateRangeFilter = OroApp.ChoiceFilter.extend({
     }
 });
 
-// datetime range filter: filter type as option + interval begin and end datetimes
-OroApp.DateTimeRangeFilter = OroApp.DateRangeFilter.extend({
+/**
+ * Datetime filter: filter type as option + interval begin and end dates
+ *
+ * @class   OroApp.DatagridDateTimeFilter
+ * @extends OroApp.DatagridDateFilter
+ */
+OroApp.DatagridDateTimeFilter = OroApp.DatagridDateFilter.extend({
     /** @property */
     template: _.template(
         '<div class="btn">' +
@@ -367,8 +455,13 @@ OroApp.DateTimeRangeFilter = OroApp.DateRangeFilter.extend({
     )
 });
 
-// select filter: filter value as select option
-OroApp.SelectFilter = OroApp.Filter.extend({
+/**
+ * Select filter: filter value as select option
+ *
+ * @class   OroApp.DatagridSelectFilter
+ * @extends OroApp.DatagridFilter
+ */
+OroApp.DatagridSelectFilter = OroApp.DatagridFilter.extend({
     /** @property */
     template: _.template(
         '<div class="btn">' +
@@ -388,13 +481,18 @@ OroApp.SelectFilter = OroApp.Filter.extend({
 
     /** @property */
     events: {
-        'change select': 'update',
+        'change select': '_update',
         'click a.disable-filter': 'disable'
     },
 
     /** @property */
     options: {},
 
+    /**
+     * Render filter template
+     *
+     * @return {*}
+     */
     render: function () {
         this.$el.empty();
         this.$el.append(
@@ -407,8 +505,13 @@ OroApp.SelectFilter = OroApp.Filter.extend({
     }
 });
 
-// select filter: filter value as select option
-OroApp.MultiSelectFilter = OroApp.SelectFilter.extend({
+/**
+ * Multiple select filter: filter values as multiple select options
+ *
+ * @class   OroApp.DatagridMultiSelectFilter
+ * @extends OroApp.DatagridSelectFilter
+ */
+OroApp.DatagridMultiSelectFilter = OroApp.DatagridSelectFilter.extend({
     /** @property */
     template: _.template(
         '<div class="btn">' +

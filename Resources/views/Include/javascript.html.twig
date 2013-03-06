@@ -11,6 +11,7 @@
 '@OroGridBundle/Resources/public/js/app/datagrid/datagrid-toolbar.js'
 
 '@OroGridBundle/Resources/public/js/app/datagrid/datagrid-filter.js'
+'@OroGridBundle/Resources/public/js/app/datagrid/datagrid-title.js'
 '@OroGridBundle/Resources/public/js/app/loadingmask.js'
 '@OroGridBundle/Resources/public/js/app/datagrid.js'
 '@OroGridBundle/Resources/public/js/app/pageablecollection.js'
@@ -63,35 +64,21 @@ output='js/acme.grid.js'
                                 or filterType == constant(filterTypePrefix ~ 'TYPE_NUMBER')
                                 or filterType == constant(filterTypePrefix ~ 'TYPE_STRING')
                             %}
-                                OroApp.ChoiceFilter.extend({
+                                OroApp.DatagridChoiceFilter.extend({
                                     name: '{{ filter.name }}',
                                     hint: '{{ filter.getOption('label') }}',
                                     enabled: {{ filter.getOption('show_filter') ? 'true' : 'false' }},
                                     choices: {{ filter.typeOptions|json_encode|raw }}
                                 })
                             {% elseif filterType == constant(filterTypePrefix ~ 'TYPE_DATE') %}
-                                OroApp.DateFilter.extend({
+                                OroApp.DatagridDateFilter.extend({
                                     name: '{{ filter.name }}',
                                     hint: '{{ filter.getOption('label') }}',
                                     enabled: {{ filter.getOption('show_filter') ? 'true' : 'false' }},
                                     choices: {{ filter.typeOptions|json_encode|raw }}
                                 })
                             {% elseif filterType == constant(filterTypePrefix ~ 'TYPE_DATETIME') %}
-                                OroApp.DateTimeFilter.extend({
-                                    name: '{{ filter.name }}',
-                                    hint: '{{ filter.getOption('label') }}',
-                                    enabled: {{ filter.getOption('show_filter') ? 'true' : 'false' }},
-                                    choices: {{ filter.typeOptions|json_encode|raw }}
-                                })
-                            {% elseif filterType == constant(filterTypePrefix ~ 'TYPE_DATE_RANGE') %}
-                                OroApp.DateRangeFilter.extend({
-                                    name: '{{ filter.name }}',
-                                    hint: '{{ filter.getOption('label') }}',
-                                    enabled: {{ filter.getOption('show_filter') ? 'true' : 'false' }},
-                                    choices: {{ filter.typeOptions|json_encode|raw }}
-                                })
-                            {% elseif filterType == constant(filterTypePrefix ~ 'TYPE_DATETIME_RANGE') %}
-                                OroApp.DateTimeRangeFilter.extend({
+                                OroApp.DatagridDateTimeFilter.extend({
                                     name: '{{ filter.name }}',
                                     hint: '{{ filter.getOption('label') }}',
                                     enabled: {{ filter.getOption('show_filter') ? 'true' : 'false' }},
@@ -101,14 +88,14 @@ output='js/acme.grid.js'
                                 or filterType == constant(filterTypePrefix ~ 'TYPE_FLEXIBLE_OPTIONS')
                             %}
                                 {% if filter.getOption('multiple') %}
-                                    OroApp.MultiSelectFilter.extend({
+                                    OroApp.DatagridMultiSelectFilter.extend({
                                         name: '{{ filter.name }}',
                                         hint: '{{ filter.getOption('label') }}',
                                         enabled: {{ filter.getOption('show_filter') ? 'true' : 'false' }},
                                         options: {{ filter.valueOptions|json_encode|raw }}
                                     })
                                 {% else %}
-                                    OroApp.SelectFilter.extend({
+                                    OroApp.DatagridSelectFilter.extend({
                                         name: '{{ filter.name }}',
                                         hint: '{{ filter.getOption('label') }}',
                                         enabled: {{ filter.getOption('show_filter') ? 'true' : 'false' }},
@@ -116,7 +103,7 @@ output='js/acme.grid.js'
                                     })
                                 {% endif %}
                             {% else %}
-                                OroApp.Filter.extend({
+                                OroApp.DatagridFilter.extend({
                                     name: '{{ filter.name }}',
                                     hint: '{{ filter.getOption('label') }}',
                                     enabled: {{ filter.getOption('show_filter') ? 'true' : 'false' }}
@@ -124,7 +111,10 @@ output='js/acme.grid.js'
                             {% endif %}
                             {% if not loop.last %},{% endif %}
                         {% endfor %}
-                    }
+                    },
+                    entityHint : {{ datagrid.entityHint|capitalize|json_encode|raw }},
+                    {% set entityHint = datagrid.entityHint ? datagrid.entityHint : 'records' %}
+                    noDataHint : {{ 'oro_grid.no_data_hint %entityHint%'|trans({'%entityHint%': entityHint}, 'OroGridBundle')|json_encode|raw }}
                 },
                 collection: {
                     inputName: "{{ datagrid.name|raw }}",
@@ -143,30 +133,61 @@ output='js/acme.grid.js'
         var containerSelector = {{ selector|json_encode|raw }};
         var datagridTemplateSelector = {{ ("#" ~ datagridName ~ "GridTemplate")|json_encode|raw }};
         var datagridName = {{ datagridName|json_encode|raw }};
+        var datagridTitleSelector = {{ ("#" ~ datagridName ~ "Title")|json_encode|raw }};
         var datagridFiltersSelector = {{ ("#" ~ datagridName ~ "Filters")|json_encode|raw }};
         var datagridToolbarSelector = {{ ("#" ~ datagridName ~ "Toolbar")|json_encode|raw }};
         var datagridBodySelector = {{ ("#" ~ datagridName ~ "Body")|json_encode|raw }};
         var datagridOptions = OroApp.scope[datagridName];
 
         var initDatagrid = function(
-                datagridOptions,
-                datagridTemplateSelector,
-                containerSelector,
-                datagridFiltersSelector,
-                datagridToolbarSelector,
-                datagridBodySelector
-                ) {
-            // Initialize a new collection and grid instance
+            datagridOptions,
+            datagridTemplateSelector,
+            containerSelector,
+            datagridTitleSelector,
+            datagridFiltersSelector,
+            datagridToolbarSelector,
+            datagridBodySelector
+        ) {
+            // Initialize grid collection
             var datagridCollection = new OroApp.PageableCollection(
                 [],
                 datagridOptions.collection
             );
+
+            // Basic grid layout
+            var template = _.template($(datagridTemplateSelector).html());
+            $(containerSelector).append(template);
+
+            // Grid
             var datagridParameters = _.extend(
                 {
                     collection: datagridCollection
                 },
                 datagridOptions.grid
             );
+            var datagrid = new OroApp.Datagrid(datagridParameters);
+            $(datagridBodySelector).html(datagrid.render().$el);
+            datagridCollection.fetch();
+
+            // Title
+            var titleParameters = _.extend(
+                {
+                    tagName: 'div',
+                    className: 'navigation container-fluid'
+                },
+                datagridOptions.grid
+            );
+            var datagridTitle = new OroApp.DatagridTitle(titleParameters);
+            $(datagridTitleSelector).html(datagridTitle.render().$el);
+
+            // Toolbar
+            var datagridToolbarParameters = {
+                collection: datagridCollection
+            };
+            var pager = new OroApp.DatagridToolbar(datagridToolbarParameters);
+            $(datagridToolbarSelector).append($(pager.render().$el));
+
+            // Filters
             var filterListParameters = _.extend(
                 {
                     collection: datagridCollection,
@@ -176,25 +197,7 @@ output='js/acme.grid.js'
                 },
                 datagridOptions.grid
             );
-
-            // Basic grid template
-            var template = _.template($(datagridTemplateSelector).html());
-            $(containerSelector).append(template);
-
-            // Render the grid and attach the root to your HTML document
-            var datagrid = new OroApp.Datagrid(datagridParameters);
-            $(datagridBodySelector).html(datagrid.render().$el);
-            datagridCollection.fetch();
-
-            // Toolbar parameters
-            var datagridToolbarParameters = {
-                collection: datagridCollection
-            };
-            var pager = new OroApp.DatagridToolbar(datagridToolbarParameters);
-            $(datagridToolbarSelector).append($(pager.render().$el));
-
-            // Render filters
-            var filtersList = new OroApp.FilterList(filterListParameters);
+            var filtersList = new OroApp.DatagridFilterList(filterListParameters);
             $(datagridFiltersSelector).html(filtersList.render().$el);
         };
 
@@ -202,6 +205,7 @@ output='js/acme.grid.js'
             datagridOptions,
             datagridTemplateSelector,
             containerSelector,
+            datagridTitleSelector,
             datagridFiltersSelector,
             datagridToolbarSelector,
             datagridBodySelector
@@ -210,6 +214,7 @@ output='js/acme.grid.js'
 </script>
 
 <script type="text/template" id="{{ datagridName }}GridTemplate">
+    <div class="clearfix" id="{{ datagridName }}Title"></div>
     <div class="clearfix" id="{{ datagridName }}Filters"></div>
     <div class="clearfix" id="{{ datagridName }}Toolbar"></div>
     <div class="clearfix" id="{{ datagridName }}Body"></div>

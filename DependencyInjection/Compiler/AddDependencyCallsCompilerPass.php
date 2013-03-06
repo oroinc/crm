@@ -48,7 +48,7 @@ class AddDependencyCallsCompilerPass implements CompilerPassInterface
             'parameters',
             'translator',
             'validator',
-            'flexible_manager'
+            'flexible_manager',
         );
 
         foreach ($keys as $key) {
@@ -62,6 +62,10 @@ class AddDependencyCallsCompilerPass implements CompilerPassInterface
 
         $this->assertAttributesHasKey($serviceId, $attributes, 'datagrid_name');
         $definition->addMethodCall('setName', array($attributes['datagrid_name']));
+
+        if (isset($attributes['entity_hint'])) {
+            $definition->addMethodCall('setEntityHint', array($attributes['entity_hint']));
+        }
 
         // apply flexible configuration
         $this->applyFlexibleConfigurationFromAttributes($container, $serviceId, $attributes);

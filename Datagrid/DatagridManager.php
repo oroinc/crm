@@ -50,6 +50,11 @@ abstract class DatagridManager implements DatagridManagerInterface
     protected $name;
 
     /**
+     * @var string
+     */
+    protected $entityHint;
+
+    /**
      * @var RouteGeneratorInterface
      */
     protected $routeGenerator;
@@ -117,6 +122,15 @@ abstract class DatagridManager implements DatagridManagerInterface
     }
 
     /**
+     * @param string $entityHint
+     * @return void
+     */
+    public function setEntityHint($entityHint)
+    {
+        $this->entityHint = $entityHint;
+    }
+
+    /**
      * @param ParametersInterface $parameters
      * @return void
      */
@@ -139,11 +153,12 @@ abstract class DatagridManager implements DatagridManagerInterface
 
         // create datagrid
         $datagrid = $this->datagridBuilder->getBaseDatagrid(
-            $this->name,
             $this->queryFactory->createQuery(),
             $listCollection,
             $this->routeGenerator,
-            $this->parameters
+            $this->parameters,
+            $this->name,
+            $this->entityHint
         );
 
         // add datagrid filters

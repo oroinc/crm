@@ -23,6 +23,14 @@ interface DatagridManagerInterface
     public function setName($name);
 
     /**
+     * Set entity hint
+     *
+     * @param string $entityHint
+     * @return void
+     */
+    public function setEntityHint($entityHint);
+
+    /**
      * @param DatagridBuilderInterface $datagridBuilder
      * @return void
      */

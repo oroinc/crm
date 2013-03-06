@@ -30,4 +30,14 @@ interface DatagridInterface extends BaseDatagridInterface
      * @return RouteGeneratorInterface
      */
     public function getRouteGenerator();
+
+    /**
+     * @return string
+     */
+    public function getName();
+
+    /**
+     * @return string
+     */
+    public function getEntityHint();
 }
