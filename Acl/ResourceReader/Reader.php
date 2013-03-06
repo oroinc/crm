@@ -88,6 +88,7 @@ class Reader
      */
     private function getScanDirectories()
     {
+        $directories = false;
         $bundles = $this->kernel->getBundles();
 
         foreach ($bundles as $bundle) {

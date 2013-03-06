@@ -35,15 +35,15 @@ class AclInterceptor implements MethodInterceptorInterface
      */
     private $reader;
 
+    /**
+     * @var \Symfony\Component\Security\Core\Authorization\AccessDecisionManager
+     */
     private $accessDecisionManager;
 
-    public function __construct(
-        SecurityContextInterface $context,
-        LoggerInterface $logger,
-        ContainerInterface $container
-    ) {
-        $this->securityContext = $context;
-        $this->logger = $logger;
+    public function __construct(ContainerInterface $container)
+    {
+        $this->securityContext = $container->get('security.context');
+        $this->logger = $container->get('logger');
         $this->container = $container;
         $this->reader = $container->get('annotation_reader');
         $this->accessDecisionManager = $container->get('security.access.decision_manager');
@@ -58,7 +58,6 @@ class AclInterceptor implements MethodInterceptorInterface
         $token = $this->securityContext->getToken();
 
         if ($token) {
-
             //get acl method resource name
             $aclAnnotation = $this->reader->getMethodAnnotation(
                 $method->reflection,

@@ -169,7 +169,7 @@ services:
 
     oro_user.acl_interceptor:
         class:                        %oro_user.acl.interceptor.class%
-        arguments:                    ["@security.context", "@logger", "@service_container"]
+        arguments:                    ["@service_container"]
 
     oro_user.acl_manager:
         class:                        %oro_user.acl.manager.class%

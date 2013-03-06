@@ -209,7 +209,6 @@ class Manager
     public function synchronizeAclResources()
     {
         $resources = $this->aclReader->getResources();
-        //var_dump($resources);die;
         $bdResources = $this->getAclRepo()->findAll();
 
         // update old resources
