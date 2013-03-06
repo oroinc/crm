@@ -12,8 +12,12 @@
 
 '@OroGridBundle/Resources/public/js/app/datagrid/datagrid-filter.js'
 '@OroGridBundle/Resources/public/js/app/datagrid/datagrid-title.js'
+
 '@OroGridBundle/Resources/public/js/app/loadingmask.js'
 '@OroGridBundle/Resources/public/js/app/datagrid.js'
+
+'@OroGridBundle/Resources/public/js/app/datagrid/datagrid-router.js'
+
 '@OroGridBundle/Resources/public/js/app/pageablecollection.js'
 
 output='js/acme.grid.js'
@@ -167,7 +171,6 @@ output='js/acme.grid.js'
             );
             var datagrid = new OroApp.Datagrid(datagridParameters);
             $(datagridBodySelector).html(datagrid.render().$el);
-            datagridCollection.fetch();
 
             // Title
             var titleParameters = _.extend(
@@ -199,6 +202,12 @@ output='js/acme.grid.js'
             );
             var filtersList = new OroApp.DatagridFilterList(filterListParameters);
             $(datagridFiltersSelector).html(filtersList.render().$el);
+
+            // Register router and start history
+            var router = new OroApp.DatagridRouter({
+                collection: datagridCollection
+            });
+            Backbone.history.start();
         };
 
         initDatagrid(

@@ -29,7 +29,7 @@ OroApp.Datagrid = Backgrid.Grid.extend({
     },
 
     /** @property */
-    noDataTemplate: _.template('<span><%= hint  %><span>'),
+    noDataTemplate: _.template('<span><%= hint %><span>'),
 
     /** @property */
     noDataHint: 'No data found.',
@@ -42,18 +42,8 @@ OroApp.Datagrid = Backgrid.Grid.extend({
     initialize: function(options) {
         this.collection = options.collection;
 
-        this.collection.on('request', function() {
-            if (this.loadingMask) {
-                this.loadingMask.show();
-            }
-        }, this);
-
-        this.collection.on('sync', function() {
-            this._checkData();
-            if (this.loadingMask) {
-                this.loadingMask.hide();
-            }
-        }, this);
+        this.collection.on('request', this._onRequest, this);
+        this.collection.on('sync', this._onSync, this);
 
         if (options.noDataHint) {
             this.noDataHint = options.noDataHint.replace('\n', '<br />');
@@ -118,17 +108,28 @@ OroApp.Datagrid = Backgrid.Grid.extend({
      * @private
      */
     _renderNoDataBlock: function($el) {
-        $el.append(this.noDataTemplate({
+        $el.append($(this.noDataTemplate({
             hint: this.noDataHint
-        }));
+        })));
+        this.$(this.selectors.noDataBlock).hide();
     },
 
     /**
-     * Switch between grid and no data block
+     * Triggers when on collection "request" event
      *
      * @private
      */
-    _checkData: function() {
+    _onRequest: function() {
+        this.loadingMask.show();
+    },
+
+    /**
+     * Triggers when on collection "sync" event
+     *
+     * @private
+     */
+    _onSync: function() {
+        this.loadingMask.hide();
         if (this.collection.models.length > 0) {
             this.$(this.selectors.grid).show();
             this.$(this.selectors.noDataBlock).hide();

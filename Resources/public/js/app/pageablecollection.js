@@ -24,10 +24,31 @@ OroApp.PageableCollection = Backbone.PageableCollection.extend({
             directions: {
                 "-1": "ASC",
                 "1": "DESC"
-            }
+            },
+            totalRecords: undefined,
+            totalPages: undefined
         });
 
         OroApp.Collection.prototype.initialize.apply(this, arguments);
+    },
+
+    stateShortenKeys: {
+        currentPage: 'i',
+        pageSize: 'p',
+        sortKey: 's',
+        order: 'o'
+    },
+
+    encodeStateData: function(state) {
+        var data = _.pick(state, 'currentPage', 'pageSize', 'sortKey', 'order');
+        OroApp.invertKeys(data, this.stateShortenKeys, true);
+        return OroApp.packToQueryString(data);
+    },
+
+    decodeStateData: function(string) {
+        var data = OroApp.unpackFromQueryString(string);
+        data = OroApp.invertKeys(data, _.invert(this.stateShortenKeys), false);
+        return data;
     },
 
     // {'filter_key' => 'filter_value', ...}
@@ -80,14 +101,16 @@ OroApp.PageableCollection = Backbone.PageableCollection.extend({
                 throw new RangeError("`firstPage must be 0 or 1`");
             }
 
-            if (totalRecords == 0) {
-                state.currentPage = currentPage = firstPage;
-            }
-
             state.lastPage = firstPage === 0 ? totalPages - 1 : totalPages;
 
+            // page out of range
             if (currentPage > state.lastPage) {
                 state.currentPage = currentPage = state.lastPage;
+            }
+
+            // no results returned
+            if (totalRecords == 0) {
+                state.currentPage = currentPage = firstPage;
             }
 
             if (mode == "infinite") {

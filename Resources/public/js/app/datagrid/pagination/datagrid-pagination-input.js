@@ -48,7 +48,6 @@ OroApp.DatagridPaginationInput = OroApp.DatagridPagination.extend({
      * @param {Event} e
      */
     changePageByInput: function(e) {
-        console.log(e, Math.random());
         e.preventDefault();
 
         var pageIndex = parseInt($(e.target).val());

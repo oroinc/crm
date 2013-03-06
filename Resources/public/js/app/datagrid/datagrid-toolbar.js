@@ -37,12 +37,6 @@ OroApp.DatagridToolbar = OroApp.View.extend({
      */
     initialize: function (options) {
         this.collection = options.collection;
-        this.pagination = new this.pagination({
-            collection: this.collection
-        });
-        this.pageSize = new this.pageSize({
-            collection: this.collection
-        });
         OroApp.View.prototype.initialize.call(this, options);
     },
 
@@ -51,10 +45,17 @@ OroApp.DatagridToolbar = OroApp.View.extend({
      */
     render: function() {
         this.$el.empty();
-
         this.$el.append(this.template());
-        this.$('.pagination').append(this.pagination.render().$el);
-        this.$('.page-size').append(this.pageSize.render().$el);
+
+        this.pagination = new this.pagination({
+            el: this.$('.pagination'),
+            collection: this.collection
+        });
+
+        this.pageSize = new this.pageSize({
+            el: this.$('.page-size'),
+            collection: this.collection
+        });
 
         return this;
     }
