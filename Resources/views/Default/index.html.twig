@@ -20,11 +20,11 @@
         <script src="{{ asset ('bundles/oroui/js/jquery.placeholder.js') }}"></script>
         <script type="text/javascript">
             jQuery(document).ready(function() {
-                jQuery('input, textarea').placeholder();
+                jQuery('input[placeholder], textarea[placeholder]').placeholder();
             });
         </script>
         <![endif]-->
-        <!--[if lte IE 7]>
+        <!--[if lte IE 8]>
             <script src="{{ asset ('bundles/oroui/js/ie.js') }}"></script>
         <![endif]-->
         {% endblock %}

@@ -87,3 +87,8 @@ table.grid{
     top: -5px !important;
     right: -2px;
 }
+#search-div.search-focus .btn-search{
+    height: 28px;
+    position: relative;
+    top: 1px;
+}
