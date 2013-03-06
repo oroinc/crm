@@ -32,22 +32,39 @@ OroApp.PageableCollection = Backbone.PageableCollection.extend({
         OroApp.Collection.prototype.initialize.apply(this, arguments);
     },
 
-    stateShortenKeys: {
+    /**
+     * Object declares state keys that will be involved in URL-state saving with their shorthands
+     *
+     * @property {Object}
+     */
+    stateShortKeys: {
         currentPage: 'i',
         pageSize: 'p',
         sortKey: 's',
         order: 'o'
     },
 
-    encodeStateData: function(state) {
-        var data = _.pick(state, 'currentPage', 'pageSize', 'sortKey', 'order');
-        OroApp.invertKeys(data, this.stateShortenKeys, true);
+    /**
+     * Encode state object to string
+     *
+     * @param {Object} stateObject
+     * @return {String}
+     */
+    encodeStateData: function(stateObject) {
+        var data = _.pick(stateObject, _.keys(this.stateShortKeys));
+        data = OroApp.invertKeys(data, this.stateShortKeys);
         return OroApp.packToQueryString(data);
     },
 
-    decodeStateData: function(string) {
-        var data = OroApp.unpackFromQueryString(string);
-        data = OroApp.invertKeys(data, _.invert(this.stateShortenKeys), false);
+    /**
+     * Decode state object from string, operation is invert for encodeStateData.
+     *
+     * @param {String} stateString
+     * @return {Object}
+     */
+    decodeStateData: function(stateString) {
+        var data = OroApp.unpackFromQueryString(stateString);
+        data = OroApp.invertKeys(data, _.invert(this.stateShortKeys));
         return data;
     },
 
