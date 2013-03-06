@@ -41,13 +41,14 @@ class CustomSoapClient extends \SoapClient
      */
     public function __doRequest($request, $location, $action, $version, $one_way = 0)
     {
-        ob_start();
         //save directly in _SERVER array
         $_SERVER['HTTP_SOAPACTION'] = $action;
         $_SERVER['CONTENT_TYPE'] = 'application/soap+xml';
         //make POST request
         $this->client->request('POST', $location, array(), array(), array(), $request);
-        ob_end_clean();
+
+        unset($_SERVER['HTTP_SOAPACTION']);
+        unset($_SERVER['CONTENT_TYPE']);
 
         return $this->client->getResponse()->getContent();
     }
