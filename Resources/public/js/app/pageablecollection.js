@@ -86,6 +86,10 @@ OroApp.PageableCollection = Backbone.PageableCollection.extend({
 
             state.lastPage = firstPage === 0 ? totalPages - 1 : totalPages;
 
+            if (currentPage > state.lastPage) {
+                state.currentPage = currentPage = state.lastPage;
+            }
+
             if (mode == "infinite") {
                 if (!links[currentPage + '']) {
                     throw new RangeError("No link found for page " + currentPage);
