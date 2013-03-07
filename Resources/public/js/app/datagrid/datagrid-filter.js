@@ -161,7 +161,7 @@ OroApp.DatagridFilter = Backbone.View.extend({
     template: _.template(
         '<div class="btn">' +
             '<%= hint %>: <input type="text" value="" style="width:80px;" />' +
-            '<a href="#" class="disable-filter">X</a>' +
+            '<a href="#" class="disable-filter" />' +
             '<span class="caret"></span>' +
         '</div>'
     ),
@@ -183,7 +183,7 @@ OroApp.DatagridFilter = Backbone.View.extend({
     /** @property */
     events: {
         'change input': '_update',
-        'click a.disable-filter': 'disable'
+        'click .disable-filter': 'disable'
     },
 
     /**
@@ -295,7 +295,7 @@ OroApp.DatagridChoiceFilter = OroApp.DatagridFilter.extend({
                 '<input type="radio" name="type" value="<%= value %>" /><%= hint %>' +
             '<% }); %>' +
             '<input type="text" name="value" value="" style="width:80px;" />' +
-            '<a href="#" class="disable-filter">X</a>' +
+            '<a href="#" class="disable-filter" />' +
             '<span class="caret"></span>' +
         '</div>'
     ),
@@ -310,7 +310,7 @@ OroApp.DatagridChoiceFilter = OroApp.DatagridFilter.extend({
     events: {
         'change input[name="type"]': '_updateOnType',
         'change input[name="value"]': '_update',
-        'click a.disable-filter': 'disable'
+        'click .disable-filter': 'disable'
     },
 
     /** @property */
@@ -380,7 +380,7 @@ OroApp.DatagridDateFilter = OroApp.DatagridChoiceFilter.extend({
             '<% }); %>' +
             'date from <input type="text" name="start" value="" style="width:80px;" />' +
             'to <input type="text" name="end" value="" style="width:80px;" />' +
-            '<a href="#" class="disable-filter">X</a>' +
+            '<a href="#" class="disable-filter" />' +
             '<span class="caret"></span>' +
         '</div>'
     ),
@@ -397,7 +397,7 @@ OroApp.DatagridDateFilter = OroApp.DatagridChoiceFilter.extend({
         'change input[name="type"]': '_updateOnType',
         'change input[name="start"]': '_update',
         'change input[name="end"]': '_update',
-        'click a.disable-filter': 'disable'
+        'click .disable-filter': 'disable'
     },
 
     /**
@@ -449,7 +449,7 @@ OroApp.DatagridDateTimeFilter = OroApp.DatagridDateFilter.extend({
             '<% }); %>' +
             'datetime from <input type="text" name="start" value="" style="width:80px;" />' +
             'to <input type="text" name="end" value="" style="width:80px;" />' +
-            '<a href="#" class="disable-filter">X</a>' +
+            '<a href="#" class="disable-filter" />' +
             '<span class="caret"></span>' +
         '</div>'
     )
@@ -464,13 +464,12 @@ OroApp.DatagridDateTimeFilter = OroApp.DatagridDateFilter.extend({
 OroApp.DatagridSelectFilter = OroApp.DatagridFilter.extend({
     /** @property */
     template: _.template(
-        '<div class="btn">' +
-            '<%= hint %>: <select style="width:150px;">' +
-                '<option value=""></option>' +
+        '<div class="btn filter-select">' +
+            '<%= hint %>: <select>' +
+                '<option value=""><%= placeholder %></option>' +
                 '<% _.each(options, function (hint, value) { %><option value="<%= value %>"><%= hint %></option><% }); %>' +
             '</select>' +
-            '<a href="#" class="disable-filter">X</a>' +
-            '<span class="caret"></span>' +
+            '<a href="#" class="disable-filter" />' +
         '</div>'
     ),
 
@@ -482,11 +481,23 @@ OroApp.DatagridSelectFilter = OroApp.DatagridFilter.extend({
     /** @property */
     events: {
         'change select': '_update',
-        'click a.disable-filter': 'disable'
+        'click .disable-filter': 'disable'
     },
 
     /** @property */
     options: {},
+
+    /** @property */
+    placeholder: 'All',
+
+    /** @property */
+    select2Element: 'select',
+
+    /** @property */
+    select2Config: {
+        width: 'off',
+        dropdownCssClass: 'select-filter-dropdown'
+    },
 
     /**
      * Render filter template
@@ -496,12 +507,58 @@ OroApp.DatagridSelectFilter = OroApp.DatagridFilter.extend({
     render: function () {
         this.$el.empty();
         this.$el.append(
-            this.template({
+                this.template({
                 hint: this.hint,
-                options: this.options
+                options: this.options,
+                placeholder: this.placeholder
             })
         );
+
+        this.initSelect2();
+
         return this;
+    },
+
+    /**
+     * Create Select2 instance
+     */
+    initSelect2: function() {
+        // create select2 instance
+        var select2Object = this.$el.find(this.select2Element).select2(this.select2Config);
+
+        var data = {
+            filterElement: this.$el,
+            select2Config: this.select2Config
+        };
+        select2Object.on('open', data, this.recalculateDropdownPosition);
+    },
+
+    /**
+     * Recalculate position of the select filter drop down relative to filter container
+     *
+     * @param event
+     */
+    recalculateDropdownPosition: function(event) {
+        var filterElement = event.data.filterElement,
+            dropdown = $('.' + event.data.select2Config.dropdownCssClass),
+            body = filterElement.closest('body'),
+            offset = filterElement.offset(),
+            dropLeft = offset.left,
+            dropWidth = dropdown.outerWidth(false),
+            viewPortRight = $(window).scrollLeft() + $(window).width(),
+            enoughRoomOnRight = dropLeft + dropWidth <= viewPortRight;
+
+
+        if (body.css('position') !== 'static') {
+            var bodyOffset = body.offset();
+            dropLeft -= bodyOffset.left;
+        }
+
+        if (!enoughRoomOnRight) {
+           dropLeft = offset.left + width - dropWidth;
+        }
+
+        dropdown.css('left', dropLeft);
     }
 });
 
@@ -518,8 +575,9 @@ OroApp.DatagridMultiSelectFilter = OroApp.DatagridSelectFilter.extend({
             '<%= hint %>: <select style="width:150px;" multiple>' +
                 '<% _.each(options, function (hint, value) { %><option value="<%= value %>"><%= hint %></option><% }); %>' +
             '</select>' +
-            '<a href="#" class="disable-filter">X</a>' +
+            '<a href="#" class="disable-filter" />' +
             '<span class="caret"></span>' +
         '</div>'
     )
 });
+

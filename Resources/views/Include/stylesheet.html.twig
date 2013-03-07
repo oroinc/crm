@@ -1,4 +1,5 @@
 {% stylesheets
+    'bundles/orogrid/css/select2.css'
     'bundles/orogrid/lib/backgrid/backgrid.css'
     'bundles/orogrid/lib/backgrid/extensions/paginator/backgrid-paginator.css'
     output='css/acme.grid.css'
@@ -36,6 +37,26 @@
             border-left: none;
             border-color: #dddddd;
             border-radius: 0;
+        }
+
+        .filter-box .btn .disable-filter {
+            background-image: url("http://localhost.bap/bundles/oroui/css/less/../../lib/bootstrap/../../img/glyphicons-halflings.png");
+            background-position: -312px 0;
+            background-repeat: no-repeat;
+            display: inline-block;
+            height: 14px;
+            line-height: 14px;
+            margin-top: 1px;
+            vertical-align: text-top;
+            width: 14px;
+        }
+
+        .filter-box .filter-select {
+            padding-right: 4px;
+        }
+
+        .filter-box .filter-select .disable-filter {
+            margin-left: 3px;
         }
 
         .no-data {
