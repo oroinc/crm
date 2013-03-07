@@ -41,7 +41,8 @@ OroApp.PageableCollection = Backbone.PageableCollection.extend({
         currentPage: 'i',
         pageSize: 'p',
         sortKey: 's',
-        order: 'o'
+        order: 'o',
+        filters: 'f'
     },
 
     /**
@@ -70,8 +71,8 @@ OroApp.PageableCollection = Backbone.PageableCollection.extend({
 
     // {'filter_key' => 'filter_value', ...}
     processFiltersParams: function(data, state) {
-        if (state.filters) {
-            _.each(state.filters, function(filterParameters, filterKey) {
+        if (state.filtersParams) {
+            _.each(state.filtersParams, function(filterParameters, filterKey) {
                 for (var parameter in filterParameters) {
                     var queryParameter = this.inputName + '[_filter][' + filterKey + ']' + parameter;
                     data[queryParameter] = filterParameters[parameter];
