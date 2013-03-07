@@ -32,6 +32,8 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
 
     private $reader;
 
+    private $configApiReader;
+
     public function setUp()
     {
         if (!interface_exists('Doctrine\Common\Persistence\ObjectManager')) {
@@ -68,6 +70,14 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
             false
         );
 
+        $this->configApiReader = $this->getMock(
+            'Oro\Bundle\UserBundle\Acl\ResourceReader\ConfigReader',
+            array(),
+            array(),
+            '',
+            false
+        );
+
         $sqlExecMock = $this->getMock('Doctrine\ORM\Query\Exec\AbstractSqlExecutor', array('execute'));
         $sqlExecMock->expects($this->any())
             ->method('execute')
@@ -79,7 +89,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
         $this->cache = $this->getMock('Doctrine\Common\Cache\CacheProvider',
             array('doFetch', 'doContains', 'doSave', 'doDelete', 'doFlush', 'doGetStats', 'fetch', 'save'));
 
-        $this->manager = new Manager($this->om, $this->reader, $this->cache, $this->securityContext);
+        $this->manager = new Manager($this->om, $this->reader, $this->cache, $this->securityContext, $this->configApiReader);
 
         $this->testRole = new Role('ROLE_TEST_ROLE');
 
@@ -257,6 +267,10 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
         $this->reader->expects($this->once())
             ->method('getResources')
             ->will($this->returnValue($annotations));
+
+        $this->configApiReader->expects($this->once())
+            ->method('getConfigResources')
+            ->will($this->returnValue(array()));
 
         $this->repository->expects($this->once())
             ->method('findAll')

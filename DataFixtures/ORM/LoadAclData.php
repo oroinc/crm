@@ -51,7 +51,7 @@ class LoadAclData extends AbstractFixture implements OrderedFixtureInterface
             ->setDescription('Oro Login check')
             ->setParent($this->getReference('acl_oro_security'));
         $manager->persist($oroLoginCheck);
-        $this->setReference('oro_login_check', $oroLoginCheck);
+        $this->setReference('acl_oro_login_check', $oroLoginCheck);
 
         $oroLogout = new Acl();
         $oroLogout->setId('oro_logout')
@@ -59,9 +59,54 @@ class LoadAclData extends AbstractFixture implements OrderedFixtureInterface
             ->setDescription('Oro Logout')
             ->setParent($this->getReference('acl_oro_security'));
         $manager->persist($oroLogout);
-        $this->setReference('oro_logout', $oroLogout);
+        $this->setReference('acl_oro_logout', $oroLogout);
+
+        $this->addResetAcl($manager);
 
         $manager->flush();
+    }
+
+    private function addResetAcl(ObjectManager $manager)
+    {
+        $oroReset = new Acl();
+        $oroReset->setId('oro_reset_controller')
+            ->setName('Reset user password')
+            ->setDescription('Oro Reset user password')
+            ->setParent($this->getReference('acl_oro_security'));
+        $manager->persist($oroReset);
+        $this->setReference('acl_oro_reset_controller', $oroReset);
+
+        $oroReset = new Acl();
+        $oroReset->setId('oro_reset_request')
+            ->setName('reset password')
+            ->setDescription('Oro Reset password page')
+            ->setParent($this->getReference('acl_oro_reset_controller'));
+        $manager->persist($oroReset);
+        $this->setReference('acl_oro_reset_request', $oroReset);
+
+        $oroReset = new Acl();
+        $oroReset->setId('oro_reset_send_mail')
+            ->setName('send reset mail')
+            ->setDescription('Request reset user password')
+            ->setParent($this->getReference('acl_oro_reset_controller'));
+        $manager->persist($oroReset);
+        $this->setReference('acl_oro_reset_send_mail', $oroReset);
+
+        $oroReset = new Acl();
+        $oroReset->setId('oro_reset_check_email')
+            ->setName('reset password check email')
+            ->setDescription('Tell the user to check his email provider')
+            ->setParent($this->getReference('acl_oro_reset_controller'));
+        $manager->persist($oroReset);
+        $this->setReference('acl_oro_reset_check_email', $oroReset);
+
+        $oroReset = new Acl();
+        $oroReset->setId('oro_reset_password')
+            ->setName('reset password')
+            ->setDescription('Reset user password')
+            ->setParent($this->getReference('acl_oro_reset_controller'));
+        $manager->persist($oroReset);
+        $this->setReference('acl_oro_reset_password', $oroReset);
     }
 
     public function getOrder()
