@@ -13,9 +13,15 @@ class SoapRolesApiTest extends WebTestCase
     /** @var CustomSoapClient */
     static protected $clientSoap = null;
 
-    public static function setUpBeforeClass()
+    public function setUp()
     {
-        self::$clientSoap = new \SoapClient('http://localhost.com/app_test.php/api/soap');
+        if (is_null(self::$clientSoap)) {
+            try {
+                self::$clientSoap = @new \SoapClient('http://localhost.com/app_test.php/api/soap');
+            } catch (\SoapFault $e) {
+                $this->markTestSkipped('Test skipped due to http://localhost.com is not available!');
+            }
+        }
     }
 
     public static function tearDownAfterClass()

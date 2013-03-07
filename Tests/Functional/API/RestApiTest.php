@@ -5,9 +5,6 @@ namespace Oro\Bundle\UserBundle\Tests\Functional\API;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Yaml\Yaml;
 use Symfony\Component\Finder\Iterator;
-//use Symfony\Component\BrowserKit\Client;
-//use Symfony\Component\BrowserKit\Request;
-//use Symfony\Component\BrowserKit\Response;
 
 class RestApiTest extends WebTestCase
 {
