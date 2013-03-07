@@ -149,6 +149,10 @@ abstract class DatagridManager implements DatagridManagerInterface
         /** @var $fieldDescription FieldDescriptionInterface */
         foreach ($this->getListFields() as $fieldDescription) {
             $listCollection->add($fieldDescription);
+
+            if ($fieldDescription->getOption('complex_data')) {
+                $this->datagridBuilder->addComplexField($fieldDescription->getOption('field_name'));
+            }
         }
 
         // create datagrid

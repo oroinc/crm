@@ -3,11 +3,11 @@
 namespace Oro\Bundle\GridBundle\Filter\ORM\Flexible;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Sonata\DoctrineORMAdminBundle\Filter\Filter as AbstractORMFilter;
+use Oro\Bundle\GridBundle\Filter\ORM\AbstractFilter;
 use Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleManager;
 use Oro\Bundle\GridBundle\Filter\FilterInterface;
 
-abstract class AbstractFlexibleFilter extends AbstractORMFilter implements FilterInterface
+abstract class AbstractFlexibleFilter extends AbstractFilter implements FilterInterface
 {
     /**
      * @var FlexibleManager

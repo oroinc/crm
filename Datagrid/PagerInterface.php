@@ -81,4 +81,19 @@ interface PagerInterface extends BasePagerInterface
      * @return integer
      */
     public function getNbResults();
+
+    /**
+     * Set list of additional fields to select
+     *
+     * @param array $complexFields
+     * @return void
+     */
+    public function setComplexFields($complexFields);
+
+    /**
+     * Return unique IDs for records
+     *
+     * @return array
+     */
+    public function getUniqueIds();
 }

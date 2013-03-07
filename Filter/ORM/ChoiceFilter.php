@@ -3,26 +3,12 @@
 namespace Oro\Bundle\GridBundle\Filter\ORM;
 
 use Symfony\Component\Translation\TranslatorInterface;
-use Sonata\DoctrineORMAdminBundle\Filter\ChoiceFilter as SonataChoiceFilter;
 use Sonata\AdminBundle\Form\Type\Filter\ChoiceType;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 use Oro\Bundle\GridBundle\Filter\FilterInterface;
 
-class ChoiceFilter extends SonataChoiceFilter implements FilterInterface
+class ChoiceFilter extends AbstractFilter implements FilterInterface
 {
-    /**
-     * @var TranslatorInterface
-     */
-    protected $translator;
-
-    /**
-     * @param TranslatorInterface $translator
-     */
-    public function __construct(TranslatorInterface $translator)
-    {
-        $this->translator = $translator;
-    }
-
     /**
      * {@inheritdoc}
      */
@@ -49,15 +35,73 @@ class ChoiceFilter extends SonataChoiceFilter implements FilterInterface
     }
 
     /**
-     * @param ProxyQueryInterface $queryBuilder
-     * @param array $value
-     * @return array
+     * {@inheritdoc}
      */
-    protected function association(ProxyQueryInterface $queryBuilder, $value)
+    public function filter(ProxyQueryInterface $queryBuilder, $alias, $field, $data)
     {
-        $alias = $this->getOption('entity_alias')
-            ?: $queryBuilder->entityJoin($this->getParentAssociationMappings());
+        if (!$data || !is_array($data) || !array_key_exists('type', $data) || !array_key_exists('value', $data)) {
+            return;
+        }
 
-        return array($alias, $this->getFieldName());
+        if (is_array($data['value'])) {
+            if (count($data['value']) == 0) {
+                return;
+            }
+
+            if (in_array('all', $data['value'], true)) {
+                return;
+            }
+
+            if ($data['type'] == ChoiceType::TYPE_NOT_CONTAINS) {
+                if ($this->isComplexField()) {
+                    $this->applyHaving(
+                        $queryBuilder,
+                        $queryBuilder->expr()->notIn(sprintf('%s', $field), $data['value'])
+                    );
+                } else {
+                    $this->applyWhere(
+                        $queryBuilder,
+                        $queryBuilder->expr()->notIn(sprintf('%s.%s', $alias, $field), $data['value'])
+                    );
+                }
+            } else {
+                if ($this->isComplexField()) {
+                    $this->applyHaving(
+                        $queryBuilder,
+                        $queryBuilder->expr()->in(sprintf('%s', $field), $data['value'])
+                    );
+                } else {
+                    $this->applyWhere(
+                        $queryBuilder,
+                        $queryBuilder->expr()->in(sprintf('%s.%s', $alias, $field), $data['value'])
+                    );
+                }
+            }
+
+        } else {
+            if ($data['value'] === '' || $data['value'] === null
+                || $data['value'] === false || $data['value'] === 'all'
+            ) {
+                return;
+            }
+
+            $parameterName = $this->getNewParameterName($queryBuilder);
+
+            if ($data['type'] == ChoiceType::TYPE_NOT_CONTAINS) {
+                $this->applyWhere($queryBuilder, sprintf('%s.%s <> :%s', $alias, $field, $parameterName));
+            } else {
+                $this->applyWhere($queryBuilder, sprintf('%s.%s = :%s', $alias, $field, $parameterName));
+            }
+
+            $queryBuilder->setParameter($parameterName, $data['value']);
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDefaultOptions()
+    {
+        return array();
     }
 }

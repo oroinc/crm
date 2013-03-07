@@ -3,34 +3,23 @@
 namespace Oro\Bundle\GridBundle\Filter\ORM;
 
 use Symfony\Component\Translation\TranslatorInterface;
-use Sonata\DoctrineORMAdminBundle\Filter\NumberFilter as SonataNumberFilter;
+use Doctrine\ORM\QueryBuilder;
 use Sonata\AdminBundle\Form\Type\Filter\NumberType;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 use Oro\Bundle\GridBundle\Filter\FilterInterface;
 
-class NumberFilter extends SonataNumberFilter implements FilterInterface
+class NumberFilter extends AbstractFilter implements FilterInterface
 {
-    /**
-     * @var TranslatorInterface
-     */
-    protected $translator;
-
-    /**
-     * @param TranslatorInterface $translator
-     */
-    public function __construct(TranslatorInterface $translator)
-    {
-        $this->translator = $translator;
-    }
-
     /**
      * {@inheritdoc}
      */
     public function getRenderSettings()
     {
-        $renderSettings    = parent::getRenderSettings();
-        $renderSettings[0] = 'oro_grid_type_filter_number';
-        return $renderSettings;
+        return array('oro_grid_type_filter_number', array(
+            'field_type'    => $this->getFieldType(),
+            'field_options' => $this->getFieldOptions(),
+            'label'         => $this->getLabel()
+        ));
     }
 
     /**
@@ -53,17 +42,55 @@ class NumberFilter extends SonataNumberFilter implements FilterInterface
     }
 
     /**
-     * @param ProxyQueryInterface $queryBuilder
-     * @param array $value
-     * @return array
+     * {@inheritdoc}
      */
-    protected function association(ProxyQueryInterface $queryBuilder, $value)
+    public function filter(ProxyQueryInterface $queryBuilder, $alias, $field, $data)
     {
-        $g = 2;
+        if (!$data || !is_array($data) || !array_key_exists('value', $data) || !is_numeric($data['value'])) {
+            return;
+        }
 
-        $alias = $this->getOption('entity_alias')
-            ?: $queryBuilder->entityJoin($this->getParentAssociationMappings());
+        $type = isset($data['type']) ? $data['type'] : false;
 
-        return array($alias, $this->getFieldName());
+        $operator = $this->getOperator($type);
+
+        if (!$operator) {
+            $operator = '=';
+        }
+
+        // c.name > '1' => c.name OPERATOR :FIELDNAME
+        $parameterName = $this->getNewParameterName($queryBuilder);
+        if ($this->isComplexField()) {
+            $this->applyHaving($queryBuilder, sprintf('%s %s :%s', $field, $operator, $parameterName));
+        } else {
+            $this->applyWhere($queryBuilder, sprintf('%s.%s %s :%s', $alias, $field, $operator, $parameterName));
+        }
+        $queryBuilder->setParameter($parameterName, $data['value']);
+    }
+
+    /**
+     * @param string $type
+     *
+     * @return bool
+     */
+    protected function getOperator($type)
+    {
+        $choices = array(
+            NumberType::TYPE_EQUAL            => '=',
+            NumberType::TYPE_GREATER_EQUAL    => '>=',
+            NumberType::TYPE_GREATER_THAN     => '>',
+            NumberType::TYPE_LESS_EQUAL       => '<=',
+            NumberType::TYPE_LESS_THAN        => '<',
+        );
+
+        return isset($choices[$type]) ? $choices[$type] : false;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDefaultOptions()
+    {
+        return array();
     }
 }

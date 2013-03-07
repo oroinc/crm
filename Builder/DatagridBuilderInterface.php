@@ -29,6 +29,12 @@ interface DatagridBuilderInterface
     public function addSorter(DatagridInterface $datagrid, FieldDescriptionInterface $field);
 
     /**
+     * @param string $field
+     * @return void
+     */
+    public function addComplexField($field);
+
+    /**
      * @param ProxyQueryInterface $query
      * @param FieldDescriptionCollection $fieldCollection
      * @param RouteGeneratorInterface $routeGenerator,

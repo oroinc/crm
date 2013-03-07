@@ -8,6 +8,13 @@ use Oro\Bundle\GridBundle\Datagrid\PagerInterface;
 class Pager extends BasePager implements PagerInterface
 {
     /**
+     * List of additional fields which must be used to calculate number of records
+     *
+     * @var array
+     */
+    protected $complexFields = array();
+
+    /**
      * {@inheritdoc}
      */
     public function getNbResults()
@@ -20,6 +27,14 @@ class Pager extends BasePager implements PagerInterface
      */
     public function computeNbResult()
     {
+        return count($this->getUniqueIds());
+    }
+
+    /**
+     * @return array
+     */
+    public function getUniqueIds()
+    {
         /** @var $countQuery \Doctrine\ORM\QueryBuilder */
         $countQuery = clone $this->getQuery();
 
@@ -29,10 +44,26 @@ class Pager extends BasePager implements PagerInterface
 
         $countQuery->resetDQLPart('orderBy');
 
-        $countQuery->select(
-            sprintf('DISTINCT %s.%s', $countQuery->getRootAlias(), current($this->getCountColumn()))
-        );
+        $selectParts = array();
+        $selectParts[] = sprintf('%s.%s', $countQuery->getRootAlias(), current($this->getCountColumn()));
+        $selectParts = array_merge($selectParts, $this->complexFields);
 
-        return count($countQuery->getQuery()->getResult());
+        $countQuery->select('DISTINCT ' . implode(', ', $selectParts));
+
+        $ids = array();
+        $results = $countQuery->getQuery()->getArrayResult();
+        foreach ($results as $result) {
+            $ids[] = reset($result);
+        }
+
+        return $ids;
+    }
+
+    /**
+     * @param array $complexFields
+     */
+    public function setComplexFields($complexFields)
+    {
+        $this->complexFields = $complexFields;
     }
 }

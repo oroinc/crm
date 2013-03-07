@@ -35,6 +35,11 @@ class DatagridBuilder implements DatagridBuilderInterface
     protected $formFactory;
 
     /**
+     * @var array
+     */
+    protected $complexFields = array();
+
+    /**
      * @param FormFactoryInterface $formFactory
      * @param FilterFactoryInterface $filterFactory
      * @param SorterFactoryInterface $sorterFactory
@@ -75,6 +80,14 @@ class DatagridBuilder implements DatagridBuilderInterface
         $sorter = $this->sorterFactory->create($field);
 
         $datagrid->addSorter($sorter);
+    }
+
+    /**
+     * @param string $field
+     */
+    public function addComplexField($field)
+    {
+        $this->complexFields[] = $field;
     }
 
     /**
@@ -131,6 +144,7 @@ class DatagridBuilder implements DatagridBuilderInterface
     {
         $pager = new Pager();
         $pager->setQuery($query);
+        $pager->setComplexFields($this->complexFields);
         return $pager;
     }
 }
