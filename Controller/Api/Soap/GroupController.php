@@ -15,9 +15,7 @@ class GroupController extends BaseController
     public function сgetAction()
     {
         return $this->container->get('besimple.soap.response')->setReturnValue(
-             $this->getManager()
-                ->createQuery('SELECT g FROM OroUserBundle:Group g ORDER BY g.id')
-                ->getResult()
+             $this->getManager()->getRepository('OroUserBundle:Group')->findAll()
         );
     }
 

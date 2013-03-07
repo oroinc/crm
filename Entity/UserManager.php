@@ -20,12 +20,12 @@ class UserManager implements UserProviderInterface
     protected $class;
 
     /**
-     * @param ObjectManager
+     * @var ObjectManager
      */
     protected $om;
 
     /**
-     * @param FlexibleManager
+     * @var FlexibleManager
      */
     protected $flexManager;
 
@@ -273,9 +273,23 @@ class UserManager implements UserProviderInterface
     }
 
     /**
+     * Returns basic query instance to get collection with all user instances
+     *
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function getListQuery()
+    {
+        return $this->getStorageManager()
+            ->createQueryBuilder()
+            ->select('u')
+            ->from('OroUserBundle:User', 'u')
+            ->orderBy('u.id', 'ASC');
+    }
+
+    /**
      * Return related repository
      *
-     * @return Doctrine\Common\Persistence\ObjectRepository
+     * @return \Doctrine\Common\Persistence\ObjectRepository
      */
     public function getRepository()
     {
@@ -283,7 +297,7 @@ class UserManager implements UserProviderInterface
     }
 
     /**
-     * @return Doctrine\Common\Persistence\ObjectManager
+     * @return \Doctrine\Common\Persistence\ObjectManager
      */
     public function getStorageManager()
     {
