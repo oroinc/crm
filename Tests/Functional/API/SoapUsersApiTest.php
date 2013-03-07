@@ -14,15 +14,14 @@ class SoapUsersApiTest extends WebTestCase
     /** @var CustomSoapClient */
     static private $clientSoap = null;
 
-    public function setUp()
+    public static function setUpBeforeClass()
     {
-        if (is_null(self::$clientSoap)) {
-            $client = static::createClient();
-            //get wsdl
-            $client->request('GET', 'api/soap');
-            $wsdl = $client->getResponse()->getContent();
-            self::$clientSoap = new CustomSoapClient($wsdl, array('location' =>'soap'), $client);
-        }
+        self::$clientSoap = new \SoapClient('http://localhost.com/app_test.php/api/soap');
+    }
+
+    public static function tearDownAfterClass()
+    {
+        self::$clientSoap = null;
     }
 
     /**
