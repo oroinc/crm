@@ -48,7 +48,7 @@ class SoapGroupsApiTest extends \PHPUnit_Framework_TestCase
      * @param array $response
      *
      * @dataProvider requestsApi
-     * @depends testCreateRole
+     * @depends testCreateGroup
      */
     public function testUpdateGroup($request, $response)
     {
@@ -66,7 +66,7 @@ class SoapGroupsApiTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @depends testUpdateRole
+     * @depends testUpdateGroup
      */
     public function testGetGroups()
     {
@@ -80,7 +80,7 @@ class SoapGroupsApiTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @depends testGetRoles
+     * @depends testGetGroups
      */
     public function testDeleteRoles()
     {
