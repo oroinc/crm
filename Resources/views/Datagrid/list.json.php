@@ -10,6 +10,10 @@ foreach ($datagrid->getResults() as $object) {
         $value = $field->getFieldValue($object);
         if ($value instanceof \DateTime) {
             $value = $value->format(\DateTime::ISO8601);
+        } elseif ($field->getType() == \Oro\Bundle\GridBundle\Field\FieldDescription::TYPE_INTEGER) {
+            $value = (int)$value;
+        } elseif ($field->getType() == \Oro\Bundle\GridBundle\Field\FieldDescription::TYPE_DECIMAL) {
+            $value = (float)$value;
         } elseif (is_object($value) && is_callable(array($value, '__toString'))) {
             $value = (string)$value;
         }

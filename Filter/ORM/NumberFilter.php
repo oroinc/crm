@@ -5,6 +5,7 @@ namespace Oro\Bundle\GridBundle\Filter\ORM;
 use Symfony\Component\Translation\TranslatorInterface;
 use Sonata\DoctrineORMAdminBundle\Filter\NumberFilter as SonataNumberFilter;
 use Sonata\AdminBundle\Form\Type\Filter\NumberType;
+use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 use Oro\Bundle\GridBundle\Filter\FilterInterface;
 
 class NumberFilter extends SonataNumberFilter implements FilterInterface
@@ -49,5 +50,20 @@ class NumberFilter extends SonataNumberFilter implements FilterInterface
             NumberType::TYPE_LESS_THAN
                 => $this->translator->trans('label_type_less_than', array(), 'SonataAdminBundle'),
         );
+    }
+
+    /**
+     * @param ProxyQueryInterface $queryBuilder
+     * @param array $value
+     * @return array
+     */
+    protected function association(ProxyQueryInterface $queryBuilder, $value)
+    {
+        $g = 2;
+
+        $alias = $this->getOption('entity_alias')
+            ?: $queryBuilder->entityJoin($this->getParentAssociationMappings());
+
+        return array($alias, $this->getFieldName());
     }
 }

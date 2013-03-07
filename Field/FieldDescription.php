@@ -285,6 +285,11 @@ class FieldDescription implements FieldDescriptionInterface
      */
     public function getFieldValue($object)
     {
+        if (is_array($object)) {
+            $name = $this->getName();
+            return isset($object[$name]) ? $object[$name] : null;
+        }
+
         $fieldName = $this->getFieldName();
         $camelizedFieldName = self::camelize($fieldName);
 

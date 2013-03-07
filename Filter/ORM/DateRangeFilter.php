@@ -5,6 +5,7 @@ namespace Oro\Bundle\GridBundle\Filter\ORM;
 use Symfony\Component\Translation\TranslatorInterface;
 use Sonata\DoctrineORMAdminBundle\Filter\DateRangeFilter as SonataDateRangeFilter;
 use Sonata\AdminBundle\Form\Type\Filter\DateRangeType;
+use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 use Oro\Bundle\GridBundle\Filter\FilterInterface;
 
 class DateRangeFilter extends SonataDateRangeFilter implements FilterInterface
@@ -43,5 +44,18 @@ class DateRangeFilter extends SonataDateRangeFilter implements FilterInterface
             DateRangeType::TYPE_NOT_BETWEEN
                 => $this->translator->trans('label_date_type_not_between', array(), 'SonataAdminBundle'),
         );
+    }
+
+    /**
+     * @param ProxyQueryInterface $queryBuilder
+     * @param array $value
+     * @return array
+     */
+    protected function association(ProxyQueryInterface $queryBuilder, $value)
+    {
+        $alias = $this->getOption('entity_alias')
+            ?: $queryBuilder->entityJoin($this->getParentAssociationMappings());
+
+        return array($alias, $this->getFieldName());
     }
 }

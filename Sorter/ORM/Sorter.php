@@ -41,7 +41,7 @@ class Sorter implements SorterInterface
      */
     public function getName()
     {
-        return $this->getField()->getName();
+        return $this->field->getName();
     }
 
     /**
@@ -87,7 +87,8 @@ class Sorter implements SorterInterface
     {
         $this->setDirection($direction);
 
-        $alias = $queryInterface->entityJoin($this->getParentAssociationMappings());
+        $alias = $this->field->getOption('entity_alias')
+            ?: $queryInterface->entityJoin($this->getParentAssociationMappings());
 
         $queryInterface->getQueryBuilder()->addOrderBy(
             $this->getFieldNameAssociatedWithAlias($alias),
@@ -101,7 +102,7 @@ class Sorter implements SorterInterface
      */
     protected function getFieldNameAssociatedWithAlias($alias)
     {
-        return sprintf('%s.%s', $alias, $this->getField()->getFieldName());
+        return sprintf('%s.%s', $alias, $this->field->getOption('field_name'));
     }
 
     /**
