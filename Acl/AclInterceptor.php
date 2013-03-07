@@ -58,22 +58,11 @@ class AclInterceptor implements MethodInterceptorInterface
         $token = $this->securityContext->getToken();
 
         if ($token) {
-            //get acl method resource name
-            $aclAnnotation = $this->reader->getMethodAnnotation(
-                $method->reflection,
-                Manager::ACL_ANNOTATION_CLASS
-            );
-            if (!$aclAnnotation) {
-                $aclAnnotation = $this->reader->getMethodAnnotation(
-                    $method->reflection,
-                    Manager::ACL_ANCESTOR_ANNOTATION_CLASS
-                );
-            }
-
-            if (!$aclAnnotation) {
+            $aclId = $this->getAclId($method);
+            if (!$aclId) {
                 $accessRoles = $this->getAclManager()->getAclRolesWithoutTree(Acl::ROOT_NODE);
             } else {
-                $accessRoles = $this->getAclManager()->getAclRoles($aclAnnotation->getId());
+                $accessRoles = $this->getAclManager()->getAclRoles($aclId);
             }
 
             if (false === $this->accessDecisionManager->decide($token, $accessRoles, $method)) {
@@ -90,6 +79,41 @@ class AclInterceptor implements MethodInterceptorInterface
         }
 
         return $method->proceed();
+    }
+
+    /**
+     * Try to get ACL id for method
+     * @param \CG\Proxy\MethodInvocation $method
+     *
+     * @return string|bool
+     */
+    private function getAclId(MethodInvocation $method)
+    {
+        $reflection = $method->reflection;
+        //get acl from annotation
+        $aclResource = $this->reader->getMethodAnnotation(
+            $reflection,
+            Manager::ACL_ANNOTATION_CLASS
+        );
+        // get acl from acl ancestor annotation
+        if (!$aclResource) {
+            $aclResource = $this->reader->getMethodAnnotation(
+                $reflection,
+                Manager::ACL_ANCESTOR_ANNOTATION_CLASS
+            );
+        }
+        // get acl from config
+        if (!$aclResource) {
+            $aclId = $this->container->get('oro_user.acl_config_reader')->getMethodAclId(
+                $reflection->class,
+                $reflection->name
+            );
+        } else {
+            //get acl id
+            $aclId = $aclResource->getId();
+        }
+
+        return $aclId;
     }
 
     /**

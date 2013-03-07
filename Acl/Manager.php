@@ -3,9 +3,10 @@ namespace Oro\Bundle\UserBundle\Acl;
 
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\Cache\CacheProvider;
-use Oro\Bundle\UserBundle\Acl\ResourceReader\Reader;
 use Symfony\Component\Security\Core\SecurityContextInterface;
 
+use Oro\Bundle\UserBundle\Acl\ResourceReader\Reader;
+use Oro\Bundle\UserBundle\Acl\ResourceReader\ConfigReader;
 use Oro\Bundle\UserBundle\Entity\Role;
 use Oro\Bundle\UserBundle\Entity\Acl;
 use Oro\Bundle\UserBundle\Entity\User;
@@ -33,11 +34,17 @@ class Manager
      */
     protected $cache;
 
+    /**
+     * @var \Oro\Bundle\UserBundle\Acl\ResourceReader\ConfigReader
+     */
+    protected $configReader;
+
     public function __construct(
         ObjectManager $em,
         Reader $aclReader,
         CacheProvider $cache,
-        SecurityContextInterface $securityContext
+        SecurityContextInterface $securityContext,
+        ConfigReader $configReader
     )
     {
         $this->em = $em;
@@ -45,6 +52,7 @@ class Manager
         $this->cache = $cache;
         $this->cache->setNamespace('oro_user.cache');
         $this->securityContext = $securityContext;
+        $this->configReader = $configReader;
     }
 
     /**
@@ -139,7 +147,6 @@ class Manager
             );
             $this->cache->save($aclId, $accessRoles);
         }
-
         return $accessRoles;
     }
 
@@ -208,7 +215,7 @@ class Manager
      */
     public function synchronizeAclResources()
     {
-        $resources = $this->aclReader->getResources();
+        $resources = $this->getAclResources();
         $bdResources = $this->getAclRepo()->findAll();
 
         // update old resources
@@ -409,5 +416,13 @@ class Manager
         }
 
         return false;
+    }
+
+    private function getAclResources()
+    {
+        $resourcesFromAnnotations = $this->aclReader->getResources();
+        $resourcesFromConfigs = $this->configReader->getConfigResources();
+
+        return $resourcesFromAnnotations + $resourcesFromConfigs;
     }
 }

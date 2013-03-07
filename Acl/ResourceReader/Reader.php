@@ -29,7 +29,7 @@ class Reader
     /**
      * Return array tree with resources
      *
-     * @return array
+     * @return \Oro\Bundle\UserBundle\Annotation\Acl[]
      */
     public function getResources()
     {
@@ -38,10 +38,22 @@ class Reader
             return array();
         }
 
+        //try to determine if we in test mode
+        $inTest = false;
+        foreach ($directories as $directory) {
+            if (strpos($directory, 'test') !== false) {
+                $inTest = true;
+            }
+        }
+
         $finder = new PatternFinder(self::ACL_CLASS, '*.php');
         $files = $finder->findFiles($directories);
+
         foreach ($files as $index => $file) {
-            if (strpos($file, 'Annotation') !== false || strpos($file, 'ResourceReader') !== false) {
+            if (strpos($file, 'Annotation') !== false ||
+                strpos($file, 'ResourceReader') !== false ||
+                (!$inTest && strpos($file, 'Test') !== false))
+            {
                 unset($files[$index]);
             }
         }
