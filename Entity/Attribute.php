@@ -55,7 +55,7 @@ class Attribute extends AbstractEntityAttribute
     public function convertDefaultValueToDatetime()
     {
         if ($this->getDefaultValue()) {
-            if (strpos($this->getAttributeType(), 'DateType') !== FALSE) {
+            if (strpos($this->getAttributeType(), 'DateType') !== false) {
                 $date = new \DateTime();
                 $date->setTimestamp(intval($this->getDefaultValue()));
 

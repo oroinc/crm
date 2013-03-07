@@ -30,6 +30,8 @@ class AttributeOptionType extends AbstractType
         $this->addFieldTranslatable($builder);
 
         $this->addFieldOptionValues($builder);
+
+        $this->addFieldDefaultValue($builder);
     }
 
     /**
@@ -56,7 +58,7 @@ class AttributeOptionType extends AbstractType
      */
     protected function addFieldTranslatable(FormBuilderInterface $builder)
     {
-        $builder->add('translatable');
+        $builder->add('translatable', null, array('required' => false));
     }
 
     /**
@@ -75,6 +77,15 @@ class AttributeOptionType extends AbstractType
                 'by_reference' => false
             )
         );
+    }
+
+    /**
+     * Add default value to form builder
+     * @param FormBuilderInterface $builder
+     */
+    protected function addFieldDefaultValue(FormBuilderInterface $builder)
+    {
+        $builder->add('defaultValue');
     }
 
     /**

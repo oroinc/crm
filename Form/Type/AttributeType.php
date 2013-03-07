@@ -104,7 +104,7 @@ class AttributeType extends AbstractType
      */
     protected function addFieldRequired(FormBuilderInterface $builder)
     {
-        $builder->add('required', 'checkbox', array('required' => false));
+        $builder->add('required', 'choice', array('choices' => array('No', 'Yes')));
     }
 
     /**
@@ -113,7 +113,7 @@ class AttributeType extends AbstractType
      */
     protected function addFieldUnique(FormBuilderInterface $builder)
     {
-        $builder->add('unique', 'checkbox', array('required' => false));
+        $builder->add('unique', 'choice', array('choices' => array('No', 'Yes')));
     }
 
     /**
@@ -131,7 +131,7 @@ class AttributeType extends AbstractType
      */
     protected function addFieldSearchable(FormBuilderInterface $builder)
     {
-        $builder->add('searchable', 'checkbox', array('required' => false));
+        $builder->add('searchable', 'choice', array('choices' => array('No', 'Yes')));
     }
 
     /**
@@ -140,7 +140,7 @@ class AttributeType extends AbstractType
      */
     protected function addFieldTranslatable(FormBuilderInterface $builder)
     {
-        $builder->add('translatable', 'checkbox', array('required' => false));
+        $builder->add('translatable', 'choice', array('choices' => array('No', 'Yes')));
     }
 
     /**
@@ -149,7 +149,7 @@ class AttributeType extends AbstractType
      */
     protected function addFieldScopable(FormBuilderInterface $builder)
     {
-        $builder->add('scopable', 'checkbox', array('required' => false));
+        $builder->add('scopable', 'choice', array('choices' => array('No', 'Yes')));
     }
 
     /**

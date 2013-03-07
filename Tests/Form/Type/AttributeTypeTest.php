@@ -33,11 +33,11 @@ class AttributeTypeTest extends TypeTestCase
         $this->assertField('id', 'hidden');
         $this->assertField('code', 'text');
         $this->assertField('attributeType', 'choice');
-        $this->assertField('required', 'checkbox');
-        $this->assertField('unique', 'checkbox');
-        $this->assertField('translatable', 'checkbox');
-        $this->assertField('scopable', 'checkbox');
-        $this->assertField('searchable', 'checkbox');
+        $this->assertField('required', 'choice');
+        $this->assertField('unique', 'choice');
+        $this->assertField('translatable', 'choice');
+        $this->assertField('scopable', 'choice');
+        $this->assertField('searchable', 'choice');
 
         $this->assertEquals(
             'Oro\Bundle\FlexibleEntityBundle\Entity\Attribute',

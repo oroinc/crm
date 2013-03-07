@@ -45,7 +45,7 @@ class AttributeOptionValueType extends AbstractType
      */
     protected function addFieldLocale(FormBuilderInterface $builder)
     {
-        $builder->add('locale', 'hidden', array('data' => 'en_US'));
+        $builder->add('locale', 'hidden');
     }
 
     /**
@@ -54,7 +54,7 @@ class AttributeOptionValueType extends AbstractType
      */
     protected function addFieldValue(FormBuilderInterface $builder)
     {
-        $builder->add('value');
+        $builder->add('value', null, array('required' => false));
     }
 
     /**
