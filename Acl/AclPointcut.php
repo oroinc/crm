@@ -16,6 +16,7 @@ class AclPointcut implements PointcutInterface
     public function matchesClass(\ReflectionClass $class)
     {
         $className = $class->getName();
+
         if (
             substr($className, -10, 10) == 'Controller' &&
             strpos($className, 'ExceptionController') === false

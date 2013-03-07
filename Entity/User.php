@@ -17,7 +17,7 @@ use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityFlexible;
 
 /**
  * @ORM\Entity(repositoryClass="Oro\Bundle\FlexibleEntityBundle\Entity\Repository\FlexibleEntityRepository")
- * @ORM\Table(name="user")
+ * @ORM\Table(name="oro_user")
  * @ORM\HasLifecycleCallbacks()
  */
 class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Serializable

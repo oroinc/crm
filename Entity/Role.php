@@ -18,7 +18,7 @@ use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
  * Role Entity
  *
  * @ORM\Entity
- * @ORM\Table(name="access_role")
+ * @ORM\Table(name="oro_access_role")
  */
 class Role implements RoleInterface
 {

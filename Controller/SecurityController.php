@@ -24,7 +24,7 @@ class SecurityController extends Controller
     * @Template
     * @Acl(
     *      id = "oro_login",
-    *      name="login page",
+    *      name="Login page",
     *      description = "Oro Login page",
     *      parent = "oro_security"
     * )
@@ -65,7 +65,7 @@ class SecurityController extends Controller
     * @Route("/login-check", name="oro_user_security_check")
     * @Acl(
     *      id = "oro_login_check",
-    *      name="login check",
+    *      name="Login check",
     *      description = "Oro Login check",
     *      parent = "oro_security"
     * )
@@ -79,7 +79,7 @@ class SecurityController extends Controller
     * @Route("/logout", name="oro_user_security_logout")
     * @Acl(
     *      id = "oro_logout",
-    *      name="logout",
+    *      name="Logout",
     *      description = "Oro Logout",
     *      parent = "oro_security"
     * )

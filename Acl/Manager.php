@@ -328,13 +328,15 @@ class Manager
      *
      * @return array
      */
-    private function getRolesForAcl(Acl $acl)
+    private function getRolesForAcl(Acl $acl = null)
     {
         $accessRoles = array();
-        $aclNodes = $this->getAclRepo()->getFullNodeWithRoles($acl);
-        foreach ($aclNodes as $node) {
-            $roles = $node->getAccessRolesNames();
-            $accessRoles = array_unique(array_merge($roles, $accessRoles));
+        if ($acl) {
+            $aclNodes = $this->getAclRepo()->getFullNodeWithRoles($acl);
+            foreach ($aclNodes as $node) {
+                $roles = $node->getAccessRolesNames();
+                $accessRoles = array_unique(array_merge($roles, $accessRoles));
+            }
         }
 
         return $accessRoles;
