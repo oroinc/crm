@@ -18,28 +18,46 @@ window.OroApp = {
     /**
      * Unpack string to object. Reverse from packToQueryString.
      *
-     * @param {String} string
+     * @param {String} query
      * @return {Object}
      */
-    unpackFromQueryString: function(string) {
-        var result = {};
-        var vars = string.split("&");
-        for (var i=0; i<vars.length; i++) {
-            var pair = vars[i].split("=");
-            pair[0] = decodeURIComponent(pair[0]);
-            pair[1] = decodeURIComponent(pair[1]);
-            // If first entry with this name
-            if (typeof result[pair[0]] === "undefined") {
-                result[pair[0]] = pair[1];
-                // If second entry with this name
-            } else if (typeof result[pair[0]] === "string") {
-                result[pair[0]] = [ result[pair[0]], pair[1] ];
-                // If third or later entry with this name
+    unpackFromQueryString: function(query) {
+        var setValue = function (root, path, value) {
+            if (path.length > 1) {
+                var dir = path.shift();
+                if (typeof root[dir] == 'undefined') {
+                    root[dir] = path[0] == '' ? [] : {};
+                }
+                arguments.callee(root[dir], path, value);
             } else {
-                result[pair[0]].push(pair[1]);
+                if (root instanceof Array) {
+                    root.push(value);
+                } else {
+                    root[path] = value;
+                }
             }
+        };
+        var nvp = query.split('&');
+        var data = {};
+        for (var i = 0 ; i < nvp.length ; i++) {
+            var pair = nvp[i].split('=');
+            var name = decodeURIComponent(pair[0]);
+            var value = decodeURIComponent(pair[1]);
+
+            var path = name.match(/(^[^\[]+)(\[.*\]$)?/);
+            var first = path[1];
+            if (path[2]) {
+                //case of 'array[level1]' || 'array[level1][level2]'
+                path = path[2].match(/(?=\[(.*)\]$)/)[1].split('][')
+            } else {
+                //case of 'name'
+                path = [];
+            }
+            path.unshift(first);
+
+            setValue(data, path, value);
         }
-        return result;
+        return data;
     },
 
     /**
@@ -56,7 +74,7 @@ window.OroApp = {
      */
     invertKeys: function(object, keys) {
         var result = _.extend({}, object);
-        for (key in keys) {
+        for (var key in keys) {
             var mirrorKey, baseKey;
             baseKey = key;
             mirrorKey = keys[key];
