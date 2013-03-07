@@ -13,7 +13,7 @@ class RestApiTest extends WebTestCase
 
     public function setUp()
     {
-        $this->client = static::createClient();
+        $this->client = static::createClient(array('debug' => false));
     }
 
     /**
@@ -66,7 +66,7 @@ class RestApiTest extends WebTestCase
                 "label" => "new_label_update"
             )
         );
-        $this->client->request('PUT', '/api/rest/latest/roles' . '/' . $roleId, $requestUpdate);
+        $this->client->request('PUT', '/api/rest/latest/roles/' . $roleId, $requestUpdate);
         $result = $this->client->getResponse();
         $this->assertJsonResponse($result, 302);
         $this->client->request('GET', "/api/rest/latest/roles");
@@ -85,7 +85,7 @@ class RestApiTest extends WebTestCase
      */
     public function testApiDeleteRole($roleId)
     {
-        $this->client->request('DELETE', "/api/rest/latest/roles" . '/' . $roleId);
+        $this->client->request('DELETE', "/api/rest/latest/roles/" . $roleId);
         $result = $this->client->getResponse();
         $this->assertJsonResponse($result, 204);
     }
@@ -130,7 +130,7 @@ class RestApiTest extends WebTestCase
     {
         $requestUpdate = array(
             "group" => array ("name" => 'new_group_' . mt_rand()));
-        $this->client->request('PUT', '/api/rest/latest/groups' . '/' . $groupId, $requestUpdate);
+        $this->client->request('PUT', '/api/rest/latest/groups/' . $groupId, $requestUpdate);
         $result = $this->client->getResponse();
         $this->assertJsonResponse($result, 302);
         $this->client->request('GET', "/api/rest/latest/groups");
@@ -149,7 +149,7 @@ class RestApiTest extends WebTestCase
      */
     public function testApiDeleteGroup($groupId)
     {
-        $this->client->request('DELETE', "/api/rest/latest/groups" . '/' . $groupId);
+        $this->client->request('DELETE', "/api/rest/latest/groups/" . $groupId);
         $result = $this->client->getResponse();
         $this->assertJsonResponse($result, 204);
     }
