@@ -27,6 +27,8 @@ class Pager extends BasePager implements PagerInterface
             $countQuery->setParameters($this->getParameters());
         }
 
+        $countQuery->resetDQLPart('orderBy');
+
         $countQuery->select(
             sprintf('%s.%s', $countQuery->getRootAlias(), current($this->getCountColumn()))
         );

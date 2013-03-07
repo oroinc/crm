@@ -2,13 +2,14 @@
 
 namespace Oro\Bundle\GridBundle\Datagrid\ORM;
 
+use Doctrine\ORM\QueryBuilder;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery as BaseProxyQuery;
 use Oro\Bundle\GridBundle\Datagrid\ProxyQueryInterface;
 
 class ProxyQuery extends BaseProxyQuery implements ProxyQueryInterface
 {
     /**
-     * @var \Doctrine\ORM\QueryBuilder
+     * @var QueryBuilder
      */
     protected $queryBuilder;
 
@@ -36,10 +37,24 @@ class ProxyQuery extends BaseProxyQuery implements ProxyQueryInterface
     }
 
     /**
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return QueryBuilder
      */
     public function getQueryBuilder()
     {
         return $this->queryBuilder;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function execute(array $params = array(), $hydrationMode = null)
+    {
+        // always clone the original queryBuilder
+        $queryBuilder = clone $this->queryBuilder;
+        $queryBuilder->setMaxResults(null);
+        $queryBuilder->setFirstResult(null);
+
+        // there is no need to perform additional filtering here
+        return $queryBuilder->getQuery()->execute($params, $hydrationMode);
     }
 }

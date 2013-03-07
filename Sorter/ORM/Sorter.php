@@ -87,13 +87,15 @@ class Sorter implements SorterInterface
     {
         $this->setDirection($direction);
 
-        $alias = $this->field->getOption('entity_alias')
-            ?: $queryInterface->entityJoin($this->getParentAssociationMappings());
+        if ($this->field->getOption('complex_data')) {
+            $sortField = $this->getName();
+        } else {
+            $alias = $this->field->getOption('entity_alias')
+                ?: $queryInterface->entityJoin($this->getParentAssociationMappings());
+            $sortField = $this->getFieldNameAssociatedWithAlias($alias);
+        }
 
-        $queryInterface->getQueryBuilder()->addOrderBy(
-            $this->getFieldNameAssociatedWithAlias($alias),
-            $this->getDirection()
-        );
+        $queryInterface->getQueryBuilder()->addOrderBy($sortField, $this->getDirection());
     }
 
     /**
@@ -102,7 +104,7 @@ class Sorter implements SorterInterface
      */
     protected function getFieldNameAssociatedWithAlias($alias)
     {
-        return sprintf('%s.%s', $alias, $this->field->getOption('field_name'));
+        return sprintf('%s.%s', $alias, $this->getFieldName());
     }
 
     /**
@@ -111,5 +113,13 @@ class Sorter implements SorterInterface
     protected function getParentAssociationMappings()
     {
         return $this->getField()->getOption('parent_association_mappings', array());
+    }
+
+    /**
+     * @return string|null
+     */
+    protected function getFieldName()
+    {
+        return $this->field->getOption('field_name');
     }
 }
