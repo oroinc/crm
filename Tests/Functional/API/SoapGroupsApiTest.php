@@ -6,7 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Yaml\Yaml;
 use Symfony\Component\Finder\Iterator;
 
-class SoapGroupsApiTest extends WebTestCase
+class SoapGroupsApiTest extends \PHPUnit_Framework_TestCase
 {
     /** Default value for role label */
     const DEFAULT_VALUE = 'GROUP_LABEL';

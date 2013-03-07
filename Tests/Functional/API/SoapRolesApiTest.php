@@ -5,7 +5,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Yaml\Yaml;
 use Symfony\Component\Finder\Iterator;
 
-class SoapRolesApiTest extends WebTestCase
+class SoapRolesApiTest extends \PHPUnit_Framework_TestCase
 {
     /** Default value for role label */
     const DEFAULT_VALUE = 'ROLE_LABEL';
