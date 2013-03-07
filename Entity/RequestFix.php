@@ -52,9 +52,14 @@ class RequestFix
 
         $entity  = str_replace('Soap', '', get_class($data));
         $attrDef = $this->om->getRepository('OroFlexibleEntityBundle:Attribute')->findBy(array('entityType' => $entity));
-        $attrVal = isset($fields['attributes']) ? $fields['attributes'] : array();
 
-        $fields['attributes'] = array();
+        if (isset($fields['attributes'])) {
+            $attrVal = $fields['attributes'];
+
+            $fields['attributes'] = array();
+        } else {
+            $attrVal = array();
+        }
 
         // transform SOAP array notation into FlexibleType format
         foreach ($attrDef as $i => $attr) {
