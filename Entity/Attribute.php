@@ -4,6 +4,7 @@ namespace Oro\Bundle\FlexibleEntityBundle\Entity;
 use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityAttribute;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * Base entity attribute
@@ -18,6 +19,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  * )
  * @ORM\Entity
  * @ORM\HasLifecycleCallbacks
+ * @UniqueEntity("code")
  */
 class Attribute extends AbstractEntityAttribute
 {
