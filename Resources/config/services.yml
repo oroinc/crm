@@ -1,0 +1,3 @@
+parameters:
+    oro_segmentation_tree.segment_manager.class: Oro\Bundle\SegmentationTreeBundle\Model\SegmentManager
+
