@@ -11,7 +11,15 @@
 '@OroGridBundle/Resources/public/js/app/datagrid/datagrid-pagesize.js'
 '@OroGridBundle/Resources/public/js/app/datagrid/datagrid-toolbar.js'
 
-'@OroGridBundle/Resources/public/js/app/datagrid/datagrid-filter.js'
+'@OroGridBundle/Resources/public/js/app/datagrid/filter/datagrid-filter-list.js'
+'@OroGridBundle/Resources/public/js/app/datagrid/filter/datagrid-filter.js'
+'@OroGridBundle/Resources/public/js/app/datagrid/filter/datagrid-filter-text.js'
+'@OroGridBundle/Resources/public/js/app/datagrid/filter/datagrid-filter-choice.js'
+'@OroGridBundle/Resources/public/js/app/datagrid/filter/datagrid-filter-date.js'
+'@OroGridBundle/Resources/public/js/app/datagrid/filter/datagrid-filter-datetime.js'
+'@OroGridBundle/Resources/public/js/app/datagrid/filter/datagrid-filter-select.js'
+'@OroGridBundle/Resources/public/js/app/datagrid/filter/datagrid-filter-multiselect.js'
+
 '@OroGridBundle/Resources/public/js/app/datagrid/datagrid-title.js'
 
 '@OroGridBundle/Resources/public/js/app/loadingmask.js'
@@ -69,21 +77,21 @@ output='js/acme.grid.js'
                                 or filterType == constant(filterTypePrefix ~ 'TYPE_NUMBER')
                                 or filterType == constant(filterTypePrefix ~ 'TYPE_STRING')
                             %}
-                                OroApp.DatagridChoiceFilter.extend({
+                                OroApp.DatagridFilterChoice.extend({
                                     name: '{{ filter.name }}',
                                     hint: '{{ filter.getOption('label') }}',
                                     enabled: {{ filter.getOption('show_filter') ? 'true' : 'false' }},
                                     choices: {{ filter.typeOptions|json_encode|raw }}
                                 })
                             {% elseif filterType == constant(filterTypePrefix ~ 'TYPE_DATE') %}
-                                OroApp.DatagridDateFilter.extend({
+                                OroApp.DatagridFilterDate.extend({
                                     name: '{{ filter.name }}',
                                     hint: '{{ filter.getOption('label') }}',
                                     enabled: {{ filter.getOption('show_filter') ? 'true' : 'false' }},
                                     choices: {{ filter.typeOptions|json_encode|raw }}
                                 })
                             {% elseif filterType == constant(filterTypePrefix ~ 'TYPE_DATETIME') %}
-                                OroApp.DatagridDateTimeFilter.extend({
+                                OroApp.DatagridFilterDateTime.extend({
                                     name: '{{ filter.name }}',
                                     hint: '{{ filter.getOption('label') }}',
                                     enabled: {{ filter.getOption('show_filter') ? 'true' : 'false' }},
@@ -93,14 +101,14 @@ output='js/acme.grid.js'
                                 or filterType == constant(filterTypePrefix ~ 'TYPE_FLEXIBLE_OPTIONS')
                             %}
                                 {% if filter.getOption('multiple') %}
-                                    OroApp.DatagridMultiSelectFilter.extend({
+                                    OroApp.DatagridFilterMultiSelect.extend({
                                         name: '{{ filter.name }}',
                                         hint: '{{ filter.getOption('label') }}',
                                         enabled: {{ filter.getOption('show_filter') ? 'true' : 'false' }},
                                         options: {{ filter.valueOptions|json_encode|raw }}
                                     })
                                 {% else %}
-                                    OroApp.DatagridSelectFilter.extend({
+                                    OroApp.DatagridFilterSelect.extend({
                                         name: '{{ filter.name }}',
                                         hint: '{{ filter.getOption('label') }}',
                                         enabled: {{ filter.getOption('show_filter') ? 'true' : 'false' }},
@@ -108,7 +116,7 @@ output='js/acme.grid.js'
                                     })
                                 {% endif %}
                             {% else %}
-                                OroApp.DatagridFilter.extend({
+                                OroApp.DatagridFilterText.extend({
                                     name: '{{ filter.name }}',
                                     hint: '{{ filter.getOption('label') }}',
                                     enabled: {{ filter.getOption('show_filter') ? 'true' : 'false' }}
