@@ -4,7 +4,6 @@ namespace Oro\Bundle\UserBundle\Tests\Functional\API;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Yaml\Yaml;
-use Symfony\Component\Finder\Iterator;
 
 class SoapApiTest extends WebTestCase
 {
@@ -12,7 +11,7 @@ class SoapApiTest extends WebTestCase
     const DEFAULT_VALUE = 'ROLE_LABEL';
 
     /** @var CustomSoapClient */
-    static private $clientSoap = null;
+    private static $clientSoap = null;
 
     public function setUp()
     {
@@ -27,7 +26,7 @@ class SoapApiTest extends WebTestCase
 
     /**
      * @param string $request
-     * @param array $response
+     * @param array  $response
      *
      * @dataProvider requestsApi
      */
@@ -46,7 +45,7 @@ class SoapApiTest extends WebTestCase
 
     /**
      * @param string $request
-     * @param array $response
+     * @param array  $response
      *
      * @dataProvider requestsApi
      * @depends testCreateRole
@@ -105,6 +104,7 @@ class SoapApiTest extends WebTestCase
                 unset($parameters[$fileName]['response']);
             }
         }
+
         return
             $parameters;
     }

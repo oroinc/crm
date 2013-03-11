@@ -87,7 +87,7 @@ class AclInterceptor implements MethodInterceptorInterface
     /**
      * Try to get ACL id for method
      *
-     * @param \CG\Proxy\MethodInvocation $method
+     * @param  \CG\Proxy\MethodInvocation $method
      * @return string|bool
      */
     private function getAclId(MethodInvocation $method)

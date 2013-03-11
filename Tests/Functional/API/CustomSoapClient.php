@@ -9,8 +9,8 @@ class CustomSoapClient extends \SoapClient
     /**
      * Overridden constructor
      *
-     * @param string $wsdl
-     * @param array $options
+     * @param string                                 $wsdl
+     * @param array                                  $options
      * @param \Symfony\Bundle\FrameworkBundle\Client $client
      */
     public function __construct($wsdl, $options, $client)
@@ -34,8 +34,8 @@ class CustomSoapClient extends \SoapClient
      * @param string $request
      * @param string $location
      * @param string $action
-     * @param int $version
-     * @param int $one_way
+     * @param int    $version
+     * @param int    $one_way
      *
      * @return string
      */
@@ -50,6 +50,7 @@ class CustomSoapClient extends \SoapClient
         //ob_end_clean();
         unset($_SERVER['HTTP_SOAPACTION']);
         unset($_SERVER['CONTENT_TYPE']);
+
         return $this->client->getResponse()->getContent();
     }
 }

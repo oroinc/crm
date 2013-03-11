@@ -10,7 +10,7 @@ class AclPointcut implements PointcutInterface
     /**
      * Check class for ACL
      *
-     * @param \ReflectionClass $class
+     * @param  \ReflectionClass $class
      * @return bool
      */
     public function matchesClass(\ReflectionClass $class)

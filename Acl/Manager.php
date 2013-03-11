@@ -112,6 +112,7 @@ class Manager
             $roles = $this->getAclRepo()->getAclRolesWithoutTree($aclId);
             $this->cache->save('acl-roles-' . $aclId, $roles);
         }
+
         return $roles;
     }
 
@@ -128,6 +129,7 @@ class Manager
             $acl = $this->getAclRepo()->getAllowedAclResourcesForUserRoles($user->getRoles());
             $this->cache->save('user-acl-' . $user->getId(), $acl);
         }
+
         return $acl;
     }
 
@@ -147,6 +149,7 @@ class Manager
             );
             $this->cache->save($aclId, $accessRoles);
         }
+
         return $accessRoles;
     }
 

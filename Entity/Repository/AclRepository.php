@@ -23,8 +23,7 @@ class AclRepository extends NestedTreeRepository
             ->select('acl.id')
             ->where('acl.rgt > :left_key')
             ->andWhere('acl.lft < :right_key')
-            ->orderBy('acl.lft')
-        ;
+            ->orderBy('acl.lft');
 
         foreach ($roles as $role) {
             $aclList = $role->getAclResources();
@@ -74,7 +73,7 @@ class AclRepository extends NestedTreeRepository
     }
 
     /**
-     * @param string $aclId
+     * @param  string $aclId
      * @return array
      */
     public function getAclRolesWithoutTree($aclId)
@@ -91,6 +90,7 @@ class AclRepository extends NestedTreeRepository
         foreach ($roles as $role) {
             $aclRoles[] = $role['role'];
         }
+
         return $aclRoles;
     }
 

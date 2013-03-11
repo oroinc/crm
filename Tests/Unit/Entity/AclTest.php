@@ -36,7 +36,6 @@ class AclTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('root', Acl::ROOT_NODE);
     }
 
-
     public function testParent()
     {
         $parentAcl = new Acl();

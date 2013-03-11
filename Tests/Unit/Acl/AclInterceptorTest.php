@@ -20,6 +20,7 @@ class AclInterceptorTest extends \PHPUnit_Framework_TestCase
     private $testMethodInvocation;
     private $inceptor;
     private $requestAttributes;
+    private $aclConfigReader;
 
     public function setUp()
     {
@@ -37,6 +38,12 @@ class AclInterceptorTest extends \PHPUnit_Framework_TestCase
 
         $this->annotationReader = $this->getMock(
             'Doctrine\Common\Annotations\AnnotationReader'
+        );
+
+        $this->aclConfigReader = new \Oro\Bundle\UserBundle\Acl\ResourceReader\ConfigReader(
+            array(
+                 'Oro\Bundle\UserBundle\Tests\Unit\Fixture\FixtureBundle'
+            )
         );
 
         $this->decisionManager = $this->getMockBuilder('Symfony\Component\Security\Core\Authorization\AccessDecisionManager')
@@ -66,7 +73,8 @@ class AclInterceptorTest extends \PHPUnit_Framework_TestCase
             'annotation_reader' => $this->annotationReader,
             'security.access.decision_manager' => $this->decisionManager,
             'oro_user.acl_manager' => $this->aclManager,
-            'request' => $this->request
+            'request' => $this->request,
+            'oro_user.acl_config_reader' => $this->aclConfigReader
         );
 
         $this->container->expects($this->any())
@@ -77,10 +85,11 @@ class AclInterceptorTest extends \PHPUnit_Framework_TestCase
                 $this->equalTo('annotation_reader'),
                 $this->equalTo('security.access.decision_manager'),
                 $this->equalTo('oro_user.acl_manager'),
-                $this->equalTo('request')
+                $this->equalTo('request'),
+                $this->equalTo('oro_user.acl_config_reader')
             ))
             ->will($this->returnCallback(
-                function($param) use (&$params){
+                function($param) use (&$params) {
                     return $params[$param];
                 }
             )
@@ -101,7 +110,7 @@ class AclInterceptorTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(false))
         ;
 
-        $this->request->expects($this->once())
+        $this->request->expects($this->any())
             ->method('getRequestFormat')
             ->will($this->returnValue('html'))
         ;
@@ -128,7 +137,12 @@ class AclInterceptorTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(false))
         ;
 
-        $this->request->expects($this->once())
+        $this->request->expects($this->at(0))
+            ->method('getRequestFormat')
+            ->will($this->returnValue('html'))
+        ;
+
+        $this->request->expects($this->at(1))
             ->method('getRequestFormat')
             ->will($this->returnValue('xml'))
         ;
@@ -150,7 +164,7 @@ class AclInterceptorTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(false))
         ;
 
-        $this->request->expects($this->once())
+        $this->request->expects($this->any())
             ->method('getRequestFormat')
             ->will($this->returnValue('html'))
         ;
@@ -172,6 +186,11 @@ class AclInterceptorTest extends \PHPUnit_Framework_TestCase
 
     public function testAccess()
     {
+        $this->request->expects($this->once())
+            ->method('getRequestFormat')
+            ->will($this->returnValue('html'))
+        ;
+
         $this->decisionManager->expects($this->once())
             ->method('decide')
             ->will($this->returnValue(true))
@@ -206,7 +225,7 @@ class AclInterceptorTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(false))
         ;
 
-        $this->request->expects($this->once())
+        $this->request->expects($this->any())
             ->method('getRequestFormat')
             ->will($this->returnValue('html'))
         ;
