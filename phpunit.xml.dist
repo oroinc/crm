@@ -26,6 +26,8 @@
                 <directory>./Resources</directory>
                 <directory>./Tests</directory>
                 <directory>./Form</directory>
+                <directory>./DataFixtures</directory>
+                <directory>./Command</directory>
             </exclude>
         </whitelist>
     </filter>

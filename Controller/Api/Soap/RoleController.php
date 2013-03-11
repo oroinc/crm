@@ -15,9 +15,7 @@ class RoleController extends BaseController
     public function сgetAction()
     {
         return $this->container->get('besimple.soap.response')->setReturnValue(
-             $this->getManager()
-                ->createQuery('SELECT r FROM OroUserBundle:Role r ORDER BY r.id')
-                ->getResult()
+             $this->getManager()->getRepository('OroUserBundle:Role')->findAll()
         );
     }
 

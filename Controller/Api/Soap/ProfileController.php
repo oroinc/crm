@@ -18,8 +18,7 @@ class ProfileController extends BaseController
     {
         return $this->container->get('besimple.soap.response')->setReturnValue(
             $this->container->get('knp_paginator')->paginate(
-                $this->container->get('doctrine.orm.entity_manager')
-                    ->createQuery('SELECT u FROM OroUserBundle:User u ORDER BY u.id'),
+                $this->getUserManager()->getListQuery(),
                 (int) $page,
                 (int) $limit
             )

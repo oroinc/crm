@@ -1,0 +1,12 @@
+# common test case
+request:
+    username: User_1
+    email: user_1@example.com
+    enabled: true
+    plainPassword: ~
+    lastLogin: ~
+    rolesCollection: ~
+    groups: ~
+    attributes: ~
+response:
+    return: true

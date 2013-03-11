@@ -3,6 +3,7 @@
 namespace Oro\Bundle\UserBundle\Controller\Api\Rest;
 
 use FOS\RestBundle\Controller\Annotations\NamePrefix;
+use FOS\RestBundle\Controller\Annotations\QueryParam;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Routing\ClassResourceInterface;
 use FOS\RestBundle\View\RouteRedirectView;
@@ -20,8 +21,8 @@ class ProfileController extends FOSRestController implements ClassResourceInterf
     /**
      * Get the list of users
      *
-     * @param int $page  [optional] Page number, starting from 1. Defaults to 1.
-     * @param int $limit [optional] Number of items per page. defaults to 10.
+     * @QueryParam(name="page", requirements="\d+", nullable=true, description="Page number, starting from 1. Defaults to 1.")
+     * @QueryParam(name="limit", requirements="\d+", nullable=true, description="Number of items per page. defaults to 10.")
      * @ApiDoc(
      *  description="Get the list of users",
      *  resource=true,
@@ -31,14 +32,15 @@ class ProfileController extends FOSRestController implements ClassResourceInterf
      *  }
      * )
      */
-    public function cgetAction($page = 1, $limit = 10)
+    public function cgetAction()
     {
         $pager = $this->get('knp_paginator')->paginate(
-            $this->getDoctrine()
-                ->getEntityManager()
-                ->createQuery('SELECT u FROM OroUserBundle:User u ORDER BY u.id'),
-            (int) $page,
-            (int) $limit
+            $this->getManager()
+                ->getListQuery()
+                ->getQuery()
+                ->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY),
+            (int) $this->getRequest()->get('page', 1),
+            (int) $this->getRequest()->get('limit', 10)
         );
 
         return $this->handleView($this->view(
@@ -54,7 +56,7 @@ class ProfileController extends FOSRestController implements ClassResourceInterf
      * @ApiDoc(
      *  description="Get user data",
      *  resource=true,
-     *  filters={
+     *  requirements={
      *      {"name"="id", "dataType"="integer"},
      *  }
      * )
@@ -97,7 +99,7 @@ class ProfileController extends FOSRestController implements ClassResourceInterf
      * @ApiDoc(
      *  description="Update existing user",
      *  resource=true,
-     *  filters={
+     *  requirements={
      *      {"name"="id", "dataType"="integer"},
      *  }
      * )
@@ -127,7 +129,7 @@ class ProfileController extends FOSRestController implements ClassResourceInterf
      * @ApiDoc(
      *  description="Delete user",
      *  resource=true,
-     *  filters={
+     *  requirements={
      *      {"name"="id", "dataType"="integer"},
      *  }
      * )
@@ -152,7 +154,7 @@ class ProfileController extends FOSRestController implements ClassResourceInterf
      * @ApiDoc(
      *  description="Get user roles",
      *  resource=true,
-     *  filters={
+     *  requirements={
      *      {"name"="id", "dataType"="integer"},
      *  }
      * )
@@ -175,7 +177,7 @@ class ProfileController extends FOSRestController implements ClassResourceInterf
      * @ApiDoc(
      *  description="Get user groups",
      *  resource=true,
-     *  filters={
+     *  requirements={
      *      {"name"="id", "dataType"="integer"},
      *  }
      * )
@@ -189,6 +191,36 @@ class ProfileController extends FOSRestController implements ClassResourceInterf
         }
 
         return $this->handleView($this->view($entity->getGroups(), Codes::HTTP_OK));
+    }
+
+    /**
+     * Filter user by username or email
+     *
+     * @QueryParam(name="email", requirements="[a-zA-Z0-9\-_\.@]+", nullable=true, description="Email to filter")
+     * @QueryParam(name="username", requirements="[a-zA-Z0-9\-_\.]+", nullable=true, description="Username to filter")
+     * @ApiDoc(
+     *  description="Get user by username or email",
+     *  resource=true,
+     *  filters={
+     *      {"name"="email", "dataType"="string"},
+     *      {"name"="username", "dataType"="string"}
+     *  }
+     * )
+     */
+    public function getFilterAction()
+    {
+        $params = $this->getRequest()->query->all();
+
+        if (empty($params)) {
+            return $this->handleView($this->view('', Codes::HTTP_BAD_REQUEST));
+        }
+
+        $entity = $this->getManager()->findUserBy($params);
+
+        return $this->handleView($this->view(
+            $entity,
+            $entity ? Codes::HTTP_OK : Codes::HTTP_NOT_FOUND
+        ));
     }
 
     /**
@@ -211,27 +243,34 @@ class ProfileController extends FOSRestController implements ClassResourceInterf
     {
         $request = $this->getRequest()->request;
         $data    = $request->get('profile', array());
+        $attrDef = $this->getManager()->getAttributeRepository()->findBy(array('entityType' => get_class($entity)));
+        $attrVal = isset($data['attributes']) ? $data['attributes'] : array();
 
-        if (array_key_exists('attributes', $data)) {
-            $attrs  = $this->getManager()->getAttributeRepository()->findBy(array('entityType' => get_class($entity)));
-            $values = array();
-            $i      = 0;
+        $data['attributes'] = array();
 
-            // transform simple notation into FlexibleType format
-            foreach ($data['attributes'] as $field => $value) {
-                foreach ($attrs as $attr) {
-                    if ($attr->getCode() == $field) {
-                        $values[$i]['id']   = $attr->getId();
-                        $values[$i]['data'] = $value;
-
-                        $i++;
-                    }
-                }
+        foreach ($attrDef as $i => $attr) {
+            /* @var $attr \Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityAttribute */
+            if ($attr->getBackendType() == 'options') {
+                $type    = 'option';
+                $default = $attr->getOptions()->offsetGet(0)->getId();
+            } else {
+                $type    = 'data';
+                $default = null;
             }
 
-            $data['attributes'] = $values;
+            $data['attributes'][$i]        = array();
+            $data['attributes'][$i]['id']  = $attr->getId();
+            $data['attributes'][$i][$type] = $default;
 
-            $request->set('profile', $data);
+            foreach ($attrVal as $field) {
+                if ($attr->getCode() == (string) $field->code) {
+                    $data['attributes'][$i][$type] = (string) $field->value;
+
+                    break;
+                }
+            }
         }
+
+        $request->set('profile', $data);
     }
 }

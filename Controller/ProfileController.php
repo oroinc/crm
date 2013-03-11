@@ -72,13 +72,12 @@ class ProfileController extends Controller
      */
     public function indexAction($page, $limit)
     {
-        $query = $this
-            ->getDoctrine()
-            ->getEntityManager()
-            ->createQuery('SELECT u FROM OroUserBundle:User u');
-
         return array(
-            'pager'  => $this->get('knp_paginator')->paginate($query, $page, $limit),
+            'pager' => $this->get('knp_paginator')->paginate(
+                $this->getManager()->getListQuery(),
+                (int) $page,
+                (int) $limit
+            ),
         );
     }
 
