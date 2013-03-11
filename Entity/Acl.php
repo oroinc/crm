@@ -60,7 +60,7 @@ class Acl
 
     /**
      * @ORM\ManyToMany(targetEntity="Role", inversedBy="aclResources")
-     * @ORM\JoinTable(name="user_acl_role",
+     * @ORM\JoinTable(name="oro_user_acl_role",
      *      joinColumns={@ORM\JoinColumn(name="acl_id", referencedColumnName="id", onDelete="CASCADE")},
      *          inverseJoinColumns={@ORM\JoinColumn(name="role_id", referencedColumnName="id", onDelete="CASCADE")}
      *      )
