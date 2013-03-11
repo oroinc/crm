@@ -11,7 +11,7 @@ use Oro\Bundle\SearchBundle\Engine\Indexer;
  * Search index items that correspond to specific entity record
  *
  * @ORM\Table(
- *  name="search_item",
+ *  name="oro_search_item",
  *  uniqueConstraints={@ORM\UniqueConstraint(name="IDX_ENTITY", columns={"entity", "record_id"})},
  *  indexes={@ORM\Index(name="IDX_ALIAS", columns={"alias"})}
  * )

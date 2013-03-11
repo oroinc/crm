@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Decimal entity for search index
  *
- * @ORM\Table(name="search_index_decimal")
+ * @ORM\Table(name="oro_search_index_decimal")
  * @ORM\Entity
  */
 class IndexDecimal

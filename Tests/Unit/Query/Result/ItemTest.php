@@ -14,23 +14,16 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         if (!interface_exists('Doctrine\Common\Persistence\ObjectManager')) {
+
             $this->markTestSkipped('Doctrine Common has to be installed for this test to run.');
         }
 
-        $this->om = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
         $this->repository = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
 
-        $this->om->expects($this->any())
-            ->method('getRepository')
-            ->with($this->equalTo('OroTestBundle:test'))
-            ->will($this->returnValue($this->repository));
+        $this->om = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
 
         $this->product = new Product();
         $this->product->setName('test product');
-
-        $this->repository->expects($this->any())
-            ->method('find')
-            ->will($this->returnValue($this->product));
 
         $this->item = new Item(
             $this->om,
@@ -52,6 +45,14 @@ class ItemTest extends \PHPUnit_Framework_TestCase
             )
         );
 
+        $this->om->expects($this->any())
+            ->method('getRepository')
+            ->with($this->equalTo('OroTestBundle:test'))
+            ->will($this->returnValue($this->repository));
+
+        $this->repository->expects($this->any())
+            ->method('find')
+            ->will($this->returnValue($this->product));
     }
 
     public function testGetEntityName()
