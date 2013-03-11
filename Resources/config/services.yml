@@ -17,6 +17,7 @@ parameters:
     oro_user.handler.role.class:      Oro\Bundle\UserBundle\Form\Handler\RoleHandler
     oro_user.handler.group.class:     Oro\Bundle\UserBundle\Form\Handler\GroupHandler
     oro_user.acl.reader.class:        Oro\Bundle\UserBundle\Acl\ResourceReader\Reader
+    oro_user.acl.config_reader.class: Oro\Bundle\UserBundle\Acl\ResourceReader\ConfigReader
     oro_user.acl.pointcut.class:      Oro\Bundle\UserBundle\Acl\AclPointcut
     oro_user.acl.interceptor.class:   Oro\Bundle\UserBundle\Acl\AclInterceptor
     oro_user.acl.manager.class:       Oro\Bundle\UserBundle\Acl\Manager
@@ -161,6 +162,10 @@ services:
         class:                        %oro_user.acl.reader.class%
         arguments:                    ["@kernel", "@annotation_reader"]
 
+    oro_user.acl_config_reader:
+        class:                        %oro_user.acl.config_reader.class%
+        arguments:                    ["%kernel.bundles%"]
+
     oro_user.acl_pointcut:
         class:                        %oro_user.acl.pointcut.class%
         arguments:                    ["@annotation_reader", "@logger"]
@@ -169,11 +174,11 @@ services:
 
     oro_user.acl_interceptor:
         class:                        %oro_user.acl.interceptor.class%
-        arguments:                    ["@security.context", "@logger", "@service_container"]
+        arguments:                    ["@service_container"]
 
     oro_user.acl_manager:
         class:                        %oro_user.acl.manager.class%
-        arguments:                    ["@doctrine.orm.entity_manager", "@oro_user.acl_reader", "@cache", "@security.context"]
+        arguments:                    ["@doctrine.orm.entity_manager", "@oro_user.acl_reader", "@cache", "@security.context", "@oro_user.acl_config_reader"]
 
     oro_user.user_menu:
         class:                        %oro_user.user_menu.builder.class%
