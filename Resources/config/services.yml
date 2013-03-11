@@ -1,1 +1,7 @@
+parameters:
+    oro_config.manager.class:         Oro\Bundle\ConfigBundle\Manager\ConfigManager
+
 services:
+    oro_config:
+        class:                        %oro_config.manager.class%
+        arguments:                    ["@doctrine.orm.entity_manager", "@session"]

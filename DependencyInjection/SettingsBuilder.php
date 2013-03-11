@@ -1,0 +1,54 @@
+<?php
+
+namespace Oro\Bundle\ConfigBundle\DependencyInjection;
+
+use Symfony\Component\Config\Definition\Builder\TreeBuilder;
+use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
+
+class SettingsBuilder
+{
+    /**
+     *
+     * @param  array               $settings
+     * @return ArrayNodeDefinition
+     */
+    public static function getNode($settings)
+    {
+        $builder = new TreeBuilder();
+        $node    = $builder->root('settings')
+            ->addDefaultsIfNotSet()
+            ->children();
+
+        foreach ($settings as $name => $setting) {
+            $child = $node
+                ->arrayNode($name)
+                ->addDefaultsIfNotSet()
+                ->children();
+
+            $type  = isset($setting['type']) && in_array($setting['type'], array('scalar', 'boolean', 'array'))
+                ? $setting['type']
+                : 'scalar';
+
+            switch ($type) {
+                case 'scalar':
+                    $child->scalarNode('value')->defaultValue($setting['value']);
+
+                    break;
+
+                case 'boolean':
+                    $child->booleanNode('value')->defaultValue((bool) $setting['value']);
+
+                    break;
+
+                case 'array':
+                    $child->arrayNode('value');
+
+                    break;
+           }
+
+           $child->scalarNode('scope')->defaultValue(isset($setting['scope']) ? $setting['scope'] : 'app');
+        }
+
+        return $node->end();
+    }
+}
