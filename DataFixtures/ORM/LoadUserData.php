@@ -3,11 +3,12 @@ namespace Oro\Bundle\UserBundle\DataFixtures\ORM;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-class LoadUserData extends AbstractFixture implements  ContainerAwareInterface
+class LoadUserData extends AbstractFixture implements  OrderedFixtureInterface, ContainerAwareInterface
 {
     private $container;
 
@@ -27,5 +28,10 @@ class LoadUserData extends AbstractFixture implements  ContainerAwareInterface
         $admin->addRole($this->getReference('admin_role'));
         $admin->setEmail('admin@example.com');
         $userManager->updateUser($admin);
+    }
+
+    public function getOrder()
+    {
+        return 2;
     }
 }
