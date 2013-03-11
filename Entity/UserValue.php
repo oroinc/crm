@@ -8,7 +8,7 @@ use Oro\Bundle\FlexibleEntityBundle\Entity\Attribute;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Table(name="user_value")
+ * @ORM\Table(name="oro_user_value")
  * @ORM\Entity
  */
 class UserValue extends AbstractEntityFlexibleValue

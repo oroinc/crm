@@ -8,9 +8,15 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 use Oro\Bundle\UserBundle\Entity\Role;
+use Oro\Bundle\UserBundle\Annotation\Acl;
 
 /**
  * @Route("/role")
+ * @Acl(
+ *      id = "oro_role",
+ *      name="Role controller",
+ *      description = "Role manipulation"
+ * )
  */
 class RoleController extends Controller
 {
@@ -62,12 +68,18 @@ class RoleController extends Controller
     /**
      * @Route("/{page}/{limit}", name="oro_user_role_index", requirements={"page"="\d+","limit"="\d+"}, defaults={"page"=1,"limit"=20})
      * @Template
+     * @Acl(
+     *      id = "oro_role_list",
+     *      name="Role list",
+     *      description = "List of roles",
+     *      parent = "oro_role"
+     * )
      */
     public function indexAction($page, $limit)
     {
         $query = $this
             ->getDoctrine()
-            ->getEntityManager()
+            ->getManager()
             ->createQuery('SELECT r FROM OroUserBundle:Role r');
 
         return array(

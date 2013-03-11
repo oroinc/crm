@@ -48,5 +48,7 @@ class AclTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('test_parent', $this->acl->getParent());
         $this->acl->setParent('root');
         $this->assertEquals('root', $this->acl->getParent());
+        $this->acl->setParent(null);
+        $this->assertEquals(false, $this->acl->getParent());
     }
 }

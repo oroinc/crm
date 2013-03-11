@@ -3,9 +3,10 @@ namespace Oro\Bundle\UserBundle\Acl;
 
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\Cache\CacheProvider;
-use Oro\Bundle\UserBundle\Acl\ResourceReader\Reader;
 use Symfony\Component\Security\Core\SecurityContextInterface;
 
+use Oro\Bundle\UserBundle\Acl\ResourceReader\Reader;
+use Oro\Bundle\UserBundle\Acl\ResourceReader\ConfigReader;
 use Oro\Bundle\UserBundle\Entity\Role;
 use Oro\Bundle\UserBundle\Entity\Acl;
 use Oro\Bundle\UserBundle\Entity\User;
@@ -14,6 +15,7 @@ use Oro\Bundle\UserBundle\Annotation\Acl as AnnotationAcl;
 class Manager
 {
     const ACL_ANNOTATION_CLASS = 'Oro\Bundle\UserBundle\Annotation\Acl';
+    const ACL_ANCESTOR_ANNOTATION_CLASS = 'Oro\Bundle\UserBundle\Annotation\AclAncestor';
 
     /**
      * @var \Doctrine\Common\Persistence\ObjectManager
@@ -32,11 +34,17 @@ class Manager
      */
     protected $cache;
 
+    /**
+     * @var \Oro\Bundle\UserBundle\Acl\ResourceReader\ConfigReader
+     */
+    protected $configReader;
+
     public function __construct(
         ObjectManager $em,
         Reader $aclReader,
         CacheProvider $cache,
-        SecurityContextInterface $securityContext
+        SecurityContextInterface $securityContext,
+        ConfigReader $configReader
     )
     {
         $this->em = $em;
@@ -44,6 +52,7 @@ class Manager
         $this->cache = $cache;
         $this->cache->setNamespace('oro_user.cache');
         $this->securityContext = $securityContext;
+        $this->configReader = $configReader;
     }
 
     /**
@@ -77,17 +86,34 @@ class Manager
                  'method' => $method
             )
         );
-        // @todo: decide what to return if the resource is not found
+        // todo: decide what to return if the resource is not found
         if (!$acl) {
-            return true;
+            $accessRoles = $this->getAclRolesWithoutTree(Acl::ROOT_NODE);
+        } else {
+            $accessRoles = $this->getRolesForAcl($acl);
         }
-
-        $accessRoles = $this->getRolesForAcl($acl);
 
         return $this->checkIsGrant(
             $this->getUserRoles($user),
             $accessRoles
         );
+    }
+
+    /**
+     * Get roles for acl id
+     *
+     * @param $aclId
+     * @return array
+     */
+    public function getAclRolesWithoutTree($aclId)
+    {
+        $roles = $this->cache->fetch('acl-roles-' . $aclId);
+        if ($roles === false) {
+            $roles = $this->getAclRepo()->getAclRolesWithoutTree($aclId);
+            $this->cache->save('acl-roles-' . $aclId, $roles);
+        }
+
+        return $roles;
     }
 
     /**
@@ -98,7 +124,13 @@ class Manager
      */
     public function getAclForUser(User $user)
     {
-        return $this->getAclRepo()->getAllowedAclResourcesForUserRoles($user->getRoles());
+        $acl = $this->cache->fetch('user-acl-' . $user->getId());
+        if ($acl === false) {
+            $acl = $this->getAclRepo()->getAllowedAclResourcesForUserRoles($user->getRoles());
+            $this->cache->save('user-acl-' . $user->getId(), $acl);
+        }
+
+        return $acl;
     }
 
     /**
@@ -186,8 +218,7 @@ class Manager
      */
     public function synchronizeAclResources()
     {
-        $resources = $this->aclReader->getResources();
-        //var_dump($resources);die;
+        $resources = $this->getAclResources();
         $bdResources = $this->getAclRepo()->findAll();
 
         // update old resources
@@ -307,13 +338,15 @@ class Manager
      *
      * @return array
      */
-    private function getRolesForAcl(Acl $acl)
+    private function getRolesForAcl(Acl $acl = null)
     {
         $accessRoles = array();
-        $aclNodes = $this->getAclRepo()->getFullNodeWithRoles($acl);
-        foreach ($aclNodes as $node) {
-            $roles = $node->getAccessRolesNames();
-            $accessRoles = array_unique(array_merge($roles, $accessRoles));
+        if ($acl) {
+            $aclNodes = $this->getAclRepo()->getFullNodeWithRoles($acl);
+            foreach ($aclNodes as $node) {
+                $roles = $node->getAccessRolesNames();
+                $accessRoles = array_unique(array_merge($roles, $accessRoles));
+            }
         }
 
         return $accessRoles;
@@ -330,15 +363,19 @@ class Manager
      */
     private function getUserRoles(User $user = null)
     {
-        $roles = array();
         if (null === $user) {
             $user = $this->getUser();
         }
         if ($user) {
-            $rolesObjects = $user->getRoles();
-            foreach ($rolesObjects as $role) {
-                $roles[] = $role->getRole();
+            $roles = $this->cache->fetch('user-' . $user->getId());
+            if ($roles === false) {
+                $rolesObjects = $user->getRoles();
+                foreach ($rolesObjects as $role) {
+                    $roles[] = $role->getRole();
+                }
+                $this->cache->save('user-' . $user->getId(), $roles);
             }
+
         } else {
             $roles = array(User::ROLE_ANONYMOUS);
         }
@@ -382,5 +419,13 @@ class Manager
         }
 
         return false;
+    }
+
+    private function getAclResources()
+    {
+        $resourcesFromAnnotations = $this->aclReader->getResources();
+        $resourcesFromConfigs = $this->configReader->getConfigResources();
+
+        return $resourcesFromAnnotations + $resourcesFromConfigs;
     }
 }

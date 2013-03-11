@@ -11,7 +11,7 @@ class RestApiUsersTest extends WebTestCase
 
     public function setUp()
     {
-        $this->client = static::createClient();
+        $this->client = static::createClient(array('debug' => false));
     }
 
     /**

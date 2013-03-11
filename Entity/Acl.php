@@ -11,12 +11,14 @@ use Oro\Bundle\UserBundle\Annotation\Acl as AnnotationAcl;
 /**
  * @Gedmo\Tree(type="nested")
  * @ORM\Entity(repositoryClass="Oro\Bundle\UserBundle\Entity\Repository\AclRepository")
- * @ORM\Table(name="user_acl", indexes={
+ * @ORM\Table(name="oro_user_acl", indexes={
  *      @ORM\Index(name="class_method_idx", columns={"class", "method"})
  * })
  */
 class Acl
 {
+    const ROOT_NODE = 'root';
+
     /**
      * @ORM\Id
      * @ORM\Column(type="string", length=50, name="id")

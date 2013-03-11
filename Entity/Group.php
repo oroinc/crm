@@ -13,7 +13,7 @@ use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="access_group")
+ * @ORM\Table(name="oro_access_group")
  */
 class Group
 {

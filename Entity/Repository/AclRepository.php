@@ -23,8 +23,7 @@ class AclRepository extends NestedTreeRepository
             ->select('acl.id')
             ->where('acl.rgt > :left_key')
             ->andWhere('acl.lft < :right_key')
-            ->orderBy('acl.lft')
-        ;
+            ->orderBy('acl.lft');
 
         foreach ($roles as $role) {
             $aclList = $role->getAclResources();
@@ -74,6 +73,28 @@ class AclRepository extends NestedTreeRepository
     }
 
     /**
+     * @param  string $aclId
+     * @return array
+     */
+    public function getAclRolesWithoutTree($aclId)
+    {
+        $aclRoles = array();
+        $roles = $this->getEntityManager()->createQueryBuilder('acl')
+            ->select('role.role')
+            ->from('OroUserBundle:role', 'role')
+            ->join('role.aclResources', 'acl')
+            ->where('acl.id = :aclId')
+            ->setParameter('aclId', $aclId)
+            ->getQuery()
+            ->getScalarResult();
+        foreach ($roles as $role) {
+            $aclRoles[] = $role['role'];
+        }
+
+        return $aclRoles;
+    }
+
+    /**
      * Get Acl array for role
      *
      * @param \Oro\Bundle\UserBundle\Entity\Role $role
@@ -86,8 +107,9 @@ class AclRepository extends NestedTreeRepository
             ->select('acl', 'accessRoles')
             ->leftJoin('acl.accessRoles', 'accessRoles', Expr\Join::WITH, 'accessRoles.id = :role')
             ->setParameter('role', $role)
+            ->orderBy('acl.root, acl.lft', 'ASC')
             ->getQuery()
-            ->getResult();
+            ->getArrayResult();
     }
 
     /**
@@ -99,30 +121,6 @@ class AclRepository extends NestedTreeRepository
      */
     public function getRoleAclTree(Role $role)
     {
-        return $this->toTree($this->getAclListWithRoles($role));
-    }
-
-    /**
-     * Convert to tree array
-     *
-     * @param array $aclRecords
-     * @param null  $parent
-     *
-     * @return array
-     */
-    protected function toTree(array $aclRecords, $parent = null)
-    {
-        $branch = array();
-        foreach ($aclRecords as $element) {
-            if ($element->getParent() == $parent) {
-                $children = $this->toTree($aclRecords, $element->getId());
-                if ($children) {
-                    $element->addChildren($children);
-                }
-                $branch[$element->getId()] = $element;
-            }
-        }
-
-        return $branch;
+        return $this->buildTree($this->getAclListWithRoles($role));
     }
 }
