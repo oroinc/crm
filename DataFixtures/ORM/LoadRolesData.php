@@ -4,10 +4,11 @@ namespace Oro\Bundle\UserBundle\DataFixtures\ORM;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 
 use Oro\Bundle\UserBundle\Entity\Role;
 
-class LoadRolesData extends AbstractFixture
+class LoadRolesData extends AbstractFixture implements OrderedFixtureInterface
 {
     /**
      * Load roles
@@ -33,5 +34,10 @@ class LoadRolesData extends AbstractFixture
         $manager->persist($roleAdmin);
 
         $manager->flush();
+    }
+
+    public function getOrder()
+    {
+        return 1;
     }
 }
