@@ -1,43 +1,32 @@
 <?php
-
 namespace Oro\Bundle\UserBundle\Tests\Functional\API;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Yaml\Yaml;
 use Symfony\Component\Finder\Iterator;
 
-class SoapRolesApiTest extends WebTestCase
+class SoapRolesApiTest extends \PHPUnit_Framework_TestCase
 {
     /** Default value for role label */
     const DEFAULT_VALUE = 'ROLE_LABEL';
 
     /** @var CustomSoapClient */
-    static private $clientSoap = null;
+    static protected $clientSoap = null;
 
     public function setUp()
     {
         if (is_null(self::$clientSoap)) {
-            $client = static::createClient();
-            //get wsdl
-            $client->request('GET', 'api/soap');
-            $wsdl = $client->getResponse()->getContent();
-            self::$clientSoap = new CustomSoapClient($wsdl, array('location' =>'soap'), $client);
+            try {
+                self::$clientSoap = @new \SoapClient('http://localhost.com/app_test.php/api/soap');
+            } catch (\SoapFault $e) {
+                $this->markTestSkipped('Test skipped due to http://localhost.com is not available!');
+            }
         }
     }
 
-    public function testClearRoles()
+    public static function tearDownAfterClass()
     {
-        $this->markTestIncomplete("Skipped due to php segmentation error!");
-        //get roles
-        $roles = self::$clientSoap->getRoles();
-        $roles = $this->classToArray($roles);
-        foreach ($roles['item'] as $role) {
-            $result = self::$clientSoap->deleteRole($role['id']);
-            $this->assertTrue($result);
-        }
-        $roles = self::$clientSoap->getRoles();
-        $roles = $this->classToArray($roles);
-        $this->assertEmpty($roles);
+        self::$clientSoap = null;
     }
 
     /**
@@ -48,14 +37,13 @@ class SoapRolesApiTest extends WebTestCase
      */
     public function testCreateRole($request, $response)
     {
-        $this->markTestIncomplete("Skipped due to php segmentation error!");
         if (is_null($request['role'])) {
             $request['role'] ='';
         }
         if (is_null($request['label'])) {
             $request['label'] = self::DEFAULT_VALUE;
         }
-        $result = self::$clientSoap->createRole($request);
+        $result =  self::$clientSoap->createRole($request);
         $result = $this->classToArray($result);
         $this->assertEqualsResponse($response, $result);
     }
@@ -77,45 +65,58 @@ class SoapRolesApiTest extends WebTestCase
         }
         $request['label'] .= '_Updated';
         //get role id
-        $roleId = self::$clientSoap->getRoleByName($request['role']);
+        $roleId =  self::$clientSoap->getRoleByName($request['role']);
         $roleId = $this->classToArray($roleId);
-        $result = self::$clientSoap->updateRole($roleId['id'], $request);
+        $result =  self::$clientSoap->updateRole($roleId['id'], $request);
         $result = $this->classToArray($result);
         $this->assertEqualsResponse($response, $result);
-        $role = self::$clientSoap->getRole($roleId['id']);
+        $role =  self::$clientSoap->getRole($roleId['id']);
         $role = $this->classToArray($role);
         $this->assertEquals($request['label'], $role['label']);
     }
 
     /**
      * @depends testUpdateRole
+     * @return array
      */
-    public function testGetRoles()
+    public function testGetRole()
     {
         //get roles
-        $roles = self::$clientSoap->getRoles();
+        $roles =  self::$clientSoap->getRoles();
         $roles = $this->classToArray($roles);
-        $this->assertEquals(5, count($roles['item']));
-        foreach ($roles['item'] as $role) {
-            $this->assertEquals($role['role'] . '_UPDATED', strtoupper($role['label']));
-        }
+        //filter roles
+        $roles = array_filter(
+            $roles['item'],
+            function ($v) {
+                return $v['role']. '_UPDATED' == strtoupper($v['label']);
+            }
+        );
+        $this->assertEquals(5, count($roles));
+
+        return $roles;
     }
 
     /**
-     * @depends testGetRoles
+     * @depends testGetRole
+     * @param array $roles
      */
-    public function testDeleteRoles()
+    public function testDeleteRoles($roles)
     {
         //get roles
-        $roles = self::$clientSoap->getRoles();
-        $roles = $this->classToArray($roles);
-        $this->assertEquals(5, count($roles['item']));
-        foreach ($roles['item'] as $role) {
-            $result = self::$clientSoap->deleteRole($role['id']);
+        foreach ($roles as $role) {
+            $result =  self::$clientSoap->deleteRole($role['id']);
             $this->assertTrue($result);
         }
-        $roles = self::$clientSoap->getRoles();
+        $roles =  self::$clientSoap->getRoles();
         $roles = $this->classToArray($roles);
+        if (!empty($roles)) {
+            $roles = array_filter(
+                $roles['item'],
+                function ($v) {
+                    return $v['role']. '_UPDATED' == strtoupper($v['label']);
+                }
+            );
+        }
         $this->assertEmpty($roles);
     }
 

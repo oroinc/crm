@@ -6,7 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Yaml\Yaml;
 use Symfony\Component\Finder\Iterator;
 
-class SoapGroupsApiTest extends WebTestCase
+class SoapGroupsApiTest extends \PHPUnit_Framework_TestCase
 {
     /** Default value for role label */
     const DEFAULT_VALUE = 'GROUP_LABEL';
@@ -17,12 +17,17 @@ class SoapGroupsApiTest extends WebTestCase
     public function setUp()
     {
         if (is_null(self::$clientSoap)) {
-            $client = static::createClient();
-            //get wsdl
-            $client->request('GET', 'api/soap');
-            $wsdl = $client->getResponse()->getContent();
-            self::$clientSoap = new CustomSoapClient($wsdl, array('location' =>'soap'), $client);
+            try {
+                self::$clientSoap = @new \SoapClient('http://localhost.com/app_test.php/api/soap');
+            } catch (\SoapFault $e) {
+                $this->markTestSkipped('Test skipped due to http://localhost.com is not available!');
+            }
         }
+    }
+
+    public static function tearDownAfterClass()
+    {
+        self::$clientSoap = null;
     }
 
     /**
@@ -33,9 +38,6 @@ class SoapGroupsApiTest extends WebTestCase
      */
     public function testCreateGroup($request, $response)
     {
-        //if (is_null($request['roles'])) {
-        //    unset($request['role']);
-        //}
         $result = self::$clientSoap->createGroup($request);
         $result = $this->classToArray($result);
         $this->assertEqualsResponse($response, $result);
@@ -46,7 +48,7 @@ class SoapGroupsApiTest extends WebTestCase
      * @param array $response
      *
      * @dataProvider requestsApi
-     * @depends testCreateRole
+     * @depends testCreateGroup
      */
     public function testUpdateGroup($request, $response)
     {
@@ -64,7 +66,7 @@ class SoapGroupsApiTest extends WebTestCase
     }
 
     /**
-     * @depends testUpdateRole
+     * @depends testUpdateGroup
      */
     public function testGetGroups()
     {
@@ -78,7 +80,7 @@ class SoapGroupsApiTest extends WebTestCase
     }
 
     /**
-     * @depends testGetRoles
+     * @depends testGetGroups
      */
     public function testDeleteRoles()
     {

@@ -3,9 +3,6 @@
 namespace Oro\Bundle\UserBundle\Tests\Functional\API;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Symfony\Component\BrowserKit\Client;
-use Symfony\Component\BrowserKit\Request;
-use Symfony\Component\BrowserKit\Response;
 
 class RestApiUsersTest extends WebTestCase
 {
@@ -84,11 +81,6 @@ class RestApiUsersTest extends WebTestCase
         $this->client->request('GET', '/api/rest/latest/profiles' . '/' . $userId);
         $result = $this->client->getResponse();
         $this->assertEmpty($result);
-    }
-
-    protected function tearDown()
-    {
-        unset($this->client);
     }
 
     /**
