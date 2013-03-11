@@ -3,33 +3,40 @@
 namespace Oro\Bundle\UserBundle\Acl;
 
 use JMS\AopBundle\Aop\PointcutInterface;
-use Doctrine\Common\Annotations\Reader;
-
-use Oro\Bundle\UserBundle\Acl\Manager;
 
 class AclPointcut implements PointcutInterface
 {
-    private $reader;
 
-    public function __construct(Reader $reader)
-    {
-        $this->reader = $reader;
-    }
-
+    /**
+     * Check class for ACL
+     *
+     * @param  \ReflectionClass $class
+     * @return bool
+     */
     public function matchesClass(\ReflectionClass $class)
     {
-        return true;
+        $className = $class->getName();
+
+        if (
+            substr($className, -10, 10) == 'Controller' &&
+            strpos($className, 'ExceptionController') === false &&
+            strpos($className, 'ProfilerController') === false
+        ) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
-     * Check method for Acl annotation
+     * Check method for Acl
      *
      * @param  \ReflectionMethod $method
      * @return bool
      */
     public function matchesMethod(\ReflectionMethod $method)
     {
-        if ($this->reader->getMethodAnnotation($method, Manager::ACL_ANNOTATION_CLASS)) {
+        if (substr($method->getName(), -6, 6) == 'Action') {
             return true;
         }
 
