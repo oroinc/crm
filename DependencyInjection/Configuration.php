@@ -5,11 +5,8 @@ namespace Oro\Bundle\UserBundle\DependencyInjection;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
-/**
- * This is the class that validates and merges configuration from your app/config files
- *
- * To learn more see {@link http://symfony.com/doc/current/cookbook/bundles/extension.html#cookbook-bundles-extension-config-class}
- */
+use Oro\Bundle\ConfigBundle\DependencyInjection\SettingsBuilder;
+
 class Configuration implements ConfigurationInterface
 {
     /**
@@ -17,34 +14,46 @@ class Configuration implements ConfigurationInterface
      */
     public function getConfigTreeBuilder()
     {
-        $treeBuilder = new TreeBuilder();
+        $builder = new TreeBuilder();
 
-        $rootNode    = $treeBuilder->root('oro_user');
-
-        $rootNode->children()
-            ->arrayNode('reset')
-                ->addDefaultsIfNotSet()
-                ->canBeUnset()
-                ->children()
-                    ->scalarNode('ttl')
-                        ->defaultValue(86400)
+        $builder->root('oro_user')
+            ->children()
+                ->arrayNode('reset')
+                    ->addDefaultsIfNotSet()
+                    ->canBeUnset()
+                    ->children()
+                        ->scalarNode('ttl')
+                            ->defaultValue(86400)
+                        ->end()
                     ->end()
                 ->end()
-            ->end()
-            ->arrayNode('email')
-                ->addDefaultsIfNotSet()
-                ->children()
-                    ->scalarNode('address')
-                        ->defaultValue('no-reply@example.com')
-                        ->cannotBeEmpty()
-                    ->end()
-                    ->scalarNode('name')
-                        ->defaultValue('Oro Admin')
-                        ->cannotBeEmpty()
+                ->arrayNode('email')
+                    ->addDefaultsIfNotSet()
+                    ->children()
+                        ->scalarNode('address')
+                            ->defaultValue('no-reply@example.com')
+                            ->cannotBeEmpty()
+                        ->end()
+                        ->scalarNode('name')
+                            ->defaultValue('Oro Admin')
+                            ->cannotBeEmpty()
+                        ->end()
                     ->end()
                 ->end()
+                ->append(
+                    // just to illustrate settings usage
+                    SettingsBuilder::getNode(array(
+                        'greeting' => array(
+                            'value' => true,
+                            'type'  => 'boolean',
+                        ),
+                        'level' => array(
+                            'value' => 10,
+                        ),
+                    ))
+                )
             ->end();
 
-        return $treeBuilder;
+        return $builder;
     }
 }

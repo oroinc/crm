@@ -151,6 +151,14 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
      */
     protected $values;
 
+    /**
+     * @var array
+     *
+     * @ORM\Column(name="settings", type="json_array", nullable=true)
+     * @Exclude
+     */
+    protected $settings;
+
     public function __construct()
     {
         parent::__construct();
@@ -549,6 +557,29 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
         if ($this->getGroups()->contains($group)) {
             $this->getGroups()->removeElement($group);
         }
+
+        return $this;
+    }
+
+    /**
+     * Returns array of user settings
+     *
+     * @return array User settings
+     */
+    public function getSettings()
+    {
+        return $this->settings;
+    }
+
+    /**
+     * Pass an associative array of settings => values and re-set settings with new ones.
+     *
+     * @param  array $settings Array of setting => value pairs
+     * @return User
+     */
+    public function setSettings(array $settings)
+    {
+        $this->settings = $settings;
 
         return $this;
     }
