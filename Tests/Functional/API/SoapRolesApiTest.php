@@ -1,9 +1,6 @@
 <?php
 namespace Oro\Bundle\UserBundle\Tests\Functional\API;
 
-use Symfony\Component\Yaml\Yaml;
-use Symfony\Component\Finder\Iterator;
-
 class SoapRolesApiTest extends \PHPUnit_Framework_TestCase
 {
     /** Default value for role label */
