@@ -109,6 +109,26 @@ class ProfileController extends BaseController
     }
 
     /**
+     * @Soap\Method("getUserBy")
+     * @Soap\Param("filters", phpType = "BeSimple\SoapCommon\Type\KeyValue\String[]")
+     * @Soap\Result(phpType = "Oro\Bundle\UserBundle\Entity\User")
+     */
+    public function getByAction(array $filters)
+    {
+        if (empty($filters)) {
+            throw new \SoapFault('NOT_FOUND', 'Empty filter data');
+        }
+
+        $entity = $this->getUserManager()->findUserBy($filters);
+
+        if (!$entity) {
+            throw new \SoapFault('NOT_FOUND', 'User can not be found using specified filter');
+        }
+
+        return $this->container->get('besimple.soap.response')->setReturnValue($entity);
+    }
+
+    /**
      * @return \Oro\Bundle\UserBundle\Entity\UserManager
      */
     protected function getUserManager()
