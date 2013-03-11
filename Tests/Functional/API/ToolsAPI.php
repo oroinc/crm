@@ -35,10 +35,11 @@ class ToolsAPI extends \PHPUnit_Framework_TestCase
      *
      * @param array $response
      * @param array $result
+     * @param $debugInfo
      */
-    public static function assertEqualsResponse($response, $result)
+    public static function assertEqualsResponse($response, $result, $debugInfo = '')
     {
-        self::assertEquals($response['return'], $result);
+        self::assertEquals($response['return'], $result, $debugInfo);
     }
 
     /**

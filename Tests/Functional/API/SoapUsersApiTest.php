@@ -17,7 +17,7 @@ class SoapUsersApiTest extends \PHPUnit_Framework_TestCase
     {
         if (is_null(self::$clientSoap)) {
             try {
-                self::$clientSoap = @new \SoapClient('http://localhost.com/app_test.php/api/soap');
+                self::$clientSoap = @new \SoapClient('http://localhost.com/app_test.php/api/soap', array('trace' => 1));
             } catch (\SoapFault $e) {
                 $this->markTestSkipped('Test skipped due to http://localhost.com is not available!');
             }
@@ -37,10 +37,9 @@ class SoapUsersApiTest extends \PHPUnit_Framework_TestCase
      */
     public function testCreateUser($request, $response)
     {
-        $this->markTestIncomplete("Due to bug in adding Users and attributes");
         $result = self::$clientSoap->createUser($request);
         $result = ToolsAPI::classToArray($result);
-        ToolsAPI::assertEqualsResponse($response, $result);
+        ToolsAPI::assertEqualsResponse($response, $result, self::$clientSoap->__getLastResponse());
     }
 
     /**
