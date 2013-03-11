@@ -1,7 +1,6 @@
 <?php
 namespace Oro\Bundle\UserBundle\Tests\Functional\API;
 
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Yaml\Yaml;
 use Symfony\Component\Finder\Iterator;
 
@@ -10,7 +9,7 @@ class SoapRolesApiTest extends \PHPUnit_Framework_TestCase
     /** Default value for role label */
     const DEFAULT_VALUE = 'ROLE_LABEL';
 
-    /** @var CustomSoapClient */
+    /** @var \SoapClient */
     static protected $clientSoap = null;
 
     public function setUp()
@@ -44,8 +43,8 @@ class SoapRolesApiTest extends \PHPUnit_Framework_TestCase
             $request['label'] = self::DEFAULT_VALUE;
         }
         $result =  self::$clientSoap->createRole($request);
-        $result = $this->classToArray($result);
-        $this->assertEqualsResponse($response, $result);
+        $result = ToolsAPI::classToArray($result);
+        ToolsAPI::assertEqualsResponse($response, $result);
     }
 
     /**
@@ -66,12 +65,12 @@ class SoapRolesApiTest extends \PHPUnit_Framework_TestCase
         $request['label'] .= '_Updated';
         //get role id
         $roleId =  self::$clientSoap->getRoleByName($request['role']);
-        $roleId = $this->classToArray($roleId);
+        $roleId = ToolsAPI::classToArray($roleId);
         $result =  self::$clientSoap->updateRole($roleId['id'], $request);
-        $result = $this->classToArray($result);
-        $this->assertEqualsResponse($response, $result);
+        $result = ToolsAPI::classToArray($result);
+        ToolsAPI::assertEqualsResponse($response, $result);
         $role =  self::$clientSoap->getRole($roleId['id']);
-        $role = $this->classToArray($role);
+        $role = ToolsAPI::classToArray($role);
         $this->assertEquals($request['label'], $role['label']);
     }
 
@@ -83,7 +82,7 @@ class SoapRolesApiTest extends \PHPUnit_Framework_TestCase
     {
         //get roles
         $roles =  self::$clientSoap->getRoles();
-        $roles = $this->classToArray($roles);
+        $roles = ToolsAPI::classToArray($roles);
         //filter roles
         $roles = array_filter(
             $roles['item'],
@@ -108,7 +107,7 @@ class SoapRolesApiTest extends \PHPUnit_Framework_TestCase
             $this->assertTrue($result);
         }
         $roles =  self::$clientSoap->getRoles();
-        $roles = $this->classToArray($roles);
+        $roles = ToolsAPI::classToArray($roles);
         if (!empty($roles)) {
             $roles = array_filter(
                 $roles['item'],
@@ -127,40 +126,6 @@ class SoapRolesApiTest extends \PHPUnit_Framework_TestCase
      */
     public function requestsApi()
     {
-        $parameters = array();
-        $testFiles = new \RecursiveDirectoryIterator(
-            __DIR__ . DIRECTORY_SEPARATOR . 'RoleRequest',
-            \RecursiveDirectoryIterator::SKIP_DOTS
-        );
-        foreach ($testFiles as $fileName => $object) {
-            $parameters[$fileName] = Yaml::parse($fileName);
-            if (is_null($parameters[$fileName]['response'])) {
-                unset($parameters[$fileName]['response']);
-            }
-        }
-        return
-            $parameters;
-    }
-
-    /**
-     * Test API response
-     *
-     * @param array $response
-     * @param array $result
-     */
-    protected function assertEqualsResponse($response, $result)
-    {
-        $this->assertEquals($response['return'], $result);
-    }
-
-    /**
-     * Convert stdClass to array
-     *
-     * @param $class
-     * @return array
-     */
-    protected function classToArray($class)
-    {
-        return json_decode(json_encode($class), true);
+        return ToolsAPI::requestsApi('RoleRequest');
     }
 }
