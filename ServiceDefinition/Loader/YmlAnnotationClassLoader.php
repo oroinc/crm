@@ -84,54 +84,20 @@ class YmlAnnotationClassLoader extends FileLoader
      */
     private function loadDefinition(\ReflectionClass $class, Definition\ServiceDefinition $definition)
     {
-        $serviceMethodHeaders = array();
-        foreach ($this->reader->getClassAnnotations($class) as $annotation) {
-            if ($annotation instanceof Annotation\Header) {
-                $serviceMethodHeaders[$annotation->getValue()] = $annotation;
-            }
-        }
-
+        $serviceMethodHeaders = $this->initServiceMethodHeaders($class);
         foreach ($class->getMethods() as $method) {
-            $serviceArguments = $serviceHeaders = array();
+            $serviceArguments = array();
             $serviceMethod = $serviceReturn = null;
-
-            foreach ($serviceMethodHeaders as $annotation) {
-                $serviceHeaders[$annotation->getValue()] = new Definition\Header(
-                    $annotation->getValue(),
-                    $this->getArgumentType($method, $annotation)
-                );
-            }
-
+            $serviceHeaders = $this->initServiceHeaders($serviceMethodHeaders, $method);
             foreach ($this->reader->getMethodAnnotations($method) as $annotation) {
                 if ($annotation instanceof Annotation\Header) {
-                    $serviceHeaders[$annotation->getValue()] = new Definition\Header(
-                        $annotation->getValue(),
-                        $this->getArgumentType($method, $annotation)
-                    );
+                    $serviceHeaders = $this->loadHeaderDefinition($serviceHeaders, $annotation, $method);
                 } elseif ($annotation instanceof Annotation\Param) {
-                    $serviceArguments[] = new Definition\Argument(
-                        $annotation->getValue(),
-                        $this->getArgumentType($method, $annotation)
-                    );
+                    $serviceArguments = $this->loadParamDefinition($serviceArguments, $annotation, $method);
                 } elseif ($annotation instanceof Annotation\Method) {
-                    if ($serviceMethod) {
-                        throw new \LogicException(sprintf(
-                            '@Soap\Method defined twice for "%s".',
-                            $method->getName()
-                        ));
-                    }
-                    $serviceMethod = new Definition\Method(
-                        $annotation->getValue(),
-                        $this->getController($class, $method, $annotation)
-                    );
+                    $serviceMethod = $this->loadMethodDefinition($annotation, $class, $method, $serviceMethod);
                 } elseif ($annotation instanceof Annotation\Result) {
-                    if ($serviceReturn) {
-                        throw new \LogicException(sprintf(
-                            '@Soap\Result defined twice for "%s".',
-                            $method->getName()
-                        ));
-                    }
-                    $serviceReturn = new Definition\Type($annotation->getPhpType(), $annotation->getXmlType());
+                    $serviceReturn = $this->loadResultDefinition($method, $annotation, $serviceReturn);
                 }
             }
 
@@ -140,17 +106,100 @@ class YmlAnnotationClassLoader extends FileLoader
             }
 
             if ($serviceMethod) {
-                $serviceMethod->setArguments($serviceArguments);
-                $serviceMethod->setHeaders($serviceHeaders);
-
-                if (!$serviceReturn) {
-                    throw new \LogicException(sprintf('@Soap\Result non-existent for "%s".', $method->getName()));
-                }
-                $serviceMethod->setReturn($serviceReturn);
-
-                $definition->getMethods()->add($serviceMethod);
+                $this->setMethod($definition, $serviceMethod, $serviceArguments, $serviceHeaders, $serviceReturn);
             }
         }
+    }
+
+    private function initServiceMethodHeaders($class)
+    {
+        $serviceMethodHeaders = array();
+        foreach ($this->reader->getClassAnnotations($class) as $annotation) {
+            if ($annotation instanceof Annotation\Header) {
+                $serviceMethodHeaders[$annotation->getValue()] = $annotation;
+            }
+        }
+
+        return $serviceMethodHeaders;
+    }
+
+    private function initServiceHeaders($serviceMethodHeaders, $method)
+    {
+        $serviceHeaders = array();
+        foreach ($serviceMethodHeaders as $annotation) {
+            $serviceHeaders[$annotation->getValue()] = new Definition\Header(
+                $annotation->getValue(),
+                $this->getArgumentType($method, $annotation)
+            );
+        }
+
+        return $serviceHeaders;
+    }
+
+    private function setMethod($definition, $serviceMethod, $serviceArguments, $serviceHeaders, $serviceReturn)
+    {
+        $serviceMethod->setArguments($serviceArguments);
+        $serviceMethod->setHeaders($serviceHeaders);
+
+        if (!$serviceReturn) {
+            throw new \LogicException(sprintf('@Soap\Result non-existent for "%s".', $method->getName()));
+        }
+        $serviceMethod->setReturn($serviceReturn);
+
+        $definition->getMethods()->add($serviceMethod);
+    }
+
+    private function loadResultDefinition($method, $annotation, $serviceReturn = null)
+    {
+        if ($serviceReturn) {
+            throw new \LogicException(
+                sprintf(
+                    '@Soap\Result defined twice for "%s".',
+                    $method->getName()
+                )
+            );
+        }
+        $serviceReturn = new Definition\Type($annotation->getPhpType(), $annotation->getXmlType());
+
+        return $serviceReturn;
+    }
+
+    private function loadMethodDefinition($annotation, $class, $method, $serviceMethod = null)
+    {
+        if ($serviceMethod) {
+            throw new \LogicException(
+                sprintf(
+                    '@Soap\Method defined twice for "%s".',
+                    $method->getName()
+                )
+            );
+        }
+        $serviceMethod = new Definition\Method(
+            $annotation->getValue(),
+            $this->getController($class, $method, $annotation)
+        );
+
+        return $serviceMethod;
+    }
+
+    private function loadParamDefinition($serviceArguments, $annotation, $method)
+    {
+        $serviceArguments[] = new Definition\Argument(
+            $annotation->getValue(),
+            $this->getArgumentType($method, $annotation)
+        );
+
+        return $serviceArguments;
+    }
+
+    private function loadHeaderDefinition($serviceHeaders, $annotation, $method)
+    {
+        $serviceHeaders[$annotation->getValue()] = new Definition\Header(
+            $annotation->getValue(),
+            $this->getArgumentType($method, $annotation)
+        );
+
+        return $serviceHeaders;
     }
 
     /**
@@ -192,5 +241,4 @@ class YmlAnnotationClassLoader extends FileLoader
             return $class->name . '::' . $method->name;
         }
     }
-
 }
