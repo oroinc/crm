@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Text entity for search index
  *
- * @ORM\Table(name="search_index_text", options={"engine"="MyISAM"})
+ * @ORM\Table(name="oro_search_index_text", options={"engine"="MyISAM"})
  * @ORM\Entity
  */
 class IndexText

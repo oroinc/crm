@@ -57,10 +57,9 @@ class Item
         $recordId = 0,
         $recordTitle = null,
         $recordUrl = null,
-        $recordText,
-        $entityConfig
-    )
-    {
+        $recordText = '',
+        $entityConfig = array()
+    ) {
         $this->em = $em;
         if ($entityName) {
             $this->setEntityName($entityName);

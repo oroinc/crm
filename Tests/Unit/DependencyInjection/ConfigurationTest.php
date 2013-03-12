@@ -1,8 +1,8 @@
 <?php
 namespace Oro\Bundle\SearchBundle\Tests\Unit\DependencyInjection;
 
-use Oro\Bundle\SearchBundle\DependencyInjection\Configuration;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
+use Oro\Bundle\SearchBundle\DependencyInjection\Configuration;
 
 class ConfigurationTest extends \PHPUnit_Framework_TestCase
 {

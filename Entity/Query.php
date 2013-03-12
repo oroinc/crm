@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * QueryLog
  *
- * @ORM\Table(name="search_query")
+ * @ORM\Table(name="oro_search_query")
  * @ORM\Entity
  * @ORM\HasLifecycleCallbacks
  */

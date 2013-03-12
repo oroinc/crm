@@ -18,71 +18,70 @@ class OrmTest extends \PHPUnit_Framework_TestCase
      * @var \Oro\Bundle\SearchBundle\Engine\Orm
      */
     private $orm;
-    private $mappingConfig;
     private $om;
     private $container;
     private $translator;
     private $flexibleManager;
+    private $mappingConfig =  array(
+        'Oro\Bundle\SearchBundle\Tests\Unit\Fixture\Entity\Product' => array(
+            'alias' => 'test_product',
+            'label' => 'test product',
+            'title_fields' => array('name'),
+            'route' => array(
+                'name' => 'test_route',
+                'parameters' => array(
+                    'id' => 'id'
+                )
+            ),
+            'fields' => array(
+                array(
+                    'name'          => 'name',
+                    'target_type'   => 'text',
+                    'target_fields' => array(
+                        'name',
+                        'all_data'
+                    )
+                ),
+                array(
+                    'name'          => 'description',
+                    'target_type'   => 'text',
+                    'target_fields' => array(
+                        'description',
+                        'all_data'
+                    )
+                ),
+                array(
+                    'name'          => 'price',
+                    'target_type'   => 'decimal',
+                    'target_fields' => array('price')
+                ),
+                array(
+                    'name'          => 'count',
+                    'target_type'   => 'integer',
+                ),
+                array(
+                    'name'            => 'manufacturer',
+                    'relation_type'   => 'one-to-one',
+                    'relation_fields' => array(
+                        array(
+                            'name'          => 'name',
+                            'target_type'   => 'text',
+                            'target_fields' => array(
+                                'manufacturer',
+                                'all_data'
+                            )
+                        )
+                    )
+                ),
+            ),
+            'flexible_manager' => 'test_manager'
+        )
+    );
 
     public function setUp()
     {
         $this->om = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
         $this->container = $this->getMockForAbstractClass('Symfony\Component\DependencyInjection\ContainerInterface');
-        $this->mappingConfig =  array(
-            'Oro\Bundle\SearchBundle\Tests\Unit\Fixture\Entity\Product' => array(
-                'alias' => 'test_product',
-                'label' => 'test product',
-                'title_fields' => array('name'),
-                'route' => array(
-                    'name' => 'test_route',
-                    'parameters' => array(
-                        'id' => 'id'
-                    )
-                ),
-                'fields' => array(
-                    array(
-                        'name'          => 'name',
-                        'target_type'   => 'text',
-                        'target_fields' => array(
-                            'name',
-                            'all_data'
-                        )
-                    ),
-                    array(
-                        'name'          => 'description',
-                        'target_type'   => 'text',
-                        'target_fields' => array(
-                            'description',
-                            'all_data'
-                        )
-                    ),
-                    array(
-                        'name'          => 'price',
-                        'target_type'   => 'decimal',
-                        'target_fields' => array('price')
-                    ),
-                    array(
-                        'name'          => 'count',
-                        'target_type'   => 'integer',
-                    ),
-                    array(
-                        'name'            => 'manufacturer',
-                        'relation_type'   => 'one-to-one',
-                        'relation_fields' => array(
-                            array(
-                                'name'          => 'name',
-                                'target_type'   => 'text',
-                                'target_fields' => array(
-                                    'manufacturer',
-                                    'all_data'
-                                )
-                            )
-                        )
-                    ),
-                ),
-                'flexible_manager' => 'test_manager'
-            )
-        );
 
         $manufacturer = new Manufacturer();
         $manufacturer->setName('adidas');
@@ -129,18 +128,20 @@ class OrmTest extends \PHPUnit_Framework_TestCase
         );
         $this->container->expects($this->any())
             ->method('get')
-            ->with($this->logicalOr(
-                $this->equalTo('translator'),
-                $this->equalTo('test_manager'),
-                $this->equalTo('router')
-            ))
-            ->will($this->returnCallback(
-                function($param) use (&$params){
-                    return $params[$param];
-                }
-            ));
-
-
+            ->with(
+                $this->logicalOr(
+                    $this->equalTo('translator'),
+                    $this->equalTo('test_manager'),
+                    $this->equalTo('router')
+                )
+            )
+            ->will(
+                $this->returnCallback(
+                    function($param) use (&$params) {
+                        return $params[$param];
+                    }
+                )
+            );
 
         $this->orm = new Orm($this->om, $this->container, $this->mappingConfig, true);
     }

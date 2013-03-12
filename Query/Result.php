@@ -83,7 +83,7 @@ class Result extends ArrayCollection
         if ($this->count()) {
             $resultData['count'] = $this->count();
             foreach ($this as $resultRecord) {
-               $resultData['data'][] = $resultRecord->toArray();
+                $resultData['data'][] = $resultRecord->toArray();
             }
         } else {
             $resultData['count'] = 0;
