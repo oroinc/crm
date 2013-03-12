@@ -198,7 +198,7 @@ class SegmentManager
         $segment = $repo->find($segmentId);
         $reference = $repo->find($referenceId);
 
-        $newSegment = $this->copyInstance($segment, $reference);
+        $newSegment = $this->copyNode($segment, $reference);
 
         $this->getStorageManager()->persist($newSegment);
     }
@@ -211,15 +211,15 @@ class SegmentManager
      * @return AbstractSegment
      * FIXME: copy relationship states as well and all attributes
      */
-    protected function copyInstance($segment, $parent)
+    public function copyNode($segment, $parent)
     {
-        $newSegment = $this->getNewEntityInstance();
+        $newSegment = $this->createSegment();
         $newSegment->setTitle($segment->getTitle());
         $newSegment->setParent($parent);
 
         // copy children by recursion
         foreach ($segment->getChildren() as $child) {
-            $newChild = $this->copyInstance($child, $newSegment);
+            $newChild = $this->copyNode($child, $newSegment);
             $newSegment->addChild($newChild);
 
             $this->getStorageManager()->persist($newSegment);
