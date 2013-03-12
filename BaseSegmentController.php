@@ -1,5 +1,5 @@
 <?php
-namespace Oro\Bundle\SegmentationTreeBundle\Controller;
+namespace Oro\Bundle\SegmentationTreeBundle;
 
 use Oro\Bundle\SegmentationTreeBundle\Model\AbstractSegment;
 use Oro\Bundle\SegmentationTreeBundle\Helper\JsonSegmentHelper;
