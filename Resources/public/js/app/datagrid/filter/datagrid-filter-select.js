@@ -24,7 +24,7 @@ OroApp.DatagridFilterSelect = OroApp.DatagridFilter.extend({
     /** @property */
     events: {
         'change select': '_update',
-        'click a.disable-filter': 'onClickDisable'
+        'click .disable-filter': 'onClickDisable'
     },
 
     /** @property */
