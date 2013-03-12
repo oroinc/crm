@@ -43,6 +43,13 @@ abstract class AbstractEntityAttributeOption extends AbstractAttributeOption
     protected $sortOrder;
 
     /**
+     * @var string $defaultValue
+     *
+     * @ORM\Column(name="default_value", type="string", length=255, nullable=true)
+     */
+    protected $defaultValue;
+
+    /**
      * @var ArrayCollection $optionValues
      *
      * @ORM\OneToMany(
@@ -60,7 +67,7 @@ abstract class AbstractEntityAttributeOption extends AbstractAttributeOption
     public function __construct()
     {
         $this->optionValues = new ArrayCollection();
-        $this->translatable = false;
+        $this->translatable = true;
         $this->sortOrder    = 1;
     }
 
@@ -116,6 +123,31 @@ abstract class AbstractEntityAttributeOption extends AbstractAttributeOption
 
         return $value;
     }
+
+    /**
+     * Set defaultValue
+     *
+     * @param string $defaultValue
+     *
+     * @return AbstractAttributeOption
+     */
+    public function setDefaultValue($defaultValue)
+    {
+        $this->defaultValue = $defaultValue;
+
+        return $this;
+    }
+
+    /**
+     * Get defaultValue
+     *
+     * @return string
+     */
+    public function getDefaultValue()
+    {
+        return $this->defaultValue;
+    }
+
 
     /**
      * To string
