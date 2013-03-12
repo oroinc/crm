@@ -4,6 +4,7 @@ namespace Oro\Bundle\GridBundle\Form\Type\Filter;
 
 use Sonata\AdminBundle\Form\Type\Filter\DateTimeRangeType as SonataDateTimeRangeType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class DateTimeRangeType extends SonataDateTimeRangeType
 {
@@ -31,5 +32,18 @@ class DateTimeRangeType extends SonataDateTimeRangeType
         $builder
             ->add('type', 'choice', array('choices' => $choices, 'required' => false))
             ->add('value', 'oro_grid_type_datetime_range', array('field_options' => $options['field_options']));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    {
+        $resolver->setDefaults(
+            array(
+                'field_type'    => 'oro_grid_type_datetime_range',
+                'field_options' => array('date_format' => 'yyyy-MM-dd')
+            )
+        );
     }
 }
