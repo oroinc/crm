@@ -121,7 +121,7 @@ class Manager
      *
      * @param \Oro\Bundle\UserBundle\Entity\User $user
      * @param bool                               $useObjects
-     * @return array|\Oro\Bundle\UserBundle\Entity\Role[]
+     * @return array|\Oro\Bundle\UserBundle\Entity\Acl[]
      */
     public function getAclForUser(User $user, $useObjects = false)
     {

@@ -140,6 +140,7 @@ class ProfileController extends BaseController
         if (!$user) {
             throw new \SoapFault('NOT_FOUND', 'User can not be found using specified filter');
         }
+
         return $this->getAclManager()->getAclForUser($user, true);
     }
 

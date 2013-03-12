@@ -24,7 +24,7 @@ class Acl
     /**
      * @ORM\Id
      * @ORM\Column(type="string", length=50, name="id")
-     * @Soap\ComplexType("int")
+     * @Soap\ComplexType("string")
      */
     protected $id;
 
@@ -57,13 +57,13 @@ class Acl
 
     /**
      * @ORM\Column(type="string", length=250, nullable=true)
-     * @Soap\ComplexType("string")
+     * @Soap\ComplexType("string", nillable=true)
      */
     protected $class;
 
     /**
      * @ORM\Column(type="string", length=250, nullable=true)
-     * @Soap\ComplexType("string")
+     * @Soap\ComplexType("string", nillable=true)
      */
     protected $method;
 
