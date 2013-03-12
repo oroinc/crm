@@ -14,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\MappedSuperClass
  * @Gedmo\Tree(type="nested")
  */
-class AbstractSegment
+abstract class AbstractSegment
 {
     /**
      * @var integer $id
@@ -64,13 +64,18 @@ class AbstractSegment
      */
     protected $root;
 
+
+    /**
+     * @var ArrayCollection $children
+     */
+    protected $children;
+
     /**
      * Constructor
      */
     public function __construct()
     {
         $this->children = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->title = '';
     }
 
     /**
@@ -245,6 +250,4 @@ class AbstractSegment
     {
         return $this->children;
     }
-
-
 }

@@ -16,7 +16,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
-
 /**
  * Base Segment controller
  *
@@ -303,6 +302,4 @@ abstract class BaseSegmentController extends Controller
      * TODO: Manage multiple items addition for future grid use
      */
     abstract public function removeItemAction(Request $request);
-
-
 }
