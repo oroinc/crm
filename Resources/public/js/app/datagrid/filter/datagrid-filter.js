@@ -37,7 +37,7 @@ OroApp.DatagridFilter = Backbone.View.extend({
     /** @property */
     events: {
         'change input': '_update',
-        'click a.disable-filter': 'onClickDisable'
+        'click .disable-filter': 'onClickDisable'
     },
 
     /**
