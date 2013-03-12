@@ -131,22 +131,10 @@ class Query
         foreach ($mappingConfig as $entity => $config) {
             foreach ($config['fields'] as $field) {
                 if (isset($field['relation_fields'])) {
-                    foreach ($field['relation_fields'] as $relationField) {
-                        if (isset($relationField['target_fields']) && count($relationField['target_fields']) > 0) {
-                            foreach ($relationField['target_fields'] as $targetFields) {
-                                if (!isset($fields[$targetFields]) || !in_array($entity, $fields[$targetFields])) {
-                                    $fields[$targetFields][] = $entity;
-                                }
-                            }
-                        }
-                    }
+                    $fields = $this->mapRelationFields($fields, $field, $entity);
                 } else {
                     if (isset($field['target_fields']) && count($field['target_fields']) > 0) {
-                        foreach ($field['target_fields'] as $targetFields) {
-                            if (!isset($fields[$targetFields]) || !in_array($entity, $fields[$targetFields])) {
-                                $fields[$targetFields][] = $entity;
-                            }
-                        }
+                        $fields = $this->mapTargetFields($fields, $field, $entity);
                     }
                 }
             }
@@ -395,6 +383,32 @@ class Query
     public function getOrderDirection()
     {
         return $this->orderDirection;
+    }
+
+    private function mapTargetFields($fields, $field, $entity)
+    {
+        foreach ($field['target_fields'] as $targetFields) {
+            if (!isset($fields[$targetFields]) || !in_array($entity, $fields[$targetFields])) {
+                $fields[$targetFields][] = $entity;
+            }
+        }
+
+        return $fields;
+    }
+
+    private function mapRelationFields($fields, $field, $entity)
+    {
+        foreach ($field['relation_fields'] as $relationField) {
+            if (isset($relationField['target_fields']) && count($relationField['target_fields']) > 0) {
+                foreach ($relationField['target_fields'] as $targetFields) {
+                    if (!isset($fields[$targetFields]) || !in_array($entity, $fields[$targetFields])) {
+                        $fields[$targetFields][] = $entity;
+                    }
+                }
+            }
+        }
+
+        return $fields;
     }
 
     /**

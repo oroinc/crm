@@ -32,9 +32,11 @@ class ReindexCommand extends ContainerAwareCommand
 
         $itemRepo->setDriversClasses($this->getContainer()->getParameter('oro_search.engine_orm'));
 
-        $changed = $itemRepo->findBy(array(
-            'changed' => true
-        ));
+        $changed = $itemRepo->findBy(
+            array(
+                'changed' => true
+            )
+        );
 
         // probably, fulltext index should be dropped here for performance reasons
         // ...

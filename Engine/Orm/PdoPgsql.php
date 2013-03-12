@@ -36,7 +36,7 @@ class PdoPgsql extends BaseDriver
      */
     public static function getPlainSql()
     {
-        return "CREATE INDEX string_fts ON search_index_text USING gin(to_tsvector('english', 'value'))";
+        return "CREATE INDEX string_fts ON oro_search_index_text USING gin(to_tsvector('english', 'value'))";
     }
 
     /**
@@ -91,7 +91,7 @@ class PdoPgsql extends BaseDriver
             }
         }
 
-        $qb->setParameter('value' . $index,  implode(' & ', $searchArray));
+        $qb->setParameter('value' . $index, implode(' & ', $searchArray));
     }
 
     /**

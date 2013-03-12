@@ -13,7 +13,6 @@ class PdoMysql extends BaseDriver
     public $columns = array();
     public $needle;
 
-
     /**
      * Init additional doctrine functions
      *
@@ -35,7 +34,7 @@ class PdoMysql extends BaseDriver
      */
     public static function getPlainSql()
     {
-        return "ALTER TABLE `search_index_text` ADD FULLTEXT `value` ( `value`)";
+        return "ALTER TABLE `oro_search_index_text` ADD FULLTEXT `value` ( `value`)";
     }
 
     /**
@@ -48,7 +47,7 @@ class PdoMysql extends BaseDriver
      */
     protected function setFieldValueStringParameter(QueryBuilder $qb, $index, $fieldValue, $searchCondition)
     {
-        $qb->setParameter('value' . $index,  $fieldValue);
+        $qb->setParameter('value' . $index, $fieldValue);
     }
 
     /**
@@ -103,7 +102,7 @@ class PdoMysql extends BaseDriver
             $whereExpr = $searchCondition['type'] . ' ('
                 .('textField.value NOT LIKE :value' . $index . $stringQuery)
                 . ')';
-            $qb->setParameter('value' . $index, $value );
+            $qb->setParameter('value' . $index, $value);
         }
 
         if ($useFieldName) {

@@ -56,7 +56,7 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
             ->method('searchQuery')
             ->will($this->returnValue(array()));
 
-        $this->indexService = new Indexer($this->om, $this->connector, $this->translator, array(
+        $config = array(
             'Oro\Bundle\DataBundle\Entity\Product' => array(
                 'alias' => 'test_alias',
                 'label' => 'test product',
@@ -99,7 +99,14 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
                     ),
                 )
             )
-        ));
+        );
+
+        $this->indexService = new Indexer(
+            $this->om,
+            $this->connector,
+            $this->translator,
+            $config
+        );
     }
 
     /**

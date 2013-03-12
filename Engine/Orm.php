@@ -47,7 +47,7 @@ class Orm extends AbstractEngine
 
         //todo: set translated mappingConfig only once
         $translator = $container->get('translator');
-        foreach ($this->mappingConfig as $entity=> $config) {
+        foreach ($this->mappingConfig as $entity => $config) {
             if (isset($this->mappingConfig[$entity]['label'])) {
                 $this->mappingConfig[$entity]['label'] = $translator->trans($config['label']);
             }
@@ -64,10 +64,12 @@ class Orm extends AbstractEngine
      */
     public function delete($entity, $realtime = true)
     {
-        $item = $this->getIndexRepo()->findOneBy(array(
-            'entity'   => get_class($entity),
-            'recordId' => $entity->getId()
-        ));
+        $item = $this->getIndexRepo()->findOneBy(
+            array(
+                'entity'   => get_class($entity),
+                'recordId' => $entity->getId()
+            )
+        );
 
         if ($item) {
             $id = $item->getId();
@@ -108,10 +110,12 @@ class Orm extends AbstractEngine
         $name = get_class($entity);
 
         if (count($data)) {
-            $item = $this->getIndexRepo()->findOneBy(array(
-                'entity'   => $name,
-                'recordId' => $entity->getId()
-            ));
+            $item = $this->getIndexRepo()->findOneBy(
+                array(
+                    'entity'   => $name,
+                    'recordId' => $entity->getId()
+                )
+            );
 
             if (!$item) {
                 $item = new Item();
@@ -504,7 +508,7 @@ class Orm extends AbstractEngine
                 $title[] = $this->getFieldValue($entity, $field);
             }
         } else {
-            $title = array((string)$entity);
+            $title = array((string) $entity);
         }
 
         return implode(' ', $title);

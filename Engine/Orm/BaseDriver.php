@@ -282,8 +282,7 @@ abstract class BaseDriver
             $orderRelation = $query->getOrderType() . 'Fields';
             $qb->leftJoin('search.' . $orderRelation, 'orderTable', 'WITH', 'orderTable.field = :orderField')
                 ->orderBy('orderTable.value', $query->getOrderDirection())
-                ->setParameter('orderField', $orderBy)
-            ;
+                ->setParameter('orderField', $orderBy);
         }
     }
 
