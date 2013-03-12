@@ -4,6 +4,7 @@ namespace Oro\Bundle\FlexibleEntityBundle\Entity\Repository;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\ORM\QueryBuilder;
+use Oro\Bundle\FlexibleEntityBundle\Doctrine\ORM\FlexibleQueryBuilder;
 use Oro\Bundle\FlexibleEntityBundle\Exception\UnknownAttributeException;
 use Oro\Bundle\FlexibleEntityBundle\Model\Behavior\TranslatableInterface;
 use Oro\Bundle\FlexibleEntityBundle\Model\Behavior\ScopableInterface;
@@ -36,7 +37,7 @@ class FlexibleEntityRepository extends EntityRepository implements TranslatableI
      * Scope code
      * @var string
      */
-    protected $scopeCode;
+    protected $scope;
 
     /**
      * Entity alias
@@ -185,17 +186,28 @@ class FlexibleEntityRepository extends EntityRepository implements TranslatableI
      */
     public function createQueryBuilder($alias, $lazyload = false)
     {
+        // TODO : change lazy load variable by default = no join
+
         $this->entityAlias = $alias;
+        $qb = new FlexibleQueryBuilder($this->_em);
+        $qb->setLocale($this->getLocale());
+        $qb->setScope($this->getScope());
+
+        $qb->select($alias)->from($this->_entityName, $alias);
+
+        /*
         if ($lazyload) {
-            $qb = parent::createQueryBuilder($this->entityAlias);
+            $qb->select($alias)->from($this->_entityName, $alias);
         } else {
             // if no lazy loading directly join with values and attribute
-            $qb = $this->_em->createQueryBuilder();
+
+            // TODO : problem query on all !
+
             $qb->select($alias, 'Value', 'Attribute')
                 ->from($this->_entityName, $this->entityAlias)
                 ->leftJoin($this->entityAlias.'.values', 'Value')
                 ->leftJoin('Value.attribute', 'Attribute');
-        }
+        }*/
 
         return $qb;
     }
