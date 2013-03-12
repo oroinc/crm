@@ -54,6 +54,11 @@ class AttributeOptionTest extends \PHPUnit_Framework_TestCase
     /**
      * @staticvar string
      */
+    protected static $defaultValue = 'testDefValue';
+
+    /**
+     * @staticvar string
+     */
     protected static $attClass = 'Oro\Bundle\FlexibleEntityBundle\Entity\Attribute';
 
     /**
@@ -90,17 +95,17 @@ class AttributeOptionTest extends \PHPUnit_Framework_TestCase
         $attOpt = new AttributeOption();
 
         // assert default value
-        $this->assertFalse($attOpt->getTranslatable());
-
-        // assert true value
-        $obj = $attOpt->setTranslatable(true);
-        $this->assertInstanceOf(self::$attOptClass, $obj);
         $this->assertTrue($attOpt->getTranslatable());
 
         // assert false value
         $obj = $attOpt->setTranslatable(false);
         $this->assertInstanceOf(self::$attOptClass, $obj);
         $this->assertFalse($attOpt->getTranslatable());
+
+        // assert true value
+        $obj = $attOpt->setTranslatable(true);
+        $this->assertInstanceOf(self::$attOptClass, $obj);
+        $this->assertTrue($attOpt->getTranslatable());
     }
 
     /**
@@ -173,6 +178,7 @@ class AttributeOptionTest extends \PHPUnit_Framework_TestCase
         $attOpt->addOptionValue($attOptValueEn);
 
         // assert result
+        $attOpt->setTranslatable(false);
         $attOptValue = $attOpt->getOptionValue();
         $this->assertInstanceOf(self::$attOptValueClass, $attOptValue);
         $this->assertEquals(self::$locale, $attOptValue->getLocale());
@@ -216,5 +222,21 @@ class AttributeOptionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(self::$localeFr, $attOptValue->getLocale());
         $this->assertEquals(self::$attOptValueFr, $attOptValue->getValue());
         $this->assertEquals(self::$attOptValueFr, $attOpt->__toString());
+    }
+
+    /**
+     * Test related getter/setter method
+     */
+    public function testDefaultValue()
+    {
+        $attOpt = new AttributeOption();
+
+        // assert default value is null
+        $this->assertNull($attOpt->getDefaultValue());
+
+        // assert get/set
+        $obj = $attOpt->setDefaultValue(self::$defaultValue);
+        $this->assertInstanceOf(self::$attOptClass, $obj);
+        $this->assertEquals(self::$defaultValue, $attOpt->getDefaultValue());
     }
 }
