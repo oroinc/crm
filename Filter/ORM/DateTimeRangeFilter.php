@@ -2,26 +2,22 @@
 
 namespace Oro\Bundle\GridBundle\Filter\ORM;
 
-use Symfony\Component\Translation\TranslatorInterface;
 use Sonata\AdminBundle\Form\Type\Filter\DateTimeRangeType;
-use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 use Oro\Bundle\GridBundle\Filter\FilterInterface;
 
 class DateTimeRangeFilter extends AbstractDateFilter implements FilterInterface
 {
+    /**
+     * Date value format
+     */
+    const VALUE_FORMAT = '/^\d{4}-\d{2}-\d{2}( \d{2}:\d{2})?$/';
+
     /**
      * This Filter allows filtering by time
      *
      * @var boolean
      */
     protected $time = true;
-
-    /**
-     * This is a range filter
-     *
-     * @var boolean
-     */
-    protected $range = true;
 
     /**
      * @return array

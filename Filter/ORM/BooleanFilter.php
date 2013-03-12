@@ -2,10 +2,10 @@
 
 namespace Oro\Bundle\GridBundle\Filter\ORM;
 
-use Symfony\Component\Translation\TranslatorInterface;
 use Sonata\AdminBundle\Form\Type\BooleanType;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 use Oro\Bundle\GridBundle\Filter\FilterInterface;
+use Doctrine\DBAL\Query\QueryBuilder;
 
 class BooleanFilter extends AbstractFilter implements FilterInterface
 {
@@ -43,6 +43,7 @@ class BooleanFilter extends AbstractFilter implements FilterInterface
             return;
         }
 
+        /** @var $queryBuilder QueryBuilder */
         if (is_array($data['value'])) {
             $values = array();
             foreach ($data['value'] as $v) {
@@ -50,7 +51,11 @@ class BooleanFilter extends AbstractFilter implements FilterInterface
                     continue;
                 }
 
-                $values[] = ($v == BooleanType::TYPE_YES) ? 1 : 0;
+                if ($v == BooleanType::TYPE_YES) {
+                    $values[] = 1;
+                } else {
+                    $values[] = 0;
+                }
             }
 
             if (count($values) == 0) {
@@ -74,7 +79,13 @@ class BooleanFilter extends AbstractFilter implements FilterInterface
             } else {
                 $this->applyWhere($queryBuilder, sprintf('%s.%s = :%s', $alias, $field, $parameterName));
             }
-            $queryBuilder->setParameter($parameterName, ($data['value'] == BooleanType::TYPE_YES) ? 1 : 0);
+
+            if ($data['value'] == BooleanType::TYPE_YES) {
+                $parameterValue = 1;
+            } else {
+                $parameterValue = 0;
+            }
+            $queryBuilder->setParameter($parameterName, $parameterValue);
         }
     }
 

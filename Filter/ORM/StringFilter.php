@@ -2,10 +2,10 @@
 
 namespace Oro\Bundle\GridBundle\Filter\ORM;
 
-use Symfony\Component\Translation\TranslatorInterface;
 use Sonata\AdminBundle\Form\Type\Filter\ChoiceType;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 use Oro\Bundle\GridBundle\Filter\FilterInterface;
+use Doctrine\DBAL\Query\QueryBuilder;
 
 class StringFilter extends AbstractFilter implements FilterInterface
 {
@@ -51,7 +51,9 @@ class StringFilter extends AbstractFilter implements FilterInterface
             return;
         }
 
-        $data['type'] = !isset($data['type']) ?  ChoiceType::TYPE_CONTAINS : $data['type'];
+        if (!isset($data['type'])) {
+            $data['type'] = ChoiceType::TYPE_CONTAINS;
+        }
 
         $operator = $this->getOperator((int) $data['type']);
 
@@ -67,6 +69,7 @@ class StringFilter extends AbstractFilter implements FilterInterface
             $this->applyWhere($queryBuilder, sprintf('%s.%s %s :%s', $alias, $field, $operator, $parameterName));
         }
 
+        /** @var $queryBuilder QueryBuilder */
         if ($data['type'] == ChoiceType::TYPE_EQUAL) {
             $queryBuilder->setParameter($parameterName, $data['value']);
         } else {
@@ -87,7 +90,11 @@ class StringFilter extends AbstractFilter implements FilterInterface
             ChoiceType::TYPE_EQUAL            => '=',
         );
 
-        return isset($choices[$type]) ? $choices[$type] : false;
+        if (isset($choices[$type])) {
+            return $choices[$type];
+        }
+
+        return false;
     }
 
     /**

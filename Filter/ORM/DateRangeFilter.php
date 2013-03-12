@@ -2,18 +2,11 @@
 
 namespace Oro\Bundle\GridBundle\Filter\ORM;
 
-use Symfony\Component\Translation\TranslatorInterface;
 use Sonata\AdminBundle\Form\Type\Filter\DateRangeType;
 use Oro\Bundle\GridBundle\Filter\FilterInterface;
 
 class DateRangeFilter extends AbstractDateFilter implements FilterInterface
 {
-    /**
-     * This is a range filter
-     * @var boolean
-     */
-    protected $range = true;
-
     /**
      * This filter has time
      * @var boolean

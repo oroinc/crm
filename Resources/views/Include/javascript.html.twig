@@ -2,6 +2,8 @@
 '@OroGridBundle/Resources/public/lib/select2/select2.js'
 '@OroGridBundle/Resources/public/lib/backbone-pageable.js'
 '@OroGridBundle/Resources/public/lib/backgrid/backgrid.js'
+'@OroGridBundle/Resources/public/lib/moment/moment.js'
+'@OroGridBundle/Resources/public/lib/backgrid/extensions/moment-cell/backgrid-moment-cell.js'
 
 '@OroGridBundle/Resources/public/js/app/datagrid/datagrid-headercell.js'
 '@OroGridBundle/Resources/public/js/app/datagrid/datagrid-header.js'
@@ -53,9 +55,15 @@ output='js/acme.grid.js'
                             sortable: {{ column.sortable|json_encode|raw }},
                             editable: false,
                             {% if column.type == constant(columnTypePrefix ~ 'TYPE_DATE') %}
-                                cell: Backgrid.DateCell
+                                cell: Backgrid.Extension.MomentCell.extend({
+                                    modelFormat:   "YYYY-MM-DD",
+                                    displayFormat: "MM/DD/YYYY"
+                                })
                             {% elseif column.type == constant(columnTypePrefix ~ 'TYPE_DATETIME') %}
-                                cell: Backgrid.DatetimeCell
+                                cell: Backgrid.Extension.MomentCell.extend({
+                                    modelFormat:   "YYYY-MM-DD hh:mm:ss",
+                                    displayFormat: "MM/DD/YYYY hh:mm"
+                                })
                             {% elseif column.type == constant(columnTypePrefix ~ 'TYPE_DECIMAL') %}
                                 cell: Backgrid.NumberCell
                             {% elseif column.type == constant(columnTypePrefix ~ 'TYPE_INTEGER') %}
