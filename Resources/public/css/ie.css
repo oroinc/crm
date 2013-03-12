@@ -86,6 +86,12 @@ table.grid{
     top: -5px !important;
     right: -2px;
 }
+#search-div.search-focus .btn-search{
+    height: 28px;
+    position: relative;
+    top: 1px;
+}
+
 .pin-bar .pin-menus{
     margin: 0 -31px 0 0;
 }
@@ -93,4 +99,5 @@ table.grid{
     filter: none !important;
 }
 .pin-bar .list-bar{
+
 }
