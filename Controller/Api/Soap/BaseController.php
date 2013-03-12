@@ -26,6 +26,26 @@ class BaseController extends ContainerAware
     }
 
     /**
+     * Form processing
+     *
+     * @param  string     $form     Form name to process
+     * @param  mixed      $entity   Entity object
+     * @return bool       True on success
+     * @throws \SoapFault
+     */
+    protected function processForm($form, $entity)
+    {
+        if (!$this->container->get(sprintf('oro_user.form.handler.%s.api', $form))->process($entity)) {
+            throw new \SoapFault('BAD_REQUEST', array_reduce(
+                $this->container->get(sprintf('oro_user.form.%s.api', $form))->getErrors(),
+                function ($res, $item) { return $res .= $item->getMessage(); }
+            ));
+        }
+
+        return true;
+    }
+
+    /**
      * @return \Doctrine\Common\Persistence\ObjectManager
      */
     protected function getManager()

@@ -151,12 +151,20 @@ class Group
     /**
      * Set new Roles collection
      *
-     * @param  Collection $roles
+     * @param  array|Collection $roles
      * @return Group
      */
-    public function setRoles(Collection $roles)
+    public function setRoles($roles)
     {
-        $this->roles = $roles;
+        if ($roles instanceof Collection) {
+            $this->roles->clear();
+
+            foreach ($roles as $role) {
+                $this->addRole($role);
+            }
+        } else {
+            $this->roles = $roles;
+        }
 
         return $this;
     }

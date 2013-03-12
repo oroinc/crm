@@ -22,6 +22,7 @@ parameters:
     oro_user.acl.interceptor.class:   Oro\Bundle\UserBundle\Acl\AclInterceptor
     oro_user.acl.manager.class:       Oro\Bundle\UserBundle\Acl\Manager
     oro_user.user_menu.builder.class: Oro\Bundle\UserBundle\Menu\UserMenuBuilder
+    oro_user.role.listener.class:     Oro\Bundle\UserBundle\EventListener\RoleListener
 
 services:
     oro_user.manager.flexible:
@@ -184,3 +185,9 @@ services:
         class:                        %oro_user.user_menu.builder.class%
         tags:
             - { name: oro_menu.builder, alias: usermenu }
+
+    oro_user.role.listener:
+        class:                        %oro_user.role.listener.class%
+        arguments:                    ["@service_container"]
+        tags:
+            - { name: doctrine.event_listener, event: preUpdate }
