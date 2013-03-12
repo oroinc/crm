@@ -106,10 +106,6 @@ class Role implements RoleInterface
      */
     public function setRole($role)
     {
-        if (!is_null($this->id)) {
-            throw new \RuntimeException('Unable to change role name at runtime');
-        }
-
         $this->role = (string) strtoupper($role);
 
         // every role should be prefixed with 'ROLE_'
