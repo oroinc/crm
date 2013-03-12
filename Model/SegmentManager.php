@@ -7,7 +7,7 @@ use Doctrine\Common\Persistence\ObjectManager;
 /**
  * Service class to manage segments node and tree
  *
- * @author Benoit Jacquemont <benoit@akeneo.com>
+ * @author    Benoit Jacquemont <benoit@akeneo.com>
  * @copyright 2012 Akeneo SAS (http://www.akeneo.com)
  * @license   http://opensource.org/licenses/MIT MIT
  *
@@ -38,8 +38,9 @@ class SegmentManager
     /**
      * Constructor
      * 
-     * @param String $storageManager Segment class name
-     * @param ObjectManager $storageManager Storage manager
+     * @param ObjectManager $storageManager   Storage manager
+     * @param String        $segmentName      Segment class name
+     * @param String        $segmentShortName Segment class name shortname
      */
     public function __construct($storageManager, $segmentName, $segmentShortName)
     {
@@ -53,7 +54,7 @@ class SegmentManager
      *
      * @return ObjectManager
      */
-    function getStorageManager()
+    public function getStorageManager()
     {
         return $this->storageManager;
     }
@@ -67,6 +68,7 @@ class SegmentManager
     public function createSegment()
     {
         $segmentClassName = $this->getSegmentName();
+
         return new $segmentClassName;
     }
 
@@ -83,6 +85,7 @@ class SegmentManager
     /**
      * Return segment class name (mainly used in Doctrine context)
      * 
+     * @return String segment class name
      */
     public function getSegmentName()
     {
@@ -109,6 +112,7 @@ class SegmentManager
     public function getChildren($parentId)
     {
         $entityRepository = $this->getEntityRepository();
+
         return $entityRepository->getChildrenFromParentId($parentId);
     }
 
@@ -152,7 +156,7 @@ class SegmentManager
      * Rename a segment
      *
      * @param integer $segmentId Segment id
-     * @param string $title new title for segment
+     * @param string  $title     New title for segment
      */
     public function rename($segmentId, $title)
     {
@@ -167,8 +171,9 @@ class SegmentManager
 
     /**
      * Move a segment to another parent
-     * @param integer $segmentId Segment to move
-     * @param integer $referenceId parent segment
+     *
+     * @param integer $segmentId   Segment to move
+     * @param integer $referenceId Parent segment
      */
     public function move($segmentId, $referenceId)
     {
@@ -184,7 +189,7 @@ class SegmentManager
     /**
      * Copy a segment and link it to a parent
      *
-     * @param integer $segmentId Segment to copy
+     * @param integer $segmentId   Segment to copy
      * @param integer $referenceId Parent segment
      */
     public function copy($segmentId, $referenceId)
@@ -201,7 +206,7 @@ class SegmentManager
     /**
      * Recursive copy
      * @param AbstractSegment $segment Segment to be copied
-     * @param AbstractSegment $parent Parent segment
+     * @param AbstractSegment $parent  Parent segment
      *
      * @return AbstractSegment
      * FIXME: copy relationship states as well and all attributes

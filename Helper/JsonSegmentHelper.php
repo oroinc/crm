@@ -4,7 +4,7 @@ namespace Oro\Bundle\SegmentationTreeBundle\Helper;
 /**
  * Helper for Tree Controller to format segments in JSON content
  *
- * @author Romain Monceau <romain@akeneo.com>
+ * @author    Romain Monceau <romain@akeneo.com>
  * @copyright 2012 Akeneo SAS (http://www.akeneo.com)
  * @license   http://opensource.org/licenses/MIT MIT
  */
@@ -12,7 +12,8 @@ class JsonSegmentHelper
 {
     /**
      * Format content for node creation response
-     * @param integer $status response status value
+     *
+     * @param integer $status    Response status value
      * @param integer $segmentId Segment id
      *
      * @return array
@@ -25,6 +26,7 @@ class JsonSegmentHelper
 
     /**
      * Format in array content segment for JSON response
+     *
      * @param ArrayCollection $segments
      *
      * @return array

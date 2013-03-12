@@ -20,7 +20,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 /**
  * Base Segment controller
  *
- * @author Benoit Jacquemont <benoit@akeneo.com>
+ * @author    Benoit Jacquemont <benoit@akeneo.com>
  * @copyright 2012 Akeneo SAS (http://www.akeneo.com)
  * @license   http://opensource.org/licenses/MIT MIT
  *
@@ -116,7 +116,7 @@ abstract class BaseSegmentController extends Controller
         if ($request->isXmlHttpRequest()) {
             $parentId = $request->get('id');
             $title = $request->get('title');
-            
+
             $segment = $this->getSegmentManager()->createSegment();
 
             $segment->setTitle($title);
@@ -263,14 +263,15 @@ abstract class BaseSegmentController extends Controller
             return $this->redirectToIndex();
         }
     }
-    
+
     /**
      * Fetch items list associated with this segment and prepare it
      * be send via Ajax.
      * The items must be returned as an array that will be
      * turned into a JSON representation via prepareJsonResponse
      *
-     * @param AbstractSegment segment
+     * @param AbstractSegment $segment
+     *
      * @return Array items
      */
     abstract protected function prepareItemListResponse(AbstractSegment $segment);
@@ -303,5 +304,5 @@ abstract class BaseSegmentController extends Controller
      */
     abstract public function removeItemAction(Request $request);
 
-    
+
 }
