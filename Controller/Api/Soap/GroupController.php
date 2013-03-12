@@ -12,7 +12,7 @@ class GroupController extends BaseController
      * @Soap\Method("getGroups")
      * @Soap\Result(phpType = "Oro\Bundle\UserBundle\Entity\Group[]")
      */
-    public function сgetAction()
+    public function cgetAction()
     {
         return $this->container->get('besimple.soap.response')->setReturnValue(
              $this->getManager()->getRepository('OroUserBundle:Group')->findAll()

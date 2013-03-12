@@ -12,7 +12,7 @@ class RoleController extends BaseController
      * @Soap\Method("getRoles")
      * @Soap\Result(phpType = "Oro\Bundle\UserBundle\Entity\Role[]")
      */
-    public function сgetAction()
+    public function cgetAction()
     {
         return $this->container->get('besimple.soap.response')->setReturnValue(
              $this->getManager()->getRepository('OroUserBundle:Role')->findAll()

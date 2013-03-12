@@ -119,15 +119,21 @@ class Manager
     /**
      * get array of resource ids allowed for user
      *
-     * @param  \Oro\Bundle\UserBundle\Entity\User $user
-     * @return array
+     * @param \Oro\Bundle\UserBundle\Entity\User $user
+     * @param bool                               $useObjects
+     * @return array|\Oro\Bundle\UserBundle\Entity\Role[]
      */
-    public function getAclForUser(User $user)
+    public function getAclForUser(User $user, $useObjects = false)
     {
-        $acl = $this->cache->fetch('user-acl-' . $user->getId());
-        if ($acl === false) {
-            $acl = $this->getAclRepo()->getAllowedAclResourcesForUserRoles($user->getRoles());
-            $this->cache->save('user-acl-' . $user->getId(), $acl);
+        if ($useObjects) {
+            $acl = $this->getAclRepo()->getAllowedAclResourcesForUserRoles($user->getRoles(), true);
+        } else {
+            $cachePrefix =  'user-acl-' . $user->getId();
+            $acl = $this->cache->fetch($cachePrefix);
+            if ($acl === false) {
+                $acl = $this->getAclRepo()->getAllowedAclResourcesForUserRoles($user->getRoles());
+                $this->cache->save($cachePrefix, $acl);
+            }
         }
 
         return $acl;

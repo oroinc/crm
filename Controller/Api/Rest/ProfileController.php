@@ -194,6 +194,28 @@ class ProfileController extends FOSRestController implements ClassResourceInterf
     }
 
     /**
+     * Get user acl list
+     *
+     * @param int $id User id
+     * @ApiDoc(
+     *  description="Get user allowed ACL resources",
+     *  resource=true,
+     *  requirements={
+     *      {"name"="id", "dataType"="integer"},
+     *  }
+     * )
+     */
+    public function getAclAction($id)
+    {
+        $user = ($this->getManager()->findUserBy(array('id' => (int) $id)));
+        if (!$user) {
+            return $this->handleView($this->view('', Codes::HTTP_NOT_FOUND));
+        }
+
+        return $this->handleView($this->view($this->getAclManager()->getAclForUser($user, true), Codes::HTTP_OK));
+    }
+
+    /**
      * Filter user by username or email
      *
      * @QueryParam(name="email", requirements="[a-zA-Z0-9\-_\.@]+", nullable=true, description="Email to filter")
@@ -221,6 +243,14 @@ class ProfileController extends FOSRestController implements ClassResourceInterf
             $entity,
             $entity ? Codes::HTTP_OK : Codes::HTTP_NOT_FOUND
         ));
+    }
+
+    /**
+     * @return \Oro\Bundle\UserBundle\Acl\Manager
+     */
+    protected function getAclManager()
+    {
+        return $this->get('oro_user.acl_manager');
     }
 
     /**
