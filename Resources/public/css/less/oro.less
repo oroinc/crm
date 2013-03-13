@@ -177,7 +177,12 @@ header:after{
 }
 .header-search{
   position: relative;
-
+  width: 350px;
+  .header-search-frame{
+    position: relative;
+    display: inline-block;
+    vertical-align: top;
+  }
   .dropdown-toggle{
     border-color: #1c2025 #020203 #1c2025 #1c2025;
     background-color: #2d353e;
@@ -207,6 +212,7 @@ header:after{
     border-right: 0;
     color: #fff;
     width: 200px;
+    outline: none;
   }
   input[type="text"]:focus{
     background-color: #fff;
@@ -221,6 +227,8 @@ header:after{
     width: 30px;
     border: solid #1c2025;
     border-width: 1px 1px 1px 0;
+    -webkit-border-radius: 0 3px 3px 0;
+    border-radius: 0 3px 3px 0;
     box-shadow: none !important;
   }
 
@@ -230,46 +238,80 @@ header:after{
   }
   .custom-dropdown{
     position: absolute;
-    top: 27px;
-    left: 61px;
+    top: 28px;
+    left: 1px;
     border: 1px solid #ccc;
     background: #fff;
-    width: 240px;
+    width: 238px;
     z-index: 105;
     color: #777;
+    -webkit-border-radius: 0 0 3px 3px;
+    border-radius: 0 0 3px 3px;
     font:12px/14px Arial, Helvetica, sans-serif;
     display: none;
+
     ul{
       margin: 0;
       padding: 0;
     }
-    span{
-      float: left;
-    }
     li{
       padding: 5px 10px;
+      display: block;
     }
     li:hover{
       background: #f5f5f5;
       cursor: pointer;
+    }
+    li a{
+      color: #777;
+      white-space: normal;
+    }
+    li a:hover{
+      text-decoration: none;
+    }
+    .name{
+      display: block;
+      clear: both;
     }
   }
   .avatar{
     float:right;
   }
 }
+.header-search:after{
+  content: "";
+  display: block;
+  clear: both;
+}
 .header-search-focused .custom-dropdown{
   display: block;
 }
+.search-focus .btn-search:hover,
+.search-focus .btn-search:focus,
+.search-focus .btn-search,
 .header-search-focused .btn-search,
 .header-search-focused .btn-search:hover,
 .header-search-focused .btn-search:focus{
   background:#fff url("../../img/general-sprite.png") no-repeat 3px -63px !important;
 }
+.search-focus input[type="text"],
 .header-search-focused input[type="text"]{
   -webkit-box-shadow:  none !important;
   box-shadow: none !important;
+  background: #fff;
+  color: #444;
 }
+#search-bar-dropdown:after{
+  border-bottom: 6px solid #FFFFFF;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  content: "";
+  display: inline-block;
+  left: 10px;
+  position: absolute;
+  top: -6px;
+}
+
 footer{
   text-align: center;
 }
