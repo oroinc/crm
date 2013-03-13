@@ -3,12 +3,16 @@
 namespace Oro\Bundle\GridBundle\Filter\ORM\Flexible;
 
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
-use Oro\Bundle\FlexibleEntityBundle\Entity\Repository\FlexibleEntityRepository;
 use Sonata\AdminBundle\Form\Type\Filter\ChoiceType;
-use Oro\Bundle\GridBundle\Datagrid\ORM\ProxyQuery;
+use Oro\Bundle\GridBundle\Filter\ORM\StringFilter;
 
 class FlexibleStringFilter extends AbstractFlexibleFilter
 {
+    /**
+     * @var StringFilter
+     */
+    protected $parentFilter;
+
     /**
      * {@inheritdoc}
      */
@@ -38,12 +42,16 @@ class FlexibleStringFilter extends AbstractFlexibleFilter
             $operator = $this->getOperator(ChoiceType::TYPE_CONTAINS);
         }
 
-        /** @var $proxyQuery ProxyQuery */
-        $queryBuilder = $proxyQuery->getQueryBuilder();
+        // apply filter
+        $this->applyFlexibleFilter($proxyQuery, $field, $value, $operator);
+    }
 
-        /** @var $entityRepository FlexibleEntityRepository */
-        $entityRepository = $this->flexibleManager->getFlexibleRepository();
-        $entityRepository->applyFilterByAttribute($queryBuilder, $field, $value, $operator);
+    /**
+     * @return array
+     */
+    public function getTypeOptions()
+    {
+        return $this->parentFilter->getTypeOptions();
     }
 
     /**
@@ -51,15 +59,9 @@ class FlexibleStringFilter extends AbstractFlexibleFilter
      *
      * @return bool
      */
-    private function getOperator($type)
+    public function getOperator($type)
     {
-        $choices = array(
-            ChoiceType::TYPE_CONTAINS     => 'LIKE',
-            ChoiceType::TYPE_NOT_CONTAINS => 'NOT LIKE',
-            ChoiceType::TYPE_EQUAL        => '=',
-        );
-
-        return isset($choices[$type]) ? $choices[$type] : false;
+        return $this->parentFilter->getOperator($type);
     }
 
     /**
@@ -67,9 +69,7 @@ class FlexibleStringFilter extends AbstractFlexibleFilter
      */
     public function getDefaultOptions()
     {
-        return array(
-            'format' => '%%%s%%'
-        );
+        return $this->parentFilter->getDefaultOptions();
     }
 
     /**
@@ -77,10 +77,6 @@ class FlexibleStringFilter extends AbstractFlexibleFilter
      */
     public function getRenderSettings()
     {
-        return array('oro_grid_type_filter_choice', array(
-            'field_type'    => $this->getFieldType(),
-            'field_options' => $this->getFieldOptions(),
-            'label'         => $this->getLabel()
-        ));
+        return $this->parentFilter->getRenderSettings();
     }
 }

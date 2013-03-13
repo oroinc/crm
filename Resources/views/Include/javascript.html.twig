@@ -85,6 +85,8 @@ output='js/acme.grid.js'
                             {% set filterType = filter.getOption('filter_type') %}
                             {% if filterType == constant(filterTypePrefix ~ 'TYPE_NUMBER')
                                 or filterType == constant(filterTypePrefix ~ 'TYPE_STRING')
+                                or filterType == constant(filterTypePrefix ~ 'TYPE_FLEXIBLE_NUMBER')
+                                or filterType == constant(filterTypePrefix ~ 'TYPE_FLEXIBLE_STRING')
                             %}
                                 OroApp.DatagridFilterChoice.extend({
                                     name: '{{ filter.name }}',
@@ -92,14 +94,18 @@ output='js/acme.grid.js'
                                     enabled: {{ filter.getOption('show_filter') ? 'true' : 'false' }},
                                     choices: {{ filter.typeOptions|json_encode|raw }}
                                 })
-                            {% elseif filterType == constant(filterTypePrefix ~ 'TYPE_DATE') %}
+                            {% elseif filterType == constant(filterTypePrefix ~ 'TYPE_DATE')
+                                or filterType == constant(filterTypePrefix ~ 'TYPE_FLEXIBLE_DATE')
+                            %}
                                 OroApp.DatagridFilterDate.extend({
                                     name: '{{ filter.name }}',
                                     label: '{{ filter.getOption('label') }}',
                                     enabled: {{ filter.getOption('show_filter') ? 'true' : 'false' }},
                                     choices: {{ filter.typeOptions|json_encode|raw }}
                                 })
-                            {% elseif filterType == constant(filterTypePrefix ~ 'TYPE_DATETIME') %}
+                            {% elseif filterType == constant(filterTypePrefix ~ 'TYPE_DATETIME')
+                                or filterType == constant(filterTypePrefix ~ 'TYPE_FLEXIBLE_DATETIME')
+                            %}
                                 OroApp.DatagridFilterDateTime.extend({
                                     name: '{{ filter.name }}',
                                     label: '{{ filter.getOption('label') }}',

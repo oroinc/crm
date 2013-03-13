@@ -52,12 +52,8 @@ class FlexibleOptionsFilter extends AbstractFlexibleFilter
             $operator = $this->getOperator((int) $data['type']);
         }
 
-        /** @var $proxyQuery ProxyQuery */
-        $queryBuilder = $proxyQuery->getQueryBuilder();
-
-        /** @var $entityRepository FlexibleEntityRepository */
-        $entityRepository = $this->flexibleManager->getFlexibleRepository();
-        $entityRepository->applyFilterByAttribute($queryBuilder, $field, $value['value'], $operator);
+        // apply filter
+        $this->applyFlexibleFilter($proxyQuery, $field, $value['value'], $operator);
     }
 
     /**
@@ -65,7 +61,7 @@ class FlexibleOptionsFilter extends AbstractFlexibleFilter
      *
      * @return bool
      */
-    private function getOperator($type)
+    public function getOperator($type)
     {
         $choices = array(
             ChoiceType::TYPE_CONTAINS         => 'IN',

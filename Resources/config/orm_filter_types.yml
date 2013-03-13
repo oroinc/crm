@@ -23,9 +23,15 @@ services:
         tags:
             - { name: oro_grid.filter.type, alias: oro_grid_orm_string }
 
+    oro_grid.orm.filter.type.flexible_number:
+        class:     Oro\Bundle\GridBundle\Filter\ORM\Flexible\FlexibleNumberFilter
+        arguments: ["@service_container", "@oro_grid.orm.filter.type.number"]
+        tags:
+            - { name: oro_grid.filter.type, alias: oro_grid_orm_flexible_number }
+
     oro_grid.orm.filter.type.flexible_string:
         class:     Oro\Bundle\GridBundle\Filter\ORM\Flexible\FlexibleStringFilter
-        arguments: ["@service_container"]
+        arguments: ["@service_container", "@oro_grid.orm.filter.type.string"]
         tags:
             - { name: oro_grid.filter.type, alias: oro_grid_orm_flexible_string }
 

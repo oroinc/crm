@@ -5,9 +5,8 @@ namespace Oro\Bundle\GridBundle\Filter\ORM;
 use Doctrine\ORM\QueryBuilder;
 use Sonata\AdminBundle\Form\Type\Filter\NumberType;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
-use Oro\Bundle\GridBundle\Filter\FilterInterface;
 
-class NumberFilter extends AbstractFilter implements FilterInterface
+class NumberFilter extends AbstractFilter
 {
     /**
      * {@inheritdoc}
@@ -71,7 +70,7 @@ class NumberFilter extends AbstractFilter implements FilterInterface
      *
      * @return bool
      */
-    protected function getOperator($type)
+    public function getOperator($type)
     {
         $choices = array(
             NumberType::TYPE_EQUAL         => '=',
