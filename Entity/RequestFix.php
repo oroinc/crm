@@ -45,6 +45,11 @@ class RequestFix
         $fields = array();
 
         foreach ((array) $data as $field => $value) {
+            // special case for ordered arrays
+            if ($value instanceof \stdClass && isset($value->item) && is_array($value->item)) {
+                $value = (array) $value->item;
+            }
+
             if (!is_null($value)) {
                 $fields[preg_replace('/[^a-z]+/i', '', $field)] = $value;
             }
