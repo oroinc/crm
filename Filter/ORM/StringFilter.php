@@ -58,7 +58,7 @@ class StringFilter extends AbstractFilter implements FilterInterface
         $operator = $this->getOperator((int) $data['type']);
 
         if (!$operator) {
-            $operator = 'LIKE';
+            $operator = ChoiceType::TYPE_CONTAINS;
         }
 
         // c.name > '1' => c.name OPERATOR :FIELDNAME

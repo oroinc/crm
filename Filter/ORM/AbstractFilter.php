@@ -6,6 +6,7 @@ use Symfony\Component\Translation\TranslatorInterface;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Sonata\DoctrineORMAdminBundle\Filter\Filter as AbstractORMFilter;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
+use Oro\Bundle\GridBundle\Field\FieldDescriptionInterface;
 
 abstract class AbstractFilter extends AbstractORMFilter
 {
@@ -60,5 +61,13 @@ abstract class AbstractFilter extends AbstractORMFilter
             ?: $queryBuilder->entityJoin($this->getParentAssociationMappings());
 
         return array($alias, $this->getFieldName());
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFieldType()
+    {
+        return $this->getOption('type', FieldDescriptionInterface::TYPE_TEXT);
     }
 }

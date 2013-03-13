@@ -9,9 +9,6 @@ interface FilterInterface extends BaseFilterInterface
     /**
      * Allowed filter types
      */
-    const TYPE_BOOLEAN          = 'oro_grid_orm_boolean';
-    const TYPE_CALLBACK         = 'oro_grid_orm_callback';
-    const TYPE_CHOICE           = 'oro_grid_orm_choice';
     const TYPE_DATE             = 'oro_grid_orm_date_range';
     const TYPE_DATETIME         = 'oro_grid_orm_datetime_range';
     const TYPE_NUMBER           = 'oro_grid_orm_number';

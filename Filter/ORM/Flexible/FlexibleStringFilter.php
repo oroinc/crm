@@ -29,15 +29,21 @@ class FlexibleStringFilter extends AbstractFlexibleFilter
         $operator = $this->getOperator((int) $data['type']);
 
         if (!$operator) {
-            $operator = 'LIKE';
+            $operator = ChoiceType::TYPE_CONTAINS;
         }
 
         /** @var $proxyQuery ProxyQuery */
         $queryBuilder = $proxyQuery->getQueryBuilder();
 
+        if ($data['type'] == ChoiceType::TYPE_EQUAL) {
+            $value = $data['value'];
+        } else {
+            $value =  sprintf($this->getOption('format'), $data['value']);
+        }
+
         /** @var $entityRepository FlexibleEntityRepository */
         $entityRepository = $this->flexibleManager->getFlexibleRepository();
-        $entityRepository->applyFilterByAttribute($queryBuilder, $field, $data['value'], $operator);
+        $entityRepository->applyFilterByAttribute($queryBuilder, $field, $value, $operator);
     }
 
     /**
@@ -71,11 +77,10 @@ class FlexibleStringFilter extends AbstractFlexibleFilter
      */
     public function getRenderSettings()
     {
-        // TODO : add rendering
-        return array('oro_grid_type_filter_default', array(
-            'label'      => $this->getLabel(),
-            'field_type' => 'text',
-            'field_options' => array('required' => false)
+        return array('oro_grid_type_filter_choice', array(
+            'field_type'    => $this->getFieldType(),
+            'field_options' => $this->getFieldOptions(),
+            'label'         => $this->getLabel()
         ));
     }
 }

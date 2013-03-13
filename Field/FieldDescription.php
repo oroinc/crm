@@ -323,7 +323,7 @@ class FieldDescription implements FieldDescriptionInterface
         if (null === $value) {
             return $value;
         }
-        switch ($this->getOption('field_type')) {
+        switch ($this->getOption('type')) {
             case AbstractAttributeType::BACKEND_TYPE_DECIMAL:
                 return floatval($value);
                 break;

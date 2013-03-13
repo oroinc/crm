@@ -11,11 +11,6 @@ services:
         tags:
             - { name: form.type, alias: oro_grid_type_datetime_range }
 
-    oro_grid.form.filter.type.default:
-        class:     Oro\Bundle\GridBundle\Form\Type\Filter\DefaultType
-        tags:
-            - { name: form.type, alias: oro_grid_type_filter_default }
-
     oro_grid.form.filter.type.number:
         class:     Oro\Bundle\GridBundle\Form\Type\Filter\NumberType
         arguments: ["@translator"]

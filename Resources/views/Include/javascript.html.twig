@@ -83,8 +83,7 @@ output='js/acme.grid.js'
                         {% for filter in datagrid.filters %}
                             '{{ filter.name }}':
                             {% set filterType = filter.getOption('filter_type') %}
-                            {% if filterType == constant(filterTypePrefix ~ 'TYPE_CHOICE')
-                                or filterType == constant(filterTypePrefix ~ 'TYPE_NUMBER')
+                            {% if filterType == constant(filterTypePrefix ~ 'TYPE_NUMBER')
                                 or filterType == constant(filterTypePrefix ~ 'TYPE_STRING')
                             %}
                                 OroApp.DatagridFilterChoice.extend({
@@ -107,9 +106,7 @@ output='js/acme.grid.js'
                                     enabled: {{ filter.getOption('show_filter') ? 'true' : 'false' }},
                                     choices: {{ filter.typeOptions|json_encode|raw }}
                                 })
-                            {% elseif filterType == constant(filterTypePrefix ~ 'TYPE_BOOLEAN')
-                                or filterType == constant(filterTypePrefix ~ 'TYPE_FLEXIBLE_OPTIONS')
-                            %}
+                            {% elseif filterType == constant(filterTypePrefix ~ 'TYPE_FLEXIBLE_OPTIONS') %}
                                 {% if filter.getOption('multiple') %}
                                     OroApp.DatagridFilterMultiSelect.extend({
                                         name: '{{ filter.name }}',
