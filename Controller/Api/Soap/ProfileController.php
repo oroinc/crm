@@ -16,12 +16,10 @@ class ProfileController extends BaseController
      */
     public function сgetAction($page = 1, $limit = 10)
     {
-        return $this->container->get('besimple.soap.response')->setReturnValue(
-            $this->container->get('knp_paginator')->paginate(
-                $this->getUserManager()->getListQuery(),
-                (int) $page,
-                (int) $limit
-            )
+        return $this->container->get('knp_paginator')->paginate(
+            $this->getUserManager()->getListQuery(),
+            (int) $page,
+            (int) $limit
         );
     }
 
@@ -32,9 +30,7 @@ class ProfileController extends BaseController
      */
     public function getAction($id)
     {
-        return $this->container->get('besimple.soap.response')->setReturnValue(
-            $this->getEntity('OroUserBundle:User', $id)
-        );
+        return $this->getEntity('OroUserBundle:User', $id);
     }
 
     /**
@@ -45,12 +41,11 @@ class ProfileController extends BaseController
     public function createAction($profile)
     {
         $entity = $this->getUserManager()->createFlexible();
+        $form   = $this->container->get('oro_user.form.profile.api')->getName();
 
-        $this->container->get('oro_soap.request')->fix($this->container->get('oro_user.form.profile.api')->getName());
+        $this->container->get('oro_soap.request')->fix($form);
 
-        return $this->container->get('besimple.soap.response')->setReturnValue(
-            $this->container->get('oro_user.form.handler.profile.api')->process($entity)
-        );
+        return $this->processForm($form, $entity);
     }
 
     /**
@@ -62,12 +57,12 @@ class ProfileController extends BaseController
     public function updateAction($id, $profile)
     {
         $entity = $this->getEntity('OroUserBundle:User', $id);
+        $form   = $this->container->get('oro_user.form.profile.api')->getName();
 
-        $this->container->get('oro_soap.request')->fix($this->container->get('oro_user.form.profile.api')->getName());
+        $this->container->get('oro_soap.request')->fix($form);
 
-        return $this->container->get('besimple.soap.response')->setReturnValue(
-            $this->container->get('oro_user.form.handler.profile.api')->process($entity)
-        );
+        return $this->processForm($form, $entity);
+
     }
 
     /**
@@ -81,7 +76,7 @@ class ProfileController extends BaseController
 
         $this->getUserManager()->deleteUser($entity);
 
-        return $this->container->get('besimple.soap.response')->setReturnValue(true);
+        return true;
     }
 
     /**
@@ -91,9 +86,7 @@ class ProfileController extends BaseController
      */
     public function getRolesAction($id)
     {
-        return $this->container->get('besimple.soap.response')->setReturnValue(
-            $this->getEntity('OroUserBundle:User', $id)->getRoles()
-        );
+        return $this->getEntity('OroUserBundle:User', $id)->getRoles();
     }
 
     /**
@@ -103,9 +96,27 @@ class ProfileController extends BaseController
      */
     public function getGroupsAction($id)
     {
-        return $this->container->get('besimple.soap.response')->setReturnValue(
-            $this->getEntity('OroUserBundle:User', $id)->getGroups()
-        );
+        return $this->getEntity('OroUserBundle:User', $id)->getGroups();
+    }
+
+    /**
+     * @Soap\Method("getUserBy")
+     * @Soap\Param("filters", phpType = "BeSimple\SoapCommon\Type\KeyValue\String[]")
+     * @Soap\Result(phpType = "Oro\Bundle\UserBundle\Entity\User")
+     */
+    public function getByAction(array $filters)
+    {
+        if (empty($filters)) {
+            throw new \SoapFault('NOT_FOUND', 'Empty filter data');
+        }
+
+        $entity = $this->getUserManager()->findUserBy($filters);
+
+        if (!$entity) {
+            throw new \SoapFault('NOT_FOUND', 'User can not be found using specified filter');
+        }
+
+        return $entity;
     }
 
     /**

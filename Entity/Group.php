@@ -13,7 +13,7 @@ use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="access_group")
+ * @ORM\Table(name="oro_access_group")
  */
 class Group
 {
@@ -35,7 +35,7 @@ class Group
 
     /**
      * @ORM\ManyToMany(targetEntity="Role")
-     * @ORM\JoinTable(name="access_group_role",
+     * @ORM\JoinTable(name="oro_user_access_group_role",
      *      joinColumns={@ORM\JoinColumn(name="group_id", referencedColumnName="id", onDelete="CASCADE")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="role_id", referencedColumnName="id", onDelete="CASCADE")}
      * )
@@ -151,12 +151,20 @@ class Group
     /**
      * Set new Roles collection
      *
-     * @param  Collection $roles
+     * @param  array|Collection $roles
      * @return Group
      */
-    public function setRoles(Collection $roles)
+    public function setRoles($roles)
     {
-        $this->roles = $roles;
+        if ($roles instanceof Collection) {
+            $this->roles->clear();
+
+            foreach ($roles as $role) {
+                $this->addRole($role);
+            }
+        } else {
+            $this->roles = $roles;
+        }
 
         return $this;
     }

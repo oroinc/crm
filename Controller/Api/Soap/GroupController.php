@@ -14,9 +14,7 @@ class GroupController extends BaseController
      */
     public function сgetAction()
     {
-        return $this->container->get('besimple.soap.response')->setReturnValue(
-             $this->getManager()->getRepository('OroUserBundle:Group')->findAll()
-        );
+        return $this->getManager()->getRepository('OroUserBundle:Group')->findAll();
     }
 
     /**
@@ -26,9 +24,7 @@ class GroupController extends BaseController
      */
     public function getAction($id)
     {
-        return $this->container->get('besimple.soap.response')->setReturnValue(
-            $this->getEntity('OroUserBundle:Group', $id)
-        );
+        return $this->getEntity('OroUserBundle:Group', $id);
     }
 
     /**
@@ -39,12 +35,11 @@ class GroupController extends BaseController
     public function createAction($group)
     {
         $entity = new Group();
+        $form   = $this->container->get('oro_user.form.group.api');
 
-        $this->container->get('oro_soap.request')->fix($this->container->get('oro_user.form.group.api')->getName());
+        $this->container->get('oro_soap.request')->fix($form->getName());
 
-        return $this->container->get('besimple.soap.response')->setReturnValue(
-            $this->container->get('oro_user.form.handler.group.api')->process($entity)
-        );
+        return $this->processForm($form->getName(), $entity);
     }
 
     /**
@@ -56,12 +51,11 @@ class GroupController extends BaseController
     public function updateAction($id, $group)
     {
         $entity = $this->getEntity('OroUserBundle:Group', $id);
+        $form   = $this->container->get('oro_user.form.group.api');
 
-        $this->container->get('oro_soap.request')->fix($this->container->get('oro_user.form.group.api')->getName());
+        $this->container->get('oro_soap.request')->fix($form->getName());
 
-        return $this->container->get('besimple.soap.response')->setReturnValue(
-            $this->container->get('oro_user.form.handler.group.api')->process($entity)
-        );
+        return $this->processForm($form->getName(), $entity);
     }
 
     /**
@@ -76,7 +70,7 @@ class GroupController extends BaseController
         $em->remove($entity);
         $em->flush();
 
-        return $this->container->get('besimple.soap.response')->setReturnValue(true);
+        return true;
     }
 
     /**
@@ -88,6 +82,6 @@ class GroupController extends BaseController
     {
         $entity = $this->getEntity('OroUserBundle:Group', $id);
 
-        return $this->container->get('besimple.soap.response')->setReturnValue($entity->getRoles()->toArray());
+        return $entity->getRoles()->toArray();
     }
 }

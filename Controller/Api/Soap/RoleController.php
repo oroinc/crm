@@ -12,11 +12,9 @@ class RoleController extends BaseController
      * @Soap\Method("getRoles")
      * @Soap\Result(phpType = "Oro\Bundle\UserBundle\Entity\Role[]")
      */
-    public function сgetAction()
+    public function cgetAction()
     {
-        return $this->container->get('besimple.soap.response')->setReturnValue(
-             $this->getManager()->getRepository('OroUserBundle:Role')->findAll()
-        );
+        return $this->getManager()->getRepository('OroUserBundle:Role')->findAll();
     }
 
     /**
@@ -26,42 +24,38 @@ class RoleController extends BaseController
      */
     public function getAction($id)
     {
-        return $this->container->get('besimple.soap.response')->setReturnValue(
-            $this->getEntity('OroUserBundle:Role', $id)
-        );
+        return $this->getEntity('OroUserBundle:Role', $id);
     }
 
     /**
      * @Soap\Method("createRole")
-     * @Soap\Param("role", phpType = "\Oro\Bundle\UserBundle\Entity\Role")
+     * @Soap\Param("role", phpType = "Oro\Bundle\UserBundle\Entity\Role")
      * @Soap\Result(phpType = "boolean")
      */
     public function createAction($role)
     {
         $entity = new Role();
+        $form   = $this->container->get('oro_user.form.role.api');
 
-        $this->container->get('oro_soap.request')->fix($this->container->get('oro_user.form.role.api')->getName());
+        $this->container->get('oro_soap.request')->fix($form->getName());
 
-        return $this->container->get('besimple.soap.response')->setReturnValue(
-            $this->container->get('oro_user.form.handler.role.api')->process($entity)
-        );
+        return $this->processForm($form->getName(), $entity);
     }
 
     /**
      * @Soap\Method("updateRole")
      * @Soap\Param("id", phpType = "int")
-     * @Soap\Param("role", phpType = "\Oro\Bundle\UserBundle\Entity\Role")
+     * @Soap\Param("role", phpType = "Oro\Bundle\UserBundle\Entity\Role")
      * @Soap\Result(phpType = "boolean")
      */
     public function updateAction($id, $role)
     {
         $entity = $this->getEntity('OroUserBundle:Role', $id);
+        $form   = $this->container->get('oro_user.form.role.api');
 
-        $this->container->get('oro_soap.request')->fix($this->container->get('oro_user.form.role.api')->getName());
+        $this->container->get('oro_soap.request')->fix($form->getName());
 
-        return $this->container->get('besimple.soap.response')->setReturnValue(
-            $this->container->get('oro_user.form.handler.role.api')->process($entity)
-        );
+        return $this->processForm($form->getName(), $entity);
     }
 
     /**
@@ -77,7 +71,7 @@ class RoleController extends BaseController
         $em->remove($entity);
         $em->flush();
 
-        return $this->container->get('besimple.soap.response')->setReturnValue(true);
+        return true;
     }
 
     /**
@@ -93,6 +87,6 @@ class RoleController extends BaseController
             throw new \SoapFault('NOT_FOUND', sprintf('Role "%s" can not be found', $name));
         }
 
-        return $this->container->get('besimple.soap.response')->setReturnValue($entity);
+        return $entity;
     }
 }

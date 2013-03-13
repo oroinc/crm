@@ -17,7 +17,7 @@ use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityFlexible;
 
 /**
  * @ORM\Entity(repositoryClass="Oro\Bundle\FlexibleEntityBundle\Entity\Repository\FlexibleEntityRepository")
- * @ORM\Table(name="user")
+ * @ORM\Table(name="oro_user")
  * @ORM\HasLifecycleCallbacks()
  */
 class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Serializable
@@ -121,7 +121,7 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
      * @var Role[]
      *
      * @ORM\ManyToMany(targetEntity="Role")
-     * @ORM\JoinTable(name="user_access_role",
+     * @ORM\JoinTable(name="oro_user_access_role",
      *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="role_id", referencedColumnName="id", onDelete="CASCADE")}
      * )
@@ -134,7 +134,7 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
      * @var Group[]
      *
      * @ORM\ManyToMany(targetEntity="Group")
-     * @ORM\JoinTable(name="user_access_group",
+     * @ORM\JoinTable(name="oro_user_access_group",
      *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="group_id", referencedColumnName="id", onDelete="CASCADE")}
      * )

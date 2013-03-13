@@ -63,4 +63,9 @@ class MainTestController extends Controller
     {
         return new Response('test');
     }
+
+    public function noActionMethod()
+    {
+        return array();
+    }
 }

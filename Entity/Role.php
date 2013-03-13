@@ -17,7 +17,7 @@ use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
  * Role Entity
  *
  * @ORM\Entity
- * @ORM\Table(name="access_role")
+ * @ORM\Table(name="oro_access_role")
  */
 class Role implements RoleInterface
 {
@@ -106,10 +106,6 @@ class Role implements RoleInterface
      */
     public function setRole($role)
     {
-        if (!is_null($this->id)) {
-            throw new \RuntimeException('Unable to change role name at runtime');
-        }
-
         $this->role = (string) strtoupper($role);
 
         // every role should be prefixed with 'ROLE_'

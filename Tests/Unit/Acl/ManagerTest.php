@@ -5,6 +5,7 @@ use Oro\Bundle\UserBundle\Acl\Manager;
 use Oro\Bundle\UserBundle\Entity\Acl;
 use Oro\Bundle\UserBundle\Entity\Role;
 use Oro\Bundle\UserBundle\Entity\User;
+use Oro\Bundle\UserBundle\Annotation\Acl as AclAnnotation;
 
 class ManagerTest extends \PHPUnit_Framework_TestCase
 {
@@ -29,6 +30,10 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
 
     private $securityContext;
 
+    private $reader;
+
+    private $configApiReader;
+
     public function setUp()
     {
         if (!interface_exists('Doctrine\Common\Persistence\ObjectManager')) {
@@ -42,7 +47,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
         $this->repository = $this->getMock(
             'Doctrine\Common\Persistence\ObjectRepository',
             array('find', 'findAll', 'findBy', 'findOneBy', 'getClassName', 'getAllowedAclResourcesForUserRoles',
-            'getFullNodeWithRoles')
+            'getFullNodeWithRoles', 'getAclRolesWithoutTree', 'getRoleAclTree', 'getAclListWithRoles')
         );
 
         $this->repository->expects($this->any())
@@ -57,8 +62,16 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
             ->method('getRepository')
             ->will($this->returnValue($this->repository));
 
-        $reader = $this->getMock(
+        $this->reader = $this->getMock(
             'Oro\Bundle\UserBundle\Acl\ResourceReader\Reader',
+            array(),
+            array(),
+            '',
+            false
+        );
+
+        $this->configApiReader = $this->getMock(
+            'Oro\Bundle\UserBundle\Acl\ResourceReader\ConfigReader',
             array(),
             array(),
             '',
@@ -76,7 +89,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
         $this->cache = $this->getMock('Doctrine\Common\Cache\CacheProvider',
             array('doFetch', 'doContains', 'doSave', 'doDelete', 'doFlush', 'doGetStats', 'fetch', 'save'));
 
-        $this->manager = new Manager($this->om, $reader, $this->cache, $this->securityContext);
+        $this->manager = new Manager($this->om, $this->reader, $this->cache, $this->securityContext, $this->configApiReader);
 
         $this->testRole = new Role('ROLE_TEST_ROLE');
 
@@ -92,7 +105,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testIsResourceGranted()
     {
-        $this->cache->expects($this->once())
+        $this->cache->expects($this->any())
             ->method('fetch')
             ->will($this->returnValue(false));
 
@@ -110,6 +123,10 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testIsClassMethodGranted()
     {
+        $this->cache->expects($this->any())
+            ->method('fetch')
+            ->will($this->returnValue(false));
+
         $this->repository->expects($this->once())
             ->method('findOneBy')
             ->with($this->equalTo(
@@ -128,9 +145,30 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(true, $this->manager->isClassMethodGranted('test_class', 'test_method', $this->testUser));
     }
 
+    public function testIsClassMethodGrantedWoAcl()
+    {
+        $this->repository->expects($this->any())
+            ->method('getAclRolesWithoutTree')
+            ->will($this->returnValue(array($this->aclObject)));
+
+        $this->cache->expects($this->any())
+            ->method('fetch')
+            ->will($this->returnValue(false));
+
+        $this->repository->expects($this->once())
+            ->method('findOneBy')
+            ->will($this->returnValue(null));
+
+        $this->assertEquals(false, $this->manager->isClassMethodGranted('test_class', 'test_method', $this->testUser));
+    }
+
     public function testGetAclForUser()
     {
-        $result= $this->manager->getAclForUser($this->user);
+        $this->cache->expects($this->any())
+            ->method('fetch')
+            ->will($this->returnValue(false));
+
+        $result = $this->manager->getAclForUser($this->user);
         $this->assertEquals(array('test'), $result);
     }
 
@@ -156,5 +194,114 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
             array('ROLE_TEST_ROLE'),
             $this->manager->getAclRoles($testAclName)
         );
+    }
+
+    public function testGetRoleAclTree()
+    {
+        $this->repository->expects($this->once())
+            ->method('getRoleAclTree')
+            ->with($this->equalTo($this->testRole))
+            ->will($this->returnValue(array()));
+
+        $this->manager->getRoleAclTree($this->testRole);
+    }
+
+    public function testGetRoleAcl()
+    {
+        $this->repository->expects($this->once())
+            ->method('getAclListWithRoles')
+            ->with($this->equalTo($this->testRole))
+            ->will($this->returnValue(array()));
+
+        $this->manager->getRoleAcl($this->testRole);
+    }
+
+    public function testSynchronizeAclResources()
+    {
+        $resources = array();
+        for ($i = 0; $i < 10; $i++) {
+            $acl = new Acl();
+            $acl->setId('test_acl_' . $i);
+            $acl->setName('test_acl_' . $i);
+            $resources[] = $acl;
+        }
+
+        $annotations = array();
+        for ($i = 5; $i < 15; $i++) {
+            $annotation = new AclAnnotation(
+                array(
+                     'id' => 'test_acl_' . $i,
+                     'name' => 'test_acl_' . $i,
+                     'description' => 'test',
+                     'parent' => 'test_acl_' . ($i-1),
+                )
+            );
+            $annotations['test_acl_' . $i] = $annotation;
+        }
+        for ($i = 20; $i < 22; $i++) {
+            $annotation = new AclAnnotation(
+                array(
+                     'id' => 'test_acl_' . $i,
+                     'name' => 'test_acl_' . $i,
+                     'description' => 'test'
+                )
+            );
+            $annotations['test_acl_' . $i] = $annotation;
+        }
+        $annotations['child'] = new AclAnnotation(
+            array(
+                 'id' => 'child',
+                 'name' => 'child',
+                 'description' => 'child',
+                 'parent' => 'parent'
+            )
+        );
+        $annotations['parent'] = new AclAnnotation(
+            array(
+                 'id' => 'parent',
+                 'name' => 'parent',
+                 'description' => 'parent'
+            )
+        );
+
+        $this->reader->expects($this->once())
+            ->method('getResources')
+            ->will($this->returnValue($annotations));
+
+        $this->configApiReader->expects($this->once())
+            ->method('getConfigResources')
+            ->will($this->returnValue(array()));
+
+        $this->repository->expects($this->once())
+            ->method('findAll')
+            ->will($this->returnValue($resources));
+
+        $this->manager->synchronizeAclResources();
+    }
+
+    public function testSaveRoleAcl()
+    {
+        for ($i = 0; $i < 10; $i++) {
+            $acl = new Acl();
+            $acl->setId('test_acl_' . $i);
+            $acl->setName('test_acl_' . $i);
+            $this->testRole->addAclResource($acl);
+            $aclResourses[] = $acl;
+        }
+
+        $gfParentAcl = new Acl();
+        $gfParentAcl->setId('grand_pa_acl');
+        $parentAcl = new Acl();
+        $parentAcl->setId('parent');
+        $parentAcl->setParent($gfParentAcl);
+        $aclWithParent = $aclResourses[8];
+        $aclWithParent->setParent($parentAcl);
+        $aclResourses[8] = $aclWithParent;
+
+        $this->repository->expects($this->any())
+            ->method('find')
+            ->will($this->returnValue($aclWithParent));
+
+        $this->manager->saveRoleAcl($this->testRole, $aclResourses);
     }
 }
