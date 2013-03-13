@@ -56,9 +56,8 @@ class StringFilter extends AbstractFilter implements FilterInterface
         }
 
         $operator = $this->getOperator((int) $data['type']);
-
         if (!$operator) {
-            $operator = ChoiceType::TYPE_CONTAINS;
+            $operator = $this->getOperator(ChoiceType::TYPE_CONTAINS);
         }
 
         // c.name > '1' => c.name OPERATOR :FIELDNAME
@@ -103,7 +102,7 @@ class StringFilter extends AbstractFilter implements FilterInterface
     public function getDefaultOptions()
     {
         return array(
-            'format'   => '%%%s%%'
+            'format' => '%%%s%%'
         );
     }
 }

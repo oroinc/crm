@@ -52,9 +52,8 @@ class NumberFilter extends AbstractFilter implements FilterInterface
         $type = isset($data['type']) ? $data['type'] : false;
 
         $operator = $this->getOperator($type);
-
         if (!$operator) {
-            $operator = '=';
+            $operator = $this->getOperator(NumberType::TYPE_EQUAL);
         }
 
         // c.name > '1' => c.name OPERATOR :FIELDNAME
@@ -75,11 +74,11 @@ class NumberFilter extends AbstractFilter implements FilterInterface
     protected function getOperator($type)
     {
         $choices = array(
-            NumberType::TYPE_EQUAL            => '=',
-            NumberType::TYPE_GREATER_EQUAL    => '>=',
-            NumberType::TYPE_GREATER_THAN     => '>',
-            NumberType::TYPE_LESS_EQUAL       => '<=',
-            NumberType::TYPE_LESS_THAN        => '<',
+            NumberType::TYPE_EQUAL         => '=',
+            NumberType::TYPE_GREATER_EQUAL => '>=',
+            NumberType::TYPE_GREATER_THAN  => '>',
+            NumberType::TYPE_LESS_EQUAL    => '<=',
+            NumberType::TYPE_LESS_THAN     => '<',
         );
 
         return isset($choices[$type]) ? $choices[$type] : false;

@@ -24,22 +24,22 @@ class FlexibleStringFilter extends AbstractFlexibleFilter
             return;
         }
 
-        $data['type'] = !isset($data['type']) ?  ChoiceType::TYPE_CONTAINS : $data['type'];
+        // process type
+        $data['type'] = !isset($data['type']) ? ChoiceType::TYPE_CONTAINS : $data['type'];
+        if ($data['type'] == ChoiceType::TYPE_EQUAL) {
+            $value = $data['value'];
+        } else {
+            $value = sprintf($this->getOption('format'), $data['value']);
+        }
 
+        // process operator
         $operator = $this->getOperator((int) $data['type']);
-
         if (!$operator) {
-            $operator = ChoiceType::TYPE_CONTAINS;
+            $operator = $this->getOperator(ChoiceType::TYPE_CONTAINS);
         }
 
         /** @var $proxyQuery ProxyQuery */
         $queryBuilder = $proxyQuery->getQueryBuilder();
-
-        if ($data['type'] == ChoiceType::TYPE_EQUAL) {
-            $value = $data['value'];
-        } else {
-            $value =  sprintf($this->getOption('format'), $data['value']);
-        }
 
         /** @var $entityRepository FlexibleEntityRepository */
         $entityRepository = $this->flexibleManager->getFlexibleRepository();
@@ -68,7 +68,7 @@ class FlexibleStringFilter extends AbstractFlexibleFilter
     public function getDefaultOptions()
     {
         return array(
-            'format'   => '%%%s%%'
+            'format' => '%%%s%%'
         );
     }
 

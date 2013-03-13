@@ -41,11 +41,12 @@ class FlexibleOptionsFilter extends AbstractFlexibleFilter
             return;
         }
 
+        // process type and operator
         if (!isset($data['type'])) {
             if (is_array($value)) {
-                $operator = 'IN';
+                $operator = $this->getOperator(ChoiceType::TYPE_CONTAINS);
             } else {
-                $operator = '=';
+                $operator = $this->getOperator(ChoiceType::TYPE_EQUAL);
             }
         } else {
             $operator = $this->getOperator((int) $data['type']);
