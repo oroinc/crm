@@ -110,4 +110,42 @@ class RoleController extends BaseController
 
         return $this->container->get('oro_user.acl_manager')->getAllowedAclResourcesForRoles(array($role));
     }
+
+    /**
+     * Link ACL Resource to role
+     *
+     * @Soap\Method("addAclToRole")
+     * @Soap\Param("roleId", phpType = "int")
+     * @Soap\Param("aclResourceId", phpType = "string")
+     * @Soap\Result(phpType = "string")
+     */
+    public function postAclAction($roleId, $aclResourceId)
+    {
+        $this->container->get('oro_user.acl_manager')->modifyAclForRole(
+            $roleId,
+            $aclResourceId,
+            true
+        );
+
+        return '';
+    }
+
+    /**
+     * Unlink ACL Resource from role
+     *
+     * @Soap\Method("removeAclFromRole")
+     * @Soap\Param("roleId", phpType = "int")
+     * @Soap\Param("aclResourceId", phpType = "string")
+     * @Soap\Result(phpType = "string")
+     */
+    public function deleteAclAction($roleId, $aclResourceId)
+    {
+        $this->container->get('oro_user.acl_manager')->modifyAclForRole(
+            $roleId,
+            $aclResourceId,
+            false
+        );
+
+        return '';
+    }
 }

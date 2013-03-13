@@ -177,6 +177,52 @@ class RoleController extends FOSRestController implements ClassResourceInterface
     }
 
     /**
+     * Link ACL Resource to role
+     *
+     * @param int $id User id
+     * @ApiDoc(
+     *  description="Get role allowed ACL resources",
+     *  resource=true,
+     *  requirements={
+     *      {"name"="id", "dataType"="integer"},
+     *  }
+     * )
+     */
+    public function postAclAction($id)
+    {
+        $this->get('oro_user.acl_manager')->modifyAclForRole(
+            $id,
+            $this->getRequest()->request->get("resource"),
+            true
+        );
+
+        return $this->handleView($this->view('', Codes::HTTP_NO_CONTENT));
+    }
+
+    /**
+     * Unlink ACL Resource to role
+     *
+     * @param int $id User id
+     * @ApiDoc(
+     *  description="Get role allowed ACL resources",
+     *  resource=true,
+     *  requirements={
+     *      {"name"="id", "dataType"="integer"},
+     *  }
+     * )
+     */
+    public function deleteAclAction($id)
+    {
+        $this->get('oro_user.acl_manager')->modifyAclForRole(
+            $id,
+            $this->getRequest()->request->get("resource"),
+            false
+        );
+
+        return $this->handleView($this->view('', Codes::HTTP_NO_CONTENT));
+    }
+
+    /**
      * @return \Doctrine\Common\Persistence\ObjectManager
      */
     protected function getManager()

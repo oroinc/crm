@@ -45,8 +45,7 @@ class Manager
         CacheProvider $cache,
         SecurityContextInterface $securityContext,
         ConfigReader $configReader
-    )
-    {
+    ) {
         $this->em = $em;
         $this->aclReader = $aclReader;
         $this->cache = $cache;
@@ -56,9 +55,41 @@ class Manager
     }
 
     /**
+     * Add/Remove Acl resource for Role
+     *
+     * @param int    $roleId
+     * @param string $aclId
+     * @param bool   $isAdd
+     */
+    public function modifyAclForRole($roleId, $aclId, $isAdd = true)
+    {
+        $aclRepo = $this->getAclRepo();
+        $role = $this->em->getRepository('OroUserBundle:Role')->find($roleId);
+
+        /** @var $aclResource \Oro\Bundle\UserBundle\Entity\Acl */
+        $aclResource = $aclRepo->find($aclId);
+        if ($isAdd) {
+            if (!$aclResource->getAccessRoles()->contains($role)) {
+                $aclResource->addAccessRole($role);
+
+                if ($aclResource->getParent() && $aclResource->getParent()->getId() !== 'root') {
+                    $this->clearParentsAcl($aclResource->getParent(), $role);
+                }
+                $this->em->persist($aclResource);
+                $this->em->flush();
+            }
+        } else {
+            $aclResource->getAccessRoles()->removeElement($role);
+            $this->em->persist($aclResource);
+            $this->em->flush();
+        }
+    }
+
+    /**
      * Search Acl resource by id
      *
      * @param string $id
+     *
      * @return \Oro\Bundle\UserBundle\Entity\Acl
      */
     public function getAclResource($id)
@@ -66,6 +97,14 @@ class Manager
         return $this->getAclRepo()->find($id);
     }
 
+    /**
+     * Get list of allowed ACL resources for roles array
+     *
+     * @param array $roles
+     * @param bool  $useObjects
+     *
+     * @return array|\Oro\Bundle\UserBundle\Entity\Role[]
+     */
     public function getAllowedAclResourcesForRoles(array $roles, $useObjects = false)
     {
         return $this->getAclRepo()->getAllowedAclResourcesForRoles($roles, $useObjects);
@@ -98,7 +137,7 @@ class Manager
     {
         $acl = $this->getAclRepo()->findOneBy(
             array(
-                 'class' => $class,
+                 'class'  => $class,
                  'method' => $method
             )
         );
@@ -119,6 +158,7 @@ class Manager
      * Get roles for acl id
      *
      * @param $aclId
+     *
      * @return array
      */
     public function getAclRolesWithoutTree($aclId)
@@ -137,6 +177,7 @@ class Manager
      *
      * @param \Oro\Bundle\UserBundle\Entity\User $user
      * @param bool                               $useObjects
+     *
      * @return array|\Oro\Bundle\UserBundle\Entity\Acl[]
      */
     public function getAclForUser(User $user, $useObjects = false)
@@ -144,7 +185,7 @@ class Manager
         if ($useObjects) {
             $acl = $this->getAclRepo()->getAllowedAclResourcesForRoles($user->getRoles(), true);
         } else {
-            $cachePrefix =  'user-acl-' . $user->getId();
+            $cachePrefix = 'user-acl-' . $user->getId();
             $acl = $this->cache->fetch($cachePrefix);
             if ($acl === false) {
                 $acl = $this->getAclRepo()->getAllowedAclResourcesForRoles($user->getRoles());
@@ -290,7 +331,7 @@ class Manager
     {
         $resource->removeAccessRole($role);
         $this->em->persist($resource);
-        if ($resource->getParent() && $resource->getParent()->getId() !== 'root') {
+        if ($resource->getParent() && $resource->getParent()->getId() !== ACL::ROOT_NODE) {
             $this->clearParentsAcl($resource->getParent(), $role);
         }
     }
@@ -427,6 +468,7 @@ class Manager
 
     /**
      * Check is grant access for roles to the acl resource roles
+     *
      * @param array $roles
      * @param array $aclRoles
      *
@@ -443,6 +485,11 @@ class Manager
         return false;
     }
 
+    /**
+     * Get Acl Resources from annotations and configs
+     *
+     * @return \Oro\Bundle\UserBundle\Annotation\Acl[]
+     */
     private function getAclResources()
     {
         $resourcesFromAnnotations = $this->aclReader->getResources();
