@@ -181,18 +181,18 @@ class RoleController extends FOSRestController implements ClassResourceInterface
      *
      * @param int $id User id
      * @ApiDoc(
-     *  description="Get role allowed ACL resources",
-     *  resource=true,
+     *  description="Link ACL Resource to role",
      *  requirements={
-     *      {"name"="id", "dataType"="integer"},
+     *      {"roleId"="id", "dataType"="integer"},
+     *      {"aclResourceId"="id", "dataType"="string"},
      *  }
      * )
      */
-    public function postAclAction($id)
+    public function postAclAction($roleId, $aclResourceId)
     {
         $this->get('oro_user.acl_manager')->modifyAclForRole(
-            $id,
-            $this->getRequest()->request->get("resource"),
+            $roleId,
+            $aclResourceId,
             true
         );
 
@@ -204,18 +204,18 @@ class RoleController extends FOSRestController implements ClassResourceInterface
      *
      * @param int $id User id
      * @ApiDoc(
-     *  description="Get role allowed ACL resources",
-     *  resource=true,
+     *  description="Unlink ACL Resource to role",
      *  requirements={
-     *      {"name"="id", "dataType"="integer"},
+     *      {"roleId"="id", "dataType"="integer"},
+     *      {"aclResourceId"="id", "dataType"="string"},
      *  }
      * )
      */
-    public function deleteAclAction($id)
+    public function deleteAclAction($roleId, $aclResourceId)
     {
         $this->get('oro_user.acl_manager')->modifyAclForRole(
-            $id,
-            $this->getRequest()->request->get("resource"),
+            $roleId,
+            $aclResourceId,
             false
         );
 

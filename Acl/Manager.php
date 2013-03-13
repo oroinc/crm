@@ -63,25 +63,26 @@ class Manager
      */
     public function modifyAclForRole($roleId, $aclId, $isAdd = true)
     {
-        $aclRepo = $this->getAclRepo();
         $role = $this->em->getRepository('OroUserBundle:Role')->find($roleId);
 
         /** @var $aclResource \Oro\Bundle\UserBundle\Entity\Acl */
-        $aclResource = $aclRepo->find($aclId);
-        if ($isAdd) {
-            if (!$aclResource->getAccessRoles()->contains($role)) {
-                $aclResource->addAccessRole($role);
+        $aclResource = $this->getAclRepo()->find($aclId);
+        if ($aclResource && $role) {
+            if ($isAdd) {
+                if (!$aclResource->getAccessRoles()->contains($role)) {
+                    $aclResource->addAccessRole($role);
 
-                if ($aclResource->getParent() && $aclResource->getParent()->getId() !== 'root') {
-                    $this->clearParentsAcl($aclResource->getParent(), $role);
+                    if ($aclResource->getParent() && $aclResource->getParent()->getId() !== 'root') {
+                        $this->clearParentsAcl($aclResource->getParent(), $role);
+                    }
+                    $this->em->persist($aclResource);
+                    $this->em->flush();
                 }
+            } else {
+                $aclResource->getAccessRoles()->removeElement($role);
                 $this->em->persist($aclResource);
                 $this->em->flush();
             }
-        } else {
-            $aclResource->getAccessRoles()->removeElement($role);
-            $this->em->persist($aclResource);
-            $this->em->flush();
         }
     }
 
