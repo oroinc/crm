@@ -13,9 +13,9 @@ OroApp.DatagridFilterList = Backbone.View.extend({
         '<a href="#" class="btn btn-link btn-group"><%= addButtonHint %></a>' +
             '<select id="add-filter-select" multiple>' +
             '<% _.each(filters, function (filter, name) { %>' +
-            '<option value="<%= name %>" <% if (filter.enabled) { %>selected<% } %>>' +
-            '<%= filter.hint %>' +
-            '</option>' +
+                '<option value="<%= name %>" <% if (filter.enabled) { %>selected<% } %>>' +
+                    '<%= filter.label %>' +
+                '</option>' +
             '<% }); %>' +
             '</select>'
     ),

@@ -26,18 +26,18 @@ OroApp.DatagridFilterText = Backbone.View.extend({
     ),
 
     /**
-     * Template for
+     * Template for filter criteria
      *
      * @property
      */
     popupCriteriaTemplate: _.template(
         '<div>' +
             '<div>' +
-                '<input type="text" value=""/>' +
+                '<input type="text" name="value" value=""/>' +
             '</div>' +
             '<div class="btn-group">' +
-                '<button href="#" class="btn btn-mini filter-update">Update</button>' +
-                '<button href="#" class="btn btn-mini filter-criteria-hide">Close</button>' +
+                '<button class="btn btn-mini filter-update">Update</button>' +
+                '<button class="btn btn-mini filter-criteria-hide">Close</button>' +
             '</div>' +
         '</div>'
     ),
@@ -57,11 +57,16 @@ OroApp.DatagridFilterText = Backbone.View.extend({
     criteriaSelector: '.filter-criteria',
 
     /**
-     * Actual value of filter's all inputs
+     * Selectors for filter criteria elements
      *
      * @property {Object}
      */
-    actualValue: {},
+    criteriaValueSelectors: {
+        value: 'input[name="value"]',
+        nested: {
+            end: 'input'
+        }
+    },
 
     /**
      * Value that was confirmed and processed.
@@ -99,15 +104,6 @@ OroApp.DatagridFilterText = Backbone.View.extend({
     defaultCriteriaHint: 'All',
 
     /**
-     * Selectors for filter criteria elements
-     *
-     * @property {Object}
-     */
-    criteriaSelectors: {
-        value: 'input'
-    },
-
-    /**
      * View events
      *
      * @property {Object}
@@ -131,9 +127,7 @@ OroApp.DatagridFilterText = Backbone.View.extend({
 
         if (key == 13) {
             this._hideCriteria();
-            this._confirmValue();
-        } else {
-            this._readActualValue();
+            this._confirmValue(this._readCriteriaValue());
         }
     },
 
@@ -145,7 +139,7 @@ OroApp.DatagridFilterText = Backbone.View.extend({
      */
     _onClickUpdateCriteria: function(e) {
         this._hideCriteria();
-        this._confirmValue();
+        this._confirmValue(this._readCriteriaValue());
     },
 
     /**
@@ -188,9 +182,9 @@ OroApp.DatagridFilterText = Backbone.View.extend({
     _onClickOutsideCriteria: function(e) {
         var elem = this.$('.filter-criteria');
 
-        if ( elem.get(0) !== event.target && !elem.has(event.target).length ) {
+        if (elem.get(0) !== e.target && !elem.has(e.target).length) {
             this._hideCriteria();
-            this._confirmValue();
+            this._confirmValue(this._readCriteriaValue());
         }
     },
 
@@ -211,11 +205,18 @@ OroApp.DatagridFilterText = Backbone.View.extend({
         this._renderCriteria(this.$('.filter-criteria'));
         this._clickOutsideCriteriaCallback = $.proxy(this._onClickOutsideCriteria, this);
         $('body').on('click', this._clickOutsideCriteriaCallback);
-
-        this._readActualValue();
-        this.confirmedValue = _.clone(this.actualValue);
+        this._initConfirmValue();
 
         return this;
+    },
+
+    /**
+     * Set initial confirm value
+     *
+     * @protected
+     */
+    _initConfirmValue: function() {
+        this.confirmedValue = this._readCriteriaValue();
     },
 
     /**
@@ -223,10 +224,11 @@ OroApp.DatagridFilterText = Backbone.View.extend({
      *
      * @param {Object} el
      * @protected
+     * @return {*}
      */
     _renderCriteria: function(el) {
         $(el).append(this.popupCriteriaTemplate());
-        return this.popupCriteriaTemplate();
+        return this;
     },
 
     /**
@@ -238,34 +240,6 @@ OroApp.DatagridFilterText = Backbone.View.extend({
         $('body').off('click', this._clickOutsideCriteriaCallback);
         Backbone.View.prototype.remove.call(this);
         return this;
-    },
-
-    /**
-     * Show popup
-     *
-     * @private
-     */
-    _showCriteria: function() {
-        this.$(this.criteriaSelector).show();
-        this._focusCriteria();
-    },
-
-    /**
-     * Hide popup
-     *
-     * @private
-     */
-    _hideCriteria: function() {
-        this.$(this.criteriaSelector).hide();
-    },
-
-    /**
-     * Focus filter criteria's input
-     *
-     * @protected
-     */
-    _focusCriteria: function() {
-        this.$(this.criteriaSelector + ' input').focus().select();
     },
 
     /**
@@ -297,17 +271,6 @@ OroApp.DatagridFilterText = Backbone.View.extend({
     },
 
     /**
-     * Reset filter form elements
-     *
-     * @return {*}
-     */
-    reset: function() {
-        this.$(this.criteriaSelectors.value).val('');
-        this._confirmValue();
-        return this;
-    },
-
-    /**
      * Show filter
      *
      * @return {*}
@@ -323,7 +286,47 @@ OroApp.DatagridFilterText = Backbone.View.extend({
      * @return {*}
      */
     hide: function() {
-        this.$el.css('display', 'none');
+        this.$el.hide();
+        return this;
+    },
+
+    /**
+     * Show criteria popup
+     *
+     * @private
+     */
+    _showCriteria: function() {
+        this.$(this.criteriaSelector).show();
+        this._focusCriteria();
+    },
+
+    /**
+     * Hide criteria popup
+     *
+     * @private
+     */
+    _hideCriteria: function() {
+        this.$(this.criteriaSelector).hide();
+    },
+
+    /**
+     * Focus filter criteria input
+     *
+     * @protected
+     */
+    _focusCriteria: function() {
+        this.$(this.criteriaSelector + ' input').focus().select();
+    },
+
+    /**
+     * Reset filter elements
+     *
+     * @return {*}
+     */
+    reset: function() {
+        this.setValue({
+            value: ''
+        });
         return this;
     },
 
@@ -337,17 +340,19 @@ OroApp.DatagridFilterText = Backbone.View.extend({
     },
 
     /**
-     * Set value to filter's criteria
+     * Set value to filter's criteria and confirm it
      *
      * @param value
+     * @return {*}
      */
     setValue: function(value) {
-        this.$(this.criteriaSelectors.value).val(value.value);
-        this._confirmValue();
+        this._writeCriteriaValue(value);
+        this._confirmValue(value);
+        return this;
     },
 
     /**
-     * Get value of filter's criteria
+     * Get confirmed value of filter's criteria
      *
      * @return {Object}
      */
@@ -356,27 +361,32 @@ OroApp.DatagridFilterText = Backbone.View.extend({
     },
 
     /**
-     * Read filter criteria value
-     *
-     * @return {Object}
-     * @protected
-     */
-    _readActualValue: function() {
-        this.actualValue = {
-            value: this.$(this.criteriaSelectors.value).val()
-        };
-    },
-
-    /**
-     * Reads actual value from criteria inputs, compare value with confirmed value, if it's differs than save new
+     * Compare value with confirmed value, if it's differs than save new
      * confirmed value and trigger "changedData" event
      *
+     * @param {Object} value
      * @protected
      */
-    _confirmValue: function() {
-        this._readActualValue();
-        if (!_.isEqual(this.confirmedValue, this.actualValue)) {
-            this.confirmedValue = _.clone(this.actualValue);
+    _confirmValue: function(value) {
+        var looseObjectCompare = function (obj1, obj2) {
+            for (var i in obj1) {
+                // both items are objects
+                if (_.isObject(obj1[i]) && _.isObject(obj2[i]) && !looseObjectCompare(obj1[i], obj2[i])) {
+                    return false;
+                } else {
+                    var equalsLoosely = (obj1[i] || '') == (obj2[i] || '');
+                    var eitherNumber = _.isNumber(obj1[i]) || _.isNumber(obj2[i]);
+                    var equalsNumbers = Number(obj1[i]) == Number(obj2[i]);
+                    if (!(equalsLoosely || (eitherNumber && equalsNumbers))) {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        };
+
+        if (!looseObjectCompare(this.confirmedValue, value)) {
+            this.confirmedValue = _.clone(value);
             this._updateCriteriaHint();
             // TODO Rename event?
             this.trigger('changedData');
@@ -384,12 +394,38 @@ OroApp.DatagridFilterText = Backbone.View.extend({
     },
 
     /**
+     * Writes values from object into criteria elements
+     *
+     * @param {Object} value
+     * @protected
+     * @return {*}
+     */
+    _writeCriteriaValue: function(value) {
+        this._setInputValue(this.criteriaValueSelectors.value, value.value);
+        return this;
+    },
+
+    /**
+     * Reads value of criteria elements into object
+     *
+     * @return {Object}
+     * @protected
+     */
+    _readCriteriaValue: function() {
+        return {
+            value: this._getInputValue(this.criteriaValueSelectors.value)
+        }
+    },
+
+    /**
      * Updates criteria hint element with actual criteria hint value
      *
      * @private
+     * @return {*}
      */
     _updateCriteriaHint: function() {
         this.$(this.criteriaHintSelector).html(this._getCriteriaHint());
+        return this;
     },
 
     /**
@@ -399,7 +435,60 @@ OroApp.DatagridFilterText = Backbone.View.extend({
      * @protected
      */
     _getCriteriaHint: function() {
-        return this.confirmedValue.value ? this.confirmedValue.value : this.defaultCriteriaHint;
+        return this.confirmedValue.value ? '"' + this.confirmedValue.value + '"': this.defaultCriteriaHint;
+    },
+
+    /**
+     * Gets input value. Radio inputs are supported.
+     *
+     * @param {String|Object} input
+     * @return {*}
+     * @protected
+     */
+    _getInputValue: function(input) {
+        var result = undefined;
+        var $input = this.$(input);
+        switch ($input.attr('type')) {
+            case 'radio':
+                $input.each(function() {
+                    if ($(this).is(':checked')) {
+                        result = $(this).val();
+                    }
+                });
+                break;
+            default:
+                result = $input.val();
+
+        }
+        return result;
+    },
+
+    /**
+     * Sets input value. Radio inputs are supported.
+     *
+     * @param {String|Object} input
+     * @param {String} value
+     * @protected
+     * @return {*}
+     */
+    _setInputValue: function(input, value) {
+        var $input = this.$(input);
+        switch ($input.attr('type')) {
+            case 'radio':
+                $input.each(function() {
+                    var $input = $(this);
+                    if ($input.attr('value') == value) {
+                        $input.attr('checked', 'checked');
+                    } else {
+                        $(this).removeAttr('checked');
+                    }
+                });
+                break;
+            default:
+                $input.val(value);
+
+        }
+        return this;
     },
 
     /**
@@ -410,8 +499,9 @@ OroApp.DatagridFilterText = Backbone.View.extend({
      * @return {*}
      */
     setParameters: function(parameters) {
-        this.$(this.criteriaSelectors.value).val(parameters['[value]']);
-        this._confirmValue();
+        var value = this._transformParametersToValue(parameters);
+        this._writeCriteriaValue(value);
+        this._confirmValue(value);
         return this;
     },
 
@@ -422,8 +512,35 @@ OroApp.DatagridFilterText = Backbone.View.extend({
      * @return {Object}
      */
     getParameters: function() {
+        var value = this.getValue();
+        return this._transformValueToParameters(value);
+    },
+
+    /**
+     * Transforms parameters to value
+     *
+     * @deprecated
+     * @param {Object} parameters
+     * @return {Object}
+     * @protected
+     */
+    _transformParametersToValue: function(parameters) {
         return {
-            '[value]': this.confirmedValue.value
-        };
+            value: parameters['[value]']
+        }
+    },
+
+    /**
+     * Transforms value to parameters
+     *
+     * @deprecated
+     * @param {Object} value
+     * @return {Object}
+     * @protected
+     */
+    _transformValueToParameters: function(value) {
+        return {
+            '[value]': value.value
+        }
     }
 });

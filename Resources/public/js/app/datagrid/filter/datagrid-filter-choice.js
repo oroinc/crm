@@ -2,98 +2,149 @@
  * Choice filter: filter type as option + filter value as string
  *
  * @class   OroApp.DatagridFilterChoice
- * @extends OroApp.DatagridFilter
+ * @extends OroApp.DatagridFilterText
  */
-OroApp.DatagridFilterChoice = OroApp.DatagridFilter.extend({
-    /** @property */
-    template: _.template(
-        '<div class="btn">' +
-            '<%= hint %>:' +
-            '<% _.each(choices, function (hint, value) { %>' +
-            '<input type="radio" name="type" value="<%= value %>" /><%= hint %>' +
-            '<% }); %>' +
-            '<input type="text" name="value" value="" style="width:80px;" />' +
-            '<a href="#" class="disable-filter" />' +
-            '<span class="caret"></span>' +
-            '</div>'
+OroApp.DatagridFilterChoice = OroApp.DatagridFilterText.extend({
+    /**
+     * Template for filter criteria
+     *
+     * @property
+     */
+    popupCriteriaTemplate: _.template(
+        '<div>' +
+            '<div>' +
+                '<input type="text" name="value" value=""/>' +
+            '</div>' +
+            '<div>' +
+                '<% _.each(choices, function (hint, value) { %>' +
+                    '<input type="radio" name="type" value="<%= value %>" />&nbsp;<%= hint %><br/>' +
+                '<% }); %>' +
+                '<br/>' +
+            '</div>' +
+            '<div class="btn-group">' +
+                '<button class="btn btn-mini filter-update">Update</button>' +
+                '<button class="btn btn-mini filter-criteria-hide">Close</button>' +
+            '</div>' +
+        '</div>'
     ),
 
-    /** @property */
-    parameterSelectors: {
-        type:  'input[name="type"]:checked',
-        value: 'input[name="value"]'
+    /**
+     * Selectors for filter criteria elements
+     *
+     * @property {Object}
+     */
+    criteriaValueSelectors: {
+        value: 'input[name="value"]',
+        type: 'input[name="type"]'
     },
 
     /** @property */
-    events: {
+    /*events: {
         'change input[name="type"]': '_updateOnType',
         'change input[name="value"]': '_update',
-        'click .disable-filter': 'onClickDisable'
+        'click a.disable-filter': 'onClickDisable'
     },
 
     /** @property */
     choices: {},
 
     /**
-     * Render filter template
+     * Render filter criteria popup
      *
+     * @param {Object} el
+     * @protected
      * @return {*}
      */
-    render: function () {
-        this.$el.empty();
-        this.$el.append(
-            this.template({
-                hint: this.hint,
-                choices: this.choices
-            })
-        );
+    _renderCriteria: function(el) {
+        $(el).append(this.popupCriteriaTemplate({
+            choices: this.choices
+        }));
         return this;
     },
 
     /**
-     * Update grid data when filter type is changed
+     * Get criteria hint value
      *
-     * @private
+     * @return {String}
+     * @protected
      */
-    _updateOnType: function() {
-        if (this.hasValue()) {
-            this.trigger('changedData');
+    _getCriteriaHint: function() {
+        if (!this.confirmedValue.value) {
+            return this.defaultCriteriaHint;
+        } else if (_.has(this.choices, this.confirmedValue.type)) {
+            return this.choices[this.confirmedValue.type] + ' "' + this.confirmedValue.value + '"'
+        } else {
+            return '"' + this.confirmedValue.value + '"';
         }
     },
 
     /**
-     * Reset filter form elements
+     * Reset filter elements
      *
      * @return {*}
      */
     reset: function() {
-        this.$(this.parameterSelectors.type).val('');
-        this.$(this.parameterSelectors.value).val('');
+        this.setValue({
+            value: '',
+            type: ''
+        });
         return this;
     },
 
     /**
-     * Set filter parameters
+     * Writes values from object into criteria elements
      *
-     * @param {Object} parameters
+     * @param {Object} value
+     * @protected
      * @return {*}
      */
-    setParameters: function(parameters) {
-        this.$(this.parameterSelectors.type).val(parameters['[type]']);
-        this.$(this.parameterSelectors.value).val(parameters['[value]']);
+    _writeCriteriaValue: function(value) {
+        this._setInputValue(this.criteriaValueSelectors.value, value.value);
+        this._setInputValue(this.criteriaValueSelectors.type, value.type);
         return this;
     },
 
     /**
-     * Get filter parameters
+     * Reads value of criteria elements into object
      *
      * @return {Object}
+     * @protected
      */
-    getParameters: function() {
+    _readCriteriaValue: function() {
         return {
-            '[type]':  this.$(this.parameterSelectors.type).val(),
-            '[value]': this.$(this.parameterSelectors.value).val()
-        };
+            value: this._getInputValue(this.criteriaValueSelectors.value),
+            type: this._getInputValue(this.criteriaValueSelectors.type)
+        }
+    },
+
+    /**
+     * Transforms parameters to value
+     *
+     * @deprecated
+     * @param {Object} parameters
+     * @return {Object}
+     * @protected
+     */
+    _transformParametersToValue: function(parameters) {
+        return {
+            value: parameters['[value]'],
+            type: parameters['[type]']
+        }
+    },
+
+    /**
+     * Transforms value to parameters
+     *
+     * @deprecated
+     * @param {Object} value
+     * @return {Object}
+     * @protected
+     */
+    _transformValueToParameters: function(value) {
+        return {
+            '[value]': value.value,
+            '[type]': value.type
+        }
     }
 });
 
