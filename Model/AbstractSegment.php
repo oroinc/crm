@@ -267,6 +267,4 @@ abstract class AbstractSegment
     {
         return ($this->getParent() === null);
     }
-
-
 }

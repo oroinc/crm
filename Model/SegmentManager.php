@@ -208,5 +208,4 @@ class SegmentManager
 
         return $newSegment;
     }
-
 }
