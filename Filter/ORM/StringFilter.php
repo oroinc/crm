@@ -2,12 +2,11 @@
 
 namespace Oro\Bundle\GridBundle\Filter\ORM;
 
+use Doctrine\DBAL\Query\QueryBuilder;
 use Sonata\AdminBundle\Form\Type\Filter\ChoiceType;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
-use Oro\Bundle\GridBundle\Filter\FilterInterface;
-use Doctrine\DBAL\Query\QueryBuilder;
 
-class StringFilter extends AbstractFilter implements FilterInterface
+class StringFilter extends AbstractFilter
 {
     /**
      * {@inheritdoc}
@@ -81,12 +80,12 @@ class StringFilter extends AbstractFilter implements FilterInterface
      *
      * @return bool
      */
-    private function getOperator($type)
+    public function getOperator($type)
     {
         $choices = array(
-            ChoiceType::TYPE_CONTAINS         => 'LIKE',
-            ChoiceType::TYPE_NOT_CONTAINS     => 'NOT LIKE',
-            ChoiceType::TYPE_EQUAL            => '=',
+            ChoiceType::TYPE_CONTAINS     => 'LIKE',
+            ChoiceType::TYPE_NOT_CONTAINS => 'NOT LIKE',
+            ChoiceType::TYPE_EQUAL        => '=',
         );
 
         if (isset($choices[$type])) {

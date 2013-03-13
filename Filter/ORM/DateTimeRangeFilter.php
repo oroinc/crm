@@ -3,9 +3,8 @@
 namespace Oro\Bundle\GridBundle\Filter\ORM;
 
 use Sonata\AdminBundle\Form\Type\Filter\DateTimeRangeType;
-use Oro\Bundle\GridBundle\Filter\FilterInterface;
 
-class DateTimeRangeFilter extends AbstractDateFilter implements FilterInterface
+class DateTimeRangeFilter extends AbstractDateFilter
 {
     /**
      * Date value format

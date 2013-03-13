@@ -6,6 +6,9 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Oro\Bundle\GridBundle\Filter\ORM\AbstractFilter;
 use Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleManager;
 use Oro\Bundle\GridBundle\Filter\FilterInterface;
+use Oro\Bundle\GridBundle\Datagrid\ProxyQueryInterface;
+use Oro\Bundle\GridBundle\Datagrid\ORM\ProxyQuery;
+use Oro\Bundle\FlexibleEntityBundle\Entity\Repository\FlexibleEntityRepository;
 
 abstract class AbstractFlexibleFilter extends AbstractFilter implements FilterInterface
 {
@@ -20,11 +23,18 @@ abstract class AbstractFlexibleFilter extends AbstractFilter implements FilterIn
     protected $container;
 
     /**
-     * @param ContainerInterface $container
+     * @var FilterInterface
      */
-    public function __construct(ContainerInterface $container)
+    protected $parentFilter;
+
+    /**
+     * @param ContainerInterface $container
+     * @param FilterInterface $parentFilter
+     */
+    public function __construct(ContainerInterface $container, FilterInterface $parentFilter = null)
     {
-        $this->container = $container;
+        $this->container    = $container;
+        $this->parentFilter = $parentFilter;
     }
 
     /**
@@ -62,5 +72,21 @@ abstract class AbstractFlexibleFilter extends AbstractFilter implements FilterIn
 
         $flexibleManagerServiceId = $flexibleConfig['entities_config'][$flexibleEntityName]['flexible_manager'];
         return $this->container->get($flexibleManagerServiceId);
+    }
+
+    /**
+     * @param ProxyQueryInterface $proxyQuery
+     * @param string $field
+     * @param string $value
+     * @param string $operator
+     */
+    protected function applyFlexibleFilter(ProxyQueryInterface $proxyQuery, $field, $value, $operator)
+    {
+        /** @var $proxyQuery ProxyQuery */
+        $queryBuilder = $proxyQuery->getQueryBuilder();
+
+        /** @var $entityRepository FlexibleEntityRepository */
+        $entityRepository = $this->flexibleManager->getFlexibleRepository();
+        $entityRepository->applyFilterByAttribute($queryBuilder, $field, $value, $operator);
     }
 }

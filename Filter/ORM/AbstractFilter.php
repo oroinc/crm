@@ -7,8 +7,9 @@ use Doctrine\DBAL\Query\QueryBuilder;
 use Sonata\DoctrineORMAdminBundle\Filter\Filter as AbstractORMFilter;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 use Oro\Bundle\GridBundle\Field\FieldDescriptionInterface;
+use Oro\Bundle\GridBundle\Filter\FilterInterface;
 
-abstract class AbstractFilter extends AbstractORMFilter
+abstract class AbstractFilter extends AbstractORMFilter implements FilterInterface
 {
     /**
      * @var TranslatorInterface
