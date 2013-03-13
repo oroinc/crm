@@ -6,6 +6,7 @@ use Symfony\Component\Finder\Iterator;
 
 class ToolsAPI extends \PHPUnit_Framework_TestCase
 {
+    static protected $random = null;
     /**
      * Data provider for REST/SOAP API tests
      *
@@ -25,6 +26,23 @@ class ToolsAPI extends \PHPUnit_Framework_TestCase
             if (is_null($parameters[$fileName]['response'])) {
                 unset($parameters[$fileName]['response']);
             }
+        }
+        //generate unique value
+        if (is_null(self::$random)) {
+            self::$random = self::randomGen(5);
+        }
+
+        foreach ($parameters as $key => $value) {
+            array_walk(
+                $parameters[$key]['request'],
+                array(self, 'replace'),
+                self::$random
+            );
+            array_walk(
+                $parameters[$key]['response'],
+                array(self, 'replace'),
+                self::$random
+            );
         }
         return
             $parameters;
@@ -51,5 +69,37 @@ class ToolsAPI extends \PHPUnit_Framework_TestCase
     public static function classToArray($class)
     {
         return json_decode(json_encode($class), true);
+    }
+
+    /**
+     * @param $length
+     * @return string
+     */
+    public static function randomGen($length)
+    {
+        $random= "";
+        srand((double)microtime()*1000000);
+        $char_list = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        $char_list .= "abcdefghijklmnopqrstuvwxyz";
+        $char_list .= "1234567890-_";
+        // Add the special characters to $char_list if needed
+
+        for ($i = 0; $i < $length; $i++) {
+            $random .= substr($char_list, (rand()%(strlen($char_list))), 1);
+        }
+        self::$random = $random;
+        return $random;
+    }
+
+    /**
+     * @param $value
+     * @param $key
+     * @param $random
+     */
+    public static function replace(&$value, $key, $random)
+    {
+        if (!is_null($value)) {
+            $value = str_replace('%str%', $random, $value);
+        }
     }
 }

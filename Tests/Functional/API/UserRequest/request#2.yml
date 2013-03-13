@@ -1,7 +1,7 @@
 # common test case
 request:
-    username: User_2
-    email: user_2@example.com
+    username: User_2_%str%
+    email: user_2_%str%@example.com
     enabled: true
     plainPassword: 123123q
     lastLogin: ~

@@ -44,53 +44,64 @@ class SoapUsersApiTest extends \PHPUnit_Framework_TestCase
      * @param array $response
      *
      * @dataProvider requestsApi
-     * @depends testCreateRole
+     * @depends testCreateUser
      */
     public function testUpdateUser($request, $response)
     {
-        $this->markTestIncomplete("Skipped due to getUserByName and getUserByEmail missing!");
-        $request['name'] .= '_Updated';
         //get user id
-        $userId = self::$clientSoap->getUserByName($request['name']);
+        $userId = self::$clientSoap->getUserBy(array('item' => array('key' =>'username', 'value' =>$request['username'])));
         $userId = ToolsAPI::classToArray($userId);
+
+        $request['username'] .= '_Updated';
+        $request['email'] .= '_Updated';
+        unset($request['plainPassword']);
         $result = self::$clientSoap->updateUser($userId['id'], $request);
         $result = ToolsAPI::classToArray($result);
         ToolsAPI::assertEqualsResponse($response, $result);
         $user = self::$clientSoap->getUser($userId['id']);
         $user = ToolsAPI::classToArray($user);
-        $this->assertEquals($request['label'], $user['label']);
+        $this->assertEquals($request['username'], $user['username']);
+        $this->assertEquals($request['email'], $user['email']);
     }
 
     /**
-     * @depends testUpdateRole
+     * @dataProvider requestsApi
+     * @depends testUpdateUser
      */
-    public function testGetUsers()
+    public function testGetUsers($request, $response)
     {
-        //get roles
-        $users = self::$clientSoap->getUsers();
+        $users = self::$clientSoap->getUsers(1, 1000);
         $users = ToolsAPI::classToArray($users);
-        $this->assertEquals(5, count($users['item']));
-        foreach ($users['item'] as $user) {
-            $this->assertEquals($user['name'] . '_UPDATED', strtoupper($user['label']));
+        $result = false;
+        foreach ($users as $user) {
+            foreach ($user as $userDetails) {
+                $result = $userDetails['username'] == $request['username'] . '_Updated';
+                if ($result) {
+                    break;
+                }
+            }
         }
+        $this->assertTrue($result);
     }
 
     /**
-     * @depends testGetRoles
+     * @dataProvider requestsApi
+     * @depends testGetUsers
      */
-    public function testDeleteUser()
+    public function testDeleteUser($request)
     {
-        //get roles
-        $users = self::$clientSoap->getUsers();
-        $users = ToolsAPI::classToArray($users);
-        $this->assertEquals(5, count($users['item']));
-        foreach ($users['item'] as $user) {
-            $result = self::$clientSoap->deleteUser($user['id']);
-            $this->assertTrue($result);
+        //get user id
+        $userId = self::$clientSoap->getUserBy(array('item' => array('key' =>'username', 'value' =>$request['username'] . '_Updated')));
+        $userId = ToolsAPI::classToArray($userId);
+        $result = self::$clientSoap->deleteUser($userId['id']);
+        $this->assertTrue($result);
+        try {
+            self::$clientSoap->getUserBy(array('item' => array('key' =>'username', 'value' =>$request['username'] . '_Updated')));
+        } catch (\SoapFault $e) {
+            if ($e->faultcode != 'NOT_FOUND') {
+                throw $e;
+            }
         }
-        $users = self::$clientSoap->getUsers();
-        $users =  ToolsAPI::classToArray($users);
-        $this->assertEmpty($users);
     }
 
     /**
