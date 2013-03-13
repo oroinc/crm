@@ -212,7 +212,7 @@ class ProfileController extends FOSRestController implements ClassResourceInterf
             return $this->handleView($this->view('', Codes::HTTP_NOT_FOUND));
         }
 
-        return $this->handleView($this->view($this->getAclManager()->getAclForUser($user, true), Codes::HTTP_OK));
+        return $this->handleView($this->view($this->getAclManager()->getAclForUser($user), Codes::HTTP_OK));
     }
 
     /**

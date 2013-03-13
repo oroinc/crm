@@ -33,6 +33,7 @@ class Acl
      * @ORM\ManyToOne(targetEntity="Acl", inversedBy="children")
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", onDelete="SET NULL")
      * @Exclude
+     * @Soap\ComplexType("string", nillable=true)
      */
     protected $parent;
 
@@ -100,7 +101,7 @@ class Acl
 
     /**
      * @Gedmo\TreeRoot
-     * @ORM\Column(name="root", type="integer", nullable=true)
+     * @ORM\Column(name="root", type="string", length=50, nullable=true)
      * @Exclude
      */
     protected $root;
@@ -109,6 +110,21 @@ class Acl
     {
         $this->accessRoles = new ArrayCollection();
         $this->children = new ArrayCollection();
+    }
+
+    /**
+     * @return array
+     */
+    public function toArray()
+    {
+        return array(
+            'id' => $this->getId(),
+            'name' => $this->getName(),
+            'description' => $this->getDescription(),
+            'class' => $this->getClass(),
+            'method' => $this->getMethod(),
+            'parent' => $this->getParent() ? $this->getParent()->getId() : ''
+        );
     }
 
     /**
@@ -323,7 +339,7 @@ class Acl
     /**
      * Set root
      *
-     * @param  integer $root
+     * @param string $root
      * @return Acl
      */
     public function setRoot($root)
@@ -336,7 +352,7 @@ class Acl
     /**
      * Get root
      *
-     * @return integer
+     * @return string
      */
     public function getRoot()
     {
@@ -435,5 +451,13 @@ class Acl
     public function getMethod()
     {
         return $this->method;
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->getId();
     }
 }

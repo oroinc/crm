@@ -56,6 +56,22 @@ class Manager
     }
 
     /**
+     * Search Acl resource by id
+     *
+     * @param string $id
+     * @return \Oro\Bundle\UserBundle\Entity\Acl
+     */
+    public function getAclResource($id)
+    {
+        return $this->getAclRepo()->find($id);
+    }
+
+    public function getAllowedAclResourcesForRoles(array $roles, $useObjects = false)
+    {
+        return $this->getAclRepo()->getAllowedAclResourcesForRoles($roles, $useObjects);
+    }
+
+    /**
      * Check permissions for resource for user.
      *
      * @param                                    $aclResourceId
@@ -126,12 +142,12 @@ class Manager
     public function getAclForUser(User $user, $useObjects = false)
     {
         if ($useObjects) {
-            $acl = $this->getAclRepo()->getAllowedAclResourcesForUserRoles($user->getRoles(), true);
+            $acl = $this->getAclRepo()->getAllowedAclResourcesForRoles($user->getRoles(), true);
         } else {
             $cachePrefix =  'user-acl-' . $user->getId();
             $acl = $this->cache->fetch($cachePrefix);
             if ($acl === false) {
-                $acl = $this->getAclRepo()->getAllowedAclResourcesForUserRoles($user->getRoles());
+                $acl = $this->getAclRepo()->getAllowedAclResourcesForRoles($user->getRoles());
                 $this->cache->save($cachePrefix, $acl);
             }
         }

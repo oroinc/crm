@@ -17,7 +17,7 @@ class AclRepository extends NestedTreeRepository
      * @param bool  $useObjects
      * @return \Oro\Bundle\UserBundle\Entity\Role[]|array
      */
-    public function getAllowedAclResourcesForUserRoles(array $roles, $useObjects = false)
+    public function getAllowedAclResourcesForRoles(array $roles, $useObjects = false)
     {
         $allowedAcl = array();
         $qb = $this->createQueryBuilder('acl');
@@ -42,14 +42,14 @@ class AclRepository extends NestedTreeRepository
                         ->getQuery();
 
                     if ($useObjects) {
-                        $aclList = $query->getResult();
+                        $acls = $query->getResult();
+
                     } else {
                         $aclList = $query->getScalarResult();
-                    }
-
-                    $acls = array();
-                    foreach ($aclList as $scalar) {
-                        $acls[] = $scalar;
+                        $acls = array();
+                        foreach ($aclList as $scalar) {
+                            $acls[] = $scalar['id'];
+                        }
                     }
 
                     $allowedAcl = $this->arrayUnique(

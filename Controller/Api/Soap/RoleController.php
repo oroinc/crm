@@ -95,4 +95,19 @@ class RoleController extends BaseController
 
         return $this->container->get('besimple.soap.response')->setReturnValue($entity);
     }
+
+    /**
+     * @Soap\Method("getRoleAcl")
+     * @Soap\Param("id", phpType = "int")
+     * @Soap\Result(phpType = "string[]")
+     */
+    public function getAclAction($id)
+    {
+        $role = $this->getManager()->find('OroUserBundle:Role', (int) $id);
+        if (!$role) {
+            throw new \SoapFault('NOT_FOUND', sprintf('Role with id "%s" can not be found', $id));
+        }
+
+        return $this->container->get('oro_user.acl_manager')->getAllowedAclResourcesForRoles(array($role));
+    }
 }

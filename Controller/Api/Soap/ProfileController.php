@@ -131,7 +131,7 @@ class ProfileController extends BaseController
     /**
      * @Soap\Method("getUserAcl")
      * @Soap\Param("id", phpType = "int")
-     * @Soap\Result(phpType = "Oro\Bundle\UserBundle\Entity\Acl[]")
+     * @Soap\Result(phpType = "string[]")
      */
     public function getAclAction($id)
     {
@@ -141,7 +141,7 @@ class ProfileController extends BaseController
             throw new \SoapFault('NOT_FOUND', 'User can not be found using specified filter');
         }
 
-        return $this->getAclManager()->getAclForUser($user, true);
+        return $this->getAclManager()->getAclForUser($user);
     }
 
     /**
