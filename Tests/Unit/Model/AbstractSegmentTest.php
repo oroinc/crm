@@ -76,9 +76,13 @@ class AbstractSegmentTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($childSegment, $children[0]);
     }
 
-    public function testHasChildren()
+    public function testHasNotChildren()
     {
         $this->assertFalse($this->segment->hasChildren());
+    }
+
+    public function testHasChildren()
+    {
         $childSegment = $this->getMockForAbstractClass("Oro\Bundle\SegmentationTreeBundle\Model\AbstractSegment");
         $this->segment->addChild($childSegment);
         $this->assertTrue($this->segment->hasChildren());
@@ -91,6 +95,19 @@ class AbstractSegmentTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->segment->hasChildren());
         $this->segment->removeChild($childSegment);
         $this->assertFalse($this->segment->hasChildren());
+    }
+
+    public function testIsRoot()
+    {
+        $this->assertTrue($this->segment->isRoot());
+    }
+
+    public function testIsNotRoot()
+    {
+        $parentSegment = $this->getMockForAbstractClass("Oro\Bundle\SegmentationTreeBundle\Model\AbstractSegment");
+        $this->segment->setParent($parentSegment);
+        $this->assertFalse($this->segment->isRoot());
+        
     }
 
     

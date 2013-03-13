@@ -64,11 +64,17 @@ abstract class AbstractSegment
      */
     protected $root;
 
-
+    /**
+     * @var AbstractSegment $parent Parent segment
+     */
+    protected $parent;
+   
     /**
      * @var ArrayCollection $children
      */
     protected $children;
+
+    
 
     /**
      * Constructor
@@ -250,4 +256,17 @@ abstract class AbstractSegment
     {
         return $this->children;
     }
+
+    /**
+     * If a node is a tree root, it's the tree starting point and therefore
+     * defines the tree itself.
+     *
+     * @return boolean
+     */
+    public function isRoot()
+    {
+        return ($this->getParent() === null);
+    }
+
+
 }

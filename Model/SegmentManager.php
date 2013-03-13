@@ -29,24 +29,15 @@ class SegmentManager
     protected $segmentName;
 
     /**
-     * Short name for managed segment class
-     * 
-     * @var string
-     */
-    protected $segmentShortName;
-
-    /**
      * Constructor
      * 
      * @param ObjectManager $storageManager   Storage manager
      * @param String        $segmentName      Segment class name
-     * @param String        $segmentShortName Segment class name shortname
      */
-    public function __construct($storageManager, $segmentName, $segmentShortName)
+    public function __construct($storageManager, $segmentName)
     {
         $this->storageManager = $storageManager;
         $this->segmentName = $segmentName;
-        $this->segmentShortName = $segmentShortName;
     }
 
     /**
@@ -73,16 +64,6 @@ class SegmentManager
     }
 
     /**
-     * Return segment class short name (mainly used in Doctrine context)
-     *
-     * @return string;
-     */
-    public function getSegmentShortname()
-    {
-        return $this->segmentShortName;
-    }
-
-    /**
      * Return segment class name (mainly used in Doctrine context)
      * 
      * @return String segment class name
@@ -99,7 +80,7 @@ class SegmentManager
      */
     public function getEntityRepository()
     {
-        return $this->getStorageManager()->getRepository($this->getSegmentShortName());
+        return $this->getStorageManager()->getRepository($this->getSegmentName());
     }
 
 
@@ -227,4 +208,5 @@ class SegmentManager
 
         return $newSegment;
     }
+
 }
