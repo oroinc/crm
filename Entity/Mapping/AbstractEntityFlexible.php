@@ -100,8 +100,14 @@ abstract class AbstractEntityFlexible extends AbstractFlexible
     public function getValue($attributeCode)
     {
         $locale = $this->getLocale();
-        $scope = $this->getScope();
-        $values = $this->getValues()->filter(
+        $scope  = $this->getScope();
+        $values = $this->getValues();
+
+        if (empty($values)) {
+            return false;
+        }
+
+        $values->filter(
             function ($value) use ($attributeCode, $locale, $scope) {
                 // related value to asked attribute
                 if ($value->getAttribute()->getCode() == $attributeCode) {
