@@ -1,6 +1,8 @@
 <?php
 namespace Oro\Bundle\FlexibleEntityBundle\Form\EventListener;
 
+use Oro\Bundle\FlexibleEntityBundle\Form\DataTransformer\FileToTextTransformer;
+
 use Oro\Bundle\FlexibleEntityBundle\Entity\AttributeOption;
 
 use Oro\Bundle\FlexibleEntityBundle\Entity\Attribute;
@@ -59,27 +61,41 @@ class AddValueFieldSubscriber implements EventSubscriberInterface
         if (null === $value) {
             return;
         }
+
         // prepare basic configuration
         $attribute = $value->getAttribute();
         $options = array('property_path' => true,);
+
         // get attribute type
         $attTypeClass = $attribute->getAttributeType();
         $attType = new $attTypeClass();
+
         // merge with attribute type configuration
         $fieldName   = $attType->getFieldName();
         $formType    = $attType->getFormType();
         $formOptions = array_merge($options, $attType->prepareFormOptions($attribute));
+
         // prepare current value
         if ($fieldName == 'option') {
             $data = $value->getOption();
         } elseif ($fieldName == 'options') {
             $data = $value->getOptions();
+        } elseif ($fieldName === 'fileUpload') {
+            $options['disabled'] = true;
+            $form->add(
+                $this->factory->createNamed('data', 'text', $value->getData(), $options)
+            );
+            $data = null;
         } else {
             $data = $value->getData();
         }
+
         // get default value if null
         $data = is_null($data) ? $attribute->getDefaultValue() : $data;
 
-        $form->add($this->factory->createNamed($fieldName, $formType, $data, $formOptions));
+        $form->add(
+            $this->factory->createNamed($fieldName, $formType, $data, $formOptions)
+        );
+
     }
 }

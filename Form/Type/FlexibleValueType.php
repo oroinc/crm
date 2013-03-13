@@ -23,7 +23,6 @@ class FlexibleValueType extends AbstractType
      */
     protected $valueClass;
 
-
     /**
      * Construct with full name of concrete impl of value class
      *
