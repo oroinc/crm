@@ -1,6 +1,8 @@
 <?php
 namespace Oro\Bundle\FlexibleEntityBundle\Entity\Mapping;
 
+use Symfony\Component\HttpFoundation\File\File;
+
 use Oro\Bundle\FlexibleEntityBundle\Model\AbstractFlexible;
 use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttribute;
 use Oro\Bundle\FlexibleEntityBundle\Model\AbstractFlexibleValue;
@@ -132,6 +134,16 @@ abstract class AbstractEntityFlexibleValue extends AbstractFlexibleValue
      * )
      */
     protected $options;
+
+    /**
+     * Store upload values
+     *
+     * @var Media $media
+     *
+     * @ORM\OneToOne(targetEntity="Oro\Bundle\FlexibleEntityBundle\Entity\Media", cascade="persist")
+     * @ORM\JoinColumn(name="media_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    protected $media;
 
     /**
      * Constructor
@@ -278,5 +290,29 @@ abstract class AbstractEntityFlexibleValue extends AbstractFlexibleValue
     public function setUnit($unit)
     {
         $this->unit = $unit;
+    }
+
+    /**
+     * Get media
+     *
+     * @return \Oro\Bundle\FlexibleEntityBundle\Entity\Media
+     */
+    public function getMedia()
+    {
+        return $this->media;
+    }
+
+    /**
+     * Set media
+     *
+     * @param \Oro\Bundle\FlexibleEntityBundle\Entity\Media $media
+     *
+     * @return \Oro\Bundle\FlexibleEntityBundle\Entity\ProductValue
+     */
+    public function setMedia($media)
+    {
+        $this->media = $media;
+
+        return $this;
     }
 }
