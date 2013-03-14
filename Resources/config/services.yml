@@ -62,14 +62,14 @@ services:
         arguments:
             - @doctrine.orm.entity_manager
         tags:
-            - { name: oro_navigation.items.builder, alias: pinbar }
+            - { name: oro_navigation.item.builder, alias: pinbar }
 
     oro_navigation.item.builder.favorite:
         class: %oro_navigation.item.builder.favorite.class%
         arguments:
             - @doctrine.orm.entity_manager
         tags:
-            - { name: oro_navigation.items.builder, alias: favorite }
+            - { name: oro_navigation.item.builder, alias: favorite }
 
     oro_navigation.item.factory:
         class: %oro_navigation.item.factory.class%

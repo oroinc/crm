@@ -10,9 +10,14 @@ class MenuBuilderPassTest extends \PHPUnit_Framework_TestCase
     {
         $containerMock = $this->getMockBuilder('Symfony\Component\DependencyInjection\ContainerBuilder')
             ->getMock();
-        $containerMock->expects($this->once())
+        $containerMock->expects($this->exactly(2))
             ->method('hasDefinition')
-            ->with('oro_menu.builder_chain')
+            ->with(
+                $this->logicalOr(
+                    $this->equalTo('oro_menu.builder_chain'),
+                    $this->equalTo('oro_navigation.item.factory')
+                )
+            )
             ->will($this->returnValue(false));
         $containerMock->expects($this->never())
             ->method('getDefinition');
@@ -27,7 +32,7 @@ class MenuBuilderPassTest extends \PHPUnit_Framework_TestCase
     {
         $definition = $this->getMockBuilder('Symfony\Component\DependencyInjection\Definition')
             ->getMock();
-        $definition->expects($this->exactly(2))
+        $definition->expects($this->exactly(4))
             ->method('addMethodCall');
         $definition->expects($this->at(0))
             ->method('addMethodCall')
@@ -35,6 +40,12 @@ class MenuBuilderPassTest extends \PHPUnit_Framework_TestCase
         $definition->expects($this->at(1))
             ->method('addMethodCall')
             ->with('addBuilder', array(new Reference('service2'), 'test'));
+        $definition->expects($this->at(3))
+            ->method('addMethodCall')
+            ->with('addBuilder', array(new Reference('service1')));
+        $definition->expects($this->at(5))
+            ->method('addMethodCall')
+            ->with('addBuilder', array(new Reference('service2')));
 
         $serviceIds = array(
             'service1' => array(array('alias' => 'test')),
@@ -44,19 +55,36 @@ class MenuBuilderPassTest extends \PHPUnit_Framework_TestCase
         $containerMock = $this->getMockBuilder('Symfony\Component\DependencyInjection\ContainerBuilder')
             ->getMock();
 
-        $containerMock->expects($this->once())
+        $containerMock->expects($this->exactly(2))
             ->method('hasDefinition')
-            ->with('oro_menu.builder_chain')
+            ->with(
+                $this->logicalOr(
+                    $this->equalTo('oro_menu.builder_chain'),
+                    $this->equalTo('oro_navigation.item.factory')
+                )
+            )
             ->will($this->returnValue(true));
 
-        $containerMock->expects($this->once())
+        $containerMock->expects($this->exactly(4))
             ->method('getDefinition')
-            ->with('oro_menu.builder_chain')
+            ->with(
+                $this->logicalOr(
+                    $this->equalTo('oro_menu.builder_chain'),
+                    $this->equalTo('oro_navigation.item.factory'),
+                    $this->equalTo('service1'),
+                    $this->equalTo('service2')
+                )
+            )
             ->will($this->returnValue($definition));
 
-        $containerMock->expects($this->once())
+        $containerMock->expects($this->exactly(2))
             ->method('findTaggedServiceIds')
-            ->with('oro_menu.builder')
+            ->with(
+                $this->logicalOr(
+                    $this->equalTo('oro_menu.builder'),
+                    $this->equalTo('oro_navigation.item.builder')
+                )
+            )
             ->will($this->returnValue($serviceIds));
 
         $compilerPass = new MenuBuilderChainPass();
