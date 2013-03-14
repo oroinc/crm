@@ -5,6 +5,8 @@ namespace Oro\Bundle\UserBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Gedmo\Mapping\Annotation as Gedmo;
+use JMS\Serializer\Annotation\Exclude;
+use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 
 use Oro\Bundle\UserBundle\Annotation\Acl as AnnotationAcl;
 
@@ -22,6 +24,7 @@ class Acl
     /**
      * @ORM\Id
      * @ORM\Column(type="string", length=50, name="id")
+     * @Soap\ComplexType("string")
      */
     protected $id;
 
@@ -29,32 +32,39 @@ class Acl
      * @Gedmo\TreeParent
      * @ORM\ManyToOne(targetEntity="Acl", inversedBy="children")
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", onDelete="SET NULL")
+     * @Exclude
+     * @Soap\ComplexType("string", nillable=true)
      */
     protected $parent;
 
     /**
      * @ORM\OneToMany(targetEntity="Acl", mappedBy="parent")
      * @ORM\OrderBy({"lft" = "ASC"})
+     * @Exclude
      */
     protected $children;
 
     /**
      * @ORM\Column(type="string", length=250)
+     * @Soap\ComplexType("string")
      */
     protected $name;
 
     /**
      * @ORM\Column(type="string", length=250)
+     * @Soap\ComplexType("string")
      */
     protected $description;
 
     /**
      * @ORM\Column(type="string", length=250, nullable=true)
+     * @Soap\ComplexType("string", nillable=true)
      */
     protected $class;
 
     /**
      * @ORM\Column(type="string", length=250, nullable=true)
+     * @Soap\ComplexType("string", nillable=true)
      */
     protected $method;
 
@@ -64,30 +74,35 @@ class Acl
      *      joinColumns={@ORM\JoinColumn(name="acl_id", referencedColumnName="id", onDelete="CASCADE")},
      *          inverseJoinColumns={@ORM\JoinColumn(name="role_id", referencedColumnName="id", onDelete="CASCADE")}
      *      )
+     * @Exclude
      */
     protected $accessRoles;
 
     /**
      * @Gedmo\TreeLeft
      * @ORM\Column(name="lft", type="integer")
+     * @Exclude
      */
     protected $lft;
 
     /**
      * @Gedmo\TreeLevel
      * @ORM\Column(name="lvl", type="integer")
+     * @Exclude
      */
     protected $lvl;
 
     /**
      * @Gedmo\TreeRight
      * @ORM\Column(name="rgt", type="integer")
+     * @Exclude
      */
     protected $rgt;
 
     /**
      * @Gedmo\TreeRoot
-     * @ORM\Column(name="root", type="integer", nullable=true)
+     * @ORM\Column(name="root", type="string", length=50, nullable=true)
+     * @Exclude
      */
     protected $root;
 
@@ -95,6 +110,21 @@ class Acl
     {
         $this->accessRoles = new ArrayCollection();
         $this->children = new ArrayCollection();
+    }
+
+    /**
+     * @return array
+     */
+    public function toArray()
+    {
+        return array(
+            'id' => $this->getId(),
+            'name' => $this->getName(),
+            'description' => $this->getDescription(),
+            'class' => $this->getClass(),
+            'method' => $this->getMethod(),
+            'parent' => $this->getParent() ? $this->getParent()->getId() : ''
+        );
     }
 
     /**
@@ -309,7 +339,7 @@ class Acl
     /**
      * Set root
      *
-     * @param  integer $root
+     * @param string $root
      * @return Acl
      */
     public function setRoot($root)
@@ -322,7 +352,7 @@ class Acl
     /**
      * Get root
      *
-     * @return integer
+     * @return string
      */
     public function getRoot()
     {
@@ -421,5 +451,13 @@ class Acl
     public function getMethod()
     {
         return $this->method;
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->getId();
     }
 }
