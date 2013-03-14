@@ -11,6 +11,8 @@ use Oro\Bundle\FlexibleEntityBundle\Exception\FlexibleQueryException;
 /**
  * Extends query builder to add useful shortcuts which allow to easily select, filter or sort a flexible entity values
  *
+ * It works exactly as classic QueryBuilder
+ *
  * @author    Nicolas Dupont <nicolas@akeneo.com>
  * @copyright 2013 Akeneo SAS (http://www.akeneo.com)
  * @license   http://opensource.org/licenses/MIT MIT
@@ -107,7 +109,7 @@ class FlexibleQueryBuilder extends QueryBuilder
      * @param Attribute $attribute attribute
      *
      * @return QueryBuilder This QueryBuilder instance.
-     */
+     *
     public function addAttributeToSelect(Attribute $attribute)
     {
         $joinAlias = 'select'.$attribute->getCode();
@@ -118,7 +120,7 @@ class FlexibleQueryBuilder extends QueryBuilder
         // TODO keep reference on this alias to order ?
 
         return $this;
-    }
+    }*/
 
     /**
      * Get allowed operators for related backend type
@@ -141,6 +143,10 @@ class FlexibleQueryBuilder extends QueryBuilder
             AbstractAttributeType::BACKEND_TYPE_TEXT     => array('eq', 'neq', 'like'),
             AbstractAttributeType::BACKEND_TYPE_VARCHAR  => array('eq', 'neq', 'like'),
         );
+
+        if (!isset($typeToOperator[$backendType])) {
+            throw new FlexibleQueryException('backend type '.$backendType.' is unknown');
+        }
 
         return $typeToOperator[$backendType];
     }
@@ -193,7 +199,7 @@ class FlexibleQueryBuilder extends QueryBuilder
                 $condition = $this->expr()->notIn($backendField, $attributeValue);
                 break;
             default:
-                throw new FlexibleQueryException($operator.' is unknown');
+                throw new FlexibleQueryException('operator '.$operator.' is unknown');
         }
 
         return $condition;
@@ -206,7 +212,7 @@ class FlexibleQueryBuilder extends QueryBuilder
      *
      * @return QueryBuilder This QueryBuilder instance.
      */
-    public function addAttributeToFilter(Attribute $attribute, $operator, $attributeValue)
+    public function addAttributeFilter(Attribute $attribute, $operator, $attributeValue)
     {
         $allowed = $this->getAllowedOperators($attribute->getBackendType());
         if (!in_array($operator, $allowed)) {
@@ -241,4 +247,38 @@ class FlexibleQueryBuilder extends QueryBuilder
 
         return $this;
     }
+
+    /**
+     * Sort by attribute value
+     *
+     * @param Attribute $attribute the attribute to sort on
+     * @param string    $direction direction to use
+     */
+     public function addAttributeOrderBy(Attribute $attribute, $direction)
+     {
+         if ($attribute->getBackendType() == AbstractAttributeType::BACKEND_TYPE_OPTION) {
+
+             $aliasPrefix = 'sorter';
+
+             // join to value
+             $joinAliasVal    = $aliasPrefix.'V'.$attributeCode;
+             $joinAliasOpt    = $aliasPrefix.'O'.$attributeCode;
+             $joinAliasOptVal = $aliasPrefix.'OV'.$attributeCode;
+
+             // TODO : deal with locale and scope !!!!!!
+
+             $this->innerJoin($this->getRootAlias().'.' . $attribute->getBackendStorage(), $joinAliasVal);
+             $this->innerJoin($joinAliasVal.'.options', $joinAliasOpt, 'WITH', $joinAliasOpt.".attribute = ".$attribute->getId());
+             $this->innerJoin($joinAliasOpt.'.optionValues', $joinAliasOptVal, 'WITH', $joinAliasOptVal.".locale = 'en_US'"); // TODO !!!
+
+             $this->addOrderBy($joinAliasOptVal.'.value', $direction);
+
+         } else {
+
+             $joinAlias = 'sorterV'.$attribute->getCode();
+             $condition = $this->prepareAttributeJoinCondition($attribute, $joinAlias);
+             $this->leftJoin($this->getRootAlias().'.'.$attribute->getBackendStorage(), $joinAlias, 'WITH', $condition);
+             $this->addOrderBy($joinAlias.'.'.$attribute->getBackendType(), $direction);
+         }
+     }
 }
