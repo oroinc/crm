@@ -177,39 +177,6 @@ class FlexibleEntityRepository extends EntityRepository implements TranslatableI
     }
 
     /**
-     * Create a new QueryBuilder instance that is prepopulated for this entity name
-     *
-     * @param string  $alias          alias for entity
-     * @param boolean $attributeCodes add selects on values only for this attribute codes list
-     *
-     * @return QueryBuilder $qb
-     *
-    public function createQueryBuilder($alias, $attributeCodes = null)
-    {
-        $this->entityAlias = $alias;
-        $qb = new FlexibleQueryBuilder($this->_em);
-        $qb->setLocale($this->getLocale());
-        $qb->setScope($this->getScope());
-
-        if (empty($attributeCodes)) {
-            $qb->select($alias)->from($this->_entityName, $alias);
-
-        } else {
-            $qb->select($alias, 'Value', 'Attribute', 'ValueOption')
-                ->from($this->_entityName, $this->entityAlias)
-                ->leftJoin($this->entityAlias.'.values', 'Value')
-                ->leftJoin('Value.attribute', 'Attribute')
-                ->leftJoin('Value.options', 'ValueOption')
-                ->leftJoin('ValueOption.optionValues', 'AttributeOptionValue')
-                ->where($qb->expr()->in('Attribute.code', $attributeCodes));
-
-            // TODO : we should filter select by current locale and scope to reduce value number
-        }
-
-        return $qb;
-    }*/
-
-    /**
      * Create a new QueryBuilder instance that allow to automatically join on attribute values and allow doctrine
      * hydratation as real flexible entity, value, option and attributes
      *
@@ -225,7 +192,7 @@ class FlexibleEntityRepository extends EntityRepository implements TranslatableI
         $qb->setLocale($this->getLocale());
         $qb->setScope($this->getScope());
 
-        $qb->select($alias, 'Value', 'Attribute', 'ValueOption')
+        $qb->select($alias, 'Value', 'Attribute', 'ValueOption', 'AttributeOptionValue')
             ->from($this->_entityName, $this->entityAlias)
             ->leftJoin($this->entityAlias.'.values', 'Value')
             ->leftJoin('Value.attribute', 'Attribute')
@@ -240,59 +207,6 @@ class FlexibleEntityRepository extends EntityRepository implements TranslatableI
 
         return $qb;
     }
-
-    /**
-     * Prepare a new QueryBuilder instance with select, criterias and order by
-     *
-     * @param array      $attributes attribute codes
-     * @param array      $criteria   criterias
-     * @param array|null $orderBy    order by
-     *
-     * @return QueryBuilder $qb
-     *
-    public function prepareQueryBuilder(array $attributes = null, array $criteria = null, array $orderBy = null)
-    {
-        // identify kind of query
-        $hasSelectedAttributes = (!is_null($attributes) and !empty($attributes));
-        $hasCriterias = (!is_null($criteria) and !empty($criteria));
-        if ($hasCriterias or $hasSelectedAttributes) {
-            $codeToAttribute = $this->getCodeToAttributes($attributes);
-        }
-        // get base query builder (direct join to attribute and value if no attribute selection)
-        if (!$hasSelectedAttributes) {
-            $qb = $this->createQueryBuilder('Entity');
-        } else {
-            $qb = $this->createQueryBuilder('Entity', array_keys($codeToAttribute)); // lazy load
-        }
-        // add criterias
-        $attributeCodeToAlias = array();
-        if ($criteria and !empty($criteria)) {
-            $attributeCodeToAlias = $this->addFieldOrAttributeCriterias(
-                $qb,
-                $attributes,
-                $criteria,
-                $codeToAttribute,
-                $attributeCodeToAlias
-            );
-        }
-        // get selected attributes values (but not used as criteria)
-        if (!empty($attributes)) {
-            $attributeCodeToAlias = $this->addAttributeToSelect(
-                $qb,
-                $attributes,
-                $codeToAttribute,
-                $attributeCodeToAlias,
-                $orderBy
-            );
-        }
-        // add order by
-        if ($orderBy) {
-            $this->addFieldOrAttributeOrderBy($qb, $orderBy, $attributeCodeToAlias);
-        }
-
-        return $qb;
-    }*/
-
 
     /**
      * Finds entities and attributes values by a set of criteria.
@@ -311,25 +225,29 @@ class FlexibleEntityRepository extends EntityRepository implements TranslatableI
         $codeToAttribute = $this->getCodeToAttributes($attributes);
         $attributes = array_keys($codeToAttribute);
 
-        // TODO : deal with more operators ?
+        // TODO : deal with more operators or let findByWithAttributes with same coverage than findBy ?
 
         // add criterias
-        foreach ($criteria as $attCode => $attValue) {
-            if (in_array($attCode, $attributes)) {
-                $attribute = $codeToAttribute[$attCode];
-                $qb->addAttributeFilter($attribute, 'eq', $attValue);
-            } else {
-                $qb->andWhere($qb->expr()->eq($this->entityAlias.'.'.$attCode, $qb->expr()->literal($attValue)));
+        if (!is_null($criteria)) {
+            foreach ($criteria as $attCode => $attValue) {
+                if (in_array($attCode, $attributes)) {
+                    $attribute = $codeToAttribute[$attCode];
+                    $qb->addAttributeFilter($attribute, 'eq', $attValue);
+                } else {
+                    $qb->andWhere($qb->expr()->eq($this->entityAlias.'.'.$attCode, $qb->expr()->literal($attValue)));
+                }
             }
         }
 
         // add sorts
-        foreach ($orderBy as $attCode => $direction) {
-            if (in_array($attCode, $attributes)) {
-                $attribute = $codeToAttribute[$attCode];
-                $qb->addAttributeOrderBy($attribute, $direction);
-            } else {
-                $qb->addOrderBy($this->entityAlias.'.'.$attCode, $direction);
+        if (!is_null($orderBy)) {
+            foreach ($orderBy as $attCode => $direction) {
+                if (in_array($attCode, $attributes)) {
+                    $attribute = $codeToAttribute[$attCode];
+                    $qb->addAttributeOrderBy($attribute, $direction);
+                } else {
+                    $qb->addOrderBy($this->entityAlias.'.'.$attCode, $direction);
+                }
             }
         }
 
@@ -344,165 +262,8 @@ class FlexibleEntityRepository extends EntityRepository implements TranslatableI
         return $qb->getQuery()->getResult();
     }
 
-
     /**
-     * Finds entities and attributes values by a set of criteria.
-     *
-     * @param array      $attributes attribute codes
-     * @param array      $criteria   criterias
-     * @param array|null $orderBy    order by
-     * @param int|null   $limit      limit
-     * @param int|null   $offset     offset
-     *
-     * @return array The objects.
-     *
-    public function findByWithAttributes(array $attributes = null, array $criteria = null, array $orderBy = null, $limit = null, $offset = null)
-    {
-        // prepare query builder
-        $qb = $this->prepareQueryBuilder($attributes, $criteria, $orderBy);
-
-        // add limit
-        if (!is_null($offset) and !is_null($limit)) {
-            $qb->setFirstResult($offset)->setMaxResults($limit);
-            // use doctrine paginator to avoid count problem with left join of values
-            $paginator = new Paginator($qb->getQuery(), $fetchJoinCollection = true);
-
-            return $paginator;
-        }
-
-        return $qb->getQuery()->getResult();
-    }*/
-
-    /**
-     * Add attributes to select
-     *
-     * @param QueryBuilder $qb                   query builder to update
-     * @param array        $attributes           attributes to select
-     * @param array        $codeToAttribute      attribute code to attribute
-     * @param array        $attributeCodeToAlias attribute code to query alias
-     * @param array        $orderBy              attribute to order by, aims to determine if we get a localized value
-     *
-     * @return array $attributeCodeToAlias
-     *
-    protected function addAttributeToSelect($qb, $attributes, $codeToAttribute, $attributeCodeToAlias, $orderBy = array())
-    {
-        foreach ($attributes as $attributeCode) {
-            // add select attribute value
-            $joinAlias = 'selectV'.$attributeCode;
-            $qb->addSelect($joinAlias);
-            // prepare join condition
-            $attribute = $codeToAttribute[$attributeCode];
-            $joinValue = 'selectv'.$attributeCode;
-            $condition = $joinAlias.'.attribute = '.$attribute->getId();
-            // add condition to get only translated value if we use this attribute to order
-            if ($attribute->getTranslatable() and isset($orderBy[$attributeCode])) {
-                $joinValueLocale = 'selectL'.$attributeCode;
-                $condition .= ' AND '.$joinAlias.'.locale = :'.$joinValueLocale;
-                $qb->setParameter($joinValueLocale, $this->getLocale());
-            }
-            // add condition to get only scoped value if we use this attribute to order
-            if ($attribute->getScopable() and isset($orderBy[$attributeCode])) {
-                $joinValueScope = 'selectS'.$attributeCode;
-                $condition .= ' AND '.$joinAlias.'.scope = :'.$joinValueScope;
-                $qb->setParameter($joinValueScope, $this->getScope());
-            }
-            // add the join with condition and store alias for next uses
-            $qb->leftJoin($this->entityAlias.'.'.$attribute->getBackendStorage(), $joinAlias, 'WITH', $condition);
-            $attributeCodeToAlias[$attributeCode]= $joinAlias.'.'.$attribute->getBackendType();
-        }
-
-        return $attributeCodeToAlias;
-    }*/
-
-    /**
-     * Add fields and/or attributes criterias
-     *
-     * @param QueryBuilder $qb                   query builder to update
-     * @param array        $attributes           attributes to select
-     * @param array        $criteria             criterias on field or attribute
-     * @param array        $codeToAttribute      attribute code to attribute
-     * @param array        $attributeCodeToAlias attribute code to query alias
-     *
-     * @return array $attributeCodeToAlias
-     *
-    protected function addFieldOrAttributeCriterias(
-        $qb,
-        $attributes,
-        $criteria,
-        $codeToAttribute,
-        $attributeCodeToAlias
-    ) {
-        foreach ($criteria as $fieldCode => $fieldValue) {
-            // add attribute criteria
-            if (in_array($fieldCode, $attributes)) {
-                $attribute = $codeToAttribute[$fieldCode];
-                $this->addAttributeCriteria($qb, $attribute, $fieldCode, $fieldValue);
-            } else {
-                // add field criteria
-                $qb->andWhere($this->entityAlias.'.'.$fieldCode.' = :'.$fieldCode)->setParameter($fieldCode, $fieldValue);
-            }
-        }
-
-        return $attributeCodeToAlias;
-    }*/
-
-    /**
-     * Add attribute criteria
-     *
-     * @param QueryBuilder $qb         query builder to update
-     * @param Attribute    $attribute  attribute
-     * @param string       $fieldCode  criterias on field or attribute
-     * @param string       $fieldValue filter value
-     * @param string       $operator   operator to use
-     *
-    protected function addAttributeCriteria(QueryBuilder $qb, $attribute, $fieldCode, $fieldValue, $operator = '=')
-    {
-        $aliasPrefix = 'filter';
-        $joinAlias = 'filterV'.$fieldCode;
-        $condition = $this->prepareJoinAttributeCondition($qb, $attribute, $fieldCode, $aliasPrefix);
-
-        // prepare condition
-        $joinValue = 'filterv'.$fieldCode;
-        $condition .= ' AND '.$joinAlias.'.'.$attribute->getBackendType().' '.$operator.' :'.$joinValue;
-
-        // add inner join to filter lines and store value alias for next uses
-        $qb->innerJoin($this->entityAlias . '.' . $attribute->getBackendStorage(), $joinAlias, 'WITH', $condition)
-            ->setParameter($joinValue, $fieldValue);
-    }*/
-
-    /**
-     * Prepare join condition
-     *
-     * @param QueryBuilder $qb          query builder to update
-     * @param Attribute    $attribute   attribute
-     * @param string       $fieldCode   criterias on field or attribute
-     * @param array        $aliasPrefix alias prefix
-     *
-     * @return string
-     *
-    protected function prepareJoinAttributeCondition(QueryBuilder $qb, $attribute, $fieldCode, $aliasPrefix)
-    {
-        $joinAlias = $aliasPrefix . 'V' . $fieldCode;
-        $condition = $joinAlias . '.attribute = ' . $attribute->getId();
-
-        // add condition on locale if attribute is translatable
-        if ($attribute->getTranslatable()) {
-            $joinValueLocale = $aliasPrefix. 'L' . $fieldCode;
-            $condition .= ' AND '.$joinAlias.'.locale = :'.$joinValueLocale;
-            $qb->setParameter($joinValueLocale, $this->getLocale());
-        }
-
-        // add condition on scope if attribute is scopable
-        if ($attribute->getScopable()) {
-            $joinValueScope = $aliasPrefix . 'S' . $fieldCode;
-            $condition .= ' AND '.$joinAlias.'.scope = :'.$joinValueScope;
-            $qb->setParameter($joinValueScope, $this->getScope());
-        }
-
-        return $condition;
-    }*/
-
-    /**
+     * TODO : re-enable and refactor for grid purpose
      * Apply a filter by attribute
      *
      * @param QueryBuilder $qb             query builder to update
@@ -541,6 +302,7 @@ class FlexibleEntityRepository extends EntityRepository implements TranslatableI
     }*/
 
     /**
+     * TODO : re-enable and refactor for grid purpose
      * Sort by attribute value
      *
      * @param QueryBuilder $qb            query builder to update
@@ -555,7 +317,6 @@ class FlexibleEntityRepository extends EntityRepository implements TranslatableI
         $attributeCodeToAlias = array();
 
         if ($attributes) {
-            /* @var $attribute Attribute
             $attribute = $attributes[$attributeCode];
 
             if ($attribute->getBackendType() != AbstractAttributeType::BACKEND_TYPE_OPTION) {
@@ -586,26 +347,6 @@ class FlexibleEntityRepository extends EntityRepository implements TranslatableI
                 $qb->innerJoin($joinAliasOpt.'.optionValues', $joinAliasOptVal, 'WITH', $joinAliasOptVal.".locale = 'en_US'");
 
                 $qb->addOrderBy($joinAliasOptVal.'.value', $direction);
-            }
-        }
-    }*/
-
-    /**
-     * Add fields and/or attributes order by
-     *
-     * @param QueryBuilder $qb                   query builder to update
-     * @param array        $orderBy              fields and attributes order by
-     * @param array        $attributeCodeToAlias attribute code to query alias
-     *
-    protected function addFieldOrAttributeOrderBy($qb, $orderBy, $attributeCodeToAlias)
-    {
-        foreach ($orderBy as $fieldCode => $direction) {
-            // on attribute value
-            if (isset($attributeCodeToAlias[$fieldCode])) {
-                $qb->addOrderBy($attributeCodeToAlias[$fieldCode], $direction);
-                // on entity field
-            } else {
-                $qb->addOrderBy($this->entityAlias.'.'.$fieldCode, $direction);
             }
         }
     }*/

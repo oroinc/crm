@@ -1,8 +1,6 @@
 <?php
 namespace Oro\Bundle\FlexibleEntityBundle\Doctrine\ORM;
 
-use Oro\Bundle\FlexibleEntityBundle\Exception\FlexibleConfigurationException;
-
 use Doctrine\ORM\QueryBuilder;
 use Oro\Bundle\FlexibleEntityBundle\Entity\Attribute;
 use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttributeType;
@@ -84,8 +82,8 @@ class FlexibleQueryBuilder extends QueryBuilder
     /**
      * Prepare join to attribute condition with current locale and scope criterias
      *
-     * @param Attribute $attribute attribute
-     * @param string $joinAlias the value join alias
+     * @param Attribute $attribute the attribute
+     * @param string    $joinAlias the value join alias
      *
      * @return string
      */
@@ -104,29 +102,9 @@ class FlexibleQueryBuilder extends QueryBuilder
     }
 
     /**
-     * Add an attribute to select
-     *
-     * @param Attribute $attribute attribute
-     *
-     * @return QueryBuilder This QueryBuilder instance.
-     *
-    public function addAttributeToSelect(Attribute $attribute)
-    {
-        $joinAlias = 'select'.$attribute->getCode();
-        $this->addSelect($joinAlias);
-        $condition = $this->prepareAttributeJoinCondition($attribute, $joinAlias);
-        $this->leftJoin($this->getRootAlias().'.'.$attribute->getBackendStorage(), $joinAlias, 'WITH', $condition);
-
-        // TODO keep reference on this alias to order ?
-
-        return $this;
-    }*/
-
-    /**
      * Get allowed operators for related backend type
      *
-     * TODO : should be enrich for dates and options!
-     * TODO : deal with null
+     * TODO : should be enrich for dates and options, deal with null
      *
      * @param string $backendType
      *
@@ -154,37 +132,37 @@ class FlexibleQueryBuilder extends QueryBuilder
     /**
      * Prepare join to attribute condition with operator and value criteria
      *
-     * @param Attribute    $attribute      the attribute
-     * @param string       $backendField   the backend field name
-     * @param string       $operator       the operator used to filter
-     * @param string|array $attributeValue the value(s) to filter
+     * @param Attribute    $attribute    the attribute
+     * @param string       $backendField the backend field name
+     * @param string       $operator     the operator used to filter
+     * @param string|array $value        the value(s) to filter
      *
      * @return string
      */
-    public function prepareAttributeCriteriaCondition(Attribute $attribute, $backendField, $operator, $attributeValue)
+    public function prepareAttributeCriteriaCondition(Attribute $attribute, $backendField, $operator, $value)
     {
         switch ($operator)
         {
             case 'eq':
-                $condition = $this->expr()->eq($backendField, $this->expr()->literal($attributeValue));
+                $condition = $this->expr()->eq($backendField, $this->expr()->literal($value));
                 break;
             case 'neq':
-                $condition = $this->expr()->neq($backendField, $this->expr()->literal($attributeValue));
+                $condition = $this->expr()->neq($backendField, $this->expr()->literal($value));
                 break;
             case 'like':
-                $condition = $this->expr()->like($backendField, $this->expr()->literal($attributeValue));
+                $condition = $this->expr()->like($backendField, $this->expr()->literal($value));
                 break;
             case 'lt':
-                $condition = $this->expr()->lt($backendField, $this->expr()->literal($attributeValue));
+                $condition = $this->expr()->lt($backendField, $this->expr()->literal($value));
                 break;
             case 'lte':
-                $condition = $this->expr()->lte($backendField, $this->expr()->literal($attributeValue));
+                $condition = $this->expr()->lte($backendField, $this->expr()->literal($value));
                 break;
             case 'gt':
-                $condition = $this->expr()->gt($backendField, $this->expr()->literal($attributeValue));
+                $condition = $this->expr()->gt($backendField, $this->expr()->literal($value));
                 break;
             case 'gte':
-                $condition = $this->expr()->gte($backendField, $this->expr()->literal($attributeValue));
+                $condition = $this->expr()->gte($backendField, $this->expr()->literal($value));
                 break;
             case 'isNull':
                 $condition = $this->expr()->isNull($backendField);
@@ -193,10 +171,10 @@ class FlexibleQueryBuilder extends QueryBuilder
                 $condition = $this->expr()->isNotNull($backendField);
                 break;
             case 'in':
-                $condition = $this->expr()->in($backendField, $attributeValue);
+                $condition = $this->expr()->in($backendField, $value);
                 break;
             case 'notIn':
-                $condition = $this->expr()->notIn($backendField, $attributeValue);
+                $condition = $this->expr()->notIn($backendField, $value);
                 break;
             default:
                 throw new FlexibleQueryException('operator '.$operator.' is unknown');
@@ -208,11 +186,13 @@ class FlexibleQueryBuilder extends QueryBuilder
     /**
      * Add an attribute to filter
      *
-     * @param Attribute $attribute attribute
+     * @param Attribute    $attribute the attribute
+     * @param string       $operator  the used operator
+     * @param string|array $value     the value(s) to filter
      *
      * @return QueryBuilder This QueryBuilder instance.
      */
-    public function addAttributeFilter(Attribute $attribute, $operator, $attributeValue)
+    public function addAttributeFilter(Attribute $attribute, $operator, $value)
     {
         $allowed = $this->getAllowedOperators($attribute->getBackendType());
         if (!in_array($operator, $allowed)) {
@@ -232,7 +212,7 @@ class FlexibleQueryBuilder extends QueryBuilder
             $this->innerJoin($this->getRootAlias().'.' . $attribute->getBackendStorage(), $joinAlias);
             $joinAliasOpt = 'filterO'.$attribute->getCode();
             $backendField = sprintf('%s.%s', $joinAliasOpt, 'id');
-            $condition = $this->prepareAttributeCriteriaCondition($attribute, $backendField, $operator, $attributeValue);
+            $condition = $this->prepareAttributeCriteriaCondition($attribute, $backendField, $operator, $value);
             $this->innerJoin($joinAlias.'.options', $joinAliasOpt, 'WITH', $condition);
 
         } else {
@@ -240,7 +220,7 @@ class FlexibleQueryBuilder extends QueryBuilder
             // apply condition on value backend
             $backendField = sprintf('%s.%s', $joinAlias, $attribute->getBackendType());
             $condition = $this->prepareAttributeJoinCondition($attribute, $joinAlias);
-            $condition .= ' AND '.$this->prepareAttributeCriteriaCondition($attribute, $backendField, $operator, $attributeValue);
+            $condition .= ' AND '.$this->prepareAttributeCriteriaCondition($attribute, $backendField, $operator, $value);
             $this->innerJoin($this->getRootAlias().'.'.$attribute->getBackendStorage(), $joinAlias, 'WITH', $condition);
 
         }
@@ -252,33 +232,33 @@ class FlexibleQueryBuilder extends QueryBuilder
      * Sort by attribute value
      *
      * @param Attribute $attribute the attribute to sort on
-     * @param string    $direction direction to use
+     * @param string    $direction the direction to use
      */
-     public function addAttributeOrderBy(Attribute $attribute, $direction)
-     {
-         if ($attribute->getBackendType() == AbstractAttributeType::BACKEND_TYPE_OPTION) {
+    public function addAttributeOrderBy(Attribute $attribute, $direction)
+    {
+        if ($attribute->getBackendType() == AbstractAttributeType::BACKEND_TYPE_OPTION) {
 
-             $aliasPrefix = 'sorter';
+            $aliasPrefix = 'sorter';
 
-             // join to value
-             $joinAliasVal    = $aliasPrefix.'V'.$attributeCode;
-             $joinAliasOpt    = $aliasPrefix.'O'.$attributeCode;
-             $joinAliasOptVal = $aliasPrefix.'OV'.$attributeCode;
+            // join to value
+            $joinAliasVal    = $aliasPrefix.'V'.$attributeCode;
+            $joinAliasOpt    = $aliasPrefix.'O'.$attributeCode;
+            $joinAliasOptVal = $aliasPrefix.'OV'.$attributeCode;
 
-             // TODO : deal with locale and scope !!!!!!
+            // TODO : deal with locale and scope !!!!!!
 
-             $this->innerJoin($this->getRootAlias().'.' . $attribute->getBackendStorage(), $joinAliasVal);
-             $this->innerJoin($joinAliasVal.'.options', $joinAliasOpt, 'WITH', $joinAliasOpt.".attribute = ".$attribute->getId());
-             $this->innerJoin($joinAliasOpt.'.optionValues', $joinAliasOptVal, 'WITH', $joinAliasOptVal.".locale = 'en_US'"); // TODO !!!
+            $this->innerJoin($this->getRootAlias().'.' . $attribute->getBackendStorage(), $joinAliasVal);
+            $this->innerJoin($joinAliasVal.'.options', $joinAliasOpt, 'WITH', $joinAliasOpt.".attribute = ".$attribute->getId());
+            $this->innerJoin($joinAliasOpt.'.optionValues', $joinAliasOptVal, 'WITH', $joinAliasOptVal.".locale = 'en_US'"); // TODO !!!
 
-             $this->addOrderBy($joinAliasOptVal.'.value', $direction);
+            $this->addOrderBy($joinAliasOptVal.'.value', $direction);
 
-         } else {
+        } else {
 
-             $joinAlias = 'sorterV'.$attribute->getCode();
-             $condition = $this->prepareAttributeJoinCondition($attribute, $joinAlias);
-             $this->leftJoin($this->getRootAlias().'.'.$attribute->getBackendStorage(), $joinAlias, 'WITH', $condition);
-             $this->addOrderBy($joinAlias.'.'.$attribute->getBackendType(), $direction);
-         }
-     }
+            $joinAlias = 'sorterV'.$attribute->getCode();
+            $condition = $this->prepareAttributeJoinCondition($attribute, $joinAlias);
+            $this->leftJoin($this->getRootAlias().'.'.$attribute->getBackendStorage(), $joinAlias, 'WITH', $condition);
+            $this->addOrderBy($joinAlias.'.'.$attribute->getBackendType(), $direction);
+        }
+    }
 }
