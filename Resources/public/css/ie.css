@@ -68,7 +68,6 @@ table.grid{
     float: left;
 }
 .list-bar{
-    width: 100%;
 }
 * +html .list-bar li{
     display: inline;
@@ -91,4 +90,14 @@ table.grid{
     height: 28px;
     position: relative;
     top: 1px;
+}
+
+.pin-bar .pin-menus{
+    margin: 0 -31px 0 0;
+}
+.pin-bar{
+    filter: none !important;
+}
+.pin-bar .list-bar{
+
 }
