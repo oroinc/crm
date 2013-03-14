@@ -2,13 +2,13 @@
 
 namespace Oro\Bundle\NavigationBundle\Tests\Unit\DependencyInjection;
 
-use Oro\Bundle\NavigationBundle\DependencyInjection\OroMenuExtension;
+use Oro\Bundle\NavigationBundle\DependencyInjection\OroNavigationExtension;
 
 class OroMenuExtensionTest extends \PHPUnit_Framework_TestCase
 {
     public function testLoad()
     {
-        $extension = new OroMenuExtension();
+        $extension = new OroNavigationExtension();
 
         $configs = array();
         $container = $this->getMock('Symfony\Component\DependencyInjection\ContainerBuilder');
