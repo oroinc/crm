@@ -6,3 +6,7 @@ oro_menu_config:
             template: 'OroNavigationBundle:Menu:dropdown.html.twig'
         horizontal_tabs:
             template: 'OroNavigationBundle:Menu:horizontal_tabs.html.twig'
+        pinbar:
+            template: 'OroNavigationBundle:Menu:pinbar.html.twig'
+        favorite:
+            template: 'OroNavigationBundle:Menu:favorites.html.twig'

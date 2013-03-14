@@ -9,17 +9,25 @@ use Symfony\Component\Config\Definition\Processor;
 
 class MenuBuilderChainPass implements CompilerPassInterface
 {
-    const BUILDER_TAG = 'oro_menu.builder';
-    const PROVIDER_KEY = 'oro_menu.builder_chain';
+    const MENU_BUILDER_TAG = 'oro_menu.builder';
+    const MENU_PROVIDER_KEY = 'oro_menu.builder_chain';
+    const ITEMS_BUILDER_TAG = 'oro_navigation.items.builder';
+    const ITEMS_PROVIDER_KEY = 'oro_navigation.item.factory';
 
     public function process(ContainerBuilder $container)
     {
-        if (!$container->hasDefinition(self::PROVIDER_KEY)) {
+        $this->processMenu($container);
+        $this->processItems($container);
+    }
+
+    protected function processMenu(ContainerBuilder $container)
+    {
+        if (!$container->hasDefinition(self::MENU_PROVIDER_KEY)) {
             return;
         }
 
-        $definition = $container->getDefinition(self::PROVIDER_KEY);
-        $taggedServices = $container->findTaggedServiceIds(self::BUILDER_TAG);
+        $definition = $container->getDefinition(self::MENU_PROVIDER_KEY);
+        $taggedServices = $container->findTaggedServiceIds(self::MENU_BUILDER_TAG);
 
         foreach ($taggedServices as $id => $tagAttributes) {
             foreach ($tagAttributes as $attributes) {
@@ -29,6 +37,30 @@ class MenuBuilderChainPass implements CompilerPassInterface
                     $addBuilderArgs[] = $attributes['alias'];
                 }
 
+                $definition->addMethodCall('addBuilder', $addBuilderArgs);
+            }
+        }
+    }
+
+    protected function processItems(ContainerBuilder $container)
+    {
+        if (!$container->hasDefinition(self::ITEMS_PROVIDER_KEY)) {
+            return;
+        }
+
+        $definition = $container->getDefinition(self::ITEMS_PROVIDER_KEY);
+        $taggedServices = $container->findTaggedServiceIds(self::ITEMS_BUILDER_TAG);
+
+        foreach ($taggedServices as $id => $tagAttributes) {
+            foreach ($tagAttributes as $attributes) {
+                if (empty($attributes['alias'])) {
+                    continue;
+                }
+
+                $builderDefinition = $container->getDefinition($id);
+                $builderDefinition->addArgument($attributes['alias']);
+
+                $addBuilderArgs = array(new Reference($id));
                 $definition->addMethodCall('addBuilder', $addBuilderArgs);
             }
         }

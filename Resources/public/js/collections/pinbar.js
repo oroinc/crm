@@ -1,0 +1,21 @@
+var navigation = navigation || {};
+navigation.pinbar = navigation.pinbar || {};
+
+navigation.pinbar.ItemsList = navigation.ItemsList.extend({
+    model: navigation.pinbar.Item,
+
+    initialize: function() {
+        this.on('change:position', this.onPositionChange, this);
+        this.on('change:maximized', this.onStateChange, this);
+    },
+
+    onPositionChange: function(item) {
+        this.trigger('positionChange', item);
+    },
+
+    onStateChange: function(item) {
+        this.trigger('stateChange', item);
+    }
+});
+
+navigation.pinbar.Items = new navigation.pinbar.ItemsList();

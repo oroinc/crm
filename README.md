@@ -90,7 +90,7 @@ class MainMenuBuilder implements BuilderInterface
 ```
 
 ### Menu declaration in YAML
-YAML file with default menu declaration is located in /Oro/MenuBundle/Resources/config/menu.yml.
+YAML file with default menu declaration is located in /Oro/NavigationBundle/Resources/config/menu.yml.
 In addition to it, each bundle may have their own menu which must be located in /SomeBundleName/Resource/menu.yml.
 Both types of declaration files have the same format:
 
