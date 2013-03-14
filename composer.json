@@ -1,0 +1,26 @@
+{
+    "name": "oro/NavigationBundle",
+    "type": "symfony-bundle",
+    "description": "BAP Navigation Bundle",
+    "keywords": ["BAP", "UI", "User Interface", "Menu", "Navigation", "Pinbar", "Shortcuts", "History"],
+    "homepage": "https://github.com/laboro/NavigationBundle",
+    "license": "MIT",
+    "require": {
+        "php": ">=5.3.3",
+        "symfony/symfony": "2.1.6",
+        "oro/UIBundle": "dev-master",
+        "oro/UserBundle": "dev-master",
+        "knplabs/knp-menu-bundle": "dev-master",
+        "knplabs/knp-menu": "dev-master"
+    },
+    "autoload": {
+        "psr-0": { "Oro\\Bundle\\NavigationBundle": "" }
+    },
+    "target-dir": "Oro/Bundle/NavigationBundle",
+    "minimum-stability": "dev",
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0-dev"
+        }
+    }
+}

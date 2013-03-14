@@ -1,0 +1,8 @@
+oro_menu_config:
+    templates:
+        navbar:
+            template: 'OroNavigationBundle:Menu:navbar.html.twig'
+        dropdown:
+            template: 'OroNavigationBundle:Menu:dropdown.html.twig'
+        horizontal_tabs:
+            template: 'OroNavigationBundle:Menu:horizontal_tabs.html.twig'

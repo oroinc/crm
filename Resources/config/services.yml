@@ -1,0 +1,38 @@
+parameters:
+    oro_menu.factory.class: Oro\Bundle\NavigationBundle\Menu\AclAwareMenuFactory
+    oro_menu.builder_chain.class: Oro\Bundle\NavigationBundle\Provider\BuilderChainProvider
+    oro_menu.configuration_builder.class: Oro\Bundle\NavigationBundle\Menu\ConfigurationBuilder
+    oro_menu.twig.extension.class: Oro\Bundle\NavigationBundle\Twig\MenuExtension
+
+services:
+    oro_menu.factory:
+        class: %oro_menu.factory.class%
+        arguments:
+            - @router
+            - @oro_user.acl_manager
+        calls:
+            - [ setCache, [ @cache ] ]
+
+    oro_menu.builder_chain:
+        class: %oro_menu.builder_chain.class%
+        arguments:
+            - @oro_menu.factory
+            - @event_dispatcher
+        tags:
+            - { name: knp_menu.provider }
+
+    oro_menu.configuration_builder:
+        class: %oro_menu.configuration_builder.class%
+        calls:
+            - [ setContainer, [ @service_container ] ]
+        tags:
+            - { name: oro_menu.builder }
+
+    oro_menu.twig.extension:
+        class: %oro_menu.twig.extension.class%
+        arguments:
+            - @knp_menu.helper
+            - @oro_menu.builder_chain
+            - @service_container
+        tags:
+            - { name: twig.extension }
