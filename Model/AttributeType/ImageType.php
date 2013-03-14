@@ -21,8 +21,6 @@ class ImageType extends FileType
     public function __construct()
     {
         $this->name        = 'Image';
-        $this->backendType = self::BACKEND_TYPE_VARCHAR;
-        $this->formType    = 'file';
     }
 
     /**

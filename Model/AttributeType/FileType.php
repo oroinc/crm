@@ -1,6 +1,8 @@
 <?php
 namespace Oro\Bundle\FlexibleEntityBundle\Model\AttributeType;
 
+use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttribute;
+
 use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttributeType;
 
 /**
@@ -20,9 +22,8 @@ class FileType extends AbstractAttributeType
     public function __construct()
     {
         $this->name        = 'File';
-        $this->backendType = self::BACKEND_TYPE_VARCHAR;
-        $this->formType    = 'file';
-
-        $this->fieldName   = 'fileUpload';
+        $this->backendType = self::BACKEND_TYPE_MEDIA;
+        $this->formType    = 'media';
+        $this->fieldName   = 'media';
     }
 }

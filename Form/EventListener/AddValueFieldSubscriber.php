@@ -80,12 +80,8 @@ class AddValueFieldSubscriber implements EventSubscriberInterface
             $data = $value->getOption();
         } elseif ($fieldName == 'options') {
             $data = $value->getOptions();
-        } elseif ($fieldName === 'fileUpload') {
-            $options['disabled'] = true;
-            $form->add(
-                $this->factory->createNamed('data', 'text', $value->getData(), $options)
-            );
-            $data = null;
+        } elseif ($fieldName == 'media') {
+            $data = $value->getMedia();
         } else {
             $data = $value->getData();
         }
@@ -96,6 +92,5 @@ class AddValueFieldSubscriber implements EventSubscriberInterface
         $form->add(
             $this->factory->createNamed($fieldName, $formType, $data, $formOptions)
         );
-
     }
 }

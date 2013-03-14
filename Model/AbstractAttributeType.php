@@ -32,6 +32,7 @@ abstract class AbstractAttributeType
     const BACKEND_TYPE_OPTION   = 'options';
     const BACKEND_TYPE_TEXT     = 'text';
     const BACKEND_TYPE_VARCHAR  = 'varchar';
+    const BACKEND_TYPE_MEDIA    = 'media';
 
     /**
      * Classes for AttributeType
