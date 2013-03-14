@@ -142,11 +142,20 @@
             {% block right_panel %}{% endblock right_panel %}
             {% block left_panel %}{% endblock left_panel %}
                 {% block pin_bar %}
+                    <style type="text/css">
+                        {# TODO: !!! Move this to some CSS file !!! #}
+                        .pin-bar .dropdown-menu {
+                            border-radius: 0;
+                            margin: 0;
+                            padding: 0;
+                            width: 375px;
+                        }
+                    </style>
                     <div class="clearfix">
                         <div class="pin-bar clearfix">
-                            <div class="pin-menus oro-drop oro-drop-right">
-                                <span class="oro-drop-opener">...</span>
-                                <div class="drop-down oro-drop-holder">
+                            <div class="pin-menus dropdown dropdown-close-prevent">
+                                <span class="oro-dropdown-toggle hide-text">...</span>
+                                <div class="dropdown-menu pull-right">
                                     <div class="tabbable tabs-left">
                                         <ul class="nav nav-tabs">
                                             <li class="active" id="tabs-tab"><a data-toggle="tab" href="#tabs-content"><i class="icon-folder-close"></i>Tabs</a></li>
