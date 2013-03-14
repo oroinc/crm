@@ -105,70 +105,19 @@ $(document).ready(function () {
             });
         });
     })
-/*    $('div.pin-bar .pin-menus > span').click(function(){
-        $(this).parent().toggleClass('open')
-    })*/;
-    $('body').append('<div id="oro-drop-holder" style="display: none;"></div><div id="oro-drop-frame" style="display: none;" ><div id="oro-drop-content"></div></div>');
-    var oroContentText;
-    var opoParent;
-    function openOroDrop(container){
-        $('#oro-drop-content').empty();
-        $('#oro-drop-content').attr('class','');
-        oroPopupOpenFlag = true;/* need for save html of parent and closr by opener btn */
-        opoParent = $(container);
-        var oroContent = $(container).find('.oro-drop-holder').html();
-        oroContentText = oroContent;
-        var oroContentClass = $(container).attr('class');
-        $('#oro-drop-content').append(oroContent);
-        $('#oro-drop-content').addClass(oroContentClass);
-        var oroContent = $(container).find('.oro-drop-holder').empty();
-        var oroPopupPosition = $(container).offset()
-        var oroPopupHeight = $(container).innerHeight();
-        var oroPopupHeightTest = $(container).find('.oro-drop-holder').attr('data-width');
-        if(oroPopupHeightTest > 0){
-            var oroPopupWidth = oroPopupHeightTest + "px";
-        }else{
-            var oroPopupWidth = $(container).innerWidth() + "px";
-        }
 
-        var oroPopupTop = oroPopupPosition.top + oroPopupHeight -1 + 'px';
-        var oroPopupLeft = oroPopupPosition.left + 'px';
-        $('#oro-drop-content').width(oroPopupWidth);
-        $('#oro-drop-frame').css({
-            'top'       :   oroPopupTop,
-            'left'      :   oroPopupLeft,
-            'width'     :   oroPopupWidth,
-            'display'   :   'block'
-        });
-        $('#oro-drop-holder').css({
-            'display' : 'block'
-        })
-        $('#oro-drop-frame .nav-tabs a[href="#profile"]').tab('show');
-    }
-    function closeOroDrop(){
-        $('#oro-drop-holder').css({
-            'display' : 'none'
-        })
-        $('#oro-drop-frame').css({
-            'display' : 'none'
-        });
-        oroContentText = $('#oro-drop-content').html();
-        $(opoParent).find('.oro-drop-holder').append(oroContentText);
-        oroContentText = ''
-        oroPopupOpenFlag = false;
-    }
-    $('.oro-drop').each( function(){
-        var myContainer = $(this);
-        $(this).find('.oro-drop-opener').click(function(){
-            if(oroPopupOpenFlag){
-                closeOroDrop();
-            }else{
-                openOroDrop(myContainer);
-            }
-        });
+/* ============================================================
+ *Oro Dropdown close prevent
+ * ============================================================ */
+    var dropdownToggles = $('.oro-dropdown-toggle');
+    dropdownToggles.click(function(e) {
+        dropdownToggles.parent().toggleClass('open')
+        e.stopPropagation();
     });
-    $('#oro-drop-holder').click(function(){
-        closeOroDrop();
+
+    $('html').click(function(e) {
+        if (!$(e.target).closest('.dropdown-close-prevent').length) {
+            dropdownToggles.parent().removeClass('open')
+        }
     });
-    var oroPopupOpenFlag = false;
-});
+ });
