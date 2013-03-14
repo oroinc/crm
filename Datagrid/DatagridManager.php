@@ -177,6 +177,11 @@ abstract class DatagridManager implements DatagridManagerInterface
             $this->datagridBuilder->addSorter($datagrid, $sorterField);
         }
 
+        // add row actions
+        foreach ($this->getRowActions() as $actionParameters) {
+            $this->datagridBuilder->addRowAction($datagrid, $actionParameters);
+        }
+
         return $datagrid;
     }
 
@@ -204,6 +209,16 @@ abstract class DatagridManager implements DatagridManagerInterface
      * @return array
      */
     protected function getSorters()
+    {
+        return array();
+    }
+
+    /**
+     * Get list of row actions
+     *
+     * @return array
+     */
+    protected function getRowActions()
     {
         return array();
     }

@@ -11,6 +11,7 @@ use Oro\Bundle\GridBundle\Filter\FilterInterface;
 use Oro\Bundle\GridBundle\Field\FieldDescriptionCollection;
 use Oro\Bundle\GridBundle\Sorter\SorterInterface;
 use Oro\Bundle\GridBundle\Route\RouteGeneratorInterface;
+use Oro\Bundle\GridBundle\Action\ActionInterface;
 
 class Datagrid implements DatagridInterface
 {
@@ -82,6 +83,11 @@ class Datagrid implements DatagridInterface
      * @var string
      */
     protected $entityHint;
+
+    /**
+     * @var ActionInterface[]
+     */
+    protected $rowActions;
 
     /**
      * @param ProxyQueryInterface $query
@@ -410,5 +416,22 @@ class Datagrid implements DatagridInterface
     public function getEntityHint()
     {
         return $this->entityHint;
+    }
+
+    /**
+     * @param ActionInterface $action
+     * @return void
+     */
+    public function addRowAction(ActionInterface $action)
+    {
+        $this->rowActions[] = $action;
+    }
+
+    /**
+     * @return ActionInterface[]
+     */
+    public function getRowActions()
+    {
+        return $this->rowActions;
     }
 }

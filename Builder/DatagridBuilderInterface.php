@@ -29,6 +29,13 @@ interface DatagridBuilderInterface
     public function addSorter(DatagridInterface $datagrid, FieldDescriptionInterface $field);
 
     /**
+     * @param DatagridInterface $datagrid
+     * @param array $parameters
+     * @return void
+     */
+    public function addRowAction(DatagridInterface $datagrid, array $parameters);
+
+    /**
      * @param string $field
      * @return void
      */

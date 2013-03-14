@@ -6,6 +6,7 @@ use Sonata\AdminBundle\Datagrid\DatagridInterface as BaseDatagridInterface;
 
 use Oro\Bundle\GridBundle\Sorter\SorterInterface;
 use Oro\Bundle\GridBundle\Route\RouteGeneratorInterface;
+use Oro\Bundle\GridBundle\Action\ActionInterface;
 
 interface DatagridInterface extends BaseDatagridInterface
 {
@@ -16,9 +17,20 @@ interface DatagridInterface extends BaseDatagridInterface
     public function addSorter(SorterInterface $sorter);
 
     /**
+     * @param ActionInterface $action
+     * @return void
+     */
+    public function addRowAction(ActionInterface $action);
+
+    /**
      * @return SorterInterface[]
      */
     public function getSorters();
+
+    /**
+     * @return ActionInterface[]
+     */
+    public function getRowActions();
 
     /**
      * @param string $name

@@ -1,0 +1,16 @@
+parameters:
+    oro_grid.action.type.redirect.class: Oro\Bundle\GridBundle\Action\RedirectAction
+    oro_grid.action.type.rest.class:     Oro\Bundle\GridBundle\Action\RESTAction
+
+services:
+    oro_grid.action.type.redirect:
+        class: %oro_grid.action.type.redirect.class%
+        arguments: ["@router"]
+        tags:
+            - { name: oro_grid.action.type, alias: oro_grid_action_redirect }
+
+    oro_grid.action.type.rest:
+        class: %oro_grid.action.type.rest.class%
+        arguments: ["@router"]
+        tags:
+            - { name: oro_grid.action.type, alias: oro_grid_action_rest }

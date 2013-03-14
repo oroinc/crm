@@ -44,6 +44,7 @@ output='js/acme.grid.js'
 
     {% set columnTypePrefix = 'Oro\\Bundle\\GridBundle\\Field\\FieldDescriptionInterface::' %}
     {% set filterTypePrefix = 'Oro\\Bundle\\GridBundle\\Filter\\FilterInterface::' %}
+    {% set actionTypePrefix = 'Oro\\Bundle\\GridBundle\\Action\\ActionInterface::' %}
 
     _.extend(OroApp, {
         scope: {
@@ -134,6 +135,19 @@ output='js/acme.grid.js'
                                     label: '{{ filter.getOption('label') }}',
                                     enabled: {{ filter.getOption('show_filter') ? 'true' : 'false' }}
                                 })
+                            {% endif %}
+                            {% if not loop.last %},{% endif %}
+                        {% endfor %}
+                    },
+                    actions: {
+                        {% for action in datagrid.rowActions %}
+                            {{ action.name }}:
+                            {% if action.type == constant(actionTypePrefix ~ 'TYPE_REST') %}
+                                // OroApp.DatagridActionREST
+                                Backbone.View.extend({{ action.options|json_encode|raw }})
+                            {% else %}
+                                // OroApp.DatagridActionRedirect
+                                Backbone.View.extend({{ action.options|json_encode|raw }})
                             {% endif %}
                             {% if not loop.last %},{% endif %}
                         {% endfor %}

@@ -14,10 +14,21 @@ class AddFilterTypeCompilerPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        $definition = $container->getDefinition('oro_grid.filter.factory');
+        $this->injectEntityTypesByTag($container, 'oro_grid.filter.factory', 'oro_grid.filter.type');
+        $this->injectEntityTypesByTag($container, 'oro_grid.action.factory', 'oro_grid.action.type');
+    }
+
+    /**
+     * @param ContainerBuilder $container
+     * @param string $definitionId
+     * @param string $tagName
+     */
+    protected function injectEntityTypesByTag(ContainerBuilder $container, $definitionId, $tagName)
+    {
+        $definition = $container->getDefinition($definitionId);
         $types      = array();
 
-        foreach ($container->findTaggedServiceIds('oro_grid.filter.type') as $id => $attributes) {
+        foreach ($container->findTaggedServiceIds($tagName) as $id => $attributes) {
             $container->getDefinition($id)->setScope(ContainerInterface::SCOPE_PROTOTYPE);
 
             foreach ($attributes as $eachTag) {

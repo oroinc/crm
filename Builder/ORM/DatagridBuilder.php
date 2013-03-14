@@ -16,6 +16,7 @@ use Oro\Bundle\GridBundle\Field\FieldDescriptionInterface;
 use Oro\Bundle\GridBundle\Field\FieldDescriptionCollection;
 use Oro\Bundle\GridBundle\Filter\FilterFactoryInterface;
 use Oro\Bundle\GridBundle\Sorter\SorterFactoryInterface;
+use Oro\Bundle\GridBundle\Action\ActionFactoryInterface;
 
 class DatagridBuilder implements DatagridBuilderInterface
 {
@@ -35,6 +36,11 @@ class DatagridBuilder implements DatagridBuilderInterface
     protected $formFactory;
 
     /**
+     * @var ActionFactoryInterface
+     */
+    protected $actionFactory;
+
+    /**
      * @var array
      */
     protected $complexFields = array();
@@ -43,15 +49,18 @@ class DatagridBuilder implements DatagridBuilderInterface
      * @param FormFactoryInterface $formFactory
      * @param FilterFactoryInterface $filterFactory
      * @param SorterFactoryInterface $sorterFactory
+     * @param ActionFactoryInterface $actionFactory
      */
     public function __construct(
         FormFactoryInterface $formFactory,
         FilterFactoryInterface $filterFactory,
-        SorterFactoryInterface $sorterFactory
+        SorterFactoryInterface $sorterFactory,
+        ActionFactoryInterface $actionFactory
     ) {
         $this->formFactory   = $formFactory;
         $this->filterFactory = $filterFactory;
         $this->sorterFactory = $sorterFactory;
+        $this->actionFactory = $actionFactory;
     }
 
     /**
@@ -80,6 +89,21 @@ class DatagridBuilder implements DatagridBuilderInterface
         $sorter = $this->sorterFactory->create($field);
 
         $datagrid->addSorter($sorter);
+    }
+
+    /**
+     * @param DatagridInterface $datagrid
+     * @param array $parameters
+     */
+    public function addRowAction(DatagridInterface $datagrid, array $parameters)
+    {
+        $action = $this->actionFactory->create(
+            $parameters['name'],
+            $parameters['type'],
+            $parameters['options']
+        );
+
+        $datagrid->addRowAction($action);
     }
 
     /**

@@ -23,5 +23,6 @@ class OroGridExtension extends Extension
         $loader->load('orm_filter_types.yml');
         $loader->load('orm_sorter_types.yml');
         $loader->load('form_types.yml');
+        $loader->load('actions.yml');
     }
 }
