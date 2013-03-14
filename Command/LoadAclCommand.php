@@ -5,17 +5,17 @@ namespace Oro\Bundle\UserBundle\Command;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Sensio\Bundle\GeneratorBundle\Command\Helper\DialogHelper;
+use Symfony\Component\Console\Input\ArrayInput;
 
-class SynchronizeAclCommand extends ContainerAwareCommand
+class LoadAclCommand extends ContainerAwareCommand
 {
     /**
      * Console command configuration
      */
     public function configure()
     {
-        $this->setName('oro:acl:synchronize');
-        $this->setDescription('Synchronize ACL resources from annotations and db');
+        $this->setName('oro:acl:load');
+        $this->setDescription('Load ACL resources from annotations and config files to db');
     }
 
     /**
@@ -24,8 +24,17 @@ class SynchronizeAclCommand extends ContainerAwareCommand
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $output->writeln('Synchronize ACL resources from annotations and db');
+        $output->writeln('Load ACL resources from annotations and config files to db');
         $this->getContainer()->get('oro_user.acl_manager')->synchronizeAclResources();
         $output->writeln('Completed');
+
+        //clear cache
+        $command = $this->getApplication()->find('cache:clear');
+        $arguments = array(
+            'command' => 'cache:clear',
+            '--no-warmup' => true
+        );
+        $input = new ArrayInput($arguments);
+        $command->run($input, $output);
     }
 }
