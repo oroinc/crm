@@ -1,8 +1,6 @@
 var navigation = navigation || {};
 
 navigation.Item = Backbone.Model.extend({
-    urlRoot: '/app_dev.php/api/rest/latest/navigationitems',
-
     defaults: {
         title: '',
         url: null,
