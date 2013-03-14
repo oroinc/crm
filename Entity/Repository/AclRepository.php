@@ -13,9 +13,9 @@ class AclRepository extends NestedTreeRepository
     /**
      * Get array with allowed acl resources for role array
      *
-     * @param array $roles
+     * @param \Oro\Bundle\UserBundle\Entity\Role[] $roles
      * @param bool  $useObjects
-     * @return \Oro\Bundle\UserBundle\Entity\Role[]|array
+     * @return \Oro\Bundle\UserBundle\Entity\Acl[]|array
      */
     public function getAllowedAclResourcesForRoles(array $roles, $useObjects = false)
     {

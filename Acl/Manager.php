@@ -11,8 +11,9 @@ use Oro\Bundle\UserBundle\Entity\Role;
 use Oro\Bundle\UserBundle\Entity\Acl;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\UserBundle\Annotation\Acl as AnnotationAcl;
+use Oro\Bundle\UserBundle\Acl\ManagerInterface;
 
-class Manager
+class Manager implements ManagerInterface
 {
     const ACL_ANNOTATION_CLASS = 'Oro\Bundle\UserBundle\Annotation\Acl';
     const ACL_ANCESTOR_ANNOTATION_CLASS = 'Oro\Bundle\UserBundle\Annotation\AclAncestor';
@@ -101,10 +102,10 @@ class Manager
     /**
      * Get list of allowed ACL resources for roles array
      *
-     * @param array $roles
+     * @param \Oro\Bundle\UserBundle\Entity\Role[] $roles
      * @param bool  $useObjects
      *
-     * @return array|\Oro\Bundle\UserBundle\Entity\Role[]
+     * @return array|\Oro\Bundle\UserBundle\Entity\Acl[]
      */
     public function getAllowedAclResourcesForRoles(array $roles, $useObjects = false)
     {
