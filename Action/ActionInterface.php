@@ -8,7 +8,7 @@ interface ActionInterface
      * Action types
      */
     const TYPE_REDIRECT = 'oro_grid_action_redirect';
-    const TYPE_REST = 'oro_grid_action_rest';
+    const TYPE_DELETE   = 'oro_grid_action_delete';
 
     /**
      * Filter name
@@ -25,6 +25,13 @@ interface ActionInterface
     public function getType();
 
     /**
+     * ACL resource name
+     *
+     * @return string|null
+     */
+    public function getAclResource();
+
+    /**
      * Action options (route, ACL resource etc.)
      *
      * @return array
@@ -37,7 +44,19 @@ interface ActionInterface
     public function setName($name);
 
     /**
+     * @param string $aclResource
+     */
+    public function setAclResource($aclResource);
+
+    /**
      * @param array $options
      */
     public function setOptions(array $options);
+
+    /**
+     * Check whether action allowed for current user
+     *
+     * @return mixed
+     */
+    public function isGranted();
 }

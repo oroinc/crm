@@ -142,8 +142,8 @@ output='js/acme.grid.js'
                     actions: {
                         {% for action in datagrid.rowActions %}
                             {{ action.name }}:
-                            {% if action.type == constant(actionTypePrefix ~ 'TYPE_REST') %}
-                                // OroApp.DatagridActionREST
+                            {% if action.type == constant(actionTypePrefix ~ 'TYPE_DELETE') %}
+                                // OroApp.DatagridActionDelete
                                 Backbone.View.extend({{ action.options|json_encode|raw }})
                             {% else %}
                                 // OroApp.DatagridActionRedirect

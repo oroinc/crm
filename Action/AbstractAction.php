@@ -3,6 +3,7 @@
 namespace Oro\Bundle\GridBundle\Action;
 
 use Symfony\Component\Routing\RouterInterface;
+use Oro\Bundle\UserBundle\Acl\ManagerInterface;
 
 abstract class AbstractAction implements ActionInterface
 {
@@ -17,6 +18,11 @@ abstract class AbstractAction implements ActionInterface
     protected $type;
 
     /**
+     * @var string
+     */
+    protected $aclResource = null;
+
+    /**
      * @var array
      */
     protected $options;
@@ -27,16 +33,23 @@ abstract class AbstractAction implements ActionInterface
     protected $router;
 
     /**
+     * @var ManagerInterface
+     */
+    protected $aclManager;
+
+    /**
      * @var bool
      */
     protected $isProcessed = false;
 
     /**
      * @param RouterInterface $router
+     * @param ManagerInterface $aclManager
      */
-    public function __construct(RouterInterface $router)
+    public function __construct(RouterInterface $router, ManagerInterface $aclManager)
     {
-        $this->router = $router;
+        $this->router     = $router;
+        $this->aclManager = $aclManager;
     }
 
     /**
@@ -60,6 +73,16 @@ abstract class AbstractAction implements ActionInterface
     }
 
     /**
+     * ACL resource name
+     *
+     * @return string|null
+     */
+    public function getAclResource()
+    {
+        return $this->aclResource;
+    }
+
+    /**
      * Action options (route, ACL resource etc.)
      *
      * @return array
@@ -75,7 +98,6 @@ abstract class AbstractAction implements ActionInterface
 
     /**
      * @param string $name
-     * @return void
      */
     public function setName($name)
     {
@@ -83,8 +105,15 @@ abstract class AbstractAction implements ActionInterface
     }
 
     /**
+     * @param string $aclResource
+     */
+    public function setAclResource($aclResource)
+    {
+        $this->aclResource = $aclResource;
+    }
+
+    /**
      * @param array $options
-     * @return void
      */
     public function setOptions(array $options)
     {
@@ -164,5 +193,19 @@ abstract class AbstractAction implements ActionInterface
         }
 
         $this->options['route'] = str_replace($replaceFrom, $replaceTo, $routePattern);
+    }
+
+    /**
+     * Check whether action allowed for current user
+     *
+     * @return bool
+     */
+    public function isGranted()
+    {
+        if ($this->aclResource) {
+            return $this->aclManager->isResourceGranted($this->aclResource);
+        }
+
+        return true;
     }
 }

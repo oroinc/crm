@@ -31,11 +31,12 @@ class ActionFactory implements ActionFactoryInterface
     /**
      * @param string $name
      * @param string $type
+     * @param string|null $aclResource
      * @param array $options
      * @return ActionInterface
      * @throws \RunTimeException
      */
-    public function create($name, $type, array $options = array())
+    public function create($name, $type, $aclResource = null, array $options = array())
     {
         if (!$type) {
             throw new \RunTimeException('The type must be defined');
@@ -50,6 +51,7 @@ class ActionFactory implements ActionFactoryInterface
         /** @var $action ActionInterface */
         $action = $this->container->get($actionServiceId);
         $action->setName($name);
+        $action->setAclResource($aclResource);
         $action->setOptions($options);
 
         return $action;

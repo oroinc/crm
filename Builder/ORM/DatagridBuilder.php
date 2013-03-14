@@ -100,10 +100,13 @@ class DatagridBuilder implements DatagridBuilderInterface
         $action = $this->actionFactory->create(
             $parameters['name'],
             $parameters['type'],
-            $parameters['options']
+            isset($parameters['acl_resource']) ? $parameters['acl_resource'] : null,
+            isset($parameters['options']) ? $parameters['options'] : array()
         );
 
-        $datagrid->addRowAction($action);
+        if ($action->isGranted()) {
+            $datagrid->addRowAction($action);
+        }
     }
 
     /**
