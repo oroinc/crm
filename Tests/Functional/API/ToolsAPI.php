@@ -35,12 +35,12 @@ class ToolsAPI extends \PHPUnit_Framework_TestCase
         foreach ($parameters as $key => $value) {
             array_walk(
                 $parameters[$key]['request'],
-                array(self, 'replace'),
+                array(get_called_class(), 'replace'),
                 self::$random
             );
             array_walk(
                 $parameters[$key]['response'],
-                array(self, 'replace'),
+                array(get_called_class(), 'replace'),
                 self::$random
             );
         }
