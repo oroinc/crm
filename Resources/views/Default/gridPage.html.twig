@@ -4,6 +4,7 @@
     {{ parent() }}
     <script type="text/javascript" src="{{ asset('bundles/oroui/lib/bootstrap/js/bootstrap-tooltip.js') }}"></script>
     <script type="text/javascript" src="{{ asset('bundles/oroui/lib/bootstrap/js/bootstrap-popover.js') }}"></script>
+    <script src="http://code.jquery.com/ui/1.10.1/jquery-ui.js"></script>
 {% endblock %}
 {% block content %}
         <div class="layout-content">
@@ -112,7 +113,8 @@
                 </div>
 
                 <div class="btn-group oro-drop">
-                    <button class="btn oro-drop-opener">Test Owner: <strong>Me</strong> <span class="caret"></span></button>
+                    <button class="btn oro-drop-opener">Test Owner 1: <strong>Me</strong> <span class="caret"></span></button>
+                    <a class="disable-filter" href="#"><i class="icon-remove hide-text">Close</i></a>
                     <div class="oro-drop-holder" data-width="300">
                         <div class="drop-frame">
                             <ul class="list-oro">
@@ -137,20 +139,69 @@
                             </ul>
                         </div>
                     </div>
+
                 </div>
                 <div class="btn-group oro-drop">
-                    <button class="btn oro-drop-opener">Test Owner: <strong>Me</strong> <span class="caret"></span></button>
-                    <div class="oro-drop-holder" data-width="300">
+                    <button class="btn oro-drop-opener">Just test: <strong>Me</strong> <span class="caret"></span></button>
+                    <a class="disable-filter" href="#"><i class="icon-remove hide-text">Close</i></a>
+                    <div class="oro-drop-holder">
                         <div class="drop-frame">
                             <ul class="list-oro">
-                                <li>first</li>
-                                <li class="divider-vertical small-divider">
-
-                                </li>
-                                <li>test</li>
+                                <li><a href="#">first</a></li>
+                                <li class="divider-vertical small-divider"></li>
+                                <li><a href="#">test</a></li>
                             </ul>
                         </div>
                     </div>
+                </div>
+                <div class="btn-group oro-drop">
+                    <button class="btn oro-drop-opener">Resolution Date: <strong>all</strong> <span class="caret"></span></button>
+                    <a class="disable-filter" href="#"><i class="icon-remove hide-text">Close</i></a>
+                    <div class="oro-drop-holder" data-width="370">
+                        <div class="drop-frame">
+                            <ul class="list-oro">
+                                <li class="one-row">
+                                    <input id="radio11" type="radio" name="date" />
+                                    <label for="radio11">Resolved within the last</label>
+                                    <input type="text" style="width:35px;" />
+                                    <select class="js-measurement" style="width:100px;">
+                                        <option value="m">minutes</option>
+                                        <option value="h">hours</option>
+                                        <option value="d">days</option>
+                                        <option value="w">weeks</option>
+                                    </select>
+                                </li>
+                                <li class="one-row">
+                                    <input id="radio12" type="radio" name="date" />
+                                    <label for="radio12">Date Range</label>
+                                    <label for="from">From</label>
+                                    <input type="text" id="from" name="from" style="width:50px;" />
+                                    <label for="to">to</label>
+                                    <input type="text" id="to" name="to" style="width:50px;" />
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <script>
+                        $(function() {
+                            jQuery( "#from" ).datepicker({
+                                defaultDate: "+1w",
+                                changeMonth: true,
+                                numberOfMonths: 3,
+                                onClose: function( selectedDate ) {
+                                    jQuery( "#to" ).datepicker( "option", "minDate", selectedDate );
+                                }
+                            });
+                            jQuery( "#to" ).datepicker({
+                                defaultDate: "+1w",
+                                changeMonth: true,
+                                numberOfMonths: 3,
+                                onClose: function( selectedDate ) {
+                                    jQuery( "#from" ).datepicker( "option", "maxDate", selectedDate );
+                                }
+                            });
+                        });
+                    </script>
                 </div>
 
                 <div class="btn-group">
@@ -2302,6 +2353,12 @@
                             });
                         });
                     /* select row -- end*/
+                    /* need dell after add funvctionalitu for close */
+                    jQuery('.disable-filter').each(function(){
+                        jQuery(this).click(function(){
+                            jQuery(this).parent().remove();
+                        });
+                    });
                 });
             </script>
         </div>
