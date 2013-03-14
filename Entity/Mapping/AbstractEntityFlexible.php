@@ -107,7 +107,7 @@ abstract class AbstractEntityFlexible extends AbstractFlexible
             return false;
         }
 
-        $values->filter(
+        $values = $values->filter(
             function ($value) use ($attributeCode, $locale, $scope) {
                 // related value to asked attribute
                 if ($value->getAttribute()->getCode() == $attributeCode) {
@@ -128,7 +128,7 @@ abstract class AbstractEntityFlexible extends AbstractFlexible
                 return false;
             }
         );
-        $value = $values->first();
+        $value = (count($values) == 1) ? $values->first() : false;
 
         return $value;
     }
