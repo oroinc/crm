@@ -13,6 +13,8 @@ navigation.shortcut.MainView = Backbone.View.extend({
 
     data: {},
 
+    cache: {},
+
     initialize: function() {
         this.$el.val('');
         this.$el.typeahead({
@@ -24,6 +26,8 @@ navigation.shortcut.MainView = Backbone.View.extend({
     source: function(query, process) {
         if (_.isArray(this.options.source)) {
             process(this.options.source);
+        } else if (!_.isUndefined(this.cache[query])) {
+            process(this.cache[query]);
         } else {
             var url = this.options.source + (this.options.source.charAt(this.options.source.length - 1) === '/' ? '' : '/')
             $.get(url + encodeURIComponent(query), function(data) {
@@ -32,6 +36,7 @@ navigation.shortcut.MainView = Backbone.View.extend({
                 _.each(data, function(item, key) {
                     result.push(key);
                 });
+                this.cache[query] = result;
                 process(result);
             }.bind(this));
         }
