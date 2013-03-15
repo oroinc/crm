@@ -176,6 +176,11 @@ class FlexibleEntityRepository extends EntityRepository implements TranslatableI
         return $attribute;
     }
 
+    public function createQueryBuilder($alias)
+    {
+        return $this->createFlexibleQueryBuilder($alias);
+    }
+
     /**
      * Create a new QueryBuilder instance that allow to automatically join on attribute values and allow doctrine
      * hydratation as real flexible entity, value, option and attributes
@@ -263,93 +268,44 @@ class FlexibleEntityRepository extends EntityRepository implements TranslatableI
     }
 
     /**
-     * TODO : re-enable and refactor for grid purpose
-     * Apply a filter by attribute
+     * Apply a filter by attribute value
      *
      * @param QueryBuilder $qb             query builder to update
      * @param string       $attributeCode  attribute code
      * @param string|array $attributeValue value(s) used to filter
      * @param string       $operator       operator to use
-     *
+     */
     public function applyFilterByAttribute(QueryBuilder $qb, $attributeCode, $attributeValue, $operator = '=')
     {
-        // TODO ensure allowed operator
-
-        $attributes = $this->getCodeToAttributes(array($attributeCode));
-        if ($attributes) {
-             @var $attribute Attribute
-            $attribute = $attributes[$attributeCode];
-
-            if ($attribute->getBackendType() != AbstractAttributeType::BACKEND_TYPE_OPTION) {
-                $this->addAttributeCriteria(
-                    $qb,
-                    $attribute,
-                    $attribute->getCode(),
-                    $attributeValue,
-                    $operator
-                );
-            } else {
-                // join to value
-                $joinAliasVal = 'filterV'.$attributeCode;
-                $qb->innerJoin($this->entityAlias.'.' . $attribute->getBackendStorage(), $joinAliasVal);
-
-                // join to option (custom backend)
-                $joinAliasOpt = 'filterO'.$attributeCode;
-                $conditionOpt = $qb->expr()->in(sprintf('%s.%s', $joinAliasOpt, 'id'), $attributeValue);
-                $qb->innerJoin($joinAliasVal.'.options', $joinAliasOpt, 'WITH', $conditionOpt);
-            }
+        $codeToAttribute = $this->getCodeToAttributes(array());
+        $attributeCodes = array_keys($codeToAttribute);
+        if (in_array($attributeCode, $attributeCodes)) {
+            $attribute = $codeToAttribute[$attributeCode];
+            $qb->addAttributeFilter($attribute, $operator, $attributeValue);
+        } else {
+            // TODO operator for field criteria
+            $qb->andWhere($qb->expr()->eq($this->entityAlias.'.'.$attributeCode, $qb->expr()->literal($attributeValue)));
         }
-    }*/
+    }
 
     /**
-     * TODO : re-enable and refactor for grid purpose
-     * Sort by attribute value
+     * Apply a sort by attribute value
      *
      * @param QueryBuilder $qb            query builder to update
      * @param string       $attributeCode attribute code
      * @param string       $direction     direction to use
-     *
+     */
     public function applySorterByAttribute(QueryBuilder $qb, $attributeCode, $direction)
     {
-
-
-        $attributes = $this->getCodeToAttributes(array($attributeCode));
-        $attributeCodeToAlias = array();
-
-        if ($attributes) {
-            $attribute = $attributes[$attributeCode];
-
-            if ($attribute->getBackendType() != AbstractAttributeType::BACKEND_TYPE_OPTION) {
-                $aliasPrefix = 'sorter';
-                $joinAlias = $aliasPrefix . 'V' . $attribute->getCode();
-                $condition = $this->prepareJoinAttributeCondition($qb, $attribute, $attribute->getCode(), $aliasPrefix);
-
-                // add left join to filter lines and store value alias for next uses
-                $qb->leftJoin($this->entityAlias . '.' . $attribute->getBackendStorage(), $joinAlias, 'WITH', $condition);
-                $attributeCodeToAlias[$attribute->getCode()] = $joinAlias.'.'.$attribute->getBackendType();
-
-                $orderBy = array($attribute->getCode() => $direction);
-                $this->addFieldOrAttributeOrderBy($qb, $orderBy, $attributeCodeToAlias);
-
-            } else {
-
-                $aliasPrefix = 'sorter';
-
-                // join to value
-                $joinAliasVal    = $aliasPrefix.'V'.$attributeCode;
-                $joinAliasOpt    = $aliasPrefix.'O'.$attributeCode;
-                $joinAliasOptVal = $aliasPrefix.'OV'.$attributeCode;
-
-                // TODO : deal with locale and scope
-
-                $qb->innerJoin($this->entityAlias.'.' . $attribute->getBackendStorage(), $joinAliasVal);
-                $qb->innerJoin($joinAliasVal.'.options', $joinAliasOpt, 'WITH', $joinAliasOpt.".attribute = ".$attribute->getId());
-                $qb->innerJoin($joinAliasOpt.'.optionValues', $joinAliasOptVal, 'WITH', $joinAliasOptVal.".locale = 'en_US'");
-
-                $qb->addOrderBy($joinAliasOptVal.'.value', $direction);
-            }
+        $codeToAttribute = $this->getCodeToAttributes(array());
+        $attributeCodes = array_keys($codeToAttribute);
+        if (in_array($attributeCode, $attributeCodes)) {
+            $attribute = $codeToAttribute[$attributeCode];
+            $qb->addAttributeOrderBy($attribute, $direction);
+        } else {
+            $qb->addOrderBy($this->entityAlias.'.'.$attributeCode, $direction);
         }
-    }*/
+    }
 
     /**
      * Find entity with attributes values

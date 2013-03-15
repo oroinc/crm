@@ -241,9 +241,9 @@ class FlexibleQueryBuilder extends QueryBuilder
             $aliasPrefix = 'sorter';
 
             // join to value
-            $joinAliasVal    = $aliasPrefix.'V'.$attributeCode;
-            $joinAliasOpt    = $aliasPrefix.'O'.$attributeCode;
-            $joinAliasOptVal = $aliasPrefix.'OV'.$attributeCode;
+            $joinAliasVal    = $aliasPrefix.'V'.$attribute->getCode();
+            $joinAliasOpt    = $aliasPrefix.'O'.$attribute->getCode();
+            $joinAliasOptVal = $aliasPrefix.'OV'.$attribute->getCode();
 
             // TODO : deal with locale and scope !!!!!!
 
