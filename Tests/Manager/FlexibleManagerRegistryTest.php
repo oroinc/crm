@@ -52,7 +52,10 @@ class FlexibleManagerRegistryTest extends OrmTestCase
         $this->entityManager   = $this->_getTestEntityManager();
         $entityConfig          = array('entities_config' => array($this->entityFQCN => array()));
         $this->flexibleManager =  new FlexibleManager(
-            $this->entityFQCN, $entityConfig, $this->entityManager, new EventDispatcher()
+            $this->entityFQCN,
+            $entityConfig,
+            $this->entityManager,
+            new EventDispatcher()
         );
     }
 
@@ -84,5 +87,4 @@ class FlexibleManagerRegistryTest extends OrmTestCase
         $this->registry->addManager($this->managerId, $this->flexibleManager, $this->entityFQCN);
         $this->assertEquals($this->registry->getManager($this->entityFQCN), $this->flexibleManager);
     }
-
 }
