@@ -2,14 +2,14 @@
     <div id="search-div" class="input-append input-prepend pull-left header-search">
         <div class="btn-group">
             <button data-toggle="dropdown" class="btn dropdown-toggle" id="search-bar-button">
-                {% if fromString != '*' %}
+                {% if fromString == '*' or fromString == '' %}
+                    All
+                {% else %}
                     {% for entity in entities %}
                         {% if entity.alias == fromString %}
                             {{ entity.label }}
                         {% endif %}
                     {% endfor %}
-                {% else %}
-                    All
                 {% endif %}
                 <span class="caret"></span>
             </button>

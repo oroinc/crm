@@ -32,7 +32,10 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
             ->method('trans')
             ->will($this->returnValue('translated test product'));
 
-        $this->om = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
+        $this->om = $this->getMockBuilder('Doctrine\ORM\EntityManager')
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->repository = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
 
         $this->om->expects($this->any())

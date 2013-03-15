@@ -46,6 +46,8 @@ class Configuration implements ConfigurationInterface
             ->arrayNode('entities_config')
                 ->prototype('array')
                 ->children()
+                    ->scalarNode('alias')->end()
+                    ->scalarNode('label')->end()
                     ->arrayNode('fields')
                         ->prototype('array')
                         ->children()

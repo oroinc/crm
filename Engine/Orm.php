@@ -2,7 +2,7 @@
 
 namespace Oro\Bundle\SearchBundle\Engine;
 
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\ORM\EntityManager;
 
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -38,7 +38,7 @@ class Orm extends AbstractEngine
      */
     protected $jobRepo;
 
-    public function __construct(ObjectManager $em, ContainerInterface $container, $mappingConfig, $logQueries)
+    public function __construct(EntityManager $em, ContainerInterface $container, $mappingConfig, $logQueries)
     {
         $this->container = $container;
         $this->em = $em;
@@ -52,6 +52,30 @@ class Orm extends AbstractEngine
                 $this->mappingConfig[$entity]['label'] = $translator->trans($config['label']);
             }
         }
+    }
+
+    /**
+     * Reload search index
+     *
+     * @return int Count of index records
+     */
+    public function reindex()
+    {
+        //clear old index
+        $this->clearSearchIndex();
+
+        //index data by mapping config
+        $recordsCount = 0;
+        foreach ($this->mappingConfig as $entityName => $mappingConfig) {
+            $entityData = $this->em->getRepository($entityName)->findAll();
+            foreach ($entityData as $entity) {
+                if ($this->save($entity, true) !== false) {
+                    $recordsCount++;
+                }
+            }
+        }
+
+        return $recordsCount;
     }
 
     /**
@@ -425,7 +449,7 @@ class Orm extends AbstractEngine
     protected function reindexJob()
     {
         // check if reindex task has not been added earlier
-        $command = 'oro:search:reindex';
+        $command = 'oro:search:index';
         $currJob = $this->em->createQuery("SELECT j FROM JMSJobQueueBundle:Job j WHERE j.command = :command AND j.state <> :state")
             ->setParameter('command', $command)
             ->setParameter('state', Job::STATE_FINISHED)
@@ -477,19 +501,23 @@ class Orm extends AbstractEngine
      */
     protected function getEntityUrl($entity)
     {
-        $routeParameters = $this->mappingConfig[get_class($entity)]['route'];
-        $routeData = array();
-        if (isset($routeParameters['parameters']) && count($routeParameters['parameters'])) {
-            foreach ($routeParameters['parameters'] as $parameter => $field) {
-                $routeData[$parameter] = $this->getFieldValue($entity, $field);
+        if (isset($this->mappingConfig[get_class($entity)]['route'])){
+            $routeParameters = $this->mappingConfig[get_class($entity)]['route'];
+            $routeData = array();
+            if (isset($routeParameters['parameters']) && count($routeParameters['parameters'])) {
+                foreach ($routeParameters['parameters'] as $parameter => $field) {
+                    $routeData[$parameter] = $this->getFieldValue($entity, $field);
+                }
             }
+
+            return $this->container->get('router')->generate(
+                $routeParameters['name'],
+                $routeData,
+                true
+            );
         }
 
-        return $this->container->get('router')->generate(
-            $routeParameters['name'],
-            $routeData,
-            true
-        );
+        return '';
     }
 
     /**
@@ -512,5 +540,43 @@ class Orm extends AbstractEngine
         }
 
         return implode(' ', $title);
+    }
+
+    /**
+     * Truncate search tables
+     */
+    protected function clearSearchIndex()
+    {
+        $connection = $this->em->getConnection();
+        $dbPlatform = $connection->getDatabasePlatform();
+        $connection->beginTransaction();
+        try {
+            $connection->query('SET FOREIGN_KEY_CHECKS=0');
+            $this->truncate($dbPlatform, $connection,'OroSearchBundle:Item');
+            $this->truncate($dbPlatform, $connection,'OroSearchBundle:IndexDecimal');
+            $this->truncate($dbPlatform, $connection,'OroSearchBundle:IndexText');
+            $this->truncate($dbPlatform, $connection,'OroSearchBundle:IndexInteger');
+            $this->truncate($dbPlatform, $connection,'OroSearchBundle:IndexDatetime');
+            $connection->query('SET FOREIGN_KEY_CHECKS=1');
+            $connection->commit();
+        }
+        catch (\Exception $e) {
+            $connection->rollback();
+        }
+
+    }
+
+    /**
+     * Truncate query for table
+     *
+     * @param $dbPlatform
+     * @param $connection
+     * @param $table
+     */
+    protected function truncate($dbPlatform, $connection, $table)
+    {
+        $cmd = $this->em->getClassMetadata($table);
+        $q = $dbPlatform->getTruncateTableSql($cmd->getTableName());
+        $connection->executeUpdate($q);
     }
 }

@@ -17,7 +17,7 @@ class ReindexCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this->setName('oro:search:reindex')
-             ->setDescription('Update and reindex (automatically) fulltext-indexed table(s)');
+             ->setDescription('Reindex search index');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -25,45 +25,10 @@ class ReindexCommand extends ContainerAwareCommand
         $output->writeln('Starting reindex task');
         $output->writeln('');
 
-        $doctrine = $this->getContainer()->get('doctrine');
-        $orm      = $this->getContainer()->get('oro_search.search.engine');
-        $em       = $doctrine->getManager();
-        $itemRepo = $em->getRepository('OroSearchBundle:Item');
-
-        $itemRepo->setDriversClasses($this->getContainer()->getParameter('oro_search.engine_orm'));
-
-        $changed = $itemRepo->findBy(
-            array(
-                'changed' => true
-            )
-        );
-
-        // probably, fulltext index should be dropped here for performance reasons
-        // ...
-
-        foreach ($changed as $item) {
-            $output->write(sprintf('  Processing "%s" with id #%u', $item->getEntity(), $item->getRecordId()));
-
-            $entity = $doctrine
-                ->getRepository($item->getEntity())
-                ->find($item->getRecordId());
-
-            if ($entity) {
-                $item->setChanged(false)
-                    ->setTitle($this->getEntityTitle($entity))
-                    ->setUrl($this->getEntityUrl($entity))
-                    ->saveItemData($orm->mapObject($entity));
-            } else {
-                $em->remove($item);
-            }
-        }
-
-        $em->flush();
-
-        // recreate fulltext index, if necessary
-        // ...
-
+        /** @var $searchEngine \Oro\Bundle\SearchBundle\Engine\AbstractEngine */
+        $searchEngine = $this->getContainer()->get('oro_search.search.engine');
+        $recordsCount = $searchEngine->reindex();
         $output->writeln('');
-        $output->writeln(sprintf('Total indexed items: %u', count($changed)));
+        $output->writeln(sprintf('Total indexed items: %u', $recordsCount));
     }
 }

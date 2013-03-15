@@ -33,6 +33,8 @@ class Manufacturer
      */
     private $products;
 
+    public $parent = array();
+
     /**
      * Get id
      *

@@ -2,7 +2,7 @@
 
 namespace Oro\Bundle\SearchBundle\Engine;
 
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\ORM\EntityManager;
 
 use Oro\Bundle\SearchBundle\Query\Query;
 use Oro\Bundle\SearchBundle\Query\Result;
@@ -14,7 +14,7 @@ use Oro\Bundle\SearchBundle\Entity\Query as QueryLog;
 abstract class AbstractEngine
 {
     /**
-     * @var \Doctrine\Common\Persistence\ObjectManager
+     * @var \Doctrine\ORM\EntityManager
      */
     protected $em;
 
@@ -26,10 +26,10 @@ abstract class AbstractEngine
     /**
      * Init entity manager
      *
-     * @param \Doctrine\Common\Persistence\ObjectManager $em
-     * @param bool                                       $logQueries
+     * @param \Doctrine\ORM\EntityManager $em
+     * @param bool                        $logQueries
      */
-    public function __construct(ObjectManager $em, $logQueries)
+    public function __construct(EntityManager $em, $logQueries)
     {
         $this->em = $em;
         $this->logQueries = $logQueries;
@@ -54,6 +54,13 @@ abstract class AbstractEngine
      * @return mixed
      */
     abstract public function delete($entity, $realtime = true);
+
+    /**
+     * Reload search index
+     *
+     * @return int Count of index records
+     */
+    abstract public function reindex();
 
     /**
      * Search query with query builder
