@@ -3,8 +3,8 @@ html, body{
     height: 100%;
 }
 #page{
-    display: table;
-    height: 100%;
+/*    display: table; need fix when create fotter at bottom
+    height: 100%; */
     width: 100%;
 }
 #top-page{
@@ -118,4 +118,8 @@ html, body{
 }
 .wb{
     background-color: #FFF;
+}
+.scroll-holder{
+    overflow: auto;
+    max-height: 575px;
 }
