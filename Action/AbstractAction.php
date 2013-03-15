@@ -2,7 +2,6 @@
 
 namespace Oro\Bundle\GridBundle\Action;
 
-use Symfony\Component\Routing\RouterInterface;
 use Oro\Bundle\UserBundle\Acl\ManagerInterface;
 
 abstract class AbstractAction implements ActionInterface
@@ -28,9 +27,9 @@ abstract class AbstractAction implements ActionInterface
     protected $options;
 
     /**
-     * @var RouterInterface
+     * @var ActionUrlGeneratorInterface
      */
-    protected $router;
+    protected $urlGenerator;
 
     /**
      * @var ManagerInterface
@@ -43,13 +42,13 @@ abstract class AbstractAction implements ActionInterface
     protected $isProcessed = false;
 
     /**
-     * @param RouterInterface $router
+     * @param ActionUrlGeneratorInterface $urlGenerator
      * @param ManagerInterface $aclManager
      */
-    public function __construct(RouterInterface $router, ManagerInterface $aclManager)
+    public function __construct(ActionUrlGeneratorInterface $urlGenerator, ManagerInterface $aclManager)
     {
-        $this->router     = $router;
-        $this->aclManager = $aclManager;
+        $this->urlGenerator = $urlGenerator;
+        $this->aclManager   = $aclManager;
     }
 
     /**
@@ -134,7 +133,7 @@ abstract class AbstractAction implements ActionInterface
     }
 
     /**
-     * Process router options ("route", "parameters", "placeholders")
+     * Process route options ("route", "parameters", "placeholders")
      *
      * @throws \LogicException
      */
@@ -144,12 +143,6 @@ abstract class AbstractAction implements ActionInterface
 
         $routeName = $this->options['route'];
 
-        $route = $this->router->getRouteCollection()->get($routeName);
-        if (!$route) {
-            throw new \LogicException('There is no route with name "' . $routeName . '".');
-        }
-
-        // process parameters
         if (isset($this->options['parameters'])) {
             $parameters = $this->options['parameters'];
             unset($this->options['parameters']);
@@ -157,42 +150,19 @@ abstract class AbstractAction implements ActionInterface
             $parameters = array();
         }
 
-        // process placeholders
         if (!isset($this->options['placeholders'])) {
             $this->options['placeholders'] = array();
         }
         $placeholders = $this->options['placeholders'];
 
-        $routePattern = $route->getPattern();
+        // generate correct url
+        $this->options['route'] = $this->urlGenerator->generate($routeName, $parameters, $placeholders);
 
-        // process placeholders in route
-        preg_match_all('/{(.*?)}/', $routePattern, $routePlaceholders, PREG_SET_ORDER);
-        $replaceFrom = array();
-        $replaceTo   = array();
-        foreach ($routePlaceholders as $placeholder) {
-            $placeholderPattern = $placeholder[0];
-            $placeholderName    = $placeholder[1];
-
-            // if need to be replaced
-            if (!isset($placeholders[$placeholderPattern])) {
-                if (isset($parameters[$placeholderPattern])) {
-                    $replaceFrom[] = $placeholderPattern;
-                    $replaceTo[]   = $parameters[$placeholderPattern];
-                } else {
-                    $defaultValue = $route->getDefault($placeholderName);
-                    if ($defaultValue === null) {
-                        throw new \LogicException(
-                            'There is no placeholder with name "' . $placeholderPattern . '"'
-                            . ' for route "' . $routeName . '".'
-                        );
-                    }
-                    $replaceFrom[] = $placeholderPattern;
-                    $replaceTo[]   = $defaultValue;
-                }
-            }
+        foreach ($this->options['placeholders'] as $key => $value) {
+            unset($this->options['placeholders'][$key]);
+            $key = '{' . $key .'}';
+            $this->options['placeholders'][$key] = $value;
         }
-
-        $this->options['route'] = str_replace($replaceFrom, $replaceTo, $routePattern);
     }
 
     /**
