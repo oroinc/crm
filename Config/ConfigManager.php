@@ -52,40 +52,29 @@ class ConfigManager
     }
 
     /**
-     * Get settings in $entity scope
+     * Merge current settings with entity scoped settings
      *
-     * @param  string      $entity   Entity name
-     * @param  int         $recordId Entity id
-     * @return Config|null
+     * @param  string $entity   Entity name
+     * @param  int    $recordId Entity id
      */
-    protected function getScopeSettings($entity, $recordId)
+    protected function mergeSettings($entity, $recordId)
     {
         $config = $this->om->getRepository('OroConfigBundle:Config')->findOneBy(array(
             'entity'   => $entity,
             'recordId' => (int) $recordId,
         ));
 
-        return $config ? $config->getSettings() : null;
-    }
+        if (!$config) {
+            return;
+        }
 
-    /**
-     * Merge current settings with new scope
-     *
-     * @param array $settings Scoped settings from Config table
-     */
-    protected function mergeSettings(array $scope)
-    {
-        foreach ($this->settings as $section => &$settings) {
-            if (!isset($scope[$section])) {
-                continue;
-            }
+        $scope = $config->getSettings();
 
-            foreach ($settings as $key => &$setting) {
-                if (!isset($scope[$section][$key])) {
-                    continue;
+        foreach ($scope as $section => $settings) {
+            foreach ($settings as $name => $value) {
+                if (isset($this->settings[$section][$name])) {
+                    $this->settings[$section][$name]['value'] = $value;
                 }
-
-                $setting['value'] = $scope[$section][$key];
             }
         }
     }

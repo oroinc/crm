@@ -4,8 +4,6 @@ namespace Oro\Bundle\ConfigBundle\Config;
 
 use Symfony\Component\Security\Core\SecurityContextInterface;
 
-use Oro\Bundle\UserBundle\Entity\User;
-
 class UserConfigManager extends ConfigManager
 {
     /**
@@ -26,14 +24,10 @@ class UserConfigManager extends ConfigManager
         if ($token = $this->security->getToken()) {
             if (is_object($user = $token->getUser())) {
                 foreach ($user->getGroups() as $group) {
-                    if ($settings = $this->getScopeSettings(get_class($group), $group->getId())) {
-                        $this->mergeSettings($settings);
-                    }
+                    $this->mergeSettings(get_class($group), $group->getId());
                 }
 
-                if ($settings = $this->getScopeSettings(get_class($user), $user->getId())) {
-                    $this->mergeSettings($settings);
-                }
+                $this->mergeSettings(get_class($user), $user->getId());
             }
         }
     }
