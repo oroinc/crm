@@ -32,7 +32,8 @@ class UserConfigManagerTest extends ConfigManagerTest
 
         $this->repository = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
         $this->security   = $this->getMock('Symfony\Component\Security\Core\SecurityContextInterface');
-        $this->group      = $this->getMock('Oro\Bundle\UserBundle\Entity\Group');
+        $this->group1     = $this->getMock('Oro\Bundle\UserBundle\Entity\Group');
+        $this->group2     = $this->getMock('Oro\Bundle\UserBundle\Entity\Group');
 
         $token  = $this->getMock('Symfony\Component\Security\Core\Authentication\Token\TokenInterface');
         $user   = new User();
@@ -48,18 +49,25 @@ class UserConfigManagerTest extends ConfigManagerTest
             ->method('getToken')
             ->will($this->returnValue($token));
 
-        $this->group
+        $this->group1
             ->expects($this->any())
             ->method('getId')
-            ->will($this->returnValue(1));
+            ->will($this->returnValue(2));
+
+        $this->group2
+            ->expects($this->any())
+            ->method('getId')
+            ->will($this->returnValue(3));
 
         $token
             ->expects($this->any())
             ->method('getUser')
             ->will($this->returnValue($user));
 
-        $user->setId(1);
-        $user->addGroup($this->group);
+        $user
+            ->setId(1)
+            ->addGroup($this->group1)
+            ->addGroup($this->group2);
 
         $this->object = new UserConfigManager($this->om, $this->settings);
     }
@@ -91,13 +99,21 @@ class UserConfigManagerTest extends ConfigManagerTest
                     'recordId' => 1,
                 )),
                 $this->equalTo(array(
-                    'entity'   => get_class($this->group),
-                    'recordId' => 1
+                    'entity'   => get_class($this->group1),
+                    'recordId' => 2
+                )),
+                $this->equalTo(array(
+                    'entity'   => get_class($this->group2),
+                    'recordId' => 3
                 ))
             ))
             ->will($this->returnCallback(
                 function($param) use ($configUser, $configGroup) {
-                    return $param['entity'] == 'Oro\Bundle\UserBundle\Entity\User' ? $configUser : $configGroup;
+                    switch ($param['recordId']) {
+                        case 1: return $configUser;
+                        case 2: return $configGroup;
+                        case 3: return null;
+                    }
                 }
             ));
 
