@@ -3,7 +3,7 @@
 namespace Oro\Bundle\UserBundle\Menu;
 
 use Knp\Menu\ItemInterface;
-use Oro\Bundle\MenuBundle\Menu\BuilderInterface;
+use Oro\Bundle\NavigationBundle\Menu\BuilderInterface;
 
 class UserMenuBuilder implements BuilderInterface
 {

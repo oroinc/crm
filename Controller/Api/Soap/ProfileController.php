@@ -14,7 +14,7 @@ class ProfileController extends BaseController
      * @Soap\Param("limit", phpType = "int")
      * @Soap\Result(phpType = "Oro\Bundle\UserBundle\Entity\User[]")
      */
-    public function сgetAction($page = 1, $limit = 10)
+    public function cgetAction($page = 1, $limit = 10)
     {
         return $this->container->get('knp_paginator')->paginate(
             $this->getUserManager()->getListQuery(),
@@ -117,6 +117,30 @@ class ProfileController extends BaseController
         }
 
         return $entity;
+    }
+
+    /**
+     * @Soap\Method("getUserAcl")
+     * @Soap\Param("id", phpType = "int")
+     * @Soap\Result(phpType = "string[]")
+     */
+    public function getAclAction($id)
+    {
+        $user = ($this->getUserManager()->findUserBy(array('id' => (int) $id)));
+
+        if (!$user) {
+            throw new \SoapFault('NOT_FOUND', 'User can not be found using specified filter');
+        }
+
+        return $this->getAclManager()->getAclForUser($user);
+    }
+
+    /**
+     * @return \Oro\Bundle\UserBundle\Acl\Manager
+     */
+    protected function getAclManager()
+    {
+        return $this->container->get('oro_user.acl_manager');
     }
 
     /**

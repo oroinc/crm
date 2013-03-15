@@ -149,6 +149,80 @@ class RoleController extends FOSRestController implements ClassResourceInterface
     }
 
     /**
+     * Get role acl list
+     *
+     * @param int $id User id
+     * @ApiDoc(
+     *  description="Get role allowed ACL resources",
+     *  resource=true,
+     *  requirements={
+     *      {"name"="id", "dataType"="integer"},
+     *  }
+     * )
+     */
+    public function getAclAction($id)
+    {
+        $role = $this->getManager()->find('OroUserBundle:Role', (int) $id);
+
+        if (!$role) {
+            return $this->handleView($this->view('', Codes::HTTP_NOT_FOUND));
+        }
+
+        return $this->handleView(
+            $this->view(
+                $this->get('oro_user.acl_manager')->getAllowedAclResourcesForRoles(array($role)),
+                Codes::HTTP_OK
+            )
+        );
+    }
+
+    /**
+     * Link ACL Resource to role
+     *
+     * @param int $id User id
+     * @ApiDoc(
+     *  description="Link ACL Resource to role",
+     *  requirements={
+     *      {"roleId"="id", "dataType"="integer"},
+     *      {"aclResourceId"="id", "dataType"="string"},
+     *  }
+     * )
+     */
+    public function postAclAction($roleId, $aclResourceId)
+    {
+        $this->get('oro_user.acl_manager')->modifyAclForRole(
+            $roleId,
+            $aclResourceId,
+            true
+        );
+
+        return $this->handleView($this->view('', Codes::HTTP_NO_CONTENT));
+    }
+
+    /**
+     * Unlink ACL Resource to role
+     *
+     * @param int $id User id
+     * @ApiDoc(
+     *  description="Unlink ACL Resource to role",
+     *  requirements={
+     *      {"roleId"="id", "dataType"="integer"},
+     *      {"aclResourceId"="id", "dataType"="string"},
+     *  }
+     * )
+     */
+    public function deleteAclAction($roleId, $aclResourceId)
+    {
+        $this->get('oro_user.acl_manager')->modifyAclForRole(
+            $roleId,
+            $aclResourceId,
+            false
+        );
+
+        return $this->handleView($this->view('', Codes::HTTP_NO_CONTENT));
+    }
+
+    /**
      * @return \Doctrine\Common\Persistence\ObjectManager
      */
     protected function getManager()

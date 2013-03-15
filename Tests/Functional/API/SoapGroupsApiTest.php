@@ -14,7 +14,7 @@ class SoapGroupsApiTest extends \PHPUnit_Framework_TestCase
     {
         if (is_null(self::$clientSoap)) {
             try {
-                self::$clientSoap = @new \SoapClient('http://localhost.com/app_test.php/api/soap');
+                self::$clientSoap = new \SoapClient('http://localhost.com/app_test.php/api/soap', array('trace' => 1, 'soap_version' => '1.2'));
             } catch (\SoapFault $e) {
                 $this->markTestSkipped('Test skipped due to http://localhost.com is not available!');
             }

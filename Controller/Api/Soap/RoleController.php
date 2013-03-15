@@ -89,4 +89,57 @@ class RoleController extends BaseController
 
         return $entity;
     }
+
+    /**
+     * @Soap\Method("getRoleAcl")
+     * @Soap\Param("id", phpType = "int")
+     * @Soap\Result(phpType = "string[]")
+     */
+    public function getAclAction($id)
+    {
+        $role = $this->getManager()->find('OroUserBundle:Role', (int) $id);
+        if (!$role) {
+            throw new \SoapFault('NOT_FOUND', sprintf('Role with id "%s" can not be found', $id));
+        }
+
+        return $this->container->get('oro_user.acl_manager')->getAllowedAclResourcesForRoles(array($role));
+    }
+
+    /**
+     * Link ACL Resource to role
+     *
+     * @Soap\Method("addAclToRole")
+     * @Soap\Param("roleId", phpType = "int")
+     * @Soap\Param("aclResourceId", phpType = "string")
+     * @Soap\Result(phpType = "string")
+     */
+    public function postAclAction($roleId, $aclResourceId)
+    {
+        $this->container->get('oro_user.acl_manager')->modifyAclForRole(
+            $roleId,
+            $aclResourceId,
+            true
+        );
+
+        return '';
+    }
+
+    /**
+     * Unlink ACL Resource from role
+     *
+     * @Soap\Method("removeAclFromRole")
+     * @Soap\Param("roleId", phpType = "int")
+     * @Soap\Param("aclResourceId", phpType = "string")
+     * @Soap\Result(phpType = "string")
+     */
+    public function deleteAclAction($roleId, $aclResourceId)
+    {
+        $this->container->get('oro_user.acl_manager')->modifyAclForRole(
+            $roleId,
+            $aclResourceId,
+            false
+        );
+
+        return '';
+    }
 }
