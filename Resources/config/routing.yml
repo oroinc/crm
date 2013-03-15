@@ -15,3 +15,8 @@ oro_shortcut_api:
         version: latest|v1
     defaults:
         version: latest
+
+oro_shortcut:
+    resource:     Oro\Bundle\NavigationBundle\Controller\ShortcutController
+    type:         annotation
+    prefix:       /shortcut

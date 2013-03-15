@@ -1,0 +1,34 @@
+{% extends bap.layout %}
+
+{% block title %}{% trans %}Shortcut actions list{% endtrans %}{% endblock %}
+
+{% block content %}
+    <div class="clearfix">
+        <h3>{% trans %}Shortcut actions list{% endtrans %}</h3>
+
+        {% if actionsList|length > 0 %}
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>Action Name</th>
+                        <th>Url</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for code, action in actionsList %}
+                    <tr>
+                        <td>{{ code }}</td>
+                        <td><a href="{{ action["url"] }}" target="_blank">{{ action["url"] }}</a></td>
+                        <td>{{ action["description"] }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <h2>{% trans %}Sorry, you don't have any action{% endtrans %}</h2>
+        {% endif %}
+
+    </div>
+
+{% endblock %}
