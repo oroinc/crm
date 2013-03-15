@@ -143,20 +143,29 @@
             {% block right_panel %}{% endblock right_panel %}
             {% block left_panel %}{% endblock left_panel %}
                 {% block pin_bar %}
+                    <style type="text/css">
+                        {# TODO: !!! Move this to some CSS file !!! #}
+                        .pin-bar .dropdown-menu {
+                            border-radius: 0;
+                            margin: 0;
+                            padding: 0;
+                            width: 375px;
+                        }
+                    </style>
                     <div class="clearfix">
                         <div class="pin-bar clearfix">
-                            <div class="pin-menus oro-drop oro-drop-right">
-                                <span class="oro-drop-opener">...</span>
-                                <div class="drop-down oro-drop-holder">
+                            <div class="pin-menus dropdown dropdown-close-prevent">
+                                <span class="oro-dropdown-toggle hide-text">...</span>
+                                <div class="dropdown-menu pull-right">
                                     <div class="tabbable tabs-left">
                                         <ul class="nav nav-tabs">
-                                            <li class="active" ><a data-toggle="tab"href="#lA"><i class="icon-folder-close"></i>Tabs</a></li>
-                                            <li><a data-toggle="tab"  href="#lB"><i class="icon-time"></i>History</a></li>
-                                            <li><a data-toggle="tab"  href="#lC"><i class="icon-star-empty"></i>Favorites</a></li>
-                                            <li><a data-toggle="tab"  href="#lD"><i class="icon-flag"></i>Most Viewed</a></li>
+                                            <li class="active" id="tabs-tab"><a data-toggle="tab" href="#tabs-content"><i class="icon-folder-close"></i>Tabs</a></li>
+                                            <li id="history-tab"><a data-toggle="tab"  href="#history-content"><i class="icon-time"></i>History</a></li>
+                                            <li id="favorites-tab"><a data-toggle="tab"  href="#favorites-content"><i class="icon-star-empty"></i>Favorites</a></li>
+                                            <li id="most-viewed-tab"><a data-toggle="tab"  href="#most-viewed-content"><i class="icon-flag"></i>Most Viewed</a></li>
                                         </ul>
                                         <div class="tab-content">
-                                            <div id="lA" class="tab-pane active">
+                                            <div id="tabs-content" class="tab-pane active">
                                                 <ul class="extra-list">
                                                     <li><button data-dismiss="alert" class="close" type="button">&times;</button><a href="#">Sales filtered Wednesday</a></li>
                                                     <li><button data-dismiss="alert" class="close" type="button">&times;</button><a href="#">Sales filtered Tuesday</a></li>
@@ -169,13 +178,15 @@
                                                     <li><button data-dismiss="alert" class="close" type="button">&times;</button><a href="#">Sales filtered Saturday</a></li>
                                                 </ul>
                                             </div>
-                                            <div id="lB" class="tab-pane">
+                                            <div id="history-content" class="tab-pane">
                                                 <p>I'm in History tab content.</p>
                                             </div>
-                                            <div id="lC" class="tab-pane">
-                                                <p>Favorites tab</p>
+                                            <div id="favorites-content" class="tab-pane">
+                                                <ul class="extra-list">
+                                                    <li>Favorites item</li>
+                                                </ul>
                                             </div>
-                                            <div id="lD" class="tab-pane">
+                                            <div id="most-viewed-content" class="tab-pane">
                                                 <p>Most Viewed</p>
                                             </div>
                                         </div>
@@ -291,6 +302,7 @@
                 {% endblock pin_bar %}
                 {% block application_menu %}
                 {% endblock application_menu %}
+                {% block page_container %}
                 {% block content %}
                     <div class="container" style="background: #fff">
                         <div class="row">
@@ -333,6 +345,7 @@
                         </div>
                     </div>
                 {% endblock content %}
+                {% endblock page_container %}
         </div>
         {% endblock main %}
     </div>
