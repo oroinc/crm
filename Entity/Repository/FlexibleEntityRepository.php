@@ -247,7 +247,7 @@ class FlexibleEntityRepository extends EntityRepository implements TranslatableI
             foreach ($criteria as $attCode => $attValue) {
                 if (in_array($attCode, $attributes)) {
                     $attribute = $codeToAttribute[$attCode];
-                    $qb->addAttributeFilter($attribute, 'eq', $attValue);
+                    $qb->addAttributeFilter($attribute, '=', $attValue);
                 } else {
                     $qb->andWhere($qb->expr()->eq($this->entityAlias.'.'.$attCode, $qb->expr()->literal($attValue)));
                 }
