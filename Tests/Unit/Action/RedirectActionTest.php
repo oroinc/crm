@@ -15,7 +15,7 @@ class RedirectActionTest extends AbstractActionTestCase
     protected function initializeAbstractActionMock($arguments = array())
     {
         $arguments = $this->getAbstractActionArguments($arguments);
-        $this->model = new RedirectAction($arguments['router'], $arguments['aclManager']);
+        $this->model = new RedirectAction($arguments['urlGenerator'], $arguments['aclManager']);
     }
 
     public function testGetType()
