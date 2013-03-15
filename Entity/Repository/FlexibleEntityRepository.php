@@ -176,6 +176,14 @@ class FlexibleEntityRepository extends EntityRepository implements TranslatableI
         return $attribute;
     }
 
+    /**
+     * TODO : should be remove to use the basic one by default and explicitely use createFlexibleQueryBuilder to add
+     * join to related tables, should be updated in grid
+     *
+     * @param string $alias alias for entity
+     *
+     * @return QueryBuilder $qb
+     */
     public function createQueryBuilder($alias)
     {
         return $this->createFlexibleQueryBuilder($alias);
@@ -188,14 +196,18 @@ class FlexibleEntityRepository extends EntityRepository implements TranslatableI
      * @param string  $alias          alias for entity
      * @param boolean $attributeCodes add selects on values only for this attribute codes list
      *
-     * @return QueryBuilder $qb
+     * @return FlexibleQueryBuilder $qb
      */
     public function createFlexibleQueryBuilder($alias, $attributeCodes = null)
     {
         $this->entityAlias = $alias;
         $qb = new FlexibleQueryBuilder($this->_em);
-        $qb->setLocale($this->getLocale());
-        $qb->setScope($this->getScope());
+
+        // TODO : grid integration, find a smart way to inject locale and scope in repository
+        $locale = ($this->getLocale() !== null) ? $this->getLocale() : 'en_US';
+        $scope = ($this->getScope() !== null) ? $this->getScope() : 'ecommerce';
+        $qb->setLocale($locale);
+        $qb->setScope($scope);
 
         $qb->select($alias, 'Value', 'Attribute', 'ValueOption', 'AttributeOptionValue')
             ->from($this->_entityName, $this->entityAlias)
@@ -214,7 +226,7 @@ class FlexibleEntityRepository extends EntityRepository implements TranslatableI
     }
 
     /**
-     * Finds entities and attributes values by a set of criteria.
+     * Finds entities and attributes values by a set of criteria, same coverage than findBy
      *
      * @param array      $attributes attribute codes
      * @param array      $criteria   criterias
@@ -229,8 +241,6 @@ class FlexibleEntityRepository extends EntityRepository implements TranslatableI
         $qb = $this->createFlexibleQueryBuilder('Entity', $attributes);
         $codeToAttribute = $this->getCodeToAttributes($attributes);
         $attributes = array_keys($codeToAttribute);
-
-        // TODO : deal with more operators or let findByWithAttributes with same coverage than findBy ?
 
         // add criterias
         if (!is_null($criteria)) {
@@ -268,6 +278,7 @@ class FlexibleEntityRepository extends EntityRepository implements TranslatableI
     }
 
     /**
+     * TODO : allow grid integration, grid should directly use query builder
      * Apply a filter by attribute value
      *
      * @param QueryBuilder $qb             query builder to update
@@ -282,13 +293,15 @@ class FlexibleEntityRepository extends EntityRepository implements TranslatableI
         if (in_array($attributeCode, $attributeCodes)) {
             $attribute = $codeToAttribute[$attributeCode];
             $qb->addAttributeFilter($attribute, $operator, $attributeValue);
+
         } else {
-            // TODO operator for field criteria
-            $qb->andWhere($qb->expr()->eq($this->entityAlias.'.'.$attributeCode, $qb->expr()->literal($attributeValue)));
+            $field = $this->entityAlias.'.'.$attributeCode;
+            $qb->andWhere($qb->prepareCriteriaCondition($field, $operator, $attributeValue));
         }
     }
 
     /**
+     * TODO : allow grid integration, grid should directly use query builder
      * Apply a sort by attribute value
      *
      * @param QueryBuilder $qb            query builder to update

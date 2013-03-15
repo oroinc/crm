@@ -32,6 +32,12 @@ class FlexibleQueryBuilder extends QueryBuilder
     protected $scope;
 
     /**
+     * Alias counter, to avoid duplicate alias name
+     * @return integer
+     */
+    protected $aliasCounter = 1;
+
+    /**
      * Get locale code
      *
      * @return string
@@ -85,6 +91,8 @@ class FlexibleQueryBuilder extends QueryBuilder
      * @param Attribute $attribute the attribute
      * @param string    $joinAlias the value join alias
      *
+     * @throws FlexibleQueryException
+     *
      * @return string
      */
     public function prepareAttributeJoinCondition(Attribute $attribute, $joinAlias)
@@ -92,9 +100,15 @@ class FlexibleQueryBuilder extends QueryBuilder
         $condition = $joinAlias.'.attribute = '.$attribute->getId();
 
         if ($attribute->getTranslatable()) {
+            if ($this->getLocale() === null) {
+                throw new FlexibleQueryException('Locale must be configured');
+            }
             $condition .= ' AND '.$joinAlias.'.locale = '.$this->expr()->literal($this->getLocale());
         }
         if ($attribute->getScopable()) {
+            if ($this->getScope() === null) {
+                throw new FlexibleQueryException('Scope must be configured');
+            }
             $condition .= ' AND '.$joinAlias.'.scope = '.$this->expr()->literal($this->getScope());
         }
 
@@ -104,22 +118,22 @@ class FlexibleQueryBuilder extends QueryBuilder
     /**
      * Get allowed operators for related backend type
      *
-     * TODO : should be enrich for dates and options, deal with null
-     *
      * @param string $backendType
+     *
+     * @throws FlexibleQueryException
      *
      * @return multitype:string
      */
     public function getAllowedOperators($backendType)
     {
         $typeToOperator = array(
-            AbstractAttributeType::BACKEND_TYPE_DATE     => array('eq'),
-            AbstractAttributeType::BACKEND_TYPE_DATETIME => array('eq'),
-            AbstractAttributeType::BACKEND_TYPE_DECIMAL  => array('eq', 'neq', 'lt', 'lte', 'gt', 'gte'),
-            AbstractAttributeType::BACKEND_TYPE_INTEGER  => array('eq', 'neq', 'lt', 'lte', 'gt', 'gte'),
-            AbstractAttributeType::BACKEND_TYPE_OPTION   => array('in', 'notIn'),
-            AbstractAttributeType::BACKEND_TYPE_TEXT     => array('eq', 'neq', 'like'),
-            AbstractAttributeType::BACKEND_TYPE_VARCHAR  => array('eq', 'neq', 'like'),
+            AbstractAttributeType::BACKEND_TYPE_DATE     => array('=', '<', '<=', '>', '>='),
+            AbstractAttributeType::BACKEND_TYPE_DATETIME => array('=', '<', '<=', '>', '>='),
+            AbstractAttributeType::BACKEND_TYPE_DECIMAL  => array('=', '<', '<=', '>', '>='),
+            AbstractAttributeType::BACKEND_TYPE_INTEGER  => array('=', '<', '<=', '>', '>='),
+            AbstractAttributeType::BACKEND_TYPE_OPTION   => array('IN', 'NOT IN'),
+            AbstractAttributeType::BACKEND_TYPE_TEXT     => array('=', 'NOT LIKE', 'LIKE'),
+            AbstractAttributeType::BACKEND_TYPE_VARCHAR  => array('=', 'NOT LIKE', 'LIKE'),
         );
 
         if (!isset($typeToOperator[$backendType])) {
@@ -130,54 +144,53 @@ class FlexibleQueryBuilder extends QueryBuilder
     }
 
     /**
-     * Prepare join to attribute condition with operator and value criteria
+     * Prepare criteria condition with field, operator and value
      *
-     * @param Attribute    $attribute    the attribute
-     * @param string       $backendField the backend field name
-     * @param string       $operator     the operator used to filter
-     * @param string|array $value        the value(s) to filter
+     * @param string       $field    the backend field name
+     * @param string       $operator the operator used to filter
+     * @param string|array $value    the value(s) to filter
      *
      * @return string
      */
-    public function prepareAttributeCriteriaCondition(Attribute $attribute, $backendField, $operator, $value)
+    public function prepareCriteriaCondition($field, $operator, $value)
     {
         switch ($operator)
         {
-            case 'eq':
-                $condition = $this->expr()->eq($backendField, $this->expr()->literal($value));
+            case '=':
+                $condition = $this->expr()->eq($field, $this->expr()->literal($value));
                 break;
-            case 'neq':
-                $condition = $this->expr()->neq($backendField, $this->expr()->literal($value));
+            case '<':
+                $condition = $this->expr()->lt($field, $this->expr()->literal($value));
                 break;
-            case 'like':
-                $condition = $this->expr()->like($backendField, $this->expr()->literal($value));
+            case '<=':
+                $condition = $this->expr()->lte($field, $this->expr()->literal($value));
                 break;
-            case 'lt':
-                $condition = $this->expr()->lt($backendField, $this->expr()->literal($value));
+            case '>':
+                $condition = $this->expr()->gt($field, $this->expr()->literal($value));
                 break;
-            case 'lte':
-                $condition = $this->expr()->lte($backendField, $this->expr()->literal($value));
+            case '>=':
+                $condition = $this->expr()->gte($field, $this->expr()->literal($value));
                 break;
-            case 'gt':
-                $condition = $this->expr()->gt($backendField, $this->expr()->literal($value));
+            case 'LIKE':
+                $condition = $this->expr()->like($field, $this->expr()->literal($value));
                 break;
-            case 'gte':
-                $condition = $this->expr()->gte($backendField, $this->expr()->literal($value));
+            case 'NOT LIKE':
+                $condition = sprintf('%s NOT LIKE %s', $field, $this->expr()->literal($value));
                 break;
-            case 'isNull':
-                $condition = $this->expr()->isNull($backendField);
+            case 'NULL':
+                $condition = $this->expr()->isNull($field);
                 break;
-            case 'isNotNull':
-                $condition = $this->expr()->isNotNull($backendField);
+            case 'NOT NULL':
+                $condition = $this->expr()->isNotNull($field);
                 break;
-            case 'in':
-                $condition = $this->expr()->in($backendField, $value);
+            case 'IN':
+                $condition = $this->expr()->in($field, $value);
                 break;
-            case 'notIn':
-                $condition = $this->expr()->notIn($backendField, $value);
+            case 'NOT IN':
+                $condition = $this->expr()->notIn($field, $value);
                 break;
             default:
-                throw new FlexibleQueryException('operator '.$operator.' is unknown');
+                throw new FlexibleQueryException('operator '.$operator.' is not supported');
         }
 
         return $condition;
@@ -196,33 +209,32 @@ class FlexibleQueryBuilder extends QueryBuilder
     {
         $allowed = $this->getAllowedOperators($attribute->getBackendType());
         if (!in_array($operator, $allowed)) {
-            throw new FlexibleQueryException($operator.' is not allowed for type '.$attribute->getBackendType());
+            throw new FlexibleQueryException(
+                $operator.' is not allowed for type '.$attribute->getBackendType().', use '.implode(', ', $allowed)
+            );
         }
 
-        // prepare condition with locale and scope
-        $joinAlias = 'filter'.$attribute->getCode();
-        $joinValue = 'filterValue'.$attribute->getCode();
+        $joinAlias = 'filter'.$attribute->getCode().$this->aliasCounter++;
 
-        // prepare condition with operator and value
         if ($attribute->getBackendType() == AbstractAttributeType::BACKEND_TYPE_OPTION) {
 
-            // TODO : deal with locale and scope
+            // inner join to value
+            $condition = $this->prepareAttributeJoinCondition($attribute, $joinAlias);
+            $this->innerJoin($this->getRootAlias().'.' . $attribute->getBackendStorage(), $joinAlias, 'WITH', $condition);
 
-            // join to value and option with filter on option id
-            $this->innerJoin($this->getRootAlias().'.' . $attribute->getBackendStorage(), $joinAlias);
-            $joinAliasOpt = 'filterO'.$attribute->getCode();
+            // then join to option with filter on option id
+            $joinAliasOpt = 'filterO'.$attribute->getCode().$this->aliasCounter;
             $backendField = sprintf('%s.%s', $joinAliasOpt, 'id');
-            $condition = $this->prepareAttributeCriteriaCondition($attribute, $backendField, $operator, $value);
+            $condition = $this->prepareCriteriaCondition($backendField, $operator, $value);
             $this->innerJoin($joinAlias.'.options', $joinAliasOpt, 'WITH', $condition);
 
         } else {
 
-            // apply condition on value backend
+            // inner join with condition on backend value
             $backendField = sprintf('%s.%s', $joinAlias, $attribute->getBackendType());
             $condition = $this->prepareAttributeJoinCondition($attribute, $joinAlias);
-            $condition .= ' AND '.$this->prepareAttributeCriteriaCondition($attribute, $backendField, $operator, $value);
+            $condition .= ' AND '.$this->prepareCriteriaCondition($backendField, $operator, $value);
             $this->innerJoin($this->getRootAlias().'.'.$attribute->getBackendStorage(), $joinAlias, 'WITH', $condition);
-
         }
 
         return $this;
@@ -236,26 +248,29 @@ class FlexibleQueryBuilder extends QueryBuilder
      */
     public function addAttributeOrderBy(Attribute $attribute, $direction)
     {
+        $aliasPrefix = 'sorter';
+        $joinAlias   = $aliasPrefix.'V'.$attribute->getCode().$this->aliasCounter++;
+
         if ($attribute->getBackendType() == AbstractAttributeType::BACKEND_TYPE_OPTION) {
 
-            $aliasPrefix = 'sorter';
-
             // join to value
-            $joinAliasVal    = $aliasPrefix.'V'.$attribute->getCode();
-            $joinAliasOpt    = $aliasPrefix.'O'.$attribute->getCode();
-            $joinAliasOptVal = $aliasPrefix.'OV'.$attribute->getCode();
+            $condition = $this->prepareAttributeJoinCondition($attribute, $joinAlias);
+            $this->leftJoin($this->getRootAlias().'.' . $attribute->getBackendStorage(), $joinAlias, 'WITH', $condition);
 
-            // TODO : deal with locale and scope !!!!!!
+            // then to option and option value to sort on
+            $joinAliasOpt = $aliasPrefix.'O'.$attribute->getCode().$this->aliasCounter;
+            $condition    = $joinAliasOpt.".attribute = ".$attribute->getId();
+            $this->leftJoin($joinAlias.'.options', $joinAliasOpt, 'WITH', $condition);
 
-            $this->innerJoin($this->getRootAlias().'.' . $attribute->getBackendStorage(), $joinAliasVal);
-            $this->innerJoin($joinAliasVal.'.options', $joinAliasOpt, 'WITH', $joinAliasOpt.".attribute = ".$attribute->getId());
-            $this->innerJoin($joinAliasOpt.'.optionValues', $joinAliasOptVal, 'WITH', $joinAliasOptVal.".locale = 'en_US'"); // TODO !!!
+            $joinAliasOptVal = $aliasPrefix.'OV'.$attribute->getCode().$this->aliasCounter;
+            $condition       = $joinAliasOptVal.'.locale = '.$this->expr()->literal($this->getLocale());
+            $this->leftJoin($joinAliasOpt.'.optionValues', $joinAliasOptVal, 'WITH', $condition);
 
             $this->addOrderBy($joinAliasOptVal.'.value', $direction);
 
         } else {
 
-            $joinAlias = 'sorterV'.$attribute->getCode();
+            // join to value and sort on
             $condition = $this->prepareAttributeJoinCondition($attribute, $joinAlias);
             $this->leftJoin($this->getRootAlias().'.'.$attribute->getBackendStorage(), $joinAlias, 'WITH', $condition);
             $this->addOrderBy($joinAlias.'.'.$attribute->getBackendType(), $direction);
