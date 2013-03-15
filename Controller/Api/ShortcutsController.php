@@ -24,7 +24,7 @@ class ShortcutsController extends FOSRestController
     /**
      * REST GET list
      *
-     * @param string $type
+     * @param string $query
      *
      * @ApiDoc(
      *  description="Get all shortcuts items for user",
@@ -32,14 +32,14 @@ class ShortcutsController extends FOSRestController
      * )
      * @return Response
      */
-    public function getAction($type, $query)
+    public function getAction($query)
     {
         /** @var $provider BuilderChainProvider */
         $provider = $this->container->get('oro_menu.builder_chain');
         /** @var $translator TranslatorInterface */
         $translator = $this->get('translator');
         $result = array();
-        $items = $provider->get($type);
+        $items = $provider->get('shortcuts');
         /** @var $item ItemInterface */
         $itemIterator = new RecursiveItemIterator($items);
         $iterator = new \RecursiveIteratorIterator($itemIterator, \RecursiveIteratorIterator::SELF_FIRST);
