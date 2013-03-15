@@ -131,7 +131,7 @@ class AbstractActionTest extends AbstractActionTestCase
                     'route' => self::TEST_ROUTE_NAME,
                 ),
                 '$expectedOptions' => array(
-                    'route'        => self::TEST_ROUTE_PATTERN,
+                    'url'          => self::TEST_ROUTE_PATTERN,
                     'placeholders' => array()
                 )
             ),
@@ -147,7 +147,7 @@ class AbstractActionTest extends AbstractActionTestCase
                     )
                 ),
                 '$expectedOptions' => array(
-                    'route'        => str_replace('{parameter}', 'parameter_key', self::TEST_ROUTE_PATTERN),
+                    'url'          => str_replace('{parameter}', 'parameter_key', self::TEST_ROUTE_PATTERN),
                     'placeholders' => array(
                         '{place}'  => 'place_key',
                         '{holder}' => 'holder_key',

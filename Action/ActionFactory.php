@@ -43,7 +43,7 @@ class ActionFactory implements ActionFactoryInterface
         }
 
         if (!isset($this->types[$type])) {
-            throw new \RunTimeException(sprintf('No attached service to action type named `%s`', $type));
+            throw new \RunTimeException(sprintf('No attached service to action type named "%s"', $type));
         }
 
         $actionServiceId = $this->types[$type];

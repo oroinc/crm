@@ -156,7 +156,8 @@ abstract class AbstractAction implements ActionInterface
         $placeholders = $this->options['placeholders'];
 
         // generate correct url
-        $this->options['route'] = $this->urlGenerator->generate($routeName, $parameters, $placeholders);
+        $this->options['url'] = $this->urlGenerator->generate($routeName, $parameters, $placeholders);
+        unset($this->options['route']);
 
         foreach ($this->options['placeholders'] as $key => $value) {
             unset($this->options['placeholders'][$key]);

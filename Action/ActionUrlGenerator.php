@@ -45,9 +45,9 @@ class ActionUrlGenerator implements ActionUrlGeneratorInterface
 
             // if need to be replaced
             if (!isset($placeholders[$placeholderName])) {
-                if (isset($parameters[$placeholderPattern])) {
+                if (isset($parameters[$placeholderName])) {
                     $replaceFrom[] = $placeholderPattern;
-                    $replaceTo[]   = $parameters[$placeholderPattern];
+                    $replaceTo[]   = $parameters[$placeholderName];
                 } else {
                     $defaultValue = $route->getDefault($placeholderName);
                     if ($defaultValue === null) {
