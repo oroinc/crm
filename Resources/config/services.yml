@@ -1,7 +1,11 @@
 parameters:
-    oro_config.manager.class:         Oro\Bundle\ConfigBundle\Manager\ConfigManager
+    oro_config.user.class:         Oro\Bundle\ConfigBundle\Config\UserConfigManager
 
 services:
-    oro_config:
-        class:                        %oro_config.manager.class%
-        arguments:                    ["@doctrine.orm.entity_manager", "@session"]
+    oro_config.user:
+        class:                        %oro_config.user.class%
+        arguments:                    ["@doctrine.orm.entity_manager"]
+        calls:
+             - [setSecurity, ["@security.context"]]
+        tags:
+            -  { name: oro_config.manager }

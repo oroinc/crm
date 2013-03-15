@@ -26,8 +26,12 @@ class ConfigPass implements CompilerPassInterface
             }
         }
 
-        $container
-            ->getDefinition('oro_config')
-            ->addArgument($settings);
+        $taggedServices = $container->findTaggedServiceIds('oro_config.manager');
+
+        foreach ($taggedServices as $id => $attributes) {
+            $container
+                ->getDefinition($id)
+                ->addArgument($settings);
+        }
     }
 }
