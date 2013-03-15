@@ -1,6 +1,0 @@
-# common test case
-request:
-    name: Group_5
-    roles: ~
-response:
-    return: true

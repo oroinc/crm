@@ -1,10 +1,9 @@
 # common test case
 request:
-    username: User_3
-    email: user_3@example.com
+    username: User_3_%str%
+    email: user_3_%str%@example.com
     enabled: true
     plainPassword: 123123q
-    lastLogin: ~
     rolesCollection: ~
     groups: ~
     attributes: ~

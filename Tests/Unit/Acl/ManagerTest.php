@@ -46,12 +46,12 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
         $this->om = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
         $this->repository = $this->getMock(
             'Doctrine\Common\Persistence\ObjectRepository',
-            array('find', 'findAll', 'findBy', 'findOneBy', 'getClassName', 'getAllowedAclResourcesForUserRoles',
+            array('find', 'findAll', 'findBy', 'findOneBy', 'getClassName', 'getAllowedAclResourcesForRoles',
             'getFullNodeWithRoles', 'getAclRolesWithoutTree', 'getRoleAclTree', 'getAclListWithRoles')
         );
 
         $this->repository->expects($this->any())
-            ->method('getAllowedAclResourcesForUserRoles')
+            ->method('getAllowedAclResourcesForRoles')
             ->will($this->returnValue(array('test')));
 
         $this->user->expects($this->any())
@@ -169,6 +169,9 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(false));
 
         $result = $this->manager->getAclForUser($this->user);
+        $this->assertEquals(array('test'), $result);
+
+        $result = $this->manager->getAclForUser($this->user, true);
         $this->assertEquals(array('test'), $result);
     }
 

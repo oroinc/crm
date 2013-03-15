@@ -11,8 +11,9 @@ use Oro\Bundle\UserBundle\Entity\Role;
 use Oro\Bundle\UserBundle\Entity\Acl;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\UserBundle\Annotation\Acl as AnnotationAcl;
+use Oro\Bundle\UserBundle\Acl\ManagerInterface;
 
-class Manager
+class Manager implements ManagerInterface
 {
     const ACL_ANNOTATION_CLASS = 'Oro\Bundle\UserBundle\Annotation\Acl';
     const ACL_ANCESTOR_ANNOTATION_CLASS = 'Oro\Bundle\UserBundle\Annotation\AclAncestor';
@@ -45,14 +46,70 @@ class Manager
         CacheProvider $cache,
         SecurityContextInterface $securityContext,
         ConfigReader $configReader
-    )
-    {
+    ) {
         $this->em = $em;
         $this->aclReader = $aclReader;
         $this->cache = $cache;
         $this->cache->setNamespace('oro_user.cache');
         $this->securityContext = $securityContext;
         $this->configReader = $configReader;
+    }
+
+    /**
+     * Add/Remove Acl resource for Role
+     *
+     * @param int    $roleId
+     * @param string $aclId
+     * @param bool   $isAdd
+     */
+    public function modifyAclForRole($roleId, $aclId, $isAdd = true)
+    {
+        $role = $this->em->getRepository('OroUserBundle:Role')->find($roleId);
+
+        /** @var $aclResource \Oro\Bundle\UserBundle\Entity\Acl */
+        $aclResource = $this->getAclRepo()->find($aclId);
+        if ($aclResource && $role) {
+            if ($isAdd) {
+                if (!$aclResource->getAccessRoles()->contains($role)) {
+                    $aclResource->addAccessRole($role);
+
+                    if ($aclResource->getParent() && $aclResource->getParent()->getId() !== 'root') {
+                        $this->clearParentsAcl($aclResource->getParent(), $role);
+                    }
+                    $this->em->persist($aclResource);
+                    $this->em->flush();
+                }
+            } else {
+                $aclResource->getAccessRoles()->removeElement($role);
+                $this->em->persist($aclResource);
+                $this->em->flush();
+            }
+        }
+    }
+
+    /**
+     * Search Acl resource by id
+     *
+     * @param string $id
+     *
+     * @return \Oro\Bundle\UserBundle\Entity\Acl
+     */
+    public function getAclResource($id)
+    {
+        return $this->getAclRepo()->find($id);
+    }
+
+    /**
+     * Get list of allowed ACL resources for roles array
+     *
+     * @param \Oro\Bundle\UserBundle\Entity\Role[] $roles
+     * @param bool  $useObjects
+     *
+     * @return array|\Oro\Bundle\UserBundle\Entity\Acl[]
+     */
+    public function getAllowedAclResourcesForRoles(array $roles, $useObjects = false)
+    {
+        return $this->getAclRepo()->getAllowedAclResourcesForRoles($roles, $useObjects);
     }
 
     /**
@@ -82,7 +139,7 @@ class Manager
     {
         $acl = $this->getAclRepo()->findOneBy(
             array(
-                 'class' => $class,
+                 'class'  => $class,
                  'method' => $method
             )
         );
@@ -103,6 +160,7 @@ class Manager
      * Get roles for acl id
      *
      * @param $aclId
+     *
      * @return array
      */
     public function getAclRolesWithoutTree($aclId)
@@ -119,15 +177,22 @@ class Manager
     /**
      * get array of resource ids allowed for user
      *
-     * @param  \Oro\Bundle\UserBundle\Entity\User $user
-     * @return array
+     * @param \Oro\Bundle\UserBundle\Entity\User $user
+     * @param bool                               $useObjects
+     *
+     * @return array|\Oro\Bundle\UserBundle\Entity\Acl[]
      */
-    public function getAclForUser(User $user)
+    public function getAclForUser(User $user, $useObjects = false)
     {
-        $acl = $this->cache->fetch('user-acl-' . $user->getId());
-        if ($acl === false) {
-            $acl = $this->getAclRepo()->getAllowedAclResourcesForUserRoles($user->getRoles());
-            $this->cache->save('user-acl-' . $user->getId(), $acl);
+        if ($useObjects) {
+            $acl = $this->getAclRepo()->getAllowedAclResourcesForRoles($user->getRoles(), true);
+        } else {
+            $cachePrefix = 'user-acl-' . $user->getId();
+            $acl = $this->cache->fetch($cachePrefix);
+            if ($acl === false) {
+                $acl = $this->getAclRepo()->getAllowedAclResourcesForRoles($user->getRoles());
+                $this->cache->save($cachePrefix, $acl);
+            }
         }
 
         return $acl;
@@ -268,7 +333,7 @@ class Manager
     {
         $resource->removeAccessRole($role);
         $this->em->persist($resource);
-        if ($resource->getParent() && $resource->getParent()->getId() !== 'root') {
+        if ($resource->getParent() && $resource->getParent()->getId() !== ACL::ROOT_NODE) {
             $this->clearParentsAcl($resource->getParent(), $role);
         }
     }
@@ -405,6 +470,7 @@ class Manager
 
     /**
      * Check is grant access for roles to the acl resource roles
+     *
      * @param array $roles
      * @param array $aclRoles
      *
@@ -421,6 +487,11 @@ class Manager
         return false;
     }
 
+    /**
+     * Get Acl Resources from annotations and configs
+     *
+     * @return \Oro\Bundle\UserBundle\Annotation\Acl[]
+     */
     private function getAclResources()
     {
         $resourcesFromAnnotations = $this->aclReader->getResources();

@@ -13,15 +13,22 @@ class AclRepository extends NestedTreeRepository
     /**
      * Get array with allowed acl resources for role array
      *
-     * @param  array                                $roles
-     * @return \Oro\Bundle\UserBundle\Entity\Role[] $roles
+     * @param \Oro\Bundle\UserBundle\Entity\Role[] $roles
+     * @param bool  $useObjects
+     * @return \Oro\Bundle\UserBundle\Entity\Acl[]|array
      */
-    public function getAllowedAclResourcesForUserRoles(array $roles)
+    public function getAllowedAclResourcesForRoles(array $roles, $useObjects = false)
     {
         $allowedAcl = array();
-        $qb = $this->createQueryBuilder('acl')
-            ->select('acl.id')
-            ->where('acl.rgt > :left_key')
+        $qb = $this->createQueryBuilder('acl');
+
+        if ($useObjects) {
+            $qb->select('acl');
+        } else {
+            $qb->select('acl.id');
+        }
+
+        $qb->where('acl.rgt > :left_key')
             ->andWhere('acl.lft < :right_key')
             ->orderBy('acl.lft');
 
@@ -30,26 +37,50 @@ class AclRepository extends NestedTreeRepository
             if (count($aclList)) {
 
                 foreach ($aclList as $acl) {
-                    $aclList = $qb->setParameter('left_key', $acl->getLft())
+                    $query = $qb->setParameter('left_key', $acl->getLft())
                         ->setParameter('right_key', $acl->getRgt())
-                        ->getQuery()
-                        ->getScalarResult();
-                    $acls = array();
-                    foreach ($aclList as $scalar) {
-                        $acls[] = $scalar['id'];
+                        ->getQuery();
+
+                    if ($useObjects) {
+                        $acls = $query->getResult();
+
+                    } else {
+                        $aclList = $query->getScalarResult();
+                        $acls = array();
+                        foreach ($aclList as $scalar) {
+                            $acls[] = $scalar['id'];
+                        }
                     }
 
-                    $allowedAcl = array_unique(
+                    $allowedAcl = $this->arrayUnique(
                         array_merge(
                             $allowedAcl,
                             $acls
-                        )
+                        ),
+                        $useObjects
                     );
                 }
             }
         }
 
         return $allowedAcl;
+    }
+
+    private function arrayUnique($array, $isObjects = true)
+    {
+        if (!$isObjects) {
+            return array_unique($array);
+        } else {
+            $final = array();
+            foreach ($array as $object)
+            {
+                if ( ! in_array($object, $final)) {
+                    $final[] = $object;
+                }
+            }
+
+            return $final;
+        }
     }
 
     /**
