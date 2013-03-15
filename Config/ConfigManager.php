@@ -59,18 +59,16 @@ class ConfigManager
      */
     protected function mergeSettings($entity, $recordId)
     {
-        $config = $this->om->getRepository('OroConfigBundle:Config')->findOneBy(array(
+        $scope = $this->om->getRepository('OroConfigBundle:Config')->findOneBy(array(
             'entity'   => $entity,
             'recordId' => (int) $recordId,
         ));
 
-        if (!$config) {
+        if (!$scope) {
             return;
         }
 
-        $scope = $config->getSettings();
-
-        foreach ($scope as $section => $settings) {
+        foreach ($scope->getSettings() as $section => $settings) {
             foreach ($settings as $name => $value) {
                 if (isset($this->settings[$section][$name])) {
                     $this->settings[$section][$name]['value'] = $value;
