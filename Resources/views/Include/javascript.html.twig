@@ -1,11 +1,20 @@
 {% javascripts
+'@OroUIBundle/Resources/public/lib/backbone.bootstrap-modal.js'
+
 '@OroGridBundle/Resources/public/lib/select2/select2.js'
 '@OroGridBundle/Resources/public/lib/backbone-pageable.js'
 '@OroGridBundle/Resources/public/lib/backgrid/backgrid.js'
 '@OroGridBundle/Resources/public/lib/moment/moment.js'
 '@OroGridBundle/Resources/public/lib/backgrid/extensions/moment-cell/backgrid-moment-cell.js'
 
-'@OroGridBundle/Resources/public/js/app/datagrid/datagrid-headercell.js'
+'@OroGridBundle/Resources/public/js/app/datagrid/action/datagrid-action-launcher.js'
+'@OroGridBundle/Resources/public/js/app/datagrid/action/datagrid-action.js'
+'@OroGridBundle/Resources/public/js/app/datagrid/action/datagrid-action-navigate.js'
+'@OroGridBundle/Resources/public/js/app/datagrid/action/datagrid-action-delete.js'
+'@OroGridBundle/Resources/public/js/app/datagrid/action/datagrid-action.js'
+'@OroGridBundle/Resources/public/js/app/datagrid/action/datagrid-action-cell.js'
+
+'@OroGridBundle/Resources/public/js/app/datagrid/datagrid-header-cell.js'
 '@OroGridBundle/Resources/public/js/app/datagrid/datagrid-header.js'
 
 '@OroGridBundle/Resources/public/js/app/datagrid/datagrid-pagination.js'
@@ -143,11 +152,9 @@ output='js/acme.grid.js'
                         {% for action in datagrid.rowActions %}
                             {{ action.name }}:
                             {% if action.type == constant(actionTypePrefix ~ 'TYPE_DELETE') %}
-                                // OroApp.DatagridActionDelete
-                                Backbone.View.extend({{ action.options|json_encode|raw }})
+                                OroApp.DatagridActionDelete.extend({{ action.options|json_encode|raw }})
                             {% else %}
-                                // OroApp.DatagridActionRedirect
-                                Backbone.View.extend({{ action.options|json_encode|raw }})
+                                OroApp.DatagridActionNavigate.extend({{ action.options|json_encode|raw }})
                             {% endif %}
                             {% if not loop.last %},{% endif %}
                         {% endfor %}

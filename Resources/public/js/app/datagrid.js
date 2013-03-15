@@ -34,22 +34,56 @@ OroApp.Datagrid = Backgrid.Grid.extend({
     /** @property */
     noDataHint: 'No data found.',
 
+    actionsColumn: Backgrid.Column,
+    actionsColumnAttributes: {
+        name: '',
+        label: '',
+        editable: false,
+        cell: OroApp.DatagridActionCell
+    },
+
     /**
      * Initialize datagrid
      *
      * @param {Object} options
      */
     initialize: function(options) {
+        if (!options.collection) {
+            throw new TypeError("'collection' is required")
+        }
+        if (!options.columns) {
+            throw new TypeError("'columns' is required")
+        }
+
         this.collection = options.collection;
 
-        this.collection.on('request', this._onRequest, this);
-        this.collection.on('sync', this._onSync, this);
+        this.collection.on('request', this.onRequest, this);
+        this.collection.on('sync', this.onSync, this);
 
         if (options.noDataHint) {
             this.noDataHint = options.noDataHint.replace('\n', '<br />');
         }
 
+        if (!_.isEmpty(options.actions)) {
+            options.columns.push(this.createActionsColumn(options.actions));
+        }
+
         Backgrid.Grid.prototype.initialize.apply(this, arguments);
+    },
+
+    /**
+     * Creates actions column
+     *
+     * @param {Array} actions
+     * @return {Backgrid.Column}
+     * @protected
+     */
+    createActionsColumn: function(actions) {
+        return new this.actionsColumn(_.extend(
+            this.actionsColumnAttributes, {
+                actions: actions
+            }
+        ));
     },
 
     /**
@@ -62,9 +96,9 @@ OroApp.Datagrid = Backgrid.Grid.extend({
 
         this.$el = this.$el.append($(this.template()));
 
-        this._renderGrid(this.$(this.selectors.grid));
-        this._renderNoDataBlock(this.$(this.selectors.noDataBlock));
-        this._renderLoadingMask(this.$(this.selectors.loadingMask));
+        this.renderGrid(this.$(this.selectors.grid));
+        this.renderNoDataBlock(this.$(this.selectors.noDataBlock));
+        this.renderLoadingMask(this.$(this.selectors.loadingMask));
 
         /**
          * Backbone event. Fired when the grid has been successfully rendered.
@@ -79,9 +113,9 @@ OroApp.Datagrid = Backgrid.Grid.extend({
      * Renders the grid's header, then footer, then finally the body.
      *
      * @param {Object} $el
-     * @private
+     * @protected
      */
-    _renderGrid: function($el) {
+    renderGrid: function($el) {
         $el.append(this.header.render().$el);
         if (this.footer) {
             $el.append(this.footer.render().$el);
@@ -95,7 +129,7 @@ OroApp.Datagrid = Backgrid.Grid.extend({
      * @param {Object} $el
      * @private
      */
-    _renderLoadingMask: function($el) {
+    renderLoadingMask: function($el) {
         this.loadingMask = new OroApp.LoadingMask({
             el: $el
         }).render();
@@ -105,9 +139,9 @@ OroApp.Datagrid = Backgrid.Grid.extend({
      * Render no data block.
      *
      * @param {Object} $el
-     * @private
+     * @protected
      */
-    _renderNoDataBlock: function($el) {
+    renderNoDataBlock: function($el) {
         $el.append($(this.noDataTemplate({
             hint: this.noDataHint
         })));
@@ -117,18 +151,18 @@ OroApp.Datagrid = Backgrid.Grid.extend({
     /**
      * Triggers when on collection "request" event
      *
-     * @private
+     * @protected
      */
-    _onRequest: function() {
+    onRequest: function() {
         this.loadingMask.show();
     },
 
     /**
      * Triggers when on collection "sync" event
      *
-     * @private
+     * @protected
      */
-    _onSync: function() {
+    onSync: function() {
         this.loadingMask.hide();
         if (this.collection.models.length > 0) {
             this.$(this.selectors.grid).show();
