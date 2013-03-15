@@ -11,15 +11,13 @@
                 <thead>
                     <tr>
                         <th>Action Name</th>
-                        <th>Url</th>
                         <th>Description</th>
                     </tr>
                 </thead>
                 <tbody>
                 {% for code, action in actionsList %}
                     <tr>
-                        <td>{{ code }}</td>
-                        <td><a href="{{ action["url"] }}" target="_blank">{{ action["url"] }}</a></td>
+                        <td><a href="{{ action["url"] }}" target="_blank">{{ code }}</a></td>
                         <td>{{ action["description"] }}</td>
                     </tr>
                 {% endfor %}
