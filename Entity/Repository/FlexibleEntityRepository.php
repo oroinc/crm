@@ -236,7 +236,7 @@ class FlexibleEntityRepository extends EntityRepository implements TranslatableI
      *
      * @return array The objects.
      */
-    public function findByWithAttributes(array $attributes = null, array $criteria = null, array $orderBy = null, $limit = null, $offset = null)
+    public function findByWithAttributes(array $attributes = array(), array $criteria = null, array $orderBy = null, $limit = null, $offset = null)
     {
         $qb = $this->createFlexibleQueryBuilder('Entity', $attributes);
         $codeToAttribute = $this->getCodeToAttributes($attributes);
