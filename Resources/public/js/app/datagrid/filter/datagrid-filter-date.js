@@ -26,13 +26,13 @@ OroApp.DatagridFilterDate = OroApp.DatagridFilterChoice.extend({
         value_end: 'input[name="end"]'
     },
 
-    /** @property */
-    events: {
-        'change input[name="type"]': '_updateOnType',
-        'change input[name="start"]': '_update',
-        'change input[name="end"]': '_update',
-        'click .disable-filter': 'onClickDisable'
-    },
+//    /** @property */
+//    events: {
+//        'change input[name="type"]': '_updateOnType',
+//        'change input[name="start"]': '_update',
+//        'change input[name="end"]': '_update',
+//        'click .disable-filter': 'onClickDisable'
+//    },
 
     /**
      * Check if filter contain value
