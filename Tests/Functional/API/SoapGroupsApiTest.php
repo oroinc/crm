@@ -8,7 +8,7 @@ class SoapGroupsApiTest extends \PHPUnit_Framework_TestCase
     const DEFAULT_VALUE = 'GROUP_LABEL';
 
     /** @var \SoapClient */
-    static private $clientSoap = null;
+    private static $clientSoap = null;
 
     public function setUp()
     {
@@ -28,7 +28,7 @@ class SoapGroupsApiTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param string $request
-     * @param array $response
+     * @param array  $response
      *
      * @dataProvider requestsApi
      */
@@ -41,7 +41,7 @@ class SoapGroupsApiTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param string $request
-     * @param array $response
+     * @param array  $response
      *
      * @dataProvider requestsApi
      * @depends testCreateGroup

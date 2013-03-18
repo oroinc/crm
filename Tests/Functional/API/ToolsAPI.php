@@ -2,11 +2,10 @@
 namespace Oro\Bundle\UserBundle\Tests\Functional\API;
 
 use Symfony\Component\Yaml\Yaml;
-use Symfony\Component\Finder\Iterator;
 
 class ToolsAPI extends \PHPUnit_Framework_TestCase
 {
-    static protected $random = null;
+    protected static $random = null;
     /**
      * Data provider for REST/SOAP API tests
      *
@@ -44,6 +43,7 @@ class ToolsAPI extends \PHPUnit_Framework_TestCase
                 self::$random
             );
         }
+
         return
             $parameters;
     }
@@ -78,7 +78,7 @@ class ToolsAPI extends \PHPUnit_Framework_TestCase
     public static function randomGen($length)
     {
         $random= "";
-        srand((double)microtime()*1000000);
+        srand((double) microtime()*1000000);
         $char_list = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         $char_list .= "abcdefghijklmnopqrstuvwxyz";
         $char_list .= "1234567890-_";
@@ -88,6 +88,7 @@ class ToolsAPI extends \PHPUnit_Framework_TestCase
             $random .= substr($char_list, (rand()%(strlen($char_list))), 1);
         }
         self::$random = $random;
+
         return $random;
     }
 

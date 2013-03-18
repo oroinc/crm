@@ -30,4 +30,3 @@ oro_user_api_acl:
     prefix:       api/rest/{version}/
     defaults:
         version:  latest
-
