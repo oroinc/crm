@@ -36,7 +36,7 @@ class RestApiUsersTest extends WebTestCase
 
     /**
      * @depends testApiCreateUser
-     * @param string $request
+     * @param  string $request
      * @return int
      */
     public function testApiUpdateUser($request)
@@ -83,7 +83,7 @@ class RestApiUsersTest extends WebTestCase
      * Test API response status
      *
      * @param string $response
-     * @param int $statusCode
+     * @param int    $statusCode
      */
     protected function assertJsonResponse($response, $statusCode = 201)
     {

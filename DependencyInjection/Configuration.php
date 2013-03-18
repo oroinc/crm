@@ -15,8 +15,8 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder()
     {
         $builder = new TreeBuilder();
-
-        $builder->root('oro_user')
+        $root   = $builder
+            ->root('oro_user')
             ->children()
                 ->arrayNode('reset')
                     ->addDefaultsIfNotSet()
@@ -40,19 +40,18 @@ class Configuration implements ConfigurationInterface
                         ->end()
                     ->end()
                 ->end()
-                ->append(
-                    // just to illustrate settings usage
-                    SettingsBuilder::getNode(array(
-                        'greeting' => array(
-                            'value' => true,
-                            'type'  => 'boolean',
-                        ),
-                        'level' => array(
-                            'value' => 10,
-                        ),
-                    ))
-                )
             ->end();
+
+         // just to illustrate settings usage
+         SettingsBuilder::append($root, array(
+            'greeting' => array(
+                'value' => true,
+                'type'  => 'boolean',
+            ),
+            'level' => array(
+                'value' => 10,
+            ),
+        ));
 
         return $builder;
     }

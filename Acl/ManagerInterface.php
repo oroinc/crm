@@ -4,13 +4,13 @@ namespace Oro\Bundle\UserBundle\Acl;
 
 use Oro\Bundle\UserBundle\Entity\User;
 
-interface ManagerInterface {
-
+interface ManagerInterface
+{
     /**
      * Check permissions for resource for user.
      *
-     * @param string $aclResourceId
-     * @param \Oro\Bundle\UserBundle\Entity\User $user
+     * @param  string                             $aclResourceId
+     * @param  \Oro\Bundle\UserBundle\Entity\User $user
      * @return bool
      */
     public function isResourceGranted($aclResourceId, User $user = null);
@@ -18,9 +18,9 @@ interface ManagerInterface {
     /**
      * Check permissions for class method
      *
-     * @param string  $class
-     * @param string  $method
-     * @param \Oro\Bundle\UserBundle\Entity\User $user
+     * @param  string                             $class
+     * @param  string                             $method
+     * @param  \Oro\Bundle\UserBundle\Entity\User $user
      * @return bool
      */
     public function isClassMethodGranted($class, $method, User $user = null);
@@ -29,15 +29,15 @@ interface ManagerInterface {
      * Add/Remove Acl resource for Role
      *
      * @param int    $roleId Role id
-     * @param string $aclId ACL Resource ID
-     * @param bool   $isAdd true if add, false if delete
+     * @param string $aclId  ACL Resource ID
+     * @param bool   $isAdd  true if add, false if delete
      */
     public function modifyAclForRole($roleId, $aclId, $isAdd = true);
 
     /**
      * Search Acl resource by id
      *
-     * @param string $id ACL Resource ID
+     * @param  string                            $id ACL Resource ID
      * @return \Oro\Bundle\UserBundle\Entity\Acl
      */
     public function getAclResource($id);
@@ -45,8 +45,8 @@ interface ManagerInterface {
     /**
      * Get list of allowed ACL resources for roles array
      *
-     * @param \Oro\Bundle\UserBundle\Entity\Role[] $roles
-     * @param bool  $useObjects true will return array of Acl objects, false - array ot ids
+     * @param  \Oro\Bundle\UserBundle\Entity\Role[]      $roles
+     * @param  bool                                      $useObjects true will return array of Acl objects, false - array ot ids
      * @return array|\Oro\Bundle\UserBundle\Entity\Acl[]
      */
     public function getAllowedAclResourcesForRoles(array $roles, $useObjects = false);

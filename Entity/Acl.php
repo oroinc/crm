@@ -339,7 +339,7 @@ class Acl
     /**
      * Set root
      *
-     * @param string $root
+     * @param  string $root
      * @return Acl
      */
     public function setRoot($root)
