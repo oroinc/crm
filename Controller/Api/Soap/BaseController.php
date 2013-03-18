@@ -28,8 +28,8 @@ class BaseController extends ContainerAware
     /**
      * Form processing
      *
-     * @param  string     $form     Form name to process
-     * @param  mixed      $entity   Entity object
+     * @param  string     $form   Form name to process
+     * @param  mixed      $entity Entity object
      * @return bool       True on success
      * @throws \SoapFault
      */

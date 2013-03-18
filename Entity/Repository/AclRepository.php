@@ -13,8 +13,8 @@ class AclRepository extends NestedTreeRepository
     /**
      * Get array with allowed acl resources for role array
      *
-     * @param \Oro\Bundle\UserBundle\Entity\Role[] $roles
-     * @param bool  $useObjects
+     * @param  \Oro\Bundle\UserBundle\Entity\Role[]      $roles
+     * @param  bool                                      $useObjects
      * @return \Oro\Bundle\UserBundle\Entity\Acl[]|array
      */
     public function getAllowedAclResourcesForRoles(array $roles, $useObjects = false)
@@ -72,8 +72,7 @@ class AclRepository extends NestedTreeRepository
             return array_unique($array);
         } else {
             $final = array();
-            foreach ($array as $object)
-            {
+            foreach ($array as $object) {
                 if ( ! in_array($object, $final)) {
                     $final[] = $object;
                 }

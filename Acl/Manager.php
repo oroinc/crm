@@ -118,7 +118,7 @@ class Manager implements ManagerInterface
      * Get list of allowed ACL resources for roles array
      *
      * @param \Oro\Bundle\UserBundle\Entity\Role[] $roles
-     * @param bool  $useObjects
+     * @param bool                                 $useObjects
      *
      * @return array|\Oro\Bundle\UserBundle\Entity\Acl[]
      */

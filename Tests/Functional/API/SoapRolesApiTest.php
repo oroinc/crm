@@ -7,7 +7,7 @@ class SoapRolesApiTest extends \PHPUnit_Framework_TestCase
     const DEFAULT_VALUE = 'ROLE_LABEL';
 
     /** @var \SoapClient */
-    static protected $clientSoap = null;
+    protected static $clientSoap = null;
 
     public function setUp()
     {
@@ -27,7 +27,7 @@ class SoapRolesApiTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param string $request
-     * @param array $response
+     * @param array  $response
      *
      * @dataProvider requestsApi
      */
@@ -46,7 +46,7 @@ class SoapRolesApiTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param string $request
-     * @param array $response
+     * @param array  $response
      *
      * @dataProvider requestsApi
      * @depends testCreateRole

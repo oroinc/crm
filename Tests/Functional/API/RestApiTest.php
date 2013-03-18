@@ -53,7 +53,7 @@ class RestApiTest extends WebTestCase
 
     /**
      * @depends testApiContainRole
-     * @param int $roleId
+     * @param  int $roleId
      * @return int
      */
     public function testApiUpdateRole($roleId)
@@ -104,7 +104,7 @@ class RestApiTest extends WebTestCase
 
     /**
      * @depends testApiCreateGroup
-     * @param array $requestGroup
+     * @param  array $requestGroup
      * @return int
      */
     public function testApiContainGroup($requestGroup)
@@ -121,7 +121,7 @@ class RestApiTest extends WebTestCase
 
     /**
      * @depends testApiContainGroup
-     * @param int $groupId
+     * @param  int $groupId
      * @return int
      */
     public function testApiUpdateGroup($groupId)
@@ -156,7 +156,7 @@ class RestApiTest extends WebTestCase
      * Test API response status
      *
      * @param string $response
-     * @param int $statusCode
+     * @param int    $statusCode
      */
     protected function assertJsonResponse($response, $statusCode = 201)
     {
@@ -171,8 +171,8 @@ class RestApiTest extends WebTestCase
      * Check created role
      *
      * @return int
-     * @param array $result
-     * @param array $request
+     * @param  array $result
+     * @param  array $request
      */
     protected function assertEqualsRoles($request, $result)
     {
@@ -187,6 +187,7 @@ class RestApiTest extends WebTestCase
             }
         }
         $this->assertEquals(0, $flag);
+
         return $roleId;
     }
 
@@ -194,8 +195,8 @@ class RestApiTest extends WebTestCase
      * Check created group
      *
      * @return int
-     * @param array $result
-     * @param array $requestGroup
+     * @param  array $result
+     * @param  array $requestGroup
      */
     protected function assertEqualsGroups($requestGroup, $result)
     {
@@ -211,6 +212,7 @@ class RestApiTest extends WebTestCase
             }
         }
         $this->assertEquals(0, $flag);
+
         return $groupId;
     }
 }
