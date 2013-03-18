@@ -1,12 +1,37 @@
 // Oro Application collection prototype for datagrid
 OroApp.PageableCollection = Backbone.PageableCollection.extend({
 
-    // basic model to store row data
+    /**
+     * Basic model to store row data
+     *
+     * @property {Function}
+     */
     model: OroApp.Model,
 
-    // initialize basic parameters from source options
+    /**
+     * Object declares state keys that will be involved in URL-state saving with their shorthands
+     *
+     * @property {Object}
+     */
+    stateShortKeys: {
+        currentPage: 'i',
+        pageSize: 'p',
+        sortKey: 's',
+        order: 'o',
+        filters: 'f'
+    },
+
+    /**
+     * Initialize basic parameters from source options
+     *
+     * @param models
+     * @param options
+     */
     initialize: function(models, options) {
-        _.extend(this.state, options.state);
+        options = options || {};
+        if (options.state) {
+            _.extend(this.state, options.state);
+        }
         if (options.url) {
             this.url = options.url;
         }
@@ -16,6 +41,8 @@ OroApp.PageableCollection = Backbone.PageableCollection.extend({
         if (options.inputName) {
             this.inputName = options.inputName;
         }
+
+        this.on('remove', this.onRemove, this);
 
         _.extend(this.queryParams, {
             currentPage: this.inputName + '[_pager][_page]',
@@ -33,16 +60,16 @@ OroApp.PageableCollection = Backbone.PageableCollection.extend({
     },
 
     /**
-     * Object declares state keys that will be involved in URL-state saving with their shorthands
+     * Triggers when model is removed from collection.
      *
-     * @property {Object}
+     * Ensure that state is changed after concrete model removed from collection.
+     *
+     * @protected
      */
-    stateShortKeys: {
-        currentPage: 'i',
-        pageSize: 'p',
-        sortKey: 's',
-        order: 'o',
-        filters: 'f'
+    onRemove: function() {
+        if (this.state.totalRecords > 0) {
+            this.state.totalRecords--;
+        }
     },
 
     /**
@@ -150,6 +177,14 @@ OroApp.PageableCollection = Backbone.PageableCollection.extend({
         return state;
     },
 
+    /**
+     * Asserts that val is finite integer.
+     *
+     * @param {*} val
+     * @param {String} name
+     * @return {Integer}
+     * @protected
+     */
     finiteInt: function(val, name) {
         val *= 1;
         if (!_.isNumber(val) || _.isNaN(val) || !_.isFinite(val) || ~~val !== val) {
@@ -158,7 +193,9 @@ OroApp.PageableCollection = Backbone.PageableCollection.extend({
         return val;
     },
 
-    // fetch collection data
+    /**
+     * Fetch collection data
+     */
     fetch: function (options) {
         var BBColProto = Backbone.Collection.prototype;
 
@@ -235,15 +272,20 @@ OroApp.PageableCollection = Backbone.PageableCollection.extend({
         return BBColProto.fetch.call(this, options);
     },
 
-    // process parameters which are sending to server
+    /**
+     * Process parameters which are sending to server
+     *
+     * @param {Object} data
+     * @param {Object} state
+     * @return {Object}
+     */
     processQueryParams: function(data, state) {
-        var PageableProto = OroApp.PageableCollection.prototype;
+        var pageablePrototype = OroApp.PageableCollection.prototype;
 
         // map params except directions
         var queryParams = this.mode == "client" ?
             _.pick(this.queryParams, "sortKey", "order") :
-            _.omit(_.pick(this.queryParams, _.keys(PageableProto.queryParams)),
-                "directions");
+            _.omit(_.pick(this.queryParams, _.keys(pageablePrototype.queryParams)), "directions");
 
         var i, kvp, k, v, kvps = _.pairs(queryParams), thisCopy = _.clone(this);
         for (i = 0; i < kvps.length; i++) {
@@ -262,7 +304,7 @@ OroApp.PageableCollection = Backbone.PageableCollection.extend({
 
         // map extra query parameters
         var extraKvps = _.pairs(_.omit(this.queryParams,
-            _.keys(PageableProto.queryParams)));
+            _.keys(pageablePrototype.queryParams)));
         for (i = 0; i < extraKvps.length; i++) {
             kvp = extraKvps[i];
             v = kvp[1];

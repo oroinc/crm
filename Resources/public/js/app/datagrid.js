@@ -9,6 +9,9 @@ OroApp.Datagrid = Backgrid.Grid.extend({
     tagName: 'div',
 
     /** @property */
+    requestsCount: 0,
+
+    /** @property */
     className: 'clearfix scroll-holder',
 
     /** @property */
@@ -163,6 +166,7 @@ OroApp.Datagrid = Backgrid.Grid.extend({
      * @protected
      */
     beforeRequest: function() {
+        this.requestsCount++;
         this.loadingMask.show();
     },
 
@@ -172,13 +176,16 @@ OroApp.Datagrid = Backgrid.Grid.extend({
      * @protected
      */
     afterRequest: function() {
-        this.loadingMask.hide();
-        if (this.collection.models.length > 0) {
-            this.$(this.selectors.grid).show();
-            this.$(this.selectors.noDataBlock).hide();
-        } else {
-            this.$(this.selectors.grid).hide();
-            this.$(this.selectors.noDataBlock).show();
+        this.requestsCount--;
+        if (this.requestsCount == 0) {
+            this.loadingMask.hide();
+            if (this.collection.models.length > 0) {
+                this.$(this.selectors.grid).show();
+                this.$(this.selectors.noDataBlock).hide();
+            } else {
+                this.$(this.selectors.grid).hide();
+                this.$(this.selectors.noDataBlock).show();
+            }
         }
     },
 
