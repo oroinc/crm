@@ -7,10 +7,9 @@
 {% block header %}
 {% endblock %}
 {% block content %}
-    <script type="text/javascript">console.clear();</script>{# this is debag code#}
 
     <div class="row-fluid">
-        <div class="container-fluid">
+        <div class="container-fluid" style="min-height: 800px; background-color:#d0def1;" id="window-container">
             <button type="button" id="my-button" class="btn btn-large btn-primary">Open more windows</button>
             <hr />
             <div class="btn-toolbar">
@@ -20,15 +19,88 @@
                     <button id="opener3" class="btn">Open window 3</button>
                 </div>
             </div>
-            <div id="opener-content1" style="display: none;">
-                <p>v quam eu pellentesque. Nam euismod, lectus sit amet tristique imperdiet, metus ligula gravida felis, non dapibus nulla sem a magna.</p>
+            <div id="opener-content1" style="display: none;" title="Dima’s Address">
+                    <form action="#" class="form form-horizontal">
+                        <fieldset>
+                            <div class="scroll-holder">
+                                <div class="control-group">
+                                    <label class="control-label" for="inputAddress">Address</label>
+                                    <div class="controls">
+                                        <input type="text" id="inputAddress" placeholder="Address">
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label" for="inputAddress2">Address2</label>
+                                    <div class="controls">
+                                        <input type="text" id="inputAddress2" placeholder="Address2">
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label" for="City">City</label>
+                                    <div class="controls">
+                                        <input type="text" id="City" placeholder="City">
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label" for="States">States</label>
+                                    <div class="controls">
+                                        <input type="text" id="States" placeholder="States">
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label" for="Zip">Zip</label>
+                                    <div class="controls">
+                                        <input type="text" id="Zip" placeholder="Zip">
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label" for="Country">Country</label>
+                                    <div class="controls">
+                                        <select name="Country" id="Country">
+                                            <option>us</option>
+                                            <option>uk</option>
+                                            <option>rus</option>
+                                            <option>tt</option>
+                                            <option>dd</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label" for="tell">tell</label>
+                                    <div class="controls">
+                                        <input type="text" id="tell" placeholder="tell">
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label" for="email">email</label>
+                                    <div class="controls">
+                                        <input type="text" id="email" placeholder="email">
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <div class="controls">
+                                        <label class="checkbox">
+                                            <input type="checkbox"> Remember me
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bottom-action">
+                                <div class="pull-right">
+                                    <button type="button" class="btn">Cancel</button>
+                                    <button type="button" class="btn btn-primary">Submit</button>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </form>
+
             </div>
-            <div id="opener-content2" style="display: none;">
+            <div id="opener-content2" style="display: none;" title="Dima’s Address2">
                 <p>Fusce hendrerit lacinia ligula.</p>
                 <p>Donec a tincidunt nisi.</p>
                 <p> Cras eu velit sed nibh feugiat congue lacinia ut urna. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.</p>
             </div>
-            <div id="opener-content3" style="display: none;">
+            <div id="opener-content3" style="display: none;" title="Dima’s Address3">
                 <p>v quam eu pellentesque. Nam euismod, lectus sit amet tristique imperdiet, metus ligula gravida felis, non dapibus nulla sem a magna.</p>
                 <p>habitasse platea dictumst. Donec elementum vulputate imperdiet. Fusce sed lectus odio. Etiam cursus fermentum ornare. Phasellus facilisis t</p>
                 <p> Quisque nec lobortis leo.</p>
@@ -62,7 +134,7 @@
                 var dialogOptions = {
                     title : "dialog window",
                     width : 400,
-                    height : 300,
+                    height : 400,
                     position: {
                         my: offsetwindow,
                         at: "center center",
@@ -86,9 +158,9 @@
                 if (isOpen === false ){
                     var offsetwindow = newPositionWindow();
                     var dialogOptions = {
-                        title : "dialog window",
+                        appendTo: "#window-container",
                         width : 400,
-                        height : 300,
+                        height : 305,
                         position: {
                             my: offsetwindow,
                             at: "center center",
@@ -114,7 +186,6 @@
                 if (isOpen === false ){
                     var offsetwindow = newPositionWindow();
                     var dialogOptions = {
-                        title : "dialog window",
                         width : 400,
                         height : 300,
                         position: {
@@ -142,7 +213,6 @@
                 if (isOpen === false ){
                     var offsetwindow = newPositionWindow();
                     var dialogOptions = {
-                        title : "dialog window",
                         width : 400,
                         height : 300,
                         position: {
