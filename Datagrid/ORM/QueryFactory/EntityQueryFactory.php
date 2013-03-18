@@ -2,7 +2,6 @@
 
 namespace Oro\Bundle\GridBundle\Datagrid\ORM\QueryFactory;
 
-use Oro\Bundle\GridBundle\Datagrid\QueryFactoryInterface;
 use Oro\Bundle\GridBundle\Datagrid\ProxyQueryInterface;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use Doctrine\ORM\QueryBuilder;
