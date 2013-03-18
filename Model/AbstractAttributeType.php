@@ -1,8 +1,6 @@
 <?php
 namespace Oro\Bundle\FlexibleEntityBundle\Model;
 
-
-
 /**
  * Abstract attribute type
  *
