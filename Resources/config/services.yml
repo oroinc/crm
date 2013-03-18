@@ -54,4 +54,3 @@ services:
         class: Oro\Bundle\FlexibleEntityBundle\Form\Type\MediaType
         tags:
             - { name: form.type, alias: media }
-

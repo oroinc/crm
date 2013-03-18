@@ -1,9 +1,6 @@
 <?php
 namespace Oro\Bundle\FlexibleEntityBundle\Model\AttributeType;
 
-use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttributeType;
-use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttribute;
-
 /**
  * Image attribute type
  *
@@ -14,24 +11,4 @@ use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttribute;
  */
 class ImageType extends FileType
 {
-
-    /**
-     * constructor
-     */
-    public function __construct()
-    {
-        $this->name        = 'Image';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function prepareFormOptions(AbstractAttribute $attribute)
-    {
-        $options = parent::prepareFormOptions($attribute);
-
-        $options['mimeTypes'] = array('image/jpeg', 'image/png', 'image/gif');
-
-        return $options;
-    }
 }
