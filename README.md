@@ -34,12 +34,14 @@ public function registerBundles()
 ```
 
 ## Run unit tests ##
+
 ``` bash
 $ phpunit --coverage-html=cov/
 ```
 
 ## Usage ##
 In your controllers you can access different Oro settings using different scopes.
+
 **Note:** Currently, only `oro_config.user` scope implemented.
 
 ``` php
@@ -48,7 +50,8 @@ $config = $this->get('oro_config.user');
 $value  = $config->get('oro_anybundle.anysetting');
 ```
 
-To use settings inside your bundle you can use `SettingsBuilder` helper class.
+To define settings inside your bundle you can use `SettingsBuilder` helper class.
+
 YourBundle\DependencyInjection\Configuration.php:
 
 ``` php
@@ -81,3 +84,5 @@ public function getConfigTreeBuilder()
     return $builder;
 }
 ```
+
+`type` above could be `scalar` (which is default) or `boolean`.
