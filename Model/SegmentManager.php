@@ -227,4 +227,67 @@ class SegmentManager
 
         return $newSegment;
     }
+
+    /**
+     * Get all tree root. They are nodes without a parent node
+     *
+     * @return ArrayCollection The root nodes
+     */
+    public function getTrees()
+    {
+        $repo = $this->getEntityRepository();
+        return $repo->getChildrenFromParentId(null);
+        
+    }
+
+    /*
+     * Get all segments of a tree by its root
+     *
+     * @param AbstractSegment $treeRoot Tree root node
+     *
+     * @return ArrayCollection The tree's nodes
+     */
+    public function getTreeSegments(AbstractSegment $treeRoot)
+    {
+        $repo = $this->getEntityRepository();
+        $treeRootId = $treeRoot->getId();
+
+        return $repo->findBy(array('root' => $treeRootId));
+    }
+
+    /*
+     * Create a new tree by creating a its root node
+     *
+     * @return AbsractSegment
+     */
+    public function createTree() {
+        $rootSegment = $this->createSegment();
+        $rootSegment->setParent(null);
+
+        return $rootSegment;
+    }
+
+    /*
+     * Remove a new tree by its root segment
+     *
+     * @param AbstractSegment $rootNode
+     */
+    public function removeTree(AbstractSegment $rootSegment) {
+
+        $rootSegment = $this->createSegment();
+        $rootSegment->setParent(null);
+    }
+
+    /*
+     * Remove a new tree by its root node id
+     *
+     * @param int $rootSegmentId
+     */
+    public function removeTreeById(int $rootSegmentId) {
+        $repo = $this->getEntityRepository();
+        $rootSegment = $repo->find($rootSegmentId);
+
+        $this->removeTree($rootSegment);
+
+    }
 }

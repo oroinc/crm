@@ -47,6 +47,25 @@ class JsonSegmentHelper
         return $return;
     }
 
+    /**
+     * Format trees content for response
+     *
+     * @param ArrayCollection $segments
+     *
+     * @return array
+     * @static
+     */
+    public static function treesResponse($segments)
+    {
+        $return = array();
+
+        foreach ($segments as $segment) {
+            $return[$segment->getId()] = $segment->getTitle();
+        }
+
+        return $return;
+    }
+
 
     /**
      * Format in array content for JSON search response
