@@ -43,6 +43,14 @@ interface ManagerInterface {
     public function getAclResource($id);
 
     /**
+     * Get ACL Resources list
+     *
+     * @param bool $useObjects Use objects or plain ids in response
+     * @return \Oro\Bundle\UserBundle\Entity\Acl[]|array
+     */
+    public function getAclResources($useObjects = true);
+
+    /**
      * Get list of allowed ACL resources for roles array
      *
      * @param \Oro\Bundle\UserBundle\Entity\Role[] $roles

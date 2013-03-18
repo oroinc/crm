@@ -100,6 +100,21 @@ class Manager implements ManagerInterface
     }
 
     /**
+     * Get ACL Resources list
+     *
+     * @param bool $useObjects Use objects or plain ids in response
+     * @return \Oro\Bundle\UserBundle\Entity\Acl[]|array
+     */
+    public function getAclResources($useObjects = true)
+    {
+        if ($useObjects) {
+            return $this->getAclRepo()->findAll();
+        }
+
+        return $this->getAclRepo()->getAclResourcesIds();
+    }
+
+    /**
      * Get list of allowed ACL resources for roles array
      *
      * @param \Oro\Bundle\UserBundle\Entity\Role[] $roles
@@ -230,7 +245,7 @@ class Manager implements ManagerInterface
 
         $aclRepo = $this->getAclRepo();
 
-        $aclCurrentList = $role->getAclResources();
+        $aclCurrentList = $role->getAclResourcesFromConfig();
         if ($aclCurrentList->count()) {
             foreach ($aclCurrentList as $acl) {
                 $acl->removeAccessRole($role);
@@ -492,7 +507,7 @@ class Manager implements ManagerInterface
      *
      * @return \Oro\Bundle\UserBundle\Annotation\Acl[]
      */
-    private function getAclResources()
+    private function getAclResourcesFromConfig()
     {
         $resourcesFromAnnotations = $this->aclReader->getResources();
         $resourcesFromConfigs = $this->configReader->getConfigResources();

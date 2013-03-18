@@ -154,4 +154,23 @@ class AclRepository extends NestedTreeRepository
     {
         return $this->buildTree($this->getAclListWithRoles($role));
     }
+
+    /**
+     * Get ACL Resources ids list
+     * @return array
+     */
+    public function getAclResourcesIds()
+    {
+        $acl = array();
+
+        $aclArray =  $this->createQueryBuilder('acl')
+            ->select('acl.id')
+            ->getQuery()
+            ->getArrayResult();
+
+        foreach ($aclArray as $aclResult) {
+            $acl[] = $aclResult['id'];
+        }
+        return $acl;
+    }
 }

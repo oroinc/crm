@@ -16,7 +16,25 @@ class AclController extends FOSRestController implements ClassResourceInterface
 {
 
     /**
-     * Get group data
+     * Get ACL Resources
+     *
+     * @param int $id Group id
+     * @ApiDoc(
+     *  description="Get ACL Resources ",
+     *  resource=true
+     * )
+     */
+    public function cgetAction()
+    {
+        return $this->handleView($this->view(
+                $this->get('oro_user.acl_manager')->getAclResources(false),
+                Codes::HTTP_OK
+            )
+        );
+    }
+
+    /**
+     * Get ACL Resource data
      *
      * @param int $id Group id
      * @ApiDoc(
@@ -38,6 +56,7 @@ class AclController extends FOSRestController implements ClassResourceInterface
         return $this->handleView($this->view(
                 $resource->toArray(),
                 $resource ? Codes::HTTP_OK : Codes::HTTP_NOT_FOUND
-            ));
+            )
+        );
     }
 }
