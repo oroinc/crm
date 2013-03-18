@@ -54,8 +54,8 @@ class ConfigManager
     /**
      * Merge current settings with entity scoped settings
      *
-     * @param  string $entity   Entity name
-     * @param  int    $recordId Entity id
+     * @param string $entity   Entity name
+     * @param int    $recordId Entity id
      */
     protected function mergeSettings($entity, $recordId)
     {

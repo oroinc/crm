@@ -9,13 +9,14 @@ class SettingsBuilder
 {
     /**
      *
-     * @param  array               $settings
-     * @return ArrayNodeDefinition
+     * @param ArrayNodeDefinition $root     Config root node
+     * @param array               $settings
      */
-    public static function getNode($settings)
+    public static function append(ArrayNodeDefinition $root, $settings)
     {
         $builder = new TreeBuilder();
-        $node    = $builder->root('settings')
+        $node    = $builder
+            ->root('settings')
             ->addDefaultsIfNotSet()
             ->children();
 
@@ -49,6 +50,6 @@ class SettingsBuilder
            $child->scalarNode('scope')->defaultValue(isset($setting['scope']) ? $setting['scope'] : 'app');
         }
 
-        return $node->end();
+        $root->children()->append($node->end());
     }
 }
