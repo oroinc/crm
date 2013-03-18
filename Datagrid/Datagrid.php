@@ -170,8 +170,7 @@ class Datagrid implements DatagridInterface
     public function hasActiveFilters()
     {
         /** @var $filter FilterInterface */
-        foreach ($this->filters as $name => $filter) {
-            // TODO Add method to interface
+        foreach ($this->filters as $filter) {
             if ($filter->isActive()) {
                 return true;
             }
