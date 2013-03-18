@@ -31,16 +31,10 @@ class OroSearchExtension extends Extension
 
         $entitiesConfig = $config['entities_config'];
         if (!count($entitiesConfig)) {
-            if (count($config['config_paths'])) {
-                foreach ($config['config_paths'] as $configPath) {
-                    $entitiesConfig += Yaml::parse($configPath);
-                }
-            } else {
-                foreach ($container->getParameter('kernel.bundles') as $bundle) {
-                    $reflection = new \ReflectionClass($bundle);
-                    if (is_file($file = dirname($reflection->getFilename()).'/Resources/config/search.yml')) {
-                        $entitiesConfig += Yaml::parse(realpath($file));
-                    }
+            foreach ($container->getParameter('kernel.bundles') as $bundle) {
+                $reflection = new \ReflectionClass($bundle);
+                if (is_file($file = dirname($reflection->getFilename()).'/Resources/config/search.yml')) {
+                    $entitiesConfig += Yaml::parse(realpath($file));
                 }
             }
         }

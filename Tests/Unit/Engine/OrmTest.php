@@ -6,6 +6,8 @@ use Oro\Bundle\SearchBundle\Engine\Orm;
 use Oro\Bundle\SearchBundle\Query\Query;
 use Oro\Bundle\SearchBundle\Entity\Item;
 use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttributeType;
+use Oro\Bundle\SearchBundle\Query\Result;
+use Oro\Bundle\SearchBundle\Query\Result\Item as ResultItem;
 
 use Oro\Bundle\SearchBundle\Tests\Unit\Fixture\Entity\Product;
 use Oro\Bundle\SearchBundle\Tests\Unit\Fixture\Entity\Manufacturer;
@@ -23,6 +25,28 @@ class OrmTest extends \PHPUnit_Framework_TestCase
     private $translator;
     private $flexibleManager;
     private $mappingConfig =  array(
+        'Oro\Bundle\SearchBundle\Tests\Unit\Fixture\Entity\Manufacturer' => array(
+            'fields' => array(
+                array(
+                    'name' => 'products',
+                    'relation_type'   => 'one-to-many',
+                    'relation_fields' => array(
+                        array(
+                            'name'          => 'name',
+                            'target_type'   => 'text',
+                        )
+                    )
+                ),
+                array(
+                    'name' => 'parent',
+                    'relation_type'   => 'one-to-many',
+                    'relation_fields' => array(
+                        array(
+                        )
+                    )
+                )
+            )
+        ),
         'Oro\Bundle\SearchBundle\Tests\Unit\Fixture\Entity\Product' => array(
             'alias' => 'test_product',
             'label' => 'test product',
@@ -80,7 +104,10 @@ class OrmTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->om = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
+        $this->om = $this->getMockBuilder('Doctrine\ORM\EntityManager')
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->container = $this->getMockForAbstractClass('Symfony\Component\DependencyInjection\ContainerInterface');
 
         $manufacturer = new Manufacturer();
@@ -176,6 +203,11 @@ class OrmTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(150, $mapping['decimal']['price']);
         $this->assertEquals(10, $mapping['integer']['count']);
         $this->assertEquals(' text_attribute', $mapping['text']['text_attribute']);
+
+        $manufacturer = new Manufacturer();
+        $manufacturer->setName('reebok');
+        $manufacturer->addProduct($this->product);
+        $this->orm->mapObject($manufacturer);
     }
 
     public function testDoSearch()
@@ -221,62 +253,138 @@ class OrmTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(Query::KEYWORD_AND, $searchOptions[0]['type']);
     }
 
-    public function testDelete()
+    public function testDeleteNonExistsEntity()
     {
         $searchRepo = $this
             ->getMockBuilder('Oro\Bundle\SearchBundle\Entity\Repository\SearchIndexRepository')
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->om->expects($this->once())
+        $this->om->expects($this->any())
             ->method('getRepository')
             ->with($this->equalTo('OroSearchBundle:Item'))
             ->will($this->returnValue($searchRepo));
 
-        $this->container->expects($this->once())
+        $searchRepo->expects($this->any())
+            ->method('findOneBy')
+            ->will($this->returnValue(false));
+
+        $this->assertEquals(false, $this->orm->delete($this->product, true));
+    }
+
+    public function testDelete()
+    {
+        $query = $this->getMock(
+            'Doctrine\ORM\AbstractQuery',
+            array('getSQL', 'setMaxResults', 'getOneOrNullResult', 'setParameter', '_doExecute'),
+            array(),
+            '',
+            false
+        );
+
+        $searchRepo = $this
+            ->getMockBuilder('Oro\Bundle\SearchBundle\Entity\Repository\SearchIndexRepository')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->om->expects($this->any())
+            ->method('getRepository')
+            ->with($this->equalTo('OroSearchBundle:Item'))
+            ->will($this->returnValue($searchRepo));
+
+        $this->container->expects($this->any())
             ->method('getParameter')
             ->with($this->equalTo('oro_search.engine_orm'))
             ->will($this->returnValue('test_orm'));
 
-        $searchRepo->expects($this->once())
+        $searchRepo->expects($this->any())
             ->method('setDriversClasses');
 
         $item = new Item();
 
-        $searchRepo->expects($this->once())
+        $searchRepo->expects($this->any())
             ->method('findOneBy')
             ->will($this->returnValue($item));
 
-        $this->om->expects($this->once())
+        $this->om->expects($this->any())
             ->method('remove')
             ->with($this->equalTo($item));
 
-        $this->om->expects($this->once())
+        $this->om->expects($this->any())
             ->method('flush');
 
+        $this->om->expects($this->once())
+            ->method('createQuery')
+            ->will($this->returnValue($query));
+
+        $query->expects($this->any())
+            ->method('setParameter')
+            ->will($this->returnValue($query));
+
+        $query->expects($this->once())
+            ->method('setMaxResults')
+            ->will($this->returnValue($query));
+
+        $query->expects($this->once())
+            ->method('getOneOrNullResult')
+            ->will($this->returnValue(0));
+
         $this->orm->delete($this->product, true);
+        $this->orm->delete($this->product, false);
     }
 
     public function testSave()
     {
+        $query = $this->getMock(
+            'Doctrine\ORM\AbstractQuery',
+            array('getSQL', 'setMaxResults', 'getOneOrNullResult', 'setParameter', '_doExecute'),
+            array(),
+            '',
+            false
+        );
+
+        $this->om->expects($this->once())
+            ->method('createQuery')
+            ->will($this->returnValue($query));
+
+        $query->expects($this->any())
+            ->method('setParameter')
+            ->will($this->returnValue($query));
+
+        $query->expects($this->once())
+            ->method('setMaxResults')
+            ->will($this->returnValue($query));
+
+        $query->expects($this->once())
+            ->method('getOneOrNullResult')
+            ->will($this->returnValue(0));
+
         $searchRepo = $this
             ->getMockBuilder('Oro\Bundle\SearchBundle\Entity\Repository\SearchIndexRepository')
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->om->expects($this->once())
+        $this->om->expects($this->any())
             ->method('getRepository')
             ->with($this->equalTo('OroSearchBundle:Item'))
             ->will($this->returnValue($searchRepo));
 
-        $this->container->expects($this->once())
+        $this->container->expects($this->any())
             ->method('getParameter')
             ->with($this->equalTo('oro_search.engine_orm'))
             ->will($this->returnValue('test_orm'));
 
-        $searchRepo->expects($this->once())
+        $searchRepo->expects($this->any())
             ->method('setDriversClasses');
 
         $this->orm->save($this->product, true);
+        $this->orm->save($this->product, false);
+
+        $manufacturer = new Manufacturer();
+        $manufacturer->setName('reebok');
+        $manufacturer->addProduct($this->product);
+        $this->orm->save($manufacturer, true);
+
+        $this->assertEquals(false, $this->orm->save(new Attribute(), true));
     }
 }

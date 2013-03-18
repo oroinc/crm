@@ -17,6 +17,8 @@ class SearchController extends Controller
     {
         return array(
             'entities' => $this->get('oro_search.index')->getEntitiesLabels(),
+            'searchString' => $this->getRequest()->get('searchString'),
+            'fromString' => $this->getRequest()->get('fromString'),
         );
     }
 
@@ -45,7 +47,7 @@ class SearchController extends Controller
                 $this->get('request')->query->get('page', 1),
                 $request->get('limit')
             ),
-            'searchString' => $this->getRequest()->get('search'),
+            'searchString' => $request->get('search'),
             'entities' => $searchManager->getEntitiesLabels(),
             'search' => $searchString,
             'from' => $from
