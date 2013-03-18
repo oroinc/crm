@@ -12,9 +12,9 @@ class Configuration implements ConfigurationInterface
      */
     public function getConfigTreeBuilder()
     {
-        $treeBuilder = new TreeBuilder();
-        $rootNode    = $treeBuilder->root('oro_config');
+        $builder = new TreeBuilder();
+        $root    = $builder->root('oro_config');
 
-        return $treeBuilder;
+        return $builder;
     }
 }
