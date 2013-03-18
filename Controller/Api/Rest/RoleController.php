@@ -200,6 +200,24 @@ class RoleController extends FOSRestController implements ClassResourceInterface
     }
 
     /**
+     * Create new role
+     *
+     * @ApiDoc(
+     *  description="Create new role",
+     *  resource=true
+     * )
+     */
+    public function postAclsAction()
+    {
+        $entity = new Role();
+        $view   = $this->get('oro_user.form.handler.role.api')->process($entity)
+            ? $this->redirectView($this->generateUrl('oro_api_get_role', array('id' => $entity->getId())), Codes::HTTP_CREATED)
+            : $this->view($this->get('oro_user.form.role.api'), Codes::HTTP_BAD_REQUEST);
+
+        return $this->handleView($view);
+    }
+
+    /**
      * Unlink ACL Resource to role
      *
      * @param int $id User id
