@@ -1,6 +1,6 @@
 /**
  * Bootstrap Modal wrapper for use with Backbone.
- * 
+ *
  * Takes care of instantiation, manages multiple modals,
  * adds several options and removes the element from the DOM when closed
  *
@@ -43,7 +43,7 @@
 
   //Reset to users' template settings
   _.templateSettings = _interpolateBackup;
-  
+
 
   var Modal = Backbone.View.extend({
 
@@ -114,7 +114,7 @@
 
     /**
      * Creates the DOM element
-     * 
+     *
      * @api private
      */
     render: function() {
@@ -147,6 +147,7 @@
      */
     open: function(cb) {
       if (!this.isRendered) this.render();
+      this.delegateEvents();
 
       var self = this,
           $el = this.$el;
@@ -173,8 +174,8 @@
       //Adjust the modal and backdrop z-index; for dealing with multiple modals
       var numModals = Modal.count,
           $backdrop = $('.modal-backdrop:eq('+numModals+')'),
-          backdropIndex = parseInt($backdrop.css('z-index'),10),
-          elIndex = parseInt($backdrop.css('z-index'), 10);
+          backdropIndex = parseInt($backdrop.css('z-index'), 10),
+          elIndex = parseInt($backdrop.css('z-index'), 10) + 1;
 
       $backdrop.css('z-index', backdropIndex + numModals);
       this.$el.css('z-index', elIndex + numModals);
@@ -187,7 +188,7 @@
 
           self.trigger('cancel');
         });
-        
+
         $(document).one('keyup.dismiss.modal', function (e) {
           e.which == 27 && self.trigger('cancel');
 
@@ -197,7 +198,7 @@
         });
       }
 
-      this.on('cancel', function() {
+      this.once('cancel', function() {
         self.close();
       });
 
@@ -207,7 +208,7 @@
       if (cb) {
         self.on('ok', cb);
       }
-      
+
       return this;
     },
 
