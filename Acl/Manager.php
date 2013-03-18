@@ -245,7 +245,7 @@ class Manager implements ManagerInterface
 
         $aclRepo = $this->getAclRepo();
 
-        $aclCurrentList = $role->getAclResourcesFromConfig();
+        $aclCurrentList = $role->getAclResources();
         if ($aclCurrentList->count()) {
             foreach ($aclCurrentList as $acl) {
                 $acl->removeAccessRole($role);
@@ -298,7 +298,7 @@ class Manager implements ManagerInterface
      */
     public function synchronizeAclResources()
     {
-        $resources = $this->getAclResources();
+        $resources = $this->getAclResourcesFromConfig();
         $bdResources = $this->getAclRepo()->findAll();
 
         // update old resources
