@@ -17,20 +17,19 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 /**
- * Base Segment controller
+ * Abstract base Segment controller
  *
  * @author    Benoit Jacquemont <benoit@akeneo.com>
  * @copyright 2012 Akeneo SAS (http://www.akeneo.com)
  * @license   http://opensource.org/licenses/MIT MIT
  *
  */
-abstract class BaseSegmentController extends Controller
+abstract class AbstractSegmentController extends Controller
 {
     /**
      * Redirect to index action
      *
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
-     * TODO: try to make it automatic 
      */
     abstract protected function redirectToIndex();
 
@@ -299,7 +298,7 @@ abstract class BaseSegmentController extends Controller
      * @Method("POST")
      * @Route("/remove-item")
      *
-     * TODO: Manage multiple items addition for future grid use
+     * TODO: Manage multiple items remove for future grid use
      */
     abstract public function removeItemAction(Request $request);
 }

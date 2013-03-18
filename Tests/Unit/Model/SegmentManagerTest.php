@@ -27,7 +27,6 @@ class SegmentManagerTest extends \PHPUnit_Framework_TestCase
     protected $entityRepository;
 
     const ENTITY_NAME = 'Oro\Bundle\SegmentationTreeBundle\Tests\Unit\Model\SegmentStub';
-    const ENTITY_SHORT_NAME = 'SegmentStub_ShortName';
 
     public function setUp()
     {
@@ -36,7 +35,7 @@ class SegmentManagerTest extends \PHPUnit_Framework_TestCase
         $this->storageManager->expects($this->any())
              ->method('getRepository')
              ->will($this->returnValue($this->entityRepository)); 
-        $this->segmentManager = new SegmentManager($this->storageManager, self::ENTITY_NAME, self::ENTITY_SHORT_NAME);
+        $this->segmentManager = new SegmentManager($this->storageManager, self::ENTITY_NAME);
     }
 
     public function testGetStorageManager()
@@ -54,11 +53,6 @@ class SegmentManagerTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertEquals($this->segmentManager->getSegmentName(), self::ENTITY_NAME);
     } 
-
-    public function testGetSegmentShortName()
-    {
-        $this->assertEquals($this->segmentManager->getSegmentShortName(), self::ENTITY_SHORT_NAME);
-    }
 
     public function testGetEntityRepository()
     {
