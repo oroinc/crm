@@ -6,3 +6,17 @@ oro_pinbar_api:
         version: latest|v1
     defaults:
         version: latest
+
+oro_shortcut_api:
+    resource: Oro\Bundle\NavigationBundle\Controller\Api\ShortcutsController
+    type: rest
+    prefix: api/rest/{version}/
+    requirements:
+        version: latest|v1
+    defaults:
+        version: latest
+
+oro_shortcut:
+    resource:     Oro\Bundle\NavigationBundle\Controller\ShortcutController
+    type:         annotation
+    prefix:       /shortcut
