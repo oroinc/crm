@@ -48,8 +48,7 @@ OroApp.DatagridAction = Backbone.View.extend({
         }
 
         this.launcherOptions = _.extend({
-            action: this,
-            model: this.model
+            action: this
         }, this.launcherOptions);
 
         Backbone.View.prototype.initialize.apply(this, arguments);

@@ -57,8 +57,17 @@ OroApp.Datagrid = Backgrid.Grid.extend({
 
         this.collection = options.collection;
 
-        this.collection.on('request', this.onRequest, this);
-        this.collection.on('sync', this.onSync, this);
+        this.collection.on('request', function(model, xhr, options) {
+            this.beforeRequest();
+            var self = this;
+            var always = xhr.always;
+            xhr.always = function() {
+                always.apply(this, arguments);
+                self.afterRequest();
+            }
+        }, this);
+
+        this.collection.on('remove', this.onRemove, this);
 
         if (options.noDataHint) {
             this.noDataHint = options.noDataHint.replace('\n', '<br />');
@@ -149,20 +158,20 @@ OroApp.Datagrid = Backgrid.Grid.extend({
     },
 
     /**
-     * Triggers when on collection "request" event
+     * Triggers when collection "request" event fired
      *
      * @protected
      */
-    onRequest: function() {
+    beforeRequest: function() {
         this.loadingMask.show();
     },
 
     /**
-     * Triggers when on collection "sync" event
+     * Triggers when collection request is done
      *
      * @protected
      */
-    onSync: function() {
+    afterRequest: function() {
         this.loadingMask.hide();
         if (this.collection.models.length > 0) {
             this.$(this.selectors.grid).show();
@@ -171,5 +180,14 @@ OroApp.Datagrid = Backgrid.Grid.extend({
             this.$(this.selectors.grid).hide();
             this.$(this.selectors.noDataBlock).show();
         }
+    },
+
+    /**
+     * Triggers when collection "remove" event fired
+     *
+     * @protected
+     */
+    onRemove: function() {
+        this.collection.fetch();
     }
 });

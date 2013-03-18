@@ -29,7 +29,8 @@ OroApp.DatagridActionNavigate = OroApp.DatagridAction.extend({
 
         if (this.useDirectLauncherLink) {
             this.launcherOptions = _.extend({
-                link: this.generateUrl()
+                link: this.generateUrl(),
+                runAction: false
             }, this.launcherOptions);
         }
     },
@@ -38,6 +39,6 @@ OroApp.DatagridActionNavigate = OroApp.DatagridAction.extend({
      * Execute redirect
      */
     execute: function() {
-        window.location.href = window.location.href + this.generateUrl();
+        window.location.href = this.generateUrl();
     }
 });

@@ -26,6 +26,9 @@ OroApp.DatagridActionLauncher = Backbone.View.extend({
     /** @property {String} */
     link: 'javascript:void(0);',
 
+    /** @property {String} */
+    runAction: true,
+
     /** @property {function(Object, ?Object=): String} */
     template:_.template(
         '<a href="<%= link %>" class="action" <%= attributesTemplate({attributes: attributes}) %>>' +
@@ -57,6 +60,7 @@ OroApp.DatagridActionLauncher = Backbone.View.extend({
      * @param {String} [options.label]
      * @param {String} [options.icon]
      * @param {String} [options.link]
+     * @param {Boolean} [options.runAction]
      * @param {Boolean} [options.onClickReturnValue]
      * @throws {TypeError} If mandatory option is undefined
      */
@@ -82,7 +86,11 @@ OroApp.DatagridActionLauncher = Backbone.View.extend({
             this.link = options.link;
         }
 
-        if (options.onClickReturnValue) {
+        if (_.has(options, 'runAction')) {
+            this.runAction = options.runAction;
+        }
+
+        if (_.has(options, 'onClickReturnValue')) {
             this.onClickReturnValue = options.onClickReturnValue;
         }
 
@@ -119,7 +127,9 @@ OroApp.DatagridActionLauncher = Backbone.View.extend({
      */
     onClick: function() {
         this.trigger('click', this);
-        this.action.run();
+        if (this.runAction) {
+            this.action.run();
+        }
         return this.onClickReturnValue;
     }
 });

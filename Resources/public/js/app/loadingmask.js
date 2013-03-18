@@ -13,10 +13,21 @@ OroApp.LoadingMask = OroApp.View.extend({
     ),
 
     /**
+     * Is visible
+     *
+     * @return {Number}
+     */
+    isVisible: function() {
+        return this.$el.filter(':visible').length;
+    },
+
+    /**
      * Show loading mask
      */
     show: function() {
-        this.$el.show();
+        if (!this.isVisible()) {
+            this.$el.show();
+        }
         return this;
     },
 
@@ -24,7 +35,9 @@ OroApp.LoadingMask = OroApp.View.extend({
      * Hide loading mask
      */
     hide: function() {
-        this.$el.hide();
+        if (this.isVisible()) {
+            this.$el.hide();
+        }
         return this;
     },
 
