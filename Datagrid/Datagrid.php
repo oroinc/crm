@@ -239,7 +239,6 @@ class Datagrid implements DatagridInterface
         $this->formBuilder->add(ParametersInterface::FILTER_PARAMETERS, 'collection', array('type' => 'hidden'));
         $filterField = $this->formBuilder->get(ParametersInterface::FILTER_PARAMETERS);
 
-
         /** @var $filter FilterInterface */
         foreach ($this->getFilters() as $filter) {
             $filterFormName = $filter->getFormName();
@@ -258,10 +257,6 @@ class Datagrid implements DatagridInterface
     protected function applySorters()
     {
         $sortBy = $this->parameters->get(ParametersInterface::SORT_PARAMETERS);
-
-        if (!is_array($sortBy)) {
-            $sortBy = array($sortBy);
-        }
 
         // we should retain an order in which sorters were added
         // when adding sort to query and when we creating sorters form elements
@@ -286,19 +281,6 @@ class Datagrid implements DatagridInterface
         $pagerField = $this->formBuilder->get(ParametersInterface::PAGER_PARAMETERS);
         $pagerField->add('_page', 'hidden');
         $pagerField->add('_per_page', 'hidden');
-    }
-
-    /**
-     * Returns required form parameter value
-     *
-     * @param string $name
-     * @return string|array|null
-     */
-    protected function getFormParameter($name)
-    {
-        $formName = $this->formBuilder->getName();
-        $parametersData = $this->parameters->get($formName);
-        return isset($parametersData[$name]) ? $parametersData[$name] : null;
     }
 
     /**
@@ -351,8 +333,8 @@ class Datagrid implements DatagridInterface
     }
 
     /**
-     * @deprecated Use applyParameters instead
      * @return void
+     * @deprecated Use applyParameters instead
      */
     public function buildPager()
     {
@@ -364,8 +346,7 @@ class Datagrid implements DatagridInterface
      */
     public function getColumns()
     {
-        // TODO Method return declared as array, but we have FieldDescriptionCollection
-        return $this->columns;
+        return $this->columns->getElements();
     }
 
     /**
@@ -373,24 +354,26 @@ class Datagrid implements DatagridInterface
      */
     public function getParameters()
     {
-        // TODO Interface declare array return type
-        return $this->parameters;
+        return $this->parameters->toArray();
     }
 
     /**
-     * {@inheritdoc}
+     * @param string $name
+     * @param string $operator
+     * @param mixed $value
+     * @deprecated Grid parameters are read-only
      */
     public function setValue($name, $operator, $value)
     {
-        // TODO: Implement setValue() method.
     }
 
     /**
      * @return array
+     * @deprecated Use getParameters instead
      */
     public function getValues()
     {
-        // TODO: Implement getValues() method.
+        return $this->getParameters();
     }
 
     /**
