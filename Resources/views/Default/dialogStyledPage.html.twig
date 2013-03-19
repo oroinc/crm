@@ -2,42 +2,8 @@
 {% block head %}
     {{ parent() }}
     <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js"></script>
-    <script type="text/javascript" src="{{ asset('bundles/oroui/lib/jquery.dialogextend.1_0_1.js') }}"></script>
-    <style type="text/css">
-        .ui-dialog-titlebar-buttonpane button {
-            border: none;
-        }
-
-        .ui-dialog-maximized,
-        .ui-dialog-normal {
-            position: fixed;
-        }
-
-        .ui-dialog-maximized .ui-dialog-titlebar,
-        .ui-dialog-minimized .ui-dialog-titlebar {
-            cursor: default;
-        }
-
-        .ui-dialog-minimized {
-            float: left;
-            margin: 1px;
-            position: static !important;
-        }
-
-        .ui-dialog-collapsed .ui-dialog-content,
-        .ui-dialog-collapsed .ui-dialog-buttonpane,
-        .ui-dialog-minimized .ui-dialog-content,
-        .ui-dialog-minimized .ui-dialog-buttonpane {
-            display: none !important;
-        }
-
-        .ui-dialog-collapsed  .ui-dialog-titlebar,
-        .ui-dialog-minimized .ui-dialog-titlebar {
-            white-space: nowrap;
-        }
-
-
-    </style>
+    <script type="text/javascript" src="{{ asset('bundles/oroui/lib/jquery.dialog.extended/jquery.dialog.extended.js') }}"></script>
+    <link rel="stylesheet" href="{{ asset('bundles/oroui/lib/jquery.dialog.extended/jquery.dialog.extended.css') }}" media="all" />
 {% endblock head %}
 {% block header %}
 {% endblock %}
