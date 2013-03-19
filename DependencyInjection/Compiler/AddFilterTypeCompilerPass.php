@@ -2,7 +2,6 @@
 
 namespace Oro\Bundle\GridBundle\DependencyInjection\Compiler;
 
-use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -32,7 +31,8 @@ class AddFilterTypeCompilerPass implements CompilerPassInterface
             $container->getDefinition($id)->setScope(ContainerInterface::SCOPE_PROTOTYPE);
 
             foreach ($attributes as $eachTag) {
-                $types[$eachTag['alias']] = $id;
+                $index = !empty($eachTag['alias']) ? $eachTag['alias'] : $id;
+                $types[$index] = $id;
             }
         }
 
