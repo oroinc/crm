@@ -64,11 +64,11 @@ Set results count for the query.
 
 ### order_by
 
-Allow to set results order. Syntaks:
+Allow to set results order. Syntax:
 
 	order_by field_type field_name direction
 
-If field type was not set, then text field whill be assigned. Direction - asc, desc. If direction is not assigned then whill be asc direction used.
+If field type was not set, then text field will be assigned. Direction - asc, desc. If direction is not assigned then whill be asc direction used.
 
 Field types
 -----------
@@ -132,7 +132,8 @@ Operator '!=' is used for search records where field does not matches the specif
 
 **Does not work with string fields**
 
-Operators is used to search for the records that have the specified field must be greater, less,  than, less than equals, or greater than equals of the specified value. Examples:
+Operators is used to search for the records that have the specified field must be greater,
+less,  than, less than equals, or greater than equals of the specified value. Examples:
 	
 	integer count >= 5
 	decimal price < 45

@@ -124,12 +124,6 @@ class Orm extends AbstractEngine
      */
     public function save($entity, $realtime = true)
     {
-        if (isset($this->mappingConfig[get_class($entity)]['alias'])) {
-            $alias = $this->mappingConfig[get_class($entity)]['alias'];
-        } else {
-            $alias = get_class($entity);
-        }
-
         $data = $this->mapObject($entity);
         $name = get_class($entity);
 
@@ -143,6 +137,12 @@ class Orm extends AbstractEngine
 
             if (!$item) {
                 $item = new Item();
+
+                if (isset($this->mappingConfig[get_class($entity)]['alias'])) {
+                    $alias = $this->mappingConfig[get_class($entity)]['alias'];
+                } else {
+                    $alias = get_class($entity);
+                }
 
                 $item->setEntity($name)
                      ->setRecordId($entity->getId())
