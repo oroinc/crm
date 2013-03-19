@@ -17,7 +17,7 @@ class ReindexCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this->setName('oro:search:reindex')
-             ->setDescription('Reindex search index');
+             ->setDescription('Rebuild search index');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)

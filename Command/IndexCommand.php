@@ -17,7 +17,7 @@ class IndexCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this->setName('oro:search:index')
-             ->setDescription('Update search index');
+             ->setDescription('Internal command (do not use). Process search index queue.');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
