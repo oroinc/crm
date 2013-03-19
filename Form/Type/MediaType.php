@@ -54,6 +54,6 @@ class MediaType extends AbstractType
      */
     public function getName()
     {
-        return 'media';
+        return 'oro_media';
     }
 }

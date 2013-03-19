@@ -50,7 +50,7 @@ services:
             - { name: kernel.event_subscriber}
 
     # Media form type
-    form.type.media:
+    form.type.oro_media:
         class: Oro\Bundle\FlexibleEntityBundle\Form\Type\MediaType
         tags:
-            - { name: form.type, alias: media }
+            - { name: form.type, alias: oro_media }
