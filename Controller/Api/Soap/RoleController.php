@@ -125,6 +125,44 @@ class RoleController extends BaseController
     }
 
     /**
+     * Link ACL Resource to role
+     *
+     * @Soap\Method("addAclArrayToRole")
+     * @Soap\Param("roleId", phpType = "int")
+     * @Soap\Param("aclResources", phpType = "string[]")
+     * @Soap\Result(phpType = "string")
+     */
+    public function addAclArrayToRoleAction($roleId, $aclResources)
+    {
+        $this->container->get('oro_user.acl_manager')->modifyAclArrayForRole(
+            $roleId,
+            $aclResources,
+            true
+        );
+
+        return '';
+    }
+
+    /**
+     * Link ACL Resource to role
+     *
+     * @Soap\Method("removeAclArrayFromRole")
+     * @Soap\Param("roleId", phpType = "int")
+     * @Soap\Param("aclResources", phpType = "string[]")
+     * @Soap\Result(phpType = "string")
+     */
+    public function removeAclArrayFromRoleAction($roleId, $aclResources)
+    {
+        $this->container->get('oro_user.acl_manager')->modifyAclArrayForRole(
+            $roleId,
+            $aclResources,
+            false
+        );
+
+        return '';
+    }
+
+    /**
      * Unlink ACL Resource from role
      *
      * @Soap\Method("removeAclFromRole")

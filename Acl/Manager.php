@@ -88,6 +88,21 @@ class Manager implements ManagerInterface
     }
 
     /**
+     * Add/Remove Acl resource for Role
+     *
+     * @param int    $roleId Role id
+     * @param array $aclIds  ACL Resource IDs
+     * @param bool   $isAdd  true if add, false if delete
+     */
+    public function modifyAclArrayForRole($roleId, array $aclIds, $isAdd = true)
+    {
+        foreach ($aclIds as $aclId) {
+            $this->modifyAclForRole($roleId, $aclId, $isAdd);
+        }
+        exit;
+    }
+
+    /**
      * Search Acl resource by id
      *
      * @param string $id

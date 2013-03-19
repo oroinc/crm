@@ -179,7 +179,7 @@ class RoleController extends FOSRestController implements ClassResourceInterface
     /**
      * Link ACL Resource to role
      *
-     * @param int $id User id
+     * @param int $id Role id
      * @ApiDoc(
      *  description="Link ACL Resource to role",
      *  requirements={
@@ -200,27 +200,9 @@ class RoleController extends FOSRestController implements ClassResourceInterface
     }
 
     /**
-     * Create new role
-     *
-     * @ApiDoc(
-     *  description="Create new role",
-     *  resource=true
-     * )
-     */
-    public function postAclsAction()
-    {
-        $entity = new Role();
-        $view   = $this->get('oro_user.form.handler.role.api')->process($entity)
-            ? $this->redirectView($this->generateUrl('oro_api_get_role', array('id' => $entity->getId())), Codes::HTTP_CREATED)
-            : $this->view($this->get('oro_user.form.role.api'), Codes::HTTP_BAD_REQUEST);
-
-        return $this->handleView($view);
-    }
-
-    /**
      * Unlink ACL Resource to role
      *
-     * @param int $id User id
+     * @param int $id Role id
      * @ApiDoc(
      *  description="Unlink ACL Resource to role",
      *  requirements={
@@ -238,6 +220,52 @@ class RoleController extends FOSRestController implements ClassResourceInterface
         );
 
         return $this->handleView($this->view('', Codes::HTTP_NO_CONTENT));
+    }
+
+    /**
+     * Link ACL Resource Array to role
+     *
+     * @param int $id Role id
+     * @ApiDoc(
+     *  description="Link ACL Resource to role",
+     *  requirements={
+     *      {"roleId"="id", "dataType"="integer"},
+     *      {"aclResources"="id", "dataType"="string[]"},
+     *  }
+     * )
+     */
+    public function postAclArrayAction($roleId)
+    {
+        $this->container->get('oro_user.acl_manager')->modifyAclArrayForRole(
+            $roleId,
+            $this->getRequest()->request->get('aclResources'),
+            true
+        );
+
+        return $this->handleView($this->view('', Codes::HTTP_NO_CONTENT));
+    }
+
+    /**
+     * Link ACL Resource to role
+     *
+     * @param int $id Role id
+     * @ApiDoc(
+     *  description="Link ACL Resource to role",
+     *  requirements={
+     *      {"roleId"="id", "dataType"="integer"},
+     *      {"aclResources"="id", "dataType"="string[]"},
+     *  }
+     * )
+     */
+    public function deleteAclArrayAction($roleId)
+    {
+        $this->container->get('oro_user.acl_manager')->modifyAclArrayForRole(
+            $roleId,
+            $this->getRequest()->request->get('aclResources'),
+            false
+        );
+
+        return '';
     }
 
     /**

@@ -182,11 +182,6 @@ services:
         class:                        %oro_user.acl.manager.class%
         arguments:                    ["@doctrine.orm.entity_manager", "@oro_user.acl_reader", "@cache", "@security.context", "@oro_user.acl_config_reader"]
 
-    oro_user.acl.form.handler.role_acl.api:
-        class:                        %oro_user.acl.handler.role.class%
-        scope:                        request
-        arguments:                    ["@oro_user.form.role.api", "@request", "@doctrine.orm.entity_manager"]
-
     oro_user.user_menu:
         class:                        %oro_user.user_menu.builder.class%
         tags:
