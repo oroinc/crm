@@ -26,7 +26,15 @@ class MediaType extends AbstractType
 
         $builder->add('file', 'file', array('required' => false));
 
-        $builder->add('filename', 'text', array('required' => false, 'disabled' => true));
+        $builder->add(
+            'remove',
+            'checkbox',
+            array(
+                'required' => false,
+                'property_path' => false,
+                'label' => 'Remove media'
+            )
+        );
     }
 
     /**
