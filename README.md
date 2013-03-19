@@ -76,6 +76,12 @@ $converter->setFamily(LengthFamilyInterface::FAMILY);
 $result = $converter->convert(LengthFamilyInterface::KILOMETER, LengthFamilyInterface::MILE, 1);
 ```
 
+Get the whole list of families and units
+========================================
+
+```php
+$this->container->getParameter('oro_measure.measures_config');
+```
 
 Add unit to an existing family
 ==============================
