@@ -1,10 +1,16 @@
+/**
+ * Datagrid pagination with input field
+ *
+ * @class   OroApp.DatagridPaginationInput
+ * @extends OroApp.DatagridPagination
+ */
 OroApp.DatagridPaginationInput = OroApp.DatagridPagination.extend({
     /** @property */
     template: _.template(
         '<label class="dib">Page:</label>' +
         '<ul class="icons-holder">' +
             '<% _.each(handles, function (handle) { %>' +
-                '<li <% if (handle.className) { %>class="<%= handle.className %>"<% } %>>' +
+                '<li <% if (handle.className || disabled) { %>class="<%= handle.className %> <% if (disabled) { %>disabled<% } %>"<% } %>>' +
                     '<% if (handle.type == "input") { %>' +
                         '<input type="text" value="<%= state.firstPage == 0 ? state.currentPage + 1 : state.currentPage  %>"' +
                             ' <% if (disabled) { %>disabled="disabled"<% } %>' +
@@ -23,16 +29,17 @@ OroApp.DatagridPaginationInput = OroApp.DatagridPagination.extend({
                 '</li>' +
             '<% }); %>' +
         '</ul>' +
-        '<label class="dib">of <%= state.totalRecords ? state.totalPages : 1 %> | <%= state.totalRecords %> records</label>'
+        '<label class="dib">of <%= state.totalPages ? state.totalPages : 1 %> | <%= state.totalRecords %> records</label>'
     ),
 
     /** @property */
     events: {
-        "click a": "changePage",
-        "change input": "changePageByInput",
-        "blur input": "changePageByInput"
+        "click a": "onChangePage",
+        "change input": "onChangePageByInput",
+        "blur input": "onChangePageByInput"
     },
 
+    /** @property */
     windowSize: 0,
 
     /**
@@ -47,7 +54,7 @@ OroApp.DatagridPaginationInput = OroApp.DatagridPagination.extend({
      *
      * @param {Event} e
      */
-    changePageByInput: function(e) {
+    onChangePageByInput: function(e) {
         e.preventDefault();
 
         var pageIndex = parseInt($(e.target).val());

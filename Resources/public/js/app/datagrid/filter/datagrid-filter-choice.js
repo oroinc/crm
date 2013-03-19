@@ -8,7 +8,7 @@ OroApp.DatagridFilterChoice = OroApp.DatagridFilterText.extend({
     /**
      * Template for filter criteria
      *
-     * @property
+     * @property {function(Object, ?Object=): String}
      */
     popupCriteriaTemplate: _.template(
         '<div>' +

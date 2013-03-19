@@ -1,5 +1,4 @@
 OroApp.DatagridHeader = Backgrid.Header.extend({
-
     /** @property */
     tagName: "thead",
 
@@ -13,10 +12,16 @@ OroApp.DatagridHeader = Backgrid.Header.extend({
      * @inheritDoc
      */
     initialize: function (options) {
-        // TODO Add check like: requireOptions(options, ["columns", "collection"]);
+        if (!options.collection) {
+            throw new TypeError("'collection' is required")
+        }
+        if (!options.columns) {
+            throw new TypeError("'columns' is required")
+        }
+
         this.columns = options.columns;
         if (!(this.columns instanceof Backbone.Collection)) {
-            this.columns = new Columns(this.columns);
+            this.columns = new Backgrid.Columns(this.columns);
         }
 
         this.row = new this.row({
@@ -25,5 +30,4 @@ OroApp.DatagridHeader = Backgrid.Header.extend({
             headerCell: this.headerCell
         });
     }
-
 });

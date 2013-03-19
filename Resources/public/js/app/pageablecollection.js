@@ -1,6 +1,10 @@
-// Oro Application collection prototype for datagrid
+/**
+ * Pageable collection
+ *
+ * @class   OroApp.PageableCollection
+ * @extends Backbone.PageableCollection
+ */
 OroApp.PageableCollection = Backbone.PageableCollection.extend({
-
     /**
      * Basic model to store row data
      *
@@ -143,7 +147,7 @@ OroApp.PageableCollection = Backbone.PageableCollection.extend({
             totalPages = state.totalPages = Math.ceil(totalRecords / pageSize);
 
             if (firstPage < 0 || firstPage > 1) {
-                throw new RangeError("`firstPage must be 0 or 1`");
+                throw new RangeError("`firstPage` must be 0 or 1");
             }
 
             state.lastPage = firstPage === 0 ? totalPages - 1 : totalPages;

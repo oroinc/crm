@@ -1,3 +1,9 @@
+/**
+ * Datagrid toolbar widget
+ *
+ * @class   OroApp.DatagridToolbar
+ * @extends OroApp.View
+ */
 OroApp.DatagridToolbar = OroApp.View.extend({
 
     /** @property */
@@ -33,11 +39,47 @@ OroApp.DatagridToolbar = OroApp.View.extend({
      *
      * @param {Object} options
      * @param {Backbone.Collection} options.collection
-     * @param {Integer} options.windowSize
      */
     initialize: function (options) {
+        options = options || {};
+
+        if (!options.collection) {
+            throw new TypeError("'collection' is required");
+        }
+
         this.collection = options.collection;
+
+        this.pagination = new this.pagination({
+            collection: this.collection
+        });
+
+        this.pageSize = new this.pageSize({
+            collection: this.collection
+        });
+
         OroApp.View.prototype.initialize.call(this, options);
+    },
+
+    /**
+     * Enable toolbar
+     *
+     * @return {*}
+     */
+    enable: function() {
+        this.pagination.enable();
+        this.pageSize.enable();
+        return this;
+    },
+
+    /**
+     * Disable toolbar
+     *
+     * @return {*}
+     */
+    disable: function() {
+        this.pagination.disable();
+        this.pageSize.disable();
+        return this;
     },
 
     /**
@@ -47,15 +89,8 @@ OroApp.DatagridToolbar = OroApp.View.extend({
         this.$el.empty();
         this.$el.append(this.template());
 
-        this.pagination = new this.pagination({
-            el: this.$('.pagination'),
-            collection: this.collection
-        });
-
-        this.pageSize = new this.pageSize({
-            el: this.$('.page-size'),
-            collection: this.collection
-        });
+        this.$('.pagination').append(this.pagination.render().$el);
+        this.$('.page-size').append(this.pageSize.render().$el);
 
         return this;
     }

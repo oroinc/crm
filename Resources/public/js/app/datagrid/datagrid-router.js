@@ -29,9 +29,14 @@ OroApp.DatagridRouter = OroApp.Router.extend({
      * Initialize router
      *
      * @param {Object} options
-     * @param {OroApp.PageableCollection} [options.collection] Collection of models.
+     * @param {OroApp.PageableCollection} options.collection Collection of models.
      */
     initialize: function(options) {
+        options = options || {};
+        if (!options.collection) {
+            throw new TypeError("'collection' is required");
+        }
+
         this.collection = options.collection;
         this._initState = _.clone(this.collection.state);
 

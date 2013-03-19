@@ -182,7 +182,6 @@ output='js/acme.grid.js'
         var datagridName = {{ datagridName|json_encode|raw }};
         var datagridTitleSelector = {{ ("#" ~ datagridName ~ "Title")|json_encode|raw }};
         var datagridFiltersSelector = {{ ("#" ~ datagridName ~ "Filters")|json_encode|raw }};
-        var datagridToolbarSelector = {{ ("#" ~ datagridName ~ "Toolbar")|json_encode|raw }};
         var datagridBodySelector = {{ ("#" ~ datagridName ~ "Body")|json_encode|raw }};
         var datagridOptions = OroApp.scope[datagridName];
 
@@ -192,7 +191,6 @@ output='js/acme.grid.js'
             containerSelector,
             datagridTitleSelector,
             datagridFiltersSelector,
-            datagridToolbarSelector,
             datagridBodySelector
         ) {
             // Initialize grid collection
@@ -226,13 +224,6 @@ output='js/acme.grid.js'
             var datagridTitle = new OroApp.DatagridTitle(titleParameters);
             $(datagridTitleSelector).html(datagridTitle.render().$el);
 
-            // Toolbar
-            var datagridToolbarParameters = {
-                collection: datagridCollection
-            };
-            var pager = new OroApp.DatagridToolbar(datagridToolbarParameters);
-            $(datagridToolbarSelector).append($(pager.render().$el));
-
             // Filters
             var filterListParameters = _.extend(
                 {
@@ -259,7 +250,6 @@ output='js/acme.grid.js'
             containerSelector,
             datagridTitleSelector,
             datagridFiltersSelector,
-            datagridToolbarSelector,
             datagridBodySelector
         );
     });
@@ -268,6 +258,5 @@ output='js/acme.grid.js'
 <script type="text/template" id="{{ datagridName }}GridTemplate">
     <div class="clearfix" id="{{ datagridName }}Title"></div>
     <div class="clearfix" id="{{ datagridName }}Filters"></div>
-    <div class="clearfix" id="{{ datagridName }}Toolbar"></div>
     <div class="clearfix" id="{{ datagridName }}Body"></div>
 </script>

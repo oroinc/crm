@@ -123,9 +123,7 @@ OroApp.DatagridFilterText = Backbone.View.extend({
      * @protected
      */
     _onReadCriteriaInputKey: function(e) {
-        var key = e.charCode ? e.charCode : e.keyCode ? e.keyCode : 0;
-
-        if (key == 13) {
+        if (e.which == 13) {
             this._hideCriteria();
             this._confirmValue(this._readCriteriaValue());
         }

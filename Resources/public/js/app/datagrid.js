@@ -16,9 +16,12 @@ OroApp.Datagrid = Backgrid.Grid.extend({
 
     /** @property */
     template: _.template(
-        '<table class="grid table-hover table table-bordered table-condensed"></table>' +
-        '<div class="no-data"></div>' +
-        '<div class="loading-mask"></div>'
+        '<div class="toolbar"></div>' +
+        '<div class="grid-container" style="position: relative;">' +
+            '<table class="grid table-hover table table-bordered table-condensed"></table>' +
+            '<div class="no-data"></div>' +
+            '<div class="loading-mask"></div>' +
+        '</div>'
     ),
 
     /** @property */
@@ -27,9 +30,19 @@ OroApp.Datagrid = Backgrid.Grid.extend({
     /** @property */
     selectors: {
         grid:        '.grid',
+        toolbar:     '.toolbar',
         noDataBlock: '.no-data',
         loadingMask: '.loading-mask'
     },
+
+    /** @property {Object} */
+    toolbarOptions: {},
+
+    /** @property {OroApp.DatagridToolbar} */
+    toolbar: OroApp.DatagridToolbar,
+
+    /** @property {OroApp.LoadingMask} */
+    loadingMask: OroApp.LoadingMask,
 
     /** @property */
     noDataTemplate: _.template('<span><%= hint %><span>'),
@@ -37,23 +50,35 @@ OroApp.Datagrid = Backgrid.Grid.extend({
     /** @property */
     noDataHint: 'No data found.',
 
+    /** @property */
     actionsColumn: Backgrid.Column,
+
+    /** @property */
     actionsColumnAttributes: {
         name: '',
         label: '',
         editable: false,
-        cell: OroApp.DatagridActionCell
+        cell: OroApp.DatagridActionCell,
+        sortable: false
     },
 
     /**
      * Initialize datagrid
      *
      * @param {Object} options
+     * @param {Backbone.Collection} options.collection
+     * @param {Backbone.Collection|Array} options.columns
+     * @param {Object} [options.toolbarOptions]
+     * @param {String} [options.noDataHint]
+     * @param {Array} [options.actions]
      */
     initialize: function(options) {
+        options = options || {};
+
         if (!options.collection) {
             throw new TypeError("'collection' is required")
         }
+
         if (!options.columns) {
             throw new TypeError("'columns' is required")
         }
@@ -79,6 +104,11 @@ OroApp.Datagrid = Backgrid.Grid.extend({
         if (!_.isEmpty(options.actions)) {
             options.columns.push(this.createActionsColumn(options.actions));
         }
+
+        this.loadingMask = new this.loadingMask();
+
+        _.extend(this.toolbarOptions, {collection: this.collection}, options.toolbarOptions);
+        this.toolbar = new this.toolbar(_.extend(this.toolbarOptions));
 
         Backgrid.Grid.prototype.initialize.apply(this, arguments);
     },
@@ -108,9 +138,10 @@ OroApp.Datagrid = Backgrid.Grid.extend({
 
         this.$el = this.$el.append($(this.template()));
 
-        this.renderGrid(this.$(this.selectors.grid));
-        this.renderNoDataBlock(this.$(this.selectors.noDataBlock));
-        this.renderLoadingMask(this.$(this.selectors.loadingMask));
+        this.renderToolbar();
+        this.renderGrid();
+        this.renderNoDataBlock();
+        this.renderLoadingMask();
 
         /**
          * Backbone event. Fired when the grid has been successfully rendered.
@@ -124,10 +155,11 @@ OroApp.Datagrid = Backgrid.Grid.extend({
     /**
      * Renders the grid's header, then footer, then finally the body.
      *
-     * @param {Object} $el
      * @protected
      */
-    renderGrid: function($el) {
+    renderGrid: function() {
+        var $el = this.$(this.selectors.grid);
+
         $el.append(this.header.render().$el);
         if (this.footer) {
             $el.append(this.footer.render().$el);
@@ -136,28 +168,33 @@ OroApp.Datagrid = Backgrid.Grid.extend({
     },
 
     /**
+     * Renders grid toolbar.
+     *
+     * @protected
+     */
+    renderToolbar: function() {
+        this.$(this.selectors.toolbar).append(this.toolbar.render().$el);
+    },
+
+    /**
      * Renders loading mask.
      *
-     * @param {Object} $el
-     * @private
+     * @protected
      */
-    renderLoadingMask: function($el) {
-        this.loadingMask = new OroApp.LoadingMask({
-            el: $el
-        }).render();
+    renderLoadingMask: function() {
+        this.$(this.selectors.loadingMask).append(this.loadingMask.render().$el);
+        this.loadingMask.hide();
     },
 
     /**
      * Render no data block.
      *
-     * @param {Object} $el
      * @protected
      */
-    renderNoDataBlock: function($el) {
-        $el.append($(this.noDataTemplate({
+    renderNoDataBlock: function() {
+        this.$(this.selectors.noDataBlock).append($(this.noDataTemplate({
             hint: this.noDataHint
-        })));
-        this.$(this.selectors.noDataBlock).hide();
+        }))).hide();
     },
 
     /**
@@ -168,6 +205,7 @@ OroApp.Datagrid = Backgrid.Grid.extend({
     beforeRequest: function() {
         this.requestsCount++;
         this.loadingMask.show();
+        this.toolbar.disable();
     },
 
     /**
@@ -179,6 +217,7 @@ OroApp.Datagrid = Backgrid.Grid.extend({
         this.requestsCount--;
         if (this.requestsCount == 0) {
             this.loadingMask.hide();
+            this.toolbar.enable();
             if (this.collection.models.length > 0) {
                 this.$(this.selectors.grid).show();
                 this.$(this.selectors.noDataBlock).hide();

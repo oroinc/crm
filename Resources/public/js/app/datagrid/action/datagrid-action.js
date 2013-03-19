@@ -77,7 +77,7 @@ OroApp.DatagridAction = Backbone.View.extend({
      * Execute action
      */
     execute: function() {
-        console.log('Execute action');
+        //console.log('Execute action');
     },
 
     /**

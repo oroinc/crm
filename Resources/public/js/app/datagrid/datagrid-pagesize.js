@@ -1,3 +1,9 @@
+/**
+ * Datagrid page size widget
+ *
+ * @class   OroApp.DatagridPageSize
+ * @extends OroApp.View
+ */
 OroApp.DatagridPageSize = OroApp.View.extend({
     /** @property */
     template: _.template(
@@ -16,20 +22,33 @@ OroApp.DatagridPageSize = OroApp.View.extend({
 
     /** @property */
     events: {
-        "click a": "changePageSize"
+        "click a": "onChangePageSize"
     },
 
     /** @property */
     items: [10, 25, 50, 100],
+
+    /** @property */
+    enabled: true,
 
     /**
      * Initializer.
      *
      * @param {Object} options
      * @param {Backbone.Collection} options.collection
-     * @param {Array} options.pageSizeItems
+     * @param {Array} [options.items]
      */
     initialize: function (options) {
+        options = options || {};
+
+        if (!options.collection) {
+            throw new TypeError("'collection' is required");
+        }
+
+        if (options.items) {
+            this.items = options.items;
+        }
+
         this.collection = options.collection;
         this.listenTo(this.collection, "add", this.render);
         this.listenTo(this.collection, "remove", this.render);
@@ -38,12 +57,33 @@ OroApp.DatagridPageSize = OroApp.View.extend({
     },
 
     /**
+     * Disable page size
+     *
+     * @return {*}
+     */
+    disable: function() {
+        this.enabled = false;
+        this.render();
+        return this;
+    },
+
+    /**
+     * Enable page size
+     *
+     * @return {*}
+     */
+    enable: function() {
+        this.enabled = true;
+        this.render();
+        return this;
+    },
+
+    /**
      * jQuery event handler for the page handlers. Goes to the right page upon clicking.
      *
      * @param {Event} e
      */
-    changePageSize: function (e) {
-        // TODO Fix wrong handle of setting bigger page size when last page is active
+    onChangePageSize: function (e) {
         e.preventDefault();
         var pageSize = parseInt($(e.target).text());
         if (pageSize !== this.collection.state.pageSize) {
@@ -54,8 +94,9 @@ OroApp.DatagridPageSize = OroApp.View.extend({
 
     render: function() {
         this.$el.empty();
+
         this.$el.append($(this.template({
-            disabled: !this.collection.state.totalRecords,
+            disabled: !this.enabled || !this.collection.state.totalRecords,
             collectionState: this.collection.state,
             items: this.items
         })));

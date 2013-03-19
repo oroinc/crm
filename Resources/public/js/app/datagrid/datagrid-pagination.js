@@ -1,3 +1,9 @@
+/**
+ * Datagrid pagination widget
+ *
+ * @class   OroApp.DatagridPageSize
+ * @extends OroApp.View
+ */
 OroApp.DatagridPagination = OroApp.View.extend({
     /** @property */
     tagName: 'div',
@@ -7,6 +13,9 @@ OroApp.DatagridPagination = OroApp.View.extend({
 
     /** @property */
     windowSize: 10,
+
+    /** @property */
+    enabled: true,
 
     /** @property */
     template: _.template(
@@ -26,12 +35,12 @@ OroApp.DatagridPagination = OroApp.View.extend({
                 '</li>' +
             '<% }); %>' +
         '</ul>' +
-        '<label class="dib">of  <%= state.totalRecords ? state.totalPages : 1 %> | <%= state.totalRecords %> records</label>'
+        '<label class="dib">of <%= state.totalPages ? state.totalPages : 1 %> | <%= state.totalRecords %> records</label>'
     ),
 
     /** @property */
     events: {
-        "click a": "changePage"
+        "click a": "onChangePage"
     },
 
     /** @property */
@@ -46,9 +55,6 @@ OroApp.DatagridPagination = OroApp.View.extend({
         }
     },
 
-    /** @property */
-    initOptionRequires: ['collection'],
-
     /**
      * Initializer.
      *
@@ -58,6 +64,12 @@ OroApp.DatagridPagination = OroApp.View.extend({
      * @param {Integer} options.windowSize
      */
     initialize: function (options) {
+        options = options || {};
+
+        if (!options.collection) {
+            throw new TypeError("'collection' is required");
+        }
+
         this.collection = options.collection;
         this.listenTo(this.collection, "add", this.render);
         this.listenTo(this.collection, "remove", this.render);
@@ -66,12 +78,39 @@ OroApp.DatagridPagination = OroApp.View.extend({
     },
 
     /**
+     * Disable pagination
+     *
+     * @return {*}
+     */
+    disable: function() {
+        this.enabled = false;
+        this.render();
+        return this;
+    },
+
+    /**
+     * Enable pagination
+     *
+     * @return {*}
+     */
+    enable: function() {
+        this.enabled = true;
+        this.render();
+        return this;
+    },
+
+    /**
      * jQuery event handler for the page handlers. Goes to the right page upon clicking.
      *
      * @param {Event} e
+     * @protected
      */
-    changePage: function (e) {
+    onChangePage: function (e) {
         e.preventDefault();
+
+        if (!this.enabled) {
+            return;
+        }
 
         var label = $(e.target).text();
         var ffConfig = this.fastForwardHandleConfig;
@@ -91,7 +130,6 @@ OroApp.DatagridPagination = OroApp.View.extend({
             }
         }
 
-        var state = collection.state;
         var pageIndex = $(e.target).text() * 1 - state.firstPage;
         collection.getPage(state.firstPage === 0 ? pageIndex : pageIndex + 1);
     },
@@ -146,13 +184,19 @@ OroApp.DatagridPagination = OroApp.View.extend({
 
         return handles;
     },
+
+    /**
+     * Render pagination
+     *
+     * @return {*}
+     */
     render: function() {
         this.$el.empty();
 
         var state = this.collection.state;
 
         this.$el.append($(this.template({
-            disabled: !state.totalRecords,
+            disabled: !this.enabled || !state.totalRecords,
             handles: this.makeHandles(),
             state: state
         })));

@@ -1,3 +1,9 @@
+/**
+ * Loading mask widget
+ *
+ * @class   OroApp.LoadingMask
+ * @extends OroApp.View
+ */
 OroApp.LoadingMask = OroApp.View.extend({
 
     /** @property */
@@ -13,36 +19,29 @@ OroApp.LoadingMask = OroApp.View.extend({
     ),
 
     /**
-     * Is visible
-     *
-     * @return {Number}
-     */
-    isVisible: function() {
-        return this.$el.filter(':visible').length;
-    },
-
-    /**
      * Show loading mask
+     *
+     * @return {this}
      */
     show: function() {
-        if (!this.isVisible()) {
-            this.$el.show();
-        }
+        this.$el.show();
         return this;
     },
 
     /**
      * Hide loading mask
+     *
+     * @return {this}
      */
     hide: function() {
-        if (this.isVisible()) {
-            this.$el.hide();
-        }
+        this.$el.hide();
         return this;
     },
 
     /**
      * Render loading mask
+     *
+     * @return {this}
      */
     render: function() {
         this.$el.empty();

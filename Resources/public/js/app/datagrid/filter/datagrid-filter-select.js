@@ -8,12 +8,13 @@ OroApp.DatagridFilterSelect = OroApp.DatagridFilter.extend({
     /** @property */
     template: _.template(
         '<div class="btn filter-select">' +
-            '<%= hint %>: <select style="width:150px;">' +
-            '<option value=""><%= placeholder %></option>' +
-            '<% _.each(options, function (hint, value) { %><option value="<%= value %>"><%= hint %></option><% }); %>' +
+            '<%= hint %>: ' +
+            '<select style="width:150px;">' +
+                '<option value=""><%= placeholder %></option>' +
+                '<% _.each(options, function (hint, value) { %><option value="<%= value %>"><%= hint %></option><% }); %>' +
             '</select>' +
             '<a href="#" class="disable-filter" />' +
-            '</div>'
+        '</div>'
     ),
 
     /** @property */

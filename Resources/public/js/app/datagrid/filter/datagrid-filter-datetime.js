@@ -5,17 +5,26 @@
  * @extends OroApp.DatagridFilterDate
  */
 OroApp.DatagridFilterDateTime = OroApp.DatagridFilterDate.extend({
-    /** @property */
-    template: _.template(
-        '<div class="btn">' +
-            '<%= hint %>:' +
-            '<% _.each(choices, function (hint, value) { %>' +
-            '<input type="radio" name="type" value="<%= value %>" /><%= hint %>' +
-            '<% }); %>' +
-            'datetime from <input type="text" name="start" value="" style="width:80px;" />' +
-            'to <input type="text" name="end" value="" style="width:80px;" />' +
-            '<a href="#" class="disable-filter" />' +
-            '<span class="caret"></span>' +
-            '</div>'
+    /**
+     * Template for filter criteria
+     *
+     * @property {function(Object, ?Object=): String}
+     */
+    popupCriteriaTemplate: _.template(
+        '<div>' +
+            '<div>' +
+                '<% _.each(choices, function (hint, value) { %>' +
+                    '<input type="radio" name="type" value="<%= value %>" /><%= hint %>' +
+                '<% }); %>' +
+            '</div>' +
+            '<div>' +
+                'datetime from <input type="text" name="start" value="" style="width:80px;" />' +
+                'to <input type="text" name="end" value="" style="width:80px;" />' +
+            '</div>' +
+            '<div class="btn-group">' +
+                '<button class="btn btn-mini filter-update">Update</button>' +
+                '<button class="btn btn-mini filter-criteria-hide">Close</button>' +
+            '</div>' +
+        '</div>'
     )
 });
