@@ -1,8 +1,41 @@
 {% extends "OroUIBundle:Default:index.html.twig" %}
 {% block head %}
     {{ parent() }}
-    <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js"></script>
     <script type="text/javascript" src="{{ asset('bundles/oroui/lib/jquery.dialogextend.1_0_1.js') }}"></script>
+    <style type="text/css">
+        .ui-dialog-titlebar-buttonpane button {
+            border: none;
+        }
+
+        .ui-dialog-maximized {
+            position: fixed;
+        }
+
+        .ui-dialog-maximized .ui-dialog-titlebar,
+        .ui-dialog-minimized .ui-dialog-titlebar {
+            cursor: default;
+        }
+
+        .ui-dialog-collapsed .ui-dialog-buttonpane {
+            display: none;
+        }
+
+        .ui-dialog-minimized {
+            float: left;
+            margin: 1px;
+            position: static !important;
+        }
+
+        .ui-dialog-minimized .ui-dialog-content,
+        .ui-dialog-minimized .ui-dialog-buttonpane {
+            display: none !important;
+        }
+
+        .ui-dialog-minimized .ui-dialog-titlebar {
+            white-space: nowrap;
+        }
+    </style>
 {% endblock head %}
 {% block header %}
 {% endblock %}
@@ -85,7 +118,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="bottom-action">
+                            <div class="bottom-action widget-actions">
                                 <div class="pull-right">
                                     <button type="button" class="btn">Cancel</button>
                                     <button type="button" class="btn btn-primary">Submit</button>
@@ -132,6 +165,7 @@
             $("#my-button").click(function(){
                 var offsetwindow = newPositionWindow();
                 var dialogOptions = {
+                    appendTo: '#main .row-fluid',
                     title : "dialog window",
                     width : 400,
                     height : 400,
