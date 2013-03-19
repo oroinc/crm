@@ -6,6 +6,7 @@ use FOS\RestBundle\Controller\Annotations\NamePrefix;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Routing\ClassResourceInterface;
 use FOS\Rest\Util\Codes;
+use FOS\RestBundle\Controller\Annotations\QueryParam;
 
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
@@ -179,6 +180,8 @@ class RoleController extends FOSRestController implements ClassResourceInterface
     /**
      * Link ACL Resource to role
      *
+     * @QueryParam(name="roleId", requirements="\d+", nullable=false, description="Role id")
+     * @QueryParam(name="aclResourceId", nullable=false, description="ACL Resource id")
      * @param int $id Role id
      * @ApiDoc(
      *  description="Link ACL Resource to role",
@@ -202,6 +205,8 @@ class RoleController extends FOSRestController implements ClassResourceInterface
     /**
      * Unlink ACL Resource to role
      *
+     * @QueryParam(name="roleId", requirements="\d+", nullable=false, description="Role id")
+     * @QueryParam(name="aclResourceId", nullable=false, description="ACL Resource id")
      * @param int $id Role id
      * @ApiDoc(
      *  description="Unlink ACL Resource to role",
@@ -225,6 +230,7 @@ class RoleController extends FOSRestController implements ClassResourceInterface
     /**
      * Link ACL Resource Array to role
      *
+     * @QueryParam(name="roleId", requirements="\d+", nullable=false, description="Role id")
      * @param int $id Role id
      * @ApiDoc(
      *  description="Link ACL Resource to role",
@@ -248,6 +254,7 @@ class RoleController extends FOSRestController implements ClassResourceInterface
     /**
      * Link ACL Resource to role
      *
+     * @QueryParam(name="roleId", requirements="\d+", nullable=false, description="Role id")
      * @param int $id Role id
      * @ApiDoc(
      *  description="Link ACL Resource to role",
