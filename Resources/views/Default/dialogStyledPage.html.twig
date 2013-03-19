@@ -8,7 +8,8 @@
             border: none;
         }
 
-        .ui-dialog-maximized {
+        .ui-dialog-maximized,
+        .ui-dialog-normal {
             position: fixed;
         }
 
@@ -17,24 +18,25 @@
             cursor: default;
         }
 
-        .ui-dialog-collapsed .ui-dialog-buttonpane {
-            display: none;
-        }
-
         .ui-dialog-minimized {
             float: left;
             margin: 1px;
             position: static !important;
         }
 
+        .ui-dialog-collapsed .ui-dialog-content,
+        .ui-dialog-collapsed .ui-dialog-buttonpane,
         .ui-dialog-minimized .ui-dialog-content,
         .ui-dialog-minimized .ui-dialog-buttonpane {
             display: none !important;
         }
 
+        .ui-dialog-collapsed  .ui-dialog-titlebar,
         .ui-dialog-minimized .ui-dialog-titlebar {
             white-space: nowrap;
         }
+
+
     </style>
 {% endblock head %}
 {% block header %}
@@ -177,6 +179,7 @@
                     "close" : function(){ $(this).dialog( "destroy" ) }
                 };
                 var dialogExtendOptions = {
+                    minimizeTo: $('.pin-bar'),
                     "maximize" : true,
                     "minimize" : true,
                     "dblclick": "maximize"
