@@ -1,8 +1,6 @@
 <?php
 namespace Oro\Bundle\FlexibleEntityBundle\Model\AttributeType;
 
-use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttributeType;
-
 /**
  * File attribute type
  *
@@ -11,7 +9,7 @@ use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttributeType;
  * @license   http://opensource.org/licenses/MIT MIT
  *
  */
-class FileType extends AbstractAttributeType
+class FileUrlType extends UrlType
 {
 
     /**
@@ -19,9 +17,7 @@ class FileType extends AbstractAttributeType
      */
     public function __construct()
     {
-        $this->name        = 'File';
-        $this->backendType = self::BACKEND_TYPE_MEDIA;
-        $this->formType    = 'oro_media';
-        $this->fieldName   = 'media';
+        parent::__construct();
+        $this->name     = 'File Url';
     }
 }

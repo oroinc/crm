@@ -74,6 +74,11 @@ class Configuration implements ConfigurationInterface
                     ->defaultValue('Oro\Bundle\FlexibleEntityBundle\Entity\AttributeOptionValue')
                 ->end()
 
+                // optional, to define customized media entity
+                ->scalarNode('attribute_media_class')
+                    ->defaultValue('Oro\Bundle\FlexibleEntityBundle\Entity\Media')
+                ->end()
+
                 // optional, default locale used for entity values
                 ->scalarNode('default_locale')
                     ->defaultValue('en_US')

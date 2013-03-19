@@ -30,6 +30,7 @@ abstract class AbstractAttributeType
     const BACKEND_TYPE_OPTION   = 'options';
     const BACKEND_TYPE_TEXT     = 'text';
     const BACKEND_TYPE_VARCHAR  = 'varchar';
+    const BACKEND_TYPE_MEDIA    = 'media';
 
     /**
      * Classes for AttributeType
@@ -47,6 +48,8 @@ abstract class AbstractAttributeType
     const TYPE_METRIC_CLASS            = 'Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\MetricType';
     const TYPE_FILE_CLASS              = 'Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\FileType';
     const TYPE_IMAGE_CLASS             = 'Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\ImageType';
+    const TYPE_FILE_URL_CLASS          = 'Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\FileUrlType';
+    const TYPE_IMAGE_URL_CLASS         = 'Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\ImageUrlType';
     const TYPE_TEXT_CLASS              = 'Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\TextType';
     const TYPE_BOOLEAN_CLASS           = 'Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\BooleanType';
 
