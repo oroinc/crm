@@ -1,8 +1,6 @@
 <?php
 namespace Oro\Bundle\FlexibleEntityBundle\Model;
 
-
-
 /**
  * Abstract attribute type
  *
@@ -53,6 +51,7 @@ abstract class AbstractAttributeType
     const TYPE_FILE_URL_CLASS          = 'Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\FileUrlType';
     const TYPE_IMAGE_URL_CLASS         = 'Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\ImageUrlType';
     const TYPE_TEXT_CLASS              = 'Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\TextType';
+    const TYPE_BOOLEAN_CLASS           = 'Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\BooleanType';
 
     /**
      * Attribute name

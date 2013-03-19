@@ -96,63 +96,16 @@ class FlexibleEntityRepositoryTest extends AbstractFlexibleManagerTest
     public function testcreateQueryBuilder()
     {
         // with lazy loading
-        $qb = $this->repository->createQueryBuilder('MyFlexible', true);
-        $expectedSql = 'SELECT MyFlexible FROM Oro\Bundle\FlexibleEntityBundle\Tests\Entity\Demo\Flexible MyFlexible';
-        $this->assertEquals($expectedSql, $qb->getQuery()->getDql());
+        // TODO : related to grid
+        //$qb = $this->repository->createQueryBuilder('MyFlexible');
+        //$expectedSql = 'SELECT MyFlexible FROM Oro\Bundle\FlexibleEntityBundle\Tests\Entity\Demo\Flexible MyFlexible';
+        //$this->assertEquals($expectedSql, $qb->getQuery()->getDql());
         // without lazy loading
-        $qb = $this->repository->createQueryBuilder('MyFlexible');
-        $expectedDql = 'SELECT MyFlexible, Value, Attribute'
+        $qb = $this->repository->createFlexibleQueryBuilder('MyFlexible');
+        $expectedDql = 'SELECT MyFlexible, Value, Attribute, ValueOption, AttributeOptionValue'
             .' FROM Oro\Bundle\FlexibleEntityBundle\Tests\Entity\Demo\Flexible MyFlexible'
-            .' LEFT JOIN MyFlexible.values Value LEFT JOIN Value.attribute Attribute';
-        $this->assertEquals($expectedDql, $qb->getQuery()->getDql());
-    }
-
-    /**
-     * Test related method
-     */
-    public function testPrepareQueryBuilder()
-    {
-        $attToSelect  = array('name', 'description');
-        $attCriterias = array('id' => '123', 'name' => 'my name', 'description' => 'my description');
-        $attOrderBy   = array('description' => 'desc', 'id' => 'asc');
-
-        // find all
-        $qb = $this->repository->prepareQueryBuilder();
-        $expectedDql = 'SELECT Entity, Value, Attribute '
-            .'FROM Oro\Bundle\FlexibleEntityBundle\Tests\Entity\Demo\Flexible Entity '
-            .'LEFT JOIN Entity.values Value LEFT JOIN Value.attribute Attribute';
-        $this->assertEquals($expectedDql, $qb->getQuery()->getDql());
-
-        // add select attributes
-        $qb = $this->repository->prepareQueryBuilder($attToSelect);
-        $expectedDql = 'SELECT Entity, selectVname, selectVdescription '
-            .'FROM Oro\Bundle\FlexibleEntityBundle\Tests\Entity\Demo\Flexible Entity '
-            .'LEFT JOIN Entity.values selectVname WITH selectVname.attribute = 1 '
-            .'LEFT JOIN Entity.values selectVdescription WITH selectVdescription.attribute = 2';
-        $this->assertEquals($expectedDql, $qb->getQuery()->getDql());
-
-        // add select attributes and criterias
-        $qb = $this->repository->prepareQueryBuilder($attToSelect, $attCriterias);
-        $expectedDql = 'SELECT Entity, selectVname, selectVdescription '
-            .'FROM Oro\Bundle\FlexibleEntityBundle\Tests\Entity\Demo\Flexible Entity '
-            .'INNER JOIN Entity.values filterVname WITH filterVname.attribute = 1 '
-            .'AND filterVname.varchar = :filtervname AND filterVname.locale = :filterLname '
-            .'INNER JOIN Entity.values filterVdescription WITH filterVdescription.attribute = 2 '
-            .'AND filterVdescription.text = :filtervdescription AND filterVdescription.locale = :filterLdescription '
-            .'AND filterVdescription.scope = :filterSdescription '
-            .'LEFT JOIN Entity.values selectVname WITH selectVname.attribute = 1 '
-            .'LEFT JOIN Entity.values selectVdescription WITH selectVdescription.attribute = 2 '
-            .'WHERE Entity.id = :id';
-        $this->assertEquals($expectedDql, $qb->getQuery()->getDql());
-
-        // add select attributes and order ny
-        $qb = $this->repository->prepareQueryBuilder($attToSelect, null, $attOrderBy);
-        $expectedDql = 'SELECT Entity, selectVname, selectVdescription '
-            .'FROM Oro\Bundle\FlexibleEntityBundle\Tests\Entity\Demo\Flexible Entity '
-            .'LEFT JOIN Entity.values selectVname WITH selectVname.attribute = 1 '
-            .'LEFT JOIN Entity.values selectVdescription WITH selectVdescription.attribute = 2 '
-            .'AND selectVdescription.locale = :selectLdescription AND selectVdescription.scope = :selectSdescription '
-            .'ORDER BY selectVdescription.text desc, Entity.id asc';
+            .' LEFT JOIN MyFlexible.values Value LEFT JOIN Value.attribute Attribute'
+            .' LEFT JOIN Value.options ValueOption LEFT JOIN ValueOption.optionValues AttributeOptionValue';
         $this->assertEquals($expectedDql, $qb->getQuery()->getDql());
     }
 }
