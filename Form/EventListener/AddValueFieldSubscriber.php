@@ -1,12 +1,6 @@
 <?php
 namespace Oro\Bundle\FlexibleEntityBundle\Form\EventListener;
 
-use Oro\Bundle\FlexibleEntityBundle\Form\DataTransformer\FileToTextTransformer;
-
-use Oro\Bundle\FlexibleEntityBundle\Entity\AttributeOption;
-
-use Oro\Bundle\FlexibleEntityBundle\Entity\Attribute;
-
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
