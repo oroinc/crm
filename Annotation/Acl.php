@@ -40,7 +40,11 @@ class Acl
 
     public function __construct(array $data)
     {
-        $this->setId($data['id']);
+        $aclId = $data['id'];
+        if (preg_match('/\s/', $aclId) > 0) {
+            throw new \RuntimeException('ACL Id can\'t contain blank spaces');
+        }
+        $this->setId($aclId);
         $this->setName($data['name']);
         $this->setDescription($data['description']);
         if (isset($data['parent'])) {
