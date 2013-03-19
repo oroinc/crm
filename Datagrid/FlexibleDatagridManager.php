@@ -70,7 +70,7 @@ abstract class FlexibleDatagridManager extends DatagridManager
     /**
      * @return Attribute[]
      */
-    protected function getFlexibleAttributes()
+    public function getFlexibleAttributes()
     {
         if (null === $this->attributes) {
             /** @var $attributeRepository \Doctrine\Common\Persistence\ObjectRepository */
@@ -88,7 +88,7 @@ abstract class FlexibleDatagridManager extends DatagridManager
      * @return string
      * @throws \LogicException
      */
-    protected function convertFlexibleTypeToFieldType($flexibleFieldType)
+    public function convertFlexibleTypeToFieldType($flexibleFieldType)
     {
         if (!isset(self::$typeMatches[$flexibleFieldType]['field'])) {
             throw new \LogicException('Unknown flexible backend field type.');
@@ -102,10 +102,10 @@ abstract class FlexibleDatagridManager extends DatagridManager
      * @return string
      * @throws \LogicException
      */
-    protected function convertFlexibleTypeToFilterType($flexibleFieldType)
+    public function convertFlexibleTypeToFilterType($flexibleFieldType)
     {
         if (!isset(self::$typeMatches[$flexibleFieldType]['filter'])) {
-            throw new \LogicException('Unknown flexible backend field type.');
+            throw new \LogicException('Unknown flexible backend filter type.');
         }
 
         return self::$typeMatches[$flexibleFieldType]['filter'];
