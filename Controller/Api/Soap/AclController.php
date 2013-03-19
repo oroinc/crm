@@ -7,6 +7,18 @@ use Symfony\Component\DependencyInjection\ContainerAware;
 
 class AclController extends ContainerAware
 {
+
+    /**
+     * Get ACL Resources
+     *
+     * @Soap\Method("getAclIds")
+     * @Soap\Result(phpType = "string[]")
+     */
+    public function cgetAction()
+    {
+        return $this->container->get('oro_user.acl_manager')->getAclResources(false);
+    }
+
     /**
      * @Soap\Method("getAcl")
      * @Soap\Param("id", phpType = "string")

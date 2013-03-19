@@ -100,10 +100,25 @@ class Manager implements ManagerInterface
     }
 
     /**
+     * Get ACL Resources list
+     *
+     * @param bool $useObjects Use objects or plain ids in response
+     * @return \Oro\Bundle\UserBundle\Entity\Acl[]|array
+     */
+    public function getAclResources($useObjects = true)
+    {
+        if ($useObjects) {
+            return $this->getAclRepo()->findAll();
+        }
+
+        return $this->getAclRepo()->getAclResourcesIds();
+    }
+
+    /**
      * Get list of allowed ACL resources for roles array
      *
      * @param \Oro\Bundle\UserBundle\Entity\Role[] $roles
-     * @param bool  $useObjects
+     * @param bool                                 $useObjects
      *
      * @return array|\Oro\Bundle\UserBundle\Entity\Acl[]
      */
@@ -283,7 +298,7 @@ class Manager implements ManagerInterface
      */
     public function synchronizeAclResources()
     {
-        $resources = $this->getAclResources();
+        $resources = $this->getAclResourcesFromConfig();
         $bdResources = $this->getAclRepo()->findAll();
 
         // update old resources
@@ -492,7 +507,7 @@ class Manager implements ManagerInterface
      *
      * @return \Oro\Bundle\UserBundle\Annotation\Acl[]
      */
-    private function getAclResources()
+    private function getAclResourcesFromConfig()
     {
         $resourcesFromAnnotations = $this->aclReader->getResources();
         $resourcesFromConfigs = $this->configReader->getConfigResources();

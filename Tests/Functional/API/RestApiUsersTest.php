@@ -19,18 +19,12 @@ class RestApiUsersTest extends WebTestCase
      */
     public function testApiCreateUser()
     {
-        // Stop here and mark this test as incomplete.
-        $this->markTestIncomplete(
-            'This test has not been implemented yet.'
-        );
-
         $request = array(
-            "user" => array (
-                "username" => 'user_123',
-                "email" => 'test@test.com',
-                "enabled" => '1',
-                "password" => '1231231q',
-                "roles" => array (1)
+            "profile" => array (
+                "username" => 'user_' . mt_rand(),
+                "email" => 'test_'  . mt_rand() . '@test.com',
+                "enabled" => 'true',
+                "plainPassword" => '1231231q',
             )
         );
         $this->client->request('POST', '/api/rest/latest/profile', $request);
@@ -42,24 +36,31 @@ class RestApiUsersTest extends WebTestCase
 
     /**
      * @depends testApiCreateUser
-     * @param string $request
+     * @param  string $request
      * @return int
      */
     public function testApiUpdateUser($request)
     {
-        $request['username'] .= '_Updated';
         //get user id
-        $userId = self::$client->getUserByName($request['name']);
+        $this->client->request('GET', '/api/rest/latest/profiles?limit=100');
+        $result = $this->client->getResponse();
+        $this->assertJsonResponse($result, 200);
+        $result = json_decode($result->getContent(), true);
+        $userId = $this->assertEqualsUser($request, $result);
+        //update profile
+        $request['profile']['username'] .= '_Updated';
+        unset($request['profile']['plainPassword']);
         $this->client->request('PUT', '/api/rest/latest/profiles' . '/' . $userId, $request);
         $result = $this->client->getResponse();
-        $this->assertJsonResponse($result, 302);
-
+        $this->assertJsonResponse($result, 204);
+        //open user by id
         $this->client->request('GET', '/api/rest/latest/profiles' . '/' . $userId);
+        $result = $this->client->getResponse();
         $this->assertJsonResponse($result, 200);
 
         $result = json_decode($result->getContent(), true);
         //compare result
-        $this->assertEqualsResponse($request, $result);
+        $this->assertEquals($request['profile']['username'], $result['username']);
 
         return $userId;
     }
@@ -70,24 +71,19 @@ class RestApiUsersTest extends WebTestCase
      */
     public function testApiDeleteUser($userId)
     {
-        // Stop here and mark this test as incomplete.
-        $this->markTestIncomplete(
-            'This test has not been implemented yet.'
-        );
-
         $this->client->request('DELETE', '/api/rest/latest/profiles' . '/' . $userId);
         $result = $this->client->getResponse();
         $this->assertJsonResponse($result, 204);
         $this->client->request('GET', '/api/rest/latest/profiles' . '/' . $userId);
         $result = $this->client->getResponse();
-        $this->assertEmpty($result);
+        $this->assertJsonResponse($result, 404);
     }
 
     /**
      * Test API response status
      *
      * @param string $response
-     * @param int $statusCode
+     * @param int    $statusCode
      */
     protected function assertJsonResponse($response, $statusCode = 201)
     {
@@ -99,22 +95,25 @@ class RestApiUsersTest extends WebTestCase
     }
 
     /**
-     * Check created role
+     * Check created user
      *
+     * @return int
      * @param array $result
      * @param array $request
      */
-    protected function assertEqualsResponse($request, $result)
+    protected function assertEqualsUser($request, $result)
     {
         $flag = 1;
         foreach ($result as $key => $object) {
-            foreach ($request as $role) {
-                if ($role['username'] == $result[$key]['username']) {
+            foreach ($request as $user) {
+                if ($user['username'] == $result[$key]['username']) {
                     $flag = 0;
+                    $userId = $result[$key]['id'];
                     break 2;
                 }
             }
         }
         $this->assertEquals(0, $flag);
+        return $userId;
     }
 }
