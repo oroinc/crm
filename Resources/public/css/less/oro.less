@@ -1368,6 +1368,9 @@ footer{
   margin: 0 0 20px;
 }
 .grid{
+  .action-cell{
+    vertical-align: bottom;
+  }
   thead th{
     background-color: #eee;
     padding: 5px 10px;
@@ -1623,4 +1626,25 @@ footer{
 .one-row input[type="radio"],
 .one-row input[type="checkbox"]{
   margin-top: 8px !important;
+}
+.grid .dropdown-menu{
+  padding: 5px 0 0;
+}
+.grid .dropdown-menu > li{
+  margin: 0;
+}
+.modal{
+  top: 40%;
+}
+.modal .modal-header{
+  #gradient > .vertical(#fefefe, #f0f0f0);
+}
+.modal-header .close{
+  font-size: 25px;
+}
+.dropup:after,
+.dropdown:after{
+  content: "";
+  clear: both;
+  display: block;
 }
