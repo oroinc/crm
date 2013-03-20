@@ -10,7 +10,7 @@
 {% block content %}
 
     <div class="row-fluid">
-        <div class="container-fluid" style="min-height: 800px; background-color:#d0def1;" id="window-container">
+        <div class="container-fluid" style="min-height: 900px; background-color:#d0def1;" id="window-container">
             <button type="button" id="my-button" class="btn btn-large btn-primary">Open more windows</button>
             <hr />
             <div class="btn-toolbar">
@@ -130,11 +130,13 @@
                 }
             }
             var isOpen;
+            var pos = 0;
             $("#my-button").click(function(){
                 var offsetwindow = newPositionWindow();
+                pos++;
                 var dialogOptions = {
                     appendTo: '#main .row-fluid',
-                    title : "dialog window",
+                    title : "dialog window title long long long " + pos,
                     width : 400,
                     height : 400,
                     position: {
@@ -145,7 +147,8 @@
                     "close" : function(){ $(this).dialog( "destroy" ) }
                 };
                 var dialogExtendOptions = {
-                    minimizeTo: $('.pin-bar'),
+                    //minimizeTo: $('.pin-bar'),
+                    maximizedHeightDecreaseBy: 'minimize-bar',
                     "maximize" : true,
                     "minimize" : true,
                     "dblclick": "maximize"

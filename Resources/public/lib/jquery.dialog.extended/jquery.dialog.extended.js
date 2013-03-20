@@ -2,12 +2,13 @@
  * jQuery DialogExtend 1.0
  *
  * Copyright (c) 2010 Shum Ting Hin
+ * 2012 Oro Inc
  *
  * Licensed under MIT
  *   http:// www.opensource.org/licenses/mit-license.php
  *
  * Project Home:
- *   http:// code.google.com/p/jquery-dialogextend/
+ *   http://code.google.com/p/jquery-dialogextend/
  *
  * Depends:
  *   jQuery 1.7.2
@@ -18,8 +19,8 @@
 
     // default settings
     var defaults = {
-        minimizedWidth: 200,
         minimizeTo: false,
+        maximizedHeightDecreaseBy: false,
         close: true,
         maximize: false,
         minimize: false,
@@ -44,7 +45,7 @@
         }
     };
 
-    var settings;
+    var settings = {};
 
     var methods = {
 
@@ -69,15 +70,13 @@
             // initiate plugin...
             $(self).each(function () {
                 $(this)
-                    // do bunch of things...
                     .dialogExtend("_verifySettings")
                     .dialogExtend("_initEvents")
-                    .dialogExtend("_initStyles")
                     .dialogExtend("_initButtons")
                     .dialogExtend("_initTitleBar")
                     // set default dialog state
                     .dialogExtend("_setState", "normal")
-                    // trigger custom event when done
+                    .dialogExtend("_initBottomLine")
                     .dialogExtend("_trigger", "load");
             });
 
@@ -89,15 +88,56 @@
             };
             $(window).resize(onResize);
 
-            if (!settings.minimizeTo) {
-                self.dialogExtend("_initializeMinimizeContainer");
-            }
-
             return self;
         },
 
         state: function () {
             return $(this).data("dialog-extend-state");
+        },
+
+        minimize: function () {
+            var self = $(this);
+            var widget = self.dialog('widget');
+
+            self
+                .dialogExtend("_trigger", "beforeMinimize")
+                .dialogExtend("_saveSnapshot")
+                .dialogExtend("_setState", "minimized")
+                .dialogExtend("_toggleButtons")
+                .dialogExtend("_trigger", "minimize");
+            widget.hide();
+
+            self.dialogExtend("_getMinimizeTo").show();
+
+            // Make copy of widget to disable dialog events
+            var minimizedEl = self.dialog("widget").clone();
+            minimizedEl.find('.ui-dialog-content').remove();
+            minimizedEl.find('.ui-resizable-handle').remove();
+            // Add title attribute to be able to view full window title
+            var title = minimizedEl.find('.ui-dialog-title');
+            title.attr('title', title.text());
+            minimizedEl.find('.ui-dialog-titlebar').dblclick(function() {
+                minimizedEl.remove();
+                widget.show();
+                widget.find('.ui-dialog-titlebar').dblclick();
+            });
+            // Proxy events to original window
+            var buttons = ['close', 'maximize', 'restore'];
+            for (var i = 0; i < buttons.length; i++) {
+                var btnClass = '.ui-dialog-titlebar-' + buttons[i];
+                minimizedEl.find(btnClass).click(
+                    function(btnClass) {
+                        return function() {
+                            minimizedEl.remove();
+                            widget.show();
+                            widget.find(btnClass).click();
+                        }
+                    }(btnClass));
+            }
+            minimizedEl.show();
+            minimizedEl.appendTo($(this).dialogExtend("_getMinimizeTo"));
+
+            return self;
         },
 
         collapse: function () {
@@ -145,76 +185,6 @@
             return this;
         },
 
-        _initializeMinimizeContainer: function() {
-            settings.minimizeTo = $('<div id="dialog-extend-fixed-container"></div>')
-                .css({
-                    position: "fixed",
-                    bottom: 1,
-                    left: settings.appendTo.offset().left,
-                    zIndex: 9999
-                })
-                .hide()
-                .appendTo(document.body);
-        },
-
-        _calculateNewMaximizedDimensions: function() {
-            var newHeight = settings.appendTo.height();
-            var newWidth = settings.appendTo.width();
-            var parentOffset = settings.appendTo.offset();
-            $(this).dialog("option", {
-                resizable: false,
-                draggable : false,
-                height: newHeight,
-                width: newWidth,
-                position: [parentOffset.left, parentOffset.top]
-            });
-            return this;
-        },
-
-        minimize: function () {
-            var self = $(this);
-            var newHeight = self.dialogExtend('_getTitleBarHeight');
-            var newWidth = settings.minimizedWidth;
-
-            var widget = self.dialog("widget");
-            self
-                .dialogExtend("_trigger", "beforeMinimize")
-                .dialogExtend("_saveSnapshot")
-                .dialog("option", {
-                    resizable: false,
-                    draggable: false,
-                    height: newHeight,
-                    width: newWidth
-                })
-                // mark new state
-                .dialogExtend("_setState", "minimized")
-                // modify dialog button according to new state
-                .dialogExtend("_toggleButtons")
-                // trigger custom event
-                .dialogExtend("_trigger", "minimize");
-
-            // avoid title text overlap buttons
-            widget
-                .find(".ui-dialog-titlebar").each(function () {
-                    var titlebar = this;
-                    var buttonPane = $(this).find(".ui-dialog-titlebar-buttonpane");
-                    var titleText = $(this).find(".ui-dialog-title");
-                    $(titleText).css({
-                        overflow: 'hidden',
-                        width: $(titlebar).width() - $(buttonPane).width() + 10
-                    });
-                });
-
-            settings.minimizeTo.show();
-            widget.appendTo(settings.minimizeTo);
-
-            return self;
-        },
-
-        _getTitleBarHeight: function() {
-            return $(this).dialog("widget").find(".ui-dialog-titlebar").height() + 15
-        },
-
         restore: function () {
             var self = $(this);
             self
@@ -229,10 +199,83 @@
             return self;
         },
 
-        _initButtons: function () {
-            var self = this;
+        _initBottomLine: function() {
+            settings.bottomLine = $('#dialog-extend-parent-bottom');
+            if (!settings.bottomLine.length) {
+                settings.bottomLine = $('<div id="dialog-extend-parent-bottom"></div>');
+                settings.bottomLine.css({
+                    position: "fixed",
+                    bottom: 0,
+                    left: 0
+                })
+                .appendTo(document.body);
+            }
+            return this;
+        },
+
+        _initializeMinimizeContainer: function() {
+            settings.minimizeTo = $('#dialog-extend-fixed-container');
+            if (!settings.minimizeTo.length) {
+                settings.minimizeTo = $('<div id="dialog-extend-fixed-container"></div>');
+                settings.minimizeTo
+                    .css({
+                        position: "fixed",
+                        bottom: 1,
+                        left: settings.appendTo.offset().left,
+                        zIndex: 9999
+                    })
+                    .hide()
+                    .appendTo(settings.appendTo);
+            }
+        },
+
+        _getMinimizeTo: function() {
+            if (settings.minimizeTo === false) {
+                this.dialogExtend("_initializeMinimizeContainer");
+            }
+            return $(settings.minimizeTo);
+        },
+
+        _calculateNewMaximizedDimensions: function() {
+            var newHeight = $(this).dialogExtend("_getContainerHeight");
+            var newWidth = settings.appendTo.width();
+            var parentOffset = settings.appendTo.offset();
+            $(this).dialog("option", {
+                resizable: false,
+                draggable : false,
+                height: newHeight,
+                width: newWidth,
+                position: [parentOffset.left, parentOffset.top]
+            });
+            return this;
+        },
+
+        _getTitleBarHeight: function() {
+            return $(this).dialog("widget").find(".ui-dialog-titlebar").height() + 15
+        },
+
+        _getContainerHeight: function() {
+            var heightDelta = 0;
+            if (settings.maximizedHeightDecreaseBy) {
+                if ($.isNumeric(settings.maximizedHeightDecreaseBy)) {
+                    heightDelta = settings.maximizedHeightDecreaseBy;
+                } else if (settings.maximizedHeightDecreaseBy === 'minimize-bar') {
+                    heightDelta = $(this).dialogExtend("_getMinimizeTo").height();
+                } else {
+                    heightDelta = $(settings.maximizedHeightDecreaseBy).height();
+                }
+            }
+
+            return settings.bottomLine.offset().top - settings.appendTo.offset().top - heightDelta - 2;
+        },
+
+        _initButtons: function (el) {
+            var self = $(this);
+            if (typeof el == 'undefined') {
+                el = self;
+            }
             // start operation on titlebar
-            var titlebar = $(self).dialog("widget").find(".ui-dialog-titlebar");
+            var titlebar = el.dialog("widget").find(".ui-dialog-titlebar");
             // create container for buttons
             var buttonPane = $('<div class="ui-dialog-titlebar-buttonpane"></div>').appendTo(titlebar);
             $(buttonPane).css({
@@ -335,33 +378,6 @@
             return self;
         },
 
-        _initStyles: function () {
-            var self = this;
-            // append styles for this plugin to body
-            if (!$(".dialog-extend-css").length) {
-                var style = '';
-                style += '<style class="dialog-extend-css" type="text/css">';
-                style += '.ui-dialog .ui-dialog-titlebar-buttonpane>a { float: right; }';
-                style += '.ui-dialog .ui-dialog-titlebar-maximize,';
-                style += '.ui-dialog .ui-dialog-titlebar-minimize,';
-                style += '.ui-dialog .ui-dialog-titlebar-restore { width: 19px; padding: 1px; height: 18px; }';
-                style += '.ui-dialog .ui-dialog-titlebar-maximize span,';
-                style += '.ui-dialog .ui-dialog-titlebar-minimize span,';
-                style += '.ui-dialog .ui-dialog-titlebar-restore span { display: block; margin: 1px; }';
-                style += '.ui-dialog .ui-dialog-titlebar-maximize:hover,';
-                style += '.ui-dialog .ui-dialog-titlebar-maximize:focus,';
-                style += '.ui-dialog .ui-dialog-titlebar-minimize:hover,';
-                style += '.ui-dialog .ui-dialog-titlebar-minimize:focus,';
-                style += '.ui-dialog .ui-dialog-titlebar-restore:hover,';
-                style += '.ui-dialog .ui-dialog-titlebar-restore:focus { padding: 0; }';
-                style += '.ui-dialog .ui-dialog-titlebar ::selection { background-color: transparent; }';
-                style += '</style>';
-                $(style).appendTo("body");
-            }
-            
-            return self;
-        },
-
         _initTitleBar: function () {
             var self = this;
             // modify title bar
@@ -447,24 +463,31 @@
         _restoreFromMinimized: function () {
             var self = $(this);
             var original = $(this).dialogExtend("_loadSnapshot");
-            // restore dialog
-            self.dialog("widget").appendTo(settings.appendTo);
-                // restore config & size
-            self.dialog("option", {
-                    resizable: original.config.resizable,
-                    draggable: original.config.draggable,
-                    height: original.size.height - self.dialogExtend('_getTitleBarHeight') - 3,
-                    width: original.size.width,
-                    maxHeight: original.size.maxHeight
-                })
+
             // restore position *AFTER* size restored
             self.dialog('widget').css({
                 position: 'fixed',
-                left: original.position.left,
-                top: original.position.top
+                left: self.dialogExtend('_getVisibleLeft', original.position.left, original.size.width),
+                top: self.dialogExtend('_getVisibleTop', original.position.top, original.size.height)
             });
 
             return self;
+        },
+
+        _getVisibleLeft: function(left, width) {
+            var containerWidth = settings.appendTo.width();
+            if (left + width > containerWidth) {
+                return containerWidth - width;
+            }
+            return left;
+        },
+
+        _getVisibleTop: function(top, height) {
+            var visibleTop = settings.bottomLine.offset().top
+            if (top + height > visibleTop) {
+                return visibleTop - height;
+            }
+            return top;
         },
 
         _restoreWithoutTriggerEvent: function () {
@@ -539,26 +562,17 @@
         },
 
         _verifySettings: function () {
-            var self = this;
-            // check <dblclick> option
-            if (!settings.dblclick) {
-            } else if (settings.dblclick == "maximize") {
-            } else if (settings.dblclick == "minimize") {
-            } else if (settings.dblclick == "collapse") {
-            } else {
-                $.error("jQuery.dialogExtend Error : Invalid <dblclick> value '" + settings.dblclick + "'");
-                settings.dblclick = false;
-            }
-            // check <titlebar> option
-            if (!settings.titlebar) {
-            } else if (settings.titlebar == "none") {
-            } else if (settings.titlebar == "transparent") {
-            } else {
-                $.error("jQuery.dialogExtend Error : Invalid <titlebar> value '" + settings.titlebar + "'");
-                settings.titlebar = false;
-            }
+            var checkOption = function(option, options) {
+                if (settings[option] && options.indexOf(settings[option]) == -1) {
+                    $.error("jQuery.dialogExtend Error : Invalid <" + option + "> value '" + settings[option] + "'");
+                    settings[option] = false;
+                }
+            };
+
+            checkOption('dblclick', ["maximize", "minimize", "collapse"]);
+            checkOption('titlebar', ["transparent"]);
             
-            return self;
+            return this;
         }
 
     };
