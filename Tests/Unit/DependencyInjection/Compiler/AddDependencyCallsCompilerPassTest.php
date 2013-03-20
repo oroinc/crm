@@ -42,6 +42,8 @@ class AddDependencyCallsCompilerPassTest extends AbstractCompilerPassTest
     }
 
     /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     *
      * @return array
      */
     public function processDataProvider()
@@ -257,6 +259,8 @@ class AddDependencyCallsCompilerPassTest extends AbstractCompilerPassTest
     }
 
     /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     *
      * @return array
      */
     public function processErrorDataProvider()

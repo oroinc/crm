@@ -1,4 +1,5 @@
 <?php
+
 namespace Oro\Bundle\GridBundle\Tests\Unit\DependencyInjection;
 
 use Oro\Bundle\GridBundle\DependencyInjection\Configuration;

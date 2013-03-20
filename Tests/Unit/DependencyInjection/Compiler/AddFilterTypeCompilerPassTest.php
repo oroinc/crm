@@ -41,6 +41,8 @@ class AddFilterTypeCompilerPassTest extends AbstractCompilerPassTest
     }
 
     /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     *
      * @return array
      */
     public function processDataProvider()
