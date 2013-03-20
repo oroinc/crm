@@ -213,7 +213,7 @@ class FieldDescription implements FieldDescriptionInterface
      */
     public function isIdentifier()
     {
-        return array_key_exists('id', $this->fieldMapping);
+        return isset($this->fieldMapping['id']);
     }
 
     /**
