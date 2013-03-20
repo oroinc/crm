@@ -103,7 +103,6 @@ class FieldDescriptionCollection implements \ArrayAccess, \Countable, \IteratorA
      */
     public function reorder(array $keys)
     {
-        array_unshift($keys, 'batch');
         $this->elements = array_merge(array_flip($keys), $this->elements);
     }
 

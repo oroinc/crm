@@ -213,7 +213,7 @@ class FieldDescription implements FieldDescriptionInterface
      */
     public function isIdentifier()
     {
-        return isset($this->fieldMapping['id']) ? $this->fieldMapping['id'] : false;
+        return array_key_exists('id', $this->fieldMapping);
     }
 
     /**
@@ -226,7 +226,7 @@ class FieldDescription implements FieldDescriptionInterface
         }
 
         if (!is_array($this->options[$name])) {
-            throw new \RuntimeException(sprintf('The key `%s` does not point to an array value', $name));
+            throw new \RuntimeException(sprintf('The key "%s" does not point to an array value', $name));
         }
 
         $this->options[$name] = array_merge($this->options[$name], $options);
@@ -275,6 +275,14 @@ class FieldDescription implements FieldDescriptionInterface
     /**
      * {@inheritdoc}
      */
+    public function isFilterable()
+    {
+        return $this->getOption('filterable', false);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getSortFieldMapping()
     {
         return $this->getOption('sort_field_mapping');
@@ -311,7 +319,7 @@ class FieldDescription implements FieldDescriptionInterface
             return $this->convertFieldValue($object->{$fieldName});
         }
 
-        throw new \LogicException(sprintf('Unable to retrieve the value of `%s`', $this->getName()));
+        throw new \LogicException(sprintf('Unable to retrieve the value of "%s"', $this->getName()));
     }
 
     /**
@@ -323,7 +331,8 @@ class FieldDescription implements FieldDescriptionInterface
         if (null === $value) {
             return $value;
         }
-        switch ($this->getOption('type')) {
+        $valueType = $this->getType() ?: $this->getOption('type');
+        switch ($valueType) {
             case AbstractAttributeType::BACKEND_TYPE_DECIMAL:
                 return floatval($value);
                 break;

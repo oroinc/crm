@@ -210,10 +210,15 @@ interface FieldDescriptionInterface
      */
     public function getLabel();
 
-    /*
+    /**
      * @return boolean
      */
     public function isSortable();
+
+    /**
+     * @return boolean
+     */
+    public function isFilterable();
 
     /**
      * return the field mapping definition used when sorting
@@ -221,7 +226,6 @@ interface FieldDescriptionInterface
      * @return array the field mapping definition
      */
     public function getSortFieldMapping();
-
 
     /**
      *

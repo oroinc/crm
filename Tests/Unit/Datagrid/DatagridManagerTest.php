@@ -178,7 +178,7 @@ class DatagridManagerTest extends \PHPUnit_Framework_TestCase
             $filterableFields = array();
             /** @var $fieldDescription FieldDescription */
             foreach ($this->testFields as $fieldDescription) {
-                if ($fieldDescription->getOption('filterable')) {
+                if ($fieldDescription->isFilterable()) {
                     $filterableFields[] = $fieldDescription;
                 }
             }
@@ -186,7 +186,7 @@ class DatagridManagerTest extends \PHPUnit_Framework_TestCase
             $sortableFields = array();
             /** @var $fieldDescription FieldDescription */
             foreach ($this->testFields as $fieldDescription) {
-                if ($fieldDescription->getOption('sortable')) {
+                if ($fieldDescription->isSortable()) {
                     $sortableFields[] = $fieldDescription;
                 }
             }
