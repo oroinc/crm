@@ -329,8 +329,8 @@ class FlexibleEntityRepository extends EntityRepository implements TranslatableI
      */
     public function findWithAttributes($id)
     {
-        $products = $this->findByWithAttributes(array(), array('id' => $id));
+        $flexibles = $this->findByWithAttributes(array(), array('id' => $id));
 
-        return current($products);
+        return current($flexibles);
     }
 }
