@@ -1371,9 +1371,6 @@ footer{
   margin: 0 0 20px;
 }
 .grid{
-  .action-cell{
-    vertical-align: bottom;
-  }
   thead th{
     background-color: #eee;
     padding: 5px 10px;
@@ -1470,11 +1467,6 @@ footer{
   font-size: 20px;
   float: left;
   padding: 0;
-}
-.more-bar-holder .dropdown-toggle:hover,
-.more-bar-holder .dropdown-toggle:focus{
-  border: 0;
-  text-decoration: none;
 }
 .more-bar-holder .dropdown-toggle:hover{
   text-decoration: none;
@@ -1635,27 +1627,60 @@ footer{
 .one-row input[type="checkbox"]{
   margin-top: 8px !important;
 }
-.grid .dropdown-menu{
-  padding: 5px 0 0;
+.ui-dialog{
+  background-color: #fff;
+  .ui-dialog-titlebar{
+    border-bottom: 1px solid #000;
+    background-color: #47505a;
+    #gradient > .vertical(#47505a, #363e47);
+    padding: 6px 15px;
+  }
+  .ui-dialog-title{
+    color: #fff;
+    font-size: 14px;
+    display: block;
+    text-overflow: ellipsis;
+  }
+  .ui-dialog-titlebar-buttonpane .ui-dialog-titlebar-close{
+    background: url("../../img/general-sprite.png") no-repeat 0 -203px;
+    width: 25px;
+    height: 23px;
+    margin: 0 !important;
+  }
+  .ui-dialog-titlebar-buttonpane .ui-dialog-titlebar-maximize{
+    background: url("../../img/general-sprite.png") no-repeat 0 -226px;
+    width: 25px;
+    height: 23px;
+    margin: 0;
+  }
+  .ui-dialog-titlebar-buttonpane .ui-dialog-titlebar-minimize{
+    background: url("../../img/general-sprite.png") no-repeat 0 -272px;
+    width: 25px;
+    height: 23px;
+    margin: 0;
+  }
+  .ui-dialog-titlebar-buttonpane .ui-dialog-titlebar-restore{
+    background: url("../../img/general-sprite.png") no-repeat 0 -249px;
+    width: 25px;
+    height: 23px;
+    margin: 0;
+  }
+  .ui-dialog-titlebar-buttonpane{
+    right: 7px !important;
+    top: 5px !important;
+    margin: 0 !important;
+  }
+  .form-horizontal .control-label{
+    width: 100px;
+  }
+  .form-horizontal .controls{
+    margin-left: 115px;
+  }
+  .bottom-action{
+    padding: 10px;
+    overflow: hidden;
+    border-top: 1px solid #dfdfdf;
+    background: #fafafa;
+  }
 
-}
-.grid .dropdown-menu > li{
-  margin: 0;
-}
-.modal{
-  top: 40%;
-}
-.modal .modal-header{
-  #gradient > .vertical(#fefefe, #f0f0f0);
-  -webkit-border-radius: 6px 6px 0 0;
-  border-radius: 6px 6px 0 0;
-}
-.modal-header .close{
-  font-size: 25px;
-}
-.dropup:after,
-.dropdown:after{
-  content: "";
-  clear: both;
-  display: block;
 }
