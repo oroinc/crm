@@ -35,6 +35,15 @@ interface ManagerInterface
     public function modifyAclForRole($roleId, $aclId, $isAdd = true);
 
     /**
+     * Add/Remove Acl resources for Role
+     *
+     * @param int   $roleId Role id
+     * @param array $aclIds ACL Resource IDs
+     * @param bool  $isAdd  true if add, false if delete
+     */
+    public function modifyAclsForRole($roleId, array $aclIds, $isAdd = true);
+
+    /**
      * Search Acl resource by id
      *
      * @param  string                            $id ACL Resource ID
@@ -45,7 +54,7 @@ interface ManagerInterface
     /**
      * Get ACL Resources list
      *
-     * @param bool $useObjects Use objects or plain ids in response
+     * @param  bool                                      $useObjects Use objects or plain ids in response
      * @return \Oro\Bundle\UserBundle\Entity\Acl[]|array
      */
     public function getAclResources($useObjects = true);

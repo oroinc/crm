@@ -64,18 +64,31 @@ class Manager implements ManagerInterface
      */
     public function modifyAclForRole($roleId, $aclId, $isAdd = true)
     {
+        /** @var $role \Oro\Bundle\UserBundle\Entity\Role */
         $role = $this->em->getRepository('OroUserBundle:Role')->find($roleId);
-
         /** @var $aclResource \Oro\Bundle\UserBundle\Entity\Acl */
         $aclResource = $this->getAclRepo()->find($aclId);
         if ($aclResource && $role) {
             if ($isAdd) {
                 if (!$aclResource->getAccessRoles()->contains($role)) {
+                    $role->addAclResource($aclResource);
                     $aclResource->addAccessRole($role);
 
                     if ($aclResource->getParent() && $aclResource->getParent()->getId() !== 'root') {
                         $this->clearParentsAcl($aclResource->getParent(), $role);
                     }
+
+                    foreach ($role->getAclResources() as $resource) {
+                        if ($resource->getId() == Acl::ROOT_NODE) {
+                            $rootNode = $resource;
+                            foreach ($role->getAclResources() as $resources) {
+                                $resources->removeAccessRole($role);
+                            }
+                            $rootNode->addAccessRole($role);
+
+                        }
+                    }
+
                     $this->em->persist($aclResource);
                     $this->em->flush();
                 }
@@ -84,6 +97,20 @@ class Manager implements ManagerInterface
                 $this->em->persist($aclResource);
                 $this->em->flush();
             }
+        }
+    }
+
+    /**
+     * Add/Remove Acl resources for Role
+     *
+     * @param int   $roleId Role id
+     * @param array $aclIds ACL Resource IDs
+     * @param bool  $isAdd  true if add, false if delete
+     */
+    public function modifyAclsForRole($roleId, array $aclIds, $isAdd = true)
+    {
+        foreach ($aclIds as $aclId) {
+            $this->modifyAclForRole($roleId, $aclId, $isAdd);
         }
     }
 
@@ -102,7 +129,7 @@ class Manager implements ManagerInterface
     /**
      * Get ACL Resources list
      *
-     * @param bool $useObjects Use objects or plain ids in response
+     * @param  bool                                      $useObjects Use objects or plain ids in response
      * @return \Oro\Bundle\UserBundle\Entity\Acl[]|array
      */
     public function getAclResources($useObjects = true)

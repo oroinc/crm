@@ -30,13 +30,18 @@ class AclRepository extends NestedTreeRepository
 
         $qb->where('acl.rgt > :left_key')
             ->andWhere('acl.lft < :right_key')
+            ->andWhere('acl.id != :rootNode')
+            ->setParameter('rootNode', Acl::ROOT_NODE)
             ->orderBy('acl.lft');
 
         foreach ($roles as $role) {
             $aclList = $role->getAclResources();
             if (count($aclList)) {
-
                 foreach ($aclList as $acl) {
+                    $rootAcl = false;
+                    if ($acl->getId() == Acl::ROOT_NODE) {
+                        $rootAcl = $acl;
+                    }
                     $query = $qb->setParameter('left_key', $acl->getLft())
                         ->setParameter('right_key', $acl->getRgt())
                         ->getQuery();
@@ -59,6 +64,11 @@ class AclRepository extends NestedTreeRepository
                         ),
                         $useObjects
                     );
+
+                    if ($rootAcl) {
+                        $root = $useObjects ? $rootAcl : $rootAcl->getId();
+                        $allowedAcl[] = $root;
+                    }
                 }
             }
         }
@@ -170,6 +180,7 @@ class AclRepository extends NestedTreeRepository
         foreach ($aclArray as $aclResult) {
             $acl[] = $aclResult['id'];
         }
+
         return $acl;
     }
 }

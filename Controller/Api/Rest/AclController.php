@@ -6,6 +6,7 @@ use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Controller\Annotations\NamePrefix;
 use FOS\RestBundle\Routing\ClassResourceInterface;
 use FOS\Rest\Util\Codes;
+use FOS\RestBundle\Controller\Annotations\QueryParam;
 
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
@@ -36,6 +37,7 @@ class AclController extends FOSRestController implements ClassResourceInterface
     /**
      * Get ACL Resource data
      *
+     * @QueryParam(name="id", nullable=false, description="ACL Resource id.")
      * @param int $id Group id
      * @ApiDoc(
      *  description="Get Acl resource",
