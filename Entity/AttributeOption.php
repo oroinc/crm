@@ -12,7 +12,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @copyright 2012 Akeneo SAS (http://www.akeneo.com)
  * @license   http://opensource.org/licenses/MIT MIT
  *
- * @ORM\Table(name="oroflexibleentity_attribute_option")
+ * @ORM\Table(name="oro_flexibleentity_attribute_option")
  * @ORM\Entity
  */
 class AttributeOption extends AbstractEntityAttributeOption
