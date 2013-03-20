@@ -6,6 +6,9 @@ use Oro\Bundle\GridBundle\Field\FieldDescription;
 use Oro\Bundle\GridBundle\Tests\Unit\Field\Stub\StubEntity;
 use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttributeType;
 
+/**
+ * @SuppressWarnings(PHPMD.TooManyMethods)
+ */
 class FieldDescriptionTest extends \PHPUnit_Framework_TestCase
 {
     /**
