@@ -1,6 +1,0 @@
-# common test case
-request:
-    role: Role_2
-    label: Role_2
-response:
-    return: true
