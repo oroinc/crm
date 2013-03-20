@@ -33,6 +33,27 @@ class ProfileType extends FlexibleType
                 'label'          => 'E-mail',
                 'required'       => true,
             ))
+            ->add('firstName', 'text', array(
+                'label'          => 'First name',
+                'required'       => false,
+            ))
+            ->add('lastName', 'text', array(
+                'label'          => 'Last name',
+                'required'       => false,
+            ))
+            ->add('middleName', 'text', array(
+                'label'          => 'Middle name',
+                'required'       => false,
+            ))
+            ->add('birthday', 'birthday', array(
+                'label'          => 'Date of birth',
+                'required'       => false,
+                'widget'         => 'single_text',
+            ))
+            ->add('image', 'file', array(
+                'label'          => 'Image',
+                'required'       => false,
+            ))
             ->add('enabled', 'checkbox', array(
                 'required'       => false,
             ))
@@ -46,12 +67,14 @@ class ProfileType extends FlexibleType
                         ->setParameter('anon', User::ROLE_ANONYMOUS);
                 },
                 'multiple'       => true,
+                'expanded'       => true,
                 'required'       => true,
             ))
             ->add('groups', 'entity', array(
                 'class'          => 'OroUserBundle:Group',
                 'property'       => 'name',
                 'multiple'       => true,
+                'expanded'       => true,
                 'required'       => false,
             ))
             ->add('plainPassword', 'repeated', array(
