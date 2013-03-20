@@ -110,11 +110,11 @@ class SegmentManager
     }
 
     /**
-     * Remove a segment from its id
+     * Remove a segment by its id
      *
      * @param integer $segmentId Id of segment to remove
      */
-    public function removeFromId($segmentId)
+    public function removeById($segmentId)
     {
         $repo = $this->getEntityRepository();
         $segment = $repo->find($segmentId);
@@ -255,8 +255,8 @@ class SegmentManager
      */
     public function removeTree(AbstractSegment $rootSegment) {
 
-        $rootSegment = $this->createSegment();
         $rootSegment->setParent(null);
+        $this->getStorageManager()->remove($rootSegment);
     }
 
     /*
@@ -264,7 +264,7 @@ class SegmentManager
      *
      * @param int $rootSegmentId
      */
-    public function removeTreeById(int $rootSegmentId) {
+    public function removeTreeById($rootSegmentId) {
         $repo = $this->getEntityRepository();
         $rootSegment = $repo->find($rootSegmentId);
 

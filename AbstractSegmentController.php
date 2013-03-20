@@ -55,13 +55,14 @@ abstract class AbstractSegmentController extends Controller
      *
      * @Method("GET")
      * @Route("/children")
-     * @Template()
-     *
      */
     public function childrenAction(Request $request)
     {
         if ($request->isXmlHttpRequest()) {
-            $parentId = $request->get('id');
+            $parentId = (int) $request->get('id');
+            if ($parentId <= 0) {
+                throw new \InvalidArgumentException("Missing segment id parameter 'id':".$parentId);
+            }
 
             $segments = $this->getSegmentManager()->getChildren($parentId);
 
@@ -166,12 +167,12 @@ abstract class AbstractSegmentController extends Controller
      *
      * @Method("POST")
      * @Route("/remove-node")
-     * @Template()
      */
     public function removeNodeAction(Request $request)
     {
         if ($request->isXmlHttpRequest()) {
             $this->getSegmentManager()->removeFromId($request->get('id'));
+            $this->getSegmentManager()->getStorageManager()->flush();
 
             $data = JsonSegmentHelper::statusOKResponse();
 
@@ -189,7 +190,6 @@ abstract class AbstractSegmentController extends Controller
      *
      * @Method("POST")
      * @Route("/move-node")
-     * @Template()
      */
     public function moveNodeAction(Request $request)
     {
@@ -211,6 +211,79 @@ abstract class AbstractSegmentController extends Controller
             return $this->redirectToIndex();
         }
     }
+
+    /**
+     * Send trees
+     * @param Request $request
+     *
+     * @return Response
+     *
+     * @Method("GET")
+     * @Route("/trees")
+     */
+    public function treesAction(Request $request)
+    {
+        if ($request->isXmlHttpRequest()) {
+            $trees = $this->getSegmentManager()->getTrees();
+            $data = JsonSegmentHelper::treesResponse($trees);
+
+            return $this->prepareJsonResponse($data);
+
+        } else {
+            return $this->redirectToIndex();
+        }
+    }
+
+    /**
+     * Remove a tree
+     * @param Request $request
+     *
+     * @return Response
+     *
+     * @Method("POST")
+     * @Route("/remove-tree")
+     */
+    public function removeTreeAction(Request $request)
+    {
+        if ($request->isXmlHttpRequest()) {
+            $this->getSegmentManager()->removeTreeById($request->get('id'));
+            $this->getSegmentManager()->getStorageManager()->flush();
+
+            $data = JsonSegmentHelper::statusOKResponse();
+
+            return $this->prepareJsonResponse($data);
+        } else {
+            return $this->redirectToIndex();
+        }
+    }
+
+    /**
+     * Create a new tree
+     * @param Request $request
+     *
+     * @return Response
+     *
+     * @Method("POST")
+     * @Route("/create-tree")
+     */
+    public function createTreeAction(Request $request)
+    {
+        if ($request->isXmlHttpRequest()) {
+            $title = $request->get('title');
+
+            $rootSegment = $this->getSegmentManager()->createTree();
+            $rootSegment->setTitle($title);
+            $this->getSegmentManager()->getStorageManager()->persist($rootSegment);
+            $this->getSegmentManager()->getStorageManager()->flush();
+
+            $data = array('rootId' => $rootSegment->getId());
+
+            return $this->prepareJsonResponse($data);
+        } else {
+            return $this->redirectToIndex();
+        }
+    }
+        
 
     /**
      * Return a response in json content type with well formated data
@@ -243,7 +316,6 @@ abstract class AbstractSegmentController extends Controller
      *
      * @Method("GET")
      * @Route("/list-items")
-     * @Template()
      *
      */
     public function listItemsAction(Request $request)
