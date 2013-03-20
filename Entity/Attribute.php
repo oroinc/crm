@@ -14,7 +14,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * @license   http://opensource.org/licenses/MIT MIT
  *
  * @ORM\Table(
- *     name="oroflexibleentity_attribute", indexes={@ORM\Index(name="searchcode_idx", columns={"code"})},
+ *     name="oro_flexibleentity_attribute", indexes={@ORM\Index(name="searchcode_idx", columns={"code"})},
  *     uniqueConstraints={@ORM\UniqueConstraint(name="searchunique_idx", columns={"code", "entity_type"})}
  * )
  * @ORM\Entity
