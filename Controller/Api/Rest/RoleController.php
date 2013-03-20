@@ -242,7 +242,7 @@ class RoleController extends FOSRestController implements ClassResourceInterface
      */
     public function postAclArrayAction($roleId)
     {
-        $this->container->get('oro_user.acl_manager')->modifyAclArrayForRole(
+        $this->container->get('oro_user.acl_manager')->modifyAclsForRole(
             $roleId,
             $this->getRequest()->request->get('aclResources'),
             true
@@ -266,7 +266,7 @@ class RoleController extends FOSRestController implements ClassResourceInterface
      */
     public function deleteAclArrayAction($roleId)
     {
-        $this->container->get('oro_user.acl_manager')->modifyAclArrayForRole(
+        $this->container->get('oro_user.acl_manager')->modifyAclsForRole(
             $roleId,
             $this->getRequest()->request->get('aclResources'),
             false

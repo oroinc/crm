@@ -127,14 +127,14 @@ class RoleController extends BaseController
     /**
      * Link ACL Resource to role
      *
-     * @Soap\Method("addAclArrayToRole")
+     * @Soap\Method("addAclsToRole")
      * @Soap\Param("roleId", phpType = "int")
      * @Soap\Param("aclResources", phpType = "string[]")
      * @Soap\Result(phpType = "string")
      */
-    public function addAclArrayToRoleAction($roleId, $aclResources)
+    public function addAclsToRoleAction($roleId, $aclResources)
     {
-        $this->container->get('oro_user.acl_manager')->modifyAclArrayForRole(
+        $this->container->get('oro_user.acl_manager')->modifyAclsForRole(
             $roleId,
             $aclResources,
             true
@@ -146,14 +146,14 @@ class RoleController extends BaseController
     /**
      * Link ACL Resource to role
      *
-     * @Soap\Method("removeAclArrayFromRole")
+     * @Soap\Method("removeAclsFromRole")
      * @Soap\Param("roleId", phpType = "int")
      * @Soap\Param("aclResources", phpType = "string[]")
      * @Soap\Result(phpType = "string")
      */
-    public function removeAclArrayFromRoleAction($roleId, $aclResources)
+    public function removeAclsFromRoleAction($roleId, $aclResources)
     {
-        $this->container->get('oro_user.acl_manager')->modifyAclArrayForRole(
+        $this->container->get('oro_user.acl_manager')->modifysForRole(
             $roleId,
             $aclResources,
             false

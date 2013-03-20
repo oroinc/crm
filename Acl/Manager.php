@@ -78,8 +78,7 @@ class Manager implements ManagerInterface
                         $this->clearParentsAcl($aclResource->getParent(), $role);
                     }
 
-                    foreach ($role->getAclResources() as $resource)
-                    {
+                    foreach ($role->getAclResources() as $resource) {
                         if ($resource->getId() == Acl::ROOT_NODE) {
                             $rootNode = $resource;
                             foreach ($role->getAclResources() as $resources) {
@@ -102,18 +101,17 @@ class Manager implements ManagerInterface
     }
 
     /**
-     * Add/Remove Acl resource for Role
+     * Add/Remove Acl resources for Role
      *
-     * @param int    $roleId Role id
-     * @param array $aclIds  ACL Resource IDs
-     * @param bool   $isAdd  true if add, false if delete
+     * @param int   $roleId Role id
+     * @param array $aclIds ACL Resource IDs
+     * @param bool  $isAdd  true if add, false if delete
      */
-    public function modifyAclArrayForRole($roleId, array $aclIds, $isAdd = true)
+    public function modifyAclsForRole($roleId, array $aclIds, $isAdd = true)
     {
         foreach ($aclIds as $aclId) {
             $this->modifyAclForRole($roleId, $aclId, $isAdd);
         }
-        exit;
     }
 
     /**
@@ -131,7 +129,7 @@ class Manager implements ManagerInterface
     /**
      * Get ACL Resources list
      *
-     * @param bool $useObjects Use objects or plain ids in response
+     * @param  bool                                      $useObjects Use objects or plain ids in response
      * @return \Oro\Bundle\UserBundle\Entity\Acl[]|array
      */
     public function getAclResources($useObjects = true)

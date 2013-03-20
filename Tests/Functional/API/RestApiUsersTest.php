@@ -98,8 +98,8 @@ class RestApiUsersTest extends WebTestCase
      * Check created user
      *
      * @return int
-     * @param array $result
-     * @param array $request
+     * @param  array $result
+     * @param  array $request
      */
     protected function assertEqualsUser($request, $result)
     {
@@ -114,6 +114,7 @@ class RestApiUsersTest extends WebTestCase
             }
         }
         $this->assertEquals(0, $flag);
+
         return $userId;
     }
 }

@@ -180,6 +180,7 @@ class AclRepository extends NestedTreeRepository
         foreach ($aclArray as $aclResult) {
             $acl[] = $aclResult['id'];
         }
+
         return $acl;
     }
 }
