@@ -1,0 +1,374 @@
+<?php
+
+namespace Oro\Bundle\GridBundle\Tests\Unit\DependencyInjection\Compiler;
+
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\Reference;
+
+use Oro\Bundle\GridBundle\DependencyInjection\Compiler\AddDependencyCallsCompilerPass;
+
+class AddDependencyCallsCompilerPassTest extends AbstractCompilerPassTest
+{
+    /**
+     * @var AddDependencyCallsCompilerPass
+     */
+    private $compiler;
+
+    /**
+     * @var ContainerBuilder
+     */
+    private $containerBuilder;
+
+    protected function setUp()
+    {
+        $this->compiler = new AddDependencyCallsCompilerPass();
+        $this->containerBuilder = new ContainerBuilder();
+    }
+
+    /**
+     * @dataProvider processDataProvider
+     *
+     * @param array $containerData
+     * @param array $expectedDefinitions
+     */
+    public function testProcess(
+        array $containerData,
+        array $expectedDefinitions = array()
+    ) {
+        $this->addDataToContainerBuilder($this->containerBuilder, $containerData);
+        $this->compiler->process($this->containerBuilder);
+        $this->assertContainerBuilderHasExpectedDefinitions($this->containerBuilder, $expectedDefinitions);
+    }
+
+    /**
+     * @return array
+     */
+    public function processDataProvider()
+    {
+        return array(
+            'Default tag attributes' => array(
+                'containerData' => array(
+                    'definitions' => array(
+                        'test.user_grid.manager' => $this->createStubDefinitionWithTags(
+                            array(
+                                AddDependencyCallsCompilerPass::DATAGRID_MANAGER_TAG => array(
+                                    'name' => AddDependencyCallsCompilerPass::DATAGRID_MANAGER_TAG,
+                                    'datagrid_name' => 'users',
+                                    'entity_name' => 'User',
+                                    'route_name' => 'user_grid_route'
+                                )
+                            )
+                        )
+                    )
+                ),
+                'expectedDefinitions' => array(
+                    'test.user_grid.manager' => array(
+                        'methodCalls' => array(
+                            'setName' => array('users'),
+                            'setQueryFactory' => array(
+                                new Reference('test.user_grid.manager.default_query_factory')
+                            ),
+                            'setRouteGenerator' => array(
+                                new Reference('test.user_grid.manager.route.default_generator')
+                            ),
+                            'setParameters' => array(new Reference('test.user_grid.manager.parameters.default')),
+                            'setDatagridBuilder' => array(new Reference('oro_grid.builder.datagrid')),
+                            'setListBuilder' => array(new Reference('oro_grid.builder.list')),
+                            'setTranslator' => array(new Reference('translator')),
+                            'setValidator' => array(new Reference('validator'))
+                        )
+                    ),
+                    'test.user_grid.manager.default_query_factory' => array(
+                        'class' => '%oro_grid.orm.query_factory.entity.class%',
+                        'arguments' => array(
+                            new Reference('doctrine'),
+                            'User'
+                        )
+                    ),
+                    'test.user_grid.manager.route.default_generator' => array(
+                        'class' => '%oro_grid.route.default_generator.class%',
+                        'arguments' => array(
+                            new Reference('router'),
+                            'user_grid_route'
+                        )
+                    ),
+                    'test.user_grid.manager.parameters.default' => array(
+                        'class' => '%oro_grid.datagrid.parameters.class%',
+                        'arguments' => array(
+                            new Reference('service_container'),
+                            'users'
+                        )
+                    )
+                )
+            ),
+            'Optional tag attribute "query_entity_alias"' => array(
+                'containerData' => array(
+                    'definitions' => array(
+                        'test.user_grid.manager' => $this->createStubDefinitionWithTags(
+                            array(
+                                AddDependencyCallsCompilerPass::DATAGRID_MANAGER_TAG => array(
+                                    'name' => AddDependencyCallsCompilerPass::DATAGRID_MANAGER_TAG,
+                                    'datagrid_name' => 'users',
+                                    'entity_name' => 'User',
+                                    'query_entity_alias' => 'u',
+                                    'route_name' => 'user_grid_route'
+                                )
+                            )
+                        )
+                    )
+                ),
+                'expectedDefinitions' => array(
+                    'test.user_grid.manager' => array(
+                        'methodCalls' => array(
+                            'setQueryFactory' => array(
+                                new Reference('test.user_grid.manager.default_query_factory')
+                            )
+                        )
+                    ),
+                    'test.user_grid.manager.default_query_factory' => array(
+                        'class' => '%oro_grid.orm.query_factory.entity.class%',
+                        'arguments' => array(new Reference('doctrine'), 'User', 'u')
+                    )
+                )
+            ),
+            'Optional tag attribute "entity_hint"' => array(
+                'containerData' => array(
+                    'definitions' => array(
+                        'test.user_grid.manager' => $this->createStubDefinitionWithTags(
+                            array(
+                                AddDependencyCallsCompilerPass::DATAGRID_MANAGER_TAG => array(
+                                    'name' => AddDependencyCallsCompilerPass::DATAGRID_MANAGER_TAG,
+                                    'datagrid_name' => 'users',
+                                    'entity_name' => 'User',
+                                    'entity_hint' => 'users',
+                                    'route_name' => 'user_grid_route'
+                                )
+                            )
+                        )
+                    )
+                ),
+                'expectedDefinitions' => array(
+                    'test.user_grid.manager' => array(
+                        'methodCalls' => array(
+                            'setEntityHint' => array('users')
+                        )
+                    )
+                )
+            ),
+            'Tag attributes override services' => array(
+                'containerData' => array(
+                    'definitions' => array(
+                        'test.user_grid.manager' => $this->createStubDefinitionWithTags(
+                            array(
+                                AddDependencyCallsCompilerPass::DATAGRID_MANAGER_TAG => array(
+                                    'datagrid_name' => 'users',
+                                    'query_factory' => 'query_factory_service',
+                                    'route_generator' => 'route_generator_service',
+                                    'datagrid_builder' => 'datagrid_builder_service',
+                                    'list_builder' => 'list_builder_service',
+                                    'parameters' => 'parameters_service',
+                                    'translator' => 'translator_service',
+                                    'validator' => 'validator_service',
+                                    'flexible_manager' => 'flexible_manager_service'
+                                )
+                            )
+                        )
+                    )
+                ),
+                'expectedDefinitions' => array(
+                    'test.user_grid.manager' => array(
+                        'methodCalls' => array(
+                            'setQueryFactory' => array(new Reference('query_factory_service')),
+                            'setRouteGenerator' => array(new Reference('route_generator_service')),
+                            'setDatagridBuilder' => array(new Reference('datagrid_builder_service')),
+                            'setListBuilder' => array(new Reference('list_builder_service')),
+                            'setParameters' => array(new Reference('parameters_service')),
+                            'setTranslator' => array(new Reference('translator_service')),
+                            'setValidator' => array(new Reference('validator_service')),
+                            'setFlexibleManager' => array(new Reference('flexible_manager_service'))
+                        )
+                    )
+                )
+            ),
+            'Flexible configuration' => array(
+                'containerData' => array(
+                    'definitions' => array(
+                        'test.user_grid.manager' => $this->createStubDefinitionWithTags(
+                            array(
+                                AddDependencyCallsCompilerPass::DATAGRID_MANAGER_TAG => array(
+                                    'name' => AddDependencyCallsCompilerPass::DATAGRID_MANAGER_TAG,
+                                    'datagrid_name' => 'users',
+                                    'route_name' => 'user_grid_route',
+                                    'entity_name' => 'User',
+                                    'flexible' => true,
+                                )
+                            )
+                        )
+                    ),
+                    'parameters' => array(
+                        'oro_flexibleentity.flexible_config' => array(
+                            'entities_config' => array(
+                                'User' => array(
+                                    'flexible_manager' => 'flexible_manager_service'
+                                )
+                            )
+                        )
+                    )
+                ),
+                'expectedDefinitions' => array(
+                    'test.user_grid.manager' => array(
+                        'methodCalls' => array(
+                            'setName' => array('users'),
+                            'setQueryFactory' => array(
+                                new Reference('test.user_grid.manager.default_query_factory')
+                            ),
+                            'setRouteGenerator' => array(
+                                new Reference('test.user_grid.manager.route.default_generator')
+                            ),
+                            'setParameters' => array(new Reference('test.user_grid.manager.parameters.default')),
+                            'setDatagridBuilder' => array(new Reference('oro_grid.builder.datagrid')),
+                            'setListBuilder' => array(new Reference('oro_grid.builder.list')),
+                            'setTranslator' => array(new Reference('translator')),
+                            'setValidator' => array(new Reference('validator')),
+                            'setFlexibleManager' => array(new Reference('flexible_manager_service'))
+                        )
+                    )
+                )
+            )
+        );
+    }
+
+    /**
+     * @dataProvider processErrorDataProvider
+     *
+     * @param array $containerData
+     * @param string $exceptionName
+     * @param string $exceptionMessage
+     */
+    public function testProcessError(array $containerData, $exceptionName, $exceptionMessage)
+    {
+        $this->addDataToContainerBuilder($this->containerBuilder, $containerData);
+        $this->setExpectedException(
+            $exceptionName,
+            $exceptionMessage
+        );
+        $this->compiler->process($this->containerBuilder);
+    }
+
+    /**
+     * @return array
+     */
+    public function processErrorDataProvider()
+    {
+        return array(
+            'Attribute "datagrid_name" is required' => array(
+                'containerData' => array(
+                    'definitions' => array(
+                        'test_service' => $this->createStubDefinitionWithTags(
+                            array(
+                                AddDependencyCallsCompilerPass::DATAGRID_MANAGER_TAG => array(
+                                    'name' => AddDependencyCallsCompilerPass::DATAGRID_MANAGER_TAG,
+                                    'entity_name' => 'User',
+                                    'route_name' => 'user_grid_route',
+                                )
+                            )
+                        )
+                    )
+                ),
+                'Symfony\Component\Config\Definition\Exception\InvalidDefinitionException',
+                sprintf(
+                    'Definition of service "test_service" must have "datagrid_name" attribute in tag "%s"',
+                    AddDependencyCallsCompilerPass::DATAGRID_MANAGER_TAG
+                )
+            ),
+            'Attribute "entity_name" is required' => array(
+                'containerData' => array(
+                    'definitions' => array(
+                        'test_service' => $this->createStubDefinitionWithTags(
+                            array(
+                                AddDependencyCallsCompilerPass::DATAGRID_MANAGER_TAG => array(
+                                    'name' => AddDependencyCallsCompilerPass::DATAGRID_MANAGER_TAG,
+                                    'datagrid_name' => 'users',
+                                    'route_name' => 'user_grid_route',
+                                )
+                            )
+                        )
+                    )
+                ),
+                'Symfony\Component\Config\Definition\Exception\InvalidDefinitionException',
+                sprintf(
+                    'Definition of service "test_service" must have "entity_name" attribute in tag "%s"',
+                    AddDependencyCallsCompilerPass::DATAGRID_MANAGER_TAG
+                )
+            ),
+            'Attribute "route_name" is required' => array(
+                'containerData' => array(
+                    'definitions' => array(
+                        'test_service' => $this->createStubDefinitionWithTags(
+                            array(
+                                AddDependencyCallsCompilerPass::DATAGRID_MANAGER_TAG => array(
+                                    'name' => AddDependencyCallsCompilerPass::DATAGRID_MANAGER_TAG,
+                                    'datagrid_name' => 'users',
+                                    'entity_name' => 'User'
+                                ),
+                            )
+                        )
+                    ),
+                ),
+                'Symfony\Component\Config\Definition\Exception\InvalidDefinitionException',
+                sprintf(
+                    'Definition of service "test_service" must have "route_name" attribute in tag "%s"',
+                    AddDependencyCallsCompilerPass::DATAGRID_MANAGER_TAG
+                )
+            ),
+            'No OroFlexibleEntityBundle configuration parameter' => array(
+                'containerData' => array(
+                    'definitions' => array(
+                        'test_service' => $this->createStubDefinitionWithTags(
+                            array(
+                                AddDependencyCallsCompilerPass::DATAGRID_MANAGER_TAG => array(
+                                    'name' => AddDependencyCallsCompilerPass::DATAGRID_MANAGER_TAG,
+                                    'datagrid_name' => 'users',
+                                    'route_name' => 'user_grid_route',
+                                    'entity_name' => 'User',
+                                    'flexible' => true
+                                )
+                            )
+                        )
+                    ),
+                    'parameters' => array()
+                ),
+                'LogicException',
+                'Cannot get value of OroFlexibleEntityBundle configuration parameter '.
+                    '("oro_flexibleentity.flexible_config").'
+            ),
+            'No OroFlexibleEntityBundle configuration for entity' => array(
+                'containerData' => array(
+                    'definitions' => array(
+                        'test_service' => $this->createStubDefinitionWithTags(
+                            array(
+                                AddDependencyCallsCompilerPass::DATAGRID_MANAGER_TAG => array(
+                                    'name' => AddDependencyCallsCompilerPass::DATAGRID_MANAGER_TAG,
+                                    'datagrid_name' => 'users',
+                                    'route_name' => 'user_grid_route',
+                                    'entity_name' => 'User',
+                                    'flexible' => true
+                                )
+                            )
+                        )
+                    ),
+                    'parameters' => array(
+                        'oro_flexibleentity.flexible_config' => array(
+                            'entities_config' => array(
+                                'User' => array()
+                            )
+                        )
+                    )
+                ),
+                'LogicException',
+                'Cannot get flexible manager of "User" from entities configuration of OroFlexibleEntityBundle.'
+            ),
+        );
+    }
+}

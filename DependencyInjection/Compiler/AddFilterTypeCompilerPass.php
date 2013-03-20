@@ -8,13 +8,18 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class AddFilterTypeCompilerPass implements CompilerPassInterface
 {
+    const DATAGRID_FILTER_TAG = 'oro_grid.filter.type';
+    const DATAGRID_FILTER_FACTORY_SERVICE = 'oro_grid.filter.factory';
+    const DATAGRID_ACTION_TAG = 'oro_grid.action.type';
+    const DATAGRID_ACTION_FACTORY_SERVICE = 'oro_grid.action.factory';
+
     /**
      * @param ContainerBuilder $container
      */
     public function process(ContainerBuilder $container)
     {
-        $this->injectEntityTypesByTag($container, 'oro_grid.filter.factory', 'oro_grid.filter.type');
-        $this->injectEntityTypesByTag($container, 'oro_grid.action.factory', 'oro_grid.action.type');
+        $this->injectEntityTypesByTag($container, self::DATAGRID_FILTER_FACTORY_SERVICE, self::DATAGRID_FILTER_TAG);
+        $this->injectEntityTypesByTag($container, self::DATAGRID_ACTION_FACTORY_SERVICE, self::DATAGRID_ACTION_TAG);
     }
 
     /**

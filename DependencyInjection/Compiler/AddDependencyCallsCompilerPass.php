@@ -12,13 +12,15 @@ use Symfony\Component\Config\Definition\Exception\InvalidDefinitionException;
 
 class AddDependencyCallsCompilerPass implements CompilerPassInterface
 {
+    const DATAGRID_MANAGER_TAG = 'oro_grid.datagrid.manager';
+    const FLEXIBLE_CONFIG_PARAMETER = 'oro_flexibleentity.flexible_config';
+
     /**
      * {@inheritDoc}
      */
     public function process(ContainerBuilder $container)
     {
-        // TODO Introduce a constant for tag
-        foreach ($container->findTaggedServiceIds('oro_grid.datagrid.manager') as $id => $tags) {
+        foreach ($container->findTaggedServiceIds(self::DATAGRID_MANAGER_TAG) as $id => $tags) {
             foreach ($tags as $attributes) {
                 $this->applyConfigurationFromAttributes($container, $id, $attributes);
                 $this->applyDefaults($container, $id, $attributes);
@@ -87,12 +89,9 @@ class AddDependencyCallsCompilerPass implements CompilerPassInterface
         $definition = $container->getDefinition($serviceId);
 
         $managerSetter = 'setFlexibleManager';
-        if ($definition->hasMethodCall($managerSetter)) {
-            return;
-        }
-
         $flexibleKey = 'flexible';
-        if (!isset($attributes[$flexibleKey]) || !$attributes[$flexibleKey]) {
+
+        if ($definition->hasMethodCall($managerSetter) || empty($attributes[$flexibleKey])) {
             return;
         }
 
@@ -100,13 +99,21 @@ class AddDependencyCallsCompilerPass implements CompilerPassInterface
         $this->assertAttributesHasKey($serviceId, $attributes, $entityKey);
 
         $className = $attributes[$entityKey];
-        $flexibleConfig = $container->getParameter('oro_flexibleentity.flexible_config');
+        if (!$container->hasParameter(self::FLEXIBLE_CONFIG_PARAMETER)) {
+            throw new \LogicException(
+                sprintf(
+                    'Cannot get value of OroFlexibleEntityBundle configuration parameter ("%s").',
+                    self::FLEXIBLE_CONFIG_PARAMETER
+                )
+            );
+        }
+        $flexibleConfig = $container->getParameter(self::FLEXIBLE_CONFIG_PARAMETER);
 
         // validate configuration
-        if (!isset($flexibleConfig['entities_config'][$className])
-            || !isset($flexibleConfig['entities_config'][$className]['flexible_manager'])
-        ) {
-            throw new \LogicException('There is no flexible manager configuration for entity ' . $className . '.');
+        if (!isset($flexibleConfig['entities_config'][$className]['flexible_manager'])) {
+            throw new \LogicException(
+                "Cannot get flexible manager of \"$className\" from entities configuration of OroFlexibleEntityBundle."
+            );
         }
 
         $flexibleManagerServiceId = $flexibleConfig['entities_config'][$className]['flexible_manager'];
@@ -213,7 +220,7 @@ class AddDependencyCallsCompilerPass implements CompilerPassInterface
                     'Definition of service "%s" must have "%s" attribute in tag "%s"',
                     $serviceId,
                     $key,
-                    'oro_grid.datagrid.manager'
+                    self::DATAGRID_MANAGER_TAG
                 )
             );
         }
