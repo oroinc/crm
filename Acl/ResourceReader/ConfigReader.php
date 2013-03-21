@@ -35,8 +35,11 @@ class ConfigReader
                          'parent'      => isset($acl['parent']) ? $acl['parent'] : false
                     )
                 );
-                $aclObject->setMethod($acl['method']);
-                $aclObject->setClass($acl['class']);
+                if (isset($acl['method']) && isset($acl['class'])) {
+                    $aclObject->setMethod($acl['method']);
+                    $aclObject->setClass($acl['class']);
+                }
+
                 $aclResources[$id] = $aclObject;
             }
         }
@@ -56,7 +59,8 @@ class ConfigReader
     {
         $aclConfig = $this->getConfigAclArray();
         foreach ($aclConfig as $id => $acl) {
-            if ($acl['class'] == $className && $acl['method'] == $methodName) {
+            if (isset($acl['class']) && isset($acl['method'])
+                && $acl['class'] == $className && $acl['method'] == $methodName) {
                 return $id;
             }
         }
