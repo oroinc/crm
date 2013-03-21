@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @copyright 2012 Akeneo SAS (http://www.akeneo.com)
  * @license   http://opensource.org/licenses/MIT MIT
  *
- * @ORM\Table(name="dataflow_job")
+ * @ORM\Table(name="oro_dataflow_job")
  * @ORM\Entity()
  */
 class Job

@@ -12,7 +12,7 @@ use Oro\Bundle\DataFlowBundle\Transform\Mapping\ItemMapping as ItemMappingModel;
  * @copyright 2012 Akeneo SAS (http://www.akeneo.com)
  * @license   http://opensource.org/licenses/MIT MIT
  *
- * @ORM\Table(name="dataflow_mapping_item")
+ * @ORM\Table(name="oro_dataflow_mapping_item")
  * @ORM\Entity
  */
 class ItemMapping extends ItemMappingModel

@@ -11,7 +11,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @copyright 2012 Akeneo SAS (http://www.akeneo.com)
  * @license   http://opensource.org/licenses/MIT MIT
  *
- * @ORM\Table(name="dataflow_connector")
+ * @ORM\Table(name="oro_dataflow_connector")
  * @ORM\Entity()
  */
 class Connector
