@@ -24,7 +24,7 @@ class OroUserExtension extends \Twig_Extension
     public function getFunctions()
     {
         return array(
-            'resource_is_grant' => new \Twig_Function_Method($this, 'checkResourceIsGrant'),
+            'resource_granted' => new \Twig_Function_Method($this, 'checkResourceIsGranted'),
         );
     }
 
@@ -35,7 +35,7 @@ class OroUserExtension extends \Twig_Extension
      *
      * @return bool
      */
-    public function checkResourceIsGrant($aclId)
+    public function checkResourceIsGranted($aclId)
     {
         return $this->manager->isResourceGranted($aclId);
     }
