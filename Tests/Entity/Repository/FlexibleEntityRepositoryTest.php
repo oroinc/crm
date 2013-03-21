@@ -100,12 +100,22 @@ class FlexibleEntityRepositoryTest extends AbstractFlexibleManagerTest
         //$qb = $this->repository->createQueryBuilder('MyFlexible');
         //$expectedSql = 'SELECT MyFlexible FROM Oro\Bundle\FlexibleEntityBundle\Tests\Entity\Demo\Flexible MyFlexible';
         //$this->assertEquals($expectedSql, $qb->getQuery()->getDql());
-        // without lazy loading
+
+        // without lazy loading with all values
         $qb = $this->repository->createFlexibleQueryBuilder('MyFlexible');
         $expectedDql = 'SELECT MyFlexible, Value, Attribute, ValueOption, AttributeOptionValue'
             .' FROM Oro\Bundle\FlexibleEntityBundle\Tests\Entity\Demo\Flexible MyFlexible'
             .' LEFT JOIN MyFlexible.values Value LEFT JOIN Value.attribute Attribute'
             .' LEFT JOIN Value.options ValueOption LEFT JOIN ValueOption.optionValues AttributeOptionValue';
+        $this->assertEquals($expectedDql, $qb->getQuery()->getDql());
+
+        // without lazy loading with only values related to attribute codes
+        $qb = $this->repository->createFlexibleQueryBuilder('MyFlexible', array('name'));
+        $expectedDql = 'SELECT MyFlexible, Value, Attribute, ValueOption, AttributeOptionValue'
+            .' FROM Oro\Bundle\FlexibleEntityBundle\Tests\Entity\Demo\Flexible MyFlexible'
+            .' LEFT JOIN MyFlexible.values Value LEFT JOIN Value.attribute Attribute'
+            .' LEFT JOIN Value.options ValueOption LEFT JOIN ValueOption.optionValues AttributeOptionValue'
+            ." WHERE Attribute.code IN('name') OR Attribute.code IS NULL";
         $this->assertEquals($expectedDql, $qb->getQuery()->getDql());
     }
 }

@@ -203,7 +203,7 @@ class FlexibleEntityRepository extends EntityRepository implements TranslatableI
         $this->entityAlias = $alias;
         $qb = new FlexibleQueryBuilder($this->_em);
 
-        // TODO : grid integration, find a smart way to inject locale and scope in repository
+        // TODO : grid integration, find a smart way to inject locale and scope in repo then qb
         $locale = ($this->getLocale() !== null) ? $this->getLocale() : 'en_US';
         $scope = ($this->getScope() !== null) ? $this->getScope() : 'ecommerce';
         $qb->setLocale($locale);
@@ -220,6 +220,7 @@ class FlexibleEntityRepository extends EntityRepository implements TranslatableI
 
         if (!empty($attributeCodes)) {
             $qb->where($qb->expr()->in('Attribute.code', $attributeCodes));
+            $qb->orWhere($qb->expr()->isNull('Attribute.code'));
         }
 
         return $qb;
