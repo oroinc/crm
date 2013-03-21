@@ -28,10 +28,10 @@ class ProfileType extends FlexibleType
     protected $security;
 
     /**
-     * @param string     $flexibleClass flexible entity class
-     * @param string     $valueClass    flexible value class
-     * @param AclManager $aclManager    ACL manager
-     * @param SecurityContextInterface $security Security context
+     * @param string                   $flexibleClass flexible entity class
+     * @param string                   $valueClass    flexible value class
+     * @param AclManager               $aclManager    ACL manager
+     * @param SecurityContextInterface $security      Security context
      */
     public function __construct($flexibleClass, $valueClass, AclManager $aclManager, SecurityContextInterface $security)
     {
