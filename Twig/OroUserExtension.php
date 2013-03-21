@@ -17,14 +17,14 @@ class OroUserExtension extends \Twig_Extension
     }
 
     /**
-     * Returns a list of filters to add to the existing list.
+     * Returns a list of functions to add to the existing list.
      *
-     * @return array An array of filters
+     * @return array An array of functions
      */
-    public function getFilters()
+    public function getFunctions()
     {
         return array(
-            'resource_is_grant'      => new \Twig_Filter_Method($this, 'checkResourceIsGrant'),
+            'resource_is_grant' => new \Twig_Function_Method($this, 'checkResourceIsGrant'),
         );
     }
 
