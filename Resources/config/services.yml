@@ -21,6 +21,7 @@ parameters:
     oro_user.acl.pointcut.class:      Oro\Bundle\UserBundle\Acl\AclPointcut
     oro_user.acl.interceptor.class:   Oro\Bundle\UserBundle\Acl\AclInterceptor
     oro_user.acl.manager.class:       Oro\Bundle\UserBundle\Acl\Manager
+    oro_user.acl.twig.class:          Oro\Bundle\UserBundle\Twig\OroUserExtension
     oro_user.user_menu.builder.class: Oro\Bundle\UserBundle\Menu\UserMenuBuilder
     oro_user.role.listener.class:     Oro\Bundle\UserBundle\EventListener\RoleListener
 
@@ -191,3 +192,9 @@ services:
         arguments:                    ["@service_container"]
         tags:
             - { name: doctrine.event_listener, event: preUpdate }
+
+    oro_search.twig.search_extension:
+        class:                        %oro_user.acl.twig.class%
+        arguments:                    ["@oro_user.acl_manager"]
+        tags:
+            - { name: twig.extension }
