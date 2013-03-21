@@ -61,9 +61,16 @@ $.widget( "ui.dialog", $.ui.dialog, {
 
         // Handle window resize
         var self = this;
-        var onResize = function() {
-            if (self.state() == "maximized") {
-                self._calculateNewMaximizedDimensions();
+        var onResize = function(e) {
+            if (e.target == window) {
+                switch (self.state()) {
+                    case 'maximized':
+                        self._calculateNewMaximizedDimensions();
+                        break;
+                    case 'normal':
+                        self._moveToVisible();
+                        break;
+                }
             }
         };
         $(window).resize(onResize);
@@ -220,6 +227,14 @@ $.widget( "ui.dialog", $.ui.dialog, {
         return this;
     },
 
+    _moveToVisible: function() {
+        var offset = this.widget().offset();
+        this._setOptions({
+            position: [offset.left, offset.top]
+        });
+        return this;
+    },
+
     _getTitleBarHeight: function() {
         return this.uiDialogTitlebar.height() + 15
     },
@@ -340,7 +355,7 @@ $.widget( "ui.dialog", $.ui.dialog, {
         // bind event callbacks which specified at init
         $.each(this.options.events, function (type) {
             if ($.isFunction(self.options.events[type])) {
-                self.bind(type, self.options.events[type]);
+                self._on(type, self.options.events[type]);
             }
         });
 
