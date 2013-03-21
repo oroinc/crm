@@ -135,25 +135,19 @@
                 var offsetwindow = newPositionWindow();
                 pos++;
                 var dialogOptions = {
+                    maximizedHeightDecreaseBy: 'minimize-bar',
                     appendTo: '#main .row-fluid',
-                    title : "dialog window title long long long " + pos,
-                    width : 400,
-                    height : 400,
+                    title: "dialog window title long long long " + pos,
+                    width: 400,
+                    height: 400,
                     position: {
                         my: offsetwindow,
                         at: "center center",
                         of: $('body')
                     },
-                    "close" : function(){ $(this).dialog( "destroy" ) }
+                    close: function(){ $(this).dialog( "destroy" ) }
                 };
-                var dialogExtendOptions = {
-                    //minimizeTo: $('.pin-bar'),
-                    maximizedHeightDecreaseBy: 'minimize-bar',
-                    "maximize" : true,
-                    "minimize" : true,
-                    "dblclick": "maximize"
-                };
-                $("<div>Some text if you need will be here</div>").dialog(dialogOptions).dialogExtend(dialogExtendOptions);
+                $("<div>Some text if you need will be here</div>").dialog(dialogOptions);
             });
             $("#opener1").click(function(){
                 try{
@@ -174,13 +168,8 @@
                         },
                         "close" : function(){ $(this).dialog( "destroy" ) }
                     };
-                    var dialogExtendOptions = {
-                        "maximize" : true,
-                        "minimize" : true,
-                        "dblclick": "maximize"
-                    };
 
-                    $("#opener-content1").dialog(dialogOptions).dialogExtend(dialogExtendOptions);
+                    $("#opener-content1").dialog(dialogOptions);
                 }
             });
             $("#opener2").click(function(){
@@ -201,13 +190,8 @@
                         },
                         "close" : function(){ $(this).dialog( "destroy" ) }
                     };
-                    var dialogExtendOptions = {
-                        "maximize" : true,
-                        "minimize" : true,
-                        "dblclick": "maximize"
-                    };
 
-                    $("#opener-content2").dialog(dialogOptions).dialogExtend(dialogExtendOptions);
+                    $("#opener-content2").dialog(dialogOptions);
                 }
             });
             $("#opener3").click(function(){
@@ -228,12 +212,7 @@
                         },
                         "close" : function(){ $(this).dialog( "destroy" ) }
                     };
-                    var dialogExtendOptions = {
-                        "maximize" : true,
-                        "minimize" : true,
-                        "dblclick": "maximize"
-                    };
-                    $("#opener-content3").dialog(dialogOptions).dialogExtend(dialogExtendOptions);
+                    $("#opener-content3").dialog(dialogOptions);
                 }
             });
         });
