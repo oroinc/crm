@@ -9,9 +9,16 @@
         "php": ">=5.3.3",
         "symfony/symfony": "2.1.6",
         "oro/UIBundle": "dev-master",
+        "oro/FlexibleEntityBundle": "dev-master",
         "sonata-project/admin-bundle": "2.1.x-dev",
         "sonata-project/doctrine-orm-admin-bundle": "2.1.x-dev"
     },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/laboro/SonataAdminBundle.git"
+        }
+    ],
     "autoload": {
         "psr-0": { "Oro\\Bundle\\GridBundle": "" }
     },
