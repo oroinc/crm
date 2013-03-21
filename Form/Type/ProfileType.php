@@ -5,9 +5,11 @@ namespace Oro\Bundle\UserBundle\Form\Type;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Security\Core\SecurityContextInterface;
 
 use Doctrine\ORM\EntityRepository;
 
+use Oro\Bundle\UserBundle\Acl\Manager as AclManager;
 use Oro\Bundle\FlexibleEntityBundle\Form\Type\FlexibleType;
 use Oro\Bundle\FlexibleEntityBundle\Form\Type\FlexibleValueType;
 use Oro\Bundle\UserBundle\Form\EventListener\ProfileSubscriber;
@@ -15,6 +17,30 @@ use Oro\Bundle\UserBundle\Entity\User;
 
 class ProfileType extends FlexibleType
 {
+    /**
+     * @var AclManager
+     */
+    protected $aclManager;
+
+    /**
+     * @var SecurityContextInterface
+     */
+    protected $security;
+
+    /**
+     * @param string     $flexibleClass flexible entity class
+     * @param string     $valueClass    flexible value class
+     * @param AclManager $aclManager    ACL manager
+     * @param SecurityContextInterface $security Security context
+     */
+    public function __construct($flexibleClass, $valueClass, AclManager $aclManager, SecurityContextInterface $security)
+    {
+        parent::__construct($flexibleClass, $valueClass);
+
+        $this->aclManager = $aclManager;
+        $this->security   = $security;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -25,7 +51,7 @@ class ProfileType extends FlexibleType
 
         // user fields
         $builder
-            ->addEventSubscriber(new ProfileSubscriber())
+            ->addEventSubscriber(new ProfileSubscriber($this->aclManager, $this->security))
             ->add('username', 'text', array(
                 'required'       => true,
             ))
@@ -33,15 +59,15 @@ class ProfileType extends FlexibleType
                 'label'          => 'E-mail',
                 'required'       => true,
             ))
-            ->add('firstName', 'text', array(
+            ->add('firstname', 'text', array(
                 'label'          => 'First name',
                 'required'       => false,
             ))
-            ->add('lastName', 'text', array(
+            ->add('lastname', 'text', array(
                 'label'          => 'Last name',
                 'required'       => false,
             ))
-            ->add('middleName', 'text', array(
+            ->add('middlename', 'text', array(
                 'label'          => 'Middle name',
                 'required'       => false,
             ))
