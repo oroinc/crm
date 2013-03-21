@@ -1,9 +1,18 @@
-OroGridBundle - Oro datagrid implementation
+OroGridBundle - Overview
 ===========================================
 
 OroGridBundle provides functionality to create and show grid with some information. Grid provides functionality to display user information by pages, apply filters, sort information and perform some specific row actions.
 
 Grid functionality consists of backend and frontend parts. Backend part responsible for interaction with DB, obtaining of source data and sending this data to frontend. Frontend part is fully functional JavaScript grid which process all user actions on UI and synchronize grid content by interacting with backend using AJAX.
+
+**Table of Contents**
+
+- [Overview](#orogridbundle---overview)
+    - [Main Components](#main-components)
+    - [Example Of Usage](#example-of-usage)
+    - [Dependencies](#dependencies)
+- [Backend Architecture](#orogridbundle---backend-architecture)
+- [Frontend Architecture](#orogridbundle---frontend-architecture)
 
 
 Main Components
