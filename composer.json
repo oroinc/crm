@@ -1,0 +1,24 @@
+{
+    "name": "oro/WindowsBundle",
+    "type": "symfony-bundle",
+    "description": "BAP Windows Bundle",
+    "keywords": ["BAP", "UI", "User Interface", "Windows"],
+    "homepage": "https://github.com/laboro/WindowsBundle",
+    "license": "MIT",
+    "require": {
+        "php": ">=5.3.3",
+        "symfony/symfony": "2.1.6",
+        "oro/UIBundle": "dev-master",
+        "oro/UserBundle": "dev-master"
+    },
+    "autoload": {
+        "psr-0": { "Oro\\Bundle\\WindowsBundle": "" }
+    },
+    "target-dir": "Oro/Bundle/WindowsBundle",
+    "minimum-stability": "dev",
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0-dev"
+        }
+    }
+}
