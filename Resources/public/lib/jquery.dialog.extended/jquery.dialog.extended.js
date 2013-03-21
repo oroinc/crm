@@ -20,9 +20,9 @@ $.widget( "ui.dialog", $.ui.dialog, {
         minimizeTo: false,
         maximizedHeightDecreaseBy: false,
         allowClose: true,
-        allowMaximize: true,
-        allowMinimize: true,
-        dblclick: "maximize",
+        allowMaximize: false,
+        allowMinimize: false,
+        dblclick: false,
         titlebar: false,
         icons: {
             close: "ui-icon-closethick",

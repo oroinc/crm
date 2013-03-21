@@ -11,13 +11,13 @@
 
     <div class="row-fluid">
         <div class="container-fluid" style="min-height: 900px; background-color:#d0def1;" id="window-container">
-            <button type="button" id="my-button" class="btn btn-large btn-primary">Open more windows</button>
+            <button type="button" id="my-button" class="btn btn-large btn-primary">Open new window</button>
             <hr />
             <div class="btn-toolbar">
                 <div class="btn-group">
-                    <button id="opener1" class="btn">Open window 1</button>
-                    <button id="opener2" class="btn">Open window 2</button>
-                    <button id="opener3" class="btn">Open window 3</button>
+                    <button id="opener1" class="btn">Extended</button>
+                    <button id="opener2" class="btn">Minimize only</button>
+                    <button id="opener3" class="btn">Classic dialog</button>
                 </div>
             </div>
             <div id="opener-content1" style="display: none;" title="Dima’s Address">
@@ -135,8 +135,9 @@
                 var offsetwindow = newPositionWindow();
                 pos++;
                 var dialogOptions = {
-                    maximizedHeightDecreaseBy: 'minimize-bar',
-                    appendTo: '#main .row-fluid',
+                    allowMaximize: true,
+                    allowMinimize: true,
+                    dblclick: 'maximize',
                     title: "dialog window title long long long " + pos,
                     width: 400,
                     height: 400,
@@ -158,7 +159,11 @@
                 if (isOpen === false ){
                     var offsetwindow = newPositionWindow();
                     var dialogOptions = {
-                        appendTo: "#window-container",
+                        allowMaximize: true,
+                        allowMinimize: true,
+                        dblclick: 'maximize',
+                        maximizedHeightDecreaseBy: 'minimize-bar',
+                        appendTo: '#main .row-fluid',
                         width : 400,
                         height : 305,
                         position: {
@@ -181,6 +186,8 @@
                 if (isOpen === false ){
                     var offsetwindow = newPositionWindow();
                     var dialogOptions = {
+                        allowMinimize: true,
+                        dblclick: 'collapse',
                         width : 400,
                         height : 300,
                         position: {
