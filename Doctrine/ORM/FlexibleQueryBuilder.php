@@ -157,22 +157,22 @@ class FlexibleQueryBuilder extends QueryBuilder
         switch ($operator)
         {
             case '=':
-                $condition = $this->expr()->eq($field, $this->expr()->literal($value));
+                $condition = $this->expr()->eq($field, $this->expr()->literal($value))->__toString();
                 break;
             case '<':
-                $condition = $this->expr()->lt($field, $this->expr()->literal($value));
+                $condition = $this->expr()->lt($field, $this->expr()->literal($value))->__toString();
                 break;
             case '<=':
-                $condition = $this->expr()->lte($field, $this->expr()->literal($value));
+                $condition = $this->expr()->lte($field, $this->expr()->literal($value))->__toString();
                 break;
             case '>':
-                $condition = $this->expr()->gt($field, $this->expr()->literal($value));
+                $condition = $this->expr()->gt($field, $this->expr()->literal($value))->__toString();
                 break;
             case '>=':
-                $condition = $this->expr()->gte($field, $this->expr()->literal($value));
+                $condition = $this->expr()->gte($field, $this->expr()->literal($value))->__toString();
                 break;
             case 'LIKE':
-                $condition = $this->expr()->like($field, $this->expr()->literal($value));
+                $condition = $this->expr()->like($field, $this->expr()->literal($value))->__toString();
                 break;
             case 'NOT LIKE':
                 $condition = sprintf('%s NOT LIKE %s', $field, $this->expr()->literal($value));
@@ -184,10 +184,10 @@ class FlexibleQueryBuilder extends QueryBuilder
                 $condition = $this->expr()->isNotNull($field);
                 break;
             case 'IN':
-                $condition = $this->expr()->in($field, $value);
+                $condition = $this->expr()->in($field, $value)->__toString();
                 break;
             case 'NOT IN':
-                $condition = $this->expr()->notIn($field, $value);
+                $condition = $this->expr()->notIn($field, $value)->__toString();
                 break;
             default:
                 throw new FlexibleQueryException('operator '.$operator.' is not supported');

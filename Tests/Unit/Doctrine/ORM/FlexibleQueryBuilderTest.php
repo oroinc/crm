@@ -114,4 +114,52 @@ class FlexibleQueryBuilderTest extends AbstractOrmTest
         $attribute->setScopable(true);
         $this->queryBuilder->prepareAttributeJoinCondition($attribute, 'alias');
     }
+
+    /**
+     * Data provider
+     *
+     * @return multitype:multitype:number string
+     *
+     * @static
+     */
+    public static function criteriaProvider()
+    {
+        return array(
+            array('code', '=', 'value', "code = 'value'"),
+            array('code', '<', 'value', "code < 'value'"),
+            array('code', '<=', 'value', "code <= 'value'"),
+            array('code', '>', 'value', "code > 'value'"),
+            array('code', '>=', 'value', "code >= 'value'"),
+            array('code', 'LIKE', 'value', "code LIKE 'value'"),
+            array('code', 'NOT LIKE', 'value', "code NOT LIKE 'value'"),
+            array('code', 'NULL', null, "code IS NULL"),
+            array('code', 'NOT NULL', null, "code IS NOT NULL"),
+            array('code', 'IN', array('a', 'b'), "code IN('a', 'b')"),
+            array('code', 'NOT IN', array('a', 'b'), "code NOT IN('a', 'b')")
+        );
+    }
+
+    /**
+     * Test related method
+     *
+     * @param string       $field    the backend field name
+     * @param string       $operator the operator used to filter
+     * @param string|array $value    the value(s) to filter
+     *
+     * @dataProvider criteriaProvider
+     */
+    public function testPrepareCriteriaCondition($field, $operator, $value, $expectedStrResult)
+    {
+        $result = $this->queryBuilder->prepareCriteriaCondition($field, $operator, $value);
+        $this->assertEquals($result, $expectedStrResult);
+    }
+
+    /**
+     * Test related method
+     * @expectedException \Oro\Bundle\FlexibleEntityBundle\Exception\FlexibleQueryException
+     */
+    public function testPrepareCriteriaConditionException()
+    {
+        $this->queryBuilder->prepareCriteriaCondition('code', 'UNKNOWN OPERATOR', 'value');
+    }
 }
