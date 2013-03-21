@@ -7,14 +7,29 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
+use Oro\Bundle\UserBundle\Annotation\Acl;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\UserBundle\Entity\UserManager;
 
+/**
+ * @Acl(
+ *      id="oro_user_profile",
+ *      name="Profile controller",
+ *      description="Profile manipulation",
+ *      parent="oro_user"
+ * )
+ */
 class ProfileController extends Controller
 {
     /**
      * @Route("/show/{id}", name="oro_user_show", requirements={"id"="\d+"})
      * @Template
+     * @Acl(
+     *      id="oro_user_profile_show",
+     *      name="View user profile",
+     *      description="View user profile",
+     *      parent="oro_user_profile"
+     * )
      */
     public function showAction(User $user)
     {
@@ -28,6 +43,12 @@ class ProfileController extends Controller
      *
      * @Route("/create", name="oro_user_create")
      * @Template("OroUserBundle:Profile:edit.html.twig")
+     * @Acl(
+     *      id="oro_user_profile_create",
+     *      name="Create user profile",
+     *      description="Create user profile",
+     *      parent="oro_user_profile"
+     * )
      */
     public function createAction()
     {
@@ -41,6 +62,12 @@ class ProfileController extends Controller
      *
      * @Route("/edit/{id}", name="oro_user_edit", requirements={"id"="\d+"}, defaults={"id"=0})
      * @Template
+     * @Acl(
+     *      id="oro_user_profile_edit",
+     *      name="Edit user profile",
+     *      description="Edit user profile",
+     *      parent="oro_user_profile"
+     * )
      */
     public function editAction(User $entity)
     {
@@ -55,9 +82,15 @@ class ProfileController extends Controller
         );
     }
 
-   /**
-    * @Route("/remove/{id}", name="oro_user_remove", requirements={"id"="\d+"})
-    */
+    /**
+     * @Route("/remove/{id}", name="oro_user_remove", requirements={"id"="\d+"})
+     * @Acl(
+     *      id="oro_user_profile_remove",
+     *      name="Remove user profile",
+     *      description="Remove user profile",
+     *      parent="oro_user_profile"
+     * )
+     */
     public function removeAction(User $entity)
     {
         $this->getManager()->deleteUser($entity);
@@ -69,6 +102,12 @@ class ProfileController extends Controller
     /**
      * @Route("/{page}/{limit}", name="oro_user_index", requirements={"page"="\d+","limit"="\d+"}, defaults={"page"=1,"limit"=20})
      * @Template
+     * @Acl(
+     *      id="oro_user_profile_list",
+     *      name="View list of user profiles",
+     *      description="View list of user profiles",
+     *      parent="oro_user_profile"
+     * )
      */
     public function indexAction($page, $limit)
     {
