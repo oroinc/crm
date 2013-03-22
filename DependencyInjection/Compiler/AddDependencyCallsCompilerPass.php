@@ -14,6 +14,7 @@ class AddDependencyCallsCompilerPass implements CompilerPassInterface
 {
     const DATAGRID_MANAGER_TAG = 'oro_grid.datagrid.manager';
     const FLEXIBLE_CONFIG_PARAMETER = 'oro_flexibleentity.flexible_config';
+    const FLEXIBLE_ENTITY_KEY = 'flexible';
 
     /**
      * {@inheritDoc}
@@ -89,9 +90,8 @@ class AddDependencyCallsCompilerPass implements CompilerPassInterface
         $definition = $container->getDefinition($serviceId);
 
         $managerSetter = 'setFlexibleManager';
-        $flexibleKey = 'flexible';
 
-        if ($definition->hasMethodCall($managerSetter) || empty($attributes[$flexibleKey])) {
+        if ($definition->hasMethodCall($managerSetter) || empty($attributes[self::FLEXIBLE_ENTITY_KEY])) {
             return;
         }
 
@@ -189,17 +189,23 @@ class AddDependencyCallsCompilerPass implements CompilerPassInterface
      */
     protected function createDefaultQueryFactoryDefinition($serviceId, array $attributes)
     {
-        $arguments = array(new Reference('doctrine'));
+        $arguments = array();
+        if (!empty($attributes[self::FLEXIBLE_ENTITY_KEY])) {
+            $factoryClass = '%oro_grid.orm.query_factory.entity.class%';
 
-        $this->assertAttributesHasKey($serviceId, $attributes, 'entity_name');
+            $arguments[] = new Reference('doctrine');
 
-        $arguments[] = $attributes['entity_name'];
+            $this->assertAttributesHasKey($serviceId, $attributes, 'entity_name');
+            $arguments[] = $attributes['entity_name'];
 
-        if (!empty($attributes['query_entity_alias'])) {
-            $arguments[] = $attributes['query_entity_alias'];
+            if (!empty($attributes['query_entity_alias'])) {
+                $arguments[] = $attributes['query_entity_alias'];
+            }
+        } else {
+            $factoryClass = '%oro_grid.orm.query_factory.query.class%';
         }
 
-        $definition = new Definition('%oro_grid.orm.query_factory.entity.class%');
+        $definition = new Definition($factoryClass);
         $definition->setPublic(false);
         $definition->setArguments($arguments);
 
