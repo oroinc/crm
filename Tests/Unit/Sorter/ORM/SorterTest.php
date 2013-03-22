@@ -13,8 +13,6 @@ class SorterTest extends \PHPUnit_Framework_TestCase
     const TEST_NAME           = 'name';
     const TEST_ALIAS          = 'alias';
     const TEST_MAIN_ALIAS     = 'main';
-    const TEST_ASC_DIRECTION  = 'ASC';
-    const TEST_DESC_DIRECTION = 'DESC';
     /**#@-*/
 
     /**
@@ -51,10 +49,10 @@ class SorterTest extends \PHPUnit_Framework_TestCase
     {
         $this->initializeFieldDescription(self::TEST_NAME);
 
-        $this->model->initialize($this->fieldDescription, self::TEST_ASC_DIRECTION);
+        $this->model->initialize($this->fieldDescription, Sorter::DIRECTION_ASC);
 
         $this->assertAttributeEquals($this->fieldDescription, 'field', $this->model);
-        $this->assertAttributeEquals(self::TEST_ASC_DIRECTION, 'direction', $this->model);
+        $this->assertAttributeEquals(Sorter::DIRECTION_ASC, 'direction', $this->model);
     }
 
     /**
@@ -83,7 +81,7 @@ class SorterTest extends \PHPUnit_Framework_TestCase
      * @param mixed $direction
      * @param null $expected
      *
-     * @dataProvider getDirectionsDataProvider
+     * @dataProvider setDirectionDataProvider
      */
     public function testSetDirection($direction = null, $expected = null)
     {
@@ -96,25 +94,25 @@ class SorterTest extends \PHPUnit_Framework_TestCase
      *
      * @return array
      */
-    public function getDirectionsDataProvider()
+    public function setDirectionDataProvider()
     {
         return array(
             'not_sorted' => array(),
             'sorted_by_asc' => array(
-                '$direction' => self::TEST_ASC_DIRECTION,
-                '$expected'  => self::TEST_ASC_DIRECTION
+                '$direction' => Sorter::DIRECTION_ASC,
+                '$expected'  => Sorter::DIRECTION_ASC
             ),
             'sorted_by_desc' => array(
-                '$direction' => self::TEST_DESC_DIRECTION,
-                '$expected'  => self::TEST_DESC_DIRECTION
+                '$direction' => Sorter::DIRECTION_DESC,
+                '$expected'  => Sorter::DIRECTION_DESC
             ),
             'sorted_using_true_value' => array(
                 '$direction' => true,
-                '$expected'  => self::TEST_DESC_DIRECTION
+                '$expected'  => Sorter::DIRECTION_DESC
             ),
             'sorted_using_false_value' => array(
                 '$direction' => false,
-                '$expected'  => self::TEST_ASC_DIRECTION
+                '$expected'  => Sorter::DIRECTION_ASC
             )
         );
     }
@@ -124,8 +122,8 @@ class SorterTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetDirection()
     {
-        $this->model->setDirection(self::TEST_ASC_DIRECTION);
-        $this->assertEquals(self::TEST_ASC_DIRECTION, $this->model->getDirection());
+        $this->model->setDirection(Sorter::DIRECTION_ASC);
+        $this->assertEquals(Sorter::DIRECTION_ASC, $this->model->getDirection());
     }
 
     /**
@@ -182,19 +180,19 @@ class SorterTest extends \PHPUnit_Framework_TestCase
             'sort_by_complex_field' => array(
                 '$fieldName'         => self::TEST_NAME,
                 '$fieldOptions'      => array('complex_data' => true),
-                '$direction'         => self::TEST_ASC_DIRECTION,
+                '$direction'         => Sorter::DIRECTION_ASC,
                 '$expectedFieldName' => self::TEST_NAME
             ),
             'sort_by_field_with_alias' => array(
                 '$fieldName'         => self::TEST_NAME,
                 '$fieldOptions'      => array('entity_alias' => self::TEST_ALIAS),
-                '$direction'         => self::TEST_ASC_DIRECTION,
+                '$direction'         => Sorter::DIRECTION_ASC,
                 '$expectedFieldName' => self::TEST_ALIAS.'.'.self::TEST_NAME
             ),
             'sort_by_field_with_alias_mapping' => array(
                 '$fieldName'         => self::TEST_NAME,
                 '$fieldOptions'      => array('parent_association_mappings' => array(self::TEST_ALIAS)),
-                '$direction'         => self::TEST_ASC_DIRECTION,
+                '$direction'         => Sorter::DIRECTION_ASC,
                 '$expectedFieldName' => self::TEST_ALIAS.'.'.self::TEST_NAME
             ),
             'sort_order_by_predefined_direction' => array(
