@@ -29,7 +29,7 @@ class SorterFactory implements SorterFactoryInterface
      */
     public function create(FieldDescriptionInterface $field, $direction = null)
     {
-        if (!$field) {
+        if (!$field->getName()) {
             throw new \RunTimeException('The field name must be defined for sorter');
         }
 

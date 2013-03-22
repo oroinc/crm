@@ -58,7 +58,7 @@ class Sorter implements SorterInterface
     public function setDirection($direction)
     {
         if (!is_null($direction)) {
-            if (in_array($direction, array(self::DIRECTION_ASC, self::DIRECTION_DESC))) {
+            if (in_array($direction, array(self::DIRECTION_ASC, self::DIRECTION_DESC), true)) {
                 $this->direction = $direction;
             } elseif ($direction) {
                 $this->direction = self::DIRECTION_DESC;

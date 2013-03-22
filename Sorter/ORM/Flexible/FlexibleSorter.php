@@ -40,7 +40,7 @@ class FlexibleSorter extends Sorter
 
         $flexibleEntityName = $field->getOption('flexible_name');
         if (!$flexibleEntityName) {
-            throw new \LogicException('Flexible entity filter must have flexible entity name.');
+            throw new \LogicException('Flexible entity sorter must have flexible entity name.');
         }
 
         $this->flexibleManager = $this->getFlexibleManager($flexibleEntityName);
