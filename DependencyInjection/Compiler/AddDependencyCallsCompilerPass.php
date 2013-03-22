@@ -190,7 +190,7 @@ class AddDependencyCallsCompilerPass implements CompilerPassInterface
     protected function createDefaultQueryFactoryDefinition($serviceId, array $attributes)
     {
         $arguments = array();
-        if (!empty($attributes[self::FLEXIBLE_ENTITY_KEY])) {
+        if (!empty($attributes['entity_name'])) {
             $factoryClass = '%oro_grid.orm.query_factory.entity.class%';
 
             $arguments[] = new Reference('doctrine');

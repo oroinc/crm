@@ -76,7 +76,7 @@ class DemoDatagridManager extends DatagridManager
         acme_demo_grid.demo_grid.manager:
             class: My\Bundle\Namespace\DemoDatagridManager
             tags:
-                - name: oro_grid.datagrid.demo
+                - name: oro_grid.datagrid.manager
                   datagrid_name: demo
                   route_name: my_controller_action_route
 

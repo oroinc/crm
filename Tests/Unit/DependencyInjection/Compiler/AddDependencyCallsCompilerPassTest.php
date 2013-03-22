@@ -108,19 +108,9 @@ class AddDependencyCallsCompilerPassTest extends AbstractCompilerPassTest
                                 AddDependencyCallsCompilerPass::DATAGRID_MANAGER_TAG => array(
                                     'name' => AddDependencyCallsCompilerPass::DATAGRID_MANAGER_TAG,
                                     'datagrid_name' => 'users',
-                                    AddDependencyCallsCompilerPass::FLEXIBLE_ENTITY_KEY => true,
                                     'entity_name' => 'User',
                                     'query_entity_alias' => 'u',
                                     'route_name' => 'user_grid_route'
-                                )
-                            )
-                        )
-                    ),
-                    'parameters' => array(
-                        'oro_flexibleentity.flexible_config' => array(
-                            'entities_config' => array(
-                                'User' => array(
-                                    'flexible_manager' => 'flexible_manager_service'
                                 )
                             )
                         )
