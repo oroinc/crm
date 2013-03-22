@@ -17,6 +17,7 @@ Grid functionality consists of backend and frontend parts. Backend part responsi
     - [Entity Builders](#entity-builders)
     - [Datagrid](#datagrid)
     - [Proxy Query](#proxy-query)
+    - [Fields](#fields)
 - [Frontend Architecture](#orogridbundle---frontend-architecture)
 
 
@@ -493,6 +494,18 @@ parameters:
     oro_grid.orm.query_factory.entity.class: Oro\Bundle\GridBundle\Datagrid\ORM\QueryFactory\EntityQueryFactory
     oro_grid.orm.query_factory.query.class:  Oro\Bundle\GridBundle\Datagrid\ORM\QueryFactory\QueryFactory
 ```
+
+
+Fields
+------
+
+Field Description is an entity that contains all information about one grid column - name, type, filter/sorter flags etc. Filter Descriptions are stored in Field Description Collection.
+
+#### Class Description
+
+* **Field \ FieldDescriptionInterface** - basic interface for Field Description, provides setters an getters for field parameters and options;
+* **Field \ FieldDescription** - Field Description implementation of basic interface, has method to extract field value from source object;
+* **Field \ FieldDescriptionCollection** - storage for FieldDescription entities, implements ArrayAccess, Countable and IteratorAggregate interfaces and their methods.
 
 
 OroGridBundle - Frontend Architecture

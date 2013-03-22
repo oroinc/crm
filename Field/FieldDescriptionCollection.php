@@ -4,6 +4,9 @@ namespace Oro\Bundle\GridBundle\Field;
 
 class FieldDescriptionCollection implements \ArrayAccess, \Countable, \IteratorAggregate
 {
+    /**
+     * @var FieldDescriptionInterface[]
+     */
     protected $elements = array();
 
     /**
