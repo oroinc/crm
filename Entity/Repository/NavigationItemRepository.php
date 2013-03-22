@@ -13,12 +13,12 @@ class NavigationItemRepository extends EntityRepository implements NavigationRep
     /**
      * Find all Favorite items for specified user
      *
-     * @param int $userId
+     * @param \Oro\Bundle\UserBundle\Entity\User $user
      * @param string $type
      *
      * @return array
      */
-    public function getNavigationItems($userId, $type)
+    public function getNavigationItems($user, $type)
     {
         $qb = $this->_em->createQueryBuilder();
 
@@ -34,16 +34,15 @@ class NavigationItemRepository extends EntityRepository implements NavigationRep
             )
         )
         ->add('from', new Expr\From('Oro\Bundle\NavigationBundle\Entity\NavigationItem', 'ni'))
-        ->innerJoin('ni.user', 'u', Expr\Join::WITH)
         ->add(
             'where',
             $qb->expr()->andx(
-                $qb->expr()->eq('u.id', ':userId'),
+                $qb->expr()->eq('ni.user', ':user'),
                 $qb->expr()->eq('ni.type', ':type')
             )
         )
         ->add('orderBy', new Expr\OrderBy('ni.position', 'ASC'))
-        ->setParameters(array('userId' => $userId, 'type' => $type));
+        ->setParameters(array('user' => $user, 'type' => $type));
 
         return $qb->getQuery()->getArrayResult();
     }
