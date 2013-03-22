@@ -12,6 +12,7 @@ Grid functionality consists of backend and frontend parts. Backend part responsi
     - [Example Of Usage](#example-of-usage)
     - [Dependencies](#dependencies)
 - [Backend Architecture](#orogridbundle---backend-architecture)
+    - [Configuration](#configuration)
 - [Frontend Architecture](#orogridbundle---frontend-architecture)
 
 
@@ -72,13 +73,15 @@ class DemoDatagridManager extends DatagridManager
 
 **Datagrid Manager Configuration**
 
-    services:
-        acme_demo_grid.demo_grid.manager:
-            class: My\Bundle\Namespace\DemoDatagridManager
-            tags:
-                - name: oro_grid.datagrid.manager
-                  datagrid_name: demo
-                  route_name: my_controller_action_route
+```
+services:
+    acme_demo_grid.demo_grid.manager:
+        class: My\Bundle\Namespace\DemoDatagridManager
+        tags:
+            - name: oro_grid.datagrid.manager
+              datagrid_name: demo
+              route_name: my_controller_action_route
+```
 
 **Controller Action**
 
@@ -122,10 +125,12 @@ class DemoController extends Controller
 
 **Twig Template**
 
-    {% include 'OroGridBundle:Include:javascript.html.twig' with {'datagrid': datagrid, 'selector': '#backgrid'} %}
-    {% include 'OroGridBundle:Include:stylesheet.html.twig' %}
+```
+{% include 'OroGridBundle:Include:javascript.html.twig' with {'datagrid': datagrid, 'selector': '#backgrid'} %}
+{% include 'OroGridBundle:Include:stylesheet.html.twig' %}
 
-    <div id="backgrid"></div>
+<div id="backgrid"></div>
+```
 
 
 Dependencies
@@ -182,39 +187,43 @@ Datagrid Manager receives parameters through tag attributes. List of parameters 
 * **translator** (optional) - Symfony Translator service ID which will be passed to Datagrid Manager; setter method is *setTranslator*;
 * **validator** (optional) - Symfony Validator service ID which will be passed to Datagrid Manager; setter method is *setValidator*.
 
-    services:
-        acme_demo_grid.product_grid.manager:
-            class: Acme\Bundle\DemoGridBundle\Datagrid\ProductDatagridManager
-            tags:
-                - name: oro_grid.datagrid.manager
-                  datagrid_name: product
-                  entity_hint: products
-                  entity_name: ~
-                  query_entity_alias: ~
-                  route_name: acme_demo_gridbundle_product_list
-                  query_factory: ~
-                  route_generator: ~
-                  parameters: ~
-                  datagrid_builder: ~
-                  list_builder: ~
-                  translator: ~
-                  validator: ~
+```
+services:
+    acme_demo_grid.product_grid.manager:
+        class: Acme\Bundle\DemoGridBundle\Datagrid\ProductDatagridManager
+        tags:
+            - name: oro_grid.datagrid.manager
+              datagrid_name: product
+              entity_hint: products
+              entity_name: ~
+              query_entity_alias: ~
+              route_name: acme_demo_gridbundle_product_list
+              query_factory: ~
+              route_generator: ~
+              parameters: ~
+              datagrid_builder: ~
+              list_builder: ~
+              translator: ~
+              validator: ~
+```
 
 **Flexible Datagrid Manager Configuration**
 
 Flexible Datagrid Manager has the same configuration as regular Datagird Manager
 with the exceptions of **flexible** attribute - it must has true value, and **entity\_name** attribute - it is obligatory.
 
-    services:
-        acme_demo_grid.user_grid.manager:
-            class: Acme\Bundle\DemoGridBundle\Datagrid\UserDatagridManager
-            tags:
-                - name: oro_grid.datagrid.manager
-                  datagrid_name: users
-                  entity_name: Oro\Bundle\UserBundle\Entity\User
-                  entity_hint: users
-                  flexible: true
-                  route_name: acme_demo_gridbundle_user_list
+```
+services:
+    acme_demo_grid.user_grid.manager:
+        class: Acme\Bundle\DemoGridBundle\Datagrid\UserDatagridManager
+        tags:
+            - name: oro_grid.datagrid.manager
+              datagrid_name: users
+              entity_name: Oro\Bundle\UserBundle\Entity\User
+              entity_hint: users
+              flexible: true
+              route_name: acme_demo_gridbundle_user_list
+```
 
 
 OroGridBundle - Frontend Architecture
