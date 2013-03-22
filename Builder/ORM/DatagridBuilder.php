@@ -5,7 +5,6 @@ namespace Oro\Bundle\GridBundle\Builder\ORM;
 use Symfony\Component\Form\FormFactoryInterface;
 
 use Oro\Bundle\GridBundle\Builder\DatagridBuilderInterface;
-use Oro\Bundle\GridBundle\Datagrid\Datagrid;
 use Oro\Bundle\GridBundle\Datagrid\DatagridInterface;
 use Oro\Bundle\GridBundle\Datagrid\PagerInterface;
 use Oro\Bundle\GridBundle\Datagrid\ProxyQueryInterface;
@@ -46,21 +45,29 @@ class DatagridBuilder implements DatagridBuilderInterface
     protected $complexFields = array();
 
     /**
+     * @var string
+     */
+    protected $className;
+
+    /**
      * @param FormFactoryInterface $formFactory
      * @param FilterFactoryInterface $filterFactory
      * @param SorterFactoryInterface $sorterFactory
      * @param ActionFactoryInterface $actionFactory
+     * @param string $className
      */
     public function __construct(
         FormFactoryInterface $formFactory,
         FilterFactoryInterface $filterFactory,
         SorterFactoryInterface $sorterFactory,
-        ActionFactoryInterface $actionFactory
+        ActionFactoryInterface $actionFactory,
+        $className
     ) {
         $this->formFactory   = $formFactory;
         $this->filterFactory = $filterFactory;
         $this->sorterFactory = $sorterFactory;
         $this->actionFactory = $actionFactory;
+        $this->className     = $className;
     }
 
     /**
@@ -142,7 +149,8 @@ class DatagridBuilder implements DatagridBuilderInterface
             array('csrf_protection' => false)
         );
 
-        return new Datagrid(
+        $datagridClassName = $this->className;
+        return new $datagridClassName(
             $query,
             $fieldCollection,
             $this->createPager($query),

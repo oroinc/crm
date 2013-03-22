@@ -8,7 +8,7 @@ use Oro\Bundle\GridBundle\Field\FieldDescriptionCollection;
 
 class DatagridBuilderTest extends \PHPUnit_Framework_TestCase
 {
-    /**
+    /**#@+
      * Test parameters
      */
     const TEST_ENTITY_NAME   = 'test_entity_name';
@@ -16,6 +16,12 @@ class DatagridBuilderTest extends \PHPUnit_Framework_TestCase
     const TEST_ACL_RESOURCE  = 'test_acl_resource';
     const TEST_HINT          = 'test_hint';
     const TEST_COMPLEX_FIELD = 'test_complex_field';
+    /**#@-*/
+
+    /**
+     * Datagrid class name
+     */
+    const DATAGRID_CLASS = 'Oro\Bundle\GridBundle\Datagrid\Datagrid';
 
     /**
      * @var DatagridBuilder
@@ -44,13 +50,14 @@ class DatagridBuilderTest extends \PHPUnit_Framework_TestCase
     /**
      * @param array $arguments
      */
-    protected function initializeActionFactory($arguments = array())
+    protected function initializeDatagridBuilder($arguments = array())
     {
         $defaultArguments = array(
             'formFactory'   => $this->getMock('Symfony\Component\Form\FormFactoryInterface'),
             'filterFactory' => $this->getMock('Oro\Bundle\GridBundle\Filter\FilterFactoryInterface'),
             'sorterFactory' => $this->getMock('Oro\Bundle\GridBundle\Sorter\SorterFactoryInterface'),
             'actionFactory' => $this->getMock('Oro\Bundle\GridBundle\Action\ActionFactoryInterface'),
+            'className'     => null,
         );
 
         $arguments = array_merge($defaultArguments, $arguments);
@@ -59,7 +66,8 @@ class DatagridBuilderTest extends \PHPUnit_Framework_TestCase
             $arguments['formFactory'],
             $arguments['filterFactory'],
             $arguments['sorterFactory'],
-            $arguments['actionFactory']
+            $arguments['actionFactory'],
+            $arguments['className']
         );
     }
 
@@ -103,7 +111,7 @@ class DatagridBuilderTest extends \PHPUnit_Framework_TestCase
             ->with($testFilter);
 
         // test
-        $this->initializeActionFactory(array('filterFactory' => $filterFactoryMock));
+        $this->initializeDatagridBuilder(array('filterFactory' => $filterFactoryMock));
         $this->model->addFilter($datagridMock, $fieldDescription);
     }
 
@@ -145,7 +153,7 @@ class DatagridBuilderTest extends \PHPUnit_Framework_TestCase
             ->with($testSorter);
 
         // test
-        $this->initializeActionFactory(array('sorterFactory' => $sorterFactoryMock));
+        $this->initializeDatagridBuilder(array('sorterFactory' => $sorterFactoryMock));
         $this->model->addSorter($datagridMock, $fieldDescription);
     }
 
@@ -248,13 +256,13 @@ class DatagridBuilderTest extends \PHPUnit_Framework_TestCase
         }
 
         // test
-        $this->initializeActionFactory(array('actionFactory' => $actionFactoryMock));
+        $this->initializeDatagridBuilder(array('actionFactory' => $actionFactoryMock));
         $this->model->addRowAction($datagridMock, $actualParameters);
     }
 
     public function testAddComplexField()
     {
-        $this->initializeActionFactory();
+        $this->initializeDatagridBuilder();
 
         $this->assertAttributeEmpty('complexFields', $this->model);
         $this->model->addComplexField(self::TEST_COMPLEX_FIELD);
@@ -289,7 +297,9 @@ class DatagridBuilderTest extends \PHPUnit_Framework_TestCase
         $parametersMock             = $this->getMock('Oro\Bundle\GridBundle\Datagrid\ParametersInterface');
 
         // test datagrid
-        $this->initializeActionFactory(array('formFactory' => $formFactoryMock));
+        $this->initializeDatagridBuilder(
+            array('formFactory' => $formFactoryMock, 'className' => self::DATAGRID_CLASS)
+        );
 
         $this->model->addComplexField(self::TEST_COMPLEX_FIELD);
         $datagrid = $this->model->getBaseDatagrid(
@@ -301,7 +311,7 @@ class DatagridBuilderTest extends \PHPUnit_Framework_TestCase
             self::TEST_HINT
         );
 
-        $this->assertInstanceOf('Oro\Bundle\GridBundle\Datagrid\Datagrid', $datagrid);
+        $this->assertInstanceOf(self::DATAGRID_CLASS, $datagrid);
         $this->assertAttributeEquals($proxyQueryMock, 'query', $datagrid);
         $this->assertAttributeEquals($fieldDescriptionCollection, 'columns', $datagrid);
         $this->assertAttributeEquals($formBuilderMock, 'formBuilder', $datagrid);
