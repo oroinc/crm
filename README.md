@@ -79,10 +79,6 @@ class DemoDatagridManager extends DatagridManager
                 - name: oro_grid.datagrid.demo
                   datagrid_name: demo
                   route_name: my_controller_action_route
-                  form_name: demo
-                  query_factory: acme_demo_grid.demo_query_factory
-        acme_demo_grid.demo_query_factory:
-            class: %oro_grid.orm.query_factory.query.class%
 
 **Controller Action**
 
@@ -107,7 +103,7 @@ class DemoController extends Controller
             ->from('MyBundle:Entity', 'e');
 
         /** @var $queryFactory QueryFactory */
-        $queryFactory = $this->get('acme_demo_grid.demo_query_factory');
+        $queryFactory = $this->get('acme_demo_grid.demo_grid.manager.default_query_factory');
         $queryFactory->setQueryBuilder($queryBuilder);
 
         /** @var $datagridManager DemoDatagridManager */
