@@ -15,6 +15,8 @@ use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 
 use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityFlexible;
 
+use Oro\Bundle\UserBundle\Entity\Status;
+
 /**
  * @ORM\Entity(repositoryClass="Oro\Bundle\FlexibleEntityBundle\Entity\Repository\FlexibleEntityRepository")
  * @ORM\Table(name="oro_user")
@@ -144,12 +146,26 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
     protected $groups;
 
     /**
-     * @var Oro\Bundle\FlexibleEntityBundle\Model\AbstractFlexibleValue[]
+     * @var \Oro\Bundle\FlexibleEntityBundle\Model\AbstractFlexibleValue[]
      *
      * @ORM\OneToMany(targetEntity="UserValue", mappedBy="entity", cascade={"persist", "remove"}, orphanRemoval=true)
      * @Exclude
      */
     protected $values;
+
+    /**
+     * @var Status[]
+     * @ORM\OneToMany(targetEntity="Status", mappedBy="user")
+     * @ORM\OrderBy({"createdAt" = "DESC"})
+     */
+    protected $statuses;
+
+    /**
+     * @var Status
+     * @ORM\OneToOne(targetEntity="Status")
+     * @ORM\JoinColumn(name="status_id", referencedColumnName="id", nullable=true)
+     */
+    protected $currentStatus;
 
     public function __construct()
     {
@@ -157,6 +173,7 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
 
         $this->salt  = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
         $this->roles = new ArrayCollection();
+        $this->statuses = new ArrayCollection;
     }
 
     /**
@@ -595,5 +612,51 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
     public function isCredentialsNonExpired()
     {
         return true;
+    }
+
+    /**
+     * Get User Statuses
+     *
+     * @return Status[]
+     */
+    public function getStatuses()
+    {
+        return $this->statuses;
+    }
+
+    /**
+     * Add Status to User
+     *
+     * @param Status $status
+     * @return User
+     */
+    public function addStatus(Status $status)
+    {
+        $this->statuses[] = $status;
+
+        return $this;
+    }
+
+    /**
+     * Get Current Status
+     *
+     * @return Status
+     */
+    public function getCurrentStatus()
+    {
+        return $this->currentStatus;
+    }
+
+    /**
+     * Set User Current Status
+     *
+     * @param Status $status
+     * @return User
+     */
+    public function setCurrentStatus(Status $status = null)
+    {
+        $this->currentStatus = $status;
+
+        return $this;
     }
 }
