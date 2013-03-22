@@ -5,6 +5,7 @@ namespace Oro\Bundle\UserBundle\Tests\Entity;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\UserBundle\Entity\Role;
 use Oro\Bundle\UserBundle\Entity\Group;
+use Oro\Bundle\UserBundle\Entity\Status;
 
 class UserTest extends \PHPUnit_Framework_TestCase
 {
@@ -155,6 +156,27 @@ class UserTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($now, $user->getCreatedAt());
         $this->assertEquals($now, $user->getUpdatedAt());
+    }
+
+    public function testStatuses()
+    {
+        $user  = $this->getUser();
+        $status  = new Status();
+
+        $this->assertNotContains($status, $user->getStatuses());
+        $this->assertNull($user->getCurrentStatus());
+
+        $user->addStatus($status);
+        $user->setCurrentStatus($status);
+
+        $this->assertContains($status, $user->getStatuses());
+        $this->assertEquals($status, $user->getCurrentStatus());
+
+        $user->setCurrentStatus();
+        $this->assertNull($user->getCurrentStatus());
+
+        $user->getStatuses()->clear();
+        $this->assertNotContains($status, $user->getStatuses());
     }
 
     /**
