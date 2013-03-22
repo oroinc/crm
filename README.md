@@ -18,6 +18,7 @@ Grid functionality consists of backend and frontend parts. Backend part responsi
     - [Datagrid](#datagrid)
     - [Proxy Query](#proxy-query)
     - [Fields](#fields)
+    - [Pager](#pager)
 - [Frontend Architecture](#orogridbundle---frontend-architecture)
     - [Frontend Overview](#frontend-overview)
     - [Backbone Developer Introduction](#backbone-developer-introduction)
@@ -514,11 +515,26 @@ Field Description is an entity that contains all information about one grid colu
 * **Field \ FieldDescriptionCollection** - storage for FieldDescription entities, implements ArrayAccess, Countable and IteratorAggregate interfaces and their methods.
 
 
+Pager
+-----
+
+Pager is an entity that provides information about pagination parameters on grid and applies it to DB request.
+
+#### Class Description
+
+* **Sonata \ AdminBundle \ Datagrid \ PagerInterface** - Sonata AdminBundle pager interface;
+* **Sonata \ AdminBundle \ Datagrid \ Pager** - abstract implementation of Sonata pager interface;
+* **Sonata \ DoctrineORMAdminBundle \ Datagrid \ Pager** - Sonata implementation of pager for Doctrine ORM extended from abstract pager;
+* **Datagrid \ PagerInterface** - basic interface for Pager entity, provides getters and setters for pagination parameters, applies it and returns values of pagination parameters;
+* **Datagrid \ ORM \ Pager** - Pager implementation of basic interface with all required methods.
+
+
 OroGridBundle - Frontend Architecture
 =====================================
 
 
-### Frontend Overview
+Frontend Overview
+-----------------
 
 Grid bundle has rich representation of frontend side that is visible to end-user as UI widgets when grid is displayed. Frontend-side serves role of View of grid data. Main goals of grid frontend-side are trivial from perspective of View:
 
@@ -536,7 +552,8 @@ More detailed responsibilities are based on requirements to grid UI. Among those
 * grid state should be saved in browser history
 * apply browser's "Go Back" and "Go Forward" actions onto grid states history
 
-### Backbone Developer Introduction
+Backbone Developer Introduction
+-------------------------------
 
 [Backgrid.js](http://wyuenho.github.com/backgrid/) is used as a basic library in OroGridBundle. It's JS modules extended from [Backgrid.js](http://wyuenho.github.com/backgrid/) modules to provide basic functionality of Grid widget. This library built using Backbone.js, and thus can be easily extended. If you don't familiar with [backbone.js](http://backbonejs.org/) look this reference http://backbonejs.org/.
 
@@ -549,7 +566,8 @@ Backbone.js provides several types of entities in the application:
 
 It should be noted that there might be also entities of other types if any type doesn't fit the requirements. In addition, there is a module of Events that is mixin of all Backbone modules. It gives object the ability to bind and trigger custom named events.
 
-### Backgrid Developer Introduction
+Backgrid Developer Introduction
+-------------------------------
 
 Detailed information on the library is here http://wyuenho.github.com/backgrid/. The main types of this library are:
 
@@ -579,7 +597,8 @@ headerCell - instance of Backgrid.Cell, responsible for presentation of column c
 
 Backbone.Grid is a class from backbone's View category. Any standard backbone's collection could be used together with grid. But to able to use the paginator in grid, you must first declare your collections to be a Backbone.PageableCollection, which is a simple subclass of the Backbone.js Collection with added pagination behavior.
 
-### Bundle Frontend Architecture
+Bundle Frontend Architecture
+----------------------------
 
 #### Basic Classes
 
