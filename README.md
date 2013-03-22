@@ -18,15 +18,15 @@ Grid functionality consists of backend and frontend parts. Backend part responsi
     - [Datagrid](#datagrid)
     - [Proxy Query](#proxy-query)
     - [Fields](#fields)
-    - [Pager](#pager)
+    - [Backend Pager](#backend-pager)
 - [Frontend Architecture](#orogridbundle---frontend-architecture)
     - [Frontend Overview](#frontend-overview)
     - [Backbone Developer Introduction](#backbone-developer-introduction)
     - [Backgrid Developer Introduction](#backgrid-developer-introduction)
-    - [Bundle Frontend Architecture](#basic-classes)
-        - [Basic Classes](#bundle-frontend-architecture)
-        - [Actions](#actions)
-        - [Filters](#filters)
+    - [Bundle Frontend Architecture](#bundle-frontend-architecture)
+        - [Basic Classes](#basic-classes)
+        - [Frontend Actions](#frontend-actions)
+        - [Frontend Filters](#frontend-filters)
 
 Main Components
 ---------------
@@ -515,8 +515,8 @@ Field Description is an entity that contains all information about one grid colu
 * **Field \ FieldDescriptionCollection** - storage for FieldDescription entities, implements ArrayAccess, Countable and IteratorAggregate interfaces and their methods.
 
 
-Pager
------
+Backend Pager
+-------------
 
 Pager is an entity that provides information about pagination parameters on grid and applies it to DB request.
 
@@ -687,7 +687,7 @@ var grid = new OroApp.Datagrid({
 $('#grid').html(grid.render().$el);
 ```
 
-#### Actions
+#### Frontend Actions
 If you need to allow a user to perform an action on records in the grid, this can be achieved by actions. Actions are designed thus that they can be used separately from the grid, but when you need to use actions in the grid, you just need to pass them into configuration. All added actions will be accessible in special actions column.
 
 Below is an example of initialization grid with actions:
@@ -721,7 +721,7 @@ Main classes and responsibilities:
 * **OroApp.DatagridActionDelete** - concrete action responsible for model delete
 * **OroApp.DatagridActionNavigate** - concrete action responsible for navigating user to some URL
 
-#### Filters
+#### Frontend Filters
 Filters are used to change collection state according to criteria selected by user. Filters classes don't depend of grid. It couples only on collection.
 
 Main classes and responsibilities:
