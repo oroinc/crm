@@ -518,7 +518,7 @@ OroGridBundle - Frontend Architecture
 =====================================
 
 
-### Overview
+### Frontend Overview
 
 Grid bundle has rich representation of frontend side that is visible to end-user as UI widgets when grid is displayed. Frontend-side serves role of View of grid data. Main goals of grid frontend-side are trivial from perspective of View:
 
