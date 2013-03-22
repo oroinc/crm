@@ -13,6 +13,7 @@ Grid functionality consists of backend and frontend parts. Backend part responsi
     - [Dependencies](#dependencies)
 - [Backend Architecture](#orogridbundle---backend-architecture)
     - [Configuration](#configuration)
+    - [Datagrid Managers](#datagrid-managers)
 - [Frontend Architecture](#orogridbundle---frontend-architecture)
 
 
