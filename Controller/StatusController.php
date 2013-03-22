@@ -33,17 +33,6 @@ class StatusController extends Controller
     }
 
     /**
-     * @Route("/status-form", name="oro_user_status_form")
-     * @Template()
-     */
-    public function statusFormAction()
-    {
-        return array(
-            'form' => $this->get('oro_user.form.status')->createView(),
-        );
-    }
-
-    /**
      * @Route("/create", name="oro_user_status_create")
      * @Template()
      */
@@ -55,7 +44,17 @@ class StatusController extends Controller
         }
 
         if ($this->getRequest()->isXmlHttpRequest()) {
-            return new Response((string)$result);
+            if (!$result) {
+                return $this->render(
+                    'OroUserBundle:Status:statusForm.html.twig',
+                    array(
+                         'form' => $this->get('oro_user.form.status')->createView(),
+                    )
+                );
+            } else {
+                return new Response((string)$result);
+            }
+
 
         } elseif ($result) {
             $this->get('session')->getFlashBag()->add('success', 'Status saved');
