@@ -21,7 +21,7 @@
                 </div>
             </div>
             <div id="opener-content1" style="display: none;" title="Dima’s Address">
-                    <form action="#" class="form form-horizontal">
+                    <form action="#" class="form form-horizontal" id="testForm">
                         <fieldset>
                             <div class="scroll-holder">
                                 <div class="control-group">
@@ -88,8 +88,8 @@
                             </div>
                             <div class="bottom-action widget-actions">
                                 <div class="pull-right">
-                                    <button type="button" class="btn">Cancel</button>
-                                    <button type="button" class="btn btn-primary">Submit</button>
+                                    <button type="reset" class="btn">Cancel</button>
+                                    <button type="submit" class="btn btn-primary">Submit</button>
                                 </div>
                             </div>
                         </fieldset>
@@ -111,6 +111,11 @@
 
     <script>
         $(function(){
+            $('#testForm').on('submit', function(e) {
+                console.log('FORM!');
+                e.stopPropagation();
+            });
+
             var positionNextWindowY = 0;
             var positionNextWindowX=0;
             var positionNextWindowCounter = -35;
@@ -157,6 +162,7 @@
                     isOpen = false;
                 }
                 if (isOpen === false ){
+                    var i = 0;
                     var offsetwindow = newPositionWindow();
                     var dialogOptions = {
                         allowMaximize: true,
@@ -171,7 +177,6 @@
                             at: "center center",
                             of: $('body')
                         },
-                        "close" : function(){ $(this).dialog( "destroy" ) }
                     };
 
                     $("#opener-content1").dialog(dialogOptions);

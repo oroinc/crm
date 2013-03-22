@@ -24,23 +24,22 @@ $.widget( "ui.dialog", $.ui.dialog, {
         allowMinimize: false,
         dblclick: false,
         titlebar: false,
+        actionsEl: '.widget-actions',
         icons: {
             close: "ui-icon-closethick",
             maximize: "ui-icon-extlink",
             minimize: "ui-icon-minus",
             restore: "ui-icon-newwin"
         },
-        events: {
-            load: null,
-            beforeCollapse: null,
-            beforeMaximize: null,
-            beforeMinimize: null,
-            beforeRestore: null,
-            collapse: null,
-            maximize: null,
-            minimize: null,
-            restore: null
-        }
+        // Events
+        beforeCollapse: null,
+        beforeMaximize: null,
+        beforeMinimize: null,
+        beforeRestore: null,
+        collapse: null,
+        maximize: null,
+        minimize: null,
+        restore: null
     }),
 
     _create: function () {
@@ -54,26 +53,30 @@ $.widget( "ui.dialog", $.ui.dialog, {
         }
         // initiate plugin...
         this._verifySettings();
-        this._initEvents();
-        // set default dialog state
+        this._initButtons();
         this._initBottomLine();
-        this._trigger("load");
 
         // Handle window resize
-        var self = this;
-        var onResize = function(e) {
-            if (e.target == window) {
-                switch (self.state()) {
-                    case 'maximized':
-                        self._calculateNewMaximizedDimensions();
-                        break;
-                    case 'normal':
-                        self._moveToVisible();
-                        break;
-                }
-            }
-        };
-        $(window).resize(onResize);
+        $(window).bind('resize.dialog', $.proxy(this._windowResizeHandler, this));
+
+        return this;
+    },
+
+    close: function() {
+        $(window).unbind('.dialog');
+        this.revertActions();
+        this._super();
+    },
+
+    actionsContainer: function() {
+        return this.uiDialogButtonPane;
+    },
+
+    showActionsContainer: function() {
+        if (!this.uiDialogButtonPane.parent().length) {
+            this.uiDialog.addClass("ui-dialog-buttons");
+            this.uiDialogButtonPane.appendTo( this.uiDialog );
+        }
     },
 
     state: function () {
@@ -254,11 +257,6 @@ $.widget( "ui.dialog", $.ui.dialog, {
         return this.bottomLine.offset().top - this._appendTo().offset().top - heightDelta - 2;
     },
 
-    _createButtons: function() {
-        this._super();
-        this._initButtons();
-    },
-
     _initButtons: function (el) {
         var self = this;
         if (typeof el == 'undefined') {
@@ -350,16 +348,58 @@ $.widget( "ui.dialog", $.ui.dialog, {
         return this;
     },
 
-    _initEvents: function () {
-        var self = this;
-        // bind event callbacks which specified at init
-        $.each(this.options.events, function (type) {
-            if ($.isFunction(self.options.events[type])) {
-                self._on(type, self.options.events[type]);
-            }
-        });
+    adoptActions: function() {
+        var el = this._getActionsElement();
+        this.hasAdoptedActions = el.length > 0;
+        if (this.hasAdoptedActions) {
+            var self = this;
+            el.hide();
+            var form = el.closest('form');
+            var actions = el.clone(true);
+            var container = this.actionsContainer();
+            actions.find('[type=submit]').each(function(idx, btn) {
+                $(btn).click(function() {
+                    $(form).trigger('submit');
+                });
+            });
+            actions.find('[type=reset]').each(function(idx, btn) {
+                $(btn).click(function() {
+                    $(form).trigger('reset');
+                    self.close();
+                });
+            });
+            container.empty();
+            actions.show();
+            actions.appendTo(container);
+            this.showActionsContainer();
+        }
+    },
 
-        return this;
+    revertActions: function() {
+        if (this.hasAdoptedActions) {
+            this._getActionsElement().show();
+        }
+    },
+
+    _getActionsElement: function() {
+        var el = this.options.actionsEl;
+        if (typeof el == 'string') {
+            el = this.find(el);
+        }
+        return el;
+    },
+
+    _windowResizeHandler: function(e) {
+        if (e.target == window) {
+            switch (this.state()) {
+                case 'maximized':
+                    this._calculateNewMaximizedDimensions();
+                    break;
+                case 'normal':
+                    this._moveToVisible();
+                    break;
+            }
+        }
     },
 
     _createTitlebar: function () {
