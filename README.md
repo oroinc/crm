@@ -5,7 +5,7 @@ OroGridBundle provides functionality to create and show grid with some informati
 
 Grid functionality consists of backend and frontend parts. Backend part responsible for interaction with DB, obtaining of source data and sending this data to frontend. Frontend part is fully functional JavaScript grid which process all user actions on UI and synchronize grid content by interacting with backend using AJAX.
 
-**Table of Contents**
+#### Table of Contents
 
 - [Overview](#orogridbundle---overview)
     - [Main Components](#main-components)
@@ -19,7 +19,7 @@ Grid functionality consists of backend and frontend parts. Backend part responsi
 Main Components
 ---------------
 
-**Backend Components**
+#### Backend Components
 
 * **Datagrid Manager** - main entity that provides all required interfaces and methods to create and initialize grid (builders, factories, parameters, route generator). Datagrid Manager encapsulates grid configuration and passes it to builder entities to initialize grid with specified parameters. Also it receives request information and pass it to Datagrid entity.
 
@@ -27,7 +27,7 @@ Main Components
 
 * **Data Entity** - stores information for one grid row, can be either Doctrine entity or simple flat array. Provides interface to get row data that will be displayed in grid.
 
-**Frontend Components**
+#### Frontend Components
 
 * **Datagrid JS Objects** - main JS objects (datagrid, collection) which stores grid information and performs synchronization requests to backend in case of change of parameters. They encapsulate logic related to data storing and processing, and contain and render Datagrid JS Views.
 
@@ -39,7 +39,7 @@ Example Of Usage
 
 To create simple datagrid user must create Datagrid Manager class with configuration, create it's instance, build and pass Datagrid object to template and insert appropriate template.
 
-**Datagrid Manager**
+#### Datagrid Manager
 
 ``` php
 use Oro\Bundle\GridBundle\Datagrid\DatagridManager;
@@ -71,7 +71,7 @@ class DemoDatagridManager extends DatagridManager
 }
 ```
 
-**Datagrid Manager Configuration**
+#### Datagrid Manager Configuration
 
 ```
 services:
@@ -83,7 +83,7 @@ services:
               route_name: my_controller_action_route
 ```
 
-**Controller Action**
+#### Controller Action
 
 ``` php
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -123,7 +123,7 @@ class DemoController extends Controller
 }
 ```
 
-**Twig Template**
+#### Twig Template
 
 ```
 {% include 'OroGridBundle:Include:javascript.html.twig' with {'datagrid': datagrid, 'selector': '#backgrid'} %}
@@ -136,14 +136,14 @@ class DemoController extends Controller
 Dependencies
 ------------
 
-**Backend Dependencies**
+#### Backend Dependencies
 
 * Oro FlexibleEntityBundle - https://github.com/laboro/FlexibleEntityBundle;
 * Oro UIBundle - https://github.com/laboro/UIBundle;
 * Sonata AdminBundle  2.1 (Oro fork) - https://github.com/laboro/SonataAdminBundle;
 * Sonata DoctrineORM AdminBundle 2.1 - https://github.com/sonata-project/SonataDoctrineORMAdminBundle.
 
-**Frontend Dependencies**
+#### Frontend Dependencies
 
 * Backbone.js - https://github.com/documentcloud/backbone;
 * Underscore.js - https://github.com/documentcloud/underscore;
@@ -160,6 +160,26 @@ Dependencies
 OroGridBundle - Backend Architecture
 ====================================
 
+Datagird backend consists of several entities, which are used to perform specific actions. Every entity implements interface, so every part can be easy extended and replaced with external component.
+
+Datagrid entities use standard Symfony interfaces to perform translation, validation and form data processing. Also some interfaces and entities are extended from Sonata AdminBundle classes, so basic Sonata classes can be injected into datagrid entities.
+
+#### Used External Interfaces
+
+**Symfony**
+
+* Translator - Symfony\Component\Translation\TranslatorInterface;
+* Validator - Symfony\Component\Validator\ValidatorInterface;
+* Form Factory - Symfony\Component\Form\FormFactoryInterface.
+
+**Sonata AdminBundle**
+
+* Datagrid - Sonata\AdminBundle\Datagrid\DatagridInterface;
+* Filter - Sonata\AdminBundle\Filter\FilterInterface;
+* Filter Factory - Sonata\AdminBundle\Filter\FilterFactoryInterface;
+* Pager - Sonata\AdminBundle\Datagrid\PagerInterface;
+* Proxy Query - Sonata\AdminBundle\Datagrid\ProxyQueryInterface.
+
 
 Configuration
 -------------
@@ -168,7 +188,7 @@ Configuration files must contains services configuration for Datagrid Managers a
 Datagrid Manager dependencies should be passed using either tag attributes, or manually using
 [setter method injection](http://symfony.com/doc/master/book/service_container.html#optional-dependencies-setter-injection).
 
-**Datagrid Manager Configuration**
+#### Datagrid Manager Configuration
 
 Datagrid Manager receives parameters through tag attributes. List of parameters and attributes is presented below.
 
@@ -207,7 +227,7 @@ services:
               validator: ~
 ```
 
-**Flexible Datagrid Manager Configuration**
+#### Flexible Datagrid Manager Configuration
 
 Flexible Datagrid Manager has the same configuration as regular Datagird Manager
 with the exceptions of **flexible** attribute - it must has true value, and **entity\_name** attribute - it is obligatory.
