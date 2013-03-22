@@ -19,7 +19,13 @@ Grid functionality consists of backend and frontend parts. Backend part responsi
     - [Proxy Query](#proxy-query)
     - [Fields](#fields)
 - [Frontend Architecture](#orogridbundle---frontend-architecture)
-
+    - [Frontend Overview](#frontend-overview)
+    - [Backbone Developer Introduction](#backbone-developer-introduction)
+    - [Backgrid Developer Introduction](#backgrid-developer-introduction)
+    - [Bundle Frontend Architecture](#basic-classes)
+        - [Basic Classes](#bundle-frontend-architecture)
+        - [Actions](#actions)
+        - [Filters](#filters)
 
 Main Components
 ---------------
@@ -731,6 +737,3 @@ var filtersList = new OroApp.DatagridFilterList({
 });
 $('#filter').html(filtersList.render().$el);
 ```
-
-Select2 is a jQuery based replacement for select boxes. It supports searching, remote data sets, and infinite scrolling of results.
-This library was borrowed to implement select widgets in grid's filters.
