@@ -17,6 +17,15 @@ class AclTest extends \PHPUnit_Framework_TestCase
         $this->acl = new Acl();
     }
 
+    public function testToArray()
+    {
+        $this->acl->setName('test_acl');
+        $this->acl->setDescription('test_description');
+        $result = $this->acl->toArray();
+        $this->assertEquals('test_acl', $result['name']);
+        $this->assertEquals('test_description', $result['description']);
+    }
+
     public function testName()
     {
         $this->assertNull($this->acl->getName());
