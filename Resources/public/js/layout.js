@@ -7,10 +7,10 @@ $(document).ready(function () {
         var _chMyHeight = _chWindowHeight - $("header").outerHeight() - $("footer").outerHeight() - 3;
         $('div.layout-content').innerHeight(_chMyHeight);
     };
-    /* changeHeight();
+     changeHeight();
     $(window).resize(function() {
         changeHeight();
-    }); */
+    });
 
     /* side bar functionality */
     $('div.side-nav').each(function () {
