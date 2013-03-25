@@ -728,6 +728,8 @@ services:
 Parameters
 ----------
 
+Parameters entity encapsulates all parameters required for grid. Default implementation receives parameters from Request object.
+
 #### Class Description
 
 * **Datagrid / ParametersInterface** - basic interface for Parameters entity;
