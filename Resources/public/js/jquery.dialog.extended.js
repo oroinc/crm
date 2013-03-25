@@ -98,6 +98,10 @@ $.widget( "ui.dialog", $.ui.dialog, {
     },
 
     _minimize: function () {
+        if (this.state() != 'normal') {
+            this._setOption("state", "normal");
+        }
+
         var widget = this.widget();
 
         this._trigger("beforeMinimize");
@@ -165,6 +169,7 @@ $.widget( "ui.dialog", $.ui.dialog, {
         if (this.state() != 'normal') {
             this._setOption("state", "normal");
         }
+
         this._trigger("beforeMaximize");
         this._saveSnapshot();
         this._calculateNewMaximizedDimensions();
@@ -426,15 +431,6 @@ $.widget( "ui.dialog", $.ui.dialog, {
 
     _restoreFromMinimized: function () {
         var original = this._loadSnapshot();
-
-        // restore dialog sizes which may change after maximized state
-        this._setOptions({
-            resizable: original.config.resizable,
-            draggable: original.config.draggable,
-            height: original.size.height - this._getTitleBarHeight(),
-            width: original.size.width,
-            maxHeight: original.size.maxHeight
-        });
 
         // Calculate position to be visible after maximize
         this.widget().css({
