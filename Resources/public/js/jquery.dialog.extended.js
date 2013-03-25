@@ -46,15 +46,19 @@ $.widget( "ui.dialog", $.ui.dialog, {
     _create: function () {
         this._super();
 
-        // initiate plugin...
         this._verifySettings();
-        this._initButtons();
         this._initBottomLine();
+    },
+
+    _init: function() {
+        this._super();
+
+        this._initButtons();
+        this._initializeContainer();
+        this._initializeState(this.options.state);
 
         // Handle window resize
         $(window).bind('resize.dialog', $.proxy(this._windowResizeHandler, this));
-
-        return this;
     },
 
     close: function() {
@@ -159,9 +163,7 @@ $.widget( "ui.dialog", $.ui.dialog, {
 
     _maximize: function () {
         if (this.state() != 'normal') {
-            // Normalize state
-            this._restoreWithoutTriggerEvent();
-            this._setState("normal");
+            this._setOption("state", "normal");
         }
         this._trigger("beforeMaximize");
         this._saveSnapshot();
@@ -399,9 +401,9 @@ $.widget( "ui.dialog", $.ui.dialog, {
         var original = this._loadSnapshot();
         // restore dialog
         this._setOptions({
-                "resizable": original.config.resizable,
-                "height": original.size.height - this._getTitleBarHeight(),
-                "maxHeight": original.size.maxHeight
+                resizable: original.config.resizable,
+                height: original.size.height - this._getTitleBarHeight(),
+                maxHeight: original.size.maxHeight
             });
 
         return this;
@@ -425,15 +427,16 @@ $.widget( "ui.dialog", $.ui.dialog, {
     _restoreFromMinimized: function () {
         var original = this._loadSnapshot();
 
+        // restore dialog sizes which may change after maximized state
         this._setOptions({
             resizable: original.config.resizable,
             draggable: original.config.draggable,
-            height: original.size.height - this._getTitleBarHeight() - 3,
+            height: original.size.height - this._getTitleBarHeight(),
             width: original.size.width,
             maxHeight: original.size.maxHeight
         });
 
-        // restore position *AFTER* size restored
+        // Calculate position to be visible after maximize
         this.widget().css({
             position: 'fixed',
             left: this._getVisibleLeft(original.position.left, original.size.width),
@@ -475,14 +478,14 @@ $.widget( "ui.dialog", $.ui.dialog, {
         // remember all configs under normal state
         if (this.state() == "normal") {
             this._setOption('snapshot', {
-                "config": {
-                    "resizable": this.options.resizable,
-                    "draggable": this.options.draggable
+                config: {
+                    resizable: this.options.resizable,
+                    draggable: this.options.draggable
                 },
-                "size": {
-                    "height": this.widget().height(),
-                    "width": this.options.width,
-                    "maxHeight": this.options.maxHeight
+                size: {
+                    height: this.widget().height(),
+                    width: this.options.width,
+                    maxHeight: this.options.maxHeight
                 },
                 "position": this.widget().offset()
             });
@@ -497,31 +500,39 @@ $.widget( "ui.dialog", $.ui.dialog, {
 
     _setOption: function(key, value) {
         if (key == 'state') {
-            if (!this.widget().hasClass('ui-dialog-' + value)) {
-                switch (value) {
-                    case 'maximized':
-                        this._maximize();
-                        break;
-                    case 'minimized':
-                        this._minimize();
-                        break;
-                    case 'collapsed':
-                        this._collapse();
-                        break;
-                    default:
-                        this._restore();
-                }
-            }
+            this._initializeState(value);
         }
 
         this._superApply(arguments);
 
         if (key == 'appendTo') {
-            // Fix parent position
-            var appendTo = this._appendTo();
-            if (appendTo.css('position') == 'static') {
-                appendTo.css('position', 'relative');
+            this._initializeContainer();
+        }
+    },
+
+    _initializeState: function(state) {
+        if (!this.widget().hasClass('ui-dialog-' + state)) {
+            switch (state) {
+                case 'maximized':
+                    this._maximize();
+                    break;
+                case 'minimized':
+                    this._minimize();
+                    break;
+                case 'collapsed':
+                    this._collapse();
+                    break;
+                default:
+                    this._restore();
             }
+        }
+    },
+
+    _initializeContainer: function() {
+        // Fix parent position
+        var appendTo = this._appendTo();
+        if (appendTo.css('position') == 'static') {
+            appendTo.css('position', 'relative');
         }
     },
 
