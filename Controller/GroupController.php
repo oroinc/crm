@@ -3,34 +3,36 @@
 namespace Oro\Bundle\UserBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 use Oro\Bundle\UserBundle\Entity\Group;
+use Oro\Bundle\UserBundle\Datagrid\GroupDatagridManager;
 
 /**
  * @Route("/group")
  */
 class GroupController extends Controller
 {
-   /**
-    * Create group form
-    *
-    * @Route("/create", name="oro_user_group_create")
-    * @Template("OroUserBundle:Group:edit.html.twig")
-    */
+    /**
+     * Create group form
+     *
+     * @Route("/create", name="oro_user_group_create")
+     * @Template("OroUserBundle:Group:edit.html.twig")
+     */
     public function createAction()
     {
         return $this->editAction(new Group());
     }
 
-   /**
-    * Edit group form
-    *
-    * @Route("/edit/{id}", name="oro_user_group_edit", requirements={"id"="\d+"}, defaults={"id"=0})
-    * @Template
-    */
+    /**
+     * Edit group form
+     *
+     * @Route("/edit/{id}", name="oro_user_group_edit", requirements={"id"="\d+"}, defaults={"id"=0})
+     * @Template
+     */
     public function editAction(Group $entity)
     {
         if ($this->get('oro_user.form.handler.group')->process($entity)) {
@@ -44,9 +46,9 @@ class GroupController extends Controller
         );
     }
 
-   /**
-    * @Route("/remove/{id}", name="oro_user_group_remove", requirements={"id"="\d+"})
-    */
+    /**
+     * @Route("/remove/{id}", name="oro_user_group_remove", requirements={"id"="\d+"})
+     */
     public function removeAction(Group $entity)
     {
         $em = $this->getDoctrine()->getManager();
@@ -63,7 +65,7 @@ class GroupController extends Controller
      * @Route("/{page}/{limit}", name="oro_user_group_index", requirements={"page"="\d+","limit"="\d+"}, defaults={"page"=1,"limit"=20})
      * @Template
      */
-    public function indexAction($page, $limit)
+    /*public function indexAction($page, $limit)
     {
         $query = $this
             ->getDoctrine()
@@ -72,6 +74,35 @@ class GroupController extends Controller
 
         return array(
             'pager'  => $this->get('knp_paginator')->paginate($query, $page, $limit),
+        );
+    }*/
+
+    /**
+     * @Route(
+     *      "/{_format}",
+     *      name="oro_user_group_index",
+     *      requirements={"_format"="html|json"},
+     *      defaults={"_format" = "html"}
+     * )
+     */
+    public function indexAction(Request $request)
+    {
+        /** @var $groupGridManager GroupDatagridManager */
+        $groupGridManager = $this->get('oro_user.group_datagrid_manager');
+        $datagrid = $groupGridManager->getDatagrid();
+
+        if ('json' == $request->getRequestFormat()) {
+            $view = 'OroGridBundle:Datagrid:list.json.php';
+        } else {
+            $view = 'OroUserBundle:Group:index.html.twig';
+        }
+
+        return $this->render(
+            $view,
+            array(
+                'datagrid' => $datagrid,
+                'form'     => $datagrid->getForm()->createView()
+            )
         );
     }
 }

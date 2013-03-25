@@ -3,12 +3,14 @@
 namespace Oro\Bundle\UserBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\UserBundle\Entity\UserManager;
+use Oro\Bundle\UserBundle\Datagrid\UserDatagridManager;
 
 class ProfileController extends Controller
 {
@@ -67,17 +69,31 @@ class ProfileController extends Controller
     }
 
     /**
-     * @Route("/{page}/{limit}", name="oro_user_index", requirements={"page"="\d+","limit"="\d+"}, defaults={"page"=1,"limit"=20})
-     * @Template
+     * @Route(
+     *      "/{_format}",
+     *      name="oro_user_index",
+     *      requirements={"_format"="html|json"},
+     *      defaults={"_format" = "html"}
+     * )
      */
-    public function indexAction($page, $limit)
+    public function indexAction(Request $request)
     {
-        return array(
-            'pager' => $this->get('knp_paginator')->paginate(
-                $this->getManager()->getListQuery(),
-                (int) $page,
-                (int) $limit
-            ),
+        /** @var $userGridManager UserDatagridManager */
+        $userGridManager = $this->get('oro_user.user_datagrid_manager');
+        $datagrid = $userGridManager->getDatagrid();
+
+        if ('json' == $request->getRequestFormat()) {
+            $view = 'OroGridBundle:Datagrid:list.json.php';
+        } else {
+            $view = 'OroUserBundle:Profile:index.html.twig';
+        }
+
+        return $this->render(
+            $view,
+            array(
+                'datagrid' => $datagrid,
+                'form'     => $datagrid->getForm()->createView()
+            )
         );
     }
 
