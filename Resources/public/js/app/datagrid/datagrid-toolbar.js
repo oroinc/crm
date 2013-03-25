@@ -10,12 +10,12 @@ OroApp.DatagridToolbar = OroApp.View.extend({
     template:_.template(
         '<div class="grid-toolbar well-small">' +
             '<div class="pull-left">' +
-                '<div class="btn-group icons-holder">' +
+                '<div class="btn-group icons-holder" style="display: none;">' +
                     '<button class="btn"><i class="icon-edit hide-text">edit</i></button>' +
                     '<button class="btn"><i class="icon-copy hide-text">copy</i></button>' +
                     '<button class="btn"><i class="icon-trash hide-text">remove</i></button>' +
                 '</div>' +
-                '<div class="btn-group">' +
+                '<div class="btn-group" style="display: none;">' +
                     '<button data-toggle="dropdown" class="btn dropdown-toggle">Status: <strong>All</strong><span class="caret"></span></button>' +
                     '<ul class="dropdown-menu">' +
                         '<li><a href="#">only short</a></li>' +

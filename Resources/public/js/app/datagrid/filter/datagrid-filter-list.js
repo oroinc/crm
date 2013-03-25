@@ -144,6 +144,10 @@ OroApp.DatagridFilterList = Backbone.View.extend({
 
         this.trigger("rendered");
 
+        if (_.isEmpty(this.filters)) {
+            this.$el.hide();
+        }
+
         return this;
     },
 

@@ -9,9 +9,6 @@ OroApp.DatagridActionCell = Backgrid.Cell.extend({
     /** @property */
     className: "action-cell",
 
-    /** @property */
-    actionsListPrototype: OroApp.DatagridActionList,
-
     /** @property {Array} */
     actions: undefined,
 

@@ -121,6 +121,15 @@ OroApp.PageableCollection = Backbone.PageableCollection.extend({
     },
 
     /**
+     * Extends and checks state
+     *
+     * @param {Object} state
+     */
+    extendState: function(state) {
+        this.state = this._checkState(_.extend({}, this.state, state))
+    },
+
+    /**
      * @inheritDoc
      */
     _checkState: function (state) {
@@ -135,16 +144,16 @@ OroApp.PageableCollection = Backbone.PageableCollection.extend({
         if (totalRecords != null && pageSize != null && currentPage != null &&
             firstPage != null && (mode == "infinite" ? links : true)) {
 
-            totalRecords = this.finiteInt(totalRecords, "totalRecords");
-            pageSize = this.finiteInt(pageSize, "pageSize");
-            currentPage = this.finiteInt(currentPage, "currentPage");
-            firstPage = this.finiteInt(firstPage, "firstPage");
+            state.totalRecords = totalRecords = this.finiteInt(totalRecords, "totalRecords");
+            state.pageSize = pageSize = this.finiteInt(pageSize, "pageSize");
+            state.currentPage = currentPage = this.finiteInt(currentPage, "currentPage");
+            state.firstPage = firstPage = this.finiteInt(firstPage, "firstPage");
 
             if (pageSize < 1) {
                 throw new RangeError("`pageSize` must be >= 1");
             }
 
-            totalPages = state.totalPages = Math.ceil(totalRecords / pageSize);
+            state.totalPages = totalPages = state.totalPages = Math.ceil(totalRecords / pageSize);
 
             if (firstPage < 0 || firstPage > 1) {
                 throw new RangeError("`firstPage` must be 0 or 1");

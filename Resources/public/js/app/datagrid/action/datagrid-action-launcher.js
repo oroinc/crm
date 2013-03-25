@@ -31,7 +31,10 @@ OroApp.DatagridActionLauncher = Backbone.View.extend({
 
     /** @property {function(Object, ?Object=): String} */
     template:_.template(
-        '<a href="<%= link %>" class="action" <%= attributesTemplate({attributes: attributes}) %>>' +
+        '<a href="<%= link %>" class="action" ' +
+            '<%= attributesTemplate({attributes: attributes}) %> ' +
+            'title="<%= label %>"' +
+        '>' +
             '<% if (icon) { %>' +
                 '<i class="icon-<%= icon %> hide-text"><%= label %></i>' +
             '<% } else { %>' +

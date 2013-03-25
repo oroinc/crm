@@ -1,48 +1,46 @@
 {% javascripts
-'@OroUIBundle/Resources/public/lib/backbone.bootstrap-modal.js'
+    '@OroUIBundle/Resources/public/lib/backbone.bootstrap-modal.js'
 
-'@OroGridBundle/Resources/public/lib/select2/select2.js'
-'@OroGridBundle/Resources/public/lib/backbone-pageable.js'
-'@OroGridBundle/Resources/public/lib/backgrid/backgrid.js'
-'@OroGridBundle/Resources/public/lib/moment/moment.js'
-'@OroGridBundle/Resources/public/lib/backgrid/extensions/moment-cell/backgrid-moment-cell.js'
+    '@OroGridBundle/Resources/public/lib/select2/select2.js'
+    '@OroGridBundle/Resources/public/lib/backbone-pageable.js'
+    '@OroGridBundle/Resources/public/lib/backgrid/backgrid.js'
+    '@OroGridBundle/Resources/public/lib/moment/moment.js'
+    '@OroGridBundle/Resources/public/lib/backgrid/extensions/moment-cell/backgrid-moment-cell.js'
 
-'@OroGridBundle/Resources/public/js/app/datagrid/action/datagrid-action-launcher.js'
-'@OroGridBundle/Resources/public/js/app/datagrid/action/datagrid-action.js'
-'@OroGridBundle/Resources/public/js/app/datagrid/action/datagrid-action-navigate.js'
-'@OroGridBundle/Resources/public/js/app/datagrid/action/datagrid-action-delete.js'
-'@OroGridBundle/Resources/public/js/app/datagrid/action/datagrid-action.js'
-'@OroGridBundle/Resources/public/js/app/datagrid/action/datagrid-action-cell.js'
+    '@OroGridBundle/Resources/public/js/app/datagrid/action/datagrid-action-launcher.js'
+    '@OroGridBundle/Resources/public/js/app/datagrid/action/datagrid-action.js'
+    '@OroGridBundle/Resources/public/js/app/datagrid/action/datagrid-action-navigate.js'
+    '@OroGridBundle/Resources/public/js/app/datagrid/action/datagrid-action-delete.js'
+    '@OroGridBundle/Resources/public/js/app/datagrid/action/datagrid-action.js'
+    '@OroGridBundle/Resources/public/js/app/datagrid/action/datagrid-action-cell.js'
 
-'@OroGridBundle/Resources/public/js/app/datagrid/datagrid-header-cell.js'
-'@OroGridBundle/Resources/public/js/app/datagrid/datagrid-header.js'
+    '@OroGridBundle/Resources/public/js/app/datagrid/datagrid-header-cell.js'
+    '@OroGridBundle/Resources/public/js/app/datagrid/datagrid-header.js'
 
-'@OroGridBundle/Resources/public/js/app/datagrid/datagrid-pagination.js'
-'@OroGridBundle/Resources/public/js/app/datagrid/pagination/datagrid-pagination-input.js'
-'@OroGridBundle/Resources/public/js/app/datagrid/datagrid-pagesize.js'
-'@OroGridBundle/Resources/public/js/app/datagrid/datagrid-toolbar.js'
+    '@OroGridBundle/Resources/public/js/app/datagrid/datagrid-pagination.js'
+    '@OroGridBundle/Resources/public/js/app/datagrid/pagination/datagrid-pagination-input.js'
+    '@OroGridBundle/Resources/public/js/app/datagrid/datagrid-pagesize.js'
+    '@OroGridBundle/Resources/public/js/app/datagrid/datagrid-toolbar.js'
 
-'@OroGridBundle/Resources/public/js/app/datagrid/filter/datagrid-filter-list.js'
-'@OroGridBundle/Resources/public/js/app/datagrid/filter/datagrid-filter.js'
-'@OroGridBundle/Resources/public/js/app/datagrid/filter/datagrid-filter-text.js'
-'@OroGridBundle/Resources/public/js/app/datagrid/filter/datagrid-filter-choice.js'
-'@OroGridBundle/Resources/public/js/app/datagrid/filter/datagrid-filter-date.js'
-'@OroGridBundle/Resources/public/js/app/datagrid/filter/datagrid-filter-datetime.js'
-'@OroGridBundle/Resources/public/js/app/datagrid/filter/datagrid-filter-select.js'
-'@OroGridBundle/Resources/public/js/app/datagrid/filter/datagrid-filter-multiselect.js'
+    '@OroGridBundle/Resources/public/js/app/datagrid/filter/datagrid-filter-list.js'
+    '@OroGridBundle/Resources/public/js/app/datagrid/filter/datagrid-filter.js'
+    '@OroGridBundle/Resources/public/js/app/datagrid/filter/datagrid-filter-text.js'
+    '@OroGridBundle/Resources/public/js/app/datagrid/filter/datagrid-filter-choice.js'
+    '@OroGridBundle/Resources/public/js/app/datagrid/filter/datagrid-filter-date.js'
+    '@OroGridBundle/Resources/public/js/app/datagrid/filter/datagrid-filter-datetime.js'
+    '@OroGridBundle/Resources/public/js/app/datagrid/filter/datagrid-filter-select.js'
+    '@OroGridBundle/Resources/public/js/app/datagrid/filter/datagrid-filter-multiselect.js'
 
-'@OroGridBundle/Resources/public/js/app/datagrid/datagrid-title.js'
+    '@OroGridBundle/Resources/public/js/app/backgrid-formatter.js'
 
-'@OroGridBundle/Resources/public/js/app/backgrid-formatter.js'
+    '@OroGridBundle/Resources/public/js/app/loadingmask.js'
+    '@OroGridBundle/Resources/public/js/app/datagrid.js'
 
-'@OroGridBundle/Resources/public/js/app/loadingmask.js'
-'@OroGridBundle/Resources/public/js/app/datagrid.js'
+    '@OroGridBundle/Resources/public/js/app/datagrid/datagrid-router.js'
 
-'@OroGridBundle/Resources/public/js/app/datagrid/datagrid-router.js'
+    '@OroGridBundle/Resources/public/js/app/pageablecollection.js'
 
-'@OroGridBundle/Resources/public/js/app/pageablecollection.js'
-
-output='js/acme.grid.js'
+    output='js/acme.grid.js'
 %}
 <script type="text/javascript" src="{{ asset_url }}"></script>
 {% endjavascripts %}
@@ -180,7 +178,6 @@ output='js/acme.grid.js'
         var containerSelector = {{ selector|json_encode|raw }};
         var datagridTemplateSelector = {{ ("#" ~ datagridName ~ "GridTemplate")|json_encode|raw }};
         var datagridName = {{ datagridName|json_encode|raw }};
-        var datagridTitleSelector = {{ ("#" ~ datagridName ~ "Title")|json_encode|raw }};
         var datagridFiltersSelector = {{ ("#" ~ datagridName ~ "Filters")|json_encode|raw }};
         var datagridBodySelector = {{ ("#" ~ datagridName ~ "Body")|json_encode|raw }};
         var datagridOptions = OroApp.scope[datagridName];
@@ -189,7 +186,6 @@ output='js/acme.grid.js'
             datagridOptions,
             datagridTemplateSelector,
             containerSelector,
-            datagridTitleSelector,
             datagridFiltersSelector,
             datagridBodySelector
         ) {
@@ -221,8 +217,6 @@ output='js/acme.grid.js'
                 },
                 datagridOptions.grid
             );
-            var datagridTitle = new OroApp.DatagridTitle(titleParameters);
-            $(datagridTitleSelector).html(datagridTitle.render().$el);
 
             // Filters
             var filterListParameters = _.extend(
@@ -248,7 +242,6 @@ output='js/acme.grid.js'
             datagridOptions,
             datagridTemplateSelector,
             containerSelector,
-            datagridTitleSelector,
             datagridFiltersSelector,
             datagridBodySelector
         );

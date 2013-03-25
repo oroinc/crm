@@ -12,7 +12,7 @@ OroApp.Datagrid = Backgrid.Grid.extend({
     requestsCount: 0,
 
     /** @property */
-    className: 'clearfix scroll-holder',
+    className: 'clearfix',
 
     /** @property */
     template: _.template(
