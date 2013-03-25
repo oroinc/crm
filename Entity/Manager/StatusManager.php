@@ -70,7 +70,7 @@ class StatusManager
      * @param \Oro\Bundle\UserBundle\Entity\Status $status
      * @param bool                                 $reloadUser
      */
-    public function setCurrentStatus(User $user, Status $status, $reloadUser = true)
+    public function setCurrentStatus(User $user, Status $status = null, $reloadUser = true)
     {
         $user->setCurrentStatus($status);
         $this->um->updateUser($user);
