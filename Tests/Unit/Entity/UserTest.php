@@ -6,6 +6,7 @@ use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\UserBundle\Entity\Role;
 use Oro\Bundle\UserBundle\Entity\Group;
 use Oro\Bundle\UserBundle\Entity\Status;
+use Oro\Bundle\UserBundle\Entity\Email;
 
 class UserTest extends \PHPUnit_Framework_TestCase
 {
@@ -177,6 +178,18 @@ class UserTest extends \PHPUnit_Framework_TestCase
 
         $user->getStatuses()->clear();
         $this->assertNotContains($status, $user->getStatuses());
+    }
+
+    public function testEmails()
+    {
+        $user  = $this->getUser();
+        $email  = new Email();
+
+        $this->assertNotContains($email, $user->getEmails());
+        $user->addEmail($email);
+        $this->assertContains($email, $user->getEmails());
+        $user->removeEmail($email);
+        $this->assertNotContains($email, $user->getEmails());
     }
 
     /**
