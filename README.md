@@ -21,6 +21,9 @@ Grid functionality consists of backend and frontend parts. Backend part responsi
     - [Backend Pager](#backend-pager)
     - [Backend Filters](#backend-filters)
     - [Backend Sorters](#backend-sorters)
+    - [Backend Actions](#backend-actions)
+    - [Parameters](#parameters)
+    - [Route Generator](#route-generator)
 - [Frontend Architecture](#orogridbundle---frontend-architecture)
     - [Frontend Overview](#frontend-overview)
     - [Backbone Developer Introduction](#backbone-developer-introduction)
@@ -563,7 +566,7 @@ Filter functionality based on Sonata AdminBundle filters.
 
 ```
 parameters:
-    oro_grid.filter.factory.class:           Oro\Bundle\GridBundle\Filter\FilterFactory
+    oro_grid.filter.factory.class: Oro\Bundle\GridBundle\Filter\FilterFactory
 
 services:
     oro_grid.filter.factory:
@@ -638,7 +641,7 @@ Sorter is an entity that allows to add sort conditions to DB request. Sorters ar
 
 ```
 parameters:
-    oro_grid.sorter.factory.class:           Oro\Bundle\GridBundle\Sorter\SorterFactory
+    oro_grid.sorter.factory.class: Oro\Bundle\GridBundle\Sorter\SorterFactory
 
 services:
     oro_grid.sorter.factory:
@@ -650,8 +653,8 @@ services:
 
 ```
 parameters:
-    oro_grid.sorter.class:                   Oro\Bundle\GridBundle\Sorter\ORM\Sorter
-    oro_grid.sorter.flexible.class:          Oro\Bundle\GridBundle\Sorter\ORM\Flexible\FlexibleSorter
+    oro_grid.sorter.class:          Oro\Bundle\GridBundle\Sorter\ORM\Sorter
+    oro_grid.sorter.flexible.class: Oro\Bundle\GridBundle\Sorter\ORM\Flexible\FlexibleSorter
 
 services:
     oro_grid.sorter:
@@ -662,6 +665,96 @@ services:
         class:     %oro_grid.sorter.flexible.class%
         scope:     prototype
         arguments: ["@service_container"]
+```
+
+
+Backend Actions
+---------------
+
+Action is an entity that represents grid action in some specific context - for example, row action. Actions are created by Action Factory.
+
+#### Class Description
+
+* **Action / ActionInterface** - basic interface for Action entity;
+* **Action / AbstracAction** - abstract implementation of Action entity, includes route processing;
+* **Action / RedirectAction** - redirect action implementation;
+* **Action / DeleteAction** - delete action implementation;
+* **Action / ActionUrlGeneratorInterface** - interface for action URL generator;
+* **Action / ActionUrlGenerator** - implementation of action URL generator;
+* **Action / ActionFactoryInterface** - basic interface for Action Factory;
+* **Action / ActionFactory** - Action Factory interface implementation to create Action entities.
+
+#### Configuration
+
+**Configuration of Services**
+
+```
+parameters:
+    oro_grid.action.factory.class:       Oro\Bundle\GridBundle\Action\ActionFactory
+    oro_grid.action.url_generator.class: Oro\Bundle\GridBundle\Action\ActionUrlGenerator
+
+services:
+    oro_grid.action.factory:
+        class:     %oro_grid.action.factory.class%
+        arguments: ["@service_container", ~]
+
+    oro_grid.action.url_generator:
+        class: %oro_grid.action.url_generator.class%
+        arguments: ["@router"]
+```
+
+**Configuration of Action Types**
+
+```
+parameters:
+    oro_grid.action.type.redirect.class: Oro\Bundle\GridBundle\Action\RedirectAction
+    oro_grid.action.type.delete.class:   Oro\Bundle\GridBundle\Action\DeleteAction
+
+services:
+    oro_grid.action.type.redirect:
+        class: %oro_grid.action.type.redirect.class%
+        arguments: ["@oro_grid.action.url_generator", "@oro_user.acl_manager"]
+        tags:
+            - { name: oro_grid.action.type, alias: oro_grid_action_redirect }
+
+    oro_grid.action.type.delete:
+        class: %oro_grid.action.type.delete.class%
+        arguments: ["@oro_grid.action.url_generator", "@oro_user.acl_manager"]
+        tags:
+            - { name: oro_grid.action.type, alias: oro_grid_action_delete }
+```
+
+
+Parameters
+----------
+
+#### Class Description
+
+* **Datagrid / ParametersInterface** - basic interface for Parameters entity;
+* **Datagrid / RequestParameters** - Parameters interface implementation, gets data from Request object.
+
+#### Configuration
+
+```
+parameters:
+    oro_grid.datagrid.parameters.class: Oro\Bundle\GridBundle\Datagrid\RequestParameters
+```
+
+Route Generator
+---------------
+
+Route Generator in an entity that generates all service URL's for grid backend and frontend parts based on source route name.
+
+#### Class Description
+
+* **Route \ RouteGeneratorInterface** - basic interface for Route Generator entity;
+* **Route \ DefaultRouteGenerator** - implementation of Route generator that receives source data from Parameters entity.
+
+#### Configuration
+
+```
+parameters:
+    oro_grid.route.default_generator.class: Oro\Bundle\GridBundle\Route\DefaultRouteGenerator
 ```
 
 

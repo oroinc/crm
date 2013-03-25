@@ -1,13 +1,8 @@
 parameters:
-    oro_grid.action.url_generator.class: Oro\Bundle\GridBundle\Action\ActionUrlGenerator
     oro_grid.action.type.redirect.class: Oro\Bundle\GridBundle\Action\RedirectAction
     oro_grid.action.type.delete.class:   Oro\Bundle\GridBundle\Action\DeleteAction
 
 services:
-    oro_grid.action.url_generator:
-        class: %oro_grid.action.url_generator.class%
-        arguments: ["@router"]
-
     oro_grid.action.type.redirect:
         class: %oro_grid.action.type.redirect.class%
         arguments: ["@oro_grid.action.url_generator", "@oro_user.acl_manager"]
