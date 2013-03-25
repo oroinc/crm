@@ -196,7 +196,7 @@ services:
         tags:
             - { name: doctrine.event_listener, event: preUpdate }
 
-    oro_search.twig.search_extension:
+    oro_user.twig.user_extension:
         class:                        %oro_user.acl.twig.class%
         arguments:                    ["@oro_user.acl_manager"]
         tags:
