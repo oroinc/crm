@@ -10,7 +10,19 @@
     <fieldset>
         <legend>{{ title }}</legend>
 
-        {{ form_widget(form) }}
+        {# store the prototype on the data-prototype attribute #}
+        <ul id="email-fields-list" data-prototype="{{ form_widget(form.emails.vars.prototype) | e }}">
+            {% for emailField in form.emails %}
+                <li>
+                    {{ form_errors(emailField) }}
+                    {{ form_widget(emailField) }}
+                </li>
+            {% endfor %}
+        </ul>
+
+        <a class="btn" href="#" id="add-another-email">Add another email</a>
+
+        {{ form_rest(form) }}
 
         <br />
         <legend>Additional information</legend>
@@ -41,4 +53,12 @@
         </div>
     </fieldset>
 </form>
+{% endblock %}
+
+{% block head_script %}
+    {{ parent() }}
+    <script type="text/javascript">
+        var emailCount = '{{ form.emails | length }}';
+    </script>
+    <script type="text/javascript" src="{{ asset('bundles/orouser/js/emails.js') }}"></script>
 {% endblock %}
