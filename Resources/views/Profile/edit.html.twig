@@ -18,7 +18,10 @@
         {{ form_row(form.middlename) }}
         {{ form_row(form.birthday) }}
         {{ form_row(form.image) }}
-        {{ form_row(form.enabled) }}
+
+        {% if form.enabled is defined %}
+            {{ form_row(form.enabled) }}
+        {% endif %}
 
         {% if form.groups is defined %}
             {{ form_row(form.groups) }}

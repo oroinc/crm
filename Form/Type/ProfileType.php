@@ -51,7 +51,7 @@ class ProfileType extends FlexibleType
 
         // user fields
         $builder
-            ->addEventSubscriber(new ProfileSubscriber($this->aclManager, $this->security))
+            ->addEventSubscriber(new ProfileSubscriber($builder->getFormFactory(), $this->aclManager, $this->security))
             ->add('username', 'text', array(
                 'required'       => true,
             ))
@@ -78,9 +78,6 @@ class ProfileType extends FlexibleType
             ))
             ->add('image', 'file', array(
                 'label'          => 'Image',
-                'required'       => false,
-            ))
-            ->add('enabled', 'checkbox', array(
                 'required'       => false,
             ))
             ->add('rolesCollection', 'entity', array(

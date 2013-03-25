@@ -4,6 +4,7 @@ namespace Oro\Bundle\UserBundle\Form\EventListener;
 
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Security\Core\SecurityContextInterface;
 
@@ -12,6 +13,11 @@ use Oro\Bundle\UserBundle\Entity\User;
 
 class ProfileSubscriber implements EventSubscriberInterface
 {
+    /**
+     * @var FormFactoryInterface
+     */
+    protected $factory;
+
     /**
      * @var AclManager
      */
@@ -23,10 +29,13 @@ class ProfileSubscriber implements EventSubscriberInterface
     protected $security;
 
     /**
-     * @param AclManager $aclManager ACL manager
+     * @param FormFactoryInterface     $factory    Factory to add new form children
+     * @param AclManager               $aclManager ACL manager
+     * @param SecurityContextInterface $security   Security context
      */
-    public function __construct(AclManager $aclManager, SecurityContextInterface $security)
+    public function __construct(FormFactoryInterface $factory, AclManager $aclManager, SecurityContextInterface $security)
     {
+        $this->factory    = $factory;
         $this->aclManager = $aclManager;
         $this->security   = $security;
     }
@@ -41,7 +50,7 @@ class ProfileSubscriber implements EventSubscriberInterface
 
     public function preSetData(FormEvent $event)
     {
-        /* @var $user User */
+        /* @var $entity User */
         $entity = $event->getData();
         $form   = $event->getForm();
 
@@ -60,6 +69,15 @@ class ProfileSubscriber implements EventSubscriberInterface
 
             if (!$this->aclManager->isResourceGranted('oro_user_group', $user)) {
                 $form->remove('groups');
+            }
+
+            // only admin granted to modify user state
+            // but do not allow "admin" to disable his own account
+            if ($this->aclManager->isResourceGranted('root', $user)) {
+                $form->add($this->factory->createNamed('enabled', 'checkbox', $entity->isEnabled(), array(
+                    'required' => false,
+                    'disabled' => $entity->getId() == $user->getId(),
+                )));
             }
         } else {
             $form->remove('rolesCollection');
