@@ -19,14 +19,15 @@ Grid functionality consists of backend and frontend parts. Backend part responsi
     - [Proxy Query](#proxy-query)
     - [Fields](#fields)
     - [Backend Pager](#backend-pager)
+    - [Backend Filters](#backend-filters)
+    - [Backend Sorters](#backend-sorters)
 - [Frontend Architecture](#orogridbundle---frontend-architecture)
     - [Frontend Overview](#frontend-overview)
     - [Backbone Developer Introduction](#backbone-developer-introduction)
     - [Backgrid Developer Introduction](#backgrid-developer-introduction)
-    - [Bundle Frontend Architecture](#bundle-frontend-architecture)
-        - [Basic Classes](#basic-classes)
-        - [Frontend Actions](#frontend-actions)
-        - [Frontend Filters](#frontend-filters)
+    - [Basic Classes](#basic-classes)
+    - [Frontend Actions](#frontend-actions)
+    - [Frontend Filters](#frontend-filters)
 
 Main Components
 ---------------
@@ -529,6 +530,141 @@ Pager is an entity that provides information about pagination parameters on grid
 * **Datagrid \ ORM \ Pager** - Pager implementation of basic interface with all required methods.
 
 
+Backend Filters
+---------------
+
+Filters allows to apply additional conditions to DB request and show in grid only required rows. Filter entities are created by Filter Factory.
+
+Filter functionality based on Sonata AdminBundle filters.
+
+#### Class Description
+
+* **Sonata \ AdminBundle \ Filter \ FilterInterface** - Sonata AdminBundle standard filter interface;
+* **Sonata \ AdminBundle \ Filter \ Filter** - Sonata AdminBundle abstract filter implementation;
+* **Sonata \ DoctirneORMAdminBundle \ Filter \ Filter** - Sonata AdminBundle abstract filter implementation for Doctrine ORM;
+* **Filter \ FilterInterface** - basic interface for Grid Filter entities;
+* **Filter \ ORM \ AbstractFilter** - abstract implementation of Filter entity;
+* **Filter \ ORM \ NumberFilter** - ORM filter for number values;
+* **Filter \ ORM \ StringFilter** - ORM filter for string values;
+* **Filter \ ORM \ AbstractDateFilter** - abstract filter implementation to work with date/datetime values;
+* **Filter \ ORM \ DateRangeFilter** - ORM filter for date and date range values;
+* **Filter \ ORM \ DateTimeRangeFilter** - ORM filter for datetime and datetime range values;
+* **Filter \ ORM \ Flexible \ AbstractFlexibleFilter** - abstract ORM filter to work with flexible attributes;
+* **Filter \ ORM \ Flexible \ NumberFlexibleFilter** - ORM filter to work with number flexible attributes;
+* **Filter \ ORM \ Flexible \ StringFlexibleFilter** - ORM filter to work with string flexible attributes;
+* **Filter \ ORM \ Flexible \ OptionsFlexibleFilter** - ORM filter to work with options flexible attributes;
+* **Sonata \ AdminBundle \ Filter \ FilterFactoryInterface** - Sonata AdminBundle interface for filter factory;
+* **Filter \ FilterFactoryInterface** - basic interface for Filter Factory entity;
+* **Filter \ FilterFactory** - basic implementation of Filter Factory entity to create Filter entities.
+
+#### Configuration
+
+**Configuration of Services**
+
+```
+parameters:
+    oro_grid.filter.factory.class:           Oro\Bundle\GridBundle\Filter\FilterFactory
+
+services:
+    oro_grid.filter.factory:
+        class:     %oro_grid.filter.factory.class%
+        arguments: ["@service_container", ~]
+```
+
+**Configuration of Filter Types**
+
+```
+services:
+    oro_grid.orm.filter.type.date_range:
+        class: Oro\Bundle\GridBundle\Filter\ORM\DateRangeFilter
+        arguments: ["@translator"]
+        tags:
+            - { name: oro_grid.filter.type, alias: oro_grid_orm_date_range }
+
+    oro_grid.orm.filter.type.datetime_range:
+        class: Oro\Bundle\GridBundle\Filter\ORM\DateTimeRangeFilter
+        arguments: ["@translator"]
+        tags:
+            - { name: oro_grid.filter.type, alias: oro_grid_orm_datetime_range }
+
+    oro_grid.orm.filter.type.number:
+        class:     Oro\Bundle\GridBundle\Filter\ORM\NumberFilter
+        arguments: ["@translator"]
+        tags:
+            - { name: oro_grid.filter.type, alias: oro_grid_orm_number }
+
+    oro_grid.orm.filter.type.string:
+        class:     Oro\Bundle\GridBundle\Filter\ORM\StringFilter
+        arguments: ["@translator"]
+        tags:
+            - { name: oro_grid.filter.type, alias: oro_grid_orm_string }
+
+    oro_grid.orm.filter.type.flexible_number:
+        class:     Oro\Bundle\GridBundle\Filter\ORM\Flexible\FlexibleNumberFilter
+        arguments: ["@service_container", "@oro_grid.orm.filter.type.number"]
+        tags:
+            - { name: oro_grid.filter.type, alias: oro_grid_orm_flexible_number }
+
+    oro_grid.orm.filter.type.flexible_string:
+        class:     Oro\Bundle\GridBundle\Filter\ORM\Flexible\FlexibleStringFilter
+        arguments: ["@service_container", "@oro_grid.orm.filter.type.string"]
+        tags:
+            - { name: oro_grid.filter.type, alias: oro_grid_orm_flexible_string }
+
+    oro_grid.orm.filter.type.flexible_options:
+        class:     Oro\Bundle\GridBundle\Filter\ORM\Flexible\FlexibleOptionsFilter
+        arguments: ["@service_container"]
+        tags:
+            - { name: oro_grid.filter.type, alias: oro_grid_orm_flexible_options }
+```
+
+
+Backend Sorters
+---------------
+
+Sorter is an entity that allows to add sort conditions to DB request. Sorters are created by Sorter Factory.
+
+#### Class Description
+
+* **Sorter \ SorterInterface** - basic interface for Sorter entity;
+* **Sorter \ ORM \ Sorter** - Sorter implementation for Doctrine ORM;
+* **Sorter \ ORM \ Flexible \ FlexibleSorter** - Sorter ORM implementation for flexible attributes;
+* **Sorter \ SorterFactoryInterface** - basic interface for Sorter Factory entity;
+* **Sorter \ SorterFactory** - basic implementation of Sorter Factory entity to create Sorter entities.
+
+#### Configuration
+
+**Configuration of Services**
+
+```
+parameters:
+    oro_grid.sorter.factory.class:           Oro\Bundle\GridBundle\Sorter\SorterFactory
+
+services:
+    oro_grid.sorter.factory:
+        class:     %oro_grid.sorter.factory.class%
+        arguments: ["@service_container"]
+```
+
+**Configuration of Sorter Types**
+
+```
+parameters:
+    oro_grid.sorter.class:                   Oro\Bundle\GridBundle\Sorter\ORM\Sorter
+    oro_grid.sorter.flexible.class:          Oro\Bundle\GridBundle\Sorter\ORM\Flexible\FlexibleSorter
+
+services:
+    oro_grid.sorter:
+        class:     %oro_grid.sorter.class%
+        scope:     prototype
+
+    oro_grid.sorter.flexible:
+        class:     %oro_grid.sorter.flexible.class%
+        scope:     prototype
+        arguments: ["@service_container"]
+```
+
+
 OroGridBundle - Frontend Architecture
 =====================================
 
@@ -597,10 +733,8 @@ headerCell - instance of Backgrid.Cell, responsible for presentation of column c
 
 Backbone.Grid is a class from backbone's View category. Any standard backbone's collection could be used together with grid. But to able to use the paginator in grid, you must first declare your collections to be a Backbone.PageableCollection, which is a simple subclass of the Backbone.js Collection with added pagination behavior.
 
-Bundle Frontend Architecture
-----------------------------
-
-#### Basic Classes
+Basic Classes
+-------------
 
 Bundle's JS module extends Backgrid.js and defines the following classes:
 
@@ -687,7 +821,9 @@ var grid = new OroApp.Datagrid({
 $('#grid').html(grid.render().$el);
 ```
 
-#### Frontend Actions
+Frontend Actions
+----------------
+
 If you need to allow a user to perform an action on records in the grid, this can be achieved by actions. Actions are designed thus that they can be used separately from the grid, but when you need to use actions in the grid, you just need to pass them into configuration. All added actions will be accessible in special actions column.
 
 Below is an example of initialization grid with actions:
@@ -721,7 +857,9 @@ Main classes and responsibilities:
 * **OroApp.DatagridActionDelete** - concrete action responsible for model delete
 * **OroApp.DatagridActionNavigate** - concrete action responsible for navigating user to some URL
 
-#### Frontend Filters
+Frontend Filters
+----------------
+
 Filters are used to change collection state according to criteria selected by user. Filters classes don't depend of grid. It couples only on collection.
 
 Main classes and responsibilities:
