@@ -11,31 +11,19 @@ Oro.windows.DialogView = Backbone.View.extend({
     },
 
     initialize: function() {
-        if (this.options.isForm) {
-            var runner = function(handlers) {
-                return function() {
-                    for (var i = 0; i < handlers.length; i++) if (_.isFunction(handlers[i])) {
-                        handlers[i]();
-                    }
-                }
-            };
-            this.options.dialogOptions.close = runner([this.revertActions.bind(this), this.options.dialogOptions.close]);
-        }
+        this.dialogContent = this.$el.clone(true);
     },
 
     adoptActions: function() {
-        var actionsEl = this._getActionsElement();
-        this.hasAdoptedActions = actionsEl.length > 0;
-        var widget = this.widget;
+        var actions = this._getActionsElement();
+        this.hasAdoptedActions = actions.length > 0;
         if (this.hasAdoptedActions) {
-            actionsEl.hide();
-            var form = actionsEl.closest('form');
-            var actions = actionsEl.clone(true);
+            var widget = this.widget;
+            var form = actions.closest('form');
             var container = widget.dialog('actionsContainer');
             actions.find('[type=submit]').each(function(idx, btn) {
                 $(btn).click(function() {
-                    this.loadContent(form.action, form.method);
-                    //$(form).trigger('submit');
+                    this.loadContent(form.attr('action'), form.attr('method'), form.serialize());
                 }.bind(this));
             }.bind(this));
             actions.find('[type=reset]').each(function(idx, btn) {
@@ -51,16 +39,10 @@ Oro.windows.DialogView = Backbone.View.extend({
         }
     },
 
-    revertActions: function() {
-        if (this.hasAdoptedActions) {
-            this._getActionsElement().show();
-        }
-    },
-
     _getActionsElement: function() {
         var el = this.options.actionsEl;
         if (typeof el == 'string') {
-            el = this.$el.find(el);
+            el = this.dialogContent.find(el);
         }
         return el;
     },
@@ -73,28 +55,35 @@ Oro.windows.DialogView = Backbone.View.extend({
         }
     },
 
-    loadContent: function(url, method) {
+    loadContent: function(url, method, data) {
         if (typeof url == 'undefined' || !url) {
             url = window.location.href;
         }
         if (typeof method == 'undefined' || !method) {
             method = 'get';
         }
-        Backbone.$.ajax({
+        var options = {
             url: url,
             type: method
-        }).done(function(content) {
-            this.setElement(content);
+        };
+        if (typeof data != 'undefined') {
+            options.data = data;
+        }
+        Backbone.$.ajax(options).done(function(content) {
+            this.dialogContent = content;
             this.show();
         }.bind(this));
     },
 
     show: function() {
         if (!this.widget) {
-            this.widget = this.$el.dialog(this.options.dialogOptions);
+            this.widget = this.dialogContent.dialog(this.options.dialogOptions);
         } else {
-            this.widget.html(this.$el);
+            this.widget.html(this.dialogContent);
         }
-        this.adoptActions();
+
+        if (this.options.isForm) {
+            this.adoptActions();
+        }
     }
 });
