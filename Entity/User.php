@@ -208,7 +208,13 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
     protected $values;
 
     /**
+     * @ORM\OneToOne(targetEntity="UserApi", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true, fetch="EXTRA_LAZY")
+     */
+    protected $api;
+
+    /**
      * @var Status[]
+     *
      * @ORM\OneToMany(targetEntity="Status", mappedBy="user")
      * @ORM\OrderBy({"createdAt" = "DESC"})
      */
@@ -216,6 +222,7 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
 
     /**
      * @var Status
+     *
      * @ORM\OneToOne(targetEntity="Status")
      * @ORM\JoinColumn(name="status_id", referencedColumnName="id", nullable=true)
      */
@@ -223,6 +230,7 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
 
     /**
      * @var Email[]
+     *
      * @ORM\OneToMany(targetEntity="Email", mappedBy="user", orphanRemoval=true, cascade={"persist"})
      */
     protected $emails;
@@ -231,10 +239,10 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
     {
         parent::__construct();
 
-        $this->salt  = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
-        $this->roles = new ArrayCollection();
-        $this->statuses = new ArrayCollection;
-        $this->emails = new ArrayCollection;
+        $this->salt     = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
+        $this->roles    = new ArrayCollection();
+        $this->statuses = new ArrayCollection();
+        $this->emails   = new ArrayCollection();
     }
 
     /**

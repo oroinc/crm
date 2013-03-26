@@ -489,7 +489,26 @@
                                     </div>
                                 </div>
                             </div>
+
                             {{ form_row(form.email) }}
+
+                            <div class="control-group">
+                                <label for="selectAccountName" class="control-label">Additional emails:</label>
+                                <div class="controls">
+                                    <div class="row-oro">
+                                        <ul id="email-fields-list" data-prototype="{{ form_widget(form.emails.vars.prototype) | e }}">
+                                            {% for emailField in form.emails %}
+                                            <li>
+                                                {{ form_errors(emailField) }}
+                                                {{ form_widget(emailField) }}
+                                            </li>
+                                            {% endfor %}
+                                        </ul>
+                                        <a class="btn" href="#" id="add-another-email">Add another email</a>
+                                    </div>
+                                </div>
+                            </div>
+
                             <div class="control-group">
                                 <label for="selectAccountName" class="control-label">Address:</label>
                                 <div class="controls">
@@ -570,7 +589,6 @@
     <fieldset>
         <legend>{{ title }}</legend>
 
-        {# store the prototype on the data-prototype attribute #}
         <ul id="email-fields-list" data-prototype="{{ form_widget(form.emails.vars.prototype) | e }}">
             {% for emailField in form.emails %}
                 <li>
@@ -625,20 +643,17 @@
 {% block head_script %}
     {{ parent() }}
 
+    <script type="text/javascript">
+        var emailCount = '{{ form.emails | length }}';
+    </script>
+
     {% javascripts
         '@OroUIBundle/Resources/public/lib/bootstrap/js/bootstrap-scrollspy.js'
+        '@OroUserBundle/Resources/public/js/emails.js'
         '@OroUserBundle/Resources/public/js/profile.js'
 
         output='js/page/profile.js'
     %}
     <script src="{{ asset_url }}" type="text/javascript"></script>
     {% endjavascripts %}
-{% endblock %}
-
-{% block head_script %}
-    {{ parent() }}
-    <script type="text/javascript">
-        var emailCount = '{{ form.emails | length }}';
-    </script>
-    <script type="text/javascript" src="{{ asset('bundles/orouser/js/emails.js') }}"></script>
 {% endblock %}
