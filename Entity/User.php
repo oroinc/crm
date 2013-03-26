@@ -204,6 +204,11 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
      */
     protected $values;
 
+    /**
+     * @ORM\OneToOne(targetEntity="UserApi", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true, fetch="EXTRA_LAZY")
+     */
+    protected $api;
+
     public function __construct()
     {
         parent::__construct();
@@ -406,6 +411,14 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
     }
 
     /**
+     * @return UserApi
+     */
+    public function getApi()
+    {
+        return $this->api;
+    }
+
+    /**
      * {@inheritDoc}
      */
     public function isEnabled()
@@ -516,6 +529,13 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
     public function setLastLogin(\DateTime $time)
     {
         $this->lastLogin = $time;
+
+        return $this;
+    }
+
+    public function setApi(UserApi $api)
+    {
+        $this->api = $api;
 
         return $this;
     }

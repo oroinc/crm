@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\UserBundle\Controller;
 
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -9,6 +10,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 use Oro\Bundle\UserBundle\Annotation\Acl;
 use Oro\Bundle\UserBundle\Entity\User;
+use Oro\Bundle\UserBundle\Entity\UserApi;
 use Oro\Bundle\UserBundle\Entity\UserManager;
 
 /**
@@ -36,6 +38,35 @@ class ProfileController extends Controller
         return array(
             'user' => $user,
         );
+    }
+
+    /**
+     * @Route("/apigen/{id}", name="oro_user_apigen", requirements={"id"="\d+"})
+     * @Template
+     * @Acl(
+     *      id="oro_user_profile_apigen",
+     *      name="Generate new API key",
+     *      description="Generate new API key",
+     *      parent="oro_user_profile"
+     * )
+     */
+    public function apigenAction(User $user)
+    {
+        if (!$api = $user->getApi()) {
+            $api = new UserApi();
+        }
+
+        $api->setApiKey($api->generateKey())
+            ->setUser($user);
+
+        $em = $this->getDoctrine()->getManager();
+
+        $em->persist($api);
+        $em->flush();
+
+        return $this->getRequest()->isXmlHttpRequest()
+            ? new JsonResponse($api->getApiKey())
+            : $this->forward('OroUSerBundle:Profile:show', array('user' => $user));
     }
 
     /**
