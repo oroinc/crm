@@ -1,5 +1,5 @@
 <?php
-namespace Oro\Bundle\SegmentationTreeBundle\Model;
+namespace Oro\Bundle\SegmentationTreeBundle\Entity;
 
 use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;

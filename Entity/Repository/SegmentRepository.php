@@ -17,11 +17,12 @@ class SegmentRepository extends NestedTreeRepository
 {
     /**
      * Get children from a parent id
+     *
      * @param integer $parentId
      *
      * @return ArrayCollection
      */
-    public function getChildrenFromParentId($parentId)
+    public function getChildrenByParentId($parentId)
     {
         $parent = $this->findOneBy(array('id' => $parentId));
 
@@ -29,28 +30,22 @@ class SegmentRepository extends NestedTreeRepository
     }
 
     /**
-     * Search Segment entities from an array of criterias
+     * Search Segment entities from an array of criterias.
+     * Search is done on a "%value%" LIKE expression.
+     * Criterias are joined with a AND operator
+     *
+     * @param int   $rootId    Tree segment root id
      * @param array $criterias
      *
      * @return ArrayCollection
      */
-    public function search($criterias)
+    public function search($rootId, $criterias)
     {
         $queryBuilder = $this->createQueryBuilder('c');
         foreach ($criterias as $key => $value) {
             $queryBuilder->andWhere('c.'. $key .' LIKE :'. $key)->setParameter($key, '%'. $value .'%');
         }
-
-        return $queryBuilder->getQuery()->getResult();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function findAll()
-    {
-        $queryBuilder = $this->createQueryBuilder('c');
-        $queryBuilder->orderBy('c.title');
+        $queryBuilder->andWhere('c.root = :rootId')->setParameter('rootId', $rootId);
 
         return $queryBuilder->getQuery()->getResult();
     }

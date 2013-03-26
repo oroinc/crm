@@ -4,6 +4,8 @@ namespace Oro\Bundle\SegmentationTreeBundle\Model;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Persistence\ObjectManager;
 
+use Oro\Bundle\SegmentationTreeBundle\Entity\AbstractSegment;
+
 /**
  * Service class to manage segments node and tree
  *
@@ -51,12 +53,12 @@ class SegmentManager
     }
 
     /**
-     * Create segment
+     * Get a new segment instance
      *
      * @return AbstractSegment
      *
      */
-    public function createSegment()
+    public function getSegmentInstance()
     {
         $segmentClassName = $this->getSegmentName();
 
@@ -94,7 +96,7 @@ class SegmentManager
     {
         $entityRepository = $this->getEntityRepository();
 
-        return $entityRepository->getChildrenFromParentId($parentId);
+        return $entityRepository->getChildrenByParentId($parentId);
     }
 
     /**
@@ -104,9 +106,9 @@ class SegmentManager
      *
      * @return ArrayCollection
      */
-    public function search($criterias)
+    public function search($rootId, $criterias)
     {
-        return $this->getEntityRepository()->search($criterias);
+        return $this->getEntityRepository()->search($rootId, $criterias);
     }
 
     /**
@@ -127,10 +129,9 @@ class SegmentManager
      *
      * @param AbstractSegment $segment
      */
-    protected function remove($segment)
+    public function remove(AbstractSegment $segment)
     {
         $this->getStorageManager()->remove($segment);
-        $this->getStorageManager()->flush();
     }
 
     /**
@@ -168,23 +169,6 @@ class SegmentManager
     }
 
     /**
-     * Copy a segment and link it to a parent
-     *
-     * @param integer $segmentId   Segment to copy
-     * @param integer $referenceId Parent segment
-     */
-    public function copy($segmentId, $referenceId)
-    {
-        $repo = $this->getEntityRepository();
-        $segment = $repo->find($segmentId);
-        $reference = $repo->find($referenceId);
-
-        $newSegment = $this->copyNode($segment, $reference);
-
-        $this->getStorageManager()->persist($newSegment);
-    }
-
-    /**
      * Recursive copy
      * @param AbstractSegment $segment Segment to be copied
      * @param AbstractSegment $parent  Parent segment
@@ -192,9 +176,9 @@ class SegmentManager
      * @return AbstractSegment
      * FIXME: copy relationship states as well and all attributes
      */
-    public function copyNode($segment, $parent)
+    public function copyNode(AbstractSegment $segment, $parent)
     {
-        $newSegment = $this->createSegment();
+        $newSegment = $this->getSegmentInstance();
         $newSegment->setTitle($segment->getTitle());
         $newSegment->setParent($parent);
 
@@ -216,8 +200,9 @@ class SegmentManager
      */
     public function getTrees()
     {
-        $repo = $this->getEntityRepository();
-        return $repo->getChildrenFromParentId(null);
+        $entityRepository = $this->getEntityRepository();
+
+        return $entityRepository->getChildrenByParentId(null);
         
     }
 
@@ -239,11 +224,16 @@ class SegmentManager
     /*
      * Create a new tree by creating a its root node
      *
+     * @param String 
+     *
      * @return AbsractSegment
      */
-    public function createTree() {
-        $rootSegment = $this->createSegment();
+    public function createTree($title)
+    {
+        $rootSegment = $this->getSegmentInstance();
         $rootSegment->setParent(null);
+        $rootSegment->setTitle($title);
+        $this->getStorageManager()->persist($rootSegment);
 
         return $rootSegment;
     }
@@ -253,7 +243,8 @@ class SegmentManager
      *
      * @param AbstractSegment $rootNode
      */
-    public function removeTree(AbstractSegment $rootSegment) {
+    public function removeTree(AbstractSegment $rootSegment)
+    {
 
         $rootSegment->setParent(null);
         $this->getStorageManager()->remove($rootSegment);
@@ -264,7 +255,8 @@ class SegmentManager
      *
      * @param int $rootSegmentId
      */
-    public function removeTreeById($rootSegmentId) {
+    public function removeTreeById($rootSegmentId)
+    {
         $repo = $this->getEntityRepository();
         $rootSegment = $repo->find($rootSegmentId);
 

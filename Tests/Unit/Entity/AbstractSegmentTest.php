@@ -1,5 +1,5 @@
 <?php
-namespace Oro\Bundle\SegmentationTreeBundle\Tests\Unit\Model;
+namespace Oro\Bundle\SegmentationTreeBundle\Tests\Unit\Entity;
 
 /**
  * Tests on AbstractSegment
@@ -16,9 +16,14 @@ class AbstractSegmentTest extends \PHPUnit_Framework_TestCase
      */
     protected $segment;
 
+    protected function createAbstractSegmentMock()
+    {
+        return $this->getMockForAbstractClass("Oro\Bundle\SegmentationTreeBundle\Entity\AbstractSegment");
+    }
+
     public function setUp()
     {
-        $this->segment = $this->getMockForAbstractClass("Oro\Bundle\SegmentationTreeBundle\Model\AbstractSegment");
+        $this->segment = $this->createAbstractSegmentMock();
     }
 
     public function testGetId()
@@ -63,14 +68,14 @@ class AbstractSegmentTest extends \PHPUnit_Framework_TestCase
 
     public function testGetParent()
     {
-        $parentSegment = $this->getMockForAbstractClass("Oro\Bundle\SegmentationTreeBundle\Model\AbstractSegment");
+        $parentSegment = $this->createAbstractSegmentMock();
         $this->segment->setParent($parentSegment);
         $this->assertEquals($parentSegment, $this->segment->getParent());
     }
 
     public function testAddChild()
     {
-        $childSegment = $this->getMockForAbstractClass("Oro\Bundle\SegmentationTreeBundle\Model\AbstractSegment");
+        $childSegment = $this->createAbstractSegmentMock();
         $this->segment->addChild($childSegment);
         $children = $this->segment->getChildren();
         $this->assertEquals($childSegment, $children[0]);
@@ -83,14 +88,14 @@ class AbstractSegmentTest extends \PHPUnit_Framework_TestCase
 
     public function testHasChildren()
     {
-        $childSegment = $this->getMockForAbstractClass("Oro\Bundle\SegmentationTreeBundle\Model\AbstractSegment");
+        $childSegment = $this->createAbstractSegmentMock();
         $this->segment->addChild($childSegment);
         $this->assertTrue($this->segment->hasChildren());
     }
 
     public function testRemoveChild()
     {
-        $childSegment = $this->getMockForAbstractClass("Oro\Bundle\SegmentationTreeBundle\Model\AbstractSegment");
+        $childSegment = $this->createAbstractSegmentMock();
         $this->segment->addChild($childSegment);
         $this->assertTrue($this->segment->hasChildren());
         $this->segment->removeChild($childSegment);
@@ -104,7 +109,7 @@ class AbstractSegmentTest extends \PHPUnit_Framework_TestCase
 
     public function testIsNotRoot()
     {
-        $parentSegment = $this->getMockForAbstractClass("Oro\Bundle\SegmentationTreeBundle\Model\AbstractSegment");
+        $parentSegment = $this->createAbstractSegmentMock();
         $this->segment->setParent($parentSegment);
         $this->assertFalse($this->segment->isRoot());
         
