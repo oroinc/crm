@@ -8,7 +8,7 @@ OroApp.DatagridFilterMultiSelect = OroApp.DatagridFilterSelect.extend({
     /** @property */
     template: _.template(
         '<div class="btn">' +
-            '<%= hint %>: ' +
+            '<%= label %>: ' +
             '<select style="width:150px;" multiple>' +
                 '<% _.each(options, function (hint, value) { %><option value="<%= value %>"><%= hint %></option><% }); %>' +
             '</select>' +

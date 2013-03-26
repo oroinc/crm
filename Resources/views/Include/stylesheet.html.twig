@@ -40,19 +40,23 @@
         }
 
         .filter-box .filter-item .disable-filter {
-            background-image: url("/bundles/oroui/img/glyphicons-halflings.png");
-            background-position: -312px 0;
-            background-repeat: no-repeat;
+            background-color: #F5F5F5;
+            border-bottom-right-radius: 4px;
+            border-color: #CCCCCC #CCCCCC #B3B3B3;
+            border-style: solid;
+            border-top-right-radius: 4px;
+            border-width: 1px 1px 1px 0;
             display: inline-block;
-            height: 14px;
-            line-height: 14px;
-            margin-top: 1px;
-            vertical-align: text-top;
-            width: 14px;
+            font-size: 18px;
+            height: 24px;
+            line-height: 28px;
+            padding: 4px 2px 0;
+            vertical-align: top;
         }
 
         .filter-box .filter-select {
             padding-right: 4px;
+            height: 28px;
         }
 
         .filter-box .filter-select .disable-filter {
@@ -63,18 +67,29 @@
             position: absolute;
             font-size: 12px;
             background-color: #ffffff;
-            padding: 7px;
+            padding: 8px 8px 2px 8px;
             border: 1px solid #d3d3d3;
             display: none;
             z-index: 9999;
         }
-
 
         .no-data {
             text-align: center;
             font-size: 16px;
             padding: 10px;
             border: 1px solid #dddddd;
+        }
+
+        .select-filter-dropdown {
+            padding: 8px 4px 4px 4px;
+        }
+
+        .select2-container .select2-choice {
+            padding: 0;
+        }
+
+        .select2-container .select2-choice span {
+            margin-right: 18px;
         }
     </style>
 {% endstylesheets %}

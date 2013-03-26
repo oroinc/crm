@@ -4,8 +4,6 @@ namespace Oro\Bundle\GridBundle\Filter\ORM\Flexible;
 
 use Doctrine\Common\Persistence\ObjectRepository;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
-use Oro\Bundle\FlexibleEntityBundle\Entity\Repository\FlexibleEntityRepository;
-use Oro\Bundle\GridBundle\Datagrid\ORM\ProxyQuery;
 use Oro\Bundle\FlexibleEntityBundle\Entity\Attribute;
 use Oro\Bundle\FlexibleEntityBundle\Entity\AttributeOption;
 use Sonata\AdminBundle\Form\Type\Filter\ChoiceType;
@@ -42,14 +40,14 @@ class FlexibleOptionsFilter extends AbstractFlexibleFilter
         }
 
         // process type and operator
-        if (!isset($data['type'])) {
+        if (!isset($value['type'])) {
             if (is_array($value)) {
                 $operator = $this->getOperator(ChoiceType::TYPE_CONTAINS);
             } else {
                 $operator = $this->getOperator(ChoiceType::TYPE_EQUAL);
             }
         } else {
-            $operator = $this->getOperator((int) $data['type']);
+            $operator = $this->getOperator((int) $value['type']);
         }
 
         // apply filter

@@ -6,23 +6,17 @@
  *  - "changedData" when filter criteria is changed
  *
  * @class   OroApp.DatagridFilterText
- * @extends Backbone.View
+ * @extends OroApp.DatagridFilter
  */
-OroApp.DatagridFilterText = Backbone.View.extend({
-    /** @property */
-    tagName: 'div',
-
-    /** @property */
-    className: 'btn-group filter-item',
-
+OroApp.DatagridFilterText = OroApp.DatagridFilter.extend({
     /** @property */
     template: _.template(
-        '<button class="btn filter-criteria-selector">' +
+        '<button class="btn filter-criteria-selector oro-drop-opener oro-dropdown-toggle">' +
             '<%= label %>: <strong class="filter-criteria-hint"><%= criteriaHint %></strong>' +
             '<span class="caret"></span>' +
         '</button>' +
-        '<a href="#" class="disable-filter" />' +
-        '<div class="filter-criteria" />'
+        '<a href="#" class="disable-filter"><i class="icon-remove hide-text">Close</i></a>' +
+        '<div class="filter-criteria dropdown-menu" />'
     ),
 
     /**
@@ -74,27 +68,6 @@ OroApp.DatagridFilterText = Backbone.View.extend({
      * @property {Object}
      */
     confirmedValue: {},
-
-    /**
-     * Is filter enabled
-     *
-     * @property {Boolean}
-     */
-    enabled: false,
-
-    /**
-     * Name of filter field
-     *
-     * @property {String}
-     */
-    name: 'input_name',
-
-    /**
-     * Label of filter
-     *
-     * @property {String}
-     */
-    label: 'Input Label',
 
     /**
      * Default value showed as filter's criteria hint
@@ -242,54 +215,6 @@ OroApp.DatagridFilterText = Backbone.View.extend({
     },
 
     /**
-     * Enable filter
-     *
-     * @return {*}
-     */
-    enable: function() {
-        if (!this.enabled) {
-            this.enabled = true;
-            this.show();
-        }
-        return this;
-    },
-
-    /**
-     * Disable filter
-     *
-     * @return {*}
-     */
-    disable: function() {
-        if (this.enabled) {
-            this.enabled = false;
-            this.hide();
-            this.trigger('disabled', this);
-            this.reset();
-        }
-        return this;
-    },
-
-    /**
-     * Show filter
-     *
-     * @return {*}
-     */
-    show: function() {
-        this.$el.css('display', 'inline-block');
-        return this;
-    },
-
-    /**
-     * Hide filter
-     *
-     * @return {*}
-     */
-    hide: function() {
-        this.$el.hide();
-        return this;
-    },
-
-    /**
      * Show criteria popup
      *
      * @private
@@ -327,15 +252,6 @@ OroApp.DatagridFilterText = Backbone.View.extend({
             value: ''
         });
         return this;
-    },
-
-    /**
-     * Check if filter contain value
-     *
-     * @return {Boolean}
-     */
-    hasValue: function() {
-        return this.confirmedValue.value != '';
     },
 
     /**

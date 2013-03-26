@@ -36,16 +36,6 @@ OroApp.DatagridFilterDate = OroApp.DatagridFilterChoice.extend({
     },
 
     /**
-     * Check if filter contain value
-     *
-     * @return {Boolean}
-     */
-    hasValue: function() {
-        return this.$(this.parameterSelectors.value_start).val() != ''
-            || this.$(this.parameterSelectors.value_end).val() != '';
-    },
-
-    /**
      * Reset filter form elements
      *
      * @return {*}

@@ -5,74 +5,40 @@
  * @extends Backbone.View
  */
 OroApp.DatagridFilter = Backbone.View.extend({
-    /** @property */
+    /**
+     * Filter container tag
+     *
+     * @property {String}
+     */
     tagName: 'div',
 
-    /** @property */
-    className: 'btn-group filter-item',
+    /**
+     * Filter container class name
+     *
+     * @property {String}
+     */
+    className: 'btn-group filter-item oro-drop',
 
-    /** @property */
-    template: _.template(
-        '<div class="btn">' +
-            '<%= hint %>: <input type="text" value="" style="width:80px;" />' +
-            '<a href="#" class="disable-filter" />' +
-            '<span class="caret"></span>' +
-        '</div>'
-    ),
-
-    /** @property */
+    /**
+     * Is filter enabled
+     *
+     * @property {Boolean}
+     */
     enabled: false,
 
-    /** @property */
+    /**
+     * Name of filter field
+     *
+     * @property {String}
+     */
     name: 'input_name',
 
-    /** @property */
-    hint: 'Input Hint',
-
-    /** @property */
-    parameterSelectors: {
-        value: 'input'
-    },
-
-    /** @property */
-    events: {
-        'change input': '_update',
-        'click .disable-filter': 'onClickDisable'
-    },
-
     /**
-     * Render filter template
+     * Label of filter
      *
-     * @return {*}
+     * @property {String}
      */
-    render: function () {
-        this.$el.empty();
-        this.$el.append(
-            this.template({
-                hint: this.hint
-            })
-        );
-        return this;
-    },
-
-    /**
-     * Filter data was updated
-     *
-     * @private
-     */
-    _update: function() {
-        this.trigger('changedData');
-    },
-
-    /**
-     * Handle click on filter disabler
-     *
-     * @param {Event} e
-     */
-    onClickDisable: function(e) {
-        e.preventDefault();
-        this.disable();
-    },
+    label: 'Input Label',
 
     /**
      * Enable filter
@@ -83,9 +49,6 @@ OroApp.DatagridFilter = Backbone.View.extend({
         if (!this.enabled) {
             this.enabled = true;
             this.show();
-            if (this.hasValue()) {
-                this.trigger('changedData');
-            }
         }
         return this;
     },
@@ -100,21 +63,8 @@ OroApp.DatagridFilter = Backbone.View.extend({
             this.enabled = false;
             this.hide();
             this.trigger('disabled', this);
-            if (this.hasValue()) {
-                this.trigger('changedData');
-            }
             this.reset();
         }
-        return this;
-    },
-
-    /**
-     * Reset filter form elements
-     *
-     * @return {*}
-     */
-    reset: function() {
-        this.$(this.parameterSelectors.value).val('');
         return this;
     },
 
@@ -134,38 +84,56 @@ OroApp.DatagridFilter = Backbone.View.extend({
      * @return {*}
      */
     hide: function() {
-        this.$el.css('display', 'none');
-        return this
+        this.$el.hide();
+        return this;
     },
 
     /**
-     * Check if filter contain value
+     * Reset filter elements
      *
-     * @return {Boolean}
+     * @return {*}
      */
-    hasValue: function() {
-        return this.$(this.parameterSelectors.value).val() != '';
+    reset: function() {
+        return this;
+    },
+
+    /**
+     * Set value to filter
+     *
+     * @param value
+     * @return {*}
+     */
+    setValue: function(value) {
+        return this;
+    },
+
+    /**
+     * Get filter value
+     *
+     * @return {Object}
+     */
+    getValue: function() {
+        return {};
     },
 
     /**
      * Set filter parameters
      *
+     * @deprecated
      * @param {Object} parameters
      * @return {*}
      */
     setParameters: function(parameters) {
-        this.$(this.parameterSelectors.value).val(parameters['[value]']);
         return this;
     },
 
     /**
      * Get filter parameters
      *
+     * @deprecated
      * @return {Object}
      */
     getParameters: function() {
-        return {
-            '[value]': this.$(this.parameterSelectors.value).val()
-        };
+        return {};
     }
 });
