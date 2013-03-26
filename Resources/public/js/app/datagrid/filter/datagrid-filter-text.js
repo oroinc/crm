@@ -148,6 +148,7 @@ OroApp.DatagridFilterText = Backbone.View.extend({
      */
     _onClickCriteriaSelector: function(e) {
         e.stopPropagation();
+        $('body').trigger('click');
         this._showCriteria();
     },
 
