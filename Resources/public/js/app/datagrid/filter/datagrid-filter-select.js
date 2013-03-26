@@ -20,6 +20,13 @@ OroApp.DatagridFilterSelect = OroApp.DatagridFilter.extend({
     /** @property */
     options: {},
 
+    /**
+     * Value that was confirmed and processed.
+     *
+     * @property {Object}
+     */
+    confirmedValue: {},
+
     /** @property */
     placeholder: 'All',
 
@@ -82,7 +89,9 @@ OroApp.DatagridFilterSelect = OroApp.DatagridFilter.extend({
      * @protected
      */
     _onSelectChange: function() {
-        this.trigger('changedData');
+        var value = this.getValue();
+        this._confirmValue(value);
+
         this.needOpenDropdown = false;
     },
 
@@ -146,7 +155,7 @@ OroApp.DatagridFilterSelect = OroApp.DatagridFilter.extend({
      * @return {*}
      */
     setValue: function(value) {
-        this.$(this.select2Element).select2('val', value.value);
+        this._confirmValue(value);
         return this;
     },
 
@@ -187,5 +196,30 @@ OroApp.DatagridFilterSelect = OroApp.DatagridFilter.extend({
         return {
             '[value]': value.value
         };
+    },
+
+    /**
+     * Confirm filter value
+     *
+     * @protected
+     */
+    _confirmValue: function(value) {
+        if (this.confirmedValue.value != value.value) {
+            this.confirmedValue = _.clone(value);
+            this.$(this.select2Element).select2('val', this.confirmedValue.value);
+            this.trigger('changedData');
+        }
+    },
+
+    /**
+     * Reset filter value
+     *
+     * @return {*}
+     */
+    reset: function() {
+        this.setValue({
+            value: ''
+        });
+        return this;
     }
 });
