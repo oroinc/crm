@@ -13,6 +13,8 @@ services:
               entity_hint: users
               flexible: true
               route_name: oro_user_index
+        calls:
+            - [ setRouter, [ @router ] ]
 
     oro_user.role_datagrid_manager:
         class: %oro_user.role_datagrid_manager.class%
@@ -22,6 +24,9 @@ services:
               entity_name: Oro\Bundle\UserBundle\Entity\Role
               entity_hint: roles
               route_name: oro_user_role_index
+        calls:
+            - [ setRouter, [ @router ] ]
+
 
     oro_user.group_datagrid_manager:
         class: %oro_user.group_datagrid_manager.class%
@@ -31,3 +36,5 @@ services:
               entity_name: Oro\Bundle\UserBundle\Entity\Group
               entity_hint: groups
               route_name: oro_user_group_index
+        calls:
+            - [ setRouter, [ @router ] ]

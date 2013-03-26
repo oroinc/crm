@@ -2,12 +2,14 @@
 
 namespace Oro\Bundle\UserBundle\Datagrid;
 
+use Symfony\Bundle\FrameworkBundle\Routing\Router;
 use Oro\Bundle\GridBundle\Datagrid\DatagridManager;
 use Oro\Bundle\GridBundle\Field\FieldDescription;
 use Oro\Bundle\GridBundle\Field\FieldDescriptionCollection;
 use Oro\Bundle\GridBundle\Field\FieldDescriptionInterface;
 use Oro\Bundle\GridBundle\Filter\FilterInterface;
 use Oro\Bundle\GridBundle\Action\ActionInterface;
+use Oro\Bundle\GridBundle\Property\UrlProperty;
 
 class RoleDatagridManager extends DatagridManager
 {
@@ -15,6 +17,25 @@ class RoleDatagridManager extends DatagridManager
      * @var FieldDescriptionCollection
      */
     protected $fieldsCollection;
+
+    /**
+     * @var Router
+     */
+    protected $router;
+
+    public function setRouter(Router $router)
+    {
+        $this->router = $router;
+    }
+
+    protected function getProperties()
+    {
+        return array(
+            new UrlProperty('edit_link', $this->router, 'oro_user_role_edit', array('id')),
+            new UrlProperty('edit_acl_link', $this->router, 'oro_user_acl_edit', array('id')),
+            new UrlProperty('delete_link', $this->router, 'oro_api_delete_role', array('id')),
+        );
+    }
 
     /**
      * @return FieldDescriptionCollection
@@ -105,17 +126,25 @@ class RoleDatagridManager extends DatagridManager
      */
     protected function getRowActions()
     {
+        $clickAction = array(
+            'name'         => 'rowClick',
+            'type'         => ActionInterface::TYPE_REDIRECT,
+            'acl_resource' => 'root',
+            'options'      => array(
+                'label' => 'Edit',
+                'link'  => 'edit_link',
+                'runOnRowClick' => true,
+            )
+        );
+
         $editAclAction = array(
             'name'         => 'edit_acl',
             'type'         => ActionInterface::TYPE_REDIRECT,
             'acl_resource' => 'root',
             'options'      => array(
-                'label'        => 'Edit ACL',
-                'icon'         => 'edit',
-                'route'        => 'oro_user_acl_edit',
-                'placeholders' => array(
-                    'id' => 'id',
-                ),
+                'label' => 'Edit ACL',
+                'icon'  => 'edit',
+                'link'  => 'edit_acl_link',
             )
         );
 
@@ -124,12 +153,9 @@ class RoleDatagridManager extends DatagridManager
             'type'         => ActionInterface::TYPE_REDIRECT,
             'acl_resource' => 'root',
             'options'      => array(
-                'label'        => 'Edit',
-                'icon'         => 'edit',
-                'route'        => 'oro_user_role_edit',
-                'placeholders' => array(
-                    'id' => 'id',
-                ),
+                'label' => 'Edit',
+                'icon'  => 'edit',
+                'link'  => 'edit_link',
             )
         );
 
@@ -138,15 +164,12 @@ class RoleDatagridManager extends DatagridManager
             'type'         => ActionInterface::TYPE_DELETE,
             'acl_resource' => 'root',
             'options'      => array(
-                'label'        => 'Delete',
-                'icon'         => 'trash',
-                'route'        => 'oro_api_delete_role',
-                'placeholders' => array(
-                    'id' => 'id',
-                ),
+                'label' => 'Delete',
+                'icon'  => 'trash',
+                'link'  => 'delete_link',
             )
         );
 
-        return array($editAclAction, $editAction, $deleteAction);
+        return array($clickAction, $editAclAction, $editAction, $deleteAction);
     }
 }

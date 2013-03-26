@@ -2,12 +2,15 @@
 
 namespace Oro\Bundle\UserBundle\Datagrid;
 
+use Symfony\Bundle\FrameworkBundle\Routing\Router;
 use Oro\Bundle\GridBundle\Datagrid\DatagridManager;
 use Oro\Bundle\GridBundle\Field\FieldDescription;
 use Oro\Bundle\GridBundle\Field\FieldDescriptionCollection;
 use Oro\Bundle\GridBundle\Field\FieldDescriptionInterface;
 use Oro\Bundle\GridBundle\Filter\FilterInterface;
 use Oro\Bundle\GridBundle\Action\ActionInterface;
+use Oro\Bundle\GridBundle\Property\FixedProperty;
+use Oro\Bundle\GridBundle\Property\UrlProperty;
 
 class GroupDatagridManager extends DatagridManager
 {
@@ -15,6 +18,24 @@ class GroupDatagridManager extends DatagridManager
      * @var FieldDescriptionCollection
      */
     protected $fieldsCollection;
+
+    /**
+     * @var Router
+     */
+    protected $router;
+
+    public function setRouter(Router $router)
+    {
+        $this->router = $router;
+    }
+
+    protected function getProperties()
+    {
+        return array(
+            new UrlProperty('edit_link', $this->router, 'oro_user_group_edit', array('id')),
+            new UrlProperty('delete_link', $this->router, 'oro_api_delete_group', array('id')),
+        );
+    }
 
     /**
      * @return FieldDescriptionCollection
@@ -58,6 +79,7 @@ class GroupDatagridManager extends DatagridManager
 
             $rolesLabel = new FieldDescription();
             $rolesLabel->setName('roles');
+            $rolesLabel->setProperty(new FixedProperty('roles', 'roleLabelsAsString'));
             $rolesLabel->setOptions(
                 array(
                     'type'        => FieldDescriptionInterface::TYPE_TEXT,
@@ -65,9 +87,9 @@ class GroupDatagridManager extends DatagridManager
                     'field_name'  => 'roles',
                     'filter_type' => FilterInterface::TYPE_STRING,
                     'required'    => false,
-                    'sortable'    => true,
+                    'sortable'    => false,
                     'filterable'  => true,
-                    'show_filter' => true,
+                    'show_filter' => false,
 
                 )
             );
@@ -106,17 +128,25 @@ class GroupDatagridManager extends DatagridManager
      */
     protected function getRowActions()
     {
+        $clickAction = array(
+            'name'         => 'rowClick',
+            'type'         => ActionInterface::TYPE_REDIRECT,
+            'acl_resource' => 'root',
+            'options'      => array(
+                'label' => 'Edit',
+                'link'  => 'edit_link',
+                'runOnRowClick' => true,
+            )
+        );
+
         $editAction = array(
             'name'         => 'edit',
             'type'         => ActionInterface::TYPE_REDIRECT,
             'acl_resource' => 'root',
             'options'      => array(
-                'label'        => 'Edit',
-                'icon'         => 'edit',
-                'route'        => 'oro_user_group_edit',
-                'placeholders' => array(
-                    'id' => 'id',
-                ),
+                'label' => 'Edit',
+                'icon'  => 'edit',
+                'link'  => 'edit_link',
             )
         );
 
@@ -125,15 +155,12 @@ class GroupDatagridManager extends DatagridManager
             'type'         => ActionInterface::TYPE_DELETE,
             'acl_resource' => 'root',
             'options'      => array(
-                'label'        => 'Delete',
-                'icon'         => 'trash',
-                'route'        => 'oro_api_delete_group',
-                'placeholders' => array(
-                    'id' => 'id',
-                ),
+                'label' => 'Delete',
+                'icon'  => 'trash',
+                'link'  => 'delete_link',
             )
         );
 
-        return array($editAction, $deleteAction);
+        return array($clickAction, $editAction, $deleteAction);
     }
 }

@@ -2,12 +2,14 @@
 
 namespace Oro\Bundle\UserBundle\Datagrid;
 
+use Symfony\Bundle\FrameworkBundle\Routing\Router;
 use Oro\Bundle\GridBundle\Datagrid\FlexibleDatagridManager;
 use Oro\Bundle\GridBundle\Field\FieldDescription;
 use Oro\Bundle\GridBundle\Field\FieldDescriptionCollection;
 use Oro\Bundle\GridBundle\Field\FieldDescriptionInterface;
 use Oro\Bundle\GridBundle\Filter\FilterInterface;
 use Oro\Bundle\GridBundle\Action\ActionInterface;
+use Oro\Bundle\GridBundle\Property\UrlProperty;
 
 class UserDatagridManager extends FlexibleDatagridManager
 {
@@ -15,6 +17,25 @@ class UserDatagridManager extends FlexibleDatagridManager
      * @var FieldDescriptionCollection
      */
     protected $fieldsCollection;
+
+    /**
+     * @var Router
+     */
+    protected $router;
+
+    public function setRouter(Router $router)
+    {
+        $this->router = $router;
+    }
+
+    protected function getProperties()
+    {
+        return array(
+            new UrlProperty('show_link', $this->router, 'oro_user_show', array('id')),
+            new UrlProperty('edit_link', $this->router, 'oro_user_edit', array('id')),
+            new UrlProperty('delete_link', $this->router, 'oro_api_delete_profile', array('id')),
+        );
+    }
 
     /**
      * @return FieldDescriptionCollection
@@ -166,17 +187,26 @@ class UserDatagridManager extends FlexibleDatagridManager
      */
     protected function getRowActions()
     {
+        $clickAction = array(
+            'name'         => 'rowClick',
+            'type'         => ActionInterface::TYPE_REDIRECT,
+            'acl_resource' => 'root',
+            'options'      => array(
+                'label'         => 'Show',
+                'link'          => 'show_link',
+                'route'         => 'oro_user_show',
+                'runOnRowClick' => true,
+            )
+        );
+
         $showAction = array(
             'name'         => 'show',
             'type'         => ActionInterface::TYPE_REDIRECT,
             'acl_resource' => 'root',
             'options'      => array(
-                'label'        => 'Show',
-                'icon'         => 'user',
-                'route'        => 'oro_user_show',
-                'placeholders' => array(
-                    'id' => 'id',
-                ),
+                'label' => 'Show',
+                'icon'  => 'user',
+                'link'  => 'show_link',
             )
         );
 
@@ -185,12 +215,9 @@ class UserDatagridManager extends FlexibleDatagridManager
             'type'         => ActionInterface::TYPE_REDIRECT,
             'acl_resource' => 'root',
             'options'      => array(
-                'label'        => 'Edit',
-                'icon'         => 'edit',
-                'route'        => 'oro_user_edit',
-                'placeholders' => array(
-                    'id' => 'id',
-                ),
+                'label' => 'Edit',
+                'icon'  => 'edit',
+                'link'  => 'edit_link',
             )
         );
 
@@ -199,15 +226,12 @@ class UserDatagridManager extends FlexibleDatagridManager
             'type'         => ActionInterface::TYPE_DELETE,
             'acl_resource' => 'root',
             'options'      => array(
-                'label'        => 'Delete',
-                'icon'         => 'trash',
-                'route'        => 'oro_api_delete_profile',
-                'placeholders' => array(
-                    'id' => 'id',
-                ),
+                'label' => 'Delete',
+                'icon'  => 'trash',
+                'link'  => 'delete_link',
             )
         );
 
-        return array($showAction, $editAction, $deleteAction);
+        return array($clickAction, $showAction, $editAction, $deleteAction);
     }
 }
