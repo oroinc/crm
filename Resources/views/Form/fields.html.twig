@@ -1,7 +1,7 @@
 {% block form_row %}
 {% spaceless %}
 <div class="control-group{% if errors|length > 0 %} error{% endif %}">
-    {{ form_label(form) }}
+    {{ form_label(form, '' , { label_attr: label_attr|merge({ class: 'control-label' })}) }}
     <div class="controls">
         {{ form_widget(form) }}
         {{ form_errors(form) }}
