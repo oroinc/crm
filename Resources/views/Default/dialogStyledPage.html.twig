@@ -8,6 +8,10 @@
     <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js"></script>
     <script type="text/javascript" src="{{ asset('bundles/orowindows/js/jquery.dialog.extended.js') }}"></script>
     <script type="text/javascript" src="{{ asset('bundles/orowindows/js/views/dialog.js') }}"></script>
+
+    <script type="text/javascript" src="{{ asset('bundles/orowindows/js/models/state.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/orowindows/js/collections/state.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/orowindows/js/views/dialog.js') }}"></script>
 {% endblock head %}
 {% block header %}
 {% endblock %}
@@ -25,7 +29,7 @@
                 </div>
             </div>
             <div id="opener-content1" style="display: none;" title="Dima’s Address">
-                    <form action="#" class="form form-horizontal" id="testForm" method="post">
+                    <form action="/app_dev.php/menu/form" class="form form-horizontal" id="testForm" method="post">
                         <fieldset>
                             <div class="scroll-holder">
                                 <div class="control-group">
@@ -113,23 +117,41 @@
         </div>
     </div>
 
+    <div style="display: none">
+        <div id="widget-restored-state-1">
+            {% render url('oro_menu_form', { 'name': "Test User" }) %}
+        </div>
+    </div>
+
     <script>
         $(function(){
+            Oro.widget.States.fetch({
+                success: function(data) {
+                    data.each(function(windowState) {
+                        new Oro.widget.DialogView({
+                            model: windowState
+                        }).render();
+                    });
+                }
+            });
+
             var pos = 0;
             $("#my-button").click(function(){
                 pos++;
-                var dialogOptions = {
-                    allowMaximize: true,
-                    allowMinimize: true,
-                    dblclick: 'maximize',
-                    title: "dialog window title long long long " + pos,
-                    width: 400,
-                    height: 400
-                };
-                $("<div>Some text if you need will be here</div>").dialog(dialogOptions);
+                new Oro.widget.DialogView({
+                    el: $("<div>Some text if you need will be here</div>"),
+                    dialogOptions: {
+                        allowMaximize: true,
+                        allowMinimize: true,
+                        dblclick: 'maximize',
+                        title: "dialog window title long long long " + pos,
+                        width: 400,
+                        height: 400
+                    }
+                }).render();
             });
             $("#opener1").click(function(){
-                new Oro.windows.DialogView({
+                new Oro.widget.DialogView({
                     el: '#opener-content1',
                     dialogOptions: {
                         allowMaximize: true,
@@ -139,7 +161,6 @@
                         appendTo: '#main .row-fluid',
                         width : 400,
                         height : 305,
-                        state: 'minimized',
                         snapshot: {
                             config: {
                                 draggable: true,
@@ -160,7 +181,7 @@
                 }).render();
             });
             $("#opener2").click(function(){
-                new Oro.windows.DialogView({
+                new Oro.widget.DialogView({
                     el: '#opener-content2',
                     dialogOptions: {
                         allowMinimize: true,
@@ -171,7 +192,7 @@
                 }).render();
             });
             $("#opener3").click(function(){
-                new Oro.windows.DialogView({
+                new Oro.widget.DialogView({
                     el: '#opener-content2',
                     dialogOptions: {
                         width : 400,
