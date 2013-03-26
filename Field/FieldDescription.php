@@ -3,6 +3,8 @@
 namespace Oro\Bundle\GridBundle\Field;
 
 use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttributeType;
+use Oro\Bundle\GridBundle\Property\PropertyInterface;
+use Oro\Bundle\GridBundle\Property\FieldProperty;
 
 class FieldDescription implements FieldDescriptionInterface
 {
@@ -15,6 +17,11 @@ class FieldDescription implements FieldDescriptionInterface
      * @var string the field name
      */
     protected $name;
+
+    /**
+     * @var PropertyInterface
+     */
+    protected $property;
 
     /**
      * @var array the option collection
@@ -80,6 +87,25 @@ class FieldDescription implements FieldDescriptionInterface
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getProperty()
+    {
+        if (!$this->property) {
+            $this->property = new FieldProperty($this);
+        }
+        return $this->property;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setProperty(PropertyInterface $property)
+    {
+        $this->property = $property;
     }
 
     /**
@@ -290,75 +316,10 @@ class FieldDescription implements FieldDescriptionInterface
 
     /**
      * {@inheritdoc}
+     * @deprecated
      */
     public function getFieldValue($object)
     {
-        if (is_array($object)) {
-            $name = $this->getName();
-            return isset($object[$name]) ? $object[$name] : null;
-        }
-
-        $fieldName = $this->getFieldName();
-        $camelizedFieldName = self::camelize($fieldName);
-
-        $getters = array();
-        // prefer method name given in the code option
-        if ($this->getOption('code')) {
-            $getters[] = $this->getOption('code');
-        }
-        $getters[] = 'get' . $camelizedFieldName;
-        $getters[] = 'is' . $camelizedFieldName;
-
-        foreach ($getters as $getter) {
-            if (method_exists($object, $getter)) {
-                return $this->convertFieldValue(call_user_func(array($object, $getter)));
-            }
-        }
-
-        if (isset($object->{$fieldName})) {
-            return $this->convertFieldValue($object->{$fieldName});
-        }
-
-        throw new \LogicException(sprintf('Unable to retrieve the value of "%s"', $this->getName()));
-    }
-
-    /**
-     * @param $value
-     * @return mixed
-     */
-    protected function convertFieldValue($value)
-    {
-        if (null === $value) {
-            return $value;
-        }
-        $valueType = $this->getType() ?: $this->getOption('type');
-        switch ($valueType) {
-            case AbstractAttributeType::BACKEND_TYPE_DECIMAL:
-                return floatval($value);
-                break;
-            case AbstractAttributeType::BACKEND_TYPE_INTEGER:
-                return intval($value);
-                break;
-            default:
-                return $value;
-        }
-    }
-
-    /**
-     * Camelize a string
-     *
-     * @static
-     *
-     * @param string $property
-     *
-     * @return string
-     */
-    private static function camelize($property)
-    {
-        return preg_replace(
-            array('/(^|_| )+(.)/e', '/\.(.)/e'),
-            array("strtoupper('\\2')", "'_'.strtoupper('\\1')"),
-            $property
-        );
+        return $this->getProperty()->getValue($object);
     }
 }

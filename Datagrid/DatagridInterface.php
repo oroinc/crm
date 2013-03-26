@@ -4,12 +4,19 @@ namespace Oro\Bundle\GridBundle\Datagrid;
 
 use Sonata\AdminBundle\Datagrid\DatagridInterface as BaseDatagridInterface;
 
+use Oro\Bundle\GridBundle\Property\PropertyInterface;
 use Oro\Bundle\GridBundle\Sorter\SorterInterface;
 use Oro\Bundle\GridBundle\Route\RouteGeneratorInterface;
 use Oro\Bundle\GridBundle\Action\ActionInterface;
 
 interface DatagridInterface extends BaseDatagridInterface
 {
+    /**
+     * @param PropertyInterface $property
+     * @return void
+     */
+    public function addProperty(PropertyInterface $property);
+
     /**
      * @param SorterInterface $sorter
      * @return void

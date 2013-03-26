@@ -15,7 +15,7 @@ class DeleteActionTest extends AbstractActionTestCase
     protected function initializeAbstractActionMock($arguments = array())
     {
         $arguments = $this->getAbstractActionArguments($arguments);
-        $this->model = new DeleteAction($arguments['urlGenerator'], $arguments['aclManager']);
+        $this->model = new DeleteAction($arguments['aclManager']);
     }
 
     public function testGetType()

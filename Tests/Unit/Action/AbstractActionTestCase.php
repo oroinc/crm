@@ -25,7 +25,6 @@ class AbstractActionTestCase extends \PHPUnit_Framework_TestCase
     protected function getAbstractActionArguments($arguments = array())
     {
         $defaultArguments = array(
-            'urlGenerator' => $this->getMock('Oro\Bundle\GridBundle\Action\ActionUrlGeneratorInterface'),
             'aclManager'   => $this->getMock('Oro\Bundle\UserBundle\Acl\ManagerInterface'),
         );
 

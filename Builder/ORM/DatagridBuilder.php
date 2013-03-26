@@ -16,6 +16,7 @@ use Oro\Bundle\GridBundle\Field\FieldDescriptionCollection;
 use Oro\Bundle\GridBundle\Filter\FilterFactoryInterface;
 use Oro\Bundle\GridBundle\Sorter\SorterFactoryInterface;
 use Oro\Bundle\GridBundle\Action\ActionFactoryInterface;
+use Oro\Bundle\GridBundle\Property\PropertyInterface;
 
 class DatagridBuilder implements DatagridBuilderInterface
 {
@@ -114,6 +115,18 @@ class DatagridBuilder implements DatagridBuilderInterface
         if ($action->isGranted()) {
             $datagrid->addRowAction($action);
         }
+    }
+
+    /**
+     * Add property to datagrid
+     *
+     * @param DatagridInterface $datagrid
+     * @param PropertyInterface $property
+     * @return void
+     */
+    public function addProperty(DatagridInterface $datagrid, PropertyInterface $property)
+    {
+        $datagrid->addProperty($property);
     }
 
     /**

@@ -25,7 +25,7 @@ OroApp.DatagridActionDelete = OroApp.DatagridAction.extend({
     doDelete: function() {
         var self = this;
         this.model.destroy({
-            url: this.generateUrl(),
+            url: this.getLink(),
             wait: true,
             error: function() {
                 self.getErrorDialog().open();

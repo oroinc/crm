@@ -15,10 +15,7 @@ OroApp.DatagridAction = Backbone.View.extend({
     launcherOptions: undefined,
 
     /** @property {String} */
-    url: undefined,
-
-    /** @property {Object} */
-    placeholders: {},
+    link: undefined,
 
     /**
      * Initialize view
@@ -34,14 +31,6 @@ OroApp.DatagridAction = Backbone.View.extend({
             throw new TypeError("'model' is required");
         }
         this.model = options.model;
-
-        if (options.url) {
-            this.url = options.url;
-        }
-
-        if (options.placeholders) {
-            this.placeholders = _.extend(this.placeholders, options.placeholders);
-        }
 
         if (options.launcherOptions) {
             _.extend(this.launcherOptions, options.launcherOptions);
@@ -81,52 +70,20 @@ OroApp.DatagridAction = Backbone.View.extend({
     },
 
     /**
-     * Generates url of action based on route, placeholders and model
+     * Get action link
      *
      * @return {String}
      * @throws {TypeError} If route is undefined
      */
-    generateUrl: function() {
-        if (!this.url) {
-            throw new TypeError("'url' is required");
+    getLink: function() {
+        if (!this.link) {
+            throw new TypeError("'link' is required");
         }
-        return this.processUrl(this.url, this.processPlaceholders(this.placeholders, this.model));
-    },
 
-    /**
-     * Process url parameters
-     *
-     * @param {String} url
-     * @param {Object} parameters Key-value storage of parameters
-     * @return String
-     * @protected
-     */
-    processUrl: function(url, parameters) {
-        result = url;
-        for (var name in parameters) {
-            result = result.replace(name, parameters[name]);
+        if (this.model.has(this.link)) {
+            return this.model.get(this.link);
+        } else {
+            return this.link;
         }
-        return result;
-    },
-
-    /**
-     * Replace values of `placeholders` with values of model properties
-     *
-     * @param {Object} placeholders
-     * @param {Backbone.Model} model
-     * @return {Object}
-     * @protected
-     */
-    processPlaceholders: function(placeholders, model) {
-        placeholders = placeholders || {};
-        var result = {};
-        _.each(placeholders, function(value, name) {
-            if (model.has(value)) {
-                value = model.get(value);
-            }
-            result[name] = value;
-        }, this);
-
-        return result;
     }
 });

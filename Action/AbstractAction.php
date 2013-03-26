@@ -27,11 +27,6 @@ abstract class AbstractAction implements ActionInterface
     protected $options;
 
     /**
-     * @var ActionUrlGeneratorInterface
-     */
-    protected $urlGenerator;
-
-    /**
      * @var ManagerInterface
      */
     protected $aclManager;
@@ -42,12 +37,10 @@ abstract class AbstractAction implements ActionInterface
     protected $isProcessed = false;
 
     /**
-     * @param ActionUrlGeneratorInterface $urlGenerator
      * @param ManagerInterface $aclManager
      */
-    public function __construct(ActionUrlGeneratorInterface $urlGenerator, ManagerInterface $aclManager)
+    public function __construct(ManagerInterface $aclManager)
     {
-        $this->urlGenerator = $urlGenerator;
         $this->aclManager   = $aclManager;
     }
 
@@ -139,31 +132,7 @@ abstract class AbstractAction implements ActionInterface
      */
     protected function processRouteOptions()
     {
-        $this->assertOption('route');
-
-        $routeName = $this->options['route'];
-
-        if (isset($this->options['parameters'])) {
-            $parameters = $this->options['parameters'];
-            unset($this->options['parameters']);
-        } else {
-            $parameters = array();
-        }
-
-        if (!isset($this->options['placeholders'])) {
-            $this->options['placeholders'] = array();
-        }
-        $placeholders = $this->options['placeholders'];
-
-        // generate correct url
-        $this->options['url'] = $this->urlGenerator->generate($routeName, $parameters, $placeholders);
-        unset($this->options['route']);
-
-        foreach ($this->options['placeholders'] as $key => $value) {
-            unset($this->options['placeholders'][$key]);
-            $key = '{' . $key .'}';
-            $this->options['placeholders'][$key] = $value;
-        }
+        $this->assertOption('link');
     }
 
     /**

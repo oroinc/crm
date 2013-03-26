@@ -2,8 +2,6 @@
 
 namespace Oro\Bundle\GridBundle\Tests\Unit\Action;
 
-use Oro\Bundle\GridBundle\Action\ActionUrlGeneratorInterface;
-
 class AbstractActionTest extends AbstractActionTestCase
 {
     /**
@@ -11,8 +9,6 @@ class AbstractActionTest extends AbstractActionTestCase
      */
     const TEST_NAME          = 'test_name';
     const TEST_ACL_RESOURCE  = 'test_acl_resource';
-    const TEST_ROUTE_NAME    = 'test_route_name';
-    const TEST_ROUTE_PATTERN = '/test/route/{parameter}';
 
     /**
      * @var array
@@ -71,29 +67,6 @@ class AbstractActionTest extends AbstractActionTestCase
     }
 
     /**
-     * Prepares mocks for route, route collection and router
-     *
-     * @return ActionUrlGeneratorInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected function prepareUrlGeneratorMock()
-    {
-        $urlGenerator = $this->getMockForAbstractClass(
-            'Oro\Bundle\GridBundle\Action\ActionUrlGeneratorInterface',
-            array(),
-            '',
-            false,
-            true,
-            true,
-            array('generate')
-        );
-        $urlGenerator->expects($this->any())
-            ->method('generate')
-            ->will($this->returnCallback(array($this, 'generateUrl')));
-
-        return $urlGenerator;
-    }
-
-    /**
      * @param string $routeName
      * @param array $parameters
      * @param array $placeholders
@@ -107,67 +80,15 @@ class AbstractActionTest extends AbstractActionTestCase
 
     /**
      * @expectedException \LogicException
-     * @expectedExceptionMessage There is no option "route" for action "test_name".
+     * @expectedExceptionMessage There is no option "link" for action "test_name".
      */
-    public function testGetOptionsNoRouteOption()
+    public function testGetOptionsNoLinkOption()
     {
         $this->initializeAbstractActionMock();
 
         $this->model->setName(self::TEST_NAME);
         $this->model->setOptions(array());
         $this->model->getOptions();
-    }
-
-    /**
-     * Data provider for testGetOptions
-     *
-     * @return array
-     */
-    public function getOptionsDataProvider()
-    {
-        return array(
-            'no_parameters_no_placeholders' => array(
-                '$sourceOptions' => array(
-                    'route' => self::TEST_ROUTE_NAME,
-                ),
-                '$expectedOptions' => array(
-                    'url'          => self::TEST_ROUTE_PATTERN,
-                    'placeholders' => array()
-                )
-            ),
-            'with_parameters_with_placeholders' => array(
-                '$sourceOptions' => array(
-                    'route'        => self::TEST_ROUTE_NAME,
-                    'parameters'   => array(
-                        '{parameter}' => 'parameter_key'
-                    ),
-                    'placeholders' => array(
-                        'place'  => 'place_key',
-                        'holder' => 'holder_key',
-                    )
-                ),
-                '$expectedOptions' => array(
-                    'url'          => str_replace('{parameter}', 'parameter_key', self::TEST_ROUTE_PATTERN),
-                    'placeholders' => array(
-                        '{place}'  => 'place_key',
-                        '{holder}' => 'holder_key',
-                    )
-                )
-            ),
-        );
-    }
-
-    /**
-     * @param array $sourceOptions
-     * @param array $expectedOptions
-     * @dataProvider getOptionsDataProvider
-     */
-    public function testGetOptions(array $sourceOptions, array $expectedOptions)
-    {
-        $this->initializeAbstractActionMock(array('urlGenerator' => $this->prepareUrlGeneratorMock()));
-
-        $this->model->setOptions($sourceOptions);
-        $this->assertEquals($expectedOptions, $this->model->getOptions());
     }
 
     /**

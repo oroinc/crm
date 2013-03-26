@@ -103,6 +103,7 @@ OroApp.Datagrid = Backgrid.Grid.extend({
 
         if (!_.isEmpty(options.actions)) {
             options.columns.push(this.createActionsColumn(options.actions));
+            this.onClickAction = this.getOnClickAction(options.actions);
         }
 
         this.loadingMask = new this.loadingMask();
@@ -111,6 +112,34 @@ OroApp.Datagrid = Backgrid.Grid.extend({
         this.toolbar = new this.toolbar(_.extend(this.toolbarOptions));
 
         Backgrid.Grid.prototype.initialize.apply(this, arguments);
+        this.listenTo(this.collection, "reset", this.registerRowClickListeners);
+    },
+
+    registerRowClickListeners: function() {
+        if (!this.onClickAction) {
+            return;
+        }
+        var self = this;
+        this.rowClickListeners = this.rowClickListeners || [];
+        _.each(this.body.rows, function(row) {
+            row.$el.on('click', function(e) {
+                if (e.target.nodeName == 'TD') {
+                    var action = new self.onClickAction({
+                        model: row.model
+                    });
+                    action.run();
+                }
+            })
+        }, this);
+    },
+
+    getOnClickAction: function(actions) {
+        var filtered = _.filter(actions, function(action) {
+            return action.prototype.runOnRowClick;
+        });
+        if (filtered.length) {
+            return filtered[0];
+        }
     },
 
     /**
@@ -121,9 +150,12 @@ OroApp.Datagrid = Backgrid.Grid.extend({
      * @protected
      */
     createActionsColumn: function(actions) {
+        var filteredActions = _.filter(actions, function(action) {
+            return !action.prototype.runOnRowClick;
+        });
         return new this.actionsColumn(_.extend(
             this.actionsColumnAttributes, {
-                actions: actions
+                actions: filteredActions
             }
         ));
     },
@@ -165,6 +197,8 @@ OroApp.Datagrid = Backgrid.Grid.extend({
             $el.append(this.footer.render().$el);
         }
         $el.append(this.body.render().$el);
+
+        this.registerRowClickListeners();
     },
 
     /**

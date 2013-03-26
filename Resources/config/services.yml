@@ -13,7 +13,6 @@ parameters:
     oro_grid.action.factory.class:           Oro\Bundle\GridBundle\Action\ActionFactory
 
     oro_grid.route.default_generator.class:  Oro\Bundle\GridBundle\Route\DefaultRouteGenerator
-    oro_grid.action.url_generator.class:     Oro\Bundle\GridBundle\Action\ActionUrlGenerator
 
 services:
     oro_grid.builder.datagrid:
@@ -40,6 +39,3 @@ services:
         class:     %oro_grid.action.factory.class%
         arguments: ["@service_container", ~]
 
-    oro_grid.action.url_generator:
-        class: %oro_grid.action.url_generator.class%
-        arguments: ["@router"]

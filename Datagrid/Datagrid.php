@@ -9,6 +9,9 @@ use Sonata\AdminBundle\Filter\FilterInterface as SonataFilterInterface;
 
 use Oro\Bundle\GridBundle\Filter\FilterInterface;
 use Oro\Bundle\GridBundle\Field\FieldDescriptionCollection;
+use Oro\Bundle\GridBundle\Field\FieldDescriptionInterface;
+use Oro\Bundle\GridBundle\Property\PropertyCollection;
+use Oro\Bundle\GridBundle\Property\PropertyInterface;
 use Oro\Bundle\GridBundle\Sorter\SorterInterface;
 use Oro\Bundle\GridBundle\Route\RouteGeneratorInterface;
 use Oro\Bundle\GridBundle\Action\ActionInterface;
@@ -19,6 +22,11 @@ class Datagrid implements DatagridInterface
      * @var ProxyQueryInterface
      */
     protected $query;
+
+    /**
+     * @var PropertyCollection
+     */
+    protected $properties;
 
     /**
      * @var FieldDescriptionCollection
@@ -117,6 +125,34 @@ class Datagrid implements DatagridInterface
         $this->parameters     = $parameters;
         $this->name           = $name;
         $this->entityHint     = $entityHint;
+        $this->properties     = new PropertyCollection();
+
+        /** @var $field FieldDescriptionInterface */
+        if (count($this->columns)) {
+            foreach ($this->columns as $field) {
+                $this->addProperty($field->getProperty());
+            }
+        }
+    }
+
+    /**
+     * Add property
+     *
+     * @param PropertyInterface $property
+     */
+    public function addProperty(PropertyInterface $property)
+    {
+        $this->properties->add($property);
+    }
+
+    /**
+     * Get properties
+     *
+     * @return PropertyCollection
+     */
+    public function getProperties()
+    {
+        return $this->properties;
     }
 
     /**

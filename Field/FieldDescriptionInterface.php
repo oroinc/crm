@@ -2,6 +2,8 @@
 
 namespace Oro\Bundle\GridBundle\Field;
 
+use Oro\Bundle\GridBundle\Property\PropertyInterface;
+
 interface FieldDescriptionInterface
 {
     /**
@@ -45,6 +47,20 @@ interface FieldDescriptionInterface
      * @return string the name
      */
     public function getName();
+
+    /**
+     * Get property for field
+     *
+     * @return PropertyInterface
+     */
+    public function getProperty();
+
+    /**
+     * Set property for field
+     *
+     * @param PropertyInterface $property
+     */
+    public function setProperty(PropertyInterface $property);
 
     /**
      * Return the value represented by the provided name

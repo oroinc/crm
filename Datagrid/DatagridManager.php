@@ -8,6 +8,7 @@ use Symfony\Component\Validator\ValidatorInterface;
 use Oro\Bundle\GridBundle\Builder\DatagridBuilderInterface;
 use Oro\Bundle\GridBundle\Builder\ListBuilderInterface;
 use Oro\Bundle\GridBundle\Field\FieldDescriptionInterface;
+use Oro\Bundle\GridBundle\Property\PropertyInterface;
 use Oro\Bundle\GridBundle\Datagrid\ParametersInterface;
 use Oro\Bundle\GridBundle\Route\RouteGeneratorInterface;
 
@@ -145,6 +146,7 @@ abstract class DatagridManager implements DatagridManagerInterface
     {
         // add datagrid fields
         $listCollection = $this->listBuilder->getBaseList();
+
         /** @var $fieldDescription FieldDescriptionInterface */
         foreach ($this->getListFields() as $fieldDescription) {
             $listCollection->add($fieldDescription);
@@ -163,6 +165,11 @@ abstract class DatagridManager implements DatagridManagerInterface
             $this->name,
             $this->entityHint
         );
+
+        // add properties
+        foreach ($this->getProperties() as $property) {
+            $this->datagridBuilder->addProperty($datagrid, $property);
+        }
 
         // add datagrid filters
         /** @var $fieldDescription FieldDescriptionInterface */
@@ -191,6 +198,16 @@ abstract class DatagridManager implements DatagridManagerInterface
      * @return FieldDescriptionInterface[]
      */
     abstract protected function getListFields();
+
+    /**
+     * Get list of properties
+     *
+     * @return PropertyInterface
+     */
+    protected function getProperties()
+    {
+        return array();
+    }
 
     /**
      * Get list of datagrid filters
