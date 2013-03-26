@@ -28,6 +28,7 @@ class OroSearchExtension extends \Twig_Extension
     public function highlight($text, $searchString)
     {
         $text = strip_tags($text);
+        $searchString = $this->clearString($searchString);
         $searchArray = explode(' ', $searchString);
         foreach ($searchArray as $searchWord) {
             $text = preg_replace("/\p{L}*?" . preg_quote($searchWord) . "\p{L}*/ui", "<strong>$0</strong>", $text);
@@ -47,7 +48,7 @@ class OroSearchExtension extends \Twig_Extension
      */
     public function trimByString($text, $searchString, $symbolCount = 400)
     {
-        $searchString = trim($searchString);
+        $searchString = $this->clearString($searchString);
         if (strpos($searchString, ' ') !== false) {
             $stringArray = explode(' ', $searchString);
             $searchString = $stringArray[0];
@@ -84,5 +85,14 @@ class OroSearchExtension extends \Twig_Extension
     public function getName()
     {
         return 'search_extension';
+    }
+
+    /**
+     * @param string $inputString
+     * @return string
+     */
+    private function clearString($inputString)
+    {
+        return trim(preg_replace('/[^a-z0-9\s]+/i', '', $inputString));
     }
 }
