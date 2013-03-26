@@ -14,6 +14,7 @@ use Oro\Bundle\FlexibleEntityBundle\Form\Type\FlexibleType;
 use Oro\Bundle\FlexibleEntityBundle\Form\Type\FlexibleValueType;
 use Oro\Bundle\UserBundle\Form\EventListener\ProfileSubscriber;
 use Oro\Bundle\UserBundle\Entity\User;
+use Oro\Bundle\UserBundle\Form\Type\EmailType;
 
 class ProfileType extends FlexibleType
 {
@@ -105,6 +106,14 @@ class ProfileType extends FlexibleType
                 'required'       => true,
                 'first_options'  => array('label' => 'Password'),
                 'second_options' => array('label' => 'Password again'),
+            ))
+            ->add('emails', 'collection', array(
+                'type'           => new EmailType(),
+                'allow_add'      => true,
+                'allow_delete'   => true,
+                'by_reference'   => false,
+                'prototype'      => true,
+                'prototype_name' => 'tag__name__',
             ));
     }
 

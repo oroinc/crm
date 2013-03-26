@@ -570,25 +570,19 @@
     <fieldset>
         <legend>{{ title }}</legend>
 
-        {{ form_row(form.username) }}
-        {{ form_row(form.email) }}
-        {{ form_row(form.firstname) }}
-        {{ form_row(form.lastname) }}
-        {{ form_row(form.middlename) }}
-        {{ form_row(form.birthday) }}
-        {{ form_row(form.image) }}
+        {# store the prototype on the data-prototype attribute #}
+        <ul id="email-fields-list" data-prototype="{{ form_widget(form.emails.vars.prototype) | e }}">
+            {% for emailField in form.emails %}
+                <li>
+                    {{ form_errors(emailField) }}
+                    {{ form_widget(emailField) }}
+                </li>
+            {% endfor %}
+        </ul>
 
-        {% if form.enabled is defined %}
-            {{ form_row(form.enabled) }}
-        {% endif %}
+        <a class="btn" href="#" id="add-another-email">Add another email</a>
 
-        {% if form.groups is defined %}
-            {{ form_row(form.groups) }}
-        {% endif %}
-
-        {% if form.rolesCollection is defined %}
-            {{ form_row(form.rolesCollection) }}
-        {% endif %}
+        {{ form_rest(form) }}
 
         <br />
         <legend>Additional information</legend>
@@ -641,3 +635,10 @@
     {% endjavascripts %}
 {% endblock %}
 
+{% block head_script %}
+    {{ parent() }}
+    <script type="text/javascript">
+        var emailCount = '{{ form.emails | length }}';
+    </script>
+    <script type="text/javascript" src="{{ asset('bundles/orouser/js/emails.js') }}"></script>
+{% endblock %}

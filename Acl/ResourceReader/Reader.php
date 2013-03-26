@@ -41,7 +41,7 @@ class Reader
         //try to determine if we in test mode
         $inTest = false;
         foreach ($directories as $directory) {
-            if (strpos($directory, 'Tests') !== false) {
+            if (strpos($directory, DIRECTORY_SEPARATOR . 'Tests' . DIRECTORY_SEPARATOR) !== false) {
                 $inTest = true;
             }
         }
