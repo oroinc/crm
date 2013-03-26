@@ -88,8 +88,20 @@ class StatusController extends Controller
      */
     public function setCurrentStatus(Status $status)
     {
-        $this->get('oro_user.status_manager')->setCurrentStatus($this->getUser(), $status, true);
+        $this->get('oro_user.status_manager')->setCurrentStatus($this->getUser(), $status);
         $this->get('session')->getFlashBag()->add('success', 'Status set');
+
+        return $this->redirect($this->generateUrl('oro_user_status_list'));
+    }
+
+    /**
+     * @Route("/clear-current", name="oro_user_status_clear_current")
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    public function clearCurrentStatus()
+    {
+        $this->get('oro_user.status_manager')->setCurrentStatus($this->getUser());
+        $this->get('session')->getFlashBag()->add('success', 'Status unset');
 
         return $this->redirect($this->generateUrl('oro_user_status_list'));
     }
