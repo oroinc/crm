@@ -56,6 +56,59 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
     protected $email;
 
     /**
+     * First name
+     *
+     * @var string
+     *
+     * @ORM\Column(name="firstname", type="string", length=100, nullable=true)
+     * @Soap\ComplexType("string", nillable=true)
+     * @Type("string")
+     */
+    protected $firstName;
+
+    /**
+     * Last name
+     *
+     * @var string
+     *
+     * @ORM\Column(name="lastname", type="string", length=100, nullable=true)
+     * @Soap\ComplexType("string", nillable=true)
+     * @Type("string")
+     */
+    protected $lastName;
+
+    /**
+     * Middle name
+     *
+     * @var string
+     *
+     * @ORM\Column(name="middlename", type="string", length=100, nullable=true)
+     * @Soap\ComplexType("string", nillable=true)
+     * @Type("string")
+     */
+    protected $middleName;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="birthday", type="datetime", nullable=true)
+     * @Soap\ComplexType("dateTime", nillable=true)
+     * @Type("dateTime")
+     */
+    protected $birthday;
+
+    /**
+     * Image filename
+     *
+     * @var string
+     *
+     * @ORM\Column(name="image", type="string", length=255, nullable=true)
+     * @Soap\ComplexType("string", nillable=true)
+     * @Type("string")
+     */
+    protected $image;
+
+    /**
      * @var boolean
      *
      * @ORM\Column(type="boolean")
@@ -98,7 +151,7 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
      *
      * @var string
      *
-     * @ORM\Column(type="string", nullable=true)
+     * @ORM\Column(name="confirmation_token", type="string", nullable=true)
      * @Exclude
      */
     protected $confirmationToken;
@@ -155,7 +208,13 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
     protected $values;
 
     /**
+     * @ORM\OneToOne(targetEntity="UserApi", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true, fetch="EXTRA_LAZY")
+     */
+    protected $api;
+
+    /**
      * @var Status[]
+     *
      * @ORM\OneToMany(targetEntity="Status", mappedBy="user")
      * @ORM\OrderBy({"createdAt" = "DESC"})
      */
@@ -163,6 +222,7 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
 
     /**
      * @var Status
+     *
      * @ORM\OneToOne(targetEntity="Status")
      * @ORM\JoinColumn(name="status_id", referencedColumnName="id", nullable=true)
      */
@@ -170,6 +230,7 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
 
     /**
      * @var Email[]
+     *
      * @ORM\OneToMany(targetEntity="Email", mappedBy="user", orphanRemoval=true, cascade={"persist"})
      */
     protected $emails;
@@ -178,10 +239,10 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
     {
         parent::__construct();
 
-        $this->salt  = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
-        $this->roles = new ArrayCollection();
-        $this->statuses = new ArrayCollection;
-        $this->emails = new ArrayCollection;
+        $this->salt     = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
+        $this->roles    = new ArrayCollection();
+        $this->statuses = new ArrayCollection();
+        $this->emails   = new ArrayCollection();
     }
 
     /**
@@ -248,17 +309,67 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
     /**
      * {@inheritDoc}
      */
-    public function getSalt()
+    public function getEmail()
     {
-        return $this->salt;
+        return $this->email;
+    }
+
+    /**
+     * Return first name
+     *
+     * @return string
+     */
+    public function getFirstname()
+    {
+        return $this->firstName;
+    }
+
+    /**
+     * Return last name
+     *
+     * @return string
+     */
+    public function getLastname()
+    {
+        return $this->lastName;
+    }
+
+    /**
+     * Return middle name
+     *
+     * @return string
+     */
+    public function getMiddlename()
+    {
+        return $this->middleName;
+    }
+
+    /**
+     * Return birthday
+     *
+     * @return \DateTime
+     */
+    public function getBirthday()
+    {
+        return $this->birthday;
+    }
+
+    /**
+     * Return image filename
+     *
+     * @return string
+     */
+    public function getImage()
+    {
+        return $this->image;
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getEmail()
+    public function getSalt()
     {
-        return $this->email;
+        return $this->salt;
     }
 
     /**
@@ -328,6 +439,14 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
     }
 
     /**
+     * @return UserApi
+     */
+    public function getApi()
+    {
+        return $this->api;
+    }
+
+    /**
      * {@inheritDoc}
      */
     public function isEnabled()
@@ -361,6 +480,41 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
     public function setEmail($email)
     {
         $this->email = $email;
+
+        return $this;
+    }
+
+    public function setFirstname($firstName = null)
+    {
+        $this->firstName = $firstName;
+
+        return $this;
+    }
+
+    public function setLastname($lastName = null)
+    {
+        $this->lastName = $lastName;
+
+        return $this;
+    }
+
+    public function setMiddlename($middleName = null)
+    {
+        $this->middleName = $middleName;
+
+        return $this;
+    }
+
+    public function setBirthday(\DateTime $birthday = null)
+    {
+        $this->birthday = $birthday;
+
+        return $this;
+    }
+
+    public function setImage($image = null)
+    {
+        $this->image = $image;
 
         return $this;
     }
@@ -403,6 +557,13 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
     public function setLastLogin(\DateTime $time)
     {
         $this->lastLogin = $time;
+
+        return $this;
+    }
+
+    public function setApi(UserApi $api)
+    {
+        $this->api = $api;
 
         return $this;
     }

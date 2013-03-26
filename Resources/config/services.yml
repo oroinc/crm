@@ -92,13 +92,13 @@ services:
 
     oro_user.form.type.profile:
         class:                        %oro_user.type.profile.class%
-        arguments:                    [%oro_user.entity.class%, %oro_user.entity.value.class%]
+        arguments:                    [%oro_user.entity.class%, %oro_user.entity.value.class%, "@oro_user.acl_manager", "@security.context"]
         tags:
             - { name: form.type, alias: oro_user_profile }
 
     oro_user.form.type.profile.api:
         class:                        %oro_user.type.profile.api.class%
-        arguments:                    [%oro_user.entity.class%, %oro_user.entity.value.class%]
+        arguments:                    [%oro_user.entity.class%, %oro_user.entity.value.class%, "@oro_user.acl_manager", "@security.context"]
         tags:
             - { name: form.type, alias: profile }
 
