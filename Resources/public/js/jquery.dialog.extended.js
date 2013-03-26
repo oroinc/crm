@@ -98,9 +98,7 @@ $.widget( "ui.dialog", $.ui.dialog, {
     },
 
     _minimize: function () {
-        if (this.state() != 'normal') {
-            this._setOption("state", "normal");
-        }
+        this._normalize();
 
         var widget = this.widget();
 
@@ -166,9 +164,7 @@ $.widget( "ui.dialog", $.ui.dialog, {
     },
 
     _maximize: function () {
-        if (this.state() != 'normal') {
-            this._setOption("state", "normal");
-        }
+        this._normalize();
 
         this._trigger("beforeMaximize");
         this._saveSnapshot();
@@ -189,6 +185,14 @@ $.widget( "ui.dialog", $.ui.dialog, {
         this._trigger("restore");
 
         return this;
+    },
+
+    _normalize: function() {
+        if (this.state() != 'normal') {
+            this.disableStateChangeTrigger = true;
+            this._setOption("state", "normal");
+            this.disableStateChangeTrigger = false;
+        }
     },
 
     _initBottomLine: function() {
@@ -473,21 +477,25 @@ $.widget( "ui.dialog", $.ui.dialog, {
     _saveSnapshot: function () {
         // remember all configs under normal state
         if (this.state() == "normal") {
-            this._setOption('snapshot', {
-                config: {
-                    resizable: this.options.resizable,
-                    draggable: this.options.draggable
-                },
-                size: {
-                    height: this.widget().height(),
-                    width: this.options.width,
-                    maxHeight: this.options.maxHeight
-                },
-                "position": this.widget().offset()
-            });
+            this._setOption('snapshot', this.snapshot());
         }
 
         return this;
+    },
+
+    snapshot: function() {
+        return {
+            config: {
+                resizable: this.options.resizable,
+                draggable: this.options.draggable
+            },
+            size: {
+                height: this.widget().height(),
+                width: this.options.width,
+                maxHeight: this.options.maxHeight
+            },
+            "position": this.widget().offset()
+        };
     },
 
     _loadSnapshot: function() {
@@ -538,6 +546,15 @@ $.widget( "ui.dialog", $.ui.dialog, {
         this.widget()
             .removeClass("ui-dialog-normal ui-dialog-maximized ui-dialog-minimized ui-dialog-collapsed")
             .addClass("ui-dialog-" + state);
+
+        // Trigger state change event
+        if (!this.disableStateChangeTrigger) {
+            var snapshot = this._loadSnapshot();
+            if (!snapshot && this.state() == 'normal') {
+                snapshot = this.snapshot();
+            }
+            this._trigger("stateChange", null, {state: this.state(), snapshot: snapshot});
+        }
 
         return this;
     },

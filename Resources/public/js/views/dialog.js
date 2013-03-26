@@ -1,15 +1,16 @@
 var Oro = Oro || {};
-Oro.windows = Oro.windows || {};
+Oro.widget = Oro.widget || {};
 
-Oro.windows.DialogView = Backbone.View.extend({
+Oro.widget.DialogView = Backbone.View.extend({
     options: {
         type: 'dialog',
         actionsEl: '.widget-actions',
         dialogOptions: null,
-        isForm: false,
-        url: false
+        url: false,
+        elementFirst: true
     },
     actions: null,
+    firstRun: true,
 
     // Windows manager global variables
     windowsPerRow: 10,
@@ -23,46 +24,79 @@ Oro.windows.DialogView = Backbone.View.extend({
     /**
      * Initialize dialog
      */
-    initialize: function() {
-        if (this.options.isForm) {
-            var runner = function(handlers) {
-                return function() {
-                    for (var i = 0; i < handlers.length; i++) if (_.isFunction(handlers[i])) {
-                        handlers[i]();
-                    }
-                }
-            };
-            this.options.dialogOptions.close = runner([this.closeHandler.bind(this), this.options.dialogOptions.close]);
-        }
+    initialize: function(options) {
+        this._initModel(options);
 
         this.dialogContent = this.$el.clone(true);
+        this._initEmbeddedForm();
+
+        var runner = function(handlers) {
+            return function() {
+                for (var i = 0; i < handlers.length; i++) if (_.isFunction(handlers[i])) {
+                    handlers[i]();
+                }
+            }
+        };
+        this.options.dialogOptions.close = runner([this.closeHandler.bind(this), this.options.dialogOptions.close]);
+    },
+
+    _initModel: function(options) {
+        if (this.model) {
+            this.restoreMode = true;
+            var attributes = Backbone.$.parseJSON(this.model.get('data'));
+            _.extend(options, attributes);
+            if (_.isObject(attributes.dialogOptions)) {
+                options.dialogOptions = _.extend(options.dialogOptions, attributes.dialogOptions);
+            }
+            this.options = options;
+            if (this.options.el) {
+                this.setElement(this.options.el);
+            } else if (this.model.get('id')) {
+                var restoredEl = Backbone.$('#widget-restored-state-' + this.model.get('id'));
+                if (restoredEl.length) {
+                    this.setElement(restoredEl);
+                }
+            }
+        } else {
+            this.model = new Oro.widget.StateModel();
+        }
+    },
+
+    _initEmbeddedForm: function() {
+        this.hasAdoptedActions = this._getActionsElement().length > 0;
+        if (this.hasAdoptedActions) {
+            this.form = this._getActionsElement().closest('form');
+
+            var formAction = this.form.attr('action');
+            if (formAction.length > 0 && formAction[0] != '#') {
+                this.options.url = formAction;
+            }
+        }
     },
 
     /**
      * Move form actions to dialog
      */
     adoptActions: function() {
-        var actions = this._getActionsElement();
-        this.hasAdoptedActions = actions.length > 0;
         if (this.hasAdoptedActions) {
-            var widget = this.widget;
-            var form = actions.closest('form');
-            var container = widget.dialog('actionsContainer');
+            var actions = this._getActionsElement();
             actions.find('[type=submit]').each(function(idx, btn) {
                 $(btn).click(function() {
-                    this.loadContent(form.attr('action'), form.attr('method'), form.serialize());
+                    this.loadContent(this.form.serialize(), this.form.attr('method'));
                 }.bind(this));
             }.bind(this));
             actions.find('[type=reset]').each(function(idx, btn) {
                 $(btn).click(function() {
-                    $(form).trigger('reset');
-                    widget.dialog('close');
-                });
-            });
-            container.empty();
+                    $(this.form).trigger('reset');
+                    this.widget.dialog('close');
+                }.bind(this));
+            }.bind(this));
             actions.show();
-            actions.appendTo(container);
-            widget.dialog('showActionsContainer');
+
+            var container = this.widget.dialog('actionsContainer');
+            container.empty();
+            this._getActionsElement().appendTo(container);
+            this.widget.dialog('showActionsContainer');
         }
     },
 
@@ -70,8 +104,32 @@ Oro.windows.DialogView = Backbone.View.extend({
      * Handle dialog close
      */
     closeHandler: function() {
+        this.model.destroy();
         this.dialogContent.remove();
         this._getActionsElement().remove();
+    },
+
+    handleStateChange: function(e, data) {
+        if (this.restoreMode) {
+            this.restoreMode = false;
+            return;
+        }
+        var saveData = _.omit(this.options, ['dialogOptions', 'el', 'model']);
+        if (!saveData.url) {
+            saveData.el = $('<div/>').append(this.$el).html();
+        }
+        saveData.dialogOptions = {};
+        _.each(this.options.dialogOptions, function(val, key) {
+            if (!_.isFunction(val) && key != 'position') {
+                saveData.dialogOptions[key] = val;
+            }
+        }.bind(this));
+
+        saveData.dialogOptions.title = $(e.target).dialog('option', 'title');
+        saveData.dialogOptions.state = data.state;
+        saveData.dialogOptions.snapshot = data.snapshot;
+
+        this.model.save({data: saveData});
     },
 
     /**
@@ -90,13 +148,23 @@ Oro.windows.DialogView = Backbone.View.extend({
         return this.actions;
     },
 
+    close: function() {
+        this.widget.dialog('close');
+    },
+
+    getWidget: function() {
+        return this.widget;
+    },
+
     /**
      * Render dialog
      */
     render: function() {
-        if (this.options.url !== false) {
-            this.loadContent(this.options.url);
+        var loadAllowed = !this.el || !this.options.elementFirst || (this.options.elementFirst && !this.firstRun);
+        if (loadAllowed && this.options.url !== false) {
+            this.loadContent();
         } else {
+            this.firstRun = false;
             this.show();
         }
     },
@@ -104,11 +172,11 @@ Oro.windows.DialogView = Backbone.View.extend({
     /**
      * Load dialog content
      *
-     * @param {String} url
-     * @param {String} method
-     * @param {Object} data
+     * @param {Object|null} data
+     * @param {String|null} method
      */
-    loadContent: function(url, method, data) {
+    loadContent: function(data, method) {
+        var url = this.options.url;
         if (typeof url == 'undefined' || !url) {
             url = window.location.href;
         }
@@ -123,8 +191,15 @@ Oro.windows.DialogView = Backbone.View.extend({
             options.data = data;
         }
         Backbone.$.ajax(options).done(function(content) {
-            this.dialogContent = content;
-            this.show();
+            try {
+                this.actions = null;
+                this.dialogContent = $('<div/>').html(content);
+                this._initEmbeddedForm();
+                this.show();
+            } catch (error) {
+                // Remove state with unrestorable content
+                this.model.destroy();
+            }
         }.bind(this));
     },
 
@@ -136,14 +211,13 @@ Oro.windows.DialogView = Backbone.View.extend({
             if (typeof this.options.dialogOptions.position == 'undefined') {
                 this.options.dialogOptions.position = this._getWindowPlacement();
             }
+            this.options.dialogOptions.stateChange = this.handleStateChange.bind(this);
             this.widget = this.dialogContent.dialog(this.options.dialogOptions);
         } else {
             this.widget.html(this.dialogContent);
         }
 
-        if (this.options.isForm) {
-            this.adoptActions();
-        }
+        this.adoptActions();
     },
 
     /**
@@ -153,22 +227,22 @@ Oro.windows.DialogView = Backbone.View.extend({
      * @private
      */
     _getWindowPlacement: function() {
-        var offset = 'center+' + Oro.windows.DialogView.prototype.windowX + ' center+' + Oro.windows.DialogView.prototype.windowY;
+        var offset = 'center+' + Oro.widget.DialogView.prototype.windowX + ' center+' + Oro.widget.DialogView.prototype.windowY;
 
-        Oro.windows.DialogView.prototype.openedWindows++;
-        if (Oro.windows.DialogView.prototype.openedWindows % Oro.windows.DialogView.prototype.windowsPerRow === 0) {
-            var rowNum = Oro.windows.DialogView.prototype.openedWindows / Oro.windows.DialogView.prototype.windowsPerRow;
-            Oro.windows.DialogView.prototype.windowX = rowNum * Oro.windows.DialogView.prototype.windowsPerRow * Oro.windows.DialogView.prototype.windowOffsetX;
-            Oro.windows.DialogView.prototype.windowY = 0;
+        Oro.widget.DialogView.prototype.openedWindows++;
+        if (Oro.widget.DialogView.prototype.openedWindows % Oro.widget.DialogView.prototype.windowsPerRow === 0) {
+            var rowNum = Oro.widget.DialogView.prototype.openedWindows / Oro.widget.DialogView.prototype.windowsPerRow;
+            Oro.widget.DialogView.prototype.windowX = rowNum * Oro.widget.DialogView.prototype.windowsPerRow * Oro.widget.DialogView.prototype.windowOffsetX;
+            Oro.widget.DialogView.prototype.windowY = 0;
 
         } else {
-            Oro.windows.DialogView.prototype.windowX += Oro.windows.DialogView.prototype.windowOffsetX;
-            Oro.windows.DialogView.prototype.windowY += Oro.windows.DialogView.prototype.windowOffsetY;
+            Oro.widget.DialogView.prototype.windowX += Oro.widget.DialogView.prototype.windowOffsetX;
+            Oro.widget.DialogView.prototype.windowY += Oro.widget.DialogView.prototype.windowOffsetY;
         }
 
         var position = {
             my: offset,
-            at: Oro.windows.DialogView.prototype.defaultPos,
+            at: Oro.widget.DialogView.prototype.defaultPos,
             of: $('body')
         };
         if (typeof this.options.dialogOptions.appendTo != 'undefined') {
