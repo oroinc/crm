@@ -17,9 +17,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 use Doctrine\ORM\Tools\SchemaTool;
 
-// Ugly hack for autoloader problem that do not seems to find the MappedSuperClass annotation
-require_once(dirname(__FILE__).'/../../../../../../vendor/doctrine/orm/lib/Doctrine/ORM/Mapping/MappedSuperclass.php');
-
 class SegmentManagerTest extends WebTestCase
 {
 
