@@ -3,12 +3,14 @@
 namespace Oro\Bundle\UserBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 use Oro\Bundle\UserBundle\Entity\Role;
 use Oro\Bundle\UserBundle\Annotation\Acl;
+use Oro\Bundle\UserBundle\Datagrid\RoleDatagridManager;
 
 /**
  * @Route("/role")
@@ -20,23 +22,23 @@ use Oro\Bundle\UserBundle\Annotation\Acl;
  */
 class RoleController extends Controller
 {
-   /**
-    * Create role form
-    *
-    * @Route("/create", name="oro_user_role_create")
-    * @Template("OroUserBundle:Role:edit.html.twig")
-    */
+    /**
+     * Create role form
+     *
+     * @Route("/create", name="oro_user_role_create")
+     * @Template("OroUserBundle:Role:edit.html.twig")
+     */
     public function createAction()
     {
         return $this->editAction(new Role());
     }
 
-   /**
-    * Edit role form
-    *
-    * @Route("/edit/{id}", name="oro_user_role_edit", requirements={"id"="\d+"}, defaults={"id"=0})
-    * @Template
-    */
+    /**
+     * Edit role form
+     *
+     * @Route("/edit/{id}", name="oro_user_role_edit", requirements={"id"="\d+"}, defaults={"id"=0})
+     * @Template
+     */
     public function editAction(Role $entity)
     {
         if ($this->get('oro_user.form.handler.role')->process($entity)) {
@@ -50,9 +52,9 @@ class RoleController extends Controller
         );
     }
 
-   /**
-    * @Route("/remove/{id}", name="oro_user_role_remove", requirements={"id"="\d+"})
-    */
+    /**
+     * @Route("/remove/{id}", name="oro_user_role_remove", requirements={"id"="\d+"})
+     */
     public function removeAction(Role $entity)
     {
         $em = $this->getDoctrine()->getManager();
@@ -66,8 +68,12 @@ class RoleController extends Controller
     }
 
     /**
-     * @Route("/{page}/{limit}", name="oro_user_role_index", requirements={"page"="\d+","limit"="\d+"}, defaults={"page"=1,"limit"=20})
-     * @Template
+     * @Route(
+     *      "/{_format}",
+     *      name="oro_user_role_index",
+     *      requirements={"_format"="html|json"},
+     *      defaults={"_format" = "html"}
+     * )
      * @Acl(
      *      id = "oro_role_list",
      *      name="Role list",
@@ -75,15 +81,24 @@ class RoleController extends Controller
      *      parent = "oro_role"
      * )
      */
-    public function indexAction($page, $limit)
+    public function indexAction(Request $request)
     {
-        $query = $this
-            ->getDoctrine()
-            ->getManager()
-            ->createQuery('SELECT r FROM OroUserBundle:Role r');
+        /** @var $roleGridManager RoleDatagridManager */
+        $roleGridManager = $this->get('oro_user.role_datagrid_manager');
+        $datagrid = $roleGridManager->getDatagrid();
 
-        return array(
-            'pager'  => $this->get('knp_paginator')->paginate($query, $page, $limit),
+        if ('json' == $request->getRequestFormat()) {
+            $view = 'OroGridBundle:Datagrid:list.json.php';
+        } else {
+            $view = 'OroUserBundle:Role:index.html.twig';
+        }
+
+        return $this->render(
+            $view,
+            array(
+                'datagrid' => $datagrid,
+                'form'     => $datagrid->getForm()->createView()
+            )
         );
     }
 }
