@@ -1,7 +1,7 @@
 <?php
 namespace Oro\Bundle\SegmentationTreeBundle\Tests\Functional\DataFixtures\ORM;
 
-use Oro\Bundle\SegmentationTreeBundle\Model\AbstractSegment;
+use Oro\Bundle\SegmentationTreeBundle\Entity\AbstractSegment;
 
 use Oro\Bundle\SegmentationTreeBundle\Entity\Item;
 use Oro\Bundle\SegmentationTreeBundle\Entity\ItemSegment;

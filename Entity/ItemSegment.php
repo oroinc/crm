@@ -1,7 +1,7 @@
 <?php
 namespace Oro\Bundle\SegmentationTreeBundle\Entity;
 
-use Oro\Bundle\SegmentationTreeBundle\Model\AbstractSegment;
+use Oro\Bundle\SegmentationTreeBundle\Entity\AbstractSegment;
 use Oro\Bundle\SegmentationTreeBundle\Entity\Item;
 
 use Gedmo\Mapping\Annotation as Gedmo;
