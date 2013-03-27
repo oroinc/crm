@@ -77,7 +77,7 @@ class PdoMysql extends BaseDriver
             if (strpos($searchCondition['fieldValue'], ' ') !== false) {
                 $stingArray = explode(' ', $searchCondition['fieldValue']);
                 foreach ($stingArray as $stringIndex => $string) {
-                    $stingArray[$stringIndex] = '+' . $string . '*';
+                    $stingArray[$stringIndex] = $string . '*';
                     $value = implode(' ', $stingArray);
                 }
             } else {
@@ -90,7 +90,7 @@ class PdoMysql extends BaseDriver
                     array(
                          'search as item',
                          'text',
-                         'MATCH_AGAINST(textField.value, :value' .$index. ') AS rankField'
+                         'MATCH_AGAINST(textField.value, \'' . $searchCondition['fieldValue'] . '\') AS rankField'
                     )
                 );
                 $qb->orderBy('rankField', 'DESC');
