@@ -9,6 +9,7 @@ use Oro\Bundle\GridBundle\Filter\FilterInterface;
 use Oro\Bundle\GridBundle\Sorter\SorterInterface;
 use Oro\Bundle\GridBundle\Datagrid\ParametersInterface;
 use Oro\Bundle\GridBundle\Datagrid\ProxyQueryInterface;
+use Oro\Bundle\GridBundle\Field\FieldDescriptionCollection;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyMethods)
@@ -54,14 +55,6 @@ class DatagridTest extends \PHPUnit_Framework_TestCase
         ParametersInterface::SORT_PARAMETERS => array(
             self::TEST_SORTER_NAME => self::TEST_SORTER_DIRECTION
         ),
-    );
-
-    /**
-     * @var array
-     */
-    protected $testColumns = array(
-        'column_1' => array('value_1'),
-        'column_2' => array('value_2'),
     );
 
     /**
@@ -578,14 +571,56 @@ class DatagridTest extends \PHPUnit_Framework_TestCase
 
     public function testGetColumns()
     {
-        $columns = $this->getMock('Oro\Bundle\GridBundle\Field\FieldDescriptionCollection', array('getElements'));
-        $columns->expects($this->once())
-            ->method('getElements')
-            ->will($this->returnValue($this->testColumns));
+        $testColumns = array(
+            'column_1' => $this->createFieldDescription('column_1'),
+            'column_2' => $this->createFieldDescription('column_2'),
+        );
+
+        $columns = new FieldDescriptionCollection($testColumns);
+        $this->initializeDatagridMock(array('columns' => $columns));
+
+        $this->assertEquals($testColumns, $this->model->getColumns());
+    }
+
+    private function createFieldDescription($name, $property = null)
+    {
+        if (!$property) {
+            $property = $this->createProperty($name);
+        }
+
+        $result = $this->getMock('Oro\Bundle\GridBundle\Field\FieldDescriptionInterface');
+        $result->expects($this->any())->method('getName')->will($this->returnValue($name));
+        $result->expects($this->any())->method('getProperty')->will($this->returnValue($property));
+
+        return $result;
+    }
+
+    private function createProperty($name)
+    {
+        $result = $this->getMock('Oro\Bundle\GridBundle\Property\PropertyInterface');
+        $result->expects($this->any())->method('getName')->will($this->returnValue($name));
+        return $result;
+    }
+
+    public function testInitializeProperties()
+    {
+        $propertyOne = $this->createProperty('property_name');
+        $columnOne = $this->createFieldDescription('field_name', $propertyOne);
+
+        $testColumns = array(
+            $columnOne
+        );
+
+        $columns = new FieldDescriptionCollection($testColumns);
 
         $this->initializeDatagridMock(array('columns' => $columns));
 
-        $this->assertEquals($this->testColumns, $this->model->getColumns());
+        $this->assertEquals(
+            array(
+                'property_name' => $propertyOne
+            ),
+            $this->model->getProperties()
+        );
     }
 
     /**

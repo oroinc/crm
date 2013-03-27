@@ -24,4 +24,26 @@ class RedirectActionTest extends AbstractActionTestCase
 
         $this->assertEquals(ActionInterface::TYPE_REDIRECT, $this->model->getType());
     }
+
+    public function testSetOptions()
+    {
+        $options = array(
+            'link' => '/delete_link',
+        );
+        $this->initializeAbstractActionMock();
+
+        $this->model->setOptions($options);
+        $this->assertEquals($options, $this->model->getOptions());
+    }
+
+    /**
+     * @expectedException \LogicException
+     * @expectedExceptionMessage There is no option "link" for action "".
+     */
+    public function testSetOptionsError()
+    {
+        $options = array();
+        $this->initializeAbstractActionMock();
+        $this->model->setOptions($options);
+    }
 }

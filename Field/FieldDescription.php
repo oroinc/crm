@@ -313,13 +313,4 @@ class FieldDescription implements FieldDescriptionInterface
     {
         return $this->getOption('sort_field_mapping');
     }
-
-    /**
-     * {@inheritdoc}
-     * @deprecated
-     */
-    public function getFieldValue($object)
-    {
-        return $this->getProperty()->getValue($object);
-    }
 }

@@ -1,9 +1,9 @@
 <?php
 
-namespace Oro\Bundle\GridBundle\Tests\Unit\Field\Stub;
+namespace Oro\Bundle\GridBundle\Tests\Unit\Property\Stub;
 
 /**
- * Stub entity class for FieldDescriptionTest::testGetFieldValue
+ * Stub entity class for FieldPropertyTest::testGetValue
  */
 class StubEntity
 {

@@ -10,6 +10,16 @@ class Collection implements \ArrayAccess, \Countable, \IteratorAggregate
     protected $elements = array();
 
     /**
+     * @param array $elements
+     */
+    public function __construct(array $elements = array())
+    {
+        foreach ($elements as $element) {
+            $this->add($element);
+        }
+    }
+
+    /**
      * @param mixed $element
      * @return void
      */
