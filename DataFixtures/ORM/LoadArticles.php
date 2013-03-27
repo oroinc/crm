@@ -42,9 +42,6 @@ class LoadArticleData extends AbstractFixture implements OrderedFixtureInterface
      */
     public function load(ObjectManager $manager)
     {
-        $translatable = $this->container->get('gedmo.listener.translatable');
-        $translatable->setTranslatableLocale('en_US');
-
         // create articles
         $article = new Article();
         $article->setTitle('my title en');

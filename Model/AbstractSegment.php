@@ -3,6 +3,7 @@ namespace Oro\Bundle\SegmentationTreeBundle\Model;
 
 use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Translatable\Translatable;
 
 /**
  * Abract segment mapped super class implementing node and tree
@@ -14,7 +15,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\MappedSuperClass
  * @Gedmo\Tree(type="nested")
  */
-abstract class AbstractSegment
+abstract class AbstractSegment implements Translatable
 {
     /**
      * @var integer $id
@@ -29,6 +30,7 @@ abstract class AbstractSegment
      * @var string $title
      *
      * @ORM\Column(name="title", type="string", length=64)
+     * @Gedmo\Translatable
      */
     protected $title;
 
@@ -68,13 +70,18 @@ abstract class AbstractSegment
      * @var AbstractSegment $parent Parent segment
      */
     protected $parent;
-   
+
     /**
      * @var ArrayCollection $children
      */
     protected $children;
 
-    
+    /**
+     * @Gedmo\Locale
+     * Used locale to override Translation listener`s locale
+     * this is not a mapped field of entity metadata, just a simple property
+     */
+    protected $locale;
 
     /**
      * Constructor
@@ -266,5 +273,19 @@ abstract class AbstractSegment
     public function isRoot()
     {
         return ($this->getParent() === null);
+    }
+
+    /**
+     * Define locale used by entity
+     *
+     * @param string $locale
+     *
+     * @return AbstractSegment
+     */
+    public function setTranslatableLocale($locale)
+    {
+        $this->locale = $locale;
+
+        return $this;
     }
 }
