@@ -1,5 +1,6 @@
-<form method="get" action="{{ path('oro_search_results') }}" style="margin: 0" autocomplete="off" id="top-search-form">
-    <div id="search-div" class="input-append input-prepend pull-left header-search">
+<form method="get" action="{{ path('oro_search_results') }}" style="margin: 0" autocomplete="off" id="top-search-form"
+      data-ajax-search = "{{ path('oro_search_simple') }}">
+    <div id="search-div" class="input-append input-prepend pull-left header-search {% if searchString %}search-focus{% endif %}">
         <div class="btn-group">
             <button data-toggle="dropdown" class="btn dropdown-toggle" id="search-bar-button">
                 {% if fromString == '*' or fromString == '' %}
@@ -24,112 +25,10 @@
             <input type="hidden" name="from" id="search-bar-from" value="{{ fromString ? fromString : '*' }}"/>
             <input type="text" id="search-bar-search" class="span2" placeholder="" name="search" value="{{ searchString }}"/>
             <button type="submit" class="btn btn-search">Search</button>
-            <div class="custom-dropdown">
+            <div class="custom-dropdown" id="search-dropdown">
                 <ul>
                 </ul>
             </div>
         </div>
     </div>
 </form>
-<script type="text/javascript">
-    jQuery(document).ready(function () {
-        var _searcjFlag = false;
-        jQuery("#search-bar-dropdown li a").click(function (e) {
-            jQuery("#search-bar-from").val(jQuery(this).parent().attr('data-alias'));
-            jQuery("#search-bar-button").html(jQuery(this).html() + '<span class="caret"></span>');
-            /*SearchByTag()*/
-            SearchByTagClose()
-            SearchInputWidth()
-            e.preventDefault();
-        });
-        SearchInputWidth()
-        function SearchByTag() {
-            var queryString = jQuery('#search-bar-search').val();
-            if (queryString == '' || queryString.length < 3) {
-                jQuery("#search-div").removeClass('header-search-focused');
-                jQuery('.custom-dropdown ul li').remove();
-            } else {
-                jQuery.ajax({
-                    url: "{{ path('oro_search_simple') }}",
-                    dataType: "json",
-                    data: {
-                        search: queryString,
-                        from: jQuery("#search-bar-from").val(),
-                        max_results: 5
-                    },
-                    success: function (data) {
-                        jQuery("#search-div").removeClass('header-search-focused');
-                        jQuery('.custom-dropdown ul li').remove();
-                        jQuery("#recordsCount").val(data['records_count']);
-                        if (data['count'] > 0) {
-                            for (var i = 0; i < data['count']; i++) {
-                                jQuery('.custom-dropdown ul').append(
-                                        '<li>'
-                                                + '<a href="' + data['data'][i]['record_url'] + '">'
-                                                + '<span class="name"><strong>' + data['data'][i]['record_string'] + '</strong></span>'
-                                                + data['data'][i]['entity_type']
-                                                + '</a>'
-                                                + '</li>'
-                                );
-                            }
-                            jQuery("#search-div").addClass('header-search-focused');
-                        }
-                    }
-                });
-            }
-        };
-        function SearchInputWidth() {
-            var _generalWidth = jQuery('#search-div').width()
-            var _btnSearchWidth = jQuery("#search-div button.btn-search").outerWidth() + jQuery('#search-bar-button').outerWidth();
-            var _inputSearchWidth = _generalWidth - _btnSearchWidth;
-            jQuery('#search-bar-search').width(_inputSearchWidth);
-            var _dropdownSearchWidth = jQuery('#search-div div.header-search-frame').width() - 1;
-            /* just design need without border */
-            jQuery('#search-div div.custom-dropdown').outerWidth(_dropdownSearchWidth);
-
-        };
-
-        function SearchByTagClose() {
-            jQuery("#search-div").removeClass('header-search-focused');
-            var queryString2 = jQuery('#search-bar-search').val();
-            if (queryString2.length > 0) {
-                jQuery('#search-div').addClass('search-focus');
-            } else {
-                jQuery('#search-div').removeClass('search-focus');
-            }
-        };
-
-        jQuery('#search-bar-search').keydown(function (event) {
-            if (event.keyCode == 13) {
-                $("#top-search-form").submit();
-                event.preventDefault();
-                return false;
-            }
-        });
-
-        jQuery("#search-bar-search").keyup(function (e) {
-            SearchByTag();
-        });
-
-        jQuery("#search-bar-search").focusout(function () {
-            if (!_searcjFlag) {
-                SearchByTagClose()
-            }
-        });
-
-        jQuery('#search-div').mouseenter(function () {
-            _searcjFlag = true;
-        }).mouseleave(function () {
-            _searcjFlag = false;
-            setTimeout(function () {
-                if (!_searcjFlag) {
-                    SearchByTagClose()
-                }
-            }, 2000)
-        });
-
-        jQuery('#search-bar-search').focusin(function () {
-            jQuery('#search-div').addClass('search-focus');
-        });
-    });
-</script>
