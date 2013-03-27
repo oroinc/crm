@@ -34,23 +34,15 @@ class WindowsExtension extends \Twig_Extension
     protected $environment;
 
     /**
-     * @var RouterInterface
-     */
-    protected $router;
-
-    /**
      * @param Twig_Environment $environment
      * @param ContainerInterface $container
-     * @param RouterInterface $router
      */
     public function __construct(
         Twig_Environment $environment,
-        ContainerInterface $container,
-        RouterInterface $router
+        ContainerInterface $container
     ) {
         $this->container = $container;
         $this->environment = $environment;
-        $this->router = $router;
     }
 
     /**
