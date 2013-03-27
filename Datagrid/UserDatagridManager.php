@@ -93,6 +93,83 @@ class UserDatagridManager extends FlexibleDatagridManager
             );
             $this->fieldsCollection->add($fieldEmail);
 
+            $fieldFirstName = new FieldDescription();
+            $fieldFirstName->setName('firstName');
+            $fieldFirstName->setOptions(
+                array(
+                    'type'        => FieldDescriptionInterface::TYPE_TEXT,
+                    'label'       => 'First name',
+                    'field_name'  => 'firstName',
+                    'filter_type' => FilterInterface::TYPE_STRING,
+                    'required'    => false,
+                    'sortable'    => true,
+                    'filterable'  => true,
+                    'show_filter' => true,
+                )
+            );
+            $this->fieldsCollection->add($fieldFirstName);
+
+            $fieldLastName = new FieldDescription();
+            $fieldLastName->setName('lastName');
+            $fieldLastName->setOptions(
+                array(
+                    'type'        => FieldDescriptionInterface::TYPE_TEXT,
+                    'label'       => 'Last name',
+                    'field_name'  => 'lastName',
+                    'filter_type' => FilterInterface::TYPE_STRING,
+                    'required'    => false,
+                    'sortable'    => true,
+                    'filterable'  => true,
+                    'show_filter' => true,
+                )
+            );
+            $this->fieldsCollection->add($fieldLastName);
+
+            $fieldBirthday = new FieldDescription();
+            $fieldBirthday->setName('birthday');
+            $fieldBirthday->setOptions(
+                array(
+                    'type'        => FieldDescriptionInterface::TYPE_DATE,
+                    'label'       => 'Birthday',
+                    'field_name'  => 'birthday',
+                    'filter_type' => FilterInterface::TYPE_DATE,
+                    'required'    => false,
+                    'sortable'    => true,
+                    'filterable'  => true,
+                    'show_filter' => true,
+                )
+            );
+            $this->fieldsCollection->add($fieldBirthday);
+
+            foreach ($this->getFlexibleAttributes() as $attribute) {
+                $backendType   = $attribute->getBackendType();
+                $attributeType = $this->convertFlexibleTypeToFieldType($backendType);
+                $filterType    = $this->convertFlexibleTypeToFilterType($backendType);
+
+                $field = new FieldDescription();
+                $field->setName($attribute->getCode());
+                $field->setOptions(
+                    array(
+                        'type'          => $attributeType,
+                        'label'         => $attribute->getCode(),
+                        'field_name'    => $attribute->getCode(),
+                        'filter_type'   => $filterType,
+                        'required'      => false,
+                        'sortable'      => true,
+                        'filterable'    => true,
+                        'flexible_name' => $this->flexibleManager->getFlexibleName()
+                    )
+                );
+
+                if ($attributeType == FieldDescriptionInterface::TYPE_OPTIONS
+                    && $attribute->getCode() == 'hobby'
+                ) {
+                    $field->setOption('multiple', true);
+                }
+
+                $this->fieldsCollection->add($field);
+            }
+
             $fieldCreated = new FieldDescription();
             $fieldCreated->setName('created');
             $fieldCreated->setOptions(
@@ -124,35 +201,6 @@ class UserDatagridManager extends FlexibleDatagridManager
                 )
             );
             $this->fieldsCollection->add($fieldUpdated);
-
-            foreach ($this->getFlexibleAttributes() as $attribute) {
-                $backendType   = $attribute->getBackendType();
-                $attributeType = $this->convertFlexibleTypeToFieldType($backendType);
-                $filterType    = $this->convertFlexibleTypeToFilterType($backendType);
-
-                $field = new FieldDescription();
-                $field->setName($attribute->getCode());
-                $field->setOptions(
-                    array(
-                        'type'          => $attributeType,
-                        'label'         => $attribute->getCode(),
-                        'field_name'    => $attribute->getCode(),
-                        'filter_type'   => $filterType,
-                        'required'      => false,
-                        'sortable'      => true,
-                        'filterable'    => true,
-                        'flexible_name' => $this->flexibleManager->getFlexibleName()
-                    )
-                );
-
-                if ($attributeType == FieldDescriptionInterface::TYPE_OPTIONS
-                    && $attribute->getCode() == 'hobby'
-                ) {
-                    $field->setOption('multiple', true);
-                }
-
-                $this->fieldsCollection->add($field);
-            }
         }
 
         return $this->fieldsCollection;
@@ -215,9 +263,10 @@ class UserDatagridManager extends FlexibleDatagridManager
             'type'         => ActionInterface::TYPE_REDIRECT,
             'acl_resource' => 'root',
             'options'      => array(
-                'label' => 'Edit',
-                'icon'  => 'edit',
-                'link'  => 'edit_link',
+                'label'   => 'Edit',
+                'icon'    => 'edit',
+                'link'    => 'edit_link',
+                'backUrl' => true,
             )
         );
 
