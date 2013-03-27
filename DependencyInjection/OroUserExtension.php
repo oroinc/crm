@@ -24,6 +24,7 @@ class OroUserExtension extends Extension
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
+        $loader->load('datagrid.yml');
 
         $container->setParameter('oro_user.reset.ttl', $config['reset']['ttl']);
         $container->setParameter('oro_user.email', array($config['email']['address'] => $config['email']['name']));

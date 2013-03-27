@@ -4,3 +4,15 @@ template_controller:
     parent: root
     class: Symfony\Bundle\FrameworkBundle\Controller\TemplateController
     method: templateAction
+oro_user:
+    name: User manipulation
+    description: User manipilation
+    parent: root
+oro_user_role:
+    name: Acess to user roles
+    description: Acess to user roles manipulation
+    parent: oro_user
+oro_user_group:
+    name: Acess to user groups
+    description: Acess to user groups manipulation
+    parent: oro_user

@@ -1,44 +1,659 @@
 {% extends bap.layout is defined ? bap.layout : 'OroUserBundle::layout.html.twig' %}
 {% import 'OroUserBundle::macros.html.twig' as macros %}
+{% form_theme form with 'OroUserBundle:Form:fields.html.twig' %}
 
-{% set title = form.vars.value.id ? 'Edit user' : 'Add user' %}
+{% set title = form.vars.value.id ? 'Edit profile' : 'Add profile' %}
 
 {% block title %}{{ title }} - {{ parent() }}{% endblock %}
 
-{% block content %}
-<form action="{{ form.vars.value.id ? path('oro_user_edit', { id: form.vars.value.id }) : path('oro_user_create') }}" {{ form_enctype(form) }} method="POST" class="form-register">
+{% block main %}
+<div class="page-container">
+    {% block right_panel %}
+    <div class="side-nav right-panel">
+        <div class="side-nav-opener">
+            <span class="maximaze-bar"><i class="icon-arrow-left hide-text">maximaze-bar</i><i class="icon-arrow-right hide-text">minimmase bar</i></span>
+            <span class="lock-bar"><i class="icon-lock hide-text">lock-bar</i><i class="icon-unlock hide-text">unlock bar</i></span>
+        </div>
+        <ul class="bar-tools">
+            <li class="open-item">
+                <a class="test2 sn-opener" href="#"><i class="icon-paypal hide-text">paypal</i><span>paypal</span></a>
+                <div class="nav-box" style="display: none;">
+                    <div class="nav-title">
+                        <h3>
+                    <span class="open-bar-item">
+                        <i class="icon-chevron-right icon-white hide-text">close</i>
+                        <i class="icon-chevron-down icon-white hide-text" style="display: none;">open</i>
+                    </span>
+                            <i class="icon-paypal hide-text">paypal</i>
+                            Paypal
+                        </h3>
+                        <span class="close action icon-remove">close</span>
+                        <span class="settings action icon-cog">settings</span>
+                    </div>
+                    <div class="nav-content">
+                        <div class="well well-small">
+
+                            <ul>
+                                <li>@DarthVader We Will begin creating DS after lunch</li>
+                                <li>@DarthVader We Will begin creating DS after lunch</li>
+                                <li>@DarthVader We Will begin creating DS after lunch</li>
+                                <li>@DarthVader We Will begin creating DS after lunch</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <a class="test5 sn-opener" href="#"><i class="icon-twitter hide-text">twitter</i><span>twitter</span></a>
+                <div class="nav-box" style="display: none;">
+                    <div class="nav-title">
+                        <h3>
+                    <span class="open-bar-item">
+                        <i class="icon-chevron-right icon-white hide-text">close</i>
+                        <i class="icon-chevron-down icon-white hide-text" style="display: none;">open</i>
+                    </span>
+                            <i class="icon-twitter hide-text">twitter</i>twitter
+                        </h3>
+                        <span class="close action icon-remove">close</span>
+                        <span class="settings action icon-cog">settings</span>
+                    </div>
+                    <div class="nav-content" style="display: none;">
+                        <p>Vivamus bibendum orci eget eros egestas et interdum ipsum elementum. Aliquam laoreet mattis felis, vitae bibendum mauris consectetur vel. </p>
+                        <p>In hac habitasse platea dictumst. Cras cursus orci arcu.</p>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <a class="test6 sn-opener" href="#"><i class="icon-facebook hide-text">facebook</i><span>facebook</span></a>
+                <div class="nav-box" style="display: none;">
+                    <div class="nav-title">
+                        <h3>
+                    <span class="open-bar-item">
+                        <i class="icon-chevron-right icon-white hide-text">close</i>
+                        <i class="icon-chevron-down icon-white hide-text" style="display: none;">open</i>
+                    </span>
+                            <i class="icon-facebook hide-text">facebook</i>Facebook
+                        </h3>
+                        <span class="close action icon-remove">close</span>
+                        <span class="settings action icon-cog">settings</span>
+                    </div>
+                    <div class="nav-content" style="display: none;">
+                        <p> Aliquam laoreet mattis felis, vitae bibendum mauris consectetur vel. </p>
+                        <p>tes te ts ea dictumst. Cras cursus orci arcu.</p>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <a class="test6 sn-opener" href="#"><i class="icon-timer hide-text">timer</i><span>timer</span></a>
+                <div class="nav-box" style="display: none;">
+                    <div class="nav-title">
+                        <h3>
+                    <span class="open-bar-item">
+                        <i class="icon-chevron-right icon-white hide-text">close</i>
+                        <i class="icon-chevron-down icon-white hide-text" style="display: none;">open</i>
+                    </span>
+                            <i class="icon-timer hide-text">timer</i>Time Tracker
+                        </h3>
+                        <span class="close action icon-remove">close</span>
+                        <span class="settings action icon-cog">settings</span>
+                    </div>
+                    <div class="nav-content" style="display: none;">
+                        <p> Aliquam laoreet mattis felis, vitae bibendum mauris consectetur vel. </p>
+                        <p>tes te ts ea dictumst. Cras cursus orci arcu.</p>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <a class="test6 sn-opener" href="#"><i class="icon-bug hide-text">bug</i><span>bug</span></a>
+                <div class="nav-box" style="display: none;">
+                    <div class="nav-title">
+                        <h3>
+                    <span class="open-bar-item">
+                        <i class="icon-chevron-right icon-white hide-text">close</i>
+                        <i class="icon-chevron-down icon-white hide-text" style="display: none;">open</i>
+                    </span>
+                            <i class="icon-bug hide-text">bug</i>
+                        </h3>
+                        <span class="close action icon-remove">close</span>
+                        <span class="settings action icon-cog">settings</span>
+                    </div>
+                    <div class="nav-content" style="display: none;">
+                        <p> Aliquam laoreet mattis felis, vitae bibendum mauris consectetur vel. </p>
+                        <p>tes te ts ea dictumst. Cras cursus orci arcu.</p>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <a class="test6 sn-opener" href="#"><i class="icon-plus icon-white hide-text">add</i><span>add</span></a>
+                <div class="nav-box" style="display: none;">
+                    <div class="nav-title">
+                        <h3>
+                    <span class="open-bar-item">
+                        <i class="icon-chevron-right icon-white hide-text">close</i>
+                        <i class="icon-chevron-down icon-white hide-text" style="display: none;">open</i>
+                    </span>
+                            <i class="icon-bug hide-text">bug</i>
+                        </h3>
+                        <span class="close action icon-remove">close</span>
+                        <span class="settings action icon-cog">settings</span>
+                    </div>
+                    <div class="nav-content" style="display: none;">
+                        <p> Aliquam laoreet mattis felis, vitae bibendum mauris consectetur vel. </p>
+                        <p>tes te ts ea dictumst. Cras cursus orci arcu.</p>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+    {% endblock right_panel %}
+
+    {% block left_panel %}
+    <div class="side-nav left-panel">
+        <div class="side-nav-opener">
+            <span class="maximaze-bar"><i class="icon-arrow-left hide-text">maximaze-bar</i><i class="icon-arrow-right hide-text">minimmase bar</i></span>
+            <span class="lock-bar"><i class="icon-lock hide-text">lock-bar</i><i class="icon-unlock hide-text">unlock bar</i></span>
+        </div>
+        <ul class="bar-tools">
+            <li class="open-item">
+                <a class="test2 sn-opener" href="#"><i class="icon-paypal hide-text">paypal</i><span>paypal</span></a>
+                <div class="nav-box" style="display: none;">
+                    <div class="nav-title">
+                        <h3>
+                    <span class="open-bar-item">
+                        <i class="icon-chevron-right icon-white hide-text">close</i>
+                        <i class="icon-chevron-down icon-white hide-text" style="display: none;">open</i>
+                    </span>
+                            <i class="icon-paypal hide-text">paypal</i>
+                            Paypal
+                        </h3>
+                        <span class="close action icon-remove">close</span>
+                        <span class="settings action icon-cog">settings</span>
+                    </div>
+                    <div class="nav-content">
+                        <div class="well well-small">
+
+                            <ul>
+                                <li>@DarthVader We Will begin creating DS after lunch</li>
+                                <li>@DarthVader We Will begin creating DS after lunch</li>
+                                <li>@DarthVader We Will begin creating DS after lunch</li>
+                                <li>@DarthVader We Will begin creating DS after lunch</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <a class="test5 sn-opener" href="#"><i class="icon-twitter hide-text">twitter</i><span>twitter</span></a>
+                <div class="nav-box" style="display: none;">
+                    <div class="nav-title">
+                        <h3>
+                    <span class="open-bar-item">
+                        <i class="icon-chevron-right icon-white hide-text">close</i>
+                        <i class="icon-chevron-down icon-white hide-text" style="display: none;">open</i>
+                    </span>
+                            <i class="icon-twitter hide-text">twitter</i>twitter
+                        </h3>
+                        <span class="close action icon-remove">close</span>
+                        <span class="settings action icon-cog">settings</span>
+                    </div>
+                    <div class="nav-content" style="display: none;">
+                        <p>Vivamus bibendum orci eget eros egestas et interdum ipsum elementum. Aliquam laoreet mattis felis, vitae bibendum mauris consectetur vel. </p>
+                        <p>In hac habitasse platea dictumst. Cras cursus orci arcu.</p>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <a class="test6 sn-opener" href="#"><i class="icon-facebook hide-text">facebook</i><span>facebook</span></a>
+                <div class="nav-box" style="display: none;">
+                    <div class="nav-title">
+                        <h3>
+                    <span class="open-bar-item">
+                        <i class="icon-chevron-right icon-white hide-text">close</i>
+                        <i class="icon-chevron-down icon-white hide-text" style="display: none;">open</i>
+                    </span>
+                            <i class="icon-facebook hide-text">facebook</i>Facebook
+                        </h3>
+                        <span class="close action icon-remove">close</span>
+                        <span class="settings action icon-cog">settings</span>
+                    </div>
+                    <div class="nav-content" style="display: none;">
+                        <p> Aliquam laoreet mattis felis, vitae bibendum mauris consectetur vel. </p>
+                        <p>tes te ts ea dictumst. Cras cursus orci arcu.</p>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <a class="test6 sn-opener" href="#"><i class="icon-timer hide-text">timer</i><span>timer</span></a>
+                <div class="nav-box" style="display: none;">
+                    <div class="nav-title">
+                        <h3>
+                    <span class="open-bar-item">
+                        <i class="icon-chevron-right icon-white hide-text">close</i>
+                        <i class="icon-chevron-down icon-white hide-text" style="display: none;">open</i>
+                    </span>
+                            <i class="icon-timer hide-text">timer</i>Time Tracker
+                        </h3>
+                        <span class="close action icon-remove">close</span>
+                        <span class="settings action icon-cog">settings</span>
+                    </div>
+                    <div class="nav-content" style="display: none;">
+                        <p> Aliquam laoreet mattis felis, vitae bibendum mauris consectetur vel. </p>
+                        <p>tes te ts ea dictumst. Cras cursus orci arcu.</p>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <a class="test6 sn-opener" href="#"><i class="icon-bug hide-text">bug</i><span>bug</span></a>
+                <div class="nav-box" style="display: none;">
+                    <div class="nav-title">
+                        <h3>
+                    <span class="open-bar-item">
+                        <i class="icon-chevron-right icon-white hide-text">close</i>
+                        <i class="icon-chevron-down icon-white hide-text" style="display: none;">open</i>
+                    </span>
+                            <i class="icon-bug hide-text">bug</i>
+                        </h3>
+                        <span class="close action icon-remove">close</span>
+                        <span class="settings action icon-cog">settings</span>
+                    </div>
+                    <div class="nav-content" style="display: none;">
+                        <p> Aliquam laoreet mattis felis, vitae bibendum mauris consectetur vel. </p>
+                        <p>tes te ts ea dictumst. Cras cursus orci arcu.</p>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <a class="test6 sn-opener" href="#"><i class="icon-plus icon-white hide-text">add</i><span>add</span></a>
+                <div class="nav-box" style="display: none;">
+                    <div class="nav-title">
+                        <h3>
+                    <span class="open-bar-item">
+                        <i class="icon-chevron-right icon-white hide-text">close</i>
+                        <i class="icon-chevron-down icon-white hide-text" style="display: none;">open</i>
+                    </span>
+                            <i class="icon-bug hide-text">bug</i>
+                        </h3>
+                        <span class="close action icon-remove">close</span>
+                        <span class="settings action icon-cog">settings</span>
+                    </div>
+                    <div class="nav-content" style="display: none;">
+                        <p> Aliquam laoreet mattis felis, vitae bibendum mauris consectetur vel. </p>
+                        <p>tes te ts ea dictumst. Cras cursus orci arcu.</p>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+    {% endblock left_panel %}
+
+    {% block pin_bar %}
+    <div style="overflow: hidden;">
+    {{ parent() }}
+    </div>
+    {% endblock pin_bar %}
+
+    {% block content %}
+    <div class="layout-content">
+        <div class="clearfix-oro">
+            <div class="navbar application-menu">
+                <div class="clearfix-oro">
+                    <div class="">
+                        <div class=" navbar-responsive-collapse">
+                            <ul class="nav nav-tabs" id="myTab">
+                                <li class="home"><a href="#myhome"><span>Home</span></a></li>
+                                <li><a href="#mycrm">My CRM</a></li>
+                                <li><a href="#mypim">My PIM</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix-oro application-menu">
+            <div class="tab-content">
+                <div class="tab-pane" id="myhome">
+                    <ul class="nav nav-pills">
+                        <li class="active">
+                            <a href="#">Dashboard</a>
+                        </li>
+                        <li><a href="#">Leads</a></li>
+                        <li><a href="#">Customers</a></li>
+                        <li><a href="#">Accounts</a></li>
+                        <li><a href="#">Forecasts</a></li>
+                        <li><a href="#">Reports</a></li>
+                    </ul>
+                </div>
+                <div class="tab-pane" id="mycrm">
+                    <ul class="nav nav-pills">
+                        <li class="active">
+                            <a href="#">Dashboard</a>
+                        </li>
+                        <li><a href="#">Leads</a></li>
+                        <li><a href="#">Customers</a></li>
+                        <li><a href="#">Accounts</a></li>
+                        <li><a href="#">Forecasts</a></li>
+                        <li><a href="#">Reports</a></li>
+                    </ul>
+                </div>
+                <div class="tab-pane" id="mypim">
+                    <ul class="nav nav-pills">
+                        <li class="active">
+                            <a href="#">Dashboard pim</a>
+                        </li>
+                        <li><a href="#">Leads pim</a></li>
+                        <li><a href="#">Customers pim</a></li>
+                        <li><a href="#">Accounts pim</a></li>
+                        <li><a href="#">Forecasts pim</a></li>
+                        <li><a href="#">Reports pim</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <script>
+            $(function () {
+                $('#myTab a:last').tab('show');
+                $('#myTab a').click(function (e) {
+                    e.preventDefault();
+                    $(this).tab('show');
+                })
+                $('a.popup-me').popover();
+            })
+        </script>
+        <div class="navigation clearfix navbar-extra navbar-extra-right">
+            <div class="top-action-box">
+                <div class="btn-group icons-holder icons-small">
+                    <button class="btn"><i class="icon-minimize hide-text">minimaze tab</i></button>
+                    <button class="btn"><i class="icon-fullscreen hide-text">full screen</i></button>
+                    <button class="btn"><i class="icon-remove hide-text">Close</i></button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="pull-right">
+                    <div class="btn-group icons-holder">
+                        <button class="btn"><i class="icon-edit hide-text">edit</i></button>
+                        <button class="btn"><i class="icon-copy hide-text">copy</i></button>
+                        <button class="btn"><i class="icon-trash hide-text">remove</i></button>
+                    </div>
+                    <div class="btn-group">
+                        <button class="btn dropdown-toggle" data-toggle="dropdown">Export:<span class="caret"></span></button>
+                        <ul class="dropdown-menu pull-right">
+                            <li><a href="#">Export</a></li>
+                            <li><a href="#">Inport</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="span9 ">
+                   <div class="customer-info well-small">
+                       <div class="visual"><img src="{{ asset('bundles/oroui/img/info-usser.png') }}" alt="usser avatar"/></div>
+                       <div class="customer-content">
+                           <div class="sub-title">Customers</div>
+                           <h1 class="usser-name">Anna Griffin</h1>
+                           <ul class="inline">
+                               <li>Last logged in: {{ form.vars.value.lastLogin ? macros.time(form.vars.value.lastLogin) : 'N/A' }}</li>
+                               <li>Lifetime Sales: $3004.92</li>
+                               <li>Retail Customer</li>
+                           </ul>
+                       </div>
+                   </div>
+                </div>
+            </div>
+        </div>
+        <div class="layout-content">
+            <div id="navbarExample" class="navbar navbar-static scrollspy-nav">
+                <div class="navbar-inner">
+                    <div class="container-fluid" style="width: auto;">
+                        <ul class="nav">
+                            <li class="active"><a href="#scroll-a1">Overview</a></li>
+                            <li><a href="#scroll-a2">Cases</a></li>
+                            <li><a href="#scroll-a3">Sales History</a></li>
+                            <li><a href="#scroll-a4">Activity History</a></li>
+                            <li><a href="#scroll-api">API</a></li>
+
+                            {% if form.groups is defined %}
+                            <li><a href="#scroll-groups">Groups</a></li>
+                            {% endif %}
+
+                            {% if form.rolesCollection is defined %}
+                            <li><a href="#scroll-roles">Roles</a></li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix-oro">
+                <form action="{{ form.vars.value.id ? path('oro_user_edit', { id: form.vars.value.id }) : path('oro_user_create') }}" {{ form_enctype(form) }} method="POST">
+                <div class="customer-info-actions container-fluid well-small">
+                    <div class="pull-right">
+                        <button type="button" class="btn">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Save</button>
+                    </div>
+                </div>
+                <div data-spy="scroll" data-target="#navbarExample" data-offset="50" class="scrollspy container-fluid">
+                    <h4 id="scroll-a1" class="scrollspy-title">Overview</h4>
+                    <div class="row-fluid">
+                        <fieldset class="form-horizontal span6">
+                            {{ form_row(form.username) }}
+                            {{ form_row(form.firstname) }}
+                            {{ form_row(form.lastname) }}
+                            {{ form_row(form.middlename) }}
+                            {{ form_row(form.birthday) }}
+                        </fieldset>
+                        <fieldset class="form-horizontal span6">
+                            <div class="control-group">
+                                <label for="selectAccountName" class="control-label">Phone:</label>
+                                <div class="controls">
+                                    <div class="row-oro">
+                                        <input type="text" class="input-xlarge" />
+                                        <div class="btn-group">
+                                            <button class="btn dropdown-toggle" data-toggle="dropdown">Work <span class="caret"></span></button>
+                                            <ul class="dropdown-menu">
+                                                <li><a href="#">Action</a></li>
+                                                <li><a href="#">Another action</a></li>
+                                                <li><a href="#">Something else here</a></li>
+                                                <li class="divider"></li>
+                                                <li><a href="#">Separated link</a></li>
+                                            </ul>
+                                        </div>
+                                        <button type="button" class="btn btn-action btn-link">+</button>
+                                        <button type="button" class="btn btn-action btn-link">&times;</button>
+                                    </div>
+                                    <div class="row-oro">
+                                        <input type="text" class="input-xlarge" />
+                                        <div class="btn-group">
+                                            <button class="btn dropdown-toggle" data-toggle="dropdown">Home <span class="caret"></span></button>
+                                            <ul class="dropdown-menu">
+                                                <li><a href="#">Action</a></li>
+                                                <li><a href="#">Another action</a></li>
+                                                <li><a href="#">Something else here</a></li>
+                                                <li class="divider"></li>
+                                                <li><a href="#">Separated link</a></li>
+                                            </ul>
+                                        </div>
+                                        <button type="button" class="btn btn-action btn-link">+</button>
+                                        <button type="button" class="btn btn-action btn-link">&times;</button>
+                                    </div>
+                                    <div class="row-oro">
+                                        <input type="text" class="input-xlarge" />
+                                        <div class="btn-group">
+                                            <button class="btn dropdown-toggle" data-toggle="dropdown">Call <span class="caret"></span></button>
+                                            <ul class="dropdown-menu">
+                                                <li><a href="#">Action</a></li>
+                                                <li><a href="#">Another action</a></li>
+                                                <li><a href="#">Something else here</a></li>
+                                                <li class="divider"></li>
+                                                <li><a href="#">Separated link</a></li>
+                                            </ul>
+                                        </div>
+                                        <button type="button" class="btn btn-action btn-link">+</button>
+                                        <button type="button" class="btn btn-action btn-link">&times;</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {{ form_row(form.email) }}
+
+                            <div class="control-group">
+                                <label for="selectAccountName" class="control-label">Additional emails:</label>
+                                <div class="controls">
+                                    <div class="row-oro">
+                                        <ul id="email-fields-list" data-prototype="{{ form_widget(form.emails.vars.prototype) | e }}">
+                                            {% for emailField in form.emails %}
+                                            <li>
+                                                {{ form_errors(emailField) }}
+                                                {{ form_widget(emailField) }}
+                                            </li>
+                                            {% endfor %}
+                                        </ul>
+                                        <a class="btn" href="#" id="add-another-email">Add another email</a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label for="selectAccountName" class="control-label">Address:</label>
+                                <div class="controls">
+                                    <div class="row-oro">
+                                        <textarea class="input-xlarge">1234 Dream Lane
+                                            Portland, OR 97236
+                                            United States</textarea>
+                                    </div>
+                                    <div class="row-oro">
+                                        <textarea class="input-xlarge">1234 Dream Lane
+                                            Portland, OR 97236
+                                            United States</textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                    <h4 id="scroll-a2" class="scrollspy-title ">Cases</h4>
+                    <p>JavaScript is a cross-platform, object-oriented scripting language developed by Netscape. JavaScript was created by Netscape programmer Brendan Eich. It was first released under the name of LiveScript as part of Netscape Navigator 2.0 in September 1995. It was renamed JavaScript on December 4, 1995. As JavaScript works on the client side, It is mostly used for client-side web development.</p>
+                    <p>JavaScript is a cross-platform, object-oriented scripting language developed by Netscape. JavaScript was created by Netscape programmer Brendan Eich. It was first released under the name of LiveScript as part of Netscape Navigator 2.0 in September 1995. It was renamed JavaScript on December 4, 1995. As JavaScript works on the client side, It is mostly used for client-side web development.</p>
+                    <p>JavaScript is a cross-platform, object-oriented scripting language developed by Netscape. JavaScript was created by Netscape programmer Brendan Eich. It was first released under the name of LiveScript as part of Netscape Navigator 2.0 in September 1995. It was renamed JavaScript on December 4, 1995. As JavaScript works on the client side, It is mostly used for client-side web development.</p>
+                    <p>JavaScript is a cross-platform, object-oriented scripting language developed by Netscape. JavaScript was created by Netscape programmer Brendan Eich. It was first released under the name of LiveScript as part of Netscape Navigator 2.0 in September 1995. It was renamed JavaScript on December 4, 1995. As JavaScript works on the client side, It is mostly used for client-side web development.</p>
+                    <h4 id="scroll-a3" class="scrollspy-title ">Sales History</h4>
+                    <p>Nulla rhoncus aliquet enim, sed ornare metus vulputate et. Sed egestas mi nec dui convallis euismod. Nulla accumsan, metus vitae pretium scelerisque, quam neque luctus turpis, vel auctor erat dui vitae diam. Vivamus ac nibh enim. Nulla vel magna ac leo scelerisque ultricies in at neque. Curabitur eu metus quis mi scelerisque volutpat. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Maecenas fermentum, ante non malesuada pellentesque, dui urna pellentesque velit, eget dictum lacus purus sit amet mi. Praesent eget aliquet orci. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nulla facilisi. Suspendisse at lorem ac justo sodales bibendum. Proin vel leo sit amet urna fringilla tempus. Sed egestas felis ac sapien sagittis eu lacinia arcu interdum. Phasellus quis mi a ligula aliquam iaculis. Duis fermentum cursus metus vel volutpat. </p>
+                    <p>Nulla rhoncus aliquet enim, sed ornare metus vulputate et. Sed egestas mi nec dui convallis euismod. Nulla accumsan, metus vitae pretium scelerisque, quam neque luctus turpis, vel auctor erat dui vitae diam. Vivamus ac nibh enim. Nulla vel magna ac leo scelerisque ultricies in at neque. Curabitur eu metus quis mi scelerisque volutpat. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Maecenas fermentum, ante non malesuada pellentesque, dui urna pellentesque velit, eget dictum lacus purus sit amet mi. Praesent eget aliquet orci. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nulla facilisi. Suspendisse at lorem ac justo sodales bibendum. Proin vel leo sit amet urna fringilla tempus. Sed egestas felis ac sapien sagittis eu lacinia arcu interdum. Phasellus quis mi a ligula aliquam iaculis. Duis fermentum cursus metus vel volutpat. </p>
+                    <p>Nulla rhoncus aliquet enim, sed ornare metus vulputate et. Sed egestas mi nec dui convallis euismod. Nulla accumsan, metus vitae pretium scelerisque, quam neque luctus turpis, vel auctor erat dui vitae diam. Vivamus ac nibh enim. Nulla vel magna ac leo scelerisque ultricies in at neque. Curabitur eu metus quis mi scelerisque volutpat. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Maecenas fermentum, ante non malesuada pellentesque, dui urna pellentesque velit, eget dictum lacus purus sit amet mi. Praesent eget aliquet orci. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nulla facilisi. Suspendisse at lorem ac justo sodales bibendum. Proin vel leo sit amet urna fringilla tempus. Sed egestas felis ac sapien sagittis eu lacinia arcu interdum. Phasellus quis mi a ligula aliquam iaculis. Duis fermentum cursus metus vel volutpat. </p>
+                    <p>Nulla rhoncus aliquet enim, sed ornare metus vulputate et. Sed egestas mi nec dui convallis euismod. Nulla accumsan, metus vitae pretium scelerisque, quam neque luctus turpis, vel auctor erat dui vitae diam. Vivamus ac nibh enim. Nulla vel magna ac leo scelerisque ultricies in at neque. Curabitur eu metus quis mi scelerisque volutpat. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Maecenas fermentum, ante non malesuada pellentesque, dui urna pellentesque velit, eget dictum lacus purus sit amet mi. Praesent eget aliquet orci. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nulla facilisi. Suspendisse at lorem ac justo sodales bibendum. Proin vel leo sit amet urna fringilla tempus. Sed egestas felis ac sapien sagittis eu lacinia arcu interdum. Phasellus quis mi a ligula aliquam iaculis. Duis fermentum cursus metus vel volutpat. </p>
+                    <p>Nulla rhoncus aliquet enim, sed ornare metus vulputate et. Sed egestas mi nec dui convallis euismod. Nulla accumsan, metus vitae pretium scelerisque, quam neque luctus turpis, vel auctor erat dui vitae diam. Vivamus ac nibh enim. Nulla vel magna ac leo scelerisque ultricies in at neque. Curabitur eu metus quis mi scelerisque volutpat. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Maecenas fermentum, ante non malesuada pellentesque, dui urna pellentesque velit, eget dictum lacus purus sit amet mi. Praesent eget aliquet orci. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nulla facilisi. Suspendisse at lorem ac justo sodales bibendum. Proin vel leo sit amet urna fringilla tempus. Sed egestas felis ac sapien sagittis eu lacinia arcu interdum. Phasellus quis mi a ligula aliquam iaculis. Duis fermentum cursus metus vel volutpat. </p>
+                    <p>In accumsan cursus erat ut tempor. Cras cursus lorem eu neque posuere eget rhoncus elit egestas. Suspendisse dictum augue nec mi malesuada feugiat. Morbi et sapien vitae nunc molestie tempus quis et purus. Vivamus vehicula velit ut nunc posuere suscipit. Etiam elementum volutpat ante, in facilisis velit egestas non. Integer ultricies vestibulum lacus, vitae vehicula urna ultricies et. Aliquam facilisis ipsum id enim rhoncus nec viverra nibh scelerisque. Vivamus auctor varius nisl nec fermentum. Morbi est est, suscipit eget hendrerit et, tincidunt tincidunt nisl. Integer eu nunc velit, euismod dictum tellus. Curabitur pulvinar consectetur feugiat. Aliquam metus mi, pretium a laoreet et, faucibus a purus. </p>
+                    <h4 id="scroll-a4" class="scrollspy-title ">Activity History</h4>
+                    <p>Donec eu metus dolor, et eleifend lacus. Vivamus malesuada sodales purus, at ultrices lectus eleifend ut. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Curabitur sollicitudin ornare ornare. In ac purus eget enim varius feugiat vitae ac nulla. Donec bibendum aliquam auctor. Sed ultrices volutpat felis vel accumsan. Nullam tincidunt nibh tortor. </p>
+                    <p>Nullam bibendum turpis vitae risus tempor tincidunt. Maecenas posuere, erat sed mattis dignissim, massa massa vestibulum dolor, et tristique est dolor sed est. Duis rhoncus augue eget metus auctor a ultricies nisi blandit. Duis sem ipsum, pretium in varius sit amet, dignissim sit amet erat. Sed vulputate risus nec ipsum ultrices a aliquam ligula lobortis. Suspendisse hendrerit sollicitudin tellus, in varius ipsum consequat id. Suspendisse potenti. Integer a enim ac erat volutpat imperdiet eget in ante. Nulla lacus arcu, dignissim in fermentum vel, ultrices vitae urna. Proin sed convallis urna. Nam ornare metus nec ipsum ornare ut dignissim dolor iaculis. Nullam vulputate scelerisque ligula quis blandit. Proin scelerisque, purus nec aliquam ultrices, lorem tortor vulputate ante, at fringilla ligula nisl eu est. Praesent eleifend semper metus, non semper leo scelerisque a. Suspendisse eget odio quis justo iaculis cursus. Donec placerat rutrum arcu non dignissim. </p>
+
+                    <h4 id="scroll-api" class="scrollspy-title">API</h4>
+                    <div class="row-fluid">
+                        <fieldset class="form-horizontal">
+                            <div class="control-group">
+                                <label class="control-label">API key</label>
+                                <div class="controls">
+                                    <strong class="label label-info">{{ form.vars.value.api ? form.vars.value.api.apiKey : 'N/A' }}</strong>
+                                    {% if form.vars.value.id %}
+                                    <a class="btn btn-small" id="btn-apigen" href="{{ path('oro_user_apigen', { id: form.vars.value.id }) }}">Generate</a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+
+                    {% if form.groups is defined %}
+                    <h4 id="scroll-groups" class="scrollspy-title">Groups</h4>
+                    <div class="row-fluid">
+                        <fieldset class="form-horizontal">
+                            {{ form_row(form.groups) }}
+                        </fieldset>
+                    </div>
+                    {% endif %}
+
+                    {% if form.rolesCollection is defined %}
+                    <h4 id="scroll-roles" class="scrollspy-title">Roles</h4>
+                    <div class="row-fluid">
+                        <fieldset class="form-horizontal">
+                            {{ form_row(form.rolesCollection) }}
+                        </fieldset>
+                    </div>
+                    {% endif %}
+
+                    {{ form_rest(form) }}
+                </div>
+                </form>
+            </div>
+        </div>
+    {% endblock content %}
+    </div>
+{% endblock main %}
+
+{#% block content %}
+<form action="{{ form.vars.value.id ? path('oro_user_edit', { id: form.vars.value.id }) : path('oro_user_create') }}" {{ form_enctype(form) }} method="POST" class="form-horizontal">
     <fieldset>
         <legend>{{ title }}</legend>
 
-        {{ form_widget(form) }}
+        <ul id="email-fields-list" data-prototype="{{ form_widget(form.emails.vars.prototype) | e }}">
+            {% for emailField in form.emails %}
+                <li>
+                    {{ form_errors(emailField) }}
+                    {{ form_widget(emailField) }}
+                </li>
+            {% endfor %}
+        </ul>
+
+        <a class="btn" href="#" id="add-another-email">Add another email</a>
+
+        {{ form_rest(form) }}
 
         <br />
         <legend>Additional information</legend>
 
-        <div class="form-horizontal">
-            <div class="control-group">
-                <label class="control-label">Created at</label>
-                <div class="controls">
-                    <span class="label">{{ form.vars.value.createdAt ? macros.time(form.vars.value.createdAt) : 'N/A' }}</span>
-                </div>
+        <div class="control-group">
+            <label class="control-label">API key</label>
+            <div class="controls">
+                <span class="label label-info">{{ form.vars.value.api ? form.vars.value.api.apiKey : 'N/A' }}</span>
             </div>
-            <div class="control-group">
-                <label class="control-label">Updated at</label>
-                <div class="controls">
-                    <span class="label">{{ form.vars.value.updatedAt ? macros.time(form.vars.value.updatedAt) : 'N/A' }}</span>
-                </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label">Created at</label>
+            <div class="controls">
+                <span class="label">{{ form.vars.value.createdAt ? macros.time(form.vars.value.createdAt) : 'N/A' }}</span>
             </div>
-            <div class="control-group">
-                <label class="control-label">Last login</label>
-                <div class="controls">
-                    <span class="label">{{ form.vars.value.lastLogin ? macros.time(form.vars.value.lastLogin) : 'N/A' }}</span>
-                </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label">Updated at</label>
+            <div class="controls">
+                <span class="label">{{ form.vars.value.updatedAt ? macros.time(form.vars.value.updatedAt) : 'N/A' }}</span>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label">Last login</label>
+            <div class="controls">
+                <span class="label">{{ form.vars.value.lastLogin ? macros.time(form.vars.value.lastLogin) : 'N/A' }}</span>
             </div>
         </div>
 
+        <div>
+            {{ form_rest(form) }}
+        </div>
         <div class="form-row">
             <button class="btn btn-large btn-primary" type="submit">Save</button>
         </div>
     </fieldset>
 </form>
+{% endblock %#}
+
+{% block head_script %}
+    {{ parent() }}
+
+    <script type="text/javascript">
+        var emailCount = '{{ form.emails | length }}';
+    </script>
+
+    {% javascripts
+        '@OroUIBundle/Resources/public/lib/bootstrap/js/bootstrap-scrollspy.js'
+        '@OroUserBundle/Resources/public/js/emails.js'
+        '@OroUserBundle/Resources/public/js/profile.js'
+
+        output='js/page/profile.js'
+    %}
+    <script src="{{ asset_url }}" type="text/javascript"></script>
+    {% endjavascripts %}
 {% endblock %}

@@ -5,16 +5,43 @@ namespace Oro\Bundle\UserBundle\Form\Type;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Security\Core\SecurityContextInterface;
 
 use Doctrine\ORM\EntityRepository;
 
+use Oro\Bundle\UserBundle\Acl\Manager as AclManager;
 use Oro\Bundle\FlexibleEntityBundle\Form\Type\FlexibleType;
 use Oro\Bundle\FlexibleEntityBundle\Form\Type\FlexibleValueType;
 use Oro\Bundle\UserBundle\Form\EventListener\ProfileSubscriber;
 use Oro\Bundle\UserBundle\Entity\User;
+use Oro\Bundle\UserBundle\Form\Type\EmailType;
 
 class ProfileType extends FlexibleType
 {
+    /**
+     * @var AclManager
+     */
+    protected $aclManager;
+
+    /**
+     * @var SecurityContextInterface
+     */
+    protected $security;
+
+    /**
+     * @param string                   $flexibleClass flexible entity class
+     * @param string                   $valueClass    flexible value class
+     * @param AclManager               $aclManager    ACL manager
+     * @param SecurityContextInterface $security      Security context
+     */
+    public function __construct($flexibleClass, $valueClass, AclManager $aclManager, SecurityContextInterface $security)
+    {
+        parent::__construct($flexibleClass, $valueClass);
+
+        $this->aclManager = $aclManager;
+        $this->security   = $security;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -25,7 +52,7 @@ class ProfileType extends FlexibleType
 
         // user fields
         $builder
-            ->addEventSubscriber(new ProfileSubscriber())
+            ->addEventSubscriber(new ProfileSubscriber($builder->getFormFactory(), $this->aclManager, $this->security))
             ->add('username', 'text', array(
                 'required'       => true,
             ))
@@ -33,7 +60,25 @@ class ProfileType extends FlexibleType
                 'label'          => 'E-mail',
                 'required'       => true,
             ))
-            ->add('enabled', 'checkbox', array(
+            ->add('firstname', 'text', array(
+                'label'          => 'First name',
+                'required'       => false,
+            ))
+            ->add('lastname', 'text', array(
+                'label'          => 'Last name',
+                'required'       => false,
+            ))
+            ->add('middlename', 'text', array(
+                'label'          => 'Middle name',
+                'required'       => false,
+            ))
+            ->add('birthday', 'birthday', array(
+                'label'          => 'Date of birth',
+                'required'       => false,
+                'widget'         => 'single_text',
+            ))
+            ->add('image', 'file', array(
+                'label'          => 'Image',
                 'required'       => false,
             ))
             ->add('rolesCollection', 'entity', array(
@@ -46,12 +91,14 @@ class ProfileType extends FlexibleType
                         ->setParameter('anon', User::ROLE_ANONYMOUS);
                 },
                 'multiple'       => true,
+                'expanded'       => true,
                 'required'       => true,
             ))
             ->add('groups', 'entity', array(
                 'class'          => 'OroUserBundle:Group',
                 'property'       => 'name',
                 'multiple'       => true,
+                'expanded'       => true,
                 'required'       => false,
             ))
             ->add('plainPassword', 'repeated', array(
@@ -59,6 +106,14 @@ class ProfileType extends FlexibleType
                 'required'       => true,
                 'first_options'  => array('label' => 'Password'),
                 'second_options' => array('label' => 'Password again'),
+            ))
+            ->add('emails', 'collection', array(
+                'type'           => new EmailType(),
+                'allow_add'      => true,
+                'allow_delete'   => true,
+                'by_reference'   => false,
+                'prototype'      => true,
+                'prototype_name' => 'tag__name__',
             ));
     }
 
