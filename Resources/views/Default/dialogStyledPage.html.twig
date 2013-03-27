@@ -34,80 +34,7 @@
                 </div>
             </div>
             <div id="opener-content1" style="display: none;" title="Dima’s Address">
-                    <form action="/app_dev.php/menu/form" class="form form-horizontal" id="testForm" method="post">
-                        <fieldset>
-                            <div class="scroll-holder">
-                                <div class="control-group">
-                                    <label class="control-label" for="inputAddress">Address</label>
-                                    <div class="controls">
-                                        <input type="text" id="inputAddress" name="inputAddress" placeholder="Address">
-                                    </div>
-                                </div>
-                                <div class="control-group">
-                                    <label class="control-label" for="inputAddress2">Address2</label>
-                                    <div class="controls">
-                                        <input type="text" id="inputAddress2" name="inputAddress2" placeholder="Address2">
-                                    </div>
-                                </div>
-                                <div class="control-group">
-                                    <label class="control-label" for="City">City</label>
-                                    <div class="controls">
-                                        <input type="text" id="City" name="City" placeholder="City">
-                                    </div>
-                                </div>
-                                <div class="control-group">
-                                    <label class="control-label" for="States">States</label>
-                                    <div class="controls">
-                                        <input type="text" id="States" name="State" placeholder="States">
-                                    </div>
-                                </div>
-                                <div class="control-group">
-                                    <label class="control-label" for="Zip">Zip</label>
-                                    <div class="controls">
-                                        <input type="text" id="Zip" name="Zip" placeholder="Zip">
-                                    </div>
-                                </div>
-                                <div class="control-group">
-                                    <label class="control-label" for="Country">Country</label>
-                                    <div class="controls">
-                                        <select name="Country" id="Country">
-                                            <option>us</option>
-                                            <option>uk</option>
-                                            <option>rus</option>
-                                            <option>tt</option>
-                                            <option>dd</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="control-group">
-                                    <label class="control-label" for="tell">tell</label>
-                                    <div class="controls">
-                                        <input type="text" id="tell" name="tell" placeholder="tell">
-                                    </div>
-                                </div>
-                                <div class="control-group">
-                                    <label class="control-label" for="email">email</label>
-                                    <div class="controls">
-                                        <input type="text" id="email" name="email" placeholder="email">
-                                    </div>
-                                </div>
-                                <div class="control-group">
-                                    <div class="controls">
-                                        <label class="checkbox">
-                                            <input type="checkbox" name="remember_me"> Remember me
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="bottom-action widget-actions">
-                                <div class="pull-right">
-                                    <button type="reset" class="btn">Cancel</button>
-                                    <button type="submit" class="btn btn-primary">Submit</button>
-                                </div>
-                            </div>
-                        </fieldset>
-                    </form>
-
+                {% render url('acme_demowindows_forms_test') %}
             </div>
             <div id="opener-content2" style="display: none;" title="Dima’s Address2">
                 <p>Fusce hendrerit lacinia ligula.</p>
@@ -124,7 +51,7 @@
 
     <div style="display: none">
         <div id="widget-restored-state-1">
-            {% render url('oro_menu_form', { 'name': "Test User" }) %}
+            {% render url('acme_demowindows_forms_test') %}
         </div>
     </div>
 
@@ -165,24 +92,8 @@
                         maximizedHeightDecreaseBy: 'minimize-bar',
                         appendTo: '#main .row-fluid',
                         width : 400,
-                        height : 305,
-                        snapshot: {
-                            config: {
-                                draggable: true,
-                                resizable: true
-                            },
-                            position: {
-                                left: 138,
-                                top: 69
-                            },
-                            size: {
-                                height: 336,
-                                maxHeight: null,
-                                width: 400
-                            }
-                        }
-                    },
-                    isForm: true
+                        height : 305
+                    }
                 }).render();
             });
             $("#opener2").click(function(){
@@ -198,7 +109,7 @@
             });
             $("#opener3").click(function(){
                 new Oro.widget.DialogView({
-                    el: '#opener-content2',
+                    el: '#opener-content3',
                     dialogOptions: {
                         width : 400,
                         height : 300
