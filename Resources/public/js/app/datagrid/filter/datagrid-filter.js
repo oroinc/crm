@@ -62,7 +62,7 @@ OroApp.DatagridFilter = Backbone.View.extend({
         if (this.enabled) {
             this.enabled = false;
             this.hide();
-            this.trigger('disabled', this);
+            this.trigger('disable', this);
             this.reset();
         }
         return this;

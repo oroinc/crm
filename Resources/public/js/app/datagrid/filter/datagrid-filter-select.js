@@ -207,7 +207,7 @@ OroApp.DatagridFilterSelect = OroApp.DatagridFilter.extend({
         if (this.confirmedValue.value != value.value) {
             this.confirmedValue = _.clone(value);
             this.$(this.select2Element).select2('val', this.confirmedValue.value);
-            this.trigger('changedData');
+            this.trigger('update');
         }
     },
 

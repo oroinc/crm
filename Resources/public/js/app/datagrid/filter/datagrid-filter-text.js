@@ -2,8 +2,8 @@
  * Text grid filter.
  *
  * Triggers events:
- *  - "disabled" when filter is disabled
- *  - "changedData" when filter criteria is changed
+ *  - "disable" when filter is disabled
+ *  - "update" when filter criteria is changed
  *
  * @class   OroApp.DatagridFilterText
  * @extends OroApp.DatagridFilter
@@ -303,8 +303,7 @@ OroApp.DatagridFilterText = OroApp.DatagridFilter.extend({
         if (!looseObjectCompare(this.confirmedValue, value)) {
             this.confirmedValue = _.clone(value);
             this._updateCriteriaHint();
-            // TODO Rename event?
-            this.trigger('changedData');
+            this.trigger('update');
         }
     },
 
