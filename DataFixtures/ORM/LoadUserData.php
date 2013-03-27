@@ -8,6 +8,8 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
+use Oro\Bundle\UserBundle\Entity\UserApi;
+
 class LoadUserData extends AbstractFixture implements  ContainerAwareInterface, OrderedFixtureInterface
 {
     private $container;
@@ -23,10 +25,18 @@ class LoadUserData extends AbstractFixture implements  ContainerAwareInterface, 
         $userManager = $this->container->get('oro_user.manager');
 
         $admin = $userManager->createUser();
-        $admin->setUsername('admin');
-        $admin->setPlainPassword('admin');
-        $admin->addRole($this->getReference('admin_role'));
-        $admin->setEmail('admin@example.com');
+        $api   = new UserApi();
+
+        $api->setApiKey('admin_api_key')
+            ->setUser($admin);
+
+        $admin
+            ->setUsername('admin')
+            ->setPlainPassword('admin')
+            ->addRole($this->getReference('admin_role'))
+            ->setEmail('admin@example.com')
+            ->setApi($api);
+
         $userManager->updateUser($admin);
     }
 
