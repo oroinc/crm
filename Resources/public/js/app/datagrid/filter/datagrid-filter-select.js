@@ -30,24 +30,13 @@ OroApp.DatagridFilterSelect = OroApp.DatagridFilter.extend({
     /** @property */
     placeholder: 'All',
 
-    /** @property */
-    select2Element: 'select',
-
-    /** @property */
-    select2Config: {
-        width: 'off',
-        dropdownCssClass: 'select-filter-dropdown'
-    },
+    inputSelector: 'select',
 
     /** @property */
     events: {
-        'click .filter-select': '_onClickFilterSelect',
         'click .disable-filter': '_onClickDisableFilter',
         'change select': '_onSelectChange'
     },
-
-    /** @property */
-    needOpenDropdown: true,
 
     /**
      * Render filter template
@@ -64,23 +53,7 @@ OroApp.DatagridFilterSelect = OroApp.DatagridFilter.extend({
             })
         );
 
-        this._initSelect2();
-
         return this;
-    },
-
-    /**
-     * Create Select2 instance
-     */
-    _initSelect2: function() {
-        // create select2 instance
-        var select2Object = this.$(this.select2Element).select2(this.select2Config);
-
-        var data = {
-            filterElement: this.$el,
-            select2Config: this.select2Config
-        };
-        select2Object.on('open', data, this._onOpenDropdown);
     },
 
     /**
@@ -91,51 +64,6 @@ OroApp.DatagridFilterSelect = OroApp.DatagridFilter.extend({
     _onSelectChange: function() {
         var value = this.getValue();
         this._confirmValue(value);
-
-        this.needOpenDropdown = false;
-    },
-
-    /**
-     * Open option dropdown in case of click on non-select area
-     *
-     * @protected
-     */
-    _onClickFilterSelect: function() {
-        if (this.needOpenDropdown) {
-            this.$(this.select2Element).select2('open');
-        }
-        this.needOpenDropdown = true;
-    },
-
-    /**
-     * Recalculate position of the select filter drop down relative to filter container,
-     * trigger click on body to process filters hiding
-     *
-     * @param event
-     */
-    _onOpenDropdown: function(event) {
-        var filterElement = event.data.filterElement,
-            dropdown = $('.' + event.data.select2Config.dropdownCssClass),
-            body = filterElement.closest('body'),
-            offset = filterElement.offset(),
-            dropLeft = offset.left,
-            dropWidth = dropdown.outerWidth(false),
-            viewPortRight = $(window).scrollLeft() + $(window).width(),
-            enoughRoomOnRight = dropLeft + dropWidth <= viewPortRight;
-
-
-        if (body.css('position') !== 'static') {
-            var bodyOffset = body.offset();
-            dropLeft -= bodyOffset.left;
-        }
-
-        if (!enoughRoomOnRight) {
-            dropLeft = offset.left + width - dropWidth;
-        }
-
-        dropdown.css('left', dropLeft);
-
-        $('body').trigger('click');
     },
 
     /**
@@ -166,7 +94,7 @@ OroApp.DatagridFilterSelect = OroApp.DatagridFilter.extend({
      */
     getValue: function() {
         return {
-            value: this.$(this.select2Element).select2('val')
+            value: this.$(this.inputSelector).val()
         };
     },
 
@@ -206,7 +134,7 @@ OroApp.DatagridFilterSelect = OroApp.DatagridFilter.extend({
     _confirmValue: function(value) {
         if (this.confirmedValue.value != value.value) {
             this.confirmedValue = _.clone(value);
-            this.$(this.select2Element).select2('val', this.confirmedValue.value);
+            this.$(this.inputSelector).val(this.confirmedValue.value);
             this.trigger('update');
         }
     },

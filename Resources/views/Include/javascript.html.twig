@@ -7,6 +7,9 @@
     '@OroGridBundle/Resources/public/lib/moment/moment.js'
     '@OroGridBundle/Resources/public/lib/backgrid/extensions/moment-cell/backgrid-moment-cell.js'
 
+    '@OroGridBundle/Resources/public/lib/multiselect/jquery.multiselect.js'
+    '@OroGridBundle/Resources/public/lib/multiselect/jquery.multiselect.filter.js'
+
     '@OroGridBundle/Resources/public/js/app/datagrid/action/datagrid-action-launcher.js'
     '@OroGridBundle/Resources/public/js/app/datagrid/action/datagrid-action.js'
     '@OroGridBundle/Resources/public/js/app/datagrid/action/datagrid-action-navigate.js'
@@ -42,7 +45,7 @@
 
     output='js/acme.grid.js'
 %}
-<script type="text/javascript" src="{{ asset_url }}"></script>
+    <script type="text/javascript" src="{{ asset_url }}"></script>
 {% endjavascripts %}
 
 <script type="text/javascript">

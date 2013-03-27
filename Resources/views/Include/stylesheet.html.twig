@@ -2,94 +2,97 @@
     'bundles/orogrid/css/select2.css'
     'bundles/orogrid/lib/backgrid/backgrid.css'
     'bundles/orogrid/lib/backgrid/extensions/paginator/backgrid-paginator.css'
+    'bundles/orogrid/lib/multiselect/jquery.multiselect.css'
+    'bundles/orogrid/lib/multiselect/jquery.multiselect.filter.css'
     output='css/acme.grid.css'
     filter='cssrewrite'
 %}
     <link rel="stylesheet" type="text/css" href="{{ asset_url }}" />
-    <style type="text/css">
-        table.grid thead th {
-            text-transform: uppercase;
-        }
-
-        table.grid thead th span.caret {
-            display: none;
-            border: none;
-            border-right: 4px solid transparent;
-            border-left: 4px solid transparent;
-        }
-
-        table.grid thead tr th.ascending span.caret {
-            display: inline-block;
-            border-top: 4px solid #000000;
-        }
-
-        table.grid thead tr th.descending span.caret {
-            display: inline-block;
-            border-bottom: 4px solid #000000;
-        }
-
-        .grid-toolbar .pagination ul li input {
-            display: inline;
-            float: left;
-            width: 40px;
-            text-align: center;
-            margin: 0;
-            border-left: none;
-            border-color: #dddddd;
-            border-radius: 0;
-        }
-
-        .filter-box .filter-item .disable-filter {
-            background-color: #F5F5F5;
-            border-bottom-right-radius: 4px;
-            border-color: #CCCCCC #CCCCCC #B3B3B3;
-            border-style: solid;
-            border-top-right-radius: 4px;
-            border-width: 1px 1px 1px 0;
-            display: inline-block;
-            font-size: 18px;
-            height: 24px;
-            line-height: 28px;
-            padding: 4px 2px 0;
-            vertical-align: top;
-        }
-
-        .filter-box .filter-select {
-            padding-right: 4px;
-            height: 28px;
-        }
-
-        .filter-box .filter-select .disable-filter {
-            margin-left: 3px;
-        }
-
-        .filter-box .filter-item .filter-criteria {
-            position: absolute;
-            font-size: 12px;
-            background-color: #ffffff;
-            padding: 8px 8px 2px 8px;
-            border: 1px solid #d3d3d3;
-            display: none;
-            z-index: 9999;
-        }
-
-        .no-data {
-            text-align: center;
-            font-size: 16px;
-            padding: 10px;
-            border: 1px solid #dddddd;
-        }
-
-        .select-filter-dropdown {
-            padding: 8px 4px 4px 4px;
-        }
-
-        .select2-container .select2-choice {
-            padding: 0;
-        }
-
-        .select2-container .select2-choice span {
-            margin-right: 18px;
-        }
-    </style>
 {% endstylesheets %}
+
+<style type="text/css">
+    table.grid thead th {
+        text-transform: uppercase;
+    }
+
+    table.grid thead th span.caret {
+        display: none;
+        border: none;
+        border-right: 4px solid transparent;
+        border-left: 4px solid transparent;
+    }
+
+    table.grid thead tr th.ascending span.caret {
+        display: inline-block;
+        border-top: 4px solid #000000;
+    }
+
+    table.grid thead tr th.descending span.caret {
+        display: inline-block;
+        border-bottom: 4px solid #000000;
+    }
+
+    .grid-toolbar .pagination ul li input {
+        display: inline;
+        float: left;
+        width: 40px;
+        text-align: center;
+        margin: 0;
+        border-left: none;
+        border-color: #dddddd;
+        border-radius: 0;
+    }
+
+    .filter-box .filter-item .disable-filter {
+        background-color: #F5F5F5;
+        border-bottom-right-radius: 4px;
+        border-color: #CCCCCC #CCCCCC #B3B3B3;
+        border-style: solid;
+        border-top-right-radius: 4px;
+        border-width: 1px 1px 1px 0;
+        display: inline-block;
+        font-size: 18px;
+        height: 24px;
+        line-height: 28px;
+        padding: 4px 2px 0;
+        vertical-align: top;
+    }
+
+    .filter-box .filter-select {
+        padding-right: 4px;
+        height: 28px;
+    }
+
+    .filter-box .filter-select .disable-filter {
+        margin-left: 3px;
+    }
+
+    .filter-box .filter-item .filter-criteria {
+        position: absolute;
+        font-size: 12px;
+        background-color: #ffffff;
+        padding: 8px 8px 2px 8px;
+        border: 1px solid #d3d3d3;
+        display: none;
+        z-index: 9999;
+    }
+
+    .no-data {
+        text-align: center;
+        font-size: 16px;
+        padding: 10px;
+        border: 1px solid #dddddd;
+    }
+
+    .select-filter-dropdown {
+        padding: 8px 4px 4px 4px;
+    }
+
+    .select2-container .select2-choice {
+        padding: 0;
+    }
+
+    .select2-container .select2-choice span {
+        margin-right: 18px;
+    }
+</style>
