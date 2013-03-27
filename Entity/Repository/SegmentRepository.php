@@ -34,18 +34,18 @@ class SegmentRepository extends NestedTreeRepository
      * Search is done on a "%value%" LIKE expression.
      * Criterias are joined with a AND operator
      *
-     * @param int   $rootId    Tree segment root id
-     * @param array $criterias
+     * @param int   $treeRootId Tree segment root id
+     * @param array $criterias  Criterias to apply
      *
      * @return ArrayCollection
      */
-    public function search($rootId, $criterias)
+    public function search($treeRootId, $criterias)
     {
         $queryBuilder = $this->createQueryBuilder('c');
         foreach ($criterias as $key => $value) {
             $queryBuilder->andWhere('c.'. $key .' LIKE :'. $key)->setParameter($key, '%'. $value .'%');
         }
-        $queryBuilder->andWhere('c.root = :rootId')->setParameter('rootId', $rootId);
+        $queryBuilder->andWhere('c.root = :rootId')->setParameter('rootId', $treeRootId);
 
         return $queryBuilder->getQuery()->getResult();
     }

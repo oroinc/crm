@@ -106,9 +106,9 @@ class SegmentManager
      *
      * @return ArrayCollection
      */
-    public function search($rootId, $criterias)
+    public function search($treeRootId, $criterias)
     {
-        return $this->getEntityRepository()->search($rootId, $criterias);
+        return $this->getEntityRepository()->search($treeRootId, $criterias);
     }
 
     /**
