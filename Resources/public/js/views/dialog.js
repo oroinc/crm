@@ -160,7 +160,7 @@ Oro.widget.DialogView = Backbone.View.extend({
      * Render dialog
      */
     render: function() {
-        var loadAllowed = !this.el || !this.options.elementFirst || (this.options.elementFirst && !this.firstRun);
+        var loadAllowed = this.$el.html().length == 0 || !this.options.elementFirst || (this.options.elementFirst && !this.firstRun);
         if (loadAllowed && this.options.url !== false) {
             this.loadContent();
         } else {
