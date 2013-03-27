@@ -12,6 +12,9 @@ use Oro\Bundle\UserBundle\Entity\UserApi;
 
 class LoadUserData extends AbstractFixture implements  ContainerAwareInterface, OrderedFixtureInterface
 {
+    /**
+     * @var ContainerInterface
+     */
     private $container;
 
     public function setContainer(ContainerInterface $container = null)
