@@ -50,7 +50,7 @@
                 jQuery('.custom-dropdown ul li').remove();
             } else {
                 jQuery.ajax({
-                    url: "{{ path('oro_api_get_search') }}",
+                    url: "{{ path('oro_search_simple') }}",
                     dataType: "json",
                     data: {
                         search: queryString,

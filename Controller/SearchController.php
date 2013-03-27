@@ -2,11 +2,39 @@
 namespace Oro\Bundle\SearchBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
 class SearchController extends Controller
 {
+
+    /**
+     * @Route("simple-search", name="oro_search_simple")
+     */
+    public function ajaxSimpleSearchAction()
+    {
+        return $this->getRequest()->isXmlHttpRequest()
+            ? new JsonResponse($this->get('oro_search.index')->simpleSearch(
+                    $this->getRequest()->get('search'),
+                    (int) $this->getRequest()->get('offset'),
+                    (int) $this->getRequest()->get('max_results'),
+                    $this->getRequest()->get('from')
+                )->toSearchResultData())
+            : $this->forward('OroSearchBundle:Search:searchResults');
+    }
+
+    /**
+     * @Route("advanced-search", name="oro_search_advanced")
+     */
+    public function ajaxAdvancedSearchAction()
+    {
+        return $this->getRequest()->isXmlHttpRequest()
+            ? new JsonResponse($this->get('oro_search.index')->advancedSearch(
+                    $this->getRequest()->get('query')
+                )->toSearchResultData())
+            : $this->forward('OroSearchBundle:Search:searchResults');
+    }
 
     /**
      * Show search block
@@ -25,7 +53,7 @@ class SearchController extends Controller
     /**
      * Show search results
      *
-     * @Route("results", name="oro_search_results", defaults={"limit"=10})
+     * @Route("/", name="oro_search_results", defaults={"limit"=10})
      * @Template
      */
     public function searchResultsAction()
