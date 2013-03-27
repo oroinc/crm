@@ -60,7 +60,7 @@ class LoadItemSegmentData extends AbstractFixture implements OrderedFixtureInter
         $segment2 = $this->createSegment('Segment Two', $treeRoot2);
 
         $items2 = array($item3, $item4, $item5);
-        $segment3 = $this->createSegment('Segment Three', $segment2,$items2);
+        $segment3 = $this->createSegment('Segment Three', $segment2, $items2);
 
         $segment4 = $this->createSegment('Segment Four', $segment2);
         $segment5 = $this->createSegment('Segment Five', $segment4);

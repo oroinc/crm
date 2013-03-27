@@ -29,9 +29,13 @@ class SegmentManagerTest extends \PHPUnit_Framework_TestCase
     protected $storageManager;
     protected $entityRepository;
 
-    public function setUp()
+    /**
+     * {@inheritdoc}
+     */
+    protected function setUp()
     {
-        $this->entityRepository = $this->getMockBuilder('Oro\Bundle\SegmentationTreeBundle\Entity\Repository\SegmentRepository')
+        $this->entityRepository =
+                $this->getMockBuilder('Oro\Bundle\SegmentationTreeBundle\Entity\Repository\SegmentRepository')
                      ->disableOriginalConstructor()
                      ->getMock();
         $this->storageManager = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
@@ -42,27 +46,42 @@ class SegmentManagerTest extends \PHPUnit_Framework_TestCase
         $this->segmentManager = new SegmentManager($this->storageManager, get_class($this->segment));
     }
 
+    /**
+     * Test related method
+     */
     public function testGetStorageManager()
     {
         $this->assertEquals($this->segmentManager->getStorageManager(), $this->storageManager);
     }
 
+    /**
+     * Test related method
+     */
     public function testCreateSegment()
     {
         $actualClassName = get_class($this->segmentManager->getSegmentInstance());
         $this->assertEquals($actualClassName, get_class($this->segment));
     }
 
+    /**
+     * Test related method
+     */
     public function testGetSegmentName()
     {
         $this->assertEquals($this->segmentManager->getSegmentName(), get_class($this->segment));
-    } 
+    }
 
+    /**
+     * Test related method
+     */
     public function testGetEntityRepository()
     {
         $this->assertEquals($this->segmentManager->getEntityRepository(), $this->entityRepository);
-    } 
+    }
 
+    /**
+     * Test related method
+     */
     public function testCopyInstance()
     {
         $rootNode = $this->segmentManager->getSegmentInstance();
@@ -88,21 +107,23 @@ class SegmentManagerTest extends \PHPUnit_Framework_TestCase
         $secondChild->addChild($firstGrandChild);
 
         $nodeCopy = $this->segmentManager->copyNode($node, $rootNode);
-        $this->assertEquals($node,$nodeCopy);
+        $this->assertEquals($node, $nodeCopy);
 
         $copyChildren = $nodeCopy->getChildren();
         $copyFirstChild = $copyChildren[0];
-        $this->assertEquals($copyFirstChild,$firstChild);
+        $this->assertEquals($copyFirstChild, $firstChild);
 
         $copySecondChild = $copyChildren[1];
-        $this->assertEquals($copySecondChild,$secondChild);
+        $this->assertEquals($copySecondChild, $secondChild);
 
         $copyGrandChildren = $copySecondChild->getChildren();
-        $copyFirstGrandChild = $copyGrandChildren[0]; 
-        $this->assertEquals($copyFirstGrandChild,$firstGrandChild);
-        
+        $copyFirstGrandChild = $copyGrandChildren[0];
+        $this->assertEquals($copyFirstGrandChild, $firstGrandChild);
     }
 
+    /**
+     * Test related method
+     */
     public function testGetChildren()
     {
         $firstChild = $this->segmentManager->getSegmentInstance();
@@ -124,6 +145,9 @@ class SegmentManagerTest extends \PHPUnit_Framework_TestCase
 
     }
 
+    /**
+     * Test related method
+     */
     public function testSearch()
     {
         $firstChild = $this->segmentManager->getSegmentInstance();
@@ -138,9 +162,8 @@ class SegmentManagerTest extends \PHPUnit_Framework_TestCase
             ->method('search')
             ->will($this->returnValue($originalChildren));
 
-        $childrenFromManager = $this->segmentManager->search(1,array());
+        $childrenFromManager = $this->segmentManager->search(1, array());
 
         $this->assertEquals($originalChildren, $childrenFromManager);
     }
 }
-

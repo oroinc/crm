@@ -8,7 +8,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 
-
 /**
  * A concrete Segment class allowing to organize
  * a simple Item class into trees
@@ -33,8 +32,8 @@ class ItemSegment extends AbstractSegment
     protected $parent;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection 
-     * 
+     * @var \Doctrine\Common\Collections\Collection
+     *
      * @ORM\OneToMany(targetEntity="ItemSegment", mappedBy="parent", cascade={"persist"})
      * @ORM\OrderBy({"left" = "ASC"})
      */
@@ -87,12 +86,10 @@ class ItemSegment extends AbstractSegment
     /**
      * Get items from this segment node
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getItems()
     {
         return $this->items;
     }
-
-
 }

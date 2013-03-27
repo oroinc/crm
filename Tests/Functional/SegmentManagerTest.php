@@ -17,6 +17,14 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 use Doctrine\ORM\Tools\SchemaTool;
 
+/**
+ * Test related class
+ *
+ * @author    Benoit Jacquemont <benoit@akeneo.com>
+ * @copyright 2012 Akeneo SAS (http://www.akeneo.com)
+ * @license   http://opensource.org/licenses/MIT MIT
+ *
+ */
 class SegmentManagerTest extends WebTestCase
 {
 
@@ -30,6 +38,10 @@ class SegmentManagerTest extends WebTestCase
      */
     protected $container;
 
+    /**
+     * @var \Symfony\Component\HttpKernel\HttpKernelInterface
+     * TODO : Kernel is defined as static variable in WebTestCase
+     */
     protected $myKernel;
 
     /**
@@ -37,19 +49,32 @@ class SegmentManagerTest extends WebTestCase
      */
     protected $schemaTool;
 
+    /**
+     * @staticvar
+     */
     static protected $itemEntityName = 'Oro\Bundle\SegmentationTreeBundle\Tests\Functional\Entity\Item';
+
+    /**
+     * @staticvar
+     */
     static protected $itemSegmentEntityName = 'Oro\Bundle\SegmentationTreeBundle\Tests\Functional\Entity\ItemSegment';
 
+    /**
+     * @var SegmentManager
+     */
     protected $segmentManager;
 
-    public function setUp()
+    /**
+     * {@inheritdoc}
+     */
+    protected function setUp()
     {
         $entityPath = dirname(__FILE__).'/Entity';
         $this->myKernel = static::createKernel(array("debug" => false));
         $this->myKernel->boot();
 
         $this->container = $this->myKernel->getContainer();
-        
+
         $this->em = $this->container->get('doctrine.orm.entity_manager');
 
         $reader = new AnnotationReader();
@@ -59,7 +84,7 @@ class SegmentManagerTest extends WebTestCase
 
         $this->schemaTool = new SchemaTool($this->em);
 
-        $this->initializeDatabase(); 
+        $this->initializeDatabase();
 
         $this->segmentManager = new SegmentManager($this->em, static::$itemSegmentEntityName);
     }
@@ -72,7 +97,7 @@ class SegmentManagerTest extends WebTestCase
         $this->schemaTool->dropDatabase();
 
         $classes = $this->em->getMetadataFactory()->getAllMetadata();
-    
+
         // disable foreign keys check
         $connection = $this->em->getConnection();
 
@@ -86,12 +111,15 @@ class SegmentManagerTest extends WebTestCase
         $connection->query('SET FOREIGN_KEY_CHECKS = 1');
 
         $fixture = new LoadItemSegmentData();
-        
+
         $fixture->setContainer($this->container);
         $fixture->load($this->em);
 
     }
 
+    /**
+     * Test related method
+     */
     public function testGetChildren()
     {
         $segment2 = $this->em->find(static::$itemSegmentEntityName, 4);
@@ -103,13 +131,16 @@ class SegmentManagerTest extends WebTestCase
 
         $actualChildren = $this->segmentManager->getChildren($segment2);
 
-        $this->assertEquals(count($expectedChildrenIds),count($actualChildren));
-        
+        $this->assertCount(count($expectedChildrenIds), $actualChildren);
+
         foreach ($actualChildren as $actualChild) {
             $this->assertTrue(in_array($actualChild->getId(), $expectedChildrenIds));
         }
     }
 
+    /**
+     * Test related method
+     */
     public function testRemoveById()
     {
         $idToRemove = 8;
@@ -120,16 +151,19 @@ class SegmentManagerTest extends WebTestCase
 
         $this->segmentManager->removeById($idToRemove);
         $this->em->flush();
-        
+
         $segmentsAfter = $this->em->getRepository(static::$itemSegmentEntityName)->findAll();
 
-        $this->assertEquals($expectedCount, count($segmentsAfter));
+        $this->assertCount($expectedCount, $segmentsAfter);
 
         foreach ($segmentsAfter as $segment) {
             $this->assertNotEquals($segment->getId(), $idToRemove);
         }
     }
 
+    /**
+     * Test related method
+     */
     public function testRemove()
     {
         $idToRemove = 7;
@@ -141,16 +175,19 @@ class SegmentManagerTest extends WebTestCase
 
         $this->segmentManager->remove($segment);
         $this->em->flush();
-        
+
         $segmentsAfter = $this->em->getRepository(static::$itemSegmentEntityName)->findAll();
 
-        $this->assertEquals($expectedCount, count($segmentsAfter));
+        $this->assertCount($expectedCount, count($segmentsAfter));
 
         foreach ($segmentsAfter as $segment) {
             $this->assertNotEquals($segment->getId(), $idToRemove);
         }
     }
 
+    /**
+     * Test related method
+     */
     public function testRename()
     {
         $idToRename = 6;
@@ -165,9 +202,12 @@ class SegmentManagerTest extends WebTestCase
 
         $segment = $this->em->find(static::$itemSegmentEntityName, $idToRename);
         $this->assertEquals($newTitle, $segment->getTitle());
-        
+
     }
 
+    /**
+     * Test related method
+     */
     public function testMove()
     {
         $idToMove = 5;
@@ -184,6 +224,9 @@ class SegmentManagerTest extends WebTestCase
         $this->assertEquals($newParentId, $segment->getParent()->getId());
     }
 
+    /**
+     * Test related method
+     */
     public function testGetTrees()
     {
         $expectedTreesIds = array(1,3);
@@ -192,11 +235,14 @@ class SegmentManagerTest extends WebTestCase
 
         $this->assertEquals(count($expectedTreesIds), count($trees));
 
-        foreach($trees as $tree) {
-            $this->assertTrue( in_array($tree->getId(),$expectedTreesIds) );
+        foreach ($trees as $tree) {
+            $this->assertTrue(in_array($tree->getId(), $expectedTreesIds));
         }
     }
-    
+
+    /**
+     * Test related method
+     */
     public function testSearch()
     {
         $rootNode2 = $this->em->find(static::$itemSegmentEntityName, 3);
@@ -206,25 +252,31 @@ class SegmentManagerTest extends WebTestCase
 
         $actualResults = $this->segmentManager->search(3, array('title' => 'Two'));
 
-        $this->assertEquals(count($expectedResultsIds),count($actualResults));
-        
+        $this->assertCount(count($expectedResultsIds), $actualResults);
+
         foreach ($actualResults as $actualResult) {
             $this->assertTrue(in_array($actualResult->getId(), $expectedResultsIds));
         }
     }
 
+    /**
+     * Test related method
+     */
     public function testSearchOnASingleTree()
     {
         $results = $this->segmentManager->search(1, array('title' => 'Segment'));
 
-        $this->assertEquals(1,count($results));
+        $this->assertCount(1, $results);
 
         $results = $this->segmentManager->search(3, array('title' => 'Segment'));
 
-        $this->assertEquals(5,count($results));
+        $this->assertCount(5, $results);
 
     }
 
+    /**
+     * Test related method
+     */
     public function testGetTreeSegments()
     {
         $rootSegment = $this->em->find(static::$itemSegmentEntityName, 3);
@@ -233,14 +285,17 @@ class SegmentManagerTest extends WebTestCase
 
         $actualTreeSegments = $this->segmentManager->getTreeSegments($rootSegment);
 
-        $this->assertEquals(count($expectedTreeSegmentsIds),count($actualTreeSegments));
-        
+        $this->assertCount(count($expectedTreeSegmentsIds), $actualTreeSegments);
+
         foreach ($actualTreeSegments as $actualTreeSegment) {
             $this->assertTrue(in_array($actualTreeSegment->getId(), $expectedTreeSegmentsIds));
         }
 
     }
 
+    /**
+     * Test related method
+     */
     public function testCreateTree()
     {
         $newTreeTitle = 'My super new tree';
@@ -254,12 +309,14 @@ class SegmentManagerTest extends WebTestCase
 
         $this->assertEquals(count($expectedTreesIds), count($trees));
 
-        foreach($trees as $tree) {
-            $this->assertTrue( in_array($tree->getId(),$expectedTreesIds) );
+        foreach ($trees as $tree) {
+            $this->assertTrue(in_array($tree->getId(), $expectedTreesIds));
         }
-
     }
 
+    /**
+     * Test related method
+     */
     public function testRemoveTree()
     {
         $treeIdToRemove = 3;
@@ -272,6 +329,9 @@ class SegmentManagerTest extends WebTestCase
 
     }
 
+    /**
+     * Test related method
+     */
     public function testRemoveTreeById()
     {
         $treeIdToRemove = 3;
@@ -281,9 +341,13 @@ class SegmentManagerTest extends WebTestCase
             };
         $segmentToRemove = $this->em->find(static::$itemSegmentEntityName, $treeIdToRemove);
         $this->removeAndAssertTreeRemoved($segmentToRemove, $removeFunction);
-
     }
 
+    /**
+     * Remove a segment and assert tree
+     * @param AbstractSegment $segment        Segment removed
+     * @param unknown_type    $removeFunction Function
+     */
     private function removeAndAssertTreeRemoved($segment, $removeFunction)
     {
         $segmentsBefore = $this->em->getRepository(static::$itemSegmentEntityName)->findAll();
@@ -292,7 +356,7 @@ class SegmentManagerTest extends WebTestCase
         $treeSegments = $this->segmentManager->getTreeSegments($segment);
         $treeSegmentsIds = array();
 
-        foreach($treeSegments as $treeSegment) {
+        foreach ($treeSegments as $treeSegment) {
             $treeSegmentsIds[] = $treeSegment->getId();
         }
 
@@ -307,9 +371,8 @@ class SegmentManagerTest extends WebTestCase
 
         $this->assertEquals($expectedCount, $segmentsCountAfter);
 
-        foreach($segmentsAfter as $segmentAfter) {
-            $this->assertFalse( in_array($segmentAfter->getId(),$treeSegmentsIds) );
+        foreach ($segmentsAfter as $segmentAfter) {
+            $this->assertFalse(in_array($segmentAfter->getId(), $treeSegmentsIds));
         }
     }
-    
 }
