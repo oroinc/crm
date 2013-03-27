@@ -1,0 +1,17 @@
+{% block content %}
+            <div id="{{ containerId|default("") }}" style="{{ containerStyle|default("display: none;") }}" title="{{ containerTitle|default("Form") }}">
+                <form action="#" class="form form-horizontal">
+                    <fieldset>
+                        <div class="scroll-holder">
+                            {{ form_widget(form) }}
+                        </div>
+                        <div class="bottom-action widget-actions">
+                            <div class="pull-right">
+                                <button type="reset" class="btn">Cancel</button>
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+{% endblock %}

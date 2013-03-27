@@ -181,6 +181,6 @@ class WindowsStateController extends FOSRestController
      */
     protected function getManager()
     {
-        return $this->getDoctrine()->getEntityManagerForClass('OroNavigationBundle:PinbarTab');
+        return $this->getDoctrine()->getEntityManagerForClass('OroWindowsBundle:WindowsState');
     }
 }

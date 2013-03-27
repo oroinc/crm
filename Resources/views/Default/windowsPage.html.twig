@@ -1,0 +1,151 @@
+{% extends "OroWindowsBundle:Default:index.html.twig" %}
+{% block head %}
+    {{ parent() }}
+    <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="{{ asset('bundles/oroui/lib/jquery.dialog.extended/jquery.dialog.extended.js') }}"></script>
+    <link rel="stylesheet" href="{{ asset('bundles/oroui/lib/jquery.dialog.extended/jquery.dialog.extended.css') }}" media="all" />
+{% endblock head %}
+{% block header %}
+{% endblock %}
+{% block content %}
+
+    <div class="row-fluid">
+
+        <div class="container-fluid" style="min-height: 900px; background-color:#d0def1;" id="window-container">
+            <button type="button" id="my-button" class="btn btn-large btn-primary">Open new window</button>
+            <hr />
+            <div class="btn-toolbar">
+                <div class="btn-group">
+                    <button id="opener1" class="btn">Extended</button>
+                    <button id="opener2" class="btn">Minimize only</button>
+                    <button id="opener3" class="btn">Classic dialog</button>
+                </div>
+            </div>
+
+{% set containerAttrs = {"style": "display: none;"} %}
+{{ oro_windows_render(containerAttrs) }}
+
+            <div id="opener-content3" style="display: none;" title="Dima’s Address3">
+                <p>v quam eu pellentesque. Nam euismod, lectus sit amet tristique imperdiet, metus ligula gravida felis, non dapibus nulla sem a magna.</p>
+                <p>habitasse platea dictumst. Donec elementum vulputate imperdiet. Fusce sed lectus odio. Etiam cursus fermentum ornare. Phasellus facilisis t</p>
+                <p> Quisque nec lobortis leo.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(function(){
+            var positionNextWindowY = 0;
+            var positionNextWindowX=0;
+            var positionNextWindowCounter = -35;
+            function newPositionWindow(){
+                var TTEmp = positionNextWindowY/15;
+                if( TTEmp > 10){
+                    positionNextWindowX = positionNextWindowCounter;
+                    positionNextWindowY = 0;
+                    positionNextWindowCounter = positionNextWindowCounter -35;
+                    var needPosition = 'center+' + positionNextWindowX + ' center+' + positionNextWindowY;
+                    return needPosition;
+                }else{
+                    positionNextWindowY = positionNextWindowY +15;
+                    positionNextWindowX =  positionNextWindowX +15;
+                    var needPosition = 'center+' +  positionNextWindowX + ' center+' + positionNextWindowY;
+                    return needPosition;
+                }
+            }
+            var isOpen;
+            var pos = 0;
+            $("#my-button").click(function(){
+                var offsetwindow = newPositionWindow();
+                pos++;
+                var dialogOptions = {
+                    allowMaximize: true,
+                    allowMinimize: true,
+                    dblclick: 'maximize',
+                    title: "dialog window title long long long " + pos,
+                    width: 400,
+                    height: 400,
+                    position: {
+                        my: offsetwindow,
+                        at: "center center",
+                        of: $('body')
+                    },
+                    close: function(){ $(this).dialog( "destroy" ) }
+                };
+                $("<div>Some text if you need will be here</div>").dialog(dialogOptions);
+            });
+            $("#opener1").click(function(){
+                try{
+                    isOpen = $('#opener-content1').dialog("isOpen");
+                } catch(e) {
+                    isOpen = false;
+                }
+                if (isOpen === false ){
+                    var offsetwindow = newPositionWindow();
+                    var dialogOptions = {
+                        allowMaximize: true,
+                        allowMinimize: true,
+                        dblclick: 'maximize',
+                        maximizedHeightDecreaseBy: 'minimize-bar',
+                        appendTo: '#main .row-fluid',
+                        width : 400,
+                        height : 305,
+                        position: {
+                            my: offsetwindow,
+                            at: "center center",
+                            of: $('body')
+                        },
+                        "close" : function(){ $(this).dialog( "destroy" ) }
+                    };
+
+                    $("#opener-content1").dialog(dialogOptions);
+                }
+            });
+            $("#opener2").click(function(){
+                try{
+                    isOpen = $('#opener-content2').dialog("isOpen");
+                } catch(e) {
+                    isOpen = false;
+                }
+                if (isOpen === false ){
+                    var offsetwindow = newPositionWindow();
+                    var dialogOptions = {
+                        allowMinimize: true,
+                        dblclick: 'collapse',
+                        width : 400,
+                        height : 300,
+                        position: {
+                            my: offsetwindow,
+                            at: "center center",
+                            of: $('body')
+                        },
+                        "close" : function(){ $(this).dialog( "destroy" ) }
+                    };
+
+                    $("#opener-content2").dialog(dialogOptions);
+                }
+            });
+            $("#opener3").click(function(){
+                try{
+                    isOpen = $('#opener-content3').dialog("isOpen");
+                } catch(e) {
+                    isOpen = false;
+                }
+                if (isOpen === false ){
+                    var offsetwindow = newPositionWindow();
+                    var dialogOptions = {
+                        width : 400,
+                        height : 300,
+                        position: {
+                            my: offsetwindow,
+                            at: "center center",
+                            of: $('body')
+                        },
+                        "close" : function(){ $(this).dialog( "destroy" ) }
+                    };
+                    $("#opener-content3").dialog(dialogOptions);
+                }
+            });
+        });
+    </script>
+{% endblock content %}

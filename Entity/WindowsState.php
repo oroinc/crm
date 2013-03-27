@@ -66,7 +66,7 @@ class WindowsState
      * Set data
      *
      * @param string $data
-     * @return
+     * @return \Oro\Bundle\WindowsBundle\Entity\WindowsState
      */
     public function setData($data)
     {
@@ -86,10 +86,24 @@ class WindowsState
     }
 
     /**
+     * Get JSON data
+     *
+     * @return array|null
+     */
+    public function getJsonData()
+    {
+        if ($this->data) {
+            return json_decode($this->data);
+        }
+
+        return null;
+    }
+
+    /**
      * Set createdAt
      *
      * @param \DateTime $createdAt
-     * @return WindowState
+     * @return \Oro\Bundle\WindowsBundle\Entity\WindowsState
      */
     public function setCreatedAt($createdAt)
     {
@@ -112,7 +126,7 @@ class WindowsState
      * Set updatedAt
      *
      * @param \DateTime $updatedAt
-     * @return WindowState
+     * @return \Oro\Bundle\WindowsBundle\Entity\WindowsState
      */
     public function setUpdatedAt($updatedAt)
     {
@@ -135,7 +149,7 @@ class WindowsState
      * Set user
      *
      * @param \Oro\Bundle\UserBundle\Entity\User $user
-     * @return WindowState
+     * @return \Oro\Bundle\WindowsBundle\Entity\WindowsState
      */
     public function setUser(\Oro\Bundle\UserBundle\Entity\User $user = null)
     {

@@ -1,6 +1,10 @@
 oro_windows_index:
     pattern: /
-    defaults: { _controller: FrameworkBundle:Template:template, template: "OroWindowBundle:Default:index.html.twig" }
+    defaults: { _controller: FrameworkBundle:Template:template, template: "OroWindowsBundle:Default:windowsPage.html.twig" }
+
+oro_windows:
+    resource: "@OroWindowsBundle/Controller/"
+    type:     annotation
 
 oro_windows_api:
     resource: Oro\Bundle\WindowsBundle\Controller\Api\WindowsStateController
