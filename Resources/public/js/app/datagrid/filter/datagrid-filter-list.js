@@ -32,6 +32,13 @@ OroApp.DatagridFilterList = Backbone.View.extend({
     },
 
     /**
+     * Flag that allows temporary disable reloading of collection
+     *
+     * @property
+     */
+    needReloadCollection: true,
+
+    /**
      * Initialize filter list options
      *
      * @param {Object} options
@@ -53,8 +60,8 @@ OroApp.DatagridFilterList = Backbone.View.extend({
 
         for (var name in this.filters) {
             this.filters[name] = new (this.filters[name])();
-            this.listenTo(this.filters[name], "changedData", this._reloadCollection);
-            this.listenTo(this.filters[name], "disabled", this.disableFilter);
+            this.listenTo(this.filters[name], "update", this._reloadCollection);
+            this.listenTo(this.filters[name], "disable", this.disableFilter);
         }
 
         this._saveState();
@@ -69,9 +76,24 @@ OroApp.DatagridFilterList = Backbone.View.extend({
         this.collection.state.filtersParams = this.getAllParameters();
     },
 
+    /**
+     * Updates collection state
+     *
+     * @param {OroApp.PageableCollection} collection
+     * @param {Object} options
+     */
     updateState: function(collection, options) {
+        var storedFlag = this.needReloadCollection;
+        if (_.has(options, 'needReloadCollection')) {
+            this.needReloadCollection = options.needReloadCollection;
+        }
+
         this._restoreState(collection, options);
         this._saveState();
+
+        if (options.hasOwnProperty('needReloadCollection')) {
+            this.needReloadCollection = storedFlag;
+        }
     },
 
     _restoreState: function(collection, options) {
@@ -160,9 +182,11 @@ OroApp.DatagridFilterList = Backbone.View.extend({
     _reloadCollection: function() {
         this._saveState();
         this.collection.state.currentPage = 1;
-        this.collection.fetch({
-            ignoreUpdateFilters: true
-        });
+        if (this.needReloadCollection) {
+            this.collection.fetch({
+                ignoreUpdateFilters: true
+            });
+        }
         return this;
     },
 
