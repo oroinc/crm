@@ -1,5 +1,5 @@
 <?php
-namespace Oro\Bundle\SegmentationTreeBundle\Model;
+namespace Oro\Bundle\SegmentationTreeBundle\Entity;
 
 use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
@@ -12,7 +12,7 @@ use Gedmo\Translatable\Translatable;
  * @copyright 2012 Akeneo SAS (http://www.akeneo.com)
  * @license   http://opensource.org/licenses/MIT MIT
  *
- * @ORM\MappedSuperClass
+ * @ORM\MappedSuperclass
  * @Gedmo\Tree(type="nested")
  */
 abstract class AbstractSegment implements Translatable
