@@ -8,22 +8,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
 class SearchController extends Controller
 {
-
-    /**
-     * @Route("simple-search", name="oro_search_simple")
-     */
-    public function ajaxSimpleSearchAction()
-    {
-        return $this->getRequest()->isXmlHttpRequest()
-            ? new JsonResponse($this->get('oro_search.index')->simpleSearch(
-                    $this->getRequest()->get('search'),
-                    (int) $this->getRequest()->get('offset'),
-                    (int) $this->getRequest()->get('max_results'),
-                    $this->getRequest()->get('from')
-                )->toSearchResultData())
-            : $this->forward('OroSearchBundle:Search:searchResults');
-    }
-
     /**
      * @Route("advanced-search", name="oro_search_advanced")
      */
@@ -63,22 +47,28 @@ class SearchController extends Controller
         $searchString = $request->get('search');
         $from = $request->get('from');
 
-        return array(
-            'searchResults' => $this->get('knp_paginator')->paginate(
-                $searchManager->simpleSearch(
-                    $searchString,
-                    null,
-                    (int) $request->get('limit'),
-                    $from,
-                    (int) $request->get('page')
-                ),
-                $this->get('request')->query->get('page', 1),
-                $request->get('limit')
-            ),
-            'searchString' => $request->get('search'),
-            'entities' => $searchManager->getEntitiesLabels(),
-            'search' => $searchString,
-            'from' => $from
+        $data = $searchManager->simpleSearch(
+            $searchString,
+            null,
+            (int) $this->getRequest()->get('limit'),
+            $from,
+            (int) $request->get('page')
         );
+
+        if ($this->getRequest()->isXmlHttpRequest()) {
+            return new JsonResponse($data->toSearchResultData());
+        } else {
+            return array(
+                'searchResults' => $this->get('knp_paginator')->paginate(
+                    $data,
+                    $this->get('request')->query->get('page', 1),
+                    $request->get('limit')
+                ),
+                'searchString' => $request->get('search'),
+                'entities' => $searchManager->getEntitiesLabels(),
+                'search' => $searchString,
+                'from' => $from
+            );
+        }
     }
 }

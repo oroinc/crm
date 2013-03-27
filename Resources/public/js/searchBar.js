@@ -15,12 +15,12 @@ $(document).ready(function () {
             $('.custom-dropdown ul li').remove();
         } else {
             $.ajax({
-                url: $('#top-search-form').attr('data-ajax-search'),
+                url: $('#top-search-form').attr('action'),
                 dataType: "json",
                 data: {
                     search: queryString,
                     from: $("#search-bar-from").val(),
-                    max_results: 5
+                    limit: 5
                 },
                 success: function (data) {
                     $("#search-div").removeClass('header-search-focused');
