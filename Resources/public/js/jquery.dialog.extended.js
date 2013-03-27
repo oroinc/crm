@@ -63,6 +63,8 @@ $.widget( "ui.dialog", $.ui.dialog, {
 
     close: function() {
         $(window).unbind('.dialog');
+        this._removeMinimizedEl();
+
         this._super();
     },
 
@@ -430,7 +432,7 @@ $.widget( "ui.dialog", $.ui.dialog, {
     },
 
     _restoreFromMinimized: function () {
-        this.minimizedEl.remove();
+        this._removeMinimizedEl();
         this.widget().show();
 
         var original = this._loadSnapshot();
@@ -443,6 +445,12 @@ $.widget( "ui.dialog", $.ui.dialog, {
         });
 
         return this;
+    },
+
+    _removeMinimizedEl: function() {
+        if (this.minimizedEl) {
+            this.minimizedEl.remove();
+        }
     },
 
     _getVisibleLeft: function(left, width) {
