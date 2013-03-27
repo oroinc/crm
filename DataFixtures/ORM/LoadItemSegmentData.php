@@ -90,9 +90,9 @@ class LoadItemSegmentData extends AbstractFixture implements OrderedFixtureInter
 
     /**
      * Translate a segment
-     * @param AbstractSegment $segment
-     * @param string $locale
-     * @param string $title
+     * @param AbstractSegment $segment Segment
+     * @param string          $locale  Locale used
+     * @param string          $title   Title translated in locale value linked
      */
     protected function translate(AbstractSegment $segment, $locale, $title)
     {
