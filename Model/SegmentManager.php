@@ -24,17 +24,17 @@ class SegmentManager
     protected $storageManager;
 
     /**
-     * Class name for managed segment 
-     * 
+     * Class name for managed segment
+     *
      * @var string
      */
     protected $segmentName;
 
     /**
      * Constructor
-     * 
-     * @param ObjectManager $storageManager   Storage manager
-     * @param String        $segmentName      Segment class name
+     *
+     * @param ObjectManager $storageManager Storage manager
+     * @param String        $segmentName    Segment class name
      */
     public function __construct($storageManager, $segmentName)
     {
@@ -67,7 +67,7 @@ class SegmentManager
 
     /**
      * Return segment class name (mainly used in Doctrine context)
-     * 
+     *
      * @return String segment class name
      */
     public function getSegmentName()
@@ -88,6 +88,7 @@ class SegmentManager
 
     /**
      * Get all children for a parent segment id
+     *
      * @param integer $parentId
      *
      * @return ArrayCollection
@@ -101,8 +102,8 @@ class SegmentManager
 
     /**
      * Search segments by criterias
-     *
-     * @param array $criterias
+     * @param integer $treeRootId Tree root id
+     * @param array   $criterias  criterias for search query
      *
      * @return ArrayCollection
      */
@@ -203,10 +204,10 @@ class SegmentManager
         $entityRepository = $this->getEntityRepository();
 
         return $entityRepository->getChildrenByParentId(null);
-        
+
     }
 
-    /*
+    /**
      * Get all segments of a tree by its root
      *
      * @param AbstractSegment $treeRoot Tree root node
@@ -221,10 +222,10 @@ class SegmentManager
         return $repo->findBy(array('root' => $treeRootId));
     }
 
-    /*
+    /**
      * Create a new tree by creating a its root node
      *
-     * @param String 
+     * @param string $title
      *
      * @return AbsractSegment
      */
@@ -238,10 +239,10 @@ class SegmentManager
         return $rootSegment;
     }
 
-    /*
+    /**
      * Remove a new tree by its root segment
      *
-     * @param AbstractSegment $rootNode
+     * @param AbstractSegment $rootSegment
      */
     public function removeTree(AbstractSegment $rootSegment)
     {
@@ -250,7 +251,7 @@ class SegmentManager
         $this->getStorageManager()->remove($rootSegment);
     }
 
-    /*
+    /**
      * Remove a new tree by its root node id
      *
      * @param int $rootSegmentId
