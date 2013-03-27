@@ -2,8 +2,8 @@
 {% block head %}
     <title>Sandbox - jQuery DialogExtend</title>
     <meta charset=utf-8 />
-    <link class="jsbin" href="http://code.jquery.com/ui/1.8.22/themes/base/jquery-ui.css" rel="stylesheet" type="text/css" />
-    <script class="jsbin" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    {{ parent() }}
+
     <script class="jsbin" src="http://code.jquery.com/ui/1.10.2/jquery-ui.min.js"></script>
     <script type="text/javascript" src="{{ asset('bundles/orowindows/js/jquery.dialog.extended.js') }}"></script>
     <link rel="stylesheet" href="{{ asset('bundles/orowindows/css/jquery.dialog.extended.css') }}" media="all" />
@@ -32,6 +32,7 @@
 {% block header %}
 {% endblock %}
 {% block content %}
+    <div id="main-content">
     <section>
         <form id="my-form">
             <h2>Configuration</h2>
@@ -122,10 +123,6 @@
                         <label for="titlebar-default">(default)</label>
                     </div>
                     <div>
-                        <input type="radio" name="titlebar" id="titlebar-none" value="none" />
-                        <label for="titlebar-none">none</label>
-                    </div>
-                    <div>
                         <input type="radio" name="titlebar" id="titlebar-transparent" value="transparent" />
                         <label for="titlebar-transparent">transparent</label>
                     </div>
@@ -134,10 +131,6 @@
             <div style="float: left;">
                 <fieldset id="config-event">
                     <legend>Events</legend>
-                    <div>
-                        <input type="checkbox" name="event" id="event-load" rel="load" checked="checked" />
-                        <label for="event-load">load</label>
-                    </div>
                     <div>
                         <input type="checkbox" name="event" id="event-b4collapse" rel="beforeCollapse" checked="checked" />
                         <label for="event-b4collapse">beforeCollapse</label>
@@ -200,6 +193,7 @@
             </div>
         </form>
     </section>
+    </div>
     <br clear="both" />
     <footer>
         <button type="button" id="my-button">Click Me</button>
@@ -207,7 +201,7 @@
     </footer>
     <script>
         $(function(){
-
+            var dialogWidget;
             // preview icon
             $("#config-icon select")
                     .change(function(){
@@ -221,6 +215,7 @@
             $("#my-button").click(function(){
                 //dialog options
                 var dialogOptions = {
+                    appendTo: $('#main-content'),
                     "title" : "dialog@" + new Date().getTime(),
                     "width" : 400,
                     "height" : 300,
@@ -233,9 +228,9 @@
                 }
                 // dialog-extend options
                 var dialogExtendOptions = {
-                    "close" : $("#button-close").is(":checked"),
-                    "maximize" : $("#button-maximize").is(":checked"),
-                    "minimize" : $("#button-minimize").is(":checked"),
+                    "allowClose" : $("#button-close").is(":checked"),
+                    "allowMaximize" : $("#button-maximize").is(":checked"),
+                    "allowMinimize" : $("#button-minimize").is(":checked"),
                     "dblclick" : $("#my-form [name=dblclick]:checked").val() || false,
                     "titlebar" : $("#my-form [name=titlebar]:checked").val() || false
                 };
@@ -254,19 +249,20 @@
                     }
                 });
                 // open dialog
-                $("<div />").dialog(dialogOptions).dialogExtend(dialogExtendOptions);
+                dialogWidget = $("<div>Dialog content</div>").dialog($.extend(dialogOptions, dialogExtendOptions));
             });
 
-
             // click to invoke method
-            $("#config-method button").click(function(){
+            $("#config-method button").click(function() {
                 var command = $(this).text();
-                var dialog = $(".ui-dialog:last").find(".ui-dialog-content");
-                if ( $(dialog).length ) {
+                if (!dialogWidget) {
+                    $("#my-button").click();
+                }
+                if ( dialogWidget.length ) {
                     if ( command == 'state' ) {
-                        alert( $(dialog).dialogExtend(command) );
+                        alert( dialogWidget.dialog(command) );
                     } else {
-                        $(dialog).dialogExtend(command);
+                        dialogWidget.dialog(command);
                     }
                 }
             });

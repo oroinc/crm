@@ -12,6 +12,11 @@
     <script type="text/javascript" src="{{ asset('bundles/orowindows/js/models/state.js') }}"></script>
     <script type="text/javascript" src="{{ asset('bundles/orowindows/js/collections/state.js') }}"></script>
     <script type="text/javascript" src="{{ asset('bundles/orowindows/js/views/dialog.js') }}"></script>
+
+    <script type="text/javascript">
+        Oro.widget.StateModel.prototype.urlRoot = {{ path('oro_api_get_windows')|json_encode|raw }};
+        Oro.widget.StateCollection.prototype.url = {{ path('oro_api_get_windows')|json_encode|raw }};
+    </script>
 {% endblock head %}
 {% block header %}
 {% endblock %}
