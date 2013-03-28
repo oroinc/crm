@@ -47,6 +47,7 @@ class ItemSegment extends AbstractSegment
      *      )
      **/
     protected $items;
+
     /**
      * Constructor
      */
