@@ -58,37 +58,20 @@ class AbstractActionTest extends AbstractActionTestCase
         $this->assertEquals(self::TEST_ACL_RESOURCE, $this->model->getAclResource());
     }
 
+    public function testGetOptions()
+    {
+        $this->initializeAbstractActionMock();
+
+        $this->model->setOptions($this->testOptions);
+        $this->assertEquals($this->testOptions, $this->model->getOptions());
+    }
+
     public function testSetOptions()
     {
         $this->initializeAbstractActionMock();
 
         $this->model->setOptions($this->testOptions);
         $this->assertAttributeEquals($this->testOptions, 'options', $this->model);
-    }
-
-    /**
-     * @param string $routeName
-     * @param array $parameters
-     * @param array $placeholders
-     * @return string
-     */
-    public function generateUrl($routeName, array $parameters = array(), array $placeholders = array())
-    {
-        $this->assertEquals(self::TEST_ROUTE_NAME, $routeName);
-        return str_replace(array_keys($parameters), array_values($parameters), self::TEST_ROUTE_PATTERN);
-    }
-
-    /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage There is no option "link" for action "test_name".
-     */
-    public function testGetOptionsNoLinkOption()
-    {
-        $this->initializeAbstractActionMock();
-
-        $this->model->setName(self::TEST_NAME);
-        $this->model->setOptions(array());
-        $this->model->getOptions();
     }
 
     /**

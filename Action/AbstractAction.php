@@ -37,6 +37,11 @@ abstract class AbstractAction implements ActionInterface
     protected $isProcessed = false;
 
     /**
+     * @var array
+     */
+    protected $requiredOptions = array();
+
+    /**
      * @param ManagerInterface $aclManager
      */
     public function __construct(ManagerInterface $aclManager)
@@ -75,16 +80,12 @@ abstract class AbstractAction implements ActionInterface
     }
 
     /**
-     * Action options (route, ACL resource etc.)
+     * Action options
      *
      * @return array
      */
     public function getOptions()
     {
-        if (!$this->isProcessed) {
-            $this->processRouteOptions();
-        }
-
         return $this->options;
     }
 
@@ -110,29 +111,27 @@ abstract class AbstractAction implements ActionInterface
     public function setOptions(array $options)
     {
         $this->options = $options;
+        $this->assertHasRequiredOptions();
+    }
+
+    protected function assertHasRequiredOptions()
+    {
+        foreach ($this->requiredOptions as $optionName) {
+            $this->assertHasRequiredOption($optionName);
+        }
     }
 
     /**
      * @param string $optionName
      * @throws \LogicException
      */
-    protected function assertOption($optionName)
+    protected function assertHasRequiredOption($optionName)
     {
         if (!isset($this->options[$optionName])) {
             throw new \LogicException(
                 'There is no option "' . $optionName . '" for action "' . $this->name . '".'
             );
         }
-    }
-
-    /**
-     * Process route options ("route", "parameters", "placeholders")
-     *
-     * @throws \LogicException
-     */
-    protected function processRouteOptions()
-    {
-        $this->assertOption('link');
     }
 
     /**

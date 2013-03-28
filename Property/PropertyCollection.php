@@ -15,7 +15,7 @@ class PropertyCollection extends Collection
     {
         if (!$property instanceof PropertyInterface) {
             throw new \InvalidArgumentException(
-                '$property should be instance of use Oro\Bundle\GridBundle\Property\PropertyInterface'
+                'Element must be an instance of Oro\\Bundle\\GridBundle\\Property\\PropertyInterface'
             );
         }
         parent::add($property);

@@ -152,7 +152,7 @@ class Datagrid implements DatagridInterface
      */
     public function getProperties()
     {
-        return $this->properties;
+        return $this->properties->getElements();
     }
 
     /**

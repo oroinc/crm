@@ -270,6 +270,26 @@ class DatagridBuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertAttributeContains(self::TEST_COMPLEX_FIELD, 'complexFields', $this->model);
     }
 
+
+    public function testAddProperty()
+    {
+        $this->initializeDatagridBuilder();
+
+        // property
+        $propertyMock = $this->getMockForAbstractClass('Oro\Bundle\GridBundle\Property\PropertyInterface');
+
+        // datagrid
+        $datagridMock = $this->getMockBuilder('Oro\Bundle\GridBundle\Datagrid\DatagridInterface')
+            ->setMethods(array('addProperty'))
+            ->getMockForAbstractClass();
+
+        $datagridMock->expects($this->once())
+            ->method('addProperty')
+            ->with($propertyMock);
+
+        $this->model->addProperty($datagridMock, $propertyMock);
+    }
+
     public function testGetBaseDatagrid()
     {
         // form builder

@@ -15,7 +15,7 @@ class FieldDescriptionCollection extends Collection
     {
         if (!$fieldDescription instanceof FieldDescriptionInterface) {
             throw new \InvalidArgumentException(
-                '$fieldDescription should be instance of use Oro\Bundle\GridBundle\Field\FieldDescriptionInterface'
+                'Element must be an instance of Oro\\Bundle\\GridBundle\\Field\\FieldDescriptionInterface'
             );
         }
         parent::add($fieldDescription);
