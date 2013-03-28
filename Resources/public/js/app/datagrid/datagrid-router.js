@@ -40,7 +40,7 @@ OroApp.DatagridRouter = OroApp.Router.extend({
         this.collection = options.collection;
         this._initState = _.clone(this.collection.state);
 
-        this.collection.on('reset', this._handleStateChange, this);
+        this.collection.on('beforeReset', this._handleStateChange, this);
 
         OroApp.Router.prototype.initialize.apply(this, arguments);
     },

@@ -259,11 +259,11 @@ OroApp.DatagridFilterList = Backbone.View.extend({
                         '[value]': filterState
                     }
                 }
-                filter.enable().setParameters(filterState);
+                this.enableFilter(filter.setParameters(filterState));
             } else if ('__' + filterName in state) {
-                filter.reset().enable();
+                this.enableFilter(filter.reset());
             } else {
-                filter.reset().disable();
+                this.disableFilter(filter.reset());
             }
         }
         return this;

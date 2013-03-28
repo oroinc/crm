@@ -5,7 +5,11 @@
  * @extends OroApp.DatagridFilter
  */
 OroApp.DatagridFilterSelect = OroApp.DatagridFilter.extend({
-    /** @property */
+    /**
+     * Filter template
+     *
+     * @property
+     */
     template: _.template(
         '<div class="btn filter-select">' +
             '<%= label %>: ' +
@@ -17,7 +21,11 @@ OroApp.DatagridFilterSelect = OroApp.DatagridFilter.extend({
         '<a href="#" class="disable-filter"><i class="icon-remove hide-text">Close</i></a>'
     ),
 
-    /** @property */
+    /**
+     * Filter content options
+     *
+     * @property
+     */
     options: {},
 
     /**
@@ -27,27 +35,69 @@ OroApp.DatagridFilterSelect = OroApp.DatagridFilter.extend({
      */
     confirmedValue: {},
 
-    /** @property */
+    /**
+     * Placeholder for default value
+     *
+     * @property
+     */
     placeholder: 'All',
 
-    /** @property */
-    select2Element: 'select',
+    /**
+     * Selector for filter area
+     *
+     * @property
+     */
+    containerSelector: '.filter-select',
 
-    /** @property */
-    select2Config: {
-        width: 'off',
-        dropdownCssClass: 'select-filter-dropdown'
+    /**
+     * Selector for close button
+     *
+     * @property
+     */
+    disableSelector: '.disable-filter',
+
+    /**
+     * Selector for select input element
+     *
+     * @property
+     */
+    inputSelector: 'select',
+
+    /**
+     * Select widget object
+     *
+     * @property
+     */
+    selectWidget: null,
+
+    /**
+     * Minimum widget menu width, calculated depends on filter options
+     *
+     * @property
+     */
+    minimumWidth: null,
+
+    /**
+     * Select widget options
+     *
+     * @property
+     */
+    widgetOptions: {
+        multiple: false,
+        height: 'auto',
+        selectedList: 1
     },
 
-    /** @property */
+    /**
+     * Filter events
+     *
+     * @property
+     */
     events: {
-        'click .filter-select': '_onClickFilterSelect',
+        'click .filter-select': '_onClickFilterArea',
         'click .disable-filter': '_onClickDisableFilter',
         'change select': '_onSelectChange'
     },
-
-    /** @property */
-    needOpenDropdown: true,
 
     /**
      * Render filter template
@@ -64,23 +114,105 @@ OroApp.DatagridFilterSelect = OroApp.DatagridFilter.extend({
             })
         );
 
-        this._initSelect2();
+        this._initializeSelectWidget();
 
         return this;
     },
 
     /**
-     * Create Select2 instance
+     * Initialize multiselect widget
+     *
+     * @protected
      */
-    _initSelect2: function() {
-        // create select2 instance
-        var select2Object = this.$(this.select2Element).select2(this.select2Config);
+    _initializeSelectWidget: function() {
+        this.selectWidget = this.$(this.inputSelector);
 
-        var data = {
-            filterElement: this.$el,
-            select2Config: this.select2Config
-        };
-        select2Object.on('open', data, this._onOpenDropdown);
+        this.selectWidget.multiselect(_.extend({
+            classes: 'select-filter-widget',
+            position: {
+                my: 'left top+2',
+                at: 'left bottom',
+                of: this.$(this.containerSelector)
+            },
+            open: $.proxy(function() {
+                this._setDropdownDesign();
+                var widget = this.selectWidget.multiselect('widget');
+                widget.find('input[type="search"]').focus();
+                $('body').trigger('click');
+            }, this)
+        }, this.widgetOptions));
+
+        this.selectWidget.multiselectfilter({
+            label: '',
+            placeholder: '',
+            autoReset: true
+        });
+
+        // fix CSS classes
+        this.$('.select-filter-widget').removeClass('ui-widget').removeClass('ui-state-default');
+        this.$('.select-filter-widget').find('span.ui-icon').remove();
+        this.$('.select-filter-widget.ui-multiselect').append('<span class="caret"></span>');
+    },
+
+    /**
+     * Get element width
+     *
+     * @param {Object} element
+     * @return {Integer}
+     * @protected
+     */
+    _getTextWidth: function(element) {
+        var html_org = element.html();
+        var html_calc = '<span>' + html_org + '</span>';
+        element.html(html_calc);
+        var width = element.find('span:first').width();
+        element.html(html_org);
+        return width;
+    },
+
+    /**
+     * Set design for select dropdown
+     *
+     * @protected
+     */
+    _setDropdownDesign: function() {
+        var widget = this.selectWidget.multiselect('widget');
+
+        // calculate minimum width
+        if (!this.minimumWidth) {
+            var elements = widget.find('.ui-multiselect-checkboxes li');
+            _.each(elements, function(element, index, list) {
+                var width = this._getTextWidth($(element).find('label'));
+                if (width > this.minimumWidth) {
+                    this.minimumWidth = width;
+                }
+            }, this);
+
+            this.minimumWidth += 16;
+        }
+
+        // set elements width
+        var filterWidth = this.$(this.containerSelector).width();
+        var requiredWidth = Math.max(filterWidth + 8, this.minimumWidth);
+        widget.width(requiredWidth);
+        widget.find('input[type="search"]').width(requiredWidth - 22);
+
+        // fix CSS classes
+        widget.addClass('dropdown-menu');
+        widget.removeClass('ui-widget-content');
+        widget.removeClass('ui-widget');
+        widget.find('.ui-widget-header').removeClass('ui-widget-header');
+        widget.find('.ui-multiselect-filter').removeClass('ui-multiselect-filter');
+        widget.find('ul li label').removeClass('ui-corner-all');
+    },
+
+    /**
+     * Open select dropdown
+     *
+     * @protected
+     */
+    _onClickFilterArea: function() {
+        this.selectWidget.multiselect('open');
     },
 
     /**
@@ -91,51 +223,6 @@ OroApp.DatagridFilterSelect = OroApp.DatagridFilter.extend({
     _onSelectChange: function() {
         var value = this.getValue();
         this._confirmValue(value);
-
-        this.needOpenDropdown = false;
-    },
-
-    /**
-     * Open option dropdown in case of click on non-select area
-     *
-     * @protected
-     */
-    _onClickFilterSelect: function() {
-        if (this.needOpenDropdown) {
-            this.$(this.select2Element).select2('open');
-        }
-        this.needOpenDropdown = true;
-    },
-
-    /**
-     * Recalculate position of the select filter drop down relative to filter container,
-     * trigger click on body to process filters hiding
-     *
-     * @param event
-     */
-    _onOpenDropdown: function(event) {
-        var filterElement = event.data.filterElement,
-            dropdown = $('.' + event.data.select2Config.dropdownCssClass),
-            body = filterElement.closest('body'),
-            offset = filterElement.offset(),
-            dropLeft = offset.left,
-            dropWidth = dropdown.outerWidth(false),
-            viewPortRight = $(window).scrollLeft() + $(window).width(),
-            enoughRoomOnRight = dropLeft + dropWidth <= viewPortRight;
-
-
-        if (body.css('position') !== 'static') {
-            var bodyOffset = body.offset();
-            dropLeft -= bodyOffset.left;
-        }
-
-        if (!enoughRoomOnRight) {
-            dropLeft = offset.left + width - dropWidth;
-        }
-
-        dropdown.css('left', dropLeft);
-
-        $('body').trigger('click');
     },
 
     /**
@@ -166,7 +253,7 @@ OroApp.DatagridFilterSelect = OroApp.DatagridFilter.extend({
      */
     getValue: function() {
         return {
-            value: this.$(this.select2Element).select2('val')
+            value: this.$(this.inputSelector).val()
         };
     },
 
@@ -206,7 +293,8 @@ OroApp.DatagridFilterSelect = OroApp.DatagridFilter.extend({
     _confirmValue: function(value) {
         if (this.confirmedValue.value != value.value) {
             this.confirmedValue = _.clone(value);
-            this.$(this.select2Element).select2('val', this.confirmedValue.value);
+            this.$(this.inputSelector).val(this.confirmedValue.value);
+            this.selectWidget.multiselect('refresh');
             this.trigger('update');
         }
     },

@@ -1,11 +1,13 @@
 {% javascripts
     '@OroUIBundle/Resources/public/lib/backbone.bootstrap-modal.js'
 
-    '@OroGridBundle/Resources/public/lib/select2/select2.js'
     '@OroGridBundle/Resources/public/lib/backbone-pageable.js'
     '@OroGridBundle/Resources/public/lib/backgrid/backgrid.js'
     '@OroGridBundle/Resources/public/lib/moment/moment.js'
     '@OroGridBundle/Resources/public/lib/backgrid/extensions/moment-cell/backgrid-moment-cell.js'
+
+    '@OroGridBundle/Resources/public/lib/multiselect/jquery.multiselect.js'
+    '@OroGridBundle/Resources/public/lib/multiselect/jquery.multiselect.filter.js'
 
     '@OroGridBundle/Resources/public/js/app/datagrid/action/datagrid-action-launcher.js'
     '@OroGridBundle/Resources/public/js/app/datagrid/action/datagrid-action.js'
@@ -41,9 +43,9 @@
 
     '@OroGridBundle/Resources/public/js/app/pageablecollection.js'
 
-    output='js/acme.grid.js'
+    output='js/oroapp.grid.js'
 %}
-<script type="text/javascript" src="{{ asset_url }}"></script>
+    <script type="text/javascript" src="{{ asset_url }}"></script>
 {% endjavascripts %}
 
 <script type="text/javascript">
@@ -196,12 +198,6 @@
                 datagridOptions.collection
             );
 
-            // Register router and start history
-            var router = new OroApp.DatagridRouter({
-                collection: datagridCollection
-            });
-            Backbone.history.start();
-
             // Basic grid layout
             var template = _.template($(datagridTemplateSelector).html());
             $(containerSelector).append(template);
@@ -237,6 +233,11 @@
             );
             var filtersList = new OroApp.DatagridFilterList(filterListParameters);
             $(datagridFiltersSelector).html(filtersList.render().$el);
+
+            // Register router and start history
+            var router = new OroApp.DatagridRouter({
+                collection: datagridCollection
+            });
         };
 
         initDatagrid(
@@ -246,6 +247,8 @@
             datagridFiltersSelector,
             datagridBodySelector
         );
+
+        Backbone.history.start();
     });
 </script>
 

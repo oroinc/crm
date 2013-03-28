@@ -120,6 +120,11 @@ OroApp.PageableCollection = Backbone.PageableCollection.extend({
         return resp.data;
     },
 
+    reset: function(models, options) {
+        this.trigger('beforeReset', this, options);
+        OroApp.Collection.prototype.reset.apply(this, arguments);
+    },
+
     /**
      * Extends and checks state
      *
