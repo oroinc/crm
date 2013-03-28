@@ -4,10 +4,14 @@
     {% block head %}
         <title>{% block title %}Dashboard{% endblock %}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet/less" href="{{ asset('bundles/oroui/css/less/main.less') }}" media="all" />
+
+        <script type="text/javascript">localStorage.clear();</script>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js"></script>
+        <link href="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/themes/smoothness/jquery-ui.min.css" rel="stylesheet" media="all" />
 
         {% block head_style %}
-            <link rel="stylesheet/less" href="{{ asset('bundles/oroui/css/less/main.less') }}" media="all" />
-
             {# CSS assetics #}
             {% stylesheets
                 'bundles/oroui/css/all.css'
@@ -19,10 +23,6 @@
         {% endblock %}
 
         {% block head_script %}
-            <script type="text/javascript"> localStorage.clear();</script>
-            <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-            <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js"></script>
-
             {# JS assetics #}
             {% javascripts
                 '@OroUIBundle/Resources/public/lib/less-1.3.1.min.js'
