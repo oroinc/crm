@@ -1,6 +1,4 @@
 $(document).ready(function () {
-    /* create overlay for popups */
-    $('<div id="bar-drop-overlay"></div>').appendTo('body');
     /* dinamic height for central column */
     function changeHeight() {
         var _chWindowHeight = $(window).height();
