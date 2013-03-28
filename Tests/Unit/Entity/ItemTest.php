@@ -68,13 +68,6 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('test entity', $this->item->getEntity());
     }
 
-    public function testUrl()
-    {
-        $this->assertNull($this->item->getUrl());
-        $this->item->setUrl('http://example.com');
-        $this->assertEquals('http://example.com', $this->item->getUrl());
-    }
-
     public function testTitle()
     {
         $this->assertNull($this->item->getTitle());

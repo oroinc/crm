@@ -51,12 +51,6 @@ class Item
     protected $recordId;
 
     /**
-     * @var string $url
-     * @ORM\Column(name="url", type="string", length=255)
-     */
-    protected $url;
-
-    /**
      * @var string $title
      * @ORM\Column(name="title", type="string", length=255)
      */
@@ -443,29 +437,6 @@ class Item
     public function getAlias()
     {
         return $this->alias;
-    }
-
-    /**
-     * Set url
-     *
-     * @param  string $url
-     * @return Item
-     */
-    public function setUrl($url)
-    {
-        $this->url = $url;
-
-        return $this;
-    }
-
-    /**
-     * Get url
-     *
-     * @return string
-     */
-    public function getUrl()
-    {
-        return $this->url;
     }
 
     /**

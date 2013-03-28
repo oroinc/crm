@@ -153,7 +153,6 @@ class Orm extends AbstractEngine
 
             if ($realtime) {
                 $item->setTitle($this->getEntityTitle($entity))
-                    ->setUrl($this->getEntityUrl($entity))
                     ->saveItemData($data);
             } else {
                 $this->reindexJob();
@@ -249,7 +248,9 @@ class Orm extends AbstractEngine
                     $item->getEntity(),
                     $item->getRecordId(),
                     $item->getTitle(),
-                    $item->getUrl(),
+                    $this->getEntityUrl(
+                        $this->em->getRepository($item->getEntity())->find($item->getRecordId())
+                    ),
                     $item->getRecordText(),
                     $this->mappingConfig[$item->getEntity()]
                 );
