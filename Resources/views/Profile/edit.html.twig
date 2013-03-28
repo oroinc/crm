@@ -107,7 +107,7 @@
                 </div>
                 <div class="span9 ">
                    <div class="customer-info well-small">
-                       <div class="visual"><img src="{{ asset('bundles/oroui/img/info-usser.png') }}" alt="usser avatar"/></div>
+                       <div class="visual"><img src="{{ form.vars.value.imagePath ? form.vars.value.imagePath | imagine_filter('avatar_med') : asset('bundles/oroui/img/info-usser.png') }}" alt="{{ form.vars.value.firstname ~ ' ' ~ form.vars.value.lastname}}"/></div>
                        <div class="customer-content">
                            <div class="sub-title">Customers</div>
                            <h1 class="usser-name">Anna Griffin</h1>
@@ -126,10 +126,7 @@
                 <div class="navbar-inner">
                     <div class="container-fluid" style="width: auto;">
                         <ul class="nav">
-                            <li class="active"><a href="#scroll-a1">Overview</a></li>
-                            <li><a href="#scroll-a2">Cases</a></li>
-                            <li><a href="#scroll-a3">Sales History</a></li>
-                            <li><a href="#scroll-a4">Activity History</a></li>
+                            <li class="active"><a href="#scroll-main">Overview</a></li>
                             <li><a href="#scroll-attributes">Additional data</a></li>
                             <li><a href="#scroll-api">API</a></li>
 
@@ -159,68 +156,16 @@
                         {% endif %}
                     </div>
                     <div data-spy="scroll" data-target="#navbarExample" data-offset="50" class="scrollspy container-fluid">
-                        <h4 id="scroll-a1" class="scrollspy-title">Overview</h4>
+                        <h4 id="scroll-main" class="scrollspy-title">Overview</h4>
                         <div class="row-fluid">
                             <fieldset class="form-horizontal span6">
                                 {{ form_row(form.username) }}
                                 {{ form_row(form.firstname) }}
                                 {{ form_row(form.lastname) }}
-                                {{ form_row(form.middlename) }}
                                 {{ form_row(form.birthday) }}
                                 {{ form_row(form.imageFile) }}
                             </fieldset>
                             <fieldset class="form-horizontal span6">
-                                <div class="control-group">
-                                    <label for="selectAccountName" class="control-label">Phone:</label>
-                                    <div class="controls">
-                                        <div class="row-oro">
-                                            <input type="text" class="input-xlarge" />
-                                            <div class="btn-group">
-                                                <button class="btn dropdown-toggle" data-toggle="dropdown">Work <span class="caret"></span></button>
-                                                <ul class="dropdown-menu">
-                                                    <li><a href="#">Action</a></li>
-                                                    <li><a href="#">Another action</a></li>
-                                                    <li><a href="#">Something else here</a></li>
-                                                    <li class="divider"></li>
-                                                    <li><a href="#">Separated link</a></li>
-                                                </ul>
-                                            </div>
-                                            <button type="button" class="btn btn-action btn-link">+</button>
-                                            <button type="button" class="btn btn-action btn-link">&times;</button>
-                                        </div>
-                                        <div class="row-oro">
-                                            <input type="text" class="input-xlarge" />
-                                            <div class="btn-group">
-                                                <button class="btn dropdown-toggle" data-toggle="dropdown">Home <span class="caret"></span></button>
-                                                <ul class="dropdown-menu">
-                                                    <li><a href="#">Action</a></li>
-                                                    <li><a href="#">Another action</a></li>
-                                                    <li><a href="#">Something else here</a></li>
-                                                    <li class="divider"></li>
-                                                    <li><a href="#">Separated link</a></li>
-                                                </ul>
-                                            </div>
-                                            <button type="button" class="btn btn-action btn-link">+</button>
-                                            <button type="button" class="btn btn-action btn-link">&times;</button>
-                                        </div>
-                                        <div class="row-oro">
-                                            <input type="text" class="input-xlarge" />
-                                            <div class="btn-group">
-                                                <button class="btn dropdown-toggle" data-toggle="dropdown">Call <span class="caret"></span></button>
-                                                <ul class="dropdown-menu">
-                                                    <li><a href="#">Action</a></li>
-                                                    <li><a href="#">Another action</a></li>
-                                                    <li><a href="#">Something else here</a></li>
-                                                    <li class="divider"></li>
-                                                    <li><a href="#">Separated link</a></li>
-                                                </ul>
-                                            </div>
-                                            <button type="button" class="btn btn-action btn-link">+</button>
-                                            <button type="button" class="btn btn-action btn-link">&times;</button>
-                                        </div>
-                                    </div>
-                                </div>
-
                                 {{ form_row(form.email) }}
 
                                 <div class="control-group">
@@ -239,39 +184,8 @@
                                         </div>
                                     </div>
                                 </div>
-
-                                <div class="control-group">
-                                    <label for="selectAccountName" class="control-label">Address:</label>
-                                    <div class="controls">
-                                        <div class="row-oro">
-                                            <textarea class="input-xlarge">1234 Dream Lane
-                                                Portland, OR 97236
-                                                United States</textarea>
-                                        </div>
-                                        <div class="row-oro">
-                                            <textarea class="input-xlarge">1234 Dream Lane
-                                                Portland, OR 97236
-                                                United States</textarea>
-                                        </div>
-                                    </div>
-                                </div>
                             </fieldset>
                         </div>
-                        <h4 id="scroll-a2" class="scrollspy-title ">Cases</h4>
-                        <p>JavaScript is a cross-platform, object-oriented scripting language developed by Netscape. JavaScript was created by Netscape programmer Brendan Eich. It was first released under the name of LiveScript as part of Netscape Navigator 2.0 in September 1995. It was renamed JavaScript on December 4, 1995. As JavaScript works on the client side, It is mostly used for client-side web development.</p>
-                        <p>JavaScript is a cross-platform, object-oriented scripting language developed by Netscape. JavaScript was created by Netscape programmer Brendan Eich. It was first released under the name of LiveScript as part of Netscape Navigator 2.0 in September 1995. It was renamed JavaScript on December 4, 1995. As JavaScript works on the client side, It is mostly used for client-side web development.</p>
-                        <p>JavaScript is a cross-platform, object-oriented scripting language developed by Netscape. JavaScript was created by Netscape programmer Brendan Eich. It was first released under the name of LiveScript as part of Netscape Navigator 2.0 in September 1995. It was renamed JavaScript on December 4, 1995. As JavaScript works on the client side, It is mostly used for client-side web development.</p>
-                        <p>JavaScript is a cross-platform, object-oriented scripting language developed by Netscape. JavaScript was created by Netscape programmer Brendan Eich. It was first released under the name of LiveScript as part of Netscape Navigator 2.0 in September 1995. It was renamed JavaScript on December 4, 1995. As JavaScript works on the client side, It is mostly used for client-side web development.</p>
-                        <h4 id="scroll-a3" class="scrollspy-title ">Sales History</h4>
-                        <p>Nulla rhoncus aliquet enim, sed ornare metus vulputate et. Sed egestas mi nec dui convallis euismod. Nulla accumsan, metus vitae pretium scelerisque, quam neque luctus turpis, vel auctor erat dui vitae diam. Vivamus ac nibh enim. Nulla vel magna ac leo scelerisque ultricies in at neque. Curabitur eu metus quis mi scelerisque volutpat. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Maecenas fermentum, ante non malesuada pellentesque, dui urna pellentesque velit, eget dictum lacus purus sit amet mi. Praesent eget aliquet orci. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nulla facilisi. Suspendisse at lorem ac justo sodales bibendum. Proin vel leo sit amet urna fringilla tempus. Sed egestas felis ac sapien sagittis eu lacinia arcu interdum. Phasellus quis mi a ligula aliquam iaculis. Duis fermentum cursus metus vel volutpat. </p>
-                        <p>Nulla rhoncus aliquet enim, sed ornare metus vulputate et. Sed egestas mi nec dui convallis euismod. Nulla accumsan, metus vitae pretium scelerisque, quam neque luctus turpis, vel auctor erat dui vitae diam. Vivamus ac nibh enim. Nulla vel magna ac leo scelerisque ultricies in at neque. Curabitur eu metus quis mi scelerisque volutpat. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Maecenas fermentum, ante non malesuada pellentesque, dui urna pellentesque velit, eget dictum lacus purus sit amet mi. Praesent eget aliquet orci. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nulla facilisi. Suspendisse at lorem ac justo sodales bibendum. Proin vel leo sit amet urna fringilla tempus. Sed egestas felis ac sapien sagittis eu lacinia arcu interdum. Phasellus quis mi a ligula aliquam iaculis. Duis fermentum cursus metus vel volutpat. </p>
-                        <p>Nulla rhoncus aliquet enim, sed ornare metus vulputate et. Sed egestas mi nec dui convallis euismod. Nulla accumsan, metus vitae pretium scelerisque, quam neque luctus turpis, vel auctor erat dui vitae diam. Vivamus ac nibh enim. Nulla vel magna ac leo scelerisque ultricies in at neque. Curabitur eu metus quis mi scelerisque volutpat. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Maecenas fermentum, ante non malesuada pellentesque, dui urna pellentesque velit, eget dictum lacus purus sit amet mi. Praesent eget aliquet orci. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nulla facilisi. Suspendisse at lorem ac justo sodales bibendum. Proin vel leo sit amet urna fringilla tempus. Sed egestas felis ac sapien sagittis eu lacinia arcu interdum. Phasellus quis mi a ligula aliquam iaculis. Duis fermentum cursus metus vel volutpat. </p>
-                        <p>Nulla rhoncus aliquet enim, sed ornare metus vulputate et. Sed egestas mi nec dui convallis euismod. Nulla accumsan, metus vitae pretium scelerisque, quam neque luctus turpis, vel auctor erat dui vitae diam. Vivamus ac nibh enim. Nulla vel magna ac leo scelerisque ultricies in at neque. Curabitur eu metus quis mi scelerisque volutpat. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Maecenas fermentum, ante non malesuada pellentesque, dui urna pellentesque velit, eget dictum lacus purus sit amet mi. Praesent eget aliquet orci. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nulla facilisi. Suspendisse at lorem ac justo sodales bibendum. Proin vel leo sit amet urna fringilla tempus. Sed egestas felis ac sapien sagittis eu lacinia arcu interdum. Phasellus quis mi a ligula aliquam iaculis. Duis fermentum cursus metus vel volutpat. </p>
-                        <p>Nulla rhoncus aliquet enim, sed ornare metus vulputate et. Sed egestas mi nec dui convallis euismod. Nulla accumsan, metus vitae pretium scelerisque, quam neque luctus turpis, vel auctor erat dui vitae diam. Vivamus ac nibh enim. Nulla vel magna ac leo scelerisque ultricies in at neque. Curabitur eu metus quis mi scelerisque volutpat. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Maecenas fermentum, ante non malesuada pellentesque, dui urna pellentesque velit, eget dictum lacus purus sit amet mi. Praesent eget aliquet orci. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nulla facilisi. Suspendisse at lorem ac justo sodales bibendum. Proin vel leo sit amet urna fringilla tempus. Sed egestas felis ac sapien sagittis eu lacinia arcu interdum. Phasellus quis mi a ligula aliquam iaculis. Duis fermentum cursus metus vel volutpat. </p>
-                        <p>In accumsan cursus erat ut tempor. Cras cursus lorem eu neque posuere eget rhoncus elit egestas. Suspendisse dictum augue nec mi malesuada feugiat. Morbi et sapien vitae nunc molestie tempus quis et purus. Vivamus vehicula velit ut nunc posuere suscipit. Etiam elementum volutpat ante, in facilisis velit egestas non. Integer ultricies vestibulum lacus, vitae vehicula urna ultricies et. Aliquam facilisis ipsum id enim rhoncus nec viverra nibh scelerisque. Vivamus auctor varius nisl nec fermentum. Morbi est est, suscipit eget hendrerit et, tincidunt tincidunt nisl. Integer eu nunc velit, euismod dictum tellus. Curabitur pulvinar consectetur feugiat. Aliquam metus mi, pretium a laoreet et, faucibus a purus. </p>
-                        <h4 id="scroll-a4" class="scrollspy-title ">Activity History</h4>
-                        <p>Donec eu metus dolor, et eleifend lacus. Vivamus malesuada sodales purus, at ultrices lectus eleifend ut. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Curabitur sollicitudin ornare ornare. In ac purus eget enim varius feugiat vitae ac nulla. Donec bibendum aliquam auctor. Sed ultrices volutpat felis vel accumsan. Nullam tincidunt nibh tortor. </p>
-                        <p>Nullam bibendum turpis vitae risus tempor tincidunt. Maecenas posuere, erat sed mattis dignissim, massa massa vestibulum dolor, et tristique est dolor sed est. Duis rhoncus augue eget metus auctor a ultricies nisi blandit. Duis sem ipsum, pretium in varius sit amet, dignissim sit amet erat. Sed vulputate risus nec ipsum ultrices a aliquam ligula lobortis. Suspendisse hendrerit sollicitudin tellus, in varius ipsum consequat id. Suspendisse potenti. Integer a enim ac erat volutpat imperdiet eget in ante. Nulla lacus arcu, dignissim in fermentum vel, ultrices vitae urna. Proin sed convallis urna. Nam ornare metus nec ipsum ornare ut dignissim dolor iaculis. Nullam vulputate scelerisque ligula quis blandit. Proin scelerisque, purus nec aliquam ultrices, lorem tortor vulputate ante, at fringilla ligula nisl eu est. Praesent eleifend semper metus, non semper leo scelerisque a. Suspendisse eget odio quis justo iaculis cursus. Donec placerat rutrum arcu non dignissim. </p>
 
                         <h4 id="scroll-attributes" class="scrollspy-title">Additional data</h4>
                         <div class="row-fluid">
