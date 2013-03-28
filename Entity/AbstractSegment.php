@@ -68,6 +68,8 @@ abstract class AbstractSegment implements Translatable
 
     /**
      * @var AbstractSegment $parent Parent segment
+     *
+     * @Gedmo\TreeParent
      */
     protected $parent;
 

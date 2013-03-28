@@ -1,6 +1,8 @@
 <?php
 namespace Oro\Bundle\SegmentationTreeBundle\Model;
 
+use Oro\Bundle\SegmentationTreeBundle\Entity\Repository\SegmentRepository;
+
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Persistence\ObjectManager;
 
@@ -78,7 +80,7 @@ class SegmentManager
     /**
      * Return the entity repository reponsible for the segment
      *
-     * @return EntityRepository
+     * @return SegmentRepository
      */
     public function getEntityRepository()
     {
