@@ -22,6 +22,15 @@ Oro\Bundle\UserBundle\Entity\User:
                 groups:   [Registration]
             - Length:
                 min:      2
+        firstName:
+            - Length:
+                max:      100
+        lastName:
+            - Length:
+                max:      100
+        middleName:
+            - Length:
+                max:      100
 
 Oro\Bundle\UserBundle\Entity\Role:
     constraints:
