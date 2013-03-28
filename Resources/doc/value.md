@@ -63,6 +63,21 @@ Base flexible entity repository is designed to deal with scoped values in querie
 
 Base flexible entity is designed to gets relevant values too, it knows the asked scopable (injected with ScopableListener).
 
+What's the backend type ?
+=========================
+
+To allow to type a value, you can use these doctrine mapped fields to store the data : value_string, value_integer, value_decimal, value_text, etc
+
+The used field is defined by the backendType property of the related attribute.
+
+The precedent do the job for basic data but there is some more complex cases and theirs related backend types :
+- options : used in case of attribute of type simple or multi list
+- media : used to store some metas on media related to this value
+- metric : used to deal with values which have an associate measure unit (cm, km)
+- price : used to deal with values which have an associate currency
+
+You can create your own, basically, by defining the backend type to use in attribute itself and add the relevant property or relation into your value class.
+
 Value and currency
 ==================
 
