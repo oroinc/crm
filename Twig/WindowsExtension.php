@@ -80,59 +80,69 @@ class WindowsExtension extends \Twig_Extension
         $repo = $this->getDoctrine()->getRepository('OroWindowsBundle:WindowsState');
         $windowsList = $repo->getWindowsStates($user->getId());
 
-        /** @var $window \Oro\Bundle\WindowsBundle\Entity\WindowsState */
-        foreach ($windowsList as $window) {
-            if (empty($window['data']) || !($jsonData = json_decode($window['data'], true))) {
-                continue;
+        if (count($windowsList)) {
+            /** @var $window \Oro\Bundle\WindowsBundle\Entity\WindowsState */
+            foreach ($windowsList as $window) {
+                try {
+                    if (empty($window['data']) || !($jsonData = json_decode($window['data'], true))) {
+                        throw new \InvalidArgumentException("Window state data array can't be empty");
+                    }
+
+                    /** @var $parentRequest \Symfony\Component\HttpFoundation\Request */
+                    $parentRequest = $this->container->get('request');
+                    //$request = $parentRequest->duplicate()
+                    $request = \Symfony\Component\HttpFoundation\Request::create($jsonData['url']);
+                    $request->cookies->add($parentRequest->cookies->all());
+
+                    // Fill request object with router info
+                    $responseEvent = new \Symfony\Component\HttpKernel\Event\GetResponseEvent(
+                        $httpKernel,
+                        $request,
+                        HttpKernelInterface::MASTER_REQUEST
+                    );
+                    /** @var $routerListener \Symfony\Component\HttpKernel\EventListener\RouterListener */
+                    $routerListener = $this->container->get('router_listener');
+                    $routerListener->onKernelRequest($responseEvent);
+
+                    // Add custom variables to template
+                    $blockParams = array(
+                        'stateId' => $window['id'],
+                        'includeContainer' => true
+                    );
+                    $style = isset($jsonData['style']) ? $jsonData['style'] : '';
+                    $style .= isset($options['style']) ? $options['style'] : '';
+                    if ($style) {
+                        $blockParams['containerStyle'] = $style;
+                    }
+                    if (isset($jsonData['id'])) {
+                        $blockParams['containerId'] = $jsonData['id'];
+                    }
+                    if (isset($jsonData['title'])) {
+                        $blockParams['containerTitle'] = $jsonData['title'];
+                    }
+
+                    $request->attributes->add(array('_template_rewrited_vars' => $blockParams));
+
+                    // Call controller method
+                    $response = $httpKernel->handle($request);
+                    if ($response->getStatusCode() == 200) {
+                        $outputHtml .= $response->getContent();
+                    }
+                } catch (\Exception $e) {
+                    /** @var $entity \Oro\Bundle\WindowsBundle\Entity\WindowsState */
+                    $entity = $this->getManager()->find('OroWindowsBundle:WindowsState', (int)$window['id']);
+                    if ($entity) {
+                        $em = $this->getManager();
+                        $em->remove($entity);
+                        $em->flush();
+                    }
+                }
             }
 
-            try {
-                /** @var $parentRequest \Symfony\Component\HttpFoundation\Request */
-                $parentRequest = $this->container->get('request');
-                //$request = $parentRequest->duplicate()
-                $request = \Symfony\Component\HttpFoundation\Request::create($jsonData['url']);
-                $request->cookies->add($parentRequest->cookies->all());
-
-                // Fill request object with router info
-                $responseEvent = new \Symfony\Component\HttpKernel\Event\GetResponseEvent(
-                    $httpKernel,
-                    $request,
-                    HttpKernelInterface::MASTER_REQUEST
-                );
-                /** @var $routerListener \Symfony\Component\HttpKernel\EventListener\RouterListener */
-                $routerListener = $this->container->get('router_listener');
-                $routerListener->onKernelRequest($responseEvent);
-
-                // Add custom variables to template
-                $blockParams = array();
-                $style = isset($jsonData['style']) ? $jsonData['style'] : '';
-                $style .= isset($options['style']) ? $options['style'] : '';
-                if ($style) {
-                    $blockParams['containerStyle'] = $style;
-                }
-                if (isset($jsonData['id'])) {
-                    $blockParams['containerId'] = $jsonData['id'];
-                }
-                if (isset($jsonData['title'])) {
-                    $blockParams['containerTitle'] = $jsonData['title'];
-                }
-
-                $request->attributes->add(array('_template_rewrited_vars' => $blockParams));
-
-                // Call controller method
-                $response = $httpKernel->handle($request);
-                if ($response->getStatusCode() == 200) {
-                    $outputHtml .= $response->getContent();
-                }
-            } catch (\Exception $e) {
-                /** @var $entity \Oro\Bundle\WindowsBundle\Entity\WindowsState */
-                $entity = $this->getManager()->find('OroWindowsBundle:WindowsState', (int)$window['id']);
-                if ($entity) {
-                    $em = $this->getManager();
-                    $em->remove($entity);
-                    $em->flush();
-                }
-            }
+            $outputHtml .= $this->environment->render(
+                "OroWindowsBundle::blockInit.html.twig",
+                array("states" => $windowsList)
+            );
         }
 
         return $outputHtml;
