@@ -68,10 +68,6 @@ class ProfileType extends FlexibleType
                 'label'          => 'Last name',
                 'required'       => false,
             ))
-            ->add('middlename', 'text', array(
-                'label'          => 'Middle name',
-                'required'       => false,
-            ))
             ->add('birthday', 'birthday', array(
                 'label'          => 'Date of birth',
                 'required'       => false,
