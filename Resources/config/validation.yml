@@ -28,9 +28,6 @@ Oro\Bundle\UserBundle\Entity\User:
         lastName:
             - Length:
                 max:      100
-        middleName:
-            - Length:
-                max:      100
 
 Oro\Bundle\UserBundle\Entity\Role:
     constraints:
