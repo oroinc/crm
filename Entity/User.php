@@ -78,17 +78,6 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
     protected $lastName;
 
     /**
-     * Middle name
-     *
-     * @var string
-     *
-     * @ORM\Column(name="middlename", type="string", length=100, nullable=true)
-     * @Soap\ComplexType("string", nillable=true)
-     * @Type("string")
-     */
-    protected $middleName;
-
-    /**
      * @var \DateTime
      *
      * @ORM\Column(name="birthday", type="datetime", nullable=true)
@@ -344,16 +333,6 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
     }
 
     /**
-     * Return middle name
-     *
-     * @return string
-     */
-    public function getMiddlename()
-    {
-        return $this->middleName;
-    }
-
-    /**
      * Return birthday
      *
      * @return \DateTime
@@ -513,13 +492,6 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
     public function setLastname($lastName = null)
     {
         $this->lastName = $lastName;
-
-        return $this;
-    }
-
-    public function setMiddlename($middleName = null)
-    {
-        $this->middleName = $middleName;
 
         return $this;
     }
@@ -770,8 +742,8 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
         return null === $this->image
             ? null
             : ($absolute
-                ? $this->getUploadDir() . '/' . $this->image
-                : $this->getUploadRootDir() . '/' . $this->image
+                ? $this->getUploadRootDir() . '/' . $this->image
+                : $this->getUploadDir() . '/' . $this->image
             );
     }
 
