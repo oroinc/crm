@@ -1,9 +1,11 @@
-            <script>
+{% if (states) %}
+            <script type="text/javascript">
                 $(function(){
-{% for state in states %}
+                    {% for state in states %}
                     new Oro.widget.DialogView({
                         model: new Oro.widget.StateModel({{ state|json_encode|raw }})
                     }).render();
-{% endfor %}
+                    {% endfor %}
                 });
             </script>
+{% endif %}

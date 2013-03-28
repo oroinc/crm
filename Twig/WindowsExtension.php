@@ -91,7 +91,11 @@ class WindowsExtension extends \Twig_Extension
                     /** @var $parentRequest \Symfony\Component\HttpFoundation\Request */
                     $parentRequest = $this->container->get('request');
                     //$request = $parentRequest->duplicate()
-                    $request = \Symfony\Component\HttpFoundation\Request::create($jsonData['url']);
+                    $url = $jsonData['url'];
+                    if (strpos($url, $_SERVER['SCRIPT_NAME']) === 0) {
+                        $url = str_replace($_SERVER['SCRIPT_NAME'], '', $url);
+                    }
+                    $request = \Symfony\Component\HttpFoundation\Request::create($url);
                     $request->cookies->add($parentRequest->cookies->all());
 
                     // Fill request object with router info
