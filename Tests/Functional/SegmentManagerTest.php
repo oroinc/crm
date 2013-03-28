@@ -129,9 +129,9 @@ class SegmentManagerTest extends WebTestCase
      */
     public function testGetChildren()
     {
-        $segment2 = $this->em->getRepository(static::$itemSegmentEntityName)->find(2);
-        $segment3 = $this->em->find(static::$itemSegmentEntityName, 3);
-        $segment4 = $this->em->find(static::$itemSegmentEntityName, 4);
+        $segment2 = $this->em->find(static::$itemSegmentEntityName, 4);
+        $segment3 = $this->em->find(static::$itemSegmentEntityName, 5);
+        $segment4 = $this->em->find(static::$itemSegmentEntityName, 6);
 
         $expectedChildrenIds = array($segment3->getId(), $segment4->getId());
 
