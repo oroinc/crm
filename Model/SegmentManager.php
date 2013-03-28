@@ -246,7 +246,6 @@ class SegmentManager
      */
     public function removeTree(AbstractSegment $rootSegment)
     {
-
         $rootSegment->setParent(null);
         $this->getStorageManager()->remove($rootSegment);
     }
