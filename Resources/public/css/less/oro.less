@@ -402,6 +402,7 @@ footer{
   background:#424850 url("../../img/bg-sidebar.png") repeat-y 100% 0;
   padding: 0 5px 18px 0;
   position: relative;
+  z-index: 999;
   .side-nav-opener{
     border-top: 1px solid #0d0d0d;
     position: absolute;
@@ -1371,6 +1372,9 @@ footer{
   margin: 0 0 20px;
 }
 .grid{
+  .action-cell{
+    vertical-align: bottom;
+  }
   thead th{
     background-color: #eee;
     padding: 5px 10px;
@@ -1467,6 +1471,11 @@ footer{
   font-size: 20px;
   float: left;
   padding: 0;
+}
+.more-bar-holder .dropdown-toggle:hover,
+.more-bar-holder .dropdown-toggle:focus{
+  border: 0;
+  text-decoration: none;
 }
 .more-bar-holder .dropdown-toggle:hover{
   text-decoration: none;
@@ -1627,6 +1636,30 @@ footer{
 .one-row input[type="checkbox"]{
   margin-top: 8px !important;
 }
+.grid .dropdown-menu{
+  padding: 5px 0 0;
+
+}
+.grid .dropdown-menu > li{
+  margin: 0;
+}
+.modal{
+  top: 40%;
+}
+.modal .modal-header{
+  #gradient > .vertical(#fefefe, #f0f0f0);
+  -webkit-border-radius: 6px 6px 0 0;
+  border-radius: 6px 6px 0 0;
+}
+.modal-header .close{
+  font-size: 25px;
+}
+.dropup:after,
+.dropdown:after{
+  content: "";
+  clear: both;
+  display: block;
+}
 .ui-dialog{
   background-color: #fff;
   .ui-dialog-titlebar{
@@ -1683,4 +1716,115 @@ footer{
     background: #fafafa;
   }
 
+}
+.customer-info{
+  padding-left: 90px;
+  .sub-title{
+    text-transform: uppercase;
+    font-size: 11px;
+    color: #999;
+  }
+  .usser-name{
+    margin: 0 0 5px;
+    font-size: 19px;
+    line-height: 22px;
+
+  }
+  .visual{
+    float: left;
+    position: relative;
+    width: 75px;
+    margin: 0 0 0 -75px;
+  }
+  ul.inline li{
+    padding: 0 10px;
+    border-left: 1px solid #e6e6e6;
+  }
+  ul.inline li:first-child{
+    padding: 0 10px 0 0;
+    border: 0;
+  }
+}
+.scrollspy-nav{
+  background-color: #f6f6f6;
+  border-bottom: 1px solid #bbb;
+  margin-bottom: 0;
+  .navbar-inner{
+    padding: 0;
+    border: 0;
+    background: 0;
+  }
+  .active a{
+    border-bottom: 3px solid #999;
+    background: 0 !important;
+    color: #444 !important;
+    font-weight: bold !important;
+  }
+}
+.customer-info-actions{
+  background-color: #f6f6f6;
+  border-bottom: 1px solid #ebebeb;
+}
+.scrollspy-nav a{
+  color: #666;
+  font-size: 12px;
+}
+.scrollspy{
+  height: 500px;
+  position: relative;
+  overflow: auto;
+}
+.btn-action{
+  color: #777 !important;
+  font-size: 20px;
+  padding: 0 5px !important;
+}
+.btn-action:hover{
+  text-decoration: none !important;
+}
+.navbar-extra-right{
+  padding-right: 15px;
+}
+.row-oro{
+  width: 100%;
+  margin: 0 0 10px;
+}
+.clearfix-oro{
+  width: 100%;
+}
+.row-oro:after,
+.clearfix-oro:after{
+  content: "";
+  display: block;
+  clear: both;
+}
+.scroll-content{
+  height: 350px;
+  overflow: auto;
+  position: relative;
+}
+.form-horizontal .controls .control-label{
+  text-align: left;
+  float: none;
+  display: inline-block;
+  margin: 0;
+  width: auto;
+}
+.form-horizontal label.control-label{
+  color: #777;
+  font-weight: bold;
+  font-size: 13px;
+}
+textarea{
+  height: 150px;
+  resize: vertical;
+  text-align: justify;
+  vertical-align: top;
+}
+.scroll-content .scrollspy-example{
+  position: relative;
+}
+.scrollspy-title{
+  font-size: 19px;
+  line-height: 22px;
 }
