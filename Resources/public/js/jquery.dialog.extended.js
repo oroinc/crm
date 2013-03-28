@@ -63,6 +63,8 @@ $.widget( "ui.dialog", $.ui.dialog, {
 
     close: function() {
         $(window).unbind('.dialog');
+        this._removeMinimizedEl();
+
         this._super();
     },
 
@@ -112,34 +114,30 @@ $.widget( "ui.dialog", $.ui.dialog, {
         this._getMinimizeTo().show();
 
         // Make copy of widget to disable dialog events
-        var minimizedEl = widget.clone();
-        minimizedEl.css({'height': 'auto'});
-        minimizedEl.find('.ui-dialog-content').remove();
-        minimizedEl.find('.ui-resizable-handle').remove();
+        this.minimizedEl = widget.clone();
+        this.minimizedEl.css({'height': 'auto'});
+        this.minimizedEl.find('.ui-dialog-content').remove();
+        this.minimizedEl.find('.ui-resizable-handle').remove();
         // Add title attribute to be able to view full window title
-        var title = minimizedEl.find('.ui-dialog-title');
+        var title = this.minimizedEl.find('.ui-dialog-title');
         title.disableSelection().attr('title', title.text());
         var self = this;
-        minimizedEl.find('.ui-dialog-titlebar').dblclick(function() {
-            minimizedEl.remove();
-            widget.show();
+        this.minimizedEl.find('.ui-dialog-titlebar').dblclick(function() {
             self.uiDialogTitlebar.dblclick();
         });
         // Proxy events to original window
         var buttons = ['close', 'maximize', 'restore'];
         for (var i = 0; i < buttons.length; i++) {
             var btnClass = '.ui-dialog-titlebar-' + buttons[i];
-            minimizedEl.find(btnClass).click(
+            this.minimizedEl.find(btnClass).click(
                 function(btnClass) {
                     return function() {
-                        minimizedEl.remove();
-                        widget.show();
                         widget.find(btnClass).click();
                     }
                 }(btnClass));
         }
-        minimizedEl.show();
-        minimizedEl.appendTo(this._getMinimizeTo());
+        this.minimizedEl.show();
+        this.minimizedEl.appendTo(this._getMinimizeTo());
 
         return this;
     },
@@ -434,6 +432,9 @@ $.widget( "ui.dialog", $.ui.dialog, {
     },
 
     _restoreFromMinimized: function () {
+        this._removeMinimizedEl();
+        this.widget().show();
+
         var original = this._loadSnapshot();
 
         // Calculate position to be visible after maximize
@@ -444,6 +445,12 @@ $.widget( "ui.dialog", $.ui.dialog, {
         });
 
         return this;
+    },
+
+    _removeMinimizedEl: function() {
+        if (this.minimizedEl) {
+            this.minimizedEl.remove();
+        }
     },
 
     _getVisibleLeft: function(left, width) {

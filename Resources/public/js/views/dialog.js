@@ -164,9 +164,9 @@ Oro.widget.DialogView = Backbone.View.extend({
         if (loadAllowed && this.options.url !== false) {
             this.loadContent();
         } else {
-            this.firstRun = false;
             this.show();
         }
+        this.firstRun = false;
     },
 
     /**
@@ -180,7 +180,7 @@ Oro.widget.DialogView = Backbone.View.extend({
         if (typeof url == 'undefined' || !url) {
             url = window.location.href;
         }
-        if (typeof method == 'undefined' || !method) {
+        if (this.firstRun || typeof method == 'undefined' || !method) {
             method = 'get';
         }
         var options = {
