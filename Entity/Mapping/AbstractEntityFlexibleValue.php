@@ -189,28 +189,8 @@ abstract class AbstractEntityFlexibleValue extends AbstractFlexibleValue
     public function getData()
     {
         $name = 'get'.ucfirst($this->attribute->getBackendType());
-        $data = $this->$name();
 
-        // TODO : to deal with toString but we should prefer return real types and explicitely render from outside
-
-        // deal with one to many or many to many backend
-        if ($data instanceof \Doctrine\ORM\PersistentCollection) {
-            if ($data->count() <= 1) {
-                // one to many
-                return $data->current();
-
-            } else {
-                // many to many
-                $items = array();
-                foreach ($data as $item) {
-                    $items[]= $item->__toString();
-                }
-
-                return implode(', ', $items);
-            }
-        }
-
-        return $data;
+        return $this->$name();
     }
 
     /**
@@ -480,5 +460,28 @@ abstract class AbstractEntityFlexibleValue extends AbstractFlexibleValue
         $this->media = $media;
 
         return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function __toString()
+    {
+        $data = $this->getData();
+
+        if ($data instanceof \Doctrine\Common\Collections\Collection) {
+            $items = array();
+            foreach ($data as $item) {
+                $items[]= $item->__toString();
+            }
+
+            return implode(', ', $items);
+
+        } else if (is_object($data)) {
+
+            return $data->__toString();
+        }
+
+        return $data;
     }
 }

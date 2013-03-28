@@ -106,7 +106,6 @@ class FlexibleTest extends \PHPUnit_Framework_TestCase
         $this->flexible->addValue($value);
         $this->assertEquals($this->flexible->getValues()->count(), 1);
         $this->assertEquals($this->flexible->getValue($code), $value);
-        $this->assertEquals($this->flexible->getValueData($code), $data);
         $this->assertEquals($this->flexible->mycode, $data);
         $this->flexible->removeValue($value);
         $this->assertEquals($this->flexible->getValues()->count(), 0);

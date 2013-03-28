@@ -134,20 +134,6 @@ abstract class AbstractEntityFlexible extends AbstractFlexible
     }
 
     /**
-     * Get value data (string, number, etc) related to attribute code
-     *
-     * @param string $attributeCode
-     *
-     * @return mixed|NULL
-     */
-    public function getValueData($attributeCode)
-    {
-        $value = $this->getValue($attributeCode);
-
-        return ($value) ? $value->getData() : null;
-    }
-
-    /**
      * Check if a field or attribute exists
      *
      * @param string $name
@@ -170,13 +156,13 @@ abstract class AbstractEntityFlexible extends AbstractFlexible
      */
     public function __get($attCode)
     {
-        // call existing getAttCode method
         $methodName = "get{$attCode}";
         if (method_exists($this, $methodName)) {
             return $this->$methodName();
+
         } else {
             // dynamic call to get value data
-            return $this->getValueData($attCode);
+            return $this->getValue($attCode);
         }
     }
 }
