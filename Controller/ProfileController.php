@@ -104,10 +104,23 @@ class ProfileController extends Controller
      */
     public function editAction(User $entity)
     {
-        if ($this->get('oro_user.form.handler.profile')->process($entity)) {
-            $this->get('session')->getFlashBag()->add('success', 'User successfully saved');
+        $flashBag = $this->get('session')->getFlashBag();
+        if ($this->getRequest()->query->has('back')) {
+            $backUrl = $this->getRequest()->get('back');
+            $flashBag->set('backUrl', $backUrl);
+        } elseif ($flashBag->has('backUrl')) {
+            $backUrl = $flashBag->get('backUrl');
+            $backUrl = reset($backUrl);
+        } else {
+            $backUrl = null;
+        }
 
-            return $this->redirect($this->generateUrl('oro_user_index'));
+
+        if ($this->get('oro_user.form.handler.profile')->process($entity)) {
+            $flashBag->add('success', 'User successfully saved');
+
+            $redirectUrl = $backUrl ? $backUrl : $this->generateUrl('oro_user_index');
+            return $this->redirect($redirectUrl);
         }
 
         return array(

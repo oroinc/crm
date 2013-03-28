@@ -35,10 +35,22 @@ class GroupController extends Controller
      */
     public function editAction(Group $entity)
     {
-        if ($this->get('oro_user.form.handler.group')->process($entity)) {
-            $this->get('session')->getFlashBag()->add('success', 'Group successfully saved');
+        $flashBag = $this->get('session')->getFlashBag();
+        if ($this->getRequest()->query->has('back')) {
+            $backUrl = $this->getRequest()->get('back');
+            $flashBag->set('backUrl', $backUrl);
+        } elseif ($flashBag->has('backUrl')) {
+            $backUrl = $flashBag->get('backUrl');
+            $backUrl = reset($backUrl);
+        } else {
+            $backUrl = null;
+        }
 
-            return $this->redirect($this->generateUrl('oro_user_group_index'));
+        if ($this->get('oro_user.form.handler.group')->process($entity)) {
+            $flashBag->add('success', 'Group successfully saved');
+
+            $redirectUrl = $backUrl ? $backUrl : $this->generateUrl('oro_user_group_index');
+            return $this->redirect($redirectUrl);
         }
 
         return array(
