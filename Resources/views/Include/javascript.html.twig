@@ -43,7 +43,7 @@
 
     '@OroGridBundle/Resources/public/js/app/pageablecollection.js'
 
-    output='js/acme.grid.js'
+    output='js/oroapp.grid.js'
 %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
 {% endjavascripts %}
@@ -198,12 +198,6 @@
                 datagridOptions.collection
             );
 
-            // Register router and start history
-            var router = new OroApp.DatagridRouter({
-                collection: datagridCollection
-            });
-            Backbone.history.start();
-
             // Basic grid layout
             var template = _.template($(datagridTemplateSelector).html());
             $(containerSelector).append(template);
@@ -239,6 +233,11 @@
             );
             var filtersList = new OroApp.DatagridFilterList(filterListParameters);
             $(datagridFiltersSelector).html(filtersList.render().$el);
+
+            // Register router and start history
+            var router = new OroApp.DatagridRouter({
+                collection: datagridCollection
+            });
         };
 
         initDatagrid(
@@ -248,6 +247,8 @@
             datagridFiltersSelector,
             datagridBodySelector
         );
+
+        Backbone.history.start();
     });
 </script>
 
