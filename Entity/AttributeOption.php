@@ -23,7 +23,7 @@ class AttributeOption extends AbstractEntityAttributeOption
      *
      * @var Attribute $attribute
      *
-     * @ORM\ManyToOne(targetEntity="Attribute")
+     * @ORM\ManyToOne(targetEntity="Attribute", inversedBy="options")
      */
     protected $attribute;
 
