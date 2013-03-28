@@ -133,9 +133,10 @@ class GroupDatagridManager extends DatagridManager
             'type'         => ActionInterface::TYPE_REDIRECT,
             'acl_resource' => 'root',
             'options'      => array(
-                'label' => 'Edit',
-                'link'  => 'edit_link',
+                'label'         => 'Edit',
+                'link'          => 'edit_link',
                 'runOnRowClick' => true,
+                'backUrl'       => true,
             )
         );
 
@@ -144,9 +145,10 @@ class GroupDatagridManager extends DatagridManager
             'type'         => ActionInterface::TYPE_REDIRECT,
             'acl_resource' => 'root',
             'options'      => array(
-                'label' => 'Edit',
-                'icon'  => 'edit',
-                'link'  => 'edit_link',
+                'label'   => 'Edit',
+                'icon'    => 'edit',
+                'link'    => 'edit_link',
+                'backUrl' => true,
             )
         );
 
