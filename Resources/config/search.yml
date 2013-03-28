@@ -26,10 +26,6 @@ Oro\Bundle\UserBundle\Entity\User:
             target_type: text
             target_fields: [lastName]
         -
-            name: middleName
-            target_type: text
-            target_fields: [middleName]
-        -
             name: birthday
             target_type: birthday
             target_fields: [birthday]
