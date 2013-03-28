@@ -5,7 +5,11 @@
  * @extends OroApp.DatagridFilter
  */
 OroApp.DatagridFilterSelect = OroApp.DatagridFilter.extend({
-    /** @property */
+    /**
+     * Filter template
+     *
+     * @property
+     */
     template: _.template(
         '<div class="btn filter-select">' +
             '<%= label %>: ' +
@@ -17,7 +21,11 @@ OroApp.DatagridFilterSelect = OroApp.DatagridFilter.extend({
         '<a href="#" class="disable-filter"><i class="icon-remove hide-text">Close</i></a>'
     ),
 
-    /** @property */
+    /**
+     * Filter content options
+     *
+     * @property
+     */
     options: {},
 
     /**
@@ -27,13 +35,66 @@ OroApp.DatagridFilterSelect = OroApp.DatagridFilter.extend({
      */
     confirmedValue: {},
 
-    /** @property */
+    /**
+     * Placeholder for default value
+     *
+     * @property
+     */
     placeholder: 'All',
 
+    /**
+     * Selector for filter area
+     *
+     * @property
+     */
+    containerSelector: '.filter-select',
+
+    /**
+     * Selector for close button
+     *
+     * @property
+     */
+    disableSelector: '.disable-filter',
+
+    /**
+     * Selector for select input element
+     *
+     * @property
+     */
     inputSelector: 'select',
 
-    /** @property */
+    /**
+     * Select widget object
+     *
+     * @property
+     */
+    selectWidget: null,
+
+    /**
+     * Minimum widget menu width, calculated depends on filter options
+     *
+     * @property
+     */
+    minimumWidth: null,
+
+    /**
+     * Select widget options
+     *
+     * @property
+     */
+    widgetOptions: {
+        multiple: false,
+        height: 'auto',
+        selectedList: 1
+    },
+
+    /**
+     * Filter events
+     *
+     * @property
+     */
     events: {
+        'click .filter-select': '_onClickFilterArea',
         'click .disable-filter': '_onClickDisableFilter',
         'change select': '_onSelectChange'
     },
@@ -53,7 +114,103 @@ OroApp.DatagridFilterSelect = OroApp.DatagridFilter.extend({
             })
         );
 
+        this._initializeSelectWidget();
+
         return this;
+    },
+
+    /**
+     * Initialize multiselect widget
+     *
+     * @protected
+     */
+    _initializeSelectWidget: function() {
+        this.selectWidget = this.$(this.inputSelector);
+
+        this.selectWidget.multiselect(_.extend({
+            classes: 'select-filter-widget',
+            position: {
+                my: 'left top+2',
+                at: 'left bottom',
+                of: this.$(this.containerSelector)
+            },
+            open: $.proxy(function() {
+                this._setDropdownDesign();
+                var widget = this.selectWidget.multiselect('widget');
+                widget.find('input[type="search"]').focus();
+                $('body').trigger('click');
+            }, this)
+        }, this.widgetOptions));
+
+        this.selectWidget.multiselectfilter({
+            label: '',
+            placeholder: '',
+            autoReset: true
+        });
+
+        // fix CSS classes
+        this.$('.select-filter-widget').removeClass('ui-widget').removeClass('ui-state-default');
+    },
+
+    /**
+     * Get element width
+     *
+     * @param {Object} element
+     * @return {Integer}
+     * @protected
+     */
+    _getTextWidth: function(element) {
+        var html_org = element.html();
+        var html_calc = '<span>' + html_org + '</span>';
+        element.html(html_calc);
+        var width = element.find('span:first').width();
+        element.html(html_org);
+        return width;
+    },
+
+    /**
+     * Set design for select dropdown
+     *
+     * @protected
+     */
+    _setDropdownDesign: function() {
+        var widget = this.selectWidget.multiselect('widget');
+
+        // calculate minimum width
+        if (!this.minimumWidth) {
+            var elements = widget.find('.ui-multiselect-checkboxes li');
+            _.each(elements, function(element, index, list) {
+                var width = this._getTextWidth($(element).find('label'));
+                if (width > this.minimumWidth) {
+                    this.minimumWidth = width;
+                }
+            }, this);
+
+            this.minimumWidth += 16;
+        }
+
+        // set elements width
+        var filterWidth = this.$(this.containerSelector).width();
+        var requiredWidth = Math.max(filterWidth + 8, this.minimumWidth);
+        widget.width(requiredWidth);
+        widget.find('input[type="search"]').width(requiredWidth - 22);
+
+        // fix CSS classes
+        widget.addClass('dropdown-menu');
+        widget.removeClass('ui-widget-content');
+        widget.removeClass('ui-widget');
+        widget.find('.ui-widget-header').removeClass('ui-widget-header');
+        widget.find('.ui-multiselect-filter').removeClass('ui-multiselect-filter');
+        widget.find('ul li label').removeClass('ui-corner-all');
+    },
+
+    /**
+     * Open select dropdown
+     *
+     * @protected
+     */
+    _onClickFilterArea: function() {
+        this.selectWidget.multiselect('open');
     },
 
     /**
@@ -135,6 +292,7 @@ OroApp.DatagridFilterSelect = OroApp.DatagridFilter.extend({
         if (this.confirmedValue.value != value.value) {
             this.confirmedValue = _.clone(value);
             this.$(this.inputSelector).val(this.confirmedValue.value);
+            this.selectWidget.multiselect('refresh');
             this.trigger('update');
         }
     },
