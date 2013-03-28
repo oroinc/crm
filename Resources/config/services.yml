@@ -14,6 +14,8 @@ parameters:
     oro_navigation.item.factory.class: Oro\Bundle\NavigationBundle\Entity\Builder\ItemFactory
     oro_navigation.item.pinbar.post_persist_listener.class: Oro\Bundle\NavigationBundle\Entity\Listener\PinbarPostPersist
 
+    oro_navigation.event.response_history.listener.class: Oro\Bundle\NavigationBundle\Event\ResponseHistoryListener
+
 services:
     oro_menu.factory:
         class: %oro_menu.factory.class%
@@ -113,3 +115,12 @@ services:
             - @oro_navigation.item.factory
         tags:
             - { name: oro_menu.builder, alias: history }
+
+    kernel.listener.nav_history_response:
+        class: %oro_navigation.event.response_history.listener.class%
+        tags:
+            - { name: kernel.event_listener, event: kernel.response, method: onResponse }
+        arguments:
+            - @oro_navigation.item.factory
+            - @security.context
+            - @doctrine.orm.entity_manager
