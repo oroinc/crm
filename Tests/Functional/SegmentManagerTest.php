@@ -147,231 +147,231 @@ class SegmentManagerTest extends WebTestCase
     /**
      * Test related method
      */
-//     public function testRemoveById()
-//     {
-//         $idToRemove = 8;
-//         $segmentsBefore = $this->em->getRepository(static::$itemSegmentEntityName)->findAll();
+    public function testRemoveById()
+    {
+        $idToRemove = 8;
+        $segmentsBefore = $this->em->getRepository(static::$itemSegmentEntityName)->findAll();
 
-//         $expectedCount = count($segmentsBefore) - 1;
+        $expectedCount = count($segmentsBefore) - 1;
 
-//         $this->segmentManager->removeById($idToRemove);
-//         $this->em->flush();
+        $this->segmentManager->removeById($idToRemove);
+        $this->em->flush();
 
-//         $segmentsAfter = $this->em->getRepository(static::$itemSegmentEntityName)->findAll();
+        $segmentsAfter = $this->em->getRepository(static::$itemSegmentEntityName)->findAll();
 
-//         $this->assertCount($expectedCount, $segmentsAfter);
+        $this->assertCount($expectedCount, $segmentsAfter);
 
-//         foreach ($segmentsAfter as $segment) {
-//             $this->assertNotEquals($segment->getId(), $idToRemove);
-//         }
-//     }
+        foreach ($segmentsAfter as $segment) {
+            $this->assertNotEquals($segment->getId(), $idToRemove);
+        }
+    }
 
-//     /**
-//      * Test related method
-//      */
-//     public function testRemove()
-//     {
-//         $idToRemove = 7;
-//         $segment = $this->em->find(static::$itemSegmentEntityName, $idToRemove);
+    /**
+     * Test related method
+     */
+    public function testRemove()
+    {
+        $idToRemove = 7;
+        $segment = $this->em->find(static::$itemSegmentEntityName, $idToRemove);
 
-//         $segmentsBefore = $this->em->getRepository(static::$itemSegmentEntityName)->findAll();
+        $segmentsBefore = $this->em->getRepository(static::$itemSegmentEntityName)->findAll();
 
-//         $expectedCount = count($segmentsBefore) - 1;
+        $expectedCount = count($segmentsBefore) - 1;
 
-//         $this->segmentManager->remove($segment);
-//         $this->em->flush();
+        $this->segmentManager->remove($segment);
+        $this->em->flush();
 
-//         $segmentsAfter = $this->em->getRepository(static::$itemSegmentEntityName)->findAll();
+        $segmentsAfter = $this->em->getRepository(static::$itemSegmentEntityName)->findAll();
 
-//         $this->assertCount($expectedCount, $segmentsAfter);
+        $this->assertCount($expectedCount, $segmentsAfter);
 
-//         foreach ($segmentsAfter as $segment) {
-//             $this->assertNotEquals($segment->getId(), $idToRemove);
-//         }
-//     }
+        foreach ($segmentsAfter as $segment) {
+            $this->assertNotEquals($segment->getId(), $idToRemove);
+        }
+    }
 
-//     /**
-//      * Test related method
-//      */
-//     public function testRename()
-//     {
-//         $idToRename = 6;
-//         $newTitle = "My new title";
+    /**
+     * Test related method
+     */
+    public function testRename()
+    {
+        $idToRename = 6;
+        $newTitle = "My new title";
 
-//         $segment = $this->em->find(static::$itemSegmentEntityName, $idToRename);
+        $segment = $this->em->find(static::$itemSegmentEntityName, $idToRename);
 
-//         $this->assertNotEquals($newTitle, $segment->getTitle());
+        $this->assertNotEquals($newTitle, $segment->getTitle());
 
-//         $this->segmentManager->rename($idToRename, $newTitle);
-//         $this->em->flush();
+        $this->segmentManager->rename($idToRename, $newTitle);
+        $this->em->flush();
 
-//         $segment = $this->em->find(static::$itemSegmentEntityName, $idToRename);
-//         $this->assertEquals($newTitle, $segment->getTitle());
-//     }
+        $segment = $this->em->find(static::$itemSegmentEntityName, $idToRename);
+        $this->assertEquals($newTitle, $segment->getTitle());
+    }
 
-//     /**
-//      * Test related method
-//      */
-//     public function testMove()
-//     {
-//         $idToMove = 5;
-//         $newParentId = 6;
-//         $segment = $this->em->find(static::$itemSegmentEntityName, $idToMove);
+    /**
+     * Test related method
+     */
+    public function testMove()
+    {
+        $idToMove = 5;
+        $newParentId = 6;
+        $segment = $this->em->find(static::$itemSegmentEntityName, $idToMove);
 
-//         $this->assertNotEquals($newParentId, $segment->getParent()->getId());
+        $this->assertNotEquals($newParentId, $segment->getParent()->getId());
 
-//         $this->segmentManager->move($idToMove, $newParentId);
-//         $this->em->flush();
+        $this->segmentManager->move($idToMove, $newParentId);
+        $this->em->flush();
 
-//         $segment = $this->em->find(static::$itemSegmentEntityName, $idToMove);
+        $segment = $this->em->find(static::$itemSegmentEntityName, $idToMove);
 
-//         $this->assertEquals($newParentId, $segment->getParent()->getId());
-//     }
+        $this->assertEquals($newParentId, $segment->getParent()->getId());
+    }
 
-//     /**
-//      * Test related method
-//      */
-//     public function testGetTrees()
-//     {
-//         $expectedTreesIds = array(1,3);
+    /**
+     * Test related method
+     */
+    public function testGetTrees()
+    {
+        $expectedTreesIds = array(1,3);
 
-//         $trees = $this->segmentManager->getTrees();
+        $trees = $this->segmentManager->getTrees();
 
-//         $this->assertEquals(count($expectedTreesIds), count($trees));
+        $this->assertEquals(count($expectedTreesIds), count($trees));
 
-//         foreach ($trees as $tree) {
-//             $this->assertTrue(in_array($tree->getId(), $expectedTreesIds));
-//         }
-//     }
+        foreach ($trees as $tree) {
+            $this->assertTrue(in_array($tree->getId(), $expectedTreesIds));
+        }
+    }
 
-//     /**
-//      * Test related method
-//      */
-//     public function testSearch()
-//     {
-//         $rootNode2 = $this->em->find(static::$itemSegmentEntityName, 3);
-//         $segment2 = $this->em->find(static::$itemSegmentEntityName, 4);
+    /**
+     * Test related method
+     */
+    public function testSearch()
+    {
+        $rootNode2 = $this->em->find(static::$itemSegmentEntityName, 3);
+        $segment2 = $this->em->find(static::$itemSegmentEntityName, 4);
 
-//         $expectedResultsIds = array($rootNode2->getId(), $segment2->getId());
+        $expectedResultsIds = array($rootNode2->getId(), $segment2->getId());
 
-//         $actualResults = $this->segmentManager->search(3, array('title' => 'Two'));
+        $actualResults = $this->segmentManager->search(3, array('title' => 'Two'));
 
-//         $this->assertCount(count($expectedResultsIds), $actualResults);
+        $this->assertCount(count($expectedResultsIds), $actualResults);
 
-//         foreach ($actualResults as $actualResult) {
-//             $this->assertTrue(in_array($actualResult->getId(), $expectedResultsIds));
-//         }
-//     }
+        foreach ($actualResults as $actualResult) {
+            $this->assertTrue(in_array($actualResult->getId(), $expectedResultsIds));
+        }
+    }
 
-//     /**
-//      * Test related method
-//      */
-//     public function testSearchOnASingleTree()
-//     {
-//         $results = $this->segmentManager->search(1, array('title' => 'Segment'));
+    /**
+     * Test related method
+     */
+    public function testSearchOnASingleTree()
+    {
+        $results = $this->segmentManager->search(1, array('title' => 'Segment'));
 
-//         $this->assertCount(1, $results);
+        $this->assertCount(1, $results);
 
-//         $results = $this->segmentManager->search(3, array('title' => 'Segment'));
+        $results = $this->segmentManager->search(3, array('title' => 'Segment'));
 
-//         $this->assertCount(5, $results);
+        $this->assertCount(5, $results);
 
-//     }
+    }
 
-//     /**
-//      * Test related method
-//      */
-//     public function testGetTreeSegments()
-//     {
-//         $rootSegment = $this->em->find(static::$itemSegmentEntityName, 3);
+    /**
+     * Test related method
+     */
+    public function testGetTreeSegments()
+    {
+        $rootSegment = $this->em->find(static::$itemSegmentEntityName, 3);
 
-//         $expectedTreeSegmentsIds = array(3,4,5,6,7,8);
+        $expectedTreeSegmentsIds = array(3,4,5,6,7,8);
 
-//         $actualTreeSegments = $this->segmentManager->getTreeSegments($rootSegment);
+        $actualTreeSegments = $this->segmentManager->getTreeSegments($rootSegment);
 
-//         $this->assertCount(count($expectedTreeSegmentsIds), $actualTreeSegments);
+        $this->assertCount(count($expectedTreeSegmentsIds), $actualTreeSegments);
 
-//         foreach ($actualTreeSegments as $actualTreeSegment) {
-//             $this->assertTrue(in_array($actualTreeSegment->getId(), $expectedTreeSegmentsIds));
-//         }
+        foreach ($actualTreeSegments as $actualTreeSegment) {
+            $this->assertTrue(in_array($actualTreeSegment->getId(), $expectedTreeSegmentsIds));
+        }
 
-//     }
+    }
 
-//     /**
-//      * Test related method
-//      */
-//     public function testCreateTree()
-//     {
-//         $newTreeTitle = 'My super new tree';
+    /**
+     * Test related method
+     */
+    public function testCreateTree()
+    {
+        $newTreeTitle = 'My super new tree';
 
-//         $newTreeRoot = $this->segmentManager->createTree($newTreeTitle);
-//         $this->em->flush();
+        $newTreeRoot = $this->segmentManager->createTree($newTreeTitle);
+        $this->em->flush();
 
-//         $expectedTreesIds = array(1, 3, $newTreeRoot->getId());
+        $expectedTreesIds = array(1, 3, $newTreeRoot->getId());
 
-//         $trees = $this->segmentManager->getTrees();
+        $trees = $this->segmentManager->getTrees();
 
-//         $this->assertEquals(count($expectedTreesIds), count($trees));
+        $this->assertEquals(count($expectedTreesIds), count($trees));
 
-//         foreach ($trees as $tree) {
-//             $this->assertTrue(in_array($tree->getId(), $expectedTreesIds));
-//         }
-//     }
+        foreach ($trees as $tree) {
+            $this->assertTrue(in_array($tree->getId(), $expectedTreesIds));
+        }
+    }
 
-//     /**
-//      * Test related method
-//      */
-//     public function testRemoveTree()
-//     {
-//         $treeIdToRemove = 3;
-//         $segmentToRemove = $this->em->find(static::$itemSegmentEntityName, $treeIdToRemove);
-//         $this->removeAndAssertTreeRemoved($segmentToRemove);
-//     }
+    /**
+     * Test related method
+     */
+    public function testRemoveTree()
+    {
+        $treeIdToRemove = 3;
+        $segmentToRemove = $this->em->find(static::$itemSegmentEntityName, $treeIdToRemove);
+        $this->removeAndAssertTreeRemoved($segmentToRemove);
+    }
 
-//     /**
-//      * Test related method
-//      */
-//     public function testRemoveTreeById()
-//     {
-//         $treeIdToRemove = 3;
-//         $segmentToRemove = $this->em->find(static::$itemSegmentEntityName, $treeIdToRemove);
-//         $this->removeAndAssertTreeRemoved($segmentToRemove, true);
-//     }
+    /**
+     * Test related method
+     */
+    public function testRemoveTreeById()
+    {
+        $treeIdToRemove = 3;
+        $segmentToRemove = $this->em->find(static::$itemSegmentEntityName, $treeIdToRemove);
+        $this->removeAndAssertTreeRemoved($segmentToRemove, true);
+    }
 
-//     /**
-//      * Remove a segment and assert tree
-//      * @param AbstractSegment $segment    Segment removed
-//      * @param boolean         $removeById Predicate to remove by id or not
-//      */
-//     private function removeAndAssertTreeRemoved($segment, $removeById = false)
-//     {
-//         $segmentsBefore = $this->em->getRepository(static::$itemSegmentEntityName)->findAll();
-//         $segmentsCountBefore = count($segmentsBefore);
+    /**
+     * Remove a segment and assert tree
+     * @param AbstractSegment $segment    Segment removed
+     * @param boolean         $removeById Predicate to remove by id or not
+     */
+    private function removeAndAssertTreeRemoved($segment, $removeById = false)
+    {
+        $segmentsBefore = $this->em->getRepository(static::$itemSegmentEntityName)->findAll();
+        $segmentsCountBefore = count($segmentsBefore);
 
-//         $treeSegments = $this->segmentManager->getTreeSegments($segment);
-//         $treeSegmentsIds = array();
+        $treeSegments = $this->segmentManager->getTreeSegments($segment);
+        $treeSegmentsIds = array();
 
-//         foreach ($treeSegments as $treeSegment) {
-//             $treeSegmentsIds[] = $treeSegment->getId();
-//         }
+        foreach ($treeSegments as $treeSegment) {
+            $treeSegmentsIds[] = $treeSegment->getId();
+        }
 
-//         if ($removeById) {
-//             $this->segmentManager->removeTreeById($segment->getId());
-//         } else {
-//             $this->segmentManager->removeTree($segment);
-//         }
+        if ($removeById) {
+            $this->segmentManager->removeTreeById($segment->getId());
+        } else {
+            $this->segmentManager->removeTree($segment);
+        }
 
-//         $this->em->flush();
+        $this->em->flush();
 
-//         $segmentsAfter = $this->em->getRepository(static::$itemSegmentEntityName)->findAll();
-//         $segmentsCountAfter = count($segmentsAfter);
+        $segmentsAfter = $this->em->getRepository(static::$itemSegmentEntityName)->findAll();
+        $segmentsCountAfter = count($segmentsAfter);
 
-//         $expectedCount = $segmentsCountBefore - count($treeSegments);
+        $expectedCount = $segmentsCountBefore - count($treeSegments);
 
-//         $this->assertEquals($expectedCount, $segmentsCountAfter);
+        $this->assertEquals($expectedCount, $segmentsCountAfter);
 
-//         foreach ($segmentsAfter as $segmentAfter) {
-//             $this->assertFalse(in_array($segmentAfter->getId(), $treeSegmentsIds));
-//         }
-//     }
+        foreach ($segmentsAfter as $segmentAfter) {
+            $this->assertFalse(in_array($segmentAfter->getId(), $treeSegmentsIds));
+        }
+    }
 }
