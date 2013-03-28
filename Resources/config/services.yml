@@ -10,6 +10,7 @@ parameters:
     oro_navigation.navigation_item_menu.builder.class: Oro\Bundle\NavigationBundle\Menu\NavigationItemBuilder
     oro_navigation.item.builder.pinbar.class: Oro\Bundle\NavigationBundle\Entity\Builder\PinbarTabBuilder
     oro_navigation.item.builder.favorite.class: Oro\Bundle\NavigationBundle\Entity\Builder\NavigationItemBuilder
+    oro_navigation.item.builder.history.class: Oro\Bundle\NavigationBundle\Entity\Builder\NavigationItemBuilder
     oro_navigation.item.factory.class: Oro\Bundle\NavigationBundle\Entity\Builder\ItemFactory
     oro_navigation.item.pinbar.post_persist_listener.class: Oro\Bundle\NavigationBundle\Entity\Listener\PinbarPostPersist
 
@@ -71,6 +72,13 @@ services:
         tags:
             - { name: oro_navigation.item.builder, alias: favorite }
 
+    oro_navigation.item.builder.history:
+        class: %oro_navigation.item.builder.history.class%
+        arguments:
+            - @doctrine.orm.entity_manager
+        tags:
+            - { name: oro_navigation.item.builder, alias: history }
+
     oro_navigation.item.factory:
         class: %oro_navigation.item.factory.class%
 
@@ -96,3 +104,12 @@ services:
             - @oro_navigation.item.factory
         tags:
             - { name: oro_menu.builder, alias: favorite }
+
+    oro_navigation.history_menu.builder:
+        class: %oro_navigation.navigation_item_menu.builder.class%
+        arguments:
+            - @security.context
+            - @doctrine.orm.entity_manager
+            - @oro_navigation.item.factory
+        tags:
+            - { name: oro_menu.builder, alias: history }
