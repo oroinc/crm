@@ -3,6 +3,7 @@
 namespace Oro\Bundle\UserBundle\Entity;
 
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -14,7 +15,6 @@ use JMS\Serializer\Annotation\Exclude;
 use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 
 use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityFlexible;
-
 use Oro\Bundle\UserBundle\Entity\Status;
 use Oro\Bundle\UserBundle\Entity\Email;
 
@@ -107,6 +107,15 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
      * @Type("string")
      */
     protected $image;
+
+    /**
+     * Image filename
+     *
+     * @var UploadedFile
+     *
+     * @Exclude
+     */
+    protected $imageFile;
 
     /**
      * @var boolean
@@ -365,6 +374,16 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
     }
 
     /**
+     * Return image file
+     *
+     * @return UploadedFile
+     */
+    public function getImageFile()
+    {
+        return $this->imageFile;
+    }
+
+    /**
      * {@inheritDoc}
      */
     public function getSalt()
@@ -515,6 +534,13 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
     public function setImage($image = null)
     {
         $this->image = $image;
+
+        return $this;
+    }
+
+    public function setImageFile(UploadedFile $imageFile)
+    {
+        $this->imageFile = $imageFile;
 
         return $this;
     }
@@ -739,6 +765,16 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
         return $this;
     }
 
+    public function getImagePath($absolute = false)
+    {
+        return null === $this->image
+            ? null
+            : ($absolute
+                ? $this->getUploadDir() . '/' . $this->image
+                : $this->getUploadRootDir() . '/' . $this->image
+            );
+    }
+
     /**
      * Generate unique confirmation token
      *
@@ -763,6 +799,8 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
     {
         $this->created =
         $this->updated = new \DateTime();
+
+        $this->preUpload();
     }
 
     /**
@@ -773,6 +811,39 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
     public function preUpdate()
     {
         $this->updated = new \DateTime();
+
+        $this->preUpload();
+    }
+
+    /**
+     * @ORM\PostPersist()
+     * @ORM\PostUpdate()
+     */
+    public function upload()
+    {
+        if (null === $this->imageFile) {
+            return;
+        }
+
+        $dir = $this->getUploadRootDir();
+
+        if (!file_exists($dir)) {
+            mkdir($dir, 0755, true);
+        }
+
+        $this->imageFile->move($dir, $this->image);
+
+        unset($this->imageFile);
+    }
+
+    /**
+     * @ORM\PostRemove()
+     */
+    public function postRemove()
+    {
+        if ($file = $this->getImagePath(true)) {
+            unlink($file);
+        }
     }
 
     /**
@@ -848,6 +919,7 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
     public function addEmail(Email $email)
     {
         $this->emails[] = $email;
+
         $email->setUser($this);
 
         return $this;
@@ -864,5 +936,36 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
         $this->emails->removeElement($email);
 
         return $this;
+    }
+
+    /**
+     * Get the absolute directory path where uploaded avatars should be saved
+     *
+     * @return string
+     */
+    protected function getUploadRootDir()
+    {
+        return __DIR__ . '/../../../../../web/' . $this->getUploadDir();
+    }
+
+    /**
+     * Get the relative directory path to user avatar
+     *
+     * @return string
+     */
+    protected function getUploadDir()
+    {
+        return 'uploads'
+            . DIRECTORY_SEPARATOR . 'users'
+            . DIRECTORY_SEPARATOR . $this->getCreatedAt()->format('Y-m');
+    }
+
+    protected function preUpload()
+    {
+        if (null !== $this->imageFile) {
+            $filename = sha1(uniqid(mt_rand(), true));
+
+            $this->image = $filename . '.' . $this->imageFile->guessExtension();
+        }
     }
 }

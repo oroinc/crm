@@ -77,8 +77,8 @@ class ProfileType extends FlexibleType
                 'required'       => false,
                 'widget'         => 'single_text',
             ))
-            ->add('image', 'file', array(
-                'label'          => 'Image',
+            ->add('imageFile', 'file', array(
+                'label'          => 'Avatar',
                 'required'       => false,
             ))
             ->add('rolesCollection', 'entity', array(
