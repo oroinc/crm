@@ -18,6 +18,7 @@ Grid functionality consists of backend and frontend parts. Backend part responsi
     - [Datagrid](#datagrid)
     - [Proxy Query](#proxy-query)
     - [Fields](#fields)
+    - [Properties](#properties)
     - [Backend Pager](#backend-pager)
     - [Backend Filters](#backend-filters)
     - [Backend Sorters](#backend-sorters)
@@ -309,12 +310,14 @@ services:
 Following example shows simple Datagrid Manager with two fields, filters, sorters and row action.
 
 ``` php
+use Symfony\Bundle\FrameworkBundle\Routing\Router;
 use Oro\Bundle\GridBundle\Datagrid\DatagridManager;
 use Oro\Bundle\GridBundle\Field\FieldDescription;
 use Oro\Bundle\GridBundle\Field\FieldDescriptionCollection;
 use Oro\Bundle\GridBundle\Field\FieldDescriptionInterface;
 use Oro\Bundle\GridBundle\Filter\FilterInterface;
 use Oro\Bundle\GridBundle\Action\ActionInterface;
+use Oro\Bundle\GridBundle\Property\UrlProperty;
 
 class ProductDatagridManager extends DatagridManager
 {
@@ -322,6 +325,29 @@ class ProductDatagridManager extends DatagridManager
      * @var FieldDescriptionCollection
      */
     protected $fieldsCollection;
+
+    /**
+     * @var Router
+     */
+    protected $router;
+
+    /**
+     * @param Router $router
+     */
+    public function setRouter(Router $router)
+    {
+        $this->router = $router;
+    }
+
+    /**
+     * @return array
+     */
+    protected function getProperties()
+    {
+        return array(
+            new UrlProperty('edit_link', $this->router, 'oro_product_edit', array('id'))
+        );
+    }
 
     /**
      * @return FieldDescriptionCollection
@@ -415,12 +441,10 @@ class ProductDatagridManager extends DatagridManager
             'type'         => ActionInterface::TYPE_REDIRECT,
             'acl_resource' => 'root',
             'options'      => array(
-                'label'        => 'Edit',
-                'icon'         => 'edit',
-                'route'        => 'product_edit',
-                'placeholders' => array(
-                    'id' => 'id',
-                ),
+                'label'   => 'Edit',
+                'icon'    => 'edit',
+                'link'    => 'edit_link',
+                'backUrl' => true,
             )
         );
         return array($editAction);
@@ -518,6 +542,49 @@ Field Description is an entity that contains all information about one grid colu
 * **Field \ FieldDescription** - Field Description implementation of basic interface, has method to extract field value from source object;
 * **Field \ FieldDescriptionCollection** - storage for FieldDescription entities, implements ArrayAccess, Countable and IteratorAggregate interfaces and their methods.
 
+Properties
+----------
+
+Property is an entity that responsible for providing values for grid results. It can for example be a value for some column. When grid results are converting to some format (e.g. json) all grid properties will be asked to provide a values for each result element. Property Collection aggregates list of Properties.
+
+#### Class Description
+
+* **Property \ PropertyInterface** - basic interface for Property, provides specific value of result data element;
+* **Property \ AbstractProperty** - abstract class for Property, knows how to get values from arrays and objects using the most appropriate way - public methods "get<Name>" or "is<Name>" or public property;
+* **Property \ FieldProperty** - by default Field Description has this type of property, it knows how to get right value from data based on field name and field type;
+* **Property \ UrlProperty** - can generate URL as it's value using Router, route name and the list of data property names that should be used as route parameters;
+
+#### Example of Getting Values
+
+```
+$data = array();
+/** @var $datagrid \Oro\Bundle\GridBundle\Datagrid\Datagrid */
+foreach ($datagrid->getResults() as $object) {
+    $record = array();
+    /** @var $property \Oro\Bundle\GridBundle\Property\PropertyInterface */
+    foreach ($datagrid->getProperties() as $property) {
+        $record[$property->getName()] = $property->getValue($object);
+    }
+    $data[] = $record;
+}
+```
+
+#### Example of Creating URL Property
+
+```
+class UserDatagridManager extends FlexibleDatagridManager
+{
+    protected function getProperties()
+    {
+        return array(
+            new UrlProperty('show_link', $this->router, 'oro_user_show', array('id')),
+            new UrlProperty('edit_link', $this->router, 'oro_user_edit', array('id')),
+            new UrlProperty('delete_link', $this->router, 'oro_api_delete_profile', array('id')),
+        );
+    }
+    // ... other methods
+}
+```
 
 Backend Pager
 -------------
@@ -679,8 +746,6 @@ Action is an entity that represents grid action in some specific context - for e
 * **Action / AbstracAction** - abstract implementation of Action entity, includes route processing;
 * **Action / RedirectAction** - redirect action implementation;
 * **Action / DeleteAction** - delete action implementation;
-* **Action / ActionUrlGeneratorInterface** - interface for action URL generator;
-* **Action / ActionUrlGenerator** - implementation of action URL generator;
 * **Action / ActionFactoryInterface** - basic interface for Action Factory;
 * **Action / ActionFactory** - Action Factory interface implementation to create Action entities.
 
@@ -691,16 +756,11 @@ Action is an entity that represents grid action in some specific context - for e
 ```
 parameters:
     oro_grid.action.factory.class:       Oro\Bundle\GridBundle\Action\ActionFactory
-    oro_grid.action.url_generator.class: Oro\Bundle\GridBundle\Action\ActionUrlGenerator
 
 services:
     oro_grid.action.factory:
         class:     %oro_grid.action.factory.class%
         arguments: ["@service_container", ~]
-
-    oro_grid.action.url_generator:
-        class: %oro_grid.action.url_generator.class%
-        arguments: ["@router"]
 ```
 
 **Configuration of Action Types**
@@ -713,13 +773,13 @@ parameters:
 services:
     oro_grid.action.type.redirect:
         class: %oro_grid.action.type.redirect.class%
-        arguments: ["@oro_grid.action.url_generator", "@oro_user.acl_manager"]
+        arguments: ["@oro_user.acl_manager"]
         tags:
             - { name: oro_grid.action.type, alias: oro_grid_action_redirect }
 
     oro_grid.action.type.delete:
         class: %oro_grid.action.type.delete.class%
-        arguments: ["@oro_grid.action.url_generator", "@oro_user.acl_manager"]
+        arguments: ["@oro_user.acl_manager"]
         tags:
             - { name: oro_grid.action.type, alias: oro_grid_action_delete }
 ```
@@ -921,24 +981,30 @@ Frontend Actions
 
 If you need to allow a user to perform an action on records in the grid, this can be achieved by actions. Actions are designed thus that they can be used separately from the grid, but when you need to use actions in the grid, you just need to pass them into configuration. All added actions will be accessible in special actions column.
 
+Action performs using instance of model and usually uses a link to do work on server. User can pass link using parameters:
+
+* **link** (String) - Full link or property name in model where link is located;
+* **backUrl** (Boolean or String) - if TRUE then additional parameter will be added to link, this parameter will have value of current window location. If *backUrl* is a String, that it will be used instead.
+* **backUrlParameter** (String) - Parameter name used for *backUrl*, by default - "back".
+
 Below is an example of initialization grid with actions:
 ``` javascript
 var grid = new OroApp.Datagrid({
-   actions: [{
-       OroApp.DatagridActionNavigate.extend({
-           label: "Edit",
-           icon: edit,
-           placeholders: {"{id}":"id"},
-           url: "/user/edit/{id}"
-       }),
-       OroApp.DatagridActionDelete.extend({
-           label: "Delete",
-           icon: "trash",
-           placeholders: {"{id}":"id"},
-           url: "/api/rest/latest/profiles/{id}.json"
-       })
- ]
-   // other configuration
+    actions: [
+        OroApp.DatagridActionNavigate.extend({
+            label: "Edit",
+            icon: edit,
+            placeholders: {"{id}":"id"},
+            url: "/user/edit/{id}"
+        }),
+        OroApp.DatagridActionDelete.extend({
+            label: "Delete",
+            icon: "trash",
+            placeholders: {"{id}":"id"},
+            url: "/api/rest/latest/profiles/{id}.json"
+        })
+    ]
+    // other configuration
 });
 ```
 
