@@ -1,11 +1,16 @@
 <?php
 namespace Oro\Bundle\FlexibleEntityBundle\Tests\Unit\Entity;
 
+use Oro\Bundle\FlexibleEntityBundle\Entity\Media;
+
+use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttribute;
+
 use Oro\Bundle\FlexibleEntityBundle\Tests\Unit\Entity\Demo\FlexibleValue;
 use Oro\Bundle\FlexibleEntityBundle\Tests\Unit\Entity\Demo\Flexible;
 use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttributeType;
 use Oro\Bundle\FlexibleEntityBundle\Entity\Attribute;
 use Oro\Bundle\FlexibleEntityBundle\Entity\AttributeOption;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Test related demo class, aims to cover abstract one
@@ -17,7 +22,6 @@ use Oro\Bundle\FlexibleEntityBundle\Entity\AttributeOption;
  */
 class FlexibleValueTest extends \PHPUnit_Framework_TestCase
 {
-
     protected $flexible;
 
     protected $attribute;
@@ -79,13 +83,58 @@ class FlexibleValueTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test related method
+     *
+     * @param string $backendType the attribute backend type
+     * @param mixed  $data        the value data
+     *
+     * @dataProvider valueProvider
      */
-    public function testGetData()
+    public function testGetData($backendType, $data)
     {
-        $data = 'my value';
+        $this->value->getAttribute()->setBackendType($backendType);
+
+        if ($backendType === AbstractAttributeType::BACKEND_TYPE_OPTIONS) {
+            $this->assertTrue($this->value->getData() instanceof ArrayCollection);
+            $this->assertEquals($this->value->getData()->count(), 0);
+        } else {
+            $this->assertNull($this->value->getData());
+        }
+
         $this->value->setData($data);
-        $this->assertEquals($this->value->getData(), $data);
+        if ($backendType === AbstractAttributeType::BACKEND_TYPE_OPTIONS) {
+            $this->assertTrue($this->value->getData() instanceof ArrayCollection);
+            $this->assertEquals($this->value->getData()->count(), 1);
+        } else {
+            $this->assertEquals($this->value->getData(), $data);
+        }
     }
+
+    /**
+     * Data provider
+     *
+     * @return multitype:multitype:number string
+     *
+     * @static
+     */
+    public static function valueProvider()
+    {
+        $options = new ArrayCollection();
+        $option  = new AttributeOption();
+        $options->add($option);
+
+        return array(
+            array(AbstractAttributeType::BACKEND_TYPE_TEXT, 'my really loooonnnng text'),
+            array(AbstractAttributeType::BACKEND_TYPE_VARCHAR, 'my value'),
+            array(AbstractAttributeType::BACKEND_TYPE_INTEGER, 12),
+            array(AbstractAttributeType::BACKEND_TYPE_DECIMAL, 123.45),
+            array(AbstractAttributeType::BACKEND_TYPE_DATE, '2013-03-28'),
+            array(AbstractAttributeType::BACKEND_TYPE_DATETIME, '2013-03-28 06:01:01'),
+            array(AbstractAttributeType::BACKEND_TYPE_OPTION, $option),
+            array(AbstractAttributeType::BACKEND_TYPE_OPTIONS, $options),
+            array(AbstractAttributeType::BACKEND_TYPE_MEDIA, new Media())
+        );
+    }
+
 
     /**
      * Test related method

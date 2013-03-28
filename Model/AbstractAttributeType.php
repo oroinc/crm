@@ -27,7 +27,8 @@ abstract class AbstractAttributeType
     const BACKEND_TYPE_DATETIME = 'datetime';
     const BACKEND_TYPE_DECIMAL  = 'decimal';
     const BACKEND_TYPE_INTEGER  = 'integer';
-    const BACKEND_TYPE_OPTION   = 'options';
+    const BACKEND_TYPE_OPTIONS  = 'options';
+    const BACKEND_TYPE_OPTION   = 'option';
     const BACKEND_TYPE_TEXT     = 'text';
     const BACKEND_TYPE_VARCHAR  = 'varchar';
     const BACKEND_TYPE_MEDIA    = 'media';
