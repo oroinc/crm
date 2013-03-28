@@ -242,13 +242,4 @@ interface FieldDescriptionInterface
      * @return array the field mapping definition
      */
     public function getSortFieldMapping();
-
-    /**
-     *
-     * @param object $object
-     * @param string $fieldName
-     *
-     * @return mixed
-     */
-    public function getFieldValue($object);
 }

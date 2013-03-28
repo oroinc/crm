@@ -28,6 +28,9 @@ OroApp.Datagrid = Backgrid.Grid.extend({
     header: OroApp.DatagridHeader,
 
     /** @property */
+    body: OroApp.DatagridBody,
+
+    /** @property */
     selectors: {
         grid:        '.grid',
         toolbar:     '.toolbar',
@@ -59,8 +62,14 @@ OroApp.Datagrid = Backgrid.Grid.extend({
         label: '',
         editable: false,
         cell: OroApp.DatagridActionCell,
+        headerCell: Backgrid.HeaderCell.extend({
+            className: 'action-column'
+        }),
         sortable: false
     },
+
+    /** @property {Function} */
+    rowClickAction: undefined,
 
     /**
      * Initialize datagrid
@@ -103,8 +112,12 @@ OroApp.Datagrid = Backgrid.Grid.extend({
 
         if (!_.isEmpty(options.actions)) {
             options.columns.push(this.createActionsColumn(options.actions));
-            this.onClickAction = this.getOnClickAction(options.actions);
+            this.rowClickAction = this.filterOnClickAction(options.actions);
         }
+
+        _.defaults(options, {
+            rowClickAction: this.rowClickAction
+        })
 
         this.loadingMask = new this.loadingMask();
 
@@ -112,34 +125,6 @@ OroApp.Datagrid = Backgrid.Grid.extend({
         this.toolbar = new this.toolbar(_.extend(this.toolbarOptions));
 
         Backgrid.Grid.prototype.initialize.apply(this, arguments);
-        this.listenTo(this.collection, "reset", this.registerRowClickListeners);
-    },
-
-    registerRowClickListeners: function() {
-        if (!this.onClickAction) {
-            return;
-        }
-        var self = this;
-        this.rowClickListeners = this.rowClickListeners || [];
-        _.each(this.body.rows, function(row) {
-            row.$el.on('click', function(e) {
-                if (e.target.nodeName == 'TD') {
-                    var action = new self.onClickAction({
-                        model: row.model
-                    });
-                    action.run();
-                }
-            })
-        }, this);
-    },
-
-    getOnClickAction: function(actions) {
-        var filtered = _.filter(actions, function(action) {
-            return action.prototype.runOnRowClick;
-        });
-        if (filtered.length) {
-            return filtered[0];
-        }
     },
 
     /**
@@ -158,6 +143,21 @@ OroApp.Datagrid = Backgrid.Grid.extend({
                 actions: filteredActions
             }
         ));
+    },
+
+    /**
+     * Filters action with runOnRowClick flag
+     *
+     * @param actions
+     * @return {*}
+     */
+    filterOnClickAction: function(actions) {
+        var filtered = _.filter(actions, function(action) {
+            return action.prototype.runOnRowClick;
+        });
+        if (filtered.length) {
+            return filtered[0];
+        }
     },
 
     /**
@@ -197,8 +197,6 @@ OroApp.Datagrid = Backgrid.Grid.extend({
             $el.append(this.footer.render().$el);
         }
         $el.append(this.body.render().$el);
-
-        this.registerRowClickListeners();
     },
 
     /**

@@ -3,7 +3,6 @@
 namespace Oro\Bundle\GridBundle\Tests\Unit\Field;
 
 use Oro\Bundle\GridBundle\Field\FieldDescription;
-use Oro\Bundle\GridBundle\Tests\Unit\Field\Stub\StubEntity;
 use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttributeType;
 
 /**
@@ -103,6 +102,20 @@ class FieldDescriptionTest extends \PHPUnit_Framework_TestCase
     {
         $this->model->setName(self::TEST_NAME);
         $this->assertEquals(self::TEST_NAME, $this->model->getName());
+    }
+
+    public function testGetDefaultProperty()
+    {
+        $property = $this->model->getProperty();
+        $this->assertInstanceOf('Oro\\Bundle\\GridBundle\\Property\\FieldProperty', $property);
+        $this->assertAttributeSame($this->model, 'field', $property);
+    }
+
+    public function testSetProperty()
+    {
+        $property = $this->getMock('Oro\\Bundle\\GridBundle\\Property\\PropertyInterface');
+        $this->model->setProperty($property);
+        $this->assertSame($property, $this->model->getProperty());
     }
 
     public function testSetOption()
@@ -315,100 +328,5 @@ class FieldDescriptionTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($this->model->getSortFieldMapping());
         $this->model->setOption('sort_field_mapping', self::TEST_MAPPING_TYPE);
         $this->assertEquals(self::TEST_MAPPING_TYPE, $this->model->getSortFieldMapping());
-    }
-
-    /**
-     * Data provider for testGetFieldValue
-     *
-     * @return array
-     */
-    public function getFieldValueDataProvider()
-    {
-        return array(
-            'array_correct_data' => array(
-                '$expected' => self::TEST_SPECIFIC_VALUE,
-                '$object'   => array(self::TEST_FIELD_NAME => self::TEST_SPECIFIC_VALUE),
-                '$name'     => self::TEST_FIELD_NAME,
-            ),
-            'array_null_data' => array(
-                '$expected' => null,
-                '$object'   => array(),
-                '$name'     => self::TEST_FIELD_NAME
-            ),
-            'object_public_decimal' => array(
-                '$expected' => 4.2,
-                '$object'   => new StubEntity('4.2'),
-                '$name'     => StubEntity::PUBLIC_PROPERTY_NAME,
-                '$options'  => array('type' => AbstractAttributeType::BACKEND_TYPE_DECIMAL),
-            ),
-            'object_public_integer' => array(
-                '$expected' => 42,
-                '$object'   => new StubEntity('42'),
-                '$name'     => StubEntity::PUBLIC_PROPERTY_NAME,
-                '$options'  => array('type' => AbstractAttributeType::BACKEND_TYPE_INTEGER),
-            ),
-            'object_public_string' => array(
-                '$expected' => self::TEST_FIELD_NAME,
-                '$object'   => new StubEntity(self::TEST_FIELD_NAME),
-                '$name'     => StubEntity::PUBLIC_PROPERTY_NAME,
-            ),
-            'object_method_by_code' => array(
-                '$expected' => StubEntity::CODE_METHOD_RESULT,
-                '$object'   => new StubEntity(),
-                '$name'     => null,
-                '$options'  => array('code' => StubEntity::CODE_METHOD_NAME),
-            ),
-            'object_method_by_code_null_result' => array(
-                '$expected' => null,
-                '$object'   => new StubEntity(),
-                '$name'     => null,
-                '$options'  => array('code' => StubEntity::CODE_METHOD_NAME_NULL),
-            ),
-            'object_method_by_getter' => array(
-                '$expected' => StubEntity::GETTER_PROPERTY_RESULT,
-                '$object'   => new StubEntity(),
-                '$name'     => StubEntity::GETTER_PROPERTY_NAME,
-            ),
-            'object_method_by_checker' => array(
-                '$expected' => StubEntity::CHECKER_PROPERTY_RESULT,
-                '$object'   => new StubEntity(),
-                '$name'     => StubEntity::CHECKER_PROPERTY_NAME,
-            )
-        );
-    }
-
-    /**
-     * @param mixed $expected
-     * @param mixed $object
-     * @param string $name
-     * @param array $options
-     *
-     * @dataProvider getFieldValueDataProvider
-     */
-    public function testGetFieldValue($expected, $object, $name, array $options = array())
-    {
-        $this->model->setName($name);
-        $this->model->setOptions($options);
-        $fieldValue = $this->model->getFieldValue($object);
-        $this->assertEquals($expected, $fieldValue);
-
-        switch ($this->model->getType()) {
-            case AbstractAttributeType::BACKEND_TYPE_DECIMAL:
-                $this->assertInternalType('float', $fieldValue);
-                break;
-            case AbstractAttributeType::BACKEND_TYPE_INTEGER:
-                $this->assertInternalType('int', $fieldValue);
-                break;
-        }
-    }
-
-    /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage Unable to retrieve the value of "not_existing_field"
-     */
-    public function testGetFieldValueNoData()
-    {
-        $this->model->setName('not_existing_field');
-        $this->model->getFieldValue(new StubEntity());
     }
 }

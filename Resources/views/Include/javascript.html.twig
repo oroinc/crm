@@ -16,6 +16,7 @@
 
     '@OroGridBundle/Resources/public/js/app/datagrid/datagrid-header-cell.js'
     '@OroGridBundle/Resources/public/js/app/datagrid/datagrid-header.js'
+    '@OroGridBundle/Resources/public/js/app/datagrid/datagrid-body.js'
 
     '@OroGridBundle/Resources/public/js/app/datagrid/datagrid-pagination.js'
     '@OroGridBundle/Resources/public/js/app/datagrid/pagination/datagrid-pagination-input.js'
@@ -195,6 +196,12 @@
                 datagridOptions.collection
             );
 
+            // Register router and start history
+            var router = new OroApp.DatagridRouter({
+                collection: datagridCollection
+            });
+            Backbone.history.start();
+
             // Basic grid layout
             var template = _.template($(datagridTemplateSelector).html());
             $(containerSelector).append(template);
@@ -230,12 +237,6 @@
             );
             var filtersList = new OroApp.DatagridFilterList(filterListParameters);
             $(datagridFiltersSelector).html(filtersList.render().$el);
-
-            // Register router and start history
-            var router = new OroApp.DatagridRouter({
-                collection: datagridCollection
-            });
-            Backbone.history.start();
         };
 
         initDatagrid(
