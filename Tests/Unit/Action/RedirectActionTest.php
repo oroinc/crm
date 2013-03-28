@@ -16,34 +16,34 @@ class RedirectActionTest extends AbstractActionTestCase
     {
         $arguments = $this->getAbstractActionArguments($arguments);
         $this->model = new RedirectAction($arguments['aclManager']);
+        $this->model->setName('redirect');
     }
 
     public function testGetType()
     {
         $this->initializeAbstractActionMock();
-
         $this->assertEquals(ActionInterface::TYPE_REDIRECT, $this->model->getType());
     }
 
     public function testSetOptions()
     {
-        $options = array(
-            'link' => '/delete_link',
-        );
         $this->initializeAbstractActionMock();
-
+        $options = array(
+            'link' => '/redirect_link',
+            'backUrl' => true,
+            'backUrlParameter' => 'backurl'
+        );
         $this->model->setOptions($options);
         $this->assertEquals($options, $this->model->getOptions());
     }
 
     /**
      * @expectedException \LogicException
-     * @expectedExceptionMessage There is no option "link" for action "".
+     * @expectedExceptionMessage There is no option "link" for action "redirect".
      */
     public function testSetOptionsError()
     {
-        $options = array();
         $this->initializeAbstractActionMock();
-        $this->model->setOptions($options);
+        $this->model->setOptions(array());
     }
 }

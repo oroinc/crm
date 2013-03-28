@@ -50,14 +50,6 @@ class UrlProperty extends AbstractProperty
     /**
      * {@inheritdoc}
      */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getValue($data)
     {
         return $this->router->generate($this->routeName, $this->getParameters($data), $this->isAbsolute);

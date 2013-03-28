@@ -16,34 +16,30 @@ class DeleteActionTest extends AbstractActionTestCase
     {
         $arguments = $this->getAbstractActionArguments($arguments);
         $this->model = new DeleteAction($arguments['aclManager']);
+        $this->model->setName('delete');
+    }
+
+    /**
+     * @expectedException \LogicException
+     * @expectedExceptionMessage There is no option "link" for action "delete".
+     */
+    public function testSetOptionsError()
+    {
+        $this->initializeAbstractActionMock();
+        $this->model->setOptions(array());
     }
 
     public function testGetType()
     {
         $this->initializeAbstractActionMock();
-
         $this->assertEquals(ActionInterface::TYPE_DELETE, $this->model->getType());
     }
 
     public function testSetOptions()
     {
-        $options = array(
-            'link' => '/delete_link',
-        );
         $this->initializeAbstractActionMock();
-
+        $options = array('link' => '/delete_link');
         $this->model->setOptions($options);
         $this->assertEquals($options, $this->model->getOptions());
-    }
-
-    /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage There is no option "link" for action "".
-     */
-    public function testSetOptionsError()
-    {
-        $options = array();
-        $this->initializeAbstractActionMock();
-        $this->model->setOptions($options);
     }
 }
