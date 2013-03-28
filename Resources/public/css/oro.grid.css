@@ -119,3 +119,8 @@ table.grid thead tr th.descending span.caret {
 .ui-multiselect-menu.select-filter-widget input[type="search"] {
     margin: 0;
 }
+
+.select-filter-widget.ui-multiselect span.caret {
+    margin-top: 8px;
+    margin-right: 8px;
+}

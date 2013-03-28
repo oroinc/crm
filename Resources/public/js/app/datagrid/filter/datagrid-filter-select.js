@@ -150,6 +150,8 @@ OroApp.DatagridFilterSelect = OroApp.DatagridFilter.extend({
 
         // fix CSS classes
         this.$('.select-filter-widget').removeClass('ui-widget').removeClass('ui-state-default');
+        this.$('.select-filter-widget').find('span.ui-icon').remove();
+        this.$('.select-filter-widget.ui-multiselect').append('<span class="caret"></span>');
     },
 
     /**
