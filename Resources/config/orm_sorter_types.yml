@@ -10,4 +10,4 @@ services:
     oro_grid.sorter.flexible:
         class:     %oro_grid.sorter.flexible.class%
         scope:     prototype
-        arguments: ["@service_container"]
+        arguments: ["@oro_flexibleentity.registry"]

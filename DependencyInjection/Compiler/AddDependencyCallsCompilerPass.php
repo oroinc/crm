@@ -4,157 +4,86 @@ namespace Oro\Bundle\GridBundle\DependencyInjection\Compiler;
 
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\Config\Definition\Exception\InvalidDefinitionException;
 
-class AddDependencyCallsCompilerPass implements CompilerPassInterface
+class AddDependencyCallsCompilerPass extends AbstractDatagridManagerCompilerPass
 {
-    const DATAGRID_MANAGER_TAG = 'oro_grid.datagrid.manager';
-    const FLEXIBLE_CONFIG_PARAMETER = 'oro_flexibleentity.flexible_config';
-    const FLEXIBLE_ENTITY_KEY = 'flexible';
+    const QUERY_FACTORY_ATTRIBUTE    = 'query_factory';
+    const ROUTE_GENERATOR_ATTRIBUTE  = 'route_generator';
+    const DATAGRID_BUILDER_ATTRIBUTE = 'datagrid_builder';
+    const LIST_BUILDER_ATTRIBUTE     = 'list_builder';
+    const PARAMETERS_ATTRIBUTE       = 'parameters';
+    const TRANSLATOR_ATTRIBUTE       = 'translator';
+    const VALIDATOR_ATTRIBUTE        = 'validator';
 
     /**
      * {@inheritDoc}
      */
-    public function process(ContainerBuilder $container)
+    public function processDatagrid()
     {
-        foreach ($container->findTaggedServiceIds(self::DATAGRID_MANAGER_TAG) as $id => $tags) {
-            foreach ($tags as $attributes) {
-                $this->applyConfigurationFromAttributes($container, $id, $attributes);
-                $this->applyDefaults($container, $id, $attributes);
-            }
-        }
+        $this->applyConfigurationFromAttributes();
+        $this->applyDefaults();
     }
 
     /**
      * This method read the attribute keys and configure grid manager class to use the related dependency
-     *
-     * @param ContainerBuilder $container
-     * @param string $serviceId
-     * @param array $attributes
      */
-    public function applyConfigurationFromAttributes(
-        ContainerBuilder $container,
-        $serviceId,
-        array $attributes
-    ) {
-        $definition = $container->getDefinition($serviceId);
-
+    protected function applyConfigurationFromAttributes()
+    {
         $keys = array(
-            'query_factory',
-            'route_generator',
-            'datagrid_builder',
-            'list_builder',
-            'parameters',
-            'translator',
-            'validator',
-            'flexible_manager',
+            self::QUERY_FACTORY_ATTRIBUTE,
+            self::ROUTE_GENERATOR_ATTRIBUTE,
+            self::DATAGRID_BUILDER_ATTRIBUTE,
+            self::LIST_BUILDER_ATTRIBUTE,
+            self::PARAMETERS_ATTRIBUTE,
+            self::TRANSLATOR_ATTRIBUTE,
+            self::VALIDATOR_ATTRIBUTE,
         );
 
         foreach ($keys as $key) {
             $method = 'set' . $this->camelize($key);
-            if (!isset($attributes[$key]) || $definition->hasMethodCall($method)) {
+            if (!$this->hasAttribute($key) || $this->definition->hasMethodCall($method)) {
                 continue;
             }
 
-            $definition->addMethodCall($method, array(new Reference($attributes[$key])));
+            $this->definition->addMethodCall($method, array(new Reference($this->getAttribute($key))));
         }
 
-        $this->assertAttributesHasKey($serviceId, $attributes, 'datagrid_name');
-        $definition->addMethodCall('setName', array($attributes['datagrid_name']));
+        $this->definition->addMethodCall('setName', array($this->getMandatoryAttribute('datagrid_name')));
 
-        if (isset($attributes['entity_hint'])) {
-            $definition->addMethodCall('setEntityHint', array($attributes['entity_hint']));
+        if ($this->hasAttribute('entity_hint')) {
+            $this->definition->addMethodCall('setEntityHint', array($this->getAttribute('entity_hint')));
         }
-
-        // apply flexible configuration
-        $this->applyFlexibleConfigurationFromAttributes($container, $serviceId, $attributes);
-    }
-
-    /**
-     * This method read the attribute keys and configure grid manager class to use the related dependency
-     *
-     * @param ContainerBuilder $container
-     * @param string $serviceId
-     * @param array $attributes
-     * @throws \LogicException
-     */
-    public function applyFlexibleConfigurationFromAttributes(
-        ContainerBuilder $container,
-        $serviceId,
-        array $attributes
-    ) {
-        $definition = $container->getDefinition($serviceId);
-
-        $managerSetter = 'setFlexibleManager';
-
-        if ($definition->hasMethodCall($managerSetter) || empty($attributes[self::FLEXIBLE_ENTITY_KEY])) {
-            return;
-        }
-
-        $entityKey = 'entity_name';
-        $this->assertAttributesHasKey($serviceId, $attributes, $entityKey);
-
-        $className = $attributes[$entityKey];
-        if (!$container->hasParameter(self::FLEXIBLE_CONFIG_PARAMETER)) {
-            throw new \LogicException(
-                sprintf(
-                    'Cannot get value of OroFlexibleEntityBundle configuration parameter ("%s").',
-                    self::FLEXIBLE_CONFIG_PARAMETER
-                )
-            );
-        }
-        $flexibleConfig = $container->getParameter(self::FLEXIBLE_CONFIG_PARAMETER);
-
-        // validate configuration
-        if (!isset($flexibleConfig['entities_config'][$className]['flexible_manager'])) {
-            throw new \LogicException(
-                "Cannot get flexible manager of \"$className\" from entities configuration of OroFlexibleEntityBundle."
-            );
-        }
-
-        $flexibleManagerServiceId = $flexibleConfig['entities_config'][$className]['flexible_manager'];
-        $definition->addMethodCall($managerSetter, array(new Reference($flexibleManagerServiceId)));
     }
 
     /**
      * Apply the default values required by the AdminInterface to the Admin service definition
-     *
-     * @param ContainerBuilder $container
-     * @param string $serviceId
-     * @param array $attributes
-     * @internal param \Symfony\Component\DependencyInjection\Definition $definition
-     * @return void
      */
-    public function applyDefaults(
-        ContainerBuilder $container,
-        $serviceId,
-        array $attributes
-    ) {
-        $definition = $container->getDefinition($serviceId);
-        $definition->setScope(ContainerInterface::SCOPE_PROTOTYPE);
+    protected function applyDefaults()
+    {
+        $this->definition->setScope(ContainerInterface::SCOPE_PROTOTYPE);
 
         $defaultAddServices = array(
-            'query_factory'    => array($this, 'getDefaultQueryFactoryServiceId'),
-            'route_generator'  => array($this, 'getDefaultRouteGeneratorServiceId'),
-            'parameters'       => array($this, 'getDefaultParametersServiceId'),
-            'datagrid_builder' => 'oro_grid.builder.datagrid',
-            'list_builder'     => 'oro_grid.builder.list',
-            'translator'       => 'translator',
-            'validator'        => 'validator',
+            self::QUERY_FACTORY_ATTRIBUTE    => array($this, 'getDefaultQueryFactoryServiceId'),
+            self::ROUTE_GENERATOR_ATTRIBUTE  => array($this, 'getDefaultRouteGeneratorServiceId'),
+            self::PARAMETERS_ATTRIBUTE       => array($this, 'getDefaultParametersServiceId'),
+            self::DATAGRID_BUILDER_ATTRIBUTE => 'oro_grid.builder.datagrid',
+            self::LIST_BUILDER_ATTRIBUTE     => 'oro_grid.builder.list',
+            self::TRANSLATOR_ATTRIBUTE       => 'translator',
+            self::VALIDATOR_ATTRIBUTE        => 'validator',
         );
 
-        foreach ($defaultAddServices as $attr => $addServiceId) {
-            $method = 'set' . $this->camelize($attr);
+        foreach ($defaultAddServices as $attribute => $serviceId) {
+            $method = 'set' . $this->camelize($attribute);
 
-            if (!$definition->hasMethodCall($method)) {
-                if (is_callable($addServiceId)) {
-                    $addServiceId = call_user_func($addServiceId, $container, $serviceId, $attributes);
+            if (!$this->definition->hasMethodCall($method)) {
+                if (is_callable($serviceId)) {
+                    $serviceId = call_user_func($serviceId);
                 }
-                $definition->addMethodCall($method, array(new Reference($addServiceId)));
+                $this->definition->addMethodCall($method, array(new Reference($serviceId)));
             }
         }
     }
@@ -162,50 +91,40 @@ class AddDependencyCallsCompilerPass implements CompilerPassInterface
     /**
      * Get id of default query factory service
      *
-     * @param ContainerBuilder $container
-     * @param string $serviceId
-     * @param array $attributes
      * @return string
      */
-    protected function getDefaultQueryFactoryServiceId(ContainerBuilder $container, $serviceId, array $attributes)
+    protected function getDefaultQueryFactoryServiceId()
     {
-        $queryFactoryServiceId = sprintf('%s.default_query_factory', $serviceId);
-
-        $container->setDefinition(
-            $queryFactoryServiceId,
-            $this->createDefaultQueryFactoryDefinition($serviceId, $attributes)
-        );
-
+        $queryFactoryServiceId = sprintf('%s.default_query_factory', $this->serviceId);
+        $this->container->setDefinition($queryFactoryServiceId, $this->createDefaultQueryFactoryDefinition());
         return $queryFactoryServiceId;
     }
 
     /**
      * Create default query factory service definition
      *
-     * @param $serviceId
-     * @param array $attributes
      * @return Definition
      * @throws InvalidDefinitionException
      */
-    protected function createDefaultQueryFactoryDefinition($serviceId, array $attributes)
+    protected function createDefaultQueryFactoryDefinition()
     {
         $arguments = array();
-        if (!empty($attributes['entity_name'])) {
-            $factoryClass = '%oro_grid.orm.query_factory.entity.class%';
+        if ($this->hasAttribute('entity_name')) {
+            $queryFactoryClass = '%oro_grid.orm.query_factory.entity.class%';
 
-            $arguments[] = new Reference('doctrine');
+            $arguments = array(
+                new Reference('doctrine'),
+                $this->getAttribute('entity_name'),
+            );
 
-            $this->assertAttributesHasKey($serviceId, $attributes, 'entity_name');
-            $arguments[] = $attributes['entity_name'];
-
-            if (!empty($attributes['query_entity_alias'])) {
-                $arguments[] = $attributes['query_entity_alias'];
+            if ($this->hasAttribute('query_entity_alias')) {
+                $arguments[] = $this->getAttribute('query_entity_alias');
             }
         } else {
-            $factoryClass = '%oro_grid.orm.query_factory.query.class%';
+            $queryFactoryClass = '%oro_grid.orm.query_factory.query.class%';
         }
 
-        $definition = new Definition($factoryClass);
+        $definition = new Definition($queryFactoryClass);
         $definition->setPublic(false);
         $definition->setArguments($arguments);
 
@@ -213,60 +132,29 @@ class AddDependencyCallsCompilerPass implements CompilerPassInterface
     }
 
     /**
-     * @param string $serviceId
-     * @param string $attributes
-     * @param string $key
-     * @throws InvalidDefinitionException
-     */
-    private function assertAttributesHasKey($serviceId, array $attributes, $key)
-    {
-        if (empty($attributes[$key])) {
-            throw new InvalidDefinitionException(
-                sprintf(
-                    'Definition of service "%s" must have "%s" attribute in tag "%s"',
-                    $serviceId,
-                    $key,
-                    self::DATAGRID_MANAGER_TAG
-                )
-            );
-        }
-    }
-
-    /**
      * Get id of default route generator service
      *
-     * @param ContainerBuilder $container
-     * @param string $serviceId
-     * @param array $attributes
      * @return string
      */
-    protected function getDefaultRouteGeneratorServiceId(ContainerBuilder $container, $serviceId, array $attributes)
+    protected function getDefaultRouteGeneratorServiceId()
     {
-        $routeGeneratorServiceId = sprintf('%s.route.default_generator', $serviceId);
-
-        $container->setDefinition(
-            $routeGeneratorServiceId,
-            $this->createDefaultRouteGeneratorDefinition($serviceId, $attributes)
-        );
-
+        $routeGeneratorServiceId = sprintf('%s.route.default_generator', $this->serviceId);
+        $this->container->setDefinition($routeGeneratorServiceId, $this->createDefaultRouteGeneratorDefinition());
         return $routeGeneratorServiceId;
     }
 
     /**
      * Create default query factory service definition
      *
-     * @param $serviceId
-     * @param array $attributes
      * @return Definition
      * @throws InvalidDefinitionException
      */
-    protected function createDefaultRouteGeneratorDefinition($serviceId, array $attributes)
+    protected function createDefaultRouteGeneratorDefinition()
     {
-        $arguments = array(new Reference('router'));
-
-        $this->assertAttributesHasKey($serviceId, $attributes, 'route_name');
-
-        $arguments[] = $attributes['route_name'];
+        $arguments = array(
+            new Reference('router'),
+            $this->getMandatoryAttribute('route_name')
+        );
 
         $definition = new Definition('%oro_grid.route.default_generator.class%');
         $definition->setPublic(false);
@@ -278,54 +166,32 @@ class AddDependencyCallsCompilerPass implements CompilerPassInterface
     /**
      * Get id of default parameters service
      *
-     * @param ContainerBuilder $container
-     * @param string $serviceId
-     * @param array $attributes
      * @return string
      */
-    protected function getDefaultParametersServiceId(ContainerBuilder $container, $serviceId, array $attributes)
+    protected function getDefaultParametersServiceId()
     {
-        $routeGeneratorServiceId = sprintf('%s.parameters.default', $serviceId);
-
-        $container->setDefinition(
-            $routeGeneratorServiceId,
-            $this->createDefaultParametersDefinition($serviceId, $attributes)
-        );
-
+        $routeGeneratorServiceId = sprintf('%s.parameters.default', $this->serviceId);
+        $this->container->setDefinition($routeGeneratorServiceId, $this->createDefaultParametersDefinition());
         return $routeGeneratorServiceId;
     }
 
     /**
      * Create default query factory service definition
      *
-     * @param $serviceId
-     * @param array $attributes
      * @return Definition
      * @throws InvalidDefinitionException
      */
-    protected function createDefaultParametersDefinition($serviceId, array $attributes)
+    protected function createDefaultParametersDefinition()
     {
-        $arguments = array(new Reference('service_container'));
-
-        $this->assertAttributesHasKey($serviceId, $attributes, 'datagrid_name');
-
-        $arguments[] = $attributes['datagrid_name'];
+        $arguments = array(
+            new Reference('service_container'),
+            $this->getMandatoryAttribute('datagrid_name')
+        );
 
         $definition = new Definition('%oro_grid.datagrid.parameters.class%');
         $definition->setPublic(false);
         $definition->setArguments($arguments);
 
         return $definition;
-    }
-
-    /**
-     * Method taken from PropertyPath
-     *
-     * @param string $property
-     * @return mixed
-     */
-    protected function camelize($property)
-    {
-        return Container::camelize($property);
     }
 }
