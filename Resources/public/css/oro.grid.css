@@ -19,6 +19,10 @@ table.grid thead tr th.descending span.caret {
     border-bottom: 4px solid #000000;
 }
 
+.filter-item {
+    padding-left: 5px;
+}
+
 .grid-toolbar .pagination ul li input {
     display: inline;
     float: left;
@@ -71,13 +75,16 @@ table.grid thead tr th.descending span.caret {
     border: 1px solid #dddddd;
 }
 
-.filter-select .select-filter-widget {
-    background: none;
+.select-filter-widget {
     width: auto !important;
-    border: none;
+}
+
+.filter-select .select-filter-widget {
     font-weight: bold;
     color: #333333;
     padding: 0 0 2px 0;
+    background: none;
+    border: none;
 }
 
 .filter-select .select-filter-widget .ui-icon {
@@ -86,6 +93,10 @@ table.grid thead tr th.descending span.caret {
 
 .ui-multiselect-menu.select-filter-widget {
     padding: 5px 2px 2px 2px;
+}
+
+.ui-multiselect-menu.select-filter-widget ul {
+    max-height: 200px;
 }
 
 .ui-multiselect-menu.select-filter-widget .ui-multiselect-close {
@@ -131,4 +142,20 @@ table.grid thead tr th.descending span.caret {
 
 .ui-multiselect-menu.select-filter-widget .ui-multiselect-checkboxes input[type="checkbox"] {
     margin: 4px 6px 5px 5px;
+}
+
+.ui-multiselect.filter-list {
+    background: none;
+    border: none;
+    padding: 0 0 4px 6px;
+}
+
+#add-filter-button {
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.ui-state-hover #add-filter-button {
+    color: #032D67;
+    text-decoration: underline;
 }

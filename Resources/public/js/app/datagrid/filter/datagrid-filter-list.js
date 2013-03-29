@@ -5,25 +5,40 @@
  * @extends Backbone.View
  */
 OroApp.DatagridFilterList = Backbone.View.extend({
-    /** @property */
+    /**
+     * List of filter objects
+     *
+     * @property
+     */
     filters: {},
 
-    /** @property */
+    /**
+     * Filter list template
+     *
+     * @property
+     */
     addButtonTemplate: _.template(
-        '<a href="#" class="btn btn-link btn-group"><%= addButtonHint %></a>' +
-            '<select id="add-filter-select" multiple>' +
+        '<select id="add-filter-select" multiple>' +
             '<% _.each(filters, function (filter, name) { %>' +
                 '<option value="<%= name %>" <% if (filter.enabled) { %>selected<% } %>>' +
                     '<%= filter.label %>' +
                 '</option>' +
             '<% }); %>' +
-            '</select>'
+        '</select>'
     ),
 
-    /** @property */
+    /**
+     * Filter list input selector
+     *
+     * @property
+     */
     filterSelector: '#add-filter-select',
 
-    /** @property */
+    /**
+     * Add filter button hint
+     *
+     * @property
+     */
     addButtonHint: 'Add filter',
 
     /** @property */
@@ -37,6 +52,13 @@ OroApp.DatagridFilterList = Backbone.View.extend({
      * @property
      */
     needReloadCollection: true,
+
+    /**
+     * Select widget object
+     *
+     * @property
+     */
+    selectWidget: null,
 
     /**
      * Initialize filter list options
@@ -71,6 +93,11 @@ OroApp.DatagridFilterList = Backbone.View.extend({
         Backbone.View.prototype.initialize.apply(this, arguments);
     },
 
+    /**
+     * Save filter state
+     *
+     * @protected
+     */
     _saveState: function() {
         this.collection.state.filters = this._createState();
         this.collection.state.filtersParams = this.getAllParameters();
@@ -96,6 +123,13 @@ OroApp.DatagridFilterList = Backbone.View.extend({
         }
     },
 
+    /**
+     * Restore filter state from collection
+     *
+     * @param {OroApp.PageableCollection} collection
+     * @param {Object} options
+     * @protected
+     */
     _restoreState: function(collection, options) {
         if (options.ignoreUpdateFilters) {
             return;
@@ -106,7 +140,7 @@ OroApp.DatagridFilterList = Backbone.View.extend({
     /**
      * Activate/deactivate all filter depends on its status
      *
-     * @private
+     * @protected
      */
     _processFilterStatus: function() {
         var activeFilters = this.$(this.filterSelector).val();
@@ -118,6 +152,22 @@ OroApp.DatagridFilterList = Backbone.View.extend({
                 this.disableFilter(filter);
             }
         }, this);
+
+        this._updateDropdownPosition();
+    },
+
+    /**
+     * Fix dropdown position
+     *
+     * @protected
+     */
+    _updateDropdownPosition: function() {
+        var button = this.$('.ui-multiselect.filter-list');
+        var position = button.offset();
+        this.selectWidget.multiselect('widget').css({
+            top: position.top + button.outerHeight(),
+            left: position.left
+        });
     },
 
     /**
@@ -129,6 +179,7 @@ OroApp.DatagridFilterList = Backbone.View.extend({
         filter.enable();
         var optionSelector = this.filterSelector + ' option[value="' + filter.name + '"]';
         this.$(optionSelector).attr('selected', 'selected');
+        this.selectWidget.multiselect('refresh');
     },
 
     /**
@@ -141,6 +192,7 @@ OroApp.DatagridFilterList = Backbone.View.extend({
         this._saveState();
         var optionSelector = this.filterSelector + ' option[value="' + filter.name + '"]';
         this.$(optionSelector).removeAttr('selected');
+        this.selectWidget.multiselect('refresh');
     },
 
     /**
@@ -160,9 +212,10 @@ OroApp.DatagridFilterList = Backbone.View.extend({
         }
 
         this.$el.append(this.addButtonTemplate({
-            filters: this.filters,
-            addButtonHint: this.addButtonHint
+            filters: this.filters
         }));
+
+        this._initializeSelectWidget();
 
         this.trigger("rendered");
 
@@ -171,6 +224,97 @@ OroApp.DatagridFilterList = Backbone.View.extend({
         }
 
         return this;
+    },
+
+    /**
+     * Initialize multiselect widget
+     *
+     * @protected
+     */
+    _initializeSelectWidget: function() {
+        this.selectWidget = this.$(this.filterSelector);
+
+        this.selectWidget.multiselect(_.extend({
+            height: 'auto',
+            selectedList: 0,
+            selectedText: this.addButtonHint,
+            classes: 'filter-list select-filter-widget',
+            open: $.proxy(function() {
+                this._setDropdownDesign();
+                var widget = this.selectWidget.multiselect('widget');
+                widget.find('input[type="search"]').focus();
+                $('body').trigger('click');
+            }, this)
+        }, this.widgetOptions));
+
+        this.selectWidget.multiselectfilter({
+            label: '',
+            placeholder: '',
+            autoReset: true
+        });
+
+        // fix CSS classes
+        this.$('.filter-list').removeClass('ui-widget').removeClass('ui-state-default');
+        this.$('.filter-list span.ui-icon').remove();
+        this.$('.ui-multiselect.filter-list span').replaceWith('<a id="add-filter-button" href="#">' + this.addButtonHint +'</a>');
+    },
+
+    /**
+     * Set design for select dropdown
+     *
+     * @protected
+     */
+    _setDropdownDesign: function() {
+        var widget = this.selectWidget.multiselect('widget');
+
+        // fix CSS classes
+        widget.addClass('dropdown-menu');
+        widget.removeClass('ui-widget-content');
+        widget.removeClass('ui-widget');
+        widget.find('.ui-widget-header').removeClass('ui-widget-header');
+        widget.find('.ui-multiselect-filter').removeClass('ui-multiselect-filter');
+        widget.find('ul li label').removeClass('ui-corner-all');
+
+        // set elements width
+        var requiredWidth = this._getMinimumDropdownWidth() + 24;
+        widget.width(requiredWidth).css('min-width', requiredWidth + 'px');
+        widget.find('input[type="search"]').width(requiredWidth - 22);
+    },
+
+    /**
+     * Get minimum width of dropdown menu
+     *
+     * @return {Number}
+     * @protected
+     */
+    _getMinimumDropdownWidth: function() {
+        var minimumWidth = 0;
+        var widget = this.selectWidget.multiselect('widget');
+        var elements = widget.find('.ui-multiselect-checkboxes li');
+        _.each(elements, function(element, index, list) {
+            var width = this._getTextWidth($(element).find('label'));
+            if (width > minimumWidth) {
+                minimumWidth = width;
+            }
+        }, this);
+
+        return minimumWidth;
+    },
+
+    /**
+     * Get element width
+     *
+     * @param {Object} element
+     * @return {Integer}
+     * @protected
+     */
+    _getTextWidth: function(element) {
+        var html_org = element.html();
+        var html_calc = '<span>' + html_org + '</span>';
+        element.html(html_calc);
+        var width = element.find('span:first').width();
+        element.html(html_org);
+        return width;
     },
 
     /**

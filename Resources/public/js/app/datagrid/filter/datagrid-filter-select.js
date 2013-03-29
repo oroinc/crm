@@ -153,8 +153,8 @@ OroApp.DatagridFilterSelect = OroApp.DatagridFilter.extend({
 
         // fix CSS classes
         this.$('.select-filter-widget').removeClass('ui-widget').removeClass('ui-state-default');
-        this.$('.select-filter-widget').find('span.ui-icon').remove();
-        this.$('.select-filter-widget.ui-multiselect').append('<span class="caret"></span>');
+        this.$('.select-filter-widget span.ui-icon').remove();
+        this.$('.select-filter-widget.ui-multiselect:first').append('<span class="caret"></span>');
     },
 
     /**
@@ -207,12 +207,6 @@ OroApp.DatagridFilterSelect = OroApp.DatagridFilter.extend({
             this.minimumWidth = this._getMinimumDropdownWidth();
         }
 
-        // set elements width
-        var filterWidth = this.$(this.containerSelector).width();
-        var requiredWidth = Math.max(filterWidth + 10, this.minimumWidth);
-        widget.width(requiredWidth).css('min-width', requiredWidth + 'px');
-        widget.find('input[type="search"]').width(requiredWidth - 22);
-
         // fix CSS classes
         widget.addClass('dropdown-menu');
         widget.removeClass('ui-widget-content');
@@ -220,6 +214,12 @@ OroApp.DatagridFilterSelect = OroApp.DatagridFilter.extend({
         widget.find('.ui-widget-header').removeClass('ui-widget-header');
         widget.find('.ui-multiselect-filter').removeClass('ui-multiselect-filter');
         widget.find('ul li label').removeClass('ui-corner-all');
+
+        // set elements width
+        var filterWidth = this.$(this.containerSelector).width();
+        var requiredWidth = Math.max(filterWidth + 10, this.minimumWidth);
+        widget.width(requiredWidth).css('min-width', requiredWidth + 'px');
+        widget.find('input[type="search"]').width(requiredWidth - 22);
     },
 
     /**
