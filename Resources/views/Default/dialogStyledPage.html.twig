@@ -1,39 +1,98 @@
 {% extends "OroUIBundle:Default:index.html.twig" %}
 {% block head %}
     {{ parent() }}
-    <script type="text/javascript" src="{{ asset('bundles/oroui/lib/underscore.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('bundles/oroui/lib/backbone.js') }}"></script>
-
-    <link rel="stylesheet" href="{{ asset('bundles/orowindows/css/jquery.dialog.extended.css') }}" media="all" />
-    <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js"></script>
-    <script type="text/javascript" src="{{ asset('bundles/orowindows/js/jquery.dialog.extended.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('bundles/orowindows/js/views/dialog.js') }}"></script>
-
-    <script type="text/javascript" src="{{ asset('bundles/orowindows/js/models/state.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('bundles/orowindows/js/collections/state.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('bundles/orowindows/js/views/dialog.js') }}"></script>
-
-    <script type="text/javascript">
-        Oro.widget.StateModel.prototype.urlRoot = {{ path('oro_api_get_windows')|json_encode|raw }};
-    </script>
+    <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>
 {% endblock head %}
 {% block header %}
 {% endblock %}
 {% block content %}
 
     <div class="row-fluid">
-        <div class="container-fluid" style="min-height: 900px; background-color:#d0def1;" id="window-container">
-            <button type="button" id="my-button" class="btn btn-large btn-primary">Open new window</button>
+        <div class="container-fluid" style="min-height: 800px; background-color:#d0def1;" id="window-container">
+            <button type="button" id="my-button" class="btn btn-large btn-primary">Open more windows</button>
             <hr />
             <div class="btn-toolbar">
                 <div class="btn-group">
-                    <button id="opener1" class="btn">Extended</button>
-                    <button id="opener2" class="btn">Minimize only</button>
-                    <button id="opener3" class="btn">Classic dialog</button>
+                    <button id="opener1" class="btn">Open window 1</button>
+                    <button id="opener2" class="btn">Open window 2</button>
+                    <button id="opener3" class="btn">Open window 3</button>
                 </div>
             </div>
             <div id="opener-content1" style="display: none;" title="Dima’s Address">
-                {% render url('acme_demowindows_forms_test') %}
+                    <form action="#" class="form form-horizontal">
+                        <fieldset>
+                            <div class="scroll-holder">
+                                <div class="control-group">
+                                    <label class="control-label" for="inputAddress">Address</label>
+                                    <div class="controls">
+                                        <input type="text" id="inputAddress" placeholder="Address">
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label" for="inputAddress2">Address2</label>
+                                    <div class="controls">
+                                        <input type="text" id="inputAddress2" placeholder="Address2">
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label" for="City">City</label>
+                                    <div class="controls">
+                                        <input type="text" id="City" placeholder="City">
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label" for="States">States</label>
+                                    <div class="controls">
+                                        <input type="text" id="States" placeholder="States">
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label" for="Zip">Zip</label>
+                                    <div class="controls">
+                                        <input type="text" id="Zip" placeholder="Zip">
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label" for="Country">Country</label>
+                                    <div class="controls">
+                                        <select name="Country" id="Country">
+                                            <option>us</option>
+                                            <option>uk</option>
+                                            <option>rus</option>
+                                            <option>tt</option>
+                                            <option>dd</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label" for="tell">tell</label>
+                                    <div class="controls">
+                                        <input type="text" id="tell" placeholder="tell">
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label" for="email">email</label>
+                                    <div class="controls">
+                                        <input type="text" id="email" placeholder="email">
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <div class="controls">
+                                        <label class="checkbox">
+                                            <input type="checkbox"> Remember me
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bottom-action">
+                                <div class="pull-right">
+                                    <button type="button" class="btn">Cancel</button>
+                                    <button type="button" class="btn btn-primary">Submit</button>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </form>
+
             </div>
             <div id="opener-content2" style="display: none;" title="Dima’s Address2">
                 <p>Fusce hendrerit lacinia ligula.</p>
@@ -48,72 +107,107 @@
         </div>
     </div>
 
-    <div style="display: none">
-        <div id="widget-restored-state-1">
-            {% render url('acme_demowindows_forms_test') %}
-        </div>
-    </div>
-
     <script>
         $(function(){
-            Oro.widget.States.fetch({
-                success: function(data) {
-                    data.each(function(windowState) {
-                        new Oro.widget.DialogView({
-                            model: windowState
-                        }).render();
-                    });
+            var positionNextWindowY = 0;
+            var positionNextWindowX=0;
+            var positionNextWindowCounter = -35;
+            function newPositionWindow(){
+                var TTEmp = positionNextWindowY/15;
+                if( TTEmp > 10){
+                    positionNextWindowX = positionNextWindowCounter;
+                    positionNextWindowY = 0;
+                    positionNextWindowCounter = positionNextWindowCounter -35;
+                    var needPosition = 'center+' + positionNextWindowX + ' center+' + positionNextWindowY;
+                    return needPosition;
+                }else{
+                    positionNextWindowY = positionNextWindowY +15;
+                    positionNextWindowX =  positionNextWindowX +15;
+                    var needPosition = 'center+' +  positionNextWindowX + ' center+' + positionNextWindowY;
+                    return needPosition;
                 }
-            });
-
-            var pos = 0;
+            }
+            var isOpen;
             $("#my-button").click(function(){
-                pos++;
-                new Oro.widget.DialogView({
-                    el: $("<div>Some text if you need will be here</div>"),
-                    dialogOptions: {
-                        allowMaximize: true,
-                        allowMinimize: true,
-                        dblclick: 'maximize',
-                        title: "dialog window title long long long " + pos,
-                        width: 400,
-                        height: 400
-                    }
-                }).render();
+                var offsetwindow = newPositionWindow();
+                var dialogOptions = {
+                    title : "dialog window",
+                    width : 400,
+                    height : 400,
+                    position: {
+                        my: offsetwindow,
+                        at: "center center",
+                        of: $('body')
+                    },
+                    "close" : function(){ $(this).dialog( "destroy" ) }
+                };
+                $("<div>Some text if you need will be here</div>").dialog(dialogOptions);
             });
             $("#opener1").click(function(){
-                new Oro.widget.DialogView({
-                    el: '#opener-content1',
-                    dialogOptions: {
-                        allowMaximize: true,
-                        allowMinimize: true,
-                        dblclick: 'maximize',
-                        maximizedHeightDecreaseBy: 'minimize-bar',
-                        appendTo: '#main .row-fluid',
+                try{
+                    isOpen = $('#opener-content1').dialog("isOpen");
+                } catch(e) {
+                    isOpen = false;
+                }
+                if (isOpen === false ){
+                    var offsetwindow = newPositionWindow();
+                    var dialogOptions = {
+                        appendTo: "#window-container",
                         width : 400,
-                        height : 305
-                    }
-                }).render();
+                        height : 305,
+                        position: {
+                            my: offsetwindow,
+                            at: "center center",
+                            of: $('body')
+                        },
+                        "close" : function(){ $(this).dialog( "destroy" ) }
+                    };
+
+                    $("#opener-content1").dialog(dialogOptions);
+                }
             });
             $("#opener2").click(function(){
-                new Oro.widget.DialogView({
-                    el: '#opener-content2',
-                    dialogOptions: {
-                        allowMinimize: true,
-                        dblclick: 'collapse',
+                try{
+                    isOpen = $('#opener-content2').dialog("isOpen");
+                } catch(e) {
+                    isOpen = false;
+                }
+                if (isOpen === false ){
+                    var offsetwindow = newPositionWindow();
+                    var dialogOptions = {
                         width : 400,
-                        height : 300
-                    }
-                }).render();
+                        height : 300,
+                        position: {
+                            my: offsetwindow,
+                            at: "center center",
+                            of: $('body')
+                        },
+                        "close" : function(){ $(this).dialog( "destroy" ) }
+                    };
+
+                    $("#opener-content2").dialog(dialogOptions);
+                }
             });
             $("#opener3").click(function(){
-                new Oro.widget.DialogView({
-                    el: '#opener-content3',
-                    dialogOptions: {
+                try{
+                    isOpen = $('#opener-content3').dialog("isOpen");
+                } catch(e) {
+                    isOpen = false;
+                }
+                if (isOpen === false ){
+                    var offsetwindow = newPositionWindow();
+                    var dialogOptions = {
                         width : 400,
-                        height : 300
-                    }
-                }).render();
+                        height : 300,
+                        position: {
+                            my: offsetwindow,
+                            at: "center center",
+                            of: $('body')
+                        },
+                        "close" : function(){ $(this).dialog( "destroy" ) }
+                    };
+                    $("#opener-content3").dialog(dialogOptions);
+                }
             });
         });
     </script>
