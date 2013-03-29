@@ -11,13 +11,12 @@ namespace Oro\Bundle\FlexibleEntityBundle\Model;
  */
 abstract class AbstractAttributeType
 {
-
     /**
      * Available backend storage
      * @var string
      */
-    const BACKEND_STORAGE_ATTRIBUTE_VALUE = 'values';
-    const BACKEND_STORAGE_FLAT_VALUE      = 'flatValues';
+    const BACKEND_STORAGE_ATTRIBUTE_VALUE = 'doctrine_eav';
+    const BACKEND_STORAGE_FLAT_VALUE      = 'doctrine_flat';
 
     /**
      * Available backend types
@@ -35,6 +34,9 @@ abstract class AbstractAttributeType
 
     /**
      * Classes for AttributeType
+     *
+     * TODO : Avoid to hardcode basic types here !
+     *
      * @staticvar string
      */
     const TYPE_DATE_CLASS              = 'Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\DateType';
@@ -62,18 +64,11 @@ abstract class AbstractAttributeType
     protected $name;
 
     /**
-     * Field backend type, "varchar" by default
+     * Field backend type, "varchar" by default, the doctrine mapping field, getter / setter to use for binding
      *
      * @var string
      */
     protected $backendType = self::BACKEND_TYPE_VARCHAR;
-
-    /**
-     * Field type alias, "data" by default, mapped by attribute property or getter/setter
-     *
-     * @var string
-     */
-    protected $fieldName = 'data';
 
     /**
      * Form type alias, "text" by default
@@ -100,16 +95,6 @@ abstract class AbstractAttributeType
     public function getBackendType()
     {
         return $this->backendType;
-    }
-
-    /**
-     * Get field name
-     *
-     * @return string
-     */
-    public function getFieldName()
-    {
-        return $this->fieldName;
     }
 
     /**

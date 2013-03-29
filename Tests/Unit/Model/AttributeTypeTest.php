@@ -150,14 +150,6 @@ class AttributeTypeTest extends \PHPUnit_Framework_TestCase
     /**
      * test related method
      */
-    public function testGetFieldName()
-    {
-        $this->assertEquals($this->booleanType->getFieldName(), 'data');
-    }
-
-    /**
-     * test related method
-     */
     public function testGetFormType()
     {
         $this->assertEquals($this->booleanType->getFormType(), 'option');
