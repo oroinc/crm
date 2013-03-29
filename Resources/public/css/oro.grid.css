@@ -104,23 +104,31 @@ table.grid thead tr th.descending span.caret {
     margin: 0;
 }
 
-.ui-multiselect-menu.select-filter-widget .ui-multiselect-checkboxes label.ui-state-active {
-    background-image: none;
-    background-color: #064aa7;
-    color: #ffffff;
-}
-
 .ui-multiselect-menu.select-filter-widget .ui-multiselect-checkboxes label.ui-state-hover {
     background-image: none;
     background-color: #dddddd;
     color: #212121;
 }
 
+.ui-multiselect-menu.select-filter-widget .ui-multiselect-checkboxes label.ui-state-active {
+    background-image: none;
+    background-color: #064aa7;
+    color: #ffffff;
+}
+
 .ui-multiselect-menu.select-filter-widget input[type="search"] {
     margin: 0;
 }
 
-.select-filter-widget.ui-multiselect span.caret {
+.ui-multiselect.select-filter-widget span.caret {
     margin-top: 8px;
     margin-right: 8px;
+}
+
+.ui-multiselect-menu.select-filter-widget .ui-multiselect-header .ui-helper-reset {
+    display: none;
+}
+
+.ui-multiselect-menu.select-filter-widget .ui-multiselect-checkboxes input[type="checkbox"] {
+    margin: 4px 6px 5px 5px;
 }
