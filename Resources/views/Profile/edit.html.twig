@@ -82,160 +82,161 @@
             })
         </script>
         <form action="{{ form.vars.value.id ? path('oro_user_edit', { id: form.vars.value.id }) : path('oro_user_create') }}" {{ form_enctype(form) }} method="post">
-        <div class="navigation clearfix navbar-extra navbar-extra-right">
-            <div class="top-action-box">
-                <div class="btn-group icons-holder icons-small">
-                    <button class="btn"><i class="icon-minimize hide-text">minimaze tab</i></button>
-                    <button class="btn"><i class="icon-fullscreen hide-text">full screen</i></button>
-                    <button class="btn"><i class="icon-remove hide-text">Close</i></button>
-                </div>
-            </div>
-            <div class="row">
-                <div class="pull-right">
-                    <div class="pull-left switch" data-off="danger">
-                        {{ form_widget(form.enabled) }}
-                    </div>
-                    <div class="btn-group icons-holder">
-                        <button class="btn"><i class="icon-edit hide-text">edit</i></button>
-                        <button class="btn"><i class="icon-copy hide-text">copy</i></button>
-                        <button class="btn"><i class="icon-trash hide-text">remove</i></button>
-                    </div>
-                    <div class="btn-group">
-                        <button class="btn dropdown-toggle" data-toggle="dropdown">Export:<span class="caret"></span></button>
-                        <ul class="dropdown-menu pull-right">
-                            <li><a href="#">Export</a></li>
-                            <li><a href="#">Inport</a></li>
-                        </ul>
+            <div class="navigation clearfix navbar-extra navbar-extra-right">
+                <div class="top-action-box">
+                    <div class="btn-group icons-holder icons-small">
+                        <button class="btn"><i class="icon-minimize hide-text">minimaze tab</i></button>
+                        <button class="btn"><i class="icon-fullscreen hide-text">full screen</i></button>
+                        <button class="btn"><i class="icon-remove hide-text">Close</i></button>
                     </div>
                 </div>
-                <div class="span9 ">
-                   <div class="customer-info well-small">
-                       <div class="visual"><img src="{{ form.vars.value.imagePath ? form.vars.value.imagePath | imagine_filter('avatar_med') : asset('bundles/oroui/img/info-usser.png') }}" alt="{{ form.vars.value.firstname ~ ' ' ~ form.vars.value.lastname}}"/></div>
-                       <div class="customer-content">
-                           <div class="sub-title">Customers</div>
-                           <h1 class="usser-name">{{ form.vars.value.firstName or form.vars.value.lastName ? form.vars.value.firstName ~ ' ' ~ form.vars.value.lastName : 'N/A' }}</h1>
-                           <ul class="inline">
-                               <li>Last logged in: {{ form.vars.value.lastLogin ? macros.time(form.vars.value.lastLogin) : 'N/A' }}</li>
-                               <li>Lifetime Sales: $3004.92</li>
-                               <li>Retail Customer</li>
-                           </ul>
+                <div class="row">
+                    <div class="pull-right">
+                        <div class="pull-left switch" data-off="danger">
+                            {{ form_widget(form.enabled) }}
+                        </div>
+                        <div class="btn-group icons-holder">
+                            <button class="btn"><i class="icon-edit hide-text">edit</i></button>
+                            <button class="btn"><i class="icon-copy hide-text">copy</i></button>
+                            <button class="btn"><i class="icon-trash hide-text">remove</i></button>
+                        </div>
+                        <div class="btn-group">
+                            <button class="btn dropdown-toggle" data-toggle="dropdown">Export:<span class="caret"></span></button>
+                            <ul class="dropdown-menu pull-right">
+                                <li><a href="#">Export</a></li>
+                                <li><a href="#">Import</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="span9 ">
+                       <div class="customer-info well-small">
+                           <div class="visual"><img src="{{ form.vars.value.imagePath ? form.vars.value.imagePath | imagine_filter('avatar_med') : asset('bundles/oroui/img/info-usser.png') }}" alt="{{ form.vars.value.firstname ~ ' ' ~ form.vars.value.lastname}}"/></div>
+                           <div class="customer-content">
+                               <div class="sub-title">Customers</div>
+                               <h1 class="usser-name">{{ form.vars.value.firstName or form.vars.value.lastName ? form.vars.value.firstName ~ ' ' ~ form.vars.value.lastName : 'N/A' }}</h1>
+                               <ul class="inline">
+                                   <li>Last logged in: {{ form.vars.value.lastLogin ? macros.time(form.vars.value.lastLogin) : 'N/A' }}</li>
+                                   <li>Lifetime Sales: $3004.92</li>
+                                   <li>Retail Customer</li>
+                               </ul>
+                           </div>
                        </div>
-                   </div>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="layout-content">
-            <div id="navbarExample" class="navbar navbar-static scrollspy-nav">
-                <div class="navbar-inner">
-                    <div class="container-fluid" style="width: auto;">
-                        <ul class="nav">
-                            <li class="active"><a href="#scroll-main">Overview</a></li>
-                            <li><a href="#scroll-attributes">Additional data</a></li>
-                            <li><a href="#scroll-api">API</a></li>
+            <div class="layout-content">
+                <div id="navbarExample" class="navbar navbar-static scrollspy-nav">
+                    <div class="navbar-inner">
+                        <div class="container-fluid" style="width: auto;">
+                            <ul class="nav">
+                                <li class="active"><a href="#scroll-main">Overview</a></li>
+                                <li><a href="#scroll-attributes">Additional data</a></li>
+                                <li><a href="#scroll-api">API</a></li>
+
+                                {% if form.groups is defined %}
+                                <li><a href="#scroll-groups">Groups</a></li>
+                                {% endif %}
+
+                                {% if form.rolesCollection is defined %}
+                                <li><a href="#scroll-roles">Roles</a></li>
+                                {% endif %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="clearfix-oro">
+                        <div class="customer-info-actions container-fluid well-small">
+                            <div class="pull-right">
+                                <a href="{{ path('oro_user_index') }}" class="btn">Cancel</a>
+                                <button type="submit" class="btn btn-primary">Save</button>
+                            </div>
+                            {% if form_errors(form) %}
+                            <div class="pull-left alert alert-error">
+                                <button class="close" type="button" data-dismiss="alert">×</button>
+                                {{ form_errors(form) }}
+                            </div>
+                            {% endif %}
+                        </div>
+                        <div data-spy="scroll" data-target="#navbarExample" data-offset="50" class="scrollspy container-fluid">
+                            <h4 id="scroll-main" class="scrollspy-title">Overview</h4>
+                            <div class="row-fluid">
+                                <fieldset class="form-horizontal span6">
+                                    {{ form_row(form.username) }}
+                                    {{ form_row(form.firstname) }}
+                                    {{ form_row(form.lastname) }}
+                                    {{ form_row(form.birthday) }}
+                                    {{ form_row(form.imageFile) }}
+                                </fieldset>
+                                <fieldset class="form-horizontal span6">
+                                    {{ form_row(form.email) }}
+
+                                    <div class="control-group">
+                                        <label for="selectAccountName" class="control-label">Additional emails:</label>
+                                        <div class="controls">
+                                            <div class="row-oro">
+                                                <ul id="email-fields-list" data-prototype="{{ form_widget(form.emails.vars.prototype) | e }}">
+                                                    {% for emailField in form.emails %}
+                                                    <li>
+                                                        {{ form_errors(emailField) }}
+                                                        {{ form_widget(emailField) }}
+                                                    </li>
+                                                    {% endfor %}
+                                                </ul>
+                                                <a class="btn" href="#" id="add-another-email">Add another email</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </div>
+
+                            <h4 id="scroll-attributes" class="scrollspy-title">Additional data</h4>
+                            <div class="row-fluid">
+                                <fieldset class="form-horizontal">
+                                    {{ form_row(form.attributes) }}
+                                </fieldset>
+                            </div>
+
+                            <h4 id="scroll-api" class="scrollspy-title">API</h4>
+                            <div class="row-fluid">
+                                <fieldset class="form-horizontal">
+                                    <div class="control-group">
+                                        <label class="control-label">API key</label>
+                                        <div class="controls">
+                                            <strong class="label label-info">{{ form.vars.value.api ? form.vars.value.api.apiKey : 'N/A' }}</strong>
+                                            {% if form.vars.value.id %}
+                                            <a class="btn btn-small" id="btn-apigen" href="{{ path('oro_user_apigen', { id: form.vars.value.id }) }}">Generate</a>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </div>
 
                             {% if form.groups is defined %}
-                            <li><a href="#scroll-groups">Groups</a></li>
+                            <h4 id="scroll-groups" class="scrollspy-title">Groups</h4>
+                            <div class="row-fluid">
+                                <fieldset class="form-horizontal">
+                                    {{ form_row(form.groups) }}
+                                </fieldset>
+                            </div>
                             {% endif %}
 
                             {% if form.rolesCollection is defined %}
-                            <li><a href="#scroll-roles">Roles</a></li>
+                            <h4 id="scroll-roles" class="scrollspy-title">Roles</h4>
+                            <div class="row-fluid">
+                                <fieldset class="form-horizontal">
+                                    {{ form_row(form.rolesCollection) }}
+                                </fieldset>
+                            </div>
                             {% endif %}
-                        </ul>
-                    </div>
+
+                            {{ form_rest(form) }}
+                        </div>
                 </div>
             </div>
-            <div class="clearfix-oro">
-                    <div class="customer-info-actions container-fluid well-small">
-                        <div class="pull-right">
-                            <a href="{{ path('oro_user_index') }}" class="btn">Cancel</a>
-                            <button type="submit" class="btn btn-primary">Save</button>
-                        </div>
-                        {% if form_errors(form) %}
-                        <div class="pull-left alert alert-error">
-                            <button class="close" type="button" data-dismiss="alert">×</button>
-                            {{ form_errors(form) }}
-                        </div>
-                        {% endif %}
-                    </div>
-                    <div data-spy="scroll" data-target="#navbarExample" data-offset="50" class="scrollspy container-fluid">
-                        <h4 id="scroll-main" class="scrollspy-title">Overview</h4>
-                        <div class="row-fluid">
-                            <fieldset class="form-horizontal span6">
-                                {{ form_row(form.username) }}
-                                {{ form_row(form.firstname) }}
-                                {{ form_row(form.lastname) }}
-                                {{ form_row(form.birthday) }}
-                                {{ form_row(form.imageFile) }}
-                            </fieldset>
-                            <fieldset class="form-horizontal span6">
-                                {{ form_row(form.email) }}
-
-                                <div class="control-group">
-                                    <label for="selectAccountName" class="control-label">Additional emails:</label>
-                                    <div class="controls">
-                                        <div class="row-oro">
-                                            <ul id="email-fields-list" data-prototype="{{ form_widget(form.emails.vars.prototype) | e }}">
-                                                {% for emailField in form.emails %}
-                                                <li>
-                                                    {{ form_errors(emailField) }}
-                                                    {{ form_widget(emailField) }}
-                                                </li>
-                                                {% endfor %}
-                                            </ul>
-                                            <a class="btn" href="#" id="add-another-email">Add another email</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </fieldset>
-                        </div>
-
-                        <h4 id="scroll-attributes" class="scrollspy-title">Additional data</h4>
-                        <div class="row-fluid">
-                            <fieldset class="form-horizontal">
-                                {{ form_row(form.attributes) }}
-                            </fieldset>
-                        </div>
-
-                        <h4 id="scroll-api" class="scrollspy-title">API</h4>
-                        <div class="row-fluid">
-                            <fieldset class="form-horizontal">
-                                <div class="control-group">
-                                    <label class="control-label">API key</label>
-                                    <div class="controls">
-                                        <strong class="label label-info">{{ form.vars.value.api ? form.vars.value.api.apiKey : 'N/A' }}</strong>
-                                        {% if form.vars.value.id %}
-                                        <a class="btn btn-small" id="btn-apigen" href="{{ path('oro_user_apigen', { id: form.vars.value.id }) }}">Generate</a>
-                                        {% endif %}
-                                    </div>
-                                </div>
-                            </fieldset>
-                        </div>
-
-                        {% if form.groups is defined %}
-                        <h4 id="scroll-groups" class="scrollspy-title">Groups</h4>
-                        <div class="row-fluid">
-                            <fieldset class="form-horizontal">
-                                {{ form_row(form.groups) }}
-                            </fieldset>
-                        </div>
-                        {% endif %}
-
-                        {% if form.rolesCollection is defined %}
-                        <h4 id="scroll-roles" class="scrollspy-title">Roles</h4>
-                        <div class="row-fluid">
-                            <fieldset class="form-horizontal">
-                                {{ form_row(form.rolesCollection) }}
-                            </fieldset>
-                        </div>
-                        {% endif %}
-
-                        {{ form_rest(form) }}
-                    </div>
-            </div>
-        </div>
-                                </form>
-    {% endblock content %}
+        </form>
     </div>
+    {% endblock content %}
+</div>
 {% endblock main %}
 
 {#% block content %}
