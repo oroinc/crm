@@ -84,8 +84,7 @@ OroApp.DatagridFilterSelect = OroApp.DatagridFilter.extend({
      */
     widgetOptions: {
         multiple: false,
-        height: 'auto',
-        selectedList: 1
+        classes: 'select-filter-widget'
     },
 
     /**
@@ -128,7 +127,11 @@ OroApp.DatagridFilterSelect = OroApp.DatagridFilter.extend({
         this.selectWidget = this.$(this.inputSelector);
 
         this.selectWidget.multiselect(_.extend({
-            classes: 'select-filter-widget',
+            height: 'auto',
+            noneSelectedText: this.placeholder,
+            selectedText: $.proxy(function(numChecked, numTotal, checkedItems) {
+                return this._getSelectedText(checkedItems);
+            }, this),
             position: {
                 my: 'left top+2',
                 at: 'left bottom',
@@ -152,6 +155,27 @@ OroApp.DatagridFilterSelect = OroApp.DatagridFilter.extend({
         this.$('.select-filter-widget').removeClass('ui-widget').removeClass('ui-state-default');
         this.$('.select-filter-widget').find('span.ui-icon').remove();
         this.$('.select-filter-widget.ui-multiselect').append('<span class="caret"></span>');
+    },
+
+    /**
+     * Get text for ele
+     *
+     * @param {Array} checkedItems
+     * @protected
+     */
+    _getSelectedText: function(checkedItems) {
+        if (_.isEmpty(checkedItems)) {
+            return this.placeholder;
+        }
+
+        var elements = [];
+        _.each(checkedItems, function(element, index, list) {
+            var title = element.getAttribute('title');
+            if (title) {
+                elements.push(title);
+            }
+        });
+        return elements.join(', ');
     },
 
     /**
@@ -180,21 +204,13 @@ OroApp.DatagridFilterSelect = OroApp.DatagridFilter.extend({
 
         // calculate minimum width
         if (!this.minimumWidth) {
-            var elements = widget.find('.ui-multiselect-checkboxes li');
-            _.each(elements, function(element, index, list) {
-                var width = this._getTextWidth($(element).find('label'));
-                if (width > this.minimumWidth) {
-                    this.minimumWidth = width;
-                }
-            }, this);
-
-            this.minimumWidth += 16;
+            this.minimumWidth = this._getMinimumDropdownWidth();
         }
 
         // set elements width
         var filterWidth = this.$(this.containerSelector).width();
-        var requiredWidth = Math.max(filterWidth + 8, this.minimumWidth);
-        widget.width(requiredWidth);
+        var requiredWidth = Math.max(filterWidth + 10, this.minimumWidth);
+        widget.width(requiredWidth).css('min-width', requiredWidth + 'px');
         widget.find('input[type="search"]').width(requiredWidth - 22);
 
         // fix CSS classes
@@ -204,6 +220,26 @@ OroApp.DatagridFilterSelect = OroApp.DatagridFilter.extend({
         widget.find('.ui-widget-header').removeClass('ui-widget-header');
         widget.find('.ui-multiselect-filter').removeClass('ui-multiselect-filter');
         widget.find('ul li label').removeClass('ui-corner-all');
+    },
+
+    /**
+     * Get minimum width of dropdown menu
+     *
+     * @return {Number}
+     * @protected
+     */
+    _getMinimumDropdownWidth: function() {
+        var minimumWidth = 0;
+        var widget = this.selectWidget.multiselect('widget');
+        var elements = widget.find('.ui-multiselect-checkboxes li');
+        _.each(elements, function(element, index, list) {
+            var width = this._getTextWidth($(element).find('label'));
+            if (width > minimumWidth) {
+                minimumWidth = width;
+            }
+        }, this);
+
+        return minimumWidth;
     },
 
     /**
