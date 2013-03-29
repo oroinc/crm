@@ -32,12 +32,22 @@ To use as dependecy, use composer and add bundle in your AppKernel :
 Classes / Concepts
 ==================
 
-(dependencies : just doctrine entities)
+(dependencies : just doctrine entities but manager is agnostic)
 
 
 
 Example of usage
 ================
+
+Define segmentation tree manager as service
+-------------------------------------------
+In your services.yml file, define your service like this :
+```yaml
+services:
+    segmentation_tree_manager:
+        class:     %oro_segmentation_tree.segment_manager.class%
+        arguments: [@doctrine.orm.entity_manager, %pim_product.segment_class%]
+```
 
 
 Implement segmentation tree with simple doctrine entity
