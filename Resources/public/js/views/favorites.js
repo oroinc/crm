@@ -6,7 +6,6 @@ navigation.favorites.MainView = navigation.MainViewAbstract.extend({
         el: '.favorite-button',
         tabTitle: 'Favorites',
         tabIcon: 'icon-star-empty',
-        collection: null,
         tabId: 'favorites'
     },
 
@@ -25,10 +24,6 @@ navigation.favorites.MainView = navigation.MainViewAbstract.extend({
 
         this.registerTab();
         this.cleanupTab();
-    },
-    
-    getCollection: function() {
-        return this.options.collection;
     },
 
     activate: function() {
