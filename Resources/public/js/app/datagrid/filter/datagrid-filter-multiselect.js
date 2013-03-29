@@ -5,15 +5,53 @@
  * @extends OroApp.DatagridFilterSelect
  */
 OroApp.DatagridFilterMultiSelect = OroApp.DatagridFilterSelect.extend({
-    /** @property */
+    /**
+     * Multiselect filter template
+     *
+     * @property
+     */
     template: _.template(
-        '<div class="btn">' +
+        '<div class="btn filter-select">' +
             '<%= label %>: ' +
-            '<select style="width:150px;" multiple>' +
+            '<select multiple>' +
                 '<% _.each(options, function (hint, value) { %><option value="<%= value %>"><%= hint %></option><% }); %>' +
             '</select>' +
-            '<a href="#" class="disable-filter" />' +
-            '<span class="caret"></span>' +
-        '</div>'
-    )
+        '</div>' +
+        '<a href="#" class="disable-filter"><i class="icon-remove hide-text">Close</i></a>'
+    ),
+
+    /**
+     * Select widget options
+     *
+     * @property
+     */
+    widgetOptions: {
+        multiple: true,
+        classes: 'select-filter-widget multiselect-filter-widget'
+    },
+
+    /**
+     * Fix menu design on data change (after click on checkbox)
+     *
+     * @protected
+     */
+    _onSelectChange: function() {
+        OroApp.DatagridFilterSelect.prototype._onSelectChange.apply(this, arguments);
+        this._setDropdownDesign();
+    },
+
+    /**
+     * Set filter parameters
+     *
+     * @deprecated
+     * @param {Object} parameters
+     * @return {*}
+     */
+    setParameters: function(parameters) {
+        var value = {
+            value: parameters
+        };
+        this.setValue(value);
+        return this;
+    }
 });
