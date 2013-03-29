@@ -46,7 +46,7 @@ In your services.yml file, define your service like this :
 services:
     segmentation_tree_manager:
         class:     %oro_segmentation_tree.segment_manager.class%
-        arguments: [@doctrine.orm.entity_manager, %pim_product.segment_class%]
+        arguments: [@doctrine.orm.entity_manager, %segment_class%]
 ```
 
 
