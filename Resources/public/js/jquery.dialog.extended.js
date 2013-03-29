@@ -53,6 +53,12 @@ $.widget( "ui.dialog", $.ui.dialog, {
     _init: function() {
         this._super();
 
+        // Limit drag area to parent
+        if (this.options.draggable && $.fn.draggable && $.isFunction(this.uiDialog.draggable)) {
+            this.uiDialog.draggable('option', 'containment', 'parent');
+        }
+
+        // Init dialog extended
         this._initButtons();
         this._initializeContainer();
         this._initializeState(this.options.state);
