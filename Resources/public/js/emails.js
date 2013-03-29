@@ -4,23 +4,14 @@ jQuery(document).ready(function () {
         var newWidget = emailList.attr('data-prototype');
         newWidget = newWidget.replace(/__name__/g, emailCount);
         emailCount++;
-        var newLi = jQuery('<li></li>').html(newWidget);
-        newLi.appendTo(jQuery('#email-fields-list'));
-        addTagFormDeleteLink($(newLi));
+        var newDiv = jQuery('<div></div>').html(newWidget);
+        newDiv.appendTo(jQuery('#email-fields-list'));
         return false;
     });
 
-    jQuery('#email-fields-list').find('li').each(function () {
-        addTagFormDeleteLink($(this));
+    jQuery('.removeRow').live('click', function (event) {
+        var name = $(this).attr('data-related');
+        jQuery('*[data-content="' + name + '"]').remove();
+        return false;
     });
-
-    function addTagFormDeleteLink($tagFormLi) {
-        var $removeFormA = $('<a class="btn" href="#">Delete</a>');
-        $tagFormLi.append($removeFormA);
-
-        $removeFormA.on('click', function (e) {
-            e.preventDefault();
-            $tagFormLi.remove();
-        });
-    }
 });

@@ -172,14 +172,11 @@
                                     <label for="selectAccountName" class="control-label">Additional emails:</label>
                                     <div class="controls">
                                         <div class="row-oro">
-                                            <ul id="email-fields-list" data-prototype="{{ form_widget(form.emails.vars.prototype) | e }}">
-                                                {% for emailField in form.emails %}
-                                                <li>
-                                                    {{ form_errors(emailField) }}
-                                                    {{ form_widget(emailField) }}
-                                                </li>
+                                            <div id="email-fields-list" data-prototype="{{ macros.collection_prototype(form.emails)|escape }}">
+                                                {% for emailField in form.emails.children %}
+                                                    {{ macros.collection_prototype(emailField) }}
                                                 {% endfor %}
-                                            </ul>
+                                            </div>
                                             <a class="btn" href="#" id="add-another-email">Add another email</a>
                                         </div>
                                     </div>
