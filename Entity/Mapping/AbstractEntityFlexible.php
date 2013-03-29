@@ -152,7 +152,7 @@ abstract class AbstractEntityFlexible extends AbstractFlexible
      *
      * @param string $attCode
      *
-     * @return boolean|NULL
+     * @return mixed
      */
     public function __get($attCode)
     {

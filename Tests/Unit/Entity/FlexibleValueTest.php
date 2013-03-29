@@ -107,6 +107,8 @@ class FlexibleValueTest extends \PHPUnit_Framework_TestCase
         } else {
             $this->assertEquals($this->value->getData(), $data);
         }
+
+        $this->assertTrue(strlen($this->value->__toString()) >= 0);
     }
 
     /**
@@ -127,8 +129,8 @@ class FlexibleValueTest extends \PHPUnit_Framework_TestCase
             array(AbstractAttributeType::BACKEND_TYPE_VARCHAR, 'my value'),
             array(AbstractAttributeType::BACKEND_TYPE_INTEGER, 12),
             array(AbstractAttributeType::BACKEND_TYPE_DECIMAL, 123.45),
-            array(AbstractAttributeType::BACKEND_TYPE_DATE, '2013-03-28'),
-            array(AbstractAttributeType::BACKEND_TYPE_DATETIME, '2013-03-28 06:01:01'),
+            array(AbstractAttributeType::BACKEND_TYPE_DATE, new \DateTime()),
+            array(AbstractAttributeType::BACKEND_TYPE_DATETIME, new \DateTime()),
             array(AbstractAttributeType::BACKEND_TYPE_OPTION, $option),
             array(AbstractAttributeType::BACKEND_TYPE_OPTIONS, $options),
             array(AbstractAttributeType::BACKEND_TYPE_MEDIA, new Media())

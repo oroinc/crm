@@ -469,6 +469,10 @@ abstract class AbstractEntityFlexibleValue extends AbstractFlexibleValue
     {
         $data = $this->getData();
 
+        if ($data instanceof \DateTime) {
+            $data = $data->format(\DateTime::ISO8601);
+        }
+
         if ($data instanceof \Doctrine\Common\Collections\Collection) {
             $items = array();
             foreach ($data as $item) {
