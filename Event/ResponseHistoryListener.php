@@ -39,16 +39,22 @@ class ResponseHistoryListener
         $postArray = array(
             'title'    => $title,
             'url'      => $request->getRequestUri(),
-            'user'  => $this->_user,
+            'user'     => $this->_user,
             'type'     => self::NAVIGATION_HISTORY_ITEM_TYPE,
-            'position' => 0,
         );
 
-        /** @var $entity \Oro\Bundle\NavigationBundle\Entity\NavigationItemInterface */
-        $entity = $this->_navItemFactory->createItem(self::NAVIGATION_HISTORY_ITEM_TYPE, $postArray);
-        //$a = $this->_navItemFactory->findItem('history');
-        $manager = $this->_em;
-        $manager->persist($entity);
-        $manager->flush();
+        $historyItem = $this->_em->getRepository('Oro\Bundle\NavigationBundle\Entity\NavigationItem')->findOneBy($postArray);
+        if ($historyItem) {
+            $historyItem->setPosition(0);
+            $historyItem->setCreatedAt( new \DateTime() );
+        }
+        else {
+            $postArray['position'] = 0;
+            /** @var $historyItem \Oro\Bundle\NavigationBundle\Entity\NavigationItemInterface */
+            $historyItem = $this->_navItemFactory->createItem(self::NAVIGATION_HISTORY_ITEM_TYPE, $postArray);
+        }
+
+        $this->_em->persist($historyItem);
+        $this->_em->flush();
     }
 }
