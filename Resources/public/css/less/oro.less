@@ -259,7 +259,7 @@ header:after{
       padding: 5px 10px;
       display: block;
     }
-    li:hover{
+    li:hover, li.hovered{
       background: #f5f5f5;
       cursor: pointer;
     }
@@ -269,6 +269,9 @@ header:after{
     }
     li a:hover{
       text-decoration: none;
+    }
+    li a:focus{
+      outline: none;
     }
     .name{
       display: block;
