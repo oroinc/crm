@@ -38,7 +38,7 @@ class SegmentManager
      * @param ObjectManager $storageManager Storage manager
      * @param String        $segmentName    Segment class name
      */
-    public function __construct($storageManager, $segmentName)
+    public function __construct(ObjectManager $storageManager, $segmentName)
     {
         $this->storageManager = $storageManager;
         $this->segmentName = $segmentName;

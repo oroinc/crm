@@ -41,10 +41,11 @@ class ItemSegment extends AbstractSegment
 
     /**
      * @ORM\ManyToMany(targetEntity="Item")
-     * @ORM\JoinTable(name="oro_segmentationtree_tests_segments_items",
-     *      joinColumns={@ORM\JoinColumn(name="segment_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="item_id", referencedColumnName="id")}
-     *      )
+     * @ORM\JoinTable(
+     *     name="oro_segmentationtree_tests_segments_items",
+     *     joinColumns={@ORM\JoinColumn(name="segment_id", referencedColumnName="id")},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="item_id", referencedColumnName="id")}
+     * )
      **/
     protected $items;
 
@@ -53,6 +54,8 @@ class ItemSegment extends AbstractSegment
      */
     public function __construct()
     {
+        parent::__construct();
+
         $this->items = new ArrayCollection();
     }
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\SegmentationTreeBundle\Tests\Functional;
+namespace Oro\Bundle\SegmentationTreeBundle\Tests\Functional\Model;
 
 use Oro\Bundle\SegmentationTreeBundle\Tests\Functional\DataFixtures\ORM\LoadItemSegmentData;
 
@@ -63,7 +63,7 @@ class SegmentManagerTest extends WebTestCase
      */
     protected function setUp()
     {
-        $entityPath = dirname(__FILE__).'/Entity';
+        $entityPath = dirname(__FILE__) . DIRECTORY_SEPARATOR .'..'. DIRECTORY_SEPARATOR .'Entity';
         static::$kernel = static::createKernel(array("debug" => true));
         static::$kernel->boot();
 
@@ -102,21 +102,6 @@ class SegmentManagerTest extends WebTestCase
         // See JMS\JobQueueBundle\Entity\Listener\ManyToAnyListener:postGenerateSchema()
         $connection->query('SET FOREIGN_KEY_CHECKS = 0');
         $this->schemaTool->createSchema($classes);
-
-        // create translations table
-        $connection->query(
-            'CREATE TABLE IF NOT EXISTS `ext_translations` (
-                `id` int(11) NOT NULL AUTO_INCREMENT,
-                `locale` varchar(8) COLLATE utf8_unicode_ci NOT NULL,
-                `object_class` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-                `field` varchar(32) COLLATE utf8_unicode_ci NOT NULL,
-                `foreign_key` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
-                `content` longtext COLLATE utf8_unicode_ci,
-                PRIMARY KEY (`id`),
-                UNIQUE KEY `lookup_unique_idx` (`locale`,`object_class`,`field`,`foreign_key`),
-                KEY `translations_lookup_idx` (`locale`,`object_class`,`foreign_key`)
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1'
-        );
         $connection->query('SET FOREIGN_KEY_CHECKS = 1');
 
         $fixture = new LoadItemSegmentData();
