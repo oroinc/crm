@@ -4,11 +4,22 @@ navigation.MainViewAbstract = Backbone.View.extend({
     options: {
         tabTitle: 'Tabs',
         tabIcon: 'icon-folder-close',
-        tabId: 'tabs'
+        tabId: 'tabs',
+        hideTabOnEmpty: false,
+        collection: null
+    },
+
+    getCollection: function() {
+        return this.options.collection;
     },
 
     registerTab: function() {
-        navigation.dotMenu.MainViewInstance.addTab(this.options.tabId, this.options.tabTitle, this.options.tabIcon, true);
+        navigation.dotMenu.MainViewInstance.addTab({
+            key: this.options.tabId,
+            title: this.options.tabTitle,
+            icon: this.options.tabIcon,
+            hideOnEmpty: this.options.hideTabOnEmpty
+        });
     },
 
     /**
@@ -30,6 +41,7 @@ navigation.MainViewAbstract = Backbone.View.extend({
 
     cleanupTab: function() {
         navigation.dotMenu.MainViewInstance.cleanup(this.options.tabId);
+        navigation.dotMenu.MainViewInstance.hideTab(this.options.tabId);
     },
 
     addItemToTab: function(item, prepend) {
