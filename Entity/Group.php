@@ -173,7 +173,7 @@ class Group
                 $this->addRole($role);
             }
         } else {
-            $this->roles = $roles;
+            $this->roles = new ArrayCollection($roles);
         }
 
         return $this;

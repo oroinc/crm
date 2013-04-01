@@ -3,6 +3,7 @@
 namespace Oro\Bundle\UserBundle\Tests\Entity;
 
 use Oro\Bundle\UserBundle\Entity\User;
+use Oro\Bundle\UserBundle\Entity\UserApi;
 use Oro\Bundle\UserBundle\Entity\Role;
 use Oro\Bundle\UserBundle\Entity\Group;
 use Oro\Bundle\UserBundle\Entity\Status;
@@ -59,6 +60,18 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($user->isPasswordRequestNonExpired(5));
     }
 
+    public function testConfirmationToken()
+    {
+        $user  = $this->getUser();
+        $token = $user->generateToken();
+
+        $this->assertNotEmpty($token);
+
+        $user->setConfirmationToken($token);
+
+        $this->assertEquals($token, $user->getConfirmationToken());
+    }
+
     public function testHasRole()
     {
         $user    = $this->getUser();
@@ -78,6 +91,10 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $user->removeRole($newRole);
 
         $this->assertFalse($user->hasRole($newRole->getRole()));
+
+        $this->setExpectedException('RuntimeException');
+
+        $user->addRole(new \stdClass());
     }
 
     public function testGroups()
@@ -95,6 +112,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $this->assertContains($group, $user->getGroups());
         $this->assertContains('Users', $user->getGroupNames());
         $this->assertTrue($user->hasRole($role));
+        $this->assertTrue($user->hasGroup('Users'));
 
         $user->removeGroup($group);
 
@@ -174,9 +192,11 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($status, $user->getCurrentStatus());
 
         $user->setCurrentStatus();
+
         $this->assertNull($user->getCurrentStatus());
 
         $user->getStatuses()->clear();
+
         $this->assertNotContains($status, $user->getStatuses());
     }
 
@@ -186,10 +206,67 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $email  = new Email();
 
         $this->assertNotContains($email, $user->getEmails());
+
         $user->addEmail($email);
+
         $this->assertContains($email, $user->getEmails());
+
         $user->removeEmail($email);
+
         $this->assertNotContains($email, $user->getEmails());
+    }
+
+    public function testNames()
+    {
+        $user  = $this->getUser();
+        $first = 'James';
+        $last  = 'Bond';
+
+        $user->setFirstname($first);
+        $user->setLastname($last);
+
+        $this->assertEquals($user->getFullname(), sprintf('%s %s', $first, $last));
+
+        $user->setNameFormat('%last%, %first%');
+
+        $this->assertEquals($user->getFullname(), sprintf('%s, %s', $last, $first));
+    }
+
+    public function testDates()
+    {
+        $user = $this->getUser();
+        $now  = new \DateTime('-1 year');
+
+        $user->setBirthday($now);
+        $user->setLastLogin($now);
+
+        $this->assertEquals($now, $user->getBirthday());
+        $this->assertEquals($now, $user->getLastLogin());
+    }
+
+    public function testApi()
+    {
+        $user = $this->getUser();
+        $api  = new UserApi();
+
+        $this->assertNull($user->getApi());
+
+        $user->setApi($api);
+
+        $this->assertEquals($api, $user->getApi());
+    }
+
+    public function testImage()
+    {
+        $user = $this->getUser();
+
+        $this->assertNull($user->getImagePath());
+
+        $user->setImage('test');
+
+        $this->assertNotEmpty($user->getImage());
+        $this->assertNotEmpty($user->getImagePath());
+        $this->assertNotEmpty($user->getImagePath(true));
     }
 
     /**
