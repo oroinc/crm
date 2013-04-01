@@ -504,7 +504,7 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
 
     /**
      *
-     * @param string $username New username
+     * @param  string $username New username
      * @return User
      */
     public function setUsername($username)
@@ -515,7 +515,7 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
     }
 
     /**
-     * @param string $email New email value
+     * @param  string $email New email value
      * @return User
      */
     public function setEmail($email)
@@ -526,7 +526,7 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
     }
 
     /**
-     * @param string $firstName New first name value
+     * @param  string $firstName New first name value
      * @return User
      */
     public function setFirstname($firstName = null)
@@ -537,7 +537,7 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
     }
 
     /**
-     * @param string $lastName New last name value
+     * @param  string $lastName New last name value
      * @return User
      */
     public function setLastname($lastName = null)
@@ -549,7 +549,7 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
 
     /**
      *
-     * @param \DateTime $birthday New birthday value
+     * @param  \DateTime $birthday New birthday value
      * @return User
      */
     public function setBirthday(\DateTime $birthday = null)
@@ -560,7 +560,7 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
     }
 
     /**
-     * @param string $image New image file name
+     * @param  string $image New image file name
      * @return User
      */
     public function setImage($image = null)
@@ -571,7 +571,7 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
     }
 
     /**
-     * @param UploadedFile $imageFile
+     * @param  UploadedFile $imageFile
      * @return User
      */
     public function setImageFile(UploadedFile $imageFile)
@@ -582,7 +582,7 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
     }
 
     /**
-     * @param bool $enabled User state
+     * @param  bool $enabled User state
      * @return User
      */
     public function setEnabled($enabled)
@@ -593,7 +593,7 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
     }
 
     /**
-     * @param string $password New encoded password
+     * @param  string $password New encoded password
      * @return User
      */
     public function setPassword($password)
@@ -604,7 +604,7 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
     }
 
     /**
-     * @param string $password New password as plain string
+     * @param  string $password New password as plain string
      * @return User
      */
     public function setPlainPassword($password)
@@ -615,7 +615,7 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
     }
 
     /**
-     * @param string $confirmationToken New confirmation token
+     * @param  string $confirmationToken New confirmation token
      * @return User
      */
     public function setConfirmationToken($token)
@@ -626,7 +626,7 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
     }
 
     /**
-     * @param \DateTime $time New password request time
+     * @param  \DateTime $time New password request time
      * @return User
      */
     public function setPasswordRequestedAt(\DateTime $time = null)
@@ -637,7 +637,7 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
     }
 
     /**
-     * @param \DateTime $time New login time
+     * @param  \DateTime $time New login time
      * @return User
      */
     public function setLastLogin(\DateTime $time)
@@ -650,7 +650,7 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
     /**
      * Set new format for a full name display. Use %first% and %last% placeholders, for example: "%last%, %first%".
      *
-     * @param string $format New format string
+     * @param  string $format New format string
      * @return User
      */
     public function setNameFormat($format)
@@ -661,7 +661,7 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
     }
 
     /**
-     * @param UserApi $api
+     * @param  UserApi $api
      * @return User
      */
     public function setApi(UserApi $api)
@@ -944,7 +944,7 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
     /**
      * Add Status to User
      *
-     * @param Status $status
+     * @param  Status $status
      * @return User
      */
     public function addStatus(Status $status)
@@ -967,7 +967,7 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
     /**
      * Set User Current Status
      *
-     * @param Status $status
+     * @param  Status $status
      * @return User
      */
     public function setCurrentStatus(Status $status = null)
@@ -990,7 +990,7 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
     /**
      * Add Email to User
      *
-     * @param Email $email
+     * @param  Email $email
      * @return User
      */
     public function addEmail(Email $email)
@@ -1005,7 +1005,7 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
     /**
      * Delete Email from User
      *
-     * @param Email $email
+     * @param  Email $email
      * @return User
      */
     public function removeEmail(Email $email)
