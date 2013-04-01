@@ -172,6 +172,15 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
     protected $lastLogin;
 
     /**
+     * Set name formatting using "%first%" and "%last%" placeholders
+     *
+     * @var string
+     *
+     * @Exclude
+     */
+    protected $nameFormat;
+
+    /**
      * @var Role[]
      *
      * @ORM\ManyToMany(targetEntity="Role")
@@ -333,6 +342,21 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
     }
 
     /**
+     * Return full name according to name format
+     *
+     * @see User::setNameFormat()
+     * @return string
+     */
+    public function getFullname()
+    {
+        return str_replace(
+            array('%first%', '%last%'),
+            array($this->getFirstname(), $this->getLastname()),
+            $this->getNameFormat()
+        );
+    }
+
+    /**
      * Return birthday
      *
      * @return \DateTime
@@ -417,6 +441,16 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
     }
 
     /**
+     * Get full name format. Defaults to "%first% %last%".
+     *
+     * @return string
+     */
+    public function getNameFormat()
+    {
+        return $this->nameFormat ?  $this->nameFormat : '%first% %last%';
+    }
+
+    /**
      * Get user created date/time
      *
      * @return \DateTime
@@ -468,6 +502,11 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
                $this->getPasswordRequestedAt()->getTimestamp() + $ttl > time();
     }
 
+    /**
+     *
+     * @param  string $username New username
+     * @return User
+     */
     public function setUsername($username)
     {
         $this->username = $username;
@@ -475,6 +514,10 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
         return $this;
     }
 
+    /**
+     * @param  string $email New email value
+     * @return User
+     */
     public function setEmail($email)
     {
         $this->email = $email;
@@ -482,6 +525,10 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
         return $this;
     }
 
+    /**
+     * @param  string $firstName New first name value
+     * @return User
+     */
     public function setFirstname($firstName = null)
     {
         $this->firstName = $firstName;
@@ -489,6 +536,10 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
         return $this;
     }
 
+    /**
+     * @param  string $lastName New last name value
+     * @return User
+     */
     public function setLastname($lastName = null)
     {
         $this->lastName = $lastName;
@@ -496,6 +547,11 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
         return $this;
     }
 
+    /**
+     *
+     * @param  \DateTime $birthday New birthday value
+     * @return User
+     */
     public function setBirthday(\DateTime $birthday = null)
     {
         $this->birthday = $birthday;
@@ -503,6 +559,10 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
         return $this;
     }
 
+    /**
+     * @param  string $image New image file name
+     * @return User
+     */
     public function setImage($image = null)
     {
         $this->image = $image;
@@ -510,6 +570,10 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
         return $this;
     }
 
+    /**
+     * @param  UploadedFile $imageFile
+     * @return User
+     */
     public function setImageFile(UploadedFile $imageFile)
     {
         $this->imageFile = $imageFile;
@@ -517,6 +581,10 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
         return $this;
     }
 
+    /**
+     * @param  bool $enabled User state
+     * @return User
+     */
     public function setEnabled($enabled)
     {
         $this->enabled = (boolean) $enabled;
@@ -524,6 +592,10 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
         return $this;
     }
 
+    /**
+     * @param  string $password New encoded password
+     * @return User
+     */
     public function setPassword($password)
     {
         $this->password = $password;
@@ -531,6 +603,10 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
         return $this;
     }
 
+    /**
+     * @param  string $password New password as plain string
+     * @return User
+     */
     public function setPlainPassword($password)
     {
         $this->plainPassword = $password;
@@ -538,20 +614,32 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
         return $this;
     }
 
-    public function setConfirmationToken($confirmationToken)
+    /**
+     * @param  string $confirmationToken New confirmation token
+     * @return User
+     */
+    public function setConfirmationToken($token)
     {
-        $this->confirmationToken = $confirmationToken;
+        $this->confirmationToken = $token;
 
         return $this;
     }
 
-    public function setPasswordRequestedAt(\DateTime $date = null)
+    /**
+     * @param  \DateTime $time New password request time
+     * @return User
+     */
+    public function setPasswordRequestedAt(\DateTime $time = null)
     {
-        $this->passwordRequestedAt = $date;
+        $this->passwordRequestedAt = $time;
 
         return $this;
     }
 
+    /**
+     * @param  \DateTime $time New login time
+     * @return User
+     */
     public function setLastLogin(\DateTime $time)
     {
         $this->lastLogin = $time;
@@ -559,6 +647,23 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
         return $this;
     }
 
+    /**
+     * Set new format for a full name display. Use %first% and %last% placeholders, for example: "%last%, %first%".
+     *
+     * @param  string $format New format string
+     * @return User
+     */
+    public function setNameFormat($format)
+    {
+        $this->nameFormat = $format;
+
+        return $this;
+    }
+
+    /**
+     * @param  UserApi $api
+     * @return User
+     */
     public function setApi(UserApi $api)
     {
         $this->api = $api;
@@ -839,7 +944,7 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
     /**
      * Add Status to User
      *
-     * @param Status $status
+     * @param  Status $status
      * @return User
      */
     public function addStatus(Status $status)
@@ -862,7 +967,7 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
     /**
      * Set User Current Status
      *
-     * @param Status $status
+     * @param  Status $status
      * @return User
      */
     public function setCurrentStatus(Status $status = null)
@@ -885,7 +990,7 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
     /**
      * Add Email to User
      *
-     * @param Email $email
+     * @param  Email $email
      * @return User
      */
     public function addEmail(Email $email)
@@ -900,7 +1005,7 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
     /**
      * Delete Email from User
      *
-     * @param Email $email
+     * @param  Email $email
      * @return User
      */
     public function removeEmail(Email $email)
@@ -927,9 +1032,11 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
      */
     protected function getUploadDir()
     {
+        $suffix = $this->getCreatedAt() ? $this->getCreatedAt()->format('Y-m') : date('Y-m');
+
         return 'uploads'
             . DIRECTORY_SEPARATOR . 'users'
-            . DIRECTORY_SEPARATOR . $this->getCreatedAt()->format('Y-m');
+            . DIRECTORY_SEPARATOR . $suffix;
     }
 
     protected function preUpload()

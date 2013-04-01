@@ -50,6 +50,7 @@ class GroupController extends Controller
             $flashBag->add('success', 'Group successfully saved');
 
             $redirectUrl = $backUrl ? $backUrl : $this->generateUrl('oro_user_group_index');
+
             return $this->redirect($redirectUrl);
         }
 

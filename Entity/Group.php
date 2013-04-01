@@ -80,13 +80,13 @@ class Group
         return $this;
     }
 
-
     public function getRoleLabelsAsString()
     {
         $labels = array();
         foreach ($this->getRoles() as $role) {
             $labels[] = $role->getLabel();
         }
+
         return implode(', ', $labels);
     }
 
@@ -173,7 +173,7 @@ class Group
                 $this->addRole($role);
             }
         } else {
-            $this->roles = $roles;
+            $this->roles = new ArrayCollection($roles);
         }
 
         return $this;

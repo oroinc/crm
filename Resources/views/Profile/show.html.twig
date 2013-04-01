@@ -1,10 +1,107 @@
 {% extends bap.layout is defined ? bap.layout : 'OroUserBundle::layout.html.twig' %}
+{% import 'OroUserBundle::macros.html.twig' as macros %}
 
 {% block title %}{{ user.username }} - {{ 'profile'|trans }} - {{ parent() }}{% endblock %}
 
 {% block content %}
-<div>
-    <p>{{ 'Username'|trans }}: {{ user.username }}</p>
-    <p>{{ 'Email'|trans }}: {{ user.email }}</p>
+<div class="layout-content">
+    <div class="navigation clearfix navbar-extra navbar-extra-right">
+        <div class="top-action-box">
+            <div class="btn-group icons-holder icons-small">
+                <button class="btn"><i class="icon-minimize hide-text">{{ 'minimaze tab'|trans }}</i></button>
+                <button class="btn"><i class="icon-fullscreen hide-text">{{ 'full screen'|trans }}</i></button>
+                <button class="btn"><i class="icon-remove hide-text">{{ 'Close'|trans }}</i></button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="pull-right">
+                <div class="btn-group icons-holder">
+                    <a href="{{ path('oro_user_edit', { id: user.id }) }}" class="btn"><i class="icon-edit hide-text">{{ 'Edit'|trans }}</i></button>
+                    <a href="{{ path('oro_user_remove', { id: user.id }) }}" class="btn"><i class="icon-trash hide-text">{{ 'Remove'|trans }}</i></a>
+                </div>
+            </div>
+            <div class="span9 ">
+               <div class="customer-info well-small">
+                   <div class="visual"><img src="{{ user.imagePath ? user.imagePath | imagine_filter('avatar_med') : asset('bundles/oroui/img/info-usser.png') }}" alt="{{ user.fullname }}"/></div>
+                   <div class="customer-content">
+                       <div class="sub-title">{{ 'User'|trans }}</div>
+                       <h1 class="usser-name">{{ user.fullname|default('N/A') }}</h1>
+                       <ul class="inline">
+                           <li>{{ 'Last logged in'|trans }}: {{ user.lastLogin ? macros.time(user.lastLogin) : 'N/A' }}</li>
+                           <li>{{ 'Created'|trans }}: {{ user.createdAt ? macros.time(user.createdAt) : 'N/A' }}</li>
+                           <li>{{ 'Updated'|trans }}: {{ user.updatedAt ? macros.time(user.updatedAt) : 'N/A' }}</li>
+                       </ul>
+                   </div>
+               </div>
+            </div>
+        </div>
+    </div>
+    <div class="layout-content">
+        <div id="navbarExample" class="navbar navbar-static scrollspy-nav">
+            <div class="navbar-inner">
+                <div class="container-fluid" style="width: auto;">
+                    <ul class="nav">
+                        <li class="active"><a href="#scroll-main">{{ 'Overview'|trans }}</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix-oro">
+            <div data-spy="scroll" data-target="#navbarExample" data-offset="50" class="scrollspy container-fluid">
+                <h4 id="scroll-main" class="scrollspy-title">{{ 'Overview'|trans }}</h4>
+                <div class="row-fluid">
+                    <div class="form-horizontal span6">
+                        <div class="control-group">
+                            <label class="control-label">{{ 'Account name'|trans }}</label>
+                            <div class="controls">
+                                <div class="clearfix-oro">
+                                    <p class="control-label">{{ user.username }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label">{{ 'First name'|trans }}</label>
+                            <div class="controls">
+                                <div class="clearfix-oro">
+                                    <p class="control-label">{{ user.firstname|default('N/A') }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label">{{ 'Last name'|trans }}</label>
+                            <div class="controls">
+                                <div class="clearfix-oro">
+                                    <p class="control-label">{{ user.lastname|default('N/A') }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label">{{ 'Birthday'|trans }}</label>
+                            <div class="controls">
+                                <div class="clearfix-oro">
+                                    <p class="control-label">{{ user.birthday ? macros.date(user.birthday) : 'N/A' }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-horizontal span6">
+                        <div class="control-group">
+                            <label class="control-label">{{ 'Email'|trans }}</label>
+                            <div class="controls">
+                                <div class="clearfix-oro">
+                                    <p class="control-label">{{ user.email }} <strong>{{ 'Primary'|trans }}</strong></p>
+                                </div>
+                                {% for obj in user.emails %}
+                                <div class="clearfix-oro">
+                                    <p class="control-label">{{ obj.email }}</p>
+                                </li>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock content %}

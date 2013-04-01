@@ -6,7 +6,6 @@ use Doctrine\ORM\EntityManager;
 
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\UserBundle\Entity\Status;
-use Oro\Bundle\UserBundle\Form\Type\StatusType;
 use Oro\Bundle\UserBundle\Entity\UserManager;
 
 class StatusManager
@@ -28,7 +27,7 @@ class StatusManager
     }
 
     /**
-     * @param \Oro\Bundle\UserBundle\Entity\User      $user
+     * @param  \Oro\Bundle\UserBundle\Entity\User     $user
      * @return \Oro\Bundle\UserBundle\Entity\Status[]
      */
     public function getUserStatuses(User $user)

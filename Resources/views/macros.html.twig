@@ -1,5 +1,9 @@
 {% macro time(time, format) -%}
-    <time class="timeago" datetime="{{ time.format(constant('DateTime::ISO8601')) }}">{{ time.format(format|default('Y-m-d H:i:s')) }}</time>
+    <time datetime="{{ time.format(constant('DateTime::ISO8601')) }}">{{ time.format(format|default('d-m-Y H:i:s')) }}</time>
+{%- endmacro %}
+
+{% macro date(time, format) -%}
+    <time datetime="{{ time.format(constant('DateTime::ISO8601')) }}">{{ time.format(format|default('d-m-Y')) }}</time>
 {%- endmacro %}
 
 {% macro collection_prototype(widget) %}
