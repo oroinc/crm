@@ -51,6 +51,16 @@ class OroSearchExtension extends Extension
     }
 
     /**
+     * Get alias
+     *
+     * @return string
+     */
+    public function getAlias()
+    {
+        return 'oro_search';
+    }
+
+    /**
      * Add search mapping config
      *
      * @param array            $config
@@ -64,10 +74,10 @@ class OroSearchExtension extends Extension
                 //todo: DELETE THIS TEMPORARY AcmeTestsBundle FIX
                 if ($container->getParameter('kernel.environment') != 'test'
                     && strpos($bundle, 'AcmeTestsBundle') === false) {
-                        $reflection = new \ReflectionClass($bundle);
-                        if (is_file($file = dirname($reflection->getFilename()).'/Resources/config/search.yml')) {
-                            $entitiesConfig += Yaml::parse(realpath($file));
-                        }
+                    $reflection = new \ReflectionClass($bundle);
+                    if (is_file($file = dirname($reflection->getFilename()).'/Resources/config/search.yml')) {
+                        $entitiesConfig += Yaml::parse(realpath($file));
+                    }
                 }
             }
         }
@@ -88,15 +98,5 @@ class OroSearchExtension extends Extension
                 $container->setParameter($paramName, $config[$name]);
             }
         }
-    }
-
-    /**
-     * Get alias
-     *
-     * @return string
-     */
-    public function getAlias()
-    {
-        return 'oro_search';
     }
 }
