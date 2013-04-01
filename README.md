@@ -1032,6 +1032,7 @@ Main classes and responsibilities:
 * **OroApp.DatagridFilterChoice** - filter that has input for value and inputs for operator, such as "contains", "not contains" and so on
 * **OroApp.DatagridFilterSelect** - filter that allows to select one of available values
 * **OroApp.DatagridFilterMultiSelect** - filter that allows to select any available values
+* **OroApp.MultiSelectDecorator** - encapsulates additional logic related to select and multiselect widgets (filter list, select and multiselect filters)
 * **OroApp.DatagridFilterData** and **OroApp.DatagridFilterDateTime** - used for filtering date and date time attributes
 Backbone.Collection - collection of models that has particular state. By setting up filters user updates collection state. After it collection sends request to update it's data accordingly with new state that was applied with filters criteria
 
