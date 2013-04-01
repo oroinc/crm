@@ -159,19 +159,10 @@
         </header>
         {% endblock header %}
         {% block main %}
-        <div id="main" class="container-fluid">
+        <div id="main" >
             {% block right_panel %}{% endblock right_panel %}
             {% block left_panel %}{% endblock left_panel %}
                 {% block pin_bar %}
-                    <style type="text/css">
-                        {# TODO: !!! Move this to some CSS file !!! #}
-                        .pin-bar .dropdown-menu {
-                            border-radius: 0;
-                            margin: 0;
-                            padding: 0;
-                            width: 375px;
-                        }
-                    </style>
                     <div class="clearfix">
                         <div class="pin-bar clearfix">
                             <div class="pin-menus dropdown dropdown-close-prevent">
