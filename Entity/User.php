@@ -1032,9 +1032,11 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
      */
     protected function getUploadDir()
     {
+        $suffix = $this->getCreatedAt() ? $this->getCreatedAt()->format('Y-m') : date('Y-m');
+
         return 'uploads'
             . DIRECTORY_SEPARATOR . 'users'
-            . DIRECTORY_SEPARATOR . $this->getCreatedAt()->format('Y-m');
+            . DIRECTORY_SEPARATOR . $suffix;
     }
 
     protected function preUpload()
