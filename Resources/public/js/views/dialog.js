@@ -32,8 +32,10 @@ Oro.widget.DialogView = Backbone.View.extend({
 
         var runner = function(handlers) {
             return function() {
-                for (var i = 0; i < handlers.length; i++) if (_.isFunction(handlers[i])) {
-                    handlers[i]();
+                for (var i = 0; i < handlers.length; i++) {
+                    if (_.isFunction(handlers[i])) {
+                        handlers[i]();
+                    }
                 }
             }
         };

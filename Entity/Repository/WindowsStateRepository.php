@@ -38,7 +38,6 @@ class WindowsStateRepository extends EntityRepository
                 $qb->expr()->eq('u.id', ':userId')
             )
         )
-//        ->add('orderBy', new Expr\OrderBy('ws.position', 'ASC'))
         ->setParameters(array('userId' => $userId));
 
         return $qb->getQuery()->getArrayResult();

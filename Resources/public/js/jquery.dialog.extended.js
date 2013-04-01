@@ -297,32 +297,34 @@ $.widget( "ui.dialog", $.ui.dialog, {
             .end();
         // append other buttons to button-pane
         var types =  ['maximize', 'restore', 'minimize'];
-        for (var key in types) if (typeof types[key] == 'string') {
-            var type = types[key];
-            var button = this.options.icons[type];
-            if (typeof this.options.icons[type] == 'string') {
-                button = '<a class="ui-dialog-titlebar-' + type + ' ui-corner-all" href="#"><span class="ui-icon ' + this.options.icons[type] + '">' + type + '</span></a>';
+        for (var key in types) {
+            if (typeof types[key] == 'string') {
+                var type = types[key];
+                var button = this.options.icons[type];
+                if (typeof this.options.icons[type] == 'string') {
+                    button = '<a class="ui-dialog-titlebar-' + type + ' ui-corner-all" href="#"><span class="ui-icon ' + this.options.icons[type] + '">' + type + '</span></a>';
 
-            } else {
-                button.addClass('ui-dialog-titlebar-' + type);
+                } else {
+                    button.addClass('ui-dialog-titlebar-' + type);
+                }
+                button = $(button);
+                button
+                    .attr("role", "button")
+                    .mouseover(function () {
+                        $(this).addClass("ui-state-hover");
+                    })
+                    .mouseout(function () {
+                        $(this).removeClass("ui-state-hover");
+                    })
+                    .focus(function () {
+                        $(this).addClass("ui-state-focus");
+                    })
+                    .blur(function () {
+                        $(this).removeClass("ui-state-focus");
+                    });
+                this._buttons[type] = button;
+                buttonPane.append(button);
             }
-            button = $(button);
-            button
-                .attr("role", "button")
-                .mouseover(function () {
-                    $(this).addClass("ui-state-hover");
-                })
-                .mouseout(function () {
-                    $(this).removeClass("ui-state-hover");
-                })
-                .focus(function () {
-                    $(this).addClass("ui-state-focus");
-                })
-                .blur(function () {
-                    $(this).removeClass("ui-state-focus");
-                });
-            this._buttons[type] = button;
-            buttonPane.append(button);
         }
 
         this.uiDialogTitlebarClose.toggle(this.options.allowClose);
