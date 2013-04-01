@@ -41,10 +41,9 @@ class ResponseHistoryListener
             'title'    => $title,
             'url'      => $request->getRequestUri(),
             'user'     => $this->_user,
-            'type'     => self::NAVIGATION_HISTORY_ITEM_TYPE,
         );
 
-        $historyItem = $this->_em->getRepository('Oro\Bundle\NavigationBundle\Entity\NavigationItem')->findOneBy($postArray);
+        $historyItem = $this->_em->getRepository('Oro\Bundle\NavigationBundle\Entity\NavigationHistoryItem')->findOneBy($postArray);
         if ($historyItem) {
             $historyItem->setPosition(0);
             $historyItem->setCreatedAt( new \DateTime() );

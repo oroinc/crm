@@ -1,0 +1,268 @@
+<?php
+
+namespace Oro\Bundle\NavigationBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Navigation History Entity
+ *
+ * @ORM\Entity(repositoryClass="Oro\Bundle\NavigationBundle\Entity\Repository\HistoryItemRepository")
+ * @ORM\HasLifecycleCallbacks
+ * @ORM\Table(name="navigation_history",
+ *      uniqueConstraints={@ORM\UniqueConstraint(name="unq_user_id_url_idx", columns={"user_id", "url"})})
+ */
+class NavigationHistoryItem implements NavigationItemInterface
+{
+    /**
+     * @var integer $id
+     *
+     * @ORM\Id
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    protected $id;
+
+    /**
+     * @var \Oro\Bundle\UserBundle\Entity\User $user
+     *
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
+     */
+    protected $user;
+
+    /**
+     * @var string $url
+     *
+     * @ORM\Column(name="url", type="string", length=250)
+     */
+    protected $url;
+
+    /**
+     * @var string $title
+     *
+     * @ORM\Column(name="title", type="string")
+     */
+    protected $title;
+
+    /**
+     * @var integer $position
+     *
+     * @ORM\Column(name="position", type="smallint")
+     */
+    protected $position;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="created_at", type="datetime")
+     */
+    protected $createdAt;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="updated_at", type="datetime")
+     */
+    protected $updatedAt;
+
+    /**
+     * Constructor
+     */
+    public function __construct(array $values = null)
+    {
+        if (!empty($values)) {
+            $this->setValues($values);
+        }
+    }
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set url
+     *
+     * @param string $url
+     * @return PinbarTab
+     */
+    public function setUrl($url)
+    {
+        $this->url = $url;
+
+        return $this;
+    }
+
+    /**
+     * Get url
+     *
+     * @return string
+     */
+    public function getUrl()
+    {
+        return $this->url;
+    }
+
+    /**
+     * Set title
+     *
+     * @param string $title
+     * @return PinbarTab
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
+
+        return $this;
+    }
+
+    /**
+     * Get title
+     *
+     * @return string
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    /**
+     * Set position
+     *
+     * @param integer $position
+     * @return PinbarTab
+     */
+    public function setPosition($position)
+    {
+        $this->position = $position;
+
+        return $this;
+    }
+
+    /**
+     * Get position
+     *
+     * @return integer
+     */
+    public function getPosition()
+    {
+        return $this->position;
+    }
+
+    /**
+     * Set createdAt
+     *
+     * @param \DateTime $createdAt
+     * @return PinbarTab
+     */
+    public function setCreatedAt($createdAt)
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    /**
+     * Get createdAt
+     *
+     * @return \DateTime
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * Set updatedAt
+     *
+     * @param \DateTime $updatedAt
+     * @return PinbarTab
+     */
+    public function setUpdatedAt($updatedAt)
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    /**
+     * Get updatedAt
+     *
+     * @return \DateTime
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
+    }
+
+    /**
+     * Set user
+     *
+     * @param \Oro\Bundle\UserBundle\Entity\User $user
+     * @return PinbarTab
+     */
+    public function setUser(\Oro\Bundle\UserBundle\Entity\User $user = null)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get user
+     *
+     * @return \Oro\Bundle\UserBundle\Entity\User
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    /**
+     * Set entity properties
+     *
+     * @param array $values
+     */
+    public function setValues(array $values)
+    {
+        if (isset($values['title'])) {
+            $this->setTitle($values['title']);
+        }
+        if (isset($values['url'])) {
+            $this->setUrl($values['url']);
+        }
+        if (isset($values['position'])) {
+            $this->setPosition($values['position']);
+        }
+        if (isset($values['user'])) {
+            $this->setUser($values['user']);
+        }
+    }
+
+    /**
+     * Pre persist event handler
+     *
+     * @ORM\PrePersist
+     */
+    public function doPrePersist()
+    {
+        $this->createdAt = new \DateTime();
+        $this->updatedAt = $this->createdAt;
+    }
+
+    /**
+     * Pre update event handler
+     *
+     * @ORM\PreUpdate
+     */
+    public function doPreUpdate()
+    {
+        $this->updatedAt = new \DateTime();
+    }
+}
