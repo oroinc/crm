@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Window state container Entity
  *
- * @ORM\Entity(repositoryClass="Oro\Bundle\WindowsBundle\Entity\Repository\WindowsStateRepository")
+ * @ORM\Entity
  * @ORM\HasLifecycleCallbacks
  * @ORM\Table(name="windows_state",
  *      indexes={@ORM\Index(name="windows_user_idx", columns={"user_id"})})
@@ -65,12 +65,12 @@ class WindowsState
     /**
      * Set data
      *
-     * @param string $data
+     * @param mixed $data
      * @return \Oro\Bundle\WindowsBundle\Entity\WindowsState
      */
     public function setData($data)
     {
-        $this->data = $data;
+        $this->data = json_encode($data);
 
         return $this;
     }
@@ -78,25 +78,21 @@ class WindowsState
     /**
      * Get data
      *
-     * @return string
+     * @return mixed
      */
     public function getData()
     {
-        return $this->data;
+        return json_decode($this->data, true);
     }
 
     /**
      * Get JSON data
      *
-     * @return array|null
+     * @return string
      */
     public function getJsonData()
     {
-        if ($this->data) {
-            return json_decode($this->data);
-        }
-
-        return null;
+        return $this->data;
     }
 
     /**

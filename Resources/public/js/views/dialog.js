@@ -45,7 +45,7 @@ Oro.widget.DialogView = Backbone.View.extend({
     _initModel: function(options) {
         if (this.model) {
             this.restoreMode = true;
-            var attributes = Backbone.$.parseJSON(this.model.get('data'));
+            var attributes = this.model.get('data');
             _.extend(options, attributes);
             if (_.isObject(attributes.dialogOptions)) {
                 options.dialogOptions = _.extend(options.dialogOptions, attributes.dialogOptions);

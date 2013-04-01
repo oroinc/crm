@@ -3,6 +3,7 @@
 namespace Oro\Bundle\WindowsBundle\Controller\Api;
 
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Routing\ClassResourceInterface;
 use FOS\RestBundle\Controller\Annotations\NamePrefix;
@@ -12,7 +13,6 @@ use FOS\Rest\Util\Codes;
 use Oro\Bundle\UserBundle\Entity\User;
 
 use Oro\Bundle\WindowsBundle\Entity\WindowsState;
-use Oro\Bundle\WindowsBundle\Entity\Repository\WindowsStateRepository;
 
 /**
  * @RouteResource("windows")
@@ -31,9 +31,7 @@ class WindowsStateController extends FOSRestController
      */
     public function cgetAction()
     {
-        /** @var $repo WindowsStateRepository */
-        $repo = $this->getDoctrine()->getRepository('\Oro\Bundle\WindowsBundle\Entity\WindowsState');
-        $items = $repo->getWindowsStates($this->getUserId());
+        $items = $this->getDoctrine()->getRepository('OroWindowsBundle:WindowsState')->findBy(array('user' => $this->getUser()));
 
         return $this->handleView(
             $this->view($items, is_array($items) ? Codes::HTTP_OK : Codes::HTTP_NOT_FOUND)
@@ -51,15 +49,7 @@ class WindowsStateController extends FOSRestController
      */
     public function postAction()
     {
-        $postArray = $this->getRequest()->request->all();
-        if (empty($postArray) || empty($postArray['data']) || !($jsonDataString = json_encode($postArray['data']))) {
-            return $this->handleView(
-                $this->view(
-                    array('message' => 'Wrong JSON inside POST body'),
-                    Codes::HTTP_BAD_REQUEST
-                )
-            );
-        }
+        $postArray = $this->getPost();
 
         /** @var $user \Oro\Bundle\UserBundle\Entity\User */
         $user = $this->getDoctrine()
@@ -69,7 +59,7 @@ class WindowsStateController extends FOSRestController
 
         /** @var $entity \Oro\Bundle\WindowsBundle\Entity\WindowsState */
         $entity = new WindowsState();
-        $entity->setData($jsonDataString);
+        $entity->setData($postArray['data']);
         $entity->setUser($user);
 
         $manager = $this->getManager();
@@ -94,15 +84,7 @@ class WindowsStateController extends FOSRestController
      */
     public function putAction($windowId)
     {
-        $postArray = $this->getRequest()->request->all();
-        if (empty($postArray) || empty($postArray['data']) || !($jsonDataString = json_encode($postArray['data']))) {
-            return $this->handleView(
-                $this->view(
-                    array('message' => 'Wrong JSON inside POST body'),
-                    Codes::HTTP_BAD_REQUEST
-                )
-            );
-        }
+        $postArray = $this->getPost();
 
         /** @var $entity \Oro\Bundle\WindowsBundle\Entity\WindowsState */
         $entity = $this->getManager()->find('OroWindowsBundle:WindowsState', (int)$windowId);
@@ -113,7 +95,7 @@ class WindowsStateController extends FOSRestController
             return $this->handleView($this->view(array(), Codes::HTTP_FORBIDDEN));
         }
 
-        $entity->setData($jsonDataString);
+        $entity->setData($postArray['data']);
 
         $em = $this->getManager();
         $em->persist($entity);
@@ -149,6 +131,23 @@ class WindowsStateController extends FOSRestController
         $em->flush();
 
         return $this->handleView($this->view(array(), Codes::HTTP_NO_CONTENT));
+    }
+
+    /**
+     * @throws \Symfony\Component\HttpKernel\Exception\HttpException
+     * @return array
+     */
+    protected function getPost()
+    {
+        $postArray = $this->getRequest()->request->all();
+        if (is_array($postArray) && array_key_exists('data', $postArray)) {
+            if (array_key_exists('url', $postArray['data'])) {
+                $postArray['data']['cleanUrl'] = str_replace($this->getRequest()->server->get('SCRIPT_NAME'), '', $postArray['data']['url']);
+            }
+        } else {
+            throw new HttpException(Codes::HTTP_BAD_REQUEST, 'Wrong JSON inside POST body');
+        }
+        return $postArray;
     }
 
     /**
