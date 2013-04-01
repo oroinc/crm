@@ -29,16 +29,7 @@ class OroSearchExtension extends Extension
 
         $container->setParameter('oro_search.log_queries', $config['log_queries']);
 
-        $entitiesConfig = $config['entities_config'];
-        if (!count($entitiesConfig)) {
-            foreach ($container->getParameter('kernel.bundles') as $bundle) {
-                $reflection = new \ReflectionClass($bundle);
-                if (is_file($file = dirname($reflection->getFilename()).'/Resources/config/search.yml')) {
-                    $entitiesConfig += Yaml::parse(realpath($file));
-                }
-            }
-        }
-        $container->setParameter('oro_search.entities_config', $entitiesConfig);
+        $this->searchMappingsConfig($config, $container);
 
         $loader->load('engine/' . $config['engine'] . '.yml');
 
@@ -57,6 +48,24 @@ class OroSearchExtension extends Extension
         $loader->load('services.yml');
 
         $container->setParameter('oro_search.twig.result_template', $config['result_template']);
+    }
+
+    private function searchMappingsConfig(array $config, ContainerBuilder $container)
+    {
+        $entitiesConfig = $config['entities_config'];
+        if (!count($entitiesConfig)) {
+            foreach ($container->getParameter('kernel.bundles') as $bundle) {
+                //todo: DELETE THIS TEMPORARY AcmeTestsBundle FIX
+                if ($container->getParameter('kernel.environment') != 'test'
+                    && strpos($bundle, 'AcmeTestsBundle') === false) {
+                        $reflection = new \ReflectionClass($bundle);
+                        if (is_file($file = dirname($reflection->getFilename()).'/Resources/config/search.yml')) {
+                            $entitiesConfig += Yaml::parse(realpath($file));
+                        }
+                }
+            }
+        }
+        $container->setParameter('oro_search.entities_config', $entitiesConfig);
     }
 
     /**
