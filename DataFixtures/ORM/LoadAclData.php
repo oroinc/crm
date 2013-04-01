@@ -72,7 +72,8 @@ class LoadAclData extends AbstractFixture implements OrderedFixtureInterface
         $oroReset->setId('oro_reset_controller')
             ->setName('Reset user password')
             ->setDescription('Oro Reset user password')
-            ->setParent($this->getReference('acl_oro_security'));
+            ->setParent($this->getReference('acl_oro_security'))
+            ->addAccessRole($this->getReference('anon_role'));
         $manager->persist($oroReset);
         $this->setReference('acl_oro_reset_controller', $oroReset);
 
