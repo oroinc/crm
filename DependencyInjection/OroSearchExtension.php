@@ -50,6 +50,12 @@ class OroSearchExtension extends Extension
         $container->setParameter('oro_search.twig.result_template', $config['result_template']);
     }
 
+    /**
+     * Add search mapping config
+     *
+     * @param array            $config
+     * @param ContainerBuilder $container
+     */
     private function searchMappingsConfig(array $config, ContainerBuilder $container)
     {
         $entitiesConfig = $config['entities_config'];
