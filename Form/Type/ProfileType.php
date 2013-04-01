@@ -135,13 +135,14 @@ class ProfileType extends FlexibleType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class'        => $this->flexibleClass,
-            'intention'         => 'profile',
-            'validation_groups' => function(FormInterface $form) {
+            'data_class'           => $this->flexibleClass,
+            'intention'            => 'profile',
+            'validation_groups'    => function(FormInterface $form) {
                 return $form->getData() && $form->getData()->getId()
                     ? array('Profile', 'Default')
                     : array('Registration', 'Profile', 'Default');
             },
+            'extra_fields_message' => 'This form should not contain extra fields: {{ extra_fields }}',
         ));
     }
 
