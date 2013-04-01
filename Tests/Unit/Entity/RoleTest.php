@@ -11,6 +11,7 @@ class RoleTest extends \PHPUnit_Framework_TestCase
     {
         $role = $this->getRole();
 
+        $this->assertEmpty($role->getId());
         $this->assertEmpty($role->getRole());
 
         $role->setRole('foo');

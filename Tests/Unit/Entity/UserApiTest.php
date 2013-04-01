@@ -2,60 +2,45 @@
 
 namespace Oro\Bundle\UserBundle\Tests\Entity;
 
-use Oro\Bundle\UserBundle\Entity\Role;
-use Oro\Bundle\UserBundle\Entity\Acl;
+use Oro\Bundle\UserBundle\Entity\UserApi;
+use Oro\Bundle\UserBundle\Entity\User;
 
-class RoleTest extends \PHPUnit_Framework_TestCase
+class UserApiTest extends \PHPUnit_Framework_TestCase
 {
-    public function testRole()
+    public function testApi()
     {
-        $role = $this->getRole();
+        $api  = $this->getApi();
+        $user = new User();
 
-        $this->assertEmpty($role->getRole());
+        $this->assertEmpty($api->getId());
 
-        $role->setRole('foo');
+        $api->setUser($user);
 
-        $this->assertEquals('ROLE_FOO', $role->getRole());
-        $this->assertEquals('ROLE_FOO', $role);
-        $this->assertNotEquals('foo', $role);
+        $this->assertEquals($user, $api->getUser());
     }
 
-    public function testLabel()
+    public function testKey()
     {
-        $role  = $this->getRole();
-        $label = 'Test role';
+        $api  = $this->getApi();
+        $key  = $api->generateKey();
 
-        $this->assertEmpty($role->getLabel());
+        $this->assertNotEmpty($key);
 
-        $role->setLabel($label);
+        $api->setApiKey($key);
 
-        $this->assertEquals($label, $role->getLabel());
-    }
-
-    public function testAcl()
-    {
-        $aclResource = new Acl();
-        $aclResource->setName('test resource');
-        $role  = $this->getRole();
-        $this->assertEquals(0, $role->getAclResources()->count());
-        $role->addAclResource($aclResource);
-        $this->assertEquals(1, $role->getAclResources()->count());
-        $role->removeAclResource($aclResource);
-        $this->assertEquals(0, $role->getAclResources()->count());
-        $role->setAclResources(array($aclResource));
-        $this->assertEquals(1, count($role->getAclResources()));
+        $this->assertEquals($key, $api->getApiKey());
     }
 
     protected function setUp()
     {
-        $this->role = new Role();
+        $this->api = new UserApi();
     }
 
     /**
-     * @return Role
+     * @return UserApi
      */
-    protected function getRole()
+    protected function getApi()
     {
-        return $this->role;
+        return $this->api;
     }
 }
