@@ -11,4 +11,4 @@ oro_menu_config:
         favorite:
             template: 'OroNavigationBundle:Menu:favorites.html.twig'
         history:
-            template: 'OroNavigationBundle:Menu:history.html.twig'
+            template: 'OroNavigationBundle:Menu:menu.html.twig'

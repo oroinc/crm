@@ -41,7 +41,7 @@ class NavigationItem implements NavigationItemInterface
     /**
      * @var string $url
      *
-     * @ORM\Column(name="url", type="text")
+     * @ORM\Column(name="url", type="string", length=500)
      */
     protected $url;
 
