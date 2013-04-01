@@ -16,6 +16,8 @@ parameters:
 
     oro_navigation.event.response_history.listener.class: Oro\Bundle\NavigationBundle\Event\ResponseHistoryListener
 
+    oro_navigation.menu.matcher.voter.request: Oro\Bundle\NavigationBundle\Menu\Matcher\Voter\RequestVoter
+
 services:
     oro_menu.factory:
         class: %oro_menu.factory.class%
@@ -115,6 +117,14 @@ services:
             - @oro_navigation.item.factory
         tags:
             - { name: oro_menu.builder, alias: history }
+
+    knp_voter_request:
+        class: %oro_navigation.menu.matcher.voter.request%
+        arguments:
+            - @service_container
+        tags:
+            - { name: knp_menu.voter, request: true }
+
 
     kernel.listener.nav_history_response:
         class: %oro_navigation.event.response_history.listener.class%
