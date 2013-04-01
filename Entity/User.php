@@ -178,7 +178,7 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
      *
      * @Exclude
      */
-    protected $nameFormat = '%first% %last%';
+    protected $nameFormat;
 
     /**
      * @var Role[]
@@ -441,13 +441,13 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
     }
 
     /**
-     * Get full name format
+     * Get full name format. Defaults to "%first% %last%".
      *
      * @return string
      */
     public function getNameFormat()
     {
-        return $this->nameFormat;
+        return $this->nameFormat ?  $this->nameFormat : '%first% %last%';
     }
 
     /**
