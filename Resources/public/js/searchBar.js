@@ -140,11 +140,6 @@ $(document).ready(function () {
         _searcjFlag = true;
     }).mouseleave(function () {
             _searcjFlag = false;
-            setTimeout(function () {
-                if (!_searcjFlag) {
-                    SearchByTagClose()
-                }
-            }, 2000)
         });
 
     $('#search-bar-search').focusin(function () {
