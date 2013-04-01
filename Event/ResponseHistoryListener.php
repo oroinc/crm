@@ -16,7 +16,8 @@ class ResponseHistoryListener
     public function __construct(ItemFactory $navigationItemFactory, $securityContext, $entityManager)
     {
         $this->_navItemFactory = $navigationItemFactory;
-        $this->_user = $securityContext->getToken()->getUser();
+        $this->_user = $securityContext->getToken() ? $securityContext->getToken()->getUser() : null;
+        $this->_user = $this->_user == 'anon.' ? null : $this->_user;
         $this->_em = $entityManager;
     }
 
@@ -27,7 +28,7 @@ class ResponseHistoryListener
         $route = $request->get('_route');
 
         // do not process requests other than in html format with 200 OK status using GET method and not _internal and _wdt
-        if ($response->getStatusCode() != 200 || $request->getRequestFormat() != 'html' || $request->getMethod() != 'GET' ||  $route[0] == '_') {
+        if ($response->getStatusCode() != 200 || $request->getRequestFormat() != 'html' || $request->getMethod() != 'GET' ||  $route[0] == '_' || is_null($this->_user)) {
             return false;
         }
 
