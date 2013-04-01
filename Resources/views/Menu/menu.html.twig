@@ -20,6 +20,11 @@
 
 {% block root %}
     {% set listAttributes = item.childrenAttributes %}
+
+    {% if options.rootClass is defined %}
+        {% import _self as oro_menu %}
+        {% set listAttributes = listAttributes|merge({'class': oro_menu.add_attribute_values(listAttributes, 'class', [options.rootClass])}) %}
+    {% endif %}
     {{ block('list') -}}
 {% endblock %}
 
@@ -57,40 +62,40 @@
 {% endblock %}
 
 {% block item_renderer %}
-{% set showNonAuthorized = item.extras.showNonAuthorized is defined and item.extras.showNonAuthorized %}
-{% set displayable = item.extras.isAllowed or showNonAuthorized %}
-{% if item.displayed and displayable %}
-    {# building the class of the item #}
-    {%- if matcher.isCurrent(item) %}
-        {%- set classes = classes|merge([options.currentClass]) %}
-    {%- elseif matcher.isAncestor(item, options.depth) %}
-        {%- set classes = classes|merge([options.ancestorClass]) %}
-    {%- endif %}
-    {%- if item.actsLikeFirst %}
-        {%- set classes = classes|merge([options.firstClass]) %}
-    {%- endif %}
-    {%- if item.actsLikeLast %}
-        {%- set classes = classes|merge([options.lastClass]) %}
-    {%- endif %}
-    {%- if classes is not empty %}
-        {%- set itemAttrebutes = itemAttrebutes|merge({'class': classes|join(' ')}) %}
-    {%- endif %}
-    {# displaying the item #}
-    {% import _self as oro_menu %}
-    <li{{ oro_menu.attributes(itemAttrebutes) }}>
-        {%- set linkAttributes = item.linkAttributes %}
-        {%- set labelAttributes = item.labelAttributes %}
-        {%- if item.uri is not empty and (not matcher.isCurrent(item) or options.currentAsLink) %}
-            {{ block('linkElement') }}
-        {%- else %}
-            {{ block('spanElement') }}
+    {% set showNonAuthorized = item.extras.showNonAuthorized is defined and item.extras.showNonAuthorized %}
+    {% set displayable = item.extras.isAllowed or showNonAuthorized %}
+    {% if item.displayed and displayable %}
+        {# building the class of the item #}
+        {%- if matcher.isCurrent(item) %}
+            {%- set classes = classes|merge([options.currentClass]) %}
+        {%- elseif matcher.isAncestor(item, options.depth) %}
+            {%- set classes = classes|merge([options.ancestorClass]) %}
         {%- endif %}
-        {# render the list of children#}
-        {%- set childrenClasses = childrenClasses|merge(['menu_level_' ~ item.level]) %}
-        {%- set listAttributes = childrenAttrebutes|merge({'class': childrenClasses|join(' ') }) %}
-        {{ block('list') }}
-    </li>
-{% endif %}
+        {%- if item.actsLikeFirst %}
+            {%- set classes = classes|merge([options.firstClass]) %}
+        {%- endif %}
+        {%- if item.actsLikeLast %}
+            {%- set classes = classes|merge([options.lastClass]) %}
+        {%- endif %}
+        {%- if classes is not empty %}
+            {%- set itemAttrebutes = itemAttrebutes|merge({'class': classes|join(' ')}) %}
+        {%- endif %}
+        {# displaying the item #}
+        {% import _self as oro_menu %}
+        <li{{ oro_menu.attributes(itemAttrebutes) }}>
+            {%- set linkAttributes = item.linkAttributes %}
+            {%- set labelAttributes = item.labelAttributes %}
+            {%- if item.uri is not empty and (not matcher.isCurrent(item) or options.currentAsLink) %}
+                {{ block('linkElement') }}
+            {%- else %}
+                {{ block('spanElement') }}
+            {%- endif %}
+            {# render the list of children#}
+            {%- set childrenClasses = childrenClasses|merge(['menu_level_' ~ item.level]) %}
+            {%- set listAttributes = childrenAttrebutes|merge({'class': childrenClasses|join(' ') }) %}
+            {{ block('list') }}
+        </li>
+    {% endif %}
 {% endblock %}
 
 {% block linkElement %}

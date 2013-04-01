@@ -12,3 +12,4 @@ oro_menu_config:
             template: 'OroNavigationBundle:Menu:favorites.html.twig'
         history:
             template: 'OroNavigationBundle:Menu:menu.html.twig'
+            rootClass: 'extra-list'
