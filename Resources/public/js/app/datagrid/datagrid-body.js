@@ -2,6 +2,9 @@ OroApp.DatagridBody = Backgrid.Body.extend({
     /** @property {Function} */
     rowClickAction: undefined,
 
+    /** @property {String} */
+    rowClickActionClass: 'row-click-action',
+
     /**
      * @inheritDoc
      */
@@ -21,6 +24,9 @@ OroApp.DatagridBody = Backgrid.Body.extend({
     render: function() {
         Backgrid.Body.prototype.render.apply(this, arguments);
         this.delegateRowClickEvents();
+        if (this.rowClickAction) {
+            this.$('tr').addClass(this.rowClickActionClass);
+        }
         return this;
     },
 

@@ -19,6 +19,10 @@ table.grid thead tr th.descending span.caret {
     border-bottom: 4px solid #000000;
 }
 
+table.grid tbody tr.row-click-action {
+    cursor: pointer;
+}
+
 .filter-item {
     padding-left: 5px;
 }
