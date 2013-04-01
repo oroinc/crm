@@ -118,7 +118,7 @@ header{
   .shortcuts{
     padding: 0 7px;
     .dropdown-menu{
-      min-width: 330px;
+      min-width: 404px;
     }
     .dropdown > a{
       float: left !important;
@@ -744,6 +744,14 @@ footer{
     padding: 4px 10px;
     min-width: 70px;
   }
+  .btn {
+    float: left;
+  }
+  .forgot-pass{
+    float: right;
+    font-weight: bold;
+    margin: 9px 0 0;
+  }
 }
 .form-pass-reset{
   margin: 0 auto 20px;
@@ -906,10 +914,6 @@ footer{
     padding-top: 4px;
   }
   /* custom button */
-  .btn{
-    margin: 0 0 20px;
-  }
-
 }
 .btn{
   .border-radius( @baseBtnBorderRadius);
@@ -1241,6 +1245,9 @@ footer{
   font-size: 13px;
   font-weight: bold;
 }
+.application-menu .tab-content > .tab-pane > .nav .current a{
+  color: #fff;
+}
 .application-menu .tab-content > .tab-pane > .nav {
   margin: 0;
 }
@@ -1273,10 +1280,16 @@ footer{
   line-height: 20px;
 }
 .application-menu .tab-content > .tab-pane > .nav a:hover{
-  background: #98b9ec;
+  background: #447fe9;
+  color: #fff;
 }
 .application-menu .tab-content > .tab-pane > .nav .active a{
-   background: #527ac0;
+  background: #3B6FE5;
+  color: #fff;
+}
+.navbar .nav > li > a:focus,
+.navbar .nav > li > a:hover{
+  color: #fff;
 }
 .navbar .nav > .active > a,
 .navbar .nav > .active > a:hover,
