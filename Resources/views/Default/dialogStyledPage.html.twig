@@ -2,7 +2,6 @@
 {% block head %}
     {{ parent() }}
     <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>
-    <script type="text/javascript" src="{{ asset('bundles/oroui/lib/jquery.dialogextend.1_0_1.js') }}"></script>
 {% endblock head %}
 {% block header %}
 {% endblock %}
@@ -142,12 +141,7 @@
                     },
                     "close" : function(){ $(this).dialog( "destroy" ) }
                 };
-                var dialogExtendOptions = {
-                    "maximize" : true,
-                    "minimize" : true,
-                    "dblclick": "maximize"
-                };
-                $("<div>Some text if you need will be here</div>").dialog(dialogOptions).dialogExtend(dialogExtendOptions);
+                $("<div>Some text if you need will be here</div>").dialog(dialogOptions);
             });
             $("#opener1").click(function(){
                 try{
@@ -168,13 +162,8 @@
                         },
                         "close" : function(){ $(this).dialog( "destroy" ) }
                     };
-                    var dialogExtendOptions = {
-                        "maximize" : true,
-                        "minimize" : true,
-                        "dblclick": "maximize"
-                    };
 
-                    $("#opener-content1").dialog(dialogOptions).dialogExtend(dialogExtendOptions);
+                    $("#opener-content1").dialog(dialogOptions);
                 }
             });
             $("#opener2").click(function(){
@@ -195,13 +184,8 @@
                         },
                         "close" : function(){ $(this).dialog( "destroy" ) }
                     };
-                    var dialogExtendOptions = {
-                        "maximize" : true,
-                        "minimize" : true,
-                        "dblclick": "maximize"
-                    };
 
-                    $("#opener-content2").dialog(dialogOptions).dialogExtend(dialogExtendOptions);
+                    $("#opener-content2").dialog(dialogOptions);
                 }
             });
             $("#opener3").click(function(){
@@ -222,12 +206,7 @@
                         },
                         "close" : function(){ $(this).dialog( "destroy" ) }
                     };
-                    var dialogExtendOptions = {
-                        "maximize" : true,
-                        "minimize" : true,
-                        "dblclick": "maximize"
-                    };
-                    $("#opener-content3").dialog(dialogOptions).dialogExtend(dialogExtendOptions);
+                    $("#opener-content3").dialog(dialogOptions);
                 }
             });
         });

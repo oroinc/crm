@@ -30,7 +30,7 @@ body{
   font-family: @baseFontFamily;
   color: @bodyColor;
   margin: 0;
-  padding: 0;
+  padding: 0 ;
   min-width: 980px;
   background:#fff url("../../img/bg-login.jpg") repeat;
 }
@@ -776,6 +776,7 @@ footer{
   background: @bodyBackground;
   .border-radius(@baseBorderRadius);
   .box-shadow(0 1px 4px rgba(0,0,0,.065));
+  z-index: 900; /* nedd recheck it */
 }
 .ui-dialog-titlebar{
   .border-radius(@baseBorderRadius @baseBorderRadius 0 0);
@@ -799,7 +800,9 @@ footer{
   height: 14px;
   width: 14px;
   margin: 2px;
-  float:right;
+  position: absolute;
+  bottom: 1px;
+  right: 4px;
   background: url("../../img/glyphicons-halflings.png") no-repeat -167px -73px;
   cursor: se-resize;
 }
@@ -1713,7 +1716,7 @@ footer{
     margin-left: 115px;
   }
   .bottom-action{
-    padding: 10px;
+    padding: 10px 10px 25px 10px;
     overflow: hidden;
     border-top: 1px solid #dfdfdf;
     background: #fafafa;

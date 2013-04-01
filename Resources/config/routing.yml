@@ -65,11 +65,6 @@ oro_ui_tables:
 oro_ui_general_elements:
     pattern: /general-elements
     defaults: { _controller: FrameworkBundle:Template:template, template: "OroUIBundle:Default:generalElements.html.twig" }
-
-oro_ui_dialog:
-    pattern: /dialog
-    defaults: { _controller: FrameworkBundle:Template:template, template: "OroUIBundle:Default:dialogPage.html.twig" }
-
 oro_ui_dialog_styled:
     pattern: /dialog-styled
     defaults: { _controller: FrameworkBundle:Template:template, template: "OroUIBundle:Default:dialogStyledPage.html.twig" }
