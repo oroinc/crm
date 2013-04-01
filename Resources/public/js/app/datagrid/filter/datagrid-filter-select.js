@@ -195,8 +195,13 @@ OroApp.DatagridFilterSelect = OroApp.DatagridFilter.extend({
      * @protected
      */
     _onSelectChange: function() {
+        // set value
         var value = this.getValue();
         this._confirmValue(value);
+
+        // update dropdown
+        var button = this.$('.filter-select');
+        this.selectWidget.updateDropdownPosition(button);
     },
 
     /**

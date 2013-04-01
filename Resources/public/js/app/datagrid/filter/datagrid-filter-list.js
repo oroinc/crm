@@ -157,17 +157,13 @@ OroApp.DatagridFilterList = Backbone.View.extend({
     },
 
     /**
-     * Fix dropdown position
+     * Set dropdown position according to current element
      *
      * @protected
      */
     _updateDropdownPosition: function() {
         var button = this.$('.ui-multiselect.filter-list');
-        var position = button.offset();
-        this.selectWidget.getWidget().css({
-            top: position.top + button.outerHeight(),
-            left: position.left
-        });
+        this.selectWidget.updateDropdownPosition(button);
     },
 
     /**

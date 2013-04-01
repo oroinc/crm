@@ -150,6 +150,19 @@ _.extend(OroApp.MultiSelectDecorator.prototype, {
      */
     multiselectfilter: function(functionName) {
         return this.element.multiselectfilter(functionName);
+    },
+
+    /**
+     *  Set dropdown position according to button element
+     *
+     * @param {Object} button
+     */
+    updateDropdownPosition: function(button) {
+        var position = button.offset();
+        this.getWidget().css({
+            top: position.top + button.outerHeight(),
+            left: position.left
+        });
     }
 });
 
