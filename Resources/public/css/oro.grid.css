@@ -19,6 +19,10 @@ table.grid thead tr th.descending span.caret {
     border-bottom: 4px solid #000000;
 }
 
+table.grid tbody tr.row-click-action {
+    cursor: pointer;
+}
+
 .grid-toolbar .pagination ul li input {
     display: inline;
     float: left;
