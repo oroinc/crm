@@ -85,9 +85,9 @@
             <div class="navigation clearfix navbar-extra navbar-extra-right">
                 <div class="top-action-box">
                     <div class="btn-group icons-holder icons-small">
-                        <button class="btn"><i class="icon-minimize hide-text">minimaze tab</i></button>
-                        <button class="btn"><i class="icon-fullscreen hide-text">full screen</i></button>
-                        <button class="btn"><i class="icon-remove hide-text">Close</i></button>
+                    <button class="btn"><i class="icon-minimize hide-text">{{ 'minimaze tab'|trans }}</i></button>
+                    <button class="btn"><i class="icon-fullscreen hide-text">{{ 'full screen'|trans }}</i></button>
+                    <button class="btn"><i class="icon-remove hide-text">{{ 'Close'|trans }}</i></button>
                     </div>
                 </div>
                 <div class="row">
@@ -96,28 +96,19 @@
                             {{ form_widget(form.enabled) }}
                         </div>
                         <div class="btn-group icons-holder">
-                            <button class="btn"><i class="icon-edit hide-text">edit</i></button>
-                            <button class="btn"><i class="icon-copy hide-text">copy</i></button>
-                            <button class="btn"><i class="icon-trash hide-text">remove</i></button>
-                        </div>
-                        <div class="btn-group">
-                            <button class="btn dropdown-toggle" data-toggle="dropdown">Export:<span class="caret"></span></button>
-                            <ul class="dropdown-menu pull-right">
-                                <li><a href="#">Export</a></li>
-                                <li><a href="#">Import</a></li>
-                            </ul>
+                            <a href="{{ path('oro_user_remove', { id: form.vars.value.id }) }}" class="btn"><i class="icon-trash hide-text">{{ 'Remove'|trans }}</i></a>
                         </div>
                     </div>
                     <div class="span9 ">
-                       <div class="customer-info well-small">
-                           <div class="visual"><img src="{{ form.vars.value.imagePath ? form.vars.value.imagePath | imagine_filter('avatar_med') : asset('bundles/oroui/img/info-usser.png') }}" alt="{{ form.vars.value.firstname ~ ' ' ~ form.vars.value.lastname}}"/></div>
-                           <div class="customer-content">
-                               <div class="sub-title">Customers</div>
-                               <h1 class="usser-name">{{ form.vars.value.firstName or form.vars.value.lastName ? form.vars.value.firstName ~ ' ' ~ form.vars.value.lastName : 'N/A' }}</h1>
-                               <ul class="inline">
-                                   <li>Last logged in: {{ form.vars.value.lastLogin ? macros.time(form.vars.value.lastLogin) : 'N/A' }}</li>
-                                   <li>Lifetime Sales: $3004.92</li>
-                                   <li>Retail Customer</li>
+                        <div class="customer-info well-small">
+                            <div class="visual"><img src="{{ form.vars.value.imagePath ? form.vars.value.imagePath | imagine_filter('avatar_med') : asset('bundles/oroui/img/info-usser.png') }}" alt="{{ form.vars.value.fullname }}"/></div>
+                            <div class="customer-content">
+                                <div class="sub-title">Customers</div>
+                                <h1 class="usser-name">{{ form.vars.value.fullname|default('N/A') }}</h1>
+                                <ul class="inline">
+                                    <li>{{ 'Last logged in'|trans }}: {{ form.vars.value.lastLogin ? macros.time(form.vars.value.lastLogin) : 'N/A' }}</li>
+                                    <li>{{ 'Created'|trans }}: {{ form.vars.value.createdAt ? macros.time(form.vars.value.createdAt) : 'N/A' }}</li>
+                                    <li>{{ 'Updated'|trans }}: {{ form.vars.value.updatedAt ? macros.time(form.vars.value.updatedAt) : 'N/A' }}</li>
                                </ul>
                            </div>
                        </div>
@@ -129,16 +120,16 @@
                     <div class="navbar-inner">
                         <div class="container-fluid" style="width: auto;">
                             <ul class="nav">
-                                <li class="active"><a href="#scroll-main">Overview</a></li>
-                                <li><a href="#scroll-attributes">Additional data</a></li>
-                                <li><a href="#scroll-api">API</a></li>
+                                <li class="active"><a href="#scroll-main">{{ 'Overview'|trans }}</a></li>
+                                <li><a href="#scroll-attributes">{{ 'Additional data'|trans }}</a></li>
+                                <li><a href="#scroll-api">{{ 'API'|trans }}</a></li>
 
                                 {% if form.groups is defined %}
-                                <li><a href="#scroll-groups">Groups</a></li>
+                                <li><a href="#scroll-groups">{{ 'Groups'|trans }}</a></li>
                                 {% endif %}
 
                                 {% if form.rolesCollection is defined %}
-                                <li><a href="#scroll-roles">Roles</a></li>
+                                <li><a href="#scroll-roles">{{ 'Roles'|trans }}</a></li>
                                 {% endif %}
                             </ul>
                         </div>
@@ -147,8 +138,8 @@
                 <div class="clearfix-oro">
                     <div class="customer-info-actions container-fluid well-small">
                         <div class="pull-right">
-                            <a href="{{ path('oro_user_index') }}" class="btn">Cancel</a>
-                            <button type="submit" class="btn btn-primary">Save</button>
+                            <a href="{{ path('oro_user_index') }}" class="btn">{{ 'Cancel'|trans }}</a>
+                            <button type="submit" class="btn btn-primary">{{ 'Save'|trans }}</button>
                         </div>
                         {% if form_errors(form) %}
                         <div class="pull-left alert alert-error">
@@ -158,7 +149,7 @@
                         {% endif %}
                     </div>
                     <div data-spy="scroll" data-target="#navbarExample" data-offset="50" class="scrollspy container-fluid">
-                        <h4 id="scroll-main" class="scrollspy-title">Overview</h4>
+                        <h4 id="scroll-main" class="scrollspy-title">{{ 'Overview'|trans }}</h4>
                         <div class="row-fluid">
                             <fieldset class="form-horizontal span6">
                                 {{ form_row(form.username) }}
@@ -171,7 +162,7 @@
                                 {{ form_row(form.email) }}
 
                                 <div class="control-group">
-                                    <label for="selectAccountName" class="control-label">Additional emails:</label>
+                                    <label for="selectAccountName" class="control-label">{{ 'Additional emails'|trans }}:</label>
                                     <div class="controls">
                                         <div class="row-oro">
                                             <div id="email-fields-list" data-prototype="{{ macros.collection_prototype(form.emails)|escape }}">
@@ -179,29 +170,29 @@
                                                     {{ macros.collection_prototype(emailField) }}
                                                 {% endfor %}
                                             </div>
-                                            <a class="btn" href="#" id="add-another-email">Add another email</a>
+                                            <a class="btn" href="javascript: void(0);" id="add-another-email">{{ 'Add another email'|trans }}</a>
                                         </div>
                                     </div>
                                 </div>
                             </fieldset>
                         </div>
 
-                        <h4 id="scroll-attributes" class="scrollspy-title">Additional data</h4>
+                        <h4 id="scroll-attributes" class="scrollspy-title">{{ 'Additional data'|trans }}</h4>
                         <div class="row-fluid">
                             <fieldset class="form-horizontal">
                                 {{ form_row(form.attributes) }}
                             </fieldset>
                         </div>
 
-                        <h4 id="scroll-api" class="scrollspy-title">API</h4>
+                        <h4 id="scroll-api" class="scrollspy-title">{{ 'API'|trans }}</h4>
                         <div class="row-fluid">
                             <fieldset class="form-horizontal">
                                 <div class="control-group">
-                                    <label class="control-label">API key</label>
+                                    <label class="control-label">{{ 'API key'|trans }}</label>
                                     <div class="controls">
                                         <strong class="label label-info">{{ form.vars.value.api ? form.vars.value.api.apiKey : 'N/A' }}</strong>
                                         {% if form.vars.value.id %}
-                                        <a class="btn btn-small" id="btn-apigen" href="{{ path('oro_user_apigen', { id: form.vars.value.id }) }}">Generate</a>
+                                        <a class="btn btn-small" id="btn-apigen" href="{{ path('oro_user_apigen', { id: form.vars.value.id }) }}">{{ 'Generate key'|trans }}</a>
                                         {% endif %}
                                     </div>
                                 </div>
@@ -209,7 +200,7 @@
                         </div>
 
                         {% if form.groups is defined %}
-                        <h4 id="scroll-groups" class="scrollspy-title">Groups</h4>
+                        <h4 id="scroll-groups" class="scrollspy-title">{{ 'Groups'|trans }}</h4>
                         <div class="row-fluid">
                             <fieldset class="form-horizontal">
                                 {{ form_row(form.groups) }}
@@ -218,7 +209,7 @@
                         {% endif %}
 
                         {% if form.rolesCollection is defined %}
-                        <h4 id="scroll-roles" class="scrollspy-title">Roles</h4>
+                        <h4 id="scroll-roles" class="scrollspy-title">{{ 'Roles'|trans }}</h4>
                         <div class="row-fluid">
                             <fieldset class="form-horizontal">
                                 {{ form_row(form.rolesCollection) }}
@@ -294,10 +285,6 @@
 
 {% block head_script %}
     {{ parent() }}
-
-    <script type="text/javascript">
-        var emailCount = '{{ form.emails | length }}';
-    </script>
 
     {% javascripts
         '@OroUIBundle/Resources/public/lib/bootstrap/js/bootstrap-scrollspy.js'

@@ -56,6 +56,7 @@ class RoleController extends Controller
             $flashBag->add('success', 'Role successfully saved');
 
             $redirectUrl = $backUrl ? $backUrl : $this->generateUrl('oro_user_role_index');
+
             return $this->redirect($redirectUrl);
         }
 

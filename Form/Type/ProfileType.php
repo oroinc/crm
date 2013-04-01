@@ -72,6 +72,10 @@ class ProfileType extends FlexibleType
                 'label'          => 'Date of birth',
                 'required'       => false,
                 'widget'         => 'single_text',
+                'format'         => 'dd-MM-yyyy',
+                'attr'           => array(
+                    'placeholder' => 'dd-mm-yyyy',
+                )
             ))
             ->add('imageFile', 'file', array(
                 'label'          => 'Avatar',

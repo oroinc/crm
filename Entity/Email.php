@@ -34,7 +34,7 @@ class Email
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -44,20 +44,20 @@ class Email
     /**
      * Set email
      *
-     * @param string $email
+     * @param  string $email
      * @return Email
      */
     public function setEmail($email)
     {
         $this->email = $email;
-    
+
         return $this;
     }
 
     /**
      * Get email
      *
-     * @return string 
+     * @return string
      */
     public function getEmail()
     {
@@ -67,20 +67,20 @@ class Email
     /**
      * Set user
      *
-     * @param \Oro\Bundle\UserBundle\Entity\User $user
+     * @param  \Oro\Bundle\UserBundle\Entity\User $user
      * @return Email
      */
     public function setUser(User $user = null)
     {
         $this->user = $user;
-    
+
         return $this;
     }
 
     /**
      * Get user
      *
-     * @return \Oro\Bundle\UserBundle\Entity\User 
+     * @return \Oro\Bundle\UserBundle\Entity\User
      */
     public function getUser()
     {
