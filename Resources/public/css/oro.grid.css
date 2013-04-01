@@ -148,14 +148,11 @@ table.grid thead tr th.descending span.caret {
     background: none;
     border: none;
     padding: 0 0 4px 6px;
-}
-
-#add-filter-button {
     font-size: 13px;
     font-weight: bold;
 }
 
-.ui-state-hover #add-filter-button {
+.ui-multiselect.filter-list.ui-state-hover {
     color: #032D67;
     text-decoration: underline;
 }
