@@ -4,13 +4,13 @@ namespace Oro\Bundle\FlexibleEntityBundle\Model\AttributeType;
 use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttributeType;
 
 /**
- * Metric attribute type
+ * Price attribute type
  *
  * @author    Nicolas Dupont <nicolas@akeneo.com>
  * @copyright 2012 Akeneo SAS (http://www.akeneo.com)
  * @license   http://opensource.org/licenses/MIT MIT
  */
-class MetricType extends AbstractAttributeType
+class PriceType extends AbstractAttributeType
 {
 
     /**
@@ -18,8 +18,8 @@ class MetricType extends AbstractAttributeType
      */
     public function __construct()
     {
-        $this->name        = 'Metric';
-        $this->backendType = self::BACKEND_TYPE_METRIC;
-        $this->formType    = 'number';
+        $this->name        = 'Price';
+        $this->backendType = self::BACKEND_TYPE_PRICE;
+        $this->formType    = 'money';
     }
 }

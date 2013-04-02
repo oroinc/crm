@@ -2,7 +2,6 @@
 namespace Oro\Bundle\FlexibleEntityBundle\Entity\Mapping;
 
 use Symfony\Component\HttpFoundation\File\File;
-
 use Oro\Bundle\FlexibleEntityBundle\Model\AbstractFlexible;
 use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttribute;
 use Oro\Bundle\FlexibleEntityBundle\Model\AbstractFlexibleValue;
@@ -58,22 +57,6 @@ abstract class AbstractEntityFlexibleValue extends AbstractFlexibleValue
      * @ORM\Column(name="scope_code", type="string", length=20, nullable=true)
      */
     protected $scope;
-
-    /**
-     * Currency code
-     * @var string $currency
-     *
-     * @ORM\Column(name="currency_code", type="string", length=5, nullable=true)
-     */
-    protected $currency;
-
-    /**
-     * Unit code
-     * @var string $unit
-     *
-     * @ORM\Column(name="unit_code", type="string", length=5, nullable=true)
-     */
-    protected $unit;
 
     /**
      * Store varchar value
@@ -144,6 +127,26 @@ abstract class AbstractEntityFlexibleValue extends AbstractFlexibleValue
      * @ORM\JoinColumn(name="media_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $media;
+
+    /**
+     * Store metric value
+     * 
+     * @var Metric $metric 
+     *
+     * @ORM\OneToOne(targetEntity="Oro\Bundle\FlexibleEntityBundle\Entity\Metric", cascade="persist")
+     * @ORM\JoinColumn(name="metric_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    protected $metric;
+
+    /**
+     * Store price value
+     * 
+     * @var Price $price 
+     *
+     * @ORM\OneToOne(targetEntity="Oro\Bundle\FlexibleEntityBundle\Entity\Price", cascade="persist")
+     * @ORM\JoinColumn(name="price_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    protected $price;
 
     /**
      * Constructor
@@ -399,43 +402,7 @@ abstract class AbstractEntityFlexibleValue extends AbstractFlexibleValue
     {
         $this->options = $options;
 
-        return ;
-    }
-
-    /**
-     * Get used currency
-     * @return string $currency
-     */
-    public function getCurrency()
-    {
-        return $this->currency;
-    }
-
-    /**
-     * Set used currency
-     * @param string $currency
-     */
-    public function setCurrency($currency)
-    {
-        $this->currency = $currency;
-    }
-
-    /**
-     * Get used unit
-     * @return string $unit
-     */
-    public function getUnit()
-    {
-        return $this->unit;
-    }
-
-    /**
-     * Set used unit
-     * @param string $unit
-     */
-    public function setUnit($unit)
-    {
-        $this->unit = $unit;
+        return $this;
     }
 
     /**
@@ -458,6 +425,54 @@ abstract class AbstractEntityFlexibleValue extends AbstractFlexibleValue
     public function setMedia($media)
     {
         $this->media = $media;
+
+        return $this;
+    }
+
+    /**
+     * Get metric
+     *
+     * @return Metric
+     */
+    public function getMetric()
+    {
+        return $this->metric;
+    }
+
+    /**
+     * Set metric
+     *
+     * @param Metric $metric
+     *
+     * @return AbstractEntityFlexibleValue
+     */
+    public function setMetric($metric)
+    {
+        $this->metric = $metric;
+
+        return $this;
+    }
+
+    /**
+     * Get price
+     *
+     * @return Price
+     */
+    public function getPrice()
+    {
+        return $this->price;
+    }
+
+    /**
+     * Set price
+     *
+     * @param Price $price
+     *
+     * @return AbstractEntityFlexibleValue
+     */
+    public function setPrice($price)
+    {
+        $this->price = $price;
 
         return $this;
     }

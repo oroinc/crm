@@ -10,6 +10,8 @@ use Oro\Bundle\FlexibleEntityBundle\Tests\Unit\Entity\Demo\Flexible;
 use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttributeType;
 use Oro\Bundle\FlexibleEntityBundle\Entity\Attribute;
 use Oro\Bundle\FlexibleEntityBundle\Entity\AttributeOption;
+use Oro\Bundle\FlexibleEntityBundle\Entity\Metric;
+use Oro\Bundle\FlexibleEntityBundle\Entity\Price;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
@@ -137,15 +139,19 @@ class FlexibleValueTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-
     /**
      * Test related method
      */
     public function testGetUnit()
     {
+        $data = 5;
         $unit = 'mm';
-        $this->value->setUnit($unit);
-        $this->assertEquals($this->value->getUnit(), $unit);
+        $metric = new Metric();
+        $metric->setUnit($unit);
+        $metric->setData($data);
+        $this->value->setData($metric);
+        $this->assertEquals($this->value->getData()->getUnit(), $unit);
+        $this->assertEquals($this->value->getData()->getData(), $data);
     }
 
     /**
@@ -153,9 +159,14 @@ class FlexibleValueTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetCurrency()
     {
+        $data = 5;
         $currency = 'USD';
-        $this->value->setCurrency($currency);
-        $this->assertEquals($this->value->getCurrency(), $currency);
+        $price = new Price();
+        $price->setData($data);
+        $price->setCurrency($currency);
+        $this->value->setData($price);
+        $this->assertEquals($this->value->getData()->getCurrency(), $currency);
+        $this->assertEquals($this->value->getData()->getData(), $data);
     }
 
     /**
