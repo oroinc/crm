@@ -114,6 +114,7 @@ class ProfileType extends FlexibleType
                 'by_reference'   => false,
                 'prototype'      => true,
                 'prototype_name' => 'tag__name__',
+                'label'         => ' '
             ));
     }
 
