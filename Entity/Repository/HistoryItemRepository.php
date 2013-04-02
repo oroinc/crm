@@ -40,6 +40,7 @@ class HistoryItemRepository extends EntityRepository implements NavigationReposi
         $maxResults = isset($this->_config['templates'][NavigationHistoryItem::NAVIGATION_HISTORY_ITEM_TYPE]['maxResults'])
                         ? $this->_config['templates'][NavigationHistoryItem::NAVIGATION_HISTORY_ITEM_TYPE]['maxResults']
                         : self::DEFAULT_MAX_RESULTS;
+        $maxResults++;
 
         $qb = $this->_em->createQueryBuilder();
 

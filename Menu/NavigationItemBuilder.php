@@ -18,22 +18,22 @@ class NavigationItemBuilder implements BuilderInterface
     /**
      * @var ContainerInterface $container
      */
-    private $container;
+    protected  $container;
 
     /**
      * @var SecurityContextInterface
      */
-    private $securityContext;
+    protected $securityContext;
 
     /**
      * @var EntityManager
      */
-    private $em;
+    protected $em;
 
     /**
      * @var ItemFactory
      */
-    private $factory;
+    protected $factory;
 
     /**
      * @param SecurityContextInterface $securityContext
