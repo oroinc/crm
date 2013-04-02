@@ -1,5 +1,12 @@
 $(document).ready(function () {
     var _searcjFlag = false;
+
+    $("#top-search-form").submit(function(){
+        if ($('#search-bar-search').val().length == 0) {
+            return false;
+        }
+    });
+
     $("#search-bar-dropdown li a").click(function (e) {
         $("#search-bar-from").val($(this).parent().attr('data-alias'));
         $("#search-bar-button").html($(this).html() + '<span class="caret"></span>');
@@ -7,6 +14,7 @@ $(document).ready(function () {
         SearchInputWidth()
         e.preventDefault();
     });
+
     SearchInputWidth()
     function SearchByTag() {
         var queryString = jQuery('#search-bar-search').val();
