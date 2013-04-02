@@ -54,3 +54,16 @@ services:
         class: Oro\Bundle\FlexibleEntityBundle\Form\Type\MediaType
         tags:
             - { name: form.type, alias: oro_media }
+
+    # Price form type
+    form.type.oro_flexibleentity_price:
+        class: Oro\Bundle\FlexibleEntityBundle\Form\Type\PriceType
+        tags:
+            - { name: form.type, alias: oro_flexibleentity_price }
+
+    # Metric form type
+    form.type.oro_flexibleentity_metric:
+        class: Oro\Bundle\FlexibleEntityBundle\Form\Type\MetricType
+        tags:
+            - { name: form.type, alias: oro_flexibleentity_metric }
+
