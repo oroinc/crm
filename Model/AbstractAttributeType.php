@@ -15,8 +15,7 @@ abstract class AbstractAttributeType
      * Available backend storage
      * @var string
      */
-    const BACKEND_STORAGE_ATTRIBUTE_VALUE = 'doctrine_eav';
-    const BACKEND_STORAGE_FLAT_VALUE      = 'doctrine_flat';
+    const BACKEND_STORAGE_ATTRIBUTE_VALUE = 'values';
 
     /**
      * Available backend types
