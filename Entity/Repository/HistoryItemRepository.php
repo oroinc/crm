@@ -13,7 +13,7 @@ class HistoryItemRepository extends EntityRepository implements NavigationReposi
 {
     const DEFAULT_MAX_RESULTS = 20;
 
-    private $_config = array();
+    private $config = array();
 
     /**
      * Setter for config
@@ -21,8 +21,9 @@ class HistoryItemRepository extends EntityRepository implements NavigationReposi
      * @param $config
      * @return $this
      */
-    public function setConfig($config) {
-        $this->_config = $config;
+    public function setConfig($config)
+    {
+        $this->config = $config;
 
         return $this;
     }
@@ -37,8 +38,8 @@ class HistoryItemRepository extends EntityRepository implements NavigationReposi
      */
     public function getNavigationItems($user, $type = null)
     {
-        $maxResults = isset($this->_config['templates'][NavigationHistoryItem::NAVIGATION_HISTORY_ITEM_TYPE]['maxResults'])
-                        ? $this->_config['templates'][NavigationHistoryItem::NAVIGATION_HISTORY_ITEM_TYPE]['maxResults']
+        $maxResults = isset($this->config['templates'][$type]['maxResults'])
+                        ? $this->config['templates'][$type]['maxResults']
                         : self::DEFAULT_MAX_RESULTS;
         $maxResults++;
 
@@ -57,9 +58,7 @@ class HistoryItemRepository extends EntityRepository implements NavigationReposi
             ->add('from', new Expr\From('Oro\Bundle\NavigationBundle\Entity\NavigationHistoryItem', 'ni'))
             ->add(
                 'where',
-                $qb->expr()->andx(
-                    $qb->expr()->eq('ni.user', ':user')
-                )
+                $qb->expr()->eq('ni.user', ':user')
             )
             ->add('orderBy', new Expr\OrderBy('ni.updatedAt', 'DESC'))
             ->setMaxResults($maxResults)

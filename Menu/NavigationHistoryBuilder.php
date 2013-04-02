@@ -2,13 +2,16 @@
 
 namespace Oro\Bundle\NavigationBundle\Menu;
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\Security\Core\SecurityContextInterface;;
 use Knp\Menu\ItemInterface;
 use Knp\Menu\Matcher\Matcher;
 
 class NavigationHistoryBuilder extends NavigationItemBuilder
 {
+    /**
+     * @var Marcher
+     */
+    private $matcher;
+
     /**
      * Modify menu by adding, removing or editing items.
      *
@@ -21,11 +24,8 @@ class NavigationHistoryBuilder extends NavigationItemBuilder
         parent::build($menu, $options, $alias);
 
         $children = $menu->getChildren();
-        /** @var $matcher Matcher */
-        $matcher = $this->container->get('knp_menu.matcher');
-
         foreach ($children as $child) {
-            if ($matcher->isCurrent($child)) {
+            if ($this->matcher->isCurrent($child)) {
                 $menu->removeChild($child);
 
                 break;
@@ -33,5 +33,18 @@ class NavigationHistoryBuilder extends NavigationItemBuilder
         }
 
         $menu->slice(0, 20);
+    }
+
+    /**
+     * Setter for matcher service
+     *
+     * @param \Knp\Menu\Matcher\Matcher $matcher
+     * @return $this
+     */
+    public function setMatcher(Matcher $matcher)
+    {
+        $this->matcher = $matcher;
+
+        return $this;
     }
 }

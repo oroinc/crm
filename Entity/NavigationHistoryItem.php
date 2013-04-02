@@ -48,13 +48,6 @@ class NavigationHistoryItem implements NavigationItemInterface
     protected $title;
 
     /**
-     * @var integer $position
-     *
-     * @ORM\Column(name="position", type="smallint")
-     */
-    protected $position;
-
-    /**
      * @var \DateTime
      *
      * @ORM\Column(name="created_at", type="datetime")
@@ -132,29 +125,6 @@ class NavigationHistoryItem implements NavigationItemInterface
     public function getTitle()
     {
         return $this->title;
-    }
-
-    /**
-     * Set position
-     *
-     * @param integer $position
-     * @return PinbarTab
-     */
-    public function setPosition($position)
-    {
-        $this->position = $position;
-
-        return $this;
-    }
-
-    /**
-     * Get position
-     *
-     * @return integer
-     */
-    public function getPosition()
-    {
-        return $this->position;
     }
 
     /**
@@ -238,9 +208,6 @@ class NavigationHistoryItem implements NavigationItemInterface
         }
         if (isset($values['url'])) {
             $this->setUrl($values['url']);
-        }
-        if (isset($values['position'])) {
-            $this->setPosition($values['position']);
         }
         if (isset($values['user'])) {
             $this->setUser($values['user']);

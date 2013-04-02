@@ -118,7 +118,8 @@ services:
             - @doctrine.orm.entity_manager
             - @oro_navigation.item.factory
         calls:
-            - [ setContainer, [ @service_container ] ]
+            - [ setContainer, [ @service_container ]]
+            - [ setMatcher, [ @knp_menu.matcher ]]
         tags:
             - { name: oro_menu.builder, alias: history }
 

@@ -11,7 +11,7 @@ class HistoryItemBuilder extends AbstractBuilder
      * Build navigation item
      *
      * @param $params
-     * @return NavigationItem|null
+     * @return NavigationHistoryItem|null
      */
     public function buildItem($params)
     {
@@ -22,7 +22,7 @@ class HistoryItemBuilder extends AbstractBuilder
      * Find navigation item
      *
      * @param int $itemId
-     * @return NavigationItem|null
+     * @return NavigationHistoryItem|null
      */
     public function findItem($itemId)
     {
