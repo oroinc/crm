@@ -1,6 +1,6 @@
 {% extends bap.layout is defined ? bap.layout : 'OroUserBundle::layout.html.twig' %}
 {% import 'OroUserBundle::macros.html.twig' as macros %}
-{% form_theme form with 'OroUserBundle:Form:fields.html.twig' %}
+{% form_theme form with 'OroUIBundle:Form:fields.html.twig' %}
 
 {% set title = form.vars.value.id ? 'Edit profile' : 'Add profile' %}
 
@@ -121,10 +121,12 @@
                             <div class="control-group">
                                 <label class="control-label">{{ 'API key'|trans }}</label>
                                 <div class="controls">
-                                    <strong class="label label-info">{{ form.vars.value.api ? form.vars.value.api.apiKey : 'N/A' }}</strong>
-                                    {% if form.vars.value.id and resource_granted('oro_user_profile_apigen') %}
-                                    <a class="btn btn-small" id="btn-apigen" href="{{ path('oro_user_apigen', { id: form.vars.value.id }) }}">{{ 'Generate key'|trans }}</a>
-                                    {% endif %}
+                                    <div class="horizontal">
+                                        <strong class="label label-info">{{ form.vars.value.api ? form.vars.value.api.apiKey : 'N/A' }}</strong>
+                                        {% if form.vars.value.id and resource_granted('oro_user_profile_apigen') %}
+                                        <a class="btn btn-small" id="btn-apigen" href="{{ path('oro_user_apigen', { id: form.vars.value.id }) }}">{{ 'Generate key'|trans }}</a>
+                                        {% endif %}
+                                    </div>
                                 </div>
                             </div>
                         </fieldset>
@@ -134,7 +136,7 @@
                     <h4 id="scroll-groups" class="scrollspy-title">{{ 'Groups'|trans }}</h4>
                     <div class="row-fluid">
                         <fieldset class="form-horizontal">
-                            {{ form_row(form.groups) }}
+                            {{ form_row(form.groups, { attr: { class: 'horizontal' } }) }}
                         </fieldset>
                     </div>
                     {% endif %}
@@ -143,7 +145,7 @@
                     <h4 id="scroll-roles" class="scrollspy-title">{{ 'Roles'|trans }}</h4>
                     <div class="row-fluid">
                         <fieldset class="form-horizontal">
-                            {{ form_row(form.rolesCollection) }}
+                            {{ form_row(form.rolesCollection, { attr: { class: 'horizontal' } }) }}
                         </fieldset>
                     </div>
                     {% endif %}
