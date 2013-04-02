@@ -4,6 +4,8 @@
 
 {% block title %}{{ title }} - {{ parent() }}{% endblock %}
 
+{% block page_container %}
+<div class="container-fluid">
 {% block content %}
 <form action="{{ form.vars.value.id ? path('oro_user_group_edit', { id: form.vars.value.id }) : path('oro_user_group_create') }}" method="POST" class="form-register">
     <fieldset>
@@ -16,4 +18,6 @@
         </div>
     </fieldset>
 </form>
+{% endblock %}
+</div>
 {% endblock %}

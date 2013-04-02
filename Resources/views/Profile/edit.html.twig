@@ -5,9 +5,9 @@
 {% set title = form.vars.value.id ? 'Edit profile' : 'Add profile' %}
 
 {% block title %}{{ title }} - {{ parent() }}{% endblock %}
-
+{% block page_container %}
+<div class="container-fluid">
 {% block content %}
-<div class="layout-content">
     <form action="{{ form.vars.value.id ? path('oro_user_edit', { id: form.vars.value.id }) : path('oro_user_create') }}" {{ form_enctype(form) }} method="post">
         <div class="navigation clearfix navbar-extra navbar-extra-right">
             <div class="top-action-box">
@@ -149,9 +149,9 @@
             </div>
         </div>
     </form>
-</div>
 {% endblock content %}
-
+</div>
+{% endblock %}
 {% block head_script %}
     {{ parent() }}
 
@@ -174,4 +174,5 @@
     %}
     <link rel="stylesheet" type="text/css" href="{{ asset_url }}" />
     {% endstylesheets %}
+
 {% endblock %}
