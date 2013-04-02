@@ -14,6 +14,7 @@ oro_menu_config:
             template: 'OroNavigationBundle:Menu:menu.html.twig'
             rootClass: 'extra-list'
             maxResults: 20
+            sortBy: 'position'
         history:
             template: 'OroNavigationBundle:Menu:menu.html.twig'
             rootClass: 'extra-list'

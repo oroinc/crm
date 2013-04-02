@@ -85,6 +85,13 @@ services:
         tags:
             - { name: oro_navigation.item.builder, alias: history }
 
+    oro_navigation.item.builder.mostviewed:
+        class: %oro_navigation.item.builder.history.class%
+        arguments:
+            - @doctrine.orm.entity_manager
+        tags:
+            - { name: oro_navigation.item.builder, alias: mostviewed }
+
     oro_navigation.item.factory:
         class: %oro_navigation.item.factory.class%
 
@@ -121,6 +128,17 @@ services:
             - [ setMatcher, [ @knp_menu.matcher ]]
         tags:
             - { name: oro_menu.builder, alias: history }
+
+    oro_navigation.mostviewed_menu.builder:
+        class: %oro_navigation.navigation_history_menu.builder.class%
+        arguments:
+            - @security.context
+            - @doctrine.orm.entity_manager
+            - @oro_navigation.item.factory
+        calls:
+            - [ setContainer, [ @service_container ] ]
+        tags:
+            - { name: oro_menu.builder, alias: mostviewed }
 
     knp_voter_request:
         class: %oro_navigation.menu.matcher.voter.request%
