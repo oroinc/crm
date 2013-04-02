@@ -139,7 +139,7 @@ class ResetController extends Controller
         $user    = $this->get('oro_user.manager')->findUserByConfirmationToken($token);
         $session = $this->get('session');
 
-        if (null === $user) {
+        /*if (null === $user) {
             throw $this->createNotFoundException(sprintf('The user with "confirmation token" does not exist for value "%s"', $token));
         }
 
@@ -157,7 +157,7 @@ class ResetController extends Controller
             $this->get('security.context')->setToken(null);
 
             return $this->redirect($this->generateUrl('oro_user_security_login'));
-        }
+        }*/
 
         return array(
             'token' => $token,
