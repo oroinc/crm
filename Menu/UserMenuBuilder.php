@@ -17,7 +17,6 @@ class UserMenuBuilder implements BuilderInterface
                 'class' => 'update-status'
             )
         ));
-        $menu->addChild('Status updates', array('route' => 'oro_user_status_list'));
 
         $menu->addChild('divider-' . rand(1, 99999))
             ->setLabel('')
