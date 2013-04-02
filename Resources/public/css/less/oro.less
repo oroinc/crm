@@ -26,6 +26,7 @@
 @linkColor:             #064eb1;
 @linkColorHover:        darken(@linkColor, 15%);
 
+
 body{
   font-family: @baseFontFamily;
   color: @bodyColor;
@@ -38,8 +39,14 @@ html{
   margin: 0;
   padding: 0;
 }
+a:focus{
+  text-decoration: none;
+}
 #top-page > .container-fluid{
     background: #fff;
+}
+#main{
+  background-color: #fff;
 }
 // style
 header{
@@ -115,11 +122,15 @@ header{
   .navbar .nav{
     margin: 0;
   }
+  .shortcuts .dropdown > .dropdown-menu{
+    min-width: 330px;
+  }
+  .shortcuts .dropdown-menu .dropdown-menu{
+    min-width: 247px;
+  }
   .shortcuts{
     padding: 0 7px;
-    .dropdown-menu{
-      min-width: 404px;
-    }
+
     .dropdown > a{
       float: left !important;
       width: 28px;
@@ -213,11 +224,8 @@ header:after{
     color: #fff;
     width: 200px;
     outline: none;
-  }
-  input[type="text"]:focus{
-    background-color: #fff;
-    background-image: none;
-    color: #444;
+    box-shadow:  none;
+    -moz-box-shadow: none;
   }
   .btn-search{
     background:#262d33 url("../../img/general-sprite.png") no-repeat 0 -176px;
@@ -281,6 +289,11 @@ header:after{
   .avatar{
     float:right;
   }
+}
+.header-search.search-focus input[type="text"]:focus{
+  background-color: #fff;
+  background-image: none;
+  color: #444;
 }
 .header-search:after{
   content: "";
@@ -829,6 +842,11 @@ footer{
   line-height: 0;
   background: url("../../img/glyphicons-halflings.png") no-repeat -432px -92px;
   cursor: pointer;
+  border: 0;
+}
+#create-status-form{
+  height: auto !important;
+  border: 0 !important;
 }
 .ui-dialog .ui-dialog-titlebar-close{
   background-position: -311px 0;
@@ -1046,6 +1064,11 @@ footer{
     padding: 0;
     width: 375px;
   }
+  .pin-bar-empty{
+    padding: 0 0 0 20px;
+    color: #fff;
+    line-height: 22px;
+  }
 }
 .pin-menus{
   float:right;
@@ -1246,12 +1269,16 @@ footer{
 .tab-content > .tab-pane{
   padding: 0;
 }
+.application-menu .tab-content > .tab-pane > .nav a:hover{
+  background-color: #447fe9;
+}
 .application-menu .tab-content > .tab-pane > .nav a{
   color: #dedddd;
   font-size: 13px;
   font-weight: bold;
 }
 .application-menu .tab-content > .tab-pane > .nav .current a{
+  background: #3b6fe5;
   color: #fff;
 }
 .application-menu .tab-content > .tab-pane > .nav {
@@ -1292,6 +1319,9 @@ footer{
 .application-menu .tab-content > .tab-pane > .nav .active a{
   background: #3B6FE5;
   color: #fff;
+}
+.nav > li > a:focus{
+  background-color: #7a95b5;
 }
 .navbar .nav > li > a:focus,
 .navbar .nav > li > a:hover{
@@ -1395,6 +1425,9 @@ footer{
 }
 .grid-toolbar .pagination{
   margin: 0 0 20px;
+  input[type="text"]{
+    width: 23px;
+  }
 }
 .grid{
   .action-cell{
