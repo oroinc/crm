@@ -13,10 +13,27 @@ class OroSearchExtensionTest extends \PHPUnit_Framework_TestCase
     {
         $this->container = new ContainerBuilder();
         $this->container = $this->getMock('Symfony\Component\DependencyInjection\ContainerBuilder');
+
+        $params = array(
+            'kernel.bundles' => array('Oro\Bundle\SearchBundle\Tests\Unit\Fixture\TestBundle'),
+            'kernel.environment' => 'test',
+        );
+
         $this->container->expects($this->any())
             ->method('getParameter')
-            ->with($this->equalTo('kernel.bundles'))
-            ->will($this->returnValue(array('Oro\Bundle\SearchBundle\Tests\Unit\Fixture\TestBundle')));
+            ->with(
+                $this->logicalOr(
+                    $this->equalTo('kernel.bundles'),
+                    $this->equalTo('kernel.environment')
+                )
+            )
+            ->will(
+                $this->returnCallback(
+                    function($param) use (&$params) {
+                        return $params[$param];
+                    }
+                )
+            );
 
         $this->container->expects($this->any())
             ->method('setParameter');
