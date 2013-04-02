@@ -5,6 +5,7 @@ namespace Oro\Bundle\SoapBundle\Entity;
 use Symfony\Component\HttpFoundation\Request;
 
 use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Common\Collections\Collection;
 
 class RequestFix
 {
@@ -48,6 +49,10 @@ class RequestFix
             // special case for ordered arrays
             if ($value instanceof \stdClass && isset($value->item) && is_array($value->item)) {
                 $value = (array) $value->item;
+            }
+
+            if ($value instanceof Collection) {
+                $value = $value->toArray();
             }
 
             if (!is_null($value)) {
