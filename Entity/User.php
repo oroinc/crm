@@ -912,8 +912,9 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
      */
     public function beforeSave()
     {
-        $this->created =
-        $this->updated = new DateTime();
+        $this->created    =
+        $this->updated    = new DateTime();
+        $this->loginCount = 0;
 
         $this->preUpload();
     }
