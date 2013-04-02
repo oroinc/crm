@@ -21,6 +21,7 @@
 @baseLineHeight:                  20px;
 
 @inputBorderRadius:               3px;
+@infoText:                        #447fe9;
 // Links
 // -------------------------
 @linkColor:             #064eb1;
@@ -33,7 +34,7 @@ body{
   margin: 0;
   padding: 0 ;
   min-width: 980px;
-  background:#fff url("../../img/bg-login.jpg") repeat;
+  background:#fff /* url("../../img/bg-login.jpg") repeat FE */;
 }
 html{
   margin: 0;
@@ -1432,6 +1433,7 @@ footer{
 .grid{
   .action-cell{
     vertical-align: bottom;
+    width: 60px;
   }
   thead th{
     background-color: #eee;
@@ -1818,6 +1820,10 @@ footer{
     color: #444 !important;
     font-weight: bold !important;
   }
+   .nav > li a:hover{
+      color: #444 !important;
+      border-bottom: 3px solid #999;
+  }
 }
 .customer-info-actions{
   background-color: #f6f6f6;
@@ -1885,4 +1891,26 @@ textarea{
 .scrollspy-title{
   font-size: 19px;
   line-height: 22px;
+}
+.oro-clearfix:after{
+  content: "";
+  display: block;
+  clear: both;
+}
+.oro-clearfix{
+  width: 100%;
+}
+.horizontal .oro-clearfix input[type="checkbox"],
+.horizontal .oro-clearfix input[type="radio"]{
+  float: left;
+  margin: 3px 10px 0 0;
+}
+.horizontal .oro-clearfix .label{
+  float: left;
+}
+.controls .horizontal{
+  padding-top: 5px;
+}
+.dot-menu-empty-message{
+  padding: 15px;
 }
