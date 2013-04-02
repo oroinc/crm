@@ -60,11 +60,11 @@ class ProfileType extends FlexibleType
                 'label'          => 'E-mail',
                 'required'       => true,
             ))
-            ->add('firstname', 'text', array(
+            ->add('firstName', 'text', array(
                 'label'          => 'First name',
                 'required'       => false,
             ))
-            ->add('lastname', 'text', array(
+            ->add('lastName', 'text', array(
                 'label'          => 'Last name',
                 'required'       => false,
             ))
@@ -146,7 +146,7 @@ class ProfileType extends FlexibleType
                     ? array('Profile', 'Default')
                     : array('Registration', 'Profile', 'Default');
             },
-            'extra_fields_message' => 'This form should not contain extra fields: {{ extra_fields }}',
+            'extra_fields_message' => 'This form should not contain extra fields: "{{ extra_fields }}"',
         ));
     }
 
