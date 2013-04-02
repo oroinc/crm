@@ -2,7 +2,6 @@
 
 namespace Oro\Bundle\GridBundle\Filter\ORM;
 
-use Sonata\AdminBundle\Form\Type\Filter\DateType;
 use Sonata\AdminBundle\Form\Type\Filter\DateRangeType;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 use Doctrine\DBAL\Query\QueryBuilder;
@@ -72,7 +71,7 @@ abstract class AbstractDateFilter extends AbstractFilter
      * @param array $data
      * @return array
      */
-    protected function getFilterParameters($data)
+    public function getFilterParameters($data)
     {
         $dateStartValue = trim($data['value']['start']);
         $dateEndValue   = trim($data['value']['end']);
@@ -94,7 +93,7 @@ abstract class AbstractDateFilter extends AbstractFilter
      * @param array $data
      * @return bool
      */
-    protected function isParametersCorrect($data)
+    public function isParametersCorrect($data)
     {
         // check data sanity
         if (!$data || !is_array($data) || !array_key_exists('value', $data)) {
@@ -148,7 +147,7 @@ abstract class AbstractDateFilter extends AbstractFilter
      * @param string $field
      */
     protected function applyFilterBetween(
-        $queryBuilder,
+        ProxyQueryInterface $queryBuilder,
         $dateStartValue,
         $dateEndValue,
         $startDateParameterName,
@@ -189,7 +188,7 @@ abstract class AbstractDateFilter extends AbstractFilter
      * @param string $field
      */
     protected function applyFilterNotBetween(
-        $queryBuilder,
+        ProxyQueryInterface $queryBuilder,
         $dateStartValue,
         $dateEndValue,
         $startDateParameterName,

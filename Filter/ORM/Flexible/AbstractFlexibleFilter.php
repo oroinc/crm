@@ -68,4 +68,40 @@ abstract class AbstractFlexibleFilter extends AbstractFilter implements FilterIn
         $entityRepository = $this->flexibleManager->getFlexibleRepository();
         $entityRepository->applyFilterByAttribute($queryBuilder, $field, $value, $operator);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDefaultOptions()
+    {
+        if ($this->parentFilter) {
+            return $this->parentFilter->getDefaultOptions();
+        }
+
+        return array();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getRenderSettings()
+    {
+        if ($this->parentFilter) {
+            return $this->parentFilter->getRenderSettings();
+        }
+
+        return array();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTypeOptions()
+    {
+        if ($this->parentFilter) {
+            return $this->parentFilter->getTypeOptions();
+        }
+
+        return parent::getTypeOptions();
+    }
 }

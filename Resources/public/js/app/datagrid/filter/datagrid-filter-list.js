@@ -100,7 +100,6 @@ OroApp.DatagridFilterList = Backbone.View.extend({
      */
     _saveState: function() {
         this.collection.state.filters = this._createState();
-        this.collection.state.filtersParams = this.getAllParameters();
     },
 
     /**
@@ -283,18 +282,8 @@ OroApp.DatagridFilterList = Backbone.View.extend({
         var state = {};
         _.each(this.filters, function(filter, name) {
             if (filter.enabled) {
-                var filterParameters = filter.getParameters();
-                var value = {};
-                _.each(_.keys(filterParameters), function(key) {
-                    if (filterParameters[key]) {
-                        value[key] = filterParameters[key];
-                    }
-                });
-                var valueKeys = _.keys(value);
-                if (valueKeys.length == 1 && valueKeys[0] == '[value]') {
-                    state[name] = value['[value]'];
-                } else if (valueKeys.length) {
-                    state[name] = value;
+                if (!filter.isEmpty()) {
+                    state[name] = filter.getValue();
                 } else {
                     state['__' + name] = 1;
                 }
@@ -302,25 +291,6 @@ OroApp.DatagridFilterList = Backbone.View.extend({
         }, this);
 
         return state;
-    },
-
-    /**
-     * Get parameters of all filters
-     *
-     * @return {Object}
-     */
-    getAllParameters: function() {
-        var result = {};
-        _.each(this.filters, function(filter, name) {
-            if (filter.enabled) {
-                var parameters = filter.getParameters();
-                if (parameters) {
-                    result[name] = parameters;
-                }
-            }
-        }, this);
-
-        return result;
     },
 
     /**
@@ -336,10 +306,10 @@ OroApp.DatagridFilterList = Backbone.View.extend({
                 var filterState = state[name];
                 if (!_.isObject(filterState)) {
                     filterState = {
-                        '[value]': filterState
+                        value: filterState
                     }
                 }
-                this.enableFilter(filter.setParameters(filterState));
+                this.enableFilter(filter.setValue(filterState));
             } else if ('__' + name in state) {
                 this.enableFilter(filter.reset());
             } else {

@@ -88,6 +88,15 @@ OroApp.DatagridFilterSelect = OroApp.DatagridFilter.extend({
     },
 
     /**
+     * Filter value object
+     *
+     * @property
+     */
+    emptyValue: {
+        value: ''
+    },
+
+    /**
      * Filter events
      *
      * @property
@@ -238,56 +247,16 @@ OroApp.DatagridFilterSelect = OroApp.DatagridFilter.extend({
     },
 
     /**
-     * Set filter parameters
-     *
-     * @deprecated
-     * @param {Object} parameters
-     * @return {*}
-     */
-    setParameters: function(parameters) {
-        var value = {
-            value: parameters['[value]']
-        };
-        this.setValue(value);
-        return this;
-    },
-
-    /**
-     * Get filter parameters
-     *
-     * @deprecated
-     * @return {Object}
-     */
-    getParameters: function() {
-        var value = this.getValue();
-        return {
-            '[value]': value.value
-        };
-    },
-
-    /**
      * Confirm filter value
      *
      * @protected
      */
     _confirmValue: function(value) {
-        if (this.confirmedValue.value != value.value) {
+        if (!_.isEqual(this.confirmedValue.value, value.value)) {
             this.confirmedValue = _.clone(value);
             this.$(this.inputSelector).val(this.confirmedValue.value);
             this.selectWidget.multiselect('refresh');
             this.trigger('update');
         }
-    },
-
-    /**
-     * Reset filter value
-     *
-     * @return {*}
-     */
-    reset: function() {
-        this.setValue({
-            value: ''
-        });
-        return this;
     }
 });

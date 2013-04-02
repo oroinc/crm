@@ -100,17 +100,46 @@ OroApp.PageableCollection = Backbone.PageableCollection.extend({
         return data;
     },
 
-    // {'filter_key' => 'filter_value', ...}
+    /**
+     * @param {Object} data
+     * @param {Object} state
+     * @return {Object}
+     */
     processFiltersParams: function(data, state) {
-        if (state.filtersParams) {
-            _.each(state.filtersParams, function(filterParameters, filterKey) {
-                for (var parameter in filterParameters) {
-                    var queryParameter = this.inputName + '[_filter][' + filterKey + ']' + parameter;
-                    data[queryParameter] = filterParameters[parameter];
-                }
-            }, this);
+        if (state.filters) {
+            _.extend(
+                data,
+                this._generateParameterStrings(state.filters, this.inputName + '[_filter]')
+            );
         }
         return data;
+    },
+
+    /**
+     *
+     * @param {Object} parameters
+     * @param {String} prefix
+     * @return {Object}
+     * @private
+     */
+    _generateParameterStrings: function(parameters, prefix) {
+        var localStrings = {};
+        var localPrefix = prefix;
+        _.each(parameters, function(filterParameters, filterKey) {
+            if (filterKey.substr(0, 2) != '__') {
+                var filterKeyString = localPrefix + '[' + filterKey + ']';
+                if (_.isObject(filterParameters) && !_.isArray(filterParameters)) {
+                    _.extend(
+                        localStrings,
+                        this._generateParameterStrings(filterParameters, filterKeyString)
+                    );
+                } else {
+                    localStrings[filterKeyString] = filterParameters;
+                }
+            }
+        }, this);
+
+        return localStrings;
     },
 
     // { data : array, options : server_parameters }

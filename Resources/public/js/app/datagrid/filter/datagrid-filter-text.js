@@ -63,18 +63,20 @@ OroApp.DatagridFilterText = OroApp.DatagridFilter.extend({
     },
 
     /**
-     * Value that was confirmed and processed.
-     *
-     * @property {Object}
-     */
-    confirmedValue: {},
-
-    /**
      * Default value showed as filter's criteria hint
      *
      * @property {String}
      */
     defaultCriteriaHint: 'All',
+
+    /**
+     * Empty value
+     *
+     * @property {String}
+     */
+    emptyValue: {
+        value: ''
+    },
 
     /**
      * View events
@@ -243,18 +245,6 @@ OroApp.DatagridFilterText = OroApp.DatagridFilter.extend({
     },
 
     /**
-     * Reset filter elements
-     *
-     * @return {*}
-     */
-    reset: function() {
-        this.setValue({
-            value: ''
-        });
-        return this;
-    },
-
-    /**
      * Set value to filter's criteria and confirm it
      *
      * @param value
@@ -283,24 +273,7 @@ OroApp.DatagridFilterText = OroApp.DatagridFilter.extend({
      * @protected
      */
     _confirmValue: function(value) {
-        var looseObjectCompare = function (obj1, obj2) {
-            for (var i in obj1) {
-                // both items are objects
-                if (_.isObject(obj1[i]) && _.isObject(obj2[i]) && !looseObjectCompare(obj1[i], obj2[i])) {
-                    return false;
-                } else {
-                    var equalsLoosely = (obj1[i] || '') == (obj2[i] || '');
-                    var eitherNumber = _.isNumber(obj1[i]) || _.isNumber(obj2[i]);
-                    var equalsNumbers = Number(obj1[i]) == Number(obj2[i]);
-                    if (!(equalsLoosely || (eitherNumber && equalsNumbers))) {
-                        return false;
-                    }
-                }
-            }
-            return true;
-        };
-
-        if (!looseObjectCompare(this.confirmedValue, value)) {
+        if (!this._looseObjectCompare(this.confirmedValue, value)) {
             this.confirmedValue = _.clone(value);
             this._updateCriteriaHint();
             this.trigger('update');
@@ -334,7 +307,7 @@ OroApp.DatagridFilterText = OroApp.DatagridFilter.extend({
     /**
      * Updates criteria hint element with actual criteria hint value
      *
-     * @private
+     * @protected
      * @return {*}
      */
     _updateCriteriaHint: function() {
@@ -406,55 +379,11 @@ OroApp.DatagridFilterText = OroApp.DatagridFilter.extend({
     },
 
     /**
-     * Set filter parameters
+     * Compares current value with empty value
      *
-     * @deprecated
-     * @param {Object} parameters
-     * @return {*}
+     * @return {Boolean}
      */
-    setParameters: function(parameters) {
-        var value = this._transformParametersToValue(parameters);
-        this._writeCriteriaValue(value);
-        this._confirmValue(value);
-        return this;
-    },
-
-    /**
-     * Get filter parameters
-     *
-     * @deprecated
-     * @return {Object}
-     */
-    getParameters: function() {
-        var value = this.getValue();
-        return this._transformValueToParameters(value);
-    },
-
-    /**
-     * Transforms parameters to value
-     *
-     * @deprecated
-     * @param {Object} parameters
-     * @return {Object}
-     * @protected
-     */
-    _transformParametersToValue: function(parameters) {
-        return {
-            value: parameters['[value]']
-        }
-    },
-
-    /**
-     * Transforms value to parameters
-     *
-     * @deprecated
-     * @param {Object} value
-     * @return {Object}
-     * @protected
-     */
-    _transformValueToParameters: function(value) {
-        return {
-            '[value]': value.value
-        }
+    isEmpty: function() {
+        return this._looseObjectCompare(this.confirmedValue.value, "");
     }
 });

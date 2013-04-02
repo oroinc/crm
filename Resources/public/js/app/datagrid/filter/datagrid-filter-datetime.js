@@ -14,7 +14,7 @@ OroApp.DatagridFilterDateTime = OroApp.DatagridFilterDate.extend({
         '<div>' +
             '<div>' +
                 '<% _.each(choices, function (hint, value) { %>' +
-                    '<input type="radio" name="type" value="<%= value %>" /><%= hint %>' +
+                    '<input type="radio" name="<%= name %>" value="<%= value %>" /><%= hint %>' +
                 '<% }); %>' +
             '</div>' +
             '<div>' +

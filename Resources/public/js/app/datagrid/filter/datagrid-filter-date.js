@@ -13,13 +13,14 @@ OroApp.DatagridFilterDate = OroApp.DatagridFilterChoice.extend({
     popupCriteriaTemplate: _.template(
         '<div>' +
             '<div>' +
-                '<% _.each(choices, function (hint, value) { %>' +
-                    '<input type="radio" name="type" value="<%= value %>" /><%= hint %>' +
-                '<% }); %>' +
-                '</div>' +
+                'From <input type="text" name="start" value="" size="10" maxlength="10" style="width:100px;" /> ' +
+                'to <input type="text" name="end" value="" size="10" maxlength="10" style="width:100px;" />' +
+            '</div>' +
             '<div>' +
-                'date from <input type="text" name="start" value="" style="width:80px;" />' +
-                'to <input type="text" name="end" value="" style="width:80px;" />' +
+                '<% _.each(choices, function (hint, value) { %>' +
+                    '<input type="radio" name="<%= name %>" value="<%= value %>" />&nbsp;<%= hint %><br/>' +
+                '<% }); %>' +
+                '<br/>' +
             '</div>' +
             '<div class="btn-group">' +
                 '<button class="btn btn-mini filter-update">Update</button>' +
@@ -29,34 +30,94 @@ OroApp.DatagridFilterDate = OroApp.DatagridFilterChoice.extend({
     ),
 
     /** @property */
-    parameterSelectors: {
-        type: 'input[name="type"]:checked',
-        value_start: 'input[name="start"]',
-        value_end: 'input[name="end"]'
+    criteriaValueSelectors: {
+        type: 'input[type="radio"]:checked',
+        value: {
+            start: 'input[name="start"]',
+            end:   'input[name="end"]'
+        }
+    },
+
+    /** @property */
+    emptyValue: {
+        type: '',
+        value: {
+            start: '',
+            end: ''
+        }
     },
 
     /**
-     * Reset filter form elements
+     * Get criteria hint value
      *
+     * @return {String}
+     * @protected
+     */
+    _getCriteriaHint: function() {
+        // if (!this.confirmedValue.value) {
+            return this.defaultCriteriaHint;
+//        } else if (_.has(this.choices, this.confirmedValue.type)) {
+//            return this.choices[this.confirmedValue.type] + ' "' + this.confirmedValue.value + '"'
+//        } else {
+//            return '"' + this.confirmedValue.value + '"';
+//        }
+    },
+
+    /**
+     * Writes values from object into criteria elements
+     *
+     * @param {Object} value
+     * @protected
      * @return {*}
      */
-    reset: function() {
-        this.$(this.parameterSelectors.type).val('');
-        this.$(this.parameterSelectors.value_start).val('');
-        this.$(this.parameterSelectors.value_end).val('');
+    _writeCriteriaValue: function(value) {
+        this._setInputValue(this.criteriaValueSelectors.type, value.type);
+        this._setInputValue(this.criteriaValueSelectors.value.start, value.value.start);
+        this._setInputValue(this.criteriaValueSelectors.value.end, value.value.end);
         return this;
     },
 
     /**
-     * Get list of filter parameters
+     * Reads value of criteria elements into object
      *
      * @return {Object}
+     * @protected
      */
-    getParameters: function() {
+    _readCriteriaValue: function() {
         return {
-            '[type]':  this.$(this.parameterSelectors.type).val(),
-            '[value][start]': this.$(this.parameterSelectors.value_start).val(),
-            '[value][end]': this.$(this.parameterSelectors.value_end).val()
-        };
+            type: this._getInputValue(this.criteriaValueSelectors.type),
+            value: {
+                start: this._getInputValue(this.criteriaValueSelectors.value.start),
+                end:   this._getInputValue(this.criteriaValueSelectors.value.end)
+            }
+        }
+    },
+
+    /**
+     * Focus filter criteria input
+     *
+     * @protected
+     */
+    _focusCriteria: function() {
+        this.$(this.criteriaValueSelectors.value.start).focus().select();
+    },
+
+    /**
+     * Compare value with confirmed value, if it's differs than save new
+     * confirmed value and trigger "changedData" event
+     *
+     * @param {Object} value
+     * @protected
+     */
+    _confirmValue: function(value) {
+        if (!this._looseObjectCompare(this.confirmedValue, value)) {
+            var needUpdate = this.confirmedValue.value.start || this.confirmedValue.value.end
+                || value.value.start || value.value.end;
+            this.confirmedValue = _.clone(value);
+            this._updateCriteriaHint();
+            if (needUpdate) {
+                this.trigger('update');
+            }
+        }
     }
 });

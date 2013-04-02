@@ -38,20 +38,5 @@ OroApp.DatagridFilterMultiSelect = OroApp.DatagridFilterSelect.extend({
     _onSelectChange: function() {
         OroApp.DatagridFilterSelect.prototype._onSelectChange.apply(this, arguments);
         this._setDropdownWidth();
-    },
-
-    /**
-     * Set filter parameters
-     *
-     * @deprecated
-     * @param {Object} parameters
-     * @return {*}
-     */
-    setParameters: function(parameters) {
-        var value = {
-            value: parameters
-        };
-        this.setValue(value);
-        return this;
     }
 });
