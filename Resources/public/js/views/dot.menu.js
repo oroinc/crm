@@ -3,13 +3,17 @@ navigation.dotMenu = navigation.dotMenu || {};
 
 navigation.dotMenu.MainView = Backbone.View.extend({
     options: {
-        el: '.pin-menus .tabbable'
+        el: '.pin-menus .tabbable',
+        defaultTabOptions: {
+            hideOnEmpty: false
+        }
     },
     tabs: {},
 
     templates: {
         tab: _.template($("#template-dot-menu-tab").html()),
-        content: _.template($("#template-dot-menu-tab-content").html())
+        content: _.template($("#template-dot-menu-tab-content").html()),
+        emptyMessage: _.template($("#template-dot-menu-empty-message").html())
     },
 
     initialize: function() {
@@ -17,24 +21,23 @@ navigation.dotMenu.MainView = Backbone.View.extend({
         this.$tabsContent = this.$('.tab-content')
     },
 
-    addTab: function(key, title, icon, hideOnEmpty) {
-        hideOnEmpty = _.isUndefined(hideOnEmpty) ? false : hideOnEmpty;
-        var data = {key: key, title: title, icon: icon, hideOnEmpty: hideOnEmpty};
+    addTab: function(options) {
+        var data = _.extend(this.options.defaultTabOptions, options);
 
-        data.$tab = this.$('#' + key + '-tab');
+        data.$tab = this.$('#' + data.key + '-tab');
         if (!data.$tab.length) {
             data.$tab = $(this.templates.tab(data));
             this.$tabsContainer.append(data.$tab);
         }
 
-        data.$tabContent = this.$('#' + key + '-content');
+        data.$tabContent = this.$('#' + data.key + '-content');
         if (!data.$tabContent.length) {
             data.$tabContent = $(this.templates.content(data));
             this.$tabsContent.append(data.$tabContent);
         }
 
         data.$tabContentContainer = data.$tabContent.find('ul');
-        this.tabs[key] = data;
+        this.tabs[data.key] = data;
     },
 
     getTab: function(key) {
@@ -42,6 +45,9 @@ navigation.dotMenu.MainView = Backbone.View.extend({
     },
 
     addTabItem: function(tabKey, item, prepend) {
+        if (this.isTabEmpty(tabKey)) {
+            this.cleanup(tabKey);
+        }
         var el = null;
         if (_.isElement(item)) {
             el = item;
@@ -62,20 +68,34 @@ navigation.dotMenu.MainView = Backbone.View.extend({
     },
 
     cleanup: function(tabKey) {
-        var tab = this.getTab(tabKey);
-        tab.$tabContentContainer.empty();
-        if (tab.hideOnEmpty) {
-            tab.$tab.hide();
-        }
+        this.getTab(tabKey).$tabContentContainer.empty();
     },
 
     checkTabContent: function(tabKey) {
-        var tab = this.getTab(tabKey);
-        if (tab.$tabContentContainer.children().length) {
-            tab.$tab.show();
+        var isEmpty = this.isTabEmpty(tabKey);
+        if (isEmpty) {
+            this.hideTab(tabKey);
         } else {
-            tab.$tab.hide();
+            this.showTab(tabKey);
         }
+    },
+
+    isTabEmpty: function(tabKey) {
+        var tab = this.getTab(tabKey);
+        return !tab.$tabContentContainer.children().length || tab.$tabContentContainer.html() == this.templates.emptyMessage();
+    },
+
+    hideTab: function(tabKey) {
+        var tab = this.getTab(tabKey);
+        if (tab.hideOnEmpty) {
+            tab.$tab.hide();
+        } else {
+            this.getTab(tabKey).$tabContentContainer.html(this.templates.emptyMessage());
+        }
+    },
+
+    showTab: function(tabKey) {
+        this.getTab(tabKey).$tab.show();
     }
 });
 
