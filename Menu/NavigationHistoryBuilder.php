@@ -15,6 +15,11 @@ class NavigationHistoryBuilder extends NavigationItemBuilder
     private $matcher;
 
     /**
+     * @var Marcher
+     */
+    private $matcher;
+
+    /**
      * Modify menu by adding, removing or editing items.
      *
      * @param \Knp\Menu\ItemInterface $menu
@@ -38,6 +43,19 @@ class NavigationHistoryBuilder extends NavigationItemBuilder
         }
 
         $menu->slice(0, $maxItems);
+    }
+
+    /**
+     * Setter for matcher service
+     *
+     * @param \Knp\Menu\Matcher\Matcher $matcher
+     * @return $this
+     */
+    public function setMatcher(Matcher $matcher)
+    {
+        $this->matcher = $matcher;
+
+        return $this;
     }
 
     /**
