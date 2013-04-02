@@ -16,20 +16,26 @@
         <div class="row">
             <div class="pull-right">
                 <div class="btn-group icons-holder">
-                    <a href="{{ path('oro_user_edit', { id: user.id }) }}" class="btn"><i class="icon-edit hide-text">{{ 'Edit'|trans }}</i></button>
+                    {% if resource_granted('oro_user_profile_edit') %}
+                    <a href="{{ path('oro_user_edit', { id: user.id }) }}" class="btn"><i class="icon-edit hide-text">{{ 'Edit'|trans }}</i></a>
+                    {% endif %}
+                    {% if resource_granted('oro_user_profile_remove') %}
                     <a href="{{ path('oro_user_remove', { id: user.id }) }}" class="btn"><i class="icon-trash hide-text">{{ 'Remove'|trans }}</i></a>
+                    {% endif %}
                 </div>
             </div>
             <div class="span9 ">
                <div class="customer-info well-small">
-                   <div class="visual"><img src="{{ user.imagePath ? user.imagePath | imagine_filter('avatar_med') : asset('bundles/oroui/img/info-usser.png') }}" alt="{{ user.fullname }}"/></div>
+                   {% set format = get_user_value('oro_user.name_format') %}
+                   <div class="visual"><img src="{{ user.imagePath ? user.imagePath | imagine_filter('avatar_med') : asset('bundles/oroui/img/info-usser.png') }}" alt="{{ user.fullname(format) }}"/></div>
                    <div class="customer-content">
                        <div class="sub-title">{{ 'User'|trans }}</div>
-                       <h1 class="usser-name">{{ user.fullname|default('N/A') }}</h1>
+                       <h1 class="usser-name">{{ user.fullname(format)|default('N/A') }}</h1>
                        <ul class="inline">
                            <li>{{ 'Last logged in'|trans }}: {{ user.lastLogin ? macros.time(user.lastLogin) : 'N/A' }}</li>
                            <li>{{ 'Created'|trans }}: {{ user.createdAt ? macros.time(user.createdAt) : 'N/A' }}</li>
                            <li>{{ 'Updated'|trans }}: {{ user.updatedAt ? macros.time(user.updatedAt) : 'N/A' }}</li>
+                           <li>{{ 'Login count'|trans }}: {{ user.loginCount|default(0) }}</li>
                        </ul>
                    </div>
                </div>

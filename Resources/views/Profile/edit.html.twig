@@ -23,19 +23,23 @@
                         {{ form_widget(form.enabled) }}
                     </div>
                     <div class="btn-group icons-holder">
+                        {% if resource_granted('oro_user_profile_remove') %}
                         <a href="{{ path('oro_user_remove', { id: form.vars.value.id }) }}" class="btn"><i class="icon-trash hide-text">{{ 'Remove'|trans }}</i></a>
+                        {% endif %}
                     </div>
                 </div>
                 <div class="span9 ">
                     <div class="customer-info well-small">
-                        <div class="visual"><img src="{{ form.vars.value.imagePath ? form.vars.value.imagePath | imagine_filter('avatar_med') : asset('bundles/oroui/img/info-usser.png') }}" alt="{{ form.vars.value.fullname }}"/></div>
+                        {% set format = get_user_value('oro_user.name_format') %}
+                        <div class="visual"><img src="{{ form.vars.value.imagePath ? form.vars.value.imagePath | imagine_filter('avatar_med') : asset('bundles/oroui/img/info-usser.png') }}" alt="{{ form.vars.value.fullname(format) }}"/></div>
                         <div class="customer-content">
-                            <div class="sub-title">Customers</div>
-                            <h1 class="usser-name">{{ form.vars.value.fullname|default('N/A') }}</h1>
+                            <div class="sub-title">{{ 'User'|trans }}</div>
+                            <h1 class="usser-name">{{ form.vars.value.fullname(format)|default('N/A') }}</h1>
                             <ul class="inline">
                                 <li>{{ 'Last logged in'|trans }}: {{ form.vars.value.lastLogin ? macros.time(form.vars.value.lastLogin) : 'N/A' }}</li>
                                 <li>{{ 'Created'|trans }}: {{ form.vars.value.createdAt ? macros.time(form.vars.value.createdAt) : 'N/A' }}</li>
                                 <li>{{ 'Updated'|trans }}: {{ form.vars.value.updatedAt ? macros.time(form.vars.value.updatedAt) : 'N/A' }}</li>
+                                <li>{{ 'Login count'|trans }}: {{ form.vars.value.loginCount|default(0) }}</li>
                            </ul>
                        </div>
                    </div>
@@ -118,7 +122,7 @@
                                 <label class="control-label">{{ 'API key'|trans }}</label>
                                 <div class="controls">
                                     <strong class="label label-info">{{ form.vars.value.api ? form.vars.value.api.apiKey : 'N/A' }}</strong>
-                                    {% if form.vars.value.id %}
+                                    {% if form.vars.value.id and resource_granted('oro_user_profile_apigen') %}
                                     <a class="btn btn-small" id="btn-apigen" href="{{ path('oro_user_apigen', { id: form.vars.value.id }) }}">{{ 'Generate key'|trans }}</a>
                                     {% endif %}
                                 </div>
