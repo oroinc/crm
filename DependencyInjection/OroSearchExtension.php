@@ -72,16 +72,27 @@ class OroSearchExtension extends Extension
         if (!count($entitiesConfig)) {
             foreach ($container->getParameter('kernel.bundles') as $bundle) {
                 //todo: DELETE THIS TEMPORARY AcmeTestsBundle FIX
-                if ($container->getParameter('kernel.environment') != 'test'
-                    && strpos($bundle, 'AcmeTestsBundle') === false) {
-                    $reflection = new \ReflectionClass($bundle);
-                    if (is_file($file = dirname($reflection->getFilename()).'/Resources/config/search.yml')) {
-                        $entitiesConfig += Yaml::parse(realpath($file));
+                if ($container->getParameter('kernel.environment') != 'test') {
+                    if (strpos($bundle, 'AcmeTestsBundle') === false) {
+                        $entitiesConfig = $this->parseSearchMapping($bundle, $entitiesConfig);
                     }
+                } else {
+                    $entitiesConfig = $this->parseSearchMapping($bundle, $entitiesConfig);
+
                 }
             }
         }
         $container->setParameter('oro_search.entities_config', $entitiesConfig);
+    }
+
+    private function parseSearchMapping($bundle, $entitiesConfig)
+    {
+        $reflection = new \ReflectionClass($bundle);
+        if (is_file($file = dirname($reflection->getFilename()).'/Resources/config/search.yml')) {
+            $entitiesConfig += Yaml::parse(realpath($file));
+        }
+
+        return $entitiesConfig;
     }
 
     /**
