@@ -109,13 +109,19 @@ $(document).ready(function () {
  * ============================================================ */
     var dropdownToggles = $('.oro-dropdown-toggle');
     dropdownToggles.click(function(e) {
-        dropdownToggles.parent().toggleClass('open')
-        e.stopPropagation();
+        $(this).parent().toggleClass('open')
     });
 
     $('html').click(function(e) {
-        if (!$(e.target).closest('.dropdown-close-prevent').length) {
-            dropdownToggles.parent().removeClass('open')
+        var $target = $(e.target);
+        var clickingTarget = null;
+        if ($target.hasClass('dropdown') || $target.hasClass('oro-drop')) {
+            clickingTarget = $target;
+        } else {
+            clickingTarget = $target.closest('.dropdown, .oro-drop');
         }
+        clickingTarget.addClass('_currently_clicked');
+        $('.open:not(._currently_clicked)').removeClass('open')
+        clickingTarget.removeClass('_currently_clicked');
     });
  });

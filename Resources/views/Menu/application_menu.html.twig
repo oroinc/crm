@@ -1,7 +1,6 @@
 {% extends 'OroNavigationBundle:Menu:horizontal_tabs.html.twig' %}
 
 {% block root %}
-    {% set options = options|merge({'curentClass': 'active', 'ancestorClass': 'active'}) %}
     {% if item.hasChildren and options.depth is not sameas(0) and item.displayChildren %}
 
         <div class="clearfix">
