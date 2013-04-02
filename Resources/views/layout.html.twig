@@ -65,9 +65,12 @@
 
             {% block header %}
             {% endblock header %}
-
+            {% block main %}
+            <div class="container-fluid">
             {% block content %}
             {% endblock content %}
+            </div>
+            {% endblock main %}
         </div>
     </div>
 
