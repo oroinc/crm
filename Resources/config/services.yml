@@ -187,6 +187,8 @@ services:
 
     oro_user.user_menu:
         class:                        %oro_user.user_menu.builder.class%
+        arguments:
+            - @security.context
         tags:
             - { name: oro_menu.builder, alias: usermenu }
 
