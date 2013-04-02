@@ -31,19 +31,8 @@ _.extend(OroApp.MultiSelectDecorator.prototype, {
      * Initialize all required properties
      */
     initialize: function() {
-        // override callbacks by proxies
-        var widgetParameters = _.clone(this.parameters);
-        _.extend(widgetParameters, {
-            open: $.proxy(function() {
-                this._onOpenDropdown();
-                if (_.has(this.parameters, 'open')) {
-                    this.parameters.open();
-                }
-            }, this)
-        });
-
         // initialize multiselect widget
-        this.multiselect(widgetParameters);
+        this.multiselect(this.parameters);
 
         // initialize multiselect filter
         this.multiselectfilter({
@@ -80,10 +69,8 @@ _.extend(OroApp.MultiSelectDecorator.prototype, {
 
     /**
      * Action performed on dropdown open
-     *
-     * @protected
      */
-    _onOpenDropdown: function() {
+    onOpenDropdown: function() {
         this._setDropdownDesign();
         this.getWidget().find('input[type="search"]').focus();
         $('body').trigger('click');

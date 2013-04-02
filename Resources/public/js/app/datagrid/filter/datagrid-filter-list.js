@@ -233,6 +233,7 @@ OroApp.DatagridFilterList = Backbone.View.extend({
             selectedText: this.addButtonHint,
             classes: 'filter-list select-filter-widget',
             open: $.proxy(function() {
+                this.selectWidget.onOpenDropdown();
                 this._setDropdownWidth();
                 this._updateDropdownPosition();
             }, this)

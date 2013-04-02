@@ -135,6 +135,7 @@ OroApp.DatagridFilterSelect = OroApp.DatagridFilter.extend({
                 of: this.$(this.containerSelector)
             },
             open: $.proxy(function() {
+                this.selectWidget.onOpenDropdown();
                 this._setDropdownWidth();
             }, this)
         }, this.widgetOptions));
