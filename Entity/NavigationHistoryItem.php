@@ -14,6 +14,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class NavigationHistoryItem implements NavigationItemInterface
 {
+    const NAVIGATION_HISTORY_ITEM_TYPE = 'history';
+
     /**
      * @var integer $id
      *

@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\NavigationBundle\Menu;
 
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Security\Core\SecurityContextInterface;
 use Doctrine\ORM\EntityManager;
 use Knp\Menu\ItemInterface;
@@ -13,6 +14,12 @@ use Oro\Bundle\NavigationBundle\Entity\Repository\NavigationRepositoryInterface;
 
 class NavigationItemBuilder implements BuilderInterface
 {
+
+    /**
+     * @var ContainerInterface $container
+     */
+    private $container;
+
     /**
      * @var SecurityContextInterface
      */
@@ -40,6 +47,19 @@ class NavigationItemBuilder implements BuilderInterface
         $this->factory = $factory;
     }
 
+    /**
+     * Inject service container
+     *
+     * @param ContainerInterface $container
+     *
+     * @return ConfigurationBuilder
+     */
+    public function setContainer(ContainerInterface $container)
+    {
+        $this->container = $container;
+
+        return $this;
+    }
 
     /**
      * Modify menu by adding, removing or editing items.
@@ -58,6 +78,11 @@ class NavigationItemBuilder implements BuilderInterface
 
             /** @var $repo NavigationRepositoryInterface */
             $repo = $this->em->getRepository(get_class($entity));
+
+            if ($this->container instanceof ContainerInterface && method_exists($repo, 'setConfig')) {
+                $repo->setConfig($this->container->getParameter('oro_menu_config'));
+            }
+
             $items = $repo->getNavigationItems($user->getId(), $alias);
             foreach ($items as $item) {
                 $menu->addChild(

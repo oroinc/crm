@@ -4,16 +4,17 @@ namespace Oro\Bundle\NavigationBundle\Event;
 
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Symfony\Component\HttpFoundation\Response;
+
 use Oro\Bundle\NavigationBundle\Entity\Builder\ItemFactory;
+use Oro\Bundle\NavigationBundle\Entity\NavigationHistoryItem;
 
 class ResponseHistoryListener
 {
-    const NAVIGATION_HISTORY_ITEM_TYPE = 'history';
     protected $_navItemFactory = null,
               $_user = null,
               $_em = null;
 
-    public function __construct(ItemFactory $navigationItemFactory, $securityContext, $entityManager)
+    public function __construct(ItemFactory $navigationItemFactory, $securityContext, EntityManager $entityManager)
     {
         $this->_navItemFactory = $navigationItemFactory;
         $this->_user = $securityContext->getToken() ? $securityContext->getToken()->getUser() : null;
@@ -51,7 +52,7 @@ class ResponseHistoryListener
         else {
             $postArray['position'] = 0;
             /** @var $historyItem \Oro\Bundle\NavigationBundle\Entity\NavigationItemInterface */
-            $historyItem = $this->_navItemFactory->createItem(self::NAVIGATION_HISTORY_ITEM_TYPE, $postArray);
+            $historyItem = $this->_navItemFactory->createItem(NavigationHistoryItem::NAVIGATION_HISTORY_ITEM_TYPE, $postArray);
         }
 
         $this->_em->persist($historyItem);
