@@ -44,12 +44,12 @@ class Configuration implements ConfigurationInterface
 
          // just to illustrate settings usage
          SettingsBuilder::append($root, array(
-            'greeting' => array(
-                'value' => true,
-                'type'  => 'boolean',
+            'greeting'    => array(
+                'value'   => true,
+                'type'    => 'boolean',
             ),
-            'level' => array(
-                'value' => 10,
+            'name_format' => array(
+                'value'   => '%%first%% %%last%%',
             ),
         ));
 
