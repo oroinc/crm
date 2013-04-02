@@ -1,9 +1,20 @@
-{% extends bap.layout is defined ? bap.layout : 'OroUserBundle::layout.html.twig' %}
+{% extends 'OroUserBundle::layout.html.twig' %}
+
+{% block bodyClass %}login-page{% endblock %}
 
 {% block title %}{{ 'Password reset - check Email'|trans }} - {{ parent() }}{% endblock %}
 
 {% block content %}
-<div class="alert alert-success">
-    {{ 'An email has been sent to %email%. It contains a link you must click to reset your password.'|trans({ '%email%': email }) }}
-</div>
+    <div class="container">
+        <div class="form-signin">
+            <div class="title-box">
+                <h1 class="oro-title">{{ get_user_value('oro_ui.product_caption') }}</h1>
+                <span class="divider-vertical"></span>
+                <h2 class="title">{{ 'Check Email'|trans }}</h2>
+            </div>
+            <fieldset>
+                <h3>{{ 'An email has been sent to %email%. It contains a link you must click to reset your password.'|trans({ '%email%': email }) }}</h3>
+            </fieldset>
+        </div>
+    </div>
 {% endblock %}

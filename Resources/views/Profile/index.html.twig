@@ -9,7 +9,11 @@
     {% include 'OroGridBundle:Include:stylesheet.html.twig' %}
 {% endblock %}
 
+{% block page_container %}
+<div class="container-fluid">
 {% block content %}
     <h1>Users overview <a class="btn btn-primary pull-right" href="{{ path('oro_user_create') }}">Add new</a></h1>
     <div id="users-grid"></div>
+{% endblock %}
+</div>
 {% endblock %}

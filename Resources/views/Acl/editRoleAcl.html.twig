@@ -1,7 +1,8 @@
 {% extends bap.layout is defined ? bap.layout : 'OroUserBundle::layout.html.twig' %}
 
 {% block title %}Acl resources - {{ parent() }}{% endblock %}
-
+{% block page_container %}
+<div class="container-fluid">
 {% block content %}
     <h1>ACL Resources list for Role: {{ role.role }}</h1>
     <form action="{{ path('oro_user_acl_save', { id: role.id }) }}" method="POST">
@@ -22,4 +23,6 @@
             <button class="btn btn-large btn-primary" type="submit">Save</button>
         </div>
     </form>
+{% endblock %}
+</div>
 {% endblock %}

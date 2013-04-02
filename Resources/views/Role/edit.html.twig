@@ -3,7 +3,8 @@
 {% set title = form.vars.value.id ? 'Edit role' : 'Add role' %}
 
 {% block title %}{{ title }} - {{ parent() }}{% endblock %}
-
+{% block page_container %}
+<div class="container-fluid">
 {% block content %}
 <form action="{{ form.vars.value.id ? path('oro_user_role_edit', { id: form.vars.value.id }) : path('oro_user_role_create') }}" method="POST" class="form-register">
     <fieldset>
@@ -16,4 +17,6 @@
         </div>
     </fieldset>
 </form>
+{% endblock %}
+</div>
 {% endblock %}
