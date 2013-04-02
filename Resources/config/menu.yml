@@ -14,4 +14,4 @@ oro_menu_config:
             template: 'OroNavigationBundle:Menu:menu.html.twig'
             rootClass: 'extra-list'
             currentAsLink: false
-            maxResults: 10
+            maxResults: 20
