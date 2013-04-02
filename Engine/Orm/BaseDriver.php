@@ -229,18 +229,20 @@ abstract class BaseDriver
         $this->setFrom($query, $qb);
 
         $whereExpr = array();
-        foreach ($query->getOptions() as $index => $searchCondition) {
-            if ($searchCondition['fieldType'] == Query::TYPE_TEXT) {
-                $whereExpr[] = $this->addTextField($qb, $index, $searchCondition, $setOrderBy);
-            } else {
-                $whereExpr[] = $this->addNonTextField($qb, $index, $searchCondition);
+        if (count ($query->getOptions())) {
+            foreach ($query->getOptions() as $index => $searchCondition) {
+                if ($searchCondition['fieldType'] == Query::TYPE_TEXT) {
+                    $whereExpr[] = $this->addTextField($qb, $index, $searchCondition, $setOrderBy);
+                } else {
+                    $whereExpr[] = $this->addNonTextField($qb, $index, $searchCondition);
+                }
             }
-        }
-        if (substr($whereExpr[0], 0, 3) == 'and') {
-            $whereExpr[0] = substr($whereExpr[0], 3, strlen($whereExpr[0]));
-        }
+            if (substr($whereExpr[0], 0, 3) == 'and') {
+                $whereExpr[0] = substr($whereExpr[0], 3, strlen($whereExpr[0]));
+            }
 
-        $qb->andWhere(implode(' ', $whereExpr));
+            $qb->andWhere(implode(' ', $whereExpr));
+        }
 
         if ($setOrderBy) {
             $this->addOrderBy($query, $qb);
