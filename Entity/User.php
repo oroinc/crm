@@ -18,6 +18,8 @@ use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityFlexible;
 use Oro\Bundle\UserBundle\Entity\Status;
 use Oro\Bundle\UserBundle\Entity\Email;
 
+use DateTime;
+
 /**
  * @ORM\Entity(repositoryClass="Oro\Bundle\FlexibleEntityBundle\Entity\Repository\FlexibleEntityRepository")
  * @ORM\Table(name="oro_user")
@@ -78,7 +80,7 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
     protected $lastName;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="birthday", type="datetime", nullable=true)
      * @Soap\ComplexType("dateTime", nillable=true)
@@ -155,7 +157,7 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
     protected $confirmationToken;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="password_requested", type="datetime", nullable=true)
      * @Exclude
@@ -163,13 +165,21 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
     protected $passwordRequestedAt;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="last_login", type="datetime", nullable=true)
      * @Soap\ComplexType("dateTime", nillable=true)
      * @Type("dateTime")
      */
     protected $lastLogin;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="login_count", type="integer", options={"default"=0, "unsigned"=true})
+     * @Exclude
+     */
+    protected $loginCount;
 
     /**
      * Set name formatting using "%first%" and "%last%" placeholders
@@ -345,21 +355,22 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
      * Return full name according to name format
      *
      * @see User::setNameFormat()
+     * @param  string $format [optional]
      * @return string
      */
-    public function getFullname()
+    public function getFullname($format = '')
     {
         return str_replace(
             array('%first%', '%last%'),
             array($this->getFirstname(), $this->getLastname()),
-            $this->getNameFormat()
+            $format ? $format : $this->getNameFormat()
         );
     }
 
     /**
      * Return birthday
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getBirthday()
     {
@@ -423,7 +434,7 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
     /**
      * Gets the timestamp that the user requested a password reset.
      *
-     * @return null|\DateTime
+     * @return null|DateTime
      */
     public function getPasswordRequestedAt()
     {
@@ -433,11 +444,21 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
     /**
      * Gets the last login time.
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getLastLogin()
     {
         return $this->lastLogin;
+    }
+
+    /**
+     * Gets login count number.
+     *
+     * @return int
+     */
+    public function getLoginCount()
+    {
+        return $this->loginCount;
     }
 
     /**
@@ -453,7 +474,7 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
     /**
      * Get user created date/time
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getCreatedAt()
     {
@@ -463,7 +484,7 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
     /**
      * Get user last update date/time
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getUpdatedAt()
     {
@@ -498,7 +519,7 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
 
     public function isPasswordRequestNonExpired($ttl)
     {
-        return $this->getPasswordRequestedAt() instanceof \DateTime &&
+        return $this->getPasswordRequestedAt() instanceof DateTime &&
                $this->getPasswordRequestedAt()->getTimestamp() + $ttl > time();
     }
 
@@ -526,7 +547,7 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
     }
 
     /**
-     * @param  string $firstName New first name value
+     * @param  string $firstName [optional] New first name value. Null by default.
      * @return User
      */
     public function setFirstname($firstName = null)
@@ -537,7 +558,7 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
     }
 
     /**
-     * @param  string $lastName New last name value
+     * @param  string $lastName [optional] New last name value. Null by default.
      * @return User
      */
     public function setLastname($lastName = null)
@@ -549,10 +570,10 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
 
     /**
      *
-     * @param  \DateTime $birthday New birthday value
+     * @param  DateTime $birthday [optional] New birthday value. Null by default.
      * @return User
      */
-    public function setBirthday(\DateTime $birthday = null)
+    public function setBirthday(DateTime $birthday = null)
     {
         $this->birthday = $birthday;
 
@@ -560,7 +581,7 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
     }
 
     /**
-     * @param  string $image New image file name
+     * @param  string $image [optional] New image file name. Null by default.
      * @return User
      */
     public function setImage($image = null)
@@ -626,10 +647,10 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
     }
 
     /**
-     * @param  \DateTime $time New password request time
+     * @param  DateTime $time [optional] New password request time. Null by default.
      * @return User
      */
-    public function setPasswordRequestedAt(\DateTime $time = null)
+    public function setPasswordRequestedAt(DateTime $time = null)
     {
         $this->passwordRequestedAt = $time;
 
@@ -637,12 +658,23 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
     }
 
     /**
-     * @param  \DateTime $time New login time
+     * @param  DateTime $time New login time
      * @return User
      */
-    public function setLastLogin(\DateTime $time)
+    public function setLastLogin(DateTime $time)
     {
         $this->lastLogin = $time;
+
+        return $this;
+    }
+
+    /**
+     * @param  int  $count New login count value
+     * @return User
+     */
+    public function setLoginCount($count)
+    {
+        $this->loginCount = $count;
 
         return $this;
     }
@@ -842,6 +874,12 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
         return $this;
     }
 
+    /**
+     *
+     * @param  bool $absolute [optional] Return absolute (true) or relative to web dir (false) path to image. False
+     *                        by default
+     * @return string|null
+     */
     public function getImagePath($absolute = false)
     {
         return null === $this->image
@@ -875,7 +913,7 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
     public function beforeSave()
     {
         $this->created =
-        $this->updated = new \DateTime();
+        $this->updated = new DateTime();
 
         $this->preUpload();
     }
@@ -887,7 +925,7 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
      */
     public function preUpdate()
     {
-        $this->updated = new \DateTime();
+        $this->updated = new DateTime();
 
         $this->preUpload();
     }
