@@ -1,5 +1,5 @@
-Translatable values
-===================
+Translatable value
+==================
 
 A value can be translated if related attribute is defined as translatable.
 
