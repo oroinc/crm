@@ -33,9 +33,9 @@
                     <input type="checkbox" id="remember_me" name="_remember_me" value="on" /> {{ 'Remember me on this computer'|trans }}
                 </label>
             </div>
-            <button type="submit" class="btn btn-large btn-primary" id="_submit" name="_submit">{{ 'Log in'|trans }}</button>
             <div class="form-row">
-                <a href="{{ path('oro_user_reset_request') }}">{{ 'Forgot your password?'|trans }}</a>
+                <button type="submit" class="btn btn-large btn-primary" id="_submit" name="_submit">{{ 'Log in'|trans }}</button>
+                <a class="forgot-pass" href="{{ path('oro_user_reset_request') }}">{{ 'Forgot your password?'|trans }}</a>
             </div>
         </fieldset>
         <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />

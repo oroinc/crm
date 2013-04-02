@@ -14,6 +14,7 @@ class GroupTest extends \PHPUnit_Framework_TestCase
         $group = $this->getGroup();
         $name  = 'Users';
 
+        $this->assertEmpty($group->getId());
         $this->assertEmpty($group->getName());
 
         $group->setName($name);
@@ -39,11 +40,18 @@ class GroupTest extends \PHPUnit_Framework_TestCase
 
         $this->assertFalse($group->hasRole($role));
 
+        $roles = array($role);
+
+        $group->setRoles($roles);
+
+        $this->assertEquals($roles, $group->getRoles()->toArray());
+
         $roles = new ArrayCollection(array($role));
 
         $group->setRoles($roles);
 
         $this->assertEquals($roles, $group->getRoles());
+        $this->assertNotEmpty($group->getRoleLabelsAsString());
     }
 
     protected function setUp()

@@ -43,7 +43,7 @@ class Status
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -53,20 +53,20 @@ class Status
     /**
      * Set status
      *
-     * @param string $status
+     * @param  string $status
      * @return Status
      */
     public function setStatus($status)
     {
         $this->status = $status;
-    
+
         return $this;
     }
 
     /**
      * Get status
      *
-     * @return string 
+     * @return string
      */
     public function getStatus()
     {
@@ -76,20 +76,20 @@ class Status
     /**
      * Set createdAt
      *
-     * @param \DateTime $createdAt
+     * @param  \DateTime $createdAt
      * @return Status
      */
     public function setCreatedAt($createdAt)
     {
         $this->createdAt = $createdAt;
-    
+
         return $this;
     }
 
     /**
      * Get createdAt
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getCreatedAt()
     {
@@ -99,20 +99,20 @@ class Status
     /**
      * Set user
      *
-     * @param \Oro\Bundle\UserBundle\Entity\User $user
+     * @param  \Oro\Bundle\UserBundle\Entity\User $user
      * @return Status
      */
     public function setUser(User $user = null)
     {
         $this->user = $user;
-    
+
         return $this;
     }
 
     /**
      * Get user
      *
-     * @return \Oro\Bundle\UserBundle\Entity\User 
+     * @return \Oro\Bundle\UserBundle\Entity\User
      */
     public function getUser()
     {

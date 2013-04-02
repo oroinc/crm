@@ -32,7 +32,6 @@ class StatusHandler
      */
     protected $um;
 
-
     /**
      *
      * @param FormInterface $form
@@ -51,9 +50,9 @@ class StatusHandler
     /**
      * Process Status form
      *
-     * @param User   $user
-     * @param Status $status
-     * @param bool   $updateCurrentStatus
+     * @param  User   $user
+     * @param  Status $status
+     * @param  bool   $updateCurrentStatus
      * @return bool
      */
     public function process(User $user, Status $status, $updateCurrentStatus = true)

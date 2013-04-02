@@ -115,11 +115,11 @@ class ProfileController extends Controller
             $backUrl = null;
         }
 
-
         if ($this->get('oro_user.form.handler.profile')->process($entity)) {
             $flashBag->add('success', 'User successfully saved');
 
             $redirectUrl = $backUrl ? $backUrl : $this->generateUrl('oro_user_index');
+
             return $this->redirect($redirectUrl);
         }
 

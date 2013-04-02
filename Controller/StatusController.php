@@ -52,9 +52,8 @@ class StatusController extends Controller
                     )
                 );
             } else {
-                return new Response((string)$result);
+                return new Response((string) $result);
             }
-
 
         } elseif ($result) {
             $this->get('session')->getFlashBag()->add('success', 'Status saved');

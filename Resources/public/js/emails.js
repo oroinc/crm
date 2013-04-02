@@ -1,17 +1,20 @@
-$(document).ready(function () {
-    $('#add-another-email').click(function () {
-        var emailList = $('#email-fields-list');
-        var newWidget = emailList.attr('data-prototype');
-        newWidget = newWidget.replace(/__name__/g, emailCount);
-        emailCount++;
-        var newDiv = $('<div></div>').html(newWidget);
-        newDiv.appendTo($('#email-fields-list'));
+$(function () {
+    var cList  = $('#email-fields-list'),
+        cCount = cList.children().length;
+
+    $('#add-another-email').on('click', function () {
+        widget = cList.attr('data-prototype').replace(/__name__/g, cCount++);
+
+        $('<div></div>').html(widget).appendTo(cList);
+
         return false;
     });
 
     $(document).on('click', '.removeRow', function (event) {
-        var name = $(this).attr('data-related');
+        name = $(this).attr('data-related');
+
         $('*[data-content="' + name + '"]').remove();
+
         return false;
     });
 });
