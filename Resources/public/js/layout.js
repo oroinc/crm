@@ -1,4 +1,7 @@
 $(document).ready(function () {
+
+    $('input:file').uniform();
+
     /* dinamic height for central column */
    /* function changeHeight() {
         var _chWindowHeight = $(window).height();
