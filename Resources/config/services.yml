@@ -9,6 +9,7 @@ parameters:
 
     oro_navigation.navigation_item_menu.builder.class: Oro\Bundle\NavigationBundle\Menu\NavigationItemBuilder
     oro_navigation.navigation_history_menu.builder.class: Oro\Bundle\NavigationBundle\Menu\NavigationHistoryBuilder
+    oro_navigation.navigation_mostviewed_menu.builder.class: Oro\Bundle\NavigationBundle\Menu\NavigationMostviewedBuilder
 
     oro_navigation.item.builder.pinbar.class: Oro\Bundle\NavigationBundle\Entity\Builder\PinbarTabBuilder
     oro_navigation.item.builder.favorite.class: Oro\Bundle\NavigationBundle\Entity\Builder\NavigationItemBuilder
@@ -130,13 +131,13 @@ services:
             - { name: oro_menu.builder, alias: history }
 
     oro_navigation.mostviewed_menu.builder:
-        class: %oro_navigation.navigation_history_menu.builder.class%
+        class: %oro_navigation.navigation_mostviewed_menu.builder.class%
         arguments:
             - @security.context
             - @doctrine.orm.entity_manager
             - @oro_navigation.item.factory
         calls:
-            - [ setContainer, [ @service_container ] ]
+            - [ setMatcher, [ @knp_menu.matcher ]]
         tags:
             - { name: oro_menu.builder, alias: mostviewed }
 

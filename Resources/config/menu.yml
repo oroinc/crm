@@ -13,8 +13,7 @@ oro_menu_config:
         mostviewed:
             template: 'OroNavigationBundle:Menu:menu.html.twig'
             rootClass: 'extra-list'
-            maxResults: 20
-            sortBy: 'position'
+            currentAsLink: false
         history:
             template: 'OroNavigationBundle:Menu:menu.html.twig'
             rootClass: 'extra-list'

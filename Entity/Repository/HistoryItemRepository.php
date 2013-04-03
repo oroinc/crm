@@ -24,6 +24,8 @@ class HistoryItemRepository extends EntityRepository implements NavigationReposi
     {
         $qb = $this->_em->createQueryBuilder();
 
+        $sortBy = isset($options['sortBy']) ? $options['sortBy'] : 'visitedAt';
+
         $qb->add(
             'select',
             new Expr\Select(
@@ -39,7 +41,7 @@ class HistoryItemRepository extends EntityRepository implements NavigationReposi
                 'where',
                 $qb->expr()->eq('ni.user', ':user')
             )
-            ->add('orderBy', new Expr\OrderBy('ni.visitedAt', 'DESC'))
+            ->add('orderBy', new Expr\OrderBy('ni.'.$sortBy, 'DESC'))
             ->setParameters(array('user' => $user));
 
         if (isset($options['maxItems'])) {
