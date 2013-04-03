@@ -4,18 +4,19 @@
     {% block head %}
         <title>{% block title %}Dashboard{% endblock %}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet/less" href="{{ asset('bundles/oroui/css/less/main.less') }}" media="all" />
 
         <script type="text/javascript">localStorage.clear();</script>
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
         <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js"></script>
 
         {% block head_style %}
-            {# CSS assetics #}
             {% stylesheets
                 'bundles/oroui/css/all.css'
+                'bundles/oroui/css/less/main.less'
+
+                debug=false
+                filter='cssrewrite, lessphp, yui_css'
                 output='css/oroapp.all.css'
-                filter='cssrewrite'
             %}
                 <link rel="stylesheet" media="all" href="{{ asset_url }}" />
             {% endstylesheets %}
@@ -43,6 +44,7 @@
                 '@OroUIBundle/Resources/public/js/backbone/setup.js'
                 '@OroUIBundle/Resources/public/js/backbone/setup.js'
 
+                filter='yui_js'
                 output='js/oroapp.all.js'
             %}
                 <script type="text/javascript" src="{{ asset_url }}"></script>
