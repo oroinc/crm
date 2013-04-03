@@ -32,9 +32,9 @@
                        <div class="sub-title">{{ 'User'|trans }}</div>
                        <h1 class="usser-name">{{ user.fullname(format)|default('N/A') }}</h1>
                        <ul class="inline">
-                           <li>{{ 'Last logged in'|trans }}: {{ user.lastLogin ? macros.time(user.lastLogin) : 'N/A' }}</li>
                            <li>{{ 'Created'|trans }}: {{ user.createdAt ? macros.time(user.createdAt) : 'N/A' }}</li>
                            <li>{{ 'Updated'|trans }}: {{ user.updatedAt ? macros.time(user.updatedAt) : 'N/A' }}</li>
+                           <li>{{ 'Last logged in'|trans }}: {{ user.lastLogin ? macros.time(user.lastLogin) : 'N/A' }}</li>
                            <li>{{ 'Login count'|trans }}: {{ user.loginCount|default(0) }}</li>
                        </ul>
                    </div>
