@@ -23,6 +23,10 @@ table.grid tbody tr.row-click-action {
     cursor: pointer;
 }
 
+.filter-item {
+    padding-left: 5px;
+}
+
 .grid-toolbar .pagination ul li input {
     display: inline;
     float: left;
@@ -75,13 +79,16 @@ table.grid tbody tr.row-click-action {
     border: 1px solid #dddddd;
 }
 
-.filter-select .select-filter-widget {
-    background: none;
+.select-filter-widget {
     width: auto !important;
-    border: none;
+}
+
+.filter-select .select-filter-widget {
     font-weight: bold;
     color: #333333;
     padding: 0 0 2px 0;
+    background: none;
+    border: none;
 }
 
 .filter-select .select-filter-widget .ui-icon {
@@ -90,6 +97,10 @@ table.grid tbody tr.row-click-action {
 
 .ui-multiselect-menu.select-filter-widget {
     padding: 5px 2px 2px 2px;
+}
+
+.ui-multiselect-menu.select-filter-widget ul {
+    max-height: 200px;
 }
 
 .ui-multiselect-menu.select-filter-widget .ui-multiselect-close {
@@ -135,4 +146,17 @@ table.grid tbody tr.row-click-action {
 
 .ui-multiselect-menu.select-filter-widget .ui-multiselect-checkboxes input[type="checkbox"] {
     margin: 4px 6px 5px 5px;
+}
+
+.ui-multiselect.filter-list {
+    background: none;
+    border: none;
+    padding: 0 0 4px 6px;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.ui-multiselect.filter-list.ui-state-hover {
+    color: #032D67;
+    text-decoration: underline;
 }

@@ -25,18 +25,24 @@ services:
 
     oro_grid.orm.filter.type.flexible_number:
         class:     Oro\Bundle\GridBundle\Filter\ORM\Flexible\FlexibleNumberFilter
-        arguments: ["@service_container", "@oro_grid.orm.filter.type.number"]
+        arguments: ["@oro_flexibleentity.registry", "@oro_grid.orm.filter.type.number"]
         tags:
             - { name: oro_grid.filter.type, alias: oro_grid_orm_flexible_number }
 
     oro_grid.orm.filter.type.flexible_string:
         class:     Oro\Bundle\GridBundle\Filter\ORM\Flexible\FlexibleStringFilter
-        arguments: ["@service_container", "@oro_grid.orm.filter.type.string"]
+        arguments: ["@oro_flexibleentity.registry", "@oro_grid.orm.filter.type.string"]
         tags:
             - { name: oro_grid.filter.type, alias: oro_grid_orm_flexible_string }
 
+    oro_grid.orm.filter.type.flexible_date_range:
+        class:     Oro\Bundle\GridBundle\Filter\ORM\Flexible\FlexibleDateRangeFilter
+        arguments: ["@oro_flexibleentity.registry", "@oro_grid.orm.filter.type.date_range"]
+        tags:
+            - { name: oro_grid.filter.type, alias: oro_grid_orm_flexible_date_range }
+
     oro_grid.orm.filter.type.flexible_options:
         class:     Oro\Bundle\GridBundle\Filter\ORM\Flexible\FlexibleOptionsFilter
-        arguments: ["@service_container"]
+        arguments: ["@oro_flexibleentity.registry"]
         tags:
             - { name: oro_grid.filter.type, alias: oro_grid_orm_flexible_options }

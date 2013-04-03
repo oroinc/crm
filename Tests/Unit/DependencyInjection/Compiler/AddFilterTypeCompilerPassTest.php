@@ -52,7 +52,7 @@ class AddFilterTypeCompilerPassTest extends AbstractCompilerPassTest
                 'containerData' => array(
                     'definitions' => array(
                         // Filter factory and filters definitions
-                        AddFilterTypeCompilerPass::DATAGRID_FILTER_FACTORY_SERVICE =>
+                        AddFilterTypeCompilerPass::DATAGRID_FILTER_FACTORY_KEY =>
                             $this->createStubDefinition(null, range(1, 2)),
                         'oro_grid.orm.filter.type.string' => $this->createStubDefinitionWithTags(
                             array(
@@ -63,7 +63,7 @@ class AddFilterTypeCompilerPassTest extends AbstractCompilerPassTest
                             )
                         ),
                         // Action factory and actions definitions
-                        AddFilterTypeCompilerPass::DATAGRID_ACTION_FACTORY_SERVICE =>
+                        AddFilterTypeCompilerPass::DATAGRID_ACTION_FACTORY_KEY =>
                             $this->createStubDefinition(null, range(1, 2)),
                         'oro_grid.action.type.redirect' => $this->createStubDefinitionWithTags(
                             array(
@@ -92,13 +92,13 @@ class AddFilterTypeCompilerPassTest extends AbstractCompilerPassTest
                 ),
                 'expectedDefinitions' => array(
                     // Second argument of filter factory
-                    AddFilterTypeCompilerPass::DATAGRID_FILTER_FACTORY_SERVICE => array(
+                    AddFilterTypeCompilerPass::DATAGRID_FILTER_FACTORY_KEY => array(
                         'arguments' => array(
                             1 => array('oro_grid_orm_string' => 'oro_grid.orm.filter.type.string')
                         )
                     ),
                     // Second argument of action factory
-                    AddFilterTypeCompilerPass::DATAGRID_ACTION_FACTORY_SERVICE => array(
+                    AddFilterTypeCompilerPass::DATAGRID_ACTION_FACTORY_KEY => array(
                         'arguments' => array(
                             1 => array(
                                 'oro_grid_action_redirect' => 'oro_grid.action.type.redirect',
@@ -126,21 +126,21 @@ class AddFilterTypeCompilerPassTest extends AbstractCompilerPassTest
                 'containerData' => array(
                     'definitions' => array(
                         // Filter and action factories
-                        AddFilterTypeCompilerPass::DATAGRID_FILTER_FACTORY_SERVICE =>
+                        AddFilterTypeCompilerPass::DATAGRID_FILTER_FACTORY_KEY =>
                             $this->createStubDefinition(null, array(null, array())),
-                        AddFilterTypeCompilerPass::DATAGRID_ACTION_FACTORY_SERVICE =>
+                        AddFilterTypeCompilerPass::DATAGRID_ACTION_FACTORY_KEY =>
                             $this->createStubDefinition(null, array(null, array())),
                         // No services tagged with filter or action tags
                     )
                 ),
                 // No changes in factories arguments because there were no tagged services
                 'expectedDefinitions' => array(
-                    AddFilterTypeCompilerPass::DATAGRID_FILTER_FACTORY_SERVICE => array(
+                    AddFilterTypeCompilerPass::DATAGRID_FILTER_FACTORY_KEY => array(
                         'arguments' => array(
                             1 => array()
                         )
                     ),
-                    AddFilterTypeCompilerPass::DATAGRID_ACTION_FACTORY_SERVICE => array(
+                    AddFilterTypeCompilerPass::DATAGRID_ACTION_FACTORY_KEY => array(
                         'arguments' => array(
                             1 => array()
                         )

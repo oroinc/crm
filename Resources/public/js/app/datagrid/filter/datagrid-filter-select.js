@@ -88,6 +88,15 @@ OroApp.DatagridFilterSelect = OroApp.DatagridFilter.extend({
     },
 
     /**
+     * Filter value object
+     *
+     * @property
+     */
+    emptyValue: {
+        value: ''
+    },
+
+    /**
      * Filter events
      *
      * @property
@@ -124,10 +133,7 @@ OroApp.DatagridFilterSelect = OroApp.DatagridFilter.extend({
      * @protected
      */
     _initializeSelectWidget: function() {
-        this.selectWidget = this.$(this.inputSelector);
-
-        this.selectWidget.multiselect(_.extend({
-            height: 'auto',
+        this.selectWidget = new OroApp.MultiSelectDecorator(this.$(this.inputSelector), _.extend({
             noneSelectedText: this.placeholder,
             selectedText: $.proxy(function(numChecked, numTotal, checkedItems) {
                 return this._getSelectedText(checkedItems);
@@ -138,27 +144,17 @@ OroApp.DatagridFilterSelect = OroApp.DatagridFilter.extend({
                 of: this.$(this.containerSelector)
             },
             open: $.proxy(function() {
-                this._setDropdownDesign();
-                var widget = this.selectWidget.multiselect('widget');
-                widget.find('input[type="search"]').focus();
-                $('body').trigger('click');
+                this.selectWidget.onOpenDropdown();
+                this._setDropdownWidth();
             }, this)
         }, this.widgetOptions));
 
-        this.selectWidget.multiselectfilter({
-            label: '',
-            placeholder: '',
-            autoReset: true
-        });
-
-        // fix CSS classes
-        this.$('.select-filter-widget').removeClass('ui-widget').removeClass('ui-state-default');
-        this.$('.select-filter-widget').find('span.ui-icon').remove();
-        this.$('.select-filter-widget.ui-multiselect').append('<span class="caret"></span>');
+        this.selectWidget.setViewDesign(this);
+        this.$('.select-filter-widget.ui-multiselect:first').append('<span class="caret"></span>');
     },
 
     /**
-     * Get text for ele
+     * Get text for filter hint
      *
      * @param {Array} checkedItems
      * @protected
@@ -169,7 +165,7 @@ OroApp.DatagridFilterSelect = OroApp.DatagridFilter.extend({
         }
 
         var elements = [];
-        _.each(checkedItems, function(element, index, list) {
+        _.each(checkedItems, function(element) {
             var title = element.getAttribute('title');
             if (title) {
                 elements.push(title);
@@ -179,67 +175,19 @@ OroApp.DatagridFilterSelect = OroApp.DatagridFilter.extend({
     },
 
     /**
-     * Get element width
-     *
-     * @param {Object} element
-     * @return {Integer}
-     * @protected
-     */
-    _getTextWidth: function(element) {
-        var html_org = element.html();
-        var html_calc = '<span>' + html_org + '</span>';
-        element.html(html_calc);
-        var width = element.find('span:first').width();
-        element.html(html_org);
-        return width;
-    },
-
-    /**
      * Set design for select dropdown
      *
      * @protected
      */
-    _setDropdownDesign: function() {
-        var widget = this.selectWidget.multiselect('widget');
-
-        // calculate minimum width
+    _setDropdownWidth: function() {
         if (!this.minimumWidth) {
-            this.minimumWidth = this._getMinimumDropdownWidth();
+            this.minimumWidth = this.selectWidget.getMinimumDropdownWidth();
         }
-
-        // set elements width
+        var widget = this.selectWidget.getWidget();
         var filterWidth = this.$(this.containerSelector).width();
         var requiredWidth = Math.max(filterWidth + 10, this.minimumWidth);
         widget.width(requiredWidth).css('min-width', requiredWidth + 'px');
         widget.find('input[type="search"]').width(requiredWidth - 22);
-
-        // fix CSS classes
-        widget.addClass('dropdown-menu');
-        widget.removeClass('ui-widget-content');
-        widget.removeClass('ui-widget');
-        widget.find('.ui-widget-header').removeClass('ui-widget-header');
-        widget.find('.ui-multiselect-filter').removeClass('ui-multiselect-filter');
-        widget.find('ul li label').removeClass('ui-corner-all');
-    },
-
-    /**
-     * Get minimum width of dropdown menu
-     *
-     * @return {Number}
-     * @protected
-     */
-    _getMinimumDropdownWidth: function() {
-        var minimumWidth = 0;
-        var widget = this.selectWidget.multiselect('widget');
-        var elements = widget.find('.ui-multiselect-checkboxes li');
-        _.each(elements, function(element, index, list) {
-            var width = this._getTextWidth($(element).find('label'));
-            if (width > minimumWidth) {
-                minimumWidth = width;
-            }
-        }, this);
-
-        return minimumWidth;
     },
 
     /**
@@ -257,8 +205,13 @@ OroApp.DatagridFilterSelect = OroApp.DatagridFilter.extend({
      * @protected
      */
     _onSelectChange: function() {
+        // set value
         var value = this.getValue();
         this._confirmValue(value);
+
+        // update dropdown
+        var button = this.$('.filter-select');
+        this.selectWidget.updateDropdownPosition(button);
     },
 
     /**
@@ -294,56 +247,16 @@ OroApp.DatagridFilterSelect = OroApp.DatagridFilter.extend({
     },
 
     /**
-     * Set filter parameters
-     *
-     * @deprecated
-     * @param {Object} parameters
-     * @return {*}
-     */
-    setParameters: function(parameters) {
-        var value = {
-            value: parameters['[value]']
-        };
-        this.setValue(value);
-        return this;
-    },
-
-    /**
-     * Get filter parameters
-     *
-     * @deprecated
-     * @return {Object}
-     */
-    getParameters: function() {
-        var value = this.getValue();
-        return {
-            '[value]': value.value
-        };
-    },
-
-    /**
      * Confirm filter value
      *
      * @protected
      */
     _confirmValue: function(value) {
-        if (this.confirmedValue.value != value.value) {
+        if (!_.isEqual(this.confirmedValue.value, value.value)) {
             this.confirmedValue = _.clone(value);
             this.$(this.inputSelector).val(this.confirmedValue.value);
             this.selectWidget.multiselect('refresh');
             this.trigger('update');
         }
-    },
-
-    /**
-     * Reset filter value
-     *
-     * @return {*}
-     */
-    reset: function() {
-        this.setValue({
-            value: ''
-        });
-        return this;
     }
 });

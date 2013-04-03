@@ -23,4 +23,9 @@ interface FilterInterface extends BaseFilterInterface
      * @return boolean
      */
     public function isActive();
+
+    /**
+     * @return array
+     */
+    public function getTypeOptions();
 }

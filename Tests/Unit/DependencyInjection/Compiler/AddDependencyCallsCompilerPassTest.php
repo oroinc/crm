@@ -3,7 +3,6 @@
 namespace Oro\Bundle\GridBundle\Tests\Unit\DependencyInjection\Compiler;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Reference;
 
 use Oro\Bundle\GridBundle\DependencyInjection\Compiler\AddDependencyCallsCompilerPass;
@@ -160,6 +159,7 @@ class AddDependencyCallsCompilerPassTest extends AbstractCompilerPassTest
                         'test.user_grid.manager' => $this->createStubDefinitionWithTags(
                             array(
                                 AddDependencyCallsCompilerPass::DATAGRID_MANAGER_TAG => array(
+                                    'name' => AddDependencyCallsCompilerPass::DATAGRID_MANAGER_TAG,
                                     'datagrid_name' => 'users',
                                     'query_factory' => 'query_factory_service',
                                     'route_generator' => 'route_generator_service',
@@ -168,7 +168,6 @@ class AddDependencyCallsCompilerPassTest extends AbstractCompilerPassTest
                                     'parameters' => 'parameters_service',
                                     'translator' => 'translator_service',
                                     'validator' => 'validator_service',
-                                    'flexible_manager' => 'flexible_manager_service'
                                 )
                             )
                         )
@@ -184,52 +183,6 @@ class AddDependencyCallsCompilerPassTest extends AbstractCompilerPassTest
                             'setParameters' => array(new Reference('parameters_service')),
                             'setTranslator' => array(new Reference('translator_service')),
                             'setValidator' => array(new Reference('validator_service')),
-                            'setFlexibleManager' => array(new Reference('flexible_manager_service'))
-                        )
-                    )
-                )
-            ),
-            'Flexible configuration' => array(
-                'containerData' => array(
-                    'definitions' => array(
-                        'test.user_grid.manager' => $this->createStubDefinitionWithTags(
-                            array(
-                                AddDependencyCallsCompilerPass::DATAGRID_MANAGER_TAG => array(
-                                    'name' => AddDependencyCallsCompilerPass::DATAGRID_MANAGER_TAG,
-                                    'datagrid_name' => 'users',
-                                    'route_name' => 'user_grid_route',
-                                    'entity_name' => 'User',
-                                    AddDependencyCallsCompilerPass::FLEXIBLE_ENTITY_KEY => true,
-                                )
-                            )
-                        )
-                    ),
-                    'parameters' => array(
-                        'oro_flexibleentity.flexible_config' => array(
-                            'entities_config' => array(
-                                'User' => array(
-                                    'flexible_manager' => 'flexible_manager_service'
-                                )
-                            )
-                        )
-                    )
-                ),
-                'expectedDefinitions' => array(
-                    'test.user_grid.manager' => array(
-                        'methodCalls' => array(
-                            'setName' => array('users'),
-                            'setQueryFactory' => array(
-                                new Reference('test.user_grid.manager.default_query_factory')
-                            ),
-                            'setRouteGenerator' => array(
-                                new Reference('test.user_grid.manager.route.default_generator')
-                            ),
-                            'setParameters' => array(new Reference('test.user_grid.manager.parameters.default')),
-                            'setDatagridBuilder' => array(new Reference('oro_grid.builder.datagrid')),
-                            'setListBuilder' => array(new Reference('oro_grid.builder.list')),
-                            'setTranslator' => array(new Reference('translator')),
-                            'setValidator' => array(new Reference('validator')),
-                            'setFlexibleManager' => array(new Reference('flexible_manager_service'))
                         )
                     )
                 )
@@ -255,8 +208,6 @@ class AddDependencyCallsCompilerPassTest extends AbstractCompilerPassTest
     }
 
     /**
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     *
      * @return array
      */
     public function processErrorDataProvider()
@@ -282,27 +233,6 @@ class AddDependencyCallsCompilerPassTest extends AbstractCompilerPassTest
                     AddDependencyCallsCompilerPass::DATAGRID_MANAGER_TAG
                 )
             ),
-            'Attribute "entity_name" is required' => array(
-                'containerData' => array(
-                    'definitions' => array(
-                        'test_service' => $this->createStubDefinitionWithTags(
-                            array(
-                                AddDependencyCallsCompilerPass::DATAGRID_MANAGER_TAG => array(
-                                    'name' => AddDependencyCallsCompilerPass::DATAGRID_MANAGER_TAG,
-                                    AddDependencyCallsCompilerPass::FLEXIBLE_ENTITY_KEY => true,
-                                    'datagrid_name' => 'users',
-                                    'route_name' => 'user_grid_route',
-                                )
-                            )
-                        )
-                    )
-                ),
-                'Symfony\Component\Config\Definition\Exception\InvalidDefinitionException',
-                sprintf(
-                    'Definition of service "test_service" must have "entity_name" attribute in tag "%s"',
-                    AddDependencyCallsCompilerPass::DATAGRID_MANAGER_TAG
-                )
-            ),
             'Attribute "route_name" is required' => array(
                 'containerData' => array(
                     'definitions' => array(
@@ -322,53 +252,6 @@ class AddDependencyCallsCompilerPassTest extends AbstractCompilerPassTest
                     'Definition of service "test_service" must have "route_name" attribute in tag "%s"',
                     AddDependencyCallsCompilerPass::DATAGRID_MANAGER_TAG
                 )
-            ),
-            'No OroFlexibleEntityBundle configuration parameter' => array(
-                'containerData' => array(
-                    'definitions' => array(
-                        'test_service' => $this->createStubDefinitionWithTags(
-                            array(
-                                AddDependencyCallsCompilerPass::DATAGRID_MANAGER_TAG => array(
-                                    'name' => AddDependencyCallsCompilerPass::DATAGRID_MANAGER_TAG,
-                                    'datagrid_name' => 'users',
-                                    'route_name' => 'user_grid_route',
-                                    'entity_name' => 'User',
-                                    AddDependencyCallsCompilerPass::FLEXIBLE_ENTITY_KEY => true
-                                )
-                            )
-                        )
-                    ),
-                    'parameters' => array()
-                ),
-                'LogicException',
-                'Cannot get value of OroFlexibleEntityBundle configuration parameter '.
-                    '("oro_flexibleentity.flexible_config").'
-            ),
-            'No OroFlexibleEntityBundle configuration for entity' => array(
-                'containerData' => array(
-                    'definitions' => array(
-                        'test_service' => $this->createStubDefinitionWithTags(
-                            array(
-                                AddDependencyCallsCompilerPass::DATAGRID_MANAGER_TAG => array(
-                                    'name' => AddDependencyCallsCompilerPass::DATAGRID_MANAGER_TAG,
-                                    'datagrid_name' => 'users',
-                                    'route_name' => 'user_grid_route',
-                                    'entity_name' => 'User',
-                                    AddDependencyCallsCompilerPass::FLEXIBLE_ENTITY_KEY => true
-                                )
-                            )
-                        )
-                    ),
-                    'parameters' => array(
-                        'oro_flexibleentity.flexible_config' => array(
-                            'entities_config' => array(
-                                'User' => array()
-                            )
-                        )
-                    )
-                ),
-                'LogicException',
-                'Cannot get flexible manager of "User" from entities configuration of OroFlexibleEntityBundle.'
             ),
         );
     }

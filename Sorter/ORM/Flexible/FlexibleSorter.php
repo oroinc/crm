@@ -2,9 +2,10 @@
 
 namespace Oro\Bundle\GridBundle\Sorter\ORM\Flexible;
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleManagerRegistry;
 use Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleManager;
 use Oro\Bundle\FlexibleEntityBundle\Entity\Repository\FlexibleEntityRepository;
+
 use Oro\Bundle\GridBundle\Sorter\ORM\Sorter;
 use Oro\Bundle\GridBundle\Field\FieldDescriptionInterface;
 use Oro\Bundle\GridBundle\Datagrid\ProxyQueryInterface;
@@ -12,21 +13,21 @@ use Oro\Bundle\GridBundle\Datagrid\ProxyQueryInterface;
 class FlexibleSorter extends Sorter
 {
     /**
+     * @var FlexibleManagerRegistry
+     */
+    protected $flexibleRegistry;
+
+    /**
      * @var FlexibleManager
      */
     protected $flexibleManager;
 
     /**
-     * @var ContainerInterface
+     * @param FlexibleManagerRegistry $flexibleRegistry
      */
-    protected $container;
-
-    /**
-     * @param ContainerInterface $container
-     */
-    public function __construct(ContainerInterface $container)
+    public function __construct(FlexibleManagerRegistry $flexibleRegistry)
     {
-        $this->container = $container;
+        $this->flexibleRegistry = $flexibleRegistry;
     }
 
     /**
@@ -43,12 +44,12 @@ class FlexibleSorter extends Sorter
             throw new \LogicException('Flexible entity sorter must have flexible entity name.');
         }
 
-        $this->flexibleManager = $this->getFlexibleManager($flexibleEntityName);
+        $this->flexibleManager = $this->flexibleRegistry->getManager($flexibleEntityName);
     }
 
     /**
      * @param ProxyQueryInterface $queryInterface
-     * @param string $direction
+     * @param string|null $direction
      */
     public function apply(ProxyQueryInterface $queryInterface, $direction = null)
     {
@@ -58,27 +59,5 @@ class FlexibleSorter extends Sorter
         /** @var $entityRepository FlexibleEntityRepository */
         $entityRepository = $this->flexibleManager->getFlexibleRepository();
         $entityRepository->applySorterByAttribute($queryBuilder, $this->getField()->getFieldName(), $direction);
-    }
-
-    /**
-     * @param string $flexibleEntityName
-     * @return FlexibleManager
-     * @throws \LogicException
-     */
-    protected function getFlexibleManager($flexibleEntityName)
-    {
-        $flexibleConfig = $this->container->getParameter('oro_flexibleentity.flexible_config');
-
-        // validate configuration
-        if (!isset($flexibleConfig['entities_config'][$flexibleEntityName])
-            || !isset($flexibleConfig['entities_config'][$flexibleEntityName]['flexible_manager'])
-        ) {
-            throw new \LogicException(
-                'There is no flexible manager configuration for entity ' . $flexibleEntityName . '.'
-            );
-        }
-
-        $flexibleManagerServiceId = $flexibleConfig['entities_config'][$flexibleEntityName]['flexible_manager'];
-        return $this->container->get($flexibleManagerServiceId);
     }
 }

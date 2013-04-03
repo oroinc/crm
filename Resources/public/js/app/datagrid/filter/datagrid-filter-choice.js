@@ -17,7 +17,7 @@ OroApp.DatagridFilterChoice = OroApp.DatagridFilterText.extend({
             '</div>' +
             '<div>' +
                 '<% _.each(choices, function (hint, value) { %>' +
-                    '<input type="radio" name="type" value="<%= value %>" />&nbsp;<%= hint %><br/>' +
+                    '<input type="radio" name="<%= name %>" value="<%= value %>" />&nbsp;<%= hint %><br/>' +
                 '<% }); %>' +
                 '<br/>' +
             '</div>' +
@@ -35,18 +35,21 @@ OroApp.DatagridFilterChoice = OroApp.DatagridFilterText.extend({
      */
     criteriaValueSelectors: {
         value: 'input[name="value"]',
-        type: 'input[name="type"]'
-    },
-
-    /** @property */
-    /*events: {
-        'change input[name="type"]': '_updateOnType',
-        'change input[name="value"]': '_update',
-        'click a.disable-filter': 'onClickDisable'
+        type: 'input[type="radio"]'
     },
 
     /** @property */
     choices: {},
+
+    /**
+     * Empty value object
+     *
+     * @property {Object}
+     */
+    emptyValue: {
+        value: '',
+        type: ''
+    },
 
     /**
      * Render filter criteria popup
@@ -57,6 +60,7 @@ OroApp.DatagridFilterChoice = OroApp.DatagridFilterText.extend({
      */
     _renderCriteria: function(el) {
         $(el).append(this.popupCriteriaTemplate({
+            name: this.name,
             choices: this.choices
         }));
         return this;
@@ -76,19 +80,6 @@ OroApp.DatagridFilterChoice = OroApp.DatagridFilterText.extend({
         } else {
             return '"' + this.confirmedValue.value + '"';
         }
-    },
-
-    /**
-     * Reset filter elements
-     *
-     * @return {*}
-     */
-    reset: function() {
-        this.setValue({
-            value: '',
-            type: ''
-        });
-        return this;
     },
 
     /**
@@ -118,32 +109,20 @@ OroApp.DatagridFilterChoice = OroApp.DatagridFilterText.extend({
     },
 
     /**
-     * Transforms parameters to value
+     * Compare value with confirmed value, if it's differs than save new
+     * confirmed value and trigger "changedData" event
      *
-     * @deprecated
-     * @param {Object} parameters
-     * @return {Object}
-     * @protected
-     */
-    _transformParametersToValue: function(parameters) {
-        return {
-            value: parameters['[value]'],
-            type: parameters['[type]']
-        }
-    },
-
-    /**
-     * Transforms value to parameters
-     *
-     * @deprecated
      * @param {Object} value
-     * @return {Object}
      * @protected
      */
-    _transformValueToParameters: function(value) {
-        return {
-            '[value]': value.value,
-            '[type]': value.type
+    _confirmValue: function(value) {
+        if (!this._looseObjectCompare(this.confirmedValue, value)) {
+            var needUpdate = this.confirmedValue.value || value.value;
+            this.confirmedValue = _.clone(value);
+            this._updateCriteriaHint();
+            if (needUpdate) {
+                this.trigger('update');
+            }
         }
     }
 });

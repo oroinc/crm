@@ -5,25 +5,40 @@
  * @extends Backbone.View
  */
 OroApp.DatagridFilterList = Backbone.View.extend({
-    /** @property */
+    /**
+     * List of filter objects
+     *
+     * @property
+     */
     filters: {},
 
-    /** @property */
+    /**
+     * Filter list template
+     *
+     * @property
+     */
     addButtonTemplate: _.template(
-        '<a href="#" class="btn btn-link btn-group"><%= addButtonHint %></a>' +
-            '<select id="add-filter-select" multiple>' +
+        '<select id="add-filter-select" multiple>' +
             '<% _.each(filters, function (filter, name) { %>' +
                 '<option value="<%= name %>" <% if (filter.enabled) { %>selected<% } %>>' +
                     '<%= filter.label %>' +
                 '</option>' +
             '<% }); %>' +
-            '</select>'
+        '</select>'
     ),
 
-    /** @property */
+    /**
+     * Filter list input selector
+     *
+     * @property
+     */
     filterSelector: '#add-filter-select',
 
-    /** @property */
+    /**
+     * Add filter button hint
+     *
+     * @property
+     */
     addButtonHint: 'Add filter',
 
     /** @property */
@@ -37,6 +52,13 @@ OroApp.DatagridFilterList = Backbone.View.extend({
      * @property
      */
     needReloadCollection: true,
+
+    /**
+     * Select widget object
+     *
+     * @property
+     */
+    selectWidget: null,
 
     /**
      * Initialize filter list options
@@ -58,11 +80,11 @@ OroApp.DatagridFilterList = Backbone.View.extend({
             this.addButtonHint = options.addButtonHint;
         }
 
-        for (var name in this.filters) {
-            this.filters[name] = new (this.filters[name])();
+        _.each(this.filters, function(filter, name) {
+            this.filters[name] = new filter();
             this.listenTo(this.filters[name], "update", this._reloadCollection);
             this.listenTo(this.filters[name], "disable", this.disableFilter);
-        }
+        }, this);
 
         this._saveState();
         this.collection.on('reset', this._restoreState, this);
@@ -71,9 +93,13 @@ OroApp.DatagridFilterList = Backbone.View.extend({
         Backbone.View.prototype.initialize.apply(this, arguments);
     },
 
+    /**
+     * Save filter state
+     *
+     * @protected
+     */
     _saveState: function() {
         this.collection.state.filters = this._createState();
-        this.collection.state.filtersParams = this.getAllParameters();
     },
 
     /**
@@ -96,6 +122,13 @@ OroApp.DatagridFilterList = Backbone.View.extend({
         }
     },
 
+    /**
+     * Restore filter state from collection
+     *
+     * @param {OroApp.PageableCollection} collection
+     * @param {Object} options
+     * @protected
+     */
     _restoreState: function(collection, options) {
         if (options.ignoreUpdateFilters) {
             return;
@@ -106,7 +139,7 @@ OroApp.DatagridFilterList = Backbone.View.extend({
     /**
      * Activate/deactivate all filter depends on its status
      *
-     * @private
+     * @protected
      */
     _processFilterStatus: function() {
         var activeFilters = this.$(this.filterSelector).val();
@@ -118,6 +151,18 @@ OroApp.DatagridFilterList = Backbone.View.extend({
                 this.disableFilter(filter);
             }
         }, this);
+
+        this._updateDropdownPosition();
+    },
+
+    /**
+     * Set dropdown position according to current element
+     *
+     * @protected
+     */
+    _updateDropdownPosition: function() {
+        var button = this.$('.ui-multiselect.filter-list');
+        this.selectWidget.updateDropdownPosition(button);
     },
 
     /**
@@ -129,6 +174,7 @@ OroApp.DatagridFilterList = Backbone.View.extend({
         filter.enable();
         var optionSelector = this.filterSelector + ' option[value="' + filter.name + '"]';
         this.$(optionSelector).attr('selected', 'selected');
+        this.selectWidget.multiselect('refresh');
     },
 
     /**
@@ -141,6 +187,7 @@ OroApp.DatagridFilterList = Backbone.View.extend({
         this._saveState();
         var optionSelector = this.filterSelector + ' option[value="' + filter.name + '"]';
         this.$(optionSelector).removeAttr('selected');
+        this.selectWidget.multiselect('refresh');
     },
 
     /**
@@ -151,18 +198,19 @@ OroApp.DatagridFilterList = Backbone.View.extend({
     render: function () {
         this.$el.empty();
 
-        for (var name in this.filters) {
-            this.filters[name].render();
-            if (!this.filters[name].enabled) {
-                this.filters[name].hide();
+        _.each(this.filters, function(filter) {
+            filter.render();
+            if (!filter.enabled) {
+                filter.hide();
             }
-            this.$el.append(this.filters[name].$el);
-        }
+            this.$el.append(filter.$el);
+        }, this);
 
         this.$el.append(this.addButtonTemplate({
-            filters: this.filters,
-            addButtonHint: this.addButtonHint
+            filters: this.filters
         }));
+
+        this._initializeSelectWidget();
 
         this.trigger("rendered");
 
@@ -171,6 +219,39 @@ OroApp.DatagridFilterList = Backbone.View.extend({
         }
 
         return this;
+    },
+
+    /**
+     * Initialize multiselect widget
+     *
+     * @protected
+     */
+    _initializeSelectWidget: function() {
+        this.selectWidget = new OroApp.MultiSelectDecorator(this.$(this.filterSelector), {
+            selectedList: 0,
+            selectedText: this.addButtonHint,
+            classes: 'filter-list select-filter-widget',
+            open: $.proxy(function() {
+                this.selectWidget.onOpenDropdown();
+                this._setDropdownWidth();
+                this._updateDropdownPosition();
+            }, this)
+        });
+
+        this.selectWidget.setViewDesign(this);
+        this.$('.filter-list span:first').replaceWith('<a id="add-filter-button" href="#">' + this.addButtonHint +'</a>');
+    },
+
+    /**
+     * Set design for select dropdown
+     *
+     * @protected
+     */
+    _setDropdownWidth: function() {
+        var widget = this.selectWidget.getWidget();
+        var requiredWidth = this.selectWidget.getMinimumDropdownWidth() + 24;
+        widget.width(requiredWidth).css('min-width', requiredWidth + 'px');
+        widget.find('input[type="search"]').width(requiredWidth - 22);
     },
 
     /**
@@ -199,47 +280,17 @@ OroApp.DatagridFilterList = Backbone.View.extend({
      */
     _createState: function() {
         var state = {};
-        for (var name in this.filters) {
-            var filter = this.filters[name];
+        _.each(this.filters, function(filter, name) {
             if (filter.enabled) {
-                var filterParameters = filter.getParameters();
-                var value = {}
-                _.each(_.keys(filterParameters), function(key) {
-                    if (filterParameters[key]) {
-                        value[key] = filterParameters[key];
-                    }
-                })
-                var valueKeys = _.keys(value);
-                if (valueKeys.length == 1 && valueKeys[0] == '[value]') {
-                    state[name] = value['[value]'];
-                } else if (valueKeys.length) {
-                    state[name] = value;
+                if (!filter.isEmpty()) {
+                    state[name] = filter.getValue();
                 } else {
                     state['__' + name] = 1;
                 }
             }
-        }
+        }, this);
 
         return state;
-    },
-
-    /**
-     * Get parameters of all filters
-     *
-     * @return {Object}
-     */
-    getAllParameters: function() {
-        var result = {};
-        for (var name in this.filters) {
-            var filter = this.filters[name];
-            if (filter.enabled) {
-                var parameters = filter.getParameters();
-                if (parameters) {
-                    result[name] = parameters;
-                }
-            }
-        }
-        return result;
     },
 
     /**
@@ -250,22 +301,22 @@ OroApp.DatagridFilterList = Backbone.View.extend({
      * @return {*}
      */
     _applyState: function(state) {
-        for (var filterName in this.filters) {
-            var filter = this.filters[filterName];
-            if (filterName in state) {
-                var filterState = state[filterName];
+        _.each(this.filters, function(filter, name) {
+            if (name in state) {
+                var filterState = state[name];
                 if (!_.isObject(filterState)) {
                     filterState = {
-                        '[value]': filterState
+                        value: filterState
                     }
                 }
-                this.enableFilter(filter.setParameters(filterState));
-            } else if ('__' + filterName in state) {
+                this.enableFilter(filter.setValue(filterState));
+            } else if ('__' + name in state) {
                 this.enableFilter(filter.reset());
             } else {
                 this.disableFilter(filter.reset());
             }
-        }
+        }, this);
+
         return this;
     }
 });

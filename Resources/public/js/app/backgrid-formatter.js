@@ -6,7 +6,7 @@ Backgrid.Extension.MomentFormatter.prototype.fromRaw = function (rawData) {
     }
 
     return originalMomentFormatterFromRawFunction.apply(this, arguments);
-}
+};
 
 // Replace standard formatter method of Backgrid.CellFormatter
 var originalCellFormatterFromRawFunction = Backgrid.CellFormatter.prototype.fromRaw;
@@ -16,4 +16,4 @@ Backgrid.CellFormatter.prototype.fromRaw = function(rawData) {
     }
 
     return originalCellFormatterFromRawFunction.apply(this, arguments);
-}
+};
