@@ -69,6 +69,10 @@ class FieldProperty extends AbstractProperty
             return $value;
         }
 
+        if (is_object($value) && is_callable(array($value, 'getData'))) {
+            $value = $value->getData();
+        }
+
         switch ($this->getFieldType()) {
             case FieldDescriptionInterface::TYPE_DATETIME:
             case FieldDescriptionInterface::TYPE_DATE:

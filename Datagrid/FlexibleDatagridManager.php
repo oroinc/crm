@@ -45,6 +45,10 @@ abstract class FlexibleDatagridManager extends DatagridManager
             'field'  => FieldDescriptionInterface::TYPE_OPTIONS,
             'filter' => FilterInterface::TYPE_FLEXIBLE_OPTIONS,
         ),
+        AbstractAttributeType::BACKEND_TYPE_OPTIONS => array(
+            'field'  => FieldDescriptionInterface::TYPE_OPTIONS,
+            'filter' => FilterInterface::TYPE_FLEXIBLE_OPTIONS,
+        ),
         AbstractAttributeType::BACKEND_TYPE_TEXT => array(
             'field'  => FieldDescriptionInterface::TYPE_TEXT,
             'filter' => FilterInterface::TYPE_FLEXIBLE_STRING,
