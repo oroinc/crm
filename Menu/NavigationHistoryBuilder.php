@@ -23,7 +23,7 @@ class NavigationHistoryBuilder extends NavigationItemBuilder
      */
     public function build(ItemInterface $menu, array $options = array(), $alias = null)
     {
-        $maxItems = isset($options['maxItems']) ? (int)$options['maxItems'] : self::DEFAULT_MAX_ITEMS;
+        $maxItems = isset($options['maxItems']) ? (int)$options['maxItems'] : self::DEFAULT_MAX_RESULTS;
         $options['maxItems'] = $maxItems + 1;
 
         parent::build($menu, $options, $alias);
