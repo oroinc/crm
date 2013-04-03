@@ -1,28 +1,40 @@
 {% extends bap.layout is defined ? bap.layout : 'OroUserBundle::layout.html.twig' %}
 
 {% block title %}Acl resources - {{ parent() }}{% endblock %}
+
+{% block head_script %}
+    {{ parent() }}
+
+    <script type="text/javascript" src="{{ asset('bundles/oroui/lib/jstree/jquery.hotkeys.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/oroui/lib/jstree/jquery.jstree.js') }}"></script>
+{% endblock head_script %}
+
 {% block page_container %}
-<div class="container-fluid">
-{% block content %}
-    <h1>ACL Resources list for Role: {{ role.role }}</h1>
-    <form action="{{ path('oro_user_acl_save', { id: role.id }) }}" method="POST">
-        <table class="table table-bordered table-striped table-condensed">
-            <thead>
-            <tr>
-                <th style="width: 10px;">Access</th>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Description</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% include 'OroUserBundle:Acl:_subResource.html.twig' with {'resources': resources, "i": 1, "j": 1 } %}
-            </tbody>
-        </table>
-        <div class="form-row">
-            <button class="btn btn-large btn-primary" type="submit">Save</button>
-        </div>
-    </form>
-{% endblock %}
-</div>
+    <div class="container-fluid">
+        {% block content %}
+            <h1>Edit ACL</h1>
+            <form action="{{ path('oro_user_acl_save', { id: role.id }) }}" method="POST">
+                <div id="acl_tree">
+                    {% include 'OroUserBundle:Acl:_subTree.html.twig' with {'resources': resources} %}
+                </div>
+                <div class="form-row form-actions">
+                    <button class="btn btn-large btn-primary" type="submit">Save</button>
+                </div>
+            </form>
+
+            <script type="text/javascript">
+                $(function() {
+                    $('#acl_tree').jstree({
+                        "checkbox": {
+                            real_checkboxes: true,
+                            real_checkboxes_names: function (n) {
+                                return ['resource[' + n.data('id') + ']', 1]
+                            }
+                        },
+                        "plugins": ["themes", "html_data", "ui", "checkbox", "hotkeys"]
+                    });
+                });
+            </script>
+        {% endblock %}
+    </div>
 {% endblock %}
