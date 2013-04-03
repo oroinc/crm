@@ -41,12 +41,18 @@
                 '@OroUIBundle/Resources/public/js/backbone/app/router.js'
                 '@OroUIBundle/Resources/public/js/backbone/app/collection.js'
                 '@OroUIBundle/Resources/public/js/backbone/setup.js'
+                '@OroUIBundle/Resources/public/js/backbone/setup.js'
 
                 output='js/oroapp.all.js'
             %}
                 <script type="text/javascript" src="{{ asset_url }}"></script>
             {% endjavascripts %}
-
+            <script src="{{ asset ('bundles/oroui/lib/jquery.uniform.min.js') }}"></script>
+            <script type="text/javascript">
+                jQuery(document).ready(function() {
+                    jQuery("input:file").uniform();
+                });
+            </script>
             <!--[if lte IE 9]>
                 <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
                 <link href="{{ asset('bundles/oroui/css/ie.css') }}" rel="stylesheet" media="all" />
