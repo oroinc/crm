@@ -4,7 +4,7 @@ namespace Oro\Bundle\NavigationBundle\Event;
 
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Security\Core\SecurityContext;
+use Symfony\Component\Security\Core\SecurityContextInterface;
 use Doctrine\ORM\EntityManager;
 
 use Oro\Bundle\NavigationBundle\Entity\Builder\ItemFactory;
@@ -29,12 +29,13 @@ class ResponseHistoryListener
 
     public function __construct(
         ItemFactory $navigationItemFactory,
-        SecurityContext $securityContext,
+        SecurityContextInterface $securityContext,
         EntityManager $entityManager
     ) {
         $this->navItemFactory = $navigationItemFactory;
-        $this->user = $securityContext->getToken() ? $securityContext->getToken()->getUser() : null;
-        $this->user = $this->user == 'anon.' ? null : $this->user;
+        $this->user = !$securityContext->getToken() ||  is_string($securityContext->getToken()->getUser())
+                      ? null : $securityContext->getToken()->getUser();
+
         $this->em = $entityManager;
     }
 
@@ -92,7 +93,7 @@ class ResponseHistoryListener
         return !($response->getStatusCode() != 200
             || $request->getRequestFormat() != 'html'
             || $request->getMethod() != 'GET'
-            ||  $route[0] == '_'
+            || $route[0] == '_'
             || is_null($this->user));
     }
 }
