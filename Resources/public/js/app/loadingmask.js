@@ -11,7 +11,6 @@ OroApp.LoadingMask = OroApp.View.extend({
         '<div id="loading-wrapper" class="loading-wrapper" style="display: block;"></div>' +
         '<div id="loading-frame" class="loading-frame" style="display: block;">' +
             '<div class="box well">' +
-                '<img src="/bundles/oroui/img/loadinfo.net.gif" alt="">' +
                 '<img src="/bundles/oroui/img/loader.gif" alt="">' +
                 'Loading . . .' +
             '</div>' +
