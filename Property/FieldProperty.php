@@ -69,8 +69,9 @@ class FieldProperty extends AbstractProperty
             return $value;
         }
 
-        if (is_object($value) && is_callable(array($value, 'getData'))) {
-            $value = $value->getData();
+        // TODO : to fix the case where $value is a flexible value
+        if (is_object($value) && is_callable(array($value, '__toString'))) {
+            $value = $value->__toString();
         }
 
         switch ($this->getFieldType()) {
