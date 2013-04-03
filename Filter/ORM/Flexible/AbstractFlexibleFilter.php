@@ -6,8 +6,8 @@ use Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleManagerRegistry;
 use Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleManager;
 use Oro\Bundle\FlexibleEntityBundle\Entity\Repository\FlexibleEntityRepository;
 
-use Oro\Bundle\GridBundle\Filter\ORM\AbstractFilter;
 use Oro\Bundle\GridBundle\Filter\FilterInterface;
+use Oro\Bundle\GridBundle\Filter\ORM\AbstractFilter;
 use Oro\Bundle\GridBundle\Datagrid\ProxyQueryInterface;
 use Oro\Bundle\GridBundle\Datagrid\ORM\ProxyQuery;
 
@@ -24,18 +24,11 @@ abstract class AbstractFlexibleFilter extends AbstractFilter implements FilterIn
     protected $flexibleManager;
 
     /**
-     * @var FilterInterface
-     */
-    protected $parentFilter;
-
-    /**
      * @param FlexibleManagerRegistry $flexibleRegistry
-     * @param FilterInterface $parentFilter
      */
-    public function __construct(FlexibleManagerRegistry $flexibleRegistry, FilterInterface $parentFilter = null)
+    public function __construct(FlexibleManagerRegistry $flexibleRegistry)
     {
         $this->flexibleRegistry = $flexibleRegistry;
-        $this->parentFilter = $parentFilter;
     }
 
     /**
@@ -54,6 +47,8 @@ abstract class AbstractFlexibleFilter extends AbstractFilter implements FilterIn
     }
 
     /**
+     * Apply filter using flexible repository
+     *
      * @param ProxyQueryInterface $proxyQuery
      * @param string $field
      * @param string $value
@@ -74,10 +69,6 @@ abstract class AbstractFlexibleFilter extends AbstractFilter implements FilterIn
      */
     public function getDefaultOptions()
     {
-        if ($this->parentFilter) {
-            return $this->parentFilter->getDefaultOptions();
-        }
-
         return array();
     }
 
@@ -86,22 +77,6 @@ abstract class AbstractFlexibleFilter extends AbstractFilter implements FilterIn
      */
     public function getRenderSettings()
     {
-        if ($this->parentFilter) {
-            return $this->parentFilter->getRenderSettings();
-        }
-
         return array();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getTypeOptions()
-    {
-        if ($this->parentFilter) {
-            return $this->parentFilter->getTypeOptions();
-        }
-
-        return parent::getTypeOptions();
     }
 }

@@ -135,10 +135,34 @@ class FieldDescription implements FieldDescriptionInterface
             unset($options['type']);
         }
 
+        // set the field_name if provided
+        if (isset($options['field_name'])) {
+            $this->setFieldName($options['field_name']);
+            // TODO Cannot unset option because it is used by filter!
+            //unset($options['field_name']);
+        }
+
         // remove property value
         if (isset($options['template'])) {
             $this->setTemplate($options['template']);
             unset($options['template']);
+        }
+
+        // set field_mapping
+        if (isset($options['field_mapping'])) {
+            $this->setFieldMapping($options['field_mapping']);
+        } else {
+            $fieldMapping = array(
+                'fieldName' => $this->getFieldName()
+            );
+            if (isset($options['entity_alias'])) {
+                $fieldMapping['entityAlias'] = $options['entity_alias'];
+            }
+            if (isset($options['expression'])) {
+                $fieldMapping['fieldExpression'] = $options['expression'];
+            }
+            $this->setFieldMapping($fieldMapping);
+            $options['field_mapping'] = $fieldMapping;
         }
 
         $this->options = $options;
@@ -311,6 +335,14 @@ class FieldDescription implements FieldDescriptionInterface
      */
     public function getSortFieldMapping()
     {
-        return $this->getOption('sort_field_mapping');
+        return $this->getOption('sort_field_mapping', $this->getFieldMapping());
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSortParentAssociationMapping()
+    {
+        return $this->getOption('sort_parent_association_mappings', array());
     }
 }

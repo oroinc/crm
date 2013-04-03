@@ -9,4 +9,19 @@ use Sonata\AdminBundle\Datagrid\ProxyQueryInterface as BaseProxyQueryInterface;
  */
 interface ProxyQueryInterface extends BaseProxyQueryInterface
 {
+    /**
+     * Adds sorting order
+     *
+     * @param array $parentAssociationMappings
+     * @param array $fieldMapping
+     * @param string $direction
+     */
+    public function addSortOrder(array $parentAssociationMappings, array $fieldMapping, $direction = null);
+
+    /**
+     * Get records total count
+     *
+     * @return array
+     */
+    public function getTotalCount();
 }

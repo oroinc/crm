@@ -3,10 +3,12 @@
 namespace Oro\Bundle\GridBundle\Filter\ORM\Flexible;
 
 use Doctrine\Common\Persistence\ObjectRepository;
+
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
+use Sonata\AdminBundle\Form\Type\Filter\ChoiceType;
+
 use Oro\Bundle\FlexibleEntityBundle\Entity\Attribute;
 use Oro\Bundle\FlexibleEntityBundle\Entity\AttributeOption;
-use Sonata\AdminBundle\Form\Type\Filter\ChoiceType;
 
 class FlexibleOptionsFilter extends AbstractFlexibleFilter
 {
@@ -18,56 +20,72 @@ class FlexibleOptionsFilter extends AbstractFlexibleFilter
     /**
      * {@inheritdoc}
      */
-    public function filter(ProxyQueryInterface $proxyQuery, $alias, $field, $value)
+    public function filter(ProxyQueryInterface $proxyQuery, $alias, $field, $data)
     {
-        if (!$value || !is_array($value) || !array_key_exists('value', $value) || null === $value['value']) {
+        if (!$this->isDataValid($data)) {
             return;
         }
 
-        if (!is_array($value['value'])) {
-            $value['value'] = array($value['value']);
+        if (!is_array($data['value'])) {
+            $data['value'] = array($data['value']);
         }
 
-        foreach ($value['value'] as $key => $data) {
-            $value['value'][$key] = trim($data);
-            if (strlen($value['value'][$key]) == 0) {
-                unset($value['value'][$key]);
+        foreach ($data['value'] as $key => $value) {
+            $data['value'][$key] = trim($value);
+            if (strlen($data['value'][$key]) == 0) {
+                unset($data['value'][$key]);
             }
         }
 
-        if (empty($value['value'])) {
+        if (empty($data['value'])) {
             return;
         }
 
         // process type and operator
-        if (!isset($value['type'])) {
-            if (is_array($value)) {
-                $operator = $this->getOperator(ChoiceType::TYPE_CONTAINS);
-            } else {
-                $operator = $this->getOperator(ChoiceType::TYPE_EQUAL);
-            }
-        } else {
-            $operator = $this->getOperator((int) $value['type']);
-        }
+        $type = isset($data['type']) ? $data['type'] : false;
+        $operator = $this->getOperator($type, ChoiceType::TYPE_CONTAINS);
 
         // apply filter
-        $this->applyFlexibleFilter($proxyQuery, $field, $value['value'], $operator);
+        $this->applyFlexibleFilter($proxyQuery, $field, $data['value'], $operator);
     }
 
     /**
-     * @param string $type
+     * Checks if $data is valid
      *
+     * @param mixed $data
      * @return bool
      */
-    public function getOperator($type)
+    protected function isDataValid($data)
     {
+        return is_array($data) && array_key_exists('value', $data) && !is_null($data['value']);
+    }
+
+    /**
+     * Get operator as string
+     *
+     * @param string $type
+     * @param int|null $default
+     * @return int|bool
+     */
+    public function getOperator($type, $default = null)
+    {
+        $type = (int) $type;
+
         $choices = array(
-            ChoiceType::TYPE_CONTAINS         => 'IN',
-            ChoiceType::TYPE_NOT_CONTAINS     => 'NOT IN',
-            ChoiceType::TYPE_EQUAL            => '=',
+            ChoiceType::TYPE_CONTAINS     => 'IN',
+            ChoiceType::TYPE_NOT_CONTAINS => 'NOT IN',
+            ChoiceType::TYPE_EQUAL        => '=',
         );
 
-        return isset($choices[$type]) ? $choices[$type] : false;
+        if (isset($choices[$type])) {
+            return $choices[$type];
+        }
+
+        if (!is_null($default) && isset($choices[$default])) {
+            return $choices[$default];
+        }
+
+        return false;
     }
 
     /**

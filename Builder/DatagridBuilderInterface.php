@@ -46,12 +46,6 @@ interface DatagridBuilderInterface
     public function addRowAction(DatagridInterface $datagrid, array $parameters);
 
     /**
-     * @param string $field
-     * @return void
-     */
-    public function addComplexField($field);
-
-    /**
      * @param ProxyQueryInterface $query
      * @param FieldDescriptionCollection $fieldCollection
      * @param RouteGeneratorInterface $routeGenerator,

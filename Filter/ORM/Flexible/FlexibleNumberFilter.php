@@ -4,10 +4,16 @@ namespace Oro\Bundle\GridBundle\Filter\ORM\Flexible;
 
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 use Sonata\AdminBundle\Form\Type\Filter\NumberType;
+
 use Oro\Bundle\GridBundle\Filter\ORM\NumberFilter;
 
-class FlexibleNumberFilter extends AbstractFlexibleFilter
+class FlexibleNumberFilter extends AbstractChildFilter
 {
+    /**
+     * @var string
+     */
+    protected $parentFilterClass = 'Oro\\Bundle\\GridBundle\\Filter\\ORM\\NumberFilter';
+
     /**
      * @var NumberFilter
      */
@@ -23,28 +29,21 @@ class FlexibleNumberFilter extends AbstractFlexibleFilter
         }
 
         $type = isset($data['type']) ? $data['type'] : false;
-
-        $operator = $this->getOperator($type);
-        if (!$operator) {
-            $operator = $this->getOperator(NumberType::TYPE_EQUAL);
-        }
+        $operator = $this->getOperator($type, NumberType::TYPE_EQUAL);
 
         // apply filter
         $this->applyFlexibleFilter($proxyQuery, $field, $data['value'], $operator);
     }
 
     /**
-     * Flexible number filter operator
+     * Get operator as string
      *
      * @param string $type
-     * @return string
+     * @param mixed $default
+     * @return bool
      */
-    public function getOperator($type)
+    public function getOperator($type, $default = null)
     {
-        if ($this->parentFilter) {
-            return $this->parentFilter->getOperator($type);
-        }
-
-        return null;
+        return $this->parentFilter->getOperator($type, $default);
     }
 }

@@ -15,7 +15,6 @@ class DatagridBuilderTest extends \PHPUnit_Framework_TestCase
     const TEST_ENTITY_TYPE   = 'test_entity_type';
     const TEST_ACL_RESOURCE  = 'test_acl_resource';
     const TEST_HINT          = 'test_hint';
-    const TEST_COMPLEX_FIELD = 'test_complex_field';
     /**#@-*/
 
     /**
@@ -93,7 +92,7 @@ class DatagridBuilderTest extends \PHPUnit_Framework_TestCase
         );
         $filterFactoryMock->expects($this->once())
             ->method('create')
-            ->with(self::TEST_ENTITY_NAME, self::TEST_ENTITY_TYPE, $this->testFilterOptions)
+            ->with(self::TEST_ENTITY_NAME, self::TEST_ENTITY_TYPE, $fieldDescription->getOptions())
             ->will($this->returnValue($testFilter));
 
         // datagrid
@@ -260,17 +259,6 @@ class DatagridBuilderTest extends \PHPUnit_Framework_TestCase
         $this->model->addRowAction($datagridMock, $actualParameters);
     }
 
-    public function testAddComplexField()
-    {
-        $this->initializeDatagridBuilder();
-
-        $this->assertAttributeEmpty('complexFields', $this->model);
-        $this->model->addComplexField(self::TEST_COMPLEX_FIELD);
-        $this->assertAttributeCount(1, 'complexFields', $this->model);
-        $this->assertAttributeContains(self::TEST_COMPLEX_FIELD, 'complexFields', $this->model);
-    }
-
-
     public function testAddProperty()
     {
         $this->initializeDatagridBuilder();
@@ -321,7 +309,6 @@ class DatagridBuilderTest extends \PHPUnit_Framework_TestCase
             array('formFactory' => $formFactoryMock, 'className' => self::DATAGRID_CLASS)
         );
 
-        $this->model->addComplexField(self::TEST_COMPLEX_FIELD);
         $datagrid = $this->model->getBaseDatagrid(
             $proxyQueryMock,
             $fieldDescriptionCollection,
@@ -345,6 +332,5 @@ class DatagridBuilderTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf('Oro\Bundle\GridBundle\Datagrid\ORM\Pager', $pager);
         $this->assertAttributeEquals($proxyQueryMock, 'query', $pager);
-        $this->assertAttributeEquals(array(self::TEST_COMPLEX_FIELD), 'complexFields', $pager);
     }
 }

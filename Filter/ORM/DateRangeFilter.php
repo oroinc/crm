@@ -8,6 +8,7 @@ class DateRangeFilter extends AbstractDateFilter
 {
     /**
      * This filter has time
+     *
      * @var boolean
      */
     protected $time = false;

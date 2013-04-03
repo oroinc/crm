@@ -3,6 +3,7 @@
 namespace Oro\Bundle\GridBundle\Filter\ORM;
 
 use Doctrine\DBAL\Query\QueryBuilder;
+
 use Sonata\AdminBundle\Form\Type\Filter\ChoiceType;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 
@@ -21,6 +22,8 @@ class StringFilter extends AbstractFilter
     }
 
     /**
+     * Get operator types
+     *
      * @return array
      */
     public function getTypeOptions()
@@ -50,25 +53,17 @@ class StringFilter extends AbstractFilter
             return;
         }
 
-        if (!isset($data['type'])) {
-            $data['type'] = ChoiceType::TYPE_CONTAINS;
-        }
-
-        $operator = $this->getOperator((int) $data['type']);
-        if (!$operator) {
-            $operator = $this->getOperator(ChoiceType::TYPE_CONTAINS);
-        }
-
-        // c.name > '1' => c.name OPERATOR :FIELDNAME
+        $type = isset($data['type']) ? $data['type'] : false;
+        $operator = $this->getOperator($type, ChoiceType::TYPE_CONTAINS);
         $parameterName = $this->getNewParameterName($queryBuilder);
-        if ($this->isComplexField()) {
-            $this->applyHaving($queryBuilder, sprintf('%s %s :%s', $field, $operator, $parameterName));
-        } else {
-            $this->applyWhere($queryBuilder, sprintf('%s.%s %s :%s', $alias, $field, $operator, $parameterName));
-        }
+
+        $this->applyFilterToClause(
+            $queryBuilder,
+            $this->createCompareFieldExpression($field, $alias, $operator, $parameterName)
+        );
 
         /** @var $queryBuilder QueryBuilder */
-        if ($data['type'] == ChoiceType::TYPE_EQUAL) {
+        if ($type == ChoiceType::TYPE_EQUAL) {
             $queryBuilder->setParameter($parameterName, $data['value']);
         } else {
             $queryBuilder->setParameter($parameterName, sprintf($this->getOption('format'), $data['value']));
@@ -76,12 +71,16 @@ class StringFilter extends AbstractFilter
     }
 
     /**
-     * @param string $type
+     * Get operator as string
      *
-     * @return bool
+     * @param int $type
+     * @param int|null $default
+     * @return int|bool
      */
-    public function getOperator($type)
+    public function getOperator($type, $default = null)
     {
+        $type = (int) $type;
+
         $choices = array(
             ChoiceType::TYPE_CONTAINS     => 'LIKE',
             ChoiceType::TYPE_NOT_CONTAINS => 'NOT LIKE',
@@ -90,6 +89,10 @@ class StringFilter extends AbstractFilter
 
         if (isset($choices[$type])) {
             return $choices[$type];
+        }
+
+        if (!is_null($default) && isset($choices[$default])) {
+            return $choices[$default];
         }
 
         return false;

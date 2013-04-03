@@ -3,27 +3,20 @@
 namespace Oro\Bundle\GridBundle\Tests\Unit\Sorter\ORM;
 
 use Oro\Bundle\GridBundle\Sorter\ORM\Sorter;
-use Oro\Bundle\GridBundle\Field\FieldDescription;
+use Oro\Bundle\GridBundle\Field\FieldDescriptionInterface;
 
 class SorterTest extends \PHPUnit_Framework_TestCase
 {
     /**#@+
      * Test parameters
      */
-    const TEST_NAME           = 'name';
-    const TEST_ALIAS          = 'alias';
-    const TEST_MAIN_ALIAS     = 'main';
+    const TEST_NAME = 'name';
     /**#@-*/
 
     /**
      * @var Sorter
      */
     protected $model;
-
-    /**
-     * @var FieldDescription
-     */
-    protected $fieldDescription;
 
     protected function setUp()
     {
@@ -33,25 +26,14 @@ class SorterTest extends \PHPUnit_Framework_TestCase
     protected function tearDown()
     {
         unset($this->model);
-        unset($this->fieldDescription);
-    }
-
-    public function initializeFieldDescription($name, $additionalOptions = array())
-    {
-        $this->fieldDescription = new FieldDescription();
-        $this->fieldDescription->setName($name);
-
-        $options = array('field_name' => $name);
-        $this->fieldDescription->setOptions(array_merge($options, $additionalOptions));
     }
 
     public function testInitialize()
     {
-        $this->initializeFieldDescription(self::TEST_NAME);
+        $fieldDescription = $this->createFieldDescription();
+        $this->model->initialize($fieldDescription, Sorter::DIRECTION_ASC);
 
-        $this->model->initialize($this->fieldDescription, Sorter::DIRECTION_ASC);
-
-        $this->assertAttributeEquals($this->fieldDescription, 'field', $this->model);
+        $this->assertAttributeEquals($fieldDescription, 'field', $this->model);
         $this->assertAttributeEquals(Sorter::DIRECTION_ASC, 'direction', $this->model);
     }
 
@@ -60,10 +42,9 @@ class SorterTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetField()
     {
-        $this->initializeFieldDescription(self::TEST_NAME);
-
-        $this->model->initialize($this->fieldDescription);
-        $this->assertEquals($this->fieldDescription, $this->model->getField());
+        $fieldDescription = $this->createFieldDescription();
+        $this->model->initialize($fieldDescription);
+        $this->assertEquals($fieldDescription, $this->model->getField());
     }
 
     /**
@@ -71,15 +52,14 @@ class SorterTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetName()
     {
-        $this->initializeFieldDescription(self::TEST_NAME);
-
-        $this->model->initialize($this->fieldDescription);
+        $fieldDescription = $this->createFieldDescription();
+        $this->model->initialize($fieldDescription);
         $this->assertEquals(self::TEST_NAME, $this->model->getName());
     }
 
     /**
-     * @param mixed $direction
-     * @param null $expected
+     * @param string|null $direction
+     * @param string $expected
      *
      * @dataProvider setDirectionDataProvider
      */
@@ -130,77 +110,57 @@ class SorterTest extends \PHPUnit_Framework_TestCase
      * @depends testInitialize
      * @depends testSetDirection
      * @depends testGetDirection
-     *
-     * @dataProvider getFieldOptionsDataProvider
      */
-    public function testApply($fieldName, $fieldOptions, $direction, $expectedFieldName)
+    public function testApply()
     {
-        $this->initializeFieldDescription($fieldName, $fieldOptions);
+        $expectedDirection = Sorter::DIRECTION_ASC;
+        $expectedAssociationMapping = array('testAssociationMapping');
+        $expectedFieldMapping = array('testFieldMapping');
 
-        $this->model->initialize($this->fieldDescription);
-
-        $queryBuilderMock = $this->getMock('Doctrine\ORM\QueryBuilder', array('addOrderBy'), array(), '', false);
-        $queryBuilderMock->expects($this->once())
-            ->method('addOrderBy')
-            ->with($expectedFieldName, $direction);
-
-        $proxyQueryMock = $this->getMock('Oro\Bundle\GridBundle\Datagrid\ORM\ProxyQuery', array('getQueryBuilder', 'entityJoin'), array(), '', false);
-        $proxyQueryMock->expects($this->once())
-            ->method('getQueryBuilder')
-            ->will($this->returnValue($queryBuilderMock));
-        $proxyQueryMock->expects($this->any())
-            ->method('entityJoin')
-            ->will($this->returnCallback(array($this, 'entityJoin')));
-
-        $this->model->apply($proxyQueryMock, $direction);
-    }
-
-    /**
-     * @param array $associationMapping
-     * @return string
-     */
-    public function entityJoin(array $associationMapping)
-    {
-        $alias = 'main';
-        if ($associationMapping) {
-            $alias = array_shift($associationMapping);
-        }
-
-        return $alias;
-    }
-
-    /**
-     * Data provider for testApply
-     *
-     * @return array
-     */
-    public function getFieldOptionsDataProvider()
-    {
-        return array(
-            'sort_by_complex_field' => array(
-                '$fieldName'         => self::TEST_NAME,
-                '$fieldOptions'      => array('complex_data' => true),
-                '$direction'         => Sorter::DIRECTION_ASC,
-                '$expectedFieldName' => self::TEST_NAME
-            ),
-            'sort_by_field_with_alias' => array(
-                '$fieldName'         => self::TEST_NAME,
-                '$fieldOptions'      => array('entity_alias' => self::TEST_ALIAS),
-                '$direction'         => Sorter::DIRECTION_ASC,
-                '$expectedFieldName' => self::TEST_ALIAS.'.'.self::TEST_NAME
-            ),
-            'sort_by_field_with_alias_mapping' => array(
-                '$fieldName'         => self::TEST_NAME,
-                '$fieldOptions'      => array('parent_association_mappings' => array(self::TEST_ALIAS)),
-                '$direction'         => Sorter::DIRECTION_ASC,
-                '$expectedFieldName' => self::TEST_ALIAS.'.'.self::TEST_NAME
-            ),
-            'sort_order_by_predefined_direction' => array(
-                '$fieldName'         => self::TEST_NAME,
-                '$fieldOptions'      => array('parent_association_mappings' => array(self::TEST_ALIAS)),
-                '$direction'         => null,
-                '$expectedFieldName' => self::TEST_ALIAS.'.'.self::TEST_NAME
-            )
+        $fieldDescription = $this->createFieldDescription(
+            self::TEST_NAME,
+            $expectedAssociationMapping,
+            $expectedFieldMapping
         );
+
+        $this->createFieldDescription();
+        $this->model->initialize($fieldDescription);
+
+        $proxyQuery = $this->getMock('Oro\Bundle\GridBundle\Datagrid\ProxyQueryInterface');
+        $proxyQuery->expects($this->once())
+            ->method('addSortOrder')
+            ->with($expectedAssociationMapping, $expectedFieldMapping, $expectedDirection);
+
+        $this->model->apply($proxyQuery, $expectedDirection);
+    }
+
+    /**
+     * Creates field description
+     *
+     * @param string $name
+     * @param array $associationMapping
+     * @param array $fieldMapping
+     * @return FieldDescriptionInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private function createFieldDescription(
+        $name = self::TEST_NAME,
+        $associationMapping = array(),
+        $fieldMapping = array()
+    ) {
+        $result = $this->getMockBuilder('Oro\Bundle\GridBundle\Field\FieldDescriptionInterface')->getMock();
+
+        $result->expects($this->any())
+            ->method('getName')
+            ->will($this->returnValue($name));
+
+        $result->expects($this->any())
+            ->method('getSortParentAssociationMapping')
+            ->will($this->returnValue($associationMapping));
+
+        $result->expects($this->any())
+            ->method('getSortFieldMapping')
+            ->will($this->returnValue($fieldMapping));
+
+        return $result;
     }
 }

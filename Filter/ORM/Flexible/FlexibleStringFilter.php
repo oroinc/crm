@@ -4,29 +4,20 @@ namespace Oro\Bundle\GridBundle\Filter\ORM\Flexible;
 
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 use Sonata\AdminBundle\Form\Type\Filter\ChoiceType;
+
 use Oro\Bundle\GridBundle\Filter\ORM\StringFilter;
 
-class FlexibleStringFilter extends AbstractFlexibleFilter
+class FlexibleStringFilter extends AbstractChildFilter
 {
+    /**
+     * @var string
+     */
+    protected $parentFilterClass = 'Oro\\Bundle\\GridBundle\\Filter\\ORM\\StringFilter';
+
     /**
      * @var StringFilter
      */
     protected $parentFilter;
-
-    /**
-     * Flexible string filter operator
-     *
-     * @param string $type
-     * @return string
-     */
-    public function getOperator($type)
-    {
-        if ($this->parentFilter) {
-            return $this->parentFilter->getOperator($type);
-        }
-
-        return null;
-    }
 
     /**
      * {@inheritdoc}
@@ -44,20 +35,30 @@ class FlexibleStringFilter extends AbstractFlexibleFilter
         }
 
         // process type
-        $data['type'] = !isset($data['type']) ? ChoiceType::TYPE_CONTAINS : $data['type'];
-        if ($data['type'] == ChoiceType::TYPE_EQUAL) {
-            $value = $data['value'];
+        $type = isset($data['type']) ? $data['type'] : false;
+        if ($type == ChoiceType::TYPE_EQUAL) {
+            $value = $type;
         } else {
             $value = sprintf($this->getOption('format'), $data['value']);
         }
 
         // process operator
-        $operator = $this->getOperator((int) $data['type']);
-        if (!$operator) {
-            $operator = $this->getOperator(ChoiceType::TYPE_CONTAINS);
-        }
+        $operator = $this->getOperator($type, ChoiceType::TYPE_CONTAINS);
 
         // apply filter
         $this->applyFlexibleFilter($proxyQuery, $field, $value, $operator);
+    }
+
+    /**
+     * Get operator as string
+     *
+     * @param int $type
+     * @param mixed $default
+     * @return int|bool
+     */
+    public function getOperator($type, $default = null)
+    {
+        $result = $this->parentFilter->getOperator($type, $default);
+        return $result;
     }
 }

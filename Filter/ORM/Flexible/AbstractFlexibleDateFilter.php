@@ -7,8 +7,13 @@ use Sonata\AdminBundle\Form\Type\Filter\NumberType;
 use Oro\Bundle\GridBundle\Filter\ORM\AbstractDateFilter;
 use Sonata\AdminBundle\Form\Type\Filter\DateRangeType;
 
-abstract class AbstractFlexibleDateFilter extends AbstractFlexibleFilter
+abstract class AbstractFlexibleDateFilter extends AbstractChildFilter
 {
+    /**
+     * @var string
+     */
+    protected $parentFilterClass = 'Oro\\Bundle\\GridBundle\\Filter\\ORM\\AbstractDateFilter';
+
     /**
      * @var AbstractDateFilter
      */

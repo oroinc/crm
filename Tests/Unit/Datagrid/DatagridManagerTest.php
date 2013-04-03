@@ -13,7 +13,6 @@ class DatagridManagerTest extends \PHPUnit_Framework_TestCase
      */
     const TEST_NAME                      = 'test_name';
     const TEST_HINT                      = 'test_hint';
-    const TEST_COMPLEX_FILTERABLE_FIELD  = 'test_complex_sortable_field';
     const TEST_FILTERABLE_SORTABLE_FIELD = 'test_filterable_sortable_field';
     const TEST_SORTABLE_FIELD            = 'test_sortable_field';
 
@@ -26,19 +25,15 @@ class DatagridManagerTest extends \PHPUnit_Framework_TestCase
      * @var array
      */
     protected $testFields = array(
-        self::TEST_COMPLEX_FILTERABLE_FIELD => array(
-            'option_1'     => 'value_1',
-            'filterable'   => 'true',
-            'complex_data' => true,
-            'field_name'   => self::TEST_COMPLEX_FILTERABLE_FIELD
-        ),
         self::TEST_SORTABLE_FIELD => array(
             'option_2' => 'value_2',
-            'sortable' => true),
+            'sortable' => true
+        ),
         self::TEST_FILTERABLE_SORTABLE_FIELD => array(
             'option_3'   => 'value_3',
             'filterable' => 'true',
-            'sortable'   => true),
+            'sortable'   => true
+        ),
         'simple_field' => array(
             'option_4' => 'value_4'
         ),
@@ -169,15 +164,11 @@ class DatagridManagerTest extends \PHPUnit_Framework_TestCase
             );
         }
 
-        $datagridManager = $this->getMockForAbstractClass(
-            'Oro\Bundle\GridBundle\Datagrid\DatagridManager',
-            array(),
-            '',
-            false,
-            true,
-            true,
-            $mockedMethods
-        );
+        $datagridManager = $this->getMockBuilder('Oro\Bundle\GridBundle\Datagrid\DatagridManager')
+            ->disableOriginalConstructor()
+            ->setMethods($mockedMethods)
+            ->getMockForAbstractClass();
+
         $datagridManager->expects($this->any())
             ->method('getListFields')
             ->will($this->returnValue($this->testFields));
@@ -271,19 +262,12 @@ class DatagridManagerTest extends \PHPUnit_Framework_TestCase
             ->method('createQuery')
             ->will($this->returnValue($queryMock));
 
-        $datagridBuilderMock = $this->getMockForAbstractClass(
-            'Oro\Bundle\GridBundle\Builder\DatagridBuilderInterface',
-            array(),
-            '',
-            false,
-            true,
-            true,
-            array('addComplexField', 'getBaseDatagrid', 'addFilter', 'addSorter', 'addRowAction')
-        );
-        $datagridBuilderMock->expects($this->once())
-            ->method('addComplexField')
-            ->with(self::TEST_COMPLEX_FILTERABLE_FIELD);
-        $datagridBuilderMock->expects($this->once())
+        $datagridBuilderMock = $this->getMockBuilder('Oro\Bundle\GridBundle\Builder\DatagridBuilderInterface')
+            ->setMethods(array('getBaseDatagrid', 'addFilter', 'addSorter', 'addRowAction'))
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+
+        $datagridBuilderMock->expects($this->at(0))
             ->method('getBaseDatagrid')
             ->with(
                 $queryMock,
@@ -294,25 +278,27 @@ class DatagridManagerTest extends \PHPUnit_Framework_TestCase
                 self::TEST_HINT
             )
             ->will($this->returnValue($datagridMock));
-        $datagridBuilderMock->expects($this->at(2))
+        $datagridBuilderMock->expects($this->at(1))
             ->method('addProperty')
             ->with($datagridMock, $this->testProperties[0]);
-        $datagridBuilderMock->expects($this->at(3))
-            ->method('addFilter')
-            ->with($datagridMock, $this->testFields[self::TEST_COMPLEX_FILTERABLE_FIELD]);
-        $datagridBuilderMock->expects($this->at(4))
+
+        $datagridBuilderMock->expects($this->at(2))
             ->method('addFilter')
             ->with($datagridMock, $this->testFields[self::TEST_FILTERABLE_SORTABLE_FIELD]);
-        $datagridBuilderMock->expects($this->at(5))
+
+        $datagridBuilderMock->expects($this->at(3))
             ->method('addSorter')
             ->with($datagridMock, $this->testFields[self::TEST_SORTABLE_FIELD]);
-        $datagridBuilderMock->expects($this->at(6))
+
+        $datagridBuilderMock->expects($this->at(4))
             ->method('addSorter')
             ->with($datagridMock, $this->testFields[self::TEST_FILTERABLE_SORTABLE_FIELD]);
-        $datagridBuilderMock->expects($this->at(7))
+
+        $datagridBuilderMock->expects($this->at(5))
             ->method('addRowAction')
             ->with($datagridMock, $this->testRowActions[1]);
-        $datagridBuilderMock->expects($this->at(8))
+
+        $datagridBuilderMock->expects($this->at(6))
             ->method('addRowAction')
             ->with($datagridMock, $this->testRowActions[2]);
 
@@ -361,7 +347,7 @@ class DatagridManagerTest extends \PHPUnit_Framework_TestCase
             false,
             true,
             true,
-            array('addComplexField', 'getBaseDatagrid', 'addFilter', 'addSorter', 'addRowAction')
+            array('getBaseDatagrid', 'addFilter', 'addSorter', 'addRowAction')
         );
         $datagridBuilderMock->expects($this->once())
             ->method('getBaseDatagrid')

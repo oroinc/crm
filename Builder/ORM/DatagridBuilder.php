@@ -41,11 +41,6 @@ class DatagridBuilder implements DatagridBuilderInterface
     protected $actionFactory;
 
     /**
-     * @var array
-     */
-    protected $complexFields = array();
-
-    /**
      * @var string
      */
     protected $className;
@@ -130,14 +125,6 @@ class DatagridBuilder implements DatagridBuilderInterface
     }
 
     /**
-     * @param string $field
-     */
-    public function addComplexField($field)
-    {
-        $this->complexFields[] = $field;
-    }
-
-    /**
      * @param ProxyQueryInterface $query
      * @param FieldDescriptionCollection $fieldCollection
      * @param RouteGeneratorInterface $routeGenerator
@@ -192,7 +179,6 @@ class DatagridBuilder implements DatagridBuilderInterface
     {
         $pager = new Pager();
         $pager->setQuery($query);
-        $pager->setComplexFields($this->complexFields);
         return $pager;
     }
 }
