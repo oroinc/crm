@@ -71,4 +71,14 @@ abstract class AbstractFilter extends AbstractORMFilter implements FilterInterfa
     {
         return $this->getOption('type', FieldDescriptionInterface::TYPE_TEXT);
     }
+
+    /**
+     * Filter type options
+     *
+     * @return array
+     */
+    public function getTypeOptions()
+    {
+        return array();
+    }
 }

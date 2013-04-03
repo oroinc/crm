@@ -41,6 +41,20 @@ OroApp.DatagridFilter = Backbone.View.extend({
     label: 'Input Label',
 
     /**
+     * Value that was confirmed and processed.
+     *
+     * @property {Object}
+     */
+    confirmedValue: {},
+
+    /**
+     * Empty value object
+     *
+     * @property {Object}
+     */
+    emptyValue: {},
+
+    /**
      * Enable filter
      *
      * @return {*}
@@ -94,6 +108,7 @@ OroApp.DatagridFilter = Backbone.View.extend({
      * @return {*}
      */
     reset: function() {
+        this.setValue(this.emptyValue);
         return this;
     },
 
@@ -117,23 +132,36 @@ OroApp.DatagridFilter = Backbone.View.extend({
     },
 
     /**
-     * Set filter parameters
+     * Compares current value with empty value
      *
-     * @deprecated
-     * @param {Object} parameters
-     * @return {*}
+     * @return {Boolean}
      */
-    setParameters: function(parameters) {
-        return this;
+    isEmpty: function() {
+        return this._looseObjectCompare(this.confirmedValue, this.emptyValue);
     },
 
     /**
-     * Get filter parameters
+     * Compare objects
      *
-     * @deprecated
-     * @return {Object}
+     * @param {*} obj1
+     * @param {*} obj2
+     * @return {*}
+     * @protected
      */
-    getParameters: function() {
-        return {};
+    _looseObjectCompare: function (obj1, obj2) {
+        for (var i in obj1) {
+            // both items are objects
+            if (_.isObject(obj1[i]) && _.isObject(obj2[i])) {
+                return this._looseObjectCompare(obj1[i], obj2[i]);
+            } else {
+                var equalsLoosely = (obj1[i] || '') == (obj2[i] || '');
+                var eitherNumber = _.isNumber(obj1[i]) || _.isNumber(obj2[i]);
+                var equalsNumbers = Number(obj1[i]) == Number(obj2[i]);
+                if (!(equalsLoosely || (eitherNumber && equalsNumbers))) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 });

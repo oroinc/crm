@@ -27,7 +27,7 @@ abstract class FlexibleDatagridManager extends DatagridManager
     protected static $typeMatches = array(
         AbstractAttributeType::BACKEND_TYPE_DATE => array(
             'field'  => FieldDescriptionInterface::TYPE_DATE,
-            'filter' => FilterInterface::TYPE_FLEXIBLE_STRING,
+            'filter' => FilterInterface::TYPE_FLEXIBLE_DATE,
         ),
         AbstractAttributeType::BACKEND_TYPE_DATETIME => array(
             'field'  => FieldDescriptionInterface::TYPE_DATETIME,

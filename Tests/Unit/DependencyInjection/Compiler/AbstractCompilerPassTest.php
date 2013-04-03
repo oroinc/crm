@@ -3,10 +3,7 @@
 namespace Oro\Bundle\GridBundle\Tests\Unit\DependencyInjection\Compiler;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Definition;
-
-use Oro\Bundle\GridBundle\DependencyInjection\Compiler\AddFilterTypeCompilerPass;
 
 abstract class AbstractCompilerPassTest extends \PHPUnit_Framework_TestCase
 {
@@ -63,11 +60,14 @@ abstract class AbstractCompilerPassTest extends \PHPUnit_Framework_TestCase
             switch ($name) {
                 case 'methodCalls':
                     foreach ($value as $method => $arguments) {
-                        $this->assertDefinitionHasMethodCall(
-                            $definition,
-                            $method,
-                            $arguments,
-                            $subjectName
+                        $this->assertDefinitionHasMethodCall($definition, $method, $arguments, $subjectName);
+                    }
+                    break;
+                case 'noMethodCalls':
+                    foreach ($value as $method) {
+                        $this->assertFalse(
+                            $definition->hasMethodCall($method),
+                            "$subjectName not expected to have method call '$method' arguments."
                         );
                     }
                     break;
@@ -82,11 +82,7 @@ abstract class AbstractCompilerPassTest extends \PHPUnit_Framework_TestCase
                     break;
                 default:
                     $method = 'get' . ucfirst($name);
-                    $this->assertEquals(
-                        $value,
-                        $definition->$method(),
-                        "$subjectName does not have expected $name."
-                    );
+                    $this->assertEquals($value, $definition->$method(), "$subjectName does not have expected $name.");
             }
         }
     }
@@ -94,19 +90,19 @@ abstract class AbstractCompilerPassTest extends \PHPUnit_Framework_TestCase
     /**
      * Asserts definition has expected method call with arguments
      *
-     * @param Definition $defintion
+     * @param Definition $definition
      * @param string $method
      * @param array $expectedArguments
      * @param string $subjectName
      */
     private function assertDefinitionHasMethodCall(
-        Definition $defintion,
+        Definition $definition,
         $method,
         array $expectedArguments,
         $subjectName = 'Definition'
     ) {
         $callFound = false;
-        foreach ($defintion->getMethodCalls() as $call) {
+        foreach ($definition->getMethodCalls() as $call) {
             list($actualMethod, $actualArguments) = $call;
             if ($method == $actualMethod) {
                 $this->assertEquals(

@@ -34,36 +34,17 @@ class FlexibleNumberFilter extends AbstractFlexibleFilter
     }
 
     /**
-     * @param string $type
+     * Flexible number filter operator
      *
-     * @return bool
+     * @param string $type
+     * @return string
      */
     public function getOperator($type)
     {
-        return $this->parentFilter->getOperator($type);
-    }
+        if ($this->parentFilter) {
+            return $this->parentFilter->getOperator($type);
+        }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getDefaultOptions()
-    {
-        return $this->parentFilter->getDefaultOptions();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getRenderSettings()
-    {
-        return $this->parentFilter->getRenderSettings();
-    }
-
-    /**
-     * @return array
-     */
-    public function getTypeOptions()
-    {
-        return $this->parentFilter->getTypeOptions();
+        return null;
     }
 }
