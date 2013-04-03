@@ -151,7 +151,7 @@ class UserDatagridManager extends FlexibleDatagridManager
                 $field->setOptions(
                     array(
                         'type'          => $attributeType,
-                        'label'         => $attribute->getCode(),
+                        'label'         => ucfirst($attribute->getCode()),
                         'field_name'    => $attribute->getCode(),
                         'filter_type'   => $filterType,
                         'required'      => false,
@@ -212,6 +212,31 @@ class UserDatagridManager extends FlexibleDatagridManager
     protected function getListFields()
     {
         return $this->getFieldDescriptionCollection()->getElements();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getFilters()
+    {
+        $hiddenFilterTypes = array(
+            FilterInterface::TYPE_DATE,
+            FilterInterface::TYPE_DATETIME,
+            FilterInterface::TYPE_FLEXIBLE_DATE,
+            FilterInterface::TYPE_FLEXIBLE_DATETIME
+        );
+
+        $fields = array();
+        /** @var $fieldDescription FieldDescription */
+        foreach ($this->getFieldDescriptionCollection() as $fieldDescription) {
+            if ($fieldDescription->isFilterable()
+                && !in_array($fieldDescription->getOption('filter_type'), $hiddenFilterTypes)
+            ) {
+                $fields[] = $fieldDescription;
+            }
+        }
+
+        return $fields;
     }
 
     /**
