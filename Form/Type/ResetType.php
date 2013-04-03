@@ -30,7 +30,7 @@ class ResetType extends AbstractType
             'type'            => 'password',
             'required'        => true,
             'first_options'   => array('label' => 'Password'),
-            'second_options'  => array('label' => 'Password again'),
+            'second_options'  => array('label' => 'Again'),
         ));
     }
 
