@@ -126,7 +126,7 @@ abstract class AbstractEntityFlexibleValue extends AbstractFlexibleValue
     /**
      * Store simple option value
      *
-     * @var Media $media
+     * @var Oro\Bundle\FlexibleEntityBundle\Entity\AttributeOption $option
      *
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\FlexibleEntityBundle\Entity\AttributeOption", cascade="persist")
      * @ORM\JoinColumn(name="option_id", referencedColumnName="id", onDelete="SET NULL")
