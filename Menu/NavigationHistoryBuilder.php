@@ -7,6 +7,8 @@ use Knp\Menu\Matcher\Matcher;
 
 class NavigationHistoryBuilder extends NavigationItemBuilder
 {
+    const DEFAULT_MAX_RESULTS = 20;
+
     /**
      * @var Marcher
      */
@@ -21,6 +23,9 @@ class NavigationHistoryBuilder extends NavigationItemBuilder
      */
     public function build(ItemInterface $menu, array $options = array(), $alias = null)
     {
+        $maxItems = isset($options['maxItems']) ? (int)$options['maxItems'] : self::DEFAULT_MAX_ITEMS;
+        $options['maxItems'] = $maxItems + 1;
+
         parent::build($menu, $options, $alias);
 
         $children = $menu->getChildren();
@@ -32,7 +37,7 @@ class NavigationHistoryBuilder extends NavigationItemBuilder
             }
         }
 
-        $menu->slice(0, 20);
+        $menu->slice(0, $maxItems);
     }
 
     /**

@@ -50,16 +50,16 @@ class NavigationHistoryItem implements NavigationItemInterface
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="created_at", type="datetime")
+     * @ORM\Column(name="visited_at", type="datetime")
      */
-    protected $createdAt;
+    protected $visitedAt;
 
     /**
-     * @var \DateTime
+     * @var \int
      *
-     * @ORM\Column(name="updated_at", type="datetime")
+     * @ORM\Column(name="visit_count", type="integer")
      */
-    protected $updatedAt;
+    protected $visitCount = 0;
 
     /**
      * Constructor
@@ -128,49 +128,49 @@ class NavigationHistoryItem implements NavigationItemInterface
     }
 
     /**
-     * Set createdAt
+     * Set visitedAt
      *
-     * @param \DateTime $createdAt
+     * @param \DateTime $visitedAt
      * @return PinbarTab
      */
-    public function setCreatedAt($createdAt)
+    public function setVisitedAt($visitedAt)
     {
-        $this->createdAt = $createdAt;
+        $this->visitedAt = $visitedAt;
 
         return $this;
     }
 
     /**
-     * Get createdAt
+     * Get visitedAt
      *
      * @return \DateTime
      */
-    public function getCreatedAt()
+    public function getVisitedAt()
     {
-        return $this->createdAt;
+        return $this->visitedAt;
     }
 
     /**
-     * Set updatedAt
+     * Set visitCount
      *
-     * @param \DateTime $updatedAt
+     * @param \DateTime $visitCount
      * @return PinbarTab
      */
-    public function setUpdatedAt($updatedAt)
+    public function setVisitCount($visitCount)
     {
-        $this->updatedAt = $updatedAt;
+        $this->visitCount = $visitCount;
 
         return $this;
     }
 
     /**
-     * Get updatedAt
+     * Get visitedAt
      *
      * @return \DateTime
      */
-    public function getUpdatedAt()
+    public function getVisitCount()
     {
-        return $this->updatedAt;
+        return $this->visitCount;
     }
 
     /**
@@ -221,8 +221,7 @@ class NavigationHistoryItem implements NavigationItemInterface
      */
     public function doPrePersist()
     {
-        $this->createdAt = new \DateTime();
-        $this->updatedAt = $this->createdAt;
+        $this->visitedAt = new \DateTime();
     }
 
     /**
@@ -232,6 +231,7 @@ class NavigationHistoryItem implements NavigationItemInterface
      */
     public function doPreUpdate()
     {
-        $this->updatedAt = new \DateTime();
+        $this->visitedAt = new \DateTime();
+        $this->visitCount++;
     }
 }

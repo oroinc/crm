@@ -50,7 +50,6 @@ class Configuration implements ConfigurationInterface
                     ->scalarNode('block')->end()
                     ->scalarNode('rootClass')->end()
                     ->scalarNode('isDropdown')->end()
-                    ->scalarNode('maxResults')->end()
                 ->end()
             ->end()
         ->end()

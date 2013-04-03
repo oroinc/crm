@@ -55,7 +55,6 @@ class ResponseHistoryListener
         }
 
         $postArray = array(
-            'title'    => $title,
             'url'      => $request->getRequestUri(),
             'user'     => $this->user,
         );
@@ -69,6 +68,11 @@ class ResponseHistoryListener
                 $postArray
             );
         }
+
+        $historyItem->setTitle($title);
+
+        // force update
+        $historyItem->doPreUpdate();
 
         $this->em->persist($historyItem);
         $this->em->flush();

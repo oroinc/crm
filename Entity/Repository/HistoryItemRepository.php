@@ -11,38 +11,17 @@ use Doctrine\ORM\Query\Expr;
  */
 class HistoryItemRepository extends EntityRepository implements NavigationRepositoryInterface
 {
-    const DEFAULT_MAX_RESULTS = 20;
-
-    private $config = array();
-
-    /**
-     * Setter for config
-     *
-     * @param $config
-     * @return $this
-     */
-    public function setConfig($config)
-    {
-        $this->config = $config;
-
-        return $this;
-    }
-
     /**
      * Find all Favorite items for specified user
      *
      * @param \Oro\Bundle\UserBundle\Entity\User $user
      * @param string $type
+     * @param array $options
      *
      * @return array
      */
-    public function getNavigationItems($user, $type = null)
+    public function getNavigationItems($user, $type = null, $options = array())
     {
-        $maxResults = isset($this->config['templates'][$type]['maxResults'])
-                        ? $this->config['templates'][$type]['maxResults']
-                        : self::DEFAULT_MAX_RESULTS;
-        $maxResults++;
-
         $qb = $this->_em->createQueryBuilder();
 
         $qb->add(
@@ -60,8 +39,8 @@ class HistoryItemRepository extends EntityRepository implements NavigationReposi
                 'where',
                 $qb->expr()->eq('ni.user', ':user')
             )
-            ->add('orderBy', new Expr\OrderBy('ni.updatedAt', 'DESC'))
-            ->setMaxResults($maxResults)
+            ->add('orderBy', new Expr\OrderBy('ni.visitedAt', 'DESC'))
+            ->setMaxResults($options['maxItems'])
             ->setParameters(array('user' => $user));
 
         return $qb->getQuery()->getArrayResult();
