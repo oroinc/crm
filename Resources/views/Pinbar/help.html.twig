@@ -1,7 +1,8 @@
 {% extends bap.layout %}
 
 {% block title %}{% trans %}How to use Pinbar{% endtrans %}{% endblock %}
-
+{% block page_container %}
+<div class="container-fluid">
 {% block content %}
     <div class="clearfix">
 
@@ -12,4 +13,6 @@
         </p>
 
     </div>
+{% endblock %}
+</div>
 {% endblock %}
