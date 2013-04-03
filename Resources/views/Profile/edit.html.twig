@@ -28,7 +28,7 @@
                         {% endif %}
                     </div>
                 </div>
-                <div class="span9 ">
+                <div class="pull-left">
                     <div class="customer-info well-small">
                         {% set format = get_user_value('oro_user.name_format') %}
                         <div class="visual"><img src="{{ form.vars.value.imagePath ? form.vars.value.imagePath | imagine_filter('avatar_med') : asset('bundles/oroui/img/info-usser.png') }}" alt="{{ form.vars.value.fullname(format) }}"/></div>
