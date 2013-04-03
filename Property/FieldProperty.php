@@ -69,6 +69,11 @@ class FieldProperty extends AbstractProperty
             return $value;
         }
 
+        // TODO : to fix the case where $value is a flexible value
+        if (is_object($value) && is_callable(array($value, '__toString'))) {
+            $value = $value->__toString();
+        }
+
         switch ($this->getFieldType()) {
             case FieldDescriptionInterface::TYPE_DATETIME:
             case FieldDescriptionInterface::TYPE_DATE:
