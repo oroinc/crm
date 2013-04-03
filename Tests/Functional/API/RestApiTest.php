@@ -4,8 +4,7 @@ namespace Oro\Bundle\WindowsBundle\Tests\Functional\API;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Yaml\Yaml;
-use Symfony\Component\Finder\Iterator;
+use Acme\Bundle\TestsBundle\Test\ToolsAPI;
 
 class RestApiTest extends WebTestCase
 {
@@ -21,7 +20,7 @@ class RestApiTest extends WebTestCase
 
     public function setUp()
     {
-        $this->client = static::createClient();
+        $this->client = static::createClient(array(), ToolsAPI::generateBasicHeader());
     }
 
     protected function tearDown()
@@ -43,10 +42,8 @@ class RestApiTest extends WebTestCase
 
         $this->client->request(
             'POST',
-            "api/rest/latest/windows",
-            self::$entity,
-            array(),
-            array('PHP_AUTH_USER' => self::AUTH_USER, 'PHP_AUTH_PW' => self::AUTH_PW)
+            "http://localhost/api/rest/latest/windows",
+            self::$entity
         );
 
         /** @var $result Response */
@@ -75,9 +72,7 @@ class RestApiTest extends WebTestCase
         $this->client->request(
             'PUT',
             "api/rest/latest/windows/" . self::$entity['id'],
-            self::$entity,
-            array(),
-            array('PHP_AUTH_USER' => self::AUTH_USER, 'PHP_AUTH_PW' => self::AUTH_PW)
+            self::$entity
         );
 
         /** @var $result Response */
@@ -100,10 +95,7 @@ class RestApiTest extends WebTestCase
 
         $this->client->request(
             'GET',
-            "api/rest/latest/windows",
-            array(),
-            array(),
-            array('PHP_AUTH_USER' => self::AUTH_USER, 'PHP_AUTH_PW' => self::AUTH_PW)
+            "api/rest/latest/windows"
         );
 
         /** @var $result Response */
@@ -126,10 +118,7 @@ class RestApiTest extends WebTestCase
 
         $this->client->request(
             'DELETE',
-            "api/rest/latest/windows/" . self::$entity['id'],
-            array(),
-            array(),
-            array('PHP_AUTH_USER' => self::AUTH_USER, 'PHP_AUTH_PW' => self::AUTH_PW)
+            "api/rest/latest/windows/" . self::$entity['id']
         );
 
         /** @var $result Response */
@@ -151,9 +140,7 @@ class RestApiTest extends WebTestCase
         $this->client->request(
             'PUT',
             "api/rest/latest/windows/" . self::$entity['id'],
-            self::$entity,
-            array(),
-            array('PHP_AUTH_USER' => self::AUTH_USER, 'PHP_AUTH_PW' => self::AUTH_PW)
+            self::$entity
         );
         /** @var $result Response */
         $result = $this->client->getResponse();
@@ -163,10 +150,7 @@ class RestApiTest extends WebTestCase
 
         $this->client->request(
             'DELETE',
-            "api/rest/latest/windows/" . self::$entity['id'],
-            array(),
-            array(),
-            array('PHP_AUTH_USER' => self::AUTH_USER, 'PHP_AUTH_PW' => self::AUTH_PW)
+            "api/rest/latest/windows/" . self::$entity['id']
         );
         /** @var $result Response */
         $result = $this->client->getResponse();
@@ -195,7 +179,7 @@ class RestApiTest extends WebTestCase
                 $url,
                 array(),
                 array(),
-                array()
+                array('PHP_AUTH_USER' => null, 'PHP_AUTH_PW' => null)
             );
             /** @var $result Response */
             $response = $this->client->getResponse();
@@ -222,10 +206,7 @@ class RestApiTest extends WebTestCase
         foreach ($requests as $requestType => $url) {
             $this->client->request(
                 $requestType,
-                $url,
-                array(),
-                array(),
-                array('PHP_AUTH_USER' => self::AUTH_USER, 'PHP_AUTH_PW' => self::AUTH_PW)
+                $url
             );
 
             /** @var $response Response */
