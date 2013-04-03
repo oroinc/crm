@@ -24,6 +24,16 @@ class UserSoap extends User
     protected $email;
 
     /**
+     * @Soap\ComplexType("string")
+     */
+    protected $firstName;
+
+    /**
+     * @Soap\ComplexType("string")
+     */
+    protected $lastName;
+
+    /**
      * @Soap\ComplexType("boolean")
      */
     protected $enabled = true;
