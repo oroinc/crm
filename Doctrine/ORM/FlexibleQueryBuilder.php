@@ -132,6 +132,7 @@ class FlexibleQueryBuilder extends QueryBuilder
             AbstractAttributeType::BACKEND_TYPE_DECIMAL  => array('=', '<', '<=', '>', '>='),
             AbstractAttributeType::BACKEND_TYPE_INTEGER  => array('=', '<', '<=', '>', '>='),
             AbstractAttributeType::BACKEND_TYPE_OPTION   => array('IN', 'NOT IN'),
+            AbstractAttributeType::BACKEND_TYPE_OPTIONS  => array('IN', 'NOT IN'),
             AbstractAttributeType::BACKEND_TYPE_TEXT     => array('=', 'NOT LIKE', 'LIKE'),
             AbstractAttributeType::BACKEND_TYPE_VARCHAR  => array('=', 'NOT LIKE', 'LIKE'),
         );
@@ -250,7 +251,8 @@ class FlexibleQueryBuilder extends QueryBuilder
 
         $joinAlias = 'filter'.$attribute->getCode().$this->aliasCounter++;
 
-        if ($attribute->getBackendType() == AbstractAttributeType::BACKEND_TYPE_OPTION) {
+        if ($attribute->getBackendType() == AbstractAttributeType::BACKEND_TYPE_OPTIONS
+            or $attribute->getBackendType() == AbstractAttributeType::BACKEND_TYPE_OPTION) {
 
             // inner join to value
             $condition = $this->prepareAttributeJoinCondition($attribute, $joinAlias);
@@ -260,7 +262,7 @@ class FlexibleQueryBuilder extends QueryBuilder
             $joinAliasOpt = 'filterO'.$attribute->getCode().$this->aliasCounter;
             $backendField = sprintf('%s.%s', $joinAliasOpt, 'id');
             $condition = $this->prepareCriteriaCondition($backendField, $operator, $value);
-            $this->innerJoin($joinAlias.'.options', $joinAliasOpt, 'WITH', $condition);
+            $this->innerJoin($joinAlias.'.'.$attribute->getBackendType(), $joinAliasOpt, 'WITH', $condition);
 
         } else {
 
@@ -285,7 +287,8 @@ class FlexibleQueryBuilder extends QueryBuilder
         $aliasPrefix = 'sorter';
         $joinAlias   = $aliasPrefix.'V'.$attribute->getCode().$this->aliasCounter++;
 
-        if ($attribute->getBackendType() == AbstractAttributeType::BACKEND_TYPE_OPTION) {
+        if ($attribute->getBackendType() == AbstractAttributeType::BACKEND_TYPE_OPTIONS
+            or $attribute->getBackendType() == AbstractAttributeType::BACKEND_TYPE_OPTION) {
 
             // join to value
             $condition = $this->prepareAttributeJoinCondition($attribute, $joinAlias);
@@ -294,7 +297,7 @@ class FlexibleQueryBuilder extends QueryBuilder
             // then to option and option value to sort on
             $joinAliasOpt = $aliasPrefix.'O'.$attribute->getCode().$this->aliasCounter;
             $condition    = $joinAliasOpt.".attribute = ".$attribute->getId();
-            $this->leftJoin($joinAlias.'.options', $joinAliasOpt, 'WITH', $condition);
+            $this->leftJoin($joinAlias.'.'.$attribute->getBackendType(), $joinAliasOpt, 'WITH', $condition);
 
             $joinAliasOptVal = $aliasPrefix.'OV'.$attribute->getCode().$this->aliasCounter;
             $condition       = $joinAliasOptVal.'.locale = '.$this->expr()->literal($this->getLocale());

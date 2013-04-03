@@ -145,13 +145,14 @@ class FlexibleQueryBuilderTest extends AbstractOrmTest
      * @param string       $field    the backend field name
      * @param string       $operator the operator used to filter
      * @param string|array $value    the value(s) to filter
+     * @param string       $expected the expected result
      *
      * @dataProvider criteriaProvider
      */
-    public function testPrepareCriteriaCondition($field, $operator, $value, $expectedStrResult)
+    public function testPrepareCriteriaCondition($field, $operator, $value, $expected)
     {
         $result = $this->queryBuilder->prepareCriteriaCondition($field, $operator, $value);
-        $this->assertEquals($result, $expectedStrResult);
+        $this->assertEquals($result, $expected);
     }
 
     /**

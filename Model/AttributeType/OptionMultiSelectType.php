@@ -21,7 +21,6 @@ class OptionMultiSelectType extends AbstractOptionType
     {
         parent::__construct();
         $this->name      = 'Multi-options (select)';
-        $this->fieldName = 'options';
     }
 
     /**

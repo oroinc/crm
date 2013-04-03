@@ -2,7 +2,6 @@
 namespace Oro\Bundle\FlexibleEntityBundle\Entity\Mapping;
 
 use Symfony\Component\HttpFoundation\File\File;
-
 use Oro\Bundle\FlexibleEntityBundle\Model\AbstractFlexible;
 use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttribute;
 use Oro\Bundle\FlexibleEntityBundle\Model\AbstractFlexibleValue;
@@ -31,13 +30,15 @@ abstract class AbstractEntityFlexibleValue extends AbstractFlexibleValue
     /**
      * @var Attribute $attribute
      *
-     * @ORM\ManyToOne(targetEntity="AbstractEntityAttribute")
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\FlexibleEntityBundle\Entity\Attribute")
      * @ORM\JoinColumn(name="attribute_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected $attribute;
 
     /**
      * @var Entity $entity
+     *
+     * This field must by overrided in concret value class 
      *
      * @ORM\ManyToOne(targetEntity="AbstractEntityFlexible", inversedBy="values")
      */
@@ -58,22 +59,6 @@ abstract class AbstractEntityFlexibleValue extends AbstractFlexibleValue
      * @ORM\Column(name="scope_code", type="string", length=20, nullable=true)
      */
     protected $scope;
-
-    /**
-     * Currency code
-     * @var string $currency
-     *
-     * @ORM\Column(name="currency_code", type="string", length=5, nullable=true)
-     */
-    protected $currency;
-
-    /**
-     * Unit code
-     * @var string $unit
-     *
-     * @ORM\Column(name="unit_code", type="string", length=5, nullable=true)
-     */
-    protected $unit;
 
     /**
      * Store varchar value
@@ -117,23 +102,36 @@ abstract class AbstractEntityFlexibleValue extends AbstractFlexibleValue
 
     /**
      * Store datetime value
-     * @var string $datetime
+     * @var date $datetime
      *
      * @ORM\Column(name="value_datetime", type="datetime", nullable=true)
      */
     protected $datetime;
 
     /**
-     * Store options values
+     * Store many options values
+     *
+     * This field must by overrided in concret value class 
+     *
      * @var options ArrayCollection
      *
-     * @ORM\ManyToMany(targetEntity="AbstractEntityAttributeOption")
+     * @ORM\ManyToMany(targetEntity="Oro\Bundle\FlexibleEntityBundle\Entity\AttributeOption")
      * @ORM\JoinTable(name="oro_flexibleentity_values_options",
      *      joinColumns={@ORM\JoinColumn(name="value_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="option_id", referencedColumnName="id")}
      * )
      */
     protected $options;
+
+    /**
+     * Store simple option value
+     *
+     * @var Oro\Bundle\FlexibleEntityBundle\Entity\AttributeOption $option
+     *
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\FlexibleEntityBundle\Entity\AttributeOption", cascade="persist")
+     * @ORM\JoinColumn(name="option_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    protected $option;
 
     /**
      * Store upload values
@@ -144,6 +142,26 @@ abstract class AbstractEntityFlexibleValue extends AbstractFlexibleValue
      * @ORM\JoinColumn(name="media_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $media;
+
+    /**
+     * Store metric value
+     * 
+     * @var Metric $metric 
+     *
+     * @ORM\OneToOne(targetEntity="Oro\Bundle\FlexibleEntityBundle\Entity\Metric", cascade="persist")
+     * @ORM\JoinColumn(name="metric_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    protected $metric;
+
+    /**
+     * Store price value
+     * 
+     * @var Price $price 
+     *
+     * @ORM\OneToOne(targetEntity="Oro\Bundle\FlexibleEntityBundle\Entity\Price", cascade="persist")
+     * @ORM\JoinColumn(name="price_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    protected $price;
 
     /**
      * Constructor
@@ -176,50 +194,179 @@ abstract class AbstractEntityFlexibleValue extends AbstractFlexibleValue
      */
     public function setData($data)
     {
-        parent::setData($data);
-        $backend = $this->attribute->getBackendType();
-        $this->$backend = $data;
+        $name = 'set'.ucfirst($this->attribute->getBackendType());
 
-        return $this;
+        return $this->$name($data);
     }
 
     /**
      * Get data
      *
-     * @return string
+     * @return mixed
      */
     public function getData()
     {
-        $backend = $this->attribute->getBackendType();
-        $data    = $this->$backend;
-        // deal with one to many or many to many backend
-        if ($data instanceof \Doctrine\ORM\PersistentCollection) {
-            if (count($data) <= 1) {
-                // one to many
-                return $data->current();
-            } else {
-                // many to many
-                $items = array();
-                foreach ($data as $item) {
-                    $items[]= $item->__toString();
-                }
+        $name = 'get'.ucfirst($this->attribute->getBackendType());
 
-                return implode(', ', $items);
-            }
-        }
+        return $this->$name();
+    }
 
-        return $data;
+    /**
+     * Get varchar data
+     *
+     * @return string
+     */
+    public function getVarchar()
+    {
+        return $this->varchar;
+    }
+
+    /**
+     * Set varchar data
+     *
+     * @param string $varchar
+     *
+     * @return EntityAttributeValue
+     */
+    public function setVarchar($varchar)
+    {
+        $this->varchar = $varchar;
+
+        return $this;
+    }
+
+    /**
+     * Get integer data
+     *
+     * @return integer
+     */
+    public function getInteger()
+    {
+        return $this->integer;
+    }
+
+    /**
+     * Set integer data
+     *
+     * @param integer $integer
+     *
+     * @return EntityAttributeValue
+     */
+    public function setInteger($integer)
+    {
+        $this->integer = $integer;
+
+        return $this;
+    }
+
+    /**
+     * Get decimal data
+     *
+     * @return double
+     */
+    public function getDecimal()
+    {
+        return $this->decimal;
+    }
+
+    /**
+     * Set decimal data
+     *
+     * @param double $decimal
+     *
+     * @return EntityAttributeValue
+     */
+    public function setDecimal($decimal)
+    {
+        $this->decimal = $decimal;
+
+        return $this;
+    }
+
+    /**
+     * Get text data
+     *
+     * @return string
+     */
+    public function getText()
+    {
+        return $this->text;
+    }
+
+    /**
+     * Set text data
+     *
+     * @param string $text
+     *
+     * @return EntityAttributeValue
+     */
+    public function setText($text)
+    {
+        $this->text = $text;
+
+        return $this;
+    }
+
+    /**
+     * Get date data
+     *
+     * @return date
+     */
+    public function getDate()
+    {
+        return $this->date;
+    }
+
+    /**
+     * Set date data
+     *
+     * @param date $date
+     *
+     * @return EntityAttributeValue
+     */
+    public function setDate($date)
+    {
+        $this->date = $date;
+
+        return $this;
+    }
+
+    /**
+     * Get datetime data
+     *
+     * @return datetime
+     */
+    public function getDatetime()
+    {
+        return $this->datetime;
+    }
+
+    /**
+     * Set datetime data
+     *
+     * @param datetime $datetime
+     *
+     * @return EntityAttributeValue
+     */
+    public function setDatetime($datetime)
+    {
+        $this->datetime = $datetime;
+
+        return $this;
     }
 
     /**
      * Set option, used for simple select to set single option
      *
      * @param AbstractEntityAttributeOption $option
+     *
+     * @return AbstractEntityFlexibleValue
      */
     public function setOption(AbstractEntityAttributeOption $option)
     {
-        $this->options->clear();
-        $this->options[] = $option;
+        $this->option = $option;
+
+        return $this;
     }
 
     /**
@@ -229,7 +376,31 @@ abstract class AbstractEntityFlexibleValue extends AbstractFlexibleValue
      */
     public function getOption()
     {
-        return $this->options->first();
+        return $this->option;
+    }
+
+    /**
+     * Get options, used for multi select to retrieve many options
+     *
+     * @return array
+     */
+    public function getOptions()
+    {
+        return $this->options;
+    }
+
+    /**
+     * Set options, used for multi select to retrieve many options
+     *
+     * @param ArrayCollection $options
+     *
+     * @return AbstractEntityFlexibleValue
+     */
+    public function setOptions($options)
+    {
+        $this->options = $options;
+
+        return $this;
     }
 
     /**
@@ -244,52 +415,6 @@ abstract class AbstractEntityFlexibleValue extends AbstractFlexibleValue
         $this->options[] = $option;
 
         return $this;
-    }
-
-    /**
-     * Get options, used for multi select to retrieve many options
-     *
-     * @return array
-     */
-    public function getOptions()
-    {
-        return $this->options;
-    }
-
-    /**
-     * Get used currency
-     * @return string $currency
-     */
-    public function getCurrency()
-    {
-        return $this->currency;
-    }
-
-    /**
-     * Set used currency
-     * @param string $currency
-     */
-    public function setCurrency($currency)
-    {
-        $this->currency = $currency;
-    }
-
-    /**
-     * Get used unit
-     * @return string $unit
-     */
-    public function getUnit()
-    {
-        return $this->unit;
-    }
-
-    /**
-     * Set used unit
-     * @param string $unit
-     */
-    public function setUnit($unit)
-    {
-        $this->unit = $unit;
     }
 
     /**
@@ -314,5 +439,80 @@ abstract class AbstractEntityFlexibleValue extends AbstractFlexibleValue
         $this->media = $media;
 
         return $this;
+    }
+
+    /**
+     * Get metric
+     *
+     * @return Metric
+     */
+    public function getMetric()
+    {
+        return $this->metric;
+    }
+
+    /**
+     * Set metric
+     *
+     * @param Metric $metric
+     *
+     * @return AbstractEntityFlexibleValue
+     */
+    public function setMetric($metric)
+    {
+        $this->metric = $metric;
+
+        return $this;
+    }
+
+    /**
+     * Get price
+     *
+     * @return Price
+     */
+    public function getPrice()
+    {
+        return $this->price;
+    }
+
+    /**
+     * Set price
+     *
+     * @param Price $price
+     *
+     * @return AbstractEntityFlexibleValue
+     */
+    public function setPrice($price)
+    {
+        $this->price = $price;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function __toString()
+    {
+        $data = $this->getData();
+
+        if ($data instanceof \DateTime) {
+            $data = $data->format(\DateTime::ISO8601);
+        }
+
+        if ($data instanceof \Doctrine\Common\Collections\Collection) {
+            $items = array();
+            foreach ($data as $item) {
+                $items[]= $item->__toString();
+            }
+
+            return implode(', ', $items);
+
+        } else if (is_object($data)) {
+
+            return $data->__toString();
+        }
+
+        return $data;
     }
 }

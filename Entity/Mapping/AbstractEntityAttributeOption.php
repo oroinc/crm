@@ -148,7 +148,6 @@ abstract class AbstractEntityAttributeOption extends AbstractAttributeOption
         return $this->defaultValue;
     }
 
-
     /**
      * To string
      *

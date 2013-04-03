@@ -21,7 +21,6 @@ class OptionMultiCheckboxType extends AbstractOptionType
     {
         parent::__construct();
         $this->name      = 'Multi-options (checkbox)';
-        $this->fieldName = 'options';
     }
 
     /**

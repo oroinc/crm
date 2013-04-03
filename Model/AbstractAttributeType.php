@@ -11,29 +11,33 @@ namespace Oro\Bundle\FlexibleEntityBundle\Model;
  */
 abstract class AbstractAttributeType
 {
-
     /**
-     * Available backend storage
+     * Available backend storage, the flexible doctrine mapped field
      * @var string
      */
     const BACKEND_STORAGE_ATTRIBUTE_VALUE = 'values';
-    const BACKEND_STORAGE_FLAT_VALUE      = 'flatValues';
 
     /**
-     * Available backend types
+     * Available backend types, the value doctrine mapped field
      * @var string
      */
     const BACKEND_TYPE_DATE     = 'date';
     const BACKEND_TYPE_DATETIME = 'datetime';
     const BACKEND_TYPE_DECIMAL  = 'decimal';
     const BACKEND_TYPE_INTEGER  = 'integer';
-    const BACKEND_TYPE_OPTION   = 'options';
+    const BACKEND_TYPE_OPTIONS  = 'options';
+    const BACKEND_TYPE_OPTION   = 'option';
     const BACKEND_TYPE_TEXT     = 'text';
     const BACKEND_TYPE_VARCHAR  = 'varchar';
     const BACKEND_TYPE_MEDIA    = 'media';
+    const BACKEND_TYPE_METRIC   = 'metric';
+    const BACKEND_TYPE_PRICE    = 'price';
 
     /**
      * Classes for AttributeType
+     *
+     * TODO : Avoid to hardcode basic types here !
+     *
      * @staticvar string
      */
     const TYPE_DATE_CLASS              = 'Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\DateType';
@@ -61,18 +65,11 @@ abstract class AbstractAttributeType
     protected $name;
 
     /**
-     * Field backend type, "varchar" by default
+     * Field backend type, "varchar" by default, the doctrine mapping field, getter / setter to use for binding
      *
      * @var string
      */
     protected $backendType = self::BACKEND_TYPE_VARCHAR;
-
-    /**
-     * Field type alias, "data" by default, mapped by attribute property or getter/setter
-     *
-     * @var string
-     */
-    protected $fieldName = 'data';
 
     /**
      * Form type alias, "text" by default
@@ -99,16 +96,6 @@ abstract class AbstractAttributeType
     public function getBackendType()
     {
         return $this->backendType;
-    }
-
-    /**
-     * Get field name
-     *
-     * @return string
-     */
-    public function getFieldName()
-    {
-        return $this->fieldName;
     }
 
     /**

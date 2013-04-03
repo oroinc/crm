@@ -51,40 +51,21 @@ class AddValueFieldSubscriber implements EventSubscriberInterface
     {
         $value = $event->getData();
         $form = $event->getForm();
-        // skip form creation with no value
+
+        // skip form creation with no data
         if (null === $value) {
             return;
         }
 
-        // prepare basic configuration
-        $attribute = $value->getAttribute();
-        $options = array('property_path' => true,);
+        $attribute          = $value->getAttribute();
+        $attributeTypeClass = $attribute->getAttributeType();
+        $attributeType      = new $attributeTypeClass();
 
-        // get attribute type
-        $attTypeClass = $attribute->getAttributeType();
-        $attType = new $attTypeClass();
+        $formName    = $attribute->getBackendType();
+        $formType    = $attributeType->getFormType();
+        $formOptions = $attributeType->prepareFormOptions($attribute);
+        $data        = is_null($value->getData()) ? $attribute->getDefaultValue() : $value->getData();
 
-        // merge with attribute type configuration
-        $fieldName   = $attType->getFieldName();
-        $formType    = $attType->getFormType();
-        $formOptions = array_merge($options, $attType->prepareFormOptions($attribute));
-
-        // prepare current value
-        if ($fieldName == 'option') {
-            $data = $value->getOption();
-        } elseif ($fieldName == 'options') {
-            $data = $value->getOptions();
-        } elseif ($fieldName == 'media') {
-            $data = $value->getMedia();
-        } else {
-            $data = $value->getData();
-        }
-
-        // get default value if null
-        $data = is_null($data) ? $attribute->getDefaultValue() : $data;
-
-        $form->add(
-            $this->factory->createNamed($fieldName, $formType, $data, $formOptions)
-        );
+        $form->add($this->factory->createNamed($formName, $formType, $data, $formOptions));
     }
 }

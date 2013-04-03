@@ -56,7 +56,7 @@ class Customer extends AbstractEntityFlexible
 
 Then we have to define customer attribute value entity, extends basic one which contains mapping.
 
-We define mapping to basic entity attribute, to basic option (for attribute of list type) and to our customer entity.
+We define mapping to basic entity attribute and to our customer entity.
 ```php
 <?php
 namespace Acme\Bundle\DemoFlexibleEntityBundle\Entity;
@@ -84,7 +84,18 @@ class CustomerValue extends AbstractEntityFlexibleValue
      * @ORM\ManyToOne(targetEntity="Customer", inversedBy="values")
      */
     protected $entity;
+}
+```
 
+We inherit some basic backend types for value, as varchar, text, integer, decimal, datetime, etc, which are in fact fields of a value.
+
+If you want use more complex attributes as list, media, metric related to a unit, a price related to a currency, you need to define mapping to advanced backend entity. 
+
+You can also define your own backend type, the attribute backend type is used to know what getter / setter use to bind the value data.
+
+For instance, to use a list of options as backend, add the following mapping in your value class :
+
+```php
     /**
      * Custom backend type to store options and theirs values
      *
@@ -97,8 +108,13 @@ class CustomerValue extends AbstractEntityFlexibleValue
      * )
      */
     protected $options;
-}
 ```
+
+And related getter / setter :
+* getOption / setOption : for list with one selectable item
+* getOptions / setOptions : for list with many selectable items 
+
+You can use Media, Metric and Price as advanced backend.
 
 Then, we configure our flexible entity in src/Acme/Bundle/DemoFlexibleEntityBundle/Resources/config/flexibleentity.yml :
 ```yaml

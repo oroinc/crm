@@ -11,4 +11,12 @@ namespace Oro\Bundle\FlexibleEntityBundle\Model\AttributeType;
  */
 class ImageType extends FileType
 {
+    /**
+     * constructor
+     */
+    public function __construct()
+    {
+        parent::__construct();
+        $this->name        = 'Image';
+    }
 }

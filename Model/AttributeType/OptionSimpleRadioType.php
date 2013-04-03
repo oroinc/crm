@@ -21,6 +21,7 @@ class OptionSimpleRadioType extends AbstractOptionType
     {
         parent::__construct();
         $this->name = 'Simple-option (radio)';
+        $this->backendType = self::BACKEND_TYPE_OPTION;
     }
 
     /**
