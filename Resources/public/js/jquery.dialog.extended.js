@@ -53,11 +53,6 @@ $.widget( "ui.dialog", $.ui.dialog, {
     _init: function() {
         this._super();
 
-        // Limit drag area to parent
-        if (this.options.draggable && $.fn.draggable && $.isFunction(this.uiDialog.draggable)) {
-            this.uiDialog.draggable('option', 'containment', 'parent');
-        }
-
         // Init dialog extended
         this._initButtons();
         this._initializeContainer();
@@ -65,6 +60,11 @@ $.widget( "ui.dialog", $.ui.dialog, {
 
         // Handle window resize
         $(window).bind('resize.dialog', $.proxy(this._windowResizeHandler, this));
+    },
+
+    _makeDraggable: function() {
+        this._super();
+        this.uiDialog.draggable('option', 'containment', 'parent');
     },
 
     close: function() {
@@ -274,7 +274,11 @@ $.widget( "ui.dialog", $.ui.dialog, {
             }
         }
 
-        return this.bottomLine.offset().top - this._appendTo().offset().top - heightDelta - 2;
+        // Maximize window to container, or to viewport in case when container is higher
+        var baseHeight = this._appendTo().height();
+        var visibleHeight = this.bottomLine.offset().top - this._appendTo().offset().top;
+        var currentHeight = baseHeight > visibleHeight ? visibleHeight : baseHeight;
+        return currentHeight - heightDelta;
     },
 
     _initButtons: function (el) {
