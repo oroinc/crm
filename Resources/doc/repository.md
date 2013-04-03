@@ -5,7 +5,7 @@ We can use classic findBy() method of repository to retrieve entity collection (
 
 ```php
 // get only entities, values and attributes are lazy loaded, you can use any criteria, order, limit 
-$products = $this->container->get('product_manager')->getEntityRepository()->findBy(array());
+$products = $this->container->get('product_manager')->getFlexibleRepository()->findBy(array());
 
 ```
 We have added a findByWithAttributes() in flexible repository which have the same signature, just attribute codes to select as first param.
@@ -14,7 +14,7 @@ This method cover the same features than findBy, add basic criterias, order by, 
 
 ```php
 $productManager = $this->container->get('product_manager');
-$productRepository = $productManager->getEntityRepository();
+$productRepository = $productManager->getFlexibleRepository();
 // get all entity fields and values (no lazy loading)
 $products = $productRepository->findByWithAttributes();
 // select few attributes
@@ -29,7 +29,7 @@ $products = $productRepository->findByWithAttributes(
 // use limit 
 $products = $productRepository->findByWithAttributes(array('name', 'description'), null, null, 10, 0);
 // force locale to get french values
-$productManager->setLocale('fr_FR')->getEntityRepository()->findByWithAttributes(array('name', 'description'));
+$productManager->setLocale('fr_FR')->getFlexibleRepository()->findByWithAttributes(array('name', 'description'));
 
 // more examples in controllers an unit tests
 ```
@@ -44,8 +44,8 @@ There is also a method to load a flexible entity and all values without lazy loa
 
 ```php
 // to load one flexible entity with lazy loading, classic way
-$customer = $this->container->get('customer_manager')->getEntityRepository()->find($id);
+$customer = $this->container->get('customer_manager')->getFlexibleRepository()->find($id);
 
 // with all values not lazy loaded with new method
-$customer = $this->container->get('customer_manager')->getEntityRepository()->findWithAttributes($id);
+$customer = $this->container->get('customer_manager')->getFlexibleRepository()->findWithAttributes($id);
 ```
