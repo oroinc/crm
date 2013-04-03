@@ -147,14 +147,44 @@ class FlexibleQueryBuilder extends QueryBuilder
     /**
      * Prepare criteria condition with field, operator and value
      *
-     * @param string       $field    the backend field name
-     * @param string       $operator the operator used to filter
+     * @param string|array $field    the backend field name
+     * @param string|array $operator the operator used to filter
      * @param string|array $value    the value(s) to filter
      *
      * @return string
+     * @throws FlexibleQueryException
      */
     public function prepareCriteriaCondition($field, $operator, $value)
     {
+        // OR condition check
+        if (is_array($operator)) {
+            if (!is_array($value)) {
+                throw new FlexibleQueryException('Values must be array');
+            }
+
+            // convert field to array
+            if (!is_array($field)) {
+                $fieldArray = array();
+                foreach (array_keys($operator) as $key) {
+                    $fieldArray[$key] = $field;
+                }
+                $field = $fieldArray;
+            }
+
+            // if arrays have different keys
+            if (array_diff(array_keys($field), array_keys($operator))
+                || array_diff(array_keys($field), array_keys($value))
+            ) {
+                throw new FlexibleQueryException('Field, operator and value arrays must have the same keys');
+            }
+
+            $conditions = array();
+            foreach ($field as $key => $fieldName) {
+                $conditions[] = $this->prepareCriteriaCondition($fieldName, $operator[$key], $value[$key]);
+            }
+            return '(' . implode(' OR ', $conditions) . ')';
+        }
+
         switch ($operator)
         {
             case '=':
@@ -201,7 +231,7 @@ class FlexibleQueryBuilder extends QueryBuilder
      * Add an attribute to filter
      *
      * @param Attribute    $attribute the attribute
-     * @param string       $operator  the used operator
+     * @param string|array $operator  the used operator
      * @param string|array $value     the value(s) to filter
      *
      * @return QueryBuilder This QueryBuilder instance.
@@ -209,10 +239,14 @@ class FlexibleQueryBuilder extends QueryBuilder
     public function addAttributeFilter(Attribute $attribute, $operator, $value)
     {
         $allowed = $this->getAllowedOperators($attribute->getBackendType());
-        if (!in_array($operator, $allowed)) {
-            throw new FlexibleQueryException(
-                $operator.' is not allowed for type '.$attribute->getBackendType().', use '.implode(', ', $allowed)
-            );
+
+        $operators = is_array($operator) ? $operator : array($operator);
+        foreach ($operators as $key) {
+            if (!in_array($key, $allowed)) {
+                throw new FlexibleQueryException(
+                    $key.' is not allowed for type '.$attribute->getBackendType().', use '.implode(', ', $allowed)
+                );
+            }
         }
 
         $joinAlias = 'filter'.$attribute->getCode().$this->aliasCounter++;
