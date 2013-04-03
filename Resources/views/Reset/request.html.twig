@@ -12,7 +12,11 @@
         <h2 class="title">{{ 'Forgot password'|trans }}</h2>
     </div>
     {% if invalid_username is defined %}
-    <p>{{ 'The username or email address "%username%" does not exist.'|trans({ '%username%': invalid_username }) }}</p>
+        <div class="well-small-oro">
+            <div class="alert alert-error">
+                {{ 'The username or email address "%username%" does not exist.'|trans({ '%username%': invalid_username }) }}
+            </div>
+        </div>
     {% endif %}
     <fieldset>
         <div class="input-prepend">
@@ -20,8 +24,8 @@
             <input type="text" id="prependedInput" class="span2" name="username" required="required" placeholder="{{ 'Username or Email'|trans }}" />
         </div>
         <div class="form-row">
-            <button type="submit" class="btn btn-large btn-primary">{{ 'Request'|trans }}</button>
             <a href="{{ path('oro_user_security_login') }}" class="btn btn-large">{{ 'Cancel'|trans }}</a>
+            <button type="submit" class="btn btn-large btn-primary">{{ 'Request'|trans }}</button>
         </div>
     </fieldset>
 </form>
