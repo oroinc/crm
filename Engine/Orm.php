@@ -284,14 +284,19 @@ class Orm extends AbstractEngine
                 /** @var $attribute \Oro\Bundle\FlexibleEntityBundle\Entity\Attribute */
                 foreach ($attributes as $attribute) {
                     if ($attribute->getSearchable()) {
-                        $value = $object->getValueData($attribute->getCode());
+                        $value = $object->getValue($attribute->getCode());
                         if ($value) {
                             $attributeType = $attribute->getBackendType();
 
                             switch ($attributeType) {
                                 case AbstractAttributeType::BACKEND_TYPE_TEXT:
                                 case AbstractAttributeType::BACKEND_TYPE_VARCHAR:
-                                    $objectData = $this->saveFlexibleTextData($alias, $objectData, $attribute->getCode(), $value);
+                                    $objectData = $this->saveFlexibleTextData(
+                                        $alias,
+                                        $objectData,
+                                        $attribute->getCode(),
+                                        $value->__toString()
+                                    );
                                     break;
                                 case AbstractAttributeType::BACKEND_TYPE_DATETIME:
                                 case AbstractAttributeType::BACKEND_TYPE_DATE:
@@ -300,7 +305,7 @@ class Orm extends AbstractEngine
                                         $objectData,
                                         AbstractAttributeType::BACKEND_TYPE_DATETIME,
                                         $attribute->getCode(),
-                                        $value
+                                        $value->getData()
                                     );
                                     break;
                                 default:
@@ -309,7 +314,7 @@ class Orm extends AbstractEngine
                                         $objectData,
                                         $attributeType,
                                         $attribute->getCode(),
-                                        $value
+                                        $value->__toString()
                                     );
                             }
                         }
