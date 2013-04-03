@@ -125,13 +125,13 @@ class ProfileType extends FlexibleType
      */
     public function addDynamicAttributesFields(FormBuilderInterface $builder)
     {
-//        $builder->add('attributes', 'collection', array(
-//            'type'          => new FlexibleValueType($this->valueClass),
-//            'property_path' => 'values',
-//            'allow_add'     => true,
-//            'allow_delete'  => true,
-//            'by_reference'  => false
-//        ));
+        $builder->add('attributes', 'collection', array(
+            'type'          => new FlexibleValueType($this->valueClass),
+            'property_path' => 'values',
+            'allow_add'     => true,
+            'allow_delete'  => true,
+            'by_reference'  => false
+        ));
     }
 
     /**
