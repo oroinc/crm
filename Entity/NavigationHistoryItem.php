@@ -85,7 +85,7 @@ class NavigationHistoryItem implements NavigationItemInterface
      * Set url
      *
      * @param string $url
-     * @return PinbarTab
+     * @return NavigationHistoryItem
      */
     public function setUrl($url)
     {
@@ -108,7 +108,7 @@ class NavigationHistoryItem implements NavigationItemInterface
      * Set title
      *
      * @param string $title
-     * @return PinbarTab
+     * @return NavigationHistoryItem
      */
     public function setTitle($title)
     {
@@ -131,7 +131,7 @@ class NavigationHistoryItem implements NavigationItemInterface
      * Set visitedAt
      *
      * @param \DateTime $visitedAt
-     * @return PinbarTab
+     * @return NavigationHistoryItem
      */
     public function setVisitedAt($visitedAt)
     {
@@ -154,7 +154,7 @@ class NavigationHistoryItem implements NavigationItemInterface
      * Set visitCount
      *
      * @param \DateTime $visitCount
-     * @return PinbarTab
+     * @return NavigationHistoryItem
      */
     public function setVisitCount($visitCount)
     {
@@ -177,7 +177,7 @@ class NavigationHistoryItem implements NavigationItemInterface
      * Set user
      *
      * @param \Oro\Bundle\UserBundle\Entity\User $user
-     * @return PinbarTab
+     * @return NavigationHistoryItem
      */
     public function setUser(\Oro\Bundle\UserBundle\Entity\User $user = null)
     {

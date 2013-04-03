@@ -12,7 +12,7 @@ use Doctrine\ORM\Query\Expr;
 class HistoryItemRepository extends EntityRepository implements NavigationRepositoryInterface
 {
     /**
-     * Find all Favorite items for specified user
+     * Find all history items for specified user
      *
      * @param \Oro\Bundle\UserBundle\Entity\User $user
      * @param string $type
