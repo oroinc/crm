@@ -24,8 +24,8 @@
             <input type="text" id="prependedInput" class="span2" name="username" required="required" placeholder="{{ 'Username or Email'|trans }}" />
         </div>
         <div class="form-row">
-            <a href="{{ path('oro_user_security_login') }}" class="btn btn-large">{{ 'Cancel'|trans }}</a>
-            <button type="submit" class="btn btn-large btn-primary">{{ 'Request'|trans }}</button>
+            <button type="submit" class="btn btn-large extra-submit btn-primary">{{ 'Request'|trans }}</button>
+            <a href="{{ path('oro_user_security_login') }}" class="btn extra-btn-large btn-large">{{ 'Cancel'|trans }}</a>
         </div>
     </fieldset>
 </form>
