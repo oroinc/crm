@@ -766,6 +766,9 @@ footer{
     font-weight: bold;
     margin: 9px 10px 0 0;
   }
+  a.btn{
+    margin: 0 0 0 15px;
+  }
 }
 .form-pass-reset{
   margin: 0 auto 20px;
@@ -960,6 +963,11 @@ footer{
   height: 34px;
   line-height: 34px;
   font-weight: bold;
+}
+a.btn-large{
+  height: 32px;
+  line-height: 32px;
+  min-width:  60px;
 }
 .btn-mini{
   height: 20px;
@@ -1571,6 +1579,9 @@ footer{
     font-weight: bold;
     line-height:  24px;
   }
+  img{
+    margin: 0 10px 0 0;
+  }
 }
 .holder-height{
   max-height: 200px;
@@ -1820,9 +1831,12 @@ footer{
     color: #444 !important;
     font-weight: bold !important;
   }
-   .nav > li a:hover{
-      color: #444 !important;
-      border-bottom: 3px solid #999;
+  .nav > li a:focus{
+    color: #444 !important;
+  }
+  .nav > li a:hover{
+    color: #444 !important;
+    border-bottom: 3px solid #999;
   }
 }
 .customer-info-actions{
@@ -1913,4 +1927,98 @@ textarea{
 }
 .dot-menu-empty-message{
   padding: 15px;
+}
+.oro-justify{
+  text-align: justify !important;
+}
+.well-small-oro{
+  padding: 10px;
+  background: #fff;
+}
+.well-small-oro .alert{
+  margin-bottom: 0 !important;
+}
+/* General settings */
+div.uploader, div.uploader span.action {
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Uploader */
+
+div.uploader {
+  height: 30px;
+  width: 220px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  background-color: #FFFFFF;
+  border: 1px solid #CCCCCC;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+  border-radius: 3px 3px 3px 3px;
+  color: #555555;
+}
+div.uploader span.action {
+  height: 30px;
+  line-height: 30px;
+  width: 82px;
+  text-align: center;
+  float: left;
+  display: inline;
+  overflow: hidden;
+  cursor: pointer;
+  border-color: #cccccc #cccccc #b3b3b3;
+  border-width: 0 0 0 1px;
+  border-image: none;
+  border-radius: 4px 4px 4px 4px;
+  border-style: solid;
+  #gradient > .vertical(#ffffff, #e6e6e6);
+}
+div.uploader span.filename {
+  text-overflow: ellipsis;
+  display: block;
+  overflow: hidden;
+  white-space: nowrap;
+  float: left;
+  cursor: default;
+  height: 30px;
+  margin:0;
+  line-height: 30px;
+  width: 116px;
+  padding: 0 10px;
+}
+div.uploader input {
+  opacity: 0;
+  filter: alpha(opacity=0);
+  -moz-opacity: 0;
+  border: none;
+  background: none;
+  position: absolute;
+  top: 0;
+  right: 0;
+  float: right;
+  cursor: default;
+  width: 100%;
+  height: 100%;
+}
+
+div.uploader {
+  display: -moz-inline-box;
+  display: inline-block;
+  *display: inline;
+  zoom: 1;
+  vertical-align: middle;
+/* Keeping this as :focus to remove browser styles */
+}
+
+div.uploader:focus {
+  outline: 0;
+}
+div.uploader, div.uploader * {
+  margin: 0;
+  padding: 0;
+}
+
+.highContrastDetect {
+  width: 0px;
+  height: 0px;
 }
