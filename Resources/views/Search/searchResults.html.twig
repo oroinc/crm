@@ -6,7 +6,7 @@
     {% block content %}
         <h2>{% trans %}Search results{% endtrans %}</h2>
 
-        <form method="get" action="{{ path('oro_search_results') }}" class="form-inline">
+        <form method="get" action="{{ path('oro_search_results') }}" class="form-inline search-form">
             <select name="from">
                 <option value="">{% trans %}All{% endtrans %}</option>
                 {% for entity in entities %}
@@ -15,7 +15,7 @@
                     </option>
                 {% endfor %}
             </select>
-            <input type="text" id="search" class="span2" name="search" value="{{ searchString }}"/>
+            <input type="text" id="search" class="span2 search" name="search" value="{{ searchString }}"/>
             <button type="submit" class="btn btn-search">Search</button>
         </form>
         {% if searchResults.count > 0 %}

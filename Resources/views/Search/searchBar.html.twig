@@ -1,4 +1,4 @@
-<form method="get" action="{{ path('oro_search_results') }}" style="margin: 0" autocomplete="off" id="top-search-form">
+<form method="get" action="{{ path('oro_search_results') }}" style="margin: 0" autocomplete="off" id="top-search-form" class="search-form">
     <div id="search-div" class="input-append input-prepend pull-left header-search {% if searchString %}search-focus{% endif %}">
         <div class="btn-group">
             <button data-toggle="dropdown" class="btn dropdown-toggle" id="search-bar-button">
@@ -22,7 +22,7 @@
         </div>
         <div class="header-search-frame">
             <input type="hidden" name="from" id="search-bar-from" value="{{ fromString ? fromString : '*' }}"/>
-            <input type="text" id="search-bar-search" class="span2" placeholder="" name="search" value="{{ searchString }}"/>
+            <input type="text" id="search-bar-search" class="span2 search" placeholder="" name="search" value="{{ searchString }}"/>
             <button type="submit" class="btn btn-search">Search</button>
             <div class="custom-dropdown" id="search-dropdown">
                 <ul>
