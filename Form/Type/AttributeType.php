@@ -16,7 +16,7 @@ use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\MoneyType;
 use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\TextAreaType;
 use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\UrlType;
 use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\NumberType;
-use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\MailType;
+use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\EmailType;
 use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\IntegerType;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Oro\Bundle\FlexibleEntityBundle\Form\EventListener\AttributeTypeSubscriber;
@@ -185,7 +185,7 @@ class AttributeType extends AbstractType
             new FileType(),
             new ImageType(),
             new IntegerType(),
-            new MailType(),
+            new EmailType(),
             new MetricType(),
             new MoneyType(),
             new OptionMultiCheckboxType(),

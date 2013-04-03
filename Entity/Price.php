@@ -55,7 +55,7 @@ class Price
      *
      * @param integer $id
      *
-     * @return Metric
+     * @return Price
      */
     public function setId($id)
     {
@@ -79,7 +79,7 @@ class Price
      *
      * @param double $data
      *
-     * @return Metric
+     * @return Price
      */
     public function setData($data)
     {
@@ -90,6 +90,7 @@ class Price
 
     /**
      * Get used currency
+     * 
      * @return string $currency
      */
     public function getCurrency()
@@ -99,11 +100,16 @@ class Price
 
     /**
      * Set used currency
+     *
      * @param string $currency
+     *
+     * @return Price
      */
     public function setCurrency($currency)
     {
         $this->currency = $currency;
+
+        return $this;
     }
 
     /**

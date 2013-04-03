@@ -21,7 +21,7 @@ abstract class AbstractOptionType extends AbstractAttributeType
      */
     public function __construct()
     {
-        $this->backendType = self::BACKEND_TYPE_OPTION;
+        $this->backendType = self::BACKEND_TYPE_OPTIONS;
         $this->formType    = 'entity';
     }
 

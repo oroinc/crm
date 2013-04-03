@@ -90,6 +90,7 @@ class Metric
 
     /**
      * Get used unit
+
      * @return string $unit
      */
     public function getUnit()
@@ -99,11 +100,16 @@ class Metric
 
     /**
      * Set used unit
+     *
      * @param string $unit
+     *
+     * @return Metric
      */
     public function setUnit($unit)
     {
         $this->unit = $unit;
+
+        return $this;
     }
 
     /**

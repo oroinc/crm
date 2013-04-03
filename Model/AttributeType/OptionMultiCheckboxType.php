@@ -20,7 +20,6 @@ class OptionMultiCheckboxType extends AbstractOptionType
     public function __construct()
     {
         parent::__construct();
-        $this->backendType = self::BACKEND_TYPE_OPTIONS;
         $this->name      = 'Multi-options (checkbox)';
     }
 

@@ -10,7 +10,7 @@ use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttributeType;
  * @copyright 2012 Akeneo SAS (http://www.akeneo.com)
  * @license   http://opensource.org/licenses/MIT MIT
  */
-class MailType extends AbstractAttributeType
+class EmailType extends AbstractAttributeType
 {
 
     /**

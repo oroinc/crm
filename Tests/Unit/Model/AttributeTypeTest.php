@@ -7,7 +7,7 @@ use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\DateType;
 use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\FileType;
 use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\ImageType;
 use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\IntegerType;
-use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\MailType;
+use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\EmailType;
 use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\MetricType;
 use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\MoneyType;
 use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\NumberType;
@@ -118,7 +118,7 @@ class AttributeTypeTest extends \PHPUnit_Framework_TestCase
         $this->fileType     = new FileType();
         $this->imageType    = new ImageType();
         $this->integerType  = new IntegerType();
-        $this->emailType    = new MailType();
+        $this->emailType    = new EmailType();
         $this->metricType   = new MetricType();
         $this->moneyType    = new MoneyType();
         $this->numberType   = new NumberType();

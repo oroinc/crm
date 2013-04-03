@@ -30,13 +30,15 @@ abstract class AbstractEntityFlexibleValue extends AbstractFlexibleValue
     /**
      * @var Attribute $attribute
      *
-     * @ORM\ManyToOne(targetEntity="AbstractEntityAttribute")
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\FlexibleEntityBundle\Entity\Attribute")
      * @ORM\JoinColumn(name="attribute_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected $attribute;
 
     /**
      * @var Entity $entity
+     *
+     * This field must by overrided in concret value class 
      *
      * @ORM\ManyToOne(targetEntity="AbstractEntityFlexible", inversedBy="values")
      */
@@ -107,16 +109,29 @@ abstract class AbstractEntityFlexibleValue extends AbstractFlexibleValue
     protected $datetime;
 
     /**
-     * Store options values
+     * Store many options values
+     *
+     * This field must by overrided in concret value class 
+     *
      * @var options ArrayCollection
      *
-     * @ORM\ManyToMany(targetEntity="AbstractEntityAttributeOption")
+     * @ORM\ManyToMany(targetEntity="Oro\Bundle\FlexibleEntityBundle\Entity\AttributeOption")
      * @ORM\JoinTable(name="oro_flexibleentity_values_options",
      *      joinColumns={@ORM\JoinColumn(name="value_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="option_id", referencedColumnName="id")}
      * )
      */
     protected $options;
+
+    /**
+     * Store simple option value
+     *
+     * @var Media $media
+     *
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\FlexibleEntityBundle\Entity\AttributeOption", cascade="persist")
+     * @ORM\JoinColumn(name="option_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    protected $option;
 
     /**
      * Store upload values
@@ -349,8 +364,7 @@ abstract class AbstractEntityFlexibleValue extends AbstractFlexibleValue
      */
     public function setOption(AbstractEntityAttributeOption $option)
     {
-        $this->options->clear();
-        $this->options[] = $option;
+        $this->option = $option;
 
         return $this;
     }
@@ -362,23 +376,7 @@ abstract class AbstractEntityFlexibleValue extends AbstractFlexibleValue
      */
     public function getOption()
     {
-        $option = $this->options->first();
-
-        return ($option === false) ? null : $option;
-    }
-
-    /**
-     * Add option, used for multi select to add many options
-     *
-     * @param AbstractEntityAttributeOption $option
-     *
-     * @return AbstractEntityFlexible
-     */
-    public function addOption(AbstractEntityAttributeOption $option)
-    {
-        $this->options[] = $option;
-
-        return $this;
+        return $this->option;
     }
 
     /**
@@ -401,6 +399,20 @@ abstract class AbstractEntityFlexibleValue extends AbstractFlexibleValue
     public function setOptions($options)
     {
         $this->options = $options;
+
+        return $this;
+    }
+
+    /**
+     * Add option, used for multi select to add many options
+     *
+     * @param AbstractEntityAttributeOption $option
+     *
+     * @return AbstractEntityFlexible
+     */
+    public function addOption(AbstractEntityAttributeOption $option)
+    {
+        $this->options[] = $option;
 
         return $this;
     }

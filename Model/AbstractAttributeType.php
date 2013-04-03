@@ -12,13 +12,13 @@ namespace Oro\Bundle\FlexibleEntityBundle\Model;
 abstract class AbstractAttributeType
 {
     /**
-     * Available backend storage
+     * Available backend storage, the flexible doctrine mapped field
      * @var string
      */
     const BACKEND_STORAGE_ATTRIBUTE_VALUE = 'values';
 
     /**
-     * Available backend types
+     * Available backend types, the value doctrine mapped field
      * @var string
      */
     const BACKEND_TYPE_DATE     = 'date';

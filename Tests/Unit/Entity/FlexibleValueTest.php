@@ -95,16 +95,14 @@ class FlexibleValueTest extends \PHPUnit_Framework_TestCase
     {
         $this->value->getAttribute()->setBackendType($backendType);
 
-        if ($backendType === AbstractAttributeType::BACKEND_TYPE_OPTIONS) {
-            $this->assertTrue($this->value->getData() instanceof ArrayCollection);
+        if ($this->value->getData() instanceof ArrayCollection) {
             $this->assertEquals($this->value->getData()->count(), 0);
         } else {
             $this->assertNull($this->value->getData());
         }
 
         $this->value->setData($data);
-        if ($backendType === AbstractAttributeType::BACKEND_TYPE_OPTIONS) {
-            $this->assertTrue($this->value->getData() instanceof ArrayCollection);
+        if ($this->value->getData() instanceof ArrayCollection) {
             $this->assertEquals($this->value->getData()->count(), 1);
         } else {
             $this->assertEquals($this->value->getData(), $data);
@@ -125,6 +123,10 @@ class FlexibleValueTest extends \PHPUnit_Framework_TestCase
         $options = new ArrayCollection();
         $option  = new AttributeOption();
         $options->add($option);
+        $price = new Price();
+        $price->setData(5)->setCurrency('USD');
+        $metric = new Metric();
+        $metric->setData(12.5)->setUnit('km');
 
         return array(
             array(AbstractAttributeType::BACKEND_TYPE_TEXT, 'my really loooonnnng text'),
@@ -135,7 +137,9 @@ class FlexibleValueTest extends \PHPUnit_Framework_TestCase
             array(AbstractAttributeType::BACKEND_TYPE_DATETIME, new \DateTime()),
             array(AbstractAttributeType::BACKEND_TYPE_OPTION, $option),
             array(AbstractAttributeType::BACKEND_TYPE_OPTIONS, $options),
-            array(AbstractAttributeType::BACKEND_TYPE_MEDIA, new Media())
+            array(AbstractAttributeType::BACKEND_TYPE_MEDIA, new Media()),
+            array(AbstractAttributeType::BACKEND_TYPE_PRICE, $price),
+            array(AbstractAttributeType::BACKEND_TYPE_METRIC, $metric),
         );
     }
 
