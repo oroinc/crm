@@ -63,7 +63,7 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
      * @var string
      *
      * @ORM\Column(name="firstname", type="string", length=100, nullable=true)
-     * @Soap\ComplexType("string", nillable=true)
+     * @Soap\ComplexType("string")
      * @Type("string")
      */
     protected $firstName;
@@ -74,7 +74,7 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
      * @var string
      *
      * @ORM\Column(name="lastname", type="string", length=100, nullable=true)
-     * @Soap\ComplexType("string", nillable=true)
+     * @Soap\ComplexType("string")
      * @Type("string")
      */
     protected $lastName;
@@ -94,8 +94,7 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
      * @var string
      *
      * @ORM\Column(name="image", type="string", length=255, nullable=true)
-     * @Soap\ComplexType("string", nillable=true)
-     * @Type("string")
+     * @Exclude
      */
     protected $image;
 
