@@ -101,6 +101,8 @@ OroApp.PageableCollection = Backbone.PageableCollection.extend({
     },
 
     /**
+     * Adds filter parameters to data
+     *
      * @param {Object} data
      * @param {Object} state
      * @return {Object}
@@ -116,6 +118,7 @@ OroApp.PageableCollection = Backbone.PageableCollection.extend({
     },
 
     /**
+     * Get list of request parameters
      *
      * @param {Object} parameters
      * @param {String} prefix
@@ -126,9 +129,10 @@ OroApp.PageableCollection = Backbone.PageableCollection.extend({
         var localStrings = {};
         var localPrefix = prefix;
         _.each(parameters, function(filterParameters, filterKey) {
+            filterKey = filterKey.toString();
             if (filterKey.substr(0, 2) != '__') {
                 var filterKeyString = localPrefix + '[' + filterKey + ']';
-                if (_.isObject(filterParameters) && !_.isArray(filterParameters)) {
+                if (_.isObject(filterParameters)) {
                     _.extend(
                         localStrings,
                         this._generateParameterStrings(filterParameters, filterKeyString)
@@ -142,13 +146,25 @@ OroApp.PageableCollection = Backbone.PageableCollection.extend({
         return localStrings;
     },
 
-    // { data : array, options : server_parameters }
+    /**
+     * Parse AJAX response
+     *
+     * @param resp
+     * @param options
+     * @return {Object}
+     */
     parse: function(resp, options) {
         this.state.totalRecords = resp.options.totalRecords;
         this.state = this._checkState(this.state);
         return resp.data;
     },
 
+    /**
+     * Reset collection object
+     *
+     * @param models
+     * @param options
+     */
     reset: function(models, options) {
         this.trigger('beforeReset', this, options);
         OroApp.Collection.prototype.reset.apply(this, arguments);

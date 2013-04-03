@@ -154,7 +154,7 @@ OroApp.DatagridFilterText = OroApp.DatagridFilter.extend({
      * @protected
      */
     _onClickOutsideCriteria: function(e) {
-        var elem = this.$('.filter-criteria');
+        var elem = this.$(this.criteriaSelector);
 
         if (elem.get(0) !== e.target && !elem.has(e.target).length) {
             this._hideCriteria();
@@ -176,7 +176,7 @@ OroApp.DatagridFilterText = OroApp.DatagridFilter.extend({
             })
         );
 
-        this._renderCriteria(this.$('.filter-criteria'));
+        this._renderCriteria(this.$(this.criteriaSelector));
         this._clickOutsideCriteriaCallback = $.proxy(this._onClickOutsideCriteria, this);
         $('body').on('click', this._clickOutsideCriteriaCallback);
         this._initConfirmValue();
@@ -229,7 +229,7 @@ OroApp.DatagridFilterText = OroApp.DatagridFilter.extend({
     /**
      * Hide criteria popup
      *
-     * @private
+     * @protected
      */
     _hideCriteria: function() {
         this.$(this.criteriaSelector).hide();

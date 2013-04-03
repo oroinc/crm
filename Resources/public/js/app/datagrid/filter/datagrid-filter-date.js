@@ -13,8 +13,8 @@ OroApp.DatagridFilterDate = OroApp.DatagridFilterChoice.extend({
     popupCriteriaTemplate: _.template(
         '<div>' +
             '<div>' +
-                'From <input type="text" name="start" value="" size="10" maxlength="10" style="width:100px;" /> ' +
-                'to <input type="text" name="end" value="" size="10" maxlength="10" style="width:100px;" />' +
+                'from <input type="text" name="start" value="" size="10" maxlength="10" style="width:100px;" /> ' +
+                'to <input type="text" name="end" value="" size="10" maxlength="10" style="width:100px;" /> ' +
             '</div>' +
             '<div>' +
                 '<% _.each(choices, function (hint, value) { %>' +
@@ -29,7 +29,11 @@ OroApp.DatagridFilterDate = OroApp.DatagridFilterChoice.extend({
         '</div>'
     ),
 
-    /** @property */
+    /**
+     * Selectors for filter data
+     *
+     * @property
+     */
     criteriaValueSelectors: {
         type: 'input[type="radio"]:checked',
         value: {
@@ -38,12 +42,82 @@ OroApp.DatagridFilterDate = OroApp.DatagridFilterChoice.extend({
         }
     },
 
-    /** @property */
+    /**
+     * Empty data object
+     *
+     * @property
+     */
     emptyValue: {
         type: '',
         value: {
             start: '',
             end: ''
+        }
+    },
+
+    /**
+     * Date widget options
+     *
+     * @property
+     */
+    dateWidgetOptions: {
+        changeMonth: true,
+        changeYear:  true,
+        yearRange:  '-50:+1',
+        dateFormat: 'yy-mm-dd',
+        class:      'date-filter-widget dropdown-menu'
+    },
+
+    /**
+     * References to date widgets
+     *
+     * @property
+     */
+    dateWidgets: {
+        start: null,
+        end: null
+    },
+
+    /**
+     * Render filter criteria popup
+     *
+     * @param {Object} el
+     * @return {*}
+     * @protected
+     */
+    _renderCriteria: function(el) {
+        OroApp.DatagridFilterChoice.prototype._renderCriteria.apply(this, arguments);
+
+        _.each(this.criteriaValueSelectors.value, function(selector, name) {
+            this.$(selector).datepicker(this.dateWidgetOptions);
+            this.dateWidgets[name] = this.$(selector).datepicker('widget');
+            this.dateWidgets[name].addClass(this.dateWidgetOptions.class);
+        }, this);
+
+        return this;
+    },
+
+    /**
+     * Handle click outside of criteria popup to hide it
+     *
+     * @param {Event} e
+     * @protected
+     */
+    _onClickOutsideCriteria: function(e) {
+        var elements = [this.$(this.criteriaSelector)];
+
+        _.each(this.dateWidgets, function(widget) {
+            elements.push(widget);
+            elements = _.union(elements, widget.find('span'));
+        });
+
+        var clickedElement = _.find(elements, function(elem) {
+            return _.isEqual(elem.get(0), e.target) || elem.has(e.target).length;
+        });
+
+        if (!clickedElement) {
+            this._hideCriteria();
+            this._confirmValue(this._readCriteriaValue());
         }
     },
 
@@ -71,9 +145,9 @@ OroApp.DatagridFilterDate = OroApp.DatagridFilterChoice.extend({
      * @return {*}
      */
     _writeCriteriaValue: function(value) {
-        this._setInputValue(this.criteriaValueSelectors.type, value.type);
         this._setInputValue(this.criteriaValueSelectors.value.start, value.value.start);
         this._setInputValue(this.criteriaValueSelectors.value.end, value.value.end);
+        this._setInputValue(this.criteriaValueSelectors.type, value.type);
         return this;
     },
 
@@ -94,12 +168,11 @@ OroApp.DatagridFilterDate = OroApp.DatagridFilterChoice.extend({
     },
 
     /**
-     * Focus filter criteria input
+     * Focus filter criteria input - no actions for date
      *
      * @protected
      */
     _focusCriteria: function() {
-        this.$(this.criteriaValueSelectors.value.start).focus().select();
     },
 
     /**
