@@ -11,7 +11,7 @@ use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\OptionSimpleRadioType;
 use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\OptionMultiSelectType;
 use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\OptionMultiCheckboxType;
 use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\DateType;
-use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\MetricType;
+use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\MetricType as AttMetricType;
 use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\MoneyType;
 use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\TextAreaType;
 use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\UrlType;
@@ -186,7 +186,7 @@ class AttributeType extends AbstractType
             new ImageType(),
             new IntegerType(),
             new EmailType(),
-            new MetricType(),
+            new AttMetricType(),
             new MoneyType(),
             new OptionMultiCheckboxType(),
             new OptionMultiSelectType(),
