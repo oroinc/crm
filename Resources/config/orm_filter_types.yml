@@ -41,6 +41,12 @@ services:
         tags:
             - { name: oro_grid.filter.type, alias: oro_grid_orm_flexible_date_range }
 
+    oro_grid.orm.filter.type.flexible_datetime_range:
+        class:     Oro\Bundle\GridBundle\Filter\ORM\Flexible\FlexibleDateTimeRangeFilter
+        arguments: ["@oro_flexibleentity.registry", "@oro_grid.orm.filter.type.datetime_range"]
+        tags:
+            - { name: oro_grid.filter.type, alias: oro_grid_orm_flexible_datetime_range }
+
     oro_grid.orm.filter.type.flexible_options:
         class:     Oro\Bundle\GridBundle\Filter\ORM\Flexible\FlexibleOptionsFilter
         arguments: ["@oro_flexibleentity.registry"]

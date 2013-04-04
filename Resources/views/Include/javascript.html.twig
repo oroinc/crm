@@ -9,6 +9,8 @@
     '@OroGridBundle/Resources/public/lib/multiselect/jquery.multiselect.js'
     '@OroGridBundle/Resources/public/lib/multiselect/jquery.multiselect.filter.js'
 
+    '@OroGridBundle/Resources/public/lib/jquery-ui-timepicker-addon.js'
+
     '@OroGridBundle/Resources/public/js/app/datagrid/action/datagrid-action-launcher.js'
     '@OroGridBundle/Resources/public/js/app/datagrid/action/datagrid-action.js'
     '@OroGridBundle/Resources/public/js/app/datagrid/action/datagrid-action-navigate.js'
@@ -78,7 +80,7 @@
                             {% elseif column.type == constant(columnTypePrefix ~ 'TYPE_DATETIME') %}
                                 cell: Backgrid.Extension.MomentCell.extend({
                                     modelFormat:   "YYYY-MM-DD hh:mm:ss",
-                                    displayFormat: "MM/DD/YYYY hh:mm"
+                                    displayFormat: "MM/DD/YYYY hh:mm a"
                                 })
                             {% elseif column.type == constant(columnTypePrefix ~ 'TYPE_DECIMAL') %}
                                 cell: Backgrid.NumberCell
@@ -132,7 +134,16 @@
                                     name: '{{ filter.name }}',
                                     label: '{{ filter.getOption('label') }}',
                                     enabled: {{ filter.getOption('show_filter') ? 'true' : 'false' }},
-                                    choices: {{ filter.typeOptions|json_encode|raw }}
+                                    choices: {{ filter.typeOptions|json_encode|raw }},
+                                    typeValues: {
+                                        between:    {{ constant(dateTypeFilterPrefix ~ 'TYPE_BETWEEN')|json_encode|raw }},
+                                        notBetween: {{ constant(dateTypeFilterPrefix ~ 'TYPE_NOT_BETWEEN')|json_encode|raw }}
+                                    },
+                                    externalWidgetOptions: {
+                                        dateFormat: 'mm/dd/yy',
+                                        timeFormat: 'hh:mm tt',
+                                        firstDay: 0
+                                    }
                                 })
                             {% elseif filterType == constant(filterTypePrefix ~ 'TYPE_FLEXIBLE_OPTIONS') %}
                                 {% if filter.getOption('multiple') %}

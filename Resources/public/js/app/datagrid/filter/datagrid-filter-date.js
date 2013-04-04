@@ -13,10 +13,10 @@ OroApp.DatagridFilterDate = OroApp.DatagridFilterChoice.extend({
     popupCriteriaTemplate: _.template(
         '<div>' +
             '<div>' +
-                'from <input type="text" name="start_visual" value="" size="10" maxlength="10" class="<%= inputClass %>" /> ' +
-                'to <input type="text" name="end_visual" value="" size="10" maxlength="10" class="<%= inputClass %>" /> <br /> ' +
                 '<input type="hidden" name="start" value="" /> ' +
-                '<input type="hidden" name="end" value="" /> ' +
+                '<input type="hidden" name="end" value="" />' +
+                'from <input type="text" name="start_visual" value="" class="<%= inputClass %>" /> ' +
+                'to <input type="text" name="end_visual" value="" class="<%= inputClass %>" />' +
             '</div>' +
             '<div>' +
                 '<% _.each(choices, function (hint, value) { %>' +
@@ -79,7 +79,9 @@ OroApp.DatagridFilterDate = OroApp.DatagridFilterChoice.extend({
         yearRange:  '-50:+1',
         dateFormat: 'yy-mm-dd',
         altFormat:  'yy-mm-dd',
-        class:      'date-filter-widget dropdown-menu'
+        class:      'date-filter-widget',
+        showButtonPanel: true,
+        currentText: 'Now'
     },
 
     /**
@@ -134,16 +136,30 @@ OroApp.DatagridFilterDate = OroApp.DatagridFilterChoice.extend({
 
         _.each(this.criteriaValueSelectors.value, function(actualSelector, name) {
             var visualSelector = this.criteriaValueSelectors.visualValue[name];
-            var options = _.extend({
-                altField: actualSelector
-            }, this.dateWidgetOptions);
-
-            this.$(visualSelector).datepicker(options);
-            this.dateWidgets[name] = this.$(visualSelector).datepicker('widget');
-            this.dateWidgets[name].addClass(this.dateWidgetOptions.class);
+            this.dateWidgets[name] = this._initializeDateWidget(visualSelector, actualSelector);
         }, this);
 
         return this;
+    },
+
+    /**
+     * Initialize date widget
+     *
+     * @param {String} visualSelector
+     * @param {String} actualSelector
+     * @return {*}
+     * @protected
+     */
+    _initializeDateWidget: function(visualSelector, actualSelector) {
+        var options = _.extend({
+            altField: actualSelector
+        }, this.dateWidgetOptions);
+
+        this.$(visualSelector).datepicker(options);
+        var widget = this.$(visualSelector).datepicker('widget');
+        widget.addClass(this.dateWidgetOptions.class);
+
+        return widget;
     },
 
     /**
@@ -155,14 +171,17 @@ OroApp.DatagridFilterDate = OroApp.DatagridFilterChoice.extend({
     _onClickOutsideCriteria: function(e) {
         var elements = [this.$(this.criteriaSelector)];
 
-        _.each(this.dateWidgets, function(widget) {
-            elements.push(widget);
-            elements = _.union(elements, widget.find('span'));
-        });
+        var widget = $('div#ui-datepicker-div.ui-datepicker');
+        elements.push(widget);
+        elements = _.union(elements, widget.find('span'));
 
         var clickedElement = _.find(elements, function(elem) {
             return _.isEqual(elem.get(0), e.target) || elem.has(e.target).length;
         });
+
+        if (!clickedElement && $(e.target).prop("tagName") == 'BUTTON') {
+            clickedElement = e.target;
+        }
 
         if (!clickedElement) {
             this._hideCriteria();
