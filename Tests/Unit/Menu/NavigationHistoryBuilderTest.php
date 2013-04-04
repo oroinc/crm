@@ -45,9 +45,9 @@ class NavigationHistoryBuilderTest extends \PHPUnit_Framework_TestCase
         $user = $this->getMockBuilder('stdClass')
             ->setMethods(array('getId'))
             ->getMock();
-        $user->expects($this->once($userId))
+        $user->expects($this->once())
             ->method('getId')
-            ->will($this->returnValue(1));
+            ->will($this->returnValue($userId));
 
         $token = $this->getMock('Symfony\Component\Security\Core\Authentication\Token\TokenInterface');
         $token->expects($this->once())
