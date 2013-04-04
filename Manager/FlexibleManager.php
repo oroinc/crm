@@ -392,4 +392,12 @@ class FlexibleManager implements TranslatableInterface, ScopableInterface
 
         return $object;
     }
+
+    public function find($id)
+    {
+        $fr = $this->getFlexibleRepository();
+        $fr->setLocale($this->getLocale());
+
+        return $fr->findWithAttributes($id);
+    }
 }

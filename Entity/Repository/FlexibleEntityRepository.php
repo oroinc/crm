@@ -243,6 +243,13 @@ class FlexibleEntityRepository extends EntityRepository implements TranslatableI
         $codeToAttribute = $this->getCodeToAttributes($attributes);
         $attributes = array_keys($codeToAttribute);
 
+        $qb->andWhere(
+            $qb->expr()->orX(
+                $qb->expr()->isNull('Value.locale'),
+                $qb->expr()->eq('Value.locale', $qb->expr()->literal($this->getLocale()))
+            )
+        );
+
         // add criterias
         if (!is_null($criteria)) {
             foreach ($criteria as $attCode => $attValue) {
