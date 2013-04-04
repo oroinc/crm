@@ -68,7 +68,7 @@ class ProfileController extends Controller
 
         return $this->getRequest()->isXmlHttpRequest()
             ? new JsonResponse($api->getApiKey())
-            : $this->forward('OroUSerBundle:Profile:show', array('user' => $user));
+            : $this->forward('OroUserBundle:Profile:show', array('user' => $user));
     }
 
     /**

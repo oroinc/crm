@@ -8,4 +8,8 @@ $(function() {
 
         return false;
     });
+
+    $('.calendar input').datepicker({
+        dateFormat: 'dd-mm-yy'
+    });
 });

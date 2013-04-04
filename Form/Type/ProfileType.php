@@ -75,6 +75,7 @@ class ProfileType extends FlexibleType
                 'format'         => 'dd-MM-yyyy',
                 'attr'           => array(
                     'placeholder' => 'dd-mm-yyyy',
+                    'class'      => 'calendar',
                 )
             ))
             ->add('imageFile', 'file', array(
