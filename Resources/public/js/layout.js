@@ -1,6 +1,7 @@
 $(document).ready(function () {
-
-    $('input:file').uniform();
+    if ($.isPlainObject($.uniform)) {
+        $('input:file').uniform();
+    }
 
     /* dinamic height for central column */
    /* function changeHeight() {
