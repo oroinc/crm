@@ -179,6 +179,10 @@ class Query
         }
         $this->from = $entities;
 
+        foreach ($this->from as $index => $fromValue) {
+            $this->from[$index] = $this->clearString($fromValue);
+        }
+
         return $this;
     }
 
@@ -229,6 +233,8 @@ class Query
         //if ($fieldName!='*' && !$this->checkFieldInConfig($fieldName)) {
         //    throw new \InvalidArgumentException('Field ' . $fieldName . ' does not exists in config');
         //}
+
+        $fieldValue = $this->clearString($fieldValue);
 
         $this->options[] = array(
             'fieldName'  => $fieldName,
@@ -409,6 +415,17 @@ class Query
         }
 
         return $fields;
+    }
+
+    /**
+     * Clear string
+     *
+     * @param string $inputString
+     * @return string
+     */
+    private function clearString($inputString)
+    {
+        return trim(preg_replace('/ +/', ' ', preg_replace('/[^a-zA-Z0-9*_]/s', ' ', $inputString)));
     }
 
     /**
