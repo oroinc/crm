@@ -15,10 +15,11 @@ class PinbarTabRepository extends EntityRepository implements NavigationReposito
      *
      * @param \Oro\Bundle\UserBundle\Entity\User $user
      * @param string $type
+     * @param array $options
      *
      * @return array
      */
-    public function getNavigationItems($user, $type)
+    public function getNavigationItems($user, $type, $options = array())
     {
         $qb = $this->_em->createQueryBuilder();
 

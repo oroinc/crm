@@ -5,15 +5,17 @@ namespace Oro\Bundle\NavigationBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Navigation Entity
+ * Navigation History Entity
  *
- * @ORM\Entity(repositoryClass="Oro\Bundle\NavigationBundle\Entity\Repository\NavigationItemRepository")
+ * @ORM\Entity(repositoryClass="Oro\Bundle\NavigationBundle\Entity\Repository\HistoryItemRepository")
  * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="navigation_item",
- *      indexes={@ORM\Index(name="sorted_items_idx", columns={"user_id", "position"})})
+ * @ORM\Table(name="navigation_history",
+ *      uniqueConstraints={@ORM\UniqueConstraint(name="unq_user_id_url_idx", columns={"user_id", "url"})})
  */
-class NavigationItem implements NavigationItemInterface
+class NavigationHistoryItem implements NavigationItemInterface
 {
+    const NAVIGATION_HISTORY_ITEM_TYPE = 'history';
+
     /**
      * @var integer $id
      *
@@ -32,16 +34,9 @@ class NavigationItem implements NavigationItemInterface
     protected $user;
 
     /**
-     * @var string $type
-     *
-     * @ORM\Column(name="type", type="string", length=10, nullable=false)
-     */
-    protected $type;
-
-    /**
      * @var string $url
      *
-     * @ORM\Column(name="url", type="string", length=500)
+     * @ORM\Column(name="url", type="string", length=250)
      */
     protected $url;
 
@@ -53,25 +48,18 @@ class NavigationItem implements NavigationItemInterface
     protected $title;
 
     /**
-     * @var integer $position
-     *
-     * @ORM\Column(name="position", type="smallint")
-     */
-    protected $position;
-
-    /**
      * @var \DateTime
      *
-     * @ORM\Column(name="created_at", type="datetime")
+     * @ORM\Column(name="visited_at", type="datetime")
      */
-    protected $createdAt;
+    protected $visitedAt;
 
     /**
-     * @var \DateTime
+     * @var \int
      *
-     * @ORM\Column(name="updated_at", type="datetime")
+     * @ORM\Column(name="visit_count", type="integer")
      */
-    protected $updatedAt;
+    protected $visitCount = 0;
 
     /**
      * Constructor
@@ -86,7 +74,7 @@ class NavigationItem implements NavigationItemInterface
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -94,45 +82,22 @@ class NavigationItem implements NavigationItemInterface
     }
 
     /**
-     * Set type
-     *
-     * @param string $type
-     * @return PinbarTab
-     */
-    public function setType($type)
-    {
-        $this->type = $type;
-
-        return $this;
-    }
-
-    /**
-     * Get type
-     *
-     * @return string
-     */
-    public function getType()
-    {
-        return $this->type;
-    }
-
-    /**
      * Set url
      *
      * @param string $url
-     * @return PinbarTab
+     * @return NavigationHistoryItem
      */
     public function setUrl($url)
     {
         $this->url = $url;
-    
+
         return $this;
     }
 
     /**
      * Get url
      *
-     * @return string 
+     * @return string
      */
     public function getUrl()
     {
@@ -143,19 +108,19 @@ class NavigationItem implements NavigationItemInterface
      * Set title
      *
      * @param string $title
-     * @return PinbarTab
+     * @return NavigationHistoryItem
      */
     public function setTitle($title)
     {
         $this->title = $title;
-    
+
         return $this;
     }
 
     /**
      * Get title
      *
-     * @return string 
+     * @return string
      */
     public function getTitle()
     {
@@ -163,79 +128,56 @@ class NavigationItem implements NavigationItemInterface
     }
 
     /**
-     * Set position
+     * Set visitedAt
      *
-     * @param integer $position
-     * @return PinbarTab
+     * @param \DateTime $visitedAt
+     * @return NavigationHistoryItem
      */
-    public function setPosition($position)
+    public function setVisitedAt($visitedAt)
     {
-        $this->position = $position;
-    
+        $this->visitedAt = $visitedAt;
+
         return $this;
     }
 
     /**
-     * Get position
+     * Get visitedAt
      *
-     * @return integer 
+     * @return \DateTime
      */
-    public function getPosition()
+    public function getVisitedAt()
     {
-        return $this->position;
+        return $this->visitedAt;
     }
 
     /**
-     * Set createdAt
+     * Set visitCount
      *
-     * @param \DateTime $createdAt
-     * @return PinbarTab
+     * @param int $visitCount
+     * @return NavigationHistoryItem
      */
-    public function setCreatedAt($createdAt)
+    public function setVisitCount($visitCount)
     {
-        $this->createdAt = $createdAt;
-    
+        $this->visitCount = $visitCount;
+
         return $this;
     }
 
     /**
-     * Get createdAt
+     * Get visitCount
      *
-     * @return \DateTime 
+     * @return int
      */
-    public function getCreatedAt()
+    public function getVisitCount()
     {
-        return $this->createdAt;
-    }
-
-    /**
-     * Set updatedAt
-     *
-     * @param \DateTime $updatedAt
-     * @return PinbarTab
-     */
-    public function setUpdatedAt($updatedAt)
-    {
-        $this->updatedAt = $updatedAt;
-    
-        return $this;
-    }
-
-    /**
-     * Get updatedAt
-     *
-     * @return \DateTime 
-     */
-    public function getUpdatedAt()
-    {
-        return $this->updatedAt;
+        return $this->visitCount;
     }
 
     /**
      * Set user
      *
      * @param \Oro\Bundle\UserBundle\Entity\User $user
-     * @return PinbarTab
+     * @return NavigationHistoryItem
      */
     public function setUser(\Oro\Bundle\UserBundle\Entity\User $user = null)
     {
@@ -247,7 +189,7 @@ class NavigationItem implements NavigationItemInterface
     /**
      * Get user
      *
-     * @return \Oro\Bundle\UserBundle\Entity\User 
+     * @return \Oro\Bundle\UserBundle\Entity\User
      */
     public function getUser()
     {
@@ -267,9 +209,6 @@ class NavigationItem implements NavigationItemInterface
         if (isset($values['url'])) {
             $this->setUrl($values['url']);
         }
-        if (isset($values['position'])) {
-            $this->setPosition($values['position']);
-        }
         if (isset($values['user'])) {
             $this->setUser($values['user']);
         }
@@ -282,8 +221,7 @@ class NavigationItem implements NavigationItemInterface
      */
     public function doPrePersist()
     {
-        $this->createdAt = new \DateTime();
-        $this->updatedAt = $this->createdAt;
+        $this->visitedAt = new \DateTime();
     }
 
     /**
@@ -293,6 +231,7 @@ class NavigationItem implements NavigationItemInterface
      */
     public function doPreUpdate()
     {
-        $this->updatedAt = new \DateTime();
+        $this->visitedAt = new \DateTime();
+        $this->visitCount++;
     }
 }

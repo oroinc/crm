@@ -8,10 +8,17 @@ parameters:
     oro_menu.twig.extension.class: Oro\Bundle\NavigationBundle\Twig\MenuExtension
 
     oro_navigation.navigation_item_menu.builder.class: Oro\Bundle\NavigationBundle\Menu\NavigationItemBuilder
+    oro_navigation.navigation_history_menu.builder.class: Oro\Bundle\NavigationBundle\Menu\NavigationHistoryBuilder
+
     oro_navigation.item.builder.pinbar.class: Oro\Bundle\NavigationBundle\Entity\Builder\PinbarTabBuilder
     oro_navigation.item.builder.favorite.class: Oro\Bundle\NavigationBundle\Entity\Builder\NavigationItemBuilder
+    oro_navigation.item.builder.history.class: Oro\Bundle\NavigationBundle\Entity\Builder\HistoryItemBuilder
     oro_navigation.item.factory.class: Oro\Bundle\NavigationBundle\Entity\Builder\ItemFactory
     oro_navigation.item.pinbar.post_persist_listener.class: Oro\Bundle\NavigationBundle\Entity\Listener\PinbarPostPersist
+
+    oro_navigation.event.response_history.listener.class: Oro\Bundle\NavigationBundle\Event\ResponseHistoryListener
+
+    oro_navigation.menu.matcher.voter.request: Oro\Bundle\NavigationBundle\Menu\Matcher\Voter\RequestVoter
 
 services:
     oro_menu.factory:
@@ -71,6 +78,13 @@ services:
         tags:
             - { name: oro_navigation.item.builder, alias: favorite }
 
+    oro_navigation.item.builder.history:
+        class: %oro_navigation.item.builder.history.class%
+        arguments:
+            - @doctrine.orm.entity_manager
+        tags:
+            - { name: oro_navigation.item.builder, alias: history }
+
     oro_navigation.item.factory:
         class: %oro_navigation.item.factory.class%
 
@@ -96,3 +110,31 @@ services:
             - @oro_navigation.item.factory
         tags:
             - { name: oro_menu.builder, alias: favorite }
+
+    oro_navigation.history_menu.builder:
+        class: %oro_navigation.navigation_history_menu.builder.class%
+        arguments:
+            - @security.context
+            - @doctrine.orm.entity_manager
+            - @oro_navigation.item.factory
+        calls:
+            - [ setMatcher, [ @knp_menu.matcher ]]
+        tags:
+            - { name: oro_menu.builder, alias: history }
+
+    knp_voter_request:
+        class: %oro_navigation.menu.matcher.voter.request%
+        arguments:
+            - @service_container
+        tags:
+            - { name: knp_menu.voter, request: true }
+
+
+    kernel.listener.nav_history_response:
+        class: %oro_navigation.event.response_history.listener.class%
+        tags:
+            - { name: kernel.event_listener, event: kernel.response, method: onResponse }
+        arguments:
+            - @oro_navigation.item.factory
+            - @security.context
+            - @doctrine.orm.entity_manager

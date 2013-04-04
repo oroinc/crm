@@ -11,14 +11,15 @@ use Doctrine\ORM\Query\Expr;
 class NavigationItemRepository extends EntityRepository implements NavigationRepositoryInterface
 {
     /**
-     * Find all Favorite items for specified user
+     * Find all navigation items for specified user
      *
      * @param \Oro\Bundle\UserBundle\Entity\User $user
      * @param string $type
+     * @param array $options
      *
      * @return array
      */
-    public function getNavigationItems($user, $type)
+    public function getNavigationItems($user, $type, $options = array())
     {
         $qb = $this->_em->createQueryBuilder();
 

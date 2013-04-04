@@ -2,9 +2,9 @@
 
 namespace Oro\Bundle\NavigationBundle\Tests\Unit\Menu;
 
-use Oro\Bundle\NavigationBundle\Menu\NavigationItemBuilder;
+use Oro\Bundle\NavigationBundle\Menu\NavigationHistoryBuilder;
 
-class NavigationItemBuilderBuilderTest extends \PHPUnit_Framework_TestCase
+class NavigationHistoryBuilderTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \Doctrine\ORM\EntityManager
@@ -17,7 +17,7 @@ class NavigationItemBuilderBuilderTest extends \PHPUnit_Framework_TestCase
     protected $securityContext;
 
     /**
-     * @var NavigationItemBuilder
+     * @var NavigationHistoryBuilder
      */
     protected $builder;
 
@@ -33,41 +33,21 @@ class NavigationItemBuilderBuilderTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->factory = $this->getMock('Oro\Bundle\NavigationBundle\Entity\Builder\ItemFactory');
-        $this->builder = new NavigationItemBuilder($this->securityContext, $this->em, $this->factory);
-    }
 
-    public function testBuildAnonUser()
-    {
-        $token = $this->getMock('Symfony\Component\Security\Core\Authentication\Token\TokenInterface');
-        $token->expects($this->once())
-            ->method('getUser')
-            ->will($this->returnValue('anon.'));
-
-        $this->securityContext->expects($this->once())
-            ->method('getToken')
-            ->will($this->returnValue($token));
-
-        $menu = $this->getMockBuilder('Knp\Menu\ItemInterface')
-            ->getMock();
-        $menu->expects($this->never())
-            ->method('addChild');
-        $menu->expects($this->once())
-            ->method('setExtra')
-            ->with('type', 'pinbar');
-
-        $this->builder->build($menu, array(), 'pinbar');
+        $this->builder = new NavigationHistoryBuilder($this->securityContext, $this->em, $this->factory);
     }
 
     public function testBuild()
     {
-        $type = 'favorite';
+        $type = 'history';
         $userId = 1;
+
         $user = $this->getMockBuilder('stdClass')
             ->setMethods(array('getId'))
             ->getMock();
-        $user->expects($this->once($userId))
+        $user->expects($this->once())
             ->method('getId')
-            ->will($this->returnValue(1));
+            ->will($this->returnValue($userId));
 
         $token = $this->getMock('Symfony\Component\Security\Core\Authentication\Token\TokenInterface');
         $token->expects($this->once())
@@ -84,13 +64,14 @@ class NavigationItemBuilderBuilderTest extends \PHPUnit_Framework_TestCase
             ->with($type, array())
             ->will($this->returnValue($item));
 
-        $repository = $this->getMockBuilder('Oro\Bundle\NavigationBundle\Entity\Repository\NavigationItemRepository')
+        $repository = $this->getMockBuilder('Oro\Bundle\NavigationBundle\Entity\Repository\HistoryItemRepository')
             ->disableOriginalConstructor()
             ->getMock();
         $items = array(
-            array('id' => 1, 'title' => 'test1', 'url' => '/', 'type' => $type),
-            array('id' => 2, 'title' => 'test2', 'url' => '/home', 'type' => $type)
+            array('id' => 1, 'title' => 'test1', 'url' => '/'),
+            array('id' => 2, 'title' => 'test2', 'url' => '/home'),
         );
+
         $repository->expects($this->once())
             ->method('getNavigationItems')
             ->with($userId, $type)
@@ -101,13 +82,32 @@ class NavigationItemBuilderBuilderTest extends \PHPUnit_Framework_TestCase
             ->with(get_class($item))
             ->will($this->returnValue($repository));
 
-        $menu = $this->getMockBuilder('Knp\Menu\ItemInterface')
-            ->getMock();
+        $menu = $this->getMockBuilder('Knp\Menu\ItemInterface')->getMock();
+
+        $childMock = $this->getMock('Knp\Menu\ItemInterface');
+        $childMock2 = clone $childMock;
+        $children = array($childMock, $childMock2);
+
+        $matcher = $this->getMock('\Knp\Menu\Matcher\Matcher');
+        $matcher->expects($this->once())
+            ->method('isCurrent')
+            ->will($this->returnValue(true));
+
+        $this->builder->setMatcher($matcher);
+
         $menu->expects($this->exactly(2))
             ->method('addChild');
         $menu->expects($this->once())
             ->method('setExtra')
             ->with('type', $type);
+        $menu->expects($this->once())
+            ->method('getChildren')
+            ->will($this->returnValue($children));
+        $menu->expects($this->once())
+            ->method('removeChild');
+        $menu->expects($this->once())
+            ->method('slice')
+            ->with(0, NavigationHistoryBuilder::DEFAULT_MAX_RESULTS);
 
         $this->builder->build($menu, array(), $type);
     }
