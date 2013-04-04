@@ -234,7 +234,9 @@ class Query
         //    throw new \InvalidArgumentException('Field ' . $fieldName . ' does not exists in config');
         //}
 
-        $fieldValue = $this->clearString($fieldValue);
+        if (is_string($fieldValue)) {
+            $fieldValue = $this->clearString($fieldValue);
+        }
 
         $this->options[] = array(
             'fieldName'  => $fieldName,
@@ -425,7 +427,7 @@ class Query
      */
     private function clearString($inputString)
     {
-        return trim(preg_replace('/ +/', ' ', preg_replace('/[^a-zA-Z0-9*_]/s', ' ', $inputString)));
+        return trim(preg_replace('/ +/', ' ', preg_replace('/[^a-zA-Z0-9:*_]/s', ' ', $inputString)));
     }
 
     /**

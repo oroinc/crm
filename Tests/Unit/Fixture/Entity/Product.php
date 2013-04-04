@@ -3,6 +3,7 @@
 namespace Oro\Bundle\SearchBundle\Tests\Unit\Fixture\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Oro\Bundle\SearchBundle\Tests\Unit\Fixture\Attribute;
 
 /**
  * Oro\Bundle\DataBundle\Entity\Product
@@ -221,9 +222,9 @@ class Product
         return $this->name;
     }
 
-    public function getValueData($code)
+    public function getValue($code)
     {
-        return $code;
+        return new Attribute($code);
     }
 
     public function setId($id)
