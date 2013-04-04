@@ -63,7 +63,7 @@ class ResponseHistoryListenerTest extends \PHPUnit_Framework_TestCase
 
     public function testOnResponse()
     {
-        $response = new Response('', 200);
+        $response = $this->getResponse();
 
         $repository = $this->getDefaultRepositoryMock($this->item);
         $em = $this->getEntityManager($repository);
@@ -72,31 +72,17 @@ class ResponseHistoryListenerTest extends \PHPUnit_Framework_TestCase
         $listener->onResponse($this->getEventMock($this->getRequest(), $response));
     }
 
-
-    public function testBadTitle()
+    /**
+     * @param array $data
+     * @dataProvider titleProvider
+     */
+    public function testTitle($data)
     {
         $this->item->expects($this->once())
                    ->method('setTitle')
-                   ->with($this->equalTo('Default Title'));
+                   ->with($this->equalTo($data['expected']));
 
-        $response = new Response('<title>bad title<title>', 200);
-
-        $repository = $this->getDefaultRepositoryMock($this->item);
-        $em = $this->getEntityManager($repository);
-
-        $listener = $this->getListener($this->factory, $this->securityContext, $em);
-        $listener->onResponse($this->getEventMock($this->getRequest(), $response));
-    }
-
-    public function testGoodTitle()
-    {
-        $title = 'Test title';
-
-        $this->item->expects($this->once())
-            ->method('setTitle')
-            ->with($this->equalTo($title));
-
-        $response = new Response('<title>' . $title . '</title>', 200);
+        $response = $this->getResponse($data['actual']);
 
         $repository = $this->getDefaultRepositoryMock($this->item);
         $em = $this->getEntityManager($repository);
@@ -118,9 +104,17 @@ class ResponseHistoryListenerTest extends \PHPUnit_Framework_TestCase
         $em = $this->getEntityManager($repository);
 
         $listener = $this->getListener($this->factory, $this->securityContext, $em);
-        $response = new Response('', 200);
+        $response = $this->getResponse();
 
         $listener->onResponse($this->getEventMock($this->getRequest(), $response));
+    }
+
+    public function titleProvider()
+    {
+        return array(
+            array(array('actual' => '<title>bad title<title>', 'expected' => 'Default Title')),
+            array(array('actual' => '<title>Good Title</title>', 'expected' => 'Good Title')),
+        );
     }
 
     /**
@@ -174,6 +168,27 @@ class ResponseHistoryListenerTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue('test_route'));
 
         return $this->request;
+    }
+
+    /**
+     * Creates response object mock
+     *
+     * @param string $content
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    private function getResponse($content = '')
+    {
+        $response = $this->getMock('Symfony\Component\HttpFoundation\Response');
+
+        $response->expects($this->once())
+                 ->method('getContent')
+                 ->will($this->returnValue($content));
+
+        $response->expects($this->once())
+                 ->method('getStatusCode')
+                 ->will($this->returnValue(200));
+
+        return $response;
     }
 
     /**
