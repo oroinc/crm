@@ -160,3 +160,7 @@ table.grid tbody tr.row-click-action {
     color: #032D67;
     text-decoration: underline;
 }
+
+.filter-criteria .date-visual-element {
+    width: 80px;
+}

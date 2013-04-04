@@ -13,8 +13,10 @@ OroApp.DatagridFilterDate = OroApp.DatagridFilterChoice.extend({
     popupCriteriaTemplate: _.template(
         '<div>' +
             '<div>' +
-                'from <input type="text" name="start" value="" size="10" maxlength="10" style="width:100px;" /> ' +
-                'to <input type="text" name="end" value="" size="10" maxlength="10" style="width:100px;" /> ' +
+                'from <input type="text" name="start_visual" value="" size="10" maxlength="10" class="<%= inputClass %>" /> ' +
+                'to <input type="text" name="end_visual" value="" size="10" maxlength="10" class="<%= inputClass %>" /> <br /> ' +
+                '<input type="hidden" name="start" value="" /> ' +
+                '<input type="hidden" name="end" value="" /> ' +
             '</div>' +
             '<div>' +
                 '<% _.each(choices, function (hint, value) { %>' +
@@ -35,10 +37,14 @@ OroApp.DatagridFilterDate = OroApp.DatagridFilterChoice.extend({
      * @property
      */
     criteriaValueSelectors: {
-        type: 'input[type="radio"]:checked',
+        type: 'input[type="radio"]',
         value: {
             start: 'input[name="start"]',
             end:   'input[name="end"]'
+        },
+        visualValue: {
+            start: 'input[name="start_visual"]',
+            end:   'input[name="end_visual"]'
         }
     },
 
@@ -56,6 +62,13 @@ OroApp.DatagridFilterDate = OroApp.DatagridFilterChoice.extend({
     },
 
     /**
+     * CSS class for visual date input elements
+     *
+     * @property
+     */
+    inputClass: 'date-visual-element',
+
+    /**
      * Date widget options
      *
      * @property
@@ -64,7 +77,8 @@ OroApp.DatagridFilterDate = OroApp.DatagridFilterChoice.extend({
         changeMonth: true,
         changeYear:  true,
         yearRange:  '-50:+1',
-        dateFormat: 'yy-mm-dd',
+        dateFormat: 'mm/dd/yy',
+        altFormat:  'yy-mm-dd',
         class:      'date-filter-widget dropdown-menu'
     },
 
@@ -79,6 +93,16 @@ OroApp.DatagridFilterDate = OroApp.DatagridFilterChoice.extend({
     },
 
     /**
+     * Date filter type values
+     *
+     * @property
+     */
+    typeValues: {
+        between:    '1',
+        notBetween: '2'
+    },
+
+    /**
      * Render filter criteria popup
      *
      * @param {Object} el
@@ -86,11 +110,20 @@ OroApp.DatagridFilterDate = OroApp.DatagridFilterChoice.extend({
      * @protected
      */
     _renderCriteria: function(el) {
-        OroApp.DatagridFilterChoice.prototype._renderCriteria.apply(this, arguments);
+        $(el).append(this.popupCriteriaTemplate({
+            name: this.name,
+            choices: this.choices,
+            inputClass: this.inputClass
+        }));
 
-        _.each(this.criteriaValueSelectors.value, function(selector, name) {
-            this.$(selector).datepicker(this.dateWidgetOptions);
-            this.dateWidgets[name] = this.$(selector).datepicker('widget');
+        _.each(this.criteriaValueSelectors.value, function(actualSelector, name) {
+            var visualSelector = this.criteriaValueSelectors.visualValue[name];
+            var options = _.extend({
+                altField: actualSelector
+            }, this.dateWidgetOptions);
+
+            this.$(visualSelector).datepicker(options);
+            this.dateWidgets[name] = this.$(visualSelector).datepicker('widget');
             this.dateWidgets[name].addClass(this.dateWidgetOptions.class);
         }, this);
 
@@ -128,13 +161,38 @@ OroApp.DatagridFilterDate = OroApp.DatagridFilterChoice.extend({
      * @protected
      */
     _getCriteriaHint: function() {
-        // if (!this.confirmedValue.value) {
-            return this.defaultCriteriaHint;
-//        } else if (_.has(this.choices, this.confirmedValue.type)) {
-//            return this.choices[this.confirmedValue.type] + ' "' + this.confirmedValue.value + '"'
-//        } else {
-//            return '"' + this.confirmedValue.value + '"';
-//        }
+        if (this.confirmedValue.value) {
+            var hint = '';
+            var start = this._getInputValue(this.criteriaValueSelectors.visualValue.start);
+            var end   = this._getInputValue(this.criteriaValueSelectors.visualValue.end);
+
+            switch (this.confirmedValue.type) {
+                case this.typeValues.notBetween:
+                    if (start && end) {
+                        hint += this.choices[this.typeValues.notBetween] + ' ' + start + ' and ' + end
+                    } else if (start) {
+                        hint += ' before ' + start;
+                    } else if (end) {
+                        hint += ' after ' + end;
+                    }
+                    break;
+                case this.typeValues.between:
+                default:
+                    if (start && end) {
+                        hint += this.choices[this.typeValues.between] + ' ' + start + ' and ' + end
+                    } else if (start) {
+                        hint += ' from ' + start;
+                    } else if (end) {
+                        hint += ' to ' + end;
+                    }
+                    break;
+            }
+            if (hint) {
+                return hint;
+            }
+        }
+
+        return this.defaultCriteriaHint;
     },
 
     /**
@@ -148,7 +206,55 @@ OroApp.DatagridFilterDate = OroApp.DatagridFilterChoice.extend({
         this._setInputValue(this.criteriaValueSelectors.value.start, value.value.start);
         this._setInputValue(this.criteriaValueSelectors.value.end, value.value.end);
         this._setInputValue(this.criteriaValueSelectors.type, value.type);
+
+        this._convertActualToVisual();
+
         return this;
+    },
+
+    /**
+     * Convert actual date values to visual fields
+     *
+     * @protected
+     */
+    _convertActualToVisual: function() {
+        this._convertDateData(
+            this.criteriaValueSelectors.value,
+            this.criteriaValueSelectors.visualValue,
+            this.dateWidgetOptions.altFormat,
+            this.dateWidgetOptions.dateFormat
+        );
+    },
+
+    /**
+     * Convert visual date values to actual fields
+     *
+     * @protected
+     */
+    _convertVisualToActual: function() {
+        this._convertDateData(
+            this.criteriaValueSelectors.visualValue,
+            this.criteriaValueSelectors.value,
+            this.dateWidgetOptions.dateFormat,
+            this.dateWidgetOptions.altFormat
+        );
+    },
+
+    /**
+     * Convert data procedure
+     *
+     * @protected
+     */
+    _convertDateData: function(fromSelectors, toSelectors, fromFormat, toFormat) {
+        _.each(fromSelectors, function(fromSelector, name) {
+            var toSelector = toSelectors[name];
+            var fromValue = this._getInputValue(fromSelector);
+            var toValue = '';
+            if (fromValue) {
+                toValue = $.datepicker.formatDate(toFormat, $.datepicker.parseDate(fromFormat, fromValue));
+            }
+            this._setInputValue(toSelector, toValue);
+        }, this);
     },
 
     /**
@@ -173,6 +279,16 @@ OroApp.DatagridFilterDate = OroApp.DatagridFilterChoice.extend({
      * @protected
      */
     _focusCriteria: function() {
+    },
+
+    /**
+     * Hide criteria popup
+     *
+     * @protected
+     */
+    _hideCriteria: function() {
+        OroApp.DatagridFilterChoice.prototype._hideCriteria.apply(this, arguments);
+        this._convertVisualToActual();
     },
 
     /**

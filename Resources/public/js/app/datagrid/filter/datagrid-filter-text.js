@@ -365,7 +365,8 @@ OroApp.DatagridFilterText = OroApp.DatagridFilter.extend({
                 $input.each(function() {
                     var $input = $(this);
                     if ($input.attr('value') == value) {
-                        $input.attr('checked', 'checked');
+                        $input.attr('checked', true);
+                        $input.click();
                     } else {
                         $(this).removeAttr('checked');
                     }
