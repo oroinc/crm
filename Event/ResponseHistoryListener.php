@@ -100,6 +100,7 @@ class ResponseHistoryListener
         return !($response->getStatusCode() != 200
             || $request->getRequestFormat() != 'html'
             || $request->getMethod() != 'GET'
+            || $request->isXmlHttpRequest()
             || $route[0] == '_'
             || is_null($this->user));
     }
