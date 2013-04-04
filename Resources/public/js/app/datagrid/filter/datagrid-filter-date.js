@@ -77,10 +77,18 @@ OroApp.DatagridFilterDate = OroApp.DatagridFilterChoice.extend({
         changeMonth: true,
         changeYear:  true,
         yearRange:  '-50:+1',
-        dateFormat: 'mm/dd/yy',
+        dateFormat: 'yy-mm-dd',
         altFormat:  'yy-mm-dd',
         class:      'date-filter-widget dropdown-menu'
     },
+
+    /**
+     * Additional date widget options that might be passed to filter
+     * http://api.jqueryui.com/datepicker/
+     *
+     * @property
+     */
+    externalWidgetOptions: {},
 
     /**
      * References to date widgets
@@ -98,8 +106,16 @@ OroApp.DatagridFilterDate = OroApp.DatagridFilterChoice.extend({
      * @property
      */
     typeValues: {
-        between:    '1',
-        notBetween: '2'
+        between:    1,
+        notBetween: 2
+    },
+
+    /**
+     * @inheritDoc
+     */
+    initialize: function () {
+        _.extend(this.dateWidgetOptions, this.externalWidgetOptions);
+        OroApp.DatagridFilterChoice.prototype.initialize.apply(this, arguments);
     },
 
     /**
@@ -165,8 +181,9 @@ OroApp.DatagridFilterDate = OroApp.DatagridFilterChoice.extend({
             var hint = '';
             var start = this._getInputValue(this.criteriaValueSelectors.visualValue.start);
             var end   = this._getInputValue(this.criteriaValueSelectors.visualValue.end);
+            var type  = parseInt(this.confirmedValue.type);
 
-            switch (this.confirmedValue.type) {
+            switch (type) {
                 case this.typeValues.notBetween:
                     if (start && end) {
                         hint += this.choices[this.typeValues.notBetween] + ' ' + start + ' and ' + end

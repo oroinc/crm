@@ -57,6 +57,7 @@
     {% set columnTypePrefix = 'Oro\\Bundle\\GridBundle\\Field\\FieldDescriptionInterface::' %}
     {% set filterTypePrefix = 'Oro\\Bundle\\GridBundle\\Filter\\FilterInterface::' %}
     {% set actionTypePrefix = 'Oro\\Bundle\\GridBundle\\Action\\ActionInterface::' %}
+    {% set dateTypeFilterPrefix = 'Sonata\\AdminBundle\\Form\\Type\\Filter\\DateRangeType::' %}
 
     _.extend(OroApp, {
         scope: {
@@ -114,7 +115,15 @@
                                     name: '{{ filter.name }}',
                                     label: '{{ filter.getOption('label') }}',
                                     enabled: {{ filter.getOption('show_filter') ? 'true' : 'false' }},
-                                    choices: {{ filter.typeOptions|json_encode|raw }}
+                                    choices: {{ filter.typeOptions|json_encode|raw }},
+                                    typeValues: {
+                                        between:    {{ constant(dateTypeFilterPrefix ~ 'TYPE_BETWEEN')|json_encode|raw }},
+                                        notBetween: {{ constant(dateTypeFilterPrefix ~ 'TYPE_NOT_BETWEEN')|json_encode|raw }}
+                                    },
+                                    externalWidgetOptions: {
+                                        dateFormat: 'mm/dd/yy',
+                                        firstDay: 0
+                                    }
                                 })
                             {% elseif filterType == constant(filterTypePrefix ~ 'TYPE_DATETIME')
                                 or filterType == constant(filterTypePrefix ~ 'TYPE_FLEXIBLE_DATETIME')
