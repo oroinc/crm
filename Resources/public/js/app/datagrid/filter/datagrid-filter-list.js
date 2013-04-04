@@ -39,7 +39,7 @@ OroApp.DatagridFilterList = Backbone.View.extend({
      *
      * @property
      */
-    addButtonHint: 'Add filter',
+    addButtonHint: '+ Add filter',
 
     /** @property */
     events: {
