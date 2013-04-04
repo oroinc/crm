@@ -10,6 +10,5 @@ $(function() {
     });
 
     $('.calendar input').datepicker({
-        dateFormat: 'dd-mm-yy'
     });
 });

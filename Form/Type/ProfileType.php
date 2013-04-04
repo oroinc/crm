@@ -72,9 +72,9 @@ class ProfileType extends FlexibleType
                 'label'          => 'Date of birth',
                 'required'       => false,
                 'widget'         => 'single_text',
-                'format'         => 'dd-MM-yyyy',
+                //'format'         => 'dd-MM-yyyy',
                 'attr'           => array(
-                    'placeholder' => 'dd-mm-yyyy',
+                    //'placeholder' => 'dd-mm-yyyy',
                     'class'      => 'calendar',
                 )
             ))
