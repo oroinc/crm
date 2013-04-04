@@ -72,6 +72,8 @@ class FieldProperty extends AbstractProperty
         // TODO : to fix the case where $value is a flexible value
         if (is_object($value) && is_callable(array($value, '__toString'))) {
             $value = $value->__toString();
+        } elseif (false === $value && $this->field->getOption('flexible_name')) {
+            return null; // TODO : temporary fix value when attribute is not exist
         }
 
         switch ($this->getFieldType()) {
