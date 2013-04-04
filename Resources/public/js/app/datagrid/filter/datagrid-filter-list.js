@@ -262,8 +262,8 @@ OroApp.DatagridFilterList = Backbone.View.extend({
      */
     _reloadCollection: function() {
         this._saveState();
-        this.collection.state.currentPage = 1;
         if (this.needReloadCollection) {
+            this.collection.state.currentPage = 1;
             this.collection.fetch({
                 ignoreUpdateFilters: true
             });

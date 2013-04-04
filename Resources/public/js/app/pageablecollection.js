@@ -176,7 +176,8 @@ OroApp.PageableCollection = Backbone.PageableCollection.extend({
      * @param {Object} state
      */
     extendState: function(state) {
-        this.state = this._checkState(_.extend({}, this.state, state))
+        var newState = _.extend({}, this.state, state);
+        this.state = this._checkState(newState);
     },
 
     /**
