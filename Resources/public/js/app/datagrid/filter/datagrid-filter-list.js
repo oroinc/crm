@@ -281,12 +281,15 @@ OroApp.DatagridFilterList = Backbone.View.extend({
     _createState: function() {
         var state = {};
         _.each(this.filters, function(filter, name) {
+            var shortName = '__' + name;
             if (filter.enabled) {
                 if (!filter.isEmpty()) {
                     state[name] = filter.getValue();
-                } else {
-                    state['__' + name] = 1;
+                } else if (!filter.defaultEnabled) {
+                    state[shortName] = 1;
                 }
+            } else if (filter.defaultEnabled) {
+                state[shortName] = 0;
             }
         }, this);
 
@@ -302,7 +305,8 @@ OroApp.DatagridFilterList = Backbone.View.extend({
      */
     _applyState: function(state) {
         _.each(this.filters, function(filter, name) {
-            if (name in state) {
+            var shortName = '__' + name;
+            if (_.has(state, name)) {
                 var filterState = state[name];
                 if (!_.isObject(filterState)) {
                     filterState = {
@@ -310,10 +314,12 @@ OroApp.DatagridFilterList = Backbone.View.extend({
                     }
                 }
                 this.enableFilter(filter.setValue(filterState));
-            } else if ('__' + name in state) {
-                this.enableFilter(filter.reset());
-            } else {
-                this.disableFilter(filter.reset());
+            } else if (_.has(state, shortName)) {
+                if (Number(state[shortName])) {
+                    this.enableFilter(filter.reset());
+                } else {
+                    this.disableFilter(filter.reset());
+                }
             }
         }, this);
 
