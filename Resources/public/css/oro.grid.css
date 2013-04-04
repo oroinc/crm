@@ -164,3 +164,8 @@ table.grid tbody tr.row-click-action {
 .filter-criteria .date-visual-element {
     width: 80px;
 }
+
+.loading-mask .loading-frame .box {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
