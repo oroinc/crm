@@ -10,7 +10,7 @@ class NavigationHistoryBuilder extends NavigationItemBuilder
     const DEFAULT_MAX_RESULTS = 20;
 
     /**
-     * @var Marcher
+     * @var Matcher
      */
     private $matcher;
 

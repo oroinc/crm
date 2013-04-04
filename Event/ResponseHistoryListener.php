@@ -2,8 +2,9 @@
 
 namespace Oro\Bundle\NavigationBundle\Event;
 
-use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Symfony\Component\Security\Core\SecurityContextInterface;
 use Doctrine\ORM\EntityManager;
 
@@ -18,7 +19,7 @@ class ResponseHistoryListener
     protected $navItemFactory = null;
 
     /**
-     * @var User|String
+     * @var \Symfony\Component\Security\Core\User\User|String
      */
     protected $user  = null;
 
@@ -39,6 +40,12 @@ class ResponseHistoryListener
         $this->em = $entityManager;
     }
 
+    /**
+     * Process onReslonse event, updates user history information
+     *
+     * @param FilterResponseEvent $event
+     * @return bool|void
+     */
     public function onResponse(FilterResponseEvent $event)
     {
         $request = $event->getRequest();
@@ -60,6 +67,7 @@ class ResponseHistoryListener
             'user'     => $this->user,
         );
 
+        /** @var $historyItem  NavigationHistoryItem */
         $historyItem = $this->em->getRepository('Oro\Bundle\NavigationBundle\Entity\NavigationHistoryItem')
                                 ->findOneBy($postArray);
         if (!$historyItem) {
@@ -82,11 +90,11 @@ class ResponseHistoryListener
     /**
      * Is request valid for adding to history
      *
-     * @param $response
-     * @param $request
+     * @param Response $response
+     * @param Request $request
      * @return bool
      */
-    private function matchRequest($response, $request)
+    private function matchRequest(Response $response, Request $request)
     {
         $route = $request->get('_route');
 

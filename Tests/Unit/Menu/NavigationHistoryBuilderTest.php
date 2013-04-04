@@ -3,7 +3,6 @@
 namespace Oro\Bundle\NavigationBundle\Tests\Unit\Menu;
 
 use Oro\Bundle\NavigationBundle\Menu\NavigationHistoryBuilder;
-use Knp\Menu\MenuItem;
 
 class NavigationHistoryBuilderTest extends \PHPUnit_Framework_TestCase
 {
@@ -41,11 +40,12 @@ class NavigationHistoryBuilderTest extends \PHPUnit_Framework_TestCase
     public function testBuild()
     {
         $type = 'history';
+        $userId = 1;
 
         $user = $this->getMockBuilder('stdClass')
             ->setMethods(array('getId'))
             ->getMock();
-        $user->expects($this->any())
+        $user->expects($this->once($userId))
             ->method('getId')
             ->will($this->returnValue(1));
 
@@ -74,7 +74,7 @@ class NavigationHistoryBuilderTest extends \PHPUnit_Framework_TestCase
 
         $repository->expects($this->once())
             ->method('getNavigationItems')
-            ->with($user->getId(), $type)
+            ->with($userId, $type)
             ->will($this->returnValue($items));
 
         $this->em->expects($this->once())

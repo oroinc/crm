@@ -153,7 +153,7 @@ class NavigationHistoryItem implements NavigationItemInterface
     /**
      * Set visitCount
      *
-     * @param \DateTime $visitCount
+     * @param int $visitCount
      * @return NavigationHistoryItem
      */
     public function setVisitCount($visitCount)
@@ -164,9 +164,9 @@ class NavigationHistoryItem implements NavigationItemInterface
     }
 
     /**
-     * Get visitedAt
+     * Get visitCount
      *
-     * @return \DateTime
+     * @return int
      */
     public function getVisitCount()
     {

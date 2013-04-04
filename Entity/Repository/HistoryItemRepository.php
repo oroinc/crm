@@ -40,8 +40,11 @@ class HistoryItemRepository extends EntityRepository implements NavigationReposi
                 $qb->expr()->eq('ni.user', ':user')
             )
             ->add('orderBy', new Expr\OrderBy('ni.visitedAt', 'DESC'))
-            ->setMaxResults($options['maxItems'])
             ->setParameters(array('user' => $user));
+
+        if (isset($options['maxItems'])) {
+            $qb->setMaxResults((int)$options['maxItems']);
+        }
 
         return $qb->getQuery()->getArrayResult();
     }
