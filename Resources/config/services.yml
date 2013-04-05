@@ -124,8 +124,6 @@ services:
 
     knp_voter_request:
         class: %oro_navigation.menu.matcher.voter.request%
-        arguments:
-            - @service_container
         tags:
             - { name: knp_menu.voter, request: true }
 
