@@ -11,7 +11,7 @@ OroApp.DatagridFilterSelect = OroApp.DatagridFilter.extend({
      * @property
      */
     template: _.template(
-        '<div class="btn filter-select">' +
+        '<div class="btn filter-select filter-criteria-selector">' +
             '<%= label %>: ' +
             '<select>' +
                 '<option value=""><%= placeholder %></option>' +
@@ -55,6 +55,13 @@ OroApp.DatagridFilterSelect = OroApp.DatagridFilter.extend({
      * @property
      */
     disableSelector: '.disable-filter',
+
+    /**
+     * Selector for widget button
+     *
+     * @property
+     */
+    buttonSelector: '.select-filter-widget.ui-multiselect:first',
 
     /**
      * Selector for select input element
@@ -146,11 +153,15 @@ OroApp.DatagridFilterSelect = OroApp.DatagridFilter.extend({
             open: $.proxy(function() {
                 this.selectWidget.onOpenDropdown();
                 this._setDropdownWidth();
+                this._setButtonPressed(this.$(this.containerSelector), true);
+            }, this),
+            close: $.proxy(function() {
+                this._setButtonPressed(this.$(this.containerSelector), false);
             }, this)
         }, this.widgetOptions));
 
         this.selectWidget.setViewDesign(this);
-        this.$('.select-filter-widget.ui-multiselect:first').append('<span class="caret"></span>');
+        this.$(this.buttonSelector).append('<span class="caret"></span>');
     },
 
     /**
@@ -210,8 +221,8 @@ OroApp.DatagridFilterSelect = OroApp.DatagridFilter.extend({
         this._confirmValue(value);
 
         // update dropdown
-        var button = this.$('.filter-select');
-        this.selectWidget.updateDropdownPosition(button);
+        var widget = this.$(this.containerSelector);
+        this.selectWidget.updateDropdownPosition(widget);
     },
 
     /**

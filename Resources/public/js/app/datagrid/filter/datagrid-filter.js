@@ -62,6 +62,13 @@ OroApp.DatagridFilter = Backbone.View.extend({
     emptyValue: {},
 
     /**
+     * Parent element active class
+     *
+     * @property {String}
+     */
+    buttonActiveClass: 'open-filter',
+
+    /**
      * Initialize.
      *
      * @param {Object} options
@@ -185,5 +192,20 @@ OroApp.DatagridFilter = Backbone.View.extend({
             }
         }
         return true;
+    },
+
+    /**
+     * Set filter button class
+     *
+     * @param {Object} element
+     * @param {Boolean} status
+     * @protected
+     */
+    _setButtonPressed: function(element, status) {
+        if (status) {
+            element.parent().addClass(this.buttonActiveClass);
+        } else {
+            element.parent().removeClass(this.buttonActiveClass);
+        }
     }
 });

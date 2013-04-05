@@ -70,12 +70,6 @@ OroApp.DatagridFilterText = OroApp.DatagridFilter.extend({
      * @property {String}
      */
     defaultCriteriaHint: 'All',
-    /**
-     * Parent element active class
-     *
-     * @property {String}
-     */
-    parentActiveClass: 'open-filter',
 
     /**
      * Empty value
@@ -227,12 +221,12 @@ OroApp.DatagridFilterText = OroApp.DatagridFilter.extend({
     /**
      * Show criteria popup
      *
-     * @private
+     * @protected
      */
     _showCriteria: function() {
         this.$(this.criteriaSelector).show();
         this._focusCriteria();
-        this.$(this.criteriaSelector).parent().addClass(this.parentActiveClass);
+        this._setButtonPressed(this.$(this.criteriaSelector), true);
     },
 
     /**
@@ -242,7 +236,7 @@ OroApp.DatagridFilterText = OroApp.DatagridFilter.extend({
      */
     _hideCriteria: function() {
         this.$(this.criteriaSelector).hide();
-        this.$(this.criteriaSelector).parent().removeClass(this.parentActiveClass);
+        this._setButtonPressed(this.$(this.criteriaSelector), false);
     },
 
     /**

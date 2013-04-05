@@ -11,7 +11,7 @@ OroApp.DatagridFilterMultiSelect = OroApp.DatagridFilterSelect.extend({
      * @property
      */
     template: _.template(
-        '<div class="btn filter-select">' +
+        '<div class="btn filter-select filter-criteria-selector">' +
             '<%= label %>: ' +
             '<select multiple>' +
                 '<% _.each(options, function (hint, value) { %><option value="<%= value %>"><%= hint %></option><% }); %>' +
