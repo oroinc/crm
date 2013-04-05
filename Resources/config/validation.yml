@@ -4,49 +4,52 @@ Oro\Bundle\UserBundle\Entity\User:
         - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity: email
     properties:
         username:
-            - NotBlank:
-                groups:   [Registration, Profile]
+            - NotBlank:     ~
             - Length:
-                min:      3
-                max:      255
+                min:        3
+                max:        255
         email:
-            - NotBlank:
-                groups:   [Registration, Profile]
+            - NotBlank:     ~
             - Length:
-                min:      6
-                max:      255
-            - Email:
-                groups:   [Registration, Profile]
+                min:        6
+                max:        255
+            - Email:        ~
         plainPassword:
             - NotBlank:
-                groups:   [Registration]
+                groups:     [Registration]
             - Length:
-                min:      2
+                min:        2
+        roles:
+            - Count:
+                min:        1
+                minMessage: "You must select at least {{ limit }} role"
         firstName:
+            - NotBlank:     ~
             - Length:
-                max:      100
+                max:        100
         lastName:
+            - NotBlank:     ~
             - Length:
-                max:      100
+                max:        100
 
 Oro\Bundle\UserBundle\Entity\Role:
     constraints:
         - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity: role
     properties:
         role:
-            - NotBlank:   ~
+            - NotBlank:     ~
             - Length:
-                max:      30
-            - Regex:      "/^ROLE_[a-zA-Z0-9_]+$/"
+                max:        30
+            - Regex:        "/^ROLE_[a-zA-Z0-9_]+$/"
         label:
             - Length:
-                max:      30
+                max:        30
 
 Oro\Bundle\UserBundle\Entity\Group:
     constraints:
         - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity: name
     properties:
         name:
-            - NotBlank:   ~
+            - NotBlank:     ~
             - Length:
-                max:      30
+                max:        30

@@ -12,7 +12,7 @@ class ProfileController extends BaseController
      * @Soap\Method("getUsers")
      * @Soap\Param("page", phpType = "int")
      * @Soap\Param("limit", phpType = "int")
-     * @Soap\Result(phpType = "Oro\Bundle\UserBundle\Entity\UserSoap[]")
+     * @Soap\Result(phpType = "Oro\Bundle\UserBundle\Entity\User[]")
      */
     public function cgetAction($page = 1, $limit = 10)
     {
@@ -26,7 +26,7 @@ class ProfileController extends BaseController
     /**
      * @Soap\Method("getUser")
      * @Soap\Param("id", phpType = "int")
-     * @Soap\Result(phpType = "Oro\Bundle\UserBundle\Entity\UserSoap")
+     * @Soap\Result(phpType = "Oro\Bundle\UserBundle\Entity\User")
      */
     public function getAction($id)
     {
@@ -35,7 +35,7 @@ class ProfileController extends BaseController
 
     /**
      * @Soap\Method("createUser")
-     * @Soap\Param("profile", phpType = "\Oro\Bundle\UserBundle\Entity\UserSoap")
+     * @Soap\Param("profile", phpType = "Oro\Bundle\UserBundle\Entity\UserSoap")
      * @Soap\Result(phpType = "boolean")
      */
     public function createAction($profile)
@@ -51,7 +51,7 @@ class ProfileController extends BaseController
     /**
      * @Soap\Method("updateUser")
      * @Soap\Param("id", phpType = "int")
-     * @Soap\Param("profile", phpType = "\Oro\Bundle\UserBundle\Entity\UserSoap")
+     * @Soap\Param("profile", phpType = "Oro\Bundle\UserBundle\Entity\UserSoap")
      * @Soap\Result(phpType = "boolean")
      */
     public function updateAction($id, $profile)
@@ -102,7 +102,7 @@ class ProfileController extends BaseController
     /**
      * @Soap\Method("getUserBy")
      * @Soap\Param("filters", phpType = "BeSimple\SoapCommon\Type\KeyValue\String[]")
-     * @Soap\Result(phpType = "Oro\Bundle\UserBundle\Entity\UserSoap")
+     * @Soap\Result(phpType = "Oro\Bundle\UserBundle\Entity\User")
      */
     public function getByAction(array $filters)
     {

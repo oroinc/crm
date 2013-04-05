@@ -3,7 +3,6 @@
 namespace Oro\Bundle\UserBundle\Form\Type;
 
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 use Oro\Bundle\UserBundle\Form\EventListener\ProfileApiSubscriber;
@@ -32,12 +31,7 @@ class ProfileApiType extends ProfileType
         parent::setDefaultOptions($resolver);
 
         $resolver->setDefaults(array(
-            'csrf_protection'   => false,
-            'validation_groups' => function(FormInterface $form) {
-                return $form->getData() && $form->getData()->getId()
-                    ? array('Api')
-                    : array('Registration', 'Profile', 'Default');
-            },
+            'csrf_protection' => false,
         ));
     }
 
