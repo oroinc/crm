@@ -32,12 +32,7 @@ class ProfileApiType extends ProfileType
         parent::setDefaultOptions($resolver);
 
         $resolver->setDefaults(array(
-            'csrf_protection'   => false,
-            'validation_groups' => function(FormInterface $form) {
-                return $form->getData() && $form->getData()->getId()
-                    ? array('Api')
-                    : array('Registration', 'Profile', 'Default');
-            },
+            'csrf_protection' => false,
         ));
     }
 

@@ -1,5 +1,3 @@
-# FOSUserBundle translation overwrite
-# Temporary workaround!
 change_password:
     flash:
         success: The password has been changed

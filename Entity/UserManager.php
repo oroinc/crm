@@ -74,8 +74,8 @@ class UserManager implements UserProviderInterface
     {
         $this->updatePassword($user);
 
-        // we need to make sure to have at least one default role
-        if (!$user->hasRole(User::ROLE_DEFAULT)) {
+        // we need to make sure to have at least one role
+        if ($user->getRolesCollection()->isEmpty()) {
             $role = $this->getStorageManager()->getRepository('OroUserBundle:Role')->findOneBy(array('role' => User::ROLE_DEFAULT));
 
             if (!$role) {
