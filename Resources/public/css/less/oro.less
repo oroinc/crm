@@ -34,7 +34,7 @@ body{
   margin: 0;
   padding: 0 ;
   min-width: 980px;
-  background:#fff /* url("../../img/bg-login.jpg") repeat FE */;
+  background:#fff;
 }
 html{
   margin: 0;
@@ -303,14 +303,6 @@ header:after{
 }
 .header-search-focused .custom-dropdown{
   display: block;
-}
-.search-focus .btn-search:hover,
-.search-focus .btn-search:focus,
-.search-focus .btn-search,
-.header-search-focused .btn-search,
-.header-search-focused .btn-search:hover,
-.header-search-focused .btn-search:focus{
-  background:#fff url("../../img/general-sprite.png") no-repeat 0 -63px !important;
 }
 .search-focus input[type="text"],
 .header-search-focused input[type="text"]{
@@ -973,6 +965,9 @@ footer{
   line-height: 20px;
   font-size: 11px;
 }
+.btn{
+  #gradient > .vertical(#ffffff, #E6E6E6);
+}
 .btn-primary{
   #gradient > .vertical(#749ddd, #4875bc);
   border: 1px solid;
@@ -1012,6 +1007,9 @@ footer{
 .btn-group.open .btn-primary.dropdown-toggle{
   #gradient > .vertical(#5680c2, #6b94d4);
   border-color: #3f5e8e #527ac0 #527ac0;
+}
+.open-filter .filter-criteria-selector{
+  #gradient > .vertical(#e6e6e6, #ffffff);
 }
 /* general style reset */
 .navbar .btn,
@@ -1346,8 +1344,12 @@ text-overflow:ellipsis;
   background:#efefef url("../../img/bg-gray-box.png") repeat-x;
   border: solid #ccc;
   border-width: 1px 0;
-  padding-top: 15px;
-  padding-bottom: 5px;
+  padding: 15px 220px 8px 20px;
+}
+.filter-box .filter-list{
+  float: right;
+  margin: 0 -120px 0 0;
+  position: relative;
 }
 .btn-group + .btn-group{
   margin-left: 0;
@@ -1900,10 +1902,14 @@ textarea{
   font-size: 19px;
   line-height: 22px;
 }
+.oro-clearfix-width:after,
 .oro-clearfix:after{
   content: "";
   display: block;
   clear: both;
+}
+.oro-clearfix-width{
+  height: 1%;
 }
 .oro-clearfix{
   width: 100%;
@@ -1937,4 +1943,15 @@ textarea{
 }
 .form-signin .oro-forgot-password {
   padding: 30px 33px;
+}
+
+.filter-criteria .oro-action{
+  width: 100%;
+  margin: 0;
+}
+.filter-criteria .oro-action .btn-group{
+  float: right;
+}
+.btn-group > .btn-small{
+  font-size: 11px;
 }
