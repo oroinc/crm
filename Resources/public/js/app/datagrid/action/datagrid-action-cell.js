@@ -83,7 +83,7 @@ OroApp.DatagridActionCell = Backgrid.Cell.extend({
      * @protected
      */
     createAction: function(actionPrototype) {
-        return new (actionPrototype)({
+        return new actionPrototype({
             model: this.model
         });
     },
