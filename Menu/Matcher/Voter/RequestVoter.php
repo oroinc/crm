@@ -13,7 +13,12 @@ class RequestVoter extends UriVoter
      */
     public function __construct(ContainerInterface $container)
     {
-        $uri = $container->get('request')->getRequestUri();
+        $uri = null;
+
+        // TODO BAP-430 do correct processing of scope to avoid problems with CLI environment
+        if ($container->isScopeActive('request')) {
+            $container->get('request')->getRequestUri();
+        }
 
         parent::__construct($uri);
     }
