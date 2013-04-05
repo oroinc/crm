@@ -15,15 +15,19 @@ OroApp.DatagridFilterChoice = OroApp.DatagridFilterText.extend({
             '<div>' +
                 '<input type="text" name="value" value=""/>' +
             '</div>' +
-            '<div>' +
+            '<div class="horizontal">' +
                 '<% _.each(choices, function (hint, value) { %>' +
-                    '<input type="radio" name="<%= name %>" value="<%= value %>" />&nbsp;<%= hint %><br/>' +
+                    '<div class="oro-clearfix">' +
+                        '<input type="radio" id="<%= name %>-<%= value %>" name="<%= name %>" value="<%= value %>" /><label for ="<%= name %>-<%= value %>"><%= hint %></label>' +
+                    '</div>'+
                 '<% }); %>' +
                 '<br/>' +
             '</div>' +
-            '<div class="btn-group">' +
-                '<button class="btn btn-mini filter-update">Update</button>' +
-                '<button class="btn btn-mini filter-criteria-hide">Close</button>' +
+            '<div class="oro-action">' +
+                '<div class="btn-group">' +
+                    '<button class="btn btn-small filter-criteria-hide">Close</button>' +
+                    '<button class="btn btn-small btn-primary filter-update">Update</button>' +
+                '</div>' +
             '</div>' +
         '</div>'
     ),

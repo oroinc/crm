@@ -29,9 +29,11 @@ OroApp.DatagridFilterText = OroApp.DatagridFilter.extend({
             '<div>' +
                 '<input type="text" name="value" value=""/>' +
             '</div>' +
-            '<div class="btn-group">' +
-                '<button class="btn btn-mini filter-update">Update</button>' +
-                '<button class="btn btn-mini filter-criteria-hide">Close</button>' +
+            '<div class="oro-action">' +
+                '<div class="btn-group">' +
+                    '<button class="btn btn-small filter-criteria-hide">Close</button>' +
+                    '<button class="btn btn-small btn-primary filter-update">Update</button>' +
+                '</div>' +
             '</div>' +
         '</div>'
     ),
@@ -68,6 +70,12 @@ OroApp.DatagridFilterText = OroApp.DatagridFilter.extend({
      * @property {String}
      */
     defaultCriteriaHint: 'All',
+    /**
+     * Parent element active class
+     *
+     * @property {String}
+     */
+    parentActiveClass: 'open-filter',
 
     /**
      * Empty value
@@ -224,6 +232,7 @@ OroApp.DatagridFilterText = OroApp.DatagridFilter.extend({
     _showCriteria: function() {
         this.$(this.criteriaSelector).show();
         this._focusCriteria();
+        this.$(this.criteriaSelector).parent().addClass(this.parentActiveClass);
     },
 
     /**
@@ -233,6 +242,7 @@ OroApp.DatagridFilterText = OroApp.DatagridFilter.extend({
      */
     _hideCriteria: function() {
         this.$(this.criteriaSelector).hide();
+        this.$(this.criteriaSelector).parent().removeClass(this.parentActiveClass);
     },
 
     /**
