@@ -104,6 +104,13 @@ OroApp.DatagridFilterSelect = OroApp.DatagridFilter.extend({
     },
 
     /**
+     * Select widget menu opened flag
+     *
+     * @property
+     */
+    selectDropdownOpened: false,
+
+    /**
      * Filter events
      *
      * @property
@@ -154,9 +161,13 @@ OroApp.DatagridFilterSelect = OroApp.DatagridFilter.extend({
                 this.selectWidget.onOpenDropdown();
                 this._setDropdownWidth();
                 this._setButtonPressed(this.$(this.containerSelector), true);
+                this.selectDropdownOpened = true;
             }, this),
             close: $.proxy(function() {
                 this._setButtonPressed(this.$(this.containerSelector), false);
+                setTimeout($.proxy(function() {
+                    this.selectDropdownOpened = false;
+                }, this), 100);
             }, this)
         }, this.widgetOptions));
 
@@ -202,12 +213,19 @@ OroApp.DatagridFilterSelect = OroApp.DatagridFilter.extend({
     },
 
     /**
-     * Open select dropdown
+     * Open/close select dropdown
      *
+     * @param {Event} e
      * @protected
      */
-    _onClickFilterArea: function() {
-        this.selectWidget.multiselect('open');
+    _onClickFilterArea: function(e) {
+        if (!this.selectDropdownOpened) {
+            this.selectWidget.multiselect('open');
+        } else {
+            this.selectWidget.multiselect('close');
+        }
+
+        e.stopPropagation();
     },
 
     /**
