@@ -89,7 +89,7 @@ class RequestFix
                     $default = $attr->getOptions()->offsetGet(0)->getId();
                 }
             } else {
-                $type    = 'data';
+                $type    = $attr->getBackendType();
                 $default = null;
             }
 
