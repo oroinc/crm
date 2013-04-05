@@ -2,8 +2,6 @@
 
 namespace Oro\Bundle\UserBundle\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-
 use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 
 use JMS\Serializer\Annotation\Exclude;

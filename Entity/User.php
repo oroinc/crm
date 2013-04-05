@@ -874,7 +874,7 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
 
     /**
      *
-     * @param  bool $absolute [optional] Return absolute (true) or relative to web dir (false) path to image. False
+     * @param bool $absolute [optional] Return absolute (true) or relative to web dir (false) path to image. False
      *                        by default
      * @return string|null
      */
