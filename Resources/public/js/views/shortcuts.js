@@ -18,7 +18,7 @@ navigation.shortcut.MainView = Backbone.View.extend({
     initialize: function() {
         this.$el.val('');
         this.$el.typeahead({
-            source: this.source.bind(this)
+            source:_.bind(this.source, this)
         });
         this.$form = this.$el.closest('form');
     },
@@ -30,7 +30,7 @@ navigation.shortcut.MainView = Backbone.View.extend({
             process(this.cache[query]);
         } else {
             var url = this.options.source + (this.options.source.charAt(this.options.source.length - 1) === '/' ? '' : '/')
-            $.get(url + encodeURIComponent(query), function(data) {
+            $.get(url + encodeURIComponent(query), _.bind(function(data) {
                 this.data = data;
                 var result = [];
                 _.each(data, function(item, key) {
@@ -38,7 +38,7 @@ navigation.shortcut.MainView = Backbone.View.extend({
                 });
                 this.cache[query] = result;
                 process(result);
-            }.bind(this));
+            }, this));
         }
     },
 

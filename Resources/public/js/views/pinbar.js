@@ -28,7 +28,7 @@ navigation.pinbar.MainView = navigation.MainViewAbstract.extend({
         this.$minimizeButton = Backbone.$(this.options.minimizeButton);
         this.$closeButton = Backbone.$(this.options.closeButton);
 
-        this.listenTo(this.options.collection, 'add', function(item) {this.setItemPosition(item)}.bind(this));
+        this.listenTo(this.options.collection, 'add', function(item) {this.setItemPosition(item)});
         this.listenTo(this.options.collection, 'remove', this.onPageClose);
         this.listenTo(this.options.collection, 'reset', this.addAll);
         this.listenTo(this.options.collection, 'all', this.render);
@@ -36,8 +36,8 @@ navigation.pinbar.MainView = navigation.MainViewAbstract.extend({
         this.listenTo(this.options.collection, 'positionChange', this.renderItem);
         this.listenTo(this.options.collection, 'stateChange', this.handleItemStateChange);
 
-        this.$minimizeButton.click(this.minimizePage.bind(this));
-        this.$closeButton.click(this.closePage.bind(this));
+        this.$minimizeButton.click(_.bind(this.minimizePage, this));
+        this.$closeButton.click(_.bind(this.closePage, this));
 
         this.registerTab();
         this.cleanup();
@@ -131,7 +131,7 @@ navigation.pinbar.MainView = navigation.MainViewAbstract.extend({
             _.each(pinnedItem, function(item) {
                 this.removeFromHistory(item);
                 item.set('maximized', false);
-            }.bind(this));
+            }, this);
         } else {
             var el = Backbone.$(e.currentTarget);
             var itemData = this.getCurrentPageItemData()
@@ -141,7 +141,7 @@ navigation.pinbar.MainView = navigation.MainViewAbstract.extend({
             itemData['title'] = el.data('title') ? el.data('title') : document.title;
             var currentItem = new navigation.pinbar.Item(itemData);
             this.options.collection.unshift(currentItem);
-            currentItem.save(null, {success: this.handleItemStateChange.bind(this)});
+            currentItem.save(null, {success: _.bind(this.handleItemStateChange, this)});
         }
     },
 
