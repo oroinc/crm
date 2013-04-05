@@ -4,15 +4,29 @@ namespace Oro\Bundle\NavigationBundle\Menu;
 
 use Knp\Menu\ItemInterface;
 use Knp\Menu\Matcher\Matcher;
+use Symfony\Component\Security\Core\SecurityContextInterface;
 
 class NavigationHistoryBuilder extends NavigationItemBuilder
 {
-    const DEFAULT_MAX_RESULTS = 20;
-
     /**
      * @var Matcher
      */
     private $matcher;
+
+    /**
+     * @var \Oro\Bundle\ConfigBundle\Config\UserConfigManager
+     */
+    private $configOptions = null;
+
+    /**
+     * Inject config
+     *
+     * @param $config
+     */
+    public function setOptions($config)
+    {
+        $this->configOptions = $config;
+    }
 
     /**
      * Modify menu by adding, removing or editing items.
@@ -23,8 +37,12 @@ class NavigationHistoryBuilder extends NavigationItemBuilder
      */
     public function build(ItemInterface $menu, array $options = array(), $alias = null)
     {
-        $maxItems = isset($options['maxItems']) ? (int)$options['maxItems'] : self::DEFAULT_MAX_RESULTS;
-        $options['maxItems'] = $maxItems + 1;
+        $maxItems = $this->configOptions->get('oro_navigation.maxItems');
+
+        if (!is_null($maxItems)) {
+            // we'll hide current item, so always select +1 item
+            $options['maxItems'] = $maxItems + 1;
+        }
 
         parent::build($menu, $options, $alias);
 

@@ -119,6 +119,7 @@ services:
             - @oro_navigation.item.factory
         calls:
             - [ setMatcher, [ @knp_menu.matcher ]]
+            - [ setOptions, [ @oro_config.user ]]
         tags:
             - { name: oro_menu.builder, alias: history }
 
