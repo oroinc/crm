@@ -1,9 +1,9 @@
 {% macro time(time, format) -%}
-    <time datetime="{{ time.format(constant('DateTime::ISO8601')) }}">{{ time.format(format|default('d-m-Y H:i:s')) }}</time>
+    <time datetime="{{ time.format(constant('DateTime::ISO8601')) }}">{{ time | localizeddate('short', 'short') }}</time>
 {%- endmacro %}
 
 {% macro date(time, format) -%}
-    <time datetime="{{ time.format(constant('DateTime::ISO8601')) }}">{{ time.format(format|default('d-m-Y')) }}</time>
+    <time datetime="{{ time.format(constant('DateTime::ISO8601')) }}">{{ time | localizeddate('none', 'short') }}</time>
 {%- endmacro %}
 
 {% macro collection_prototype(widget) %}
