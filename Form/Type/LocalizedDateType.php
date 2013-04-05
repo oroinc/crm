@@ -30,7 +30,7 @@ class LocalizedDateType extends AbstractType
 
         $view->vars['attr']['-data-format'] = str_replace(
             array('M', 'yy'),
-            array('m', 'yy'),
+            array('m', 'y'),
             $formatter->getPattern()
         );
     }
