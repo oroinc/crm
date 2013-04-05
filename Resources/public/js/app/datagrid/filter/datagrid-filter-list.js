@@ -49,9 +49,16 @@ OroApp.DatagridFilterList = Backbone.View.extend({
     /**
      * Select widget object
      *
-     * @property
+     * @property {OroApp.MultiSelectDecorator}
      */
     selectWidget: null,
+
+    /**
+     * Widget button selector
+     *
+     * @property
+     */
+    buttonSelector: '.ui-multiselect.filter-list',
 
     /**
      * Initialize filter list options
@@ -308,7 +315,18 @@ OroApp.DatagridFilterList = Backbone.View.extend({
      * @protected
      */
     _updateDropdownPosition: function() {
-        var button = this.$('.ui-multiselect.filter-list');
-        this.selectWidget.updateDropdownPosition(button);
+        var button = this.$(this.buttonSelector);
+        var buttonPosition = button.offset();
+        var widgetWidth = this.selectWidget.getWidget().outerWidth();
+        var windowWidth = $(window).width();
+        var widgetLeftOffset = buttonPosition.left;
+        if (buttonPosition.left + widgetWidth > windowWidth) {
+            widgetLeftOffset = buttonPosition.left + button.outerWidth() - widgetWidth;
+        }
+
+        this.selectWidget.getWidget().css({
+            top: buttonPosition.top + button.outerHeight(),
+            left: widgetLeftOffset
+        });
     }
 });
