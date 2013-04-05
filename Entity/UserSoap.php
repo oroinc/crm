@@ -2,6 +2,8 @@
 
 namespace Oro\Bundle\UserBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+
 use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 
 use JMS\Serializer\Annotation\Exclude;
@@ -54,7 +56,7 @@ class UserSoap extends User
     protected $roles;
 
     /**
-     * @Soap\ComplexType("int[]", nillable=true)
+     * @Soap\ComplexType("int[]")
      */
     protected $rolesCollection;
 
@@ -67,4 +69,14 @@ class UserSoap extends User
      * @Soap\ComplexType("Oro\Bundle\SoapBundle\Entity\FlexibleAttribute[]", nillable=true)
      */
     protected $attributes;
+
+    public function setRolesCollection($collection)
+    {
+        $this->rolesCollection = $collection;
+    }
+
+    public function getRolesCollection()
+    {
+        return $this->rolesCollection;
+    }
 }

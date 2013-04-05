@@ -19,7 +19,6 @@ Oro\Bundle\UserBundle\Entity\User:
                 groups:     [Registration]
             - Length:
                 min:        2
-        # assumed that user must have at least IS_AUTHENTICATED_ANONYMOUSLY role and any other one
         roles:
             - Count:
                 min:        1

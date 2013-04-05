@@ -1,1 +1,1 @@
-You must select at least {{ limit }} role:  You must select at least {{ limit }} role|You must select at least {{ limit }} roles
+You must select at least {{ limit }} role:  You must select at least {{ limit }} role.|You must select at least {{ limit }} roles.

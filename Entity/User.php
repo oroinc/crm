@@ -817,12 +817,11 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
 
     /**
      * Directly set the ArrayCollection of Roles.
-     * Type hinted as Collection which is the parent of (Array|Persistent)Collection.
      *
      * @param  ArrayCollection $collection
      * @return User
      */
-    public function setRolesCollection(ArrayCollection $collection)
+    public function setRolesCollection($collection)
     {
         $this->roles = $collection;
 
