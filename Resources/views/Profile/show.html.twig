@@ -89,6 +89,22 @@
                                 </div>
                             </div>
                         </div>
+                        <h4 id="scroll-api" class="scrollspy-title">{{ 'API'|trans }}</h4>
+                        <div class="row-fluid">
+                            <fieldset class="form-horizontal">
+                                <div class="control-group">
+                                    <label class="control-label">{{ 'API key'|trans }}</label>
+                                    <div class="controls">
+                                        <div class="horizontal">
+                                            <strong class="label label-info">{{ user.api ? user.api.apiKey : 'N/A' }}</strong>
+                                            {% if resource_granted('oro_user_profile_apigen') %}
+                                                <a class="btn btn-small" id="btn-apigen" href="{{ path('oro_user_apigen', { id: user.id }) }}">{{ 'Generate key'|trans }}</a>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
                     </div>
                     <div class="form-horizontal span6">
                         <div class="control-group">
@@ -110,4 +126,20 @@
         </div>
     </div>
 </div>
+
 {% endblock content %}
+
+    {% block head_script %}
+    {{ parent() }}
+
+    {% javascripts
+    '@OroUIBundle/Resources/public/lib/bootstrap/js/bootstrap-scrollspy.js'
+    '@OroUserBundle/Resources/public/js/bootstrap-switch.js'
+    '@OroUserBundle/Resources/public/js/emails.js'
+    '@OroUserBundle/Resources/public/js/profile.js'
+
+    output='js/page/profile.js'
+    %}
+    <script src="{{ asset_url }}" type="text/javascript"></script>
+    {% endjavascripts %}
+{% endblock %}

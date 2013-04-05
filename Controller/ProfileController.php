@@ -6,6 +6,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
+use YsTools\BackUrlBundle\Annotation\BackUrl;
+
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
@@ -34,6 +36,7 @@ class ProfileController extends Controller
      *      description="View user profile",
      *      parent="oro_user_profile"
      * )
+     * @BackUrl("back")
      */
     public function showAction(User $user)
     {
@@ -68,7 +71,7 @@ class ProfileController extends Controller
 
         return $this->getRequest()->isXmlHttpRequest()
             ? new JsonResponse($api->getApiKey())
-            : $this->forward('OroUSerBundle:Profile:show', array('user' => $user));
+            : $this->forward('OroUserBundle:Profile:show', array('user' => $user));
     }
 
     /**
@@ -101,6 +104,7 @@ class ProfileController extends Controller
      *      description="Edit user profile",
      *      parent="oro_user_profile"
      * )
+     * @BackUrl("back")
      */
     public function editAction(User $entity)
     {
@@ -136,6 +140,7 @@ class ProfileController extends Controller
      *      description="Remove user profile",
      *      parent="oro_user_profile"
      * )
+     * @BackUrl("back")
      */
     public function removeAction(User $entity)
     {
@@ -158,6 +163,7 @@ class ProfileController extends Controller
      *      description="View list of user profiles",
      *      parent="oro_user_profile"
      * )
+     * @BackUrl("back")
      */
     public function indexAction(Request $request)
     {
