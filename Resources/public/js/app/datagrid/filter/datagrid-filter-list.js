@@ -43,15 +43,8 @@ OroApp.DatagridFilterList = Backbone.View.extend({
 
     /** @property */
     events: {
-        'change #add-filter-select': '_processFilterStatus'
+        'change #add-filter-select': '_onChangeFilterSelect'
     },
-
-    /**
-     * Flag that allows temporary disable reloading of collection
-     *
-     * @property
-     */
-    needReloadCollection: true,
 
     /**
      * Select widget object
@@ -82,112 +75,148 @@ OroApp.DatagridFilterList = Backbone.View.extend({
 
         _.each(this.filters, function(filter, name) {
             this.filters[name] = new filter();
-            this.listenTo(this.filters[name], "update", this._reloadCollection);
-            this.listenTo(this.filters[name], "disable", this.disableFilter);
+            this.listenTo(this.filters[name], "update", this._onFilterUpdated);
+            this.listenTo(this.filters[name], "disable", this._onFilterDisabled);
         }, this);
 
-        this._saveState();
-        this.collection.on('reset', this._restoreState, this);
-        this.collection.on('updateState', this.updateState, this);
-
+        this.collection.on('beforeFetch', this._beforeCollectionFetch, this);
+        this.collection.on('updateState', this._onUpdateCollectionState, this);
         Backbone.View.prototype.initialize.apply(this, arguments);
     },
 
     /**
-     * Save filter state
+     * Triggers when filter is updated
      *
+     * @param {OroApp.DatagridFilter} filter
      * @protected
      */
-    _saveState: function() {
-        this.collection.state.filters = this._createState();
-    },
-
-    /**
-     * Updates collection state
-     *
-     * @param {OroApp.PageableCollection} collection
-     * @param {Object} options
-     */
-    updateState: function(collection, options) {
-        var storedFlag = this.needReloadCollection;
-        if (_.has(options, 'needReloadCollection')) {
-            this.needReloadCollection = options.needReloadCollection;
-        }
-
-        this._restoreState(collection, options);
-        this._saveState();
-
-        if (options.hasOwnProperty('needReloadCollection')) {
-            this.needReloadCollection = storedFlag;
-        }
-    },
-
-    /**
-     * Restore filter state from collection
-     *
-     * @param {OroApp.PageableCollection} collection
-     * @param {Object} options
-     * @protected
-     */
-    _restoreState: function(collection, options) {
-        if (options.ignoreUpdateFilters) {
+    _onFilterUpdated: function(filter) {
+        if (this.ignoreFiltersUpdateEvents) {
             return;
         }
-        this._applyState(collection.state.filters ? collection.state.filters : {});
+        this.collection.state.currentPage = 1;
+        this.collection.fetch();
     },
 
     /**
-     * Activate/deactivate all filter depends on its status
+     * Triggers when filter is disabled
+     *
+     * @param {OroApp.DatagridFilter} filter
+     * @protected
+     */
+    _onFilterDisabled: function(filter) {
+        this.disableFilter(filter);
+    },
+
+    /**
+     * Triggers before collection fetch it's data
      *
      * @protected
      */
-    _processFilterStatus: function() {
-        var activeFilters = this.$(this.filterSelector).val();
+    _beforeCollectionFetch: function(collection) {
+        collection.state.filters = this._createState();
+    },
 
+    /**
+     * Triggers when collection state is updated
+     *
+     * @param {OroApp.PageableCollection} collection
+     */
+    _onUpdateCollectionState: function(collection) {
+        this.ignoreFiltersUpdateEvents = true;
+        this._applyState(collection.state.filters || {});
+        this.ignoreFiltersUpdateEvents = false;
+    },
+
+    /**
+     * Create state according to filters parameters
+     *
+     * @return {Object}
+     * @protected
+     */
+    _createState: function() {
+        var state = {};
         _.each(this.filters, function(filter, name) {
-            if (!filter.enabled && _.indexOf(activeFilters, name) != -1) {
-                this.enableFilter(filter);
-            } else if (filter.enabled && _.indexOf(activeFilters, name) == -1) {
-                this.disableFilter(filter);
+            var shortName = '__' + name;
+            if (filter.enabled) {
+                if (!filter.isEmpty()) {
+                    state[name] = filter.getValue();
+                } else if (!filter.defaultEnabled) {
+                    state[shortName] = 1;
+                }
+            } else if (filter.defaultEnabled) {
+                state[shortName] = 0;
             }
         }, this);
 
-        this._updateDropdownPosition();
+        return state;
     },
 
     /**
-     * Set dropdown position according to current element
+     * Apply filter values from state
+     *
+     * @param {Object} state
+     * @protected
+     * @return {*}
+     */
+    _applyState: function(state) {
+        _.each(this.filters, function(filter, name) {
+            var shortName = '__' + name;
+            if (_.has(state, name)) {
+                var filterState = state[name];
+                if (!_.isObject(filterState)) {
+                    filterState = {
+                        value: filterState
+                    }
+                }
+                this.enableFilter(filter.setValue(filterState));
+            } else if (_.has(state, shortName)) {
+                if (Number(state[shortName])) {
+                    this.enableFilter(filter.reset());
+                } else {
+                    this.disableFilter(filter.reset());
+                }
+            }
+        }, this);
+
+        return this;
+    },
+
+    /**
+     * Triggers when filter select is changed
      *
      * @protected
      */
-    _updateDropdownPosition: function() {
-        var button = this.$('.ui-multiselect.filter-list');
-        this.selectWidget.updateDropdownPosition(button);
+    _onChangeFilterSelect: function() {
+        this._processFilterStatus();
     },
 
     /**
      * Enable filter
      *
      * @param {OroApp.DatagridFilter} filter
+     * @return {*}
      */
     enableFilter: function(filter) {
         filter.enable();
         var optionSelector = this.filterSelector + ' option[value="' + filter.name + '"]';
         this.$(optionSelector).attr('selected', 'selected');
         this.selectWidget.multiselect('refresh');
+        return this;
     },
 
     /**
      * Disable filter
      *
      * @param {OroApp.DatagridFilter} filter
+     * @return {*}
      */
     disableFilter : function(filter) {
         filter.disable();
-        this._saveState();
         var optionSelector = this.filterSelector + ' option[value="' + filter.name + '"]';
         this.$(optionSelector).removeAttr('selected');
         this.selectWidget.multiselect('refresh');
+        return this;
     },
 
     /**
@@ -255,74 +284,31 @@ OroApp.DatagridFilterList = Backbone.View.extend({
     },
 
     /**
-     * Reload collection data with current filters
+     * Activate/deactivate all filter depends on its status
      *
-     * @private
-     * @return {*}
+     * @protected
      */
-    _reloadCollection: function() {
-        this._saveState();
-        if (this.needReloadCollection) {
-            this.collection.state.currentPage = 1;
-            this.collection.fetch({
-                ignoreUpdateFilters: true
-            });
-        }
-        return this;
-    },
+    _processFilterStatus: function() {
+        var activeFilters = this.$(this.filterSelector).val();
 
-    /**
-     * Create state according to filters parameters
-     *
-     * @return {Object}
-     * @private
-     * @return {*}
-     */
-    _createState: function() {
-        var state = {};
         _.each(this.filters, function(filter, name) {
-            var shortName = '__' + name;
-            if (filter.enabled) {
-                if (!filter.isEmpty()) {
-                    state[name] = filter.getValue();
-                } else if (!filter.defaultEnabled) {
-                    state[shortName] = 1;
-                }
-            } else if (filter.defaultEnabled) {
-                state[shortName] = 0;
+            if (!filter.enabled && _.indexOf(activeFilters, name) != -1) {
+                this.enableFilter(filter);
+            } else if (filter.enabled && _.indexOf(activeFilters, name) == -1) {
+                this.disableFilter(filter);
             }
         }, this);
 
-        return state;
+        this._updateDropdownPosition();
     },
 
     /**
-     * Apply filter parameters stored in state
+     * Set dropdown position according to current element
      *
-     * @param state
-     * @private
-     * @return {*}
+     * @protected
      */
-    _applyState: function(state) {
-        _.each(this.filters, function(filter, name) {
-            var shortName = '__' + name;
-            if (_.has(state, name)) {
-                var filterState = state[name];
-                if (!_.isObject(filterState)) {
-                    filterState = {
-                        value: filterState
-                    }
-                }
-                this.enableFilter(filter.setValue(filterState));
-            } else if (_.has(state, shortName)) {
-                if (Number(state[shortName])) {
-                    this.enableFilter(filter.reset());
-                } else {
-                    this.disableFilter(filter.reset());
-                }
-            }
-        }, this);
-
-        return this;
+    _updateDropdownPosition: function() {
+        var button = this.$('.ui-multiselect.filter-list');
+        this.selectWidget.updateDropdownPosition(button);
     }
 });

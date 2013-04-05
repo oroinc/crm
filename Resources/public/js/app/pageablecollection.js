@@ -1,6 +1,11 @@
 /**
  * Pageable collection
  *
+ * Additional events:
+ * beforeReset: Fired when collection is about to reset data (e.g. after success response)
+ * updateState: Fired when collection state is updated using updateState method
+ * beforeFetch: Fired when collection starts to fetch, before request is formed
+ *
  * @class   OroApp.PageableCollection
  * @extends Backbone.PageableCollection
  */
@@ -171,13 +176,14 @@ OroApp.PageableCollection = Backbone.PageableCollection.extend({
     },
 
     /**
-     * Extends and checks state
+     * Updates and checks state
      *
      * @param {Object} state
      */
-    extendState: function(state) {
+    updateState: function(state) {
         var newState = _.extend({}, this.state, state);
         this.state = this._checkState(newState);
+        this.trigger('updateState', this, this.state);
     },
 
     /**
@@ -261,6 +267,7 @@ OroApp.PageableCollection = Backbone.PageableCollection.extend({
      * Fetch collection data
      */
     fetch: function (options) {
+        this.trigger('beforeFetch', this, options);
         var BBColProto = Backbone.Collection.prototype;
 
         options = options || {};
