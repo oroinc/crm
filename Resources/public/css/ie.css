@@ -60,7 +60,7 @@ header .container{
 }
 .filter-box{
     display: block;
-    width: 100%;
+    zoom:1;
 }
 table.grid{
 }
@@ -100,4 +100,7 @@ table.grid{
 }
 .pin-bar .list-bar{
 
+}
+.filter-list input[type="search"]{
+    width: 100px;
 }

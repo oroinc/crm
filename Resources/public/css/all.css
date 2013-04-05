@@ -98,9 +98,6 @@ html, body{
 .form-signin .input-prepend{
     margin-bottom: 10px;
 }
-.login-page{
-    background: url("../img/bg-login.jpg") repeat;
-}
 .logo{
     font-size: 18px;
     font-weight: bold;
@@ -115,6 +112,7 @@ html, body{
 }
 .logo a:hover{
     text-decoration: none;
+    color: #fff;
 }
 .wb{
     background-color: #FFF;
