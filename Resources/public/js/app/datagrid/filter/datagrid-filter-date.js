@@ -18,7 +18,7 @@ OroApp.DatagridFilterDate = OroApp.DatagridFilterChoice.extend({
                 'from <input type="text" name="start_visual" value="" class="<%= inputClass %>" /> ' +
                 'to <input type="text" name="end_visual" value="" class="<%= inputClass %>" />' +
             '</div>' +
-            '<div>' +
+            '<div class="horizontal">' +
                 '<% _.each(choices, function (hint, value) { %>' +
                     '<input type="radio" name="<%= name %>" value="<%= value %>" />&nbsp;<%= hint %><br/>' +
                 '<% }); %>' +
@@ -26,8 +26,8 @@ OroApp.DatagridFilterDate = OroApp.DatagridFilterChoice.extend({
             '</div>' +
             '<div class="oro-action">' +
                 '<div class="btn-group">' +
-                    '<button class="btn btn-mini filter-criteria-hide">Close</button>' +
-                    '<button class="btn btn-mini filter-update">Update</button>' +
+                    '<button class="btn btn-small filter-criteria-hide">Close</button>' +
+                    '<button class="btn btn-small btn-primary filter-update">Update</button>' +
                 '</div>' +
             '</div>' +
         '</div>'
@@ -115,6 +115,13 @@ OroApp.DatagridFilterDate = OroApp.DatagridFilterChoice.extend({
     },
 
     /**
+     * Date widget selector
+     *
+     * @property
+     */
+    dateWidgetSelector: 'div#ui-datepicker-div.ui-datepicker',
+
+    /**
      * @inheritDoc
      */
     initialize: function () {
@@ -173,7 +180,7 @@ OroApp.DatagridFilterDate = OroApp.DatagridFilterChoice.extend({
     _onClickOutsideCriteria: function(e) {
         var elements = [this.$(this.criteriaSelector)];
 
-        var widget = $('div#ui-datepicker-div.ui-datepicker');
+        var widget = $(this.dateWidgetSelector);
         elements.push(widget);
         elements = _.union(elements, widget.find('span'));
 
@@ -181,7 +188,7 @@ OroApp.DatagridFilterDate = OroApp.DatagridFilterChoice.extend({
             return _.isEqual(elem.get(0), e.target) || elem.has(e.target).length;
         });
 
-        if (!clickedElement && $(e.target).prop("tagName") == 'BUTTON') {
+        if (!clickedElement && $(e.target).prop('tagName') == 'BUTTON') {
             clickedElement = e.target;
         }
 
