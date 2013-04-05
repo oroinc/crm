@@ -9,6 +9,8 @@ $(function() {
         return false;
     });
 
+    dateFormat = $('.calendar input').attr('-data-format');
     $('.calendar input').datepicker({
+        dateFormat : dateFormat
     });
 });
