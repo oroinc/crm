@@ -8,11 +8,30 @@
     {% include 'OroGridBundle:Include:javascript.html.twig' with {'datagrid': datagrid, 'selector': '#groups-grid'} %}
     {% include 'OroGridBundle:Include:stylesheet.html.twig' %}
 {% endblock %}
-{% block page_container %}
-<div class="container-fluid">
+
 {% block content %}
-    <h1>Groups overview <a class="btn btn-primary pull-right" href="{{ path('oro_user_group_create') }}">Add new</a></h1>
+    <div class="container-fluid">
+    <h1>Groups overview <a class="btn btn-primary pull-right" href="#" id="add-new-btn">Add new</a></h1>
     <div id="groups-grid"></div>
-{% endblock %}
+
+    <script type="text/javascript">
+        $(function() {
+            $("#add-new-btn").click(function() {
+                new Oro.widget.DialogView({
+                    url: {{ path('oro_user_group_create')|json_encode|raw }},
+                    dialogOptions: {
+                        //appendTo: '#window-container',
+                        allowMaximize: true,
+                        allowMinimize: true,
+                        dblclick: 'maximize',
+                        maximizedHeightDecreaseBy: 'minimize-bar',
+                        width : 400,
+                        height : 250,
+                        title: 'Add group'
+                    }
+                }).render();
+            });
+        });
+    </script>
 </div>
 {% endblock %}
