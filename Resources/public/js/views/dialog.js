@@ -39,7 +39,7 @@ Oro.widget.DialogView = Backbone.View.extend({
                 }
             }
         };
-        this.options.dialogOptions.close = runner([this.closeHandler.bind(this), this.options.dialogOptions.close]);
+        this.options.dialogOptions.close = runner([_.bind(this.closeHandler, this), this.options.dialogOptions.close]);
     },
 
     _initModel: function(options) {
@@ -82,17 +82,18 @@ Oro.widget.DialogView = Backbone.View.extend({
     adoptActions: function() {
         if (this.hasAdoptedActions) {
             var actions = this._getActionsElement();
+            var self = this;
             actions.find('[type=submit]').each(function(idx, btn) {
                 $(btn).click(function() {
-                    this.loadContent(this.form.serialize(), this.form.attr('method'));
-                }.bind(this));
-            }.bind(this));
+                    self.loadContent(self.form.serialize(), self.form.attr('method'));
+                });
+            });
             actions.find('[type=reset]').each(function(idx, btn) {
                 $(btn).click(function() {
-                    $(this.form).trigger('reset');
-                    this.widget.dialog('close');
-                }.bind(this));
-            }.bind(this));
+                    $(self.form).trigger('reset');
+                    self.widget.dialog('close');
+                });
+            });
             actions.show();
 
             var container = this.widget.dialog('actionsContainer');
@@ -125,7 +126,7 @@ Oro.widget.DialogView = Backbone.View.extend({
             if (!_.isFunction(val) && key != 'position') {
                 saveData.dialogOptions[key] = val;
             }
-        }.bind(this));
+        }, this);
 
         saveData.dialogOptions.title = $(e.target).dialog('option', 'title');
         saveData.dialogOptions.state = data.state;
@@ -192,7 +193,7 @@ Oro.widget.DialogView = Backbone.View.extend({
         if (typeof data != 'undefined') {
             options.data = data;
         }
-        Backbone.$.ajax(options).done(function(content) {
+        Backbone.$.ajax(options).done(_.bind(function(content) {
             try {
                 this.actions = null;
                 this.dialogContent = $('<div/>').html(content);
@@ -202,7 +203,7 @@ Oro.widget.DialogView = Backbone.View.extend({
                 // Remove state with unrestorable content
                 this.model.destroy();
             }
-        }.bind(this));
+        }, this));
     },
 
     /**
@@ -213,7 +214,7 @@ Oro.widget.DialogView = Backbone.View.extend({
             if (typeof this.options.dialogOptions.position == 'undefined') {
                 this.options.dialogOptions.position = this._getWindowPlacement();
             }
-            this.options.dialogOptions.stateChange = this.handleStateChange.bind(this);
+            this.options.dialogOptions.stateChange = _.bind(this.handleStateChange, this);
             this.widget = this.dialogContent.dialog(this.options.dialogOptions);
         } else {
             this.widget.html(this.dialogContent);
