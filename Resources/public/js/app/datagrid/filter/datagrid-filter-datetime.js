@@ -21,9 +21,11 @@ OroApp.DatagridFilterDateTime = OroApp.DatagridFilterDate.extend({
                 'datetime from <input type="text" name="start" value="" style="width:80px;" />' +
                 'to <input type="text" name="end" value="" style="width:80px;" />' +
             '</div>' +
-            '<div class="btn-group">' +
-                '<button class="btn btn-mini filter-update">Update</button>' +
-                '<button class="btn btn-mini filter-criteria-hide">Close</button>' +
+            '<div class="oro-action">' +
+                '<div class="btn-group">' +
+                    '<button class="btn btn-mini filter-criteria-hide">Close</button>' +
+                    '<button class="btn btn-mini filter-update">Update</button>' +
+                '</div>' +
             '</div>' +
         '</div>'
     )

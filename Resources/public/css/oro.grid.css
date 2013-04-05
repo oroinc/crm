@@ -70,6 +70,7 @@ table.grid tbody tr.row-click-action {
     border: 1px solid #d3d3d3;
     display: none;
     z-index: 9999;
+    left: 5px;
 }
 
 .no-data {
@@ -100,7 +101,7 @@ table.grid tbody tr.row-click-action {
 }
 
 .ui-multiselect-menu.select-filter-widget ul {
-    max-height: 200px;
+    max-height: 170px;
 }
 
 .ui-multiselect-menu.select-filter-widget .ui-multiselect-close {
@@ -145,13 +146,13 @@ table.grid tbody tr.row-click-action {
 }
 
 .ui-multiselect-menu.select-filter-widget .ui-multiselect-checkboxes input[type="checkbox"] {
-    margin: 4px 6px 5px 5px;
+    margin: 0 6px 5px 5px;
 }
 
 .ui-multiselect.filter-list {
     background: none;
     border: none;
-    padding: 0 0 4px 6px;
+    padding: 6px 0 4px 6px;
     font-size: 13px;
     font-weight: bold;
 }

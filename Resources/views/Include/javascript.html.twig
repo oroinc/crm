@@ -153,7 +153,7 @@
                     },
                     actions: {
                         {% for action in datagrid.rowActions %}
-                            {{ action.name }}:
+                            {{ action.name|json_encode|raw }}:
                             {% if action.type == constant(actionTypePrefix ~ 'TYPE_DELETE') %}
                                 OroApp.DatagridActionDelete.extend({{ action.options|json_encode|raw }})
                             {% else %}
@@ -228,7 +228,7 @@
                 {
                     collection: datagridCollection,
                     tagName: 'div',
-                    className: 'filter-box container-fluid'
+                    className: 'filter-box oro-clearfix-width'
                 },
                 datagridOptions.grid
             );
