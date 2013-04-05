@@ -193,6 +193,9 @@ Oro.widget.DialogView = Backbone.View.extend({
         if (typeof data != 'undefined') {
             options.data = data;
         }
+        options.data = (typeof options.data != 'undefined' ? options.data + '&' : '')
+            + '_widgetContainer=' + this.options.type;
+
         Backbone.$.ajax(options).done(_.bind(function(content) {
             try {
                 this.actions = null;

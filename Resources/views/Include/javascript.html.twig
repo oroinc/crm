@@ -1,0 +1,17 @@
+{% javascripts
+    '@OroWindowsBundle/Resources/public/js/jquery.dialog.extended.js'
+    '@OroWindowsBundle/Resources/public/js/views/dialog.js'
+
+    '@OroWindowsBundle/Resources/public/js/models/state.js'
+    '@OroWindowsBundle/Resources/public/js/collections/state.js'
+    '@OroWindowsBundle/Resources/public/js/views/dialog.js'
+
+    filter='yui_js'
+    output='js/oroapp-windows.all.js'
+%}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+{% endjavascripts %}
+
+<script type="text/javascript">
+    Oro.widget.StateModel.prototype.urlRoot = {{ path('oro_api_get_windows')|json_encode|raw }};
+</script>

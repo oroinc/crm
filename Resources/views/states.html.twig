@@ -3,6 +3,7 @@
         {% for stateId, state in states %}
             {% if state.url %}
                 <div id="widget-restored-state-{{ stateId|default("none") }}">
+
                     {% render state.cleanUrl %}
                 </div>
             {% endif %}

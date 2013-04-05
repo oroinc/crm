@@ -5,7 +5,6 @@ services:
     oro_windows.twig.extension:
         class: %oro_windows.twig.extension.class%
         arguments:
-            - @twig
             - @security.context
             - @doctrine.orm.entity_manager
         tags:
