@@ -8,7 +8,7 @@
 {% block page_container %}
 <div class="container-fluid">
 {% block content %}
-    <form action="{{ form.vars.value.id ? path('oro_user_edit', { id: form.vars.value.id }) : path('oro_user_create') }}" {{ form_enctype(form) }} method="post">
+    <form action="{{ form.vars.value.id ? path('oro_user_edit', { id: form.vars.value.id, back: app.request.get('back') }) : path('oro_user_create', {back: app.request.get('back')}) }}" {{ form_enctype(form) }} method="post">
         <div class="navigation clearfix navbar-extra navbar-extra-right">
             <div class="top-action-box">
                 <div class="btn-group icons-holder icons-small">
@@ -78,7 +78,7 @@
             <div class="clearfix-oro">
                 <div class="customer-info-actions container-fluid well-small">
                     <div class="pull-right">
-                        <a href="{{ path('oro_user_index') }}" class="btn">{{ 'Cancel'|trans }}</a>
+                        <a href="{{ app.request.get('back') ? app.request.get('back') : path('oro_user_index') }}" class="btn">{{ 'Cancel'|trans }}</a>
                         <button type="submit" class="btn btn-primary">{{ 'Save'|trans }}</button>
                     </div>
                     {% if form_errors(form) %}
