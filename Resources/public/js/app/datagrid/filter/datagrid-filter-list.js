@@ -206,7 +206,7 @@ OroApp.DatagridFilterList = Backbone.View.extend({
             this.$el.append(filter.$el);
         }, this);
 
-        this.$el.append(this.addButtonTemplate({
+        this.$el.prepend(this.addButtonTemplate({
             filters: this.filters
         }));
 
