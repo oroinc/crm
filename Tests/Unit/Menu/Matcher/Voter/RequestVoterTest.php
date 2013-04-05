@@ -10,6 +10,7 @@ class NavigationItemBuilderBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testUriVoterConstruct()
     {
+        $this->markTestSkipped('Skipped due to bug BAP-430');
         $containerMock = $this->getMock('Symfony\Component\DependencyInjection\ContainerInterface');
         $itemMock = $this->getMock('Knp\Menu\ItemInterface');
 
