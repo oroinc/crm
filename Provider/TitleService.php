@@ -2,18 +2,28 @@
 
 namespace Oro\Bundle\NavigationBundle\Provider;
 
-use Symfony\Component\Yaml\Yaml;
+use Oro\Bundle\NavigationBundle\Title\TitleReader\ConfigReader;
+use Oro\Bundle\NavigationBundle\Title\TitleReader\AnnotationsReader;
 
 class TitleService
 {
+    /**
+     * Title template
+     *
+     * @var string
+     */
     private $template;
-    private $templateEngine;
-    private $bundles;
 
-    public function __construct($bundles)
+    /**
+     * Title data readers
+     *
+     * @var array
+     */
+    private $readers = array();
+
+    public function __construct(AnnotationsReader $reader, ConfigReader $configReader)
     {
-        //$this->templateEngine = $templateEngine;
-        $this->bundles = $bundles;
+        $this->readers = array($reader, $configReader);
     }
 
     public function setTemplate($template)
@@ -42,21 +52,14 @@ class TitleService
 
     }
 
-    /**
-     * Get titles array from config files
-     *
-     * @return array
-     */
-    public function getTitlesConfig()
-    {
-        $titleConfig = array();
-        foreach ($this->bundles as $bundle) {
-            $reflection = new \ReflectionClass($bundle);
-            if (is_file($file = dirname($reflection->getFilename()) . '/Resources/config/titles.yml')) {
-                $titleConfig += Yaml::parse(realpath($file));
-            }
-        }
 
-        return $titleConfig;
+    public function update($routes)
+    {
+
+        $data = array();
+
+        foreach ($this->readers as $reader) {
+            $data = array_merge_recursive($data, $reader->getData());
+        }
     }
 }

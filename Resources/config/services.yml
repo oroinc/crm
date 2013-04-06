@@ -20,7 +20,10 @@ parameters:
     oro_navigation.event.response_history.listener.class: Oro\Bundle\NavigationBundle\Event\ResponseHistoryListener
 
     oro_navigation.menu.matcher.voter.request: Oro\Bundle\NavigationBundle\Menu\Matcher\Voter\RequestVoter
-    oro_navigation.title_service.class: Oro\Bundle\NavigationBundle\Provider\TitleService
+
+    oro_navigation.title_service.class:         Oro\Bundle\NavigationBundle\Provider\TitleService
+    oro_user.title_service.annotations_reader.class: Oro\Bundle\NavigationBundle\Title\TitleReader\AnnotationsReader
+    oro_user.title_service.config_reader.class: Oro\Bundle\NavigationBundle\Title\TitleReader\ConfigReader
 
 services:
     oro_menu.factory:
@@ -160,4 +163,12 @@ services:
 
     oro_navigation.title_service:
         class:                        %oro_navigation.title_service.class%
-        arguments:                    ["%kernel.bundles%"]
+        arguments:                    ["@oro_navigation.title_annotations_reader", "@oro_navigation.title_config_reader"]
+
+    oro_navigation.title_annotations_reader:
+        class:                        %oro_user.title_service.annotations_reader.class%
+        arguments:                    ["@kernel", "@annotation_reader"]
+
+    oro_navigation.title_config_reader:
+        class:                        %oro_user.title_service.config_reader.class%
+        arguments:                    ["@kernel"]
