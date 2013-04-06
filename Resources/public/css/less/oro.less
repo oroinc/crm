@@ -6,6 +6,7 @@
 @marginBottomBox:                 20px;
 @generalBorderColor:              #ddd;
 @widthPage:                       960px;
+@widthBodyPage:                   980px;
 @widthPopup:                      @widthPage/2;
 @widthClosePanel:                 25px;
 @widthLeftPanel:                  230px;
@@ -36,9 +37,15 @@ body{
   min-width: 980px;
   background:#fff;
 }
+body.error-page{
+  background-color: #eee;
+}
 html{
   margin: 0;
   padding: 0;
+}
+body.error-page #main{
+  background: none;
 }
 a:focus{
   text-decoration: none;
@@ -1439,6 +1446,9 @@ text-overflow:ellipsis;
     width: 23px;
   }
 }
+.grid-container{
+  max-width: ;
+}
 .grid{
   .action-cell{
     vertical-align: bottom;
@@ -1952,6 +1962,34 @@ textarea{
 .filter-criteria .oro-action .btn-group{
   float: right;
 }
+.filter-criteria .oro-action .btn{
+  outline: none;
+  position: static;
+}
 .btn-group > .btn-small{
   font-size: 11px;
+}
+.popup-box-errors{
+  width: 480px;
+  margin: 0 auto;
+  border: 1px solid #bbb;
+  padding: 40px 0;
+  background-color: #fff;
+  -webkit-border-radius: 6px;
+  border-radius: 6px;
+  -webkit-box-shadow:  1px 1px 3px 0px rgba(0, 0, 0, 0.5);
+  box-shadow:  1px 1px 3px 0px rgba(0, 0, 0, 0.5);
+}
+.popup-box-errors .popup-content{
+  background-color: #fff;
+  font: 14px/20px 'HelveticaNeue', Arial, sans-serif;
+  margin: 0 30px;
+}
+.popup-box-errors h1{
+  font:bold 20px/46px 'HelveticaNeue', Arial, sans-serif;
+  margin: 0 0 10px;
+}
+.popup-box-errors h1 span{
+  font-size: 45px;
+  margin: 0 12px 0 0;
 }
