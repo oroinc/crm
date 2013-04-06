@@ -20,6 +20,7 @@ parameters:
     oro_navigation.event.response_history.listener.class: Oro\Bundle\NavigationBundle\Event\ResponseHistoryListener
 
     oro_navigation.menu.matcher.voter.request: Oro\Bundle\NavigationBundle\Menu\Matcher\Voter\RequestVoter
+    oro_navigation.title_service.class: Oro\Bundle\NavigationBundle\Provider\TitleService
 
 services:
     oro_menu.factory:
@@ -156,3 +157,7 @@ services:
             - @oro_navigation.item.factory
             - @security.context
             - @doctrine.orm.entity_manager
+
+    oro_navigation.title_service:
+        class:                        %oro_navigation.title_service.class%
+        arguments:                    ["%kernel.bundles%"]
