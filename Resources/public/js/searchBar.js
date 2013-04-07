@@ -8,6 +8,10 @@ $(document).ready(function () {
     });
 
     $("#search-bar-dropdown li a").click(function (e) {
+        $( "#search-bar-dropdown li" ).each(function( index ) {
+            $(this).removeClass('active');
+        });
+        $(this).parent().addClass('active');
         $("#search-bar-from").val($(this).parent().attr('data-alias'));
         $("#search-bar-button").html($(this).html() + '<span class="caret"></span>');
         SearchByTagClose()
