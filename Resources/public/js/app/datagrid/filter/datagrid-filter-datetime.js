@@ -48,7 +48,7 @@ OroApp.DatagridFilterDateTime = OroApp.DatagridFilterDate.extend({
 
         this.$(visualSelector).datetimepicker(options);
         var widget = this.$(visualSelector).datetimepicker('widget');
-        widget.addClass(this.dateWidgetOptions.class);
+        widget.addClass(this.dateWidgetOptions.className);
 
         return widget;
     },

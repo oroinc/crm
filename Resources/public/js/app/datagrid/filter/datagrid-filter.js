@@ -178,14 +178,19 @@ OroApp.DatagridFilter = Backbone.View.extend({
      * @protected
      */
     _looseObjectCompare: function (obj1, obj2) {
-        for (var i in obj1) {
+        if (!_.isObject(obj1) || !_.isObject(obj2)) {
+            return obj1 == obj2;
+        }
+        var objKeys = _.keys(obj1);
+        for (var i in objKeys) {
+            var key = objKeys[i];
             // both items are objects
-            if (_.isObject(obj1[i]) && _.isObject(obj2[i])) {
-                return this._looseObjectCompare(obj1[i], obj2[i]);
+            if (_.isObject(obj1[key]) && _.isObject(obj2[key])) {
+                return this._looseObjectCompare(obj1[key], obj2[key]);
             } else {
-                var equalsLoosely = (obj1[i] || '') == (obj2[i] || '');
-                var eitherNumber = _.isNumber(obj1[i]) || _.isNumber(obj2[i]);
-                var equalsNumbers = Number(obj1[i]) == Number(obj2[i]);
+                var equalsLoosely = (obj1[key] || '') == (obj2[key] || '');
+                var eitherNumber = _.isNumber(obj1[key]) || _.isNumber(obj2[key]);
+                var equalsNumbers = Number(obj1[key]) == Number(obj2[key]);
                 if (!(equalsLoosely || (eitherNumber && equalsNumbers))) {
                     return false;
                 }

@@ -69,9 +69,9 @@ OroApp.DatagridActionCell = Backgrid.Cell.extend({
     createActions: function() {
         var result = [];
         var actions = this.column.get('actions');
-        for (var index in actions) {
-            result.push(this.createAction(actions[index]));
-        }
+        _.each(actions, function(action) {
+            result.push(this.createAction(action));
+        }, this);
 
         return result;
     },
@@ -96,15 +96,16 @@ OroApp.DatagridActionCell = Backgrid.Cell.extend({
     createLaunchers: function() {
         var result = [];
 
-        for (var index in this.actions) {
+        _.each(this.actions, function(action) {
             var options = {};
-            if (this.actions[index].icon) {
+            if (action.icon) {
                 options = {
-                    icon: this.actions[index].icon
+                    icon: action.icon
                 };
             }
-            result.push(this.actions[index].createLauncher(options));
-        }
+            var launcher = action.createLauncher(options);
+            result.push(launcher);
+        }, this);
 
         return result;
     },
@@ -186,14 +187,13 @@ OroApp.DatagridActionCell = Backgrid.Cell.extend({
             withoutIcons: []
         };
 
-        for (var index in this.launchers) {
-            var launcher = this.launchers[index];
+        _.each(this.launchers, function(launcher) {
             if (launcher.icon) {
                 result.withIcons.push(launcher);
             } else {
                 result.withoutIcons.push(launcher);
             }
-        }
+        }, this);
 
         return result;
     }
