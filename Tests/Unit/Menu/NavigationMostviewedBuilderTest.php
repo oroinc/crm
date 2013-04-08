@@ -17,7 +17,7 @@ class NavigationMostviewedBuilderTest extends \PHPUnit_Framework_TestCase
     protected $securityContext;
 
     /**
-     * @var NavigationHistoryBuilder
+     * @var NavigationMostviewedBuilder
      */
     protected $builder;
 
@@ -40,6 +40,7 @@ class NavigationMostviewedBuilderTest extends \PHPUnit_Framework_TestCase
     public function testBuild()
     {
         $type = 'mostviewed';
+        $maxItems = 20;
         $userId = 1;
 
         $user = $this->getMockBuilder('stdClass')
@@ -67,29 +68,29 @@ class NavigationMostviewedBuilderTest extends \PHPUnit_Framework_TestCase
         $repository = $this->getMockBuilder('Oro\Bundle\NavigationBundle\Entity\Repository\HistoryItemRepository')
             ->disableOriginalConstructor()
             ->getMock();
-        $items = array(
-            array('id' => 1, 'title' => 'test1', 'url' => '/'),
-            array('id' => 2, 'title' => 'test2', 'url' => '/home'),
-        );
 
         $repository->expects($this->once())
             ->method('getNavigationItems')
-            ->with($userId, $type)
-            ->will($this->returnValue($items));
+            ->with($userId, $type, array('maxItems' => $maxItems, 'showMostviewed' => true))
+            ->will($this->returnValue(array()));
 
         $this->em->expects($this->once())
             ->method('getRepository')
             ->with(get_class($item))
             ->will($this->returnValue($repository));
 
+        $configMock = $this->getMockBuilder('Oro\Bundle\ConfigBundle\Config\UserConfigManager')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $configMock->expects($this->once())
+            ->method('get')
+            ->with($this->equalTo('oro_navigation.maxItems'))
+            ->will($this->returnValue($maxItems));
+
         $menu = $this->getMockBuilder('Knp\Menu\ItemInterface')->getMock();
 
-        $menu->expects($this->exactly(2))
-            ->method('addChild');
-        $menu->expects($this->once())
-            ->method('setExtra')
-            ->with('type', $type);
-
+        $this->builder->setOptions($configMock);
         $this->builder->build($menu, array(), $type);
     }
 }

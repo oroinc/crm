@@ -11,6 +11,8 @@ use Doctrine\ORM\Query\Expr;
  */
 class HistoryItemRepository extends EntityRepository implements NavigationRepositoryInterface
 {
+    const DEFAULT_ORDER_BY = 'visitedAt';
+
     /**
      * Find all history items for specified user
      *
@@ -23,8 +25,10 @@ class HistoryItemRepository extends EntityRepository implements NavigationReposi
     public function getNavigationItems($user, $type = null, $options = array())
     {
         $qb = $this->_em->createQueryBuilder();
-
-        $sortBy = isset($options['sortBy']) ? $options['sortBy'] : 'visitedAt';
+        $sortBy = self::DEFAULT_ORDER_BY;
+        if (isset($options['showMostviewed']) && $options['showMostviewed']) {
+            $sortBy = 'visitCount';
+        }
 
         $qb->add(
             'select',
@@ -41,7 +45,7 @@ class HistoryItemRepository extends EntityRepository implements NavigationReposi
                 'where',
                 $qb->expr()->eq('ni.user', ':user')
             )
-            ->add('orderBy', new Expr\OrderBy('ni.'.$sortBy, 'DESC'))
+            ->add('orderBy', new Expr\OrderBy('ni.' . $sortBy, 'DESC'))
             ->setParameters(array('user' => $user));
 
         if (isset($options['maxItems'])) {

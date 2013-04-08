@@ -137,6 +137,8 @@ services:
             - @security.context
             - @doctrine.orm.entity_manager
             - @oro_navigation.item.factory
+        calls:
+            - [ setOptions, [ @oro_config.user ]]
         tags:
             - { name: oro_menu.builder, alias: mostviewed }
 
