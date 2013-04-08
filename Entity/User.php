@@ -597,6 +597,7 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
     public function setImageFile(UploadedFile $imageFile)
     {
         $this->imageFile = $imageFile;
+        $this->updated   = new DateTime(); // this will trigger PreUpdate callback even if only image has been changed
 
         return $this;
     }
@@ -924,8 +925,6 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
      */
     public function preUpdate()
     {
-        $this->updated = new DateTime();
-
         $this->preUpload();
     }
 
