@@ -136,8 +136,6 @@ services:
             - @security.context
             - @doctrine.orm.entity_manager
             - @oro_navigation.item.factory
-        calls:
-            - [ setMatcher, [ @knp_menu.matcher ]]
         tags:
             - { name: oro_menu.builder, alias: mostviewed }
 

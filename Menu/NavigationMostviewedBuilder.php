@@ -4,8 +4,10 @@ namespace Oro\Bundle\NavigationBundle\Menu;
 
 use Knp\Menu\ItemInterface;
 
-class NavigationMostviewedBuilder extends NavigationHistoryBuilder
+class NavigationMostviewedBuilder extends NavigationItemBuilder
 {
+    const DEFAULT_MAX_RESULTS = 20;
+
     /**
      * Modify menu by adding, removing or editing items.
      *
@@ -16,6 +18,9 @@ class NavigationMostviewedBuilder extends NavigationHistoryBuilder
     public function build(ItemInterface $menu, array $options = array(), $alias = null)
     {
         $options['sortBy'] = 'visitCount';
+        if (!isset($options['maxItems'])) {
+            $options['maxItems'] = self::DEFAULT_MAX_RESULTS;
+        }
         parent::build($menu, $options, $alias);
     }
 }
