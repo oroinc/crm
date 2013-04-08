@@ -47,9 +47,19 @@ class TitleService
      */
     private $prefix = null;
 
+    /**
+     * @var string
+     */
     private $translatedTemplate;
 
+    /**
+     * @var \Twig_Environment
+     */
     private $templateEngine;
+
+    /**
+     * @var \Symfony\Bundle\FrameworkBundle\Translation\Translator
+     */
     private $translator;
 
     /**
@@ -66,6 +76,12 @@ class TitleService
         $this->em = $em;
     }
 
+    /**
+     * Set template string
+     *
+     * @param string $template
+     * @return $this
+     */
     public function setTemplate($template)
     {
         $this->template = $template;
@@ -73,6 +89,11 @@ class TitleService
         return $this;
     }
 
+    /**
+     * Generate translated title
+     *
+     * @param array $params
+     */
     public function generate($params)
     {
         $this->params = $params;
@@ -93,6 +114,12 @@ class TitleService
         $this->translatedTemplate = $prefix . $this->translatedTemplate . $suffix;
     }
 
+    /**
+     * Set string suffix
+     *
+     * @param string $suffix
+     * @return $this
+     */
     public function setSuffix($suffix)
     {
         $this->suffix = $suffix;
@@ -100,6 +127,12 @@ class TitleService
         return $this;
     }
 
+    /**
+     * Set string prefix
+     *
+     * @param string $prefix
+     * @return $this
+     */
     public function setPrefix($prefix)
     {
         $this->prefix = $prefix;
@@ -107,11 +140,21 @@ class TitleService
         return $this;
     }
 
+    /**
+     * Return params
+     *
+     * @return array
+     */
     public function getParams()
     {
         return $this->params;
     }
 
+    /**
+     * Return rendered translated title
+     *
+     * @return string
+     */
     public function render()
     {
         return $this->templateEngine->render($this->translatedTemplate, $this->getParams());
