@@ -27,7 +27,7 @@ class Configuration implements ConfigurationInterface
             $rootNode,
             array(
                 'maxItems' => array(
-                    'value' => 20, // default value, can be overriden in config.yml
+                    'value' => 20, // default value, can be overridden in config.yml
                     'type'  => 'scalar',
                 ),
             )
