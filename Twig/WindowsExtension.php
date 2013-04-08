@@ -14,11 +14,6 @@ class WindowsExtension extends \Twig_Extension
     const EXTENSION_NAME = 'oro_windows';
 
     /**
-     * @var Twig_Environment $environment
-     */
-    protected $environment;
-
-    /**
      * @var SecurityContextInterface
      */
     protected $securityContext;
@@ -29,16 +24,20 @@ class WindowsExtension extends \Twig_Extension
     protected $em;
 
     /**
-     * @param Twig_Environment $environment
+     * Protect extension from infinite loop
+     *
+     * @var bool
+     */
+    protected $rendered = false;
+
+    /**
      * @param SecurityContextInterface $securityContext
      * @param EntityManager $em
      */
     public function __construct(
-        Twig_Environment $environment,
         SecurityContextInterface $securityContext,
         EntityManager $em
     ) {
-        $this->environment = $environment;
         $this->securityContext = $securityContext;
         $this->em = $em;
     }
@@ -51,23 +50,31 @@ class WindowsExtension extends \Twig_Extension
     public function getFunctions()
     {
         return array(
-            'oro_windows_restore' => new \Twig_Function_Method($this, 'render', array('is_safe' => array('html')))
+            'oro_windows_restore' => new \Twig_Function_Method(
+                $this,
+                'render',
+                array(
+                    'is_safe' => array('html'),
+                    'needs_environment' => true
+                )
+            )
         );
     }
 
     /**
      * Renders a menu with the specified renderer.
      *
+     * @param \Twig_Environment $environment
      * @param array $options
      *
-     * @throws \InvalidArgumentException
      * @return string
      */
-    public function render(array $options = array())
+    public function render(Twig_Environment $environment, array $options = array())
     {
-        if (!($user = $this->getUser())) {
+        if (!($user = $this->getUser()) || $this->rendered) {
             return '';
         }
+        $this->rendered = true;
 
         $states = array();
         $windowsList = $this->em->getRepository('OroWindowsBundle:WindowsState')->findBy(array('user' => $user));
@@ -78,11 +85,12 @@ class WindowsExtension extends \Twig_Extension
                 $this->em->remove($windowState);
                 $this->em->flush();
             } else {
+                $data['cleanUrl'] = $this->getUrlWithContainer($data['cleanUrl'], $data['type']);
                 $states[$windowState->getId()] = $data;
             }
         }
 
-        return $this->environment->render(
+        return $environment->render(
             "OroWindowsBundle::states.html.twig",
             array("states" => $states)
         );
@@ -107,6 +115,22 @@ class WindowsExtension extends \Twig_Extension
         }
 
         return $user;
+    }
+
+    protected function getUrlWithContainer($url, $container)
+    {
+        if (strpos($url, '_widgetContainer=') === false) {
+            $parts = parse_url($url);
+            $widgetPart = '_widgetContainer=' . $container;
+            if (array_key_exists('query', $parts)) {
+                $separator = $parts['query'] ? '&' : '';
+                $newQuery = $parts['query'] . $separator . $widgetPart;
+                $url = str_replace($parts['query'], $newQuery, $url);
+            } else {
+                $url .= '?' . $widgetPart;
+            }
+        }
+        return $url;
     }
 
     /**
