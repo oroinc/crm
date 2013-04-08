@@ -14,9 +14,9 @@ class NavigationMostviewedBuilder extends NavigationItemBuilder
     /**
      * Inject config
      *
-     * @param $config
+     * @param \Oro\Bundle\ConfigBundle\Config\UserConfigManager $config
      */
-    public function setOptions($config)
+    public function setOptions(\Oro\Bundle\ConfigBundle\Config\UserConfigManager $config)
     {
         $this->configOptions = $config;
     }
