@@ -34,6 +34,8 @@ class LoadUserData extends AbstractFixture implements OrderedFixtureInterface
         $user->setUsername(self::TEST_NAME)
             ->setPassword($ef->getEncoder($user)->encodePassword(self::TEST_PASSWORD, $user->getSalt()))
             ->setEmail(self::TEST_EMAIL)
+            ->setFirstname('Firstname')
+            ->setLastname('Lastname')
             ->setEnabled(true);
         $user->addRole($role);
 
