@@ -44,8 +44,8 @@ class BaseController extends ContainerAware
     }
 
     /**
-     * @param Form $form
-     * @return string All error messages concatinated into one string
+     * @param  Form   $form
+     * @return string All form's error messages concatenated into one string
      */
     protected function getFormErrors(Form $form)
     {
