@@ -76,7 +76,7 @@ $(document).ready(function () {
         }
     };
 
-    $('#search-bar-search').keydown(function (event) {
+    $('#search-bar-search').keyup(function (event) {
         switch(event.keyCode) {
             case 13: //enter
                 $("#top-search-form").submit();
