@@ -403,19 +403,36 @@ class FlexibleManager implements TranslatableInterface, ScopableInterface
         return $fr->findWithAttributes($id);
     }
 
+    /**
+     * Save a product in two phases :
+     *   1) Persist and flush the entity as usual
+     *   2)
+     *     2.1) Force the reloading of the object (to be sure all values are loaded)
+     *     2.2) Add the missing translatable attribute locale values
+     *     2.3) Reflush to save these new values
+     */
     public function save($product)
     {
-
-        if ($this->storageManager->contains($product)) {
-            $this->storageManager->refresh($product);
-        }
-
-        $this->addMissingTranslatableAttributeLocaleValue($product);
-
         $this->storageManager->persist($product);
+        $this->storageManager->flush();
+
+        $this->storageManager->refresh($product);
+        $this->addMissingTranslatableAttributeLocaleValue($product);
         $this->storageManager->flush();
     }
 
+    /**
+     * Add missing translatable attribute locale value
+     *
+     * It makes sure that if an attribute is translatable, then all values
+     * in the locales defined by the entity activated languages exist.
+     *
+     * For example:
+     *   An entity has french and english languages activated.
+     *   It has a translatable attribute "name" with a value in french,
+     *   but the value in english is not available.
+     *   This method will create this value with an empty data.
+     */
     private function AddMissingTranslatableAttributeLocaleValue($product)
     {
         $values         = $product->getValues();
