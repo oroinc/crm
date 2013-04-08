@@ -5,7 +5,7 @@ use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttributeType;
 use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttribute;
 
 /**
- * Date attribute type
+ * Datetime attribute type
  *
  * @author    Nicolas Dupont <nicolas@akeneo.com>
  * @copyright 2012 Akeneo SAS (http://www.akeneo.com)
@@ -13,7 +13,6 @@ use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttribute;
  */
 class DateTimeType extends AbstractAttributeType
 {
-
     /**
      * constructor
      */
@@ -38,7 +37,7 @@ class DateTimeType extends AbstractAttributeType
         $options['input'] = 'datetime';
         $options['attr'] = array(
             'class' => 'datepicker input-small',
-            'placeholder' => 'YYYY-MM-DD HH:II:SS',
+            'placeholder' => 'YYYY-MM-DD HH:mm:ss',
         );
 
         return $options;
