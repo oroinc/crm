@@ -53,13 +53,18 @@ class TitleService
     }
 
 
+    /**
+     * Updates title index
+     *
+     * @param array $routes
+     */
     public function update($routes)
     {
 
         $data = array();
 
         foreach ($this->readers as $reader) {
-            $data = array_merge_recursive($data, $reader->getData());
+            $data = array_merge($data, $reader->getData());
         }
     }
 }

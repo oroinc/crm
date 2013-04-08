@@ -2,9 +2,9 @@
 
 namespace Oro\Bundle\NavigationBundle\Command;
 
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 
 /**
  * Class TitleIndexLoadCommand
@@ -49,11 +49,11 @@ class TitleIndexUpdateCommand extends ContainerAwareCommand
         $toUpdate = array();
 
         foreach ($routes as $name => $route) {
-            $requirements = $route->getRequirements();
-            $method = isset($requirements['_method'])
-                ?  $requirements['_method'] : 'ANY';
+            /** @var $route \Symfony\Component\Routing\Route  */
 
-            if ($this->checkMethod($method) && $route->getDefault('_controller') != 'assetic.controller:render') {
+            $requirements = $route->getRequirements();
+
+            if ($this->checkMethod($requirements) && $route->getDefault('_controller') != 'assetic.controller:render') {
                 $toUpdate[$name] = $route;
             }
         }
@@ -64,11 +64,14 @@ class TitleIndexUpdateCommand extends ContainerAwareCommand
     /**
      * Check if allowed GET method
      *
-     * @param mixed $method
+     * @param array $requirements
      * @return bool
      */
-    private function checkMethod($method)
+    private function checkMethod($requirements)
     {
+        $method = isset($requirements['_method'])
+            ?  $requirements['_method'] : 'ANY';
+
         $allowed = 'GET';
 
         $result = (is_array($method) && in_array($allowed, $method)
