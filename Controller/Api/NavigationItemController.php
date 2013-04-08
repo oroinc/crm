@@ -38,7 +38,7 @@ class NavigationItemController extends FOSRestController
 
         /** @var $repo NavigationRepositoryInterface */
         $repo = $this->getDoctrine()->getRepository(get_class($entity));
-        $items = $repo->getNavigationItems($this->getUserId(), $type);
+        $items = $repo->getNavigationItems($this->getUser(), $type);
 
         return $this->handleView(
             $this->view($items, is_array($items) ? Codes::HTTP_OK : Codes::HTTP_NOT_FOUND)

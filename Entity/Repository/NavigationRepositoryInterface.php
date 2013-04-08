@@ -10,10 +10,11 @@ interface NavigationRepositoryInterface
     /**
      * Find all navigation items for specified user
      *
-     * @param int $userId
+     * @param \Oro\Bundle\UserBundle\Entity\User $user
      * @param string $type
+     * @param array $options
      *
      * @return array
      */
-    public function getNavigationItems($userId, $type);
+    public function getNavigationItems($user, $type, $options = array());
 }

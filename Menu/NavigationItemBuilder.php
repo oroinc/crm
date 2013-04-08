@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\NavigationBundle\Menu;
 
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Security\Core\SecurityContextInterface;
 use Doctrine\ORM\EntityManager;
 use Knp\Menu\ItemInterface;
@@ -40,7 +41,6 @@ class NavigationItemBuilder implements BuilderInterface
         $this->factory = $factory;
     }
 
-
     /**
      * Modify menu by adding, removing or editing items.
      *
@@ -58,7 +58,7 @@ class NavigationItemBuilder implements BuilderInterface
 
             /** @var $repo NavigationRepositoryInterface */
             $repo = $this->em->getRepository(get_class($entity));
-            $items = $repo->getNavigationItems($user->getId(), $alias);
+            $items = $repo->getNavigationItems($user->getId(), $alias, $options);
             foreach ($items as $item) {
                 $menu->addChild(
                     $alias . '_item_' . $item['id'],

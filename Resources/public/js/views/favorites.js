@@ -6,7 +6,6 @@ navigation.favorites.MainView = navigation.MainViewAbstract.extend({
         el: '.favorite-button',
         tabTitle: 'Favorites',
         tabIcon: 'icon-star-empty',
-        collection: null,
         tabId: 'favorites'
     },
 
@@ -16,7 +15,7 @@ navigation.favorites.MainView = navigation.MainViewAbstract.extend({
 
     initialize: function() {
         this.options.collection = new navigation.ItemsList();
-        
+
         this.listenTo(this.getCollection(), 'add', this.addItemToTab);
         this.listenTo(this.getCollection(), 'reset', this.addAll);
         this.listenTo(this.getCollection(), 'all', this.render);
@@ -25,10 +24,6 @@ navigation.favorites.MainView = navigation.MainViewAbstract.extend({
 
         this.registerTab();
         this.cleanupTab();
-    },
-    
-    getCollection: function() {
-        return this.options.collection;
     },
 
     activate: function() {
@@ -61,7 +56,7 @@ navigation.favorites.MainView = navigation.MainViewAbstract.extend({
     addAll: function(items) {
         items.each(function(item) {
             this.addItemToTab(item);
-        }.bind(this));
+        }, this);
     },
 
     render: function() {

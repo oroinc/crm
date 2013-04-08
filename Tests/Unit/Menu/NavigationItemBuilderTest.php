@@ -61,10 +61,11 @@ class NavigationItemBuilderBuilderTest extends \PHPUnit_Framework_TestCase
     public function testBuild()
     {
         $type = 'favorite';
+        $userId = 1;
         $user = $this->getMockBuilder('stdClass')
             ->setMethods(array('getId'))
             ->getMock();
-        $user->expects($this->once())
+        $user->expects($this->once($userId))
             ->method('getId')
             ->will($this->returnValue(1));
 
@@ -92,7 +93,7 @@ class NavigationItemBuilderBuilderTest extends \PHPUnit_Framework_TestCase
         );
         $repository->expects($this->once())
             ->method('getNavigationItems')
-            ->with(1, $type)
+            ->with($userId, $type)
             ->will($this->returnValue($items));
 
         $this->em->expects($this->once())

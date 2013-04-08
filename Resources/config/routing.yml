@@ -20,3 +20,7 @@ oro_shortcut:
     resource:     Oro\Bundle\NavigationBundle\Controller\ShortcutController
     type:         annotation
     prefix:       /shortcut
+
+oro_pinbar_help:
+    pattern: /pinbar/help
+    defaults: { _controller: FrameworkBundle:Template:template, template: "OroNavigationBundle:Pinbar:help.html.twig" }

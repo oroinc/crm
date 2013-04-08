@@ -106,5 +106,4 @@ class ConfigurationBuilder implements BuilderInterface
             unset($menuItem[$optionName]);
         }
     }
-
 }

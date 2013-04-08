@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Entity(repositoryClass="Oro\Bundle\NavigationBundle\Entity\Repository\NavigationItemRepository")
  * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="navigation_item",
+ * @ORM\Table(name="oro_navigation_item",
  *      indexes={@ORM\Index(name="sorted_items_idx", columns={"user_id", "position"})})
  */
 class NavigationItem implements NavigationItemInterface
@@ -41,7 +41,7 @@ class NavigationItem implements NavigationItemInterface
     /**
      * @var string $url
      *
-     * @ORM\Column(name="url", type="text")
+     * @ORM\Column(name="url", type="string", length=500)
      */
     protected $url;
 
