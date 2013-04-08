@@ -76,13 +76,16 @@ $(document).ready(function () {
         }
     };
 
+    $('#search-bar-search').keydown(function (event) {
+        if (event.keyCode == 13) {
+            $("#top-search-form").submit();
+            event.preventDefault();
+            return false;
+        }
+    });
+
     $('#search-bar-search').keyup(function (event) {
         switch(event.keyCode) {
-            case 13: //enter
-                $("#top-search-form").submit();
-                event.preventDefault();
-                return false;
-                break;
             case 40: //down
             case 38: //up
                 $("#search-div").addClass('header-search-focused');
