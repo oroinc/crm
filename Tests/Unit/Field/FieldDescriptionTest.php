@@ -186,7 +186,11 @@ class FieldDescriptionTest extends \PHPUnit_Framework_TestCase
         $options['type']     = self::TEST_TYPE;
 
         $this->model->setOptions($options);
-        $this->assertEquals($this->testOptions, $this->model->getOptions());
+        $expectedTestOptions = $this->testOptions;
+        $expectedTestOptions['field_mapping'] = array(
+            'fieldName' => $this->testOptions['field_name']
+        );
+        $this->assertEquals($expectedTestOptions, $this->model->getOptions());
         $this->assertEquals(self::TEST_TEMPLATE, $this->model->getTemplate());
         $this->assertEquals(self::TEST_TYPE, $this->model->getType());
     }
@@ -286,6 +290,9 @@ class FieldDescriptionTest extends \PHPUnit_Framework_TestCase
         $expectedOptions[self::TEST_OPTION_NAME][self::TEST_FIELD_NAME] = array(
             self::TEST_DEFAULT_VALUE,
             self::TEST_SPECIFIC_VALUE
+        );
+        $expectedOptions['field_mapping'] = array(
+            'fieldName' => $this->testOptions['field_name']
         );
         $this->assertEquals($expectedOptions, $this->model->getOptions());
     }

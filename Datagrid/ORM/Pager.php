@@ -3,17 +3,12 @@
 namespace Oro\Bundle\GridBundle\Datagrid\ORM;
 
 use Sonata\DoctrineORMAdminBundle\Datagrid\Pager as BasePager;
+
 use Oro\Bundle\GridBundle\Datagrid\PagerInterface;
+use Oro\Bundle\GridBundle\Datagrid\ProxyQueryInterface;
 
 class Pager extends BasePager implements PagerInterface
 {
-    /**
-     * List of additional fields which must be used to calculate number of records
-     *
-     * @var array
-     */
-    protected $complexFields = array();
-
     /**
      * {@inheritdoc}
      */
@@ -27,43 +22,14 @@ class Pager extends BasePager implements PagerInterface
      */
     public function computeNbResult()
     {
-        return count($this->getUniqueIds());
+        return $this->getQuery()->getTotalCount();
     }
 
     /**
-     * @return array
+     * @return ProxyQueryInterface
      */
-    public function getUniqueIds()
+    public function getQuery()
     {
-        /** @var $countQuery \Doctrine\ORM\QueryBuilder */
-        $countQuery = clone $this->getQuery();
-
-        if (count($this->getParameters()) > 0) {
-            $countQuery->setParameters($this->getParameters());
-        }
-
-        $countQuery->resetDQLPart('orderBy');
-
-        $selectParts = array();
-        $selectParts[] = sprintf('%s.%s', $countQuery->getRootAlias(), current($this->getCountColumn()));
-        $selectParts = array_merge($selectParts, $this->complexFields);
-
-        $countQuery->select('DISTINCT ' . implode(', ', $selectParts));
-
-        $ids = array();
-        $results = $countQuery->getQuery()->getArrayResult();
-        foreach ($results as $result) {
-            $ids[] = reset($result);
-        }
-
-        return $ids;
-    }
-
-    /**
-     * @param array $complexFields
-     */
-    public function setComplexFields($complexFields)
-    {
-        $this->complexFields = $complexFields;
+        return parent::getQuery();
     }
 }

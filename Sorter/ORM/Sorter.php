@@ -86,40 +86,10 @@ class Sorter implements SorterInterface
     public function apply(ProxyQueryInterface $queryInterface, $direction = null)
     {
         $this->setDirection($direction);
-
-        if ($this->field->getOption('complex_data')) {
-            $sortField = $this->getName();
-        } else {
-            $alias = $this->field->getOption('entity_alias')
-                ?: $queryInterface->entityJoin($this->getParentAssociationMappings());
-            $sortField = $this->getFieldNameAssociatedWithAlias($alias);
-        }
-
-        $queryInterface->getQueryBuilder()->addOrderBy($sortField, $this->getDirection());
-    }
-
-    /**
-     * @param $alias
-     * @return string
-     */
-    protected function getFieldNameAssociatedWithAlias($alias)
-    {
-        return sprintf('%s.%s', $alias, $this->getFieldName());
-    }
-
-    /**
-     * @return mixed
-     */
-    protected function getParentAssociationMappings()
-    {
-        return $this->getField()->getOption('parent_association_mappings', array());
-    }
-
-    /**
-     * @return string|null
-     */
-    protected function getFieldName()
-    {
-        return $this->field->getOption('field_name');
+        $queryInterface->addSortOrder(
+            $this->field->getSortParentAssociationMapping(),
+            $this->field->getSortFieldMapping(),
+            $this->getDirection()
+        );
     }
 }

@@ -3,6 +3,7 @@
 namespace Oro\Bundle\GridBundle\Filter\ORM;
 
 use Doctrine\ORM\QueryBuilder;
+
 use Sonata\AdminBundle\Form\Type\Filter\NumberType;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 
@@ -21,6 +22,8 @@ class NumberFilter extends AbstractFilter
     }
 
     /**
+     * Get operator types
+     *
      * @return array
      */
     public function getTypeOptions()
@@ -49,29 +52,28 @@ class NumberFilter extends AbstractFilter
         }
 
         $type = isset($data['type']) ? $data['type'] : false;
-
-        $operator = $this->getOperator($type);
-        if (!$operator) {
-            $operator = $this->getOperator(NumberType::TYPE_EQUAL);
-        }
+        $operator = $this->getOperator($type, NumberType::TYPE_EQUAL);
 
         // c.name > '1' => c.name OPERATOR :FIELDNAME
         $parameterName = $this->getNewParameterName($queryBuilder);
-        if ($this->isComplexField()) {
-            $this->applyHaving($queryBuilder, sprintf('%s %s :%s', $field, $operator, $parameterName));
-        } else {
-            $this->applyWhere($queryBuilder, sprintf('%s.%s %s :%s', $alias, $field, $operator, $parameterName));
-        }
+
+        $this->applyFilterToClause(
+            $queryBuilder,
+            $this->createCompareFieldExpression($field, $alias, $operator, $parameterName)
+        );
+
         $queryBuilder->setParameter($parameterName, $data['value']);
     }
 
     /**
-     * @param string $type
-     *
-     * @return bool
+     * @param int $type
+     * @param int|null $default
+     * @return int|bool
      */
-    public function getOperator($type)
+    public function getOperator($type, $default = null)
     {
+        $type = (int) $type;
+
         $choices = array(
             NumberType::TYPE_EQUAL         => '=',
             NumberType::TYPE_GREATER_EQUAL => '>=',
@@ -80,7 +82,15 @@ class NumberFilter extends AbstractFilter
             NumberType::TYPE_LESS_THAN     => '<',
         );
 
-        return isset($choices[$type]) ? $choices[$type] : false;
+        if (isset($choices[$type])) {
+            return $choices[$type];
+        }
+
+        if (!is_null($default) && isset($choices[$default])) {
+            return $choices[$default];
+        }
+
+        return false;
     }
 
     /**

@@ -70,12 +70,6 @@ OroApp.DatagridFilterText = OroApp.DatagridFilter.extend({
      * @property {String}
      */
     defaultCriteriaHint: 'All',
-    /**
-     * Parent element active class
-     *
-     * @property {String}
-     */
-    parentActiveClass: 'open-filter',
 
     /**
      * Empty value
@@ -162,7 +156,7 @@ OroApp.DatagridFilterText = OroApp.DatagridFilter.extend({
      * @protected
      */
     _onClickOutsideCriteria: function(e) {
-        var elem = this.$('.filter-criteria');
+        var elem = this.$(this.criteriaSelector);
 
         if (elem.get(0) !== e.target && !elem.has(e.target).length) {
             this._hideCriteria();
@@ -184,7 +178,7 @@ OroApp.DatagridFilterText = OroApp.DatagridFilter.extend({
             })
         );
 
-        this._renderCriteria(this.$('.filter-criteria'));
+        this._renderCriteria(this.$(this.criteriaSelector));
         this._clickOutsideCriteriaCallback = $.proxy(this._onClickOutsideCriteria, this);
         $('body').on('click', this._clickOutsideCriteriaCallback);
         this._initConfirmValue();
@@ -227,22 +221,22 @@ OroApp.DatagridFilterText = OroApp.DatagridFilter.extend({
     /**
      * Show criteria popup
      *
-     * @private
+     * @protected
      */
     _showCriteria: function() {
         this.$(this.criteriaSelector).show();
         this._focusCriteria();
-        this.$(this.criteriaSelector).parent().addClass(this.parentActiveClass);
+        this._setButtonPressed(this.$(this.criteriaSelector), true);
     },
 
     /**
      * Hide criteria popup
      *
-     * @private
+     * @protected
      */
     _hideCriteria: function() {
         this.$(this.criteriaSelector).hide();
-        this.$(this.criteriaSelector).parent().removeClass(this.parentActiveClass);
+        this._setButtonPressed(this.$(this.criteriaSelector), false);
     },
 
     /**
@@ -375,7 +369,8 @@ OroApp.DatagridFilterText = OroApp.DatagridFilter.extend({
                 $input.each(function() {
                     var $input = $(this);
                     if ($input.attr('value') == value) {
-                        $input.attr('checked', 'checked');
+                        $input.attr('checked', true);
+                        $input.click();
                     } else {
                         $(this).removeAttr('checked');
                     }

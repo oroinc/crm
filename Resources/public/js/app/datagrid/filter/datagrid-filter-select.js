@@ -11,7 +11,7 @@ OroApp.DatagridFilterSelect = OroApp.DatagridFilter.extend({
      * @property
      */
     template: _.template(
-        '<div class="btn filter-select">' +
+        '<div class="btn filter-select filter-criteria-selector">' +
             '<%= label %>: ' +
             '<select>' +
                 '<option value=""><%= placeholder %></option>' +
@@ -57,6 +57,13 @@ OroApp.DatagridFilterSelect = OroApp.DatagridFilter.extend({
     disableSelector: '.disable-filter',
 
     /**
+     * Selector for widget button
+     *
+     * @property
+     */
+    buttonSelector: '.select-filter-widget.ui-multiselect:first',
+
+    /**
      * Selector for select input element
      *
      * @property
@@ -95,6 +102,13 @@ OroApp.DatagridFilterSelect = OroApp.DatagridFilter.extend({
     emptyValue: {
         value: ''
     },
+
+    /**
+     * Select widget menu opened flag
+     *
+     * @property
+     */
+    selectDropdownOpened: false,
 
     /**
      * Filter events
@@ -146,11 +160,19 @@ OroApp.DatagridFilterSelect = OroApp.DatagridFilter.extend({
             open: $.proxy(function() {
                 this.selectWidget.onOpenDropdown();
                 this._setDropdownWidth();
+                this._setButtonPressed(this.$(this.containerSelector), true);
+                this.selectDropdownOpened = true;
+            }, this),
+            close: $.proxy(function() {
+                this._setButtonPressed(this.$(this.containerSelector), false);
+                setTimeout($.proxy(function() {
+                    this.selectDropdownOpened = false;
+                }, this), 100);
             }, this)
         }, this.widgetOptions));
 
         this.selectWidget.setViewDesign(this);
-        this.$('.select-filter-widget.ui-multiselect:first').append('<span class="caret"></span>');
+        this.$(this.buttonSelector).append('<span class="caret"></span>');
     },
 
     /**
@@ -191,12 +213,19 @@ OroApp.DatagridFilterSelect = OroApp.DatagridFilter.extend({
     },
 
     /**
-     * Open select dropdown
+     * Open/close select dropdown
      *
+     * @param {Event} e
      * @protected
      */
-    _onClickFilterArea: function() {
-        this.selectWidget.multiselect('open');
+    _onClickFilterArea: function(e) {
+        if (!this.selectDropdownOpened) {
+            this.selectWidget.multiselect('open');
+        } else {
+            this.selectWidget.multiselect('close');
+        }
+
+        e.stopPropagation();
     },
 
     /**
@@ -210,8 +239,8 @@ OroApp.DatagridFilterSelect = OroApp.DatagridFilter.extend({
         this._confirmValue(value);
 
         // update dropdown
-        var button = this.$('.filter-select');
-        this.selectWidget.updateDropdownPosition(button);
+        var widget = this.$(this.containerSelector);
+        this.selectWidget.updateDropdownPosition(widget);
     },
 
     /**

@@ -1,7 +1,7 @@
 // Replace standard formatter method of Backgrid.MomentFormatter
 var originalMomentFormatterFromRawFunction = Backgrid.Extension.MomentFormatter.prototype.fromRaw;
 Backgrid.Extension.MomentFormatter.prototype.fromRaw = function (rawData) {
-    if (rawData == null) {
+    if (!rawData) {
         return '';
     }
 

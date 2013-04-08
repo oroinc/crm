@@ -42,7 +42,7 @@ class FlexibleDatagridManagerTest extends \PHPUnit_Framework_TestCase
      */
     protected $typeToFilter = array(
         AbstractAttributeType::BACKEND_TYPE_DATE     => FilterInterface::TYPE_FLEXIBLE_DATE,
-        AbstractAttributeType::BACKEND_TYPE_DATETIME => FilterInterface::TYPE_FLEXIBLE_STRING,
+        AbstractAttributeType::BACKEND_TYPE_DATETIME => FilterInterface::TYPE_FLEXIBLE_DATETIME,
         AbstractAttributeType::BACKEND_TYPE_DECIMAL  => FilterInterface::TYPE_FLEXIBLE_NUMBER,
         AbstractAttributeType::BACKEND_TYPE_INTEGER  => FilterInterface::TYPE_FLEXIBLE_NUMBER,
         AbstractAttributeType::BACKEND_TYPE_OPTION   => FilterInterface::TYPE_FLEXIBLE_OPTIONS,

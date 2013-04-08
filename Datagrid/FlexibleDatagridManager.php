@@ -31,7 +31,7 @@ abstract class FlexibleDatagridManager extends DatagridManager
         ),
         AbstractAttributeType::BACKEND_TYPE_DATETIME => array(
             'field'  => FieldDescriptionInterface::TYPE_DATETIME,
-            'filter' => FilterInterface::TYPE_FLEXIBLE_STRING,
+            'filter' => FilterInterface::TYPE_FLEXIBLE_DATETIME,
         ),
         AbstractAttributeType::BACKEND_TYPE_DECIMAL => array(
             'field'  => FieldDescriptionInterface::TYPE_DECIMAL,

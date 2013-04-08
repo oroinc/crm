@@ -237,9 +237,16 @@ interface FieldDescriptionInterface
     public function isFilterable();
 
     /**
-     * return the field mapping definition used when sorting
+     * Return the field mapping definition used when sorting
      *
      * @return array the field mapping definition
      */
     public function getSortFieldMapping();
+
+    /**
+     * Return the parent association mapping definitions used when sorting
+     *
+     * @return array the parent association mapping definitions
+     */
+    public function getSortParentAssociationMapping();
 }

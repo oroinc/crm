@@ -161,3 +161,17 @@ table.grid tbody tr.row-click-action {
     color: #032D67;
     text-decoration: underline;
 }
+
+.loading-mask .loading-frame .box {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.filter-criteria .date-visual-element {
+    width: 80px;
+}
+
+
+.filter-criteria .datetime-visual-element {
+    width: 120px;
+}

@@ -2,9 +2,11 @@
 
 namespace Oro\Bundle\GridBundle\Filter\ORM;
 
+use Doctrine\DBAL\Query\QueryBuilder;
+use Doctrine\ORM\Query\Expr;
+
 use Sonata\AdminBundle\Form\Type\Filter\DateRangeType;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
-use Doctrine\DBAL\Query\QueryBuilder;
 
 abstract class AbstractDateFilter extends AbstractFilter
 {
@@ -68,6 +70,8 @@ abstract class AbstractDateFilter extends AbstractFilter
     }
 
     /**
+     * Get filter parameters using data
+     *
      * @param array $data
      * @return array
      */
@@ -106,7 +110,7 @@ abstract class AbstractDateFilter extends AbstractFilter
         }
 
         // check date format
-        if (!$this->isDateCorrect($data['value']['start'], $data['value']['end'])) {
+        if (!$this->isDateCorrect($data['value']['start']) && !$this->isDateCorrect($data['value']['end'])) {
             return false;
         }
 
@@ -114,23 +118,16 @@ abstract class AbstractDateFilter extends AbstractFilter
     }
 
     /**
-     * @param string $dateStartValue
-     * @param string $dateEndValue
+     * Checks if date matches format or empty
+     *
+     * @param string $date
      * @return bool
      */
-    protected function isDateCorrect($dateStartValue, $dateEndValue)
+    protected function isDateCorrect($date)
     {
-        $dateStartValue = trim($dateStartValue);
-        $dateEndValue   = trim($dateEndValue);
+        $date = trim($date);
 
-        if ($dateStartValue && !preg_match(static::VALUE_FORMAT, $dateStartValue)) {
-            $dateStartValue = null;
-        }
-        if ($dateEndValue && !preg_match(static::VALUE_FORMAT, $dateEndValue)) {
-            $dateEndValue = null;
-        }
-
-        if (!$dateStartValue && !$dateEndValue) {
+        if ($date && !preg_match(static::VALUE_FORMAT, $date)) {
             return false;
         }
 
@@ -138,6 +135,8 @@ abstract class AbstractDateFilter extends AbstractFilter
     }
 
     /**
+     * Apply expression using "between" filtering
+     *
      * @param ProxyQueryInterface $queryBuilder
      * @param string $dateStartValue
      * @param string $dateEndValue
@@ -147,7 +146,7 @@ abstract class AbstractDateFilter extends AbstractFilter
      * @param string $field
      */
     protected function applyFilterBetween(
-        ProxyQueryInterface $queryBuilder,
+        $queryBuilder,
         $dateStartValue,
         $dateEndValue,
         $startDateParameterName,
@@ -156,29 +155,23 @@ abstract class AbstractDateFilter extends AbstractFilter
         $field
     ) {
         if ($dateStartValue) {
-            if ($this->isComplexField()) {
-                $this->applyHaving($queryBuilder, sprintf('%s %s :%s', $field, '>=', $startDateParameterName));
-            } else {
-                $this->applyWhere(
-                    $queryBuilder,
-                    sprintf('%s.%s %s :%s', $alias, $field, '>=', $startDateParameterName)
-                );
-            }
+            $this->applyFilterToClause(
+                $queryBuilder,
+                $this->createCompareFieldExpression($field, $alias, '>=', $startDateParameterName)
+            );
         }
 
         if ($dateEndValue) {
-            if ($this->isComplexField()) {
-                $this->applyHaving($queryBuilder, sprintf('%s %s :%s', $field, '<=', $endDateParameterName));
-            } else {
-                $this->applyWhere(
-                    $queryBuilder,
-                    sprintf('%s.%s %s :%s', $alias, $field, '<=', $endDateParameterName)
-                );
-            }
+            $this->applyFilterToClause(
+                $queryBuilder,
+                $this->createCompareFieldExpression($field, $alias, '<=', $endDateParameterName)
+            );
         }
     }
 
     /**
+     * Apply expression using "not between" filtering
+     *
      * @param ProxyQueryInterface $queryBuilder
      * @param string $dateStartValue
      * @param string $dateEndValue
@@ -188,7 +181,7 @@ abstract class AbstractDateFilter extends AbstractFilter
      * @param string $field
      */
     protected function applyFilterNotBetween(
-        ProxyQueryInterface $queryBuilder,
+        $queryBuilder,
         $dateStartValue,
         $dateEndValue,
         $startDateParameterName,
@@ -196,29 +189,17 @@ abstract class AbstractDateFilter extends AbstractFilter
         $alias,
         $field
     ) {
-        $conditionParts = array();
+        $orExpression = $this->getExpressionFactory()->orX();
 
         if ($dateStartValue) {
-            if ($this->isComplexField()) {
-                $conditionParts[] = sprintf('%s < :%s', $field, $startDateParameterName);
-            } else {
-                $conditionParts[] = sprintf('%s.%s < :%s', $alias, $field, $startDateParameterName);
-            }
+            $orExpression->add($this->createCompareFieldExpression($field, $alias, '<', $startDateParameterName));
         }
 
         if ($dateEndValue) {
-            if ($this->isComplexField()) {
-                $conditionParts[] = sprintf('%s > :%s', $field, $endDateParameterName);
-            } else {
-                $conditionParts[] = sprintf('%s.%s > :%s', $alias, $field, $endDateParameterName);
-            }
+            $orExpression->add($this->createCompareFieldExpression($field, $alias, '>', $endDateParameterName));
         }
 
-        if ($this->isComplexField()) {
-            $this->applyHaving($queryBuilder, implode(' OR ', $conditionParts));
-        } else {
-            $this->applyWhere($queryBuilder, implode(' OR ', $conditionParts));
-        }
+        $this->applyFilterToClause($queryBuilder, $orExpression);
     }
 
     /**

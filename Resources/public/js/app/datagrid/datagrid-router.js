@@ -67,10 +67,7 @@ OroApp.DatagridRouter = OroApp.Router.extend({
      */
     changeState: function(encodedStateData) {
         var state = this.collection.decodeStateData(encodedStateData);
-        this.collection.extendState(state);
-        this.collection.trigger('updateState', this.collection, {
-            needReloadCollection: false
-        });
+        this.collection.updateState(state);
         this.collection.fetch({
             ignoreSaveStateInUrl: true
         });
@@ -80,10 +77,7 @@ OroApp.DatagridRouter = OroApp.Router.extend({
      * Route for initializing collection. Collection will retrieve initial state and call fetch.
      */
     init: function() {
-        this.collection.extendState(this._initState);
-        this.collection.trigger('updateState', this.collection, {
-            needReloadCollection: false
-        });
+        this.collection.updateState(this._initState);
         this.collection.fetch({
             ignoreSaveStateInUrl: true
         });
