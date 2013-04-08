@@ -40,7 +40,7 @@ class WindowsExtensionTest extends \PHPUnit_Framework_TestCase
         $this->em = $this->getMockBuilder('Doctrine\ORM\EntityManager')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->extension = new WindowsExtension($this->environment, $this->securityContext, $this->em);
+        $this->extension = new WindowsExtension($this->securityContext, $this->em);
     }
 
     public function testGetFunctions()
@@ -58,10 +58,16 @@ class WindowsExtensionTest extends \PHPUnit_Framework_TestCase
 
     public function testRenderNoUser()
     {
-        $this->assertEmpty($this->extension->render());
+        $this->assertEmpty($this->extension->render($this->environment));
     }
 
-    public function testRender()
+    /**
+     * @dataProvider renderDataProvider
+     * @param string $widgetUrl
+     * @param string $widgetType
+     * @param string $expectedWidgetUrl
+     */
+    public function testRender($widgetUrl, $widgetType, $expectedWidgetUrl)
     {
         $user = $this->getMock('stdClass');
 
@@ -75,7 +81,7 @@ class WindowsExtensionTest extends \PHPUnit_Framework_TestCase
             ->method('getToken')
             ->will($this->returnValue($token));
 
-        $normalStateData = array('test' => true);
+        $normalStateData = array('cleanUrl' => $widgetUrl, 'type' => $widgetType);
         $normalState = $this->getStateMock(1, $normalStateData);
         $badState = $this->getStateMock(2, null);
         $states = array($normalState, $badState);
@@ -96,12 +102,25 @@ class WindowsExtensionTest extends \PHPUnit_Framework_TestCase
             ->method('flush');
 
         $output = 'RENDERED';
+        $expectedStates = array('cleanUrl' => $expectedWidgetUrl, 'type' => $widgetType);
         $this->environment->expects($this->once())
             ->method('render')
-            ->with("OroWindowsBundle::states.html.twig", array("states" => array(1 => $normalStateData)))
+            ->with("OroWindowsBundle::states.html.twig", array("states" => array(1 => $expectedStates)))
             ->will($this->returnValue($output));
 
-        $this->assertEquals($output, $this->extension->render());
+        $this->assertEquals($output, $this->extension->render($this->environment));
+    }
+
+    /**
+     * @return array
+     */
+    public function renderDataProvider()
+    {
+        return array(
+            'url_without_parameters' => array('/user/create', 'test', '/user/create?_widgetContainer=test'),
+            'url_with_parameters' => array('/user/create?id=1', 'test', '/user/create?id=1&_widgetContainer=test'),
+            'url_with_parameters_and_fragment' => array('/user/create?id=1#group=date', 'test', '/user/create?id=1&_widgetContainer=test#group=date'),
+        );
     }
 
     protected function getStateMock($id, $data)
