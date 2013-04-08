@@ -2,10 +2,13 @@
 
 namespace Oro\Bundle\NavigationBundle\Provider;
 
+use Doctrine\Common\Persistence\ObjectManager;
+use Oro\Bundle\NavigationBundle\Entity\Title;
 use Oro\Bundle\NavigationBundle\Title\TitleReader\ConfigReader;
 use Oro\Bundle\NavigationBundle\Title\TitleReader\AnnotationsReader;
 use Symfony\Component\Yaml\Yaml;
 use Symfony\Bundle\FrameworkBundle\Translation\Translator;
+use Symfony\Component\Routing\Route;
 
 class TitleService
 {
@@ -44,20 +47,23 @@ class TitleService
      */
     private $prefix = null;
 
-    private $bundles;
-
     private $translatedTemplate;
 
     private $templateEngine;
     private $translator;
 
+    /**
+     * @var ObjectManager
+     */
+    private $em;
 
-    public function __construct(AnnotationsReader $reader, ConfigReader $configReader, \Twig_Environment $templateEngine, Translator $translator)
+    public function __construct(AnnotationsReader $reader, ConfigReader $configReader, \Twig_Environment $templateEngine, Translator $translator, ObjectManager $em)
     {
         $this->readers = array($reader, $configReader);
 
         $this->templateEngine = $templateEngine;
         $this->translator = $translator;
+        $this->em = $em;
     }
 
     public function setTemplate($template)
@@ -119,11 +125,33 @@ class TitleService
      */
     public function update($routes)
     {
-
-        $data = array();
+        $data = $routes;
 
         foreach ($this->readers as $reader) {
             $data = array_merge($data, $reader->getData());
         }
+
+        $entity = new Title();
+        $bdData = $this->em->getRepository(get_class($entity))->getExistItems();
+
+        $existInDB = array_intersect_key($data, $bdData);
+
+        foreach ($data as $route => $title) {
+            if (!array_key_exists($route, $existInDB)) {
+                $entity = new Title();
+                $entity->setTitle($title instanceof Route ? '' : $title);
+                $entity->setRoute($route);
+
+                $this->em->persist($entity);
+            }
+        }
+
+        foreach ($bdData as $route => $title) {
+            if (!array_key_exists($route, $existInDB)) {
+                $this->em->remove($entity);
+            }
+        }
+
+        $this->em->flush();
     }
 }

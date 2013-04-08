@@ -17,7 +17,10 @@ class ConfigReader extends Reader
         $dirs = $this->getScanDirectories();
         foreach ($dirs as $dir) {
             if (is_file($file = $dir . '/Resources/config/titles.yml')) {
-                $titleConfig += Yaml::parse(realpath($file));
+                $data = Yaml::parse(realpath($file));
+                if ($data) {
+                    $titleConfig += $data;
+                }
             }
         }
 

@@ -166,9 +166,9 @@ services:
         arguments:
           - @oro_navigation.title_annotations_reader
           - @oro_navigation.title_config_reader
-#         - %kernel.bundles%
           - @oro_navigation.twig
           - @translator.default
+          - @doctrine.orm.entity_manager
 
     oro_navigation.title_annotations_reader:
         class:                        %oro_user.title_service.annotations_reader.class%
