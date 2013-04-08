@@ -3,6 +3,7 @@
 namespace Oro\Bundle\NavigationBundle\Menu;
 
 use Knp\Menu\ItemInterface;
+use Oro\Bundle\NavigationBundle\Entity\NavigationHistoryItem;
 
 class NavigationMostviewedBuilder extends NavigationItemBuilder
 {
@@ -30,7 +31,7 @@ class NavigationMostviewedBuilder extends NavigationItemBuilder
      */
     public function build(ItemInterface $menu, array $options = array(), $alias = null)
     {
-        $options['showMostviewed'] = true;
+        $options['orderBy'] = array(array('field' => NavigationHistoryItem::NAVIGATION_HISTORY_COLUMN_VISIT_COUNT));
         $maxItems = $this->configOptions->get('oro_navigation.maxItems');
         if (!is_null($maxItems)) {
             $options['maxItems'] = $maxItems;
