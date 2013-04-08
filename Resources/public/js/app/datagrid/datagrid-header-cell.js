@@ -11,7 +11,7 @@ OroApp.DatagridHeaderCell = Backgrid.HeaderCell.extend({
         '<% if (sortable) { %>' +
             '<a href="#">' +
                 '<%= label %> ' +
-                '<span class="caret"></b>' +
+                '<span class="caret"></span>' +
             '</a>' +
         '<% } else { %>' +
             '<span><%= label %></span>' + // wrap label into span otherwise underscore will not render it
