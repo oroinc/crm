@@ -16,7 +16,7 @@ OroApp.DatagridActionDelete = OroApp.DatagridAction.extend({
      * Execute delete model
      */
     execute: function() {
-        this.getConfirmDialog().open($.proxy(this.doDelete, this));
+        this.getConfirmDialog().open();
     },
 
     /**
@@ -44,6 +44,7 @@ OroApp.DatagridActionDelete = OroApp.DatagridAction.extend({
                 title: 'Delete Confirmation',
                 content: 'Are you sure you want to delete this item?'
             });
+            this.confirmModal.on('ok', _.bind(this.doDelete, this));
         }
         return this.confirmModal;
     },
