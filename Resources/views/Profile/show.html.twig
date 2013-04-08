@@ -17,7 +17,7 @@
             <div class="pull-right">
                 <div class="btn-group icons-holder">
                     {% if resource_granted('oro_user_profile_edit') %}
-                    <a href="{{ path('oro_user_edit', { id: user.id }) }}" class="btn"><i class="icon-edit hide-text">{{ 'Edit'|trans }}</i></a>
+                    <a href="{{ path('oro_user_edit', { id: user.id, back: app.request.uri }) }}" class="btn"><i class="icon-edit hide-text">{{ 'Edit'|trans }}</i></a>
                     {% endif %}
                     {% if resource_granted('oro_user_profile_remove') %}
                     <a href="{{ path('oro_user_remove', { id: user.id }) }}" class="btn"><i class="icon-trash hide-text">{{ 'Remove'|trans }}</i></a>
