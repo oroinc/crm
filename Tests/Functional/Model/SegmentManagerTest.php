@@ -63,6 +63,7 @@ class SegmentManagerTest extends WebTestCase
      */
     protected function setUp()
     {
+        $this->markTestSkipped("Skipped due to missing DB isolation");
         $entityPath = dirname(__FILE__) . DIRECTORY_SEPARATOR .'..'. DIRECTORY_SEPARATOR .'Entity';
         static::$kernel = static::createKernel(array("debug" => true));
         static::$kernel->boot();
