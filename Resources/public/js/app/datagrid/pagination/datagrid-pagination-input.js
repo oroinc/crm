@@ -35,8 +35,14 @@ OroApp.DatagridPaginationInput = OroApp.DatagridPagination.extend({
     /** @property */
     events: {
         "click a": "onChangePage",
+        "blur input": "onChangePageByInput",
         "change input": "onChangePageByInput",
-        "blur input": "onChangePageByInput"
+        'keyup input': function(e) {
+            if (e.which == 13) {
+                // fix for IE 8, bacause change event is not fired when enter is pressed
+                this.onChangePageByInput(e);
+            }
+        }
     },
 
     /** @property */
