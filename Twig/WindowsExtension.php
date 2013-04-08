@@ -84,7 +84,7 @@ class WindowsExtension extends \Twig_Extension
             if (!$data) {
                 $this->em->remove($windowState);
                 $this->em->flush();
-            } else {
+            } elseif (array_key_exists('cleanUrl', $data) && array_key_exists('type', $data)) {
                 $data['cleanUrl'] = $this->getUrlWithContainer($data['cleanUrl'], $data['type']);
                 $states[$windowState->getId()] = $data;
             }
