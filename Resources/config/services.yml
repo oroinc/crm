@@ -163,7 +163,12 @@ services:
 
     oro_navigation.title_service:
         class:                        %oro_navigation.title_service.class%
-        arguments:                    ["@oro_navigation.title_annotations_reader", "@oro_navigation.title_config_reader"]
+        arguments:
+          - @oro_navigation.title_annotations_reader
+          - @oro_navigation.title_config_reader
+#         - %kernel.bundles%
+          - @oro_navigation.twig
+          - @translator.default
 
     oro_navigation.title_annotations_reader:
         class:                        %oro_user.title_service.annotations_reader.class%
@@ -172,3 +177,11 @@ services:
     oro_navigation.title_config_reader:
         class:                        %oro_user.title_service.config_reader.class%
         arguments:                    ["@kernel"]
+
+    oro_navigation.twig.string_loader:
+        class: Twig_Loader_String
+
+    oro_navigation.twig:
+        class: Twig_Environment
+        arguments:
+            - @oro_navigation.twig.string_loader

@@ -37,6 +37,11 @@ class OroNavigationExtension extends Extension
                     }
                 }
             }
+
+            if (is_file($file = dirname($reflection->getFilename()) . '/Resources/config/titles.yml')) {
+                $entitiesConfig[''] += Yaml::parse(realpath($file));
+            }
+
         }
 
         // process configurations to validate and merge
