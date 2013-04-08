@@ -48,6 +48,7 @@ class GroupController extends Controller
             'form' => $this->get('oro_user.form.group')->createView(),
         );
         $template = ($widgetContainer ? $widgetContainer . '.' : '') . 'edit.html.twig';
+
         return $this->render('OroUserBundle:Group:' . $template, $viewParameters);
     }
 
@@ -114,7 +115,7 @@ class GroupController extends Controller
     /**
      * Get redirect URLs
      *
-     * @param string $default
+     * @param  string $default
      * @return string
      */
     protected function getRedirectUrl($default)
