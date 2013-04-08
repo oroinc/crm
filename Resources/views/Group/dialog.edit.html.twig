@@ -1,0 +1,8 @@
+{% for flashMessage in app.session.flashbag.get('success') %}
+    <div class="alert alert-success">
+        <button type="button" class="close" data-dismiss="alert">×</button>
+        {{ flashMessage }}
+    </div>
+{% endfor %}
+
+{% include 'OroUserBundle:Group:edit.form.html.twig' %}
