@@ -92,7 +92,6 @@ $(document).ready(function () {
                 $('#search-dropdown a:first').focus();
                 event.preventDefault();
                 return false;
-                break;
             default:
                 SearchByTag();
         };
@@ -104,12 +103,14 @@ $(document).ready(function () {
         function select_previous () {
             $this.parent('li').prev().find('a').focus();
             evt.stopPropagation();
+            evt.preventDefault();
             return false;
         }
 
         function select_next () {
             $this.parent('li').next().find('a').focus();
             evt.stopPropagation();
+            evt.preventDefault();
             return false;
         }
 
@@ -120,7 +121,7 @@ $(document).ready(function () {
                 evt.stopPropagation();
                 break;
             case 9: // Tab key
-                if (evt.shiftKey) {
+                if (D.shiftKey) {
                     select_previous();
                 }
                 else {
