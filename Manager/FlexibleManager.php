@@ -17,6 +17,8 @@ use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttributeOption;
 use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttributeOptionValue;
 use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttributeExtended;
 use Doctrine\Common\Persistence\ObjectManager;
+use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityFlexible;
+use Pim\Bundle\ProductBundle\Entity\ProductValue;
 
 /**
  * Flexible object manager, allow to use flexible entity in storage agnostic way
@@ -399,5 +401,54 @@ class FlexibleManager implements TranslatableInterface, ScopableInterface
         $fr->setLocale($this->getLocale());
 
         return $fr->findWithAttributes($id);
+    }
+
+    public function save($product)
+    {
+
+        if ($this->storageManager->contains($product)) {
+            $this->storageManager->refresh($product);
+        }
+
+        $this->addMissingTranslatableAttributeLocaleValue($product);
+
+        $this->storageManager->persist($product);
+        $this->storageManager->flush();
+    }
+
+    private function AddMissingTranslatableAttributeLocaleValue($product)
+    {
+        $values         = $product->getValues();
+        $languages      = $product->getLanguages();
+        $attributes     = array();
+        $missingLocales = array();
+
+        foreach ($values as $value) {
+            $attribute = $value->getAttribute();
+            $attributes[$attribute->getCode()] = $attribute;
+            if (true === $attribute->getTranslatable()) {
+                if (!isset($missingLocales[$attribute->getCode()])) {
+                    $missingLocales[$attribute->getCode()] = $languages->map(function ($language) {
+                        return $language->getCode();
+                    })->toArray();
+                }
+
+                foreach ($languages as $language) {
+                    if ($language->getCode() === $value->getLocale()) {
+                        $missingLocales[$attribute->getCode()] = array_diff($missingLocales[$attribute->getCode()], array($value->getLocale()));
+                    }
+                }
+            }
+        }
+
+        foreach ($missingLocales as $attribute => $locales) {
+            foreach ($locales as $locale) {
+                $value = new ProductValue;
+                $value->setLocale($locale);
+                $value->setAttribute($attributes[$attribute]);
+
+                $product->addValue($value);
+            }
+        }
     }
 }
