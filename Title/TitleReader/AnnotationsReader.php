@@ -90,6 +90,7 @@ class AnnotationsReader extends Reader
     private function prepareRoutesArray(array $routes)
     {
         foreach ($routes as $name => $route) {
+            /** @var $route \Symfony\Component\Routing\Route */
             $this->routes[$route->getDefault('_controller')] = $name;
         }
     }

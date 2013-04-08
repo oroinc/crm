@@ -2,13 +2,14 @@
 
 namespace Oro\Bundle\NavigationBundle\Provider;
 
-use Doctrine\Common\Persistence\ObjectManager;
-use Oro\Bundle\NavigationBundle\Entity\Title;
-use Oro\Bundle\NavigationBundle\Title\TitleReader\ConfigReader;
-use Oro\Bundle\NavigationBundle\Title\TitleReader\AnnotationsReader;
 use Symfony\Component\Yaml\Yaml;
 use Symfony\Bundle\FrameworkBundle\Translation\Translator;
 use Symfony\Component\Routing\Route;
+use Doctrine\Common\Persistence\ObjectManager;
+
+use Oro\Bundle\NavigationBundle\Entity\Title;
+use Oro\Bundle\NavigationBundle\Title\TitleReader\ConfigReader;
+use Oro\Bundle\NavigationBundle\Title\TitleReader\AnnotationsReader;
 
 class TitleService
 {
@@ -176,12 +177,15 @@ class TitleService
         $data = $routes;
 
         foreach ($this->readers as $reader) {
+            /** @var $reader  \Oro\Bundle\NavigationBundle\Title\TitleReader\Reader */
             $data = array_merge($data, $reader->getData($routes));
         }
 
         $bdData = $this->em->getRepository('Oro\Bundle\NavigationBundle\Entity\Title')->findAll();
 
         foreach ($bdData as $entity) {
+            /** @var $entity Title */
+
             if (!array_key_exists($entity->getRoute(), $data)) {
                 //remove not existing entries
                 $this->em->remove($entity);
