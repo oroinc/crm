@@ -20,7 +20,9 @@ OroApp.DatagridFilterDate = OroApp.DatagridFilterChoice.extend({
             '</div>' +
             '<div class="horizontal">' +
                 '<% _.each(choices, function (hint, value) { %>' +
-                    '<input type="radio" name="<%= name %>" value="<%= value %>" />&nbsp;<%= hint %><br/>' +
+                    '<div class="oro-clearfix">' +
+                        '<input type="radio" id="<%= name %>-<%= value %>" name="<%= name %>" value="<%= value %>" /><label for ="<%= name %>-<%= value %>"><%= hint %></label>' +
+                    '</div>' +
                 '<% }); %>' +
                 '<br/>' +
             '</div>' +
