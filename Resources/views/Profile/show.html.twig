@@ -16,6 +16,7 @@
         <div class="row">
             <div class="pull-right">
                 <div class="btn-group icons-holder">
+                    <a href="{{ app.request.get('back') ? app.request.get('back') : path('oro_user_index') }}" class="btn"><i class="icon-chevron-left hide-text">{{ 'Back'|trans }}</i></a>
                     {% if resource_granted('oro_user_profile_edit') %}
                     <a href="{{ path('oro_user_edit', { id: user.id, back: app.request.uri }) }}" class="btn"><i class="icon-edit hide-text">{{ 'Edit'|trans }}</i></a>
                     {% endif %}
