@@ -176,7 +176,7 @@ services:
 
     oro_navigation.title_config_reader:
         class:                        %oro_user.title_service.config_reader.class%
-        arguments:                    ["@kernel"]
+        arguments:                    ["%oro_titles%"]
 
     oro_navigation.twig.string_loader:
         class: Twig_Loader_String

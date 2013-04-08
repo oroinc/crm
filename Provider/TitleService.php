@@ -67,8 +67,13 @@ class TitleService
      */
     private $em;
 
-    public function __construct(AnnotationsReader $reader, ConfigReader $configReader, \Twig_Environment $templateEngine, Translator $translator, ObjectManager $em)
-    {
+    public function __construct(
+        AnnotationsReader $reader,
+        ConfigReader $configReader,
+        \Twig_Environment $templateEngine,
+        Translator $translator,
+        ObjectManager $em
+    ) {
         $this->readers = array($reader, $configReader);
 
         $this->templateEngine = $templateEngine;
@@ -171,28 +176,37 @@ class TitleService
         $data = $routes;
 
         foreach ($this->readers as $reader) {
-            $data = array_merge($data, $reader->getData());
+            $data = array_merge($data, $reader->getData($routes));
         }
 
-        $entity = new Title();
-        $bdData = $this->em->getRepository(get_class($entity))->getExistItems();
+        $bdData = $this->em->getRepository('Oro\Bundle\NavigationBundle\Entity\Title')->findAll();
 
-        $existInDB = array_intersect_key($data, $bdData);
+        foreach ($bdData as $entity) {
+            if (!array_key_exists($entity->getRoute(), $data)) {
+                //remove not existing entries
+                $this->em->remove($entity);
 
-        foreach ($data as $route => $title) {
-            if (!array_key_exists($route, $existInDB)) {
-                $entity = new Title();
-                $entity->setTitle($title instanceof Route ? '' : $title);
-                $entity->setRoute($route);
+                continue;
+            }
 
+            $route = $entity->getRoute();
+            $title = $data[$route] instanceof Route ? '' : $data[$route];
+
+            if ($entity->getIsSystem()) {
+                $entity->setTitle($title);
                 $this->em->persist($entity);
             }
+
+            unset($data[$route]);
         }
 
-        foreach ($bdData as $route => $title) {
-            if (!array_key_exists($route, $existInDB)) {
-                $this->em->remove($entity);
-            }
+        foreach ($data as $route => $title) {
+            $entity = new Title();
+            $entity->setTitle($title instanceof Route ? '' : $title);
+            $entity->setRoute($route);
+            $entity->setIsSystem(true);
+
+            $this->em->persist($entity);
         }
 
         $this->em->flush();

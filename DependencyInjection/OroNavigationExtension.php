@@ -22,6 +22,7 @@ class OroNavigationExtension extends Extension
     {
         $entitiesConfig = array();
         $titlesConfig = array();
+
         foreach ($container->getParameter('kernel.bundles') as $bundle) {
             $reflection = new \ReflectionClass($bundle);
             if (is_file($file = dirname($reflection->getFilename()).'/Resources/config/menu.yml')) {

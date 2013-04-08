@@ -23,9 +23,10 @@ abstract class Reader
     /**
      * Returns data from source
      *
+     * @param array $routes
      * @return array
      */
-    abstract public function getData();
+    abstract public function getData(array $routes);
 
     /**
      * Get dir array of bundles

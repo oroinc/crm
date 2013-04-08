@@ -1,29 +1,42 @@
 <?php
 namespace Oro\Bundle\NavigationBundle\Title\TitleReader;
 
+use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Yaml\Yaml;
 
 class ConfigReader extends Reader
 {
     /**
+     * @var array
+     */
+    private $configData = array();
+
+    public function __construct(array $configData)
+    {
+        $this->configData = $configData;
+    }
+
+    /**
      * Get Route/Title information from bundle configs
      *
-     * @return array()
+     * @param array $routes
+     * @return array
+     * @throws \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
      */
-    public function getData()
+    public function getData(array $routes)
     {
-        $titleConfig = array();
+        $data = array();
 
-        $dirs = $this->getScanDirectories();
-        foreach ($dirs as $dir) {
-            if (is_file($file = $dir . '/Resources/config/titles.yml')) {
-                $data = Yaml::parse(realpath($file));
-                if ($data) {
-                    $titleConfig += $data;
-                }
+        foreach ((array)$this->configData as $route => $title) {
+            if (array_key_exists($route, $routes)) {
+                $data[$route] = $title;
+            } else {
+                throw new InvalidConfigurationException(
+                    sprintf('Title for route "%s" could not be saved. Route not found.', $route)
+                );
             }
         }
 
-        return $titleConfig;
+        return $data;
     }
 }

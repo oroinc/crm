@@ -7,8 +7,8 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Title
  *
- * @ORM\Entity(repositoryClass="Oro\Bundle\NavigationBundle\Entity\Repository\TitleRepository")
- * @ORM\Table(name="oro_title")
+ * @ORM\Entity()
+ * @ORM\Table(name="oro_title", uniqueConstraints={@ORM\UniqueConstraint(name="unq_route", columns={"route"})})
  */
 class Title
 {
@@ -35,6 +35,12 @@ class Title
      */
     private $title;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="is_system", type="boolean")
+     */
+    private $isSystem;
 
     /**
      * Get id
@@ -90,5 +96,28 @@ class Title
     public function getTitle()
     {
         return $this->title;
+    }
+
+    /**
+     * Set is system
+     *
+     * @param bool $value
+     * @return Title
+     */
+    public function setIsSystem($value)
+    {
+        $this->isSystem = $value;
+
+        return $this;
+    }
+
+    /**
+     * Returns is title not changed in db
+     *
+     * @return bool
+     */
+    public function getIsSystem()
+    {
+        return $this->isSystem;
     }
 }

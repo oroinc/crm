@@ -13,6 +13,11 @@ class AnnotationsReader extends Reader
      */
     private $reader;
 
+    /**
+     * @var array
+     */
+    private $routes = array();
+
     const ANNOTATION_CLASS = 'Oro\Bundle\NavigationBundle\Annotation\TitleTemplate';
 
     public function __construct(KernelInterface $kernel, CommonAnnotationsReader $reader)
@@ -25,10 +30,13 @@ class AnnotationsReader extends Reader
     /**
      * Get Route/Title information from controller annotations
      *
+     * @param array $routes
      * @return array()
      */
-    public function getData()
+    public function getData(array $routes)
     {
+        $this->prepareRoutesArray($routes);
+
         $directories = $this->getScanDirectories();
         if (!$directories) {
             return array();
@@ -75,30 +83,35 @@ class AnnotationsReader extends Reader
     }
 
     /**
+     * Prepare routes array for using in this reader
+     *
+     * @param array $routes
+     */
+    private function prepareRoutesArray(array $routes)
+    {
+        foreach ($routes as $name => $route) {
+            $this->routes[$route->getDefault('_controller')] = $name;
+        }
+    }
+
+    /**
      * Gets the default route name for a class method.
      *
      * @param \ReflectionClass  $class
      * @param \ReflectionMethod $method
      *
+     * @throws \RuntimeException if route doesn't exist
      * @return string
      */
     private function getDefaultRouteName(\ReflectionClass $class, \ReflectionMethod $method)
     {
-        $name = strtolower(str_replace('\\', '_', $class->name).'_'.$method->name);
+        $key = $class->getName() . '::' . $method->getName();
 
-        return preg_replace(
-            array(
-                '/(bundle|controller)_/',
-                '/action(_\d+)?$/',
-                '/__/'
-            ),
-            array(
-                '_',
-                '\\1',
-                '_'
-            ),
-            $name
-        );
+        if (array_key_exists($key, $this->routes)) {
+            return $this->routes[$key];
+        }
+
+        throw new \RuntimeException(sprintf('Route doesn\'t exist for "%s".', $key));
     }
 
     /**
