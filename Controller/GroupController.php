@@ -35,28 +35,20 @@ class GroupController extends Controller
      */
     public function editAction(Group $entity)
     {
-        $flashBag = $this->get('session')->getFlashBag();
-        if ($this->getRequest()->query->has('back')) {
-            $backUrl = $this->getRequest()->get('back');
-            $flashBag->set('backUrl', $backUrl);
-        } elseif ($flashBag->has('backUrl')) {
-            $backUrl = $flashBag->get('backUrl');
-            $backUrl = reset($backUrl);
-        } else {
-            $backUrl = null;
-        }
-
+        $widgetContainer = $this->getRequest()->get('_widgetContainer');
         if ($this->get('oro_user.form.handler.group')->process($entity)) {
-            $flashBag->add('success', 'Group successfully saved');
+            $this->get('session')->getFlashBag()->add('success', 'Group successfully saved');
 
-            $redirectUrl = $backUrl ? $backUrl : $this->generateUrl('oro_user_group_index');
-
-            return $this->redirect($redirectUrl);
+            if (!$widgetContainer) {
+                return $this->redirect($this->getRedirectUrl($this->generateUrl('oro_user_group_index')));
+            }
         }
 
-        return array(
+        $viewParameters = array(
             'form' => $this->get('oro_user.form.group')->createView(),
         );
+        $template = ($widgetContainer ? $widgetContainer . '.' : '') . 'edit.html.twig';
+        return $this->render('OroUserBundle:Group:' . $template, $viewParameters);
     }
 
     /**
@@ -117,5 +109,27 @@ class GroupController extends Controller
                 'form'     => $datagrid->getForm()->createView()
             )
         );
+    }
+
+    /**
+     * Get redirect URLs
+     *
+     * @param string $default
+     * @return string
+     */
+    protected function getRedirectUrl($default)
+    {
+        $flashBag = $this->get('session')->getFlashBag();
+        if ($this->getRequest()->query->has('back')) {
+            $backUrl = $this->getRequest()->get('back');
+            $flashBag->set('backUrl', $backUrl);
+        } elseif ($flashBag->has('backUrl')) {
+            $backUrl = $flashBag->get('backUrl');
+            $backUrl = reset($backUrl);
+        } else {
+            $backUrl = null;
+        }
+
+        return $backUrl ? $backUrl : $default;
     }
 }

@@ -4,20 +4,9 @@
 
 {% block title %}{{ title }} - {{ parent() }}{% endblock %}
 
-{% block page_container %}
-<div class="container-fluid">
 {% block content %}
-<form action="{{ form.vars.value.id ? path('oro_user_group_edit', { id: form.vars.value.id }) : path('oro_user_group_create') }}" method="POST" class="form-register">
-    <fieldset>
-        <legend>{{ title }}</legend>
-
-        {{ form_widget(form) }}
-
-        <div class="form-row">
-            <button class="btn btn-large btn-primary" type="submit">Save</button>
-        </div>
-    </fieldset>
-</form>
-{% endblock %}
-</div>
+    <div class="container-fluid">
+        <h1>{{ title }}</h1>
+        {% include 'OroUserBundle:Group:edit.form.html.twig' %}
+    </div>
 {% endblock %}
