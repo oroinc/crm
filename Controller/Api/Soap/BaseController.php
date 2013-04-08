@@ -3,6 +3,7 @@
 namespace Oro\Bundle\UserBundle\Controller\Api\Soap;
 
 use Symfony\Component\DependencyInjection\ContainerAware;
+use Symfony\Component\Form\Form;
 
 class BaseController extends ContainerAware
 {
@@ -36,13 +37,31 @@ class BaseController extends ContainerAware
     protected function processForm($form, $entity)
     {
         if (!$this->container->get(sprintf('oro_user.form.handler.%s.api', $form))->process($entity)) {
-            throw new \SoapFault('BAD_REQUEST', array_reduce(
-                $this->container->get(sprintf('oro_user.form.%s.api', $form))->getErrors(),
-                function ($res, $item) { return $res .= $item->getMessage(); }
-            ));
+            throw new \SoapFault('BAD_REQUEST', $this->getFormErrors($this->container->get(sprintf('oro_user.form.%s.api', $form))));
         }
 
         return true;
+    }
+
+    /**
+     * @param Form $form
+     * @return string All error messages concatinated into one string
+     */
+    protected function getFormErrors(Form $form)
+    {
+        $errors = '';
+
+        foreach ($form->getErrors() as $error) {
+            $errors .= $error->getMessage() ."\n";
+        }
+
+        foreach ($form->all() as $key => $child) {
+            if ($err = $this->getFormErrors($child)) {
+                $errors .= sprintf("%s: %s\n", $key, $err);
+            }
+        }
+
+        return $errors;
     }
 
     /**
