@@ -83,7 +83,7 @@ OroApp.DatagridFilterDate = OroApp.DatagridFilterChoice.extend({
         yearRange:  '-50:+1',
         dateFormat: 'yy-mm-dd',
         altFormat:  'yy-mm-dd',
-        class:      'date-filter-widget',
+        className:      'date-filter-widget',
         showButtonPanel: true,
         currentText: 'Now'
     },
@@ -168,7 +168,7 @@ OroApp.DatagridFilterDate = OroApp.DatagridFilterChoice.extend({
 
         this.$(visualSelector).datepicker(options);
         var widget = this.$(visualSelector).datepicker('widget');
-        widget.addClass(this.dateWidgetOptions.class);
+        widget.addClass(this.dateWidgetOptions.className);
 
         return widget;
     },
