@@ -10,21 +10,20 @@ class NavigationItemBuilderBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testUriVoterConstruct()
     {
-        $containerMock = $this->getMock('Symfony\Component\DependencyInjection\ContainerInterface');
-        $itemMock = $this->getMock('Knp\Menu\ItemInterface');
-
         $uri = 'test.uri';
 
-        $containerMock->expects($this->once())
-                      ->method('get')
-                      ->with($this->equalTo('request'))
-                      ->will($this->returnValue(Request::create($uri)));
+        $request = $this->getMock('Symfony\Component\HttpFoundation\Request');
+        $request->expects($this->once())
+            ->method('getRequestUri')
+            ->will($this->returnValue($uri));
 
+        $itemMock = $this->getMock('Knp\Menu\ItemInterface');
         $itemMock->expects($this->exactly(2))
             ->method('getUri')
             ->will($this->returnValue($uri));
 
-        $voter = new Voter\RequestVoter($containerMock);
+        $voter = new Voter\RequestVoter();
+        $voter->setRequest($request);
 
         $this->assertTrue($voter->matchItem($itemMock));
     }

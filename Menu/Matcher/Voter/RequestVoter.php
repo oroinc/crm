@@ -3,18 +3,22 @@
 namespace Oro\Bundle\NavigationBundle\Menu\Matcher\Voter;
 
 use Knp\Menu\Matcher\Voter\UriVoter;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class RequestVoter extends UriVoter
 {
     /**
-     * Constructor
-     * @param ContainerInterface $container
+     * @var Request
      */
-    public function __construct(ContainerInterface $container)
-    {
-        $uri = $container->get('request')->getRequestUri();
+    private $request;
 
-        parent::__construct($uri);
+    public function setRequest(Request $request)
+    {
+        $this->request = $request;
+
+        $this->setUri($request->getRequestUri());
+
+        return $this;
     }
 }

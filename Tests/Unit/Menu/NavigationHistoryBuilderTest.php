@@ -105,10 +105,23 @@ class NavigationHistoryBuilderTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($children));
         $menu->expects($this->once())
             ->method('removeChild');
+
+        $n = rand(1, 10);
+
+        $configMock = $this->getMockBuilder('Oro\Bundle\ConfigBundle\Config\UserConfigManager')
+                        ->disableOriginalConstructor()
+                        ->getMock();
+
+        $configMock->expects($this->once())
+                        ->method('get')
+                        ->with($this->equalTo('oro_navigation.maxItems'))
+                        ->will($this->returnValue($n));
+
         $menu->expects($this->once())
             ->method('slice')
-            ->with(0, NavigationHistoryBuilder::DEFAULT_MAX_RESULTS);
+            ->with(0, $n);
 
+        $this->builder->setOptions($configMock);
         $this->builder->build($menu, array(), $type);
     }
 }

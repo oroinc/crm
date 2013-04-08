@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Entity(repositoryClass="Oro\Bundle\NavigationBundle\Entity\Repository\PinbarTabRepository")
  * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="navigation_item_pinbar")
+ * @ORM\Table(name="oro_navigation_item_pinbar")
  */
 class PinbarTab implements NavigationItemInterface
 {

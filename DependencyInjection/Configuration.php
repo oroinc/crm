@@ -7,6 +7,7 @@ use Oro\Bundle\NavigationBundle\Config\Definition\Builder\MenuTreeBuilder;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Builder\NodeBuilder;
+use Oro\Bundle\ConfigBundle\DependencyInjection\SettingsBuilder;
 
 class Configuration implements ConfigurationInterface
 {
@@ -21,6 +22,16 @@ class Configuration implements ConfigurationInterface
         $node = $rootNode->children();
         $this->setChildren($node);
         $node->end();
+
+        SettingsBuilder::append(
+            $rootNode,
+            array(
+                'maxItems' => array(
+                    'value' => 20, // default value, can be overriden in config.yml
+                    'type'  => 'scalar',
+                ),
+            )
+        );
 
         return $treeBuilder;
     }

@@ -15,6 +15,6 @@ oro_menu_config:
             rootClass: 'extra-list'
             currentAsLink: false
         history:
-            template: 'OroNavigationBundle:Menu:menu.html.twig'
+            template: 'OroNavigationBundle:Menu:history.html.twig'
             rootClass: 'extra-list'
             currentAsLink: false

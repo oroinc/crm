@@ -127,6 +127,7 @@ services:
             - @oro_navigation.item.factory
         calls:
             - [ setMatcher, [ @knp_menu.matcher ]]
+            - [ setOptions, [ @oro_config.user ]]
         tags:
             - { name: oro_menu.builder, alias: history }
 
@@ -141,8 +142,6 @@ services:
 
     knp_voter_request:
         class: %oro_navigation.menu.matcher.voter.request%
-        arguments:
-            - @service_container
         tags:
             - { name: knp_menu.voter, request: true }
 

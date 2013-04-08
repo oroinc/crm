@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Entity(repositoryClass="Oro\Bundle\NavigationBundle\Entity\Repository\HistoryItemRepository")
  * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="navigation_history",
+ * @ORM\Table(name="oro_navigation_history",
  *      uniqueConstraints={@ORM\UniqueConstraint(name="unq_user_id_url_idx", columns={"user_id", "url"})})
  */
 class NavigationHistoryItem implements NavigationItemInterface
