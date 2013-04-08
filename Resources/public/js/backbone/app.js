@@ -40,9 +40,9 @@ window.OroApp = {
         var nvp = query.split('&');
         var data = {};
         for (var i = 0 ; i < nvp.length ; i++) {
-            var pair = nvp[i].split('=');
-            var name = decodeURIComponent(pair[0]);
-            var value = decodeURIComponent(pair[1]);
+            var pair  = nvp[i].split('=');
+            var name  = this._decodeComponent(pair[0]);
+            var value = this._decodeComponent(pair[1]);
 
             var path = name.match(/(^[^\[]+)(\[.*\]$)?/);
             var first = path[1];
@@ -58,6 +58,19 @@ window.OroApp = {
             setValue(data, path, value);
         }
         return data;
+    },
+
+    /**
+     * Decode URL encoded component
+     *
+     * @param {String} string
+     * @return {String}
+     * @protected
+     */
+    _decodeComponent: function(string) {
+        var result = string.replace('+', '%20');
+        result = decodeURIComponent(result);
+        return result;
     },
 
     /**
