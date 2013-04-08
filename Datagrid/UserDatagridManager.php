@@ -219,19 +219,10 @@ class UserDatagridManager extends FlexibleDatagridManager
      */
     protected function getFilters()
     {
-        $hiddenFilterTypes = array(
-            FilterInterface::TYPE_DATE,
-            FilterInterface::TYPE_DATETIME,
-            FilterInterface::TYPE_FLEXIBLE_DATE,
-            FilterInterface::TYPE_FLEXIBLE_DATETIME
-        );
-
         $fields = array();
         /** @var $fieldDescription FieldDescription */
         foreach ($this->getFieldDescriptionCollection() as $fieldDescription) {
-            if ($fieldDescription->isFilterable()
-                && !in_array($fieldDescription->getOption('filter_type'), $hiddenFilterTypes)
-            ) {
+            if ($fieldDescription->isFilterable()) {
                 $fields[] = $fieldDescription;
             }
         }

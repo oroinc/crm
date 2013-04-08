@@ -1,0 +1,12 @@
+<form action="{{ form.vars.value.id ? path('oro_user_group_edit', { id: form.vars.value.id }) : path('oro_user_group_create') }}" method="POST" class="form-register">
+    <fieldset>
+        {{ form_widget(form) }}
+
+        <div class="form-row widget-actions form-actions">
+            <div class="pull-right">
+                <button class="btn" type="reset">Cancel</button>
+                <button class="btn btn-primary" type="submit">Save</button>
+            </div>
+        </div>
+    </fieldset>
+</form>
