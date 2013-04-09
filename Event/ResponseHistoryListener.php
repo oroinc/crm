@@ -36,7 +36,6 @@ class ResponseHistoryListener
         $this->navItemFactory = $navigationItemFactory;
         $this->user = !$securityContext->getToken() ||  is_string($securityContext->getToken()->getUser())
                       ? null : $securityContext->getToken()->getUser();
-
         $this->em = $entityManager;
     }
 

@@ -16,6 +16,9 @@ class NavigationHistoryItem implements NavigationItemInterface
 {
     const NAVIGATION_HISTORY_ITEM_TYPE = 'history';
 
+    const NAVIGATION_HISTORY_COLUMN_VISITED_AT = 'visitedAt';
+    const NAVIGATION_HISTORY_COLUMN_VISIT_COUNT = 'visitCount';
+
     /**
      * @var integer $id
      *
