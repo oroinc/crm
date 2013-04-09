@@ -6,13 +6,13 @@ Allow to organize items in hierarchical segments  (Replace ClassificationTree)
 Install
 =======
 
-To install for dev:
+To install for dev :
 
 ```bash
 $ php composer.phar update --dev
 ```
 
-To use as dependecy, use composer and add bundle in your AppKernel :
+To use as dependency, use composer and add bundle in your AppKernel :
 
 ```yaml
     "require": {
