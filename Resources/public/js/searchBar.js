@@ -104,12 +104,14 @@ $(document).ready(function () {
         function select_previous () {
             $this.parent('li').prev().find('a').focus();
             evt.stopPropagation();
+            evt.preventDefault();
             return false;
         }
 
         function select_next () {
             $this.parent('li').next().find('a').focus();
             evt.stopPropagation();
+            evt.preventDefault();
             return false;
         }
 
