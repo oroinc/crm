@@ -25,7 +25,7 @@ OroApp.DatagridHeaderCell = Backgrid.HeaderCell.extend({
      */
     initialize: function() {
         Backgrid.HeaderCell.prototype.initialize.apply(this, arguments);
-        this.collection.once('reset', this._initCellDirection, this);
+        this.collection.on('reset', this._initCellDirection, this);
     },
 
     /**
@@ -35,14 +35,18 @@ OroApp.DatagridHeaderCell = Backgrid.HeaderCell.extend({
      * @private
      */
     _initCellDirection: function(collection) {
-        if (collection == this.collection && this.column.get('sortable')) {
+        if (collection == this.collection) {
             var state = collection.state;
-            if (state.sortKey == this.column.get('name')) {
+            var direction = null;
+            if (this.column.get('sortable') && state.sortKey == this.column.get('name')) {
                 if (1 == state.order) {
-                    this.direction('descending');
+                    direction = 'descending';
                 } else if (-1 == state.order) {
-                    this.direction('ascending');
+                    direction = 'ascending';
                 }
+            }
+            if (direction != this.direction()) {
+                this.direction(direction);
             }
         }
     },
