@@ -4,7 +4,7 @@
 
 {% set title = form.vars.value.id ? 'Edit profile' : 'New User' %}
 
-{% block title %}{{ title }} - {{ 'User Management'|trans }} -  {{ parent() }}{% endblock %}
+{% block title %}{{ title }} - {{ 'User Management'|trans }} {% endblock %}
 {% block page_container %}
 <div class="container-fluid">
 {% block content %}
