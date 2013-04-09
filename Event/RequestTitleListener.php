@@ -1,0 +1,48 @@
+<?php
+
+namespace Oro\Bundle\NavigationBundle\Event;
+
+use Oro\Bundle\NavigationBundle\Provider\TitleService;
+use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\HttpKernel;
+
+class RequestTitleListener
+{
+    /**
+     * @var TitleService
+     */
+    private $service;
+
+    /**
+     * Injection
+     *
+     * @param TitleService $service
+     */
+    public function __construct(TitleService $service)
+    {
+        $this->service = $service;
+    }
+
+    /**
+     * Find title for current route in database
+     *
+     * @param GetResponseEvent $event
+     */
+    public function onKernelRequest(GetResponseEvent $event)
+    {
+        $request = $event->getRequest();
+        if (
+            HttpKernel::MASTER_REQUEST != $event->getRequestType()
+            || $request->getRequestFormat() != 'html'
+            || $request->getMethod() != 'GET'
+            || $request->isXmlHttpRequest()
+        ) {
+            // don't do anything
+            return;
+        }
+
+        $route = $request->get('_route');
+
+        $this->service->loadByRoute($route);
+    }
+}

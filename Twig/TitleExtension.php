@@ -52,12 +52,7 @@ class TitleExtension extends \Twig_Extension
      */
     public function render(array $options = array(), $titleTemplate = null)
     {
-        if (!is_null($titleTemplate)) {
-            $this->titleService
-                ->setTemplate($titleTemplate);
-        }
-
-        return $this->titleService->render(null. $options, true);
+        return $this->titleService->render($options, $titleTemplate, true);
     }
 
     /**
@@ -71,7 +66,7 @@ class TitleExtension extends \Twig_Extension
     {
         $data =  $this->serializer->deserialize($titleData, 'Oro\Bundle\NavigationBundle\Title\StoredTitle', 'json');
 
-        return $this->titleService->render($data->getTemplate(), $data->getParams());
+        return $this->titleService->render($data->getParams(), $data->getTemplate());
     }
 
     /**

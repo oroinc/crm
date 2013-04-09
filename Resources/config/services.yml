@@ -27,6 +27,8 @@ parameters:
     oro_navigation.title_service.annotations_reader.class: Oro\Bundle\NavigationBundle\Title\TitleReader\AnnotationsReader
     oro_navigation.title_service.config_reader.class: Oro\Bundle\NavigationBundle\Title\TitleReader\ConfigReader
 
+    oro_navigation.title_service.event.request.listener.class: Oro\Bundle\NavigationBundle\Event\RequestTitleListener
+
 services:
     oro_menu.factory:
         class: %oro_menu.factory.class%
@@ -195,3 +197,10 @@ services:
             - @serializer
         tags:
             - { name: twig.extension }
+
+    kernel.listener.title_service.request_listener:
+        class: %oro_navigation.title_service.event.request.listener.class%
+        tags:
+            - { name: kernel.event_listener, priority: -255, event: kernel.request, method: onKernelRequest }
+        arguments:
+            - @oro_navigation.title_service

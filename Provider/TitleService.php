@@ -80,21 +80,21 @@ class TitleService
     /**
      * Return rendered translated title
      *
-     * @param null $title
      * @param array $params
+     * @param null $title
      * @param bool $storeData
      * @return $this
      */
-    public function render($title = null, $params = array(), $storeData = false)
+    public function render($params = array(), $title = null, $storeData = false)
     {
         if ($storeData) {
             $this->params = $params;
-            $this->template = is_null($title) ? $this->getTemplate() : $title;
+            $this->template = is_null($title) ? $this->template : $title;
         }
 
         $trans = $this->translator;
 
-        $translatedTemplate = $trans->trans($title);
+        $translatedTemplate = $trans->trans($this->template);
 
         $suffix = '';
         if (!is_null($this->suffix)) {
@@ -168,6 +168,23 @@ class TitleService
     public function getParams()
     {
         return $this->params;
+    }
+
+    /**
+     * Load title template from database
+     *
+     * @param  string$route
+     */
+    public function loadByRoute($route)
+    {
+        /** @var $bdData Title */
+        $bdData = $this->em->getRepository('Oro\Bundle\NavigationBundle\Entity\Title')->findOneBy(
+            array('route' => $route)
+        );
+
+        if ($bdData) {
+            $this->setTemplate($bdData->getTitle());
+        }
     }
 
     /**
