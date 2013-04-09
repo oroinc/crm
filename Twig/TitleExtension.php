@@ -64,9 +64,7 @@ class TitleExtension extends \Twig_Extension
      */
     public function renderStored($titleData)
     {
-        $data =  $this->serializer->deserialize($titleData, 'Oro\Bundle\NavigationBundle\Title\StoredTitle', 'json');
-
-        return $this->titleService->render($data->getParams(), $data->getTemplate());
+        return $this->titleService->renderStored($titleData);
     }
 
     /**

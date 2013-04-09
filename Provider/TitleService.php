@@ -10,6 +10,8 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Oro\Bundle\NavigationBundle\Entity\Title;
 use Oro\Bundle\NavigationBundle\Title\TitleReader\ConfigReader;
 use Oro\Bundle\NavigationBundle\Title\TitleReader\AnnotationsReader;
+use Oro\Bundle\NavigationBundle\Title\StoredTitle;
+use JMS\Serializer\Serializer;
 
 class TitleService
 {
@@ -63,18 +65,25 @@ class TitleService
      */
     private $em;
 
+    /**
+     * @var Serializer
+     */
+    protected $serializer = null;
+
     public function __construct(
         AnnotationsReader $reader,
         ConfigReader $configReader,
         \Twig_Environment $templateEngine,
         Translator $translator,
-        ObjectManager $em
+        ObjectManager $em,
+        Serializer $serializer
     ) {
         $this->readers = array($reader, $configReader);
 
         $this->templateEngine = $templateEngine;
         $this->translator = $translator;
         $this->em = $em;
+        $this->serializer = $serializer;
     }
 
     /**
@@ -109,6 +118,20 @@ class TitleService
         $translatedTemplate = $prefix . $translatedTemplate . $suffix;
 
         return $this->templateEngine->render($translatedTemplate, $params);
+    }
+
+    /**
+     * Render serialized title
+     *
+     * @param string $titleData
+     * @return string
+     */
+    public function renderStored($titleData)
+    {
+        /** @var $data \Oro\Bundle\NavigationBundle\Title\StoredTitle */
+        $data =  $this->serializer->deserialize($titleData, 'Oro\Bundle\NavigationBundle\Title\StoredTitle', 'json');
+
+        return $this->render($data->getTemplate(), $data->getParams());
     }
 
     /**
@@ -236,5 +259,14 @@ class TitleService
         }
 
         $this->em->flush();
+    }
+
+    public function getSerialized()
+    {
+        $storedTitle = new StoredTitle();
+        $storedTitle->setTemplate($this->getTemplate())
+            ->setParams($this->getParams());
+
+        return $this->serializer->serialize($storedTitle, 'json');
     }
 }

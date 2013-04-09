@@ -10,6 +10,7 @@ use Doctrine\ORM\EntityManager;
 
 use Oro\Bundle\NavigationBundle\Entity\Builder\ItemFactory;
 use Oro\Bundle\NavigationBundle\Entity\NavigationHistoryItem;
+use Oro\Bundle\NavigationBundle\Provider\TitleService;
 
 class ResponseHistoryListener
 {
@@ -28,15 +29,22 @@ class ResponseHistoryListener
      */
     protected $em = null;
 
+    /**
+     * @var TitleService
+     */
+    protected $titleService = null;
+
     public function __construct(
         ItemFactory $navigationItemFactory,
         SecurityContextInterface $securityContext,
-        EntityManager $entityManager
+        EntityManager $entityManager,
+        TitleService $titleService
     ) {
         $this->navItemFactory = $navigationItemFactory;
         $this->user = !$securityContext->getToken() ||  is_string($securityContext->getToken()->getUser())
                       ? null : $securityContext->getToken()->getUser();
         $this->em = $entityManager;
+        $this->titleService = $titleService;
     }
 
     /**
@@ -56,11 +64,6 @@ class ResponseHistoryListener
             return false;
         }
 
-        $title = 'Default Title';
-        if (preg_match('#<title>([^<]+)</title>#msi', $response->getContent(), $match)) {
-            $title = $match[1];
-        }
-
         $postArray = array(
             'url'      => $request->getRequestUri(),
             'user'     => $this->user,
@@ -77,7 +80,7 @@ class ResponseHistoryListener
             );
         }
 
-        $historyItem->setTitle($title);
+        $historyItem->setTitle($this->titleService->getSerialized());
 
         // force update
         $historyItem->doUpdate();

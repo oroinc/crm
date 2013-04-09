@@ -164,6 +164,8 @@ services:
             - @oro_navigation.item.factory
             - @security.context
             - @doctrine.orm.entity_manager
+            - @oro_navigation.title_service
+
 
     oro_navigation.title_service:
         class: %oro_navigation.title_service.class%
@@ -173,6 +175,7 @@ services:
           - @oro_navigation.twig
           - @translator.default
           - @doctrine.orm.entity_manager
+          - @serializer
 
     oro_navigation.title_annotations_reader:
         class:                        %oro_navigation.title_service.annotations_reader.class%

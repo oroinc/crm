@@ -1,6 +1,7 @@
 <?php
 
 namespace Oro\Bundle\NavigationBundle\Title;
+
 use JMS\Serializer\Annotation\Type;
 
 /**
