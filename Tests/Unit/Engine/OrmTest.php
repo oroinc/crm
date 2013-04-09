@@ -7,7 +7,6 @@ use Oro\Bundle\SearchBundle\Query\Query;
 use Oro\Bundle\SearchBundle\Entity\Item;
 use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttributeType;
 use Oro\Bundle\SearchBundle\Query\Result;
-use Oro\Bundle\SearchBundle\Query\Result\Item as ResultItem;
 
 use Oro\Bundle\SearchBundle\Tests\Unit\Fixture\Entity\Product;
 use Oro\Bundle\SearchBundle\Tests\Unit\Fixture\Entity\Manufacturer;
@@ -24,83 +23,83 @@ class OrmTest extends \PHPUnit_Framework_TestCase
     private $container;
     private $translator;
     private $flexibleManager;
-    private $mappingConfig =  array(
-        'Oro\Bundle\SearchBundle\Tests\Unit\Fixture\Entity\Manufacturer' => array(
-            'fields' => array(
-                array(
-                    'name' => 'products',
-                    'relation_type'   => 'one-to-many',
-                    'relation_fields' => array(
-                        array(
-                            'name'          => 'name',
-                            'target_type'   => 'text',
-                        )
-                    )
-                ),
-                array(
-                    'name' => 'parent',
-                    'relation_type'   => 'one-to-many',
-                    'relation_fields' => array(
-                        array(
-                        )
-                    )
-                )
-            )
-        ),
-        'Oro\Bundle\SearchBundle\Tests\Unit\Fixture\Entity\Product' => array(
-            'alias' => 'test_product',
-            'label' => 'test product',
-            'title_fields' => array('name'),
-            'route' => array(
-                'name' => 'test_route',
-                'parameters' => array(
-                    'id' => 'id'
-                )
-            ),
-            'fields' => array(
-                array(
-                    'name'          => 'name',
-                    'target_type'   => 'text',
-                    'target_fields' => array(
-                        'name',
-                        'all_data'
-                    )
-                ),
-                array(
-                    'name'          => 'description',
-                    'target_type'   => 'text',
-                    'target_fields' => array(
-                        'description',
-                        'all_data'
-                    )
-                ),
-                array(
-                    'name'          => 'price',
-                    'target_type'   => 'decimal',
-                    'target_fields' => array('price')
-                ),
-                array(
-                    'name'          => 'count',
-                    'target_type'   => 'integer',
-                ),
-                array(
-                    'name'            => 'manufacturer',
-                    'relation_type'   => 'one-to-one',
-                    'relation_fields' => array(
-                        array(
-                            'name'          => 'name',
-                            'target_type'   => 'text',
-                            'target_fields' => array(
-                                'manufacturer',
-                                'all_data'
+    private $mappingConfig
+        = array(
+            'Oro\Bundle\SearchBundle\Tests\Unit\Fixture\Entity\Manufacturer' => array(
+                'fields' => array(
+                    array(
+                        'name'            => 'products',
+                        'relation_type'   => 'one-to-many',
+                        'relation_fields' => array(
+                            array(
+                                'name'        => 'name',
+                                'target_type' => 'text',
                             )
                         )
+                    ),
+                    array(
+                        'name'            => 'parent',
+                        'relation_type'   => 'one-to-many',
+                        'relation_fields' => array(
+                            array()
+                        )
+                    )
+                )
+            ),
+            'Oro\Bundle\SearchBundle\Tests\Unit\Fixture\Entity\Product'      => array(
+                'alias'            => 'test_product',
+                'label'            => 'test product',
+                'title_fields'     => array('name'),
+                'route'            => array(
+                    'name'       => 'test_route',
+                    'parameters' => array(
+                        'id' => 'id'
                     )
                 ),
-            ),
-            'flexible_manager' => 'test_manager'
-        )
-    );
+                'fields'           => array(
+                    array(
+                        'name'          => 'name',
+                        'target_type'   => 'text',
+                        'target_fields' => array(
+                            'name',
+                            'all_data'
+                        )
+                    ),
+                    array(
+                        'name'          => 'description',
+                        'target_type'   => 'text',
+                        'target_fields' => array(
+                            'description',
+                            'all_data'
+                        )
+                    ),
+                    array(
+                        'name'          => 'price',
+                        'target_type'   => 'decimal',
+                        'target_fields' => array('price')
+                    ),
+                    array(
+                        'name'        => 'count',
+                        'target_type' => 'integer',
+                    ),
+                    array(
+                        'name'            => 'manufacturer',
+                        'relation_type'   => 'one-to-one',
+                        'relation_fields' => array(
+                            array(
+                                'name'          => 'name',
+                                'target_type'   => 'text',
+                                'target_fields' => array(
+                                    'manufacturer',
+                                    'all_data'
+                                )
+                            )
+                        )
+                    ),
+                ),
+                'flexible_manager' => 'test_manager'
+            )
+        );
 
     public function setUp()
     {
@@ -132,7 +131,7 @@ class OrmTest extends \PHPUnit_Framework_TestCase
             ->method('getAttributeRepository')
             ->will($this->returnValue($this->attributeRepository));
 
-        $this->translator =  $this->getMockBuilder('Symfony\Component\Translation\Translator')
+        $this->translator = $this->getMockBuilder('Symfony\Component\Translation\Translator')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -149,9 +148,9 @@ class OrmTest extends \PHPUnit_Framework_TestCase
             ->method('generate')
             ->will($this->returnValue('http://example.com'));
         $params = array(
-            'translator' => $this->translator,
+            'translator'   => $this->translator,
             'test_manager' => $this->flexibleManager,
-            'router' => $this->route,
+            'router'       => $this->route,
         );
         $this->container->expects($this->any())
             ->method('get')
@@ -164,7 +163,7 @@ class OrmTest extends \PHPUnit_Framework_TestCase
             )
             ->will(
                 $this->returnCallback(
-                    function($param) use (&$params) {
+                    function ($param) use (&$params) {
                         return $params[$param];
                     }
                 )
@@ -189,13 +188,15 @@ class OrmTest extends \PHPUnit_Framework_TestCase
 
         $this->attributeRepository->expects($this->once())
             ->method('findBy')
-            ->will($this->returnValue(
-                array(
-                     $testTextAttribute,
-                     $testIntegerAttribute,
-                     $testDatetimeAttribute
+            ->will(
+                $this->returnValue(
+                    array(
+                         $testTextAttribute,
+                         $testIntegerAttribute,
+                         $testDatetimeAttribute
+                    )
                 )
-            ));
+            );
 
         $mapping = $this->orm->mapObject($this->product);
 

@@ -14,9 +14,11 @@ class SearchController extends Controller
     public function ajaxAdvancedSearchAction()
     {
         return $this->getRequest()->isXmlHttpRequest()
-            ? new JsonResponse($this->get('oro_search.index')->advancedSearch(
+            ? new JsonResponse(
+                $this->get('oro_search.index')->advancedSearch(
                     $this->getRequest()->get('query')
-                )->toSearchResultData())
+                )->toSearchResultData()
+            )
             : $this->forward('OroSearchBundle:Search:searchResults');
     }
 
@@ -28,9 +30,9 @@ class SearchController extends Controller
     public function searchBarAction()
     {
         return array(
-            'entities' => $this->get('oro_search.index')->getEntitiesLabels(),
+            'entities'     => $this->get('oro_search.index')->getEntitiesLabels(),
             'searchString' => $this->getRequest()->get('searchString'),
-            'fromString' => $this->getRequest()->get('fromString'),
+            'fromString'   => $this->getRequest()->get('fromString'),
         );
     }
 
@@ -50,9 +52,9 @@ class SearchController extends Controller
         $data = $searchManager->simpleSearch(
             $searchString,
             null,
-            (int) $this->getRequest()->get('limit'),
+            (int)$this->getRequest()->get('limit'),
             $from,
-            (int) $request->get('page')
+            (int)$request->get('page')
         );
 
         if ($this->getRequest()->isXmlHttpRequest()) {
@@ -64,10 +66,10 @@ class SearchController extends Controller
                     $this->get('request')->query->get('page', 1),
                     $request->get('limit')
                 ),
-                'searchString' => $request->get('search'),
-                'entities' => $searchManager->getEntitiesLabels(),
-                'search' => $searchString,
-                'from' => $from
+                'searchString'  => $request->get('search'),
+                'entities'      => $searchManager->getEntitiesLabels(),
+                'search'        => $searchString,
+                'from'          => $from
             );
         }
     }

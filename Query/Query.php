@@ -422,7 +422,7 @@ class Query
     /**
      * Clear string
      *
-     * @param string $inputString
+     * @param  string $inputString
      * @return string
      */
     private function clearString($inputString)
