@@ -22,8 +22,10 @@ parameters:
     oro_navigation.menu.matcher.voter.request: Oro\Bundle\NavigationBundle\Menu\Matcher\Voter\RequestVoter
 
     oro_navigation.title_service.class:         Oro\Bundle\NavigationBundle\Provider\TitleService
-    oro_user.title_service.annotations_reader.class: Oro\Bundle\NavigationBundle\Title\TitleReader\AnnotationsReader
-    oro_user.title_service.config_reader.class: Oro\Bundle\NavigationBundle\Title\TitleReader\ConfigReader
+    oro_navigation.title_service.twig.extension.class: Oro\Bundle\NavigationBundle\Twig\TitleExtension
+
+    oro_navigation.title_service.annotations_reader.class: Oro\Bundle\NavigationBundle\Title\TitleReader\AnnotationsReader
+    oro_navigation.title_service.config_reader.class: Oro\Bundle\NavigationBundle\Title\TitleReader\ConfigReader
 
 services:
     oro_menu.factory:
@@ -162,7 +164,7 @@ services:
             - @doctrine.orm.entity_manager
 
     oro_navigation.title_service:
-        class:                        %oro_navigation.title_service.class%
+        class: %oro_navigation.title_service.class%
         arguments:
           - @oro_navigation.title_annotations_reader
           - @oro_navigation.title_config_reader
@@ -171,11 +173,11 @@ services:
           - @doctrine.orm.entity_manager
 
     oro_navigation.title_annotations_reader:
-        class:                        %oro_user.title_service.annotations_reader.class%
+        class:                        %oro_navigation.title_service.annotations_reader.class%
         arguments:                    ["@kernel", "@annotation_reader"]
 
     oro_navigation.title_config_reader:
-        class:                        %oro_user.title_service.config_reader.class%
+        class:                        %oro_navigation.title_service.config_reader.class%
         arguments:                    ["%oro_titles%"]
 
     oro_navigation.twig.string_loader:
@@ -185,3 +187,11 @@ services:
         class: Twig_Environment
         arguments:
             - @oro_navigation.twig.string_loader
+
+    oro_navigation.title_service.twig.extension:
+        class: %oro_navigation.title_service.twig.extension.class%
+        arguments:
+            - @oro_navigation.title_service
+            - @service_container
+        tags:
+            - { name: twig.extension }

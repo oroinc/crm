@@ -40,7 +40,7 @@ class Title
      *
      * @ORM\Column(name="is_system", type="boolean")
      */
-    private $isSystem;
+    private $isSystem = true;
 
     /**
      * Get id

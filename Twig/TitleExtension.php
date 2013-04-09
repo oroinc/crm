@@ -2,18 +2,12 @@
 
 namespace Oro\Bundle\NavigationBundle\Twig;
 
-use Knp\Menu\ItemInterface;
-use Knp\Menu\Twig\Helper;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Oro\Bundle\NavigationBundle\Provider\TitleService;
 
 class TitleExtension extends \Twig_Extension
 {
     const EXT_NAME = 'oro_title';
-
-    /**
-     * @var Helper $helper
-     */
-    private $helper;
 
     /**
      * @var ContainerInterface $container
@@ -21,12 +15,17 @@ class TitleExtension extends \Twig_Extension
     protected $container;
 
     /**
-     * @param Helper $helper
+     * @var TitleService
+     */
+    protected $titleService;
+
+    /**
+     * @param TitleService $titleService
      * @param ContainerInterface $container
      */
-    public function __construct(Helper $helper, ContainerInterface $container)
+    public function __construct(TitleService $titleService, ContainerInterface $container)
     {
-        $this->helper = $helper;
+        $this->titleService = $titleService;
         $this->container = $container;
     }
 
@@ -54,7 +53,11 @@ class TitleExtension extends \Twig_Extension
      */
     public function render($title, array $options = array(), $renderer = null)
     {
-        return $this->helper->render($title, $options, $renderer);
+        $this->titleService
+            ->setTemplate($title)
+            ->generate($options);
+
+        return $this->titleService->render();
     }
 
     /**

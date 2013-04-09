@@ -99,6 +99,7 @@ class TitleService
      * Generate translated title
      *
      * @param array $params
+     * @return $this
      */
     public function generate($params)
     {
@@ -118,6 +119,8 @@ class TitleService
         }
 
         $this->translatedTemplate = $prefix . $this->translatedTemplate . $suffix;
+
+        return $this;
     }
 
     /**
