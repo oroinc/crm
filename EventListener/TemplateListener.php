@@ -30,7 +30,7 @@ class TemplateListener extends FrameworkTemplateListener
                     if ($templating->exists($containerTemplate)) {
                         $request->attributes->set('_template', $containerTemplate);
                     } elseif ($templating->exists($widgetTemplate)) {
-                        $request->attributes->set('_template', $containerTemplate);
+                        $request->attributes->set('_template', $widgetTemplate);
                     }
                 }
             }
