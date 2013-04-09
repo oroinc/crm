@@ -49,11 +49,6 @@ class TitleService
     private $prefix = null;
 
     /**
-     * @var string
-     */
-    private $translatedTemplate;
-
-    /**
      * @var \Twig_Environment
      */
     private $templateEngine;
@@ -83,30 +78,23 @@ class TitleService
     }
 
     /**
-     * Set template string
+     * Return rendered translated title
      *
-     * @param string $template
-     * @return $this
-     */
-    public function setTemplate($template)
-    {
-        $this->template = $template;
-
-        return $this;
-    }
-
-    /**
-     * Generate translated title
-     *
+     * @param null $title
      * @param array $params
+     * @param bool $storeData
      * @return $this
      */
-    public function generate($params)
+    public function render($title = null, $params = array(), $storeData = false)
     {
-        $this->params = $params;
+        if ($storeData) {
+            $this->params = $params;
+            $this->template = is_null($title) ? $this->getTemplate() : $title;
+        }
+
         $trans = $this->translator;
 
-        $this->translatedTemplate = $trans->trans($this->template, $params);
+        $translatedTemplate = $trans->trans($title);
 
         $suffix = '';
         if (!is_null($this->suffix)) {
@@ -118,9 +106,9 @@ class TitleService
             $prefix = $trans->trans($this->prefix, $params);
         }
 
-        $this->translatedTemplate = $prefix . $this->translatedTemplate . $suffix;
+        $translatedTemplate = $prefix . $translatedTemplate . $suffix;
 
-        return $this;
+        return $this->templateEngine->render($translatedTemplate, $params);
     }
 
     /**
@@ -150,6 +138,29 @@ class TitleService
     }
 
     /**
+     * Set template string
+     *
+     * @param string $template
+     * @return $this
+     */
+    public function setTemplate($template)
+    {
+        $this->template = $template;
+
+        return $this;
+    }
+
+    /**
+     * Get template string
+     *
+     * @return string
+     */
+    public function getTemplate()
+    {
+        return $this->template;
+    }
+
+    /**
      * Return params
      *
      * @return array
@@ -158,17 +169,6 @@ class TitleService
     {
         return $this->params;
     }
-
-    /**
-     * Return rendered translated title
-     *
-     * @return string
-     */
-    public function render()
-    {
-        return $this->templateEngine->render($this->translatedTemplate, $this->getParams());
-    }
-
 
     /**
      * Updates title index
@@ -190,7 +190,7 @@ class TitleService
             /** @var $entity Title */
 
             if (!array_key_exists($entity->getRoute(), $data)) {
-                //remove not existing entries
+                // remove not existing entries
                 $this->em->remove($entity);
 
                 continue;
@@ -199,6 +199,7 @@ class TitleService
             $route = $entity->getRoute();
             $title = $data[$route] instanceof Route ? '' : $data[$route];
 
+            // update existing system titles
             if ($entity->getIsSystem()) {
                 $entity->setTitle($title);
                 $this->em->persist($entity);
@@ -207,6 +208,7 @@ class TitleService
             unset($data[$route]);
         }
 
+        // create title items for new routes
         foreach ($data as $route => $title) {
             $entity = new Title();
             $entity->setTitle($title instanceof Route ? '' : $title);

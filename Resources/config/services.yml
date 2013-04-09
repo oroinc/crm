@@ -192,6 +192,6 @@ services:
         class: %oro_navigation.title_service.twig.extension.class%
         arguments:
             - @oro_navigation.title_service
-            - @service_container
+            - @serializer
         tags:
             - { name: twig.extension }

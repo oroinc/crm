@@ -2,17 +2,12 @@
 
 namespace Oro\Bundle\NavigationBundle\Twig;
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Oro\Bundle\NavigationBundle\Provider\TitleService;
+use JMS\Serializer\Serializer;
 
 class TitleExtension extends \Twig_Extension
 {
     const EXT_NAME = 'oro_title';
-
-    /**
-     * @var ContainerInterface $container
-     */
-    protected $container;
 
     /**
      * @var TitleService
@@ -20,13 +15,18 @@ class TitleExtension extends \Twig_Extension
     protected $titleService;
 
     /**
-     * @param TitleService $titleService
-     * @param ContainerInterface $container
+     * @var Serializer
      */
-    public function __construct(TitleService $titleService, ContainerInterface $container)
+    protected $serializer;
+
+    /**
+     * @param TitleService $titleService
+     * @param \JMS\Serializer\Serializer $serializer
+     */
+    public function __construct(TitleService $titleService, Serializer $serializer)
     {
         $this->titleService = $titleService;
-        $this->container = $container;
+        $this->serializer = $serializer;
     }
 
     /**
@@ -37,27 +37,41 @@ class TitleExtension extends \Twig_Extension
     public function getFunctions()
     {
         return array(
-            'oro_title' => new \Twig_Function_Method($this, 'render', array('is_safe' => array('html'))),
+            'oro_title_render' => new \Twig_Function_Method($this, 'render', array('is_safe' => array('html'))),
+            'oro_title_render_stored' => new \Twig_Function_Method($this, 'renderStored', array('is_safe' => array('html'))),
         );
     }
 
     /**
-     * Renders a title with the specified renderer.
+     * Renders a title
      *
-     * @param string $title
+     * @param string $titleTemplate
      * @param array $options
-     * @param string $renderer
      *
-     * @throws \InvalidArgumentException
      * @return string
      */
-    public function render($title, array $options = array(), $renderer = null)
+    public function render(array $options = array(), $titleTemplate = null)
     {
-        $this->titleService
-            ->setTemplate($title)
-            ->generate($options);
+        if (!is_null($titleTemplate)) {
+            $this->titleService
+                ->setTemplate($titleTemplate);
+        }
 
-        return $this->titleService->render();
+        return $this->titleService->render(null. $options, true);
+    }
+
+    /**
+     * Renders title from saved json string
+     *
+     * @param string $titleData json encoded string
+     *
+     * @return string
+     */
+    public function renderStored($titleData)
+    {
+        $data =  $this->serializer->deserialize($titleData, 'Oro\Bundle\NavigationBundle\Title\StoredTitle', 'json');
+
+        return $this->titleService->render($data->getTemplate(), $data->getParams());
     }
 
     /**
