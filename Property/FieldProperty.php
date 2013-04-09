@@ -76,6 +76,23 @@ class FieldProperty extends AbstractProperty
             return null; // TODO : temporary fix value when attribute is not exist
         }
 
+        $result = $this->convertValue($value);
+
+        if (is_object($result) && is_callable(array($result, '__toString'))) {
+            $result = (string)$result;
+        }
+
+        return $result;
+    }
+
+    /**
+     * Convert value to appropriate type
+     *
+     * @param mixed $value
+     * @return mixed
+     */
+    protected function convertValue($value)
+    {
         switch ($this->getFieldType()) {
             case FieldDescriptionInterface::TYPE_DATETIME:
             case FieldDescriptionInterface::TYPE_DATE:
@@ -97,13 +114,12 @@ class FieldProperty extends AbstractProperty
                 $result = $value;
         }
 
-        if (is_object($result) && is_callable(array($result, '__toString'))) {
-            $result = (string)$result;
-        }
-
         return $result;
     }
 
+    /**
+     * @return string
+     */
     protected function getFieldType()
     {
         return $this->field->getType() ? : $this->field->getOption('type');
