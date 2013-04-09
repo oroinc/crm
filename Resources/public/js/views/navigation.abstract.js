@@ -36,7 +36,7 @@ navigation.MainViewAbstract = Backbone.View.extend({
      * @return {Object}
      */
     getCurrentPageItemData: function() {
-        return {url: window.location.pathname};
+        return {url: window.location.pathname + window.location.search + window.location.hash};
     },
 
     cleanupTab: function() {
