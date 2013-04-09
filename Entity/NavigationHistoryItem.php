@@ -229,10 +229,8 @@ class NavigationHistoryItem implements NavigationItemInterface
 
     /**
      * Pre update event handler
-     *
-     * @ORM\PreUpdate
      */
-    public function doPreUpdate()
+    public function doUpdate()
     {
         $this->visitedAt = new \DateTime();
         $this->visitCount++;
