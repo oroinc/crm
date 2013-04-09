@@ -13,9 +13,13 @@ class StatusType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('status', 'text', array(
-            'required' => true,
-        ));
+        $builder->add(
+            'status',
+            'text',
+            array(
+                 'required' => true,
+            )
+        );
 
     }
 
@@ -32,8 +36,10 @@ class StatusType extends AbstractType
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $resolver->setDefaults(array(
-             'data_class' => 'Oro\Bundle\UserBundle\Entity\Status',
-        ));
+        $resolver->setDefaults(
+            array(
+                 'data_class' => 'Oro\Bundle\UserBundle\Entity\Status',
+            )
+        );
     }
 }

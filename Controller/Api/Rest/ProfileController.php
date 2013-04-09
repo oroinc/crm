@@ -39,20 +39,23 @@ class ProfileController extends FOSRestController implements ClassResourceInterf
                 ->getListQuery()
                 ->getQuery()
                 ->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY),
-            (int) $this->getRequest()->get('page', 1),
-            (int) $this->getRequest()->get('limit', 10)
+            (int)$this->getRequest()->get('page', 1),
+            (int)$this->getRequest()->get('limit', 10)
         );
 
-        return $this->handleView($this->view(
-            $pager->getItems(),
-            Codes::HTTP_OK
-        ));
+        return $this->handleView(
+            $this->view(
+                $pager->getItems(),
+                Codes::HTTP_OK
+            )
+        );
     }
 
     /**
      * Get user data
      *
      * @param int $id User id
+     *
      * @ApiDoc(
      *  description="Get user data",
      *  resource=true,
@@ -63,12 +66,14 @@ class ProfileController extends FOSRestController implements ClassResourceInterf
      */
     public function getAction($id)
     {
-        $entity = $this->getManager()->findUserBy(array('id' => (int) $id));
+        $entity = $this->getManager()->findUserBy(array('id' => (int)$id));
 
-        return $this->handleView($this->view(
-            $entity,
-            $entity ? Codes::HTTP_OK : Codes::HTTP_NOT_FOUND
-        ));
+        return $this->handleView(
+            $this->view(
+                $entity,
+                $entity ? Codes::HTTP_OK : Codes::HTTP_NOT_FOUND
+            )
+        );
     }
 
     /**
@@ -96,6 +101,7 @@ class ProfileController extends FOSRestController implements ClassResourceInterf
      * Update existing user
      *
      * @param int $id User id
+     *
      * @ApiDoc(
      *  description="Update existing user",
      *  resource=true,
@@ -107,7 +113,7 @@ class ProfileController extends FOSRestController implements ClassResourceInterf
     public function putAction($id)
     {
         /* @var $entity \Oro\Bundle\UserBundle\Entity\User */
-        $entity = $this->getManager()->findUserBy(array('id' => (int) $id));
+        $entity = $this->getManager()->findUserBy(array('id' => (int)$id));
 
         if (!$entity) {
             return $this->handleView($this->view('', Codes::HTTP_NOT_FOUND));
@@ -126,6 +132,7 @@ class ProfileController extends FOSRestController implements ClassResourceInterf
      * Delete user
      *
      * @param int $id User id
+     *
      * @ApiDoc(
      *  description="Delete user",
      *  resource=true,
@@ -136,7 +143,7 @@ class ProfileController extends FOSRestController implements ClassResourceInterf
      */
     public function deleteAction($id)
     {
-        $entity = $this->getManager()->findUserBy(array('id' => (int) $id));
+        $entity = $this->getManager()->findUserBy(array('id' => (int)$id));
 
         if (!$entity) {
             return $this->handleView($this->view('', Codes::HTTP_NOT_FOUND));
@@ -151,6 +158,7 @@ class ProfileController extends FOSRestController implements ClassResourceInterf
      * Get user roles
      *
      * @param int $id User id
+     *
      * @ApiDoc(
      *  description="Get user roles",
      *  resource=true,
@@ -161,7 +169,7 @@ class ProfileController extends FOSRestController implements ClassResourceInterf
      */
     public function getRolesAction($id)
     {
-        $entity = $this->getManager()->findUserBy(array('id' => (int) $id));
+        $entity = $this->getManager()->findUserBy(array('id' => (int)$id));
 
         if (!$entity) {
             return $this->handleView($this->view('', Codes::HTTP_NOT_FOUND));
@@ -174,6 +182,7 @@ class ProfileController extends FOSRestController implements ClassResourceInterf
      * Get user groups
      *
      * @param int $id User id
+     *
      * @ApiDoc(
      *  description="Get user groups",
      *  resource=true,
@@ -184,7 +193,7 @@ class ProfileController extends FOSRestController implements ClassResourceInterf
      */
     public function getGroupsAction($id)
     {
-        $entity = $this->getManager()->findUserBy(array('id' => (int) $id));
+        $entity = $this->getManager()->findUserBy(array('id' => (int)$id));
 
         if (!$entity) {
             return $this->handleView($this->view('', Codes::HTTP_NOT_FOUND));
@@ -197,6 +206,7 @@ class ProfileController extends FOSRestController implements ClassResourceInterf
      * Get user acl list
      *
      * @param int $id User id
+     *
      * @ApiDoc(
      *  description="Get user allowed ACL resources",
      *  resource=true,
@@ -207,7 +217,7 @@ class ProfileController extends FOSRestController implements ClassResourceInterf
      */
     public function getAclAction($id)
     {
-        $user = ($this->getManager()->findUserBy(array('id' => (int) $id)));
+        $user = ($this->getManager()->findUserBy(array('id' => (int)$id)));
         if (!$user) {
             return $this->handleView($this->view('', Codes::HTTP_NOT_FOUND));
         }
@@ -239,10 +249,12 @@ class ProfileController extends FOSRestController implements ClassResourceInterf
 
         $entity = $this->getManager()->findUserBy($params);
 
-        return $this->handleView($this->view(
-            $entity,
-            $entity ? Codes::HTTP_OK : Codes::HTTP_NOT_FOUND
-        ));
+        return $this->handleView(
+            $this->view(
+                $entity,
+                $entity ? Codes::HTTP_OK : Codes::HTTP_NOT_FOUND
+            )
+        );
     }
 
     /**
@@ -272,7 +284,7 @@ class ProfileController extends FOSRestController implements ClassResourceInterf
     protected function fixFlexRequest(User $entity)
     {
         $request = $this->getRequest()->request;
-        $data    = $request->get('profile', array());
+        $data = $request->get('profile', array());
         $attrDef = $this->getManager()->getAttributeRepository()->findBy(array('entityType' => get_class($entity)));
         $attrVal = isset($data['attributes']) ? $data['attributes'] : array();
 

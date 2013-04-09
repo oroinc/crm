@@ -44,10 +44,10 @@ class Reader
         $files = $finder->findFiles($directories);
 
         foreach ($files as $index => $file) {
-            if (strpos($file, 'Annotation') !== false ||
-                strpos($file, 'ResourceReader') !== false ||
-                ($inTest && strpos($file, 'Test') !== false))
-            {
+            if (strpos($file, 'Annotation') !== false
+                || strpos($file, 'ResourceReader') !== false
+                || ($inTest && strpos($file, 'Test') !== false)
+            ) {
                 unset($files[$index]);
             }
         }

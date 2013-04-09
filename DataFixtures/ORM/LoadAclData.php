@@ -21,8 +21,7 @@ class LoadAclData extends AbstractFixture implements OrderedFixtureInterface
             ->setDescription('root node')
             ->setName('Root')
             ->addAccessRole($this->getReference('user_role'))
-            ->addAccessRole($this->getReference('admin_role'))
-        ;
+            ->addAccessRole($this->getReference('admin_role'));
         $manager->persist($rootAcl);
         $this->setReference('acl_root', $rootAcl);
 
@@ -32,8 +31,7 @@ class LoadAclData extends AbstractFixture implements OrderedFixtureInterface
             ->setName('Oro Security')
             ->setDescription('Oro security')
             ->setParent($this->getReference('acl_root'))
-            ->addAccessRole($this->getReference('anon_role'))
-        ;
+            ->addAccessRole($this->getReference('anon_role'));
         $manager->persist($oroSecurity);
         $this->setReference('acl_oro_security', $oroSecurity);
 

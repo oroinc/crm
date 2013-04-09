@@ -10,7 +10,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 use Oro\Bundle\UserBundle\Entity\UserApi;
 
-class LoadUserData extends AbstractFixture implements  ContainerAwareInterface, OrderedFixtureInterface
+class LoadUserData extends AbstractFixture implements ContainerAwareInterface, OrderedFixtureInterface
 {
     /**
      * @var ContainerInterface
@@ -28,7 +28,7 @@ class LoadUserData extends AbstractFixture implements  ContainerAwareInterface, 
         $userManager = $this->container->get('oro_user.manager');
 
         $admin = $userManager->createUser();
-        $api   = new UserApi();
+        $api = new UserApi();
 
         $api->setApiKey('admin_api_key')
             ->setUser($admin);

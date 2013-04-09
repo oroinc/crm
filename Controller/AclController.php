@@ -25,7 +25,9 @@ class AclController extends Controller
      * Show ACL Resources tree for Role
      *
      * @Route("/edit/{id}", name="oro_user_acl_edit", requirements={"id"="\d+"})
+     *
      * @param \Oro\Bundle\UserBundle\Entity\Role $role
+     *
      * @Template()
      * @return array
      * @Acl(
@@ -38,14 +40,16 @@ class AclController extends Controller
     public function editRoleAclAction(Role $role)
     {
         return array(
-            'role' => $role,
+            'role'      => $role,
             'resources' => $this->getAclManager()->getRoleAclTree($role)
         );
     }
 
     /**
      * @Route("/save/{id}", name="oro_user_acl_save", requirements={"id"="\d+"})
-     * @param  \Oro\Bundle\UserBundle\Entity\Role                 $role
+     *
+     * @param  \Oro\Bundle\UserBundle\Entity\Role $role
+     *
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      * @Acl(
      *      id = "oro_acl_save",

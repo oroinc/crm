@@ -54,8 +54,8 @@ class ProfileSubscriber implements EventSubscriberInterface
     public function preBind(FormEvent $event)
     {
         $inputData = $event->getData();
-        if(isset($inputData['emails'])) {
-            foreach($inputData['emails'] as $id => $email) {
+        if (isset($inputData['emails'])) {
+            foreach ($inputData['emails'] as $id => $email) {
                 if (!$email['email']) {
                     unset($inputData['emails'][$id]);
                 }

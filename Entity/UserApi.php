@@ -17,12 +17,12 @@ class UserApi
      */
     protected $id;
 
-   /**
-    * @var User
-    *
-    * @ORM\OneToOne(targetEntity="User", inversedBy="api", fetch="LAZY")
-    * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
-    */
+    /**
+     * @var User
+     *
+     * @ORM\OneToOne(targetEntity="User", inversedBy="api", fetch="LAZY")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
+     */
     protected $user;
 
     /**
@@ -45,7 +45,8 @@ class UserApi
     /**
      * Set apiKey
      *
-     * @param  string  $apiKey
+     * @param  string $apiKey
+     *
      * @return UserApi
      */
     public function setApiKey($apiKey)
@@ -68,7 +69,8 @@ class UserApi
     /**
      * Set user
      *
-     * @param  User    $user
+     * @param  User $user
+     *
      * @return UserApi
      */
     public function setUser(User $user)

@@ -26,16 +26,19 @@ class GroupController extends FOSRestController implements ClassResourceInterfac
      */
     public function cgetAction()
     {
-        return $this->handleView($this->view(
-            $this->getManager()->getRepository('OroUserBundle:Group')->findAll(),
-            Codes::HTTP_OK
-        ));
+        return $this->handleView(
+            $this->view(
+                $this->getManager()->getRepository('OroUserBundle:Group')->findAll(),
+                Codes::HTTP_OK
+            )
+        );
     }
 
     /**
      * Get group data
      *
      * @param int $id Group id
+     *
      * @ApiDoc(
      *  description="Get group data",
      *  resource=true,
@@ -46,12 +49,14 @@ class GroupController extends FOSRestController implements ClassResourceInterfac
      */
     public function getAction($id)
     {
-        $entity = $this->getManager()->find('OroUserBundle:Group', (int) $id);
+        $entity = $this->getManager()->find('OroUserBundle:Group', (int)$id);
 
-        return $this->handleView($this->view(
-            $entity,
-            $entity ? Codes::HTTP_OK : Codes::HTTP_NOT_FOUND
-        ));
+        return $this->handleView(
+            $this->view(
+                $entity,
+                $entity ? Codes::HTTP_OK : Codes::HTTP_NOT_FOUND
+            )
+        );
     }
 
     /**
@@ -65,8 +70,11 @@ class GroupController extends FOSRestController implements ClassResourceInterfac
     public function postAction()
     {
         $entity = new Group();
-        $view   = $this->get('oro_user.form.handler.group.api')->process($entity)
-            ? $this->redirectView($this->generateUrl('oro_api_get_group', array('id' => $entity->getId())), Codes::HTTP_CREATED)
+        $view = $this->get('oro_user.form.handler.group.api')->process($entity)
+            ? $this->redirectView(
+                $this->generateUrl('oro_api_get_group', array('id' => $entity->getId())),
+                Codes::HTTP_CREATED
+            )
             : $this->view($this->get('oro_user.form.group.api'), Codes::HTTP_BAD_REQUEST);
 
         return $this->handleView($view);
@@ -76,6 +84,7 @@ class GroupController extends FOSRestController implements ClassResourceInterfac
      * Update existing group
      *
      * @param int $id Group id
+     *
      * @ApiDoc(
      *  description="Update existing group",
      *  resource=true,
@@ -86,7 +95,7 @@ class GroupController extends FOSRestController implements ClassResourceInterfac
      */
     public function putAction($id)
     {
-        $entity = $this->getManager()->find('OroUserBundle:Group', (int) $id);
+        $entity = $this->getManager()->find('OroUserBundle:Group', (int)$id);
 
         if (!$entity) {
             return $this->handleView($this->view('', Codes::HTTP_NOT_FOUND));
@@ -103,6 +112,7 @@ class GroupController extends FOSRestController implements ClassResourceInterfac
      * Delete group
      *
      * @param int $id Group id
+     *
      * @ApiDoc(
      *  description="Delete group",
      *  resource=true,
@@ -113,8 +123,8 @@ class GroupController extends FOSRestController implements ClassResourceInterfac
      */
     public function deleteAction($id)
     {
-        $em     = $this->getManager();
-        $entity = $em->find('OroUserBundle:Group', (int) $id);
+        $em = $this->getManager();
+        $entity = $em->find('OroUserBundle:Group', (int)$id);
 
         if (!$entity) {
             return $this->handleView($this->view('', Codes::HTTP_NOT_FOUND));
@@ -130,6 +140,7 @@ class GroupController extends FOSRestController implements ClassResourceInterfac
      * Get group roles
      *
      * @param int $id Group id
+     *
      * @ApiDoc(
      *  description="Get group roles",
      *  resource=true,
@@ -140,7 +151,7 @@ class GroupController extends FOSRestController implements ClassResourceInterfac
      */
     public function getRolesAction($id)
     {
-        $entity = $this->getManager()->find('OroUserBundle:Group', (int) $id);
+        $entity = $this->getManager()->find('OroUserBundle:Group', (int)$id);
 
         if (!$entity) {
             return $this->handleView($this->view('', Codes::HTTP_NOT_FOUND));

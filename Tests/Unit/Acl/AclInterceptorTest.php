@@ -46,15 +46,17 @@ class AclInterceptorTest extends \PHPUnit_Framework_TestCase
             )
         );
 
-        $this->decisionManager = $this->getMockBuilder('Symfony\Component\Security\Core\Authorization\AccessDecisionManager')
-        ->disableOriginalConstructor()
-        ->getMock();
+        $this->decisionManager = $this->getMockBuilder(
+            'Symfony\Component\Security\Core\Authorization\AccessDecisionManager'
+        )
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->token = $this->getMock('Symfony\Component\Security\Core\Authentication\Token\TokenInterface');
 
         $this->aclManager = $this->getMockBuilder('Oro\Bundle\UserBundle\Acl\Manager')
-        ->disableOriginalConstructor()
-        ->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->request = $this->getMock('Symfony\Component\HttpFoundation\Request');
         $this->requestAttributes = $this->getMock('Symfony\Component\HttpFoundation\ParameterBag');
@@ -64,36 +66,38 @@ class AclInterceptorTest extends \PHPUnit_Framework_TestCase
         $this->securityContext
             ->expects($this->once())
             ->method('getToken')
-            ->will($this->returnValue($this->token))
-        ;
+            ->will($this->returnValue($this->token));
 
         $params = array(
-            'security.context' => $this->securityContext,
-            'logger' => $this->logger,
-            'annotation_reader' => $this->annotationReader,
+            'security.context'                 => $this->securityContext,
+            'logger'                           => $this->logger,
+            'annotation_reader'                => $this->annotationReader,
             'security.access.decision_manager' => $this->decisionManager,
-            'oro_user.acl_manager' => $this->aclManager,
-            'request' => $this->request,
-            'oro_user.acl_config_reader' => $this->aclConfigReader
+            'oro_user.acl_manager'             => $this->aclManager,
+            'request'                          => $this->request,
+            'oro_user.acl_config_reader'       => $this->aclConfigReader
         );
 
         $this->container->expects($this->any())
             ->method('get')
-            ->with($this->logicalOr(
-                $this->equalTo('security.context'),
-                $this->equalTo('logger'),
-                $this->equalTo('annotation_reader'),
-                $this->equalTo('security.access.decision_manager'),
-                $this->equalTo('oro_user.acl_manager'),
-                $this->equalTo('request'),
-                $this->equalTo('oro_user.acl_config_reader')
-            ))
-            ->will($this->returnCallback(
-                function($param) use (&$params) {
-                    return $params[$param];
-                }
+            ->with(
+                $this->logicalOr(
+                    $this->equalTo('security.context'),
+                    $this->equalTo('logger'),
+                    $this->equalTo('annotation_reader'),
+                    $this->equalTo('security.access.decision_manager'),
+                    $this->equalTo('oro_user.acl_manager'),
+                    $this->equalTo('request'),
+                    $this->equalTo('oro_user.acl_config_reader')
+                )
             )
-        );
+            ->will(
+                $this->returnCallback(
+                    function ($param) use (&$params) {
+                        return $params[$param];
+                    }
+                )
+            );
 
         $object = new  MainTestController();
         $this->testMethodInvocation = new MethodInvocation(
@@ -107,24 +111,20 @@ class AclInterceptorTest extends \PHPUnit_Framework_TestCase
     {
         $this->decisionManager->expects($this->once())
             ->method('decide')
-            ->will($this->returnValue(false))
-        ;
+            ->will($this->returnValue(false));
 
         $this->request->expects($this->any())
             ->method('getRequestFormat')
-            ->will($this->returnValue('html'))
-        ;
+            ->will($this->returnValue('html'));
 
         $this->requestAttributes->expects($this->once())
             ->method('get')
-            ->will($this->returnValue('test_route'))
-        ;
+            ->will($this->returnValue('test_route'));
 
         $this->aclManager
             ->expects($this->once())
             ->method('getAclRolesWithoutTree')
-            ->will($this->returnValue(array('TEST_ROLE', 'ANOTHER_ROLE')))
-        ;
+            ->will($this->returnValue(array('TEST_ROLE', 'ANOTHER_ROLE')));
 
         $this->setExpectedException('RuntimeException');
         $this->inceptor->intercept($this->testMethodInvocation);
@@ -134,24 +134,20 @@ class AclInterceptorTest extends \PHPUnit_Framework_TestCase
     {
         $this->decisionManager->expects($this->once())
             ->method('decide')
-            ->will($this->returnValue(false))
-        ;
+            ->will($this->returnValue(false));
 
         $this->request->expects($this->at(0))
             ->method('getRequestFormat')
-            ->will($this->returnValue('html'))
-        ;
+            ->will($this->returnValue('html'));
 
         $this->request->expects($this->at(1))
             ->method('getRequestFormat')
-            ->will($this->returnValue('xml'))
-        ;
+            ->will($this->returnValue('xml'));
 
         $this->aclManager
             ->expects($this->once())
             ->method('getAclRolesWithoutTree')
-            ->will($this->returnValue(array('TEST_ROLE', 'ANOTHER_ROLE')))
-        ;
+            ->will($this->returnValue(array('TEST_ROLE', 'ANOTHER_ROLE')));
 
         $this->setExpectedException('RuntimeException');
         $this->inceptor->intercept($this->testMethodInvocation);
@@ -161,24 +157,20 @@ class AclInterceptorTest extends \PHPUnit_Framework_TestCase
     {
         $this->decisionManager->expects($this->once())
             ->method('decide')
-            ->will($this->returnValue(false))
-        ;
+            ->will($this->returnValue(false));
 
         $this->request->expects($this->any())
             ->method('getRequestFormat')
-            ->will($this->returnValue('html'))
-        ;
+            ->will($this->returnValue('html'));
 
         $this->requestAttributes->expects($this->once())
             ->method('get')
-            ->will($this->returnValue('_internal'))
-        ;
+            ->will($this->returnValue('_internal'));
 
         $this->aclManager
             ->expects($this->once())
             ->method('getAclRolesWithoutTree')
-            ->will($this->returnValue(array('TEST_ROLE', 'ANOTHER_ROLE')))
-        ;
+            ->will($this->returnValue(array('TEST_ROLE', 'ANOTHER_ROLE')));
 
         $result = $this->inceptor->intercept($this->testMethodInvocation);
         $this->assertEquals('Symfony\Component\HttpFoundation\Response', get_class($result));
@@ -188,19 +180,16 @@ class AclInterceptorTest extends \PHPUnit_Framework_TestCase
     {
         $this->request->expects($this->once())
             ->method('getRequestFormat')
-            ->will($this->returnValue('html'))
-        ;
+            ->will($this->returnValue('html'));
 
         $this->decisionManager->expects($this->once())
             ->method('decide')
-            ->will($this->returnValue(true))
-        ;
+            ->will($this->returnValue(true));
 
         $this->aclManager
             ->expects($this->once())
             ->method('getAclRolesWithoutTree')
-            ->will($this->returnValue(array('TEST_ROLE', 'ANOTHER_ROLE')))
-        ;
+            ->will($this->returnValue(array('TEST_ROLE', 'ANOTHER_ROLE')));
 
         $this->inceptor->intercept($this->testMethodInvocation);
     }
@@ -209,37 +198,32 @@ class AclInterceptorTest extends \PHPUnit_Framework_TestCase
     {
         $annotation = new Acl(
             array(
-                 'id' => 'testAcl',
-                 'name' => 'test name',
+                 'id'          => 'testAcl',
+                 'name'        => 'test name',
                  'description' => 'test description'
             )
         );
 
         $this->annotationReader->expects($this->once())
             ->method('getMethodAnnotation')
-            ->will($this->returnValue($annotation))
-        ;
+            ->will($this->returnValue($annotation));
 
         $this->decisionManager->expects($this->once())
             ->method('decide')
-            ->will($this->returnValue(false))
-        ;
+            ->will($this->returnValue(false));
 
         $this->request->expects($this->any())
             ->method('getRequestFormat')
-            ->will($this->returnValue('html'))
-        ;
+            ->will($this->returnValue('html'));
 
         $this->requestAttributes->expects($this->once())
             ->method('get')
-            ->will($this->returnValue('test_route'))
-        ;
+            ->will($this->returnValue('test_route'));
 
         $this->aclManager
             ->expects($this->once())
             ->method('getAclRoles')
-            ->will($this->returnValue(array('TEST_ROLE')))
-        ;
+            ->will($this->returnValue(array('TEST_ROLE')));
 
         $this->setExpectedException('RuntimeException');
         $this->inceptor->intercept($this->testMethodInvocation);

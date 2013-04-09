@@ -40,10 +40,12 @@ class LocalizedDateType extends AbstractType
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $resolver->setDefaults(array(
-            'years' => range(date('Y') - 120, date('Y')),
-            'format' => \IntlDateFormatter::SHORT
-        ));
+        $resolver->setDefaults(
+            array(
+                 'years'  => range(date('Y') - 120, date('Y')),
+                 'format' => \IntlDateFormatter::SHORT
+            )
+        );
     }
 
     /**

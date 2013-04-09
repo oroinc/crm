@@ -1,4 +1,5 @@
 <?php
+namespace Oro\Bundle\UserBundle\Tests\Unit\Type;
 
 use Symfony\Component\Form\Tests\FormIntegrationTestCase;
 

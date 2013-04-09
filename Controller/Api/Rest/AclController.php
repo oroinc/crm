@@ -11,7 +11,7 @@ use FOS\RestBundle\Controller\Annotations\QueryParam;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
 /**
- *@NamePrefix("oro_api_")
+ * @NamePrefix("oro_api_")
  */
 class AclController extends FOSRestController implements ClassResourceInterface
 {
@@ -20,6 +20,7 @@ class AclController extends FOSRestController implements ClassResourceInterface
      * Get ACL Resources
      *
      * @param int $id Group id
+     *
      * @ApiDoc(
      *  description="Get ACL Resources ",
      *  resource=true
@@ -27,7 +28,8 @@ class AclController extends FOSRestController implements ClassResourceInterface
      */
     public function cgetAction()
     {
-        return $this->handleView($this->view(
+        return $this->handleView(
+            $this->view(
                 $this->get('oro_user.acl_manager')->getAclResources(false),
                 Codes::HTTP_OK
             )
@@ -38,7 +40,9 @@ class AclController extends FOSRestController implements ClassResourceInterface
      * Get ACL Resource data
      *
      * @QueryParam(name="id", nullable=false, description="ACL Resource id.")
+     *
      * @param int $id Group id
+     *
      * @ApiDoc(
      *  description="Get Acl resource",
      *  resource=true,
@@ -55,7 +59,8 @@ class AclController extends FOSRestController implements ClassResourceInterface
             return $this->handleView($this->view('', Codes::HTTP_NOT_FOUND));
         }
 
-        return $this->handleView($this->view(
+        return $this->handleView(
+            $this->view(
                 $resource->toArray(),
                 $resource ? Codes::HTTP_OK : Codes::HTTP_NOT_FOUND
             )
