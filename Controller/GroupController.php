@@ -36,21 +36,17 @@ class GroupController extends Controller
     public function editAction(Group $entity)
     {
         $backUrl = $this->getRedirectUrl($this->generateUrl('oro_user_group_index'));
-        $widgetContainer = $this->getRequest()->get('_widgetContainer');
         if ($this->get('oro_user.form.handler.group')->process($entity)) {
             $this->get('session')->getFlashBag()->add('success', 'Group successfully saved');
 
-            if (!$widgetContainer) {
+            if (!$this->getRequest()->get('_widgetContainer')) {
                 return $this->redirect($backUrl);
             }
         }
 
-        $viewParameters = array(
+        return array(
             'form' => $this->get('oro_user.form.group')->createView(),
         );
-        $template = ($widgetContainer ? $widgetContainer . '.' : '') . 'edit.html.twig';
-
-        return $this->render('OroUserBundle:Group:' . $template, $viewParameters);
     }
 
     /**
