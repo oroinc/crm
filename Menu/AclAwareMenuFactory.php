@@ -126,7 +126,7 @@ class AclAwareMenuFactory extends MenuFactory
             $hasInCache = false;
             $uri = null;
             if ($this->cache) {
-                $cacheKey = $this->getCacheKey('route_uri', $options['route'] . serialize($params));
+                $cacheKey = $this->getCacheKey('route_uri', $options['route'] . ($params ? serialize($params) : ''));
                 if ($this->cache->contains($cacheKey)) {
                     $uri = $this->cache->fetch($cacheKey);
                     $hasInCache = true;
