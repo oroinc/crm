@@ -80,7 +80,7 @@ class ResponseHistoryListener
         $historyItem->setTitle($title);
 
         // force update
-        $historyItem->doPreUpdate();
+        $historyItem->doUpdate();
 
         $this->em->persist($historyItem);
         $this->em->flush();
