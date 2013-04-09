@@ -343,7 +343,8 @@ class AclAwareMenuFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testRouteCaching($hasInCache)
     {
-        $uriKey = md5('route_uri:route_name');
+        $params = array('id' => 20);
+        $uriKey = md5('route_uri:route_name' . serialize($params));
         $aclKey = md5('route_acl:route_name');
 
         $cache = $this->getMockBuilder('Doctrine\Common\Cache\ArrayCache')
@@ -386,7 +387,7 @@ class AclAwareMenuFactoryTest extends \PHPUnit_Framework_TestCase
 
         $this->factory->setCache($cache);
 
-        $options = array('route' => 'route_name');
+        $options = array('route' => 'route_name', 'routeParameters' => $params);
 
         $this->assertRouteByRouteNameCalls(true, 'route_name', 'controller', 'action', (int)!$hasInCache);
 
