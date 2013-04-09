@@ -17,7 +17,7 @@ class TemplateListener extends FrameworkTemplateListener
     public function onKernelView(GetResponseForControllerResultEvent $event)
     {
         $request = $event->getRequest();
-        if ($container = $request->query->get('_widgetContainer')) {
+        if ($container = $request->query->get('_widgetContainer', $request->request->get('_widgetContainer'))) {
             $template = $request->attributes->get('_template');
             if (strpos($template, self::TEMPLATE_PARTS_SEPARATOR) !== false) {
                 $templateParts = explode(self::TEMPLATE_PARTS_SEPARATOR, $template);

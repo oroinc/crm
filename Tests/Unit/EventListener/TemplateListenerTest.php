@@ -69,11 +69,12 @@ class TemplateListenerTest extends \PHPUnit_Framework_TestCase
      * @param bool $containerExists
      * @param bool $widgetExists
      * @param string $expectedTemplate
+     * @param string $requestAttribute
      */
-    public function testOnKernelViewWidgetTemplateExists($containerExists, $widgetExists, $expectedTemplate)
+    public function testOnKernelViewWidgetTemplateExists($containerExists, $widgetExists, $expectedTemplate, $requestAttribute)
     {
         $request = Request::create('/test/url');
-        $request->query->set('_widgetContainer', 'container');
+        $request->$requestAttribute->set('_widgetContainer', 'container');
         $request->attributes->set('_template', 'TestBundle:Default:test.html.twig');
 
         $this->event->expects($this->any())
@@ -110,10 +111,14 @@ class TemplateListenerTest extends \PHPUnit_Framework_TestCase
     public function templateDataProvider()
     {
         return array(
-            'container yes, widget yes' => array(true, true, 'TestBundle:Default:container.test.html.twig'),
-            'container yes, widget no' => array(true, false, 'TestBundle:Default:container.test.html.twig'),
-            'container no, widget yes' => array(false, true, 'TestBundle:Default:widget.test.html.twig'),
-            'container no, widget no' => array(false, false, 'TestBundle:Default:test.html.twig')
+            'container yes, widget yes' => array(true, true, 'TestBundle:Default:container.test.html.twig', 'query'),
+            'container yes, widget no' => array(true, false, 'TestBundle:Default:container.test.html.twig', 'query'),
+            'container no, widget yes' => array(false, true, 'TestBundle:Default:widget.test.html.twig', 'query'),
+            'container no, widget no' => array(false, false, 'TestBundle:Default:test.html.twig', 'query'),
+            'post container yes, widget yes' => array(true, true, 'TestBundle:Default:container.test.html.twig', 'request'),
+            'post container yes, widget no' => array(true, false, 'TestBundle:Default:container.test.html.twig', 'request'),
+            'post container no, widget yes' => array(false, true, 'TestBundle:Default:widget.test.html.twig', 'request'),
+            'post container no, widget no' => array(false, false, 'TestBundle:Default:test.html.twig', 'request')
         );
     }
 }
