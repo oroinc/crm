@@ -17,6 +17,7 @@ abstract class AbstractDateFilter extends AbstractFilter
 
     /**
      * Flag indicating that filter will filter by datetime instead by date
+     *
      * @var boolean
      */
     protected $time = false;
@@ -79,6 +80,13 @@ abstract class AbstractDateFilter extends AbstractFilter
     {
         $dateStartValue = trim($data['value']['start']);
         $dateEndValue   = trim($data['value']['end']);
+
+        if (!$this->isDateCorrect($dateStartValue)) {
+            $dateStartValue = '';
+        }
+        if (!$this->isDateCorrect($dateEndValue)) {
+            $dateEndValue = '';
+        }
 
         if (!isset($data['type']) || !is_numeric($data['type'])) {
             $filterType = DateRangeType::TYPE_BETWEEN;
