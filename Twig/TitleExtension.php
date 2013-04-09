@@ -52,7 +52,7 @@ class TitleExtension extends \Twig_Extension
      */
     public function render(array $options = array(), $titleTemplate = null)
     {
-        return $this->titleService->render($options, $titleTemplate, true);
+        return $this->titleService->render($options, is_null($titleTemplate) ? $this->titleService->getTemplate() : $titleTemplate, true);
     }
 
     /**

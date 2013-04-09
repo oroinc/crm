@@ -34,7 +34,7 @@ class TitleService
      *
      * @var array
      */
-    private $params;
+    private $params = array();
 
     /**
      * Current title suffix
@@ -98,12 +98,12 @@ class TitleService
     {
         if ($storeData) {
             $this->params = $params;
-            $this->template = is_null($title) ? $this->template : $title;
+            $this->template = $title;
         }
 
         $trans = $this->translator;
 
-        $translatedTemplate = $trans->trans($this->template);
+        $translatedTemplate = $trans->trans($title);
 
         $suffix = '';
         if (!is_null($this->suffix)) {
@@ -131,7 +131,7 @@ class TitleService
         /** @var $data \Oro\Bundle\NavigationBundle\Title\StoredTitle */
         $data =  $this->serializer->deserialize($titleData, 'Oro\Bundle\NavigationBundle\Title\StoredTitle', 'json');
 
-        return $this->render($data->getTemplate(), $data->getParams());
+        return $this->render($data->getParams(), $data->getTemplate());
     }
 
     /**
@@ -196,7 +196,7 @@ class TitleService
     /**
      * Load title template from database
      *
-     * @param  string$route
+     * @param string $route
      */
     public function loadByRoute($route)
     {
@@ -261,6 +261,11 @@ class TitleService
         $this->em->flush();
     }
 
+    /**
+     * Return serialized title data
+     *
+     * @return string
+     */
     public function getSerialized()
     {
         $storedTitle = new StoredTitle();
