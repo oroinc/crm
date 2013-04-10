@@ -10,7 +10,7 @@ use FOS\RestBundle\Controller\Annotations\NamePrefix;
 use FOS\RestBundle\Controller\Annotations\RouteResource;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use FOS\Rest\Util\Codes;
-use Oro\Bundle\UserBundle\Entity\User;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 use Oro\Bundle\WindowsBundle\Entity\WindowsState;
 
@@ -51,10 +51,8 @@ class WindowsStateController extends FOSRestController
     {
         $postArray = $this->getPost();
 
-        /** @var $user \Oro\Bundle\UserBundle\Entity\User */
-        $user = $this->getDoctrine()
-            ->getRepository('OroUserBundle:User')
-            ->find($this->getUserId());
+        /** @var $user UserInterface */
+        $user = $this->getUser();
         $postArray['user'] = $user;
 
         /** @var $entity \Oro\Bundle\WindowsBundle\Entity\WindowsState */
@@ -151,26 +149,16 @@ class WindowsStateController extends FOSRestController
     }
 
     /**
-     * Get current user id
-     *
-     * @return int
-     */
-    protected function getUserId()
-    {
-        /** @var $user User */
-        $user = $this->getUser();
-        return $user ? $user->getId() : 0;
-    }
-
-    /**
      * Validate permissions
      *
-     * @param User $user
+     * TODO: refactor this to use Symfony2 ACL
+     *
+     * @param UserInterface $user
      * @return bool
      */
-    protected function validatePermissions(User $user)
+    protected function validatePermissions(UserInterface $user)
     {
-        return $user->getId() == $this->getUserId();
+        return $user->getUsername() == $this->getUser()->getUsername();
     }
 
     /**

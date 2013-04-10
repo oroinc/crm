@@ -3,6 +3,7 @@
 namespace Oro\Bundle\WindowsBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * Window state container Entity
@@ -24,9 +25,9 @@ class WindowsState
     protected $id;
 
     /**
-     * @var \Oro\Bundle\UserBundle\Entity\User $user
+     * @var UserInterface $user
      *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
+     * @ORM\ManyToOne(targetEntity="Symfony\Component\Security\Core\User\UserInterface")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      */
     protected $user;
@@ -144,10 +145,10 @@ class WindowsState
     /**
      * Set user
      *
-     * @param \Oro\Bundle\UserBundle\Entity\User $user
+     * @param UserInterface $user
      * @return \Oro\Bundle\WindowsBundle\Entity\WindowsState
      */
-    public function setUser(\Oro\Bundle\UserBundle\Entity\User $user = null)
+    public function setUser(UserInterface $user = null)
     {
         $this->user = $user;
 
@@ -157,7 +158,7 @@ class WindowsState
     /**
      * Get user
      *
-     * @return \Oro\Bundle\UserBundle\Entity\User 
+     * @return UserInterface
      */
     public function getUser()
     {

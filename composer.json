@@ -9,7 +9,6 @@
         "php": ">=5.3.3",
         "symfony/symfony": "2.1.6",
         "oro/ui-bundle": "dev-master",
-        "oro/user-bundle": "dev-master",
         "friendsofsymfony/rest-bundle": "*",
         "nelmio/api-doc-bundle": "dev-master"
     },
@@ -20,7 +19,7 @@
     "minimum-stability": "dev",
     "extra": {
         "branch-alias": {
-            "dev-master": "1.0-dev"
+            "dev-master": "1.0.0-alpha"
         }
     }
 }

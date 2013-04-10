@@ -25,7 +25,7 @@ class WindowsStateTest extends \PHPUnit_Framework_TestCase
 
     public function propertiesDataProvider()
     {
-        $userMock = $this->getMockBuilder('\Oro\Bundle\UserBundle\Entity\User')
+        $userMock = $this->getMockBuilder('Symfony\Component\Security\Core\User\UserInterface')
             ->disableOriginalConstructor()
             ->getMock();
         return array(
