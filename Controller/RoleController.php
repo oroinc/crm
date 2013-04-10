@@ -11,6 +11,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Oro\Bundle\UserBundle\Entity\Role;
 use Oro\Bundle\UserBundle\Annotation\Acl;
 use Oro\Bundle\UserBundle\Datagrid\RoleDatagridManager;
+use Oro\Bundle\UserBundle\Datagrid\RoleUserDatagridManager;
+use Oro\Bundle\GridBundle\Datagrid\ORM\QueryFactory\QueryFactory;
 
 /**
  * @Route("/role")
@@ -117,21 +119,32 @@ class RoleController extends Controller
 
     /**
      * @Route(
-     *  "{id}/users/{page}/{limit}",
+     *  "/{id}/users/{_format}",
      *  name="oro_user_role_users",
-     *  requirements={"id"="\d+", "page"="\d+","limit"="\d+"}, defaults={"page"=1,"limit"=20}
+     *  requirements={"id"="\d+", "_format"="html|json"}, defaults={"id"=1, "_format"="html"}
      * )
-     * @Template
      */
-    public function showUsersAction(Role $role, $page, $limit)
+    public function showUsersAction(Role $role)
     {
-        return array(
-            'users' => $this->get('knp_paginator')->paginate(
-                $role->getUsers(),
-                $page,
-                $limit
-            ),
-            'role' => $role
+        /** @var $queryFactory QueryFactory */
+        $queryFactory = $this->get('oro_user.roleuser_datagrid_manager.default_query_factory');
+        $queryFactory->setQueryBuilder($this->get('oro_user.role_manager')->getUserQueryBuilder($role));
+
+        $request = $this->getRequest();
+        $userGridManager = $this->get('oro_user.roleuser_datagrid_manager');
+        /** @var $userGridManager RoleUserDatagridManager */
+        $datagrid = $userGridManager->getDatagrid();
+
+        if ('json' == $request->getRequestFormat()) {
+            $view = 'OroGridBundle:Datagrid:list.json.php';
+        } else {
+            $view = 'OroUserBundle:Profile:index.html.twig';
+        }
+        return $this->render(
+            $view,
+            array(
+                'datagrid' => $datagrid
+            )
         );
     }
 }

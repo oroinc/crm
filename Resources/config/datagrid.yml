@@ -2,6 +2,7 @@ parameters:
     oro_user.user_datagrid_manager.class: Oro\Bundle\UserBundle\Datagrid\UserDatagridManager
     oro_user.role_datagrid_manager.class: Oro\Bundle\UserBundle\Datagrid\RoleDatagridManager
     oro_user.group_datagrid_manager.class: Oro\Bundle\UserBundle\Datagrid\GroupDatagridManager
+    oro_user.roleuser_datagrid_manager.class: Oro\Bundle\UserBundle\Datagrid\RoleUserDatagridManager
 
 services:
     oro_user.user_datagrid_manager:
@@ -36,5 +37,16 @@ services:
               entity_name: Oro\Bundle\UserBundle\Entity\Group
               entity_hint: groups
               route_name: oro_user_group_index
+        calls:
+            - [ setRouter, [ @router ] ]
+
+
+    oro_user.roleuser_datagrid_manager:
+        class: %oro_user.roleuser_datagrid_manager.class%
+        tags:
+            - name: oro_grid.datagrid.manager
+              datagrid_name: roleusers
+              entity_hint: user
+              route_name: oro_user_role_users
         calls:
             - [ setRouter, [ @router ] ]
