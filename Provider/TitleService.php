@@ -103,7 +103,7 @@ class TitleService
 
         $trans = $this->translator;
 
-        $translatedTemplate = $trans->trans($title);
+        $translatedTemplate = $trans->trans($title, $params);
 
         $suffix = '';
         if (!is_null($this->suffix)) {
@@ -117,7 +117,7 @@ class TitleService
 
         $translatedTemplate = $prefix . $translatedTemplate . $suffix;
 
-        return $this->templateEngine->render($translatedTemplate, $params);
+        return $translatedTemplate;
     }
 
     /**

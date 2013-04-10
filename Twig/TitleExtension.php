@@ -43,6 +43,18 @@ class TitleExtension extends \Twig_Extension
     }
 
     /**
+     * Register new token parser
+     *
+     * @return array
+     */
+    public function getTokenParsers()
+    {
+        return array(
+            new TitleSetTokenParser()
+        );
+    }
+
+    /**
      * Renders a title
      *
      * @param string $titleTemplate
@@ -50,9 +62,17 @@ class TitleExtension extends \Twig_Extension
      *
      * @return string
      */
-    public function render(array $options = array(), $titleTemplate = null)
+    public function render($titleTemplate = null)
     {
-        return $this->titleService->render($options, is_null($titleTemplate) ? $this->titleService->getTemplate() : $titleTemplate, true);
+        return $this->titleService->render($this->titleService->getParams(), is_null($titleTemplate) ? $this->titleService->getTemplate() : $titleTemplate);
+    }
+
+    public function set(array $options = array())
+    {
+        $titleTemplate = isset($options['template']) ? $options['template'] : $this->titleService->getTemplate();
+        $params = isset($options['params']) ? $options['params'] : array();
+
+        return $this->titleService->render($params, $titleTemplate, true);
     }
 
     /**
