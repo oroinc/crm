@@ -2,9 +2,9 @@
 {% import 'OroUserBundle::macros.html.twig' as macros %}
 {% form_theme form with 'OroUIBundle:Form:fields.html.twig' %}
 
-{% set title = form.vars.value.id ? 'Edit profile' : 'Add profile' %}
+{% set title = form.vars.value.id ? 'Edit profile' : 'New User' %}
 
-{% block title %}{{ title }} - {{ parent() }}{% endblock %}
+{% block title %}{{ title }} - {{ 'User Management'|trans }} {% endblock %}
 {% block page_container %}
 <div class="container-fluid">
 {% block content %}

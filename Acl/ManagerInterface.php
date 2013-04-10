@@ -67,5 +67,4 @@ interface ManagerInterface
      * @return array|\Oro\Bundle\UserBundle\Entity\Acl[]
      */
     public function getAllowedAclResourcesForRoles(array $roles, $useObjects = false);
-
 }

@@ -38,22 +38,16 @@ class Reader
             return array();
         }
 
-        //try to determine if we in test mode
-        $inTest = false;
-        foreach ($directories as $directory) {
-            if (strpos($directory, DIRECTORY_SEPARATOR . 'Tests' . DIRECTORY_SEPARATOR) !== false) {
-                $inTest = true;
-            }
-        }
+        $inTest = $this->kernel->getEnvironment() == 'test' ? true : false;
 
         $finder = new PatternFinder(self::ACL_CLASS, '*.php');
         $files = $finder->findFiles($directories);
 
         foreach ($files as $index => $file) {
-            if (strpos($file, 'Annotation') !== false ||
-                strpos($file, 'ResourceReader') !== false ||
-                (!$inTest && strpos($file, 'Test') !== false))
-            {
+            if (strpos($file, 'Annotation') !== false
+                || strpos($file, 'ResourceReader') !== false
+                || ($inTest && strpos($file, 'Test') !== false)
+            ) {
                 unset($files[$index]);
             }
         }

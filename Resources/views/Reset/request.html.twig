@@ -2,7 +2,7 @@
 
 {% block bodyClass %}login-page{% endblock %}
 
-{% block title %}{{ 'Password reset request'|trans }} - {{ parent() }}{% endblock %}
+{% block title %}{{ 'Forgot password'|trans }}{% endblock %}
 
 {% block content %}
     <form action="{{ path('oro_user_reset_send_email') }}" method="POST" class="form-signin">

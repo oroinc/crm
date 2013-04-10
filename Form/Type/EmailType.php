@@ -13,9 +13,13 @@ class EmailType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('email', 'email', array(
-             'required' => true,
-        ));
+        $builder->add(
+            'email',
+            'email',
+            array(
+                 'required' => false,
+            )
+        );
     }
 
     /**
@@ -31,8 +35,10 @@ class EmailType extends AbstractType
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $resolver->setDefaults(array(
-            'data_class' => 'Oro\Bundle\UserBundle\Entity\Email',
-        ));
+        $resolver->setDefaults(
+            array(
+                 'data_class' => 'Oro\Bundle\UserBundle\Entity\Email',
+            )
+        );
     }
 }

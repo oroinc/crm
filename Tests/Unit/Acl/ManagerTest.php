@@ -46,8 +46,18 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
         $this->om = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
         $this->repository = $this->getMock(
             'Doctrine\Common\Persistence\ObjectRepository',
-            array('find', 'findAll', 'findBy', 'findOneBy', 'getClassName', 'getAllowedAclResourcesForRoles',
-            'getFullNodeWithRoles', 'getAclRolesWithoutTree', 'getRoleAclTree', 'getAclListWithRoles')
+            array(
+                'find',
+                'findAll',
+                'findBy',
+                'findOneBy',
+                'getClassName',
+                'getAllowedAclResourcesForRoles',
+                'getFullNodeWithRoles',
+                'getAclRolesWithoutTree',
+                'getRoleAclTree',
+                'getAclListWithRoles'
+            )
         );
 
         $this->repository->expects($this->any())
@@ -81,15 +91,23 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
         $sqlExecMock = $this->getMock('Doctrine\ORM\Query\Exec\AbstractSqlExecutor', array('execute'));
         $sqlExecMock->expects($this->any())
             ->method('execute')
-            ->will($this->returnValue( 10 ));
+            ->will($this->returnValue(10));
         $parserResultMock = $this->getMock('Doctrine\ORM\Query\ParserResult');
         $parserResultMock->expects($this->any())
             ->method('getSqlExecutor')
             ->will($this->returnValue($sqlExecMock));
-        $this->cache = $this->getMock('Doctrine\Common\Cache\CacheProvider',
-            array('doFetch', 'doContains', 'doSave', 'doDelete', 'doFlush', 'doGetStats', 'fetch', 'save'));
+        $this->cache = $this->getMock(
+            'Doctrine\Common\Cache\CacheProvider',
+            array('doFetch', 'doContains', 'doSave', 'doDelete', 'doFlush', 'doGetStats', 'fetch', 'save')
+        );
 
-        $this->manager = new Manager($this->om, $this->reader, $this->cache, $this->securityContext, $this->configApiReader);
+        $this->manager = new Manager(
+            $this->om,
+            $this->reader,
+            $this->cache,
+            $this->securityContext,
+            $this->configApiReader
+        );
 
         $this->testRole = new Role('ROLE_TEST_ROLE');
 
@@ -129,12 +147,14 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
 
         $this->repository->expects($this->once())
             ->method('findOneBy')
-            ->with($this->equalTo(
-                array(
-                    'class' => 'test_class',
-                    'method' => 'test_method'
+            ->with(
+                $this->equalTo(
+                    array(
+                        'class'  => 'test_class',
+                        'method' => 'test_method'
+                    )
                 )
-            ))
+            )
             ->will($this->returnValue($this->aclObject));
 
         $this->repository->expects($this->once())
@@ -233,10 +253,10 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
         for ($i = 5; $i < 15; $i++) {
             $annotation = new AclAnnotation(
                 array(
-                     'id' => 'test_acl_' . $i,
-                     'name' => 'test_acl_' . $i,
-                     'description' => 'test',
-                     'parent' => 'test_acl_' . ($i-1),
+                    'id'          => 'test_acl_' . $i,
+                    'name'        => 'test_acl_' . $i,
+                    'description' => 'test',
+                    'parent'      => 'test_acl_' . ($i - 1),
                 )
             );
             $annotations['test_acl_' . $i] = $annotation;
@@ -244,26 +264,26 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
         for ($i = 20; $i < 22; $i++) {
             $annotation = new AclAnnotation(
                 array(
-                     'id' => 'test_acl_' . $i,
-                     'name' => 'test_acl_' . $i,
-                     'description' => 'test'
+                    'id'          => 'test_acl_' . $i,
+                    'name'        => 'test_acl_' . $i,
+                    'description' => 'test'
                 )
             );
             $annotations['test_acl_' . $i] = $annotation;
         }
         $annotations['child'] = new AclAnnotation(
             array(
-                 'id' => 'child',
-                 'name' => 'child',
-                 'description' => 'child',
-                 'parent' => 'parent'
+                'id'          => 'child',
+                'name'        => 'child',
+                'description' => 'child',
+                'parent'      => 'parent'
             )
         );
         $annotations['parent'] = new AclAnnotation(
             array(
-                 'id' => 'parent',
-                 'name' => 'parent',
-                 'description' => 'parent'
+                'id'          => 'parent',
+                'name'        => 'parent',
+                'description' => 'parent'
             )
         );
 

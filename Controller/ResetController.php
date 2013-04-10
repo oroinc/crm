@@ -11,7 +11,7 @@ use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\UserBundle\Annotation\Acl;
 
 /**
- *  @Acl(
+ * @Acl(
  *      id = "oro_reset_controller",
  *      name="Reset user password",
  *      description = "Oro Reset user password",
@@ -53,14 +53,17 @@ class ResetController extends Controller
     public function sendEmailAction()
     {
         $username = $this->getRequest()->request->get('username');
-        $user     = $this->get('oro_user.manager')->findUserByUsernameOrEmail($username);
+        $user = $this->get('oro_user.manager')->findUserByUsernameOrEmail($username);
 
         if (null === $user) {
             return $this->render('OroUserBundle:Reset:request.html.twig', array('invalid_username' => $username));
         }
 
         if ($user->isPasswordRequestNonExpired($this->container->getParameter('oro_user.reset.ttl'))) {
-            $this->get('session')->getFlashBag()->add('warn', 'The password for this user has already been requested within the last 24 hours.');
+            $this->get('session')->getFlashBag()->add(
+                'warn',
+                'The password for this user has already been requested within the last 24 hours.'
+            );
 
             return $this->redirect($this->generateUrl('oro_user_reset_request'));
         }
@@ -107,7 +110,7 @@ class ResetController extends Controller
     public function checkEmailAction()
     {
         $session = $this->get('session');
-        $email   = $session->get(static::SESSION_EMAIL);
+        $email = $session->get(static::SESSION_EMAIL);
 
         $session->remove(static::SESSION_EMAIL);
 
@@ -136,15 +139,20 @@ class ResetController extends Controller
      */
     public function resetAction($token)
     {
-        $user    = $this->get('oro_user.manager')->findUserByConfirmationToken($token);
+        $user = $this->get('oro_user.manager')->findUserByConfirmationToken($token);
         $session = $this->get('session');
 
         if (null === $user) {
-            throw $this->createNotFoundException(sprintf('The user with "confirmation token" does not exist for value "%s"', $token));
+            throw $this->createNotFoundException(
+                sprintf('The user with "confirmation token" does not exist for value "%s"', $token)
+            );
         }
 
         if (!$user->isPasswordRequestNonExpired($this->container->getParameter('oro_user.reset.ttl'))) {
-            $session->getFlashBag()->add('warn', 'The password for this user has already been requested within the last 24 hours.');
+            $session->getFlashBag()->add(
+                'warn',
+                'The password for this user has already been requested within the last 24 hours.'
+            );
 
             return $this->redirect($this->generateUrl('oro_user_reset_request'));
         }
@@ -169,7 +177,8 @@ class ResetController extends Controller
      * Get the truncated email displayed when requesting the resetting.
      * The default implementation only keeps the part following @ in the address.
      *
-     * @param  User   $user
+     * @param  User $user
+     *
      * @return string
      */
     protected function getObfuscatedEmail(User $user)
