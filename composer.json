@@ -8,9 +8,9 @@
     "require": {
         "php": ">=5.3.3",
         "symfony/symfony": "2.1.6",
-        "oro/ui-bundle": "dev-master",
+        "oro/ui-bundle": "*",
         "friendsofsymfony/rest-bundle": "*",
-        "nelmio/api-doc-bundle": "dev-master"
+        "nelmio/api-doc-bundle": "*"
     },
     "autoload": {
         "psr-0": { "Oro\\Bundle\\WindowsBundle": "" }
