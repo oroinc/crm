@@ -6,7 +6,7 @@ use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 use Oro\Bundle\GridBundle\Form\Type\Filter\NumberType;
 use Oro\Bundle\GridBundle\Filter\ORM\NumberFilter;
 
-class FlexibleNumberFilter extends AbstractFlexibleChildFilter
+class FlexibleNumberFilter extends AbstractFlexibleFilter
 {
     /**
      * @var string

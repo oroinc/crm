@@ -6,7 +6,7 @@ use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 use Oro\Bundle\GridBundle\Form\Type\Filter\ChoiceType;
 use Oro\Bundle\GridBundle\Filter\ORM\StringFilter;
 
-class FlexibleStringFilter extends AbstractFlexibleChildFilter
+class FlexibleStringFilter extends AbstractFlexibleFilter
 {
     /**
      * @var string

@@ -6,7 +6,7 @@ use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 use Oro\Bundle\GridBundle\Filter\ORM\AbstractDateFilter;
 use Oro\Bundle\GridBundle\Form\Type\Filter\DateRangeType;
 
-abstract class AbstractFlexibleDateFilter extends AbstractFlexibleChildFilter
+abstract class AbstractFlexibleDateFilter extends AbstractFlexibleFilter
 {
     /**
      * @var string
