@@ -38,7 +38,12 @@ class Reader
             return array();
         }
 
-        $inTest = $this->kernel->getEnvironment() == 'test' ? true : false;
+        $inTest = false;
+        foreach ($directories as $directory) {
+            if (strpos($directory, 'Unit') !== false) {
+                $inTest = true;
+            }
+        }
 
         $finder = new PatternFinder(self::ACL_CLASS, '*.php');
         $files = $finder->findFiles($directories);
@@ -46,7 +51,7 @@ class Reader
         foreach ($files as $index => $file) {
             if (strpos($file, 'Annotation') !== false
                 || strpos($file, 'ResourceReader') !== false
-                || ($inTest && strpos($file, 'Test') !== false)
+                || (!$inTest && strpos($file, 'Test') !== false)
             ) {
                 unset($files[$index]);
             }
