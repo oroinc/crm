@@ -69,7 +69,7 @@ class TitleExtension extends \Twig_Extension
 
     public function set(array $options = array())
     {
-        $titleTemplate = isset($options['template']) ? $options['template'] : $this->titleService->getTemplate();
+        $titleTemplate = isset($options['titleTemplate']) ? $options['titleTemplate'] : $this->titleService->getTemplate();
         $params = isset($options['params']) ? $options['params'] : array();
 
         return $this->titleService->render($params, $titleTemplate, true);

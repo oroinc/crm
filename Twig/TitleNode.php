@@ -1,16 +1,11 @@
 <?php
-/**
- * {magecore_license_notice}
- *
- * @category   MageCore
- * @package    Franklinsports_Tiers
- * @copyright  {magecore_copyright}
- * @license    {magecore_license}
- */
 
 namespace Oro\Bundle\NavigationBundle\Twig;
 
-
+/**
+ * Class TitleNode
+ * @package Oro\Bundle\NavigationBundle\Twig
+ */
 class TitleNode extends \Twig_Node
 {
     public function __construct(\Twig_Node $expr = null, $lineno = 0, $tag = null)
@@ -18,18 +13,37 @@ class TitleNode extends \Twig_Node
         parent::__construct(array('expr' => $expr), array(), $lineno, $tag);
     }
 
+    /**
+     * Compile title node to template
+     *
+     * @param \Twig_Compiler $compiler
+     * @throws \Twig_Error_Syntax
+     */
     public function compile(\Twig_Compiler $compiler)
     {
         $node = $this->getNode('expr');
 
-//        foreach ($node as $argument) {
-//
-//        }
+        $arguments = null;
 
-//        $string = $this->compileString($this->getNode('expr'));
+        $nodes = $node->getIterator();
 
-////        $compiler
-//            ->write('$this->env->getExtension("oro_title")->set(array("params" => array("%user%" => "FROM TOKEN")));')
-//            ->raw("\n");
+        // take first argument array node
+        foreach ($nodes as $childNode) {
+            if ($childNode instanceof \Twig_Node_Expression_Array) {
+                $arguments = $childNode;
+
+                break;
+            }
+        }
+
+        if (is_null($arguments)) {
+            throw new \Twig_Error_Syntax('Function oro_title_set expected argument: array');
+        }
+
+        $compiler
+            ->raw("\n")
+            ->write('$this->env->getExtension("oro_title")->set(')
+            ->subcompile($arguments)
+            ->raw(");\n");
     }
 }

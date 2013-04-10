@@ -2,6 +2,12 @@
 
 namespace Oro\Bundle\NavigationBundle\Twig;
 
+/**
+ * Class TitleSetTokenParser
+ * Used for compiling {% oro_title_set(array) %} tag
+ *
+ * @package Oro\Bundle\NavigationBundle\Twig
+ */
 class TitleSetTokenParser extends \Twig_TokenParser
 {
     /**
