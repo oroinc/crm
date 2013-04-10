@@ -19,7 +19,7 @@ Backend Architecture
  - [Route Generator](#route-generator)
 
 Overview
--------------
+--------
 Datagird backend consists of several entities, which are used to perform specific actions. Every entity implements interface, so every part can be easy extended and replaced with external component.
 
 Datagrid entities use standard Symfony interfaces to perform translation, validation and form data processing. Also some interfaces and entities are extended from Sonata AdminBundle classes, so basic Sonata classes can be injected into datagrid entities.
@@ -444,7 +444,7 @@ class UserDatagridManager extends FlexibleDatagridManager
 ```
 
 Pager
--------------
+-----
 
 Pager is an entity that provides information about pagination parameters on grid and applies it to DB request.
 
@@ -458,7 +458,7 @@ Pager is an entity that provides information about pagination parameters on grid
 
 
 Filters
----------------
+-------
 
 Filters allows to apply additional conditions to DB request and show in grid only required rows. Filter entities are created by Filter Factory.
 
@@ -547,7 +547,7 @@ services:
 
 
 Sorters
----------------
+-------
 
 Sorter is an entity that allows to add sort conditions to DB request. Sorters are created by Sorter Factory.
 
@@ -593,7 +593,7 @@ services:
 
 
 Actions
----------------
+-------
 
 Action is an entity that represents grid action in some specific context - for example, row action. Actions are created by Action Factory.
 
