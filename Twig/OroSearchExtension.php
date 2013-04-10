@@ -88,7 +88,7 @@ class OroSearchExtension extends \Twig_Extension
     }
 
     /**
-     * @param string $inputString
+     * @param  string $inputString
      * @return string
      */
     private function clearString($inputString)

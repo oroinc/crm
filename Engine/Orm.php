@@ -507,7 +507,7 @@ class Orm extends AbstractEngine
      */
     protected function getEntityUrl($entity)
     {
-        if (isset($this->mappingConfig[get_class($entity)]['route'])){
+        if (isset($this->mappingConfig[get_class($entity)]['route'])) {
             $routeParameters = $this->mappingConfig[get_class($entity)]['route'];
             $routeData = array();
             if (isset($routeParameters['parameters']) && count($routeParameters['parameters'])) {
@@ -558,15 +558,14 @@ class Orm extends AbstractEngine
         $connection->beginTransaction();
         try {
             $connection->query('SET FOREIGN_KEY_CHECKS=0');
-            $this->truncate($dbPlatform, $connection,'OroSearchBundle:Item');
-            $this->truncate($dbPlatform, $connection,'OroSearchBundle:IndexDecimal');
-            $this->truncate($dbPlatform, $connection,'OroSearchBundle:IndexText');
-            $this->truncate($dbPlatform, $connection,'OroSearchBundle:IndexInteger');
-            $this->truncate($dbPlatform, $connection,'OroSearchBundle:IndexDatetime');
+            $this->truncate($dbPlatform, $connection, 'OroSearchBundle:Item');
+            $this->truncate($dbPlatform, $connection, 'OroSearchBundle:IndexDecimal');
+            $this->truncate($dbPlatform, $connection, 'OroSearchBundle:IndexText');
+            $this->truncate($dbPlatform, $connection, 'OroSearchBundle:IndexInteger');
+            $this->truncate($dbPlatform, $connection, 'OroSearchBundle:IndexDatetime');
             $connection->query('SET FOREIGN_KEY_CHECKS=1');
             $connection->commit();
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             $connection->rollback();
         }
 
