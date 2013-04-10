@@ -3,7 +3,6 @@
 namespace Oro\Bundle\NavigationBundle\Twig;
 
 use Oro\Bundle\NavigationBundle\Provider\TitleService;
-use JMS\Serializer\Serializer;
 
 class TitleExtension extends \Twig_Extension
 {
@@ -15,18 +14,11 @@ class TitleExtension extends \Twig_Extension
     protected $titleService;
 
     /**
-     * @var Serializer
-     */
-    protected $serializer;
-
-    /**
      * @param TitleService $titleService
-     * @param \JMS\Serializer\Serializer $serializer
      */
-    public function __construct(TitleService $titleService, Serializer $serializer)
+    public function __construct(TitleService $titleService)
     {
         $this->titleService = $titleService;
-        $this->serializer = $serializer;
     }
 
     /**

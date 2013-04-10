@@ -21,11 +21,11 @@ parameters:
 
     oro_navigation.menu.matcher.voter.request: Oro\Bundle\NavigationBundle\Menu\Matcher\Voter\RequestVoter
 
-    oro_navigation.title_service.class:         Oro\Bundle\NavigationBundle\Provider\TitleService
-    oro_navigation.title_service.twig.extension.class: Oro\Bundle\NavigationBundle\Twig\TitleExtension
+    oro_navigation.title_service.class:                        Oro\Bundle\NavigationBundle\Provider\TitleService
+    oro_navigation.title_service.twig.extension.class:         Oro\Bundle\NavigationBundle\Twig\TitleExtension
 
-    oro_navigation.title_service.annotations_reader.class: Oro\Bundle\NavigationBundle\Title\TitleReader\AnnotationsReader
-    oro_navigation.title_service.config_reader.class: Oro\Bundle\NavigationBundle\Title\TitleReader\ConfigReader
+    oro_navigation.title_service.annotations_reader.class:     Oro\Bundle\NavigationBundle\Title\TitleReader\AnnotationsReader
+    oro_navigation.title_service.config_reader.class:          Oro\Bundle\NavigationBundle\Title\TitleReader\ConfigReader
 
     oro_navigation.title_service.event.request.listener.class: Oro\Bundle\NavigationBundle\Event\RequestTitleListener
 
@@ -188,7 +188,6 @@ services:
         class: %oro_navigation.title_service.twig.extension.class%
         arguments:
             - @oro_navigation.title_service
-            - @serializer
         tags:
             - { name: twig.extension }
 
