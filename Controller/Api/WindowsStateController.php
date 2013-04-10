@@ -77,7 +77,7 @@ class WindowsStateController extends FOSRestController
      * @param int $windowId Window state id
      *
      * @ApiDoc(
-     *  description="Update Navigation item",
+     *  description="Update Windows state item",
      *  resource=true
      * )
      * @return Response
@@ -110,7 +110,7 @@ class WindowsStateController extends FOSRestController
      * @param int $windowId
      *
      * @ApiDoc(
-     *  description="Remove Navigation item",
+     *  description="Remove Windows state",
      *  resource=true
      * )
      * @return Response
@@ -163,7 +163,7 @@ class WindowsStateController extends FOSRestController
     }
 
     /**
-     * Validate permissions on pinbar
+     * Validate permissions
      *
      * @param User $user
      * @return bool
