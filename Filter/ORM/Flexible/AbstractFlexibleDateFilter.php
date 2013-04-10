@@ -3,11 +3,10 @@
 namespace Oro\Bundle\GridBundle\Filter\ORM\Flexible;
 
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
-use Sonata\AdminBundle\Form\Type\Filter\NumberType;
 use Oro\Bundle\GridBundle\Filter\ORM\AbstractDateFilter;
-use Sonata\AdminBundle\Form\Type\Filter\DateRangeType;
+use Oro\Bundle\GridBundle\Form\Type\Filter\DateRangeType;
 
-abstract class AbstractFlexibleDateFilter extends AbstractChildFilter
+abstract class AbstractFlexibleDateFilter extends AbstractFlexibleChildFilter
 {
     /**
      * @var string

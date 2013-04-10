@@ -5,8 +5,8 @@ namespace Oro\Bundle\GridBundle\Filter\ORM;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Doctrine\ORM\Query\Expr;
 
-use Sonata\AdminBundle\Form\Type\Filter\DateRangeType;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
+use Oro\Bundle\GridBundle\Form\Type\Filter\DateRangeType;
 
 abstract class AbstractDateFilter extends AbstractFilter
 {

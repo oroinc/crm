@@ -5,7 +5,7 @@ namespace Oro\Bundle\GridBundle\Filter\ORM\Flexible;
 use Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleManagerRegistry;
 use Oro\Bundle\GridBundle\Filter\FilterInterface;
 
-abstract class AbstractChildFilter extends AbstractFlexibleFilter
+abstract class AbstractFlexibleChildFilter extends AbstractFlexibleFilter
 {
     /**
      * @var string
@@ -29,7 +29,7 @@ abstract class AbstractChildFilter extends AbstractFlexibleFilter
         $this->flexibleRegistry = $flexibleRegistry;
         $this->parentFilter = $parentFilter;
         if (!$this->parentFilter instanceof $this->parentFilterClass) {
-            throw new \InvalidArgumentException('$parentFilter must be an instance of ' . $this->parentFilterClass);
+            throw new \InvalidArgumentException('Parent filter must be an instance of ' . $this->parentFilterClass);
         }
     }
 
