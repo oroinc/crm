@@ -413,7 +413,7 @@ Property is an entity that responsible for providing values for grid results. It
 
 #### Example of Getting Values
 
-```
+``` php
 $data = array();
 /** @var $datagrid \Oro\Bundle\GridBundle\Datagrid\Datagrid */
 foreach ($datagrid->getResults() as $object) {
@@ -428,7 +428,7 @@ foreach ($datagrid->getResults() as $object) {
 
 #### Example of Creating URL Property
 
-```
+``` php
 class UserDatagridManager extends FlexibleDatagridManager
 {
     protected function getProperties()
