@@ -21,7 +21,7 @@
                 {% if pinbarItem.extras.maximized %}
                     {% set historyItems = historyItems|merge({(pinbarItem.uri): pinbarItem.extras.maximized.format('U')}) %}
                 {% endif %}
-                {% set pinbarItems = pinbarItems|merge([{'id': pinbarItem.extras.id, 'title': pinbarItem.label, 'url': pinbarItem.uri, 'type': pinbarItem.extras.type}]) %}
+                {% set pinbarItems = pinbarItems|merge([{'id': pinbarItem.extras.id, 'title': pinbarItem.label|raw, 'title_rendered': oro_title_render_stored(pinbarItem.label|raw),  'url': pinbarItem.uri, 'type': pinbarItem.extras.type}]) %}
             {% endif %}
         {% endfor %}
     {% endif %}
