@@ -288,8 +288,8 @@ class Orm extends AbstractEngine
      */
     protected function getEntityTitle($entity)
     {
-        if ($this->mapper->getFieldValue($entity, 'title_fields')) {
-            $fields = $this->mapper->getFieldValue($entity, 'title_fields');
+        if ($this->mapper->getEntityMapParameter(get_class($entity), 'title_fields')) {
+            $fields = $this->mapper->getEntityMapParameter(get_class($entity), 'title_fields');
             $title = array();
             foreach ($fields as $field) {
                 $title[] = $this->mapper->getFieldValue($entity, $field);
