@@ -1,7 +1,8 @@
 Table of Contents
-=================
+-----------------
 
 - [Backend Architecture](./reference/backend/index.md)
+    - [Overview](./reference/backend/index.md#overview)
     - [Configuration](./reference/backend/index.md#configuration)
     - [Datagrid Managers](./reference/backend/index.md#datagrid-managers)
     - [Entity Builders](./reference/backend/index.md#entity-builders)
