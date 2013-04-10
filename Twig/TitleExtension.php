@@ -39,6 +39,7 @@ class TitleExtension extends \Twig_Extension
         return array(
             'oro_title_render' => new \Twig_Function_Method($this, 'render', array('is_safe' => array('html'))),
             'oro_title_render_stored' => new \Twig_Function_Method($this, 'renderStored', array('is_safe' => array('html'))),
+            'oro_title_render_serialized' => new \Twig_Function_Method($this, 'renderSerialized', array('is_safe' => array('html'))),
         );
     }
 
@@ -85,6 +86,11 @@ class TitleExtension extends \Twig_Extension
     public function renderStored($titleData)
     {
         return $this->titleService->renderStored($titleData);
+    }
+
+    public function renderSerialized()
+    {
+        return $this->titleService->getSerialized();
     }
 
     /**
