@@ -1,6 +1,6 @@
 {% extends bap.layout is defined ? bap.layout : 'OroUserBundle::layout.html.twig' %}
 
-{% block title %}Users overview - {{ parent() }}{% endblock %}
+{% block title %}{{ 'Users overview'|trans }} - {{ 'User Management'|trans }}{% endblock %}
 
 {% block head_script %}
     {{ parent() }}

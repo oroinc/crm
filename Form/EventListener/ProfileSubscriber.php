@@ -45,7 +45,24 @@ class ProfileSubscriber implements EventSubscriberInterface
      */
     public static function getSubscribedEvents()
     {
-        return array(FormEvents::PRE_SET_DATA => 'preSetData');
+        return array(
+            FormEvents::PRE_SET_DATA => 'preSetData',
+            FormEvents::PRE_BIND => 'preBind',
+        );
+    }
+
+    public function preBind(FormEvent $event)
+    {
+        $inputData = $event->getData();
+        if (isset($inputData['emails'])) {
+            foreach ($inputData['emails'] as $id => $email) {
+                if (!$email['email']) {
+                    unset($inputData['emails'][$id]);
+                }
+            }
+
+            $event->setData($inputData);
+        }
     }
 
     public function preSetData(FormEvent $event)

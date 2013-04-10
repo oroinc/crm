@@ -27,16 +27,19 @@ class UserMenuBuilder implements BuilderInterface
         $menu->addChild(
             'My profile',
             array(
-                'route' => 'oro_user_show',
-                'routeParameters' => array('id' =>  $this->securityContext->getToken()->getUser()->getId())
+                 'route'           => 'oro_user_show',
+                 'routeParameters' => array('id' => $this->securityContext->getToken()->getUser()->getId())
             )
         );
-        $menu->addChild('Update status', array(
-            'route' => 'oro_user_status_create',
-            'attributes' => array(
-                'class' => 'update-status'
+        $menu->addChild(
+            'Update status',
+            array(
+                 'route'      => 'oro_user_status_create',
+                 'attributes' => array(
+                     'class' => 'update-status'
+                 )
             )
-        ));
+        );
 
         $menu->addChild('divider-' . rand(1, 99999))
             ->setLabel('')
