@@ -211,8 +211,10 @@ Filters are used to change collection state according to criteria selected by us
 Main classes and responsibilities:
 
 * **OroApp.DatagridFilterList** - container for filters, renders all active filters, has a control to enable and disable filters
-* **OroApp.DatagridFilter** - basic filter allows user to enter text value that will be used for data filtering
+* **OroApp.DatagridFilter** - abstract filter that has common methods for all filters
+* **OroApp.DatagridFilterText** - basic filter allows user to enter text value that will be used for data filtering
 * **OroApp.DatagridFilterChoice** - filter that has input for value and inputs for operator, such as "contains", "not contains" and so on
+* **OroApp.DatagridFilterNumber** - filter for that has operator and additionally able to format value as a number (integer, decimal)
 * **OroApp.DatagridFilterSelect** - filter that allows to select one of available values
 * **OroApp.DatagridFilterMultiSelect** - filter that allows to select any available values
 * **OroApp.MultiSelectDecorator** - encapsulates additional logic related to select and multiselect widgets (filter list, select and multiselect filters)
@@ -236,6 +238,13 @@ var filtersList = new OroApp.DatagridFilterList({
             label:'gender',
             enabled:false,
             options: {"18": "Male", "19": "Female"}
+        }),
+        salary: OroApp.DatagridFilterNumber.extend({
+            name:'salary',
+            label:'salary',
+            enabled:false,
+            choices:{"1": "=", "2": ">", "3": "<"},
+            formatter: "decimal"
         })
     }
 });
