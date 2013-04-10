@@ -82,4 +82,11 @@ class AbstractFlexibleFilterTest extends \PHPUnit_Framework_TestCase
         $this->assertInternalType('array', $renderSettings);
         $this->assertEmpty($renderSettings);
     }
+
+    public function testGetTypeOptions()
+    {
+        $typeOptions = $this->model->getTypeOptions();
+        $this->assertInternalType('array', $typeOptions);
+        $this->assertEmpty($typeOptions);
+    }
 }

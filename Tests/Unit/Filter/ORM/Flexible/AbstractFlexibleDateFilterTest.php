@@ -6,6 +6,7 @@ use Doctrine\ORM\QueryBuilder;
 use Oro\Bundle\GridBundle\Filter\ORM\Flexible\AbstractFlexibleDateFilter;
 use Oro\Bundle\GridBundle\Form\Type\Filter\DateRangeType;
 use Oro\Bundle\GridBundle\Datagrid\ORM\ProxyQuery;
+use Oro\Bundle\GridBundle\Filter\ORM\AbstractDateFilter;
 
 class AbstractFlexibleDateFilterTest extends \PHPUnit_Framework_TestCase
 {
@@ -35,10 +36,21 @@ class AbstractFlexibleDateFilterTest extends \PHPUnit_Framework_TestCase
      */
     protected $actualFilterParameters = array();
 
+    /**
+     * @var AbstractDateFilter|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $parentFilter;
+
+    /**
+     * @var array
+     */
+    protected $testOptions = array('test' => 'options');
+
     protected function tearDown()
     {
         unset($this->model);
         unset($this->queryBuilder);
+        unset($this->parentFilter);
     }
 
     /**
@@ -46,14 +58,22 @@ class AbstractFlexibleDateFilterTest extends \PHPUnit_Framework_TestCase
      */
     protected function initializeFilter(array $arguments = array())
     {
+        $this->parentFilter = $this->getMockForAbstractClass(
+            'Oro\Bundle\GridBundle\Filter\ORM\AbstractDateFilter',
+            array(),
+            '',
+            false,
+            true,
+            true,
+            array('getDefaultOptions', 'getRenderSettings', 'getTypeOptions')
+        );
+        $this->parentFilter->expects($this->any())
+            ->method('getDefaultOptions')
+            ->will($this->returnValue($this->testOptions));
+
         $defaultArguments = array(
             'flexibleRegistry' => $this->getMock('Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleManagerRegistry'),
-            'parentFilter'     => $this->getMockForAbstractClass(
-                'Oro\Bundle\GridBundle\Filter\ORM\AbstractDateFilter',
-                array(),
-                '',
-                false
-            ),
+            'parentFilter'     => $this->parentFilter,
         );
 
         $arguments = array_merge($defaultArguments, $arguments);
@@ -195,5 +215,33 @@ class AbstractFlexibleDateFilterTest extends \PHPUnit_Framework_TestCase
             'value'    => $attributeValue,
             'operator' => $operator
         );
+    }
+
+    public function testGetDefaultOptions()
+    {
+        $this->initializeFilter();
+        $this->assertEquals($this->testOptions, $this->model->getDefaultOptions());
+    }
+
+    public function testGetRenderSettings()
+    {
+        $this->initializeFilter();
+
+        $this->parentFilter->expects($this->once())
+            ->method('getRenderSettings')
+            ->will($this->returnValue($this->testOptions));
+
+        $this->assertEquals($this->testOptions, $this->model->getRenderSettings());
+    }
+
+    public function testGetTypeOptions()
+    {
+        $this->initializeFilter();
+
+        $this->parentFilter->expects($this->once())
+            ->method('getTypeOptions')
+            ->will($this->returnValue($this->testOptions));
+
+        $this->assertEquals($this->testOptions, $this->model->getTypeOptions());
     }
 }

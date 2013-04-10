@@ -44,11 +44,7 @@ abstract class AbstractFlexibleFilter extends AbstractFilter implements FilterIn
         if ($this->parentFilterClass) {
             $this->parentFilter = $parentFilter;
             if (!$this->parentFilter instanceof $this->parentFilterClass) {
-                throw new \InvalidArgumentException('$parentFilter must be an instance of ' . $this->parentFilterClass);
-            }
-            $filterInterface = 'Oro\\Bundle\\GridBundle\\Filter\\FilterInterface';
-            if (!$this->parentFilter instanceof $filterInterface) {
-                throw new \InvalidArgumentException('$parentFilter must be an instance of ' . $filterInterface);
+                throw new \InvalidArgumentException('Parent filter must be an instance of ' . $this->parentFilterClass);
             }
         }
     }
