@@ -1,5 +1,5 @@
 {
-    "name": "oro/NavigationBundle",
+    "name": "oro/navigation-bundle",
     "type": "symfony-bundle",
     "description": "BAP Navigation Bundle",
     "keywords": ["BAP", "UI", "User Interface", "Menu", "Navigation", "Pinbar", "Shortcuts", "History"],
@@ -8,10 +8,12 @@
     "require": {
         "php": ">=5.3.3",
         "symfony/symfony": "2.1.6",
-        "oro/UIBundle": "dev-master",
-        "oro/UserBundle": "dev-master",
+        "oro/ui-bundle": "dev-master",
+        "oro/user-bundle": "dev-master",
         "knplabs/knp-menu-bundle": "dev-master",
-        "knplabs/knp-menu": "dev-master"
+        "knplabs/knp-menu": "dev-master",
+        "friendsofsymfony/rest-bundle": "*",
+        "nelmio/api-doc-bundle": "dev-master"
     },
     "autoload": {
         "psr-0": { "Oro\\Bundle\\NavigationBundle": "" }
