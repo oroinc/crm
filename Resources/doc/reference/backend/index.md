@@ -641,6 +641,64 @@ services:
             - { name: oro_grid.action.type, alias: oro_grid_action_delete }
 ```
 
+#### Example of Datagrid Actions
+
+``` php
+
+class UserDatagridManager extends FlexibleDatagridManager
+{
+    /**
+     * {@inheritdoc}
+     */
+    protected function getRowActions()
+    {
+        $clickAction = array(
+            'name'         => 'rowClick',
+            'type'         => ActionInterface::TYPE_REDIRECT,
+            'acl_resource' => 'root',
+            'options'      => array(
+                'label'         => 'Show',
+                'link'          => 'show_link',
+                'route'         => 'oro_user_show',
+                'runOnRowClick' => true,
+            )
+        );
+        $showAction = array(
+            'name'         => 'show',
+            'type'         => ActionInterface::TYPE_REDIRECT,
+            'acl_resource' => 'root',
+            'options'      => array(
+                'label' => 'Show',
+                'icon'  => 'user',
+                'link'  => 'show_link',
+            )
+        );
+        $editAction = array(
+            'name'         => 'edit',
+            'type'         => ActionInterface::TYPE_REDIRECT,
+            'acl_resource' => 'root',
+            'options'      => array(
+                'label'   => 'Edit',
+                'icon'    => 'edit',
+                'link'    => 'edit_link',
+                'backUrl' => true,
+            )
+        );
+        $deleteAction = array(
+            'name'         => 'delete',
+            'type'         => ActionInterface::TYPE_DELETE,
+            'acl_resource' => 'root',
+            'options'      => array(
+                'label' => 'Delete',
+                'icon'  => 'trash',
+                'link'  => 'delete_link',
+            )
+        );
+        return array($clickAction, $showAction, $editAction, $deleteAction);
+    }
+    // other methods
+}
+```
 
 Parameters
 ----------
