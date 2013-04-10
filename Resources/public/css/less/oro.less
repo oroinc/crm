@@ -1452,9 +1452,12 @@ text-overflow:ellipsis;
 .grid-container{
   width: 100%;
   position: relative;
-  overflow: auto;
+  overflow-x: auto;
+  overflow-y: visible;
 }
 .grid{
+  margin-bottom: 50px;
+
   .action-cell{
     vertical-align: bottom;
     width: 60px;
@@ -1905,6 +1908,9 @@ text-overflow:ellipsis;
   font-weight: bold;
   font-size: 13px;
 }
+.form-horizontal .controls label{
+  float: left;
+}
 textarea{
   height: 150px;
   resize: vertical;
@@ -2000,5 +2006,66 @@ textarea{
   margin: 0 12px 0 0;
 }
 .has-switch{
-  margin: 1px 10px 0 0;
+  margin: 0 10px 0 0;
+}
+.top-messages{
+  margin-bottom: 0;
+}
+/* custom form elements */
+.uploader,
+.uploader *{
+  margin: 0;
+  padding: 0;
+}
+/* Uploader */
+
+div.uploader {
+  height: 28px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  float: left;
+  position: relative;
+  overflow: hidden;
+  cursor: default;
+  line-height: 28px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+}
+
+div.uploader span.action {
+  float: left;
+  height: 28px;
+  border-left: 1px solid #ccc;
+  padding: 0 10px;
+  overflow: hidden;
+  cursor: pointer;
+  #gradient > .vertical(#ffffff, #e6e6e6);
+}
+
+div.uploader span.filename {
+  padding: 0px 10px;
+  float: left;
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: default;
+  width: 109px;
+}
+
+div.uploader input {
+  opacity: 0;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  float: right;
+  height: 25px;
+  border: none;
+  cursor: default;
+}
+.logo a:focus,
+.logo a:hover{
+  text-decoration: none;
+  color: #fff;
 }
