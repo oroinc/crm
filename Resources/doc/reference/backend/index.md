@@ -82,7 +82,7 @@ services:
               route_name: acme_demo_gridbundle_user_list
 ```
 
-Alternatively flexible_manager attribute can be passed. This attribute must contain id of flexible manager service. In this case entity_name attribute will not be used to determine flexible manager service so it can be omitted. For example:
+Alternatively **flexible\_manager** attribute can be passed. This attribute must contain id of flexible manager service. In this case entity_name attribute will not be used to determine flexible manager service so it can be omitted. For example:
 
 ```
 services:
