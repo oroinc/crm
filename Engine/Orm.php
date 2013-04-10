@@ -6,7 +6,6 @@ use Doctrine\ORM\EntityManager;
 
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\Form\Util\PropertyPath;
 
 use JMS\JobQueueBundle\Entity\Job;
 
@@ -14,15 +13,10 @@ use Oro\Bundle\SearchBundle\Query\Query;
 use Oro\Bundle\SearchBundle\Query\Result\Item as ResultItem;
 use Oro\Bundle\SearchBundle\Entity\Item;
 use Oro\Bundle\SearchBundle\Engine\Indexer;
-use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttributeType;
+use Oro\Bundle\SearchBundle\Engine\ObjectMapper;
 
 class Orm extends AbstractEngine
 {
-    /**
-     * @var array
-     */
-    protected $mappingConfig;
-
     /**
      * @var \Symfony\Component\DependencyInjection\ContainerInterface
      */
@@ -38,20 +32,17 @@ class Orm extends AbstractEngine
      */
     protected $jobRepo;
 
-    public function __construct(EntityManager $em, ContainerInterface $container, $mappingConfig, $logQueries)
+    /**
+     * @var \Oro\Bundle\SearchBundle\Engine\ObjectMapper
+     */
+    protected $mapper;
+
+    public function __construct(EntityManager $em, ContainerInterface $container, ObjectMapper $mapper, $logQueries)
     {
         $this->container = $container;
         $this->em = $em;
-        $this->mappingConfig = $mappingConfig;
+        $this->mapper = $mapper;
         $this->logQueries = $logQueries;
-
-        //todo: set translated mappingConfig only once
-        $translator = $container->get('translator');
-        foreach ($this->mappingConfig as $entity => $config) {
-            if (isset($this->mappingConfig[$entity]['label'])) {
-                $this->mappingConfig[$entity]['label'] = $translator->trans($config['label']);
-            }
-        }
     }
 
     /**
@@ -66,7 +57,8 @@ class Orm extends AbstractEngine
 
         //index data by mapping config
         $recordsCount = 0;
-        foreach ($this->mappingConfig as $entityName => $mappingConfig) {
+        $entities = $this->mapper->getEntities();
+        foreach ($entities as $entityName) {
             $entityData = $this->em->getRepository($entityName)->findAll();
             foreach ($entityData as $entity) {
                 if ($this->save($entity, true) !== false) {
@@ -124,7 +116,7 @@ class Orm extends AbstractEngine
      */
     public function save($entity, $realtime = true)
     {
-        $data = $this->mapObject($entity);
+        $data = $this->mapper->mapObject($entity);
         $name = get_class($entity);
 
         if (count($data)) {
@@ -138,8 +130,9 @@ class Orm extends AbstractEngine
             if (!$item) {
                 $item = new Item();
 
-                if (isset($this->mappingConfig[get_class($entity)]['alias'])) {
-                    $alias = $this->mappingConfig[get_class($entity)]['alias'];
+                $entityConfig = $this->mapper->getEntityConfig(get_class($entity));
+                if ($entityConfig) {
+                    $alias = $entityConfig['alias'];
                 } else {
                     $alias = get_class($entity);
                 }
@@ -165,60 +158,6 @@ class Orm extends AbstractEngine
         }
 
         return false;
-    }
-
-    /**
-     * Map object data for index
-     *
-     * @param object $object
-     *
-     * @return array
-     */
-    public function mapObject($object)
-    {
-        $mappingConfig = $this->mappingConfig;
-        $objectData = array();
-
-        if (is_object($object) && isset($mappingConfig[get_class($object)])) {
-            $config = $mappingConfig[get_class($object)];
-            if (isset($config['alias'])) {
-                $alias = $config['alias'];
-            } else {
-                $alias = get_class($object);
-            }
-            foreach ($config['fields'] as $field) {
-                // check field relation type and set it to null if field doesn't have relations
-                if (!isset($field['relation_type'])) {
-                    $field['relation_type'] = 'none';
-                }
-
-                $value = $this->getFieldValue($object, $field['name']);
-
-                switch ($field['relation_type']) {
-                    case Indexer::RELATION_ONE_TO_ONE:
-                    case Indexer::RELATION_MANY_TO_ONE:
-                        $objectData = $this->setRelatedFields($alias, $objectData, $field['relation_fields'], $value, $field['name']);
-
-                        break;
-                    case Indexer::RELATION_MANY_TO_MANY:
-                    case Indexer::RELATION_ONE_TO_MANY:
-                        foreach ($value as $relationObject) {
-                            $objectData = $this->setRelatedFields($alias, $objectData, $field['relation_fields'], $relationObject, $field['name']);
-                        }
-
-                        break;
-                    default:
-                        if ($value) {
-                            $objectData = $this->setDataValue($alias, $objectData, $field, $value);
-                        }
-                }
-            }
-            if (isset($config['flexible_manager'])) {
-                $objectData =  $this->setFlexibleFields($alias, $object, $objectData, $config['flexible_manager']);
-            }
-        }
-
-        return $objectData;
     }
 
     /**
@@ -252,7 +191,7 @@ class Orm extends AbstractEngine
                         $this->em->getRepository($item->getEntity())->find($item->getRecordId())
                     ),
                     $item->getRecordText(),
-                    $this->mappingConfig[$item->getEntity()]
+                    $this->mapper->getEntityConfig($item->getEntity())
                 );
             }
         }
@@ -261,192 +200,6 @@ class Orm extends AbstractEngine
             'results' => $results,
             'records_count' => $recordsCount
         );
-    }
-
-    /**
-     * Map Flexible entity fields
-     *
-     * @param string $alias
-     * @param $object
-     * @param array  $objectData
-     * @param string $managerName
-     *
-     * @return array
-     */
-    protected function setFlexibleFields($alias, $object, $objectData, $managerName)
-    {
-        /** @var $flexibleManager \Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleManager */
-        $flexibleManager = $this->container->get($managerName);
-        if ($flexibleManager) {
-            $attributes = $flexibleManager->getAttributeRepository()
-                ->findBy(array('entityType' => $flexibleManager->getFlexibleName()));
-            if (count($attributes)) {
-                /** @var $attribute \Oro\Bundle\FlexibleEntityBundle\Entity\Attribute */
-                foreach ($attributes as $attribute) {
-                    if ($attribute->getSearchable()) {
-                        $value = $object->getValue($attribute->getCode());
-                        if ($value) {
-                            $attributeType = $attribute->getBackendType();
-
-                            switch ($attributeType) {
-                                case AbstractAttributeType::BACKEND_TYPE_TEXT:
-                                case AbstractAttributeType::BACKEND_TYPE_VARCHAR:
-                                    $objectData = $this->saveFlexibleTextData(
-                                        $alias,
-                                        $objectData,
-                                        $attribute->getCode(),
-                                        $value->__toString()
-                                    );
-                                    break;
-                                case AbstractAttributeType::BACKEND_TYPE_DATETIME:
-                                case AbstractAttributeType::BACKEND_TYPE_DATE:
-                                    $objectData = $this->saveFlexibleData(
-                                        $alias,
-                                        $objectData,
-                                        AbstractAttributeType::BACKEND_TYPE_DATETIME,
-                                        $attribute->getCode(),
-                                        $value->getData()
-                                    );
-                                    break;
-                                default:
-                                    $objectData = $this->saveFlexibleData(
-                                        $alias,
-                                        $objectData,
-                                        $attributeType,
-                                        $attribute->getCode(),
-                                        $value->__toString()
-                                    );
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        return $objectData;
-    }
-
-    /**
-     * @param string $alias
-     * @param array  $objectData
-     * @param string $attributeType
-     * @param string $attribute
-     * @param mixed  $value
-     *
-     * @return array
-     */
-    protected function saveFlexibleData($alias, $objectData, $attributeType, $attribute, $value)
-    {
-        if ($attributeType != AbstractAttributeType::BACKEND_TYPE_OPTION) {
-            $objectData[$attributeType][$attribute] = $value;
-        }
-        //$objectData[AbstractAttributeType::BACKEND_TYPE_TEXT][$alias . '_' . $attribute] = $value;
-        return $objectData;
-    }
-
-    /**
-     * @param string $alias
-     * @param array  $objectData
-     * @param string $attribute
-     * @param mixed  $value
-     *
-     * @return array
-     */
-    protected function saveFlexibleTextData($alias, $objectData, $attribute, $value)
-    {
-        if (!isset($objectData[AbstractAttributeType::BACKEND_TYPE_TEXT][$attribute])) {
-            $objectData[AbstractAttributeType::BACKEND_TYPE_TEXT][$attribute] = '';
-        }
-        $objectData[AbstractAttributeType::BACKEND_TYPE_TEXT][$attribute] .= " " . $value;
-        if (!isset($objectData[AbstractAttributeType::BACKEND_TYPE_TEXT][Indexer::TEXT_ALL_DATA_FIELD])) {
-            $objectData[AbstractAttributeType::BACKEND_TYPE_TEXT][Indexer::TEXT_ALL_DATA_FIELD] = '';
-        }
-        $objectData[AbstractAttributeType::BACKEND_TYPE_TEXT][Indexer::TEXT_ALL_DATA_FIELD] .= " " . $value;
-        $objectData[AbstractAttributeType::BACKEND_TYPE_TEXT][$alias . '_' . $attribute] = $value;
-
-        return $objectData;
-    }
-
-    /**
-     * Set related fields values
-     *
-     * @param string $alias
-     * @param array  $objectData
-     * @param array  $relationFields
-     * @param object $relationObject
-     * @param string $parentName
-     *
-     * @return array
-     */
-    protected function setRelatedFields($alias, $objectData, $relationFields, $relationObject, $parentName)
-    {
-        foreach ($relationFields as $relationObjectField) {
-            $value = $this->getFieldValue($relationObject, $relationObjectField['name']);
-            if ($value) {
-                $relationObjectField['name'] = $parentName;
-                $objectData = $this->setDataValue(
-                    $alias,
-                    $objectData,
-                    $relationObjectField,
-                    $value
-                );
-            }
-        }
-
-        return $objectData;
-    }
-
-    /**
-     * @param object|array $objectOrArray
-     * @param string       $fieldName
-     *
-     * @return mixed
-     */
-    protected function getFieldValue($objectOrArray, $fieldName)
-    {
-        $propertyPath = new PropertyPath($fieldName);
-
-        return $propertyPath->getValue($objectOrArray);
-    }
-
-    /**
-     * Set value for meta fields by type
-     *
-     * @param string $alias
-     * @param array  $objectData
-     * @param array  $fieldConfig
-     * @param mixed  $value
-     *
-     * @return array
-     */
-    protected function setDataValue($alias, $objectData, $fieldConfig, $value)
-    {
-        //check if field have target_fields parameter
-        if (isset($fieldConfig['target_fields']) && count($fieldConfig['target_fields'])) {
-            $targetFields = $fieldConfig['target_fields'];
-        } else {
-            $targetFields = array($fieldConfig['name']);
-        }
-
-        if ($fieldConfig['target_type'] != 'text') {
-            foreach ($targetFields as $targetField) {
-                $objectData[$fieldConfig['target_type']][$targetField] = $value;
-            }
-
-        } else {
-            foreach ($targetFields as $targetField) {
-                if (!isset($objectData[$fieldConfig['target_type']][$targetField])) {
-                    $objectData[$fieldConfig['target_type']][$targetField] = '';
-                }
-                $objectData[$fieldConfig['target_type']][$targetField] .= $value . ' ';
-            }
-            if (!isset($objectData[$fieldConfig['target_type']][Indexer::TEXT_ALL_DATA_FIELD])) {
-                $objectData[$fieldConfig['target_type']][Indexer::TEXT_ALL_DATA_FIELD] = '';
-            }
-            $objectData[$fieldConfig['target_type']][Indexer::TEXT_ALL_DATA_FIELD] .= $value . ' ';
-        }
-
-        return $objectData;
     }
 
     /**
@@ -507,12 +260,12 @@ class Orm extends AbstractEngine
      */
     protected function getEntityUrl($entity)
     {
-        if (isset($this->mappingConfig[get_class($entity)]['route'])) {
-            $routeParameters = $this->mappingConfig[get_class($entity)]['route'];
+        if ($this->mapper->getEntityMapParameter(get_class($entity), 'route')){
+            $routeParameters = $this->mapper->getEntityMapParameter(get_class($entity), 'route');
             $routeData = array();
             if (isset($routeParameters['parameters']) && count($routeParameters['parameters'])) {
                 foreach ($routeParameters['parameters'] as $parameter => $field) {
-                    $routeData[$parameter] = $this->getFieldValue($entity, $field);
+                    $routeData[$parameter] = $this->mapper->getFieldValue($entity, $field);
                 }
             }
 
@@ -535,11 +288,11 @@ class Orm extends AbstractEngine
      */
     protected function getEntityTitle($entity)
     {
-        if (isset($this->mappingConfig[get_class($entity)]['title_fields'])) {
-            $fields = $this->mappingConfig[get_class($entity)]['title_fields'];
+        if ($this->mapper->getFieldValue($entity, 'title_fields')) {
+            $fields = $this->mapper->getFieldValue($entity, 'title_fields');
             $title = array();
             foreach ($fields as $field) {
-                $title[] = $this->getFieldValue($entity, $field);
+                $title[] = $this->mapper->getFieldValue($entity, $field);
             }
         } else {
             $title = array((string) $entity);

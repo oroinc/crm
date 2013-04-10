@@ -2,7 +2,8 @@ $(document).ready(function () {
     var _searcjFlag = false;
 
     $(".search-form").submit(function(){
-        if ($(this).find('.search').val().length == 0) {
+        var $searchString = $.trim($(this).find('.search').val());
+        if ($searchString.length == 0) {
             return false;
         }
     });
