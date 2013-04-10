@@ -172,7 +172,6 @@ services:
         arguments:
           - @oro_navigation.title_annotations_reader
           - @oro_navigation.title_config_reader
-          - @oro_navigation.twig
           - @translator.default
           - @doctrine.orm.entity_manager
           - @serializer
@@ -184,14 +183,6 @@ services:
     oro_navigation.title_config_reader:
         class:                        %oro_navigation.title_service.config_reader.class%
         arguments:                    ["%oro_titles%"]
-
-    oro_navigation.twig.string_loader:
-        class: Twig_Loader_String
-
-    oro_navigation.twig:
-        class: Twig_Environment
-        arguments:
-            - @oro_navigation.twig.string_loader
 
     oro_navigation.title_service.twig.extension:
         class: %oro_navigation.title_service.twig.extension.class%

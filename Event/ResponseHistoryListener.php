@@ -87,6 +87,8 @@ class ResponseHistoryListener
 
         $this->em->persist($historyItem);
         $this->em->flush();
+
+        return true;
     }
 
     /**

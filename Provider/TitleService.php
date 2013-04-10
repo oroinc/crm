@@ -5,13 +5,13 @@ namespace Oro\Bundle\NavigationBundle\Provider;
 use Symfony\Component\Yaml\Yaml;
 use Symfony\Bundle\FrameworkBundle\Translation\Translator;
 use Symfony\Component\Routing\Route;
+use JMS\Serializer\Serializer;
 use Doctrine\Common\Persistence\ObjectManager;
 
 use Oro\Bundle\NavigationBundle\Entity\Title;
 use Oro\Bundle\NavigationBundle\Title\TitleReader\ConfigReader;
 use Oro\Bundle\NavigationBundle\Title\TitleReader\AnnotationsReader;
 use Oro\Bundle\NavigationBundle\Title\StoredTitle;
-use JMS\Serializer\Serializer;
 
 class TitleService
 {
@@ -51,11 +51,6 @@ class TitleService
     private $prefix = null;
 
     /**
-     * @var \Twig_Environment
-     */
-    private $templateEngine;
-
-    /**
      * @var \Symfony\Bundle\FrameworkBundle\Translation\Translator
      */
     private $translator;
@@ -73,14 +68,12 @@ class TitleService
     public function __construct(
         AnnotationsReader $reader,
         ConfigReader $configReader,
-        \Twig_Environment $templateEngine,
         Translator $translator,
         ObjectManager $em,
         Serializer $serializer
     ) {
         $this->readers = array($reader, $configReader);
 
-        $this->templateEngine = $templateEngine;
         $this->translator = $translator;
         $this->em = $em;
         $this->serializer = $serializer;
@@ -91,15 +84,12 @@ class TitleService
      *
      * @param array $params
      * @param null $title
-     * @param bool $storeData
      * @return $this
      */
-    public function render($params = array(), $title = null, $storeData = false)
+    public function render($params = array(), $title = null)
     {
-        if ($storeData) {
-            $this->params = $params;
-            $this->template = $title;
-        }
+        $title = is_null($title) ? $this->getTemplate() : $title;
+        $params = empty($params) ? $this->getParams() : $params;
 
         $trans = $this->translator;
 
@@ -118,6 +108,30 @@ class TitleService
         $translatedTemplate = $prefix . $translatedTemplate . $suffix;
 
         return $translatedTemplate;
+    }
+
+    /**
+     * Set properties from array
+     *
+     * @param array $values
+     * @return $this
+     */
+    public function setData(array $values)
+    {
+        if (isset($values['titleTemplate']) && $this->getTemplate() == null) {
+            $this->setTemplate($values['titleTemplate']);
+        }
+        if (isset($values['params'])) {
+            $this->setParams($values['params']);
+        }
+        if (isset($values['prefix'])) {
+            $this->setPrefix($values['prefix']);
+        }
+        if (isset($values['suffix'])) {
+            $this->setSuffix($values['suffix']);
+        }
+
+        return $this;
     }
 
     /**
@@ -191,6 +205,19 @@ class TitleService
     public function getParams()
     {
         return $this->params;
+    }
+
+    /**
+     * Setter for params
+     *
+     * @param array $params
+     * @return $this
+     */
+    public function setParams(array $params)
+    {
+        $this->params = $params;
+
+        return $this;
     }
 
     /**
@@ -269,7 +296,8 @@ class TitleService
     public function getSerialized()
     {
         $storedTitle = new StoredTitle();
-        $storedTitle->setTemplate($this->getTemplate())
+        $storedTitle
+            ->setTemplate($this->getTemplate())
             ->setParams($this->getParams());
 
         return $this->serializer->serialize($storedTitle, 'json');

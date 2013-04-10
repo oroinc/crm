@@ -56,24 +56,24 @@ class TitleExtension extends \Twig_Extension
     }
 
     /**
-     * Renders a title
-     *
-     * @param string $titleTemplate
-     * @param array $options
+     * Renders title
      *
      * @return string
      */
-    public function render($titleTemplate = null)
+    public function render()
     {
-        return $this->titleService->render($this->titleService->getParams(), is_null($titleTemplate) ? $this->titleService->getTemplate() : $titleTemplate);
+        return $this->titleService->render();
     }
 
+    /**
+     * Set title options
+     *
+     * @param array $options
+     * @return $this
+     */
     public function set(array $options = array())
     {
-        $titleTemplate = isset($options['titleTemplate']) ? $options['titleTemplate'] : $this->titleService->getTemplate();
-        $params = isset($options['params']) ? $options['params'] : array();
-
-        return $this->titleService->render($params, $titleTemplate, true);
+        return $this->titleService->setData($options);
     }
 
     /**
@@ -88,6 +88,11 @@ class TitleExtension extends \Twig_Extension
         return $this->titleService->renderStored($titleData);
     }
 
+    /**
+     * Returns json serialized data
+     *
+     * @return string
+     */
     public function renderSerialized()
     {
         return $this->titleService->getSerialized();
