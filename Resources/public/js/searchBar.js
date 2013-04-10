@@ -93,7 +93,6 @@ $(document).ready(function () {
                 $('#search-dropdown a:first').focus();
                 event.preventDefault();
                 return false;
-                break;
             default:
                 SearchByTag();
         };
@@ -123,7 +122,7 @@ $(document).ready(function () {
                 evt.stopPropagation();
                 break;
             case 9: // Tab key
-                if (evt.shiftKey) {
+                if (D.shiftKey) {
                     select_previous();
                 }
                 else {

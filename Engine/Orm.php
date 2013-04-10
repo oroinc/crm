@@ -311,15 +311,14 @@ class Orm extends AbstractEngine
         $connection->beginTransaction();
         try {
             $connection->query('SET FOREIGN_KEY_CHECKS=0');
-            $this->truncate($dbPlatform, $connection,'OroSearchBundle:Item');
-            $this->truncate($dbPlatform, $connection,'OroSearchBundle:IndexDecimal');
-            $this->truncate($dbPlatform, $connection,'OroSearchBundle:IndexText');
-            $this->truncate($dbPlatform, $connection,'OroSearchBundle:IndexInteger');
-            $this->truncate($dbPlatform, $connection,'OroSearchBundle:IndexDatetime');
+            $this->truncate($dbPlatform, $connection, 'OroSearchBundle:Item');
+            $this->truncate($dbPlatform, $connection, 'OroSearchBundle:IndexDecimal');
+            $this->truncate($dbPlatform, $connection, 'OroSearchBundle:IndexText');
+            $this->truncate($dbPlatform, $connection, 'OroSearchBundle:IndexInteger');
+            $this->truncate($dbPlatform, $connection, 'OroSearchBundle:IndexDatetime');
             $connection->query('SET FOREIGN_KEY_CHECKS=1');
             $connection->commit();
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             $connection->rollback();
         }
 

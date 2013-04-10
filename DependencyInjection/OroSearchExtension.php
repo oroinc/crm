@@ -71,15 +71,7 @@ class OroSearchExtension extends Extension
         $entitiesConfig = $config['entities_config'];
         if (!count($entitiesConfig)) {
             foreach ($container->getParameter('kernel.bundles') as $bundle) {
-                //todo: DELETE THIS TEMPORARY AcmeTestsBundle FIX
-                if ($container->getParameter('kernel.environment') != 'test') {
-                    if (strpos($bundle, 'AcmeTestsBundle') === false) {
-                        $entitiesConfig = $this->parseSearchMapping($bundle, $entitiesConfig);
-                    }
-                } else {
-                    $entitiesConfig = $this->parseSearchMapping($bundle, $entitiesConfig);
-
-                }
+                $entitiesConfig = $this->parseSearchMapping($bundle, $entitiesConfig);
             }
         }
         $container->setParameter('oro_search.entities_config', $entitiesConfig);

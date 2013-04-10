@@ -15,7 +15,7 @@ class OroSearchExtensionTest extends \PHPUnit_Framework_TestCase
         $this->container = $this->getMock('Symfony\Component\DependencyInjection\ContainerBuilder');
 
         $params = array(
-            'kernel.bundles' => array('Oro\Bundle\SearchBundle\Tests\Unit\Fixture\TestBundle'),
+            'kernel.bundles'     => array('Oro\Bundle\SearchBundle\Tests\Unit\Fixture\TestBundle'),
             'kernel.environment' => 'test',
         );
 
@@ -29,7 +29,7 @@ class OroSearchExtensionTest extends \PHPUnit_Framework_TestCase
             )
             ->will(
                 $this->returnCallback(
-                    function($param) use (&$params) {
+                    function ($param) use (&$params) {
                         return $params[$param];
                     }
                 )
@@ -89,7 +89,7 @@ class OroSearchExtensionTest extends \PHPUnit_Framework_TestCase
             'oro_search' => array(
                 'engine'          => 'orm',
                 'realtime_update' => true,
-                'engine_orm' => array('pro_pgSql')
+                'engine_orm'      => array('pro_pgSql')
             )
         );
         $searchExtension->load($config, $this->container);
