@@ -36,17 +36,19 @@
         </div>
     </div>
     <div class="layout-content">
-        <div id="navbarExample" class="navbar navbar-static scrollspy-nav">
+        <div id="navbar-profile" class="navbar navbar-static scrollspy-nav">
             <div class="navbar-inner">
                 <div class="container-fluid" style="width: auto;">
                     <ul class="nav">
                         <li class="active"><a href="#scroll-main">{{ 'Overview'|trans }}</a></li>
+                        <li><a href="#scroll-api">{{ 'API'|trans }}</a></li>
+                        <li><a href="#scroll-attributes">{{ 'Additional data'|trans }}</a></li>
                     </ul>
                 </div>
             </div>
         </div>
         <div class="clearfix-oro">
-            <div data-spy="scroll" data-target="#navbarExample" data-offset="50" class="scrollspy container-fluid">
+            <div data-spy="scroll" data-target="#navbar-profile" data-offset="50" class="scrollspy container-fluid">
                 <h4 id="scroll-main" class="scrollspy-title">{{ 'Overview'|trans }}</h4>
                 <div class="row-fluid">
                     <div class="form-horizontal span6">
@@ -82,22 +84,6 @@
                                 </div>
                             </div>
                         </div>
-                        <h4 id="scroll-api" class="scrollspy-title">{{ 'API'|trans }}</h4>
-                        <div class="row-fluid">
-                            <fieldset class="form-horizontal">
-                                <div class="control-group">
-                                    <label class="control-label">{{ 'API key'|trans }}</label>
-                                    <div class="controls">
-                                        <div class="horizontal">
-                                            <strong class="label label-info">{{ user.api ? user.api.apiKey : 'N/A' }}</strong>
-                                            {% if resource_granted('oro_user_profile_apigen') %}
-                                                <a class="btn btn-small" id="btn-apigen" href="{{ path('oro_user_apigen', { id: user.id }) }}">{{ 'Generate key'|trans }}</a>
-                                            {% endif %}
-                                        </div>
-                                    </div>
-                                </div>
-                            </fieldset>
-                        </div>
                     </div>
                     <div class="form-horizontal span6">
                         <div class="control-group">
@@ -109,29 +95,61 @@
                                 {% for obj in user.emails %}
                                 <div class="clearfix-oro">
                                     <p class="control-label">{{ obj.email }}</p>
-                                </li>
+                                </div>
                                 {% endfor %}
                             </div>
                         </div>
+                    </div>
+                </div>
+
+                <h4 id="scroll-api" class="scrollspy-title">{{ 'API'|trans }}</h4>
+                <div class="row-fluid">
+                    <div class="form-horizontal">
+                        <div class="control-group">
+                            <label class="control-label">{{ 'API key'|trans }}</label>
+                            <div class="controls">
+                                <div class="horizontal">
+                                    <strong class="label label-info">{{ user.api ? user.api.apiKey : 'N/A' }}</strong>
+                                    {% if resource_granted('oro_user_profile_apigen') %}
+                                    <a class="btn btn-small" id="btn-apigen" href="{{ path('oro_user_apigen', { id: user.id }) }}">{{ 'Generate key'|trans }}</a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <h4 id="scroll-attributes" class="scrollspy-title">{{ 'Additional data'|trans }}</h4>
+                <div class="row-fluid">
+                    <div class="form-horizontal">
+                        {% for attr in user.values %}
+                        <div class="control-group">
+                            <label class="control-label">{{ attr.attribute.code|title }}</label>
+                            <div class="controls">
+                                <div class="clearfix-oro">
+                                    <p class="control-label">{{ attr.__toString }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
 {% endblock content %}
 
-    {% block head_script %}
+{% block head_script %}
     {{ parent() }}
 
     {% javascripts
-    '@OroUIBundle/Resources/public/lib/bootstrap/js/bootstrap-scrollspy.js'
-    '@OroUserBundle/Resources/public/js/bootstrap-switch.js'
-    '@OroUserBundle/Resources/public/js/emails.js'
-    '@OroUserBundle/Resources/public/js/profile.js'
+        '@OroUIBundle/Resources/public/lib/bootstrap/js/bootstrap-scrollspy.js'
+        '@OroUserBundle/Resources/public/js/bootstrap-switch.js'
+        '@OroUserBundle/Resources/public/js/emails.js'
+        '@OroUserBundle/Resources/public/js/profile.js'
 
-    output='js/page/profile.js'
+        output='js/page/profile.js'
     %}
     <script src="{{ asset_url }}" type="text/javascript"></script>
     {% endjavascripts %}

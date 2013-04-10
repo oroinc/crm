@@ -133,7 +133,7 @@
                     {% if form.rolesCollection is defined %}
                     <h4 id="scroll-roles" class="scrollspy-title">{{ 'Roles'|trans }}</h4>
                     <div class="row-fluid">
-                        <fieldset class="form-horizontal">
+                        <fieldset class="form-horizontal" id="roles-list">
                             {{ form_row(form.rolesCollection, { attr: { class: 'horizontal' } }) }}
                         </fieldset>
                     </div>
