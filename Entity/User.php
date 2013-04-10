@@ -192,7 +192,7 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
     /**
      * @var Role[]
      *
-     * @ORM\ManyToMany(targetEntity="Role")
+     * @ORM\ManyToMany(targetEntity="Role", inversedBy="users")
      * @ORM\JoinTable(name="oro_user_access_role",
      *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="role_id", referencedColumnName="id", onDelete="CASCADE")}
@@ -205,7 +205,7 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
     /**
      * @var Group[]
      *
-     * @ORM\ManyToMany(targetEntity="Group")
+     * @ORM\ManyToMany(targetEntity="Group", inversedBy="users")
      * @ORM\JoinTable(name="oro_user_access_group",
      *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="group_id", referencedColumnName="id", onDelete="CASCADE")}

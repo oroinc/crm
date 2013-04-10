@@ -110,6 +110,26 @@ class GroupController extends Controller
     }
 
     /**
+     * @Route(
+     *  "{id}/users/{page}/{limit}",
+     *  name="oro_user_group_users",
+     *  requirements={"id"="\d+", "page"="\d+","limit"="\d+"}, defaults={"page"=1,"limit"=20}
+     * )
+     * @Template
+     */
+    public function showUsersAction(Group $group, $page, $limit)
+    {
+        return array(
+            'users' => $this->get('knp_paginator')->paginate(
+                $group->getUsers(),
+                $page,
+                $limit
+            ),
+            'group' => $group
+        );
+    }
+
+    /**
      * Get redirect URLs
      *
      * @param  string $default

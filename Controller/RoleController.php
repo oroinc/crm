@@ -114,4 +114,24 @@ class RoleController extends Controller
             )
         );
     }
+
+    /**
+     * @Route(
+     *  "{id}/users/{page}/{limit}",
+     *  name="oro_user_role_users",
+     *  requirements={"id"="\d+", "page"="\d+","limit"="\d+"}, defaults={"page"=1,"limit"=20}
+     * )
+     * @Template
+     */
+    public function showUsersAction(Role $role, $page, $limit)
+    {
+        return array(
+            'users' => $this->get('knp_paginator')->paginate(
+                $role->getUsers(),
+                $page,
+                $limit
+            ),
+            'role' => $role
+        );
+    }
 }

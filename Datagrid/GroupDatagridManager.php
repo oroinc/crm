@@ -34,6 +34,7 @@ class GroupDatagridManager extends DatagridManager
         return array(
             new UrlProperty('edit_link', $this->router, 'oro_user_group_edit', array('id')),
             new UrlProperty('delete_link', $this->router, 'oro_api_delete_group', array('id')),
+            new UrlProperty('users_link', $this->router, 'oro_user_group_users', array('id')),
         );
     }
 
@@ -163,6 +164,18 @@ class GroupDatagridManager extends DatagridManager
             )
         );
 
-        return array($clickAction, $editAction, $deleteAction);
+        $showUsersAction = array(
+            'name'         => 'users',
+            'type'         => ActionInterface::TYPE_REDIRECT,
+            'acl_resource' => 'root',
+            'options'      => array(
+                'label'   => 'Users',
+                'icon'    => 'user',
+                'link'    => 'users_link',
+                'backUrl' => true,
+            )
+        );
+
+        return array($clickAction, $editAction, $deleteAction, $showUsersAction);
     }
 }

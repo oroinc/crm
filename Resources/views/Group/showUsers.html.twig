@@ -1,0 +1,46 @@
+{% extends bap.layout is defined ? bap.layout : 'OroUserBundle::layout.html.twig' %}
+{% import 'OroUserBundle::macros.html.twig' as macros %}
+{% block title %}{{ 'Group users'|trans }} - {{ 'User Management'|trans }}{% endblock %}
+
+{% block page_container %}
+    <div class="container-fluid">
+        {% block content %}
+            <h1>Group {{ group.name }} users</h1>
+            {{ knp_pagination_render(users) }}
+
+            <table class="table table-bordered table-striped table-condensed">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th style="width: 150px">Created At</th>
+                    <th style="width: 150px">Updated At</th>
+                    <th style="width: 50px">Edit</th>
+                    <th style="width: 50px">Remove</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                {% for user in users %}
+                    <tr>
+                        <td><a href="{{ path('oro_user_show', { id: user.id }) }}" class="pull-right">{{ user.id }}</a></td>
+                        <td><a href="{{ path('oro_user_show', { id: user.id }) }}">{{ user.username }}</a></td>
+                        <td><a href="{{ path('oro_user_show', { id: user.id }) }}">{{ user.email }}</a></td>
+                        <td>{{ macros.time(user.created) }}</td>
+                        <td>{{ macros.time(user.updated) }}</td>
+                        <td><a href="{{ path('oro_user_edit', { id: user.id }) }}"><i class="icon-edit"></i></a></td>
+                        <td><a href="{{ path('oro_user_remove', { id: user.id }) }}"><i class="icon-remove"></i></a></td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="100%">There are no users.</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+            {{ knp_pagination_render(users) }}
+        {% endblock %}
+    </div>
+{% endblock %}
