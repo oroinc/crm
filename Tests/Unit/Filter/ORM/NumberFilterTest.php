@@ -60,8 +60,7 @@ class NumberFilterTest extends FilterTestCase
 
     protected function setUp()
     {
-        $translator = $this->getTranslatorMock();
-        $this->model = new NumberFilter($translator);
+        $this->model = new NumberFilter($this->getTranslatorMock());
     }
 
     protected function tearDown()
@@ -71,11 +70,13 @@ class NumberFilterTest extends FilterTestCase
 
     public function testGetRenderSettings()
     {
-        $fieldOptions = array(
-            'label' => self::TEST_LABEL,
-            'type'  => self::TEST_TYPE,
+        $this->model->initialize(
+            self::TEST_NAME,
+            array(
+                'label' => self::TEST_LABEL,
+                'type'  => self::TEST_TYPE,
+            )
         );
-        $this->model->initialize(self::TEST_NAME, $fieldOptions);
 
         $this->assertEquals($this->expectedRenderSettings, $this->model->getRenderSettings());
     }

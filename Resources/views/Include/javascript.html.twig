@@ -31,6 +31,7 @@
     '@OroGridBundle/Resources/public/js/app/datagrid/filter/datagrid-filter.js'
     '@OroGridBundle/Resources/public/js/app/datagrid/filter/datagrid-filter-text.js'
     '@OroGridBundle/Resources/public/js/app/datagrid/filter/datagrid-filter-choice.js'
+    '@OroGridBundle/Resources/public/js/app/datagrid/filter/datagrid-filter-number.js'
     '@OroGridBundle/Resources/public/js/app/datagrid/filter/datagrid-filter-date.js'
     '@OroGridBundle/Resources/public/js/app/datagrid/filter/datagrid-filter-datetime.js'
     '@OroGridBundle/Resources/public/js/app/datagrid/filter/datagrid-filter-select.js'
@@ -96,9 +97,7 @@
                         {% for filter in datagrid.filters %}
                             {{ filter.name|json_encode|raw }}:
                             {% set filterType = filter.getOption('filter_type') %}
-                            {% if filterType == constant(filterTypePrefix ~ 'TYPE_NUMBER')
-                                or filterType == constant(filterTypePrefix ~ 'TYPE_STRING')
-                                or filterType == constant(filterTypePrefix ~ 'TYPE_FLEXIBLE_NUMBER')
+                            {% if filterType == constant(filterTypePrefix ~ 'TYPE_STRING')
                                 or filterType == constant(filterTypePrefix ~ 'TYPE_FLEXIBLE_STRING')
                             %}
                                 OroApp.DatagridFilterChoice.extend({
@@ -106,6 +105,16 @@
                                     label: {{ filter.getOption('label')|json_encode|raw }},
                                     enabled: {{ filter.getOption('show_filter') ? 'true' : 'false' }},
                                     choices: {{ filter.typeOptions|json_encode|raw }}
+                                })
+                            {% elseif filterType == constant(filterTypePrefix ~ 'TYPE_NUMBER')
+                                or filterType == constant(filterTypePrefix ~ 'TYPE_FLEXIBLE_NUMBER')
+                            %}
+                                OroApp.DatagridFilterNumber.extend({
+                                    name: '{{ filter.name }}',
+                                    label: '{{ filter.getOption('label') }}',
+                                    enabled: {{ filter.getOption('show_filter') ? 'true' : 'false' }},
+                                    choices: {{ filter.typeOptions|json_encode|raw }},
+                                    formatter: {{ filter.getOption('data_type')|json_encode|raw }}
                                 })
                             {% elseif filterType == constant(filterTypePrefix ~ 'TYPE_DATE')
                                 or filterType == constant(filterTypePrefix ~ 'TYPE_FLEXIBLE_DATE')

@@ -39,6 +39,11 @@ OroApp.DatagridFilterText = OroApp.DatagridFilter.extend({
     ),
 
     /**
+     * @property {Boolean}
+     */
+    popupCriteriaShowed: false,
+
+    /**
      * Selector to element of criteria hint
      *
      * @property {String}
@@ -102,7 +107,7 @@ OroApp.DatagridFilterText = OroApp.DatagridFilter.extend({
     _onReadCriteriaInputKey: function(e) {
         if (e.which == 13) {
             this._hideCriteria();
-            this._confirmValue(this._readCriteriaValue());
+            this.setValue(this._readDOMValue());
         }
     },
 
@@ -114,7 +119,7 @@ OroApp.DatagridFilterText = OroApp.DatagridFilter.extend({
      */
     _onClickUpdateCriteria: function(e) {
         this._hideCriteria();
-        this._confirmValue(this._readCriteriaValue());
+        this.setValue(this._readDOMValue());
     },
 
     /**
@@ -136,7 +141,7 @@ OroApp.DatagridFilterText = OroApp.DatagridFilter.extend({
      */
     _onClickCloseCriteria: function() {
         this._hideCriteria();
-        this.setValue(this.confirmedValue);
+        this._updateDOMValue();
     },
 
     /**
@@ -160,7 +165,7 @@ OroApp.DatagridFilterText = OroApp.DatagridFilter.extend({
 
         if (elem.get(0) !== e.target && !elem.has(e.target).length) {
             this._hideCriteria();
-            this._confirmValue(this._readCriteriaValue());
+            this.setValue(this._readDOMValue());
         }
     },
 
@@ -179,20 +184,14 @@ OroApp.DatagridFilterText = OroApp.DatagridFilter.extend({
         );
 
         this._renderCriteria(this.$(this.criteriaSelector));
-        this._clickOutsideCriteriaCallback = $.proxy(this._onClickOutsideCriteria, this);
+        this._clickOutsideCriteriaCallback = _.bind(function(e) {
+            if (this.popupCriteriaShowed) {
+                this._onClickOutsideCriteria(e);
+            }
+        }, this);
         $('body').on('click', this._clickOutsideCriteriaCallback);
-        this._initConfirmValue();
 
         return this;
-    },
-
-    /**
-     * Set initial confirm value
-     *
-     * @protected
-     */
-    _initConfirmValue: function() {
-        this.confirmedValue = this._readCriteriaValue();
     },
 
     /**
@@ -227,6 +226,7 @@ OroApp.DatagridFilterText = OroApp.DatagridFilter.extend({
         this.$(this.criteriaSelector).show();
         this._focusCriteria();
         this._setButtonPressed(this.$(this.criteriaSelector), true);
+        this.popupCriteriaShowed = true;
     },
 
     /**
@@ -237,6 +237,7 @@ OroApp.DatagridFilterText = OroApp.DatagridFilter.extend({
     _hideCriteria: function() {
         this.$(this.criteriaSelector).hide();
         this._setButtonPressed(this.$(this.criteriaSelector), false);
+        this.popupCriteriaShowed = false;
     },
 
     /**
@@ -249,63 +250,28 @@ OroApp.DatagridFilterText = OroApp.DatagridFilter.extend({
     },
 
     /**
-     * Set value to filter's criteria and confirm it
-     *
-     * @param value
-     * @return {*}
+     * @inheritDoc
      */
-    setValue: function(value) {
-        this._writeCriteriaValue(value);
-        this._confirmValue(value);
-        return this;
-    },
-
-    /**
-     * Get confirmed value of filter's criteria
-     *
-     * @return {Object}
-     */
-    getValue: function() {
-        return this.confirmedValue;
-    },
-
-    /**
-     * Compare value with confirmed value, if it's differs than save new
-     * confirmed value and trigger "changedData" event
-     *
-     * @param {Object} value
-     * @protected
-     */
-    _confirmValue: function(value) {
-        if (!this._looseObjectCompare(this.confirmedValue, value)) {
-            this.confirmedValue = _.clone(value);
-            this._updateCriteriaHint();
-            this.trigger('update');
-        }
-    },
-
-    /**
-     * Writes values from object into criteria elements
-     *
-     * @param {Object} value
-     * @protected
-     * @return {*}
-     */
-    _writeCriteriaValue: function(value) {
+    _writeDOMValue: function(value) {
         this._setInputValue(this.criteriaValueSelectors.value, value.value);
         return this;
     },
 
     /**
-     * Reads value of criteria elements into object
-     *
-     * @return {Object}
-     * @protected
+     * @inheritDoc
      */
-    _readCriteriaValue: function() {
+    _readDOMValue: function() {
         return {
             value: this._getInputValue(this.criteriaValueSelectors.value)
         }
+    },
+
+    /**
+     * @inheritDoc
+     */
+    _onValueUpdated: function(newValue, oldValue) {
+        OroApp.DatagridFilter.prototype._onValueUpdated.apply(this, arguments);
+        this._updateCriteriaHint();
     },
 
     /**
@@ -326,69 +292,7 @@ OroApp.DatagridFilterText = OroApp.DatagridFilter.extend({
      * @protected
      */
     _getCriteriaHint: function() {
-        return this.confirmedValue.value ? '"' + this.confirmedValue.value + '"': this.defaultCriteriaHint;
-    },
-
-    /**
-     * Gets input value. Radio inputs are supported.
-     *
-     * @param {String|Object} input
-     * @return {*}
-     * @protected
-     */
-    _getInputValue: function(input) {
-        var result = undefined;
-        var $input = this.$(input);
-        switch ($input.attr('type')) {
-            case 'radio':
-                $input.each(function() {
-                    if ($(this).is(':checked')) {
-                        result = $(this).val();
-                    }
-                });
-                break;
-            default:
-                result = $input.val();
-
-        }
-        return result;
-    },
-
-    /**
-     * Sets input value. Radio inputs are supported.
-     *
-     * @param {String|Object} input
-     * @param {String} value
-     * @protected
-     * @return {*}
-     */
-    _setInputValue: function(input, value) {
-        var $input = this.$(input);
-        switch ($input.attr('type')) {
-            case 'radio':
-                $input.each(function() {
-                    var $input = $(this);
-                    if ($input.attr('value') == value) {
-                        $input.attr('checked', true);
-                        $input.click();
-                    } else {
-                        $(this).removeAttr('checked');
-                    }
-                });
-                break;
-            default:
-                $input.val(value);
-
-        }
-        return this;
-    },
-
-    /**
-     * Compares current value with empty value
-     *
-     * @return {Boolean}
-     */
-    isEmpty: function() {
-        return this._looseObjectCompare(this.confirmedValue.value, "");
+        var value = this._getDisplayValue();
+        return value.value ? '"' + value.value + '"': this.defaultCriteriaHint;
     }
 });

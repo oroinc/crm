@@ -56,11 +56,7 @@ OroApp.DatagridFilterChoice = OroApp.DatagridFilterText.extend({
     },
 
     /**
-     * Render filter criteria popup
-     *
-     * @param {Object} el
-     * @protected
-     * @return {*}
+     * @inheritDoc
      */
     _renderCriteria: function(el) {
         $(el).append(this.popupCriteriaTemplate({
@@ -71,41 +67,33 @@ OroApp.DatagridFilterChoice = OroApp.DatagridFilterText.extend({
     },
 
     /**
-     * Get criteria hint value
-     *
-     * @return {String}
-     * @protected
+     * @inheritDoc
      */
     _getCriteriaHint: function() {
-        if (!this.confirmedValue.value) {
+        var value = this._getDisplayValue();
+        if (!value.value) {
             return this.defaultCriteriaHint;
-        } else if (_.has(this.choices, this.confirmedValue.type)) {
-            return this.choices[this.confirmedValue.type] + ' "' + this.confirmedValue.value + '"'
+        } else if (_.has(this.choices, value.type)) {
+            return this.choices[value.type] + ' "' + value.value + '"'
         } else {
-            return '"' + this.confirmedValue.value + '"';
+            return '"' + value.value + '"';
         }
     },
 
     /**
-     * Writes values from object into criteria elements
-     *
-     * @param {Object} value
-     * @protected
-     * @return {*}
+     * @inheritDoc
      */
-    _writeCriteriaValue: function(value) {
+    _writeDOMValue: function(value) {
         this._setInputValue(this.criteriaValueSelectors.value, value.value);
         this._setInputValue(this.criteriaValueSelectors.type, value.type);
         return this;
     },
 
+
     /**
-     * Reads value of criteria elements into object
-     *
-     * @return {Object}
-     * @protected
+     * @inheritDoc
      */
-    _readCriteriaValue: function() {
+    _readDOMValue: function() {
         return {
             value: this._getInputValue(this.criteriaValueSelectors.value),
             type: this._getInputValue(this.criteriaValueSelectors.type)
@@ -113,20 +101,11 @@ OroApp.DatagridFilterChoice = OroApp.DatagridFilterText.extend({
     },
 
     /**
-     * Compare value with confirmed value, if it's differs than save new
-     * confirmed value and trigger "changedData" event
-     *
-     * @param {Object} value
-     * @protected
+     * @inheritDoc
      */
-    _confirmValue: function(value) {
-        if (!this._looseObjectCompare(this.confirmedValue, value)) {
-            var needUpdate = this.confirmedValue.value || value.value;
-            this.confirmedValue = _.clone(value);
-            this._updateCriteriaHint();
-            if (needUpdate) {
-                this.trigger('update');
-            }
+    _triggerUpdate: function(newValue, oldValue) {
+        if (newValue.value || oldValue.value) {
+            this.trigger('update');
         }
     }
 });

@@ -25,87 +25,98 @@ OroApp.DatagridFilterDateTime = OroApp.DatagridFilterDate.extend({
     }, OroApp.DatagridFilterDate.prototype.dateWidgetOptions),
 
     /**
-     * Additional datetime widget options that might be passed to filter
-     * http://api.jqueryui.com/datepicker/
-     * http://trentrichardson.com/examples/timepicker/#tp-options
-     *
-     * @property
+     * @inheritDoc
      */
-    externalWidgetOptions: {},
-
-    /**
-     * Initialize datetime widget
-     *
-     * @param {String} visualSelector
-     * @param {String} actualSelector
-     * @return {*}
-     * @protected
-     */
-    _initializeDateWidget: function(visualSelector, actualSelector) {
-        var options = _.extend({
-            altField: actualSelector
-        }, this.dateWidgetOptions);
-
-        this.$(visualSelector).datetimepicker(options);
-        var widget = this.$(visualSelector).datetimepicker('widget');
+    _initializeDateWidget: function(widgetSelector) {
+        this.$(widgetSelector).datetimepicker(this.dateWidgetOptions);
+        var widget = this.$(widgetSelector).datetimepicker('widget');
         widget.addClass(this.dateWidgetOptions.className);
-
         return widget;
     },
 
     /**
-     * Convert actual date values to visual fields
-     *
-     * @protected
+     * @inheritDoc
      */
-    _convertActualToVisual: function() {
-        this._convertDateData(
-            this.criteriaValueSelectors.value,
-            this.criteriaValueSelectors.visualValue,
-            this.dateWidgetOptions.altFormat,
-            this.dateWidgetOptions.dateFormat,
-            this.dateWidgetOptions.altTimeFormat,
-            this.dateWidgetOptions.timeFormat
-        );
+    _formatDisplayValue: function(value) {
+        var dateFromFormat = this.dateWidgetOptions.altFormat;
+        var dateToFormat = this.dateWidgetOptions.dateFormat;
+        var timeFromFormat = this.dateWidgetOptions.altTimeFormat;
+        var timeToFormat = this.dateWidgetOptions.timeFormat;
+        return this._formatValueDatetimes(value, dateFromFormat, dateToFormat, timeFromFormat, timeToFormat);
     },
 
     /**
-     * Convert visual date values to actual fields
-     *
-     * @protected
+     * @inheritDoc
      */
-    _convertVisualToActual: function() {
-        this._convertDateData(
-            this.criteriaValueSelectors.visualValue,
-            this.criteriaValueSelectors.value,
-            this.dateWidgetOptions.dateFormat,
-            this.dateWidgetOptions.altFormat,
-            this.dateWidgetOptions.timeFormat,
-            this.dateWidgetOptions.altTimeFormat
-        );
+    _formatRawValue: function(value) {
+        var dateFromFormat = this.dateWidgetOptions.dateFormat;
+        var dateToFormat = this.dateWidgetOptions.altFormat;
+        var timeFromFormat = this.dateWidgetOptions.timeFormat;
+        var timeToToFormat = this.dateWidgetOptions.altTimeFormat;
+        return this._formatValueDatetimes(value, dateFromFormat, dateToFormat, timeFromFormat, timeToToFormat);
     },
 
     /**
-     * Convert data procedure
+     * Format datetimes in a valut to another format
      *
+     * @param {Object} value
+     * @param {String} dateFromFormat
+     * @param {String} dateToFormat
+     * @param {String} timeFromFormat
+     * @param {String} timeToToFormat
+     * @return {Object}
      * @protected
      */
-    _convertDateData: function(fromSelectors, toSelectors, fromDateFormat, toDateFormat, fromTimeFormat, toTimeFormat) {
-        _.each(fromSelectors, function(fromSelector, name) {
-            var toSelector = toSelectors[name];
-            var fromValue = this._getInputValue(fromSelector);
-            var toValue = '';
-            if (fromValue) {
-                var dateValue = $.datepicker.formatDate(toDateFormat, $.datepicker.parseDate(fromDateFormat, fromValue));
+    _formatValueDatetimes: function(value, dateFromFormat, dateToFormat, timeFromFormat, timeToToFormat) {
+        if (value.value && value.value.start) {
+            value.value.start = this._formatDatetime(
+                value.value.start, dateFromFormat, dateToFormat, timeFromFormat, timeToToFormat
+            );
+        }
+        if (value.value && value.value.end) {
+            value.value.end = this._formatDatetime(
+                value.value.end, dateFromFormat, dateToFormat, timeFromFormat, timeToToFormat
+            );
+        }
+        return value;
+    },
 
-                // remove date part
-                var dateBefore = $.datepicker.formatDate(fromDateFormat, $.datepicker.parseDate(toDateFormat, dateValue));
-                fromValue = fromValue.substr(dateBefore.length + this.dateWidgetOptions.altSeparator.length);
+    /**
+     * Formats datetime string to another format
+     *
+     * @param {String} value
+     * @param {String} dateFromFormat
+     * @param {String} dateToFormat
+     * @param {String} timeFromFormat
+     * @param {String} timeToToFormat
+     * @return {String}
+     * @protected
+     */
+    _formatDatetime: function(value, dateFromFormat, dateToFormat, timeFromFormat, timeToToFormat) {
+        var datePart = this._formatDate(value, dateFromFormat, dateToFormat);
+        var dateBefore = this._formatDate(value, dateToFormat, dateFromFormat);
+        var timePart = value.substr(dateBefore.length + this.dateWidgetOptions.altSeparator.length);
+        timePart = this._formatTime(timePart, timeFromFormat, timeToToFormat);
+        return datePart + this.dateWidgetOptions.altSeparator + timePart;
+    },
 
-                var timeValue = $.datepicker.formatTime(toTimeFormat, $.datepicker.parseTime(fromTimeFormat, fromValue));
-                toValue = dateValue + this.dateWidgetOptions.altSeparator + timeValue;
+    /**
+     * Formats time string to another format
+     *
+     * @param {String} value
+     * @param {String} fromFormat
+     * @param {String} toFormat
+     * @return {String}
+     * @protected
+     */
+    _formatTime: function(value, fromFormat, toFormat) {
+        var fromValue = $.datepicker.parseTime(fromFormat, value);
+        if (!fromValue) {
+            fromValue = $.datepicker.parseTime(toFormat, value);
+            if (!fromValue) {
+                return value;
             }
-            this._setInputValue(toSelector, toValue);
-        }, this);
+        }
+        return $.datepicker.formatTime(toFormat, fromValue);
     }
 });
