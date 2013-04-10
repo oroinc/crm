@@ -1,10 +1,10 @@
 OroGridBundle Documentation
 ===========================
 
-- [Overview](./reference/backend/overview.md)
-    - [Main Components](./reference/backend/overview.md#main-components)
-    - [Example Of Usage](./reference/backend/overview.md#example-of-usage)
-    - [Dependencies](./reference/backend/overview.md#dependencies)
+- [Overview](./reference/overview.md)
+    - [Main Components](./reference/overview.md#main-components)
+    - [Example Of Usage](./reference/overview.md#example-of-usage)
+    - [Dependencies](./reference/overview.md#dependencies)
 - [Backend Architecture](./reference/backend/index.md)
     - [Overview](./reference/backend/index.md#overview)
     - [Configuration](./reference/backend/index.md#configuration)
