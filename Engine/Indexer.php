@@ -53,7 +53,7 @@ class Indexer
      */
     public function getEntitiesLabels()
     {
-        $this->mapper->getEntitiesLabels();
+        return $this->mapper->getEntitiesLabels();
     }
 
     /**

@@ -104,8 +104,8 @@ class ObjectMapper
      */
     public function getEntityConfig($entity)
     {
-        if (isset($this->mappingConfig[$entity])) {
-            return $this->mappingConfig[$entity];
+        if (isset($this->mappingConfig[(string)$entity])) {
+            return $this->mappingConfig[(string)$entity];
         }
 
         return false;
