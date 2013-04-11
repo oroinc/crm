@@ -44,16 +44,13 @@ navigation.favorites.MainView = navigation.MainViewAbstract.extend({
             if (el.data('url')) {
                 itemData['url'] = el.data('url');
             }
-
             itemData['title'] = document.title;
             itemData['type'] = 'favorite';
             itemData['position'] = this.getCollection().length;
             var currentItem = new navigation.Item(itemData);
 
             this.getCollection().unshift(currentItem);
-
             currentItem.attributes.title = _.isObject(el.data('title')) ? JSON.stringify(el.data('title')) : '{"template": "' + itemData['title'] + '"}';
-
             currentItem.save();
         }
     },

@@ -144,7 +144,6 @@ navigation.pinbar.MainView = navigation.MainViewAbstract.extend({
             var currentItem = new navigation.pinbar.Item(itemData);
             this.options.collection.unshift(currentItem);
 
-            //currentItem.attributes.title = _.isObject(el.data('title')) ? JSON.stringify(el.data('title')) : '{"template": "' + itemData['title'] + '"}';
             currentItem.save(null, {success: _.bind(this.handleItemStateChange, this)});
         }
     },
@@ -221,14 +220,9 @@ navigation.pinbar.MainView = navigation.MainViewAbstract.extend({
             this.cleanup();
             item.set('display_type', type);
 
-            var data = _.extend({}, item);
-            if (!_.isUndefined(data.attributes.title_rendered)) {
-                data.attributes.title = data.attributes.title_rendered;
-            }
-
             var view = new navigation.pinbar.ItemView({
                 type: type,
-                model: data
+                model: item
             });
 
             if (type == 'tab') {
