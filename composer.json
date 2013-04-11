@@ -8,7 +8,7 @@
     "require": {
         "php": ">=5.3.3",
         "symfony/symfony": "2.1.*",
-        "jms/serializer-bundle": "dev-master"
+        "jms/serializer-bundle": "0.12.*@dev"
     },
     "require-dev": {
         "doctrine/dbal": ">=2.2,<2.4-dev",
