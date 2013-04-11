@@ -2,23 +2,23 @@
 
 namespace Oro\Bundle\NavigationBundle\Event;
 
-use Oro\Bundle\NavigationBundle\Provider\TitleService;
+use Oro\Bundle\NavigationBundle\Provider\TitleServiceInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernel;
 
 class RequestTitleListener
 {
     /**
-     * @var TitleService
+     * @var TitleServiceInterface
      */
     private $service;
 
     /**
      * Injection
      *
-     * @param TitleService $service
+     * @param TitleServiceInterface $service
      */
-    public function __construct(TitleService $service)
+    public function __construct(TitleServiceInterface $service)
     {
         $this->service = $service;
     }

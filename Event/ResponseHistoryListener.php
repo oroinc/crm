@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\NavigationBundle\Event;
 
+use Oro\Bundle\NavigationBundle\Provider\TitleServiceInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
@@ -10,7 +11,6 @@ use Doctrine\ORM\EntityManager;
 
 use Oro\Bundle\NavigationBundle\Entity\Builder\ItemFactory;
 use Oro\Bundle\NavigationBundle\Entity\NavigationHistoryItem;
-use Oro\Bundle\NavigationBundle\Provider\TitleService;
 
 class ResponseHistoryListener
 {
@@ -30,7 +30,7 @@ class ResponseHistoryListener
     protected $em = null;
 
     /**
-     * @var TitleService
+     * @var TitleServiceInterface
      */
     protected $titleService = null;
 
@@ -38,7 +38,7 @@ class ResponseHistoryListener
         ItemFactory $navigationItemFactory,
         SecurityContextInterface $securityContext,
         EntityManager $entityManager,
-        TitleService $titleService
+        TitleServiceInterface $titleService
     ) {
         $this->navItemFactory = $navigationItemFactory;
         $this->user = !$securityContext->getToken() ||  is_string($securityContext->getToken()->getUser())

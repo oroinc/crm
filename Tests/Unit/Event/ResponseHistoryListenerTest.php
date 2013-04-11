@@ -4,6 +4,7 @@ namespace Oro\Bundle\NavigationBundle\Tests\Unit\Event;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\NavigationBundle\Entity\NavigationHistoryItem;
 use Oro\Bundle\NavigationBundle\Event\ResponseHistoryListener;
+use Oro\Bundle\NavigationBundle\Provider\TitleService;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -41,6 +42,16 @@ class ResponseHistoryListenerTest extends \PHPUnit_Framework_TestCase
      */
     protected $request;
 
+    /**
+     * @var TitleService
+     */
+    protected $titleService;
+
+    /**
+     * @var string
+     */
+    protected $serializedTitle;
+
     public function setUp()
     {
         $this->factory = $this->getMock('Oro\Bundle\NavigationBundle\Entity\Builder\ItemFactory');
@@ -59,6 +70,13 @@ class ResponseHistoryListenerTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($token));
 
         $this->item = $this->getMock('Oro\Bundle\NavigationBundle\Entity\NavigationHistoryItem');
+
+        $this->serializedTitle = json_encode(array('titleTemplate' => 'Test title template'));
+
+        $this->titleService = $this->getMock('Oro\Bundle\NavigationBundle\Provider\TitleServiceInterface');
+        $this->titleService->expects($this->once())
+                            ->method('getSerialized')
+                            ->will($this->returnValue($this->serializedTitle));
     }
 
     public function testOnResponse()
@@ -72,22 +90,17 @@ class ResponseHistoryListenerTest extends \PHPUnit_Framework_TestCase
         $listener->onResponse($this->getEventMock($this->getRequest(), $response));
     }
 
-    /**
-     * @param array $data
-     * @dataProvider titleProvider
-     */
-    public function testTitle($data)
+    public function testTitle()
     {
         $this->item->expects($this->once())
                    ->method('setTitle')
-                   ->with($this->equalTo($data['expected']));
+                   ->with($this->equalTo($this->serializedTitle));
 
-        $response = $this->getResponse($data['actual']);
-
+        $response = $this->getResponse();
         $repository = $this->getDefaultRepositoryMock($this->item);
         $em = $this->getEntityManager($repository);
 
-        $listener = $this->getListener($this->factory, $this->securityContext, $em);
+        $listener = $this->getListener($this->factory, $this->securityContext, $em, $em);
         $listener->onResponse($this->getEventMock($this->getRequest(), $response));
     }
 
@@ -103,18 +116,10 @@ class ResponseHistoryListenerTest extends \PHPUnit_Framework_TestCase
         $repository = $this->getDefaultRepositoryMock(null);
         $em = $this->getEntityManager($repository);
 
-        $listener = $this->getListener($this->factory, $this->securityContext, $em);
+        $listener = $this->getListener($this->factory, $this->securityContext, $em, $em);
         $response = $this->getResponse();
 
         $listener->onResponse($this->getEventMock($this->getRequest(), $response));
-    }
-
-    public function titleProvider()
-    {
-        return array(
-            array(array('actual' => '<title>bad title<title>', 'expected' => 'Default Title')),
-            array(array('actual' => '<title>Good Title</title>', 'expected' => 'Good Title')),
-        );
     }
 
     /**
@@ -173,16 +178,11 @@ class ResponseHistoryListenerTest extends \PHPUnit_Framework_TestCase
     /**
      * Creates response object mock
      *
-     * @param string $content
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
-    private function getResponse($content = '')
+    private function getResponse()
     {
         $response = $this->getMock('Symfony\Component\HttpFoundation\Response');
-
-        $response->expects($this->once())
-                 ->method('getContent')
-                 ->will($this->returnValue($content));
 
         $response->expects($this->once())
                  ->method('getStatusCode')
@@ -199,7 +199,7 @@ class ResponseHistoryListenerTest extends \PHPUnit_Framework_TestCase
      */
     private function getListener($factory, $securityContext, $entityManager)
     {
-        return new ResponseHistoryListener($factory, $securityContext, $entityManager);
+        return new ResponseHistoryListener($factory, $securityContext, $entityManager, $this->titleService);
     }
 
     /**

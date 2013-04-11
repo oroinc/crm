@@ -13,7 +13,7 @@ use Oro\Bundle\NavigationBundle\Title\TitleReader\ConfigReader;
 use Oro\Bundle\NavigationBundle\Title\TitleReader\AnnotationsReader;
 use Oro\Bundle\NavigationBundle\Title\StoredTitle;
 
-class TitleService
+class TitleService implements TitleServiceInterface
 {
     /**
      * Title template
