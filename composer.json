@@ -20,6 +20,10 @@
         "oro/grid-bundle": "dev-master",
         "oro/navigation-bundle": "dev-master"
     },
+    "require-dev": {
+        "doctrine/data-fixtures": "@dev",
+        "doctrine/doctrine-fixtures-bundle": "@dev"
+    },
     "autoload": {
         "psr-0": { "Oro\\Bundle\\UserBundle": "" }
     },
