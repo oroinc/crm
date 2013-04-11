@@ -88,7 +88,7 @@ class DefaultRouteGenerator implements RouteGeneratorInterface
      */
     public function setRouteParameters(array $parameters)
     {
-        $this->parameters = $parameters;
+        $this->routeParameters = $parameters;
     }
 
     /**
