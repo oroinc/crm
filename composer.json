@@ -8,7 +8,7 @@
     "require": {
         "php": ">=5.3.3",
         "symfony/symfony": "2.1.*",
-        "oro/UIBundle": "dev-master",
+        "oro/ui-bundle": "dev-master",
         "oro/user-bundle": "dev-master"
     },
     "autoload": {
