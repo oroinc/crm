@@ -1,5 +1,5 @@
 {
-    "name": "oro/MeasureBundle",
+    "name": "oro/measure-bundle",
     "type": "symfony-bundle",
     "description": "BAP Measure Bundle",
     "keywords": ["BAP", "Measure", "Convert"],
