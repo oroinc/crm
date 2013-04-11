@@ -237,18 +237,11 @@ class FlexibleEntityRepository extends EntityRepository implements TranslatableI
      *
      * @return array The objects.
      */
-    public function findByWithAttributes(array $attributes = array(), array $criteria = null, array $orderBy = null, $limit = null, $offset = null)
+    public function findByWithAttributesQB(array $attributes = array(), array $criteria = null, array $orderBy = null, $limit = null, $offset = null)
     {
         $qb = $this->createFlexibleQueryBuilder('Entity', $attributes);
         $codeToAttribute = $this->getCodeToAttributes($attributes);
         $attributes = array_keys($codeToAttribute);
-
-        $qb->andWhere(
-            $qb->expr()->orX(
-                $qb->expr()->isNull('Value.locale'),
-                $qb->expr()->eq('Value.locale', $qb->expr()->literal($this->getLocale()))
-            )
-        );
 
         // add criterias
         if (!is_null($criteria)) {
@@ -282,7 +275,16 @@ class FlexibleEntityRepository extends EntityRepository implements TranslatableI
             return $paginator;
         }
 
-        return $qb->getQuery()->getResult();
+        return $qb;
+    }
+
+    public function findByWithAttributes(array $attributes = array(), array $criteria = null, array $orderBy = null, $limit = null, $offset = null)
+    {
+        return $this
+            ->findByWithAttributesQB($attributes, $criteria, $orderBy, $limit, $offset)
+            ->getQuery()
+            ->getResult()
+        ;
     }
 
     /**
@@ -340,5 +342,22 @@ class FlexibleEntityRepository extends EntityRepository implements TranslatableI
         $flexibles = $this->findByWithAttributes(array(), array('id' => $id));
 
         return count($flexibles) ? current($flexibles) : null;
+    }
+
+    public function findLocalizedValuesWithAttributes($id)
+    {
+        $qb = $this->findByWithAttributesQB(array(), array('id' => $id));
+
+        return $qb
+            ->andWhere(
+                $qb->expr()->orX(
+                    $qb->expr()->isNull('Value.locale'),
+                    $qb->expr()->eq('Value.locale', $qb->expr()->literal($this->getLocale()))
+                )
+            )
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+
     }
 }
