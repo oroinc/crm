@@ -50,29 +50,29 @@
 {% endblock date_widget %}
 
 {% block choice_widget_expanded %}
-    {% spaceless %}
-        <div {{ block('widget_container_attributes') }}>
-            {% for child in form %}
-                <div class="oro-clearfix">
-                    {{ form_widget(child) }}
-                    {{ form_label(child) }}
-                </div>
-            {% endfor %}
-        </div>
-    {% endspaceless %}
+{% spaceless %}
+    <div {{ block('widget_container_attributes') }}>
+        {% for child in form %}
+            <div class="oro-clearfix">
+                {{ form_widget(child) }}
+                {{ form_label(child) }}
+            </div>
+        {% endfor %}
+    </div>
+{% endspaceless %}
 {% endblock choice_widget_expanded %}
 
 {% block form_label %}
-    {% spaceless %}
-        {% if not compound %}
-            {% set label_attr = label_attr|merge({'for': id}) %}
-        {% endif %}
-        {% if required %}
-            {% set label_attr = label_attr|merge({'class': (label_attr.class|default('') ~ ' required')|trim}) %}
-        {% endif %}
-        {% if label is empty %}
-            {% set label = name|humanize %}
-        {% endif %}
-        <label{% for attrname, attrvalue in label_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>{{ label|trans({}, translation_domain)|capitalize }}</label>
-    {% endspaceless %}
+{% spaceless %}
+    {% if not compound %}
+        {% set label_attr = label_attr|merge({'for': id}) %}
+    {% endif %}
+    {% if required %}
+        {% set label_attr = label_attr|merge({'class': (label_attr.class|default('') ~ ' required')|trim}) %}
+    {% endif %}
+    {% if label is empty %}
+        {% set label = name|humanize %}
+    {% endif %}
+    <label{% for attrname, attrvalue in label_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>{{ label|trans({}, translation_domain)|capitalize }}</label>
+{% endspaceless %}
 {% endblock form_label %}
