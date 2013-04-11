@@ -34,7 +34,6 @@ class GroupDatagridManager extends DatagridManager
         return array(
             new UrlProperty('edit_link', $this->router, 'oro_user_group_edit', array('id')),
             new UrlProperty('delete_link', $this->router, 'oro_api_delete_group', array('id')),
-            new UrlProperty('users_link', $this->router, 'oro_user_group_users', array('id')),
         );
     }
 

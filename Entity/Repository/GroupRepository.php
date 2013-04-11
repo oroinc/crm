@@ -4,23 +4,23 @@ namespace Oro\Bundle\UserBundle\Entity\Repository;
 use Doctrine\ORM\Query\Expr;
 use Doctrine\ORM\EntityRepository;
 
-use Oro\Bundle\UserBundle\Entity\Role;
+use Oro\Bundle\UserBundle\Entity\Group;
 
-class RoleRepository extends EntityRepository
+class GroupRepository extends EntityRepository
 {
     /**
      * Get user query builder
      *
-     * @param \Oro\Bundle\UserBundle\Entity\Role $role
+     * @param \Oro\Bundle\UserBundle\Entity\Group $group
      * @return \Doctrine\ORM\QueryBuilder
      */
-    public function getUserQueryBuilder(Role $role)
+    public function getUserQueryBuilder(Group $group)
     {
         return $this->_em->createQueryBuilder()
             ->select('u')
             ->from('OroUserBundle:User', 'u')
-            ->join('u.roles', 'role')
-            ->where('role = :role')
-            ->setParameter('role', $role);
+            ->join('u.groups', 'groups')
+            ->where('groups = :group')
+            ->setParameter('group', $group);
     }
 }
