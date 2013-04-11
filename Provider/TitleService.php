@@ -84,25 +84,27 @@ class TitleService
      *
      * @param array $params
      * @param null $title
+     * @param null $prefix
+     * @param null $suffix
      * @return $this
      */
-    public function render($params = array(), $title = null)
+    public function render($params = array(), $title = null, $prefix = null, $suffix = null)
     {
         $title = is_null($title) ? $this->getTemplate() : $title;
+        $prefix = is_null($prefix) ? $this->prefix : $prefix;
+        $suffix = is_null($suffix) ? $this->suffix : $suffix;
         $params = empty($params) ? $this->getParams() : $params;
 
         $trans = $this->translator;
 
         $translatedTemplate = $trans->trans($title, $params);
 
-        $suffix = '';
-        if (!is_null($this->suffix)) {
-            $suffix = $trans->trans($this->suffix, $params);
+        if (!is_null($suffix)) {
+            $suffix = $trans->trans($suffix, $params);
         }
 
-        $prefix = '';
-        if (!is_null($this->prefix)) {
-            $prefix = $trans->trans($this->prefix, $params);
+        if (!is_null($prefix)) {
+            $prefix = $trans->trans($prefix, $params);
         }
 
         $translatedTemplate = $prefix . $translatedTemplate . $suffix;
@@ -145,7 +147,7 @@ class TitleService
         /** @var $data \Oro\Bundle\NavigationBundle\Title\StoredTitle */
         $data =  $this->serializer->deserialize($titleData, 'Oro\Bundle\NavigationBundle\Title\StoredTitle', 'json');
 
-        return $this->render($data->getParams(), $data->getTemplate());
+        return $this->render($data->getParams(), $data->getTemplate(), $data->getPrefix(), $data->getSuffix());
     }
 
     /**
@@ -298,7 +300,9 @@ class TitleService
         $storedTitle = new StoredTitle();
         $storedTitle
             ->setTemplate($this->getTemplate())
-            ->setParams($this->getParams());
+            ->setParams($this->getParams())
+            ->setPrefix($this->prefix)
+            ->setSuffix($this->suffix);
 
         return $this->serializer->serialize($storedTitle, 'json');
     }

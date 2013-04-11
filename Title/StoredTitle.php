@@ -24,6 +24,18 @@ class StoredTitle
     private $params = array();
 
     /**
+     * @Type("string")
+     * @var string
+     */
+    private $prefix;
+
+    /**
+     * @Type("string")
+     * @var string
+     */
+    private $suffix;
+
+    /**
      * Setter for template
      *
      * @param string $template
@@ -67,5 +79,51 @@ class StoredTitle
     public function getParams()
     {
         return $this->params;
+    }
+
+    /**
+     * Setter for prefix
+     *
+     * @param string $prefix
+     * @return $this
+     */
+    public function setPrefix($prefix)
+    {
+        $this->prefix = $prefix;
+
+        return $this;
+    }
+
+    /**
+     * Getter for prefix
+     *
+     * @return string
+     */
+    public function getPrefix()
+    {
+        return $this->prefix;
+    }
+
+    /**
+     * Setter for sufix
+     *
+     * @param string $suffix
+     * @return $this
+     */
+    public function setSuffix($suffix)
+    {
+        $this->suffix = $suffix;
+
+        return $this;
+    }
+
+    /**
+     * Getter for suffix
+     *
+     * @return string
+     */
+    public function getSuffix()
+    {
+        return $this->suffix;
     }
 }
