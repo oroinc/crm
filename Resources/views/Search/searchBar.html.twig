@@ -14,9 +14,13 @@
                 <span class="caret"></span>
             </button>
             <ul class="dropdown-menu" id="search-bar-dropdown">
-                <li data-alias="*"><a href="#">{% trans %}All{% endtrans %}</a></li>
+                <li data-alias="*" {% if fromString == '*' or fromString == '' %}class="active"{% endif %}>
+                    <a href="#">{% trans %}All{% endtrans %}</a>
+                </li>
                 {% for entity in entities %}
-                    <li data-alias="{{ entity.alias }}"><a href="#">{{ entity.label }}</a></li>
+                    <li data-alias="{{ entity.alias }}" {% if entity.alias == fromString %}class="active"{% endif %}>
+                        <a href="#">{{ entity.label }}</a>
+                    </li>
                 {% endfor %}
             </ul>
         </div>

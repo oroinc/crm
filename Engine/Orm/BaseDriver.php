@@ -22,7 +22,7 @@ abstract class BaseDriver
     protected $em;
 
     /**
-     * @param \Doctrine\ORM\EntityManager         $em
+     * @param \Doctrine\ORM\EntityManager $em
      * @param \Doctrine\ORM\Mapping\ClassMetadata $class
      */
     public function initRepo(EntityManager $em, ClassMetadata $class)
@@ -83,7 +83,7 @@ abstract class BaseDriver
         $qb = $this->getRequestQB($query, false);
         $qb->select($qb->expr()->countDistinct('search.id'));
 
-        return (int) $qb->getQuery()->getSingleScalarResult();
+        return (int)$qb->getQuery()->getSingleScalarResult();
     }
 
     /**
@@ -184,7 +184,11 @@ abstract class BaseDriver
         $qb->setParameter('field' . $index, $searchCondition['fieldName']);
         $qb->setParameter('value' . $index, $searchCondition['fieldValue']);
 
-        return $searchCondition['type'] . ' (' . $this->createNonTextQuery($joinAlias, $index, $searchCondition['condition']) . ')';
+        return $searchCondition['type'] . ' (' . $this->createNonTextQuery(
+            $joinAlias,
+            $index,
+            $searchCondition['condition']
+        ) . ')';
     }
 
     /**
@@ -199,11 +203,17 @@ abstract class BaseDriver
     protected function createNonTextQuery($joinAlias, $index, $condition)
     {
         if ($condition == Query::OPERATOR_IN) {
-            $searchString = $joinAlias . '.field= :field' . $index . ' AND ' . $joinAlias . '.value ' . $condition . ' (:value' . $index . ')';
+            $searchString
+                = $joinAlias . '.field= :field' . $index . ' AND ' . $joinAlias . '.value ' . $condition . ' (:value'
+                . $index . ')';
         } elseif ($condition == Query::OPERATOR_NOT_IN) {
-            $searchString = $joinAlias . '.field= :field' . $index . ' AND ' . $joinAlias . '.value NOT IN (:value' . $index . ')';
+            $searchString
+                =
+                $joinAlias . '.field= :field' . $index . ' AND ' . $joinAlias . '.value NOT IN (:value' . $index . ')';
         } else {
-            $searchString = $joinAlias . '.field= :field' . $index . ' AND ' . $joinAlias . '.value ' . $condition . ' :value' . $index;
+            $searchString
+                = $joinAlias . '.field= :field' . $index . ' AND ' . $joinAlias . '.value ' . $condition . ' :value'
+                . $index;
         }
 
         return $searchString;
@@ -229,7 +239,7 @@ abstract class BaseDriver
         $this->setFrom($query, $qb);
 
         $whereExpr = array();
-        if (count ($query->getOptions())) {
+        if (count($query->getOptions())) {
             foreach ($query->getOptions() as $index => $searchCondition) {
                 if ($searchCondition['fieldType'] == Query::TYPE_TEXT) {
                     $whereExpr[] = $this->addTextField($qb, $index, $searchCondition, $setOrderBy);

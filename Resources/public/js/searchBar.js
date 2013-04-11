@@ -2,12 +2,17 @@ $(document).ready(function () {
     var _searcjFlag = false;
 
     $(".search-form").submit(function(){
-        if ($(this).find('.search').val().length == 0) {
+        var $searchString = $.trim($(this).find('.search').val());
+        if ($searchString.length == 0) {
             return false;
         }
     });
 
     $("#search-bar-dropdown li a").click(function (e) {
+        $( "#search-bar-dropdown li" ).each(function( index ) {
+            $(this).removeClass('active');
+        });
+        $(this).parent().addClass('active');
         $("#search-bar-from").val($(this).parent().attr('data-alias'));
         $("#search-bar-button").html($(this).html() + '<span class="caret"></span>');
         SearchByTagClose()
@@ -73,19 +78,21 @@ $(document).ready(function () {
     };
 
     $('#search-bar-search').keydown(function (event) {
+        if (event.keyCode == 13) {
+            $("#top-search-form").submit();
+            event.preventDefault();
+            return false;
+        }
+    });
+
+    $('#search-bar-search').keyup(function (event) {
         switch(event.keyCode) {
-            case 13: //enter
-                $("#top-search-form").submit();
-                event.preventDefault();
-                return false;
-                break;
             case 40: //down
             case 38: //up
                 $("#search-div").addClass('header-search-focused');
                 $('#search-dropdown a:first').focus();
                 event.preventDefault();
                 return false;
-                break;
             default:
                 SearchByTag();
         };
@@ -97,12 +104,14 @@ $(document).ready(function () {
         function select_previous () {
             $this.parent('li').prev().find('a').focus();
             evt.stopPropagation();
+            evt.preventDefault();
             return false;
         }
 
         function select_next () {
             $this.parent('li').next().find('a').focus();
             evt.stopPropagation();
+            evt.preventDefault();
             return false;
         }
 
@@ -113,7 +122,7 @@ $(document).ready(function () {
                 evt.stopPropagation();
                 break;
             case 9: // Tab key
-                if (evt.shiftKey) {
+                if (D.shiftKey) {
                     select_previous();
                 }
                 else {

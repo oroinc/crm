@@ -7,6 +7,7 @@ use Symfony\Component\Translation\Translator;
 
 use Oro\Bundle\SearchBundle\Query\Query;
 use Oro\Bundle\SearchBundle\Query\Parser;
+use Oro\Bundle\SearchBundle\Engine\ObjectMapper;
 
 class Indexer
 {
@@ -23,11 +24,6 @@ class Indexer
     protected $adapter;
 
     /**
-     * @var array
-     */
-    protected $mappingConfig;
-
-    /**
      * @var \Doctrine\Common\Persistence\ObjectManager
      */
     private $em;
@@ -37,18 +33,17 @@ class Indexer
      */
     private $translator;
 
-    public function __construct(ObjectManager $em, $adapter, Translator $translator, $mappingConfig)
+    /**
+     * @var \Oro\Bundle\SearchBundle\Engine\ObjectMapper
+     */
+    protected $mapper;
+
+    public function __construct(ObjectManager $em, $adapter, Translator $translator, ObjectMapper $mapper)
     {
-        $this->mappingConfig = $mappingConfig;
+        $this->mapper = $mapper;
         $this->adapter = $adapter;
         $this->em = $em;
         $this->translator = $translator;
-
-        foreach ($this->mappingConfig as $entity => $config) {
-            if (isset($this->mappingConfig[$entity]['label'])) {
-                $this->mappingConfig[$entity]['label'] = $translator->trans($config['label']);
-            }
-        }
     }
 
     /**
@@ -58,15 +53,7 @@ class Indexer
      */
     public function getEntitiesLabels()
     {
-        $entities = array();
-        foreach ($this->mappingConfig as $mappingEntity) {
-            $entities[] = array(
-                'alias' => isset($mappingEntity['alias']) ? $mappingEntity['alias'] : '',
-                'label' => isset($mappingEntity['label']) ? $mappingEntity['label'] : '',
-            );
-        }
-
-        return $entities;
+        return $this->mapper->getEntitiesLabels();
     }
 
     /**
@@ -114,7 +101,7 @@ class Indexer
     {
         $query = new Query(Query::SELECT);
 
-        $query->setMappingConfig($this->mappingConfig);
+        $query->setMappingConfig($this->mapper->getMappingConfig());
         $query->setEntityManager($this->em);
 
         return $query;
@@ -141,7 +128,7 @@ class Indexer
      */
     public function advancedSearch($searchString)
     {
-        $parser = new Parser($this->mappingConfig);
+        $parser = new Parser($this->mapper->getMappingConfig());
 
         return $this->query($parser->getQueryFromString($searchString));
     }

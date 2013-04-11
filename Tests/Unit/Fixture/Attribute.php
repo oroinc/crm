@@ -2,9 +2,8 @@
 
 namespace Oro\Bundle\SearchBundle\Tests\Unit\Fixture;
 
-
-class Attribute {
-
+class Attribute
+{
     private $code;
 
     public function __construct($code)

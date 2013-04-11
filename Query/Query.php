@@ -228,13 +228,13 @@ class Query
      * @return \Oro\Bundle\SearchBundle\Query\Query
      * @throws \InvalidArgumentException
      */
-    public function where($keyWord, $fieldName, $condition, $fieldValue, $fieldType = null)
+    public function where($keyWord, $fieldName, $condition, $fieldValue, $fieldType = self::TYPE_TEXT)
     {
         //if ($fieldName!='*' && !$this->checkFieldInConfig($fieldName)) {
         //    throw new \InvalidArgumentException('Field ' . $fieldName . ' does not exists in config');
         //}
 
-        if (is_string($fieldValue)) {
+        if ($fieldType == self::TYPE_TEXT) {
             $fieldValue = $this->clearString($fieldValue);
         }
 
@@ -422,7 +422,7 @@ class Query
     /**
      * Clear string
      *
-     * @param string $inputString
+     * @param  string $inputString
      * @return string
      */
     private function clearString($inputString)

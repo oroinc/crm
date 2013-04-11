@@ -51,6 +51,10 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
             )
         );
 
+        $this->mapper = $this->getMockBuilder('Oro\Bundle\SearchBundle\Engine\ObjectMapper')
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->connector->expects($this->any())
             ->method('doSearch')
             ->will($this->returnValue(array('results' => array(), 'records_count' => 10)));
@@ -59,7 +63,7 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
             ->method('searchQuery')
             ->will($this->returnValue(array()));
 
-        $config = array(
+        $this->config = array(
             'Oro\Bundle\DataBundle\Entity\Product' => array(
                 'alias' => 'test_alias',
                 'label' => 'test product',
@@ -108,7 +112,7 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
             $this->om,
             $this->connector,
             $this->translator,
-            $config
+            $this->mapper
         );
     }
 
@@ -117,6 +121,10 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
      */
     public function testSelect()
     {
+        $this->mapper->expects($this->once())
+            ->method('getMappingConfig')
+            ->will($this->returnValue($this->config));
+
         $select = $this->indexService->select();
         $this->assertEquals('select', $select->getQuery());
     }
@@ -126,6 +134,10 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
      */
     public function testQuery()
     {
+        $this->mapper->expects($this->once())
+            ->method('getMappingConfig')
+            ->will($this->returnValue($this->config));
+
         $select = $this->indexService->select();
 
         $this->connector->expects($this->once())
@@ -141,6 +153,10 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
      */
     public function testSimpleSearch()
     {
+        $this->mapper->expects($this->any())
+            ->method('getMappingConfig')
+            ->will($this->returnValue($this->config));
+
         $select = $this->indexService->simpleSearch('test', 0, 0);
         $query = $select->getQuery();
         $from = $query->getFrom();
@@ -162,6 +178,10 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
      */
     public function testAdvancedSearch()
     {
+        $this->mapper->expects($this->once())
+            ->method('getMappingConfig')
+            ->will($this->returnValue($this->config));
+
         $select = $this->indexService->advancedSearch(
             'from (test_product, test_category)
             where name ~ "test string" and integer count = 10 and decimal price in (10, 12, 15)
@@ -201,12 +221,5 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(10, $query->getFirstResult());
 
         $this->assertEquals(5, $query->getMaxResults());
-    }
-
-    public function testGetEntitiesLabels()
-    {
-        $data = $this->indexService->getEntitiesLabels();
-        $this->assertEquals('test_alias', $data[0]['alias']);
-        $this->assertEquals('translated test product', $data[0]['label']);
     }
 }
