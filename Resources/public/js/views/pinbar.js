@@ -139,11 +139,11 @@ navigation.pinbar.MainView = navigation.MainViewAbstract.extend({
                 itemData['url'] = el.data('url');
             }
 
-            itemData['title'] = _.isObject(el.data('title')) ? JSON.stringify(el.data('title')) : '{}';
-
+            itemData['title'] = document.title;
             var currentItem = new navigation.pinbar.Item(itemData);
             this.options.collection.unshift(currentItem);
 
+            currentItem.attributes.title = _.isObject(el.data('title')) ? JSON.stringify(el.data('title')) : '{"template": "' + itemData['title'] + '"}';
             currentItem.save(null, {success: _.bind(this.handleItemStateChange, this)});
         }
     },
