@@ -164,18 +164,6 @@ class GroupDatagridManager extends DatagridManager
             )
         );
 
-        $showUsersAction = array(
-            'name'         => 'users',
-            'type'         => ActionInterface::TYPE_REDIRECT,
-            'acl_resource' => 'root',
-            'options'      => array(
-                'label'   => 'Users',
-                'icon'    => 'user',
-                'link'    => 'users_link',
-                'backUrl' => true,
-            )
-        );
-
-        return array($clickAction, $editAction, $deleteAction, $showUsersAction);
+        return array($clickAction, $editAction, $deleteAction);
     }
 }

@@ -11,7 +11,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Oro\Bundle\UserBundle\Entity\Role;
 use Oro\Bundle\UserBundle\Annotation\Acl;
 use Oro\Bundle\UserBundle\Datagrid\RoleDatagridManager;
-use Oro\Bundle\UserBundle\Datagrid\RoleUserDatagridManager;
+use Oro\Bundle\UserBundle\Datagrid\LightUserDatagridManager;
 use Oro\Bundle\GridBundle\Datagrid\ORM\QueryFactory\QueryFactory;
 
 /**
@@ -38,8 +38,9 @@ class RoleController extends Controller
     /**
      * Edit role form
      *
-     * @Route("/edit/{id}", name="oro_user_role_edit", requirements={"id"="\d+"}, defaults={"id"=0})
-     * @Template
+     * @Route("/edit/{id}/{_format}", name="oro_user_role_edit",
+     * requirements={"id"="\d+", "_format"="html|json"},
+     * defaults={"id"=0, "_format"="html"})
      */
     public function editAction(Role $entity)
     {
@@ -62,8 +63,27 @@ class RoleController extends Controller
             return $this->redirect($redirectUrl);
         }
 
-        return array(
-            'form' => $this->get('oro_user.form.role')->createView(),
+        $this->get('oro_user.role_user_datagrid_manager.default_query_factory')
+             ->setQueryBuilder(
+                 $this->get('oro_user.role_manager')->getUserQueryBuilder($entity)
+             );
+
+        /** @var $userGridManager LightUserDatagridManager */
+        $userGridManager = $this->get('oro_user.role_user_datagrid_manager');
+        $userGridManager->getRouteGenerator()->setRouteParameters(array('id' => $entity->getId()));
+
+        if ('json' == $this->getRequest()->getRequestFormat()) {
+            $view = 'OroGridBundle:Datagrid:list.json.php';
+        } else {
+            $view = 'OroUserBundle:Role:edit.html.twig';
+        }
+
+        return $this->render(
+            $view,
+            array(
+                'datagrid' => $userGridManager->getDatagrid(),
+                'form' => $this->get('oro_user.form.role')->createView(),
+            )
         );
     }
 
@@ -113,36 +133,6 @@ class RoleController extends Controller
             array(
                 'datagrid' => $datagrid,
                 'form'     => $datagrid->getForm()->createView()
-            )
-        );
-    }
-
-    /**
-     * @Route(
-     *  "/{id}/users/{_format}",
-     *  name="oro_user_role_users",
-     *  requirements={"id"="\d+", "_format"="html|json"}, defaults={"_format"="html"}
-     * )
-     */
-    public function showUsersAction(Role $role)
-    {
-        $this->get('oro_user.roleuser_datagrid_manager.default_query_factory')
-            ->setQueryBuilder($this->get('oro_user.role_manager')
-                    ->getUserQueryBuilder($role));
-
-        /** @var $userGridManager RoleUserDatagridManager */
-        $userGridManager = $this->get('oro_user.roleuser_datagrid_manager');
-        $userGridManager->getRouteGenerator()->setRouteParameters(array('id' => $role->getId()));
-
-        if ('json' == $this->getRequest()->getRequestFormat()) {
-            $view = 'OroGridBundle:Datagrid:list.json.php';
-        } else {
-            $view = 'OroUserBundle:Profile:index.html.twig';
-        }
-        return $this->render(
-            $view,
-            array(
-                'datagrid' => $userGridManager->getDatagrid()
             )
         );
     }

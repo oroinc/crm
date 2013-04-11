@@ -29,6 +29,7 @@ parameters:
     oro_user.role.listener.class:     Oro\Bundle\UserBundle\EventListener\RoleListener
     oro_user.localized_date.class:    Oro\Bundle\UserBundle\Form\Type\LocalizedDateType
     oro_user.role.manager.class:      Oro\Bundle\UserBundle\Entity\Manager\RoleManager
+    oro_user.group.manager.class:     Oro\Bundle\UserBundle\Entity\Manager\GroupManager
 
 services:
     oro_user.manager.flexible:
@@ -235,4 +236,8 @@ services:
 
     oro_user.role_manager:
         class:                        %oro_user.role.manager.class%
+        arguments:                    ["@doctrine.orm.entity_manager"]
+
+    oro_user.group_manager:
+        class:                        %oro_user.group.manager.class%
         arguments:                    ["@doctrine.orm.entity_manager"]

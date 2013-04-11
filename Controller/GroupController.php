@@ -10,6 +10,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 use Oro\Bundle\UserBundle\Entity\Group;
 use Oro\Bundle\UserBundle\Datagrid\GroupDatagridManager;
+use Oro\Bundle\UserBundle\Datagrid\LightUserDatagridManager;
 
 /**
  * @Route("/group")
@@ -30,8 +31,10 @@ class GroupController extends Controller
     /**
      * Edit group form
      *
-     * @Route("/edit/{id}", name="oro_user_group_edit", requirements={"id"="\d+"}, defaults={"id"=0})
-     * @Template
+     * @Route("/edit/{id}/{_format}",
+     * name="oro_user_group_edit",
+     * requirements={"id"="\d+", "_format"="html|json"},
+     * defaults={"id"=0, "_format"="html"})
      */
     public function editAction(Group $entity)
     {
@@ -44,8 +47,27 @@ class GroupController extends Controller
             }
         }
 
-        return array(
-            'form' => $this->get('oro_user.form.group')->createView(),
+        $this->get('oro_user.group_user_datagrid_manager.default_query_factory')
+             ->setQueryBuilder(
+                 $this->get('oro_user.group_manager')->getUserQueryBuilder($entity)
+             );
+
+        /** @var $userGridManager LightUserDatagridManager */
+        $userGridManager = $this->get('oro_user.group_user_datagrid_manager');
+        $userGridManager->getRouteGenerator()->setRouteParameters(array('id' => $entity->getId()));
+
+        if ('json' == $this->getRequest()->getRequestFormat()) {
+            $view = 'OroGridBundle:Datagrid:list.json.php';
+        } else {
+            $view = 'OroUserBundle:Group:edit.html.twig';
+        }
+
+        return $this->render(
+            $view,
+            array(
+                'datagrid' => $userGridManager->getDatagrid(),
+                'form' => $this->get('oro_user.form.group')->createView(),
+            )
         );
     }
 
@@ -106,26 +128,6 @@ class GroupController extends Controller
                 'datagrid' => $datagrid,
                 'form'     => $datagrid->getForm()->createView()
             )
-        );
-    }
-
-    /**
-     * @Route(
-     *  "{id}/users/{page}/{limit}",
-     *  name="oro_user_group_users",
-     *  requirements={"id"="\d+", "page"="\d+","limit"="\d+"}, defaults={"page"=1,"limit"=20}
-     * )
-     * @Template
-     */
-    public function showUsersAction(Group $group, $page, $limit)
-    {
-        return array(
-            'users' => $this->get('knp_paginator')->paginate(
-                $group->getUsers(),
-                $page,
-                $limit
-            ),
-            'group' => $group
         );
     }
 

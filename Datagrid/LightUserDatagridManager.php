@@ -3,7 +3,6 @@
 namespace Oro\Bundle\UserBundle\Datagrid;
 
 use Symfony\Bundle\FrameworkBundle\Routing\Router;
-use Oro\Bundle\GridBundle\Datagrid\DatagridManager;
 use Oro\Bundle\GridBundle\Field\FieldDescription;
 use Oro\Bundle\GridBundle\Field\FieldDescriptionCollection;
 use Oro\Bundle\GridBundle\Field\FieldDescriptionInterface;
@@ -11,23 +10,8 @@ use Oro\Bundle\GridBundle\Filter\FilterInterface;
 use Oro\Bundle\GridBundle\Action\ActionInterface;
 use Oro\Bundle\GridBundle\Property\UrlProperty;
 
-class RoleUserDatagridManager extends DatagridManager
+class LightUserDatagridManager extends UserDatagridManager
 {
-    /**
-     * @var FieldDescriptionCollection
-     */
-    protected $fieldsCollection;
-
-    /**
-     * @var Router
-     */
-    protected $router;
-
-    public function setRouter(Router $router)
-    {
-        $this->router = $router;
-    }
-
     protected function getProperties()
     {
         return array(
@@ -117,37 +101,14 @@ class RoleUserDatagridManager extends DatagridManager
                     'filter_type' => FilterInterface::TYPE_STRING,
                     'required'    => false,
                     'sortable'    => true,
-                    'filterable'  => true,
+                    'filterable'  => false,
                     'show_filter' => false,
                 )
             );
+            $this->fieldsCollection->add($fieldLastName);
         }
 
         return $this->fieldsCollection;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getListFields()
-    {
-        return $this->getFieldDescriptionCollection()->getElements();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getSorters()
-    {
-        $fields = array();
-        /** @var $fieldDescription FieldDescription */
-        foreach ($this->getFieldDescriptionCollection() as $fieldDescription) {
-            if ($fieldDescription->isSortable()) {
-                $fields[] = $fieldDescription;
-            }
-        }
-
-        return $fields;
     }
 
     /**
@@ -164,10 +125,23 @@ class RoleUserDatagridManager extends DatagridManager
                 'link'          => 'show_link',
                 'route'         => 'oro_user_show',
                 'runOnRowClick' => true,
+                'backUrl'       => true,
             )
         );
 
-        return array($clickAction);
+        $showAction = array(
+            'name'         => 'show',
+            'type'         => ActionInterface::TYPE_REDIRECT,
+            'acl_resource' => 'root',
+            'options'      => array(
+                'label' => 'Show',
+                'icon'  => 'user',
+                'link'  => 'show_link',
+                'backUrl'       => true,
+            )
+        );
+
+        return array($clickAction, $showAction);
     }
 
 }
