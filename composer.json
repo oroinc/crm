@@ -1,5 +1,5 @@
 {
-    "name": "oro/FlexibleEntityBundle",
+    "name": "oro/flexible-entity-bundle",
     "type": "symfony-bundle",
     "description": "BAP Flexible Entity Bundle",
     "keywords": ["BAP"],
