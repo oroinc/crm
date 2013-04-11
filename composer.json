@@ -9,7 +9,7 @@
         "php": ">=5.3.3",
         "symfony/symfony": "2.1.*",
         "friendsofsymfony/rest-bundle": "*",
-        "nelmio/api-doc-bundle": "dev-master",
+        "nelmio/api-doc-bundle": "2.1.*@dev",
         "escapestudios/wsse-authentication-bundle": "2.1.x-dev",
         "jms/aop-bundle": "dev-master",
         "oro/flexible-entity-bundle": "dev-master",
