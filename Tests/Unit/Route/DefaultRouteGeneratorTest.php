@@ -38,6 +38,11 @@ class DefaultRouteGeneratorTest extends \PHPUnit_Framework_TestCase
     /**
      * @var array
      */
+    protected $testRouteParameters = array('id' => 1);
+
+    /**
+     * @var array
+     */
     protected $expectedSortParameters = array(
         self::TEST_ROOT_PARAMETER => array(
             ParametersInterface::SORT_PARAMETERS => array(
@@ -143,9 +148,10 @@ class DefaultRouteGeneratorTest extends \PHPUnit_Framework_TestCase
             $parametersMock = $this->getParametersMock($parameters);
         }
 
-        $routerMock = $this->getRouterMock($expectedParameters);
+        $routerMock = $this->getRouterMock(array_merge($expectedParameters, $this->testRouteParameters));
 
         $this->model = new DefaultRouteGenerator($routerMock, self::TEST_ROUTE_NAME);
+        $this->model->setRouteParameters($this->testRouteParameters);
         $this->assertEquals(
             self::TEST_URL,
             $this->model->generateUrl($parametersMock, $extendParameters)
@@ -156,12 +162,13 @@ class DefaultRouteGeneratorTest extends \PHPUnit_Framework_TestCase
     {
         $expectedParameters = array_merge_recursive($this->testBasicParameters, $this->expectedSortParameters);
         $parametersMock = $this->getParametersMock($this->testBasicParameters);
-        $routerMock = $this->getRouterMock($expectedParameters);
+        $routerMock = $this->getRouterMock(array_merge($expectedParameters, $this->testRouteParameters));
 
         $field = new FieldDescription();
         $field->setName(self::TEST_FIELD_NAME);
 
         $this->model = new DefaultRouteGenerator($routerMock, self::TEST_ROUTE_NAME);
+        $this->model->setRouteParameters($this->testRouteParameters);
         $this->assertEquals(
             self::TEST_URL,
             $this->model->generateSortUrl($parametersMock, $field, self::TEST_SORT_DIRECTION)
@@ -206,9 +213,9 @@ class DefaultRouteGeneratorTest extends \PHPUnit_Framework_TestCase
     public function testGeneratePagerUrl(array $expectedParameters, array $parameters, $page, $perPage = null)
     {
         $parametersMock = $this->getParametersMock($parameters);
-        $routerMock = $this->getRouterMock($expectedParameters);
-
+        $routerMock = $this->getRouterMock(array_merge($expectedParameters, $this->testRouteParameters));
         $this->model = new DefaultRouteGenerator($routerMock, self::TEST_ROUTE_NAME);
+        $this->model->setRouteParameters($this->testRouteParameters);
         $this->assertEquals(
             self::TEST_URL,
             $this->model->generatePagerUrl($parametersMock, $page, $perPage)
