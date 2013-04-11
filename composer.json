@@ -10,7 +10,7 @@
         "symfony/symfony": "2.1.6",
         "oro/ui-bundle": "dev-master",
         "friendsofsymfony/rest-bundle": "*",
-        "nelmio/api-doc-bundle": "dev-master"
+        "nelmio/api-doc-bundle": "2.1.*@dev"
     },
     "autoload": {
         "psr-0": { "Oro\\Bundle\\WindowsBundle": "" }
