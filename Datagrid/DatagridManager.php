@@ -188,6 +188,16 @@ abstract class DatagridManager implements DatagridManagerInterface
     }
 
     /**
+     * Get Route generator
+     *
+     * @return RouteGeneratorInterface
+     */
+    public function getRouteGenerator()
+    {
+        return $this->routeGenerator;
+    }
+
+    /**
      * Get list of datagrid fields
      *
      * @abstract
