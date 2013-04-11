@@ -13,10 +13,8 @@ OroApp.DatagridFilterDate = OroApp.DatagridFilterChoice.extend({
     popupCriteriaTemplate: _.template(
         '<div>' +
             '<div>' +
-                '<input type="hidden" name="start" value="" /> ' +
-                '<input type="hidden" name="end" value="" />' +
-                'from <input type="text" name="start_visual" value="" class="<%= inputClass %>" /> ' +
-                'to <input type="text" name="end_visual" value="" class="<%= inputClass %>" />' +
+                'from <input type="text" name="start" value="" class="<%= inputClass %>" /> ' +
+                'to <input type="text" name="end" value="" class="<%= inputClass %>" />' +
             '</div>' +
             '<div class="horizontal">' +
                 '<% _.each(choices, function (hint, value) { %>' +
@@ -45,10 +43,6 @@ OroApp.DatagridFilterDate = OroApp.DatagridFilterChoice.extend({
         value: {
             start: 'input[name="start"]',
             end:   'input[name="end"]'
-        },
-        visualValue: {
-            start: 'input[name="start_visual"]',
-            end:   'input[name="end_visual"]'
         }
     },
 
@@ -132,11 +126,7 @@ OroApp.DatagridFilterDate = OroApp.DatagridFilterChoice.extend({
     },
 
     /**
-     * Render filter criteria popup
-     *
-     * @param {Object} el
-     * @return {*}
-     * @protected
+     * @inheritDoc
      */
     _renderCriteria: function(el) {
         $(el).append(this.popupCriteriaTemplate({
@@ -146,8 +136,7 @@ OroApp.DatagridFilterDate = OroApp.DatagridFilterChoice.extend({
         }));
 
         _.each(this.criteriaValueSelectors.value, function(actualSelector, name) {
-            var visualSelector = this.criteriaValueSelectors.visualValue[name];
-            this.dateWidgets[name] = this._initializeDateWidget(visualSelector, actualSelector);
+            this.dateWidgets[name] = this._initializeDateWidget(actualSelector);
         }, this);
 
         return this;
@@ -156,28 +145,19 @@ OroApp.DatagridFilterDate = OroApp.DatagridFilterChoice.extend({
     /**
      * Initialize date widget
      *
-     * @param {String} visualSelector
-     * @param {String} actualSelector
+     * @param {String} widgetSelector
      * @return {*}
      * @protected
      */
-    _initializeDateWidget: function(visualSelector, actualSelector) {
-        var options = _.extend({
-            altField: actualSelector
-        }, this.dateWidgetOptions);
-
-        this.$(visualSelector).datepicker(options);
-        var widget = this.$(visualSelector).datepicker('widget');
+    _initializeDateWidget: function(widgetSelector) {
+        this.$(widgetSelector).datepicker(this.dateWidgetOptions);
+        var widget = this.$(widgetSelector).datepicker('widget');
         widget.addClass(this.dateWidgetOptions.className);
-
         return widget;
     },
 
     /**
-     * Handle click outside of criteria popup to hide it
-     *
-     * @param {Event} e
-     * @protected
+     * @inheritDoc
      */
     _onClickOutsideCriteria: function(e) {
         var elements = [this.$(this.criteriaSelector)];
@@ -196,22 +176,20 @@ OroApp.DatagridFilterDate = OroApp.DatagridFilterChoice.extend({
 
         if (!clickedElement) {
             this._hideCriteria();
-            this._confirmValue(this._readCriteriaValue());
+            this.setValue(this._readDOMValue());
         }
     },
 
     /**
-     * Get criteria hint value
-     *
-     * @return {String}
-     * @protected
+     * @inheritDoc
      */
     _getCriteriaHint: function() {
-        if (this.confirmedValue.value) {
+        var value = this._getDisplayValue();
+        if (value.value) {
             var hint = '';
-            var start = this._getInputValue(this.criteriaValueSelectors.visualValue.start);
-            var end   = this._getInputValue(this.criteriaValueSelectors.visualValue.end);
-            var type  = parseInt(this.confirmedValue.type);
+            var start = value.value.start;
+            var end   = value.value.end;
+            var type  = parseInt(value.type);
 
             switch (type) {
                 case this.typeValues.notBetween:
@@ -243,74 +221,76 @@ OroApp.DatagridFilterDate = OroApp.DatagridFilterChoice.extend({
     },
 
     /**
-     * Writes values from object into criteria elements
+     * @inheritDoc
+     */
+    _formatDisplayValue: function(value) {
+        var fromFormat = this.dateWidgetOptions.altFormat;
+        var toFormat = this.dateWidgetOptions.dateFormat;
+        return this._formatValueDates(value, fromFormat, toFormat);
+    },
+
+    /**
+     * @inheritDoc
+     */
+    _formatRawValue: function(value) {
+        var fromFormat = this.dateWidgetOptions.dateFormat;
+        var toFormat = this.dateWidgetOptions.altFormat;
+        return this._formatValueDates(value, fromFormat, toFormat);
+    },
+
+    /**
+     * Format datetes in a valut to another format
      *
      * @param {Object} value
+     * @param {String} fromFormat
+     * @param {String} toFormat
+     * @return {Object}
      * @protected
-     * @return {*}
      */
-    _writeCriteriaValue: function(value) {
+    _formatValueDates: function(value, fromFormat, toFormat) {
+        if (value.value && value.value.start) {
+            value.value.start = this._formatDate(value.value.start, fromFormat, toFormat);
+        }
+        if (value.value && value.value.end) {
+            value.value.end = this._formatDate(value.value.end, fromFormat, toFormat);
+        }
+        return value;
+    },
+
+    /**
+     * Formats date string to another format
+     *
+     * @param {String} value
+     * @param {String} fromFormat
+     * @param {String} toFormat
+     * @return {String}
+     * @protected
+     */
+    _formatDate: function(value, fromFormat, toFormat) {
+        var fromValue = $.datepicker.parseDate(fromFormat, value);
+        if (!fromValue) {
+            fromValue = $.datepicker.parseDate(toFormat, value);
+            if (!fromValue) {
+                return value;
+            }
+        }
+        return $.datepicker.formatDate(toFormat, fromValue);
+    },
+
+    /**
+     * @inheritDoc
+     */
+    _writeDOMValue: function(value) {
         this._setInputValue(this.criteriaValueSelectors.value.start, value.value.start);
         this._setInputValue(this.criteriaValueSelectors.value.end, value.value.end);
         this._setInputValue(this.criteriaValueSelectors.type, value.type);
-
-        this._convertActualToVisual();
-
         return this;
     },
 
     /**
-     * Convert actual date values to visual fields
-     *
-     * @protected
+     * @inheritDoc
      */
-    _convertActualToVisual: function() {
-        this._convertDateData(
-            this.criteriaValueSelectors.value,
-            this.criteriaValueSelectors.visualValue,
-            this.dateWidgetOptions.altFormat,
-            this.dateWidgetOptions.dateFormat
-        );
-    },
-
-    /**
-     * Convert visual date values to actual fields
-     *
-     * @protected
-     */
-    _convertVisualToActual: function() {
-        this._convertDateData(
-            this.criteriaValueSelectors.visualValue,
-            this.criteriaValueSelectors.value,
-            this.dateWidgetOptions.dateFormat,
-            this.dateWidgetOptions.altFormat
-        );
-    },
-
-    /**
-     * Convert data procedure
-     *
-     * @protected
-     */
-    _convertDateData: function(fromSelectors, toSelectors, fromFormat, toFormat) {
-        _.each(fromSelectors, function(fromSelector, name) {
-            var toSelector = toSelectors[name];
-            var fromValue = this._getInputValue(fromSelector);
-            var toValue = '';
-            if (fromValue) {
-                toValue = $.datepicker.formatDate(toFormat, $.datepicker.parseDate(fromFormat, fromValue));
-            }
-            this._setInputValue(toSelector, toValue);
-        }, this);
-    },
-
-    /**
-     * Reads value of criteria elements into object
-     *
-     * @return {Object}
-     * @protected
-     */
-    _readCriteriaValue: function() {
+    _readDOMValue: function() {
         return {
             type: this._getInputValue(this.criteriaValueSelectors.type),
             value: {
@@ -321,39 +301,28 @@ OroApp.DatagridFilterDate = OroApp.DatagridFilterChoice.extend({
     },
 
     /**
-     * Focus filter criteria input - no actions for date
-     *
-     * @protected
+     * @inheritDoc
      */
-    _focusCriteria: function() {
-    },
+    _focusCriteria: function() {},
 
     /**
-     * Hide criteria popup
-     *
-     * @protected
+     * @inheritDoc
      */
     _hideCriteria: function() {
         OroApp.DatagridFilterChoice.prototype._hideCriteria.apply(this, arguments);
-        this._convertVisualToActual();
     },
 
     /**
-     * Compare value with confirmed value, if it's differs than save new
-     * confirmed value and trigger "changedData" event
-     *
-     * @param {Object} value
-     * @protected
+     * @inheritDoc
      */
-    _confirmValue: function(value) {
-        if (!this._looseObjectCompare(this.confirmedValue, value)) {
-            var needUpdate = this.confirmedValue.value.start || this.confirmedValue.value.end
-                || value.value.start || value.value.end;
-            this.confirmedValue = _.clone(value);
-            this._updateCriteriaHint();
-            if (needUpdate) {
-                this.trigger('update');
-            }
+    _triggerUpdate: function(newValue, oldValue) {
+        newValue = newValue.value;
+        oldValue = oldValue.value;
+
+        if ((newValue && (newValue.start || newValue.end)) ||
+            (oldValue && (oldValue.start || oldValue.end))
+        ) {
+            this.trigger('update');
         }
     }
 });

@@ -31,9 +31,7 @@ OroApp.DatagridFilterMultiSelect = OroApp.DatagridFilterSelect.extend({
     },
 
     /**
-     * Fix menu design on data change (after click on checkbox)
-     *
-     * @protected
+     * @inheritDoc
      */
     _onSelectChange: function() {
         OroApp.DatagridFilterSelect.prototype._onSelectChange.apply(this, arguments);

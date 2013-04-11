@@ -80,6 +80,7 @@ class DatagridBuilder implements DatagridBuilderInterface
             $fieldDescription->getOption('filter_type'),
             $fieldDescription->getOptions()
         );
+        $filter->setOption('data_type', $fieldDescription->getType());
         $datagrid->addFilter($filter);
     }
 

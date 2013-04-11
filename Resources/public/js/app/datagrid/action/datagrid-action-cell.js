@@ -39,6 +39,11 @@ OroApp.DatagridActionCell = Backgrid.Cell.extend({
         '<li class="launcher-item"></li>'
     ),
 
+    /** @property */
+    events: {
+        'click': '_onCellClick'
+    },
+
     /**
      * Initilize cell actions and launchers
      */
@@ -196,5 +201,16 @@ OroApp.DatagridActionCell = Backgrid.Cell.extend({
         }, this);
 
         return result;
+    },
+
+    /**
+     * Open/close dropdown
+     *
+     * @param {Event} e
+     * @protected
+     */
+    _onCellClick: function(e) {
+        this.$('.dropdown-toggle').dropdown('toggle');
+        e.stopPropagation();
     }
 });

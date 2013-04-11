@@ -2,7 +2,7 @@
 
 namespace Oro\Bundle\GridBundle\Filter\ORM;
 
-use Sonata\AdminBundle\Form\Type\Filter\DateRangeType;
+use Oro\Bundle\GridBundle\Form\Type\Filter\DateRangeType;
 
 class DateRangeFilter extends AbstractDateFilter
 {

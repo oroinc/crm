@@ -24,11 +24,29 @@ abstract class AbstractFlexibleFilter extends AbstractFilter implements FilterIn
     protected $flexibleManager;
 
     /**
-     * @param FlexibleManagerRegistry $flexibleRegistry
+     * @var string
      */
-    public function __construct(FlexibleManagerRegistry $flexibleRegistry)
+    protected $parentFilterClass = null;
+
+    /**
+     * @var FilterInterface
+     */
+    protected $parentFilter;
+
+    /**
+     * @param FlexibleManagerRegistry $flexibleRegistry
+     * @param FilterInterface|null $parentFilter
+     * @throws \InvalidArgumentException If $parentFilter has invalid type
+     */
+    public function __construct(FlexibleManagerRegistry $flexibleRegistry, FilterInterface $parentFilter = null)
     {
         $this->flexibleRegistry = $flexibleRegistry;
+        if ($this->parentFilterClass) {
+            $this->parentFilter = $parentFilter;
+            if (!$this->parentFilter instanceof $this->parentFilterClass) {
+                throw new \InvalidArgumentException('Parent filter must be an instance of ' . $this->parentFilterClass);
+            }
+        }
     }
 
     /**
@@ -37,13 +55,30 @@ abstract class AbstractFlexibleFilter extends AbstractFilter implements FilterIn
     public function initialize($name, array $options = array())
     {
         parent::initialize($name, $options);
+        $this->loadFlexibleManager();
+    }
 
-        $flexibleEntityName = $this->getOption('flexible_name');
-        if (!$flexibleEntityName) {
-            throw new \LogicException('Flexible entity filter must have flexible entity name.');
+    /**
+     * Gets flexible manager
+     *
+     * @return FlexibleManager
+     * @throws \LogicException
+     */
+    protected function getFlexibleManager()
+    {
+        $this->loadFlexibleManager();
+        return $this->flexibleManager;
+    }
+
+    protected function loadFlexibleManager()
+    {
+        if (!$this->flexibleManager) {
+            $flexibleEntityName = $this->getOption('flexible_name');
+            if (!$flexibleEntityName) {
+                throw new \LogicException('Flexible entity filter must have flexible entity name.');
+            }
+            $this->flexibleManager = $this->flexibleRegistry->getManager($flexibleEntityName);
         }
-
-        $this->flexibleManager = $this->flexibleRegistry->getManager($flexibleEntityName);
     }
 
     /**
@@ -60,7 +95,7 @@ abstract class AbstractFlexibleFilter extends AbstractFilter implements FilterIn
         $queryBuilder = $proxyQuery->getQueryBuilder();
 
         /** @var $entityRepository FlexibleEntityRepository */
-        $entityRepository = $this->flexibleManager->getFlexibleRepository();
+        $entityRepository = $this->getFlexibleManager()->getFlexibleRepository();
         $entityRepository->applyFilterByAttribute($queryBuilder, $field, $value, $operator);
     }
 
@@ -69,7 +104,7 @@ abstract class AbstractFlexibleFilter extends AbstractFilter implements FilterIn
      */
     public function getDefaultOptions()
     {
-        return array();
+        return $this->parentFilter ? $this->parentFilter->getDefaultOptions() : array();
     }
 
     /**
@@ -77,6 +112,14 @@ abstract class AbstractFlexibleFilter extends AbstractFilter implements FilterIn
      */
     public function getRenderSettings()
     {
-        return array();
+        return $this->parentFilter ? $this->parentFilter->getRenderSettings() : array();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTypeOptions()
+    {
+        return $this->parentFilter ? $this->parentFilter->getTypeOptions() : parent::getTypeOptions();
     }
 }

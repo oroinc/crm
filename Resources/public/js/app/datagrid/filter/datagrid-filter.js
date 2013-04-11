@@ -48,11 +48,11 @@ OroApp.DatagridFilter = Backbone.View.extend({
     label: 'Input Label',
 
     /**
-     * Value that was confirmed and processed.
+     * Raw value of filter
      *
      * @property {Object}
      */
-    confirmedValue: {},
+    value: {},
 
     /**
      * Empty value object
@@ -142,22 +142,85 @@ OroApp.DatagridFilter = Backbone.View.extend({
     },
 
     /**
+     * Get clone of current value
+     *
+     * @return {Object}
+     */
+    getValue: function() {
+        return this._deepClone(this.value);
+    },
+
+    /**
      * Set value to filter
      *
      * @param value
      * @return {*}
      */
     setValue: function(value) {
+        value = this._formatRawValue(value);
+        if (this._isNewValueUpdated(value)) {
+            var oldValue = this.value;
+            this.value = this._deepClone(value);
+            this._updateDOMValue();
+            this._onValueUpdated(this.value, oldValue);
+        }
         return this;
     },
 
     /**
-     * Get filter value
+     * Converts a display value to raw format, e.g. decimal value can be displayed as "5,000,000.00"
+     * but raw value is 5000000.0
      *
-     * @return {Object}
+     * @param {*} value
+     * @return {*}
+     * @protected
      */
-    getValue: function() {
-        return {};
+    _formatRawValue: function(value) {
+        return value;
+    },
+
+    /**
+     * Converts a raw value to display format, opposite to _formatRawValue
+     *
+     * @param {*} value
+     * @return {*}
+     * @protected
+     */
+    _formatDisplayValue: function(value) {
+        return value;
+    },
+
+    /**
+     * Checks if new value differs from current value
+     *
+     * @param {*} newValue
+     * @return {Boolean}
+     * @protected
+     */
+    _isNewValueUpdated: function(newValue) {
+        return !this._looseObjectCompare(this.value, newValue)
+    },
+
+    /**
+     * Triggers when filter value is updated
+     *
+     * @param {*} newValue
+     * @param {*} oldValue
+     * @protected
+     */
+    _onValueUpdated: function(newValue, oldValue) {
+        this._triggerUpdate(newValue, oldValue);
+    },
+
+    /**
+     * Triggers update event
+     *
+     * @param {*} newValue
+     * @param {*} oldValue
+     * @protected
+     */
+    _triggerUpdate: function(newValue, oldValue) {
+        this.trigger('update');
     },
 
     /**
@@ -166,7 +229,7 @@ OroApp.DatagridFilter = Backbone.View.extend({
      * @return {Boolean}
      */
     isEmpty: function() {
-        return this._looseObjectCompare(this.confirmedValue, this.emptyValue);
+        return this._looseObjectCompare(this.getValue(), this.emptyValue);
     },
 
     /**
@@ -201,6 +264,116 @@ OroApp.DatagridFilter = Backbone.View.extend({
         } else {
             return value1 == value2;
         }
+    },
+
+    /**
+     * Gets input value. Radio inputs are supported.
+     *
+     * @param {String|Object} input
+     * @return {*}
+     * @protected
+     */
+    _getInputValue: function(input) {
+        var result = undefined;
+        var $input = this.$(input);
+        switch ($input.attr('type')) {
+            case 'radio':
+                $input.each(function() {
+                    if ($(this).is(':checked')) {
+                        result = $(this).val();
+                    }
+                });
+                break;
+            default:
+                result = $input.val();
+
+        }
+        return result;
+    },
+
+    /**
+     * Sets input value. Radio inputs are supported.
+     *
+     * @param {String|Object} input
+     * @param {String} value
+     * @protected
+     * @return {*}
+     */
+    _setInputValue: function(input, value) {
+        var $input = this.$(input);
+        switch ($input.attr('type')) {
+            case 'radio':
+                $input.each(function() {
+                    var $input = $(this);
+                    if ($input.attr('value') == value) {
+                        $input.attr('checked', true);
+                        $input.click();
+                    } else {
+                        $(this).removeAttr('checked');
+                    }
+                });
+                break;
+            default:
+                $input.val(value);
+
+        }
+        return this;
+    },
+
+    /**
+     * Updated DOM value with current display value
+     *
+     * @return {*}
+     * @protected
+     */
+    _updateDOMValue: function() {
+        return this._writeDOMValue(this._getDisplayValue());
+    },
+
+    /**
+     * Get current value formatted to display format
+     *
+     * @return {*}
+     * @protected
+     */
+    _getDisplayValue: function() {
+        return this._formatDisplayValue(this.getValue());
+    },
+
+    /**
+     * Writes values from object into DOM elements
+     *
+     * @param {Object} value
+     * @abstract
+     * @protected
+     * @return {*}
+     */
+    _writeDOMValue: function(value) {
+        throw new Error("Method _writeDOMValue is abstract and must be implemented");
+        //this._setInputValue(inputValueSelector, value.value);
+        //return this
+    },
+
+    /**
+     * Reads value of DOM elements into object
+     *
+     * @return {Object}
+     * @protected
+     */
+    _readDOMValue: function() {
+        throw new Error("Method _readDOMValue is abstract and must be implemented");
+        //return { value: this._getInputValue(this.inputValueSelector) }
+    },
+
+    /**
+     * Deep clone a value
+     *
+     * @param {*} value
+     * @return {*}
+     * @protected
+     */
+    _deepClone: function(value) {
+        return $.extend(true, {}, value);
     },
 
     /**

@@ -3,10 +3,8 @@
 namespace Oro\Bundle\GridBundle\Filter\ORM\Flexible;
 
 use Doctrine\Common\Persistence\ObjectRepository;
-
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
-use Sonata\AdminBundle\Form\Type\Filter\ChoiceType;
-
+use Oro\Bundle\GridBundle\Form\Type\Filter\ChoiceType;
 use Oro\Bundle\FlexibleEntityBundle\Entity\Attribute;
 use Oro\Bundle\FlexibleEntityBundle\Entity\AttributeOption;
 
@@ -118,19 +116,20 @@ class FlexibleOptionsFilter extends AbstractFlexibleFilter
     {
         if (null === $this->valueOptions) {
             $filedName = $this->getOption('field_name');
+            $flexibleManager = $this->getFlexibleManager();
 
             /** @var $attributeRepository ObjectRepository */
-            $attributeRepository = $this->flexibleManager->getAttributeRepository();
+            $attributeRepository = $flexibleManager->getAttributeRepository();
             /** @var $attribute Attribute */
             $attribute = $attributeRepository->findOneBy(
-                array('entityType' => $this->flexibleManager->getFlexibleName(), 'code' => $filedName)
+                array('entityType' => $flexibleManager->getFlexibleName(), 'code' => $filedName)
             );
             if (!$attribute) {
                 throw new \LogicException('There is no flexible attribute with name ' . $filedName . '.');
             }
 
             /** @var $optionsRepository ObjectRepository */
-            $optionsRepository = $this->flexibleManager->getAttributeOptionRepository();
+            $optionsRepository = $flexibleManager->getAttributeOptionRepository();
             $options = $optionsRepository->findBy(
                 array('attribute' => $attribute)
             );

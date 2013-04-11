@@ -120,7 +120,6 @@ abstract class AbstractFilter extends AbstractORMFilter implements FilterInterfa
         return new Expr\Comparison($leftExpression, $operator, $rightExpression);
     }
 
-
     /**
      * Create comparison expression for field
      *
