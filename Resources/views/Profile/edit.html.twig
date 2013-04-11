@@ -64,6 +64,10 @@
                             {% if form.rolesCollection is defined %}
                             <li><a href="#scroll-roles">{{ 'Roles'|trans }}</a></li>
                             {% endif %}
+
+                            {% if form.attributes is defined %}
+                                <li><a href="#scroll-attributes">{{ 'Attrinutes'|trans }}</a></li>
+                            {% endif %}
                         </ul>
                     </div>
                 </div>
@@ -134,6 +138,15 @@
                     <div class="row-fluid">
                         <fieldset class="form-horizontal" id="roles-list">
                             {{ form_row(form.rolesCollection, { attr: { class: 'horizontal' } }) }}
+                        </fieldset>
+                    </div>
+                    {% endif %}
+
+                    {% if form.attributes is defined %}
+                    <h4 id="scroll-attributes" class="scrollspy-title">{{ 'Attributes'|trans }}</h4>
+                    <div class="row-fluid">
+                        <fieldset class="form-horizontal" id="attributes-list">
+                            {{ form_row(form.attributes) }}
                         </fieldset>
                     </div>
                     {% endif %}

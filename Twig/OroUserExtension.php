@@ -2,7 +2,12 @@
 
 namespace Oro\Bundle\UserBundle\Twig;
 
+use Symfony\Component\Form\FormView;
+
+use Doctrine\Common\Collections\Collection;
+
 use Oro\Bundle\UserBundle\Acl\ManagerInterface;
+use Oro\Bundle\FlexibleEntityBundle\Model\FlexibleValueInterface;
 
 class OroUserExtension extends \Twig_Extension
 {
@@ -29,6 +34,18 @@ class OroUserExtension extends \Twig_Extension
     }
 
     /**
+     * Returns a list of filters to add to the existing list.
+     *
+     * @return array An array of filters
+     */
+    public function getFilters()
+    {
+       return array(
+           'is_flexible' => new \Twig_Filter_Method($this, 'isFlexible'),
+       );
+    }
+
+    /**
      * Check if ACL resource is grant for current user
      *
      * @param string $aclId ACL Resource id
@@ -38,6 +55,23 @@ class OroUserExtension extends \Twig_Extension
     public function checkResourceIsGranted($aclId)
     {
         return $this->manager->isResourceGranted($aclId);
+    }
+
+    /**
+     * Check if FormView is instance of FlexibleBundle
+     *
+     * @param $form
+     *
+     * @return bool
+     */
+    public function isFlexible($form)
+    {
+        return
+            $form instanceof FormView
+            && isset($form->vars['value'])
+            && $form->vars['value'] instanceof Collection
+            && !empty($form->vars['value'])
+            && $form->vars['value'][0] instanceof FlexibleValueInterface;
     }
 
     /**

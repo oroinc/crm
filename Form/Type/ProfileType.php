@@ -73,7 +73,7 @@ class ProfileType extends FlexibleType
                 'required'       => false,
                 'widget'         => 'single_text',
                 'attr'           => array(
-                    'class'      => 'calendar',
+                    'class'      => 'datepicker',
                 )
             ))
             ->add('imageFile', 'file', array(
