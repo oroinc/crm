@@ -9,11 +9,12 @@
         "php": ">=5.3.3",
         "symfony/symfony": "2.1.*",
         "friendsofsymfony/rest-bundle": "*",
+        "nelmio/api-doc-bundle": "dev-master",
         "knplabs/knp-paginator-bundle": "dev-master",
         "jms/job-queue-bundle": "dev-master",
-        "oro/FlexibleEntityBundle": "dev-master",
-        "oro/UIBundle": "dev-master",
-        "oro/SoapBundle": "dev-master"
+        "oro/flexible-entity-bundle": "dev-master",
+        "oro/ui-bundle": "dev-master",
+        "oro/soap-bundle": "dev-master"
     },
     "autoload": {
         "psr-0": { "Oro\\Bundle\\SearchBundle": "" }
