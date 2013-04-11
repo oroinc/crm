@@ -1,5 +1,5 @@
 {
-    "name": "oro/DataFlowBundle",
+    "name": "oro/data-flow-bundle",
     "type": "symfony-bundle",
     "description": "BAP Flexible Entity Bundle",
     "keywords": ["BAP", "Import", "Export"],
