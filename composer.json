@@ -13,6 +13,7 @@
         "escapestudios/wsse-authentication-bundle": "2.1.x-dev",
         "jms/aop-bundle": "1.0.*",
         "ys-tools/back-url-bundle": "dev-master",
+        "liip/imagine-bundle": "dev-master",
         "oro/flexible-entity-bundle": "dev-master",
         "oro/ui-bundle": "dev-master",
         "oro/soap-bundle": "dev-master",
