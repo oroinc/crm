@@ -10,10 +10,10 @@
         "symfony/symfony": "2.1.*",
         "oro/ui-bundle": "dev-master",
         "oro/user-bundle": "dev-master",
-        "knplabs/knp-menu-bundle": "2.0.*@dev",
-        "knplabs/knp-menu": "2.0.*@dev",
-        "friendsofsymfony/rest-bundle": "*",
-        "nelmio/api-doc-bundle": "2.1.*@dev"
+        "knplabs/knp-menu-bundle": "dev-master",
+        "knplabs/knp-menu": "dev-master",
+        "friendsofsymfony/rest-bundle": "0.11.*",
+        "nelmio/api-doc-bundle": "dev-master"
     },
     "autoload": {
         "psr-0": { "Oro\\Bundle\\NavigationBundle": "" }
