@@ -2,9 +2,6 @@
 
 namespace Oro\Bundle\GridBundle\Datagrid;
 
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\Form;
-
 use Sonata\AdminBundle\Filter\FilterInterface as SonataFilterInterface;
 
 use Oro\Bundle\GridBundle\Filter\FilterInterface;
@@ -37,11 +34,6 @@ class Datagrid implements DatagridInterface
      * @var PagerInterface
      */
     protected $pager;
-
-    /**
-     * @var FormBuilderInterface
-     */
-    protected $formBuilder;
 
     /**
      * Parameters applied flag
@@ -78,11 +70,6 @@ class Datagrid implements DatagridInterface
     protected $sorters = array();
 
     /**
-     * @var Form
-     */
-    protected $form;
-
-    /**
      * @var string
      */
     protected $name;
@@ -101,7 +88,6 @@ class Datagrid implements DatagridInterface
      * @param ProxyQueryInterface $query
      * @param FieldDescriptionCollection $columns
      * @param PagerInterface $pager
-     * @param FormBuilderInterface $formBuilder
      * @param RouteGeneratorInterface $routeGenerator
      * @param ParametersInterface $parameters
      * @param string $name
@@ -111,7 +97,6 @@ class Datagrid implements DatagridInterface
         ProxyQueryInterface $query,
         FieldDescriptionCollection $columns,
         PagerInterface $pager,
-        FormBuilderInterface $formBuilder,
         RouteGeneratorInterface $routeGenerator,
         ParametersInterface $parameters,
         $name,
@@ -120,7 +105,6 @@ class Datagrid implements DatagridInterface
         $this->query          = $query;
         $this->columns        = $columns;
         $this->pager          = $pager;
-        $this->formBuilder    = $formBuilder;
         $this->routeGenerator = $routeGenerator;
         $this->parameters     = $parameters;
         $this->name           = $name;
@@ -267,23 +251,18 @@ class Datagrid implements DatagridInterface
     }
 
     /**
-     * Apply filter data to ProxyQuery and add form fields
+     * Apply filter data to ProxyQuery
      */
     protected function applyFilters()
     {
         $filterParameters = $this->parameters->get(ParametersInterface::FILTER_PARAMETERS);
-        $this->formBuilder->add(ParametersInterface::FILTER_PARAMETERS, 'collection', array('type' => 'hidden'));
-        $filterField = $this->formBuilder->get(ParametersInterface::FILTER_PARAMETERS);
 
         /** @var $filter FilterInterface */
         foreach ($this->getFilters() as $filter) {
-            $filterFormName = $filter->getFormName();
-            if (isset($filterParameters[$filterFormName])) {
-                $filter->apply($this->query, $filterParameters[$filterFormName]);
+            $filterName = $filter->getName();
+            if (isset($filterParameters[$filterName])) {
+                $filter->apply($this->query, $filterParameters[$filterName]);
             }
-
-            list($type, $options) = $filter->getRenderSettings();
-            $filterField->add($filterFormName, $type, $options);
         }
     }
 
@@ -294,14 +273,9 @@ class Datagrid implements DatagridInterface
     {
         $sortBy = $this->parameters->get(ParametersInterface::SORT_PARAMETERS);
 
-        // we should retain an order in which sorters were added
-        // when adding sort to query and when we creating sorters form elements
-        $this->formBuilder->add(ParametersInterface::SORT_PARAMETERS, 'collection', array('type' => 'hidden'));
-        $sortByField = $this->formBuilder->get(ParametersInterface::SORT_PARAMETERS);
         foreach ($sortBy as $fieldName => $direction) {
             if (isset($this->sorters[$fieldName])) {
                 $this->sorters[$fieldName]->apply($this->query, $direction);
-                $sortByField->add($fieldName, 'hidden');
             }
         }
     }
@@ -312,43 +286,24 @@ class Datagrid implements DatagridInterface
         $this->pager->setPage(isset($pagerParameters['_page']) ? $pagerParameters['_page'] : 1);
         $this->pager->setMaxPerPage(!empty($pagerParameters['_per_page']) ? $pagerParameters['_per_page'] : 25);
         $this->pager->init();
-
-        $this->formBuilder->add(ParametersInterface::PAGER_PARAMETERS, 'collection', array('type' => 'hidden'));
-        $pagerField = $this->formBuilder->get(ParametersInterface::PAGER_PARAMETERS);
-        $pagerField->add('_page', 'hidden');
-        $pagerField->add('_per_page', 'hidden');
     }
 
     /**
-     * Bind all source parameters
-     */
-    protected function bindParameters()
-    {
-        if ($this->parametersBinded) {
-            return;
-        }
-
-        $formName = $this->formBuilder->getName();
-        $parametersData = $this->parameters->toArray();
-        $this->form->bind($parametersData[$formName]);
-
-        $this->parametersBinded = true;
-    }
-
-    /**
-     * @return Form
+     * @return null
+     * @deprecated
      */
     public function getForm()
     {
-        $this->applyParameters();
+        // TODO: remove after removing of all invocations of getForm in https://magecore.atlassian.net/browse/BAP-503
+        // create stub form
+        $formType = new \Symfony\Component\Form\Extension\Core\Type\HiddenType();
+        $resolvedFormType = new \Symfony\Component\Form\ResolvedFormType($formType);
+        $dispatcher = new \Symfony\Component\EventDispatcher\EventDispatcher();
+        $formConfiguration = new \Symfony\Component\Form\FormConfigBuilder(null, null, $dispatcher);
+        $formConfiguration->setType($resolvedFormType);
+        $form = new \Symfony\Component\Form\Form($formConfiguration);
 
-        if (!$this->form) {
-            $this->form = $this->formBuilder->getForm();
-        }
-
-        $this->bindParameters();
-
-        return $this->form;
+        return $form;
     }
 
     /**

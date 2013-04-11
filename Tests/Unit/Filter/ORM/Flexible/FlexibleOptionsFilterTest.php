@@ -327,48 +327,4 @@ class FlexibleOptionsFilterTest extends FlexibleFilterTestCase
 
         $this->model->getValueOptions();
     }
-
-    /**
-     * Data provider for testGetRenderSettings
-     *
-     * @return array
-     */
-    public function getRenderSettingsDataProvider()
-    {
-        return array(
-            'multiple'     => array('$multiple' => true),
-            'not_multiple' => array('$multiple' => false),
-        );
-    }
-
-    /**
-     * @param boolean $multiple
-     * @return array
-     *
-     * @dataProvider getRenderSettingsDataProvider
-     */
-    public function testGetRenderSettings($multiple)
-    {
-        $flexibleRegistry = $this->prepareFlexibleRegistryWithOptions($this->testAttributeOptions);
-
-        $this->initializeFilter($flexibleRegistry);
-        $this->model->initialize(
-            self::TEST_NAME,
-            array(
-                'flexible_name' => self::TEST_FLEXIBLE_NAME,
-                'field_name'    => self::TEST_FIELD,
-                'label'         => self::TEST_LABEL,
-                'multiple'      => $multiple,
-            )
-        );
-
-        $expectedSettings = array('oro_grid_type_filter_flexible_options', array(
-            'label'         => self::TEST_LABEL,
-            'field_options' => array(
-                'choices'  => $this->testAttributeOptions,
-                'multiple' => $multiple
-            ),
-        ));
-        $this->assertEquals($expectedSettings, $this->model->getRenderSettings());
-    }
 }

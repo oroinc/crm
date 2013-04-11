@@ -38,13 +38,4 @@ class DateTimeRangeFilterTest extends FilterTestCase
         $actualTypes = $this->model->getTypeOptions();
         $this->assertTypeOptions($actualTypes);
     }
-
-    /**
-     * Test only element name, other logic is already tested in AbstractDateFilterTest
-     */
-    public function testGetRenderSettings()
-    {
-        $renderSettings = $this->model->getRenderSettings();
-        $this->assertEquals('oro_grid_type_filter_datetime_range', $renderSettings[0]);
-    }
 }

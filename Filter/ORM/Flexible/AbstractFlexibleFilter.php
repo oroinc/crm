@@ -110,14 +110,6 @@ abstract class AbstractFlexibleFilter extends AbstractFilter implements FilterIn
     /**
      * {@inheritdoc}
      */
-    public function getRenderSettings()
-    {
-        return $this->parentFilter ? $this->parentFilter->getRenderSettings() : array();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getTypeOptions()
     {
         return $this->parentFilter ? $this->parentFilter->getTypeOptions() : parent::getTypeOptions();

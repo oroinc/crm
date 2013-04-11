@@ -95,20 +95,6 @@ class FlexibleOptionsFilter extends AbstractFlexibleFilter
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function getRenderSettings()
-    {
-        return array('oro_grid_type_filter_flexible_options', array(
-            'label'         => $this->getLabel(),
-            'field_options' => array(
-                'choices'  => $this->getValueOptions(),
-                'multiple' => $this->getOption('multiple') ? true : false
-            ),
-        ));
-    }
-
-    /**
      * @return array
      * @throws \LogicException
      */

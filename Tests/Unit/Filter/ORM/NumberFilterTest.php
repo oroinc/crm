@@ -68,19 +68,6 @@ class NumberFilterTest extends FilterTestCase
         unset($this->model);
     }
 
-    public function testGetRenderSettings()
-    {
-        $this->model->initialize(
-            self::TEST_NAME,
-            array(
-                'label' => self::TEST_LABEL,
-                'type'  => self::TEST_TYPE,
-            )
-        );
-
-        $this->assertEquals($this->expectedRenderSettings, $this->model->getRenderSettings());
-    }
-
     public function testGetTypeOptions()
     {
         $actualTypes = $this->model->getTypeOptions();

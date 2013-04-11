@@ -72,17 +72,6 @@ class StringFilterTest extends FilterTestCase
         unset($this->model);
     }
 
-    public function testGetRenderSettings()
-    {
-        $fieldOptions = array(
-            'label' => self::TEST_LABEL,
-            'type'  => self::TEST_TYPE,
-        );
-        $this->model->initialize(self::TEST_NAME, $fieldOptions);
-
-        $this->assertEquals($this->expectedRenderSettings, $this->model->getRenderSettings());
-    }
-
     public function testGetTypeOptions()
     {
         $actualTypes = $this->model->getTypeOptions();

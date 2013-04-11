@@ -223,17 +223,6 @@ class AbstractFlexibleDateFilterTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->testOptions, $this->model->getDefaultOptions());
     }
 
-    public function testGetRenderSettings()
-    {
-        $this->initializeFilter();
-
-        $this->parentFilter->expects($this->once())
-            ->method('getRenderSettings')
-            ->will($this->returnValue($this->testOptions));
-
-        $this->assertEquals($this->testOptions, $this->model->getRenderSettings());
-    }
-
     public function testGetTypeOptions()
     {
         $this->initializeFilter();

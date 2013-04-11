@@ -22,7 +22,7 @@ Overview
 --------
 Datagird backend consists of several entities, which are used to perform specific actions. Every entity implements interface, so every part can be easy extended and replaced with external component.
 
-Datagrid entities use standard Symfony interfaces to perform translation, validation and form data processing. Also some interfaces and entities are extended from Sonata AdminBundle classes, so basic Sonata classes can be injected into datagrid entities.
+Datagrid entities use standard Symfony interfaces to perform translation and validation. Also some interfaces and entities are extended from Sonata AdminBundle classes, so basic Sonata classes can be injected into datagrid entities.
 
 #### Used External Interfaces
 
@@ -30,7 +30,6 @@ Datagrid entities use standard Symfony interfaces to perform translation, valida
 
 * Translator - Symfony\Component\Translation\TranslatorInterface;
 * Validator - Symfony\Component\Validator\ValidatorInterface;
-* Form Factory - Symfony\Component\Form\FormFactoryInterface.
 
 **Sonata AdminBundle**
 
@@ -54,7 +53,7 @@ Datagrid Manager receives parameters through tag attributes. List of parameters 
 
 * **class** - Datagrid Manager class name;
 * **name** - reserved Datagrid Manager tag name;
-* **datagrid\_name** - datagrid unique ID, used to set form name and isolate separate grids from each other; setter method is *setName*;
+* **datagrid\_name** - datagrid unique ID, used to set datagrid name and isolate separate grids from each other; setter method is *setName*;
 * **entity\_hint** (optional) - string which is used to set UI datagrid name; setter method is *setEntityHint*;
 * **entity\_name** (optional) - string that represents Doctrine entity name which should be used to select;
 * **query\_entity\_alias** (optional) - string that represents Doctrine entity alias which should be used in request;
@@ -318,7 +317,7 @@ Entity Builders provides functionality to build specific types of service entiti
 #### Class Description
 
 * **Builder \ DatagridBuilderInterface** - basic interface for Datagrid Builder, provides getter for Datagrid entity and methods to inject additional service entities (filters, sorters, row actions);
-* **Builder \ ORM \ DatagridBuilder** - implements Datagrid Builder interface, receives form and additional entities factories to create entity instances, and creates Pager entity;
+* **Builder \ ORM \ DatagridBuilder** - implements Datagrid Builder interface, receives entity factories to create entity instances, and creates Pager entity;
 * **Builder \ ListBuilderInterface** - basic interface to build Field Description entities and add it to Field Collection;
 * **Builder \ ORM \ ListBuilder** - implements List Builder interface and all its methods.
 
@@ -333,7 +332,6 @@ services:
     oro_grid.builder.datagrid:
         class:     %oro_grid.builder.datagrid.class%
         arguments:
-            - @form.factory
             - @oro_grid.filter.factory
             - @oro_grid.sorter.factory
             - @oro_grid.action.factory
@@ -347,7 +345,7 @@ services:
 Datagrid
 --------
 
-Datagrid is a main entity that contains fields, additional entities, DB query, form and parameters, process it and returns results - data that will be rendered on UI.
+Datagrid is a main entity that contains fields, additional entities, DB query and parameters, process it and returns results - data that will be rendered on UI.
 
 #### Class Description
 

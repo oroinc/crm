@@ -154,4 +154,11 @@ class AbstractFilterTest extends \PHPUnit_Framework_TestCase
         $this->assertInternalType('array', $typeOptions);
         $this->assertEmpty($typeOptions);
     }
+
+    public function testGetRenderSettings()
+    {
+        $renderSettings = $this->model->getRenderSettings();
+        $this->assertInternalType('array', $renderSettings);
+        $this->assertEmpty($renderSettings);
+    }
 }

@@ -10,18 +10,6 @@ use Oro\Bundle\GridBundle\Form\Type\Filter\NumberType;
 class NumberFilter extends AbstractFilter
 {
     /**
-     * {@inheritdoc}
-     */
-    public function getRenderSettings()
-    {
-        return array('oro_grid_type_filter_number', array(
-            'field_type'    => $this->getFieldType(),
-            'field_options' => $this->getFieldOptions(),
-            'label'         => $this->getLabel()
-        ));
-    }
-
-    /**
      * Get operator types
      *
      * @return array

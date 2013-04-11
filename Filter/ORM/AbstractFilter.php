@@ -187,4 +187,15 @@ abstract class AbstractFilter extends AbstractORMFilter implements FilterInterfa
     {
         return array();
     }
+
+    /**
+     * Field render settings
+     *
+     * @deprecated
+     * @return array
+     */
+    public function getRenderSettings()
+    {
+        return array();
+    }
 }

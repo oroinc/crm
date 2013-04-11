@@ -2,8 +2,6 @@
 
 namespace Oro\Bundle\GridBundle\Tests\Unit\Datagrid;
 
-use Symfony\Component\Form\Form;
-use Symfony\Component\Form\FormBuilder;
 use Oro\Bundle\GridBundle\Datagrid\Datagrid;
 use Oro\Bundle\GridBundle\Filter\FilterInterface;
 use Oro\Bundle\GridBundle\Sorter\SorterInterface;
@@ -23,7 +21,6 @@ class DatagridTest extends \PHPUnit_Framework_TestCase
     const TEST_FILTER_NAME      = 'test_filter_name';
     const TEST_SORTER_NAME      = 'test_sorter_name';
     const TEST_SORTER_DIRECTION = 'test_sorter_direction';
-    const TEST_FORM_NAME        = 'test_form_name';
 
     const TEST_ACTIVE_FILTER_NAME   = 'active_filter_name';
     const TEST_INACTIVE_FILTER_NAME = 'inactive_filter_name';
@@ -78,7 +75,6 @@ class DatagridTest extends \PHPUnit_Framework_TestCase
             'query'          => $this->getMock('Oro\Bundle\GridBundle\Datagrid\ProxyQueryInterface'),
             'columns'        => $this->getMock('Oro\Bundle\GridBundle\Field\FieldDescriptionCollection'),
             'pager'          => $this->getMock('Oro\Bundle\GridBundle\Datagrid\PagerInterface'),
-            'formBuilder'    => $this->getMock('Symfony\Component\Form\FormBuilder', array(), array(), '', false),
             'routeGenerator' => $this->getMock('Oro\Bundle\GridBundle\Route\RouteGeneratorInterface'),
             'parameters'     => $this->getMock('Oro\Bundle\GridBundle\Datagrid\ParametersInterface'),
             'name'           => null,
@@ -91,7 +87,6 @@ class DatagridTest extends \PHPUnit_Framework_TestCase
             $arguments['query'],
             $arguments['columns'],
             $arguments['pager'],
-            $arguments['formBuilder'],
             $arguments['routeGenerator'],
             $arguments['parameters'],
             $arguments['name'],
@@ -112,7 +107,7 @@ class DatagridTest extends \PHPUnit_Framework_TestCase
             false,
             true,
             true,
-            array('getName', 'isActive', 'getFormName', 'apply', 'getRenderSettings')
+            array('getName', 'isActive', 'apply')
         );
         $filterMock->expects($this->any())
             ->method('getName')
@@ -293,57 +288,6 @@ class DatagridTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param FormBuilder $filterFieldMock
-     * @param FormBuilder $pagerFilterMock
-     * @param FormBuilder $sorterFieldMock
-     * @param Form $formMock
-     * @return FormBuilder|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected function getFormBuilderMock(
-        FormBuilder $filterFieldMock,
-        FormBuilder $pagerFilterMock,
-        FormBuilder $sorterFieldMock,
-        Form $formMock
-    ) {
-        $formBuilderMock = $this->getMock(
-            'Symfony\Component\Form\FormBuilder',
-            array('add', 'get', 'getForm', 'getName'),
-            array(),
-            '',
-            false
-        );
-        $formBuilderMock->expects($this->at(0))
-            ->method('add')
-            ->with(ParametersInterface::FILTER_PARAMETERS, 'collection', array('type' => 'hidden'));
-        $formBuilderMock->expects($this->at(1))
-            ->method('get')
-            ->with(ParametersInterface::FILTER_PARAMETERS)
-            ->will($this->returnValue($filterFieldMock));
-        $formBuilderMock->expects($this->at(2))
-            ->method('add')
-            ->with(ParametersInterface::PAGER_PARAMETERS, 'collection', array('type' => 'hidden'));
-        $formBuilderMock->expects($this->at(3))
-            ->method('get')
-            ->with(ParametersInterface::PAGER_PARAMETERS)
-            ->will($this->returnValue($pagerFilterMock));
-        $formBuilderMock->expects($this->at(4))
-            ->method('add')
-            ->with(ParametersInterface::SORT_PARAMETERS, 'collection', array('type' => 'hidden'));
-        $formBuilderMock->expects($this->at(5))
-            ->method('get')
-            ->with(ParametersInterface::SORT_PARAMETERS)
-            ->will($this->returnValue($sorterFieldMock));
-        $formBuilderMock->expects($this->any())
-            ->method('getForm')
-            ->will($this->returnValue($formMock));
-        $formBuilderMock->expects($this->any())
-            ->method('getName')
-            ->will($this->returnValue(self::TEST_FORM_NAME));
-
-        return $formBuilderMock;
-    }
-
-    /**
      * @return array
      */
     protected function prepareDatagridMocks()
@@ -372,39 +316,7 @@ class DatagridTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnCallback(array($this, 'getParameter')));
         $parametersMock->expects($this->any())
             ->method('toArray')
-            ->will($this->returnValue(array(self::TEST_FORM_NAME => $this->testParameters)));
-
-        $filterFieldMock = $this->getMock('Symfony\Component\Form\FormBuilder', array('add'), array(), '', false);
-        $filterFieldMock->expects($this->at(0))
-            ->method('add')
-            ->with(
-                self::TEST_ACTIVE_FILTER_NAME,
-                self::TEST_ACTIVE_FILTER_TYPE,
-                array('active', 'filter', 'options')
-            );
-        $filterFieldMock->expects($this->at(1))
-            ->method('add')
-            ->with(
-                self::TEST_INACTIVE_FILTER_NAME,
-                self::TEST_INACTIVE_FILTER_TYPE,
-                array('inactive', 'filter', 'options')
-            );
-
-        $pagerFilterMock = $this->getMock('Symfony\Component\Form\FormBuilder', array('add'), array(), '', false);
-        $pagerFilterMock->expects($this->at(0))->method('add')->with('_page', 'hidden');
-        $pagerFilterMock->expects($this->at(1))->method('add')->with('_per_page', 'hidden');
-
-        $sorterFieldMock = $this->getMock('Symfony\Component\Form\FormBuilder', array('add'), array(), '', false);
-        $sorterFieldMock->expects($this->once())
-            ->method('add')
-            ->with(self::TEST_SORTER_NAME, 'hidden');
-
-        $formMock = $this->getMock('Symfony\Component\Form\Form', array('bind'), array(), '', false);
-        $formMock->expects($this->any())
-            ->method('bind')
-            ->will($this->returnValue($this->testParameters));
-
-        $formBuilderMock = $this->getFormBuilderMock($filterFieldMock, $pagerFilterMock, $sorterFieldMock, $formMock);
+            ->will($this->returnValue(array(self::TEST_NAME => $this->testParameters)));
 
         $pagerMock = $this->getMockForAbstractClass(
             'Oro\Bundle\GridBundle\Datagrid\PagerInterface',
@@ -422,8 +334,6 @@ class DatagridTest extends \PHPUnit_Framework_TestCase
         return array(
             'query'       => $proxyQueryMock,
             'pager'       => $pagerMock,
-            'form'        => $formMock,
-            'formBuilder' => $formBuilderMock,
             'parameters'  => $parametersMock,
         );
     }
@@ -438,38 +348,12 @@ class DatagridTest extends \PHPUnit_Framework_TestCase
         /** @var $activeFilterMock \PHPUnit_Framework_MockObject_MockObject */
         $activeFilterMock = $this->getFilterMock(self::TEST_ACTIVE_FILTER_NAME);
         $activeFilterMock->expects($this->once())
-            ->method('getFormName')
-            ->will($this->returnValue(self::TEST_ACTIVE_FILTER_NAME));
-        $activeFilterMock->expects($this->once())
             ->method('apply')
             ->with($proxyQueryMock, $filterParameters[self::TEST_ACTIVE_FILTER_NAME]);
-        $activeFilterMock->expects($this->once())
-            ->method('getRenderSettings')
-            ->will(
-                $this->returnValue(
-                    array(
-                        self::TEST_ACTIVE_FILTER_TYPE,
-                        $filterParameters[self::TEST_ACTIVE_FILTER_NAME]['options']
-                    )
-                )
-            );
         /** @var $inactiveFilterMock \PHPUnit_Framework_MockObject_MockObject */
         $inactiveFilterMock = $this->getFilterMock(self::TEST_INACTIVE_FILTER_NAME);
-        $inactiveFilterMock->expects($this->once())
-            ->method('getFormName')
-            ->will($this->returnValue(self::TEST_INACTIVE_FILTER_NAME));
         $inactiveFilterMock->expects($this->never())
             ->method('apply');
-        $inactiveFilterMock->expects($this->once())
-            ->method('getRenderSettings')
-            ->will(
-                $this->returnValue(
-                    array(
-                        self::TEST_INACTIVE_FILTER_TYPE,
-                        array('inactive', 'filter', 'options'),
-                    )
-                )
-            );
 
         $this->model->addFilter($activeFilterMock);
         $this->model->addFilter($inactiveFilterMock);
@@ -491,34 +375,6 @@ class DatagridTest extends \PHPUnit_Framework_TestCase
         $this->model->addSorter($sorterMock);
     }
 
-    public function testGetForm()
-    {
-        $datagridMocks = $this->prepareDatagridMocks();
-        $this->initializeDatagridMock(
-            array(
-                'query'       => $datagridMocks['query'],
-                'pager'       => $datagridMocks['pager'],
-                'formBuilder' => $datagridMocks['formBuilder'],
-                'parameters'  => $datagridMocks['parameters'],
-            )
-        );
-
-        $this->addFilterMocks($datagridMocks['query']);
-        $this->addSorterMocks($datagridMocks['query']);
-
-        $this->assertAttributeEquals(false, 'parametersApplied', $this->model);
-        $this->assertAttributeEmpty('form', $this->model);
-        $this->assertAttributeEquals(false, 'parametersBinded', $this->model);
-
-        // all actions must be executed only at first run
-        $this->assertEquals($datagridMocks['form'], $this->model->getForm());
-        $this->assertEquals($datagridMocks['form'], $this->model->getForm());
-
-        $this->assertAttributeEquals(true, 'parametersApplied', $this->model);
-        $this->assertAttributeEquals($datagridMocks['form'], 'form', $this->model);
-        $this->assertAttributeEquals(true, 'parametersBinded', $this->model);
-    }
-
     public function testBuildPager()
     {
         $datagridMocks = $this->prepareDatagridMocks();
@@ -526,7 +382,6 @@ class DatagridTest extends \PHPUnit_Framework_TestCase
             array(
                 'query'       => $datagridMocks['query'],
                 'pager'       => $datagridMocks['pager'],
-                'formBuilder' => $datagridMocks['formBuilder'],
                 'parameters'  => $datagridMocks['parameters'],
             )
         );
@@ -534,6 +389,8 @@ class DatagridTest extends \PHPUnit_Framework_TestCase
         $this->addFilterMocks($datagridMocks['query']);
         $this->addSorterMocks($datagridMocks['query']);
 
+        // should apply parameters only once
+        $this->model->buildPager();
         $this->model->buildPager();
     }
 
@@ -558,7 +415,6 @@ class DatagridTest extends \PHPUnit_Framework_TestCase
             array(
                 'query'       => $proxyQueryMock,
                 'pager'       => $datagridMocks['pager'],
-                'formBuilder' => $datagridMocks['formBuilder'],
                 'parameters'  => $datagridMocks['parameters'],
             )
         );

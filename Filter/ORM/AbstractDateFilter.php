@@ -219,24 +219,4 @@ abstract class AbstractDateFilter extends AbstractFilter
             'input_type' => 'datetime'
         );
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getRenderSettings()
-    {
-        $name = 'oro_grid_type_filter_date';
-
-        if ($this->time) {
-            $name .= 'time';
-        }
-
-        $name .= '_range';
-
-        return array($name, array(
-            'field_type'    => $this->getFieldType(),
-            'field_options' => $this->getFieldOptions(),
-            'label'         => $this->getLabel(),
-        ));
-    }
 }

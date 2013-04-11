@@ -417,19 +417,4 @@ class AbstractDateFilterTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertEquals($this->defaultFormOptions, $this->model->getDefaultOptions());
     }
-
-    public function testGetRenderSettings()
-    {
-        $fieldOptions = array(
-            'type'  => self::TEST_FIELD_TYPE,
-            'label' => self::TEST_LABEL
-        );
-        $this->model->initialize(self::TEST_NAME, $fieldOptions);
-
-        $this->assertAttributeEquals(false, 'time', $this->model);
-        $this->assertEquals(
-            array('oro_grid_type_filter_date_range', $this->expectedRenderSettings),
-            $this->model->getRenderSettings()
-        );
-    }
 }
