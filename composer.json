@@ -9,6 +9,9 @@
         "php": ">=5.3.3",
         "symfony/symfony": "2.1.*"
     },
+    "suggest": {
+        "leafo/lessphp": "dev-master"
+    },
     "autoload": {
         "psr-0": { "Oro\\Bundle\\UIBundle": "" }
     },
