@@ -7,13 +7,13 @@
     "license": "MIT",
     "require": {
         "php": ">=5.3.3",
-        "symfony/symfony": "2.1.6",
+        "symfony/symfony": "2.1.*",
         "oro/ui-bundle": "dev-master",
         "oro/user-bundle": "dev-master",
-        "knplabs/knp-menu-bundle": "dev-master",
-        "knplabs/knp-menu": "dev-master",
+        "knplabs/knp-menu-bundle": "2.0.*@dev",
+        "knplabs/knp-menu": "2.0.*@dev",
         "friendsofsymfony/rest-bundle": "*",
-        "nelmio/api-doc-bundle": "dev-master"
+        "nelmio/api-doc-bundle": "2.1.*@dev"
     },
     "autoload": {
         "psr-0": { "Oro\\Bundle\\NavigationBundle": "" }
