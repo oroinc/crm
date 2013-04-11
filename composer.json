@@ -12,6 +12,7 @@
         "nelmio/api-doc-bundle": "dev-master",
         "knplabs/knp-paginator-bundle": "dev-master",
         "jms/job-queue-bundle": "dev-master",
+        "jms/serializer": "dev-master",
         "oro/flexible-entity-bundle": "dev-master",
         "oro/ui-bundle": "dev-master",
         "oro/soap-bundle": "dev-master"
