@@ -4,8 +4,8 @@ namespace Oro\Bundle\GridBundle\Filter\ORM;
 
 use Doctrine\ORM\QueryBuilder;
 
-use Sonata\AdminBundle\Form\Type\Filter\NumberType;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
+use Oro\Bundle\GridBundle\Form\Type\Filter\NumberType;
 
 class NumberFilter extends AbstractFilter
 {

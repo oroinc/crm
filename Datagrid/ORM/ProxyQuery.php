@@ -29,7 +29,7 @@ class ProxyQuery extends BaseProxyQuery implements ProxyQueryInterface
     /**
      * @var array
      */
-    protected $sortOrder = array();
+    protected $sortOrderList = array();
 
     /**
      * Get query builder
@@ -108,7 +108,7 @@ class ProxyQuery extends BaseProxyQuery implements ProxyQueryInterface
      */
     protected function applyOrderBy(QueryBuilder $queryBuilder)
     {
-        foreach ($this->sortOrder as $sortOrder) {
+        foreach ($this->sortOrderList as $sortOrder) {
             $this->applySortOrder($queryBuilder, $sortOrder);
         }
     }
@@ -208,7 +208,7 @@ class ProxyQuery extends BaseProxyQuery implements ProxyQueryInterface
             throw new \LogicException('Cannot add sorting order, unknown field name in $fieldMapping.');
         }
 
-        $this->sortOrder[] = array($sortExpression, $direction, $extraSelect);
+        $this->sortOrderList[] = array($sortExpression, $direction, $extraSelect);
     }
 
     /**

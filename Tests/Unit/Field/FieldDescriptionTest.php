@@ -28,6 +28,8 @@ class FieldDescriptionTest extends \PHPUnit_Framework_TestCase
 
     const TEST_TARGET_ENTITY = 'test_target_entity';
     const TEST_MAPPING_TYPE  = 'test_mapping_type';
+    const TEST_ENTITY_ALIAS  = 'test_entity_alias';
+    const TEST_EXPRESSION    = 'test_expression';
 
     /**
      * @var FieldDescription
@@ -176,23 +178,81 @@ class FieldDescriptionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(self::TEST_TYPE, $this->model->getType());
     }
 
-    public function testSetOptions()
+    /**
+     * Data provider for testSetOptions
+     *
+     * @return array
+     */
+    public function setOptionsDataProvider()
+    {
+        $expectedFieldMapping = array(
+            'fieldName'       => self::TEST_FIELD_NAME,
+            'entityAlias'     => self::TEST_ENTITY_ALIAS,
+            'fieldExpression' => self::TEST_EXPRESSION
+        );
+
+        return array(
+            'with_field_mapping' => array(
+                '$sourceOptions' => array_merge(
+                    $this->testOptions,
+                    array(
+                        'entity_alias' => self::TEST_ENTITY_ALIAS,
+                        'expression'   => self::TEST_EXPRESSION,
+                    )
+                ),
+                '$expectedOptions' => array_merge(
+                    $this->testOptions,
+                    array(
+                        'field_name'    => self::TEST_FIELD_NAME,
+                        'entity_alias'  => self::TEST_ENTITY_ALIAS,
+                        'expression'    => self::TEST_EXPRESSION,
+                        'field_mapping' => $expectedFieldMapping
+                    )
+                ),
+                '$expectedFieldMappping' => $expectedFieldMapping
+            ),
+            'without_field_mapping' => array(
+                '$sourceOptions' => array_merge(
+                    $this->testOptions,
+                    array(
+                        'field_mapping' => $this->testFieldMapping
+                    )
+                ),
+                '$expectedOptions' => array_merge(
+                    $this->testOptions,
+                    array(
+                        'field_name'    => self::TEST_FIELD_NAME,
+                        'field_mapping' => $this->testFieldMapping
+                    )
+                ),
+                '$expectedFieldMappping' => $this->testFieldMapping
+            ),
+        );
+    }
+
+    /**
+     * @param array $sourceOptions
+     * @param array $expectedOptions
+     * @param array $expectedFieldMappping
+     *
+     * @dataProvider setOptionsDataProvider
+     */
+    public function testSetOptions(array $sourceOptions, array $expectedOptions, array $expectedFieldMappping)
     {
         // some data to rewrite
         $this->model->setOption(self::TEST_OPTION_NAME, self::TEST_OPTION_VALUE);
 
-        $options = $this->testOptions;
-        $options['template'] = self::TEST_TEMPLATE;
-        $options['type']     = self::TEST_TYPE;
+        $sourceOptions['template']   = self::TEST_TEMPLATE;
+        $sourceOptions['type']       = self::TEST_TYPE;
+        $sourceOptions['field_name'] = self::TEST_FIELD_NAME;
 
-        $this->model->setOptions($options);
-        $expectedTestOptions = $this->testOptions;
-        $expectedTestOptions['field_mapping'] = array(
-            'fieldName' => $this->testOptions['field_name']
-        );
-        $this->assertEquals($expectedTestOptions, $this->model->getOptions());
+        $this->model->setOptions($sourceOptions);
+
+        $this->assertEquals($expectedOptions, $this->model->getOptions());
         $this->assertEquals(self::TEST_TEMPLATE, $this->model->getTemplate());
         $this->assertEquals(self::TEST_TYPE, $this->model->getType());
+        $this->assertEquals(self::TEST_FIELD_NAME, $this->model->getFieldName());
+        $this->assertEquals($expectedFieldMappping, $this->model->getFieldMapping());
     }
 
     public function testSetAssociationMapping()
@@ -335,5 +395,12 @@ class FieldDescriptionTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($this->model->getSortFieldMapping());
         $this->model->setOption('sort_field_mapping', self::TEST_MAPPING_TYPE);
         $this->assertEquals(self::TEST_MAPPING_TYPE, $this->model->getSortFieldMapping());
+    }
+
+    public function testGetSortParentAssociationMapping()
+    {
+        $this->assertEmpty($this->model->getSortFieldMapping());
+        $this->model->setOption('sort_parent_association_mappings', self::TEST_MAPPING_TYPE);
+        $this->assertEquals(self::TEST_MAPPING_TYPE, $this->model->getSortParentAssociationMapping());
     }
 }

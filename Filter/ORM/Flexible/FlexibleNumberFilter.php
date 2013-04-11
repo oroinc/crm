@@ -3,11 +3,10 @@
 namespace Oro\Bundle\GridBundle\Filter\ORM\Flexible;
 
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
-use Sonata\AdminBundle\Form\Type\Filter\NumberType;
-
+use Oro\Bundle\GridBundle\Form\Type\Filter\NumberType;
 use Oro\Bundle\GridBundle\Filter\ORM\NumberFilter;
 
-class FlexibleNumberFilter extends AbstractChildFilter
+class FlexibleNumberFilter extends AbstractFlexibleFilter
 {
     /**
      * @var string

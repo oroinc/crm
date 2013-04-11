@@ -3,11 +3,10 @@
 namespace Oro\Bundle\GridBundle\Filter\ORM\Flexible;
 
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
-use Sonata\AdminBundle\Form\Type\Filter\ChoiceType;
-
+use Oro\Bundle\GridBundle\Form\Type\Filter\ChoiceType;
 use Oro\Bundle\GridBundle\Filter\ORM\StringFilter;
 
-class FlexibleStringFilter extends AbstractChildFilter
+class FlexibleStringFilter extends AbstractFlexibleFilter
 {
     /**
      * @var string
@@ -37,7 +36,7 @@ class FlexibleStringFilter extends AbstractChildFilter
         // process type
         $type = isset($data['type']) ? $data['type'] : false;
         if ($type == ChoiceType::TYPE_EQUAL) {
-            $value = $type;
+            $value = $data['value'];
         } else {
             $value = sprintf($this->getOption('format'), $data['value']);
         }
@@ -58,7 +57,6 @@ class FlexibleStringFilter extends AbstractChildFilter
      */
     public function getOperator($type, $default = null)
     {
-        $result = $this->parentFilter->getOperator($type, $default);
-        return $result;
+        return $this->parentFilter->getOperator($type, $default);
     }
 }

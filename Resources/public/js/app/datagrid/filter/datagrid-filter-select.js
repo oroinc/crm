@@ -29,13 +29,6 @@ OroApp.DatagridFilterSelect = OroApp.DatagridFilter.extend({
     options: {},
 
     /**
-     * Value that was confirmed and processed.
-     *
-     * @property {Object}
-     */
-    confirmedValue: {},
-
-    /**
      * Placeholder for default value
      *
      * @property
@@ -149,7 +142,7 @@ OroApp.DatagridFilterSelect = OroApp.DatagridFilter.extend({
     _initializeSelectWidget: function() {
         this.selectWidget = new OroApp.MultiSelectDecorator(this.$(this.inputSelector), _.extend({
             noneSelectedText: this.placeholder,
-            selectedText: $.proxy(function(numChecked, numTotal, checkedItems) {
+            selectedText: _.bind(function(numChecked, numTotal, checkedItems) {
                 return this._getSelectedText(checkedItems);
             }, this),
             position: {
@@ -157,15 +150,15 @@ OroApp.DatagridFilterSelect = OroApp.DatagridFilter.extend({
                 at: 'left bottom',
                 of: this.$(this.containerSelector)
             },
-            open: $.proxy(function() {
+            open: _.bind(function() {
                 this.selectWidget.onOpenDropdown();
                 this._setDropdownWidth();
                 this._setButtonPressed(this.$(this.containerSelector), true);
                 this.selectDropdownOpened = true;
             }, this),
-            close: $.proxy(function() {
+            close: _.bind(function() {
                 this._setButtonPressed(this.$(this.containerSelector), false);
-                setTimeout($.proxy(function() {
+                setTimeout(_.bind(function() {
                     this.selectDropdownOpened = false;
                 }, this), 100);
             }, this)
@@ -235,8 +228,7 @@ OroApp.DatagridFilterSelect = OroApp.DatagridFilter.extend({
      */
     _onSelectChange: function() {
         // set value
-        var value = this.getValue();
-        this._confirmValue(value);
+        this.setValue(this._readDOMValue());
 
         // update dropdown
         var widget = this.$(this.containerSelector);
@@ -254,38 +246,34 @@ OroApp.DatagridFilterSelect = OroApp.DatagridFilter.extend({
     },
 
     /**
-     * Set value to filter's criteria and confirm it
-     *
-     * @param value
-     * @return {*}
+     * @inheritDoc
      */
-    setValue: function(value) {
-        this._confirmValue(value);
+    _isNewValueUpdated: function(newValue) {
+        return !_.isEqual(this.getValue().value, newValue.value);
+    },
+
+    /**
+     * @inheritDoc
+     */
+    _onValueUpdated: function(newValue, oldValue) {
+        OroApp.DatagridFilter.prototype._onValueUpdated.apply(this, arguments);
+        this.selectWidget.multiselect('refresh');
+    },
+
+    /**
+     * @inheritDoc
+     */
+    _writeDOMValue: function(value) {
+        this._setInputValue(this.inputSelector, value.value);
         return this;
     },
 
     /**
-     * Get confirmed value of filter's criteria
-     *
-     * @return {Object}
+     * @inheritDoc
      */
-    getValue: function() {
+    _readDOMValue: function() {
         return {
-            value: this.$(this.inputSelector).val()
-        };
-    },
-
-    /**
-     * Confirm filter value
-     *
-     * @protected
-     */
-    _confirmValue: function(value) {
-        if (!_.isEqual(this.confirmedValue.value, value.value)) {
-            this.confirmedValue = _.clone(value);
-            this.$(this.inputSelector).val(this.confirmedValue.value);
-            this.selectWidget.multiselect('refresh');
-            this.trigger('update');
+            value: this._getInputValue(this.inputSelector)
         }
     }
 });

@@ -31,6 +31,7 @@
     '@OroGridBundle/Resources/public/js/app/datagrid/filter/datagrid-filter.js'
     '@OroGridBundle/Resources/public/js/app/datagrid/filter/datagrid-filter-text.js'
     '@OroGridBundle/Resources/public/js/app/datagrid/filter/datagrid-filter-choice.js'
+    '@OroGridBundle/Resources/public/js/app/datagrid/filter/datagrid-filter-number.js'
     '@OroGridBundle/Resources/public/js/app/datagrid/filter/datagrid-filter-date.js'
     '@OroGridBundle/Resources/public/js/app/datagrid/filter/datagrid-filter-datetime.js'
     '@OroGridBundle/Resources/public/js/app/datagrid/filter/datagrid-filter-select.js'
@@ -63,7 +64,7 @@
 
     _.extend(OroApp, {
         scope: {
-            {{ datagridName }}: {
+            {{ datagridName|json_encode|raw }}: {
                 grid: {
                     columns: [
                         {% for column in datagrid.columns %}
@@ -86,9 +87,6 @@
                                 cell: Backgrid.NumberCell
                             {% elseif column.type == constant(columnTypePrefix ~ 'TYPE_INTEGER') %}
                                 cell: Backgrid.IntegerCell.extend({ orderSeparator: '' })
-                            {% elseif column.type == constant(columnTypePrefix ~ 'TYPE_OPTIONS') %}
-                                // TODO use Backgrid.SelectCell with source data
-                                cell: Backgrid.StringCell
                             {% else %}
                                 cell: Backgrid.StringCell
                             {% endif %}
@@ -97,25 +95,33 @@
                     ],
                     filters: {
                         {% for filter in datagrid.filters %}
-                            '{{ filter.name }}':
+                            {{ filter.name|json_encode|raw }}:
                             {% set filterType = filter.getOption('filter_type') %}
-                            {% if filterType == constant(filterTypePrefix ~ 'TYPE_NUMBER')
-                                or filterType == constant(filterTypePrefix ~ 'TYPE_STRING')
-                                or filterType == constant(filterTypePrefix ~ 'TYPE_FLEXIBLE_NUMBER')
+                            {% if filterType == constant(filterTypePrefix ~ 'TYPE_STRING')
                                 or filterType == constant(filterTypePrefix ~ 'TYPE_FLEXIBLE_STRING')
                             %}
                                 OroApp.DatagridFilterChoice.extend({
+                                    name: {{ filter.name|json_encode|raw }},
+                                    label: {{ filter.getOption('label')|json_encode|raw }},
+                                    enabled: {{ filter.getOption('show_filter') ? 'true' : 'false' }},
+                                    choices: {{ filter.typeOptions|json_encode|raw }}
+                                })
+                            {% elseif filterType == constant(filterTypePrefix ~ 'TYPE_NUMBER')
+                                or filterType == constant(filterTypePrefix ~ 'TYPE_FLEXIBLE_NUMBER')
+                            %}
+                                OroApp.DatagridFilterNumber.extend({
                                     name: '{{ filter.name }}',
                                     label: '{{ filter.getOption('label') }}',
                                     enabled: {{ filter.getOption('show_filter') ? 'true' : 'false' }},
-                                    choices: {{ filter.typeOptions|json_encode|raw }}
+                                    choices: {{ filter.typeOptions|json_encode|raw }},
+                                    formatter: {{ filter.getOption('data_type')|json_encode|raw }}
                                 })
                             {% elseif filterType == constant(filterTypePrefix ~ 'TYPE_DATE')
                                 or filterType == constant(filterTypePrefix ~ 'TYPE_FLEXIBLE_DATE')
                             %}
                                 OroApp.DatagridFilterDate.extend({
-                                    name: '{{ filter.name }}',
-                                    label: '{{ filter.getOption('label') }}',
+                                    name: {{ filter.name|json_encode|raw }},
+                                    label: {{ filter.getOption('label')|json_encode|raw }},
                                     enabled: {{ filter.getOption('show_filter') ? 'true' : 'false' }},
                                     choices: {{ filter.typeOptions|json_encode|raw }},
                                     typeValues: {
@@ -131,8 +137,8 @@
                                 or filterType == constant(filterTypePrefix ~ 'TYPE_FLEXIBLE_DATETIME')
                             %}
                                 OroApp.DatagridFilterDateTime.extend({
-                                    name: '{{ filter.name }}',
-                                    label: '{{ filter.getOption('label') }}',
+                                    name: {{ filter.name|json_encode|raw }},
+                                    label: {{ filter.getOption('label')|json_encode|raw }},
                                     enabled: {{ filter.getOption('show_filter') ? 'true' : 'false' }},
                                     choices: {{ filter.typeOptions|json_encode|raw }},
                                     typeValues: {
@@ -148,23 +154,23 @@
                             {% elseif filterType == constant(filterTypePrefix ~ 'TYPE_FLEXIBLE_OPTIONS') %}
                                 {% if filter.getOption('multiple') %}
                                     OroApp.DatagridFilterMultiSelect.extend({
-                                        name: '{{ filter.name }}',
-                                        label: '{{ filter.getOption('label') }}',
+                                        name: {{ filter.name|json_encode|raw }},
+                                        label: {{ filter.getOption('label')|json_encode|raw }},
                                         enabled: {{ filter.getOption('show_filter') ? 'true' : 'false' }},
                                         options: {{ filter.valueOptions|json_encode|raw }}
                                     })
                                 {% else %}
                                     OroApp.DatagridFilterSelect.extend({
-                                        name: '{{ filter.name }}',
-                                        label: '{{ filter.getOption('label') }}',
+                                        name: {{ filter.name|json_encode|raw }},
+                                        label: {{ filter.getOption('label')|json_encode|raw }},
                                         enabled: {{ filter.getOption('show_filter') ? 'true' : 'false' }},
                                         options: {{ filter.valueOptions|json_encode|raw }}
                                     })
                                 {% endif %}
                             {% else %}
                                 OroApp.DatagridFilterText.extend({
-                                    name: '{{ filter.name }}',
-                                    label: '{{ filter.getOption('label') }}',
+                                    name: {{ filter.name|json_encode|raw }},
+                                    label: {{ filter.getOption('label')|json_encode|raw }},
                                     enabled: {{ filter.getOption('show_filter') ? 'true' : 'false' }}
                                 })
                             {% endif %}
@@ -187,7 +193,7 @@
                     noDataHint : {{ 'oro_grid.no_data_hint %entityHint%'|trans({'%entityHint%': entityHint}, 'OroGridBundle')|json_encode|raw }}
                 },
                 collection: {
-                    inputName: "{{ datagrid.name|raw }}",
+                    inputName: {{ datagrid.name|json_encode|raw }},
                     url: {{ datagrid.routeGenerator.generateUrl(null, {'_format': 'json'})|json_encode|raw }},
                     state: {
                         currentPage:  {{ datagrid.pager.page|json_encode|raw }},
