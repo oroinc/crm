@@ -8,9 +8,9 @@
     "require": {
         "php": ">=5.3.3",
         "symfony/symfony": "2.1.6",
-        "oro/ui-bundle": "*",
+        "oro/ui-bundle": "dev-master",
         "friendsofsymfony/rest-bundle": "*",
-        "nelmio/api-doc-bundle": "*"
+        "nelmio/api-doc-bundle": "dev-master"
     },
     "autoload": {
         "psr-0": { "Oro\\Bundle\\WindowsBundle": "" }
@@ -19,7 +19,7 @@
     "minimum-stability": "dev",
     "extra": {
         "branch-alias": {
-            "dev-master": "1.0.0-alpha"
+            "dev-master": "1.0-dev"
         }
     }
 }
