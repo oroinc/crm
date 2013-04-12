@@ -45,7 +45,7 @@ services:
             - name: oro_grid.datagrid.manager
               datagrid_name: roleusers
               entity_hint: user
-              route_name: oro_user_role_edit
+              route_name: oro_user_role_user_grid
         calls:
             - [ setRouter, [ @router ] ]
 
@@ -55,6 +55,6 @@ services:
             - name: oro_grid.datagrid.manager
               datagrid_name: groupusers
               entity_hint: user
-              route_name: oro_user_group_edit
+              route_name: oro_user_group_user_grid
         calls:
             - [ setRouter, [ @router ] ]
