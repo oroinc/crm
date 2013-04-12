@@ -39,8 +39,8 @@ class ProfileController extends FOSRestController implements ClassResourceInterf
                 ->getListQuery()
                 ->getQuery()
                 ->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY),
-            (int)$this->getRequest()->get('page', 1),
-            (int)$this->getRequest()->get('limit', 10)
+            (int) $this->getRequest()->get('page', 1),
+            (int) $this->getRequest()->get('limit', 10)
         );
 
         return $this->handleView(
@@ -66,7 +66,7 @@ class ProfileController extends FOSRestController implements ClassResourceInterf
      */
     public function getAction($id)
     {
-        $entity = $this->getManager()->findUserBy(array('id' => (int)$id));
+        $entity = $this->getManager()->findUserBy(array('id' => (int) $id));
 
         return $this->handleView(
             $this->view(
@@ -113,7 +113,7 @@ class ProfileController extends FOSRestController implements ClassResourceInterf
     public function putAction($id)
     {
         /* @var $entity \Oro\Bundle\UserBundle\Entity\User */
-        $entity = $this->getManager()->findUserBy(array('id' => (int)$id));
+        $entity = $this->getManager()->findUserBy(array('id' => (int) $id));
 
         if (!$entity) {
             return $this->handleView($this->view('', Codes::HTTP_NOT_FOUND));
@@ -143,7 +143,7 @@ class ProfileController extends FOSRestController implements ClassResourceInterf
      */
     public function deleteAction($id)
     {
-        $entity = $this->getManager()->findUserBy(array('id' => (int)$id));
+        $entity = $this->getManager()->findUserBy(array('id' => (int) $id));
 
         if (!$entity) {
             return $this->handleView($this->view('', Codes::HTTP_NOT_FOUND));
@@ -169,7 +169,7 @@ class ProfileController extends FOSRestController implements ClassResourceInterf
      */
     public function getRolesAction($id)
     {
-        $entity = $this->getManager()->findUserBy(array('id' => (int)$id));
+        $entity = $this->getManager()->findUserBy(array('id' => (int) $id));
 
         if (!$entity) {
             return $this->handleView($this->view('', Codes::HTTP_NOT_FOUND));
@@ -193,7 +193,7 @@ class ProfileController extends FOSRestController implements ClassResourceInterf
      */
     public function getGroupsAction($id)
     {
-        $entity = $this->getManager()->findUserBy(array('id' => (int)$id));
+        $entity = $this->getManager()->findUserBy(array('id' => (int) $id));
 
         if (!$entity) {
             return $this->handleView($this->view('', Codes::HTTP_NOT_FOUND));
@@ -217,7 +217,7 @@ class ProfileController extends FOSRestController implements ClassResourceInterf
      */
     public function getAclAction($id)
     {
-        $user = ($this->getManager()->findUserBy(array('id' => (int)$id)));
+        $user = ($this->getManager()->findUserBy(array('id' => (int) $id)));
         if (!$user) {
             return $this->handleView($this->view('', Codes::HTTP_NOT_FOUND));
         }

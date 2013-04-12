@@ -45,7 +45,7 @@ class UserApi
     /**
      * Set apiKey
      *
-     * @param  string $apiKey
+     * @param string $apiKey
      *
      * @return UserApi
      */
@@ -69,7 +69,7 @@ class UserApi
     /**
      * Set user
      *
-     * @param  User $user
+     * @param User $user
      *
      * @return UserApi
      */

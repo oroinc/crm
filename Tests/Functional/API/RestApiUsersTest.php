@@ -13,7 +13,7 @@ class RestUsersApiTest extends WebTestCase
 {
 
     protected $client = null;
-    static protected $hasLoaded = false;
+    protected static $hasLoaded = false;
 
     public function setUp()
     {
@@ -116,8 +116,8 @@ class RestUsersApiTest extends WebTestCase
      * Check created user
      *
      * @return int
-     * @param array $result
-     * @param array $request
+     * @param  array $result
+     * @param  array $request
      */
     protected function assertEqualsUser($request, $result)
     {
@@ -132,6 +132,7 @@ class RestUsersApiTest extends WebTestCase
             }
         }
         $this->assertEquals(0, $flag);
+
         return $userId;
     }
 }
