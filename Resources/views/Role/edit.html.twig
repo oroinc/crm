@@ -3,6 +3,14 @@
 {% set title = form.vars.value.id ? 'Edit role' : 'Add role' %}
 
 {% block title %}{{ title }} - {{ parent() }}{% endblock %}
+
+{% block head_script %}
+    {{ parent() }}
+
+    {% include 'OroGridBundle:Include:javascript.html.twig' with {'datagrid': datagrid, 'selector': '#users-grid'} %}
+    {% include 'OroGridBundle:Include:stylesheet.html.twig' %}
+{% endblock %}
+
 {% block page_container %}
 <div class="container-fluid">
 {% block content %}
@@ -17,6 +25,8 @@
         </div>
     </fieldset>
 </form>
+<h3>{{ 'Users'|trans }}</h3>
+<div id="users-grid"></div>
 {% endblock %}
 </div>
 {% endblock %}
