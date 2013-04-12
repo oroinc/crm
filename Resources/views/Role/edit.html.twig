@@ -1,6 +1,6 @@
 {% extends bap.layout is defined ? bap.layout : 'OroUserBundle::layout.html.twig' %}
 
-{% set title = form.vars.value.id ? 'Edit role' : 'Add role' %}
+{% set title = form.vars.value.id ? 'Edit role'|trans : 'Add role'|trans %}
 
 {% block title %}{{ title }} - {{ parent() }}{% endblock %}
 
@@ -15,22 +15,23 @@
 
 {% block page_container %}
 <div class="container-fluid">
-{% block content %}
-    <form action="{{ form.vars.value.id ? path('oro_user_role_edit', { id: form.vars.value.id }) : path('oro_user_role_create') }}" method="POST" class="form-register">
+    {% block content %}
+    <form action="{{ form.vars.value.id ? path('oro_user_role_edit', { id: form.vars.value.id }) : path('oro_user_role_create') }}" method="post" class="form-register">
         <fieldset>
             <legend>{{ title }}</legend>
 
             {{ form_widget(form) }}
 
             <div class="form-row">
-                <button class="btn btn-large btn-primary" type="submit">Save</button>
+                <button class="btn btn-large btn-primary" type="submit">{{ 'Save'|trans }}</button>
             </div>
         </fieldset>
     </form>
-    {% if form.vars.value.id %}
+
+        {% if form.vars.value.id %}
         <h3>{{ 'Users'|trans }}</h3>
         <div id="users-grid"></div>
-    {% endif %}
-{% endblock %}
+        {% endif %}
+    {% endblock %}
 </div>
 {% endblock %}
