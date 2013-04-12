@@ -10,14 +10,14 @@
 {% endblock head_script %}
 
 {% block page_container %}
-    <div class="container-fluid">
+    <div class="container-fluid oro-tree">
         {% block content %}
             <h1>Edit ACL</h1>
             <form action="{{ path('oro_user_acl_save', { id: role.id }) }}" method="POST">
                 <div id="acl_tree">
                     {% include 'OroUserBundle:Acl:_subTree.html.twig' with {'resources': resources} %}
                 </div>
-                <div class="form-row form-actions">
+                <div class="form-actions">
                     <button class="btn btn-large btn-primary" type="submit">Save</button>
                 </div>
             </form>
