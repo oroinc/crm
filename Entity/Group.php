@@ -45,12 +45,6 @@ class Group
     protected $roles;
 
     /**
-     * @var User[]
-     * @ORM\ManyToMany(targetEntity="User", mappedBy="groups")
-     */
-    protected $users;
-
-    /**
      * @param string $name [optional] Group name
      */
     public function __construct($name = '')
@@ -183,13 +177,5 @@ class Group
         }
 
         return $this;
-    }
-
-    /**
-     * @return User[]
-     */
-    public function getUsers()
-    {
-        return $this->users;
     }
 }

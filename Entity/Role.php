@@ -56,12 +56,6 @@ class Role implements RoleInterface
     protected $aclResources;
 
     /**
-     * @var User[]
-     * @ORM\ManyToMany(targetEntity="User", mappedBy="roles")
-     */
-    protected $users;
-
-    /**
      * Populate the role field
      *
      * @param string $role ROLE_FOO etc
@@ -181,13 +175,5 @@ class Role implements RoleInterface
     public function setAclResources($resources)
     {
         $this->aclResources = $resources;
-    }
-
-    /**
-     * @return User[]
-     */
-    public function getUsers()
-    {
-        return $this->users;
     }
 }
