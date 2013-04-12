@@ -31,8 +31,7 @@ class RequestTitleListener
     public function onKernelRequest(GetResponseEvent $event)
     {
         $request = $event->getRequest();
-        if (
-            HttpKernel::MASTER_REQUEST != $event->getRequestType()
+        if (HttpKernel::MASTER_REQUEST != $event->getRequestType()
             || $request->getRequestFormat() != 'html'
             || $request->getMethod() != 'GET'
             || $request->isXmlHttpRequest()

@@ -36,4 +36,11 @@ interface TitleServiceInterface
      * @return string
      */
     public function getSerialized();
+
+    /**
+     * Updates title index
+     *
+     * @param array $routes
+     */
+    public function update($routes);
 }

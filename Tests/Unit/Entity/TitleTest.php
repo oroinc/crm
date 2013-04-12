@@ -1,10 +1,10 @@
 <?php
 
-namespace Oro\Bundle\NavigationBundle\Tests\Unit\Title;
+namespace Oro\Bundle\NavigationBundle\Tests\Entity;
 
-use Oro\Bundle\NavigationBundle\Title\StoredTitle;
+use Oro\Bundle\NavigationBundle\Entity\Title;
 
-class StoredTitleTest extends \PHPUnit_Framework_TestCase
+class TitleTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @dataProvider provider
@@ -13,7 +13,7 @@ class StoredTitleTest extends \PHPUnit_Framework_TestCase
      */
     public function testSettersAndGetters($property, $isArray = false)
     {
-        $obj = new StoredTitle();
+        $obj = new Title();
         if ($isArray) {
             $value = array('testKey' => 'testValue');
         } else {
@@ -32,10 +32,9 @@ class StoredTitleTest extends \PHPUnit_Framework_TestCase
     public function provider()
     {
         return array(
-            array('params', true),
-            array('template'),
-            array('prefix'),
-            array('suffix')
+            array('route'),
+            array('title'),
+            array('isSystem')
         );
     }
 }
