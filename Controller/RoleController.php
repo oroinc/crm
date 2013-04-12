@@ -11,6 +11,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Oro\Bundle\UserBundle\Entity\Role;
 use Oro\Bundle\UserBundle\Annotation\Acl;
 use Oro\Bundle\UserBundle\Datagrid\RoleDatagridManager;
+use Oro\Bundle\UserBundle\Datagrid\LightUserDatagridManager;
 
 /**
  * @Route("/role")
@@ -60,8 +61,35 @@ class RoleController extends Controller
             return $this->redirect($redirectUrl);
         }
 
+        $userGridManager = $this->get('oro_user.role_user_datagrid_manager');
+        $userGridManager->getRouteGenerator()->setRouteParameters(array('id' => $entity->getId()));
+
         return array(
+            'datagrid' => $userGridManager->getDatagrid(),
             'form' => $this->get('oro_user.form.role')->createView(),
+        );
+    }
+
+    /**
+     * Get grid users data
+     *
+     * @Route(
+     *  "/grid/{id}",
+     *  name="oro_user_role_user_grid",
+     *  requirements={"id"="\d+"},
+     *  defaults={"id"=0, "_format"="json"}
+     * )
+     * @Template("OroGridBundle:Datagrid:list.json.php")
+     */
+    public function gridDataAction(Role $entity)
+    {
+        $this->get('oro_user.role_user_datagrid_manager.default_query_factory')
+             ->setQueryBuilder(
+                 $this->get('oro_user.role_manager')->getUserQueryBuilder($entity)
+             );
+
+        return array(
+            'datagrid' => $this->get('oro_user.role_user_datagrid_manager')->getDatagrid()
         );
     }
 

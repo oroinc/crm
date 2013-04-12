@@ -10,6 +10,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 use Oro\Bundle\UserBundle\Entity\Group;
 use Oro\Bundle\UserBundle\Datagrid\GroupDatagridManager;
+use Oro\Bundle\UserBundle\Datagrid\LightUserDatagridManager;
 
 /**
  * @Route("/group")
@@ -44,8 +45,35 @@ class GroupController extends Controller
             }
         }
 
+        $userGridManager = $this->get('oro_user.group_user_datagrid_manager');
+        $userGridManager->getRouteGenerator()->setRouteParameters(array('id' => $entity->getId()));
+
         return array(
             'form' => $this->get('oro_user.form.group')->createView(),
+            'datagrid' => $this->get('oro_user.group_user_datagrid_manager')->getDatagrid(),
+        );
+    }
+
+    /**
+     * Get grid data
+     *
+     * @Route(
+     *  "/grid/{id}",
+     *  name="oro_user_group_user_grid",
+     *  requirements={"id"="\d+"},
+     *  defaults={"id"=0, "_format"="json"}
+     * )
+     * @Template("OroGridBundle:Datagrid:list.json.php")
+     */
+    public function gridDataAction(Group $entity)
+    {
+        $this->get('oro_user.group_user_datagrid_manager.default_query_factory')
+            ->setQueryBuilder(
+                $this->get('oro_user.group_manager')->getUserQueryBuilder($entity)
+            );
+
+        return array(
+            'datagrid' => $this->get('oro_user.group_user_datagrid_manager')->getDatagrid(),
         );
     }
 

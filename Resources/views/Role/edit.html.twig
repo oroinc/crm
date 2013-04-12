@@ -3,20 +3,34 @@
 {% set title = form.vars.value.id ? 'Edit role' : 'Add role' %}
 
 {% block title %}{{ title }} - {{ parent() }}{% endblock %}
+
+{% block head_script %}
+    {{ parent() }}
+
+    {% if form.vars.value.id %}
+        {% include 'OroGridBundle:Include:javascript.html.twig' with {'datagrid': datagrid, 'selector': '#users-grid'} %}
+        {% include 'OroGridBundle:Include:stylesheet.html.twig' %}
+    {% endif %}
+{% endblock %}
+
 {% block page_container %}
 <div class="container-fluid">
 {% block content %}
-<form action="{{ form.vars.value.id ? path('oro_user_role_edit', { id: form.vars.value.id }) : path('oro_user_role_create') }}" method="POST" class="form-register">
-    <fieldset>
-        <legend>{{ title }}</legend>
+    <form action="{{ form.vars.value.id ? path('oro_user_role_edit', { id: form.vars.value.id }) : path('oro_user_role_create') }}" method="POST" class="form-register">
+        <fieldset>
+            <legend>{{ title }}</legend>
 
-        {{ form_widget(form) }}
+            {{ form_widget(form) }}
 
-        <div class="form-row">
-            <button class="btn btn-large btn-primary" type="submit">Save</button>
-        </div>
-    </fieldset>
-</form>
+            <div class="form-row">
+                <button class="btn btn-large btn-primary" type="submit">Save</button>
+            </div>
+        </fieldset>
+    </form>
+    {% if form.vars.value.id %}
+        <h3>{{ 'Users'|trans }}</h3>
+        <div id="users-grid"></div>
+    {% endif %}
 {% endblock %}
 </div>
 {% endblock %}
