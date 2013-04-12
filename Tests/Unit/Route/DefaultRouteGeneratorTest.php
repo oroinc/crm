@@ -221,4 +221,14 @@ class DefaultRouteGeneratorTest extends \PHPUnit_Framework_TestCase
             $this->model->generatePagerUrl($parametersMock, $page, $perPage)
         );
     }
+
+    public function testSetRouteParameters()
+    {
+        $routerMock = $this->getMockForAbstractClass(
+            'Symfony\Component\Routing\RouterInterface'
+        );
+        $this->model = new DefaultRouteGenerator($routerMock, self::TEST_ROUTE_NAME);
+        $this->model->setRouteParameters($this->testRouteParameters);
+        $this->assertAttributeEquals($this->testRouteParameters, 'routeParameters', $this->model);
+    }
 }
