@@ -11,9 +11,9 @@
 
 {% block page_container %}
 <div class="container-fluid">
-{% block content %}
-    <h1>Users overview <a class="btn btn-primary pull-right" href="{{ path('oro_user_create', {back: app.request.uri}) }}">Add new</a></h1>
+    {% block content %}
+    <h1>{{ 'Users overview'|trans }} <a class="btn btn-primary pull-right" href="{{ path('oro_user_create', { back: app.request.uri }) }}">{{ 'Add new'|trans }}</a></h1>
     <div id="users-grid"></div>
-{% endblock %}
+    {% endblock %}
 </div>
 {% endblock %}

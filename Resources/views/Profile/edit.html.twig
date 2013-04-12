@@ -154,23 +154,21 @@
 
     {% javascripts
         '@OroUIBundle/Resources/public/lib/bootstrap/js/bootstrap-scrollspy.js'
-        '@OroUserBundle/Resources/public/js/bootstrap-switch.js'
         '@OroUserBundle/Resources/public/js/emails.js'
         '@OroUserBundle/Resources/public/js/profile.js'
 
-        output='js/page/profile.js'
+        filter='yui_js'
+        output='js/oro.user.profile.js'
     %}
     <script src="{{ asset_url }}" type="text/javascript"></script>
     {% endjavascripts %}
 
     {% stylesheets
-        '@OroUserBundle/Resources/public/css/bootstrap-switch.css'
         '@OroUserBundle/Resources/public/css/jquery-ui-1.10.2.custom.css'
 
-        output='css/page/profile.css'
-        filter='cssrewrite'
+        filter='cssrewrite,lessphp,yui_css'
+        output='css/oro.user.profile.css'
     %}
     <link rel="stylesheet" type="text/css" href="{{ asset_url }}" />
     {% endstylesheets %}
-
 {% endblock %}

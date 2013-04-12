@@ -1,6 +1,6 @@
 {% extends bap.layout is defined ? bap.layout : 'OroUserBundle::layout.html.twig' %}
 
-{% block title %}Groups overview - {{ parent() }}{% endblock %}
+{% block title %}{{ 'Groups overview'|trans }} - {{ parent() }}{% endblock %}
 
 {% block head_script %}
     {{ parent() }}
@@ -10,15 +10,15 @@
 {% endblock %}
 
 {% block content %}
-    <div class="container-fluid">
-    <h1>Groups overview <a class="btn btn-primary pull-right" href="#" id="add-new-btn">Add new</a></h1>
+<div class="container-fluid">
+    <h1>{{ 'Groups overview'|trans }} <a class="btn btn-primary pull-right" href="{{ path('oro_user_group_create') }}" id="add-new-btn">{{ 'Add new'|trans }}</a></h1>
     <div id="groups-grid"></div>
 
     <script type="text/javascript">
         $(function() {
-            $("#add-new-btn").click(function() {
+            $("#add-new-btn").click(function(e) {
                 new Oro.widget.DialogView({
-                    url: {{ path('oro_user_group_create')|json_encode|raw }},
+                    url: $(this).attr('href'),
                     dialogOptions: {
                         appendTo: '#main',
                         allowMaximize: true,
@@ -27,9 +27,11 @@
                         maximizedHeightDecreaseBy: 'minimize-bar',
                         width : 400,
                         height : 250,
-                        title: 'Add group'
+                        title: '{{ 'Add group'|trans }}'
                     }
                 }).render();
+
+                return false;
             });
         });
     </script>
