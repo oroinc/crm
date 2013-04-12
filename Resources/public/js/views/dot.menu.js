@@ -19,6 +19,7 @@ navigation.dotMenu.MainView = Backbone.View.extend({
     initialize: function() {
         this.$tabsContainer = this.$('.nav-tabs');
         this.$tabsContent = this.$('.tab-content')
+        this.$tabsContent.find('.menu-close').click(_.bind(this.close, this));
     },
 
     addTab: function(options) {
