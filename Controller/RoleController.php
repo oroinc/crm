@@ -12,7 +12,6 @@ use Oro\Bundle\UserBundle\Entity\Role;
 use Oro\Bundle\UserBundle\Annotation\Acl;
 use Oro\Bundle\UserBundle\Datagrid\RoleDatagridManager;
 use Oro\Bundle\UserBundle\Datagrid\LightUserDatagridManager;
-use Oro\Bundle\GridBundle\Datagrid\ORM\QueryFactory\QueryFactory;
 
 /**
  * @Route("/role")
