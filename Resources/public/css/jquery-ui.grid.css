@@ -32,7 +32,7 @@
 ----------------------------------*/
 
 /* states and images */
- .ui-icon {
+.ui-icon {
     display: block;
     text-indent: -99999px;
     overflow: hidden;
@@ -40,7 +40,7 @@
 }
 
 /* Overlays */
- .ui-widget-overlay {
+.ui-widget-overlay {
     position: fixed;
     top: 0;
     left: 0;
@@ -153,25 +153,25 @@
 ----------------------------------*/
 
 /* Overlays */
- .ui-widget-overlay {
+.ui-widget-overlay {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
 }
- .ui-slider {
+.ui-slider {
     position: relative;
     text-align: left;
 }
- .ui-slider .ui-slider-handle {
+.ui-slider .ui-slider-handle {
     position: absolute;
     z-index: 2;
     width: 1.2em;
     height: 1.2em;
     cursor: default;
 }
- .ui-slider .ui-slider-range {
+.ui-slider .ui-slider-range {
     position: absolute;
     z-index: 1;
     font-size: .7em;
@@ -181,221 +181,120 @@
 }
 
 /* For IE8 - See #6727 */
- .ui-slider.ui-state-disabled .ui-slider-handle,
- .ui-slider.ui-state-disabled .ui-slider-range {
+.ui-slider.ui-state-disabled .ui-slider-handle,
+.ui-slider.ui-state-disabled .ui-slider-range {
     filter: inherit;
 }
 
- .ui-slider-horizontal {
+.ui-slider-horizontal {
     height: .8em;
 }
- .ui-slider-horizontal .ui-slider-handle {
+.ui-slider-horizontal .ui-slider-handle {
     top: -.3em;
     margin-left: -.6em;
 }
- .ui-slider-horizontal .ui-slider-range {
+.ui-slider-horizontal .ui-slider-range {
     top: 0;
     height: 100%;
 }
- .ui-slider-horizontal .ui-slider-range-min {
+.ui-slider-horizontal .ui-slider-range-min {
     left: 0;
 }
- .ui-slider-horizontal .ui-slider-range-max {
+.ui-slider-horizontal .ui-slider-range-max {
     right: 0;
 }
 
- .ui-slider-vertical {
+.ui-slider-vertical {
     width: .8em;
     height: 100px;
 }
- .ui-slider-vertical .ui-slider-handle {
+.ui-slider-vertical .ui-slider-handle {
     left: -.3em;
     margin-left: 0;
     margin-bottom: -.6em;
 }
- .ui-slider-vertical .ui-slider-range {
+.ui-slider-vertical .ui-slider-range {
     left: 0;
     width: 100%;
 }
- .ui-slider-vertical .ui-slider-range-min {
+.ui-slider-vertical .ui-slider-range-min {
     bottom: 0;
 }
- .ui-slider-vertical .ui-slider-range-max {
+.ui-slider-vertical .ui-slider-range-max {
     top: 0;
 }
 
 /* css for timepicker */
- .ui-timepicker-div .ui-widget-header { margin-bottom: 8px; }
- .ui-timepicker-div dl { text-align: left; }
- .ui-timepicker-div dl dt { height: 25px; margin-bottom: -25px; }
- .ui-timepicker-div dl dd { margin: 0 10px 10px 65px; }
- .ui-timepicker-div td { font-size: 90%; }
- .ui-tpicker-grid-label { background: none; border: none; margin: 0; padding: 0; }
+.ui-timepicker-div .ui-widget-header { margin-bottom: 8px; }
+.ui-timepicker-div dl { text-align: left; }
+.ui-timepicker-div dl dt { height: 25px; margin-bottom: -25px; }
+.ui-timepicker-div dl dd { margin: 0 10px 10px 65px; }
+.ui-timepicker-div td { font-size: 90%; }
+.ui-tpicker-grid-label { background: none; border: none; margin: 0; padding: 0; }
 
- .ui-timepicker-rtl{ direction: rtl; }
- .ui-timepicker-rtl dl { text-align: right; }
- .ui-timepicker-rtl dl dd { margin: 0 65px 10px 10px; }
+.ui-timepicker-rtl{ direction: rtl; }
+.ui-timepicker-rtl dl { text-align: right; }
+.ui-timepicker-rtl dl dd { margin: 0 65px 10px 10px; }
 
 
-/* Component containers
-----------------------------------*/
- .ui-widget {
-    font-family: Verdana,Arial,sans-serif;
-    font-size: 1.1em;
-}
- .ui-widget .ui-widget {
-    font-size: 1em;
-}
- .ui-widget input,
- .ui-widget select,
- .ui-widget textarea,
- .ui-widget button {
-    font-family: Verdana,Arial,sans-serif;
-    font-size: 1em;
-}
-.ui-widget-content,  .ui-widget-content {
-    border: 1px solid #aaaaaa;
-    background: #ffffff url(../images/ui-bg_flat_75_ffffff_40x100.png) 50% 50% repeat-x;
-    color: #222222;
-    overflow: visible;
-}
- .ui-widget-content a {
-    color: #222222;
-}
- .ui-widget-header {
-    border: 1px solid #aaaaaa;
-    background: #cccccc url(../images/ui-bg_highlight-soft_75_cccccc_1x100.png) 50% 50% repeat-x;
-    color: #222222;
-    font-weight: bold;
-}
- .ui-widget-header a {
-    color: #222222;
-}
 
 /* Interaction states
 ----------------------------------*/
- .ui-state-default,
- .ui-widget-content .ui-state-default,
- .ui-widget-header .ui-state-default {
+.ui-state-default,
+.ui-widget-content .ui-state-default,
+.ui-widget-header .ui-state-default {
     border: 1px solid #d3d3d3;
     background: #e6e6e6 url(../images/ui-bg_glass_75_e6e6e6_1x400.png) 50% 50% repeat-x;
     font-weight: normal;
     color: #555555;
 }
- .ui-state-default a,
- .ui-state-default a:link,
- .ui-state-default a:visited {
+.ui-state-default a,
+.ui-state-default a:link,
+.ui-state-default a:visited {
     color: #555555;
     text-decoration: none;
 }
- .ui-state-hover,
- .ui-widget-content .ui-state-hover,
- .ui-widget-header .ui-state-hover,
- .ui-state-focus,
- .ui-widget-content .ui-state-focus,
- .ui-widget-header .ui-state-focus {
+.ui-state-hover,
+.ui-widget-content .ui-state-hover,
+.ui-widget-header .ui-state-hover,
+.ui-state-focus,
+.ui-widget-content .ui-state-focus,
+.ui-widget-header .ui-state-focus {
     border: 1px solid #999999;
     background: #dadada url(../images/ui-bg_glass_75_dadada_1x400.png) 50% 50% repeat-x;
     font-weight: normal;
     color: #212121;
 }
- .ui-state-hover a,
- .ui-state-hover a:hover,
- .ui-state-hover a:link,
- .ui-state-hover a:visited {
+.ui-state-hover a,
+.ui-state-hover a:hover,
+.ui-state-hover a:link,
+.ui-state-hover a:visited {
     color: #212121;
     text-decoration: none;
 }
- .ui-state-active,
- .ui-widget-content .ui-state-active,
- .ui-widget-header .ui-state-active {
+.ui-state-active,
+.ui-widget-content .ui-state-active,
+.ui-widget-header .ui-state-active {
     border: 1px solid #aaaaaa;
     background: #ffffff url(../images/ui-bg_glass_65_ffffff_1x400.png) 50% 50% repeat-x;
     font-weight: normal;
     color: #212121;
 }
- .ui-state-active a,
- .ui-state-active a:link,
- .ui-state-active a:visited {
+.ui-state-active a,
+.ui-state-active a:link,
+.ui-state-active a:visited {
     color: #212121;
     text-decoration: none;
 }
 
-/* Icons
-----------------------------------*/
-
-/* states and images */
- .ui-icon {
-    width: 16px;
-    height: 16px;
-}
- .ui-icon,
- .ui-widget-content .ui-icon {
-    background-image: url(../images/ui-icons_222222_256x240.png);
-}
- .ui-widget-header .ui-icon {
-    background-image: url(../images/ui-icons_222222_256x240.png);
-}
- .ui-state-default .ui-icon {
-    background-image: url(../images/ui-icons_888888_256x240.png);
-}
- .ui-state-hover .ui-icon,
- .ui-state-focus .ui-icon {
-    background-image: url(../images/ui-icons_454545_256x240.png);
-}
- .ui-state-active .ui-icon {
-    background-image: url(../images/ui-icons_454545_256x240.png);
-}
- .ui-state-highlight .ui-icon {
-    background-image: url(../images/ui-icons_2e83ff_256x240.png);
-}
- .ui-state-error .ui-icon,
- .ui-state-error-text .ui-icon {
-    background-image: url(../images/ui-icons_cd0a0a_256x240.png);
-}
-
-/* positioning */
- .ui-icon-circle-triangle-e { background-position: -48px -192px; }
- .ui-icon-circle-triangle-s { background-position: -64px -192px; }
- .ui-icon-circle-triangle-w { background-position: -80px -192px; }
- .ui-icon-circle-triangle-n { background-position: -96px -192px; }
-
-/* Misc visuals
-----------------------------------*/
-
-/* Corner radius */
- .ui-corner-all,
- .ui-corner-top,
- .ui-corner-left,
- .ui-corner-tl {
-    border-top-left-radius: 4px;
-}
- .ui-corner-all,
- .ui-corner-top,
- .ui-corner-right,
- .ui-corner-tr {
-    border-top-right-radius: 4px;
-}
- .ui-corner-all,
- .ui-corner-bottom,
- .ui-corner-left,
- .ui-corner-bl {
-    border-bottom-left-radius: 4px;
-}
- .ui-corner-all,
- .ui-corner-bottom,
- .ui-corner-right,
- .ui-corner-br {
-    border-bottom-right-radius: 4px;
-}
 
 /* Overlays */
- .ui-widget-overlay {
+.ui-widget-overlay {
     background: #aaaaaa url(../images/ui-bg_flat_0_aaaaaa_40x100.png) 50% 50% repeat-x;
     opacity: .3;
     filter: Alpha(Opacity=30);
 }
- .ui-widget-shadow {
+.ui-widget-shadow {
     margin: -8px 0 0 -8px;
     padding: 8px;
     background: #aaaaaa url(../images/ui-bg_flat_0_aaaaaa_40x100.png) 50% 50% repeat-x;
