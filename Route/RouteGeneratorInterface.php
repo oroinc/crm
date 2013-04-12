@@ -29,4 +29,10 @@ interface RouteGeneratorInterface
      * @return string
      */
     public function generatePagerUrl(ParametersInterface $parameters, $page, $perPage = null);
+
+    /**
+     * Set array with route parameters
+     * @param array $parameters
+     */
+    public function setRouteParameters(array $parameters);
 }
