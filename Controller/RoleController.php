@@ -37,9 +37,8 @@ class RoleController extends Controller
     /**
      * Edit role form
      *
-     * @Route("/edit/{id}/{_format}", name="oro_user_role_edit",
-     * requirements={"id"="\d+", "_format"="html|json"},
-     * defaults={"id"=0, "_format"="html"})
+     * @Route("/edit/{id}", name="oro_user_role_edit", requirements={"id"="\d+"}, defaults={"id"=0})
+     * @Template
      */
     public function editAction(Role $entity)
     {
@@ -62,27 +61,35 @@ class RoleController extends Controller
             return $this->redirect($redirectUrl);
         }
 
+        $userGridManager = $this->get('oro_user.role_user_datagrid_manager');
+        $userGridManager->getRouteGenerator()->setRouteParameters(array('id' => $entity->getId()));
+
+        return array(
+            'datagrid' => $userGridManager->getDatagrid(),
+            'form' => $this->get('oro_user.form.role')->createView(),
+        );
+    }
+
+    /**
+     * Get grid users data
+     *
+     * @Route(
+     *  "/grid/{id}",
+     *  name="oro_user_role_user_grid",
+     *  requirements={"id"="\d+"},
+     *  defaults={"id"=0, "_format"="json"}
+     * )
+     * @Template("OroGridBundle:Datagrid:list.json.php")
+     */
+    public function gridDataAction(Role $entity)
+    {
         $this->get('oro_user.role_user_datagrid_manager.default_query_factory')
              ->setQueryBuilder(
                  $this->get('oro_user.role_manager')->getUserQueryBuilder($entity)
              );
 
-        /** @var $userGridManager LightUserDatagridManager */
-        $userGridManager = $this->get('oro_user.role_user_datagrid_manager');
-        $userGridManager->getRouteGenerator()->setRouteParameters(array('id' => $entity->getId()));
-
-        if ('json' == $this->getRequest()->getRequestFormat()) {
-            $view = 'OroGridBundle:Datagrid:list.json.php';
-        } else {
-            $view = 'OroUserBundle:Role:edit.html.twig';
-        }
-
-        return $this->render(
-            $view,
-            array(
-                'datagrid' => $userGridManager->getDatagrid(),
-                'form' => $this->get('oro_user.form.role')->createView(),
-            )
+        return array(
+            'datagrid' => $this->get('oro_user.role_user_datagrid_manager')->getDatagrid()
         );
     }
 
