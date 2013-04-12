@@ -32,6 +32,7 @@ interface RouteGeneratorInterface
 
     /**
      * Set array with route parameters
+     *
      * @param array $parameters
      */
     public function setRouteParameters(array $parameters);

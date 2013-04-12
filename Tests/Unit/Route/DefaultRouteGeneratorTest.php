@@ -148,10 +148,9 @@ class DefaultRouteGeneratorTest extends \PHPUnit_Framework_TestCase
             $parametersMock = $this->getParametersMock($parameters);
         }
 
-        $routerMock = $this->getRouterMock(array_merge($expectedParameters, $this->testRouteParameters));
+        $routerMock = $this->getRouterMock($expectedParameters);
 
         $this->model = new DefaultRouteGenerator($routerMock, self::TEST_ROUTE_NAME);
-        $this->model->setRouteParameters($this->testRouteParameters);
         $this->assertEquals(
             self::TEST_URL,
             $this->model->generateUrl($parametersMock, $extendParameters)
@@ -162,13 +161,12 @@ class DefaultRouteGeneratorTest extends \PHPUnit_Framework_TestCase
     {
         $expectedParameters = array_merge_recursive($this->testBasicParameters, $this->expectedSortParameters);
         $parametersMock = $this->getParametersMock($this->testBasicParameters);
-        $routerMock = $this->getRouterMock(array_merge($expectedParameters, $this->testRouteParameters));
+        $routerMock = $this->getRouterMock($expectedParameters);
 
         $field = new FieldDescription();
         $field->setName(self::TEST_FIELD_NAME);
 
         $this->model = new DefaultRouteGenerator($routerMock, self::TEST_ROUTE_NAME);
-        $this->model->setRouteParameters($this->testRouteParameters);
         $this->assertEquals(
             self::TEST_URL,
             $this->model->generateSortUrl($parametersMock, $field, self::TEST_SORT_DIRECTION)
@@ -220,5 +218,15 @@ class DefaultRouteGeneratorTest extends \PHPUnit_Framework_TestCase
             self::TEST_URL,
             $this->model->generatePagerUrl($parametersMock, $page, $perPage)
         );
+    }
+
+    public function testSetRouteParameters()
+    {
+        $routerMock = $this->getMockForAbstractClass(
+            'Symfony\Component\Routing\RouterInterface'
+        );
+        $this->model = new DefaultRouteGenerator($routerMock, self::TEST_ROUTE_NAME);
+        $this->model->setRouteParameters($this->testRouteParameters);
+        $this->assertAttributeEquals($this->testRouteParameters, 'routeParameters', $this->model);
     }
 }
