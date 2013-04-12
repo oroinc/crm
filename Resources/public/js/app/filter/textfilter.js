@@ -134,7 +134,11 @@ OroApp.Filter.TextFilter = OroApp.Filter.AbstractFilter.extend({
     _onClickCriteriaSelector: function(e) {
         e.stopPropagation();
         $('body').trigger('click');
-        this._showCriteria();
+        if (!this.popupCriteriaShowed) {
+            this._showCriteria();
+        } else {
+            this._hideCriteria();
+        }
     },
 
     /**
@@ -169,6 +173,7 @@ OroApp.Filter.TextFilter = OroApp.Filter.AbstractFilter.extend({
         if (elem.get(0) !== e.target && !elem.has(e.target).length) {
             this._hideCriteria();
             this.setValue(this._readDOMValue());
+            e.stopPropagation();
         }
     },
 
@@ -229,7 +234,9 @@ OroApp.Filter.TextFilter = OroApp.Filter.AbstractFilter.extend({
         this.$(this.criteriaSelector).show();
         this._focusCriteria();
         this._setButtonPressed(this.$(this.criteriaSelector), true);
-        this.popupCriteriaShowed = true;
+        setTimeout(_.bind(function() {
+            this.popupCriteriaShowed = true;
+        }, this), 100);
     },
 
     /**
@@ -240,7 +247,9 @@ OroApp.Filter.TextFilter = OroApp.Filter.AbstractFilter.extend({
     _hideCriteria: function() {
         this.$(this.criteriaSelector).hide();
         this._setButtonPressed(this.$(this.criteriaSelector), false);
-        this.popupCriteriaShowed = false;
+        setTimeout(_.bind(function() {
+            this.popupCriteriaShowed = false;
+        }, this), 100);
     },
 
     /**

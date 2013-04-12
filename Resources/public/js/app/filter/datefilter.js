@@ -192,10 +192,10 @@ OroApp.Filter.DateFilter = OroApp.Filter.ChoiceFilter.extend({
             var hint = '';
             var start = value.value.start;
             var end   = value.value.end;
-            var type  = parseInt(value.type);
+            var type  = value.type ? value.type.toString() : '';
 
             switch (type) {
-                case this.typeValues.notBetween:
+                case this.typeValues.notBetween.toString():
                     if (start && end) {
                         hint += this.choices[this.typeValues.notBetween] + ' ' + start + ' and ' + end
                     } else if (start) {
@@ -204,7 +204,7 @@ OroApp.Filter.DateFilter = OroApp.Filter.ChoiceFilter.extend({
                         hint += ' after ' + end;
                     }
                     break;
-                case this.typeValues.between:
+                case this.typeValues.between.toString():
                 default:
                     if (start && end) {
                         hint += this.choices[this.typeValues.between] + ' ' + start + ' and ' + end

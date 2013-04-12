@@ -199,7 +199,7 @@ OroApp.Filter.SelectFilter = OroApp.Filter.AbstractFilter.extend({
      */
     _setDropdownWidth: function() {
         if (!this.minimumWidth) {
-            this.minimumWidth = this.selectWidget.getMinimumDropdownWidth();
+            this.minimumWidth = this.selectWidget.getMinimumDropdownWidth() + 12;
         }
         var widget = this.selectWidget.getWidget();
         var filterWidth = this.$(this.containerSelector).width();
@@ -216,9 +216,13 @@ OroApp.Filter.SelectFilter = OroApp.Filter.AbstractFilter.extend({
      */
     _onClickFilterArea: function(e) {
         if (!this.selectDropdownOpened) {
-            this.selectWidget.multiselect('open');
+            setTimeout(_.bind(function() {
+                this.selectWidget.multiselect('open');
+            }, this), 50);
         } else {
-            this.selectWidget.multiselect('close');
+            setTimeout(_.bind(function() {
+                this.selectWidget.multiselect('close');
+            }, this), 50);
         }
 
         e.stopPropagation();

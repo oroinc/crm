@@ -8,8 +8,8 @@ OroApp.Filter = OroApp.Filter || {};
  * @extends OroApp.Filter.ChoiceFilter
  */
 OroApp.Filter.NumberFilter = OroApp.Filter.ChoiceFilter.extend({
-    /** @property {Backgrid.NumberFormatter} */
-    formatter: new Backgrid.NumberFormatter(),
+    /** @property {OroApp.Filter.NumberFormatter} */
+    formatter: new OroApp.Filter.NumberFormatter(),
 
     /**
      * Initialize.
@@ -56,13 +56,13 @@ OroApp.Filter.NumberFilter = OroApp.Filter.ChoiceFilter.extend({
         var result = formatter;
         switch (formatter) {
             case 'integer':
-                result = new Backgrid.NumberFormatter({
+                result = new OroApp.Filter.NumberFormatter({
                     decimals: 0,
                     orderSeparator: ''
                 });
                 break;
             case 'decimal':
-                result = new Backgrid.NumberFormatter();
+                result = new OroApp.Filter.NumberFormatter();
                 break;
         }
         if (_.isString(result)) {

@@ -20,6 +20,20 @@ OroApp.Filter.List = Backbone.View.extend({
     filters: {},
 
     /**
+     * Container tag name
+     *
+     * @property
+     */
+    tagName: 'div',
+
+    /**
+     * Container classes
+     *
+     * @property
+     */
+    className: 'filter-box oro-clearfix-width',
+
+    /**
      * Filter list template
      *
      * @property
@@ -48,11 +62,6 @@ OroApp.Filter.List = Backbone.View.extend({
      */
     addButtonHint: '+ Add filter',
 
-    /** @property */
-    events: {
-        'change #add-filter-select': '_onChangeFilterSelect'
-    },
-
     /**
      * Select widget object
      *
@@ -66,6 +75,11 @@ OroApp.Filter.List = Backbone.View.extend({
      * @property
      */
     buttonSelector: '.ui-multiselect.filter-list',
+
+    /** @property */
+    events: {
+        'change #add-filter-select': '_onChangeFilterSelect'
+    },
 
     /**
      * Initialize filter list options
@@ -113,9 +127,32 @@ OroApp.Filter.List = Backbone.View.extend({
         this.disableFilter(filter);
     },
 
-    getValues: function() {},
+    /**
+     * Returns list of filter values
+     */
+    getValues: function() {
+        var values = {};
+        _.each(this.filters, function(filter) {
+            if (filter.enabled) {
+                values[filter.name] = filter.getValue();
+            }
+        }, this);
 
-    setValues: function() {},
+        return values;
+    },
+
+    /**
+     * Sets values for filters
+     */
+    setValues: function(values) {
+        _.each(values, function(value, name) {
+            if (_.has(this.filters, name)) {
+                this.filters[name].setValue(value);
+            }
+        }, this);
+
+        console.log(values);
+    },
 
     /**
      * Triggers when filter select is changed
@@ -136,7 +173,11 @@ OroApp.Filter.List = Backbone.View.extend({
     enableFilter: function(filter) {
         filter.enable();
         var optionSelector = this.filterSelector + ' option[value="' + filter.name + '"]';
-        this.$(optionSelector).attr('selected', 'selected');
+        this.$(optionSelector).attr('selected', true);
+        var checkbox = this.selectWidget.multiselect('widget').find('input[value="' + filter.name + '"]');
+        if (!checkbox.is(':checked')) {
+            checkbox.click();
+        }
         this.selectWidget.multiselect('refresh');
         return this;
     },
@@ -193,6 +234,7 @@ OroApp.Filter.List = Backbone.View.extend({
      */
     _initializeSelectWidget: function() {
         this.selectWidget = new OroApp.Filter.MultiSelectDecorator(this.$(this.filterSelector), {
+            multiple: true,
             selectedList: 0,
             selectedText: this.addButtonHint,
             classes: 'filter-list select-filter-widget',
