@@ -96,6 +96,10 @@ navigation.dotMenu.MainView = Backbone.View.extend({
 
     showTab: function(tabKey) {
         this.getTab(tabKey).$tab.show();
+    },
+
+    close: function() {
+        this.$el.parents('.dropdown').removeClass('open');
     }
 });
 

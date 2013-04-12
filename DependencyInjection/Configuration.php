@@ -61,7 +61,6 @@ class Configuration implements ConfigurationInterface
                     ->scalarNode('block')->end()
                     ->scalarNode('rootClass')->end()
                     ->scalarNode('isDropdown')->end()
-                    ->scalarNode('currentLinkCloseTab')->end()
                 ->end()
             ->end()
         ->end()
