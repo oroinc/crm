@@ -19,6 +19,11 @@ class DefaultRouteGenerator implements RouteGeneratorInterface
     private $routeName;
 
     /**
+     * @var array
+     */
+    protected $routeParameters;
+
+    /**
      * @param RouterInterface $router
      * @param string $routeName
      */
@@ -26,6 +31,7 @@ class DefaultRouteGenerator implements RouteGeneratorInterface
     {
         $this->router = $router;
         $this->routeName = $routeName;
+        $this->routeParameters = array();
     }
 
     /**
@@ -38,6 +44,7 @@ class DefaultRouteGenerator implements RouteGeneratorInterface
         } else {
             $routeParameters = $extendParameters;
         }
+
         return $this->generate($this->routeName, $routeParameters);
     }
 
@@ -52,6 +59,7 @@ class DefaultRouteGenerator implements RouteGeneratorInterface
         $routeParameters[$rootParameter][ParametersInterface::SORT_PARAMETERS] = array(
             $field->getName() => $direction
         );
+
         return $this->generate($this->routeName, $routeParameters);
     }
 
@@ -67,7 +75,16 @@ class DefaultRouteGenerator implements RouteGeneratorInterface
         if (null !== $perPage) {
             $routeParameters[$rootParameter][ParametersInterface::PAGER_PARAMETERS]['_per_page'] = $perPage;
         }
+
         return $this->generate($this->routeName, $routeParameters);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setRouteParameters(array $parameters)
+    {
+        $this->routeParameters = $parameters;
     }
 
     /**
@@ -78,6 +95,8 @@ class DefaultRouteGenerator implements RouteGeneratorInterface
      */
     protected function generate($name, $parameters = array(), $absolute = false)
     {
+        $parameters = array_merge($parameters, $this->routeParameters);
+
         return $this->router->generate($name, $parameters, $absolute);
     }
 }
