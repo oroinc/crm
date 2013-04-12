@@ -92,10 +92,18 @@ class TitleService implements TitleServiceInterface
      */
     public function render($params = array(), $title = null, $prefix = null, $suffix = null)
     {
-        $title = is_null($title) ? $this->getTemplate() : $title;
-        $prefix = is_null($prefix) ? $this->prefix : $prefix;
-        $suffix = is_null($suffix) ? $this->suffix : $suffix;
-        $params = empty($params) ? $this->getParams() : $params;
+        if (is_null($title)) {
+            $title = $this->getTemplate();
+        }
+        if (is_null($prefix)) {
+            $prefix = $this->prefix;
+        }
+        if (is_null($suffix)) {
+            $suffix = $this->suffix;
+        }
+        if (empty($params)) {
+            $params = $this->getParams();
+        }
 
         $trans = $this->translator;
 
@@ -288,7 +296,11 @@ class TitleService implements TitleServiceInterface
             }
 
             $route = $entity->getRoute();
-            $title = $data[$route] instanceof Route ? '' : $data[$route];
+            $title = '';
+
+            if (!$data[$route] instanceof Route) {
+                $title = $data[$route];
+            }
 
             // update existing system titles
             if ($entity->getIsSystem()) {

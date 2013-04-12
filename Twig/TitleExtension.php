@@ -2,21 +2,21 @@
 
 namespace Oro\Bundle\NavigationBundle\Twig;
 
-use Oro\Bundle\NavigationBundle\Provider\TitleService;
+use Oro\Bundle\NavigationBundle\Provider\TitleServiceInterface;
 
 class TitleExtension extends \Twig_Extension
 {
     const EXT_NAME = 'oro_title';
 
     /**
-     * @var TitleService
+     * @var TitleServiceInterface
      */
     protected $titleService;
 
     /**
-     * @param TitleService $titleService
+     * @param TitleServiceInterface $titleService
      */
-    public function __construct(TitleService $titleService)
+    public function __construct(TitleServiceInterface $titleService)
     {
         $this->titleService = $titleService;
     }

@@ -80,7 +80,7 @@ class TitleServiceTest extends \PHPUnit_Framework_TestCase
         $this->translator->expects($this->exactly(3))
                          ->method('trans');
 
-        $result = $this->titleService->render(array(), 'Title template', 'Prefix', 'Suffix');
+        $result = $this->titleService->render(array(), null, 'Prefix', 'Suffix');
 
         $this->assertTrue(is_string($result));
     }

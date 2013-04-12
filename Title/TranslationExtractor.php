@@ -8,9 +8,24 @@ use Symfony\Component\Translation\Extractor\ExtractorInterface;
 
 class TranslationExtractor implements ExtractorInterface
 {
+    /**
+     * @var \Oro\Bundle\NavigationBundle\Provider\TitleService
+     */
     private $titleService;
+
+    /**
+     * @var bool
+     */
     private $catalogue;
+
+    /**
+     * @var bool
+     */
     private $domain;
+
+    /**
+     * @var string
+     */
     private $prefix;
 
     /**
@@ -24,6 +39,8 @@ class TranslationExtractor implements ExtractorInterface
     }
 
     /**
+     * Extract titles for translation
+     *
      * @param string $directory
      * @param \Symfony\Component\Translation\MessageCatalogue $catalogue
      * @throws \RuntimeException

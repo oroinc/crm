@@ -5,6 +5,14 @@ namespace Oro\Bundle\NavigationBundle\Provider;
 interface TitleServiceInterface
 {
     /**
+     * Set properties from array
+     *
+     * @param array $values
+     * @return $this
+     */
+    public function setData(array $values);
+
+    /**
      * Return rendered translated title
      *
      * @param array $params
