@@ -2,9 +2,9 @@
  * View that represents all grid filters
  *
  * @class   OroApp.DatagridFilterList
- * @extends Backbone.View
+ * @extends OroApp.Filter.List
  */
-OroApp.DatagridFilterList = Backbone.View.extend({
+OroApp.DatagridFilterList = OroApp.Filter.List.extend({
     /**
      * List of filter objects
      *
@@ -263,7 +263,7 @@ OroApp.DatagridFilterList = Backbone.View.extend({
      * @protected
      */
     _initializeSelectWidget: function() {
-        this.selectWidget = new OroApp.MultiSelectDecorator(this.$(this.filterSelector), {
+        this.selectWidget = new OroApp.Filter.MultiSelectDecorator(this.$(this.filterSelector), {
             selectedList: 0,
             selectedText: this.addButtonHint,
             classes: 'filter-list select-filter-widget',
