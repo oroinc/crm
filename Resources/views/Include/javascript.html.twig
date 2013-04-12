@@ -27,6 +27,9 @@
     '@OroGridBundle/Resources/public/js/app/datagrid/datagrid-pagesize.js'
     '@OroGridBundle/Resources/public/js/app/datagrid/datagrid-toolbar.js'
 
+    '@OroFilterBundle/Resources/public/js/app/filter/formatter.js'
+    '@OroFilterBundle/Resources/public/js/app/filter/multiselectdecorator.js'
+
     '@OroFilterBundle/Resources/public/js/app/filter/abstractfilter.js'
     '@OroFilterBundle/Resources/public/js/app/filter/textfilter.js'
     '@OroFilterBundle/Resources/public/js/app/filter/choicefilter.js'
@@ -36,7 +39,6 @@
     '@OroFilterBundle/Resources/public/js/app/filter/selectfilter.js'
     '@OroFilterBundle/Resources/public/js/app/filter/multiselectfilter.js'
 
-    '@OroFilterBundle/Resources/public/js/app/filter/multiselectdecorator.js'
     '@OroFilterBundle/Resources/public/js/app/filter/list.js'
 
     '@OroGridBundle/Resources/public/js/app/datagrid/filter/datagrid-filter-list.js'
@@ -254,9 +256,7 @@
             // Filters
             var filterListParameters = _.extend(
                 {
-                    collection: datagridCollection,
-                    tagName: 'div',
-                    className: 'filter-box oro-clearfix-width'
+                    collection: datagridCollection
                 },
                 datagridOptions.grid
             );
