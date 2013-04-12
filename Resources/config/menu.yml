@@ -1,0 +1,41 @@
+oro_menu_config:
+    items:
+        user_tab:
+            label: 'Users'
+            uri: '#'
+        user_list:
+            label: 'Users'
+            route: 'oro_user_index'
+        user_roles:
+            label: 'Roles'
+            route: 'oro_user_role_index'
+        user_groups:
+            label: 'Groups'
+            route: 'oro_user_group_index'
+
+        shortcut_new_user:
+            label: Create New User
+            route: oro_user_create
+            extras:
+                description: Create new user instance
+                isCustomAction: true
+        shortcut_list_users:
+            label: Users List
+            route: oro_user_index
+            extras:
+                description: List of users
+                isCustomAction: true
+
+    tree:
+        application_menu:
+            children:
+                user_tab:
+                    children:
+                        user_list: ~
+                        user_roles: ~
+                        user_groups: ~
+
+        shortcuts:
+            children:
+                shortcut_new_user: ~
+                shortcut_list_users: ~
