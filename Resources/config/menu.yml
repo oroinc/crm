@@ -13,7 +13,7 @@ oro_menu_config:
         mostviewed:
             template: 'OroNavigationBundle:Menu:history.html.twig'
             rootClass: 'extra-list'
-            currentAsLink: false
+            currentLinkCloseTab: true
         history:
             template: 'OroNavigationBundle:Menu:history.html.twig'
             rootClass: 'extra-list'
