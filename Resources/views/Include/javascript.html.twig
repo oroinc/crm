@@ -102,26 +102,26 @@
                             {% if filterType == constant(filterTypePrefix ~ 'TYPE_STRING')
                                 or filterType == constant(filterTypePrefix ~ 'TYPE_FLEXIBLE_STRING')
                             %}
-                                OroApp.Filter.ChoiceFilter.extend({
+                                OroApp.createInstanceFromConstructor(OroApp.Filter.ChoiceFilter.extend({
                                     name: {{ filter.name|json_encode|raw }},
                                     label: {{ filter.getOption('label')|json_encode|raw }},
                                     enabled: {{ filter.getOption('show_filter') ? 'true' : 'false' }},
                                     choices: {{ filter.typeOptions|json_encode|raw }}
-                                })
+                                }))
                             {% elseif filterType == constant(filterTypePrefix ~ 'TYPE_NUMBER')
                                 or filterType == constant(filterTypePrefix ~ 'TYPE_FLEXIBLE_NUMBER')
                             %}
-                                OroApp.Filter.NumberFilter.extend({
+                                OroApp.createInstanceFromConstructor(OroApp.Filter.NumberFilter.extend({
                                     name: '{{ filter.name }}',
                                     label: '{{ filter.getOption('label') }}',
                                     enabled: {{ filter.getOption('show_filter') ? 'true' : 'false' }},
                                     choices: {{ filter.typeOptions|json_encode|raw }},
                                     formatter: {{ filter.getOption('data_type')|json_encode|raw }}
-                                })
+                                }))
                             {% elseif filterType == constant(filterTypePrefix ~ 'TYPE_DATE')
                                 or filterType == constant(filterTypePrefix ~ 'TYPE_FLEXIBLE_DATE')
                             %}
-                                OroApp.Filter.DateFilter.extend({
+                                OroApp.createInstanceFromConstructor(OroApp.Filter.DateFilter.extend({
                                     name: {{ filter.name|json_encode|raw }},
                                     label: {{ filter.getOption('label')|json_encode|raw }},
                                     enabled: {{ filter.getOption('show_filter') ? 'true' : 'false' }},
@@ -134,11 +134,11 @@
                                         dateFormat: 'mm/dd/yy',
                                         firstDay: 0
                                     }
-                                })
+                                }))
                             {% elseif filterType == constant(filterTypePrefix ~ 'TYPE_DATETIME')
                                 or filterType == constant(filterTypePrefix ~ 'TYPE_FLEXIBLE_DATETIME')
                             %}
-                                OroApp.Filter.DateTimeFilter.extend({
+                                OroApp.createInstanceFromConstructor(OroApp.Filter.DateTimeFilter.extend({
                                     name: {{ filter.name|json_encode|raw }},
                                     label: {{ filter.getOption('label')|json_encode|raw }},
                                     enabled: {{ filter.getOption('show_filter') ? 'true' : 'false' }},
@@ -152,29 +152,29 @@
                                         timeFormat: 'hh:mm tt',
                                         firstDay: 0
                                     }
-                                })
+                                }))
                             {% elseif filterType == constant(filterTypePrefix ~ 'TYPE_FLEXIBLE_OPTIONS') %}
                                 {% if filter.getOption('multiple') %}
-                                    OroApp.Filter.MultiSelectFilter.extend({
+                                    OroApp.createInstanceFromConstructor(OroApp.Filter.MultiSelectFilter.extend({
                                         name: {{ filter.name|json_encode|raw }},
                                         label: {{ filter.getOption('label')|json_encode|raw }},
                                         enabled: {{ filter.getOption('show_filter') ? 'true' : 'false' }},
                                         options: {{ filter.valueOptions|json_encode|raw }}
-                                    })
+                                    }))
                                 {% else %}
-                                    OroApp.Filter.SelectFilter.extend({
+                                    OroApp.createInstanceFromConstructor(OroApp.Filter.SelectFilter.extend({
                                         name: {{ filter.name|json_encode|raw }},
                                         label: {{ filter.getOption('label')|json_encode|raw }},
                                         enabled: {{ filter.getOption('show_filter') ? 'true' : 'false' }},
                                         options: {{ filter.valueOptions|json_encode|raw }}
-                                    })
+                                    }))
                                 {% endif %}
                             {% else %}
-                                OroApp.Filter.TextFilter.extend({
+                                OroApp.createInstanceFromConstructor(OroApp.Filter.TextFilter.extend({
                                     name: {{ filter.name|json_encode|raw }},
                                     label: {{ filter.getOption('label')|json_encode|raw }},
                                     enabled: {{ filter.getOption('show_filter') ? 'true' : 'false' }}
-                                })
+                                }))
                             {% endif %}
                             {% if not loop.last %},{% endif %}
                         {% endfor %}
