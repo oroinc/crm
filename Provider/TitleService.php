@@ -13,6 +13,8 @@ use Oro\Bundle\NavigationBundle\Title\TitleReader\ConfigReader;
 use Oro\Bundle\NavigationBundle\Title\TitleReader\AnnotationsReader;
 use Oro\Bundle\NavigationBundle\Title\StoredTitle;
 
+use Doctrine\ORM\EntityRepository;
+
 class TitleService implements TitleServiceInterface
 {
     /**
@@ -240,6 +242,26 @@ class TitleService implements TitleServiceInterface
     }
 
     /**
+     * Return stored titles repository
+     *
+     * @return EntityRepository
+     */
+    public function getStoredTitlesRepository()
+    {
+        return $this->em->getRepository('Oro\Bundle\NavigationBundle\Entity\Title');
+    }
+
+    public function getNotEmptyTitles()
+    {
+        return $this->getStoredTitlesRepository()
+            ->createQueryBuilder('title')
+            ->where('title.title <> :title')
+            ->setParameter('title', '')
+            ->getQuery()
+            ->getArrayResult();
+    }
+
+    /**
      * Updates title index
      *
      * @param array $routes
@@ -253,7 +275,7 @@ class TitleService implements TitleServiceInterface
             $data = array_merge($data, $reader->getData($routes));
         }
 
-        $bdData = $this->em->getRepository('Oro\Bundle\NavigationBundle\Entity\Title')->findAll();
+        $bdData = $this->getStoredTitlesRepository()->findAll();
 
         foreach ($bdData as $entity) {
             /** @var $entity Title */

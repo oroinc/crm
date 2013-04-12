@@ -28,6 +28,7 @@ parameters:
     oro_navigation.title_service.config_reader.class:          Oro\Bundle\NavigationBundle\Title\TitleReader\ConfigReader
 
     oro_navigation.title_service.event.request.listener.class: Oro\Bundle\NavigationBundle\Event\RequestTitleListener
+    oro_navigation.translation.extractor.class:                Oro\Bundle\NavigationBundle\Title\TranslationExtractor
 
 services:
     oro_menu.factory:
@@ -197,3 +198,10 @@ services:
             - { name: kernel.event_listener, priority: -255, event: kernel.request, method: onKernelRequest }
         arguments:
             - @oro_navigation.title_service
+
+    oro_navigation.translation.extractor:
+        class: %oro_navigation.translation.extractor.class%
+        arguments:
+            - @oro_navigation.title_service
+        tags:
+            - { name: translation.extractor, alias: navigation_translation_extractor }
