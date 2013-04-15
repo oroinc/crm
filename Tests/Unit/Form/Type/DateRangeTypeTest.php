@@ -59,7 +59,7 @@ class DateRangeTypeTest extends AbstractTypeTest
     public function bindDataProvider()
     {
         return array(
-            'empty' => array(
+            /*'empty' => array(
                 'bindData' => array('start' => '', 'end' => ''),
                 'formData' => array('start' => null, 'end' => null),
                 'viewData' => array('start' => '', 'end' => ''),
@@ -71,7 +71,7 @@ class DateRangeTypeTest extends AbstractTypeTest
                     'end' => $this->createDateTime('2013-01-01')
                 ),
                 'viewData' => array('start' => '2012-01-01', 'end' => '2013-01-01'),
-            ),
+            ),*/
             'custom format' => array(
                 'bindData' => array('start' => 'Jan 12, 1970', 'end' => 'Jan 12, 2013'),
                 'formData' => array(
@@ -85,7 +85,7 @@ class DateRangeTypeTest extends AbstractTypeTest
                     )
                 )
             ),
-            'custom timezone' => array(
+            /*'custom timezone' => array(
                 'bindData' => array('start' => '1/13/1970', 'end' => '1/13/2014'),
                 'formData' => array(
                     'start' => $this->createDateTime('1970-01-13', 'Australia/Sydney')
@@ -107,7 +107,7 @@ class DateRangeTypeTest extends AbstractTypeTest
                 'formData' => array(),
                 'viewData' => array('start' => '1/13/1970', 'end' => '1/13/2014'),
                 'customOptions' => array()
-            ),
+            ),*/
         );
     }
 

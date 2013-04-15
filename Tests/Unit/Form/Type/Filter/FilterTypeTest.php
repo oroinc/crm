@@ -3,12 +3,12 @@
 namespace Oro\Bundle\FilterBundle\Tests\Unit\Form\Type\Filter;
 
 use Oro\Bundle\FilterBundle\Tests\Unit\Form\Type\AbstractTypeTest;
-use Oro\Bundle\FilterBundle\Form\Type\Filter\ChoiceType;
+use Oro\Bundle\FilterBundle\Form\Type\Filter\FilterType;
 
-class ChoiceTypeTest extends AbstractTypeTest
+class FilterTypeTest extends AbstractTypeTest
 {
     /**
-     * @var ChoiceType
+     * @var FilterType
      */
     protected $type;
 
@@ -16,7 +16,7 @@ class ChoiceTypeTest extends AbstractTypeTest
     {
         parent::setUp();
         $translator = $this->createMockTranslator();
-        $this->type = new ChoiceType($translator);
+        $this->type = new FilterType($translator);
     }
 
     /**
@@ -29,7 +29,7 @@ class ChoiceTypeTest extends AbstractTypeTest
 
     public function testGetName()
     {
-        $this->assertEquals(ChoiceType::NAME, $this->type->getName());
+        $this->assertEquals(FilterType::NAME, $this->type->getName());
     }
 
     /**
@@ -42,10 +42,12 @@ class ChoiceTypeTest extends AbstractTypeTest
                 'defaultOptions' => array(
                     'field_type' => 'text',
                     'field_options' => array(),
-                    'choice_options' => array(),
+                    'operator_choices' => array(),
+                    'operator_type' => 'choice',
+                    'operator_options' => array(),
                 ),
                 'requiredOptions' => array(
-                    'choices', 'choice_options', 'field_type', 'field_options'
+                    'field_type', 'field_options', 'operator_choices', 'operator_type', 'operator_options'
                 )
             )
         );
@@ -62,7 +64,7 @@ class ChoiceTypeTest extends AbstractTypeTest
                 'formData' => array('type' => null, 'value' => null),
                 'viewData' => array('type' => '', 'value' => ''),
                 'customOptions' => array(
-                    'choices' => array()
+                    'operator_choices' => array()
                 ),
             ),
             'empty choice' => array(
@@ -70,7 +72,7 @@ class ChoiceTypeTest extends AbstractTypeTest
                 'formData' => array('value' => null),
                 'viewData' => array('type' => '1', 'value' => ''),
                 'customOptions' => array(
-                    'choices' => array()
+                    'operator_choices' => array()
                 ),
             ),
             'invalid choice' => array(
@@ -78,7 +80,7 @@ class ChoiceTypeTest extends AbstractTypeTest
                 'formData' => array('value' => null),
                 'viewData' => array('type' => '-1', 'value' => ''),
                 'customOptions' => array(
-                    'choices' => array(
+                    'operator_choices' => array(
                         1 => 'Choice 1'
                     )
                 ),
@@ -88,7 +90,7 @@ class ChoiceTypeTest extends AbstractTypeTest
                 'formData' => array('type' => null, 'value' => 'text'),
                 'viewData' => array('type' => '', 'value' => 'text'),
                 'customOptions' => array(
-                    'choices' => array(
+                    'operator_choices' => array(
                         1 => 'Choice 1'
                     )
                 ),

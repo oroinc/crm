@@ -18,14 +18,28 @@ abstract class AbstractTypeTest extends FormIntegrationTestCase
     /**
      * @var string
      */
-    private $oldDefaultLocale;
+    protected $defaultTimezone = null;
+
+    /**
+     * @var string
+     */
+    private $oldLocale;
+
+    /**
+     * @var string
+     */
+    private $oldTimezone;
 
     protected function setUp()
     {
         parent::setUp();
         if ($this->defaultLocale) {
-            $this->oldDefaultLocale = \Locale::getDefault();
+            $this->oldLocale = \Locale::getDefault();
             \Locale::setDefault($this->defaultLocale);
+        }
+        if ($this->defaultTimezone) {
+            $this->oldTimezone = date_default_timezone_get();
+            date_default_timezone_set($this->defaultTimezone);
         }
     }
 
@@ -33,7 +47,10 @@ abstract class AbstractTypeTest extends FormIntegrationTestCase
     {
         parent::tearDown();
         if ($this->defaultLocale) {
-            \Locale::setDefault($this->oldDefaultLocale);
+            \Locale::setDefault($this->oldLocale);
+        }
+        if ($this->defaultTimezone) {
+            date_default_timezone_set($this->oldTimezone);
         }
     }
 

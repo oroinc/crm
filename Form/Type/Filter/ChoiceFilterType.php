@@ -2,16 +2,16 @@
 
 namespace Oro\Bundle\FilterBundle\Form\Type\Filter;
 
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-class TextType extends AbstractType
+class ChoiceFilterType extends AbstractType
 {
-    const TYPE_CONTAINS = 1;
-    const TYPE_NOT_CONTAINS = 2;
-    const TYPE_EQUAL = 3;
-    const NAME = 'oro_type_text_filter';
+    const NAME = 'oro_type_choice_filter';
 
     /**
      * @var TranslatorInterface
@@ -39,7 +39,7 @@ class TextType extends AbstractType
      */
     public function getParent()
     {
-        return ChoiceType::NAME;
+        return FilterType::NAME;
     }
 
     /**
@@ -47,16 +47,11 @@ class TextType extends AbstractType
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $choices = array(
-            self::TYPE_CONTAINS => $this->translator->trans('label_type_contains', array(), 'OroFilterBundle'),
-            self::TYPE_NOT_CONTAINS => $this->translator->trans('label_type_not_contains', array(), 'OroFilterBundle'),
-            self::TYPE_EQUAL => $this->translator->trans('label_type_equal', array(), 'OroFilterBundle'),
-        );
-
         $resolver->setDefaults(
             array(
-                'field_type' => 'text',
-                'choices' => $choices,
+                'field_type' => 'choice',
+                'field_options' => array('choices' => array()),
+                'operator_type' => 'hidden',
             )
         );
     }

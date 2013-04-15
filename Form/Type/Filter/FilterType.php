@@ -9,9 +9,9 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-class ChoiceType extends AbstractType
+class FilterType extends AbstractType
 {
-    const NAME = 'oro_type_choice_filter';
+    const NAME = 'oro_type_filter';
 
     /**
      * @var TranslatorInterface
@@ -39,20 +39,31 @@ class ChoiceType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add(
-            'type',
-            'choice',
-            array_merge(
-                array('choices' => $options['choices'], 'required' => false),
-                $options['choice_options']
-            )
-        );
+        $builder->add('type', $options['operator_type'], $this->createOperatorOptions($options));
+        $builder->add('value', $options['field_type'], $this->createFieldOptions($options));
+    }
 
-        $builder->add(
-            'value',
-            $options['field_type'],
-            array_merge(array('required' => false), $options['field_options'])
-        );
+    /**
+     * @param array $options
+     * @return array
+     */
+    protected function createOperatorOptions(array $options)
+    {
+        $result = array('required' => false);
+        if ($options['operator_choices']) {
+            $result['choices'] = $options['operator_choices'];
+        }
+        $result = array_merge($result, $options['operator_options']);
+        return $result;
+    }
+
+    /**
+     * @param array $options
+     * @return array
+     */
+    protected function createFieldOptions(array $options)
+    {
+        return array_merge(array('required' => false), $options['field_options']);
     }
 
     /**
@@ -74,9 +85,11 @@ class ChoiceType extends AbstractType
             array(
                 'field_type' => 'text',
                 'field_options' => array(),
-                'choice_options' => array(),
+                'operator_choices' => array(),
+                'operator_type' => 'choice',
+                'operator_options' => array(),
             )
         )
-        ->setRequired(array('choices', 'choice_options', 'field_type', 'field_options'));
+        ->setRequired(array('field_type', 'field_options', 'operator_choices', 'operator_type', 'operator_options'));
     }
 }

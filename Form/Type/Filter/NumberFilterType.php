@@ -6,7 +6,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-class NumberType extends AbstractType
+class NumberFilterType extends AbstractType
 {
     const TYPE_GREATER_EQUAL = 1;
     const TYPE_GREATER_THAN = 2;
@@ -41,7 +41,7 @@ class NumberType extends AbstractType
      */
     public function getParent()
     {
-        return ChoiceType::NAME;
+        return FilterType::NAME;
     }
 
     /**
@@ -49,7 +49,7 @@ class NumberType extends AbstractType
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $choices = array(
+        $operatorChoices = array(
             self::TYPE_EQUAL => $this->translator->trans('label_type_equal', array(), 'OroFilterBundle'),
             self::TYPE_GREATER_EQUAL =>
                 $this->translator->trans('label_type_greater_equal', array(), 'OroFilterBundle'),
@@ -61,7 +61,7 @@ class NumberType extends AbstractType
         $resolver->setDefaults(
             array(
                 'field_type' => 'number',
-                'choices' => $choices
+                'operator_choices' => $operatorChoices,
             )
         );
     }

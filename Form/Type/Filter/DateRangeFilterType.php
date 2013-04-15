@@ -6,9 +6,9 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-use Oro\Bundle\FilterBundle\Form\Type\DateRangeType as BasicDateRangeType;
+use Oro\Bundle\FilterBundle\Form\Type\DateRangeType;
 
-class DateRangeType extends AbstractType
+class DateRangeFilterType extends AbstractType
 {
     const TYPE_BETWEEN = 1;
     const TYPE_NOT_BETWEEN = 2;
@@ -40,7 +40,7 @@ class DateRangeType extends AbstractType
      */
     public function getParent()
     {
-        return ChoiceType::NAME;
+        return FilterType::NAME;
     }
 
     /**
@@ -48,7 +48,7 @@ class DateRangeType extends AbstractType
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $choices = array(
+        $operatorChoices = array(
             self::TYPE_BETWEEN
                 => $this->translator->trans('label_date_type_between', array(), 'OroFilterBundle'),
             self::TYPE_NOT_BETWEEN
@@ -57,8 +57,8 @@ class DateRangeType extends AbstractType
 
         $resolver->setDefaults(
             array(
-                'field_type' => BasicDateRangeType::NAME,
-                'choices' => $choices
+                'field_type' => DateRangeType::NAME,
+                'operator_choices' => $operatorChoices
             )
         );
     }

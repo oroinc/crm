@@ -10,10 +10,10 @@ services:
             - { name: form.type, alias: oro_type_datetime_range }
 
     oro_filter.form.type.filter.choice:
-        class:     Oro\Bundle\FilterBundle\Form\Type\Filter\ChoiceType
+        class:     Oro\Bundle\FilterBundle\Form\Type\Filter\FilterType
         arguments: ["@translator"]
         tags:
-            - { name: form.type, alias: oro_type_choice_filter }
+            - { name: form.type, alias: oro_type_filter }
 
     oro_filter.form.type.filter.text:
         class:     Oro\Bundle\FilterBundle\Form\Type\Filter\TextType
