@@ -3,6 +3,16 @@ $(document).ready(function () {
         $('input:file').uniform();
     }
 
+    if (typeof($.datepicker) != 'undefined') {
+        $('input.datepicker').each(function (index, el) {
+            el = $(el);
+
+            el.datepicker({
+                dateFormat: el.attr('data-format') ? el.attr('data-format') : ''
+            });
+        });
+    }
+
     /* dinamic height for central column */
    /* function changeHeight() {
         var _chWindowHeight = $(window).height();
