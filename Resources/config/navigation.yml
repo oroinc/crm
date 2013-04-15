@@ -39,3 +39,8 @@ oro_menu_config:
             children:
                 shortcut_new_user: ~
                 shortcut_list_users: ~
+
+oro_titles:
+    oro_user_show: %%username%% -View profile - User Management
+    oro_user_role_edit: Edit role - User management
+    oro_user_role_index: "Roles overview - User management"

@@ -5,3 +5,7 @@ change_password:
 resetting:
     flash:
         success: The password has been reset successfully
+
+"%%username%% -View profile - User Management": "%%username%% -View profile - User Management"
+"Edit role - User management": "Edit role - User management"
+"Roles overview - User management": "Roles overview - User management"
