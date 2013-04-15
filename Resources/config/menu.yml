@@ -11,9 +11,8 @@ oro_menu_config:
         favorite:
             template: 'OroNavigationBundle:Menu:favorites.html.twig'
         mostviewed:
-            template: 'OroNavigationBundle:Menu:history.html.twig'
+            template: 'OroNavigationBundle:Menu:mostviewed.html.twig'
             rootClass: 'extra-list'
-            currentAsLink: false
         history:
             template: 'OroNavigationBundle:Menu:history.html.twig'
             rootClass: 'extra-list'
