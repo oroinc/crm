@@ -15,6 +15,10 @@ class TitleTemplate
      */
     private $titleTemplate;
 
+    /**
+     * @param array $data
+     * @throws \RuntimeException
+     */
     public function __construct(array $data)
     {
         $titleTemplate = isset($data['value']) ? $data['value'] : false;

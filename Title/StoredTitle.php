@@ -105,7 +105,7 @@ class StoredTitle
     }
 
     /**
-     * Setter for sufix
+     * Setter for suffix
      *
      * @param string $suffix
      * @return $this
