@@ -2,7 +2,7 @@
 
 namespace Oro\Bundle\NavigationBundle\Title;
 
-use Oro\Bundle\NavigationBundle\Provider\TitleService;
+use Oro\Bundle\NavigationBundle\Provider\TitleServiceInterface;
 use Symfony\Component\Translation\MessageCatalogue;
 use Symfony\Component\Translation\Extractor\ExtractorInterface;
 
@@ -14,28 +14,16 @@ class TranslationExtractor implements ExtractorInterface
     private $titleService;
 
     /**
-     * @var bool
-     */
-    private $catalogue;
-
-    /**
-     * @var bool
-     */
-    private $domain;
-
-    /**
      * @var string
      */
     private $prefix;
 
     /**
-     * @param \Oro\Bundle\NavigationBundle\Provider\TitleService $titleService
+     * @param \Oro\Bundle\NavigationBundle\Provider\TitleServiceInterface $titleService
      */
-    public function __construct(TitleService $titleService)
+    public function __construct(TitleServiceInterface $titleService)
     {
         $this->titleService    = $titleService;
-        $this->catalogue       = false;
-        $this->domain          = false;
     }
 
     /**
@@ -43,28 +31,16 @@ class TranslationExtractor implements ExtractorInterface
      *
      * @param string $directory
      * @param \Symfony\Component\Translation\MessageCatalogue $catalogue
-     * @throws \RuntimeException
-     * @throws \Exception
-     * @return bool
-     * @return \Symfony\Component\Translation\MessageCatalogue
+     *
+     * @return MessageCatalogue
      */
     public function extract($directory, MessageCatalogue $catalogue)
     {
-        if ($this->catalogue) {
-            throw new \RuntimeException('Invalid state');
-        }
-
-        $locale = 'en';
-        $this->catalogue = new MessageCatalogue($locale);
-
         $titles = $this->titleService->getNotEmptyTitles();
         foreach ($titles as $titleRecord) {
             $message = $titleRecord['title'];
             $catalogue->set($message, $this->prefix . $message);
         }
-
-        $catalogue = $this->catalogue;
-        $this->catalogue = false;
 
         return $catalogue;
     }

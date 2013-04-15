@@ -240,7 +240,7 @@ class TitleService implements TitleServiceInterface
     public function loadByRoute($route)
     {
         /** @var $bdData Title */
-        $bdData = $this->em->getRepository('Oro\Bundle\NavigationBundle\Entity\Title')->findOneBy(
+        $bdData = $this->getStoredTitlesRepository()->findOneBy(
             array('route' => $route)
         );
 
@@ -252,13 +252,18 @@ class TitleService implements TitleServiceInterface
     /**
      * Return stored titles repository
      *
-     * @return EntityRepository
+     * @return \Doctrine\ORM\EntityRepository
      */
     public function getStoredTitlesRepository()
     {
         return $this->em->getRepository('Oro\Bundle\NavigationBundle\Entity\Title');
     }
 
+    /**
+     * Returns not empty titles array
+     *
+     * @return array
+     */
     public function getNotEmptyTitles()
     {
         return $this->getStoredTitlesRepository()
