@@ -109,7 +109,7 @@ class TitleServiceTest extends \PHPUnit_Framework_TestCase
         $storedTitleMock->expects($this->once())
                         ->method('getSuffix');
 
-        $result = $this->titleService->renderStored($data);
+        $result = $this->titleService->render(array(), $data, null, null, true);
 
         $this->assertTrue(is_string($result));
     }

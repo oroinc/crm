@@ -26,7 +26,6 @@ class TitleExtensionTest extends \PHPUnit_Framework_TestCase
     {
         $functions = $this->extension->getFunctions();
         $this->assertArrayHasKey('oro_title_render', $functions);
-        $this->assertArrayHasKey('oro_title_render_stored', $functions);
         $this->assertArrayHasKey('oro_title_render_serialized', $functions);
     }
 
@@ -48,10 +47,10 @@ class TitleExtensionTest extends \PHPUnit_Framework_TestCase
         $data = array();
 
         $this->service->expects($this->once())
-            ->method('renderStored')
+            ->method('render')
             ->with($this->equalTo($data));
 
-        $this->extension->renderStored($data);
+        $this->extension->render($data);
     }
 
     public function testSet()
