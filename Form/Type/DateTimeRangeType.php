@@ -7,7 +7,7 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class DateTimeRangeType extends AbstractType
 {
-    const NAME = 'oro_grid_type_datetime_range';
+    const NAME = 'oro_type_datetime_range';
 
     /**
      * {@inheritDoc}

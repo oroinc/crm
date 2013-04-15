@@ -6,6 +6,8 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
+use Oro\Bundle\FilterBundle\Form\Type\DateRangeType as BasicDateRangeType;
+
 class DateRangeType extends AbstractType
 {
     const TYPE_BETWEEN = 1;
@@ -55,7 +57,7 @@ class DateRangeType extends AbstractType
 
         $resolver->setDefaults(
             array(
-                'field_type' => 'oro_type_date_range',
+                'field_type' => BasicDateRangeType::NAME,
                 'choices' => $choices
             )
         );
