@@ -1,0 +1,40 @@
+services:
+    oro_filter.form.type.date_range:
+        class: Oro\Bundle\FilterBundle\Form\Type\DateRangeType
+        tags:
+            - { name: form.type, alias: oro_type_date_range }
+
+    oro_filter.form.type.datetime_range:
+        class: Oro\Bundle\FilterBundle\Form\Type\DateTimeRangeType
+        tags:
+            - { name: form.type, alias: oro_type_datetime_range }
+
+    oro_filter.form.type.filter.choice:
+        class:     Oro\Bundle\FilterBundle\Form\Type\Filter\ChoiceType
+        arguments: ["@translator"]
+        tags:
+            - { name: form.type, alias: oro_type_choice_filter }
+
+    oro_filter.form.type.filter.text:
+        class:     Oro\Bundle\FilterBundle\Form\Type\Filter\TextType
+        arguments: ["@translator"]
+        tags:
+            - { name: form.type, alias: oro_type_text_filter }
+
+    oro_filter.form.type.filter.number:
+        class:     Oro\Bundle\FilterBundle\Form\Type\Filter\NumberType
+        arguments: ["@translator"]
+        tags:
+            - { name: form.type, alias: oro_type_number_filter }
+
+    oro_filter.form.type.filter.date_range:
+        class:     Oro\Bundle\FilterBundle\Form\Type\Filter\DateRangeType
+        arguments: ["@translator"]
+        tags:
+            - { name: form.type, alias: oro_type_date_range_filter }
+
+    oro_filter.form.type.filter.datetime_range:
+        class:     Oro\Bundle\FilterBundle\Form\Type\Filter\DateTimeRangeType
+        arguments: ["@translator"]
+        tags:
+            - { name: form.type, alias: oro_type_datetime_range_filter }
