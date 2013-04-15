@@ -88,10 +88,21 @@ class TitleService implements TitleServiceInterface
      * @param null $title
      * @param null $prefix
      * @param null $suffix
+     * @param bool $isJSON
      * @return $this
      */
-    public function render($params = array(), $title = null, $prefix = null, $suffix = null)
+    public function render($params = array(), $title = null, $prefix = null, $suffix = null, $isJSON = false)
     {
+        if (!is_null($title) && $isJSON) {
+            /** @var $data \Oro\Bundle\NavigationBundle\Title\StoredTitle */
+            $data =  $this->serializer->deserialize($title, 'Oro\Bundle\NavigationBundle\Title\StoredTitle', 'json');
+
+            $params = $data->getParams();
+            $title = $data->getTemplate();
+            $prefix = $data->getPrefix();
+            $suffix = $data->getSuffix();
+        }
+
         if (is_null($title)) {
             $title = $this->getTemplate();
         }
@@ -144,20 +155,6 @@ class TitleService implements TitleServiceInterface
         }
 
         return $this;
-    }
-
-    /**
-     * Render serialized title
-     *
-     * @param string $titleData
-     * @return string
-     */
-    public function renderStored($titleData)
-    {
-        /** @var $data \Oro\Bundle\NavigationBundle\Title\StoredTitle */
-        $data =  $this->serializer->deserialize($titleData, 'Oro\Bundle\NavigationBundle\Title\StoredTitle', 'json');
-
-        return $this->render($data->getParams(), $data->getTemplate(), $data->getPrefix(), $data->getSuffix());
     }
 
     /**

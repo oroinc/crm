@@ -24,14 +24,6 @@ interface TitleServiceInterface
     public function render($params = array(), $title = null, $prefix = null, $suffix = null);
 
     /**
-     * Render serialized title
-     *
-     * @param string $titleData
-     * @return string
-     */
-    public function renderStored($titleData);
-
-    /**
      * Load title template from database
      *
      * @param string $route
