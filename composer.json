@@ -7,7 +7,10 @@
     "license": "MIT",
     "require": {
         "php": ">=5.3.3",
-        "symfony/symfony": "2.1.*"
+        "symfony/framework-bundle": ">=2.1,<2.3-dev",
+        "kriswallsmith/assetic": "1.1.*@dev",
+        "symfony/assetic-bundle": "2.1.*",
+        "leafo/lessphp": "dev-master"
     },
     "autoload": {
         "psr-0": { "Oro\\Bundle\\UIBundle": "" }
