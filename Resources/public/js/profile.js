@@ -9,10 +9,6 @@ $(function() {
         return false;
     });
 
-    $('.calendar input').datepicker({
-        dateFormat: $('.calendar input').attr('-data-format')
-    });
-
     $('#roles-list input')
         .on('click', function() {
             inputs = $(this).closest('.controls');
