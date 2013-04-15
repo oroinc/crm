@@ -25,8 +25,9 @@ class OroNavigationExtension extends Extension
 
         foreach ($container->getParameter('kernel.bundles') as $bundle) {
             $reflection = new \ReflectionClass($bundle);
-            if (is_file($file = dirname($reflection->getFilename()).'/Resources/config/menu.yml')) {
+            if (is_file($file = dirname($reflection->getFilename()).'/Resources/config/navigation.yml')) {
                 $bundleConfig = Yaml::parse(realpath($file));
+
                 // merge entity configs
                 if (isset($bundleConfig['oro_menu_config'])) {
                     foreach ($bundleConfig['oro_menu_config'] as $entity => $entityConfig) {
@@ -40,13 +41,9 @@ class OroNavigationExtension extends Extension
                 }
             }
 
-            if (is_file($file = dirname($reflection->getFilename()) . '/Resources/config/titles.yml')) {
-                $bundleConfig = Yaml::parse(realpath($file));
-                if (!is_null($bundleConfig)) {
-                    $titlesConfig += $bundleConfig;
-                }
+            if (isset($bundleConfig['oro_titles'])) {
+                $titlesConfig += is_array($bundleConfig['oro_titles']) ? $bundleConfig['oro_titles'] : array();
             }
-
         }
 
         // process configurations to validate and merge
