@@ -177,7 +177,7 @@ class ResetController extends Controller
      * Get the truncated email displayed when requesting the resetting.
      * The default implementation only keeps the part following @ in the address.
      *
-     * @param  User $user
+     * @param User $user
      *
      * @return string
      */

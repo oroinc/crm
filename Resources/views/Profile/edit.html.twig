@@ -1,10 +1,12 @@
 {% extends bap.layout is defined ? bap.layout : 'OroUserBundle::layout.html.twig' %}
 {% import 'OroUserBundle::macros.html.twig' as macros %}
+{% set format = get_user_value('oro_user.name_format') %}
 {% form_theme form with 'OroUIBundle:Form:fields.html.twig' %}
 
-{% set title = form.vars.value.id ? 'Edit profile' : 'New User' %}
+{% set title = form.vars.value.id ? form.vars.value.fullname(format)|default('N/A') ~ ' - ' ~ 'Edit profile'|trans : 'New profile'|trans %}
 
 {% block title %}{{ title }} - {{ 'User Management'|trans }} {% endblock %}
+
 {% block page_container %}
 <div class="container-fluid">
     {% block content %}
@@ -24,7 +26,6 @@
                 </div>
                 <div class="pull-left">
                     <div class="customer-info well-small">
-                        {% set format = get_user_value('oro_user.name_format') %}
                         <div class="visual"><img src="{{ form.vars.value.imagePath ? form.vars.value.imagePath | imagine_filter('avatar_med') : asset('bundles/oroui/img/info-usser.png') }}" alt="{{ form.vars.value.fullname(format) }}"/></div>
                         <div class="customer-content">
                             <div class="sub-title">{{ 'User'|trans }}</div>
@@ -117,13 +118,6 @@
                         </fieldset>
                     </div>
 
-                   {# <h4 id="scroll-attributes" class="scrollspy-title">{{ 'Additional data'|trans }}</h4>
-                    <div class="row-fluid">
-                        <fieldset class="form-horizontal">
-                            {{ form_row(form.attributes) }}
-                        </fieldset>
-                    </div>#}
-
                     {% if form.groups is defined %}
                     <h4 id="scroll-groups" class="scrollspy-title">{{ 'Groups'|trans }}</h4>
                     <div class="row-fluid">
@@ -167,23 +161,21 @@
 
     {% javascripts
         '@OroUIBundle/Resources/public/lib/bootstrap/js/bootstrap-scrollspy.js'
-        '@OroUserBundle/Resources/public/js/bootstrap-switch.js'
         '@OroUserBundle/Resources/public/js/emails.js'
         '@OroUserBundle/Resources/public/js/profile.js'
 
-        output='js/page/profile.js'
+        filter='?yui_js'
+        output='js/oro.user.profile.js'
     %}
     <script src="{{ asset_url }}" type="text/javascript"></script>
     {% endjavascripts %}
 
     {% stylesheets
-        '@OroUserBundle/Resources/public/css/bootstrap-switch.css'
         '@OroUserBundle/Resources/public/css/jquery-ui-1.10.2.custom.css'
 
-        output='css/page/profile.css'
-        filter='cssrewrite'
+        filter='cssrewrite,lessphp,yui_css'
+        output='css/oro.user.profile.css'
     %}
     <link rel="stylesheet" type="text/css" href="{{ asset_url }}" />
     {% endstylesheets %}
-
 {% endblock %}

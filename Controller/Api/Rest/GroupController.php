@@ -49,7 +49,7 @@ class GroupController extends FOSRestController implements ClassResourceInterfac
      */
     public function getAction($id)
     {
-        $entity = $this->getManager()->find('OroUserBundle:Group', (int)$id);
+        $entity = $this->getManager()->find('OroUserBundle:Group', (int) $id);
 
         return $this->handleView(
             $this->view(
@@ -95,7 +95,7 @@ class GroupController extends FOSRestController implements ClassResourceInterfac
      */
     public function putAction($id)
     {
-        $entity = $this->getManager()->find('OroUserBundle:Group', (int)$id);
+        $entity = $this->getManager()->find('OroUserBundle:Group', (int) $id);
 
         if (!$entity) {
             return $this->handleView($this->view('', Codes::HTTP_NOT_FOUND));
@@ -124,7 +124,7 @@ class GroupController extends FOSRestController implements ClassResourceInterfac
     public function deleteAction($id)
     {
         $em = $this->getManager();
-        $entity = $em->find('OroUserBundle:Group', (int)$id);
+        $entity = $em->find('OroUserBundle:Group', (int) $id);
 
         if (!$entity) {
             return $this->handleView($this->view('', Codes::HTTP_NOT_FOUND));
@@ -151,7 +151,7 @@ class GroupController extends FOSRestController implements ClassResourceInterfac
      */
     public function getRolesAction($id)
     {
-        $entity = $this->getManager()->find('OroUserBundle:Group', (int)$id);
+        $entity = $this->getManager()->find('OroUserBundle:Group', (int) $id);
 
         if (!$entity) {
             return $this->handleView($this->view('', Codes::HTTP_NOT_FOUND));

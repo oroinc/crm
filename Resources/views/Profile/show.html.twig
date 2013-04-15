@@ -1,7 +1,8 @@
 {% extends bap.layout is defined ? bap.layout : 'OroUserBundle::layout.html.twig' %}
 {% import 'OroUserBundle::macros.html.twig' as macros %}
 {% set format = get_user_value('oro_user.name_format') %}
-{% block title %}{{ user.fullname(format)|default('N/A') }} - {{ 'Profile'|trans }} - {{ 'User Management'|trans }}}{% endblock %}
+
+{% block title %}{{ user.fullname(format)|default('N/A') }} - {{ 'View profile'|trans }} - {{ 'User Management'|trans }}{% endblock %}
 
 {% block content %}
 <div class="layout-content">
@@ -145,11 +146,11 @@
 
     {% javascripts
         '@OroUIBundle/Resources/public/lib/bootstrap/js/bootstrap-scrollspy.js'
-        '@OroUserBundle/Resources/public/js/bootstrap-switch.js'
         '@OroUserBundle/Resources/public/js/emails.js'
         '@OroUserBundle/Resources/public/js/profile.js'
 
-        output='js/page/profile.js'
+        filter='?yui_js'
+        output='js/oro.user.profile.js'
     %}
     <script src="{{ asset_url }}" type="text/javascript"></script>
     {% endjavascripts %}

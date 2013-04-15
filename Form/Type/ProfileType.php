@@ -71,10 +71,6 @@ class ProfileType extends FlexibleType
             ->add('birthday', 'oro_localized_date', array(
                 'label'          => 'Date of birth',
                 'required'       => false,
-                'widget'         => 'single_text',
-                'attr'           => array(
-                    'class'      => 'datepicker',
-                )
             ))
             ->add('imageFile', 'file', array(
                 'label'          => 'Avatar',
@@ -113,7 +109,7 @@ class ProfileType extends FlexibleType
                 'by_reference'   => false,
                 'prototype'      => true,
                 'prototype_name' => 'tag__name__',
-                'label'         => ' '
+                'label'          => ' '
             ));
     }
 

@@ -13,7 +13,7 @@ class RestUserApiTest extends WebTestCase
 {
 
     public $client = null;
-    static protected $hasLoaded = false;
+    protected static $hasLoaded = false;
 
     public function setUp()
     {

@@ -10,7 +10,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 use Oro\Bundle\UserBundle\Entity\Group;
 use Oro\Bundle\UserBundle\Datagrid\GroupDatagridManager;
-use Oro\Bundle\UserBundle\Datagrid\LightUserDatagridManager;
 
 /**
  * @Route("/group")

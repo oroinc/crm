@@ -16,7 +16,7 @@ class SoapUsersApiTest extends WebTestCase
 
     /** @var \SoapClient */
     protected $clientSoap = null;
-    static protected $hasLoaded = false;
+    protected static $hasLoaded = false;
 
     public function setUp()
     {

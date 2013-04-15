@@ -48,7 +48,7 @@ class AclController extends Controller
     /**
      * @Route("/save/{id}", name="oro_user_acl_save", requirements={"id"="\d+"})
      *
-     * @param  \Oro\Bundle\UserBundle\Entity\Role $role
+     * @param \Oro\Bundle\UserBundle\Entity\Role $role
      *
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      * @Acl(
