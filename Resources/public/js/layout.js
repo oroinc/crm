@@ -8,7 +8,7 @@ $(document).ready(function () {
             el = $(el);
 
             el.datepicker({
-                dateFormat: el.attr('data-format') ? el.attr('data-format') : ''
+                dateFormat: el.attr('data-format') ? el.attr('data-format') : 'mm/dd/yy'
             });
         });
     }
