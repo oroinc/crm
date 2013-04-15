@@ -11,6 +11,33 @@ use Oro\Bundle\FilterBundle\Form\Type\Filter\ChoiceType;
 abstract class AbstractTypeTest extends FormIntegrationTestCase
 {
     /**
+     * @var string
+     */
+    protected $defaultLocale = null;
+
+    /**
+     * @var string
+     */
+    private $oldDefaultLocale;
+
+    protected function setUp()
+    {
+        parent::setUp();
+        if ($this->defaultLocale) {
+            $this->oldDefaultLocale = \Locale::getDefault();
+            \Locale::setDefault($this->defaultLocale);
+        }
+    }
+
+    protected function tearDown()
+    {
+        parent::tearDown();
+        if ($this->defaultLocale) {
+            \Locale::setDefault($this->oldDefaultLocale);
+        }
+    }
+
+    /**
      * @return TranslatorInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected function createMockTranslator()

@@ -13,6 +13,11 @@ class NumberTypeTest extends AbstractTypeTest
      */
     private $type;
 
+    /**
+     * @var string
+     */
+    protected $defaultLocale = 'en_US';
+
     protected function setUp()
     {
         parent::setUp();
@@ -89,6 +94,14 @@ class NumberTypeTest extends AbstractTypeTest
                 'bindData' => array('type' => NumberType::TYPE_EQUAL, 'value' => '12345.67890'),
                 'formData' => array('type' => NumberType::TYPE_EQUAL, 'value' => 12345.6789),
                 'viewData' => array('type' => NumberType::TYPE_EQUAL, 'value' => '12345.68'),
+                'customOptions' => array(
+                    'field_type' => 'money'
+                ),
+            ),
+            'invalid format' => array(
+                'bindData' => array('type' => NumberType::TYPE_EQUAL, 'value' => 'abcd.67890'),
+                'formData' => array('type' => NumberType::TYPE_EQUAL),
+                'viewData' => array('type' => NumberType::TYPE_EQUAL, 'value' => 'abcd.67890'),
                 'customOptions' => array(
                     'field_type' => 'money'
                 ),

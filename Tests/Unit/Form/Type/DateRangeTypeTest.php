@@ -11,6 +11,11 @@ class DateRangeTypeTest extends AbstractTypeTest
      */
     private $type;
 
+    /**
+     * @var string
+     */
+    protected $defaultLocale = 'en_US';
+
     protected function setUp()
     {
         parent::setUp();
@@ -96,6 +101,12 @@ class DateRangeTypeTest extends AbstractTypeTest
                         'format' => \IntlDateFormatter::SHORT
                     )
                 )
+            ),
+            'invalid format' => array(
+                'bindData' => array('start' => '1/13/1970', 'end' => '1/13/2014'),
+                'formData' => array(),
+                'viewData' => array('start' => '1/13/1970', 'end' => '1/13/2014'),
+                'customOptions' => array()
             ),
         );
     }
