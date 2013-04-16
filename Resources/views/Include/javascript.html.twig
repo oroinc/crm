@@ -117,8 +117,7 @@
                                     name: '{{ filter.name }}',
                                     label: '{{ filter.getOption('label') }}',
                                     enabled: {{ filter.getOption('show_filter') ? 'true' : 'false' }},
-                                    choices: {{ filter.typeOptions|json_encode|raw }},
-                                    formatter: {{ filter.getOption('data_type')|json_encode|raw }}
+                                    choices: {{ filter.typeOptions|json_encode|raw }}
                                 }))
                             {% elseif filterType == constant(filterTypePrefix ~ 'TYPE_DATE')
                                 or filterType == constant(filterTypePrefix ~ 'TYPE_FLEXIBLE_DATE')
