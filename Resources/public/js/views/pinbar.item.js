@@ -36,12 +36,14 @@ navigation.pinbar.ItemView = Backbone.View.extend({
     },
 
     render: function () {
-        var data = this.model;
-        if (!_.isUndefined(data.attributes.title_rendered)) {
+        if (!_.isUndefined(this.model.attributes.title_rendered)) {
             // to avoid changing title passed by reference
             var data = _.clone(this.model);
             data.attributes = _.clone(this.model.attributes);
             data.attributes.title = data.attributes.title_rendered;
+        }
+        else {
+            var data = this.model;
         }
 
         this.$el.html(
