@@ -34,7 +34,7 @@ class ConfigExtension extends \Twig_Extension
      */
     public function getUserValue($name)
     {
-        return $this->userConfigManager->get($configName);
+        return $this->userConfigManager->get($name);
     }
 
 
