@@ -31,7 +31,7 @@ class TitleExtensionTest extends \PHPUnit_Framework_TestCase
 
     public function testNameConfigured()
     {
-        $this->assertTrue(is_string($this->extension->getName()));
+        $this->assertInternalType('string', $this->extension->getName());
     }
 
     public function testRenderSerialized()
@@ -76,7 +76,7 @@ class TitleExtensionTest extends \PHPUnit_Framework_TestCase
     {
         $result = $this->extension->getTokenParsers();
 
-        $this->assertTrue(is_array($result));
-        $this->assertEquals(1, count($result));
+        $this->assertInternalType('array', $result);
+        $this->assertCount(1, $result);
     }
 }

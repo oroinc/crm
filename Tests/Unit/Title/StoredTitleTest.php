@@ -8,17 +8,13 @@ class StoredTitleTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @dataProvider provider
+     *
      * @param string $property
-     * @param bool $isArray
+     * @param mixed $value
      */
-    public function testSettersAndGetters($property, $isArray = false)
+    public function testSettersAndGetters($property, $value)
     {
         $obj = new StoredTitle();
-        if ($isArray) {
-            $value = array('testKey' => 'testValue');
-        } else {
-            $value = 'testValue';
-        }
 
         call_user_func_array(array($obj, 'set' . ucfirst($property)), array($value));
         $this->assertEquals($value, call_user_func_array(array($obj, 'get' . ucfirst($property)), array()));
@@ -32,10 +28,10 @@ class StoredTitleTest extends \PHPUnit_Framework_TestCase
     public function provider()
     {
         return array(
-            array('params', true),
-            array('template'),
-            array('prefix'),
-            array('suffix')
+            array('params', array('testKey' => 'testValue')),
+            array('template', 'testValue'),
+            array('prefix', 'testValue'),
+            array('suffix', 'testValue')
         );
     }
 }

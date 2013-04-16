@@ -9,7 +9,7 @@ class AnnotationsReaderTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private $kernelMoc;
+    private $kernelMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -31,7 +31,7 @@ class AnnotationsReaderTest extends \PHPUnit_Framework_TestCase
             'Symfony\Bundle\FrameworkBundle\FrameworkBundle'
         );
 
-        $this->kernelMoc = $this->getMock(
+        $this->kernelMock = $this->getMock(
             'Symfony\Component\HttpKernel\KernelInterface',
             array()
         );
@@ -44,29 +44,29 @@ class AnnotationsReaderTest extends \PHPUnit_Framework_TestCase
     public function testGetEmptyData()
     {
 
-        $this->kernelMoc->expects($this->once())
+        $this->kernelMock->expects($this->once())
             ->method('getBundles')
             ->will($this->returnValue(array()));
 
-        $reader = new AnnotationsReader($this->kernelMoc, $this->annotationReader);
-        $this->assertEquals(0, count($reader->getData(array())));
+        $reader = new AnnotationsReader($this->kernelMock, $this->annotationReader);
+        $this->assertCount(0, $reader->getData(array()));
     }
 
     public function testGetData()
     {
 
-        $this->kernelMoc->expects($this->once())
+        $this->kernelMock->expects($this->once())
             ->method('getBundles')
             ->will($this->returnValue(array($this->testBundle)));
 
         $routeMock = $this->getMock('Symfony\Component\Routing\Route', array(), array('/user/show/{id}'));
 
         $routeMock->expects($this->once())
-                ->method('getDefault')
-                ->with($this->equalTo('_controller'));
+            ->method('getDefault')
+            ->with($this->equalTo('_controller'));
 
-        $reader = new AnnotationsReader($this->kernelMoc, $this->annotationReader);
+        $reader = new AnnotationsReader($this->kernelMock, $this->annotationReader);
 
-        $this->assertTrue(is_array($reader->getData(array($routeMock))));
+        $this->assertInternalType('array', $reader->getData(array($routeMock)));
     }
 }

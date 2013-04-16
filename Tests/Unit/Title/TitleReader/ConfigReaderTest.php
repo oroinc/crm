@@ -18,38 +18,23 @@ class ConfigReaderTest extends \PHPUnit_Framework_TestCase
         $this->reader = new ConfigReader(array(self::TEST_ROUTE => 'Test title template'));
     }
 
-    /**
-     * @dataProvider provider
-     *
-     * @param array $routes
-     */
-    public function testGetData(array $routes)
+    public function testGetDataSuccess()
     {
         try {
-            $data = $this->reader->getData($routes);
+            $data = $this->reader->getData(array(self::TEST_ROUTE => 'Test route data'));
 
-            $this->assertTrue(is_array($data));
-            $this->assertEquals(1, count($data));
+            $this->assertInternalType('array', $data);
+            $this->assertCount(1, $data);
         } catch (\Exception $e) {
             $this->assertInstanceOf('Symfony\Component\Config\Definition\Exception\InvalidConfigurationException', $e);
         }
     }
 
     /**
-     * Data provider
-     *
-     * @return array
+     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
      */
-    public function provider()
+    public function testGetDataFailed()
     {
-        return array(
-            array(
-                array(self::TEST_ROUTE => 'Test route data')
-            ),
-
-            array(
-                array()
-            )
-        );
+        $this->reader->getData(array());
     }
 }

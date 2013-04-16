@@ -40,9 +40,7 @@ abstract class Reader
 
         foreach ($bundles as $bundle) {
             /** @var $bundle \Symfony\Component\HttpKernel\Bundle\BundleInterface  */
-            if (strpos($bundle->getPath(), 'vendor') === false) {
-                $directories[] = $bundle->getPath();
-            }
+            $directories[] = $bundle->getPath();
         }
 
         return $directories;

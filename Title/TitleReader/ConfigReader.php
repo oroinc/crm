@@ -27,7 +27,7 @@ class ConfigReader extends Reader
     {
         $data = array();
 
-        foreach ((array)$this->configData as $route => $title) {
+        foreach ($this->configData as $route => $title) {
             if (array_key_exists($route, $routes)) {
                 $data[$route] = $title;
             } else {

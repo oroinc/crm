@@ -23,7 +23,7 @@ class TranslationExtractor implements ExtractorInterface
      */
     public function __construct(TitleServiceInterface $titleService)
     {
-        $this->titleService    = $titleService;
+        $this->titleService = $titleService;
     }
 
     /**
