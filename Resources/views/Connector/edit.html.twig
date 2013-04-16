@@ -2,8 +2,6 @@
 
 {% set title = connector.id ? "Edit connector" : "Create connector" %}
 
-{% block title %}{{ parent() }} - {{ title | trans }}{% endblock %}
-
 {% block content %}
 
     <form action="{{ connector.id ? path('oro_dataflow_connector_edit', { id: connector.id }) : path('oro_dataflow_connector_create', {'serviceId': connector.serviceId}) }}" method="POST">

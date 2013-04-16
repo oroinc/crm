@@ -2,8 +2,6 @@
 
 {% set title = "Configuration" %}
 
-{% block title %}{{ parent() }} - {{ title | trans }}{% endblock %}
-
 {% block content %}
 
     <form action="{{ path('oro_dataflow_configuration_edit', { id: configuration.id }) }}" method="POST">
