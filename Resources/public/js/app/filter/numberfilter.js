@@ -11,6 +11,9 @@ OroApp.Filter.NumberFilter = OroApp.Filter.ChoiceFilter.extend({
     /** @property {OroApp.Filter.NumberFormatter} */
     formatter: new OroApp.Filter.NumberFormatter(),
 
+    /** @property {Object} */
+    formatterOptions: {},
+
     /**
      * Initialize.
      *
@@ -19,7 +22,7 @@ OroApp.Filter.NumberFilter = OroApp.Filter.ChoiceFilter.extend({
      */
     initialize: function(options) {
         options = options || {};
-        this.formatter = this._getNumberFormatter(options.formatter || this.formatter);
+        this.formatter = new OroApp.Filter.NumberFormatter(this.formatterOptions);
         Backbone.View.prototype.initialize.apply(this, arguments);
     },
 
@@ -43,31 +46,5 @@ OroApp.Filter.NumberFilter = OroApp.Filter.ChoiceFilter.extend({
             value.value = this.formatter.fromRaw(value.value);
         }
         return value;
-    },
-
-    /**
-     * Gets instance of formatter, an object with methods "toRaw" and "fromRaw"
-     *
-     * @param {*} formatter
-     * @return {*}
-     * @protected
-     */
-    _getNumberFormatter: function(formatter) {
-        var result = formatter;
-        switch (formatter) {
-            case 'integer':
-                result = new OroApp.Filter.NumberFormatter({
-                    decimals: 0,
-                    orderSeparator: ''
-                });
-                break;
-            case 'decimal':
-                result = new OroApp.Filter.NumberFormatter();
-                break;
-        }
-        if (_.isString(result)) {
-            throw new TypeError('Cannot create formatter ' + result);
-        }
-        return result;
     }
 });

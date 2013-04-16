@@ -1,0 +1,26 @@
+<script type="text/javascript">
+
+{% block oro_type_text_filter_js %}
+    OroApp.createInstanceFromConstructor(OroApp.Filter.ChoiceFilter.extend({
+        'name':    {{ formView.vars.name|json_encode|raw }},
+        'label':   {{ formView.vars.label|json_encode|raw }},
+        'enabled': {{ (not formView.vars.disabled)|json_encode|raw }},
+        'choices': {{ formView.children.type.vars.choices|oro_filter_choices|json_encode|raw }}
+    }))
+{% endblock %}
+
+{% block oro_type_number_filter_js %}
+    OroApp.createInstanceFromConstructor(OroApp.Filter.NumberFilter.extend({
+        'name':    {{ formView.vars.name|json_encode|raw }},
+        'label':   {{ formView.vars.label|json_encode|raw }},
+        'enabled': {{ (not formView.vars.disabled)|json_encode|raw }},
+        'choices': {{ formView.children.type.vars.choices|oro_filter_choices|json_encode|raw }},
+        'formatterOptions': {
+            'decimals': {{ formView.vars.precision|json_encode|raw }},
+            'decimalSeparator': {{ formView.vars.decimal_separator|json_encode|raw }},
+            'orderSeparator': {{ (formView.vars.grouping ? formView.vars.grouping_separator : '')|json_encode|raw }}
+        }
+    }))
+{% endblock %}
+
+</script>

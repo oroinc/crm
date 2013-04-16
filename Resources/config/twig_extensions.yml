@@ -1,0 +1,9 @@
+parameters:
+    oro_filter.twig.extension.render_js.class: Oro\Bundle\FilterBundle\Twig\RenderJsExtension
+
+services:
+    oro_filter.twig.extension.render_js:
+        class: %oro_filter.twig.extension.render_js.class%
+        arguments: ["%oro_filter.twig.layout%"]
+        tags:
+            - { name: twig.extension }

@@ -5,6 +5,8 @@ namespace Oro\Bundle\FilterBundle\Form\Type\Filter;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
 
 class NumberFilterType extends AbstractType
 {
@@ -64,5 +66,19 @@ class NumberFilterType extends AbstractType
                 'operator_choices' => $operatorChoices,
             )
         );
+    }
+
+    /**
+     * @param FormView $view
+     * @param FormInterface $form
+     * @param array $options
+     */
+    public function buildView(FormView $view, FormInterface $form, array $options)
+    {
+        // TODO: replace with correct locale data
+        $view->vars['precision']          = 2;
+        $view->vars['grouping']           = true;
+        $view->vars['grouping_separator'] = ' ';
+        $view->vars['decimal_separator']  = '.';
     }
 }

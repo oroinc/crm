@@ -5,9 +5,6 @@ namespace Oro\Bundle\FilterBundle\DependencyInjection;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
-/**
- * @todo Remove this class after fixing of https://magecore.atlassian.net/browse/BAP-528
- */
 class Configuration implements ConfigurationInterface
 {
     /**
@@ -16,7 +13,20 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
-        $treeBuilder->root('oro_filter');
+        $rootNode = $treeBuilder->root('oro_filter');
+
+        $rootNode
+            ->children()
+                ->arrayNode('twig')
+                    ->addDefaultsIfNotSet()
+                    ->children()
+                        ->scalarNode('layout')
+                            ->cannotBeEmpty()
+                            ->defaultValue('OroFilterBundle:Filter:layout.html.twig')
+                        ->end()
+                    ->end()
+                ->end()
+            ->end();
 
         return $treeBuilder;
     }
