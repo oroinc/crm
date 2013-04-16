@@ -15,8 +15,12 @@ class ConfigPass implements CompilerPassInterface
 
         foreach ($container->getExtensions() as $name => $extension) {
             if (strpos($name, 'oro_') !== false) {
+                if (!$config = $extension->getConfiguration(array(), $container)) {
+                    continue;
+                }
+
                 $config = $processor->processConfiguration(
-                    $extension->getConfiguration(array(), $container),
+                    $config,
                     $container->getExtensionConfig($name)
                 );
 
