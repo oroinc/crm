@@ -103,9 +103,7 @@ class Reader
         $bundles = $this->kernel->getBundles();
 
         foreach ($bundles as $bundle) {
-            if (strpos($bundle->getPath(), 'vendor') === false) {
-                $directories[] = $bundle->getPath();
-            }
+            $directories[] = $bundle->getPath();
         }
 
         return $directories;
