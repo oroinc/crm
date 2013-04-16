@@ -41,7 +41,7 @@ class TranslationExtractorTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $repo->expects($this->once())
             ->method('getNotEmptyTitles')
-            ->will($this->returnValue(array('title' => 'Test title')));
+            ->will($this->returnValue(array(array('title' => 'Test title'))));
 
         $this->titleService->expects($this->once())
             ->method('getStoredTitlesRepository')
