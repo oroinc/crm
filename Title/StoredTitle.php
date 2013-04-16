@@ -27,13 +27,13 @@ class StoredTitle
      * @Type("string")
      * @var string
      */
-    private $prefix;
+    private $prefix = '';
 
     /**
      * @Type("string")
      * @var string
      */
-    private $suffix;
+    private $suffix = '';
 
     /**
      * Setter for template

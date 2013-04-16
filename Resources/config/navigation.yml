@@ -1,4 +1,4 @@
-oro_menu_config:
+1oro_menu_config:
     templates:
         navbar:
             template: 'OroNavigationBundle:Menu:navbar.html.twig'
@@ -14,8 +14,3 @@ oro_menu_config:
             template: 'OroNavigationBundle:Menu:history.html.twig'
             rootClass: 'extra-list'
             currentAsLink: false
-
-oro_titles:
-    oro_user_show: "%%user%% - Profile"
-    oro_user_role_index: "Roles"
-    oro_user_role_edit: "Edit %%role%% role"
