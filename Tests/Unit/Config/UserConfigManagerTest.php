@@ -108,11 +108,16 @@ class UserConfigManagerTest extends ConfigManagerTest
                 ))
             ))
             ->will($this->returnCallback(
-                function($param) use ($configUser, $configGroup) {
+                function ($param) use ($configUser, $configGroup) {
                     switch ($param['recordId']) {
-                        case 1: return $configUser;
-                        case 2: return $configGroup;
-                        case 3: return null;
+                        case 1:
+                            return $configUser;
+
+                        case 2:
+                            return $configGroup;
+
+                        case 3:
+                            return null;
                     }
                 }
             ));

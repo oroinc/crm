@@ -7,9 +7,9 @@ use Oro\Bundle\ConfigBundle\Config\UserConfigManager;
 class ConfigExtension extends \Twig_Extension
 {
     /**
-     * @var \Oro\Bundle\ConfigBundle\Config\UserConfigManager
+     * @var UserConfigManager
      */
-    private $userConfigManager;
+    protected $userConfigManager;
 
     public function __construct(UserConfigManager $userConfigManager)
     {
@@ -29,10 +29,10 @@ class ConfigExtension extends \Twig_Extension
     }
 
     /**
-     * @param string $configName
+     * @param  string $name Setting name in "{bundle}.{setting}" format
      * @return mixed
      */
-    public function getUserValue($configName)
+    public function getUserValue($name)
     {
         return $this->userConfigManager->get($configName);
     }
