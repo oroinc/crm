@@ -2,8 +2,6 @@
 
 {% set title = form.vars.value.id ? 'Edit group'|trans : 'Add group'|trans %}
 
-{% block title %}{{ title }} - {{ parent() }}{% endblock %}
-
 {% block head_script %}
     {{ parent() }}
 

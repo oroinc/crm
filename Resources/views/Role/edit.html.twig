@@ -1,6 +1,5 @@
 {% extends bap.layout is defined ? bap.layout : 'OroUserBundle::layout.html.twig' %}
 
-{% set title = form.vars.value.id ? 'Edit role'|trans : 'Add role'|trans %}
 {% oro_title_set({params : {"%role%": form.vars.value.label} }) %}
 
 {% block head_script %}

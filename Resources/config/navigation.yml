@@ -41,6 +41,25 @@ oro_menu_config:
                 shortcut_list_users: ~
 
 oro_titles:
-    oro_user_show: %%username%% -View profile - User Management
+    oro_user_show: %%username%% - View profile - User Management
+    oro_user_edit: %%username%% - Edit profile - User Management
+    oro_user_create: New profile - User Management
+    oro_user_index: Users overview - User Management
+
     oro_user_role_edit: Edit role - User management
+    oro_user_role_create: Add role - User management
     oro_user_role_index: "Roles overview - User management"
+
+    oro_user_security_login: Login
+    oro_user_status_list: "User statuses - User management"
+    oro_user_status_create: "Add status - User management"
+
+    oro_user_reset_reset: Password reset
+    oro_user_reset_request: Forgot password
+    oro_user_reset_check_email: Password reset - check email
+
+    oro_user_acl_edit: Acl resources - User Management
+
+    oro_user_group_create: Edit group - User Management
+    oro_user_group_edit: Add group - User Management
+    oro_user_group_index: Groups overview - User Management
