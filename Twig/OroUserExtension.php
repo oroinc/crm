@@ -40,9 +40,9 @@ class OroUserExtension extends \Twig_Extension
      */
     public function getFilters()
     {
-       return array(
-           'is_flexible' => new \Twig_Filter_Method($this, 'isFlexible'),
-       );
+        return array(
+            'is_flexible' => new \Twig_Filter_Method($this, 'isFlexible'),
+        );
     }
 
     /**

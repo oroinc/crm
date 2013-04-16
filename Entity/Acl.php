@@ -412,6 +412,19 @@ class Acl
     }
 
     /**
+     * Set new access roles collection
+     * 
+     * @param  ArrayCollection $roles
+     * @return Acl
+     */
+    public function setAccessRoles(ArrayCollection $roles)
+    {
+        $this->accessRoles = $roles;
+
+        return $this;
+    }
+
+    /**
      * Set class
      *
      * @param  string $class
