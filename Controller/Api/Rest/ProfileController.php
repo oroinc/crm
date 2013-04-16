@@ -293,7 +293,7 @@ class ProfileController extends FOSRestController implements ClassResourceInterf
         foreach ($attrDef as $i => $attr) {
             /* @var $attr \Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityAttribute */
             if ($attr->getBackendType() == 'options') {
-               if (in_array(
+                if (in_array(
                     $attr->getAttributeType(),
                     array(
                         'Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\OptionMultiSelectType',
