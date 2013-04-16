@@ -6,6 +6,7 @@ use Oro\Bundle\NavigationBundle\Provider\TitleServiceInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
+use Symfony\Component\HttpKernel\HttpKernel;
 use Symfony\Component\Security\Core\SecurityContextInterface;
 use Doctrine\ORM\EntityManager;
 
@@ -55,6 +56,11 @@ class ResponseHistoryListener
      */
     public function onResponse(FilterResponseEvent $event)
     {
+        if (HttpKernel::MASTER_REQUEST != $event->getRequestType()) {
+            // Do not do anything
+            return;
+        }
+
         $request = $event->getRequest();
         $response = $event->getResponse();
 

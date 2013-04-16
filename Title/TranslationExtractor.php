@@ -36,7 +36,7 @@ class TranslationExtractor implements ExtractorInterface
      */
     public function extract($directory, MessageCatalogue $catalogue)
     {
-        $titles = $this->titleService->getNotEmptyTitles();
+        $titles = $this->titleService->getStoredTitlesRepository()->getNotEmptyTitles();
         foreach ($titles as $titleRecord) {
             $message = $titleRecord['title'];
             $catalogue->set($message, $this->prefix . $message);

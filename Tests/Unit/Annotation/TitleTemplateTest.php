@@ -9,30 +9,22 @@ class TitleTemplateTest extends \PHPUnit_Framework_TestCase
     const TEST_VALUE = 'test annotation value';
 
     /**
-     * @dataProvider provider
-     *@param array $data
+     * Test good annotation
      */
-    public function testAnnotation($data = array())
+    public function testGoodAnnotation()
     {
-        try {
-            $annotation = new TitleTemplate($data);
+        $annotation = new TitleTemplate(array('value' => self::TEST_VALUE));
 
-            $this->assertEquals(self::TEST_VALUE, $annotation->getTitleTemplate());
-        } catch (\Exception $e) {
-            $this->assertInstanceOf('\RuntimeException', $e);
-        }
+        $this->assertEquals(self::TEST_VALUE, $annotation->getTitleTemplate());
     }
 
     /**
-     * Data provider
+     * Test bad annotation
      *
-     * @return array
+     * @expectedException \RuntimeException
      */
-    public function provider()
+    public function testBadAnnotation()
     {
-        return array(
-            array(array('value' => self::TEST_VALUE)),
-            array()
-        );
+        new TitleTemplate(array());
     }
 }

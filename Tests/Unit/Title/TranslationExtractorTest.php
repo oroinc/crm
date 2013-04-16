@@ -22,8 +22,8 @@ class TranslationExtractorTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->titleService = $this->getMockBuilder('Oro\Bundle\NavigationBundle\Provider\TitleService')
-                                   ->disableOriginalConstructor()
-                                   ->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->extractor = new TranslationExtractor($this->titleService);
     }
 
@@ -33,15 +33,22 @@ class TranslationExtractorTest extends \PHPUnit_Framework_TestCase
     public function testExtract()
     {
         $messageCatalogue = $this->getMockBuilder('Symfony\Component\Translation\MessageCatalogue')
-                        ->disableOriginalConstructor()
-                        ->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $repo = $this->getMockBuilder('Oro\Bundle\NavigationBundle\Entity\Repository\TitleRepository')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $repo->expects($this->once())
+            ->method('getNotEmptyTitles')
+            ->will($this->returnValue(array('title' => 'Test title')));
 
         $this->titleService->expects($this->once())
-                           ->method('getNotEmptyTitles')
-                           ->will($this->returnValue(array('title' => 'Test title')));
+            ->method('getStoredTitlesRepository')
+            ->will($this->returnValue($repo));
 
         $messageCatalogue->expects($this->once())
-                         ->method('set');
+            ->method('set');
 
         $this->extractor->setPrefix('__');
         $this->extractor->extract('', $messageCatalogue);

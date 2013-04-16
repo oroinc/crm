@@ -28,11 +28,8 @@ class TitleIndexUpdateCommandTest extends \PHPUnit_Framework_TestCase
     {
         $this->command->configure();
 
-        $description = $this->command->getDescription();
-        $name = $this->command->getName();
-
-        $this->assertFalse(empty($description));
-        $this->assertFalse(empty($name));
+        $this->assertNotEmpty($this->command->getDescription());
+        $this->assertNotEmpty($this->command->getName());
     }
 
     /**
@@ -47,39 +44,39 @@ class TitleIndexUpdateCommandTest extends \PHPUnit_Framework_TestCase
         $route = $this->getMock('Symfony\Component\Routing\Route', array(), array('/user/show/{id}'));
 
         $route->expects($this->once())
-              ->method('getRequirements')
-              ->will($this->returnValue(array('_method' => $data)));
+            ->method('getRequirements')
+            ->will($this->returnValue(array('_method' => $data)));
 
         $route->expects($this->once())
-               ->method('getDefault')
-               ->with('_controller')
-               ->will($this->returnValue(''));
+            ->method('getDefault')
+            ->with('_controller')
+            ->will($this->returnValue(''));
 
         $routerCollection = $this->getMock('Symfony\Component\Routing\RouteCollection');
 
         $routerCollection->expects($this->once())
-                        ->method('all')
-                        ->will($this->returnValue(array($route)));
+            ->method('all')
+            ->will($this->returnValue(array($route)));
 
         $router = $this->getMock('Symfony\Component\Routing\RouterInterface');
 
         $router->expects($this->once())
-                        ->method('getRouteCollection')
-                        ->will($this->returnValue($routerCollection));
+            ->method('getRouteCollection')
+            ->will($this->returnValue($routerCollection));
 
         $titleService = $this->getMock('Oro\Bundle\NavigationBundle\Provider\TitleServiceInterface');
         $titleService->expects($this->once())
             ->method('update');
 
         $this->container->expects($this->at(0))
-                        ->method('get')
-                        ->with($this->equalTo('router'))
-                        ->will($this->returnValue($router));
+            ->method('get')
+            ->with($this->equalTo('router'))
+            ->will($this->returnValue($router));
 
         $this->container->expects($this->at(1))
-                        ->method('get')
-                        ->with($this->equalTo('oro_navigation.title_service'))
-                        ->will($this->returnValue($titleService));
+            ->method('get')
+            ->with($this->equalTo('oro_navigation.title_service'))
+            ->will($this->returnValue($titleService));
 
         $this->command->execute($input, $output);
     }

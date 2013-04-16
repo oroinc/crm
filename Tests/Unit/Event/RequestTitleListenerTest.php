@@ -31,7 +31,7 @@ class RequestTitleListenerTest extends \PHPUnit_Framework_TestCase
         $titleService = $this->titleService;
 
         if ($invokeTimes) {
-            $titleService->expects($this->once())
+            $titleService->expects($this->exactly($invokeTimes))
                 ->method('loadByRoute')
                 ->with('test_route');
         }

@@ -9,16 +9,11 @@ class TitleTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider provider
      * @param string $property
-     * @param bool $isArray
      */
-    public function testSettersAndGetters($property, $isArray = false)
+    public function testSettersAndGetters($property)
     {
         $obj = new Title();
-        if ($isArray) {
-            $value = array('testKey' => 'testValue');
-        } else {
-            $value = 'testValue';
-        }
+        $value = 'testValue';
 
         call_user_func_array(array($obj, 'set' . ucfirst($property)), array($value));
         $this->assertEquals($value, call_user_func_array(array($obj, 'get' . ucfirst($property)), array()));

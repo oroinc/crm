@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Title
  *
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="Oro\Bundle\NavigationBundle\Entity\Repository\TitleRepository")
  * @ORM\Table(name="oro_navigation_title", uniqueConstraints={@ORM\UniqueConstraint(name="unq_route", columns={"route"})})
  */
 class Title

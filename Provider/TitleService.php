@@ -85,9 +85,9 @@ class TitleService implements TitleServiceInterface
      * Return rendered translated title
      *
      * @param array $params
-     * @param null $title
-     * @param null $prefix
-     * @param null $suffix
+     * @param string $title
+     * @param string $prefix
+     * @param string $suffix
      * @param bool $isJSON
      * @return $this
      */
@@ -254,21 +254,6 @@ class TitleService implements TitleServiceInterface
     public function getStoredTitlesRepository()
     {
         return $this->em->getRepository('Oro\Bundle\NavigationBundle\Entity\Title');
-    }
-
-    /**
-     * Returns not empty titles array
-     *
-     * @return array
-     */
-    public function getNotEmptyTitles()
-    {
-        return $this->getStoredTitlesRepository()
-            ->createQueryBuilder('title')
-            ->where('title.title <> :title')
-            ->setParameter('title', '')
-            ->getQuery()
-            ->getArrayResult();
     }
 
     /**

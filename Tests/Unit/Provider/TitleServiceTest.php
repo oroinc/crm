@@ -43,28 +43,28 @@ class TitleServiceTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->annotationsReader = $this->getMockBuilder('Oro\Bundle\NavigationBundle\Title\TitleReader\AnnotationsReader')
-                                        ->disableOriginalConstructor()
-                                        ->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->configReader = $this->getMockBuilder('Oro\Bundle\NavigationBundle\Title\TitleReader\ConfigReader')
-                                   ->disableOriginalConstructor()
-                                   ->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->em = $this->getMockBuilder('Doctrine\ORM\EntityManager')
-                         ->disableOriginalConstructor()
-                         ->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->translator = $this->getMockBuilder('Symfony\Bundle\FrameworkBundle\Translation\Translator')
-                                 ->disableOriginalConstructor()
-                                 ->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->serializer = $this->getMockBuilder('JMS\Serializer\Serializer')
-                                 ->disableOriginalConstructor()
-                                 ->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->repository = $this->getMockBuilder('Doctrine\ORM\EntityRepository')
-                                 ->disableOriginalConstructor()
-                                 ->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->titleService = new TitleService(
             $this->annotationsReader,
@@ -78,7 +78,7 @@ class TitleServiceTest extends \PHPUnit_Framework_TestCase
     public function testRender()
     {
         $this->translator->expects($this->exactly(3))
-                         ->method('trans');
+            ->method('trans');
 
         $result = $this->titleService->render(array(), null, 'Prefix', 'Suffix');
 
@@ -92,22 +92,22 @@ class TitleServiceTest extends \PHPUnit_Framework_TestCase
         $storedTitleMock = $this->getMock('Oro\Bundle\NavigationBundle\Title\StoredTitle');
 
         $this->serializer->expects($this->once())
-                         ->method('deserialize')
-                         ->with($this->equalTo($data), $this->equalTo('Oro\Bundle\NavigationBundle\Title\StoredTitle'), $this->equalTo('json'))
-                         ->will($this->returnValue($storedTitleMock));
+            ->method('deserialize')
+            ->with($this->equalTo($data), $this->equalTo('Oro\Bundle\NavigationBundle\Title\StoredTitle'), $this->equalTo('json'))
+            ->will($this->returnValue($storedTitleMock));
 
         $storedTitleMock->expects($this->once())
-                        ->method('getParams');
+            ->method('getParams');
 
         $storedTitleMock->expects($this->once())
-                        ->method('getTemplate')
-                        ->will($this->returnValue('string'));
+            ->method('getTemplate')
+            ->will($this->returnValue('string'));
 
         $storedTitleMock->expects($this->once())
-                        ->method('getPrefix');
+            ->method('getPrefix');
 
         $storedTitleMock->expects($this->once())
-                        ->method('getSuffix');
+            ->method('getSuffix');
 
         $result = $this->titleService->render(array(), $data, null, null, true);
 
@@ -127,9 +127,9 @@ class TitleServiceTest extends \PHPUnit_Framework_TestCase
 
         $dataArray = array(
             'titleTemplate' => 'titleTemplate',
-            'prefix'        => 'prefix',
-            'suffix'        => 'suffix',
-            'params'        =>  array('test_params')
+            'prefix' => 'prefix',
+            'suffix' => 'suffix',
+            'params' => array('test_params')
         );
         $this->titleService->setData($dataArray);
 
@@ -138,49 +138,50 @@ class TitleServiceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider existInDb
-     * @param bool $existItem
+     * Tests case with exists item
      */
-    public function testLoadByRoute($existItem)
+    public function testLoadByRouteExistInDB()
     {
         $route = 'test_route';
 
         $this->em->expects($this->once())
-                 ->method('getRepository')
-                 ->will($this->returnValue($this->repository));
+            ->method('getRepository')
+            ->will($this->returnValue($this->repository));
 
         $entityMock = $this->getMock('Oro\Bundle\NavigationBundle\Entity\Title');
 
         $this->repository->expects($this->once())
-                         ->method('findOneBy')
-                         ->with($this->equalTo(array('route' => $route)))
-                         ->will($this->returnValue($existItem ? $entityMock : false));
+            ->method('findOneBy')
+            ->with($this->equalTo(array('route' => $route)))
+            ->will($this->returnValue($entityMock));
 
-        if ($existItem) {
-            $testTitle = 'Test title';
-            $entityMock->expects($this->once())
-                        ->method('getTitle')
-                        ->will($this->returnValue($testTitle));
+        $testTitle = 'Test title';
+        $entityMock->expects($this->once())
+            ->method('getTitle')
+            ->will($this->returnValue($testTitle));
 
-            $this->titleService->loadByRoute($route);
+        $this->titleService->loadByRoute($route);
 
-            $this->assertEquals($testTitle, $this->titleService->getTemplate());
-        } else {
-            $this->titleService->loadByRoute($route);
-        }
+        $this->assertEquals($testTitle, $this->titleService->getTemplate());
     }
 
     /**
-     * Data provider
-     *
-     * @return array
+     * Tests case with doesn't exists item
      */
-    public function existInDb()
+    public function testLoadByRouteDoesntExistInDB()
     {
-        return array(
-            array(true),
-            array(false)
-        );
+        $route = 'test_route';
+
+        $this->em->expects($this->once())
+            ->method('getRepository')
+            ->will($this->returnValue($this->repository));
+
+        $this->repository->expects($this->once())
+            ->method('findOneBy')
+            ->with($this->equalTo(array('route' => $route)))
+            ->will($this->returnValue(false));
+
+        $this->titleService->loadByRoute($route);
     }
 
     /**
@@ -202,24 +203,24 @@ class TitleServiceTest extends \PHPUnit_Framework_TestCase
         $this->prepareReaders();
 
         $this->em->expects($this->once())
-                 ->method('getRepository')
-                 ->will($this->returnValue($this->repository));
+            ->method('getRepository')
+            ->will($this->returnValue($this->repository));
 
         $entityMock = $this->getMock('Oro\Bundle\NavigationBundle\Entity\Title');
 
         $entityMock->expects($this->once())
-                   ->method('getRoute')
-                   ->will($this->returnValue('test_route'));
+            ->method('getRoute')
+            ->will($this->returnValue('test_route'));
 
         $this->repository->expects($this->once())
-                         ->method('findAll')
-                         ->will($this->returnValue(array($entityMock)));
+            ->method('findAll')
+            ->will($this->returnValue(array($entityMock)));
 
         $this->em->expects($this->once())
-                 ->method('remove');
+            ->method('remove');
 
         $this->em->expects($this->once())
-                 ->method('flush');
+            ->method('flush');
 
         $this->titleService->update(array());
     }
@@ -231,32 +232,32 @@ class TitleServiceTest extends \PHPUnit_Framework_TestCase
         $testData = array('route_name' => 'Title');
 
         $this->em->expects($this->once())
-                 ->method('getRepository')
-                 ->will($this->returnValue($this->repository));
+            ->method('getRepository')
+            ->will($this->returnValue($this->repository));
 
         $entityMock = $this->getMock('Oro\Bundle\NavigationBundle\Entity\Title');
 
         $entityMock->expects($this->exactly(2))
-                   ->method('getRoute')
-                   ->will($this->returnValue('route_name'));
+            ->method('getRoute')
+            ->will($this->returnValue('route_name'));
 
         $entityMock->expects($this->once())
-                   ->method('getIsSystem')
-                   ->will($this->returnValue(true));
+            ->method('getIsSystem')
+            ->will($this->returnValue(true));
 
         $entityMock->expects($this->once())
-                   ->method('setTitle')
-                   ->with($this->equalTo('Title'));
+            ->method('setTitle')
+            ->with($this->equalTo('Title'));
 
         $this->repository->expects($this->once())
-                         ->method('findAll')
-                         ->will($this->returnValue(array($entityMock)));
+            ->method('findAll')
+            ->will($this->returnValue(array($entityMock)));
 
         $this->em->expects($this->once())
-                 ->method('persist');
+            ->method('persist');
 
         $this->em->expects($this->once())
-                 ->method('flush');
+            ->method('flush');
 
         $this->titleService->update($testData);
     }
@@ -268,19 +269,19 @@ class TitleServiceTest extends \PHPUnit_Framework_TestCase
         $testData = array('route_name' => 'Title');
 
         $this->em->expects($this->once())
-                 ->method('getRepository')
-                 ->will($this->returnValue($this->repository));
+            ->method('getRepository')
+            ->will($this->returnValue($this->repository));
 
         $this->repository->expects($this->once())
-                         ->method('findAll')
-                         ->will($this->returnValue(array()));
+            ->method('findAll')
+            ->will($this->returnValue(array()));
 
         $this->em->expects($this->once())
-                 ->method('persist')
-                 ->with($this->isInstanceOf('Oro\Bundle\NavigationBundle\Entity\Title'));
+            ->method('persist')
+            ->with($this->isInstanceOf('Oro\Bundle\NavigationBundle\Entity\Title'));
 
         $this->em->expects($this->once())
-                 ->method('flush');
+            ->method('flush');
 
         $this->titleService->update($testData);
     }
@@ -290,9 +291,9 @@ class TitleServiceTest extends \PHPUnit_Framework_TestCase
         $testValue = 'test value';
 
         $this->serializer->expects($this->once())
-                         ->method('serialize')
-                         ->with($this->isInstanceOf('\Oro\Bundle\NavigationBundle\Title\StoredTitle'), $this->equalTo('json'))
-                         ->will($this->returnValue($testValue));
+            ->method('serialize')
+            ->with($this->isInstanceOf('\Oro\Bundle\NavigationBundle\Title\StoredTitle'), $this->equalTo('json'))
+            ->will($this->returnValue($testValue));
 
         $result = $this->titleService->getSerialized();
 
