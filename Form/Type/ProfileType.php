@@ -68,7 +68,7 @@ class ProfileType extends FlexibleType
                 'label'          => 'Last name',
                 'required'       => true,
             ))
-            ->add('birthday', 'oro_localized_date', array(
+            ->add('birthday', 'oro_date', array(
                 'label'          => 'Date of birth',
                 'required'       => false,
             ))
