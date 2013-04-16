@@ -47,7 +47,6 @@ class TitleIndexUpdateCommand extends ContainerAwareCommand
     private function update($routes)
     {
         $toUpdate = array();
-
         foreach ($routes as $name => $route) {
             /** @var $route \Symfony\Component\Routing\Route  */
 
@@ -69,14 +68,12 @@ class TitleIndexUpdateCommand extends ContainerAwareCommand
      */
     private function checkMethod($requirements)
     {
-        $method = isset($requirements['_method'])
-            ?  $requirements['_method'] : 'ANY';
+        $method = isset($requirements['_method']) ?  $requirements['_method'] : 'ANY';
 
-        $allowed = 'GET';
+        $allowed = array('GET', 'ANY');
+        $method = !is_array($method) ? explode('|', $method) : $method;
 
-        $result = (is_array($method) && in_array($allowed, $method)
-                    || $method === $allowed
-                    || $method === 'ANY') ? true : false;
+        $result = (boolean) count(array_intersect($allowed, $method));
 
         return $result;
     }
