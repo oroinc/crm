@@ -20,7 +20,7 @@ class DateTimeType extends AbstractAttributeType
     {
         $this->name        = 'DateTime';
         $this->backendType = self::BACKEND_TYPE_DATETIME;
-        $this->formType    = 'datetime';
+        $this->formType    = 'oro_datetime';
     }
 
     /**
@@ -35,10 +35,6 @@ class DateTimeType extends AbstractAttributeType
         $options = parent::prepareFormOptions($attribute);
         $options['widget'] = 'single_text';
         $options['input'] = 'datetime';
-        $options['attr'] = array(
-            'class' => 'datepicker input-small',
-            'placeholder' => 'YYYY-MM-DD HH:mm:ss',
-        );
 
         return $options;
     }
