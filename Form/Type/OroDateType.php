@@ -27,7 +27,7 @@ class OroDateType extends AbstractType
             $pattern
         );
 
-        $view->vars['attr']['data-format'] = str_replace(
+        $view->vars['attr']['data-dateformat'] = $view->vars['attr']['placeholder'] = str_replace(
             array('M', 'yy'),
             array('m', 'y'),
             $formatter->getPattern()
@@ -45,7 +45,6 @@ class OroDateType extends AbstractType
             'widget'    => 'single_text',
             'attr'      => array(
                 'class' => 'datepicker',
-                'placeholder' => 'MM/DD/YY',
             )
         ));
     }

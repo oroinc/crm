@@ -8,7 +8,7 @@ $(document).ready(function () {
             el = $(el);
 
             el.datepicker({
-                dateFormat: el.attr('data-format') ? el.attr('data-format') : 'm/d/y'
+                dateFormat: el.attr('data-dateformat') ? el.attr('data-dateformat') : 'm/d/y'
             });
         });
     }
@@ -18,8 +18,8 @@ $(document).ready(function () {
             el = $(el);
 
             el.datetimepicker({
-                dateFormat: el.attr('data-format') ? el.attr('data-format') : 'm/d/y',
-                timeFormat: el.attr('time-format') ? el.attr('time-format') : 'hh:mm tt'
+                dateFormat: el.attr('data-dateformat') ? el.attr('data-dateformat') : 'm/d/y',
+                timeFormat: el.attr('data-timeformat') ? el.attr('data-timeformat') : 'hh:mm tt'
             });
         });
     }
