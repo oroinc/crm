@@ -65,6 +65,10 @@ class AnnotationsReaderTest extends \PHPUnit_Framework_TestCase
             ->method('getDefault')
             ->with($this->equalTo('_controller'));
 
+        $this->testBundle->expects($this->any())
+            ->method('getPath')
+            ->will($this->returnValue(realpath(__DIR__)));
+
         $reader = new AnnotationsReader($this->kernelMock, $this->annotationReader);
 
         $this->assertInternalType('array', $reader->getData(array($routeMock)));
