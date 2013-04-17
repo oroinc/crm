@@ -8,7 +8,18 @@ $(document).ready(function () {
             el = $(el);
 
             el.datepicker({
-                dateFormat: el.attr('data-format') ? el.attr('data-format') : 'mm/dd/yy'
+                dateFormat: el.attr('data-format') ? el.attr('data-format') : 'm/d/y'
+            });
+        });
+    }
+
+    if (typeof($.timepicker) != 'undefined') {
+        $('input.datetimepicker').each(function (index, el) {
+            el = $(el);
+
+            el.datetimepicker({
+                dateFormat: el.attr('data-format') ? el.attr('data-format') : 'm/d/y',
+                timeFormat: el.attr('time-format') ? el.attr('time-format') : 'hh:mm tt'
             });
         });
     }
