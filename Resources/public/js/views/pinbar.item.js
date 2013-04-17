@@ -36,10 +36,8 @@ navigation.pinbar.ItemView = Backbone.View.extend({
     },
 
     render: function () {
-        var data = this.model.updateTitleIfExists();
-
         this.$el.html(
-            this.templates[this.options.type](data.toJSON())
+            this.templates[this.options.type](this.model.toJSON())
         );
         if (this.model.get('url') ==  window.location.pathname) {
             this.$el.addClass('active');

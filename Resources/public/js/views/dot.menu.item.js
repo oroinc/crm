@@ -26,10 +26,8 @@ navigation.dotMenu.ItemView = Backbone.View.extend({
     },
 
     render: function () {
-        var data = this.model.updateTitleIfExists();
-
         this.$el.html(
-            this.template(data.toJSON())
+            this.template(this.model.toJSON())
         );
         if (this.model.get('url') ==  window.location.pathname) {
             this.$el.addClass('active');
