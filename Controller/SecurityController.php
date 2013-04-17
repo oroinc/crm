@@ -19,16 +19,16 @@ use Oro\Bundle\UserBundle\Annotation\Acl;
  */
 class SecurityController extends Controller
 {
-   /**
-    * @Route("/login", name="oro_user_security_login")
-    * @Template
-    * @Acl(
-    *      id = "oro_login",
-    *      name="Login page",
-    *      description = "Oro Login page",
-    *      parent = "oro_security"
-    * )
-    */
+    /**
+     * @Route("/login", name="oro_user_security_login")
+     * @Template
+     * @Acl(
+     *      id = "oro_login",
+     *      name="Login page",
+     *      description = "Oro Login page",
+     *      parent = "oro_security"
+     * )
+     */
     public function loginAction()
     {
         $request = $this->getRequest();
@@ -61,29 +61,31 @@ class SecurityController extends Controller
         );
     }
 
-   /**
-    * @Route("/login-check", name="oro_user_security_check")
-    * @Acl(
-    *      id = "oro_login_check",
-    *      name="Login check",
-    *      description = "Oro Login check",
-    *      parent = "oro_security"
-    * )
-    */
+    /**
+     * @Route("/login-check", name="oro_user_security_check")
+     * @Acl(
+     *      id = "oro_login_check",
+     *      name="Login check",
+     *      description = "Oro Login check",
+     *      parent = "oro_security"
+     * )
+     */
     public function checkAction()
     {
-        throw new \RuntimeException('You must configure the check path to be handled by the firewall using form_login in your security firewall configuration.');
+        throw new \RuntimeException(
+            'You must configure the check path to be handled by the firewall using form_login in your security firewall configuration.'
+        );
     }
 
-   /**
-    * @Route("/logout", name="oro_user_security_logout")
-    * @Acl(
-    *      id = "oro_logout",
-    *      name="Logout",
-    *      description = "Oro Logout",
-    *      parent = "oro_security"
-    * )
-    */
+    /**
+     * @Route("/logout", name="oro_user_security_logout")
+     * @Acl(
+     *      id = "oro_logout",
+     *      name="Logout",
+     *      description = "Oro Logout",
+     *      parent = "oro_security"
+     * )
+     */
     public function logoutAction()
     {
         throw new \RuntimeException('You must activate the logout in your security firewall configuration.');

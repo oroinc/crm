@@ -80,7 +80,7 @@ class ProfileType extends FlexibleType
                 'label'          => 'Roles',
                 'class'          => 'OroUserBundle:Role',
                 'property'       => 'label',
-                'query_builder' => function(EntityRepository $er) {
+                'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder('r')
                         ->where('r.role <> :anon')
                         ->setParameter('anon', User::ROLE_ANONYMOUS);
@@ -137,7 +137,7 @@ class ProfileType extends FlexibleType
         $resolver->setDefaults(array(
             'data_class'           => $this->flexibleClass,
             'intention'            => 'profile',
-            'validation_groups'    => function(FormInterface $form) {
+            'validation_groups'    => function (FormInterface $form) {
                 return $form->getData() && $form->getData()->getId()
                     ? array('Profile', 'Default')
                     : array('Registration', 'Profile', 'Default');

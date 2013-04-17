@@ -38,12 +38,11 @@ class WsseUserProvider extends Provider
 
         if ($user && $user->getApi()) {
             if ($this->validateDigest(
-                    $token->getAttribute('digest'),
-                    $token->getAttribute('nonce'),
-                    $token->getAttribute('created'),
-                    $user->getApi()->getApiKey()
-                )
-            ) {
+                $token->getAttribute('digest'),
+                $token->getAttribute('nonce'),
+                $token->getAttribute('created'),
+                $user->getApi()->getApiKey()
+            )) {
                 $authToken = new Token($user->getRoles());
 
                 $authToken->setUser($user);
