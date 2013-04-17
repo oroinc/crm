@@ -260,7 +260,7 @@ class Orm extends AbstractEngine
      */
     protected function getEntityUrl($entity)
     {
-        if ($this->mapper->getEntityMapParameter(get_class($entity), 'route')){
+        if ($this->mapper->getEntityMapParameter(get_class($entity), 'route')) {
             $routeParameters = $this->mapper->getEntityMapParameter(get_class($entity), 'route');
             $routeData = array();
             if (isset($routeParameters['parameters']) && count($routeParameters['parameters'])) {
