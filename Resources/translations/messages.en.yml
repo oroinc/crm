@@ -5,3 +5,27 @@ change_password:
 resetting:
     flash:
         success: The password has been reset successfully
+
+"%%username%% - View profile - User Management": "%%username%% -View profile - User Management"
+"%%username%% - Edit profile - User Management": "%%username%% - Edit profile - User Management"
+"New profile - User Management": "New profile - User Management"
+"Users overview - User Management": "Users overview - User Management"
+
+"Edit role - User management": "Edit role - User management"
+"Roles overview - User management": "Roles overview - User management"
+"Add role - User management": "Add role - User management"
+"Roles overview - User management": "Roles overview - User management"
+
+Login: Login
+"User statuses - User management": "User statuses - User management"
+"Add status - User management": "Add status - User management"
+
+"Password reset": Password reset
+"Forgot password": "Forgot password"
+"Password reset - check email": "Password reset - check email"
+
+"Acl resources - User Management": "Acl resources - User Management"
+
+"Edit group - User Management": "Edit group - User Management"
+"Add group - User Management": "Add group - User Management"
+"Groups overview - User Management": "Groups overview - User Management"

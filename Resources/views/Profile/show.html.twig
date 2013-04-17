@@ -2,7 +2,7 @@
 {% import 'OroUserBundle::macros.html.twig' as macros %}
 {% set format = get_user_value('oro_user.name_format') %}
 
-{% block title %}{{ user.fullname(format)|default('N/A') }} - {{ 'View profile'|trans }} - {{ 'User Management'|trans }}{% endblock %}
+{% oro_title_set({params : {"%username%": user.fullname(format)|default('N/A')}}) %}
 
 {% block content %}
 <div class="layout-content">
