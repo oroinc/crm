@@ -28,21 +28,10 @@ class FlexibleNumberFilter extends AbstractFlexibleFilter
         }
 
         $type = isset($data['type']) ? $data['type'] : false;
-        $operator = $this->getOperator($type, NumberType::TYPE_EQUAL);
+
+        $operator = $this->parentFilter->getOperator($type);
 
         // apply filter
         $this->applyFlexibleFilter($proxyQuery, $field, $data['value'], $operator);
-    }
-
-    /**
-     * Get operator as string
-     *
-     * @param string $type
-     * @param mixed $default
-     * @return bool
-     */
-    public function getOperator($type, $default = null)
-    {
-        return $this->parentFilter->getOperator($type, $default);
     }
 }

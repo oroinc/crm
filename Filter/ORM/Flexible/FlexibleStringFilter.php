@@ -3,7 +3,7 @@
 namespace Oro\Bundle\GridBundle\Filter\ORM\Flexible;
 
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
-use Oro\Bundle\GridBundle\Form\Type\Filter\ChoiceType;
+use Oro\Bundle\FilterBundle\Form\Type\Filter\TextFilterType;
 use Oro\Bundle\GridBundle\Filter\ORM\StringFilter;
 
 class FlexibleStringFilter extends AbstractFlexibleFilter
@@ -23,40 +23,20 @@ class FlexibleStringFilter extends AbstractFlexibleFilter
      */
     public function filter(ProxyQueryInterface $proxyQuery, $alias, $field, $data)
     {
-        if (!$data || !is_array($data) || !array_key_exists('value', $data)) {
+        $data = $this->parentFilter->parseData($data);
+        if (!$data) {
             return;
         }
 
-        $data['value'] = trim($data['value']);
+        $operator = $this->parentFilter->getOperator($data['type']);
 
-        if (strlen($data['value']) == 0) {
-            return;
-        }
-
-        // process type
-        $type = isset($data['type']) ? $data['type'] : false;
-        if ($type == ChoiceType::TYPE_EQUAL) {
+        if ('=' == $operator) {
             $value = $data['value'];
         } else {
             $value = sprintf($this->getOption('format'), $data['value']);
         }
 
-        // process operator
-        $operator = $this->getOperator($type, ChoiceType::TYPE_CONTAINS);
-
         // apply filter
         $this->applyFlexibleFilter($proxyQuery, $field, $value, $operator);
-    }
-
-    /**
-     * Get operator as string
-     *
-     * @param int $type
-     * @param mixed $default
-     * @return int|bool
-     */
-    public function getOperator($type, $default = null)
-    {
-        return $this->parentFilter->getOperator($type, $default);
     }
 }

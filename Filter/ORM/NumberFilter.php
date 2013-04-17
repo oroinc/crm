@@ -3,44 +3,22 @@
 namespace Oro\Bundle\GridBundle\Filter\ORM;
 
 use Doctrine\ORM\QueryBuilder;
-
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
-use Oro\Bundle\GridBundle\Form\Type\Filter\NumberType;
+use Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType;
 
 class NumberFilter extends AbstractFilter
 {
-    /**
-     * Get operator types
-     *
-     * @return array
-     */
-    public function getTypeOptions()
-    {
-        return array(
-            NumberType::TYPE_EQUAL
-                => $this->translator->trans('label_type_equal', array(), 'SonataAdminBundle'),
-            NumberType::TYPE_GREATER_EQUAL
-                => $this->translator->trans('label_type_greater_equal', array(), 'SonataAdminBundle'),
-            NumberType::TYPE_GREATER_THAN
-                => $this->translator->trans('label_type_greater_than', array(), 'SonataAdminBundle'),
-            NumberType::TYPE_LESS_EQUAL
-                => $this->translator->trans('label_type_less_equal', array(), 'SonataAdminBundle'),
-            NumberType::TYPE_LESS_THAN
-                => $this->translator->trans('label_type_less_than', array(), 'SonataAdminBundle'),
-        );
-    }
-
     /**
      * {@inheritdoc}
      */
     public function filter(ProxyQueryInterface $queryBuilder, $alias, $field, $data)
     {
-        if (!$data || !is_array($data) || !array_key_exists('value', $data) || !is_numeric($data['value'])) {
+        $data = $this->parseData($data);
+        if (!$data) {
             return;
         }
 
-        $type = isset($data['type']) ? $data['type'] : false;
-        $operator = $this->getOperator($type, NumberType::TYPE_EQUAL);
+        $operator = $this->getOperator($data['type']);
 
         // c.name > '1' => c.name OPERATOR :FIELDNAME
         $parameterName = $this->getNewParameterName($queryBuilder);
@@ -54,31 +32,39 @@ class NumberFilter extends AbstractFilter
     }
 
     /**
-     * @param int $type
-     * @param int|null $default
-     * @return int|bool
+     * @param mixed $data
+     * @return array|bool
      */
-    public function getOperator($type, $default = null)
+    protected function parseData($data)
     {
-        $type = (int) $type;
+        if (!is_array($data) || !array_key_exists('value', $data) || !is_numeric($data['value'])) {
+            return false;
+        }
 
-        $choices = array(
-            NumberType::TYPE_EQUAL         => '=',
-            NumberType::TYPE_GREATER_EQUAL => '>=',
-            NumberType::TYPE_GREATER_THAN  => '>',
-            NumberType::TYPE_LESS_EQUAL    => '<=',
-            NumberType::TYPE_LESS_THAN     => '<',
+        $data['type'] = isset($data['type']) ? $data['type'] : null;
+
+        return $data;
+    }
+
+    /**
+     * Get operator string
+     *
+     * @param int $type
+     * @return string
+     */
+    public function getOperator($type)
+    {
+        $type = (int)$type;
+
+        $operatorTypes = array(
+            NumberFilterType::TYPE_EQUAL         => '=',
+            NumberFilterType::TYPE_GREATER_EQUAL => '>=',
+            NumberFilterType::TYPE_GREATER_THAN  => '>',
+            NumberFilterType::TYPE_LESS_EQUAL    => '<=',
+            NumberFilterType::TYPE_LESS_THAN     => '<',
         );
 
-        if (isset($choices[$type])) {
-            return $choices[$type];
-        }
-
-        if (!is_null($default) && isset($choices[$default])) {
-            return $choices[$default];
-        }
-
-        return false;
+        return isset($operatorTypes[$type]) ? $operatorTypes[$type] : '=';
     }
 
     /**
@@ -86,6 +72,8 @@ class NumberFilter extends AbstractFilter
      */
     public function getDefaultOptions()
     {
-        return array();
+        return array(
+            'form_type' => NumberFilterType::NAME
+        );
     }
 }

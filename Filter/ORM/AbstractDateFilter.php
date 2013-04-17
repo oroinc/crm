@@ -3,43 +3,37 @@
 namespace Oro\Bundle\GridBundle\Filter\ORM;
 
 use Doctrine\DBAL\Query\QueryBuilder;
-use Doctrine\ORM\Query\Expr;
-
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
-use Oro\Bundle\GridBundle\Form\Type\Filter\DateRangeType;
+use Oro\Bundle\FilterBundle\Form\Type\Filter\DateRangeFilterType;
 
 abstract class AbstractDateFilter extends AbstractFilter
 {
     /**
-     * Date value format
+     * DateTime object as string format
      */
-    const VALUE_FORMAT = '/^\d{4}-\d{2}-\d{2}$/';
+    const DATETIME_FORMAT = 'Y-m-d';
 
-    /**
-     * Flag indicating that filter will filter by datetime instead by date
-     *
-     * @var boolean
-     */
-    protected $time = false;
 
     /**
      * {@inheritdoc}
      */
     public function filter(ProxyQueryInterface $queryBuilder, $alias, $field, $data)
     {
-        if (!$this->isParametersCorrect($data)) {
+        $data = $this->parseData($data);
+        if (!$data) {
             return;
         }
 
-        $parameters     = $this->getFilterParameters($data);
-        $dateStartValue = $parameters['date_start'];
-        $dateEndValue   = $parameters['date_end'];
-        $filterType     = $parameters['filter_type'];
+        /** @var $dateStartValue \DateTime */
+        $dateStartValue = $data['date_start'];
+        /** @var $dateEndValue \DateTime */
+        $dateEndValue = $data['date_end'];
+        $operatorType = $data['operator_type'];
 
         $startDateParameterName = $this->getNewParameterName($queryBuilder);
-        $endDateParameterName   = $this->getNewParameterName($queryBuilder);
+        $endDateParameterName = $this->getNewParameterName($queryBuilder);
 
-        if ($filterType == DateRangeType::TYPE_NOT_BETWEEN) {
+        if ($operatorType == DateRangeFilterType::TYPE_NOT_BETWEEN) {
             $this->applyFilterNotBetween(
                 $queryBuilder,
                 $dateStartValue,
@@ -63,83 +57,51 @@ abstract class AbstractDateFilter extends AbstractFilter
 
         /** @var $queryBuilder QueryBuilder */
         if ($dateStartValue) {
-            $queryBuilder->setParameter($startDateParameterName, $dateStartValue);
+            $queryBuilder->setParameter($startDateParameterName, $dateStartValue->format(static::DATETIME_FORMAT));
         }
         if ($dateEndValue) {
-            $queryBuilder->setParameter($endDateParameterName, $dateEndValue);
+            $queryBuilder->setParameter($endDateParameterName, $dateEndValue->format(static::DATETIME_FORMAT));
         }
     }
 
     /**
-     * Get filter parameters using data
-     *
-     * @param array $data
-     * @return array
+     * @param mixed $data
+     * @return array|bool
      */
-    public function getFilterParameters($data)
+    public function parseData($data)
     {
-        $dateStartValue = trim($data['value']['start']);
-        $dateEndValue   = trim($data['value']['end']);
-
-        if (!$this->isDateCorrect($dateStartValue)) {
-            $dateStartValue = '';
-        }
-        if (!$this->isDateCorrect($dateEndValue)) {
-            $dateEndValue = '';
+        if (!is_array($data) || !array_key_exists('value', $data) || !is_array($data['value'])) {
+            return false;
         }
 
-        if (!isset($data['type']) || !is_numeric($data['type'])) {
-            $filterType = DateRangeType::TYPE_BETWEEN;
-        } else {
-            $filterType = $data['type'];
+        $data['value']['start'] = isset($data['value']['start']) ? $data['value']['start'] : null;
+        $data['value']['end'] = isset($data['value']['end']) ? $data['value']['end'] : null;
+
+        if (!$data['value']['start'] && !$data['value']['end']) {
+            return false;
+        }
+
+        // check start date
+        if ($data['value']['start'] && !$data['value']['start'] instanceof \DateTime) {
+            return false;
+        }
+
+        // check end date
+        if ($data['value']['end'] && !$data['value']['end'] instanceof \DateTime) {
+            return false;
+        }
+
+        $data['type'] = isset($data['type']) ? $data['type'] : null;
+
+        if ($data['type'] != DateRangeFilterType::TYPE_NOT_BETWEEN) {
+            $data['type'] = DateRangeFilterType::TYPE_BETWEEN;
         }
 
         return array(
-            'date_start'  => $dateStartValue,
-            'date_end'    => $dateEndValue,
-            'filter_type' => $filterType
+            'date_start' => $data['value']['start'],
+            'date_end' => $data['value']['end'],
+            'operator_type' => $data['type']
         );
-    }
-
-    /**
-     * @param array $data
-     * @return bool
-     */
-    public function isParametersCorrect($data)
-    {
-        // check data sanity
-        if (!$data || !is_array($data) || !array_key_exists('value', $data)) {
-            return false;
-        }
-
-        // additional data check for ranged items
-        if (!array_key_exists('start', $data['value']) || !array_key_exists('end', $data['value'])) {
-            return false;
-        }
-
-        // check date format
-        if (!$this->isDateCorrect($data['value']['start']) && !$this->isDateCorrect($data['value']['end'])) {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * Checks if date matches format or empty
-     *
-     * @param string $date
-     * @return bool
-     */
-    protected function isDateCorrect($date)
-    {
-        $date = trim($date);
-
-        if ($date && !preg_match(static::VALUE_FORMAT, $date)) {
-            return false;
-        }
-
-        return true;
     }
 
     /**
@@ -208,15 +170,5 @@ abstract class AbstractDateFilter extends AbstractFilter
         }
 
         $this->applyFilterToClause($queryBuilder, $orExpression);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getDefaultOptions()
-    {
-        return array(
-            'input_type' => 'datetime'
-        );
     }
 }

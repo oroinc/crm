@@ -10,7 +10,7 @@ use Doctrine\ORM\Query\Expr;
 use Sonata\DoctrineORMAdminBundle\Filter\Filter as AbstractORMFilter;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 
-use Oro\Bundle\GridBundle\Field\FieldDescriptionInterface;
+use Oro\Bundle\FilterBundle\Form\Type\Filter\FilterType;
 use Oro\Bundle\GridBundle\Filter\FilterInterface;
 
 abstract class AbstractFilter extends AbstractORMFilter implements FilterInterface
@@ -31,16 +31,6 @@ abstract class AbstractFilter extends AbstractORMFilter implements FilterInterfa
     public function __construct(TranslatorInterface $translator)
     {
         $this->translator = $translator;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function apply($queryBuilder, $value)
-    {
-        list($alias, $field) = $this->association($queryBuilder, $value);
-        $this->value = $value;
-        $this->filter($queryBuilder, $alias, $field, $value);
     }
 
     /**
@@ -173,29 +163,30 @@ abstract class AbstractFilter extends AbstractORMFilter implements FilterInterfa
     /**
      * {@inheritdoc}
      */
-    public function getFieldType()
-    {
-        return $this->getOption('type', FieldDescriptionInterface::TYPE_TEXT);
-    }
-
-    /**
-     * Filter type options
-     *
-     * @return array
-     */
-    public function getTypeOptions()
+    public function getDefaultOptions()
     {
         return array();
     }
 
     /**
-     * Field render settings
-     *
-     * @deprecated
-     * @return array
+     * {@inheritdoc}
      */
     public function getRenderSettings()
     {
-        return array();
+        $formType = $this->getOption('form_type', FilterType::NAME);
+        $formOptions = array();
+        if ($this->getOption('field_type')) {
+            $formOptions['field_type'] = $this->getOption('field_type');
+        }
+        if ($this->getFieldOptions()) {
+            $formOptions['field_options'] = $this->getFieldOptions();
+        }
+        if ($this->getLabel()) {
+            $formOptions['label'] = $this->getLabel();
+        }
+        if (!$this->getOption('show_filter', true)) {
+            $formOptions['disabled'] = true;
+        }
+        return array($formType, $formOptions);
     }
 }

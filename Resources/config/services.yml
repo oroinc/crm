@@ -18,6 +18,7 @@ services:
     oro_grid.builder.datagrid:
         class:     %oro_grid.builder.datagrid.class%
         arguments:
+            - @form.factory
             - @oro_grid.filter.factory
             - @oro_grid.sorter.factory
             - @oro_grid.action.factory

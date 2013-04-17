@@ -24,6 +24,11 @@ class FlexibleFilterTestCase extends \PHPUnit_Framework_TestCase
      */
     protected $parentFilterClass;
 
+    protected function setUp()
+    {
+        $this->markTestSkipped();
+    }
+
     protected function tearDown()
     {
         unset($this->model);

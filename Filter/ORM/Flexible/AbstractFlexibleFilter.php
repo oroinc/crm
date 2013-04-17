@@ -26,7 +26,7 @@ abstract class AbstractFlexibleFilter extends AbstractFilter implements FilterIn
     /**
      * @var string
      */
-    protected $parentFilterClass = null;
+    protected $parentFilterClass;
 
     /**
      * @var FilterInterface
@@ -35,17 +35,15 @@ abstract class AbstractFlexibleFilter extends AbstractFilter implements FilterIn
 
     /**
      * @param FlexibleManagerRegistry $flexibleRegistry
-     * @param FilterInterface|null $parentFilter
+     * @param FilterInterface $parentFilter
      * @throws \InvalidArgumentException If $parentFilter has invalid type
      */
-    public function __construct(FlexibleManagerRegistry $flexibleRegistry, FilterInterface $parentFilter = null)
+    public function __construct(FlexibleManagerRegistry $flexibleRegistry, FilterInterface $parentFilter)
     {
         $this->flexibleRegistry = $flexibleRegistry;
-        if ($this->parentFilterClass) {
-            $this->parentFilter = $parentFilter;
-            if (!$this->parentFilter instanceof $this->parentFilterClass) {
-                throw new \InvalidArgumentException('Parent filter must be an instance of ' . $this->parentFilterClass);
-            }
+        $this->parentFilter = $parentFilter;
+        if (!$this->parentFilter instanceof $this->parentFilterClass) {
+            throw new \InvalidArgumentException('Parent filter must be an instance of ' . $this->parentFilterClass);
         }
     }
 
@@ -55,6 +53,7 @@ abstract class AbstractFlexibleFilter extends AbstractFilter implements FilterIn
     public function initialize($name, array $options = array())
     {
         parent::initialize($name, $options);
+        $this->parentFilter->initialize($name, $options);
         $this->loadFlexibleManager();
     }
 
@@ -104,14 +103,16 @@ abstract class AbstractFlexibleFilter extends AbstractFilter implements FilterIn
      */
     public function getDefaultOptions()
     {
-        return $this->parentFilter ? $this->parentFilter->getDefaultOptions() : array();
+        return $this->parentFilter->getDefaultOptions();
     }
 
     /**
-     * {@inheritdoc}
+     * Returns the main widget used to render the filter
+     *
+     * @return array
      */
-    public function getTypeOptions()
+    public function getRenderSettings()
     {
-        return $this->parentFilter ? $this->parentFilter->getTypeOptions() : parent::getTypeOptions();
+        return $this->parentFilter->getRenderSettings();
     }
 }

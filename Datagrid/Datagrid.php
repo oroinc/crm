@@ -2,6 +2,9 @@
 
 namespace Oro\Bundle\GridBundle\Datagrid;
 
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\Form;
+
 use Sonata\AdminBundle\Filter\FilterInterface as SonataFilterInterface;
 
 use Oro\Bundle\GridBundle\Filter\FilterInterface;
@@ -34,6 +37,11 @@ class Datagrid implements DatagridInterface
      * @var PagerInterface
      */
     protected $pager;
+
+    /**
+     * @var FormBuilderInterface
+     */
+    protected $formBuilder;
 
     /**
      * Parameters applied flag
@@ -70,6 +78,11 @@ class Datagrid implements DatagridInterface
     protected $sorters = array();
 
     /**
+     * @var Form
+     */
+    protected $form;
+
+    /**
      * @var string
      */
     protected $name;
@@ -88,6 +101,7 @@ class Datagrid implements DatagridInterface
      * @param ProxyQueryInterface $query
      * @param FieldDescriptionCollection $columns
      * @param PagerInterface $pager
+     * @param FormBuilderInterface $formBuilder
      * @param RouteGeneratorInterface $routeGenerator
      * @param ParametersInterface $parameters
      * @param string $name
@@ -97,6 +111,7 @@ class Datagrid implements DatagridInterface
         ProxyQueryInterface $query,
         FieldDescriptionCollection $columns,
         PagerInterface $pager,
+        FormBuilderInterface $formBuilder,
         RouteGeneratorInterface $routeGenerator,
         ParametersInterface $parameters,
         $name,
@@ -105,6 +120,7 @@ class Datagrid implements DatagridInterface
         $this->query          = $query;
         $this->columns        = $columns;
         $this->pager          = $pager;
+        $this->formBuilder    = $formBuilder;
         $this->routeGenerator = $routeGenerator;
         $this->parameters     = $parameters;
         $this->name           = $name;
@@ -145,7 +161,10 @@ class Datagrid implements DatagridInterface
      */
     public function addFilter(SonataFilterInterface $filter)
     {
-        $this->filters[$filter->getName()] = $filter;
+        $name = $filter->getName();
+        $this->filters[$name] = $filter;
+        list($formType, $formOptions) = $filter->getRenderSettings();
+        $this->formBuilder->add($name, $formType, $formOptions);
     }
 
     /**
@@ -255,13 +274,15 @@ class Datagrid implements DatagridInterface
      */
     protected function applyFilters()
     {
-        $filterParameters = $this->parameters->get(ParametersInterface::FILTER_PARAMETERS);
+        $form = $this->getForm();
 
         /** @var $filter FilterInterface */
         foreach ($this->getFilters() as $filter) {
             $filterName = $filter->getName();
-            if (isset($filterParameters[$filterName])) {
-                $filter->apply($this->query, $filterParameters[$filterName]);
+            $filterForm = $form->get($filterName);
+            if ($filterForm->isValid()) {
+                $data = $filterForm->getData();
+                $filter->apply($this->query, $data);
             }
         }
     }
@@ -289,21 +310,16 @@ class Datagrid implements DatagridInterface
     }
 
     /**
-     * @return null
-     * @deprecated
+     * @return Form
      */
     public function getForm()
     {
-        // TODO: remove after removing of all invocations of getForm in https://magecore.atlassian.net/browse/BAP-503
-        // create stub form
-        $formType = new \Symfony\Component\Form\Extension\Core\Type\HiddenType();
-        $resolvedFormType = new \Symfony\Component\Form\ResolvedFormType($formType);
-        $dispatcher = new \Symfony\Component\EventDispatcher\EventDispatcher();
-        $formConfiguration = new \Symfony\Component\Form\FormConfigBuilder(null, null, $dispatcher);
-        $formConfiguration->setType($resolvedFormType);
-        $form = new \Symfony\Component\Form\Form($formConfiguration);
+        if (!$this->form) {
+            $this->form = $this->formBuilder->getForm();
+            $this->form->bind($this->parameters->get(ParametersInterface::FILTER_PARAMETERS));
+        }
 
-        return $form;
+        return $this->form;
     }
 
     /**
@@ -324,7 +340,6 @@ class Datagrid implements DatagridInterface
     }
 
     /**
-     * @return void
      * @deprecated Use applyParameters instead
      */
     public function buildPager()

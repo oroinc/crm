@@ -108,7 +108,11 @@
                                     name: {{ filter.name|json_encode|raw }},
                                     label: {{ filter.getOption('label')|json_encode|raw }},
                                     enabled: {{ filter.getOption('show_filter') ? 'true' : 'false' }},
-                                    choices: {{ filter.typeOptions|json_encode|raw }}
+                                    choices: {
+                                        1: 'contains',
+                                        2: 'not contains',
+                                        3: 'equal'
+                                    }
                                 }))
                             {% elseif filterType == constant(filterTypePrefix ~ 'TYPE_NUMBER')
                                 or filterType == constant(filterTypePrefix ~ 'TYPE_FLEXIBLE_NUMBER')
@@ -117,7 +121,14 @@
                                     name: '{{ filter.name }}',
                                     label: '{{ filter.getOption('label') }}',
                                     enabled: {{ filter.getOption('show_filter') ? 'true' : 'false' }},
-                                    choices: {{ filter.typeOptions|json_encode|raw }}
+                                    choices: {
+                                        1: '>=',
+                                        2: '>',
+                                        3: '=',
+                                        4: '<=',
+                                        5: '<'
+                                    },
+                                    formatter: {{ filter.getOption('data_type')|json_encode|raw }}
                                 }))
                             {% elseif filterType == constant(filterTypePrefix ~ 'TYPE_DATE')
                                 or filterType == constant(filterTypePrefix ~ 'TYPE_FLEXIBLE_DATE')
@@ -126,7 +137,10 @@
                                     name: {{ filter.name|json_encode|raw }},
                                     label: {{ filter.getOption('label')|json_encode|raw }},
                                     enabled: {{ filter.getOption('show_filter') ? 'true' : 'false' }},
-                                    choices: {{ filter.typeOptions|json_encode|raw }},
+                                    choices: {
+                                        1: 'between',
+                                        2: 'not between'
+                                    },
                                     typeValues: {
                                         between:    {{ constant(dateTypeFilterPrefix ~ 'TYPE_BETWEEN')|json_encode|raw }},
                                         notBetween: {{ constant(dateTypeFilterPrefix ~ 'TYPE_NOT_BETWEEN')|json_encode|raw }}
@@ -143,7 +157,10 @@
                                     name: {{ filter.name|json_encode|raw }},
                                     label: {{ filter.getOption('label')|json_encode|raw }},
                                     enabled: {{ filter.getOption('show_filter') ? 'true' : 'false' }},
-                                    choices: {{ filter.typeOptions|json_encode|raw }},
+                                    choices: {
+                                        1: 'between',
+                                        2: 'not between'
+                                    },
                                     typeValues: {
                                         between:    {{ constant(dateTypeFilterPrefix ~ 'TYPE_BETWEEN')|json_encode|raw }},
                                         notBetween: {{ constant(dateTypeFilterPrefix ~ 'TYPE_NOT_BETWEEN')|json_encode|raw }}

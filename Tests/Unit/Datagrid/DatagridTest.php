@@ -8,170 +8,99 @@ use Oro\Bundle\GridBundle\Sorter\SorterInterface;
 use Oro\Bundle\GridBundle\Datagrid\ParametersInterface;
 use Oro\Bundle\GridBundle\Datagrid\ProxyQueryInterface;
 use Oro\Bundle\GridBundle\Field\FieldDescriptionCollection;
+use Oro\Bundle\GridBundle\Field\FieldDescriptionInterface;
+use Oro\Bundle\GridBundle\Property\PropertyInterface;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyMethods)
  */
-class DatagridTest extends \PHPUnit_Framework_TestCase
+class DatagridTest2 extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * Test grid name
-     */
-    const TEST_NAME             = 'test_grid_name';
-    const TEST_FILTER_NAME      = 'test_filter_name';
-    const TEST_SORTER_NAME      = 'test_sorter_name';
-    const TEST_SORTER_DIRECTION = 'test_sorter_direction';
-
-    const TEST_ACTIVE_FILTER_NAME   = 'active_filter_name';
-    const TEST_INACTIVE_FILTER_NAME = 'inactive_filter_name';
-    const TEST_ACTIVE_FILTER_TYPE   = 'active_filter_type';
-    const TEST_INACTIVE_FILTER_TYPE = 'inactive_filter_type';
-
-    const TEST_PAGE = 3;
-    const TEST_PER_PAGE = 100;
-
-    /**
-     * @var Datagrid
-     */
-    protected $model;
-
-    /**
-     * @var array
-     */
-    protected $testParameters = array(
-        ParametersInterface::FILTER_PARAMETERS => array(
-            self::TEST_ACTIVE_FILTER_NAME => array(
-                'type'    => self::TEST_ACTIVE_FILTER_TYPE,
-                'options' => array('active', 'filter', 'options'),
-            )
-        ),
-        ParametersInterface::PAGER_PARAMETERS => array(
-            '_page'     => self::TEST_PAGE,
-            '_per_page' => self::TEST_PER_PAGE,
-        ),
-        ParametersInterface::SORT_PARAMETERS => array(
-            self::TEST_SORTER_NAME => self::TEST_SORTER_DIRECTION
-        ),
-    );
-
-    /**
-     * @var array
-     */
-    protected $testResult = array('test', 'result', 'data');
-
-    protected function tearDown()
+    public function testAddProperty()
     {
-        unset($this->model);
+        $property = $this->createProperty('test');
+        $datagrid = $this->createDatagrid();
+
+        $this->assertEquals(array(), $datagrid->getProperties());
+
+        $datagrid->addProperty($property);
+
+        $this->assertEquals(array('test' => $property), $datagrid->getProperties());
     }
 
-    /**
-     * Prepare all constructor argument mocks for datagrid and create
-     *
-     * @param array $arguments
-     */
-    protected function initializeDatagridMock($arguments = array())
+    public function testGetProperties()
     {
-        $defaultArguments = array(
-            'query'          => $this->getMock('Oro\Bundle\GridBundle\Datagrid\ProxyQueryInterface'),
-            'columns'        => $this->getMock('Oro\Bundle\GridBundle\Field\FieldDescriptionCollection'),
-            'pager'          => $this->getMock('Oro\Bundle\GridBundle\Datagrid\PagerInterface'),
-            'routeGenerator' => $this->getMock('Oro\Bundle\GridBundle\Route\RouteGeneratorInterface'),
-            'parameters'     => $this->getMock('Oro\Bundle\GridBundle\Datagrid\ParametersInterface'),
-            'name'           => null,
-            'entityHint'     => null,
-        );
+        $property = $this->createProperty('property_name');
+        $field = $this->createFieldDescription('field_name', $property);
+        $datagrid = $this->createDatagrid(array('columns' => new FieldDescriptionCollection(array($field))));
 
-        $arguments = array_merge($defaultArguments, $arguments);
-
-        $this->model = new Datagrid(
-            $arguments['query'],
-            $arguments['columns'],
-            $arguments['pager'],
-            $arguments['routeGenerator'],
-            $arguments['parameters'],
-            $arguments['name'],
-            $arguments['entityHint']
-        );
-    }
-
-    /**
-     * @param string $filterName
-     * @return FilterInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected function getFilterMock($filterName)
-    {
-        $filterMock = $this->getMockForAbstractClass(
-            'Oro\Bundle\GridBundle\Filter\FilterInterface',
-            array(),
-            '',
-            false,
-            true,
-            true,
-            array('getName', 'isActive', 'apply')
-        );
-        $filterMock->expects($this->any())
-            ->method('getName')
-            ->will($this->returnValue($filterName));
-
-        return $filterMock;
+        $this->assertEquals(array('property_name' => $property), $datagrid->getProperties());
     }
 
     public function testAddFilter()
     {
-        $filterMock = $this->getFilterMock(self::TEST_FILTER_NAME);
-        $this->initializeDatagridMock();
+        $filterName = 'filter';
+        $formType = 'text';
+        $formOptions = array('disabled' => true);
+        $filter = $this->createFilter($filterName, array($formType, $formOptions));
 
-        $this->assertAttributeEmpty('filters', $this->model);
-        $this->model->addFilter($filterMock);
-        $this->assertAttributeEquals(array(self::TEST_FILTER_NAME => $filterMock), 'filters', $this->model);
+        $formBuilder = $this->getMock('Symfony\Component\Form\Tests\FormBuilderInterface');
+        $datagrid = $this->createDatagrid(array('formBuilder' => $formBuilder));
+
+        $this->assertAttributeEmpty('filters', $datagrid);
+        $formBuilder->expects($this->once())->method('add')->with($filterName, $formType, $formOptions);
+        $datagrid->addFilter($filter);
+        $this->assertAttributeEquals(array('filter' => $filter), 'filters', $datagrid);
     }
 
     public function testGetFilters()
     {
-        $this->initializeDatagridMock();
+        $datagrid = $this->createDatagrid();
 
         $expectedFilters = array(
-            'filter_name_1' => null,
-            'filter_name_2' => null,
+            'filter_name_1' => $this->createFilter('filter_name_1'),
+            'filter_name_2' => $this->createFilter('filter_name_2'),
         );
-        foreach (array_keys($expectedFilters) as $filterName) {
-            $filterMock = $this->getFilterMock($filterName);
-            $this->model->addFilter($filterMock);
-            $expectedFilters[$filterName] = $filterMock;
+
+        foreach ($expectedFilters as $filter) {
+            $datagrid->addFilter($filter);
         }
 
-        $this->assertEquals($expectedFilters, $this->model->getFilters());
+        $this->assertEquals($expectedFilters, $datagrid->getFilters());
     }
 
     public function testGetFilter()
     {
-        $filterMock = $this->getFilterMock(self::TEST_FILTER_NAME);
-        $this->initializeDatagridMock();
+        $filterName = 'filter';
+        $filter = $this->createFilter($filterName);
+        $datagrid = $this->createDatagrid();
 
-        $this->assertNull($this->model->getFilter(self::TEST_FILTER_NAME));
-        $this->model->addFilter($filterMock);
-        $this->assertEquals($filterMock, $this->model->getFilter(self::TEST_FILTER_NAME));
+        $this->assertNull($datagrid->getFilter($filterName));
+        $datagrid->addFilter($filter);
+        $this->assertEquals($filter, $datagrid->getFilter($filterName));
     }
 
     public function testHasFilter()
     {
-        $filterMock = $this->getFilterMock(self::TEST_FILTER_NAME);
-        $this->initializeDatagridMock();
+        $filterName = 'filter';
+        $filter = $this->createFilter($filterName);
+        $datagrid = $this->createDatagrid();
 
-        $this->assertFalse($this->model->hasFilter(self::TEST_FILTER_NAME));
-        $this->model->addFilter($filterMock);
-        $this->assertTrue($this->model->hasFilter(self::TEST_FILTER_NAME));
+        $this->assertFalse($datagrid->hasFilter($filterName));
+        $datagrid->addFilter($filter);
+        $this->assertTrue($datagrid->hasFilter($filterName));
     }
 
     public function testRemoveFilter()
     {
-        $filterMock = $this->getFilterMock(self::TEST_FILTER_NAME);
-        $this->initializeDatagridMock();
-        $this->model->addFilter($filterMock);
+        $filterName = 'filter';
+        $filter = $this->createFilter($filterName);
+        $datagrid = $this->createDatagrid();
+        $datagrid->addFilter($filter);
 
-        $this->assertTrue($this->model->hasFilter(self::TEST_FILTER_NAME));
-        $this->model->removeFilter(self::TEST_FILTER_NAME);
-        $this->assertFalse($this->model->hasFilter(self::TEST_FILTER_NAME));
+        $this->assertTrue($datagrid->hasFilter($filterName));
+        $datagrid->removeFilter($filterName);
+        $this->assertFalse($datagrid->hasFilter($filterName));
     }
 
     public function hasActiveFiltersDataProvider()
@@ -201,243 +130,352 @@ class DatagridTest extends \PHPUnit_Framework_TestCase
      */
     public function testHasActiveFilters(array $sourceFilters, $isActive)
     {
-        $this->initializeDatagridMock();
+        $datagrid = $this->createDatagrid();
 
         foreach ($sourceFilters as $filterName => $isActive) {
-            /** @var $filterMock \PHPUnit_Framework_MockObject_MockObject */
-            $filterMock = $this->getFilterMock($filterName);
-            $filterMock->expects($this->any())
+            $filter = $this->createFilter($filterName);
+            $filter->expects($this->any())
                 ->method('isActive')
                 ->will($this->returnValue($isActive));
-            $this->model->addFilter($filterMock);
+            $datagrid->addFilter($filter);
         }
 
         if ($isActive) {
-            $this->assertTrue($this->model->hasActiveFilters());
+            $this->assertTrue($datagrid->hasActiveFilters());
         } else {
-            $this->assertFalse($this->model->hasActiveFilters());
+            $this->assertFalse($datagrid->hasActiveFilters());
         }
-    }
-
-    /**
-     * @param string $sorterName
-     * @return SorterInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected function getSorterMock($sorterName)
-    {
-        $sorterMock = $this->getMockForAbstractClass(
-            'Oro\Bundle\GridBundle\Sorter\SorterInterface',
-            array(),
-            '',
-            false,
-            true,
-            true,
-            array('getName', 'apply')
-        );
-        $sorterMock->expects($this->any())
-            ->method('getName')
-            ->will($this->returnValue($sorterName));
-
-        return $sorterMock;
     }
 
     public function testAddSorter()
     {
-        $sorterMock = $this->getSorterMock(self::TEST_SORTER_NAME);
-        $this->initializeDatagridMock();
+        $sorterName = 'sorter';
+        $sorter = $this->createSorter($sorterName);
+        $datagrid = $this->createDatagrid();
 
-        $this->assertAttributeEmpty('sorters', $this->model);
-        $this->model->addSorter($sorterMock);
-        $this->assertAttributeEquals(array(self::TEST_SORTER_NAME => $sorterMock), 'sorters', $this->model);
+        $this->assertAttributeEmpty('sorters', $datagrid);
+        $datagrid->addSorter($sorter);
+        $this->assertAttributeEquals(array($sorterName => $sorter), 'sorters', $datagrid);
     }
 
     public function testGetSorters()
     {
-        $this->initializeDatagridMock();
+        $datagrid = $this->createDatagrid();
 
         $expectedSorters = array(
-            'sorter_name_1' => null,
-            'sorter_name_2' => null,
+            'sorter_name_1' => $this->createSorter('sorter_name_1'),
+            'sorter_name_2' => $this->createSorter('sorter_name_2'),
         );
-        foreach (array_keys($expectedSorters) as $sorterName) {
-            $sorterMock = $this->getSorterMock($sorterName);
-            $this->model->addSorter($sorterMock);
-            $expectedSorters[$sorterName] = $sorterMock;
+
+        foreach ($expectedSorters as $sorter) {
+            $datagrid->addSorter($sorter);
         }
 
-        $this->assertEquals($expectedSorters, $this->model->getSorters());
+        $this->assertEquals($expectedSorters, $datagrid->getSorters());
     }
 
     public function testGetSorter()
     {
-        $sorterMock = $this->getSorterMock(self::TEST_SORTER_NAME);
-        $this->initializeDatagridMock();
+        $sorterName = 'sorter';
+        $sorter = $this->createSorter($sorterName);
+        $datagrid = $this->createDatagrid();
 
-        $this->assertNull($this->model->getSorter(self::TEST_SORTER_NAME));
-        $this->model->addSorter($sorterMock);
-        $this->assertEquals($sorterMock, $this->model->getSorter(self::TEST_SORTER_NAME));
+        $this->assertNull($datagrid->getSorter($sorterName));
+        $datagrid->addSorter($sorter);
+        $this->assertEquals($sorter, $datagrid->getSorter($sorterName));
     }
 
-    /**
-     * @param string $name
-     * @return mixed
-     */
-    public function getParameter($name)
+    public function testGetParameters()
     {
-        return isset($this->testParameters[$name]) ? $this->testParameters[$name] : null;
+        $arrayParameters = array('test');
+        $parameters = $this->createParameters($arrayParameters);
+        $datagrid = $this->createDatagrid(array('parameters' => $parameters));
+        $this->assertEquals($arrayParameters, $datagrid->getParameters());
     }
 
-    /**
-     * @return array
-     */
-    protected function prepareDatagridMocks()
+    public function testGetValues()
     {
-        $proxyQueryMock = $this->getMockForAbstractClass(
-            'Oro\Bundle\GridBundle\Datagrid\ProxyQueryInterface',
-            array(),
-            '',
-            false,
-            true,
-            true,
-            array('execute')
-        );
-
-        $parametersMock = $this->getMockForAbstractClass(
-            'Oro\Bundle\GridBundle\Datagrid\ParametersInterface',
-            array(),
-            '',
-            false,
-            true,
-            true,
-            array('get', 'toArray')
-        );
-        $parametersMock->expects($this->any())
-            ->method('get')
-            ->will($this->returnCallback(array($this, 'getParameter')));
-        $parametersMock->expects($this->any())
-            ->method('toArray')
-            ->will($this->returnValue(array(self::TEST_NAME => $this->testParameters)));
-
-        $pagerMock = $this->getMockForAbstractClass(
-            'Oro\Bundle\GridBundle\Datagrid\PagerInterface',
-            array(),
-            '',
-            false,
-            true,
-            true,
-            array('setPage', 'setMaxPerPage', 'init')
-        );
-        $pagerMock->expects($this->once())->method('setPage')->with(self::TEST_PAGE);
-        $pagerMock->expects($this->once())->method('setMaxPerPage')->with(self::TEST_PER_PAGE);
-        $pagerMock->expects($this->once())->method('init');
-
-        return array(
-            'query'       => $proxyQueryMock,
-            'pager'       => $pagerMock,
-            'parameters'  => $parametersMock,
-        );
+        $arrayParameters = array('test');
+        $parameters = $this->createParameters($arrayParameters);
+        $datagrid = $this->createDatagrid(array('parameters' => $parameters));
+        $this->assertEquals($arrayParameters, $datagrid->getValues());
     }
 
-    /**
-     * @param ProxyQueryInterface $proxyQueryMock
-     */
-    protected function addFilterMocks(ProxyQueryInterface $proxyQueryMock)
+    public function testGetRouteGenerator()
     {
-        $filterParameters = $this->testParameters[ParametersInterface::FILTER_PARAMETERS];
-
-        /** @var $activeFilterMock \PHPUnit_Framework_MockObject_MockObject */
-        $activeFilterMock = $this->getFilterMock(self::TEST_ACTIVE_FILTER_NAME);
-        $activeFilterMock->expects($this->once())
-            ->method('apply')
-            ->with($proxyQueryMock, $filterParameters[self::TEST_ACTIVE_FILTER_NAME]);
-        /** @var $inactiveFilterMock \PHPUnit_Framework_MockObject_MockObject */
-        $inactiveFilterMock = $this->getFilterMock(self::TEST_INACTIVE_FILTER_NAME);
-        $inactiveFilterMock->expects($this->never())
-            ->method('apply');
-
-        $this->model->addFilter($activeFilterMock);
-        $this->model->addFilter($inactiveFilterMock);
+        $routeGenerator = $this->getMock('Oro\Bundle\GridBundle\Route\RouteGeneratorInterface');
+        $datagrid = $this->createDatagrid(array('routeGenerator' => $routeGenerator));
+        $this->assertEquals($routeGenerator, $datagrid->getRouteGenerator());
     }
 
-    /**
-     * @param ProxyQueryInterface $proxyQueryMock
-     */
-    protected function addSorterMocks(ProxyQueryInterface $proxyQueryMock)
+    public function testGetName()
     {
-        $sorterParameters = $this->testParameters[ParametersInterface::SORT_PARAMETERS];
-
-        /** @var $sorterMock \PHPUnit_Framework_MockObject_MockObject */
-        $sorterMock = $this->getSorterMock(self::TEST_SORTER_NAME);
-        $sorterMock->expects($this->once())
-            ->method('apply')
-            ->with($proxyQueryMock, $sorterParameters[self::TEST_SORTER_NAME]);
-
-        $this->model->addSorter($sorterMock);
+        $datagridName = 'datagrid';
+        $datagrid = $this->createDatagrid(array('name' => $datagridName));
+        $this->assertEquals($datagridName, $datagrid->getName());
     }
 
-    public function testBuildPager()
+    public function testGetEntityHint()
     {
-        $datagridMocks = $this->prepareDatagridMocks();
-        $this->initializeDatagridMock(
-            array(
-                'query'       => $datagridMocks['query'],
-                'pager'       => $datagridMocks['pager'],
-                'parameters'  => $datagridMocks['parameters'],
-            )
-        );
+        $entityHint = 'Entity Hint';
+        $datagrid = $this->createDatagrid(array('entityHint' => $entityHint));
+        $this->assertEquals($entityHint, $datagrid->getEntityHint());
+    }
 
-        $this->addFilterMocks($datagridMocks['query']);
-        $this->addSorterMocks($datagridMocks['query']);
+    public function testAddRowAction()
+    {
+        $action = $this->getMock('Oro\Bundle\GridBundle\Action\ActionInterface');
+        $datagrid = $this->createDatagrid();
 
-        // should apply parameters only once
-        $this->model->buildPager();
-        $this->model->buildPager();
+        $this->assertAttributeEmpty('rowActions', $datagrid);
+        $datagrid->addRowAction($action);
+        $this->assertAttributeEquals(array($action), 'rowActions', $datagrid);
+    }
+
+    public function testGetRowActions()
+    {
+        $datagrid = $this->createDatagrid();
+
+        $expectedActions = array();
+        for ($i = 0; $i < 5; $i++) {
+            $actionMock = $this->getMock('Oro\Bundle\GridBundle\Action\ActionInterface');
+            $expectedActions[] = $actionMock;
+            $datagrid->addRowAction($actionMock);
+        }
+
+        $this->assertEquals($expectedActions, $datagrid->getRowActions());
+    }
+
+    public function testSetValue()
+    {
+        // method is empty, do nothing
+        $datagrid = $this->createDatagrid();
+        $datagrid->setValue('name', '=', 'value');
+    }
+
+    public function testGetPager()
+    {
+        $pager = $this->getMock('Oro\Bundle\GridBundle\Datagrid\PagerInterface');
+        $datagrid = $this->createDatagrid(array('pager' => $pager));
+        $this->assertSame($pager, $datagrid->getPager());
     }
 
     public function testGetQuery()
     {
-        $queryMock = $this->getMock('Oro\Bundle\GridBundle\Datagrid\ProxyQueryInterface', array(), array(), '', false);
-        $this->initializeDatagridMock(array('query' => $queryMock));
-
-        $this->assertEquals($queryMock, $this->model->getQuery());
-    }
-
-    public function testGetResults()
-    {
-        $datagridMocks = $this->prepareDatagridMocks();
-        /** @var $proxyQueryMock \PHPUnit_Framework_MockObject_MockObject */
-        $proxyQueryMock = $datagridMocks['query'];
-        $proxyQueryMock->expects($this->once())
-            ->method('execute')
-            ->will($this->returnValue($this->testResult));
-
-        $this->initializeDatagridMock(
-            array(
-                'query'       => $proxyQueryMock,
-                'pager'       => $datagridMocks['pager'],
-                'parameters'  => $datagridMocks['parameters'],
-            )
-        );
-
-        $this->addFilterMocks($proxyQueryMock);
-        $this->addSorterMocks($proxyQueryMock);
-
-        $this->assertEquals($this->testResult, $this->model->getResults());
+        $query = $this->getMock('Oro\Bundle\GridBundle\Datagrid\ProxyQueryInterface');
+        $datagrid = $this->createDatagrid(array('query' => $query));
+        $this->assertSame($query, $datagrid->getQuery());
     }
 
     public function testGetColumns()
     {
-        $testColumns = array(
-            'column_1' => $this->createFieldDescription('column_1'),
-            'column_2' => $this->createFieldDescription('column_2'),
-        );
+        $columns = $this->getMock('Oro\Bundle\GridBundle\Field\FieldDescriptionCollection');
+        $datagrid = $this->createDatagrid(array('columns' => $columns));
 
-        $columns = new FieldDescriptionCollection($testColumns);
-        $this->initializeDatagridMock(array('columns' => $columns));
-
-        $this->assertEquals($testColumns, $this->model->getColumns());
+        $elements = array($this->createFieldDescription('test'));
+        $columns->expects($this->once())->method('getElements')->will($this->returnValue($elements));
+        $this->assertEquals($elements, $datagrid->getColumns());
     }
 
+    public function testGetForm()
+    {
+        $form = $this->getMock('Symfony\Component\Form\Tests\FormInterface');
+        $formBuilder = $this->getMock('Symfony\Component\Form\Tests\FormBuilderInterface');
+        $filterParameters = array('filter' => 'value');
+        $parameters = $this->createParameters(array(ParametersInterface::FILTER_PARAMETERS => $filterParameters));
+
+        $datagrid = $this->createDatagrid(array('formBuilder' => $formBuilder, 'parameters' => $parameters));
+
+        $formBuilder->expects($this->once())->method('getForm')->will($this->returnValue($form));
+        $form->expects($this->once())->method('bind')->with($filterParameters);
+
+        $this->assertEquals($form, $datagrid->getForm());
+        $this->assertEquals($form, $datagrid->getForm()); // check form created once
+    }
+
+    public function getResultsDataProvider()
+    {
+        return array(
+            array(
+                'filters' => array(
+                    array('name' => 'valid_filter', 'expectIsValid' => true, 'expectValue' => 'filter_value'),
+                    array('name' => 'skip_filter', 'expectIsValid' => false),
+                ),
+                'sorters' => array(
+                    array('name' => 'sorter_one', 'expectApply' => true, 'expectDirection' => 'ASC'),
+                    array('name' => 'sorter_two', 'expectApply' => false),
+                ),
+                'pager' => array(
+                    'expectPage' => 20,
+                    'expectPerPage' => 25,
+                ),
+                'parametersData' => array(
+                    ParametersInterface::FILTER_PARAMETERS
+                        => array('valid_filter' => 'filter_value', 'skip_filter' => 'invalid value'),
+                    ParametersInterface::SORT_PARAMETERS => array('sorter_one' => 'ASC'),
+                    ParametersInterface::PAGER_PARAMETERS => array('_page' => 20, '_per_page' => 25),
+                )
+            )
+        );
+    }
+
+    /**
+     * @dataProvider getResultsDataProvider
+     */
+    public function testGetResults(
+        array $filtersData,
+        array $sortersData,
+        array $pagerData,
+        array $parametersData
+    ) {
+        $query = $this->getMock('Oro\Bundle\GridBundle\Datagrid\ProxyQueryInterface');
+        $pager = $this->getMock('Oro\Bundle\GridBundle\Datagrid\PagerInterface');
+
+        $form = $this->getMock('Symfony\Component\Form\Tests\FormInterface');
+        $formBuilder = $this->getMock('Symfony\Component\Form\Tests\FormBuilderInterface');
+        $formBuilder->expects($this->once())->method('getForm')->will($this->returnValue($form));
+
+        $parameters = $this->createParameters($parametersData);
+
+        $datagrid = $this->createDatagrid(
+            array(
+                'query' => $query,
+                'pager' => $pager,
+                'formBuilder' => $formBuilder,
+                'parameters' => $parameters
+            )
+        );
+
+        $this->addFilterMocks($filtersData, $datagrid, $form, $query);
+        $this->addSorterMocks($sortersData, $datagrid, $query);
+        $this->addPagerMocks($pagerData, $pager);
+
+        $expectedResults = array();
+        $query->expects($this->once())->method('execute')->will($this->returnValue($expectedResults));
+        $this->assertEquals($expectedResults, $datagrid->getResults());
+    }
+
+    /**
+     * @param array $filtersData
+     * @param Datagrid $datagrid
+     * @param \PHPUnit_Framework_MockObject_MockObject $form
+     * @param ProxyQueryInterface $query
+     */
+    private function addFilterMocks(
+        array $filtersData,
+        Datagrid $datagrid,
+        \PHPUnit_Framework_MockObject_MockObject $form,
+        ProxyQueryInterface $query
+    ) {
+        $filterFormChildrenValueMap = array();
+
+        foreach ($filtersData as $data) {
+            $name = $data['name'];
+            $filter = $this->createFilter($name);
+            $datagrid->addFilter($filter);
+
+            $filterForm = $this->getMock('Symfony\Component\Form\Tests\FormInterface');
+            $filterFormChildrenValueMap[] = array($name, $filterForm);
+            $filterForm->expects($this->once())->method('isValid')->will($this->returnValue($data['expectIsValid']));
+
+            if ($data['expectIsValid']) {
+                $filterForm->expects($this->once())->method('getData')->will($this->returnValue($data['expectValue']));
+                $filter->expects($this->once())->method('apply')->with($query, $data['expectValue']);
+            } else {
+                $filterForm->expects($this->never())->method('getData');
+                $filter->expects($this->never())->method('apply');
+            }
+        }
+
+        $form->expects($this->any())->method('get')->will($this->returnValueMap($filterFormChildrenValueMap));
+    }
+
+    /**
+     * @param array $sortersData
+     * @param Datagrid $datagrid
+     * @param ProxyQueryInterface $query
+     */
+    private function addSorterMocks(
+        array $sortersData,
+        Datagrid $datagrid,
+        ProxyQueryInterface $query
+    ) {
+        foreach ($sortersData as $data) {
+            $name = $data['name'];
+            $sorter = $this->createSorter($name);
+            $datagrid->addSorter($sorter);
+
+            if ($data['expectApply']) {
+                $sorter->expects($this->once())->method('apply')->with($query, $data['expectDirection']);
+            } else {
+                $sorter->expects($this->never())->method('apply');
+            }
+        }
+    }
+
+    /**
+     * @param array $pagerData,
+     * @param \PHPUnit_Framework_MockObject_MockObject $pager
+     */
+    private function addPagerMocks(array $pagerData, $pager)
+    {
+        $pager->expects($this->once())->method('setPage')->with($pagerData['expectPage']);
+        $pager->expects($this->once())->method('setMaxPerPage')->with($pagerData['expectPerPage']);
+        $pager->expects($this->once())->method('init');
+    }
+
+    /**
+     * Prepare all constructor argument mocks for datagrid and create
+     *
+     * @param array $arguments
+     * @return Datagrid
+     */
+    private function createDatagrid($arguments = array())
+    {
+        $arguments = $this->getDatagridMockArguments($arguments);
+        return new Datagrid(
+            $arguments['query'],
+            $arguments['columns'],
+            $arguments['pager'],
+            $arguments['formBuilder'],
+            $arguments['routeGenerator'],
+            $arguments['parameters'],
+            $arguments['name'],
+            $arguments['entityHint']
+        );
+    }
+
+    private function getDatagridMockArguments(array $arguments = array())
+    {
+        $defaultArguments = array(
+            'query'          => $this->getMock('Oro\Bundle\GridBundle\Datagrid\ProxyQueryInterface'),
+            'columns'        => $this->getMock('Oro\Bundle\GridBundle\Field\FieldDescriptionCollection'),
+            'pager'          => $this->getMock('Oro\Bundle\GridBundle\Datagrid\PagerInterface'),
+            'formBuilder'    => $this->getMock('Symfony\Component\Form\Tests\FormBuilderInterface'),
+            'routeGenerator' => $this->getMock('Oro\Bundle\GridBundle\Route\RouteGeneratorInterface'),
+            'parameters'     => $this->getMock('Oro\Bundle\GridBundle\Datagrid\ParametersInterface'),
+            'name'           => null,
+            'entityHint'     => null,
+        );
+        return array_merge($defaultArguments, $arguments);
+    }
+
+    /**
+     * @param string $name
+     * @return PropertyInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private function createProperty($name)
+    {
+        $result = $this->getMock('Oro\Bundle\GridBundle\Property\PropertyInterface');
+        $result->expects($this->any())->method('getName')->will($this->returnValue($name));
+        return $result;
+    }
+
+    /**
+     * @param $name
+     * @param mixed $property
+     * @return FieldDescriptionInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
     private function createFieldDescription($name, $property = null)
     {
         if (!$property) {
@@ -451,116 +489,71 @@ class DatagridTest extends \PHPUnit_Framework_TestCase
         return $result;
     }
 
-    private function createProperty($name)
+
+    /**
+     * @param string $name
+     * @param array|null $renderSettings
+     * @return FilterInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private function createFilter($name, $renderSettings = null)
     {
-        $result = $this->getMock('Oro\Bundle\GridBundle\Property\PropertyInterface');
-        $result->expects($this->any())->method('getName')->will($this->returnValue($name));
+        if (null === $renderSettings) {
+            $renderSettings = array('text', array());
+        }
+
+        $result = $this->getMockBuilder('Oro\Bundle\GridBundle\Filter\FilterInterface')
+            ->setMethods(array('getName', 'isActive', 'getFormName', 'apply', 'getRenderSettings'))
+            ->getMockForAbstractClass();
+
+        $result->expects($this->any())
+            ->method('getName')
+            ->will($this->returnValue($name));
+
+        $result->expects($this->any())
+            ->method('getRenderSettings')
+            ->will($this->returnValue($renderSettings));
+
         return $result;
     }
 
-    public function testInitializeProperties()
+    /**
+     * @param string $sorterName
+     * @return SorterInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function createSorter($sorterName)
     {
-        $propertyOne = $this->createProperty('property_name');
-        $columnOne = $this->createFieldDescription('field_name', $propertyOne);
+        $result = $this->getMockBuilder('Oro\Bundle\GridBundle\Sorter\SorterInterface')
+            ->setMethods(array('getName', 'apply'))
+            ->getMockForAbstractClass();
 
-        $testColumns = array(
-            $columnOne
-        );
+        $result->expects($this->any())
+            ->method('getName')
+            ->will($this->returnValue($sorterName));
 
-        $columns = new FieldDescriptionCollection($testColumns);
-
-        $this->initializeDatagridMock(array('columns' => $columns));
-
-        $this->assertEquals(
-            array(
-                'property_name' => $propertyOne
-            ),
-            $this->model->getProperties()
-        );
+        return $result;
     }
 
     /**
      * @return ParametersInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected function prepareParametersMock()
+    protected function createParameters(array $parameters = array())
     {
-        $parameters = $this->getMockForAbstractClass(
-            'Oro\Bundle\GridBundle\Datagrid\ParametersInterface',
-            array(),
-            '',
-            false,
-            true,
-            true,
-            array('toArray')
-        );
-        $parameters->expects($this->once())
+        $result = $this->getMock('Oro\Bundle\GridBundle\Datagrid\ParametersInterface');
+
+        $result->expects($this->any())
             ->method('toArray')
-            ->will($this->returnValue($this->testParameters));
+            ->will($this->returnValue($parameters));
 
-        return $parameters;
-    }
+        $result->expects($this->any())
+            ->method('get')
+            ->will(
+                $this->returnCallback(
+                    function ($key) use ($parameters) {
+                        return isset($parameters[$key]) ? $parameters[$key] : null;
+                    }
+                )
+            );
 
-    public function testGetParameters()
-    {
-        $parameters = $this->prepareParametersMock();
-        $this->initializeDatagridMock(array('parameters' => $parameters));
-        $this->assertEquals($this->testParameters, $this->model->getParameters());
-    }
-
-    public function testGetValues()
-    {
-        $parameters = $this->prepareParametersMock();
-        $this->initializeDatagridMock(array('parameters' => $parameters));
-        $this->assertEquals($this->testParameters, $this->model->getValues());
-    }
-
-    public function testGetRouteGenerator()
-    {
-        $routeGenerator = $this->getMock('Oro\Bundle\GridBundle\Route\RouteGeneratorInterface');
-        $this->initializeDatagridMock(array('routeGenerator' => $routeGenerator));
-        $this->assertEquals($routeGenerator, $this->model->getRouteGenerator());
-    }
-
-    public function testGetName()
-    {
-        $this->initializeDatagridMock(array('name' => self::TEST_NAME));
-        $this->assertEquals(self::TEST_NAME, $this->model->getName());
-    }
-
-    public function testGetEntityHint()
-    {
-        $this->initializeDatagridMock(array('entityHint' => self::TEST_NAME));
-        $this->assertEquals(self::TEST_NAME, $this->model->getEntityHint());
-    }
-
-    public function testAddRowAction()
-    {
-        $actionMock = $this->getMock('Oro\Bundle\GridBundle\Action\ActionInterface');
-        $this->initializeDatagridMock();
-
-        $this->assertAttributeEmpty('rowActions', $this->model);
-        $this->model->addRowAction($actionMock);
-        $this->assertAttributeEquals(array($actionMock), 'rowActions', $this->model);
-    }
-
-    public function testGetRowActions()
-    {
-        $this->initializeDatagridMock();
-
-        $expectedActions = array();
-        for ($i = 0; $i < 5; $i++) {
-            $actionMock = $this->getMock('Oro\Bundle\GridBundle\Action\ActionInterface');
-            $expectedActions[] = $actionMock;
-            $this->model->addRowAction($actionMock);
-        }
-
-        $this->assertEquals($expectedActions, $this->model->getRowActions());
-    }
-
-    public function testSetValue()
-    {
-        // method is empty, do nothing
-        $this->initializeDatagridMock();
-        $this->model->setValue(self::TEST_SORTER_NAME, null, self::TEST_SORTER_DIRECTION);
+        return $result;
     }
 }
