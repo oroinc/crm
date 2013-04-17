@@ -2,7 +2,7 @@
 <html>
 <head>
     {% block head %}
-    <title>{% block title %}DataFlow management{% endblock %}</title>
+    <title>{{ oro_title_render() }}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script type="text/javascript"> localStorage.clear();</script>
     <link rel="stylesheet/less" href="{{ asset('bundles/oroui/css/less/main.less') }}" media="all" />

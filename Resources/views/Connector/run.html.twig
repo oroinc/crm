@@ -2,8 +2,6 @@
 
 {% set title = 'Prepare running' %}
 
-{% block title %}{{ parent() }} - {{ title }}{% endblock %}
-
 {% block content %}
 
     <form action="{{ path('oro_dataflow_connector_run', { id: connector.id })}}" method="POST">
