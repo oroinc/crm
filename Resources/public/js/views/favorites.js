@@ -39,14 +39,10 @@ navigation.favorites.MainView = navigation.MainViewAbstract.extend({
         if (current.length) {
             _.each(current, function(item) {item.destroy({wait: true});});
         } else {
-            var el = Backbone.$(e.currentTarget);
-            var itemData = this.getCurrentPageItemData()
-            if (el.data('url')) {
-                itemData['url'] = el.data('url');
-            }
-            itemData['title'] = el.data('title') ? el.data('title') : document.title;
+            var itemData = this.getNewItemData(Backbone.$(e.currentTarget));
             itemData['type'] = 'favorite';
             itemData['position'] = this.getCollection().length;
+
             var currentItem = new navigation.Item(itemData);
             this.getCollection().unshift(currentItem);
             currentItem.save();

@@ -3,6 +3,7 @@ var navigation = navigation || {};
 navigation.Item = Backbone.Model.extend({
     defaults: {
         title: '',
+        title_rendered: '',
         url: null,
         position: null,
         type: null

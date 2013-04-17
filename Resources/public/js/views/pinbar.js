@@ -133,13 +133,7 @@ navigation.pinbar.MainView = navigation.MainViewAbstract.extend({
                 item.set('maximized', false);
             }, this);
         } else {
-            var el = Backbone.$(e.currentTarget);
-            var itemData = this.getCurrentPageItemData()
-            if (el.data('url')) {
-                itemData['url'] = el.data('url');
-            }
-            itemData['title'] = el.data('title') ? el.data('title') : document.title;
-            var currentItem = new navigation.pinbar.Item(itemData);
+            var currentItem = new navigation.pinbar.Item(this.getNewItemData(Backbone.$(e.currentTarget)));
             this.options.collection.unshift(currentItem);
             currentItem.save(null, {success: _.bind(this.handleItemStateChange, this)});
         }

@@ -39,6 +39,22 @@ navigation.MainViewAbstract = Backbone.View.extend({
         return {url: window.location.pathname + window.location.search + window.location.hash};
     },
 
+    /**
+     * Get data for new navigation item based on element options
+     *
+     * @param el
+     * @returns {Object}
+     */
+    getNewItemData: function(el) {
+        var itemData = this.getCurrentPageItemData();
+        if (el.data('url')) {
+            itemData['url'] = el.data('url');
+        }
+        itemData['title_rendered'] = el.data('title_rendered') ? el.data('title_rendered') : document.title;
+        itemData['title'] = el.data('title') ? JSON.stringify(el.data('title')) : '{"template": "' + document.title + '"}';
+        return itemData;
+    },
+
     cleanupTab: function() {
         navigation.dotMenu.MainViewInstance.cleanup(this.options.tabId);
         navigation.dotMenu.MainViewInstance.hideTab(this.options.tabId);
