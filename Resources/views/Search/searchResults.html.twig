@@ -1,6 +1,7 @@
 {% extends bap.layout %}
 
-{% block title %}{% trans %}Search results{% endtrans %}: {{ searchString }} - {{ parent() }}{% endblock %}
+{% oro_title_set({params : {"%keyword%": searchString} }) %}
+
 {% block page_container %}
 <div class="container-fluid">
     {% block content %}
