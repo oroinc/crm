@@ -5,6 +5,8 @@ namespace Oro\Bundle\FilterBundle\Form\Type\Filter;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
 
 use Oro\Bundle\FilterBundle\Form\Type\DateTimeRangeType;
 
@@ -53,5 +55,17 @@ class DateTimeRangeFilterType extends AbstractType
                 'field_type' => DateTimeRangeType::NAME
             )
         );
+    }
+
+    /**
+     * @param FormView $view
+     * @param FormInterface $form
+     * @param array $options
+     */
+    public function buildView(FormView $view, FormInterface $form, array $options)
+    {
+        // TODO: replace with correct locale data
+        // format of jQueryUI Timepicker (http://trentrichardson.com/examples/timepicker/#tp-formatting)
+        $view->vars['time_format'] = 'hh:mm tt';
     }
 }

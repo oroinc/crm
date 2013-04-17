@@ -37,4 +37,3 @@ class DateTimeRangeType extends AbstractType
         );
     }
 }
-

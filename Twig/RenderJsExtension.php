@@ -18,7 +18,12 @@ class RenderJsExtension extends \Twig_Extension
     const SUFFIX = '_js';
 
     /**
-     * @var \Twig_Template
+     * Block with required JS files
+     */
+    const HEADER_JAVASCRIPT = 'oro_filter_javascript';
+
+    /**
+     * @var string
      */
     protected $templateName;
 
@@ -39,28 +44,27 @@ class RenderJsExtension extends \Twig_Extension
     }
 
     /**
-     * @param \Twig_Environment $environment
-     * @return \Twig_Template
-     */
-    protected function getTemplate(\Twig_Environment $environment)
-    {
-        return $environment->loadTemplate($this->templateName);
-    }
-
-    /**
      * @return array
      */
     public function getFunctions()
     {
         return array(
             new \Twig_SimpleFunction(
-                'oro_filter_render_js',
-                array($this, 'renderJs'),
+                'oro_filter_render_filter_js',
+                array($this, 'renderFilterJs'),
                 array(
                     'is_safe' => array('html'),
                     'needs_environment' => true
                 )
-            )
+            ),
+            new \Twig_SimpleFunction(
+                'oro_filter_render_header_js',
+                array($this, 'renderHeaderJs'),
+                array(
+                    'is_safe' => array('html'),
+                    'needs_environment' => true
+                )
+            ),
         );
     }
 
@@ -71,13 +75,14 @@ class RenderJsExtension extends \Twig_Extension
      * @param FormView $formView
      * @return string
      */
-    public function renderJs(\Twig_Environment $environment, FormView $formView)
+    public function renderFilterJs(\Twig_Environment $environment, FormView $formView)
     {
         if (!$formView->vars['block_prefixes'] || !is_array($formView->vars['block_prefixes'])) {
             return '';
         }
 
-        $template = $this->getTemplate($environment);
+        /** @var $template \Twig_Template */
+        $template = $environment->loadTemplate($this->templateName);
 
         // start from the last element
         $prefixes = array_reverse($formView->vars['block_prefixes']);
@@ -93,6 +98,24 @@ class RenderJsExtension extends \Twig_Extension
         }
 
         return '';
+    }
+
+    /**
+     * Render header with all required JS files
+     *
+     * @param \Twig_Environment $environment
+     * @param string $fileName
+     * @return string
+     */
+    public function renderHeaderJs(\Twig_Environment $environment, $fileName = null)
+    {
+        /** @var $template \Twig_Template */
+        $template = $environment->loadTemplate($this->templateName);
+
+        return $template->renderBlock(
+            self::HEADER_JAVASCRIPT,
+            array('fileName' => $fileName)
+        );
     }
 
     /**

@@ -5,6 +5,8 @@ namespace Oro\Bundle\FilterBundle\Form\Type\Filter;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
 
 use Oro\Bundle\FilterBundle\Form\Type\DateRangeType;
 
@@ -61,5 +63,18 @@ class DateRangeFilterType extends AbstractType
                 'operator_choices' => $operatorChoices
             )
         );
+    }
+
+    /**
+     * @param FormView $view
+     * @param FormInterface $form
+     * @param array $options
+     */
+    public function buildView(FormView $view, FormInterface $form, array $options)
+    {
+        // TODO: replace with correct locale data
+        // format of jQueryUI Timepicker (http://api.jqueryui.com/datepicker/)
+        $view->vars['date_format'] = 'mm/dd/yy';
+        $view->vars['first_day']   = 0;
     }
 }

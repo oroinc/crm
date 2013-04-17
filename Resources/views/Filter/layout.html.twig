@@ -1,4 +1,6 @@
-<script type="text/javascript">
+{% block oro_filter_javascript %}
+    {% include 'OroFilterBundle:Header:javascript.html.twig' %}
+{% endblock %}
 
 {% block oro_type_text_filter_js %}
     OroApp.createInstanceFromConstructor(OroApp.Filter.ChoiceFilter.extend({
@@ -23,4 +25,67 @@
     }))
 {% endblock %}
 
-</script>
+{% block oro_type_date_range_filter_js %}
+    {% set dateConstantPrefix = 'Oro\\Bundle\\FilterBundle\\Form\\Type\\Filter\\DateRangeFilterType::' %}
+
+    OroApp.createInstanceFromConstructor(OroApp.Filter.DateFilter.extend({
+        'name':    {{ formView.vars.name|json_encode|raw }},
+        'label':   {{ formView.vars.label|json_encode|raw }},
+        'enabled': {{ (not formView.vars.disabled)|json_encode|raw }},
+        'choices': {{ formView.children.type.vars.choices|oro_filter_choices|json_encode|raw }},
+        'typeValues': {
+            'between':    {{ constant(dateConstantPrefix ~ 'TYPE_BETWEEN')|json_encode|raw }},
+            'notBetween': {{ constant(dateConstantPrefix ~ 'TYPE_NOT_BETWEEN')|json_encode|raw }}
+        },
+        'externalWidgetOptions': {
+            'dateFormat': {{ formView.vars.date_format|json_encode|raw }},
+            'firstDay':   {{ formView.vars.first_day|json_encode|raw }}
+        }
+    }))
+{% endblock %}
+
+{% block oro_type_datetime_range_filter_js %}
+    {% set dateTimeConstantPrefix = 'Oro\\Bundle\\FilterBundle\\Form\\Type\\Filter\\DateTimeRangeFilterType::' %}
+
+    OroApp.createInstanceFromConstructor(OroApp.Filter.DateTimeFilter.extend({
+        'name':    {{ formView.vars.name|json_encode|raw }},
+        'label':   {{ formView.vars.label|json_encode|raw }},
+        'enabled': {{ (not formView.vars.disabled)|json_encode|raw }},
+        'choices': {{ formView.children.type.vars.choices|oro_filter_choices|json_encode|raw }},
+        'typeValues': {
+            'between':    {{ constant(dateTimeConstantPrefix ~ 'TYPE_BETWEEN')|json_encode|raw }},
+            'notBetween': {{ constant(dateTimeConstantPrefix ~ 'TYPE_NOT_BETWEEN')|json_encode|raw }}
+        },
+        'externalWidgetOptions': {
+            'dateFormat': {{ formView.vars.date_format|json_encode|raw }},
+            'timeFormat': {{ formView.vars.time_format|json_encode|raw }},
+            'firstDay':   {{ formView.vars.first_day|json_encode|raw }}
+        }
+    }))
+{% endblock %}
+
+{% block oro_type_choice_filter_js %}
+    {% if formView.children.value.vars.multiple %}
+        {{ block('oro_type_multiselect_filter_js') }}
+    {% else %}
+        {{ block('oro_type_select_filter_js') }}
+    {% endif %}
+{% endblock %}
+
+{% block oro_type_select_filter_js %}
+    OroApp.createInstanceFromConstructor(OroApp.Filter.SelectFilter.extend({
+        'name':    {{ formView.vars.name|json_encode|raw }},
+        'label':   {{ formView.vars.label|json_encode|raw }},
+        'enabled': {{ (not formView.vars.disabled)|json_encode|raw }},
+        'options': {{ formView.children.value.vars.choices|oro_filter_choices|json_encode|raw }}
+    }))
+{% endblock %}
+
+{% block oro_type_multiselect_filter_js %}
+    OroApp.createInstanceFromConstructor(OroApp.Filter.MultiSelectFilter.extend({
+        'name':    {{ formView.vars.name|json_encode|raw }},
+        'label':   {{ formView.vars.label|json_encode|raw }},
+        'enabled': {{ (not formView.vars.disabled)|json_encode|raw }},
+        'options': {{ formView.children.value.vars.choices|oro_filter_choices|json_encode|raw }}
+    }))
+{% endblock %}

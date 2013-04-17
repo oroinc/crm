@@ -10,6 +10,8 @@ use Symfony\Component\Config\Definition\Processor;
 
 class OroFilterExtension extends Extension
 {
+    const PARAMETER_TWIG_LAYOUT = 'oro_filter.twig.layout';
+
     /**
      * {@inheritdoc}
      */
@@ -18,7 +20,7 @@ class OroFilterExtension extends Extension
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
 
-        $container->setParameter('oro_filter.twig.layout', $config['twig']['layout']);
+        $container->setParameter(self::PARAMETER_TWIG_LAYOUT, $config['twig']['layout']);
 
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('form_types.yml');
