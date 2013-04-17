@@ -2,11 +2,11 @@
 
 namespace Oro\Bundle\FilterBundle\Tests\Unit\Form\Type\Filter;
 
-use Oro\Bundle\FilterBundle\Tests\Unit\Form\Type\AbstractTypeTest;
+use Oro\Bundle\FilterBundle\Tests\Unit\Form\Type\AbstractTypeTestCase;
 use Oro\Bundle\FilterBundle\Form\Type\Filter\ChoiceFilterType;
 use Oro\Bundle\FilterBundle\Form\Type\Filter\FilterType;
 
-class ChoiceFilterTypeTest extends AbstractTypeTest
+class ChoiceFilterTypeTest extends AbstractTypeTestCase
 {
     /**
      * @var ChoiceFilterType
@@ -44,7 +44,11 @@ class ChoiceFilterTypeTest extends AbstractTypeTest
                 'defaultOptions' => array(
                     'field_type' => 'choice',
                     'field_options' => array('choices' => array()),
-                    'operator_type' => 'hidden',
+                    'operator_choices' => array(
+                        ChoiceFilterType::TYPE_CONTAINS => 'label_type_contains',
+                        ChoiceFilterType::TYPE_NOT_CONTAINS => 'label_type_not_contains',
+                        ChoiceFilterType::TYPE_EQUAL => 'label_type_equal',
+                    ),
                 )
             )
         );

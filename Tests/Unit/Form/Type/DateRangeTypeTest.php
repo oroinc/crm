@@ -4,7 +4,7 @@ namespace Oro\Bundle\FilterBundle\Tests\Unit\Form\Type;
 
 use Oro\Bundle\FilterBundle\Form\Type\DateRangeType;
 
-class DateRangeTypeTest extends AbstractTypeTest
+class DateRangeTypeTest extends AbstractTypeTestCase
 {
     /**
      * @var DateRangeType

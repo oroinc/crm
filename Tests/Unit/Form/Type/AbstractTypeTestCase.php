@@ -6,9 +6,8 @@ use Symfony\Component\Form\Tests\FormIntegrationTestCase;
 use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\Form\FormTypeInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Oro\Bundle\FilterBundle\Form\Type\Filter\ChoiceType;
 
-abstract class AbstractTypeTest extends FormIntegrationTestCase
+abstract class AbstractTypeTestCase extends FormIntegrationTestCase
 {
     /**
      * @var string

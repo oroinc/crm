@@ -2,11 +2,11 @@
 
 namespace Oro\Bundle\FilterBundle\Tests\Unit\Form\Type\Filter;
 
-use Oro\Bundle\FilterBundle\Tests\Unit\Form\Type\AbstractTypeTest;
+use Oro\Bundle\FilterBundle\Tests\Unit\Form\Type\AbstractTypeTestCase;
 use Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType;
 use Oro\Bundle\FilterBundle\Form\Type\Filter\FilterType;
 
-class NumberFilterTypeTest extends AbstractTypeTest
+class NumberFilterTypeTest extends AbstractTypeTestCase
 {
     /**
      * @var NumberFilterType
