@@ -104,18 +104,14 @@ class RenderJsExtension extends \Twig_Extension
      * Render header with all required JS files
      *
      * @param \Twig_Environment $environment
-     * @param string $fileName
      * @return string
      */
-    public function renderHeaderJs(\Twig_Environment $environment, $fileName = null)
+    public function renderHeaderJs(\Twig_Environment $environment)
     {
         /** @var $template \Twig_Template */
         $template = $environment->loadTemplate($this->templateName);
 
-        return $template->renderBlock(
-            self::HEADER_JAVASCRIPT,
-            array('fileName' => $fileName)
-        );
+        return $template->renderBlock(self::HEADER_JAVASCRIPT, array());
     }
 
     /**
@@ -142,7 +138,7 @@ class RenderJsExtension extends \Twig_Extension
         $result = array();
         foreach ($choices as $choice) {
             if ($choice instanceof ChoiceView) {
-                $result[$choice->data] = $choice->label;
+                $result[$choice->value] = $choice->label;
             }
         }
         return $result;
