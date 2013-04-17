@@ -36,15 +36,7 @@ navigation.pinbar.ItemView = Backbone.View.extend({
     },
 
     render: function () {
-        if (!_.isUndefined(this.model.attributes.title_rendered)) {
-            // to avoid changing title passed by reference
-            var data = _.clone(this.model);
-            data.attributes = _.clone(this.model.attributes);
-            data.attributes.title = data.attributes.title_rendered;
-        }
-        else {
-            var data = this.model;
-        }
+        var data = this.model.updateTitleIfExists();
 
         this.$el.html(
             this.templates[this.options.type](data.toJSON())

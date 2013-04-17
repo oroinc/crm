@@ -143,7 +143,7 @@ navigation.pinbar.MainView = navigation.MainViewAbstract.extend({
             var currentItem = new navigation.pinbar.Item(itemData);
             this.options.collection.unshift(currentItem);
 
-            currentItem.attributes.title = _.isObject(el.data('title')) ? JSON.stringify(el.data('title')) : '{"template": "' + itemData['title'] + '"}';
+            currentItem.updateTitle(el.data('title'), itemData['title']);
             currentItem.save(null, {success: _.bind(this.handleItemStateChange, this)});
         }
     },

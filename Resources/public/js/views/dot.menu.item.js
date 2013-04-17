@@ -26,10 +26,7 @@ navigation.dotMenu.ItemView = Backbone.View.extend({
     },
 
     render: function () {
-        var data = _.extend({}, this.model);
-        if (!_.isUndefined(data.attributes.title_rendered)) {
-            data.attributes.title = data.attributes.title_rendered;
-        }
+        var data = this.model.updateTitleIfExists();
 
         this.$el.html(
             this.template(data.toJSON())

@@ -50,7 +50,8 @@ navigation.favorites.MainView = navigation.MainViewAbstract.extend({
             var currentItem = new navigation.Item(itemData);
 
             this.getCollection().unshift(currentItem);
-            currentItem.attributes.title = _.isObject(el.data('title')) ? JSON.stringify(el.data('title')) : '{"template": "' + itemData['title'] + '"}';
+            currentItem.updateTitle(el.data('title'), itemData['title']);
+
             currentItem.save();
         }
     },
