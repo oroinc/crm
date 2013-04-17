@@ -51,7 +51,7 @@ navigation.MainViewAbstract = Backbone.View.extend({
             itemData['url'] = el.data('url');
         }
         itemData['title_rendered'] = el.data('title_rendered') ? el.data('title_rendered') : document.title;
-        itemData['title'] = el.data('title') ? el.data('title') : '{"template": "' + document.title + '"}';
+        itemData['title'] = el.data('title') ? JSON.stringify(el.data('title')) : '{"template": "' + document.title + '"}';
         return itemData;
     },
 
