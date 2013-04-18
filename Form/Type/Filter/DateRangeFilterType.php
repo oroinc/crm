@@ -57,10 +57,17 @@ class DateRangeFilterType extends AbstractType
                 => $this->translator->trans('label_date_type_not_between', array(), 'OroFilterBundle'),
         );
 
+        $typeValues = array(
+            'between'    => self::TYPE_BETWEEN,
+            'notBetween' => self::TYPE_NOT_BETWEEN
+        );
+
         $resolver->setDefaults(
             array(
                 'field_type' => DateRangeType::NAME,
-                'operator_choices' => $operatorChoices
+                'operator_choices' => $operatorChoices,
+                'widget_options' => array(),
+                'type_values' => $typeValues
             )
         );
     }
@@ -72,9 +79,14 @@ class DateRangeFilterType extends AbstractType
      */
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
+        $view->vars['type_values'] = $options['type_values'];
+
         // TODO: replace with correct locale data
         // format of jQueryUI Timepicker (http://api.jqueryui.com/datepicker/)
-        $view->vars['date_format'] = 'mm/dd/yy';
-        $view->vars['first_day']   = 0;
+        $widgetOptions = array(
+            'dateFormat' => 'mm/dd/yy',
+            'firstDay'   => 0,
+        );
+        $view->vars['widget_options'] = array_merge($widgetOptions, $options['widget_options']);
     }
 }

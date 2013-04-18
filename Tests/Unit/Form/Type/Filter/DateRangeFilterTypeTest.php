@@ -48,6 +48,11 @@ class DateRangeFilterTypeTest extends AbstractTypeTestCase
                     'operator_choices' => array(
                         DateRangeFilterType::TYPE_BETWEEN => 'label_date_type_between',
                         DateRangeFilterType::TYPE_NOT_BETWEEN => 'label_date_type_not_between',
+                    ),
+                    'widget_options' => array(),
+                    'type_values' => array(
+                        'between'    => DateRangeFilterType::TYPE_BETWEEN,
+                        'notBetween' => DateRangeFilterType::TYPE_NOT_BETWEEN
                     )
                 )
             )
@@ -63,7 +68,10 @@ class DateRangeFilterTypeTest extends AbstractTypeTestCase
             'empty' => array(
                 'bindData' => array(),
                 'formData' => array('type' => null, 'value' => array('start' => '', 'end' => '')),
-                'viewData' => array('type' => null, 'value' => array('start' => '', 'end' => '')),
+                'viewData' => array(
+                    'value'          => array('type' => null, 'value' => array('start' => '', 'end' => '')),
+                    'widget_options' => array('dateFormat' => 'mm/dd/yy', 'firstDay' => 0)
+                ),
             ),
         );
     }

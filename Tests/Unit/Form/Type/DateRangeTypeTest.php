@@ -78,7 +78,9 @@ class DateRangeTypeTest extends AbstractTypeTestCase
                     'start' => $this->createDateTime('1970-01-12'),
                     'end' => $this->createDateTime('2013-01-12'),
                 ),
-                'viewData' => array('start' => 'Jan 12, 1970', 'end' => 'Jan 12, 2013'),
+                'viewData' => array(
+                    'value' => array('start' => 'Jan 12, 1970', 'end' => 'Jan 12, 2013'),
+                ),
                 'customOptions' => array(
                     'field_options' => array(
                         'format' => \IntlDateFormatter::MEDIUM

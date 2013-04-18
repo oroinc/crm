@@ -66,7 +66,9 @@ class DateTimeRangeTypeTest extends AbstractTypeTestCase
             'empty' => array(
                 'bindData' => array('start' => '', 'end' => ''),
                 'formData' => array('start' => null, 'end' => null),
-                'viewData' => array('start' => '', 'end' => ''),
+                'viewData' => array(
+                    'value' => array('start' => '', 'end' => ''),
+                ),
             ),
             'default timezone' => array(
                 'bindData' => array('start' => '2012-01-01 13:00', 'end' => '2013-01-01 18:00'),
@@ -74,7 +76,9 @@ class DateTimeRangeTypeTest extends AbstractTypeTestCase
                     'start' => $this->createDateTime('2012-01-01 13:00'),
                     'end' => $this->createDateTime('2013-01-01 18:00')
                 ),
-                'viewData' => array('start' => '2012-01-01T13:00:00+02:00', 'end' => '2013-01-01T18:00:00+02:00'),
+                'viewData' => array(
+                    'value' => array('start' => '2012-01-01T13:00:00+02:00', 'end' => '2013-01-01T18:00:00+02:00'),
+                ),
             ),
             'custom timezone' => array(
                 'bindData' => array('start' => '2010-06-02T03:04:00-10:00', 'end' => '2013-06-02T03:04:00-10:00'),
@@ -84,7 +88,9 @@ class DateTimeRangeTypeTest extends AbstractTypeTestCase
                     'end' => $this->createDateTime('2013-06-02 03:04:00', 'America/New_York')
                         ->setTimezone(new \DateTimeZone('America/Los_Angeles')),
                 ),
-                'viewData' => array('start' => '2010-06-02T03:04:00', 'end' => '2013-06-02T03:04:00'),
+                'viewData' => array(
+                    'value' => array('start' => '2010-06-02T03:04:00', 'end' => '2013-06-02T03:04:00'),
+                ),
                 'customOptions' => array(
                     'field_options' => array(
                         'model_timezone' => 'America/Los_Angeles',
@@ -99,7 +105,9 @@ class DateTimeRangeTypeTest extends AbstractTypeTestCase
                     'start' => $this->createDateTime('1970-01-13 00:00:00'),
                     'end' => $this->createDateTime('2014-01-13 00:00:00')
                 ),
-                'viewData' => array('start' => '1970-01-13T00:00:00+03:00', 'end' => '2014-01-13T00:00:00+02:00'),
+                'viewData' => array(
+                    'value' => array('start' => '1970-01-13T00:00:00+03:00', 'end' => '2014-01-13T00:00:00+02:00'),
+                ),
                 'customOptions' => array()
             ),
         );

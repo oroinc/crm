@@ -54,7 +54,9 @@ class NumberFilterTypeTest extends AbstractTypeTestCase
                         NumberFilterType::TYPE_GREATER_THAN => 'label_type_greater_than',
                         NumberFilterType::TYPE_LESS_EQUAL => 'label_type_less_equal',
                         NumberFilterType::TYPE_LESS_THAN => 'label_type_less_than',
-                    )
+                    ),
+                    'data_type' => NumberFilterType::DATA_INTEGER,
+                    'formatter_options' => array()
                 )
             )
         );
@@ -69,7 +71,9 @@ class NumberFilterTypeTest extends AbstractTypeTestCase
             'not formatted number' => array(
                 'bindData' => array('type' => NumberFilterType::TYPE_EQUAL, 'value' => '12345.67890'),
                 'formData' => array('type' => NumberFilterType::TYPE_EQUAL, 'value' => 12345.6789),
-                'viewData' => array('type' => NumberFilterType::TYPE_EQUAL, 'value' => '12,345.68'),
+                'viewData' => array(
+                    'value' => array('type' => NumberFilterType::TYPE_EQUAL, 'value' => '12,345.68'),
+                ),
                 'customOptions' => array(
                     'field_options' => array('grouping' => true, 'precision' => 2)
                 ),
@@ -77,7 +81,9 @@ class NumberFilterTypeTest extends AbstractTypeTestCase
             'formatted number' => array(
                 'bindData' => array('type' => NumberFilterType::TYPE_EQUAL, 'value' => '12,345.68'),
                 'formData' => array('type' => NumberFilterType::TYPE_EQUAL, 'value' => 12345.68),
-                'viewData' => array('type' => NumberFilterType::TYPE_EQUAL, 'value' => '12,345.68'),
+                'viewData' => array(
+                    'value' => array('type' => NumberFilterType::TYPE_EQUAL, 'value' => '12,345.68'),
+                ),
                 'customOptions' => array(
                     'field_options' => array('grouping' => true, 'precision' => 2)
                 ),
@@ -85,23 +91,43 @@ class NumberFilterTypeTest extends AbstractTypeTestCase
             'integer' => array(
                 'bindData' => array('type' => NumberFilterType::TYPE_EQUAL, 'value' => '12345.67890'),
                 'formData' => array('type' => NumberFilterType::TYPE_EQUAL, 'value' => 12345),
-                'viewData' => array('type' => NumberFilterType::TYPE_EQUAL, 'value' => '12345'),
+                'viewData' => array(
+                    'value' => array('type' => NumberFilterType::TYPE_EQUAL, 'value' => '12345'),
+                    'formatter_options' => array(
+                        'decimals' => 0,
+                        'grouping' => false,
+                        'orderSeparator' => '',
+                        'decimalSeparator' => '.',
+                    )
+                ),
                 'customOptions' => array(
-                    'field_type' => 'integer'
+                    'field_type' => 'integer',
+                    'data_type' => NumberFilterType::DATA_INTEGER
                 ),
             ),
             'money' => array(
                 'bindData' => array('type' => NumberFilterType::TYPE_EQUAL, 'value' => '12345.67890'),
                 'formData' => array('type' => NumberFilterType::TYPE_EQUAL, 'value' => 12345.6789),
-                'viewData' => array('type' => NumberFilterType::TYPE_EQUAL, 'value' => '12345.68'),
+                'viewData' => array(
+                    'value' => array('type' => NumberFilterType::TYPE_EQUAL, 'value' => '12345.68'),
+                    'formatter_options' => array(
+                        'decimals' => 2,
+                        'grouping' => true,
+                        'orderSeparator' => ',',
+                        'decimalSeparator' => '.',
+                    )
+                ),
                 'customOptions' => array(
-                    'field_type' => 'money'
+                    'field_type' => 'money',
+                    'data_type' => NumberFilterType::DATA_DECIMAL
                 ),
             ),
             'invalid format' => array(
                 'bindData' => array('type' => NumberFilterType::TYPE_EQUAL, 'value' => 'abcd.67890'),
                 'formData' => array('type' => NumberFilterType::TYPE_EQUAL),
-                'viewData' => array('type' => NumberFilterType::TYPE_EQUAL, 'value' => 'abcd.67890'),
+                'viewData' => array(
+                    'value' => array('type' => NumberFilterType::TYPE_EQUAL, 'value' => 'abcd.67890'),
+                ),
                 'customOptions' => array(
                     'field_type' => 'money'
                 ),

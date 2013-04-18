@@ -74,6 +74,7 @@ class FilterType extends AbstractType
         $children = $form->getChildren();
         $view->vars['value']['type'] = $children['type']->getViewData();
         $view->vars['value']['value'] = $children['value']->getViewData();
+        $view->vars['show_filter'] = $options['show_filter'];
     }
 
     /**
@@ -88,8 +89,11 @@ class FilterType extends AbstractType
                 'operator_choices' => array(),
                 'operator_type' => 'choice',
                 'operator_options' => array(),
+                'show_filter' => false,
             )
         )
-        ->setRequired(array('field_type', 'field_options', 'operator_choices', 'operator_type', 'operator_options'));
+        ->setRequired(
+            array('field_type', 'field_options', 'operator_choices', 'operator_type', 'operator_options', 'show_filter')
+        );
     }
 }

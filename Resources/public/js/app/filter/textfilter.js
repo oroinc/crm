@@ -221,7 +221,7 @@ OroApp.Filter.TextFilter = OroApp.Filter.AbstractFilter.extend({
      */
     remove: function() {
         $('body').off('click', this._clickOutsideCriteriaCallback);
-        Backbone.View.prototype.remove.call(this);
+        OroApp.Filter.AbstractFilter.prototype.remove.call(this);
         return this;
     },
 

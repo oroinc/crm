@@ -45,9 +45,15 @@ class FilterTypeTest extends AbstractTypeTestCase
                     'operator_choices' => array(),
                     'operator_type' => 'choice',
                     'operator_options' => array(),
+                    'show_filter' => false
                 ),
                 'requiredOptions' => array(
-                    'field_type', 'field_options', 'operator_choices', 'operator_type', 'operator_options'
+                    'field_type',
+                    'field_options',
+                    'operator_choices',
+                    'operator_type',
+                    'operator_options',
+                    'show_filter'
                 )
             )
         );
@@ -62,7 +68,9 @@ class FilterTypeTest extends AbstractTypeTestCase
             'empty data' => array(
                 'bindData' => array(),
                 'formData' => array('type' => null, 'value' => null),
-                'viewData' => array('type' => '', 'value' => ''),
+                'viewData' => array(
+                    'value' => array('type' => '', 'value' => ''),
+                ),
                 'customOptions' => array(
                     'operator_choices' => array()
                 ),
@@ -70,7 +78,9 @@ class FilterTypeTest extends AbstractTypeTestCase
             'empty choice' => array(
                 'bindData' => array('type' => '1', 'value' => ''),
                 'formData' => array('value' => null),
-                'viewData' => array('type' => '1', 'value' => ''),
+                'viewData' => array(
+                    'value' => array('type' => '1', 'value' => ''),
+                ),
                 'customOptions' => array(
                     'operator_choices' => array()
                 ),
@@ -78,7 +88,9 @@ class FilterTypeTest extends AbstractTypeTestCase
             'invalid choice' => array(
                 'bindData' => array('type' => '-1', 'value' => ''),
                 'formData' => array('value' => null),
-                'viewData' => array('type' => '-1', 'value' => ''),
+                'viewData' => array(
+                    'value' => array('type' => '-1', 'value' => ''),
+                ),
                 'customOptions' => array(
                     'operator_choices' => array(
                         1 => 'Choice 1'
@@ -88,7 +100,9 @@ class FilterTypeTest extends AbstractTypeTestCase
             'without choice' => array(
                 'bindData' => array('value' => 'text'),
                 'formData' => array('type' => null, 'value' => 'text'),
-                'viewData' => array('type' => '', 'value' => 'text'),
+                'viewData' => array(
+                    'value' => array('type' => '', 'value' => 'text'),
+                ),
                 'customOptions' => array(
                     'operator_choices' => array(
                         1 => 'Choice 1'

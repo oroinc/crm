@@ -63,12 +63,16 @@ class ChoiceFilterTypeTest extends AbstractTypeTestCase
             'empty' => array(
                 'bindData' => array(),
                 'formData' => array('type' => null, 'value' => null),
-                'viewData' => array('type' => null, 'value' => null)
+                'viewData' => array(
+                    'value' => array('type' => null, 'value' => null),
+                )
             ),
             'predefined value choice' => array(
                 'bindData' => array('value' => 1),
                 'formData' => array('type' => null, 'value' => 1),
-                'viewData' => array('type' => null, 'value' => 1),
+                'viewData' => array(
+                    'value' => array('type' => null, 'value' => 1),
+                ),
                 'customOptions' => array(
                     'field_options' => array(
                         'choices' => array(1 => 'One', 2 => 'Two')
@@ -78,7 +82,9 @@ class ChoiceFilterTypeTest extends AbstractTypeTestCase
             'invalid value choice' => array(
                 'bindData' => array('value' => 3),
                 'formData' => array('type' => null),
-                'viewData' => array('type' => null, 'value' => 3),
+                'viewData' => array(
+                    'value' => array('type' => null, 'value' => 3),
+                ),
                 'customOptions' => array(
                     'field_options' => array(
                         'choices' => array(1 => 'One')
@@ -88,7 +94,9 @@ class ChoiceFilterTypeTest extends AbstractTypeTestCase
             'multiple choices' => array(
                 'bindData' => array('value' => array(1, 2)),
                 'formData' => array('type' => null, 'value' => array(1, 2)),
-                'viewData' => array('type' => null, 'value' => array(1, 2)),
+                'viewData' => array(
+                    'value' => array('type' => null, 'value' => array(1, 2)),
+                ),
                 'customOptions' => array(
                     'field_options' => array(
                         'multiple' => true,
@@ -99,7 +107,9 @@ class ChoiceFilterTypeTest extends AbstractTypeTestCase
             'invalid multiple choices' => array(
                 'bindData' => array('value' => array(3, 4)),
                 'formData' => array('type' => null),
-                'viewData' => array('type' => null, 'value' => array(3, 4)),
+                'viewData' => array(
+                    'value' => array('type' => null, 'value' => array(3, 4)),
+                ),
                 'customOptions' => array(
                     'field_options' => array(
                         'multiple' => true,

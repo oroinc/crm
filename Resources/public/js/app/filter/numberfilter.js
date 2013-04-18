@@ -23,7 +23,7 @@ OroApp.Filter.NumberFilter = OroApp.Filter.ChoiceFilter.extend({
     initialize: function(options) {
         options = options || {};
         this.formatter = new OroApp.Filter.NumberFormatter(this.formatterOptions);
-        Backbone.View.prototype.initialize.apply(this, arguments);
+        OroApp.Filter.ChoiceFilter.prototype.initialize.apply(this, arguments);
     },
 
     /**

@@ -66,6 +66,11 @@ class DateTimeRangeFilterType extends AbstractType
     {
         // TODO: replace with correct locale data
         // format of jQueryUI Timepicker (http://trentrichardson.com/examples/timepicker/#tp-formatting)
-        $view->vars['time_format'] = 'hh:mm tt';
+        $widgetOptions = array(
+            'dateFormat' => 'mm/dd/yy',
+            'timeFormat' => 'hh:mm tt',
+            'firstDay'   => 0,
+        );
+        $view->vars['widget_options'] = array_merge($widgetOptions, $options['widget_options']);
     }
 }

@@ -62,7 +62,9 @@ class TextFilterTypeTest extends AbstractTypeTestCase
             'simple text' => array(
                 'bindData' => array('type' => TextFilterType::TYPE_CONTAINS, 'value' => 'text'),
                 'formData' => array('type' => TextFilterType::TYPE_CONTAINS, 'value' => 'text'),
-                'viewData' => array('type' => TextFilterType::TYPE_CONTAINS, 'value' => 'text'),
+                'viewData' => array(
+                    'value' => array('type' => TextFilterType::TYPE_CONTAINS, 'value' => 'text'),
+                ),
             ),
         );
     }

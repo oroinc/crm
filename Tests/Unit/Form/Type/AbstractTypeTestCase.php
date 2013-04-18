@@ -122,7 +122,11 @@ abstract class AbstractTypeTestCase extends FormIntegrationTestCase
         $this->assertEquals($formData, $form->getData());
 
         $view = $form->createView();
-        $this->assertEquals($viewData, $view->vars['value']);
+
+        foreach ($viewData as $key => $value) {
+            $this->assertArrayHasKey($key, $view->vars);
+            $this->assertEquals($value, $view->vars[$key]);
+        }
     }
 
     /**

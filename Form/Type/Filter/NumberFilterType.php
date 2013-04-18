@@ -17,6 +17,9 @@ class NumberFilterType extends AbstractType
     const TYPE_LESS_THAN = 5;
     const NAME = 'oro_type_number_filter';
 
+    const DATA_INTEGER = 'data_integer';
+    const DATA_DECIMAL = 'data_decimal';
+
     /**
      * @var TranslatorInterface
      */
@@ -64,6 +67,8 @@ class NumberFilterType extends AbstractType
             array(
                 'field_type' => 'number',
                 'operator_choices' => $operatorChoices,
+                'data_type' => self::DATA_INTEGER,
+                'formatter_options' => array()
             )
         );
     }
@@ -75,10 +80,32 @@ class NumberFilterType extends AbstractType
      */
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
-        // TODO: replace with correct locale data
-        $view->vars['precision']          = 2;
-        $view->vars['grouping']           = true;
-        $view->vars['grouping_separator'] = ' ';
-        $view->vars['decimal_separator']  = '.';
+        $dataType = self::DATA_INTEGER;
+        if (isset($options['data_type'])) {
+            $dataType = $options['data_type'];
+        }
+
+        $formatterOptions = array();
+
+        switch ($dataType) {
+            case self::DATA_DECIMAL:
+                $formatterOptions['decimals'] = 2;
+                $formatterOptions['grouping'] = true;
+                break;
+            case self::DATA_INTEGER:
+            default:
+                $formatterOptions['decimals'] = 0;
+                $formatterOptions['grouping'] = false;
+        }
+
+        $formatter = new \NumberFormatter(\Locale::getDefault(), \NumberFormatter::DECIMAL);
+
+        $formatterOptions['orderSeparator'] = $formatterOptions['grouping']
+            ? $formatter->getSymbol(\NumberFormatter::GROUPING_SEPARATOR_SYMBOL)
+            : '';
+
+        $formatterOptions['decimalSeparator'] = $formatter->getSymbol(\NumberFormatter::DECIMAL_SEPARATOR_SYMBOL);
+
+        $view->vars['formatter_options'] = $formatterOptions;
     }
 }
