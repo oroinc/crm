@@ -1,3 +1,5 @@
+{{ oro_filter_render_header_js() }}
+
 {% javascripts
     '@OroUIBundle/Resources/public/lib/backbone.bootstrap-modal.js'
 
@@ -5,11 +7,6 @@
     '@OroGridBundle/Resources/public/lib/backgrid/backgrid.js'
     '@OroGridBundle/Resources/public/lib/moment/moment.js'
     '@OroGridBundle/Resources/public/lib/backgrid/extensions/moment-cell/backgrid-moment-cell.js'
-
-    '@OroFilterBundle/Resources/public/lib/multiselect/jquery.multiselect.js'
-    '@OroFilterBundle/Resources/public/lib/multiselect/jquery.multiselect.filter.js'
-
-    '@OroFilterBundle/Resources/public/lib/jquery-ui-timepicker-addon.js'
 
     '@OroGridBundle/Resources/public/js/app/datagrid/action/datagrid-action-launcher.js'
     '@OroGridBundle/Resources/public/js/app/datagrid/action/datagrid-action.js'
@@ -26,20 +23,6 @@
     '@OroGridBundle/Resources/public/js/app/datagrid/pagination/datagrid-pagination-input.js'
     '@OroGridBundle/Resources/public/js/app/datagrid/datagrid-pagesize.js'
     '@OroGridBundle/Resources/public/js/app/datagrid/datagrid-toolbar.js'
-
-    '@OroFilterBundle/Resources/public/js/app/filter/formatter.js'
-    '@OroFilterBundle/Resources/public/js/app/filter/multiselectdecorator.js'
-
-    '@OroFilterBundle/Resources/public/js/app/filter/abstractfilter.js'
-    '@OroFilterBundle/Resources/public/js/app/filter/textfilter.js'
-    '@OroFilterBundle/Resources/public/js/app/filter/choicefilter.js'
-    '@OroFilterBundle/Resources/public/js/app/filter/numberfilter.js'
-    '@OroFilterBundle/Resources/public/js/app/filter/datefilter.js'
-    '@OroFilterBundle/Resources/public/js/app/filter/datetimefilter.js'
-    '@OroFilterBundle/Resources/public/js/app/filter/selectfilter.js'
-    '@OroFilterBundle/Resources/public/js/app/filter/multiselectfilter.js'
-
-    '@OroFilterBundle/Resources/public/js/app/filter/list.js'
 
     '@OroGridBundle/Resources/public/js/app/datagrid/filter/datagrid-filter-list.js'
 
@@ -62,9 +45,7 @@
     {% set collectionName = datagridName ~ 'Collection' %}
 
     {% set columnTypePrefix = 'Oro\\Bundle\\GridBundle\\Field\\FieldDescriptionInterface::' %}
-    {% set filterTypePrefix = 'Oro\\Bundle\\GridBundle\\Filter\\FilterInterface::' %}
     {% set actionTypePrefix = 'Oro\\Bundle\\GridBundle\\Action\\ActionInterface::' %}
-    {% set dateTypeFilterPrefix = 'Sonata\\AdminBundle\\Form\\Type\\Filter\\DateRangeType::' %}
 
     _.extend(OroApp, {
         scope: {
@@ -99,101 +80,7 @@
                     ],
                     filters: {
                         {% for filter in datagrid.filters %}
-                            {{ filter.name|json_encode|raw }}:
-                            {% set filterType = filter.getOption('filter_type') %}
-                            {% if filterType == constant(filterTypePrefix ~ 'TYPE_STRING')
-                                or filterType == constant(filterTypePrefix ~ 'TYPE_FLEXIBLE_STRING')
-                            %}
-                                OroApp.createInstanceFromConstructor(OroApp.Filter.ChoiceFilter.extend({
-                                    name: {{ filter.name|json_encode|raw }},
-                                    label: {{ filter.getOption('label')|json_encode|raw }},
-                                    enabled: {{ filter.getOption('show_filter') ? 'true' : 'false' }},
-                                    choices: {
-                                        1: 'contains',
-                                        2: 'not contains',
-                                        3: 'equal'
-                                    }
-                                }))
-                            {% elseif filterType == constant(filterTypePrefix ~ 'TYPE_NUMBER')
-                                or filterType == constant(filterTypePrefix ~ 'TYPE_FLEXIBLE_NUMBER')
-                            %}
-                                OroApp.createInstanceFromConstructor(OroApp.Filter.NumberFilter.extend({
-                                    name: '{{ filter.name }}',
-                                    label: '{{ filter.getOption('label') }}',
-                                    enabled: {{ filter.getOption('show_filter') ? 'true' : 'false' }},
-                                    choices: {
-                                        1: '>=',
-                                        2: '>',
-                                        3: '=',
-                                        4: '<=',
-                                        5: '<'
-                                    },
-                                    formatter: {{ filter.getOption('data_type')|json_encode|raw }}
-                                }))
-                            {% elseif filterType == constant(filterTypePrefix ~ 'TYPE_DATE')
-                                or filterType == constant(filterTypePrefix ~ 'TYPE_FLEXIBLE_DATE')
-                            %}
-                                OroApp.createInstanceFromConstructor(OroApp.Filter.DateFilter.extend({
-                                    name: {{ filter.name|json_encode|raw }},
-                                    label: {{ filter.getOption('label')|json_encode|raw }},
-                                    enabled: {{ filter.getOption('show_filter') ? 'true' : 'false' }},
-                                    choices: {
-                                        1: 'between',
-                                        2: 'not between'
-                                    },
-                                    typeValues: {
-                                        between:    {{ constant(dateTypeFilterPrefix ~ 'TYPE_BETWEEN')|json_encode|raw }},
-                                        notBetween: {{ constant(dateTypeFilterPrefix ~ 'TYPE_NOT_BETWEEN')|json_encode|raw }}
-                                    },
-                                    externalWidgetOptions: {
-                                        dateFormat: 'mm/dd/yy',
-                                        firstDay: 0
-                                    }
-                                }))
-                            {% elseif filterType == constant(filterTypePrefix ~ 'TYPE_DATETIME')
-                                or filterType == constant(filterTypePrefix ~ 'TYPE_FLEXIBLE_DATETIME')
-                            %}
-                                OroApp.createInstanceFromConstructor(OroApp.Filter.DateTimeFilter.extend({
-                                    name: {{ filter.name|json_encode|raw }},
-                                    label: {{ filter.getOption('label')|json_encode|raw }},
-                                    enabled: {{ filter.getOption('show_filter') ? 'true' : 'false' }},
-                                    choices: {
-                                        1: 'between',
-                                        2: 'not between'
-                                    },
-                                    typeValues: {
-                                        between:    {{ constant(dateTypeFilterPrefix ~ 'TYPE_BETWEEN')|json_encode|raw }},
-                                        notBetween: {{ constant(dateTypeFilterPrefix ~ 'TYPE_NOT_BETWEEN')|json_encode|raw }}
-                                    },
-                                    externalWidgetOptions: {
-                                        dateFormat: 'mm/dd/yy',
-                                        timeFormat: 'hh:mm tt',
-                                        firstDay: 0
-                                    }
-                                }))
-                            {% elseif filterType == constant(filterTypePrefix ~ 'TYPE_FLEXIBLE_OPTIONS') %}
-                                {% if filter.getOption('multiple') %}
-                                    OroApp.createInstanceFromConstructor(OroApp.Filter.MultiSelectFilter.extend({
-                                        name: {{ filter.name|json_encode|raw }},
-                                        label: {{ filter.getOption('label')|json_encode|raw }},
-                                        enabled: {{ filter.getOption('show_filter') ? 'true' : 'false' }},
-                                        options: {{ filter.valueOptions|json_encode|raw }}
-                                    }))
-                                {% else %}
-                                    OroApp.createInstanceFromConstructor(OroApp.Filter.SelectFilter.extend({
-                                        name: {{ filter.name|json_encode|raw }},
-                                        label: {{ filter.getOption('label')|json_encode|raw }},
-                                        enabled: {{ filter.getOption('show_filter') ? 'true' : 'false' }},
-                                        options: {{ filter.valueOptions|json_encode|raw }}
-                                    }))
-                                {% endif %}
-                            {% else %}
-                                OroApp.createInstanceFromConstructor(OroApp.Filter.TextFilter.extend({
-                                    name: {{ filter.name|json_encode|raw }},
-                                    label: {{ filter.getOption('label')|json_encode|raw }},
-                                    enabled: {{ filter.getOption('show_filter') ? 'true' : 'false' }}
-                                }))
-                            {% endif %}
+                            {{ filter.name|json_encode|raw }} : {{ oro_filter_render_filter_js(form.children[filter.name]) }}
                             {% if not loop.last %},{% endif %}
                         {% endfor %}
                     },

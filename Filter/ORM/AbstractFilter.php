@@ -184,9 +184,7 @@ abstract class AbstractFilter extends AbstractORMFilter implements FilterInterfa
         if ($this->getLabel()) {
             $formOptions['label'] = $this->getLabel();
         }
-        if (!$this->getOption('show_filter', true)) {
-            $formOptions['disabled'] = true;
-        }
+        $formOptions['attr']['show_filter'] = $this->getOption('show_filter', false);
         return array($formType, $formOptions);
     }
 }

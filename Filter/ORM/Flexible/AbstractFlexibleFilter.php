@@ -29,7 +29,7 @@ abstract class AbstractFlexibleFilter extends AbstractFilter implements FilterIn
     protected $parentFilterClass;
 
     /**
-     * @var FilterInterface
+     * @var AbstractFilter
      */
     protected $parentFilter;
 
@@ -103,6 +103,7 @@ abstract class AbstractFlexibleFilter extends AbstractFilter implements FilterIn
      */
     public function getDefaultOptions()
     {
+        $this->parentFilter->setOptions($this->getOptions());
         return $this->parentFilter->getDefaultOptions();
     }
 
@@ -113,6 +114,7 @@ abstract class AbstractFlexibleFilter extends AbstractFilter implements FilterIn
      */
     public function getRenderSettings()
     {
+        $this->parentFilter->setOptions($this->getOptions());
         return $this->parentFilter->getRenderSettings();
     }
 }
