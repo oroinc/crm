@@ -214,7 +214,8 @@ class FlexibleEntityRepository extends EntityRepository implements TranslatableI
             ->leftJoin($this->entityAlias.'.values', 'Value')
             ->leftJoin('Value.attribute', 'Attribute')
             ->leftJoin('Value.options', 'ValueOption')
-            ->leftJoin('ValueOption.optionValues', 'AttributeOptionValue');
+            ->leftJoin('ValueOption.optionValues', 'AttributeOptionValue')
+        ;
 
         // TODO : we should filter select by current locale and scope to reduce values number
 
@@ -344,7 +345,7 @@ class FlexibleEntityRepository extends EntityRepository implements TranslatableI
         return count($flexibles) ? current($flexibles) : null;
     }
 
-    public function findLocalizedValuesWithAttributes($id)
+    public function findWithLocalizedValuesAndSortedAttributes($id)
     {
         $qb = $this->findByWithAttributesQB(array(), array('id' => $id));
 
@@ -355,9 +356,9 @@ class FlexibleEntityRepository extends EntityRepository implements TranslatableI
                     $qb->expr()->eq('Value.locale', $qb->expr()->literal($this->getLocale()))
                 )
             )
+            ->orderBy('Attribute.sortOrder')
             ->getQuery()
             ->getOneOrNullResult()
         ;
-
     }
 }
