@@ -2,10 +2,14 @@
 
 namespace Oro\Bundle\GridBundle\Tests\Unit\Filter\ORM\Flexible;
 
+use Oro\Bundle\GridBundle\Datagrid\ProxyQueryInterface;
 use Oro\Bundle\GridBundle\Filter\ORM\Flexible\AbstractFlexibleFilter;
 use Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleManagerRegistry;
 use Oro\Bundle\GridBundle\Filter\FilterInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.TooManyMethods)
+ */
 class AbstractFlexibleFilterTest extends \PHPUnit_Framework_TestCase
 {
     /**#@+
@@ -83,6 +87,77 @@ class AbstractFlexibleFilterTest extends \PHPUnit_Framework_TestCase
 
         $this->model->initialize(self::TEST_NAME, $options);
         $this->assertAttributeEquals($flexibleManager, 'flexibleManager', $this->model);
+    }
+
+
+    public function applyDataProvider()
+    {
+        return array(
+            'use_field_mapping_entity_alias' => array(
+                'value' => 'test',
+                'expectParentFilterCalls' => array(
+                    array('getParentAssociationMappings', array(), array('parentAssociationMappings')),
+                    array('getFieldMapping', array(), array('entityAlias' => 'e')),
+                    array('getFieldName', array(), 'field_name'),
+                ),
+                'expectEntityJoin' => array(array('parentAssociationMappings'), 'o'),
+                'expectFilterArguments' => array('e', 'field_name', 'test')
+            ),
+            'use_entity_join_entity_alias' => array(
+                'value' => 'test',
+                'expectParentFilterCalls' => array(
+                    array('getParentAssociationMappings', array(), array('parentAssociationMappings')),
+                    array('getFieldMapping', array(), array()),
+                    array('getFieldName', array(), 'field_name'),
+                ),
+                'expectEntityJoin' => array(array('parentAssociationMappings'), 'o'),
+                'expectFilterArguments' => array('o', 'field_name', 'test')
+            )
+        );
+    }
+
+    /**
+     * @dataProvider applyDataProvider
+     */
+    public function testApply(
+        $value,
+        array $expectParentFilterCalls,
+        array $expectEntityJoin,
+        array $expectFilterArguments
+    ) {
+        $this->addParentFilterExpectedCalls($expectParentFilterCalls);
+
+        list($parentAssociationMappings, $entityAlias) = $expectEntityJoin;
+
+        $proxyQuery = $this->getMock('Oro\Bundle\GridBundle\Datagrid\ProxyQueryInterface');
+        $proxyQuery->expects($this->once())
+            ->method('entityJoin')->with($parentAssociationMappings)->will($this->returnValue($entityAlias));
+
+        list($expectEntityAlias, $expectFieldName, $expectValue) = $expectFilterArguments;
+
+        $this->model->expects($this->once())->method('filter')
+            ->with($proxyQuery, $expectEntityAlias, $expectFieldName, $expectValue);
+
+        $this->model->apply($proxyQuery, $value);
+    }
+
+    /**
+     * @param array $expectedCalls
+     */
+    protected function addParentFilterExpectedCalls(array $expectedCalls)
+    {
+        $index = 0;
+        if ($expectedCalls) {
+            foreach ($expectedCalls as $expectedCall) {
+                list($method, $arguments, $result) = $expectedCall;
+
+                $methodExpectation = $this->parentFilter->expects($this->at($index++))->method($method);
+                $methodExpectation = call_user_func_array(array($methodExpectation, 'with'), $arguments);
+                $methodExpectation->will($this->returnValue($result));
+            }
+        } else {
+            $this->parentFilter->expects($this->never())->method($this->anything());
+        }
     }
 
     public function testGetDefaultOptions()
