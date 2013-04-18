@@ -35,7 +35,7 @@ class Address extends AbstractEntityFlexible
      *
      * @ORM\Column(name="street2", type="string", length=500)
      */
-    private $street2;
+    private $street2 = '';
 
     /**
      * @var string
@@ -72,7 +72,7 @@ class Address extends AbstractEntityFlexible
      *
      * @ORM\Column(name="mark", type="string", length=255)
      */
-    private $mark;
+    private $mark = '';
 
     /**
      * @var \Oro\Bundle\FlexibleEntityBundle\Model\AbstractFlexibleValue[]

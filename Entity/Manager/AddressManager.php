@@ -7,6 +7,13 @@ use Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleManager;
 
 use Doctrine\Common\Persistence\ObjectManager;
 
+/***
+ * Class AddressManager
+ * @package Oro\Bundle\AddressBundle\Entity\Manager
+ *
+ * @method string getFlexibleName()
+ * @method string getFlexibleValueName()
+ */
 class AddressManager
 {
     /**
