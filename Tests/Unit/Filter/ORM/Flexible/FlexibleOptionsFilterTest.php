@@ -55,7 +55,8 @@ class FlexibleOptionsFilterTest extends FlexibleFilterTestCase
                                 'two' => 'value two'
                             ),
                             'multiple' => false
-                        )
+                        ),
+                        'show_filter' => false
                     )
                 )
             )

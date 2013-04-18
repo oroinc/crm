@@ -110,7 +110,6 @@ abstract class AbstractFlexibleFilter implements FilterInterface
      */
     public function getDefaultOptions()
     {
-        $this->parentFilter->setOptions($this->getOptions());
         return $this->parentFilter->getDefaultOptions();
     }
 
@@ -121,7 +120,6 @@ abstract class AbstractFlexibleFilter implements FilterInterface
      */
     public function getRenderSettings()
     {
-        $this->parentFilter->setOptions($this->getOptions());
         return $this->parentFilter->getRenderSettings();
     }
 

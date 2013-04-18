@@ -35,27 +35,34 @@ class AbstractFilterTest extends \PHPUnit_Framework_TestCase
         return array(
             'default' => array(
                 array(),
-                array(FilterType::NAME, array('field_options' => array('required' => false)))
+                array(FilterType::NAME, array('field_options' => array('required' => false), 'show_filter' => false))
             ),
             'custom_form_type' => array(
                 array('form_type' => TextFilterType::NAME),
-                array(TextFilterType::NAME, array('field_options' => array('required' => false)))
+                array(TextFilterType::NAME,
+                    array('field_options' => array('required' => false), 'show_filter' => false)
+                )
             ),
             'custom_field_type' => array(
                 array('field_type' => 'text'),
-                array(FilterType::NAME, array('field_type' => 'text', 'field_options' => array('required' => false)))
+                array(FilterType::NAME,
+                    array('field_type' => 'text', 'field_options' => array('required' => false), 'show_filter' => false)
+                )
             ),
             'custom_field_options' => array(
                 array('field_options' => array('custom_option' => 'value')),
-                array(FilterType::NAME, array('field_options' => array('custom_option' => 'value')))
+                array(FilterType::NAME,
+                    array('field_options' => array('custom_option' => 'value'), 'show_filter' => false)
+                )
             ),
             'custom_label' => array(
                 array('label' => 'custom label'),
-                array(FilterType::NAME, array('label' => 'custom label', 'field_options' => array('required' => false)))
-            ),
-            'not_show_filter' => array(
-                array('show_filter' => false),
-                array(FilterType::NAME, array('disabled' => true, 'field_options' => array('required' => false)))
+                array(FilterType::NAME,
+                    array(
+                        'label' => 'custom label',
+                        'field_options' => array('required' => false), 'show_filter' => false
+                    )
+                )
             )
         );
     }
