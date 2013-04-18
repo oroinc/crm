@@ -70,25 +70,20 @@ abstract class AbstractDateFilter extends AbstractFilter
      */
     public function parseData($data)
     {
-        if (!is_array($data) || !array_key_exists('value', $data) || !is_array($data['value'])) {
+        if (!$this->isValidData($data)) {
             return false;
         }
 
-        $data['value']['start'] = isset($data['value']['start']) ? $data['value']['start'] : null;
-        $data['value']['end'] = isset($data['value']['end']) ? $data['value']['end'] : null;
-
-        if (!$data['value']['start'] && !$data['value']['end']) {
-            return false;
+        if (isset($data['value']['start'])) {
+            $data['value']['start'] = $data['value']['start']->format(static::DATETIME_FORMAT);
+        } else {
+            $data['value']['start'] = null;
         }
 
-        // check start date
-        if ($data['value']['start'] && !$data['value']['start'] instanceof \DateTime) {
-            return false;
-        }
-
-        // check end date
-        if ($data['value']['end'] && !$data['value']['end'] instanceof \DateTime) {
-            return false;
+        if (isset($data['value']['end'])) {
+            $data['value']['end'] = $data['value']['end']->format(static::DATETIME_FORMAT);
+        } else {
+            $data['value']['end'] = null;
         }
 
         $data['type'] = isset($data['type']) ? $data['type'] : null;
@@ -98,10 +93,37 @@ abstract class AbstractDateFilter extends AbstractFilter
         }
 
         return array(
-            'date_start' => $data['value']['start'] ? $data['value']['start']->format(static::DATETIME_FORMAT) : null,
-            'date_end' => $data['value']['end'] ? $data['value']['end']->format(static::DATETIME_FORMAT) : null,
+            'date_start' => $data['value']['start'],
+            'date_end' => $data['value']['end'],
             'type' => $data['type']
         );
+    }
+
+    /**
+     * @param $data
+     * @return bool
+     */
+    protected function isValidData($data)
+    {
+        if (!is_array($data) || !array_key_exists('value', $data) || !is_array($data['value'])) {
+            return false;
+        }
+
+        if (!isset($data['value']['start']) && !isset($data['value']['end'])) {
+            return false;
+        }
+
+        // check start date
+        if (isset($data['value']['start']) && !$data['value']['start'] instanceof \DateTime) {
+            return false;
+        }
+
+        // check end date
+        if (isset($data['value']['end']) && !$data['value']['end'] instanceof \DateTime) {
+            return false;
+        }
+
+        return true;
     }
 
     /**

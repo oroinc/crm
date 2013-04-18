@@ -8,7 +8,7 @@ use Oro\Bundle\FilterBundle\Form\Type\Filter\FilterType;
 
 class AbstractFilterTest extends \PHPUnit_Framework_TestCase
 {
-    const TEST_NAME           = 'test_name';
+    const TEST_NAME = 'test_name';
 
     /**
      * @var AbstractFilter

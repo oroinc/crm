@@ -62,7 +62,9 @@ abstract class FilterTestCase extends \PHPUnit_Framework_TestCase
     public function testFilter($data, array $expectProxyQueryCalls, array $options = array())
     {
         $proxyQuery = $this->getMockBuilder('Oro\Bundle\GridBundle\Datagrid\ORM\ProxyQuery')
-            ->setMethods(array('getUniqueParameterId', 'andWhere', 'orWhere', 'setParameter'))
+            ->setMethods(
+                array('getUniqueParameterId', 'andWhere', 'orWhere', 'andHaving', 'orHaving', 'setParameter')
+            )
             ->disableOriginalConstructor()
             ->getMock();
 

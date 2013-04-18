@@ -65,6 +65,25 @@ class StringFilterTest extends FilterTestCase
                     array('setParameter', array(self::TEST_NAME . '_p1', '%test%'), null)
                 )
             ),
+            'equals_having' => array(
+                'data' => array('value' => 'test', 'type' => TextFilterType::TYPE_EQUAL),
+                'expectProxyQueryCalls' => array(
+                    array('getUniqueParameterId', array(), 'p1'),
+                    array('andHaving',
+                        array(
+                            $this->getExpressionFactory()->eq(
+                                'CONCAT(field_alias)',
+                                ':' . self::TEST_NAME . '_p1'
+                            )
+                        ), null),
+                    array('setParameter', array(self::TEST_NAME . '_p1', 'test'), null)
+                ),
+                array(
+                    'field_mapping' => array(
+                        'fieldExpression' => 'CONCAT(field_alias)'
+                    )
+                )
+            ),
         );
     }
 
