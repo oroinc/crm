@@ -12,8 +12,7 @@ use Oro\Bundle\GridBundle\Filter\ORM\Flexible\FlexibleOptionsFilter;
 
 class FlexibleOptionsFilterTest extends FlexibleFilterTestCase
 {
-
-    const TEST_ATTRIBUTE     = 'test_attribute';
+    const TEST_ATTRIBUTE = 'test_attribute';
 
     /**
      * {@inheritdoc}
@@ -28,9 +27,9 @@ class FlexibleOptionsFilterTest extends FlexibleFilterTestCase
     {
         return array(
             'correct_equals' => array(
-                'data' => array('value' => 'test', 'type' => ChoiceFilterType::TYPE_EQUAL),
+                'data' => array('value' => 'test', 'type' => ChoiceFilterType::TYPE_CONTAINS),
                 'expectRepositoryCalls' => array(
-                    array('applyFilterByAttribute', array(self::TEST_FIELD, 'test', '='), null)
+                    array('applyFilterByAttribute', array(self::TEST_FIELD, 'test', 'IN'), null)
                 )
             ),
             'incorrect' => array(

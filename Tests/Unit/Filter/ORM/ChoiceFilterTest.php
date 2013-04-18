@@ -16,9 +16,8 @@ class ChoiceFilterTest extends FilterTestCase
     {
         return array(
             array(ChoiceFilterType::TYPE_CONTAINS, 'IN'),
-            array(ChoiceFilterType::TYPE_EQUAL, '='),
             array(ChoiceFilterType::TYPE_NOT_CONTAINS, 'NOT IN'),
-            array(false, '=')
+            array(false, 'IN')
         );
     }
 
@@ -36,20 +35,6 @@ class ChoiceFilterTest extends FilterTestCase
             'no_value' => array(
                 'data' => array('value' => ''),
                 'expectProxyQueryCalls' => array()
-            ),
-            'equals' => array(
-                'data' => array('value' => 'test', 'type' => ChoiceFilterType::TYPE_EQUAL),
-                'expectProxyQueryCalls' => array(
-                    array('getUniqueParameterId', array(), 'p1'),
-                    array('andWhere',
-                        array(
-                            $this->getExpressionFactory()->eq(
-                                self::TEST_ALIAS . '.' . self::TEST_FIELD,
-                                ':' . self::TEST_NAME . '_p1'
-                            )
-                        ), null),
-                    array('setParameter', array(self::TEST_NAME . '_p1', 'test'), null)
-                )
             ),
             'contains' => array(
                 'data' => array('value' => 'test', 'type' => ChoiceFilterType::TYPE_CONTAINS),

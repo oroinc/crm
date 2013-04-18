@@ -20,28 +20,18 @@ class ChoiceFilter extends AbstractFilter
 
         $operator = $this->getOperator($data['type']);
 
-        /** @var $queryBuilder QueryBuilder */
-        if ('=' == $operator) {
-            $parameterName = $this->getNewParameterName($queryBuilder);
-            $this->applyFilterToClause(
-                $queryBuilder,
-                $this->createCompareFieldExpression($field, $alias, $operator, $parameterName)
+        if ('IN' == $operator) {
+            $expression = $this->getExpressionFactory()->in(
+                $this->createFieldExpression($field, $alias),
+                $data['value']
             );
-            $queryBuilder->setParameter($parameterName, $data['value']);
         } else {
-            if ('IN' == $operator) {
-                $expression = $this->getExpressionFactory()->in(
-                    $this->createFieldExpression($field, $alias),
-                    $data['value']
-                );
-            } else {
-                $expression = $this->getExpressionFactory()->notIn(
-                    $this->createFieldExpression($field, $alias),
-                    $data['value']
-                );
-            }
-            $this->applyFilterToClause($queryBuilder, $expression);
+            $expression = $this->getExpressionFactory()->notIn(
+                $this->createFieldExpression($field, $alias),
+                $data['value']
+            );
         }
+        $this->applyFilterToClause($queryBuilder, $expression);
     }
 
     /**
@@ -72,10 +62,9 @@ class ChoiceFilter extends AbstractFilter
         $operatorTypes = array(
             ChoiceFilterType::TYPE_CONTAINS     => 'IN',
             ChoiceFilterType::TYPE_NOT_CONTAINS => 'NOT IN',
-            ChoiceFilterType::TYPE_EQUAL        => '=',
         );
 
-        return isset($operatorTypes[$type]) ? $operatorTypes[$type] : '=';
+        return isset($operatorTypes[$type]) ? $operatorTypes[$type] : 'IN';
     }
 
     /**
