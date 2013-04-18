@@ -45,6 +45,12 @@ class LoadAddressAttributesData extends AbstractFixture implements ContainerAwar
             ->setCode('lastname');
 
         $sm->persist($attr);
+
+        $attr = $fm
+            ->createAttribute(new TextType())
+            ->setCode('company');
+
+        $sm->persist($attr);
         $sm->flush();
     }
 
