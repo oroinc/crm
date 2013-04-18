@@ -1,0 +1,24 @@
+<script type="text/javascript">
+    $(function() {
+        $('#remove-btn').click(function(e) {
+            e.preventDefault();
+            var el = $(e.target);
+            var doAction = function() {
+                location.href = el.attr('href');
+            };
+            var message = "{{ 'Are you sure you want to delete this item?'|trans }}";
+            if (typeof Backbone.BootstrapModal != 'undefined') {
+                var confirmModal = new Backbone.BootstrapModal({
+                    title: "{{ 'Delete Confirmation'|trans }}",
+                    content: message
+                });
+                confirmModal.on('ok', doAction);
+                confirmModal.open();
+            } else {
+                if (window.confirm(message)) {
+                    doAction();
+                }
+            }
+        });
+    });
+</script>

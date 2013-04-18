@@ -97,7 +97,6 @@ class AccountController extends Controller
      *      description="Remove account",
      *      parent="oro_account_account"
      * )
-     * @BackUrl("back")
      */
     public function removeAction(Account $entity)
     {
