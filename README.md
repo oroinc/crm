@@ -43,11 +43,11 @@ $ phpunit --coverage-html=cov/
 Main classes / concepts
 =======================
 
-- Attribute : the smallest entity, a name, a sku, a price, have a type and some configuration
-- AttribueType : aims to configure basic attribute configuration as storage, rendering
-- Flexible : the flexible entity, ie, an entity which support usage of dynamic attribute
+- Attribute : the smallest entity a property (as a name, a sku, a price, a color) which have a type and some configuration
+- AttributeType : aims to configure basic attribute configuration as storage, rendering
+- Flexible : the flexible entity, ie, an entity which support usage of dynamic attributes
 - FlexibleValue : the value related to an entity and an attribute
-- FlexibleManager :  the service which allows to easily manipulate flexible entity and provides "glue" between pieces
+- FlexibleManager : the service which allows to easily manipulate flexible entity and provides "glue" between pieces
 - FlexibleRepository : aims to build query on flexible storage 
 
 How to use ?

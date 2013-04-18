@@ -1,5 +1,5 @@
-Translatable values
-===================
+Translatable value
+==================
 
 A value can be translated if related attribute is defined as translatable.
 
@@ -63,10 +63,25 @@ Base flexible entity repository is designed to deal with scoped values in querie
 
 Base flexible entity is designed to gets relevant values too, it knows the asked scopable (injected with ScopableListener).
 
-Value and currency
-==================
+What's a backend type ?
+=======================
 
-A value can be related to a currency.
+To allow to type a value, you can use these doctrine mapped fields to store the data : value_string, value_integer, value_decimal, value_text, etc
+
+The used field is defined by the backendType property of the related attribute.
+
+The precedent do the job for basic data but there is some more complex cases and theirs related backend types :
+- options : used in case of attribute of type simple or multi list
+- media : used to store some metas on media related to this value
+- metric : used to deal with values which have an associate measure unit (cm, km)
+- price : used to deal with values which have an associate currency
+
+You can create your own, basically, by defining the backend type to use in attribute itself and add the relevant property or relation into your value class.
+
+Price value
+===========
+
+A value can be related to a currency, if related attribute use price backend type.
 
 You can use any currency code you want (no checks, depends on application, list of currencies is available in Locale Component).
 
@@ -74,21 +89,26 @@ You can use any currency code you want (no checks, depends on application, list 
 $pm = $this->container->get('product_manager');
 $value = $pm->createFlexibleValue();
 $value->setAttribute($attPrice);
-$value->setData(100);
-$value->setCurrency('EURO');
+$price = new Price();
+$price->setData(5);
+$price->setCurrency('USD');
+$value->setData($price);
+$product->addValue($value);
 ```
 
-Value and measure unit
-======================
+Metric value
+============
 
-A value can be related to a measure unit.
+A value can be related to a measure unit if related attribute use metric backend type.
 
 You can use any unit code you want (no checks, depends on application).
 
 ```php
-$pm = $this->container->get('product_manager');
 $value = $pm->createFlexibleValue();
-$value->setAttribute($attPrice);
-$value->setData(100);
-$value->setUnit('cm');
+$value->setAttribute($attSize);
+$metric = new Metric();
+$metric->setUnit('mm');
+$metric->setData(10);
+$value->setData($metric);
+$product->addValue($value);
 ```

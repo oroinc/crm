@@ -11,12 +11,12 @@ use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\OptionSimpleRadioType;
 use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\OptionMultiSelectType;
 use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\OptionMultiCheckboxType;
 use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\DateType;
-use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\MetricType;
+use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\MetricType as AttMetricType;
 use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\MoneyType;
 use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\TextAreaType;
 use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\UrlType;
 use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\NumberType;
-use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\MailType;
+use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\EmailType;
 use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\IntegerType;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Oro\Bundle\FlexibleEntityBundle\Form\EventListener\AttributeTypeSubscriber;
@@ -192,8 +192,8 @@ class AttributeType extends AbstractType
             new FileType(),
             new ImageType(),
             new IntegerType(),
-            new MailType(),
-            new MetricType(),
+            new EmailType(),
+            new AttMetricType(),
             new MoneyType(),
             new OptionMultiCheckboxType(),
             new OptionMultiSelectType(),

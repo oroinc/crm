@@ -132,6 +132,7 @@ class FlexibleQueryBuilder extends QueryBuilder
             AbstractAttributeType::BACKEND_TYPE_DECIMAL  => array('=', '<', '<=', '>', '>='),
             AbstractAttributeType::BACKEND_TYPE_INTEGER  => array('=', '<', '<=', '>', '>='),
             AbstractAttributeType::BACKEND_TYPE_OPTION   => array('IN', 'NOT IN'),
+            AbstractAttributeType::BACKEND_TYPE_OPTIONS  => array('IN', 'NOT IN'),
             AbstractAttributeType::BACKEND_TYPE_TEXT     => array('=', 'NOT LIKE', 'LIKE'),
             AbstractAttributeType::BACKEND_TYPE_VARCHAR  => array('=', 'NOT LIKE', 'LIKE'),
         );
@@ -146,14 +147,44 @@ class FlexibleQueryBuilder extends QueryBuilder
     /**
      * Prepare criteria condition with field, operator and value
      *
-     * @param string       $field    the backend field name
-     * @param string       $operator the operator used to filter
+     * @param string|array $field    the backend field name
+     * @param string|array $operator the operator used to filter
      * @param string|array $value    the value(s) to filter
      *
      * @return string
+     * @throws FlexibleQueryException
      */
     public function prepareCriteriaCondition($field, $operator, $value)
     {
+        // OR condition check
+        if (is_array($operator)) {
+            if (!is_array($value)) {
+                throw new FlexibleQueryException('Values must be array');
+            }
+
+            // convert field to array
+            if (!is_array($field)) {
+                $fieldArray = array();
+                foreach (array_keys($operator) as $key) {
+                    $fieldArray[$key] = $field;
+                }
+                $field = $fieldArray;
+            }
+
+            // if arrays have different keys
+            if (array_diff(array_keys($field), array_keys($operator))
+                || array_diff(array_keys($field), array_keys($value))
+            ) {
+                throw new FlexibleQueryException('Field, operator and value arrays must have the same keys');
+            }
+
+            $conditions = array();
+            foreach ($field as $key => $fieldName) {
+                $conditions[] = $this->prepareCriteriaCondition($fieldName, $operator[$key], $value[$key]);
+            }
+            return '(' . implode(' OR ', $conditions) . ')';
+        }
+
         switch ($operator)
         {
             case '=':
@@ -200,7 +231,7 @@ class FlexibleQueryBuilder extends QueryBuilder
      * Add an attribute to filter
      *
      * @param Attribute    $attribute the attribute
-     * @param string       $operator  the used operator
+     * @param string|array $operator  the used operator
      * @param string|array $value     the value(s) to filter
      *
      * @return QueryBuilder This QueryBuilder instance.
@@ -208,15 +239,20 @@ class FlexibleQueryBuilder extends QueryBuilder
     public function addAttributeFilter(Attribute $attribute, $operator, $value)
     {
         $allowed = $this->getAllowedOperators($attribute->getBackendType());
-        if (!in_array($operator, $allowed)) {
-            throw new FlexibleQueryException(
-                $operator.' is not allowed for type '.$attribute->getBackendType().', use '.implode(', ', $allowed)
-            );
+
+        $operators = is_array($operator) ? $operator : array($operator);
+        foreach ($operators as $key) {
+            if (!in_array($key, $allowed)) {
+                throw new FlexibleQueryException(
+                    $key.' is not allowed for type '.$attribute->getBackendType().', use '.implode(', ', $allowed)
+                );
+            }
         }
 
         $joinAlias = 'filter'.$attribute->getCode().$this->aliasCounter++;
 
-        if ($attribute->getBackendType() == AbstractAttributeType::BACKEND_TYPE_OPTION) {
+        if ($attribute->getBackendType() == AbstractAttributeType::BACKEND_TYPE_OPTIONS
+            or $attribute->getBackendType() == AbstractAttributeType::BACKEND_TYPE_OPTION) {
 
             // inner join to value
             $condition = $this->prepareAttributeJoinCondition($attribute, $joinAlias);
@@ -226,7 +262,7 @@ class FlexibleQueryBuilder extends QueryBuilder
             $joinAliasOpt = 'filterO'.$attribute->getCode().$this->aliasCounter;
             $backendField = sprintf('%s.%s', $joinAliasOpt, 'id');
             $condition = $this->prepareCriteriaCondition($backendField, $operator, $value);
-            $this->innerJoin($joinAlias.'.options', $joinAliasOpt, 'WITH', $condition);
+            $this->innerJoin($joinAlias.'.'.$attribute->getBackendType(), $joinAliasOpt, 'WITH', $condition);
 
         } else {
 
@@ -251,7 +287,8 @@ class FlexibleQueryBuilder extends QueryBuilder
         $aliasPrefix = 'sorter';
         $joinAlias   = $aliasPrefix.'V'.$attribute->getCode().$this->aliasCounter++;
 
-        if ($attribute->getBackendType() == AbstractAttributeType::BACKEND_TYPE_OPTION) {
+        if ($attribute->getBackendType() == AbstractAttributeType::BACKEND_TYPE_OPTIONS
+            or $attribute->getBackendType() == AbstractAttributeType::BACKEND_TYPE_OPTION) {
 
             // join to value
             $condition = $this->prepareAttributeJoinCondition($attribute, $joinAlias);
@@ -260,7 +297,7 @@ class FlexibleQueryBuilder extends QueryBuilder
             // then to option and option value to sort on
             $joinAliasOpt = $aliasPrefix.'O'.$attribute->getCode().$this->aliasCounter;
             $condition    = $joinAliasOpt.".attribute = ".$attribute->getId();
-            $this->leftJoin($joinAlias.'.options', $joinAliasOpt, 'WITH', $condition);
+            $this->leftJoin($joinAlias.'.'.$attribute->getBackendType(), $joinAliasOpt, 'WITH', $condition);
 
             $joinAliasOptVal = $aliasPrefix.'OV'.$attribute->getCode().$this->aliasCounter;
             $condition       = $joinAliasOptVal.'.locale = '.$this->expr()->literal($this->getLocale());

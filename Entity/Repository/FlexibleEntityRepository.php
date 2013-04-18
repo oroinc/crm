@@ -209,13 +209,14 @@ class FlexibleEntityRepository extends EntityRepository implements TranslatableI
         $qb->setLocale($locale);
         $qb->setScope($scope);
 
-        $qb->select($alias, 'Value', 'Attribute', 'ValueOption', 'AttributeOptionValue')
+        $qb->select($alias, 'Value', 'Attribute', 'ValueOption', 'AttributeOptionValue', 'ValueMetric', 'ValuePrice')
             ->from($this->_entityName, $this->entityAlias)
             ->leftJoin($this->entityAlias.'.values', 'Value')
             ->leftJoin('Value.attribute', 'Attribute')
             ->leftJoin('Value.options', 'ValueOption')
             ->leftJoin('ValueOption.optionValues', 'AttributeOptionValue')
-        ;
+            ->leftJoin('Value.price', 'ValuePrice')
+            ->leftJoin('Value.metric', 'ValueMetric');
 
         // TODO : we should filter select by current locale and scope to reduce values number
 

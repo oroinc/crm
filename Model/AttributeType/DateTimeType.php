@@ -1,27 +1,26 @@
 <?php
 namespace Oro\Bundle\FlexibleEntityBundle\Model\AttributeType;
 
-use Doctrine\ORM\EntityRepository;
+use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttributeType;
 use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttribute;
 
 /**
- * Simple options (select) attribute type
+ * Datetime attribute type
  *
  * @author    Nicolas Dupont <nicolas@akeneo.com>
  * @copyright 2012 Akeneo SAS (http://www.akeneo.com)
  * @license   http://opensource.org/licenses/MIT MIT
  */
-class OptionSimpleSelectType extends AbstractOptionType
+class DateTimeType extends AbstractAttributeType
 {
-
     /**
      * constructor
      */
     public function __construct()
     {
-        parent::__construct();
-        $this->name = 'Simple-option (select)';
-        $this->backendType = self::BACKEND_TYPE_OPTION;
+        $this->name        = 'DateTime';
+        $this->backendType = self::BACKEND_TYPE_DATETIME;
+        $this->formType    = 'oro_datetime';
     }
 
     /**
@@ -34,8 +33,8 @@ class OptionSimpleSelectType extends AbstractOptionType
     public function prepareFormOptions(AbstractAttribute $attribute)
     {
         $options = parent::prepareFormOptions($attribute);
-        $options['expanded'] = false;
-        $options['multiple'] = false;
+        $options['widget'] = 'single_text';
+        $options['input'] = 'datetime';
 
         return $options;
     }
