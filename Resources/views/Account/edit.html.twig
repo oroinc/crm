@@ -8,12 +8,16 @@
 
     {% javascripts
     '@OroUIBundle/Resources/public/lib/bootstrap/js/bootstrap-scrollspy.js'
+    '@OroUIBundle/Resources/public/lib/backbone.bootstrap-modal.js'
 
     filter='?yui_js'
     output='js/oro.account.account.js'
     %}
     <script src="{{ asset_url }}" type="text/javascript"></script>
     {% endjavascripts %}
+
+    {% include 'OroAccountBundle:Account:remove.confirm.js.twig' %}
+
 {% endblock %}
 
 {% block content %}
@@ -25,7 +29,7 @@
                     <div class="pull-right">
                         <div class="btn-group icons-holder">
                             {% if resource_granted('oro_account_account_remove') %}
-                                <a href="{{ path('oro_account_remove', { id: form.vars.value.id }) }}" class="btn"><i class="icon-trash hide-text">{{ 'Remove'|trans }}</i></a>
+                                <a href="{{ path('oro_account_remove', { id: form.vars.value.id }) }}" id="remove-btn" class="btn"><i class="icon-trash hide-text">{{ 'Remove'|trans }}</i></a>
                             {% endif %}
                         </div>
                     </div>
