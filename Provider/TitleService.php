@@ -67,6 +67,9 @@ class TitleService implements TitleServiceInterface
      */
     protected $serializer = null;
 
+    /** @var array */
+    protected $titles = null;
+
     public function __construct(
         AnnotationsReader $reader,
         ConfigReader $configReader,
@@ -230,7 +233,7 @@ class TitleService implements TitleServiceInterface
     }
 
     /**
-     * Load title template from database
+     * Load title template from database, fallback to config values
      *
      * @param string $route
      */
@@ -243,6 +246,8 @@ class TitleService implements TitleServiceInterface
 
         if ($bdData) {
             $this->setTemplate($bdData->getTitle());
+        } elseif (isset($this->titles[$route])) {
+            $this->setTemplate($this->titles[$route]);
         }
     }
 
@@ -326,5 +331,15 @@ class TitleService implements TitleServiceInterface
             ->setSuffix($this->suffix);
 
         return $this->serializer->serialize($storedTitle, 'json');
+    }
+
+    /**
+     * Inject titles from config
+     *
+     * @param $titles
+     */
+    public function setTitles($titles)
+    {
+        $this->titles = $titles;
     }
 }
