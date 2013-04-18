@@ -3,40 +3,17 @@
 namespace Oro\Bundle\GridBundle\Tests\Unit\Filter\ORM;
 
 use Oro\Bundle\GridBundle\Filter\ORM\DateRangeFilter;
-use Oro\Bundle\GridBundle\Form\Type\Filter\DateRangeType;
+use Oro\Bundle\FilterBundle\Form\Type\Filter\DateRangeFilterType;
 
-class DateRangeFilterTest extends FilterTestCase
+class DateRangeFilterTest extends AbstractDateFilterTest
 {
-    /**
-     * @var array
-     */
-    protected $filterTypes = array(DateRangeType::TYPE_BETWEEN, DateRangeType::TYPE_NOT_BETWEEN);
-
-    /**
-     * @var DateRangeFilter
-     */
-    protected $model;
-
-    protected function setUp()
+    protected function createTestFilter()
     {
-        $this->markTestSkipped();
-        $translator = $this->getTranslatorMock();
-        $this->model = new DateRangeFilter($translator);
+        return new DateRangeFilter($this->getTranslatorMock());
     }
 
-    protected function tearDown()
+    public function testGetDefaultOptions()
     {
-        unset($this->model);
-    }
-
-    public function testProperties()
-    {
-        $this->assertAttributeEquals(false, 'time', $this->model);
-    }
-
-    public function testGetTypeOptions()
-    {
-        $actualTypes = $this->model->getTypeOptions();
-        $this->assertTypeOptions($actualTypes);
+        $this->assertEquals(array('form_type' => DateRangeFilterType::NAME), $this->model->getDefaultOptions());
     }
 }

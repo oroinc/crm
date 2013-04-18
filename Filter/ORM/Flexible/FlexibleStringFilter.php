@@ -3,7 +3,6 @@
 namespace Oro\Bundle\GridBundle\Filter\ORM\Flexible;
 
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
-use Oro\Bundle\FilterBundle\Form\Type\Filter\TextFilterType;
 use Oro\Bundle\GridBundle\Filter\ORM\StringFilter;
 
 class FlexibleStringFilter extends AbstractFlexibleFilter

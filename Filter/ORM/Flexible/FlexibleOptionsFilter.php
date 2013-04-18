@@ -3,11 +3,14 @@
 namespace Oro\Bundle\GridBundle\Filter\ORM\Flexible;
 
 use Doctrine\Common\Persistence\ObjectRepository;
+
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
-use Oro\Bundle\GridBundle\Filter\ORM\ChoiceFilter;
+
 use Oro\Bundle\FilterBundle\Form\Type\Filter\ChoiceFilterType;
 use Oro\Bundle\FlexibleEntityBundle\Entity\Attribute;
 use Oro\Bundle\FlexibleEntityBundle\Entity\AttributeOption;
+
+use Oro\Bundle\GridBundle\Filter\ORM\ChoiceFilter;
 
 class FlexibleOptionsFilter extends AbstractFlexibleFilter
 {
@@ -40,17 +43,6 @@ class FlexibleOptionsFilter extends AbstractFlexibleFilter
 
         // apply filter
         $this->applyFlexibleFilter($proxyQuery, $field, $data['value'], $operator);
-    }
-
-    /**
-     * Checks if $data is valid
-     *
-     * @param mixed $data
-     * @return bool
-     */
-    protected function isDataValid($data)
-    {
-        return is_array($data) && array_key_exists('value', $data) && !is_null($data['value']);
     }
 
     /**

@@ -3,40 +3,24 @@
 namespace Oro\Bundle\GridBundle\Tests\Unit\Filter\ORM;
 
 use Oro\Bundle\GridBundle\Filter\ORM\DateTimeRangeFilter;
-use Oro\Bundle\GridBundle\Form\Type\Filter\DateTimeRangeType;
+use Oro\Bundle\FilterBundle\Form\Type\Filter\DateTimeRangeFilterType;
 
-class DateTimeRangeFilterTest extends FilterTestCase
+class DateTimeRangeFilterTest extends AbstractDateFilterTest
 {
-    /**
-     * @var array
-     */
-    protected $filterTypes = array(DateTimeRangeType::TYPE_BETWEEN, DateTimeRangeType::TYPE_NOT_BETWEEN);
-
-    /**
-     * @var DateTimeRangeFilter
-     */
-    protected $model;
-
-    protected function setUp()
+    protected function createTestFilter()
     {
-        $this->markTestSkipped();
-        $translator = $this->getTranslatorMock();
-        $this->model = new DateTimeRangeFilter($translator);
+        return new DateTimeRangeFilter($this->getTranslatorMock());
     }
 
-    protected function tearDown()
+    public function testGetDefaultOptions()
     {
-        unset($this->model);
+        $this->assertEquals(array('form_type' => DateTimeRangeFilterType::NAME), $this->model->getDefaultOptions());
     }
 
-    public function testProperties()
-    {
-        $this->assertAttributeEquals(true, 'time', $this->model);
-    }
 
-    public function testGetTypeOptions()
+
+    protected function dateTimeToString(\DateTime $dateTime)
     {
-        $actualTypes = $this->model->getTypeOptions();
-        $this->assertTypeOptions($actualTypes);
+        return $dateTime->format(DateTimeRangeFilter::DATETIME_FORMAT);
     }
 }

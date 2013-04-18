@@ -2,23 +2,23 @@
 
 namespace Oro\Bundle\GridBundle\Tests\Unit\Filter\ORM;
 
-use Oro\Bundle\FilterBundle\Form\Type\Filter\TextFilterType;
-use Oro\Bundle\GridBundle\Filter\ORM\StringFilter;
+use Oro\Bundle\FilterBundle\Form\Type\Filter\ChoiceFilterType;
+use Oro\Bundle\GridBundle\Filter\ORM\ChoiceFilter;
 
-class StringFilterTest extends FilterTestCase
+class ChoiceFilterTest extends FilterTestCase
 {
     protected function createTestFilter()
     {
-        return new StringFilter($this->getTranslatorMock());
+        return new ChoiceFilter($this->getTranslatorMock());
     }
 
     public function getOperatorDataProvider()
     {
         return array(
-            array(TextFilterType::TYPE_CONTAINS, 'LIKE'),
-            array(TextFilterType::TYPE_EQUAL, '='),
-            array(TextFilterType::TYPE_NOT_CONTAINS, 'NOT LIKE'),
-            array(false, 'LIKE')
+            array(ChoiceFilterType::TYPE_CONTAINS, 'IN'),
+            array(ChoiceFilterType::TYPE_EQUAL, '='),
+            array(ChoiceFilterType::TYPE_NOT_CONTAINS, 'NOT IN'),
+            array(false, '=')
         );
     }
 
@@ -38,7 +38,7 @@ class StringFilterTest extends FilterTestCase
                 'expectProxyQueryCalls' => array()
             ),
             'equals' => array(
-                'data' => array('value' => 'test', 'type' => TextFilterType::TYPE_EQUAL),
+                'data' => array('value' => 'test', 'type' => ChoiceFilterType::TYPE_EQUAL),
                 'expectProxyQueryCalls' => array(
                     array('getUniqueParameterId', array(), 'p1'),
                     array('andWhere',
@@ -51,18 +51,24 @@ class StringFilterTest extends FilterTestCase
                     array('setParameter', array(self::TEST_NAME . '_p1', 'test'), null)
                 )
             ),
-            'like' => array(
-                'data' => array('value' => 'test', 'type' => TextFilterType::TYPE_CONTAINS),
+            'contains' => array(
+                'data' => array('value' => 'test', 'type' => ChoiceFilterType::TYPE_CONTAINS),
                 'expectProxyQueryCalls' => array(
-                    array('getUniqueParameterId', array(), 'p1'),
-                    array('andWhere',
-                        array(
-                            $this->getExpressionFactory()->like(
-                                self::TEST_ALIAS . '.' . self::TEST_FIELD,
-                                ':' . self::TEST_NAME . '_p1'
-                            )
-                        ), null),
-                    array('setParameter', array(self::TEST_NAME . '_p1', '%test%'), null)
+                    array(
+                        'andWhere',
+                        array($this->getExpressionFactory()->in(self::TEST_ALIAS . '.' . self::TEST_FIELD, 'test')),
+                        null
+                    )
+                )
+            ),
+            'not_contains' => array(
+                'data' => array('value' => 'test', 'type' => ChoiceFilterType::TYPE_NOT_CONTAINS),
+                'expectProxyQueryCalls' => array(
+                    array(
+                        'andWhere',
+                        array($this->getExpressionFactory()->notIn(self::TEST_ALIAS . '.' . self::TEST_FIELD, 'test')),
+                        null
+                    )
                 )
             ),
         );
@@ -72,8 +78,7 @@ class StringFilterTest extends FilterTestCase
     {
         $this->assertEquals(
             array(
-                'format' => '%%%s%%',
-                'form_type' => TextFilterType::NAME
+                'form_type' => ChoiceFilterType::NAME
             ),
             $this->model->getDefaultOptions()
         );

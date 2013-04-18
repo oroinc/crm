@@ -3,21 +3,12 @@
 namespace Oro\Bundle\GridBundle\Tests\Unit\Filter\ORM;
 
 use Oro\Bundle\GridBundle\Filter\ORM\AbstractFilter;
-use Oro\Bundle\GridBundle\Field\FieldDescriptionInterface;
+use Oro\Bundle\FilterBundle\Form\Type\Filter\TextFilterType;
+use Oro\Bundle\FilterBundle\Form\Type\Filter\FilterType;
 
 class AbstractFilterTest extends \PHPUnit_Framework_TestCase
 {
-    /**#@+
-     * Test parameters
-     */
     const TEST_NAME           = 'test_name';
-    const TEST_VALUE          = 'test_value';
-    const TEST_TYPE           = 'test_type';
-    const TEST_FIELD_NAME     = 'test_field_name';
-    const TEST_ALIAS_BASIC    = 'test_basic_alias';
-    const TEST_ALIAS_MAPPING  = 'test_mapping_alias';
-    const TEST_PARENT_MAPPING = 'test_parent_mapping';
-    /**#@-*/
 
     /**
      * @var AbstractFilter
@@ -26,21 +17,12 @@ class AbstractFilterTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->markTestSkipped();
         $translator = $this->getMock('Symfony\Component\Translation\TranslatorInterface');
 
-        $this->model = $this->getMockForAbstractClass(
-            'Oro\Bundle\GridBundle\Filter\ORM\AbstractFilter',
-            array($translator),
-            '',
-            true,
-            true,
-            true,
-            array('filter', 'getDefaultOptions')
-        );
-        $this->model->expects($this->any())
-            ->method('getDefaultOptions')
-            ->will($this->returnValue(array()));
+        $this->model = $this->getMockBuilder('Oro\Bundle\GridBundle\Filter\ORM\AbstractFilter')
+            ->setConstructorArgs(array($translator))
+            ->setMethods(array('filter'))
+            ->getMockForAbstractClass();
     }
 
     protected function tearDown()
@@ -48,118 +30,42 @@ class AbstractFilterTest extends \PHPUnit_Framework_TestCase
         unset($this->model);
     }
 
-    /**
-     * Data provider for testApply
-     *
-     * @return array
-     */
-    public function applyDataProvider()
+    public function getRenderSettingsDataProvider()
     {
         return array(
-            'no_entity_alias' => array(
-                '$value'   => self::TEST_VALUE,
-                '$options' => array(
-                    'field_name'                  => self::TEST_FIELD_NAME,
-                    'field_mapping'               => array('entityAlias' => null),
-                    'parent_association_mappings' => array()
-                ),
-                '$expected' => array(
-                    'value' => self::TEST_VALUE,
-                    'alias' => self::TEST_ALIAS_BASIC,
-                    'field' => self::TEST_FIELD_NAME
-                )
+            'default' => array(
+                array(),
+                array(FilterType::NAME, array('field_options' => array('required' => false)))
             ),
-            'with_entity_alias' => array(
-                '$value'   => self::TEST_VALUE,
-                '$options' => array(
-                    'field_name'                  => self::TEST_FIELD_NAME,
-                    'field_mapping'               => array('entityAlias' => self::TEST_ALIAS_MAPPING),
-                    'parent_association_mappings' => array('mapping' => self::TEST_PARENT_MAPPING)
-                ),
-                '$expected' => array(
-                    'value' => self::TEST_VALUE,
-                    'alias' => self::TEST_ALIAS_MAPPING,
-                    'field' => self::TEST_FIELD_NAME
-                )
+            'custom_form_type' => array(
+                array('form_type' => TextFilterType::NAME),
+                array(TextFilterType::NAME, array('field_options' => array('required' => false)))
+            ),
+            'custom_field_type' => array(
+                array('field_type' => 'text'),
+                array(FilterType::NAME, array('field_type' => 'text', 'field_options' => array('required' => false)))
+            ),
+            'custom_field_options' => array(
+                array('field_options' => array('custom_option' => 'value')),
+                array(FilterType::NAME, array('field_options' => array('custom_option' => 'value')))
+            ),
+            'custom_label' => array(
+                array('label' => 'custom label'),
+                array(FilterType::NAME, array('label' => 'custom label', 'field_options' => array('required' => false)))
+            ),
+            'not_show_filter' => array(
+                array('show_filter' => false),
+                array(FilterType::NAME, array('disabled' => true, 'field_options' => array('required' => false)))
             )
         );
     }
 
     /**
-     * @param string $value
-     * @param array $options
-     * @param array $expected
-     *
-     * @dataProvider applyDataProvider
+     * @dataProvider getRenderSettingsDataProvider
      */
-    public function testApply($value, array $options, array $expected)
-    {
-        $proxyQuery = $this->getMockForAbstractClass(
-            'Oro\Bundle\GridBundle\Datagrid\ProxyQueryInterface',
-            array(),
-            '',
-            false,
-            true,
-            true,
-            array('entityJoin')
-        );
-        $proxyQuery->expects($this->once())
-            ->method('entityJoin')
-            ->with($options['parent_association_mappings'])
-            ->will($this->returnValue(self::TEST_ALIAS_BASIC));
-
-        $this->model->initialize(self::TEST_NAME, $options);
-        $this->model->expects($this->once())
-            ->method('filter')
-            ->with($proxyQuery, $expected['alias'], $expected['field'], $expected['value']);
-
-        $this->model->apply($proxyQuery, $value);
-
-        $this->assertEquals($expected['value'], $this->model->getValue());
-    }
-
-    /**
-     * Data provider for testGetFieldType
-     *
-     * @return array
-     */
-    public function getFieldTypeDataProvider()
-    {
-        return array(
-            'no_type_option' => array(
-                '$options'      => array(),
-                '$expectedType' => FieldDescriptionInterface::TYPE_TEXT,
-            ),
-            'type_option' => array(
-                '$options'      => array('type' => self::TEST_TYPE),
-                '$expectedType' => self::TEST_TYPE,
-            ),
-        );
-    }
-
-    /**
-     * @param array $options
-     * @param string $expectedType
-     *
-     * @dataProvider getFieldTypeDataProvider
-     */
-    public function testGetFieldType(array $options, $expectedType)
+    public function testGetRenderSettings($options, $expectedRenderSettings)
     {
         $this->model->initialize(self::TEST_NAME, $options);
-        $this->assertEquals($expectedType, $this->model->getFieldType());
-    }
-
-    public function testGetTypeOptions()
-    {
-        $typeOptions = $this->model->getTypeOptions();
-        $this->assertInternalType('array', $typeOptions);
-        $this->assertEmpty($typeOptions);
-    }
-
-    public function testGetRenderSettings()
-    {
-        $renderSettings = $this->model->getRenderSettings();
-        $this->assertInternalType('array', $renderSettings);
-        $this->assertEmpty($renderSettings);
+        $this->assertEquals($expectedRenderSettings, $this->model->getRenderSettings());
     }
 }

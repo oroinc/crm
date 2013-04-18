@@ -28,12 +28,12 @@ abstract class AbstractDateFilter extends AbstractFilter
         $dateStartValue = $data['date_start'];
         /** @var $dateEndValue \DateTime */
         $dateEndValue = $data['date_end'];
-        $operatorType = $data['operator_type'];
+        $type = $data['type'];
 
         $startDateParameterName = $this->getNewParameterName($queryBuilder);
         $endDateParameterName = $this->getNewParameterName($queryBuilder);
 
-        if ($operatorType == DateRangeFilterType::TYPE_NOT_BETWEEN) {
+        if ($type == DateRangeFilterType::TYPE_NOT_BETWEEN) {
             $this->applyFilterNotBetween(
                 $queryBuilder,
                 $dateStartValue,
@@ -57,10 +57,10 @@ abstract class AbstractDateFilter extends AbstractFilter
 
         /** @var $queryBuilder QueryBuilder */
         if ($dateStartValue) {
-            $queryBuilder->setParameter($startDateParameterName, $dateStartValue->format(static::DATETIME_FORMAT));
+            $queryBuilder->setParameter($startDateParameterName, $dateStartValue);
         }
         if ($dateEndValue) {
-            $queryBuilder->setParameter($endDateParameterName, $dateEndValue->format(static::DATETIME_FORMAT));
+            $queryBuilder->setParameter($endDateParameterName, $dateEndValue);
         }
     }
 
@@ -98,9 +98,9 @@ abstract class AbstractDateFilter extends AbstractFilter
         }
 
         return array(
-            'date_start' => $data['value']['start'],
-            'date_end' => $data['value']['end'],
-            'operator_type' => $data['type']
+            'date_start' => $data['value']['start'] ? $data['value']['start']->format(static::DATETIME_FORMAT) : null,
+            'date_end' => $data['value']['end'] ? $data['value']['end']->format(static::DATETIME_FORMAT) : null,
+            'type' => $data['type']
         );
     }
 

@@ -29,12 +29,16 @@ class ChoiceFilter extends AbstractFilter
             );
             $queryBuilder->setParameter($parameterName, $data['value']);
         } else {
-            $expression = $this->getExpressionFactory()->in(
-                $this->createFieldExpression($field, $alias),
-                $data['value']
-            );
-            if ('NOT IN' == $operator) {
-                $expression = $this->getExpressionFactory()->not($expression);
+            if ('IN' == $operator) {
+                $expression = $this->getExpressionFactory()->in(
+                    $this->createFieldExpression($field, $alias),
+                    $data['value']
+                );
+            } else {
+                $expression = $this->getExpressionFactory()->notIn(
+                    $this->createFieldExpression($field, $alias),
+                    $data['value']
+                );
             }
             $this->applyFilterToClause($queryBuilder, $expression);
         }

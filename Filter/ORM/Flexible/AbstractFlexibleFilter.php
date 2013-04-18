@@ -11,8 +11,13 @@ use Oro\Bundle\GridBundle\Filter\ORM\AbstractFilter;
 use Oro\Bundle\GridBundle\Datagrid\ProxyQueryInterface;
 use Oro\Bundle\GridBundle\Datagrid\ORM\ProxyQuery;
 
-abstract class AbstractFlexibleFilter extends AbstractFilter implements FilterInterface
+abstract class AbstractFlexibleFilter implements FilterInterface
 {
+    /**
+     * @var bool
+     */
+    protected $active = false;
+
     /**
      * @var FlexibleManagerRegistry
      */
@@ -42,7 +47,7 @@ abstract class AbstractFlexibleFilter extends AbstractFilter implements FilterIn
     {
         $this->flexibleRegistry = $flexibleRegistry;
         $this->parentFilter = $parentFilter;
-        if (!$this->parentFilter instanceof $this->parentFilterClass) {
+        if ($this->parentFilterClass && !$this->parentFilter instanceof $this->parentFilterClass) {
             throw new \InvalidArgumentException('Parent filter must be an instance of ' . $this->parentFilterClass);
         }
     }
@@ -52,7 +57,6 @@ abstract class AbstractFlexibleFilter extends AbstractFilter implements FilterIn
      */
     public function initialize($name, array $options = array())
     {
-        parent::initialize($name, $options);
         $this->parentFilter->initialize($name, $options);
         $this->loadFlexibleManager();
     }
@@ -96,6 +100,9 @@ abstract class AbstractFlexibleFilter extends AbstractFilter implements FilterIn
         /** @var $entityRepository FlexibleEntityRepository */
         $entityRepository = $this->getFlexibleManager()->getFlexibleRepository();
         $entityRepository->applyFilterByAttribute($queryBuilder, $field, $value, $operator);
+
+        // filter is active since it's applied to the flexible repository
+        $this->active = true;
     }
 
     /**
@@ -116,5 +123,133 @@ abstract class AbstractFlexibleFilter extends AbstractFilter implements FilterIn
     {
         $this->parentFilter->setOptions($this->getOptions());
         return $this->parentFilter->getRenderSettings();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function apply($queryBuilder, $value)
+    {
+        list($alias, $field) = $this->association($queryBuilder);
+        $this->filter($queryBuilder, $alias, $field, $value);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function association(ProxyQueryInterface $queryBuilder)
+    {
+        // TODO We can skip call entityJoin because flexible attributes don't have association mappings
+        $alias = $queryBuilder->entityJoin($this->getParentAssociationMappings());
+
+        $fieldMapping = $this->getFieldMapping();
+        if (!empty($fieldMapping['entityAlias'])) {
+            $alias = $fieldMapping['entityAlias'];
+        }
+        return array($alias, $this->getFieldName());
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getName()
+    {
+        return $this->parentFilter->getName();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFormName()
+    {
+        return $this->parentFilter->getFormName();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getLabel()
+    {
+        return $this->parentFilter->getLabel();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setLabel($label)
+    {
+        $this->parentFilter->setLabel($label);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getOption($name, $default = null)
+    {
+        return $this->parentFilter->getOption($name, $default);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setOption($name, $value)
+    {
+        $this->parentFilter->setOption($name, $value);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFieldName()
+    {
+        return $this->parentFilter->getFieldName();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getParentAssociationMappings()
+    {
+        return $this->parentFilter->getParentAssociationMappings();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFieldMapping()
+    {
+        return $this->parentFilter->getFieldMapping();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAssociationMapping()
+    {
+        return $this->parentFilter->getAssociationMapping();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFieldOptions()
+    {
+        return $this->parentFilter->getFieldOptions();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFieldType()
+    {
+        return $this->parentFilter->getFieldType();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isActive()
+    {
+        return $this->active;
     }
 }

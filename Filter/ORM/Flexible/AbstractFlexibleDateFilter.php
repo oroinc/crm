@@ -30,9 +30,9 @@ abstract class AbstractFlexibleDateFilter extends AbstractFlexibleFilter
 
         $dateStartValue = $data['date_start'];
         $dateEndValue = $data['date_end'];
-        $operatorType = $data['operator_type'];
+        $type = $data['type'];
 
-        if ($operatorType == DateRangeFilterType::TYPE_NOT_BETWEEN) {
+        if ($type == DateRangeFilterType::TYPE_NOT_BETWEEN) {
             $this->applyFilterNotBetween($queryBuilder, $dateStartValue, $dateEndValue, $field);
         } else {
             $this->applyFilterBetween($queryBuilder, $dateStartValue, $dateEndValue, $field);

@@ -36,7 +36,7 @@ class NumberFilter extends AbstractFilter
      * @param mixed $data
      * @return array|bool
      */
-    protected function parseData($data)
+    public function parseData($data)
     {
         if (!is_array($data) || !array_key_exists('value', $data) || !is_numeric($data['value'])) {
             return false;
