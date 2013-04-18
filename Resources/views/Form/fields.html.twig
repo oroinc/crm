@@ -34,7 +34,7 @@
 
 {% block date_widget %}
 {% spaceless %}
-    {% set type, attr = 'text', attr|merge({'placeholder': '' }) %}
+    {% set type = 'text' %}
     {% if widget == 'single_text' %}
         {{ block('form_widget_simple')|raw }}
     {% else %}
