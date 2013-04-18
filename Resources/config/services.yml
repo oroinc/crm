@@ -3,6 +3,7 @@ parameters:
     oro_address.address.entity.class: Oro\Bundle\AddressBundle\Entity\Address
     oro_address.address.manager.flexible.class: Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleManager
     oro_address.address.entity.value.class: Oro\Bundle\AddressBundle\Entity\Value\AddressValue
+    oro_address.address_type.manager.class: Oro\Bundle\AddressBundle\Entity\Manager\AddressTypeManager
 
 services:
     oro_address.address.manager.flexible:
@@ -21,3 +22,9 @@ services:
             - %oro_address.address.entity.class%
             - @doctrine.orm.entity_manager
             - @oro_address.address.manager.flexible
+
+    oro_address.address_type.manager:
+        class: %oro_address.address_type.manager.class%
+        arguments:
+            - %oro_address.address.entity.class%
+            - @doctrine.orm.entity_manager
