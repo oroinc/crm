@@ -231,4 +231,12 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
         $this->attribute->removeOption($option);
         $this->assertEquals($this->attribute->getOptions()->count(), 0);
     }
+
+    public function testGetSetSortOrder()
+    {
+        $this->assertEquals(0, $this->attribute->getSortOrder());
+
+        $this->attribute->setSortOrder(20);
+        $this->assertEquals(20, $this->attribute->getSortOrder());
+    }
 }
