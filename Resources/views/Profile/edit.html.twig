@@ -3,9 +3,7 @@
 {% set format = get_user_value('oro_user.name_format') %}
 {% form_theme form with 'OroUIBundle:Form:fields.html.twig' %}
 
-{% set title = form.vars.value.id ? form.vars.value.fullname(format)|default('N/A') ~ ' - ' ~ 'Edit profile'|trans : 'New profile'|trans %}
-
-{% block title %}{{ title }} - {{ 'User Management'|trans }} {% endblock %}
+{% oro_title_set({params : {"%username%": form.vars.value.fullname(format)|default('N/A') }}) %}
 
 {% block page_container %}
 <div class="container-fluid">
@@ -160,6 +158,7 @@
     {{ parent() }}
 
     {% javascripts
+        '@OroUIBundle/Resources/public/lib/jquery-ui-timepicker-addon.js'
         '@OroUIBundle/Resources/public/lib/bootstrap/js/bootstrap-scrollspy.js'
         '@OroUserBundle/Resources/public/js/emails.js'
         '@OroUserBundle/Resources/public/js/profile.js'

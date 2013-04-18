@@ -3,8 +3,6 @@
 
 {% block bodyClass %}login-page{% endblock %}
 
-{% block title %}{{ 'Password reset'|trans }}{% endblock %}
-
 {% block content %}
 <div class="container">
     <form action="{{ path('oro_user_reset_reset', { token: token }) }}" {{ form_enctype(form) }} method="post" class="form-signin">

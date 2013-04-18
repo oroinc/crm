@@ -27,7 +27,6 @@ parameters:
     oro_user.acl.twig.class:          Oro\Bundle\UserBundle\Twig\OroUserExtension
     oro_user.user_menu.builder.class: Oro\Bundle\UserBundle\Menu\UserMenuBuilder
     oro_user.role.listener.class:     Oro\Bundle\UserBundle\EventListener\RoleListener
-    oro_user.localized_date.class:    Oro\Bundle\UserBundle\Form\Type\LocalizedDateType
     oro_user.role.manager.class:      Oro\Bundle\UserBundle\Entity\Manager\RoleManager
     oro_user.group.manager.class:     Oro\Bundle\UserBundle\Entity\Manager\GroupManager
 
@@ -229,10 +228,6 @@ services:
         class:                        %oro_user.status.manager.class%
         arguments:                    ["@doctrine.orm.entity_manager", "@oro_user.manager"]
 
-    oro_user.type.localized_date:
-        class:                        %oro_user.localized_date.class%
-        tags:
-            - { name: form.type, alias: oro_localized_date }
 
     oro_user.role_manager:
         class:                        %oro_user.role.manager.class%

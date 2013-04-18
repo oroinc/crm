@@ -1,7 +1,5 @@
 {% extends bap.layout is defined ? bap.layout : 'OroUserBundle::layout.html.twig' %}
 
-{% block title %}User statuses - {{ parent() }}{% endblock %}
-
 {% block content %}
     <h2>{% trans %}User statuses.{% endtrans %}
         {% if user.currentStatus %}
