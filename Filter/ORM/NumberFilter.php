@@ -88,11 +88,11 @@ class NumberFilter extends AbstractFilter
         $dataType = $this->getOption('data_type', FieldDescriptionInterface::TYPE_INTEGER);
         switch ($dataType) {
             case FieldDescriptionInterface::TYPE_DECIMAL:
-                $formOptions['attr']['data_type'] = NumberFilterType::DATA_DECIMAL;
+                $formOptions['data_type'] = NumberFilterType::DATA_DECIMAL;
                 break;
             case FieldDescriptionInterface::TYPE_INTEGER:
             default:
-                $formOptions['attr']['data_type'] = NumberFilterType::DATA_INTEGER;
+                $formOptions['data_type'] = NumberFilterType::DATA_INTEGER;
                 break;
         }
 
