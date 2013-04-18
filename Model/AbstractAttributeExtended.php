@@ -371,4 +371,28 @@ abstract class AbstractAttributeExtended
 
         return $this;
     }
+
+    /**
+     * Set sortOrder (base attribute shortcut)
+     *
+     * @param boolean $sortOrder
+     *
+     * @return AbstractAttributeExtended
+     */
+    public function setSortOrder($sortOrder)
+    {
+        $this->attribute->setSortOrder($sortOrder);
+
+        return $this;
+    }
+
+    /**
+     * Get sortOrder (base attribute shortcut)
+     *
+     * @return boolean $sortOrder
+     */
+    public function getSortOrder()
+    {
+        return $this->attribute->getSortOrder();
+    }
 }

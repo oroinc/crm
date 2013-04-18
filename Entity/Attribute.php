@@ -37,6 +37,11 @@ class Attribute extends AbstractEntityAttribute
     protected $options;
 
     /**
+     * @ORM\Column(name="sort_order", type="integer")
+     */
+    protected $sortOrder = 0;
+
+    /**
      * Convert defaultValue to UNIX timestamp if it is a DateTime object
      *
      * @ORM\PrePersist
@@ -93,5 +98,17 @@ class Attribute extends AbstractEntityAttribute
                 $this->setDefaultValue((bool) $this->getDefaultValue());
             }
         }
+    }
+
+    public function getSortOrder()
+    {
+        return $this->sortOrder;
+    }
+
+    public function setSortOrder($sortOrder)
+    {
+        $this->sortOrder = $sortOrder;
+
+        return $this;
     }
 }

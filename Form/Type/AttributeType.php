@@ -57,6 +57,8 @@ class AttributeType extends AbstractType
 
         $this->addFieldDefaultValue($builder);
 
+        $this->addPositionField($builder);
+
         $this->addSubscriber($builder);
     }
 
@@ -150,6 +152,11 @@ class AttributeType extends AbstractType
     protected function addFieldScopable(FormBuilderInterface $builder)
     {
         $builder->add('scopable', 'choice', array('choices' => array('No', 'Yes')));
+    }
+
+    protected function addPositionField(FormBuilderInterface $builder)
+    {
+        $builder->add('sortOrder', 'integer', array('label' => 'Position'));
     }
 
     /**
