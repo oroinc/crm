@@ -19,11 +19,14 @@ class AccountType extends FlexibleType
         parent::addEntityFields($builder);
 
         // account fields
-        $builder
-            ->add('name', 'text', array(
-                'label'          => 'Name',
-                'required'       => true,
-            ));
+        $builder->add(
+            'name',
+            'text',
+            array(
+                'label' => 'Name',
+                'required' => true,
+            )
+        );
     }
 
     /**
@@ -33,13 +36,17 @@ class AccountType extends FlexibleType
      */
     public function addDynamicAttributesFields(FormBuilderInterface $builder)
     {
-        $builder->add('attributes', 'collection', array(
-            'type'          => new FlexibleValueType($this->valueClass),
-            'property_path' => 'values',
-            'allow_add'     => true,
-            'allow_delete'  => true,
-            'by_reference'  => false
-        ));
+        $builder->add(
+            'attributes',
+            'collection',
+            array(
+                'type' => new FlexibleValueType($this->valueClass),
+                'property_path' => 'values',
+                'allow_add' => true,
+                'allow_delete' => true,
+                'by_reference' => false
+            )
+        );
     }
 
     /**
@@ -47,11 +54,13 @@ class AccountType extends FlexibleType
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $resolver->setDefaults(array(
-            'data_class'           => $this->flexibleClass,
-            'intention'            => 'account',
-            'extra_fields_message' => 'This form should not contain extra fields: "{{ extra_fields }}"',
-        ));
+        $resolver->setDefaults(
+            array(
+                'data_class' => $this->flexibleClass,
+                'intention' => 'account',
+                'extra_fields_message' => 'This form should not contain extra fields: "{{ extra_fields }}"',
+            )
+        );
     }
 
     /**
