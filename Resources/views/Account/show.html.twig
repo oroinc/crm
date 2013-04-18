@@ -1,0 +1,93 @@
+{% extends 'OroAccountBundle::layout.html.twig' %}
+{% import 'OroUserBundle::macros.html.twig' as macros %}
+{% oro_title_set({params : {"%account.name%": account.name|default('N/A')} }) %}
+
+{% block head_script %}
+    {{ parent() }}
+
+    {% javascripts
+    '@OroUIBundle/Resources/public/lib/bootstrap/js/bootstrap-scrollspy.js'
+
+    filter='?yui_js'
+    output='js/oro.account.account.js'
+    %}
+    <script src="{{ asset_url }}" type="text/javascript"></script>
+    {% endjavascripts %}
+{% endblock %}
+
+{% block content %}
+<div class="layout-content">
+    <div class="navigation clearfix navbar-extra navbar-extra-right">
+        <div class="row">
+            <div class="pull-right">
+                <div class="btn-group icons-holder">
+                    <a href="{{ app.request.get('back') ? app.request.get('back') : path('oro_account_index') }}" class="btn"><i class="icon-chevron-left hide-text">{{ 'Back'|trans }}</i></a>
+                    {% if resource_granted('oro_account_account_edit') %}
+                    <a href="{{ path('oro_account_edit', { id: account.id, back: app.request.uri }) }}" class="btn"><i class="icon-edit hide-text">{{ 'Edit'|trans }}</i></a>
+                    {% endif %}
+                    {% if resource_granted('oro_account_account_remove') %}
+                    <a href="{{ path('oro_account_remove', { id: account.id }) }}" class="btn"><i class="icon-trash hide-text">{{ 'Remove'|trans }}</i></a>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="span9">
+               <div class="customer-info well-small">
+                   <div class="customer-content">
+                       <div class="sub-title">{{ 'Account'|trans }}</div>
+                       <h1 class="usser-name">{{ account.name|default('N/A') }}</h1>
+                       <ul class="inline">
+                           <li>{{ 'Created'|trans }}: {{ account.createdAt ? macros.time(account.createdAt) : 'N/A' }}</li>
+                           <li>{{ 'Updated'|trans }}: {{ account.updatedAt ? macros.time(account.updatedAt) : 'N/A' }}</li>
+                       </ul>
+                   </div>
+               </div>
+            </div>
+        </div>
+    </div>
+    <div class="layout-content">
+        <div id="navbar-profile" class="navbar navbar-static scrollspy-nav">
+            <div class="navbar-inner">
+                <div class="container-fluid" style="width: auto;">
+                    <ul class="nav">
+                        <li class="active"><a href="#scroll-main">{{ 'Overview'|trans }}</a></li>
+                        <li><a href="#scroll-attributes">{{ 'Additional data'|trans }}</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix-oro">
+            <div data-spy="scroll" data-target="#navbar-profile" data-offset="50" class="scrollspy container-fluid">
+                <h4 id="scroll-main" class="scrollspy-title">{{ 'Overview'|trans }}</h4>
+                <div class="row-fluid">
+                    <div class="form-horizontal span6">
+                        <div class="control-group">
+                            <label class="control-label">{{ 'Account name'|trans }}</label>
+                            <div class="controls">
+                                <div class="clearfix-oro">
+                                    <p class="control-label">{{ account.name }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <h4 id="scroll-attributes" class="scrollspy-title">{{ 'Additional data'|trans }}</h4>
+                <div class="row-fluid">
+                    <div class="form-horizontal">
+                        {% for attr in account.values %}
+                        <div class="control-group">
+                            <label class="control-label">{{ attr.attribute.code|title }}</label>
+                            <div class="controls">
+                                <div class="clearfix-oro">
+                                    <p class="control-label">{{ attr.__toString }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

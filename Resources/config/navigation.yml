@@ -1,0 +1,38 @@
+oro_menu_config:
+    items:
+        account_tab:
+            label: 'Accounts'
+            uri: '#'
+        account_list:
+            label: 'Accounts'
+            route: 'oro_account_index'
+
+        shortcut_new_account:
+            label: Create New Account
+            route: oro_account_create
+            extras:
+                description: Create new account instance
+                isCustomAction: true
+        shortcut_list_accounts:
+            label: Accounts List
+            route: oro_account_index
+            extras:
+                description: List of accounts
+
+    tree:
+        application_menu:
+            children:
+                account_tab:
+                    children:
+                        account_list: ~
+
+        shortcuts:
+            children:
+                shortcut_new_account: ~
+                shortcut_list_accounts: ~
+
+oro_titles:
+    oro_account_index: Accounts Overview
+    oro_account_show: %%account.name%% - View Account
+    oro_account_create: New Account
+    oro_account_edit: %%account.name%% - Edit Account

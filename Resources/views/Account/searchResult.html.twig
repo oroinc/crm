@@ -1,0 +1,5 @@
+<div class="alert">
+    <p><strong>{{ result.entityConfig.label }}</strong></p>
+    <h3><a href="{{ result.recordUrl }}">{{ result.recordTitle }}</a></h3>
+    {{ result.recordText|highlight_trim(searchString)|raw }}
+</div>
