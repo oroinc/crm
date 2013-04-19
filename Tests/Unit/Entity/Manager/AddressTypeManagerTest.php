@@ -2,12 +2,12 @@
 
 namespace Oro\Bundle\AddressBundle\Tests\Entity\Manager;
 
-use Oro\Bundle\AddressBundle\Entity\Manager\AddressManager;
-use Oro\Bundle\AddressBundle\Entity\Address;
+use Oro\Bundle\AddressBundle\Entity\Manager\AddressTypeManager;
+use Oro\Bundle\AddressBundle\Entity\AddressType;
 use Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleManager;
 use Doctrine\Common\Persistence\ObjectManager;
 
-class AddressManagerTest extends \PHPUnit_Framework_TestCase
+class AddressTypeManagerTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var ObjectManager
@@ -25,9 +25,9 @@ class AddressManagerTest extends \PHPUnit_Framework_TestCase
     protected $class;
 
     /**
-     * @var AddressManager
+     * @var AddressTypeManager
      */
-    protected $addressManager;
+    protected $addressTypeManager;
 
     /**
      * Setup testing environment
@@ -55,17 +55,17 @@ class AddressManagerTest extends \PHPUnit_Framework_TestCase
             ->with($this->equalTo($this->class))
             ->will($this->returnValue($classMetaData));
 
-        $this->addressManager = new AddressManager($this->class, $this->om, $this->fm);
+        $this->addressTypeManager = new AddressTypeManager($this->class, $this->om, $this->fm);
     }
 
     /**
-     * Test address manager construct
+     * Test address type manager construct
      */
-    public function testAddressManagerConstruct()
+    public function testAddressTypeManagerConstruct()
     {
-        $this->assertEquals($this->addressManager->getStorageManager(), $this->om);
-        $this->assertInstanceOf($this->class, $this->addressManager->createAddress());
-        $this->assertEquals($this->class, $this->addressManager->getClass());
+        $this->assertEquals($this->addressTypeManager->getStorageManager(), $this->om);
+        $this->assertInstanceOf($this->class, $this->addressTypeManager->createAddressType());
+        $this->assertEquals($this->class, $this->addressTypeManager->getClass());
     }
 
     /**
@@ -73,17 +73,17 @@ class AddressManagerTest extends \PHPUnit_Framework_TestCase
      */
     public function testRepository()
     {
-        $addressCriteria = array('street' => 'No way');
-        $repository = $this->getRepository($addressCriteria);
+        $addressTypeCriteria = array('type' => 'shipping');
+        $repository = $this->getRepository($addressTypeCriteria);
 
         $this->om
             ->expects($this->once())
             ->method('getRepository')
-            ->with($this->equalTo($this->addressManager->getClass()))
+            ->with($this->equalTo($this->addressTypeManager->getClass()))
             ->will($this->returnValue($repository));
 
-        $this->assertEquals($this->addressManager->getRepository(), $repository);
-        $this->assertEquals($repository->findOneBy($addressCriteria), new Address());
+        $this->assertEquals($this->addressTypeManager->getRepository(), $repository);
+        $this->assertEquals($repository->findOneBy($addressTypeCriteria), new AddressType());
     }
 
     /**
@@ -91,78 +91,55 @@ class AddressManagerTest extends \PHPUnit_Framework_TestCase
      */
     public function testQueryMethods()
     {
-        $address = new Address();
-        $addressCriteria = array('street' => 'No way');
+        $addressType = new AddressType();
+        $addressTypeCriteria = array('type' => 'shipping');
 
         $this->om
             ->expects($this->once())
             ->method('persist')
-            ->with($this->equalTo($address));
+            ->with($this->equalTo($addressType));
 
         $this->om
             ->expects($this->once())
             ->method('remove')
-            ->with($this->equalTo($address));
+            ->with($this->equalTo($addressType));
 
         $this->om
             ->expects($this->once())
             ->method('refresh')
-            ->with($this->equalTo($address));
+            ->with($this->equalTo($addressType));
 
         $this->om
             ->expects($this->exactly(2))
             ->method('flush');
 
-        $this->addressManager->updateAddress($address);
-        $this->addressManager->deleteAddress($address);
-        $this->addressManager->reloadAddress($address);
+        $this->addressTypeManager->updateAddressType($addressType);
+        $this->addressTypeManager->deleteAddressType($addressType);
+        $this->addressTypeManager->reloadAddressType($addressType);
 
-        $repository = $this->getRepository($addressCriteria);
+        $repository = $this->getRepository($addressTypeCriteria);
         $this->om
             ->expects($this->once())
             ->method('getRepository')
-            ->with($this->equalTo($this->addressManager->getClass()))
+            ->with($this->equalTo($this->addressTypeManager->getClass()))
             ->will($this->returnValue($repository));
-        $this->assertEquals($this->addressManager->findAddressBy($addressCriteria), $address);
-    }
-
-    /**
-     * Test magic call methods for existing flexible manager methods
-     */
-    public function testCall()
-    {
-        $this->fm
-            ->expects($this->once())
-            ->method('getFlexibleName')
-            ->will($this->returnValue(1));
-
-        $this->assertEquals($this->addressManager->getFlexibleName(), 1);
-    }
-
-    /**
-     * Testing exception on not existing method in address manager
-     *
-     * @expectedException \RuntimeException
-     */
-    public function testCallException()
-    {
-        $this->addressManager->NotExistingMethod();
+        $this->assertEquals($this->addressTypeManager->findAddressTypeBy($addressTypeCriteria), $addressType);
     }
 
     /**
      * Return repository mock
      *
-     * @param array $addressCriteria
+     * @param array $addressTypeCriteria
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
-    protected function getRepository($addressCriteria = array())
+    protected function getRepository($addressTypeCriteria = array())
     {
         $repository = $this->getMock('Doctrine\Common\Persistence\ObjectRepository');
         $repository
             ->expects($this->any())
             ->method('findOneBy')
-            ->with($this->equalTo($addressCriteria))
-            ->will($this->returnValue(new Address()));
+            ->with($this->equalTo($addressTypeCriteria))
+            ->will($this->returnValue(new AddressType()));
 
         return $repository;
     }
