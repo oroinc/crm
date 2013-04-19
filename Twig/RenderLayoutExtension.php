@@ -5,43 +5,17 @@ namespace Oro\Bundle\FilterBundle\Twig;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\Extension\Core\View\ChoiceView;
 
-class RenderJsExtension extends \Twig_Extension
+class RenderLayoutExtension extends AbstractExtension
 {
     /**
      * Extension name
      */
-    const NAME = 'oro_filter_render_js';
+    const NAME = 'oro_filter_render_layout';
 
     /**
      * JS block suffix
      */
     const SUFFIX = '_js';
-
-    /**
-     * Block with required JS files
-     */
-    const HEADER_JAVASCRIPT = 'oro_filter_javascript';
-
-    /**
-     * @var string
-     */
-    protected $templateName;
-
-    /**
-     * @param string $templateName
-     */
-    public function __construct($templateName)
-    {
-        $this->templateName = $templateName;
-    }
-
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        return self::NAME;
-    }
 
     /**
      * @return array
@@ -50,20 +24,9 @@ class RenderJsExtension extends \Twig_Extension
     {
         return array(
             new \Twig_SimpleFunction(
-                'oro_filter_render_filter_js',
-                array($this, 'renderFilterJs'),
-                array(
-                    'is_safe' => array('html'),
-                    'needs_environment' => true
-                )
-            ),
-            new \Twig_SimpleFunction(
-                'oro_filter_render_header_js',
-                array($this, 'renderHeaderJs'),
-                array(
-                    'is_safe' => array('html'),
-                    'needs_environment' => true
-                )
+                'oro_filter_render_filter_javascript',
+                array($this, 'renderFilterJavascript'),
+                $this->defaultFunctionOptions
             ),
         );
     }
@@ -75,7 +38,7 @@ class RenderJsExtension extends \Twig_Extension
      * @param FormView $formView
      * @return string
      */
-    public function renderFilterJs(\Twig_Environment $environment, FormView $formView)
+    public function renderFilterJavascript(\Twig_Environment $environment, FormView $formView)
     {
         if (!$formView->vars['block_prefixes'] || !is_array($formView->vars['block_prefixes'])) {
             return '';
@@ -98,20 +61,6 @@ class RenderJsExtension extends \Twig_Extension
         }
 
         return '';
-    }
-
-    /**
-     * Render header with all required JS files
-     *
-     * @param \Twig_Environment $environment
-     * @return string
-     */
-    public function renderHeaderJs(\Twig_Environment $environment)
-    {
-        /** @var $template \Twig_Template */
-        $template = $environment->loadTemplate($this->templateName);
-
-        return $template->renderBlock(self::HEADER_JAVASCRIPT, array());
     }
 
     /**

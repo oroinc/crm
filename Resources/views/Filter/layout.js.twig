@@ -1,7 +1,3 @@
-{% block oro_filter_javascript %}
-    {% include 'OroFilterBundle:Header:javascript.html.twig' %}
-{% endblock %}
-
 {% block oro_type_text_filter_js %}
     OroApp.createInstanceFromConstructor(OroApp.Filter.ChoiceFilter.extend({
         'name':    {{ formView.vars.name|json_encode|raw }},

@@ -4,21 +4,24 @@ namespace Oro\Bundle\FilterBundle\Tests\Unit\Twig;
 
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\Extension\Core\View\ChoiceView;
-use Oro\Bundle\FilterBundle\Twig\RenderJsExtension;
+use Oro\Bundle\FilterBundle\Twig\RenderLayoutExtension;
 
-class RenderJsExtensionTest extends \PHPUnit_Framework_TestCase
+class RenderLayoutExtensionTest extends AbstractExtensionTestCase
 {
+    /**
+     * Testing class name
+     */
+    const TESTING_CLASS = 'Oro\Bundle\FilterBundle\Twig\RenderLayoutExtension';
+
     /**#@+
      * Test parameters
      */
-    const TEST_TEMPLATE_NAME        = 'test_template_name';
     const TEST_FIRST_EXISTING_TYPE  = 'test_first_existing_type';
     const TEST_SECOND_EXISTING_TYPE = 'test_second_existing_type';
-    const TEST_BLOCK_HTML           = 'test_block_html';
     /**#@-*/
 
     /**
-     * @var RenderJsExtension
+     * @var RenderLayoutExtension
      */
     protected $extension;
 
@@ -26,16 +29,11 @@ class RenderJsExtensionTest extends \PHPUnit_Framework_TestCase
      * @var array
      */
     protected $expectedFunctions = array(
-        'oro_filter_render_filter_js' => array(
-            'callback'          => 'renderFilterJs',
+        'oro_filter_render_filter_javascript' => array(
+            'callback'          => 'renderFilterJavascript',
             'safe'              => array('html'),
             'needs_environment' => true
         ),
-        'oro_filter_render_header_js' => array(
-            'callback'          => 'renderHeaderJs',
-            'safe'              => array('html'),
-            'needs_environment' => true
-        )
     );
 
     /**
@@ -47,45 +45,12 @@ class RenderJsExtensionTest extends \PHPUnit_Framework_TestCase
         )
     );
 
-    protected function setUp()
-    {
-        $this->extension = new RenderJsExtension(self::TEST_TEMPLATE_NAME);
-    }
-
-    protected function tearDown()
-    {
-        unset($this->extension);
-    }
-
-    public function testGetName()
-    {
-        $this->assertEquals(RenderJsExtension::NAME, $this->extension->getName());
-    }
-
-    public function testGetFunctions()
-    {
-        $twigNode = $this->getMock('\Twig_Node');
-
-        $actualFunctions = $this->extension->getFunctions();
-
-        /** @var $function \Twig_SimpleFunction */
-        foreach ($actualFunctions as $function) {
-            $functionName = $function->getName();
-            $this->assertArrayHasKey($functionName, $this->expectedFunctions);
-
-            $expectedParameters = $this->expectedFunctions[$functionName];
-            $this->assertEquals(array($this->extension, $expectedParameters['callback']), $function->getCallable());
-            $this->assertEquals($expectedParameters['safe'], $function->getSafe($twigNode));
-            $this->assertEquals($expectedParameters['needs_environment'], $function->needsEnvironment());
-        }
-    }
-
     /**
      * Data provider for testRenderFilterJs
      *
      * @return array
      */
-    public function renderFilterJsDataProvider()
+    public function renderFilterJavascriptDataProvider()
     {
         return array(
             'empty_prefixes' => array(
@@ -109,7 +74,7 @@ class RenderJsExtensionTest extends \PHPUnit_Framework_TestCase
                     self::TEST_SECOND_EXISTING_TYPE,
                     'blocks'
                 ),
-                '$expectedBlock' => self::TEST_SECOND_EXISTING_TYPE . RenderJsExtension::SUFFIX
+                '$expectedBlock' => self::TEST_SECOND_EXISTING_TYPE . RenderLayoutExtension::SUFFIX
             ),
         );
     }
@@ -118,9 +83,9 @@ class RenderJsExtensionTest extends \PHPUnit_Framework_TestCase
      * @param array $blockPrefixes
      * @param string|null $expectedBlock
      *
-     * @dataProvider renderFilterJsDataProvider
+     * @dataProvider renderFilterJavascriptDataProvider
      */
-    public function testRenderFilterJs($blockPrefixes, $expectedBlock = null)
+    public function testRenderFilterJavascript($blockPrefixes, $expectedBlock = null)
     {
         $formView = new FormView();
         $formView->vars = array('block_prefixes' => $blockPrefixes);
@@ -150,7 +115,7 @@ class RenderJsExtensionTest extends \PHPUnit_Framework_TestCase
             ->with(self::TEST_TEMPLATE_NAME)
             ->will($this->returnValue($template));
 
-        $html = $this->extension->renderFilterJs($environment, $formView);
+        $html = $this->extension->renderFilterJavascript($environment, $formView);
         if ($expectedBlock) {
             $this->assertEquals(self::TEST_BLOCK_HTML, $html);
         } else {
@@ -167,51 +132,11 @@ class RenderJsExtensionTest extends \PHPUnit_Framework_TestCase
     public function hasBlockCallback($blockName)
     {
         $existingBlocks = array(
-            self::TEST_FIRST_EXISTING_TYPE . RenderJsExtension::SUFFIX,
-            self::TEST_SECOND_EXISTING_TYPE . RenderJsExtension::SUFFIX
+            self::TEST_FIRST_EXISTING_TYPE . RenderLayoutExtension::SUFFIX,
+            self::TEST_SECOND_EXISTING_TYPE . RenderLayoutExtension::SUFFIX
         );
 
         return in_array($blockName, $existingBlocks);
-    }
-
-    public function testRenderHeaderJs()
-    {
-        $template = $this->getMockForAbstractClass(
-            '\Twig_Template',
-            array(),
-            '',
-            false,
-            true,
-            true,
-            array('renderBlock')
-        );
-        $template->expects($this->once())
-            ->method('renderBlock')
-            ->with(RenderJsExtension::HEADER_JAVASCRIPT, array())
-            ->will($this->returnValue(self::TEST_BLOCK_HTML));
-
-        $environment = $this->getMock('\Twig_Environment', array('loadTemplate'));
-        $environment->expects($this->once())
-            ->method('loadTemplate')
-            ->with(self::TEST_TEMPLATE_NAME)
-            ->will($this->returnValue($template));
-
-        $html = $this->extension->renderHeaderJs($environment);
-        $this->assertEquals(self::TEST_BLOCK_HTML, $html);
-    }
-
-    public function testGetFilters()
-    {
-        $actualFilters = $this->extension->getFilters();
-
-        /** @var $filter \Twig_SimpleFilter */
-        foreach ($actualFilters as $filter) {
-            $filterName = $filter->getName();
-            $this->assertArrayHasKey($filterName, $this->expectedFilters);
-
-            $expectedParameters = $this->expectedFilters[$filterName];
-            $this->assertEquals(array($this->extension, $expectedParameters['callback']), $filter->getCallable());
-        }
     }
 
     public function testGetChoices()
