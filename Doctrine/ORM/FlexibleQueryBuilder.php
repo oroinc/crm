@@ -2,7 +2,7 @@
 namespace Oro\Bundle\FlexibleEntityBundle\Doctrine\ORM;
 
 use Doctrine\ORM\QueryBuilder;
-use Oro\Bundle\FlexibleEntityBundle\Entity\Attribute;
+use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttribute;
 use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttributeType;
 use Oro\Bundle\FlexibleEntityBundle\Exception\FlexibleQueryException;
 
@@ -88,14 +88,14 @@ class FlexibleQueryBuilder extends QueryBuilder
     /**
      * Prepare join to attribute condition with current locale and scope criterias
      *
-     * @param Attribute $attribute the attribute
-     * @param string    $joinAlias the value join alias
+     * @param AbstractAttribute $attribute the attribute
+     * @param string            $joinAlias the value join alias
      *
      * @throws FlexibleQueryException
      *
      * @return string
      */
-    public function prepareAttributeJoinCondition(Attribute $attribute, $joinAlias)
+    public function prepareAttributeJoinCondition(AbstractAttribute $attribute, $joinAlias)
     {
         $condition = $joinAlias.'.attribute = '.$attribute->getId();
 
@@ -230,13 +230,13 @@ class FlexibleQueryBuilder extends QueryBuilder
     /**
      * Add an attribute to filter
      *
-     * @param Attribute    $attribute the attribute
-     * @param string|array $operator  the used operator
-     * @param string|array $value     the value(s) to filter
+     * @param AbstractAttribute $attribute the attribute
+     * @param string|array      $operator  the used operator
+     * @param string|array      $value     the value(s) to filter
      *
      * @return QueryBuilder This QueryBuilder instance.
      */
-    public function addAttributeFilter(Attribute $attribute, $operator, $value)
+    public function addAttributeFilter(AbstractAttribute $attribute, $operator, $value)
     {
         $allowed = $this->getAllowedOperators($attribute->getBackendType());
 
@@ -279,10 +279,10 @@ class FlexibleQueryBuilder extends QueryBuilder
     /**
      * Sort by attribute value
      *
-     * @param Attribute $attribute the attribute to sort on
-     * @param string    $direction the direction to use
+     * @param AbstractAttribute $attribute the attribute to sort on
+     * @param string            $direction the direction to use
      */
-    public function addAttributeOrderBy(Attribute $attribute, $direction)
+    public function addAttributeOrderBy(AbstractAttribute $attribute, $direction)
     {
         $aliasPrefix = 'sorter';
         $joinAlias   = $aliasPrefix.'V'.$attribute->getCode().$this->aliasCounter++;
