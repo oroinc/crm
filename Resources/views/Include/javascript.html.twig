@@ -1,4 +1,4 @@
-{{ oro_filter_render_header_js() }}
+{{ oro_filter_render_header_javascript() }}
 
 {% javascripts
     '@OroUIBundle/Resources/public/lib/backbone.bootstrap-modal.js'
@@ -83,7 +83,7 @@
                     ],
                     filters: {
                         {% for filter in datagrid.filters %}
-                            {{ filter.name|json_encode|raw }} : {{ oro_filter_render_filter_js(form.children[filter.name]) }}
+                            {{ filter.name|json_encode|raw }} : {{ oro_filter_render_filter_javascript(form.children[filter.name]) }}
                             {% if not loop.last %},{% endif %}
                         {% endfor %}
                     },
