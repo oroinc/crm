@@ -1,0 +1,15 @@
+Oro\Bundle\AccountBundle\Entity\Account:
+    alias: oro_account
+    label: Account
+    flexible_manager: oro_account.account.manager.flexible
+    title_fields: [name]
+    route:
+        name: oro_account_show
+        parameters:
+            id: id
+    search_template: OroAccountBundle:Account:searchResult.html.twig
+    fields:
+        -
+            name: name
+            target_type: text
+            target_fields: [name]
