@@ -10,7 +10,9 @@ use Doctrine\Common\Persistence\ObjectManager;
 
 use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\OptionSimpleSelectType;
 use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\MoneyType;
+use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\IntegerType;
 use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\TextType;
+use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\UrlType;
 use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\TextAreaType;
 
 use Oro\Bundle\AccountBundle\Entity\Manager\AccountManager;
@@ -48,7 +50,10 @@ class LoadAccountAttrData extends AbstractFixture implements ContainerAwareInter
     {
         $this->addAttributes(
             array(
-                'website',
+                array(
+                    'code' => 'website',
+                    'type' => new UrlType()
+                ),
                 'office_phone',
                 'office_fax',
                 array(
@@ -59,7 +64,10 @@ class LoadAccountAttrData extends AbstractFixture implements ContainerAwareInter
                     'code' => 'annual_revenue',
                     'type' => new MoneyType()
                 ),
-                'employees',
+                array(
+                    'code' => 'employees',
+                    'type' => new IntegerType()
+                ),
                 'ownership',
                 'ticker_symbol',
                 'rating'

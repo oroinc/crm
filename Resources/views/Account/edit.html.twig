@@ -18,6 +18,50 @@
 
     {% include 'OroAccountBundle:Account:remove.confirm.js.twig' %}
 
+    {# TODO: Move this to ticker symbol Flexible type #}
+    <script type="text/javascript">
+        $(function() {
+            var cache = {};
+            $("#oro_account_form_attributes_7_varchar").typeahead({
+                source: function (request, process) {
+                    YAHOO = {
+                        Finance: {
+                            SymbolSuggest: {
+                                ssCallback: function (data) {
+                                    var result = $.map(data.ResultSet.Result, function (item) {
+                                        return item.name;
+                                    });
+                                    $.each(data.ResultSet.Result, function (itemKey, item) {
+                                        console.log(item)
+                                        cache[item.name] = item.symbol;
+                                    });
+                                    process(result)
+                                }
+                            }
+                        }
+                    };
+                    $.ajax({
+                        type: "GET",
+                        dataType: "jsonp",
+                        jsonp: "callback",
+                        jsonpCallback: "YAHOO.Finance.SymbolSuggest.ssCallback",
+                        data: {
+                            query: request
+                        },
+                        cache: true,
+                        url: "http://autoc.finance.yahoo.com/autoc"
+                    });
+                },
+                updater: function(item) {
+                    if (typeof cache[item] != 'undefined') {
+                        return cache[item];
+                    } else {
+                        return item;
+                    }
+                }
+            });
+        });
+    </script>
 {% endblock %}
 
 {% block content %}
