@@ -185,6 +185,29 @@ class TitleServiceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Tests case with fallback to config value
+     */
+    public function testLoadByRouteFallbackToConfig()
+    {
+        $route = 'test_route';
+
+        $this->em->expects($this->once())
+            ->method('getRepository')
+            ->will($this->returnValue($this->repository));
+
+        $this->repository->expects($this->once())
+            ->method('findOneBy')
+            ->with($this->equalTo(array('route' => $route)))
+            ->will($this->returnValue(false));
+
+        $titles = array($route => 'Test title template %placeholder%');
+        $this->titleService->setTitles($titles);
+        $this->titleService->loadByRoute($route);
+
+        $this->assertEquals($titles[$route], $this->titleService->getTemplate());
+    }
+
+    /**
      * Prepare readers for update test
      */
     private function prepareReaders()
