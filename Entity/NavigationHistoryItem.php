@@ -9,12 +9,14 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Entity(repositoryClass="Oro\Bundle\NavigationBundle\Entity\Repository\HistoryItemRepository")
  * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="oro_navigation_history",
- *      uniqueConstraints={@ORM\UniqueConstraint(name="unq_user_id_url_idx", columns={"user_id", "url"})})
+ * @ORM\Table(name="oro_navigation_history")
  */
 class NavigationHistoryItem implements NavigationItemInterface
 {
     const NAVIGATION_HISTORY_ITEM_TYPE = 'history';
+
+    const NAVIGATION_HISTORY_COLUMN_VISITED_AT = 'visitedAt';
+    const NAVIGATION_HISTORY_COLUMN_VISIT_COUNT = 'visitCount';
 
     /**
      * @var integer $id
@@ -36,7 +38,7 @@ class NavigationHistoryItem implements NavigationItemInterface
     /**
      * @var string $url
      *
-     * @ORM\Column(name="url", type="string", length=250)
+     * @ORM\Column(name="url", type="string", length=500)
      */
     protected $url;
 
@@ -226,10 +228,8 @@ class NavigationHistoryItem implements NavigationItemInterface
 
     /**
      * Pre update event handler
-     *
-     * @ORM\PreUpdate
      */
-    public function doPreUpdate()
+    public function doUpdate()
     {
         $this->visitedAt = new \DateTime();
         $this->visitCount++;

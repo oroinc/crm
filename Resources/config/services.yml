@@ -9,6 +9,7 @@ parameters:
 
     oro_navigation.navigation_item_menu.builder.class: Oro\Bundle\NavigationBundle\Menu\NavigationItemBuilder
     oro_navigation.navigation_history_menu.builder.class: Oro\Bundle\NavigationBundle\Menu\NavigationHistoryBuilder
+    oro_navigation.navigation_mostviewed_menu.builder.class: Oro\Bundle\NavigationBundle\Menu\NavigationMostviewedBuilder
 
     oro_navigation.item.builder.pinbar.class: Oro\Bundle\NavigationBundle\Entity\Builder\PinbarTabBuilder
     oro_navigation.item.builder.favorite.class: Oro\Bundle\NavigationBundle\Entity\Builder\NavigationItemBuilder
@@ -19,6 +20,15 @@ parameters:
     oro_navigation.event.response_history.listener.class: Oro\Bundle\NavigationBundle\Event\ResponseHistoryListener
 
     oro_navigation.menu.matcher.voter.request: Oro\Bundle\NavigationBundle\Menu\Matcher\Voter\RequestVoter
+
+    oro_navigation.title_service.class:                        Oro\Bundle\NavigationBundle\Provider\TitleService
+    oro_navigation.title_service.twig.extension.class:         Oro\Bundle\NavigationBundle\Twig\TitleExtension
+
+    oro_navigation.title_service.annotations_reader.class:     Oro\Bundle\NavigationBundle\Title\TitleReader\AnnotationsReader
+    oro_navigation.title_service.config_reader.class:          Oro\Bundle\NavigationBundle\Title\TitleReader\ConfigReader
+
+    oro_navigation.title_service.event.request.listener.class: Oro\Bundle\NavigationBundle\Event\RequestTitleListener
+    oro_navigation.translation.extractor.class:                Oro\Bundle\NavigationBundle\Title\TranslationExtractor
 
 services:
     oro_menu.factory:
@@ -85,6 +95,13 @@ services:
         tags:
             - { name: oro_navigation.item.builder, alias: history }
 
+    oro_navigation.item.builder.mostviewed:
+        class: %oro_navigation.item.builder.history.class%
+        arguments:
+            - @doctrine.orm.entity_manager
+        tags:
+            - { name: oro_navigation.item.builder, alias: mostviewed }
+
     oro_navigation.item.factory:
         class: %oro_navigation.item.factory.class%
 
@@ -123,6 +140,17 @@ services:
         tags:
             - { name: oro_menu.builder, alias: history }
 
+    oro_navigation.mostviewed_menu.builder:
+        class: %oro_navigation.navigation_mostviewed_menu.builder.class%
+        arguments:
+            - @security.context
+            - @doctrine.orm.entity_manager
+            - @oro_navigation.item.factory
+        calls:
+            - [ setOptions, [ @oro_config.user ]]
+        tags:
+            - { name: oro_menu.builder, alias: mostviewed }
+
     knp_voter_request:
         class: %oro_navigation.menu.matcher.voter.request%
         tags:
@@ -137,3 +165,43 @@ services:
             - @oro_navigation.item.factory
             - @security.context
             - @doctrine.orm.entity_manager
+            - @oro_navigation.title_service
+
+
+    oro_navigation.title_service:
+        class: %oro_navigation.title_service.class%
+        arguments:
+          - @oro_navigation.title_annotations_reader
+          - @oro_navigation.title_config_reader
+          - @translator.default
+          - @doctrine.orm.entity_manager
+          - @serializer
+
+    oro_navigation.title_annotations_reader:
+        class:                        %oro_navigation.title_service.annotations_reader.class%
+        arguments:                    ["@kernel", "@annotation_reader"]
+
+    oro_navigation.title_config_reader:
+        class:                        %oro_navigation.title_service.config_reader.class%
+        arguments:                    ["%oro_titles%"]
+
+    oro_navigation.title_service.twig.extension:
+        class: %oro_navigation.title_service.twig.extension.class%
+        arguments:
+            - @oro_navigation.title_service
+        tags:
+            - { name: twig.extension }
+
+    kernel.listener.title_service.request_listener:
+        class: %oro_navigation.title_service.event.request.listener.class%
+        tags:
+            - { name: kernel.event_listener, priority: -255, event: kernel.request, method: onKernelRequest }
+        arguments:
+            - @oro_navigation.title_service
+
+    oro_navigation.translation.extractor:
+        class: %oro_navigation.translation.extractor.class%
+        arguments:
+            - @oro_navigation.title_service
+        tags:
+            - { name: translation.extractor, alias: navigation_translation_extractor }

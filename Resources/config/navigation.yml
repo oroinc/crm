@@ -10,6 +10,9 @@ oro_menu_config:
             template: 'OroNavigationBundle:Menu:pinbar.html.twig'
         favorite:
             template: 'OroNavigationBundle:Menu:favorites.html.twig'
+        mostviewed:
+            template: 'OroNavigationBundle:Menu:mostviewed.html.twig'
+            rootClass: 'extra-list'
         history:
             template: 'OroNavigationBundle:Menu:history.html.twig'
             rootClass: 'extra-list'

@@ -21,10 +21,13 @@ class OroNavigationExtension extends Extension
     public function load(array $configs, ContainerBuilder $container)
     {
         $entitiesConfig = array();
+        $titlesConfig = array();
+
         foreach ($container->getParameter('kernel.bundles') as $bundle) {
             $reflection = new \ReflectionClass($bundle);
-            if (is_file($file = dirname($reflection->getFilename()).'/Resources/config/menu.yml')) {
+            if (is_file($file = dirname($reflection->getFilename()).'/Resources/config/navigation.yml')) {
                 $bundleConfig = Yaml::parse(realpath($file));
+
                 // merge entity configs
                 if (isset($bundleConfig['oro_menu_config'])) {
                     foreach ($bundleConfig['oro_menu_config'] as $entity => $entityConfig) {
@@ -36,6 +39,10 @@ class OroNavigationExtension extends Extension
                         }
                     }
                 }
+
+                if (isset($bundleConfig['oro_titles'])) {
+                    $titlesConfig += is_array($bundleConfig['oro_titles']) ? $bundleConfig['oro_titles'] : array();
+                }
             }
         }
 
@@ -46,5 +53,6 @@ class OroNavigationExtension extends Extension
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
         $container->setParameter('oro_menu_config', $config);
+        $container->setParameter('oro_titles', $titlesConfig);
     }
 }

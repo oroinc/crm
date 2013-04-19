@@ -3,16 +3,10 @@
 namespace Oro\Bundle\NavigationBundle\Menu;
 
 use Knp\Menu\ItemInterface;
-use Knp\Menu\Matcher\Matcher;
-use Symfony\Component\Security\Core\SecurityContextInterface;
+use Oro\Bundle\NavigationBundle\Entity\NavigationHistoryItem;
 
-class NavigationHistoryBuilder extends NavigationItemBuilder
+class NavigationMostviewedBuilder extends NavigationItemBuilder
 {
-    /**
-     * @var Matcher
-     */
-    private $matcher;
-
     /**
      * @var \Oro\Bundle\ConfigBundle\Config\UserConfigManager
      */
@@ -37,37 +31,11 @@ class NavigationHistoryBuilder extends NavigationItemBuilder
      */
     public function build(ItemInterface $menu, array $options = array(), $alias = null)
     {
+        $options['orderBy'] = array(array('field' => NavigationHistoryItem::NAVIGATION_HISTORY_COLUMN_VISIT_COUNT));
         $maxItems = $this->configOptions->get('oro_navigation.maxItems');
-
         if (!is_null($maxItems)) {
-            // we'll hide current item, so always select +1 item
-            $options['maxItems'] = $maxItems + 1;
+            $options['maxItems'] = $maxItems;
         }
-
         parent::build($menu, $options, $alias);
-
-        $children = $menu->getChildren();
-        foreach ($children as $child) {
-            if ($this->matcher->isCurrent($child)) {
-                $menu->removeChild($child);
-
-                break;
-            }
-        }
-
-        $menu->slice(0, $maxItems);
-    }
-
-    /**
-     * Setter for matcher service
-     *
-     * @param \Knp\Menu\Matcher\Matcher $matcher
-     * @return $this
-     */
-    public function setMatcher(Matcher $matcher)
-    {
-        $this->matcher = $matcher;
-
-        return $this;
     }
 }

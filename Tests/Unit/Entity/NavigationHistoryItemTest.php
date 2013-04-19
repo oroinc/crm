@@ -43,13 +43,13 @@ class NavigationHistoryItemTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($item->getVisitCount(), 0);
     }
 
-    public function testDoPreUpdate()
+    public function testDoUpdate()
     {
         $item = new NavigationHistoryItem();
         $oldVisitedAt = $item->getVisitedAt();
         $oldVisitCount = $item->getVisitCount();
 
-        $item->doPreUpdate();
+        $item->doUpdate();
 
         $this->assertInstanceOf('DateTime', $item->getVisitedAt());
         $this->assertNotEquals($oldVisitedAt, $item->getVisitedAt());

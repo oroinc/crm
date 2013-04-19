@@ -18,7 +18,8 @@ navigation.dotMenu.MainView = Backbone.View.extend({
 
     initialize: function() {
         this.$tabsContainer = this.$('.nav-tabs');
-        this.$tabsContent = this.$('.tab-content')
+        this.$tabsContent = this.$('.tab-content');
+        this.$tabsContent.find('.menu-close').click(_.bind(this.close, this));
     },
 
     addTab: function(options) {
@@ -96,6 +97,10 @@ navigation.dotMenu.MainView = Backbone.View.extend({
 
     showTab: function(tabKey) {
         this.getTab(tabKey).$tab.show();
+    },
+
+    close: function() {
+        this.$el.parents('.open').removeClass('open');
     }
 });
 

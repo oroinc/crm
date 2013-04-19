@@ -2,9 +2,11 @@
 
 namespace Oro\Bundle\NavigationBundle\Event;
 
+use Oro\Bundle\NavigationBundle\Provider\TitleServiceInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
+use Symfony\Component\HttpKernel\HttpKernel;
 use Symfony\Component\Security\Core\SecurityContextInterface;
 use Doctrine\ORM\EntityManager;
 
@@ -28,16 +30,22 @@ class ResponseHistoryListener
      */
     protected $em = null;
 
+    /**
+     * @var TitleServiceInterface
+     */
+    protected $titleService = null;
+
     public function __construct(
         ItemFactory $navigationItemFactory,
         SecurityContextInterface $securityContext,
-        EntityManager $entityManager
+        EntityManager $entityManager,
+        TitleServiceInterface $titleService
     ) {
         $this->navItemFactory = $navigationItemFactory;
         $this->user = !$securityContext->getToken() ||  is_string($securityContext->getToken()->getUser())
                       ? null : $securityContext->getToken()->getUser();
-
         $this->em = $entityManager;
+        $this->titleService = $titleService;
     }
 
     /**
@@ -48,6 +56,11 @@ class ResponseHistoryListener
      */
     public function onResponse(FilterResponseEvent $event)
     {
+        if (HttpKernel::MASTER_REQUEST != $event->getRequestType()) {
+            // Do not do anything
+            return;
+        }
+
         $request = $event->getRequest();
         $response = $event->getResponse();
 
@@ -55,11 +68,6 @@ class ResponseHistoryListener
         // with 200 OK status using GET method and not _internal and _wdt
         if (!$this->matchRequest($response, $request)) {
             return false;
-        }
-
-        $title = 'Default Title';
-        if (preg_match('#<title>([^<]+)</title>#msi', $response->getContent(), $match)) {
-            $title = $match[1];
         }
 
         $postArray = array(
@@ -78,13 +86,15 @@ class ResponseHistoryListener
             );
         }
 
-        $historyItem->setTitle($title);
+        $historyItem->setTitle($this->titleService->getSerialized());
 
         // force update
-        $historyItem->doPreUpdate();
+        $historyItem->doUpdate();
 
         $this->em->persist($historyItem);
         $this->em->flush();
+
+        return true;
     }
 
     /**
