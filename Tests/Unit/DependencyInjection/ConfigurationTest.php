@@ -12,7 +12,8 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
      */
     protected $expectedConfiguration = array(
         'twig' => array(
-            'layout' => Configuration::DEFAULT_LAYOUT
+            'layout' => Configuration::DEFAULT_LAYOUT,
+            'header' => Configuration::DEFAULT_HEADER
         )
     );
 

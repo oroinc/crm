@@ -7,7 +7,8 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 class Configuration implements ConfigurationInterface
 {
-    const DEFAULT_LAYOUT = 'OroFilterBundle:Filter:layout.html.twig';
+    const DEFAULT_LAYOUT = 'OroFilterBundle:Filter:layout.js.twig';
+    const DEFAULT_HEADER = 'OroFilterBundle:Filter:header.html.twig';
 
     /**
      * {@inheritDoc}
@@ -25,6 +26,10 @@ class Configuration implements ConfigurationInterface
                         ->scalarNode('layout')
                             ->cannotBeEmpty()
                             ->defaultValue(self::DEFAULT_LAYOUT)
+                        ->end()
+                        ->scalarNode('header')
+                            ->cannotBeEmpty()
+                            ->defaultValue(self::DEFAULT_HEADER)
                         ->end()
                     ->end()
                 ->end()

@@ -14,14 +14,16 @@ class OroGridExtensionTest extends \PHPUnit_Framework_TestCase
     protected $expectedDefinitions = array(
         'oro_filter.form.type.date_range',
         'oro_filter.form.type.filter.datetime_range',
-        'oro_filter.twig.extension.render_js'
+        'oro_filter.twig.extension.render_layout',
+        'oro_filter.twig.extension.render_header'
     );
 
     /**
      * @var array
      */
     protected $expectedParameters = array(
-        OroFilterExtension::PARAMETER_TWIG_LAYOUT
+        OroFilterExtension::PARAMETER_TWIG_LAYOUT,
+        OroFilterExtension::PARAMETER_TWIG_HEADER,
     );
 
     /**
