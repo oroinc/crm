@@ -4,6 +4,8 @@ parameters:
     oro_address.address.manager.flexible.class: Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleManager
     oro_address.address.entity.value.class: Oro\Bundle\AddressBundle\Entity\Value\AddressValue
     oro_address.address_type.manager.class: Oro\Bundle\AddressBundle\Entity\Manager\AddressTypeManager
+    oro_address.type.address.class: Oro\Bundle\AddressBundle\Form\Type\AddressType
+    oro_address.handler.address.class: Oro\Bundle\AddressBundle\Form\Handler\AddressHandler
 
 services:
     oro_address.address.manager.flexible:
@@ -27,4 +29,26 @@ services:
         class: %oro_address.address_type.manager.class%
         arguments:
             - %oro_address.address.entity.class%
+            - @doctrine.orm.entity_manager
+
+    oro_address.form.address:
+        class: Symfony\Component\Form\Form
+        factory_method: createNamed
+        factory_service: form.factory
+        arguments: ["oro_address_form", "oro_address", null]
+
+    oro_address.form.type.address:
+        class: %oro_address.type.address.class%
+        arguments:
+            - %oro_address.address.entity.class%
+            - %oro_address.address.entity.value.class%
+        tags:
+             - { name: form.type, alias: oro_address }
+
+    oro_address.form.handler.address:
+        class: %oro_address.handler.address.class%
+        scope: request
+        arguments:
+            - @oro_address.form.address
+            - @request
             - @doctrine.orm.entity_manager

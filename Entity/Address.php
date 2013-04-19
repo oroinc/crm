@@ -10,7 +10,7 @@ use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityFlexible;
  *
  * @ORM\Table("oro_address")
  * @ORM\HasLifecycleCallbacks()
- * @ORM\Entity(repositoryClass="Oro\Bundle\AddressBundle\Entity\AddressRepository")
+ * @ORM\Entity(repositoryClass="Oro\Bundle\AddressBundle\Entity\Repository\AddressRepository")
  */
 class Address extends AbstractEntityFlexible
 {
