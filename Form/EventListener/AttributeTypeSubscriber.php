@@ -65,7 +65,7 @@ class AttributeTypeSubscriber implements EventSubscriberInterface
 
             // add related options
             if ($data->getBackendType() === AbstractAttributeType::BACKEND_TYPE_OPTION) {
-                $this->addOptionCollection($form)
+                $this->addOptionCollection($form);
             }
 
             $this->disableField($form, 'code');
