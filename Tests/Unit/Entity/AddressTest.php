@@ -19,6 +19,19 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($value, call_user_func_array(array($obj, 'get' . ucfirst($property)), array()));
     }
 
+    public function testBeforeSave()
+    {
+        $obj = new Address();
+        $obj->beforeSave();
+
+        $this->assertNotNull($obj->getCreatedAt());
+        $this->assertNotNull($obj->getUpdatedAt());
+
+        $this->assertEquals($obj->getCreatedAt(), $obj->getUpdatedAt());
+
+    }
+
+
     /**
      * Data provider
      *
@@ -27,6 +40,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     public function provider()
     {
         return array(
+            array('id'),
             array('street'),
             array('street2'),
             array('city'),
@@ -34,6 +48,8 @@ class AddressTest extends \PHPUnit_Framework_TestCase
             array('postalCode'),
             array('country'),
             array('mark'),
+            array('created'),
+            array('updated'),
         );
     }
 }
