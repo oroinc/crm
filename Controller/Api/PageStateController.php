@@ -5,8 +5,8 @@ namespace Oro\Bundle\WindowsBundle\Controller\Api;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 use FOS\RestBundle\Controller\FOSRestController;
-use FOS\RestBundle\Routing\ClassResourceInterface;
 use FOS\RestBundle\Controller\Annotations\NamePrefix;
+use FOS\RestBundle\View\RouteRedirectView;
 use FOS\Rest\Util\Codes;
 
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
@@ -26,10 +26,36 @@ class PageStateController extends FOSRestController
      */
     public function cgetAction()
     {
-        $items = $this->getDoctrine()->getRepository('OroNavigationBundle:PageState')->findBy(array('user' => $this->getUser()));
+        return $this->handleView(
+            $this->view(
+                $this->getDoctrine()->getRepository('OroNavigationBundle:PageState')->findBy(array('user' => $this->getUser())),
+                Codes::HTTP_OK
+            )
+        );
+    }
+
+    /**
+     * Get page state
+     *
+     * @param int $id Page state id
+     *
+     * @ApiDoc(
+     *  description="Get page state",
+     *  resource=true,
+     *  requirements={
+     *      {"name"="id", "dataType"="integer"},
+     *  }
+     * )
+     */
+    public function getAction($id)
+    {
+        $entity = $this->getManager()->findUserBy(array('id' => (int) $id));
 
         return $this->handleView(
-            $this->view($items, is_array($items) ? Codes::HTTP_OK : Codes::HTTP_NOT_FOUND)
+            $this->view(
+                $entity,
+                $entity ? Codes::HTTP_OK : Codes::HTTP_NOT_FOUND
+            )
         );
     }
 
@@ -53,10 +79,13 @@ class PageStateController extends FOSRestController
      *
      * @ApiDoc(
      *  description="Update existing page state",
-     *  resource=true
+     *  resource=true,
+     *  requirements={
+     *      {"name"="id", "dataType"="integer"},
+     *  }
      * )
      */
-    public function putAction($windowId)
+    public function putAction($id)
     {
         return $this->handleView($this->view(array(), Codes::HTTP_OK));
     }
@@ -68,7 +97,10 @@ class PageStateController extends FOSRestController
      *
      * @ApiDoc(
      *  description="Remove page state",
-     *  resource=true
+     *  resource=true,
+     *  requirements={
+     *      {"name"="id", "dataType"="integer"},
+     *  }
      * )
      */
     public function deleteAction($id)
@@ -83,6 +115,6 @@ class PageStateController extends FOSRestController
      */
     protected function getManager()
     {
-        return $this->getDoctrine()->getEntityManagerForClass('OroNavigationBundle:PageState');
+        return $this->getDoctrine()->getManagerForClass('OroNavigationBundle:PageState');
     }
 }
