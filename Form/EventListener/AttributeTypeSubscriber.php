@@ -65,24 +65,32 @@ class AttributeTypeSubscriber implements EventSubscriberInterface
 
             // add related options
             if ($data->getBackendType() === AbstractAttributeType::BACKEND_TYPE_OPTION) {
-                $form->add(
-                    $this->factory->createNamed(
-                        'options',
-                        'collection',
-                        null,
-                        array(
-                            'type'         => new AttributeOptionType(),
-                            'allow_add'    => true,
-                            'allow_delete' => true,
-                            'by_reference' => false
-                        )
-                    )
-                );
+                $this->addOptionCollection();
             }
 
             $this->disableField($form, 'code');
             $this->disableField($form, 'attributeType');
         }
+    }
+
+    /**
+     * Add attribute option collection
+     */
+    protected function addOptionCollection()
+    {
+        $form->add(
+            $this->factory->createNamed(
+                'options',
+                'collection',
+                null,
+                array(
+                    'type'         => new AttributeOptionType(),
+                    'allow_add'    => true,
+                    'allow_delete' => true,
+                    'by_reference' => false
+                )
+            )
+        );
     }
 
     /**
