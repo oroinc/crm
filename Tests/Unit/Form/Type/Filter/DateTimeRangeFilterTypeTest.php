@@ -65,8 +65,11 @@ class DateTimeRangeFilterTypeTest extends AbstractTypeTestCase
                 'formData' => array('type' => null, 'value' => array('start' => '', 'end' => '')),
                 'viewData' => array(
                     'value'          => array('type' => null, 'value' => array('start' => '', 'end' => '')),
-                    'widget_options' => array('dateFormat' => 'mm/dd/yy', 'timeFormat' => 'hh:mm tt', 'firstDay' => 0)
+                    'widget_options' => array('dateFormat' => 'mm/dd/yy', 'timeFormat' => 'hh:mm', 'firstDay' => 1)
                 ),
+                'customOptions' => array(
+                    'widget_options' => array('firstDay' => 1, 'timeFormat' => 'hh:mm')
+                )
             ),
         );
     }

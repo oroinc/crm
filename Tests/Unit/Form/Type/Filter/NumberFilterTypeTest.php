@@ -107,19 +107,26 @@ class NumberFilterTypeTest extends AbstractTypeTestCase
             ),
             'money' => array(
                 'bindData' => array('type' => NumberFilterType::TYPE_EQUAL, 'value' => '12345.67890'),
-                'formData' => array('type' => NumberFilterType::TYPE_EQUAL, 'value' => 12345.6789),
+                'formData' => array(
+                    'type' => NumberFilterType::TYPE_EQUAL,
+                    'value' => 12345.6789
+                ),
                 'viewData' => array(
                     'value' => array('type' => NumberFilterType::TYPE_EQUAL, 'value' => '12345.68'),
                     'formatter_options' => array(
-                        'decimals' => 2,
+                        'decimals' => 4,
                         'grouping' => true,
-                        'orderSeparator' => ',',
+                        'orderSeparator' => ' ',
                         'decimalSeparator' => '.',
                     )
                 ),
                 'customOptions' => array(
                     'field_type' => 'money',
-                    'data_type' => NumberFilterType::DATA_DECIMAL
+                    'data_type' => NumberFilterType::DATA_DECIMAL,
+                    'formatter_options' => array(
+                        'decimals' => 4,
+                        'orderSeparator' => ' '
+                    )
                 ),
             ),
             'invalid format' => array(

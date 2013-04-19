@@ -106,6 +106,6 @@ class NumberFilterType extends AbstractType
 
         $formatterOptions['decimalSeparator'] = $formatter->getSymbol(\NumberFormatter::DECIMAL_SEPARATOR_SYMBOL);
 
-        $view->vars['formatter_options'] = $formatterOptions;
+        $view->vars['formatter_options'] = array_merge($formatterOptions, $options['formatter_options']);
     }
 }
