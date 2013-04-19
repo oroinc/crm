@@ -25,7 +25,7 @@
 
 {% block money_widget %}
 {% spaceless %}
-    <div class="input-prepend"">
+    <div class="input-prepend input-prepend-right"">
         <span class="add-on">{{ money_pattern|replace({ '{{ widget }}': '' }) }}</span>
         {{ money_pattern|replace({ '{{ widget }}': block('form_widget_simple') })|raw }}
     </div>

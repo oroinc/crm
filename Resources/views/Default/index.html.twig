@@ -35,10 +35,9 @@
             {% javascripts
                 '@OroUIBundle/Resources/public/lib/underscore.js'
                 '@OroUIBundle/Resources/public/lib/backbone.js'
-                '@OroUIBundle/Resources/public/lib/jquery.mCustomScrollbar.min.js'
-                '@OroUIBundle/Resources/public/lib/jquery.mousewheel.min.js'
-                '@OroUIBundle/Resources/public/lib/jquery.numeric.js'
-                '@OroUIBundle/Resources/public/lib/jquery.uniform.min.js'
+                '@OroUIBundle/Resources/public/lib/jquery/jquery.mousewheel.min.js'
+                '@OroUIBundle/Resources/public/lib/jquery/jquery.numeric.js'
+                '@OroUIBundle/Resources/public/lib/jquery/jquery.uniform.min.js'
                 '@OroUIBundle/Resources/public/lib/bootstrap.min.js'
                 '@OroUIBundle/Resources/public/lib/bootstrap/js/bootstrap-tooltip.js'
                 '@OroUIBundle/Resources/public/lib/bootstrap/js/bootstrap-popover.js'
@@ -60,7 +59,7 @@
             <!--[if lte IE 9]>
                 <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
                 <link href="{{ asset('bundles/oroui/css/ie.css') }}" rel="stylesheet" media="all" />
-                <script src="{{ asset('bundles/oroui/js/jquery.placeholder.js') }}"></script>
+                <script src="{{ asset('bundles/oroui/js/lib/jquery/jquery.placeholder.js') }}"></script>
                 <script type="text/javascript">
                     jQuery(document).ready(function() {
                         jQuery('input[placeholder], textarea[placeholder]').placeholder();
