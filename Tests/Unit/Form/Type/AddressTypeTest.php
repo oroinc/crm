@@ -5,25 +5,60 @@ use Symfony\Component\Form\Tests\FormIntegrationTestCase;
 
 use Oro\Bundle\AddressBundle\Form\Type\AddressType;
 use Oro\Bundle\AddressBundle\Entity\Address;
+use Symfony\Component\Form\FormInterface;
 
 class AddressTypeTest extends FormIntegrationTestCase
 {
+    /**
+     * @var AddressType
+     */
+    protected $type;
+
+    /**
+     * @var FormInterface
+     */
+    protected $form;
+
+    /**
+     * Setup test env
+     */
+    public function setUp()
+    {
+        parent::setUp();
+
+        $flexibleClass = 'Oro\Bundle\AddressBundle\Entity\Address';
+        $entityClass = 'Oro\Bundle\AddressBundle\Entity\Value\AddressValue';
+
+        $this->type = new AddressType($flexibleClass, $entityClass);
+        $this->form = $this->factory->create($this->type);
+
+    }
+
+    /**
+     * Create form
+     */
+    protected function createForm()
+    {
+        return $this->factory->create($this->type);
+    }
+
     public function testBindValidData()
     {
         $formData = array(
-            'street' => 'No way, no way',
+            'street'      => 'test',
+            'city'        => 'test',
+            'state'       => 'test',
+            'postal_code' => 'test',
+            'country'     => 'test',
         );
 
-        $flexibleClass = 'Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleManager';
-        $entityClass = 'Oro\Bundle\AddressBundle\Entity\Value\AddressValue';
-
-        $type = new AddressType($flexibleClass, $entityClass);
-        $form = $this->factory->create($type);
+        $form = $this->form;
 
         $address = new Address();
         $address->setStreet($formData['street']);
 
         $this->assertTrue($form->isSynchronized());
+        $form->bind($formData);
 
         $view = $form->createView();
         $children = $view->children;
