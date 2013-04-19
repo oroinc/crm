@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\GridBundle\Tests\Unit\Filter\ORM;
 
+use Oro\Bundle\GridBundle\Field\FieldDescriptionInterface;
 use Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType;
 use Oro\Bundle\GridBundle\Filter\ORM\NumberFilter;
 
@@ -63,5 +64,50 @@ class NumberFilterTest extends FilterTestCase
     public function testGetDefaultOptions()
     {
         $this->assertEquals(array('form_type' => NumberFilterType::NAME), $this->model->getDefaultOptions());
+    }
+
+    public function getRenderSettingsDataProvider()
+    {
+        return array(
+            'default' => array(
+                array(),
+                array(NumberFilterType::NAME,
+                    array(
+                        'field_options' => array('required' => false),
+                        'show_filter' => false,
+                        'data_type' => NumberFilterType::DATA_INTEGER
+                    )
+                )
+            ),
+            'integer' => array(
+                array('data_type' => FieldDescriptionInterface::TYPE_INTEGER),
+                array(NumberFilterType::NAME,
+                    array(
+                        'field_options' => array('required' => false),
+                        'show_filter' => false,
+                        'data_type' => NumberFilterType::DATA_INTEGER
+                    )
+                )
+            ),
+            'decimal' => array(
+                array('data_type' => FieldDescriptionInterface::TYPE_DECIMAL),
+                array(NumberFilterType::NAME,
+                    array(
+                        'field_options' => array('required' => false),
+                        'show_filter' => false,
+                        'data_type' => NumberFilterType::DATA_DECIMAL
+                    )
+                )
+            ),
+        );
+    }
+
+    /**
+     * @dataProvider getRenderSettingsDataProvider
+     */
+    public function testGetRenderSettings($options, $expectedRenderSettings)
+    {
+        $this->model->initialize(self::TEST_NAME, $options);
+        $this->assertEquals($expectedRenderSettings, $this->model->getRenderSettings());
     }
 }

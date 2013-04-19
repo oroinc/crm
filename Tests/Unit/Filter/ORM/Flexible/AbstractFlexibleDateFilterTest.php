@@ -22,6 +22,10 @@ class AbstractFlexibleDateFilterTest extends FlexibleFilterTestCase
     public function filterDataProvider()
     {
         return array(
+            'no_data' => array(
+                'data' => array(),
+                'expectRepositoryCalls' => array()
+            ),
             'between' => array(
                 'data' => array(
                     'value' => array(
