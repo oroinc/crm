@@ -26,7 +26,7 @@ OroApp.DatagridFilterList = OroApp.Filter.List.extend({
     /**
      * Triggers when filter is updated
      *
-     * @param {OroApp.DatagridFilter} filter
+     * @param {OroApp.Filter.AbstractFilter} filter
      * @protected
      */
     _onFilterUpdated: function(filter) {
