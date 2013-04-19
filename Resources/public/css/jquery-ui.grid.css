@@ -102,7 +102,7 @@
 .ui-datepicker select.ui-datepicker-month,
 .ui-datepicker select.ui-datepicker-year {
     width: 49%;
-    height: 24px;
+    height: 23px;
     padding: 1px 3px;
 }
 .ui-datepicker table {
@@ -226,7 +226,7 @@
 /* css for timepicker */
 .ui-datepicker .ui-timepicker-div .ui-widget-header { margin-bottom: 8px; }
 .ui-datepicker .ui-timepicker-div dl { text-align: left; }
-.ui-datepicker .ui-timepicker-div dl dt { height: 25px; margin-bottom: -25px; }
+.ui-datepicker .ui-timepicker-div dl dt { height: 25px; margin-bottom: -21px; }
 .ui-datepicker .ui-timepicker-div dl dd { margin: 0 10px 10px 65px; }
 .ui-datepicker .ui-timepicker-div td { font-size: 90%; }
 .ui-datepicker .ui-tpicker-grid-label { background: none; border: none; margin: 0; padding: 0; }
@@ -251,6 +251,7 @@
     font-family: Verdana,Arial,sans-serif;
     font-size: 1em;
 }
+.ui-widget-content,
 .ui-datepicker.ui-widget-content{
     border: 1px solid #aaaaaa;
     background: #ffffff url(../images/ui-bg_flat_75_ffffff_40x100.png) 50% 50% repeat-x;
