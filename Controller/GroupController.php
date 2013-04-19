@@ -44,12 +44,14 @@ class GroupController extends Controller
             }
         }
 
+        /** @var $userGridManager GroupDatagridManager */
         $userGridManager = $this->get('oro_user.group_user_datagrid_manager');
         $userGridManager->getRouteGenerator()->setRouteParameters(array('id' => $entity->getId()));
+        $datagrid = $userGridManager->getDatagrid();
 
         return array(
             'form' => $this->get('oro_user.form.group')->createView(),
-            'datagrid' => $this->get('oro_user.group_user_datagrid_manager')->getDatagrid(),
+            'datagrid' => $datagrid->createView()
         );
     }
 
@@ -71,9 +73,11 @@ class GroupController extends Controller
                 $this->get('oro_user.group_manager')->getUserQueryBuilder($entity)
             );
 
-        return array(
-            'datagrid' => $this->get('oro_user.group_user_datagrid_manager')->getDatagrid(),
-        );
+        /** @var $datagridManager GroupDatagridManager */
+        $datagridManager = $this->get('oro_user.group_user_datagrid_manager');
+        $datagrid = $datagridManager->getDatagrid();
+
+        return array('datagrid' => $datagrid->createView());
     }
 
     /**
@@ -129,10 +133,7 @@ class GroupController extends Controller
 
         return $this->render(
             $view,
-            array(
-                'datagrid' => $datagrid,
-                'form'     => $datagrid->getForm()->createView()
-            )
+            array('datagrid' => $datagrid->createView())
         );
     }
 

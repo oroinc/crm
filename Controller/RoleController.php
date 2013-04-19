@@ -60,11 +60,13 @@ class RoleController extends Controller
             return $this->redirect($redirectUrl);
         }
 
+        /** @var $userGridManager RoleDatagridManager */
         $userGridManager = $this->get('oro_user.role_user_datagrid_manager');
         $userGridManager->getRouteGenerator()->setRouteParameters(array('id' => $entity->getId()));
+        $datagrid = $userGridManager->getDatagrid();
 
         return array(
-            'datagrid' => $userGridManager->getDatagrid(),
+            'datagrid' => $datagrid->createView(),
             'form' => $this->get('oro_user.form.role')->createView(),
         );
     }
@@ -87,9 +89,11 @@ class RoleController extends Controller
                  $this->get('oro_user.role_manager')->getUserQueryBuilder($entity)
              );
 
-        return array(
-            'datagrid' => $this->get('oro_user.role_user_datagrid_manager')->getDatagrid()
-        );
+        /** @var $datagridManager RoleDatagridManager */
+        $datagridManager = $this->get('oro_user.role_user_datagrid_manager');
+        $datagrid = $datagridManager->getDatagrid();
+
+        return array('datagrid' => $datagrid->createView());
     }
 
     /**
@@ -135,10 +139,7 @@ class RoleController extends Controller
 
         return $this->render(
             $view,
-            array(
-                'datagrid' => $datagrid,
-                'form'     => $datagrid->getForm()->createView()
-            )
+            array('datagrid' => $datagrid->createView())
         );
     }
 }
