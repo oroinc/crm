@@ -21,7 +21,7 @@ oro_navigation_api_shortcut:
         version:  latest
 
 oro_navigation_api_pagestate:
-    resource:     "@OroNavigationBundle/Controller/Api/PageStateController.php"
+    resource:     "@OroNavigationBundle/Controller/Api/PagestateController.php"
     type:         rest
     prefix:       api/rest/{version}/
     defaults:
