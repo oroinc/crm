@@ -14,7 +14,7 @@ use Oro\Bundle\GridBundle\Property\PropertyInterface;
 /**
  * @SuppressWarnings(PHPMD.TooManyMethods)
  */
-class DatagridTest2 extends \PHPUnit_Framework_TestCase
+class DatagridTest extends \PHPUnit_Framework_TestCase
 {
     public function testAddProperty()
     {
@@ -555,5 +555,14 @@ class DatagridTest2 extends \PHPUnit_Framework_TestCase
             );
 
         return $result;
+    }
+
+    public function testCreateView()
+    {
+        $datagrid = $this->createDatagrid();
+        $datagridView = $datagrid->createView();
+
+        $this->assertInstanceOf('Oro\Bundle\GridBundle\Datagrid\DatagridView', $datagridView);
+        $this->assertEquals($datagrid, $datagridView->getDatagrid());
     }
 }

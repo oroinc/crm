@@ -422,4 +422,12 @@ class Datagrid implements DatagridInterface
     {
         return $this->rowActions;
     }
+
+    /**
+     * @return DatagridView
+     */
+    public function createView()
+    {
+        return new DatagridView($this);
+    }
 }

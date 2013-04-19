@@ -40,6 +40,9 @@
     <script type="text/javascript" src="{{ asset_url }}"></script>
 {% endjavascripts %}
 
+{% set datagrid = datagridView.datagrid %}
+{% set form     = datagridView.formView %}
+
 <script type="text/javascript">
     {% set datagridName = datagrid.name ~ 'Datagrid' %}
     {% set collectionName = datagridName ~ 'Collection' %}
