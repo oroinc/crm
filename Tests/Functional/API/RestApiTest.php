@@ -7,6 +7,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Yaml\Yaml;
 use Symfony\Component\Finder\Iterator;
 
+use Acme\Bundle\TestsBundle\Test\ToolsAPI;
+
 class RestApiTest extends WebTestCase
 {
     /**
@@ -15,9 +17,6 @@ class RestApiTest extends WebTestCase
     protected $client;
 
     protected static $entities;
-
-    const AUTH_USER = "TestUsername";
-    const AUTH_PW = "12345";
 
     public function setUp()
     {
@@ -57,10 +56,10 @@ class RestApiTest extends WebTestCase
 
         $this->client->request(
             'POST',
-            "api/rest/latest/navigationitems/" . $itemType,
+            'api/rest/latest/navigationitems/' . $itemType,
             self::$entities[$itemType],
             array(),
-            array('PHP_AUTH_USER' => self::AUTH_USER, 'PHP_AUTH_PW' => self::AUTH_PW)
+            ToolsAPI::generateWsseHeader()
         );
 
         /** @var $result Response */
@@ -91,10 +90,10 @@ class RestApiTest extends WebTestCase
 
         $this->client->request(
             'PUT',
-            "api/rest/latest/navigationitems/" . $itemType . "/ids/" . self::$entities[$itemType]['id'],
+            'api/rest/latest/navigationitems/' . $itemType . '/ids/' . self::$entities[$itemType]['id'],
             $updatedPintab,
             array(),
-            array('PHP_AUTH_USER' => self::AUTH_USER, 'PHP_AUTH_PW' => self::AUTH_PW)
+            ToolsAPI::generateWsseHeader()
         );
 
         /** @var $result Response */
@@ -118,10 +117,10 @@ class RestApiTest extends WebTestCase
 
         $this->client->request(
             'GET',
-            "api/rest/latest/navigationitems/" . $itemType,
+            'api/rest/latest/navigationitems/' . $itemType,
             array(),
             array(),
-            array('PHP_AUTH_USER' => self::AUTH_USER, 'PHP_AUTH_PW' => self::AUTH_PW)
+            ToolsAPI::generateWsseHeader()
         );
 
         /** @var $result Response */
@@ -145,10 +144,10 @@ class RestApiTest extends WebTestCase
 
         $this->client->request(
             'DELETE',
-            "api/rest/latest/navigationitems/" . $itemType . "/ids/" . self::$entities[$itemType]['id'],
+            'api/rest/latest/navigationitems/' . $itemType . '/ids/' . self::$entities[$itemType]['id'],
             array(),
             array(),
-            array('PHP_AUTH_USER' => self::AUTH_USER, 'PHP_AUTH_PW' => self::AUTH_PW)
+            ToolsAPI::generateWsseHeader()
         );
 
         /** @var $result Response */
@@ -170,11 +169,12 @@ class RestApiTest extends WebTestCase
 
         $this->client->request(
             'PUT',
-            "api/rest/latest/navigationitems/" . $itemType . "/ids/" . self::$entities[$itemType]['id'],
+            'api/rest/latest/navigationitems/' . $itemType . '/ids/' . self::$entities[$itemType]['id'],
             self::$entities[$itemType],
             array(),
-            array('PHP_AUTH_USER' => self::AUTH_USER, 'PHP_AUTH_PW' => self::AUTH_PW)
+            ToolsAPI::generateWsseHeader()
         );
+
         /** @var $result Response */
         $result = $this->client->getResponse();
         $this->assertJsonResponse($result, 404);
@@ -183,10 +183,10 @@ class RestApiTest extends WebTestCase
 
         $this->client->request(
             'DELETE',
-            "api/rest/latest/navigationitems/" . $itemType . "/ids/" . self::$entities[$itemType]['id'],
+            'api/rest/latest/navigationitems/' . $itemType . '/ids/' . self::$entities[$itemType]['id'],
             array(),
             array(),
-            array('PHP_AUTH_USER' => self::AUTH_USER, 'PHP_AUTH_PW' => self::AUTH_PW)
+            ToolsAPI::generateWsseHeader()
         );
         /** @var $result Response */
         $result = $this->client->getResponse();
@@ -211,15 +211,11 @@ class RestApiTest extends WebTestCase
         );
 
         foreach ($requests as $requestType => $url) {
-            $this->client->request(
-                $requestType,
-                $url,
-                array(),
-                array(),
-                array()
-            );
+            $this->client->request($requestType, $url);
+
             /** @var $result Response */
             $response = $this->client->getResponse();
+
             $this->assertEquals(401, $response->getStatusCode());
 
             $this->client->restart();
@@ -247,7 +243,7 @@ class RestApiTest extends WebTestCase
                 $url,
                 array(),
                 array(),
-                array('PHP_AUTH_USER' => self::AUTH_USER, 'PHP_AUTH_PW' => self::AUTH_PW)
+                ToolsAPI::generateWsseHeader()
             );
 
             /** @var $response Response */
