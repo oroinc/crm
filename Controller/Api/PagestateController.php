@@ -18,7 +18,7 @@ use Oro\Bundle\NavigationBundle\Form\Type\PageStateType;
 /**
  * @NamePrefix("oro_api_")
  */
-class PageStateController extends FOSRestController implements ClassResourceInterface
+class PagestateController extends FOSRestController implements ClassResourceInterface
 {
     /**
      * Get list of user's page states
