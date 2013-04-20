@@ -19,16 +19,19 @@ class AddressType extends FlexibleType
         $required =  array(
             'required' => true,
         );
+        $notRequired =  array(
+            'required' => false,
+        );
 
         // address fields
         $builder
             ->add('street', 'text', $required)
-            ->add('street2', 'text')
+            ->add('street2', 'text', $notRequired)
             ->add('city', 'text', $required)
             ->add('state', 'text', $required)
             ->add('postal_code', 'text', $required)
             ->add('country', 'text', $required)
-            ->add('mark', 'text');
+            ->add('mark', 'text', $notRequired);
     }
 
     /**

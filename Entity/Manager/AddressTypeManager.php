@@ -37,9 +37,9 @@ class AddressTypeManager
     }
 
     /**
-     * Returns an empty address instance
+     * Returns an empty address type instance
      *
-     * @return Address
+     * @return AddressType
      */
     public function createAddressType()
     {
@@ -95,7 +95,7 @@ class AddressTypeManager
     }
 
     /**
-     * Returns the address's fully qualified class name.
+     * Returns the address's type fully qualified class name.
      *
      * @return string
      */

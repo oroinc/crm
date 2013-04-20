@@ -9,7 +9,6 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Entity(repositoryClass="Oro\Bundle\AddressBundle\Entity\Repository\AddressTypeRepository")
  * @ORM\Table(name="oro_address_type")
- * @ORM\HasLifecycleCallbacks()
  */
 class AddressType
 {

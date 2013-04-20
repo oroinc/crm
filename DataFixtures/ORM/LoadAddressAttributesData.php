@@ -4,10 +4,10 @@ namespace Oro\Bundle\AddressBundle\DataFixtures\ORM;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
-
-use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\TextType;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+
+use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\TextType;
 
 class LoadAddressAttributesData extends AbstractFixture implements ContainerAwareInterface
 {
@@ -52,10 +52,5 @@ class LoadAddressAttributesData extends AbstractFixture implements ContainerAwar
 
         $sm->persist($attr);
         $sm->flush();
-    }
-
-    public function getOrder()
-    {
-        return 110;
     }
 }

@@ -28,7 +28,6 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         $this->assertNotNull($obj->getUpdatedAt());
 
         $this->assertEquals($obj->getCreatedAt(), $obj->getUpdatedAt());
-
     }
 
 

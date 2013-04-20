@@ -10,6 +10,7 @@ class OroAddressExtensionTest extends \PHPUnit_Framework_TestCase
     {
         $extension = new OroAddressExtension();
         $configs = array();
+        $isCalled = false;
         $container = $this->getMock('Symfony\Component\DependencyInjection\ContainerBuilder');
 
         $container->expects($this->any())
