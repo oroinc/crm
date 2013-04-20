@@ -14,7 +14,7 @@ use Doctrine\Common\Persistence\ObjectManager;
  * @method string getFlexibleName()
  * @method string getFlexibleValueName()
  */
-class AddressManager
+class AddressManager implements StorageInterface
 {
     /**
      * @var string

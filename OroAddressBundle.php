@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\AddressBundle;
 
+use Oro\Bundle\AddressBundle\DependencyInjection\Compiler\AddressProviderPass;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
@@ -24,5 +25,7 @@ class OroAddressBundle extends Bundle
         /** @var $extension SecurityExtension */
         $extension = $container->getExtension('security');
         $extension->addSecurityListenerFactory(new ApiFactory());
+
+        $container->addCompilerPass(new AddressProviderPass());
     }
 }
