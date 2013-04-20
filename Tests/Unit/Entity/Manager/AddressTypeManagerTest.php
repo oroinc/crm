@@ -38,7 +38,7 @@ class AddressTypeManagerTest extends \PHPUnit_Framework_TestCase
         $this->fm = $this->getMockBuilder('Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleManager')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->class = 'Oro\Bundle\AddressBundle\Entity\Address';
+        $this->class = 'Oro\Bundle\AddressBundle\Entity\AddressType';
 
         $classMetaData = $this->getMockBuilder('Doctrine\ORM\Mapping\ClassMetadata')
             ->disableOriginalConstructor()

@@ -1,0 +1,8 @@
+oro_address_api:
+    resource: Oro\Bundle\AddressBundle\Controller\Api\AddressController
+    type: rest
+    prefix: api/rest/{version}/
+    requirements:
+        version: latest|v1
+    defaults:
+        version: latest

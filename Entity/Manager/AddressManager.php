@@ -137,6 +137,20 @@ class AddressManager
     }
 
     /**
+     * Returns basic query instance to get collection with all user instances
+     *
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function getListQuery()
+    {
+        return $this->getStorageManager()
+            ->createQueryBuilder()
+            ->select('a')
+            ->from('OroAddressBundle:Address', 'a')
+            ->orderBy('a.id', 'ASC');
+    }
+
+    /**
      * Provide proxy method calls to flexible manager
      *
      * @param string $name
