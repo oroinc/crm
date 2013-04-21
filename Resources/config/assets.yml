@@ -1,6 +1,3 @@
-css:
-  - 'bundles/oroui/css/all.css'
-  - 'bundles/oroui/css/less/main.less'
 js:
   - '@OroUIBundle/Resources/public/lib/underscore.js'
   - '@OroUIBundle/Resources/public/lib/backbone.js'

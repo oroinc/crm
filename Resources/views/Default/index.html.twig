@@ -28,6 +28,9 @@
                 <link rel="stylesheet" media="all" href="{{ asset_url }}" />
                 {% endstylesheets %}
             {% endif %}
+            {% oro_css filter='cssrewrite, lessphp, yui_css' output='js/oro_app.css' %}
+                <link rel="stylesheet" media="all" href="{{ asset_url }}" />
+            {% endoro_css %}
         {% endblock %}
 
         {% block head_script %}
