@@ -6,6 +6,7 @@ use Oro\Bundle\FlexibleEntityBundle\Exception\HasRequiredValueException;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Events;
+use Doctrine\ORM\Proxy\Proxy;
 
 /**
  * Define required value behavior, throw exception if value related to required attribute is not defined
@@ -87,7 +88,12 @@ class RequiredValueListener implements EventSubscriber
         if ($entity instanceof FlexibleInterface) {
 
             // get flexible config
-            $entityClass = get_class($entity);
+            $entityClass = false;
+            if ($entity instanceof Proxy) {
+                $entityClass = get_parent_class($entity);
+            } else {
+                $entityClass = get_class($entity);
+            }
             $flexibleConfig = $this->container->getParameter('oro_flexibleentity.flexible_config');
             $flexibleManagerName = $flexibleConfig['entities_config'][$entityClass]['flexible_manager'];
             $flexibleManager = $this->container->get($flexibleManagerName);
