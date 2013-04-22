@@ -12,7 +12,8 @@
         "nelmio/api-doc-bundle": "dev-master",
 
         "oro/ui-bundle": "dev-master",
-        "oro/user-bundle": "dev-master"
+        "oro/user-bundle": "dev-master",
+        "oro/address-bundle": "dev-address_flexible_type"
     },
     "autoload": {
         "psr-0": { "": "src/" }

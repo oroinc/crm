@@ -2,6 +2,8 @@
 
 namespace Oro\Bundle\AccountBundle\DataFixtures\ORM;
 
+use Oro\Bundle\AddressBundle\Model\AttributeType\AddressType;
+use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\MetricType;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -70,7 +72,11 @@ class LoadAccountAttrData extends AbstractFixture implements ContainerAwareInter
                 ),
                 'ownership',
                 'ticker_symbol',
-                'rating'
+                'rating',
+                array(
+                    'code' => 'shipping_address',
+                    'type' => new AddressType()
+                ),
             )
         );
 

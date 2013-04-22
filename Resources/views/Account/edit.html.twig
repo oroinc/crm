@@ -29,11 +29,10 @@
                             SymbolSuggest: {
                                 ssCallback: function (data) {
                                     var result = $.map(data.ResultSet.Result, function (item) {
-                                        return item.name;
+                                        return item.name + " (" + item.symbol + ")";
                                     });
                                     $.each(data.ResultSet.Result, function (itemKey, item) {
-                                        console.log(item)
-                                        cache[item.name] = item.symbol;
+                                        cache[item.name + " (" + item.symbol + ")"] = item.symbol;
                                     });
                                     process(result)
                                 }

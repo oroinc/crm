@@ -6,6 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityFlexibleValue;
 use Oro\Bundle\FlexibleEntityBundle\Entity\Attribute;
 use Oro\Bundle\AccountBundle\Entity\Account;
+use Oro\Bundle\AddressBundle\Entity\Address;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -43,4 +44,38 @@ class AccountValue extends AbstractEntityFlexibleValue
      * )
      */
     protected $options;
+
+    /**
+     * Store upload values
+     *
+     * @var Address $media
+     *
+     * @ORM\OneToOne(targetEntity="Oro\Bundle\AddressBundle\Entity\Address", cascade="persist")
+     * @ORM\JoinColumn(name="address_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    protected $address;
+
+    /**
+     * Get media
+     *
+     * @return Address
+     */
+    public function getAddress()
+    {
+        return $this->address;
+    }
+
+    /**
+     * Set media
+     *
+     * @param Address $media
+     *
+     * @return AccountValue
+     */
+    public function setAddress($media)
+    {
+        $this->address = $media;
+
+        return $this;
+    }
 }

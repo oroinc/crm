@@ -78,10 +78,18 @@ class AccountDatagridManager extends FlexibleDatagridManager
             $this->fieldsCollection->add($fieldName);
 
             foreach ($this->getFlexibleAttributes() as $attribute) {
-                $backendType   = $attribute->getBackendType();
-                $attributeType = $this->convertFlexibleTypeToFieldType($backendType);
-                $filterType    = $this->convertFlexibleTypeToFilterType($backendType);
-
+                if ($attribute->getCode() == 'shipping_address') {
+                    $attributeType = FieldDescriptionInterface::TYPE_TEXT;
+                    $filterType = FilterInterface::TYPE_STRING;
+                    $isSortable = false;
+                    $isSearchable = false;
+                } else {
+                    $backendType   = $attribute->getBackendType();
+                    $attributeType = $this->convertFlexibleTypeToFieldType($backendType);
+                    $filterType    = $this->convertFlexibleTypeToFilterType($backendType);
+                    $isSortable = true;
+                    $isSearchable = true;
+                }
                 $field = new FieldDescription();
                 $field->setName($attribute->getCode());
                 $field->setOptions(
@@ -91,8 +99,8 @@ class AccountDatagridManager extends FlexibleDatagridManager
                         'field_name'    => $attribute->getCode(),
                         'filter_type'   => $filterType,
                         'required'      => false,
-                        'sortable'      => true,
-                        'filterable'    => true,
+                        'sortable'      => $isSortable,
+                        'filterable'    => $isSearchable,
                         'flexible_name' => $this->flexibleManager->getFlexibleName()
                     )
                 );
