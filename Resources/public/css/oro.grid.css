@@ -42,6 +42,10 @@ table.grid tbody tr.row-click-action {
 }
 
 .loading-mask .loading-frame .box {
-    margin-top: 20px;
-    margin-bottom: 20px;
+    margin: 20px 0;
+}
+
+.loading-mask .loading-frame .box .loading-content {
+    background: #ffffff url('../img/loader.gif') no-repeat center left;
+    padding-left: 30px;
 }

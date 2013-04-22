@@ -15,13 +15,17 @@ OroApp.LoadingMask = OroApp.View.extend({
     /** @property {String} */
     className: 'loading-mask',
 
+    /** @property {String} */
+    loadingHint: 'Loading...',
+
     /** @property */
     template:_.template(
         '<div id="loading-wrapper" class="loading-wrapper"></div>' +
         '<div id="loading-frame" class="loading-frame">' +
             '<div class="box well">' +
-                '<img src="/bundles/oroui/img/loader.gif" alt="">' +
-                'Loading . . .' +
+                '<div class="loading-content">' +
+                    '<%= loadingHint %>' +
+                '</div>' +
             '</div>' +
         '</div>'
     ),
@@ -121,7 +125,9 @@ OroApp.LoadingMask = OroApp.View.extend({
      */
     render: function() {
         this.$el.empty();
-        this.$el.append(this.template());
+        this.$el.append(this.template({
+            loadingHint: this.loadingHint
+        }));
         this.hide();
         return this;
     }
