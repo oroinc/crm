@@ -18,30 +18,42 @@ Following table displays filter JavaScript class, parameters and block where the
 
 <table>
 <tr>
-    <th>&nbsp;</th>
-    <th>Text Filter</th>
-    <th>Number Filter</th>
-    <th>Date Range Filter</th>
-    <th>DateTime Range Filter</th>
-    <th>Select Filter</th>
-    <th>Multiselect Filter</th>
-</tr>
-<tr>
+    <th>Filter</th>
     <th>Block Name</th>
-    <td>oro_type_text_filter_js</td>
-    <td>oro_type_number_filter_js</td>
-    <td>oro_type_date_range_filter_js</td>
-    <td>oro_type_datetime_range_filter_js</td>
-    <td>oro_type_select_filter_js</td>
-    <td>oro_type_multiselect_filter_js</td>
+    <th>JavaScript Class</th>
 </tr>
 <tr>
-    <th>JavaScript Class</th>
+    <td>Text Filter</td>
+    <td>oro_type_text_filter_js</td>
     <td>OroApp.Filter.ChoiceFilter</td>
+</tr>
+<tr>
+    <td>Number Filter</td>
+    <td>oro_type_number_filter_js</td>
     <td>OroApp.Filter.NumberFilter</td>
+</tr>
+
+<tr>
+    <td>Date Range Filter</td>
+    <td>oro_type_date_range_filter_js</td>
     <td>OroApp.Filter.DateFilter</td>
+</tr>
+
+<tr>
+    <td>DateTime Range Filter</td>
+    <td>oro_type_datetime_range_filter_js</td>
     <td>OroApp.Filter.DateTimeFilter</td>
+</tr>
+
+<tr>
+    <td>Select Filter</td>
+    <td>oro_type_select_filter_js</td>
     <td>OroApp.Filter.SelectFilter</td>
+</tr>
+
+<tr>
+    <td>Multiselect Filter</td>
+    <td>oro_type_multiselect_filter_js</td>
     <td>OroApp.Filter.MultiSelectFilter</td>
 </tr>
 </table>
@@ -72,18 +84,18 @@ By default this blocks just include external templates.
 
 <table>
 <tr>
-    <th>&nbsp;</th>
-    <th>JavaScript Files</th>
-    <th>Style Files</th>
-</tr>
-<tr>
+    <th>Type</th>
     <th>Block Name</th>
-    <td>oro_filter_header_javascript</td>
-    <td>oro_filter_header_stylesheet</td>
+    <th>Including Template</th>
 </tr>
 <tr>
-    <th>Including Template</th>
+    <td>JavaScript Files</td>
+    <td>oro_filter_header_javascript</td>
     <td>OroFilterBundle:Header:javascript.html.twig</td>
+</tr>
+<tr>
+    <td>Style Files</td>
+    <td>oro_filter_header_stylesheet</td>
     <td>OroFilterBundle:Header:stylesheet.html.twig</td>
 </tr>
 </table>
