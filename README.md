@@ -7,4 +7,5 @@ powered by javascript. On side of application backend filters are represented wi
 It also means that filtering logic itself is out of scope of this bundle.
 
 - [Filters Form Types](./Resources/doc/reference/filter_form_types.md)
+- [Javascript Widgets](./Resources/doc/reference/javascript_widgets.md)
 
