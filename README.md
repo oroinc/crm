@@ -6,5 +6,5 @@ and to provide their data on backed. Filters on frontend are represented with in
 powered by javascript. On side of application backend filters are represented with standad symfony form types.
 It also means that filtering logic itself is out of scope of this bundle.
 
-- [Filters Form Types](./doc/reference/filter_form_types.md)
+- [Filters Form Types](./Resources/doc/reference/filter_form_types.md)
 
