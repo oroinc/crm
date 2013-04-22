@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\AddressBundle\Entity\Value;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 use Oro\Bundle\FlexibleEntityBundle\Entity\Attribute;

@@ -12,7 +12,6 @@ use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use FOS\Rest\Util\Codes;
 use Oro\Bundle\AddressBundle\Entity\Manager\AddressManager;
 
-
 /**
  * @RouteResource("address")
  * @NamePrefix("oro_api_")
@@ -79,7 +78,7 @@ class AddressController extends FOSRestController implements ClassResourceInterf
     /**
      * Get entity Manager
      *
-     * @return Oro\Bundle\AddressBundle\Entity\Manager\AddressManager
+     * @return AddressManager
      */
     protected function getManager()
     {
