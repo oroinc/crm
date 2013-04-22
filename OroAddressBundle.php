@@ -24,7 +24,7 @@ class OroAddressBundle extends Bundle
 
         /** @var $extension SecurityExtension */
         $extension = $container->getExtension('security');
-        $extension->addSecurityListenerFactory(new ApiFactory());
+        // $extension->addSecurityListenerFactory(new ApiFactory());
 
         $container->addCompilerPass(new AddressProviderPass());
     }

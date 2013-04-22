@@ -1,4 +1,5 @@
 parameters:
+    oro_address.address.base.class: Oro\Bundle\AddressBundle\Entity\AddressBase
     oro_address.address.entity.class: Oro\Bundle\AddressBundle\Entity\Address
     oro_address.address.type.entity.class: Oro\Bundle\AddressBundle\Entity\AddressType
 
@@ -53,8 +54,8 @@ services:
     oro_address.form.type.address:
         class: %oro_address.type.address.class%
         arguments:
-            - %oro_address.address.entity.class%
-            - %oro_address.address.entity.value.class%
+            - %oro_address.address.base.class%
+            - Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityFlexibleValue
         tags:
              - { name: form.type, alias: oro_address }
 

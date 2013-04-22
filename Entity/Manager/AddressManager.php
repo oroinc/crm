@@ -2,7 +2,7 @@
 
 namespace Oro\Bundle\AddressBundle\Entity\Manager;
 
-use Oro\Bundle\AddressBundle\Entity\Address;
+use Oro\Bundle\AddressBundle\Entity\AddressBase;
 use Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleManager;
 
 use Doctrine\Common\Persistence\ObjectManager;
@@ -50,7 +50,7 @@ class AddressManager implements StorageInterface
     /**
      * Returns an empty address instance
      *
-     * @return Address
+     * @return AddressBase
      */
     public function createAddress()
     {
@@ -62,11 +62,11 @@ class AddressManager implements StorageInterface
     /**
      * Updates an address
      *
-     * @param Address $address
+     * @param AddressBase $address
      * @param bool $flush Whether to flush the changes (default true)
      * @throws \RuntimeException
      */
-    public function updateAddress(Address $address, $flush = true)
+    public function updateAddress(AddressBase $address, $flush = true)
     {
         $this->getStorageManager()->persist($address);
         if ($flush) {
@@ -77,9 +77,9 @@ class AddressManager implements StorageInterface
     /**
      * Deletes an address
      *
-     * @param Address $address
+     * @param AddressBase $address
      */
-    public function deleteAddress(Address $address)
+    public function deleteAddress(AddressBase $address)
     {
         $this->getStorageManager()->remove($address);
         $this->getStorageManager()->flush();
@@ -89,7 +89,7 @@ class AddressManager implements StorageInterface
      * Finds one address by the given criteria
      *
      * @param  array $criteria
-     * @return Address
+     * @return AddressBase
      */
     public function findAddressBy(array $criteria)
     {
@@ -99,9 +99,9 @@ class AddressManager implements StorageInterface
     /**
      * Reloads an address
      *
-     * @param Address $address
+     * @param AddressBase $address
      */
-    public function reloadAddress(Address $address)
+    public function reloadAddress(AddressBase $address)
     {
         $this->getStorageManager()->refresh($address);
     }
