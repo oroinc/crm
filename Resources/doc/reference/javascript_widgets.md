@@ -255,24 +255,24 @@ Below is example of creating filter list:
 var filtersList = new OroApp.Filter.List({
     addButtonHint: '+ Add more',
     filters: {
-        username: OroApp.DatagridFilterChoice.extend({
+        username: OroApp.Filter.ChoiceFilter.extend({
             name:'username',
             label:'Username',
             enabled:true,
             choices:{"1": "contains", "2": "does not contain", "3": "is equal to"}
         }),
-        gender: OroApp.DatagridFilterSelect.extend({
+        gender: OroApp.Filter.SelectFilter.extend({
             name:'gender',
             label:'gender',
             enabled:false,
             options: {"18": "Male", "19": "Female"}
         },
-        salary: OroApp.DatagridFilterNumber.extend({
+        salary: OroApp.Filter.NumberFilter.extend({
             name:'salary',
             label:'salary',
             enabled:false,
             choices:{"1": "=", "2": ">", "3": "<"},
-            formatterOptions:{"decimals": 0, "grouping": false, "orderSeparator": "", "decimalSeparator": "."}
+            formatterOptions: {"decimals": 0, "grouping": false, "orderSeparator": "", "decimalSeparator": "."}
         })
     }
 });
