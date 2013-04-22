@@ -77,8 +77,9 @@ class AccountDatagridManager extends FlexibleDatagridManager
             );
             $this->fieldsCollection->add($fieldName);
 
+            $specialAttributes = array('shipping_address', 'billing_address');
             foreach ($this->getFlexibleAttributes() as $attribute) {
-                if ($attribute->getCode() == 'shipping_address') {
+                if (in_array($attribute->getCode(), $specialAttributes)) {
                     $attributeType = FieldDescriptionInterface::TYPE_TEXT;
                     $filterType = FilterInterface::TYPE_STRING;
                     $isSortable = false;
