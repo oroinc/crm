@@ -10,9 +10,11 @@ parameters:
     oro_address.address.entity.value.class: Oro\Bundle\AddressBundle\Entity\Value\AddressValue
 
     oro_address.type.address.class: Oro\Bundle\AddressBundle\Form\Type\AddressType
+    oro_address.type.address_api.class: Oro\Bundle\AddressBundle\Form\Type\AddressApiType
     oro_address.handler.address.class: Oro\Bundle\AddressBundle\Form\Handler\AddressHandler
 
     oro_address.provider.address.class: Oro\Bundle\AddressBundle\Provider\AddressProvider
+    oro_address.entity.value.class: Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityFlexibleValue
 
 services:
     oro_address.address.provider:
@@ -45,20 +47,37 @@ services:
             - %oro_address.address.type.entity.class%
             - @doctrine.orm.entity_manager
 
+    # address form definitions
     oro_address.form.address:
         class: Symfony\Component\Form\Form
         factory_method: createNamed
         factory_service: form.factory
         arguments: ["oro_address_form", "oro_address", null]
 
+    oro_address.form.address.api:
+        class:                        Symfony\Component\Form\Form
+        factory_method:               createNamed
+        factory_service:              form.factory
+        arguments:                    ["oro_address_form_api", "oro_address_form_api", null]
+
+    # address form type definitions
     oro_address.form.type.address:
         class: %oro_address.type.address.class%
         arguments:
             - %oro_address.address.base.class%
-            - Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityFlexibleValue
+            - %oro_address.entity.value.class%
         tags:
              - { name: form.type, alias: oro_address }
 
+    oro_address.form.type.address.api:
+        class: %oro_address.type.address_api.class%
+        arguments:
+            - %oro_address.address.base.class%
+            - %oro_address.entity.value.class%
+        tags:
+            - { name: form.type, alias: oro_address_form_api }
+
+    # address form handlers
     oro_address.form.handler.address:
         class: %oro_address.handler.address.class%
         scope: request
@@ -66,3 +85,8 @@ services:
             - @oro_address.form.address
             - @request
             - @doctrine.orm.entity_manager
+
+    oro_address.form.handler.address.api:
+        class:                        %oro_address.handler.address.class%
+        scope:                        request
+        arguments:                    ["@oro_address.form.address.api", "@request", "@doctrine.orm.entity_manager"]

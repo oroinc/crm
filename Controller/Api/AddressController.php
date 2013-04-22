@@ -11,6 +11,7 @@ use FOS\RestBundle\Controller\Annotations\QueryParam;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use FOS\Rest\Util\Codes;
 use Oro\Bundle\AddressBundle\Entity\Manager\AddressManager;
+use Oro\Bundle\AddressBundle\Entity\Address;
 
 /**
  * @RouteResource("address")
@@ -36,11 +37,9 @@ class AddressController extends FOSRestController implements ClassResourceInterf
     public function cgetAction()
     {
         $addressManager = $this->getManager();
-        //$items = $addressManager->getRepository()->findAll();
 
         $pager = $this->get('knp_paginator')->paginate(
-            $addressManager->getRepository()
-                ->createFlexibleQueryBuilder('address')
+            $addressManager->getListQuery()
                 ->getQuery()
                 ->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY),
             (int) $this->getRequest()->get('page', 1),
@@ -67,12 +66,43 @@ class AddressController extends FOSRestController implements ClassResourceInterf
      */
     public function getAction($id)
     {
-        $addressManager = $this->container->get('oro_address.address.manager');
-        $items = $addressManager->getRepository()->findAll();
+        $addressManager = $this->getManager();
+        $items = $addressManager->getRepository()->findOneById($id);
 
         return $this->handleView(
             $this->view($items, is_array($items) ? Codes::HTTP_OK : Codes::HTTP_NOT_FOUND)
         );
+    }
+
+    public function putAction()
+    {
+
+    }
+
+    /**
+     * Create new address
+     *
+     * @ApiDoc(
+     *  description="Create new address",
+     *  resource=true
+     * )
+     */
+    public function postAction()
+    {
+        $entity = $this->getManager()->createFlexible();
+
+        $this->fixFlexRequest($entity);
+
+        $view = $this->get('oro_address.form.handler.address.api')->process($entity)
+            ? RouteRedirectView::create('oro_api_get_address', array('id' => $entity->getId()), Codes::HTTP_CREATED)
+            : $this->view($this->get('oro_address.form.address.api'), Codes::HTTP_BAD_REQUEST);
+
+        return $this->handleView($view);
+    }
+
+    public function deleteAction()
+    {
+
     }
 
     /**
@@ -82,6 +112,60 @@ class AddressController extends FOSRestController implements ClassResourceInterf
      */
     protected function getManager()
     {
-        return $this->container->get('oro_address.address.manager');
+        return $this->get('oro_address.address.manager');
+    }
+
+    /**
+     * This is temporary fix for flexible entity values processing.
+     *
+     * Assumed that user will post data in the following format:
+     * {"id": "21", "street":"Test","city":"York","values":{"firstname":"John"}}
+     *
+     * @param User $entity
+     */
+    protected function fixFlexRequest(Address $entity)
+    {
+        $request = $this->getRequest()->request;
+        $data = $request->all('', array());
+        $attrDef = $this->getManager()->getAttributeRepository()->findBy(array('entityType' => get_class($entity)));
+        $attrVal = isset($data['values']) ? $data['values'] : array();
+
+        $data['values'] = array();
+
+        foreach ($attrDef as $i => $attr) {
+            /* @var $attr \Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityAttribute */
+            if ($attr->getBackendType() == 'options') {
+                if (in_array(
+                    $attr->getAttributeType(),
+                    array(
+                        'Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\OptionMultiSelectType',
+                        'Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\OptionMultiCheckboxType',
+                    ))
+                ) {
+                    $type    = 'options';
+                    $default = array($attr->getOptions()->offsetGet(0)->getId());
+                } else {
+                    $type    = 'option';
+                    $default = $attr->getOptions()->offsetGet(0)->getId();
+                }
+            } else {
+                $type    = $attr->getBackendType();
+                $default = null;
+            }
+
+            $data['values'][$i]        = array();
+            $data['values'][$i]['id']  = $attr->getId();
+            $data['values'][$i][$type] = $default;
+
+            foreach ($attrVal as $field) {
+                if ($attr->getCode() == (string) $field->code) {
+                    $data['values'][$i][$type] = (string) $field->value;
+
+                    break;
+                }
+            }
+        }
+
+        $request->set('profile', $data);
     }
 }
