@@ -3,9 +3,9 @@ Filters Form Types
 
 ### Table of Contents
 
-* [Filter Form Types](#filter-form-types)
-* [Example of Usage](#example-of-usage)
-* [References](#references)
+- [Filter Form Types](#filter-form-types)
+- [Example of Usage](#example-of-usage)
+- [References](#references)
 
 ### Overview
 
