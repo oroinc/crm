@@ -8,8 +8,8 @@ Filter bundles provides several templates which can be used to customize filter 
 - [Layout Template](#layout-template)
 - [Header Template](#header-template)
 
-Layout Template
----------------
+
+###Layout Template
 
 Layout template stores blocks which contain filter Javascript code to create object of appropriate filter.
 This template is used by twig extension oro_filter_render_filter_javascript to render filter code.
@@ -76,8 +76,8 @@ parameters:
     oro_filter.twig.layout: AcmeMyBundle:Filter:layout.js.twig
 ```
 
-Header Template
----------------
+
+###Header Template
 
 Header template contains blocks with all files required for filters - it is *.js and *.css files.
 By default this blocks just include external templates.
