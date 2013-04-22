@@ -1,30 +1,23 @@
 Javascript Widgets
 ------------------
 
-###Table of Contents
-
-- [Javascript Widgets](#javascript-widgets)
-    - [Overview](#overview)
-    - [OroApp.Filter.List](#oroappfilterlist)
-    - [OroApp.Filter.AbstractFilter](#oroappfilterabstractfilter)
-    - [OroApp.Filter.TextFilter](#oroappfiltertextfilter)
-    - [OroApp.Filter.ChoiceFilter](#oroappfilterchoicefilter)
-    - [OroApp.Filter.NumberFilter](#oroappfilternumberfilter)
-    - [OroApp.Filter.SelectFilter](#oroappfilterselectfilter)
-    - [OroApp.Filter.MultiSelectFilter](#oroappfiltermultiselectfilter)
-    - [OroApp.Filter.MultiSelectDecorator](#oroappfiltermultiselectdecorator)
-    - [OroApp.Filter.DateFilter](#oroappfilterdatefilter)
-    - [OroApp.Filter.DateTimeFilter](#oroappfilterdatetimefilter)
-- [Example of Usage](#example-of-usage)
-- [References](#references)
-
-
-###Overview
-
 On frontend side filter form types are represented by javascript widgets. 
 They are located in Resources/public/js directory and use javascript namespace OroApp.Filter.
 
-Main classes and responsibilities:
+###Table of Contents
+
+- [OroApp.Filter.List](#oroappfilterlist)
+- [OroApp.Filter.AbstractFilter](#oroappfilterabstractfilter)
+- [OroApp.Filter.TextFilter](#oroappfiltertextfilter)
+- [OroApp.Filter.ChoiceFilter](#oroappfilterchoicefilter)
+- [OroApp.Filter.NumberFilter](#oroappfilternumberfilter)
+- [OroApp.Filter.SelectFilter](#oroappfilterselectfilter)
+- [OroApp.Filter.MultiSelectFilter](#oroappfiltermultiselectfilter)
+- [OroApp.Filter.MultiSelectDecorator](#oroappfiltermultiselectdecorator)
+- [OroApp.Filter.DateFilter](#oroappfilterdatefilter)
+- [OroApp.Filter.DateTimeFilter](#oroappfilterdatetimefilter)
+- [Example of Usage](#example-of-usage)
+- [References](#references)
 
 ###OroApp.Filter.List
 
@@ -254,8 +247,7 @@ _OroApp.Filter.DateFilter_
 * typeValues
 * externalWidgetOptions
 
-Example of Usage
-----------------
+###Example of Usage
 
 Below is example of creating filter list:
 
@@ -287,7 +279,6 @@ var filtersList = new OroApp.Filter.List({
 $('#filter').html(filtersList.render().$el);
 ```
 
-References
-----------
+###References
 
 * Backbone.js - http://backbonejs.org/
