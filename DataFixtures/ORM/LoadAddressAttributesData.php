@@ -31,7 +31,8 @@ class LoadAddressAttributesData extends AbstractFixture implements ContainerAwar
         /**
          * @var $fm \Oro\Bundle\AddressBundle\Entity\Manager\AddressManager
          */
-        $fm = $this->container->get('oro_address.address.manager');
+        $fm = $this->container->get('oro_address.address.provider')->getStorage();
+        /** @var \Doctrine\Common\Persistence\ObjectManager $sm */
         $sm = $fm->getStorageManager();
 
         $attr = $fm

@@ -73,13 +73,6 @@ class AddressBase extends AbstractEntityFlexible
     protected $mark;
 
     /**
-     * @var \Oro\Bundle\FlexibleEntityBundle\Model\AbstractFlexibleValue[]
-     *
-     * @ORM\OneToMany(targetEntity="Oro\Bundle\AddressBundle\Entity\Value\AddressValue", mappedBy="entity", cascade={"persist", "remove"}, orphanRemoval=true)
-     */
-    protected $values;
-
-    /**
      * Get id
      *
      * @return integer 

@@ -50,7 +50,7 @@ class AddressManager implements StorageInterface
     /**
      * Returns an empty address instance
      *
-     * @return AddressBase
+     * @return \Oro\Bundle\AddressBundle\Entity\AddressBase
      */
     public function createAddress()
     {
