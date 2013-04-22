@@ -259,7 +259,7 @@ _OroApp.Filter.DateFilter_
 **Options Description**
 
 * **widget\_options** - Value of this option will be used by javascript widget to correctly display it's data. 
-* Default value of this option depend from of current application locale options.
+Default value of this option depend from of current application locale options.
 * **type\_values** - Value of this option will be used by javascript widget to generate valid hint of 
 current filter value (strings like "between %start% and %end%", "before %start%", "after %end%", 
 "not between %start%", etc)
