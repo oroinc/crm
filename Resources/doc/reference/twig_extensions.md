@@ -6,6 +6,10 @@ to render view objects of filters forms as HTML and javascript code.
 
 ###Table of Contents
 
+- [oro_filter_render_filter_javascript Function](#oro_filter_render_filter_javascript-function)
+- [oro_filter_render_header_javascript Function](#oro_filter_render_header_javascript-function)
+- [oro_filter_render_header_stylesheet Function](#oro_filter_render_header_stylesheet-function)
+
 
 ###oro_filter_render_filter_javascript Function
 
