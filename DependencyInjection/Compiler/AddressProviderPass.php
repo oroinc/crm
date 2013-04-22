@@ -21,9 +21,8 @@ class AddressProviderPass implements CompilerPassInterface
         $taggedServices = $container->findTaggedServiceIds(self::TAG);
 
         foreach ($taggedServices as $id => $tagAttributes) {
+            $addStorageArgs = array(new Reference($id));
             foreach ($tagAttributes as $attributes) {
-                $addStorageArgs = array(new Reference($id));
-
                 if (!empty($attributes['alias'])) {
                     $addStorageArgs[] = $attributes['alias'];
                 }
