@@ -9,7 +9,8 @@ Filters Form Types
 
 ### Overview
 
-PHP classes that represent filters and extend standard Symfony form types. Each filter form types is compound and consists of two fields:
+PHP classes that represent filters and extend standard Symfony form types. 
+Each filter form types is compound and consists of two fields:
 
 * field for filter value (named as "value")
 * field for filter operator (named as "type")
@@ -172,11 +173,13 @@ _OroApp.Filter.NumberFilter_
 
 **Options**
 
-* **data\_type** - This option can be used for configuration of value field type. Can be a value of one of constants: NumberFilterType::DATA\_INTEGER or NumberFilterType::DATA\_DECIMAL.
+* **data\_type** - This option can be used for configuration of value field type. Can be a value of one of constants: 
+NumberFilterType::DATA\_INTEGER or NumberFilterType::DATA\_DECIMAL.
 
 **formatter_options**
 
-In addition to data_type option, this option can contain parameters for number formatter that is used by value field. Available attributes are:
+In addition to data_type option, this option can contain parameters for number formatter that is used by value field. 
+Available attributes are:
 
 * decimals - maximum fraction digits
 * grouping - use grouping to separate digits
@@ -255,8 +258,11 @@ _OroApp.Filter.DateFilter_
 
 **Options Description**
 
-* **widget\_options** - Value of this option will be used by javascript widget to correctly display it's data. Default value of this option depend from of current application locale options.
-* **type\_values** - Value of this option will be used by javascript widget to generate valid hint of current filter value (strings like "between %start% and %end%", "before %start%", "after %end%", "not between %start%", etc)
+* **widget\_options** - Value of this option will be used by javascript widget to correctly display it's data. 
+* Default value of this option depend from of current application locale options.
+* **type\_values** - Value of this option will be used by javascript widget to generate valid hint of 
+current filter value (strings like "between %start% and %end%", "before %start%", "after %end%", 
+"not between %start%", etc)
 
 ### oro\_type\_datetime\_range\_filter Form Type
 
@@ -340,8 +346,8 @@ _Oro\Bundle\FilterBundle\Form\Type\DateTimeRangeType_
 Example of Usage
 ----------------
 
-You can use filter form types as any other form type in Symfony. For example, consider you have a form with two filters.
-In your form type you should add code like this:
+You can use filter form types as any other form type in Symfony. For example, consider you have a form 
+with three filters. In your form type you should add code like this:
 
 ``` php
 class MyFilterFormType extends AbstractType
