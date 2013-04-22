@@ -3,6 +3,7 @@ namespace Oro\Bundle\FlexibleEntityBundle\EventListener;
 
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\Common\EventSubscriber;
+use Doctrine\ORM\Proxy\Proxy;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Oro\Bundle\FlexibleEntityBundle\Model\FlexibleInterface;
@@ -64,7 +65,9 @@ class TranslatableListener implements EventSubscriber
 
             // get flexible entity class
             $flexibleEntityClass = false;
-            if ($entity instanceof FlexibleInterface) {
+            if ($entity instanceof Proxy) {
+                $flexibleEntityClass = get_parent_class($entity);
+            } elseif ($entity instanceof FlexibleInterface) {
                 $flexibleEntityClass = get_class($entity);
             } elseif ($entity instanceof AbstractAttributeOption) {
                 $flexibleEntityClass = $entity->getAttribute()->getEntityType();
