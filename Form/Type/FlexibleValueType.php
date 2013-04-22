@@ -40,6 +40,16 @@ class FlexibleValueType extends AbstractType
     {
         $builder->add('id', 'hidden');
 
+        $this->addSubscriber($builder);
+    }
+
+    /**
+     * Add subscriber
+     *
+     * @param FormBuilderInterface $builder
+     */
+    public function addSubscriber(FormBuilderInterface $builder)
+    {
         $subscriber = new AddValueFieldSubscriber($builder->getFormFactory());
         $builder->addEventSubscriber($subscriber);
     }
