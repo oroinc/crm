@@ -282,4 +282,19 @@ class Address extends AbstractEntityFlexible
         $this->created = new \DateTime();
         $this->updated = new \DateTime();
     }
+
+    public function __toString()
+    {
+        $data = array(
+            $this->getStreet(),
+            $this->getStreet2(),
+            ',',
+            $this->getPostalCode(),
+            $this->getCity(),
+            ',',
+            $this->getState(),
+            $this->getCountry()
+        );
+        return implode(' ', $data);
+    }
 }
