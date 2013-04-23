@@ -24,6 +24,7 @@ use Oro\Bundle\UserBundle\Datagrid\UserDatagridManager;
  *      description="Profile manipulation",
  *      parent="oro_user"
  * )
+ * @BackUrl("back", useSession=true)
  */
 class ProfileController extends Controller
 {
@@ -36,7 +37,6 @@ class ProfileController extends Controller
      *      description="View user profile",
      *      parent="oro_user_profile"
      * )
-     * @BackUrl("back")
      */
     public function showAction(User $user)
     {
@@ -104,27 +104,13 @@ class ProfileController extends Controller
      *      description="Edit user profile",
      *      parent="oro_user_profile"
      * )
-     * @BackUrl("back")
      */
     public function editAction(User $entity)
     {
-        $flashBag = $this->get('session')->getFlashBag();
-        if ($this->getRequest()->query->has('back')) {
-            $backUrl = $this->getRequest()->get('back');
-            $flashBag->set('backUrl', $backUrl);
-        } elseif ($flashBag->has('backUrl')) {
-            $backUrl = $flashBag->get('backUrl');
-            $backUrl = reset($backUrl);
-        } else {
-            $backUrl = null;
-        }
-
         if ($this->get('oro_user.form.handler.profile')->process($entity)) {
-            $flashBag->add('success', 'User successfully saved');
-
-            $redirectUrl = $backUrl ? $backUrl : $this->generateUrl('oro_user_index');
-
-            return $this->redirect($redirectUrl);
+            $this->get('session')->getFlashBag()->add('success', 'User successfully saved');
+            BackUrl::triggerRedirect();
+            return $this->redirect($this->generateUrl('oro_user_index'));
         }
 
         return array(
@@ -140,13 +126,13 @@ class ProfileController extends Controller
      *      description="Remove user profile",
      *      parent="oro_user_profile"
      * )
-     * @BackUrl("back")
      */
     public function removeAction(User $entity)
     {
         $this->getManager()->deleteUser($entity);
         $this->get('session')->getFlashBag()->add('success', 'User successfully removed');
 
+        BackUrl::triggerRedirect();
         return $this->redirect($this->generateUrl('oro_user_index'));
     }
 
@@ -163,7 +149,6 @@ class ProfileController extends Controller
      *      description="View list of user profiles",
      *      parent="oro_user_profile"
      * )
-     * @BackUrl("back")
      */
     public function indexAction(Request $request)
     {
