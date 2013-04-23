@@ -4,7 +4,6 @@ namespace Oro\Bundle\NavigationBundle\Menu;
 
 use Knp\Menu\ItemInterface;
 use Knp\Menu\Matcher\Matcher;
-use Symfony\Component\Security\Core\SecurityContextInterface;
 
 class NavigationHistoryBuilder extends NavigationItemBuilder
 {
@@ -32,8 +31,8 @@ class NavigationHistoryBuilder extends NavigationItemBuilder
      * Modify menu by adding, removing or editing items.
      *
      * @param \Knp\Menu\ItemInterface $menu
-     * @param array $options
-     * @param string|null $alias
+     * @param array                   $options
+     * @param string|null             $alias
      */
     public function build(ItemInterface $menu, array $options = array(), $alias = null)
     {

@@ -73,7 +73,7 @@ class PageState
     /**
      * Set user
      *
-     * @param  User $user
+     * @param  User      $user
      * @return PageState
      */
     public function setUser(User $user = null)
@@ -96,7 +96,7 @@ class PageState
     /**
      * Set page id
      *
-     * @param  string $pageId
+     * @param  string    $pageId
      * @return PageState
      */
     public function setPageId($pageId)
@@ -119,7 +119,7 @@ class PageState
     /**
      * Set data
      *
-     * @param  string $data
+     * @param  string    $data
      * @return PageState
      */
     public function setData($data)

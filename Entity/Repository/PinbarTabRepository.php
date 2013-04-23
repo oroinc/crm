@@ -14,8 +14,8 @@ class PinbarTabRepository extends EntityRepository implements NavigationReposito
      * Find all Pinbar tabs for specified user
      *
      * @param \Oro\Bundle\UserBundle\Entity\User $user
-     * @param string $type
-     * @param array $options
+     * @param string                             $type
+     * @param array                              $options
      *
      * @return array
      */
@@ -54,8 +54,8 @@ class PinbarTabRepository extends EntityRepository implements NavigationReposito
     /**
      * Increment positions of Pinbar tabs for specified user
      *
-     * @param \Oro\Bundle\UserBundle\Entity\User $user
-     * @param int $navigationItemId
+     * @param  \Oro\Bundle\UserBundle\Entity\User $user
+     * @param  int                                $navigationItemId
      * @return mixed
      */
     public function incrementTabsPositions($user, $navigationItemId)
@@ -63,7 +63,7 @@ class PinbarTabRepository extends EntityRepository implements NavigationReposito
         $updateQuery = $this->_em->createQuery(
             'UPDATE Oro\Bundle\NavigationBundle\Entity\NavigationItem p '
             . 'set p.position = p.position + 1 '
-            . 'WHERE p.id != ' . (int)$navigationItemId
+            . 'WHERE p.id != ' . (int) $navigationItemId
             . " AND p.type = 'pinbar'"
             . " AND p.user = :user"
         );

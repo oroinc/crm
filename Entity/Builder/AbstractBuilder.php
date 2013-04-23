@@ -18,7 +18,7 @@ abstract class AbstractBuilder
 
     /**
      * @param EntityManager $em
-     * @param string $type
+     * @param string        $type
      */
     public function __construct(EntityManager $em, $type)
     {

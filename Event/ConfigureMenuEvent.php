@@ -22,7 +22,7 @@ class ConfigureMenuEvent extends Event
 
     /**
      * @param FactoryInterface $factory
-     * @param ItemInterface $menu
+     * @param ItemInterface    $menu
      */
     public function __construct(FactoryInterface $factory, ItemInterface $menu)
     {
@@ -49,7 +49,7 @@ class ConfigureMenuEvent extends Event
     /**
      * Get event name for given menu.
      *
-     * @param string $name
+     * @param  string $name
      * @return string
      */
     public static function getEventName($name)

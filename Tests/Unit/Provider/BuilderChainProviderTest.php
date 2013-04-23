@@ -231,8 +231,8 @@ class BuilderChainProviderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param string $name
-     * @param null|int $position
+     * @param  string                                   $name
+     * @param  null|int                                 $position
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
     protected function getChildItem($name, $position = null)

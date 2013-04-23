@@ -2,7 +2,6 @@
 namespace Oro\Bundle\NavigationBundle\Title\TitleReader;
 
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
-use Symfony\Component\Yaml\Yaml;
 
 class ConfigReader extends Reader
 {
@@ -19,7 +18,7 @@ class ConfigReader extends Reader
     /**
      * Get Route/Title information from bundle configs
      *
-     * @param array $routes
+     * @param  array                                                                        $routes
      * @return array
      * @throws \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
      */
