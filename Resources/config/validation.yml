@@ -16,7 +16,7 @@ Oro\Bundle\AddressBundle\Entity\Address:
             - Length:
                   min: 2
                   max: 255
-        postal_code:
+        postalCode:
             - NotBlank: ~
             - Length:
                   max: 20

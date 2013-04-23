@@ -4,35 +4,39 @@ namespace Oro\Bundle\AddressBundle\Form\Type;
 
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Oro\Bundle\FlexibleEntityBundle\Form\Type\FlexibleType;
+use Oro\Bundle\FlexibleEntityBundle\Form\Type\FlexibleValueType;
 
+use Oro\Bundle\UserBundle\Form\EventListener\PatchSubscriber;
 
-class AddressApiType extends FlexibleType
+class AddressApiType extends AddressType
 {
     /**
      * {@inheritdoc}
      */
     public function addEntityFields(FormBuilderInterface $builder)
     {
-        // add default flexible fields
         parent::addEntityFields($builder);
+        $builder->addEventSubscriber(new PatchSubscriber());
+    }
 
-        $required =  array(
-            'required' => true,
+    /**
+     * Add entity fields to form builder
+     *
+     * @param FormBuilderInterface $builder
+     */
+    public function addDynamicAttributesFields(FormBuilderInterface $builder)
+    {
+        $builder->add(
+            'attributes',
+            'collection',
+            array(
+                'type'          => new FlexibleValueType($this->valueClass),
+                'property_path' => 'values',
+                'allow_add'     => true,
+                'allow_delete'  => true,
+                'by_reference'  => false
+            )
         );
-        $notRequired =  array(
-            'required' => false,
-        );
-
-        // address fields
-        $builder
-            ->add('street', 'text', $required)
-            ->add('street2', 'text', $notRequired)
-            ->add('city', 'text', $required)
-            ->add('state', 'text', $required)
-            ->add('postal_code', 'text', $required)
-            ->add('country', 'text', $required)
-            ->add('mark', 'text', $notRequired);
     }
 
     /**
