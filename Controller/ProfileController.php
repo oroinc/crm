@@ -179,10 +179,7 @@ class ProfileController extends Controller
 
         return $this->render(
             $view,
-            array(
-                'datagrid' => $datagrid,
-                'form'     => $datagrid->getForm()->createView()
-            )
+            array('datagrid' => $datagrid->createView())
         );
     }
 
