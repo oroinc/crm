@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\AddressBundle\Controller\Api;
+namespace Oro\Bundle\AddressBundle\Controller\Api\Rest;
 
 use Symfony\Component\HttpFoundation\Response;
 use FOS\RestBundle\Controller\FOSRestController;
