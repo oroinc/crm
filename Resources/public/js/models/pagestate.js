@@ -90,7 +90,6 @@ Oro.PageState.Model = Backbone.Model.extend({
     },
 
     url: function() {
-        //return '/app_dev.php/api/rest/latest/pagestate' + ((this.id) ? 's/'+this.id : '');
         return this.id
             ? Routing.generate('oro_api_get_pagestate', { id: this.id })
             : Routing.generate('oro_api_get_pagestates');
