@@ -270,11 +270,9 @@ abstract class AbstractAttribute implements TimestampableInterface
     public function setAttributeType($type)
     {
         $this->attributeType = $type;
-        // set backedn type from frontend if not already defined
-        if (is_null($this->backendType)) {
-            $attType = new $type();
-            $this->backendType = $attType->getBackendType();
-        }
+
+        $attType = new $type();
+        $this->backendType = $attType->getBackendType();
 
         return $this;
     }
