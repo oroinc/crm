@@ -2,7 +2,6 @@
 
 namespace Oro\Bundle\NavigationBundle\Provider;
 
-use Symfony\Component\Yaml\Yaml;
 use Symfony\Bundle\FrameworkBundle\Translation\Translator;
 use Symfony\Component\Routing\Route;
 use JMS\Serializer\Serializer;
@@ -87,11 +86,11 @@ class TitleService implements TitleServiceInterface
     /**
      * Return rendered translated title
      *
-     * @param array $params
+     * @param array  $params
      * @param string $title
      * @param string $prefix
      * @param string $suffix
-     * @param bool $isJSON
+     * @param bool   $isJSON
      * @return $this
      */
     public function render($params = array(), $title = null, $prefix = null, $suffix = null, $isJSON = false)

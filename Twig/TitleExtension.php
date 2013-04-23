@@ -49,7 +49,7 @@ class TitleExtension extends \Twig_Extension
     /**
      * Renders title
      *
-     * @param null $titleData
+     * @param  null   $titleData
      * @return string
      */
     public function render($titleData = null)

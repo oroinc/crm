@@ -10,7 +10,7 @@ class StoredTitleTest extends \PHPUnit_Framework_TestCase
      * @dataProvider provider
      *
      * @param string $property
-     * @param mixed $value
+     * @param mixed  $value
      */
     public function testSettersAndGetters($property, $value)
     {

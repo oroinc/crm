@@ -4,7 +4,6 @@ namespace Oro\Bundle\NavigationBundle\Menu\Matcher\Voter;
 
 use Knp\Menu\Matcher\Voter\UriVoter;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class RequestVoter extends UriVoter
 {
