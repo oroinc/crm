@@ -32,12 +32,14 @@ class RestApiTest extends WebTestCase
      */
     public function testPost()
     {
-        $requestData = array(
-            'street'  => 'Some kind',
-            'city'    => 'Old York',
-            'state'   => 'OY',
-            'country' => 'USA',
-            'postal_code' => '32422',
+        $requestData = array('address' =>
+            array(
+                'street'      => 'Some kind sd',
+                'city'        => 'Old York',
+                'state'       => 'OY',
+                'country'     => 'USA',
+                'postal_code' => '32422',
+            )
         );
 
         $this->client->request(
@@ -64,19 +66,18 @@ class RestApiTest extends WebTestCase
     /**
      * Test GET
      *
-     * @depends testPut
-     * @dataProvider navagationItemsProvider
      */
-    public function _tetestGet($itemType)
+    public function testGet()
     {
-        $this->assertNotEmpty(self::$entities[$itemType]);
+        $requestData = array('address' =>
+            array(
+                'id'          => 6,
+            )
+        );
 
         $this->client->request(
             'GET',
-            "api/rest/latest/navigationitems/" . $itemType,
-            array(),
-            array(),
-            array('PHP_AUTH_USER' => self::AUTH_USER, 'PHP_AUTH_PW' => self::AUTH_PW)
+            "api/rest/latest/address/" . $requestData['address']['id']
         );
 
         /** @var $result Response */

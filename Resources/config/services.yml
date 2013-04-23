@@ -58,7 +58,7 @@ services:
         class:                        Symfony\Component\Form\Form
         factory_method:               createNamed
         factory_service:              form.factory
-        arguments:                    ["oro_address_form_api", "oro_address_form_api", null]
+        arguments:                    ["address", "address", null]
 
     # address form type definitions
     oro_address.form.type.address:
@@ -75,7 +75,7 @@ services:
             - %oro_address.address.base.class%
             - %oro_address.entity.value.class%
         tags:
-            - { name: form.type, alias: oro_address_form_api }
+            - { name: form.type, alias: address }
 
     # address form handlers
     oro_address.form.handler.address:

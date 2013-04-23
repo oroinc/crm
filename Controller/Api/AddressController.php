@@ -8,6 +8,7 @@ use FOS\RestBundle\Routing\ClassResourceInterface;
 use FOS\RestBundle\Controller\Annotations\NamePrefix;
 use FOS\RestBundle\Controller\Annotations\RouteResource;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
+use FOS\RestBundle\View\RouteRedirectView;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use FOS\Rest\Util\Codes;
 use Oro\Bundle\AddressBundle\Entity\Manager\AddressManager;
@@ -119,14 +120,14 @@ class AddressController extends FOSRestController implements ClassResourceInterf
      * This is temporary fix for flexible entity values processing.
      *
      * Assumed that user will post data in the following format:
-     * {"id": "21", "street":"Test","city":"York","values":{"firstname":"John"}}
+     * {address: {"id": "21", "street":"Test","city":"York","values":{"firstname":"John"}}}
      *
      * @param User $entity
      */
     protected function fixFlexRequest(Address $entity)
     {
         $request = $this->getRequest()->request;
-        $data = $request->all('', array());
+        $data = $request->get('address', array());
         $attrDef = $this->getManager()->getAttributeRepository()->findBy(array('entityType' => get_class($entity)));
         $attrVal = isset($data['values']) ? $data['values'] : array();
 
@@ -166,6 +167,6 @@ class AddressController extends FOSRestController implements ClassResourceInterf
             }
         }
 
-        $request->set('profile', $data);
+        $request->set('address', $data);
     }
 }
