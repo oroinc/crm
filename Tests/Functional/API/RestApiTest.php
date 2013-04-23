@@ -14,7 +14,7 @@ class RestApiTest extends WebTestCase
      */
     protected $client;
 
-    protected static $entities;
+    protected static $id;
 
     public function setUp()
     {
@@ -48,18 +48,18 @@ class RestApiTest extends WebTestCase
             $requestData
         );
 
+
         /** @var $result Response */
         $result = $this->client->getResponse();
 
         $this->assertJsonResponse($result, 201);
+        $this->assertRegExp('#/addresses/[\d+]#', $result->headers->get('Location'));
 
-        $resultJson = json_decode($result->getContent(), true);
 
-        //$this->assertArrayHasKey("id", $resultJson);
-        //$this->assertGreaterThan(0, $resultJson["id"]);
+        preg_match('#/addresses/([\d]+)#', $result->headers->get('Location'), $match);
+        $this->assertArrayHasKey(1, $match);
 
-        $requestData['id'] = $resultJson["id"];
-        self::$entities = $requestData;
+        self::$id = $match[1];
     }
 
     /**
@@ -71,7 +71,7 @@ class RestApiTest extends WebTestCase
     {
         $this->client->request(
             'GET',
-            "api/rest/latest/addresses/1"
+            "api/rest/latest/addresses/".self::$id
         );
 
         /** @var $result Response */
@@ -82,6 +82,8 @@ class RestApiTest extends WebTestCase
 
         $this->assertNotEmpty($resultJson);
         $this->assertArrayHasKey('id', $resultJson);
+
+        $this->assertEquals($resultJson['id'], self::$id);
     }
 
     /**
@@ -91,23 +93,75 @@ class RestApiTest extends WebTestCase
      */
     public function testPut()
     {
-        $updated = array(
-            'street' => uniqid('street_')
+        $this->client->request(
+            'GET',
+            'http://localhost/api/rest/latest/addresses?limit=1'
         );
+
+        $result = $this->client->getResponse();
+        $this->assertJsonResponse($result, 200);
+
+        $result = json_decode($result->getContent(), true);
+        $this->assertGreaterThan(0, count($result));
+        $this->assertArrayHasKey('id', $result[0]);
+
+        $addressId = $result[0]['id'];
+
+        // update
+        $request = array('address' => $result[0]);
+        $request['address']['street'] .= '_Updated!!!';
+        unset($request['address']['created']);
+        unset($request['address']['updated']);
 
         $this->client->request(
             'PUT',
-            "api/rest/latest/addresses/1",
-            $updated
+            'http://localhost/api/rest/latest/addresses/' . $addressId,
+            $request
+        );
+
+        $result = $this->client->getResponse();
+        $this->assertJsonResponse($result, 204);
+
+        // open address by id
+        $this->client->request(
+            'GET',
+            'http://localhost/api/rest/latest/addresses/' . $addressId
+        );
+
+        $result = $this->client->getResponse();
+        $this->assertJsonResponse($result, 200);
+
+        $result = json_decode($result->getContent(), true);
+
+        // compare result
+        $this->assertEquals($request['address']['street'], $result['street']);
+    }
+
+    /**
+     * Test DELETE
+     *
+     * @depends testPost
+     */
+    public function testDelete()
+    {
+        $addressId = self::$id;
+
+        $this->client->request(
+            'DELETE',
+            'http://localhost/api/rest/latest/addresses/' . $addressId
         );
 
         /** @var $result Response */
         $result = $this->client->getResponse();
-        var_dump($result);
-        $this->assertJsonResponse($result, 200);
+        $this->assertJsonResponse($result, 204);
 
-        $resultJson = json_decode($result->getContent(), true);
-        $this->assertCount(0, $resultJson);
+        $this->client->request(
+            'GET',
+            'http://localhost/api/rest/latest/addresses/' . $addressId
+        );
+
+        $result = $this->client->getResponse();
+        $this->assertJsonResponse($result, 404);
     }
 
     /**

@@ -98,16 +98,14 @@ class AddressController extends FOSRestController implements ClassResourceInterf
             );
         }
 
-        /** @var $entity \Oro\Bundle\NavigationBundle\Entity\NavigationItemInterface */
         $entity = $this->getManager()->getRepository()->findOneById((int)$addressId);
         if (!$entity) {
             return $this->handleView($this->view(array(), Codes::HTTP_NOT_FOUND));
         }
 
         $this->fixFlexRequest($entity);
-
         $view = $this->get('oro_address.form.handler.address.api')->process($entity)
-            ? $this->view(array(), Codes::HTTP_OK)
+            ? $this->view(array(), Codes::HTTP_NO_CONTENT)
             : $this->view($this->get('oro_address.form.address.api'), Codes::HTTP_BAD_REQUEST);
 
 
@@ -154,8 +152,7 @@ class AddressController extends FOSRestController implements ClassResourceInterf
         }
 
         $em = $this->getManager();
-        $em->remove($entity);
-        $em->flush();
+        $em->deleteAddress($entity);
 
         return $this->handleView($this->view(array(), Codes::HTTP_NO_CONTENT));
     }
