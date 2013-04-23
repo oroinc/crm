@@ -8,6 +8,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
+use YsTools\BackUrlBundle\Annotation\BackUrl;
+
 use Oro\Bundle\UserBundle\Entity\Role;
 use Oro\Bundle\UserBundle\Annotation\Acl;
 use Oro\Bundle\UserBundle\Datagrid\RoleDatagridManager;
@@ -19,6 +21,7 @@ use Oro\Bundle\UserBundle\Datagrid\RoleDatagridManager;
  *      name="Role controller",
  *      description = "Role manipulation"
  * )
+ * @BackUrl("back", useSession=true)
  */
 class RoleController extends Controller
 {
@@ -41,30 +44,19 @@ class RoleController extends Controller
      */
     public function editAction(Role $entity)
     {
-        $flashBag = $this->get('session')->getFlashBag();
-        if ($this->getRequest()->query->has('back')) {
-            $backUrl = $this->getRequest()->get('back');
-            $flashBag->set('backUrl', $backUrl);
-        } elseif ($flashBag->has('backUrl')) {
-            $backUrl = $flashBag->get('backUrl');
-            $backUrl = reset($backUrl);
-        } else {
-            $backUrl = null;
-        }
-
         if ($this->get('oro_user.form.handler.role')->process($entity)) {
-            $flashBag->add('success', 'Role successfully saved');
-
-            $redirectUrl = $backUrl ? $backUrl : $this->generateUrl('oro_user_role_index');
-
-            return $this->redirect($redirectUrl);
+            $this->get('session')->getFlashBag()->add('success', 'Role successfully saved');
+            BackUrl::triggerRedirect();
+            return $this->redirect($this->generateUrl('oro_user_role_index'));
         }
 
+        /** @var $userGridManager RoleDatagridManager */
         $userGridManager = $this->get('oro_user.role_user_datagrid_manager');
         $userGridManager->getRouteGenerator()->setRouteParameters(array('id' => $entity->getId()));
+        $datagrid = $userGridManager->getDatagrid();
 
         return array(
-            'datagrid' => $userGridManager->getDatagrid(),
+            'datagrid' => $datagrid->createView(),
             'form' => $this->get('oro_user.form.role')->createView(),
         );
     }
@@ -87,9 +79,11 @@ class RoleController extends Controller
                  $this->get('oro_user.role_manager')->getUserQueryBuilder($entity)
              );
 
-        return array(
-            'datagrid' => $this->get('oro_user.role_user_datagrid_manager')->getDatagrid()
-        );
+        /** @var $datagridManager RoleDatagridManager */
+        $datagridManager = $this->get('oro_user.role_user_datagrid_manager');
+        $datagrid = $datagridManager->getDatagrid();
+
+        return array('datagrid' => $datagrid->createView());
     }
 
     /**
@@ -135,10 +129,7 @@ class RoleController extends Controller
 
         return $this->render(
             $view,
-            array(
-                'datagrid' => $datagrid,
-                'form'     => $datagrid->getForm()->createView()
-            )
+            array('datagrid' => $datagrid->createView())
         );
     }
 }

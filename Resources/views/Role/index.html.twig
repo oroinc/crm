@@ -2,8 +2,7 @@
 
 {% block head_script %}
     {{ parent() }}
-
-    {% include 'OroGridBundle:Include:javascript.html.twig' with {'datagrid': datagrid, 'selector': '#roles-grid'} %}
+    {% include 'OroGridBundle:Include:javascript.html.twig' with {'datagridView': datagrid, 'selector': '#roles-grid'} %}
 {% endblock %}
 
 {% block page_container %}

@@ -2,8 +2,7 @@
 
 {% block head_script %}
     {{ parent() }}
-
-    {% include 'OroGridBundle:Include:javascript.html.twig' with {'datagrid': datagrid, 'selector': '#users-grid'} %}
+    {% include 'OroGridBundle:Include:javascript.html.twig' with {'datagridView': datagrid, 'selector': '#users-grid'} %}
 {% endblock %}
 
 {% block page_container %}

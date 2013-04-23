@@ -8,11 +8,14 @@ use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
+use YsTools\BackUrlBundle\Annotation\BackUrl;
+
 use Oro\Bundle\UserBundle\Entity\Group;
 use Oro\Bundle\UserBundle\Datagrid\GroupDatagridManager;
 
 /**
  * @Route("/group")
+ * @BackUrl("back", useSession=true)
  */
 class GroupController extends Controller
 {
@@ -35,21 +38,23 @@ class GroupController extends Controller
      */
     public function editAction(Group $entity)
     {
-        $backUrl = $this->getRedirectUrl($this->generateUrl('oro_user_group_index'));
         if ($this->get('oro_user.form.handler.group')->process($entity)) {
             $this->get('session')->getFlashBag()->add('success', 'Group successfully saved');
 
             if (!$this->getRequest()->get('_widgetContainer')) {
-                return $this->redirect($backUrl);
+                BackUrl::triggerRedirect();
+                return $this->redirect($this->generateUrl('oro_user_group_index'));
             }
         }
 
+        /** @var $userGridManager GroupDatagridManager */
         $userGridManager = $this->get('oro_user.group_user_datagrid_manager');
         $userGridManager->getRouteGenerator()->setRouteParameters(array('id' => $entity->getId()));
+        $datagrid = $userGridManager->getDatagrid();
 
         return array(
             'form' => $this->get('oro_user.form.group')->createView(),
-            'datagrid' => $this->get('oro_user.group_user_datagrid_manager')->getDatagrid(),
+            'datagrid' => $datagrid->createView()
         );
     }
 
@@ -71,9 +76,11 @@ class GroupController extends Controller
                 $this->get('oro_user.group_manager')->getUserQueryBuilder($entity)
             );
 
-        return array(
-            'datagrid' => $this->get('oro_user.group_user_datagrid_manager')->getDatagrid(),
-        );
+        /** @var $datagridManager GroupDatagridManager */
+        $datagridManager = $this->get('oro_user.group_user_datagrid_manager');
+        $datagrid = $datagridManager->getDatagrid();
+
+        return array('datagrid' => $datagrid->createView());
     }
 
     /**
@@ -129,32 +136,8 @@ class GroupController extends Controller
 
         return $this->render(
             $view,
-            array(
-                'datagrid' => $datagrid,
-                'form'     => $datagrid->getForm()->createView()
-            )
+            array('datagrid' => $datagrid->createView())
         );
     }
 
-    /**
-     * Get redirect URLs
-     *
-     * @param  string $default
-     * @return string
-     */
-    protected function getRedirectUrl($default)
-    {
-        $flashBag = $this->get('session')->getFlashBag();
-        if ($this->getRequest()->query->has('back')) {
-            $backUrl = $this->getRequest()->get('back');
-            $flashBag->set('backUrl', $backUrl);
-        } elseif ($flashBag->has('backUrl')) {
-            $backUrl = $flashBag->get('backUrl');
-            $backUrl = reset($backUrl);
-        } else {
-            $backUrl = null;
-        }
-
-        return $backUrl ? $backUrl : $default;
-    }
 }
