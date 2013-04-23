@@ -49,11 +49,62 @@
                 '@OroUIBundle/Resources/public/js/backbone/app/model.js'
                 '@OroUIBundle/Resources/public/js/backbone/app/view.js'
                 '@OroUIBundle/Resources/public/js/backbone/app/router.js'
+                '@OroUIBundle/Resources/public/js/backbone/app/events.js'
                 '@OroUIBundle/Resources/public/js/backbone/app/collection.js'
                 '@OroUIBundle/Resources/public/js/backbone/setup.js'
 
-                filter='?yui_js'
-                output='js/oroapp.all.js'
+                '@OroUIBundle/Resources/public/js/hash.navigation.js'
+                '@OroUIBundle/Resources/public/js/url.min.js'
+
+
+                '@OroUIBundle/Resources/public/lib/backbone.bootstrap-modal.js'
+
+                '@OroGridBundle/Resources/public/lib/backbone-pageable.js'
+                '@OroGridBundle/Resources/public/lib/backgrid/backgrid.js'
+                '@OroGridBundle/Resources/public/lib/moment/moment.js'
+                '@OroGridBundle/Resources/public/lib/backgrid/extensions/moment-cell/backgrid-moment-cell.js'
+
+                '@OroGridBundle/Resources/public/lib/multiselect/jquery.multiselect.js'
+                '@OroGridBundle/Resources/public/lib/multiselect/jquery.multiselect.filter.js'
+
+                '@OroGridBundle/Resources/public/lib/jquery-ui-timepicker-addon.js'
+
+                '@OroGridBundle/Resources/public/js/app/datagrid/action/datagrid-action-launcher.js'
+                '@OroGridBundle/Resources/public/js/app/datagrid/action/datagrid-action.js'
+                '@OroGridBundle/Resources/public/js/app/datagrid/action/datagrid-action-navigate.js'
+                '@OroGridBundle/Resources/public/js/app/datagrid/action/datagrid-action-delete.js'
+                '@OroGridBundle/Resources/public/js/app/datagrid/action/datagrid-action.js'
+                '@OroGridBundle/Resources/public/js/app/datagrid/action/datagrid-action-cell.js'
+
+                '@OroGridBundle/Resources/public/js/app/datagrid/datagrid-header-cell.js'
+                '@OroGridBundle/Resources/public/js/app/datagrid/datagrid-header.js'
+                '@OroGridBundle/Resources/public/js/app/datagrid/datagrid-body.js'
+
+                '@OroGridBundle/Resources/public/js/app/datagrid/datagrid-pagination.js'
+                '@OroGridBundle/Resources/public/js/app/datagrid/pagination/datagrid-pagination-input.js'
+                '@OroGridBundle/Resources/public/js/app/datagrid/datagrid-pagesize.js'
+                '@OroGridBundle/Resources/public/js/app/datagrid/datagrid-toolbar.js'
+
+                '@OroGridBundle/Resources/public/js/app/datagrid/filter/datagrid-filter-list.js'
+                '@OroGridBundle/Resources/public/js/app/datagrid/filter/datagrid-filter.js'
+                '@OroGridBundle/Resources/public/js/app/datagrid/filter/datagrid-filter-text.js'
+                '@OroGridBundle/Resources/public/js/app/datagrid/filter/datagrid-filter-choice.js'
+                '@OroGridBundle/Resources/public/js/app/datagrid/filter/datagrid-filter-number.js'
+                '@OroGridBundle/Resources/public/js/app/datagrid/filter/datagrid-filter-date.js'
+                '@OroGridBundle/Resources/public/js/app/datagrid/filter/datagrid-filter-datetime.js'
+                '@OroGridBundle/Resources/public/js/app/datagrid/filter/datagrid-filter-select.js'
+                '@OroGridBundle/Resources/public/js/app/datagrid/filter/datagrid-filter-multiselect.js'
+
+                '@OroGridBundle/Resources/public/js/app/backgrid-formatter.js'
+
+                '@OroGridBundle/Resources/public/js/app/loadingmask.js'
+                '@OroGridBundle/Resources/public/js/app/datagrid.js'
+
+                '@OroGridBundle/Resources/public/js/app/datagrid/datagrid-router.js'
+
+                '@OroGridBundle/Resources/public/js/app/pageablecollection.js'
+
+                '@OroGridBundle/Resources/public/js/app/multiselect-decorator.js'
             %}
                 <script type="text/javascript" src="{{ asset_url }}"></script>
             {% endjavascripts %}
@@ -70,6 +121,11 @@
             <!--[if lte IE 7]>
                 <script src="{{ asset ('bundles/oroui/js/ie.js') }}"></script>
             <![endif]-->
+            <script type="text/javascript">
+                jQuery(document).ready(function() {
+                    new OroApp.hashNavigation({baseUrl : '{{ app.request.getSchemeAndHttpHost() }}'});
+                })
+            </script>
         {% endblock %}
     {% endblock %}
 </head>
@@ -223,7 +279,9 @@
                                                 </ul>
                                             </div>
                                             <div id="history-content" class="tab-pane">
-                                                {{ oro_menu_render('history', {'maxItems': 10}) }}
+                                                <ul class="extra-list">
+                                                    <li>History</li>
+                                                </ul>
                                             </div>
                                             <div id="favorites-content" class="tab-pane">
                                                 <ul class="extra-list">
@@ -346,6 +404,8 @@
                 {% endblock pin_bar %}
                 {% block application_menu %}
                 {% endblock application_menu %}
+
+            <div id="container">
                 {% block page_container %}
                 {% block content %}
                     <div class="container" style="background: #fff">
@@ -389,6 +449,7 @@
                     </div>
                 {% endblock content %}
                 {% endblock page_container %}
+            </div>
         </div>
         {% endblock main %}
     </div>

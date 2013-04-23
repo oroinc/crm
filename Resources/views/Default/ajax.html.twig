@@ -1,0 +1,11 @@
+<div id="head">
+    <title>{% block title %}{% endblock title %}</title>
+    {% block head_script %}
+    {% endblock head_script %}
+</div>
+<div id="content">
+    {% block page_container %}
+        {% block content %}
+        {% endblock content %}
+    {% endblock page_container %}
+</div>
