@@ -2,207 +2,112 @@
 
 namespace Oro\Bundle\GridBundle\Tests\Unit\Filter\ORM;
 
+use Oro\Bundle\GridBundle\Field\FieldDescriptionInterface;
+use Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType;
 use Oro\Bundle\GridBundle\Filter\ORM\NumberFilter;
-use Oro\Bundle\GridBundle\Form\Type\Filter\NumberType;
 
 class NumberFilterTest extends FilterTestCase
 {
-    /**#@+
-     * Test parameters
-     */
-    const TEST_NAME      = 'test_name';
-    const TEST_LABEL     = 'test_label';
-    const TEST_TYPE      = 'test_type';
-    const TEST_ALIAS     = 'test_alias';
-    const TEST_FIELD     = 'test_field';
-    const TEST_VALUE     = '3.14';
-    const TEST_UNIQUE_ID = 'test_unique_id';
-    const TEST_PARAMETER = 'test_name_test_unique_id';
-    /**#@-*/
-
-    /**
-     * @var array
-     */
-    protected $filterTypes = array(
-        NumberType::TYPE_EQUAL,
-        NumberType::TYPE_GREATER_EQUAL,
-        NumberType::TYPE_GREATER_THAN,
-        NumberType::TYPE_LESS_EQUAL,
-        NumberType::TYPE_LESS_THAN,
-    );
-
-    /**
-     * @var NumberFilter
-     */
-    protected $model;
-
-    /**
-     * @var array
-     */
-    protected $expectedRenderSettings = array(
-        'oro_grid_type_filter_number', array(
-            'field_type'    => self::TEST_TYPE,
-            'field_options' => array('required' => false),
-            'label'         => self::TEST_LABEL
-        )
-    );
-
-    /**
-     * @var array
-     */
-    protected $knownOperators = array(
-        NumberType::TYPE_EQUAL         => '=',
-        NumberType::TYPE_GREATER_EQUAL => '>=',
-        NumberType::TYPE_GREATER_THAN  => '>',
-        NumberType::TYPE_LESS_EQUAL    => '<=',
-        NumberType::TYPE_LESS_THAN     => '<',
-    );
-
-    protected function setUp()
+    protected function createTestFilter()
     {
-        $this->model = new NumberFilter($this->getTranslatorMock());
+        return new NumberFilter($this->getTranslatorMock());
     }
 
-    protected function tearDown()
-    {
-        unset($this->model);
-    }
-
-    public function testGetRenderSettings()
-    {
-        $this->model->initialize(
-            self::TEST_NAME,
-            array(
-                'label' => self::TEST_LABEL,
-                'type'  => self::TEST_TYPE,
-            )
-        );
-
-        $this->assertEquals($this->expectedRenderSettings, $this->model->getRenderSettings());
-    }
-
-    public function testGetTypeOptions()
-    {
-        $actualTypes = $this->model->getTypeOptions();
-        $this->assertTypeOptions($actualTypes);
-    }
-
-    /**
-     * Data provider testGetOperator
-     *
-     * @return array
-     */
     public function getOperatorDataProvider()
     {
-        $cases = array(
-            'no_operator' => array(
-                '$expected' => false,
-                '$type'     => false,
-            ),
-            'default_operator' => array(
-                '$expected' => $this->knownOperators[NumberType::TYPE_EQUAL],
-                '$type'     => false,
-                '$default'  => NumberType::TYPE_EQUAL
-            ),
-
+        return array(
+            array(NumberFilterType::TYPE_GREATER_EQUAL, '>='),
+            array(NumberFilterType::TYPE_GREATER_THAN, '>'),
+            array(NumberFilterType::TYPE_EQUAL, '='),
+            array(NumberFilterType::TYPE_LESS_EQUAL, '<='),
+            array(NumberFilterType::TYPE_LESS_THAN, '<'),
+            array(false, '=')
         );
-        foreach ($this->knownOperators as $operator => $string) {
-            $key = 'operator_' . $string;
-            $cases[$key] = array(
-                '$expected' => $string,
-                '$type'     => $operator,
-            );
-        }
-
-        return $cases;
-    }
-
-    /**
-     * @param string|bool $expected
-     * @param int $type
-     * @param int $default
-     *
-     * @dataProvider getOperatorDataProvider
-     */
-    public function testGetOperator($expected, $type, $default = null)
-    {
-        $this->assertEquals($expected, $this->model->getOperator($type, $default));
     }
 
     public function filterDataProvider()
     {
         return array(
-            'incorrect_no_data' => array(
-                '$data' => array(),
+            'not_array_value' => array(
+                'data' => '',
+                'expectProxyQueryCalls' => array()
             ),
-            'incorrect_type' => array(
-                '$data' => 'incorrectData',
+            'no_data' => array(
+                'data' => array(),
+                'expectProxyQueryCalls' => array()
             ),
-            'incorrect_no_value' => array(
-                '$data' => array(
-                    'key' => 'value'
-                ),
+            'no_value' => array(
+                'data' => array('value' => ''),
+                'expectProxyQueryCalls' => array()
             ),
-            'incorrect_not_numeric' => array(
-                '$data' => array(
-                    'value' => 'stringData'
-                ),
+            'not_numeric' => array(
+                'data' => array('value' => 'abc'),
+                'expectProxyQueryCalls' => array()
             ),
-            'correct_defined_operator' => array(
-                '$data'      => array(
-                    'value' => self::TEST_VALUE,
-                    'type'  => NumberType::TYPE_GREATER_THAN
-                ),
-                '$expected'  => self::TEST_ALIAS . '.' . self::TEST_FIELD . ' > :' . self::TEST_PARAMETER,
-                '$isCorrect' => true
+            'equals' => array(
+                'data' => array('value' => 123, 'type' => NumberFilterType::TYPE_EQUAL),
+                'expectProxyQueryCalls' => array(
+                    array('getUniqueParameterId', array(), 'p1'),
+                    array('andWhere',
+                        array(
+                            $this->getExpressionFactory()->eq(
+                                self::TEST_ALIAS . '.' . self::TEST_FIELD,
+                                ':' . self::TEST_NAME . '_p1'
+                            )
+                        ), null),
+                    array('setParameter', array(self::TEST_NAME . '_p1', 123), null)
+                )
             ),
-            'correct_default_operator' => array(
-                '$data'      => array(
-                    'value' => self::TEST_VALUE
-                ),
-                '$expected'  => self::TEST_ALIAS . '.' . self::TEST_FIELD . ' = :' . self::TEST_PARAMETER,
-                '$isCorrect' => true
-            )
         );
-    }
-
-    /**
-     * @param array $data
-     * @param string $expected
-     * @param bool $isCorrect
-     *
-     * @dataProvider filterDataProvider
-     */
-    public function testFilter($data, $expected = null, $isCorrect = false)
-    {
-        $queryBuilder = $this->getMock(
-            'Oro\Bundle\GridBundle\Datagrid\ORM\ProxyQuery',
-            array('getUniqueParameterId', 'andWhere', 'setParameter'),
-            array(),
-            '',
-            false
-        );
-        if ($isCorrect) {
-            $queryBuilder->expects($this->once())
-                ->method('getUniqueParameterId')
-                ->will($this->returnValue(self::TEST_UNIQUE_ID));
-            $queryBuilder->expects($this->once())
-                ->method('andWhere')
-                ->will($this->returnCallback(array($this, 'andWhereCallback')));
-            $queryBuilder->expects($this->once())
-                ->method('setParameter')
-                ->with(self::TEST_PARAMETER, $data['value']);
-        }
-
-        $this->model->initialize(self::TEST_NAME, array('field_mapping' => true));
-        $this->model->filter($queryBuilder, self::TEST_ALIAS, self::TEST_FIELD, $data);
-        $this->assertEquals($expected, $this->actualCondition);
     }
 
     public function testGetDefaultOptions()
     {
-        $defaultOptions = $this->model->getDefaultOptions();
-        $this->assertInternalType('array', $defaultOptions);
-        $this->assertEmpty($defaultOptions);
+        $this->assertEquals(array('form_type' => NumberFilterType::NAME), $this->model->getDefaultOptions());
+    }
+
+    public function getRenderSettingsDataProvider()
+    {
+        return array(
+            'default' => array(
+                array(),
+                array(NumberFilterType::NAME,
+                    array(
+                        'field_options' => array('required' => false),
+                        'show_filter' => false,
+                        'data_type' => NumberFilterType::DATA_INTEGER
+                    )
+                )
+            ),
+            'integer' => array(
+                array('data_type' => FieldDescriptionInterface::TYPE_INTEGER),
+                array(NumberFilterType::NAME,
+                    array(
+                        'field_options' => array('required' => false),
+                        'show_filter' => false,
+                        'data_type' => NumberFilterType::DATA_INTEGER
+                    )
+                )
+            ),
+            'decimal' => array(
+                array('data_type' => FieldDescriptionInterface::TYPE_DECIMAL),
+                array(NumberFilterType::NAME,
+                    array(
+                        'field_options' => array('required' => false),
+                        'show_filter' => false,
+                        'data_type' => NumberFilterType::DATA_DECIMAL
+                    )
+                )
+            ),
+        );
+    }
+
+    /**
+     * @dataProvider getRenderSettingsDataProvider
+     */
+    public function testGetRenderSettings($options, $expectedRenderSettings)
+    {
+        $this->model->initialize(self::TEST_NAME, $options);
+        $this->assertEquals($expectedRenderSettings, $this->model->getRenderSettings());
     }
 }

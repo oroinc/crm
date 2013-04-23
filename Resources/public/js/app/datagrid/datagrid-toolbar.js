@@ -89,7 +89,7 @@ OroApp.DatagridToolbar = OroApp.View.extend({
         this.$el.empty();
         this.$el.append(this.template());
 
-        this.$('.pagination').append(this.pagination.render().$el);
+        this.$('.pagination').replaceWith(this.pagination.render().$el);
         this.$('.page-size').append(this.pageSize.render().$el);
 
         return this;
