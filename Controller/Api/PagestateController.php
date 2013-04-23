@@ -174,7 +174,7 @@ class PagestateController extends FOSRestController implements ClassResourceInte
     protected function getState(PageState $entity = null)
     {
         return array(
-            'id' => $entity ? $entity->getId() : 0,
+            'id' => $entity ? $entity->getId() : null,
             'pagestate' => array(
                 'data' => $entity ? $entity->getData() : '',
                 'pageId' => $entity ? $entity->getPageId() : ''
