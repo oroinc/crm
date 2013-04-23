@@ -16,7 +16,7 @@ class TitleTemplate
     private $titleTemplate;
 
     /**
-     * @param array $data
+     * @param  array             $data
      * @throws \RuntimeException
      */
     public function __construct(array $data)

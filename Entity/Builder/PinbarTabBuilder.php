@@ -29,7 +29,7 @@ class PinbarTabBuilder extends AbstractBuilder
     /**
      * Find navigation item
      *
-     * @param int $itemId
+     * @param  int            $itemId
      * @return PinbarTab|null
      */
     public function findItem($itemId)

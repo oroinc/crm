@@ -51,7 +51,7 @@ class ResponseHistoryListener
     /**
      * Process onReslonse event, updates user history information
      *
-     * @param FilterResponseEvent $event
+     * @param  FilterResponseEvent $event
      * @return bool|void
      */
     public function onResponse(FilterResponseEvent $event)
@@ -100,8 +100,8 @@ class ResponseHistoryListener
     /**
      * Is request valid for adding to history
      *
-     * @param Response $response
-     * @param Request $request
+     * @param  Response $response
+     * @param  Request  $request
      * @return bool
      */
     private function matchRequest(Response $response, Request $request)

@@ -30,7 +30,7 @@ class AnnotationsReader extends Reader
     /**
      * Get Route/Title information from controller annotations
      *
-     * @param array $routes
+     * @param  array   $routes
      * @return array()
      */
     public function getData(array $routes)
@@ -41,7 +41,6 @@ class AnnotationsReader extends Reader
         if (!$directories) {
             return array();
         }
-
 
         $finder = new PatternFinder(self::ANNOTATION_CLASS, '*.php');
         $files = $finder->findFiles($directories);

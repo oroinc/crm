@@ -1,7 +1,4 @@
 parameters:
-    api.security.authentication.listener.class:                Oro\Bundle\NavigationBundle\Security\Firewall\ApiListener
-    api.security.authentication.entry_point.class:             Oro\Bundle\NavigationBundle\Security\EntryPoint\ApiAuthenticationEntryPoint
-
     oro_menu.factory.class:                                    Oro\Bundle\NavigationBundle\Menu\AclAwareMenuFactory
     oro_menu.builder_chain.class:                              Oro\Bundle\NavigationBundle\Provider\BuilderChainProvider
     oro_menu.configuration_builder.class:                      Oro\Bundle\NavigationBundle\Menu\ConfigurationBuilder
@@ -31,6 +28,9 @@ parameters:
     oro_navigation.translation.extractor.class:                Oro\Bundle\NavigationBundle\Title\TranslationExtractor
 
     oro_navigation.twig_assets_extension.class:                Oro\Bundle\NavigationBundle\Twig\AssetsConfigExtension
+
+    oro_navigation.form.type.pagestate.class:                  Oro\Bundle\NavigationBundle\Form\Type\PageStateType
+    oro_navigation.form.handler.pagestate.class:               Oro\Bundle\NavigationBundle\Form\Handler\PageStateHandler
 
 services:
     oro_menu.factory:
@@ -64,17 +64,6 @@ services:
             - @service_container
         tags:
             - { name: twig.extension }
-
-    api.security.authentication.listener:
-        class: %api.security.authentication.listener.class%
-        arguments:
-            - @security.context
-            - @security.authentication.manager
-            - ~
-            - ~
-
-    api.security.authentication.entry_point:
-        class: %api.security.authentication.entry_point.class%
 
     oro_navigation.item.builder.pinbar:
         class: %oro_navigation.item.builder.pinbar.class%
@@ -215,3 +204,19 @@ services:
         arguments:    [@assetic.asset_factory, %oro_navigation.assets_config%, @templating.name_parser, %assetic.bundles%]
         tags:
             - { name: twig.extension }
+
+    oro_navigation.form.pagestate:
+        class:                        Symfony\Component\Form\Form
+        factory_method:               createNamed
+        factory_service:              form.factory
+        arguments:                    ["pagestate", "pagestate", null]
+
+    oro_navigation.form.type.pagestate:
+        class:                        %oro_navigation.form.type.pagestate.class%
+        tags:
+            - { name: form.type, alias: pagestate }
+
+    oro_navigation.form.handler.pagestate:
+        class:                        %oro_navigation.form.handler.pagestate.class%
+        scope:                        request
+        arguments:                    ["@oro_navigation.form.pagestate", "@request", "@doctrine.orm.entity_manager", "@security.context"]

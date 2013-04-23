@@ -147,9 +147,9 @@ class ResponseHistoryListenerTest extends \PHPUnit_Framework_TestCase
     /**
      * Get the mock of the GetResponseEvent and FilterResponseEvent.
      *
-     * @param \Symfony\Component\HttpFoundation\Request        $request
-     * @param null|\Symfony\Component\HttpFoundation\Response  $response
-     * @param string                                           $type
+     * @param \Symfony\Component\HttpFoundation\Request       $request
+     * @param null|\Symfony\Component\HttpFoundation\Response $response
+     * @param string                                          $type
      *
      * @return mixed
      */
@@ -225,9 +225,9 @@ class ResponseHistoryListenerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param \Oro\Bundle\NavigationBundle\Entity\Builder\ItemFactory $factory
-     * @param \Symfony\Component\Security\Core\SecurityContextInterface $securityContext
-     * @param \Doctrine\ORM\EntityManager $entityManager
+     * @param  \Oro\Bundle\NavigationBundle\Entity\Builder\ItemFactory   $factory
+     * @param  \Symfony\Component\Security\Core\SecurityContextInterface $securityContext
+     * @param  \Doctrine\ORM\EntityManager                               $entityManager
      * @return ResponseHistoryListener
      */
     private function getListener($factory, $securityContext, $entityManager)
@@ -238,8 +238,8 @@ class ResponseHistoryListenerTest extends \PHPUnit_Framework_TestCase
     /**
      * Returns EntityManager
      *
-     * @param \Oro\Bundle\NavigationBundle\Entity\Repository\HistoryItemRepository $repositoryMock
-     * @return \Doctrine\ORM\EntityManager $entityManager
+     * @param  \Oro\Bundle\NavigationBundle\Entity\Repository\HistoryItemRepository $repositoryMock
+     * @return \Doctrine\ORM\EntityManager                                          $entityManager
      */
     private function getEntityManager($repositoryMock)
     {
@@ -258,7 +258,7 @@ class ResponseHistoryListenerTest extends \PHPUnit_Framework_TestCase
     /**
      * Prepare repository mock
      *
-     * @param mixed $returnValue
+     * @param  mixed                                    $returnValue
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
     private function getDefaultRepositoryMock($returnValue)
