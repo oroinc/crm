@@ -2,20 +2,22 @@
 
 namespace Oro\Bundle\AccountBundle\DataFixtures\ORM;
 
-use Oro\Bundle\AddressBundle\Model\AttributeType\AddressType;
-use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\MetricType;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttributeType;
+use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttribute;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
 
+use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\MetricType;
 use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\OptionSimpleSelectType;
 use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\MoneyType;
 use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\IntegerType;
 use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\TextType;
 use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\UrlType;
 use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\TextAreaType;
+use Oro\Bundle\AddressBundle\Model\AttributeType\AddressType;
 
 use Oro\Bundle\AccountBundle\Entity\Manager\AccountManager;
 
@@ -90,33 +92,24 @@ class LoadAccountAttrData extends AbstractFixture implements ContainerAwareInter
     protected function addAttributes(array $attributes)
     {
         foreach ($attributes as $data) {
-            if (is_string($data)) {
-                $data = array('code' => $data);
-            }
-            if (!array_key_exists('code', $data)) {
-                throw new \InvalidArgumentException('Code is required for attribute');
-            }
-            if (!array_key_exists('type', $data)) {
-                $data['type'] = new TextType();
-            }
-            if (is_string($data)) {
-                $data['type'] = new $data['type'];
-            }
-            if (!array_key_exists('options', $data)) {
-                $data['options'] = null;
-            }
-            $this->addAttribute($data['code'], $data['type'], $data['options']);
+            $attr = $this->createAttribute($data);
+
+            $this->createAttributeOptions($attr, $data);
+            $this->setAttributeFlags($attr, $data);
+            $this->setAttributeParameters($attr, $data);
+
+            $this->sm->persist($attr);
         }
     }
 
-    protected function addAttribute($name, $class, $options = null)
+    /**
+     * @param AbstractAttribute $attr
+     * @param array|string $data
+     */
+    protected function createAttributeOptions(AbstractAttribute $attr, $data)
     {
-        $attr = $this->fm
-            ->createAttribute($class)
-            ->setCode($name);
-
-        if ($options) {
-            foreach ($options as $option) {
+        if (is_array($data) && array_key_exists('options', $data)) {
+            foreach ($data['options'] as $option) {
                 $attr->addOption(
                     $this->fm->createAttributeOption()->addOptionValue(
                         $this->fm->createAttributeOptionValue()->setValue($option)
@@ -124,6 +117,88 @@ class LoadAccountAttrData extends AbstractFixture implements ContainerAwareInter
                 );
             }
         }
-        $this->sm->persist($attr);
+    }
+
+    /**
+     * @param array|string $data
+     * @return AbstractAttribute
+     */
+    protected function createAttribute($data)
+    {
+        $code = $this->getCode($data);
+        return $this->fm
+            ->createAttribute($this->getType($data))
+            ->setCode($code);
+    }
+
+    protected function setAttributeFlags(AbstractAttribute $attr, $data)
+    {
+        if (!is_array($data)) {
+            return;
+        }
+        $supportedProperties = array('searchable', 'translatable', 'required', 'scopable');
+        foreach ($supportedProperties as $property) {
+            if (array_key_exists($property, $data)) {
+                $method = 'set' . ucfirst($property);
+                $attr->$method((bool)$data[$property]);
+            }
+        }
+    }
+
+    /**
+     * @param AbstractAttribute $attr
+     * @param array|string $data
+     */
+    protected function setAttributeParameters(AbstractAttribute $attr, $data)
+    {
+        if (!is_array($data)) {
+            return;
+        }
+        $supportedProperties = array('entityType', 'attributeType', 'backendType', 'backendStorage', 'defaultValue', 'id');
+        foreach ($supportedProperties as $property) {
+            if (array_key_exists($property, $data)) {
+                $method = 'set' . ucfirst($property);
+                $attr->$method($data[$property]);
+            }
+        }
+    }
+
+    /**
+     * Get code based on configuration
+     *
+     * @param $data
+     * @return string
+     * @throws \InvalidArgumentException
+     */
+    protected function getCode($data)
+    {
+        $code = null;
+        if (is_string($data)) {
+            $code = $data;
+        } elseif (is_array($data) && isset($data['code'])) {
+            $code = $data['code'];
+        }
+        if ($code === null) {
+            throw new \InvalidArgumentException('Code is required for attribute');
+        }
+        return $code;
+    }
+
+    /**
+     * Get type based on configuration
+     *
+     * @param array $data
+     * @return AbstractAttributeType
+     */
+    protected function getType($data)
+    {
+        $type = null;
+        if (is_array($data) && array_key_exists('type', $data)) {
+            $type = $data['type'];
+        }
+        if (is_string($type)) {
+            return new $type;
+        }
+        return new TextType();
     }
 }

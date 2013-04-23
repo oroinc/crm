@@ -13,7 +13,7 @@
 
         "oro/ui-bundle": "dev-master",
         "oro/user-bundle": "dev-master",
-        "oro/address-bundle": "dev-address_flexible_type"
+        "oro/address-bundle": "dev-master"
     },
     "autoload": {
         "psr-0": { "": "src/" }
