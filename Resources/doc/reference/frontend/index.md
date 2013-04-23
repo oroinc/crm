@@ -206,46 +206,22 @@ Main classes and responsibilities:
 Filters
 -------
 
-Filters are used to change collection state according to criteria selected by user. Filters classes don't depend of grid. It couples only on collection.
+Filters are used to change collection state according to criteria selected by user. Datagrid uses filter functionality provided by OroFilterBundle. It extends filter list and adds additional functionality to work with collection.
 
 Main classes and responsibilities:
 
-* **OroApp.DatagridFilterList** - container for filters, renders all active filters, has a control to enable and disable filters
-* **OroApp.DatagridFilter** - abstract filter that has common methods for all filters
-* **OroApp.DatagridFilterText** - basic filter allows user to enter text value that will be used for data filtering
-* **OroApp.DatagridFilterChoice** - filter that has input for value and inputs for operator, such as "contains", "not contains" and so on
-* **OroApp.DatagridFilterNumber** - filter for that has operator and additionally able to format value as a number (integer, decimal)
-* **OroApp.DatagridFilterSelect** - filter that allows to select one of available values
-* **OroApp.DatagridFilterMultiSelect** - filter that allows to select any available values
-* **OroApp.MultiSelectDecorator** - encapsulates additional logic related to select and multiselect widgets (filter list, select and multiselect filters)
-* **OroApp.DatagridFilterData** and **OroApp.DatagridFilterDateTime** - used for filtering date and date time attributes
-Backbone.Collection - collection of models that has particular state. By setting up filters user updates collection state. After it collection sends request to update it's data accordingly with new state that was applied with filters criteria
+* **OroApp.DatagridFilterList** - extends OroApp.Filter.List from OroFilterBundle and adds methods to work with state and collection
+* **Backbone.Collection** - collection of models that has particular state. By setting up filters user updates collection state. After it collection sends request to update it's data accordingly with new state that was applied with filters criteria
 
-Below is example of creating filter list:
+Below is example of creating filter list. *oro\_filter\_render\_filter\_javascript* is a twig extension from OroFilterBundle which returns Javascript filter object.
 ``` javascript
 var filtersList = new OroApp.DatagridFilterList({
-    collection:datagridCollection,
-    addButtonHint:'+ Add more',
-    filters:{
-        username: OroApp.DatagridFilterChoice.extend({
-            name:'username',
-            label:'Username',
-            enabled:true,
-            choices:{"1": "contains", "2": "does not contain", "3": "is equal to"}
-        }),
-        gender: OroApp.DatagridFilterSelect.extend({
-            name:'gender',
-            label:'gender',
-            enabled:false,
-            options: {"18": "Male", "19": "Female"}
-        }),
-        salary: OroApp.DatagridFilterNumber.extend({
-            name:'salary',
-            label:'salary',
-            enabled:false,
-            choices:{"1": "=", "2": ">", "3": "<"},
-            formatter: "decimal"
-        })
+    collection: datagridCollection,
+    addButtonHint: '+ Add more',
+    filters: {
+        username: {{ oro_filter_render_filter_javascript(form.children.username) }},
+        gender:   {{ oro_filter_render_filter_javascript(form.children.gender) }},
+        salary:   {{ oro_filter_render_filter_javascript(form.children.salary) }}
     }
 });
 $('#filter').html(filtersList.render().$el);

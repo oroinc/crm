@@ -117,8 +117,11 @@ OroApp.Datagrid = Backgrid.Grid.extend({
 
         _.defaults(options, {
             rowClickAction: this.rowClickAction
-        })
+        });
 
+        if (options.loadingMask) {
+            this.loadingMask = options.loadingMask;
+        }
         this.loadingMask = new this.loadingMask();
 
         _.extend(this.toolbarOptions, {collection: this.collection}, options.toolbarOptions);

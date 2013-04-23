@@ -109,7 +109,7 @@ class DemoController extends Controller
         } else {
             $view = 'MyBundle:Demo:grid.html.twig';
         }
-        return $this->render($view, array('datagrid' => $datagrid));
+        return $this->render($view, array('datagrid' => $datagrid->createView()));
     }
 }
 ```
@@ -117,7 +117,7 @@ class DemoController extends Controller
 #### Twig Template
 
 ```
-{% include 'OroGridBundle:Include:javascript.html.twig' with {'datagrid': datagrid, 'selector': '#backgrid'} %}
+{% include 'OroGridBundle:Include:javascript.html.twig' with {'datagridView': datagrid, 'selector': '#backgrid'} %}
 {% include 'OroGridBundle:Include:stylesheet.html.twig' %}
 
 <div id="backgrid"></div>
@@ -129,8 +129,9 @@ Dependencies
 
 #### Backend Dependencies
 
-* Oro FlexibleEntityBundle - https://github.com/laboro/FlexibleEntityBundle;
 * Oro UIBundle - https://github.com/laboro/UIBundle;
+* Oro FilterBundle - https://github.com/laboro/FilterBundle;
+* Oro FlexibleEntityBundle - https://github.com/laboro/FlexibleEntityBundle;
 * Sonata AdminBundle  2.1 (Oro fork) - https://github.com/laboro/SonataAdminBundle;
 * Sonata DoctrineORM AdminBundle 2.1 - https://github.com/sonata-project/SonataDoctrineORMAdminBundle.
 
