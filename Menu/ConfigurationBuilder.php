@@ -31,8 +31,8 @@ class ConfigurationBuilder implements BuilderInterface
      * Modify menu by adding, removing or editing items.
      *
      * @param \Knp\Menu\ItemInterface $menu
-     * @param array $options
-     * @param string|null $alias
+     * @param array                   $options
+     * @param string|null             $alias
      */
     public function build(ItemInterface $menu, array $options = array(), $alias = null)
     {
@@ -58,8 +58,8 @@ class ConfigurationBuilder implements BuilderInterface
 
     /**
      * @param ItemInterface $menu
-     * @param array $data
-     * @param array $itemList
+     * @param array         $data
+     * @param array         $itemList
      *
      * @return \Knp\Menu\ItemInterface
      */
@@ -94,7 +94,7 @@ class ConfigurationBuilder implements BuilderInterface
     }
 
     /**
-     * @param array $menuItem
+     * @param array  $menuItem
      * @param string $optionName
      *
      * @return void

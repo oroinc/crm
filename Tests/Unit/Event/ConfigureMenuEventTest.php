@@ -31,7 +31,6 @@ class ConfigureMenuEventTest extends \PHPUnit_Framework_TestCase
         $this->event = new ConfigureMenuEvent($this->factory, $this->menu);
     }
 
-
     public function testGetFactory()
     {
         $this->assertEquals($this->event->getFactory(), $this->factory);

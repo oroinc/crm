@@ -67,7 +67,7 @@ class BuilderChainProvider implements MenuProviderInterface
      * Add builder to chain.
      *
      * @param BuilderInterface $builder
-     * @param string $alias
+     * @param string           $alias
      */
     public function addBuilder(BuilderInterface $builder, $alias = self::COMMON_BUILDER_ALIAS)
     {
@@ -82,8 +82,8 @@ class BuilderChainProvider implements MenuProviderInterface
     /**
      * Build menu.
      *
-     * @param string $alias
-     * @param array $options
+     * @param  string        $alias
+     * @param  array         $options
      * @return ItemInterface
      */
     public function get($alias, array $options = array())
@@ -147,7 +147,7 @@ class BuilderChainProvider implements MenuProviderInterface
                 }
                 $position = $child->getExtra('position');
                 if ($position !== null) {
-                    $orderedChildren[$child->getName()] = (int)$position;
+                    $orderedChildren[$child->getName()] = (int) $position;
                     $hasOrdering = true;
                 } else {
                     $unorderedChildren[] = $child->getName();
@@ -163,20 +163,21 @@ class BuilderChainProvider implements MenuProviderInterface
     /**
      * Checks whether a menu exists in this provider
      *
-     * @param string $alias
-     * @param array $options
+     * @param  string  $alias
+     * @param  array   $options
      * @return boolean
      */
     public function has($alias, array $options = array())
     {
         $this->assertAlias($alias);
+
         return array_key_exists($alias, $this->builders);
     }
 
     /**
      * Assert alias not empty
      *
-     * @param string $alias
+     * @param  string                    $alias
      * @throws \InvalidArgumentException
      */
     protected function assertAlias($alias)

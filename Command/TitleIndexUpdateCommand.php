@@ -26,8 +26,8 @@ class TitleIndexUpdateCommand extends ContainerAwareCommand
     /**
      * Runs command
      *
-     * @param InputInterface $input
-     * @param OutputInterface $output
+     * @param  InputInterface  $input
+     * @param  OutputInterface $output
      * @return int|null|void
      */
     public function execute(InputInterface $input, OutputInterface $output)
@@ -63,7 +63,7 @@ class TitleIndexUpdateCommand extends ContainerAwareCommand
     /**
      * Check if allowed GET method
      *
-     * @param array $requirements
+     * @param  array $requirements
      * @return bool
      */
     private function checkMethod($requirements)

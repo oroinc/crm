@@ -2,19 +2,15 @@
 
 namespace Oro\Bundle\NavigationBundle\Controller\Api;
 
-use Symfony\Component\HttpKernel\Exception\HttpException;
-
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Controller\Annotations\NamePrefix;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
 use FOS\RestBundle\Routing\ClassResourceInterface;
-use FOS\RestBundle\View\RouteRedirectView;
 use FOS\Rest\Util\Codes;
 
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
 use Oro\Bundle\NavigationBundle\Entity\PageState;
-use Oro\Bundle\NavigationBundle\Form\Type\PageStateType;
 use Symfony\Component\Validator\Constraints\True;
 
 /**
@@ -172,13 +168,13 @@ class PagestateController extends FOSRestController implements ClassResourceInte
     /**
      * Get State for Backbone model
      *
-     * @param PageState $entity
+     * @param  PageState $entity
      * @return array
      */
     protected function getState(PageState $entity = null)
     {
         return array(
-            'id' => $entity ? $entity->getId() : 0,
+            'id' => $entity ? $entity->getId() : null,
             'pagestate' => array(
                 'data' => $entity ? $entity->getData() : '',
                 'pageId' => $entity ? $entity->getPageId() : ''

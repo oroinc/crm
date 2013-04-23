@@ -16,9 +16,9 @@ interface TitleServiceInterface
      * Return rendered translated title
      *
      * @param array $params
-     * @param null $title
-     * @param null $prefix
-     * @param null $suffix
+     * @param null  $title
+     * @param null  $prefix
+     * @param null  $suffix
      * @return $this
      */
     public function render($params = array(), $title = null, $prefix = null, $suffix = null);

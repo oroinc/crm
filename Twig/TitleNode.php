@@ -16,7 +16,7 @@ class TitleNode extends \Twig_Node
     /**
      * Compile title node to template
      *
-     * @param \Twig_Compiler $compiler
+     * @param  \Twig_Compiler     $compiler
      * @throws \Twig_Error_Syntax
      */
     public function compile(\Twig_Compiler $compiler)

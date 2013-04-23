@@ -14,6 +14,10 @@ Oro.PageState.Model = Backbone.Model.extend({
     initialize: function () {
         var self = this;
 
+        if ($('form[data-collect=true]').length == 0) {
+            return;
+        }
+
         $.get(
             Routing.generate('oro_api_get_pagestate_checkid') + '?pageId=' + this.filterUrl(),
             function (data) {
@@ -28,10 +32,10 @@ Oro.PageState.Model = Backbone.Model.extend({
 
                 setInterval(function() {
                     self.collect();
-                }, 5000);
+                }, 2000);
 
                 self.on('change:pagestate', function(model) {
-                    self.save();
+                    self.save(self.get('pagestate'));
                 });
             }
         )
@@ -89,11 +93,13 @@ Oro.PageState.Model = Backbone.Model.extend({
         return base64_encode(base);
     },
 
-    url: function() {
+    url: function(method) {
         return this.id
-            ? Routing.generate('oro_api_get_pagestate', { id: this.id })
-            : Routing.generate('oro_api_get_pagestates');
+            ? Routing.generate('oro_api_put_pagestate', { id: this.id })
+            : Routing.generate('oro_api_post_pagestate');
     }
 });
 
-Oro.pagestate = new Oro.PageState.Model();
+$(function() {
+    Oro.pagestate = new Oro.PageState.Model();
+})

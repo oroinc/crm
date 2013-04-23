@@ -26,8 +26,8 @@ class ItemFactory
     /**
      * Create navigation item
      *
-     * @param string $type
-     * @param array $params
+     * @param  string      $type
+     * @param  array       $params
      * @return null|object
      */
     public function createItem($type, $params)
@@ -38,14 +38,15 @@ class ItemFactory
 
         /** @var $builder AbstractBuilder */
         $builder = $this->builders[$type];
+
         return $builder->buildItem($params);
     }
 
     /**
      * Get navigation item
      *
-     * @param string $type
-     * @param int $itemId
+     * @param  string      $type
+     * @param  int         $itemId
      * @return null|object
      */
     public function findItem($type, $itemId)
@@ -56,6 +57,7 @@ class ItemFactory
 
         /** @var $builder AbstractBuilder */
         $builder = $this->builders[$type];
+
         return $builder->findItem($itemId);
     }
 }

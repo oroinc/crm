@@ -5,7 +5,6 @@ use Symfony\Component\DependencyInjection\Reference;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
-use Symfony\Component\Config\Definition\Processor;
 
 class MenuBuilderChainPass implements CompilerPassInterface
 {

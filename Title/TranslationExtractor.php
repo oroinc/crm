@@ -29,7 +29,7 @@ class TranslationExtractor implements ExtractorInterface
     /**
      * Extract titles for translation
      *
-     * @param string $directory
+     * @param string                                          $directory
      * @param \Symfony\Component\Translation\MessageCatalogue $catalogue
      *
      * @return MessageCatalogue

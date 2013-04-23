@@ -37,7 +37,6 @@ class TitleSetTokenParserTest extends \PHPUnit_Framework_TestCase
                ->method('getStream')
                ->will($this->returnValue($stream));
 
-
         $token = $this->getMockBuilder('Twig_Token')
                       ->disableOriginalConstructor()
                       ->getMock();

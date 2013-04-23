@@ -4,8 +4,6 @@ namespace Oro\Bundle\NavigationBundle\Tests\Functional\API;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Yaml\Yaml;
-use Symfony\Component\Finder\Iterator;
 
 use Acme\Bundle\TestsBundle\Test\ToolsAPI;
 
@@ -262,7 +260,7 @@ class RestApiTest extends WebTestCase
      * Test API response status
      *
      * @param Response $response
-     * @param int $statusCode
+     * @param int      $statusCode
      */
     protected function assertJsonResponse($response, $statusCode = 200)
     {
