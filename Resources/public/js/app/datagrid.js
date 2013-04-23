@@ -257,6 +257,11 @@ OroApp.Datagrid = Backgrid.Grid.extend({
                 this.$(this.selectors.grid).hide();
                 this.$(this.selectors.noDataBlock).show();
             }
+            /**
+             * Backbone event. Fired when data for grid has been successfully rendered.
+             * @event grid_load:complete
+             */
+            OroApp.Events.trigger("grid_load:complete");
         }
     },
 

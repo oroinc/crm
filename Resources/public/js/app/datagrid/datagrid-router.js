@@ -7,8 +7,7 @@
 OroApp.DatagridRouter = OroApp.Router.extend({
     /** @property */
     routes: {
-        "g/*encodedStateData": "changeState",
-        "": "init"
+        "g/*encodedStateData": "changeState"
     },
 
     /**
@@ -41,6 +40,18 @@ OroApp.DatagridRouter = OroApp.Router.extend({
         this._initState = _.clone(this.collection.state);
 
         this.collection.on('beforeReset', this._handleStateChange, this);
+        /**
+         * Processing state after ajax request
+         */
+        OroApp.Events.once(
+            "hash_navigation_request:complete",
+            function(hashNavigation) {
+                this.changeState(hashNavigation.encodedStateData);
+            },
+            this
+        );
+
+        this.init();
 
         OroApp.Router.prototype.initialize.apply(this, arguments);
     },
@@ -56,8 +67,9 @@ OroApp.DatagridRouter = OroApp.Router.extend({
         if (options.ignoreSaveStateInUrl) {
             return;
         }
+        var url = OroApp.unpackFromQueryString(Backbone.history.fragment).url;
         var encodedStateData = collection.encodeStateData(collection.state);
-        this.navigate('g/' + encodedStateData);
+        this.navigate('url=' + url + '&g/' + encodedStateData);
     },
 
     /**
@@ -66,7 +78,12 @@ OroApp.DatagridRouter = OroApp.Router.extend({
      * @param {String} encodedStateData String represents encoded state stored in URL
      */
     changeState: function(encodedStateData) {
-        var state = this.collection.decodeStateData(encodedStateData);
+        var state = null;
+        if (encodedStateData) {
+            state = this.collection.decodeStateData(encodedStateData);
+        } else {
+            state = this._initState;
+        }
         this.collection.updateState(state);
         this.collection.fetch({
             ignoreSaveStateInUrl: true
@@ -74,12 +91,11 @@ OroApp.DatagridRouter = OroApp.Router.extend({
     },
 
     /**
-     * Route for initializing collection. Collection will retrieve initial state and call fetch.
+     * Init function to change collection state if page is loaded without hash navigation
      */
     init: function() {
-        this.collection.updateState(this._initState);
-        this.collection.fetch({
-            ignoreSaveStateInUrl: true
-        });
+        if (Backbone.history.fragment === '') {
+            this.changeState('');
+        }
     }
 });
