@@ -1,74 +1,100 @@
-console.log('pagestate model loaded');
-
 var Oro = Oro || {};
 
 Oro.PageState = Oro.PageState || {};
 
 Oro.PageState.Model = Backbone.Model.extend({
     defaults: {
-        id: 4, // DB entityId
-        //urlRoot: '/api/rest/latest/pagestate', // REST URI -> /api/rest/{version}/pagestates/{id}
-        //userId: null, // not sure we'll really need this, but let it stay here for a while
-        //pageId: '', // we should somehow identify current page
-        formData: {},
-        createdAt: new Date(),
-        updatedAt: new Date()
+        restore   : false,
+        pagestate : {
+            pageId : '',
+            data   : {}
+        }
     },
 
     initialize: function () {
         var self = this;
 
-        console.log('Model init');
+        $.get(
+            Routing.generate('oro_api_get_pagestate_checkid') + '?pageId=' + this.filterUrl(),
+            function (data) {
+                self.set({
+                    id        : data.id,
+                    pagestate : data.pagestate
+                });
 
-        var timer = setInterval(function () {
-            self.collect();
-        }, 5000);
+                if ( parseInt(data.id) > 0  && self.get('restore')) {
+                    self.restore();
+                }
 
-        this.on("change:formData", function(model){
-            console.log( '--- data has been changed ---' );
-            console.log( this.get('formData') );
+                setInterval(function() {
+                    self.collect();
+                }, 5000);
 
-            console.log('--- and saved/updated ---');
-            this.save();
-        });
+                self.on('change:pagestate', function(model) {
+                    self.save();
+                });
+            }
+        )
     },
 
-    collect: function () {
-        console.log('data collecting...'+ new Date());
+    collect: function() {
+        var self = this;
         var data = {};
-        //$('form[data-collect=true]').each(function(index, el){
-        $('form').each(function(index, el){
+
+        $('form[data-collect=true]').each(function(index, el){
             data[index] = $(el)
                 .find('input, textarea, select')
-                .not(':input[type=button], :input[type=submit], :input[type=reset]')
+                .not(':input[type=button], :input[type=submit], :input[type=reset], :input[type=password], :input[type=file]')
                 .serializeArray();
         });
 
         this.set({
-            formData: data,
-            updatedAt: new Date()
+            pagestate: {
+                pageId : self.filterUrl(),
+                data   : JSON.stringify(data)
+            }
         });
     },
 
+    restore: function() {
+        $.each(JSON.parse(this.get('pagestate').data), function(index, el) {
+            form = $('form[data-collect=true]').eq(index);
+
+            $.each(el, function(i, input){
+                form.find('[name="'+ input.name+'"]').val(input.value);
+            });
+        });
+    },
+
+    filterUrl: function() {
+        var self = this;
+        var href = document.location.href;
+        var base = href.substr(0, location.href.indexOf('?'));
+        var params = href.replace(base + '?', '');
+
+        params = params.split('&');
+        if (params.length == 1 && params[0].indexOf('restore') !== -1) {
+            self.set('restore', true);
+        } else {
+            base += '?';
+            $(params).each(function(index, el) {
+                if (el.indexOf('restore') == -1) {
+                    base += el;
+                } else {
+                    self.set('restore', true);
+                }
+            })
+        }
+
+        return base64_encode(base);
+    },
+
     url: function() {
-//        var base = _.result(this, 'urlRoot') || _.result(this.collection, 'url') || urlError();
-//        base +=  (base.charAt(base.length - 1) === '/' ? '' : '/') + this.get('type');
-//        if (this.isNew()) {
-//            return base;
-//        }
-//        return base + (base.charAt(base.length - 1) === '/' ? '' : '/') + 'ids/' + encodeURIComponent(this.id);
-
-        //return this.get('urlRoot')+'/'+this.get('id');
-        return '/api/rest/latest/pagestate' + ((this.id) ? 's/id/'+this.id : '');
+        //return '/app_dev.php/api/rest/latest/pagestate' + ((this.id) ? 's/'+this.id : '');
+        return this.id
+            ? Routing.generate('oro_api_get_pagestate', { id: this.id })
+            : Routing.generate('oro_api_get_pagestates');
     }
-
-//    sync: function () {
-//        console.log('try sync');
-//    }
-
 });
 
-var pageState = new Oro.PageState.Model();
-
-// Or we can set the `id` of the model
-// var pageState = new Oro.PageState.Model({id: 1});
+Oro.pagestate = new Oro.PageState.Model();

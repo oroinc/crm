@@ -6,6 +6,7 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Controller\Annotations\NamePrefix;
+use FOS\RestBundle\Controller\Annotations\QueryParam;
 use FOS\RestBundle\Routing\ClassResourceInterface;
 use FOS\RestBundle\View\RouteRedirectView;
 use FOS\Rest\Util\Codes;
@@ -14,6 +15,7 @@ use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
 use Oro\Bundle\NavigationBundle\Entity\PageState;
 use Oro\Bundle\NavigationBundle\Form\Type\PageStateType;
+use Symfony\Component\Validator\Constraints\True;
 
 /**
  * @NamePrefix("oro_api_")
@@ -73,7 +75,7 @@ class PagestateController extends FOSRestController implements ClassResourceInte
         $entity = new PageState();
 
         $view = $this->get('oro_navigation.form.handler.pagestate')->process($entity)
-            ? RouteRedirectView::create('oro_api_get_page_state', array('id' => $entity->getId()), Codes::HTTP_CREATED)
+            ? $this->view($this->getState($entity), Codes::HTTP_CREATED)
             : $this->view($this->get('oro_navigation.form.pagestate'), Codes::HTTP_BAD_REQUEST);
 
         return $this->handleView($view);
@@ -99,7 +101,7 @@ class PagestateController extends FOSRestController implements ClassResourceInte
         }
 
         $view = $this->get('oro_navigation.form.handler.pagestate')->process($entity)
-            ? RouteRedirectView::create('oro_api_get_page_state', array('id' => $entity->getId()), Codes::HTTP_NO_CONTENT)
+            ? $this->view('', Codes::HTTP_NO_CONTENT)
             : $this->view($this->get('oro_navigation.form.pagestate'), Codes::HTTP_BAD_REQUEST);
 
         return $this->handleView($view);
@@ -131,6 +133,23 @@ class PagestateController extends FOSRestController implements ClassResourceInte
     }
 
     /**
+     * Check if page id already exists
+     *
+     * @QueryParam(name="pageId", nullable=false, description="Unique page id")
+     *
+     * @ApiDoc(
+     *  description="Check if page id already exists",
+     *  resource=true
+     * )
+     */
+    public function getCheckidAction()
+    {
+        $entity = $this->getDoctrine()->getRepository('OroNavigationBundle:PageState')->findOneByPageId($this->getRequest()->get('pageId'));
+
+        return $this->handleView($this->view($this->getState($entity), Codes::HTTP_OK));
+    }
+
+    /**
      * Get entity Manager
      *
      * @return \Doctrine\Common\Persistence\ObjectManager
@@ -147,6 +166,23 @@ class PagestateController extends FOSRestController implements ClassResourceInte
      */
     protected function getEntity($id)
     {
-        return $this->getDoctrine()->getRepository('OroNavigationBundle:PageState')->findBy(array('id' => (int) $id));
+        return $this->getDoctrine()->getRepository('OroNavigationBundle:PageState')->findOneById((int) $id);
+    }
+
+    /**
+     * Get State for Backbone model
+     *
+     * @param PageState $entity
+     * @return array
+     */
+    protected function getState(PageState $entity = null)
+    {
+        return array(
+            'id' => $entity ? $entity->getId() : 0,
+            'pagestate' => array(
+                'data' => $entity ? $entity->getData() : '',
+                'pageId' => $entity ? $entity->getPageId() : ''
+            )
+        );
     }
 }
