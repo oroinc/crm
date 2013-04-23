@@ -13,6 +13,7 @@
         "knplabs/knp-menu-bundle": "dev-master",
         "knplabs/knp-menu": "dev-master",
         "friendsofsymfony/rest-bundle": "0.11.*",
+        "friendsofsymfony/jsrouting-bundle": "1.1.*@dev",
         "nelmio/api-doc-bundle": "dev-master"
     },
     "require-dev": {
