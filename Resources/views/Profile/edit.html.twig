@@ -9,7 +9,7 @@
 {% block page_container %}
 <div class="container-fluid">
     {% block content %}
-    <form action="{{ form.vars.value.id ? path('oro_user_edit', { id: form.vars.value.id }) : path('oro_user_create') }}" {{ form_enctype(form) }} method="post">
+    <form action="{{ form.vars.value.id ? path('oro_user_edit', { id: form.vars.value.id }) : path('oro_user_create') }}" {{ form_enctype(form) }} method="post" data-collect="true">
         <div class="navigation clearfix navbar-extra navbar-extra-right">
             <div class="row">
                 {% if form.vars.value.id %}
