@@ -45,39 +45,33 @@ class RestApiTest extends WebTestCase
         $this->client->request(
             'POST',
             "api/rest/latest/address",
-            $requestData,
-            array()
+            $requestData
         );
 
         /** @var $result Response */
         $result = $this->client->getResponse();
 
-        var_dump($result->getContent());
-
         $this->assertJsonResponse($result, 201);
 
         $resultJson = json_decode($result->getContent(), true);
-        $this->assertArrayHasKey("id", $resultJson);
-        $this->assertGreaterThan(0, $resultJson["id"]);
+
+        //$this->assertArrayHasKey("id", $resultJson);
+        //$this->assertGreaterThan(0, $resultJson["id"]);
 
         $requestData['id'] = $resultJson["id"];
+        self::$entities = $requestData;
     }
 
     /**
      * Test GET
      *
+     * @depends testPost
      */
     public function testGet()
     {
-        $requestData = array('address' =>
-            array(
-                'id'          => 6,
-            )
-        );
-
         $this->client->request(
             'GET',
-            "api/rest/latest/address/" . $requestData['address']['id']
+            "api/rest/latest/addresses/1"
         );
 
         /** @var $result Response */
@@ -85,8 +79,35 @@ class RestApiTest extends WebTestCase
 
         $this->assertJsonResponse($result, 200);
         $resultJson = json_decode($result->getContent(), true);
+
         $this->assertNotEmpty($resultJson);
-        $this->assertArrayHasKey('id', $resultJson[0]);
+        $this->assertArrayHasKey('id', $resultJson);
+    }
+
+    /**
+     * Test PUT
+     *
+     * @depends testPost
+     */
+    public function testPut()
+    {
+        $updated = array(
+            'street' => uniqid('street_')
+        );
+
+        $this->client->request(
+            'PUT',
+            "api/rest/latest/addresses/1",
+            $updated
+        );
+
+        /** @var $result Response */
+        $result = $this->client->getResponse();
+        var_dump($result);
+        $this->assertJsonResponse($result, 200);
+
+        $resultJson = json_decode($result->getContent(), true);
+        $this->assertCount(0, $resultJson);
     }
 
     /**

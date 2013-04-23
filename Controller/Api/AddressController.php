@@ -68,16 +68,50 @@ class AddressController extends FOSRestController implements ClassResourceInterf
     public function getAction($id)
     {
         $addressManager = $this->getManager();
-        $items = $addressManager->getRepository()->findOneById($id);
+        $item = $addressManager->getRepository()->findOneById($id);
 
         return $this->handleView(
-            $this->view($items, is_array($items) ? Codes::HTTP_OK : Codes::HTTP_NOT_FOUND)
+            $this->view($item, is_object($item) ? Codes::HTTP_OK : Codes::HTTP_NOT_FOUND)
         );
     }
 
-    public function putAction()
+    /**
+     * REST PUT
+     *
+     * @param int $addressId Address item id
+     *
+     * @ApiDoc(
+     *  description="Update address",
+     *  resource=true
+     * )
+     * @return Response
+     */
+    public function putAction($addressId)
     {
+        $postArray = $this->getRequest()->request->all();
+        if (empty($postArray)) {
+            return $this->handleView(
+                $this->view(
+                    array('message' => 'Wrong JSON inside POST body'),
+                    Codes::HTTP_BAD_REQUEST
+                )
+            );
+        }
 
+        /** @var $entity \Oro\Bundle\NavigationBundle\Entity\NavigationItemInterface */
+        $entity = $this->getManager()->getRepository()->findOneById((int)$addressId);
+        if (!$entity) {
+            return $this->handleView($this->view(array(), Codes::HTTP_NOT_FOUND));
+        }
+
+        $this->fixFlexRequest($entity);
+
+        $view = $this->get('oro_address.form.handler.address.api')->process($entity)
+            ? $this->view(array(), Codes::HTTP_OK)
+            : $this->view($this->get('oro_address.form.address.api'), Codes::HTTP_BAD_REQUEST);
+
+
+        return $this->handleView($view);
     }
 
     /**
@@ -101,9 +135,29 @@ class AddressController extends FOSRestController implements ClassResourceInterf
         return $this->handleView($view);
     }
 
-    public function deleteAction()
+    /**
+     * REST DELETE
+     *
+     * @param int $addressId
+     *
+     * @ApiDoc(
+     *  description="Remove Address",
+     *  resource=true
+     * )
+     * @return Response
+     */
+    public function deleteAction($addressId)
     {
+        $entity = $this->getManager()->getRepository()->findOneById((int)$addressId);
+        if (!$entity) {
+            return $this->handleView($this->view(array(), Codes::HTTP_NOT_FOUND));
+        }
 
+        $em = $this->getManager();
+        $em->remove($entity);
+        $em->flush();
+
+        return $this->handleView($this->view(array(), Codes::HTTP_NO_CONTENT));
     }
 
     /**
