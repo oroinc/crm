@@ -65,12 +65,12 @@ class TranslatableListener implements EventSubscriber
 
             // get flexible entity class
             $flexibleEntityClass = false;
-            if ($entity instanceof Proxy) {
+            if ($entity instanceof AbstractAttributeOption) {
+                $flexibleEntityClass = $entity->getAttribute()->getEntityType();
+            } elseif ($entity instanceof Proxy) {
                 $flexibleEntityClass = get_parent_class($entity);
             } elseif ($entity instanceof FlexibleInterface) {
                 $flexibleEntityClass = get_class($entity);
-            } elseif ($entity instanceof AbstractAttributeOption) {
-                $flexibleEntityClass = $entity->getAttribute()->getEntityType();
             }
 
             if ($flexibleEntityClass) {
