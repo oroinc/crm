@@ -40,7 +40,7 @@ class PinbarTab implements NavigationItemInterface
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -60,7 +60,7 @@ class PinbarTab implements NavigationItemInterface
     /**
      * Set maximizeDate
      *
-     * @param boolean $maximizeDate
+     * @param  boolean   $maximizeDate
      * @return PinbarTab
      */
     public function setMaximized($maximizeDate)
@@ -73,7 +73,7 @@ class PinbarTab implements NavigationItemInterface
     /**
      * Set user
      *
-     * @param NavigationItem $item
+     * @param  NavigationItem                                $item
      * @return \Oro\Bundle\NavigationBundle\Entity\PinbarTab
      */
     public function setItem(NavigationItem $item)
@@ -106,13 +106,14 @@ class PinbarTab implements NavigationItemInterface
     /**
      * Get user
      *
-     * @return \Oro\Bundle\UserBundle\Entity\User 
+     * @return \Oro\Bundle\UserBundle\Entity\User
      */
     public function getUser()
     {
         if ($this->getItem()) {
             return $this->getItem()->getUser();
         }
+
         return null;
     }
 
@@ -124,7 +125,7 @@ class PinbarTab implements NavigationItemInterface
     public function setValues(array $values)
     {
         if (isset($values['maximized'])) {
-            $this->setMaximized((bool)$values['maximized']);
+            $this->setMaximized((bool) $values['maximized']);
         }
         if ($this->getItem()) {
             $this->getItem()->setValues($values);

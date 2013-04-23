@@ -12,7 +12,7 @@ class MenuNodeDefinition extends ArrayNodeDefinition
     /**
      * Make menu hierarchy
      *
-     * @param int $depth
+     * @param  int                $depth
      * @return MenuNodeDefinition
      */
     public function menuNodeHierarchy($depth = 10)

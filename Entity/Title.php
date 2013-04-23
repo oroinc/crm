@@ -45,7 +45,7 @@ class Title
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -55,20 +55,20 @@ class Title
     /**
      * Set route
      *
-     * @param string $route
+     * @param  string $route
      * @return Title
      */
     public function setRoute($route)
     {
         $this->route = $route;
-    
+
         return $this;
     }
 
     /**
      * Get route
      *
-     * @return string 
+     * @return string
      */
     public function getRoute()
     {
@@ -78,20 +78,20 @@ class Title
     /**
      * Set title
      *
-     * @param string $title
+     * @param  string $title
      * @return Title
      */
     public function setTitle($title)
     {
         $this->title = $title;
-    
+
         return $this;
     }
 
     /**
      * Get title
      *
-     * @return string 
+     * @return string
      */
     public function getTitle()
     {
@@ -101,7 +101,7 @@ class Title
     /**
      * Set is system
      *
-     * @param bool $value
+     * @param  bool  $value
      * @return Title
      */
     public function setIsSystem($value)

@@ -2,7 +2,6 @@
 
 namespace Oro\Bundle\NavigationBundle\Menu;
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Security\Core\SecurityContextInterface;
 use Doctrine\ORM\EntityManager;
 use Knp\Menu\ItemInterface;
@@ -31,8 +30,8 @@ class NavigationItemBuilder implements BuilderInterface
 
     /**
      * @param SecurityContextInterface $securityContext
-     * @param EntityManager $em
-     * @param ItemFactory $factory
+     * @param EntityManager            $em
+     * @param ItemFactory              $factory
      */
     public function __construct(SecurityContextInterface $securityContext, EntityManager $em, ItemFactory $factory)
     {
@@ -45,8 +44,8 @@ class NavigationItemBuilder implements BuilderInterface
      * Modify menu by adding, removing or editing items.
      *
      * @param \Knp\Menu\ItemInterface $menu
-     * @param array $options
-     * @param string|null $alias
+     * @param array                   $options
+     * @param string|null             $alias
      */
     public function build(ItemInterface $menu, array $options = array(), $alias = null)
     {

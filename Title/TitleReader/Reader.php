@@ -23,7 +23,7 @@ abstract class Reader
     /**
      * Returns data from source
      *
-     * @param array $routes
+     * @param  array $routes
      * @return array
      */
     abstract public function getData(array $routes);

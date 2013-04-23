@@ -23,7 +23,7 @@ class RequestTitleListenerTest extends \PHPUnit_Framework_TestCase
      */
     public function testRequest($data)
     {
-        $invokeTimes = (int)($data == HttpKernelInterface::MASTER_REQUEST);
+        $invokeTimes = (int) ($data == HttpKernelInterface::MASTER_REQUEST);
 
         /** @var $request \PHPUnit_Framework_MockObject_MockObject */
         $request = $this->getRequest($invokeTimes);
@@ -46,7 +46,6 @@ class RequestTitleListenerTest extends \PHPUnit_Framework_TestCase
             ->method('getRequestType')
             ->will($this->returnValue($data));
 
-
         $listener = new RequestTitleListener($titleService);
         $listener->onKernelRequest($event);
     }
@@ -65,7 +64,7 @@ class RequestTitleListenerTest extends \PHPUnit_Framework_TestCase
     /**
      * Creates request mock object
      *
-     * @param int $invokeTimes
+     * @param  int     $invokeTimes
      * @return Request
      */
     private function getRequest($invokeTimes)
