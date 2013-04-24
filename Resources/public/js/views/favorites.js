@@ -24,6 +24,16 @@ navigation.favorites.MainView = navigation.MainViewAbstract.extend({
 
         this.registerTab();
         this.cleanupTab();
+        /**
+         * Processing links in 3 dots menu after item is added (e.g. favourites)
+         */
+        OroApp.Events.bind(
+            "hash_navigation_request:complete",
+            function() {
+                this.render();
+            },
+            this
+        );
     },
 
     activate: function() {
@@ -44,7 +54,7 @@ navigation.favorites.MainView = navigation.MainViewAbstract.extend({
             if (el.data('url')) {
                 itemData['url'] = el.data('url');
             }
-            itemData['title'] = el.data('title') ? el.data('title') : document.title;
+            itemData['title'] = el.data('title') ? el.data('title') : document.title;;
             itemData['type'] = 'favorite';
             itemData['position'] = this.getCollection().length;
             var currentItem = new navigation.Item(itemData);
