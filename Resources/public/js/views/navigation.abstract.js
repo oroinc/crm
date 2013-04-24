@@ -36,7 +36,13 @@ navigation.MainViewAbstract = Backbone.View.extend({
      * @return {Object}
      */
     getCurrentPageItemData: function() {
-        return {url: window.location.pathname + window.location.search + window.location.hash};
+        var url = '';
+        if (OroApp.hashNavigation) {
+            url = OroApp.hashNavigation.prototype;
+        } else {
+            url = window.location.pathname + window.location.search + window.location.hash;
+        }
+        return {url: url};
     },
 
     cleanupTab: function() {

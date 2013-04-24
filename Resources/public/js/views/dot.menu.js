@@ -66,6 +66,11 @@ navigation.dotMenu.MainView = Backbone.View.extend({
                 this.getTab(tabKey).$tabContentContainer.append(el);
             }
         }
+        /**
+         * Backbone event. Fired when item is added to menu
+         * @event navigaion_item:added
+         */
+        OroApp.Events.trigger("navigaion_item:added", el);
     },
 
     cleanup: function(tabKey) {
