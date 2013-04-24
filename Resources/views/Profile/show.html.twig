@@ -140,18 +140,3 @@
     </div>
 </div>
 {% endblock content %}
-
-{% block head_script %}
-    {{ parent() }}
-
-    {% javascripts
-        '@OroUIBundle/Resources/public/lib/bootstrap/js/bootstrap-scrollspy.js'
-        '@OroUserBundle/Resources/public/js/emails.js'
-        '@OroUserBundle/Resources/public/js/profile.js'
-
-        filter='?yui_js'
-        output='js/oro.user.profile.js'
-    %}
-    <script src="{{ asset_url }}" type="text/javascript"></script>
-    {% endjavascripts %}
-{% endblock %}

@@ -1,0 +1,10 @@
+css:
+  - '@OroUserBundle/Resources/public/css/jquery-ui-1.10.2.custom.css'
+
+js:
+  - '@OroUIBundle/Resources/public/lib/jstree/jquery.hotkeys.js'
+  - '@OroUIBundle/Resources/public/lib/jstree/jquery.jstree.js'
+  - '@OroUIBundle/Resources/public/lib/jquery-ui-timepicker-addon.js'
+  - '@OroUIBundle/Resources/public/lib/bootstrap/js/bootstrap-scrollspy.js'
+  - '@OroUserBundle/Resources/public/js/emails.js'
+  - '@OroUserBundle/Resources/public/js/profile.js'
