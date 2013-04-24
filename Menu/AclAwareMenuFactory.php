@@ -43,7 +43,7 @@ class AclAwareMenuFactory extends MenuFactory
 
     /**
      * @param \Symfony\Component\Routing\RouterInterface $router
-     * @param \Oro\Bundle\UserBundle\Acl\Manager $aclManager
+     * @param \Oro\Bundle\UserBundle\Acl\Manager         $aclManager
      */
     public function __construct(RouterInterface $router, Manager $aclManager)
     {
@@ -65,7 +65,7 @@ class AclAwareMenuFactory extends MenuFactory
     /**
      * Check Permissions and set options for renderer.
      *
-     * @param array $options
+     * @param  array $options
      * @return array
      */
     protected function buildOptions(array $options = array())
@@ -157,7 +157,7 @@ class AclAwareMenuFactory extends MenuFactory
     /**
      * Get route information based on MenuItem options
      *
-     * @param array $options
+     * @param  array         $options
      * @return array|boolean
      */
     protected function getRouteInfo(array $options = array())
@@ -224,13 +224,14 @@ class AclAwareMenuFactory extends MenuFactory
     /**
      * Get route info by uri
      *
-     * @param string $uri
+     * @param  string      $uri
      * @return null|string
      */
     protected function getRouteInfoByUri($uri)
     {
         try {
             $routeInfo = $this->router->match($uri);
+
             return $routeInfo[self::ROUTE_CONTROLLER_KEY];
         } catch (ResourceNotFoundException $e) {
         }
@@ -241,8 +242,8 @@ class AclAwareMenuFactory extends MenuFactory
     /**
      * Get safe cache key
      *
-     * @param string $space
-     * @param string $value
+     * @param  string $space
+     * @param  string $value
      * @return string
      */
     protected function getCacheKey($space, $value)

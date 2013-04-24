@@ -1,0 +1,12 @@
+Oro\Bundle\NavigationBundle\Entity\PageState:
+    constraints:
+        - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity: pageId
+    properties:
+        pageId:
+            - NotBlank:     ~
+            - Length:
+                max:        255
+        user:
+            - NotBlank:     ~
+        data:
+            - NotBlank:     ~

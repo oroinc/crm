@@ -21,7 +21,7 @@ class HistoryItemBuilder extends AbstractBuilder
     /**
      * Find navigation item
      *
-     * @param int $itemId
+     * @param  int                        $itemId
      * @return NavigationHistoryItem|null
      */
     public function findItem($itemId)

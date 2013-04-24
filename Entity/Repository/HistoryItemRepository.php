@@ -23,8 +23,8 @@ class HistoryItemRepository extends EntityRepository implements NavigationReposi
      *  )
      * )
      * @param \Oro\Bundle\UserBundle\Entity\User $user
-     * @param string $type
-     * @param array $options
+     * @param string                             $type
+     * @param array                              $options
      *
      * @return array
      */
@@ -62,7 +62,7 @@ class HistoryItemRepository extends EntityRepository implements NavigationReposi
             }
         }
         if (isset($options['maxItems'])) {
-            $qb->setMaxResults((int)$options['maxItems']);
+            $qb->setMaxResults((int) $options['maxItems']);
         }
 
         return $qb->getQuery()->getArrayResult();

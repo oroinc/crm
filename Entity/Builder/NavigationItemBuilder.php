@@ -24,7 +24,7 @@ class NavigationItemBuilder extends AbstractBuilder
     /**
      * Find navigation item
      *
-     * @param int $itemId
+     * @param  int                 $itemId
      * @return NavigationItem|null
      */
     public function findItem($itemId)

@@ -20,7 +20,7 @@ class MenuTreeBuilder extends NodeBuilder
     /**
      * Creates a child menu node
      *
-     * @param string $name The name of the node
+     * @param  string             $name The name of the node
      * @return MenuNodeDefinition The child node
      */
     public function menuNode($name)

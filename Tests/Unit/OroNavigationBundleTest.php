@@ -12,19 +12,6 @@ class OroNavigationBundleTest extends \PHPUnit_Framework_TestCase
             ->method('addCompilerPass')
             ->with($this->isInstanceOf('Oro\Bundle\NavigationBundle\DependencyInjection\Compiler\MenuBuilderChainPass'));
 
-        $security = $this->getMockBuilder('Symfony\Bundle\SecurityBundle\DependencyInjection\SecurityExtension')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $security->expects($this->once())
-            ->method('addSecurityListenerFactory')
-            ->with($this->isInstanceOf('Oro\Bundle\NavigationBundle\DependencyInjection\Security\Factory\ApiFactory'));
-
-        $container->expects($this->once())
-            ->method('getExtension')
-            ->with('security')
-            ->will($this->returnValue($security));
-
         $bundle = new OroNavigationBundle();
         $bundle->build($container);
     }
