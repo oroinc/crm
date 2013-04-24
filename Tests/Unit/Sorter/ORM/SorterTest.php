@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\GridBundle\Tests\Unit\Sorter\ORM;
 
+use Oro\Bundle\GridBundle\Sorter\SorterInterface;
 use Oro\Bundle\GridBundle\Sorter\ORM\Sorter;
 use Oro\Bundle\GridBundle\Field\FieldDescriptionInterface;
 
@@ -31,10 +32,10 @@ class SorterTest extends \PHPUnit_Framework_TestCase
     public function testInitialize()
     {
         $fieldDescription = $this->createFieldDescription();
-        $this->model->initialize($fieldDescription, Sorter::DIRECTION_ASC);
+        $this->model->initialize($fieldDescription, SorterInterface::DIRECTION_ASC);
 
         $this->assertAttributeEquals($fieldDescription, 'field', $this->model);
-        $this->assertAttributeEquals(Sorter::DIRECTION_ASC, 'direction', $this->model);
+        $this->assertAttributeEquals(SorterInterface::DIRECTION_ASC, 'direction', $this->model);
     }
 
     /**
@@ -79,20 +80,20 @@ class SorterTest extends \PHPUnit_Framework_TestCase
         return array(
             'not_sorted' => array(),
             'sorted_by_asc' => array(
-                '$direction' => Sorter::DIRECTION_ASC,
-                '$expected'  => Sorter::DIRECTION_ASC
+                '$direction' => SorterInterface::DIRECTION_ASC,
+                '$expected'  => SorterInterface::DIRECTION_ASC
             ),
             'sorted_by_desc' => array(
-                '$direction' => Sorter::DIRECTION_DESC,
-                '$expected'  => Sorter::DIRECTION_DESC
+                '$direction' => SorterInterface::DIRECTION_DESC,
+                '$expected'  => SorterInterface::DIRECTION_DESC
             ),
             'sorted_using_true_value' => array(
                 '$direction' => true,
-                '$expected'  => Sorter::DIRECTION_DESC
+                '$expected'  => SorterInterface::DIRECTION_DESC
             ),
             'sorted_using_false_value' => array(
                 '$direction' => false,
-                '$expected'  => Sorter::DIRECTION_ASC
+                '$expected'  => SorterInterface::DIRECTION_ASC
             )
         );
     }
@@ -102,8 +103,8 @@ class SorterTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetDirection()
     {
-        $this->model->setDirection(Sorter::DIRECTION_ASC);
-        $this->assertEquals(Sorter::DIRECTION_ASC, $this->model->getDirection());
+        $this->model->setDirection(SorterInterface::DIRECTION_ASC);
+        $this->assertEquals(SorterInterface::DIRECTION_ASC, $this->model->getDirection());
     }
 
     /**
@@ -113,7 +114,7 @@ class SorterTest extends \PHPUnit_Framework_TestCase
      */
     public function testApply()
     {
-        $expectedDirection = Sorter::DIRECTION_ASC;
+        $expectedDirection = SorterInterface::DIRECTION_ASC;
         $expectedAssociationMapping = array('testAssociationMapping');
         $expectedFieldMapping = array('testFieldMapping');
 

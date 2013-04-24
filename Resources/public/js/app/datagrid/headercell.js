@@ -18,6 +18,9 @@ OroApp.Datagrid.HeaderCell = Backgrid.HeaderCell.extend({
         '<% } %>'
     ),
 
+    /** @property {Boolean} */
+    allowNoSorting: false,
+
     /**
      * Initialize.
      *
@@ -65,5 +68,44 @@ OroApp.Datagrid.HeaderCell = Backgrid.HeaderCell.extend({
         })));
 
         return this;
+    },
+
+    /**
+     * Click on column name to perform sorting
+     *
+     * @param {Event} e
+     */
+    onClick: function (e) {
+        e.preventDefault();
+
+        var columnName = this.column.get("name");
+
+        if (this.column.get("sortable")) {
+            if (this.direction() === "ascending") {
+                this.sort(columnName, "descending", function (left, right) {
+                    var leftVal = left.get(columnName);
+                    var rightVal = right.get(columnName);
+                    if (leftVal === rightVal) {
+                        return 0;
+                    }
+                    else if (leftVal > rightVal) { return -1; }
+                    return 1;
+                });
+            }
+            else if (this.allowNoSorting && this.direction() === "descending") {
+                this.sort(columnName, null);
+            }
+            else {
+                this.sort(columnName, "ascending", function (left, right) {
+                    var leftVal = left.get(columnName);
+                    var rightVal = right.get(columnName);
+                    if (leftVal === rightVal) {
+                        return 0;
+                    }
+                    else if (leftVal < rightVal) { return -1; }
+                    return 1;
+                });
+            }
+        }
     }
 });
