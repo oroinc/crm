@@ -172,9 +172,27 @@ OroApp.hashNavigation = OroApp.Router.extend({
             js = js + this.outerHTML;
         })
         $('#container').append(js);
-        $('title').html($(data).filter('#head').find('title').html());
+        var title = $(data).filter('#head').find('title').html();
+        $('title').html(title);
+        $('.top-action-box .btn').filter('.minimize-button, .favorite-button').data('title', title);
+
         this.processClicks('#container ' + this.selector);
+        this.updateMenuTabs(data);
         this.triggerCompleteEvent();
+    },
+
+    /**
+     * Update History and Most Viewed menu tabs
+     *
+     * @param data
+     */
+    updateMenuTabs: function(data) {
+        $('#history-content').html($(data).filter('#history-content').html());
+        $('#most-viewed-content').html($(data).filter('#most-viewed-content').html());
+        /**
+         * Processing links for history and most viewed tabs
+         */
+        this.processClicks('#history-content ' + this.selector + ', #most-viewed-content ' + this.selector);
     },
 
     /**
@@ -190,6 +208,7 @@ OroApp.hashNavigation = OroApp.Router.extend({
 
     /**
      * Processing all links in selector and setting necessary click handler
+     * links with "no-hash" class are not processed
      *
      * @param {String} selector
      */
@@ -203,6 +222,9 @@ OroApp.hashNavigation = OroApp.Router.extend({
             var link = '';
             if ($(target).is('a')) {
                 link = $(target).attr('href');
+                if ($(target).hasClass('back')) {
+                    this.back();
+                }
             } else if ($(target).is('span')) {
                 link = $(target).attr('data-url');
             }
@@ -211,23 +233,36 @@ OroApp.hashNavigation = OroApp.Router.extend({
                 window.location.hash = '#url=' + link;
             }
             return false;
-        }, this))
+        }, this));
     },
 
     /**
-     * Returns url part from the hash
+     * Returns real url part from the hash
      * @return {String}
      */
     getHashUrl: function() {
         var url = this.url;
         if (!url) {
-            url = Backbone.history.fragment.split('|g/')[0];
+            /**
+             * Get real url part from the url without grid state
+             */
+            url = Backbone.history.fragment.split('|g/')[0].replace('url=', '');
+            if (!url) {
+                url = window.location.pathname + window.location.search;
+            }
         }
         return url;
     },
 
+    /**
+     * Processing back clicks. If we have back attribute in url, use it, otherwise using browser back
+     */
     back: function() {
         var url = new Url(this.getHashUrl());
-        alert(url.query.back);
+        if (url.query.back) {
+            window.location = url.query.back;
+        } else {
+            window.history.back();
+        }
     }
 });

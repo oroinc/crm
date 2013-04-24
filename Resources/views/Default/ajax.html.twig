@@ -3,6 +3,12 @@
     {% block head_script %}
     {% endblock head_script %}
 </div>
+<div id="history-content">
+    {{ oro_menu_render('history', {'maxItems': 10}) }}
+</div>
+<div id="most-viewed-content">
+    {{ oro_menu_render('mostviewed', {'maxItems': 10}) }}
+</div>
 <div id="content">
     {% block page_container %}
         {% block content %}
