@@ -166,7 +166,7 @@ OroApp.hashNavigation = OroApp.Router.extend({
     handleResponse: function(data)
     {
         /**
-         * todo: check the bug in firefox with page freezing and remove
+         * Clearing content area with native js, prevents freezing of firefox with firebug enabled
          */
         document.getElementById('container').innerHTML = '';
         $('#container').html($(data).filter('#content').html());
