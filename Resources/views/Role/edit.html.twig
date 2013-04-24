@@ -1,15 +1,13 @@
 {% extends bap.layout is defined ? bap.layout : 'OroUserBundle::layout.html.twig' %}
 
 {% set title = form.vars.value.id ? 'Edit role'|trans : 'Add role'|trans %}
-
-{% block title %}{{ title }} - {{ parent() }}{% endblock %}
+{% oro_title_set({params : {"%role%": form.vars.value.label} }) %}
 
 {% block head_script %}
     {{ parent() }}
 
     {% if form.vars.value.id %}
-        {% include 'OroGridBundle:Include:javascript.html.twig' with {'datagrid': datagrid, 'selector': '#users-grid'} %}
-        {% include 'OroGridBundle:Include:stylesheet.html.twig' %}
+        {% include 'OroGridBundle:Include:javascript.html.twig' with {'datagridView': datagrid, 'selector': '#users-grid'} %}
     {% endif %}
 {% endblock %}
 
