@@ -38,7 +38,7 @@ class Country
     /**
      * @var ArrayCollection
      *
-     * @ORM\OneToMany(targetEntity="Region", mappedBy="country", cascade={"persist", "remove"}, orphanRemoval=true, fetch="EXTRA_LAZY")
+     * @ORM\OneToMany(targetEntity="Region", mappedBy="country", cascade={"ALL"}, fetch="EXTRA_LAZY")
      */
     private $regions;
 

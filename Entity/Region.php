@@ -3,6 +3,7 @@
 namespace Oro\Bundle\AddressBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 use Oro\Bundle\AddressBundle\Entity\Country;
@@ -28,8 +29,8 @@ class Region
     /**
      * @var string
      *
-     * @ORM\ManyToOne(targetEntity="Country", inversedBy="regions")\
-     * @ORM\JoinColumn(name="country_id", referencedColumnName="iso2_code", onDelete="CASCADE")
+     * @ORM\ManyToOne(targetEntity="Country", inversedBy="regions",cascade={"persist"})
+     * @ORM\JoinColumn(name="country_id", referencedColumnName="iso2_code")
      *
      */
     private $country;
