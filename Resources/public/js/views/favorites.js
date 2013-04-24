@@ -25,7 +25,7 @@ navigation.favorites.MainView = navigation.MainViewAbstract.extend({
         this.registerTab();
         this.cleanupTab();
         /**
-         * Processing links in 3 dots menu after item is added (e.g. favourites)
+         * Render links in favorites menu after hash navigation request is completed
          */
         OroApp.Events.bind(
             "hash_navigation_request:complete",
