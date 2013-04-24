@@ -2,7 +2,7 @@
 <html>
 <head>
     {% block head %}
-        <title>{% block title %}Dashboard{% endblock %}</title>
+        <title>{{ oro_title_render() }}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
@@ -15,7 +15,6 @@
                 <script type="text/javascript" src="{{ asset('bundles/oroui/lib/less-1.3.1.min.js') }}"></script>
                 <link rel="stylesheet" media="all" href="{{ asset('bundles/oroui/css/all.css') }}" />
                 <link rel="stylesheet" media="all" href="{{ asset('bundles/oroui/css/jquery-ui.grid.css') }}" />
-
             {% else %}
                 {% stylesheets
                     'bundles/oroui/css/all.css'
@@ -28,90 +27,24 @@
                 <link rel="stylesheet" media="all" href="{{ asset_url }}" />
                 {% endstylesheets %}
             {% endif %}
+            {% oro_css filter='cssrewrite, lessphp, ?yui_css' output='css/oro_app.css' %}
+                <link rel="stylesheet" media="all" href="{{ asset_url }}" />
+            {% endoro_css %}
         {% endblock %}
 
         {% block head_script %}
             {# JS assetics #}
-            {% javascripts
-                '@OroUIBundle/Resources/public/lib/underscore.js'
-                '@OroUIBundle/Resources/public/lib/backbone.js'
-                '@OroUIBundle/Resources/public/lib/jquery.mCustomScrollbar.min.js'
-                '@OroUIBundle/Resources/public/lib/jquery.mousewheel.min.js'
-                '@OroUIBundle/Resources/public/lib/jquery.numeric.js'
-                '@OroUIBundle/Resources/public/lib/jquery.uniform.min.js'
-                '@OroUIBundle/Resources/public/lib/bootstrap.min.js'
-                '@OroUIBundle/Resources/public/lib/bootstrap/js/bootstrap-tooltip.js'
-                '@OroUIBundle/Resources/public/lib/bootstrap/js/bootstrap-popover.js'
-                '@OroUIBundle/Resources/public/lib/bootstrap/js/bootstrap.switch.js'
-
-                '@OroUIBundle/Resources/public/js/layout.js'
-                '@OroUIBundle/Resources/public/js/backbone/app.js'
-                '@OroUIBundle/Resources/public/js/backbone/app/model.js'
-                '@OroUIBundle/Resources/public/js/backbone/app/view.js'
-                '@OroUIBundle/Resources/public/js/backbone/app/router.js'
-                '@OroUIBundle/Resources/public/js/backbone/app/events.js'
-                '@OroUIBundle/Resources/public/js/backbone/app/collection.js'
-                '@OroUIBundle/Resources/public/js/backbone/setup.js'
-
-                '@OroUIBundle/Resources/public/js/hash.navigation.js'
-                '@OroUIBundle/Resources/public/js/url.min.js'
-
-
-                '@OroUIBundle/Resources/public/lib/backbone.bootstrap-modal.js'
-
-                '@OroGridBundle/Resources/public/lib/backbone-pageable.js'
-                '@OroGridBundle/Resources/public/lib/backgrid/backgrid.js'
-                '@OroGridBundle/Resources/public/lib/moment/moment.js'
-                '@OroGridBundle/Resources/public/lib/backgrid/extensions/moment-cell/backgrid-moment-cell.js'
-
-                '@OroGridBundle/Resources/public/lib/multiselect/jquery.multiselect.js'
-                '@OroGridBundle/Resources/public/lib/multiselect/jquery.multiselect.filter.js'
-
-                '@OroGridBundle/Resources/public/lib/jquery-ui-timepicker-addon.js'
-
-                '@OroGridBundle/Resources/public/js/app/datagrid/action/datagrid-action-launcher.js'
-                '@OroGridBundle/Resources/public/js/app/datagrid/action/datagrid-action.js'
-                '@OroGridBundle/Resources/public/js/app/datagrid/action/datagrid-action-navigate.js'
-                '@OroGridBundle/Resources/public/js/app/datagrid/action/datagrid-action-delete.js'
-                '@OroGridBundle/Resources/public/js/app/datagrid/action/datagrid-action.js'
-                '@OroGridBundle/Resources/public/js/app/datagrid/action/datagrid-action-cell.js'
-
-                '@OroGridBundle/Resources/public/js/app/datagrid/datagrid-header-cell.js'
-                '@OroGridBundle/Resources/public/js/app/datagrid/datagrid-header.js'
-                '@OroGridBundle/Resources/public/js/app/datagrid/datagrid-body.js'
-
-                '@OroGridBundle/Resources/public/js/app/datagrid/datagrid-pagination.js'
-                '@OroGridBundle/Resources/public/js/app/datagrid/pagination/datagrid-pagination-input.js'
-                '@OroGridBundle/Resources/public/js/app/datagrid/datagrid-pagesize.js'
-                '@OroGridBundle/Resources/public/js/app/datagrid/datagrid-toolbar.js'
-
-                '@OroGridBundle/Resources/public/js/app/datagrid/filter/datagrid-filter-list.js'
-                '@OroGridBundle/Resources/public/js/app/datagrid/filter/datagrid-filter.js'
-                '@OroGridBundle/Resources/public/js/app/datagrid/filter/datagrid-filter-text.js'
-                '@OroGridBundle/Resources/public/js/app/datagrid/filter/datagrid-filter-choice.js'
-                '@OroGridBundle/Resources/public/js/app/datagrid/filter/datagrid-filter-number.js'
-                '@OroGridBundle/Resources/public/js/app/datagrid/filter/datagrid-filter-date.js'
-                '@OroGridBundle/Resources/public/js/app/datagrid/filter/datagrid-filter-datetime.js'
-                '@OroGridBundle/Resources/public/js/app/datagrid/filter/datagrid-filter-select.js'
-                '@OroGridBundle/Resources/public/js/app/datagrid/filter/datagrid-filter-multiselect.js'
-
-                '@OroGridBundle/Resources/public/js/app/backgrid-formatter.js'
-
-                '@OroGridBundle/Resources/public/js/app/loadingmask.js'
-                '@OroGridBundle/Resources/public/js/app/datagrid.js'
-
-                '@OroGridBundle/Resources/public/js/app/datagrid/datagrid-router.js'
-
-                '@OroGridBundle/Resources/public/js/app/pageablecollection.js'
-
-                '@OroGridBundle/Resources/public/js/app/multiselect-decorator.js'
-            %}
+            {% oro_js filter='?yui_js' output='js/oro_app.all.js' %}
                 <script type="text/javascript" src="{{ asset_url }}"></script>
-            {% endjavascripts %}
+            {% endoro_js %}
+
+            {% if app.debug %}
+                <script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
+            {% endif %}
             <!--[if lte IE 9]>
                 <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
                 <link href="{{ asset('bundles/oroui/css/ie.css') }}" rel="stylesheet" media="all" />
-                <script src="{{ asset('bundles/oroui/js/jquery.placeholder.js') }}"></script>
+                <script src="{{ asset('bundles/oroui/js/lib/jquery/jquery.placeholder.js') }}"></script>
                 <script type="text/javascript">
                     jQuery(document).ready(function() {
                         jQuery('input[placeholder], textarea[placeholder]').placeholder();

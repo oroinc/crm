@@ -1,0 +1,14 @@
+parameters:
+    oro_ui.date.class:      Oro\Bundle\UIBundle\Form\Type\OroDateType
+    oro_ui.datetime.class:  Oro\Bundle\UIBundle\Form\Type\OroDateTimeType
+
+services:
+    oro_ui.type.oro_date:
+        class:              %oro_ui.date.class%
+        tags:
+            - { name: form.type, alias: oro_date }
+
+    oro_ui.type.oro_datetime:
+        class:              %oro_ui.datetime.class%
+        tags:
+            - { name: form.type, alias: oro_datetime }
