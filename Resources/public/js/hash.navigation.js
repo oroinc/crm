@@ -29,7 +29,6 @@ OroApp.hashNavigation = OroApp.Router.extend({
      */
     url: '',
 
-
     /** @property {OroApp.DatagridRouter} */
     gridRoute: '',
 
@@ -51,11 +50,18 @@ OroApp.hashNavigation = OroApp.Router.extend({
         this.loadPage(this.url);
     },
 
+    /**
+     * Routing grid state changed action
+     *
+     * @param encodedStateData
+     */
     gridChangeStateAction: function(encodedStateData) {
         this.encodedStateData = encodedStateData;
-        //this.gridChangeState();
     },
 
+    /**
+     *  Changing state for grid
+     */
     gridChangeState: function() {
         if (this.gridRoute) {
             this.gridRoute.changeState(this.encodedStateData);
@@ -91,7 +97,6 @@ OroApp.hashNavigation = OroApp.Router.extend({
         li.addClass('active');
         var tabId = li.parents('.tab-pane').attr('id');
         $('.application-menu a[href=#' + tabId + ']').tab('show');
-        
     },
 
     /**
@@ -262,6 +267,8 @@ OroApp.hashNavigation = OroApp.Router.extend({
 
     /**
      * Processing back clicks. If we have back attribute in url, use it, otherwise using browser back
+     *
+     * @return {Boolean}
      */
     back: function() {
         var backFound = false;
