@@ -86,7 +86,7 @@ class NavigationItem implements NavigationItemInterface
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -96,7 +96,7 @@ class NavigationItem implements NavigationItemInterface
     /**
      * Set type
      *
-     * @param string $type
+     * @param  string    $type
      * @return PinbarTab
      */
     public function setType($type)
@@ -119,20 +119,20 @@ class NavigationItem implements NavigationItemInterface
     /**
      * Set url
      *
-     * @param string $url
+     * @param  string    $url
      * @return PinbarTab
      */
     public function setUrl($url)
     {
         $this->url = $url;
-    
+
         return $this;
     }
 
     /**
      * Get url
      *
-     * @return string 
+     * @return string
      */
     public function getUrl()
     {
@@ -142,20 +142,20 @@ class NavigationItem implements NavigationItemInterface
     /**
      * Set title
      *
-     * @param string $title
+     * @param  string    $title
      * @return PinbarTab
      */
     public function setTitle($title)
     {
         $this->title = $title;
-    
+
         return $this;
     }
 
     /**
      * Get title
      *
-     * @return string 
+     * @return string
      */
     public function getTitle()
     {
@@ -165,20 +165,20 @@ class NavigationItem implements NavigationItemInterface
     /**
      * Set position
      *
-     * @param integer $position
+     * @param  integer   $position
      * @return PinbarTab
      */
     public function setPosition($position)
     {
         $this->position = $position;
-    
+
         return $this;
     }
 
     /**
      * Get position
      *
-     * @return integer 
+     * @return integer
      */
     public function getPosition()
     {
@@ -188,20 +188,20 @@ class NavigationItem implements NavigationItemInterface
     /**
      * Set createdAt
      *
-     * @param \DateTime $createdAt
+     * @param  \DateTime $createdAt
      * @return PinbarTab
      */
     public function setCreatedAt($createdAt)
     {
         $this->createdAt = $createdAt;
-    
+
         return $this;
     }
 
     /**
      * Get createdAt
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getCreatedAt()
     {
@@ -211,20 +211,20 @@ class NavigationItem implements NavigationItemInterface
     /**
      * Set updatedAt
      *
-     * @param \DateTime $updatedAt
+     * @param  \DateTime $updatedAt
      * @return PinbarTab
      */
     public function setUpdatedAt($updatedAt)
     {
         $this->updatedAt = $updatedAt;
-    
+
         return $this;
     }
 
     /**
      * Get updatedAt
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getUpdatedAt()
     {
@@ -234,7 +234,7 @@ class NavigationItem implements NavigationItemInterface
     /**
      * Set user
      *
-     * @param \Oro\Bundle\UserBundle\Entity\User $user
+     * @param  \Oro\Bundle\UserBundle\Entity\User $user
      * @return PinbarTab
      */
     public function setUser(\Oro\Bundle\UserBundle\Entity\User $user = null)
@@ -247,7 +247,7 @@ class NavigationItem implements NavigationItemInterface
     /**
      * Get user
      *
-     * @return \Oro\Bundle\UserBundle\Entity\User 
+     * @return \Oro\Bundle\UserBundle\Entity\User
      */
     public function getUser()
     {

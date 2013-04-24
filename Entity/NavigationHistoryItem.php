@@ -9,8 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Entity(repositoryClass="Oro\Bundle\NavigationBundle\Entity\Repository\HistoryItemRepository")
  * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="oro_navigation_history",
- *      uniqueConstraints={@ORM\UniqueConstraint(name="unq_user_id_url_idx", columns={"user_id", "url"})})
+ * @ORM\Table(name="oro_navigation_history")
  */
 class NavigationHistoryItem implements NavigationItemInterface
 {
@@ -39,7 +38,7 @@ class NavigationHistoryItem implements NavigationItemInterface
     /**
      * @var string $url
      *
-     * @ORM\Column(name="url", type="string", length=250)
+     * @ORM\Column(name="url", type="string", length=500)
      */
     protected $url;
 
@@ -87,7 +86,7 @@ class NavigationHistoryItem implements NavigationItemInterface
     /**
      * Set url
      *
-     * @param string $url
+     * @param  string                $url
      * @return NavigationHistoryItem
      */
     public function setUrl($url)
@@ -110,7 +109,7 @@ class NavigationHistoryItem implements NavigationItemInterface
     /**
      * Set title
      *
-     * @param string $title
+     * @param  string                $title
      * @return NavigationHistoryItem
      */
     public function setTitle($title)
@@ -133,7 +132,7 @@ class NavigationHistoryItem implements NavigationItemInterface
     /**
      * Set visitedAt
      *
-     * @param \DateTime $visitedAt
+     * @param  \DateTime             $visitedAt
      * @return NavigationHistoryItem
      */
     public function setVisitedAt($visitedAt)
@@ -156,7 +155,7 @@ class NavigationHistoryItem implements NavigationItemInterface
     /**
      * Set visitCount
      *
-     * @param int $visitCount
+     * @param  int                   $visitCount
      * @return NavigationHistoryItem
      */
     public function setVisitCount($visitCount)
@@ -179,7 +178,7 @@ class NavigationHistoryItem implements NavigationItemInterface
     /**
      * Set user
      *
-     * @param \Oro\Bundle\UserBundle\Entity\User $user
+     * @param  \Oro\Bundle\UserBundle\Entity\User $user
      * @return NavigationHistoryItem
      */
     public function setUser(\Oro\Bundle\UserBundle\Entity\User $user = null)

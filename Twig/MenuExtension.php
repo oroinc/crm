@@ -27,9 +27,9 @@ class MenuExtension extends \Twig_Extension
     protected $container;
 
     /**
-     * @param Helper $helper
+     * @param Helper                $helper
      * @param MenuProviderInterface $provider
-     * @param ContainerInterface $container
+     * @param ContainerInterface    $container
      */
     public function __construct(Helper $helper, MenuProviderInterface $provider, ContainerInterface $container)
     {
@@ -55,8 +55,8 @@ class MenuExtension extends \Twig_Extension
      * Renders a menu with the specified renderer.
      *
      * @param ItemInterface|string|array $menu
-     * @param array $options
-     * @param string $renderer
+     * @param array                      $options
+     * @param string                     $renderer
      *
      * @throws \InvalidArgumentException
      * @return string
@@ -113,7 +113,7 @@ class MenuExtension extends \Twig_Extension
     public function getMenu($menu, array $path = array(), array $options = array())
     {
         if (!$menu instanceof ItemInterface) {
-            $menu = $this->provider->get((string)$menu, $options);
+            $menu = $this->provider->get((string) $menu, $options);
         }
 
         foreach ($path as $child) {

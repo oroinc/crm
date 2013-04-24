@@ -4,7 +4,6 @@ namespace Oro\Bundle\NavigationBundle\Controller\Api;
 
 use Symfony\Component\HttpFoundation\Response;
 use FOS\RestBundle\Controller\FOSRestController;
-use FOS\RestBundle\Routing\ClassResourceInterface;
 use FOS\RestBundle\Controller\Annotations\NamePrefix;
 use FOS\RestBundle\Controller\Annotations\RouteResource;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
@@ -93,7 +92,7 @@ class NavigationItemController extends FOSRestController
      * REST PUT
      *
      * @param string $type
-     * @param int $itemId Navigation item id
+     * @param int    $itemId Navigation item id
      *
      * @ApiDoc(
      *  description="Update Navigation item",
@@ -114,7 +113,7 @@ class NavigationItemController extends FOSRestController
         }
 
         /** @var $entity \Oro\Bundle\NavigationBundle\Entity\NavigationItemInterface */
-        $entity = $this->getFactory()->findItem($type, (int)$itemId);
+        $entity = $this->getFactory()->findItem($type, (int) $itemId);
         if (!$entity) {
             return $this->handleView($this->view(array(), Codes::HTTP_NOT_FOUND));
         }
@@ -135,7 +134,7 @@ class NavigationItemController extends FOSRestController
      * REST DELETE
      *
      * @param string $type
-     * @param int $itemId
+     * @param int    $itemId
      *
      * @ApiDoc(
      *  description="Remove Navigation item",
@@ -146,7 +145,7 @@ class NavigationItemController extends FOSRestController
     public function deleteIdAction($type, $itemId)
     {
         /** @var $entity \Oro\Bundle\NavigationBundle\Entity\NavigationItemInterface */
-        $entity = $this->getFactory()->findItem($type, (int)$itemId);
+        $entity = $this->getFactory()->findItem($type, (int) $itemId);
         if (!$entity) {
             return $this->handleView($this->view(array(), Codes::HTTP_NOT_FOUND));
         }
@@ -170,13 +169,14 @@ class NavigationItemController extends FOSRestController
     {
         /** @var $user User */
         $user = $this->getUser();
+
         return $user ? $user->getId() : 0;
     }
 
     /**
      * Validate permissions on pinbar
      *
-     * @param User $user
+     * @param  User $user
      * @return bool
      */
     protected function validatePermissions(User $user)

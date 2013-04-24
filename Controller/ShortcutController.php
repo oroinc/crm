@@ -2,16 +2,20 @@
 
 namespace Oro\Bundle\NavigationBundle\Controller;
 
+use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
-use Oro\Bundle\NavigationBundle\Provider\BuilderChainProvider;
 use Knp\Menu\Iterator\RecursiveItemIterator;
 use Knp\Menu\ItemInterface;
-use Symfony\Component\Translation\TranslatorInterface;
 
+use Oro\Bundle\NavigationBundle\Provider\BuilderChainProvider;
+
+/**
+ * @Route("/shortcut")
+ */
 class ShortcutController extends Controller
 {
     /**

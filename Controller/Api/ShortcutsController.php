@@ -4,7 +4,6 @@ namespace Oro\Bundle\NavigationBundle\Controller\Api;
 
 use Symfony\Component\HttpFoundation\Response;
 use FOS\RestBundle\Controller\FOSRestController;
-use FOS\RestBundle\Routing\ClassResourceInterface;
 use FOS\RestBundle\Controller\Annotations\NamePrefix;
 use FOS\RestBundle\Controller\Annotations\RouteResource;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
@@ -51,6 +50,7 @@ class ShortcutsController extends FOSRestController
                 }
             }
         }
+
         return $this->handleView(
             $this->view($result, is_array($result) ? Codes::HTTP_OK : Codes::HTTP_NOT_FOUND)
         );

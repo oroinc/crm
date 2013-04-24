@@ -42,7 +42,7 @@ class AclAwareMenuFactoryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider optionsWithResourceIdDataProvider
-     * @param array $options
+     * @param array   $options
      * @param boolean $isAllowed
      */
     public function testBuildOptionsWithResourceId($options, $isAllowed)
@@ -132,7 +132,7 @@ class AclAwareMenuFactoryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider optionsWithRouteDataProvider
-     * @param array $options
+     * @param array   $options
      * @param boolean $isAllowed
      */
     public function testBuildOptionsWithRoute($options, $isAllowed)
@@ -148,10 +148,10 @@ class AclAwareMenuFactoryTest extends \PHPUnit_Framework_TestCase
      * Assert ACL and route calls are present when route option is present.
      *
      * @param boolean $isAllowed
-     * @param string $routeName
-     * @param string $class
-     * @param string $method
-     * @param int $callsCount
+     * @param string  $routeName
+     * @param string  $class
+     * @param string  $method
+     * @param int     $callsCount
      */
     protected function assertRouteByRouteNameCalls($isAllowed, $routeName, $class, $method, $callsCount)
     {
@@ -215,7 +215,7 @@ class AclAwareMenuFactoryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider optionsWithUriDataProvider
-     * @param array $options
+     * @param array   $options
      * @param boolean $isAllowed
      */
     public function testBuildOptionsWithUri($options, $isAllowed)
@@ -389,7 +389,7 @@ class AclAwareMenuFactoryTest extends \PHPUnit_Framework_TestCase
 
         $options = array('route' => 'route_name', 'routeParameters' => $params);
 
-        $this->assertRouteByRouteNameCalls(true, 'route_name', 'controller', 'action', (int)!$hasInCache);
+        $this->assertRouteByRouteNameCalls(true, 'route_name', 'controller', 'action', (int) !$hasInCache);
 
         $item = $this->factory->createItem('test', $options);
         $this->assertTrue($item->getExtra('isAllowed'));
