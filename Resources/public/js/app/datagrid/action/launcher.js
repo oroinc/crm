@@ -1,20 +1,24 @@
+var OroApp = OroApp || {};
+OroApp.Datagrid = OroApp.Datagrid || {};
+OroApp.Datagrid.Action = OroApp.Datagrid.Action || {};
+
 /**
  * Action launcher implemented as simple link. Click on link triggers action run
  *
  * Events:
  * click: Fired when launcher was clicked
  *
- * @class   OroApp.DatagridActionLauncher
+ * @class   OroApp.Datagrid.Action.Launcher
  * @extends Backbone.View
  */
-OroApp.DatagridActionLauncher = Backbone.View.extend({
+OroApp.Datagrid.Action.Launcher = Backbone.View.extend({
     /** @property {String} */
     tagName: 'a',
 
     /** @property {Boolean} */
     onClickReturnValue: true,
 
-    /** @property {OroApp.DatagridAction} */
+    /** @property {OroApp.Datagrid.Action} */
     action: undefined,
 
     /** @property {String} */
@@ -58,7 +62,7 @@ OroApp.DatagridActionLauncher = Backbone.View.extend({
      * Initialize
      *
      * @param {Object} options
-     * @param {OroApp.DatagridAction} options.action
+     * @param {OroApp.Datagrid.Action} options.action
      * @param {function(Object, ?Object=): string} [options.template]
      * @param {String} [options.label]
      * @param {String} [options.icon]

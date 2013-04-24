@@ -1,10 +1,10 @@
 /**
  * Datagrid header cell
  *
- * @class   OroApp.DatagridHeaderCell
+ * @class   OroApp.Datagrid.HeaderCell
  * @extends Backgrid.HeaderCell
  */
-OroApp.DatagridHeaderCell = Backgrid.HeaderCell.extend({
+OroApp.Datagrid.HeaderCell = Backgrid.HeaderCell.extend({
 
     /** @property */
     template:_.template(

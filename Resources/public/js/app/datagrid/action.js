@@ -1,15 +1,15 @@
 /**
  * Basic action class. Subclasses should override execute method which is invoked when action is running.
  *
- * @class   OroApp.DatagridAction
+ * @class   OroApp.Datagrid.Action
  * @extends Backbone.View
  */
-OroApp.DatagridAction = Backbone.View.extend({
+OroApp.Datagrid.Action = Backbone.View.extend({
     /** @property {Backbone.Model} */
     model: null,
 
     /** @property {Function} */
-    launcherPrototype: OroApp.DatagridActionLauncher,
+    launcherPrototype: OroApp.Datagrid.Action.Launcher,
 
     /** @property {Object} */
     launcherOptions: undefined,
@@ -61,7 +61,7 @@ OroApp.DatagridAction = Backbone.View.extend({
      * Creates launcher
      *
      * @param {Object} options Launcher options
-     * @return {OroApp.DatagridActionLauncher}
+     * @return {OroApp.Datagrid.Action.Launcher}
      */
     createLauncher: function(options) {
         options = options || {};

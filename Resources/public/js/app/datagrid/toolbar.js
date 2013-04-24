@@ -1,10 +1,13 @@
+var OroApp = OroApp || {};
+OroApp.Datagrid = OroApp.Datagrid || {};
+
 /**
  * Datagrid toolbar widget
  *
- * @class   OroApp.DatagridToolbar
+ * @class   OroApp.Datagrid.Toolbar
  * @extends OroApp.View
  */
-OroApp.DatagridToolbar = OroApp.View.extend({
+OroApp.Datagrid.Toolbar = OroApp.View.extend({
 
     /** @property */
     template:_.template(
@@ -29,10 +32,10 @@ OroApp.DatagridToolbar = OroApp.View.extend({
     ),
 
     /** @property */
-    pagination: OroApp.DatagridPaginationInput,
+    pagination: OroApp.Datagrid.Pagination.Input,
 
     /** @property */
-    pageSize: OroApp.DatagridPageSize,
+    pageSize: OroApp.Datagrid.PageSize,
 
     /**
      * Initializer.

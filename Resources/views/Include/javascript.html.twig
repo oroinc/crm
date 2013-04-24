@@ -8,30 +8,29 @@
     '@OroGridBundle/Resources/public/lib/moment/moment.js'
     '@OroGridBundle/Resources/public/lib/backgrid/extensions/moment-cell/backgrid-moment-cell.js'
 
-    '@OroGridBundle/Resources/public/js/app/datagrid/action/datagrid-action-launcher.js'
-    '@OroGridBundle/Resources/public/js/app/datagrid/action/datagrid-action.js'
-    '@OroGridBundle/Resources/public/js/app/datagrid/action/datagrid-action-navigate.js'
-    '@OroGridBundle/Resources/public/js/app/datagrid/action/datagrid-action-delete.js'
-    '@OroGridBundle/Resources/public/js/app/datagrid/action/datagrid-action.js'
-    '@OroGridBundle/Resources/public/js/app/datagrid/action/datagrid-action-cell.js'
+    '@OroGridBundle/Resources/public/js/app/datagrid/action/launcher.js'
+    '@OroGridBundle/Resources/public/js/app/datagrid/action.js'
+    '@OroGridBundle/Resources/public/js/app/datagrid/action/navigate.js'
+    '@OroGridBundle/Resources/public/js/app/datagrid/action/delete.js'
+    '@OroGridBundle/Resources/public/js/app/datagrid/action/cell.js'
 
-    '@OroGridBundle/Resources/public/js/app/datagrid/datagrid-header-cell.js'
-    '@OroGridBundle/Resources/public/js/app/datagrid/datagrid-header.js'
-    '@OroGridBundle/Resources/public/js/app/datagrid/datagrid-body.js'
+    '@OroGridBundle/Resources/public/js/app/datagrid/headercell.js'
+    '@OroGridBundle/Resources/public/js/app/datagrid/header.js'
+    '@OroGridBundle/Resources/public/js/app/datagrid/body.js'
 
-    '@OroGridBundle/Resources/public/js/app/datagrid/datagrid-pagination.js'
-    '@OroGridBundle/Resources/public/js/app/datagrid/pagination/datagrid-pagination-input.js'
-    '@OroGridBundle/Resources/public/js/app/datagrid/datagrid-pagesize.js'
-    '@OroGridBundle/Resources/public/js/app/datagrid/datagrid-toolbar.js'
+    '@OroGridBundle/Resources/public/js/app/datagrid/pagination.js'
+    '@OroGridBundle/Resources/public/js/app/datagrid/pagination/input.js'
+    '@OroGridBundle/Resources/public/js/app/datagrid/pagesize.js'
+    '@OroGridBundle/Resources/public/js/app/datagrid/toolbar.js'
 
-    '@OroGridBundle/Resources/public/js/app/datagrid/filter/datagrid-filter-list.js'
+    '@OroGridBundle/Resources/public/js/app/datagrid/filter/list.js'
 
     '@OroGridBundle/Resources/public/js/app/backgrid-formatter.js'
 
     '@OroGridBundle/Resources/public/js/app/loadingmask.js'
-    '@OroGridBundle/Resources/public/js/app/datagrid.js'
+    '@OroGridBundle/Resources/public/js/app/datagrid/grid.js'
 
-    '@OroGridBundle/Resources/public/js/app/datagrid/datagrid-router.js'
+    '@OroGridBundle/Resources/public/js/app/datagrid/router.js'
 
     '@OroGridBundle/Resources/public/js/app/pageablecollection.js'
 
@@ -114,9 +113,9 @@
                         {% for action in datagrid.rowActions %}
                             {{ action.name|json_encode|raw }}:
                             {% if action.type == constant(actionTypePrefix ~ 'TYPE_DELETE') %}
-                                OroApp.DatagridActionDelete.extend({{ action.options|json_encode|raw }})
+                                OroApp.Datagrid.Action.Delete.extend({{ action.options|json_encode|raw }})
                             {% else %}
-                                OroApp.DatagridActionNavigate.extend({{ action.options|json_encode|raw }})
+                                OroApp.Datagrid.Action.Navigate.extend({{ action.options|json_encode|raw }})
                             {% endif %}
                             {% if not loop.last %},{% endif %}
                         {% endfor %}
@@ -170,7 +169,7 @@
                     loadingHint: {{ 'oro_grid.label_loading_mask'|trans({}, 'OroGridBundle')|json_encode|raw }}
                 })
             }, datagridOptions.grid);
-            var datagrid = new OroApp.Datagrid(datagridParameters);
+            var datagrid = new OroApp.Datagrid.Grid(datagridParameters);
             $(datagridBodySelector).html(datagrid.render().$el);
 
             // Title
@@ -184,11 +183,11 @@
                 addButtonHint: {{ 'oro_grid.label_add_filter'|trans({}, 'OroGridBundle')|json_encode|raw }},
                 collection: datagridCollection
             }, datagridOptions.grid);
-            var filtersList = new OroApp.DatagridFilterList(filterListParameters);
+            var filtersList = new OroApp.Datagrid.Filter.List(filterListParameters);
             $(datagridFiltersSelector).html(filtersList.render().$el);
 
             // Register router and start history
-            var router = new OroApp.DatagridRouter({
+            var router = new OroApp.Datagrid.Router({
                 collection: datagridCollection
             });
         };

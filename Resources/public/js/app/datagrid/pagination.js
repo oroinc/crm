@@ -1,10 +1,13 @@
+var OroApp = OroApp || {};
+OroApp.Datagrid = OroApp.Datagrid || {};
+
 /**
  * Datagrid pagination widget
  *
- * @class   OroApp.DatagridPageSize
+ * @class   OroApp.Datagrid.Pagination
  * @extends OroApp.View
  */
-OroApp.DatagridPagination = OroApp.View.extend({
+OroApp.Datagrid.Pagination = OroApp.View.extend({
     /** @property */
     tagName: 'div',
 

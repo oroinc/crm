@@ -1,10 +1,13 @@
+var OroApp = OroApp || {};
+OroApp.Datagrid = OroApp.Datagrid || {};
+
 /**
  * Router for basic datagrid
  *
- * @class   OroApp.DatagridRouter
+ * @class   OroApp.Datagrid.Router
  * @extends OroApp.Router
  */
-OroApp.DatagridRouter = OroApp.Router.extend({
+OroApp.Datagrid.Router = OroApp.Router.extend({
     /** @property */
     routes: {
         "g/*encodedStateData": "changeState",

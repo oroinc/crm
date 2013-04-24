@@ -102,7 +102,7 @@ When the collection is requests data from storage, it sends a GET request using 
 example.com/users/list.json?users[_pager][_page]=1&users[_pager][_per_page]=10
 ```
 
-* **OroApp.DatagridRouter**
+* **OroApp.Datagrid.Router**
 
 Inherited from OroApp.Router. This object acts as a router. Thanks to this class, user can for example select next page using pagination, change records number per page apply some sorting and then go back to original state using Back button. It also responsible for initializing collection with first state that came from URL that user requests.
 An example URL that stores the state of grid:
@@ -111,12 +111,12 @@ example.com/users/list#g/i=2&p=25&s=email&o=-1
 ```
 This line contains information about the page number (i = 2), the name of the field you are sorting (p = 25) and a ascending sort order (o = -1).
 
-* **OroApp.Datagrid** In addition to basic grid, this class can work with loading mask, toolbar, set of filters, and set of actions.
+* **OroApp.Datagrid.Grid** In addition to basic grid, this class can work with loading mask, toolbar, set of filters, and set of actions.
 * **Datagrid.LoadingMask** Serves to display the loading process to end-user when some request is in progress.
-* **OroApp.DatagridToolbar** Aggregates control toolbar widgets, including paginator, and page size widgets.
-OroApp.DatagridPagination and OroApp.DatagridPaginationInput
+* **OroApp.Datagrid.Toolbar** Aggregates control toolbar widgets, including paginator, and page size widgets.
+OroApp.Datagrid.Pagination and OroApp.Datagrid.Pagination.Input
 Paginator could have one of two possible presentations, using links as page numbers and using input field for entering and displaying page number.
-* **OroApp.DatagridPageSize** This widget is used to control number of records displayed on one grid page.
+* **OroApp.Datagrid.PageSize** This widget is used to control number of records displayed on one grid page.
 
 Here is an example of code that initializes grid:
 ``` javascript
@@ -129,7 +129,7 @@ var collection = new OroApp.PageableCollection({
         totalRecords:52
     }
 });
-var grid = new OroApp.Datagrid({
+var grid = new OroApp.Datagrid.Grid({
     collection: collection,
     columns:[
         {
@@ -174,15 +174,15 @@ Action performs using instance of model and usually uses a link to do work on se
 
 Below is an example of initialization grid with actions:
 ``` javascript
-var grid = new OroApp.Datagrid({
+var grid = new OroApp.Datagrid.Grid({
     actions: [
-        OroApp.DatagridActionNavigate.extend({
+        OroApp.Datagrid.Action.Navigate.extend({
             label: "Edit",
             icon: edit,
             placeholders: {"{id}":"id"},
             url: "/user/edit/{id}"
         }),
-        OroApp.DatagridActionDelete.extend({
+        OroApp.Datagrid.Action.Delete.extend({
             label: "Delete",
             icon: "trash",
             placeholders: {"{id}":"id"},
@@ -195,13 +195,13 @@ var grid = new OroApp.Datagrid({
 
 Main classes and responsibilities:
 
-* **OroApp.Datagrid** - grid contains collection of models and allowed actions that user can perform
+* **OroApp.Datagrid.Grid** - grid contains collection of models and allowed actions that user can perform
 * **OroApp.BackboneModel** - model that is represented by one of grid rows. Action is performed on concrete instances of models
-* **OroApp.DatagridActionCell** - responsible for rendering grid's actions launchers
-* **OroApp.DatagridAction** - abstract action that can be performed
-* **OroApp.DatagridActionLauncher** - renders control that can be used by user to run action, for example a simple link
-* **OroApp.DatagridActionDelete** - concrete action responsible for model delete
-* **OroApp.DatagridActionNavigate** - concrete action responsible for navigating user to some URL
+* **OroApp.Datagrid.Action.Cell** - responsible for rendering grid's actions launchers
+* **OroApp.Datagrid.Action** - abstract action that can be performed
+* **OroApp.Datagrid.Action.Launcher** - renders control that can be used by user to run action, for example a simple link
+* **OroApp.Datagrid.Action.Delete** - concrete action responsible for model delete
+* **OroApp.Datagrid.Action.Navigate** - concrete action responsible for navigating user to some URL
 
 Filters
 -------
@@ -210,12 +210,12 @@ Filters are used to change collection state according to criteria selected by us
 
 Main classes and responsibilities:
 
-* **OroApp.DatagridFilterList** - extends OroApp.Filter.List from OroFilterBundle and adds methods to work with state and collection
+* **OroApp.Datagrid.Filter.List** - extends OroApp.Filter.List from OroFilterBundle and adds methods to work with state and collection
 * **Backbone.Collection** - collection of models that has particular state. By setting up filters user updates collection state. After it collection sends request to update it's data accordingly with new state that was applied with filters criteria
 
 Below is example of creating filter list. *oro\_filter\_render\_filter\_javascript* is a twig extension from OroFilterBundle which returns Javascript filter object.
 ``` javascript
-var filtersList = new OroApp.DatagridFilterList({
+var filtersList = new OroApp.Datagrid.Filter.List({
     collection: datagridCollection,
     addButtonHint: '+ Add more',
     filters: {

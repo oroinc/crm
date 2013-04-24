@@ -1,10 +1,14 @@
+var OroApp = OroApp || {};
+OroApp.Datagrid = OroApp.Datagrid || {};
+OroApp.Datagrid.Filter = OroApp.Datagrid.Filter || {};
+
 /**
  * View that represents all grid filters
  *
- * @class   OroApp.DatagridFilterList
+ * @class   OroApp.Datagrid.Filter.List
  * @extends OroApp.Filter.List
  */
-OroApp.DatagridFilterList = OroApp.Filter.List.extend({
+OroApp.Datagrid.Filter.List = OroApp.Filter.List.extend({
     /**
      * Initialize filter list options
      *
