@@ -62,7 +62,13 @@ class RequestParameters implements ParametersInterface
     public function set($type, $value)
     {
         $parameters = $this->getRootParameterValue();
-        $parameters[$type] = array_merge_recursive($this->get($type), $value);
+        $currentValue = $this->get($type);
+
+        if (is_array($currentValue) && is_array($value)) {
+            $parameters[$type] = array_merge_recursive($currentValue, $value);
+        } else {
+            $parameters[$type] = $value;
+        }
 
         $this->getRequest()->query->set($this->rootParameterName, $parameters);
     }
