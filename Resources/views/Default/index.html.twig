@@ -27,38 +27,16 @@
                 <link rel="stylesheet" media="all" href="{{ asset_url }}" />
                 {% endstylesheets %}
             {% endif %}
+            {% oro_css filter='cssrewrite, lessphp, ?yui_css' output='css/oro_app.css' %}
+                <link rel="stylesheet" media="all" href="{{ asset_url }}" />
+            {% endoro_css %}
         {% endblock %}
 
         {% block head_script %}
             {# JS assetics #}
-            {% javascripts
-                '@OroUIBundle/Resources/public/lib/base64.js'
-                '@OroUIBundle/Resources/public/lib/underscore.js'
-                '@OroUIBundle/Resources/public/lib/backbone.js'
-                '@OroUIBundle/Resources/public/lib/jquery/jquery.mousewheel.min.js'
-                '@OroUIBundle/Resources/public/lib/jquery/jquery.numeric.js'
-                '@OroUIBundle/Resources/public/lib/jquery/jquery.uniform.min.js'
-                '@OroUIBundle/Resources/public/lib/bootstrap.min.js'
-                '@OroUIBundle/Resources/public/lib/bootstrap/js/bootstrap-tooltip.js'
-                '@OroUIBundle/Resources/public/lib/bootstrap/js/bootstrap-popover.js'
-                '@OroUIBundle/Resources/public/lib/bootstrap/js/bootstrap.switch.js'
-
-                '@OroUIBundle/Resources/public/js/layout.js'
-                '@OroUIBundle/Resources/public/js/backbone/app.js'
-                '@OroUIBundle/Resources/public/js/backbone/app/model.js'
-                '@OroUIBundle/Resources/public/js/backbone/app/view.js'
-                '@OroUIBundle/Resources/public/js/backbone/app/router.js'
-                '@OroUIBundle/Resources/public/js/backbone/app/collection.js'
-                '@OroUIBundle/Resources/public/js/backbone/setup.js'
-
-                '@FOSJsRoutingBundle/Resources/public/js/router.js'
-                'js/routes.js'
-
-                filter='?yui_js'
-                output='js/oro.app.js'
-            %}
+            {% oro_js filter='?yui_js' output='js/oro_app.all.js' %}
                 <script type="text/javascript" src="{{ asset_url }}"></script>
-            {% endjavascripts %}
+            {% endoro_js %}
 
             {% if app.debug %}
                 <script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
