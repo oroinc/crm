@@ -1,12 +1,8 @@
 {% extends bap.layout is defined ? bap.layout : 'OroUserBundle::layout.html.twig' %}
 
-{% block title %}{{ 'Roles overview'|trans }} - {{ parent() }}{% endblock %}
-
 {% block head_script %}
     {{ parent() }}
-
-    {% include 'OroGridBundle:Include:javascript.html.twig' with {'datagrid': datagrid, 'selector': '#roles-grid'} %}
-    {% include 'OroGridBundle:Include:stylesheet.html.twig' %}
+    {% include 'OroGridBundle:Include:javascript.html.twig' with {'datagridView': datagrid, 'selector': '#roles-grid'} %}
 {% endblock %}
 
 {% block page_container %}

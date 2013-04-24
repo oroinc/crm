@@ -116,32 +116,7 @@ class LightUserDatagridManager extends UserDatagridManager
      */
     protected function getRowActions()
     {
-        $clickAction = array(
-            'name'         => 'rowClick',
-            'type'         => ActionInterface::TYPE_REDIRECT,
-            'acl_resource' => 'root',
-            'options'      => array(
-                'label'         => 'Show',
-                'link'          => 'show_link',
-                'route'         => 'oro_user_show',
-                'runOnRowClick' => true,
-                'backUrl'       => true,
-            )
-        );
-
-        $showAction = array(
-            'name'         => 'show',
-            'type'         => ActionInterface::TYPE_REDIRECT,
-            'acl_resource' => 'root',
-            'options'      => array(
-                'label' => 'Show',
-                'icon'  => 'user',
-                'link'  => 'show_link',
-                'backUrl'       => true,
-            )
-        );
-
-        return array($clickAction, $showAction);
+        return array();
     }
 
 }

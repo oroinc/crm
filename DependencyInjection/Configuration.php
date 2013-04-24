@@ -42,8 +42,8 @@ class Configuration implements ConfigurationInterface
                 ->end()
             ->end();
 
-         // just to illustrate settings usage
-         SettingsBuilder::append($root, array(
+        // just to illustrate settings usage
+        SettingsBuilder::append($root, array(
             'greeting'    => array(
                 'value'   => true,
                 'type'    => 'boolean',
