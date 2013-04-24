@@ -223,7 +223,10 @@ OroApp.hashNavigation = OroApp.Router.extend({
             if ($(target).is('a')) {
                 link = $(target).attr('href');
                 if ($(target).hasClass('back')) {
-                    this.back();
+                    //if back link is found
+                    if (this.back()) {
+                        return false;
+                    }
                 }
             } else if ($(target).is('span')) {
                 link = $(target).attr('data-url');
@@ -258,11 +261,15 @@ OroApp.hashNavigation = OroApp.Router.extend({
      * Processing back clicks. If we have back attribute in url, use it, otherwise using browser back
      */
     back: function() {
+        var backFound = false;
         var url = new Url(this.getHashUrl());
         if (url.query.back) {
             window.location = url.query.back;
+            backFound = true;
         } else {
             window.history.back();
+            backFound = true;
         }
+        return backFound;
     }
 });
