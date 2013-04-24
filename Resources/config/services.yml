@@ -27,6 +27,8 @@ parameters:
     oro_navigation.title_service.event.request.listener.class: Oro\Bundle\NavigationBundle\Event\RequestTitleListener
     oro_navigation.translation.extractor.class:                Oro\Bundle\NavigationBundle\Title\TranslationExtractor
 
+    oro_navigation.twig_assets_extension.class:                Oro\Bundle\NavigationBundle\Twig\AssetsConfigExtension
+
     oro_navigation.form.type.pagestate.class:                  Oro\Bundle\NavigationBundle\Form\Type\PageStateType
     oro_navigation.form.handler.pagestate.class:               Oro\Bundle\NavigationBundle\Form\Handler\PageStateHandler
 
@@ -196,6 +198,12 @@ services:
             - @oro_navigation.title_service
         tags:
             - { name: translation.extractor, alias: navigation_translation_extractor }
+
+    oro_navigation.twig.assets_extension:
+        class:        %oro_navigation.twig_assets_extension.class%
+        arguments:    [@assetic.asset_factory, %oro_navigation.assets_config%, @templating.name_parser, %assetic.bundles%]
+        tags:
+            - { name: twig.extension }
 
     oro_navigation.form.pagestate:
         class:                        Symfony\Component\Form\Form
