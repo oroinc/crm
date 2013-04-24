@@ -57,7 +57,7 @@
             <script type="text/javascript">
                 $(function() {
                     new OroApp.hashNavigation({baseUrl : '{{ app.request.getSchemeAndHttpHost() }}'});
-                    //Backbone.history.start();
+                    Backbone.history.start();
                 })
             </script>
         {% endblock %}

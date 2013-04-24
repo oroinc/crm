@@ -136,11 +136,14 @@ OroApp.hashNavigation = OroApp.Router.extend({
             this
         );
         /**
-         * Checking for grid route
+         * Checking for grid route and updating it's state
          */
         OroApp.Events.bind(
             "grid_route:loaded",
-            function(route) {this.gridRoute = route; this.gridChangeState();},
+            function(route) {
+                this.gridRoute = route;
+                this.gridChangeState();
+            },
             this
         );
         /**
@@ -223,7 +226,7 @@ OroApp.hashNavigation = OroApp.Router.extend({
             if ($(target).is('a')) {
                 link = $(target).attr('href');
                 if ($(target).hasClass('back')) {
-                    //if back link is found
+                    //if back link is found, go back and don't do further processing
                     if (this.back()) {
                         return false;
                     }
@@ -247,7 +250,7 @@ OroApp.hashNavigation = OroApp.Router.extend({
         var url = this.url;
         if (!url) {
             /**
-             * Get real url part from the url without grid state
+             * Get real url part from the hash without grid state
              */
             url = Backbone.history.fragment.split('|g/')[0].replace('url=', '');
             if (!url) {
