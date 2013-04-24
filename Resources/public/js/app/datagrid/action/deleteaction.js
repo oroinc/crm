@@ -5,10 +5,10 @@ OroApp.Datagrid.Action = OroApp.Datagrid.Action || {};
 /**
  * Delete action with confirm dialog, triggers REST DELETE request
  *
- * @class   OroApp.Datagrid.Action.Delete
- * @extends OroApp.Datagrid.Action
+ * @class   OroApp.Datagrid.Action.DeleteAction
+ * @extends OroApp.Datagrid.Action.ModelAction
  */
-OroApp.Datagrid.Action.Delete = OroApp.Datagrid.Action.extend({
+OroApp.Datagrid.Action.DeleteAction = OroApp.Datagrid.Action.ModelAction.extend({
 
     /** @property Backbone.BootstrapModal */
     errorModal: undefined,

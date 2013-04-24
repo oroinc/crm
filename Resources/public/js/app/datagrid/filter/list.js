@@ -111,6 +111,12 @@ OroApp.Datagrid.Filter.List = OroApp.Filter.List.extend({
                 } else {
                     this.disableFilter(filter.reset());
                 }
+            } else {
+                if (filter.defaultEnabled) {
+                    this.enableFilter(filter.reset());
+                } else {
+                    this.disableFilter(filter.reset());
+                }
             }
         }, this);
 

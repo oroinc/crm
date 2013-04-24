@@ -12,13 +12,16 @@ OroApp.Datagrid.Action = OroApp.Datagrid.Action || {};
  * @extends Backbone.View
  */
 OroApp.Datagrid.Action.Launcher = Backbone.View.extend({
+    /** @property */
+    enabled: true,
+
     /** @property {String} */
-    tagName: 'a',
+    tagName: 'span',
 
     /** @property {Boolean} */
     onClickReturnValue: true,
 
-    /** @property {OroApp.Datagrid.Action} */
+    /** @property {OroApp.Datagrid.Action.AbstractAction} */
     action: undefined,
 
     /** @property {String} */
@@ -28,6 +31,12 @@ OroApp.Datagrid.Action.Launcher = Backbone.View.extend({
     icon: undefined,
 
     /** @property {String} */
+    iconClassName: undefined,
+
+    /** @property {String} */
+    className: undefined,
+
+    /** @property {String} */
     link: 'javascript:void(0);',
 
     /** @property {String} */
@@ -35,14 +44,20 @@ OroApp.Datagrid.Action.Launcher = Backbone.View.extend({
 
     /** @property {function(Object, ?Object=): String} */
     template:_.template(
-        '<a href="<%= link %>" class="action" ' +
-            '<%= attributesTemplate({attributes: attributes}) %> ' +
-            'title="<%= label %>"' +
+        '<a href="<%= link %>" class="action' +
+            '<%= className ? \' \' + className : \'\' %>' +
+            '<%= !enabled ? \' disabled\' : \'\' %>' +
+            '"' +
+            ' <%= attributesTemplate({attributes: attributes}) %>' +
+            ' title="<%= label %>"' +
         '>' +
             '<% if (icon) { %>' +
                 '<i class="icon-<%= icon %> hide-text"><%= label %></i>' +
             '<% } else { %>' +
-                '<%= label %>' +
+                '<% if (iconClassName) { %>' +
+                    '<i class="<%= iconClassName %>"></i>' +
+                '<% } %>' +
+                ' <%= label %>' +
             '<% } %>' +
         '</a>'
     ),
@@ -62,7 +77,7 @@ OroApp.Datagrid.Action.Launcher = Backbone.View.extend({
      * Initialize
      *
      * @param {Object} options
-     * @param {OroApp.Datagrid.Action} options.action
+     * @param {OroApp.Datagrid.Action.AbstractAction} options.action
      * @param {function(Object, ?Object=): string} [options.template]
      * @param {String} [options.label]
      * @param {String} [options.icon]
@@ -93,6 +108,14 @@ OroApp.Datagrid.Action.Launcher = Backbone.View.extend({
             this.link = options.link;
         }
 
+        if (options.iconClassName) {
+            this.iconClassName = options.iconClassName;
+        }
+
+        if (options.className) {
+            this.className = options.className;
+        }
+
         if (_.has(options, 'runAction')) {
             this.runAction = options.runAction;
         }
@@ -116,10 +139,13 @@ OroApp.Datagrid.Action.Launcher = Backbone.View.extend({
         var $el = $(this.template({
             label: this.label || this.action.label,
             icon: this.icon,
+            className: this.className,
+            iconClassName: this.iconClassName,
             link: this.link,
             action: this.action,
             attributes: this.attributes,
-            attributesTemplate: this.attributesTemplate
+            attributesTemplate: this.attributesTemplate,
+            enabled: this.enabled
         }));
 
         this.setElement($el);
@@ -133,10 +159,35 @@ OroApp.Datagrid.Action.Launcher = Backbone.View.extend({
      * @return {Boolean}
      */
     onClick: function() {
+        if (!this.enabled) {
+            return this.onClickReturnValue;
+        }
         this.trigger('click', this);
         if (this.runAction) {
             this.action.run();
         }
         return this.onClickReturnValue;
+    },
+
+    /**
+     * Disable
+     *
+     * @return {*}
+     */
+    disable: function() {
+        this.enabled = false;
+        this.$el.addClass('disabled');
+        return this;
+    },
+
+    /**
+     * Enable
+     *
+     * @return {*}
+     */
+    enable: function() {
+        this.enabled = true;
+        this.$el.removeClass('disabled');
+        return this;
     }
 });

@@ -5,10 +5,10 @@ OroApp.Datagrid.Action = OroApp.Datagrid.Action || {};
 /**
  * Navigate action. Changes window location to url, from getLink method
  *
- * @class   OroApp.Datagrid.Action.Navigate
- * @extends OroApp.Datagrid.Action
+ * @class   OroApp.Datagrid.Action.NavigateAction
+ * @extends OroApp.Datagrid.Action.ModelAction
  */
-OroApp.Datagrid.Action.Navigate = OroApp.Datagrid.Action.extend({
+OroApp.Datagrid.Action.NavigateAction = OroApp.Datagrid.Action.ModelAction.extend({
 
     /**
      * If `true` then created launcher will be complete clickable link,
@@ -25,7 +25,7 @@ OroApp.Datagrid.Action.Navigate = OroApp.Datagrid.Action.extend({
      * @param {Boolean} options.useDirectLauncherLink
      */
     initialize: function(options) {
-        OroApp.Datagrid.Action.prototype.initialize.apply(this, arguments);
+        OroApp.Datagrid.Action.ModelAction.prototype.initialize.apply(this, arguments);
 
         if (options.useDirectLauncherLink) {
             this.useDirectLauncherLink = options.useDirectLauncherLink;

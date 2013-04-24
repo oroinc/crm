@@ -26,6 +26,7 @@ OroApp.Datagrid.Toolbar = OroApp.View.extend({
                     '</ul>' +
                 '</div>' +
             '</div>' +
+            '<div class="actions-panel pull-right form-horizontal"></div>' +
             '<div class="page-size pull-right form-horizontal"></div>' +
             '<div class="pagination pagination-centered"></div>' +
         '</div>'
@@ -36,6 +37,9 @@ OroApp.Datagrid.Toolbar = OroApp.View.extend({
 
     /** @property */
     pageSize: OroApp.Datagrid.PageSize,
+
+    /** @property */
+    actionsPanel: OroApp.Datagrid.ActionsPanel,
 
     /**
      * Initializer.
@@ -60,8 +64,31 @@ OroApp.Datagrid.Toolbar = OroApp.View.extend({
             collection: this.collection
         });
 
+        this.actionsPanel = new this.actionsPanel({
+            actions: [
+                new OroApp.Datagrid.Action.RefreshCollectionAction({
+                    collection: this.collection,
+                    launcherOptions: {
+                        label: 'Refresh',
+                        className: 'btn',
+                        iconClassName: 'icon-refresh'
+                    }
+                }),
+                new OroApp.Datagrid.Action.ResetCollectionAction({
+                    collection: this.collection,
+                    launcherOptions: {
+                        label: 'Reset',
+                        className: 'btn',
+                        iconClassName: 'icon-repeat'
+                    }
+                })
+            ]
+        });
+
         OroApp.View.prototype.initialize.call(this, options);
     },
+
+    // actionspanel
 
     /**
      * Enable toolbar
@@ -71,6 +98,7 @@ OroApp.Datagrid.Toolbar = OroApp.View.extend({
     enable: function() {
         this.pagination.enable();
         this.pageSize.enable();
+        this.actionsPanel.enable();
         return this;
     },
 
@@ -82,6 +110,7 @@ OroApp.Datagrid.Toolbar = OroApp.View.extend({
     disable: function() {
         this.pagination.disable();
         this.pageSize.disable();
+        this.actionsPanel.disable();
         return this;
     },
 
@@ -94,6 +123,7 @@ OroApp.Datagrid.Toolbar = OroApp.View.extend({
 
         this.$('.pagination').replaceWith(this.pagination.render().$el);
         this.$('.page-size').append(this.pageSize.render().$el);
+        this.$('.actions-panel').append(this.actionsPanel.render().$el);
 
         return this;
     }

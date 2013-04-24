@@ -176,13 +176,13 @@ Below is an example of initialization grid with actions:
 ``` javascript
 var grid = new OroApp.Datagrid.Grid({
     actions: [
-        OroApp.Datagrid.Action.Navigate.extend({
+        OroApp.Datagrid.Action.NavigateAction.extend({
             label: "Edit",
             icon: edit,
             placeholders: {"{id}":"id"},
             url: "/user/edit/{id}"
         }),
-        OroApp.Datagrid.Action.Delete.extend({
+        OroApp.Datagrid.Action.DeleteAction.extend({
             label: "Delete",
             icon: "trash",
             placeholders: {"{id}":"id"},
@@ -198,10 +198,10 @@ Main classes and responsibilities:
 * **OroApp.Datagrid.Grid** - grid contains collection of models and allowed actions that user can perform
 * **OroApp.BackboneModel** - model that is represented by one of grid rows. Action is performed on concrete instances of models
 * **OroApp.Datagrid.Action.Cell** - responsible for rendering grid's actions launchers
-* **OroApp.Datagrid.Action** - abstract action that can be performed
+* **OroApp.Datagrid.Action.AbstractAction** - abstract action that can be performed
 * **OroApp.Datagrid.Action.Launcher** - renders control that can be used by user to run action, for example a simple link
-* **OroApp.Datagrid.Action.Delete** - concrete action responsible for model delete
-* **OroApp.Datagrid.Action.Navigate** - concrete action responsible for navigating user to some URL
+* **OroApp.Datagrid.Action.DeleteAction** - concrete action responsible for model delete
+* **OroApp.Datagrid.Action.NavigateAction** - concrete action responsible for navigating user to some URL
 
 Filters
 -------

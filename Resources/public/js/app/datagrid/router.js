@@ -56,6 +56,7 @@ OroApp.Datagrid.Router = OroApp.Router.extend({
      * @private
      */
     _handleStateChange: function(collection, options) {
+        options = options || {};
         if (options.ignoreSaveStateInUrl) {
             return;
         }

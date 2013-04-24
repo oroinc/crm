@@ -64,7 +64,7 @@ OroApp.Datagrid.Action.Cell = Backgrid.Cell.extend({
     /**
      * Handle action run
      *
-     * @param {OroApp.Datagrid.Action} action
+     * @param {OroApp.Datagrid.Action.AbstractAction} action
      */
     onActionRun: function(action) {
         this.$('.dropdown.open').removeClass('open');

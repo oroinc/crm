@@ -18,6 +18,13 @@ OroApp.PageableCollection = Backbone.PageableCollection.extend({
     model: OroApp.Model,
 
     /**
+     * Initial state of collection
+     *
+     * @property
+     */
+    initialState: {},
+
+    /**
      * Declaration of URL parameters
      *
      * @property {Object}
@@ -55,6 +62,8 @@ OroApp.PageableCollection = Backbone.PageableCollection.extend({
         if (options.state) {
             _.extend(this.state, options.state);
         }
+        this.initialState = OroApp.deepClone(this.state);
+
         if (options.url) {
             this.url = options.url;
         }
