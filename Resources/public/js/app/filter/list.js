@@ -150,8 +150,6 @@ OroApp.Filter.List = Backbone.View.extend({
                 this.filters[name].setValue(value);
             }
         }, this);
-
-        console.log(values);
     },
 
     /**
