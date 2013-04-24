@@ -2,27 +2,17 @@
 
 namespace Oro\Bundle\GridBundle\Filter\ORM;
 
-use Oro\Bundle\GridBundle\Form\Type\Filter\DateRangeType;
+use Oro\Bundle\FilterBundle\Form\Type\Filter\DateRangeFilterType;
 
 class DateRangeFilter extends AbstractDateFilter
 {
     /**
-     * This filter has time
-     *
-     * @var boolean
+     * {@inheritdoc}
      */
-    protected $time = false;
-
-    /**
-     * @return array
-     */
-    public function getTypeOptions()
+    public function getDefaultOptions()
     {
         return array(
-            DateRangeType::TYPE_BETWEEN
-                => $this->translator->trans('label_date_type_between', array(), 'SonataAdminBundle'),
-            DateRangeType::TYPE_NOT_BETWEEN
-                => $this->translator->trans('label_date_type_not_between', array(), 'SonataAdminBundle'),
+            'form_type' => DateRangeFilterType::NAME
         );
     }
 }

@@ -4,9 +4,9 @@ namespace Oro\Bundle\GridBundle\Filter\ORM;
 
 use Doctrine\DBAL\Query\QueryBuilder;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
-use Oro\Bundle\FilterBundle\Form\Type\Filter\TextFilterType;
+use Oro\Bundle\FilterBundle\Form\Type\Filter\ChoiceFilterType;
 
-class StringFilter extends AbstractFilter
+class ChoiceFilter extends AbstractFilter
 {
     /**
      * {@inheritdoc}
@@ -19,20 +19,19 @@ class StringFilter extends AbstractFilter
         }
 
         $operator = $this->getOperator($data['type']);
-        $parameterName = $this->getNewParameterName($queryBuilder);
 
-        $this->applyFilterToClause(
-            $queryBuilder,
-            $this->createCompareFieldExpression($field, $alias, $operator, $parameterName)
-        );
-
-        /** @var $queryBuilder QueryBuilder */
-        if ('=' == $operator) {
-            $value = $data['value'];
+        if ('IN' == $operator) {
+            $expression = $this->getExpressionFactory()->in(
+                $this->createFieldExpression($field, $alias),
+                $data['value']
+            );
         } else {
-            $value = sprintf($this->getOption('format'), $data['value']);
+            $expression = $this->getExpressionFactory()->notIn(
+                $this->createFieldExpression($field, $alias),
+                $data['value']
+            );
         }
-        $queryBuilder->setParameter($parameterName, $value);
+        $this->applyFilterToClause($queryBuilder, $expression);
     }
 
     /**
@@ -61,12 +60,11 @@ class StringFilter extends AbstractFilter
         $type = (int)$type;
 
         $operatorTypes = array(
-            TextFilterType::TYPE_CONTAINS     => 'LIKE',
-            TextFilterType::TYPE_NOT_CONTAINS => 'NOT LIKE',
-            TextFilterType::TYPE_EQUAL        => '=',
+            ChoiceFilterType::TYPE_CONTAINS     => 'IN',
+            ChoiceFilterType::TYPE_NOT_CONTAINS => 'NOT IN',
         );
 
-        return isset($operatorTypes[$type]) ? $operatorTypes[$type] : 'LIKE';
+        return isset($operatorTypes[$type]) ? $operatorTypes[$type] : 'IN';
     }
 
     /**
@@ -75,8 +73,7 @@ class StringFilter extends AbstractFilter
     public function getDefaultOptions()
     {
         return array(
-            'format' => '%%%s%%',
-            'form_type' => TextFilterType::NAME
+            'form_type' => ChoiceFilterType::NAME
         );
     }
 }

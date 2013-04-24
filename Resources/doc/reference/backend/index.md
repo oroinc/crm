@@ -22,7 +22,7 @@ Overview
 --------
 Datagird backend consists of several entities, which are used to perform specific actions. Every entity implements interface, so every part can be easy extended and replaced with external component.
 
-Datagrid entities use standard Symfony interfaces to perform translation, validation and form data processing. Also some interfaces and entities are extended from Sonata AdminBundle classes, so basic Sonata classes can be injected into datagrid entities.
+Datagrid entities use standard Symfony interfaces to perform translation and validation. Also some interfaces and entities are extended from Sonata AdminBundle classes, so basic Sonata classes can be injected into datagrid entities.
 
 #### Used External Interfaces
 
@@ -30,7 +30,6 @@ Datagrid entities use standard Symfony interfaces to perform translation, valida
 
 * Translator - Symfony\Component\Translation\TranslatorInterface;
 * Validator - Symfony\Component\Validator\ValidatorInterface;
-* Form Factory - Symfony\Component\Form\FormFactoryInterface.
 
 **Sonata AdminBundle**
 
@@ -54,7 +53,7 @@ Datagrid Manager receives parameters through tag attributes. List of parameters 
 
 * **class** - Datagrid Manager class name;
 * **name** - reserved Datagrid Manager tag name;
-* **datagrid\_name** - datagrid unique ID, used to set form name and isolate separate grids from each other; setter method is *setName*;
+* **datagrid\_name** - datagrid unique ID, used to set datagrid name and isolate separate grids from each other; setter method is *setName*;
 * **entity\_hint** (optional) - string which is used to set UI datagrid name; setter method is *setEntityHint*;
 * **entity\_name** (optional) - string that represents Doctrine entity name which should be used to select;
 * **query\_entity\_alias** (optional) - string that represents Doctrine entity alias which should be used in request;
@@ -318,7 +317,7 @@ Entity Builders provides functionality to build specific types of service entiti
 #### Class Description
 
 * **Builder \ DatagridBuilderInterface** - basic interface for Datagrid Builder, provides getter for Datagrid entity and methods to inject additional service entities (filters, sorters, row actions);
-* **Builder \ ORM \ DatagridBuilder** - implements Datagrid Builder interface, receives form and additional entities factories to create entity instances, and creates Pager entity;
+* **Builder \ ORM \ DatagridBuilder** - implements Datagrid Builder interface, receives entity factories to create entity instances, and creates Pager entity;
 * **Builder \ ListBuilderInterface** - basic interface to build Field Description entities and add it to Field Collection;
 * **Builder \ ORM \ ListBuilder** - implements List Builder interface and all its methods.
 
@@ -333,7 +332,6 @@ services:
     oro_grid.builder.datagrid:
         class:     %oro_grid.builder.datagrid.class%
         arguments:
-            - @form.factory
             - @oro_grid.filter.factory
             - @oro_grid.sorter.factory
             - @oro_grid.action.factory
@@ -347,13 +345,14 @@ services:
 Datagrid
 --------
 
-Datagrid is a main entity that contains fields, additional entities, DB query, form and parameters, process it and returns results - data that will be rendered on UI.
+Datagrid is a main entity that contains fields, additional entities, DB query and parameters, process it and returns results - data that will be rendered on UI.
 
 #### Class Description
 
 * **Sonata \ AdminBundle \ Datagrid \ DatagridInterface** - Sonata AdminBundle datagrid interface, that provides basic method signatures to work with fields, filters, pager and result.
 * **Datagrid \ DatagridInterface** - basic datagrid interface, that provides additional methods to work with sorters, actions, router and names.
-* **Datagrid \ Datagrid** - Datagrid entity implementation of Datagrid interface, implements all methods and has protected methods to apply additional entities parameters to DB request and bind source parameters.
+* **Datagrid \ Datagrid** - Datagrid entity implementation of Datagrid interface, implements all methods and has protected methods to apply additional entities parameters to DB request and bind source parameters;
+* **Datagrid \ DatagridView** - entity that encapsulates all data required for Datagrid view.
 
 #### Configuration
 
@@ -464,6 +463,8 @@ Filters allows to apply additional conditions to DB request and show in grid onl
 
 Filter functionality based on Sonata AdminBundle filters.
 
+Flexible filters are used to apply filters to flexible attributes in flexible entities. Flexible filters has parent filters and use their basic functionality (operators, settings etc).
+
 #### Class Description
 
 * **Sonata \ AdminBundle \ Filter \ FilterInterface** - Sonata AdminBundle standard filter interface;
@@ -473,6 +474,7 @@ Filter functionality based on Sonata AdminBundle filters.
 * **Filter \ ORM \ AbstractFilter** - abstract implementation of Filter entity;
 * **Filter \ ORM \ NumberFilter** - ORM filter for number values;
 * **Filter \ ORM \ StringFilter** - ORM filter for string values;
+* **Filter \ ORM \ ChoiceFilter** - ORM filter which allows to use choices (single or multiple);
 * **Filter \ ORM \ AbstractDateFilter** - abstract filter implementation to work with date/datetime values;
 * **Filter \ ORM \ DateRangeFilter** - ORM filter for date and date range values;
 * **Filter \ ORM \ DateTimeRangeFilter** - ORM filter for datetime and datetime range values;
@@ -480,6 +482,9 @@ Filter functionality based on Sonata AdminBundle filters.
 * **Filter \ ORM \ Flexible \ NumberFlexibleFilter** - ORM filter to work with number flexible attributes;
 * **Filter \ ORM \ Flexible \ StringFlexibleFilter** - ORM filter to work with string flexible attributes;
 * **Filter \ ORM \ Flexible \ OptionsFlexibleFilter** - ORM filter to work with options flexible attributes;
+* **Filter \ ORM \ Flexible \ AbstractFlexibleDateFilter** - abstract ORM filter to work with date/time flexible attributes;
+* **Filter \ ORM \ Flexible \ FlexibleDateRangeFilter** - ORM filter for date flexible attribute;
+* **Filter \ ORM \ Flexible \ FlexibleDateTimeRangeFilter - ORM filter for datetime flexible attribute;
 * **Sonata \ AdminBundle \ Filter \ FilterFactoryInterface** - Sonata AdminBundle interface for filter factory;
 * **Filter \ FilterFactoryInterface** - basic interface for Filter Factory entity;
 * **Filter \ FilterFactory** - basic implementation of Filter Factory entity to create Filter entities.
@@ -526,6 +531,12 @@ services:
         tags:
             - { name: oro_grid.filter.type, alias: oro_grid_orm_string }
 
+    oro_grid.orm.filter.type.choice:
+        class:     Oro\Bundle\GridBundle\Filter\ORM\ChoiceFilter
+        arguments: ["@translator"]
+        tags:
+            - { name: oro_grid.filter.type, alias: oro_grid_orm_choice }
+
     oro_grid.orm.filter.type.flexible_number:
         class:     Oro\Bundle\GridBundle\Filter\ORM\Flexible\FlexibleNumberFilter
         arguments: ["@oro_flexibleentity.registry", "@oro_grid.orm.filter.type.number"]
@@ -538,9 +549,21 @@ services:
         tags:
             - { name: oro_grid.filter.type, alias: oro_grid_orm_flexible_string }
 
+    oro_grid.orm.filter.type.flexible_date_range:
+        class:     Oro\Bundle\GridBundle\Filter\ORM\Flexible\FlexibleDateRangeFilter
+        arguments: ["@oro_flexibleentity.registry", "@oro_grid.orm.filter.type.date_range"]
+        tags:
+            - { name: oro_grid.filter.type, alias: oro_grid_orm_flexible_date_range }
+
+    oro_grid.orm.filter.type.flexible_datetime_range:
+        class:     Oro\Bundle\GridBundle\Filter\ORM\Flexible\FlexibleDateTimeRangeFilter
+        arguments: ["@oro_flexibleentity.registry", "@oro_grid.orm.filter.type.datetime_range"]
+        tags:
+            - { name: oro_grid.filter.type, alias: oro_grid_orm_flexible_datetime_range }
+
     oro_grid.orm.filter.type.flexible_options:
         class:     Oro\Bundle\GridBundle\Filter\ORM\Flexible\FlexibleOptionsFilter
-        arguments: ["@oro_flexibleentity.registry"]
+        arguments: ["@oro_flexibleentity.registry", "@oro_grid.orm.filter.type.choice"]
         tags:
             - { name: oro_grid.filter.type, alias: oro_grid_orm_flexible_options }
 ```

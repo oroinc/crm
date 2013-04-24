@@ -19,7 +19,7 @@ OroApp.DatagridActionCell = Backgrid.Cell.extend({
     template:_.template(
         '<div class="more-bar-holder">' +
             '<div class="dropdown">' +
-                '<a data-toggle="dropdown" class="dropdown-toggle" href="#">...</a>' +
+                '<a data-toggle="dropdown" class="dropdown-toggle" href="javascript:void(0);">...</a>' +
                 '<ul class="dropdown-menu pull-right launchers-dropdown-menu"></ul>' +
             '</div>' +
         '</div>'

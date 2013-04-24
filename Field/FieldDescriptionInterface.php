@@ -42,7 +42,7 @@ interface FieldDescriptionInterface
     public function setName($name);
 
     /**
-     * Return the name, the name can be used as a form label or table header
+     * Return the name, the name can be used as a label or table header
      *
      * @return string the name
      */
