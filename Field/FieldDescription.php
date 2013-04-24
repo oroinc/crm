@@ -9,7 +9,7 @@ use Oro\Bundle\GridBundle\Property\FieldProperty;
 class FieldDescription implements FieldDescriptionInterface
 {
     /**
-     * @var string the field name (of the form)
+     * @var string the field name
      */
     protected $fieldName;
 

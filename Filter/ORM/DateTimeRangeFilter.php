@@ -2,32 +2,22 @@
 
 namespace Oro\Bundle\GridBundle\Filter\ORM;
 
-use Oro\Bundle\GridBundle\Form\Type\Filter\DateTimeRangeType;
+use Oro\Bundle\FilterBundle\Form\Type\Filter\DateTimeRangeFilterType;
 
 class DateTimeRangeFilter extends AbstractDateFilter
 {
     /**
-     * Date value format
+     * DateTime object as string format
      */
-    const VALUE_FORMAT = '/^\d{4}-\d{2}-\d{2}( \d{2}:\d{2})?$/';
+    const DATETIME_FORMAT = 'Y-m-d H:i:s';
 
     /**
-     * This Filter allows filtering by time
-     *
-     * @var boolean
+     * {@inheritdoc}
      */
-    protected $time = true;
-
-    /**
-     * @return array
-     */
-    public function getTypeOptions()
+    public function getDefaultOptions()
     {
         return array(
-            DateTimeRangeType::TYPE_BETWEEN
-                => $this->translator->trans('label_date_type_between', array(), 'SonataAdminBundle'),
-            DateTimeRangeType::TYPE_NOT_BETWEEN
-                => $this->translator->trans('label_date_type_not_between', array(), 'SonataAdminBundle'),
+            'form_type' => DateTimeRangeFilterType::NAME
         );
     }
 }

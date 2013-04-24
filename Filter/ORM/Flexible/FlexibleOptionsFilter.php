@@ -3,10 +3,14 @@
 namespace Oro\Bundle\GridBundle\Filter\ORM\Flexible;
 
 use Doctrine\Common\Persistence\ObjectRepository;
+
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
-use Oro\Bundle\GridBundle\Form\Type\Filter\ChoiceType;
+
+use Oro\Bundle\FilterBundle\Form\Type\Filter\ChoiceFilterType;
 use Oro\Bundle\FlexibleEntityBundle\Entity\Attribute;
 use Oro\Bundle\FlexibleEntityBundle\Entity\AttributeOption;
+
+use Oro\Bundle\GridBundle\Filter\ORM\ChoiceFilter;
 
 class FlexibleOptionsFilter extends AbstractFlexibleFilter
 {
@@ -16,82 +20,29 @@ class FlexibleOptionsFilter extends AbstractFlexibleFilter
     protected $valueOptions;
 
     /**
+     * @var string
+     */
+    protected $parentFilterClass = 'Oro\\Bundle\\GridBundle\\Filter\\ORM\\ChoiceFilter';
+
+    /**
+     * @var ChoiceFilter
+     */
+    protected $parentFilter;
+
+    /**
      * {@inheritdoc}
      */
     public function filter(ProxyQueryInterface $proxyQuery, $alias, $field, $data)
     {
-        if (!$this->isDataValid($data)) {
+        $data = $this->parentFilter->parseData($data);
+        if (!$data) {
             return;
         }
 
-        if (!is_array($data['value'])) {
-            $data['value'] = array($data['value']);
-        }
-
-        foreach ($data['value'] as $key => $value) {
-            $data['value'][$key] = trim($value);
-            if (strlen($data['value'][$key]) == 0) {
-                unset($data['value'][$key]);
-            }
-        }
-
-        if (empty($data['value'])) {
-            return;
-        }
-
-        // process type and operator
-        $type = isset($data['type']) ? $data['type'] : false;
-        $operator = $this->getOperator($type, ChoiceType::TYPE_CONTAINS);
+        $operator = $this->parentFilter->getOperator($data['type']);
 
         // apply filter
         $this->applyFlexibleFilter($proxyQuery, $field, $data['value'], $operator);
-    }
-
-    /**
-     * Checks if $data is valid
-     *
-     * @param mixed $data
-     * @return bool
-     */
-    protected function isDataValid($data)
-    {
-        return is_array($data) && array_key_exists('value', $data) && !is_null($data['value']);
-    }
-
-    /**
-     * Get operator as string
-     *
-     * @param string $type
-     * @param int|null $default
-     * @return int|bool
-     */
-    public function getOperator($type, $default = null)
-    {
-        $type = (int) $type;
-
-        $choices = array(
-            ChoiceType::TYPE_CONTAINS     => 'IN',
-            ChoiceType::TYPE_NOT_CONTAINS => 'NOT IN',
-            ChoiceType::TYPE_EQUAL        => '=',
-        );
-
-        if (isset($choices[$type])) {
-            return $choices[$type];
-        }
-
-        if (!is_null($default) && isset($choices[$default])) {
-            return $choices[$default];
-        }
-
-        return false;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getDefaultOptions()
-    {
-        return array();
     }
 
     /**
@@ -99,18 +50,16 @@ class FlexibleOptionsFilter extends AbstractFlexibleFilter
      */
     public function getRenderSettings()
     {
-        return array('oro_grid_type_filter_flexible_options', array(
-            'label'         => $this->getLabel(),
-            'field_options' => array(
-                'choices'  => $this->getValueOptions(),
-                'multiple' => $this->getOption('multiple') ? true : false
-            ),
-        ));
+        list($formType, $formOptions) = parent::getRenderSettings();
+        $formOptions['field_options']['choices'] = $this->getValueOptions();
+        $formOptions['field_options']['multiple'] = $this->getOption('multiple') ? true : false;
+        return array($formType, $formOptions);
     }
 
     /**
      * @return array
      * @throws \LogicException
+     * @todo Make this method protected or private
      */
     public function getValueOptions()
     {

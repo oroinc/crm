@@ -161,7 +161,10 @@ class Datagrid implements DatagridInterface
      */
     public function addFilter(SonataFilterInterface $filter)
     {
-        $this->filters[$filter->getName()] = $filter;
+        $name = $filter->getName();
+        $this->filters[$name] = $filter;
+        list($formType, $formOptions) = $filter->getRenderSettings();
+        $this->formBuilder->add($name, $formType, $formOptions);
     }
 
     /**
@@ -267,23 +270,20 @@ class Datagrid implements DatagridInterface
     }
 
     /**
-     * Apply filter data to ProxyQuery and add form fields
+     * Apply filter data to ProxyQuery
      */
     protected function applyFilters()
     {
-        $filterParameters = $this->parameters->get(ParametersInterface::FILTER_PARAMETERS);
-        $this->formBuilder->add(ParametersInterface::FILTER_PARAMETERS, 'collection', array('type' => 'hidden'));
-        $filterField = $this->formBuilder->get(ParametersInterface::FILTER_PARAMETERS);
+        $form = $this->getForm();
 
         /** @var $filter FilterInterface */
         foreach ($this->getFilters() as $filter) {
-            $filterFormName = $filter->getFormName();
-            if (isset($filterParameters[$filterFormName])) {
-                $filter->apply($this->query, $filterParameters[$filterFormName]);
+            $filterName = $filter->getName();
+            $filterForm = $form->get($filterName);
+            if ($filterForm->isValid()) {
+                $data = $filterForm->getData();
+                $filter->apply($this->query, $data);
             }
-
-            list($type, $options) = $filter->getRenderSettings();
-            $filterField->add($filterFormName, $type, $options);
         }
     }
 
@@ -294,14 +294,9 @@ class Datagrid implements DatagridInterface
     {
         $sortBy = $this->parameters->get(ParametersInterface::SORT_PARAMETERS);
 
-        // we should retain an order in which sorters were added
-        // when adding sort to query and when we creating sorters form elements
-        $this->formBuilder->add(ParametersInterface::SORT_PARAMETERS, 'collection', array('type' => 'hidden'));
-        $sortByField = $this->formBuilder->get(ParametersInterface::SORT_PARAMETERS);
         foreach ($sortBy as $fieldName => $direction) {
             if (isset($this->sorters[$fieldName])) {
                 $this->sorters[$fieldName]->apply($this->query, $direction);
-                $sortByField->add($fieldName, 'hidden');
             }
         }
     }
@@ -312,27 +307,6 @@ class Datagrid implements DatagridInterface
         $this->pager->setPage(isset($pagerParameters['_page']) ? $pagerParameters['_page'] : 1);
         $this->pager->setMaxPerPage(!empty($pagerParameters['_per_page']) ? $pagerParameters['_per_page'] : 25);
         $this->pager->init();
-
-        $this->formBuilder->add(ParametersInterface::PAGER_PARAMETERS, 'collection', array('type' => 'hidden'));
-        $pagerField = $this->formBuilder->get(ParametersInterface::PAGER_PARAMETERS);
-        $pagerField->add('_page', 'hidden');
-        $pagerField->add('_per_page', 'hidden');
-    }
-
-    /**
-     * Bind all source parameters
-     */
-    protected function bindParameters()
-    {
-        if ($this->parametersBinded) {
-            return;
-        }
-
-        $formName = $this->formBuilder->getName();
-        $parametersData = $this->parameters->toArray();
-        $this->form->bind($parametersData[$formName]);
-
-        $this->parametersBinded = true;
     }
 
     /**
@@ -340,13 +314,10 @@ class Datagrid implements DatagridInterface
      */
     public function getForm()
     {
-        $this->applyParameters();
-
         if (!$this->form) {
             $this->form = $this->formBuilder->getForm();
+            $this->form->bind($this->parameters->get(ParametersInterface::FILTER_PARAMETERS));
         }
-
-        $this->bindParameters();
 
         return $this->form;
     }
@@ -369,7 +340,6 @@ class Datagrid implements DatagridInterface
     }
 
     /**
-     * @return void
      * @deprecated Use applyParameters instead
      */
     public function buildPager()
@@ -451,5 +421,13 @@ class Datagrid implements DatagridInterface
     public function getRowActions()
     {
         return $this->rowActions;
+    }
+
+    /**
+     * @return DatagridView
+     */
+    public function createView()
+    {
+        return new DatagridView($this);
     }
 }

@@ -4,7 +4,7 @@ namespace Oro\Bundle\GridBundle\Filter\ORM\Flexible;
 
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 use Oro\Bundle\GridBundle\Filter\ORM\AbstractDateFilter;
-use Oro\Bundle\GridBundle\Form\Type\Filter\DateRangeType;
+use Oro\Bundle\FilterBundle\Form\Type\Filter\DateRangeFilterType;
 
 abstract class AbstractFlexibleDateFilter extends AbstractFlexibleFilter
 {
@@ -23,16 +23,16 @@ abstract class AbstractFlexibleDateFilter extends AbstractFlexibleFilter
      */
     public function filter(ProxyQueryInterface $queryBuilder, $alias, $field, $data)
     {
-        if (!$this->parentFilter->isParametersCorrect($data)) {
+        $data = $this->parentFilter->parseData($data);
+        if (!$data) {
             return;
         }
 
-        $parameters     = $this->parentFilter->getFilterParameters($data);
-        $dateStartValue = $parameters['date_start'];
-        $dateEndValue   = $parameters['date_end'];
-        $filterType     = $parameters['filter_type'];
+        $dateStartValue = $data['date_start'];
+        $dateEndValue = $data['date_end'];
+        $type = $data['type'];
 
-        if ($filterType == DateRangeType::TYPE_NOT_BETWEEN) {
+        if ($type == DateRangeFilterType::TYPE_NOT_BETWEEN) {
             $this->applyFilterNotBetween($queryBuilder, $dateStartValue, $dateEndValue, $field);
         } else {
             $this->applyFilterBetween($queryBuilder, $dateStartValue, $dateEndValue, $field);

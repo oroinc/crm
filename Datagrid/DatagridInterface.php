@@ -59,4 +59,9 @@ interface DatagridInterface extends BaseDatagridInterface
      * @return string
      */
     public function getEntityHint();
+
+    /**
+     * @return DatagridView
+     */
+    public function createView();
 }

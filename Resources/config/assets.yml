@@ -1,0 +1,56 @@
+js:
+  - '@OroUIBundle/Resources/public/lib/backbone.bootstrap-modal.js'
+
+  - '@OroGridBundle/Resources/public/lib/backbone-pageable.js'
+  - '@OroGridBundle/Resources/public/lib/backgrid/backgrid.js'
+  - '@OroGridBundle/Resources/public/lib/moment/moment.js'
+  - '@OroGridBundle/Resources/public/lib/backgrid/extensions/moment-cell/backgrid-moment-cell.js'
+
+  - '@OroGridBundle/Resources/public/lib/multiselect/jquery.multiselect.js'
+  - '@OroGridBundle/Resources/public/lib/multiselect/jquery.multiselect.filter.js'
+
+  - '@OroGridBundle/Resources/public/lib/jquery-ui-timepicker-addon.js'
+
+  - '@OroGridBundle/Resources/public/js/app/datagrid/action/datagrid-action-launcher.js'
+  - '@OroGridBundle/Resources/public/js/app/datagrid/action/datagrid-action.js'
+  - '@OroGridBundle/Resources/public/js/app/datagrid/action/datagrid-action-navigate.js'
+  - '@OroGridBundle/Resources/public/js/app/datagrid/action/datagrid-action-delete.js'
+  - '@OroGridBundle/Resources/public/js/app/datagrid/action/datagrid-action.js'
+  - '@OroGridBundle/Resources/public/js/app/datagrid/action/datagrid-action-cell.js'
+
+  - '@OroGridBundle/Resources/public/js/app/datagrid/datagrid-header-cell.js'
+  - '@OroGridBundle/Resources/public/js/app/datagrid/datagrid-header.js'
+  - '@OroGridBundle/Resources/public/js/app/datagrid/datagrid-body.js'
+
+  - '@OroGridBundle/Resources/public/js/app/datagrid/datagrid-pagination.js'
+  - '@OroGridBundle/Resources/public/js/app/datagrid/pagination/datagrid-pagination-input.js'
+  - '@OroGridBundle/Resources/public/js/app/datagrid/datagrid-pagesize.js'
+  - '@OroGridBundle/Resources/public/js/app/datagrid/datagrid-toolbar.js'
+
+  - '@OroGridBundle/Resources/public/js/app/datagrid/filter/datagrid-filter-list.js'
+  - '@OroGridBundle/Resources/public/js/app/datagrid/filter/datagrid-filter.js'
+  - '@OroGridBundle/Resources/public/js/app/datagrid/filter/datagrid-filter-text.js'
+  - '@OroGridBundle/Resources/public/js/app/datagrid/filter/datagrid-filter-choice.js'
+  - '@OroGridBundle/Resources/public/js/app/datagrid/filter/datagrid-filter-number.js'
+  - '@OroGridBundle/Resources/public/js/app/datagrid/filter/datagrid-filter-date.js'
+  - '@OroGridBundle/Resources/public/js/app/datagrid/filter/datagrid-filter-datetime.js'
+  - '@OroGridBundle/Resources/public/js/app/datagrid/filter/datagrid-filter-select.js'
+  - '@OroGridBundle/Resources/public/js/app/datagrid/filter/datagrid-filter-multiselect.js'
+
+  - '@OroGridBundle/Resources/public/js/app/backgrid-formatter.js'
+
+  - '@OroGridBundle/Resources/public/js/app/loadingmask.js'
+  - '@OroGridBundle/Resources/public/js/app/datagrid.js'
+
+  - '@OroGridBundle/Resources/public/js/app/datagrid/datagrid-router.js'
+
+  - '@OroGridBundle/Resources/public/js/app/pageablecollection.js'
+
+  - '@OroGridBundle/Resources/public/js/app/multiselect-decorator.js'
+
+css:
+  - 'bundles/orogrid/lib/backgrid/backgrid.css'
+  - 'bundles/orogrid/lib/backgrid/extensions/paginator/backgrid-paginator.css'
+  - 'bundles/orogrid/lib/multiselect/jquery.multiselect.css'
+  - 'bundles/orogrid/lib/multiselect/jquery.multiselect.filter.css'
+  - 'bundles/orogrid/css/oro.grid.css'

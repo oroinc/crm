@@ -43,6 +43,16 @@
                 <target>No %entityHint% were found to match your search.
                     Try modifying your search criteria or creating a new ...</target>
             </trans-unit>
+            <trans-unit id="oro_grid.label_add_filter">
+                <source>oro_grid.label_add_filter</source>
+                <target>+ Add filter</target>
+            </trans-unit>
+            <trans-unit id="oro_grid.label_loading_mask">
+                <source>oro_grid.label_loading_mask</source>
+                <target>Loading . . .</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>
+
+
