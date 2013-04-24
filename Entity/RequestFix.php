@@ -6,6 +6,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\Collections\Collection;
+use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityAttribute;
 
 class RequestFix
 {
@@ -56,7 +57,7 @@ class RequestFix
             }
 
             if (!is_null($value)) {
-                $fields[preg_replace('/[^a-z]+/i', '', $field)] = $value;
+                $fields[preg_replace('/[^\w+]+/i', '', $field)] = $value;
             }
         }
 
@@ -73,7 +74,7 @@ class RequestFix
 
         // transform SOAP array notation into FlexibleType format
         foreach ($attrDef as $i => $attr) {
-            /* @var $attr \Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityAttribute */
+            /* @var AbstractEntityAttribute $attr */
             if ($attr->getBackendType() == 'options') {
                 if (
                     in_array(
