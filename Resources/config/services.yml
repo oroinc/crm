@@ -101,4 +101,4 @@ services:
 
     oro_address.dict.import.manager:
         class: %oro_address.dict.manager.class%
-        arguments: ["@oro_address.dict.import.dbwriter"]
+        arguments: ["@oro_address.dict.import.dbwriter", null]
