@@ -40,20 +40,16 @@ OroApp.DatagridRouter = OroApp.Router.extend({
         this._initState = _.clone(this.collection.state);
 
         this.collection.on('beforeReset', this._handleStateChange, this);
-        /**
-         * Processing state after ajax request
-         */
-        OroApp.Events.once(
-            "hash_navigation_request:complete",
-            function(hashNavigation) {
-                this.changeState(hashNavigation.encodedStateData);
-            },
-            this
-        );
+
 
         this.init();
 
         OroApp.Router.prototype.initialize.apply(this, arguments);
+        /**
+         * Backbone event. Fired when grid route is initialized
+         * @event grid_route:loaded
+         */
+        OroApp.Events.trigger("grid_route:loaded", this);
     },
 
     /**
@@ -67,9 +63,14 @@ OroApp.DatagridRouter = OroApp.Router.extend({
         if (options.ignoreSaveStateInUrl) {
             return;
         }
-        var url = OroApp.unpackFromQueryString(Backbone.history.fragment).url;
         var encodedStateData = collection.encodeStateData(collection.state);
-        this.navigate('url=' + url + '&g/' + encodedStateData);
+        var url = '';
+        if (OroApp.hashNavigation) {
+            url = 'url=' + OroApp.hashNavigation.prototype.getHashUrl() + '|g/' + encodedStateData;
+        } else {
+            url = 'g/' + encodedStateData;
+        }
+        this.navigate(url);
     },
 
     /**

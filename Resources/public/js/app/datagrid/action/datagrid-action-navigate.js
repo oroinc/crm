@@ -39,7 +39,10 @@ OroApp.DatagridActionNavigate = OroApp.DatagridAction.extend({
      * Execute redirect
      */
     execute: function() {
-        //window.location.href = this.getLink();
-        window.location.hash = '#uri=' + this.getLink();
+        if (OroApp.hashNavigation) {
+            window.location.hash = '#url=' + this.getLink();
+        } else {
+            window.location.href = this.getLink();
+        }
     }
 });
