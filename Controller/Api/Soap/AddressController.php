@@ -64,7 +64,7 @@ class AddressController extends ContainerAware
      */
     public function deleteAction($id)
     {
-        $em     = $this->getManager();
+        $em = $this->getManager();
         $entity = $this->getEntity('OroAddressBundle:Address', $id);
 
         $em->remove($entity);
