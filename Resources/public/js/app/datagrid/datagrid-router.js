@@ -7,7 +7,8 @@
 OroApp.DatagridRouter = OroApp.Router.extend({
     /** @property */
     routes: {
-        "g/*encodedStateData": "changeState"
+        "g/*encodedStateData": "changeState",
+        "": "init"
     },
 
     /**
@@ -41,8 +42,7 @@ OroApp.DatagridRouter = OroApp.Router.extend({
 
         this.collection.on('beforeReset', this._handleStateChange, this);
 
-
-        this.init();
+        //this.init();
 
         OroApp.Router.prototype.initialize.apply(this, arguments);
         /**
