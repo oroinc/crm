@@ -10,17 +10,33 @@ OroApp.hashNavigation = OroApp.Router.extend({
      *
      * @property {String}
      * */
-    selector: 'a:not([href^=#],[href^=javascript]), .extralist span[data-url]',
+    selector: 'a:not([href^=#],[href^=javascript]),span[data-url]',
 
     /** @property {String} */
     baseUrl: '',
 
-    /** @property */
+    /**
+     * State data for grids
+     *
+     * @property
+     */
     encodedStateData: '',
+
+    /**
+     * Url part
+     *
+     * @property
+     */
+    url: '',
+
+
+    /** @property {OroApp.DatagridRouter} */
+    gridRoute: '',
 
     /** @property */
     routes: {
-        "*page(&g/*encodedStateData)": "defaultAction"
+        "url=*page(|g/*encodedStateData)": "defaultAction",
+        "g/*encodedStateData": "gridChangeStateAction"
     },
 
     /**
@@ -31,8 +47,18 @@ OroApp.hashNavigation = OroApp.Router.extend({
      */
     defaultAction: function (page, encodedStateData) {
         this.encodedStateData = encodedStateData;
-        if (page) {
-            this.loadPage(page);
+        this.url = page;
+        this.loadPage(this.url);
+    },
+
+    gridChangeStateAction: function(encodedStateData) {
+        this.encodedStateData = encodedStateData;
+        //this.gridChangeState();
+    },
+
+    gridChangeState: function() {
+        if (this.gridRoute) {
+            this.gridRoute.changeState(this.encodedStateData);
         }
     },
 
@@ -70,16 +96,15 @@ OroApp.hashNavigation = OroApp.Router.extend({
 
     /**
      * Ajax call for loading page content
-     *
-     * @param {String} page
      */
-    loadPage: function (page) {
-        var url = this.getHashUrl(page);
-        if (url) {
-            var pageUrl = this.baseUrl + url;
-            this.setActiveMenu(url);
+    loadPage: function () {
+        if (this.url) {
+            this.gridRoute = ''; //clearing grid router
+            var pageUrl = this.baseUrl + this.url;
             $.ajax({
-                url:pageUrl,
+                url: pageUrl,
+
+                headers: { 'x-oro-hash-navigation': true },
 
                 error: function(XMLHttpRequest, textStatus, errorThrown) {
                     alert('Error Message: '+textStatus);
@@ -88,6 +113,7 @@ OroApp.hashNavigation = OroApp.Router.extend({
 
                 success: _.bind(function(data)  {
                     this.handleResponse(data);
+                    this.setActiveMenu(this.url);
                 }, this)
             });
         }
@@ -97,9 +123,6 @@ OroApp.hashNavigation = OroApp.Router.extend({
      *
      */
     init: function() {
-        if (!Backbone.history.started) {
-            Backbone.history.start();
-        }
         /**
          * Processing all links
          */
@@ -110,6 +133,24 @@ OroApp.hashNavigation = OroApp.Router.extend({
         OroApp.Events.bind(
             "grid_load:complete",
             function() {this.processClicks('.grid-container ' + this.selector)},
+            this
+        );
+        /**
+         * Checking for grid route
+         */
+        OroApp.Events.bind(
+            "grid_route:loaded",
+            function(route) {this.gridRoute = route; this.gridChangeState();},
+            this
+        );
+        /**
+         * Processing links in 3 dots menu after item is added (e.g. favourites)
+         */
+        OroApp.Events.bind(
+            "navigaion_item:added",
+            function(item) {
+                this.processClicks(item.find(this.selector));
+            },
             this
         );
     },
@@ -169,22 +210,24 @@ OroApp.hashNavigation = OroApp.Router.extend({
             if (link) {
                 window.location.hash = '#url=' + link;
             }
+            return false;
         }, this))
     },
 
     /**
      * Returns url part from the hash
-     * @param {String} url
      * @return {String}
      */
-    getHashUrl: function(url) {
+    getHashUrl: function() {
+        var url = this.url;
         if (!url) {
-            url = Backbone.history.fragment;
+            url = Backbone.history.fragment.split('|g/')[0];
         }
-        return OroApp.unpackFromQueryString(url).url;
+        return url;
     },
 
     back: function() {
-        
+        var url = new Url(this.getHashUrl());
+        alert(url.query.back);
     }
 });

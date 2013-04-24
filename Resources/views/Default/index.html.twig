@@ -122,8 +122,9 @@
                 <script src="{{ asset ('bundles/oroui/js/ie.js') }}"></script>
             <![endif]-->
             <script type="text/javascript">
-                jQuery(document).ready(function() {
+                $(function() {
                     new OroApp.hashNavigation({baseUrl : '{{ app.request.getSchemeAndHttpHost() }}'});
+                    Backbone.history.start();
                 })
             </script>
         {% endblock %}
