@@ -18,6 +18,20 @@ OroApp.PageableCollection = Backbone.PageableCollection.extend({
     model: OroApp.Model,
 
     /**
+     * Declaration of URL parameters
+     *
+     * @property {Object}
+     */
+    queryParams: _.extend({}, Backbone.PageableCollection.prototype.queryParams, {
+        directions: {
+            "-1": "ASC",
+            "1": "DESC"
+        },
+        totalRecords: undefined,
+        totalPages: undefined
+    }),
+
+    /**
      * Object declares state keys that will be involved in URL-state saving with their shorthands
      *
      * @property {Object}
@@ -56,13 +70,7 @@ OroApp.PageableCollection = Backbone.PageableCollection.extend({
         _.extend(this.queryParams, {
             currentPage: this.inputName + '[_pager][_page]',
             pageSize:    this.inputName + '[_pager][_per_page]',
-            sortBy:      this.inputName + '[_sort_by][%field%]',
-            directions: {
-                "-1": "ASC",
-                "1": "DESC"
-            },
-            totalRecords: undefined,
-            totalPages: undefined
+            sortBy:      this.inputName + '[_sort_by][%field%]'
         });
 
         OroApp.Collection.prototype.initialize.apply(this, arguments);
@@ -393,5 +401,21 @@ OroApp.PageableCollection = Backbone.PageableCollection.extend({
         delete data[queryParams.sortKey];
 
         return data;
+    },
+
+    /**
+     * Convert direction value to direction key
+     *
+     * @param {String} directionValue
+     * @return {String}
+     */
+    getSortDirectionKey: function(directionValue) {
+        var directionKey = null;
+        _.each(this.queryParams.directions, function(value, key) {
+            if (value == directionValue) {
+                directionKey = key;
+            }
+        });
+        return directionKey;
     }
 });

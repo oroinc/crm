@@ -8,6 +8,16 @@ use Oro\Bundle\GridBundle\Field\FieldDescriptionInterface;
 interface SorterInterface
 {
     /**
+     * Ascending sorting direction
+     */
+    const DIRECTION_ASC = "ASC";
+
+    /**
+     * Descending sorting direction
+     */
+    const DIRECTION_DESC = "DESC";
+
+    /**
      * @return string
      */
     public function getName();

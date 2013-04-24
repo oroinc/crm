@@ -11,6 +11,7 @@ use Oro\Bundle\GridBundle\Field\FieldDescriptionInterface;
 use Oro\Bundle\GridBundle\Property\PropertyInterface;
 use Oro\Bundle\GridBundle\Datagrid\ParametersInterface;
 use Oro\Bundle\GridBundle\Route\RouteGeneratorInterface;
+use Oro\Bundle\GridBundle\Sorter\SorterInterface;
 
 abstract class DatagridManager implements DatagridManagerInterface
 {
@@ -152,6 +153,14 @@ abstract class DatagridManager implements DatagridManagerInterface
             $listCollection->add($fieldDescription);
         }
 
+        // merge default parameters
+        $parametersArray = $this->parameters->toArray();
+        if (empty($parametersArray[$this->name])) {
+            foreach ($this->getDefaultParameters() as $type => $value) {
+                $this->parameters->set($type, $value);
+            }
+        }
+
         // create datagrid
         $datagrid = $this->datagridBuilder->getBaseDatagrid(
             $this->queryFactory->createQuery(),
@@ -241,6 +250,54 @@ abstract class DatagridManager implements DatagridManagerInterface
      * @return array
      */
     protected function getRowActions()
+    {
+        return array();
+    }
+
+    /**
+     * Get default parameters
+     *
+     * @return array
+     */
+    protected function getDefaultParameters()
+    {
+        return array(
+            ParametersInterface::FILTER_PARAMETERS => $this->getDefaultFilters(),
+            ParametersInterface::SORT_PARAMETERS   => $this->getDefaultSorters(),
+            ParametersInterface::PAGER_PARAMETERS  => $this->getDefaultPager()
+        );
+    }
+
+    /**
+     * @return array
+     */
+    protected function getDefaultSorters()
+    {
+        $sorters = array();
+
+        // get first field
+        $fields = $this->getListFields();
+        if (!empty($fields)) {
+            /** @var $field FieldDescriptionInterface */
+            $field = reset($fields);
+            $sorters[$field->getName()] = SorterInterface::DIRECTION_ASC;
+        }
+
+        return $sorters;
+    }
+
+    /**
+     * @return array
+     */
+    protected function getDefaultFilters()
+    {
+        return array();
+    }
+
+    /**
+     * @return array
+     */
+    protected function getDefaultPager()
     {
         return array();
     }

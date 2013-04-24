@@ -253,9 +253,13 @@ class Datagrid implements DatagridInterface
      */
     public function getPager()
     {
+        $this->applyPager();
         return $this->pager;
     }
 
+    /**
+     * Apply parameters
+     */
     protected function applyParameters()
     {
         if ($this->parametersApplied) {
@@ -301,11 +305,14 @@ class Datagrid implements DatagridInterface
         }
     }
 
+    /**
+     * Apply pager parameters
+     */
     protected function applyPager()
     {
         $pagerParameters = $this->parameters->get(ParametersInterface::PAGER_PARAMETERS);
         $this->pager->setPage(isset($pagerParameters['_page']) ? $pagerParameters['_page'] : 1);
-        $this->pager->setMaxPerPage(!empty($pagerParameters['_per_page']) ? $pagerParameters['_per_page'] : 25);
+        $this->pager->setMaxPerPage(!empty($pagerParameters['_per_page']) ? $pagerParameters['_per_page'] : 10);
         $this->pager->init();
     }
 

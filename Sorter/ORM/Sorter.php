@@ -9,16 +9,6 @@ use Oro\Bundle\GridBundle\Field\FieldDescriptionInterface;
 class Sorter implements SorterInterface
 {
     /**
-     * Ascending sorting direction
-     */
-    const DIRECTION_ASC = "ASC";
-
-    /**
-     * Descending sorting direction
-     */
-    const DIRECTION_DESC = "DESC";
-
-    /**
      * @var FieldDescriptionInterface
      */
     protected $field;
