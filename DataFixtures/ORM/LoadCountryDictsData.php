@@ -4,13 +4,11 @@ namespace Oro\Bundle\AddressBundle\DataFixtures\ORM;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
-use Oro\Bundle\AddressBundle\Entity\Country;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 use Oro\Bundle\AddressBundle\Provider\ImportExport\Manager;
-use Oro\Bundle\AddressBundle\Entity;
-
+use Oro\Bundle\AddressBundle\Entity\Country;
 
 class LoadCountryDictsData extends AbstractFixture implements ContainerAwareInterface
 {

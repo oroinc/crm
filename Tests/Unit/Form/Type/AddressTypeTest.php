@@ -48,7 +48,7 @@ class AddressTypeTest extends FormIntegrationTestCase
             'street'      => 'test',
             'city'        => 'test',
             'state'       => 'test',
-            'postal_code' => 'test',
+            'postalCode' => 'test',
             'country'     => 'test',
         );
 

@@ -195,8 +195,8 @@ class AddressController extends FOSRestController implements ClassResourceInterf
                     array(
                         'Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\OptionMultiSelectType',
                         'Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\OptionMultiCheckboxType',
-                    ))
-                ) {
+                    )
+                )) {
                     $type    = 'options';
                     $default = array($attr->getOptions()->offsetGet(0)->getId());
                 } else {
