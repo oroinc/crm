@@ -124,7 +124,9 @@ class NavigationItemController extends FOSRestController
             return $this->handleView($this->view(array(), Codes::HTTP_FORBIDDEN));
         }
 
-        $params['url'] = $this->getStateUrl($params['url']);
+        if (!empty($params['url'])) {
+            $params['url'] = $this->getStateUrl($params['url']);
+        }
 
         $entity->setValues($params);
 
