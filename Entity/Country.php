@@ -49,9 +49,9 @@ class Country
      */
     public function __construct($name = null, $iso2Code = null, $iso3Code = null)
     {
-        $this->setName($name)
-             ->setIso2Code($iso2Code)
-             ->setIso3Code($iso3Code);
+        $this->setName($name);
+        $this->setIso2Code($iso2Code);
+        $this->setIso3Code($iso3Code);
     }
 
     /**

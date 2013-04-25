@@ -35,5 +35,7 @@ class DbWriter implements WriterInterface
         }
 
         $this->om->flush();
+
+        return true;
     }
 }

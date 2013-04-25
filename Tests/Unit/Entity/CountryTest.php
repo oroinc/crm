@@ -36,10 +36,10 @@ class CountryTest extends \PHPUnit_Framework_TestCase
     public function provider()
     {
         return array(
-            array('iso2Code'),
-            array('iso3Code'),
             array('name'),
-            array('regions')
+            array('iso2code'),
+            array('iso3code'),
+            array('regions'),
         );
     }
 }

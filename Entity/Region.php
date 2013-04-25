@@ -145,4 +145,9 @@ class Region
 
         return $this;
     }
+
+    public function getLocale()
+    {
+        return $this->locale;
+    }
 }

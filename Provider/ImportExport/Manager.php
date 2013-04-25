@@ -37,7 +37,7 @@ class Manager
         } elseif (!is_null($data)) {
             $this->writer->writeBatch($data);
         } else {
-            throw new Exception("Source is not defined");
+            throw new \Exception("Source is not defined");
         }
 
         return true;

@@ -149,6 +149,59 @@ class AddressManagerTest extends \PHPUnit_Framework_TestCase
         $this->addressManager->NotExistingMethod();
     }
 
+    public function testListQuery()
+    {
+        $em = $this->getMockBuilder('Doctrine\ORM\EntityManager')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->class = 'Oro\Bundle\AddressBundle\Entity\Address';
+
+        $classMetaData = $this->getMockBuilder('Doctrine\ORM\Mapping\ClassMetadata')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $classMetaData
+            ->expects($this->once())
+            ->method('getName')
+            ->with()
+            ->will($this->returnValue($this->class));
+
+        $em
+            ->expects($this->once())
+            ->method('getClassMetadata')
+            ->with($this->equalTo($this->class))
+            ->will($this->returnValue($classMetaData));
+
+
+        $addressManager = new AddressManager($this->class, $em, $this->fm);
+
+        $qBuilder = $this->getMockBuilder('Doctrine\ORM\QueryBuilder')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $qBuilder->expects($this->once())
+            ->method('select')
+            ->with($this->equalTo('a'))
+            ->will($this->returnValue($qBuilder));
+
+        $qBuilder->expects($this->once())
+            ->method('from')
+            ->with($this->equalTo('OroAddressBundle:Address'), $this->equalTo('a'))
+            ->will($this->returnValue($qBuilder));
+
+        $qBuilder->expects($this->once())
+            ->method('orderBy')
+            ->with($this->equalTo('a.id'), $this->equalTo('ASC'))
+            ->will($this->returnValue($qBuilder));
+
+        $em
+            ->expects($this->once())
+            ->method('createQueryBuilder')
+            ->will($this->returnValue($qBuilder));
+
+
+        $addressManager->getListQuery();
+    }
+
     /**
      * Return repository mock
      *

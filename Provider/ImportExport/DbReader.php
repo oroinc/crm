@@ -67,4 +67,14 @@ class DbReader implements ReaderInterface
     {
         $this->offset = 0;
     }
+
+    public function getBatchSize()
+    {
+        return $this->batchSize;
+    }
+
+    public function getLimit()
+    {
+        return $this->limit;
+    }
 }

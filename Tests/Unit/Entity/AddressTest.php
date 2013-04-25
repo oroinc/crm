@@ -30,6 +30,17 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($obj->getCreatedAt(), $obj->getUpdatedAt());
     }
 
+    public function testToString()
+    {
+        $obj = new Address();
+        $obj->setStreet('sdafsdf')
+            ->setState('asdfsf')
+            ->setCountry('USA');
+
+        $this->assertTrue(method_exists($obj, '__toString'));
+        $this->assertEquals($obj->__toString(), (string)$obj);
+    }
+
     /**
      * Data provider
      *
