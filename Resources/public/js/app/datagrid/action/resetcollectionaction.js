@@ -17,7 +17,7 @@ OroApp.Datagrid.Action.ResetCollectionAction = OroApp.Datagrid.Action.AbstractAc
      * Initialize action
      *
      * @param {Object} options
-     * @param {Backbone.Model} options.collection Collection
+     * @param {OroApp.PageableCollection} options.collection Collection
      * @throws {TypeError} If collection is undefined
      */
     initialize: function(options) {
@@ -32,7 +32,7 @@ OroApp.Datagrid.Action.ResetCollectionAction = OroApp.Datagrid.Action.AbstractAc
     },
 
     /**
-     * Execute delete model
+     * Execute reset collection
      */
     execute: function() {
         this.collection.updateState(this.collection.initialState);

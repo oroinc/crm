@@ -8,14 +8,14 @@ OroApp.Datagrid = OroApp.Datagrid || {};
  * @extends Backbone.View
  */
 OroApp.Datagrid.ActionsPanel = Backbone.View.extend({
-
-    /** @property */
-    template: _.template(
-        '<div class="btn-group"></div>'
-    ),
+    /** @property String */
+    className: 'btn-group',
 
     /** @property {OroApp.Datagrid.Action.AbstractAction[]} */
     actions: [],
+
+    /** @property {OroApp.Datagrid.Action.Launcher[]} */
+    launchers: [],
 
     /**
      * Initialize view
@@ -49,12 +49,9 @@ OroApp.Datagrid.ActionsPanel = Backbone.View.extend({
     render: function () {
         this.$el.empty();
 
-        this.$el = this.$el.append($(this.template()));
-        var $launchersList = this.$('.btn-group');
-
         _.each(this.launchers, function(launcher) {
-            $launchersList.append(launcher.render().$el);
-        });
+            this.$el.append(launcher.render().$el);
+        }, this);
 
         return this;
     },

@@ -1,5 +1,6 @@
 var OroApp = OroApp || {};
 OroApp.Datagrid = OroApp.Datagrid || {};
+OroApp.Datagrid.Action = OroApp.Datagrid.Action || {};
 
 /**
  * Abstract action class. Subclasses should override execute method which is invoked when action is running.

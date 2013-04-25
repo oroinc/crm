@@ -88,8 +88,6 @@ OroApp.Datagrid.Toolbar = OroApp.View.extend({
         OroApp.View.prototype.initialize.call(this, options);
     },
 
-    // actionspanel
-
     /**
      * Enable toolbar
      *

@@ -10,14 +10,14 @@ OroApp.Datagrid.Action = OroApp.Datagrid.Action || {};
  */
 OroApp.Datagrid.Action.RefreshCollectionAction = OroApp.Datagrid.Action.AbstractAction.extend({
 
-    /** @property OroApp.PageableCollection */
+    /** @property Backbone.Collection */
     collection: undefined,
 
     /**
      * Initialize action
      *
      * @param {Object} options
-     * @param {Backbone.Model} options.collection Collection
+     * @param {Backbone.Collection} options.collection Collection
      * @throws {TypeError} If collection is undefined
      */
     initialize: function(options) {
@@ -32,7 +32,7 @@ OroApp.Datagrid.Action.RefreshCollectionAction = OroApp.Datagrid.Action.Abstract
     },
 
     /**
-     * Execute delete model
+     * Execute refresh collection
      */
     execute: function() {
         this.collection.fetch();

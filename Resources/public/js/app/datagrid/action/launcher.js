@@ -16,7 +16,7 @@ OroApp.Datagrid.Action.Launcher = Backbone.View.extend({
     enabled: true,
 
     /** @property {String} */
-    tagName: 'span',
+    tagName: 'a',
 
     /** @property {Boolean} */
     onClickReturnValue: true,
@@ -44,9 +44,9 @@ OroApp.Datagrid.Action.Launcher = Backbone.View.extend({
 
     /** @property {function(Object, ?Object=): String} */
     template:_.template(
-        '<a href="<%= link %>" class="action' +
-            '<%= className ? \' \' + className : \'\' %>' +
-            '<%= !enabled ? \' disabled\' : \'\' %>' +
+        '<<%= tagName %> href="<%= link %>" class="action' +
+            '<%= className ? " " + className : "" %>' +
+            '<%= !enabled ? " disabled" : "" %>' +
             '"' +
             ' <%= attributesTemplate({attributes: attributes}) %>' +
             ' title="<%= label %>"' +
@@ -59,7 +59,7 @@ OroApp.Datagrid.Action.Launcher = Backbone.View.extend({
                 '<% } %>' +
                 ' <%= label %>' +
             '<% } %>' +
-        '</a>'
+        '</<%= tagName %>>'
     ),
 
     attributesTemplate: _.template(
@@ -145,7 +145,8 @@ OroApp.Datagrid.Action.Launcher = Backbone.View.extend({
             action: this.action,
             attributes: this.attributes,
             attributesTemplate: this.attributesTemplate,
-            enabled: this.enabled
+            enabled: this.enabled,
+            tagName: this.tagName
         }));
 
         this.setElement($el);
