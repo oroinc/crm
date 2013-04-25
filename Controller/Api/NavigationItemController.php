@@ -212,6 +212,6 @@ class NavigationItemController extends FOSRestController
 
         return is_null($state)
             ? $url
-            : $url . strpos($url, '?') ? '&restore=1' : '?restore=1';
+            : $url . (strpos($url, '?') ? '&restore=1' : '?restore=1');
     }
 }
