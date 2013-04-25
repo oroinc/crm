@@ -63,34 +63,43 @@ Oro.PageState.Model = Backbone.Model.extend({
     restore: function() {
         $.each(JSON.parse(this.get('pagestate').data), function(index, el) {
             form = $('form[data-collect=true]').eq(index);
+            form.find('option').prop('selected', false);
 
             $.each(el, function(i, input){
-                form.find('[name="'+ input.name+'"]').val(input.value);
+                element = form.find('[name="'+ input.name+'"]');
+                switch (element.prop('type')) {
+                    case 'checkbox':
+                        element.filter('[value="'+ input.value +'"]').prop('checked', true);
+                        break;
+                    case 'select-multiple':
+                        element.find('option[value="'+ input.value +'"]').prop('selected', true);
+                        break;
+                    default:
+                        element.val(input.value);
+                }
             });
         });
     },
 
     filterUrl: function() {
-        var self = this;
-        var href = document.location.href;
-        var base = href.substr(0, location.href.indexOf('?'));
-        var params = href.replace(base + '?', '');
+        self = this;
 
-        params = params.split('&');
+        params = window.location.search.replace('?', '').split('&');
+
         if (params.length == 1 && params[0].indexOf('restore') !== -1) {
             self.set('restore', true);
         } else {
-            base += '?';
-            $(params).each(function(index, el) {
+            params = $.grep(params, function(el) {
                 if (el.indexOf('restore') == -1) {
-                    base += el;
+                    return true;
                 } else {
                     self.set('restore', true);
+                    return false;
                 }
             })
         }
 
-        return base64_encode(base);
+        return base64_encode(window.location.pathname + '?' + params.join('&'));
     },
 
     url: function(method) {

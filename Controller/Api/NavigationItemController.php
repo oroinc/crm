@@ -69,8 +69,7 @@ class NavigationItemController extends FOSRestController
         }
 
         $params['user'] = $this->getUser();
-
-        $this->checkPageState($params);
+        $params['url']  = $this->getStateUrl($params['url']);
 
         /** @var $entity \Oro\Bundle\NavigationBundle\Entity\NavigationItemInterface */
         $entity = $this->getFactory()->createItem($type, $params);
@@ -125,7 +124,7 @@ class NavigationItemController extends FOSRestController
             return $this->handleView($this->view(array(), Codes::HTTP_FORBIDDEN));
         }
 
-        $this->checkPageState($params);
+        $params['url'] = $this->getStateUrl($params['url']);
 
         $entity->setValues($params);
 
@@ -199,23 +198,20 @@ class NavigationItemController extends FOSRestController
     }
 
     /**
-     * Check if navigation item has corresponding page state
+     * Check if navigation item has corresponding page state and return modified URL
      *
-     * @param array $params
+     * @param  string $url Original URL
+     * @return string Modified URL
      */
-    protected function checkPageState(&$params)
+    protected function getStateUrl($url)
     {
-        if (!isset($params['url'])) {
-            return;
-        }
-
         $state = $this
             ->getDoctrine()
             ->getRepository('OroNavigationBundle:PageState')
-            ->findOneByPageId(base64_encode($params['url']));
+            ->findOneByPageId(base64_encode($url));
 
-        if (!is_null($state)) {
-            $params['url'] .= strpos($params['url'], '?') ? '&restore=1' : '?restore=1';
-        }
+        return is_null($state)
+            ? $url
+            : $url . strpos($url, '?') ? '&restore=1' : '?restore=1';
     }
 }
