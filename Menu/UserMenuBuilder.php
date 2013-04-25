@@ -37,13 +37,24 @@ class UserMenuBuilder implements BuilderInterface
                  'route'      => 'oro_user_status_create',
                  'attributes' => array(
                      'class' => 'update-status'
-                 )
+                 ),
+                'linkAttributes' => array(
+                    'class' => 'no-hash'
+                )
             )
         );
 
         $menu->addChild('divider-' . rand(1, 99999))
             ->setLabel('')
             ->setAttribute('class', 'divider');
-        $menu->addChild('Logout', array('route' => 'oro_user_security_logout'));
+        $menu->addChild(
+            'Logout',
+            array(
+                'route' => 'oro_user_security_logout',
+                'linkAttributes' => array(
+                    'class' => 'no-hash'
+                )
+            )
+        );
     }
 }
