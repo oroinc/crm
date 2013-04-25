@@ -18,6 +18,13 @@ interface ParametersInterface
     public function get($type, $default = null);
 
     /**
+     * @param string $type
+     * @param mixed $value
+     * @return void
+     */
+    public function set($type, $value);
+
+    /**
      * @return array
      */
     public function toArray();

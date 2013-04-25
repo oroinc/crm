@@ -79,4 +79,21 @@ class RequestParametersTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($expectedParameters, $this->model->toArray());
     }
+
+    public function testSet()
+    {
+        // test set array
+        $additionalParameters = array(self::TEST_EXISTING_PARAMETER => self::TEST_EXISTING_VALUE);
+        $this->model->set(RequestParameters::FILTER_PARAMETERS, $additionalParameters);
+
+        $expectedParameters = array_merge(
+            $this->testParameters[self::TEST_ROOT_PARAMETER][RequestParameters::FILTER_PARAMETERS],
+            $additionalParameters
+        );
+        $this->assertEquals($expectedParameters, $this->model->get(RequestParameters::FILTER_PARAMETERS));
+
+        // test set scalar value
+        $this->model->set(self::TEST_EXISTING_PARAMETER, self::TEST_DEFAULT_VALUE);
+        $this->assertEquals(self::TEST_DEFAULT_VALUE, $this->model->get(self::TEST_EXISTING_PARAMETER));
+    }
 }

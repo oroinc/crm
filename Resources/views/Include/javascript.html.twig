@@ -8,30 +8,33 @@
     '@OroGridBundle/Resources/public/lib/moment/moment.js'
     '@OroGridBundle/Resources/public/lib/backgrid/extensions/moment-cell/backgrid-moment-cell.js'
 
-    '@OroGridBundle/Resources/public/js/app/datagrid/action/datagrid-action-launcher.js'
-    '@OroGridBundle/Resources/public/js/app/datagrid/action/datagrid-action.js'
-    '@OroGridBundle/Resources/public/js/app/datagrid/action/datagrid-action-navigate.js'
-    '@OroGridBundle/Resources/public/js/app/datagrid/action/datagrid-action-delete.js'
-    '@OroGridBundle/Resources/public/js/app/datagrid/action/datagrid-action.js'
-    '@OroGridBundle/Resources/public/js/app/datagrid/action/datagrid-action-cell.js'
+    '@OroGridBundle/Resources/public/js/app/datagrid/action/launcher.js'
+    '@OroGridBundle/Resources/public/js/app/datagrid/action/abstractaction.js'
+    '@OroGridBundle/Resources/public/js/app/datagrid/action/modelaction.js'
+    '@OroGridBundle/Resources/public/js/app/datagrid/action/navigateaction.js'
+    '@OroGridBundle/Resources/public/js/app/datagrid/action/deleteaction.js'
+    '@OroGridBundle/Resources/public/js/app/datagrid/action/refreshcollectionaction.js'
+    '@OroGridBundle/Resources/public/js/app/datagrid/action/resetcollectionaction.js'
+    '@OroGridBundle/Resources/public/js/app/datagrid/action/cell.js'
+    '@OroGridBundle/Resources/public/js/app/datagrid/actionspanel.js'
 
-    '@OroGridBundle/Resources/public/js/app/datagrid/datagrid-header-cell.js'
-    '@OroGridBundle/Resources/public/js/app/datagrid/datagrid-header.js'
-    '@OroGridBundle/Resources/public/js/app/datagrid/datagrid-body.js'
+    '@OroGridBundle/Resources/public/js/app/datagrid/headercell.js'
+    '@OroGridBundle/Resources/public/js/app/datagrid/header.js'
+    '@OroGridBundle/Resources/public/js/app/datagrid/body.js'
 
-    '@OroGridBundle/Resources/public/js/app/datagrid/datagrid-pagination.js'
-    '@OroGridBundle/Resources/public/js/app/datagrid/pagination/datagrid-pagination-input.js'
-    '@OroGridBundle/Resources/public/js/app/datagrid/datagrid-pagesize.js'
-    '@OroGridBundle/Resources/public/js/app/datagrid/datagrid-toolbar.js'
+    '@OroGridBundle/Resources/public/js/app/datagrid/pagination.js'
+    '@OroGridBundle/Resources/public/js/app/datagrid/pagination/input.js'
+    '@OroGridBundle/Resources/public/js/app/datagrid/pagesize.js'
+    '@OroGridBundle/Resources/public/js/app/datagrid/toolbar.js'
 
-    '@OroGridBundle/Resources/public/js/app/datagrid/filter/datagrid-filter-list.js'
+    '@OroGridBundle/Resources/public/js/app/datagrid/filter/list.js'
 
     '@OroGridBundle/Resources/public/js/app/backgrid-formatter.js'
 
     '@OroGridBundle/Resources/public/js/app/loadingmask.js'
-    '@OroGridBundle/Resources/public/js/app/datagrid.js'
+    '@OroGridBundle/Resources/public/js/app/datagrid/grid.js'
 
-    '@OroGridBundle/Resources/public/js/app/datagrid/datagrid-router.js'
+    '@OroGridBundle/Resources/public/js/app/datagrid/router.js'
 
     '@OroGridBundle/Resources/public/js/app/pageablecollection.js'
 
@@ -49,6 +52,29 @@
 
     {% set columnTypePrefix = 'Oro\\Bundle\\GridBundle\\Field\\FieldDescriptionInterface::' %}
     {% set actionTypePrefix = 'Oro\\Bundle\\GridBundle\\Action\\ActionInterface::' %}
+    {% set parameterTypePrefix = 'Oro\\Bundle\\GridBundle\\Datagrid\\ParametersInterface::' %}
+
+    {% set datagridParameters = [] %}
+    {% if datagrid.name in datagrid.parameters|keys %}
+        {% set datagridParameters = datagrid.parameters[datagrid.name] %}
+    {% endif %}
+
+    {% set parametersSorterType = constant(parameterTypePrefix ~ 'SORT_PARAMETERS') %}
+    {% set parametersFilterType = constant(parameterTypePrefix ~ 'FILTER_PARAMETERS') %}
+
+    {% set sortField = '' %}
+    {% set sortDirection = '' %}
+    {% if parametersSorterType in datagridParameters|keys %}
+        {% for field, direction in datagrid.parameters[datagrid.name][parametersSorterType]|slice(0,1) %}
+            {% set sortField = field %}
+            {% set sortDirection = direction %}
+        {% endfor %}
+    {% endif %}
+
+    {% set filterData = [] %}
+    {% if parametersFilterType in datagridParameters|keys %}
+        {% set filterData = datagridParameters[parametersFilterType] %}
+    {% endif %}
 
     _.extend(OroApp, {
         scope: {
@@ -91,9 +117,9 @@
                         {% for action in datagrid.rowActions %}
                             {{ action.name|json_encode|raw }}:
                             {% if action.type == constant(actionTypePrefix ~ 'TYPE_DELETE') %}
-                                OroApp.DatagridActionDelete.extend({{ action.options|json_encode|raw }})
+                                OroApp.Datagrid.Action.DeleteAction.extend({{ action.options|json_encode|raw }})
                             {% else %}
-                                OroApp.DatagridActionNavigate.extend({{ action.options|json_encode|raw }})
+                                OroApp.Datagrid.Action.NavigateAction.extend({{ action.options|json_encode|raw }})
                             {% endif %}
                             {% if not loop.last %},{% endif %}
                         {% endfor %}
@@ -108,7 +134,10 @@
                     state: {
                         currentPage:  {{ datagrid.pager.page|json_encode|raw }},
                         pageSize:     {{ datagrid.pager.maxPerPage|json_encode|raw }},
-                        totalRecords: {{ datagrid.pager.nbResults|json_encode|raw }}
+                        totalRecords: {{ datagrid.pager.nbResults|json_encode|raw }},
+                        sortKey:      {{ sortField|json_encode|raw }},
+                        order:        OroApp.PageableCollection.prototype.getSortDirectionKey({{ sortDirection|json_encode|raw }}),
+                        filters:      {{ filterData ? filterData|json_encode|raw : '{}' }}
                     }
                 }
             }
@@ -144,7 +173,7 @@
                     loadingHint: {{ 'oro_grid.label_loading_mask'|trans({}, 'OroGridBundle')|json_encode|raw }}
                 })
             }, datagridOptions.grid);
-            var datagrid = new OroApp.Datagrid(datagridParameters);
+            var datagrid = new OroApp.Datagrid.Grid(datagridParameters);
             $(datagridBodySelector).html(datagrid.render().$el);
 
             // Title
@@ -158,11 +187,11 @@
                 addButtonHint: {{ 'oro_grid.label_add_filter'|trans({}, 'OroGridBundle')|json_encode|raw }},
                 collection: datagridCollection
             }, datagridOptions.grid);
-            var filtersList = new OroApp.DatagridFilterList(filterListParameters);
+            var filtersList = new OroApp.Datagrid.Filter.List(filterListParameters);
             $(datagridFiltersSelector).html(filtersList.render().$el);
 
             // Register router and start history
-            var router = new OroApp.DatagridRouter({
+            var router = new OroApp.Datagrid.Router({
                 collection: datagridCollection
             });
         };

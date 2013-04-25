@@ -1,20 +1,27 @@
+var OroApp = OroApp || {};
+OroApp.Datagrid = OroApp.Datagrid || {};
+OroApp.Datagrid.Action = OroApp.Datagrid.Action || {};
+
 /**
  * Action launcher implemented as simple link. Click on link triggers action run
  *
  * Events:
  * click: Fired when launcher was clicked
  *
- * @class   OroApp.DatagridActionLauncher
+ * @class   OroApp.Datagrid.Action.Launcher
  * @extends Backbone.View
  */
-OroApp.DatagridActionLauncher = Backbone.View.extend({
+OroApp.Datagrid.Action.Launcher = Backbone.View.extend({
+    /** @property */
+    enabled: true,
+
     /** @property {String} */
     tagName: 'a',
 
     /** @property {Boolean} */
     onClickReturnValue: true,
 
-    /** @property {OroApp.DatagridAction} */
+    /** @property {OroApp.Datagrid.Action.AbstractAction} */
     action: undefined,
 
     /** @property {String} */
@@ -24,6 +31,12 @@ OroApp.DatagridActionLauncher = Backbone.View.extend({
     icon: undefined,
 
     /** @property {String} */
+    iconClassName: undefined,
+
+    /** @property {String} */
+    className: undefined,
+
+    /** @property {String} */
     link: 'javascript:void(0);',
 
     /** @property {String} */
@@ -31,16 +44,22 @@ OroApp.DatagridActionLauncher = Backbone.View.extend({
 
     /** @property {function(Object, ?Object=): String} */
     template:_.template(
-        '<a href="<%= link %>" class="action" ' +
-            '<%= attributesTemplate({attributes: attributes}) %> ' +
-            'title="<%= label %>"' +
+        '<<%= tagName %> href="<%= link %>" class="action' +
+            '<%= className ? " " + className : "" %>' +
+            '<%= !enabled ? " disabled" : "" %>' +
+            '"' +
+            ' <%= attributesTemplate({attributes: attributes}) %>' +
+            ' title="<%= label %>"' +
         '>' +
             '<% if (icon) { %>' +
                 '<i class="icon-<%= icon %> hide-text"><%= label %></i>' +
             '<% } else { %>' +
-                '<%= label %>' +
+                '<% if (iconClassName) { %>' +
+                    '<i class="<%= iconClassName %>"></i>' +
+                '<% } %>' +
+                ' <%= label %>' +
             '<% } %>' +
-        '</a>'
+        '</<%= tagName %>>'
     ),
 
     attributesTemplate: _.template(
@@ -58,7 +77,7 @@ OroApp.DatagridActionLauncher = Backbone.View.extend({
      * Initialize
      *
      * @param {Object} options
-     * @param {OroApp.DatagridAction} options.action
+     * @param {OroApp.Datagrid.Action.AbstractAction} options.action
      * @param {function(Object, ?Object=): string} [options.template]
      * @param {String} [options.label]
      * @param {String} [options.icon]
@@ -89,6 +108,14 @@ OroApp.DatagridActionLauncher = Backbone.View.extend({
             this.link = options.link;
         }
 
+        if (options.iconClassName) {
+            this.iconClassName = options.iconClassName;
+        }
+
+        if (options.className) {
+            this.className = options.className;
+        }
+
         if (_.has(options, 'runAction')) {
             this.runAction = options.runAction;
         }
@@ -112,10 +139,14 @@ OroApp.DatagridActionLauncher = Backbone.View.extend({
         var $el = $(this.template({
             label: this.label || this.action.label,
             icon: this.icon,
+            className: this.className,
+            iconClassName: this.iconClassName,
             link: this.link,
             action: this.action,
             attributes: this.attributes,
-            attributesTemplate: this.attributesTemplate
+            attributesTemplate: this.attributesTemplate,
+            enabled: this.enabled,
+            tagName: this.tagName
         }));
 
         this.setElement($el);
@@ -129,10 +160,35 @@ OroApp.DatagridActionLauncher = Backbone.View.extend({
      * @return {Boolean}
      */
     onClick: function() {
+        if (!this.enabled) {
+            return this.onClickReturnValue;
+        }
         this.trigger('click', this);
         if (this.runAction) {
             this.action.run();
         }
         return this.onClickReturnValue;
+    },
+
+    /**
+     * Disable
+     *
+     * @return {*}
+     */
+    disable: function() {
+        this.enabled = false;
+        this.$el.addClass('disabled');
+        return this;
+    },
+
+    /**
+     * Enable
+     *
+     * @return {*}
+     */
+    enable: function() {
+        this.enabled = true;
+        this.$el.removeClass('disabled');
+        return this;
     }
 });

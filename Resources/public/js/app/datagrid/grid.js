@@ -1,10 +1,13 @@
+var OroApp = OroApp || {};
+OroApp.Datagrid = OroApp.Datagrid || {};
+
 /**
  * Basic datagrid class
  *
- * @class   OroApp.Datagrid
+ * @class   OroApp.Datagrid.Grid
  * @extends Backgrid.Grid
  */
-OroApp.Datagrid = Backgrid.Grid.extend({
+OroApp.Datagrid.Grid = Backgrid.Grid.extend({
     /** @property */
     tagName: 'div',
 
@@ -25,10 +28,10 @@ OroApp.Datagrid = Backgrid.Grid.extend({
     ),
 
     /** @property */
-    header: OroApp.DatagridHeader,
+    header: OroApp.Datagrid.Header,
 
     /** @property */
-    body: OroApp.DatagridBody,
+    body: OroApp.Datagrid.Body,
 
     /** @property */
     selectors: {
@@ -41,8 +44,8 @@ OroApp.Datagrid = Backgrid.Grid.extend({
     /** @property {Object} */
     toolbarOptions: {},
 
-    /** @property {OroApp.DatagridToolbar} */
-    toolbar: OroApp.DatagridToolbar,
+    /** @property {OroApp.Datagrid.Toolbar} */
+    toolbar: OroApp.Datagrid.Toolbar,
 
     /** @property {OroApp.LoadingMask} */
     loadingMask: OroApp.LoadingMask,
@@ -61,7 +64,7 @@ OroApp.Datagrid = Backgrid.Grid.extend({
         name: '',
         label: '',
         editable: false,
-        cell: OroApp.DatagridActionCell,
+        cell: OroApp.Datagrid.Action.Cell,
         headerCell: Backgrid.HeaderCell.extend({
             className: 'action-column'
         }),

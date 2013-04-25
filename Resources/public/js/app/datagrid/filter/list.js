@@ -1,10 +1,14 @@
+var OroApp = OroApp || {};
+OroApp.Datagrid = OroApp.Datagrid || {};
+OroApp.Datagrid.Filter = OroApp.Datagrid.Filter || {};
+
 /**
  * View that represents all grid filters
  *
- * @class   OroApp.DatagridFilterList
+ * @class   OroApp.Datagrid.Filter.List
  * @extends OroApp.Filter.List
  */
-OroApp.DatagridFilterList = OroApp.Filter.List.extend({
+OroApp.Datagrid.Filter.List = OroApp.Filter.List.extend({
     /**
      * Initialize filter list options
      *
@@ -103,6 +107,12 @@ OroApp.DatagridFilterList = OroApp.Filter.List.extend({
                 this.enableFilter(filter.setValue(filterState));
             } else if (_.has(state, shortName)) {
                 if (Number(state[shortName])) {
+                    this.enableFilter(filter.reset());
+                } else {
+                    this.disableFilter(filter.reset());
+                }
+            } else {
+                if (filter.defaultEnabled) {
                     this.enableFilter(filter.reset());
                 } else {
                     this.disableFilter(filter.reset());

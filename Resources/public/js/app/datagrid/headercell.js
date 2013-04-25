@@ -1,10 +1,10 @@
 /**
  * Datagrid header cell
  *
- * @class   OroApp.DatagridHeaderCell
+ * @class   OroApp.Datagrid.HeaderCell
  * @extends Backgrid.HeaderCell
  */
-OroApp.DatagridHeaderCell = Backgrid.HeaderCell.extend({
+OroApp.Datagrid.HeaderCell = Backgrid.HeaderCell.extend({
 
     /** @property */
     template:_.template(
@@ -17,6 +17,9 @@ OroApp.DatagridHeaderCell = Backgrid.HeaderCell.extend({
             '<span><%= label %></span>' + // wrap label into span otherwise underscore will not render it
         '<% } %>'
     ),
+
+    /** @property {Boolean} */
+    allowNoSorting: false,
 
     /**
      * Initialize.
@@ -65,5 +68,44 @@ OroApp.DatagridHeaderCell = Backgrid.HeaderCell.extend({
         })));
 
         return this;
+    },
+
+    /**
+     * Click on column name to perform sorting
+     *
+     * @param {Event} e
+     */
+    onClick: function (e) {
+        e.preventDefault();
+
+        var columnName = this.column.get("name");
+
+        if (this.column.get("sortable")) {
+            if (this.direction() === "ascending") {
+                this.sort(columnName, "descending", function (left, right) {
+                    var leftVal = left.get(columnName);
+                    var rightVal = right.get(columnName);
+                    if (leftVal === rightVal) {
+                        return 0;
+                    }
+                    else if (leftVal > rightVal) { return -1; }
+                    return 1;
+                });
+            }
+            else if (this.allowNoSorting && this.direction() === "descending") {
+                this.sort(columnName, null);
+            }
+            else {
+                this.sort(columnName, "ascending", function (left, right) {
+                    var leftVal = left.get(columnName);
+                    var rightVal = right.get(columnName);
+                    if (leftVal === rightVal) {
+                        return 0;
+                    }
+                    else if (leftVal < rightVal) { return -1; }
+                    return 1;
+                });
+            }
+        }
     }
 });

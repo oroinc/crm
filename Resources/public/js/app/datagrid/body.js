@@ -1,4 +1,13 @@
-OroApp.DatagridBody = Backgrid.Body.extend({
+var OroApp = OroApp || {};
+OroApp.Datagrid = OroApp.Datagrid || {};
+
+/**
+ * Datagrid body widget
+ *
+ * @class   OroApp.Datagrid.Body
+ * @extends Backgrid.Body
+ */
+OroApp.Datagrid.Body = Backgrid.Body.extend({
     /** @property {Function} */
     rowClickAction: undefined,
 
