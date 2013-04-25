@@ -30,7 +30,7 @@ class AddressType extends FlexibleType
             ->add('city', 'text', $required)
             ->add('state', 'text', $required)
             ->add('postalCode', 'text', $required)
-            ->add('country', 'text', $required)
+            ->add('country', 'oro_country', $required)
             ->add('mark', 'text', $notRequired);
     }
 
