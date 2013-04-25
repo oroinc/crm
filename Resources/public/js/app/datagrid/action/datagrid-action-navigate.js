@@ -40,7 +40,7 @@ OroApp.DatagridActionNavigate = OroApp.DatagridAction.extend({
      */
     execute: function() {
         if (OroApp.hashNavigation) {
-            window.location.hash = '#url=' + this.getLink();
+            OroApp.hashNavigation.prototype.setLocation(this.getLink());
         } else {
             window.location.href = this.getLink();
         }
