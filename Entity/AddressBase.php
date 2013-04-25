@@ -4,6 +4,7 @@ namespace Oro\Bundle\AddressBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityFlexible;
+use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 
 /**
  * Address
@@ -18,6 +19,7 @@ class AddressBase extends AbstractEntityFlexible
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     * @Soap\ComplexType("int", nillable=true)
      */
     protected $id;
 
@@ -25,6 +27,7 @@ class AddressBase extends AbstractEntityFlexible
      * @var string
      *
      * @ORM\Column(name="street", type="string", length=500)
+     * @Soap\ComplexType("string", nillable=true)
      */
     protected $street;
 
@@ -32,6 +35,7 @@ class AddressBase extends AbstractEntityFlexible
      * @var string
      *
      * @ORM\Column(name="street2", type="string", length=500, nullable=true)
+     * @Soap\ComplexType("string", nillable=true)
      */
     protected $street2;
 
@@ -39,6 +43,7 @@ class AddressBase extends AbstractEntityFlexible
      * @var string
      *
      * @ORM\Column(name="city", type="string", length=255)
+     * @Soap\ComplexType("string", nillable=true)
      */
     protected $city;
 
@@ -46,6 +51,7 @@ class AddressBase extends AbstractEntityFlexible
      * @var string
      *
      * @ORM\Column(name="state", type="string", length=255)
+     * @Soap\ComplexType("string", nillable=true)
      */
     protected $state;
 
@@ -53,13 +59,15 @@ class AddressBase extends AbstractEntityFlexible
      * @var string
      *
      * @ORM\Column(name="postal_code", type="string", length=20)
+     * @Soap\ComplexType("string", nillable=true)
      */
-    protected $postal_code;
+    protected $postalCode;
 
     /**
      * @var string
      *
      * @ORM\Column(name="country", type="string", length=70)
+     * @Soap\ComplexType("string", nillable=true)
      */
     protected $country;
 
@@ -69,6 +77,7 @@ class AddressBase extends AbstractEntityFlexible
      * @var string
      *
      * @ORM\Column(name="mark", type="string", length=255, nullable=true)
+     * @Soap\ComplexType("string", nillable=true)
      */
     protected $mark;
 
@@ -182,7 +191,7 @@ class AddressBase extends AbstractEntityFlexible
      */
     public function setPostalCode($postalCode)
     {
-        $this->postal_code = $postalCode;
+        $this->postalCode = $postalCode;
     
         return $this;
     }
@@ -194,7 +203,7 @@ class AddressBase extends AbstractEntityFlexible
      */
     public function getPostalCode()
     {
-        return $this->postal_code;
+        return $this->postalCode;
     }
 
     /**

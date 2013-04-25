@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\AddressBundle\Controller\Api\Rest;
 
+use Knp\Component\Pager\Paginator;
 use Symfony\Component\HttpFoundation\Response;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Routing\ClassResourceInterface;
@@ -13,6 +14,7 @@ use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use FOS\Rest\Util\Codes;
 use Oro\Bundle\AddressBundle\Entity\Manager\AddressManager;
 use Oro\Bundle\AddressBundle\Entity\Address;
+use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityAttribute;
 
 /**
  * @RouteResource("address")
@@ -39,6 +41,7 @@ class AddressController extends FOSRestController implements ClassResourceInterf
     {
         $addressManager = $this->getManager();
 
+        /** @var Paginator $pager */
         $pager = $this->get('knp_paginator')->paginate(
             $addressManager->getListQuery()
                 ->getQuery()
@@ -89,10 +92,10 @@ class AddressController extends FOSRestController implements ClassResourceInterf
     public function putAction($addressId)
     {
         $postArray = $this->getRequest()->request->all();
-        if (empty($postArray)) {
+        if (empty($postArray) || !array_key_exists('address', $postArray)) {
             return $this->handleView(
                 $this->view(
-                    array('message' => 'Wrong JSON inside POST body'),
+                    array('message' => 'Wrong POST body'),
                     Codes::HTTP_BAD_REQUEST
                 )
             );
@@ -173,16 +176,16 @@ class AddressController extends FOSRestController implements ClassResourceInterf
      * Assumed that user will post data in the following format:
      * {address: {"id": "21", "street":"Test","city":"York","values":{"firstname":"John"}}}
      *
-     * @param User $entity
+     * @param Address $entity
      */
     protected function fixFlexRequest(Address $entity)
     {
         $request = $this->getRequest()->request;
         $data = $request->get('address', array());
         $attrDef = $this->getManager()->getAttributeRepository()->findBy(array('entityType' => get_class($entity)));
-        $attrVal = isset($data['values']) ? $data['values'] : array();
+        $attrVal = isset($data['attributes']) ? $data['attributes'] : array();
 
-        $data['values'] = array();
+        $data['attributes'] = array();
 
         foreach ($attrDef as $i => $attr) {
             /* @var $attr \Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityAttribute */
@@ -205,13 +208,13 @@ class AddressController extends FOSRestController implements ClassResourceInterf
                 $default = null;
             }
 
-            $data['values'][$i]        = array();
-            $data['values'][$i]['id']  = $attr->getId();
-            $data['values'][$i][$type] = $default;
+            $data['attributes'][$i]        = array();
+            $data['attributes'][$i]['id']  = $attr->getId();
+            $data['attributes'][$i][$type] = $default;
 
             foreach ($attrVal as $field) {
                 if ($attr->getCode() == (string) $field->code) {
-                    $data['values'][$i][$type] = (string) $field->value;
+                    $data['attributes'][$i][$type] = (string) $field->value;
 
                     break;
                 }
