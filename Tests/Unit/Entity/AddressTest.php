@@ -30,7 +30,6 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($obj->getCreatedAt(), $obj->getUpdatedAt());
     }
 
-
     /**
      * Data provider
      *
