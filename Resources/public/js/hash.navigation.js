@@ -137,7 +137,9 @@ OroApp.hashNavigation = OroApp.Router.extend({
          */
         OroApp.Events.bind(
             "grid_load:complete",
-            function() {this.processClicks('.grid-container ' + this.selector)},
+            function() {
+                this.processClicks('.grid-container ' + this.selector)
+            },
             this
         );
         /**
@@ -180,9 +182,17 @@ OroApp.hashNavigation = OroApp.Router.extend({
             js = js + this.outerHTML;
         })
         $('#container').append(js);
-        var title = $(data).filter('#head').find('title').html();
-        $('title').html(title);
-        $('.top-action-box .btn').filter('.minimize-button, .favorite-button').data('title', title);
+        /**
+         * Setting page title
+         */
+        $('title').html($(data).filter('#head').find('title').html());
+        /**
+         * Setting serialized titles for pinbar and favourites buttons
+         */
+        var titleSerialized = $(data).filter('#head').find('#title-serialized').html();
+        titleSerialized = $.parseJSON(titleSerialized);
+        $('.top-action-box .btn').filter('.minimize-button, .favorite-button').data('title', titleSerialized);
+
 
         this.processClicks('#container ' + this.selector);
         this.updateMenuTabs(data);
@@ -241,7 +251,7 @@ OroApp.hashNavigation = OroApp.Router.extend({
             }
             link = link.replace(this.baseUrl, '').replace(/^(#\!?|\.)/, '');
             if (link) {
-                window.location.hash = '#url=' + link;
+                this.setLocation(link);
             }
             return false;
         }, this));
@@ -263,6 +273,15 @@ OroApp.hashNavigation = OroApp.Router.extend({
             }
         }
         return url;
+    },
+
+    /**
+     * Change location hash with new url
+     *
+     * @param {String} url
+     */
+    setLocation: function(url) {
+        window.location.hash = '#url=' + url;
     },
 
     /**

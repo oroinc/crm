@@ -1,13 +1,14 @@
 <div id="head">
-    <title>{% block title %}{% endblock title %}</title>
+    <title>{{ oro_title_render() }}</title>
+    <div id="title-serialized">{{ oro_title_render_serialized()|raw }}</div>
     {% block head_script %}
     {% endblock head_script %}
 </div>
 <div id="history-content">
-    {{ oro_menu_render('history', {'maxItems': 10}) }}
+    {{ oro_menu_render('history') }}
 </div>
 <div id="most-viewed-content">
-    {{ oro_menu_render('mostviewed', {'maxItems': 10}) }}
+    {{ oro_menu_render('mostviewed') }}
 </div>
 <div id="content">
     {% block page_container %}
