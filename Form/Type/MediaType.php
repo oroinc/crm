@@ -30,9 +30,12 @@ class MediaType extends AbstractType
             'remove',
             'checkbox',
             array(
-                'required' => false,
+                'required'      => false,
                 'property_path' => false,
-                'label' => 'Remove media'
+                'label'         => 'Remove media',
+                'attr'          => array(
+                    'class' => 'noswitch',
+                )
             )
         );
     }

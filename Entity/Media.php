@@ -54,6 +54,14 @@ class Media
     protected $filePath;
 
     /**
+     * Original file name
+     *
+     * @var string $originalFilename
+     *
+     * @ORM\Column
+     */
+    protected $originalFilename;
+    /**
      * Mime type
      *
      * @var string $mimeType
@@ -154,6 +162,30 @@ class Media
     public function setFilePath($filePath)
     {
         $this->filePath = $filePath;
+
+        return $this;
+    }
+
+    /**
+     * Get original filename
+     *
+     * @return string
+     */
+    public function getOriginalFilename()
+    {
+        return $this->originalFilename;
+    }
+
+    /**
+     * Set original filename
+     *
+     * @param string $originalFilename
+     *
+     * @return \Oro\Bundle\FlexibleEntityBundle\Entity\Media
+     */
+    public function setOriginalFilename($originalFilename)
+    {
+        $this->originalFilename = $originalFilename;
 
         return $this;
     }
