@@ -101,13 +101,55 @@ window.OroApp = {
     },
 
     /**
+     * Loosely compare two values
+     *
+     * @param {*} value1
+     * @param {*} value2
+     * @return {Boolean} TRUE if values are equal, otherwise - FALSE
+     */
+    isEqualsLoosely: function (value1, value2) {
+        if (!_.isObject(value1)) {
+            var equalsLoosely = (value1 || '') == (value2 || '');
+            var eitherNumber = _.isNumber(value1) || _.isNumber(value2);
+            var equalsNumbers = Number(value1) == Number(value2);
+            return equalsLoosely || (eitherNumber && equalsNumbers);
+
+        } else if (_.isObject(value1)) {
+            var valueKeys = _.keys(value1);
+
+            if (_.isObject(value2)) {
+                valueKeys = _.unique(valueKeys.concat(_.keys(value2)));
+            }
+
+            for (var index in valueKeys) {
+                var key = valueKeys[index];
+                if (!this.isEqualsLoosely(value1[key], value2[key])) {
+                    return false;
+                }
+            }
+            return true;
+        } else {
+            return value1 == value2;
+        }
+    },
+
+    /**
+     * Deep clone a value
+     *
+     * @param {*} value
+     * @return {*}
+     */
+    deepClone: function(value) {
+        return $.extend(true, {}, value);
+    },
+
+    /**
      * Creates instance based on constructor
      *
      * @param {Object} constructor
      * @return {Object}
      */
-    createInstanceFromConstructor: function(constructor)
-    {
+    createInstanceFromConstructor: function(constructor) {
         var instance = new constructor();
         var instanceArguments = Array.prototype.splice.call(arguments, 1);
         constructor.apply(instance, instanceArguments);
