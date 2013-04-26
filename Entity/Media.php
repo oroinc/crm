@@ -54,6 +54,14 @@ class Media
     protected $filePath;
 
     /**
+     * Original file name
+     *
+     * @var string $originalFilename
+     *
+     * @ORM\Column
+     */
+    protected $originalFilename;
+    /**
      * Mime type
      *
      * @var string $mimeType
@@ -61,6 +69,8 @@ class Media
      * @ORM\Column(name="mimeType", type="string", length=255)
      */
     protected $mimeType;
+
+    protected $removed = false;
 
     /**
      * Get id
@@ -159,6 +169,30 @@ class Media
     }
 
     /**
+     * Get original filename
+     *
+     * @return string
+     */
+    public function getOriginalFilename()
+    {
+        return $this->originalFilename;
+    }
+
+    /**
+     * Set original filename
+     *
+     * @param string $originalFilename
+     *
+     * @return \Oro\Bundle\FlexibleEntityBundle\Entity\Media
+     */
+    public function setOriginalFilename($originalFilename)
+    {
+        $this->originalFilename = $originalFilename;
+
+        return $this;
+    }
+
+    /**
      * Get mime type
      *
      * @return string
@@ -180,6 +214,16 @@ class Media
         $this->mimeType = $mimeType;
 
         return $this;
+    }
+
+    public function setRemoved($removed)
+    {
+        $this->removed = $removed;
+    }
+
+    public function isRemoved()
+    {
+        return $this->removed;
     }
 
     /**
