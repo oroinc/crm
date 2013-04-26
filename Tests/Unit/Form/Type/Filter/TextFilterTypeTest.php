@@ -46,7 +46,7 @@ class TextFilterTypeTest extends AbstractTypeTestCase
                     'operator_choices' => array(
                         TextFilterType::TYPE_CONTAINS => 'label_type_contains',
                         TextFilterType::TYPE_NOT_CONTAINS => 'label_type_not_contains',
-                        TextFilterType::TYPE_EQUAL => 'label_type_equal',
+                        TextFilterType::TYPE_EQUAL => 'label_type_equals',
                     )
                 )
             )
