@@ -44,13 +44,13 @@ class AddressTypeTest extends \PHPUnit_Framework_TestCase
             ->with('city', 'text');
         $builder->expects($this->at(4))
             ->method('add')
-            ->with('state', 'oro_region');
+            ->with('postalCode', 'text');
         $builder->expects($this->at(5))
             ->method('add')
-            ->with('postalCode', 'text');
+            ->with('country', 'oro_country');
         $builder->expects($this->at(6))
             ->method('add')
-            ->with('country', 'oro_country');
+            ->with('state', 'oro_region');
         $builder->expects($this->at(7))
             ->method('add')
             ->with('mark', 'text');
