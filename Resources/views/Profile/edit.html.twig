@@ -19,7 +19,7 @@
                     </div>
                     <div class="btn-group icons-holder">
                         {% if resource_granted('oro_user_profile_remove') %}
-                        <a href="{{ path('oro_user_remove', { id: form.vars.value.id }) }}" class="btn"><i class="icon-trash hide-text">{{ 'Remove'|trans }}</i></a>
+                        <a href="javascript: void(0);" class="btn" id="btn-remove-profile" data-id="{{ form.vars.value.id }}" data-message="{{ 'Are you sure you want to delete this profile?'|trans }}"><i class="icon-trash hide-text">{{ 'Remove'|trans }}</i></a>
                         {% endif %}
                     </div>
                 </div>
@@ -161,11 +161,12 @@
     {% javascripts
         '@OroUIBundle/Resources/public/lib/jquery-ui-timepicker-addon.js'
         '@OroUIBundle/Resources/public/lib/bootstrap/js/bootstrap-scrollspy.js'
+        '@OroUIBundle/Resources/public/lib/backbone.bootstrap-modal.js'
         '@OroUserBundle/Resources/public/js/emails.js'
         '@OroUserBundle/Resources/public/js/profile.js'
 
         filter='?yui_js'
-        output='js/oro.user.profile.js'
+        output='js/oro.profile.edit.js'
     %}
     <script src="{{ asset_url }}" type="text/javascript"></script>
     {% endjavascripts %}

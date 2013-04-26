@@ -87,21 +87,6 @@ class RoleController extends Controller
     }
 
     /**
-     * @Route("/remove/{id}", name="oro_user_role_remove", requirements={"id"="\d+"})
-     */
-    public function removeAction(Role $entity)
-    {
-        $em = $this->getDoctrine()->getManager();
-
-        $em->remove($entity);
-        $em->flush();
-
-        $this->get('session')->getFlashBag()->add('success', 'Role successfully removed');
-
-        return $this->redirect($this->generateUrl('oro_user_role_index'));
-    }
-
-    /**
      * @Route(
      *      "/{_format}",
      *      name="oro_user_role_index",
