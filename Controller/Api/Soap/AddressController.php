@@ -2,10 +2,10 @@
 
 namespace Oro\Bundle\AddressBundle\Controller\Api\Soap;
 
-use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
-use Symfony\Component\DependencyInjection\ContainerAware;
 use Symfony\Component\Form\Form;
+use Symfony\Component\DependencyInjection\ContainerAware;
 use Doctrine\Common\Persistence\ObjectManager;
+use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 
 use Oro\Bundle\AddressBundle\Entity\Address;
 

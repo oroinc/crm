@@ -3,6 +3,7 @@
 namespace Oro\Bundle\AddressBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation\Exclude;
 
 /**
  * Address
@@ -22,6 +23,7 @@ class Address extends AddressBase
      * @var \Oro\Bundle\FlexibleEntityBundle\Model\AbstractFlexibleValue[]
      *
      * @ORM\OneToMany(targetEntity="Oro\Bundle\AddressBundle\Entity\Value\AddressValue", mappedBy="entity", cascade={"persist", "remove"}, orphanRemoval=true)
+     * @Exclude
      */
     protected $values;
 }

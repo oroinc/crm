@@ -3,8 +3,10 @@
 namespace Oro\Bundle\AddressBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityFlexible;
+use JMS\Serializer\Annotation\Type;
 use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
+
+use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityFlexible;
 
 /**
  * Address
@@ -53,6 +55,7 @@ class AddressBase extends AbstractEntityFlexible
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\AddressBundle\Entity\Region", cascade={"persist"})
      * @ORM\JoinColumn(name="region_id", referencedColumnName="id")
      * @Soap\ComplexType("string", nillable=true)
+     * @Type("string")
      */
     protected $state;
 
@@ -70,6 +73,7 @@ class AddressBase extends AbstractEntityFlexible
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\AddressBundle\Entity\Country", cascade={"persist"})
      * @ORM\JoinColumn(name="country_id", referencedColumnName="iso2_code")
      * @Soap\ComplexType("string", nillable=true)
+     * @Type("string")
      */
     protected $country;
 

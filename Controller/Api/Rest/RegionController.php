@@ -1,4 +1,5 @@
 <?php
+
 namespace Oro\Bundle\AddressBundle\Controller\Api\Rest;
 
 use FOS\Rest\Util\Codes;
@@ -25,6 +26,7 @@ class RegionController extends FOSRestController
      */
     public function cgetAction()
     {
+        /** @var  $item \Oro\Bundle\AddressBundle\Entity\Region */
         $items = $this->getDoctrine()->getRepository('OroAddressBundle:Region')->findAll();
 
         return $this->handleView(
@@ -45,6 +47,7 @@ class RegionController extends FOSRestController
      */
     public function getAction($id)
     {
+        /** @var  $item \Oro\Bundle\AddressBundle\Entity\Region */
         $item = $this->getDoctrine()->getRepository('OroAddressBundle:Region')->find($id);
 
         return $this->handleView(

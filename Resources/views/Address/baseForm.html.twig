@@ -52,14 +52,15 @@
 
                     <div class="row-fluid">
                         <fieldset class="form-horizontal span6">
-                            {{ form_row(form.street) }}
-                            {{ form_row(form.street2) }}
-                            {{ form_row(form.country, {'attr': {'class': 'country-select', 'data-url': url('oro_api_country_get_regions', {id: 'country_id'})}}
-                            ) }}
-                            {% include 'OroAddressBundle:Region:_element.html.twig' with ({form: form.state}) %}
-                            {{ form_row(form.city) }}
-                            {{ form_row(form.postalCode) }}
-                            {{ form_row(form.mark) }}
+                            {% block oro_address_form_fields %}
+                                {{ form_row(form.street) }}
+                                {{ form_row(form.street2) }}
+                                {{ form_row(form.country, {'attr': {'class': 'country-select', 'data-url': url('oro_api_country_get_regions', {id: 'country_id'})}}) }}
+                                {% include 'OroAddressBundle:Region:_element.html.twig' with ({form: form.state}) %}
+                                {{ form_row(form.city) }}
+                                {{ form_row(form.postalCode) }}
+                                {{ form_row(form.mark) }}
+                            {% endblock %}
                         </fieldset>
                     </div>
 

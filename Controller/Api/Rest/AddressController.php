@@ -2,16 +2,17 @@
 
 namespace Oro\Bundle\AddressBundle\Controller\Api\Rest;
 
-use Knp\Component\Pager\Paginator;
-use Symfony\Component\HttpFoundation\Response;
+use FOS\Rest\Util\Codes;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Routing\ClassResourceInterface;
 use FOS\RestBundle\Controller\Annotations\NamePrefix;
 use FOS\RestBundle\Controller\Annotations\RouteResource;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
 use FOS\RestBundle\View\RouteRedirectView;
+use Knp\Component\Pager\Paginator;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
-use FOS\Rest\Util\Codes;
+use Symfony\Component\HttpFoundation\Response;
+
 use Oro\Bundle\AddressBundle\Entity\Manager\AddressManager;
 use Oro\Bundle\AddressBundle\Entity\Address;
 use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityAttribute;
