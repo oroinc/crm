@@ -83,21 +83,6 @@ class GroupController extends Controller
     }
 
     /**
-     * @Route("/remove/{id}", name="oro_user_group_remove", requirements={"id"="\d+"})
-     */
-    public function removeAction(Group $entity)
-    {
-        $em = $this->getDoctrine()->getManager();
-
-        $em->remove($entity);
-        $em->flush();
-
-        $this->get('session')->getFlashBag()->add('success', 'Group successfully removed');
-
-        return $this->redirect($this->generateUrl('oro_user_group_index'));
-    }
-
-    /**
      * @Route(
      *      "/{_format}",
      *      name="oro_user_group_index",
