@@ -1,6 +1,8 @@
 <?php
 namespace Oro\Bundle\FlexibleEntityBundle\Form\EventListener;
 
+use Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleManager;
+
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
@@ -24,12 +26,19 @@ class AddValueFieldSubscriber implements EventSubscriberInterface
     protected $factory;
 
     /**
-     * Constructor
-     * @param FormFactoryInterface $factory
+     * @var FlexibleManager
      */
-    public function __construct(FormFactoryInterface $factory)
+    protected $flexibleManager;
+
+    /**
+     * Constructor
+     * @param FormFactoryInterface $factory         the form factory
+     * @param FlexibleManager      $flexibleManager the flexible manager
+     */
+    public function __construct(FormFactoryInterface $factory, FlexibleManager $flexibleManager)
     {
-        $this->factory = $factory;
+        $this->factory         = $factory;
+        $this->flexibleManager = $flexibleManager;
     }
 
     /**
@@ -57,9 +66,8 @@ class AddValueFieldSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $attribute          = $value->getAttribute();
-        $attributeTypeClass = $attribute->getAttributeType();
-        $attributeType      = new $attributeTypeClass();
+        $attribute     = $value->getAttribute();
+        $attributeType = $this->flexibleManager->getAttributeTypeFactory()->create($attribute->getAttributeType());
 
         $formName    = $attribute->getBackendType();
         $formType    = $attributeType->getFormType();

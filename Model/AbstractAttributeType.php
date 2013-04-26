@@ -141,7 +141,7 @@ abstract class AbstractAttributeType implements AttributeTypeInterface
     public function prepareFormOptions(AbstractAttribute $attribute)
     {
         $options = array(
-            'label'    => $this->translator->trans($attribute->getCode()),
+            'label'    => $attribute->getCode(),
             'required' => $attribute->getRequired()
         );
 

@@ -6,6 +6,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Oro\Bundle\FlexibleEntityBundle\Form\EventListener\AddValueFieldSubscriber;
+use Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleManager;
 
 /**
  * Base flexible value form type
@@ -17,6 +18,10 @@ use Oro\Bundle\FlexibleEntityBundle\Form\EventListener\AddValueFieldSubscriber;
  */
 class FlexibleValueType extends AbstractType
 {
+    /**
+     * @var FlexibleManager
+     */
+    protected $flexibleManager;
 
     /**
      * @var string
@@ -24,13 +29,14 @@ class FlexibleValueType extends AbstractType
     protected $valueClass;
 
     /**
-     * Construct with full name of concrete impl of value class
+     * Constructor
      *
-     * @param string $valueClass flexible value class
+     * @param FlexibleManager $flexibleManager the manager
      */
-    public function __construct($valueClass)
+    public function __construct(FlexibleManager $flexibleManager)
     {
-        $this->valueClass = $valueClass;
+        $this->flexibleManager = $flexibleManager;
+        $this->valueClass      = $flexibleManager->getFlexibleValueName();
     }
 
     /**
@@ -39,7 +45,6 @@ class FlexibleValueType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('id', 'hidden');
-
         $this->addSubscriber($builder);
     }
 
@@ -50,7 +55,7 @@ class FlexibleValueType extends AbstractType
      */
     public function addSubscriber(FormBuilderInterface $builder)
     {
-        $subscriber = new AddValueFieldSubscriber($builder->getFormFactory());
+        $subscriber = new AddValueFieldSubscriber($builder->getFormFactory(), $this->flexibleManager);
         $builder->addEventSubscriber($subscriber);
     }
 
@@ -59,11 +64,7 @@ class FlexibleValueType extends AbstractType
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $resolver->setDefaults(
-            array(
-                'data_class' => $this->valueClass
-            )
-        );
+        $resolver->setDefaults(array('data_class' => $this->valueClass));
     }
 
     /**

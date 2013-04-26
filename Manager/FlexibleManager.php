@@ -1,6 +1,8 @@
 <?php
 namespace Oro\Bundle\FlexibleEntityBundle\Manager;
 
+use Oro\Bundle\FlexibleEntityBundle\AttributeType\AttributeTypeFactory;
+
 use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttributeType;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Oro\Bundle\FlexibleEntityBundle\FlexibleEntityEvents;
@@ -50,6 +52,11 @@ class FlexibleManager implements TranslatableInterface, ScopableInterface
     protected $eventDispatcher;
 
     /**
+     * @var AttributeTypeFactory $attributeTypeFactory
+     */
+    protected $attributeTypeFactory;
+    
+    /**
      * Locale code (from config or choose by user)
      * @var string
      */
@@ -64,17 +71,19 @@ class FlexibleManager implements TranslatableInterface, ScopableInterface
     /**
      * Constructor
      *
-     * @param string                   $flexibleName    Entity name
-     * @param array                    $flexibleConfig  Global flexible entities configuration array
-     * @param ObjectManager            $storageManager  Storage manager
-     * @param EventDispatcherInterface $eventDispatcher Event dispatcher
+     * @param string                   $flexibleName         Entity name
+     * @param array                    $flexibleConfig       Global flexible entities configuration array
+     * @param ObjectManager            $storageManager       Storage manager
+     * @param EventDispatcherInterface $eventDispatcher      Event dispatcher
+     * @param AttributeTypeFactory     $attributeTypeFactory Attribute type factory
      */
-    public function __construct($flexibleName, $flexibleConfig, ObjectManager $storageManager, EventDispatcherInterface $eventDispatcher)
+    public function __construct($flexibleName, $flexibleConfig, ObjectManager $storageManager, EventDispatcherInterface $eventDispatcher, AttributeTypeFactory $attributeTypeFactory)
     {
-        $this->flexibleName    = $flexibleName;
-        $this->flexibleConfig  = $flexibleConfig['entities_config'][$flexibleName];
-        $this->storageManager  = $storageManager;
-        $this->eventDispatcher = $eventDispatcher;
+        $this->flexibleName         = $flexibleName;
+        $this->flexibleConfig       = $flexibleConfig['entities_config'][$flexibleName];
+        $this->storageManager       = $storageManager;
+        $this->eventDispatcher      = $eventDispatcher;
+        $this->attributeTypeFactory = $attributeTypeFactory;
     }
 
     /**
@@ -393,11 +402,26 @@ class FlexibleManager implements TranslatableInterface, ScopableInterface
         return $object;
     }
 
+    /**
+     * Return only localized values of flexible entity
+     * 
+     * @param integer $id
+     */
     public function localizedFind($id)
     {
         $fr = $this->getFlexibleRepository();
         $fr->setLocale($this->getLocale());
 
         return $fr->findWithLocalizedValuesAndSortedAttributes($id);
+    }
+
+    /**
+     * Get attribute type factory
+     * 
+     * @return AttributeTypeFactory
+     */
+    public function getAttributeTypeFactory()
+    {
+        return $this->attributeTypeFactory;
     }
 }
