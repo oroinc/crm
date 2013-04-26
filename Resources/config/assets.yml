@@ -11,6 +11,7 @@ js:
   - '@OroUIBundle/Resources/public/lib/bootstrap/js/bootstrap.switch.js'
 
   - '@OroUIBundle/Resources/public/js/layout.js'
+  - '@OroUIBundle/Resources/public/js/csrf.js'
   - '@OroUIBundle/Resources/public/js/backbone/app.js'
   - '@OroUIBundle/Resources/public/js/backbone/app/model.js'
   - '@OroUIBundle/Resources/public/js/backbone/app/view.js'
@@ -25,3 +26,5 @@ js:
   - '@OroUIBundle/Resources/public/js/jquery.form.js'
   - '@OroUIBundle/Resources/public/js/hash.navigation.js'
   - '@OroUIBundle/Resources/public/js/url.min.js'
+
+  - '@FOSJsRoutingBundle/Resources/public/js/router.js'
