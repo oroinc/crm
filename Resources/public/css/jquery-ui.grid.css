@@ -61,6 +61,7 @@
     top: 2px;
     width: 1.8em;
     height: 1.8em;
+    cursor: pointer;
 }
 .ui-datepicker .ui-datepicker-prev-hover,
 .ui-datepicker .ui-datepicker-next-hover {
@@ -323,7 +324,7 @@
 
 
 /* states and images */
-.date-filter-widget .ui-icon {
+.ui-datepicker .ui-icon {
     width: 16px;
     height: 16px;
 }
@@ -362,28 +363,28 @@
 ----------------------------------*/
 
 /* Corner radius */
-.date-filter-widget .ui-corner-all,
-.date-filter-widget .ui-corner-top,
-.date-filter-widget .ui-corner-left,
-.date-filter-widget .ui-corner-tl {
+.ui-datepicker .ui-corner-all,
+.ui-datepicker .ui-corner-top,
+.ui-datepicker .ui-corner-left,
+.ui-datepicker .ui-corner-tl {
     border-top-left-radius: 4px;
 }
-.date-filter-widget .ui-corner-all,
-.date-filter-widget .ui-corner-top,
-.date-filter-widget .ui-corner-right,
-.date-filter-widget .ui-corner-tr {
+.ui-datepicker .ui-corner-all,
+.ui-datepicker .ui-corner-top,
+.ui-datepicker .ui-corner-right,
+.ui-datepicker .ui-corner-tr {
     border-top-right-radius: 4px;
 }
-.date-filter-widget .ui-corner-all,
-.date-filter-widget .ui-corner-bottom,
-.date-filter-widget .ui-corner-left,
-.date-filter-widget .ui-corner-bl {
+.ui-datepicker .ui-corner-all,
+.ui-datepicker .ui-corner-bottom,
+.ui-datepicker .ui-corner-left,
+.ui-datepicker .ui-corner-bl {
     border-bottom-left-radius: 4px;
 }
-.date-filter-widget .ui-corner-all,
-.date-filter-widget .ui-corner-bottom,
-.date-filter-widget .ui-corner-right,
-.date-filter-widget .ui-corner-br {
+.ui-datepicker .ui-corner-all,
+.ui-datepicker .ui-corner-bottom,
+.ui-datepicker .ui-corner-right,
+.ui-datepicker .ui-corner-br {
     border-bottom-right-radius: 4px;
 }
 
