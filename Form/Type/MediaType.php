@@ -22,22 +22,19 @@ class MediaType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('id', 'hidden');
-
-        $builder->add('file', 'file', array('required' => false));
-
-        $builder->add(
-            'remove',
-            'checkbox',
-            array(
-                'required'      => false,
-                'property_path' => false,
-                'label'         => 'Remove media',
-                'attr'          => array(
+        $builder
+            ->add('id', 'hidden')
+            ->add('file', 'file', array(
+                'required' => false,
+            ))
+            ->add('removed', 'checkbox', array(
+                'required' => false,
+                'label'    => 'Remove media',
+                'attr'     => array(
                     'class' => 'noswitch',
                 )
-            )
-        );
+            ))
+        ;
     }
 
     /**

@@ -70,6 +70,8 @@ class Media
      */
     protected $mimeType;
 
+    protected $removed = false;
+
     /**
      * Get id
      *
@@ -212,6 +214,16 @@ class Media
         $this->mimeType = $mimeType;
 
         return $this;
+    }
+
+    public function setRemoved($removed)
+    {
+        $this->removed = $removed;
+    }
+
+    public function isRemoved()
+    {
+        return $this->removed;
     }
 
     /**
