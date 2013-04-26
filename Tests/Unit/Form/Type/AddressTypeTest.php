@@ -17,7 +17,11 @@ class AddressTypeTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->type = new AddressType('Oro\Bundle\AddressBundle\Entity\Address', 'Oro\Bundle\AddressBundle\Entity\Value\AddressValue');
+        $buildAddressFormListener = $this->getMockBuilder('Oro\Bundle\AddressBundle\Form\EventListener\BuildAddressFormListener')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->type = new AddressType($buildAddressFormListener, 'Oro\Bundle\AddressBundle\Entity\Address', 'Oro\Bundle\AddressBundle\Entity\Value\AddressValue');
     }
 
     public function testAddEntityFields()
@@ -30,28 +34,28 @@ class AddressTypeTest extends \PHPUnit_Framework_TestCase
             ->method('add')
             ->will($this->returnSelf());
 
-        $builder->expects($this->at(0))
-            ->method('add')
-            ->with('id', 'hidden');
         $builder->expects($this->at(1))
             ->method('add')
-            ->with('street', 'text');
+            ->with('id', 'hidden');
         $builder->expects($this->at(2))
             ->method('add')
-            ->with('street2', 'text');
+            ->with('street', 'text');
         $builder->expects($this->at(3))
             ->method('add')
-            ->with('city', 'text');
+            ->with('street2', 'text');
         $builder->expects($this->at(4))
             ->method('add')
-            ->with('postalCode', 'text');
+            ->with('city', 'text');
         $builder->expects($this->at(5))
             ->method('add')
-            ->with('country', 'oro_country');
+            ->with('postalCode', 'text');
         $builder->expects($this->at(6))
             ->method('add')
-            ->with('state', 'oro_region');
+            ->with('country', 'oro_country');
         $builder->expects($this->at(7))
+            ->method('add')
+            ->with('state', 'oro_region');
+        $builder->expects($this->at(8))
             ->method('add')
             ->with('mark', 'text');
         $this->type->addEntityFields($builder);

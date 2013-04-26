@@ -32,7 +32,7 @@ class RegionTypeTest extends \PHPUnit_Framework_TestCase
 
     public function testGetParent()
     {
-        $this->assertEquals('entity', $this->type->getParent());
+        $this->assertEquals('choice', $this->type->getParent());
     }
 
     public function testGetName()
