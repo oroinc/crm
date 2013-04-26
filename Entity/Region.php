@@ -146,8 +146,21 @@ class Region
         return $this;
     }
 
+    /**
+     * Returns locale code
+     *
+     * @return mixed
+     */
     public function getLocale()
     {
         return $this->locale;
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->getName();
     }
 }

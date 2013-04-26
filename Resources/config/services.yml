@@ -20,6 +20,7 @@ parameters:
     oro_address.dict.manager.class: Oro\Bundle\AddressBundle\Provider\ImportExport\Manager
 
     oro_address.type.country.class: Oro\Bundle\AddressBundle\Form\Type\CountryType
+    oro_address.type.region.class: Oro\Bundle\AddressBundle\Form\Type\RegionType
 
 services:
     oro_address.address.provider:
@@ -109,3 +110,8 @@ services:
         class: %oro_address.type.country.class%
         tags:
             - { name: form.type, alias: oro_country }
+
+    oro_address.form.type.region:
+        class: %oro_address.type.region.class%
+        tags:
+            - { name: form.type, alias: oro_region }
