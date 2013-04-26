@@ -22,5 +22,6 @@ js:
 
   - '@OroUIBundle/Resources/public/js/backbone/app/events.js'
 
+  - '@OroUIBundle/Resources/public/js/jquery.form.js'
   - '@OroUIBundle/Resources/public/js/hash.navigation.js'
   - '@OroUIBundle/Resources/public/js/url.min.js'

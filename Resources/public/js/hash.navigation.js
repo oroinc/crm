@@ -12,6 +12,18 @@ OroApp.hashNavigation = OroApp.Router.extend({
      * */
     selector: 'a:not([href^=#],[href^=javascript]),span[data-url]',
 
+    /**
+     * Selector for forms
+     *
+     * @property {String}
+     * */
+    formSelector: "form",
+
+    formData: "",
+    target: "",
+
+    method: "get",
+
     /** @property {String} */
     baseUrl: '',
 
@@ -55,14 +67,14 @@ OroApp.hashNavigation = OroApp.Router.extend({
      *
      * @param encodedStateData
      */
-    gridChangeStateAction: function(encodedStateData) {
+    gridChangeStateAction: function (encodedStateData) {
         this.encodedStateData = encodedStateData;
     },
 
     /**
      *  Changing state for grid
      */
-    gridChangeState: function() {
+    gridChangeState: function () {
         if (this.gridRoute) {
             this.gridRoute.changeState(this.encodedStateData);
         }
@@ -73,7 +85,7 @@ OroApp.hashNavigation = OroApp.Router.extend({
      *
      * @param options
      */
-    initialize: function(options) {
+    initialize: function (options) {
         options = options || {};
         if (!options.baseUrl) {
             throw new TypeError("'baseUrl' is required");
@@ -91,7 +103,7 @@ OroApp.hashNavigation = OroApp.Router.extend({
      *
      * @param {String} url
      */
-    setActiveMenu: function(url) {
+    setActiveMenu: function (url) {
         $('.application-menu a').parents('li').removeClass('active');
         var li = $('.application-menu a[href="' + url + '"]').parents('li');
         li.addClass('active');
@@ -106,28 +118,52 @@ OroApp.hashNavigation = OroApp.Router.extend({
         if (this.url) {
             this.gridRoute = ''; //clearing grid router
             var pageUrl = this.baseUrl + this.url;
-            $.ajax({
-                url: pageUrl,
+            if (this.method == 'get') {
+                $.ajax({
+                    type: this.method,
+                    url: pageUrl,
+                    data: this.formData,
+                    headers: { 'x-oro-hash-navigation': true },
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        alert('Error Message: ' + textStatus);
+                        alert('HTTP Error: ' + errorThrown);
+                    },
 
-                headers: { 'x-oro-hash-navigation': true },
+                    success: _.bind(function (data) {
+                        this.handleResponse(data);
+                        this.setActiveMenu(this.url);
+                    }, this)
+                });
+            } else {
+                $.ajaxSettings.beforeSend = function (xhr) {
+                    xhr.setRequestHeader('x-oro-hash-navigation', {toString: function () {
+                        return true;
+                    }});
+                };
+                $(this.target).ajaxSubmit({
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        alert('Error Message: ' + textStatus);
+                        alert('HTTP Error: ' + errorThrown);
+                    },
+                    success: _.bind(function (data) {
+                        this.handleResponse(data);
+                        this.setActiveMenu(this.url);
+                    }, this)
+                });
+            }
 
-                error: function(XMLHttpRequest, textStatus, errorThrown) {
-                    alert('Error Message: '+textStatus);
-                    alert('HTTP Error: '+errorThrown);
-                },
-
-                success: _.bind(function(data)  {
-                    this.handleResponse(data);
-                    this.setActiveMenu(this.url);
-                }, this)
-            });
+            $.ajaxSettings.beforeSend = function (xhr) {
+                xhr.setRequestHeader('X-Requested-With', {toString: function () {
+                    return 'XMLHttpRequest';
+                }});
+            };
         }
     },
 
     /**
      *
      */
-    init: function() {
+    init: function () {
         /**
          * Processing all links
          */
@@ -137,7 +173,7 @@ OroApp.hashNavigation = OroApp.Router.extend({
          */
         OroApp.Events.bind(
             "grid_load:complete",
-            function() {
+            function () {
                 this.processClicks('.grid-container ' + this.selector)
             },
             this
@@ -147,7 +183,7 @@ OroApp.hashNavigation = OroApp.Router.extend({
          */
         OroApp.Events.bind(
             "grid_route:loaded",
-            function(route) {
+            function (route) {
                 this.gridRoute = route;
                 this.gridChangeState();
             },
@@ -158,11 +194,12 @@ OroApp.hashNavigation = OroApp.Router.extend({
          */
         OroApp.Events.bind(
             "navigaion_item:added",
-            function(item) {
+            function (item) {
                 this.processClicks(item.find(this.selector));
             },
             this
         );
+        this.processSend(this.formSelector);
     },
 
     /**
@@ -170,33 +207,46 @@ OroApp.hashNavigation = OroApp.Router.extend({
      *
      * @param {String} data
      */
-    handleResponse: function(data)
-    {
+    handleResponse: function (data) {
         /**
          * Clearing content area with native js, prevents freezing of firefox with firebug enabled
          */
         document.getElementById('container').innerHTML = '';
-        $('#container').html($(data).filter('#content').html());
-        var js = '';
-        $(data).filter('#head').find('script:not([src])').each(function() {
-            js = js + this.outerHTML;
-        })
-        $('#container').append(js);
-        /**
-         * Setting page title
-         */
-        $('title').html($(data).filter('#head').find('title').html());
-        /**
-         * Setting serialized titles for pinbar and favourites buttons
-         */
-        var titleSerialized = $(data).filter('#head').find('#title-serialized').html();
-        titleSerialized = $.parseJSON(titleSerialized);
-        $('.top-action-box .btn').filter('.minimize-button, .favorite-button').data('title', titleSerialized);
+        var redirectUrl = $(data).filter('#redirect').html();
+        if (redirectUrl) {
+            this.method = 'get';
+            this.formData = '';
+            redirectUrl = redirectUrl.replace(this.baseUrl, '').replace(/^(#\!?|\.)/, '');
+            urlParts = redirectUrl.split('url=');
+            if (urlParts[1]) {
+                redirectUrl = urlParts[1];
+            }
+            this.setLocation(redirectUrl);
+        } else {
+            $('#container').html($(data).filter('#content').html());
+            var js = '';
+            $(data).filter('#head').find('script:not([src])').each(function () {
+                js = js + this.outerHTML;
+            })
+            $('#container').append(js);
+
+            /**
+             * Setting page title
+             */
+            $('title').html($(data).filter('#head').find('title').html());
+            /**
+             * Setting serialized titles for pinbar and favourites buttons
+             */
+            var titleSerialized = $(data).filter('#head').find('#title-serialized').html();
+            titleSerialized = $.parseJSON(titleSerialized);
+            $('.top-action-box .btn').filter('.minimize-button, .favorite-button').data('title', titleSerialized);
 
 
-        this.processClicks('#container ' + this.selector);
-        this.updateMenuTabs(data);
-        this.triggerCompleteEvent();
+            this.processClicks('#container ' + this.selector);
+            this.processSend('#container ' + this.formSelector);
+            this.updateMenuTabs(data);
+            this.triggerCompleteEvent();
+        }
     },
 
     /**
@@ -204,7 +254,7 @@ OroApp.hashNavigation = OroApp.Router.extend({
      *
      * @param data
      */
-    updateMenuTabs: function(data) {
+    updateMenuTabs: function (data) {
         $('#history-content').html($(data).filter('#history-content').html());
         $('#most-viewed-content').html($(data).filter('#most-viewed-content').html());
         /**
@@ -216,7 +266,7 @@ OroApp.hashNavigation = OroApp.Router.extend({
     /**
      * Trigger hash navigation complete event
      */
-    triggerCompleteEvent: function() {
+    triggerCompleteEvent: function () {
         /**
          * Backbone event. Fired when hash navigation ajax request is complete
          * @event hash_navigation_request:complete
@@ -230,8 +280,8 @@ OroApp.hashNavigation = OroApp.Router.extend({
      *
      * @param {String} selector
      */
-    processClicks: function(selector) {
-        $(selector).not('.no-hash').on('click', _.bind(function(e) {
+    processClicks: function (selector) {
+        $(selector).not('.no-hash').on('click', _.bind(function (e) {
             if (e.shiftKey || e.ctrlKey || e.metaKey || e.which == 2) {
                 return true;
             }
@@ -258,10 +308,48 @@ OroApp.hashNavigation = OroApp.Router.extend({
     },
 
     /**
+     * Processing all links in selector and setting necessary click handler
+     *
+     * @param {String} selector
+     */
+    processSend: function (selector) {
+        $(selector).on('submit', _.bind(function (e) {
+            var target = e.currentTarget;
+            e.preventDefault();
+            var link = '';
+
+            link = $(target).attr('action');
+
+            link = link.replace(this.baseUrl, '').replace(/^(#\!?|\.)/, '');
+
+            this.method = $(target).attr('method');
+            if (link) {
+                url = link;
+                var data = $(target).serialize();
+                if (this.method == 'get') {
+                    url += '?' + data;
+                    this.target = '';
+                } else {
+                    this.formData = data;
+                    this.target = target;
+                }
+                window.location.hash = '#url=' + url;
+            }
+            $.ajaxSettings.beforeSend = function (xhr) {
+                xhr.setRequestHeader('X-Requested-With', {toString: function () {
+                    return '';
+                }});
+            };
+
+            return false;
+        }, this))
+    },
+
+    /**
      * Returns real url part from the hash
      * @return {String}
      */
-    getHashUrl: function() {
+    getHashUrl: function () {
         var url = this.url;
         if (!url) {
             /**
@@ -280,7 +368,7 @@ OroApp.hashNavigation = OroApp.Router.extend({
      *
      * @param {String} url
      */
-    setLocation: function(url) {
+    setLocation: function (url) {
         window.location.hash = '#url=' + url;
     },
 
@@ -289,7 +377,7 @@ OroApp.hashNavigation = OroApp.Router.extend({
      *
      * @return {Boolean}
      */
-    back: function() {
+    back: function () {
         var backFound = false;
         var url = new Url(this.getHashUrl());
         if (url.query.back) {
