@@ -31,6 +31,7 @@ parameters:
 
     oro_navigation.form.type.pagestate.class:                  Oro\Bundle\NavigationBundle\Form\Type\PageStateType
     oro_navigation.form.handler.pagestate.class:               Oro\Bundle\NavigationBundle\Form\Handler\PageStateHandler
+    oro_navigation.event.response_hashnav.listener.class:      Oro\Bundle\NavigationBundle\Event\ResponseHashnavListener
 
 services:
     oro_menu.factory:
@@ -220,3 +221,8 @@ services:
         class:                        %oro_navigation.form.handler.pagestate.class%
         scope:                        request
         arguments:                    ["@oro_navigation.form.pagestate", "@request", "@doctrine.orm.entity_manager", "@security.context"]
+
+    kernel.listener.hashnav_response:
+        class: %oro_navigation.event.response_hashnav.listener.class%
+        tags:
+            - { name: kernel.event_listener, event: kernel.response, method: onResponse }
