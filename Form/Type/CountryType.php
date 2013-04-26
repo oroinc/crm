@@ -3,6 +3,7 @@ namespace Oro\Bundle\AddressBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Doctrine\ORM\EntityRepository;
 
 class CountryType extends AbstractType
 {
@@ -11,7 +12,10 @@ class CountryType extends AbstractType
         $resolver->setDefaults(
             array(
                 'class' => 'OroAddressBundle:Country',
-                'property' => 'name',
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('c')
+                        ->orderBy('c.name', 'ASC');
+                },
                 'empty_value' => 'Choose a country...',
                 'empty_data'  => null
             )

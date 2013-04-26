@@ -8,7 +8,8 @@
     "require": {
         "php": ">=5.3.3",
         "symfony/symfony": "2.1.*",
-        "symfony/intl": "2.1.*@dev"
+        "symfony/icu": "1.2.*@dev",
+        "symfony/intl": "2.3.*@dev"
     },
     "autoload": {
         "psr-0": { "Oro\\Bundle\\AddressBundle": "" }
