@@ -37,6 +37,17 @@ class RoleController extends Controller
     }
 
     /**
+     * @param Role $entity
+     */
+    protected function initializeQueryFactory(Role $entity)
+    {
+        $this->get('oro_user.role_user_datagrid_manager.default_query_factory')
+            ->setQueryBuilder(
+                $this->get('oro_user.role_manager')->getUserQueryBuilder($entity)
+            );
+    }
+
+    /**
      * Edit role form
      *
      * @Route("/edit/{id}", name="oro_user_role_edit", requirements={"id"="\d+"}, defaults={"id"=0})
@@ -52,6 +63,7 @@ class RoleController extends Controller
 
         /** @var $userGridManager RoleDatagridManager */
         $userGridManager = $this->get('oro_user.role_user_datagrid_manager');
+        $this->initializeQueryFactory($entity);
         $userGridManager->getRouteGenerator()->setRouteParameters(array('id' => $entity->getId()));
         $datagrid = $userGridManager->getDatagrid();
 
@@ -74,13 +86,9 @@ class RoleController extends Controller
      */
     public function gridDataAction(Role $entity)
     {
-        $this->get('oro_user.role_user_datagrid_manager.default_query_factory')
-             ->setQueryBuilder(
-                 $this->get('oro_user.role_manager')->getUserQueryBuilder($entity)
-             );
-
         /** @var $datagridManager RoleDatagridManager */
         $datagridManager = $this->get('oro_user.role_user_datagrid_manager');
+        $this->initializeQueryFactory($entity);
         $datagrid = $datagridManager->getDatagrid();
 
         return array('datagrid' => $datagrid->createView());

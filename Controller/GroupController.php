@@ -31,6 +31,17 @@ class GroupController extends Controller
     }
 
     /**
+     * @param Group $entity
+     */
+    protected function initializeQueryFactory(Group $entity)
+    {
+        $this->get('oro_user.group_user_datagrid_manager.default_query_factory')
+            ->setQueryBuilder(
+                $this->get('oro_user.group_manager')->getUserQueryBuilder($entity)
+            );
+    }
+
+    /**
      * Edit group form
      *
      * @Route("/edit/{id}", name="oro_user_group_edit", requirements={"id"="\d+"}, defaults={"id"=0})
@@ -49,6 +60,7 @@ class GroupController extends Controller
 
         /** @var $userGridManager GroupDatagridManager */
         $userGridManager = $this->get('oro_user.group_user_datagrid_manager');
+        $this->initializeQueryFactory($entity);
         $userGridManager->getRouteGenerator()->setRouteParameters(array('id' => $entity->getId()));
         $datagrid = $userGridManager->getDatagrid();
 
@@ -71,13 +83,9 @@ class GroupController extends Controller
      */
     public function gridDataAction(Group $entity)
     {
-        $this->get('oro_user.group_user_datagrid_manager.default_query_factory')
-            ->setQueryBuilder(
-                $this->get('oro_user.group_manager')->getUserQueryBuilder($entity)
-            );
-
         /** @var $datagridManager GroupDatagridManager */
         $datagridManager = $this->get('oro_user.group_user_datagrid_manager');
+        $this->initializeQueryFactory($entity);
         $datagrid = $datagridManager->getDatagrid();
 
         return array('datagrid' => $datagrid->createView());
