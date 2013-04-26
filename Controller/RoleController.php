@@ -46,18 +46,23 @@ class RoleController extends Controller
     {
         if ($this->get('oro_user.form.handler.role')->process($entity)) {
             $this->get('session')->getFlashBag()->add('success', 'Role successfully saved');
+
             BackUrl::triggerRedirect();
+
             return $this->redirect($this->generateUrl('oro_user_role_index'));
         }
 
-        /** @var $userGridManager RoleDatagridManager */
-        $userGridManager = $this->get('oro_user.role_user_datagrid_manager');
-        $userGridManager->getRouteGenerator()->setRouteParameters(array('id' => $entity->getId()));
-        $datagrid = $userGridManager->getDatagrid();
+        /** @var $gridManager RoleDatagridManager */
+        $gridManager = $this->get('oro_user.role_user_datagrid_manager');
+
+        $this->initializeQueryFactory($entity);
+        $gridManager->getRouteGenerator()->setRouteParameters(array('id' => $entity->getId()));
+
+        $datagrid = $gridManager->getDatagrid();
 
         return array(
             'datagrid' => $datagrid->createView(),
-            'form' => $this->get('oro_user.form.role')->createView(),
+            'form'     => $this->get('oro_user.form.role')->createView(),
         );
     }
 
@@ -74,14 +79,9 @@ class RoleController extends Controller
      */
     public function gridDataAction(Role $entity)
     {
-        $this->get('oro_user.role_user_datagrid_manager.default_query_factory')
-             ->setQueryBuilder(
-                 $this->get('oro_user.role_manager')->getUserQueryBuilder($entity)
-             );
+        $this->initializeQueryFactory($entity);
 
-        /** @var $datagridManager RoleDatagridManager */
-        $datagridManager = $this->get('oro_user.role_user_datagrid_manager');
-        $datagrid = $datagridManager->getDatagrid();
+        $datagrid = $this->get('oro_user.role_user_datagrid_manager')->getDatagrid();
 
         return array('datagrid' => $datagrid->createView());
     }
@@ -102,11 +102,8 @@ class RoleController extends Controller
      */
     public function indexAction(Request $request)
     {
-        /** @var $roleGridManager RoleDatagridManager */
-        $roleGridManager = $this->get('oro_user.role_datagrid_manager');
-        $datagrid = $roleGridManager->getDatagrid();
-
-        $view = 'json' == $request->getRequestFormat()
+        $datagrid = $this->get('oro_user.role_datagrid_manager')->getDatagrid();
+        $view     = 'json' == $request->getRequestFormat()
             ? 'OroGridBundle:Datagrid:list.json.php'
             : 'OroUserBundle:Role:index.html.twig';
 
@@ -114,5 +111,16 @@ class RoleController extends Controller
             $view,
             array('datagrid' => $datagrid->createView())
         );
+    }
+
+    /**
+     * @param Role $entity
+     */
+    protected function initializeQueryFactory(Role $entity)
+    {
+        $this->get('oro_user.role_user_datagrid_manager.default_query_factory')
+            ->setQueryBuilder(
+                $this->get('oro_user.role_manager')->getUserQueryBuilder($entity)
+            );
     }
 }

@@ -43,18 +43,22 @@ class GroupController extends Controller
 
             if (!$this->getRequest()->get('_widgetContainer')) {
                 BackUrl::triggerRedirect();
+
                 return $this->redirect($this->generateUrl('oro_user_group_index'));
             }
         }
 
-        /** @var $userGridManager GroupDatagridManager */
-        $userGridManager = $this->get('oro_user.group_user_datagrid_manager');
-        $userGridManager->getRouteGenerator()->setRouteParameters(array('id' => $entity->getId()));
-        $datagrid = $userGridManager->getDatagrid();
+        /** @var $gridManager GroupDatagridManager */
+        $gridManager = $this->get('oro_user.group_user_datagrid_manager');
+
+        $this->initializeQueryFactory($entity);
+        $gridManager->getRouteGenerator()->setRouteParameters(array('id' => $entity->getId()));
+
+        $datagrid = $gridManager->getDatagrid();
 
         return array(
-            'form' => $this->get('oro_user.form.group')->createView(),
-            'datagrid' => $datagrid->createView()
+            'datagrid' => $datagrid->createView(),
+            'form'     => $this->get('oro_user.form.group')->createView(),
         );
     }
 
@@ -71,16 +75,26 @@ class GroupController extends Controller
      */
     public function gridDataAction(Group $entity)
     {
-        $this->get('oro_user.group_user_datagrid_manager.default_query_factory')
-            ->setQueryBuilder(
-                $this->get('oro_user.group_manager')->getUserQueryBuilder($entity)
-            );
+        $this->initializeQueryFactory($entity);
 
-        /** @var $datagridManager GroupDatagridManager */
-        $datagridManager = $this->get('oro_user.group_user_datagrid_manager');
-        $datagrid = $datagridManager->getDatagrid();
+        $datagrid = $this->get('oro_user.group_user_datagrid_manager')->getDatagrid();
 
         return array('datagrid' => $datagrid->createView());
+    }
+
+    /**
+     * @Route("/remove/{id}", name="oro_user_group_remove", requirements={"id"="\d+"})
+     */
+    public function removeAction(Group $entity)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $em->remove($entity);
+        $em->flush();
+
+        $this->get('session')->getFlashBag()->add('success', 'Group successfully removed');
+
+        return $this->redirect($this->generateUrl('oro_user_group_index'));
     }
 
     /**
@@ -93,11 +107,8 @@ class GroupController extends Controller
      */
     public function indexAction(Request $request)
     {
-        /** @var $groupGridManager GroupDatagridManager */
-        $groupGridManager = $this->get('oro_user.group_datagrid_manager');
-        $datagrid = $groupGridManager->getDatagrid();
-
-        $view = 'json' == $request->getRequestFormat()
+        $datagrid = $this->get('oro_user.group_datagrid_manager')->getDatagrid();
+        $view     = 'json' == $request->getRequestFormat()
             ? 'OroGridBundle:Datagrid:list.json.php'
             : 'OroUserBundle:Group:index.html.twig';
 
@@ -107,4 +118,14 @@ class GroupController extends Controller
         );
     }
 
+    /**
+     * @param Group $entity
+     */
+    protected function initializeQueryFactory(Group $entity)
+    {
+        $this->get('oro_user.group_user_datagrid_manager.default_query_factory')
+            ->setQueryBuilder(
+                $this->get('oro_user.group_manager')->getUserQueryBuilder($entity)
+            );
+    }
 }
