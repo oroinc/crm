@@ -31,17 +31,6 @@ class GroupController extends Controller
     }
 
     /**
-     * @param Group $entity
-     */
-    protected function initializeQueryFactory(Group $entity)
-    {
-        $this->get('oro_user.group_user_datagrid_manager.default_query_factory')
-            ->setQueryBuilder(
-                $this->get('oro_user.group_manager')->getUserQueryBuilder($entity)
-            );
-    }
-
-    /**
      * Edit group form
      *
      * @Route("/edit/{id}", name="oro_user_group_edit", requirements={"id"="\d+"}, defaults={"id"=0})
@@ -54,19 +43,22 @@ class GroupController extends Controller
 
             if (!$this->getRequest()->get('_widgetContainer')) {
                 BackUrl::triggerRedirect();
+
                 return $this->redirect($this->generateUrl('oro_user_group_index'));
             }
         }
 
-        /** @var $userGridManager GroupDatagridManager */
-        $userGridManager = $this->get('oro_user.group_user_datagrid_manager');
+        /** @var $gridManager GroupDatagridManager */
+        $gridManager = $this->get('oro_user.group_user_datagrid_manager');
+
         $this->initializeQueryFactory($entity);
-        $userGridManager->getRouteGenerator()->setRouteParameters(array('id' => $entity->getId()));
-        $datagrid = $userGridManager->getDatagrid();
+        $gridManager->getRouteGenerator()->setRouteParameters(array('id' => $entity->getId()));
+
+        $datagrid = $gridManager->getDatagrid();
 
         return array(
-            'form' => $this->get('oro_user.form.group')->createView(),
-            'datagrid' => $datagrid->createView()
+            'datagrid' => $datagrid->createView(),
+            'form'     => $this->get('oro_user.form.group')->createView(),
         );
     }
 
@@ -83,44 +75,12 @@ class GroupController extends Controller
      */
     public function gridDataAction(Group $entity)
     {
-        /** @var $datagridManager GroupDatagridManager */
-        $datagridManager = $this->get('oro_user.group_user_datagrid_manager');
         $this->initializeQueryFactory($entity);
-        $datagrid = $datagridManager->getDatagrid();
+
+        $datagrid = $this->get('oro_user.group_user_datagrid_manager')->getDatagrid();
 
         return array('datagrid' => $datagrid->createView());
     }
-
-    /**
-     * @Route("/remove/{id}", name="oro_user_group_remove", requirements={"id"="\d+"})
-     */
-    public function removeAction(Group $entity)
-    {
-        $em = $this->getDoctrine()->getManager();
-
-        $em->remove($entity);
-        $em->flush();
-
-        $this->get('session')->getFlashBag()->add('success', 'Group successfully removed');
-
-        return $this->redirect($this->generateUrl('oro_user_group_index'));
-    }
-
-    /**
-     * @Route("/{page}/{limit}", name="oro_user_group_index", requirements={"page"="\d+","limit"="\d+"}, defaults={"page"=1,"limit"=20})
-     * @Template
-     */
-    /*public function indexAction($page, $limit)
-    {
-        $query = $this
-            ->getDoctrine()
-            ->getEntityManager()
-            ->createQuery('SELECT g FROM OroUserBundle:Group g ORDER BY g.id');
-
-        return array(
-            'pager'  => $this->get('knp_paginator')->paginate($query, $page, $limit),
-        );
-    }*/
 
     /**
      * @Route(
@@ -132,15 +92,10 @@ class GroupController extends Controller
      */
     public function indexAction(Request $request)
     {
-        /** @var $groupGridManager GroupDatagridManager */
-        $groupGridManager = $this->get('oro_user.group_datagrid_manager');
-        $datagrid = $groupGridManager->getDatagrid();
-
-        if ('json' == $request->getRequestFormat()) {
-            $view = 'OroGridBundle:Datagrid:list.json.php';
-        } else {
-            $view = 'OroUserBundle:Group:index.html.twig';
-        }
+        $datagrid = $this->get('oro_user.group_datagrid_manager')->getDatagrid();
+        $view     = 'json' == $request->getRequestFormat()
+            ? 'OroGridBundle:Datagrid:list.json.php'
+            : 'OroUserBundle:Group:index.html.twig';
 
         return $this->render(
             $view,
@@ -148,4 +103,14 @@ class GroupController extends Controller
         );
     }
 
+    /**
+     * @param Group $entity
+     */
+    protected function initializeQueryFactory(Group $entity)
+    {
+        $this->get('oro_user.group_user_datagrid_manager.default_query_factory')
+            ->setQueryBuilder(
+                $this->get('oro_user.group_manager')->getUserQueryBuilder($entity)
+            );
+    }
 }
