@@ -52,6 +52,7 @@ class AddressBase extends AbstractEntityFlexible
      *
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\AddressBundle\Entity\Region", cascade={"persist"})
      * @ORM\JoinColumn(name="region_id", referencedColumnName="id")
+     * @Soap\ComplexType("string", nillable=true)
      */
     protected $state;
 

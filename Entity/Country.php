@@ -2,10 +2,10 @@
 
 namespace Oro\Bundle\AddressBundle\Entity;
 
+use JMS\Serializer\Annotation\Exclude;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
-use JMS\Serializer\Annotation\Exclude;
 
 /**
  * Country

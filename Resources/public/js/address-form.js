@@ -7,12 +7,15 @@
             var url = $(this).data('url') || false;
             var countryId = $(this).val();
 
+            regionSelect.find('option[value!=""]').remove();
             if (url !== false) {
-                $.getJSON(url, {countryId: countryId}, function (response) {
-                    if (response.content !== false) {
-                        regionSelect.replaceWith(response.content);
-                    } else {
-                        regionSelect.find('option[value!=""]').remove();
+
+                url = url.replace('country_id', countryId);
+                $.getJSON(url, {}, function (response) {
+                    if (response.length > 0) {
+                        $.each(response, function (i, region) {
+                            regionSelect.append($('<option>', {value: region.id}).text(region.name));
+                        })
                     }
                 });
             }
