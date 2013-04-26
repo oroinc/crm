@@ -3,12 +3,12 @@ namespace Oro\Bundle\AddressBundle\Tests\Unit\Type;
 
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-use Oro\Bundle\AddressBundle\Form\Type\CountryType;
+use Oro\Bundle\AddressBundle\Form\Type\RegionType;
 
-class CountryTypeTest extends \PHPUnit_Framework_TestCase
+class RegionTypeTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var CountryType
+     * @var RegionType
      */
     protected $type;
 
@@ -17,7 +17,7 @@ class CountryTypeTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->type = new CountryType('Oro\Bundle\AddressBundle\Entity\Address', 'Oro\Bundle\AddressBundle\Entity\Value\AddressValue');
+        $this->type = new RegionType('Oro\Bundle\AddressBundle\Entity\Address', 'Oro\Bundle\AddressBundle\Entity\Value\AddressValue');
     }
 
     public function testSetDefaultOptions()
@@ -37,6 +37,6 @@ class CountryTypeTest extends \PHPUnit_Framework_TestCase
 
     public function testGetName()
     {
-        $this->assertEquals('oro_country', $this->type->getName());
+        $this->assertEquals('oro_region', $this->type->getName());
     }
 }

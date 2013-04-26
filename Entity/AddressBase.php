@@ -51,7 +51,8 @@ class AddressBase extends AbstractEntityFlexible
      * @var string
      *
      * @ORM\Column(name="state", type="string", length=255)
-     * @Soap\ComplexType("string", nillable=true)
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\AddressBundle\Entity\Region", cascade={"persist"})
+     * @ORM\JoinColumn(name="region_id", referencedColumnName="id")
      */
     protected $state;
 
@@ -164,10 +165,10 @@ class AddressBase extends AbstractEntityFlexible
     /**
      * Set state
      *
-     * @param string $state
+     * @param Region $state
      * @return AddressBase
      */
-    public function setState($state)
+    public function setState(Region $state)
     {
         $this->state = $state;
     
@@ -177,7 +178,7 @@ class AddressBase extends AbstractEntityFlexible
     /**
      * Get state
      *
-     * @return string 
+     * @return Region
      */
     public function getState()
     {

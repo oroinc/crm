@@ -89,5 +89,4 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
         $manager = new ImportExport\Manager($this->writer);
         $manager->sync();
     }
-
 }
