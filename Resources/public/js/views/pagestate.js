@@ -79,6 +79,7 @@ Oro.PageState.View = Backbone.View.extend({
         params = window.location.search.replace('?', '').split('&');
 
         if (params.length == 1 && params[0].indexOf('restore') !== -1) {
+            params = '';
             self.model.set('restore', true);
         } else {
             params = Backbone.$.grep(params, function(el) {
@@ -91,6 +92,6 @@ Oro.PageState.View = Backbone.View.extend({
             })
         }
 
-        return base64_encode(window.location.pathname + '?' + params.join('&'));
+        return base64_encode(window.location.pathname + (params != '' ? '?' + params.join('&') : ''));
     }
 });
