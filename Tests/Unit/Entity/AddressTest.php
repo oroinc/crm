@@ -9,11 +9,11 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider provider
      * @param string $property
+     * @param mixed $value
      */
-    public function testSettersAndGetters($property)
+    public function testSettersAndGetters($property, $value)
     {
         $obj = new Address();
-        $value = 'testValue';
 
         call_user_func_array(array($obj, 'set' . ucfirst($property)), array($value));
         $this->assertEquals($value, call_user_func_array(array($obj, 'get' . ucfirst($property)), array()));
@@ -33,12 +33,17 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     public function testToString()
     {
         $obj = new Address();
-        $obj->setStreet('sdafsdf')
-            ->setState('asdfsf')
-            ->setCountry('USA');
+        $country = $this->getMock('Oro\Bundle\AddressBundle\Entity\Country');
+        $country->expects($this->once())
+            ->method('__toString')
+            ->will($this->returnValue('Ukraine'));
+        $obj->setStreet('Street')
+            ->setState('DN')
+            ->setPostalCode('12345')
+            ->setCountry($country);
 
         $this->assertTrue(method_exists($obj, '__toString'));
-        $this->assertEquals($obj->__toString(), (string)$obj);
+        $this->assertEquals('Street  , 12345  , DN Ukraine', $obj->__toString());
     }
 
     /**
@@ -48,17 +53,18 @@ class AddressTest extends \PHPUnit_Framework_TestCase
      */
     public function provider()
     {
+        $countryMock = $this->getMock('Oro\Bundle\AddressBundle\Entity\Country');
         return array(
-            array('id'),
-            array('street'),
-            array('street2'),
-            array('city'),
-            array('state'),
-            array('postalCode'),
-            array('country'),
-            array('mark'),
-            array('created'),
-            array('updated'),
+            array('id', 1),
+            array('street', 'street'),
+            array('street2', 'street2'),
+            array('city', 'city'),
+            array('state', 'state'),
+            array('postalCode', '12345'),
+            array('country', $countryMock),
+            array('mark', 'T'),
+            array('created', new \DateTime()),
+            array('updated', new \DateTime()),
         );
     }
 }

@@ -1,13 +1,11 @@
 <?php
 namespace Oro\Bundle\AddressBundle\Tests\Unit\Type;
 
-use Symfony\Component\Form\Tests\FormIntegrationTestCase;
-
 use Oro\Bundle\AddressBundle\Form\Type\AddressApiType;
-use Oro\Bundle\AddressBundle\Entity\Address;
-use Symfony\Component\Form\FormInterface;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Form\FormBuilderInterface;
 
-class AddressApiTypeTest extends FormIntegrationTestCase
+class AddressApiTypeTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var AddressApiType
@@ -15,56 +13,52 @@ class AddressApiTypeTest extends FormIntegrationTestCase
     protected $type;
 
     /**
-     * @var FormInterface
-     */
-    protected $form;
-
-    /**
      * Setup test env
      */
     public function setUp()
     {
-        parent::setUp();
-
-        $flexibleClass = 'Oro\Bundle\AddressBundle\Entity\Address';
-        $entityClass = 'Oro\Bundle\AddressBundle\Entity\Value\AddressValue';
-
-        $this->type = new AddressApiType($flexibleClass, $entityClass);
-        $this->form = $this->factory->create($this->type);
-
+        $this->type = new AddressApiType('Oro\Bundle\AddressBundle\Entity\Address', 'Oro\Bundle\AddressBundle\Entity\Value\AddressValue');
     }
 
-    /**
-     * Create form
-     */
-    protected function createForm()
+    public function testAddEntityFields()
     {
-        return $this->factory->create($this->type);
+        /** @var FormBuilderInterface $builder */
+        $builder = $this->getMockBuilder('Symfony\Component\Form\FormBuilder')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $builder->expects($this->any())
+            ->method('add')
+            ->will($this->returnSelf());
+        $builder->expects($this->once())
+            ->method('addEventSubscriber')
+            ->with($this->isInstanceOf('Oro\Bundle\UserBundle\Form\EventListener\PatchSubscriber'));
+        $this->type->addEntityFields($builder);
     }
 
-    public function testBindValidData()
+    public function testAddDynamicAttributesFields()
     {
-        $formData = array(
-            'street'      => 'test',
-            'city'        => 'test',
-            'state'       => 'test',
-            'postalCode'  => 'test',
-            'country'     => 'test',
-        );
+        /** @var FormBuilderInterface $builder */
+        $builder = $this->getMockBuilder('Symfony\Component\Form\FormBuilder')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $builder->expects($this->any())
+            ->method('add')
+            ->with('attributes', 'collection', $this->isType('array'));
+        $this->type->addDynamicAttributesFields($builder);
+    }
 
-        $form = $this->form;
+    public function testSetDefaultOptions()
+    {
+        /** @var OptionsResolverInterface $resolver */
+        $resolver = $this->getMock('Symfony\Component\OptionsResolver\OptionsResolverInterface');
+        $resolver->expects($this->once())
+            ->method('setDefaults')
+            ->with($this->isType('array'));
+        $this->type->setDefaultOptions($resolver);
+    }
 
-        $address = new Address();
-        $address->setStreet($formData['street']);
-
-        $this->assertTrue($form->isSynchronized());
-        $form->bind($formData);
-
-        $view = $form->createView();
-        $children = $view->children;
-
-        foreach (array_keys($formData) as $key) {
-            $this->assertArrayHasKey($key, $children);
-        }
+    public function testGetName()
+    {
+        $this->assertEquals('address', $this->type->getName());
     }
 }

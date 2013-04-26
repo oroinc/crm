@@ -42,4 +42,10 @@ class CountryTest extends \PHPUnit_Framework_TestCase
             array('regions'),
         );
     }
+
+    public function testToString()
+    {
+        $obj = new Country('name', 'iso2Code', 'iso3Code');
+        $this->assertEquals('name', $obj->__toString());
+    }
 }

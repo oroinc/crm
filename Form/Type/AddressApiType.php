@@ -44,8 +44,6 @@ class AddressApiType extends AddressType
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        parent::setDefaultOptions($resolver);
-
         $resolver->setDefaults(
             array(
                 'data_class'           => $this->flexibleClass,
