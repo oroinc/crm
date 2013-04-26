@@ -87,21 +87,6 @@ class RoleController extends Controller
     }
 
     /**
-     * @Route("/remove/{id}", name="oro_user_role_remove", requirements={"id"="\d+"})
-     */
-    public function removeAction(Role $entity)
-    {
-        $em = $this->getDoctrine()->getManager();
-
-        $em->remove($entity);
-        $em->flush();
-
-        $this->get('session')->getFlashBag()->add('success', 'Role successfully removed');
-
-        return $this->redirect($this->generateUrl('oro_user_role_index'));
-    }
-
-    /**
      * @Route(
      *      "/{_format}",
      *      name="oro_user_role_index",
@@ -121,11 +106,9 @@ class RoleController extends Controller
         $roleGridManager = $this->get('oro_user.role_datagrid_manager');
         $datagrid = $roleGridManager->getDatagrid();
 
-        if ('json' == $request->getRequestFormat()) {
-            $view = 'OroGridBundle:Datagrid:list.json.php';
-        } else {
-            $view = 'OroUserBundle:Role:index.html.twig';
-        }
+        $view = 'json' == $request->getRequestFormat()
+            ? 'OroGridBundle:Datagrid:list.json.php'
+            : 'OroUserBundle:Role:index.html.twig';
 
         return $this->render(
             $view,

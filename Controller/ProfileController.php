@@ -119,24 +119,6 @@ class ProfileController extends Controller
     }
 
     /**
-     * @Route("/remove/{id}", name="oro_user_remove", requirements={"id"="\d+"})
-     * @Acl(
-     *      id="oro_user_profile_remove",
-     *      name="Remove user profile",
-     *      description="Remove user profile",
-     *      parent="oro_user_profile"
-     * )
-     */
-    public function removeAction(User $entity)
-    {
-        $this->getManager()->deleteUser($entity);
-        $this->get('session')->getFlashBag()->add('success', 'User successfully removed');
-
-        BackUrl::triggerRedirect();
-        return $this->redirect($this->generateUrl('oro_user_index'));
-    }
-
-    /**
      * @Route(
      *      "/{_format}",
      *      name="oro_user_index",
@@ -156,11 +138,9 @@ class ProfileController extends Controller
         $userGridManager = $this->get('oro_user.user_datagrid_manager');
         $datagrid = $userGridManager->getDatagrid();
 
-        if ('json' == $request->getRequestFormat()) {
-            $view = 'OroGridBundle:Datagrid:list.json.php';
-        } else {
-            $view = 'OroUserBundle:Profile:index.html.twig';
-        }
+        $view = 'json' == $request->getRequestFormat()
+            ? 'OroGridBundle:Datagrid:list.json.php'
+            : 'OroUserBundle:Profile:index.html.twig';
 
         return $this->render(
             $view,

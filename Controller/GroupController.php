@@ -84,37 +84,6 @@ class GroupController extends Controller
     }
 
     /**
-     * @Route("/remove/{id}", name="oro_user_group_remove", requirements={"id"="\d+"})
-     */
-    public function removeAction(Group $entity)
-    {
-        $em = $this->getDoctrine()->getManager();
-
-        $em->remove($entity);
-        $em->flush();
-
-        $this->get('session')->getFlashBag()->add('success', 'Group successfully removed');
-
-        return $this->redirect($this->generateUrl('oro_user_group_index'));
-    }
-
-    /**
-     * @Route("/{page}/{limit}", name="oro_user_group_index", requirements={"page"="\d+","limit"="\d+"}, defaults={"page"=1,"limit"=20})
-     * @Template
-     */
-    /*public function indexAction($page, $limit)
-    {
-        $query = $this
-            ->getDoctrine()
-            ->getEntityManager()
-            ->createQuery('SELECT g FROM OroUserBundle:Group g ORDER BY g.id');
-
-        return array(
-            'pager'  => $this->get('knp_paginator')->paginate($query, $page, $limit),
-        );
-    }*/
-
-    /**
      * @Route(
      *      "/{_format}",
      *      name="oro_user_group_index",
@@ -128,11 +97,9 @@ class GroupController extends Controller
         $groupGridManager = $this->get('oro_user.group_datagrid_manager');
         $datagrid = $groupGridManager->getDatagrid();
 
-        if ('json' == $request->getRequestFormat()) {
-            $view = 'OroGridBundle:Datagrid:list.json.php';
-        } else {
-            $view = 'OroUserBundle:Group:index.html.twig';
-        }
+        $view = 'json' == $request->getRequestFormat()
+            ? 'OroGridBundle:Datagrid:list.json.php'
+            : 'OroUserBundle:Group:index.html.twig';
 
         return $this->render(
             $view,
