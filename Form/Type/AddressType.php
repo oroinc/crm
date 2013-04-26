@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\AddressBundle\Form\Type;
 
+use Oro\Bundle\AddressBundle\Form\EventListener\BuildAddressFormListener;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Oro\Bundle\FlexibleEntityBundle\Form\Type\FlexibleType;
@@ -9,12 +10,26 @@ use Oro\Bundle\FlexibleEntityBundle\Form\Type\FlexibleType;
 class AddressType extends FlexibleType
 {
     /**
+     * @var \Oro\Bundle\AddressBundle\Form\EventListener\BuildAddressFormListener
+     */
+    private $eventListener;
+
+    public function __construct(BuildAddressFormListener $eventListener, $flexibleClass, $valueClass)
+    {
+        $this->eventListener = $eventListener;
+
+        return parent::__construct($flexibleClass, $valueClass);
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function addEntityFields(FormBuilderInterface $builder)
     {
         // add default flexible fields
         parent::addEntityFields($builder);
+
+        $builder->addEventSubscriber($this->eventListener);
 
         $required =  array(
             'required' => true,

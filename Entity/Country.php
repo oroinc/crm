@@ -62,7 +62,8 @@ class Country
 
     /**
      * @param \Doctrine\Common\Collections\ArrayCollection $regions
-     * @return Country
+     *
+     * @return $this
      */
     public function setRegions($regions)
     {
@@ -77,6 +78,16 @@ class Country
     public function getRegions()
     {
         return $this->regions;
+    }
+
+    /**
+     * Check if country contains regions
+     *
+     * @return bool
+     */
+    public function hasRegions()
+    {
+        return count($this->regions) > 0;
     }
 
     /**

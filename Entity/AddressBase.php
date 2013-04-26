@@ -50,7 +50,6 @@ class AddressBase extends AbstractEntityFlexible
     /**
      * @var string
      *
-     * @ORM\Column(name="state", type="string", length=255)
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\AddressBundle\Entity\Region", cascade={"persist"})
      * @ORM\JoinColumn(name="region_id", referencedColumnName="id")
      */
