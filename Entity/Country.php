@@ -4,6 +4,8 @@ namespace Oro\Bundle\AddressBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
+use JMS\Serializer\Annotation\Exclude;
 
 /**
  * Country
@@ -18,6 +20,7 @@ class Country
      *
      * @ORM\Id
      * @ORM\Column(name="iso2_code", type="string", length=2)
+     * @Soap\ComplexType("string", nillable=true)
      */
     private $iso2Code;
 
@@ -25,6 +28,7 @@ class Country
      * @var string
      *
      * @ORM\Column(name="iso3_code", type="string", length=3)
+     * @Soap\ComplexType("string", nillable=true)
      */
     private $iso3Code;
 
@@ -32,6 +36,7 @@ class Country
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=100)
+     * @Soap\ComplexType("string", nillable=true)
      */
     private $name;
 
@@ -39,6 +44,7 @@ class Country
      * @var ArrayCollection
      *
      * @ORM\OneToMany(targetEntity="Region", mappedBy="country", cascade={"ALL"}, fetch="EXTRA_LAZY")
+     * @Exclude
      */
     private $regions;
 
@@ -149,6 +155,4 @@ class Country
     {
         return $this->getName();
     }
-
-
 }
