@@ -3,6 +3,7 @@
 namespace Oro\Bundle\AddressBundle\Provider\ImportExport;
 
 use Symfony\Component\Intl\Intl;
+use Symfony\Component\Security\Acl\Exception\Exception;
 use Symfony\Component\Yaml\Yaml;
 
 class IntlReader implements ReaderInterface
@@ -42,6 +43,11 @@ class IntlReader implements ReaderInterface
      */
     public function readBatch()
     {
+        if (!extension_loaded('intl')) {
+            //throw new Exception('Intl extension required in order to use this reader');
+            return false;
+        }
+
         $countries = Intl::getRegionBundle()->getCountryNames();
         $class = $this->class;
 
