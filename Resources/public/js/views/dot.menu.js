@@ -38,7 +38,7 @@ navigation.dotMenu.MainView = Backbone.View.extend({
         }
 
         data.$tabContentContainer = data.$tabContent.find('ul');
-        this.tabs[data.key] = data;
+        this.tabs[data.key] = _.clone(data);
     },
 
     getTab: function(key) {

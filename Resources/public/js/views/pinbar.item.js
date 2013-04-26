@@ -39,10 +39,12 @@ navigation.pinbar.ItemView = Backbone.View.extend({
     unpin: function()
     {
         this.model.destroy({wait: true});
+        return false;
     },
 
     maximize: function() {
         this.model.set('maximized', new Date().toISOString());
+        return false;
     },
 
     setActiveItem: function() {

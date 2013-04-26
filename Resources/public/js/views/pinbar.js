@@ -28,7 +28,7 @@ navigation.pinbar.MainView = navigation.MainViewAbstract.extend({
         this.$minimizeButton = Backbone.$(this.options.minimizeButton);
         this.$closeButton = Backbone.$(this.options.closeButton);
 
-        this.listenTo(this.options.collection, 'add', function() {this.addAll();this.render();});
+        this.listenTo(this.options.collection, 'add', function(item) {this.setItemPosition(item)});
         this.listenTo(this.options.collection, 'remove', this.onPageClose);
         this.listenTo(this.options.collection, 'reset', this.addAll);
         this.listenTo(this.options.collection, 'all', this.render);
@@ -42,18 +42,6 @@ navigation.pinbar.MainView = navigation.MainViewAbstract.extend({
         this.registerTab();
         this.cleanup();
         this.render();
-
-        /**
-         * Render links in pinbar menu after hash navigation request is completed
-         */
-        OroApp.Events.bind(
-            "hash_navigation_request:complete",
-            function() {
-                /*this.reorder();
-                this.render();*/
-            },
-            this
-        );
     },
 
     /**
