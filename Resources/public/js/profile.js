@@ -1,6 +1,6 @@
 $(function() {
     $('#btn-apigen').on('click', function(e) {
-        el = $(this);
+        var el = $(this);
 
         $.get(el.attr('href'), function (data) {
             el.prev().text(data);
@@ -10,19 +10,19 @@ $(function() {
     });
 
     $('#btn-remove-profile').on('click', function(e) {
-        el = $(this);
-        message = el.attr('data-message');
-        doAction = function() {
-            $.ajax({
-                url: Routing.generate('oro_api_delete_profile', { id: el.attr('data-id') }),
-                type: 'DELETE',
-                success: function (data) {
-                    window.location.href = Routing.generate('oro_user_index');
-                }
-            });
-        };
+        var el = $(this),
+            message = el.attr('data-message'),
+            doAction = function() {
+                $.ajax({
+                    url: Routing.generate('oro_api_delete_profile', { id: el.attr('data-id') }),
+                    type: 'DELETE',
+                    success: function (data) {
+                        window.location.href = Routing.generate('oro_user_index');
+                    }
+                });
+            };
 
-        if (typeof Backbone.BootstrapModal != 'undefined') {
+        if (!_.isUndefined(Backbone.BootstrapModal)) {
             confirm = new Backbone.BootstrapModal({
                 title: 'Delete Confirmation',
                 content: message
@@ -38,7 +38,7 @@ $(function() {
 
     $('#roles-list input')
         .on('click', function() {
-            inputs = $(this).closest('.controls');
+            var inputs = $(this).closest('.controls');
 
             inputs.find(':checkbox').attr('required', inputs.find(':checked').length > 0 ? null : 'required');
         })

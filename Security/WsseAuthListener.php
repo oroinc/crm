@@ -21,7 +21,7 @@ class WsseAuthListener extends Listener
         $request = $event->getRequest();
 
         // check for a special "anti-CSRF" header in AJAX calls
-        if ($request->isXmlHttpRequest()
+        if (!$request->headers->has('X-WSSE')
             && !$request->headers->has('X-CSRF-Header')
         ) {
             throw new AuthenticationException('Possible CSRF attack detected');
