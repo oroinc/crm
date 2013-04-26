@@ -50,7 +50,7 @@ class TextFilterType extends AbstractType
         $choices = array(
             self::TYPE_CONTAINS => $this->translator->trans('label_type_contains', array(), 'OroFilterBundle'),
             self::TYPE_NOT_CONTAINS => $this->translator->trans('label_type_not_contains', array(), 'OroFilterBundle'),
-            self::TYPE_EQUAL => $this->translator->trans('label_type_equal', array(), 'OroFilterBundle'),
+            self::TYPE_EQUAL => $this->translator->trans('label_type_equals', array(), 'OroFilterBundle'),
         );
 
         $resolver->setDefaults(
