@@ -29,17 +29,21 @@ class LoadCountryDictsData extends AbstractFixture implements ContainerAwareInte
      */
     public function load(ObjectManager $manager)
     {
+        /* sample for manual imput
+        $importManager = $this->container->get('oro_address.dict.import.manager');
+        $data = array(
+            new Country('Ukraine', 'UA', 'UKR'),
+            new Country('United States of America', 'US', 'USA'),
+            new Country('Russian Federation', 'RU', 'RUS'),
+        );
+        $importManager->sync($data);
+        */
+
         /**
          * @var $importManager Manager
          */
-        $importManager = $this->container->get('oro_address.dict.import.manager');
-        $importManager->sync(
-            array(
-                new Country('Ukraine', 'UA', 'UKR'),
-                new Country('United States of America', 'US', 'USA'),
-                new Country('Russian Federation', 'RU', 'RUS'),
-            )
-        );
+        $importManager = $this->container->get('oro_address.dict.import.intl.manager');
+        $importManager->sync();
 
     }
 }

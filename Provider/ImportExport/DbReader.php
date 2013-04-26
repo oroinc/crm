@@ -14,17 +14,12 @@ class DbReader implements ReaderInterface
     /**
      * @var int batch size for reading
      */
-    protected $batchSize = 10;
+    protected $batchSize = 100;
 
     /**
      * @var int offset
      */
     protected $offset = 0;
-
-    /**
-     * @var int|null
-     */
-    protected $limit = 100;
 
     /**
      * @var string
@@ -35,9 +30,8 @@ class DbReader implements ReaderInterface
      * @param string $class
      * @param ObjectManager $om
      * @param null|int $batchSize
-     * @param null $limit
      */
-    public function __construct($class, ObjectManager $om, $batchSize = null, $limit = null)
+    public function __construct($class, ObjectManager $om, $batchSize = null)
     {
         $metadata = $om->getClassMetadata($class);
         $this->class = $metadata->getName();
@@ -45,10 +39,6 @@ class DbReader implements ReaderInterface
 
         if (!is_null($batchSize)) {
             $this->batchSize = $batchSize;
-        }
-
-        if (!is_null($limit)) {
-            $this->limit = $limit;
         }
     }
 
@@ -60,7 +50,7 @@ class DbReader implements ReaderInterface
         $offset = $this->offset * $this->batchSize;
         $this->offset++;
 
-        return $this->om->getRepository($this->class)->findBy(array(), array(), $this->limit, $offset);
+        return $this->om->getRepository($this->class)->findBy(array(), array(), $this->batchSize, $offset);
     }
 
     public function reset()
@@ -71,10 +61,5 @@ class DbReader implements ReaderInterface
     public function getBatchSize()
     {
         return $this->batchSize;
-    }
-
-    public function getLimit()
-    {
-        return $this->limit;
     }
 }

@@ -26,11 +26,6 @@ class DbReaderTest extends \PHPUnit_Framework_TestCase
     /**
      * @var int
      */
-    private $limit = 32;
-
-    /**
-     * @var int
-     */
     private $batchSize = 50;
 
     /**
@@ -58,7 +53,7 @@ class DbReaderTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($classMetaData));
 
 
-        $this->reader = new ImportExport\DbReader($this->class, $this->om, $this->batchSize, $this->limit);
+        $this->reader = new ImportExport\DbReader($this->class, $this->om, $this->batchSize);
     }
 
     /**
@@ -66,8 +61,7 @@ class DbReaderTest extends \PHPUnit_Framework_TestCase
      */
     public function testSettingBatchLimit()
     {
-        $this->assertEquals($this->limit, $this->reader->getLimit());
-        $this->assertEquals($this->batchSize, $this->reader->getBatchSize());
+                $this->assertEquals($this->batchSize, $this->reader->getBatchSize());
     }
 
     /**
@@ -82,7 +76,7 @@ class DbReaderTest extends \PHPUnit_Framework_TestCase
             ->with(
                 $this->equalTo(array()),
                 $this->equalTo(array()),
-                $this->limit,
+                $this->batchSize,
                 $this->logicalOr(0, $this->batchSize)
             )
             ->will(
