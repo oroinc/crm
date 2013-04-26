@@ -163,20 +163,24 @@
         </header>
         {% endblock header %}
 
-        {% if app.session.flashbag.peekAll|length > 0 %}
-        <div class="row-fluid">
-            <div class="span12">
-                {% for type, messages in app.session.flashbag.all %}
-                    {% for message in messages %}
-                    <div class="alert{{ type ? ' alert-'~type : '' }} fade in top-messages">
-                        <a class="close" data-dismiss="alert" href="#">&times;</a>
-                        {{ message|trans|raw }}
+        <div id="flash-messages">
+            {% block messages %}
+                {% if app.session.flashbag.peekAll|length > 0 %}
+                    <div class="row-fluid">
+                        <div class="span12">
+                            {% for type, messages in app.session.flashbag.all %}
+                                {% for message in messages %}
+                                    <div class="alert{{ type ? ' alert-'~type : '' }} fade in top-messages">
+                                        <a class="close" data-dismiss="alert" href="#">&times;</a>
+                                        {{ message|trans|raw }}
+                                    </div>
+                                {% endfor %}
+                            {% endfor %}
+                        </div>
                     </div>
-                    {% endfor %}
-                {% endfor %}
-            </div>
+                {% endif %}
+            {% endblock messages %}
         </div>
-        {% endif %}
 
         {% block main %}
         <div id="main" >
@@ -398,6 +402,9 @@
     <title>{{ oro_title_render() }}</title>
     <div id="title-serialized">{{ oro_title_render_serialized()|raw }}</div>
     {{ block('head_script') }}
+</div>
+<div id="messages">
+    {{ block('messages') }}
 </div>
 <div id="history-content">
     {{ oro_menu_render('history') }}

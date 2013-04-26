@@ -245,8 +245,13 @@ OroApp.hashNavigation = OroApp.Router.extend({
             this.processClicks('#container ' + this.selector);
             this.processSend('#container ' + this.formSelector);
             this.updateMenuTabs(data);
+            this.updateMessages(data);
             this.triggerCompleteEvent();
         }
+    },
+
+    updateMessages: function(data) {
+        $('#flash-messages').html($(data).filter('#messages').html());
     },
 
     /**
