@@ -109,7 +109,9 @@ class ProfileController extends Controller
     {
         if ($this->get('oro_user.form.handler.profile')->process($entity)) {
             $this->get('session')->getFlashBag()->add('success', 'User successfully saved');
+
             BackUrl::triggerRedirect();
+
             return $this->redirect($this->generateUrl('oro_user_index'));
         }
 
@@ -134,11 +136,8 @@ class ProfileController extends Controller
      */
     public function indexAction(Request $request)
     {
-        /** @var $userGridManager UserDatagridManager */
-        $userGridManager = $this->get('oro_user.user_datagrid_manager');
-        $datagrid = $userGridManager->getDatagrid();
-
-        $view = 'json' == $request->getRequestFormat()
+        $datagrid = $this->get('oro_user.user_datagrid_manager')->getDatagrid();
+        $view     = 'json' == $request->getRequestFormat()
             ? 'OroGridBundle:Datagrid:list.json.php'
             : 'OroUserBundle:Profile:index.html.twig';
 
