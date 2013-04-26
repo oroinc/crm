@@ -17,6 +17,5 @@ class ImageType extends FileType
     public function __construct()
     {
         parent::__construct();
-        $this->name        = 'Image';
     }
 }

@@ -18,7 +18,6 @@ class NumberType extends AbstractAttributeType
      */
     public function __construct()
     {
-        $this->name        = 'Number';
         $this->backendType = self::BACKEND_TYPE_DECIMAL;
         $this->formType    = 'number';
     }

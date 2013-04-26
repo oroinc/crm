@@ -18,7 +18,6 @@ class MoneyType extends AbstractAttributeType
      */
     public function __construct()
     {
-        $this->name        = 'Money';
         $this->backendType = self::BACKEND_TYPE_DECIMAL;
         $this->formType    = 'money';
     }

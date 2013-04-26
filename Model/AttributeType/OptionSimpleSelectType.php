@@ -20,7 +20,6 @@ class OptionSimpleSelectType extends AbstractOptionType
     public function __construct()
     {
         parent::__construct();
-        $this->name = 'Simple-option (select)';
         $this->backendType = self::BACKEND_TYPE_OPTION;
     }
 

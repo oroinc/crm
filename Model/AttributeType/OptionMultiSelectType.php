@@ -13,16 +13,6 @@ use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttribute;
  */
 class OptionMultiSelectType extends AbstractOptionType
 {
-
-    /**
-     * constructor
-     */
-    public function __construct()
-    {
-        parent::__construct();
-        $this->name      = 'Multi-options (select)';
-    }
-
     /**
      * Get form type options
      *

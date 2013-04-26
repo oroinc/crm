@@ -18,7 +18,6 @@ class UrlType extends AbstractAttributeType
      */
     public function __construct()
     {
-        $this->name        = 'Url';
         $this->backendType = self::BACKEND_TYPE_VARCHAR;
         $this->formType    = 'url';
     }

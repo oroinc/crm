@@ -18,7 +18,6 @@ class EmailType extends AbstractAttributeType
      */
     public function __construct()
     {
-        $this->name        = 'E-mail';
         $this->backendType = self::BACKEND_TYPE_VARCHAR;
         $this->formType    = 'email';
     }

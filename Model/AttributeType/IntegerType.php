@@ -18,7 +18,6 @@ class IntegerType extends AbstractAttributeType
      */
     public function __construct()
     {
-        $this->name        = 'Integer';
         $this->backendType = self::BACKEND_TYPE_INTEGER;
         $this->formType    = 'integer';
     }

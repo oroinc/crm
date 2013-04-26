@@ -1,0 +1,58 @@
+services:
+    oro_flexibleentity.attributetype.text:
+        class: Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\TextType
+        tags:
+            - { name: oro_flexibleentity.attributetype, alias: oro_flexibleentity_text }
+    oro_flexibleentity.attributetype.textarea:
+        class: Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\TextAreaType
+        tags:
+            - { name: oro_flexibleentity.attributetype, alias: oro_flexibleentity_textarea }
+    oro_flexibleentity.attributetype.date:
+        class: Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\DateType
+        tags:
+            - { name: oro_flexibleentity.attributetype, alias: oro_flexibleentity_date }
+    oro_flexibleentity.attributetype.integer:
+        class: Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\IntegerType
+        tags:
+            - { name: oro_flexibleentity.attributetype, alias: oro_flexibleentity_integer }
+    oro_flexibleentity.attributetype.boolean:
+        class: Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\BooleanType
+        tags:
+            - { name: oro_flexibleentity.attributetype, alias: oro_flexibleentity_boolean }
+    oro_flexibleentity.attributetype.money:
+        class: Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\MoneyType
+        tags:
+            - { name: oro_flexibleentity.attributetype, alias: oro_flexibleentity_money }
+    oro_flexibleentity.attributetype.number:
+        class: Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\NumberType
+        tags:
+            - { name: oro_flexibleentity.attributetype, alias: oro_flexibleentity_number }
+    oro_flexibleentity.attributetype.multiselect:
+        class: Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\OptionMultiSelectType
+        tags:
+            - { name: oro_flexibleentity.attributetype, alias: oro_flexibleentity_multiselect }
+    oro_flexibleentity.attributetype.simpleselect:
+        class: Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\OptionSimpleSelectType
+        tags:
+            - { name: oro_flexibleentity.attributetype, alias: oro_flexibleentity_simpleselect }
+    oro_flexibleentity.attributetype.metric:
+        class: Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\MetricType
+        tags:
+            - { name: oro_flexibleentity.attributetype, alias: oro_flexibleentity_metric }
+    oro_flexibleentity.attributetype.file:
+        class: Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\FileType
+        tags:
+            - { name: oro_flexibleentity.attributetype, alias: oro_flexibleentity_file }
+    oro_flexibleentity.attributetype.image:
+        class: Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\ImageType
+        tags:
+            - { name: oro_flexibleentity.attributetype, alias: oro_flexibleentity_image }
+
+    oro_flexibleentity.attributetype.fileurl:
+        class: Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\FileUrlType
+        tags:
+            - { name: oro_flexibleentity.attributetype, alias: oro_flexibleentity_fileurl }
+    oro_flexibleentity.attributetype.imageurl:
+        class: Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\ImageUrlType
+        tags:
+            - { name: oro_flexibleentity.attributetype, alias: oro_flexibleentity_imageurl }

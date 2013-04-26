@@ -18,7 +18,6 @@ class MetricType extends AbstractAttributeType
      */
     public function __construct()
     {
-        $this->name        = 'Metric';
         $this->backendType = self::BACKEND_TYPE_METRIC;
         $this->formType    = 'oro_flexibleentity_metric';
     }

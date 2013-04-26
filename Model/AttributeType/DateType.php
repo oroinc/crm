@@ -19,7 +19,6 @@ class DateType extends AbstractAttributeType
      */
     public function __construct()
     {
-        $this->name        = 'Date';
         $this->backendType = self::BACKEND_TYPE_DATE;
         $this->formType    = 'oro_date';
     }

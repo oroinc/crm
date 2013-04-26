@@ -19,7 +19,6 @@ class FileType extends AbstractAttributeType
      */
     public function __construct()
     {
-        $this->name        = 'File';
         $this->backendType = self::BACKEND_TYPE_MEDIA;
         $this->formType    = 'oro_media';
     }

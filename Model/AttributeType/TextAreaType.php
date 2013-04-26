@@ -18,7 +18,6 @@ class TextAreaType extends AbstractAttributeType
      */
     public function __construct()
     {
-        $this->name        = 'Text Area';
         $this->backendType = self::BACKEND_TYPE_TEXT;
         $this->formType   = 'textarea';
     }

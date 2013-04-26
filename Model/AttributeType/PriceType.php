@@ -18,7 +18,6 @@ class PriceType extends AbstractAttributeType
      */
     public function __construct()
     {
-        $this->name        = 'Price';
         $this->backendType = self::BACKEND_TYPE_PRICE;
         $this->formType    = 'oro_flexibleentity_price';
     }

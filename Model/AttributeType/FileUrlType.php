@@ -11,13 +11,4 @@ namespace Oro\Bundle\FlexibleEntityBundle\Model\AttributeType;
  */
 class FileUrlType extends UrlType
 {
-
-    /**
-     * constructor
-     */
-    public function __construct()
-    {
-        parent::__construct();
-        $this->name     = 'File Url';
-    }
 }

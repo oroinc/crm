@@ -1,6 +1,9 @@
 <?php
 namespace Oro\Bundle\FlexibleEntityBundle\Model;
 
+use Oro\Bundle\FlexibleEntityBundle\AttributeType\AttributeTypeInterface;
+use Symfony\Component\Translation\TranslatorInterface;
+
 /**
  * Abstract attribute type
  *
@@ -9,16 +12,18 @@ namespace Oro\Bundle\FlexibleEntityBundle\Model;
  * @license   http://opensource.org/licenses/MIT MIT
  *
  */
-abstract class AbstractAttributeType
+abstract class AbstractAttributeType implements AttributeTypeInterface
 {
     /**
      * Available backend storage, the flexible doctrine mapped field
+     * 
      * @var string
      */
     const BACKEND_STORAGE_ATTRIBUTE_VALUE = 'values';
 
     /**
-     * Available backend types, the value doctrine mapped field
+     * Available backend types, the doctrine mapped field in value class
+     * 
      * @var string
      */
     const BACKEND_TYPE_DATE     = 'date';
@@ -34,35 +39,23 @@ abstract class AbstractAttributeType
     const BACKEND_TYPE_PRICE    = 'price';
 
     /**
-     * Classes for AttributeType
-     *
-     * TODO : Avoid to hardcode basic types here !
-     *
-     * @staticvar string
+     * @var TranslatorInterface
      */
-    const TYPE_DATE_CLASS              = 'Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\DateType';
-    const TYPE_INTEGER_CLASS           = 'Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\IntegerType';
-    const TYPE_MONEY_CLASS             = 'Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\MoneyType';
-    const TYPE_NUMBER_CLASS            = 'Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\NumberType';
-    const TYPE_OPT_MULTI_CB_CLASS      = 'Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\OptionMultiCheckboxType';
-    const TYPE_OPT_MULTI_SELECT_CLASS  = 'Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\OptionMultiSelectType';
-    const TYPE_OPT_SINGLE_RADIO_CLASS  = 'Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\OptionSimpleRadioType';
-    const TYPE_OPT_SINGLE_SELECT_CLASS = 'Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\OptionSimpleSelectType';
-    const TYPE_TEXTAREA_CLASS          = 'Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\TextAreaType';
-    const TYPE_METRIC_CLASS            = 'Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\MetricType';
-    const TYPE_FILE_CLASS              = 'Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\FileType';
-    const TYPE_IMAGE_CLASS             = 'Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\ImageType';
-    const TYPE_FILE_URL_CLASS          = 'Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\FileUrlType';
-    const TYPE_IMAGE_URL_CLASS         = 'Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\ImageUrlType';
-    const TYPE_TEXT_CLASS              = 'Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\TextType';
-    const TYPE_BOOLEAN_CLASS           = 'Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\BooleanType';
+    protected $translator;
 
     /**
-     * Attribute name
+     * Attribute type name
      *
      * @var string
      */
     protected $name;
+
+    /**
+     * Attribute type options
+     *
+     * @var array
+     */
+    protected $options;
 
     /**
      * Field backend type, "varchar" by default, the doctrine mapping field, getter / setter to use for binding
@@ -79,6 +72,26 @@ abstract class AbstractAttributeType
     protected $formType = 'text';
 
     /**
+     * @param TranslatorInterface $translator
+     */
+    public function __construct(TranslatorInterface $translator)
+    {
+        $this->translator = $translator;
+    }
+
+    /**
+     * Initialize
+     *
+     * @param string $name    the name
+     * @param array  $options the options
+     */
+    public function initialize($name, $options = array())
+    {
+        $this->name = $name;
+        $this->options = $options;
+    }
+    
+    /**
      * Get attribute type name
      *
      * @return string
@@ -86,6 +99,16 @@ abstract class AbstractAttributeType
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * Get attribute type options
+     *
+     * @return array
+     */
+    public function getOptions()
+    {
+        return $this->options;
     }
 
     /**
@@ -118,7 +141,7 @@ abstract class AbstractAttributeType
     public function prepareFormOptions(AbstractAttribute $attribute)
     {
         $options = array(
-            'label'    => $attribute->getCode(),
+            'label'    => $this->translator->trans($attribute->getCode()),
             'required' => $attribute->getRequired()
         );
 

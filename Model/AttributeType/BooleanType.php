@@ -19,7 +19,6 @@ class BooleanType extends AbstractAttributeType
      */
     public function __construct()
     {
-        $this->name        = 'Boolean';
         $this->backendType = self::BACKEND_TYPE_INTEGER;
         $this->formType    = 'option';
     }
