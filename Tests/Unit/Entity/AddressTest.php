@@ -37,13 +37,19 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         $country->expects($this->once())
             ->method('__toString')
             ->will($this->returnValue('Ukraine'));
+
+        $regionMock = $this->getMock('Oro\Bundle\AddressBundle\Entity\Region');
+        $regionMock->expects($this->once())
+            ->method('__toString')
+            ->will($this->returnValue('Kharkivs\'ka oblast\''));
+
         $obj->setStreet('Street')
-            ->setState('DN')
+            ->setState($regionMock)
             ->setPostalCode('12345')
             ->setCountry($country);
 
         $this->assertTrue(method_exists($obj, '__toString'));
-        $this->assertEquals('Street  , 12345  , DN Ukraine', $obj->__toString());
+        $this->assertEquals('Street  , 12345  , Kharkivs\'ka oblast\' Ukraine', $obj->__toString());
     }
 
     /**
@@ -54,12 +60,13 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     public function provider()
     {
         $countryMock = $this->getMock('Oro\Bundle\AddressBundle\Entity\Country');
+        $regionMock = $this->getMock('Oro\Bundle\AddressBundle\Entity\Region');
         return array(
             array('id', 1),
             array('street', 'street'),
             array('street2', 'street2'),
             array('city', 'city'),
-            array('state', 'state'),
+            array('state', $regionMock),
             array('postalCode', '12345'),
             array('country', $countryMock),
             array('mark', 'T'),

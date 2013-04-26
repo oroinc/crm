@@ -1,9 +1,9 @@
 <?php
 namespace Oro\Bundle\AddressBundle\Tests\Unit\Type;
 
-use Oro\Bundle\AddressBundle\Form\Type\AddressType;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Symfony\Component\Form\FormBuilderInterface;
+
+use Oro\Bundle\AddressBundle\Form\Type\AddressType;
 
 class AddressTypeTest extends \PHPUnit_Framework_TestCase
 {
@@ -22,7 +22,7 @@ class AddressTypeTest extends \PHPUnit_Framework_TestCase
 
     public function testAddEntityFields()
     {
-        /** @vadr FormBuilderInterface $builder */
+        /** @var \Symfony\Component\Form\FormBuilderInterface $builder */
         $builder = $this->getMockBuilder('Symfony\Component\Form\FormBuilder')
             ->disableOriginalConstructor()
             ->getMock();
@@ -44,7 +44,7 @@ class AddressTypeTest extends \PHPUnit_Framework_TestCase
             ->with('city', 'text');
         $builder->expects($this->at(4))
             ->method('add')
-            ->with('state', 'text');
+            ->with('state', 'oro_region');
         $builder->expects($this->at(5))
             ->method('add')
             ->with('postalCode', 'text');
