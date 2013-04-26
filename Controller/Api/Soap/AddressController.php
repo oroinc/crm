@@ -27,7 +27,7 @@ class AddressController extends ContainerAware
      */
     public function getAction($id)
     {
-        return $this->getEntity('OroAddressBundle:Address', $id);
+        return $this->getEntity('OroAddressBundle:Address', (int)$id);
     }
 
     /**
@@ -51,7 +51,7 @@ class AddressController extends ContainerAware
      */
     public function updateAction($id, $address)
     {
-        $address = $this->getEntity('OroAddressBundle:Address', $id);
+        $address = $this->getEntity('OroAddressBundle:Address', (int)$id);
         $form = $this->container->get('oro_address.form.address.api');
         $this->container->get('oro_soap.request')->fix($form->getName());
         return $this->processForm($address);
@@ -65,7 +65,7 @@ class AddressController extends ContainerAware
     public function deleteAction($id)
     {
         $em = $this->getManager();
-        $entity = $this->getEntity('OroAddressBundle:Address', $id);
+        $entity = $this->getEntity('OroAddressBundle:Address', (int)$id);
 
         $em->remove($entity);
         $em->flush();
@@ -74,16 +74,35 @@ class AddressController extends ContainerAware
     }
 
     /**
+     * @Soap\Method("getCountries")
+     * @Soap\Result(phpType = "Oro\Bundle\AddressBundle\Entity\Country[]")
+     */
+    public function getCountriesAction()
+    {
+        return $this->getManager()->getRepository('OroAddressBundle:Country')->findAll();
+    }
+
+    /**
+     * @Soap\Method("getCountry")
+     * @Soap\Param("iso2Code", phpType = "string")
+     * @Soap\Result(phpType = "Oro\Bundle\AddressBundle\Entity\Country")
+     */
+    public function getCountryAction($iso2Code)
+    {
+        return $this->getEntity('OroAddressBundle:Country', $iso2Code);
+    }
+
+    /**
      * Shortcut to get entity
      *
      * @param string $repo
-     * @param int $id
+     * @param int|string $id
      * @throws \SoapFault
      * @return Address
      */
     protected function getEntity($repo, $id)
     {
-        $entity = $this->getManager()->find($repo, (int)$id);
+        $entity = $this->getManager()->find($repo, $id);
 
         if (!$entity) {
             throw new \SoapFault('NOT_FOUND', sprintf('Record #%u can not be found', $id));
