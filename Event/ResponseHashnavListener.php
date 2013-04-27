@@ -14,8 +14,8 @@ class ResponseHashnavListener
     {
         $request = $event->getRequest();
         $response = $event->getResponse();
-        if ($request->headers->get('x-oro-hash-navigation') && $response->getStatusCode() == 302)
-        {
+        if (($request->get('x-oro-hash-navigation') || $request->headers->get('x-oro-hash-navigation'))
+            && $response->getStatusCode() == 302) {
             $response = '<div id="redirect">' . $response->headers->get('location') . '</div>';
             $event->setResponse(new Response($response));
         }
