@@ -1,4 +1,4 @@
-var OroApp = OroApp || {};
+OroApp = OroApp || {};
 OroApp.Filter = OroApp.Filter || {};
 
 /**
