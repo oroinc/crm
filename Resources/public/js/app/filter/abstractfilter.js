@@ -150,7 +150,7 @@ OroApp.Filter.AbstractFilter = Backbone.View.extend({
      * @return {Object}
      */
     getValue: function() {
-        return this._deepClone(this.value);
+        return OroApp.deepClone(this.value);
     },
 
     /**
@@ -163,7 +163,7 @@ OroApp.Filter.AbstractFilter = Backbone.View.extend({
         value = this._formatRawValue(value);
         if (this._isNewValueUpdated(value)) {
             var oldValue = this.value;
-            this.value = this._deepClone(value);
+            this.value = OroApp.deepClone(value);
             this._updateDOMValue();
             this._onValueUpdated(this.value, oldValue);
         }
@@ -201,7 +201,7 @@ OroApp.Filter.AbstractFilter = Backbone.View.extend({
      * @protected
      */
     _isNewValueUpdated: function(newValue) {
-        return !this._looseObjectCompare(this.value, newValue)
+        return !OroApp.isEqualsLoosely(this.value, newValue)
     },
 
     /**
@@ -232,41 +232,7 @@ OroApp.Filter.AbstractFilter = Backbone.View.extend({
      * @return {Boolean}
      */
     isEmpty: function() {
-        return this._looseObjectCompare(this.getValue(), this.emptyValue);
-    },
-
-    /**
-     * Loosely compare two values
-     *
-     * @param {*} value1
-     * @param {*} value2
-     * @return {Boolean} TRUE if values are equal, otherwise - FALSE
-     * @protected
-     */
-    _looseObjectCompare: function (value1, value2) {
-        if (!_.isObject(value1)) {
-            var equalsLoosely = (value1 || '') == (value2 || '');
-            var eitherNumber = _.isNumber(value1) || _.isNumber(value2);
-            var equalsNumbers = Number(value1) == Number(value2);
-            return equalsLoosely || (eitherNumber && equalsNumbers);
-
-        } else if (_.isObject(value1)) {
-            var valueKeys = _.keys(value1);
-
-            if (_.isObject(value2)) {
-                valueKeys = _.unique(valueKeys.concat(_.keys(value2)));
-            }
-
-            for (var index in valueKeys) {
-                var key = valueKeys[index];
-                if (!this._looseObjectCompare(value1[key], value2[key])) {
-                    return false;
-                }
-            }
-            return true;
-        } else {
-            return value1 == value2;
-        }
+        return OroApp.isEqualsLoosely(this.getValue(), this.emptyValue);
     },
 
     /**
@@ -366,17 +332,6 @@ OroApp.Filter.AbstractFilter = Backbone.View.extend({
     _readDOMValue: function() {
         throw new Error("Method _readDOMValue is abstract and must be implemented");
         //return { value: this._getInputValue(this.inputValueSelector) }
-    },
-
-    /**
-     * Deep clone a value
-     *
-     * @param {*} value
-     * @return {*}
-     * @protected
-     */
-    _deepClone: function(value) {
-        return $.extend(true, {}, value);
     },
 
     /**

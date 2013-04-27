@@ -1,30 +1,23 @@
 Javascript Widgets
 ------------------
 
-###Table of Contents
-
-- [Javascript Widgets](#javascript-widgets)
-    - [Overview](#overview)
-    - [OroApp.Filter.List](#oroappfilterlist)
-    - [OroApp.Filter.AbstractFilter](#oroappfilterabstractfilter)
-    - [OroApp.Filter.TextFilter](#oroappfiltertextfilter)
-    - [OroApp.Filter.ChoiceFilter](#oroappfilterchoicefilter)
-    - [OroApp.Filter.NumberFilter](#oroappfilternumberfilter)
-    - [OroApp.Filter.SelectFilter](#oroappfilterselectfilter)
-    - [OroApp.Filter.MultiSelectFilter](#oroappfiltermultiselectfilter)
-    - [OroApp.Filter.MultiSelectDecorator](#oroappfiltermultiselectdecorator)
-    - [OroApp.Filter.DateFilter](#oroappfilterdatefilter)
-    - [OroApp.Filter.DateTimeFilter](#oroappfilterdatetimefilter)
-- [Example of Usage](#example-of-usage)
-- [References](#references)
-
-
-###Overview
-
 On frontend side filter form types are represented by javascript widgets. 
 They are located in Resources/public/js directory and use javascript namespace OroApp.Filter.
 
-Main classes and responsibilities:
+###Table of Contents
+
+- [OroApp.Filter.List](#oroappfilterlist)
+- [OroApp.Filter.AbstractFilter](#oroappfilterabstractfilter)
+- [OroApp.Filter.TextFilter](#oroappfiltertextfilter)
+- [OroApp.Filter.ChoiceFilter](#oroappfilterchoicefilter)
+- [OroApp.Filter.NumberFilter](#oroappfilternumberfilter)
+- [OroApp.Filter.SelectFilter](#oroappfilterselectfilter)
+- [OroApp.Filter.MultiSelectFilter](#oroappfiltermultiselectfilter)
+- [OroApp.Filter.MultiSelectDecorator](#oroappfiltermultiselectdecorator)
+- [OroApp.Filter.DateFilter](#oroappfilterdatefilter)
+- [OroApp.Filter.DateTimeFilter](#oroappfilterdatetimefilter)
+- [Example of Usage](#example-of-usage)
+- [References](#references)
 
 ###OroApp.Filter.List
 
@@ -254,8 +247,7 @@ _OroApp.Filter.DateFilter_
 * typeValues
 * externalWidgetOptions
 
-Example of Usage
-----------------
+###Example of Usage
 
 Below is example of creating filter list:
 
@@ -263,31 +255,30 @@ Below is example of creating filter list:
 var filtersList = new OroApp.Filter.List({
     addButtonHint: '+ Add more',
     filters: {
-        username: OroApp.DatagridFilterChoice.extend({
+        username: OroApp.Filter.ChoiceFilter.extend({
             name:'username',
             label:'Username',
             enabled:true,
             choices:{"1": "contains", "2": "does not contain", "3": "is equal to"}
         }),
-        gender: OroApp.DatagridFilterSelect.extend({
+        gender: OroApp.Filter.SelectFilter.extend({
             name:'gender',
             label:'gender',
             enabled:false,
             options: {"18": "Male", "19": "Female"}
         },
-        salary: OroApp.DatagridFilterNumber.extend({
+        salary: OroApp.Filter.NumberFilter.extend({
             name:'salary',
             label:'salary',
             enabled:false,
             choices:{"1": "=", "2": ">", "3": "<"},
-            formatterOptions:{"decimals": 0, "grouping": false, "orderSeparator": "", "decimalSeparator": "."}
+            formatterOptions: {"decimals": 0, "grouping": false, "orderSeparator": "", "decimalSeparator": "."}
         })
     }
 });
 $('#filter').html(filtersList.render().$el);
 ```
 
-References
-----------
+###References
 
 * Backbone.js - http://backbonejs.org/
