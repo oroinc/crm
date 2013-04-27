@@ -1,4 +1,4 @@
-{% if app.request.headers.get('x-oro-hash-navigation') != true %}
+{% if (app.request.headers.get('x-oro-hash-navigation') != true) and (app.request.get('x-oro-hash-navigation') != true)%}
 <!DOCTYPE html>
 <html>
 <head>
@@ -390,10 +390,10 @@
         {% endblock main %}
     </div>
 </div>
-
 </body>
 </html>
 {% else %}
+{# Template for hash tag navigation#}
 <div id="head">
     <title>{{ oro_title_render() }}</title>
     <div id="title-serialized">{{ oro_title_render_serialized()|raw }}</div>

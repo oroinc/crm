@@ -19,11 +19,6 @@ OroApp.hashNavigation = OroApp.Router.extend({
      * */
     formSelector: "form",
 
-    formData: "",
-    target: "",
-
-    method: "get",
-
     /** @property {String} */
     baseUrl: '',
 
@@ -118,45 +113,22 @@ OroApp.hashNavigation = OroApp.Router.extend({
         if (this.url) {
             this.gridRoute = ''; //clearing grid router
             var pageUrl = this.baseUrl + this.url;
-            if (this.method == 'get') {
-                $.ajax({
-                    type: this.method,
-                    url: pageUrl,
-                    data: this.formData,
-                    headers: { 'x-oro-hash-navigation': true },
-                    error: function (XMLHttpRequest, textStatus, errorThrown) {
-                        alert('Error Message: ' + textStatus);
-                        alert('HTTP Error: ' + errorThrown);
-                    },
+            $.ajax({
+                url: pageUrl,
+                headers: { 'x-oro-hash-navigation': true },
+                beforeSend: function( xhr ) {
+                    //remove standard ajax header because we already have a custom header sent
+                    xhr.setRequestHeader('X-Requested-With', {toString: function(){ return ''; }});
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert('Error Message: ' + textStatus);
+                    alert('HTTP Error: ' + errorThrown);
+                },
 
-                    success: _.bind(function (data) {
-                        this.handleResponse(data);
-                        this.setActiveMenu(this.url);
-                    }, this)
-                });
-            } else {
-                $.ajaxSettings.beforeSend = function (xhr) {
-                    xhr.setRequestHeader('x-oro-hash-navigation', {toString: function () {
-                        return true;
-                    }});
-                };
-                $(this.target).ajaxSubmit({
-                    error: function (XMLHttpRequest, textStatus, errorThrown) {
-                        alert('Error Message: ' + textStatus);
-                        alert('HTTP Error: ' + errorThrown);
-                    },
-                    success: _.bind(function (data) {
-                        this.handleResponse(data);
-                        this.setActiveMenu(this.url);
-                    }, this)
-                });
-            }
-
-            $.ajaxSettings.beforeSend = function (xhr) {
-                xhr.setRequestHeader('X-Requested-With', {toString: function () {
-                    return 'XMLHttpRequest';
-                }});
-            };
+                success: _.bind(function (data) {
+                    this.handleResponse(data);
+                }, this)
+            });
         }
     },
 
@@ -199,6 +171,18 @@ OroApp.hashNavigation = OroApp.Router.extend({
             },
             this
         );
+
+        /**
+         * Processing links in search result dropdown
+         */
+        OroApp.Events.bind(
+            "top_search_request:complete",
+            function () {
+                this.processClicks('#search-dropdown '  + this.selector);
+            },
+            this
+        );
+
         this.processSend(this.formSelector);
     },
 
@@ -238,13 +222,16 @@ OroApp.hashNavigation = OroApp.Router.extend({
              * Setting serialized titles for pinbar and favourites buttons
              */
             var titleSerialized = $(data).filter('#head').find('#title-serialized').html();
-            titleSerialized = $.parseJSON(titleSerialized);
-            $('.top-action-box .btn').filter('.minimize-button, .favorite-button').data('title', titleSerialized);
+            if (titleSerialized) {
+                titleSerialized = $.parseJSON(titleSerialized);
+                $('.top-action-box .btn').filter('.minimize-button, .favorite-button').data('title', titleSerialized);
+            }
 
 
             this.processClicks('#container ' + this.selector);
             this.processSend('#container ' + this.formSelector);
             this.updateMenuTabs(data);
+            this.setActiveMenu(this.url);
             this.triggerCompleteEvent();
         }
     },
@@ -299,7 +286,6 @@ OroApp.hashNavigation = OroApp.Router.extend({
             } else if ($(target).is('span')) {
                 link = $(target).attr('data-url');
             }
-            link = link.replace(this.baseUrl, '').replace(/^(#\!?|\.)/, '');
             if (link) {
                 this.setLocation(link);
             }
@@ -308,7 +294,7 @@ OroApp.hashNavigation = OroApp.Router.extend({
     },
 
     /**
-     * Processing all links in selector and setting necessary click handler
+     * Processing forms submit events
      *
      * @param {String} selector
      */
@@ -316,31 +302,32 @@ OroApp.hashNavigation = OroApp.Router.extend({
         $(selector).on('submit', _.bind(function (e) {
             var target = e.currentTarget;
             e.preventDefault();
-            var link = '';
 
-            link = $(target).attr('action');
-
-            link = link.replace(this.baseUrl, '').replace(/^(#\!?|\.)/, '');
-
+            var url = '';
+            url = $(target).attr('action');
             this.method = $(target).attr('method');
-            if (link) {
-                url = link;
+
+            if (url) {
                 var data = $(target).serialize();
                 if (this.method == 'get') {
-                    url += '?' + data;
-                    this.target = '';
+                    if (data) {
+                        url += '?' + data;
+                    }
+                    this.setLocation(url);
                 } else {
-                    this.formData = data;
-                    this.target = target;
+                    $(target).ajaxSubmit({
+                        data:{'x-oro-hash-navigation' : true},
+                        headers: { 'x-oro-hash-navigation': true },
+                        error: function (XMLHttpRequest, textStatus, errorThrown) {
+                            alert('Error Message: ' + textStatus);
+                            alert('HTTP Error: ' + errorThrown);
+                        },
+                        success: _.bind(function (data) {
+                            this.handleResponse(data);
+                        }, this)
+                    });
                 }
-                window.location.hash = '#url=' + url;
             }
-            $.ajaxSettings.beforeSend = function (xhr) {
-                xhr.setRequestHeader('X-Requested-With', {toString: function () {
-                    return '';
-                }});
-            };
-
             return false;
         }, this))
     },
@@ -369,6 +356,7 @@ OroApp.hashNavigation = OroApp.Router.extend({
      * @param {String} url
      */
     setLocation: function (url) {
+        url = url.replace(this.baseUrl, '').replace(/^(#\!?|\.)/, '');
         window.location.hash = '#url=' + url;
     },
 
