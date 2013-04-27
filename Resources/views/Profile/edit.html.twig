@@ -19,7 +19,7 @@
                     </div>
                     <div class="btn-group icons-holder">
                         {% if resource_granted('oro_user_profile_remove') %}
-                        <a href="{{ path('oro_user_remove', { id: form.vars.value.id }) }}" class="btn"><i class="icon-trash hide-text">{{ 'Remove'|trans }}</i></a>
+                        <a href="javascript: void(0);" class="btn" id="btn-remove-profile" data-id="{{ form.vars.value.id }}" data-message="{{ 'Are you sure you want to delete this profile?'|trans }}"><i class="icon-trash hide-text">{{ 'Remove'|trans }}</i></a>
                         {% endif %}
                     </div>
                 </div>

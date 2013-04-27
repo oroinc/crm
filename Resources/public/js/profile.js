@@ -1,4 +1,9 @@
 $(function() {
+    function checkRoleInputs() {
+        inputs = $('#roles-list .controls').find(':checkbox');
+        inputs.attr('required', inputs.filter(':checked').length > 0 ? null : 'required');
+    }
+
     $(document).on('click', '#btn-apigen', function (e) {
         el = $(this);
 
@@ -10,7 +15,44 @@ $(function() {
     });
 
     $(document).on('click', '#roles-list input', function (e) {
-        inputs = $(this).closest('.controls');
-        inputs.find(':checkbox').attr('required', inputs.find(':checked').length > 0 ? null : 'required');
+        checkRoleInputs();
     });
+
+    $(document).on('click', '#btn-remove-profile', function (e) {
+        var el = $(this),
+            message = el.attr('data-message'),
+            doAction = function() {
+                $.ajax({
+                    url: Routing.generate('oro_api_delete_profile', { id: el.attr('data-id') }),
+                    type: 'DELETE',
+                    success: function (data) {
+                        OroApp.hashNavigation.prototype.setLocation(Routing.generate('oro_user_index'))
+                    }
+                });
+            };
+
+        if (!_.isUndefined(Backbone.BootstrapModal)) {
+            confirm = new Backbone.BootstrapModal({
+                title: 'Delete Confirmation',
+                content: message
+            });
+            confirm.on('ok', doAction);
+            confirm.open();
+        } else if (window.confirm(message)) {
+            doAction();
+        }
+
+        return false;
+    });
+
+    /**
+     * Process role checkboxes after hash navigation request is completed
+     */
+    OroApp.Events.bind(
+        "hash_navigation_request:complete",
+        function () {
+            checkRoleInputs();
+        },
+        this
+    );
 });
