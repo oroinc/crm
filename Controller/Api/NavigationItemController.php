@@ -57,8 +57,9 @@ class NavigationItemController extends FOSRestController
      */
     public function postAction($type)
     {
-        $postArray = $this->getRequest()->request->all();
-        if (empty($postArray) || empty($postArray['type'])) {
+        $params = $this->getRequest()->request->all();
+
+        if (empty($params) || empty($params['type'])) {
             return $this->handleView(
                 $this->view(
                     array('message' => 'Wrong JSON inside POST body'),
@@ -67,21 +68,20 @@ class NavigationItemController extends FOSRestController
             );
         }
 
-        /** @var $user \Oro\Bundle\UserBundle\Entity\User */
-        $user = $this->getDoctrine()
-            ->getRepository('OroUserBundle:User')
-            ->find($this->getUserId());
-        $postArray['user'] = $user;
+        $params['user'] = $this->getUser();
+        $params['url']  = $this->getStateUrl($params['url']);
 
         /** @var $entity \Oro\Bundle\NavigationBundle\Entity\NavigationItemInterface */
-        $entity = $this->getFactory()->createItem($type, $postArray);
+        $entity = $this->getFactory()->createItem($type, $params);
+
         if (!$entity) {
             return $this->handleView($this->view(array(), Codes::HTTP_NOT_FOUND));
         }
 
-        $manager = $this->getManager();
-        $manager->persist($entity);
-        $manager->flush();
+        $em = $this->getManager();
+
+        $em->persist($entity);
+        $em->flush();
 
         return $this->handleView(
             $this->view(array('id' => $entity->getId()), Codes::HTTP_CREATED)
@@ -102,8 +102,9 @@ class NavigationItemController extends FOSRestController
      */
     public function putIdAction($type, $itemId)
     {
-        $postArray = $this->getRequest()->request->all();
-        if (empty($postArray)) {
+        $params = $this->getRequest()->request->all();
+
+        if (empty($params)) {
             return $this->handleView(
                 $this->view(
                     array('message' => 'Wrong JSON inside POST body'),
@@ -114,16 +115,23 @@ class NavigationItemController extends FOSRestController
 
         /** @var $entity \Oro\Bundle\NavigationBundle\Entity\NavigationItemInterface */
         $entity = $this->getFactory()->findItem($type, (int) $itemId);
+
         if (!$entity) {
             return $this->handleView($this->view(array(), Codes::HTTP_NOT_FOUND));
         }
+
         if (!$this->validatePermissions($entity->getUser())) {
             return $this->handleView($this->view(array(), Codes::HTTP_FORBIDDEN));
         }
 
-        $entity->setValues($postArray);
+        if (isset($params['url']) && !empty($params['url'])) {
+            $params['url'] = $this->getStateUrl($params['url']);
+        }
+
+        $entity->setValues($params);
 
         $em = $this->getManager();
+
         $em->persist($entity);
         $em->flush();
 
@@ -161,19 +169,6 @@ class NavigationItemController extends FOSRestController
     }
 
     /**
-     * Get current user id
-     *
-     * @return int
-     */
-    protected function getUserId()
-    {
-        /** @var $user User */
-        $user = $this->getUser();
-
-        return $user ? $user->getId() : 0;
-    }
-
-    /**
      * Validate permissions on pinbar
      *
      * @param  User $user
@@ -181,7 +176,7 @@ class NavigationItemController extends FOSRestController
      */
     protected function validatePermissions(User $user)
     {
-        return $user->getId() == $this->getUserId();
+        return $user->getId() == ($this->getUser() ? $this->getUser()->getId() : 0);
     }
 
     /**
@@ -191,7 +186,7 @@ class NavigationItemController extends FOSRestController
      */
     protected function getManager()
     {
-        return $this->getDoctrine()->getEntityManagerForClass('OroNavigationBundle:PinbarTab');
+        return $this->getDoctrine()->getManagerForClass('OroNavigationBundle:PinbarTab');
     }
 
     /**
@@ -201,6 +196,24 @@ class NavigationItemController extends FOSRestController
      */
     protected function getFactory()
     {
-        return $this->container->get('oro_navigation.item.factory');
+        return $this->get('oro_navigation.item.factory');
+    }
+
+    /**
+     * Check if navigation item has corresponding page state and return modified URL
+     *
+     * @param  string $url Original URL
+     * @return string Modified URL
+     */
+    protected function getStateUrl($url)
+    {
+        $state = $this
+            ->getDoctrine()
+            ->getRepository('OroNavigationBundle:PageState')
+            ->findOneByPageId(base64_encode($url));
+
+        return is_null($state)
+            ? $url
+            : $url . (strpos($url, '?') ? '&restore=1' : '?restore=1');
     }
 }

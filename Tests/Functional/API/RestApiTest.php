@@ -14,11 +14,17 @@ class RestApiTest extends WebTestCase
      */
     protected $client;
 
+    /**
+     * @var \Symfony\Component\Routing\RouterInterface
+     */
+    protected $router;
+
     protected static $entities;
 
     public function setUp()
     {
         $this->client = static::createClient();
+        $this->router = $this->client->getContainer()->get('router');
     }
 
     protected function tearDown()
@@ -54,7 +60,7 @@ class RestApiTest extends WebTestCase
 
         $this->client->request(
             'POST',
-            'api/rest/latest/navigationitems/' . $itemType,
+            $this->router->generate('oro_api_post_navigationitems', array('type' => $itemType)),
             self::$entities[$itemType],
             array(),
             ToolsAPI::generateWsseHeader()
@@ -66,10 +72,11 @@ class RestApiTest extends WebTestCase
         $this->assertJsonResponse($result, 201);
 
         $resultJson = json_decode($result->getContent(), true);
-        $this->assertArrayHasKey("id", $resultJson);
-        $this->assertGreaterThan(0, $resultJson["id"]);
 
-        self::$entities[$itemType]['id'] = $resultJson["id"];
+        $this->assertArrayHasKey('id', $resultJson);
+        $this->assertGreaterThan(0, $resultJson['id']);
+
+        self::$entities[$itemType]['id'] = $resultJson['id'];
     }
 
     /**
@@ -88,7 +95,7 @@ class RestApiTest extends WebTestCase
 
         $this->client->request(
             'PUT',
-            'api/rest/latest/navigationitems/' . $itemType . '/ids/' . self::$entities[$itemType]['id'],
+            $this->router->generate('oro_api_put_navigationitems_id', array('type' => $itemType, 'itemId' => self::$entities[$itemType]['id'])),
             $updatedPintab,
             array(),
             ToolsAPI::generateWsseHeader()
@@ -100,6 +107,7 @@ class RestApiTest extends WebTestCase
         $this->assertJsonResponse($result, 200);
 
         $resultJson = json_decode($result->getContent(), true);
+
         $this->assertCount(0, $resultJson);
     }
 
@@ -115,7 +123,7 @@ class RestApiTest extends WebTestCase
 
         $this->client->request(
             'GET',
-            'api/rest/latest/navigationitems/' . $itemType,
+            $this->router->generate('oro_api_get_navigationitems', array('type' => $itemType)),
             array(),
             array(),
             ToolsAPI::generateWsseHeader()
@@ -142,7 +150,7 @@ class RestApiTest extends WebTestCase
 
         $this->client->request(
             'DELETE',
-            'api/rest/latest/navigationitems/' . $itemType . '/ids/' . self::$entities[$itemType]['id'],
+            $this->router->generate('oro_api_delete_navigationitems_id', array('type' => $itemType, 'itemId' => self::$entities[$itemType]['id'])),
             array(),
             array(),
             ToolsAPI::generateWsseHeader()
@@ -167,7 +175,7 @@ class RestApiTest extends WebTestCase
 
         $this->client->request(
             'PUT',
-            'api/rest/latest/navigationitems/' . $itemType . '/ids/' . self::$entities[$itemType]['id'],
+            $this->router->generate('oro_api_put_navigationitems_id', array('type' => $itemType, 'itemId' => self::$entities[$itemType]['id'])),
             self::$entities[$itemType],
             array(),
             ToolsAPI::generateWsseHeader()
@@ -181,7 +189,7 @@ class RestApiTest extends WebTestCase
 
         $this->client->request(
             'DELETE',
-            'api/rest/latest/navigationitems/' . $itemType . '/ids/' . self::$entities[$itemType]['id'],
+            $this->router->generate('oro_api_delete_navigationitems_id', array('type' => $itemType, 'itemId' => self::$entities[$itemType]['id'])),
             array(),
             array(),
             ToolsAPI::generateWsseHeader()
@@ -202,10 +210,10 @@ class RestApiTest extends WebTestCase
         $this->assertNotEmpty(self::$entities[$itemType]);
 
         $requests = array(
-            'GET' => "api/rest/latest/navigationitems/" . $itemType,
-            'POST' => "api/rest/latest/navigationitems/" . $itemType,
-            'PUT' => "api/rest/latest/navigationitems/" . $itemType . "/ids/" . self::$entities[$itemType]['id'],
-            'DELETE' => "api/rest/latest/navigationitems/" . $itemType . "/ids/" . self::$entities[$itemType]['id']
+            'GET'    => $this->router->generate('oro_api_get_navigationitems', array('type' => $itemType)),
+            'POST'   => $this->router->generate('oro_api_post_navigationitems', array('type' => $itemType)),
+            'PUT'    => $this->router->generate('oro_api_put_navigationitems_id', array('type' => $itemType, 'itemId' => self::$entities[$itemType]['id'])),
+            'DELETE' => $this->router->generate('oro_api_delete_navigationitems_id', array('type' => $itemType, 'itemId' => self::$entities[$itemType]['id'])),
         );
 
         foreach ($requests as $requestType => $url) {
@@ -231,8 +239,8 @@ class RestApiTest extends WebTestCase
         $this->assertNotEmpty(self::$entities[$itemType]);
 
         $requests = array(
-            'POST' => "api/rest/latest/navigationitems/" . $itemType,
-            'PUT' => "api/rest/latest/navigationitems/" . $itemType . "/ids/" . self::$entities[$itemType]['id'],
+            'POST' => $this->router->generate('oro_api_post_navigationitems', array('type' => $itemType)),
+            'PUT'  => $this->router->generate('oro_api_put_navigationitems_id', array('type' => $itemType, 'itemId' => self::$entities[$itemType]['id'])),
         );
 
         foreach ($requests as $requestType => $url) {
@@ -246,11 +254,13 @@ class RestApiTest extends WebTestCase
 
             /** @var $response Response */
             $response = $this->client->getResponse();
+
             $this->assertJsonResponse($response, 400);
 
             $responseJson = json_decode($response->getContent(), true);
+
             $this->assertArrayHasKey('message', $responseJson);
-            $this->assertEquals("Wrong JSON inside POST body", $responseJson['message']);
+            $this->assertEquals('Wrong JSON inside POST body', $responseJson['message']);
 
             $this->client->restart();
         }
@@ -268,6 +278,7 @@ class RestApiTest extends WebTestCase
             $statusCode,
             $response->getStatusCode()
         );
+
         $this->assertTrue(
             $response->headers->contains('Content-Type', 'application/json')
         );
