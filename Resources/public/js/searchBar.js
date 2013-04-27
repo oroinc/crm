@@ -25,7 +25,7 @@ $(document).ready(function () {
         var queryString = jQuery('#search-bar-search').val();
         if (queryString == '' || queryString.length < 3) {
             $("#search-div").removeClass('header-search-focused');
-            $('.custom-dropdown ul li').remove();
+            $('#search-dropdown ul li').remove();
         } else {
             $.ajax({
                 url: $('#top-search-form').attr('action'),
@@ -37,11 +37,11 @@ $(document).ready(function () {
                 },
                 success: function (data) {
                     $("#search-div").removeClass('header-search-focused');
-                    $('.custom-dropdown ul li').remove();
+                    $('#search-dropdown ul li').remove();
                     $("#recordsCount").val(data['records_count']);
                     if (data['count'] > 0) {
                         for (var i = 0; i < data['count']; i++) {
-                            $('.custom-dropdown ul').append(
+                            $('#search-dropdown ul').append(
                                 '<li>'
                                     + '<a href="' + data['data'][i]['record_url'] + '">'
                                     + '<span class="name"><strong>' + data['data'][i]['record_string'] + '</strong></span>'
@@ -51,6 +51,11 @@ $(document).ready(function () {
                             );
                         }
                         $("#search-div").addClass('header-search-focused');
+                        /**
+                         * Backbone event. Fired when search ajax request is complete
+                         * @event top_search_request:complete
+                         */
+                        OroApp.Events.trigger("top_search_request:complete");
                     }
                 }
             });
@@ -63,8 +68,7 @@ $(document).ready(function () {
         $('#search-bar-search').width(_inputSearchWidth);
         var _dropdownSearchWidth = $('#search-div div.header-search-frame').width() - 1;
         /* just design need without border */
-        $('#search-div div.custom-dropdown').outerWidth(_dropdownSearchWidth);
-
+        $('#search-div div#search-dropdown').outerWidth(_dropdownSearchWidth);
     };
 
     function SearchByTagClose() {
@@ -156,8 +160,8 @@ $(document).ready(function () {
     $('#search-div').mouseenter(function () {
         _searcjFlag = true;
     }).mouseleave(function () {
-            _searcjFlag = false;
-        });
+       _searcjFlag = false;
+    });
 
     $('#search-bar-search').focusin(function () {
         $('#search-div').addClass('search-focus');
