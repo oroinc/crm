@@ -19,6 +19,7 @@ interface RouteGeneratorInterface
      * @param FieldDescriptionInterface $field
      * @param string $direction
      * @return string
+     * @deprecated
      */
     public function generateSortUrl(ParametersInterface $parameters, FieldDescriptionInterface $field, $direction);
 
@@ -27,6 +28,7 @@ interface RouteGeneratorInterface
      * @param int $page
      * @param int $perPage
      * @return string
+     * @deprecated
      */
     public function generatePagerUrl(ParametersInterface $parameters, $page, $perPage = null);
 

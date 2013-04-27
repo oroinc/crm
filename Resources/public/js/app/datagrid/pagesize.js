@@ -1,10 +1,13 @@
+var OroApp = OroApp || {};
+OroApp.Datagrid = OroApp.Datagrid || {};
+
 /**
  * Datagrid page size widget
  *
- * @class   OroApp.DatagridPageSize
+ * @class   OroApp.Datagrid.PageSize
  * @extends OroApp.View
  */
-OroApp.DatagridPageSize = OroApp.View.extend({
+OroApp.Datagrid.PageSize = OroApp.View.extend({
     /** @property */
     template: _.template(
         '<label class="control-label">View per page: &nbsp;</label>' +

@@ -2,9 +2,14 @@
 
 namespace Oro\Bundle\GridBundle\Tests\Unit\Datagrid;
 
+use Symfony\Component\HttpFoundation\Request;
+
 use Oro\Bundle\GridBundle\Datagrid\DatagridManager;
 use Oro\Bundle\GridBundle\Field\FieldDescription;
 use Oro\Bundle\GridBundle\Field\FieldDescriptionCollection;
+use Oro\Bundle\GridBundle\Datagrid\ParametersInterface;
+use Oro\Bundle\GridBundle\Datagrid\RequestParameters;
+use Oro\Bundle\GridBundle\Sorter\SorterInterface;
 
 class DatagridManagerTest extends \PHPUnit_Framework_TestCase
 {
@@ -321,7 +326,24 @@ class DatagridManagerTest extends \PHPUnit_Framework_TestCase
         $datagridMock       = $this->getMock('Oro\Bundle\GridBundle\Datagrid\DatagridInterface');
         $queryMock          = $this->getMock('Oro\Bundle\GridBundle\Datagrid\ProxyQueryInterface');
         $routeGeneratorMock = $this->getMock('Oro\Bundle\GridBundle\Route\RouteGeneratorInterface');
-        $parametersMock     = $this->getMock('Oro\Bundle\GridBundle\Datagrid\ParametersInterface');
+
+        $request = new Request();
+
+        $container = $this->getMockForAbstractClass(
+            'Symfony\Component\DependencyInjection\ContainerInterface',
+            array(),
+            '',
+            false,
+            true,
+            true,
+            array('get')
+        );
+        $container->expects($this->any())
+            ->method('get')
+            ->with('request')
+            ->will($this->returnValue($request));
+
+        $parameters = new RequestParameters($container, self::TEST_NAME);
 
         $filterListParameters = $this->getFilterListParameters();
         $listCollection  = $filterListParameters['list_collection'];
@@ -362,11 +384,27 @@ class DatagridManagerTest extends \PHPUnit_Framework_TestCase
         $this->model->setListBuilder($listBuilderMock);
         $this->model->setQueryFactory($queryFactoryMock);
         $this->model->setRouteGenerator($routeGeneratorMock);
-        $this->model->setParameters($parametersMock);
+        $this->model->setParameters($parameters);
         $this->model->setName(self::TEST_NAME);
         $this->model->setEntityHint(self::TEST_HINT);
 
         $this->assertEquals($datagridMock, $this->model->getDatagrid());
         $this->assertEquals($this->testFields, $listCollection->getElements());
+
+        $defaultParameters = array(
+            self::TEST_NAME => array(
+                ParametersInterface::SORT_PARAMETERS => array(
+                    self::TEST_SORTABLE_FIELD => SorterInterface::DIRECTION_ASC
+                )
+            )
+        );
+        $this->assertEquals($defaultParameters, $parameters->toArray());
+    }
+
+    public function testGetRouteGenerator()
+    {
+        $routeGenerator = $this->getMock('Oro\Bundle\GridBundle\Route\RouteGeneratorInterface');
+        $this->model->setRouteGenerator($routeGenerator);
+        $this->assertEquals($routeGenerator, $this->model->getRouteGenerator());
     }
 }

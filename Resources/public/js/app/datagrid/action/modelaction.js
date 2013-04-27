@@ -1,18 +1,16 @@
+var OroApp = OroApp || {};
+OroApp.Datagrid = OroApp.Datagrid || {};
+OroApp.Datagrid.Action = OroApp.Datagrid.Action || {};
+
 /**
- * Basic action class. Subclasses should override execute method which is invoked when action is running.
+ * Basic model action class.
  *
- * @class   OroApp.DatagridAction
- * @extends Backbone.View
+ * @class   OroApp.Datagrid.ModelAction
+ * @extends OroApp.Datagrid.Action.AbstractAction
  */
-OroApp.DatagridAction = Backbone.View.extend({
+OroApp.Datagrid.Action.ModelAction = OroApp.Datagrid.Action.AbstractAction.extend({
     /** @property {Backbone.Model} */
     model: null,
-
-    /** @property {Function} */
-    launcherPrototype: OroApp.DatagridActionLauncher,
-
-    /** @property {Object} */
-    launcherOptions: undefined,
 
     /** @property {String} */
     link: undefined,
@@ -27,7 +25,7 @@ OroApp.DatagridAction = Backbone.View.extend({
      * Initialize view
      *
      * @param {Object} options
-     * @param {Backbone.Model} [options.model] Optional parameter
+     * @param {Backbone.Model} options.model Optional parameter
      * @throws {TypeError} If model is undefined
      */
     initialize: function(options) {
@@ -38,10 +36,6 @@ OroApp.DatagridAction = Backbone.View.extend({
         }
         this.model = options.model;
 
-        if (options.launcherOptions) {
-            _.extend(this.launcherOptions, options.launcherOptions);
-        }
-
         if (_.has(options, 'backUrl')) {
             this.backUrl = options.backUrl;
         }
@@ -50,37 +44,7 @@ OroApp.DatagridAction = Backbone.View.extend({
             this.backUrlParameter = options.backUrlParameter;
         }
 
-        this.launcherOptions = _.extend({
-            action: this
-        }, this.launcherOptions);
-
-        Backbone.View.prototype.initialize.apply(this, arguments);
-    },
-
-    /**
-     * Creates launcher
-     *
-     * @param {Object} options Launcher options
-     * @return {OroApp.DatagridActionLauncher}
-     */
-    createLauncher: function(options) {
-        options = options || {};
-        _.defaults(options, this.launcherOptions);
-        return new (this.launcherPrototype)(options);
-    },
-
-    /**
-     * Run action
-     */
-    run: function() {
-        this.execute();
-    },
-
-    /**
-     * Execute action
-     */
-    execute: function() {
-        //console.log('Execute action');
+        OroApp.Datagrid.Action.AbstractAction.prototype.initialize.apply(this, arguments);
     },
 
     /**

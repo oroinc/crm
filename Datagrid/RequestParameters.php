@@ -18,6 +18,11 @@ class RequestParameters implements ParametersInterface
     protected $rootParameterName;
 
     /**
+     * @var Request
+     */
+    protected $request;
+
+    /**
      * @var array
      */
     static protected $usedParameterTypes = array(
@@ -50,6 +55,25 @@ class RequestParameters implements ParametersInterface
     }
 
     /**
+     * @param string $type
+     * @param mixed $value
+     * @return void
+     */
+    public function set($type, $value)
+    {
+        $parameters = $this->getRootParameterValue();
+        $currentValue = $this->get($type);
+
+        if (is_array($currentValue) && is_array($value)) {
+            $parameters[$type] = array_merge_recursive($currentValue, $value);
+        } else {
+            $parameters[$type] = $value;
+        }
+
+        $this->getRequest()->query->set($this->rootParameterName, $parameters);
+    }
+
+    /**
      * @return array
      */
     protected function getRootParameterValue()
@@ -62,7 +86,10 @@ class RequestParameters implements ParametersInterface
      */
     protected function getRequest()
     {
-        return $this->container->get('request');
+        if (!$this->request) {
+            $this->request = clone $this->container->get('request');
+        }
+        return $this->request;
     }
 
     /**

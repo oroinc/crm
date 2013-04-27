@@ -1,10 +1,14 @@
+var OroApp = OroApp || {};
+OroApp.Datagrid = OroApp.Datagrid || {};
+OroApp.Datagrid.Pagination = OroApp.Datagrid.Pagination || {};
+
 /**
  * Datagrid pagination with input field
  *
- * @class   OroApp.DatagridPaginationInput
- * @extends OroApp.DatagridPagination
+ * @class   OroApp.Datagrid.Pagination.Input
+ * @extends OroApp.Datagrid.Pagination
  */
-OroApp.DatagridPaginationInput = OroApp.DatagridPagination.extend({
+OroApp.Datagrid.Pagination.Input = OroApp.Datagrid.Pagination.extend({
     /** @property */
     template: _.template(
         '<label class="dib">Page:</label>' +
@@ -52,7 +56,7 @@ OroApp.DatagridPaginationInput = OroApp.DatagridPagination.extend({
      * @inheritDoc
      */
     initialize: function (options) {
-        OroApp.DatagridPagination.prototype.initialize.call(this, options);
+        OroApp.Datagrid.Pagination.prototype.initialize.call(this, options);
     },
 
     /**
@@ -101,13 +105,13 @@ OroApp.DatagridPaginationInput = OroApp.DatagridPagination.extend({
             type: 'input'
         });
 
-        return OroApp.DatagridPagination.prototype.makeHandles.call(this, handles);
+        return OroApp.Datagrid.Pagination.prototype.makeHandles.call(this, handles);
     },
     /**
      * Render pagination view and add validation for input with positive integer value
      */
     render: function() {
-        OroApp.DatagridPagination.prototype.render.apply(this, arguments);
+        OroApp.Datagrid.Pagination.prototype.render.apply(this, arguments);
         this.$('input').numeric({ decimal: false, negative: false });
         return this;
     }

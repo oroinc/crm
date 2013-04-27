@@ -2,6 +2,8 @@
 
 namespace Oro\Bundle\GridBundle\Tests\Unit\Datagrid;
 
+use Symfony\Component\HttpFoundation\Request;
+
 use Oro\Bundle\GridBundle\Datagrid\Datagrid;
 use Oro\Bundle\GridBundle\Filter\FilterInterface;
 use Oro\Bundle\GridBundle\Sorter\SorterInterface;
@@ -10,6 +12,8 @@ use Oro\Bundle\GridBundle\Datagrid\ProxyQueryInterface;
 use Oro\Bundle\GridBundle\Field\FieldDescriptionCollection;
 use Oro\Bundle\GridBundle\Field\FieldDescriptionInterface;
 use Oro\Bundle\GridBundle\Property\PropertyInterface;
+use Oro\Bundle\GridBundle\Datagrid\RequestParameters;
+use Oro\Bundle\GridBundle\Datagrid\PagerInterface;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyMethods)
@@ -255,9 +259,37 @@ class DatagridTest extends \PHPUnit_Framework_TestCase
 
     public function testGetPager()
     {
-        $pager = $this->getMock('Oro\Bundle\GridBundle\Datagrid\PagerInterface');
-        $datagrid = $this->createDatagrid(array('pager' => $pager));
+        $perPage = 15;
+        $page = 2;
+        $request = new Request();
+
+        $container = $this->getMockForAbstractClass(
+            'Symfony\Component\DependencyInjection\ContainerInterface',
+            array(),
+            '',
+            false,
+            true,
+            true,
+            array('get')
+        );
+        $container->expects($this->any())
+            ->method('get')
+            ->with('request')
+            ->will($this->returnValue($request));
+
+        $parameters = new RequestParameters($container, 'datagrid_name');
+        $parameters->set(
+            ParametersInterface::PAGER_PARAMETERS,
+            array('_page' => $page, '_per_page' => $perPage)
+        );
+
+        /** @var $pager PagerInterface */
+        $pager = $this->getMock('Oro\Bundle\GridBundle\Datagrid\ORM\Pager', array('init'));
+        $datagrid = $this->createDatagrid(array('pager' => $pager, 'parameters' => $parameters));
+
         $this->assertSame($pager, $datagrid->getPager());
+        $this->assertEquals($page, $pager->getPage());
+        $this->assertEquals($perPage, $pager->getMaxPerPage());
     }
 
     public function testGetQuery()
@@ -534,6 +566,7 @@ class DatagridTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param array $parameters
      * @return ParametersInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected function createParameters(array $parameters = array())

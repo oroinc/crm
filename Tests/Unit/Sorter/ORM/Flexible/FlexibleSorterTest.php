@@ -7,6 +7,7 @@ use Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleManager;
 use Oro\Bundle\FlexibleEntityBundle\Entity\Repository\FlexibleEntityRepository;
 
 use Oro\Bundle\GridBundle\Field\FieldDescription;
+use Oro\Bundle\GridBundle\Sorter\SorterInterface;
 use Oro\Bundle\GridBundle\Sorter\ORM\Flexible\FlexibleSorter;
 
 class FlexibleSorterTest extends \PHPUnit_Framework_TestCase
@@ -71,7 +72,7 @@ class FlexibleSorterTest extends \PHPUnit_Framework_TestCase
     {
         $entityName = 'TestEntity';
         $fieldName = 'test_field';
-        $direction = FlexibleSorter::DIRECTION_ASC;
+        $direction = SorterInterface::DIRECTION_ASC;
 
         $fieldDescription = $this->createFieldDescription($entityName, $fieldName);
         $flexibleManager = $this->createFlexibleManager();

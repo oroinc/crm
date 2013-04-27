@@ -6,32 +6,36 @@ js:
   - '@OroGridBundle/Resources/public/lib/moment/moment.js'
   - '@OroGridBundle/Resources/public/lib/backgrid/extensions/moment-cell/backgrid-moment-cell.js'
 
-  - '@OroGridBundle/Resources/public/js/app/datagrid/action/datagrid-action-launcher.js'
-  - '@OroGridBundle/Resources/public/js/app/datagrid/action/datagrid-action.js'
-  - '@OroGridBundle/Resources/public/js/app/datagrid/action/datagrid-action-navigate.js'
-  - '@OroGridBundle/Resources/public/js/app/datagrid/action/datagrid-action-delete.js'
-  - '@OroGridBundle/Resources/public/js/app/datagrid/action/datagrid-action.js'
-  - '@OroGridBundle/Resources/public/js/app/datagrid/action/datagrid-action-cell.js'
+  - '@OroGridBundle/Resources/public/js/app/datagrid/action/launcher.js'
+  - '@OroGridBundle/Resources/public/js/app/datagrid/action/abstractaction.js'
+  - '@OroGridBundle/Resources/public/js/app/datagrid/action/modelaction.js'
+  - '@OroGridBundle/Resources/public/js/app/datagrid/action/navigateaction.js'
+  - '@OroGridBundle/Resources/public/js/app/datagrid/action/deleteaction.js'
+  - '@OroGridBundle/Resources/public/js/app/datagrid/action/refreshcollectionaction.js'
+  - '@OroGridBundle/Resources/public/js/app/datagrid/action/resetcollectionaction.js'
+  - '@OroGridBundle/Resources/public/js/app/datagrid/action/cell.js'
+  - '@OroGridBundle/Resources/public/js/app/datagrid/actionspanel.js'
 
-  - '@OroGridBundle/Resources/public/js/app/datagrid/datagrid-header-cell.js'
-  - '@OroGridBundle/Resources/public/js/app/datagrid/datagrid-header.js'
-  - '@OroGridBundle/Resources/public/js/app/datagrid/datagrid-body.js'
+  - '@OroGridBundle/Resources/public/js/app/datagrid/headercell.js'
+  - '@OroGridBundle/Resources/public/js/app/datagrid/header.js'
+  - '@OroGridBundle/Resources/public/js/app/datagrid/body.js'
 
-  - '@OroGridBundle/Resources/public/js/app/datagrid/datagrid-pagination.js'
-  - '@OroGridBundle/Resources/public/js/app/datagrid/pagination/datagrid-pagination-input.js'
-  - '@OroGridBundle/Resources/public/js/app/datagrid/datagrid-pagesize.js'
-  - '@OroGridBundle/Resources/public/js/app/datagrid/datagrid-toolbar.js'
+  - '@OroGridBundle/Resources/public/js/app/datagrid/pagination.js'
+  - '@OroGridBundle/Resources/public/js/app/datagrid/pagination/input.js'
+  - '@OroGridBundle/Resources/public/js/app/datagrid/pagesize.js'
+  - '@OroGridBundle/Resources/public/js/app/datagrid/toolbar.js'
 
-  - '@OroGridBundle/Resources/public/js/app/datagrid/filter/datagrid-filter-list.js'
+  - '@OroGridBundle/Resources/public/js/app/datagrid/filter/list.js'
 
   - '@OroGridBundle/Resources/public/js/app/backgrid-formatter.js'
 
   - '@OroGridBundle/Resources/public/js/app/loadingmask.js'
-  - '@OroGridBundle/Resources/public/js/app/datagrid.js'
+  - '@OroGridBundle/Resources/public/js/app/datagrid/grid.js'
 
-  - '@OroGridBundle/Resources/public/js/app/datagrid/datagrid-router.js'
+  - '@OroGridBundle/Resources/public/js/app/datagrid/router.js'
 
   - '@OroGridBundle/Resources/public/js/app/pageablecollection.js'
+
 
 css:
   - 'bundles/orogrid/lib/backgrid/backgrid.css'
