@@ -15,13 +15,18 @@ OroApp.Navigation = OroApp.Router.extend({
     /**
      * links - Selector for all links that will be processed by hash navigation
      * forms - Selector for all forms that will be processed by hash navigation
+     * loadingMask - Selector for loading spinner
+     * searchDropdown - Selector for dropdown with search results
+     * menuDropdowns - Selector for 3 dots menu and my profile dropdowns
      *
      * @property
      */
     selectors: {
         links:       'a:not([href^=#],[href^=javascript]),span[data-url]',
         forms:       'form',
-        loadingMask: '.hash-loading-mask'
+        loadingMask: '.hash-loading-mask',
+        searchDropdown: '#search-div',
+        menuDropdowns: '.pin-menus.dropdown, .nav .dropdown'
     },
 
     /** @property {OroApp.LoadingMask} */
@@ -128,11 +133,11 @@ OroApp.Navigation = OroApp.Router.extend({
                     //remove standard ajax header because we already have a custom header sent
                     xhr.setRequestHeader('X-Requested-With', {toString: function(){ return ''; }});
                 },
-                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                error: _.bind(function (XMLHttpRequest, textStatus, errorThrown) {
                     alert('Error Message: ' + textStatus);
                     alert('HTTP Error: ' + errorThrown);
                     this.afterRequest();
-                },
+                }, this),
 
                 success: _.bind(function (data) {
                     this.handleResponse(data);
@@ -270,8 +275,17 @@ OroApp.Navigation = OroApp.Router.extend({
             this.updateMenuTabs(data);
             this.setActiveMenu(this.url);
             this.updateMessages(data);
+            this.hideActiveDropdowns();
             this.triggerCompleteEvent();
         }
+    },
+
+    /**
+     * Hide active dropdowns
+     */
+    hideActiveDropdowns: function() {
+        $(this.selectors.searchDropdown).removeClass('header-search-focused');
+        $(this.selectors.menuDropdowns).removeClass('open');
     },
 
     /**
