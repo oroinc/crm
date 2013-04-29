@@ -18,10 +18,18 @@
     '@OroGridBundle/Resources/public/js/app/datagrid/action/cell.js'
     '@OroGridBundle/Resources/public/js/app/datagrid/actionspanel.js'
 
-    '@OroGridBundle/Resources/public/js/app/datagrid/booleancell.js'
+    '@OroGridBundle/Resources/public/js/app/datagrid/cell/formatter/momentformatter.js'
+    '@OroGridBundle/Resources/public/js/app/datagrid/cell/formatter/cellformatter.js'
+
+    '@OroGridBundle/Resources/public/js/app/datagrid/cell/momentcell.js'
+    '@OroGridBundle/Resources/public/js/app/datagrid/cell/booleancell.js'
+    '@OroGridBundle/Resources/public/js/app/datagrid/cell/numbercell.js'
+    '@OroGridBundle/Resources/public/js/app/datagrid/cell/integercell.js'
+    '@OroGridBundle/Resources/public/js/app/datagrid/cell/stringcell.js'
 
     '@OroGridBundle/Resources/public/js/app/datagrid/headercell.js'
     '@OroGridBundle/Resources/public/js/app/datagrid/header.js'
+    '@OroGridBundle/Resources/public/js/app/datagrid/row.js'
     '@OroGridBundle/Resources/public/js/app/datagrid/body.js'
 
     '@OroGridBundle/Resources/public/js/app/datagrid/pagination.js'
@@ -30,8 +38,6 @@
     '@OroGridBundle/Resources/public/js/app/datagrid/toolbar.js'
 
     '@OroGridBundle/Resources/public/js/app/datagrid/filter/list.js'
-
-    '@OroGridBundle/Resources/public/js/app/backgrid-formatter.js'
 
     '@OroGridBundle/Resources/public/js/app/loadingmask.js'
     '@OroGridBundle/Resources/public/js/app/datagrid/grid.js'
@@ -90,23 +96,23 @@
                             sortable: {{ column.sortable|json_encode|raw }},
                             editable: false,
                             {% if column.type == constant(columnTypePrefix ~ 'TYPE_DATE') %}
-                                cell: Backgrid.Extension.MomentCell.extend({
+                                cell: OroApp.Datagrid.Cell.MomentCell.extend({
                                     modelFormat:   "YYYY-MM-DD",
                                     displayFormat: "MM/DD/YYYY"
                                 })
                             {% elseif column.type == constant(columnTypePrefix ~ 'TYPE_DATETIME') %}
-                                cell: Backgrid.Extension.MomentCell.extend({
+                                cell: OroApp.Datagrid.Cell.MomentCell.extend({
                                     modelFormat:   "YYYY-MM-DD hh:mm:ss",
                                     displayFormat: "MM/DD/YYYY hh:mm a"
                                 })
                             {% elseif column.type == constant(columnTypePrefix ~ 'TYPE_DECIMAL') %}
-                                cell: Backgrid.NumberCell
+                                cell: OroApp.Datagrid.Cell.NumberCell
                             {% elseif column.type == constant(columnTypePrefix ~ 'TYPE_INTEGER') %}
-                                cell: Backgrid.IntegerCell.extend({ orderSeparator: '' })
+                                cell: OroApp.Datagrid.Cell.IntegerCell.extend({ orderSeparator: '' })
                             {% elseif column.type == constant(columnTypePrefix ~ 'TYPE_BOOLEAN') %}
-                                cell: OroApp.Datagrid.BooleanCell
+                                cell: OroApp.Datagrid.Cell.BooleanCell
                             {% else %}
-                                cell: Backgrid.StringCell
+                                cell: OroApp.Datagrid.Cell.StringCell
                             {% endif %}
                         }{% if not loop.last %},{% endif %}
                         {% endfor %}

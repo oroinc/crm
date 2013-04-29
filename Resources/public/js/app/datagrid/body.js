@@ -2,17 +2,21 @@ var OroApp = OroApp || {};
 OroApp.Datagrid = OroApp.Datagrid || {};
 
 /**
- * Datagrid body widget
+ * Grid body widget
+ *
+ * Triggers events:
+ *  - "cellEdited" when one of cell of body row is edited
+ *  - "rowClicked" when row of body is clicked
  *
  * @class   OroApp.Datagrid.Body
  * @extends Backgrid.Body
  */
 OroApp.Datagrid.Body = Backgrid.Body.extend({
-    /** @property {Function} */
-    rowClickAction: undefined,
+    /** @property */
+    row: OroApp.Datagrid.Row,
 
     /** @property {String} */
-    rowClickActionClass: 'row-click-action',
+    rowClassName: undefined,
 
     /**
      * @inheritDoc
@@ -20,11 +24,65 @@ OroApp.Datagrid.Body = Backgrid.Body.extend({
     initialize: function(options) {
         options = options || {};
 
-        if (options.rowClickAction) {
-            this.rowClickAction = options.rowClickAction;
+        if (!options.row) {
+            options.row = this.row;
+        }
+
+        if (options.rowClassName) {
+            this.rowClassName = options.rowClassName;
         }
 
         Backgrid.Body.prototype.initialize.apply(this, arguments);
+
+        this._listenToRowsEvents(this.rows);
+    },
+
+    /**
+     * @inheritDoc
+     */
+    refresh: function() {
+        Backgrid.Body.prototype.refresh.apply(this, arguments);
+        this._listenToRowsEvents(this.rows);
+        return this;
+    },
+
+    /**
+     * @inheritDoc
+     */
+    insertRow: function(model, collection, options) {
+        Backgrid.Body.prototype.insertRow.apply(this, arguments);
+        var index = collection.indexOf(model);
+        if (index < this.rows.length) {
+            this._listenToOneRowEvents(this.rows[index]);
+        }
+    },
+
+    /**
+     * Listen to events of rows list
+     *
+     * @param {Array} rows
+     * @private
+     */
+    _listenToRowsEvents: function(rows) {
+        _.each(rows, function(row) {
+            this._listenToOneRowEvents(row);
+        }, this);
+    },
+
+    /**
+     * Listen to events of row, proxies events "cellEdited" and "clicked" to "rowClicked"
+     *
+     * @param {Backgrid.Row} row
+     * @private
+     */
+    _listenToOneRowEvents: function(row) {
+        this.listenTo(row, 'cellEdited', function(row, cell) {
+            this.trigger('cellEdited', row, cell);
+        });
+
+        this.listenTo(row, 'clicked', function(row, e) {
+            this.trigger('rowClicked', row, e);
+        });
     },
 
     /**
@@ -32,47 +90,9 @@ OroApp.Datagrid.Body = Backgrid.Body.extend({
      */
     render: function() {
         Backgrid.Body.prototype.render.apply(this, arguments);
-        this.delegateRowClickEvents();
-        if (this.rowClickAction) {
-            this.$('tr').addClass(this.rowClickActionClass);
+        if (this.rowClassName) {
+            this.$('> *').addClass(this.rowClassName);
         }
         return this;
-    },
-
-    /**
-     * Delegates row click events
-     *
-     * @protected
-     */
-    delegateRowClickEvents: function() {
-        var self = this;
-        _.each(this.rows, function(row) {
-            row.delegateEvents({
-                'click': function(e) {
-                    var rowElement = row.$el.get(0);
-                    var targetElement = e.target;
-                    var targetParentElement = $(e.target).parent().get(0);
-                    self.trigger('rowClicked', row, e);
-                    if (rowElement == targetElement || rowElement == targetParentElement) {
-                        self.trigger('rowClicked', row, e);
-                        self.runRowClickAction(row);
-                    }
-                }
-            });
-        }, this);
-    },
-
-    /**
-     * Run row click action if it exists
-     *
-     * @protected
-     */
-    runRowClickAction: function(row) {
-        if (this.rowClickAction) {
-            var action = new this.rowClickAction({
-                model: row.model
-            });
-            action.run();
-        }
     }
 });

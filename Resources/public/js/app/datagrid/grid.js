@@ -2,7 +2,11 @@ var OroApp = OroApp || {};
 OroApp.Datagrid = OroApp.Datagrid || {};
 
 /**
- * Basic datagrid class
+ * Basic grid class.
+ *
+ * Triggers events:
+ *  - "cellEdited" when one of cell of grid body row is edited
+ *  - "rowClicked" when row of grid body is clicked
  *
  * @class   OroApp.Datagrid.Grid
  * @extends Backgrid.Grid
@@ -74,6 +78,9 @@ OroApp.Datagrid.Grid = Backgrid.Grid.extend({
     /** @property {Function} */
     rowClickAction: undefined,
 
+    /** @property {String} */
+    rowClickActionClass: 'row-click-action',
+
     /**
      * Initialize datagrid
      *
@@ -118,9 +125,9 @@ OroApp.Datagrid.Grid = Backgrid.Grid.extend({
             this.rowClickAction = this.filterOnClickAction(options.actions);
         }
 
-        _.defaults(options, {
-            rowClickAction: this.rowClickAction
-        });
+        if (this.rowClickAction) {
+            options.rowClassName = this.rowClickActionClass + ' ' + (options.rowClassName || '');
+        }
 
         if (options.loadingMask) {
             this.loadingMask = options.loadingMask;
@@ -131,6 +138,40 @@ OroApp.Datagrid.Grid = Backgrid.Grid.extend({
         this.toolbar = new this.toolbar(_.extend(this.toolbarOptions));
 
         Backgrid.Grid.prototype.initialize.apply(this, arguments);
+
+        this._listenToBodyEvents();
+    },
+
+    /**
+     * Listen to events of body, proxies events "rowClicked" and "rowEdited", handle run of rowClickAction if required
+     *
+     * @private
+     */
+    _listenToBodyEvents: function() {
+        this.listenTo(this.body, 'rowClicked', function(row) {
+            this.trigger('rowClicked', this, row);
+            if (this.rowClickAction) {
+                var action = this._createRowClickAction(this.rowClickAction, row);
+                action.run();
+            }
+        });
+        this.listenTo(this.body, 'cellEdited', function(row, cell) {
+            this.trigger('cellEdited', this, row, cell);
+        });
+    },
+
+    /**
+     * Create row click action
+     *
+     * @param {*} action Action prototype
+     * @param {OroApp.Datagrid.Row} row
+     * @return {OroApp.Datagrid.Action.AbstractAction}
+     * @private
+     */
+    _createRowClickAction: function(action, row) {
+        return new action({
+            model: row.model
+        });
     },
 
     /**

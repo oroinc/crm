@@ -1,14 +1,19 @@
 var OroApp = OroApp || {};
 OroApp.Datagrid = OroApp.Datagrid || {};
-OroApp.Datagrid.Column = OroApp.Datagrid.Column || {};
+OroApp.Datagrid.Cell = OroApp.Datagrid.Cell || {};
 
 /**
- * Boolean column cell
+ * Boolean column cell. Added missing behaviour.
  *
- * @class   OroApp.Datagrid.BooleanCell
+ * Triggers events:
+ *  - "edit" when a cell is entering edit mode and an editor
+ *  - "editing" when a cell has finished switching to edit mode
+ *  - "edited" when cell editing is finished
+ *
+ * @class   OroApp.Datagrid.Cell.BooleanCell
  * @extends Backgrid.BooleanCell
  */
-OroApp.Datagrid.BooleanCell = Backgrid.BooleanCell.extend({
+OroApp.Datagrid.Cell.BooleanCell = Backgrid.BooleanCell.extend({
     /** @property {Boolean} */
     editable: false,
 
@@ -16,7 +21,7 @@ OroApp.Datagrid.BooleanCell = Backgrid.BooleanCell.extend({
     editor: _.template("<input type='checkbox' <%= checked ? checked='checked' : '' %> <%= editable ? '' : 'disabled' %> />'"),
 
     /**
-     * Initialize editable flag
+     * @inheritDoc
      */
     initialize: function() {
         Backgrid.BooleanCell.prototype.initialize.apply(this, arguments);
@@ -24,7 +29,7 @@ OroApp.Datagrid.BooleanCell = Backgrid.BooleanCell.extend({
     },
 
     /**
-     * Renders a checkbox and check it if the model value of this column is true, uncheck otherwise.
+     * @inheritDoc
      */
     render: function () {
         this.$el.empty();
@@ -37,16 +42,17 @@ OroApp.Datagrid.BooleanCell = Backgrid.BooleanCell.extend({
     },
 
     /**
-     * Simple focuses the checkbox and add an `editor` CSS class to the cell.
+     * @inheritDoc
      */
     enterEditMode: function (e) {
         if (this.editable) {
             Backgrid.BooleanCell.prototype.enterEditMode.apply(this, arguments);
+            this.trigger("editing", this);
         }
     },
 
     /**
-     * Removed the `editor` CSS class from the cell.
+     * @inheritDoc
      */
     exitEditMode: function (e) {
         if (this.editable) {
@@ -55,11 +61,12 @@ OroApp.Datagrid.BooleanCell = Backgrid.BooleanCell.extend({
     },
 
     /**
-     * Set true to the model attribute if the checkbox is checked, false otherwise.
+     * @inheritDoc
      */
     save: function (e) {
         if (this.editable) {
             Backgrid.BooleanCell.prototype.save.apply(this, arguments);
+            this.trigger("edited", this);
         }
     }
 });
