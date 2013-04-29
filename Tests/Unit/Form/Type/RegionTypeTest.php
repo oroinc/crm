@@ -17,7 +17,10 @@ class RegionTypeTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->type = new RegionType('Oro\Bundle\AddressBundle\Entity\Address', 'Oro\Bundle\AddressBundle\Entity\Value\AddressValue');
+        $this->type = new RegionType(
+            'Oro\Bundle\AddressBundle\Entity\Address',
+            'Oro\Bundle\AddressBundle\Entity\Value\AddressValue'
+        );
     }
 
     public function testSetDefaultOptions()

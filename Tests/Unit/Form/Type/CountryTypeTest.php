@@ -17,7 +17,10 @@ class CountryTypeTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->type = new CountryType('Oro\Bundle\AddressBundle\Entity\Address', 'Oro\Bundle\AddressBundle\Entity\Value\AddressValue');
+        $this->type = new CountryType(
+            'Oro\Bundle\AddressBundle\Entity\Address',
+            'Oro\Bundle\AddressBundle\Entity\Value\AddressValue'
+        );
     }
 
     public function testSetDefaultOptions()

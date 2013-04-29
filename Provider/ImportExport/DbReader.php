@@ -42,14 +42,4 @@ class DbReader extends Reader implements ReaderInterface
 
         return $this->om->getRepository($this->class)->findBy(array(), array(), $this->batchSize, $offset);
     }
-
-    public function reset()
-    {
-        $this->offset = 0;
-    }
-
-    public function getBatchSize()
-    {
-        return $this->batchSize;
-    }
 }

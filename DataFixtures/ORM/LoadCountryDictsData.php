@@ -8,7 +8,6 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 use Oro\Bundle\AddressBundle\Provider\ImportExport\Manager;
-use Oro\Bundle\AddressBundle\Entity\Country;
 
 class LoadCountryDictsData extends AbstractFixture implements ContainerAwareInterface
 {
@@ -29,7 +28,7 @@ class LoadCountryDictsData extends AbstractFixture implements ContainerAwareInte
      */
     public function load(ObjectManager $manager)
     {
-        /* sample for manual imput
+        /* sample for manual input
         $importManager = $this->container->get('oro_address.dict.import.manager');
         $data = array(
             new Country('Ukraine', 'UA', 'UKR'),
@@ -44,6 +43,5 @@ class LoadCountryDictsData extends AbstractFixture implements ContainerAwareInte
          */
         $importManager = $this->container->get('oro_address.dict.import.intl.manager');
         $importManager->sync();
-
     }
 }

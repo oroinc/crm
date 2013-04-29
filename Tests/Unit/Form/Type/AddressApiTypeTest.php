@@ -23,7 +23,11 @@ class AddressApiTypeTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->type = new AddressApiType($buildAddressFormListener, 'Oro\Bundle\AddressBundle\Entity\Address', 'Oro\Bundle\AddressBundle\Entity\Value\AddressValue');
+        $this->type = new AddressApiType(
+            $buildAddressFormListener,
+            'Oro\Bundle\AddressBundle\Entity\Address',
+            'Oro\Bundle\AddressBundle\Entity\Value\AddressValue'
+        );
     }
 
     public function testAddEntityFields()

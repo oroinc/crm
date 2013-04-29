@@ -25,7 +25,7 @@ class Manager
      * data can be passed through argument or read from reader
      *
      * @param $data
-     * @throws Exception
+     * @throws \Exception
      * @return boolean true on success
      */
     public function sync($data = null)

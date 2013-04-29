@@ -3,7 +3,6 @@
 namespace Oro\Bundle\AddressBundle\Provider\ImportExport;
 
 use Doctrine\Common\Persistence\ObjectManager;
-use Symfony\Component\Config\Definition\Exception\Exception;
 
 class DbWriter implements WriterInterface
 {
@@ -30,7 +29,7 @@ class DbWriter implements WriterInterface
             if (is_object($entry)) {
                 $this->om->persist($entry);
             } else {
-                throw new Exception("Entry passed to writer is not an object");
+                throw new \Exception("Entry passed to writer is not an object");
             }
         }
 

@@ -72,14 +72,4 @@ class IntlReader extends Reader implements ReaderInterface
 
         return $isoCodes;
     }
-
-    public function reset()
-    {
-        $this->offset = 0;
-    }
-
-    public function getBatchSize()
-    {
-        return $this->batchSize;
-    }
 }
