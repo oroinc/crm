@@ -102,6 +102,7 @@ class RestApiTest extends WebTestCase
         );
 
         $result = $this->client->getResponse();
+
         $this->assertJsonResponse($result, 200);
 
         $result = json_decode($result->getContent(), true);
@@ -113,6 +114,7 @@ class RestApiTest extends WebTestCase
         // update
         $request = array('address' => $result[0]);
         $request['address']['street'] .= '_Updated!!!';
+        $request['address']['country'] = 'US';
         unset($request['address']['created']);
         unset($request['address']['updated']);
 
@@ -123,6 +125,7 @@ class RestApiTest extends WebTestCase
         );
 
         $result = $this->client->getResponse();
+
         $this->assertJsonResponse($result, 204);
 
         // open address by id
