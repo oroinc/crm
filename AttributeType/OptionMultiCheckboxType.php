@@ -1,27 +1,18 @@
 <?php
-namespace Oro\Bundle\FlexibleEntityBundle\Model\AttributeType;
+namespace Oro\Bundle\FlexibleEntityBundle\AttributeType;
 
-use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttributeType;
+use Doctrine\ORM\EntityRepository;
 use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttribute;
 
 /**
- * Datetime attribute type
+ * Multi options (checkbox) attribute type
  *
  * @author    Nicolas Dupont <nicolas@akeneo.com>
  * @copyright 2012 Akeneo SAS (http://www.akeneo.com)
  * @license   http://opensource.org/licenses/MIT MIT
  */
-class DateTimeType extends AbstractAttributeType
+class OptionMultiCheckboxType extends AbstractOptionType
 {
-    /**
-     * constructor
-     */
-    public function __construct()
-    {
-        $this->backendType = self::BACKEND_TYPE_DATETIME;
-        $this->formType    = 'oro_datetime';
-    }
-
     /**
      * Get form type options
      *
@@ -32,8 +23,8 @@ class DateTimeType extends AbstractAttributeType
     public function prepareFormOptions(AbstractAttribute $attribute)
     {
         $options = parent::prepareFormOptions($attribute);
-        $options['widget'] = 'single_text';
-        $options['input'] = 'datetime';
+        $options['expanded'] = true;
+        $options['multiple'] = true;
 
         return $options;
     }

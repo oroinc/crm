@@ -1,14 +1,13 @@
 <?php
 namespace Oro\Bundle\FlexibleEntityBundle\Form\EventListener;
 
-use Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleManager;
-
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttributeType;
+use Oro\Bundle\FlexibleEntityBundle\AttributeType\AbstractAttributeType;
+use Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleManager;
 
 /**
  * Aims to generate value type based on entity value and attribute type
@@ -66,14 +65,12 @@ class AddValueFieldSubscriber implements EventSubscriberInterface
             return;
         }
 
+        // TODO :
+        // - attribute type has properties
+        // - get properties from attributes
         $attribute     = $value->getAttribute();
         $attributeType = $this->flexibleManager->getAttributeTypeFactory()->create($attribute->getAttributeType());
-
-        $formName    = $attribute->getBackendType();
-        $formType    = $attributeType->getFormType();
-        $formOptions = $attributeType->prepareFormOptions($attribute);
-        $data        = is_null($value->getData()) ? $attribute->getDefaultValue() : $value->getData();
-
-        $form->add($this->factory->createNamed($formName, $formType, $data, $formOptions));
+        $valueForm = $attributeType->buildValueFormType($this->factory, $value);
+        $form->add($valueForm);
     }
 }

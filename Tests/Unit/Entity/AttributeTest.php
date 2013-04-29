@@ -4,7 +4,7 @@ namespace Oro\Bundle\FlexibleEntityBundle\Tests\Unit\Entity;
 use Oro\Bundle\FlexibleEntityBundle\Entity\Attribute;
 use Oro\Bundle\FlexibleEntityBundle\Entity\AttributeOption;
 use Oro\Bundle\FlexibleEntityBundle\Entity\AttributeOptionValue;
-use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttributeType;
+use Oro\Bundle\FlexibleEntityBundle\AttributeType\AbstractAttributeType;
 
 /**
  * Test related class

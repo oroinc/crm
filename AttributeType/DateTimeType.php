@@ -1,26 +1,25 @@
 <?php
-namespace Oro\Bundle\FlexibleEntityBundle\Model\AttributeType;
+namespace Oro\Bundle\FlexibleEntityBundle\AttributeType;
 
-use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttributeType;
+use Oro\Bundle\FlexibleEntityBundle\AttributeType\AbstractAttributeType;
 use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttribute;
 
 /**
- * Date attribute type
+ * Datetime attribute type
  *
  * @author    Nicolas Dupont <nicolas@akeneo.com>
  * @copyright 2012 Akeneo SAS (http://www.akeneo.com)
  * @license   http://opensource.org/licenses/MIT MIT
  */
-class DateType extends AbstractAttributeType
+class DateTimeType extends AbstractAttributeType
 {
-
     /**
      * constructor
      */
     public function __construct()
     {
-        $this->backendType = self::BACKEND_TYPE_DATE;
-        $this->formType    = 'oro_date';
+        $this->backendType = self::BACKEND_TYPE_DATETIME;
+        $this->formType    = 'oro_datetime';
     }
 
     /**

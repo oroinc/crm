@@ -1,16 +1,16 @@
 <?php
-namespace Oro\Bundle\FlexibleEntityBundle\Model\AttributeType;
+namespace Oro\Bundle\FlexibleEntityBundle\AttributeType;
 
-use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttributeType;
+use Oro\Bundle\FlexibleEntityBundle\AttributeType\AbstractAttributeType;
 
 /**
- * Url attribute type
+ * Mail attribute type
  *
  * @author    Nicolas Dupont <nicolas@akeneo.com>
  * @copyright 2012 Akeneo SAS (http://www.akeneo.com)
  * @license   http://opensource.org/licenses/MIT MIT
  */
-class UrlType extends AbstractAttributeType
+class EmailType extends AbstractAttributeType
 {
 
     /**
@@ -19,6 +19,6 @@ class UrlType extends AbstractAttributeType
     public function __construct()
     {
         $this->backendType = self::BACKEND_TYPE_VARCHAR;
-        $this->formType    = 'url';
+        $this->formType    = 'email';
     }
 }

@@ -1,23 +1,23 @@
 <?php
-namespace Oro\Bundle\FlexibleEntityBundle\Tests\Unit\Model;
+namespace Oro\Bundle\FlexibleEntityBundle\Tests\Unit\AttributeType;
 
-use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttributeType;
-use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\BooleanType;
-use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\DateType;
-use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\FileType;
-use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\ImageType;
-use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\IntegerType;
-use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\EmailType;
-use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\MetricType;
-use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\MoneyType;
-use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\NumberType;
-use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\OptionMultiCheckboxType;
-use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\OptionMultiSelectType;
-use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\OptionSimpleRadioType;
-use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\OptionSimpleSelectType;
-use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\TextAreaType;
-use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\TextType;
-use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\UrlType;
+use Oro\Bundle\FlexibleEntityBundle\AttributeType\AbstractAttributeType;
+use Oro\Bundle\FlexibleEntityBundle\AttributeType\BooleanType;
+use Oro\Bundle\FlexibleEntityBundle\AttributeType\DateType;
+use Oro\Bundle\FlexibleEntityBundle\AttributeType\FileType;
+use Oro\Bundle\FlexibleEntityBundle\AttributeType\ImageType;
+use Oro\Bundle\FlexibleEntityBundle\AttributeType\IntegerType;
+use Oro\Bundle\FlexibleEntityBundle\AttributeType\EmailType;
+use Oro\Bundle\FlexibleEntityBundle\AttributeType\MetricType;
+use Oro\Bundle\FlexibleEntityBundle\AttributeType\MoneyType;
+use Oro\Bundle\FlexibleEntityBundle\AttributeType\NumberType;
+use Oro\Bundle\FlexibleEntityBundle\AttributeType\OptionMultiCheckboxType;
+use Oro\Bundle\FlexibleEntityBundle\AttributeType\OptionMultiSelectType;
+use Oro\Bundle\FlexibleEntityBundle\AttributeType\OptionSimpleRadioType;
+use Oro\Bundle\FlexibleEntityBundle\AttributeType\OptionSimpleSelectType;
+use Oro\Bundle\FlexibleEntityBundle\AttributeType\TextAreaType;
+use Oro\Bundle\FlexibleEntityBundle\AttributeType\TextType;
+use Oro\Bundle\FlexibleEntityBundle\AttributeType\UrlType;
 
 /**
  * Test related class

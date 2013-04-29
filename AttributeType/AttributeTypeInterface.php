@@ -1,6 +1,10 @@
 <?php
 namespace Oro\Bundle\FlexibleEntityBundle\AttributeType;
 
+use Symfony\Component\Form\FormFactoryInterface;
+use Oro\Bundle\FlexibleEntityBundle\Model\FlexibleValueInterface;
+use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttribute;
+
 /**
  * The attribute type interface
  *
@@ -31,4 +35,24 @@ interface AttributeTypeInterface
      * @param array  $options the options
      */
     public function initialize($name, $options = array());
+
+    /**
+     * Build form type for flexible entity value
+     *
+     * @param FormFactoryInterface   $factory the form factory
+     * @param FlexibleValueInterface $value   the flexible value
+     *
+     * @return FormInterface the form
+     */
+    public function buildValueFormType(FormFactoryInterface $factory, FlexibleValueInterface $value);
+
+    /**
+     * Build form type for attribute
+     *
+     * @param FormFactoryInterface $factory   the form factory
+     * @param AbstractAttribute    $attribute the attribute
+     *
+     * @return FormInterface the form
+     */
+    public function buildAttributeFormType(FormFactoryInterface $factory, AbstractAttribute $attribute);
 }

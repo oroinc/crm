@@ -2,7 +2,7 @@
 namespace Oro\Bundle\FlexibleEntityBundle\Tests\Unit\EventListener;
 
 use Oro\Bundle\FlexibleEntityBundle\Tests\Unit\AbstractOrmTest;
-use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttributeType;
+use Oro\Bundle\FlexibleEntityBundle\AttributeType\AbstractAttributeType;
 use Oro\Bundle\FlexibleEntityBundle\Tests\Unit\Entity\Demo\FlexibleValue;
 use Oro\Bundle\FlexibleEntityBundle\Entity\Attribute;
 use Oro\Bundle\FlexibleEntityBundle\EventListener\DefaultValueListener;

@@ -3,7 +3,7 @@ namespace Oro\Bundle\FlexibleEntityBundle\Manager;
 
 use Oro\Bundle\FlexibleEntityBundle\AttributeType\AttributeTypeFactory;
 
-use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttributeType;
+use Oro\Bundle\FlexibleEntityBundle\AttributeType\AbstractAttributeType;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Oro\Bundle\FlexibleEntityBundle\FlexibleEntityEvents;
 use Oro\Bundle\FlexibleEntityBundle\Event\FilterAttributeEvent;

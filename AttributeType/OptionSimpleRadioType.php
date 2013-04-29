@@ -1,18 +1,28 @@
 <?php
-namespace Oro\Bundle\FlexibleEntityBundle\Model\AttributeType;
+namespace Oro\Bundle\FlexibleEntityBundle\AttributeType;
 
 use Doctrine\ORM\EntityRepository;
 use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttribute;
 
 /**
- * Multi options (checkbox) attribute type
+ * Simple options (radio) attribute type
  *
  * @author    Nicolas Dupont <nicolas@akeneo.com>
  * @copyright 2012 Akeneo SAS (http://www.akeneo.com)
  * @license   http://opensource.org/licenses/MIT MIT
  */
-class OptionMultiCheckboxType extends AbstractOptionType
+class OptionSimpleRadioType extends AbstractOptionType
 {
+
+    /**
+     * constructor
+     */
+    public function __construct()
+    {
+        parent::__construct();
+        $this->backendType = self::BACKEND_TYPE_OPTION;
+    }
+
     /**
      * Get form type options
      *
@@ -24,7 +34,7 @@ class OptionMultiCheckboxType extends AbstractOptionType
     {
         $options = parent::prepareFormOptions($attribute);
         $options['expanded'] = true;
-        $options['multiple'] = true;
+        $options['multiple'] = false;
 
         return $options;
     }

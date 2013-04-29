@@ -3,7 +3,7 @@ namespace Oro\Bundle\FlexibleEntityBundle\Form\EventListener;
 
 use Symfony\Component\Form\Form;
 use Oro\Bundle\FlexibleEntityBundle\Form\Type\AttributeOptionType;
-use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttributeType;
+use Oro\Bundle\FlexibleEntityBundle\AttributeType\AbstractAttributeType;
 use Symfony\Component\Form\Event\DataEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormFactoryInterface;

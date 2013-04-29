@@ -1,7 +1,7 @@
 <?php
 namespace Oro\Bundle\FlexibleEntityBundle\Form\Type;
 
-use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttributeType;
+use Oro\Bundle\FlexibleEntityBundle\AttributeType\AbstractAttributeType;
 use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\ImageType;
 use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\FileType;
 use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\BooleanType;
