@@ -38,8 +38,8 @@ _Backbone.View_
 
 **Properties Description**
 
-* **filters** - Named list of filters, instances of OroApp.Filter.Abstract.
-* **addButtonHint** - Test of button that is used for adding filters to the list.
+* **filters** - named list of filters, instances of OroApp.Filter.Abstract;
+* **addButtonHint** - test of button that is used for adding filters to the list.
 
 
 ###OroApp.Filter.AbstractFilter
@@ -58,10 +58,10 @@ _Backbone.View_
 
 **Properties Description**
 
-* **name** - Unique name name of filter.
-* **label** - Label of filter. This values is used for displaying filter in list options
-and in rendering of filter html template.
-* **enabled** - Is filter enabled or not. If filter is not enabled it will not be displayed in filter list.
+* **name** - unique name name of filter;
+* **label** - label of filter. This values is used for displaying filter in list options
+and in rendering of filter html template;
+* **enabled** - whether filter enabled or not. If filter is not enabled it will not be displayed in filter list.
 
 ###OroApp.Filter.TextFilter
 
@@ -106,7 +106,7 @@ _OroApp.Filter.TextFilter_
 
 **Properties Description**
 
-* **choices** - List of filter types (f.e. contains, not contains for text filter)
+* **choices** - list of filter types (f.e. contains, not contains for text filter).
 
 ###OroApp.Filter.NumberFilter
 
@@ -134,13 +134,13 @@ _OroApp.Filter.ChoiceFilter_
 
 **Properties Description**
 
-* **formatter** - Instance of OroApp.Filter.NumberFormatter, this object is responsible for converting string
-to number and backward.
-* **formatterOptions** - This value will be used as argument for OroApp.Filter.NumberFormatter.
+* **formatter** - instance of OroApp.Filter.NumberFormatter, this object is responsible for converting string
+to number and backward;
+* **formatterOptions** - this value will be used as argument for OroApp.Filter.NumberFormatter.
 It contains next options:
-    * decimals: Integer - Number of decimals to display. Must be an integer.
-    * decimalSeparator: String - The separator to use whendisplaying decimals.
-    * orderSeparator: String - The separator to use to separator thousands. May be an empty string.
+    * decimals: Integer - number of decimals to display. Must be an integer;
+    * decimalSeparator: String - the separator to use whendisplaying decimals;
+    * orderSeparator: String - the separator to use to separator thousands. May be an empty string.
 
 ###OroApp.Filter.SelectFilter
 
@@ -148,7 +148,8 @@ Filter that allows to select one of available values
 
 **Rendered As**
 
-Clickable control with filter value hint. When control is clicked a combobox with available values is displayed.
+Clickable control with filter value hint. When control is clicked a combobox with context search field
+and available values is displayed.
 
 **Parent**
 
@@ -157,6 +158,7 @@ _OroApp.Filter.AbstractFilter_
 **Options**
 
 * options: Object
+* contextSearch: Boolean
 
 **Inherit Properties**
 
@@ -166,7 +168,8 @@ _OroApp.Filter.AbstractFilter_
 
 **Properties Description**
 
-* **options** - List of available options for select and multiselect filters.
+* **options** - list of available options for select and multiselect filters.
+* **contextSearch** - flag whether need to show context search field.
 
 ###OroApp.Filter.MultiSelectFilter
 
@@ -174,7 +177,7 @@ Filter that allows to select any available values.
 
 **Rendered As**
 
-Same as parent.
+Same as parent, but several values can be selected.
 
 **Parent**
 
@@ -186,10 +189,17 @@ _OroApp.Filter.SelectFilter_
 * label
 * enabled
 * options
+* contextSearch
 
 ###OroApp.Filter.MultiSelectDecorator
 
 Encapsulates additional logic related to select and multiselect widgets (filter list, select and multiselect filters).
+
+**Option Parameters**
+
+* **element** : HTML Element - HTML element used for rendering of multiselect widget;
+* **parameters** : Object - list of parameters to initialize multiselect widget;
+* **contextSearch** : Boolean - flag that specified whether to show context search field.
 
 ###OroApp.Filter.DateFilter
 
@@ -218,8 +228,8 @@ _OroApp.Filter.ChoiceFilter_
 
 **Properties Description**
 
-* **typeValues** - List of date/datetime type values for between/not between filter types.
-* **externalWidgetOptions** - Additional date/datetime widget options, gets from form type.
+* **typeValues** - list of date/datetime type values for between/not between filter types;
+* **externalWidgetOptions** - additional date/datetime widget options, gets from form type.
 
 ###OroApp.Filter.DateTimeFilter
 
