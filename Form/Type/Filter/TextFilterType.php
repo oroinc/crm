@@ -48,14 +48,14 @@ class TextFilterType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $choices = array(
-            self::TYPE_CONTAINS => $this->translator->trans('label_type_contains', array(), 'OroFilterBundle'),
+            self::TYPE_CONTAINS     => $this->translator->trans('label_type_contains', array(), 'OroFilterBundle'),
             self::TYPE_NOT_CONTAINS => $this->translator->trans('label_type_not_contains', array(), 'OroFilterBundle'),
-            self::TYPE_EQUAL => $this->translator->trans('label_type_equals', array(), 'OroFilterBundle'),
+            self::TYPE_EQUAL        => $this->translator->trans('label_type_equals', array(), 'OroFilterBundle'),
         );
 
         $resolver->setDefaults(
             array(
-                'field_type' => 'text',
+                'field_type'       => 'text',
                 'operator_choices' => $choices,
             )
         );
