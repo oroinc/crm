@@ -187,4 +187,12 @@ abstract class AbstractFilter extends AbstractORMFilter implements FilterInterfa
         $formOptions['show_filter'] = $this->getOption('show_filter', false);
         return array($formType, $formOptions);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFieldOptions()
+    {
+        return $this->getOption('field_options', array());
+    }
 }
