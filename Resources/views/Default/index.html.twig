@@ -1,4 +1,4 @@
-{% if (app.request.headers.get('x-oro-hash-navigation') != true) and (app.request.get('x-oro-hash-navigation') != true)%}
+{% if not oro_is_hash_navigation() %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -400,21 +400,7 @@
 </html>
 {% else %}
 {# Template for hash tag navigation#}
-<div id="head">
-    <title>{{ oro_title_render() }}</title>
-    <div id="title-serialized">{{ oro_title_render_serialized()|raw }}</div>
-    {{ block('head_script') }}
-</div>
-<div id="messages">
-    {{ block('messages') }}
-</div>
-<div id="history-content">
-    {{ oro_menu_render('history') }}
-</div>
-<div id="most-viewed-content">
-    {{ oro_menu_render('mostviewed') }}
-</div>
-<div id="content">
-    {{ block('page_container') }}
-</div>
+{% include 'OroNavigationBundle:HashNav:hashNavAjax.html.twig'
+    with {'script': block('head_script'), 'messages':block('messages'), 'content': block('page_container')}
+%}
 {% endif %}
