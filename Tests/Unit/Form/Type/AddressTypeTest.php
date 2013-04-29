@@ -30,34 +30,51 @@ class AddressTypeTest extends \PHPUnit_Framework_TestCase
         $builder = $this->getMockBuilder('Symfony\Component\Form\FormBuilder')
             ->disableOriginalConstructor()
             ->getMock();
+
         $builder->expects($this->exactly(8))
             ->method('add')
             ->will($this->returnSelf());
 
-        $builder->expects($this->at(1))
+        $builder->expects($this->at(0))
             ->method('add')
             ->with('id', 'hidden');
+
+        $builder->expects($this->at(1))
+            ->method('addEventSubscriber')
+            ->with($this->isInstanceOf('Symfony\Component\EventDispatcher\EventSubscriberInterface'));
+
         $builder->expects($this->at(2))
             ->method('add')
             ->with('street', 'text');
+
         $builder->expects($this->at(3))
             ->method('add')
             ->with('street2', 'text');
+
         $builder->expects($this->at(4))
             ->method('add')
             ->with('city', 'text');
+
         $builder->expects($this->at(5))
             ->method('add')
             ->with('postalCode', 'text');
+
         $builder->expects($this->at(6))
             ->method('add')
             ->with('country', 'oro_country');
+
         $builder->expects($this->at(7))
             ->method('add')
             ->with('state', 'oro_region');
+
         $builder->expects($this->at(8))
             ->method('add')
             ->with('mark', 'text');
+
+        $builder->expects($this->once())
+            ->method('addEventSubscriber')
+            ->with($this->isInstanceOf('Symfony\Component\EventDispatcher\EventSubscriberInterface'));
+
         $this->type->addEntityFields($builder);
     }
 

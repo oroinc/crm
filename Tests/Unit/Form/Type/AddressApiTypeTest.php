@@ -4,6 +4,7 @@ namespace Oro\Bundle\AddressBundle\Tests\Unit\Type;
 use Oro\Bundle\AddressBundle\Form\Type\AddressApiType;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormBuilder;
 use Oro\Bundle\UserBundle\Form\EventListener\PatchSubscriber;
 
 class AddressApiTypeTest extends \PHPUnit_Framework_TestCase
@@ -27,18 +28,18 @@ class AddressApiTypeTest extends \PHPUnit_Framework_TestCase
 
     public function testAddEntityFields()
     {
-        /** @var FormBuilderInterface $builder */
+        /** @var \Symfony\Component\Form\FormBuilderInterface $builder */
         $builder = $this->getMockBuilder('Symfony\Component\Form\FormBuilder')
             ->disableOriginalConstructor()
             ->getMock();
 
-        $builder->expects($this->any())
+        $builder->expects($this->exactly(8))
             ->method('add')
             ->will($this->returnSelf());
 
-        $builder->expects($this->once())
+        $builder->expects($this->exactly(2))
             ->method('addEventSubscriber')
-            ->with($this->isInstanceOf('Oro\Bundle\UserBundle\Form\EventListener\PatchSubscriber'));
+            ->with($this->isInstanceOf('Symfony\Component\EventDispatcher\EventSubscriberInterface'));
 
         $this->type->addEntityFields($builder);
     }
