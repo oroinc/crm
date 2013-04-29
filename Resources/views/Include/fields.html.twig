@@ -1,0 +1,20 @@
+{% extends 'OroUIBundle:Form:fields.html.twig' %}
+
+{% block oro_country_widget %}
+    {{ form_widget(form, {'attr': {'class': 'country-field'}}) }}
+{% endblock oro_country_widget %}
+
+{% block oro_region_widget %}
+    {% set country_field = country_field|default('country-select') %}
+    {{ form_widget(form, {'attr': {'class': 'region-field'}}) }}
+{% endblock oro_region_widget %}
+
+{% block oro_address_widget %}
+    {{ form_row(form.street) }}
+    {{ form_row(form.street2) }}
+    {{ form_row(form.country) }}
+    {{ form_row(form.state) }}
+    {{ form_row(form.city) }}
+    {{ form_row(form.postalCode) }}
+    {{ form_row(form.mark) }}
+{%  endblock oro_address_widget %}

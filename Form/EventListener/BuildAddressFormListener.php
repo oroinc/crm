@@ -87,9 +87,9 @@ class BuildAddressFormListener implements EventSubscriberInterface
         $form = $event->getForm();
 
         /** @var $country \Oro\Bundle\AddressBundle\Entity\Country */
-        $country = $this->om->getRepository('OroAddressBundle:Country')->find($data['country']);
+        $country = $this->om->getRepository('OroAddressBundle:Country')->find(isset($data['country']) ? $data['country'] : false);
 
-        if ($country->hasRegions()) {
+        if ($country && $country->hasRegions()) {
             $form->add(
                 $this->factory->createNamed(
                     'state',

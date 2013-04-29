@@ -83,6 +83,7 @@ services:
     oro_address.form.type.address.api:
         class: %oro_address.type.address_api.class%
         arguments:
+            - @oro_address.form.listener.address
             - %oro_address.address.base.class%
             - %oro_address.entity.value.class%
         tags:

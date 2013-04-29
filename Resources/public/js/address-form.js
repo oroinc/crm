@@ -19,5 +19,7 @@
                 });
             }
         });
+
+        countrySelect.trigger('click');
     }); // $.ready
 })(jQuery);
