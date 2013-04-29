@@ -48,7 +48,13 @@ navigation.pinbar.ItemView = Backbone.View.extend({
     },
 
     setActiveItem: function() {
-        if (this.model.get('url') ==  OroApp.hashNavigation.prototype.getHashUrl()) {
+        var url = '';
+        if (OroApp.hashNavigationEnabled()) {
+            url = OroApp.Navigation.prototype.getHashUrl();
+        } else {
+            url = window.location.pathname;
+        }
+        if (this.model.get('url') ==  url) {
             this.$el.addClass('active');
         } else {
             this.$el.removeClass('active');

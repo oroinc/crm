@@ -82,11 +82,7 @@ navigation.pinbar.MainView = navigation.MainViewAbstract.extend({
             }
             if (url != this.getCurrentPageItemData().url) {
                 item.save(null, {success: function() {
-                    if (OroApp.hashNavigation) {
-                        OroApp.hashNavigation.prototype.setLocation(url);
-                    } else {
-                        window.location.href = url;
-                    }
+                    OroApp.Navigation.prototype.setLocation(url);
                 }});
             }
         }
@@ -121,8 +117,8 @@ navigation.pinbar.MainView = navigation.MainViewAbstract.extend({
      */
     goToLatestOpenedPage: function()
     {
-        if (OroApp.hashNavigation) {
-            OroApp.hashNavigation.prototype.back();
+        if (OroApp.hashNavigationEnabled()) {
+            OroApp.Navigation.prototype.back();
         } else {
             window.location.href = this.getLatestUrl();
         }
