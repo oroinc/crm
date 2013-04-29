@@ -6,7 +6,7 @@ use Symfony\Component\Intl\Intl;
 use Symfony\Component\Security\Acl\Exception\Exception;
 use Symfony\Component\Yaml\Yaml;
 
-class IntlReader implements ReaderInterface
+class IntlReader extends Reader implements ReaderInterface
 {
     const FALLBACK_DATA = 'DataFixtures/countries.yml';
 
@@ -14,16 +14,6 @@ class IntlReader implements ReaderInterface
      * @var string
      */
     protected $class;
-
-    /**
-     * @var int batch size for reading
-     */
-    protected $batchSize = 100;
-
-    /**
-     * @var int offset
-     */
-    protected $offset = 0;
 
     /**
      * @param string $class

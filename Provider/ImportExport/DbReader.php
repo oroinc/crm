@@ -4,22 +4,12 @@ namespace Oro\Bundle\AddressBundle\Provider\ImportExport;
 
 use Doctrine\Common\Persistence\ObjectManager;
 
-class DbReader implements ReaderInterface
+class DbReader extends Reader implements ReaderInterface
 {
     /**
      * @var ObjectManager
      */
     protected $om;
-
-    /**
-     * @var int batch size for reading
-     */
-    protected $batchSize = 100;
-
-    /**
-     * @var int offset
-     */
-    protected $offset = 0;
 
     /**
      * @var string
