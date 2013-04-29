@@ -109,4 +109,8 @@ div.uploader input{
     filter: alpha(opacity=0);
 
 }
+.header-search .btn-search{
+    background:#262d33 url("../img/general-sprite.png") no-repeat 0 -176px;
+    filter: none;
+}
 

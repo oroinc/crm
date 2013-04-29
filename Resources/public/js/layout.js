@@ -1,6 +1,6 @@
 $(document).ready(function () {
     if ($.isPlainObject($.uniform)) {
-        $('input:file').uniform();
+        $('input:file, select').uniform();
     }
 
     if (typeof($.datepicker) != 'undefined') {
