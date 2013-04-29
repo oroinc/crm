@@ -55,7 +55,12 @@ class FlexibleManager implements TranslatableInterface, ScopableInterface
      * @var AttributeTypeFactory $attributeTypeFactory
      */
     protected $attributeTypeFactory;
-    
+
+    /**
+     * @var array $attributeTypes
+     */
+    protected $attributeTypes;
+
     /**
      * Locale code (from config or choose by user)
      * @var string
@@ -404,7 +409,7 @@ class FlexibleManager implements TranslatableInterface, ScopableInterface
 
     /**
      * Return only localized values of flexible entity
-     * 
+     *
      * @param integer $id
      */
     public function localizedFind($id)
@@ -417,11 +422,49 @@ class FlexibleManager implements TranslatableInterface, ScopableInterface
 
     /**
      * Get attribute type factory
-     * 
+     *
      * @return AttributeTypeFactory
      */
     public function getAttributeTypeFactory()
     {
         return $this->attributeTypeFactory;
+    }
+
+    /**
+     * Add useable attribute type for this flexible entity
+     *
+     * @param string $type
+     *
+     * @return \Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleManager
+     */
+    public function addAttributeType($type)
+    {
+        $this->attributeTypes[]= $type;
+
+        return $this;
+    }
+
+    /**
+     * Set the useable attribute types for this flexible entity
+     *
+     * @param array $types
+     *
+     * @return \Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleManager
+     */
+    public function setAttributeTypes($types)
+    {
+        $this->attributeTypes = $types;
+
+        return $this;
+    }
+
+    /**
+     * Get attribute types aliases
+     *
+     * @return array
+     */
+    public function getAttributeTypes()
+    {
+        return $this->attributeTypes;
     }
 }
