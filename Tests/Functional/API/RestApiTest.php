@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Yaml\Yaml;
 use Symfony\Component\Finder\Iterator;
+
 use Oro\Bundle\AddressBundle\Entity\Region;
 
 class RestApiTest extends WebTestCase
@@ -14,6 +15,9 @@ class RestApiTest extends WebTestCase
      * @var \Symfony\Bundle\FrameworkBundle\Client
      */
     protected $client;
+
+    /** @var \Doctrine\ORM\EntityManager  */
+    protected $em;
 
     protected static $id;
 

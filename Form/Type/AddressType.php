@@ -18,7 +18,7 @@ class AddressType extends FlexibleType
     {
         $this->eventListener = $eventListener;
 
-        return parent::__construct($flexibleClass, $valueClass);
+        parent::__construct($flexibleClass, $valueClass);
     }
 
     /**
