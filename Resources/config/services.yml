@@ -1,0 +1,7 @@
+parameters:
+#    oro_log.example.class: Oro\Bundle\LogBundle\Example
+
+services:
+#    oro_log.example:
+#        class: %oro_log.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]
