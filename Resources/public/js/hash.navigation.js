@@ -193,7 +193,7 @@ OroApp.Navigation = OroApp.Router.extend({
         OroApp.Events.bind(
             "top_search_request:complete",
             function () {
-                this.processClicks('#search-dropdown '  + this.selectors.links);
+                this.processClicks(this.selectors.searchDropdown + ' ' + this.selectors.links);
             },
             this
         );
@@ -210,6 +210,11 @@ OroApp.Navigation = OroApp.Router.extend({
     beforeRequest: function() {
         this.gridRoute = ''; //clearing grid router
         this.loadingMask.show();
+        /**
+         * Backbone event. Fired when hash navigation ajax request is complete
+         * @event hash_navigation_request:complete
+         */
+        OroApp.Events.trigger("hash_navigation_request:start", this);
     },
 
     /**
@@ -239,7 +244,7 @@ OroApp.Navigation = OroApp.Router.extend({
          * Clearing content area with native js, prevents freezing of firefox with firebug enabled
          */
         document.getElementById('container').innerHTML = '';
-        var redirectUrl = $(data).filter('#redirect').html();
+        var redirectUrl = $(data).filter('#redirect').text();
         if (redirectUrl) {
             urlParts = redirectUrl.split('url=');
             if (urlParts[1]) {
@@ -376,15 +381,17 @@ OroApp.Navigation = OroApp.Router.extend({
                     }
                     this.setLocation(url);
                 } else {
+                    this.beforeRequest();
                     $(target).ajaxSubmit({
                         data:{'x-oro-hash-navigation' : true},
                         headers: { 'x-oro-hash-navigation': true },
-                        error: function (XMLHttpRequest, textStatus, errorThrown) {
-                            alert('Error Message: ' + textStatus);
-                            alert('HTTP Error: ' + errorThrown);
-                        },
+                        error: _.bind(function (XMLHttpRequest, textStatus, errorThrown) {
+                            alert('Error Message: ' + textStatus + ' HTTP Error: ' + errorThrown);
+                            this.afterRequest();
+                        }, this),
                         success: _.bind(function (data) {
                             this.handleResponse(data);
+                            this.afterRequest();
                         }, this)
                     });
                 }
@@ -397,13 +404,17 @@ OroApp.Navigation = OroApp.Router.extend({
      * Returns real url part from the hash
      * @return {String}
      */
-    getHashUrl: function () {
+    getHashUrl: function (includeGrid) {
         var url = this.url;
         if (!url) {
             /**
              * Get real url part from the hash without grid state
              */
-            url = Backbone.history.fragment.split('|g/')[0].replace('url=', '');
+            var urlParts = Backbone.history.fragment.split('|g/');
+            url = urlParts[0].replace('url=', '');
+            if (urlParts[1] && (!_.isUndefined(includeGrid) && includeGrid == true)) {
+                url += '#g/' + urlParts[1];
+            }
             if (!url) {
                 url = window.location.pathname + window.location.search;
             }
@@ -418,7 +429,7 @@ OroApp.Navigation = OroApp.Router.extend({
      */
     setLocation: function (url) {
         if (this.enabled) {
-            url = url.replace(this.baseUrl, '').replace(/^(#\!?|\.)/, '');
+            url = url.replace(this.baseUrl, '').replace(/^(#\!?|\.)/, '').replace('#g/', '|g/');
             window.location.hash = '#url=' + url;
         } else {
             window.location = url;

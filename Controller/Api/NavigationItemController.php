@@ -84,7 +84,7 @@ class NavigationItemController extends FOSRestController
         $em->flush();
 
         return $this->handleView(
-            $this->view(array('id' => $entity->getId()), Codes::HTTP_CREATED)
+            $this->view(array('id' => $entity->getId(), 'restore' => 1), Codes::HTTP_CREATED)
         );
     }
 

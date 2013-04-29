@@ -19,6 +19,17 @@ navigation.dotMenu.MainView = Backbone.View.extend({
     initialize: function() {
         this.$tabsContainer = this.$('.nav-tabs');
         this.$tabsContent = this.$('.tab-content');
+        this.init();
+        OroApp.Events.bind(
+            "hash_navigation_request:complete",
+            function() {
+                this.init();
+            },
+            this
+        );
+    },
+
+    init: function() {
         this.$tabsContent.find('.menu-close').click(_.bind(this.close, this));
     },
 
@@ -106,6 +117,7 @@ navigation.dotMenu.MainView = Backbone.View.extend({
 
     close: function() {
         this.$el.parents('.open').removeClass('open');
+        return false;
     }
 });
 
