@@ -6,7 +6,8 @@ use Oro\Bundle\FlexibleEntityBundle\Exception\HasRequiredValueException;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Events;
-use Doctrine\ORM\Proxy\Proxy;
+use Doctrine\Common\Util\ClassUtils;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Define required value behavior, throw exception if value related to required attribute is not defined
@@ -56,7 +57,7 @@ class RequiredValueListener implements EventSubscriber
      *
      * @param LifecycleEventArgs $args
      *
-     * @throws HasValueRequiredException
+     * @throws HasRequiredValueException
      */
     public function prePersist(LifecycleEventArgs $args)
     {
@@ -68,7 +69,7 @@ class RequiredValueListener implements EventSubscriber
      *
      * @param LifecycleEventArgs $args
      *
-     * @throws IsRequiredException
+     * @throws HasRequiredValueException
      */
     public function preUpdate(LifecycleEventArgs $args)
     {
@@ -79,32 +80,30 @@ class RequiredValueListener implements EventSubscriber
      * Check if all values required are set
      * @param LifecycleEventArgs $args
      *
-     * @throws HasValueRequiredException
+     * @throws HasRequiredValueException
      */
     protected function checkRequired(LifecycleEventArgs $args)
     {
         $entity = $args->getEntity();
         // check entity implements "has required value" behavior
         if ($entity instanceof FlexibleInterface) {
-
             // get flexible config
-            $entityClass = false;
-            if ($entity instanceof Proxy) {
-                $entityClass = get_parent_class($entity);
-            } else {
-                $entityClass = get_class($entity);
-            }
-            $flexibleConfig = $this->container->getParameter('oro_flexibleentity.flexible_config');
-            $flexibleManagerName = $flexibleConfig['entities_config'][$entityClass]['flexible_manager'];
-            $flexibleManager = $this->container->get($flexibleManagerName);
+            $entityClass = ClassUtils::getRealClass(get_class($entity));
+            $metadata = $args->getEntityManager()->getClassMetadata($entityClass);
 
-            // get required attributes
-            $repo = $flexibleManager->getAttributeRepository();
-            $attributes = $repo->findBy(array('entityType' => $entityClass, 'required' => true));
-            // check that value is set for any required attributes
-            foreach ($attributes as $attribute) {
-                if (!$entity->getValue($attribute->getCode())) {
-                    throw new HasRequiredValueException('attribute '.$attribute->getCode().' is required');
+            $flexibleConfig = $this->container->getParameter('oro_flexibleentity.flexible_config');
+            if (!$metadata->isMappedSuperclass && array_key_exists($entityClass, $flexibleConfig['entities_config'])) {
+                $flexibleManagerName = $flexibleConfig['entities_config'][$entityClass]['flexible_manager'];
+                $flexibleManager = $this->container->get($flexibleManagerName);
+
+                // get required attributes
+                $repo = $flexibleManager->getAttributeRepository();
+                $attributes = $repo->findBy(array('entityType' => $entityClass, 'required' => true));
+                // check that value is set for any required attributes
+                foreach ($attributes as $attribute) {
+                    if (!$entity->getValue($attribute->getCode())) {
+                        throw new HasRequiredValueException('attribute '.$attribute->getCode().' is required');
+                    }
                 }
             }
         }

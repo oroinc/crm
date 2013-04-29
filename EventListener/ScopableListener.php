@@ -3,7 +3,7 @@ namespace Oro\Bundle\FlexibleEntityBundle\EventListener;
 
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\Common\EventSubscriber;
-use Doctrine\ORM\Proxy\Proxy;
+use Doctrine\Common\Util\ClassUtils;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Oro\Bundle\FlexibleEntityBundle\Model\Behavior\ScopableInterface;
@@ -60,18 +60,13 @@ class ScopableListener implements EventSubscriber
 
         // inject selected scope on scopable containers
         if ($entity instanceof ScopableInterface) {
-
             // get flexible entity class
-            $flexibleEntityClass = false;
-            if ($entity instanceof Proxy) {
-                $flexibleEntityClass = get_parent_class($entity);
-            } elseif ($entity instanceof FlexibleInterface) {
-                $flexibleEntityClass = get_class($entity);
-            }
+            $flexibleEntityClass = ClassUtils::getRealClass(get_class($entity));
 
-            if ($flexibleEntityClass) {
+            $metadata = $args->getEntityManager()->getClassMetadata($flexibleEntityClass);
+            $flexibleConfig = $this->container->getParameter('oro_flexibleentity.flexible_config');
+            if ($flexibleEntityClass && !$metadata->isMappedSuperclass && array_key_exists($flexibleEntityClass, $flexibleConfig['entities_config'])) {
                 // get flexible config and manager
-                $flexibleConfig = $this->container->getParameter('oro_flexibleentity.flexible_config');
                 $flexibleManagerName = $flexibleConfig['entities_config'][$flexibleEntityClass]['flexible_manager'];
                 $flexibleManager = $this->container->get($flexibleManagerName);
                 // set scope setted in manager
