@@ -12,14 +12,15 @@ use YsTools\BackUrlBundle\Annotation\BackUrl;
 
 use Oro\Bundle\UserBundle\Entity\Role;
 use Oro\Bundle\UserBundle\Annotation\Acl;
+use Oro\Bundle\UserBundle\Annotation\AclAncestor;
 use Oro\Bundle\UserBundle\Datagrid\RoleDatagridManager;
 
 /**
  * @Route("/role")
  * @Acl(
- *      id = "oro_role",
- *      name="Role controller",
- *      description = "Role manipulation"
+ *      id="oro_user_role",
+ *      name="Role manipulation",
+ *      description="Role manipulation"
  * )
  * @BackUrl("back", useSession=true)
  */
@@ -30,6 +31,12 @@ class RoleController extends Controller
      *
      * @Route("/create", name="oro_user_role_create")
      * @Template("OroUserBundle:Role:edit.html.twig")
+     * @Acl(
+     *      id="oro_user_role_create",
+     *      name="Create role",
+     *      description="Create new role",
+     *      parent="oro_user_role"
+     * )
      */
     public function createAction()
     {
@@ -41,6 +48,12 @@ class RoleController extends Controller
      *
      * @Route("/edit/{id}", name="oro_user_role_edit", requirements={"id"="\d+"}, defaults={"id"=0})
      * @Template
+     * @Acl(
+     *      id="oro_user_role_edit",
+     *      name="Edit role",
+     *      description="Edit role",
+     *      parent="oro_user_role"
+     * )
      */
     public function editAction(Role $entity)
     {
@@ -70,12 +83,13 @@ class RoleController extends Controller
      * Get grid users data
      *
      * @Route(
-     *  "/grid/{id}",
-     *  name="oro_user_role_user_grid",
-     *  requirements={"id"="\d+"},
-     *  defaults={"id"=0, "_format"="json"}
+     *      "/grid/{id}",
+     *      name="oro_user_role_user_grid",
+     *      requirements={"id"="\d+"},
+     *      defaults={"id"=0, "_format"="json"}
      * )
      * @Template("OroGridBundle:Datagrid:list.json.php")
+     * @AclAncestor("oro_user_role_list")
      */
     public function gridDataAction(Role $entity)
     {
@@ -94,10 +108,10 @@ class RoleController extends Controller
      *      defaults={"_format" = "html"}
      * )
      * @Acl(
-     *      id = "oro_role_list",
-     *      name="Role list",
-     *      description = "List of roles",
-     *      parent = "oro_role"
+     *      id="oro_user_role_list",
+     *      name="View role list",
+     *      description="List of roles",
+     *      parent="oro_user_role"
      * )
      */
     public function indexAction(Request $request)
