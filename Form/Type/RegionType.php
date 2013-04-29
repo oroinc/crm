@@ -19,7 +19,7 @@ class RegionType extends AbstractType
                 return new ObjectChoiceList(array());
             }
 
-            return new ObjectChoiceList($options['country']->getRegions());
+            return new ObjectChoiceList($options['country']->getRegions(), null, array(), null, 'code');
         };
 
         $resolver

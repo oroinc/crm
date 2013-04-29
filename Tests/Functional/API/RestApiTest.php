@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Yaml\Yaml;
 use Symfony\Component\Finder\Iterator;
+use Oro\Bundle\AddressBundle\Entity\Region;
 
 class RestApiTest extends WebTestCase
 {
@@ -19,6 +20,7 @@ class RestApiTest extends WebTestCase
     public function setUp()
     {
         $this->client = static::createClient();
+        $this->em = static::$kernel->getContainer()->get('doctrine');
     }
 
     protected function tearDown()
@@ -32,13 +34,15 @@ class RestApiTest extends WebTestCase
      */
     public function testPost()
     {
+        /** @var \Oro\Bundle\AddressBundle\Entity\Region $region */
+        $region = $this->em->getRepository('OroAddressBundle:Region')->findOneByCode('CA');
         $requestData = array('address' =>
             array(
                 'street'      => 'Some kind sd',
                 'city'        => 'Old York',
-                'state'       => 'OY',
-                'country'     => 'USA',
-                'postal_code' => '32422',
+                'state'       => 'CA',
+                'country'     => 'US',
+                'postalCode' => '32422',
             )
         );
 
@@ -51,7 +55,6 @@ class RestApiTest extends WebTestCase
 
         /** @var $result Response */
         $result = $this->client->getResponse();
-
         $this->assertJsonResponse($result, 201);
         $this->assertRegExp('#/addresses/[\d+]#', $result->headers->get('Location'));
 
