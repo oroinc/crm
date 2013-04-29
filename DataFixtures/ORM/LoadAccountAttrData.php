@@ -197,8 +197,11 @@ class LoadAccountAttrData extends AbstractFixture implements ContainerAwareInter
             $type = $data['type'];
         }
         if (is_string($type)) {
-            return new $type;
+            $type = new $type;
         }
-        return new TextType();
+        if (!$type) {
+            $type = new TextType();
+        }
+        return $type;
     }
 }
