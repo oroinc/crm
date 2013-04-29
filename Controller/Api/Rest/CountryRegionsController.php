@@ -32,7 +32,7 @@ class CountryRegionsController extends FOSRestController
         $item = $this->getDoctrine()->getRepository('OroAddressBundle:Country')->find($id);
 
         return $this->handleView(
-            $this->view($item->getRegions(), is_object($item) ? Codes::HTTP_OK : Codes::HTTP_NOT_FOUND)
+            $this->view($item ? $item->getRegions() : null, $item ? Codes::HTTP_OK : Codes::HTTP_NOT_FOUND)
         );
     }
 }
