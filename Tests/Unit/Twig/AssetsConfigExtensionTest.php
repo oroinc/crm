@@ -17,11 +17,11 @@ class AcmeAssetsConfigExtensionTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->assetsFactory = $this->translator =  $this->getMockBuilder('Symfony\Bundle\AsseticBundle\Factory\AssetFactory')
+        $this->assetsFactory = $this->getMockBuilder('Symfony\Bundle\AsseticBundle\Factory\AssetFactory')
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->templateNameParser = $this->translator =  $this->getMockBuilder('Symfony\Component\Templating\TemplateNameParserInterface')
+        $this->templateNameParser = $this->getMockBuilder('Symfony\Component\Templating\TemplateNameParserInterface')
             ->disableOriginalConstructor()
             ->getMock();
 

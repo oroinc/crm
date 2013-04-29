@@ -33,6 +33,8 @@ parameters:
     oro_navigation.form.handler.pagestate.class:               Oro\Bundle\NavigationBundle\Form\Handler\PageStateHandler
     oro_navigation.event.response_hashnav.listener.class:      Oro\Bundle\NavigationBundle\Event\ResponseHashnavListener
 
+    oro_navigation.twig_hash_nav_extension.class:              Oro\Bundle\NavigationBundle\Twig\HashNavExtension
+
 services:
     oro_menu.factory:
         class: %oro_menu.factory.class%
@@ -202,7 +204,11 @@ services:
 
     oro_navigation.twig.assets_extension:
         class:        %oro_navigation.twig_assets_extension.class%
-        arguments:    [@assetic.asset_factory, %oro_navigation.assets_config%, @templating.name_parser, %assetic.bundles%]
+        arguments:
+            - @assetic.asset_factory
+            - %oro_navigation.assets_config%
+            - @templating.name_parser
+            - %assetic.bundles%
         tags:
             - { name: twig.extension }
 
@@ -226,3 +232,9 @@ services:
         class: %oro_navigation.event.response_hashnav.listener.class%
         tags:
             - { name: kernel.event_listener, event: kernel.response, method: onResponse }
+
+    oro_navigation.twig.hash_nav_extension:
+        class:        %oro_navigation.twig_hash_nav_extension.class%
+        tags:
+            - { name: twig.extension }
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
