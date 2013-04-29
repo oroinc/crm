@@ -569,7 +569,7 @@ class Manager implements ManagerInterface
 
     /**
      *
-     * @param Acl $acl
+     * @param Acl  $acl
      * @param Role $role
      */
     protected function removeAclFromRole(Acl $acl, Role $role)

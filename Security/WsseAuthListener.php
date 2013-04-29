@@ -12,9 +12,9 @@ class WsseAuthListener extends Listener
     /**
      * Check for a possible CSRF attack in REST API
      *
-     * @param   GetResponseEvent        $event
-     * @return  mixed
-     * @throws  AuthenticationException
+     * @param  GetResponseEvent        $event
+     * @return mixed
+     * @throws AuthenticationException
      */
     public function handle(GetResponseEvent $event)
     {

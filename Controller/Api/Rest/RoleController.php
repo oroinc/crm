@@ -11,6 +11,8 @@ use FOS\RestBundle\Controller\Annotations\QueryParam;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
 use Oro\Bundle\UserBundle\Entity\Role;
+use Oro\Bundle\UserBundle\Annotation\Acl;
+use Oro\Bundle\UserBundle\Annotation\AclAncestor;
 
 /**
  * @NamePrefix("oro_api_")
@@ -21,9 +23,10 @@ class RoleController extends FOSRestController implements ClassResourceInterface
      * Get the list of roles
      *
      * @ApiDoc(
-     *  description="Get the list of roles",
-     *  resource=true
+     *      description="Get the list of roles",
+     *      resource=true
      * )
+     * @AclAncestor("oro_user_role_list")
      */
     public function cgetAction()
     {
@@ -37,12 +40,19 @@ class RoleController extends FOSRestController implements ClassResourceInterface
      * Get role data
      *
      * @param int $id Role id
+     *
      * @ApiDoc(
-     *  description="Get role data",
-     *  resource=true,
-     *  filters={
-     *      {"name"="id", "dataType"="integer"},
-     *  }
+     *      description="Get role data",
+     *      resource=true,
+     *      filters={
+     *          {"name"="id", "dataType"="integer"},
+     *      }
+     * )
+     * @Acl(
+     *      id="oro_user_role_show",
+     *      name="View role",
+     *      description="View role",
+     *      parent="oro_user_role"
      * )
      */
     public function getAction($id)
@@ -59,9 +69,10 @@ class RoleController extends FOSRestController implements ClassResourceInterface
      * Create new role
      *
      * @ApiDoc(
-     *  description="Create new role",
-     *  resource=true
+     *      description="Create new role",
+     *      resource=true
      * )
+     * @AclAncestor("oro_user_role_create")
      */
     public function postAction()
     {
@@ -77,13 +88,15 @@ class RoleController extends FOSRestController implements ClassResourceInterface
      * Update existing role
      *
      * @param int $id Role id
+     *
      * @ApiDoc(
-     *  description="Update existing role",
-     *  resource=true,
-     *  filters={
-     *      {"name"="id", "dataType"="integer"},
-     *  }
+     *      description="Update existing role",
+     *      resource=true,
+     *      filters={
+     *          {"name"="id", "dataType"="integer"},
+     *      }
      * )
+     * @AclAncestor("oro_user_role_update")
      */
     public function putAction($id)
     {
@@ -104,12 +117,19 @@ class RoleController extends FOSRestController implements ClassResourceInterface
      * Delete role
      *
      * @param int $id Role id
+     *
      * @ApiDoc(
-     *  description="Delete role",
-     *  resource=true,
-     *  filters={
-     *      {"name"="id", "dataType"="integer"},
-     *  }
+     *      description="Delete role",
+     *      resource=true,
+     *      filters={
+     *          {"name"="id", "dataType"="integer"},
+     *      }
+     * )
+     * @Acl(
+     *      id="oro_user_role_remove",
+     *      name="Remove role",
+     *      description="Remove role",
+     *      parent="oro_user_role"
      * )
      */
     public function deleteAction($id)
@@ -131,13 +151,15 @@ class RoleController extends FOSRestController implements ClassResourceInterface
      * Get role by name
      *
      * @param string $name Role name
+     *
      * @ApiDoc(
-     *  description="Get role by name",
-     *  resource=true,
-     *  filters={
-     *      {"name"="name", "dataType"="string"},
-     *  }
+     *      description="Get role by name",
+     *      resource=true,
+     *      filters={
+     *          {"name"="name", "dataType"="string"},
+     *      }
      * )
+     * @AclAncestor("oro_user_role_show")
      */
     public function getBynameAction($name)
     {
@@ -150,16 +172,18 @@ class RoleController extends FOSRestController implements ClassResourceInterface
     }
 
     /**
-     * Get role acl list
+     * Get ACL resources granted by a role
      *
      * @param int $id User id
+     *
      * @ApiDoc(
-     *  description="Get role allowed ACL resources",
-     *  resource=true,
-     *  requirements={
-     *      {"name"="id", "dataType"="integer"},
-     *  }
+     *      description="Get ACL resources granted by a role",
+     *      resource=true,
+     *      requirements={
+     *          {"name"="id", "dataType"="integer"},
+     *      }
      * )
+     * @AclAncestor("oro_user_acl_edit")
      */
     public function getAclAction($id)
     {
@@ -178,101 +202,97 @@ class RoleController extends FOSRestController implements ClassResourceInterface
     }
 
     /**
-     * Link ACL Resource to role
+     * Link ACL resource to role
      *
-     * @QueryParam(name="roleId", requirements="\d+", nullable=false, description="Role id")
-     * @QueryParam(name="aclResourceId", nullable=false, description="ACL Resource id")
-     * @param int $id Role id
+     * @param int    $id       Role id
+     * @param string $resource ACL resource id
+     *
      * @ApiDoc(
-     *  description="Link ACL Resource to role",
-     *  requirements={
-     *      {"roleId"="id", "dataType"="integer"},
-     *      {"aclResourceId"="id", "dataType"="string"},
-     *  }
+     *      description="Link ACL resource to role",
+     *      requirements={
+     *          {"name"="id", "dataType"="integer"},
+     *          {"name"="resource", "dataType"="string"},
+     *      }
      * )
+     * @AclAncestor("oro_user_acl_save")
      */
-    public function postAclAction($roleId, $aclResourceId)
+    public function postAclAction($id, $resource)
     {
-        $this->get('oro_user.acl_manager')->modifyAclForRole(
-            $roleId,
-            $aclResourceId,
-            true
-        );
+        $this->get('oro_user.acl_manager')->modifyAclForRole($id, $resource, true);
 
         return $this->handleView($this->view('', Codes::HTTP_NO_CONTENT));
     }
 
     /**
-     * Unlink ACL Resource to role
+     * Unlink ACL resource from role
      *
-     * @QueryParam(name="roleId", requirements="\d+", nullable=false, description="Role id")
-     * @QueryParam(name="aclResourceId", nullable=false, description="ACL Resource id")
-     * @param int $id Role id
+     * @param int    $id       Role id
+     * @param string $resource ACL resource id
+     *
      * @ApiDoc(
-     *  description="Unlink ACL Resource to role",
-     *  requirements={
-     *      {"roleId"="id", "dataType"="integer"},
-     *      {"aclResourceId"="id", "dataType"="string"},
-     *  }
+     *      description="Unlink ACL resource from role",
+     *      requirements={
+     *          {"name"="id", "dataType"="integer"},
+     *          {"name"="resource", "dataType"="string"},
+     *      }
      * )
+     * @AclAncestor("oro_user_acl_save")
      */
-    public function deleteAclAction($roleId, $aclResourceId)
+    public function deleteAclAction($id, $resource)
     {
-        $this->get('oro_user.acl_manager')->modifyAclForRole(
-            $roleId,
-            $aclResourceId,
+        $this->get('oro_user.acl_manager')->modifyAclForRole($id, $resource, false);
+
+        return $this->handleView($this->view('', Codes::HTTP_NO_CONTENT));
+    }
+
+    /**
+     * Link ACL resources to role
+     *
+     * @param int $id Role id
+     *
+     * @QueryParam(name="resources", nullable=false, description="Array of ACL resource ids")
+     * @ApiDoc(
+     *      description="Link ACL resources to role",
+     *      requirements={
+     *          {"name"="id", "dataType"="integer"}
+     *      }
+     * )
+     * @AclAncestor("oro_user_acl_save")
+     */
+    public function postAclArrayAction($id)
+    {
+        $this->container->get('oro_user.acl_manager')->modifyAclsForRole(
+            $id,
+            $this->getRequest()->request->get('resources'),
+            true
+        );
+
+        return $this->handleView($this->view('', Codes::HTTP_CREATED));
+    }
+
+    /**
+     * Unlink ACL resources from role
+     *
+     * @param int $id Role id
+     *
+     * @QueryParam(name="resources", nullable=false, description="Array of ACL resource ids")
+     * @ApiDoc(
+     *      description="Unlink ACL resources from roles",
+     *      requirements={
+     *          {"name"="id", "dataType"="integer"}
+     *      }
+     * )
+     * @AclAncestor("oro_user_acl_save")
+     */
+    public function deleteAclArrayAction($id)
+    {
+        $this->container->get('oro_user.acl_manager')->modifyAclsForRole(
+            $id,
+            $this->getRequest()->request->get('resources'),
             false
         );
 
         return $this->handleView($this->view('', Codes::HTTP_NO_CONTENT));
-    }
-
-    /**
-     * Link ACL Resource Array to role
-     *
-     * @QueryParam(name="roleId", requirements="\d+", nullable=false, description="Role id")
-     * @param int $id Role id
-     * @ApiDoc(
-     *  description="Link ACL Resource to role",
-     *  requirements={
-     *      {"roleId"="id", "dataType"="integer"},
-     *      {"aclResources"="id", "dataType"="string[]"},
-     *  }
-     * )
-     */
-    public function postAclArrayAction($roleId)
-    {
-        $this->container->get('oro_user.acl_manager')->modifyAclsForRole(
-            $roleId,
-            $this->getRequest()->request->get('aclResources'),
-            true
-        );
-
-        return $this->handleView($this->view('', Codes::HTTP_NO_CONTENT));
-    }
-
-    /**
-     * Link ACL Resource to role
-     *
-     * @QueryParam(name="roleId", requirements="\d+", nullable=false, description="Role id")
-     * @param int $id Role id
-     * @ApiDoc(
-     *  description="Link ACL Resource to role",
-     *  requirements={
-     *      {"roleId"="id", "dataType"="integer"},
-     *      {"aclResources"="id", "dataType"="string[]"},
-     *  }
-     * )
-     */
-    public function deleteAclArrayAction($roleId)
-    {
-        $this->container->get('oro_user.acl_manager')->modifyAclsForRole(
-            $roleId,
-            $this->getRequest()->request->get('aclResources'),
-            false
-        );
-
-        return '';
     }
 
     /**
