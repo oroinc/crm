@@ -7,6 +7,8 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
+use Oro\Bundle\AddressBundle\Entity\Country;
+
 class BuildAddressFormListener implements EventSubscriberInterface
 {
     private $om;
@@ -86,10 +88,10 @@ class BuildAddressFormListener implements EventSubscriberInterface
         $data = $event->getData();
         $form = $event->getForm();
 
-        /** @var $country \Oro\Bundle\AddressBundle\Entity\Country */
+        /** @var Country $country */
         $country = $this->om->getRepository('OroAddressBundle:Country')->find($data['country']);
 
-        if ($country->hasRegions()) {
+        if ($country && $country->hasRegions()) {
             $form->add(
                 $this->factory->createNamed(
                     'state',
