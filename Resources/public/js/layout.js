@@ -140,6 +140,9 @@ if (typeof OroApp !== "undefined") {
     );
 }
 
+/**
+ * Js updates
+ */
 function initLayout() {
     if ($.isPlainObject($.uniform)) {
         $('input:file').uniform();
@@ -169,6 +172,11 @@ function initLayout() {
     if (typeof $.fn['bootstrapSwitch'] != "undefined"){
         $('.switch').not('.has-switch')['bootstrapSwitch']();
     }
+
+    $('[data-spy="scroll"]').each(function () {
+        var $spy = $(this)
+        $spy.scrollspy($spy.data())
+    })
 }
 
 /**

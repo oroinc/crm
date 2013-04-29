@@ -155,5 +155,14 @@ var OroApp = {
         constructor.apply(instance, instanceArguments);
 
         return instance;
+    },
+
+    /**
+     * Checks if hash navigation is enabled
+     *
+     * @return {*}
+     */
+    hashNavigationEnabled: function() {
+        return ((typeof this.Navigation != "undefined") && this.Navigation.prototype.enabled);
     }
 };
