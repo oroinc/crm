@@ -10,6 +10,8 @@ use FOS\Rest\Util\Codes;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
 use Oro\Bundle\UserBundle\Entity\Group;
+use Oro\Bundle\UserBundle\Annotation\Acl;
+use Oro\Bundle\UserBundle\Annotation\AclAncestor;
 
 /**
  * @NamePrefix("oro_api_")
@@ -20,9 +22,10 @@ class GroupController extends FOSRestController implements ClassResourceInterfac
      * Get the list of groups
      *
      * @ApiDoc(
-     *  description="Get the list of groups",
-     *  resource=true
+     *      description="Get the list of groups",
+     *      resource=true
      * )
+     * @AclAncestor("oro_user_group_list")
      */
     public function cgetAction()
     {
@@ -40,12 +43,13 @@ class GroupController extends FOSRestController implements ClassResourceInterfac
      * @param int $id Group id
      *
      * @ApiDoc(
-     *  description="Get group data",
-     *  resource=true,
-     *  filters={
-     *      {"name"="id", "dataType"="integer"},
-     *  }
+     *      description="Get group data",
+     *      resource=true,
+     *      filters={
+     *          {"name"="id", "dataType"="integer"},
+     *      }
      * )
+     * @AclAncestor("oro_user_group_show")
      */
     public function getAction($id)
     {
@@ -63,14 +67,15 @@ class GroupController extends FOSRestController implements ClassResourceInterfac
      * Create new group
      *
      * @ApiDoc(
-     *  description="Create new group",
-     *  resource=true
+     *      description="Create new group",
+     *      resource=true
      * )
+     * @AclAncestor("oro_user_group_create")
      */
     public function postAction()
     {
         $entity = new Group();
-        $view = $this->get('oro_user.form.handler.group.api')->process($entity)
+        $view   = $this->get('oro_user.form.handler.group.api')->process($entity)
             ? $this->redirectView(
                 $this->generateUrl('oro_api_get_group', array('id' => $entity->getId())),
                 Codes::HTTP_CREATED
@@ -86,12 +91,13 @@ class GroupController extends FOSRestController implements ClassResourceInterfac
      * @param int $id Group id
      *
      * @ApiDoc(
-     *  description="Update existing group",
-     *  resource=true,
-     *  filters={
-     *      {"name"="id", "dataType"="integer"},
-     *  }
+     *      description="Update existing group",
+     *      resource=true,
+     *      filters={
+     *          {"name"="id", "dataType"="integer"},
+     *      }
      * )
+     * @AclAncestor("oro_user_group_update")
      */
     public function putAction($id)
     {
@@ -114,11 +120,17 @@ class GroupController extends FOSRestController implements ClassResourceInterfac
      * @param int $id Group id
      *
      * @ApiDoc(
-     *  description="Delete group",
-     *  resource=true,
-     *  filters={
-     *      {"name"="id", "dataType"="integer"},
-     *  }
+     *      description="Delete group",
+     *      resource=true,
+     *      filters={
+     *          {"name"="id", "dataType"="integer"},
+     *      }
+     * )
+     * @Acl(
+     *      id="oro_user_group_remove",
+     *      name="Remove group",
+     *      description="Remove group",
+     *      parent="oro_user_group"
      * )
      */
     public function deleteAction($id)
@@ -142,11 +154,17 @@ class GroupController extends FOSRestController implements ClassResourceInterfac
      * @param int $id Group id
      *
      * @ApiDoc(
-     *  description="Get group roles",
-     *  resource=true,
-     *  filters={
-     *      {"name"="id", "dataType"="integer"},
-     *  }
+     *      description="Get group roles",
+     *      resource=true,
+     *      filters={
+     *          {"name"="id", "dataType"="integer"},
+     *      }
+     * )
+     * @Acl(
+     *      id="oro_user_group_roles",
+     *      name="View group roles",
+     *      description="View group roles",
+     *      parent="oro_user_group"
      * )
      */
     public function getRolesAction($id)

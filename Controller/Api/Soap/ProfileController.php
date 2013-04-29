@@ -5,14 +5,16 @@ namespace Oro\Bundle\UserBundle\Controller\Api\Soap;
 use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 
 use Oro\Bundle\UserBundle\Entity\UserSoap;
+use Oro\Bundle\UserBundle\Annotation\AclAncestor;
 
 class ProfileController extends BaseController
 {
     /**
      * @Soap\Method("getUsers")
-     * @Soap\Param("page", phpType = "int")
-     * @Soap\Param("limit", phpType = "int")
-     * @Soap\Result(phpType = "Oro\Bundle\UserBundle\Entity\User[]")
+     * @Soap\Param("page", phpType="int")
+     * @Soap\Param("limit", phpType="int")
+     * @Soap\Result(phpType="Oro\Bundle\UserBundle\Entity\User[]")
+     * @AclAncestor("oro_user_profile_list")
      */
     public function cgetAction($page = 1, $limit = 10)
     {
@@ -25,8 +27,9 @@ class ProfileController extends BaseController
 
     /**
      * @Soap\Method("getUser")
-     * @Soap\Param("id", phpType = "int")
-     * @Soap\Result(phpType = "Oro\Bundle\UserBundle\Entity\User")
+     * @Soap\Param("id", phpType="int")
+     * @Soap\Result(phpType="Oro\Bundle\UserBundle\Entity\User")
+     * @AclAncestor("oro_user_profile_show")
      */
     public function getAction($id)
     {
@@ -35,8 +38,9 @@ class ProfileController extends BaseController
 
     /**
      * @Soap\Method("createUser")
-     * @Soap\Param("profile", phpType = "Oro\Bundle\UserBundle\Entity\UserSoap")
-     * @Soap\Result(phpType = "boolean")
+     * @Soap\Param("profile", phpType="Oro\Bundle\UserBundle\Entity\UserSoap")
+     * @Soap\Result(phpType="boolean")
+     * @AclAncestor("oro_user_profile_create")
      */
     public function createAction($profile)
     {
@@ -50,9 +54,10 @@ class ProfileController extends BaseController
 
     /**
      * @Soap\Method("updateUser")
-     * @Soap\Param("id", phpType = "int")
-     * @Soap\Param("profile", phpType = "Oro\Bundle\UserBundle\Entity\UserSoap")
-     * @Soap\Result(phpType = "boolean")
+     * @Soap\Param("id", phpType="int")
+     * @Soap\Param("profile", phpType="Oro\Bundle\UserBundle\Entity\UserSoap")
+     * @Soap\Result(phpType="boolean")
+     * @AclAncestor("oro_user_profile_edit")
      */
     public function updateAction($id, $profile)
     {
@@ -67,8 +72,9 @@ class ProfileController extends BaseController
 
     /**
      * @Soap\Method("deleteUser")
-     * @Soap\Param("id", phpType = "int")
-     * @Soap\Result(phpType = "boolean")
+     * @Soap\Param("id", phpType="int")
+     * @Soap\Result(phpType="boolean")
+     * @AclAncestor("oro_user_profile_remove")
      */
     public function deleteAction($id)
     {
@@ -81,8 +87,9 @@ class ProfileController extends BaseController
 
     /**
      * @Soap\Method("getUserRoles")
-     * @Soap\Param("id", phpType = "int")
-     * @Soap\Result(phpType = "Oro\Bundle\UserBundle\Entity\Role[]")
+     * @Soap\Param("id", phpType="int")
+     * @Soap\Result(phpType="Oro\Bundle\UserBundle\Entity\Role[]")
+     * @AclAncestor("oro_user_profile_roles")
      */
     public function getRolesAction($id)
     {
@@ -91,8 +98,9 @@ class ProfileController extends BaseController
 
     /**
      * @Soap\Method("getUserGroups")
-     * @Soap\Param("id", phpType = "int")
-     * @Soap\Result(phpType = "Oro\Bundle\UserBundle\Entity\Group[]")
+     * @Soap\Param("id", phpType="int")
+     * @Soap\Result(phpType="Oro\Bundle\UserBundle\Entity\Group[]")
+     * @AclAncestor("oro_user_profile_groups")
      */
     public function getGroupsAction($id)
     {
@@ -100,9 +108,23 @@ class ProfileController extends BaseController
     }
 
     /**
+     * @Soap\Method("getUserAcl")
+     * @Soap\Param("id", phpType="int")
+     * @Soap\Result(phpType="string[]")
+     * @AclAncestor("oro_user_profile_acl")
+     */
+    public function getAclAction($id)
+    {
+        return $this->getAclManager()->getAclForUser(
+            $this->getEntity('OroUserBundle:User', $id)
+        );
+    }
+
+    /**
      * @Soap\Method("getUserBy")
-     * @Soap\Param("filters", phpType = "BeSimple\SoapCommon\Type\KeyValue\String[]")
-     * @Soap\Result(phpType = "Oro\Bundle\UserBundle\Entity\User")
+     * @Soap\Param("filters", phpType="BeSimple\SoapCommon\Type\KeyValue\String[]")
+     * @Soap\Result(phpType="Oro\Bundle\UserBundle\Entity\User")
+     * @AclAncestor("oro_user_profile_show")
      */
     public function getByAction(array $filters)
     {
@@ -117,22 +139,6 @@ class ProfileController extends BaseController
         }
 
         return $entity;
-    }
-
-    /**
-     * @Soap\Method("getUserAcl")
-     * @Soap\Param("id", phpType = "int")
-     * @Soap\Result(phpType = "string[]")
-     */
-    public function getAclAction($id)
-    {
-        $user = ($this->getUserManager()->findUserBy(array('id' => (int) $id)));
-
-        if (!$user) {
-            throw new \SoapFault('NOT_FOUND', 'User can not be found using specified filter');
-        }
-
-        return $this->getAclManager()->getAclForUser($user);
     }
 
     /**

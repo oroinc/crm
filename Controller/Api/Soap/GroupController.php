@@ -5,12 +5,14 @@ namespace Oro\Bundle\UserBundle\Controller\Api\Soap;
 use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 
 use Oro\Bundle\UserBundle\Entity\Group;
+use Oro\Bundle\UserBundle\Annotation\AclAncestor;
 
 class GroupController extends BaseController
 {
     /**
      * @Soap\Method("getGroups")
-     * @Soap\Result(phpType = "Oro\Bundle\UserBundle\Entity\Group[]")
+     * @Soap\Result(phpType="Oro\Bundle\UserBundle\Entity\Group[]")
+     * @AclAncestor("oro_user_group_list")
      */
     public function cgetAction()
     {
@@ -19,8 +21,9 @@ class GroupController extends BaseController
 
     /**
      * @Soap\Method("getGroup")
-     * @Soap\Param("id", phpType = "int")
-     * @Soap\Result(phpType = "Oro\Bundle\UserBundle\Entity\Group")
+     * @Soap\Param("id", phpType="int")
+     * @Soap\Result(phpType="Oro\Bundle\UserBundle\Entity\Group")
+     * @AclAncestor("oro_user_group_show")
      */
     public function getAction($id)
     {
@@ -29,8 +32,9 @@ class GroupController extends BaseController
 
     /**
      * @Soap\Method("createGroup")
-     * @Soap\Param("group", phpType = "\Oro\Bundle\UserBundle\Entity\Group")
-     * @Soap\Result(phpType = "boolean")
+     * @Soap\Param("group", phpType="\Oro\Bundle\UserBundle\Entity\Group")
+     * @Soap\Result(phpType="boolean")
+     * @AclAncestor("oro_user_group_create")
      */
     public function createAction($group)
     {
@@ -44,9 +48,10 @@ class GroupController extends BaseController
 
     /**
      * @Soap\Method("updateGroup")
-     * @Soap\Param("id", phpType = "int")
-     * @Soap\Param("group", phpType = "\Oro\Bundle\UserBundle\Entity\Group")
-     * @Soap\Result(phpType = "boolean")
+     * @Soap\Param("id", phpType="int")
+     * @Soap\Param("group", phpType="\Oro\Bundle\UserBundle\Entity\Group")
+     * @Soap\Result(phpType="boolean")
+     * @AclAncestor("oro_user_group_update")
      */
     public function updateAction($id, $group)
     {
@@ -60,8 +65,9 @@ class GroupController extends BaseController
 
     /**
      * @Soap\Method("deleteGroup")
-     * @Soap\Param("id", phpType = "int")
-     * @Soap\Result(phpType = "boolean")
+     * @Soap\Param("id", phpType="int")
+     * @Soap\Result(phpType="boolean")
+     * @AclAncestor("oro_user_group_remove")
      */
     public function deleteAction($id)
     {
@@ -75,8 +81,9 @@ class GroupController extends BaseController
 
     /**
      * @Soap\Method("getGroupRoles")
-     * @Soap\Param("id", phpType = "int")
-     * @Soap\Result(phpType = "Oro\Bundle\UserBundle\Entity\Role[]")
+     * @Soap\Param("id", phpType="int")
+     * @Soap\Result(phpType="Oro\Bundle\UserBundle\Entity\Role[]")
+     * @AclAncestor("oro_user_group_roles")
      */
     public function getRolesAction($id)
     {
