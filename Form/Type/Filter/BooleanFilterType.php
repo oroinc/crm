@@ -53,10 +53,7 @@ class BooleanFilterType extends AbstractType
 
         $resolver->setDefaults(
             array(
-                'field_options' => array(
-                    'choices'  => $fieldChoices,
-                    'multiple' => false,
-                ),
+                'field_options' => array('choices' => $fieldChoices),
             )
         );
     }
