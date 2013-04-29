@@ -164,7 +164,7 @@
 
         </header>
         {% endblock header %}
-
+        {% block top_action_box %}{% endblock %}
         <div id="flash-messages">
             {% block messages %}
                 {% if app.session.flashbag.peekAll|length > 0 %}
