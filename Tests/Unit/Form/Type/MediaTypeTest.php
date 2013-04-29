@@ -33,7 +33,7 @@ class MediaTypeTest extends TypeTestCase
     {
         $this->assertField('id', 'hidden');
         $this->assertField('file', 'file');
-        $this->assertField('remove', 'checkbox');
+        $this->assertField('removed', 'checkbox');
 
         $this->assertEquals(
             'Oro\Bundle\FlexibleEntityBundle\Entity\Media',
