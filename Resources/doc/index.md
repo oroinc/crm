@@ -1,11 +1,11 @@
 OroGridBundle Documentation
 ===========================
 
-- [Overview](./reference/overview.md)
+- [**Overview**](./reference/overview.md)
     - [Main Components](./reference/overview.md#main-components)
     - [Example Of Usage](./reference/overview.md#example-of-usage)
     - [Dependencies](./reference/overview.md#dependencies)
-- [Backend Architecture](./reference/backend/index.md)
+- **Backend Architecture**
     - [Overview](./reference/backend/overview.md)
     - [Configuration](./reference/backend/configuration.md)
     - [Datagrid Managers](./reference/backend/datagrid-managers.md)
@@ -14,13 +14,13 @@ OroGridBundle Documentation
     - [Proxy Query](./reference/backend/proxy-query.md)
     - [Fields](./reference/backend/fields.md)
     - [Properties](./reference/backend/properties.md)
-    - [Backend Pager](./reference/backend/pager.md)
-    - [Backend Filters](./reference/backend/filters.md)
-    - [Backend Sorters](./reference/backend/sorters.md)
-    - [Backend Actions](./reference/backend/actions.md)
+    - [Pager](./reference/backend/pager.md)
+    - [Filters](./reference/backend/filters.md)
+    - [Sorters](./reference/backend/sorters.md)
+    - [Actions](./reference/backend/actions.md)
     - [Parameters](./reference/backend/parameters.md)
     - [Route Generator](./reference/backend/route-generator.md)
-- [Frontend Architecture](./reference/frontend/index.md)
+- **Frontend Architecture**
     - [Overview](./reference/frontend/overview.md)
     - [Backbone Developer Introduction](./reference/frontend/backbone-developer-introduction.md)
     - [Backgrid Developer Introduction](./reference/frontend/backgrid-developer-introduction.md)
