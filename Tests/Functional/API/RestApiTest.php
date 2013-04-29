@@ -35,7 +35,16 @@ class RestApiTest extends WebTestCase
     public function testPost()
     {
         /** @var \Oro\Bundle\AddressBundle\Entity\Region $region */
-        $region = $this->em->getRepository('OroAddressBundle:Region')->findOneByCode('CA');
+        $region = $this->em->getRepository('OroAddressBundle:Region')->findOneByCode('TEST');
+
+        if (!$region) {
+            $country = $this->em->getRepository('OroAddressBundle:Country')->findOneByIso2Code('US');
+
+            $region = new Region();
+            $region->setCode('TEST')
+                ->setCountry($country)
+                ->setName('TEST');
+        }
         $requestData = array('address' =>
             array(
                 'street'      => 'Some kind sd',
@@ -55,6 +64,7 @@ class RestApiTest extends WebTestCase
 
         /** @var $result Response */
         $result = $this->client->getResponse();
+
         $this->assertJsonResponse($result, 201);
         $this->assertRegExp('#/addresses/[\d+]#', $result->headers->get('Location'));
 
