@@ -39,14 +39,22 @@ navigation.pinbar.ItemView = Backbone.View.extend({
     unpin: function()
     {
         this.model.destroy({wait: true});
+        return false;
     },
 
     maximize: function() {
         this.model.set('maximized', new Date().toISOString());
+        return false;
     },
 
     setActiveItem: function() {
-        if (this.model.get('url') ==  OroApp.hashNavigation.prototype.getHashUrl()) {
+        var url = '';
+        if (OroApp.hashNavigationEnabled()) {
+            url = OroApp.Navigation.prototype.getHashUrl();
+        } else {
+            url = window.location.pathname;
+        }
+        if (this.model.get('url') ==  url) {
             this.$el.addClass('active');
         } else {
             this.$el.removeClass('active');

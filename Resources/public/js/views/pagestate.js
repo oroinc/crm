@@ -74,9 +74,9 @@ Oro.PageState.View = Backbone.View.extend({
     },
 
     filterUrl: function() {
-        self = this;
+        var self = this;
 
-        params = window.location.search.replace('?', '').split('&');
+        var params = window.location.search.replace('?', '').split('&');
 
         if (params.length == 1 && params[0].indexOf('restore') !== -1) {
             params = '';

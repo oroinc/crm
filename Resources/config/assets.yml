@@ -1,0 +1,3 @@
+js:
+  - '@OroNavigationBundle/Resources/public/js/hash.navigation.js'
+  - '@OroNavigationBundle/Resources/public/js/url.min.js'
