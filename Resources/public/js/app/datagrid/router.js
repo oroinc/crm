@@ -69,8 +69,8 @@ OroApp.Datagrid.Router = OroApp.Router.extend({
         }
         var encodedStateData = collection.encodeStateData(collection.state);
         var url = '';
-        if (OroApp.hashNavigation) {
-            url = 'url=' + OroApp.hashNavigation.prototype.getHashUrl() + '|g/' + encodedStateData;
+        if (OroApp.hashNavigationEnabled()) {
+            url = 'url=' + OroApp.Navigation.prototype.getHashUrl() + '|g/' + encodedStateData;
         } else {
             url = 'g/' + encodedStateData;
         }
