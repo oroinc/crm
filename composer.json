@@ -14,6 +14,13 @@
         "doctrine/dbal": ">=2.2,<2.4-dev",
         "doctrine/orm": ">=2.2.3,<2.4-dev"
     },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/laboro/UIBundle",
+            "branch": "master"
+        }
+    ],
     "autoload": {
         "psr-0": { "Oro\\Bundle\\FlexibleEntityBundle": "" }
     },
