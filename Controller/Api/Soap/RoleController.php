@@ -5,12 +5,14 @@ namespace Oro\Bundle\UserBundle\Controller\Api\Soap;
 use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 
 use Oro\Bundle\UserBundle\Entity\Role;
+use Oro\Bundle\UserBundle\Annotation\AclAncestor;
 
 class RoleController extends BaseController
 {
     /**
      * @Soap\Method("getRoles")
-     * @Soap\Result(phpType = "Oro\Bundle\UserBundle\Entity\Role[]")
+     * @Soap\Result(phpType="Oro\Bundle\UserBundle\Entity\Role[]")
+     * @AclAncestor("oro_user_role_list")
      */
     public function cgetAction()
     {
@@ -19,8 +21,9 @@ class RoleController extends BaseController
 
     /**
      * @Soap\Method("getRole")
-     * @Soap\Param("id", phpType = "int")
-     * @Soap\Result(phpType = "Oro\Bundle\UserBundle\Entity\Role")
+     * @Soap\Param("id", phpType="int")
+     * @Soap\Result(phpType="Oro\Bundle\UserBundle\Entity\Role")
+     * @AclAncestor("oro_user_role_show")
      */
     public function getAction($id)
     {
@@ -29,8 +32,9 @@ class RoleController extends BaseController
 
     /**
      * @Soap\Method("createRole")
-     * @Soap\Param("role", phpType = "Oro\Bundle\UserBundle\Entity\Role")
-     * @Soap\Result(phpType = "boolean")
+     * @Soap\Param("role", phpType="Oro\Bundle\UserBundle\Entity\Role")
+     * @Soap\Result(phpType="boolean")
+     * @AclAncestor("oro_user_role_create")
      */
     public function createAction($role)
     {
@@ -44,9 +48,10 @@ class RoleController extends BaseController
 
     /**
      * @Soap\Method("updateRole")
-     * @Soap\Param("id", phpType = "int")
-     * @Soap\Param("role", phpType = "Oro\Bundle\UserBundle\Entity\Role")
-     * @Soap\Result(phpType = "boolean")
+     * @Soap\Param("id", phpType="int")
+     * @Soap\Param("role", phpType="Oro\Bundle\UserBundle\Entity\Role")
+     * @Soap\Result(phpType="boolean")
+     * @AclAncestor("oro_user_role_update")
      */
     public function updateAction($id, $role)
     {
@@ -60,8 +65,9 @@ class RoleController extends BaseController
 
     /**
      * @Soap\Method("deleteRole")
-     * @Soap\Param("id", phpType = "int")
-     * @Soap\Result(phpType = "boolean")
+     * @Soap\Param("id", phpType="int")
+     * @Soap\Result(phpType="boolean")
+     * @AclAncestor("oro_user_role_remove")
      */
     public function deleteAction($id)
     {
@@ -76,8 +82,9 @@ class RoleController extends BaseController
 
     /**
      * @Soap\Method("getRoleByName")
-     * @Soap\Param("name", phpType = "string")
-     * @Soap\Result(phpType = "Oro\Bundle\UserBundle\Entity\Role")
+     * @Soap\Param("name", phpType="string")
+     * @Soap\Result(phpType="Oro\Bundle\UserBundle\Entity\Role")
+     * @AclAncestor("oro_user_role_show")
      */
     public function getBynameAction($name)
     {
@@ -94,6 +101,7 @@ class RoleController extends BaseController
      * @Soap\Method("getRoleAcl")
      * @Soap\Param("id", phpType = "int")
      * @Soap\Result(phpType = "string[]")
+     * @AclAncestor("oro_user_acl_edit")
      */
     public function getAclAction($id)
     {
@@ -106,77 +114,77 @@ class RoleController extends BaseController
     }
 
     /**
-     * Link ACL Resource to role
+     * Link ACL resource to role
+     *
+     * @param int    $id       Role id
+     * @param string $resource ACL resource id
      *
      * @Soap\Method("addAclToRole")
-     * @Soap\Param("roleId", phpType = "int")
-     * @Soap\Param("aclResourceId", phpType = "string")
-     * @Soap\Result(phpType = "string")
+     * @Soap\Param("id", phpType="int")
+     * @Soap\Param("resource", phpType="string")
+     * @Soap\Result(phpType="string")
+     * @AclAncestor("oro_user_acl_save")
      */
-    public function postAclAction($roleId, $aclResourceId)
+    public function postAclAction($id, $resource)
     {
-        $this->container->get('oro_user.acl_manager')->modifyAclForRole(
-            $roleId,
-            $aclResourceId,
-            true
-        );
+        $this->container->get('oro_user.acl_manager')->modifyAclForRole($id, $resource, true);
 
         return '';
     }
 
     /**
-     * Link ACL Resource to role
+     * Unlink ACL resource from role
      *
-     * @Soap\Method("addAclsToRole")
-     * @Soap\Param("roleId", phpType = "int")
-     * @Soap\Param("aclResources", phpType = "string[]")
-     * @Soap\Result(phpType = "string")
-     */
-    public function addAclsToRoleAction($roleId, $aclResources)
-    {
-        $this->container->get('oro_user.acl_manager')->modifyAclsForRole(
-            $roleId,
-            $aclResources,
-            true
-        );
-
-        return '';
-    }
-
-    /**
-     * Link ACL Resource to role
-     *
-     * @Soap\Method("removeAclsFromRole")
-     * @Soap\Param("roleId", phpType = "int")
-     * @Soap\Param("aclResources", phpType = "string[]")
-     * @Soap\Result(phpType = "string")
-     */
-    public function removeAclsFromRoleAction($roleId, $aclResources)
-    {
-        $this->container->get('oro_user.acl_manager')->modifysForRole(
-            $roleId,
-            $aclResources,
-            false
-        );
-
-        return '';
-    }
-
-    /**
-     * Unlink ACL Resource from role
+     * @param int    $id       Role id
+     * @param string $resource ACL resource id
      *
      * @Soap\Method("removeAclFromRole")
-     * @Soap\Param("roleId", phpType = "int")
-     * @Soap\Param("aclResourceId", phpType = "string")
-     * @Soap\Result(phpType = "string")
+     * @Soap\Param("id", phpType="int")
+     * @Soap\Param("resource", phpType="string")
+     * @Soap\Result(phpType="string")
+     * @AclAncestor("oro_user_acl_save")
      */
-    public function deleteAclAction($roleId, $aclResourceId)
+    public function deleteAclAction($id, $resource)
     {
-        $this->container->get('oro_user.acl_manager')->modifyAclForRole(
-            $roleId,
-            $aclResourceId,
-            false
-        );
+        $this->container->get('oro_user.acl_manager')->modifyAclForRole($id, $resource, false);
+
+        return '';
+    }
+
+    /**
+     * Link ACL resources to role
+     *
+     * @param int   $id        Role id
+     * @param array $resources Array of ACL resource ids
+     *
+     * @Soap\Method("addAclsToRole")
+     * @Soap\Param("id", phpType="int")
+     * @Soap\Param("resources", phpType="string[]")
+     * @Soap\Result(phpType="string")
+     * @AclAncestor("oro_user_acl_save")
+     */
+    public function addAclsToRoleAction($id, $resources)
+    {
+        $this->container->get('oro_user.acl_manager')->modifyAclsForRole($id, $resources, true);
+
+        return '';
+    }
+
+    /**
+     * Unlink ACL resources from role
+     *
+     * @param int   $id        Role id
+     * @param array $resources Array of ACL resource ids
+     *
+     * @Soap\Method("removeAclsFromRole")
+     * @Soap\Param("id", phpType="int")
+     * @Soap\Param("resources", phpType="string[]")
+     * @Soap\Result(phpType="string")
+     * @AclAncestor("oro_user_acl_save")
+     */
+    public function deleteAclsAction($id, $resources)
+    {
+        $this->container->get('oro_user.acl_manager')->modifysForRole($id, $resources, false);
 
         return '';
     }

@@ -10,21 +10,22 @@ use FOS\RestBundle\Controller\Annotations\QueryParam;
 
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
+use Oro\Bundle\UserBundle\Annotation\Acl;
+use Oro\Bundle\UserBundle\Annotation\AclAncestor;
+
 /**
  * @NamePrefix("oro_api_")
  */
 class AclController extends FOSRestController implements ClassResourceInterface
 {
-
     /**
-     * Get ACL Resources
-     *
-     * @param int $id Group id
+     * Get ACL resources
      *
      * @ApiDoc(
-     *  description="Get ACL Resources ",
-     *  resource=true
+     *      description="Get ACL resources",
+     *      resource=true
      * )
+     * @AclAncestor("oro_user_acl_edit")
      */
     public function cgetAction()
     {
@@ -37,18 +38,23 @@ class AclController extends FOSRestController implements ClassResourceInterface
     }
 
     /**
-     * Get ACL Resource data
+     * Get ACL resource data
      *
-     * @QueryParam(name="id", nullable=false, description="ACL Resource id.")
+     * @param string $id ACL resource id
      *
-     * @param int $id Group id
-     *
+     * @QueryParam(name="id", nullable=false, description="ACL resource id")
      * @ApiDoc(
-     *  description="Get Acl resource",
-     *  resource=true,
-     *  filters={
-     *      {"name"="id", "dataType"="string"},
-     *  }
+     *      description="Get ACL resource data",
+     *      resource=true,
+     *      filters={
+     *          {"name"="id", "dataType"="string"},
+     *      }
+     * )
+     * @Acl(
+     *      id="oro_user_acl_show",
+     *      name="View ACL resource",
+     *      description="View ACL resource",
+     *      parent="oro_user_acl"
      * )
      */
     public function getAction($id)

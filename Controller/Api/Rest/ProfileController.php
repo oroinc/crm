@@ -12,6 +12,8 @@ use FOS\Rest\Util\Codes;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
 use Oro\Bundle\UserBundle\Entity\User;
+use Oro\Bundle\UserBundle\Annotation\Acl;
+use Oro\Bundle\UserBundle\Annotation\AclAncestor;
 
 /**
  * @NamePrefix("oro_api_")
@@ -24,13 +26,14 @@ class ProfileController extends FOSRestController implements ClassResourceInterf
      * @QueryParam(name="page", requirements="\d+", nullable=true, description="Page number, starting from 1. Defaults to 1.")
      * @QueryParam(name="limit", requirements="\d+", nullable=true, description="Number of items per page. defaults to 10.")
      * @ApiDoc(
-     *  description="Get the list of users",
-     *  resource=true,
-     *  filters={
-     *      {"name"="page", "dataType"="integer"},
-     *      {"name"="limit", "dataType"="integer"}
-     *  }
+     *      description="Get the list of users",
+     *      resource=true,
+     *      filters={
+     *          {"name"="page", "dataType"="integer"},
+     *          {"name"="limit", "dataType"="integer"}
+     *      }
      * )
+     * @AclAncestor("oro_user_profile_list")
      */
     public function cgetAction()
     {
@@ -57,12 +60,13 @@ class ProfileController extends FOSRestController implements ClassResourceInterf
      * @param int $id User id
      *
      * @ApiDoc(
-     *  description="Get user data",
-     *  resource=true,
-     *  requirements={
-     *      {"name"="id", "dataType"="integer"},
-     *  }
+     *      description="Get user data",
+     *      resource=true,
+     *      requirements={
+     *          {"name"="id", "dataType"="integer"},
+     *      }
      * )
+     * @AclAncestor("oro_user_profile_show")
      */
     public function getAction($id)
     {
@@ -80,9 +84,10 @@ class ProfileController extends FOSRestController implements ClassResourceInterf
      * Create new user
      *
      * @ApiDoc(
-     *  description="Create new user",
-     *  resource=true
+     *      description="Create new user",
+     *      resource=true
      * )
+     * @AclAncestor("oro_user_profile_create")
      */
     public function postAction()
     {
@@ -103,12 +108,13 @@ class ProfileController extends FOSRestController implements ClassResourceInterf
      * @param int $id User id
      *
      * @ApiDoc(
-     *  description="Update existing user",
-     *  resource=true,
-     *  requirements={
-     *      {"name"="id", "dataType"="integer"},
-     *  }
+     *      description="Update existing user",
+     *      resource=true,
+     *      requirements={
+     *          {"name"="id", "dataType"="integer"},
+     *      }
      * )
+     * @AclAncestor("oro_user_profile_edit")
      */
     public function putAction($id)
     {
@@ -134,11 +140,17 @@ class ProfileController extends FOSRestController implements ClassResourceInterf
      * @param int $id User id
      *
      * @ApiDoc(
-     *  description="Delete user",
-     *  resource=true,
-     *  requirements={
-     *      {"name"="id", "dataType"="integer"},
-     *  }
+     *      description="Delete user",
+     *      resource=true,
+     *      requirements={
+     *          {"name"="id", "dataType"="integer"},
+     *      }
+     * )
+     * @Acl(
+     *      id="oro_user_profile_remove",
+     *      name="Remove user profile",
+     *      description="Remove user profile",
+     *      parent="oro_user_profile"
      * )
      */
     public function deleteAction($id)
@@ -160,11 +172,17 @@ class ProfileController extends FOSRestController implements ClassResourceInterf
      * @param int $id User id
      *
      * @ApiDoc(
-     *  description="Get user roles",
-     *  resource=true,
-     *  requirements={
-     *      {"name"="id", "dataType"="integer"},
-     *  }
+     *      description="Get user roles",
+     *      resource=true,
+     *      requirements={
+     *          {"name"="id", "dataType"="integer"},
+     *      }
+     * )
+     * @Acl(
+     *      id="oro_user_profile_roles",
+     *      name="View user roles",
+     *      description="View user roles",
+     *      parent="oro_user"
      * )
      */
     public function getRolesAction($id)
@@ -184,11 +202,17 @@ class ProfileController extends FOSRestController implements ClassResourceInterf
      * @param int $id User id
      *
      * @ApiDoc(
-     *  description="Get user groups",
-     *  resource=true,
-     *  requirements={
-     *      {"name"="id", "dataType"="integer"},
-     *  }
+     *      description="Get user groups",
+     *      resource=true,
+     *      requirements={
+     *          {"name"="id", "dataType"="integer"},
+     *      }
+     * )
+     * @Acl(
+     *      id="oro_user_profile_groups",
+     *      name="View user groups",
+     *      description="View user groups",
+     *      parent="oro_user"
      * )
      */
     public function getGroupsAction($id)
@@ -203,21 +227,28 @@ class ProfileController extends FOSRestController implements ClassResourceInterf
     }
 
     /**
-     * Get user acl list
+     * Get user's ACL list
      *
      * @param int $id User id
      *
      * @ApiDoc(
-     *  description="Get user allowed ACL resources",
-     *  resource=true,
-     *  requirements={
-     *      {"name"="id", "dataType"="integer"},
-     *  }
+     *      description="Get user's granted ACL resources",
+     *      resource=true,
+     *      requirements={
+     *          {"name"="id", "dataType"="integer"},
+     *      }
+     * )
+     * @Acl(
+     *      id="oro_user_profile_acl",
+     *      name="View user ACL",
+     *      description="View user's granted ACL resources",
+     *      parent="oro_user"
      * )
      */
     public function getAclAction($id)
     {
-        $user = ($this->getManager()->findUserBy(array('id' => (int) $id)));
+        $user = $this->getManager()->findUserBy(array('id' => (int) $id));
+
         if (!$user) {
             return $this->handleView($this->view('', Codes::HTTP_NOT_FOUND));
         }
@@ -231,13 +262,14 @@ class ProfileController extends FOSRestController implements ClassResourceInterf
      * @QueryParam(name="email", requirements="[a-zA-Z0-9\-_\.@]+", nullable=true, description="Email to filter")
      * @QueryParam(name="username", requirements="[a-zA-Z0-9\-_\.]+", nullable=true, description="Username to filter")
      * @ApiDoc(
-     *  description="Get user by username or email",
-     *  resource=true,
-     *  filters={
-     *      {"name"="email", "dataType"="string"},
-     *      {"name"="username", "dataType"="string"}
-     *  }
+     *      description="Get user by username or email",
+     *      resource=true,
+     *      filters={
+     *          {"name"="email", "dataType"="string"},
+     *          {"name"="username", "dataType"="string"}
+     *      }
      * )
+     * @AclAncestor("oro_user_profile_show")
      */
     public function getFilterAction()
     {

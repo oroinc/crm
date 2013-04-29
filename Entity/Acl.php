@@ -413,7 +413,7 @@ class Acl
 
     /**
      * Set new access roles collection
-     * 
+     *
      * @param  ArrayCollection $roles
      * @return Acl
      */
