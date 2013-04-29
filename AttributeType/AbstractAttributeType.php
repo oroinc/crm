@@ -19,14 +19,14 @@ abstract class AbstractAttributeType implements AttributeTypeInterface
 {
     /**
      * Available backend storage, the flexible doctrine mapped field
-     * 
+     *
      * @var string
      */
     const BACKEND_STORAGE_ATTRIBUTE_VALUE = 'values';
 
     /**
      * Available backend types, the doctrine mapped field in value class
-     * 
+     *
      * @var string
      */
     const BACKEND_TYPE_DATE     = 'date';
@@ -93,7 +93,7 @@ abstract class AbstractAttributeType implements AttributeTypeInterface
         $this->name = $name;
         $this->options = $options;
     }
-    
+
     /**
      * Get attribute type name
      *
@@ -141,12 +141,22 @@ abstract class AbstractAttributeType implements AttributeTypeInterface
     {
         $attribute   = $value->getAttribute();
         $formName    = $attribute->getBackendType();
-        $formType    = $this->getFormType();
+        $formType    = $this->getValueFormType($value);
         $formOptions = $this->prepareFormOptions($attribute); // TODO : useless !!!!??
         $data        = is_null($value->getData()) ? $attribute->getDefaultValue() : $value->getData();
         $form        = $factory->createNamed($formName, $formType, $data, $formOptions);
 
         return $form;
+    }
+
+    /**
+     * Get form type from value
+     *
+     * @param FlexibleValueInterface $value
+     */
+    protected function getValueFormType(FlexibleValueInterface $value)
+    {
+        return $this->getFormType();
     }
 
     /**
