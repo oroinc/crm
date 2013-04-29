@@ -26,7 +26,11 @@ $(function() {
                     url: Routing.generate('oro_api_delete_profile', { id: el.attr('data-id') }),
                     type: 'DELETE',
                     success: function (data) {
-                        OroApp.hashNavigation.prototype.setLocation(Routing.generate('oro_user_index'))
+                        if (OroApp.hashNavigationEnabled()) {
+                            OroApp.Navigation.prototype.setLocation(Routing.generate('oro_user_index'))
+                        } else {
+                            window.location.href = Routing.generate('oro_user_index');
+                        }
                     }
                 });
             };
