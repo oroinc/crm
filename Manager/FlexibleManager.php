@@ -272,25 +272,30 @@ class FlexibleManager implements TranslatableInterface, ScopableInterface
     }
 
     /**
-     * Return a new instance
+     * Return a new attribute instance
      *
-     * @param AbstractAttributeType $type attribute type
+     * @param string $type attribute type
      *
      * @return AbstractAttribute
      */
-    public function createAttribute(AbstractAttributeType $type = null)
+    public function createAttribute($type = null)
     {
-        // create attribute
         $class = $this->getAttributeName();
         $attribute = new $class();
         $attribute->setEntityType($this->getFlexibleName());
-        // add configuration related to the attribute type
+
         $attribute->setBackendStorage(AbstractAttributeType::BACKEND_STORAGE_ATTRIBUTE_VALUE);
         if ($type) {
-            $attribute->setBackendType($type->getBackendType());
-            $attribute->setAttributeType($type->getName());
+            if (!in_array($type, $this->getAttributeTypes())) {
+                throw new FlexibleConfigurationException(
+                    sprintf('Attribute "%s" type is not useable for this flexible entity', $type)
+                );
+            }
+            $attributeType = $this->getAttributeTypeFactory()->get($type);
+            $attribute->setBackendType($attributeType->getBackendType());
+            $attribute->setAttributeType($attributeType->getName());
         }
-        // dispatch event
+
         $event = new FilterAttributeEvent($this, $attribute);
         $this->eventDispatcher->dispatch(FlexibleEntityEvents::CREATE_ATTRIBUTE, $event);
 
