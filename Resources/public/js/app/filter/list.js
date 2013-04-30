@@ -231,16 +231,19 @@ OroApp.Filter.List = Backbone.View.extend({
      * @protected
      */
     _initializeSelectWidget: function() {
-        this.selectWidget = new OroApp.Filter.MultiSelectDecorator(this.$(this.filterSelector), {
-            multiple: true,
-            selectedList: 0,
-            selectedText: this.addButtonHint,
-            classes: 'filter-list select-filter-widget',
-            open: $.proxy(function() {
-                this.selectWidget.onOpenDropdown();
-                this._setDropdownWidth();
-                this._updateDropdownPosition();
-            }, this)
+        this.selectWidget = new OroApp.Filter.MultiSelectDecorator({
+            element: this.$(this.filterSelector),
+            parameters: {
+                multiple: true,
+                selectedList: 0,
+                selectedText: this.addButtonHint,
+                classes: 'filter-list select-filter-widget',
+                open: $.proxy(function() {
+                    this.selectWidget.onOpenDropdown();
+                    this._setDropdownWidth();
+                    this._updateDropdownPosition();
+                }, this)
+            }
         });
 
         this.selectWidget.setViewDesign(this);

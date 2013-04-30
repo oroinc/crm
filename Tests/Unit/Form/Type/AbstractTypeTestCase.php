@@ -10,6 +10,11 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 abstract class AbstractTypeTestCase extends FormIntegrationTestCase
 {
     /**
+     * @var \Symfony\Component\Form\FormFactory
+     */
+    protected $factory;
+
+    /**
      * @var string
      */
     protected $defaultLocale = null;
@@ -59,7 +64,8 @@ abstract class AbstractTypeTestCase extends FormIntegrationTestCase
     protected function createMockTranslator()
     {
         $translator = $this->getMock('Symfony\Component\Translation\TranslatorInterface');
-        $translator->expects($this->any())->method('trans')
+        $translator->expects($this->any())
+            ->method('trans')
             ->with($this->anything(), array(), 'OroFilterBundle')
             ->will($this->returnArgument(0));
 

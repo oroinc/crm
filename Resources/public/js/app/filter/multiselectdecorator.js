@@ -7,42 +7,60 @@ OroApp.Filter = OroApp.Filter || {};
  *
  * @class OroApp.Filter.MultiSelectDecorator
  */
-OroApp.Filter.MultiSelectDecorator = function (element, parameters) {
-    this.element = element;
-    _.extend(this.parameters, parameters);
-    this.initialize();
+OroApp.Filter.MultiSelectDecorator = function(options) {
+    this.initialize(options);
 };
 
 _.extend(OroApp.Filter.MultiSelectDecorator.prototype, {
     /**
      * Multiselect widget element container
      *
-     * @property
+     * @property {Object}
      */
     element: null,
 
     /**
      * Default multiselect widget parameters
      *
-     * @property
+     * @property {Object}
      */
     parameters: {
         height: 'auto'
     },
 
     /**
+     * @property {Boolean}
+     */
+    contextSearch: true,
+
+    /**
      * Initialize all required properties
      */
-    initialize: function() {
+    initialize: function(options) {
+        if (!options.element) {
+            throw new Error("Select element must be defined");
+        }
+        this.element = options.element;
+
+        if (options.parameters) {
+            _.extend(this.parameters, options.parameters);
+        }
+
+        if (_.has(options, 'contextSearch')) {
+            this.contextSearch = options.contextSearch;
+        }
+
         // initialize multiselect widget
         this.multiselect(this.parameters);
 
         // initialize multiselect filter
-        this.multiselectfilter({
-            label: '',
-            placeholder: '',
-            autoReset: true
-        });
+        if (this.contextSearch) {
+            this.multiselectfilter({
+                label: '',
+                placeholder: '',
+                autoReset: true
+            });
+        }
     },
 
     /**

@@ -44,6 +44,11 @@ There are next filters form types:
     <td>Represents choice filter form</td>
 </tr>
 <tr>
+    <td><a href="#oro_type_boolean_filter-form-type">BooleanFilterType</a></td>
+    <td>oro_type_boolean_filter</td>
+    <td>Represents boolean filter form</td>
+</tr>
+<tr>
     <td><a href="#oro_type_date_range_filter-form-type">DateRangeFilterType</a></td>
     <td>oro_type_date_range_filter</td>
     <td>Represents date filter form</td>
@@ -215,6 +220,35 @@ _Oro\Bundle\FilterBundle\Form\Type\Filter\ChoiceFilterType_
 **JS Classes**
 
 _OroApp.Filter.MultiSelectFilter_
+_OroApp.Filter.SelectFilter_
+
+### oro\_type\_boolean\_filter Form Type
+
+**Inherit Options**
+
+* field\_type
+* field\_options
+* operator\_choices
+* operator\_type
+* operator\_options
+* show\_filter
+
+**Default Options**
+
+* field\_options = choices
+    * BooleanFilterType::TYPE\_YES
+    * BooleanFilterType::TYPE\_NO
+
+**Parent Type**
+
+oro\_type\_choice\_filter
+
+**Class**
+
+_Oro\Bundle\FilterBundle\Form\Type\Filter\BooleanFilterType_
+
+**JS Class**
+
 _OroApp.Filter.SelectFilter_
 
 ### oro\_type\_date\_range\_filter Form Type
