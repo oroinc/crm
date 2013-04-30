@@ -71,7 +71,7 @@ class Region
      * @param Country $country
      * @return Region
      */
-    public function setCountry(Country $country)
+    public function setCountry($country)
     {
         $this->country = $country;
     

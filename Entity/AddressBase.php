@@ -170,7 +170,7 @@ class AddressBase extends AbstractEntityFlexible
      * @param Region $state
      * @return AddressBase
      */
-    public function setState(Region $state)
+    public function setState($state)
     {
         $this->state = $state;
     
@@ -216,7 +216,7 @@ class AddressBase extends AbstractEntityFlexible
      * @param Country $country
      * @return AddressBase
      */
-    public function setCountry(Country $country)
+    public function setCountry($country)
     {
         $this->country = $country;
     
