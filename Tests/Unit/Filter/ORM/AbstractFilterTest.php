@@ -35,18 +35,18 @@ class AbstractFilterTest extends \PHPUnit_Framework_TestCase
         return array(
             'default' => array(
                 array(),
-                array(FilterType::NAME, array('field_options' => array('required' => false), 'show_filter' => false))
+                array(FilterType::NAME, array('show_filter' => false))
             ),
             'custom_form_type' => array(
                 array('form_type' => TextFilterType::NAME),
                 array(TextFilterType::NAME,
-                    array('field_options' => array('required' => false), 'show_filter' => false)
+                    array('show_filter' => false)
                 )
             ),
             'custom_field_type' => array(
                 array('field_type' => 'text'),
                 array(FilterType::NAME,
-                    array('field_type' => 'text', 'field_options' => array('required' => false), 'show_filter' => false)
+                    array('field_type' => 'text', 'show_filter' => false)
                 )
             ),
             'custom_field_options' => array(
@@ -60,7 +60,7 @@ class AbstractFilterTest extends \PHPUnit_Framework_TestCase
                 array(FilterType::NAME,
                     array(
                         'label' => 'custom label',
-                        'field_options' => array('required' => false), 'show_filter' => false
+                        'show_filter' => false
                     )
                 )
             )
@@ -74,5 +74,16 @@ class AbstractFilterTest extends \PHPUnit_Framework_TestCase
     {
         $this->model->initialize(self::TEST_NAME, $options);
         $this->assertEquals($expectedRenderSettings, $this->model->getRenderSettings());
+    }
+
+    public function testGetFieldOptions()
+    {
+        // default value
+        $this->assertEmpty($this->model->getFieldOptions());
+
+        // predefined value
+        $fieldOptions = array('key' => 'value');
+        $this->model->setOption('field_options', $fieldOptions);
+        $this->assertEquals($fieldOptions, $this->model->getFieldOptions());
     }
 }

@@ -12,15 +12,20 @@ abstract class FilterTestCase extends \PHPUnit_Framework_TestCase
     /**#@+
      * Test parameters
      */
-    const TEST_NAME      = 'test_name';
-    const TEST_ALIAS     = 'test_alias';
-    const TEST_FIELD     = 'test_field';
+    const TEST_NAME  = 'test_name';
+    const TEST_ALIAS = 'test_alias';
+    const TEST_FIELD = 'test_field';
     /**#@-*/
 
     /**
      * @var AbstractFilter
      */
     protected $model;
+
+    /**
+     * @var Expr
+     */
+    protected $expressionFactory;
 
     protected function setUp()
     {
@@ -101,7 +106,10 @@ abstract class FilterTestCase extends \PHPUnit_Framework_TestCase
      */
     protected function getExpressionFactory()
     {
-        return new Expr();
+        if (!$this->expressionFactory) {
+            $this->expressionFactory = new Expr();
+        }
+        return $this->expressionFactory;
     }
 
     /**
