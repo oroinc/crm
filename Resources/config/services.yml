@@ -5,3 +5,11 @@ services:
 #    oro_log.example:
 #        class: %oro_log.example.class%
 #        arguments: [@service_id, "plain_value", %parameter%]
+
+#    oro_log.listener.loggable:
+#        class: Gedmo\Loggable\LoggableListener
+#        class: Oro\Bundle\LogBundle\Entity\Listener\LogPrePersist
+#        tags:
+#            - { name: doctrine.event_subscriber, connection: default }
+#        calls:
+#            - [ setAnnotationReader, [ @annotation_reader ] ]
