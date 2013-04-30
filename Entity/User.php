@@ -26,7 +26,7 @@ use DateTime;
  * @ORM\Entity(repositoryClass="Oro\Bundle\FlexibleEntityBundle\Entity\Repository\FlexibleEntityRepository")
  * @ORM\Table(name="oro_user")
  * @ORM\HasLifecycleCallbacks()
- * @Gedmo\Loggable(logEntryClass="Oro\Bundle\LogBundle\Entity\Log")
+ * @Gedmo\Loggable(logEntryClass="Oro\Bundle\DataAuditBundle\Entity\Log")
  */
 class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Serializable
 {
