@@ -52,6 +52,9 @@
                 '@OroUIBundle/Resources/public/js/backbone/app/collection.js'
                 '@OroUIBundle/Resources/public/js/backbone/setup.js'
 
+                '@OroUIBundle/Resources/public/lib/backbone.bootstrap-modal.js'
+                '@OroUIBundle/Resources/public/js/backbone/bootstrap-modal.js'
+
                 '@FOSJsRoutingBundle/Resources/public/js/router.js'
                 'js/routes.js'
 
@@ -176,21 +179,6 @@
 
         </header>
         {% endblock header %}
-
-        {% if app.session.flashbag.peekAll|length > 0 %}
-        <div class="row-fluid">
-            <div class="span12">
-                {% for type, messages in app.session.flashbag.all %}
-                    {% for message in messages %}
-                    <div class="alert{{ type ? ' alert-'~type : '' }} fade in top-messages">
-                        <a class="close" data-dismiss="alert" href="#">&times;</a>
-                        {{ message|trans|raw }}
-                    </div>
-                    {% endfor %}
-                {% endfor %}
-            </div>
-        </div>
-        {% endif %}
 
         {% block main %}
         <div id="main" >
@@ -354,7 +342,22 @@
                 {% endblock pin_bar %}
                 {% block application_menu %}
                 {% endblock application_menu %}
+                {% if app.session.flashbag.peekAll|length > 0 %}
+
+                    {% for type, messages in app.session.flashbag.all %}
+                        {% for message in messages %}
+                            <div class="alert{{ type ? ' alert-'~type : '' }} fade in top-messages ">
+                                <a class="close" data-dismiss="alert" href="#">&times;</a>
+                                {{ message|trans|raw }}
+                            </div>
+                        {% endfor %}
+                    {% endfor %}
+
+                {% endif %}
                 {% block page_container %}
+
+
+
                 {% block content %}
                     <div class="container" style="background: #fff">
                         <div class="row">

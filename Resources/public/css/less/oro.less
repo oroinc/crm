@@ -1682,12 +1682,16 @@ text-overflow:ellipsis;
   height: 24px;
   line-height: 24px;
 }
+.icons-holder .icons-holder-text [class^="icon-"]{
+  margin-right: 5px;
+}
 .navbar-extra .has-switch > div.switch-off,
 .navbar-extra .has-switch > div.switch-on{
   height: 24px;
   line-height: 24px;
 }
 .navbar-extra .has-switch span,
+
 .navbar-extra .has-switch label{
   padding-top: 3px;
 }
@@ -1695,6 +1699,20 @@ text-overflow:ellipsis;
   min-width: 80px;
   margin-right: 7px;
 }
+.navbar-extra .has-switch span.switch-left,
+.navbar-extra .has-switch span.switch-left:hover,
+.navbar-extra .has-switch span.switch-danger:hover,
+.navbar-extra .has-switch span.switch-danger{
+  #gradient > .vertical(#ffffff, #e6e6e6);
+  color: #444;
+  font-size: 12px;
+  text-shadow: none;
+  line-height: 18px;
+  padding-top: 0;
+  position: relative;
+}                d
+.navbar-extra .has-switch span.switch-danger
+
 .navbar-extra .pull-left.btn-group {
   margin: 0 7px 0 0;
 }
@@ -2487,6 +2505,7 @@ div.selector.disabled span {
   text-align: center;
   z-index: 1;
   width: 33%;
+  padding:  0 7px;
 }
 .has-switch span.switch-left {
   -webkit-border-top-left-radius: 4px;
