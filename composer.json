@@ -8,7 +8,8 @@
     "require": {
         "php": ">=5.3.3",
         "symfony/symfony": "2.1.*",
-        "friendsofsymfony/rest-bundle": "0.11.*"
+        "friendsofsymfony/rest-bundle": "0.11.*",
+        "oro/user-bundle": "dev-master"
     },
     "autoload": {
         "psr-0": { "": "src/" }
