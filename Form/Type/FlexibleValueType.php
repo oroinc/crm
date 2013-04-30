@@ -5,8 +5,8 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Oro\Bundle\FlexibleEntityBundle\Form\EventListener\AddValueFieldSubscriber;
 use Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleManager;
+use Oro\Bundle\FlexibleEntityBundle\Form\EventListener\FlexibleValueSubscriber;
 
 /**
  * Base flexible value form type
@@ -55,7 +55,7 @@ class FlexibleValueType extends AbstractType
      */
     public function addSubscriber(FormBuilderInterface $builder)
     {
-        $subscriber = new AddValueFieldSubscriber($builder->getFormFactory(), $this->flexibleManager);
+        $subscriber = new FlexibleValueSubscriber($builder->getFormFactory(), $this->flexibleManager);
         $builder->addEventSubscriber($subscriber);
     }
 

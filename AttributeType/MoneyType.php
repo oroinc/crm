@@ -12,16 +12,6 @@ use Oro\Bundle\FlexibleEntityBundle\AttributeType\AbstractAttributeType;
  */
 class MoneyType extends AbstractAttributeType
 {
-
-    /**
-     * constructor
-     */
-    public function __construct()
-    {
-        $this->backendType = self::BACKEND_TYPE_DECIMAL;
-        $this->formType    = 'money';
-    }
-
     /**
      * {@inheritdoc}
      */

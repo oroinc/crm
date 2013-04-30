@@ -13,16 +13,6 @@ use Oro\Bundle\FlexibleEntityBundle\AttributeType\AbstractAttributeType;
  */
 class BooleanType extends AbstractAttributeType
 {
-
-    /**
-     * constructor
-     */
-    public function __construct()
-    {
-        $this->backendType = self::BACKEND_TYPE_INTEGER;
-        $this->formType    = 'option';
-    }
-
     /**
      * {@inheritdoc}
      */

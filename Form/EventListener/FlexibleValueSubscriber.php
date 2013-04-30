@@ -1,23 +1,21 @@
 <?php
 namespace Oro\Bundle\FlexibleEntityBundle\Form\EventListener;
 
-use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Oro\Bundle\FlexibleEntityBundle\AttributeType\AbstractAttributeType;
 use Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleManager;
 
 /**
- * Aims to generate value type based on entity value and attribute type
+ * Add a relevant form for each flexible entity value
  *
  * @author    Nicolas Dupont <nicolas@akeneo.com>
  * @copyright 2012 Akeneo SAS (http://www.akeneo.com)
  * @license   http://opensource.org/licenses/MIT MIT
  *
  */
-class AddValueFieldSubscriber implements EventSubscriberInterface
+class FlexibleValueSubscriber implements EventSubscriberInterface
 {
     /**
      * @var FormFactoryInterface
@@ -31,6 +29,7 @@ class AddValueFieldSubscriber implements EventSubscriberInterface
 
     /**
      * Constructor
+     *
      * @param FormFactoryInterface $factory         the form factory
      * @param FlexibleManager      $flexibleManager the flexible manager
      */
@@ -42,6 +41,7 @@ class AddValueFieldSubscriber implements EventSubscriberInterface
 
     /**
      * Get subscribed events
+     *
      * @return array
      */
     public static function getSubscribedEvents()
@@ -52,7 +52,8 @@ class AddValueFieldSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * Add form field type
+     * Build and add the relevant value form for each flexible entity values
+     *
      * @param FormEvent $event
      */
     public function preSetData(FormEvent $event)
@@ -65,9 +66,9 @@ class AddValueFieldSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $attribute     = $value->getAttribute();
-        $attributeType = $this->flexibleManager->getAttributeTypeFactory()->get($attribute->getAttributeType());
-        $valueForm     = $attributeType->buildValueFormType($this->factory, $value);
+        $attributeTypeAlias = $value->getAttribute()->getAttributeType();
+        $attributeType      = $this->flexibleManager->getAttributeTypeFactory()->get($attributeTypeAlias);
+        $valueForm          = $attributeType->buildValueFormType($this->factory, $value);
 
         $form->add($valueForm);
     }

@@ -1,71 +1,101 @@
 services:
+    oro_flexibleentity.attributetype.boolean:
+        class: Oro\Bundle\FlexibleEntityBundle\AttributeType\BooleanType
+        arguments: ["@translator", "integer", "option"]
+        tags:
+            - { name: oro_flexibleentity.attributetype, alias: oro_flexibleentity_boolean }
     oro_flexibleentity.attributetype.text:
         class: Oro\Bundle\FlexibleEntityBundle\AttributeType\TextType
-        arguments: ["@translator"]
+        arguments: ["@translator", "varchar", "text"]
         tags:
             - { name: oro_flexibleentity.attributetype, alias: oro_flexibleentity_text }
     oro_flexibleentity.attributetype.textarea:
         class: Oro\Bundle\FlexibleEntityBundle\AttributeType\TextAreaType
-        arguments: ["@translator"]
+        arguments: ["@translator", "text", "textarea"]
         tags:
             - { name: oro_flexibleentity.attributetype, alias: oro_flexibleentity_textarea }
     oro_flexibleentity.attributetype.date:
         class: Oro\Bundle\FlexibleEntityBundle\AttributeType\DateType
-        arguments: ["@translator"]
+        arguments: ["@translator", "date", "oro_date"]
         tags:
             - { name: oro_flexibleentity.attributetype, alias: oro_flexibleentity_date }
+    oro_flexibleentity.attributetype.datetime:
+        class: Oro\Bundle\FlexibleEntityBundle\AttributeType\DateTimeType
+        arguments: ["@translator", "datetime", "oro_datetime"]
+        tags:
+            - { name: oro_flexibleentity.attributetype, alias: oro_flexibleentity_datetime }
     oro_flexibleentity.attributetype.integer:
         class: Oro\Bundle\FlexibleEntityBundle\AttributeType\IntegerType
-        arguments: ["@translator"]
+        arguments: ["@translator", "integer", "integer"]
         tags:
             - { name: oro_flexibleentity.attributetype, alias: oro_flexibleentity_integer }
-    oro_flexibleentity.attributetype.boolean:
-        class: Oro\Bundle\FlexibleEntityBundle\AttributeType\BooleanType
-        arguments: ["@translator"]
-        tags:
-            - { name: oro_flexibleentity.attributetype, alias: oro_flexibleentity_boolean }
     oro_flexibleentity.attributetype.money:
         class: Oro\Bundle\FlexibleEntityBundle\AttributeType\MoneyType
-        arguments: ["@translator"]
+        arguments: ["@translator", "decimal", "money"]
         tags:
             - { name: oro_flexibleentity.attributetype, alias: oro_flexibleentity_money }
     oro_flexibleentity.attributetype.number:
         class: Oro\Bundle\FlexibleEntityBundle\AttributeType\NumberType
-        arguments: ["@translator"]
+        arguments: ["@translator", "decimal", "number"]
         tags:
             - { name: oro_flexibleentity.attributetype, alias: oro_flexibleentity_number }
     oro_flexibleentity.attributetype.multiselect:
         class: Oro\Bundle\FlexibleEntityBundle\AttributeType\OptionMultiSelectType
-        arguments: ["@translator"]
+        arguments: ["@translator", "options", "entity"]
         tags:
             - { name: oro_flexibleentity.attributetype, alias: oro_flexibleentity_multiselect }
     oro_flexibleentity.attributetype.simpleselect:
         class: Oro\Bundle\FlexibleEntityBundle\AttributeType\OptionSimpleSelectType
-        arguments: ["@translator"]
+        arguments: ["@translator", "option", "entity"]
         tags:
             - { name: oro_flexibleentity.attributetype, alias: oro_flexibleentity_simpleselect }
     oro_flexibleentity.attributetype.metric:
         class: Oro\Bundle\FlexibleEntityBundle\AttributeType\MetricType
-        arguments: ["@translator"]
+        arguments: ["@translator", "metric", "oro_flexibleentity_metric"]
         tags:
             - { name: oro_flexibleentity.attributetype, alias: oro_flexibleentity_metric }
     oro_flexibleentity.attributetype.file:
         class: Oro\Bundle\FlexibleEntityBundle\AttributeType\FileType
-        arguments: ["@translator"]
+        arguments: ["@translator", "media", "oro_media"]
         tags:
             - { name: oro_flexibleentity.attributetype, alias: oro_flexibleentity_file }
     oro_flexibleentity.attributetype.image:
         class: Oro\Bundle\FlexibleEntityBundle\AttributeType\ImageType
-        arguments: ["@translator"]
+        arguments: ["@translator", "media", "oro_media"]
         tags:
             - { name: oro_flexibleentity.attributetype, alias: oro_flexibleentity_image }
     oro_flexibleentity.attributetype.fileurl:
         class: Oro\Bundle\FlexibleEntityBundle\AttributeType\FileUrlType
-        arguments: ["@translator"]
+        arguments: ["@translator", "media", "oro_media"]
         tags:
             - { name: oro_flexibleentity.attributetype, alias: oro_flexibleentity_fileurl }
     oro_flexibleentity.attributetype.imageurl:
         class: Oro\Bundle\FlexibleEntityBundle\AttributeType\ImageUrlType
-        arguments: ["@translator"]
+        arguments: ["@translator", "media", "oro_media"]
         tags:
             - { name: oro_flexibleentity.attributetype, alias: oro_flexibleentity_imageurl }
+    oro_flexibleentity.attributetype.email:
+        class: Oro\Bundle\FlexibleEntityBundle\AttributeType\EmailType
+        arguments: ["@translator", "varchar", "email"]
+        tags:
+            - { name: oro_flexibleentity.attributetype, alias: oro_flexibleentity_email }
+    oro_flexibleentity.attributetype.url:
+        class: Oro\Bundle\FlexibleEntityBundle\AttributeType\UrlType
+        arguments: ["@translator", "varchar", "url"]
+        tags:
+            - { name: oro_flexibleentity.attributetype, alias: oro_flexibleentity_url }
+    oro_flexibleentity.attributetype.multicheckbox:
+        class: Oro\Bundle\FlexibleEntityBundle\AttributeType\OptionMultiCheckboxType
+        arguments: ["@translator", "options", "entity"]
+        tags:
+            - { name: oro_flexibleentity.attributetype, alias: oro_flexibleentity_multicheckbox }
+    oro_flexibleentity.attributetype.simpleradio:
+        class: Oro\Bundle\FlexibleEntityBundle\AttributeType\OptionSimpleRadioType
+        arguments: ["@translator", "option", "entity"]
+        tags:
+            - { name: oro_flexibleentity.attributetype, alias: oro_flexibleentity_simpleradio }
+    oro_flexibleentity.attributetype.price:
+        class: Oro\Bundle\FlexibleEntityBundle\AttributeType\PriceType
+        arguments: ["@translator", "price", "oro_flexibleentity_price"]
+        tags:
+            - { name: oro_flexibleentity.attributetype, alias: oro_flexibleentity_price }

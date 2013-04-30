@@ -13,16 +13,6 @@ use Oro\Bundle\FlexibleEntityBundle\Model\FlexibleValueInterface;
  */
 class OptionSimpleSelectType extends AbstractOptionType
 {
-
-    /**
-     * constructor
-     */
-    public function __construct()
-    {
-        parent::__construct();
-        $this->backendType = self::BACKEND_TYPE_OPTION;
-    }
-
     /**
      * {@inheritdoc}
      */

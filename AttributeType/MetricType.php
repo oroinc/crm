@@ -12,16 +12,6 @@ use Oro\Bundle\FlexibleEntityBundle\AttributeType\AbstractAttributeType;
  */
 class MetricType extends AbstractAttributeType
 {
-
-    /**
-     * constructor
-     */
-    public function __construct()
-    {
-        $this->backendType = self::BACKEND_TYPE_METRIC;
-        $this->formType    = 'oro_flexibleentity_metric';
-    }
-
     /**
      * {@inheritdoc}
      */

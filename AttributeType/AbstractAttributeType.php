@@ -61,11 +61,17 @@ abstract class AbstractAttributeType implements AttributeTypeInterface
     protected $formType = 'text';
 
     /**
-     * @param TranslatorInterface $translator
+     * Constructor
+     *
+     * @param TranslatorInterface $translator  the service translator
+     * @param string              $backendType the backend type
+     * @param string              $formType    the form type
      */
-    public function __construct(TranslatorInterface $translator)
+    public function __construct(TranslatorInterface $translator, $backendType, $formType)
     {
-        $this->translator = $translator;
+        $this->translator  = $translator;
+        $this->backendType = $backendType;
+        $this->formType    = $formType;
     }
 
     /**
@@ -136,8 +142,8 @@ abstract class AbstractAttributeType implements AttributeTypeInterface
     protected function prepareValueFormOptions(FlexibleValueInterface $value)
     {
         $options = array(
-            'label'    => $this->translator->trans($attribute->getCode()),
-            'required' => $attribute->getRequired()
+            'label'    => $this->translator->trans($value->getAttribute()->getCode()),
+            'required' => $value->getAttribute()->getRequired()
         );
 
         return $options;
@@ -152,7 +158,7 @@ abstract class AbstractAttributeType implements AttributeTypeInterface
      */
     protected function prepareValueFormData(FlexibleValueInterface $value)
     {
-        return is_null($value->getData()) ? $attribute->getDefaultValue() : $value->getData();
+        return is_null($value->getData()) ? $value->getAttribute()->getDefaultValue() : $value->getData();
     }
 
     /**

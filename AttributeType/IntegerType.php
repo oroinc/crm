@@ -13,15 +13,6 @@ use Oro\Bundle\FlexibleEntityBundle\AttributeType\AbstractAttributeType;
 class IntegerType extends AbstractAttributeType
 {
     /**
-     * constructor
-     */
-    public function __construct()
-    {
-        $this->backendType = self::BACKEND_TYPE_INTEGER;
-        $this->formType    = 'integer';
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function getName()

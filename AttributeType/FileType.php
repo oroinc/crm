@@ -13,16 +13,6 @@ use Oro\Bundle\FlexibleEntityBundle\AttributeType\AbstractAttributeType;
  */
 class FileType extends AbstractAttributeType
 {
-
-    /**
-     * constructor
-     */
-    public function __construct()
-    {
-        $this->backendType = self::BACKEND_TYPE_MEDIA;
-        $this->formType    = 'oro_media';
-    }
-
     /**
      * {@inheritdoc}
      */

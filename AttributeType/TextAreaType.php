@@ -12,16 +12,6 @@ use Oro\Bundle\FlexibleEntityBundle\AttributeType\AbstractAttributeType;
  */
 class TextAreaType extends AbstractAttributeType
 {
-
-    /**
-     * constructor
-     */
-    public function __construct()
-    {
-        $this->backendType = self::BACKEND_TYPE_TEXT;
-        $this->formType   = 'textarea';
-    }
-
     /**
      * {@inheritdoc}
      */

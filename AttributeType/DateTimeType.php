@@ -14,15 +14,6 @@ use Oro\Bundle\FlexibleEntityBundle\Model\FlexibleValueInterface;
 class DateTimeType extends AbstractAttributeType
 {
     /**
-     * constructor
-     */
-    public function __construct()
-    {
-        $this->backendType = self::BACKEND_TYPE_DATETIME;
-        $this->formType    = 'oro_datetime';
-    }
-
-    /**
      * {@inheritdoc}
      */
     protected function prepareValueFormOptions(FlexibleValueInterface $value)
