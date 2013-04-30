@@ -23,8 +23,5 @@ js:
 
   - '@FOSJsRoutingBundle/Resources/public/js/router.js'
   - 'js/routes.js'
-  
-  - '@OroUIBundle/Resources/public/js/jquery.form.js'
-
 css:
   - 'bundles/oroui/lib/jstree/themes/default/style.css'
