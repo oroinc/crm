@@ -5,25 +5,30 @@ namespace Oro\Bundle\DataAuditBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
-use Symfony\Component\HttpFoundation\Session\Flash\FlashBag;
-use YsTools\BackUrlBundle\Annotation\BackUrl;
-
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
-//use Oro\Bundle\UserBundle\Annotation\Acl;
-
+use Oro\Bundle\UserBundle\Annotation\Acl;
 use Oro\Bundle\DataAuditBundle\Entity\Log;
-use Oro\Bundle\DataAuditBundle\Datagrid\LogDatagridManager;
 
+/**
+ * @Acl(
+ *      id="oro_dataaudit",
+ *      name="Data audit",
+ *      description="Data audit"
+ * )
+ */
 class LogController extends Controller
 {
     /**
-     * @Route(
-     *      "/index",
-     *      name="oro_dataaudit_index"
+     * @Route("/", name="oro_dataaudit_index")
+     * @Template
+     * @Acl(
+     *      id="oro_dataaudit_list",
+     *      name="View log stream",
+     *      description="View log stream",
+     *      parent="oro_dataaudit"
      * )
-     * @BackUrl("back")
      */
     public function indexAction(Request $request)
     {
@@ -36,44 +41,52 @@ class LogController extends Controller
             $view,
             array('datagrid' => $datagrid->createView())
         );
-
     }
 
     /**
-     * Get redirect URLs
-     *
-     * @param  string $default
-     * @return string
+     * @Route("/history/{entity}/{id}", name="oro_dataaudit_history", requirements={"entity"="[a-zA-Z\\]+", "id"="\d+"})
+     * @Template
+     * @Acl(
+     *      id="oro_dataaudit_history",
+     *      name="View entity history",
+     *      description="View entity history log",
+     *      parent="oro_dataaudit"
+     * )
      */
-    protected function getRedirectUrl($default)
+    public function historyAction($entity, $id)
     {
-        $flashBag = $this->getFlashBag();
-        if ($this->getRequest()->query->has('back')) {
-            $backUrl = $this->getRequest()->get('back');
-            $flashBag->set('backUrl', $backUrl);
-        } elseif ($flashBag->has('backUrl')) {
-            $backUrl = $flashBag->get('backUrl');
-            $backUrl = reset($backUrl);
-        } else {
-            $backUrl = null;
-        }
+        $history = $this->getManager()->getRepository('OroDataAuditBundle:Log')->findBy(array(
+            'objectClass' => $entity,
+            'objectId'    => $id,
+        ));
 
-        return $backUrl ? $backUrl : $default;
+        return array(
+            'history' => $history,
+        );
     }
 
     /**
-     * @return FlashBag
+     * @Route("/show/{id}", name="oro_dataaudit_show", requirements={"id"="\d+"})
+     * @Template
+     * @Acl(
+     *      id="oro_dataaudit_show",
+     *      name="View event",
+     *      description="View event with changed data",
+     *      parent="oro_dataaudit"
+     * )
      */
-    protected function getFlashBag()
+    public function showAction(Log $entry)
     {
-        return $this->get('session')->getFlashBag();
+        return array(
+            'entry' => $entry,
+        );
     }
 
     /**
-     * @return LogManager
+     * @return \Doctrine\Common\Persistence\ObjectManager
      */
     protected function getManager()
     {
-        return $this->get('oro_dataaudit.log_datagrid.manager');
+        return $this->getDoctrine()->getManagerForClass('OroDataAuditBundle:Log');
     }
 }
