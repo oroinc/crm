@@ -1,0 +1,39 @@
+{% extends bap.layout %}
+{% import 'OroUIBundle::macros.html.twig' as macros %}
+
+{% block content %}
+<div class="layout-content">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Author</th>
+                <th>Date</th>
+                <th>Version</th>
+                <th>Old value</th>
+                <th>New value</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for entry in history %}
+            <tr>
+                <td>{{ entry.id }}</td>
+                <td><strong>{{ entry.username }}</strong></td>
+                <td>{{ macros(entry.loggedAt) }}</td>
+                <td>{{ entry.version }}</td>
+                <td>
+                    {% for key, value in entry.data %}
+                        {{ key }}: {{ value }}<br />
+                    {% endfor %}
+                </td>
+                <td></td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="100%">{{ 'No records found'|trans }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

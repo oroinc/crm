@@ -1,3 +1,5 @@
-#oro_log_homepage:
-#    pattern:  /hello/{name}
-#    defaults: { _controller: OroLogBundle:Default:index }
+oro_dataaudit_bundle:
+    resource:     "@OroDataAuditBundle/Controller"
+    type:         annotation
+    prefix:       /audit
+
