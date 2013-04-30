@@ -1,13 +1,13 @@
-var OroApp = OroApp || {};
-OroApp.Filter = OroApp.Filter || {};
+var Oro = Oro || {};
+Oro.Filter = Oro.Filter || {};
 
 /**
  * Select filter: filter value as select option
  *
- * @class   OroApp.Filter.SelectFilter
- * @extends OroApp.Filter.AbstractFilter
+ * @class   Oro.Filter.SelectFilter
+ * @extends Oro.Filter.AbstractFilter
  */
-OroApp.Filter.SelectFilter = OroApp.Filter.AbstractFilter.extend({
+Oro.Filter.SelectFilter = Oro.Filter.AbstractFilter.extend({
     /**
      * Filter template
      *
@@ -148,7 +148,7 @@ OroApp.Filter.SelectFilter = OroApp.Filter.AbstractFilter.extend({
      * @protected
      */
     _initializeSelectWidget: function() {
-        this.selectWidget = new OroApp.Filter.MultiSelectDecorator({
+        this.selectWidget = new Oro.Filter.MultiSelectDecorator({
             element: this.$(this.inputSelector),
             parameters: _.extend({
                 noneSelectedText: this.placeholder,
@@ -272,7 +272,7 @@ OroApp.Filter.SelectFilter = OroApp.Filter.AbstractFilter.extend({
      * @inheritDoc
      */
     _onValueUpdated: function(newValue, oldValue) {
-        OroApp.Filter.AbstractFilter.prototype._onValueUpdated.apply(this, arguments);
+        Oro.Filter.AbstractFilter.prototype._onValueUpdated.apply(this, arguments);
         this.selectWidget.multiselect('refresh');
     },
 

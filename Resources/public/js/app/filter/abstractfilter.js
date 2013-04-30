@@ -1,13 +1,13 @@
-var OroApp = OroApp || {};
-OroApp.Filter = OroApp.Filter || {};
+var Oro = Oro || {};
+Oro.Filter = Oro.Filter || {};
 
 /**
  * Basic grid filter
  *
- * @class   OroApp.Filter.AbstractFilter
+ * @class   Oro.Filter.AbstractFilter
  * @extends Backbone.View
  */
-OroApp.Filter.AbstractFilter = Backbone.View.extend({
+Oro.Filter.AbstractFilter = Backbone.View.extend({
     /**
      * Filter container tag
      *
@@ -95,6 +95,7 @@ OroApp.Filter.AbstractFilter = Backbone.View.extend({
         if (!this.enabled) {
             this.enabled = true;
             this.show();
+            this.trigger('enable', this);
         }
         return this;
     },

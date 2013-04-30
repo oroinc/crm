@@ -1,13 +1,13 @@
-var OroApp = OroApp || {};
-OroApp.Filter = OroApp.Filter || {};
+var Oro = Oro || {};
+Oro.Filter = Oro.Filter || {};
 
 /**
  * Datetime filter: filter type as option + interval begin and end dates
  *
- * @class   OroApp.Filter.DateTimeFilter
- * @extends OroApp.Filter.DateFilter
+ * @class   Oro.Filter.DateTimeFilter
+ * @extends Oro.Filter.DateFilter
  */
-OroApp.Filter.DateTimeFilter = OroApp.Filter.DateFilter.extend({
+Oro.Filter.DateTimeFilter = Oro.Filter.DateFilter.extend({
     /**
      * CSS class for visual datetime input elements
      *
@@ -25,7 +25,7 @@ OroApp.Filter.DateTimeFilter = OroApp.Filter.DateFilter.extend({
         altFieldTimeOnly: false,
         altSeparator: ' ',
         altTimeFormat: 'HH:mm'
-    }, OroApp.Filter.DateFilter.prototype.dateWidgetOptions),
+    }, Oro.Filter.DateFilter.prototype.dateWidgetOptions),
 
     /**
      * @inheritDoc

@@ -1,13 +1,13 @@
-var OroApp = OroApp || {};
-OroApp.Filter = OroApp.Filter || {};
+var Oro = Oro || {};
+Oro.Filter = Oro.Filter || {};
 
 /**
  * Date filter: filter type as option + interval begin and end dates
  *
- * @class   OroApp.Filter.DateFilter
- * @extends OroApp.Filter.ChoiceFilter
+ * @class   Oro.Filter.DateFilter
+ * @extends Oro.Filter.ChoiceFilter
  */
-OroApp.Filter.DateFilter = OroApp.Filter.ChoiceFilter.extend({
+Oro.Filter.DateFilter = Oro.Filter.ChoiceFilter.extend({
     /**
      * Template for filter criteria
      *
@@ -125,7 +125,7 @@ OroApp.Filter.DateFilter = OroApp.Filter.ChoiceFilter.extend({
      */
     initialize: function () {
         _.extend(this.dateWidgetOptions, this.externalWidgetOptions);
-        OroApp.Filter.ChoiceFilter.prototype.initialize.apply(this, arguments);
+        Oro.Filter.ChoiceFilter.prototype.initialize.apply(this, arguments);
     },
 
     /**
@@ -312,7 +312,7 @@ OroApp.Filter.DateFilter = OroApp.Filter.ChoiceFilter.extend({
      * @inheritDoc
      */
     _hideCriteria: function() {
-        OroApp.Filter.ChoiceFilter.prototype._hideCriteria.apply(this, arguments);
+        Oro.Filter.ChoiceFilter.prototype._hideCriteria.apply(this, arguments);
     },
 
     /**

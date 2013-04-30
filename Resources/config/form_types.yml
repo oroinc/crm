@@ -9,6 +9,11 @@ services:
         tags:
             - { name: form.type, alias: oro_type_datetime_range }
 
+    oro_filter.form.type.validated_collection:
+        class: Oro\Bundle\FilterBundle\Form\Type\ValidatedCollectionType
+        tags:
+            - { name: form.type, alias: oro_type_validated_collection }
+
     oro_filter.form.type.filter:
         class:     Oro\Bundle\FilterBundle\Form\Type\Filter\FilterType
         arguments: ["@translator"]
@@ -50,3 +55,9 @@ services:
         arguments: ["@translator"]
         tags:
             - { name: form.type, alias: oro_type_boolean_filter }
+
+    oro_filter.form.type.filter.boolean_collection:
+        class:     Oro\Bundle\FilterBundle\Form\Type\Filter\BooleanCollectionFilterType
+        arguments: ["@translator"]
+        tags:
+            - { name: form.type, alias: oro_type_boolean_collection_filter }

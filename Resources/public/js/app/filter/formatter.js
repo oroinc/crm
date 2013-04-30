@@ -1,5 +1,5 @@
-var OroApp = OroApp || {};
-OroApp.Filter = OroApp.Filter || {};
+var Oro = Oro || {};
+Oro.Filter = Oro.Filter || {};
 
 /**
  Just a convenient class for interested parties to subclass.
@@ -9,16 +9,16 @@ OroApp.Filter = OroApp.Filter || {};
  are defined.
 
  @abstract
- @class OroApp.Filter.Formatter
+ @class Oro.Filter.Formatter
  @constructor
  */
-OroApp.Filter.Formatter = function () {};
-_.extend(OroApp.Filter.Formatter.prototype, {
+Oro.Filter.Formatter = function () {};
+_.extend(Oro.Filter.Formatter.prototype, {
 
     /**
      Takes a raw value from a model and returns a formatted string for display.
 
-     @member OroApp.Filter.Formatter
+     @member Oro.Filter.Formatter
      @param {*} rawData
      @return {string}
      */
@@ -33,7 +33,7 @@ _.extend(OroApp.Filter.Formatter.prototype, {
      If the user input is invalid or unable to be converted to a raw value
      suitable for persistence in the model, toRaw must return `undefined`.
 
-     @member OroApp.Filter.Formatter
+     @member Oro.Filter.Formatter
      @param {string} formattedData
      @return {*|undefined}
      */
@@ -45,12 +45,12 @@ _.extend(OroApp.Filter.Formatter.prototype, {
 /**
  A floating point number formatter. Doesn't understand notation at the moment.
 
- @class OroApp.Filter.NumberFormatter
- @extends OroApp.Filter.Formatter
+ @class Oro.Filter.NumberFormatter
+ @extends Oro.Filter.Formatter
  @constructor
  @throws {RangeError} If decimals < 0 or > 20.
  */
-OroApp.Filter.NumberFormatter = function (options) {
+Oro.Filter.NumberFormatter = function (options) {
     options = options ? _.clone(options) : {};
     _.extend(this, this.defaults, options);
 
@@ -58,11 +58,11 @@ OroApp.Filter.NumberFormatter = function (options) {
         throw new RangeError("decimals must be between 0 and 20");
     }
 };
-OroApp.Filter.NumberFormatter.prototype = new OroApp.Filter.Formatter;
-_.extend(OroApp.Filter.NumberFormatter.prototype, {
+Oro.Filter.NumberFormatter.prototype = new Oro.Filter.Formatter;
+_.extend(Oro.Filter.NumberFormatter.prototype, {
 
     /**
-     @member OroApp.Filter.NumberFormatter
+     @member Oro.Filter.NumberFormatter
      @cfg {Object} options
 
      @cfg {number} [options.decimals=2] Number of decimals to display. Must be an integer.
@@ -87,7 +87,7 @@ _.extend(OroApp.Filter.NumberFormatter.prototype, {
      decimals separated by `decimalSeparator`. The number returned is rounded
      the usual way.
 
-     @member OroApp.Filter.NumberFormatter
+     @member Oro.Filter.NumberFormatter
      @param {number} number
      @return {string}
      */
@@ -107,7 +107,7 @@ _.extend(OroApp.Filter.NumberFormatter.prototype, {
      Takes a string, possibly formatted with `orderSeparator` and/or
      `decimalSeparator`, and convert it back to a number.
 
-     @member OroApp.Filter.NumberFormatter
+     @member Oro.Filter.NumberFormatter
      @param {string} formattedData
      @return {number|undefined} Undefined if the string cannot be converted to
      a number.

@@ -1,17 +1,17 @@
-var OroApp = OroApp || {};
-OroApp.Filter = OroApp.Filter || {};
+var Oro = Oro || {};
+Oro.Filter = Oro.Filter || {};
 
 /**
  * View that represents all grid filters
  *
- * @class   OroApp.Filter.List
+ * @class   Oro.Filter.List
  * @extends Backbone.View
  *
  * @event updateList    on update of filter list
  * @event updateFilter  on update data of specific filter
  * @event disableFilter on disable specific filter
  */
-OroApp.Filter.List = Backbone.View.extend({
+Oro.Filter.List = Backbone.View.extend({
     /**
      * List of filter objects
      *
@@ -65,7 +65,7 @@ OroApp.Filter.List = Backbone.View.extend({
     /**
      * Select widget object
      *
-     * @property {OroApp.Filter.MultiSelectDecorator}
+     * @property {Oro.Filter.MultiSelectDecorator}
      */
     selectWidget: null,
 
@@ -109,7 +109,7 @@ OroApp.Filter.List = Backbone.View.extend({
     /**
      * Triggers when filter is updated
      *
-     * @param {OroApp.Filter.AbstractFilter} filter
+     * @param {Oro.Filter.AbstractFilter} filter
      * @protected
      */
     _onFilterUpdated: function(filter) {
@@ -119,7 +119,7 @@ OroApp.Filter.List = Backbone.View.extend({
     /**
      * Triggers when filter is disabled
      *
-     * @param {OroApp.Filter.AbstractFilter} filter
+     * @param {Oro.Filter.AbstractFilter} filter
      * @protected
      */
     _onFilterDisabled: function(filter) {
@@ -165,7 +165,7 @@ OroApp.Filter.List = Backbone.View.extend({
     /**
      * Enable filter
      *
-     * @param {OroApp.Filter.AbstractFilter} filter
+     * @param {Oro.Filter.AbstractFilter} filter
      * @return {*}
      */
     enableFilter: function(filter) {
@@ -183,7 +183,7 @@ OroApp.Filter.List = Backbone.View.extend({
     /**
      * Disable filter
      *
-     * @param {OroApp.Filter.AbstractFilter} filter
+     * @param {Oro.Filter.AbstractFilter} filter
      * @return {*}
      */
     disableFilter : function(filter) {
@@ -231,7 +231,7 @@ OroApp.Filter.List = Backbone.View.extend({
      * @protected
      */
     _initializeSelectWidget: function() {
-        this.selectWidget = new OroApp.Filter.MultiSelectDecorator({
+        this.selectWidget = new Oro.Filter.MultiSelectDecorator({
             element: this.$(this.filterSelector),
             parameters: {
                 multiple: true,
