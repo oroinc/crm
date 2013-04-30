@@ -70,7 +70,7 @@ class NavigationItemController extends FOSRestController
 
         $params['user'] = $this->getUser();
         $params['url']  = $this->getStateUrl($params['url']);
-        $restore = strpos($params['url'], 'restore=') !== false;
+        $restore = (strpos($params['url'], 'restore=') !== false);
 
 
         /** @var $entity \Oro\Bundle\NavigationBundle\Entity\NavigationItemInterface */
