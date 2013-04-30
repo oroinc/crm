@@ -6,9 +6,9 @@ OroApp.Datagrid.Filter = OroApp.Datagrid.Filter || {};
  * View that represents all grid filters
  *
  * @class   OroApp.Datagrid.Filter.List
- * @extends OroApp.Filter.List
+ * @extends Oro.Filter.List
  */
-OroApp.Datagrid.Filter.List = OroApp.Filter.List.extend({
+OroApp.Datagrid.Filter.List = Oro.Filter.List.extend({
     /**
      * Initialize filter list options
      *
@@ -24,13 +24,13 @@ OroApp.Datagrid.Filter.List = OroApp.Filter.List.extend({
         this.collection.on('beforeFetch', this._beforeCollectionFetch, this);
         this.collection.on('updateState', this._onUpdateCollectionState, this);
 
-        OroApp.Filter.List.prototype.initialize.apply(this, arguments);
+        Oro.Filter.List.prototype.initialize.apply(this, arguments);
     },
 
     /**
      * Triggers when filter is updated
      *
-     * @param {OroApp.Filter.AbstractFilter} filter
+     * @param {Oro.Filter.AbstractFilter} filter
      * @protected
      */
     _onFilterUpdated: function(filter) {
@@ -40,7 +40,7 @@ OroApp.Datagrid.Filter.List = OroApp.Filter.List.extend({
         this.collection.state.currentPage = 1;
         this.collection.fetch();
 
-        OroApp.Filter.List.prototype._onFilterUpdated.apply(this, arguments);
+        Oro.Filter.List.prototype._onFilterUpdated.apply(this, arguments);
     },
 
     /**
