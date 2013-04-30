@@ -8,7 +8,6 @@
         {{ block('oro_region_updater_js')|raw }}
     {% endif %}
 
-
     {% set country_field = country_field|default('#oro_address_form_country') %}
 
     {{ form_widget(form) }}
@@ -17,11 +16,13 @@
         $(function() {
             var regions = new Oro.RegionUpdater.Collection();
 
-            new Oro.RegionUpdater.View ({
+            var regionView = new Oro.RegionUpdater.View ({
                 el: $('{{ country_field }}'),
-                target: $('{{ id }}'),
+                target: $('#{{ id }}'),
                 collection: regions
             });
+
+            regionView.sync();
         });
     </script>
 {% endblock oro_region_widget %}

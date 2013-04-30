@@ -45,7 +45,11 @@ class AddressType extends FlexibleType
             ->add('city', 'text', $required)
             ->add('postalCode', 'text', $required)
             ->add('country', 'oro_country', $required)
-            ->add('state', 'oro_region', $required)
+            ->add(
+                'state',
+                'oro_region',
+                array_merge($required, array('country_field' => '#oro_address_form_country'))
+            )
             ->add('mark', 'text', $notRequired);
     }
 

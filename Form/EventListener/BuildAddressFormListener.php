@@ -65,14 +65,15 @@ class BuildAddressFormListener implements EventSubscriberInterface
         }
 
         if ($country->hasRegions()) {
+            $config = $form->get('state')->getConfig()->getOptions();
+            $config['country'] = $country;
+
             $form->add(
                 $this->factory->createNamed(
                     'state',
                     'oro_region',
                     $address->getState(),
-                    array(
-                        'country' => $country
-                    )
+                    $config
                 )
             );
         }
@@ -92,14 +93,15 @@ class BuildAddressFormListener implements EventSubscriberInterface
         $country = $this->om->getRepository('OroAddressBundle:Country')->find(isset($data['country']) ? $data['country'] : false);
 
         if ($country && $country->hasRegions()) {
+            $config = $form->get('state')->getConfig()->getOptions();
+            $config['country'] = $country;
+
             $form->add(
                 $this->factory->createNamed(
                     'state',
                     'oro_region',
                     null,
-                    array(
-                        'country'  => $country
-                    )
+                    $config
                 )
             );
         }
