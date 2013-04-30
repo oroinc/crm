@@ -18,6 +18,8 @@
     '@OroGridBundle/Resources/public/js/app/datagrid/action/cell.js'
     '@OroGridBundle/Resources/public/js/app/datagrid/actionspanel.js'
 
+    '@OroGridBundle/Resources/public/js/app/datagrid/booleancell.js'
+
     '@OroGridBundle/Resources/public/js/app/datagrid/headercell.js'
     '@OroGridBundle/Resources/public/js/app/datagrid/header.js'
     '@OroGridBundle/Resources/public/js/app/datagrid/body.js'
@@ -101,6 +103,8 @@
                                 cell: Backgrid.NumberCell
                             {% elseif column.type == constant(columnTypePrefix ~ 'TYPE_INTEGER') %}
                                 cell: Backgrid.IntegerCell.extend({ orderSeparator: '' })
+                            {% elseif column.type == constant(columnTypePrefix ~ 'TYPE_BOOLEAN') %}
+                                cell: OroApp.Datagrid.BooleanCell
                             {% else %}
                                 cell: Backgrid.StringCell
                             {% endif %}

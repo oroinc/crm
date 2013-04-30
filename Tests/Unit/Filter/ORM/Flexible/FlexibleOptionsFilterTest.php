@@ -48,7 +48,6 @@ class FlexibleOptionsFilterTest extends FlexibleFilterTestCase
                     ChoiceFilterType::NAME,
                     array(
                         'field_options' => array(
-                            'required' => false,
                             'choices' => array(
                                 'one' => 'value one',
                                 'two' => 'value two'
