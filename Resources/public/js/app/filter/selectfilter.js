@@ -107,6 +107,11 @@ OroApp.Filter.SelectFilter = OroApp.Filter.AbstractFilter.extend({
     selectDropdownOpened: false,
 
     /**
+     * @property {Boolean}
+     */
+    contextSearch: true,
+
+    /**
      * Filter events
      *
      * @property
@@ -143,29 +148,33 @@ OroApp.Filter.SelectFilter = OroApp.Filter.AbstractFilter.extend({
      * @protected
      */
     _initializeSelectWidget: function() {
-        this.selectWidget = new OroApp.Filter.MultiSelectDecorator(this.$(this.inputSelector), _.extend({
-            noneSelectedText: this.placeholder,
-            selectedText: _.bind(function(numChecked, numTotal, checkedItems) {
-                return this._getSelectedText(checkedItems);
-            }, this),
-            position: {
-                my: 'left top+2',
-                at: 'left bottom',
-                of: this.$(this.containerSelector)
-            },
-            open: _.bind(function() {
-                this.selectWidget.onOpenDropdown();
-                this._setDropdownWidth();
-                this._setButtonPressed(this.$(this.containerSelector), true);
-                this.selectDropdownOpened = true;
-            }, this),
-            close: _.bind(function() {
-                this._setButtonPressed(this.$(this.containerSelector), false);
-                setTimeout(_.bind(function() {
-                    this.selectDropdownOpened = false;
-                }, this), 100);
-            }, this)
-        }, this.widgetOptions));
+        this.selectWidget = new OroApp.Filter.MultiSelectDecorator({
+            element: this.$(this.inputSelector),
+            parameters: _.extend({
+                noneSelectedText: this.placeholder,
+                selectedText: _.bind(function(numChecked, numTotal, checkedItems) {
+                    return this._getSelectedText(checkedItems);
+                }, this),
+                position: {
+                    my: 'left top+2',
+                    at: 'left bottom',
+                    of: this.$(this.containerSelector)
+                },
+                open: _.bind(function() {
+                    this.selectWidget.onOpenDropdown();
+                    this._setDropdownWidth();
+                    this._setButtonPressed(this.$(this.containerSelector), true);
+                    this.selectDropdownOpened = true;
+                }, this),
+                close: _.bind(function() {
+                    this._setButtonPressed(this.$(this.containerSelector), false);
+                    setTimeout(_.bind(function() {
+                        this.selectDropdownOpened = false;
+                    }, this), 100);
+                }, this)
+            }, this.widgetOptions),
+            contextSearch: this.contextSearch
+        });
 
         this.selectWidget.setViewDesign(this);
         this.$(this.buttonSelector).append('<span class="caret"></span>');

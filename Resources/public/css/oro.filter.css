@@ -50,7 +50,7 @@
 }
 
 .ui-multiselect-menu.select-filter-widget {
-    padding: 5px 2px 2px 2px;
+    padding: 2px;
 }
 
 .ui-multiselect-menu.select-filter-widget ul {
@@ -92,6 +92,15 @@
 .ui-multiselect.select-filter-widget span.caret {
     margin-top: 8px;
     margin-right: 8px;
+}
+
+.ui-multiselect-menu.select-filter-widget .ui-multiselect-header {
+    padding: 0;
+    margin: 0;
+}
+
+.ui-multiselect-menu.select-filter-widget .ui-multiselect-header > div {
+    padding: 4px 4px 6px 4px;
 }
 
 .ui-multiselect-menu.select-filter-widget .ui-multiselect-header .ui-helper-reset {
