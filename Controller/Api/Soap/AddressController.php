@@ -74,25 +74,6 @@ class AddressController extends ContainerAware
     }
 
     /**
-     * @Soap\Method("getCountries")
-     * @Soap\Result(phpType = "Oro\Bundle\AddressBundle\Entity\Country[]")
-     */
-    public function getCountriesAction()
-    {
-        return $this->getManager()->getRepository('OroAddressBundle:Country')->findAll();
-    }
-
-    /**
-     * @Soap\Method("getCountry")
-     * @Soap\Param("iso2Code", phpType = "string")
-     * @Soap\Result(phpType = "Oro\Bundle\AddressBundle\Entity\Country")
-     */
-    public function getCountryAction($iso2Code)
-    {
-        return $this->getEntity('OroAddressBundle:Country', $iso2Code);
-    }
-
-    /**
      * Shortcut to get entity
      *
      * @param string $repo
