@@ -9,22 +9,34 @@
     <div class="navigation clearfix navbar-extra navbar-extra-right">
         <div class="row">
             <div class="pull-right">
-                <div class="btn-group icons-holder">
-                    <a href="{{ app.session.get('back') ? app.session.get('back') : path('oro_user_index') }}" class="btn" title="{{ 'Back'|trans }}"><i class="icon-chevron-left hide-text">{{ 'Back'|trans }}</i></a>
-                    {% if resource_granted('oro_user_profile_edit') %}
+                <div class="pull-right">
+                    <div class="btn-group icons-holder ">
+                        <a href="{{ app.session.get('back') ? app.session.get('back') : path('oro_user_index') }}" class="btn" title="{{ 'Back'|trans }}"><i class="icon-chevron-left hide-text">{{ 'Back'|trans }}</i></a>
+                        {% if resource_granted('oro_user_profile_edit') %}
                         <a href="{{ path('oro_user_edit', { id: user.id }) }}" class="btn" title="{{ 'Edit profile'|trans }}"><i class="icon-edit hide-text">{{ 'Edit'|trans }}</i></a>
-                    {% endif %}
-                    {% if resource_granted('oro_user_profile_remove') %}
-                        <a href="javascript: void(0);" class="btn" id="btn-remove-profile" data-id="{{ user.id }}" data-message="{{ 'Are you sure you want to delete this profile?'|trans }}" title="{{ 'Delete profile'|trans }}"><i class="icon-trash hide-text">{{ 'Remove'|trans }}</i></a>
+                        {% endif %}
+                        {% if resource_granted('oro_user_profile_remove') %}
+                        <a href="javascript: void(0);" class="btn icons-holder-text" id="btn-remove-profile" data-id="{{ user.id }}" data-message="{{ 'Are you sure you want to delete this profile?'|trans }}" title="{{ 'Delete profile'|trans }}"><i class="icon-trash hide-text">{{ 'Remove'|trans }}</i>Delete</a>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="pull-right" style="clear: right; padding: 10px 0 0;">
+                    {% if user.enabled %}
+                    <div class="status-enabled"><i class="icon-status-enabled"></i>{{ 'Enabled'|trans }}</div>
+                    {% else %}
+                    <div class="status-disabled"><i class="icon-status-disabled"></i>{{ 'Disabled'|trans }}</div>
                     {% endif %}
                 </div>
             </div>
             <div class="span9 ">
                <div class="customer-info well-small">
                    <div class="visual"><img src="{{ user.imagePath ? user.imagePath | imagine_filter('avatar_med') : asset('bundles/oroui/img/info-usser.png') }}" alt="{{ user.fullname(format) }}"/></div>
-                   <div class="customer-content">
-                       <div class="sub-title">{{ 'User'|trans }}</div>
-                       <h1 class="usser-name">{{ user.fullname(format)|default('N/A') }}</h1>
+                   <div class="customer-content pull-left">
+                       <div class="clearfix-oro">
+                            <div class="sub-title">{{ 'User'|trans }}</div>
+                            <span class="separator">/</span>
+                            <h1 class="usser-name">{{ user.fullname(format)|default('N/A') }}</h1>
+                       </div>
                        <ul class="inline">
                            <li>{{ 'Created'|trans }}: {{ user.createdAt ? macros.time(user.createdAt) : 'N/A' }}</li>
                            <li>{{ 'Updated'|trans }}: {{ user.updatedAt ? macros.time(user.updatedAt) : 'N/A' }}</li>
@@ -50,89 +62,97 @@
         </div>
         <div class="clearfix-oro">
             <div data-spy="scroll" data-target="#navbar-profile" data-offset="50" class="scrollspy container-fluid">
-                <h4 id="scroll-main" class="scrollspy-title">{{ 'Overview'|trans }}</h4>
-                <div class="row-fluid">
-                    <div class="form-horizontal span6">
-                        <div class="control-group">
-                            <label class="control-label">{{ 'Account name'|trans }}</label>
-                            <div class="controls">
-                                <div class="clearfix-oro">
-                                    <p class="control-label">{{ user.username }}</p>
+                <div class="usser-row">
+                   <h4 id="scroll-main" class="scrollspy-title">{{ 'Overview'|trans }}</h4>
+                    <div class="row-fluid row-fluid-divider">
+                        <div class="form-horizontal span6">
+                            <h5 class="usser-fiedset"><span>Basic Information</span></h5>
+                            <div class="control-group">
+                                <label class="control-label">{{ 'Account name'|trans }}</label>
+                                <div class="controls">
+                                    <div class="clearfix-oro">
+                                        <p class="control-label">{{ user.username }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label">{{ 'First name'|trans }}</label>
+                                <div class="controls">
+                                    <div class="clearfix-oro">
+                                        <p class="control-label">{{ user.firstname|default('N/A') }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label">{{ 'Last name'|trans }}</label>
+                                <div class="controls">
+                                    <div class="clearfix-oro">
+                                        <p class="control-label">{{ user.lastname|default('N/A') }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label">{{ 'Birthday'|trans }}</label>
+                                <div class="controls">
+                                    <div class="clearfix-oro">
+                                        <p class="control-label">{{ user.birthday ? macros.date(user.birthday) : 'N/A' }}</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="control-group">
-                            <label class="control-label">{{ 'First name'|trans }}</label>
-                            <div class="controls">
-                                <div class="clearfix-oro">
-                                    <p class="control-label">{{ user.firstname|default('N/A') }}</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="control-group">
-                            <label class="control-label">{{ 'Last name'|trans }}</label>
-                            <div class="controls">
-                                <div class="clearfix-oro">
-                                    <p class="control-label">{{ user.lastname|default('N/A') }}</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="control-group">
-                            <label class="control-label">{{ 'Birthday'|trans }}</label>
-                            <div class="controls">
-                                <div class="clearfix-oro">
-                                    <p class="control-label">{{ user.birthday ? macros.date(user.birthday) : 'N/A' }}</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-horizontal span6">
-                        <div class="control-group">
-                            <label class="control-label">{{ 'Email'|trans }}</label>
-                            <div class="controls">
-                                <div class="clearfix-oro">
-                                    <p class="control-label">{{ user.email }} <strong>{{ 'Primary'|trans }}</strong></p>
-                                </div>
-                                {% for obj in user.emails %}
-                                <div class="clearfix-oro">
-                                    <p class="control-label">{{ obj.email }}</p>
-                                </div>
-                                {% endfor %}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <h4 id="scroll-api" class="scrollspy-title">{{ 'API'|trans }}</h4>
-                <div class="row-fluid">
-                    <div class="form-horizontal">
-                        <div class="control-group">
-                            <label class="control-label">{{ 'API key'|trans }}</label>
-                            <div class="controls">
-                                <div class="horizontal">
-                                    <strong class="label label-info">{{ user.api ? user.api.apiKey : 'N/A' }}</strong>
-                                    {% if resource_granted('oro_user_profile_apigen') %}
-                                    <a class="btn btn-small" id="btn-apigen" href="{{ path('oro_user_apigen', { id: user.id }) }}">{{ 'Generate key'|trans }}</a>
-                                    {% endif %}
+                        <div class="form-horizontal span6">
+                            <h5 class="usser-fiedset"><span>Contact Information</span></h5>
+                            <div class="control-group">
+                                <label class="control-label">{{ 'Email'|trans }}</label>
+                                <div class="controls">
+                                    <div class="clearfix-oro">
+                                        <p class="control-label">{{ user.email }} <strong>{{ 'Primary'|trans }}</strong></p>
+                                    </div>
+                                    {% for obj in user.emails %}
+                                    <div class="clearfix-oro">
+                                        <p class="control-label">{{ obj.email }}</p>
+                                    </div>
+                                    {% endfor %}
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <h4 id="scroll-attributes" class="scrollspy-title">{{ 'Additional data'|trans }}</h4>
-                <div class="row-fluid">
-                    <div class="form-horizontal">
-                        {% for attr in user.values %}
-                        <div class="control-group">
-                            <label class="control-label">{{ attr.attribute.code|title }}</label>
-                            <div class="controls">
-                                <div class="clearfix-oro">
-                                    <p class="control-label">{{ attr.__toString }}</p>
+                <div class="usser-row">
+                    <h4 id="scroll-api" class="scrollspy-title">{{ 'API'|trans }}</h4>
+                    <div class="row-fluid">
+                        <div class="form-horizontal">
+                            <div class="control-group">
+                                <label class="control-label">{{ 'API key'|trans }}</label>
+                                <div class="controls">
+                                    <div class="horizontal">
+                                        <strong class="label label-info">{{ user.api ? user.api.apiKey : 'N/A' }}</strong>
+                                        {% if resource_granted('oro_user_profile_apigen') %}
+                                        <a class="btn btn-small" id="btn-apigen" href="{{ path('oro_user_apigen', { id: user.id }) }}">{{ 'Generate key'|trans }}</a>
+                                        {% endif %}
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="usser-row">
+                    <h4 id="scroll-attributes" class="scrollspy-title">{{ 'Additional data'|trans }}</h4>
+                    <div class="row-fluid">
+                        <div class="form-horizontal">
+                            {% for attr in user.values %}
+                            <div class="control-group">
+                                <label class="control-label">{{ attr.attribute.code|title }}</label>
+                                <div class="controls">
+                                    <div class="clearfix-oro">
+                                        <p class="control-label">{{ attr.__toString }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
                     </div>
                 </div>
             </div>
