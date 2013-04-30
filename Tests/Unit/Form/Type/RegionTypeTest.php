@@ -42,4 +42,42 @@ class RegionTypeTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertEquals('oro_region', $this->type->getName());
     }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testBuildFormException()
+    {
+        $builderMock = $this->getMock('Symfony\Component\Form\Tests\FormBuilderInterface');
+        $options = array();
+
+        $this->type->buildForm($builderMock, $options);
+    }
+
+    public function testBuildForm()
+    {
+        $builderMock = $this->getMock('Symfony\Component\Form\Tests\FormBuilderInterface');
+        $options = array(RegionType::COUNTRY_OPTION_KEY => 'test');
+
+        $builderMock->expects($this->once())
+            ->method('setAttribute')
+            ->with($this->equalTo(RegionType::COUNTRY_OPTION_KEY), $this->equalTo('test'));
+
+
+        $this->type->buildForm($builderMock, $options);
+    }
+
+    public function testFinishView()
+    {
+        $formViewMock = $this->getMock('Symfony\Component\Form\FormView');
+        $formMock = $this->getMockBuilder('Symfony\Component\Form\Form')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $formMock->expects($this->once())
+            ->method('getAttribute')
+            ->with($this->equalTo(RegionType::COUNTRY_OPTION_KEY))
+            ->will($this->returnValue(''));
+
+        $this->type->finishView($formViewMock, $formMock, array());
+    }
 }

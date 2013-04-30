@@ -47,6 +47,14 @@ class RegionController extends ContainerAware
     }
 
     /**
+     * @return ObjectManager
+     */
+    protected function getManager()
+    {
+        return $this->container->get('doctrine.orm.entity_manager');
+    }
+
+    /**
      * Shortcut to get entity
      *
      * @param string $repo
@@ -63,13 +71,5 @@ class RegionController extends ContainerAware
         }
 
         return $entity;
-    }
-
-    /**
-     * @return ObjectManager
-     */
-    protected function getManager()
-    {
-        return $this->container->get('doctrine.orm.entity_manager');
     }
 }

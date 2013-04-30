@@ -2,7 +2,6 @@
 
 namespace Oro\Bundle\AddressBundle\Controller\Api\Soap;
 
-use Symfony\Component\Form\Form;
 use Symfony\Component\DependencyInjection\ContainerAware;
 use Doctrine\Common\Persistence\ObjectManager;
 use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
@@ -25,9 +24,9 @@ class CountryController extends ContainerAware
      * @Soap\Param("iso2Code", phpType = "string")
      * @Soap\Result(phpType = "Oro\Bundle\AddressBundle\Entity\Country")
      */
-    public function getAction($id)
+    public function getAction($iso2Code)
     {
-        return $this->getEntity('OroAddressBundle:Country', (int)$id);
+        return $this->getEntity('OroAddressBundle:Country', $iso2Code);
     }
 
     /**
