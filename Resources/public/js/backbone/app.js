@@ -123,7 +123,7 @@ window.OroApp = {
 
             for (var index in valueKeys) {
                 var key = valueKeys[index];
-                if (!this.isEqualsLoosely(value1[key], value2[key])) {
+                if (!_.has(value2, key) || !this.isEqualsLoosely(value1[key], value2[key])) {
                     return false;
                 }
             }
