@@ -20,10 +20,8 @@ Oro.RegionUpdater.View = Backbone.View.extend({
      * Trigger change event
      */
     sync: function () {
-        var el = $(this.el);
-
-        if (el.val() == '') {
-            el.trigger('change');
+        if (this.target.val() == '' && $(this.el).val() != '') {
+            $(this.el).trigger('change');
         }
     },
 

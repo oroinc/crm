@@ -66,6 +66,7 @@ class BuildAddressFormListener implements EventSubscriberInterface
 
         if ($country->hasRegions()) {
             $config = $form->get('state')->getConfig()->getOptions();
+            unset($config['choice_list']);
             $config['country'] = $country;
 
             $form->add(
@@ -94,6 +95,7 @@ class BuildAddressFormListener implements EventSubscriberInterface
 
         if ($country && $country->hasRegions()) {
             $config = $form->get('state')->getConfig()->getOptions();
+            unset($config['choice_list']);
             $config['country'] = $country;
 
             $form->add(
