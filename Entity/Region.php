@@ -4,6 +4,7 @@ namespace Oro\Bundle\AddressBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation\Type;
+use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 use Oro\Bundle\AddressBundle\Entity\Country;
@@ -32,6 +33,7 @@ class Region
      * @ORM\ManyToOne(targetEntity="Country", inversedBy="regions",cascade={"persist"})
      * @ORM\JoinColumn(name="country_id", referencedColumnName="iso2_code")
      * @Type("string")
+     * @Soap\ComplexType("string", nillable=true)
      */
     private $country;
 
@@ -39,6 +41,7 @@ class Region
      * @var string
      *
      * @ORM\Column(name="code", type="string", length=32)
+     * @Soap\ComplexType("string", nillable=true)
      */
     private $code;
 
@@ -46,6 +49,7 @@ class Region
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255)
+     * @Soap\ComplexType("string", nillable=true)
      * @Gedmo\Translatable
      */
     private $name;
