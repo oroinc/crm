@@ -90,7 +90,6 @@ abstract class AbstractFlexibleManagerTest extends AbstractOrmTest
                     'flexible_manager'             => 'demo_manager',
                     'flexible_class'               => $this->flexibleClassName,
                     'flexible_value_class'         => $this->flexibleValueClassName,
-                    'attribute_extended_class'     => $this->flexibleAttributeClassName,
                     'attribute_class'              => $this->attributeClassName,
                     'attribute_option_class'       => $this->attributeOptionClassName,
                     'attribute_option_value_class' => $this->attributeOptionValueClassName,

@@ -17,7 +17,6 @@ use Oro\Bundle\FlexibleEntityBundle\Model\Behavior\ScopableInterface;
 use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttribute;
 use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttributeOption;
 use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttributeOptionValue;
-use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttributeExtended;
 use Doctrine\Common\Persistence\ObjectManager;
 
 /**
@@ -199,15 +198,6 @@ class FlexibleManager implements TranslatableInterface, ScopableInterface
      * Return class name that can be used to get the repository or instance
      * @return string
      */
-    public function getAttributeExtendedName()
-    {
-        return $this->flexibleConfig['attribute_extended_class'];
-    }
-
-    /**
-     * Return class name that can be used to get the repository or instance
-     * @return string
-     */
     public function getAttributeOptionName()
     {
         return $this->flexibleConfig['attribute_option_class'];
@@ -252,21 +242,6 @@ class FlexibleManager implements TranslatableInterface, ScopableInterface
     public function getAttributeRepository()
     {
         return $this->storageManager->getRepository($this->getAttributeName());
-    }
-
-    /**
-     * Return related repository
-     * @return Doctrine\Common\Persistence\ObjectRepository
-     */
-    public function getAttributeExtendedRepository()
-    {
-        if (!$this->getAttributeExtendedName()) {
-            throw new FlexibleConfigurationException(
-                $this->getFlexibleName() .' has no flexible attribute extended class'
-            );
-        }
-
-        return $this->storageManager->getRepository($this->getAttributeExtendedName());
     }
 
     /**
@@ -362,30 +337,6 @@ class FlexibleManager implements TranslatableInterface, ScopableInterface
         // dispatch event
         $event = new FilterFlexibleEvent($this, $object);
         $this->eventDispatcher->dispatch(FlexibleEntityEvents::CREATE_FLEXIBLE, $event);
-
-        return $object;
-    }
-
-    /**
-     * Return a new instance
-     *
-     * @param AbstractAttributeType $type attribute type
-     *
-     * @return AbstractAttributeExtended
-     */
-    public function createAttributeExtended(AbstractAttributeType $type = null)
-    {
-        if (!$this->getAttributeExtendedName()) {
-            throw new FlexibleConfigurationException(
-                $this->getFlexibleName() .' has no flexible attribute extended class'
-            );
-        }
-        // build base attribute
-        $attribute = $this->createAttribute($type);
-        // build flexible attribute
-        $class = $this->getAttributeExtendedName();
-        $object = new $class();
-        $object->setAttribute($attribute);
 
         return $object;
     }

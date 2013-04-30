@@ -58,7 +58,6 @@ How to use ?
 - [Dive into flexible value](Resources/doc/value.md)
 - [Create a flexible form](Resources/doc/form.md)
 - [Customize manager and repository](Resources/doc/customize_manager.md)
-- [Create an extended attribute](Resources/doc/extended_attribute.md)
 - [Others customizations](Resources/doc/customize_others.md)
 
 Enhancement
