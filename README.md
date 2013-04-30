@@ -1,0 +1,4 @@
+ContactBundle
+=============
+
+Mange contacts
