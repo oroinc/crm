@@ -9,13 +9,22 @@
     <div class="navigation clearfix navbar-extra navbar-extra-right">
         <div class="row">
             <div class="pull-right">
-                <div class="btn-group icons-holder">
-                    <a href="{{ app.session.get('back') ? app.session.get('back') : path('oro_user_index') }}" class="btn" title="{{ 'Back'|trans }}"><i class="icon-chevron-left hide-text">{{ 'Back'|trans }}</i></a>
-                    {% if resource_granted('oro_user_profile_edit') %}
+                <div class="pull-right">
+                    <div class="btn-group icons-holder ">
+                        <a href="{{ app.session.get('back') ? app.session.get('back') : path('oro_user_index') }}" class="btn" title="{{ 'Back'|trans }}"><i class="icon-chevron-left hide-text">{{ 'Back'|trans }}</i></a>
+                        {% if resource_granted('oro_user_profile_edit') %}
                         <a href="{{ path('oro_user_edit', { id: user.id }) }}" class="btn" title="{{ 'Edit profile'|trans }}"><i class="icon-edit hide-text">{{ 'Edit'|trans }}</i></a>
-                    {% endif %}
-                    {% if resource_granted('oro_user_profile_remove') %}
-                        <a href="javascript: void(0);" class="btn" id="btn-remove-profile" data-id="{{ user.id }}" data-message="{{ 'Are you sure you want to delete this profile?'|trans }}" title="{{ 'Delete profile'|trans }}"><i class="icon-trash hide-text">{{ 'Remove'|trans }}</i></a>
+                        {% endif %}
+                        {% if resource_granted('oro_user_profile_remove') %}
+                        <a href="javascript: void(0);" class="btn icons-holder-text" id="btn-remove-profile" data-id="{{ user.id }}" data-message="{{ 'Are you sure you want to delete this profile?'|trans }}" title="{{ 'Delete profile'|trans }}"><i class="icon-trash hide-text">{{ 'Remove'|trans }}</i>Delete</a>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="pull-right" style="clear: right; padding: 10px 0 0;">
+                    {% if user.enabled %}
+                    <div class="status-enabled"><i class="icon-status-enabled"></i>{{ 'Enabled'|trans }}</div>
+                    {% else %}
+                    <div class="status-disabled"><i class="icon-status-disabled"></i>{{ 'Disabled'|trans }}</div>
                     {% endif %}
                 </div>
             </div>
