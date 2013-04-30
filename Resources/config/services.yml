@@ -1,5 +1,5 @@
 parameters:
-    oro_dataaudit.log.listener.class: Oro\Bundle\DataAuditBundle\EventListener\LogListener
+    oro_dataaudit.log.listener.class:     Oro\Bundle\DataAuditBundle\EventListener\LogListener
 
 services:
     oro_dataaudit.log.listener:

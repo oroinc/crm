@@ -1,0 +1,25 @@
+oro_menu_config:
+    items:
+        audit_tab:
+            label: 'Data Audit'
+            uri: '#'
+        audit_list:
+            label: 'Grid'
+            route: 'oro_dataaudit_index'
+
+    tree:
+        application_menu:
+            children:
+                audit_tab:
+                    children:
+                        audit_list: ~
+
+oro_titles:
+#    oro_user_show: %%username%% - View profile - User Management
+#    oro_user_edit: %%username%% - Edit profile - User Management
+#    oro_user_create: New profile - User Management
+#    oro_user_index: Users overview - User Management
+
+#    oro_user_role_edit: Edit role - User management
+#    oro_user_role_create: Add role - User management
+#    oro_user_role_index: "Roles overview - User management"
