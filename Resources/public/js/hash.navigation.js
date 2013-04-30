@@ -15,6 +15,8 @@ OroApp.Navigation = OroApp.Router.extend({
     /**
      * links - Selector for all links that will be processed by hash navigation
      * forms - Selector for all forms that will be processed by hash navigation
+     * content - Selector for ajax response content area
+     * container - Selector for main content area
      * loadingMask - Selector for loading spinner
      * searchDropdown - Selector for dropdown with search results
      * menuDropdowns - Selector for 3 dots menu and my profile dropdowns
@@ -24,6 +26,8 @@ OroApp.Navigation = OroApp.Router.extend({
     selectors: {
         links:       'a:not([href^=#],[href^=javascript]),span[data-url]',
         forms:       'form',
+        content:     '#content',
+        container:     '#container',
         loadingMask: '.hash-loading-mask',
         searchDropdown: '#search-div',
         menuDropdowns: '.pin-menus.dropdown, .nav .dropdown'
@@ -240,49 +244,54 @@ OroApp.Navigation = OroApp.Router.extend({
      * @param {String} data
      */
     handleResponse: function (data) {
-        /**
-         * Clearing content area with native js, prevents freezing of firefox with firebug enabled
-         */
-        document.getElementById('container').innerHTML = '';
-        var redirectUrl = $(data).filter('#redirect').text();
-        if (redirectUrl) {
-            urlParts = redirectUrl.split('url=');
-            if (urlParts[1]) {
-                redirectUrl = urlParts[1];
-            }
-            this.setLocation(redirectUrl);
-        } else {
-            $('#container').html($(data).filter('#content').html());
+        try {
             /**
-             * Collecting javascript from head and append them to content
+             * Clearing content area with native js, prevents freezing of firefox with firebug enabled
              */
-            var js = '';
-            $(data).filter('#head').find('script:not([src])').each(function () {
-                js = js + this.outerHTML;
-            })
-            $('#container').append(js);
-            /**
-             * Setting page title
-             */
-            $('title').html($(data).filter('#head').find('title').html());
-            /**
-             * Setting serialized titles for pinbar and favourites buttons
-             */
-            var titleSerialized = $(data).filter('#head').find('#title-serialized').html();
-            if (titleSerialized) {
-                titleSerialized = $.parseJSON(titleSerialized);
-                $('.top-action-box .btn').filter('.minimize-button, .favorite-button').data('title', titleSerialized);
-            }
+            document.getElementById('container').innerHTML = '';
+            var redirectUrl = $(data).filter('#redirect').text();
+            if (redirectUrl) {
+                urlParts = redirectUrl.split('url=');
+                if (urlParts[1]) {
+                    redirectUrl = urlParts[1];
+                }
+                this.setLocation(redirectUrl);
+            } else {
+                $(this.selectors.container).html($(data).filter(this.selectors.content).html());
+                /**
+                 * Collecting javascript from head and append them to content
+                 */
+                var js = '';
+                $(data).filter('#head').find('script:not([src])').each(function () {
+                    js = js + this.outerHTML;
+                })
+                $(this.selectors.container).append(js);
+                /**
+                 * Setting page title
+                 */
+                document.title = $(data).filter('#head').find('#title').html();
+                /**
+                 * Setting serialized titles for pinbar and favourites buttons
+                 */
+                var titleSerialized = $(data).filter('#head').find('#title-serialized').html();
+                if (titleSerialized) {
+                    titleSerialized = $.parseJSON(titleSerialized);
+                    $('.top-action-box .btn').filter('.minimize-button, .favorite-button').data('title', titleSerialized);
+                }
 
-
-            this.processClicks('#container ' + this.selectors.links);
-            this.processForms('#container ' + this.selectors.forms);
-            this.updateMenuTabs(data);
-            this.setActiveMenu(this.url);
-            this.updateMessages(data);
-            this.hideActiveDropdowns();
-            this.triggerCompleteEvent();
+                this.processClicks('#container ' + this.selectors.links);
+                this.processForms('#container ' + this.selectors.forms);
+                this.updateMenuTabs(data);
+                this.setActiveMenu(this.url);
+                this.updateMessages(data);
+                this.hideActiveDropdowns();
+            }
         }
+        catch (err) {
+            console.log(err);
+            alert("Sorry, unable to load page");
+        }
+        this.triggerCompleteEvent();
     },
 
     /**
@@ -423,12 +432,23 @@ OroApp.Navigation = OroApp.Router.extend({
     },
 
     /**
+     * Check if url is a 3d party link
+     *
+     * @todo Implement check
+     * @param url
+     * @return {Boolean}
+     */
+    checkThirdPartyLink: function(url) {
+        return false;
+    },
+
+    /**
      * Change location hash with new url
      *
      * @param {String} url
      */
     setLocation: function (url) {
-        if (this.enabled) {
+        if (this.enabled && !this.checkThirdPartyLink(url)) {
             url = url.replace(this.baseUrl, '').replace(/^(#\!?|\.)/, '').replace('#g/', '|g/');
             window.location.hash = '#url=' + url;
         } else {
