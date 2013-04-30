@@ -1,12 +1,29 @@
 {% extends 'OroUIBundle:Form:fields.html.twig' %}
 
-{% block oro_country_widget %}
-    {{ form_widget(form, {'attr': {'class': 'country-field'}}) }}
-{% endblock oro_country_widget %}
-
 {% block oro_region_widget %}
-    {% set country_field = country_field|default('country-select') %}
-    {{ form_widget(form, {'attr': {'class': 'region-field'}}) }}
+    {# // check if block was not included yet #}
+    {% set _block = block('oro_region_updater_js') %}
+    {% if (_block is empty) %}
+        {% include 'OroAddressBundle:Include:javascript.html.twig' %}
+        {{ block('oro_region_updater_js')|raw }}
+    {% endif %}
+
+
+    {% set country_field = country_field|default('#oro_address_form_country') %}
+
+    {{ form_widget(form) }}
+
+    <script type="text/javascript">
+        $(function() {
+            var regions = new Oro.RegionUpdater.Collection();
+
+            new Oro.RegionUpdater.View ({
+                el: $('{{ country_field }}'),
+                target: $('{{ id }}'),
+                collection: regions
+            });
+        });
+    </script>
 {% endblock oro_region_widget %}
 
 {% block oro_address_widget %}

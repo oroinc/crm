@@ -71,7 +71,7 @@ class AddressBase extends AbstractEntityFlexible
      *
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\AddressBundle\Entity\Country", cascade={"persist"})
      * @ORM\JoinColumn(name="country_id", referencedColumnName="iso2_code")
-     * @Soap\ComplexType("Oro\Bundle\AddressBundle\Entity\Country", nillable=false)
+     * @Soap\ComplexType("string", nillable=false)
      */
     protected $country;
 
