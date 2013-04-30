@@ -21,4 +21,12 @@ class UrlType extends AbstractAttributeType
         $this->backendType = self::BACKEND_TYPE_VARCHAR;
         $this->formType    = 'url';
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getName()
+    {
+        return 'oro_flexibleentity_url';
+    }
 }

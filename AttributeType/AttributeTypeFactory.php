@@ -33,13 +33,14 @@ class AttributeTypeFactory
     }
 
     /**
+     * Get the attribute type service
+     *
      * @param string $type
-     * @param array  $options
-     * 
+     *
      * @return AttributeTypeInterface
      * @throws \RunTimeException
      */
-    public function create($type, array $options = array())
+    public function get($type)
     {
         if (!$type) {
             throw new \RunTimeException('The type must be defined');
@@ -57,8 +58,6 @@ class AttributeTypeFactory
         if (!$attributeType instanceof AttributeTypeInterface) {
             throw new \RunTimeException(sprintf('The service "%s" must implement "AttributeTypeInterface"', $id));
         }
-
-        $attributeType->initialize($type, $options);
 
         return $attributeType;
     }

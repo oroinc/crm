@@ -2,7 +2,7 @@
 namespace Oro\Bundle\FlexibleEntityBundle\AttributeType;
 
 use Doctrine\ORM\EntityRepository;
-use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttribute;
+use Oro\Bundle\FlexibleEntityBundle\Model\FlexibleValueInterface;
 
 /**
  * Multi options (checkbox) attribute type
@@ -14,18 +14,22 @@ use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttribute;
 class OptionMultiCheckboxType extends AbstractOptionType
 {
     /**
-     * Get form type options
-     *
-     * @param AbstractAttribute $attribute
-     *
-     * @return array
+     * {@inheritdoc}
      */
-    public function prepareFormOptions(AbstractAttribute $attribute)
+    protected function prepareValueFormOptions(FlexibleValueInterface $value)
     {
-        $options = parent::prepareFormOptions($attribute);
+        $options = parent::prepareValueFormOptions($value);
         $options['expanded'] = true;
         $options['multiple'] = true;
 
         return $options;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getName()
+    {
+        return 'oro_flexibleentity_multicheckbox';
     }
 }

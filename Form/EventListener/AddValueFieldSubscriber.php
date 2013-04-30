@@ -58,19 +58,17 @@ class AddValueFieldSubscriber implements EventSubscriberInterface
     public function preSetData(FormEvent $event)
     {
         $value = $event->getData();
-        $form = $event->getForm();
+        $form  = $event->getForm();
 
         // skip form creation with no data
         if (null === $value) {
             return;
         }
 
-        // TODO :
-        // - attribute type has properties
-        // - get properties from attributes
         $attribute     = $value->getAttribute();
-        $attributeType = $this->flexibleManager->getAttributeTypeFactory()->create($attribute->getAttributeType());
-        $valueForm = $attributeType->buildValueFormType($this->factory, $value);
+        $attributeType = $this->flexibleManager->getAttributeTypeFactory()->get($attribute->getAttributeType());
+        $valueForm     = $attributeType->buildValueFormType($this->factory, $value);
+
         $form->add($valueForm);
     }
 }

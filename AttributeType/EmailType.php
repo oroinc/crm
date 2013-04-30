@@ -21,4 +21,12 @@ class EmailType extends AbstractAttributeType
         $this->backendType = self::BACKEND_TYPE_VARCHAR;
         $this->formType    = 'email';
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getName()
+    {
+        return 'oro_flexibleentity_email';
+    }
 }

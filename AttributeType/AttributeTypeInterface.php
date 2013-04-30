@@ -16,25 +16,10 @@ interface AttributeTypeInterface
 {
     /**
      * Get name
-     * 
+     *
      * @return string
      */
     public function getName();
-
-    /**
-     * Get options
-     *
-     * @return array
-     */
-    public function getOptions();
-
-    /**
-     * Initialize
-     *
-     * @param string $name    the name
-     * @param array  $options the options
-     */
-    public function initialize($name, $options = array());
 
     /**
      * Build form type for flexible entity value

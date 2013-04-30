@@ -21,4 +21,12 @@ class MoneyType extends AbstractAttributeType
         $this->backendType = self::BACKEND_TYPE_DECIMAL;
         $this->formType    = 'money';
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getName()
+    {
+        return 'oro_flexibleentity_money';
+    }
 }

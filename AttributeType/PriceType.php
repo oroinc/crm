@@ -21,4 +21,12 @@ class PriceType extends AbstractAttributeType
         $this->backendType = self::BACKEND_TYPE_PRICE;
         $this->formType    = 'oro_flexibleentity_price';
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getName()
+    {
+        return 'oro_flexibleentity_price';
+    }
 }

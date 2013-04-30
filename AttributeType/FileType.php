@@ -22,4 +22,12 @@ class FileType extends AbstractAttributeType
         $this->backendType = self::BACKEND_TYPE_MEDIA;
         $this->formType    = 'oro_media';
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getName()
+    {
+        return 'oro_flexibleentity_file';
+    }
 }

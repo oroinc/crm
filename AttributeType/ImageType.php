@@ -12,10 +12,10 @@ namespace Oro\Bundle\FlexibleEntityBundle\AttributeType;
 class ImageType extends FileType
 {
     /**
-     * constructor
+     * {@inheritdoc}
      */
-    public function __construct()
+    public function getName()
     {
-        parent::__construct();
+        return 'oro_flexibleentity_image';
     }
 }

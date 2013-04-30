@@ -21,4 +21,12 @@ class TextType extends AbstractAttributeType
         $this->backendType = self::BACKEND_TYPE_VARCHAR;
         $this->formType    = 'text';
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getName()
+    {
+        return 'oro_flexibleentity_text';
+    }
 }

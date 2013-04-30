@@ -22,4 +22,12 @@ class BooleanType extends AbstractAttributeType
         $this->backendType = self::BACKEND_TYPE_INTEGER;
         $this->formType    = 'option';
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getName()
+    {
+        return 'oro_flexibleentity_boolean';
+    }
 }

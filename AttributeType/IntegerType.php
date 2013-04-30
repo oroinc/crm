@@ -12,7 +12,6 @@ use Oro\Bundle\FlexibleEntityBundle\AttributeType\AbstractAttributeType;
  */
 class IntegerType extends AbstractAttributeType
 {
-
     /**
      * constructor
      */
@@ -20,5 +19,13 @@ class IntegerType extends AbstractAttributeType
     {
         $this->backendType = self::BACKEND_TYPE_INTEGER;
         $this->formType    = 'integer';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getName()
+    {
+        return 'oro_flexibleentity_integer';
     }
 }

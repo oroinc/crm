@@ -21,4 +21,12 @@ class NumberType extends AbstractAttributeType
         $this->backendType = self::BACKEND_TYPE_DECIMAL;
         $this->formType    = 'number';
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getName()
+    {
+        return 'oro_flexibleentity_number';
+    }
 }

@@ -11,4 +11,11 @@ namespace Oro\Bundle\FlexibleEntityBundle\AttributeType;
  */
 class ImageUrlType extends FileUrlType
 {
+    /**
+     * {@inheritdoc}
+     */
+    public function getName()
+    {
+        return 'oro_flexibleentity_imageurl';
+    }
 }

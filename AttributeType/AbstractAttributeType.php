@@ -47,20 +47,6 @@ abstract class AbstractAttributeType implements AttributeTypeInterface
     protected $translator;
 
     /**
-     * Attribute type name
-     *
-     * @var string
-     */
-    protected $name;
-
-    /**
-     * Attribute type options
-     *
-     * @var array
-     */
-    protected $options;
-
-    /**
      * Field backend type, "varchar" by default, the doctrine mapping field, getter / setter to use for binding
      *
      * @var string
@@ -80,38 +66,6 @@ abstract class AbstractAttributeType implements AttributeTypeInterface
     public function __construct(TranslatorInterface $translator)
     {
         $this->translator = $translator;
-    }
-
-    /**
-     * Initialize
-     *
-     * @param string $name    the name
-     * @param array  $options the options
-     */
-    public function initialize($name, $options = array())
-    {
-        $this->name = $name;
-        $this->options = $options;
-    }
-
-    /**
-     * Get attribute type name
-     *
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
-     * Get attribute type options
-     *
-     * @return array
-     */
-    public function getOptions()
-    {
-        return $this->options;
     }
 
     /**
@@ -139,24 +93,66 @@ abstract class AbstractAttributeType implements AttributeTypeInterface
      */
     public function buildValueFormType(FormFactoryInterface $factory, FlexibleValueInterface $value)
     {
-        $attribute   = $value->getAttribute();
-        $formName    = $attribute->getBackendType();
-        $formType    = $this->getValueFormType($value);
-        $formOptions = $this->prepareFormOptions($attribute); // TODO : useless !!!!??
-        $data        = is_null($value->getData()) ? $attribute->getDefaultValue() : $value->getData();
-        $form        = $factory->createNamed($formName, $formType, $data, $formOptions);
+        $name    = $this->prepareValueFormName($value);
+        $type    = $this->prepareValueFormAlias($value);
+        $options = $this->prepareValueFormOptions($value);
+        $data    = $this->prepareValueFormData($value);
+        $form    = $factory->createNamed($name, $type, $data, $options);
 
         return $form;
     }
 
     /**
-     * Get form type from value
+     * Get the value form type name to use to ensure binding
      *
      * @param FlexibleValueInterface $value
+     *
+     * @return string
      */
-    protected function getValueFormType(FlexibleValueInterface $value)
+    protected function prepareValueFormName(FlexibleValueInterface $value)
+    {
+        return $value->getAttribute()->getBackendType();
+    }
+
+    /**
+     * Get value form type alias to use to render value
+     *
+     * @param FlexibleValueInterface $value
+     *
+     * @return string
+     */
+    protected function prepareValueFormAlias(FlexibleValueInterface $value)
     {
         return $this->getFormType();
+    }
+
+    /**
+     * Get value form type options to configure the form
+     *
+     * @param FlexibleValueInterface $value
+     *
+     * @return array
+     */
+    protected function prepareValueFormOptions(FlexibleValueInterface $value)
+    {
+        $options = array(
+            'label'    => $this->translator->trans($attribute->getCode()),
+            'required' => $attribute->getRequired()
+        );
+
+        return $options;
+    }
+
+    /**
+     * Get value form type data
+     *
+     * @param FlexibleValueInterface $value
+     *
+     * @return mixed
+     */
+    protected function prepareValueFormData(FlexibleValueInterface $value)
+    {
+        return is_null($value->getData()) ? $attribute->getDefaultValue() : $value->getData();
     }
 
     /**
@@ -164,23 +160,8 @@ abstract class AbstractAttributeType implements AttributeTypeInterface
      */
     public function buildAttributeFormType(FormFactoryInterface $factory, AbstractAttribute $attribute)
     {
+        // TODO will be used to build attribute create / edit form for attribute management, cf BAP-650
+
         return null;
-    }
-
-    /**
-     * Get form type options
-     *
-     * @param AbstractAttribute $attribute
-     *
-     * @return array
-     */
-    public function prepareFormOptions(AbstractAttribute $attribute)
-    {
-        $options = array(
-            'label'    => $attribute->getCode(),
-            'required' => $attribute->getRequired()
-        );
-
-        return $options;
     }
 }
