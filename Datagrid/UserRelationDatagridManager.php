@@ -7,6 +7,8 @@ use Oro\Bundle\GridBundle\Field\FieldDescription;
 use Oro\Bundle\GridBundle\Field\FieldDescriptionCollection;
 use Oro\Bundle\GridBundle\Field\FieldDescriptionInterface;
 use Oro\Bundle\GridBundle\Filter\FilterInterface;
+use Oro\Bundle\GridBundle\Sorter\SorterInterface;
+use Oro\Bundle\GridBundle\Datagrid\ParametersInterface;
 
 abstract class UserRelationDatagridManager extends DatagridManager
 {
@@ -103,5 +105,28 @@ abstract class UserRelationDatagridManager extends DatagridManager
             )
         );
         $fieldsCollection->add($fieldLastName);
+    }
+
+    /**
+     * @return array
+     */
+    protected function getDefaultSorters()
+    {
+        return array('id' => SorterInterface::DIRECTION_ASC);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function getQueryParameters()
+    {
+        $additionalParameters = $this->parameters->get(ParametersInterface::ADDITIONAL_PARAMETERS);
+        $dataIn    = !empty($additionalParameters['data_in']) ? $additionalParameters['data_in'] : array(0);
+        $dataNotIn = !empty($additionalParameters['data_not_in']) ? $additionalParameters['data_not_in'] : array(0);
+
+        return array(
+            'data_in'     => $dataIn,
+            'data_not_in' => $dataNotIn,
+        );
     }
 }

@@ -6,6 +6,7 @@ use Oro\Bundle\GridBundle\Field\FieldDescription;
 use Oro\Bundle\GridBundle\Field\FieldDescriptionInterface;
 use Oro\Bundle\UserBundle\Entity\Role;
 use Oro\Bundle\GridBundle\Filter\FilterInterface;
+use Doctrine\ORM\QueryBuilder;
 
 class RoleUserDatagridManager extends UserRelationDatagridManager
 {
@@ -40,15 +41,17 @@ class RoleUserDatagridManager extends UserRelationDatagridManager
     protected function createUserRelationColumn()
     {
         $fieldHasRole = new FieldDescription();
-        $fieldHasRole->setName('hasCurrentRole');
+        $fieldHasRole->setName('has_role');
         $fieldHasRole->setOptions(
             array(
                 'type'        => FieldDescriptionInterface::TYPE_BOOLEAN,
                 'label'       => 'Has role',
                 'field_name'  => 'hasCurrentRole',
                 'expression'  => 'hasCurrentRole',
+                'nullable'    => false,
+                'editable'    => true,
                 'sortable'    => true,
-                'filter_type' => FilterInterface::TYPE_NUMBER,
+                'filter_type' => FilterInterface::TYPE_BOOLEAN,
                 'filterable'  => true,
                 'show_filter' => true,
             )
@@ -61,8 +64,13 @@ class RoleUserDatagridManager extends UserRelationDatagridManager
      */
     protected function createQuery()
     {
+        /** @var $query QueryBuilder */
         $query = parent::createQuery();
-        $query->addSelect('CASE WHEN :role MEMBER OF u.roles THEN 1 ELSE 0 END AS hasCurrentRole');
+        $query->addSelect(
+            'CASE WHEN ' .
+            '(:role MEMBER OF u.roles OR u.id IN (:data_in)) AND u.id NOT IN (:data_not_in) '.
+            'THEN 1 ELSE 0 END AS hasCurrentRole'
+        );
         return $query;
     }
 
@@ -71,8 +79,9 @@ class RoleUserDatagridManager extends UserRelationDatagridManager
      */
     protected function getQueryParameters()
     {
-        return array(
-            'role' => $this->getRole()
+        return array_merge(
+            parent::getQueryParameters(),
+            array('role' => $this->getRole())
         );
     }
 }
