@@ -1,6 +1,8 @@
 <?php
 namespace Oro\Bundle\FlexibleEntityBundle\Tests\Unit;
 
+use Oro\Bundle\FlexibleEntityBundle\AttributeType\TextType;
+
 use Doctrine\Tests\OrmTestCase;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
@@ -84,7 +86,6 @@ abstract class AbstractFlexibleManagerTest extends AbstractOrmTest
         $this->flexibleValueClassName        = 'Oro\Bundle\FlexibleEntityBundle\Tests\Unit\Entity\Demo\FlexibleValue';
         $this->defaultLocale                 = 'en_US';
         $this->defaultScope                  = 'mobile';
-        $this->attributeTypeFactory          = new AttributeTypeFactory($this->container);
         $this->flexibleConfig = array(
             'entities_config' => array(
                 $this->flexibleClassName => array(
@@ -105,6 +106,12 @@ abstract class AbstractFlexibleManagerTest extends AbstractOrmTest
         // prepare test container
         $this->container->setParameter('oro_flexibleentity.flexible_config', $this->flexibleConfig);
 
+        // prepare attribute type factory
+        $attType = new TextType($this->getTranslatorMock(), 'varchar', 'text');
+        $this->container->set('oro_flexibleentity.attributetype.text', $attType);
+        $attTypes = array('oro_flexibleentity_text' => 'oro_flexibleentity.attributetype.text');
+        $this->attributeTypeFactory = new AttributeTypeFactory($this->container, $attTypes);
+
         // prepare simple entity manager (use default entity manager)
         $this->manager = new FlexibleManager(
             $this->flexibleClassName,
@@ -115,7 +122,9 @@ abstract class AbstractFlexibleManagerTest extends AbstractOrmTest
         );
 
         // add attribute types
-        $this->manager->addAttributeType('oro_flexibleentity_text');
+        foreach ($attTypes as $attTypeAlias => $attTypeId) {
+            $this->manager->addAttributeType($attTypeAlias);
+        }
 
         $this->container->set('demo_manager', $this->manager);
         $this->container->set('event_dispatcher', $dispatcher);
