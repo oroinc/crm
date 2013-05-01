@@ -54,6 +54,7 @@ How to use ?
 ============
 
 - [Create a flexible entity](Resources/doc/flexible.md)
+- [Create an attribute type](Resources/doc/attribute_type.md)
 - [Use flexible repository](Resources/doc/repository.md)
 - [Dive into flexible value](Resources/doc/value.md)
 - [Create a flexible form](Resources/doc/form.md)
