@@ -1,7 +1,7 @@
 var Oro = Oro || {};
 
 /**
- * OroApp extension of Bootstrap Modal wrapper for use with Backbone.
+ * Oro extension of Bootstrap Modal wrapper for use with Backbone.
  */
 (function($, _, Backbone) {
     Oro.BootstrapModal = Backbone.BootstrapModal.extend({

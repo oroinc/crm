@@ -1,8 +1,7 @@
 /**
  * Main Oro Application backbone.js namespace
  */
-window.OroApp = {
-
+window.Oro = {
     /**
      * Pack object to string
      *
@@ -78,7 +77,7 @@ window.OroApp = {
      *
      * Example of usage:
      *
-     * OroApp.mirrorKeys({foo: 'x', bar: 'y'}, {foo: 'f', bar: 'b'})
+     * Oro.invertKeys({foo: 'x', bar: 'y'}, {foo: 'f', bar: 'b'})
      * will return {f: 'x', b: 'y'}
      *
      * @param {Object} object
@@ -134,16 +133,6 @@ window.OroApp = {
     },
 
     /**
-     * Deep clone a value
-     *
-     * @param {*} value
-     * @return {*}
-     */
-    deepClone: function(value) {
-        return $.extend(true, {}, value);
-    },
-
-    /**
      * Creates instance based on constructor
      *
      * @param {Object} constructor
@@ -155,5 +144,15 @@ window.OroApp = {
         constructor.apply(instance, instanceArguments);
 
         return instance;
+    },
+
+    /**
+     * Deep clone a value
+     *
+     * @param {*} value
+     * @return {*}
+     */
+    deepClone: function(value) {
+        return $.extend(true, {}, value);
     }
 };
