@@ -1,6 +1,6 @@
-var OroApp = OroApp || {};
-OroApp.Datagrid = OroApp.Datagrid || {};
-OroApp.Datagrid.Cell = OroApp.Datagrid.Cell || {};
+var Oro = Oro || {};
+Oro.Datagrid = Oro.Datagrid || {};
+Oro.Datagrid.Cell = Oro.Datagrid.Cell || {};
 
 /**
  * Number column cell. Added missing behaviour.
@@ -10,10 +10,10 @@ OroApp.Datagrid.Cell = OroApp.Datagrid.Cell || {};
  *  - "editing" when a cell has finished switching to edit mode
  *  - "edited" when cell editing is finished
  *
- * @class   OroApp.Datagrid.Cell.NumberCell
+ * @class   Oro.Datagrid.Cell.NumberCell
  * @extends Backgrid.NumberCell
  */
-OroApp.Datagrid.Cell.NumberCell = Backgrid.NumberCell.extend({
+Oro.Datagrid.Cell.NumberCell = Backgrid.NumberCell.extend({
     /**
      * @inheritDoc
      */

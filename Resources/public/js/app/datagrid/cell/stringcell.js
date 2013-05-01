@@ -1,6 +1,6 @@
-var OroApp = OroApp || {};
-OroApp.Datagrid = OroApp.Datagrid || {};
-OroApp.Datagrid.Cell = OroApp.Datagrid.Cell || {};
+var Oro = Oro || {};
+Oro.Datagrid = Oro.Datagrid || {};
+Oro.Datagrid.Cell = Oro.Datagrid.Cell || {};
 
 /**
  * String column cell. Added missing behaviour.
@@ -10,14 +10,14 @@ OroApp.Datagrid.Cell = OroApp.Datagrid.Cell || {};
  *  - "editing" when a cell has finished switching to edit mode
  *  - "edited" when cell editing is finished
  *
- * @class   OroApp.Datagrid.Cell.StringCell
+ * @class   Oro.Datagrid.Cell.StringCell
  * @extends Backgrid.StringCell
  */
-OroApp.Datagrid.Cell.StringCell = Backgrid.StringCell.extend({
+Oro.Datagrid.Cell.StringCell = Backgrid.StringCell.extend({
     /**
      @property {Backgrid.CellFormatter|Object|string}
      */
-    formatter: new OroApp.Datagrid.Cell.Formatter.CellFormatter(),
+    formatter: new Oro.Datagrid.Cell.Formatter.CellFormatter(),
 
     /**
      * @inheritDoc

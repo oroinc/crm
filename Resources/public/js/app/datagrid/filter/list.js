@@ -1,19 +1,19 @@
-var OroApp = OroApp || {};
-OroApp.Datagrid = OroApp.Datagrid || {};
-OroApp.Datagrid.Filter = OroApp.Datagrid.Filter || {};
+var Oro = Oro || {};
+Oro.Datagrid = Oro.Datagrid || {};
+Oro.Datagrid.Filter = Oro.Datagrid.Filter || {};
 
 /**
  * View that represents all grid filters
  *
- * @class   OroApp.Datagrid.Filter.List
+ * @class   Oro.Datagrid.Filter.List
  * @extends Oro.Filter.List
  */
-OroApp.Datagrid.Filter.List = Oro.Filter.List.extend({
+Oro.Datagrid.Filter.List = Oro.Filter.List.extend({
     /**
      * Initialize filter list options
      *
      * @param {Object} options
-     * @param {OroApp.PageableCollection} [options.collection]
+     * @param {Oro.PageableCollection} [options.collection]
      * @param {Object} [options.filters]
      * @param {String} [options.addButtonHint]
      */
@@ -55,7 +55,7 @@ OroApp.Datagrid.Filter.List = Oro.Filter.List.extend({
     /**
      * Triggers when collection state is updated
      *
-     * @param {OroApp.PageableCollection} collection
+     * @param {Oro.PageableCollection} collection
      */
     _onUpdateCollectionState: function(collection) {
         this.ignoreFiltersUpdateEvents = true;

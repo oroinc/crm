@@ -1,20 +1,20 @@
-var OroApp = OroApp || {};
-OroApp.Datagrid = OroApp.Datagrid || {};
+var Oro = Oro || {};
+Oro.Datagrid = Oro.Datagrid || {};
 
 /**
  * Panel with action buttons
  *
- * @class   OroApp.Datagrid.ActionsPanel
+ * @class   Oro.Datagrid.ActionsPanel
  * @extends Backbone.View
  */
-OroApp.Datagrid.ActionsPanel = Backbone.View.extend({
+Oro.Datagrid.ActionsPanel = Backbone.View.extend({
     /** @property String */
     className: 'btn-group',
 
-    /** @property {OroApp.Datagrid.Action.AbstractAction[]} */
+    /** @property {Oro.Datagrid.Action.AbstractAction[]} */
     actions: [],
 
-    /** @property {OroApp.Datagrid.Action.Launcher[]} */
+    /** @property {Oro.Datagrid.Action.Launcher[]} */
     launchers: [],
 
     /**

@@ -1,20 +1,20 @@
-var OroApp = OroApp || {};
-OroApp.Datagrid = OroApp.Datagrid || {};
-OroApp.Datagrid.Cell = OroApp.Datagrid.Cell || {};
-OroApp.Datagrid.Cell.Formatter = OroApp.Datagrid.Cell.Formatter || {};
+var Oro = Oro || {};
+Oro.Datagrid = Oro.Datagrid || {};
+Oro.Datagrid.Cell = Oro.Datagrid.Cell || {};
+Oro.Datagrid.Cell.Formatter = Oro.Datagrid.Cell.Formatter || {};
 
 /**
  * Formatter for date and time. Fixed formatting method.
  *
- * @class   OroApp.Datagrid.Cell.Formatter.MomentFormatter
+ * @class   Oro.Datagrid.Cell.Formatter.MomentFormatter
  * @extends Backgrid.Extension.MomentFormatter
  */
-OroApp.Datagrid.Cell.Formatter.MomentFormatter = function (options) {
+Oro.Datagrid.Cell.Formatter.MomentFormatter = function (options) {
     _.extend(this, this.defaults, options);
 }
 
-OroApp.Datagrid.Cell.Formatter.MomentFormatter.prototype = new Backgrid.Extension.MomentFormatter;
-_.extend(OroApp.Datagrid.Cell.Formatter.MomentFormatter.prototype, {
+Oro.Datagrid.Cell.Formatter.MomentFormatter.prototype = new Backgrid.Extension.MomentFormatter;
+_.extend(Oro.Datagrid.Cell.Formatter.MomentFormatter.prototype, {
     /**
      * @inheritDoc
      */

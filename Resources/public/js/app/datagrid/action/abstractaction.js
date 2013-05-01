@@ -1,16 +1,16 @@
-var OroApp = OroApp || {};
-OroApp.Datagrid = OroApp.Datagrid || {};
-OroApp.Datagrid.Action = OroApp.Datagrid.Action || {};
+var Oro = Oro || {};
+Oro.Datagrid = Oro.Datagrid || {};
+Oro.Datagrid.Action = Oro.Datagrid.Action || {};
 
 /**
  * Abstract action class. Subclasses should override execute method which is invoked when action is running.
  *
- * @class   OroApp.Datagrid.Action.AbstractAction
+ * @class   Oro.Datagrid.Action.AbstractAction
  * @extends Backbone.View
  */
-OroApp.Datagrid.Action.AbstractAction = Backbone.View.extend({
+Oro.Datagrid.Action.AbstractAction = Backbone.View.extend({
     /** @property {Function} */
-    launcherPrototype: OroApp.Datagrid.Action.Launcher,
+    launcherPrototype: Oro.Datagrid.Action.Launcher,
 
     /** @property {Object} */
     launcherOptions: undefined,
@@ -39,7 +39,7 @@ OroApp.Datagrid.Action.AbstractAction = Backbone.View.extend({
      * Creates launcher
      *
      * @param {Object} options Launcher options
-     * @return {OroApp.Datagrid.Action.Launcher}
+     * @return {Oro.Datagrid.Action.Launcher}
      */
     createLauncher: function(options) {
         options = options || {};

@@ -1,6 +1,6 @@
-var OroApp = OroApp || {};
-OroApp.Datagrid = OroApp.Datagrid || {};
-OroApp.Datagrid.Cell = OroApp.Datagrid.Cell || {};
+var Oro = Oro || {};
+Oro.Datagrid = Oro.Datagrid || {};
+Oro.Datagrid.Cell = Oro.Datagrid.Cell || {};
 
 /**
  * Datetime column cell. Added missing behavior.
@@ -10,13 +10,13 @@ OroApp.Datagrid.Cell = OroApp.Datagrid.Cell || {};
  *  - "editing" when a cell has finished switching to edit mode
  *  - "edited" when cell editing is finished
  *
- * @class   OroApp.Datagrid.Cell.MomentCell
+ * @class   Oro.Datagrid.Cell.MomentCell
  * @extends Backgrid.Extension.MomentCell
  */
-OroApp.Datagrid.Cell.MomentCell = Backgrid.Extension.MomentCell.extend({
+Oro.Datagrid.Cell.MomentCell = Backgrid.Extension.MomentCell.extend({
 
     /** @property {Backgrid.CellFormatter} */
-    formatter: OroApp.Datagrid.Cell.Formatter.MomentFormatter,
+    formatter: Oro.Datagrid.Cell.Formatter.MomentFormatter,
 
     /**
      * @inheritDoc

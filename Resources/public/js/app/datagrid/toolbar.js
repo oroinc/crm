@@ -1,13 +1,13 @@
-var OroApp = OroApp || {};
-OroApp.Datagrid = OroApp.Datagrid || {};
+var Oro = Oro || {};
+Oro.Datagrid = Oro.Datagrid || {};
 
 /**
  * Datagrid toolbar widget
  *
- * @class   OroApp.Datagrid.Toolbar
- * @extends OroApp.View
+ * @class   Oro.Datagrid.Toolbar
+ * @extends Backbone.View
  */
-OroApp.Datagrid.Toolbar = OroApp.View.extend({
+Oro.Datagrid.Toolbar = Backbone.View.extend({
 
     /** @property */
     template:_.template(
@@ -33,13 +33,13 @@ OroApp.Datagrid.Toolbar = OroApp.View.extend({
     ),
 
     /** @property */
-    pagination: OroApp.Datagrid.Pagination.Input,
+    pagination: Oro.Datagrid.Pagination.Input,
 
     /** @property */
-    pageSize: OroApp.Datagrid.PageSize,
+    pageSize: Oro.Datagrid.PageSize,
 
     /** @property */
-    actionsPanel: OroApp.Datagrid.ActionsPanel,
+    actionsPanel: Oro.Datagrid.ActionsPanel,
 
     /**
      * Initializer.
@@ -66,7 +66,7 @@ OroApp.Datagrid.Toolbar = OroApp.View.extend({
 
         this.actionsPanel = new this.actionsPanel({
             actions: [
-                new OroApp.Datagrid.Action.RefreshCollectionAction({
+                new Oro.Datagrid.Action.RefreshCollectionAction({
                     collection: this.collection,
                     launcherOptions: {
                         label: 'Refresh',
@@ -74,7 +74,7 @@ OroApp.Datagrid.Toolbar = OroApp.View.extend({
                         iconClassName: 'icon-refresh'
                     }
                 }),
-                new OroApp.Datagrid.Action.ResetCollectionAction({
+                new Oro.Datagrid.Action.ResetCollectionAction({
                     collection: this.collection,
                     launcherOptions: {
                         label: 'Reset',
@@ -85,7 +85,7 @@ OroApp.Datagrid.Toolbar = OroApp.View.extend({
             ]
         });
 
-        OroApp.View.prototype.initialize.call(this, options);
+        Backbone.View.prototype.initialize.call(this, options);
     },
 
     /**

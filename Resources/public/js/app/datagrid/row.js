@@ -1,5 +1,5 @@
-var OroApp = OroApp || {};
-OroApp.Datagrid = OroApp.Datagrid || {};
+var Oro = Oro || {};
+Oro.Datagrid = Oro.Datagrid || {};
 
 /**
  * Grid row.
@@ -8,10 +8,10 @@ OroApp.Datagrid = OroApp.Datagrid || {};
  *  - "cellEdited" when one of row cell is edited
  *  - "clicked" when row is clicked
  *
- * @class   OroApp.Datagrid.Row
+ * @class   Oro.Datagrid.Row
  * @extends Backgrid.Row
  */
-OroApp.Datagrid.Row = Backgrid.Row.extend({
+Oro.Datagrid.Row = Backgrid.Row.extend({
 
     /** @property */
     events: {

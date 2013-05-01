@@ -1,18 +1,18 @@
-var OroApp = OroApp || {};
-OroApp.Datagrid = OroApp.Datagrid || {};
-OroApp.Datagrid.Cell = OroApp.Datagrid.Cell || {};
-OroApp.Datagrid.Cell.Formatter = OroApp.Datagrid.Cell.Formatter || {};
+var Oro = Oro || {};
+Oro.Datagrid = Oro.Datagrid || {};
+Oro.Datagrid.Cell = Oro.Datagrid.Cell || {};
+Oro.Datagrid.Cell.Formatter = Oro.Datagrid.Cell.Formatter || {};
 
 /**
  * Cell formatter with fixed fromRaw method
  *
- * @class   OroApp.Datagrid.Cell.Formatter.CellFormatter
+ * @class   Oro.Datagrid.Cell.Formatter.CellFormatter
  * @extends Backgrid.CellFormatter
  */
-OroApp.Datagrid.Cell.Formatter.CellFormatter = function () {};
+Oro.Datagrid.Cell.Formatter.CellFormatter = function () {};
 
-OroApp.Datagrid.Cell.Formatter.CellFormatter.prototype = new Backgrid.CellFormatter;
-_.extend(OroApp.Datagrid.Cell.Formatter.CellFormatter.prototype, {
+Oro.Datagrid.Cell.Formatter.CellFormatter.prototype = new Backgrid.CellFormatter;
+_.extend(Oro.Datagrid.Cell.Formatter.CellFormatter.prototype, {
     /**
      * @inheritDoc
      */

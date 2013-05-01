@@ -1,10 +1,13 @@
+var Oro = Oro || {};
+Oro.Datagrid = Oro.Datagrid || {};
+
 /**
  * Datagrid header cell
  *
- * @class   OroApp.Datagrid.HeaderCell
+ * @class   Oro.Datagrid.HeaderCell
  * @extends Backgrid.HeaderCell
  */
-OroApp.Datagrid.HeaderCell = Backgrid.HeaderCell.extend({
+Oro.Datagrid.HeaderCell = Backgrid.HeaderCell.extend({
 
     /** @property */
     template:_.template(

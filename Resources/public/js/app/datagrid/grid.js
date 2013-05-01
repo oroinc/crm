@@ -1,5 +1,5 @@
-var OroApp = OroApp || {};
-OroApp.Datagrid = OroApp.Datagrid || {};
+var Oro = Oro || {};
+Oro.Datagrid = Oro.Datagrid || {};
 
 /**
  * Basic grid class.
@@ -8,10 +8,10 @@ OroApp.Datagrid = OroApp.Datagrid || {};
  *  - "cellEdited" when one of cell of grid body row is edited
  *  - "rowClicked" when row of grid body is clicked
  *
- * @class   OroApp.Datagrid.Grid
+ * @class   Oro.Datagrid.Grid
  * @extends Backgrid.Grid
  */
-OroApp.Datagrid.Grid = Backgrid.Grid.extend({
+Oro.Datagrid.Grid = Backgrid.Grid.extend({
     /** @property */
     tagName: 'div',
 
@@ -32,10 +32,10 @@ OroApp.Datagrid.Grid = Backgrid.Grid.extend({
     ),
 
     /** @property */
-    header: OroApp.Datagrid.Header,
+    header: Oro.Datagrid.Header,
 
     /** @property */
-    body: OroApp.Datagrid.Body,
+    body: Oro.Datagrid.Body,
 
     /** @property */
     selectors: {
@@ -48,11 +48,11 @@ OroApp.Datagrid.Grid = Backgrid.Grid.extend({
     /** @property {Object} */
     toolbarOptions: {},
 
-    /** @property {OroApp.Datagrid.Toolbar} */
-    toolbar: OroApp.Datagrid.Toolbar,
+    /** @property {Oro.Datagrid.Toolbar} */
+    toolbar: Oro.Datagrid.Toolbar,
 
-    /** @property {OroApp.LoadingMask} */
-    loadingMask: OroApp.LoadingMask,
+    /** @property {Oro.LoadingMask} */
+    loadingMask: Oro.LoadingMask,
 
     /** @property */
     noDataTemplate: _.template('<span><%= hint %><span>'),
@@ -68,7 +68,7 @@ OroApp.Datagrid.Grid = Backgrid.Grid.extend({
         name: '',
         label: '',
         editable: false,
-        cell: OroApp.Datagrid.Action.Cell,
+        cell: Oro.Datagrid.Action.Cell,
         headerCell: Backgrid.HeaderCell.extend({
             className: 'action-column'
         }),
@@ -164,8 +164,8 @@ OroApp.Datagrid.Grid = Backgrid.Grid.extend({
      * Create row click action
      *
      * @param {*} action Action prototype
-     * @param {OroApp.Datagrid.Row} row
-     * @return {OroApp.Datagrid.Action.AbstractAction}
+     * @param {Oro.Datagrid.Row} row
+     * @return {Oro.Datagrid.Action.AbstractAction}
      * @private
      */
     _createRowClickAction: function(action, row) {

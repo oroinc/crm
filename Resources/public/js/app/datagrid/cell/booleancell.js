@@ -1,6 +1,6 @@
-var OroApp = OroApp || {};
-OroApp.Datagrid = OroApp.Datagrid || {};
-OroApp.Datagrid.Cell = OroApp.Datagrid.Cell || {};
+var Oro = Oro || {};
+Oro.Datagrid = Oro.Datagrid || {};
+Oro.Datagrid.Cell = Oro.Datagrid.Cell || {};
 
 /**
  * Boolean column cell. Added missing behaviour.
@@ -10,10 +10,10 @@ OroApp.Datagrid.Cell = OroApp.Datagrid.Cell || {};
  *  - "editing" when a cell has finished switching to edit mode
  *  - "edited" when cell editing is finished
  *
- * @class   OroApp.Datagrid.Cell.BooleanCell
+ * @class   Oro.Datagrid.Cell.BooleanCell
  * @extends Backgrid.BooleanCell
  */
-OroApp.Datagrid.Cell.BooleanCell = Backgrid.BooleanCell.extend({
+Oro.Datagrid.Cell.BooleanCell = Backgrid.BooleanCell.extend({
     /** @property {Boolean} */
     editable: false,
 

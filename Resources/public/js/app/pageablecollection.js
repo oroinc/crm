@@ -1,3 +1,5 @@
+var Oro = Oro || {};
+
 /**
  * Pageable collection
  *
@@ -6,16 +8,16 @@
  * updateState: Fired when collection state is updated using updateState method
  * beforeFetch: Fired when collection starts to fetch, before request is formed
  *
- * @class   OroApp.PageableCollection
+ * @class   Oro.PageableCollection
  * @extends Backbone.PageableCollection
  */
-OroApp.PageableCollection = Backbone.PageableCollection.extend({
+Oro.PageableCollection = Backbone.PageableCollection.extend({
     /**
      * Basic model to store row data
      *
      * @property {Function}
      */
-    model: OroApp.Model,
+    model: Backbone.Model,
 
     /**
      * Initial state of collection
@@ -62,7 +64,7 @@ OroApp.PageableCollection = Backbone.PageableCollection.extend({
         if (options.state) {
             _.extend(this.state, options.state);
         }
-        this.initialState = OroApp.deepClone(this.state);
+        this.initialState = Oro.deepClone(this.state);
 
         if (options.url) {
             this.url = options.url;
@@ -83,7 +85,7 @@ OroApp.PageableCollection = Backbone.PageableCollection.extend({
             parameters:  this.inputName + '[_parameters]'
         });
 
-        OroApp.Collection.prototype.initialize.apply(this, arguments);
+        Backbone.PageableCollection.prototype.initialize.apply(this, arguments);
     },
 
     /**
@@ -107,8 +109,8 @@ OroApp.PageableCollection = Backbone.PageableCollection.extend({
      */
     encodeStateData: function(stateObject) {
         var data = _.pick(stateObject, _.keys(this.stateShortKeys));
-        data = OroApp.invertKeys(data, this.stateShortKeys);
-        return OroApp.packToQueryString(data);
+        data = Oro.invertKeys(data, this.stateShortKeys);
+        return Oro.packToQueryString(data);
     },
 
     /**
@@ -118,8 +120,8 @@ OroApp.PageableCollection = Backbone.PageableCollection.extend({
      * @return {Object}
      */
     decodeStateData: function(stateString) {
-        var data = OroApp.unpackFromQueryString(stateString);
-        data = OroApp.invertKeys(data, _.invert(this.stateShortKeys));
+        var data = Oro.unpackFromQueryString(stateString);
+        data = Oro.invertKeys(data, _.invert(this.stateShortKeys));
         return data;
     },
 
@@ -190,7 +192,7 @@ OroApp.PageableCollection = Backbone.PageableCollection.extend({
      */
     reset: function(models, options) {
         this.trigger('beforeReset', this, options);
-        OroApp.Collection.prototype.reset.apply(this, arguments);
+        Backbone.PageableCollection.prototype.reset.apply(this, arguments);
     },
 
     /**
@@ -369,7 +371,7 @@ OroApp.PageableCollection = Backbone.PageableCollection.extend({
      * @return {Object}
      */
     processQueryParams: function(data, state) {
-        var pageablePrototype = OroApp.PageableCollection.prototype;
+        var pageablePrototype = Oro.PageableCollection.prototype;
 
         // map params except directions
         var queryParams = this.mode == "client" ?
