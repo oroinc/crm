@@ -314,5 +314,20 @@ OroApp.Datagrid.Grid = Backgrid.Grid.extend({
      */
     onRemove: function() {
         this.collection.fetch();
+    },
+
+    /**
+     * Set additional parameter to send on server
+     *
+     * @param {String} name
+     * @param value
+     */
+    setAdditionalParameter: function(name, value) {
+        var state = this.collection.state;
+        if (!_.has(state, 'parameters')) {
+            state.parameters = {};
+        }
+
+        state.parameters[name] = value;
     }
 });

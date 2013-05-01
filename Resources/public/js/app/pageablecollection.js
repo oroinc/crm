@@ -79,7 +79,8 @@ OroApp.PageableCollection = Backbone.PageableCollection.extend({
         _.extend(this.queryParams, {
             currentPage: this.inputName + '[_pager][_page]',
             pageSize:    this.inputName + '[_pager][_per_page]',
-            sortBy:      this.inputName + '[_sort_by][%field%]'
+            sortBy:      this.inputName + '[_sort_by][%field%]',
+            parameters:  this.inputName + '[_parameters]'
         });
 
         OroApp.Collection.prototype.initialize.apply(this, arguments);
