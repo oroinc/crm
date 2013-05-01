@@ -38,8 +38,11 @@ services:
             - %oro_flexibleentity.flexible_config%
             - @doctrine.orm.entity_manager
             - @event_dispatcher
+            - @oro_flexibleentity.attributetype.factory
         tags:
             - { name: oro_flexibleentity_manager, entity: %oro_address.address.entity.class%}
+        calls:
+            - [ addAttributeType, ['oro_flexibleentity_text'] ]
 
     oro_address.address.manager:
         class: %oro_address.address.manager.class%

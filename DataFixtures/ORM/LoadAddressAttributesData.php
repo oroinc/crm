@@ -7,8 +7,6 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\TextType;
-
 class LoadAddressAttributesData extends AbstractFixture implements ContainerAwareInterface
 {
     /**
@@ -36,19 +34,19 @@ class LoadAddressAttributesData extends AbstractFixture implements ContainerAwar
         $sm = $fm->getStorageManager();
 
         $attr = $fm
-            ->createAttribute(new TextType())
+            ->createAttribute('oro_flexibleentity_text')
             ->setCode('firstname');
 
         $sm->persist($attr);
 
         $attr = $fm
-            ->createAttribute(new TextType())
+            ->createAttribute('oro_flexibleentity_text')
             ->setCode('lastname');
 
         $sm->persist($attr);
 
         $attr = $fm
-            ->createAttribute(new TextType())
+            ->createAttribute('oro_flexibleentity_text')
             ->setCode('company');
 
         $sm->persist($attr);
