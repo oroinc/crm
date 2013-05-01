@@ -133,7 +133,7 @@ class ProxyQuery extends BaseProxyQuery implements ProxyQueryInterface
         } else {
             $pattern = sprintf('/\:%s[^\w]/', preg_quote($parameterName));
         }
-        return (bool)preg_match($pattern, $dql);
+        return (bool)preg_match($pattern, $dql . ' ');
     }
 
     /**
@@ -254,7 +254,7 @@ class ProxyQuery extends BaseProxyQuery implements ProxyQueryInterface
         foreach ($selectExpressions as $expression) {
             if (preg_match('/^.* AS ([\w]+)$/i', $expression, $matches)) {
                 $alias = $matches[1];
-                if (preg_match(sprintf('/[^\w]%s[^\w]/', preg_quote($alias)), $dqlWithoutSelect)) {
+                if (preg_match(sprintf('/[^\w]%s[^\w]/', preg_quote($alias)), $dqlWithoutSelect . ' ')) {
                     $result[] = $expression;
                 }
             }
