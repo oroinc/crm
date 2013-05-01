@@ -21,7 +21,16 @@ class ProductType extends FlexibleType
     {
         parent::addEntityFields($builder);
 
+        // another classic doctrine property, you can add here custom doctrine mapping too
         $builder->add('sku', 'text');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getName()
+    {
+        return 'acme_product';
     }
 }
 ```
@@ -47,18 +56,22 @@ class ProductValueType extends FlexibleValueType
 }
 ```
 
-Declare form as service
------------------------
+Declare forms as services
+-------------------------
 
 ```yaml
-    form.type.pim_product_value:
-        class: Pim\Bundle\ProductBundle\Form\Type\ProductValueType
-        arguments: [@product_manager, %product_attribute_value_class%]
+    form.type.acme_product:
+        class: Acme\Bundle\DemoFlexibleEntityBundle\Form\Type\ProductType
+        arguments: [@product_manager, 'acme_product_value']
         tags:
-            - { name: form.type, alias: pim_product_value }
-```
+            - { name: form.type, alias: acme_product }
 
-NB : product form (ie flexible type) can also be declared as service.
+    form.type.acme_product_value:
+        class: Acme\Bundle\DemoFlexibleEntityBundle\Form\Type\ProductValueType
+        arguments: [@product_manager]
+        tags:
+            - { name: form.type, alias: acme_product_value }
+```
 
 Use from controller
 -------------------
@@ -68,27 +81,23 @@ Use from controller
     {
         $request = $this->getRequest();
 
-        // create form
-        $entClassName = $this->getProductManager()->getFlexibleName();
-        $valueClassName = $this->getProductManager()->getFlexibleValueName();
-        $form = $this->createForm(new ProductType($this->getProductManager(), 'pim_product_value'), $entity);
+        $form = $this->createForm('acme_product', $entity);
 
         if ($request->getMethod() == 'POST') {
             $form->bind($request);
+
             if ($form->isValid()) {
                 $em = $this->getProductManager()->getStorageManager();
                 $em->persist($entity);
                 $em->flush();
-                $this->get('session')->getFlashBag()->add('success', 'Successfully saved');
 
-                return $this->redirect($this->generateUrl('acme_demo_customer_index'));
+                $this->get('session')->getFlashBag()->add('success', 'Product successfully saved');
+
+                return $this->redirect($this->generateUrl('acme_demoflexibleentity_product_list'));
             }
         }
 
-        return array(
-            'form' => $form->createView(),
-        );
+        return array('form' => $form->createView(),);
     }
 ```
 
-Note that you can also define product form as service in configuration and use directly service from controller

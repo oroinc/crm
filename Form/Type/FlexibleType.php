@@ -43,7 +43,7 @@ class FlexibleType extends AbstractType
     {
         $this->flexibleManager = $flexibleManager;
         $this->flexibleClass   = $flexibleManager->getFlexibleName();
-        $this->valueFormAlias   = $valueFormAlias;
+        $this->valueFormAlias  = $valueFormAlias;
     }
 
     /**
@@ -89,11 +89,7 @@ class FlexibleType extends AbstractType
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $resolver->setDefaults(
-            array(
-                'data_class' => $this->flexibleClass
-            )
-        );
+        $resolver->setDefaults(array('data_class' => $this->flexibleClass));
     }
 
     /**
