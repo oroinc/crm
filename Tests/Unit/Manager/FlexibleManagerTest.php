@@ -14,15 +14,6 @@ use Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleManager;
  */
 class FlexibleManagerTest extends AbstractFlexibleManagerTest
 {
-
-    /**
-     * Set up unit test
-     */
-    public function setUp()
-    {
-        parent::setUp();
-    }
-
     /**
      * test related method
      */

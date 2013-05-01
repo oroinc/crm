@@ -116,9 +116,21 @@ abstract class AbstractFlexibleManagerTest extends AbstractOrmTest
 
         // add attribute types
         $this->manager->addAttributeType('oro_flexibleentity_text');
-        $this->manager->addAttributeType('oro_flexibleentity_number');
 
         $this->container->set('demo_manager', $this->manager);
         $this->container->set('event_dispatcher', $dispatcher);
+    }
+
+    /**
+     * @return TranslatorInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function getTranslatorMock()
+    {
+        $translator = $this->getMock('Symfony\Component\Translation\TranslatorInterface');
+        $translator->expects($this->any())
+            ->method('trans')
+            ->will($this->returnArgument(0));
+
+        return $translator;
     }
 }

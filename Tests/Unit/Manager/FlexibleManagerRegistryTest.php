@@ -1,10 +1,10 @@
 <?php
 namespace Oro\Bundle\FlexibleEntityBundle\Tests\Unit\Manager;
 
-use Oro\Bundle\FlexibleEntityBundle\AttributeType\AttributeTypeFactory;
-
+use Symfony\Component\DependencyInjection\Container;
 use Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleManager;
 use Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleManagerRegistry;
+use Oro\Bundle\FlexibleEntityBundle\AttributeType\AttributeTypeFactory;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Doctrine\Tests\OrmTestCase;
 
@@ -50,6 +50,7 @@ class FlexibleManagerRegistryTest extends OrmTestCase
      */
     public function setUp()
     {
+        $this->container       = new Container();
         $this->registry        = new FlexibleManagerRegistry();
         $this->entityManager   = $this->_getTestEntityManager();
         $entityConfig          = array('entities_config' => array($this->entityFQCN => array()));

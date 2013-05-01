@@ -23,8 +23,8 @@ class FlexibleTypeTest extends TypeTestCase
         parent::setUp();
         $flexibleName = 'Oro\Bundle\FlexibleEntityBundle\Tests\Unit\Entity\Demo\Flexible';
         $valueName    = 'Oro\Bundle\FlexibleEntityBundle\Tests\Unit\Entity\Demo\FlexibleValue';
-        $this->type = new FlexibleType($flexibleName, $valueName);
-        $this->form = $this->factory->create($this->type);
+        $this->type   = new FlexibleType($flexibleName, $valueName);
+        $this->form   = $this->factory->create($this->type);
     }
 
     /**

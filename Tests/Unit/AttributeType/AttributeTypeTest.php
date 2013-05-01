@@ -1,24 +1,6 @@
 <?php
 namespace Oro\Bundle\FlexibleEntityBundle\Tests\Unit\AttributeType;
 
-use Oro\Bundle\FlexibleEntityBundle\AttributeType\AbstractAttributeType;
-use Oro\Bundle\FlexibleEntityBundle\AttributeType\BooleanType;
-use Oro\Bundle\FlexibleEntityBundle\AttributeType\DateType;
-use Oro\Bundle\FlexibleEntityBundle\AttributeType\FileType;
-use Oro\Bundle\FlexibleEntityBundle\AttributeType\ImageType;
-use Oro\Bundle\FlexibleEntityBundle\AttributeType\IntegerType;
-use Oro\Bundle\FlexibleEntityBundle\AttributeType\EmailType;
-use Oro\Bundle\FlexibleEntityBundle\AttributeType\MetricType;
-use Oro\Bundle\FlexibleEntityBundle\AttributeType\MoneyType;
-use Oro\Bundle\FlexibleEntityBundle\AttributeType\NumberType;
-use Oro\Bundle\FlexibleEntityBundle\AttributeType\OptionMultiCheckboxType;
-use Oro\Bundle\FlexibleEntityBundle\AttributeType\OptionMultiSelectType;
-use Oro\Bundle\FlexibleEntityBundle\AttributeType\OptionSimpleRadioType;
-use Oro\Bundle\FlexibleEntityBundle\AttributeType\OptionSimpleSelectType;
-use Oro\Bundle\FlexibleEntityBundle\AttributeType\TextAreaType;
-use Oro\Bundle\FlexibleEntityBundle\AttributeType\TextType;
-use Oro\Bundle\FlexibleEntityBundle\AttributeType\UrlType;
-
 /**
  * Test related class
  *
@@ -29,129 +11,49 @@ use Oro\Bundle\FlexibleEntityBundle\AttributeType\UrlType;
 class AttributeTypeTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var AbstractAttributeType
+     * Data provider
+     *
+     * @return array
+     *
+     * @static
      */
-    protected $booleanType;
-
-    /**
-     * @var AbstractAttributeType
-     */
-    protected $dateType;
-
-    /**
-     * @var AbstractAttributeType
-     */
-    protected $fileType;
-
-    /**
-     * @var AbstractAttributeType
-     */
-    protected $imageType;
-
-    /**
-     * @var AbstractAttributeType
-     */
-    protected $integerType;
-
-    /**
-     * @var AbstractAttributeType
-     */
-    protected $emailType;
-
-    /**
-     * @var AbstractAttributeType
-     */
-    protected $metricType;
-
-    /**
-     * @var AbstractAttributeType
-     */
-    protected $moneyType;
-
-    /**
-     * @var AbstractAttributeType
-     */
-    protected $numberType;
-
-    /**
-     * @var AbstractAttributeType
-     */
-    protected $optMCType;
-
-    /**
-     * @var AbstractAttributeType
-     */
-    protected $optMSType;
-
-    /**
-     * @var AbstractAttributeType
-     */
-    protected $optSRType;
-
-    /**
-     * @var AbstractAttributeType
-     */
-    protected $optSSType;
-
-    /**
-     * @var AbstractAttributeType
-     */
-    protected $textareaType;
-
-    /**
-     * @var AbstractAttributeType
-     */
-    protected $textType;
-
-    /**
-     * @var AbstractAttributeType
-     */
-    protected $urlType;
-
-    /**
-     * Set up unit test
-     */
-    public function setUp()
+    public static function typesProvider()
     {
-        $this->booleanType  = new BooleanType();
-        $this->dateType     = new DateType();
-        $this->fileType     = new FileType();
-        $this->imageType    = new ImageType();
-        $this->integerType  = new IntegerType();
-        $this->emailType    = new EmailType();
-        $this->metricType   = new MetricType();
-        $this->moneyType    = new MoneyType();
-        $this->numberType   = new NumberType();
-        $this->optMCType    = new OptionMultiCheckboxType();
-        $this->optMSType    = new OptionMultiSelectType();
-        $this->optSRType    = new OptionSimpleRadioType();
-        $this->optSSType    = new OptionSimpleSelectType();
-        $this->textareaType = new TextAreaType();
-        $this->textType     = new TextType();
-        $this->urlType      = new UrlType();
+        return array(
+            array('Oro\Bundle\FlexibleEntityBundle\AttributeType\BooleanType', 'integer', 'option', 'oro_flexibleentity_boolean'),
+            array('Oro\Bundle\FlexibleEntityBundle\AttributeType\TextType', 'varchar', 'text', 'oro_flexibleentity_text'),
+            array('Oro\Bundle\FlexibleEntityBundle\AttributeType\TextAreaType', 'text', 'textarea', 'oro_flexibleentity_textarea')
+        );
     }
 
     /**
-     * test related method
+     * @return TranslatorInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    public function testGetName()
+    protected function getTranslatorMock()
     {
-        $this->assertEquals($this->booleanType->getName(), 'Boolean');
+        $translator = $this->getMock('Symfony\Component\Translation\TranslatorInterface');
+        $translator->expects($this->any())
+            ->method('trans')
+            ->will($this->returnArgument(0));
+
+        return $translator;
     }
 
     /**
-     * test related method
+     * Test related methods
+     *
+     * @param string $class
+     * @param string $backend
+     * @param string $form
+     * @param string $name
+     *
+     * @dataProvider typesProvider
      */
-    public function testGetBackendType()
+    public function testConstructorAnGetters($class, $backend, $form, $name)
     {
-        $this->assertEquals($this->booleanType->getBackendType(), AbstractAttributeType::BACKEND_TYPE_INTEGER);
-    }
-
-    /**
-     * test related method
-     */
-    public function testGetFormType()
-    {
-        $this->assertEquals($this->booleanType->getFormType(), 'option');
+        $attType = new $class($this->getTranslatorMock(), $backend, $form);
+        $this->assertEquals($attType->getName(), $name);
+        $this->assertEquals($attType->getBackendType(), $backend);
+        $this->assertEquals($attType->getFormType(), $form);
     }
 }
