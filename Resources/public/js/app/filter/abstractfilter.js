@@ -151,7 +151,7 @@ Oro.Filter.AbstractFilter = Backbone.View.extend({
      * @return {Object}
      */
     getValue: function() {
-        return OroApp.deepClone(this.value);
+        return Oro.deepClone(this.value);
     },
 
     /**
@@ -164,7 +164,7 @@ Oro.Filter.AbstractFilter = Backbone.View.extend({
         value = this._formatRawValue(value);
         if (this._isNewValueUpdated(value)) {
             var oldValue = this.value;
-            this.value = OroApp.deepClone(value);
+            this.value = Oro.deepClone(value);
             this._updateDOMValue();
             this._onValueUpdated(this.value, oldValue);
         }
@@ -202,7 +202,7 @@ Oro.Filter.AbstractFilter = Backbone.View.extend({
      * @protected
      */
     _isNewValueUpdated: function(newValue) {
-        return !OroApp.isEqualsLoosely(this.value, newValue)
+        return !Oro.isEqualsLoosely(this.value, newValue)
     },
 
     /**
@@ -233,7 +233,7 @@ Oro.Filter.AbstractFilter = Backbone.View.extend({
      * @return {Boolean}
      */
     isEmpty: function() {
-        return OroApp.isEqualsLoosely(this.getValue(), this.emptyValue);
+        return Oro.isEqualsLoosely(this.getValue(), this.emptyValue);
     },
 
     /**
