@@ -18,7 +18,6 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Media
 {
-
     /**
      * @var integer $id
      *
@@ -216,11 +215,17 @@ class Media
         return $this;
     }
 
+    /**
+     * @param boolean $removed
+     */
     public function setRemoved($removed)
     {
         $this->removed = $removed;
     }
 
+    /**
+     * @return boolean
+     */
     public function isRemoved()
     {
         return $this->removed;

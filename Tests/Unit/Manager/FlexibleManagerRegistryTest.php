@@ -1,6 +1,8 @@
 <?php
 namespace Oro\Bundle\FlexibleEntityBundle\Tests\Unit\Manager;
 
+use Oro\Bundle\FlexibleEntityBundle\AttributeType\AttributeTypeFactory;
+
 use Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleManager;
 use Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleManagerRegistry;
 use Symfony\Component\EventDispatcher\EventDispatcher;
@@ -55,7 +57,8 @@ class FlexibleManagerRegistryTest extends OrmTestCase
             $this->entityFQCN,
             $entityConfig,
             $this->entityManager,
-            new EventDispatcher()
+            new EventDispatcher(),
+            new AttributeTypeFactory($this->container)
         );
     }
 

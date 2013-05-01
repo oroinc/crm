@@ -138,6 +138,10 @@ class AttributeType extends AbstractType
         $builder->add('scopable', 'choice', array('choices' => array('No', 'Yes')));
     }
 
+    /**
+     * Add attribute position field
+     * @param FormBuilderInterface $builder
+     */
     protected function addPositionField(FormBuilderInterface $builder)
     {
         $builder->add('sortOrder', 'integer', array('label' => 'Position'));

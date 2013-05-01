@@ -182,6 +182,7 @@ class FlexibleQueryBuilder extends QueryBuilder
             foreach ($field as $key => $fieldName) {
                 $conditions[] = $this->prepareCriteriaCondition($fieldName, $operator[$key], $value[$key]);
             }
+
             return '(' . implode(' OR ', $conditions) . ')';
         }
 

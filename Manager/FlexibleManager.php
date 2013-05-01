@@ -1,6 +1,8 @@
 <?php
 namespace Oro\Bundle\FlexibleEntityBundle\Manager;
 
+use Oro\Bundle\FlexibleEntityBundle\Model\AbstractFlexible;
+
 use Oro\Bundle\FlexibleEntityBundle\AttributeType\AttributeTypeFactory;
 
 use Oro\Bundle\FlexibleEntityBundle\AttributeType\AbstractAttributeType;
@@ -367,6 +369,8 @@ class FlexibleManager implements TranslatableInterface, ScopableInterface
      * Return only localized values of flexible entity
      *
      * @param integer $id
+     *
+     * @return AbstractFlexible
      */
     public function localizedFind($id)
     {

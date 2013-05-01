@@ -10,6 +10,7 @@ use Oro\Bundle\FlexibleEntityBundle\Model\Behavior\TranslatableInterface;
 use Oro\Bundle\FlexibleEntityBundle\Model\Behavior\ScopableInterface;
 use Oro\Bundle\FlexibleEntityBundle\Entity\Attribute;
 use Oro\Bundle\FlexibleEntityBundle\AttributeType\AbstractAttributeType;
+use Oro\Bundle\FlexibleEntityBundle\Model\AbstractFlexible;
 
 /**
  * Base repository for flexible entity
@@ -280,13 +281,23 @@ class FlexibleEntityRepository extends EntityRepository implements TranslatableI
         return $qb;
     }
 
+    /**
+     * Finds entities and attributes values by a set of criteria, same coverage than findBy
+     *
+     * @param array      $attributes attribute codes
+     * @param array      $criteria   criterias
+     * @param array|null $orderBy    order by
+     * @param int|null   $limit      limit
+     * @param int|null   $offset     offset
+     *
+     * @return array The objects.
+     */
     public function findByWithAttributes(array $attributes = array(), array $criteria = null, array $orderBy = null, $limit = null, $offset = null)
     {
         return $this
             ->findByWithAttributesQB($attributes, $criteria, $orderBy, $limit, $offset)
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
     }
 
     /**
@@ -346,6 +357,13 @@ class FlexibleEntityRepository extends EntityRepository implements TranslatableI
         return count($flexibles) ? current($flexibles) : null;
     }
 
+    /**
+     * Load a flexible entity with only localized values
+     *
+     * @param integer $id
+     *
+     * @return AbstractFlexible
+     */
     public function findWithLocalizedValuesAndSortedAttributes($id)
     {
         $qb = $this->findByWithAttributesQB(array(), array('id' => $id));
@@ -359,7 +377,6 @@ class FlexibleEntityRepository extends EntityRepository implements TranslatableI
             )
             ->orderBy('Attribute.sortOrder')
             ->getQuery()
-            ->getOneOrNullResult()
-        ;
+            ->getOneOrNullResult();
     }
 }

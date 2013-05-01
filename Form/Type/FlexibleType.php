@@ -36,8 +36,8 @@ class FlexibleType extends AbstractType
     /**
      * Constructor
      *
-     * @param FlexibleManager   $flexibleManager the manager
-     * @param string            $valueFormAlias  the value form type alias
+     * @param FlexibleManager $flexibleManager the manager
+     * @param string          $valueFormAlias  the value form type alias
      */
     public function __construct(FlexibleManager $flexibleManager, $valueFormAlias)
     {

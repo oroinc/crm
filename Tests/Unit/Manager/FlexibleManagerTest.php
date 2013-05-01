@@ -1,7 +1,6 @@
 <?php
 namespace Oro\Bundle\FlexibleEntityBundle\Tests\Unit\Manager;
 
-use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\TextType;
 use Oro\Bundle\FlexibleEntityBundle\Tests\Unit\AbstractFlexibleManagerTest;
 use Doctrine\ORM\EntityManager;
 use Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleManager;
@@ -33,7 +32,8 @@ class FlexibleManagerTest extends AbstractFlexibleManagerTest
             $this->flexibleClassName,
             $this->container->getParameter('oro_flexibleentity.flexible_config'),
             $this->entityManager,
-            $this->container->get('event_dispatcher')
+            $this->container->get('event_dispatcher'),
+            $this->attributeTypeFactory
         );
         $this->assertNotNull($myManager->getStorageManager());
         $this->assertEquals($myManager->getStorageManager(), $this->entityManager);
@@ -166,8 +166,7 @@ class FlexibleManagerTest extends AbstractFlexibleManagerTest
      */
     public function testCreateAttribute()
     {
-        $attributeType = new TextType();
-        $this->assertTrue($this->manager->createAttribute($attributeType) instanceof $this->attributeClassName);
+        $this->assertTrue($this->manager->createAttribute('oro_flexibleentity_text') instanceof $this->attributeClassName);
     }
 
     /**

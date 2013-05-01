@@ -8,6 +8,7 @@ use Symfony\Component\DependencyInjection\Container;
 use Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleManager;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\EventDispatcher\EventDispatcher;
+use Oro\Bundle\FlexibleEntityBundle\AttributeType\AttributeTypeFactory;
 
 /**
  * Test related class
@@ -23,6 +24,11 @@ abstract class AbstractFlexibleManagerTest extends AbstractOrmTest
      * @var FlexibleManager
      */
     protected $manager;
+
+    /**
+     * @var AttributeTypeFactory
+     */
+    protected $attributeTypeFactory;
 
     /**
      * @var string
@@ -43,11 +49,6 @@ abstract class AbstractFlexibleManagerTest extends AbstractOrmTest
      * @var string
      */
     protected $flexibleClassName;
-
-    /**
-     * @var string
-     */
-    protected $flexibleAttributeClassName;
 
     /**
      * @var string
@@ -81,9 +82,9 @@ abstract class AbstractFlexibleManagerTest extends AbstractOrmTest
         $this->attributeOptionValueClassName = 'Oro\Bundle\FlexibleEntityBundle\Entity\AttributeOptionValue';
         $this->flexibleClassName             = 'Oro\Bundle\FlexibleEntityBundle\Tests\Unit\Entity\Demo\Flexible';
         $this->flexibleValueClassName        = 'Oro\Bundle\FlexibleEntityBundle\Tests\Unit\Entity\Demo\FlexibleValue';
-        $this->flexibleAttributeClassName    = 'Oro\Bundle\FlexibleEntityBundle\Tests\Unit\Entity\Demo\FlexibleAttribute';
         $this->defaultLocale                 = 'en_US';
         $this->defaultScope                  = 'mobile';
+        $this->attributeTypeFactory          = new AttributeTypeFactory($this->container);
         $this->flexibleConfig = array(
             'entities_config' => array(
                 $this->flexibleClassName => array(
@@ -109,8 +110,13 @@ abstract class AbstractFlexibleManagerTest extends AbstractOrmTest
             $this->flexibleClassName,
             $this->flexibleConfig,
             $this->entityManager,
-            $dispatcher
+            $dispatcher,
+            $this->attributeTypeFactory
         );
+
+        // add attribute types
+        $this->manager->addAttributeType('oro_flexibleentity_text');
+        $this->manager->addAttributeType('oro_flexibleentity_number');
 
         $this->container->set('demo_manager', $this->manager);
         $this->container->set('event_dispatcher', $dispatcher);
