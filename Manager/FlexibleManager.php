@@ -90,6 +90,7 @@ class FlexibleManager implements TranslatableInterface, ScopableInterface
         $this->storageManager       = $storageManager;
         $this->eventDispatcher      = $eventDispatcher;
         $this->attributeTypeFactory = $attributeTypeFactory;
+        $this->attributeTypes       = array();
     }
 
     /**
@@ -290,7 +291,11 @@ class FlexibleManager implements TranslatableInterface, ScopableInterface
         if ($type) {
             if (!in_array($type, $this->getAttributeTypes())) {
                 throw new FlexibleConfigurationException(
-                    sprintf('Attribute "%s" type is not useable for this flexible entity', $type)
+                    sprintf(
+                        'Attribute "%s" type is not useable for the flexible entity "%s"',
+                        $type,
+                        $this->flexibleName
+                    )
                 );
             }
             $attributeType = $this->getAttributeTypeFactory()->get($type);
