@@ -40,10 +40,6 @@ Create flexible value form
 
 ```php
 <?php
-namespace Pim\Bundle\ProductBundle\Form\Type;
-
-use Oro\Bundle\FlexibleEntityBundle\Form\Type\FlexibleValueType;
-
 class ProductValueType extends FlexibleValueType
 {
     /**
@@ -51,7 +47,7 @@ class ProductValueType extends FlexibleValueType
      */
     public function getName()
     {
-        return 'pim_product_value';
+        return 'acme_product_value';
     }
 }
 ```
