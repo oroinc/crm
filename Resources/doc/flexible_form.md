@@ -45,6 +45,7 @@ class ProductValueType extends FlexibleValueType
         return 'pim_product_value';
     }
 }
+```
 
 Declare form as service
 -----------------------
@@ -56,6 +57,8 @@ Declare form as service
         tags:
             - { name: form.type, alias: pim_product_value }
 ```
+
+NB : product form (ie flexible type) can also be declared as service.
 
 Use from controller
 -------------------
