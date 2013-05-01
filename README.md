@@ -57,7 +57,7 @@ How to use ?
 - [Create an attribute type](Resources/doc/attribute_type.md)
 - [Use flexible repository](Resources/doc/repository.md)
 - [Dive into flexible value](Resources/doc/value.md)
-- [Create a flexible form](Resources/doc/form.md)
+- [Create a flexible form](Resources/doc/flexible_form.md)
 - [Customize manager and repository](Resources/doc/customize_manager.md)
 - [Others customizations](Resources/doc/customize_others.md)
 
