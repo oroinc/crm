@@ -1,6 +1,9 @@
 Create a flexible entity
 ========================
 
+Flexible entity class
+---------------------
+
 We illustrate here the easiest way to create a flexible, ie, by extending abstract classes, you can prefer use flexible and value interfaces.
 
 Here, we create a customer entity class, extends abstract orm entity which contains basic mapping.
@@ -53,6 +56,9 @@ class Customer extends AbstractEntityFlexible
 
     // ... getter / setter
 ```
+
+Flexible value class
+--------------------
 
 Then we have to define customer attribute value entity, extends basic one which contains mapping.
 
@@ -116,6 +122,9 @@ And related getter / setter :
 
 You can use Media, Metric and Price as advanced backend.
 
+Configuration
+-------------
+
 Then, we configure our flexible entity in src/Acme/Bundle/DemoFlexibleEntityBundle/Resources/config/flexibleentity.yml :
 ```yaml
 entities_config:
@@ -141,12 +150,15 @@ parameters:
 services:
     customer_manager:
         class:     "%customer_manager_class%"
-        arguments: [%customer_entity_class%, %oro_flexibleentity.flexible_config%, @doctrine.orm.entity_manager, @event_dispatcher]
+        arguments: [%customer_entity_class%, %oro_flexibleentity.flexible_config%, @doctrine.orm.entity_manager, @event_dispatcher, @oro_flexibleentity.attributetype.factory]
         tags:
             - { name: oro_flexibleentity_manager, entity: %customer_entity_class%}
+        calls:
+            - [ addAttributeType, ['oro_flexibleentity_text'] ]
+            - [ addAttributeType, ['oro_flexibleentity_number'] ]
 ```
 
-Note that tag is not mandatory, it allows to define the flexible manager and entity on registry.
+Note that tag allows to define the flexible manager and entity on registry.
 
 How to use :
 ```php
@@ -155,14 +167,14 @@ $cm = $this->container->get('customer_manager');
 
 // create an attribute with one of predefined type
 $attCode = 'company';
-$att = $cm->createAttribute(new TextType());
+$att = $cm->createAttribute('oro_flexibleentity_text');
 $att->setCode($attCode);
 
 // persist and flush
 $cm->getStorageManager()->persist($att);
 $cm->getStorageManager()->flush();
 
-// create customer with basic fields mapped in customer entity  (cf controllers and unit tests for more exemples)
+// create customer with basic fields mapped in customer entity
 $customer = $cm->createFlexible();
 $customer->setEmail('name@mail.com');
 $customer->setFirstname('Nicolas');
@@ -182,88 +194,4 @@ $cm->getStorageManager()->persist($customer);
 $cm->getStorageManager()->flush();
 ```
 
-Create a simple entity
-======================
-
-You can also use this bundle to deal with simple / classic doctrine entity, without attribute management as following.
-
-Create an entity class (classic doctrine way) :
-```php
-use Doctrine\ORM\Mapping as ORM;
-
-/**
- * Manufacturer entity
- *
- * @ORM\Table(name="acmemanufacturer_manufacturer")
- * @ORM\Entity()
- */
-class Manufacturer
-{
-    /**
-     * @var integer $id
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    private $id;
-
-    /**
-     * @var string $name
-     *
-     * @ORM\Column(name="name", type="string", length=255)
-     */
-    private $name;
-
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-    
-    // ... getter / setter
-```
-
-Define the service manager (src/Acme/Bundle/DemoFlexibleEntityBundle/Resources/config/services.yml) : 
-```yaml
-parameters:
-    manufacturer_manager_class: Oro\Bundle\FlexibleEntityBundle\Manager\SimpleManager
-    manufacturer_entity_class:  Acme\Bundle\DemoFlexibleEntityBundle\Entity\Manufacturer
-
-services:
-    manufacturer_manager:
-        class:     "%manufacturer_manager_class%"
-        arguments: [%manufacturer_entity_class%, @doctrine.orm.entity_manager]
-```
-
-How to use :
-```php
-        // get list
-        $manager = $this->container->get('manufacturer_manager');
-        $manufacturers = $manager->getEntityRepository()->findAll();
-        // create a new one
-        $manufacturer = $manager->createEntity();
-        $manufacturer->setName('Acme');
-        // persist
-        $manager->getStorageManager()->persist($manufacturer);
-        $manager->getStorageManager()->flush();
-        
-```
-
-In this case, we can directly use classic way too with :
-```php
-        // get list
-        $em = $this->container->get('doctrine.orm.entity_manager');
-        $manufacturers = $em->getRepository('AcmeManufacturerBundle:Manufacturer')->findAll();
-        // create a new one
-        $manufacturer = new Manufacturer();
-        $manufacturer->setName('Acme');
-        // persist
-        $em->persist($manufacturer);
-        $em->flush();
-```
 
