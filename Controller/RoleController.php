@@ -13,7 +13,7 @@ use YsTools\BackUrlBundle\Annotation\BackUrl;
 use Oro\Bundle\UserBundle\Entity\Role;
 use Oro\Bundle\UserBundle\Annotation\Acl;
 use Oro\Bundle\UserBundle\Annotation\AclAncestor;
-use Oro\Bundle\UserBundle\Datagrid\RoleDatagridManager;
+use Oro\Bundle\UserBundle\Datagrid\RoleUserDatagridManager;
 
 /**
  * @Route("/role")
@@ -65,16 +65,8 @@ class RoleController extends Controller
             return $this->redirect($this->generateUrl('oro_user_role_index'));
         }
 
-        /** @var $gridManager RoleDatagridManager */
-        $gridManager = $this->get('oro_user.role_user_datagrid_manager');
-
-        $this->initializeQueryFactory($entity);
-        $gridManager->getRouteGenerator()->setRouteParameters(array('id' => $entity->getId()));
-
-        $datagrid = $gridManager->getDatagrid();
-
         return array(
-            'datagrid' => $datagrid->createView(),
+            'datagrid' => $this->getRoleUserDatagridManager($entity)->getDatagrid()->createView(),
             'form'     => $this->get('oro_user.form.role')->createView(),
         );
     }
@@ -93,11 +85,20 @@ class RoleController extends Controller
      */
     public function gridDataAction(Role $entity)
     {
-        $this->initializeQueryFactory($entity);
+        return array('datagrid' => $this->getRoleUserDatagridManager($entity)->getDatagrid()->createView());
+    }
 
-        $datagrid = $this->get('oro_user.role_user_datagrid_manager')->getDatagrid();
-
-        return array('datagrid' => $datagrid->createView());
+    /**
+     * @param Role $role
+     * @return RoleUserDatagridManager
+     */
+    protected function getRoleUserDatagridManager(Role $role)
+    {
+        /** @var $result RoleUserDatagridManager */
+        $result = $this->get('oro_user.role_user_datagrid_manager');
+        $result->setRole($role);
+        $result->getRouteGenerator()->setRouteParameters(array('id' => $role->getId()));
+        return $result;
     }
 
     /**
@@ -125,16 +126,5 @@ class RoleController extends Controller
             $view,
             array('datagrid' => $datagrid->createView())
         );
-    }
-
-    /**
-     * @param Role $entity
-     */
-    protected function initializeQueryFactory(Role $entity)
-    {
-        $this->get('oro_user.role_user_datagrid_manager.default_query_factory')
-            ->setQueryBuilder(
-                $this->get('oro_user.role_manager')->getUserQueryBuilder($entity)
-            );
     }
 }
