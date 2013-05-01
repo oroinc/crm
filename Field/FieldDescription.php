@@ -345,4 +345,12 @@ class FieldDescription implements FieldDescriptionInterface
     {
         return $this->getOption('sort_parent_association_mappings', array());
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isEditable()
+    {
+        return $this->getOption('editable', false);
+    }
 }

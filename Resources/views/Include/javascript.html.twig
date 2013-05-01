@@ -92,7 +92,7 @@
                             name: {{ column.name|json_encode|raw }},
                             label: {{ column.label|json_encode|raw }},
                             sortable: {{ column.sortable|json_encode|raw }},
-                            editable: false,
+                            editable: {{ column.editable|json_encode|raw }},
                             {% if column.type == constant(columnTypePrefix ~ 'TYPE_DATE') %}
                                 cell: Oro.Datagrid.Cell.MomentCell.extend({
                                     modelFormat:   "YYYY-MM-DD",

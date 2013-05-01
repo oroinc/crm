@@ -86,4 +86,14 @@ class AbstractFilterTest extends \PHPUnit_Framework_TestCase
         $this->model->setOption('field_options', $fieldOptions);
         $this->assertEquals($fieldOptions, $this->model->getFieldOptions());
     }
+
+    public function testIsNullable()
+    {
+        // default value
+        $this->assertTrue($this->model->isNullable());
+
+        // custom value
+        $this->model->setOption('nullable', false);
+        $this->assertFalse($this->model->isNullable());
+    }
 }

@@ -20,11 +20,16 @@ class BooleanFilter extends AbstractFilter
 
         $fieldExpression   = $this->createFieldExpression($field, $alias);
         $expressionFactory = $this->getExpressionFactory();
+        $compareExpression = $expressionFactory->neq($fieldExpression, $expressionFactory->literal(''));
 
-        $summaryExpression = $expressionFactory->andX(
-            $expressionFactory->isNotNull($fieldExpression),
-            $expressionFactory->neq($fieldExpression, $expressionFactory->literal(''))
-        );
+        if ($this->isNullable()) {
+            $summaryExpression = $expressionFactory->andX(
+                $expressionFactory->isNotNull($fieldExpression),
+                $compareExpression
+            );
+        } else {
+            $summaryExpression = $compareExpression;
+        }
 
         switch ($data['value']) {
             case BooleanFilterType::TYPE_YES:

@@ -403,4 +403,14 @@ class FieldDescriptionTest extends \PHPUnit_Framework_TestCase
         $this->model->setOption('sort_parent_association_mappings', self::TEST_MAPPING_TYPE);
         $this->assertEquals(self::TEST_MAPPING_TYPE, $this->model->getSortParentAssociationMapping());
     }
+
+    public function testIsEditable()
+    {
+        // default value
+        $this->assertFalse($this->model->isEditable());
+
+        // custom value
+        $this->model->setOption('editable', true);
+        $this->assertTrue($this->model->isEditable());
+    }
 }

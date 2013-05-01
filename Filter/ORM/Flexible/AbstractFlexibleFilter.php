@@ -246,6 +246,14 @@ abstract class AbstractFlexibleFilter implements FilterInterface
     /**
      * {@inheritdoc}
      */
+    public function isNullable()
+    {
+        return $this->parentFilter->isNullable();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function isActive()
     {
         return $this->active;
