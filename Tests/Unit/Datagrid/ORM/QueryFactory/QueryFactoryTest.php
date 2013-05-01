@@ -34,4 +34,14 @@ class QueryFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Oro\Bundle\GridBundle\Datagrid\ORM\ProxyQuery', $proxyQuery);
         $this->assertAttributeEquals($queryBuilderMock, 'queryBuilder', $proxyQuery);
     }
+
+    /**
+     * @expectedException \LogicException
+     * @expectedExceptionMessage Can't create datagrid query. Query builder is not configured.
+     */
+    public function testCreateQueryFails()
+    {
+        $this->model = new QueryFactory();
+        $this->model->createQuery();
+    }
 }

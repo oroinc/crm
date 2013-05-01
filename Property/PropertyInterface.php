@@ -2,6 +2,8 @@
 
 namespace Oro\Bundle\GridBundle\Property;
 
+use Oro\Bundle\GridBundle\Datagrid\ResultRecordInterface;
+
 interface PropertyInterface
 {
     /**
@@ -14,8 +16,8 @@ interface PropertyInterface
     /**
      * Get field value from data
      *
-     * @param mixed $data
+     * @param ResultRecordInterface $record
      * @return mixed
      */
-    public function getValue($data);
+    public function getValue(ResultRecordInterface $record);
 }

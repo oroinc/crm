@@ -2,29 +2,28 @@
 
 namespace Oro\Bundle\GridBundle\Tests\Unit\Property;
 
+use Oro\Bundle\GridBundle\Datagrid\ResultRecord;
+use Oro\Bundle\GridBundle\Datagrid\ResultRecordInterface;
+
 use Oro\Bundle\GridBundle\Property\FieldProperty;
 use Oro\Bundle\GridBundle\Field\FieldDescription;
-use Oro\Bundle\GridBundle\Tests\Unit\Property\Stub\StubEntity;
 
 class FieldPropertyTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage Unable to retrieve the value of "not_existing_field"
-     */
-    public function testGetValueNoData()
+    public function testGetName()
     {
-        $fieldProperty = new FieldProperty($this->createFieldDescription('not_existing_field'));
-        $fieldProperty->getValue(new StubEntity());
+        $fieldDescription = $this->createFieldDescription('name');
+        $property = new FieldProperty($fieldDescription);
+        $this->assertEquals('name', $property->getName());
     }
 
     /**
      * @dataProvider getValueDataProvider
      */
-    public function testGetValue($expectedValue, $data, FieldDescription $fieldDescription)
+    public function testGetValue($expectedValue, ResultRecordInterface $record, FieldDescription $fieldDescription)
     {
         $fieldProperty = new FieldProperty($fieldDescription);
-        $this->assertSame($expectedValue, $fieldProperty->getValue($data));
+        $this->assertSame($expectedValue, $fieldProperty->getValue($record));
     }
 
     /**
@@ -33,73 +32,97 @@ class FieldPropertyTest extends \PHPUnit_Framework_TestCase
     public function getValueDataProvider()
     {
         return array(
+            'null value' => array(
+                null,
+                $this->createRecord(
+                    array(
+                        'field' => null,
+                    )
+                ),
+                $this->createFieldDescription('field')
+            ),
             'default field type' => array(
                 'value',
-                array(
-                    'field' => 'value',
+                $this->createRecord(
+                    array(
+                        'field' => 'value',
+                    )
                 ),
                 $this->createFieldDescription('field')
             ),
             'text field type' => array(
                 'text',
-                array(
-                    'fieldText' => 'text',
+                $this->createRecord(
+                    array(
+                        'fieldText' => 'text',
+                    )
                 ),
                 $this->createFieldDescription('fieldText', array('type' => FieldDescription::TYPE_TEXT))
             ),
             'decimal field type' => array(
                 100.0,
-                array(
-                    'fieldDecimal' => '100.0',
+                $this->createRecord(
+                    array(
+                        'fieldDecimal' => '100.0',
+                    )
                 ),
                 $this->createFieldDescription('fieldDecimal', array('type' => FieldDescription::TYPE_DECIMAL))
             ),
             'integer field type' => array(
                 100,
-                array(
-                    'fieldInteger' => 100.0,
+                $this->createRecord(
+                    array(
+                        'fieldInteger' => 100.0,
+                    )
                 ),
                 $this->createFieldDescription('fieldInteger', array('type' => FieldDescription::TYPE_INTEGER))
             ),
             'date field type' => array(
                 '2013-01-01T13:00:00+0200',
-                array(
-                    'dateField' => new \DateTime('2013-01-01 13:00:00+0200'),
+                $this->createRecord(
+                    array(
+                        'dateField' => new \DateTime('2013-01-01 13:00:00+0200'),
+                    )
                 ),
                 $this->createFieldDescription('dateField', array('type' => FieldDescription::TYPE_DATE))
             ),
             'datetime field type' => array(
                 '2013-01-01T15:00:00+0200',
-                array(
-                    'datetimeField' => new \DateTime('2013-01-01 15:00:00+0200'),
+                $this->createRecord(
+                    array(
+                        'datetimeField' => new \DateTime('2013-01-01 15:00:00+0200'),
+                    )
                 ),
                 $this->createFieldDescription('datetimeField', array('type' => FieldDescription::TYPE_DATETIME))
             ),
             'not datetime value in field type' => array(
                 '2013-01-01T17:00:00+0200',
-                array(
-                    'datetimeField' => '2013-01-01T17:00:00+0200',
+                $this->createRecord(
+                    array(
+                        'datetimeField' => '2013-01-01T17:00:00+0200',
+                    )
                 ),
                 $this->createFieldDescription('datetimeField', array('type' => FieldDescription::TYPE_DATE))
             ),
             'object with __toString' => array(
                 'string value',
-                array(
-                    'fieldName' => $this->createObjectConvertableToString('string value'),
+                $this->createRecord(
+                    array(
+                        'fieldName' => $this->createObjectConvertableToString('string value'),
+                    )
                 ),
                 $this->createFieldDescription('fieldName')
             ),
-            'object method by code' => array(
-                StubEntity::CODE_METHOD_RESULT,
-                new StubEntity(),
-                $this->createFieldDescription(null, array('code' => StubEntity::CODE_METHOD_NAME))
-            ),
-            'object method by code with null result' => array(
-                null,
-                new StubEntity(),
-                $this->createFieldDescription(null, array('code' => StubEntity::CODE_METHOD_NAME_NULL))
-            ),
         );
+    }
+
+    /**
+     * @param mixed $data
+     * @return ResultRecordInterface
+     */
+    private function createRecord($data)
+    {
+        return new ResultRecord($data);
     }
 
     /**

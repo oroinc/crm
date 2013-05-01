@@ -11,6 +11,8 @@ use Oro\Bundle\GridBundle\Datagrid\ParametersInterface;
 use Oro\Bundle\GridBundle\Datagrid\RequestParameters;
 use Oro\Bundle\GridBundle\Sorter\SorterInterface;
 
+use Oro\Bundle\GridBundle\Tests\Unit\Datagrid\Stub\StubDatagridManager;
+
 class DatagridManagerTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -56,10 +58,27 @@ class DatagridManagerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        $this->testFields = $this->createFieldDescriptions($this->testFields);
+
         $this->testProperties = array(
             $this->getMock('Oro\Bundle\GridBundle\Property\PropertyInterface')
         );
-        $this->model = $this->getMockForAbstractClass('Oro\Bundle\GridBundle\Datagrid\DatagridManager');
+        $this->model = new StubDatagridManager($this->testFields, $this->testProperties, $this->testRowActions);
+    }
+
+    protected function createFieldDescriptions(array $fieldsOptions)
+    {
+        $result = array();
+        // convert fields to field descriptions
+        foreach ($fieldsOptions as $fieldName => $fieldOptions) {
+            if (is_array($fieldOptions)) {
+                $field = new FieldDescription();
+                $field->setName($fieldName);
+                $field->setOptions($fieldOptions);
+                $result[$fieldName] = $field;
+            }
+        }
+        return $result;
     }
 
     protected function tearDown()
@@ -112,6 +131,16 @@ class DatagridManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertAttributeEquals($validatorMock, 'validator', $this->model);
     }
 
+    public function testSetRouter()
+    {
+        $routerMock = $this->getMockBuilder('Symfony\Component\Routing\Router')
+            ->disableOriginalConstructor()->getMock();
+
+        $this->assertAttributeEmpty('router', $this->model);
+        $this->model->setRouter($routerMock);
+        $this->assertAttributeEquals($routerMock, 'router', $this->model);
+    }
+
     public function testSetRouteGenerator()
     {
         $routeGeneratorMock = $this->getMock('Oro\Bundle\GridBundle\Route\RouteGeneratorInterface');
@@ -144,82 +173,13 @@ class DatagridManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertAttributeEquals(self::TEST_HINT, 'entityHint', $this->model);
     }
 
-    /**
-     * Generate fields, filters, sorters
-     *
-     * @param boolean $customValues
-     */
-    protected function prepareDatagridManagerForGetDatagrid($customValues = false)
+    public function testGetDatagrid()
     {
-        // convert fields to field descriptions
-        foreach ($this->testFields as $fieldName => $fieldOptions) {
-            if (is_array($fieldOptions)) {
-                $field = new FieldDescription();
-                $field->setName($fieldName);
-                $field->setOptions($fieldOptions);
-                $this->testFields[$fieldName] = $field;
-            }
-        }
+        $datagridMock       = $this->getMock('Oro\Bundle\GridBundle\Datagrid\DatagridInterface');
+        $queryMock          = $this->getMock('Oro\Bundle\GridBundle\Datagrid\ProxyQueryInterface');
+        $routeGeneratorMock = $this->getMock('Oro\Bundle\GridBundle\Route\RouteGeneratorInterface');
+        $parameters         = $this->createTestParameters();
 
-        $mockedMethods = array('getListFields');
-        if ($customValues) {
-            $mockedMethods = array_merge(
-                $mockedMethods,
-                array('getProperties', 'getFilters', 'getSorters', 'getRowActions')
-            );
-        }
-
-        $datagridManager = $this->getMockBuilder('Oro\Bundle\GridBundle\Datagrid\DatagridManager')
-            ->disableOriginalConstructor()
-            ->setMethods($mockedMethods)
-            ->getMockForAbstractClass();
-
-        $datagridManager->expects($this->any())
-            ->method('getListFields')
-            ->will($this->returnValue($this->testFields));
-
-        if ($customValues) {
-            $filterableFields = array();
-            /** @var $fieldDescription FieldDescription */
-            foreach ($this->testFields as $fieldDescription) {
-                if ($fieldDescription->isFilterable()) {
-                    $filterableFields[] = $fieldDescription;
-                }
-            }
-
-            $sortableFields = array();
-            /** @var $fieldDescription FieldDescription */
-            foreach ($this->testFields as $fieldDescription) {
-                if ($fieldDescription->isSortable()) {
-                    $sortableFields[] = $fieldDescription;
-                }
-            }
-
-            $datagridManager->expects($this->any())
-                ->method('getProperties')
-                ->will($this->returnValue($this->testProperties));
-            $datagridManager->expects($this->any())
-                ->method('getListFields')
-                ->will($this->returnValue($this->testFields));
-            $datagridManager->expects($this->any())
-                ->method('getFilters')
-                ->will($this->returnValue($filterableFields));
-            $datagridManager->expects($this->any())
-                ->method('getSorters')
-                ->will($this->returnValue($sortableFields));
-            $datagridManager->expects($this->any())
-                ->method('getRowActions')
-                ->will($this->returnValue($this->testRowActions));
-        }
-
-        $this->model = $datagridManager;
-    }
-
-    /**
-     * @return array
-     */
-    protected function getFilterListParameters()
-    {
         $listCollection = new FieldDescriptionCollection();
 
         $listBuilderMock = $this->getMockForAbstractClass(
@@ -234,25 +194,6 @@ class DatagridManagerTest extends \PHPUnit_Framework_TestCase
         $listBuilderMock->expects($this->once())
             ->method('getBaseList')
             ->will($this->returnValue($listCollection));
-
-        return array(
-            'list_collection' => $listCollection,
-            'list_builder'    => $listBuilderMock,
-        );
-    }
-
-    public function testGetDatagrid()
-    {
-        $this->prepareDatagridManagerForGetDatagrid(true);
-
-        $datagridMock       = $this->getMock('Oro\Bundle\GridBundle\Datagrid\DatagridInterface');
-        $queryMock          = $this->getMock('Oro\Bundle\GridBundle\Datagrid\ProxyQueryInterface');
-        $routeGeneratorMock = $this->getMock('Oro\Bundle\GridBundle\Route\RouteGeneratorInterface');
-        $parametersMock     = $this->getMock('Oro\Bundle\GridBundle\Datagrid\ParametersInterface');
-
-        $filterListParameters = $this->getFilterListParameters();
-        $listCollection  = $filterListParameters['list_collection'];
-        $listBuilderMock = $filterListParameters['list_builder'];
 
         $queryFactoryMock = $this->getMockForAbstractClass(
             'Oro\Bundle\GridBundle\Datagrid\QueryFactoryInterface',
@@ -278,7 +219,7 @@ class DatagridManagerTest extends \PHPUnit_Framework_TestCase
                 $queryMock,
                 $listCollection,
                 $routeGeneratorMock,
-                $parametersMock,
+                $parameters,
                 self::TEST_NAME,
                 self::TEST_HINT
             )
@@ -311,79 +252,6 @@ class DatagridManagerTest extends \PHPUnit_Framework_TestCase
         $this->model->setListBuilder($listBuilderMock);
         $this->model->setQueryFactory($queryFactoryMock);
         $this->model->setRouteGenerator($routeGeneratorMock);
-        $this->model->setParameters($parametersMock);
-        $this->model->setName(self::TEST_NAME);
-        $this->model->setEntityHint(self::TEST_HINT);
-
-        $this->assertEquals($datagridMock, $this->model->getDatagrid());
-        $this->assertEquals($this->testFields, $listCollection->getElements());
-    }
-
-    public function testGetDatagridWithDefaultValues()
-    {
-        $this->prepareDatagridManagerForGetDatagrid();
-
-        $datagridMock       = $this->getMock('Oro\Bundle\GridBundle\Datagrid\DatagridInterface');
-        $queryMock          = $this->getMock('Oro\Bundle\GridBundle\Datagrid\ProxyQueryInterface');
-        $routeGeneratorMock = $this->getMock('Oro\Bundle\GridBundle\Route\RouteGeneratorInterface');
-
-        $request = new Request();
-
-        $container = $this->getMockForAbstractClass(
-            'Symfony\Component\DependencyInjection\ContainerInterface',
-            array(),
-            '',
-            false,
-            true,
-            true,
-            array('get')
-        );
-        $container->expects($this->any())
-            ->method('get')
-            ->with('request')
-            ->will($this->returnValue($request));
-
-        $parameters = new RequestParameters($container, self::TEST_NAME);
-
-        $filterListParameters = $this->getFilterListParameters();
-        $listCollection  = $filterListParameters['list_collection'];
-        $listBuilderMock = $filterListParameters['list_builder'];
-
-        $queryFactoryMock = $this->getMockForAbstractClass(
-            'Oro\Bundle\GridBundle\Datagrid\QueryFactoryInterface',
-            array(),
-            '',
-            false,
-            true,
-            true,
-            array('createQuery')
-        );
-        $queryFactoryMock->expects($this->once())
-            ->method('createQuery')
-            ->will($this->returnValue($queryMock));
-
-        $datagridBuilderMock = $this->getMockForAbstractClass(
-            'Oro\Bundle\GridBundle\Builder\DatagridBuilderInterface',
-            array(),
-            '',
-            false,
-            true,
-            true,
-            array('getBaseDatagrid', 'addFilter', 'addSorter', 'addRowAction')
-        );
-        $datagridBuilderMock->expects($this->once())
-            ->method('getBaseDatagrid')
-            ->will($this->returnValue($datagridMock));
-
-        // default filters, sorters and row actions are empty arrays
-        $datagridBuilderMock->expects($this->never())->method('addFilter');
-        $datagridBuilderMock->expects($this->never())->method('addSorter');
-        $datagridBuilderMock->expects($this->never())->method('addRowAction');
-
-        $this->model->setDatagridBuilder($datagridBuilderMock);
-        $this->model->setListBuilder($listBuilderMock);
-        $this->model->setQueryFactory($queryFactoryMock);
-        $this->model->setRouteGenerator($routeGeneratorMock);
         $this->model->setParameters($parameters);
         $this->model->setName(self::TEST_NAME);
         $this->model->setEntityHint(self::TEST_HINT);
@@ -399,6 +267,26 @@ class DatagridManagerTest extends \PHPUnit_Framework_TestCase
             )
         );
         $this->assertEquals($defaultParameters, $parameters->toArray());
+    }
+
+    protected function createTestParameters()
+    {
+        $request = new Request();
+        $container = $this->getMockForAbstractClass(
+            'Symfony\Component\DependencyInjection\ContainerInterface',
+            array(),
+            '',
+            false,
+            true,
+            true,
+            array('get')
+        );
+        $container->expects($this->any())
+            ->method('get')
+            ->with('request')
+            ->will($this->returnValue($request));
+
+        return new RequestParameters($container, self::TEST_NAME);
     }
 
     public function testGetRouteGenerator()

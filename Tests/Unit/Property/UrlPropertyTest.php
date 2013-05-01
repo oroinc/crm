@@ -2,8 +2,11 @@
 
 namespace Oro\Bundle\GridBundle\Tests\Unit\Property;
 
-use Oro\Bundle\GridBundle\Property\UrlProperty;
 use Symfony\Bundle\FrameworkBundle\Routing\Router;
+
+use Oro\Bundle\GridBundle\Datagrid\ResultRecord;
+use Oro\Bundle\GridBundle\Datagrid\ResultRecordInterface;
+use Oro\Bundle\GridBundle\Property\UrlProperty;
 
 class UrlPropertyTest extends \PHPUnit_Framework_TestCase
 {
@@ -51,7 +54,7 @@ class UrlPropertyTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetValue(
         $expectedParameters,
-        $data,
+        ResultRecordInterface $record,
         $placeholders = array(),
         $isAbsolute = false
     ) {
@@ -63,7 +66,7 @@ class UrlPropertyTest extends \PHPUnit_Framework_TestCase
             ->with(self::TEST_ROUTE_NAME, $expectedParameters, $isAbsolute)
             ->will($this->returnValue($expectedResult));
 
-        $this->assertEquals($expectedResult, $property->getValue($data));
+        $this->assertEquals($expectedResult, $property->getValue($record));
     }
 
     /**
@@ -74,16 +77,19 @@ class UrlPropertyTest extends \PHPUnit_Framework_TestCase
         return array(
             'no route parameters' => array(
                 'expectedParameters' => array(),
-                'data' => array()
+                'data' => new ResultRecord(array())
             ),
             'has placeholders' => array(
                 'expectedParameters' => array(
                     'id' => 1
                 ),
-                'data' => array(
-                    'id' => 1,
-                    'name' => 'Test name',
-                ),
+                'data' =>
+                    new ResultRecord(
+                        array(
+                            'id' => 1,
+                            'name' => 'Test name',
+                        )
+                    ),
                 'placeholders' => array(
                     'id'
                 ),
@@ -93,9 +99,11 @@ class UrlPropertyTest extends \PHPUnit_Framework_TestCase
                 'expectedParameters' => array(
                     'id' => 1
                 ),
-                'data' => array(
-                    '_id_' => 1,
-                    'name' => 'Test name',
+                'data' => new ResultRecord(
+                    array(
+                        '_id_' => 1,
+                        'name' => 'Test name',
+                    )
                 ),
                 'placeholders' => array(
                     'id' => '_id_'

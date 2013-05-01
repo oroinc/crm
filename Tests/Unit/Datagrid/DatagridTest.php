@@ -4,6 +4,7 @@ namespace Oro\Bundle\GridBundle\Tests\Unit\Datagrid;
 
 use Symfony\Component\HttpFoundation\Request;
 
+use Oro\Bundle\GridBundle\Datagrid\ResultRecord;
 use Oro\Bundle\GridBundle\Datagrid\Datagrid;
 use Oro\Bundle\GridBundle\Filter\FilterInterface;
 use Oro\Bundle\GridBundle\Sorter\SorterInterface;
@@ -382,9 +383,10 @@ class DatagridTest extends \PHPUnit_Framework_TestCase
         $this->addSorterMocks($sortersData, $datagrid, $query);
         $this->addPagerMocks($pagerData, $pager);
 
-        $expectedResults = array();
-        $query->expects($this->once())->method('execute')->will($this->returnValue($expectedResults));
-        $this->assertEquals($expectedResults, $datagrid->getResults());
+        $queryResult = array(array('data'));
+        $expectedResult = array(new ResultRecord($queryResult[0]));
+        $query->expects($this->once())->method('execute')->will($this->returnValue($queryResult));
+        $this->assertEquals($expectedResult, $datagrid->getResults());
     }
 
     /**

@@ -35,6 +35,8 @@ class FlexibleDatagridManagerTest extends \PHPUnit_Framework_TestCase
         AbstractAttributeType::BACKEND_TYPE_OPTION   => FieldDescriptionInterface::TYPE_OPTIONS,
         AbstractAttributeType::BACKEND_TYPE_TEXT     => FieldDescriptionInterface::TYPE_TEXT,
         AbstractAttributeType::BACKEND_TYPE_VARCHAR  => FieldDescriptionInterface::TYPE_TEXT,
+        AbstractAttributeType::BACKEND_TYPE_PRICE    => FieldDescriptionInterface::TYPE_TEXT,
+        AbstractAttributeType::BACKEND_TYPE_METRIC   => FieldDescriptionInterface::TYPE_TEXT,
     );
 
     /**
@@ -48,6 +50,8 @@ class FlexibleDatagridManagerTest extends \PHPUnit_Framework_TestCase
         AbstractAttributeType::BACKEND_TYPE_OPTION   => FilterInterface::TYPE_FLEXIBLE_OPTIONS,
         AbstractAttributeType::BACKEND_TYPE_TEXT     => FilterInterface::TYPE_FLEXIBLE_STRING,
         AbstractAttributeType::BACKEND_TYPE_VARCHAR  => FilterInterface::TYPE_FLEXIBLE_STRING,
+        AbstractAttributeType::BACKEND_TYPE_PRICE    => FilterInterface::TYPE_FLEXIBLE_STRING,
+        AbstractAttributeType::BACKEND_TYPE_METRIC   => FilterInterface::TYPE_FLEXIBLE_STRING,
     );
 
     protected function setUp()
