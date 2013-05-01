@@ -1,7 +1,8 @@
 <?php
 namespace Oro\Bundle\FlexibleEntityBundle\Tests\Form\Type;
 
-use Symfony\Component\Form\Tests\Extension\Core\Type\TypeTestCase;
+use Symfony\Component\Form\Forms;
+use Oro\Bundle\FlexibleEntityBundle\Tests\Unit\AbstractFlexibleManagerTest;
 use Oro\Bundle\FlexibleEntityBundle\Form\Type\FlexibleType;
 
 /**
@@ -12,8 +13,12 @@ use Oro\Bundle\FlexibleEntityBundle\Form\Type\FlexibleType;
  * @license   http://opensource.org/licenses/MIT MIT
  *
  */
-class FlexibleTypeTest extends TypeTestCase
+class FlexibleTypeTest extends AbstractFlexibleManagerTest
 {
+    /**
+     * @var \Symfony\Component\Form\FormFactoryInterface
+     */
+    protected $factory;
 
     /**
      * {@inheritdoc}
@@ -21,9 +26,10 @@ class FlexibleTypeTest extends TypeTestCase
     public function setUp()
     {
         parent::setUp();
-        $flexibleName = 'Oro\Bundle\FlexibleEntityBundle\Tests\Unit\Entity\Demo\Flexible';
-        $valueName    = 'Oro\Bundle\FlexibleEntityBundle\Tests\Unit\Entity\Demo\FlexibleValue';
-        $this->type = new FlexibleType($flexibleName, $valueName);
+        $this->factory = Forms::createFormFactoryBuilder()
+            ->addExtensions(array())
+            ->getFormFactory();
+        $this->type = new FlexibleType($this->manager, 'text');
         $this->form = $this->factory->create($this->type);
     }
 

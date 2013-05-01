@@ -100,11 +100,22 @@ class Attribute extends AbstractEntityAttribute
         }
     }
 
+    /**
+     * Get sort order
+     * @return number
+     */
     public function getSortOrder()
     {
         return $this->sortOrder;
     }
 
+    /**
+     * Set sort order
+     *
+     * @param integer $sortOrder
+     *
+     * @return \Oro\Bundle\FlexibleEntityBundle\Entity\Attribute
+     */
     public function setSortOrder($sortOrder)
     {
         $this->sortOrder = $sortOrder;

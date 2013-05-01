@@ -1,5 +1,5 @@
 <?php
-namespace Oro\Bundle\FlexibleEntityBundle\Model\AttributeType;
+namespace Oro\Bundle\FlexibleEntityBundle\AttributeType;
 
 /**
  * File attribute type
@@ -11,13 +11,11 @@ namespace Oro\Bundle\FlexibleEntityBundle\Model\AttributeType;
  */
 class FileUrlType extends UrlType
 {
-
     /**
-     * constructor
+     * {@inheritdoc}
      */
-    public function __construct()
+    public function getName()
     {
-        parent::__construct();
-        $this->name     = 'File Url';
+        return 'oro_flexibleentity_fileurl';
     }
 }

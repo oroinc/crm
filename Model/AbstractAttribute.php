@@ -271,9 +271,6 @@ abstract class AbstractAttribute implements TimestampableInterface
     {
         $this->attributeType = $type;
 
-        $attType = new $type();
-        $this->backendType = $attType->getBackendType();
-
         return $this;
     }
 

@@ -1,7 +1,6 @@
 <?php
 namespace Oro\Bundle\FlexibleEntityBundle\Tests\Unit\Manager;
 
-use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\TextType;
 use Oro\Bundle\FlexibleEntityBundle\Tests\Unit\AbstractFlexibleManagerTest;
 use Doctrine\ORM\EntityManager;
 use Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleManager;
@@ -15,15 +14,6 @@ use Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleManager;
  */
 class FlexibleManagerTest extends AbstractFlexibleManagerTest
 {
-
-    /**
-     * Set up unit test
-     */
-    public function setUp()
-    {
-        parent::setUp();
-    }
-
     /**
      * test related method
      */
@@ -33,7 +23,8 @@ class FlexibleManagerTest extends AbstractFlexibleManagerTest
             $this->flexibleClassName,
             $this->container->getParameter('oro_flexibleentity.flexible_config'),
             $this->entityManager,
-            $this->container->get('event_dispatcher')
+            $this->container->get('event_dispatcher'),
+            $this->attributeTypeFactory
         );
         $this->assertNotNull($myManager->getStorageManager());
         $this->assertEquals($myManager->getStorageManager(), $this->entityManager);
@@ -98,14 +89,6 @@ class FlexibleManagerTest extends AbstractFlexibleManagerTest
     /**
      * Test related method
      */
-    public function testGetAttributeExtendedName()
-    {
-        $this->assertEquals($this->manager->getAttributeExtendedName(), $this->flexibleAttributeClassName);
-    }
-
-    /**
-     * Test related method
-     */
     public function testGetAttributeOptionName()
     {
         $this->assertEquals($this->manager->getAttributeOptionName(), $this->attributeOptionClassName);
@@ -146,14 +129,6 @@ class FlexibleManagerTest extends AbstractFlexibleManagerTest
     /**
      * Test related method
      */
-    public function testGetAttributeExtendedRepository()
-    {
-        $this->assertTrue($this->manager->getAttributeExtendedRepository() instanceof \Doctrine\ORM\EntityRepository);
-    }
-
-    /**
-     * Test related method
-     */
     public function testGetAttributeOptionRepository()
     {
         $this->assertTrue($this->manager->getAttributeOptionRepository() instanceof \Doctrine\ORM\EntityRepository);
@@ -182,8 +157,7 @@ class FlexibleManagerTest extends AbstractFlexibleManagerTest
      */
     public function testCreateAttribute()
     {
-        $attributeType = new TextType();
-        $this->assertTrue($this->manager->createAttribute($attributeType) instanceof $this->attributeClassName);
+        $this->assertTrue($this->manager->createAttribute('oro_flexibleentity_text') instanceof $this->attributeClassName);
     }
 
     /**
@@ -208,14 +182,6 @@ class FlexibleManagerTest extends AbstractFlexibleManagerTest
     public function testCreateFlexible()
     {
         $this->assertTrue($this->manager->createFlexible() instanceof $this->flexibleClassName);
-    }
-
-    /**
-     * Test related method
-     */
-    public function testCreateAttributeExtended()
-    {
-        $this->assertTrue($this->manager->createAttributeExtended() instanceof $this->flexibleAttributeClassName);
     }
 
     /**

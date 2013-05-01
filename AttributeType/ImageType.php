@@ -1,5 +1,5 @@
 <?php
-namespace Oro\Bundle\FlexibleEntityBundle\Model\AttributeType;
+namespace Oro\Bundle\FlexibleEntityBundle\AttributeType;
 
 /**
  * Image attribute type
@@ -9,15 +9,13 @@ namespace Oro\Bundle\FlexibleEntityBundle\Model\AttributeType;
  * @license   http://opensource.org/licenses/MIT MIT
  *
  */
-class ImageUrlType extends FileUrlType
+class ImageType extends FileType
 {
-
     /**
-     * constructor
+     * {@inheritdoc}
      */
-    public function __construct()
+    public function getName()
     {
-        parent::__construct();
-        $this->name     = 'Image Url';
+        return 'oro_flexibleentity_image';
     }
 }

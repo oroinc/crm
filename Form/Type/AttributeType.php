@@ -1,23 +1,7 @@
 <?php
 namespace Oro\Bundle\FlexibleEntityBundle\Form\Type;
 
-use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttributeType;
-use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\ImageType;
-use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\FileType;
-use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\BooleanType;
-use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\TextType;
-use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\OptionSimpleSelectType;
-use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\OptionSimpleRadioType;
-use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\OptionMultiSelectType;
-use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\OptionMultiCheckboxType;
-use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\DateType;
-use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\MetricType as AttMetricType;
-use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\MoneyType;
-use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\TextAreaType;
-use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\UrlType;
-use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\NumberType;
-use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\EmailType;
-use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\IntegerType;
+use Oro\Bundle\FlexibleEntityBundle\AttributeType\AbstractAttributeType;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Oro\Bundle\FlexibleEntityBundle\Form\EventListener\AttributeTypeSubscriber;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -154,6 +138,10 @@ class AttributeType extends AbstractType
         $builder->add('scopable', 'choice', array('choices' => array('No', 'Yes')));
     }
 
+    /**
+     * Add attribute position field
+     * @param FormBuilderInterface $builder
+     */
     protected function addPositionField(FormBuilderInterface $builder)
     {
         $builder->add('sortOrder', 'integer', array('label' => 'Position'));
@@ -186,28 +174,9 @@ class AttributeType extends AbstractType
      */
     public function getAttributeTypeChoices()
     {
-        $availablesTypes = array(
-            new BooleanType(),
-            new DateType(),
-            new FileType(),
-            new ImageType(),
-            new IntegerType(),
-            new EmailType(),
-            new AttMetricType(),
-            new MoneyType(),
-            new OptionMultiCheckboxType(),
-            new OptionMultiSelectType(),
-            new OptionSimpleRadioType(),
-            new OptionSimpleSelectType(),
-            new NumberType(),
-            new TextAreaType(),
-            new TextType(),
-            new UrlType()
+        $types = array(
+            'oro_flexibleentity_text' => 'oro_flexibleentity_text'
         );
-        $types = array();
-        foreach ($availablesTypes as $type) {
-            $types[get_class($type)]= $type->getName();
-        }
         asort($types);
 
         return $types;

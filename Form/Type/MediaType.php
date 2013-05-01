@@ -24,17 +24,18 @@ class MediaType extends AbstractType
     {
         $builder
             ->add('id', 'hidden')
-            ->add('file', 'file', array(
-                'required' => false,
-            ))
-            ->add('removed', 'checkbox', array(
-                'required' => false,
-                'label'    => 'Remove media',
-                'attr'     => array(
-                    'class' => 'noswitch',
+            ->add('file', 'file', array('required' => false,))
+            ->add(
+                'removed',
+                'checkbox',
+                array(
+                    'required' => false,
+                    'label'    => 'Remove media',
+                    'attr'     => array(
+                        'class' => 'noswitch',
+                    )
                 )
-            ))
-        ;
+            );
     }
 
     /**

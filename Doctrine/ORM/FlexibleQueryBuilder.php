@@ -3,7 +3,7 @@ namespace Oro\Bundle\FlexibleEntityBundle\Doctrine\ORM;
 
 use Doctrine\ORM\QueryBuilder;
 use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttribute;
-use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttributeType;
+use Oro\Bundle\FlexibleEntityBundle\AttributeType\AbstractAttributeType;
 use Oro\Bundle\FlexibleEntityBundle\Exception\FlexibleQueryException;
 
 /**
@@ -182,6 +182,7 @@ class FlexibleQueryBuilder extends QueryBuilder
             foreach ($field as $key => $fieldName) {
                 $conditions[] = $this->prepareCriteriaCondition($fieldName, $operator[$key], $value[$key]);
             }
+
             return '(' . implode(' OR ', $conditions) . ')';
         }
 

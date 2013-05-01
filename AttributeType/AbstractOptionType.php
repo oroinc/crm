@@ -1,10 +1,9 @@
 <?php
-namespace Oro\Bundle\FlexibleEntityBundle\Model\AttributeType;
+namespace Oro\Bundle\FlexibleEntityBundle\AttributeType;
 
 use Doctrine\ORM\EntityRepository;
-
-use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttributeType;
-use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttribute;
+use Oro\Bundle\FlexibleEntityBundle\Model\FlexibleValueInterface;
+use Oro\Bundle\FlexibleEntityBundle\AttributeType\AbstractAttributeType;
 
 /**
  * Abstract option attribute type
@@ -15,26 +14,13 @@ use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttribute;
  */
 abstract class AbstractOptionType extends AbstractAttributeType
 {
-
     /**
-     * constructor
+     * {@inheritdoc}
      */
-    public function __construct()
+    protected function prepareValueFormOptions(FlexibleValueInterface $value)
     {
-        $this->backendType = self::BACKEND_TYPE_OPTIONS;
-        $this->formType    = 'entity';
-    }
-
-    /**
-     * Get form type options
-     *
-     * @param AbstractAttribute $attribute
-     *
-     * @return array
-     */
-    public function prepareFormOptions(AbstractAttribute $attribute)
-    {
-        $options = parent::prepareFormOptions($attribute);
+        $options = parent::prepareValueFormOptions($value);
+        $attribute = $value->getAttribute();
         $options['empty_value']   = false;
         $options['class']         = 'OroFlexibleEntityBundle:AttributeOption';
         $options['query_builder'] = function (EntityRepository $er) use ($attribute) {

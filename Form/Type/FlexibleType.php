@@ -1,6 +1,8 @@
 <?php
 namespace Oro\Bundle\FlexibleEntityBundle\Form\Type;
 
+use Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleManager;
+
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -16,6 +18,10 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  */
 class FlexibleType extends AbstractType
 {
+    /**
+     * @var FlexibleManager
+     */
+    protected $flexibleManager;
 
     /**
      * @var string
@@ -25,18 +31,19 @@ class FlexibleType extends AbstractType
     /**
      * @var string
      */
-    protected $valueClass;
+    protected $valueFormAlias;
 
     /**
-     * Construct with full name of concrete impl of flexible entity class
+     * Constructor
      *
-     * @param string $flexibleClass flexible entity class
-     * @param string $valueClass    flexible value class
+     * @param FlexibleManager $flexibleManager the manager
+     * @param string          $valueFormAlias  the value form type alias
      */
-    public function __construct($flexibleClass, $valueClass)
+    public function __construct(FlexibleManager $flexibleManager, $valueFormAlias)
     {
-        $this->flexibleClass = $flexibleClass;
-        $this->valueClass = $valueClass;
+        $this->flexibleManager = $flexibleManager;
+        $this->flexibleClass   = $flexibleManager->getFlexibleName();
+        $this->valueFormAlias  = $valueFormAlias;
     }
 
     /**
@@ -69,7 +76,7 @@ class FlexibleType extends AbstractType
             'values',
             'collection',
             array(
-                'type'         => new FlexibleValueType($this->valueClass),
+                'type'         => $this->valueFormAlias,
                 'allow_add'    => true,
                 'allow_delete' => true,
                 'by_reference' => false
@@ -82,11 +89,7 @@ class FlexibleType extends AbstractType
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $resolver->setDefaults(
-            array(
-                'data_class' => $this->flexibleClass
-            )
-        );
+        $resolver->setDefaults(array('data_class' => $this->flexibleClass));
     }
 
     /**
