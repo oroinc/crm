@@ -183,6 +183,7 @@
             }, datagridOptions.grid);
             var datagrid = new Oro.Datagrid.Grid(datagridParameters);
             $(datagridBodySelector).html(datagrid.render().$el);
+            Oro.Registry.setElement('datagrid', {{ datagrid.name|json_encode|raw }}, datagrid);
 
             // Title
             var titleParameters = _.extend({
