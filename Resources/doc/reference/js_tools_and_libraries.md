@@ -13,7 +13,7 @@ This article contains description of all JavaScript tools and libraries in OroUI
 
 ### Oro
 
-Oro is the globab namespace for all JS widgets. Also it contains several useful functions.
+Oro is the global namespace for all JS widgets. Also it contains several useful functions.
 
 **Public methods**
 
