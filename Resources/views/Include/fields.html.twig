@@ -8,7 +8,9 @@
         {{ block('oro_region_updater_js')|raw }}
     {% endif %}
 
-    {% set country_field = country_field|default('#oro_address_form_country') %}
+    {% if country_field is not defined %}
+        {% set country_field = id|replace('_state', '_country') %}
+    {% endif %}
 
     {{ form_widget(form) }}
 
