@@ -115,6 +115,6 @@ class EntityIdentifierType extends AbstractType
      */
     public function getParent()
     {
-        return 'text';
+        return 'hidden';
     }
 }
