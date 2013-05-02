@@ -43,17 +43,6 @@ class RegionTypeTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('oro_region', $this->type->getName());
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
-    public function testBuildFormException()
-    {
-        $builderMock = $this->getMock('Symfony\Component\Form\Tests\FormBuilderInterface');
-        $options = array();
-
-        $this->type->buildForm($builderMock, $options);
-    }
-
     public function testBuildForm()
     {
         $builderMock = $this->getMock('Symfony\Component\Form\Tests\FormBuilderInterface');

@@ -20,11 +20,6 @@ class RegionType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         parent::buildForm($builder, $options);
-
-        if (!isset($options[self::COUNTRY_OPTION_KEY])) {
-            throw new \InvalidArgumentException('Country field ID for region selector not filled');
-        }
-
         $builder->setAttribute(self::COUNTRY_OPTION_KEY, $options[self::COUNTRY_OPTION_KEY]);
     }
 
