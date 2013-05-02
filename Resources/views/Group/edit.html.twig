@@ -12,8 +12,8 @@
         {% set listenerParameters = {
             'columnName': 'has_group',
             'selectors': {
-                'included': null,
-                'excluded': null
+                'included': '#groupAppendUsers',
+                'excluded': '#groupRemoveUsers'
             }
         } %}
         {% include 'OroUserBundle:Include:listener.html.twig' with {'datagridView': datagrid, 'parameters': listenerParameters} %}
@@ -27,7 +27,9 @@
         <fieldset>
             <legend>{{ title }}</legend>
 
-            {{ form_widget(form) }}
+            {{ form_widget(form.appendUsers, {'id': 'groupAppendUsers'}) }}
+            {{ form_widget(form.removeUsers, {'id': 'groupRemoveUsers'}) }}
+            {{ form_rest(form) }}
 
             {% if form.vars.value.id %}
                 {{ 'Users'|trans }}
