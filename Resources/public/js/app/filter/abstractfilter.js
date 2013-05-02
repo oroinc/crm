@@ -72,6 +72,13 @@ Oro.Filter.AbstractFilter = Backbone.View.extend({
     buttonActiveClass: 'open-filter',
 
     /**
+     * Null link value
+     *
+     * @property {String}
+     */
+    nullLink: 'javascript:void(0);',
+
+    /**
      * Initialize.
      *
      * @param {Object} options

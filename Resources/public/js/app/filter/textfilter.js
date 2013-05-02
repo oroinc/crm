@@ -18,7 +18,7 @@ Oro.Filter.TextFilter = Oro.Filter.AbstractFilter.extend({
             '<%= label %>: <strong class="filter-criteria-hint"><%= criteriaHint %></strong>' +
             '<span class="caret"></span>' +
         '</button>' +
-        '<a href="#" class="disable-filter"><i class="icon-remove hide-text">Close</i></a>' +
+        '<a href="<%= nullLink %>" class="disable-filter"><i class="icon-remove hide-text">Close</i></a>' +
         '<div class="filter-criteria dropdown-menu" />'
     ),
 
@@ -187,7 +187,8 @@ Oro.Filter.TextFilter = Oro.Filter.AbstractFilter.extend({
         this.$el.append(
             this.template({
                 label: this.label,
-                criteriaHint: this._getCriteriaHint()
+                criteriaHint: this._getCriteriaHint(),
+                nullLink: this.nullLink
             })
         );
 

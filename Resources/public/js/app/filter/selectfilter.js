@@ -21,7 +21,7 @@ Oro.Filter.SelectFilter = Oro.Filter.AbstractFilter.extend({
                 '<% _.each(options, function (hint, value) { %><option value="<%= value %>"><%= hint %></option><% }); %>' +
             '</select>' +
         '</div>' +
-        '<a href="#" class="disable-filter"><i class="icon-remove hide-text">Close</i></a>'
+        '<a href="<%= nullLink %>" class="disable-filter"><i class="icon-remove hide-text">Close</i></a>'
     ),
 
     /**
@@ -133,7 +133,8 @@ Oro.Filter.SelectFilter = Oro.Filter.AbstractFilter.extend({
             this.template({
                 label: this.label,
                 options: this.options,
-                placeholder: this.placeholder
+                placeholder: this.placeholder,
+                nullLink: this.nullLink
             })
         );
 

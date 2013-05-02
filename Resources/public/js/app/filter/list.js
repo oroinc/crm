@@ -247,7 +247,9 @@ Oro.Filter.List = Backbone.View.extend({
         });
 
         this.selectWidget.setViewDesign(this);
-        this.$('.filter-list span:first').replaceWith('<a id="add-filter-button" href="#">' + this.addButtonHint +'</a>');
+        this.$('.filter-list span:first').replaceWith(
+            '<a id="add-filter-button" href="javascript:void(0);">' + this.addButtonHint +'</a>'
+        );
     },
 
     /**
