@@ -36,8 +36,8 @@ abstract class UserRelationDatagridManager extends DatagridManager
                 'filter_type' => FilterInterface::TYPE_NUMBER,
                 'required'    => false,
                 'sortable'    => true,
-                'filterable'  => false,
-                'show_filter' => false,
+                'filterable'  => true,
+                'show_filter' => true,
             )
         );
         $fieldsCollection->add($fieldId);
@@ -52,8 +52,8 @@ abstract class UserRelationDatagridManager extends DatagridManager
                 'filter_type' => FilterInterface::TYPE_STRING,
                 'required'    => false,
                 'sortable'    => true,
-                'filterable'  => false,
-                'show_filter' => false,
+                'filterable'  => true,
+                'show_filter' => true,
             )
         );
         $fieldsCollection->add($fieldUsername);
@@ -68,8 +68,8 @@ abstract class UserRelationDatagridManager extends DatagridManager
                 'filter_type' => FilterInterface::TYPE_STRING,
                 'required'    => false,
                 'sortable'    => true,
-                'filterable'  => false,
-                'show_filter' => false,
+                'filterable'  => true,
+                'show_filter' => true,
             )
         );
         $fieldsCollection->add($fieldEmail);
@@ -84,8 +84,8 @@ abstract class UserRelationDatagridManager extends DatagridManager
                 'filter_type' => FilterInterface::TYPE_STRING,
                 'required'    => false,
                 'sortable'    => true,
-                'filterable'  => false,
-                'show_filter' => false,
+                'filterable'  => true,
+                'show_filter' => true,
             )
         );
         $fieldsCollection->add($fieldFirstName);
@@ -100,8 +100,8 @@ abstract class UserRelationDatagridManager extends DatagridManager
                 'filter_type' => FilterInterface::TYPE_STRING,
                 'required'    => false,
                 'sortable'    => true,
-                'filterable'  => false,
-                'show_filter' => false,
+                'filterable'  => true,
+                'show_filter' => true,
             )
         );
         $fieldsCollection->add($fieldLastName);
