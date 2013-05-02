@@ -2,6 +2,8 @@
 
 namespace Oro\Bundle\UserBundle\Form\Type;
 
+use Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleManager;
+
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -29,14 +31,13 @@ class ProfileType extends FlexibleType
     protected $security;
 
     /**
-     * @param string                   $flexibleClass flexible entity class
-     * @param string                   $valueClass    flexible value class
-     * @param AclManager               $aclManager    ACL manager
-     * @param SecurityContextInterface $security      Security context
+     * @param FlexibleManager          $flexibleManager flexible manager
+     * @param AclManager               $aclManager      ACL manager
+     * @param SecurityContextInterface $security        Security context
      */
-    public function __construct($flexibleClass, $valueClass, AclManager $aclManager, SecurityContextInterface $security)
+    public function __construct(FlexibleManager $flexibleManager, AclManager $aclManager, SecurityContextInterface $security)
     {
-        parent::__construct($flexibleClass, $valueClass);
+        parent::__construct($flexibleManager, '');
 
         $this->aclManager = $aclManager;
         $this->security   = $security;
@@ -121,7 +122,7 @@ class ProfileType extends FlexibleType
     public function addDynamicAttributesFields(FormBuilderInterface $builder)
     {
         $builder->add('attributes', 'collection', array(
-            'type'          => new FlexibleValueType($this->valueClass),
+            'type'          => new FlexibleValueType($this->flexibleManager),
             'property_path' => 'values',
             'allow_add'     => true,
             'allow_delete'  => true,

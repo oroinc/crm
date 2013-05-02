@@ -33,9 +33,16 @@ parameters:
 services:
     oro_user.manager.flexible:
         class:                        "%oro_user.manager.flexible.class%"
-        arguments:                    [%oro_user.entity.class%, %oro_flexibleentity.flexible_config%, "@doctrine.orm.entity_manager", "@event_dispatcher"]
+        arguments:                    [%oro_user.entity.class%, %oro_flexibleentity.flexible_config%, "@doctrine.orm.entity_manager", "@event_dispatcher", @oro_flexibleentity.attributetype.factory]
         tags:
             - { name: oro_flexibleentity_manager, entity: %oro_user.entity.class%}
+        calls:
+            - [ addAttributeType, ['oro_flexibleentity_text'] ]
+            - [ addAttributeType, ['oro_flexibleentity_textarea'] ]
+            - [ addAttributeType, ['oro_flexibleentity_money'] ]
+            - [ addAttributeType, ['oro_flexibleentity_simpleselect'] ]
+            - [ addAttributeType, ['oro_flexibleentity_multiselect'] ]
+            - [ addAttributeType, ['oro_flexibleentity_url'] ]
 
     oro_user.manager:
         class:                        %oro_user.manager.class%
@@ -96,7 +103,7 @@ services:
 
     oro_user.form.type.profile:
         class:                        %oro_user.type.profile.class%
-        arguments:                    [%oro_user.entity.class%, %oro_user.entity.value.class%, "@oro_user.acl_manager", "@security.context"]
+        arguments:                    [@oro_user.manager.flexible, "@oro_user.acl_manager", "@security.context"]
         tags:
             - { name: form.type, alias: oro_user_profile }
 
