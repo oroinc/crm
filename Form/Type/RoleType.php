@@ -16,26 +16,64 @@ class RoleType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('role', 'text', array(
-                'required' => true,
-            ))
-            ->add('label', 'text', array(
-                'required' => false,
-            ));
+            ->add(
+                'role',
+                'text',
+                array(
+                    'required' => true,
+                )
+            )
+            ->add(
+                'label',
+                'text',
+                array(
+                    'required' => false,
+                )
+            )
+            ->add(
+                'appendUsers',
+                'oro_entity_identifier',
+                array(
+                    'class'    => 'OroUserBundle:User',
+                    'required' => false,
+                    'mapped'   => false,
+                    'multiple' => true,
+                )
+            )
+            ->add(
+                'removeUsers',
+                'oro_entity_identifier',
+                array(
+                    'class'    => 'OroUserBundle:User',
+                    'required' => false,
+                    'mapped'   => false,
+                    'multiple' => true,
+                )
+            );
 
         $factory = $builder->getFormFactory();
 
         // disable role name edit after role has been created
-        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) use ($factory) {
-            if ($event->getData() && $event->getData()->getId()) {
-                $form = $event->getForm();
+        $builder->addEventListener(
+            FormEvents::PRE_SET_DATA,
+            function (FormEvent $event) use ($factory) {
+                if ($event->getData() && $event->getData()->getId()) {
+                    $form = $event->getForm();
 
-                $form->add($factory->createNamed('role', 'text', null, array_merge(
-                    $form->get('role')->getConfig()->getOptions(),
-                    array('disabled' => true)
-                )));
+                    $form->add(
+                        $factory->createNamed(
+                            'role',
+                            'text',
+                            null,
+                            array_merge(
+                                $form->get('role')->getConfig()->getOptions(),
+                                array('disabled' => true)
+                            )
+                        )
+                    );
+                }
             }
-        });
+        );
     }
 
     /**
@@ -43,10 +81,12 @@ class RoleType extends AbstractType
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $resolver->setDefaults(array(
-            'data_class' => 'Oro\Bundle\UserBundle\Entity\Role',
-            'intention'  => 'role',
-        ));
+        $resolver->setDefaults(
+            array(
+                'data_class' => 'Oro\Bundle\UserBundle\Entity\Role',
+                'intention'  => 'role',
+            )
+        );
     }
 
     /**
