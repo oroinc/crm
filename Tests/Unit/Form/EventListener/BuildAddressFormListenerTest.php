@@ -73,7 +73,7 @@ class BuildAddressFormListenerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(null, $this->listener->preSetData($eventMock));
     }
 
-    public function testPreSetData()
+    public function testPreSetDataHasState()
     {
         $eventMock = $this->getMockBuilder('Symfony\Component\Form\FormEvent')
             ->disableOriginalConstructor()
@@ -104,6 +104,10 @@ class BuildAddressFormListenerTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $formMock->expects($this->once())
+            ->method('has')
+            ->with($this->equalTo('state'))
+            ->will($this->returnValue(true));
+        $formMock->expects($this->once())
             ->method('get')
             ->with($this->equalTo('state'))
             ->will($this->returnValue($fieldMock));
@@ -129,7 +133,55 @@ class BuildAddressFormListenerTest extends \PHPUnit_Framework_TestCase
             ->method('getForm')
             ->will($this->returnValue($formMock));
 
-        $this->assertEquals(null, $this->listener->preSetData($eventMock));
+        $this->assertNull($this->listener->preSetData($eventMock));
+    }
+
+    public function testPreSetDataNoState()
+    {
+        $eventMock = $this->getMockBuilder('Symfony\Component\Form\FormEvent')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $countryMock = $this->getMock('Oro\Bundle\AddressBundle\Entity\Country');
+        $countryMock->expects($this->once())
+            ->method('hasRegions')
+            ->will($this->returnValue(true));
+
+        $addressMock = $this->getMock('Oro\Bundle\AddressBundle\Entity\Address');
+        $addressMock->expects($this->once())
+            ->method('getCountry')
+            ->will($this->returnValue($countryMock));
+        $addressMock->expects($this->once())
+            ->method('getState');
+
+        $formMock = $this->getMockBuilder('Symfony\Component\Form\Tests\FormInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $formMock->expects($this->once())
+            ->method('has')
+            ->with($this->equalTo('state'))
+            ->will($this->returnValue(false));
+        $formMock->expects($this->never())
+            ->method('get');
+        $formMock->expects($this->once())
+            ->method('add');
+
+        $newFieldMock = $this->getMockBuilder('Symfony\Component\Form\Tests\FormInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->formBuilder->expects($this->once())
+            ->method('createNamed')
+            ->will($this->returnValue($newFieldMock));
+
+        $eventMock->expects($this->once())
+            ->method('getData')
+            ->will($this->returnValue($addressMock));
+        $eventMock->expects($this->once())
+            ->method('getForm')
+            ->will($this->returnValue($formMock));
+
+        $this->assertNull($this->listener->preSetData($eventMock));
     }
 
     public function testPreBindData()
