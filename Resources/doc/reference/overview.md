@@ -145,6 +145,5 @@ Dependencies
 * Moment.js - https://github.com/timrwood/moment/;
 * JQuery UI Datepicker - https://github.com/jquery/jquery-ui;
 * JQuery UI MultiSelect - https://github.com/ehynds/jquery-ui-multiselect-widget;
-* JQuery Timepicker - https://github.com/trentrichardson/jQuery-Timepicker-Addon;
 * JQuery Numeric - https://github.com/byllc/jquery-numeric;
 * JQuery UI - https://github.com/jquery/jquery-ui;
