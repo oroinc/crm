@@ -61,7 +61,7 @@ class DatagridManagerTest extends \PHPUnit_Framework_TestCase
         $this->testFields = $this->createFieldDescriptions($this->testFields);
 
         $this->testProperties = array(
-            $this->getMock('Oro\Bundle\GridBundle\Property\PropertyInterface')
+            $this->getMockForAbstractClass('Oro\Bundle\GridBundle\Property\PropertyInterface')
         );
         $this->model = new StubDatagridManager($this->testFields, $this->testProperties, $this->testRowActions);
     }
@@ -88,7 +88,7 @@ class DatagridManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testSetDatagridBuilder()
     {
-        $datagridBuilderMock = $this->getMock('Oro\Bundle\GridBundle\Builder\DatagridBuilderInterface');
+        $datagridBuilderMock = $this->getMockForAbstractClass('Oro\Bundle\GridBundle\Builder\DatagridBuilderInterface');
 
         $this->assertAttributeEmpty('datagridBuilder', $this->model);
         $this->model->setDatagridBuilder($datagridBuilderMock);
@@ -97,7 +97,7 @@ class DatagridManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testSetListBuilder()
     {
-        $listBuilderMock = $this->getMock('Oro\Bundle\GridBundle\Builder\ListBuilderInterface');
+        $listBuilderMock = $this->getMockForAbstractClass('Oro\Bundle\GridBundle\Builder\ListBuilderInterface');
 
         $this->assertAttributeEmpty('listBuilder', $this->model);
         $this->model->setListBuilder($listBuilderMock);
@@ -106,7 +106,7 @@ class DatagridManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testSetQueryFactory()
     {
-        $queryFactoryMock = $this->getMock('Oro\Bundle\GridBundle\Datagrid\QueryFactoryInterface');
+        $queryFactoryMock = $this->getMockForAbstractClass('Oro\Bundle\GridBundle\Datagrid\QueryFactoryInterface');
 
         $this->assertAttributeEmpty('queryFactory', $this->model);
         $this->model->setQueryFactory($queryFactoryMock);
@@ -115,7 +115,7 @@ class DatagridManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testSetTranslator()
     {
-        $translatorMock = $this->getMock('Symfony\Component\Translation\TranslatorInterface');
+        $translatorMock = $this->getMockForAbstractClass('Symfony\Component\Translation\TranslatorInterface');
 
         $this->assertAttributeEmpty('translator', $this->model);
         $this->model->setTranslator($translatorMock);
@@ -124,7 +124,7 @@ class DatagridManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testSetValidator()
     {
-        $validatorMock = $this->getMock('Symfony\Component\Validator\ValidatorInterface');
+        $validatorMock = $this->getMockForAbstractClass('Symfony\Component\Validator\ValidatorInterface');
 
         $this->assertAttributeEmpty('validator', $this->model);
         $this->model->setValidator($validatorMock);
@@ -143,7 +143,7 @@ class DatagridManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testSetRouteGenerator()
     {
-        $routeGeneratorMock = $this->getMock('Oro\Bundle\GridBundle\Route\RouteGeneratorInterface');
+        $routeGeneratorMock = $this->getMockForAbstractClass('Oro\Bundle\GridBundle\Route\RouteGeneratorInterface');
 
         $this->assertAttributeEmpty('routeGenerator', $this->model);
         $this->model->setRouteGenerator($routeGeneratorMock);
@@ -152,7 +152,7 @@ class DatagridManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testSetParameters()
     {
-        $parametersMock = $this->getMock('Oro\Bundle\GridBundle\Datagrid\ParametersInterface');
+        $parametersMock = $this->getMockForAbstractClass('Oro\Bundle\GridBundle\Datagrid\ParametersInterface');
 
         $this->assertAttributeEmpty('parameters', $this->model);
         $this->model->setParameters($parametersMock);
@@ -175,9 +175,9 @@ class DatagridManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testGetDatagrid()
     {
-        $datagridMock       = $this->getMock('Oro\Bundle\GridBundle\Datagrid\DatagridInterface');
-        $queryMock          = $this->getMock('Oro\Bundle\GridBundle\Datagrid\ProxyQueryInterface');
-        $routeGeneratorMock = $this->getMock('Oro\Bundle\GridBundle\Route\RouteGeneratorInterface');
+        $datagridMock       = $this->getMockForAbstractClass('Oro\Bundle\GridBundle\Datagrid\DatagridInterface');
+        $queryMock          = $this->getMockForAbstractClass('Oro\Bundle\GridBundle\Datagrid\ProxyQueryInterface');
+        $routeGeneratorMock = $this->getMockForAbstractClass('Oro\Bundle\GridBundle\Route\RouteGeneratorInterface');
         $parameters         = $this->createTestParameters();
 
         $listCollection = new FieldDescriptionCollection();
@@ -291,7 +291,7 @@ class DatagridManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testGetRouteGenerator()
     {
-        $routeGenerator = $this->getMock('Oro\Bundle\GridBundle\Route\RouteGeneratorInterface');
+        $routeGenerator = $this->getMockForAbstractClass('Oro\Bundle\GridBundle\Route\RouteGeneratorInterface');
         $this->model->setRouteGenerator($routeGenerator);
         $this->assertEquals($routeGenerator, $this->model->getRouteGenerator());
     }

@@ -17,7 +17,7 @@ class AbstractFilterTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $translator = $this->getMock('Symfony\Component\Translation\TranslatorInterface');
+        $translator = $this->getMockForAbstractClass('Symfony\Component\Translation\TranslatorInterface');
 
         $this->model = $this->getMockBuilder('Oro\Bundle\GridBundle\Filter\ORM\AbstractFilter')
             ->setConstructorArgs(array($translator))

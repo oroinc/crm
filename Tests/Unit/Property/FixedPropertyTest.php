@@ -18,7 +18,7 @@ class FixedPropertyTest extends \PHPUnit_Framework_TestCase
         $property = new FixedProperty('name');
         $value = 'value';
 
-        $record = $this->getMock('Oro\Bundle\GridBundle\Datagrid\ResultRecordInterface');
+        $record = $this->getMockForAbstractClass('Oro\Bundle\GridBundle\Datagrid\ResultRecordInterface');
         $record->expects($this->once())->method('getValue')->with('name')->will($this->returnValue($value));
         $this->assertEquals($value, $property->getValue($record));
     }
@@ -28,7 +28,7 @@ class FixedPropertyTest extends \PHPUnit_Framework_TestCase
         $property = new FixedProperty('name', 'key');
         $value = 'value';
 
-        $record = $this->getMock('Oro\Bundle\GridBundle\Datagrid\ResultRecordInterface');
+        $record = $this->getMockForAbstractClass('Oro\Bundle\GridBundle\Datagrid\ResultRecordInterface');
         $record->expects($this->once())->method('getValue')->with('key')->will($this->returnValue($value));
         $this->assertEquals($value, $property->getValue($record));
     }

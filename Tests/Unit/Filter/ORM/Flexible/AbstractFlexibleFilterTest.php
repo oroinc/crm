@@ -155,7 +155,7 @@ class AbstractFlexibleFilterTest extends \PHPUnit_Framework_TestCase
 
         list($parentAssociationMappings, $entityAlias) = $expectEntityJoin;
 
-        $proxyQuery = $this->getMock('Oro\Bundle\GridBundle\Datagrid\ProxyQueryInterface');
+        $proxyQuery = $this->getMockForAbstractClass('Oro\Bundle\GridBundle\Datagrid\ProxyQueryInterface');
         $proxyQuery->expects($this->once())
             ->method('entityJoin')->with($parentAssociationMappings)->will($this->returnValue($entityAlias));
 

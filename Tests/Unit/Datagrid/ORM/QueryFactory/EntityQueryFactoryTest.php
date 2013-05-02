@@ -28,7 +28,7 @@ class EntityQueryFactoryTest extends \PHPUnit_Framework_TestCase
     protected function initializeEntityQueryFactory($arguments = array())
     {
         $defaultArguments = array(
-            'registry'  => $this->getMock('Symfony\Bridge\Doctrine\RegistryInterface'),
+            'registry'  => $this->getMockForAbstractClass('Symfony\Bridge\Doctrine\RegistryInterface'),
             'className' => null,
             'alias'     => null,
         );

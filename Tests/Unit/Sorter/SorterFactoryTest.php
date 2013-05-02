@@ -32,8 +32,8 @@ class SorterFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testCreateNoField()
     {
-        $containerMock = $this->getMock('Symfony\Component\DependencyInjection\ContainerInterface');
-        $fieldDescriptionMock = $this->getMockForAbstractClass('Oro\Bundle\GridBundle\Field\FieldDescriptionInterface', array(), '', false);
+        $containerMock = $this->getMockForAbstractClass('Symfony\Component\DependencyInjection\ContainerInterface');
+        $fieldDescriptionMock = $this->getMockForAbstractClass('Oro\Bundle\GridBundle\Field\FieldDescriptionInterface');
 
         $this->model = new SorterFactory($containerMock);
 

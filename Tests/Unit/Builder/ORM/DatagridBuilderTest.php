@@ -52,10 +52,10 @@ class DatagridBuilderTest extends \PHPUnit_Framework_TestCase
     protected function initializeDatagridBuilder($arguments = array())
     {
         $defaultArguments = array(
-            'formFactory'   => $this->getMock('Symfony\Component\Form\FormFactoryInterface'),
-            'filterFactory' => $this->getMock('Oro\Bundle\GridBundle\Filter\FilterFactoryInterface'),
-            'sorterFactory' => $this->getMock('Oro\Bundle\GridBundle\Sorter\SorterFactoryInterface'),
-            'actionFactory' => $this->getMock('Oro\Bundle\GridBundle\Action\ActionFactoryInterface'),
+            'formFactory'   => $this->getMockForAbstractClass('Symfony\Component\Form\FormFactoryInterface'),
+            'filterFactory' => $this->getMockForAbstractClass('Oro\Bundle\GridBundle\Filter\FilterFactoryInterface'),
+            'sorterFactory' => $this->getMockForAbstractClass('Oro\Bundle\GridBundle\Sorter\SorterFactoryInterface'),
+            'actionFactory' => $this->getMockForAbstractClass('Oro\Bundle\GridBundle\Action\ActionFactoryInterface'),
             'className'     => null,
         );
 
@@ -299,10 +299,10 @@ class DatagridBuilderTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($formBuilderMock));
 
         // datagrid input parameters
-        $proxyQueryMock             = $this->getMock('Oro\Bundle\GridBundle\Datagrid\ProxyQueryInterface');
+        $proxyQueryMock= $this->getMockForAbstractClass('Oro\Bundle\GridBundle\Datagrid\ProxyQueryInterface');
         $fieldDescriptionCollection = new FieldDescriptionCollection();
-        $routeGeneratorMock         = $this->getMock('Oro\Bundle\GridBundle\Route\RouteGeneratorInterface');
-        $parametersMock             = $this->getMock('Oro\Bundle\GridBundle\Datagrid\ParametersInterface');
+        $routeGeneratorMock = $this->getMockForAbstractClass('Oro\Bundle\GridBundle\Route\RouteGeneratorInterface');
+        $parametersMock = $this->getMockForAbstractClass('Oro\Bundle\GridBundle\Datagrid\ParametersInterface');
 
         // test datagrid
         $this->initializeDatagridBuilder(

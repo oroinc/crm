@@ -109,13 +109,13 @@ class FieldDescriptionTest extends \PHPUnit_Framework_TestCase
     public function testGetDefaultProperty()
     {
         $property = $this->model->getProperty();
-        $this->assertInstanceOf('Oro\\Bundle\\GridBundle\\Property\\FieldProperty', $property);
+        $this->assertInstanceOf('Oro\Bundle\GridBundle\Property\FieldProperty', $property);
         $this->assertAttributeSame($this->model, 'field', $property);
     }
 
     public function testSetProperty()
     {
-        $property = $this->getMock('Oro\\Bundle\\GridBundle\\Property\\PropertyInterface');
+        $property = $this->getMockForAbstractClass('Oro\Bundle\GridBundle\Property\PropertyInterface');
         $this->model->setProperty($property);
         $this->assertSame($property, $this->model->getProperty());
     }

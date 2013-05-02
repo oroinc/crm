@@ -117,7 +117,7 @@ abstract class FilterTestCase extends \PHPUnit_Framework_TestCase
      */
     protected function getTranslatorMock()
     {
-        $translator = $this->getMock('Symfony\Component\Translation\TranslatorInterface');
+        $translator = $this->getMockForAbstractClass('Symfony\Component\Translation\TranslatorInterface');
         $translator->expects($this->any())
             ->method('trans')
             ->will($this->returnArgument(0));

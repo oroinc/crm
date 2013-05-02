@@ -35,7 +35,7 @@ class FieldDescriptionCollectionTest extends \PHPUnit_Framework_TestCase
 
     private function createProperty($name)
     {
-        $result = $this->getMock('Oro\\Bundle\\GridBundle\\Property\\PropertyInterface');
+        $result = $this->getMockForAbstractClass('Oro\\Bundle\\GridBundle\\Property\\PropertyInterface');
         $result->expects($this->any())->method('getName')->will($this->returnValue($name));
         return $result;
     }
