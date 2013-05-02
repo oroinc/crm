@@ -1,6 +1,6 @@
 {% extends 'OroAccountBundle::layout.html.twig' %}
 {% import 'OroUserBundle::macros.html.twig' as macros %}
-{% form_theme form with 'OroUIBundle:Form:fields.html.twig' %}
+{% form_theme form with 'OroAddressBundle:Include:fields.html.twig' %}
 {% oro_title_set({params : {"%account.name%": form.vars.value.name|default('N/A')} }) %}
 
 {% block head_script %}
@@ -63,6 +63,15 @@
     </script>
 {% endblock %}
 
+{% block form_buttons %}
+    <div class="pull-left customer-info-top-actions">
+        <div class="btn-group">
+            <a href="{{ app.request.get('back') ? app.request.get('back') : path('oro_account_index') }}" class="btn">{{ 'Cancel'|trans }}</a>
+            <button type="submit" class="btn btn-primary"><i class="icon-ok icon-white hide-text">Save </i> {{ 'Save'|trans }}</button>
+        </div>
+    </div>
+{% endblock %}
+
 {% block content %}
     <div class="container-fluid">
     <form action="{{ form.vars.value.id ? path('oro_account_edit', { id: form.vars.value.id, back: app.request.get('back') }) : path('oro_account_create', { back: app.request.get('back') }) }}" {{ form_enctype(form) }} method="post">
@@ -70,21 +79,27 @@
             <div class="row">
                 {% if form.vars.value.id %}
                     <div class="pull-right">
-                        <div class="btn-group icons-holder">
-                            <a href="{{ app.request.get('back') ? app.request.get('back') : path('oro_account_index') }}" class="btn"><i class="icon-chevron-left hide-text">{{ 'Back'|trans }}</i></a>
-                            {% if resource_granted('oro_account_account_show') %}
-                                <a href="{{ path('oro_account_show', { id: form.vars.value.id, back: app.request.uri }) }}" class="btn"><i class="icon-eye-open hide-text">{{ 'View'|trans }}</i></a>
-                            {% endif %}
-                            {% if resource_granted('oro_account_account_remove') %}
-                                <a href="{{ path('oro_account_remove', { id: form.vars.value.id }) }}" id="remove-btn" class="btn"><i class="icon-trash hide-text">{{ 'Remove'|trans }}</i></a>
-                            {% endif %}
+                        <div class="pull-right">
+                            <div class="pull-left btn-group icons-holder">
+                                {% if resource_granted('oro_account_account_remove') %}
+                                    <a href="javascript: void(0);" class="btn icons-holder-text" id="btn-remove"
+                                       data-url="{{ path('oro_api_delete_account', {'id': form.vars.value.id}) }}"
+                                       data-redirect="{{ path('oro_account_index') }}"
+                                       data-message="{{ 'Are you sure you want to delete this account?'|trans }}"
+                                       title="{{ 'Delete account'|trans }}"><i class="icon-trash hide-text">{{ 'Remove'|trans }}</i>Delete</a>
+                                {% endif %}
+                            </div>
+                            {{ block('form_buttons') }}
                         </div>
                     </div>
                     <div class="pull-left">
                         <div class="customer-info well-small">
-                            <div class="customer-content">
-                                <div class="sub-title">{{ 'Account'|trans }}</div>
-                                <h1 class="usser-name">{{ form.vars.value.name|default('N/A') }}</h1>
+                            <div class="customer-content pull-left">
+                                <div class="clearfix-oro">
+                                    <div class="sub-title">{{ 'Account'|trans }}</div>
+                                    <span class="separator">/</span>
+                                    <h1 class="usser-name">{{ form.vars.value.name|default('N/A') }}</h1>
+                                </div>
                                 <ul class="inline">
                                     <li>{{ 'Created'|trans }}: {{ form.vars.value.createdAt ? macros.time(form.vars.value.createdAt) : 'N/A' }}</li>
                                     <li>{{ 'Updated'|trans }}: {{ form.vars.value.updatedAt ? macros.time(form.vars.value.updatedAt) : 'N/A' }}</li>
@@ -93,10 +108,15 @@
                         </div>
                     </div>
                 {% else %}
+                    <div class="pull-right">
+                        <div class="pull-right">
+                            {{ block('form_buttons') }}
+                        </div>
+                    </div>
                     <div class="pull-left">
                         <div class="customer-info well-small">
                             <div class="customer-content">
-                                <h1 class="usser-name">{{ form.vars.value.id ? 'Edit Account' : 'New Account' }}</h1>
+                                <h1 class="usser-name">{{ 'New Account'|trans }}</h1>
                             </div>
                         </div>
                     </div>
@@ -116,19 +136,16 @@
                     </div>
                 </div>
             </div>
+
             <div class="clearfix-oro">
-                <div class="customer-info-actions container-fluid well-small">
-                    <div class="pull-right">
-                        <a href="{{ app.request.get('back') ? app.request.get('back') : path('oro_account_index') }}" class="btn">{{ 'Cancel'|trans }}</a>
-                        <button type="submit" class="btn btn-primary">{{ 'Save'|trans }}</button>
-                    </div>
-                    {% if form_errors(form) %}
+                {% if form_errors(form) %}
+                    <div class="customer-info-actions container-fluid well-small">
                         <div class="pull-left alert alert-error">
                             <button class="close" type="button" data-dismiss="alert">×</button>
                             {{ form_errors(form) }}
                         </div>
-                    {% endif %}
-                </div>
+                    </div>
+                {% endif %}
                 <div data-spy="scroll" data-target="#navbarExample" data-offset="50" class="scrollspy container-fluid">
                     <h4 id="scroll-main" class="scrollspy-title">{{ 'Overview'|trans }}</h4>
                     <div class="row-fluid">

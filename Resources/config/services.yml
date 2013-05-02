@@ -4,6 +4,7 @@ parameters:
     oro_account.account.entity.class: Oro\Bundle\AccountBundle\Entity\Account
     oro_account.account.entity.value.class: Oro\Bundle\AccountBundle\Entity\Value\AccountValue
     oro_account.type.account.class: Oro\Bundle\AccountBundle\Form\Type\AccountType
+    oro_account.type.account_value.class: Oro\Bundle\AccountBundle\Form\Type\AccountValueType
     oro_account.handler.account.class: Oro\Bundle\AccountBundle\Form\Handler\AccountHandler
 
 services:
@@ -14,6 +15,14 @@ services:
             - %oro_flexibleentity.flexible_config%
             - @doctrine.orm.entity_manager
             - @event_dispatcher
+            - @oro_flexibleentity.attributetype.factory
+        calls:
+            - [ addAttributeType, ['oro_flexibleentity_text'] ]
+            - [ addAttributeType, ['oro_flexibleentity_integer'] ]
+            - [ addAttributeType, ['oro_flexibleentity_textarea'] ]
+            - [ addAttributeType, ['oro_flexibleentity_money'] ]
+            - [ addAttributeType, ['oro_flexibleentity_url'] ]
+            - [ addAttributeType, ['oro_address'] ]
         tags:
             - { name: oro_flexibleentity_manager, entity: %oro_account.account.entity.class%}
 
@@ -33,10 +42,17 @@ services:
     oro_account.form.type.account:
         class: %oro_account.type.account.class%
         arguments:
-            - %oro_account.account.entity.class%
-            - %oro_account.account.entity.value.class%
+            - @oro_account.account.manager.flexible
+            - "oro_account_value"
         tags:
-             - { name: form.type, alias: oro_account }
+            - { name: form.type, alias: oro_account }
+
+    oro_account.form.type.account_value:
+        class: %oro_account.type.account_value.class%
+        arguments:
+            - @oro_account.account.manager.flexible
+        tags:
+            - { name: form.type, alias: oro_account_value }
 
     oro_account.form.handler.account:
         class: %oro_account.handler.account.class%

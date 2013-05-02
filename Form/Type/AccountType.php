@@ -6,7 +6,6 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 use Oro\Bundle\FlexibleEntityBundle\Form\Type\FlexibleType;
-use Oro\Bundle\FlexibleEntityBundle\Form\Type\FlexibleValueType;
 
 class AccountType extends FlexibleType
 {
@@ -40,7 +39,7 @@ class AccountType extends FlexibleType
             'attributes',
             'collection',
             array(
-                'type' => new FlexibleValueType($this->valueClass),
+                'type' => $this->valueFormAlias,
                 'property_path' => 'values',
                 'allow_add' => true,
                 'allow_delete' => true,

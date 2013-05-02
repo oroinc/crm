@@ -10,15 +10,6 @@ use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttribute;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
 
-use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\MetricType;
-use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\OptionSimpleSelectType;
-use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\MoneyType;
-use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\IntegerType;
-use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\TextType;
-use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\UrlType;
-use Oro\Bundle\FlexibleEntityBundle\Model\AttributeType\TextAreaType;
-use Oro\Bundle\AddressBundle\Model\AttributeType\AddressType;
-
 use Oro\Bundle\AccountBundle\Entity\Manager\AccountManager;
 
 class LoadAccountAttrData extends AbstractFixture implements ContainerAwareInterface
@@ -56,32 +47,32 @@ class LoadAccountAttrData extends AbstractFixture implements ContainerAwareInter
             array(
                 array(
                     'code' => 'website',
-                    'type' => new UrlType()
+                    'type' => 'oro_flexibleentity_url'
                 ),
                 'office_phone',
                 'office_fax',
                 array(
                     'code' => 'description',
-                    'type' => new TextAreaType()
+                    'type' => 'oro_flexibleentity_textarea'
                 ),
                 array(
                     'code' => 'annual_revenue',
-                    'type' => new MoneyType()
+                    'type' => 'oro_flexibleentity_money'
                 ),
                 array(
                     'code' => 'employees',
-                    'type' => new IntegerType()
+                    'type' => 'oro_flexibleentity_integer'
                 ),
                 'ownership',
                 'ticker_symbol',
                 'rating',
                 array(
                     'code' => 'shipping_address',
-                    'type' => new AddressType()
+                    'type' => 'oro_address'
                 ),
                 array(
                     'code' => 'billing_address',
-                    'type' => new AddressType()
+                    'type' => 'oro_address'
                 ),
             )
         );
@@ -188,20 +179,10 @@ class LoadAccountAttrData extends AbstractFixture implements ContainerAwareInter
      * Get type based on configuration
      *
      * @param array $data
-     * @return AbstractAttributeType
+     * @return string
      */
     protected function getType($data)
     {
-        $type = null;
-        if (is_array($data) && array_key_exists('type', $data)) {
-            $type = $data['type'];
-        }
-        if (is_string($type)) {
-            $type = new $type;
-        }
-        if (!$type) {
-            $type = new TextType();
-        }
-        return $type;
+        return is_array($data) && array_key_exists('type', $data) ? $data['type'] : 'oro_flexibleentity_text';
     }
 }

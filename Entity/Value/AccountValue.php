@@ -56,7 +56,7 @@ class AccountValue extends AbstractEntityFlexibleValue
     protected $address;
 
     /**
-     * Get media
+     * Get address
      *
      * @return Address
      */
@@ -66,15 +66,15 @@ class AccountValue extends AbstractEntityFlexibleValue
     }
 
     /**
-     * Set media
+     * Set address
      *
-     * @param Address $media
+     * @param Address $address
      *
      * @return AccountValue
      */
-    public function setAddress($media)
+    public function setAddress($address)
     {
-        $this->address = $media;
+        $this->address = $address;
 
         return $this;
     }

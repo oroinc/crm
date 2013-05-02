@@ -1,24 +1,31 @@
 <script type="text/javascript">
     $(function() {
-        $('#remove-btn').click(function(e) {
-            e.preventDefault();
-            var el = $(e.target);
+        $('#btn-remove').on('click', function(e) {
+            var el = $(this);
+            var message = el.data('message');
             var doAction = function() {
-                location.href = el.attr('href');
-            };
-            var message = "{{ 'Are you sure you want to delete this item?'|trans }}";
-            if (typeof Backbone.BootstrapModal != 'undefined') {
-                var confirmModal = new Backbone.BootstrapModal({
-                    title: "{{ 'Delete Confirmation'|trans }}",
-                    content: message
+                $.ajax({
+                    url: el.data('url'),
+                    type: 'DELETE',
+                    success: function (data) {
+                        window.location.href = el.data('redirect');
+                    }
                 });
-                confirmModal.on('ok', doAction);
-                confirmModal.open();
-            } else {
-                if (window.confirm(message)) {
-                    doAction();
-                }
+            };
+
+            if (!_.isUndefined(Oro.BootstrapModal)) {
+                var confirm = new Oro.BootstrapModal({
+                    title: 'Delete Confirmation',
+                    content: message,
+                    okText: 'Yes, Delete'
+                });
+                confirm.on('ok', doAction);
+                confirm.open();
+            } else if (window.confirm(message)) {
+                doAction();
             }
+
+            return false;
         });
     });
 </script>
