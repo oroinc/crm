@@ -1,4 +1,4 @@
-JavaScript Tools & Libraries
+JavaScript Tools and Libraries
 ----------------------------
 
 This article contains description of all JavaScript tools and libraries in OroUIBundle.
