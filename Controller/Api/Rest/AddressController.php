@@ -92,16 +92,6 @@ class AddressController extends FOSRestController implements ClassResourceInterf
      */
     public function putAction($addressId)
     {
-        $postArray = $this->getRequest()->request->all();
-        if (empty($postArray) || !array_key_exists('address', $postArray)) {
-            return $this->handleView(
-                $this->view(
-                    array('message' => 'Wrong POST body'),
-                    Codes::HTTP_BAD_REQUEST
-                )
-            );
-        }
-
         $entity = $this->getManager()->getRepository()->findOneById((int)$addressId);
         if (!$entity) {
             return $this->handleView($this->view(array(), Codes::HTTP_NOT_FOUND));
@@ -131,7 +121,7 @@ class AddressController extends FOSRestController implements ClassResourceInterf
         $this->fixFlexRequest($entity);
 
         $view = $this->get('oro_address.form.handler.address.api')->process($entity)
-            ? RouteRedirectView::create('oro_api_get_address', array('id' => $entity->getId()), Codes::HTTP_CREATED)
+            ? $this->view(array('id' => $entity->getId()), Codes::HTTP_CREATED)
             : $this->view($this->get('oro_address.form.address.api'), Codes::HTTP_BAD_REQUEST);
 
         return $this->handleView($view);

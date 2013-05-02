@@ -17,16 +17,17 @@ class AddressTypeTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $buildAddressFormListener = $this->getMockBuilder(
-            'Oro\Bundle\AddressBundle\Form\EventListener\BuildAddressFormListener'
-        )
+        $buildAddressFormListener = $this->getMockBuilder('Oro\Bundle\AddressBundle\Form\EventListener\BuildAddressFormListener')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $flexibleManager = $this->getMockBuilder('Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleManager')
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->type = new AddressType(
-            $buildAddressFormListener,
-            'Oro\Bundle\AddressBundle\Entity\Address',
-            'Oro\Bundle\AddressBundle\Entity\Value\AddressValue'
+            $flexibleManager,
+            'oro_address_value',
+            $buildAddressFormListener
         );
     }
 

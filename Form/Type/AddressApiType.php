@@ -4,7 +4,6 @@ namespace Oro\Bundle\AddressBundle\Form\Type;
 
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Oro\Bundle\FlexibleEntityBundle\Form\Type\FlexibleValueType;
 
 use Oro\Bundle\UserBundle\Form\EventListener\PatchSubscriber;
 
@@ -30,7 +29,7 @@ class AddressApiType extends AddressType
             'attributes',
             'collection',
             array(
-                'type'          => new FlexibleValueType($this->valueClass),
+                'type'          => $this->valueFormAlias,
                 'property_path' => 'values',
                 'allow_add'     => true,
                 'allow_delete'  => true,
