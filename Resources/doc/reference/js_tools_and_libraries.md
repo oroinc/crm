@@ -3,7 +3,7 @@ JavaScript Tools & Libraries
 
 This article contains description of all JavaScript tools and libraries in OroUIBundle.
 
-### Table of Contents**
+### Table of Contents
 
 * [Oro](#oro)
 * [Oro.Registry](#ororegistry)
