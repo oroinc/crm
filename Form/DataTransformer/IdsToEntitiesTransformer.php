@@ -139,7 +139,7 @@ class IdsToEntitiesTransformer implements DataTransformerInterface
                 throw new UnexpectedTypeException($qb, 'Doctrine\ORM\Query\QueryBuilder');
             }
         } else {
-            $qb = $this->em->getRepository($this->className)->createQueryBuilder('e');
+            $qb = $repository->createQueryBuilder('e');
             $qb->where(sprintf('e.%s IN (:ids)', $this->propertyPath))
                 ->setParameter('ids', $ids);
         }

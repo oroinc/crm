@@ -76,12 +76,19 @@ class EntityIdentifierType extends AbstractType
             if (null !== $em) {
                 if ($em instanceof EntityManager) {
                     return $em;
+                } elseif (is_string($em)) {
+                    $em = $registry->getManager($em);
                 } else {
-                    return $registry->getManager($em);
+                    throw new FormException(
+                        sprintf(
+                            'Option "em" should be a string or entity manager object, %s given',
+                            is_object($em) ? get_class($em) : gettype($em)
+                        )
+                    );
                 }
+            } else {
+                $em = $registry->getManagerForClass($options['class']);
             }
-
-            $em = $registry->getManagerForClass($options['class']);
 
             if (null === $em) {
                 throw new FormException(
@@ -95,9 +102,23 @@ class EntityIdentifierType extends AbstractType
             return $em;
         };
 
+        $queryBuilderNormalizer = function (Options $options, $queryBuilder) {
+            if (null !== $queryBuilder && !is_callable($queryBuilder)) {
+                throw new FormException(
+                    sprintf(
+                        'Option "queryBuilder" should be a callable, %s given',
+                        is_object($queryBuilder) ? get_class($queryBuilder) : gettype($queryBuilder)
+                    )
+                );
+            }
+
+            return $queryBuilder;
+        };
+
         $resolver->setNormalizers(
             array(
                 'em' => $emNormalizer,
+                'queryBuilder' => $queryBuilderNormalizer,
             )
         );
     }
