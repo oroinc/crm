@@ -34,29 +34,17 @@ class FieldPropertyTest extends \PHPUnit_Framework_TestCase
         return array(
             'null value' => array(
                 null,
-                $this->createRecord(
-                    array(
-                        'field' => null,
-                    )
-                ),
+                $this->createRecord(array('field' => null)),
                 $this->createFieldDescription('field')
             ),
             'default field type' => array(
                 'value',
-                $this->createRecord(
-                    array(
-                        'field' => 'value',
-                    )
-                ),
+                $this->createRecord(array('field' => 'value')),
                 $this->createFieldDescription('field')
             ),
             'text field type' => array(
                 'text',
-                $this->createRecord(
-                    array(
-                        'textFieldName' => 'text',
-                    )
-                ),
+                $this->createRecord(array('textFieldName' => 'text')),
                 $this->createFieldDescription(
                     'fieldText',
                     array('type' => FieldDescription::TYPE_TEXT, 'field_name' => 'textFieldName')
@@ -64,11 +52,7 @@ class FieldPropertyTest extends \PHPUnit_Framework_TestCase
             ),
             'decimal field type' => array(
                 100.0,
-                $this->createRecord(
-                    array(
-                        'decimalFieldName' => '100.0',
-                    )
-                ),
+                $this->createRecord(array('decimalFieldName' => '100.0')),
                 $this->createFieldDescription(
                     'fieldDecimal',
                     array('type' => FieldDescription::TYPE_DECIMAL, 'field_name' => 'decimalFieldName')
@@ -76,11 +60,7 @@ class FieldPropertyTest extends \PHPUnit_Framework_TestCase
             ),
             'integer field type' => array(
                 100,
-                $this->createRecord(
-                    array(
-                        'integerFieldName' => 100.0,
-                    )
-                ),
+                $this->createRecord(array('integerFieldName' => 100.0)),
                 $this->createFieldDescription(
                     'fieldInteger',
                     array('type' => FieldDescription::TYPE_INTEGER, 'field_name' => 'integerFieldName')
@@ -88,11 +68,7 @@ class FieldPropertyTest extends \PHPUnit_Framework_TestCase
             ),
             'date field type' => array(
                 '2013-01-01T13:00:00+0200',
-                $this->createRecord(
-                    array(
-                        'dateFieldName' => new \DateTime('2013-01-01 13:00:00+0200'),
-                    )
-                ),
+                $this->createRecord(array('dateFieldName' => new \DateTime('2013-01-01 13:00:00+0200'))),
                 $this->createFieldDescription(
                     'dateField',
                     array('type' => FieldDescription::TYPE_DATE, 'field_name' => 'dateFieldName')
@@ -100,11 +76,7 @@ class FieldPropertyTest extends \PHPUnit_Framework_TestCase
             ),
             'datetime field type' => array(
                 '2013-01-01T15:00:00+0200',
-                $this->createRecord(
-                    array(
-                        'datetimeFieldName' => new \DateTime('2013-01-01 15:00:00+0200'),
-                    )
-                ),
+                $this->createRecord(array('datetimeFieldName' => new \DateTime('2013-01-01 15:00:00+0200'))),
                 $this->createFieldDescription(
                     'datetimeField',
                     array('type' => FieldDescription::TYPE_DATETIME, 'field_name' => 'datetimeFieldName')
@@ -112,11 +84,7 @@ class FieldPropertyTest extends \PHPUnit_Framework_TestCase
             ),
             'not datetime value in field type' => array(
                 '2013-01-01T17:00:00+0200',
-                $this->createRecord(
-                    array(
-                        'datetimeFieldName' => '2013-01-01T17:00:00+0200',
-                    )
-                ),
+                $this->createRecord(array('datetimeFieldName' => '2013-01-01T17:00:00+0200')),
                 $this->createFieldDescription(
                     'datetimeField',
                     array('type' => FieldDescription::TYPE_DATE, 'field_name' => 'datetimeFieldName')
@@ -124,11 +92,7 @@ class FieldPropertyTest extends \PHPUnit_Framework_TestCase
             ),
             'object with __toString' => array(
                 'string value',
-                $this->createRecord(
-                    array(
-                        'fieldName' => $this->createObjectConvertableToString('string value'),
-                    )
-                ),
+                $this->createRecord(array('fieldName' => $this->createObjectConvertableToString('string value'))),
                 $this->createFieldDescription('fieldName')
             ),
         );
