@@ -413,4 +413,14 @@ class FieldDescriptionTest extends \PHPUnit_Framework_TestCase
         $this->model->setOption('editable', true);
         $this->assertTrue($this->model->isEditable());
     }
+
+    public function testIsShown()
+    {
+        // default value
+        $this->assertTrue($this->model->isShown());
+
+        // custom value
+        $this->model->setOption('show_column', false);
+        $this->assertFalse($this->model->isShown());
+    }
 }

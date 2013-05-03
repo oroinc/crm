@@ -353,4 +353,12 @@ class FieldDescription implements FieldDescriptionInterface
     {
         return $this->getOption('editable', false);
     }
+
+    /**
+     * @return boolean
+     */
+    public function isShown()
+    {
+        return $this->getOption('show_column', true);
+    }
 }

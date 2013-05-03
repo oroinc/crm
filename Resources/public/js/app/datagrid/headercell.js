@@ -44,10 +44,11 @@ Oro.Datagrid.HeaderCell = Backgrid.HeaderCell.extend({
         if (collection == this.collection) {
             var state = collection.state;
             var direction = null;
-            if (this.column.get('sortable') && state.sortKey == this.column.get('name')) {
-                if (1 == state.order) {
+            var columnName = this.column.get('name');
+            if (this.column.get('sortable') && _.has(state.sorters, columnName)) {
+                if (1 == state.sorters[columnName]) {
                     direction = 'descending';
-                } else if (-1 == state.order) {
+                } else if (-1 == state.sorters[columnName]) {
                     direction = 'ascending';
                 }
             }
@@ -110,5 +111,43 @@ Oro.Datagrid.HeaderCell = Backgrid.HeaderCell.extend({
                 });
             }
         }
+    },
+
+    /**
+     * @param {string} columnName
+     * @param {null|"ascending"|"descending"} direction
+     * @param {function(*, *): number} [comparator]
+     */
+    sort: function (columnName, direction, comparator) {
+
+        comparator = comparator || this._cidComparator;
+
+        var collection = this.collection;
+
+        if (Backbone.PageableCollection && collection instanceof Backbone.PageableCollection) {
+            var order;
+            if (direction === "ascending") order = -1;
+            else if (direction === "descending") order = 1;
+            else order = null;
+
+            collection.setSorting(columnName, order);
+
+            if (collection.mode == "client") {
+                if (!collection.fullCollection.comparator) {
+                    collection.fullCollection.comparator = comparator;
+                }
+                collection.fullCollection.sort();
+            }
+            else collection.fetch();
+        }
+        else {
+            collection.comparator = comparator;
+            collection.sort();
+        }
+
+        /**
+         * Global Backbone event. Fired when the sorter is clicked on a sortable column.
+         */
+        Backbone.trigger("backgrid:sort", columnName, direction, comparator, this.collection);
     }
 });
