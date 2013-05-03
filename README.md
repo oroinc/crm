@@ -18,7 +18,7 @@ Add on composer.json (see http://getcomposer.org/)
 
     "require" :  {
         // ...
-        "oro/OroAddress": "dev-master",
+        "oro/address-bundle": "dev-master",
     }
 
 ### Step 2) Register the bundle
