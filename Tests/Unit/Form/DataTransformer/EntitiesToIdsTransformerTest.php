@@ -8,9 +8,9 @@ use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\AbstractQuery;
 
-use Oro\Bundle\UIBundle\Form\DataTransformer\IdsToEntitiesTransformer;
+use Oro\Bundle\UIBundle\Form\DataTransformer\EntitiesToIdsTransformer;
 
-class IdsToEntitiesTransformerTest extends \PHPUnit_Framework_TestCase
+class EntitiesToIdsTransformerTest extends \PHPUnit_Framework_TestCase
 {
 
     /**
@@ -44,7 +44,7 @@ class IdsToEntitiesTransformerTest extends \PHPUnit_Framework_TestCase
      */
     public function testTransform($property, $value, $expectedValue)
     {
-        $transformer = new IdsToEntitiesTransformer($this->getMockEntityManager(), 'TestClass', $property, null);
+        $transformer = new EntitiesToIdsTransformer($this->getMockEntityManager(), 'TestClass', $property, null);
         $this->assertEquals($expectedValue, $transformer->transform($value));
     }
 
@@ -78,7 +78,7 @@ class IdsToEntitiesTransformerTest extends \PHPUnit_Framework_TestCase
      */
     public function testTransformFailsWhenValueInNotAnArray()
     {
-        $transformer = new IdsToEntitiesTransformer($this->getMockEntityManager(), 'TestClass', 'id', null);
+        $transformer = new EntitiesToIdsTransformer($this->getMockEntityManager(), 'TestClass', 'id', null);
         $transformer->transform('invalid value');
     }
 
@@ -104,7 +104,7 @@ class IdsToEntitiesTransformerTest extends \PHPUnit_Framework_TestCase
             $this->addMockExpectedCalls($key, $calls);
         }
 
-        $transformer = new IdsToEntitiesTransformer(
+        $transformer = new EntitiesToIdsTransformer(
             $this->getMockEntityManager(),
             $className,
             $property,
@@ -260,7 +260,7 @@ class IdsToEntitiesTransformerTest extends \PHPUnit_Framework_TestCase
             $this->addMockExpectedCalls($key, $calls);
         }
 
-        $transformer = new IdsToEntitiesTransformer(
+        $transformer = new EntitiesToIdsTransformer(
             $this->getMockEntityManager(),
             $className,
             $property,
@@ -355,7 +355,7 @@ class IdsToEntitiesTransformerTest extends \PHPUnit_Framework_TestCase
         $em->expects($this->once())->method('getClassMetadata')
             ->with($className)->will($this->returnValue($classMetadata));
 
-        new IdsToEntitiesTransformer($em, $className, null, null);
+        new EntitiesToIdsTransformer($em, $className, null, null);
     }
 
     /**
@@ -364,7 +364,7 @@ class IdsToEntitiesTransformerTest extends \PHPUnit_Framework_TestCase
      */
     public function testCreateFailsWhenQueryBuilderCallbackIsNotCallable()
     {
-        new IdsToEntitiesTransformer($this->getMockEntityManager(), 'TestClass', 'id', array());
+        new EntitiesToIdsTransformer($this->getMockEntityManager(), 'TestClass', 'id', array());
     }
 
     /**

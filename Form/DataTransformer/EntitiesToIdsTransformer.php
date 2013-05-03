@@ -13,9 +13,9 @@ use Symfony\Component\Form\Exception\UnexpectedTypeException;
 use Symfony\Component\Form\Exception\FormException;
 
 /**
- * Transforms between array of ids and array of entities
+ * Transforms between array of entities and array of ids
  */
-class IdsToEntitiesTransformer implements DataTransformerInterface
+class EntitiesToIdsTransformer implements DataTransformerInterface
 {
     /**
      * @var EntityManager
@@ -65,7 +65,7 @@ class IdsToEntitiesTransformer implements DataTransformerInterface
      * @param EntityManager $em
      * @param string $className
      * @return string
-     * @throws \RuntimeException When entity has composite key
+     * @throws FormException When entity has composite key
      */
     protected function getIdPropertyPathFromEntityManager(EntityManager $em, $className)
     {

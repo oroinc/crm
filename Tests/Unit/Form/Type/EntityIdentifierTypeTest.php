@@ -31,26 +31,19 @@ class EntityIdentifierTypeTest extends FormIntegrationTestCase
     private $entityManager;
 
     /**
-     * @var ClassMetadata|\PHPUnit_Framework_MockObject_MockObject
+     * @var EntitiesToIdsTransformer|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $classMetadata;
-    /**
-     * @var EntityRepository|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $repository;
-    /**
-     * @var QueryBuilder|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $queryBuilder;
-    /**
-     * @var AbstractQuery|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $query;
+    private $entitiesToIdsTransformer;
 
     protected function setUp()
     {
         parent::setUp();
-        $this->type = new EntityIdentifierType($this->getMockManagerRegistry());
+        $this->type = $this->getMockBuilder('Oro\Bundle\UIBundle\Form\Type\EntityIdentifierType')
+            ->setMethods(array('createEntitiesToIdsTransformer'))
+            ->setConstructorArgs(array($this->getMockManagerRegistry()))
+            ->getMock();
+        $this->type->expects($this->any())->method('createEntitiesToIdsTransformer')
+            ->will($this->returnValue($this->getMockEntitiesToIdsTransformer()));
     }
 
     /**
@@ -105,7 +98,6 @@ class EntityIdentifierTypeTest extends FormIntegrationTestCase
     {
         $self = $this;
         $entitiesId1234 = $this->createMockEntityList('id', array(1, 2, 3, 4));
-        $entitiesCodeAbc = $this->createMockEntityList('code', array('a', 'b', 'c'));
         return array(
             'default' => array(
                 '1,2,3,4',
@@ -116,23 +108,10 @@ class EntityIdentifierTypeTest extends FormIntegrationTestCase
                     'managerRegistry' => array(
                         array('getManagerForClass', array('TestClass'), array('self', 'getMockEntityManager')),
                     ),
-                    'entityManager' => array(
-                        array('getClassMetadata', array('TestClass'), array('self', 'getMockClassMetadata')),
-                        array('getRepository', array('TestClass'), array('self', 'getMockRepository')),
-                    ),
-                    'classMetadata' => array(
-                        array('getSingleIdentifierFieldName', array(), 'id'),
-                    ),
-                    'repository' => array(
-                        array('createQueryBuilder', array('e'), array('self', 'getMockQueryBuilder')),
-                    ),
-                    'queryBuilder' => array(
-                        array('where', array('e.id IN (:ids)'), array('self', 'getMockQueryBuilder')),
-                        array('setParameter', array('ids'), array(1, 2, 3, 4)),
-                        array('getQuery', array(), array('self', 'getMockQuery')),
-                    ),
-                    'query' => array(
-                        array('execute', array(), $entitiesId1234),
+                    'entitiesToIdsTransformer' => array(
+                        array('transform', array(null), array()),
+                        array('reverseTransform', array(array(1, 2, 3, 4)), $entitiesId1234),
+                        array('transform', array($entitiesId1234), array(1, 2, 3, 4)),
                     )
                 )
             ),
@@ -145,49 +124,10 @@ class EntityIdentifierTypeTest extends FormIntegrationTestCase
                     'managerRegistry' => array(
                         array('getManagerForClass', array('TestClass'), array('self', 'getMockEntityManager')),
                     ),
-                    'entityManager' => array(
-                        array('getClassMetadata', array('TestClass'), array('self', 'getMockClassMetadata')),
-                        array('getRepository', array('TestClass'), array('self', 'getMockRepository')),
-                    ),
-                    'classMetadata' => array(
-                        array('getSingleIdentifierFieldName', array(), 'id'),
-                    ),
-                    'repository' => array(
-                        array('createQueryBuilder', array('e'), array('self', 'getMockQueryBuilder')),
-                    ),
-                    'queryBuilder' => array(
-                        array('where', array('e.id IN (:ids)'), array('self', 'getMockQueryBuilder')),
-                        array('setParameter', array('ids'), array(1, 2, 3, 4)),
-                        array('getQuery', array(), array('self', 'getMockQuery')),
-                    ),
-                    'query' => array(
-                        array('execute', array(), $entitiesId1234),
-                    )
-                )
-            ),
-            'custom property' => array(
-                'a,b,c',
-                $entitiesCodeAbc,
-                'a,b,c',
-                array('class' => 'TestClass', 'property' => 'code'),
-                'expectedCalls' => array(
-                    'managerRegistry' => array(
-                        array('getManagerForClass', array('TestClass'), array('self', 'getMockEntityManager')),
-                    ),
-                    'entityManager' => array(
-                        array('getRepository', array('TestClass'), array('self', 'getMockRepository')),
-                    ),
-                    'classMetadata' => array(),
-                    'repository' => array(
-                        array('createQueryBuilder', array('e'), array('self', 'getMockQueryBuilder')),
-                    ),
-                    'queryBuilder' => array(
-                        array('where', array('e.code IN (:ids)'), array('self', 'getMockQueryBuilder')),
-                        array('setParameter', array('ids'), array('a', 'b', 'c')),
-                        array('getQuery', array(), array('self', 'getMockQuery')),
-                    ),
-                    'query' => array(
-                        array('execute', array(), $entitiesCodeAbc),
+                    'entitiesToIdsTransformer' => array(
+                        array('transform', array(null), array()),
+                        array('reverseTransform', array(array(1, 2, 3, 4)), $entitiesId1234),
+                        array('transform', array($entitiesId1234), array(1, 2, 3, 4)),
                     )
                 )
             ),
@@ -200,23 +140,10 @@ class EntityIdentifierTypeTest extends FormIntegrationTestCase
                     'managerRegistry' => array(
                         array('getManager', array('custom_entity_manager'), array('self', 'getMockEntityManager')),
                     ),
-                    'entityManager' => array(
-                        array('getClassMetadata', array('TestClass'), array('self', 'getMockClassMetadata')),
-                        array('getRepository', array('TestClass'), array('self', 'getMockRepository')),
-                    ),
-                    'classMetadata' => array(
-                        array('getSingleIdentifierFieldName', array(), 'id'),
-                    ),
-                    'repository' => array(
-                        array('createQueryBuilder', array('e'), array('self', 'getMockQueryBuilder')),
-                    ),
-                    'queryBuilder' => array(
-                        array('where', array('e.id IN (:ids)'), array('self', 'getMockQueryBuilder')),
-                        array('setParameter', array('ids'), array(1, 2, 3, 4)),
-                        array('getQuery', array(), array('self', 'getMockQuery')),
-                    ),
-                    'query' => array(
-                        array('execute', array(), $entitiesId1234),
+                    'entitiesToIdsTransformer' => array(
+                        array('transform', array(null), array()),
+                        array('reverseTransform', array(array(1, 2, 3, 4)), $entitiesId1234),
+                        array('transform', array($entitiesId1234), array(1, 2, 3, 4)),
                     )
                 )
             ),
@@ -227,23 +154,10 @@ class EntityIdentifierTypeTest extends FormIntegrationTestCase
                 array('class' => 'TestClass', 'em' => array('self', 'getMockEntityManager')),
                 'expectedCalls' => array(
                     'managerRegistry' => array(),
-                    'entityManager' => array(
-                        array('getClassMetadata', array('TestClass'), array('self', 'getMockClassMetadata')),
-                        array('getRepository', array('TestClass'), array('self', 'getMockRepository')),
-                    ),
-                    'classMetadata' => array(
-                        array('getSingleIdentifierFieldName', array(), 'id'),
-                    ),
-                    'repository' => array(
-                        array('createQueryBuilder', array('e'), array('self', 'getMockQueryBuilder')),
-                    ),
-                    'queryBuilder' => array(
-                        array('where', array('e.id IN (:ids)'), array('self', 'getMockQueryBuilder')),
-                        array('setParameter', array('ids'), array(1, 2, 3, 4)),
-                        array('getQuery', array(), array('self', 'getMockQuery')),
-                    ),
-                    'query' => array(
-                        array('execute', array(), $entitiesId1234),
+                    'entitiesToIdsTransformer' => array(
+                        array('transform', array(null), array()),
+                        array('reverseTransform', array(array(1, 2, 3, 4)), $entitiesId1234),
+                        array('transform', array($entitiesId1234), array(1, 2, 3, 4)),
                     )
                 )
             ),
@@ -263,23 +177,10 @@ class EntityIdentifierTypeTest extends FormIntegrationTestCase
                     'managerRegistry' => array(
                         array('getManagerForClass', array('TestClass'), array('self', 'getMockEntityManager')),
                     ),
-                    'entityManager' => array(
-                        array('getClassMetadata', array('TestClass'), array('self', 'getMockClassMetadata')),
-                        array('getRepository', array('TestClass'), array('self', 'getMockRepository')),
-                    ),
-                    'classMetadata' => array(
-                        array('getSingleIdentifierFieldName', array(), 'id'),
-                    ),
-                    'repository' => array(
-                        array('createQueryBuilder', array('o'), array('self', 'getMockQueryBuilder')),
-                    ),
-                    'queryBuilder' => array(
-                        array('where', array('o.id IN (:values)'), array('self', 'getMockQueryBuilder')),
-                        array('setParameter', array('values'), array(1, 2, 3, 4)),
-                        array('getQuery', array(), array('self', 'getMockQuery')),
-                    ),
-                    'query' => array(
-                        array('execute', array(), $entitiesId1234),
+                    'entitiesToIdsTransformer' => array(
+                        array('transform', array(null), array()),
+                        array('reverseTransform', array(array(1, 2, 3, 4)), $entitiesId1234),
+                        array('transform', array($entitiesId1234), array(1, 2, 3, 4)),
                     )
                 )
             ),
@@ -358,6 +259,64 @@ class EntityIdentifierTypeTest extends FormIntegrationTestCase
                     => 'Option "queryBuilder" should be a callable, string given'
             ),
         );
+    }
+
+    public function testCreateEntitiesToIdsTransformer()
+    {
+        $options = array(
+            'em' => $this->getMockEntityManager(),
+            'class' => 'TestClass',
+            'property' => 'id',
+            'queryBuilder' => function ($repository, array $ids) {
+                return $repository->createQueryBuilder('o')->where('o.id IN (:values)')->setParameter('values', $ids);
+            },
+            'values_delimiter' => ','
+        );
+        $builder = $this->getMockBuilder('Symfony\Component\Form\Tests\FormBuilderInterface')
+            ->setMethods(array('addViewTransformer', 'addEventSubscriber'))
+            ->getMockForAbstractClass();
+
+        $builder->expects($this->at(0))
+            ->method('addViewTransformer')
+            ->with(
+                $this->callback(
+                    function ($transformer) use ($options) {
+                        \PHPUnit_Framework_TestCase::assertInstanceOf(
+                            'Oro\Bundle\UIBundle\Form\DataTransformer\EntitiesToIdsTransformer',
+                            $transformer
+                        );
+                        \PHPUnit_Framework_TestCase::assertAttributeEquals(
+                            $options['em'],
+                            'em',
+                            $transformer
+                        );
+                        \PHPUnit_Framework_TestCase::assertAttributeEquals(
+                            $options['class'],
+                            'className',
+                            $transformer
+                        );
+                        \PHPUnit_Framework_TestCase::assertAttributeEquals(
+                            $options['property'],
+                            'property',
+                            $transformer
+                        );
+                        \PHPUnit_Framework_TestCase::assertAttributeEquals(
+                            $options['queryBuilder'],
+                            'queryBuilderCallback',
+                            $transformer
+                        );
+                        return true;
+                    }
+                )
+            )
+            ->will($this->returnSelf());
+
+        $builder->expects($this->at(1))
+            ->method('addViewTransformer')
+            ->will($this->returnSelf());
+
+        $this->type = new EntityIdentifierType($this->getMockManagerRegistry());
+        $this->type->buildForm($builder, $options);
     }
 
     /**
@@ -447,62 +406,17 @@ class EntityIdentifierTypeTest extends FormIntegrationTestCase
     }
 
     /**
-     * @return ClassMetadata|\PHPUnit_Framework_MockObject_MockObject
+     * @return EntitiesToIdsTransformer|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected function getMockClassMetadata()
+    protected function getMockEntitiesToIdsTransformer()
     {
-        if (!$this->classMetadata) {
-            $this->classMetadata = $this->getMockBuilder('Doctrine\ORM\Mapping\ClassMetadata')
-                ->disableOriginalConstructor()
-                ->setMethods(array('getSingleIdentifierFieldName'))
-                ->getMockForAbstractClass();
+        if (!$this->entitiesToIdsTransformer) {
+            $this->entitiesToIdsTransformer =
+                $this->getMockBuilder('Oro\Bundle\UIBundle\Form\DataTransformer\EntitiesToIdsTransformer')
+                    ->disableOriginalConstructor()
+                    ->setMethods(array('transform', 'reverseTransform'))
+                    ->getMockForAbstractClass();
         }
-
-        return $this->classMetadata;
-    }
-
-    /**
-     * @return EntityRepository|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected function getMockRepository()
-    {
-        if (!$this->repository) {
-            $this->repository = $this->getMockBuilder('Doctrine\ORM\EntityRepository')
-                ->disableOriginalConstructor()
-                ->setMethods(array('createQueryBuilder'))
-                ->getMockForAbstractClass();
-        }
-
-        return $this->repository;
-    }
-
-    /**
-     * @return QueryBuilder|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected function getMockQueryBuilder()
-    {
-        if (!$this->queryBuilder) {
-            $this->queryBuilder = $this->getMockBuilder('Doctrine\ORM\QueryBuilder')
-                ->disableOriginalConstructor()
-                ->setMethods(array('where', 'setParameter', 'getQuery'))
-                ->getMockForAbstractClass();
-        }
-
-        return $this->queryBuilder;
-    }
-
-    /**
-     * @return AbstractQuery|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected function getMockQuery()
-    {
-        if (!$this->query) {
-            $this->query= $this->getMockBuilder('Doctrine\ORM\AbstractQuery')
-                ->disableOriginalConstructor()
-                ->setMethods(array('execute'))
-                ->getMockForAbstractClass();
-        }
-
-        return $this->query;
+        return $this->entitiesToIdsTransformer;
     }
 }

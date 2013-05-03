@@ -12,7 +12,7 @@ use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 use Oro\Bundle\UIBundle\Form\DataTransformer\ArrayToStringTransformer;
-use Oro\Bundle\UIBundle\Form\DataTransformer\IdsToEntitiesTransformer;
+use Oro\Bundle\UIBundle\Form\DataTransformer\EntitiesToIdsTransformer;
 use Oro\Bundle\UIBundle\Form\EventListener\FixArrayToStringListener;
 
 class EntityIdentifierType extends AbstractType
@@ -38,16 +38,23 @@ class EntityIdentifierType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->addViewTransformer(
-                new IdsToEntitiesTransformer(
-                    $options['em'],
-                    $options['class'],
-                    $options['property'],
-                    $options['queryBuilder']
-                )
-            )
+            ->addViewTransformer($this->createEntitiesToIdsTransformer($options))
             ->addViewTransformer(new ArrayToStringTransformer($options['values_delimiter'], true))
             ->addEventSubscriber(new FixArrayToStringListener($options['values_delimiter']));
+    }
+
+    /**
+     * @param array $options
+     * @return EntitiesToIdsTransformer
+     */
+    protected function createEntitiesToIdsTransformer(array $options)
+    {
+        return new EntitiesToIdsTransformer(
+            $options['em'],
+            $options['class'],
+            $options['property'],
+            $options['queryBuilder']
+        );
     }
 
     /**
