@@ -45,7 +45,6 @@ services:
 Following example shows simple Datagrid Manager with two fields, filters, sorters and row action.
 
 ``` php
-use Symfony\Bundle\FrameworkBundle\Routing\Router;
 use Oro\Bundle\GridBundle\Datagrid\DatagridManager;
 use Oro\Bundle\GridBundle\Field\FieldDescription;
 use Oro\Bundle\GridBundle\Field\FieldDescriptionCollection;
@@ -67,7 +66,7 @@ class ProductDatagridManager extends DatagridManager
     }
 
     /**
-     * @param FieldDescriptionCollection $fieldCollection
+     * {@inheritdoc}
      */
     protected function configureFields(FieldDescriptionCollection $fieldsCollection)
     {
