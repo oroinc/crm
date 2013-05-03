@@ -2,19 +2,14 @@
 
 namespace Oro\Bundle\AddressBundle\Tests\Unit\Provider\ImportExport;
 
-use Oro\Bundle\AddressBundle\Entity\Country;
 use Oro\Bundle\AddressBundle\Provider\ImportExport;
-use Doctrine\Common\Persistence\ObjectManager;
+use Oro\Bundle\AddressBundle\Provider\ImportExport\Reader;
+use Oro\Bundle\AddressBundle\Provider\ImportExport\ReaderInterface;
 
 class IntlReaderTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var ObjectManager
-     */
-    private $om;
-
-    /**
-     * @var ReaderInterface
+     * @var Reader|ReaderInterface
      */
     private $reader;
 
@@ -52,7 +47,8 @@ class IntlReaderTest extends \PHPUnit_Framework_TestCase
     public function testReader()
     {
         $data = $this->reader->readBatch();
-        $this->assertTrue(count($data) == $this->batchSize);
+        $this->assertInternalType('array', $data);
+        $this->assertCount($this->batchSize, $data);
 
         $this->reader->reset();
         $data2 = $this->reader->readBatch();

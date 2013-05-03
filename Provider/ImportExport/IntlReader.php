@@ -3,7 +3,6 @@
 namespace Oro\Bundle\AddressBundle\Provider\ImportExport;
 
 use Symfony\Component\Intl\Intl;
-use Symfony\Component\Security\Acl\Exception\Exception;
 use Symfony\Component\Yaml\Yaml;
 
 class IntlReader extends Reader implements ReaderInterface
@@ -34,7 +33,6 @@ class IntlReader extends Reader implements ReaderInterface
     public function readBatch()
     {
         if (!extension_loaded('intl')) {
-            //throw new Exception('Intl extension required in order to use this reader');
             return false;
         }
 
@@ -47,15 +45,16 @@ class IntlReader extends Reader implements ReaderInterface
         $isoCodes = $this->readFallbackData();
 
         $countries = array_slice($countries, $offset, $this->batchSize);
+
         if (!empty($countries)) {
+            $result = array();
             foreach ($countries as $iso2code => $countryName) {
                 $result[] = new $class($countryName, $iso2code, isset($isoCodes[$iso2code]) ? $isoCodes[$iso2code] : $iso2code);
             }
-        } else {
-            $result = false;
+            return $result;
         }
 
-        return $result;
+        return false;
     }
 
     /**
