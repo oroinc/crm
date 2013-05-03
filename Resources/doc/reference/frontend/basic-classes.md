@@ -37,11 +37,12 @@ example.com/users/list#g/i=2&p=25&s=email&o=-1
 This line contains information about the page number (i = 2), the name of the field you are sorting (p = 25) and a ascending sort order (o = -1).
 
 * **Oro.Datagrid.Grid** In addition to basic grid, this class can work with loading mask, toolbar, set of filters, and set of actions.
-* **Datagrid.LoadingMask** Serves to display the loading process to end-user when some request is in progress.
+* **Oro.LoadingMask** Serves to display the loading process to end-user when some request is in progress.
 * **Oro.Datagrid.Toolbar** Aggregates control toolbar widgets, including paginator, and page size widgets.
-Oro.Datagrid.Pagination and Oro.Datagrid.Pagination.Input
+Oro.Datagrid.Pagination** and **Oro.Datagrid.Pagination.Input
 Paginator could have one of two possible presentations, using links as page numbers and using input field for entering and displaying page number.
 * **Oro.Datagrid.PageSize** This widget is used to control number of records displayed on one grid page.
+* **Oro.Datagrid.Row** View extended from Backgrid.Row that allows listening to it's events
 
 Here is an example of code that initializes grid:
 ``` javascript

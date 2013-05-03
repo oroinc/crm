@@ -28,3 +28,4 @@ OroGridBundle Documentation
     - [Cells](./reference/frontend/cells.md)
     - [Actions](./reference/frontend/actions.md)
     - [Filters](./reference/frontend/filters.md)
+    - [Listeners](./reference/frontend/listeners.md)
