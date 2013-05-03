@@ -23,7 +23,7 @@ class EntitiesToIdsTransformer implements DataTransformerInterface
     protected $em;
 
     /**
-     * @var
+     * @var string
      */
     protected $className;
 
