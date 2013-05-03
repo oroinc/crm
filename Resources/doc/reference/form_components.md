@@ -16,7 +16,7 @@ to existing entities of specified type.
 ### Data Transformers
 
 * **Form / DataTransformer / ArrayToStringTransformer** - converts array to string and back;
-* **Form / DataTransformer / IdsToEntitiesTransformer** - converts entity IDs to entities and back.
+* **Form / DataTransformer / EntitiesToIdsTransformer** - converts entity IDs to entities and back.
 
 
 ### Event Subscribers
