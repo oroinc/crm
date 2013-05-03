@@ -232,6 +232,39 @@ class EntityIdentifierTypeTest extends FormIntegrationTestCase
                     )
                 )
             ),
+            'accept array' => array(
+                array(1, 2, 3, 4),
+                $entitiesId1234,
+                '1,2,3,4',
+                array('class' => 'TestClass'),
+                'expectedCalls' => array(
+                    'managerRegistry' => array(
+                        array('getManagerForClass', array('TestClass'), array('self', 'getMockEntityManager')),
+                    ),
+                    'entityManager' => array(
+                        array('getClassMetadata', array('TestClass'), array('self', 'getMockClassMetadata')),
+                        array('getRepository', array('TestClass'), array('self', 'getMockRepository')),
+                    ),
+                    'classMetadata' => array(
+                        array('getSingleIdentifierFieldName', array(), 'id'),
+                    ),
+                    'repository' => array(
+                        array('createQueryBuilder', array('e'), array('self', 'getMockQueryBuilder')),
+                    ),
+                    'queryBuilder' => array(
+                        array('where', array('e.id IN (:ids)'), array('self', 'getMockQueryBuilder')),
+                        array('setParameter', array('ids'), array(1, 2, 3, 4)),
+                        array('getQuery', array(), array('self', 'getMockQuery')),
+                    ),
+                    'query' => array(
+                        array(
+                            'execute',
+                            array(),
+                            $entitiesId1234
+                        ),
+                    )
+                )
+            ),
             'custom property' => array(
                 'a,b,c',
                 $entitiesCodeAbc,
