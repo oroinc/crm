@@ -39,7 +39,7 @@ use Oro\Bundle\GridBundle\Field\FieldDescriptionInterface;
 
 class DemoDatagridManager extends DatagridManager
 {
-    protected function getListFields()
+    protected function configureFields(FieldDescriptionCollection $fieldsCollection)
     {
         $fieldId = new FieldDescription();
         $fieldId->setName('id');
@@ -49,6 +49,8 @@ class DemoDatagridManager extends DatagridManager
                 'label' => 'ID',
             )
         );
+        $fieldsCollection->add($fieldId);
+
         $fieldName = new FieldDescription();
         $fieldName->setName('name');
         $fieldName->setOptions(
@@ -57,7 +59,7 @@ class DemoDatagridManager extends DatagridManager
                 'label' => 'name',
             )
         );
-        return array($fieldId, $fieldName);
+        $fieldsCollection->add($fieldName);
     }
 }
 ```
