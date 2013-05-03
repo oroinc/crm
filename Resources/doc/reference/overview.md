@@ -63,6 +63,15 @@ class DemoDatagridManager extends DatagridManager
     }
 
     protected function createQuery()
+    {
+        $queryBuilder = $this->entityManager->createQueryBuilder();
+        $queryBuilder
+            ->select('id', 'name')
+            ->from('MyBundle:Entity', 'e');
+
+        $this->queryFactory->setQueryBuilder($queryBuilder);
+        return $this->queryFactory->createQuery();
+    }
 }
 ```
 
@@ -104,17 +113,6 @@ class DemoController extends Controller
             $view = 'MyBundle:Demo:grid.html.twig';
         }
         return $this->render($view, array('datagrid' => $datagrid->createView()));
-    }
-
-    protected function createQuery()
-    {
-        $queryBuilder = $this->entityManager->createQueryBuilder();
-        $queryBuilder
-            ->select('id', 'name')
-            ->from('MyBundle:Entity', 'e');
-
-        $this->queryFactory->setQueryBuilder($queryBuilder);
-        return $this->queryFactory->createQuery();
     }
 }
 ```
