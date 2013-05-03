@@ -11,7 +11,7 @@ Oro.Datagrid.Cell.Formatter = Oro.Datagrid.Cell.Formatter || {};
  */
 Oro.Datagrid.Cell.Formatter.MomentFormatter = function (options) {
     _.extend(this, this.defaults, options);
-}
+};
 
 Oro.Datagrid.Cell.Formatter.MomentFormatter.prototype = new Backgrid.Extension.MomentFormatter;
 _.extend(Oro.Datagrid.Cell.Formatter.MomentFormatter.prototype, {

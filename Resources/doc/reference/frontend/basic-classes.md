@@ -62,21 +62,21 @@ var grid = new Oro.Datagrid.Grid({
             label:"ID",
             sortable:true,
             editable:false,
-            cell:Backgrid.IntegerCell.extend({ orderSeparator:'' })
+            cell:Oro.Datagrid.Cell.IntegerCell.extend({ orderSeparator:'' })
         },
         {
             name:"username",
             label:"Username",
             sortable:true,
             editable:false,
-            cell:Backgrid.StringCell
+            cell:Oro.Datagrid.Cell.StringCell
         },
         {
             name:"email",
             label:"Email",
             sortable:true,
             editable:false,
-            cell:Backgrid.StringCell
+            cell:Oro.Datagrid.Cell.StringCell
         }
     ],
     entityHint: "Users",

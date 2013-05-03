@@ -26,7 +26,7 @@ Oro.Datagrid.Cell.StringCell = Backgrid.StringCell.extend({
         if (this.column.get("editable")) {
             e.stopPropagation();
         }
-        return Backgrid.Extension.MomentCell.prototype.enterEditMode.apply(this, arguments);
+        return Backgrid.StringCell.prototype.enterEditMode.apply(this, arguments);
     },
 
     /**
@@ -36,6 +36,6 @@ Oro.Datagrid.Cell.StringCell = Backgrid.StringCell.extend({
         if (this.editable) {
             this.trigger("edited", this);
         }
-        return Backgrid.Extension.MomentCell.prototype.exitEditMode.apply(this, arguments);
+        return Backgrid.StringCell.prototype.exitEditMode.apply(this, arguments);
     }
 });

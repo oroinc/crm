@@ -25,5 +25,6 @@ OroGridBundle Documentation
     - [Backbone Developer Introduction](./reference/frontend/backbone-developer-introduction.md)
     - [Backgrid Developer Introduction](./reference/frontend/backgrid-developer-introduction.md)
     - [Basic Classes](./reference/frontend/basic-classes.md)
+    - [Cells](./reference/frontend/cells.md)
     - [Actions](./reference/frontend/actions.md)
     - [Filters](./reference/frontend/filters.md)
