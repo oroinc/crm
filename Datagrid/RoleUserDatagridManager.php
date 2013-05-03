@@ -2,11 +2,12 @@
 
 namespace Oro\Bundle\UserBundle\Datagrid;
 
+use Doctrine\ORM\QueryBuilder;
 use Oro\Bundle\GridBundle\Field\FieldDescription;
 use Oro\Bundle\GridBundle\Field\FieldDescriptionInterface;
 use Oro\Bundle\UserBundle\Entity\Role;
 use Oro\Bundle\GridBundle\Filter\FilterInterface;
-use Doctrine\ORM\QueryBuilder;
+use Oro\Bundle\GridBundle\Sorter\SorterInterface;
 
 class RoleUserDatagridManager extends UserRelationDatagridManager
 {
@@ -82,6 +83,17 @@ class RoleUserDatagridManager extends UserRelationDatagridManager
         return array_merge(
             parent::getQueryParameters(),
             array('role' => $this->getRole())
+        );
+    }
+
+    /**
+     * @return array
+     */
+    protected function getDefaultSorters()
+    {
+        return array(
+            'has_role' => SorterInterface::DIRECTION_DESC,
+            'lastName' => SorterInterface::DIRECTION_ASC,
         );
     }
 }

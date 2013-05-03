@@ -2,11 +2,12 @@
 
 namespace Oro\Bundle\UserBundle\Datagrid;
 
+use Doctrine\ORM\QueryBuilder;
 use Oro\Bundle\GridBundle\Field\FieldDescription;
 use Oro\Bundle\GridBundle\Field\FieldDescriptionInterface;
 use Oro\Bundle\UserBundle\Entity\Group;
 use Oro\Bundle\GridBundle\Filter\FilterInterface;
-use Doctrine\ORM\QueryBuilder;
+use Oro\Bundle\GridBundle\Sorter\SorterInterface;
 
 class GroupUserDatagridManager extends UserRelationDatagridManager
 {
@@ -82,6 +83,17 @@ class GroupUserDatagridManager extends UserRelationDatagridManager
         return array_merge(
             parent::getQueryParameters(),
             array('group' => $this->getGroup())
+        );
+    }
+
+    /**
+     * @return array
+     */
+    protected function getDefaultSorters()
+    {
+        return array(
+            'has_group' => SorterInterface::DIRECTION_DESC,
+            'lastName' => SorterInterface::DIRECTION_ASC,
         );
     }
 }
