@@ -61,6 +61,8 @@ class DemoDatagridManager extends DatagridManager
         );
         $fieldsCollection->add($fieldName);
     }
+
+    protected function createQuery()
 }
 ```
 
@@ -91,19 +93,9 @@ class DemoController extends Controller
      */
     public function gridAction(Request $request)
     {
-        /** @var $em \Doctrine\ORM\EntityManager */
-        $em = $this->getDoctrine()->getManager();
-        $queryBuilder = $em->createQueryBuilder();
-        $queryBuilder
-            ->select('id', 'name')
-            ->from('MyBundle:Entity', 'e');
-
-        /** @var $queryFactory QueryFactory */
-        $queryFactory = $this->get('acme_demo_grid.demo_grid.manager.default_query_factory');
-        $queryFactory->setQueryBuilder($queryBuilder);
-
         /** @var $datagridManager DemoDatagridManager */
         $datagridManager = $this->get('acme_demo_grid.demo_grid.manager');
+        $datagridManager->setEntityManager($this->getDoctrine()->getManager());
         $datagrid = $datagridManager->getDatagrid();
 
         if ('json' == $request->getRequestFormat()) {
@@ -112,6 +104,17 @@ class DemoController extends Controller
             $view = 'MyBundle:Demo:grid.html.twig';
         }
         return $this->render($view, array('datagrid' => $datagrid->createView()));
+    }
+
+    protected function createQuery()
+    {
+        $queryBuilder = $this->entityManager->createQueryBuilder();
+        $queryBuilder
+            ->select('id', 'name')
+            ->from('MyBundle:Entity', 'e');
+
+        $this->queryFactory->setQueryBuilder($queryBuilder);
+        return $this->queryFactory->createQuery();
     }
 }
 ```
