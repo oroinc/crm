@@ -23,34 +23,29 @@ class EntityIdentifierTypeTest extends FormIntegrationTestCase
     /**
      * @var ManagerRegistry|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $managerRegistry;
+    private $managerRegistry;
 
     /**
      * @var EntityManager|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $entityManager;
+    private $entityManager;
 
     /**
      * @var ClassMetadata|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $classMetadata;
+    private $classMetadata;
     /**
      * @var EntityRepository|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $repository;
+    private $repository;
     /**
      * @var QueryBuilder|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $queryBuilder;
+    private $queryBuilder;
     /**
      * @var AbstractQuery|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $query;
-
-    /**
-     * @var \Symfony\Component\Form\FormFactory
-     */
-    protected $factory;
+    private $query;
 
     protected function setUp()
     {
@@ -64,93 +59,6 @@ class EntityIdentifierTypeTest extends FormIntegrationTestCase
     protected function getTestFormType()
     {
         return $this->type;
-    }
-
-    /**
-     * @return ManagerRegistry|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected function getMockManagerRegistry()
-    {
-        if (!$this->managerRegistry) {
-            $this->managerRegistry = $this->getMockForAbstractClass('Doctrine\Common\Persistence\ManagerRegistry');
-        }
-
-        return $this->managerRegistry;
-    }
-
-    /**
-     * @return EntityManager|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected function getMockEntityManager()
-    {
-        if (!$this->entityManager) {
-            $this->entityManager = $this->getMockBuilder('Doctrine\ORM\EntityManager')
-                ->disableOriginalConstructor()
-                ->setMethods(array('getClassMetadata', 'getRepository'))
-                ->getMockForAbstractClass();
-        }
-
-        return $this->entityManager;
-    }
-
-    /**
-     * @return ClassMetadata|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected function getMockClassMetadata()
-    {
-        if (!$this->classMetadata) {
-            $this->classMetadata = $this->getMockBuilder('Doctrine\ORM\Mapping\ClassMetadata')
-                ->disableOriginalConstructor()
-                ->setMethods(array('getSingleIdentifierFieldName'))
-                ->getMockForAbstractClass();
-        }
-
-        return $this->classMetadata;
-    }
-
-    /**
-     * @return EntityRepository|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected function getMockRepository()
-    {
-        if (!$this->repository) {
-            $this->repository = $this->getMockBuilder('Doctrine\ORM\EntityRepository')
-                ->disableOriginalConstructor()
-                ->setMethods(array('createQueryBuilder'))
-                ->getMockForAbstractClass();
-        }
-
-        return $this->repository;
-    }
-
-    /**
-     * @return QueryBuilder|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected function getMockQueryBuilder()
-    {
-        if (!$this->queryBuilder) {
-            $this->queryBuilder = $this->getMockBuilder('Doctrine\ORM\QueryBuilder')
-                ->disableOriginalConstructor()
-                ->setMethods(array('where', 'setParameter', 'getQuery'))
-                ->getMockForAbstractClass();
-        }
-
-        return $this->queryBuilder;
-    }
-
-    /**
-     * @return AbstractQuery|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected function getMockQuery()
-    {
-        if (!$this->query) {
-            $this->query= $this->getMockBuilder('Doctrine\ORM\AbstractQuery')
-                ->disableOriginalConstructor()
-                ->setMethods(array('execute'))
-                ->getMockForAbstractClass();
-        }
-
-        return $this->query;
     }
 
     /**
@@ -224,11 +132,7 @@ class EntityIdentifierTypeTest extends FormIntegrationTestCase
                         array('getQuery', array(), array('self', 'getMockQuery')),
                     ),
                     'query' => array(
-                        array(
-                            'execute',
-                            array(),
-                            $entitiesId1234
-                        ),
+                        array('execute', array(), $entitiesId1234),
                     )
                 )
             ),
@@ -257,11 +161,7 @@ class EntityIdentifierTypeTest extends FormIntegrationTestCase
                         array('getQuery', array(), array('self', 'getMockQuery')),
                     ),
                     'query' => array(
-                        array(
-                            'execute',
-                            array(),
-                            $entitiesId1234
-                        ),
+                        array('execute', array(), $entitiesId1234),
                     )
                 )
             ),
@@ -287,11 +187,7 @@ class EntityIdentifierTypeTest extends FormIntegrationTestCase
                         array('getQuery', array(), array('self', 'getMockQuery')),
                     ),
                     'query' => array(
-                        array(
-                            'execute',
-                            array(),
-                            $entitiesCodeAbc
-                        ),
+                        array('execute', array(), $entitiesCodeAbc),
                     )
                 )
             ),
@@ -320,11 +216,7 @@ class EntityIdentifierTypeTest extends FormIntegrationTestCase
                         array('getQuery', array(), array('self', 'getMockQuery')),
                     ),
                     'query' => array(
-                        array(
-                            'execute',
-                            array(),
-                            $entitiesId1234
-                        ),
+                        array('execute', array(), $entitiesId1234),
                     )
                 )
             ),
@@ -351,11 +243,7 @@ class EntityIdentifierTypeTest extends FormIntegrationTestCase
                         array('getQuery', array(), array('self', 'getMockQuery')),
                     ),
                     'query' => array(
-                        array(
-                            'execute',
-                            array(),
-                            $entitiesId1234
-                        ),
+                        array('execute', array(), $entitiesId1234),
                     )
                 )
             ),
@@ -391,11 +279,7 @@ class EntityIdentifierTypeTest extends FormIntegrationTestCase
                         array('getQuery', array(), array('self', 'getMockQuery')),
                     ),
                     'query' => array(
-                        array(
-                            'execute',
-                            array(),
-                            $entitiesId1234
-                        ),
+                        array('execute', array(), $entitiesId1234),
                     )
                 )
             ),
@@ -533,5 +417,92 @@ class EntityIdentifierTypeTest extends FormIntegrationTestCase
         } else {
             $mock->expects($this->never())->method($this->anything());
         }
+    }
+
+    /**
+     * @return ManagerRegistry|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function getMockManagerRegistry()
+    {
+        if (!$this->managerRegistry) {
+            $this->managerRegistry = $this->getMockForAbstractClass('Doctrine\Common\Persistence\ManagerRegistry');
+        }
+
+        return $this->managerRegistry;
+    }
+
+    /**
+     * @return EntityManager|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function getMockEntityManager()
+    {
+        if (!$this->entityManager) {
+            $this->entityManager = $this->getMockBuilder('Doctrine\ORM\EntityManager')
+                ->disableOriginalConstructor()
+                ->setMethods(array('getClassMetadata', 'getRepository'))
+                ->getMockForAbstractClass();
+        }
+
+        return $this->entityManager;
+    }
+
+    /**
+     * @return ClassMetadata|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function getMockClassMetadata()
+    {
+        if (!$this->classMetadata) {
+            $this->classMetadata = $this->getMockBuilder('Doctrine\ORM\Mapping\ClassMetadata')
+                ->disableOriginalConstructor()
+                ->setMethods(array('getSingleIdentifierFieldName'))
+                ->getMockForAbstractClass();
+        }
+
+        return $this->classMetadata;
+    }
+
+    /**
+     * @return EntityRepository|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function getMockRepository()
+    {
+        if (!$this->repository) {
+            $this->repository = $this->getMockBuilder('Doctrine\ORM\EntityRepository')
+                ->disableOriginalConstructor()
+                ->setMethods(array('createQueryBuilder'))
+                ->getMockForAbstractClass();
+        }
+
+        return $this->repository;
+    }
+
+    /**
+     * @return QueryBuilder|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function getMockQueryBuilder()
+    {
+        if (!$this->queryBuilder) {
+            $this->queryBuilder = $this->getMockBuilder('Doctrine\ORM\QueryBuilder')
+                ->disableOriginalConstructor()
+                ->setMethods(array('where', 'setParameter', 'getQuery'))
+                ->getMockForAbstractClass();
+        }
+
+        return $this->queryBuilder;
+    }
+
+    /**
+     * @return AbstractQuery|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function getMockQuery()
+    {
+        if (!$this->query) {
+            $this->query= $this->getMockBuilder('Doctrine\ORM\AbstractQuery')
+                ->disableOriginalConstructor()
+                ->setMethods(array('execute'))
+                ->getMockForAbstractClass();
+        }
+
+        return $this->query;
     }
 }

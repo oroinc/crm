@@ -10,6 +10,7 @@ use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Util\PropertyPath;
 use Symfony\Component\Form\Exception\TransformationFailedException;
 use Symfony\Component\Form\Exception\UnexpectedTypeException;
+use Symfony\Component\Form\Exception\FormException;
 
 /**
  * Transforms between array of ids and array of entities
@@ -53,7 +54,7 @@ class IdsToEntitiesTransformer implements DataTransformerInterface
         $this->property = $property;
         $this->propertyPath = new PropertyPath($this->property);
         if (null !== $queryBuilderCallback && !is_callable($queryBuilderCallback)) {
-            throw new UnexpectedTypeException($queryBuilderCallback, 'callback');
+            throw new UnexpectedTypeException($queryBuilderCallback, 'callable');
         }
         $this->queryBuilderCallback = $queryBuilderCallback;
     }
@@ -72,7 +73,7 @@ class IdsToEntitiesTransformer implements DataTransformerInterface
         try {
             return $meta->getSingleIdentifierFieldName();
         } catch (MappingException $e) {
-            throw new \RuntimeException(
+            throw new FormException(
                 "Cannot get id property path of entity. \"$this->className\" has composite primary key."
             );
         }
@@ -136,7 +137,7 @@ class IdsToEntitiesTransformer implements DataTransformerInterface
             /** @var $qb QueryBuilder */
             $qb = call_user_func($this->queryBuilderCallback, $repository, $ids);
             if (!$qb instanceof QueryBuilder) {
-                throw new UnexpectedTypeException($qb, 'Doctrine\ORM\Query\QueryBuilder');
+                throw new UnexpectedTypeException($qb, 'Doctrine\ORM\QueryBuilder');
             }
         } else {
             $qb = $repository->createQueryBuilder('e');
