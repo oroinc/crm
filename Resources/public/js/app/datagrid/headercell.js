@@ -71,6 +71,10 @@ Oro.Datagrid.HeaderCell = Backgrid.HeaderCell.extend({
             sortable: this.column.get("sortable")
         })));
 
+        if (this.column.has('width')) {
+            this.$el.width(this.column.get('width'));
+        }
+
         return this;
     },
 

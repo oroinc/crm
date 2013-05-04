@@ -45,7 +45,7 @@
 
     '@OroGridBundle/Resources/public/js/app/pageablecollection.js'
 
-    output='js/oroapp.grid.js'
+    output='js/oro.grid.js'
 %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
 {% endjavascripts %}
@@ -106,7 +106,8 @@
                             {% elseif column.type == constant(columnTypePrefix ~ 'TYPE_INTEGER') %}
                                 cell: Oro.Datagrid.Cell.IntegerCell.extend({ orderSeparator: '' })
                             {% elseif column.type == constant(columnTypePrefix ~ 'TYPE_BOOLEAN') %}
-                                cell: Oro.Datagrid.Cell.BooleanCell
+                                cell: Oro.Datagrid.Cell.BooleanCell,
+                                width: 10,
                             {% else %}
                                 cell: Oro.Datagrid.Cell.StringCell
                             {% endif %}
