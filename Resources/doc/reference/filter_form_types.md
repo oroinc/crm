@@ -134,7 +134,7 @@ _Oro\Bundle\FilterBundle\Form\Type\Filter\TextFilterType_
 
 **JS Class**
 
-_OroApp.Filter.TextFilter_
+_Oro.Filter.TextFilter_
 
 
 ### oro\_type\_number\_filter Form Type
@@ -174,7 +174,7 @@ _Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType_
 
 **JS Class**
 
-_OroApp.Filter.NumberFilter_
+_Oro.Filter.NumberFilter_
 
 **Options**
 
@@ -219,8 +219,8 @@ _Oro\Bundle\FilterBundle\Form\Type\Filter\ChoiceFilterType_
 
 **JS Classes**
 
-_OroApp.Filter.MultiSelectFilter_
-_OroApp.Filter.SelectFilter_
+_Oro.Filter.MultiSelectFilter_
+_Oro.Filter.SelectFilter_
 
 ### oro\_type\_boolean\_filter Form Type
 
@@ -249,7 +249,7 @@ _Oro\Bundle\FilterBundle\Form\Type\Filter\BooleanFilterType_
 
 **JS Class**
 
-_OroApp.Filter.SelectFilter_
+_Oro.Filter.SelectFilter_
 
 ### oro\_type\_date\_range\_filter Form Type
 
@@ -288,7 +288,7 @@ _Oro\Bundle\FilterBundle\Form\Type\Filter\DateRangeFilterType_
 
 **JS Classes**
 
-_OroApp.Filter.DateFilter_
+_Oro.Filter.DateFilter_
 
 **Options Description**
 
@@ -331,7 +331,7 @@ _Oro\Bundle\FilterBundle\Form\Type\Filter\DateRangeFilterType_
 
 **JS Classes**
 
-_OroApp.Filter.DateFilter_
+_Oro.Filter.DateFilter_
 
 ### oro\_type\_date\_range Form Type
 

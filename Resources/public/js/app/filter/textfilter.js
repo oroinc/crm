@@ -1,5 +1,5 @@
-var OroApp = OroApp || {};
-OroApp.Filter = OroApp.Filter || {};
+var Oro = Oro || {};
+Oro.Filter = Oro.Filter || {};
 
 /**
  * Text grid filter.
@@ -8,17 +8,17 @@ OroApp.Filter = OroApp.Filter || {};
  *  - "disable" when filter is disabled
  *  - "update" when filter criteria is changed
  *
- * @class   OroApp.Filter.TextFilter
- * @extends OroApp.Filter.AbstractFilter
+ * @class   Oro.Filter.TextFilter
+ * @extends Oro.Filter.AbstractFilter
  */
-OroApp.Filter.TextFilter = OroApp.Filter.AbstractFilter.extend({
+Oro.Filter.TextFilter = Oro.Filter.AbstractFilter.extend({
     /** @property */
     template: _.template(
-        '<button class="btn filter-criteria-selector oro-drop-opener oro-dropdown-toggle">' +
+        '<button type="button" class="btn filter-criteria-selector oro-drop-opener oro-dropdown-toggle">' +
             '<%= label %>: <strong class="filter-criteria-hint"><%= criteriaHint %></strong>' +
             '<span class="caret"></span>' +
         '</button>' +
-        '<a href="#" class="disable-filter"><i class="icon-remove hide-text">Close</i></a>' +
+        '<a href="<%= nullLink %>" class="disable-filter"><i class="icon-remove hide-text">Close</i></a>' +
         '<div class="filter-criteria dropdown-menu" />'
     ),
 
@@ -34,8 +34,8 @@ OroApp.Filter.TextFilter = OroApp.Filter.AbstractFilter.extend({
             '</div>' +
             '<div class="oro-action">' +
                 '<div class="btn-group">' +
-                    '<button class="btn btn-small filter-criteria-hide">Close</button>' +
-                    '<button class="btn btn-small btn-primary filter-update">Update</button>' +
+                    '<button type="button" class="btn btn-small filter-criteria-hide">Close</button>' +
+                    '<button type="button" class="btn btn-small btn-primary filter-update">Update</button>' +
                 '</div>' +
             '</div>' +
         '</div>'
@@ -187,7 +187,8 @@ OroApp.Filter.TextFilter = OroApp.Filter.AbstractFilter.extend({
         this.$el.append(
             this.template({
                 label: this.label,
-                criteriaHint: this._getCriteriaHint()
+                criteriaHint: this._getCriteriaHint(),
+                nullLink: this.nullLink
             })
         );
 
@@ -221,7 +222,7 @@ OroApp.Filter.TextFilter = OroApp.Filter.AbstractFilter.extend({
      */
     remove: function() {
         $('body').off('click', this._clickOutsideCriteriaCallback);
-        OroApp.Filter.AbstractFilter.prototype.remove.call(this);
+        Oro.Filter.AbstractFilter.prototype.remove.call(this);
         return this;
     },
 
@@ -282,7 +283,7 @@ OroApp.Filter.TextFilter = OroApp.Filter.AbstractFilter.extend({
      * @inheritDoc
      */
     _onValueUpdated: function(newValue, oldValue) {
-        OroApp.Filter.AbstractFilter.prototype._onValueUpdated.apply(this, arguments);
+        Oro.Filter.AbstractFilter.prototype._onValueUpdated.apply(this, arguments);
         this._updateCriteriaHint();
     },
 

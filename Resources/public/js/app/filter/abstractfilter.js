@@ -1,13 +1,13 @@
-var OroApp = OroApp || {};
-OroApp.Filter = OroApp.Filter || {};
+var Oro = Oro || {};
+Oro.Filter = Oro.Filter || {};
 
 /**
  * Basic grid filter
  *
- * @class   OroApp.Filter.AbstractFilter
+ * @class   Oro.Filter.AbstractFilter
  * @extends Backbone.View
  */
-OroApp.Filter.AbstractFilter = Backbone.View.extend({
+Oro.Filter.AbstractFilter = Backbone.View.extend({
     /**
      * Filter container tag
      *
@@ -72,6 +72,13 @@ OroApp.Filter.AbstractFilter = Backbone.View.extend({
     buttonActiveClass: 'open-filter',
 
     /**
+     * Null link value
+     *
+     * @property {String}
+     */
+    nullLink: 'javascript:void(0);',
+
+    /**
      * Initialize.
      *
      * @param {Object} options
@@ -95,6 +102,7 @@ OroApp.Filter.AbstractFilter = Backbone.View.extend({
         if (!this.enabled) {
             this.enabled = true;
             this.show();
+            this.trigger('enable', this);
         }
         return this;
     },
@@ -150,7 +158,7 @@ OroApp.Filter.AbstractFilter = Backbone.View.extend({
      * @return {Object}
      */
     getValue: function() {
-        return OroApp.deepClone(this.value);
+        return Oro.deepClone(this.value);
     },
 
     /**
@@ -163,7 +171,7 @@ OroApp.Filter.AbstractFilter = Backbone.View.extend({
         value = this._formatRawValue(value);
         if (this._isNewValueUpdated(value)) {
             var oldValue = this.value;
-            this.value = OroApp.deepClone(value);
+            this.value = Oro.deepClone(value);
             this._updateDOMValue();
             this._onValueUpdated(this.value, oldValue);
         }
@@ -201,7 +209,7 @@ OroApp.Filter.AbstractFilter = Backbone.View.extend({
      * @protected
      */
     _isNewValueUpdated: function(newValue) {
-        return !OroApp.isEqualsLoosely(this.value, newValue)
+        return !Oro.isEqualsLoosely(this.value, newValue)
     },
 
     /**
@@ -232,7 +240,7 @@ OroApp.Filter.AbstractFilter = Backbone.View.extend({
      * @return {Boolean}
      */
     isEmpty: function() {
-        return OroApp.isEqualsLoosely(this.getValue(), this.emptyValue);
+        return Oro.isEqualsLoosely(this.getValue(), this.emptyValue);
     },
 
     /**

@@ -1,17 +1,17 @@
-var OroApp = OroApp || {};
-OroApp.Filter = OroApp.Filter || {};
+var Oro = Oro || {};
+Oro.Filter = Oro.Filter || {};
 
 /**
  * Multiselect decorator class.
  * Wraps multiselect widget and provides design modifications
  *
- * @class OroApp.Filter.MultiSelectDecorator
+ * @class Oro.Filter.MultiSelectDecorator
  */
-OroApp.Filter.MultiSelectDecorator = function(options) {
+Oro.Filter.MultiSelectDecorator = function(options) {
     this.initialize(options);
 };
 
-_.extend(OroApp.Filter.MultiSelectDecorator.prototype, {
+_.extend(Oro.Filter.MultiSelectDecorator.prototype, {
     /**
      * Multiselect widget element container
      *

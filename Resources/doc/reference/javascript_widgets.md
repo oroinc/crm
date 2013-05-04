@@ -2,24 +2,24 @@ Javascript Widgets
 ------------------
 
 On frontend side filter form types are represented by javascript widgets. 
-They are located in Resources/public/js directory and use javascript namespace OroApp.Filter.
+They are located in Resources/public/js directory and use javascript namespace Oro.Filter.
 
 ###Table of Contents
 
-- [OroApp.Filter.List](#oroappfilterlist)
-- [OroApp.Filter.AbstractFilter](#oroappfilterabstractfilter)
-- [OroApp.Filter.TextFilter](#oroappfiltertextfilter)
-- [OroApp.Filter.ChoiceFilter](#oroappfilterchoicefilter)
-- [OroApp.Filter.NumberFilter](#oroappfilternumberfilter)
-- [OroApp.Filter.SelectFilter](#oroappfilterselectfilter)
-- [OroApp.Filter.MultiSelectFilter](#oroappfiltermultiselectfilter)
-- [OroApp.Filter.MultiSelectDecorator](#oroappfiltermultiselectdecorator)
-- [OroApp.Filter.DateFilter](#oroappfilterdatefilter)
-- [OroApp.Filter.DateTimeFilter](#oroappfilterdatetimefilter)
+- [Oro.Filter.List](#orofilterlist)
+- [Oro.Filter.AbstractFilter](#orofilterabstractfilter)
+- [Oro.Filter.TextFilter](#orofiltertextfilter)
+- [Oro.Filter.ChoiceFilter](#orofilterchoicefilter)
+- [Oro.Filter.NumberFilter](#orofilternumberfilter)
+- [Oro.Filter.SelectFilter](#orofilterselectfilter)
+- [Oro.Filter.MultiSelectFilter](#orofiltermultiselectfilter)
+- [Oro.Filter.MultiSelectDecorator](#orofiltermultiselectdecorator)
+- [Oro.Filter.DateFilter](#orofilterdatefilter)
+- [Oro.Filter.DateTimeFilter](#orofilterdatetimefilter)
 - [Example of Usage](#example-of-usage)
 - [References](#references)
 
-###OroApp.Filter.List
+###Oro.Filter.List
 
 Container for filters, renders all active filters, has a control to enable and disable filters
 
@@ -38,11 +38,11 @@ _Backbone.View_
 
 **Properties Description**
 
-* **filters** - named list of filters, instances of OroApp.Filter.Abstract;
+* **filters** - named list of filters, instances of Oro.Filter.Abstract;
 * **addButtonHint** - test of button that is used for adding filters to the list.
 
 
-###OroApp.Filter.AbstractFilter
+###Oro.Filter.AbstractFilter
 
 Abstract filter that has common methods for all filters.
 
@@ -63,7 +63,7 @@ _Backbone.View_
 and in rendering of filter html template;
 * **enabled** - whether filter enabled or not. If filter is not enabled it will not be displayed in filter list.
 
-###OroApp.Filter.TextFilter
+###Oro.Filter.TextFilter
 
 Has only one text input that can be filled by user. Operator type is not supported.
 
@@ -74,7 +74,7 @@ When control is clicked a popup container with text input and update button is s
 
 **Parent**
 
-_OroApp.Filter.AbstractFilter_
+_Oro.Filter.AbstractFilter_
 
 **Inherit Properties**
 
@@ -82,7 +82,7 @@ _OroApp.Filter.AbstractFilter_
 * label
 * enabled
 
-###OroApp.Filter.ChoiceFilter
+###Oro.Filter.ChoiceFilter
 
 This widget supports value input and operator type input.
 
@@ -92,7 +92,7 @@ Same as parent widget but also contains radio buttons for operator choices
 
 **Parent**
 
-_OroApp.Filter.TextFilter_
+_Oro.Filter.TextFilter_
 
 **Options**
 
@@ -108,7 +108,7 @@ _OroApp.Filter.TextFilter_
 
 * **choices** - list of filter types (f.e. contains, not contains for text filter).
 
-###OroApp.Filter.NumberFilter
+###Oro.Filter.NumberFilter
 
 Filter that has an operator and additionally able to format value as a number (integer, decimal)
 
@@ -118,11 +118,11 @@ Same as parent widget but has behavior of parsing numbers as input value
 
 **Parent**
 
-_OroApp.Filter.ChoiceFilter_
+_Oro.Filter.ChoiceFilter_
 
 **Options**
 
-* formatter: OroApp.Filter.NumberFormatter
+* formatter: Oro.Filter.NumberFormatter
 * formatterOptions: Object
 
 **Inherit Properties**
@@ -134,15 +134,15 @@ _OroApp.Filter.ChoiceFilter_
 
 **Properties Description**
 
-* **formatter** - instance of OroApp.Filter.NumberFormatter, this object is responsible for converting string
+* **formatter** - instance of Oro.Filter.NumberFormatter, this object is responsible for converting string
 to number and backward;
-* **formatterOptions** - this value will be used as argument for OroApp.Filter.NumberFormatter.
+* **formatterOptions** - this value will be used as argument for Oro.Filter.NumberFormatter.
 It contains next options:
     * decimals: Integer - number of decimals to display. Must be an integer;
     * decimalSeparator: String - the separator to use whendisplaying decimals;
     * orderSeparator: String - the separator to use to separator thousands. May be an empty string.
 
-###OroApp.Filter.SelectFilter
+###Oro.Filter.SelectFilter
 
 Filter that allows to select one of available values
 
@@ -153,7 +153,7 @@ and available values is displayed.
 
 **Parent**
 
-_OroApp.Filter.AbstractFilter_
+_Oro.Filter.AbstractFilter_
 
 **Options**
 
@@ -171,7 +171,7 @@ _OroApp.Filter.AbstractFilter_
 * **options** - list of available options for select and multiselect filters.
 * **contextSearch** - flag whether need to show context search field.
 
-###OroApp.Filter.MultiSelectFilter
+###Oro.Filter.MultiSelectFilter
 
 Filter that allows to select any available values.
 
@@ -181,7 +181,7 @@ Same as parent, but several values can be selected.
 
 **Parent**
 
-_OroApp.Filter.SelectFilter_
+_Oro.Filter.SelectFilter_
 
 **Inherit Properties**
 
@@ -191,7 +191,7 @@ _OroApp.Filter.SelectFilter_
 * options
 * contextSearch
 
-###OroApp.Filter.MultiSelectDecorator
+###Oro.Filter.MultiSelectDecorator
 
 Encapsulates additional logic related to select and multiselect widgets (filter list, select and multiselect filters).
 
@@ -201,7 +201,7 @@ Encapsulates additional logic related to select and multiselect widgets (filter 
 * **parameters** : Object - list of parameters to initialize multiselect widget;
 * **contextSearch** : Boolean - flag that specified whether to show context search field.
 
-###OroApp.Filter.DateFilter
+###Oro.Filter.DateFilter
 
 Used for filtering date values.
 
@@ -212,7 +212,7 @@ Available operators displayed as radio buttons.
 
 **Parent**
 
-_OroApp.Filter.ChoiceFilter_
+_Oro.Filter.ChoiceFilter_
 
 **Properties**
 
@@ -231,7 +231,7 @@ _OroApp.Filter.ChoiceFilter_
 * **typeValues** - list of date/datetime type values for between/not between filter types;
 * **externalWidgetOptions** - additional date/datetime widget options, gets from form type.
 
-###OroApp.Filter.DateTimeFilter
+###Oro.Filter.DateTimeFilter
 
 Used for filtering date time values.
 
@@ -241,7 +241,7 @@ Same as parent but clickable calendars also display controls for setting time
 
 **Parent**
 
-_OroApp.Filter.DateFilter_
+_Oro.Filter.DateFilter_
 
 **Properties**
 
@@ -262,22 +262,22 @@ _OroApp.Filter.DateFilter_
 Below is example of creating filter list:
 
 ```
-var filtersList = new OroApp.Filter.List({
+var filtersList = new Oro.Filter.List({
     addButtonHint: '+ Add more',
     filters: {
-        username: OroApp.Filter.ChoiceFilter.extend({
+        username: Oro.Filter.ChoiceFilter.extend({
             name:'username',
             label:'Username',
             enabled:true,
             choices:{"1": "contains", "2": "does not contain", "3": "is equal to"}
         }),
-        gender: OroApp.Filter.SelectFilter.extend({
+        gender: Oro.Filter.SelectFilter.extend({
             name:'gender',
             label:'gender',
             enabled:false,
             options: {"18": "Male", "19": "Female"}
         },
-        salary: OroApp.Filter.NumberFilter.extend({
+        salary: Oro.Filter.NumberFilter.extend({
             name:'salary',
             label:'salary',
             enabled:false,
