@@ -109,7 +109,7 @@ services:
 
     oro_user.form.type.profile.api:
         class:                        %oro_user.type.profile.api.class%
-        arguments:                    [%oro_user.entity.class%, %oro_user.entity.value.class%, "@oro_user.acl_manager", "@security.context"]
+        arguments:                    [@oro_user.manager.flexible, "@oro_user.acl_manager", "@security.context"]
         tags:
             - { name: form.type, alias: profile }
 
