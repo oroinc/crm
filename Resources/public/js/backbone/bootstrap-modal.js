@@ -24,6 +24,11 @@ var Oro = Oro || {};
             <div class="modal-body"><%= content %></div>\
             <div class="modal-footer">\
               <a href="#" class="btn ok btn-danger"><%= okText %></a>\
+              <% if (allowCancel) { %>\
+                <% if (cancelText) { %>\
+                  <a href="#" class="btn cancel"><%= cancelText %></a>\
+                <% } %>\
+              <% } %>\
             </div>\
         '),
 
@@ -31,6 +36,9 @@ var Oro = Oro || {};
          * @param {Object} options
          */
         initialize: function(options) {
+            if (!options.cancelText) {
+                options.cancelText = '';
+            }
             options = _.extend({
                 template: this.template
             }, options);
