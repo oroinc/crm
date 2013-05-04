@@ -28,7 +28,8 @@ class RequestParameters implements ParametersInterface
     static protected $usedParameterTypes = array(
         self::FILTER_PARAMETERS,
         self::PAGER_PARAMETERS,
-        self::SORT_PARAMETERS
+        self::SORT_PARAMETERS,
+        self::ADDITIONAL_PARAMETERS
     );
 
     /**

@@ -14,19 +14,15 @@ abstract class AbstractQueryFactory implements QueryFactoryInterface
      */
     protected $queryBuilder;
 
-    /**
-     * @return ProxyQueryInterface
-     */
-    protected function getProxyQuery()
-    {
-        return new ProxyQuery($this->queryBuilder);
-    }
 
     /**
      * @return ProxyQueryInterface
      */
     public function createQuery()
     {
-        return $this->getProxyQuery();
+        if (!$this->queryBuilder) {
+            throw new \LogicException('Can\'t create datagrid query. Query builder is not configured.');
+        }
+        return new ProxyQuery($this->queryBuilder);
     }
 }

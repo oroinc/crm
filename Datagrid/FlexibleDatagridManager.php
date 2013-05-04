@@ -4,9 +4,11 @@ namespace Oro\Bundle\GridBundle\Datagrid;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleManager;
-use Oro\Bundle\FlexibleEntityBundle\Entity\Attribute;
+use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttribute;
 use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttributeType;
+use Oro\Bundle\GridBundle\Field\FieldDescription;
 use Oro\Bundle\GridBundle\Field\FieldDescriptionInterface;
+use Oro\Bundle\GridBundle\Field\FieldDescriptionCollection;
 use Oro\Bundle\GridBundle\Filter\FilterInterface;
 
 abstract class FlexibleDatagridManager extends DatagridManager
@@ -17,7 +19,7 @@ abstract class FlexibleDatagridManager extends DatagridManager
     protected $flexibleManager;
 
     /**
-     * @var Attribute[]
+     * @var AbstractAttribute[]
      */
     protected $attributes;
 
@@ -57,6 +59,14 @@ abstract class FlexibleDatagridManager extends DatagridManager
             'field' => FieldDescriptionInterface::TYPE_TEXT,
             'filter' => FilterInterface::TYPE_FLEXIBLE_STRING,
         ),
+        AbstractAttributeType::BACKEND_TYPE_PRICE => array(
+            'field'  => FieldDescriptionInterface::TYPE_TEXT,
+            'filter' => FilterInterface::TYPE_FLEXIBLE_STRING,
+        ),
+        AbstractAttributeType::BACKEND_TYPE_METRIC => array(
+            'field'  => FieldDescriptionInterface::TYPE_TEXT,
+            'filter' => FilterInterface::TYPE_FLEXIBLE_STRING,
+        ),
     );
 
     /**
@@ -72,10 +82,77 @@ abstract class FlexibleDatagridManager extends DatagridManager
     }
 
     /**
-     * @return Attribute[]
+     * Traverse all flexible attributes and add them as fields to collection
+     *
+     * @param FieldDescriptionCollection $fieldsCollection
+     * @param array $options
+     */
+    protected function configureFlexibleFields(FieldDescriptionCollection $fieldsCollection, array $options = array())
+    {
+        foreach ($this->getFlexibleAttributes() as $attribute) {
+            $attributeCode = $attribute->getCode();
+            $fieldsCollection->add(
+                $this->createFlexibleField(
+                    $attribute,
+                    isset($options[$attributeCode]) ? $options[$attributeCode] : array()
+                )
+            );
+        }
+    }
+
+    /**
+     * Create field by flexible attribute
+     *
+     * @param AbstractAttribute $attribute
+     * @return FieldDescriptionInterface
+     */
+    protected function createFlexibleField(AbstractAttribute $attribute, array $options = array())
+    {
+        $field = new FieldDescription();
+        $field->setName($attribute->getCode());
+        $options = array_merge($this->getFlexibleFieldDefaultOptions($attribute), $options);
+        $field->setOptions($options);
+
+        return $field;
+    }
+
+    /**
+     * Get default options for flexible field
+     *
+     * @param AbstractAttribute $attribute
+     * @return array
+     */
+    protected function getFlexibleFieldDefaultOptions(AbstractAttribute $attribute)
+    {
+        $backendType   = $attribute->getBackendType();
+        $attributeType = $this->convertFlexibleTypeToFieldType($backendType);
+        $filterType    = $this->convertFlexibleTypeToFilterType($backendType);
+
+        $result = array(
+            'type'          => $attributeType,
+            'label'         => ucfirst($attribute->getCode()),
+            'field_name'    => $attribute->getCode(),
+            'filter_type'   => $filterType,
+            'required'      => false,
+            'sortable'      => true,
+            'filterable'    => true,
+            'flexible_name' => $this->flexibleManager->getFlexibleName()
+        );
+
+        if ($attributeType == FieldDescriptionInterface::TYPE_OPTIONS) {
+            $result['multiple'] = true;
+        }
+
+        return $result;
+    }
+
+    /**
+     * @deprecated Method should not be used outside of the class
+     * @return AbstractAttribute[]
      */
     public function getFlexibleAttributes()
     {
+        // TODO Make this method protected
         if (null === $this->attributes) {
             /** @var $attributeRepository \Doctrine\Common\Persistence\ObjectRepository */
             $attributeRepository = $this->flexibleManager->getAttributeRepository();
@@ -88,12 +165,14 @@ abstract class FlexibleDatagridManager extends DatagridManager
     }
 
     /**
+     * @deprecated Method should not be used outside of the class
      * @param $flexibleFieldType
      * @return string
      * @throws \LogicException
      */
     public function convertFlexibleTypeToFieldType($flexibleFieldType)
     {
+        // TODO Make this method protected
         if (!isset(self::$typeMatches[$flexibleFieldType]['field'])) {
             throw new \LogicException('Unknown flexible backend field type.');
         }
@@ -102,12 +181,14 @@ abstract class FlexibleDatagridManager extends DatagridManager
     }
 
     /**
+     * @deprecated Method should not be used outside of the class
      * @param $flexibleFieldType
      * @return string
      * @throws \LogicException
      */
     public function convertFlexibleTypeToFilterType($flexibleFieldType)
     {
+        // TODO Make this method protected
         if (!isset(self::$typeMatches[$flexibleFieldType]['filter'])) {
             throw new \LogicException('Unknown flexible backend filter type.');
         }

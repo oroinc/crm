@@ -1,13 +1,13 @@
-var OroApp = OroApp || {};
-OroApp.Datagrid = OroApp.Datagrid || {};
+var Oro = Oro || {};
+Oro.Datagrid = Oro.Datagrid || {};
 
 /**
  * Router for basic datagrid
  *
- * @class   OroApp.Datagrid.Router
- * @extends OroApp.Router
+ * @class   Oro.Datagrid.Router
+ * @extends Backbone.Router
  */
-OroApp.Datagrid.Router = OroApp.Router.extend({
+Oro.Datagrid.Router = Backbone.Router.extend({
     /** @property */
     routes: {
         "g/*encodedStateData": "changeState",
@@ -17,7 +17,7 @@ OroApp.Datagrid.Router = OroApp.Router.extend({
     /**
      * Binded collection, passed in constructor as option
      *
-     * @property {OroApp.PageableCollection}
+     * @property {Oro.PageableCollection}
      */
     collection: null,
 
@@ -32,7 +32,7 @@ OroApp.Datagrid.Router = OroApp.Router.extend({
      * Initialize router
      *
      * @param {Object} options
-     * @param {OroApp.PageableCollection} options.collection Collection of models.
+     * @param {Oro.PageableCollection} options.collection Collection of models.
      */
     initialize: function(options) {
         options = options || {};
@@ -45,13 +45,13 @@ OroApp.Datagrid.Router = OroApp.Router.extend({
 
         this.collection.on('beforeReset', this._handleStateChange, this);
 
-        OroApp.Router.prototype.initialize.apply(this, arguments);
+        Backbone.Router.prototype.initialize.apply(this, arguments);
     },
 
     /**
      * Triggers when collection is has new state and fetched
      *
-     * @param {OroApp.PageableCollection} collection
+     * @param {Oro.PageableCollection} collection
      * @param {Object} options Fetch options
      * @private
      */

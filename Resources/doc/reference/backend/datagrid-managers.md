@@ -45,7 +45,6 @@ services:
 Following example shows simple Datagrid Manager with two fields, filters, sorters and row action.
 
 ``` php
-use Symfony\Bundle\FrameworkBundle\Routing\Router;
 use Oro\Bundle\GridBundle\Datagrid\DatagridManager;
 use Oro\Bundle\GridBundle\Field\FieldDescription;
 use Oro\Bundle\GridBundle\Field\FieldDescriptionCollection;
@@ -57,24 +56,6 @@ use Oro\Bundle\GridBundle\Property\UrlProperty;
 class ProductDatagridManager extends DatagridManager
 {
     /**
-     * @var FieldDescriptionCollection
-     */
-    protected $fieldsCollection;
-
-    /**
-     * @var Router
-     */
-    protected $router;
-
-    /**
-     * @param Router $router
-     */
-    public function setRouter(Router $router)
-    {
-        $this->router = $router;
-    }
-
-    /**
      * @return array
      */
     protected function getProperties()
@@ -85,85 +66,43 @@ class ProductDatagridManager extends DatagridManager
     }
 
     /**
-     * @return FieldDescriptionCollection
-     */
-    protected function getFieldDescriptionCollection()
-    {
-        if (!$this->fieldsCollection) {
-            $this->fieldsCollection = new FieldDescriptionCollection();
-            $fieldManufacturerId = new FieldDescription();
-            $fieldManufacturerId->setName('id');
-            $fieldManufacturerId->setOptions(
-                array(
-                    'type'         => FieldDescriptionInterface::TYPE_INTEGER,
-                    'label'        => 'ID',
-                    'entity_alias' => 'm',
-                    'field_name'   => 'id',
-                    'filter_type'  => FilterInterface::TYPE_NUMBER,
-                    'required'     => false,
-                    'sortable'     => true,
-                    'filterable'   => true,
-                    'show_filter'  => true,
-                )
-            );
-            $this->fieldsCollection->add($fieldManufacturerId);
-
-            $fieldManufacturerName = new FieldDescription();
-            $fieldManufacturerName->setName('name');
-            $fieldManufacturerName->setOptions(
-                array(
-                    'type'        => FieldDescriptionInterface::TYPE_TEXT,
-                    'label'        => 'Name',
-                    'entity_alias' => 'm',
-                    'field_name'   => 'name',
-                    'filter_type'  => FilterInterface::TYPE_STRING,
-                    'required'     => false,
-                    'sortable'     => true,
-                    'filterable'   => true,
-                    'show_filter'  => true,
-                )
-            );
-            $this->fieldsCollection->add($fieldManufacturerName);
-        }
-        return $this->fieldsCollection;
-    }
-
-    /**
      * {@inheritdoc}
      */
-    protected function getListFields()
+    protected function configureFields(FieldDescriptionCollection $fieldsCollection)
     {
-        return $this->getFieldDescriptionCollection()->getElements();
-    }
+        $fieldManufacturerId = new FieldDescription();
+        $fieldManufacturerId->setName('id');
+        $fieldManufacturerId->setOptions(
+            array(
+                'type'         => FieldDescriptionInterface::TYPE_INTEGER,
+                'label'        => 'ID',
+                'entity_alias' => 'm',
+                'field_name'   => 'id',
+                'filter_type'  => FilterInterface::TYPE_NUMBER,
+                'required'     => false,
+                'sortable'     => true,
+                'filterable'   => true,
+                'show_filter'  => true,
+            )
+        );
+        $fieldsCollection->add($fieldManufacturerId);
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function getSorters()
-    {
-        $fields = array();
-        /** @var $fieldDescription FieldDescription */
-        foreach ($this->getFieldDescriptionCollection() as $fieldDescription) {
-            if ($fieldDescription->isSortable()) {
-                $fields[] = $fieldDescription;
-            }
-        }
-        return $fields;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getFilters()
-    {
-        $fields = array();
-        /** @var $fieldDescription FieldDescription */
-        foreach ($this->getFieldDescriptionCollection() as $fieldDescription) {
-            if ($fieldDescription->isFilterable()) {
-                $fields[] = $fieldDescription;
-            }
-        }
-        return $fields;
+        $fieldManufacturerName = new FieldDescription();
+        $fieldManufacturerName->setName('name');
+        $fieldManufacturerName->setOptions(
+            array(
+                'type'        => FieldDescriptionInterface::TYPE_TEXT,
+                'label'        => 'Name',
+                'entity_alias' => 'm',
+                'field_name'   => 'name',
+                'filter_type'  => FilterInterface::TYPE_STRING,
+                'required'     => false,
+                'sortable'     => true,
+                'filterable'   => true,
+                'show_filter'  => true,
+            )
+        );
+        $fieldsCollection->add($fieldManufacturerName);
     }
 
     /**

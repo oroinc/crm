@@ -250,4 +250,9 @@ interface FieldDescriptionInterface
      * @return array the parent association mapping definitions
      */
     public function getSortParentAssociationMapping();
+
+    /**
+     * @return boolean
+     */
+    public function isEditable();
 }

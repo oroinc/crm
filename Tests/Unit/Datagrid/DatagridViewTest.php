@@ -12,7 +12,7 @@ class DatagridViewTest extends \PHPUnit_Framework_TestCase
 {
     public function testGetDatagrid()
     {
-        $datagrid = $this->getMock('Oro\Bundle\GridBundle\Datagrid\DatagridInterface');
+        $datagrid = $this->getMockForAbstractClass('Oro\Bundle\GridBundle\Datagrid\DatagridInterface');
         $datagridView = new DatagridView($datagrid);
 
         $this->assertEquals($datagrid, $datagridView->getDatagrid());

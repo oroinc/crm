@@ -76,7 +76,8 @@ class AddDependencyCallsCompilerPassTest extends AbstractCompilerPassTest
                             'setDatagridBuilder' => array(new Reference('oro_grid.builder.datagrid')),
                             'setListBuilder' => array(new Reference('oro_grid.builder.list')),
                             'setTranslator' => array(new Reference('translator')),
-                            'setValidator' => array(new Reference('validator'))
+                            'setValidator' => array(new Reference('validator')),
+                            'setRouter' => array(new Reference('router')),
                         )
                     ),
                     'test.user_grid.manager.default_query_factory' => array(
@@ -168,6 +169,7 @@ class AddDependencyCallsCompilerPassTest extends AbstractCompilerPassTest
                                     'parameters' => 'parameters_service',
                                     'translator' => 'translator_service',
                                     'validator' => 'validator_service',
+                                    'router' => 'router_service',
                                 )
                             )
                         )
@@ -183,6 +185,7 @@ class AddDependencyCallsCompilerPassTest extends AbstractCompilerPassTest
                             'setParameters' => array(new Reference('parameters_service')),
                             'setTranslator' => array(new Reference('translator_service')),
                             'setValidator' => array(new Reference('validator_service')),
+                            'setRouter' => array(new Reference('router_service')),
                         )
                     )
                 )

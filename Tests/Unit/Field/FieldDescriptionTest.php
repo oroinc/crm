@@ -109,13 +109,13 @@ class FieldDescriptionTest extends \PHPUnit_Framework_TestCase
     public function testGetDefaultProperty()
     {
         $property = $this->model->getProperty();
-        $this->assertInstanceOf('Oro\\Bundle\\GridBundle\\Property\\FieldProperty', $property);
+        $this->assertInstanceOf('Oro\Bundle\GridBundle\Property\FieldProperty', $property);
         $this->assertAttributeSame($this->model, 'field', $property);
     }
 
     public function testSetProperty()
     {
-        $property = $this->getMock('Oro\\Bundle\\GridBundle\\Property\\PropertyInterface');
+        $property = $this->getMockForAbstractClass('Oro\Bundle\GridBundle\Property\PropertyInterface');
         $this->model->setProperty($property);
         $this->assertSame($property, $this->model->getProperty());
     }
@@ -402,5 +402,25 @@ class FieldDescriptionTest extends \PHPUnit_Framework_TestCase
         $this->assertEmpty($this->model->getSortFieldMapping());
         $this->model->setOption('sort_parent_association_mappings', self::TEST_MAPPING_TYPE);
         $this->assertEquals(self::TEST_MAPPING_TYPE, $this->model->getSortParentAssociationMapping());
+    }
+
+    public function testIsEditable()
+    {
+        // default value
+        $this->assertFalse($this->model->isEditable());
+
+        // custom value
+        $this->model->setOption('editable', true);
+        $this->assertTrue($this->model->isEditable());
+    }
+
+    public function testIsShown()
+    {
+        // default value
+        $this->assertTrue($this->model->isShown());
+
+        // custom value
+        $this->model->setOption('show_column', false);
+        $this->assertFalse($this->model->isShown());
     }
 }

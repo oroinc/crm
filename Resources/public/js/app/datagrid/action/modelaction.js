@@ -1,14 +1,14 @@
-var OroApp = OroApp || {};
-OroApp.Datagrid = OroApp.Datagrid || {};
-OroApp.Datagrid.Action = OroApp.Datagrid.Action || {};
+var Oro = Oro || {};
+Oro.Datagrid = Oro.Datagrid || {};
+Oro.Datagrid.Action = Oro.Datagrid.Action || {};
 
 /**
  * Basic model action class.
  *
- * @class   OroApp.Datagrid.ModelAction
- * @extends OroApp.Datagrid.Action.AbstractAction
+ * @class   Oro.Datagrid.ModelAction
+ * @extends Oro.Datagrid.Action.AbstractAction
  */
-OroApp.Datagrid.Action.ModelAction = OroApp.Datagrid.Action.AbstractAction.extend({
+Oro.Datagrid.Action.ModelAction = Oro.Datagrid.Action.AbstractAction.extend({
     /** @property {Backbone.Model} */
     model: null,
 
@@ -44,7 +44,7 @@ OroApp.Datagrid.Action.ModelAction = OroApp.Datagrid.Action.AbstractAction.exten
             this.backUrlParameter = options.backUrlParameter;
         }
 
-        OroApp.Datagrid.Action.AbstractAction.prototype.initialize.apply(this, arguments);
+        Oro.Datagrid.Action.AbstractAction.prototype.initialize.apply(this, arguments);
     },
 
     /**

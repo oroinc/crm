@@ -27,7 +27,7 @@ class PagerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->query = $this->getMock('Oro\Bundle\GridBundle\Datagrid\ProxyQueryInterface');
+        $this->query = $this->getMockForAbstractClass('Oro\Bundle\GridBundle\Datagrid\ProxyQueryInterface');
         $this->model = new Pager();
         $this->model->setQuery($this->query);
     }
