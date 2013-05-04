@@ -27,41 +27,161 @@ Oro.User.GridListener = Oro.Datagrid.Listener.AbstractListener.extend({
         this.selectors = options.selectors;
 
         Oro.Datagrid.Listener.AbstractListener.prototype.initialize.apply(this, arguments);
+
+        this._clearState();
+        this._synchronizeState();
+
+        this.listenTo(this.datagrid.getRefreshAction(), 'preExecute', this._onExecuteRefreshAction);
+        this.listenTo(this.datagrid.getResetAction(), 'preExecute', this._onExecuteResetAction);
     },
 
     /**
-     * Process value
+     * Fills inputs referenced by selectors with ids need to be included and to excluded
      *
-     * @param {*} value
+     * @param {*} id model id
      * @param {Backbone.Model} model
      * @protected
      */
-    _processValue: function(value, model) {
-        var includedValues = this.get('included');
-        var excludedValues = this.get('excluded');
+    _processValue: function(id, model) {
+        var original = this.get('original');
+        var included = this.get('included');
+        var excluded = this.get('excluded');
 
         var isActive = model.get(this.columnName);
-        if (isActive) {
-            includedValues = _.union(includedValues, [value]);
-            excludedValues = _.without(excludedValues, value);
+        var originallyActive;
+        if (_.has(original, id)) {
+            originallyActive = original[id];
         } else {
-            includedValues = _.without(includedValues, value);
-            excludedValues = _.union(excludedValues, [value]);
+            originallyActive = !isActive;
+            original[id] = originallyActive;
         }
 
-        this.set('included', includedValues);
-        this.set('excluded', excludedValues);
+        if (isActive) {
+            if (originallyActive) {
+                included = _.without(included, [id]);
+            } else {
+                included = _.union(included, [id]);
+            }
+            excluded = _.without(excluded, id);
+        } else {
+            included = _.without(included, id);
+            if (!originallyActive) {
+                excluded = _.without(excluded, [id]);
+            } else {
+                excluded = _.union(excluded, [id]);
+            }
+        }
 
-        // synchronize with form
+        this.set('included', included);
+        this.set('excluded', excluded);
+        this.set('original', original);
+
+        this._synchronizeState();
+    },
+
+    /**
+     * Clears state of include and exclude properties to empty values
+     *
+     * @private
+     */
+    _clearState: function () {
+        this.set('included', []);
+        this.set('excluded', []);
+        this.set('original', {});
+    },
+
+    /**
+     * Synchronize values of include and exclude properties with form fields and datagrid parameters
+     *
+     * @private
+     */
+    _synchronizeState: function () {
+        var included = this.get('included');
+        var excluded = this.get('excluded');
         if (this.selectors.included) {
-            $(this.selectors.included).val(includedValues.join(','));
+            $(this.selectors.included).val(included.join(','));
         }
         if (this.selectors.excluded) {
-            $(this.selectors.excluded).val(excludedValues.join(','));
+            $(this.selectors.excluded).val(excluded.join(','));
         }
+        this.datagrid.setAdditionalParameter('data_in', included);
+        this.datagrid.setAdditionalParameter('data_not_in', excluded);
+    },
 
-        // synchronize with datagrid
-        this.datagrid.setAdditionalParameter('data_in', includedValues);
-        this.datagrid.setAdditionalParameter('data_not_in', excludedValues);
+    /**
+     * Confirms refresh action that before it will be executed
+     *
+     * @param {Oro.Datagrid.Action.AbstractAction} action
+     * @param {Object} options
+     * @private
+     */
+    _onExecuteRefreshAction: function(action, options) {
+        this._confirmAction(action, options, 'refresh', {
+            title: 'Refresh Confirmation',
+            content: 'Your local changes will be lost. Are you sure you want to refresh grid?'
+        });
+    },
+
+    /**
+     * Confirms reset action that before it will be executed
+     *
+     * @param {Oro.Datagrid.Action.AbstractAction} action
+     * @param {Object} options
+     * @private
+     */
+    _onExecuteResetAction: function(action, options) {
+        this._confirmAction(action, options, 'reset', {
+            title: 'Reset Confirmation',
+            content: 'Your local changes will be lost. Are you sure you want to reset grid?'
+        });
+    },
+
+    /**
+     * Asks user a confirmation if there are local changes, if user confirms then clears state and runs action
+     *
+     * @param {Oro.Datagrid.Action.AbstractAction} action
+     * @param {Object} actionOptions
+     * @param {String} type "reset" or "refresh"
+     * @param {Object} confirmModalOptions Options for confirm dialog
+     * @private
+     */
+    _confirmAction: function(action, actionOptions, type, confirmModalOptions) {
+        this.confirmed = this.confirmed || {};
+        if (!this.confirmed[type] && this._hasChanges()) {
+            actionOptions.doExecute = false; // do not execute action until it's confirmed
+            this._openConfirmDialog(type, confirmModalOptions, function () {
+                // If confirmed, clear state and run action
+                this.confirmed[type] = true;
+                this._clearState();
+                this._synchronizeState();
+                action.run();
+            });
+        }
+        this.confirmed[type] = false;
+    },
+
+    /**
+     * Returns TRUE if listener contains user changes
+     *
+     * @return {Boolean}
+     * @private
+     */
+    _hasChanges: function() {
+        return !_.isEmpty(this.get('included')) || !_.isEmpty(this.get('excluded'));
+    },
+
+    /**
+     * Opens confirm modal dialog
+     */
+    _openConfirmDialog: function(type, options, callback) {
+        this.confirmModal = this.confirmModal || {};
+        if (!this.confirmModal[type]) {
+            this.confirmModal[type] = new Oro.BootstrapModal(_.extend({
+                title: 'Confirmation',
+                okText: 'Yes'
+            }, options));
+            this.confirmModal[type].on('ok', _.bind(callback, this));
+        }
+        this.confirmModal[type].open();
     }
 });
