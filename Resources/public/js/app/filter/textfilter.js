@@ -14,7 +14,7 @@ Oro.Filter = Oro.Filter || {};
 Oro.Filter.TextFilter = Oro.Filter.AbstractFilter.extend({
     /** @property */
     template: _.template(
-        '<button class="btn filter-criteria-selector oro-drop-opener oro-dropdown-toggle">' +
+        '<button type="button" class="btn filter-criteria-selector oro-drop-opener oro-dropdown-toggle">' +
             '<%= label %>: <strong class="filter-criteria-hint"><%= criteriaHint %></strong>' +
             '<span class="caret"></span>' +
         '</button>' +
@@ -34,8 +34,8 @@ Oro.Filter.TextFilter = Oro.Filter.AbstractFilter.extend({
             '</div>' +
             '<div class="oro-action">' +
                 '<div class="btn-group">' +
-                    '<button class="btn btn-small filter-criteria-hide">Close</button>' +
-                    '<button class="btn btn-small btn-primary filter-update">Update</button>' +
+                    '<button type="button" class="btn btn-small filter-criteria-hide">Close</button>' +
+                    '<button type="button" class="btn btn-small btn-primary filter-update">Update</button>' +
                 '</div>' +
             '</div>' +
         '</div>'
