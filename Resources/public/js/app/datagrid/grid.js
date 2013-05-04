@@ -121,10 +121,8 @@ Oro.Datagrid.Grid = Backgrid.Grid.extend({
         }
 
         options.actions = options.actions || [];
-        console.log(options.actions);
         this.rowClickAction = this.filterOnClickAction(options.actions);
         if (!_.isEmpty(options.actions)) {
-            console.log(options.actions);
             options.columns.push(this.createActionsColumn(options.actions));
         }
 
