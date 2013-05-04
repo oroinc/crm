@@ -43,38 +43,6 @@ abstract class UserRelationDatagridManager extends DatagridManager
         );
         $fieldsCollection->add($fieldId);
 
-        $fieldUsername = new FieldDescription();
-        $fieldUsername->setName('username');
-        $fieldUsername->setOptions(
-            array(
-                'type'        => FieldDescriptionInterface::TYPE_TEXT,
-                'label'       => 'Username',
-                'field_name'  => 'username',
-                'filter_type' => FilterInterface::TYPE_STRING,
-                'required'    => false,
-                'sortable'    => true,
-                'filterable'  => true,
-                'show_filter' => true,
-            )
-        );
-        $fieldsCollection->add($fieldUsername);
-
-        $fieldEmail = new FieldDescription();
-        $fieldEmail->setName('email');
-        $fieldEmail->setOptions(
-            array(
-                'type'        => FieldDescriptionInterface::TYPE_TEXT,
-                'label'       => 'Email',
-                'field_name'  => 'email',
-                'filter_type' => FilterInterface::TYPE_STRING,
-                'required'    => false,
-                'sortable'    => true,
-                'filterable'  => true,
-                'show_filter' => true,
-            )
-        );
-        $fieldsCollection->add($fieldEmail);
-
         $fieldFirstName = new FieldDescription();
         $fieldFirstName->setName('firstName');
         $fieldFirstName->setOptions(
@@ -106,6 +74,38 @@ abstract class UserRelationDatagridManager extends DatagridManager
             )
         );
         $fieldsCollection->add($fieldLastName);
+
+        $fieldUsername = new FieldDescription();
+        $fieldUsername->setName('username');
+        $fieldUsername->setOptions(
+            array(
+                'type'        => FieldDescriptionInterface::TYPE_TEXT,
+                'label'       => 'Username',
+                'field_name'  => 'username',
+                'filter_type' => FilterInterface::TYPE_STRING,
+                'required'    => false,
+                'sortable'    => true,
+                'filterable'  => true,
+                'show_filter' => true,
+            )
+        );
+        $fieldsCollection->add($fieldUsername);
+
+        $fieldEmail = new FieldDescription();
+        $fieldEmail->setName('email');
+        $fieldEmail->setOptions(
+            array(
+                'type'        => FieldDescriptionInterface::TYPE_TEXT,
+                'label'       => 'Email',
+                'field_name'  => 'email',
+                'filter_type' => FilterInterface::TYPE_STRING,
+                'required'    => false,
+                'sortable'    => true,
+                'filterable'  => true,
+                'show_filter' => true,
+            )
+        );
+        $fieldsCollection->add($fieldEmail);
     }
 
     /**

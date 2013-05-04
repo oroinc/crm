@@ -178,7 +178,8 @@ Oro.User.GridListener = Oro.Datagrid.Listener.AbstractListener.extend({
         if (!this.confirmModal[type]) {
             this.confirmModal[type] = new Oro.BootstrapModal(_.extend({
                 title: 'Confirmation',
-                okText: 'Yes'
+                okText: 'Yes',
+                cancelText: 'Cancel'
             }, options));
             this.confirmModal[type].on('ok', _.bind(callback, this));
         }
