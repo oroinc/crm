@@ -14,6 +14,7 @@
     '@OroGridBundle/Resources/public/js/app/datagrid/action/refreshcollectionaction.js'
     '@OroGridBundle/Resources/public/js/app/datagrid/action/resetcollectionaction.js'
     '@OroGridBundle/Resources/public/js/app/datagrid/action/cell.js'
+    '@OroGridBundle/Resources/public/js/app/datagrid/action/column.js'
     '@OroGridBundle/Resources/public/js/app/datagrid/actionspanel.js'
 
     '@OroGridBundle/Resources/public/js/app/datagrid/cell/formatter/momentformatter.js'
@@ -118,7 +119,7 @@
                             {% if not loop.last %},{% endif %}
                         {% endfor %}
                     },
-                    actions: {
+                    rowActions: {
                         {% for action in datagrid.rowActions %}
                             {{ action.name|json_encode|raw }}:
                             {% if action.type == constant(actionTypePrefix ~ 'TYPE_DELETE') %}

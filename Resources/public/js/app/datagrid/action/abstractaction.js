@@ -5,6 +5,10 @@ Oro.Datagrid.Action = Oro.Datagrid.Action || {};
 /**
  * Abstract action class. Subclasses should override execute method which is invoked when action is running.
  *
+ * Triggers events:
+ *  - "preExecute" before action is executed
+ *  - "postExecute" after action is executed
+ *
  * @class   Oro.Datagrid.Action.AbstractAction
  * @extends Backbone.View
  */
@@ -51,7 +55,14 @@ Oro.Datagrid.Action.AbstractAction = Backbone.View.extend({
      * Run action
      */
     run: function() {
-        this.execute();
+        var options = {
+            doExecute: true
+        };
+        this.trigger('preExecute', this, options);
+        if (options.doExecute) {
+            this.execute();
+            this.trigger('postExecute', this, options);
+        }
     },
 
     /**

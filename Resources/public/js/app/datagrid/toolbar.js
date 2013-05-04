@@ -46,6 +46,8 @@ Oro.Datagrid.Toolbar = Backbone.View.extend({
      *
      * @param {Object} options
      * @param {Backbone.Collection} options.collection
+     * @param {Array} options.actions List of actions
+     * @throws {TypeError} If "collection" is undefined
      */
     initialize: function (options) {
         options = options || {};
@@ -64,26 +66,10 @@ Oro.Datagrid.Toolbar = Backbone.View.extend({
             collection: this.collection
         });
 
-        this.actionsPanel = new this.actionsPanel({
-            actions: [
-                new Oro.Datagrid.Action.RefreshCollectionAction({
-                    collection: this.collection,
-                    launcherOptions: {
-                        label: 'Refresh',
-                        className: 'btn',
-                        iconClassName: 'icon-refresh'
-                    }
-                }),
-                new Oro.Datagrid.Action.ResetCollectionAction({
-                    collection: this.collection,
-                    launcherOptions: {
-                        label: 'Reset',
-                        className: 'btn',
-                        iconClassName: 'icon-repeat'
-                    }
-                })
-            ]
-        });
+        this.actionsPanel = new this.actionsPanel();
+        if (options.actions) {
+            this.actionsPanel.setActions(options.actions);
+        }
 
         Backbone.View.prototype.initialize.call(this, options);
     },

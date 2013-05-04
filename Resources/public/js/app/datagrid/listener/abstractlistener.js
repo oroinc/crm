@@ -13,10 +13,10 @@ Oro.Datagrid.Listener.AbstractListener = Backbone.Model.extend({
     /** @param {Oro.Datagrid.Grid} */
     datagrid: null,
 
-    /** @param {String} */
+    /** @param {String} Column name of cells that will be listened for changing their values */
     columnName: 'id',
 
-    /** @param {String} */
+    /** @param {String} Model field that contains data */
     dataField: 'id',
 
     /**
@@ -42,9 +42,6 @@ Oro.Datagrid.Listener.AbstractListener = Backbone.Model.extend({
         if (options.dataField) {
             this.dataField = options.dataField;
         }
-
-        this.set('included', []);
-        this.set('excluded', []);
 
         this.datagrid.on('cellEdited', this._onCellEdited, this);
 
@@ -72,7 +69,7 @@ Oro.Datagrid.Listener.AbstractListener = Backbone.Model.extend({
     /**
      * Process value
      *
-     * @param {*} value
+     * @param {*} value Value of model property with name of this.dataField
      * @param {Backbone.Model} model
      * @protected
      * @abstract
