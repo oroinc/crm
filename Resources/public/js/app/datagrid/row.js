@@ -36,7 +36,10 @@ Oro.Datagrid.Row = Backgrid.Row.extend({
      * @inheritDoc
      */
     makeCell: function (column) {
-        var cell = Backgrid.Row.prototype.makeCell.apply(this, arguments);
+        var cell = new (column.get("cell"))({
+            column: column,
+            model: this.model
+        });
         this._listenToCellEvents(cell);
         return cell;
     },
@@ -51,5 +54,10 @@ Oro.Datagrid.Row = Backgrid.Row.extend({
         this.listenTo(cell, 'edited', function(cell) {
             this.trigger('cellEdited', this, cell);
         });
+        if (cell.listenRowClick && cell.onRowClicked && _.isFunction(cell.onRowClicked)) {
+            this.on('clicked', function(e) {
+                cell.onRowClicked(this, e);
+            }, this);
+        }
     }
 });

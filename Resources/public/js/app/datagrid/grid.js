@@ -120,9 +120,12 @@ Oro.Datagrid.Grid = Backgrid.Grid.extend({
             this.noDataHint = options.noDataHint.replace('\n', '<br />');
         }
 
+        options.actions = options.actions || [];
+        console.log(options.actions);
+        this.rowClickAction = this.filterOnClickAction(options.actions);
         if (!_.isEmpty(options.actions)) {
+            console.log(options.actions);
             options.columns.push(this.createActionsColumn(options.actions));
-            this.rowClickAction = this.filterOnClickAction(options.actions);
         }
 
         if (this.rowClickAction) {
@@ -193,14 +196,18 @@ Oro.Datagrid.Grid = Backgrid.Grid.extend({
     },
 
     /**
-     * Filters action with runOnRowClick flag
+     * Filters action with runOnRowClick flag. Removes all row actions from actions argument
      *
      * @param actions
      * @return {*}
      */
     filterOnClickAction: function(actions) {
-        var filtered = _.filter(actions, function(action) {
-            return action.prototype.runOnRowClick;
+        var filtered = _.filter(actions, function(action, key) {
+            if (action.prototype.runOnRowClick) {
+                delete actions[key];
+                return true;
+            }
+            return false;
         });
         if (filtered.length) {
             return filtered[0];

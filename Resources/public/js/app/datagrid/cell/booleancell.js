@@ -17,13 +17,16 @@ Oro.Datagrid.Cell.BooleanCell = Backgrid.BooleanCell.extend({
     /** @property {Boolean} */
     editable: false,
 
+    /** @property {Boolean} */
+    listenRowClick: true,
+
     /** @property {Object} */
     editor: _.template("<input type='checkbox' <%= checked ? checked='checked' : '' %> <%= editable ? '' : 'disabled' %> />'"),
 
     /**
      * @inheritDoc
      */
-    initialize: function() {
+    initialize: function(options) {
         Backgrid.BooleanCell.prototype.initialize.apply(this, arguments);
         this.editable = this.column.get("editable");
     },
@@ -67,6 +70,15 @@ Oro.Datagrid.Cell.BooleanCell = Backgrid.BooleanCell.extend({
         if (this.editable) {
             Backgrid.BooleanCell.prototype.save.apply(this, arguments);
             this.trigger("edited", this);
+        }
+    },
+
+    /**
+     * @param {Backgrid.Row} row
+     */
+    onRowClicked: function(row) {
+        if (this.editable) {
+            this.currentEditor.click();
         }
     }
 });
