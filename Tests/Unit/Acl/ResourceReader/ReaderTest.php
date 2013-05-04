@@ -27,7 +27,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
             'Symfony\Bundle\FrameworkBundle\FrameworkBundle'
         );
 
-        $this->kernelMoc = $this->getMock(
+        $this->kernelMoc = $this->getMockForAbstractClass(
             'Symfony\Component\HttpKernel\KernelInterface',
             array()
         );
