@@ -16,7 +16,11 @@ class AccountTypeTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->type = new AccountType('Oro\Bundle\AccountBundle\Entity\Account', 'Oro\Bundle\AccountBundle\Entity\AccountValue');
+        $flexibleManager = $this->getMockBuilder('Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleManager')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->type = new AccountType($flexibleManager,'oro_account');
     }
 
     public function testAddEntityFields()
