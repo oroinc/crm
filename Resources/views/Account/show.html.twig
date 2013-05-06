@@ -22,29 +22,40 @@
 <div class="layout-content">
     <div class="navigation clearfix navbar-extra navbar-extra-right">
         <div class="row">
-            <div class="pull-right">
-                <div class="btn-group icons-holder">
-                    <a href="{{ app.request.get('back') ? app.request.get('back') : path('oro_account_index') }}" class="btn"><i class="icon-chevron-left hide-text">{{ 'Back'|trans }}</i></a>
-                    {% if resource_granted('oro_account_account_edit') %}
-                    <a href="{{ path('oro_account_edit', { id: account.id, back: app.request.uri }) }}" class="btn"><i class="icon-edit hide-text">{{ 'Edit'|trans }}</i></a>
-                    {% endif %}
-                    {% if resource_granted('oro_account_account_remove') %}
-                    <a href="{{ path('oro_account_remove', { id: account.id }) }}" id="remove-btn" class="btn"><i class="icon-trash hide-text">{{ 'Remove'|trans }}</i></a>
-                    {% endif %}
+                <div class="pull-right">
+                    <div class="pull-right">
+                        <div class="btn-group icons-holder ">
+                            <a href="{{ app.session.get('back') ? app.session.get('back') : path('oro_account_index') }}"
+                               class="btn" title="{{ 'Back'|trans }}"><i class="icon-chevron-left hide-text">{{ 'Back'|trans }}</i></a>
+                            {% if resource_granted('oro_account_account_edit') %}
+                                <a href="{{ path('oro_account_edit', { id: account.id }) }}"
+                                   class="btn" title="{{ 'Edit account'|trans }}"><i class="icon-edit hide-text">{{ 'Edit'|trans }}</i></a>
+                            {% endif %}
+                            {% if resource_granted('oro_account_account_remove') %}
+                                <a href="javascript: void(0);" class="btn icons-holder-text remove-button"
+                                   data-url="{{ path('oro_api_delete_account', {'id': account.id}) }}"
+                                   data-redirect="{{ path('oro_account_index') }}"
+                                   data-message="{{ 'Are you sure you want to delete this account?'|trans }}"
+                                   title="{{ 'Delete account'|trans }}"><i class="icon-trash hide-text">{{ 'Remove'|trans }}</i>Delete</a>
+                            {% endif %}
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="span9">
-               <div class="customer-info well-small">
-                   <div class="customer-content">
-                       <div class="sub-title">{{ 'Account'|trans }}</div>
-                       <h1 class="usser-name">{{ account.name|default('N/A') }}</h1>
-                       <ul class="inline">
-                           <li>{{ 'Created'|trans }}: {{ account.createdAt ? macros.time(account.createdAt) : 'N/A' }}</li>
-                           <li>{{ 'Updated'|trans }}: {{ account.updatedAt ? macros.time(account.updatedAt) : 'N/A' }}</li>
-                       </ul>
-                   </div>
-               </div>
-            </div>
+                <div class="pull-left">
+                    <div class="customer-info well-small">
+                        <div class="customer-content pull-left">
+                            <div class="clearfix-oro">
+                                <div class="sub-title">{{ 'Account'|trans }}</div>
+                                <span class="separator">/</span>
+                                <h1 class="usser-name">{{ account.name|default('N/A') }}</h1>
+                            </div>
+                            <ul class="inline">
+                                <li>{{ 'Created'|trans }}: {{ account.createdAt ? macros.time(account.createdAt) : 'N/A' }}</li>
+                                <li>{{ 'Updated'|trans }}: {{ account.updatedAt ? macros.time(account.updatedAt) : 'N/A' }}</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
         </div>
     </div>
     <div class="layout-content">

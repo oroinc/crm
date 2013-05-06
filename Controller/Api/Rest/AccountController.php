@@ -8,6 +8,7 @@ use FOS\Rest\Util\Codes;
 
 use FOS\RestBundle\Controller\Annotations\NamePrefix;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
+use Oro\Bundle\UserBundle\Annotation\Acl;
 
 use Oro\Bundle\AccountBundle\Entity\Manager\AccountManager;
 use Oro\Bundle\AccountBundle\Entity\Account;
@@ -24,11 +25,17 @@ class AccountController extends FOSRestController implements ClassResourceInterf
      * @param int $id Account id
      * @return \Symfony\Component\HttpFoundation\Response
      * @ApiDoc(
-     *  description="Delete account",
-     *  resource=true,
-     *  requirements={
-     *      {"name"="id", "dataType"="integer"},
-     *  }
+     *      description="Delete account",
+     *      resource=true,
+     *      requirements={
+     *          {"name"="id", "dataType"="integer"},
+     *      }
+     * )
+     * @Acl(
+     *      id="oro_account_account_remove",
+     *      name="Remove account",
+     *      description="Remove account",
+     *      parent="oro_account_account"
      * )
      */
     public function deleteAction($id)

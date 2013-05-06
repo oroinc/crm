@@ -90,23 +90,6 @@ class AccountController extends Controller
     }
 
     /**
-     * @Route("/remove/{id}", name="oro_account_remove", requirements={"id"="\d+"})
-     * @Acl(
-     *      id="oro_account_account_remove",
-     *      name="Remove account",
-     *      description="Remove account",
-     *      parent="oro_account_account"
-     * )
-     */
-    public function removeAction(Account $entity)
-    {
-        $this->getManager()->deleteAccount($entity);
-        $this->getFlashBag()->add('success', 'Account successfully removed');
-
-        return $this->redirect($this->generateUrl('oro_account_index'));
-    }
-
-    /**
      * @Route(
      *      "/{_format}",
      *      name="oro_account_index",
