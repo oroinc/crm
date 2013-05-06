@@ -1,3 +1,11 @@
-oro_contact_homepage:
-    pattern:  /hello/{name}
-    defaults: { _controller: OroContactBundle:Default:index }
+oro_contact_bundle:
+    resource:     "@OroContactBundle/Controller"
+    type:         annotation
+    prefix:       /contact
+
+oro_contact_api:
+    resource:     "@OroContactBundle/Controller/Api/Rest/ContactController.php"
+    type:         rest
+    prefix:       api/rest/{version}/
+    defaults:
+        version:  latest

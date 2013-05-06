@@ -1,0 +1,15 @@
+parameters:
+    oro_contact.datagrid_manager.class: Oro\Bundle\ContactBundle\Datagrid\ContactDatagridManager
+
+services:
+    oro_contact.contact.datagrid_manager:
+        class: %oro_contact.datagrid_manager.class%
+        tags:
+            - name: oro_grid.datagrid.manager
+              datagrid_name: contacts
+              entity_name: %oro_contact.entity.class%
+              entity_hint: contacts
+              flexible: true
+              route_name: oro_contact_index
+        calls:
+            - [ setRouter, [ @router ] ]

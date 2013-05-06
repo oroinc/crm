@@ -1,0 +1,15 @@
+{% extends 'OroContactBundle::layout.html.twig' %}
+
+{% block head_script %}
+    {{ parent() }}
+
+    {% include 'OroGridBundle:Include:javascript.html.twig' with {'datagridView': datagrid, 'selector': '#contacts-grid'} %}
+    {% include 'OroGridBundle:Include:stylesheet.html.twig' %}
+{% endblock %}
+
+{% block content %}
+    <div class="container-fluid">
+        <h1>{{ 'Contact Overview'|trans }} <a class="btn btn-primary pull-right" href="{{ path('oro_contact_create', {back: app.request.uri}) }}">{{ 'Add new'|trans }}</a></h1>
+        <div id="contacts-grid"></div>
+    </div>
+{% endblock %}
