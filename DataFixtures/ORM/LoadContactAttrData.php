@@ -59,9 +59,9 @@ class LoadContactAttrData extends AbstractFixture implements ContainerAwareInter
                 ),
                 array(
                     'code' => 'lead_source',
-                    'type' => 'oro_flexibleentity_text',
+                    'type' => 'oro_flexibleentity_simpleselect',
                     'options' => array(
-                        'call', 'TV', 'website'
+                        'other', 'call', 'TV', 'website'
                     )
                 ),
             )

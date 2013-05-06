@@ -18,7 +18,7 @@ services:
             - @oro_flexibleentity.attributetype.factory
         calls:
             - [ addAttributeType, ['oro_flexibleentity_text'] ]
-            - [ addAttributeType, ['oro_flexibleentity_integer'] ]
+            - [ addAttributeType, ['oro_flexibleentity_simpleselect'] ]
             - [ addAttributeType, ['oro_flexibleentity_textarea'] ]
             - [ addAttributeType, ['oro_flexibleentity_date'] ]
         tags:
