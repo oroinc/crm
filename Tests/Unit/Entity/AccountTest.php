@@ -20,6 +20,12 @@ class AccountTest extends \PHPUnit_Framework_TestCase
         $entity = new Account();
         $entity->beforeSave();
         $this->assertInstanceOf('\DateTime', $entity->getCreatedAt());
+    }
+
+    public function testDoPreUpdate()
+    {
+        $entity = new Account();
+        $entity->doPreUpdate();
         $this->assertInstanceOf('\DateTime', $entity->getUpdatedAt());
     }
 }

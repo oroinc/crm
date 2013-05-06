@@ -107,6 +107,15 @@ class Account extends AbstractEntityFlexible
     public function beforeSave()
     {
         $this->created = new \DateTime();
+    }
+
+    /**
+     * Pre update event handler
+     *
+     * @ORM\PreUpdate
+     */
+    public function doPreUpdate()
+    {
         $this->updated = new \DateTime();
     }
 }
