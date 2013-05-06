@@ -1,11 +1,11 @@
 <?php
 
-namespace Oro\Bundle\AccountBundle\Entity\Value;
+namespace Oro\Bundle\ContactBundle\Entity\Value;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityFlexibleValue;
 use Oro\Bundle\FlexibleEntityBundle\Entity\Attribute;
-use Oro\Bundle\AccountBundle\Entity\Contact;
+use Oro\Bundle\ContactBundle\Entity\Contact;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -37,7 +37,7 @@ class ContactValue extends AbstractEntityFlexibleValue
      *
      * @ORM\ManyToMany(targetEntity="Oro\Bundle\FlexibleEntityBundle\Entity\AttributeOption")
      * @ORM\JoinTable(
-     *     name="oro_account_value_option",
+     *     name="oro_contact_value_option",
      *     joinColumns={@ORM\JoinColumn(name="value_id", referencedColumnName="id", onDelete="CASCADE")},
      *     inverseJoinColumns={@ORM\JoinColumn(name="option_id", referencedColumnName="id", onDelete="CASCADE")}
      * )

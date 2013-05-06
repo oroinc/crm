@@ -3,9 +3,12 @@
 namespace Oro\Bundle\ContactBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+
 use JMS\Serializer\Annotation\Type;
 use JMS\Serializer\Annotation\Exclude;
+
 use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
+
 use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityFlexible;
 
 /**
@@ -25,23 +28,14 @@ class Contact extends AbstractEntityFlexible
     protected $id;
 
     /**
-     * @var integer
-     *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User", inversedBy="contacts")
-     * @Type("integer")
-     */
-    protected $createdBy;
-
-    /**
      * @var \Oro\Bundle\FlexibleEntityBundle\Model\AbstractFlexibleValue[]
-     *
-     * @ORM\OneToMany(targetEntity="Oro\Bundle\AccountBundle\Entity\Value\AccountValue", mappedBy="entity", cascade={"persist", "remove"}, orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="Oro\Bundle\ContactBundle\Entity\Value\ContactValue", mappedBy="entity", cascade={"persist", "remove"}, orphanRemoval=true)
      * @Exclude
      */
     protected $values;
 
     /**
-     * Returns the contact unique id.
+     * Returns the account unique id.
      *
      * @return mixed
      */
@@ -68,11 +62,6 @@ class Contact extends AbstractEntityFlexible
     public function getUpdatedAt()
     {
         return $this->updated;
-    }
-
-    public function __toString()
-    {
-        return (string)$this->getName();
     }
 
     /**

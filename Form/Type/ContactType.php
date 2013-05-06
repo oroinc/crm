@@ -6,29 +6,9 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 use Oro\Bundle\FlexibleEntityBundle\Form\Type\FlexibleType;
-use Oro\Bundle\FlexibleEntityBundle\Form\Type\FlexibleValueType;
 
 class ContactType extends FlexibleType
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function addEntityFields(FormBuilderInterface $builder)
-    {
-        // add default flexible fields
-        parent::addEntityFields($builder);
-
-        // contact fields
-        $builder->add(
-            'name',
-            'text',
-            array(
-                'label' => 'Name',
-                'required' => true,
-            )
-        );
-    }
-
     /**
      * Add entity fields to form builder
      *
@@ -40,7 +20,7 @@ class ContactType extends FlexibleType
             'attributes',
             'collection',
             array(
-                'type' => new FlexibleValueType($this->valueClass),
+                'type' => $this->valueFormAlias,
                 'property_path' => 'values',
                 'allow_add' => true,
                 'allow_delete' => true,

@@ -1,0 +1,10 @@
+Oro\Bundle\ContactBundle\Entity\Contact:
+    alias: oro_contact
+    label: Contact
+    flexible_manager: oro_contact.manager.flexible
+    route:
+        name: oro_contact_show
+        parameters:
+            id: id
+    search_template: OroContactBundle:Account:searchResult.html.twig
+    fields: []

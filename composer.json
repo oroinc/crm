@@ -9,7 +9,12 @@
         "php": ">=5.3.3",
         "symfony/symfony": "2.1.*",
         "friendsofsymfony/rest-bundle": "0.11.*",
-        "oro/user-bundle": "dev-master"
+        "nelmio/api-doc-bundle": "dev-master",
+
+        "oro/ui-bundle": "dev-master",
+        "oro/user-bundle": "dev-master",
+        "oro/address-bundle": "dev-master",
+        "oro/contact-bundle": "dev-master"
     },
     "autoload": {
         "psr-0": { "": "src/" }

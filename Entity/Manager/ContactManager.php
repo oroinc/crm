@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\AccountBundle\Entity\Manager;
+namespace Oro\Bundle\ContactBundle\Entity\Manager;
 
 use Doctrine\Common\Persistence\ObjectManager;
 use Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleManager;
@@ -51,60 +51,60 @@ class ContactManager
     }
 
     /**
-     * Updates an account
+     * Updates an contact
      *
-     * @param Contact $account
+     * @param Contact $contact
      * @param bool $flush Whether to flush the changes (default true)
      * @throws \RuntimeException
      */
-    public function updateContact(Contact $account, $flush = true)
+    public function updateContact(Contact $contact, $flush = true)
     {
-        $this->getStorageManager()->persist($account);
+        $this->getStorageManager()->persist($contact);
         if ($flush) {
             $this->getStorageManager()->flush();
         }
     }
 
     /**
-     * Deletes an account
+     * Deletes an contact
      *
-     * @param Contact $account
+     * @param contact $contact
      */
-    public function deleteAccount(Contact $account)
+    public function deleteContact(contact $contact)
     {
-        $this->getStorageManager()->remove($account);
+        $this->getStorageManager()->remove($contact);
         $this->getStorageManager()->flush();
     }
 
     /**
-     * Finds one account by the given criteria
+     * Finds one contact by the given criteria
      *
      * @param  array $criteria
-     * @return Contact
+     * @return contact
      */
-    public function findAccountBy(array $criteria)
+    public function findContactBy(array $criteria)
     {
         return $this->getRepository()->findOneBy($criteria);
     }
 
     /**
-     * Returns a collection with all account instances
+     * Returns a collection with all contact instances
      *
      * @return \Traversable
      */
-    public function findAccounts()
+    public function findContacts()
     {
         return $this->getRepository()->findAll();
     }
 
     /**
-     * Reloads an account
+     * Reloads an contact
      *
-     * @param Contact $account
+     * @param contact $contact
      */
-    public function reloadAccount(Contact $account)
+    public function reloadContact(Contact $contact)
     {
-        $this->getStorageManager()->refresh($account);
+        $this->getStorageManager()->refresh($contact);
     }
 
     /**
@@ -134,9 +134,9 @@ class ContactManager
     {
         return $this->getStorageManager()
             ->createQueryBuilder()
-            ->select('a')
-            ->from('OroContactBundle:Contact', 'a')
-            ->orderBy('a.id', 'ASC');
+            ->select('c')
+            ->from('OroContactBundle:Contact', 'c')
+            ->orderBy('c.id', 'ASC');
     }
 
     /**

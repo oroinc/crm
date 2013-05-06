@@ -1,0 +1,36 @@
+oro_menu_config:
+    items:
+        contact_tab:
+            label: 'Contacts'
+            uri: '#'
+        contact_list:
+            label: 'Contacts'
+            route: 'oro_contact_index'
+        contact_create:
+            label: 'Create Contact'
+            route: 'oro_contact_create'
+
+        shortcut_new_contact:
+            label: Create New Contact
+            route: oro_contact_create
+            extras:
+                description: Create new contact instance
+                isCustomAction: true
+
+    tree:
+        application_menu:
+            children:
+                contact_tab:
+                    children:
+                        contact_list: ~
+                        contact_create: ~
+
+        shortcuts:
+            children:
+                shortcut_new_contact: ~
+
+oro_titles:
+    oro_contact_index: Contacts Overview
+    oro_contact_show: %%contact.name%% - View Contact
+    oro_contact_create: New Contact
+    oro_contact_edit: Edit Contact
