@@ -120,6 +120,38 @@ Add the doctrine mapping and getter / setter in your value implementation as :
     }
 ```
 
+Then, if you want to directly join to these value when do queries on flexible entity, create a custom repository as following :
+
+```php
+class ProductRepository extends FlexibleEntityRepository
+{
+    /**
+     * Add join to values tables
+     *
+     * @param QueryBuilder $qb
+     */
+    protected function addJoinToValueTables(QueryBuilder $qb)
+    {
+        parent::addJoinToValueTables($qb);
+
+        $qb->addSelect('ValueMetric')->addSelect('ValuePrice');
+        $qb->leftJoin('Value.price', 'ValuePrice')->leftJoin('Value.metric', 'ValueMetric');
+    }
+}
+```
+
+Define its use in our flexible entity class with the doctrine annotation :
+
+```php
+/**
+ * @ORM\Table(name="acme_demoflexibleentity_product")
+ * @ORM\Entity(repositoryClass="Acme\Bundle\DemoFlexibleEntityBundle\Entity\Repository\ProductRepository")
+ */
+class Product extends AbstractEntityFlexible
+{
+}
+```
+
 Use
 ---
 
