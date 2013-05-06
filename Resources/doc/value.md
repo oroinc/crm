@@ -8,7 +8,7 @@ By default, attribute is defined as not translatable, you have to setup as follo
 ```php
 $pm = $this->container->get('product_manager');
 $attributeCode = 'name';
-$attribute = $pm->createAttribute(new TextType());
+$attribute = $pm->createAttribute('oro_flexibleentity_text');
 $attribute->setCode($attributeCode);
 $attribute->setTranslatable(true);
 ```
@@ -41,7 +41,7 @@ By default, attribute is defined as not scopable, you have to setup as following
 ```php
 $pm = $this->container->get('product_manager');
 $attributeCode = 'description';
-$attribute = $pm->createAttribute(new TextType());
+$attribute = $pm->createAttribute('oro_flexibleentity_text');
 $attribute->setCode($attributeCode);
 $attribute->setTranslatable(true);
 $attribute->setScopable(true);
@@ -70,16 +70,150 @@ To allow to type a value, you can use these doctrine mapped fields to store the 
 
 The used field is defined by the backendType property of the related attribute.
 
-The precedent do the job for basic data but there is some more complex cases and theirs related backend types :
-- options : used in case of attribute of type simple or multi list
-- media : used to store some metas on media related to this value
-- metric : used to deal with values which have an associate measure unit (cm, km)
-- price : used to deal with values which have an associate currency
+The AbstractEntityFlexibleValue already define some mapping for varchar, integer, decimal, text, date, datetime, options (multi select), option (simple select).
 
-You can create your own, basically, by defining the backend type to use in attribute itself and add the relevant property or relation into your value class.
+There are other backend types defined into flexible bundle as media, metric, price, you can see in the following how to allow their use for your flexible entity.
+
+You can also add your own backend type for a custom attribute type.
+
+Media value
+===========
+
+Define
+------
+
+Add the doctrine mapping and getter / setter in your value implementation as :
+
+```php
+    /**
+     * Store upload values
+     *
+     * @var Media $media
+     *
+     * @ORM\OneToOne(targetEntity="Oro\Bundle\FlexibleEntityBundle\Entity\Media", cascade="persist")
+     * @ORM\JoinColumn(name="media_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    protected $media;
+
+    /**
+     * Get media
+     *
+     * @return \Oro\Bundle\FlexibleEntityBundle\Entity\Media
+     */
+    public function getMedia()
+    {
+        return $this->media;
+    }
+
+    /**
+     * Set media
+     *
+     * @param \Oro\Bundle\FlexibleEntityBundle\Entity\Media $media
+     *
+     * @return \Oro\Bundle\FlexibleEntityBundle\Entity\ProductValue
+     */
+    public function setMedia($media)
+    {
+        $this->media = $media;
+
+        return $this;
+    }
+```
+
+Then, if you want to directly join to these value when do queries on flexible entity, create a custom repository as following :
+
+```php
+class ProductRepository extends FlexibleEntityRepository
+{
+    /**
+     * Add join to values tables
+     *
+     * @param QueryBuilder $qb
+     */
+    protected function addJoinToValueTables(QueryBuilder $qb)
+    {
+        parent::addJoinToValueTables($qb);
+
+        $qb->addSelect('ValueMetric')->addSelect('ValuePrice');
+        $qb->leftJoin('Value.price', 'ValuePrice')->leftJoin('Value.metric', 'ValueMetric');
+    }
+}
+```
+
+Define its use in our flexible entity class with the doctrine annotation :
+
+```php
+/**
+ * @ORM\Table(name="acme_demoflexibleentity_product")
+ * @ORM\Entity(repositoryClass="Acme\Bundle\DemoFlexibleEntityBundle\Entity\Repository\ProductRepository")
+ */
+class Product extends AbstractEntityFlexible
+{
+}
+```
+
+Use
+---
+
+```php
+$pm = $this->container->get('product_manager');
+$value = $pm->createFlexibleValue();
+$value->setAttribute($attPrice);
+$media = new Media();
+$media->setOriginalFilename($uploadedFile->getClientOriginalName());
+$media->setFilename($filename);
+$media->setFilepath($this->getFilePath($media));
+$media->setMimeType($uploadedFile->getMimeType());
+$value->setData($media);
+$product->addValue($value);
+```
 
 Price value
 ===========
+
+Define
+------
+
+Add the doctrine mapping and getter / setter in your value implementation as :
+
+```php
+    /**
+     * Store price value
+     *
+     * @var Price $price
+     *
+     * @ORM\OneToOne(targetEntity="Oro\Bundle\FlexibleEntityBundle\Entity\Price", cascade="persist")
+     * @ORM\JoinColumn(name="price_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    protected $price;
+
+    /**
+     * Get price
+     *
+     * @return Price
+     */
+    public function getPrice()
+    {
+        return $this->price;
+    }
+
+    /**
+     * Set price
+     *
+     * @param Price $price
+     *
+     * @return AbstractEntityFlexibleValue
+     */
+    public function setPrice($price)
+    {
+        $this->price = $price;
+
+        return $this;
+    }
+```
+
+Use
+---
 
 A value can be related to a currency, if related attribute use price backend type.
 
@@ -98,6 +232,49 @@ $product->addValue($value);
 
 Metric value
 ============
+
+Define
+------
+
+```php
+
+    /**
+     * Store metric value
+     *
+     * @var Metric $metric
+     *
+     * @ORM\OneToOne(targetEntity="Oro\Bundle\FlexibleEntityBundle\Entity\Metric", cascade="persist")
+     * @ORM\JoinColumn(name="metric_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    protected $metric;
+
+    /**
+     * Get metric
+     *
+     * @return Metric
+     */
+    public function getMetric()
+    {
+        return $this->metric;
+    }
+
+    /**
+     * Set metric
+     *
+     * @param Metric $metric
+     *
+     * @return AbstractEntityFlexibleValue
+     */
+    public function setMetric($metric)
+    {
+        $this->metric = $metric;
+
+        return $this;
+    }
+```
+
+Use
+---
 
 A value can be related to a measure unit if related attribute use metric backend type.
 

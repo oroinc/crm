@@ -1,6 +1,11 @@
 About queries on flexible entity
 ================================
 
+Repository
+----------
+
+Flexible entity uses a flexible repository which already contains useful method to deal with main data querying.
+
 We can use classic findBy() method of repository to retrieve entity collection (native Symfony shortcurt to build doctrine query)
 
 ```php
@@ -30,15 +35,7 @@ $products = $productRepository->findByWithAttributes(
 $products = $productRepository->findByWithAttributes(array('name', 'description'), null, null, 10, 0);
 // force locale to get french values
 $productManager->setLocale('fr_FR')->getFlexibleRepository()->findByWithAttributes(array('name', 'description'));
-
-// more examples in controllers an unit tests
 ```
-
-This method should be extended to add other operators like, in, etc, for now you have to define the method in your custom repository.
-
-Another interesting method is prepareQueryBuilder(), it allows to prepare query builder with attribute to select, criterias, order.
-
-As it returns a QueryBuilder you can get the query add some very custom clauses, add lock mode, change hydration mode, etc. 
 
 There is also a method to load a flexible entity and all values without lazy loading : 
 
@@ -49,3 +46,13 @@ $customer = $this->container->get('customer_manager')->getFlexibleRepository()->
 // with all values not lazy loaded with new method
 $customer = $this->container->get('customer_manager')->getFlexibleRepository()->findWithAttributes($id);
 ```
+
+You can easily extends the flexible repository and define the use in your flexible entity to add some custom business methods.
+
+Query Builder
+-------------
+
+You can use the method createFlexibleQueryBuilder to return the FlexibleQueryBuilder which already embed some logic to deal with flexible storage and querying (operator, locale, scope).
+
+As it returns a QueryBuilder you can get the query add some very custom clauses, add lock mode, change hydration mode, etc. 
+
