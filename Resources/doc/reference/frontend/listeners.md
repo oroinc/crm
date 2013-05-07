@@ -12,4 +12,5 @@ Specific datagrid instance is extracted from Oro.Registry.
 * **Backbone.Model** - basic Backbone class which provides container functionality;
 * **Oro.Datagrid.Listener.AbstractListener** - abstract listener that allows developer to work with datagrid,
 rows and cells.
+* **Oro.Datagrid.Listener.ColumnFormListener** - listener that synchronize datagrid with entity form fields.
 
