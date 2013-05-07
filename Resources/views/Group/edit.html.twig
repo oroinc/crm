@@ -16,7 +16,7 @@
                 'excluded': '#groupRemoveUsers'
             }
         } %}
-        {% include 'OroUserBundle:Include:listener.html.twig' with {'datagridView': datagrid, 'parameters': listenerParameters} %}
+        {% include 'OroGridBundle:Include:Listener/column_form.html.twig' with {'datagridView': datagrid, 'parameters': listenerParameters} %}
     {% endif %}
 {% endblock %}
 
