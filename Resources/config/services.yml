@@ -6,6 +6,8 @@ parameters:
     oro_account.type.account.class: Oro\Bundle\AccountBundle\Form\Type\AccountType
     oro_account.type.account_value.class: Oro\Bundle\AccountBundle\Form\Type\AccountValueType
     oro_account.handler.account.class: Oro\Bundle\AccountBundle\Form\Handler\AccountHandler
+    oro_account.attribute_type.account.class: Oro\Bundle\AccountBundle\AttributeType\AccountType
+    oro_account.form.type.account_select.class: Oro\Bundle\AccountBundle\Form\Type\AccountSelectType
 
 services:
     oro_account.account.manager.flexible:
@@ -61,3 +63,19 @@ services:
             - @oro_account.form.account
             - @request
             - @doctrine.orm.entity_manager
+
+    # Form type
+    oro_account.form.type.account_select:
+        class: %oro_account.form.type.account_select.class%
+        tags:
+            - { name: form.type, alias: oro_account_select }
+
+    # Flexible attribute
+    oro_account.attribute_type.account:
+        class: %oro_account.attribute_type.account.class%
+        arguments:
+            - @translator
+            - "account"
+            - "oro_account_select"
+        tags:
+            - { name: oro_flexibleentity.attributetype, alias: oro_account_attribute_account }
