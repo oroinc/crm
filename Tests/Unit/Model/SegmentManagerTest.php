@@ -8,7 +8,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 use Symfony\Component\DependencyInjection\Container;
 
-use Oro\Bundle\SegmentationTreeBundle\Model\SegmentManager;
+use Oro\Bundle\SegmentationTreeBundle\Manager\SegmentManager;
 use Oro\Bundle\SegmentationTreeBundle\Entity\AbstractSegment;
 
 /**

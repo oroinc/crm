@@ -26,7 +26,7 @@ class SegmentRepository extends NestedTreeRepository
     {
         $parent = $this->findOneBy(array('id' => $parentId));
 
-        return $this->getChildren($parent, true, 'code');
+        return $this->getChildren($parent, true);
     }
 
     /**

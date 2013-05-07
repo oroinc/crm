@@ -6,7 +6,7 @@ use Oro\Bundle\SegmentationTreeBundle\Tests\Functional\DataFixtures\ORM\LoadItem
 
 use Oro\Bundle\SegmentationTreeBundle\Tests\Functional\Entity\Item;
 use Oro\Bundle\SegmentationTreeBundle\Tests\Functional\Entity\ItemSegment;
-use Oro\Bundle\SegmentationTreeBundle\Model\SegmentManager;
+use Oro\Bundle\SegmentationTreeBundle\Manager\SegmentManager;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\DependencyInjection\Container;
@@ -63,7 +63,6 @@ class SegmentManagerTest extends WebTestCase
      */
     protected function setUp()
     {
-        $this->markTestSkipped("Skipped due to missing DB isolation");
         $entityPath = dirname(__FILE__) . DIRECTORY_SEPARATOR .'..'. DIRECTORY_SEPARATOR .'Entity';
         static::$kernel = static::createKernel(array("debug" => true));
         static::$kernel->boot();
@@ -85,11 +84,20 @@ class SegmentManagerTest extends WebTestCase
     }
 
     /**
+     * {@inheritdoc}
+     */
+    protected function tearDown()
+    {
+        // Remove specific tables used only for the tests
+        $classes = $this->em->getMetadataFactory()->getAllMetadata();
+        $this->schemaTool->dropSchema($classes);
+    }
+
+    /**
      * Initialize database dropping existent and create tables
      */
     protected function initializeDatabase()
     {
-        $this->schemaTool->dropDatabase();
 
         $classes = $this->em->getMetadataFactory()->getAllMetadata();
 
@@ -102,6 +110,7 @@ class SegmentManagerTest extends WebTestCase
         // is configured to manage only our Test entity.
         // See JMS\JobQueueBundle\Entity\Listener\ManyToAnyListener:postGenerateSchema()
         $connection->query('SET FOREIGN_KEY_CHECKS = 0');
+        $this->schemaTool->dropSchema($classes);
         $this->schemaTool->createSchema($classes);
         $connection->query('SET FOREIGN_KEY_CHECKS = 1');
 
@@ -198,7 +207,7 @@ class SegmentManagerTest extends WebTestCase
     /**
      * Test related method
      */
-    public function testMove()
+    public function testMoveParent()
     {
         $idToMove = 5;
         $newParentId = 6;
@@ -206,7 +215,7 @@ class SegmentManagerTest extends WebTestCase
 
         $this->assertNotEquals($newParentId, $segment->getParent()->getId());
 
-        $this->segmentManager->move($idToMove, $newParentId);
+        $this->segmentManager->move($idToMove, $newParentId, null);
         $this->em->flush();
 
         $segment = $this->em->find(static::$itemSegmentEntityName, $idToMove);

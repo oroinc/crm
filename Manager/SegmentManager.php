@@ -1,5 +1,5 @@
 <?php
-namespace Oro\Bundle\SegmentationTreeBundle\Model;
+namespace Oro\Bundle\SegmentationTreeBundle\Manager;
 
 use Oro\Bundle\SegmentationTreeBundle\Entity\Repository\SegmentRepository;
 
@@ -157,18 +157,29 @@ class SegmentManager
     /**
      * Move a segment to another parent
      *
-     * @param integer $segmentId   Segment to move
-     * @param integer $referenceId Parent segment
+     * @param integer $segmentId     Segment to move
+     * @param integer $parentId      Parent segment where to move
+     * @param integer $prevSiblingId Position the node after the passed
+     * sibling. If no sibling is provided, the node became the first child node
      */
-    public function move($segmentId, $referenceId)
+    public function move($segmentId, $parentId, $prevSiblingId)
     {
         $repo = $this->getEntityRepository();
         $segment = $repo->find($segmentId);
-        $reference = $repo->find($referenceId);
+        $parent = $repo->find($parentId);
+        $prevSibling = null;
 
-        $segment->setParent($reference);
+        $segment->setParent($parent);
 
-        $this->getStorageManager()->persist($segment);
+        if (!empty($prevSiblingId)) {
+            $prevSibling = $repo->find($prevSiblingId);
+        }
+
+        if (is_object($prevSibling)) {
+            $repo->persistAsNextSiblingOf($segment, $prevSibling);
+        } else {
+            $repo->persistAsFirstChildOf($segment, $parent);
+        }
     }
 
     /**
