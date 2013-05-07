@@ -141,14 +141,14 @@ class SegmentManager
      * Rename a segment
      *
      * @param integer $segmentId Segment id
-     * @param string  $title     New title for segment
+     * @param string  $code      New code for segment
      */
-    public function rename($segmentId, $title)
+    public function rename($segmentId, $code)
     {
         $repo = $this->getEntityRepository();
         $segment = $repo->find($segmentId);
 
-        $segment->setTitle($title);
+        $segment->setCode($code);
 
         $this->getStorageManager()->persist($segment);
     }
@@ -182,7 +182,7 @@ class SegmentManager
     public function copyNode(AbstractSegment $segment, $parent)
     {
         $newSegment = $this->getSegmentInstance();
-        $newSegment->setTitle($segment->getTitle());
+        $newSegment->setCode($segment->getCode());
         $newSegment->setParent($parent);
 
         // copy children by recursion
@@ -227,15 +227,15 @@ class SegmentManager
     /**
      * Create a new tree by creating a its root node
      *
-     * @param string $title
+     * @param string $code
      *
      * @return AbsractSegment
      */
-    public function createTree($title)
+    public function createTree($code)
     {
         $rootSegment = $this->getSegmentInstance();
         $rootSegment->setParent(null);
-        $rootSegment->setTitle($title);
+        $rootSegment->setCode($code);
         $this->getStorageManager()->persist($rootSegment);
 
         return $rootSegment;

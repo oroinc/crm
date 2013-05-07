@@ -182,17 +182,17 @@ class SegmentManagerTest extends WebTestCase
     public function testRename()
     {
         $idToRename = 6;
-        $newTitle = "My new title";
+        $newCode = "My new code";
 
         $segment = $this->em->find(static::$itemSegmentEntityName, $idToRename);
 
-        $this->assertNotEquals($newTitle, $segment->getTitle());
+        $this->assertNotEquals($newCode, $segment->getCode());
 
-        $this->segmentManager->rename($idToRename, $newTitle);
+        $this->segmentManager->rename($idToRename, $newCode);
         $this->em->flush();
 
         $segment = $this->em->find(static::$itemSegmentEntityName, $idToRename);
-        $this->assertEquals($newTitle, $segment->getTitle());
+        $this->assertEquals($newCode, $segment->getCode());
     }
 
     /**
@@ -240,7 +240,7 @@ class SegmentManagerTest extends WebTestCase
 
         $expectedResultsIds = array($rootNode2->getId(), $segment2->getId());
 
-        $actualResults = $this->segmentManager->search(3, array('title' => 'Two'));
+        $actualResults = $this->segmentManager->search(3, array('code' => 'Two'));
 
         $this->assertCount(count($expectedResultsIds), $actualResults);
 
@@ -254,11 +254,11 @@ class SegmentManagerTest extends WebTestCase
      */
     public function testSearchOnASingleTree()
     {
-        $results = $this->segmentManager->search(1, array('title' => 'Segment'));
+        $results = $this->segmentManager->search(1, array('code' => 'Segment'));
 
         $this->assertCount(1, $results);
 
-        $results = $this->segmentManager->search(3, array('title' => 'Segment'));
+        $results = $this->segmentManager->search(3, array('code' => 'Segment'));
 
         $this->assertCount(5, $results);
 
@@ -288,9 +288,9 @@ class SegmentManagerTest extends WebTestCase
      */
     public function testCreateTree()
     {
-        $newTreeTitle = 'My super new tree';
+        $newTreeCode= 'My super new tree';
 
-        $newTreeRoot = $this->segmentManager->createTree($newTreeTitle);
+        $newTreeRoot = $this->segmentManager->createTree($newTreeCode);
         $this->em->flush();
 
         $expectedTreesIds = array(1, 3, $newTreeRoot->getId());

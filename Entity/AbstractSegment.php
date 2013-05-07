@@ -26,11 +26,11 @@ abstract class AbstractSegment
     protected $id;
 
     /**
-     * @var string $title
+     * @var string $code
      *
-     * @ORM\Column(name="title", type="string", length=64)
+     * @ORM\Column(name="code", type="string", length=64)
      */
-    protected $title;
+    protected $code;
 
     /**
      * @var integer $left
@@ -95,26 +95,27 @@ abstract class AbstractSegment
     }
 
     /**
-     * Set title
-     * @param string $title
+     * Set code
+     *
+     * @param string $code
      *
      * @return AbstractSegment
      */
-    public function setTitle($title)
+    public function setCode($code)
     {
-        $this->title = $title;
+        $this->code = $code;
 
         return $this;
     }
 
     /**
-     * Get title
+     * Get code
      *
      * @return string
      */
-    public function getTitle()
+    public function getCode()
     {
-        return $this->title;
+        return $this->code;
     }
 
     /**
