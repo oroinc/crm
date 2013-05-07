@@ -22,11 +22,23 @@ use Oro\Bundle\SegmentationTreeBundle\Entity\AbstractSegment;
 class SegmentManagerTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var SegmentManager $segmentManager
+     * @var AbstractSegment $segmentManager
      */
     protected $segment;
+
+    /**
+     * @var SegmentManager $segmentManager
+     */
     protected $segmentManager;
+
+    /**
+     * @var Doctrine\Common\Persistence\ObjectManager
+     */
     protected $storageManager;
+
+    /**
+     * @var Oro\Bundle\SegmentationTreeBundle\Entity\Repository\SegmentRepository
+     */
     protected $entityRepository;
 
     /**
@@ -87,22 +99,22 @@ class SegmentManagerTest extends \PHPUnit_Framework_TestCase
         $rootNode = $this->segmentManager->getSegmentInstance();
 
         $node = $this->segmentManager->getSegmentInstance();
-        $node->setTitle('parent node');
+        $node->setCode('parent node');
         $node->setParent($rootNode);
         $rootNode->addChild($node);
 
         $firstChild = $this->segmentManager->getSegmentInstance();
-        $firstChild->setTitle('first child');
+        $firstChild->setCode('first child');
         $firstChild->setParent($node);
         $node->addChild($firstChild);
 
         $secondChild = $this->segmentManager->getSegmentInstance();
-        $secondChild->setTitle('second child');
+        $secondChild->setCode('second child');
         $secondChild->setParent($node);
         $node->addChild($secondChild);
 
         $firstGrandChild = $this->segmentManager->getSegmentInstance();
-        $firstGrandChild->setTitle('first grand child');
+        $firstGrandChild->setCode('first grand child');
         $firstGrandChild->setParent($secondChild);
         $secondChild->addChild($firstGrandChild);
 
@@ -127,10 +139,10 @@ class SegmentManagerTest extends \PHPUnit_Framework_TestCase
     public function testGetChildren()
     {
         $firstChild = $this->segmentManager->getSegmentInstance();
-        $firstChild->setTitle('first child');
+        $firstChild->setCode('first child');
 
         $secondChild = $this->segmentManager->getSegmentInstance();
-        $secondChild->setTitle('second child');
+        $secondChild->setCode('second child');
 
         $originalChildren = new ArrayCollection(array($firstChild, $secondChild));
 
@@ -151,10 +163,10 @@ class SegmentManagerTest extends \PHPUnit_Framework_TestCase
     public function testSearch()
     {
         $firstChild = $this->segmentManager->getSegmentInstance();
-        $firstChild->setTitle('first child');
+        $firstChild->setCode('first child');
 
         $secondChild = $this->segmentManager->getSegmentInstance();
-        $secondChild->setTitle('second child');
+        $secondChild->setCode('second child');
 
         $originalChildren = new ArrayCollection(array($firstChild, $secondChild));
 

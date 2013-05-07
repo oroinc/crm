@@ -72,16 +72,16 @@ class LoadItemSegmentData extends AbstractFixture implements OrderedFixtureInter
     /**
      * Create a Segment entity
      *
-     * @param string      $title  Title of the segment
+     * @param string      $code   Code of the segment
      * @param ItemSegment $parent Parent segment
      * @param array       $items  Items that should be associated to this segment
      *
      * @return ItemSegment
      */
-    protected function createSegment($title, $parent = null, $items = array())
+    protected function createSegment($code, $parent = null, $items = array())
     {
         $segment = new ItemSegment();
-        $segment->setTitle($title);
+        $segment->setCode($code);
         $segment->setParent($parent);
 
         foreach ($items as $item) {

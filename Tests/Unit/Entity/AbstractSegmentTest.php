@@ -46,11 +46,11 @@ class AbstractSegmentTest extends \PHPUnit_Framework_TestCase
     /**
      * Test related method
      */
-    public function testGetTitle()
+    public function testGetCode()
     {
-        $title = "my title";
-        $this->segment->setTitle($title);
-        $this->assertEquals($title, $this->segment->getTitle());
+        $code = "my code";
+        $this->segment->setCode($code);
+        $this->assertEquals($code, $this->segment->getCode());
     }
 
     /**
