@@ -4,7 +4,7 @@ namespace Oro\Bundle\SegmentationTreeBundle\Tests\Functional\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Simple item
+ * Simple item to use for functionnal testing
  *
  * @author    Benoit Jacquemont <benoit@akeneo.com>
  * @copyright 2012 Akeneo SAS (http://www.akeneo.com)
@@ -42,7 +42,7 @@ class Item
     /**
      * Get id of the current item
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -66,7 +66,7 @@ class Item
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -90,7 +90,7 @@ class Item
     /**
      * Get description
      *
-     * @return string 
+     * @return string
      */
     public function getDescription()
     {
