@@ -64,6 +64,18 @@ class LoadContactAttrData extends AbstractFixture implements ContainerAwareInter
                         'other', 'call', 'TV', 'website'
                     )
                 ),
+                array(
+                    'code' => 'account',
+                    'type' => 'oro_account_attribute_account'
+                ),
+                array(
+                    'code' => 'assigned_to',
+                    'type' => 'oro_user_attribute_user'
+                ),
+                array(
+                    'code' => 'reports_to',
+                    'type' => 'oro_contact_attribute_contact'
+                )
             )
         );
 

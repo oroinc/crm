@@ -61,7 +61,7 @@ class ContactDatagridManager extends FlexibleDatagridManager
             );
             $this->fieldsCollection->add($fieldId);
 
-            $specialAttributes = array('shipping_address', 'billing_address');
+            $specialAttributes = array('account', 'assigned_to', 'reports_to');
             foreach ($this->getFlexibleAttributes() as $attribute) {
                 if (in_array($attribute->getCode(), $specialAttributes)) {
                     $attributeType = FieldDescriptionInterface::TYPE_TEXT;

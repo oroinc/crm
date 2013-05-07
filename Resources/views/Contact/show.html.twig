@@ -1,6 +1,6 @@
 {% extends 'OroContactBundle::layout.html.twig' %}
 {% import 'OroUserBundle::macros.html.twig' as macros %}
-{% oro_title_set({params : {"%contact.name%": contact.first_name ~ " " ~ contact.last_name} }) %}
+{% oro_title_set({params : {"%contact.name%": contact.__toString} }) %}
 
 {% block head_script %}
     {{ parent() }}
@@ -49,7 +49,7 @@
                             <div class="clearfix-oro">
                                 <div class="sub-title">{{ 'Contact'|trans }}</div>
                                 <span class="separator">/</span>
-                                <h1 class="usser-name">{{ contact.first_name }} {{ contact.last_name }}</h1>
+                                <h1 class="usser-name">{{ contact.__toString }}</h1>
                             </div>
                             <ul class="inline">
                                 <li>{{ 'Created'|trans }}: {{ contact.createdAt ? macros.time(contact.createdAt) : 'N/A' }}</li>

@@ -6,6 +6,8 @@ parameters:
     oro_contact.type.contact.class: Oro\Bundle\ContactBundle\Form\Type\ContactType
     oro_contact.type.contact_value.class: Oro\Bundle\ContactBundle\Form\Type\ContactValueType
     oro_contact.handler.contact.class: Oro\Bundle\ContactBundle\Form\Handler\ContactHandler
+    oro_contact.attribute_type.contact.class: Oro\Bundle\ContactBundle\AttributeType\ContactType
+    oro_contact.form.type.contact_select.class: Oro\Bundle\ContactBundle\Form\Type\ContactSelectType
 
 services:
     oro_contact.manager.flexible:
@@ -21,6 +23,9 @@ services:
             - [ addAttributeType, ['oro_flexibleentity_simpleselect'] ]
             - [ addAttributeType, ['oro_flexibleentity_textarea'] ]
             - [ addAttributeType, ['oro_flexibleentity_date'] ]
+            - [ addAttributeType, ['oro_account_attribute_account'] ]
+            - [ addAttributeType, ['oro_user_attribute_user'] ]
+            - [ addAttributeType, ['oro_contact_attribute_contact'] ]
         tags:
             - { name: oro_flexibleentity_manager, entity: %oro_contact.entity.class%}
 
@@ -59,3 +64,19 @@ services:
             - @oro_contact.form.contact
             - @request
             - @doctrine.orm.entity_manager
+
+    # Form type
+    oro_contact.form.type.contact_select:
+        class: %oro_contact.form.type.contact_select.class%
+        tags:
+            - { name: form.type, alias: oro_contact_select }
+
+    # Flexible attribute
+    oro_contact.attribute_type.contact:
+        class: %oro_contact.attribute_type.contact.class%
+        arguments:
+            - @translator
+            - "contact"
+            - "oro_contact_select"
+        tags:
+            - { name: oro_flexibleentity.attributetype, alias: oro_contact_attribute_contact }

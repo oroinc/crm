@@ -83,4 +83,9 @@ class Contact extends AbstractEntityFlexible
     {
         $this->updated = new \DateTime();
     }
+
+    public function __toString()
+    {
+        return $this->getValue('first_name') . ' ' . $this->getValue('last_name');
+    }
 }
