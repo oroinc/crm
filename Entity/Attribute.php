@@ -61,7 +61,8 @@ class Attribute extends AbstractEntityAttribute
     public function convertDefaultValueToDatetime()
     {
         if ($this->getDefaultValue()) {
-            if (strpos($this->getAttributeType(), 'DateType') !== false) {
+            // TODO : must be moved and avoid to use service name here
+            if ($this->getAttributeType() === 'oro_flexibleentity_date') {
                 $date = new \DateTime();
                 $date->setTimestamp(intval($this->getDefaultValue()));
 
@@ -79,7 +80,8 @@ class Attribute extends AbstractEntityAttribute
     public function convertDefaultValueToInteger()
     {
         if ($this->getDefaultValue() !== null) {
-            if (strpos($this->getAttributeType(), 'BooleanType') !== false) {
+            // TODO : must be moved and avoid to use service name here
+            if ($this->getAttributeType() === 'oro_flexibleentity_integer') {
                 $this->setDefaultValue((int) $this->getDefaultValue());
             }
         }
@@ -93,7 +95,8 @@ class Attribute extends AbstractEntityAttribute
     public function convertDefaultValueToBoolean()
     {
         if ($this->getDefaultValue() !== null) {
-            if (strpos($this->getAttributeType(), 'BooleanType') !== false) {
+            // TODO : must be moved and avoid to use service name here
+            if ($this->getAttributeType() === 'oro_flexibleentity_boolean') {
                 $this->setDefaultValue((bool) $this->getDefaultValue());
             }
         }
