@@ -5,6 +5,7 @@ use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttribute;
 use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttributeOption;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * Base Doctrine ORM entity attribute
@@ -36,6 +37,7 @@ abstract class AbstractEntityAttribute extends AbstractAttribute
      * @var string $label
      *
      * @ORM\Column(name="label", type="string", length=255)
+     * @Gedmo\Translatable
      */
     protected $label;
 

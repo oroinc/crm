@@ -12,7 +12,6 @@ use Oro\Bundle\FlexibleEntityBundle\Model\Behavior\TimestampableInterface;
  */
 abstract class AbstractAttribute implements TimestampableInterface
 {
-
     /**
      * Attribute id
      * @var integer $id

@@ -23,7 +23,6 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  */
 class Attribute extends AbstractEntityAttribute
 {
-
     /**
      * Overrided to change target entity name
      *
