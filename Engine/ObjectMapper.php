@@ -5,7 +5,7 @@ use Symfony\Component\Translation\Translator;
 use Symfony\Component\Form\Util\PropertyPath;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttributeType;
+use Oro\Bundle\FlexibleEntityBundle\AttributeType\AbstractAttributeType;
 
 class ObjectMapper
 {
