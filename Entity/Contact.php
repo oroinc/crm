@@ -34,8 +34,8 @@ class Contact extends AbstractEntityFlexible
      *
      * @ORM\ManyToMany(targetEntity="Group")
      * @ORM\JoinTable(name="oro_contact_to_contact_group",
-     *      joinColumns={@ORM\JoinColumn(name="id", referencedColumnName="id", onDelete="CASCADE")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="group_id", referencedColumnName="id", onDelete="CASCADE")}
+     *      joinColumns={@ORM\JoinColumn(name="contact_id", referencedColumnName="id", onDelete="CASCADE")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="contact_group_id", referencedColumnName="id", onDelete="CASCADE")}
      * )
      * @Soap\ComplexType("int[]", nillable=true)
      * @Exclude

@@ -51,7 +51,7 @@ class ContactValue extends AbstractEntityFlexibleValue
      *
      * @var Account $account
      *
-     * @ORM\OneToOne(targetEntity="Oro\Bundle\AccountBundle\Entity\Account", cascade="persist")
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\AccountBundle\Entity\Account", cascade="persist")
      * @ORM\JoinColumn(name="account_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $account;
@@ -61,7 +61,7 @@ class ContactValue extends AbstractEntityFlexibleValue
      *
      * @var User $user
      *
-     * @ORM\OneToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User", cascade="persist")
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User", cascade="persist")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $user;
@@ -71,7 +71,7 @@ class ContactValue extends AbstractEntityFlexibleValue
      *
      * @var Contact $contact
      *
-     * @ORM\OneToOne(targetEntity="Oro\Bundle\ContactBundle\Entity\Contact", cascade="persist")
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\ContactBundle\Entity\Contact", cascade="persist")
      * @ORM\JoinColumn(name="contact_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $contact;

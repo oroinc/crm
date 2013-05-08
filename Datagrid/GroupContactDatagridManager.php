@@ -38,13 +38,14 @@ class GroupContactDatagridManager extends FlexibleDatagridManager
                 'required'    => false,
                 'sortable'    => false,
                 'filterable'  => false,
-                'show_column' => true,
+                'show_column' => false,
                 'show_filter' => false,
             )
         );
         $fieldsCollection->add($fieldId);
 
-        // $this->configureFlexibleFields($fieldsCollection);
+        $this->configureFlexibleField($fieldsCollection, 'first_name', array('label' => 'First Name'));
+        $this->configureFlexibleField($fieldsCollection, 'last_name', array('label' => 'Last Name'));
     }
 
     /**

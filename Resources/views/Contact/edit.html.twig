@@ -84,6 +84,10 @@
                     <div class="container-fluid" style="width: auto;">
                         <ul class="nav">
                             <li class="active"><a href="#scroll-main">{{ 'Overview'|trans }}</a></li>
+
+                            {% if form.groups is defined %}
+                                <li><a href="#scroll-groups">{{ 'Groups'|trans }}</a></li>
+                            {% endif %}
                         </ul>
                     </div>
                 </div>
@@ -105,6 +109,17 @@
                             <fieldset class="form-horizontal" id="attributes-list">
                                 {{ form_row(form.attributes) }}
                             </fieldset>
+                        </div>
+                    {% endif %}
+
+                    {% if form.groups is defined %}
+                        <div class="usser-row">
+                            <h4 id="scroll-groups" class="scrollspy-title">{{ 'Groups'|trans }}</h4>
+                            <div class="row-fluid">
+                                <fieldset class="form-horizontal">
+                                    {{ form_row(form.groups, { attr: { class: 'horizontal' } }) }}
+                                </fieldset>
+                            </div>
                         </div>
                     {% endif %}
 

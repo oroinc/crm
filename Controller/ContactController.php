@@ -23,6 +23,7 @@ use Oro\Bundle\ContactBundle\Datagrid\ContactDatagridManager;
  *      description="contact manipulation",
  *      parent="oro_contact"
  * )
+ * @BackUrl("back", useSession=true)
  */
 class ContactController extends Controller
 {
@@ -35,7 +36,6 @@ class ContactController extends Controller
      *      description="View contact",
      *      parent="oro_contact_contact"
      * )
-     * @BackUrl("back")
      */
     public function showAction(Contact $contact)
     {
@@ -73,11 +73,10 @@ class ContactController extends Controller
      *      description="Edit contact",
      *      parent="oro_contact_contact"
      * )
-     * @BackUrl("back")
      */
     public function editAction(Contact $entity)
     {
-        $backUrl = $this->getRedirectUrl($this->generateUrl('oro_contact_index'));
+        $backUrl = $this->generateUrl('oro_contact_index');
 
         if ($this->get('oro_contact.form.handler.contact')->process($entity)) {
             $this->getFlashBag()->add('success', 'Contact successfully saved');
@@ -102,7 +101,6 @@ class ContactController extends Controller
      *      description="View list of contacts",
      *      parent="oro_contact_contact"
      * )
-     * @BackUrl("back")
      */
     public function indexAction(Request $request)
     {
@@ -120,28 +118,6 @@ class ContactController extends Controller
             $view,
             array('datagrid' => $datagrid->createView())
         );
-    }
-
-    /**
-     * Get redirect URLs
-     *
-     * @param  string $default
-     * @return string
-     */
-    protected function getRedirectUrl($default)
-    {
-        $flashBag = $this->getFlashBag();
-        if ($this->getRequest()->query->has('back')) {
-            $backUrl = $this->getRequest()->get('back');
-            $flashBag->set('backUrl', $backUrl);
-        } elseif ($flashBag->has('backUrl')) {
-            $backUrl = $flashBag->get('backUrl');
-            $backUrl = reset($backUrl);
-        } else {
-            $backUrl = null;
-        }
-
-        return $backUrl ? $backUrl : $default;
     }
 
     /**

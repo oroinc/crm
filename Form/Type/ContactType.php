@@ -32,6 +32,27 @@ class ContactType extends FlexibleType
     /**
      * {@inheritdoc}
      */
+    public function addEntityFields(FormBuilderInterface $builder)
+    {
+        // add default flexible fields
+        parent::addEntityFields($builder);
+
+        $builder->add(
+            'groups',
+            'entity',
+            array(
+                'class'    => 'OroContactBundle:Group',
+                'property' => 'name',
+                'multiple' => true,
+                'expanded' => true,
+                'required' => false,
+            )
+        );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(
