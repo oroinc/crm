@@ -44,7 +44,14 @@ class FieldProperty extends AbstractProperty
      */
     protected function getRawValue(ResultRecordInterface $record)
     {
-        return $record->getValue($this->field->getFieldName());
+        try {
+            $value = $record->getValue($this->field->getFieldName());
+        } catch (\LogicException $e) {
+            // default value if there is no flexible attribute
+            $value = null;
+        }
+
+        return $value;
     }
 
     /**
