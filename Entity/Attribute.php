@@ -5,6 +5,7 @@ use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityAttribute;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * Base entity attribute
@@ -20,9 +21,18 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * @ORM\Entity
  * @ORM\HasLifecycleCallbacks
  * @UniqueEntity("code")
+ * @Gedmo\TranslationEntity(class="Oro\Bundle\FlexibleEntityBundle\Entity\AttributeTranslation")
  */
 class Attribute extends AbstractEntityAttribute
 {
+    /**
+     * @var string $label
+     *
+     * @ORM\Column(name="label", type="string", length=255)
+     * @Gedmo\Translatable
+     */
+    protected $label;
+
     /**
      * Overrided to change target entity name
      *
