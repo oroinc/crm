@@ -2,26 +2,30 @@
 
 namespace Oro\Bundle\AddressBundle\Controller\Api\Rest;
 
-use FOS\Rest\Util\Codes;
-use FOS\RestBundle\Controller\FOSRestController;
-use FOS\RestBundle\Routing\ClassResourceInterface;
 use FOS\RestBundle\Controller\Annotations\NamePrefix;
 use FOS\RestBundle\Controller\Annotations\RouteResource;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
-use FOS\RestBundle\View\RouteRedirectView;
-use Knp\Component\Pager\Paginator;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
-use Symfony\Component\HttpFoundation\Response;
+use Oro\Bundle\UserBundle\Annotation\Acl;
 
+use FOS\RestBundle\Routing\ClassResourceInterface;
+use Oro\Bundle\AddressBundle\Form\Handler\ApiFormHandler;
+use Oro\Bundle\SoapBundle\Controller\Api\Rest\FlexibleRestController;
+use Symfony\Component\Form\Form;
+use Symfony\Component\HttpFoundation\Response;
 use Oro\Bundle\AddressBundle\Entity\Manager\AddressManager;
-use Oro\Bundle\AddressBundle\Entity\Address;
-use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityAttribute;
 
 /**
  * @RouteResource("address")
  * @NamePrefix("oro_api_")
+ * @Acl(
+ *      id="oro_address",
+ *      name="Address manipulation",
+ *      description="Address manipulation",
+ *      parent="root"
+ * )
  */
-class AddressController extends FOSRestController implements ClassResourceInterface
+class AddressController extends FlexibleRestController implements ClassResourceInterface
 {
     /**
      * REST GET list
@@ -36,26 +40,17 @@ class AddressController extends FOSRestController implements ClassResourceInterf
      *      {"name"="page", "dataType"="integer"},
      *      {"name"="limit", "dataType"="integer"}
      *  }
+     * @Acl(
+     *      id="oro_address_list",
+     *      name="View list of addresses",
+     *      description="View list of addresses",
+     *      parent="oro_address"
+     * )
      * @return Response
      */
     public function cgetAction()
     {
-        $addressManager = $this->getManager();
-
-        /** @var Paginator $pager */
-        $pager = $this->get('knp_paginator')->paginate(
-            $addressManager->getListQuery()
-                ->getQuery()
-                ->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY),
-            (int) $this->getRequest()->get('page', 1),
-            (int) $this->getRequest()->get('limit', 10)
-        );
-
-        $items = $pager->getItems();
-
-        return $this->handleView(
-            $this->view($items, is_array($items) ? Codes::HTTP_OK : Codes::HTTP_NOT_FOUND)
-        );
+        return parent::getListHandler();
     }
 
     /**
@@ -67,16 +62,17 @@ class AddressController extends FOSRestController implements ClassResourceInterf
      *  description="Get address item",
      *  resource=true
      * )
+     * @Acl(
+     *      id="oro_address_show",
+     *      name="View address",
+     *      description="View address",
+     *      parent="oro_address"
+     * )
      * @return Response
      */
     public function getAction($id)
     {
-        $addressManager = $this->getManager();
-        $item = $addressManager->getRepository()->findOneById($id);
-
-        return $this->handleView(
-            $this->view($item, is_object($item) ? Codes::HTTP_OK : Codes::HTTP_NOT_FOUND)
-        );
+        return parent::getHandler($id);
     }
 
     /**
@@ -88,22 +84,17 @@ class AddressController extends FOSRestController implements ClassResourceInterf
      *  description="Update address",
      *  resource=true
      * )
+     * @Acl(
+     *      id="oro_address_edit",
+     *      name="Edit address",
+     *      description="Edit address",
+     *      parent="oro_address"
+     * )
      * @return Response
      */
     public function putAction($addressId)
     {
-        $entity = $this->getManager()->getRepository()->findOneById((int)$addressId);
-        if (!$entity) {
-            return $this->handleView($this->view(array(), Codes::HTTP_NOT_FOUND));
-        }
-
-        $this->fixFlexRequest($entity);
-        $view = $this->get('oro_address.form.handler.address.api')->process($entity)
-            ? $this->view(array(), Codes::HTTP_NO_CONTENT)
-            : $this->view($this->get('oro_address.form.address.api'), Codes::HTTP_BAD_REQUEST);
-
-
-        return $this->handleView($view);
+        return parent::updateHandler($addressId);
     }
 
     /**
@@ -113,18 +104,16 @@ class AddressController extends FOSRestController implements ClassResourceInterf
      *  description="Create new address",
      *  resource=true
      * )
+     * @Acl(
+     *      id="oro_address_create",
+     *      name="Create address",
+     *      description="Create address",
+     *      parent="oro_address"
+     * )
      */
     public function postAction()
     {
-        $entity = $this->getManager()->createFlexible();
-
-        $this->fixFlexRequest($entity);
-
-        $view = $this->get('oro_address.form.handler.address.api')->process($entity)
-            ? $this->view(array('id' => $entity->getId()), Codes::HTTP_CREATED)
-            : $this->view($this->get('oro_address.form.address.api'), Codes::HTTP_BAD_REQUEST);
-
-        return $this->handleView($view);
+        return parent::createHandler();
     }
 
     /**
@@ -136,19 +125,17 @@ class AddressController extends FOSRestController implements ClassResourceInterf
      *  description="Remove Address",
      *  resource=true
      * )
+     * @Acl(
+     *      id="oro_address_remove",
+     *      name="Remove address",
+     *      description="Remove address",
+     *      parent="oro_address"
+     * )
      * @return Response
      */
     public function deleteAction($addressId)
     {
-        $entity = $this->getManager()->getRepository()->findOneById((int)$addressId);
-        if (!$entity) {
-            return $this->handleView($this->view(array(), Codes::HTTP_NOT_FOUND));
-        }
-
-        $em = $this->getManager();
-        $em->deleteAddress($entity);
-
-        return $this->handleView($this->view(array(), Codes::HTTP_NO_CONTENT));
+        return parent::deleteHandler($addressId);
     }
 
     /**
@@ -162,56 +149,47 @@ class AddressController extends FOSRestController implements ClassResourceInterf
     }
 
     /**
-     * This is temporary fix for flexible entity values processing.
-     *
-     * Assumed that user will post data in the following format:
-     * {address: {"id": "21", "street":"Test","city":"York","values":{"firstname":"John"}}}
-     *
-     * @param Address $entity
+     * @return string
      */
-    protected function fixFlexRequest(Address $entity)
+    protected function getRequestVar()
     {
-        $request = $this->getRequest()->request;
-        $data = $request->get('address', array());
-        $attrDef = $this->getManager()->getAttributeRepository()->findBy(array('entityType' => get_class($entity)));
-        $attrVal = isset($data['attributes']) ? $data['attributes'] : array();
+        return 'address';
+    }
 
-        $data['attributes'] = array();
+    /**
+     * @return Form
+     */
+    protected function getForm()
+    {
+        return $this->get('oro_address.form.address.api');
+    }
 
-        foreach ($attrDef as $i => $attr) {
-            /* @var $attr \Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityAttribute */
-            if ($attr->getBackendType() == 'options') {
-                if (in_array(
-                    $attr->getAttributeType(),
-                    array(
-                        'oro_flexibleentity_multiselect',
-                        'oro_flexibleentity_multicheckbox',
-                    )
-                )) {
-                    $type    = 'options';
-                    $default = array($attr->getOptions()->offsetGet(0)->getId());
-                } else {
-                    $type    = 'option';
-                    $default = $attr->getOptions()->offsetGet(0)->getId();
-                }
-            } else {
-                $type    = $attr->getBackendType();
-                $default = null;
-            }
+    /**
+     * @return ApiFormHandler
+     */
+    protected function getFormHandler()
+    {
+        return $this->get('oro_address.form.handler.address.api');
+    }
 
-            $data['attributes'][$i]        = array();
-            $data['attributes'][$i]['id']  = $attr->getId();
-            $data['attributes'][$i][$type] = $default;
-
-            foreach ($attrVal as $field) {
-                if ($attr->getCode() == (string) $field->code) {
-                    $data['attributes'][$i][$type] = (string) $field->value;
-
-                    break;
-                }
-            }
+    protected function transformEntityField($field, &$value)
+    {
+        switch ($field) {
+            case 'country':
+                $value = array(
+                    'iso2code' => $value->getIso2Code(),
+                    'iso3code' => $value->getIso3Code(),
+                    'name' => $value->getName()
+                );
+                break;
+            case 'state':
+                $value = array(
+                    'code' => $value->getCode(),
+                    'name' => $value->getName()
+                );
+                break;
+            default:
+                parent::transformEntityField($field, $value);
         }
-
-        $request->set('address', $data);
     }
 }

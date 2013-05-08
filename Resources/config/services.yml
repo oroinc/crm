@@ -120,9 +120,12 @@ services:
             - @doctrine.orm.entity_manager
 
     oro_address.form.handler.address.api:
-        class:                        %oro_address.handler.address.class%
-        scope:                        request
-        arguments:                    ["@oro_address.form.address.api", "@request", "@doctrine.orm.entity_manager"]
+        class: %oro_address.handler.address.class%
+        scope: request
+        arguments:
+            - @oro_address.form.address.api
+            - @request
+            - @doctrine.orm.entity_manager
 
     oro_address.form.type.country:
         class: %oro_address.type.country.class%

@@ -2,7 +2,9 @@
 
 namespace Oro\Bundle\AddressBundle\Entity\Manager;
 
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Oro\Bundle\AddressBundle\Entity\AddressBase;
+use Oro\Bundle\FlexibleEntityBundle\Entity\Repository\FlexibleEntityRepository;
 use Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleManager;
 
 use Doctrine\Common\Persistence\ObjectManager;
@@ -139,15 +141,16 @@ class AddressManager implements StorageInterface
     /**
      * Returns basic query instance to get collection with all user instances
      *
-     * @return \Doctrine\ORM\QueryBuilder
+     * @param int $limit
+     * @param int $offset
+     * @return Paginator
      */
-    public function getListQuery()
+    public function getListQuery($limit = 10, $offset = 1)
     {
-        return $this->getStorageManager()
-            ->createQueryBuilder()
-            ->select('a')
-            ->from('OroAddressBundle:Address', 'a')
-            ->orderBy('a.id', 'ASC');
+
+        /** @var FlexibleEntityRepository $repository */
+        $repository = $this->fm->getFlexibleRepository();
+        return $repository->findByWithAttributesQB(array(), null, array('id' => 'ASC'), $limit, $offset);
     }
 
     /**
