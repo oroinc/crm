@@ -27,19 +27,6 @@ class AttributeTypeTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return TranslatorInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected function getTranslatorMock()
-    {
-        $translator = $this->getMock('Symfony\Component\Translation\TranslatorInterface');
-        $translator->expects($this->any())
-            ->method('trans')
-            ->will($this->returnArgument(0));
-
-        return $translator;
-    }
-
-    /**
      * Test related methods
      *
      * @param string $class
@@ -51,7 +38,7 @@ class AttributeTypeTest extends \PHPUnit_Framework_TestCase
      */
     public function testConstructorAnGetters($class, $backend, $form, $name)
     {
-        $attType = new $class($this->getTranslatorMock(), $backend, $form);
+        $attType = new $class($backend, $form);
         $this->assertEquals($attType->getName(), $name);
         $this->assertEquals($attType->getBackendType(), $backend);
         $this->assertEquals($attType->getFormType(), $form);

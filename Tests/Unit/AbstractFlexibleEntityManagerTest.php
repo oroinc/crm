@@ -107,7 +107,7 @@ abstract class AbstractFlexibleManagerTest extends AbstractOrmTest
         $this->container->setParameter('oro_flexibleentity.flexible_config', $this->flexibleConfig);
 
         // prepare attribute type factory
-        $attType = new TextType($this->getTranslatorMock(), 'varchar', 'text');
+        $attType = new TextType('varchar', 'text');
         $this->container->set('oro_flexibleentity.attributetype.text', $attType);
         $attTypes = array('oro_flexibleentity_text' => 'oro_flexibleentity.attributetype.text');
         $this->attributeTypeFactory = new AttributeTypeFactory($this->container, $attTypes);
@@ -128,18 +128,5 @@ abstract class AbstractFlexibleManagerTest extends AbstractOrmTest
 
         $this->container->set('demo_manager', $this->manager);
         $this->container->set('event_dispatcher', $dispatcher);
-    }
-
-    /**
-     * @return TranslatorInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected function getTranslatorMock()
-    {
-        $translator = $this->getMock('Symfony\Component\Translation\TranslatorInterface');
-        $translator->expects($this->any())
-            ->method('trans')
-            ->will($this->returnArgument(0));
-
-        return $translator;
     }
 }

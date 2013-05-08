@@ -30,7 +30,7 @@ With backend type to use and form type to render a value :
 services:
     oro_flexibleentity.attributetype.text:
         class: Oro\Bundle\FlexibleEntityBundle\AttributeType\TextType
-        arguments: ["@translator", "varchar", "text"]
+        arguments: ["varchar", "text"]
         tags:
             - { name: oro_flexibleentity.attributetype, alias: oro_flexibleentity_text }
 ```
