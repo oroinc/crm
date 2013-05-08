@@ -2,13 +2,29 @@
 
 namespace Oro\Bundle\AddressBundle\Tests\Functional\API;
 
+use Acme\Bundle\TestsBundle\Test\ToolsAPI;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Yaml\Yaml;
-use Symfony\Component\Finder\Iterator;
+use Acme\Bundle\TestsBundle\Test\Client;
 
 class RestApiTest extends WebTestCase
 {
+    public $client = null;
+    protected static $hasLoaded = false;
+
+    public function setUp()
+    {
+        $this->client = static::createClient(array(), ToolsAPI::generateWsseHeader());
+        if (!self::$hasLoaded) {
+            $this->client->startTransaction();
+        }
+        self::$hasLoaded = true;
+    }
+
+    public static function tearDownAfterClass()
+    {
+        Client::rollbackTransaction();
+    }
+
     /**
      * Test POST
      *
@@ -25,17 +41,16 @@ class RestApiTest extends WebTestCase
             )
         );
 
-        $client = $this->createClient();
-        $client->request(
+        $this->client->request(
             'POST',
             "api/rest/latest/address",
             $requestData
         );
 
         /** @var $result Response */
-        $result = $client->getResponse();
+        $result = $this->client->getResponse();
 
-        $this->assertJsonResponse($result, 201);
+        ToolsAPI::assertJsonResponse($result, 201);
 
         $responseData = $result->getContent();
         $this->assertNotEmpty($responseData);
@@ -53,16 +68,15 @@ class RestApiTest extends WebTestCase
      */
     public function testGet($id)
     {
-        $client = $this->createClient();
-        $client->request(
+        $this->client->request(
             'GET',
             "api/rest/latest/addresses/" . $id
         );
 
         /** @var $result Response */
-        $result = $client->getResponse();
+        $result = $this->client->getResponse();
 
-        $this->assertJsonResponse($result, 200);
+        ToolsAPI::assertJsonResponse($result, 200);
         $resultJson = json_decode($result->getContent(), true);
 
         $this->assertNotEmpty($resultJson);
@@ -78,7 +92,6 @@ class RestApiTest extends WebTestCase
      */
     public function testPut($id)
     {
-        $client = $this->createClient();
         // update
         $requestData = array('address' =>
             array(
@@ -87,24 +100,24 @@ class RestApiTest extends WebTestCase
             )
         );
 
-        $client->request(
+        $this->client->request(
             'PUT',
             'http://localhost/api/rest/latest/addresses/' . $id,
             $requestData
         );
 
-        $result = $client->getResponse();
+        $result = $this->client->getResponse();
 
-        $this->assertJsonResponse($result, 204);
+        ToolsAPI::assertJsonResponse($result, 204);
 
         // open address by id
-        $client->request(
+        $this->client->request(
             'GET',
             'http://localhost/api/rest/latest/addresses/' . $id
         );
 
-        $result = $client->getResponse();
-        $this->assertJsonResponse($result, 200);
+        $result = $this->client->getResponse();
+        ToolsAPI::assertJsonResponse($result, 200);
 
         $result = json_decode($result->getContent(), true);
 
@@ -121,39 +134,21 @@ class RestApiTest extends WebTestCase
      */
     public function testDelete($id)
     {
-        $client = $this->createClient();
-        $client->request(
+        $this->client->request(
             'DELETE',
             'http://localhost/api/rest/latest/addresses/' . $id
         );
 
         /** @var $result Response */
-        $result = $client->getResponse();
-        $this->assertJsonResponse($result, 204);
+        $result = $this->client->getResponse();
+        ToolsAPI::assertJsonResponse($result, 204);
 
-        $client->request(
+        $this->client->request(
             'GET',
             'http://localhost/api/rest/latest/addresses/' . $id
         );
 
-        $result = $client->getResponse();
-        $this->assertJsonResponse($result, 404);
-    }
-
-    /**
-     * Test API response status
-     *
-     * @param Response $response
-     * @param int $statusCode
-     */
-    protected function assertJsonResponse($response, $statusCode = 200)
-    {
-        $this->assertEquals(
-            $statusCode,
-            $response->getStatusCode()
-        );
-        $this->assertTrue(
-            $response->headers->contains('Content-Type', 'application/json')
-        );
+        $result = $this->client->getResponse();
+        ToolsAPI::assertJsonResponse($result, 404);
     }
 }
