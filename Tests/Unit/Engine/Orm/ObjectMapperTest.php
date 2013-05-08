@@ -1,7 +1,7 @@
 <?php
 namespace Oro\Bundle\SearchBundle\Tests\Unit\Engine\Orm;
 
-use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttributeType;
+use Oro\Bundle\FlexibleEntityBundle\AttributeType\AbstractAttributeType;
 
 use Oro\Bundle\SearchBundle\Engine\ObjectMapper;
 
