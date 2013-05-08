@@ -8,19 +8,12 @@
     "require": {
         "php": ">=5.3.3",
         "symfony/symfony": "2.1.*",
-        "oro/ui-bundle": "dev-master"
+        "stof/doctrine-extensions-bundle": "dev-master"
     },
     "require-dev": {
         "doctrine/dbal": ">=2.2,<2.4-dev",
         "doctrine/orm": ">=2.2.3,<2.4-dev"
     },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/laboro/UIBundle",
-            "branch": "master"
-        }
-    ],
     "autoload": {
         "psr-0": { "Oro\\Bundle\\FlexibleEntityBundle": "" }
     },

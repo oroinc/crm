@@ -5,6 +5,7 @@ use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityAttribute;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * Base entity attribute
@@ -20,9 +21,17 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * @ORM\Entity
  * @ORM\HasLifecycleCallbacks
  * @UniqueEntity("code")
+ * @Gedmo\TranslationEntity(class="Oro\Bundle\FlexibleEntityBundle\Entity\AttributeTranslation")
  */
 class Attribute extends AbstractEntityAttribute
 {
+    /**
+     * @var string $label
+     *
+     * @ORM\Column(name="label", type="string", length=255)
+     * @Gedmo\Translatable
+     */
+    protected $label;
 
     /**
      * Overrided to change target entity name
@@ -62,7 +71,8 @@ class Attribute extends AbstractEntityAttribute
     public function convertDefaultValueToDatetime()
     {
         if ($this->getDefaultValue()) {
-            if (strpos($this->getAttributeType(), 'DateType') !== false) {
+            // TODO : must be moved and avoid to use service name here
+            if ($this->getAttributeType() === 'oro_flexibleentity_date') {
                 $date = new \DateTime();
                 $date->setTimestamp(intval($this->getDefaultValue()));
 
@@ -80,7 +90,8 @@ class Attribute extends AbstractEntityAttribute
     public function convertDefaultValueToInteger()
     {
         if ($this->getDefaultValue() !== null) {
-            if (strpos($this->getAttributeType(), 'BooleanType') !== false) {
+            // TODO : must be moved and avoid to use service name here
+            if ($this->getAttributeType() === 'oro_flexibleentity_integer') {
                 $this->setDefaultValue((int) $this->getDefaultValue());
             }
         }
@@ -94,7 +105,8 @@ class Attribute extends AbstractEntityAttribute
     public function convertDefaultValueToBoolean()
     {
         if ($this->getDefaultValue() !== null) {
-            if (strpos($this->getAttributeType(), 'BooleanType') !== false) {
+            // TODO : must be moved and avoid to use service name here
+            if ($this->getAttributeType() === 'oro_flexibleentity_boolean') {
                 $this->setDefaultValue((bool) $this->getDefaultValue());
             }
         }
