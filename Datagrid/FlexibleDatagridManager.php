@@ -5,7 +5,7 @@ namespace Oro\Bundle\GridBundle\Datagrid;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleManager;
 use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttribute;
-use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttributeType;
+use Oro\Bundle\FlexibleEntityBundle\AttributeType\AbstractAttributeType;
 use Oro\Bundle\GridBundle\Field\FieldDescription;
 use Oro\Bundle\GridBundle\Field\FieldDescriptionInterface;
 use Oro\Bundle\GridBundle\Field\FieldDescriptionCollection;

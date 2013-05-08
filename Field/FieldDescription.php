@@ -2,7 +2,7 @@
 
 namespace Oro\Bundle\GridBundle\Field;
 
-use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttributeType;
+use Oro\Bundle\FlexibleEntityBundle\AttributeType\AbstractAttributeType;
 use Oro\Bundle\GridBundle\Property\PropertyInterface;
 use Oro\Bundle\GridBundle\Property\FieldProperty;
 
