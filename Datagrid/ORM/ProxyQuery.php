@@ -77,7 +77,7 @@ class ProxyQuery extends BaseProxyQuery implements ProxyQueryInterface
         $qb = clone $this->getQueryBuilder();
 
         $this->applyWhere($qb);
-        $this->applyOrderBy($qb);
+        $this->applyOrderByParameters($qb);
 
         return $qb;
     }
@@ -142,10 +142,10 @@ class ProxyQuery extends BaseProxyQuery implements ProxyQueryInterface
      * @param QueryBuilder $queryBuilder
      * @return QueryBuilder
      */
-    protected function applyOrderBy(QueryBuilder $queryBuilder)
+    protected function applyOrderByParameters(QueryBuilder $queryBuilder)
     {
         foreach ($this->sortOrderList as $sortOrder) {
-            $this->applySortOrder($queryBuilder, $sortOrder);
+            $this->applySortOrderParameters($queryBuilder, $sortOrder);
         }
     }
 
@@ -155,10 +155,9 @@ class ProxyQuery extends BaseProxyQuery implements ProxyQueryInterface
      * @param QueryBuilder $queryBuilder
      * @param array $sortOrder
      */
-    protected function applySortOrder(QueryBuilder $queryBuilder, array $sortOrder)
+    protected function applySortOrderParameters(QueryBuilder $queryBuilder, array $sortOrder)
     {
-        list($sortExpression, $direction, $extraSelect) = $sortOrder;
-        $queryBuilder->addOrderBy($sortExpression, $direction);
+        list($sortExpression, $extraSelect) = $sortOrder;
         if ($extraSelect && !$this->hasSelectItem($queryBuilder, $sortExpression)) {
             $queryBuilder->addSelect($extraSelect);
         }
@@ -218,7 +217,7 @@ class ProxyQuery extends BaseProxyQuery implements ProxyQueryInterface
         $qb = clone $this->getQueryBuilder();
 
         // Apply orderBy before change select, because it can contain some expressions from select as aliases
-        $this->applyOrderBy($qb);
+        $this->applyOrderByParameters($qb);
 
         $selectExpressions = array('DISTINCT ' . $this->getIdFieldFQN());
         // We must leave expressions used in having
@@ -312,7 +311,8 @@ class ProxyQuery extends BaseProxyQuery implements ProxyQueryInterface
             throw new \LogicException('Cannot add sorting order, unknown field name in $fieldMapping.');
         }
 
-        $this->sortOrderList[] = array($sortExpression, $direction, $extraSelect);
+        $this->getQueryBuilder()->addOrderBy($sortExpression, $direction);
+        $this->sortOrderList[] = array($sortExpression, $extraSelect);
     }
 
     /**
