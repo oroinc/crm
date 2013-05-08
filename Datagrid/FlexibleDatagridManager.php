@@ -87,8 +87,10 @@ abstract class FlexibleDatagridManager extends DatagridManager
      * @param FieldDescriptionCollection $fieldsCollection
      * @param array $options
      */
-    protected function configureFlexibleFields(FieldDescriptionCollection $fieldsCollection, array $options = array())
-    {
+    protected function configureFlexibleFields(
+        FieldDescriptionCollection $fieldsCollection,
+        array $options = array()
+    ) {
         foreach ($this->getFlexibleAttributes() as $attribute) {
             $attributeCode = $attribute->getCode();
             $fieldsCollection->add(
@@ -101,9 +103,28 @@ abstract class FlexibleDatagridManager extends DatagridManager
     }
 
     /**
+     * @param FieldDescriptionCollection $fieldsCollection
+     * @param string $attributeCode
+     * @param array $options
+     */
+    protected function configureFlexibleField(
+        FieldDescriptionCollection $fieldsCollection,
+        $attributeCode,
+        array $options = array()
+    ) {
+        $fieldsCollection->add(
+            $this->createFlexibleField(
+                $this->getFlexibleAttribute($attributeCode),
+                $options
+            )
+        );
+    }
+
+    /**
      * Create field by flexible attribute
      *
      * @param AbstractAttribute $attribute
+     * @param array $options
      * @return FieldDescriptionInterface
      */
     protected function createFlexibleField(AbstractAttribute $attribute, array $options = array())
@@ -147,32 +168,48 @@ abstract class FlexibleDatagridManager extends DatagridManager
     }
 
     /**
-     * @deprecated Method should not be used outside of the class
      * @return AbstractAttribute[]
      */
-    public function getFlexibleAttributes()
+    protected function getFlexibleAttributes()
     {
-        // TODO Make this method protected
         if (null === $this->attributes) {
             /** @var $attributeRepository \Doctrine\Common\Persistence\ObjectRepository */
             $attributeRepository = $this->flexibleManager->getAttributeRepository();
-            $this->attributes = $attributeRepository->findBy(
+            $attributes = $attributeRepository->findBy(
                 array('entityType' => $this->flexibleManager->getFlexibleName())
             );
+            $this->attributes = array();
+            /** @var $attribute AbstractAttribute */
+            foreach ($attributes as $attribute) {
+                $this->attributes[$attribute->getCode()] = $attribute;
+            }
         }
 
         return $this->attributes;
     }
 
     /**
-     * @deprecated Method should not be used outside of the class
+     * @param $code
+     * @return AbstractAttribute
+     * @throws \LogicException
+     */
+    protected function getFlexibleAttribute($code)
+    {
+        $attributes = $this->getFlexibleAttributes();
+        if (!isset($attributes[$code])) {
+            throw new \LogicException('There is no attribute with code "' . $code . '".');
+        }
+
+        return $attributes[$code];
+    }
+
+    /**
      * @param $flexibleFieldType
      * @return string
      * @throws \LogicException
      */
-    public function convertFlexibleTypeToFieldType($flexibleFieldType)
+    protected function convertFlexibleTypeToFieldType($flexibleFieldType)
     {
-        // TODO Make this method protected
         if (!isset(self::$typeMatches[$flexibleFieldType]['field'])) {
             throw new \LogicException('Unknown flexible backend field type.');
         }
@@ -181,14 +218,12 @@ abstract class FlexibleDatagridManager extends DatagridManager
     }
 
     /**
-     * @deprecated Method should not be used outside of the class
      * @param $flexibleFieldType
      * @return string
      * @throws \LogicException
      */
-    public function convertFlexibleTypeToFilterType($flexibleFieldType)
+    protected function convertFlexibleTypeToFilterType($flexibleFieldType)
     {
-        // TODO Make this method protected
         if (!isset(self::$typeMatches[$flexibleFieldType]['filter'])) {
             throw new \LogicException('Unknown flexible backend filter type.');
         }
