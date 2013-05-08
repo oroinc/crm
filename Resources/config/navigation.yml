@@ -9,6 +9,9 @@ oro_menu_config:
         contact_create:
             label: 'Create Contact'
             route: 'oro_contact_create'
+        contact_group_list:
+            label: 'Groups'
+            route: 'oro_contact_group_index'
 
         shortcut_new_contact:
             label: Create New Contact
@@ -24,6 +27,7 @@ oro_menu_config:
                     children:
                         contact_list: ~
                         contact_create: ~
+                        contact_group_list: ~
 
         shortcuts:
             children:
@@ -34,3 +38,7 @@ oro_titles:
     oro_contact_show: %%contact.name%% - View Contact
     oro_contact_create: New Contact
     oro_contact_edit: Edit Contact
+
+    oro_contact_group_index: Groups Overview
+    oro_contact_group_create: New Group
+    oro_contact_group_edit: Edit Group

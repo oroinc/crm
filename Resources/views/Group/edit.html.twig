@@ -1,0 +1,46 @@
+{% extends 'OroContactBundle::layout.html.twig' %}
+
+{% set title = form.vars.value.id ? 'Edit group'|trans : 'Add group'|trans %}
+
+{% block head_script %}
+    {{ parent() }}
+
+    {% if form.vars.value.id %}
+        {% include 'OroGridBundle:Include:javascript.html.twig' with {'datagridView': datagrid, 'selector': '#contacts-grid'} %}
+        {% include 'OroGridBundle:Include:stylesheet.html.twig' %}
+
+        {% set listenerParameters = {
+            'columnName': 'has_group',
+            'selectors': {
+                'included': '#groupAppendContacts',
+                'excluded': '#groupRemoveContacts'
+            }
+        } %}
+        {% include 'OroGridBundle:Include:Listener/column_form.html.twig' with {'datagridView': datagrid, 'parameters': listenerParameters} %}
+    {% endif %}
+{% endblock %}
+
+{% block page_container %}
+<div class="container-fluid">
+    {% block content %}
+    <form action="{{ form.vars.value.id ? path('oro_contact_group_edit', { id: form.vars.value.id }) : path('oro_contact_group_create') }}" method="post" class="form-register">
+        <fieldset>
+            <legend>{{ title }}</legend>
+
+            {{ form_widget(form.appendContacts, {'id': 'groupAppendContacts'}) }}
+            {{ form_widget(form.removeContacts, {'id': 'groupRemoveContacts'}) }}
+            {{ form_rest(form) }}
+
+            {% if form.vars.value.id %}
+                {{ 'Contacts'|trans }}
+                <div id="contacts-grid"></div>
+            {% endif %}
+
+            <div class="form-row">
+                <button class="btn btn-large btn-primary" type="submit">{{ 'Save'|trans }}</button>
+            </div>
+        </fieldset>
+    </form>
+    {% endblock %}
+</div>
+{% endblock %}

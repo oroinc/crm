@@ -1,9 +1,11 @@
 parameters:
-    oro_contact.datagrid_manager.class: Oro\Bundle\ContactBundle\Datagrid\ContactDatagridManager
+    oro_contact.contact.datagrid_manager.class: Oro\Bundle\ContactBundle\Datagrid\ContactDatagridManager
+    oro_contact.group.datagrid_manager.class: Oro\Bundle\ContactBundle\Datagrid\GroupDatagridManager
+    oro_contact.group_contact.datagrid_manager.class: Oro\Bundle\ContactBundle\Datagrid\GroupContactDatagridManager
 
 services:
     oro_contact.contact.datagrid_manager:
-        class: %oro_contact.datagrid_manager.class%
+        class: %oro_contact.contact.datagrid_manager.class%
         tags:
             - name: oro_grid.datagrid.manager
               datagrid_name: contacts
@@ -11,5 +13,23 @@ services:
               entity_hint: contacts
               flexible: true
               route_name: oro_contact_index
-        calls:
-            - [ setRouter, [ @router ] ]
+
+    oro_contact.group.datagrid_manager:
+        class: %oro_contact.group.datagrid_manager.class%
+        tags:
+            - name: oro_grid.datagrid.manager
+              datagrid_name: groups
+              entity_name: Oro\Bundle\ContactBundle\Entity\Group
+              entity_hint: groups
+              route_name: oro_contact_group_index
+
+    oro_contact.group_contact.datagrid_manager:
+        class: %oro_contact.group_contact.datagrid_manager.class%
+        tags:
+            - name: oro_grid.datagrid.manager
+              datagrid_name: groupcontacts
+              entity_name: %oro_contact.entity.class%
+              entity_hint: contacts
+              flexible: true
+              query_entity_alias: c
+              route_name: oro_contact_group_contact_grid
