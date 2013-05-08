@@ -27,7 +27,7 @@ class Configuration implements ConfigurationInterface
             $rootNode,
             array(
                 'product_caption' => array(
-                    'value' => 'test',
+                    'value' => 'ORO Platform',
                     'type' => 'scalar'
                 ),
             )
