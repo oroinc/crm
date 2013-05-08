@@ -5,7 +5,6 @@ use Symfony\Component\Form\FormFactoryInterface;
 use Oro\Bundle\FlexibleEntityBundle\AttributeType\AttributeTypeInterface;
 use Oro\Bundle\FlexibleEntityBundle\Model\FlexibleValueInterface;
 use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttribute;
-use Symfony\Component\Translation\TranslatorInterface;
 
 /**
  * Abstract attribute type
@@ -42,11 +41,6 @@ abstract class AbstractAttributeType implements AttributeTypeInterface
     const BACKEND_TYPE_PRICE    = 'price';
 
     /**
-     * @var TranslatorInterface
-     */
-    protected $translator;
-
-    /**
      * Field backend type, "varchar" by default, the doctrine mapping field, getter / setter to use for binding
      *
      * @var string
@@ -63,13 +57,11 @@ abstract class AbstractAttributeType implements AttributeTypeInterface
     /**
      * Constructor
      *
-     * @param TranslatorInterface $translator  the service translator
      * @param string              $backendType the backend type
      * @param string              $formType    the form type
      */
-    public function __construct(TranslatorInterface $translator, $backendType, $formType)
+    public function __construct($backendType, $formType)
     {
-        $this->translator  = $translator;
         $this->backendType = $backendType;
         $this->formType    = $formType;
     }
