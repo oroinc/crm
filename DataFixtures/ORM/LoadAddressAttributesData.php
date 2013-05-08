@@ -35,19 +35,22 @@ class LoadAddressAttributesData extends AbstractFixture implements ContainerAwar
 
         $attr = $fm
             ->createAttribute('oro_flexibleentity_text')
-            ->setCode('firstname');
+            ->setCode('firstname')
+            ->setLabel('First name');
 
         $sm->persist($attr);
 
         $attr = $fm
             ->createAttribute('oro_flexibleentity_text')
-            ->setCode('lastname');
+            ->setCode('lastname')
+            ->setLabel('Last name');
 
         $sm->persist($attr);
 
         $attr = $fm
             ->createAttribute('oro_flexibleentity_text')
-            ->setCode('company');
+            ->setCode('company')
+            ->setLabel('Company');
 
         $sm->persist($attr);
         $sm->flush();
