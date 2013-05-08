@@ -37,6 +37,11 @@ class FieldPropertyTest extends \PHPUnit_Framework_TestCase
                 $this->createRecord(array('field' => null)),
                 $this->createFieldDescription('field')
             ),
+            'without value' => array(
+                null,
+                $this->createRecord(array()),
+                $this->createFieldDescription('field')
+            ),
             'default field type' => array(
                 'value',
                 $this->createRecord(array('field' => 'value')),
