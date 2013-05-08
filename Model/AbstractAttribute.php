@@ -26,13 +26,19 @@ abstract class AbstractAttribute implements TimestampableInterface
     protected $code;
 
     /**
+     * Attribute label
+     * @var string $label
+     */
+    protected $label;
+
+    /**
      * Entity type (FQCN)
      * @var string $entityType
      */
     protected $entityType;
 
     /**
-     * Attribute type (FQCN)
+     * Attribute type (service alias))
      * @var string $attributeType
      */
     protected $attributeType;
@@ -138,6 +144,30 @@ abstract class AbstractAttribute implements TimestampableInterface
     public function getCode()
     {
         return $this->code;
+    }
+
+    /**
+     * Set label
+     *
+     * @param string $label
+     *
+     * @return AbstractAttribute
+     */
+    public function setLabel($label)
+    {
+        $this->label = $label;
+
+        return $this;
+    }
+
+    /**
+     * Get label
+     *
+     * @return string
+     */
+    public function getLabel()
+    {
+        return $this->label;
     }
 
     /**
