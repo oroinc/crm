@@ -26,8 +26,12 @@ class Configuration implements ConfigurationInterface
         SettingsBuilder::append(
             $rootNode,
             array(
-                'product_caption' => array(
-                    'value' => 'ORO Platform',
+                'application_name' => array(
+                    'value' => 'ORO',
+                    'type' => 'scalar'
+                ),
+                'application_title' => array(
+                    'value' => 'ORO Business Application Platform',
                     'type' => 'scalar'
                 ),
             )
