@@ -46,6 +46,7 @@ abstract class FlexibleRestController extends RestController
                 if ($attributeValue) {
                     /** @var Attribute $attribute */
                     $attribute = $flexibleValue->getAttribute();
+                    parent::transformEntityField($attribute->getCode(), $attributeValue);
                     $attributeData = array('value' => $attributeValue);
                     if ($attributeValue instanceof TranslatableInterface) {
                         /** @var TranslatableInterface $flexibleValue */
