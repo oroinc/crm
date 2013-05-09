@@ -45,36 +45,54 @@ class LoadContactAttrData extends AbstractFixture implements ContainerAwareInter
     {
         $this->addAttributes(
             array(
-                'first_name',
-                'last_name',
-                'name_prefix',
-                'title',
                 array(
-                    'code' => 'birthdate',
-                    'type' => 'oro_flexibleentity_date'
+                    'code'  => 'first_name',
+                    'label' => 'Lirst Name',
                 ),
                 array(
-                    'code' => 'description',
-                    'type' => 'oro_flexibleentity_textarea'
+                    'code'  => 'last_name',
+                    'label' => 'Last Name',
                 ),
                 array(
-                    'code' => 'lead_source',
-                    'type' => 'oro_flexibleentity_simpleselect',
+                    'code'  => 'name_prefix',
+                    'label' => 'Name Prefix',
+                ),
+                array(
+                    'code'  => 'title',
+                    'label' => 'Title',
+                ),
+                array(
+                    'code'  => 'birthday',
+                    'type'  => 'oro_flexibleentity_date',
+                    'label' => 'Birthday',
+                ),
+                array(
+                    'code'  => 'description',
+                    'type'  => 'oro_flexibleentity_textarea',
+                    'label' => 'Description',
+                ),
+                array(
+                    'code'  => 'lead_source',
+                    'type'  => 'oro_flexibleentity_simpleselect',
+                    'label' => 'Lead Source',
                     'options' => array(
                         'other', 'call', 'TV', 'website'
                     )
                 ),
                 array(
-                    'code' => 'account',
-                    'type' => 'oro_account_attribute_account'
+                    'code'  => 'account',
+                    'type'  => 'oro_account_attribute_account',
+                    'label' => 'Account',
                 ),
                 array(
-                    'code' => 'assigned_to',
-                    'type' => 'oro_user_attribute_user'
+                    'code'  => 'assigned_to',
+                    'type'  => 'oro_user_attribute_user',
+                    'label' => 'Assigned To'
                 ),
                 array(
-                    'code' => 'reports_to',
-                    'type' => 'oro_contact_attribute_contact'
+                    'code'  => 'reports_to',
+                    'type'  => 'oro_contact_attribute_contact',
+                    'label' => 'Reports To'
                 )
             )
         );

@@ -1,7 +1,5 @@
 {% extends 'OroContactBundle::layout.html.twig' %}
 
-{% set title = 'Groups overview'|trans %}
-
 {% block head_script %}
     {{ parent() }}
 
@@ -11,7 +9,7 @@
 
 {% block content %}
 <div class="container-fluid">
-    <h1>{{ 'Groups overview'|trans }} <a class="btn btn-primary pull-right" href="{{ path('oro_contact_group_create') }}" id="add-new-btn">{{ 'Add new'|trans }}</a></h1>
+    <h1>{{ 'Groups'|trans }} <a class="btn btn-primary pull-right" href="{{ path('oro_contact_group_create') }}" id="add-new-btn">{{ 'Add new'|trans }}</a></h1>
     <div id="groups-grid"></div>
 
     <script type="text/javascript">
