@@ -8,11 +8,11 @@ use FOS\RestBundle\Controller\Annotations\QueryParam;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Oro\Bundle\UserBundle\Annotation\Acl;
 
-use FOS\RestBundle\Routing\ClassResourceInterface;
-use Oro\Bundle\AddressBundle\Form\Handler\ApiFormHandler;
-use Oro\Bundle\SoapBundle\Controller\Api\Rest\FlexibleRestController;
 use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Response;
+use FOS\RestBundle\Routing\ClassResourceInterface;
+use Oro\Bundle\SoapBundle\Form\Handler\ApiFormHandler;
+use Oro\Bundle\SoapBundle\Controller\Api\Rest\FlexibleRestController;
 use Oro\Bundle\AddressBundle\Entity\Manager\AddressManager;
 
 /**
@@ -33,8 +33,8 @@ class AddressController extends FlexibleRestController implements ClassResourceI
      * @QueryParam(name="page", requirements="\d+", nullable=true, description="Page number, starting from 1. Defaults to 1.")
      * @QueryParam(name="limit", requirements="\d+", nullable=true, description="Number of items per page. defaults to 10.")
      * @ApiDoc(
-     *  description="Get all addresses items",
-     *  resource=true
+     *      description="Get all addresses items",
+     *      resource=true
      * )
      * filters={
      *      {"name"="page", "dataType"="integer"},
@@ -50,7 +50,7 @@ class AddressController extends FlexibleRestController implements ClassResourceI
      */
     public function cgetAction()
     {
-        return parent::getListHandler();
+        return $this->handleGetListRequest();
     }
 
     /**
@@ -59,8 +59,8 @@ class AddressController extends FlexibleRestController implements ClassResourceI
      * @param string $id
      *
      * @ApiDoc(
-     *  description="Get address item",
-     *  resource=true
+     *      description="Get address item",
+     *      resource=true
      * )
      * @Acl(
      *      id="oro_address_show",
@@ -72,7 +72,7 @@ class AddressController extends FlexibleRestController implements ClassResourceI
      */
     public function getAction($id)
     {
-        return parent::getHandler($id);
+        return $this->handleGetRequest($id);
     }
 
     /**
@@ -81,8 +81,8 @@ class AddressController extends FlexibleRestController implements ClassResourceI
      * @param int $addressId Address item id
      *
      * @ApiDoc(
-     *  description="Update address",
-     *  resource=true
+     *      description="Update address",
+     *      resource=true
      * )
      * @Acl(
      *      id="oro_address_edit",
@@ -94,15 +94,15 @@ class AddressController extends FlexibleRestController implements ClassResourceI
      */
     public function putAction($addressId)
     {
-        return parent::updateHandler($addressId);
+        return $this->handlePutRequest($addressId);
     }
 
     /**
      * Create new address
      *
      * @ApiDoc(
-     *  description="Create new address",
-     *  resource=true
+     *      description="Create new address",
+     *      resource=true
      * )
      * @Acl(
      *      id="oro_address_create",
@@ -113,7 +113,7 @@ class AddressController extends FlexibleRestController implements ClassResourceI
      */
     public function postAction()
     {
-        return parent::createHandler();
+        return $this->handlePostRequest();
     }
 
     /**
@@ -122,8 +122,8 @@ class AddressController extends FlexibleRestController implements ClassResourceI
      * @param int $addressId
      *
      * @ApiDoc(
-     *  description="Remove Address",
-     *  resource=true
+     *      description="Remove Address",
+     *      resource=true
      * )
      * @Acl(
      *      id="oro_address_remove",
@@ -135,7 +135,7 @@ class AddressController extends FlexibleRestController implements ClassResourceI
      */
     public function deleteAction($addressId)
     {
-        return parent::deleteHandler($addressId);
+        return $this->handleDeleteRequest($addressId);
     }
 
     /**
@@ -145,15 +145,7 @@ class AddressController extends FlexibleRestController implements ClassResourceI
      */
     protected function getManager()
     {
-        return $this->get('oro_address.address.manager');
-    }
-
-    /**
-     * @return string
-     */
-    protected function getRequestVar()
-    {
-        return 'address';
+        return $this->get('oro_address.address.manager.api');
     }
 
     /**
