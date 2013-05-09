@@ -4,7 +4,7 @@ parameters:
     oro_address.address.type.entity.class: Oro\Bundle\AddressBundle\Entity\AddressType
 
     oro_address.address.manager.class: Oro\Bundle\AddressBundle\Entity\Manager\AddressManager
-    oro_address.address.manager.api.class:  Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
+    oro_address.address.manager.api.class:  Oro\Bundle\SoapBundle\Entity\Manager\ApiFlexibleEntityManager
     oro_address.address.manager.flexible.class: Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleManager
     oro_address.address.type.manager.class: Oro\Bundle\AddressBundle\Entity\Manager\AddressTypeManager
 
