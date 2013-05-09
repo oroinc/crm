@@ -131,36 +131,39 @@ abstract class FlexibleDatagridManager extends DatagridManager
     {
         $field = new FieldDescription();
         $field->setName($attribute->getCode());
-        $options = array_merge($this->getFlexibleFieldDefaultOptions($attribute), $options);
-        $field->setOptions($options);
+        $field->setOptions($this->getFlexibleFieldOptions($attribute, $options));
 
         return $field;
     }
 
     /**
-     * Get default options for flexible field
+     * Get options for flexible field
      *
      * @param AbstractAttribute $attribute
+     * @param array $options
      * @return array
      */
-    protected function getFlexibleFieldDefaultOptions(AbstractAttribute $attribute)
+    protected function getFlexibleFieldOptions(AbstractAttribute $attribute, array $options = array())
     {
-        $backendType   = $attribute->getBackendType();
-        $attributeType = $this->convertFlexibleTypeToFieldType($backendType);
-        $filterType    = $this->convertFlexibleTypeToFilterType($backendType);
-
-        $result = array(
-            'type'          => $attributeType,
+        $defaultOptions = array(
             'label'         => ucfirst($attribute->getLabel()),
             'field_name'    => $attribute->getCode(),
-            'filter_type'   => $filterType,
             'required'      => false,
             'sortable'      => true,
             'filterable'    => true,
             'flexible_name' => $this->flexibleManager->getFlexibleName()
         );
 
-        if ($attributeType == FieldDescriptionInterface::TYPE_OPTIONS) {
+        $result = array_merge($defaultOptions, $options);
+
+        $backendType = $attribute->getBackendType();
+        if (!isset($result['type'])) {
+            $result['type'] = $this->convertFlexibleTypeToFieldType($backendType);
+        }
+        if (!isset($result['filter_type'])) {
+            $result['filter_type'] = $this->convertFlexibleTypeToFilterType($backendType);
+        }
+        if (!isset($result['multiple']) && $result['type'] == FieldDescriptionInterface::TYPE_OPTIONS) {
             $result['multiple'] = true;
         }
 
