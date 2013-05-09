@@ -31,7 +31,7 @@ abstract class RestController extends FOSRestController
         $manager = $this->getManager();
         $items = $manager->getList($limit, $offset);
 
-        $result = null;
+        $result = array();
         foreach ($items as $item) {
             $result[] = $this->getPreparedItem($item);
         }
@@ -70,12 +70,12 @@ abstract class RestController extends FOSRestController
         }
 
         $this->fixRequestAttributes($entity);
-        $view = $this->getFormHandler()->process($entity)
-            ? $this->view(null, Codes::HTTP_NO_CONTENT)
-            : $this->view($this->getForm(), Codes::HTTP_BAD_REQUEST);
-
-
-        return $this->handleView($view);
+        if ($this->getFormHandler()->process($entity)) {
+            $item = $this->getPreparedItem($entity);
+            return new Response(json_encode($item), Codes::HTTP_OK);
+        } else {
+            return $this->handleView($this->view($this->getForm(), Codes::HTTP_BAD_REQUEST));
+        }
     }
 
     /**
