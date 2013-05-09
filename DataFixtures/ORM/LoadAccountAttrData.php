@@ -4,7 +4,6 @@ namespace Oro\Bundle\AccountBundle\DataFixtures\ORM;
 
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttributeType;
 use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttribute;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
@@ -116,10 +115,13 @@ class LoadAccountAttrData extends AbstractFixture implements ContainerAwareInter
      */
     protected function createAttribute($data)
     {
-        $code = $this->getCode($data);
-        return $this->fm
-            ->createAttribute($this->getType($data))
-            ->setCode($code);
+        /** @var $attribute AbstractAttribute */
+        $attribute = $this->fm->createAttribute($this->getType($data));
+        $attribute
+            ->setCode($this->getCode($data))
+            ->setLabel($this->getLabel($data));
+
+        return $attribute;
     }
 
     protected function setAttributeFlags(AbstractAttribute $attr, $data)
@@ -173,6 +175,31 @@ class LoadAccountAttrData extends AbstractFixture implements ContainerAwareInter
             throw new \InvalidArgumentException('Code is required for attribute');
         }
         return $code;
+    }
+
+    /**
+     * Get label based on configuration
+     *
+     * @param $data
+     * @return string
+     * @throws \InvalidArgumentException
+     */
+    protected function getLabel($data)
+    {
+        $label = null;
+        if (is_string($data)) {
+            $label = $data;
+        } elseif (is_array($data)) {
+            if (isset($data['label'])) {
+                $label = $data['label'];
+            } elseif (isset($data['code'])) {
+                $label = $data['code'];
+            }
+        }
+        if ($label === null) {
+            throw new \InvalidArgumentException('Label is required for attribute');
+        }
+        return $label;
     }
 
     /**
