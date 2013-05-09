@@ -19,7 +19,7 @@ class TitleIndexUpdateCommand extends ContainerAwareCommand
      */
     public function configure()
     {
-        $this->setName('oro:title:index:update');
+        $this->setName('oro:navigation:init');
         $this->setDescription('Load "Title Templates" from annotations and config files to db');
     }
 

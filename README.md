@@ -43,6 +43,11 @@ public function registerBundles()
 
 <a name="first-menu"></a>
 
+### Step 3) Initialize Page Titles
+```
+php app/console oro:navigation:init
+```
+
 ## Your first menu
 
 ### Defining menu with PHP Builder
@@ -145,6 +150,27 @@ replace any menu item from his bundles. Developers can prioritize loading and re
 options via sorting bundles in AppKernel.php.
 
 <a name="rendering-menus"></a>
+
+### Page Titles
+
+Navigation bundle helps to manage page titles for all routes and supports titles translation.
+Rout titles can be defined in navigation.yml file:
+```yaml
+oro_titles:
+    route_name_1: "%%parameter%% - Title"
+    route_name_2: "Edit %%parameter%% record"
+    route_name_3: "Static title"
+```
+
+Title can be defined with annotation together with route annotation:
+```
+@TitleTemplate("Route title with %%parameter%%")
+```
+
+After titles update following command should be executed:
+```
+php app/console oro:navigation:init
+```
 
 ## Rendering Menus
 
