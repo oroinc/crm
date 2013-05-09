@@ -83,7 +83,6 @@ services:
     oro_contact.attribute_type.contact:
         class: %oro_contact.attribute_type.contact.class%
         arguments:
-            - @translator
             - "contact"
             - "oro_contact_select"
         tags:
