@@ -94,14 +94,40 @@ class ApiEntityManager
      * In case when limit and offset set to null QueryBuilder instance will be returned.
      *
      * @param int $limit
-     * @param int $offset
+     * @param int $page
      * @param null $orderBy
      * @return \Traversable
      */
-    public function getList($limit = 10, $offset = 1, $orderBy = null)
+    public function getList($limit = 10, $page = 1, $orderBy = null)
     {
+        $page = $page > 0 ? $page : 1;
         $orderBy = $orderBy ? $orderBy : $this->getDefaultOrderBy();
-        return $this->getRepository()->findBy(array(), $orderBy, $limit, $offset);
+        return $this->getRepository()->findBy(array(), $this->getOrderBy($orderBy), $limit, $this->getOffset($page));
+    }
+
+    /**
+     * Get order by
+     *
+     * @param $orderBy
+     * @return array|null
+     */
+    protected function getOrderBy($orderBy)
+    {
+        return $orderBy ? $orderBy : $this->getDefaultOrderBy();
+    }
+
+    /**
+     * Get offset by page
+     *
+     * @param int|null $page
+     * @return int
+     */
+    protected function getOffset($page)
+    {
+        if (!$page !== null) {
+            $page = $page > 0 ? $page - 1 : 0;
+        }
+        return $page;
     }
 
     /**

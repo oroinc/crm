@@ -46,12 +46,10 @@ class ApiFlexibleEntityManager extends ApiEntityManager
     /**
      * {@inheritDoc}
      */
-    public function getList($limit = 10, $offset = 1, $orderBy = null)
+    public function getList($limit = 10, $page = 1, $orderBy = null)
     {
-        $orderBy = $orderBy ? $orderBy : $this->getDefaultOrderBy();
-
         /** @var FlexibleEntityRepository $repository */
         $repository = $this->getFlexibleManager()->getFlexibleRepository();
-        return $repository->findByWithAttributesQB(array(), null, $orderBy, $limit, $offset);
+        return $repository->findByWithAttributesQB(array(), null, $this->getOrderBy($orderBy), $limit, $this->getOffset($page));
     }
 }
