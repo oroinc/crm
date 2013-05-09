@@ -74,7 +74,6 @@ services:
     oro_account.attribute_type.account:
         class: %oro_account.attribute_type.account.class%
         arguments:
-            - @translator
             - "account"
             - "oro_account_select"
         tags:
