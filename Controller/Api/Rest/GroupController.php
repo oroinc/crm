@@ -13,14 +13,14 @@ use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Response;
 use FOS\RestBundle\Routing\ClassResourceInterface;
 use Oro\Bundle\SoapBundle\Form\Handler\ApiFormHandler;
-use Oro\Bundle\SoapBundle\Controller\Api\Rest\FlexibleRestController;
-use Oro\Bundle\SoapBundle\Entity\Manager\ApiFlexibleEntityManager;
+use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
+use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
 
 /**
- * @RouteResource("contact")
+ * @RouteResource("contactgroup")
  * @NamePrefix("oro_api_")
  */
-class ContactController extends FlexibleRestController implements ClassResourceInterface
+class GroupController extends RestController implements ClassResourceInterface
 {
     /**
      * REST GET list
@@ -28,10 +28,10 @@ class ContactController extends FlexibleRestController implements ClassResourceI
      * @QueryParam(name="page", requirements="\d+", nullable=true, description="Page number, starting from 1. Defaults to 1.")
      * @QueryParam(name="limit", requirements="\d+", nullable=true, description="Number of items per page. defaults to 10.")
      * @ApiDoc(
-     *      description="Get all contacts items",
+     *      description="Get all contact group items",
      *      resource=true
      * )
-     * @AclAncestor("oro_contact_list")
+     * @AclAncestor("oro_contact_group_list")
      * @return Response
      */
     public function cgetAction()
@@ -48,7 +48,12 @@ class ContactController extends FlexibleRestController implements ClassResourceI
      *      description="Get contact item",
      *      resource=true
      * )
-     * @AclAncestor("oro_contact_show")
+     * @Acl(
+     *      id="oro_contact_group_show",
+     *      name="View contact group",
+     *      description="View contact group",
+     *      parent="oro_contact_group"
+     * )
      * @return Response
      */
     public function getAction($id)
@@ -59,13 +64,13 @@ class ContactController extends FlexibleRestController implements ClassResourceI
     /**
      * REST PUT
      *
-     * @param int $id Contact item id
+     * @param int $id
      *
      * @ApiDoc(
-     *      description="Update contact",
+     *      description="Update contact group",
      *      resource=true
      * )
-     * @AclAncestor("oro_contact_edit")
+     * @AclAncestor("oro_contact_group_edit")
      * @return Response
      */
     public function putAction($id)
@@ -74,13 +79,13 @@ class ContactController extends FlexibleRestController implements ClassResourceI
     }
 
     /**
-     * Create new contact
+     * Create new contact group
      *
      * @ApiDoc(
-     *      description="Create new contact",
+     *      description="Create new contact group",
      *      resource=true
      * )
-     * @AclAncestor("oro_contact_create")
+     * @AclAncestor("oro_contact_group_create")
      */
     public function postAction()
     {
@@ -93,14 +98,14 @@ class ContactController extends FlexibleRestController implements ClassResourceI
      * @param int $id
      *
      * @ApiDoc(
-     *      description="Remove Contact",
+     *      description="Remove Contact Group",
      *      resource=true
      * )
      * @Acl(
-     *      id="oro_contact_remove",
-     *      name="Remove contact",
-     *      description="Remove contact",
-     *      parent="oro_contact"
+     *      id="oro_contact_group_remove",
+     *      name="Remove contact group",
+     *      description="Remove contact group",
+     *      parent="oro_contact_group"
      * )
      * @return Response
      */
@@ -112,11 +117,11 @@ class ContactController extends FlexibleRestController implements ClassResourceI
     /**
      * Get entity Manager
      *
-     * @return ApiFlexibleEntityManager
+     * @return ApiEntityManager
      */
     protected function getManager()
     {
-        return $this->get('oro_contact.contact.manager.api');
+        return $this->get('oro_contact.group.manager.api');
     }
 
     /**
@@ -124,7 +129,7 @@ class ContactController extends FlexibleRestController implements ClassResourceI
      */
     protected function getForm()
     {
-        return $this->get('oro_contact.form.contact.api');
+        return $this->get('oro_contact.form.group.api');
     }
 
     /**
@@ -132,6 +137,6 @@ class ContactController extends FlexibleRestController implements ClassResourceI
      */
     protected function getFormHandler()
     {
-        return $this->get('oro_contact.form.handler.contact.api');
+        return $this->get('oro_contact.form.handler.group.api');
     }
 }
