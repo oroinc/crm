@@ -2,31 +2,39 @@
 
 namespace Oro\Bundle\SoapBundle\Controller\Api\Rest;
 
-use Doctrine\Common\Util\ClassUtils;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\Response;
 
+use Doctrine\Common\Persistence\ObjectRepository;
+use Doctrine\Common\Util\ClassUtils;
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\Proxy\Proxy;
 use Doctrine\ORM\UnitOfWork;
+
 use FOS\Rest\Util\Codes;
 use FOS\RestBundle\Controller\FOSRestController;
-use Oro\Bundle\AddressBundle\Form\Handler\ApiFormHandler;
-use Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleManager;
-use Symfony\Component\Form\Form;
-use Symfony\Component\HttpFoundation\Response;
 
+use Oro\Bundle\SoapBundle\Form\Handler\ApiFormHandler;
+use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
+use Oro\Bundle\FlexibleEntityBundle\Entity\Attribute;
+use Oro\Bundle\FlexibleEntityBundle\Model\Behavior\ScopableInterface;
+use Oro\Bundle\FlexibleEntityBundle\Model\Behavior\TranslatableInterface;
+use Oro\Bundle\FlexibleEntityBundle\Model\FlexibleValueInterface;
 use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityAttribute;
 
 abstract class FlexibleRestController extends FOSRestController
 {
+    const ITEMS_PER_PAGE = 10;
+
     /**
-     * GET list
+     * GET entities list
      *
      * @return Response
      */
-    protected function getListHandler()
+    protected function handleGetListRequest()
     {
         $offset = (int)$this->getRequest()->get('page', 1);
-        $limit = (int)$this->getRequest()->get('limit', 10);
+        $limit = (int)$this->getRequest()->get('limit', self::ITEMS_PER_PAGE);
         $manager = $this->getManager();
         $items = $manager->getListQuery($limit, $offset);
 
@@ -40,39 +48,38 @@ abstract class FlexibleRestController extends FOSRestController
     }
 
     /**
-     * GET item
+     * GET single item
      *
-     * @param string $id
+     * @param mixed $id
      * @return Response
      */
-    public function getHandler($id)
+    public function handleGetRequest($id)
     {
         $manager = $this->getManager();
-        $item = $manager->getRepository()->findOneById($id);
+        $item = $manager->getRepository()->find($id);
 
-        $responseItem = $this->getPreparedItem($item);
-
-        return $this->handleView(
-            $this->view($responseItem, $responseItem ? Codes::HTTP_OK : Codes::HTTP_NOT_FOUND)
-        );
+        if ($item) {
+            $item = $this->getPreparedItem($item);
+        }
+        return new Response(json_encode($item), $item ? Codes::HTTP_OK : Codes::HTTP_NOT_FOUND);
     }
 
     /**
      * Edit entity
      *
-     * @param int $id
+     * @param mixed $id
      * @return Response
      */
-    public function updateHandler($id)
+    public function handlePutRequest($id)
     {
-        $entity = $this->getManager()->getRepository()->findOneById((int)$id);
+        $entity = $this->getManager()->getRepository()->find($id);
         if (!$entity) {
-            return $this->handleView($this->view(array(), Codes::HTTP_NOT_FOUND));
+            return $this->handleView($this->view(null, Codes::HTTP_NOT_FOUND));
         }
 
-        $this->fixFlexRequest($entity);
+        $this->fixRequestAttributes($entity);
         $view = $this->getFormHandler()->process($entity)
-            ? $this->view(array(), Codes::HTTP_NO_CONTENT)
+            ? $this->view(null, Codes::HTTP_NO_CONTENT)
             : $this->view($this->getForm(), Codes::HTTP_BAD_REQUEST);
 
 
@@ -84,40 +91,45 @@ abstract class FlexibleRestController extends FOSRestController
      *
      * @return Response
      */
-    public function createHandler()
+    public function handlePostRequest()
     {
-        $entity = $this->getManager()->createFlexible();
-        $this->fixFlexRequest($entity);
+        $entity = $this->getManager()->getFlexibleManager()->createFlexible();
+        $this->fixRequestAttributes($entity);
 
-        $view = $this->getFormHandler()->process($entity)
-            ? $this->view(array('id' => $entity->getId()), Codes::HTTP_CREATED)
-            : $this->view($this->getForm(), Codes::HTTP_BAD_REQUEST);
+        $isProcessed = $this->getFormHandler()->process($entity);
 
+        if ($isProcessed) {
+            $entityClass = ClassUtils::getRealClass(get_class($entity));
+            $classMetadata = $this->getManager()->getObjectManager()->getClassMetadata($entityClass);
+            $view = $this->view($classMetadata->getIdentifierValues($entity), Codes::HTTP_CREATED);
+        } else {
+            $view = $this->view($this->getForm(), Codes::HTTP_BAD_REQUEST);
+        }
         return $this->handleView($view);
     }
 
     /**
      * Delete entity
      *
-     * @param $id
+     * @param mixed $id
      * @return Response
      */
-    public function deleteHandler($id)
+    public function handleDeleteRequest($id)
     {
-        $entity = $this->getManager()->getRepository()->findOneById((int)$id);
+        $entity = $this->getManager()->getRepository()->find($id);
         if (!$entity) {
-            return $this->handleView($this->view(array(), Codes::HTTP_NOT_FOUND));
+            return $this->handleView($this->view(null, Codes::HTTP_NOT_FOUND));
         }
 
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getManager()->getObjectManager();
         $em->remove($entity);
         $em->flush();
 
-        return $this->handleView($this->view(array(), Codes::HTTP_NO_CONTENT));
+        return $this->handleView($this->view(null, Codes::HTTP_NO_CONTENT));
     }
 
     /**
-     * Prepare item for serialization
+     * Prepare entity for serialization
      *
      * @param mixed $entity
      * @return array
@@ -130,18 +142,26 @@ abstract class FlexibleRestController extends FOSRestController
         foreach ($uow->getOriginalEntityData($entity) as $field => $value) {
             if ($field == 'values') {
                 $result['attributes'] = array();
+                /** @var FlexibleValueInterface $flexibleValue */
                 foreach ($entity->getValues() as $flexibleValue) {
                     if ($flexibleValue instanceof Proxy) {
+                        /** @var Proxy $flexibleValue */
                         $flexibleValue->__load();
                     }
                     $attributeValue = $flexibleValue->getData();
                     if ($attributeValue) {
+                        /** @var Attribute $attribute */
                         $attribute = $flexibleValue->getAttribute();
-                        $result['attributes'][$attribute->getCode()] = (object)array(
-                            'locale' => $flexibleValue->getLocale(),
-                            'scope' => $flexibleValue->getScope(),
-                            'value' => $attributeValue
-                        );
+                        $attributeData = array('value' => $attributeValue);
+                        if ($attributeValue instanceof TranslatableInterface) {
+                            /** @var TranslatableInterface $flexibleValue */
+                            $attributeData['locale'] = $flexibleValue->getLocale();
+                        }
+                        if ($attributeValue instanceof ScopableInterface) {
+                            /** @var ScopableInterface $flexibleValue */
+                            $attributeData['scope'] = $flexibleValue->getScope();
+                        }
+                        $result['attributes'][$attribute->getCode()] = (object)$attributeData;
                     }
                 }
                 continue;
@@ -158,34 +178,41 @@ abstract class FlexibleRestController extends FOSRestController
     }
 
     /**
+     * Prepare entity field for serialization
+     *
      * @param string $field
      * @param mixed $value
      */
     protected function transformEntityField($field, &$value)
     {
         if ($value instanceof Proxy && method_exists($value, '__toString')) {
-            $value = $value->__toString();
+            $value = (string)$value;
         } elseif ($value instanceof \DateTime) {
             $value = $value->format('c');
         }
     }
 
     /**
-     * This is temporary fix for flexible entity values processing.
+     * Transform request with flexible entities
      *
-     * Assumed that user will post data in the following format:
+     * Assumed post data in the following format:
      * {entity: {"id": "21", "property_one": "Test", "attributes": {"flexible_attribute_code": "John"}}}
      * {entity: {"id": "21", "property_one": "Test", "attributes": {"flexible_attribute_code": {"value": "John", "scope": "mobile"}}}}
      *
      * @param mixed $entity
      */
-    protected function fixFlexRequest($entity)
+    protected function fixRequestAttributes($entity)
     {
         $request = $this->getRequest()->request;
-        $data = $request->get($this->getRequestVar(), array());
+        $requestVariable = $this->getForm()->getName();
+        $data = $request->get($requestVariable, array());
 
+        /** @var ObjectRepository $attrRepository */
+        $attrRepository = $this->getManager()
+            ->getFlexibleManager()
+            ->getAttributeRepository();
         $entityClass = ClassUtils::getRealClass(get_class($entity));
-        $attrDef = $this->getManager()->getAttributeRepository()->findBy(array('entityType' => $entityClass));
+        $attrDef = $attrRepository->findBy(array('entityType' => $entityClass));
         $attrVal = isset($data['attributes']) ? $data['attributes'] : array();
 
         unset($data['attributes']);
@@ -219,8 +246,12 @@ abstract class FlexibleRestController extends FOSRestController
             foreach ($attrVal as $fieldCode => $fieldValue) {
                 if ($attr->getCode() == (string)$fieldCode) {
                     if (is_array($fieldValue)) {
-                        $data['values'][$i]['scope'] = $fieldValue['scope'];
-                        $data['values'][$i]['locale'] = $fieldValue['locale'];
+                        if (array_key_exists('scope', $fieldValue)) {
+                            $data['values'][$i]['scope'] = $fieldValue['scope'];
+                        }
+                        if (array_key_exists('locale', $fieldValue)) {
+                            $data['values'][$i]['locale'] = $fieldValue['locale'];
+                        }
                         $fieldValue = $fieldValue['value'];
                     }
                     $data['values'][$i][$type] = (string)$fieldValue;
@@ -230,18 +261,18 @@ abstract class FlexibleRestController extends FOSRestController
             }
         }
 
-        $request->set($this->getRequestVar(), $data);
+        $request->set($requestVariable, $data);
     }
 
     /**
      * Get entity Manager
      *
-     * @return FlexibleManager
+     * @return ApiEntityManager
      */
     abstract protected function getManager();
 
     /**
-     * @return Form
+     * @return FormInterface
      */
     abstract protected function getForm();
 
@@ -249,9 +280,4 @@ abstract class FlexibleRestController extends FOSRestController
      * @return ApiFormHandler
      */
     abstract protected function getFormHandler();
-
-    /**
-     * @return string
-     */
-    abstract protected function getRequestVar();
 }
