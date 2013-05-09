@@ -78,7 +78,7 @@ class AddressController extends FlexibleRestController implements ClassResourceI
     /**
      * REST PUT
      *
-     * @param int $addressId Address item id
+     * @param int $id Address item id
      *
      * @ApiDoc(
      *      description="Update address",
@@ -92,9 +92,9 @@ class AddressController extends FlexibleRestController implements ClassResourceI
      * )
      * @return Response
      */
-    public function putAction($addressId)
+    public function putAction($id)
     {
-        return $this->handlePutRequest($addressId);
+        return $this->handlePutRequest($id);
     }
 
     /**
@@ -119,7 +119,7 @@ class AddressController extends FlexibleRestController implements ClassResourceI
     /**
      * REST DELETE
      *
-     * @param int $addressId
+     * @param int $id
      *
      * @ApiDoc(
      *      description="Remove Address",
@@ -133,9 +133,9 @@ class AddressController extends FlexibleRestController implements ClassResourceI
      * )
      * @return Response
      */
-    public function deleteAction($addressId)
+    public function deleteAction($id)
     {
-        return $this->handleDeleteRequest($addressId);
+        return $this->handleDeleteRequest($id);
     }
 
     /**
