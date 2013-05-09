@@ -5,9 +5,6 @@ namespace Oro\Bundle\SoapBundle\Entity\Manager;
 use Doctrine\Common\Persistence\Mapping\ClassMetadata;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\Persistence\ObjectRepository;
-use Doctrine\ORM\Tools\Pagination\Paginator;
-use Oro\Bundle\FlexibleEntityBundle\Entity\Repository\FlexibleEntityRepository;
-use Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleManager;
 
 class ApiEntityManager
 {
@@ -22,29 +19,53 @@ class ApiEntityManager
     protected $om;
 
     /**
-     * @var FlexibleManager
-     */
-    protected $fm;
-
-    /**
      * @var ClassMetadata
      */
-    private $metadata;
+    protected $metadata;
 
     /**
      * Constructor
      *
      * @param string $class Entity name
      * @param ObjectManager $om Object manager
-     * @param FlexibleManager $fm Proxy for methods of flexible manager
      */
-    public function __construct($class, ObjectManager $om, FlexibleManager $fm)
+    public function __construct($class, ObjectManager $om)
     {
         $this->metadata = $om->getClassMetadata($class);
 
         $this->class = $this->metadata->getName();
         $this->om = $om;
-        $this->fm = $fm;
+    }
+
+    /**
+     * Get entity metadata
+     *
+     * @return ClassMetadata
+     */
+    public function getMetadata()
+    {
+        return $this->metadata;
+    }
+
+    /**
+     * Create new entity instance
+     *
+     * @return mixed
+     */
+    public function createEntity()
+    {
+        return new $this->class;
+    }
+
+    /**
+     * Get entity by identifier.
+     *
+     * @param mixed $id
+     * @return object
+     */
+    public function find($id)
+    {
+        return $this->getRepository()->find($id);
     }
 
     /**
@@ -68,29 +89,33 @@ class ApiEntityManager
     }
 
     /**
-     * @return FlexibleManager
-     */
-    public function getFlexibleManager()
-    {
-        return $this->fm;
-    }
-
-    /**
-     * Returns basic query instance to get collection with all user instances
+     * Returns Paginator to paginate throw items.
+     *
+     * In case when limit and offset set to null QueryBuilder instance will be returned.
      *
      * @param int $limit
      * @param int $offset
-     * @return Paginator
+     * @param null $orderBy
+     * @return \Traversable
      */
-    public function getListQuery($limit = 10, $offset = 1)
+    public function getList($limit = 10, $offset = 1, $orderBy = null)
+    {
+        $orderBy = $orderBy ? $orderBy : $this->getDefaultOrderBy();
+        return $this->getRepository()->findBy(array(), $orderBy, $limit, $offset);
+    }
+
+    /**
+     * Get default order by.
+     *
+     * @return array|null
+     */
+    protected function getDefaultOrderBy()
     {
         $ids = $this->metadata->getIdentifierFieldNames();
         $orderBy = $ids ? array() : null;
         foreach ($ids as $pk) {
             $orderBy[$pk] = 'ASC';
         }
-        /** @var FlexibleEntityRepository $repository */
-        $repository = $this->getFlexibleManager()->getFlexibleRepository();
-        return $repository->findByWithAttributesQB(array(), null, $orderBy, $limit, $offset);
+        return $orderBy;
     }
 }
