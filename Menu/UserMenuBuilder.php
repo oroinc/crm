@@ -31,7 +31,8 @@ class UserMenuBuilder implements BuilderInterface
                  'routeParameters' => array('id' => $this->securityContext->getToken()->getUser()->getId())
             )
         );
-        $menu->addChild(
+        /* Disabled status menu till active stream will be implemented (BAP-617)
+         $menu->addChild(
             'Update status',
             array(
                  'route'      => 'oro_user_status_create',
@@ -39,7 +40,7 @@ class UserMenuBuilder implements BuilderInterface
                      'class' => 'update-status'
                  )
             )
-        );
+        );*/
 
         $menu->addChild('divider-' . rand(1, 99999))
             ->setLabel('')
