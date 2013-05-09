@@ -168,6 +168,6 @@ services:
     # Flexible attribute
     oro_address.attribute_type.address:
         class: %oro_address.attribute.address.class%
-        arguments: ["@translator", "address", "oro_address"]
+        arguments: ["address", "oro_address"]
         tags:
             - { name: oro_flexibleentity.attributetype, alias: oro_address }
