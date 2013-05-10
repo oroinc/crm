@@ -28,16 +28,16 @@ use Oro\Bundle\ContactBundle\Datagrid\ContactDatagridManager;
 class ContactController extends Controller
 {
     /**
-     * @Route("/show/{id}", name="oro_contact_show", requirements={"id"="\d+"})
+     * @Route("/view/{id}", name="oro_contact_view", requirements={"id"="\d+"})
      * @Template
      * @Acl(
-     *      id="oro_contact_show",
+     *      id="oro_contact_view",
      *      name="View contact",
      *      description="View contact",
      *      parent="oro_contact"
      * )
      */
-    public function showAction(Contact $contact)
+    public function viewAction(Contact $contact)
     {
         return array(
             'contact' => $contact,
@@ -48,7 +48,7 @@ class ContactController extends Controller
      * Create contact form
      *
      * @Route("/create", name="oro_contact_create")
-     * @Template("OroContactBundle:Contact:edit.html.twig")
+     * @Template("OroContactBundle:Contact:update.html.twig")
      * @Acl(
      *      id="oro_contact_create",
      *      name="Create contact",
@@ -59,22 +59,22 @@ class ContactController extends Controller
     public function createAction()
     {
         $contact = $this->getManager()->createFlexible();
-        return $this->editAction($contact);
+        return $this->updateAction($contact);
     }
 
     /**
-     * Edit user form
+     * Update user form
      *
-     * @Route("/edit/{id}", name="oro_contact_edit", requirements={"id"="\d+"}, defaults={"id"=0})
+     * @Route("/update/{id}", name="oro_contact_update", requirements={"id"="\d+"}, defaults={"id"=0})
      * @Template
      * @Acl(
-     *      id="oro_contact_edit",
-     *      name="Edit contact",
-     *      description="Edit contact",
+     *      id="oro_contact_update",
+     *      name="Update contact",
+     *      description="Update contact",
      *      parent="oro_contact"
      * )
      */
-    public function editAction(Contact $entity)
+    public function updateAction(Contact $entity)
     {
         $backUrl = $this->generateUrl('oro_contact_index');
 

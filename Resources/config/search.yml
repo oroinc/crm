@@ -3,7 +3,7 @@ Oro\Bundle\ContactBundle\Entity\Contact:
     label: Contact
     flexible_manager: oro_contact.manager.flexible
     route:
-        name: oro_contact_show
+        name: oro_contact_view
         parameters:
             id: id
     search_template: OroContactBundle:Account:searchResult.html.twig

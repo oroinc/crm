@@ -5,7 +5,7 @@
 </div>
 {% endfor %}
 
-<form action="{{ form.vars.value.id ? path('oro_contact_group_edit', { id: form.vars.value.id }) : path('oro_contact_group_create') }}" method="post" class="form-register">
+<form action="{{ form.vars.value.id ? path('oro_contact_group_update', { id: form.vars.value.id }) : path('oro_contact_group_create') }}" method="post" class="form-register">
     <fieldset>
         {{ form_widget(form) }}
 

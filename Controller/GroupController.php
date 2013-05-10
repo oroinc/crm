@@ -27,7 +27,7 @@ class GroupController extends Controller
      * Create group form
      *
      * @Route("/create", name="oro_contact_group_create")
-     * @Template("OroContactBundle:Group:edit.html.twig")
+     * @Template("OroContactBundle:Group:update.html.twig")
      * @Acl(
      *      id="oro_contact_group_create",
      *      name="Create group",
@@ -37,22 +37,22 @@ class GroupController extends Controller
      */
     public function createAction()
     {
-        return $this->editAction(new Group());
+        return $this->updateAction(new Group());
     }
 
     /**
-     * Edit group form
+     * Update group form
      *
-     * @Route("/edit/{id}", name="oro_contact_group_edit", requirements={"id"="\d+"}, defaults={"id"=0})
+     * @Route("/update/{id}", name="oro_contact_group_update", requirements={"id"="\d+"}, defaults={"id"=0})
      * @Template
      * @Acl(
-     *      id="oro_contact_group_edit",
-     *      name="Edit group",
-     *      description="Edit group",
+     *      id="oro_contact_group_update",
+     *      name="Update group",
+     *      description="Update group",
      *      parent="oro_contact_group"
      * )
      */
-    public function editAction(Group $entity)
+    public function updateAction(Group $entity)
     {
         if ($this->get('oro_contact.form.handler.group')->process($entity)) {
             $this->get('session')->getFlashBag()->add('success', 'Group successfully saved');
@@ -80,7 +80,7 @@ class GroupController extends Controller
      *      defaults={"id"=0, "_format"="json"}
      * )
      * @Template("OroGridBundle:Datagrid:list.json.php")
-     * @AclAncestor("oro_contact_group_edit")
+     * @AclAncestor("oro_contact_group_update")
      */
     public function gridDataAction(Group $entity)
     {

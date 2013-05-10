@@ -20,8 +20,8 @@ class ContactDatagridManager extends FlexibleDatagridManager
     protected function getProperties()
     {
         return array(
-            new UrlProperty('show_link', $this->router, 'oro_contact_show', array('id')),
-            new UrlProperty('edit_link', $this->router, 'oro_contact_edit', array('id')),
+            new UrlProperty('view_link', $this->router, 'oro_contact_view', array('id')),
+            new UrlProperty('update_link', $this->router, 'oro_contact_update', array('id')),
             new UrlProperty('delete_link', $this->router, 'oro_api_delete_contact', array('id')),
         );
     }
@@ -102,34 +102,33 @@ class ContactDatagridManager extends FlexibleDatagridManager
             'type'         => ActionInterface::TYPE_REDIRECT,
             'acl_resource' => 'root',
             'options'      => array(
-                'label'         => 'Show',
-                'link'          => 'show_link',
-                'route'         => 'oro_contact_show',
+                'label'         => 'View',
+                'link'          => 'view_link',
                 'runOnRowClick' => true,
                 'backUrl' => true,
             )
         );
 
-        $showAction = array(
-            'name'         => 'show',
+        $viewAction = array(
+            'name'         => 'view',
             'type'         => ActionInterface::TYPE_REDIRECT,
             'acl_resource' => 'root',
             'options'      => array(
-                'label' => 'Show',
+                'label' => 'View',
                 'icon'  => 'user',
-                'link'  => 'show_link',
+                'link'  => 'view_link',
                 'backUrl' => true,
             )
         );
 
-        $editAction = array(
-            'name'         => 'edit',
+        $updateAction = array(
+            'name'         => 'update',
             'type'         => ActionInterface::TYPE_REDIRECT,
             'acl_resource' => 'root',
             'options'      => array(
-                'label'   => 'Edit',
+                'label'   => 'Update',
                 'icon'    => 'edit',
-                'link'    => 'edit_link',
+                'link'    => 'update_link',
                 'backUrl' => true,
             )
         );
@@ -145,7 +144,7 @@ class ContactDatagridManager extends FlexibleDatagridManager
             )
         );
 
-        return array($clickAction, $showAction, $editAction, $deleteAction);
+        return array($clickAction, $viewAction, $updateAction, $deleteAction);
     }
 
     /**

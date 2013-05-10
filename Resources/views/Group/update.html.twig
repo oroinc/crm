@@ -1,6 +1,6 @@
 {% extends 'OroContactBundle::layout.html.twig' %}
 
-{% set title = form.vars.value.id ? 'Edit group'|trans : 'Add group'|trans %}
+{% set title = form.vars.value.id ? 'Update group'|trans : 'Add group'|trans %}
 
 {% block head_script %}
     {{ parent() }}
@@ -23,7 +23,7 @@
 {% block page_container %}
 <div class="container-fluid">
     {% block content %}
-    <form action="{{ form.vars.value.id ? path('oro_contact_group_edit', { id: form.vars.value.id }) : path('oro_contact_group_create') }}" method="post" class="form-register">
+    <form action="{{ form.vars.value.id ? path('oro_contact_group_update', { id: form.vars.value.id }) : path('oro_contact_group_create') }}" method="post" class="form-register">
         <fieldset>
             <legend>{{ title }}</legend>
 

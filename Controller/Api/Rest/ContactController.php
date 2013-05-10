@@ -48,7 +48,7 @@ class ContactController extends FlexibleRestController implements ClassResourceI
      *      description="Get contact item",
      *      resource=true
      * )
-     * @AclAncestor("oro_contact_show")
+     * @AclAncestor("oro_contact_view")
      * @return Response
      */
     public function getAction($id)
@@ -65,7 +65,7 @@ class ContactController extends FlexibleRestController implements ClassResourceI
      *      description="Update contact",
      *      resource=true
      * )
-     * @AclAncestor("oro_contact_edit")
+     * @AclAncestor("oro_contact_update")
      * @return Response
      */
     public function putAction($id)
@@ -93,13 +93,13 @@ class ContactController extends FlexibleRestController implements ClassResourceI
      * @param int $id
      *
      * @ApiDoc(
-     *      description="Remove Contact",
+     *      description="Delete Contact",
      *      resource=true
      * )
      * @Acl(
-     *      id="oro_contact_remove",
-     *      name="Remove contact",
-     *      description="Remove contact",
+     *      id="oro_contact_delete",
+     *      name="Delete contact",
+     *      description="Delete contact",
      *      parent="oro_contact"
      * )
      * @return Response

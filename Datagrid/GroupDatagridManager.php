@@ -19,7 +19,7 @@ class GroupDatagridManager extends DatagridManager
     protected function getProperties()
     {
         return array(
-            new UrlProperty('edit_link', $this->router, 'oro_contact_group_edit', array('id')),
+            new UrlProperty('update_link', $this->router, 'oro_contact_group_update', array('id')),
             new UrlProperty('delete_link', $this->router, 'oro_api_delete_contactgroup', array('id')),
         );
     }
@@ -72,21 +72,21 @@ class GroupDatagridManager extends DatagridManager
             'type'         => ActionInterface::TYPE_REDIRECT,
             'acl_resource' => 'root',
             'options'      => array(
-                'label'         => 'Edit',
-                'link'          => 'edit_link',
+                'label'         => 'Update',
+                'link'          => 'update_link',
                 'runOnRowClick' => true,
                 'backUrl'       => true,
             )
         );
 
-        $editAction = array(
-            'name'         => 'edit',
+        $updateAction = array(
+            'name'         => 'update',
             'type'         => ActionInterface::TYPE_REDIRECT,
             'acl_resource' => 'root',
             'options'      => array(
-                'label'   => 'Edit',
+                'label'   => 'Update',
                 'icon'    => 'edit',
-                'link'    => 'edit_link',
+                'link'    => 'update_link',
                 'backUrl' => true,
             )
         );
@@ -102,6 +102,6 @@ class GroupDatagridManager extends DatagridManager
             )
         );
 
-        return array($clickAction, $editAction, $deleteAction);
+        return array($clickAction, $updateAction, $deleteAction);
     }
 }

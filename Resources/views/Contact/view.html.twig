@@ -29,16 +29,16 @@
                         <div class="btn-group icons-holder ">
                             <a href="{{ app.session.get('back') ? app.session.get('back') : path('oro_contact_index') }}"
                                class="btn" title="{{ 'Back'|trans }}"><i class="icon-chevron-left hide-text">{{ 'Back'|trans }}</i></a>
-                            {% if resource_granted('oro_contact_edit') %}
-                                <a href="{{ path('oro_contact_edit', { id: contact.id }) }}"
-                                   class="btn" title="{{ 'Edit contact'|trans }}"><i class="icon-edit hide-text">{{ 'Edit'|trans }}</i></a>
+                            {% if resource_granted('oro_contact_update') %}
+                                <a href="{{ path('oro_contact_update', { id: contact.id }) }}"
+                                   class="btn" title="{{ 'Update contact'|trans }}"><i class="icon-edit hide-text">{{ 'Update'|trans }}</i></a>
                             {% endif %}
-                            {% if resource_granted('oro_contact_remove') %}
+                            {% if resource_granted('oro_contact_delete') %}
                                 <a href="javascript: void(0);" class="btn icons-holder-text remove-button"
                                    data-url="{{ path('oro_api_delete_contact', {'id': contact.id}) }}"
                                    data-redirect="{{ path('oro_contact_index') }}"
                                    data-message="{{ 'Are you sure you want to delete this contact?'|trans }}"
-                                   title="{{ 'Delete contact'|trans }}"><i class="icon-trash hide-text">{{ 'Remove'|trans }}</i>Delete</a>
+                                   title="{{ 'Delete contact'|trans }}"><i class="icon-trash hide-text">{{ 'Delete'|trans }}</i>Delete</a>
                             {% endif %}
                         </div>
                     </div>

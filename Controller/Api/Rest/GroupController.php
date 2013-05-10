@@ -49,7 +49,7 @@ class GroupController extends RestController implements ClassResourceInterface
      *      resource=true
      * )
      * @Acl(
-     *      id="oro_contact_group_show",
+     *      id="oro_contact_group_view",
      *      name="View contact group",
      *      description="View contact group",
      *      parent="oro_contact_group"
@@ -70,7 +70,7 @@ class GroupController extends RestController implements ClassResourceInterface
      *      description="Update contact group",
      *      resource=true
      * )
-     * @AclAncestor("oro_contact_group_edit")
+     * @AclAncestor("oro_contact_group_update")
      * @return Response
      */
     public function putAction($id)
@@ -98,13 +98,13 @@ class GroupController extends RestController implements ClassResourceInterface
      * @param int $id
      *
      * @ApiDoc(
-     *      description="Remove Contact Group",
+     *      description="Delete Contact Group",
      *      resource=true
      * )
      * @Acl(
-     *      id="oro_contact_group_remove",
-     *      name="Remove contact group",
-     *      description="Remove contact group",
+     *      id="oro_contact_group_delete",
+     *      name="Delete contact group",
+     *      description="Delete contact group",
      *      parent="oro_contact_group"
      * )
      * @return Response
