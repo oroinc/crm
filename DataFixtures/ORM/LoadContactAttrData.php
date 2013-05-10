@@ -47,7 +47,7 @@ class LoadContactAttrData extends AbstractFixture implements ContainerAwareInter
             array(
                 array(
                     'code'  => 'first_name',
-                    'label' => 'Lirst Name',
+                    'label' => 'First Name',
                 ),
                 array(
                     'code'  => 'last_name',

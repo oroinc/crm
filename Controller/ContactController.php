@@ -80,6 +80,9 @@ class ContactController extends Controller
 
         if ($this->get('oro_contact.form.handler.contact')->process($entity)) {
             $this->getFlashBag()->add('success', 'Contact successfully saved');
+
+            BackUrl::triggerRedirect();
+
             return $this->redirect($backUrl);
         }
 
