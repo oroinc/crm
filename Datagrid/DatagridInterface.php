@@ -64,9 +64,4 @@ interface DatagridInterface extends BaseDatagridInterface
      * @return DatagridView
      */
     public function createView();
-
-    /**
-     * @return ResultRecordInterface[]
-     */
-    public function getResults();
 }
