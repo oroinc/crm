@@ -9,3 +9,10 @@ oro_contact_api:
     prefix:       api/rest/{version}/
     defaults:
         version:  latest
+
+oro_contact_group_api:
+    resource:     "@OroContactBundle/Controller/Api/Rest/GroupController.php"
+    type:         rest
+    prefix:       api/rest/{version}/
+    defaults:
+        version:  latest

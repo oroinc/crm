@@ -18,10 +18,10 @@ use Oro\Bundle\ContactBundle\Datagrid\ContactDatagridManager;
 
 /**
  * @Acl(
- *      id="oro_contact_contact",
+ *      id="oro_contact",
  *      name="contact controller",
  *      description="contact manipulation",
- *      parent="oro_contact"
+ *      parent="root"
  * )
  * @BackUrl("back", useSession=true)
  */
@@ -31,10 +31,10 @@ class ContactController extends Controller
      * @Route("/show/{id}", name="oro_contact_show", requirements={"id"="\d+"})
      * @Template
      * @Acl(
-     *      id="oro_contact_contact_show",
+     *      id="oro_contact_show",
      *      name="View contact",
      *      description="View contact",
-     *      parent="oro_contact_contact"
+     *      parent="oro_contact"
      * )
      */
     public function showAction(Contact $contact)
@@ -50,10 +50,10 @@ class ContactController extends Controller
      * @Route("/create", name="oro_contact_create")
      * @Template("OroContactBundle:Contact:edit.html.twig")
      * @Acl(
-     *      id="oro_contact_contact_create",
+     *      id="oro_contact_create",
      *      name="Create contact",
      *      description="Create contact",
-     *      parent="oro_contact_contact"
+     *      parent="oro_contact"
      * )
      */
     public function createAction()
@@ -68,10 +68,10 @@ class ContactController extends Controller
      * @Route("/edit/{id}", name="oro_contact_edit", requirements={"id"="\d+"}, defaults={"id"=0})
      * @Template
      * @Acl(
-     *      id="oro_contact_contact_edit",
+     *      id="oro_contact_edit",
      *      name="Edit contact",
      *      description="Edit contact",
-     *      parent="oro_contact_contact"
+     *      parent="oro_contact"
      * )
      */
     public function editAction(Contact $entity)
@@ -97,10 +97,10 @@ class ContactController extends Controller
      *      defaults={"_format" = "html"}
      * )
      * @Acl(
-     *      id="oro_contact_contact_list",
+     *      id="oro_contact_list",
      *      name="View list of contacts",
      *      description="View list of contacts",
-     *      parent="oro_contact_contact"
+     *      parent="oro_contact"
      * )
      */
     public function indexAction(Request $request)

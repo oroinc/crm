@@ -11,6 +11,13 @@ parameters:
     oro_contact.form.type.contact_select.class: Oro\Bundle\ContactBundle\Form\Type\ContactSelectType
     oro_contact.handler.group.class: Oro\Bundle\ContactBundle\Form\Handler\GroupHandler
 
+    oro_contact.contact.manager.api.class:  Oro\Bundle\SoapBundle\Entity\Manager\ApiFlexibleEntityManager
+    oro_contact.type.contact.api.class: Oro\Bundle\ContactBundle\Form\Type\ContactApiType
+
+    oro_contact.group.entity.class: Oro\Bundle\ContactBundle\Entity\Group
+    oro_contact.group.manager.api.class:  Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
+    oro_contact.type.group.api.class: Oro\Bundle\ContactBundle\Form\Type\GroupApiType
+
 services:
     oro_contact.manager.flexible:
         class: %oro_contact.manager.flexible.class%
@@ -100,3 +107,58 @@ services:
         tags:
             - { name: form.type, alias: oro_contact_group }
 
+    # Contact API
+    oro_contact.contact.manager.api:
+        class: %oro_contact.contact.manager.api.class%
+        arguments:
+            - %oro_contact.entity.class%
+            - @doctrine.orm.entity_manager
+            - @oro_contact.manager.flexible
+
+    oro_contact.form.type.contact.api:
+        class: %oro_contact.type.contact.api.class%
+        arguments:
+            - @oro_contact.manager.flexible
+            - "oro_contact_value"
+        tags:
+            - { name: form.type, alias: contact }
+
+    oro_contact.form.contact.api:
+        class: Symfony\Component\Form\Form
+        factory_method: createNamed
+        factory_service: form.factory
+        arguments: ["contact", "contact", null]
+
+    oro_contact.form.handler.contact.api:
+        class: %oro_contact.handler.contact.class%
+        scope: request
+        arguments:
+            - @oro_contact.form.contact.api
+            - @request
+            - @doctrine.orm.entity_manager
+
+    # Group API
+    oro_contact.group.manager.api:
+        class: %oro_contact.group.manager.api.class%
+        arguments:
+            - %oro_contact.group.entity.class%
+            - @doctrine.orm.entity_manager
+
+    oro_contact.form.type.group.api:
+        class: %oro_contact.type.group.api.class%
+        tags:
+            - { name: form.type, alias: contact_group }
+
+    oro_contact.form.group.api:
+        class: Symfony\Component\Form\Form
+        factory_method: createNamed
+        factory_service: form.factory
+        arguments: ["contact_group", "contact_group", null]
+
+    oro_contact.form.handler.group.api:
+        class: %oro_contact.handler.group.class%
+        scope: request
+        arguments:
+            - @oro_contact.form.group.api
+            - @request
+            - @doctrine.orm.entity_manager
