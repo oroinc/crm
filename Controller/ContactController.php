@@ -84,7 +84,8 @@ class ContactController extends Controller
         }
 
         return array(
-            'form' => $this->get('oro_contact.form.contact')->createView(),
+            'entity' => $entity,
+            'form'   => $this->get('oro_contact.form.contact')->createView(),
         );
     }
 

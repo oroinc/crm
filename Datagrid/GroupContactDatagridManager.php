@@ -44,8 +44,8 @@ class GroupContactDatagridManager extends FlexibleDatagridManager
         );
         $fieldsCollection->add($fieldId);
 
-        $this->configureFlexibleField($fieldsCollection, 'first_name', array('label' => 'First Name'));
-        $this->configureFlexibleField($fieldsCollection, 'last_name', array('label' => 'Last Name'));
+        $this->configureFlexibleField($fieldsCollection, 'first_name');
+        $this->configureFlexibleField($fieldsCollection, 'last_name');
     }
 
     /**
