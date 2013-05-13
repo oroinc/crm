@@ -94,7 +94,11 @@
             <div class="navbar-inner"><div class="container">
 
             {% block logo %}
-            <h1 class="logo "><a href="{{ path('oro_default') }}">{{ get_user_value('oro_ui.product_caption') }}</a></h1>
+            <h1 class="logo ">
+                <a href="{{ path('oro_default') }}" title="{{ get_user_value('oro_ui.application_title') }}">
+                    {{ get_user_value('oro_ui.application_name') }}
+                </a>
+            </h1>
             {% endblock logo %}
             <div class="navbar-responsive-collapse">
             {% block shortcuts %}
@@ -164,13 +168,15 @@
                         </ul>
                     </li>
                 {% endblock user_menu %}
+                {# Disabled notification icon till it will be implemented
                 {% block notifications %}
                 <li class="divider-vertical small-divider"></li>
                 <li><a class="notifications" href="#"><i class="icon-bullhorn"></i><span class="badge badge-important">1</span></a></li>
                 {% endblock notifications %}
+                #}
                 {% block help %}
                 <li class="divider-vertical small-divider"></li>
-                <li><a class="help" href="#"><i class="icon-question-sign">help</i></a></li>
+                <li><a class="help" href="http://www.orocrm.com/" target="_blank"><i class="icon-question-sign" title="{{ 'Get help'|trans }}"></i></a></li>
                 {% endblock help %}
             </ul>
             {% endblock section_top_right %}
