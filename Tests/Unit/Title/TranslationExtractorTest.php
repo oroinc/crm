@@ -3,6 +3,7 @@
 namespace Oro\Bundle\NavigationBundle\Tests\Unit\Title;
 
 use Oro\Bundle\NavigationBundle\Title\TranslationExtractor;
+use Symfony\Component\Routing\Route;
 
 class TranslationExtractorTest extends \PHPUnit_Framework_TestCase
 {
@@ -24,7 +25,26 @@ class TranslationExtractorTest extends \PHPUnit_Framework_TestCase
         $this->titleService = $this->getMockBuilder('Oro\Bundle\NavigationBundle\Provider\TitleService')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->extractor = new TranslationExtractor($this->titleService);
+
+        $this->router = $this->getMockBuilder('Symfony\Component\Routing\Router')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $route = $this->getMockBuilder('Symfony\Component\Routing\Route')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $routeCollection = $this->getMock('Symfony\Component\Routing\RouteCollection');
+        $routeCollection
+            ->expects($this->once())
+            ->method('all')
+            ->will($this->returnValue(array($route)));
+
+        $this->router
+            ->expects($this->once())
+            ->method('getRouteCollection')
+            ->will($this->returnValue($routeCollection));
+
+        $this->extractor = new TranslationExtractor($this->titleService, $this->router);
     }
 
     /**
