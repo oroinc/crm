@@ -24,7 +24,7 @@
 {% block page_container %}
 <div class="container-fluid">
     {% block content %}
-    <form action="{{ form.vars.value.id ? path('oro_user_role_edit', { id: form.vars.value.id }) : path('oro_user_role_create') }}" method="post" class="form-register">
+    <form action="{{ form.vars.value.id ? path('oro_user_role_edit', { id: form.vars.value.id, back: app.session.get('back') }) : path('oro_user_role_create') }}" method="post" class="form-register">
         <fieldset>
             <legend>{{ title }}</legend>
 
