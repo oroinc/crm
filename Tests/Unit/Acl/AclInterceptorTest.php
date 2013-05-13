@@ -24,15 +24,15 @@ class AclInterceptorTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->securityContext = $this->getMock(
+        $this->securityContext = $this->getMockForAbstractClass(
             'Symfony\Component\Security\Core\SecurityContextInterface'
         );
 
-        $this->logger = $this->getMock(
+        $this->logger = $this->getMockForAbstractClass(
             'Symfony\Component\HttpKernel\Log\LoggerInterface'
         );
 
-        $this->container = $this->getMock(
+        $this->container = $this->getMockForAbstractClass(
             'Symfony\Component\DependencyInjection\ContainerInterface'
         );
 
@@ -52,7 +52,9 @@ class AclInterceptorTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->token = $this->getMock('Symfony\Component\Security\Core\Authentication\Token\TokenInterface');
+        $this->token = $this->getMockForAbstractClass(
+            'Symfony\Component\Security\Core\Authentication\Token\TokenInterface'
+        );
 
         $this->aclManager = $this->getMockBuilder('Oro\Bundle\UserBundle\Acl\Manager')
             ->disableOriginalConstructor()

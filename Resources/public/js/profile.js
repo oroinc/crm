@@ -22,10 +22,11 @@ $(function() {
                 });
             };
 
-        if (!_.isUndefined(Backbone.BootstrapModal)) {
-            confirm = new Backbone.BootstrapModal({
+        if (!_.isUndefined(Oro.BootstrapModal)) {
+            confirm = new Oro.BootstrapModal({
                 title: 'Delete Confirmation',
-                content: message
+                content: message,
+                okText: 'Yes, Delete'
             });
             confirm.on('ok', doAction);
             confirm.open();
@@ -43,4 +44,12 @@ $(function() {
             inputs.find(':checkbox').attr('required', inputs.find(':checked').length > 0 ? null : 'required');
         })
         .triggerHandler('click');
+
+    $('#btn-enable input').on('change', function(e) {
+//        if ($(this).is(':checked')) {
+//
+//        }
+        $('.status-enabled').toggleClass('hide');
+        $('.status-disabled').toggleClass('hide');
+    });
 });

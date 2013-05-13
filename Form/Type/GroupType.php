@@ -14,17 +14,44 @@ class GroupType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name', 'text', array(
-                'required'  => true,
-            ))
-            ->add('roles', 'entity', array(
-                'label'     => 'Roles',
-                'class'     => 'OroUserBundle:Role',
-                'property'  => 'label',
-                'required'  => true,
-                'multiple'  => true,
-                'required'  => true,
-            ));
+            ->add(
+                'name',
+                'text',
+                array(
+                    'required' => true,
+                )
+            )
+            ->add(
+                'roles',
+                'entity',
+                array(
+                    'label'    => 'Roles',
+                    'class'    => 'OroUserBundle:Role',
+                    'property' => 'label',
+                    'required' => true,
+                    'multiple' => true,
+                )
+            )
+            ->add(
+                'appendUsers',
+                'oro_entity_identifier',
+                array(
+                    'class'    => 'OroUserBundle:User',
+                    'required' => false,
+                    'mapped'   => false,
+                    'multiple' => true,
+                )
+            )
+            ->add(
+                'removeUsers',
+                'oro_entity_identifier',
+                array(
+                    'class'    => 'OroUserBundle:User',
+                    'required' => false,
+                    'mapped'   => false,
+                    'multiple' => true,
+                )
+            );
     }
 
     /**
@@ -32,10 +59,12 @@ class GroupType extends AbstractType
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $resolver->setDefaults(array(
-            'data_class' => 'Oro\Bundle\UserBundle\Entity\Group',
-            'intention'  => 'group',
-        ));
+        $resolver->setDefaults(
+            array(
+                'data_class' => 'Oro\Bundle\UserBundle\Entity\Group',
+                'intention'  => 'group',
+            )
+        );
     }
 
     /**

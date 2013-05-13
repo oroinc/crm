@@ -29,13 +29,22 @@ parameters:
     oro_user.role.listener.class:     Oro\Bundle\UserBundle\EventListener\RoleListener
     oro_user.role.manager.class:      Oro\Bundle\UserBundle\Entity\Manager\RoleManager
     oro_user.group.manager.class:     Oro\Bundle\UserBundle\Entity\Manager\GroupManager
+    oro_user.attribute_type.user.class: Oro\Bundle\UserBundle\AttributeType\UserType
+    oro_user.form.type.user_select.class: Oro\Bundle\UserBundle\Form\Type\UserSelectType
 
 services:
     oro_user.manager.flexible:
         class:                        "%oro_user.manager.flexible.class%"
-        arguments:                    [%oro_user.entity.class%, %oro_flexibleentity.flexible_config%, "@doctrine.orm.entity_manager", "@event_dispatcher"]
+        arguments:                    [%oro_user.entity.class%, %oro_flexibleentity.flexible_config%, "@doctrine.orm.entity_manager", "@event_dispatcher", @oro_flexibleentity.attributetype.factory]
         tags:
             - { name: oro_flexibleentity_manager, entity: %oro_user.entity.class%}
+        calls:
+            - [ addAttributeType, ['oro_flexibleentity_text'] ]
+            - [ addAttributeType, ['oro_flexibleentity_textarea'] ]
+            - [ addAttributeType, ['oro_flexibleentity_money'] ]
+            - [ addAttributeType, ['oro_flexibleentity_simpleselect'] ]
+            - [ addAttributeType, ['oro_flexibleentity_multiselect'] ]
+            - [ addAttributeType, ['oro_flexibleentity_url'] ]
 
     oro_user.manager:
         class:                        %oro_user.manager.class%
@@ -96,13 +105,13 @@ services:
 
     oro_user.form.type.profile:
         class:                        %oro_user.type.profile.class%
-        arguments:                    [%oro_user.entity.class%, %oro_user.entity.value.class%, "@oro_user.acl_manager", "@security.context"]
+        arguments:                    [@oro_user.manager.flexible, "@oro_user.acl_manager", "@security.context"]
         tags:
             - { name: form.type, alias: oro_user_profile }
 
     oro_user.form.type.profile.api:
         class:                        %oro_user.type.profile.api.class%
-        arguments:                    [%oro_user.entity.class%, %oro_user.entity.value.class%, "@oro_user.acl_manager", "@security.context"]
+        arguments:                    [@oro_user.manager.flexible, "@oro_user.acl_manager", "@security.context"]
         tags:
             - { name: form.type, alias: profile }
 
@@ -234,3 +243,18 @@ services:
     oro_user.group_manager:
         class:                        %oro_user.group.manager.class%
         arguments:                    ["@doctrine.orm.entity_manager"]
+
+    # Form type
+    oro_user.form.type.user_select:
+        class: %oro_user.form.type.user_select.class%
+        tags:
+            - { name: form.type, alias: oro_user_select }
+
+    # Flexible attribute
+    oro_user.attribute_type.user:
+        class: %oro_user.attribute_type.user.class%
+        arguments:
+            - "user"
+            - "oro_user_select"
+        tags:
+            - { name: oro_flexibleentity.attributetype, alias: oro_user_attribute_user }

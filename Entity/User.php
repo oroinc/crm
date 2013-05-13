@@ -233,7 +233,9 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
     protected $values;
 
     /**
-     * @ORM\OneToOne(targetEntity="UserApi", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true, fetch="EXTRA_LAZY")
+     * @ORM\OneToOne(
+     *  targetEntity="UserApi", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true, fetch="EXTRA_LAZY"
+     * )
      */
     protected $api;
 
@@ -278,14 +280,16 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
      */
     public function serialize()
     {
-        return serialize(array(
-            $this->password,
-            $this->salt,
-            $this->username,
-            $this->enabled,
-            $this->confirmationToken,
-            $this->id,
-        ));
+        return serialize(
+            array(
+                $this->password,
+                $this->salt,
+                $this->username,
+                $this->enabled,
+                $this->confirmationToken,
+                $this->id,
+            )
+        );
     }
 
     /**
@@ -767,9 +771,8 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
      */
     public function hasRole($role)
     {
-        return !is_null($this->getRole(
-            $role instanceof Role ? $role->getRole() : $role
-        ));
+        $role = $role instanceof Role ? $role->getRole() : $role;
+        return (bool)$this->getRole($role);
     }
 
     /**
@@ -780,13 +783,9 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
      * @return User
      * @throws \RuntimeException
      */
-    public function addRole($role)
+    public function addRole(Role $role)
     {
-        if (!$role instanceof Role) {
-            throw new \RuntimeException('addRole takes a Role object as the parameter');
-        }
-
-        if (!$this->hasRole($role->getRole())) {
+        if (!$this->hasRole($role)) {
             $this->roles->add($role);
         }
 
@@ -796,10 +795,11 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
     /**
      * Pass a string, remove the Role object from collection
      *
-     * @param string $role
+     * @param Role|string $role
      */
     public function removeRole($role)
     {
+        $role = $role instanceof Role ? $role->getRole() : $role;
         $item = $this->getRole($role);
 
         if ($item) {
