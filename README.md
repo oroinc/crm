@@ -259,8 +259,8 @@ block('page_container') - content area block (without header/footer), that will 
 ```
       <script type="text/javascript">
             $(function() {
-                if (OroApp.hashNavigationEnabled()) {
-                    new OroApp.Navigation({baseUrl : '{{ app.request.getSchemeAndHttpHost() }}'});
+                if (Oro.hashNavigationEnabled()) {
+                    new Oro.Navigation({baseUrl : '{{ app.request.getSchemeAndHttpHost() }}'});
                     Backbone.history.start();
                 }
             })

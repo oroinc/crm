@@ -84,7 +84,7 @@ navigation.pinbar.MainView = navigation.MainViewAbstract.extend({
             /**
              * Add restore param to the url
              */
-            if (OroApp.hashNavigationEnabled() && !_.isUndefined(item.changed) && item.changed.restore) {
+            if (Oro.hashNavigationEnabled() && !_.isUndefined(item.changed) && item.changed.restore) {
                 var itemUrl = item.get('url');
                 if (itemUrl.indexOf('?') !== -1) {
                     itemUrl += '&restore=1';
@@ -95,7 +95,7 @@ navigation.pinbar.MainView = navigation.MainViewAbstract.extend({
             }
             if (url != this.getCurrentPageItemData().url) {
                 item.save(null, {success: function() {
-                    OroApp.Navigation.prototype.setLocation(url);
+                    Oro.Navigation.prototype.setLocation(url);
                 }});
             }
         }
@@ -130,8 +130,8 @@ navigation.pinbar.MainView = navigation.MainViewAbstract.extend({
      */
     goToLatestOpenedPage: function()
     {
-        if (OroApp.hashNavigationEnabled()) {
-            OroApp.Navigation.prototype.setLocation(this.getLatestUrl());
+        if (Oro.hashNavigationEnabled()) {
+            Oro.Navigation.prototype.setLocation(this.getLatestUrl());
         } else {
             window.location.href = this.getLatestUrl();
         }

@@ -13,7 +13,7 @@ Oro.PageState.View = Backbone.View.extend({
         /**
          * Render links in favorites menu after hash navigation request is completed
          */
-        OroApp.Events.bind(
+        Oro.Events.bind(
             "hash_navigation_request:complete",
             function() {
                 this.init();
@@ -23,7 +23,7 @@ Oro.PageState.View = Backbone.View.extend({
         /**
          * Render links in favorites menu after hash navigation request is started
          */
-        OroApp.Events.bind(
+        Oro.Events.bind(
             "hash_navigation_request:start",
             function() {
                 this.clearTimer();
@@ -115,8 +115,8 @@ Oro.PageState.View = Backbone.View.extend({
     filterUrl: function() {
         var self = this;
         var url = window.location;
-        if (OroApp.hashNavigationEnabled()) {
-            var url = new Url( OroApp.Navigation.prototype.getHashUrl());
+        if (Oro.hashNavigationEnabled()) {
+            var url = new Url( Oro.Navigation.prototype.getHashUrl());
             url.search = url.query.toString();
             url.pathname = url.path;
         }

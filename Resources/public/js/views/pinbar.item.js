@@ -27,7 +27,7 @@ navigation.pinbar.ItemView = Backbone.View.extend({
         /**
          * Change active pinbar item after hash navigation request is completed
          */
-        OroApp.Events.bind(
+        Oro.Events.bind(
             "hash_navigation_request:complete",
             function() {
                 this.setActiveItem();
@@ -49,8 +49,8 @@ navigation.pinbar.ItemView = Backbone.View.extend({
 
     setActiveItem: function() {
         var url = '';
-        if (OroApp.hashNavigationEnabled()) {
-            url = OroApp.Navigation.prototype.getHashUrl();
+        if (Oro.hashNavigationEnabled()) {
+            url = Oro.Navigation.prototype.getHashUrl();
         } else {
             url = window.location.pathname;
         }

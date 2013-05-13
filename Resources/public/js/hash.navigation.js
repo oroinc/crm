@@ -1,11 +1,11 @@
-var OroApp = OroApp || {};
+var Oro = Oro || {};
 /**
  * Router for hash navigation
  *
- * @class   OroApp.Navigation
- * @extends OroApp.Router
+ * @class   Oro.Navigation
+ * @extends Oro.Router
  */
-OroApp.Navigation = OroApp.Router.extend({
+Oro.Navigation = Backbone.Router.extend({
 
     /**
      * Hash navigation enabled/disabled flag
@@ -33,7 +33,7 @@ OroApp.Navigation = OroApp.Router.extend({
         menuDropdowns: '.pin-menus.dropdown, .nav .dropdown'
     },
 
-    /** @property {OroApp.LoadingMask} */
+    /** @property {Oro.LoadingMask} */
     loadingMask: '',
 
     /** @property {String} */
@@ -53,7 +53,7 @@ OroApp.Navigation = OroApp.Router.extend({
      */
     url: '',
 
-    /** @property {OroApp.DatagridRouter} */
+    /** @property {Oro.DatagridRouter} */
     gridRoute: '',
 
     /** @property */
@@ -107,7 +107,7 @@ OroApp.Navigation = OroApp.Router.extend({
 
         this.init();
 
-        OroApp.Router.prototype.initialize.apply(this, arguments);
+        Backbone.Router.prototype.initialize.apply(this, arguments);
     },
 
     /**
@@ -162,7 +162,7 @@ OroApp.Navigation = OroApp.Router.extend({
         /**
          * Processing all links in grid after grid load
          */
-        OroApp.Events.bind(
+        Oro.Events.bind(
             "grid_load:complete",
             function () {
                 this.processClicks('.grid-container ' + this.selectors.links)
@@ -172,7 +172,7 @@ OroApp.Navigation = OroApp.Router.extend({
         /**
          * Checking for grid route and updating it's state
          */
-        OroApp.Events.bind(
+        Oro.Events.bind(
             "grid_route:loaded",
             function (route) {
                 this.gridRoute = route;
@@ -183,7 +183,7 @@ OroApp.Navigation = OroApp.Router.extend({
         /**
          * Processing links in 3 dots menu after item is added (e.g. favourites)
          */
-        OroApp.Events.bind(
+        Oro.Events.bind(
             "navigaion_item:added",
             function (item) {
                 this.processClicks(item.find(this.selectors.links));
@@ -194,7 +194,7 @@ OroApp.Navigation = OroApp.Router.extend({
         /**
          * Processing links in search result dropdown
          */
-        OroApp.Events.bind(
+        Oro.Events.bind(
             "top_search_request:complete",
             function () {
                 this.processClicks(this.selectors.searchDropdown + ' ' + this.selectors.links);
@@ -204,7 +204,7 @@ OroApp.Navigation = OroApp.Router.extend({
 
         this.processForms(this.selectors.forms);
 
-        this.loadingMask = new OroApp.LoadingMask();
+        this.loadingMask = new Oro.LoadingMask();
         this.renderLoadingMask();
     },
 
@@ -218,7 +218,7 @@ OroApp.Navigation = OroApp.Router.extend({
          * Backbone event. Fired when hash navigation ajax request is complete
          * @event hash_navigation_request:complete
          */
-        OroApp.Events.trigger("hash_navigation_request:start", this);
+        Oro.Events.trigger("hash_navigation_request:start", this);
     },
 
     /**
@@ -333,7 +333,7 @@ OroApp.Navigation = OroApp.Router.extend({
          * Backbone event. Fired when hash navigation ajax request is complete
          * @event hash_navigation_request:complete
          */
-        OroApp.Events.trigger("hash_navigation_request:complete", this);
+        Oro.Events.trigger("hash_navigation_request:complete", this);
     },
 
     /**
