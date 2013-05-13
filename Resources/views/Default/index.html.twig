@@ -23,25 +23,27 @@
 
                     debug=false
                     filter='cssrewrite, lessphp, yui_css'
-                    output='css/oroapp.all.css'
+                    output='css/oro.all.css'
                 %}
                 <link rel="stylesheet" media="all" href="{{ asset_url }}" />
                 {% endstylesheets %}
             {% endif %}
-            {% oro_css filter='cssrewrite, lessphp, ?yui_css' output='css/oro_app.css' %}
+            {% oro_css filter='cssrewrite, lessphp, ?yui_css' output='css/oro.css' %}
                 <link rel="stylesheet" media="all" href="{{ asset_url }}" />
             {% endoro_css %}
         {% endblock %}
 
         {% block script %}
-
             {# JS assetics #}
-            {% oro_js filter='?yui_js' output='js/oro_app.all.js' %}
-                <script type="text/javascript" src="{{ asset_url }}"></script>
+            {% oro_js filter='?yui_js' output='js/oro.all.js' %}
+            <script type="text/javascript" src="{{ asset_url }}"></script>
             {% endoro_js %}
 
             {% if app.debug %}
                 <script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
+                <script type="text/javascript">
+                    Oro.debug = true;
+                </script>
             {% endif %}
             <!--[if lte IE 9]>
                 <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -58,8 +60,8 @@
             <![endif]-->
             <script type="text/javascript">
                 $(function() {
-                    if (OroApp.hashNavigationEnabled()) {
-                        new OroApp.Navigation({baseUrl : '{{ app.request.getSchemeAndHttpHost() }}'});
+                    if (Oro.hashNavigationEnabled()) {
+                        new Oro.Navigation({baseUrl : '{{ app.request.getSchemeAndHttpHost() }}'});
                         Backbone.history.start();
                     }
                 })
@@ -77,7 +79,11 @@
             <div class="navbar-inner"><div class="container">
 
             {% block logo %}
-            <h1 class="logo "><a href="{{ path('oro_default') }}">{{ get_user_value('oro_ui.product_caption') }}</a></h1>
+            <h1 class="logo ">
+                <a href="{{ path('oro_default') }}" title="{{ get_user_value('oro_ui.application_title') }}">
+                    {{ get_user_value('oro_ui.application_name') }}
+                </a>
+            </h1>
             {% endblock logo %}
             <div class="navbar-responsive-collapse">
             {% block shortcuts %}
@@ -147,13 +153,15 @@
                         </ul>
                     </li>
                 {% endblock user_menu %}
+                {# Disabled notification icon till it will be implemented
                 {% block notifications %}
                 <li class="divider-vertical small-divider"></li>
                 <li><a class="notifications" href="#"><i class="icon-bullhorn"></i><span class="badge badge-important">1</span></a></li>
                 {% endblock notifications %}
+                #}
                 {% block help %}
                 <li class="divider-vertical small-divider"></li>
-                <li><a class="help" href="#"><i class="icon-question-sign">help</i></a></li>
+                <li><a class="help no-hash" href="http://www.orocrm.com/" target="_blank"><i class="icon-question-sign" title="{{ 'Get help'|trans }}"></i></a></li>
                 {% endblock help %}
             </ul>
             {% endblock section_top_right %}

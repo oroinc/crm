@@ -1,8 +1,7 @@
 /**
  * Main Oro Application backbone.js namespace
  */
-var OroApp = {
-
+var Oro = {
     /**
      * Pack object to string
      *
@@ -78,7 +77,7 @@ var OroApp = {
      *
      * Example of usage:
      *
-     * OroApp.mirrorKeys({foo: 'x', bar: 'y'}, {foo: 'f', bar: 'b'})
+     * Oro.invertKeys({foo: 'x', bar: 'y'}, {foo: 'f', bar: 'b'})
      * will return {f: 'x', b: 'y'}
      *
      * @param {Object} object
@@ -123,7 +122,7 @@ var OroApp = {
 
             for (var index in valueKeys) {
                 var key = valueKeys[index];
-                if (!this.isEqualsLoosely(value1[key], value2[key])) {
+                if (!_.has(value2, key) || !this.isEqualsLoosely(value1[key], value2[key])) {
                     return false;
                 }
             }
@@ -131,16 +130,6 @@ var OroApp = {
         } else {
             return value1 == value2;
         }
-    },
-
-    /**
-     * Deep clone a value
-     *
-     * @param {*} value
-     * @return {*}
-     */
-    deepClone: function(value) {
-        return $.extend(true, {}, value);
     },
 
     /**
@@ -158,9 +147,19 @@ var OroApp = {
     },
 
     /**
+     * Deep clone a value
+     *
+     * @param {*} value
+     * @return {*}
+     */
+    deepClone: function(value) {
+        return $.extend(true, {}, value);
+    },
+
+    /**
      * Checks if hash navigation is enabled
      *
-     * @return {*}
+     * @return {Boolean}
      */
     hashNavigationEnabled: function() {
         return ((typeof this.Navigation != "undefined") && this.Navigation.prototype.enabled);

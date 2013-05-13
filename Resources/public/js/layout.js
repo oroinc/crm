@@ -127,11 +127,11 @@ $(document).ready(function () {
     });
  });
 
-if (typeof OroApp !== "undefined") {
+if (typeof Oro !== "undefined") {
     /**
      * Init page layout js after hash navigation request is completed
      */
-    OroApp.Events.bind(
+    Oro.Events.bind(
         "hash_navigation_request:complete",
         function () {
             initLayout();
