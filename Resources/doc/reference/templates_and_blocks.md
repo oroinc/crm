@@ -25,36 +25,36 @@ Following table displays filter JavaScript class, parameters and block where the
 <tr>
     <td>Text Filter</td>
     <td>oro_type_text_filter_js</td>
-    <td>OroApp.Filter.ChoiceFilter</td>
+    <td>Oro.Filter.ChoiceFilter</td>
 </tr>
 <tr>
     <td>Number Filter</td>
     <td>oro_type_number_filter_js</td>
-    <td>OroApp.Filter.NumberFilter</td>
+    <td>Oro.Filter.NumberFilter</td>
 </tr>
 
 <tr>
     <td>Date Range Filter</td>
     <td>oro_type_date_range_filter_js</td>
-    <td>OroApp.Filter.DateFilter</td>
+    <td>Oro.Filter.DateFilter</td>
 </tr>
 
 <tr>
     <td>DateTime Range Filter</td>
     <td>oro_type_datetime_range_filter_js</td>
-    <td>OroApp.Filter.DateTimeFilter</td>
+    <td>Oro.Filter.DateTimeFilter</td>
 </tr>
 
 <tr>
     <td>Select Filter</td>
     <td>oro_type_select_filter_js</td>
-    <td>OroApp.Filter.SelectFilter</td>
+    <td>Oro.Filter.SelectFilter</td>
 </tr>
 
 <tr>
     <td>Multiselect Filter</td>
     <td>oro_type_multiselect_filter_js</td>
-    <td>OroApp.Filter.MultiSelectFilter</td>
+    <td>Oro.Filter.MultiSelectFilter</td>
 </tr>
 </table>
 

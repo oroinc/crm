@@ -63,7 +63,7 @@ abstract class AbstractTypeTestCase extends FormIntegrationTestCase
      */
     protected function createMockTranslator()
     {
-        $translator = $this->getMock('Symfony\Component\Translation\TranslatorInterface');
+        $translator = $this->getMockForAbstractClass('Symfony\Component\Translation\TranslatorInterface');
         $translator->expects($this->any())
             ->method('trans')
             ->with($this->anything(), array(), 'OroFilterBundle')
@@ -77,7 +77,7 @@ abstract class AbstractTypeTestCase extends FormIntegrationTestCase
      */
     protected function createMockOptionsResolver()
     {
-        return $this->getMock('Symfony\Component\OptionsResolver\OptionsResolverInterface');
+        return $this->getMockForAbstractClass('Symfony\Component\OptionsResolver\OptionsResolverInterface');
     }
 
     /**

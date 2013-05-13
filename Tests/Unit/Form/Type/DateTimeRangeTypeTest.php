@@ -25,9 +25,8 @@ class DateTimeRangeTypeTest extends AbstractTypeTestCase
     protected function setUp()
     {
         parent::setUp();
-        $translator = $this->createMockTranslator();
-        $this->type = new DateTimeRangeType($translator);
-        $this->factory->addType(new DateRangeType($translator));
+        $this->type = new DateTimeRangeType();
+        $this->factory->addType(new DateRangeType());
     }
 
     /**

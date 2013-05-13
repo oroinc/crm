@@ -33,7 +33,7 @@ This equals to next code:
 
 ```
 <script type="text/javascript">
-    var nameFilter = OroApp.createInstanceFromConstructor(OroApp.Filter.ChoiceFilter.extend({
+    var nameFilter = Oro.createInstanceFromConstructor(Oro.Filter.ChoiceFilter.extend({
         'name':    'name',
         'label':   'Name',
         'enabled': true,
@@ -59,7 +59,7 @@ Equals to something like this:
 {% javascripts
     {# list of references to js files #}
     ...
-    output='js/oroapp.filter.js'
+    output='js/oro.filter.js'
 %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
 {% endjavascripts %}
@@ -82,7 +82,7 @@ Equals to something like this:
 {% stylesheets
     {# list of references to css files #}
     ...
-    output='css/oroapp.filter.css'
+    output='css/oro.filter.css'
 %}
     <link rel="stylesheet" type="text/css" href="{{ asset_url }}" />
 {% endstylesheets %}

@@ -1,15 +1,15 @@
-var OroApp = OroApp || {};
-OroApp.Filter = OroApp.Filter || {};
+var Oro = Oro || {};
+Oro.Filter = Oro.Filter || {};
 
 /**
  * Number filter: formats value as a number
  *
- * @class   OroApp.Filter.NumberFilter
- * @extends OroApp.Filter.ChoiceFilter
+ * @class   Oro.Filter.NumberFilter
+ * @extends Oro.Filter.ChoiceFilter
  */
-OroApp.Filter.NumberFilter = OroApp.Filter.ChoiceFilter.extend({
-    /** @property {OroApp.Filter.NumberFormatter} */
-    formatter: new OroApp.Filter.NumberFormatter(),
+Oro.Filter.NumberFilter = Oro.Filter.ChoiceFilter.extend({
+    /** @property {Oro.Filter.NumberFormatter} */
+    formatter: new Oro.Filter.NumberFormatter(),
 
     /** @property {Object} */
     formatterOptions: {},
@@ -22,8 +22,8 @@ OroApp.Filter.NumberFilter = OroApp.Filter.ChoiceFilter.extend({
      */
     initialize: function(options) {
         options = options || {};
-        this.formatter = new OroApp.Filter.NumberFormatter(this.formatterOptions);
-        OroApp.Filter.ChoiceFilter.prototype.initialize.apply(this, arguments);
+        this.formatter = new Oro.Filter.NumberFormatter(this.formatterOptions);
+        Oro.Filter.ChoiceFilter.prototype.initialize.apply(this, arguments);
     },
 
     /**

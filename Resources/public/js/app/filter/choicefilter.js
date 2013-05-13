@@ -1,13 +1,13 @@
-var OroApp = OroApp || {};
-OroApp.Filter = OroApp.Filter || {};
+var Oro = Oro || {};
+Oro.Filter = Oro.Filter || {};
 
 /**
  * Choice filter: filter type as option + filter value as string
  *
- * @class   OroApp.Filter.ChoiceFilter
- * @extends OroApp.Filter.TextFilter
+ * @class   Oro.Filter.ChoiceFilter
+ * @extends Oro.Filter.TextFilter
  */
-OroApp.Filter.ChoiceFilter = OroApp.Filter.TextFilter.extend({
+Oro.Filter.ChoiceFilter = Oro.Filter.TextFilter.extend({
     /**
      * Template for filter criteria
      *
@@ -28,8 +28,8 @@ OroApp.Filter.ChoiceFilter = OroApp.Filter.TextFilter.extend({
             '</div>' +
             '<div class="oro-action">' +
                 '<div class="btn-group">' +
-                    '<button class="btn btn-small filter-criteria-hide">Close</button>' +
-                    '<button class="btn btn-small btn-primary filter-update">Update</button>' +
+                    '<button type="button" class="btn btn-small filter-criteria-hide">Close</button>' +
+                    '<button type="button" class="btn btn-small btn-primary filter-update">Update</button>' +
                 '</div>' +
             '</div>' +
         '</div>'

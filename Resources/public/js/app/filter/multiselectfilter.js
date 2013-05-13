@@ -1,13 +1,13 @@
-var OroApp = OroApp || {};
-OroApp.Filter = OroApp.Filter || {};
+var Oro = Oro || {};
+Oro.Filter = Oro.Filter || {};
 
 /**
  * Multiple select filter: filter values as multiple select options
  *
- * @class   OroApp.Filter.MultiSelectFilter
- * @extends OroApp.Filter.SelectFilter
+ * @class   Oro.Filter.MultiSelectFilter
+ * @extends Oro.Filter.SelectFilter
  */
-OroApp.Filter.MultiSelectFilter = OroApp.Filter.SelectFilter.extend({
+Oro.Filter.MultiSelectFilter = Oro.Filter.SelectFilter.extend({
     /**
      * Multiselect filter template
      *
@@ -20,7 +20,7 @@ OroApp.Filter.MultiSelectFilter = OroApp.Filter.SelectFilter.extend({
                 '<% _.each(options, function (hint, value) { %><option value="<%= value %>"><%= hint %></option><% }); %>' +
             '</select>' +
         '</div>' +
-        '<a href="#" class="disable-filter"><i class="icon-remove hide-text">Close</i></a>'
+        '<a href="<%= nullLink %>" class="disable-filter"><i class="icon-remove hide-text">Close</i></a>'
     ),
 
     /**
@@ -37,7 +37,7 @@ OroApp.Filter.MultiSelectFilter = OroApp.Filter.SelectFilter.extend({
      * @inheritDoc
      */
     _onSelectChange: function() {
-        OroApp.Filter.SelectFilter.prototype._onSelectChange.apply(this, arguments);
+        Oro.Filter.SelectFilter.prototype._onSelectChange.apply(this, arguments);
         this._setDropdownWidth();
     }
 });
