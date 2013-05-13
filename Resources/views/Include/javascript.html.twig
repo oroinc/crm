@@ -1,12 +1,4 @@
 {% block oro_region_updater_js %}
-    {% javascripts
-        '@OroAddressBundle/Resources/public/js/views/region.updater.js'
-        '@OroAddressBundle/Resources/public/js/models/region.updater.js'
-        '@OroAddressBundle/Resources/public/js/collections/region.updater.js'
-    %}
-        <script type="text/javascript" src="{{ asset_url }}"></script>
-    {% endjavascripts %}
-
     <script type="text/template" id="region-chooser-template">
         <% _.each(regions, function(region, i) { %>
             <option value="<%= region.get('code') %>"><%= region.get('name') %></option>
