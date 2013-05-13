@@ -24,6 +24,16 @@ navigation.favorites.MainView = navigation.MainViewAbstract.extend({
 
         this.registerTab();
         this.cleanupTab();
+        /**
+         * Render links in favorites menu after hash navigation request is completed
+         */
+        Oro.Events.bind(
+            "hash_navigation_request:complete",
+            function() {
+                this.render();
+            },
+            this
+        );
     },
 
     activate: function() {

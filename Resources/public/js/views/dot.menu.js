@@ -19,6 +19,17 @@ navigation.dotMenu.MainView = Backbone.View.extend({
     initialize: function() {
         this.$tabsContainer = this.$('.nav-tabs');
         this.$tabsContent = this.$('.tab-content');
+        this.init();
+        Oro.Events.bind(
+            "hash_navigation_request:complete",
+            function() {
+                this.init();
+            },
+            this
+        );
+    },
+
+    init: function() {
         this.$tabsContent.find('.menu-close').click(_.bind(this.close, this));
     },
 
@@ -38,7 +49,7 @@ navigation.dotMenu.MainView = Backbone.View.extend({
         }
 
         data.$tabContentContainer = data.$tabContent.find('ul');
-        this.tabs[data.key] = data;
+        this.tabs[data.key] = _.clone(data);
     },
 
     getTab: function(key) {
@@ -66,6 +77,11 @@ navigation.dotMenu.MainView = Backbone.View.extend({
                 this.getTab(tabKey).$tabContentContainer.append(el);
             }
         }
+        /**
+         * Backbone event. Fired when item is added to menu
+         * @event navigaion_item:added
+         */
+        Oro.Events.trigger("navigaion_item:added", el);
     },
 
     cleanup: function(tabKey) {
@@ -101,6 +117,7 @@ navigation.dotMenu.MainView = Backbone.View.extend({
 
     close: function() {
         this.$el.parents('.open').removeClass('open');
+        return false;
     }
 });
 

@@ -24,24 +24,48 @@ navigation.pinbar.ItemView = Backbone.View.extend({
     initialize: function() {
         this.listenTo(this.model, 'destroy', this.remove)
         this.listenTo(this.model, 'change:display_type', this.remove);
+        /**
+         * Change active pinbar item after hash navigation request is completed
+         */
+        Oro.Events.bind(
+            "hash_navigation_request:complete",
+            function() {
+                this.setActiveItem();
+            },
+            this
+        );
     },
 
     unpin: function()
     {
         this.model.destroy({wait: true});
+        return false;
     },
 
     maximize: function() {
         this.model.set('maximized', new Date().toISOString());
+        return false;
+    },
+
+    setActiveItem: function() {
+        var url = '';
+        if (Oro.hashNavigationEnabled()) {
+            url = Oro.Navigation.prototype.getHashUrl();
+        } else {
+            url = window.location.pathname;
+        }
+        if (this.model.get('url') ==  url) {
+            this.$el.addClass('active');
+        } else {
+            this.$el.removeClass('active');
+        }
     },
 
     render: function () {
         this.$el.html(
             this.templates[this.options.type](this.model.toJSON())
         );
-        if (this.model.get('url') ==  window.location.pathname) {
-            this.$el.addClass('active');
-        }
+        this.setActiveItem();
         return this;
     }
 });

@@ -111,7 +111,7 @@ class ResponseHistoryListener
         return !($response->getStatusCode() != 200
             || $request->getRequestFormat() != 'html'
             || $request->getMethod() != 'GET'
-            || $request->isXmlHttpRequest()
+            || ($request->isXmlHttpRequest() && !$request->headers->get('x-oro-hash-navigation'))
             || $route[0] == '_'
             || is_null($this->user));
     }

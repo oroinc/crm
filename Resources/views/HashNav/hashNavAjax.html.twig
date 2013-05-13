@@ -1,0 +1,17 @@
+<div id="head">
+    <div id="title">{{ oro_title_render() }}</div>
+    <div id="title-serialized">{{ oro_title_render_serialized()|raw }}</div>
+    {{ script|raw }}
+</div>
+<div id="messages">
+    {{ messages|raw }}
+</div>
+<div id="history-content">
+    {{ oro_menu_render('history') }}
+</div>
+<div id="most-viewed-content">
+    {{ oro_menu_render('mostviewed') }}
+</div>
+<div id="content">
+    {{ content|raw }}
+</div>

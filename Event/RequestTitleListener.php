@@ -34,7 +34,7 @@ class RequestTitleListener
         if (HttpKernel::MASTER_REQUEST != $event->getRequestType()
             || $request->getRequestFormat() != 'html'
             || $request->getMethod() != 'GET'
-            || $request->isXmlHttpRequest()
+            || ($request->isXmlHttpRequest() && !$request->headers->get('x-oro-hash-navigation'))
         ) {
             // don't do anything
             return;

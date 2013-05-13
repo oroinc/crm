@@ -35,6 +35,7 @@ navigation.pinbar.MainView = navigation.MainViewAbstract.extend({
 
         this.listenTo(this.options.collection, 'positionChange', this.renderItem);
         this.listenTo(this.options.collection, 'stateChange', this.handleItemStateChange);
+        this.listenTo(this.options.collection, 'urlChange', this.renderItem);
 
         this.$minimizeButton.click(_.bind(this.minimizePage, this));
         this.$closeButton.click(_.bind(this.closePage, this));
@@ -80,9 +81,21 @@ navigation.pinbar.MainView = navigation.MainViewAbstract.extend({
             } else {
                 url = this.getLatestUrl();
             }
+            /**
+             * Add restore param to the url
+             */
+            if (Oro.hashNavigationEnabled() && !_.isUndefined(item.changed) && item.changed.restore) {
+                var itemUrl = item.get('url');
+                if (itemUrl.indexOf('?') !== -1) {
+                    itemUrl += '&restore=1';
+                } else {
+                    itemUrl += '?restore=1';
+                }
+                item.set('url', itemUrl);
+            }
             if (url != this.getCurrentPageItemData().url) {
                 item.save(null, {success: function() {
-                    window.location.href = url;
+                    Oro.Navigation.prototype.setLocation(url);
                 }});
             }
         }
@@ -117,7 +130,11 @@ navigation.pinbar.MainView = navigation.MainViewAbstract.extend({
      */
     goToLatestOpenedPage: function()
     {
-        window.location.href = this.getLatestUrl();
+        if (Oro.hashNavigationEnabled()) {
+            Oro.Navigation.prototype.setLocation(this.getLatestUrl());
+        } else {
+            window.location.href = this.getLatestUrl();
+        }
     },
 
     /**

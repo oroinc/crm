@@ -9,6 +9,8 @@ ACL implementation from Oro UserBundle.
 * [Installation](#installation)
 * [Your first menu](#first-menu)
 * [Rendering Menus](#rendering-menus)
+* [Work with assets](#work-with-assets)
+* [Hash Navigation](#hash-havigation)
 
 <a name="installation"></a>
 
@@ -185,3 +187,89 @@ arguments and call KmpMenu renderer with the resulting options.
     {{ oro_menu_render('navbar', array('template' => 'SomeUserBundle:Menu:customdesign.html.twig')) }}
 {% endblock content %}
 ```
+
+<a name="work-with-assets"></a>
+
+## Work with assets
+
+To implement hashtag navigation we must all basic javascript and css files was loaded in main template.
+To do this, each bundle can has config file assets.yml with the list of js and css files.
+
+```yaml
+js:
+  - '@Path/To/Js/first.js'
+  - '@Path/To/Js/second.js'
+  - '@Path/To/Js/third.js'
+css:
+  - '@Path/To/Css/first.css'
+  - '@Path/To/Css/second.css'
+  - '@Path/To/Css/third.css'
+```
+
+In main template must be added the next tags:
+
+```
+    {% oro_js filter='array with filters' output='js/name_of_output_file.js' %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endoro_js %}
+    {% oro_css filter='array with filters' output='css/name_of_output_file.css' %}
+        <link rel="stylesheet" media="all" href="{{ asset_url }}" />
+    {% endoro_css %}
+```
+This tags is the same as assettics "javascripts" and "stylesheets" tags but without list of files.
+
+When you run dump assets command, files from config files will be minimized and converted due the filters array.
+
+<a name="hash-navigation"></a>
+
+## Hashtag Navigation
+
+To simplify site navigation and make it work without full page reloads hashtag navigation is implemented.
+
+To enable hashtag navigation, we need to follow next steps:
+
+1. In main layout template additional check must be added, so it should look like:
+
+```
+{% if not oro_is_hash_navigation() %}
+<!DOCTYPE html>
+<html>
+...
+[content]
+...
+</html>
+{% else %}
+{# Template for hash tag navigation#}
+{% include 'OroNavigationBundle:HashNav:hashNavAjax.html.twig'
+    with {'script': block('head_script'), 'messages':block('messages'), 'content': block('page_container')}
+%}
+{% endif %}
+```
+
+where
+
+block('head_script') - block with additional javascripts
+
+block('messages') - block with system messages
+
+block('page_container') - content area block (without header/footer), that will be realoaded during navigation
+
+2. This code must be added at the end of head section of main layout template:
+
+```
+      <script type="text/javascript">
+            $(function() {
+                if (Oro.hashNavigationEnabled()) {
+                    new Oro.Navigation({baseUrl : '{{ app.request.getSchemeAndHttpHost() }}'});
+                    Backbone.history.start();
+                }
+            })
+      </script>
+```
+
+3. To exclude links from processing with hash navigation, additional css class "no-hash" should be added to the <a> tag, e.g <a href="page-url" class="no-hash">
+
+4. To make <a> tag open back url generated with YsTools/BackUrlBundle, additional css class "back" should be added, e.g <a href="/some-back-url" class="back">
+
+As a part of hashtag navigation, form submit is also processed with Ajax.
+

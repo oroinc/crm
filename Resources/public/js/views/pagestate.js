@@ -3,7 +3,36 @@ var Oro = Oro || {};
 Oro.PageState = Oro.PageState || {};
 
 Oro.PageState.View = Backbone.View.extend({
+
+    timer: '',
+
     initialize: function () {
+        this.init();
+        this.listenTo(this.model, 'change:pagestate', this.handleStateChange);
+
+        /**
+         * Render links in favorites menu after hash navigation request is completed
+         */
+        Oro.Events.bind(
+            "hash_navigation_request:complete",
+            function() {
+                this.init();
+            },
+            this
+        );
+        /**
+         * Render links in favorites menu after hash navigation request is started
+         */
+        Oro.Events.bind(
+            "hash_navigation_request:start",
+            function() {
+                this.clearTimer();
+            },
+            this
+        );
+    },
+
+    init: function() {
         var self = this;
 
         if (Backbone.$('form[data-collect=true]').length == 0) {
@@ -22,19 +51,29 @@ Oro.PageState.View = Backbone.View.extend({
                     self.restore();
                 }
 
-                setInterval(function() {
+                self.timer = setInterval(function() {
                     self.collect();
                 }, 2000);
-
-                self.model.on('change:pagestate', function(model) {
-                    self.model.save(self.model.get('pagestate'));
-                });
             }
         )
     },
 
+    clearTimer: function() {
+        clearInterval(this.timer);
+        this.model.set('restore', false);
+    },
+
+    handleStateChange: function() {
+        if (this.model.get('pagestate').pageId) {
+            this.model.save(this.model.get('pagestate'));
+        }
+    },
+
     collect: function() {
-        var self = this;
+        var filterUrl = this.filterUrl();
+        if (!filterUrl) {
+            return;
+        }
         var data = {};
 
         Backbone.$('form[data-collect=true]').each(function(index, el){
@@ -46,7 +85,7 @@ Oro.PageState.View = Backbone.View.extend({
 
         this.model.set({
             pagestate: {
-                pageId : self.filterUrl(),
+                pageId : filterUrl,
                 data   : JSON.stringify(data)
             }
         });
@@ -74,9 +113,15 @@ Oro.PageState.View = Backbone.View.extend({
     },
 
     filterUrl: function() {
-        self = this;
+        var self = this;
+        var url = window.location;
+        if (Oro.hashNavigationEnabled()) {
+            url = new Url( Oro.Navigation.prototype.getHashUrl());
+            url.search = url.query.toString();
+            url.pathname = url.path;
+        }
 
-        params = window.location.search.replace('?', '').split('&');
+        var params = url.search.replace('?', '').split('&');
 
         if (params.length == 1 && params[0].indexOf('restore') !== -1) {
             params = '';
@@ -92,6 +137,10 @@ Oro.PageState.View = Backbone.View.extend({
             })
         }
 
-        return base64_encode(window.location.pathname + (params != '' ? '?' + params.join('&') : ''));
+        return base64_encode(url.pathname + (params != '' ? '?' + params.join('&') : ''));
     }
 });
+
+$(function() {
+    Oro.pagestate = new Oro.PageState.View({ model: new Oro.PageState.Model });
+})

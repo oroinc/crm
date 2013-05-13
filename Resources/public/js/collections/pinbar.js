@@ -6,6 +6,7 @@ navigation.pinbar.ItemsList = navigation.ItemsList.extend({
 
     initialize: function() {
         this.on('change:position', this.onPositionChange, this);
+        this.on('change:url', this.onUrlChange, this);
         this.on('change:maximized', this.onStateChange, this);
     },
 
@@ -15,6 +16,10 @@ navigation.pinbar.ItemsList = navigation.ItemsList.extend({
 
     onStateChange: function(item) {
         this.trigger('stateChange', item);
+    },
+
+    onUrlChange: function(item) {
+        this.trigger('urlChange', item);
     }
 });
 
