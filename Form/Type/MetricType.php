@@ -20,9 +20,16 @@ class MetricType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('id', 'hidden');
-        $builder->add('data', 'number');
-        $builder->add('unit', 'text');
+        $unitOptions['choices'] = $options['units'];
+        if ($options['default_unit']) {
+            $unitOptions['preferred_choices'] = $options['default_unit'];
+        }
+
+        $builder
+            ->add('id', 'hidden')
+            ->add('data', 'number')
+            ->add('unit', 'choice', $unitOptions)
+        ;
     }
 
     /**
@@ -32,7 +39,9 @@ class MetricType extends AbstractType
     {
         $resolver->setDefaults(
             array(
-                'data_class' => 'Oro\Bundle\FlexibleEntityBundle\Entity\Metric'
+                'data_class'   => 'Oro\Bundle\FlexibleEntityBundle\Entity\Metric',
+                'units'        => array(),
+                'default_unit' => null,
             )
         );
     }
