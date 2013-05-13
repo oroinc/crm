@@ -9,15 +9,21 @@ class TitleRepository extends EntityRepository
     /**
      * Returns not empty titles array
      *
+     * @param array $routes route names to get titles for
      * @return array
      */
-    public function getNotEmptyTitles()
+    public function getTitles($routes = array())
     {
-        return $this
+        $qb = $this
             ->createQueryBuilder('title')
-            ->where('title.title <> :title')
-            ->setParameter('title', '')
-            ->getQuery()
-            ->getArrayResult();
+            ->andWhere('title.title <> :title')
+            ->setParameter('title', '');
+
+        if (!empty($routes)) {
+            $qb->andWhere('title.route IN (:routes)')
+               ->setParameter('routes', $routes);
+        }
+
+        return $qb->getQuery()->getArrayResult();
     }
 }
