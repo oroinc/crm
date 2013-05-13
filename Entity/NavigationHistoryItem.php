@@ -38,7 +38,7 @@ class NavigationHistoryItem implements NavigationItemInterface
     /**
      * @var string $url
      *
-     * @ORM\Column(name="url", type="string", length=500)
+     * @ORM\Column(name="url", type="string", length=1023)
      */
     protected $url;
 
