@@ -2,61 +2,136 @@
 
 namespace Oro\Bundle\AccountBundle\Controller\Api\Rest;
 
-use FOS\RestBundle\Controller\FOSRestController;
-use FOS\RestBundle\Routing\ClassResourceInterface;
-use FOS\Rest\Util\Codes;
-
 use FOS\RestBundle\Controller\Annotations\NamePrefix;
+use FOS\RestBundle\Controller\Annotations\RouteResource;
+use FOS\RestBundle\Controller\Annotations\QueryParam;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Oro\Bundle\UserBundle\Annotation\Acl;
+use Oro\Bundle\UserBundle\Annotation\AclAncestor;
 
-use Oro\Bundle\AccountBundle\Entity\Manager\AccountManager;
-use Oro\Bundle\AccountBundle\Entity\Account;
+use Symfony\Component\Form\Form;
+use Symfony\Component\HttpFoundation\Response;
+use FOS\RestBundle\Routing\ClassResourceInterface;
+use Oro\Bundle\SoapBundle\Form\Handler\ApiFormHandler;
+use Oro\Bundle\SoapBundle\Controller\Api\Rest\FlexibleRestController;
+use Oro\Bundle\SoapBundle\Entity\Manager\ApiFlexibleEntityManager;
 
 /**
+ * @RouteResource("account")
  * @NamePrefix("oro_api_")
  */
-class AccountController extends FOSRestController implements ClassResourceInterface
+class AccountController extends FlexibleRestController implements ClassResourceInterface
 {
-
     /**
-     * Delete account
+     * REST GET list
      *
-     * @param int $id Account id
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @QueryParam(name="page", requirements="\d+", nullable=true, description="Page number, starting from 1. Defaults to 1.")
+     * @QueryParam(name="limit", requirements="\d+", nullable=true, description="Number of items per page. defaults to 10.")
      * @ApiDoc(
-     *      description="Delete account",
-     *      resource=true,
-     *      requirements={
-     *          {"name"="id", "dataType"="integer"},
-     *      }
+     *      description="Get all account items",
+     *      resource=true
      * )
-     * @Acl(
-     *      id="oro_account_account_remove",
-     *      name="Remove account",
-     *      description="Remove account",
-     *      parent="oro_account_account"
-     * )
+     * @AclAncestor("oro_account_list")
+     * @return Response
      */
-    public function deleteAction($id)
+    public function cgetAction()
     {
-        /** @var Account $entity */
-        $entity = $this->getManager()->findAccountBy(array('id' => (int) $id));
-
-        if (!$entity) {
-            return $this->handleView($this->view('', Codes::HTTP_NOT_FOUND));
-        }
-
-        $this->getManager()->deleteAccount($entity);
-
-        return $this->handleView($this->view('', Codes::HTTP_NO_CONTENT));
+        return $this->handleGetListRequest();
     }
 
     /**
-     * @return AccountManager
+     * REST GET item
+     *
+     * @param string $id
+     *
+     * @ApiDoc(
+     *      description="Get account item",
+     *      resource=true
+     * )
+     * @AclAncestor("oro_account_view")
+     * @return Response
+     */
+    public function getAction($id)
+    {
+        return $this->handleGetRequest($id);
+    }
+
+    /**
+     * REST PUT
+     *
+     * @param int $id Account item id
+     *
+     * @ApiDoc(
+     *      description="Update account",
+     *      resource=true
+     * )
+     * @AclAncestor("oro_account_update")
+     * @return Response
+     */
+    public function putAction($id)
+    {
+        return $this->handlePutRequest($id);
+    }
+
+    /**
+     * Create new account
+     *
+     * @ApiDoc(
+     *      description="Create new account",
+     *      resource=true
+     * )
+     * @AclAncestor("oro_account_create")
+     */
+    public function postAction()
+    {
+        return $this->handlePostRequest();
+    }
+
+    /**
+     * REST DELETE
+     *
+     * @param int $id
+     *
+     * @ApiDoc(
+     *      description="Delete Account",
+     *      resource=true
+     * )
+     * @Acl(
+     *      id="oro_account_delete",
+     *      name="Delete account",
+     *      description="Delete account",
+     *      parent="oro_account"
+     * )
+     * @return Response
+     */
+    public function deleteAction($id)
+    {
+        return $this->handleDeleteRequest($id);
+    }
+
+    /**
+     * Get entity Manager
+     *
+     * @return ApiFlexibleEntityManager
      */
     protected function getManager()
     {
-        return $this->get('oro_account.account.manager');
+        return $this->get('oro_account.account.manager.api');
+    }
+
+    /**
+     * @return Form
+     */
+    protected function getForm()
+    {
+        return $this->get('oro_account.form.type.account.api');
+    }
+
+    /**
+     * @return ApiFormHandler
+     */
+    protected function getFormHandler()
+    {
+        return $this->get('oro_account.form.handler.account.api');
     }
 }
