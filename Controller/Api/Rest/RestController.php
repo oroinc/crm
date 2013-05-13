@@ -2,7 +2,10 @@
 
 namespace Oro\Bundle\SoapBundle\Controller\Api\Rest;
 
-use Symfony\Component\Form\FormInterface;
+use Oro\Bundle\SoapBundle\Controller\Api\ApiCrudInterface;
+use Oro\Bundle\SoapBundle\Controller\Api\EntityManagerAwareInterface;
+use Oro\Bundle\SoapBundle\Controller\Api\FormAwareInterface;
+use Oro\Bundle\SoapBundle\Controller\Api\FormHandlerAwareInterface;
 use Symfony\Component\HttpFoundation\Response;
 
 use Doctrine\Common\Util\ClassUtils;
@@ -12,24 +15,25 @@ use Doctrine\ORM\UnitOfWork;
 use FOS\Rest\Util\Codes;
 use FOS\RestBundle\Controller\FOSRestController;
 
-use Oro\Bundle\SoapBundle\Form\Handler\ApiFormHandler;
-use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
-
-abstract class RestController extends FOSRestController
+abstract class RestController extends FOSRestController implements
+     FormAwareInterface,
+     FormHandlerAwareInterface,
+     EntityManagerAwareInterface,
+     ApiCrudInterface
 {
     const ITEMS_PER_PAGE = 10;
 
     /**
      * GET entities list
      *
+     * @param int $page
+     * @param int $limit
      * @return Response
      */
-    protected function handleGetListRequest()
+    public function handleGetListRequest($page = 1, $limit = self::ITEMS_PER_PAGE)
     {
-        $offset = (int)$this->getRequest()->get('page', 1);
-        $limit = (int)$this->getRequest()->get('limit', self::ITEMS_PER_PAGE);
         $manager = $this->getManager();
-        $items = $manager->getList($limit, $offset);
+        $items = $manager->getList($limit, $page);
 
         $result = array();
         foreach ($items as $item) {
@@ -53,7 +57,8 @@ abstract class RestController extends FOSRestController
         if ($item) {
             $item = $this->getPreparedItem($item);
         }
-        return new Response(json_encode($item), $item ? Codes::HTTP_OK : Codes::HTTP_NOT_FOUND);
+        $responseData = $item ? json_encode($item) : '';
+        return new Response($responseData, $item ? Codes::HTTP_OK : Codes::HTTP_NOT_FOUND);
     }
 
     /**
@@ -62,15 +67,14 @@ abstract class RestController extends FOSRestController
      * @param mixed $id
      * @return Response
      */
-    public function handlePutRequest($id)
+    public function handleUpdateRequest($id)
     {
         $entity = $this->getManager()->find($id);
         if (!$entity) {
             return $this->handleView($this->view(null, Codes::HTTP_NOT_FOUND));
         }
 
-        $this->fixRequestAttributes($entity);
-        if ($this->getFormHandler()->process($entity)) {
+        if ($this->processForm($entity)) {
             $item = $this->getPreparedItem($entity);
             return new Response(json_encode($item), Codes::HTTP_OK);
         } else {
@@ -83,12 +87,10 @@ abstract class RestController extends FOSRestController
      *
      * @return Response
      */
-    public function handlePostRequest()
+    public function handleCreateRequest()
     {
         $entity = $this->getManager()->createEntity();
-        $this->fixRequestAttributes($entity);
-
-        $isProcessed = $this->getFormHandler()->process($entity);
+        $isProcessed = $this->processForm($entity);
 
         if ($isProcessed) {
             $entityClass = ClassUtils::getRealClass(get_class($entity));
@@ -159,33 +161,13 @@ abstract class RestController extends FOSRestController
     }
 
     /**
-     * Transform request
-     *
-     * Assumed post data in the following format:
-     * {entity: {"id": "21", "property_one": "Test", "attributes": {"flexible_attribute_code": "John"}}}
-     * {entity: {"id": "21", "property_one": "Test", "attributes": {"flexible_attribute_code": {"value": "John", "scope": "mobile"}}}}
+     * Process form.
      *
      * @param mixed $entity
+     * @return bool
      */
-    protected function fixRequestAttributes($entity)
+    protected function processForm($entity)
     {
-        return;
+        return $this->getFormHandler()->process($entity);
     }
-
-    /**
-     * Get entity Manager
-     *
-     * @return ApiEntityManager
-     */
-    abstract protected function getManager();
-
-    /**
-     * @return FormInterface
-     */
-    abstract protected function getForm();
-
-    /**
-     * @return ApiFormHandler
-     */
-    abstract protected function getFormHandler();
 }

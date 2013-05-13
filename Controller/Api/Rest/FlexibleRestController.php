@@ -2,7 +2,6 @@
 
 namespace Oro\Bundle\SoapBundle\Controller\Api\Rest;
 
-use Doctrine\Common\Persistence\ObjectRepository;
 use Doctrine\Common\Util\ClassUtils;
 use Doctrine\ORM\Proxy\Proxy;
 
@@ -11,7 +10,6 @@ use Oro\Bundle\FlexibleEntityBundle\Entity\Attribute;
 use Oro\Bundle\FlexibleEntityBundle\Model\Behavior\ScopableInterface;
 use Oro\Bundle\FlexibleEntityBundle\Model\Behavior\TranslatableInterface;
 use Oro\Bundle\FlexibleEntityBundle\Model\FlexibleValueInterface;
-use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityAttribute;
 
 abstract class FlexibleRestController extends RestController
 {
@@ -67,68 +65,29 @@ abstract class FlexibleRestController extends RestController
     /**
      * {@inheritDoc}
      */
+    protected function processForm($entity)
+    {
+        $this->fixRequestAttributes($entity);
+        return parent::processForm($entity);
+    }
+
+    /**
+     * Transform request
+     *
+     * Assumed post data in the following format:
+     * {entity: {"id": "21", "property_one": "Test", "attributes": {"flexible_attribute_code": "John"}}}
+     * {entity: {"id": "21", "property_one": "Test", "attributes": {"flexible_attribute_code": {"value": "John", "scope": "mobile"}}}}
+     *
+     * @param mixed $entity
+     */
     protected function fixRequestAttributes($entity)
     {
-        parent::fixRequestAttributes($entity);
-
-        $request = $this->getRequest()->request;
         $requestVariable = $this->getForm()->getName();
+        $request = $this->getRequest()->request;
         $data = $request->get($requestVariable, array());
 
-        /** @var ObjectRepository $attrRepository */
-        $attrRepository = $this->getManager()
-            ->getFlexibleManager()
-            ->getAttributeRepository();
         $entityClass = ClassUtils::getRealClass(get_class($entity));
-        $attrDef = $attrRepository->findBy(array('entityType' => $entityClass));
-        $attrVal = isset($data['attributes']) ? $data['attributes'] : array();
-
-        unset($data['attributes']);
-        $data['values'] = array();
-
-        foreach ($attrDef as $i => $attr) {
-            /* @var AbstractEntityAttribute $attr */
-            if ($attr->getBackendType() == 'options') {
-                if (in_array(
-                    $attr->getAttributeType(),
-                    array(
-                        'oro_flexibleentity_multiselect',
-                        'oro_flexibleentity_multicheckbox',
-                    )
-                )) {
-                    $type = 'options';
-                    $default = array($attr->getOptions()->offsetGet(0)->getId());
-                } else {
-                    $type = 'option';
-                    $default = $attr->getOptions()->offsetGet(0)->getId();
-                }
-            } else {
-                $type = $attr->getBackendType();
-                $default = null;
-            }
-
-            $data['values'][$i] = array();
-            $data['values'][$i]['id'] = $attr->getId();
-            $data['values'][$i][$type] = $default;
-
-            foreach ($attrVal as $fieldCode => $fieldValue) {
-                if ($attr->getCode() == (string)$fieldCode) {
-                    if (is_array($fieldValue)) {
-                        if (array_key_exists('scope', $fieldValue)) {
-                            $data['values'][$i]['scope'] = $fieldValue['scope'];
-                        }
-                        if (array_key_exists('locale', $fieldValue)) {
-                            $data['values'][$i]['locale'] = $fieldValue['locale'];
-                        }
-                        $fieldValue = $fieldValue['value'];
-                    }
-                    $data['values'][$i][$type] = (string)$fieldValue;
-
-                    break;
-                }
-            }
-        }
-
+        $data = $this->container->get('oro_soap.request')->getFixedData($entityClass, $data);
         $request->set($requestVariable, $data);
     }
 }
