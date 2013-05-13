@@ -73,7 +73,6 @@ class NumberFilterTest extends FilterTestCase
                 array(),
                 array(NumberFilterType::NAME,
                     array(
-                        'field_options' => array('required' => false),
                         'show_filter' => false,
                         'data_type' => NumberFilterType::DATA_INTEGER
                     )
@@ -83,7 +82,6 @@ class NumberFilterTest extends FilterTestCase
                 array('data_type' => FieldDescriptionInterface::TYPE_INTEGER),
                 array(NumberFilterType::NAME,
                     array(
-                        'field_options' => array('required' => false),
                         'show_filter' => false,
                         'data_type' => NumberFilterType::DATA_INTEGER
                     )
@@ -93,7 +91,6 @@ class NumberFilterTest extends FilterTestCase
                 array('data_type' => FieldDescriptionInterface::TYPE_DECIMAL),
                 array(NumberFilterType::NAME,
                     array(
-                        'field_options' => array('required' => false),
                         'show_filter' => false,
                         'data_type' => NumberFilterType::DATA_DECIMAL
                     )
