@@ -2,7 +2,6 @@
 
 namespace Oro\Bundle\UserBundle\Datagrid;
 
-use Symfony\Bundle\FrameworkBundle\Routing\Router;
 use Oro\Bundle\GridBundle\Datagrid\DatagridManager;
 use Oro\Bundle\GridBundle\Field\FieldDescription;
 use Oro\Bundle\GridBundle\Field\FieldDescriptionCollection;
@@ -15,20 +14,8 @@ use Oro\Bundle\GridBundle\Property\UrlProperty;
 class GroupDatagridManager extends DatagridManager
 {
     /**
-     * @var FieldDescriptionCollection
+     * {@inheritDoc}
      */
-    protected $fieldsCollection;
-
-    /**
-     * @var Router
-     */
-    protected $router;
-
-    public function setRouter(Router $router)
-    {
-        $this->router = $router;
-    }
-
     protected function getProperties()
     {
         return array(
@@ -38,93 +25,63 @@ class GroupDatagridManager extends DatagridManager
     }
 
     /**
-     * @return FieldDescriptionCollection
+     * {@inheritDoc}
      */
-    protected function getFieldDescriptionCollection()
+    protected function configureFields(FieldDescriptionCollection $fieldsCollection)
     {
-        if (!$this->fieldsCollection) {
-            $this->fieldsCollection = new FieldDescriptionCollection();
+        $fieldId = new FieldDescription();
+        $fieldId->setName('id');
+        $fieldId->setOptions(
+            array(
+                'type'        => FieldDescriptionInterface::TYPE_INTEGER,
+                'label'       => 'ID',
+                'field_name'  => 'id',
+                'filter_type' => FilterInterface::TYPE_NUMBER,
+                'required'    => false,
+                'sortable'    => true,
+                'filterable'  => true,
+                'show_filter' => true,
+            )
+        );
+        $fieldsCollection->add($fieldId);
 
-            $fieldId = new FieldDescription();
-            $fieldId->setName('id');
-            $fieldId->setOptions(
-                array(
-                    'type'        => FieldDescriptionInterface::TYPE_INTEGER,
-                    'label'       => 'ID',
-                    'field_name'  => 'id',
-                    'filter_type' => FilterInterface::TYPE_NUMBER,
-                    'required'    => false,
-                    'sortable'    => true,
-                    'filterable'  => true,
-                    'show_filter' => true,
-                )
-            );
-            $this->fieldsCollection->add($fieldId);
+        $fieldName = new FieldDescription();
+        $fieldName->setName('name');
+        $fieldName->setOptions(
+            array(
+                'type'        => FieldDescriptionInterface::TYPE_TEXT,
+                'label'       => 'Name',
+                'field_name'  => 'name',
+                'filter_type' => FilterInterface::TYPE_STRING,
+                'required'    => false,
+                'sortable'    => true,
+                'filterable'  => true,
+                'show_filter' => true,
+            )
+        );
+        $fieldsCollection->add($fieldName);
 
-            $fieldName = new FieldDescription();
-            $fieldName->setName('name');
-            $fieldName->setOptions(
-                array(
-                    'type'        => FieldDescriptionInterface::TYPE_TEXT,
-                    'label'       => 'Name',
-                    'field_name'  => 'name',
-                    'filter_type' => FilterInterface::TYPE_STRING,
-                    'required'    => false,
-                    'sortable'    => true,
-                    'filterable'  => true,
-                    'show_filter' => true,
-                )
-            );
-            $this->fieldsCollection->add($fieldName);
+        $rolesLabel = new FieldDescription();
+        $rolesLabel->setName('roles');
+        $rolesLabel->setProperty(new FixedProperty('roles', 'roleLabelsAsString'));
+        $rolesLabel->setOptions(
+            array(
+                'type'        => FieldDescriptionInterface::TYPE_TEXT,
+                'label'       => 'Roles',
+                'field_name'  => 'roles',
+                'filter_type' => FilterInterface::TYPE_STRING,
+                'required'    => false,
+                'sortable'    => false,
+                'filterable'  => true,
+                'show_filter' => false,
 
-            $rolesLabel = new FieldDescription();
-            $rolesLabel->setName('roles');
-            $rolesLabel->setProperty(new FixedProperty('roles', 'roleLabelsAsString'));
-            $rolesLabel->setOptions(
-                array(
-                    'type'        => FieldDescriptionInterface::TYPE_TEXT,
-                    'label'       => 'Roles',
-                    'field_name'  => 'roles',
-                    'filter_type' => FilterInterface::TYPE_STRING,
-                    'required'    => false,
-                    'sortable'    => false,
-                    'filterable'  => true,
-                    'show_filter' => false,
-
-                )
-            );
-            $this->fieldsCollection->add($rolesLabel);
-        }
-
-        return $this->fieldsCollection;
+            )
+        );
+        $fieldsCollection->add($rolesLabel);
     }
 
     /**
-     * {@inheritdoc}
-     */
-    protected function getListFields()
-    {
-        return $this->getFieldDescriptionCollection()->getElements();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getSorters()
-    {
-        $fields = array();
-        /** @var $fieldDescription FieldDescription */
-        foreach ($this->getFieldDescriptionCollection() as $fieldDescription) {
-            if ($fieldDescription->isSortable()) {
-                $fields[] = $fieldDescription;
-            }
-        }
-
-        return $fields;
-    }
-
-    /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     protected function getRowActions()
     {

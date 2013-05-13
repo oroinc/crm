@@ -26,8 +26,8 @@ $(function() {
                     url: Routing.generate('oro_api_delete_profile', { id: el.attr('data-id') }),
                     type: 'DELETE',
                     success: function (data) {
-                        if (OroApp.hashNavigationEnabled()) {
-                            OroApp.Navigation.prototype.setLocation(Routing.generate('oro_user_index'))
+                        if (Oro.hashNavigationEnabled()) {
+                            Oro.Navigation.prototype.setLocation(Routing.generate('oro_user_index'))
                         } else {
                             window.location.href = Routing.generate('oro_user_index');
                         }
@@ -53,7 +53,7 @@ $(function() {
     /**
      * Process role checkboxes after hash navigation request is completed
      */
-    OroApp.Events.bind(
+    Oro.Events.bind(
         "hash_navigation_request:complete",
         function () {
             checkRoleInputs();
