@@ -45,7 +45,14 @@ Oro.Datagrid.Router = Backbone.Router.extend({
 
         this.collection.on('beforeReset', this._handleStateChange, this);
 
+        //this.init();
+
         Backbone.Router.prototype.initialize.apply(this, arguments);
+        /**
+         * Backbone event. Fired when grid route is initialized
+         * @event grid_route:loaded
+         */
+        Oro.Events.trigger("grid_route:loaded", this);
     },
 
     /**
@@ -61,7 +68,13 @@ Oro.Datagrid.Router = Backbone.Router.extend({
             return;
         }
         var encodedStateData = collection.encodeStateData(collection.state);
-        this.navigate('g/' + encodedStateData);
+        var url = '';
+        if (Oro.hashNavigationEnabled()) {
+            url = 'url=' + Oro.Navigation.prototype.getHashUrl() + '|g/' + encodedStateData;
+        } else {
+            url = 'g/' + encodedStateData;
+        }
+        this.navigate(url);
     },
 
     /**
@@ -70,7 +83,12 @@ Oro.Datagrid.Router = Backbone.Router.extend({
      * @param {String} encodedStateData String represents encoded state stored in URL
      */
     changeState: function(encodedStateData) {
-        var state = this.collection.decodeStateData(encodedStateData);
+        var state = null;
+        if (encodedStateData) {
+            state = this.collection.decodeStateData(encodedStateData);
+        } else {
+            state = this._initState;
+        }
         this.collection.updateState(state);
         this.collection.fetch({
             ignoreSaveStateInUrl: true
@@ -78,12 +96,11 @@ Oro.Datagrid.Router = Backbone.Router.extend({
     },
 
     /**
-     * Route for initializing collection. Collection will retrieve initial state and call fetch.
+     * Init function to change collection state if page is loaded without hash navigation
      */
     init: function() {
-        this.collection.updateState(this._initState);
-        this.collection.fetch({
-            ignoreSaveStateInUrl: true
-        });
+        if (Backbone.history.fragment === '') {
+            this.changeState('');
+        }
     }
 });

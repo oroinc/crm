@@ -1,13 +1,3 @@
-{% javascripts
-    '@OroGridBundle/Resources/public/js/app/datagrid/listener/abstractlistener.js'
-    '@OroGridBundle/Resources/public/js/app/datagrid/listener/columnformlistener.js'
-
-    filter='?yui_js'
-    output='js/oro.grid.listener.js'
-%}
-    <script src="{{ asset_url }}" type="text/javascript"></script>
-{% endjavascripts %}
-
 <script type="text/javascript">
     $(function() {
         var listener = new Oro.Datagrid.Listener.ColumnFormListener(_.extend({
