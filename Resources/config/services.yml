@@ -256,7 +256,6 @@ services:
     oro_user.attribute_type.user:
         class: %oro_user.attribute_type.user.class%
         arguments:
-            - @translator
             - "user"
             - "oro_user_select"
         tags:
