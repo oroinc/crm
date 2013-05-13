@@ -36,10 +36,12 @@ $(function() {
             };
 
         if (!_.isUndefined(Oro.BootstrapModal)) {
-            confirm = new Oro.BootstrapModal({
+            var confirm = new Oro.BootstrapModal({
                 title: 'Delete Confirmation',
                 content: message,
-                okText: 'Yes, Delete'
+                okText: 'Yes, Delete',
+                cancelText: 'Cancel'
+
             });
             confirm.on('ok', doAction);
             confirm.open();
