@@ -98,17 +98,17 @@ services:
             - "oro_account_value"
         tags:
             - { name: form.type, alias: account }
-#
-#    oro_account.form.account.api:
-#        class: Symfony\Component\Form\Form
-#        factory_method: createNamed
-#        factory_service: form.factory
-#        arguments: ["account", "account", null]
+
+    oro_account.form.account.api:
+        class: Symfony\Component\Form\Form
+        factory_method: createNamed
+        factory_service: form.factory
+        arguments: ["account", "account", null]
 
     oro_account.form.handler.account.api:
         class: %oro_account.handler.account.class%
         scope: request
         arguments:
-            - @oro_account.form.account
+            - @oro_account.form.account.api
             - @request
             - @doctrine.orm.entity_manager
