@@ -1,6 +1,11 @@
 $(function() {
-    $('#btn-apigen').on('click', function(e) {
-        var el = $(this);
+    function checkRoleInputs() {
+        inputs = $('#roles-list .controls').find(':checkbox');
+        inputs.attr('required', inputs.filter(':checked').length > 0 ? null : 'required');
+    }
+
+    $(document).on('click', '#btn-apigen', function (e) {
+        el = $(this);
 
         $.get(el.attr('href'), function (data) {
             el.prev().text(data);
@@ -9,7 +14,11 @@ $(function() {
         return false;
     });
 
-    $('#btn-remove-profile').on('click', function(e) {
+    $(document).on('click', '#roles-list input', function (e) {
+        checkRoleInputs();
+    });
+
+    $(document).on('click', '#btn-remove-profile', function (e) {
         var el = $(this),
             message = el.attr('data-message'),
             doAction = function() {
@@ -17,7 +26,11 @@ $(function() {
                     url: Routing.generate('oro_api_delete_profile', { id: el.attr('data-id') }),
                     type: 'DELETE',
                     success: function (data) {
-                        window.location.href = Routing.generate('oro_user_index');
+                        if (Oro.hashNavigationEnabled()) {
+                            Oro.Navigation.prototype.setLocation(Routing.generate('oro_user_index'))
+                        } else {
+                            window.location.href = Routing.generate('oro_user_index');
+                        }
                     }
                 });
             };
@@ -37,18 +50,18 @@ $(function() {
         return false;
     });
 
-    $('#roles-list input')
-        .on('click', function() {
-            var inputs = $(this).closest('.controls');
+    /**
+     * Process role checkboxes after hash navigation request is completed
+     */
+    Oro.Events.bind(
+        "hash_navigation_request:complete",
+        function () {
+            checkRoleInputs();
+        },
+        this
+    );
 
-            inputs.find(':checkbox').attr('required', inputs.find(':checked').length > 0 ? null : 'required');
-        })
-        .triggerHandler('click');
-
-    $('#btn-enable input').on('change', function(e) {
-//        if ($(this).is(':checked')) {
-//
-//        }
+    $(document).on('change', '#btn-enable input', function(e) {
         $('.status-enabled').toggleClass('hide');
         $('.status-disabled').toggleClass('hide');
     });

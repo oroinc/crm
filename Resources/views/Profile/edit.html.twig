@@ -24,12 +24,12 @@
                         </div>
                         <div class="pull-left customer-info-top-actions">
                             <div class="btn-group">
-                                <a href="{{ app.session.get('back') ? app.session.get('back') : path('oro_user_index') }}" class="btn">{{ 'Cancel'|trans }}</a>
+                                <a href="{{ app.session.get('back') ? app.session.get('back') : path('oro_user_index') }}" class="btn back">{{ 'Cancel'|trans }}</a>
                                 <button type="submit" class="btn btn-primary"><i class="icon-ok icon-white hide-text">Save </i> {{ ' Save'|trans }}</button>
                             </div>
                         </div>
                     </div>
-                    <div class="pull-right" style="clear: right; padding: 10px 0 0;">
+                    <div class="pull-right pull-right-extra">
                         <div class="status-enabled{% if not form.vars.value.enabled %} hide{% endif %}"><i class="icon-status-enabled"></i>{{ 'Enabled'|trans }}</div>
                         <div class="status-disabled{% if form.vars.value.enabled %} hide{% endif %}"><i class="icon-status-disabled"></i>{{ 'Disabled'|trans }}</div>
                     </div>
@@ -176,28 +176,3 @@
 </div>
 {% endblock %}
 
-{% block head_script %}
-    {{ parent() }}
-
-    {% javascripts
-        '@OroUIBundle/Resources/public/lib/jquery-ui-timepicker-addon.js'
-        '@OroUIBundle/Resources/public/lib/bootstrap/js/bootstrap-scrollspy.js'
-        '@OroUIBundle/Resources/public/lib/backbone.bootstrap-modal.js'
-        '@OroUserBundle/Resources/public/js/emails.js'
-        '@OroUserBundle/Resources/public/js/profile.js'
-
-        filter='?yui_js'
-        output='js/oro.profile.edit.js'
-    %}
-    <script src="{{ asset_url }}" type="text/javascript"></script>
-    {% endjavascripts %}
-
-    {% stylesheets
-        '@OroUserBundle/Resources/public/css/jquery-ui-1.10.2.custom.css'
-
-        filter='cssrewrite,lessphp,yui_css'
-        output='css/oro.user.profile.css'
-    %}
-    <link rel="stylesheet" type="text/css" href="{{ asset_url }}" />
-    {% endstylesheets %}
-{% endblock %}
