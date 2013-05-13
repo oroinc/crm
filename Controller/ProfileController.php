@@ -15,12 +15,11 @@ use Oro\Bundle\UserBundle\Annotation\Acl;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\UserBundle\Entity\UserApi;
 use Oro\Bundle\UserBundle\Entity\UserManager;
-use Oro\Bundle\UserBundle\Datagrid\UserDatagridManager;
 
 /**
  * @Acl(
  *      id="oro_user_profile",
- *      name="Profile controller",
+ *      name="Profile manipulation",
  *      description="Profile manipulation",
  *      parent="oro_user"
  * )

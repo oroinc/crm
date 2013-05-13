@@ -35,10 +35,11 @@ $(function() {
                 });
             };
 
-        if (!_.isUndefined(Backbone.BootstrapModal)) {
-            confirm = new Backbone.BootstrapModal({
+        if (!_.isUndefined(Oro.BootstrapModal)) {
+            confirm = new Oro.BootstrapModal({
                 title: 'Delete Confirmation',
-                content: message
+                content: message,
+                okText: 'Yes, Delete'
             });
             confirm.on('ok', doAction);
             confirm.open();
@@ -59,4 +60,9 @@ $(function() {
         },
         this
     );
+
+    $(document).on('change', '#btn-enable input', function(e) {
+        $('.status-enabled').toggleClass('hide');
+        $('.status-disabled').toggleClass('hide');
+    });
 });
