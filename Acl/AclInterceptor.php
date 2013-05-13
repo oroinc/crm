@@ -55,8 +55,7 @@ class AclInterceptor implements MethodInterceptorInterface
             sprintf('User invoked class: "%s", Method: "%s".', $method->reflection->class, $method->reflection->name)
         );
 
-            $token = $this->securityContext->getToken();
-
+        $token = $this->securityContext->getToken();
         if ($token) {
             $aclId = $this->getAclId($method);
             if (!$aclId) {

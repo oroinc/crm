@@ -9,20 +9,26 @@ use Acme\Bundle\TestsBundle\Test\Client;
 /**
  * @outputBuffering enabled
  */
-class RestUsersACLApiTest extends WebTestCase
+class RestApiUsersACLTest extends WebTestCase
 {
-
     const USER_NAME = 'user_wo_permissions';
     const USER_PASSWORD = 'user_api_key';
 
     const DEFAULT_USER_ID = '1';
 
+    /**
+     * @var Client
+     */
     protected $client = null;
+
     protected static $hasLoaded = false;
 
     public function setUp()
     {
-        $this->client = static::createClient(array(), ToolsAPI::generateWsseHeader(self::USER_NAME, self::USER_PASSWORD));
+        $this->client = static::createClient(
+            array(),
+            ToolsAPI::generateWsseHeader(self::USER_NAME, self::USER_PASSWORD)
+        );
         if (!self::$hasLoaded) {
             //rebuild indexes before tests
             $kernel = $this->client->getKernel();
@@ -59,30 +65,27 @@ class RestUsersACLApiTest extends WebTestCase
         );
         $this->client->request('POST', 'http://localhost/api/rest/latest/profile', $request);
         $result = $this->client->getResponse();
-        ToolsAPI::assertJsonResponse($result, 400);
+        ToolsAPI::assertJsonResponse($result, 403);
     }
 
     public function testApiGetUsers()
     {
-        $this->markTestSkipped('Skipped due to bug');
         //get user id
         $this->client->request('GET', 'http://localhost/api/rest/latest/profiles?limit=100');
         $result = $this->client->getResponse();
-        ToolsAPI::assertJsonResponse($result, 400);
+        ToolsAPI::assertJsonResponse($result, 403);
     }
 
     public function testApiGetUser()
     {
-        $this->markTestSkipped('Skipped due to bug');
         //open user by id
         $this->client->request('GET', 'http://localhost/api/rest/latest/profiles' . '/' . self::DEFAULT_USER_ID);
         $result = $this->client->getResponse();
-        ToolsAPI::assertJsonResponse($result, 400);
+        ToolsAPI::assertJsonResponse($result, 403);
     }
 
     public function testApiUpdateUser()
     {
-        $this->markTestSkipped('Skipped due to bug');
         $request = array(
             "profile" => array (
                 "username" => 'user_' . mt_rand(),
@@ -94,16 +97,19 @@ class RestUsersACLApiTest extends WebTestCase
             )
         );
 
-        $this->client->request('PUT', 'http://localhost/api/rest/latest/profiles' . '/' . self::DEFAULT_USER_ID, $request);
+        $this->client->request(
+            'PUT',
+            'http://localhost/api/rest/latest/profiles' . '/' . self::DEFAULT_USER_ID,
+            $request
+        );
         $result = $this->client->getResponse();
-        ToolsAPI::assertJsonResponse($result, 400);
+        ToolsAPI::assertJsonResponse($result, 403);
     }
 
     public function testApiDeleteUser()
     {
-        $this->markTestSkipped('Skipped due to bug');
         $this->client->request('DELETE', 'http://localhost/api/rest/latest/profiles' . '/' . self::DEFAULT_USER_ID);
         $result = $this->client->getResponse();
-        ToolsAPI::assertJsonResponse($result, 400);
+        ToolsAPI::assertJsonResponse($result, 403);
     }
 }

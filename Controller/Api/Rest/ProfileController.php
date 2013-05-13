@@ -330,8 +330,8 @@ class ProfileController extends FOSRestController implements ClassResourceInterf
                     array(
                         'oro_flexibleentity_multiselect',
                         'oro_flexibleentity_multicheckbox',
-                    ))
-                ) {
+                    )
+                )) {
                     $type    = 'options';
                     $default = array($attr->getOptions()->offsetGet(0)->getId());
                 } else {

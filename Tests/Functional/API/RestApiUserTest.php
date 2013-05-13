@@ -9,7 +9,7 @@ use Acme\Bundle\TestsBundle\Test\Client;
 /**
  * @outputBuffering enabled
  */
-class RestUserApiTest extends WebTestCase
+class RestApiUserTest extends WebTestCase
 {
 
     public $client = null;
