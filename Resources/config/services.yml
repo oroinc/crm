@@ -5,3 +5,6 @@ services:
     oro_measure.measure_converter:
         class: Oro\Bundle\MeasureBundle\Convert\MeasureConverter
         arguments: [%oro_measure.measures_config%]
+
+    oro_measure.manager:
+        class: Oro\Bundle\MeasureBundle\Manager\MeasureManager
