@@ -116,7 +116,7 @@ Oro.PageState.View = Backbone.View.extend({
         var self = this;
         var url = window.location;
         if (Oro.hashNavigationEnabled()) {
-            var url = new Url( Oro.Navigation.prototype.getHashUrl());
+            url = new Url( Oro.Navigation.prototype.getHashUrl());
             url.search = url.query.toString();
             url.pathname = url.path;
         }
