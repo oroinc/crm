@@ -19,7 +19,8 @@ js:
 
   - '@OroUIBundle/Resources/public/js/layout.js'
   - '@OroUIBundle/Resources/public/js/csrf.js'
-
+  - '@OroUIBundle/Resources/public/lib/backbone.bootstrap-modal.js'
+  - '@OroUIBundle/Resources/public/js/backbone/bootstrap-modal.js'
 
   - '@FOSJsRoutingBundle/Resources/public/js/router.js'
   - 'js/routes.js'

@@ -165,25 +165,6 @@
         </header>
         {% endblock header %}
         {% block top_action_box %}{% endblock %}
-        <div id="flash-messages">
-            {% block messages %}
-                {% if app.session.flashbag.peekAll|length > 0 %}
-                    <div class="row-fluid">
-                        <div class="span12">
-                            {% for type, messages in app.session.flashbag.all %}
-                                {% for message in messages %}
-                                    <div class="alert{{ type ? ' alert-'~type : '' }} fade in top-messages">
-                                        <a class="close" data-dismiss="alert" href="#">&times;</a>
-                                        {{ message|trans|raw }}
-                                    </div>
-                                {% endfor %}
-                            {% endfor %}
-                        </div>
-                    </div>
-                {% endif %}
-            {% endblock messages %}
-        </div>
-
         {% block main %}
         <div id="main" >
             {% block right_panel %}{% endblock right_panel %}
@@ -346,6 +327,22 @@
                 {% endblock pin_bar %}
                 {% block application_menu %}
                 {% endblock application_menu %}
+                <div id="flash-messages">
+                    {% block messages %}
+                        {% if app.session.flashbag.peekAll|length > 0 %}
+
+                            {% for type, messages in app.session.flashbag.all %}
+                                {% for message in messages %}
+                                    <div class="alert{{ type ? ' alert-'~type : '' }} fade in top-messages ">
+                                        <a class="close" data-dismiss="alert" href="#">&times;</a>
+                                        {{ message|trans|raw }}
+                                    </div>
+                                {% endfor %}
+                            {% endfor %}
+
+                        {% endif %}
+                    {% endblock messages %}
+                </div>
             <div class="hash-loading-mask"></div>
             <div id="container">
                 {% block page_container %}
@@ -377,6 +374,7 @@
                                 <ul>
                                     <li><a href="{{ path('oro_ui_form_elements') }}">Form elements</a></li>
                                     <li><a href="{{ path('oro_ui_messages') }}">System messages</a></li>
+                                    <li><a href="{{ path('oro_ui_title_bar') }}">Entity Title Bar</a></li>
                                     <li><a href="{{ path('oro_ui_buttons') }}">Buttons</a></li>
                                     <li><a href="#">Print page</a></li>
                                     <li><a href="{{ path('oro_ui_tables') }}">Tables</a></li>
