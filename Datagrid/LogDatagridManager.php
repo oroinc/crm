@@ -2,7 +2,6 @@
 
 namespace Oro\Bundle\DataAuditBundle\Datagrid;
 
-use Symfony\Bundle\FrameworkBundle\Routing\Router;
 use Oro\Bundle\GridBundle\Datagrid\DatagridManager;
 use Oro\Bundle\GridBundle\Field\FieldDescription;
 use Oro\Bundle\GridBundle\Field\FieldDescriptionCollection;
@@ -17,25 +16,6 @@ class LogDatagridManager extends DatagridManager
      * @var FieldDescriptionCollection
      */
     protected $fieldsCollection;
-
-    /**
-     * @var Router
-     */
-    protected $router;
-
-    public function setRouter(Router $router)
-    {
-        $this->router = $router;
-    }
-
-    protected function getProperties()
-    {
-        return array(
-            new UrlProperty('show_link', $this->router, '#', array('id')),
-            new UrlProperty('edit_link', $this->router, '#', array('id')),
-            new UrlProperty('delete_link', $this->router, '#', array('id')),
-        );
-    }
 
     /**
      * @return FieldDescriptionCollection
