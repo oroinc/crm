@@ -36,7 +36,7 @@ class Metric
      * Unit code
      * @var string $unit
      *
-     * @ORM\Column(name="unit_code", type="string", length=5, nullable=true)
+     * @ORM\Column(name="unit_code", type="string", length=20, nullable=true)
      */
     protected $unit;
 

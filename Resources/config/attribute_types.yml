@@ -51,7 +51,7 @@ services:
             - { name: oro_flexibleentity.attributetype, alias: oro_flexibleentity_simpleselect }
     oro_flexibleentity.attributetype.metric:
         class: Oro\Bundle\FlexibleEntityBundle\AttributeType\MetricType
-        arguments: ["metric", "oro_flexibleentity_metric"]
+        arguments: ["metric", "oro_flexibleentity_metric", @oro_measure.manager]
         tags:
             - { name: oro_flexibleentity.attributetype, alias: oro_flexibleentity_metric }
     oro_flexibleentity.attributetype.file:

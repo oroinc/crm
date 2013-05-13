@@ -21,7 +21,8 @@ class MetricTypeTest extends TypeTestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->type = new MetricType();
+        $this->measureManager = $this->getMock('Oro\Bundle\MeasureBundle\Manager\MeasureManager');
+        $this->type = new MetricType('', '', $this->measureManager);
         $this->form = $this->factory->create($this->type);
     }
 
@@ -32,7 +33,7 @@ class MetricTypeTest extends TypeTestCase
     {
         $this->assertField('id', 'hidden');
         $this->assertField('data', 'number');
-        $this->assertField('unit', 'text');
+        $this->assertField('unit', 'choice');
 
         $this->assertEquals(
             'Oro\Bundle\FlexibleEntityBundle\Entity\Metric',
