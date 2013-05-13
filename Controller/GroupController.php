@@ -13,7 +13,7 @@ use YsTools\BackUrlBundle\Annotation\BackUrl;
 use Oro\Bundle\UserBundle\Entity\Group;
 use Oro\Bundle\UserBundle\Annotation\Acl;
 use Oro\Bundle\UserBundle\Annotation\AclAncestor;
-use Oro\Bundle\UserBundle\Datagrid\GroupDatagridManager;
+use Oro\Bundle\UserBundle\Datagrid\GroupUserDatagridManager;
 
 /**
  * @Route("/group")
@@ -67,16 +67,8 @@ class GroupController extends Controller
             }
         }
 
-        /** @var $gridManager GroupDatagridManager */
-        $gridManager = $this->get('oro_user.group_user_datagrid_manager');
-
-        $this->initializeQueryFactory($entity);
-        $gridManager->getRouteGenerator()->setRouteParameters(array('id' => $entity->getId()));
-
-        $datagrid = $gridManager->getDatagrid();
-
         return array(
-            'datagrid' => $datagrid->createView(),
+            'datagrid' => $this->getGroupUserDatagridManager($entity)->getDatagrid()->createView(),
             'form'     => $this->get('oro_user.form.group')->createView(),
         );
     }
@@ -95,11 +87,20 @@ class GroupController extends Controller
      */
     public function gridDataAction(Group $entity)
     {
-        $this->initializeQueryFactory($entity);
+        return array('datagrid' => $this->getGroupUserDatagridManager($entity)->getDatagrid()->createView());
+    }
 
-        $datagrid = $this->get('oro_user.group_user_datagrid_manager')->getDatagrid();
-
-        return array('datagrid' => $datagrid->createView());
+    /**
+     * @param Group $group
+     * @return GroupUserDatagridManager
+     */
+    protected function getGroupUserDatagridManager(Group $group)
+    {
+        /** @var $result GroupUserDatagridManager */
+        $result = $this->get('oro_user.group_user_datagrid_manager');
+        $result->setGroup($group);
+        $result->getRouteGenerator()->setRouteParameters(array('id' => $group->getId()));
+        return $result;
     }
 
     /**
@@ -127,16 +128,5 @@ class GroupController extends Controller
             $view,
             array('datagrid' => $datagrid->createView())
         );
-    }
-
-    /**
-     * @param Group $entity
-     */
-    protected function initializeQueryFactory(Group $entity)
-    {
-        $this->get('oro_user.group_user_datagrid_manager.default_query_factory')
-            ->setQueryBuilder(
-                $this->get('oro_user.group_manager')->getUserQueryBuilder($entity)
-            );
     }
 }

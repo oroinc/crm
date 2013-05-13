@@ -40,7 +40,9 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
             $this->markTestSkipped('Doctrine Common has to be installed for this test to run.');
         }
 
-        $this->securityContext = $this->getMock('Symfony\Component\Security\Core\SecurityContextInterface');
+        $this->securityContext = $this->getMockForAbstractClass(
+            'Symfony\Component\Security\Core\SecurityContextInterface'
+        );
 
         $this->user = $this->getMock('Oro\Bundle\UserBundle\Entity\User');
         $this->om = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
