@@ -1,14 +1,14 @@
-var OroApp = OroApp || {};
-OroApp.Datagrid = OroApp.Datagrid || {};
-OroApp.Datagrid.Action = OroApp.Datagrid.Action || {};
+var Oro = Oro || {};
+Oro.Datagrid = Oro.Datagrid || {};
+Oro.Datagrid.Action = Oro.Datagrid.Action || {};
 
 /**
  * Refreshes collection
  *
- * @class   OroApp.Datagrid.Action.RefreshCollectionAction
- * @extends OroApp.Datagrid.Action.AbstractAction
+ * @class   Oro.Datagrid.Action.RefreshCollectionAction
+ * @extends Oro.Datagrid.Action.AbstractAction
  */
-OroApp.Datagrid.Action.RefreshCollectionAction = OroApp.Datagrid.Action.AbstractAction.extend({
+Oro.Datagrid.Action.RefreshCollectionAction = Oro.Datagrid.Action.AbstractAction.extend({
 
     /** @property Backbone.Collection */
     collection: undefined,
@@ -28,7 +28,7 @@ OroApp.Datagrid.Action.RefreshCollectionAction = OroApp.Datagrid.Action.Abstract
         }
         this.collection = options.collection;
 
-        OroApp.Datagrid.Action.AbstractAction.prototype.initialize.apply(this, arguments);
+        Oro.Datagrid.Action.AbstractAction.prototype.initialize.apply(this, arguments);
     },
 
     /**

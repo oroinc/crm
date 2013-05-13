@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\GridBundle\Property;
 
+use Oro\Bundle\GridBundle\Datagrid\ResultRecordInterface;
 use Oro\Bundle\GridBundle\Field\FieldDescriptionInterface;
 
 class FieldProperty extends AbstractProperty
@@ -30,31 +31,27 @@ class FieldProperty extends AbstractProperty
     /**
      * {@inheritdoc}
      */
-    public function getValue($data)
+    public function getValue(ResultRecordInterface $record)
     {
-        return $this->format($this->getRawValue($data));
+        return $this->format($this->getRawValue($record));
     }
 
     /**
      * Get raw value from object
      *
-     * @param mixed $data
-     * @return mixed|null
-     * @throws \LogicException
+     * @param ResultRecordInterface $record
+     * @return mixed
      */
-    protected function getRawValue($data)
+    protected function getRawValue(ResultRecordInterface $record)
     {
-        $fieldName = $this->field->getName();
-        if (is_array($data)) {
-            return isset($data[$fieldName]) ? $data[$fieldName] : null;
+        try {
+            $value = $record->getValue($this->field->getFieldName());
+        } catch (\LogicException $e) {
+            // default value if there is no flexible attribute
+            $value = null;
         }
 
-        $codeOption = $this->field->getOption('code');
-        if ($codeOption && method_exists($data, $codeOption)) {
-            return call_user_func(array($data, $codeOption));
-        }
-
-        return $this->getDataValue($data, $this->field->getFieldName());
+        return $value;
     }
 
     /**
@@ -93,7 +90,7 @@ class FieldProperty extends AbstractProperty
      */
     protected function convertValue($value)
     {
-        switch ($this->getFieldType()) {
+        switch ($this->field->getType()) {
             case FieldDescriptionInterface::TYPE_DATETIME:
             case FieldDescriptionInterface::TYPE_DATE:
                 if ($value instanceof \DateTime) {
@@ -110,18 +107,13 @@ class FieldProperty extends AbstractProperty
             case FieldDescriptionInterface::TYPE_INTEGER:
                 $result = intval($value);
                 break;
+            case FieldDescriptionInterface::TYPE_BOOLEAN:
+                $result = (bool)$value;
+                break;
             default:
                 $result = $value;
         }
 
         return $result;
-    }
-
-    /**
-     * @return string
-     */
-    protected function getFieldType()
-    {
-        return $this->field->getType() ? : $this->field->getOption('type');
     }
 }

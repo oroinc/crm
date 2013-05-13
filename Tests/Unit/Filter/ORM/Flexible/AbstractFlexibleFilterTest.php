@@ -41,7 +41,33 @@ class AbstractFlexibleFilterTest extends \PHPUnit_Framework_TestCase
             array('getManager')
         );
 
-        $this->parentFilter = $this->getMock('Oro\Bundle\GridBundle\Filter\FilterInterface');
+        $this->parentFilter = $this->getMockForAbstractClass(
+            'Oro\Bundle\GridBundle\Filter\FilterInterface',
+            array(),
+            '',
+            false,
+            true,
+            true,
+            array(
+                'initialize',
+                'getOption',
+                'setOption',
+                'getFieldName',
+                'getFieldMapping',
+                'getParentAssociationMappings',
+                'getDefaultOptions',
+                'getRenderSettings',
+                'getForm',
+                'getName',
+                'getFormName',
+                'getLabel',
+                'setLabel',
+                'getAssociationMapping',
+                'getFieldOptions',
+                'getFieldType',
+                'isNullable',
+            )
+        );
 
         $this->model = $this->getMockForAbstractClass(
             'Oro\Bundle\GridBundle\Filter\ORM\Flexible\AbstractFlexibleFilter',
@@ -129,7 +155,7 @@ class AbstractFlexibleFilterTest extends \PHPUnit_Framework_TestCase
 
         list($parentAssociationMappings, $entityAlias) = $expectEntityJoin;
 
-        $proxyQuery = $this->getMock('Oro\Bundle\GridBundle\Datagrid\ProxyQueryInterface');
+        $proxyQuery = $this->getMockForAbstractClass('Oro\Bundle\GridBundle\Datagrid\ProxyQueryInterface');
         $proxyQuery->expects($this->once())
             ->method('entityJoin')->with($parentAssociationMappings)->will($this->returnValue($entityAlias));
 
@@ -268,6 +294,14 @@ class AbstractFlexibleFilterTest extends \PHPUnit_Framework_TestCase
         $this->parentFilter->expects($this->once())->method('getFieldType')
             ->will($this->returnValue($expected));
         $this->assertEquals($expected, $this->model->getFieldType());
+    }
+
+    public function testIsNullable()
+    {
+        $expected = 'test';
+        $this->parentFilter->expects($this->once())->method('isNullable')
+            ->will($this->returnValue($expected));
+        $this->assertEquals($expected, $this->model->isNullable());
     }
 
     public function testIsActive()

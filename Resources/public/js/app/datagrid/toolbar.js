@@ -1,13 +1,13 @@
-var OroApp = OroApp || {};
-OroApp.Datagrid = OroApp.Datagrid || {};
+var Oro = Oro || {};
+Oro.Datagrid = Oro.Datagrid || {};
 
 /**
  * Datagrid toolbar widget
  *
- * @class   OroApp.Datagrid.Toolbar
- * @extends OroApp.View
+ * @class   Oro.Datagrid.Toolbar
+ * @extends Backbone.View
  */
-OroApp.Datagrid.Toolbar = OroApp.View.extend({
+Oro.Datagrid.Toolbar = Backbone.View.extend({
 
     /** @property */
     template:_.template(
@@ -33,19 +33,21 @@ OroApp.Datagrid.Toolbar = OroApp.View.extend({
     ),
 
     /** @property */
-    pagination: OroApp.Datagrid.Pagination.Input,
+    pagination: Oro.Datagrid.Pagination.Input,
 
     /** @property */
-    pageSize: OroApp.Datagrid.PageSize,
+    pageSize: Oro.Datagrid.PageSize,
 
     /** @property */
-    actionsPanel: OroApp.Datagrid.ActionsPanel,
+    actionsPanel: Oro.Datagrid.ActionsPanel,
 
     /**
      * Initializer.
      *
      * @param {Object} options
      * @param {Backbone.Collection} options.collection
+     * @param {Array} options.actions List of actions
+     * @throws {TypeError} If "collection" is undefined
      */
     initialize: function (options) {
         options = options || {};
@@ -64,28 +66,12 @@ OroApp.Datagrid.Toolbar = OroApp.View.extend({
             collection: this.collection
         });
 
-        this.actionsPanel = new this.actionsPanel({
-            actions: [
-                new OroApp.Datagrid.Action.RefreshCollectionAction({
-                    collection: this.collection,
-                    launcherOptions: {
-                        label: 'Refresh',
-                        className: 'btn',
-                        iconClassName: 'icon-refresh'
-                    }
-                }),
-                new OroApp.Datagrid.Action.ResetCollectionAction({
-                    collection: this.collection,
-                    launcherOptions: {
-                        label: 'Reset',
-                        className: 'btn',
-                        iconClassName: 'icon-repeat'
-                    }
-                })
-            ]
-        });
+        this.actionsPanel = new this.actionsPanel();
+        if (options.actions) {
+            this.actionsPanel.setActions(options.actions);
+        }
 
-        OroApp.View.prototype.initialize.call(this, options);
+        Backbone.View.prototype.initialize.call(this, options);
     },
 
     /**

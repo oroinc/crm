@@ -16,9 +16,11 @@ class BooleanFilterTest extends FilterTestCase
     {
         $fieldExpression   = self::TEST_ALIAS . '.' . self::TEST_FIELD;
         $expressionFactory = $this->getExpressionFactory();
+        $compareExpression = $expressionFactory->neq($fieldExpression, $expressionFactory->literal(''));
+
         $summaryExpression = $expressionFactory->andX(
             $expressionFactory->isNotNull($fieldExpression),
-            $expressionFactory->neq($fieldExpression, $expressionFactory->literal(''))
+            $compareExpression
         );
 
         return array(
@@ -38,7 +40,7 @@ class BooleanFilterTest extends FilterTestCase
                 'data' => array('value' => 'incorrect_value'),
                 'expectProxyQueryCalls' => array()
             ),
-            'value_yes' => array(
+            'value_yes_nullable' => array(
                 'data' => array('value' => BooleanFilterType::TYPE_YES),
                 'expectProxyQueryCalls' => array(
                     array(
@@ -48,7 +50,18 @@ class BooleanFilterTest extends FilterTestCase
                     )
                 )
             ),
-            'value_no' => array(
+            'value_yes_not_nullable' => array(
+                'data' => array('value' => BooleanFilterType::TYPE_YES),
+                'expectProxyQueryCalls' => array(
+                    array(
+                        'andWhere',
+                        array($compareExpression),
+                        null
+                    )
+                ),
+                'options' => array('nullable' => false)
+            ),
+            'value_no_nullable' => array(
                 'data' => array('value' => BooleanFilterType::TYPE_NO),
                 'expectProxyQueryCalls' => array(
                     array(
@@ -57,6 +70,17 @@ class BooleanFilterTest extends FilterTestCase
                         null
                     )
                 )
+            ),
+            'value_no_not_nullable' => array(
+                'data' => array('value' => BooleanFilterType::TYPE_NO),
+                'expectProxyQueryCalls' => array(
+                    array(
+                        'andWhere',
+                        array($expressionFactory->not($compareExpression)),
+                        null
+                    )
+                ),
+                'options' => array('nullable' => false)
             ),
         );
     }

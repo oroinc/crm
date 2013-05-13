@@ -2,7 +2,8 @@
 
 namespace Oro\Bundle\GridBundle\Property;
 
-use Symfony\Bundle\FrameworkBundle\Routing\Router;
+use Symfony\Component\Routing\Router;
+use Oro\Bundle\GridBundle\Datagrid\ResultRecordInterface;
 
 class UrlProperty extends AbstractProperty
 {
@@ -50,19 +51,25 @@ class UrlProperty extends AbstractProperty
     /**
      * {@inheritdoc}
      */
-    public function getValue($data)
+    public function getValue(ResultRecordInterface $record)
     {
-        return $this->router->generate($this->routeName, $this->getParameters($data), $this->isAbsolute);
+        return $this->router->generate($this->routeName, $this->getParameters($record), $this->isAbsolute);
     }
 
-    protected function getParameters($data)
+    /**
+     * Get route parameters from record
+     *
+     * @param ResultRecordInterface $record
+     * @return array
+     */
+    protected function getParameters(ResultRecordInterface $record)
     {
         $result = array();
         foreach ($this->placeholders as $name => $dataKey) {
             if (is_numeric($name)) {
                 $name = $dataKey;
             }
-            $result[$name] = $this->getDataValue($data, $dataKey);
+            $result[$name] = $record->getValue($dataKey);
         }
         return $result;
     }

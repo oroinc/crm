@@ -1,23 +1,23 @@
-var OroApp = OroApp || {};
-OroApp.Datagrid = OroApp.Datagrid || {};
-OroApp.Datagrid.Action = OroApp.Datagrid.Action || {};
+var Oro = Oro || {};
+Oro.Datagrid = Oro.Datagrid || {};
+Oro.Datagrid.Action = Oro.Datagrid.Action || {};
 
 /**
  * Resets collection to initial state
  *
- * @class   OroApp.Datagrid.Action.ResetCollectionAction
- * @extends OroApp.Datagrid.Action.AbstractAction
+ * @class   Oro.Datagrid.Action.ResetCollectionAction
+ * @extends Oro.Datagrid.Action.AbstractAction
  */
-OroApp.Datagrid.Action.ResetCollectionAction = OroApp.Datagrid.Action.AbstractAction.extend({
+Oro.Datagrid.Action.ResetCollectionAction = Oro.Datagrid.Action.AbstractAction.extend({
 
-    /** @property OroApp.PageableCollection */
+    /** @property Oro.PageableCollection */
     collection: undefined,
 
     /**
      * Initialize action
      *
      * @param {Object} options
-     * @param {OroApp.PageableCollection} options.collection Collection
+     * @param {Oro.PageableCollection} options.collection Collection
      * @throws {TypeError} If collection is undefined
      */
     initialize: function(options) {
@@ -28,7 +28,7 @@ OroApp.Datagrid.Action.ResetCollectionAction = OroApp.Datagrid.Action.AbstractAc
         }
         this.collection = options.collection;
 
-        OroApp.Datagrid.Action.AbstractAction.prototype.initialize.apply(this, arguments);
+        Oro.Datagrid.Action.AbstractAction.prototype.initialize.apply(this, arguments);
     },
 
     /**

@@ -3,6 +3,7 @@
 namespace Oro\Bundle\GridBundle\Datagrid;
 
 use Symfony\Component\Validator\ValidatorInterface;
+use Symfony\Component\Routing\Router;
 use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -63,6 +64,12 @@ interface DatagridManagerInterface
      * @return void
      */
     public function setValidator(ValidatorInterface $validator);
+
+    /**
+     * @param Router $router
+     * @return void
+     */
+    public function setRouter(Router $router);
 
     /**
      * @param RouteGeneratorInterface $routeGenerator

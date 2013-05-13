@@ -77,7 +77,7 @@ class ProxyQuery extends BaseProxyQuery implements ProxyQueryInterface
         $qb = clone $this->getQueryBuilder();
 
         $this->applyWhere($qb);
-        $this->applyOrderBy($qb);
+        $this->applyOrderByParameters($qb);
 
         return $qb;
     }
@@ -85,19 +85,55 @@ class ProxyQuery extends BaseProxyQuery implements ProxyQueryInterface
     /**
      * Apply where part on query builder
      *
-     * @param QueryBuilder $queryBuilder
+     * @param QueryBuilder $qb
      * @return QueryBuilder
      */
-    protected function applyWhere(QueryBuilder $queryBuilder)
+    protected function applyWhere(QueryBuilder $qb)
     {
         $idx = $this->getResultIds();
         if (count($idx) > 0) {
-            $queryBuilder->where(sprintf('%s IN (%s)', $this->getIdFieldFQN(), implode(',', $idx)));
-            $queryBuilder->resetDQLPart('having');
-            $queryBuilder->setParameters(array());
-            $queryBuilder->setMaxResults(null);
-            $queryBuilder->setFirstResult(null);
+            $qb->where(sprintf('%s IN (%s)', $this->getIdFieldFQN(), implode(',', $idx)));
+            $qb->resetDQLPart('having');
+            $qb->setMaxResults(null);
+            $qb->setFirstResult(null);
+            // Since DQL has been changed, some parameters potentially are not used anymore.
+            $this->fixUnusedParameters($qb);
         }
+    }
+
+    /**
+     * Removes unused parameters from query builder
+     *
+     * @param QueryBuilder $qb
+     */
+    protected function fixUnusedParameters(QueryBuilder $qb)
+    {
+        $dql = $qb->getDQL();
+        $usedParameters = array();
+        /** @var $parameter \Doctrine\ORM\Query\Parameter */
+        foreach ($qb->getParameters() as $parameter) {
+            if ($this->dqlContainsParameter($dql, $parameter->getName())) {
+                $usedParameters[$parameter->getName()] = $parameter->getValue();
+            }
+        }
+        $qb->setParameters($usedParameters);
+    }
+
+    /**
+     * Returns TRUE if $dql contains usage of parameter with $parameterName
+     *
+     * @param string $dql
+     * @param string $parameterName
+     * @return bool
+     */
+    protected function dqlContainsParameter($dql, $parameterName)
+    {
+        if (is_numeric($parameterName)) {
+            $pattern = sprintf('/\?%s[^\w]/', preg_quote($parameterName));
+        } else {
+            $pattern = sprintf('/\:%s[^\w]/', preg_quote($parameterName));
+        }
+        return (bool)preg_match($pattern, $dql . ' ');
     }
 
     /**
@@ -106,10 +142,10 @@ class ProxyQuery extends BaseProxyQuery implements ProxyQueryInterface
      * @param QueryBuilder $queryBuilder
      * @return QueryBuilder
      */
-    protected function applyOrderBy(QueryBuilder $queryBuilder)
+    protected function applyOrderByParameters(QueryBuilder $queryBuilder)
     {
         foreach ($this->sortOrderList as $sortOrder) {
-            $this->applySortOrder($queryBuilder, $sortOrder);
+            $this->applySortOrderParameters($queryBuilder, $sortOrder);
         }
     }
 
@@ -119,10 +155,9 @@ class ProxyQuery extends BaseProxyQuery implements ProxyQueryInterface
      * @param QueryBuilder $queryBuilder
      * @param array $sortOrder
      */
-    protected function applySortOrder(QueryBuilder $queryBuilder, array $sortOrder)
+    protected function applySortOrderParameters(QueryBuilder $queryBuilder, array $sortOrder)
     {
-        list($sortExpression, $direction, $extraSelect) = $sortOrder;
-        $queryBuilder->addOrderBy($sortExpression, $direction);
+        list($sortExpression, $extraSelect) = $sortOrder;
         if ($extraSelect && !$this->hasSelectItem($queryBuilder, $sortExpression)) {
             $queryBuilder->addSelect($extraSelect);
         }
@@ -181,11 +216,79 @@ class ProxyQuery extends BaseProxyQuery implements ProxyQueryInterface
     {
         $qb = clone $this->getQueryBuilder();
 
-        $qb->resetDQLPart('select');
-        $qb->addSelect('DISTINCT ' . $this->getIdFieldFQN());
-        $this->applyOrderBy($qb);
+        // Apply orderBy before change select, because it can contain some expressions from select as aliases
+        $this->applyOrderByParameters($qb);
+
+        $selectExpressions = array('DISTINCT ' . $this->getIdFieldFQN());
+        // We must leave expressions used in having
+        $selectExpressions = array_merge($selectExpressions, $this->getSelectExpressionsUsedByAliases($qb));
+        $qb->select($selectExpressions);
+
+        // Since DQL has been changed, some parameters potentially are not used anymore.
+        $this->fixUnusedParameters($qb);
 
         return $qb;
+    }
+
+    /**
+     * Returns select expressions used in DQL as aliases
+     *
+     * Example of usage:
+     *
+     * Assume $qb holds DQL as below:
+     * SELECT u, CASE WHEN :group MEMBER OF u.groups THEN 1 ELSE 0 END AS hasGroup FROM User HAVING hasGroup = 1
+     *
+     * Then method will return:
+     * array("CASE WHEN :group MEMBER OF u.groups THEN 1 ELSE 0 END AS hasGroup")
+     *
+     * @param QueryBuilder $qb
+     * @return array
+     */
+    protected function getSelectExpressionsUsedByAliases(QueryBuilder $qb)
+    {
+        $result = array();
+        $qb = clone $qb;
+        $selectExpressions = $this->getSelectExpressions($qb);
+        $dqlWithoutSelect = $qb->resetDQLPart('select')->getDQL();
+        foreach ($selectExpressions as $expression) {
+            if (preg_match('/^.* AS ([\w]+)$/i', $expression, $matches)) {
+                $alias = $matches[1];
+                if (preg_match(sprintf('/[^\w]%s[^\w]/', preg_quote($alias)), $dqlWithoutSelect . ' ')) {
+                    $result[] = $expression;
+                }
+            }
+        }
+        return $result;
+    }
+
+    /**
+     * Get list of select DQL part expressions strings of QueryBuilder.
+     *
+     * Example of usage:
+     *
+     * Assume $qb holds DQL as below:
+     * SELECT u.name, u.email FROM User
+     *
+     * Then method will return:
+     * array("u.name", "u.email")
+     *
+     * @param QueryBuilder $qb
+     * @return array
+     */
+    protected function getSelectExpressions(QueryBuilder $qb)
+    {
+        $result = array();
+        /** @var $selectPart \Doctrine\ORM\Query\Expr\Select */
+        foreach ($qb->getDQLPart('select') as $selectPart) {
+            foreach ($selectPart->getParts() as $part) {
+                if (is_string($part)) {
+                    $result = array_merge($result, array_map('trim', explode(',', $part)));
+                } else {
+                    $result[] = $part;
+                }
+            }
+        }
+        return $result;
     }
 
     /**
@@ -208,7 +311,8 @@ class ProxyQuery extends BaseProxyQuery implements ProxyQueryInterface
             throw new \LogicException('Cannot add sorting order, unknown field name in $fieldMapping.');
         }
 
-        $this->sortOrderList[] = array($sortExpression, $direction, $extraSelect);
+        $this->getQueryBuilder()->addOrderBy($sortExpression, $direction);
+        $this->sortOrderList[] = array($sortExpression, $extraSelect);
     }
 
     /**

@@ -1,13 +1,13 @@
-var OroApp = OroApp || {};
-OroApp.Datagrid = OroApp.Datagrid || {};
+var Oro = Oro || {};
+Oro.Datagrid = Oro.Datagrid || {};
 
 /**
  * Router for basic datagrid
  *
- * @class   OroApp.Datagrid.Router
- * @extends OroApp.Router
+ * @class   Oro.Datagrid.Router
+ * @extends Backbone.Router
  */
-OroApp.Datagrid.Router = OroApp.Router.extend({
+Oro.Datagrid.Router = Backbone.Router.extend({
     /** @property */
     routes: {
         "g/*encodedStateData": "changeState",
@@ -17,7 +17,7 @@ OroApp.Datagrid.Router = OroApp.Router.extend({
     /**
      * Binded collection, passed in constructor as option
      *
-     * @property {OroApp.PageableCollection}
+     * @property {Oro.PageableCollection}
      */
     collection: null,
 
@@ -32,7 +32,7 @@ OroApp.Datagrid.Router = OroApp.Router.extend({
      * Initialize router
      *
      * @param {Object} options
-     * @param {OroApp.PageableCollection} options.collection Collection of models.
+     * @param {Oro.PageableCollection} options.collection Collection of models.
      */
     initialize: function(options) {
         options = options || {};
@@ -47,18 +47,18 @@ OroApp.Datagrid.Router = OroApp.Router.extend({
 
         //this.init();
 
-        OroApp.Router.prototype.initialize.apply(this, arguments);
+        Backbone.Router.prototype.initialize.apply(this, arguments);
         /**
          * Backbone event. Fired when grid route is initialized
          * @event grid_route:loaded
          */
-        OroApp.Events.trigger("grid_route:loaded", this);
+        Oro.Events.trigger("grid_route:loaded", this);
     },
 
     /**
      * Triggers when collection is has new state and fetched
      *
-     * @param {OroApp.PageableCollection} collection
+     * @param {Oro.PageableCollection} collection
      * @param {Object} options Fetch options
      * @private
      */
@@ -69,8 +69,8 @@ OroApp.Datagrid.Router = OroApp.Router.extend({
         }
         var encodedStateData = collection.encodeStateData(collection.state);
         var url = '';
-        if (OroApp.hashNavigationEnabled()) {
-            url = 'url=' + OroApp.Navigation.prototype.getHashUrl() + '|g/' + encodedStateData;
+        if (Oro.hashNavigationEnabled()) {
+            url = 'url=' + Oro.Navigation.prototype.getHashUrl() + '|g/' + encodedStateData;
         } else {
             url = 'g/' + encodedStateData;
         }

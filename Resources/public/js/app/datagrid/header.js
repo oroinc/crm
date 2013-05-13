@@ -1,13 +1,13 @@
-var OroApp = OroApp || {};
-OroApp.Datagrid = OroApp.Datagrid || {};
+var Oro = Oro || {};
+Oro.Datagrid = Oro.Datagrid || {};
 
 /**
  * Datagrid header widget
  *
- * @class   OroApp.Datagrid.Header
+ * @class   Oro.Datagrid.Header
  * @extends Backgrid.Header
  */
-OroApp.Datagrid.Header = Backgrid.Header.extend({
+Oro.Datagrid.Header = Backgrid.Header.extend({
     /** @property */
     tagName: "thead",
 
@@ -15,7 +15,7 @@ OroApp.Datagrid.Header = Backgrid.Header.extend({
     row: Backgrid.HeaderRow,
 
     /** @property */
-    headerCell: OroApp.Datagrid.HeaderCell,
+    headerCell: Oro.Datagrid.HeaderCell,
 
     /**
      * @inheritDoc

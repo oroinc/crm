@@ -338,12 +338,16 @@ class Datagrid implements DatagridInterface
     }
 
     /**
-     * @return array
+     * @return ResultRecord
      */
     public function getResults()
     {
         $this->applyParameters();
-        return $this->getQuery()->execute();
+        $result = array();
+        foreach ($this->getQuery()->execute() as $row) {
+            $result[] = new ResultRecord($row);
+        }
+        return $result;
     }
 
     /**

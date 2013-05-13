@@ -1,14 +1,14 @@
-var OroApp = OroApp || {};
-OroApp.Datagrid = OroApp.Datagrid || {};
-OroApp.Datagrid.Action = OroApp.Datagrid.Action || {};
+var Oro = Oro || {};
+Oro.Datagrid = Oro.Datagrid || {};
+Oro.Datagrid.Action = Oro.Datagrid.Action || {};
 
 /**
  * Cell for grid, contains actions
  *
- * @class   OroApp.Datagrid.Action.Cell
+ * @class   Oro.Datagrid.Action.Cell
  * @extends Backgrid.Cell
  */
-OroApp.Datagrid.Action.Cell = Backgrid.Cell.extend({
+Oro.Datagrid.Action.Cell = Backgrid.Cell.extend({
 
     /** @property */
     className: "action-cell",
@@ -64,7 +64,7 @@ OroApp.Datagrid.Action.Cell = Backgrid.Cell.extend({
     /**
      * Handle action run
      *
-     * @param {OroApp.Datagrid.Action.AbstractAction} action
+     * @param {Oro.Datagrid.Action.AbstractAction} action
      */
     onActionRun: function(action) {
         this.$('.dropdown.open').removeClass('open');
@@ -172,7 +172,7 @@ OroApp.Datagrid.Action.Cell = Backgrid.Cell.extend({
     /**
      * Render launcher
      *
-     * @param {OroApp.Datagrid.Action.Launcher} launcher
+     * @param {Oro.Datagrid.Action.Launcher} launcher
      * @param {Object} [templateParameters]
      * @return {jQuery} Rendered element wrapped with jQuery
      */

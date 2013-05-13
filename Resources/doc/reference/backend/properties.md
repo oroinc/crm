@@ -8,6 +8,7 @@ Property is an entity that responsible for providing values for grid results. It
 * **Property \ PropertyInterface** - basic interface for Property, provides specific value of result data element;
 * **Property \ AbstractProperty** - abstract class for Property, knows how to get values from arrays and objects using the most appropriate way - public methods "get<Name>" or "is<Name>" or public property;
 * **Property \ FieldProperty** - by default Field Description has this type of property, it knows how to get right value from data based on field name and field type;
+* **Property \ FixedProperty** - simple property implementation that extracts data by fixed value key;
 * **Property \ UrlProperty** - can generate URL as it's value using Router, route name and the list of data property names that should be used as route parameters;
 
 #### Example of Getting Values

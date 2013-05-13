@@ -18,6 +18,7 @@ class AddDependencyCallsCompilerPass extends AbstractDatagridManagerCompilerPass
     const PARAMETERS_ATTRIBUTE       = 'parameters';
     const TRANSLATOR_ATTRIBUTE       = 'translator';
     const VALIDATOR_ATTRIBUTE        = 'validator';
+    const ROUTER_ATTRIBUTE           = 'router';
 
     /**
      * {@inheritDoc}
@@ -41,6 +42,7 @@ class AddDependencyCallsCompilerPass extends AbstractDatagridManagerCompilerPass
             self::PARAMETERS_ATTRIBUTE,
             self::TRANSLATOR_ATTRIBUTE,
             self::VALIDATOR_ATTRIBUTE,
+            self::ROUTER_ATTRIBUTE,
         );
 
         foreach ($keys as $key) {
@@ -74,6 +76,7 @@ class AddDependencyCallsCompilerPass extends AbstractDatagridManagerCompilerPass
             self::LIST_BUILDER_ATTRIBUTE     => 'oro_grid.builder.list',
             self::TRANSLATOR_ATTRIBUTE       => 'translator',
             self::VALIDATOR_ATTRIBUTE        => 'validator',
+            self::ROUTER_ATTRIBUTE           => 'router',
         );
 
         foreach ($defaultAddServices as $attribute => $serviceId) {
