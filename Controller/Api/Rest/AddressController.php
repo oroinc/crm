@@ -50,7 +50,10 @@ class AddressController extends FlexibleRestController implements ClassResourceI
      */
     public function cgetAction()
     {
-        return $this->handleGetListRequest();
+        $page = (int)$this->getRequest()->get('page', 1);
+        $limit = (int)$this->getRequest()->get('limit', self::ITEMS_PER_PAGE);
+
+        return $this->handleGetListRequest($page, $limit);
     }
 
     /**
@@ -94,7 +97,7 @@ class AddressController extends FlexibleRestController implements ClassResourceI
      */
     public function putAction($id)
     {
-        return $this->handlePutRequest($id);
+        return $this->handleUpdateRequest($id);
     }
 
     /**
@@ -113,7 +116,7 @@ class AddressController extends FlexibleRestController implements ClassResourceI
      */
     public function postAction()
     {
-        return $this->handlePostRequest();
+        return $this->handleCreateRequest();
     }
 
     /**
@@ -143,7 +146,7 @@ class AddressController extends FlexibleRestController implements ClassResourceI
      *
      * @return AddressManager
      */
-    protected function getManager()
+    public function getManager()
     {
         return $this->get('oro_address.address.manager.api');
     }
@@ -151,7 +154,7 @@ class AddressController extends FlexibleRestController implements ClassResourceI
     /**
      * @return Form
      */
-    protected function getForm()
+    public function getForm()
     {
         return $this->get('oro_address.form.address.api');
     }
@@ -159,7 +162,7 @@ class AddressController extends FlexibleRestController implements ClassResourceI
     /**
      * @return ApiFormHandler
      */
-    protected function getFormHandler()
+    public function getFormHandler()
     {
         return $this->get('oro_address.form.handler.address.api');
     }
