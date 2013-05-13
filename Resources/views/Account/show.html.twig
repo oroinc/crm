@@ -90,7 +90,7 @@
                     <div class="form-horizontal">
                         {% for attr in account.values %}
                         <div class="control-group">
-                            <label class="control-label">{{ attr.attribute.code|title }}</label>
+                            <label class="control-label">{{ attr.attribute.label|title }}</label>
                             <div class="controls">
                                 <div class="clearfix-oro">
                                     <p class="control-label">{{ attr.__toString }}</p>
