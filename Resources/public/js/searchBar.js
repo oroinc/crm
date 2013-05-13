@@ -55,7 +55,7 @@ $(document).ready(function () {
                          * Backbone event. Fired when search ajax request is complete
                          * @event top_search_request:complete
                          */
-                        OroApp.Events.trigger("top_search_request:complete");
+                        Oro.Events.trigger("top_search_request:complete");
                     }
                 }
             });
