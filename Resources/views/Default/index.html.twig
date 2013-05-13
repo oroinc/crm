@@ -1,3 +1,4 @@
+{% if not oro_is_hash_navigation() %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -27,41 +28,16 @@
                 <link rel="stylesheet" media="all" href="{{ asset_url }}" />
                 {% endstylesheets %}
             {% endif %}
+            {% oro_css filter='cssrewrite, lessphp, ?yui_css' output='css/oro.css' %}
+                <link rel="stylesheet" media="all" href="{{ asset_url }}" />
+            {% endoro_css %}
         {% endblock %}
 
-        {% block head_script %}
+        {% block script %}
             {# JS assetics #}
-            {% javascripts
-                '@OroUIBundle/Resources/public/lib/base64.js'
-                '@OroUIBundle/Resources/public/lib/underscore.js'
-                '@OroUIBundle/Resources/public/lib/backbone.js'
-                '@OroUIBundle/Resources/public/lib/jquery/jquery.mousewheel.min.js'
-                '@OroUIBundle/Resources/public/lib/jquery/jquery.numeric.js'
-                '@OroUIBundle/Resources/public/lib/jquery/jquery.uniform.min.js'
-                '@OroUIBundle/Resources/public/lib/bootstrap.min.js'
-                '@OroUIBundle/Resources/public/lib/bootstrap/js/bootstrap-tooltip.js'
-                '@OroUIBundle/Resources/public/lib/bootstrap/js/bootstrap-popover.js'
-                '@OroUIBundle/Resources/public/lib/bootstrap/js/bootstrap.switch.js'
-
-                '@OroUIBundle/Resources/public/js/layout.js'
-                '@OroUIBundle/Resources/public/js/csrf.js'
-                '@OroUIBundle/Resources/public/js/backbone/app.js'
-                '@OroUIBundle/Resources/public/js/backbone/error.js'
-                '@OroUIBundle/Resources/public/js/registry.js'
-
-                '@OroUIBundle/Resources/public/lib/backbone.bootstrap-modal.js'
-                '@OroUIBundle/Resources/public/js/backbone/bootstrap-modal.js'
-
-                '@OroUIBundle/Resources/public/js/backbone/setup.js'
-
-                '@FOSJsRoutingBundle/Resources/public/js/router.js'
-                'js/routes.js'
-
-                filter='?yui_js'
-                output='js/oro.app.js'
-            %}
-                <script type="text/javascript" src="{{ asset_url }}"></script>
-            {% endjavascripts %}
+            {% oro_js filter='?yui_js' output='js/oro.all.js' %}
+            <script type="text/javascript" src="{{ asset_url }}"></script>
+            {% endoro_js %}
 
             {% if app.debug %}
                 <script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
@@ -69,7 +45,6 @@
                     Oro.debug = true;
                 </script>
             {% endif %}
-
             <!--[if lte IE 9]>
                 <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
                 <link href="{{ asset('bundles/oroui/css/ie.css') }}" rel="stylesheet" media="all" />
@@ -83,6 +58,16 @@
             <!--[if lte IE 7]>
                 <script src="{{ asset ('bundles/oroui/js/ie.js') }}"></script>
             <![endif]-->
+            <script type="text/javascript">
+                $(function() {
+                    if (Oro.hashNavigationEnabled()) {
+                        new Oro.Navigation({baseUrl : '{{ app.request.getSchemeAndHttpHost() }}'});
+                        Backbone.history.start();
+                    }
+                })
+            </script>
+            {% block head_script %}
+            {% endblock %}
         {% endblock %}
     {% endblock %}
 </head>
@@ -176,7 +161,7 @@
                 #}
                 {% block help %}
                 <li class="divider-vertical small-divider"></li>
-                <li><a class="help" href="http://www.orocrm.com/" target="_blank"><i class="icon-question-sign" title="{{ 'Get help'|trans }}"></i></a></li>
+                <li><a class="help no-hash" href="http://www.orocrm.com/" target="_blank"><i class="icon-question-sign" title="{{ 'Get help'|trans }}"></i></a></li>
                 {% endblock help %}
             </ul>
             {% endblock section_top_right %}
@@ -187,7 +172,7 @@
 
         </header>
         {% endblock header %}
-
+        {% block top_action_box %}{% endblock %}
         {% block main %}
         <div id="main" >
             {% block right_panel %}{% endblock right_panel %}
@@ -350,22 +335,25 @@
                 {% endblock pin_bar %}
                 {% block application_menu %}
                 {% endblock application_menu %}
-                {% if app.session.flashbag.peekAll|length > 0 %}
+                <div id="flash-messages">
+                    {% block messages %}
+                        {% if app.session.flashbag.peekAll|length > 0 %}
 
-                    {% for type, messages in app.session.flashbag.all %}
-                        {% for message in messages %}
-                            <div class="alert{{ type ? ' alert-'~type : '' }} fade in top-messages ">
-                                <a class="close" data-dismiss="alert" href="#">&times;</a>
-                                {{ message|trans|raw }}
-                            </div>
-                        {% endfor %}
-                    {% endfor %}
+                            {% for type, messages in app.session.flashbag.all %}
+                                {% for message in messages %}
+                                    <div class="alert{{ type ? ' alert-'~type : '' }} fade in top-messages ">
+                                        <a class="close" data-dismiss="alert" href="#">&times;</a>
+                                        {{ message|trans|raw }}
+                                    </div>
+                                {% endfor %}
+                            {% endfor %}
 
-                {% endif %}
+                        {% endif %}
+                    {% endblock messages %}
+                </div>
+            <div class="hash-loading-mask"></div>
+            <div id="container">
                 {% block page_container %}
-
-
-
                 {% block content %}
                     <div class="container" style="background: #fff">
                         <div class="row">
@@ -409,10 +397,16 @@
                     </div>
                 {% endblock content %}
                 {% endblock page_container %}
+            </div>
         </div>
         {% endblock main %}
     </div>
 </div>
-
 </body>
 </html>
+{% else %}
+{# Template for hash tag navigation#}
+{% include 'OroNavigationBundle:HashNav:hashNavAjax.html.twig'
+    with {'script': block('head_script'), 'messages':block('messages'), 'content': block('page_container')}
+%}
+{% endif %}

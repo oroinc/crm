@@ -27,7 +27,6 @@
  *      }
  *  }
  */
-
 /* Group: jstree tree_selector plugin */
 (function ($) {
     var tree_select_id = "tree_select";
@@ -43,14 +42,13 @@
                     this.data.tree_selector.auto_open_root = settings.auto_open_root;
 
                     var tree_toolbar = $('<div>', {
-                        id: 'tree_toolbar',
-                        class: 'jstree-tree-toolbar'
+                        id: 'tree_toolbar'
                     });
+                    tree_toolbar.addClass('jstree-tree-toolbar');
                     var tree_select = $('<select>', {
-                        id: tree_select_id,
-                        class: 'jstree-tree-select'
+                        id: tree_select_id
                     });
-
+                    tree_select.addClass('jstree-tree-select');
                     var this_jstree = this;
                     tree_select.bind('change', function() {
                         this_jstree.switch_tree();

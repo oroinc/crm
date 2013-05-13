@@ -1,7 +1,7 @@
 /**
  * Main Oro Application backbone.js namespace
  */
-window.Oro = {
+var Oro = {
     /**
      * Pack object to string
      *
@@ -154,5 +154,14 @@ window.Oro = {
      */
     deepClone: function(value) {
         return $.extend(true, {}, value);
+    },
+
+    /**
+     * Checks if hash navigation is enabled
+     *
+     * @return {Boolean}
+     */
+    hashNavigationEnabled: function() {
+        return ((typeof this.Navigation != "undefined") && this.Navigation.prototype.enabled);
     }
 };
