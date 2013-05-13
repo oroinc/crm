@@ -96,7 +96,7 @@ class AccountDatagridManager extends FlexibleDatagridManager
                 $field->setOptions(
                     array(
                         'type'          => $attributeType,
-                        'label'         => ucfirst($attribute->getCode()),
+                        'label'         => $attribute->getLabel(),
                         'field_name'    => $attribute->getCode(),
                         'filter_type'   => $filterType,
                         'required'      => false,

@@ -199,6 +199,12 @@ class LoadAccountAttrData extends AbstractFixture implements ContainerAwareInter
         if ($label === null) {
             throw new \InvalidArgumentException('Label is required for attribute');
         }
+
+        if (strpos($label, '_') !== false) {
+            // replace  underscored labels (for example if it comes from code)
+            $label = str_replace('_', ' ', $label);
+        }
+
         return $label;
     }
 
