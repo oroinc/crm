@@ -57,5 +57,10 @@ class OroMeasureExtension extends Extension
         $loader->load('services.yml');
         // set measures config
         $container->setParameter('oro_measure.measures_config', $config);
+
+        $manager = $container
+            ->getDefinition('oro_measure.manager')
+            ->addMethodCall('setMeasureConfig', $config)
+        ;
     }
 }
