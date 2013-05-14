@@ -36,7 +36,10 @@ class GroupController extends RestController implements ClassResourceInterface
      */
     public function cgetAction()
     {
-        return $this->handleGetListRequest();
+        $page = (int)$this->getRequest()->get('page', 1);
+        $limit = (int)$this->getRequest()->get('limit', self::ITEMS_PER_PAGE);
+
+        return $this->handleGetListRequest($page, $limit);
     }
 
     /**
@@ -75,7 +78,7 @@ class GroupController extends RestController implements ClassResourceInterface
      */
     public function putAction($id)
     {
-        return $this->handlePutRequest($id);
+        return $this->handleUpdateRequest($id);
     }
 
     /**
@@ -89,7 +92,7 @@ class GroupController extends RestController implements ClassResourceInterface
      */
     public function postAction()
     {
-        return $this->handlePostRequest();
+        return $this->handleCreateRequest();
     }
 
     /**
@@ -119,15 +122,15 @@ class GroupController extends RestController implements ClassResourceInterface
      *
      * @return ApiEntityManager
      */
-    protected function getManager()
+    public function getManager()
     {
         return $this->get('oro_contact.group.manager.api');
     }
 
     /**
-     * @return Form
+     * @return FormInterface
      */
-    protected function getForm()
+    public function getForm()
     {
         return $this->get('oro_contact.form.group.api');
     }
@@ -135,7 +138,7 @@ class GroupController extends RestController implements ClassResourceInterface
     /**
      * @return ApiFormHandler
      */
-    protected function getFormHandler()
+    public function getFormHandler()
     {
         return $this->get('oro_contact.form.handler.group.api');
     }

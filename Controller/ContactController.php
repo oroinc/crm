@@ -2,9 +2,9 @@
 
 namespace Oro\Bundle\ContactBundle\Controller;
 
+
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBag;
 use YsTools\BackUrlBundle\Annotation\BackUrl;
 
@@ -13,8 +13,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Oro\Bundle\UserBundle\Annotation\Acl;
 
 use Oro\Bundle\ContactBundle\Entity\Contact;
-use Oro\Bundle\ContactBundle\Entity\Manager\ContactManager;
 use Oro\Bundle\ContactBundle\Datagrid\ContactDatagridManager;
+use Oro\Bundle\SoapBundle\Entity\Manager\ApiFlexibleEntityManager;
 
 /**
  * @Acl(
@@ -58,7 +58,8 @@ class ContactController extends Controller
      */
     public function createAction()
     {
-        $contact = $this->getManager()->createFlexible();
+        /** @var Contact $contact */
+        $contact = $this->getManager()->createEntity();
         return $this->updateAction($contact);
     }
 
@@ -133,10 +134,10 @@ class ContactController extends Controller
     }
 
     /**
-     * @return ContactManager
+     * @return ApiFlexibleEntityManager
      */
     protected function getManager()
     {
-        return $this->get('oro_contact.manager');
+        return $this->get('oro_contact.contact.manager');
     }
 }
