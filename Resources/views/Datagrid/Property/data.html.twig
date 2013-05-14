@@ -1,1 +1,14 @@
-<i>{{ data|json_encode }}</i>
+{#<i>{{ data|json_encode }}</i>#}
+
+<ul>
+{% for key, value in data %}
+    <li>
+        <b>{{ key }}:</b>
+    {% if value.timestamp is defined %}
+        <s>{{ value|date('m/d/Y') }}</s> {{ value|date('m/d/Y') }}
+    {% else %}
+        <s>{{ value }}</s> {{ value }}
+    {% endif %}
+    </li>
+{% endfor %}
+</ul>
