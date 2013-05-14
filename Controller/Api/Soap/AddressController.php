@@ -2,22 +2,24 @@
 
 namespace Oro\Bundle\AddressBundle\Controller\Api\Soap;
 
-use Symfony\Component\Form\Form;
-use Symfony\Component\DependencyInjection\ContainerAware;
-use Doctrine\Common\Persistence\ObjectManager;
+use Symfony\Component\Form\FormInterface;
 use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 
-use Oro\Bundle\AddressBundle\Entity\Address;
+use Oro\Bundle\SoapBundle\Controller\Api\Soap\FlexibleSoapController;
+use Oro\Bundle\SoapBundle\Entity\Manager\ApiFlexibleEntityManager;
+use Oro\Bundle\SoapBundle\Form\Handler\ApiFormHandler;
 
-class AddressController extends ContainerAware
+class AddressController extends FlexibleSoapController
 {
     /**
      * @Soap\Method("getAddresses")
+     * @Soap\Param("page", phpType="int")
+     * @Soap\Param("limit", phpType="int")
      * @Soap\Result(phpType = "Oro\Bundle\AddressBundle\Entity\Address[]")
      */
-    public function cgetAction()
+    public function cgetAction($page = 1, $limit = 10)
     {
-        return $this->getManager()->getRepository('OroAddressBundle:Address')->findAll();
+        return $this->handleGetListRequest($page, $limit);
     }
 
     /**
@@ -27,34 +29,28 @@ class AddressController extends ContainerAware
      */
     public function getAction($id)
     {
-        return $this->getEntity('OroAddressBundle:Address', (int)$id);
+        return $this->handleGetRequest($id);
     }
 
     /**
      * @Soap\Method("createAddress")
-     * @Soap\Param("address", phpType = "Oro\Bundle\AddressBundle\Entity\Address")
+     * @Soap\Param("address", phpType = "Oro\Bundle\AddressBundle\Entity\AddressSoap")
      * @Soap\Result(phpType = "boolean")
      */
     public function createAction($address)
     {
-        $entity = $this->container->get('oro_address.address.manager')->createFlexible();
-        $form = $this->container->get('oro_address.form.address.api')->getName();
-        $this->container->get('oro_soap.request')->fix($form);
-        return $this->processForm($entity);
+        return $this->handleCreateRequest();
     }
 
     /**
      * @Soap\Method("updateAddress")
      * @Soap\Param("id", phpType = "int")
-     * @Soap\Param("address", phpType = "Oro\Bundle\AddressBundle\Entity\Address")
+     * @Soap\Param("address", phpType = "Oro\Bundle\AddressBundle\Entity\AddressSoap")
      * @Soap\Result(phpType = "boolean")
      */
     public function updateAction($id, $address)
     {
-        $address = $this->getEntity('OroAddressBundle:Address', (int)$id);
-        $form = $this->container->get('oro_address.form.address.api');
-        $this->container->get('oro_soap.request')->fix($form->getName());
-        return $this->processForm($address);
+        return $this->handleUpdateRequest($id);
     }
 
     /**
@@ -64,76 +60,30 @@ class AddressController extends ContainerAware
      */
     public function deleteAction($id)
     {
-        $em = $this->getManager();
-        $entity = $this->getEntity('OroAddressBundle:Address', (int)$id);
-
-        $em->remove($entity);
-        $em->flush();
-
-        return true;
+        return $this->handleDeleteRequest($id);
     }
 
     /**
-     * Shortcut to get entity
-     *
-     * @param string $repo
-     * @param int|string $id
-     * @throws \SoapFault
-     * @return Address
+     * @return ApiFlexibleEntityManager
      */
-    protected function getEntity($repo, $id)
+    public function getManager()
     {
-        $entity = $this->getManager()->find($repo, $id);
-
-        if (!$entity) {
-            throw new \SoapFault('NOT_FOUND', sprintf('Record #%u can not be found', $id));
-        }
-
-        return $entity;
+        return $this->container->get('oro_address.address.manager.api');
     }
 
     /**
-     * Form processing
-     *
-     * @param Address $entity Entity object
-     * @return bool True on success
-     * @throws \SoapFault
+     * @return FormInterface
      */
-    protected function processForm($entity)
+    public function getForm()
     {
-        if (!$this->container->get('oro_address.form.handler.address.api')->process($entity)) {
-            throw new \SoapFault('BAD_REQUEST', $this->getFormErrors($this->container->get('oro_address.form.address.api')));
-        }
-
-        return true;
+        return $this->container->get('oro_address.form.address.api');
     }
 
     /**
-     * @param Form $form
-     * @return string All form's error messages concatenated into one string
+     * @return ApiFormHandler
      */
-    protected function getFormErrors(Form $form)
+    public function getFormHandler()
     {
-        $errors = '';
-
-        foreach ($form->getErrors() as $error) {
-            $errors .= $error->getMessage() ."\n";
-        }
-
-        foreach ($form->all() as $key => $child) {
-            if ($err = $this->getFormErrors($child)) {
-                $errors .= sprintf("%s: %s\n", $key, $err);
-            }
-        }
-
-        return $errors;
-    }
-
-    /**
-     * @return ObjectManager
-     */
-    protected function getManager()
-    {
-        return $this->container->get('doctrine.orm.entity_manager');
+        return $this->container->get('oro_address.form.handler.address.api');
     }
 }
