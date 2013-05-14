@@ -267,11 +267,11 @@ block('page_container') - content area block (without header/footer), that will 
       </script>
 ```
 
-3. To exclude links from processing with hash navigation (like windows open buttons, delete links),
-additional css class "no-hash" should be added to the <a> tag,  e.g <a href="page-url" class="no-hash">
+3. To exclude links from processing with hash navigation (like windows open buttons, delete links), additional css class
+"no-hash" should be added to the '<a>' tag,  e.g '<a href="page-url" class="no-hash">'
 
-4. To make <a> tag open back url generated with YsTools/BackUrlBundle, additional css class "back" should be added,
-e.g <a href="/some-back-url" class="back">
+4. To make tag open back url generated with YsTools/BackUrlBundle, additional css class "back" should be added,
+e.g '<a href="/some-back-url" class="back">'
 
 As a part of hashtag navigation, form submit is also processed with Ajax.
 
