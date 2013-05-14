@@ -10,7 +10,7 @@ ACL implementation from Oro UserBundle.
 * [Your first menu](#first-menu)
 * [Rendering Menus](#rendering-menus)
 * [Work with assets](#work-with-assets)
-* [Hash Navigation](#hash-havigation)
+* [Hash Navigation](#hash-navigation)
 
 <a name="installation"></a>
 
@@ -228,7 +228,7 @@ To simplify site navigation and make it work without full page reloads hashtag n
 
 To enable hashtag navigation, we need to follow next steps:
 
-1. In main layout template additional check must be added, so it should look like:
+* In main layout template additional check must be added, so it should look like:
 
 ```
 {% if not oro_is_hash_navigation() %}
@@ -254,7 +254,7 @@ block('messages') - block with system messages
 
 block('page_container') - content area block (without header/footer), that will be realoaded during navigation
 
-2. This code must be added at the end of head section of main layout template:
+* This code must be added at the end of head section of main layout template:
 
 ```
       <script type="text/javascript">
@@ -267,9 +267,19 @@ block('page_container') - content area block (without header/footer), that will 
       </script>
 ```
 
-3. To exclude links from processing with hash navigation, additional css class "no-hash" should be added to the <a> tag, e.g <a href="page-url" class="no-hash">
+* To exclude links from processing with hash navigation (like windows open buttons, delete links), additional css class
+"no-hash" should be added to the tag, e.g.
 
-4. To make <a> tag open back url generated with YsTools/BackUrlBundle, additional css class "back" should be added, e.g <a href="/some-back-url" class="back">
+```
+      <a href="page-url" class="no-hash">
+```
+
+* To make tag open back url generated with YsTools/BackUrlBundle, additional css class "back" should be added,
+e.g.
+
+```
+      <a href="/some-back-url" class="back">
+```
 
 As a part of hashtag navigation, form submit is also processed with Ajax.
 
