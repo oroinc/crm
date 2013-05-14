@@ -24,8 +24,8 @@ class AccountApiType extends AccountType
     {
         $resolver->setDefaults(
             array(
-                'data_class' => $this->flexibleClass,
-                'intention' => 'account',
+                'data_class'           => $this->flexibleClass,
+                'intention'            => 'account',
                 'extra_fields_message' => 'This form should not contain extra fields: "{{ extra_fields }}"',
                 'csrf_protection'      => false,
             )
