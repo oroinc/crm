@@ -41,16 +41,6 @@ class Log extends AbstractLogEntry
      */
     public function getUser()
     {
-        return $this->user;
-    }
-
-    /**
-     * Return the role name field
-     *
-     * @return string
-     */
-    public function __toString()
-    {
-        return (string) $this->user;
+        return $this->user->getUsername();
     }
 }

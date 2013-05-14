@@ -21,8 +21,12 @@ use Oro\Bundle\DataAuditBundle\Entity\Log;
 class LogController extends Controller
 {
     /**
-     * @Route("/", name="oro_dataaudit_index")
-     * @Template
+     * @Route(
+     *      "/{_format}",
+     *      name="oro_dataaudit_index",
+     *      requirements={"_format"="html|json"},
+     *      defaults={"_format" = "html"}
+     * )
      * @Acl(
      *      id="oro_dataaudit_list",
      *      name="View log stream",
@@ -55,10 +59,12 @@ class LogController extends Controller
      */
     public function historyAction($entity, $id)
     {
-        $history = $this->getManager()->getRepository('OroDataAuditBundle:Log')->findBy(array(
-            'objectClass' => $entity,
-            'objectId'    => $id,
-        ));
+        $history = $this->getManager()->getRepository('OroDataAuditBundle:Log')->findBy(
+            array(
+                'objectClass' => $entity,
+                'objectId'    => $id,
+            )
+        );
 
         return array(
             'history' => $history,
