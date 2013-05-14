@@ -3,7 +3,7 @@
 namespace Oro\Bundle\SoapBundle\Controller\Api\Soap;
 
 use Doctrine\Common\Collections\Collection;
-use Oro\Bundle\SoapBundle\Controller\Api\ApiCrudInterface;
+use Oro\Bundle\SoapBundle\Controller\Api\Soap\SoapApiCrudInterface;
 use Oro\Bundle\SoapBundle\Controller\Api\EntityManagerAwareInterface;
 use Oro\Bundle\SoapBundle\Controller\Api\FormAwareInterface;
 use Oro\Bundle\SoapBundle\Controller\Api\FormHandlerAwareInterface;
@@ -15,7 +15,7 @@ abstract class SoapController extends ContainerAware implements
      FormAwareInterface,
      FormHandlerAwareInterface,
      EntityManagerAwareInterface,
-     ApiCrudInterface
+     SoapApiCrudInterface
 {
     /**
      * {@inheritDoc}

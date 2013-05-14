@@ -1,13 +1,15 @@
 <?php
 
-namespace Oro\Bundle\SoapBundle\Controller\Api;
+namespace Oro\Bundle\SoapBundle\Controller\Api\Rest;
 
-interface ApiCrudInterface
+use Symfony\Component\HttpFoundation\Response;
+
+interface RestApiCrudInterface
 {
     /**
      * Create item.
      *
-     * @return mixed
+     * @return Response
      */
     public function handleCreateRequest();
 
@@ -16,7 +18,7 @@ interface ApiCrudInterface
      *
      * @param int $page
      * @param int $limit
-     * @return mixed
+     * @return Response
      */
     public function handleGetListRequest($page, $limit);
 
@@ -32,7 +34,7 @@ interface ApiCrudInterface
      * Update item.
      *
      * @param mixed $id
-     * @return mixed
+     * @return Response
      */
     public function handleUpdateRequest($id);
 
@@ -40,7 +42,7 @@ interface ApiCrudInterface
      * Delete item.
      *
      * @param mixed $id
-     * @return mixed
+     * @return Response
      */
     public function handleDeleteRequest($id);
 }

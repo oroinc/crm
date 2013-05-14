@@ -2,7 +2,7 @@
 
 namespace Oro\Bundle\SoapBundle\Controller\Api\Rest;
 
-use Oro\Bundle\SoapBundle\Controller\Api\ApiCrudInterface;
+use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestApiCrudInterface;
 use Oro\Bundle\SoapBundle\Controller\Api\EntityManagerAwareInterface;
 use Oro\Bundle\SoapBundle\Controller\Api\FormAwareInterface;
 use Oro\Bundle\SoapBundle\Controller\Api\FormHandlerAwareInterface;
@@ -19,7 +19,7 @@ abstract class RestController extends FOSRestController implements
      FormAwareInterface,
      FormHandlerAwareInterface,
      EntityManagerAwareInterface,
-     ApiCrudInterface
+     RestApiCrudInterface
 {
     const ITEMS_PER_PAGE = 10;
 
