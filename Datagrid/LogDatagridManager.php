@@ -8,11 +8,7 @@ use Oro\Bundle\GridBundle\Field\FieldDescriptionCollection;
 use Oro\Bundle\GridBundle\Field\FieldDescriptionInterface;
 use Oro\Bundle\GridBundle\Filter\FilterInterface;
 
-use Oro\Bundle\GridBundle\Action\ActionInterface;
-use Oro\Bundle\GridBundle\Property\UrlProperty;
-use Oro\Bundle\GridBundle\Property\PropertyInterface;
-
-use Oro\Bundle\DataAuditBundle\Datagrid\DataProperty;
+use Oro\Bundle\GridBundle\Property\TwigTemplateProperty;
 
 class LogDatagridManager extends DatagridManager
 {
@@ -48,14 +44,20 @@ class LogDatagridManager extends DatagridManager
         $fieldAction->setName('action');
         $fieldAction->setOptions(
             array(
-                'type'        => FieldDescriptionInterface::TYPE_TEXT,
+                'type'        => FieldDescriptionInterface::TYPE_OPTIONS,
                 'label'       => 'Action',
                 'field_name'  => 'action',
-                'filter_type' => FilterInterface::TYPE_STRING,
+                'filter_type' => FilterInterface::TYPE_CHOICE,
                 'required'    => false,
                 'sortable'    => true,
                 'filterable'  => true,
                 'show_filter' => true,
+                'choices' => array(
+                    'update' => 'Updated',
+                    'create' => 'Created',
+                    'delete' => 'Deleted',
+                ),
+                'multiple' => true,
             )
         );
         $this->fieldsCollection->add($fieldAction);
@@ -82,7 +84,7 @@ class LogDatagridManager extends DatagridManager
             array(
                 'type'        => FieldDescriptionInterface::TYPE_DATETIME,
                 'label'       => 'Logged At',
-                'field_name'  => 'logged_at',
+                'field_name'  => 'loggedAt',
                 'filter_type' => FilterInterface::TYPE_DATETIME,
                 'required'    => false,
                 'sortable'    => true,
@@ -98,7 +100,7 @@ class LogDatagridManager extends DatagridManager
             array(
                 'type'        => FieldDescriptionInterface::TYPE_TEXT,
                 'label'       => 'Object Class',
-                'field_name'  => 'object_class',
+                'field_name'  => 'objectClass',
                 'filter_type' => FilterInterface::TYPE_STRING,
                 'required'    => false,
                 'sortable'    => true,
@@ -114,7 +116,7 @@ class LogDatagridManager extends DatagridManager
             array(
                 'type'        => FieldDescriptionInterface::TYPE_INTEGER,
                 'label'       => 'Object Id',
-                'field_name'  => 'object_id',
+                'field_name'  => 'objectId',
                 'filter_type' => FilterInterface::TYPE_NUMBER,
                 'required'    => false,
                 'sortable'    => false,
@@ -144,7 +146,7 @@ class LogDatagridManager extends DatagridManager
         $fieldData->setName('data');
         $fieldData->setOptions(
             array(
-                'type'        => FieldDescriptionInterface::TYPE_TEXT,
+                'type'        => FieldDescriptionInterface::TYPE_HTML,
                 'label'       => 'Data',
                 'field_name'  => 'data',
                 'filter_type' => FilterInterface::TYPE_STRING,
@@ -154,6 +156,8 @@ class LogDatagridManager extends DatagridManager
                 'show_filter' => false,
             )
         );
+        $templateProperty = new TwigTemplateProperty($fieldData, 'OroDataAuditBundle:Datagrid:Property/data.html.twig');
+        $fieldData->setProperty($templateProperty);
         $this->fieldsCollection->add($fieldData);
 
         return $this->fieldsCollection;
