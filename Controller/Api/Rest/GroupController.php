@@ -128,7 +128,7 @@ class GroupController extends RestController implements ClassResourceInterface
     }
 
     /**
-     * @return Form
+     * @return FormInterface
      */
     public function getForm()
     {

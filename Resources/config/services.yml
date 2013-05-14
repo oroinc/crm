@@ -72,6 +72,13 @@ services:
             - @request
             - @doctrine.orm.entity_manager
 
+    oro_contact.contact.manager:
+        class: %oro_contact.contact.manager.api.class%
+        arguments:
+            - %oro_contact.entity.class%
+            - @doctrine.orm.entity_manager
+            - @oro_contact.manager.flexible
+
     # Form type
     oro_contact.form.type.contact_select:
         class: %oro_contact.form.type.contact_select.class%

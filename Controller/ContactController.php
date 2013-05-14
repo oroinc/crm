@@ -138,6 +138,6 @@ class ContactController extends Controller
      */
     protected function getManager()
     {
-        return $this->get('oro_contact.contact.manager.api');
+        return $this->get('oro_contact.contact.manager');
     }
 }
