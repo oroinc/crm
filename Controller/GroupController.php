@@ -83,7 +83,7 @@ class GroupController extends Controller
      *      defaults={"id"=0, "_format"="json"}
      * )
      * @Template("OroGridBundle:Datagrid:list.json.php")
-     * @AclAncestor("oro_user_group_list")
+     * @AclAncestor("oro_user_group_edit")
      */
     public function gridDataAction(Group $entity)
     {

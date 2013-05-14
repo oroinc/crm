@@ -109,61 +109,11 @@ class AclInterceptorTest extends \PHPUnit_Framework_TestCase
         $this->inceptor = new AclInterceptor($this->container);
     }
 
-    public function testNoAccessOnHtml()
-    {
-        $this->decisionManager->expects($this->once())
-            ->method('decide')
-            ->will($this->returnValue(false));
-
-        $this->request->expects($this->any())
-            ->method('getRequestFormat')
-            ->will($this->returnValue('html'));
-
-        $this->requestAttributes->expects($this->once())
-            ->method('get')
-            ->will($this->returnValue('test_route'));
-
-        $this->aclManager
-            ->expects($this->once())
-            ->method('getAclRolesWithoutTree')
-            ->will($this->returnValue(array('TEST_ROLE', 'ANOTHER_ROLE')));
-
-        $this->setExpectedException('RuntimeException');
-        $this->inceptor->intercept($this->testMethodInvocation);
-    }
-
-    public function testNoAccessOnNonHtml()
-    {
-        $this->decisionManager->expects($this->once())
-            ->method('decide')
-            ->will($this->returnValue(false));
-
-        $this->request->expects($this->at(0))
-            ->method('getRequestFormat')
-            ->will($this->returnValue('html'));
-
-        $this->request->expects($this->at(1))
-            ->method('getRequestFormat')
-            ->will($this->returnValue('xml'));
-
-        $this->aclManager
-            ->expects($this->once())
-            ->method('getAclRolesWithoutTree')
-            ->will($this->returnValue(array('TEST_ROLE', 'ANOTHER_ROLE')));
-
-        $this->setExpectedException('RuntimeException');
-        $this->inceptor->intercept($this->testMethodInvocation);
-    }
-
     public function testNoAccessOnInternalRouteHtml()
     {
         $this->decisionManager->expects($this->once())
             ->method('decide')
             ->will($this->returnValue(false));
-
-        $this->request->expects($this->any())
-            ->method('getRequestFormat')
-            ->will($this->returnValue('html'));
 
         $this->requestAttributes->expects($this->once())
             ->method('get')
@@ -178,12 +128,30 @@ class AclInterceptorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('Symfony\Component\HttpFoundation\Response', get_class($result));
     }
 
+    /**
+     * @expectedException \Symfony\Component\Security\Core\Exception\AccessDeniedException
+     * @expectedExceptionMessage Access denied.
+     */
+    public function testNoAccessDefault()
+    {
+        $this->decisionManager->expects($this->once())
+            ->method('decide')
+            ->will($this->returnValue(false));
+
+        $this->requestAttributes->expects($this->once())
+            ->method('get')
+            ->will($this->returnValue('test_route'));
+
+        $this->aclManager
+            ->expects($this->once())
+            ->method('getAclRolesWithoutTree')
+            ->will($this->returnValue(array('TEST_ROLE', 'ANOTHER_ROLE')));
+
+        $this->inceptor->intercept($this->testMethodInvocation);
+    }
+
     public function testAccess()
     {
-        $this->request->expects($this->once())
-            ->method('getRequestFormat')
-            ->will($this->returnValue('html'));
-
         $this->decisionManager->expects($this->once())
             ->method('decide')
             ->will($this->returnValue(true));
@@ -213,10 +181,6 @@ class AclInterceptorTest extends \PHPUnit_Framework_TestCase
         $this->decisionManager->expects($this->once())
             ->method('decide')
             ->will($this->returnValue(false));
-
-        $this->request->expects($this->any())
-            ->method('getRequestFormat')
-            ->will($this->returnValue('html'));
 
         $this->requestAttributes->expects($this->once())
             ->method('get')

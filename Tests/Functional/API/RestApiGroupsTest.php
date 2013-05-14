@@ -11,8 +11,11 @@ use Acme\Bundle\TestsBundle\Test\Client;
  */
 class RestApiGroupsTest extends WebTestCase
 {
-
+    /**
+     * @var Client
+     */
     protected $client = null;
+
     protected static $hasLoaded = false;
 
     public function setUp()
@@ -86,6 +89,7 @@ class RestApiGroupsTest extends WebTestCase
         $this->client->request('GET', 'http://localhost/api/rest/latest/groups' .'/'. $group['id']);
         $result = $this->client->getResponse();
         $result = json_decode($result->getContent(), true);
+        $this->assertArrayHasKey('name', $result);
         $this->assertEquals($result['name'], $request['group']['name'], 'Group does not updated');
 
         return $group;
