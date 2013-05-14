@@ -1,5 +1,4 @@
 parameters:
-    oro_contact.manager.class: Oro\Bundle\ContactBundle\Entity\Manager\ContactManager
     oro_contact.manager.flexible.class: Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleManager
     oro_contact.entity.class: Oro\Bundle\ContactBundle\Entity\Contact
     oro_contact.entity.value.class: Oro\Bundle\ContactBundle\Entity\Value\ContactValue
@@ -11,7 +10,7 @@ parameters:
     oro_contact.form.type.contact_select.class: Oro\Bundle\ContactBundle\Form\Type\ContactSelectType
     oro_contact.handler.group.class: Oro\Bundle\ContactBundle\Form\Handler\GroupHandler
 
-    oro_contact.contact.manager.api.class:  Oro\Bundle\SoapBundle\Entity\Manager\ApiFlexibleEntityManager
+    oro_contact.contact.manager.api.class: Oro\Bundle\SoapBundle\Entity\Manager\ApiFlexibleEntityManager
     oro_contact.type.contact.api.class: Oro\Bundle\ContactBundle\Form\Type\ContactApiType
 
     oro_contact.group.entity.class: Oro\Bundle\ContactBundle\Entity\Group
@@ -37,13 +36,6 @@ services:
             - [ addAttributeType, ['oro_contact_attribute_contact'] ]
         tags:
             - { name: oro_flexibleentity_manager, entity: %oro_contact.entity.class%}
-
-    oro_contact.manager:
-        class: %oro_contact.manager.class%
-        arguments:
-            - %oro_contact.entity.class%
-            - @doctrine.orm.entity_manager
-            - @oro_contact.manager.flexible
 
     oro_contact.form.contact:
         class: Symfony\Component\Form\Form

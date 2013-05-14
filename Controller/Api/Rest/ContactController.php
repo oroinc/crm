@@ -9,7 +9,7 @@ use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Oro\Bundle\UserBundle\Annotation\Acl;
 use Oro\Bundle\UserBundle\Annotation\AclAncestor;
 
-use Symfony\Component\Form\Form;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Response;
 use FOS\RestBundle\Routing\ClassResourceInterface;
 use Oro\Bundle\SoapBundle\Form\Handler\ApiFormHandler;
@@ -36,7 +36,10 @@ class ContactController extends FlexibleRestController implements ClassResourceI
      */
     public function cgetAction()
     {
-        return $this->handleGetListRequest();
+        $page = (int)$this->getRequest()->get('page', 1);
+        $limit = (int)$this->getRequest()->get('limit', self::ITEMS_PER_PAGE);
+
+        return $this->handleGetListRequest($page, $limit);
     }
 
     /**
@@ -70,7 +73,7 @@ class ContactController extends FlexibleRestController implements ClassResourceI
      */
     public function putAction($id)
     {
-        return $this->handlePutRequest($id);
+        return $this->handleUpdateRequest($id);
     }
 
     /**
@@ -84,7 +87,7 @@ class ContactController extends FlexibleRestController implements ClassResourceI
      */
     public function postAction()
     {
-        return $this->handlePostRequest();
+        return $this->handleCreateRequest();
     }
 
     /**
@@ -114,15 +117,15 @@ class ContactController extends FlexibleRestController implements ClassResourceI
      *
      * @return ApiFlexibleEntityManager
      */
-    protected function getManager()
+    public function getManager()
     {
         return $this->get('oro_contact.contact.manager.api');
     }
 
     /**
-     * @return Form
+     * @return FormInterface
      */
-    protected function getForm()
+    public function getForm()
     {
         return $this->get('oro_contact.form.contact.api');
     }
@@ -130,7 +133,7 @@ class ContactController extends FlexibleRestController implements ClassResourceI
     /**
      * @return ApiFormHandler
      */
-    protected function getFormHandler()
+    public function getFormHandler()
     {
         return $this->get('oro_contact.form.handler.contact.api');
     }

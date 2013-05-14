@@ -2,20 +2,18 @@
 
 namespace Oro\Bundle\ContactBundle\DataFixtures\ORM;
 
+use Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleManager;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttributeType;
 use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttribute;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
 
-use Oro\Bundle\ContactBundle\Entity\Manager\ContactManager;
-
 class LoadContactAttrData extends AbstractFixture implements ContainerAwareInterface
 {
     /**
-     * @var ContactManager
+     * @var FlexibleManager
      */
     protected $fm;
 
@@ -32,7 +30,7 @@ class LoadContactAttrData extends AbstractFixture implements ContainerAwareInter
     public function setContainer(ContainerInterface $container = null)
     {
         $this->container = $container;
-        $this->fm = $this->container->get('oro_contact.manager');
+        $this->fm = $this->container->get('oro_contact.manager.flexible');
         $this->sm = $this->fm->getStorageManager();
     }
 
@@ -220,6 +218,12 @@ class LoadContactAttrData extends AbstractFixture implements ContainerAwareInter
         if ($label === null) {
             throw new \InvalidArgumentException('Label is required for attribute');
         }
+
+        if (strpos($label, '_') !== false) {
+            // replace  underscored labels (for example if it comes from code)
+            $label = str_replace('_', ' ', $label);
+        }
+
         return $label;
     }
 
