@@ -9,6 +9,8 @@ navigation.pinbar.ItemView = Backbone.View.extend({
 
     tagName:  'li',
 
+    isRemoved: false,
+
     templates: {
         list: _.template($("#template-list-pin-item").html()),
         tab: _.template($("#template-tab-pin-item").html())
@@ -22,14 +24,17 @@ navigation.pinbar.ItemView = Backbone.View.extend({
     },
 
     initialize: function() {
-        this.listenTo(this.model, 'destroy', this.remove)
-        this.listenTo(this.model, 'change:display_type', this.remove);
+        this.listenTo(this.model, 'destroy', this.removeItem);
+        this.listenTo(this.model, 'change:display_type', this.removeItem);
         /**
          * Change active pinbar item after hash navigation request is completed
          */
         Oro.Events.bind(
             "hash_navigation_request:complete",
             function() {
+                if (!this.isRemoved && this.checkCurrentUrl()) {
+                    this.maximize();
+                }
                 this.setActiveItem();
             },
             this
@@ -47,14 +52,23 @@ navigation.pinbar.ItemView = Backbone.View.extend({
         return false;
     },
 
-    setActiveItem: function() {
+    removeItem: function() {
+        this.isRemoved = true;
+        this.remove();
+    },
+
+    checkCurrentUrl: function() {
         var url = '';
         if (Oro.hashNavigationEnabled()) {
             url = Oro.Navigation.prototype.getHashUrl();
         } else {
             url = window.location.pathname;
         }
-        if (this.model.get('url') ==  url) {
+        return this.model.get('url') ==  url;
+    },
+
+    setActiveItem: function() {
+        if (this.checkCurrentUrl()) {
             this.$el.addClass('active');
         } else {
             this.$el.removeClass('active');

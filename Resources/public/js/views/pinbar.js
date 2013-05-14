@@ -78,6 +78,8 @@ navigation.pinbar.MainView = navigation.MainViewAbstract.extend({
             var url = null;
             if (item.get('maximized')) {
                 url = item.get('url');
+                this.removeFromHistory(item);
+                this.options.history.push(url);
             } else {
                 url = this.getLatestUrl();
             }
@@ -267,6 +269,11 @@ navigation.pinbar.MainView = navigation.MainViewAbstract.extend({
             if (this.options.collection.length == 0) {
                 this.requireCleanup = true;
                 this.$listBar.html(this.templates.noItemsMessage());
+                /**
+                 * Backbone event. Fired when pinbar help link is shown
+                 * @event pinbar_help:shown
+                 */
+                Oro.Events.trigger("pinbar_help:shown");
             }
 
             this.checkTabContent();
