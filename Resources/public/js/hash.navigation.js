@@ -255,7 +255,11 @@ Oro.Navigation = Backbone.Router.extend({
                 if (urlParts[1]) {
                     redirectUrl = urlParts[1];
                 }
-                this.setLocation(redirectUrl);
+                if($(data).filter('#redirect').attr('data-redirect')) {
+                    window.location.href = redirectUrl;
+                } else {
+                    this.setLocation(redirectUrl);
+                }
             } else {
                 $(this.selectors.container).html($(data).filter(this.selectors.content).html());
                 /**
