@@ -28,17 +28,17 @@ use Oro\Bundle\AccountBundle\Datagrid\AccountDatagridManager;
 class AccountController extends Controller
 {
     /**
-     * @Route("/show/{id}", name="oro_account_show", requirements={"id"="\d+"})
+     * @Route("/view/{id}", name="oro_account_view", requirements={"id"="\d+"})
      * @Template
      * @Acl(
-     *      id="oro_account_account_show",
+     *      id="oro_account_account_view",
      *      name="View account",
      *      description="View account",
      *      parent="oro_account_account"
      * )
      * @BackUrl("back")
      */
-    public function showAction(Account $account)
+    public function viewAction(Account $account)
     {
         return array(
             'account' => $account,
@@ -49,7 +49,7 @@ class AccountController extends Controller
      * Create account form
      *
      * @Route("/create", name="oro_account_create")
-     * @Template("OroAccountBundle:Account:edit.html.twig")
+     * @Template("OroAccountBundle:Account:update.html.twig")
      * @Acl(
      *      id="oro_account_account_create",
      *      name="Create account",
@@ -61,22 +61,22 @@ class AccountController extends Controller
     {
         /** @var Account $account */
         $account = $this->getManager()->createEntity();
-        return $this->editAction($account);
+        return $this->updateAction($account);
     }
 
     /**
      * Edit user form
      *
-     * @Route("/edit/{id}", name="oro_account_edit", requirements={"id"="\d+"}, defaults={"id"=0})
+     * @Route("/update/{id}", name="oro_account_update", requirements={"id"="\d+"}, defaults={"id"=0})
      * @Template
      * @Acl(
-     *      id="oro_account_account_edit",
+     *      id="oro_account_account_update",
      *      name="Edit account",
      *      description="Edit account",
      *      parent="oro_account_account"
      * )
      */
-    public function editAction(Account $entity)
+    public function updateAction(Account $entity)
     {
         $backUrl = $this->generateUrl('oro_account_index');
 

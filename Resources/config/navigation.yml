@@ -32,7 +32,7 @@ oro_menu_config:
                 shortcut_list_accounts: ~
 
 oro_titles:
-    oro_account_index: Accounts Overview
-    oro_account_show: %%account.name%% - View Account
+    oro_account_index: Accounts
+    oro_account_view: %%account.name%% - View Account
     oro_account_create: New Account
-    oro_account_edit: %%account.name%% - Edit Account
+    oro_account_update: %%account.name%% - Edit Account

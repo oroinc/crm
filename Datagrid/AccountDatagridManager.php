@@ -2,7 +2,8 @@
 
 namespace Oro\Bundle\AccountBundle\Datagrid;
 
-use Symfony\Component\Routing\Router;
+use Doctrine\ORM\QueryBuilder;
+
 use Oro\Bundle\GridBundle\Datagrid\FlexibleDatagridManager;
 use Oro\Bundle\GridBundle\Field\FieldDescription;
 use Oro\Bundle\GridBundle\Field\FieldDescriptionCollection;
@@ -14,174 +15,99 @@ use Oro\Bundle\GridBundle\Property\UrlProperty;
 class AccountDatagridManager extends FlexibleDatagridManager
 {
     /**
-     * @var FieldDescriptionCollection
+     * {@inheritDoc}
      */
-    protected $fieldsCollection;
-
-    /**
-     * @var Router
-     */
-    protected $router;
-
-    public function setRouter(Router $router)
-    {
-        $this->router = $router;
-    }
-
     protected function getProperties()
     {
         return array(
-            new UrlProperty('show_link', $this->router, 'oro_account_show', array('id')),
-            new UrlProperty('edit_link', $this->router, 'oro_account_edit', array('id')),
+            new UrlProperty('view_link', $this->router, 'oro_account_view', array('id')),
+            new UrlProperty('update_link', $this->router, 'oro_account_update', array('id')),
             new UrlProperty('delete_link', $this->router, 'oro_api_delete_account', array('id')),
         );
     }
 
     /**
-     * @return FieldDescriptionCollection
+     * {@inheritDoc}
      */
-    protected function getFieldDescriptionCollection()
+    protected function configureFields(FieldDescriptionCollection $fieldsCollection)
     {
-        if (!$this->fieldsCollection) {
-            $this->fieldsCollection = new FieldDescriptionCollection();
+        $fieldId = new FieldDescription();
+        $fieldId->setName('id');
+        $fieldId->setOptions(
+            array(
+                'type'        => FieldDescriptionInterface::TYPE_INTEGER,
+                'label'       => 'ID',
+                'field_name'  => 'id',
+                'filter_type' => FilterInterface::TYPE_NUMBER,
+                'required'    => false,
+                'sortable'    => true,
+                'filterable'  => true,
+                'show_filter' => true,
+            )
+        );
+        $fieldsCollection->add($fieldId);
 
-            $fieldId = new FieldDescription();
-            $fieldId->setName('id');
-            $fieldId->setOptions(
-                array(
-                    'type'        => FieldDescriptionInterface::TYPE_INTEGER,
-                    'label'       => 'ID',
-                    'field_name'  => 'id',
-                    'filter_type' => FilterInterface::TYPE_NUMBER,
-                    'required'    => false,
-                    'sortable'    => true,
-                    'filterable'  => true,
-                    'show_filter' => true,
-                )
-            );
-            $this->fieldsCollection->add($fieldId);
+        $fieldId = new FieldDescription();
+        $fieldId->setName('name');
+        $fieldId->setOptions(
+            array(
+                'type'        => FieldDescriptionInterface::TYPE_TEXT,
+                'label'       => 'Name',
+                'field_name'  => 'name',
+                'filter_type' => FilterInterface::TYPE_STRING,
+                'required'    => false,
+                'sortable'    => true,
+                'filterable'  => true,
+                'show_filter' => true,
+            )
+        );
+        $fieldsCollection->add($fieldId);
 
-            $fieldName = new FieldDescription();
-            $fieldName->setName('name');
-            $fieldName->setOptions(
-                array(
-                    'type'        => FieldDescriptionInterface::TYPE_TEXT,
-                    'label'       => 'Name',
-                    'field_name'  => 'name',
-                    'filter_type' => FilterInterface::TYPE_STRING,
-                    'required'    => false,
-                    'sortable'    => true,
-                    'filterable'  => true,
-                    'show_filter' => true,
-                )
-            );
-            $this->fieldsCollection->add($fieldName);
+        $specialAttributeOptions = array(
+            'type'        => FieldDescriptionInterface::TYPE_TEXT,
+            'filter_type' => FilterInterface::TYPE_STRING,
+            'sortable'    => false,
+            'filterable'  => false
+        );
+        $this->configureFlexibleFields(
+            $fieldsCollection,
+            array(
+                'shipping_address'     => $specialAttributeOptions,
+                'billing_address' => $specialAttributeOptions
+            )
+        );
 
-            $specialAttributes = array('shipping_address', 'billing_address');
-            foreach ($this->getFlexibleAttributes() as $attribute) {
-                if (in_array($attribute->getCode(), $specialAttributes)) {
-                    $attributeType = FieldDescriptionInterface::TYPE_TEXT;
-                    $filterType = FilterInterface::TYPE_STRING;
-                    $isSortable = false;
-                    $isSearchable = false;
-                } else {
-                    $backendType   = $attribute->getBackendType();
-                    $attributeType = $this->convertFlexibleTypeToFieldType($backendType);
-                    $filterType    = $this->convertFlexibleTypeToFilterType($backendType);
-                    $isSortable = true;
-                    $isSearchable = true;
-                }
-                $field = new FieldDescription();
-                $field->setName($attribute->getCode());
-                $field->setOptions(
-                    array(
-                        'type'          => $attributeType,
-                        'label'         => $attribute->getLabel(),
-                        'field_name'    => $attribute->getCode(),
-                        'filter_type'   => $filterType,
-                        'required'      => false,
-                        'sortable'      => $isSortable,
-                        'filterable'    => $isSearchable,
-                        'flexible_name' => $this->flexibleManager->getFlexibleName()
-                    )
-                );
-                $this->fieldsCollection->add($field);
-            }
+        $fieldCreated = new FieldDescription();
+        $fieldCreated->setName('created');
+        $fieldCreated->setOptions(
+            array(
+                'type'        => FieldDescriptionInterface::TYPE_DATETIME,
+                'label'       => 'Created At',
+                'field_name'  => 'created',
+                'filter_type' => FilterInterface::TYPE_DATETIME,
+                'required'    => false,
+                'sortable'    => true,
+                'filterable'  => true,
+                'show_filter' => true,
+            )
+        );
+        $fieldsCollection->add($fieldCreated);
 
-            $fieldCreated = new FieldDescription();
-            $fieldCreated->setName('created');
-            $fieldCreated->setOptions(
-                array(
-                    'type'        => FieldDescriptionInterface::TYPE_DATETIME,
-                    'label'       => 'Created At',
-                    'field_name'  => 'created',
-                    'filter_type' => FilterInterface::TYPE_DATETIME,
-                    'required'    => false,
-                    'sortable'    => true,
-                    'filterable'  => true,
-                    'show_filter' => true,
-                )
-            );
-            $this->fieldsCollection->add($fieldCreated);
-
-            $fieldUpdated = new FieldDescription();
-            $fieldUpdated->setName('updated');
-            $fieldUpdated->setOptions(
-                array(
-                    'type'        => FieldDescriptionInterface::TYPE_DATETIME,
-                    'label'       => 'Updated At',
-                    'field_name'  => 'updated',
-                    'filter_type' => FilterInterface::TYPE_DATETIME,
-                    'required'    => false,
-                    'sortable'    => true,
-                    'filterable'  => true,
-                    'show_filter' => true,
-                )
-            );
-            $this->fieldsCollection->add($fieldUpdated);
-        }
-
-        return $this->fieldsCollection;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getListFields()
-    {
-        return $this->getFieldDescriptionCollection()->getElements();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getFilters()
-    {
-        $fields = array();
-        /** @var $fieldDescription FieldDescription */
-        foreach ($this->getFieldDescriptionCollection() as $fieldDescription) {
-            if ($fieldDescription->isFilterable()) {
-                $fields[] = $fieldDescription;
-            }
-        }
-
-        return $fields;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getSorters()
-    {
-        $fields = array();
-        /** @var $fieldDescription FieldDescription */
-        foreach ($this->getFieldDescriptionCollection() as $fieldDescription) {
-            if ($fieldDescription->isSortable()) {
-                $fields[] = $fieldDescription;
-            }
-        }
-
-        return $fields;
+        $fieldUpdated = new FieldDescription();
+        $fieldUpdated->setName('updated');
+        $fieldUpdated->setOptions(
+            array(
+                'type'        => FieldDescriptionInterface::TYPE_DATETIME,
+                'label'       => 'Updated At',
+                'field_name'  => 'updated',
+                'filter_type' => FilterInterface::TYPE_DATETIME,
+                'required'    => false,
+                'sortable'    => true,
+                'filterable'  => true,
+                'show_filter' => true,
+            )
+        );
+        $fieldsCollection->add($fieldUpdated);
     }
 
     /**
@@ -194,34 +120,33 @@ class AccountDatagridManager extends FlexibleDatagridManager
             'type'         => ActionInterface::TYPE_REDIRECT,
             'acl_resource' => 'root',
             'options'      => array(
-                'label'         => 'Show',
-                'link'          => 'show_link',
-                'route'         => 'oro_account_show',
+                'label'         => 'View',
+                'link'          => 'view_link',
                 'runOnRowClick' => true,
                 'backUrl' => true,
             )
         );
 
-        $showAction = array(
-            'name'         => 'show',
+        $viewAction = array(
+            'name'         => 'view',
             'type'         => ActionInterface::TYPE_REDIRECT,
             'acl_resource' => 'root',
             'options'      => array(
-                'label' => 'Show',
+                'label' => 'View',
                 'icon'  => 'user',
-                'link'  => 'show_link',
+                'link'  => 'view_link',
                 'backUrl' => true,
             )
         );
 
-        $editAction = array(
-            'name'         => 'edit',
+        $updateAction = array(
+            'name'         => 'update',
             'type'         => ActionInterface::TYPE_REDIRECT,
             'acl_resource' => 'root',
             'options'      => array(
-                'label'   => 'Edit',
+                'label'   => 'Update',
                 'icon'    => 'edit',
-                'link'    => 'edit_link',
+                'link'    => 'update_link',
                 'backUrl' => true,
             )
         );
@@ -237,6 +162,6 @@ class AccountDatagridManager extends FlexibleDatagridManager
             )
         );
 
-        return array($clickAction, $showAction, $editAction, $deleteAction);
+        return array($clickAction, $viewAction, $updateAction, $deleteAction);
     }
 }

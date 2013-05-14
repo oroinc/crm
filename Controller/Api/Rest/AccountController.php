@@ -97,10 +97,10 @@ class AccountController extends FlexibleRestController implements ClassResourceI
      *      resource=true
      * )
      * @Acl(
-     *      id="oro_account_delete",
+     *      id="oro_account_account_remove",
      *      name="Delete account",
      *      description="Delete account",
-     *      parent="oro_account"
+     *      parent="oro_account_account"
      * )
      * @return Response
      */

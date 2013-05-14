@@ -27,8 +27,8 @@
                         <div class="btn-group icons-holder ">
                             <a href="{{ app.session.get('back') ? app.session.get('back') : path('oro_account_index') }}"
                                class="btn" title="{{ 'Back'|trans }}"><i class="icon-chevron-left hide-text">{{ 'Back'|trans }}</i></a>
-                            {% if resource_granted('oro_account_account_edit') %}
-                                <a href="{{ path('oro_account_edit', { id: account.id }) }}"
+                            {% if resource_granted('oro_account_account_update') %}
+                                <a href="{{ path('oro_account_update', { id: account.id }) }}"
                                    class="btn" title="{{ 'Edit account'|trans }}"><i class="icon-edit hide-text">{{ 'Edit'|trans }}</i></a>
                             {% endif %}
                             {% if resource_granted('oro_account_account_remove') %}

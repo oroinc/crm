@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\AccountBundle\DataFixtures\ORM;
 
+use Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleManager;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttribute;
@@ -9,12 +10,10 @@ use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttribute;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
 
-use Oro\Bundle\AccountBundle\Entity\Manager\AccountManager;
-
 class LoadAccountAttrData extends AbstractFixture implements ContainerAwareInterface
 {
     /**
-     * @var AccountManager
+     * @var FlexibleManager
      */
     protected $fm;
 
@@ -31,7 +30,7 @@ class LoadAccountAttrData extends AbstractFixture implements ContainerAwareInter
     public function setContainer(ContainerInterface $container = null)
     {
         $this->container = $container;
-        $this->fm = $this->container->get('oro_account.account.manager');
+        $this->fm = $this->container->get('oro_account.account.manager.flexible');
         $this->sm = $this->fm->getStorageManager();
     }
 
@@ -46,17 +45,24 @@ class LoadAccountAttrData extends AbstractFixture implements ContainerAwareInter
             array(
                 array(
                     'code' => 'website',
-                    'type' => 'oro_flexibleentity_url'
+                    'type' => 'oro_flexibleentity_url',
                 ),
-                'office_phone',
-                'office_fax',
+                array(
+                    'code' => 'office_phone',
+                    'label' => 'Office phone'
+                ),
+                array(
+                    'code' => 'office_fax',
+                    'label' => 'Office fax'
+                ),
                 array(
                     'code' => 'description',
                     'type' => 'oro_flexibleentity_textarea'
                 ),
                 array(
                     'code' => 'annual_revenue',
-                    'type' => 'oro_flexibleentity_money'
+                    'type' => 'oro_flexibleentity_money',
+                    'label' => 'Annual revenue'
                 ),
                 array(
                     'code' => 'employees',
@@ -67,11 +73,13 @@ class LoadAccountAttrData extends AbstractFixture implements ContainerAwareInter
                 'rating',
                 array(
                     'code' => 'shipping_address',
-                    'type' => 'oro_address'
+                    'type' => 'oro_address',
+                    'label' => 'Shipping address'
                 ),
                 array(
                     'code' => 'billing_address',
-                    'type' => 'oro_address'
+                    'type' => 'oro_address',
+                    'label' => 'Billing address'
                 ),
             )
         );
