@@ -27,14 +27,19 @@ class ResponseHashnavListener
         $response = $event->getResponse();
 
         if (($request->get('x-oro-hash-navigation') || $request->headers->get('x-oro-hash-navigation'))
-            && $response->getStatusCode() == 302) {
+            && $response->getStatusCode() == 302
+        ) {
 
             $documentRedirect = '';
             if (!$this->security->getToken()) {
                 $documentRedirect = 'data-redirect=true';
             }
 
-            $response = '<div id="redirect" ' . $documentRedirect . '>' . $response->headers->get('location') . '</div>';
+            $response = '<div id="redirect" '
+                . $documentRedirect
+                . '>'
+                . $response->headers->get('location')
+                . '</div>';
             $event->setResponse(new Response($response));
         }
     }

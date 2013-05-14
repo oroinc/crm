@@ -274,4 +274,3 @@ class ResponseHistoryListenerTest extends \PHPUnit_Framework_TestCase
         return $repository;
     }
 }
-
