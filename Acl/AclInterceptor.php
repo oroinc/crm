@@ -55,29 +55,22 @@ class AclInterceptor implements MethodInterceptorInterface
             sprintf('User invoked class: "%s", Method: "%s".', $method->reflection->class, $method->reflection->name)
         );
 
-        // todo: delete next string when authentication for api wheel be complete
-        if ($this->container->get('request')->getRequestFormat() == 'html') {
-            $token = $this->securityContext->getToken();
+        $token = $this->securityContext->getToken();
+        if ($token) {
+            $aclId = $this->getAclId($method);
+            if (!$aclId) {
+                $accessRoles = $this->getAclManager()->getAclRolesWithoutTree(Acl::ROOT_NODE);
+            } else {
+                $accessRoles = $this->getAclManager()->getAclRoles($aclId);
+            }
 
-            if ($token) {
-                $aclId = $this->getAclId($method);
-                if (!$aclId) {
-                    $accessRoles = $this->getAclManager()->getAclRolesWithoutTree(Acl::ROOT_NODE);
-                } else {
-                    $accessRoles = $this->getAclManager()->getAclRoles($aclId);
+            if (false === $this->accessDecisionManager->decide($token, $accessRoles, $method)) {
+                //check if we have internal action - show blank
+                if ($this->container->get('request')->attributes->get('_route') == '_internal') {
+                    return new Response('');
                 }
 
-                if (false === $this->accessDecisionManager->decide($token, $accessRoles, $method)) {
-                    if ($this->container->get('request')->getRequestFormat() !== 'html') {
-                        throw new \RuntimeException('Access denied.', 401);
-                    }
-                    //check if we have internal action - show blank
-                    if ($this->container->get('request')->attributes->get('_route') == '_internal') {
-                        return new Response('');
-                    }
-
-                    throw new AccessDeniedException('Access denied.');
-                }
+                throw new AccessDeniedException('Access denied.');
             }
         }
 

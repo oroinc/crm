@@ -8,28 +8,39 @@
     {% if form.vars.value.id %}
         {% include 'OroGridBundle:Include:javascript.html.twig' with {'datagridView': datagrid, 'selector': '#users-grid'} %}
         {% include 'OroGridBundle:Include:stylesheet.html.twig' %}
+
+        {% set listenerParameters = {
+            'columnName': 'has_group',
+            'selectors': {
+                'included': '#groupAppendUsers',
+                'excluded': '#groupRemoveUsers'
+            }
+        } %}
+        {% include 'OroGridBundle:Include:Listener/column_form.html.twig' with {'datagridView': datagrid, 'parameters': listenerParameters} %}
     {% endif %}
 {% endblock %}
 
 {% block page_container %}
 <div class="container-fluid">
     {% block content %}
-    <form action="{{ form.vars.value.id ? path('oro_user_group_edit', { id: form.vars.value.id }) : path('oro_user_group_create') }}" method="post" class="form-register">
+    <form action="{{ form.vars.value.id ? path('oro_user_group_edit', { id: form.vars.value.id, back: app.session.get('back') }) : path('oro_user_group_create', { back: app.session.get('back') }) }}" method="post" class="form-register">
         <fieldset>
             <legend>{{ title }}</legend>
 
-            {{ form_widget(form) }}
+            {{ form_widget(form.appendUsers, {'id': 'groupAppendUsers'}) }}
+            {{ form_widget(form.removeUsers, {'id': 'groupRemoveUsers'}) }}
+            {{ form_rest(form) }}
+
+            {% if form.vars.value.id %}
+                {{ 'Users'|trans }}
+                <div id="users-grid"></div>
+            {% endif %}
 
             <div class="form-row">
                 <button class="btn btn-large btn-primary" type="submit">{{ 'Save'|trans }}</button>
             </div>
         </fieldset>
     </form>
-
-        {% if form.vars.value.id %}
-        <h3>{{ 'Users'|trans }}</h3>
-        <div id="users-grid"></div>
-        {% endif %}
     {% endblock %}
 </div>
 {% endblock %}

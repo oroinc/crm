@@ -31,19 +31,31 @@ class UserMenuBuilder implements BuilderInterface
                  'routeParameters' => array('id' => $this->securityContext->getToken()->getUser()->getId())
             )
         );
-        $menu->addChild(
+        /* Disabled status menu till active stream will be implemented (BAP-617)
+         $menu->addChild(
             'Update status',
             array(
                  'route'      => 'oro_user_status_create',
                  'attributes' => array(
                      'class' => 'update-status'
-                 )
+                 ),
+                'linkAttributes' => array(
+                    'class' => 'no-hash'
+                )
             )
-        );
+        );*/
 
         $menu->addChild('divider-' . rand(1, 99999))
             ->setLabel('')
             ->setAttribute('class', 'divider');
-        $menu->addChild('Logout', array('route' => 'oro_user_security_logout'));
+        $menu->addChild(
+            'Logout',
+            array(
+                'route' => 'oro_user_security_logout',
+                'linkAttributes' => array(
+                    'class' => 'no-hash'
+                )
+            )
+        );
     }
 }

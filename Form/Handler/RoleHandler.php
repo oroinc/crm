@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 use Doctrine\Common\Persistence\ObjectManager;
 
+use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\UserBundle\Entity\Role;
 
 class RoleHandler
@@ -27,7 +28,6 @@ class RoleHandler
     protected $manager;
 
     /**
-     *
      * @param FormInterface $form
      * @param Request       $request
      * @param ObjectManager $manager
@@ -53,8 +53,9 @@ class RoleHandler
             $this->form->bind($this->request);
 
             if ($this->form->isValid()) {
-                $this->onSuccess($entity);
-
+                $appendUsers = $this->form->get('appendUsers')->getData();
+                $removeUsers = $this->form->get('removeUsers')->getData();
+                $this->onSuccess($entity, $appendUsers, $removeUsers);
                 return true;
             }
         }
@@ -66,10 +67,44 @@ class RoleHandler
      * "Success" form handler
      *
      * @param Role $entity
+     * @param User[] $appendUsers
+     * @param User[] $removeUsers
      */
-    protected function onSuccess(Role $entity)
+    protected function onSuccess(Role $entity, array $appendUsers, array $removeUsers)
     {
+        $this->appendUsers($entity, $appendUsers);
+        $this->removeUsers($entity, $removeUsers);
         $this->manager->persist($entity);
         $this->manager->flush();
+    }
+
+    /**
+     * Append users to role
+     *
+     * @param Role $role
+     * @param User[] $users
+     */
+    protected function appendUsers(Role $role, array $users)
+    {
+        /** @var $user User */
+        foreach ($users as $user) {
+            $user->addRole($role);
+            $this->manager->persist($user);
+        }
+    }
+
+    /**
+     * Remove users from role
+     *
+     * @param Role $role
+     * @param User[] $users
+     */
+    protected function removeUsers(Role $role, array $users)
+    {
+        /** @var $user User */
+        foreach ($users as $user) {
+            $user->removeRole($role);
+            $this->manager->persist($user);
+        }
     }
 }

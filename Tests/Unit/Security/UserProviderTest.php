@@ -111,7 +111,7 @@ class UserProviderTest extends \PHPUnit_Framework_TestCase
      */
     public function testRefreshInvalidUser()
     {
-        $user = $this->getMock('Symfony\Component\Security\Core\User\UserInterface');
+        $user = $this->getMockForAbstractClass('Symfony\Component\Security\Core\User\UserInterface');
 
         $this->userProvider->refreshUser($user);
     }

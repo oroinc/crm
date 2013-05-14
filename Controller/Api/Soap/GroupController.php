@@ -51,7 +51,7 @@ class GroupController extends BaseController
      * @Soap\Param("id", phpType="int")
      * @Soap\Param("group", phpType="\Oro\Bundle\UserBundle\Entity\Group")
      * @Soap\Result(phpType="boolean")
-     * @AclAncestor("oro_user_group_update")
+     * @AclAncestor("oro_user_group_edit")
      */
     public function updateAction($id, $group)
     {
@@ -73,6 +73,7 @@ class GroupController extends BaseController
     {
         $entity = $this->getEntity('OroUserBundle:Group', $id);
 
+        $em = $this->getManager();
         $em->remove($entity);
         $em->flush();
 

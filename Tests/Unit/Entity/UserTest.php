@@ -91,10 +91,6 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $user->removeRole($newRole);
 
         $this->assertFalse($user->hasRole($newRole->getRole()));
-
-        $this->setExpectedException('RuntimeException');
-
-        $user->addRole(new \stdClass());
     }
 
     public function testGroups()

@@ -30,10 +30,12 @@ class RoleController extends FOSRestController implements ClassResourceInterface
      */
     public function cgetAction()
     {
-        return $this->handleView($this->view(
-            $this->getManager()->getRepository('OroUserBundle:Role')->findAll(),
-            Codes::HTTP_OK
-        ));
+        return $this->handleView(
+            $this->view(
+                $this->getManager()->getRepository('OroUserBundle:Role')->findAll(),
+                Codes::HTTP_OK
+            )
+        );
     }
 
     /**
@@ -59,10 +61,12 @@ class RoleController extends FOSRestController implements ClassResourceInterface
     {
         $entity = $this->getManager()->find('OroUserBundle:Role', (int) $id);
 
-        return $this->handleView($this->view(
-            $entity,
-            $entity ? Codes::HTTP_OK : Codes::HTTP_NOT_FOUND
-        ));
+        return $this->handleView(
+            $this->view(
+                $entity,
+                $entity ? Codes::HTTP_OK : Codes::HTTP_NOT_FOUND
+            )
+        );
     }
 
     /**
@@ -78,7 +82,10 @@ class RoleController extends FOSRestController implements ClassResourceInterface
     {
         $entity = new Role();
         $view   = $this->get('oro_user.form.handler.role.api')->process($entity)
-            ? $this->redirectView($this->generateUrl('oro_api_get_role', array('id' => $entity->getId())), Codes::HTTP_CREATED)
+            ? $this->redirectView(
+                $this->generateUrl('oro_api_get_role', array('id' => $entity->getId())),
+                Codes::HTTP_CREATED
+            )
             : $this->view($this->get('oro_user.form.role.api'), Codes::HTTP_BAD_REQUEST);
 
         return $this->handleView($view);
@@ -96,7 +103,7 @@ class RoleController extends FOSRestController implements ClassResourceInterface
      *          {"name"="id", "dataType"="integer"},
      *      }
      * )
-     * @AclAncestor("oro_user_role_update")
+     * @AclAncestor("oro_user_role_edit")
      */
     public function putAction($id)
     {
@@ -165,10 +172,12 @@ class RoleController extends FOSRestController implements ClassResourceInterface
     {
         $entity = $this->getManager()->getRepository('OroUserBundle:Role')->findOneBy(array('role' => $name));
 
-        return $this->handleView($this->view(
-            $entity,
-            $entity ? Codes::HTTP_OK : Codes::HTTP_NOT_FOUND
-        ));
+        return $this->handleView(
+            $this->view(
+                $entity,
+                $entity ? Codes::HTTP_OK : Codes::HTTP_NOT_FOUND
+            )
+        );
     }
 
     /**

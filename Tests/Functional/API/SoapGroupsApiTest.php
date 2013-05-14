@@ -63,49 +63,50 @@ class SoapGroupsApiTest extends WebTestCase
      */
     public function testUpdateGroup($request, $response)
     {
-        $this->markTestSkipped('Due to missing getGroupBy');
+        $groups = $this->clientSoap->soapClient->getGroups();
+        $groups = ToolsAPI::classToArray($groups);
+        foreach ($groups['item'] as $group) {
+            if ($group['name'] == $request['name']) {
+                $groupId = $group['id'];
+                break;
+            }
+        }
         $request['name'] .= '_Updated';
-        //get role id
-        $groupId = $this->clientSoap->soapClient->getGroupByName($request['name']);
-        $groupId = ToolsAPI::classToArray($groupId);
-        $result = $this->clientSoap->soapClient->updateGroup($groupId['id'], $request);
+        $result = $this->clientSoap->soapClient->updateGroup($groupId, $request);
         $result = ToolsAPI::classToArray($result);
         ToolsAPI::assertEqualsResponse($response, $result);
-        $group = $this->clientSoap->soapClient->getGroup($groupId['id']);
+        $group = $this->clientSoap->soapClient->getGroup($groupId);
         $group = ToolsAPI::classToArray($group);
-        $this->assertEquals($request['label'], $group['label']);
+        $this->assertEquals($request['name'], $group['name']);
     }
 
-    /**
-     * @depends testUpdateGroup
-     */
     public function testGetGroups()
     {
         //get roles
         $groups = $this->clientSoap->soapClient->getGroups();
         $groups = ToolsAPI::classToArray($groups);
         $this->assertEquals(5, count($groups['item']));
-        foreach ($groups['item'] as $group) {
-            $this->assertEquals($group['name'] . '_UPDATED', strtoupper($group['label']));
-        }
     }
 
     /**
      * @depends testGetGroups
      */
-    public function testDeleteRoles()
+    public function testDeleteGroups()
     {
         //get roles
         $groups = $this->clientSoap->soapClient->getGroups();
         $groups = ToolsAPI::classToArray($groups);
         $this->assertEquals(5, count($groups['item']));
         foreach ($groups['item'] as $group) {
-            $result = $this->clientSoap->soapClient->deleteGroup($group['id']);
-            $this->assertTrue($result);
+            if ($group['id'] > 2) {
+                //do not delete default groups
+                $result = $this->clientSoap->soapClient->deleteGroup($group['id']);
+                $this->assertTrue($result);
+            }
         }
         $groups = $this->clientSoap->soapClient->getGroups();
         $groups = ToolsAPI::classToArray($groups);
-        $this->assertEmpty($groups);
+        $this->assertEquals(2, count($groups['item']));
     }
 
     /**
