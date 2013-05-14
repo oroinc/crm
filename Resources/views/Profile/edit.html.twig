@@ -10,7 +10,7 @@
 <div class="container-fluid">
     {% block content %}
     <form action="{{ form.vars.value.id ? path('oro_user_edit', { id: form.vars.value.id }) : path('oro_user_create') }}" {{ form_enctype(form) }} method="post" data-collect="true">
-        <div class="navigation clearfix navbar-extra navbar-extra-right">
+        <div class="navigation clearfix navbar-extra">
             <div class="row">
                 {% if form.vars.value.id %}
                 <div class="pull-right">
@@ -87,7 +87,7 @@
                     </div>
                 </div>
             </div>
-            <div class="clearfix-oro">
+            <div class="clearfix">
                 {% if form_errors(form) %}
                     <div class="customer-info-actions container-fluid well-small">
                         <div class="pull-left alert alert-error">
