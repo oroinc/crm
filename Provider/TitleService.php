@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\NavigationBundle\Provider;
 
+use JMS\Serializer\Exception\RuntimeException;
 use Symfony\Bundle\FrameworkBundle\Translation\Translator;
 use Symfony\Component\Routing\Route;
 use JMS\Serializer\Serializer;
@@ -96,13 +97,24 @@ class TitleService implements TitleServiceInterface
     public function render($params = array(), $title = null, $prefix = null, $suffix = null, $isJSON = false)
     {
         if (!is_null($title) && $isJSON) {
-            /** @var $data \Oro\Bundle\NavigationBundle\Title\StoredTitle */
-            $data =  $this->serializer->deserialize($title, 'Oro\Bundle\NavigationBundle\Title\StoredTitle', 'json');
+            try {
+                /** @var $data \Oro\Bundle\NavigationBundle\Title\StoredTitle */
+                $data =  $this->serializer->deserialize($title, 'Oro\Bundle\NavigationBundle\Title\StoredTitle', 'json');
 
-            $params = $data->getParams();
-            $title = $data->getTemplate();
-            $prefix = $data->getPrefix();
-            $suffix = $data->getSuffix();
+                $params = $data->getParams();
+                $title = $data->getTemplate();
+                $prefix = $data->getPrefix();
+                $suffix = $data->getSuffix();
+            } catch (RuntimeException $e) {
+                // wrong json string - ignore title
+                $params = array();
+                $title  = 'Untitled';
+                $prefix = '';
+                $suffix = '';
+            }
+
+
+
         }
 
         if (is_null($title)) {

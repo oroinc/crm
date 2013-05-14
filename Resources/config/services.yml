@@ -199,6 +199,7 @@ services:
         class: %oro_navigation.translation.extractor.class%
         arguments:
             - @oro_navigation.title_service
+            - @router
         tags:
             - { name: translation.extractor, alias: navigation_translation_extractor }
 
