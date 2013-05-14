@@ -19,6 +19,9 @@ class ChoiceFilter extends AbstractFilter
         }
 
         $operator = $this->getOperator($data['type']);
+        if (!is_array($data['value'])) {
+            $data['value'] = array($data['value']);
+        }
 
         if ('IN' == $operator) {
             $expression = $this->getExpressionFactory()->in(
@@ -75,5 +78,25 @@ class ChoiceFilter extends AbstractFilter
         return array(
             'form_type' => ChoiceFilterType::NAME
         );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getRenderSettings()
+    {
+        list($formType, $formOptions) = parent::getRenderSettings();
+
+        $choices = $this->getOption('choices');
+        if ($choices) {
+            $formOptions['field_options']['choices'] = $choices;
+        }
+
+        $multiple = $this->getOption('multiple');
+        if (null !== $multiple) {
+            $formOptions['field_options']['multiple'] = $multiple;
+        }
+
+        return array($formType, $formOptions);
     }
 }

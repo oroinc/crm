@@ -7,6 +7,11 @@ use Oro\Bundle\GridBundle\Filter\ORM\ChoiceFilter;
 
 class ChoiceFilterTest extends FilterTestCase
 {
+    /**
+     * @var array
+     */
+    protected $testChoices = array('key1' => 'value1', 'key2' => 'value2');
+
     protected function createTestFilter()
     {
         return new ChoiceFilter($this->getTranslatorMock());
@@ -41,7 +46,12 @@ class ChoiceFilterTest extends FilterTestCase
                 'expectProxyQueryCalls' => array(
                     array(
                         'andWhere',
-                        array($this->getExpressionFactory()->in(self::TEST_ALIAS . '.' . self::TEST_FIELD, 'test')),
+                        array(
+                            $this->getExpressionFactory()->in(
+                                self::TEST_ALIAS . '.' . self::TEST_FIELD,
+                                array('test')
+                            )
+                        ),
                         null
                     )
                 )
@@ -51,7 +61,12 @@ class ChoiceFilterTest extends FilterTestCase
                 'expectProxyQueryCalls' => array(
                     array(
                         'andWhere',
-                        array($this->getExpressionFactory()->notIn(self::TEST_ALIAS . '.' . self::TEST_FIELD, 'test')),
+                        array(
+                            $this->getExpressionFactory()->notIn(
+                                self::TEST_ALIAS . '.' . self::TEST_FIELD,
+                                array('test')
+                            )
+                        ),
                         null
                     )
                 )
@@ -67,5 +82,51 @@ class ChoiceFilterTest extends FilterTestCase
             ),
             $this->model->getDefaultOptions()
         );
+    }
+
+    public function getRenderSettingsDataProvider()
+    {
+        return array(
+            'default' => array(
+                array(),
+                array(ChoiceFilterType::NAME,
+                    array(
+                        'show_filter' => false
+                    )
+                )
+            ),
+            'single select' => array(
+                array('choices' => $this->testChoices),
+                array(ChoiceFilterType::NAME,
+                    array(
+                        'show_filter'   => false,
+                        'field_options' => array(
+                            'choices' => $this->testChoices
+                        )
+                    )
+                )
+            ),
+            'multiple select' => array(
+                array('choices' => $this->testChoices, 'multiple' => true),
+                array(ChoiceFilterType::NAME,
+                    array(
+                        'show_filter'   => false,
+                        'field_options' => array(
+                            'choices'  => $this->testChoices,
+                            'multiple' => true
+                        )
+                    )
+                )
+            ),
+        );
+    }
+
+    /**
+     * @dataProvider getRenderSettingsDataProvider
+     */
+    public function testGetRenderSettings($options, $expectedRenderSettings)
+    {
+        $this->model->initialize(self::TEST_NAME, $options);
+        $this->assertEquals($expectedRenderSettings, $this->model->getRenderSettings());
     }
 }

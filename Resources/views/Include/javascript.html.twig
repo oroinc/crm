@@ -57,7 +57,13 @@
                                 cell: Oro.Datagrid.Cell.IntegerCell.extend({ orderSeparator: '' })
                             {% elseif column.type == constant(columnTypePrefix ~ 'TYPE_BOOLEAN') %}
                                 cell: Oro.Datagrid.Cell.BooleanCell,
-                                width: 10,
+                                width: 10
+                            {% elseif column.type == constant(columnTypePrefix ~ 'TYPE_HTML') %}
+                                cell: Oro.Datagrid.Cell.HtmlCell
+                            {% elseif column.type == constant(columnTypePrefix ~ 'TYPE_OPTIONS') and column.getOption('choices') %}
+                                cell: Oro.Datagrid.Cell.SelectCell.extend({
+                                    choices: {{ column.getOption('choices')|json_encode|raw }}
+                                })
                             {% else %}
                                 cell: Oro.Datagrid.Cell.StringCell
                             {% endif %}
