@@ -151,55 +151,27 @@ class AddressManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testListQuery()
     {
-        $em = $this->getMockBuilder('Doctrine\ORM\EntityManager')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->class = 'Oro\Bundle\AddressBundle\Entity\Address';
-
-        $classMetaData = $this->getMockBuilder('Doctrine\ORM\Mapping\ClassMetadata')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $classMetaData
-            ->expects($this->once())
-            ->method('getName')
-            ->with()
-            ->will($this->returnValue($this->class));
-
-        $em
-            ->expects($this->once())
-            ->method('getClassMetadata')
-            ->with($this->equalTo($this->class))
-            ->will($this->returnValue($classMetaData));
-
-
-        $addressManager = new AddressManager($this->class, $em, $this->fm);
-
-        $qBuilder = $this->getMockBuilder('Doctrine\ORM\QueryBuilder')
+        $limit = 1;
+        $offset = 10;
+        $paginator = $this->getMockBuilder('Doctrine\ORM\Tools\Pagination\Paginator')
             ->disableOriginalConstructor()
             ->getMock();
 
-        $qBuilder->expects($this->once())
-            ->method('select')
-            ->with($this->equalTo('a'))
-            ->will($this->returnValue($qBuilder));
+        $repo = $this->getMockBuilder('Oro\Bundle\FlexibleEntityBundle\Entity\Repository\FlexibleEntityRepository')
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $qBuilder->expects($this->once())
-            ->method('from')
-            ->with($this->equalTo('OroAddressBundle:Address'), $this->equalTo('a'))
-            ->will($this->returnValue($qBuilder));
+        $repo->expects($this->once())
+            ->method('findByWithAttributesQB')
+            ->with(array(), null, array('id' => 'ASC'), $limit, $offset)
+            ->will($this->returnValue($paginator));
 
-        $qBuilder->expects($this->once())
-            ->method('orderBy')
-            ->with($this->equalTo('a.id'), $this->equalTo('ASC'))
-            ->will($this->returnValue($qBuilder));
-
-        $em
-            ->expects($this->once())
-            ->method('createQueryBuilder')
-            ->will($this->returnValue($qBuilder));
+        $this->fm->expects($this->once())
+            ->method('getFlexibleRepository')
+            ->will($this->returnValue($repo));
 
 
-        $addressManager->getListQuery();
+        $this->assertSame($paginator, $this->addressManager->getListQuery($limit, $offset));
     }
 
     /**

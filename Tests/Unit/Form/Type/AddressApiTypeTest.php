@@ -51,18 +51,6 @@ class AddressApiTypeTest extends \PHPUnit_Framework_TestCase
         $this->type->addEntityFields($builder);
     }
 
-    public function testAddDynamicAttributesFields()
-    {
-        /** @var FormBuilderInterface $builder */
-        $builder = $this->getMockBuilder('Symfony\Component\Form\FormBuilder')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $builder->expects($this->any())
-            ->method('add')
-            ->with('attributes', 'collection', $this->isType('array'));
-        $this->type->addDynamicAttributesFields($builder);
-    }
-
     public function testSetDefaultOptions()
     {
         /** @var OptionsResolverInterface $resolver */

@@ -147,7 +147,6 @@ class AddressManager implements StorageInterface
      */
     public function getListQuery($limit = 10, $offset = 1)
     {
-
         /** @var FlexibleEntityRepository $repository */
         $repository = $this->fm->getFlexibleRepository();
         return $repository->findByWithAttributesQB(array(), null, array('id' => 'ASC'), $limit, $offset);

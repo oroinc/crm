@@ -15,7 +15,7 @@ class AddressController extends FlexibleSoapController
      * @Soap\Method("getAddresses")
      * @Soap\Param("page", phpType="int")
      * @Soap\Param("limit", phpType="int")
-     * @Soap\Result(phpType = "Oro\Bundle\AddressBundle\Entity\AddressSoap[]")
+     * @Soap\Result(phpType = "Oro\Bundle\AddressBundle\Entity\Address[]")
      */
     public function cgetAction($page = 1, $limit = 10)
     {
@@ -25,7 +25,7 @@ class AddressController extends FlexibleSoapController
     /**
      * @Soap\Method("getAddress")
      * @Soap\Param("id", phpType = "int")
-     * @Soap\Result(phpType = "Oro\Bundle\AddressBundle\Entity\AddressSoap")
+     * @Soap\Result(phpType = "Oro\Bundle\AddressBundle\Entity\Address")
      */
     public function getAction($id)
     {
