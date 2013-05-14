@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\AccountBundle\Controller;
 
+use Oro\Bundle\SoapBundle\Entity\Manager\ApiFlexibleEntityManager;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -13,7 +14,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Oro\Bundle\UserBundle\Annotation\Acl;
 
 use Oro\Bundle\AccountBundle\Entity\Account;
-use Oro\Bundle\AccountBundle\Entity\Manager\AccountManager;
 use Oro\Bundle\AccountBundle\Datagrid\AccountDatagridManager;
 
 /**
@@ -23,6 +23,7 @@ use Oro\Bundle\AccountBundle\Datagrid\AccountDatagridManager;
  *      description="Account manipulation",
  *      parent="oro_account"
  * )
+ * @BackUrl("back", useSession=true)
  */
 class AccountController extends Controller
 {
@@ -58,7 +59,8 @@ class AccountController extends Controller
      */
     public function createAction()
     {
-        $account = $this->getManager()->createFlexible();
+        /** @var Account $account */
+        $account = $this->getManager()->createEntity();
         return $this->editAction($account);
     }
 
@@ -73,14 +75,14 @@ class AccountController extends Controller
      *      description="Edit account",
      *      parent="oro_account_account"
      * )
-     * @BackUrl("back")
      */
     public function editAction(Account $entity)
     {
-        $backUrl = $this->getRedirectUrl($this->generateUrl('oro_account_index'));
+        $backUrl = $this->generateUrl('oro_account_index');
 
         if ($this->get('oro_account.form.handler.account')->process($entity)) {
             $this->getFlashBag()->add('success', 'Account successfully saved');
+            BackUrl::triggerRedirect();
             return $this->redirect($backUrl);
         }
 
@@ -123,28 +125,6 @@ class AccountController extends Controller
     }
 
     /**
-     * Get redirect URLs
-     *
-     * @param  string $default
-     * @return string
-     */
-    protected function getRedirectUrl($default)
-    {
-        $flashBag = $this->getFlashBag();
-        if ($this->getRequest()->query->has('back')) {
-            $backUrl = $this->getRequest()->get('back');
-            $flashBag->set('backUrl', $backUrl);
-        } elseif ($flashBag->has('backUrl')) {
-            $backUrl = $flashBag->get('backUrl');
-            $backUrl = reset($backUrl);
-        } else {
-            $backUrl = null;
-        }
-
-        return $backUrl ? $backUrl : $default;
-    }
-
-    /**
      * @return FlashBag
      */
     protected function getFlashBag()
@@ -153,10 +133,10 @@ class AccountController extends Controller
     }
 
     /**
-     * @return AccountManager
+     * @return ApiFlexibleEntityManager
      */
     protected function getManager()
     {
-        return $this->get('oro_account.account.manager');
+        return $this->get('oro_account.account.manager.api');
     }
 }

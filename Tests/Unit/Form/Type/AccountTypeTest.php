@@ -20,7 +20,7 @@ class AccountTypeTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->type = new AccountType($flexibleManager,'oro_account');
+        $this->type = new AccountType($flexibleManager, 'oro_account');
     }
 
     public function testAddEntityFields()
@@ -45,7 +45,7 @@ class AccountTypeTest extends \PHPUnit_Framework_TestCase
 
         $builder->expects($this->once())
             ->method('add')
-            ->with('attributes', 'collection');
+            ->with('values', 'collection');
         $this->type->addDynamicAttributesFields($builder);
     }
 

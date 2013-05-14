@@ -1,5 +1,4 @@
 parameters:
-    oro_account.account.manager.class: Oro\Bundle\AccountBundle\Entity\Manager\AccountManager
     oro_account.account.manager.flexible.class: Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleManager
     oro_account.account.entity.class: Oro\Bundle\AccountBundle\Entity\Account
     oro_account.account.entity.value.class: Oro\Bundle\AccountBundle\Entity\Value\AccountValue
@@ -8,6 +7,9 @@ parameters:
     oro_account.handler.account.class: Oro\Bundle\AccountBundle\Form\Handler\AccountHandler
     oro_account.attribute_type.account.class: Oro\Bundle\AccountBundle\AttributeType\AccountType
     oro_account.form.type.account_select.class: Oro\Bundle\AccountBundle\Form\Type\AccountSelectType
+
+    oro_account.account.manager.api.class:  Oro\Bundle\SoapBundle\Entity\Manager\ApiFlexibleEntityManager
+    oro_account.type.account.api.class: Oro\Bundle\AccountBundle\Form\Type\AccountApiType
 
 services:
     oro_account.account.manager.flexible:
@@ -27,13 +29,6 @@ services:
             - [ addAttributeType, ['oro_address'] ]
         tags:
             - { name: oro_flexibleentity_manager, entity: %oro_account.account.entity.class%}
-
-    oro_account.account.manager:
-        class: %oro_account.account.manager.class%
-        arguments:
-            - %oro_account.account.entity.class%
-            - @doctrine.orm.entity_manager
-            - @oro_account.account.manager.flexible
 
     oro_account.form.account:
         class: Symfony\Component\Form\Form
@@ -78,3 +73,33 @@ services:
             - "oro_account_select"
         tags:
             - { name: oro_flexibleentity.attributetype, alias: oro_account_attribute_account }
+
+    # Account API
+    oro_account.account.manager.api:
+        class: %oro_account.account.manager.api.class%
+        arguments:
+            - %oro_account.account.entity.class%
+            - @doctrine.orm.entity_manager
+            - @oro_account.account.manager.flexible
+
+    oro_account.form.type.account.api:
+        class: %oro_account.type.account.api.class%
+        arguments:
+            - @oro_account.account.manager.flexible
+            - "oro_account_value"
+        tags:
+            - { name: form.type, alias: account }
+
+    oro_account.form.account.api:
+        class: Symfony\Component\Form\Form
+        factory_method: createNamed
+        factory_service: form.factory
+        arguments: ["account", "account", null]
+
+    oro_account.form.handler.account.api:
+        class: %oro_account.handler.account.class%
+        scope: request
+        arguments:
+            - @oro_account.form.account.api
+            - @request
+            - @doctrine.orm.entity_manager

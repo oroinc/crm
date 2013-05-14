@@ -2,30 +2,19 @@
 
 namespace Oro\Bundle\AccountBundle\Form\Type;
 
+use Oro\Bundle\UserBundle\Form\EventListener\PatchSubscriber;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-use Oro\Bundle\FlexibleEntityBundle\Form\Type\FlexibleType;
-
-class AccountType extends FlexibleType
+class AccountApiType extends AccountType
 {
     /**
      * {@inheritdoc}
      */
     public function addEntityFields(FormBuilderInterface $builder)
     {
-        // add default flexible fields
         parent::addEntityFields($builder);
-
-        // account fields
-        $builder->add(
-            'name',
-            'text',
-            array(
-                'label' => 'Name',
-                'required' => true,
-            )
-        );
+        $builder->addEventSubscriber(new PatchSubscriber());
     }
 
     /**
@@ -35,18 +24,19 @@ class AccountType extends FlexibleType
     {
         $resolver->setDefaults(
             array(
-                'data_class' => $this->flexibleClass,
-                'intention' => 'account',
+                'data_class'           => $this->flexibleClass,
+                'intention'            => 'account',
                 'extra_fields_message' => 'This form should not contain extra fields: "{{ extra_fields }}"',
+                'csrf_protection'      => false,
             )
         );
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritdoc}
      */
     public function getName()
     {
-        return 'oro_account';
+        return 'account';
     }
 }
