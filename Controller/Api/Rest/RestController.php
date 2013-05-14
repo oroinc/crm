@@ -75,11 +75,11 @@ abstract class RestController extends FOSRestController implements
         }
 
         if ($this->processForm($entity)) {
-            $item = $this->getPreparedItem($entity);
-            return new Response(json_encode($item), Codes::HTTP_OK);
+            $view = $this->view(null, Codes::HTTP_NO_CONTENT);
         } else {
-            return $this->handleView($this->view($this->getForm(), Codes::HTTP_BAD_REQUEST));
+            $view = $this->view($this->getForm(), Codes::HTTP_BAD_REQUEST);
         }
+        return $this->handleView($view);
     }
 
     /**

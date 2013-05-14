@@ -87,7 +87,7 @@ abstract class FlexibleRestController extends RestController
         $data = $request->get($requestVariable, array());
 
         $entityClass = ClassUtils::getRealClass(get_class($entity));
-        $data = $this->container->get('oro_soap.request')->getFixedData($entityClass, $data);
+        $data = $this->container->get('oro_soap.request')->getFixedAttributesData($entityClass, $data);
         $request->set($requestVariable, $data);
     }
 }

@@ -2,8 +2,9 @@
 
 namespace Oro\Bundle\SoapBundle\Entity;
 
-// TODO: Remove Collection and ContainerAware uses after all code will be refactored to use getFixedData()
+// TODO: Remove Collection and ContainerAware uses after BAP-721 implementation
 use Doctrine\Common\Collections\Collection;
+use Oro\Bundle\FlexibleEntityBundle\Model\FlexibleInterface;
 use Symfony\Component\DependencyInjection\ContainerAware;
 
 use Doctrine\Common\Persistence\ObjectRepository;
@@ -28,7 +29,7 @@ class RequestFix extends ContainerAware
     }
 
     /**
-     * @todo Remove this code
+     * @todo Remove this code after BAP-721 implementation
      * @deprecated This method will be removed after all code will be refactored to use getFixedData()
      * @param string $name
      */
@@ -59,7 +60,9 @@ class RequestFix extends ContainerAware
         $entityClass = ClassUtils::getRealClass(get_class($entity));
         $entityClass = str_replace('Soap', '', $entityClass);
 
-        $data = $this->getFixedData($entityClass, $data);
+        if ($entity instanceof FlexibleInterface) {
+            $data = $this->getFixedAttributesData($entityClass, $data, 'attributes');
+        }
 
         $request->request->set($name, $data);
     }
@@ -73,7 +76,7 @@ class RequestFix extends ContainerAware
      * @param string $requestAttributeKey
      * @return array
      */
-    public function getFixedData($entityClass, array $data, $attributeKey = 'values', $requestAttributeKey = 'attributes')
+    public function getFixedAttributesData($entityClass, array $data, $attributeKey = 'values', $requestAttributeKey = 'attributes')
     {
         /** @var ObjectRepository $attrRepository */
         $attrRepository = $this->managerRegistry

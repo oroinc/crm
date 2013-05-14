@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\SoapBundle\Controller\Api\Soap;
 
+use Doctrine\Common\Collections\Collection;
 use Oro\Bundle\SoapBundle\Controller\Api\ApiCrudInterface;
 use Oro\Bundle\SoapBundle\Controller\Api\EntityManagerAwareInterface;
 use Oro\Bundle\SoapBundle\Controller\Api\FormAwareInterface;
@@ -89,6 +90,7 @@ abstract class SoapController extends ContainerAware implements
      */
     protected function processForm($entity)
     {
+        $this->fixRequestAttributes($entity);
         if (!$this->getFormHandler()->process($entity)) {
             throw new \SoapFault('BAD_REQUEST', $this->getFormErrors($this->getForm()));
         }
@@ -116,5 +118,37 @@ abstract class SoapController extends ContainerAware implements
         }
 
         return $errors;
+    }
+
+    /**
+     * Convert SOAP request to format applicable for form.
+     *
+     * @param object $entity
+     */
+    protected function fixRequestAttributes($entity)
+    {
+        $request = $this->container->get('request');
+        $entityData = $request->get($this->getForm()->getName());
+        if (!is_object($entityData)) {
+            return;
+        }
+
+        $data = array();
+        foreach ((array)$entityData as $field => $value) {
+            // special case for ordered arrays
+            if ($value instanceof \stdClass && isset($value->item) && is_array($value->item)) {
+                $value = (array) $value->item;
+            }
+
+            if ($value instanceof Collection) {
+                $value = $value->toArray();
+            }
+
+            if (!is_null($value)) {
+                $data[preg_replace('/[^\w+]+/i', '', $field)] = $value;
+            }
+        }
+
+        $request->request->set($this->getForm()->getName(), $data);
     }
 }
