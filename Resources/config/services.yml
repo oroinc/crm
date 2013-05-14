@@ -4,9 +4,12 @@ parameters:
 
 services:
     oro_soap.request:
-        class:                        %oro_soap.request.class%
-        scope:                        request
-        arguments:                    ["@request", "@doctrine.orm.entity_manager"]
+        class: %oro_soap.request.class%
+        scope: request
+        calls:
+              - [ setContainer, [ @service_container ] ]
+        arguments:
+            - @oro_flexibleentity.registry
 
     besimple.soap.definition.loader.yml_file:
         class:                        %oro_soap.loader_yml.class%
