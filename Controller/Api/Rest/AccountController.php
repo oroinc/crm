@@ -9,7 +9,7 @@ use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Oro\Bundle\UserBundle\Annotation\Acl;
 use Oro\Bundle\UserBundle\Annotation\AclAncestor;
 
-use Symfony\Component\Form\Form;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Response;
 use FOS\RestBundle\Routing\ClassResourceInterface;
 use Oro\Bundle\SoapBundle\Form\Handler\ApiFormHandler;
@@ -70,7 +70,7 @@ class AccountController extends FlexibleRestController implements ClassResourceI
      */
     public function putAction($id)
     {
-        return $this->handlePutRequest($id);
+        return $this->handleUpdateRequest($id);
     }
 
     /**
@@ -84,7 +84,7 @@ class AccountController extends FlexibleRestController implements ClassResourceI
      */
     public function postAction()
     {
-        return $this->handlePostRequest();
+        return $this->handleCreateRequest();
     }
 
     /**
@@ -114,15 +114,15 @@ class AccountController extends FlexibleRestController implements ClassResourceI
      *
      * @return ApiFlexibleEntityManager
      */
-    protected function getManager()
+    public function getManager()
     {
         return $this->get('oro_account.account.manager.api');
     }
 
     /**
-     * @return Form
+     * @return FormInterface
      */
-    protected function getForm()
+    public function getForm()
     {
         return $this->get('oro_account.form.type.account.api');
     }
@@ -130,7 +130,7 @@ class AccountController extends FlexibleRestController implements ClassResourceI
     /**
      * @return ApiFormHandler
      */
-    protected function getFormHandler()
+    public function getFormHandler()
     {
         return $this->get('oro_account.form.handler.account.api');
     }

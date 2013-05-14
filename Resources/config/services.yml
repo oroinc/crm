@@ -1,5 +1,4 @@
 parameters:
-    oro_account.account.manager.class: Oro\Bundle\AccountBundle\Entity\Manager\AccountManager
     oro_account.account.manager.flexible.class: Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleManager
     oro_account.account.entity.class: Oro\Bundle\AccountBundle\Entity\Account
     oro_account.account.entity.value.class: Oro\Bundle\AccountBundle\Entity\Value\AccountValue
@@ -30,13 +29,6 @@ services:
             - [ addAttributeType, ['oro_address'] ]
         tags:
             - { name: oro_flexibleentity_manager, entity: %oro_account.account.entity.class%}
-
-    oro_account.account.manager:
-        class: %oro_account.account.manager.class%
-        arguments:
-            - %oro_account.account.entity.class%
-            - @doctrine.orm.entity_manager
-            - @oro_account.account.manager.flexible
 
     oro_account.form.account:
         class: Symfony\Component\Form\Form
@@ -89,7 +81,6 @@ services:
             - %oro_account.account.entity.class%
             - @doctrine.orm.entity_manager
             - @oro_account.account.manager.flexible
-
 
     oro_account.form.type.account.api:
         class: %oro_account.type.account.api.class%
