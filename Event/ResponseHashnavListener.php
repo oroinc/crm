@@ -2,7 +2,6 @@
 namespace Oro\Bundle\NavigationBundle\Event;
 
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
-use Symfony\Component\HttpKernel\Event\GetResponseForControllerResultEvent;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\SecurityContextInterface;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
@@ -34,13 +33,14 @@ class ResponseHashnavListener
         $response = $event->getResponse();
 
         if (($request->get('x-oro-hash-navigation') || $request->headers->get('x-oro-hash-navigation'))
-            && $response->getStatusCode() == 302
+            && $response->isRedirect()
         ) {
-            $event->setResponse($this->templating->renderResponse(
+            $event->setResponse(
+                $this->templating->renderResponse(
                     'OroNavigationBundle:HashNav:redirect.html.twig',
                     array(
-                         'token' => $this->security->getToken(),
-                         'location' =>  $response->headers->get('location')
+                         'token'    => $this->security->getToken(),
+                         'location' => $response->headers->get('location')
                     )
                 )
             );
