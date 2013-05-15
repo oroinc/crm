@@ -33,7 +33,7 @@ Oro.Datagrid.Cell.StringCell = Backgrid.StringCell.extend({
      * @inheritDoc
      */
     exitEditMode: function (e) {
-        if (this.editable) {
+        if (this.column.get("editable")) {
             this.trigger("edited", this);
         }
         return Backgrid.StringCell.prototype.exitEditMode.apply(this, arguments);

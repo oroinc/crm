@@ -52,7 +52,7 @@ class TwigTemplatePropertyTest extends \PHPUnit_Framework_TestCase
     {
         // mocks
         $record = $this->getMockForAbstractClass(
-            '\Oro\Bundle\GridBundle\Datagrid\ResultRecordInterface',
+            'Oro\Bundle\GridBundle\Datagrid\ResultRecordInterface',
             array(),
             '',
             false,
@@ -66,7 +66,7 @@ class TwigTemplatePropertyTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(self::TEST_FIELD_VALUE));
 
         $template = $this->getMockForAbstractClass(
-            '\Twig_TemplateInterface',
+            'Twig_TemplateInterface',
             array(),
             '',
             false,
@@ -84,7 +84,7 @@ class TwigTemplatePropertyTest extends \PHPUnit_Framework_TestCase
             ->with($expectedContext)
             ->will($this->returnValue(self::TEST_RENDERED_TEMPLATE));
 
-        $environment = $this->getMock('\Twig_Environment', array('loadTemplate'));
+        $environment = $this->getMock('Twig_Environment', array('loadTemplate'));
         $environment->expects($this->once())
             ->method('loadTemplate')
             ->with(self::TEST_TEMPLATE_NAME)

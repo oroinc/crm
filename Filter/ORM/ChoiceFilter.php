@@ -19,9 +19,6 @@ class ChoiceFilter extends AbstractFilter
         }
 
         $operator = $this->getOperator($data['type']);
-        if (!is_array($data['value'])) {
-            $data['value'] = array($data['value']);
-        }
 
         if ('IN' == $operator) {
             $expression = $this->getExpressionFactory()->in(
@@ -45,6 +42,10 @@ class ChoiceFilter extends AbstractFilter
     {
         if (!is_array($data) || !array_key_exists('value', $data) || !$data['value']) {
             return false;
+        }
+
+        if (!is_array($data['value'])) {
+            $data['value'] = array($data['value']);
         }
 
         $data['type'] = isset($data['type']) ? $data['type'] : null;

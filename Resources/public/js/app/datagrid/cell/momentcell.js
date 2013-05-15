@@ -32,7 +32,7 @@ Oro.Datagrid.Cell.MomentCell = Backgrid.Extension.MomentCell.extend({
      * @inheritDoc
      */
     exitEditMode: function (e) {
-        if (this.editable) {
+        if (this.column.get("editable")) {
             this.trigger("edited", this);
         }
         return Backgrid.Extension.MomentCell.prototype.exitEditMode.apply(this, arguments);

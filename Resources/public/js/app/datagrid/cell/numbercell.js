@@ -28,7 +28,7 @@ Oro.Datagrid.Cell.NumberCell = Backgrid.NumberCell.extend({
      * @inheritDoc
      */
     exitEditMode: function (e) {
-        if (this.editable) {
+        if (this.column.get("editable")) {
             this.trigger("edited", this);
         }
         return Backgrid.NumberCell.prototype.exitEditMode.apply(this, arguments);

@@ -18,6 +18,11 @@ class TwigTemplateProperty extends AbstractProperty implements TwigPropertyInter
     protected $templateName;
 
     /**
+     * @var \Twig_TemplateInterface
+     */
+    protected $template;
+
+    /**
      * @var FieldDescriptionInterface
      */
     protected $field;
@@ -42,7 +47,6 @@ class TwigTemplateProperty extends AbstractProperty implements TwigPropertyInter
 
     /**
      * @param \Twig_Environment $environment
-     * @return null
      */
     public function setEnvironment(\Twig_Environment $environment)
     {
@@ -50,21 +54,31 @@ class TwigTemplateProperty extends AbstractProperty implements TwigPropertyInter
     }
 
     /**
+     * @return \Twig_TemplateInterface
+     */
+    protected function getTemplate()
+    {
+        if (!$this->template) {
+            $this->template = $this->environment->loadTemplate($this->templateName);
+        }
+
+        return $this->template;
+    }
+
+    /**
      * Render field template
      *
      * @param ResultRecordInterface $record
      * @return string
-     * @throws \LogicException
      */
     public function getValue(ResultRecordInterface $record)
     {
-        $template = $this->environment->loadTemplate($this->templateName);
         $context = array(
             'field'  => $this->field,
             'record' => $record,
             'value'  => $record->getValue($this->getName()),
         );
 
-        return $template->render($context);
+        return $this->getTemplate()->render($context);
     }
 }
