@@ -39,6 +39,7 @@ abstract class AbstractAttributeType implements AttributeTypeInterface
     const BACKEND_TYPE_MEDIA    = 'media';
     const BACKEND_TYPE_METRIC   = 'metric';
     const BACKEND_TYPE_PRICE    = 'price';
+    const BACKEND_TYPE_PHONE    = 'phones';
 
     /**
      * Field backend type, "varchar" by default, the doctrine mapping field, getter / setter to use for binding

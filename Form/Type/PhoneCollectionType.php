@@ -12,10 +12,15 @@ class PhoneCollectionType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('id', 'hidden');
-        $builder->add('area_code', 'text');
-        $builder->add('phone', 'text');
-        $builder->add('type', 'text');
+        $builder->add('phones', 'collection', array(
+            'type'           => new PhoneType(),
+            'allow_add'      => true,
+            'allow_delete'   => true,
+            'by_reference'   => false,
+            'prototype'      => true,
+            'prototype_name' => 'tag__name__',
+            'label'          => ' '
+        ));
     }
 
     /**

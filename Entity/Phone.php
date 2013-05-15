@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\AddressBundle\Entity;
+namespace Oro\Bundle\FlexibleEntityBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -106,10 +106,13 @@ class Phone
 
     /**
      * @param string $area_code
+     * @return Phone
      */
     public function setAreaCode($area_code)
     {
         $this->area_code = $area_code;
+
+        return $this;
     }
 
     /**
