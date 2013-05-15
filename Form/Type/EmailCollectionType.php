@@ -11,15 +11,20 @@ class EmailCollectionType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('emails', 'collection', array(
-            'type'           => new EmailType(),
-            'allow_add'      => true,
-            'allow_delete'   => true,
-            'by_reference'   => false,
-            'prototype'      => true,
-            'prototype_name' => 'tag__name__',
-            'label'          => ' '
-        ));
+        $builder->add(
+            'emails',
+            'collection',
+            array(
+                'type'           => new EmailType(),
+
+                'allow_add'      => true,
+                'allow_delete'   => true,
+                'by_reference'   => false,
+                'prototype'      => true,
+                'prototype_name' => '__name__',
+                'label'          => ' '
+            )
+        );
     }
 
     /**

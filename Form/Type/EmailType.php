@@ -15,11 +15,15 @@ class EmailType extends AbstractType
     {
         $builder->add('id', 'hidden');
         $builder->add('data', 'email');
-        $builder->add('type', 'choice', array(
-            'empty_value'   => 'Choose email type...',
-            'empty_data'    => null,
-            'choice_list'   => new ChoiceList(array_keys(self::getEmailTypes()), array_values(self::getEmailTypes()))
-        ));
+        $builder->add(
+            'type',
+            'choice',
+            array(
+                'empty_value'   => 'Choose email type...',
+                'empty_data'    => null,
+                'choice_list'   => new ChoiceList(array_keys(self::getEmailTypes()), array_values(self::getEmailTypes()))
+            )
+        );
     }
 
     /**

@@ -30,7 +30,7 @@ class PhoneCollectionType extends AbstractType
     {
         $resolver->setDefaults(
             array(
-                'data_class' => 'Oro\Bundle\FlexibleEntityBundle\Entity\Phone'
+                'data_class'  => 'Oro\Bundle\FlexibleEntityBundle\Entity\Phone'
             )
         );
     }
