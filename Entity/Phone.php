@@ -18,7 +18,6 @@ class Phone
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
-     * @Soap\ComplexType("int", nillable=true)
      */
     protected $id;
 
@@ -26,7 +25,6 @@ class Phone
      * @var string
      *
      * @ORM\Column(name="phone", type="string", length=50)
-     * @Soap\ComplexType("string", nillable=true)
      */
     private $phone;
 
@@ -34,7 +32,6 @@ class Phone
      * @var string
      *
      * @ORM\Column(name="area_code", type="string", length=10)
-     * @Soap\ComplexType("string", nillable=true)
      */
     private $area_code;
 
@@ -42,7 +39,6 @@ class Phone
      * @var string
      *
      * @ORM\Column(name="type", type="string", length=50)
-     * @Soap\ComplexType("string", nillable=true)
      */
     private $type;
 
