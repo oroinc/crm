@@ -1,5 +1,5 @@
 <?php
-namespace Oro\Bundle\AddressBundle\AttributeType;
+namespace Oro\Bundle\FlexibleEntityBundle\AttributeType;
 
 use Oro\Bundle\FlexibleEntityBundle\AttributeType\AbstractAttributeType;
 use Oro\Bundle\FlexibleEntityBundle\Model\FlexibleValueInterface;
