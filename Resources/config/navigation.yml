@@ -3,6 +3,8 @@ oro_menu_config:
         user_tab:
             label: 'Users'
             uri: '#'
+            extras:
+                routes: ['oro_user_*']
         user_list:
             label: 'Users'
             route: 'oro_user_index'
