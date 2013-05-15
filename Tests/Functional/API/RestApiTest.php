@@ -2,9 +2,8 @@
 
 namespace Oro\Bundle\WindowsBundle\Tests\Functional\API;
 
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Acme\Bundle\TestsBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
-
 use Acme\Bundle\TestsBundle\Test\ToolsAPI;
 
 class RestApiTest extends WebTestCase
