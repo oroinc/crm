@@ -7,13 +7,6 @@ use Oro\Bundle\NavigationBundle\Menu\Matcher\Voter\RoutePatternVoter;
 
 class RoutePatternVoterTest extends \PHPUnit_Framework_TestCase
 {
-    protected function setUp()
-    {
-        if (!class_exists('Symfony\Component\HttpFoundation\Request')) {
-            $this->markTestSkipped('The Symfony HttpFoundation component is not available.');
-        }
-    }
-
     public function testMatchingWithoutRequest()
     {
         $item = $this->getMock('Knp\Menu\ItemInterface');

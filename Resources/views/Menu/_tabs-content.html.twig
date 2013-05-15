@@ -13,7 +13,7 @@
             {% set displayable = item.extras.isAllowed or showNonAuthorized %}
             {% if displayable and item.hasChildren and item.displayChildren %}
                 {% set tabClasses = ['tab-pane'] %}
-                {% set tabClasses = matcher.isAncestor(item, 2) ? [options.ancestorClass] : tabClasses %}
+                {% set tabClasses = matcher.isAncestor(item, 2) ? tabClasses|merge([options.ancestorClass]) : tabClasses %}
                 {% set tabClasses = matcher.isCurrent(item) ? tabClasses|merge([options.currentClass]) : tabClasses %}
                 <div class="{{ tabClasses|join(' ')  }}"
                      id="{{- item.name|replace({' ': '_', '#': '_'})|lower|trim -}}">
