@@ -3,18 +3,21 @@ oro_menu_config:
         user_tab:
             label: 'Users'
             uri: '#'
-            extras:
-                routes: ['oro_user_*']
         user_list:
             label: 'Users'
             route: 'oro_user_index'
+            extras:
+                routes: ['/^oro_user_(?!role\w+|group\w+)\w+$/']
         user_roles:
             label: 'Roles'
             route: 'oro_user_role_index'
+            extras:
+                routes: ['oro_user_role_*']
         user_groups:
             label: 'Groups'
             route: 'oro_user_group_index'
-
+            extras:
+                routes: ['oro_user_group_*']
         shortcut_new_user:
             label: Create New User
             route: oro_user_create
