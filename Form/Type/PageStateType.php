@@ -14,12 +14,20 @@ class PageStateType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('pageId', 'text', array(
-                'required' => true,
-            ))
-            ->add('data', 'textarea', array(
-                'required' => true,
-            ));
+            ->add(
+                'pageId',
+                'text',
+                array(
+                    'required' => true,
+                )
+            )
+            ->add(
+                'data',
+                'textarea',
+                array(
+                    'required' => true,
+                )
+            );
     }
 
     /**
@@ -27,11 +35,13 @@ class PageStateType extends AbstractType
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $resolver->setDefaults(array(
-            'data_class'      => 'Oro\Bundle\NavigationBundle\Entity\PageState',
-            'intention'       => 'pagestate',
-            'csrf_protection' => false,
-        ));
+        $resolver->setDefaults(
+            array(
+                'data_class'      => 'Oro\Bundle\NavigationBundle\Entity\PageState',
+                'intention'       => 'pagestate',
+                'csrf_protection' => false,
+            )
+        );
     }
 
     /**

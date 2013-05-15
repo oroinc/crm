@@ -60,26 +60,28 @@ class AsseticTokenParserTest extends \PHPUnit_Framework_TestCase
 
         $startToken = new Twig_Token(Twig_Token::NAME_TYPE, 'oro_css', 31);
 
-        $stream = new Twig_TokenStream(array(
-            new Twig_Token(Twig_Token::NAME_TYPE, 'filter', 31),
-            new Twig_Token(Twig_Token::OPERATOR_TYPE, '=', 31),
-            new Twig_Token(Twig_Token::STRING_TYPE, 'cssrewrite, lessphp, ?yui_css', 31),
-            new Twig_Token(Twig_Token::NAME_TYPE, 'debug', 31),
-            new Twig_Token(Twig_Token::OPERATOR_TYPE, '=', 31),
-            new Twig_Token(Twig_Token::NAME_TYPE, 'false', 31),
-            new Twig_Token(Twig_Token::NAME_TYPE, 'combine', 31),
-            new Twig_Token(Twig_Token::OPERATOR_TYPE, '=', 31),
-            new Twig_Token(Twig_Token::NAME_TYPE, 'false', 31),
-            new Twig_Token(Twig_Token::NAME_TYPE, 'output', 31),
-            new Twig_Token(Twig_Token::OPERATOR_TYPE, '=', 31),
-            new Twig_Token(Twig_Token::STRING_TYPE, 'css/oro_app.css', 31),
-            new Twig_Token(Twig_Token::BLOCK_END_TYPE, '', 31),
-            new Twig_Token(Twig_Token::BLOCK_END_TYPE, '', 32),
-            new Twig_Token(Twig_Token::BLOCK_START_TYPE, '', 33),
-            new Twig_Token(Twig_Token::NAME_TYPE, 'endoro_css', 33),
-            new Twig_Token(Twig_Token::BLOCK_END_TYPE, '', 33),
-            new Twig_Token(Twig_Token::EOF_TYPE, '', 31),
-        ));
+        $stream = new Twig_TokenStream(
+            array(
+                new Twig_Token(Twig_Token::NAME_TYPE, 'filter', 31),
+                new Twig_Token(Twig_Token::OPERATOR_TYPE, '=', 31),
+                new Twig_Token(Twig_Token::STRING_TYPE, 'cssrewrite, lessphp, ?yui_css', 31),
+                new Twig_Token(Twig_Token::NAME_TYPE, 'debug', 31),
+                new Twig_Token(Twig_Token::OPERATOR_TYPE, '=', 31),
+                new Twig_Token(Twig_Token::NAME_TYPE, 'false', 31),
+                new Twig_Token(Twig_Token::NAME_TYPE, 'combine', 31),
+                new Twig_Token(Twig_Token::OPERATOR_TYPE, '=', 31),
+                new Twig_Token(Twig_Token::NAME_TYPE, 'false', 31),
+                new Twig_Token(Twig_Token::NAME_TYPE, 'output', 31),
+                new Twig_Token(Twig_Token::OPERATOR_TYPE, '=', 31),
+                new Twig_Token(Twig_Token::STRING_TYPE, 'css/oro_app.css', 31),
+                new Twig_Token(Twig_Token::BLOCK_END_TYPE, '', 31),
+                new Twig_Token(Twig_Token::BLOCK_END_TYPE, '', 32),
+                new Twig_Token(Twig_Token::BLOCK_START_TYPE, '', 33),
+                new Twig_Token(Twig_Token::NAME_TYPE, 'endoro_css', 33),
+                new Twig_Token(Twig_Token::BLOCK_END_TYPE, '', 33),
+                new Twig_Token(Twig_Token::EOF_TYPE, '', 31),
+            )
+        );
 
         $bodyNode = $this->getMockBuilder('\Twig_Node')
             ->disableOriginalConstructor()
@@ -117,11 +119,13 @@ class AsseticTokenParserTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $brokenStream = new Twig_TokenStream(array(
-            new Twig_Token(Twig_Token::NAME_TYPE, 'bad', 31),
-            new Twig_Token(Twig_Token::OPERATOR_TYPE, '=', 31),
-            new Twig_Token(Twig_Token::STRING_TYPE, 'bad value', 31),
-        ));
+        $brokenStream = new Twig_TokenStream(
+            array(
+                new Twig_Token(Twig_Token::NAME_TYPE, 'bad', 31),
+                new Twig_Token(Twig_Token::OPERATOR_TYPE, '=', 31),
+                new Twig_Token(Twig_Token::STRING_TYPE, 'bad value', 31),
+            )
+        );
 
         $parser->expects($this->once())
             ->method('getStream')

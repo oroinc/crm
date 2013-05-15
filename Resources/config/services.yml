@@ -17,6 +17,7 @@ parameters:
     oro_navigation.event.response_history.listener.class:      Oro\Bundle\NavigationBundle\Event\ResponseHistoryListener
 
     oro_navigation.menu.matcher.voter.request:                 Oro\Bundle\NavigationBundle\Menu\Matcher\Voter\RequestVoter
+    oro_navigation.menu.matcher.voter.routepattern:            Oro\Bundle\NavigationBundle\Menu\Matcher\Voter\RoutePatternVoter
 
     oro_navigation.title_service.class:                        Oro\Bundle\NavigationBundle\Provider\TitleService
     oro_navigation.title_service.twig.extension.class:         Oro\Bundle\NavigationBundle\Twig\TitleExtension
@@ -150,6 +151,10 @@ services:
         tags:
             - { name: knp_menu.voter, request: true }
 
+    knp_menu.voter.router:
+        class: %oro_navigation.menu.matcher.voter.routepattern%
+        tags:
+            - { name: knp_menu.voter, request: true }
 
     kernel.listener.nav_history_response:
         class: %oro_navigation.event.response_history.listener.class%

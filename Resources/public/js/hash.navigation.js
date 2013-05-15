@@ -118,7 +118,7 @@ Oro.Navigation = Backbone.Router.extend({
      * @param {String} url
      */
     setActiveMenu: function (url) {
-        $('.application-menu a').parents('li').removeClass('active');
+        $('.application-menu:eq(1) a').parents('li').removeClass('active'); // handle only tabs content
         var li = $('.application-menu a[href="' + url + '"]').parents('li');
         li.addClass('active');
         var tabId = li.parents('.tab-pane').attr('id');
