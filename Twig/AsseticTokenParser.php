@@ -6,7 +6,6 @@ use Assetic\Asset\AssetInterface;
 use Assetic\Factory\AssetFactory;
 use Symfony\Bundle\AsseticBundle\Twig\AsseticNode;
 
-
 class AsseticTokenParser extends \Twig_TokenParser
 {
     /**
@@ -67,11 +66,14 @@ class AsseticTokenParser extends \Twig_TokenParser
                 $attributes['combine'] = $this->parseValue($stream);
             } else {
                 $token = $stream->getCurrent();
-                throw new \Twig_Error_Syntax(sprintf(
-                    'Unexpected token "%s" of value "%s"',
-                    \Twig_Token::typeToEnglish($token->getType(), $token->getLine()),
-                    $token->getValue()
-                ), $token->getLine());
+                throw new \Twig_Error_Syntax(
+                    sprintf(
+                        'Unexpected token "%s" of value "%s"',
+                        \Twig_Token::typeToEnglish($token->getType(), $token->getLine()),
+                        $token->getValue()
+                    ),
+                    $token->getLine()
+                );
             }
         }
 
