@@ -41,6 +41,15 @@ class TwigTemplateProperty extends AbstractProperty implements TwigPropertyInter
     }
 
     /**
+     * @param \Twig_Environment $environment
+     * @return null
+     */
+    public function setEnvironment(\Twig_Environment $environment)
+    {
+        $this->environment = $environment;
+    }
+
+    /**
      * Render field template
      *
      * @param ResultRecordInterface $record
@@ -53,18 +62,9 @@ class TwigTemplateProperty extends AbstractProperty implements TwigPropertyInter
         $context = array(
             'field'  => $this->field,
             'record' => $record,
-            'data'   => $record->getValue($this->getName()),
+            'value'  => $record->getValue($this->getName()),
         );
 
         return $template->render($context);
-    }
-
-    /**
-     * @param \Twig_Environment $environment
-     * @return null
-     */
-    public function setEnvironment(\Twig_Environment $environment)
-    {
-        $this->environment = $environment;
     }
 }

@@ -8,15 +8,26 @@ use Oro\Bundle\GridBundle\Filter\ORM\ChoiceFilter;
 class ChoiceFilterTest extends FilterTestCase
 {
     /**
+     * @var ChoiceFilter
+     */
+    protected $model;
+
+    /**
      * @var array
      */
     protected $testChoices = array('key1' => 'value1', 'key2' => 'value2');
 
+    /**
+     * @return ChoiceFilter
+     */
     protected function createTestFilter()
     {
         return new ChoiceFilter($this->getTranslatorMock());
     }
 
+    /**
+     * @return array
+     */
     public function getOperatorDataProvider()
     {
         return array(
@@ -26,6 +37,20 @@ class ChoiceFilterTest extends FilterTestCase
         );
     }
 
+    /**
+     * @dataProvider getOperatorDataProvider
+     *
+     * @param mixed $type
+     * @param string $expected
+     */
+    public function testGetOperator($type, $expected)
+    {
+        $this->assertEquals($expected, $this->model->getOperator($type));
+    }
+
+    /**
+     * @return array
+     */
     public function filterDataProvider()
     {
         return array(
@@ -84,6 +109,9 @@ class ChoiceFilterTest extends FilterTestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function getRenderSettingsDataProvider()
     {
         return array(

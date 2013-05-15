@@ -71,6 +71,14 @@ class FieldPropertyTest extends \PHPUnit_Framework_TestCase
                     array('type' => FieldDescription::TYPE_INTEGER, 'field_name' => 'integerFieldName')
                 )
             ),
+            'boolean field type' => array(
+                true,
+                $this->createRecord(array('booleanFieldName' => '1')),
+                $this->createFieldDescription(
+                    'fieldBoolean',
+                    array('type' => FieldDescription::TYPE_BOOLEAN, 'field_name' => 'booleanFieldName')
+                )
+            ),
             'date field type' => array(
                 '2013-01-01T13:00:00+0200',
                 $this->createRecord(array('dateFieldName' => new \DateTime('2013-01-01 13:00:00+0200'))),

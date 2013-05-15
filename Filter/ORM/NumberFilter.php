@@ -93,7 +93,6 @@ class NumberFilter extends AbstractFilter
             case FieldDescriptionInterface::TYPE_INTEGER:
             default:
                 $formOptions['data_type'] = NumberFilterType::DATA_INTEGER;
-                break;
         }
 
         return array($formType, $formOptions);

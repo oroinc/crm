@@ -8,11 +8,19 @@ use Oro\Bundle\GridBundle\Filter\ORM\NumberFilter;
 
 class NumberFilterTest extends FilterTestCase
 {
+    /**
+     * @var NumberFilter
+     */
+    protected $model;
+
     protected function createTestFilter()
     {
         return new NumberFilter($this->getTranslatorMock());
     }
 
+    /**
+     * @return array
+     */
     public function getOperatorDataProvider()
     {
         return array(
@@ -25,6 +33,20 @@ class NumberFilterTest extends FilterTestCase
         );
     }
 
+    /**
+     * @dataProvider getOperatorDataProvider
+     *
+     * @param mixed $type
+     * @param string $expected
+     */
+    public function testGetOperator($type, $expected)
+    {
+        $this->assertEquals($expected, $this->model->getOperator($type));
+    }
+
+    /**
+     * @return array
+     */
     public function filterDataProvider()
     {
         return array(
@@ -66,6 +88,9 @@ class NumberFilterTest extends FilterTestCase
         $this->assertEquals(array('form_type' => NumberFilterType::NAME), $this->model->getDefaultOptions());
     }
 
+    /**
+     * @return array
+     */
     public function getRenderSettingsDataProvider()
     {
         return array(

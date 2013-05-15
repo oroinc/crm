@@ -7,11 +7,17 @@ use Oro\Bundle\GridBundle\Filter\ORM\BooleanFilter;
 
 class BooleanFilterTest extends FilterTestCase
 {
+    /**
+     * @return BooleanFilter
+     */
     protected function createTestFilter()
     {
         return new BooleanFilter($this->getTranslatorMock());
     }
 
+    /**
+     * @return array
+     */
     public function filterDataProvider()
     {
         $fieldExpression   = self::TEST_ALIAS . '.' . self::TEST_FIELD;
@@ -93,10 +99,5 @@ class BooleanFilterTest extends FilterTestCase
             ),
             $this->model->getDefaultOptions()
         );
-    }
-
-    public function testGetOperator()
-    {
-        // do nothing as getOperator method not exist in this class
     }
 }

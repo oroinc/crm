@@ -7,11 +7,17 @@ use Oro\Bundle\GridBundle\Filter\ORM\StringFilter;
 
 class StringFilterTest extends FilterTestCase
 {
+    /**
+     * @return StringFilter
+     */
     protected function createTestFilter()
     {
         return new StringFilter($this->getTranslatorMock());
     }
 
+    /**
+     * @return array
+     */
     public function getOperatorDataProvider()
     {
         return array(
@@ -22,6 +28,20 @@ class StringFilterTest extends FilterTestCase
         );
     }
 
+    /**
+     * @dataProvider getOperatorDataProvider
+     *
+     * @param mixed $type
+     * @param string $expected
+     */
+    public function testGetOperator($type, $expected)
+    {
+        $this->assertEquals($expected, $this->model->getOperator($type));
+    }
+
+    /**
+     * @return array
+     */
     public function filterDataProvider()
     {
         return array(

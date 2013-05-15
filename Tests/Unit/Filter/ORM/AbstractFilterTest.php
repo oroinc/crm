@@ -30,6 +30,9 @@ class AbstractFilterTest extends \PHPUnit_Framework_TestCase
         unset($this->model);
     }
 
+    /**
+     * @return array
+     */
     public function getRenderSettingsDataProvider()
     {
         return array(
