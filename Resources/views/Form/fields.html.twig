@@ -76,3 +76,15 @@
     <label{% for attrname, attrvalue in label_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>{{ label|trans({}, translation_domain)|capitalize }}</label>
 {% endspaceless %}
 {% endblock form_label %}
+
+{% block oro_flexibleentity_email_collection_widget %}
+    {% import 'OroUserBundle::macros.html.twig' as macros %}
+    <div class="row-oro">
+        <div id="email-fields-list" data-prototype="{{ macros.collection_prototype(form.emails)|escape }}">
+            {% for emailField in form.emails.children %}
+                {{ macros.collection_prototype(emailField) }}
+            {% endfor %}
+        </div>
+        <a class="btn" href="javascript: void(0);" id="add-another-email">{{ 'Add another email'|trans }}</a>
+    </div>
+{%  endblock oro_flexibleentity_email_collection_widget %}
