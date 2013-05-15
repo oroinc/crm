@@ -11,7 +11,7 @@ oro_contact_api:
         version:  latest
 
 oro_contact_group_api:
-    resource:     "@OroContactBundle/Controller/Api/Rest/GroupController.php"
+    resource:     "@OroContactBundle/Controller/Api/Rest/ContactGroupController.php"
     type:         rest
     prefix:       api/rest/{version}/
     defaults:

@@ -9,7 +9,7 @@ use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Oro\Bundle\UserBundle\Annotation\Acl;
 use Oro\Bundle\UserBundle\Annotation\AclAncestor;
 
-use Symfony\Component\Form\Form;
+use Symfony\Component\Form\Tests\FormInterface;
 use Symfony\Component\HttpFoundation\Response;
 use FOS\RestBundle\Routing\ClassResourceInterface;
 use Oro\Bundle\SoapBundle\Form\Handler\ApiFormHandler;
@@ -20,7 +20,7 @@ use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
  * @RouteResource("contactgroup")
  * @NamePrefix("oro_api_")
  */
-class GroupController extends RestController implements ClassResourceInterface
+class ContactGroupController extends RestController implements ClassResourceInterface
 {
     /**
      * REST GET list
