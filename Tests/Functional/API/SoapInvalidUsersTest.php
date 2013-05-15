@@ -2,8 +2,7 @@
 
 namespace Oro\Bundle\UserBundle\Tests\Functional\API;
 
-use Ddeboer\DataImport\Tests\Reader\ExcelReaderTest;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Acme\Bundle\TestsBundle\Test\WebTestCase;
 use Acme\Bundle\TestsBundle\Test\ToolsAPI;
 use Acme\Bundle\TestsBundle\Test\Client;
 

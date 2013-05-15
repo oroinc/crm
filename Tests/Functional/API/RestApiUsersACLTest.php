@@ -2,12 +2,13 @@
 
 namespace Oro\Bundle\UserBundle\Tests\Functional\API;
 
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Acme\Bundle\TestsBundle\Test\WebTestCase;
 use Acme\Bundle\TestsBundle\Test\ToolsAPI;
 use Acme\Bundle\TestsBundle\Test\Client;
 
 /**
  * @outputBuffering enabled
+ * @db_isolation
  */
 class RestApiUsersACLTest extends WebTestCase
 {
@@ -30,24 +31,9 @@ class RestApiUsersACLTest extends WebTestCase
             ToolsAPI::generateWsseHeader(self::USER_NAME, self::USER_PASSWORD)
         );
         if (!self::$hasLoaded) {
-            //rebuild indexes before tests
-            $kernel = $this->client->getKernel();
-            $application = new \Symfony\Bundle\FrameworkBundle\Console\Application($kernel);
-            $application->setAutoExit(false);
-            $options = array('command' => 'oro:search:reindex');
-            $options['--env'] = "test";
-            $options['--quiet'] = null;
-            $application->run(new \Symfony\Component\Console\Input\ArrayInput($options));
-
-            $this->client->startTransaction();
             $this->client->appendFixtures(__DIR__ . DIRECTORY_SEPARATOR . 'DataFixtures');
         }
         self::$hasLoaded = true;
-    }
-
-    public static function tearDownAfterClass()
-    {
-        Client::rollbackTransaction();
     }
 
     public function testApiCreateUser()
