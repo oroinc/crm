@@ -3,7 +3,6 @@ namespace Oro\Bundle\AddressBundle\AttributeType;
 
 use Oro\Bundle\FlexibleEntityBundle\AttributeType\AbstractAttributeType;
 use Oro\Bundle\FlexibleEntityBundle\Model\FlexibleValueInterface;
-use Doctrine\ORM\EntityRepository;
 
 class PhoneCollectionType extends AbstractAttributeType
 {
@@ -24,6 +23,6 @@ class PhoneCollectionType extends AbstractAttributeType
      */
     public function getName()
     {
-        return 'oro_address_phone_collection';
+        return 'oro_flexibleentity_phone_collection';
     }
 }

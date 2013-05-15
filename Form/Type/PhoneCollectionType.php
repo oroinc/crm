@@ -1,5 +1,5 @@
 <?php
-namespace Oro\Bundle\AddressBundle\Form\Type;
+namespace Oro\Bundle\FlexibleEntityBundle\Form\Type;
 
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -25,7 +25,7 @@ class PhoneCollectionType extends AbstractType
     {
         $resolver->setDefaults(
             array(
-                'data_class' => 'Oro\Bundle\AddressBundle\Entity\Phone'
+                'data_class' => 'Oro\Bundle\FlexibleEntityBundle\Entity\Phone'
             )
         );
     }
@@ -35,6 +35,6 @@ class PhoneCollectionType extends AbstractType
      */
     public function getName()
     {
-        return 'oro_address_phone_collection';
+        return 'oro_flexibleentity_phone_collection';
     }
 }

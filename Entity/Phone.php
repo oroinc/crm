@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Phone
  *
- * @ORM\Table("oro_address_phone")
+ * @ORM\Table("oro_flexibleentity_phone")
  * @ORM\Entity
  */
 class Phone
@@ -48,11 +48,13 @@ class Phone
 
     /**
      * @param null|string $phone
+     * @param null $areaCode
      * @param null|string $type
      */
-    public function __construct($phone = null, $type = null)
+    public function __construct($phone = null, $areaCode = null, $type = null)
     {
         $this->setPhone($phone);
+        $this->setAreaCode($areaCode);
         $this->setType($type);
     }
 
@@ -103,14 +105,6 @@ class Phone
     }
 
     /**
-     * @return string
-     */
-    public function __toString()
-    {
-        return $this->getPhone();
-    }
-
-    /**
      * @param string $area_code
      */
     public function setAreaCode($area_code)
@@ -124,5 +118,13 @@ class Phone
     public function getAreaCode()
     {
         return $this->area_code;
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return (is_null($this->getAreaCode()) ? '' : $this->getAreaCode() . ' ') . $this->getPhone();
     }
 }
