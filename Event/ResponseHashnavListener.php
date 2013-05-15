@@ -5,6 +5,7 @@ use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Symfony\Component\HttpKernel\Event\GetResponseForControllerResultEvent;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\SecurityContextInterface;
+use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 
 class ResponseHashnavListener
 {
@@ -13,9 +14,15 @@ class ResponseHashnavListener
      */
     protected $security;
 
-    public function __construct(SecurityContextInterface $security)
+    /**
+     * @var \Symfony\Bundle\FrameworkBundle\Templating\EngineInterface
+     */
+    protected $templating;
+
+    public function __construct(SecurityContextInterface $security, EngineInterface $templating)
     {
         $this->security = $security;
+        $this->templating = $templating;
     }
 
     /**
@@ -29,18 +36,14 @@ class ResponseHashnavListener
         if (($request->get('x-oro-hash-navigation') || $request->headers->get('x-oro-hash-navigation'))
             && $response->getStatusCode() == 302
         ) {
-
-            $documentRedirect = '';
-            if (!$this->security->getToken()) {
-                $documentRedirect = 'data-redirect=true';
-            }
-
-            $response = '<div id="redirect" '
-                . $documentRedirect
-                . '>'
-                . $response->headers->get('location')
-                . '</div>';
-            $event->setResponse(new Response($response));
+            $event->setResponse($this->templating->renderResponse(
+                    'OroNavigationBundle:HashNav:redirect.html.twig',
+                    array(
+                         'token' => $this->security->getToken(),
+                         'location' =>  $response->headers->get('location')
+                    )
+                )
+            );
         }
     }
 }

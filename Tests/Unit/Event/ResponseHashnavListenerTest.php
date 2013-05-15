@@ -22,6 +22,7 @@ class ResponseHashnavListenerTest extends \PHPUnit_Framework_TestCase
      */
     protected $response;
 
+    protected $templating;
     protected $event;
     protected $securityContext;
 
@@ -43,7 +44,8 @@ class ResponseHashnavListenerTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->response));
 
         $this->securityContext = $this->getMock('Symfony\Component\Security\Core\SecurityContextInterface');
-        $this->listener = new ResponseHashnavListener($this->securityContext);
+        $this->templating = $this->getMock('Symfony\Bundle\FrameworkBundle\Templating\EngineInterface');
+        $this->listener = new ResponseHashnavListener($this->securityContext, $this->templating);
     }
 
     public function testPlainRequest()
@@ -67,6 +69,10 @@ class ResponseHashnavListenerTest extends \PHPUnit_Framework_TestCase
 
         $this->event->expects($this->once())
             ->method('setResponse');
+
+        $this->templating->expects($this->once())
+            ->method('renderResponse')
+            ->will($this->returnValue(new Response()));
 
         $this->listener->onResponse($this->event);
     }
