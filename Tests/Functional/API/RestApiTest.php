@@ -3,26 +3,16 @@
 namespace Oro\Bundle\AddressBundle\Tests\Functional\API;
 
 use Acme\Bundle\TestsBundle\Test\ToolsAPI;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Acme\Bundle\TestsBundle\Test\WebTestCase;
 use Acme\Bundle\TestsBundle\Test\Client;
 
 class RestApiTest extends WebTestCase
 {
     public $client = null;
-    protected static $hasLoaded = false;
 
     public function setUp()
     {
         $this->client = static::createClient(array(), ToolsAPI::generateWsseHeader());
-        if (!self::$hasLoaded) {
-            $this->client->startTransaction();
-        }
-        self::$hasLoaded = true;
-    }
-
-    public static function tearDownAfterClass()
-    {
-        Client::rollbackTransaction();
     }
 
     /**
