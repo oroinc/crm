@@ -76,3 +76,9 @@ services:
         class: Oro\Bundle\FlexibleEntityBundle\Form\Type\PhoneCollectionType
         tags:
             - { name: form.type, alias: oro_flexibleentity_phone_collection }
+
+    # Email collection form type
+    form.type.oro_flexibleentity_email_collection:
+        class: Oro\Bundle\FlexibleEntityBundle\Form\Type\EmailCollectionType
+        tags:
+            - { name: form.type, alias: oro_flexibleentity_email_collection }
