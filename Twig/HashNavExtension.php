@@ -12,12 +12,13 @@ class HashNavExtension extends \Twig_Extension
      */
     protected $request;
 
-    /*
-	 * Listen to the 'kernel.request' event to get the main request.
+    /**
+     * Listen to the 'kernel.request' event to get the main request.
      * The request can not be injected directly into a Twig extension,
      * this causes a ScopeWideningInjectionException
-	 */
-    public function onKernelRequest(GetResponseEvent $event) {
+     */
+    public function onKernelRequest(GetResponseEvent $event)
+    {
         if ($event->getRequestType() === HttpKernel::MASTER_REQUEST) {
             $this->request = $event->getRequest();
         }
@@ -46,9 +47,11 @@ class HashNavExtension extends \Twig_Extension
      */
     public function checkIsHashNavigation()
     {
-        return (
-            $this->request->headers->get('x-oro-hash-navigation') != true
-            && $this->request->get('x-oro-hash-navigation') != true
+        return (!is_object($this->request)
+            || (
+                $this->request->headers->get('x-oro-hash-navigation') != true
+                    && $this->request->get('x-oro-hash-navigation') != true
+            )
         ) ? false : true;
     }
 

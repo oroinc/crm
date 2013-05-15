@@ -115,7 +115,7 @@ class Configuration implements ConfigurationInterface
                         ->useAttributeAsKey('routeParameters')->prototype('scalar')->end()
                     ->end()
                     ->arrayNode('extras')
-                        ->useAttributeAsKey('extras')->prototype('scalar')->end()
+                        ->useAttributeAsKey('extras')->prototype('variable')->end()
                     ->end()
                     ->booleanNode('showNonAuthorized')->end()
                 ->end()

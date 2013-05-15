@@ -41,9 +41,13 @@ class OroNavigationExtensionTest extends \PHPUnit_Framework_TestCase
 
         $container->expects($this->once())
             ->method('getParameter')
-            ->will($this->returnValue(array(
-                'Oro\Bundle\NavigationBundle\Tests\Unit\Fixtures\TestBundle'
-            )));
+            ->will(
+                $this->returnValue(
+                    array(
+                        'Oro\Bundle\NavigationBundle\Tests\Unit\Fixtures\TestBundle'
+                    )
+                )
+            );
 
         $assets = $extension->getAssets($container);
 

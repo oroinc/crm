@@ -20,17 +20,19 @@ Oro.Navigation = Backbone.Router.extend({
      * loadingMask - Selector for loading spinner
      * searchDropdown - Selector for dropdown with search results
      * menuDropdowns - Selector for 3 dots menu and my profile dropdowns
+     * pinbarHelp - Selector for pinbars help link
      *
      * @property
      */
     selectors: {
-        links:       'a:not([href^=#],[href^=javascript]),span[data-url]',
-        forms:       'form',
-        content:     '#content',
-        container:     '#container',
-        loadingMask: '.hash-loading-mask',
+        links:          'a:not([href^=#],[href^=javascript]),span[data-url]',
+        forms:          'form',
+        content:        '#content',
+        container:      '#container',
+        loadingMask:    '.hash-loading-mask',
         searchDropdown: '#search-div',
-        menuDropdowns: '.pin-menus.dropdown, .nav .dropdown'
+        menuDropdowns:  '.pin-menus.dropdown, .nav .dropdown',
+        pinbarHelp:     '.pin-bar-empty'
     },
 
     /** @property {Oro.LoadingMask} */
@@ -116,8 +118,9 @@ Oro.Navigation = Backbone.Router.extend({
      * @param {String} url
      */
     setActiveMenu: function (url) {
-        $('.application-menu a').parents('li').removeClass('active');
-        var li = $('.application-menu a[href="' + url + '"]').parents('li');
+        $('.application-menu:eq(1) a').parents('li').removeClass('active'); // handle only tabs content
+        var urlObject = new Url(url);
+        var li = $('.application-menu a[href="' + urlObject.path + '"]').parents('li');
         li.addClass('active');
         var tabId = li.parents('.tab-pane').attr('id');
         $('.application-menu a[href=#' + tabId + ']').tab('show');
@@ -202,6 +205,17 @@ Oro.Navigation = Backbone.Router.extend({
             this
         );
 
+        /**
+         * Processing pinbar help link
+         */
+        Oro.Events.bind(
+            "pinbar_help:shown",
+            function () {
+                this.processClicks(this.selectors.pinbarHelp);
+            },
+            this
+        );
+
         this.processForms(this.selectors.forms);
 
         this.loadingMask = new Oro.LoadingMask();
@@ -255,7 +269,11 @@ Oro.Navigation = Backbone.Router.extend({
                 if (urlParts[1]) {
                     redirectUrl = urlParts[1];
                 }
-                this.setLocation(redirectUrl);
+                if($(data).filter('#redirect').attr('data-redirect')) {
+                    window.location.href = redirectUrl;
+                } else {
+                    this.setLocation(redirectUrl);
+                }
             } else {
                 $(this.selectors.container).html($(data).filter(this.selectors.content).html());
                 /**
@@ -279,8 +297,8 @@ Oro.Navigation = Backbone.Router.extend({
                     $('.top-action-box .btn').filter('.minimize-button, .favorite-button').data('title', titleSerialized);
                 }
 
-                this.processClicks('#container ' + this.selectors.links);
-                this.processForms('#container ' + this.selectors.forms);
+                this.processClicks(this.selectors.container + ' ' + this.selectors.links);
+                this.processForms(this.selectors.container + ' ' + this.selectors.forms);
                 this.updateMenuTabs(data);
                 this.setActiveMenu(this.url);
                 this.updateMessages(data);

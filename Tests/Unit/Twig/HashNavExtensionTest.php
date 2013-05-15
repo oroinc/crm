@@ -51,7 +51,8 @@ class HashNavExtensionTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->extension->checkIsHashNavigation());
     }
 
-    public function testGetFunctions(){
+    public function testGetFunctions()
+    {
         $functions = $this->extension->getFunctions();
         $this->assertTrue(is_array($functions));
         $this->assertTrue(array_key_exists('oro_is_hash_navigation', $functions));
