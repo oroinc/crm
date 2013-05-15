@@ -6,7 +6,7 @@ navigation.favorites.MainView = navigation.MainViewAbstract.extend({
         el: '.favorite-button',
         tabTitle: 'Favorites',
         tabIcon: 'icon-star-empty',
-        tabId: 'favorites'
+        tabId: 'favorite'
     },
 
     events: {
