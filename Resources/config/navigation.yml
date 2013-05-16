@@ -17,6 +17,7 @@ oro_menu_config:
             label: ''
             extras:
                 icon: 'icon-home icon-white'
+                position: 1
             uri: '#'
 
     tree:
