@@ -57,7 +57,12 @@ class RoleController extends Controller
      */
     public function editAction(Role $entity)
     {
+        $resources = $this->getRequest()->request->get('resource');
         if ($this->get('oro_user.form.handler.role')->process($entity)) {
+            if ($resources) {
+                $this->getAclManager()->saveRoleAcl($entity, $resources);
+            }
+
             $this->get('session')->getFlashBag()->add('success', 'Role successfully saved');
 
             BackUrl::triggerRedirect();
@@ -68,6 +73,7 @@ class RoleController extends Controller
         return array(
             'datagrid' => $this->getRoleUserDatagridManager($entity)->getDatagrid()->createView(),
             'form'     => $this->get('oro_user.form.role')->createView(),
+            'resources' => $entity->getId() ? $this->getAclManager()->getRoleAclTree($entity) : null
         );
     }
 
@@ -126,5 +132,13 @@ class RoleController extends Controller
             $view,
             array('datagrid' => $datagrid->createView())
         );
+    }
+
+    /**
+     * @return \Oro\Bundle\UserBundle\Acl\Manager
+     */
+    protected function getAclManager()
+    {
+        return $this->get('oro_user.acl_manager');
     }
 }
