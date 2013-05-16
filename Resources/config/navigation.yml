@@ -1,16 +1,15 @@
 oro_menu_config:
     items:
-        contact_tab:
-            label: 'Contacts'
+        customers_tab:
+            label: 'Customers'
             uri: '#'
+            extras:
+                position: 10
         contact_list:
             label: 'Contacts'
             route: 'oro_contact_index'
-        contact_create:
-            label: 'Create Contact'
-            route: 'oro_contact_create'
         contact_group_list:
-            label: 'Groups'
+            label: 'Groups of contacts'
             route: 'oro_contact_group_index'
 
         shortcut_new_contact:
@@ -19,7 +18,6 @@ oro_menu_config:
             extras:
                 description: Create new contact instance
                 isCustomAction: true
-
         shortcut_list_contacts:
             label: Contacts List
             route: oro_contact_index
@@ -29,10 +27,9 @@ oro_menu_config:
     tree:
         application_menu:
             children:
-                contact_tab:
+                customers_tab:
                     children:
                         contact_list: ~
-                        contact_create: ~
                         contact_group_list: ~
 
         shortcuts:
