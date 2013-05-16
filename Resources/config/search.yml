@@ -4,7 +4,7 @@ Oro\Bundle\AccountBundle\Entity\Account:
     flexible_manager: oro_account.account.manager.flexible
     title_fields: [name]
     route:
-        name: oro_account_show
+        name: oro_account_view
         parameters:
             id: id
     search_template: OroAccountBundle:Account:searchResult.html.twig
