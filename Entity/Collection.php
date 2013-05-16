@@ -4,15 +4,13 @@ namespace Oro\Bundle\FlexibleEntityBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityFlexibleValue;
-
 /**
  * Email
  *
  * @ORM\Table(name="oro_flexibleentity_email")
  * @ORM\Entity
  */
-class Email
+class Collection
 {
     /**
      * @var integer
@@ -36,13 +34,6 @@ class Email
      * @ORM\Column(name="type", type="smallint")
      */
     private $type;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\AddressBundle\Entity\Value\AddressValue", inversedBy="emails")
-     * @ORM\JoinColumn(name="value_id", referencedColumnName="id")
-     * @var AbstractEntityFlexibleValue
-     */
-    private $value;
 
     /**
      * Get id
@@ -71,7 +62,7 @@ class Email
      * Set data
      *
      * @param string $data
-     * @return Email
+     * @return Collection
      */
     public function setData($data)
     {
@@ -94,7 +85,7 @@ class Email
      * Set type
      *
      * @param integer $type
-     * @return Email
+     * @return Collection
      */
     public function setType($type)
     {
@@ -111,29 +102,6 @@ class Email
     public function getType()
     {
         return $this->type;
-    }
-
-    /**
-     * Set value
-     *
-     * @param AbstractEntityFlexibleValue $value
-     * @return $this
-     */
-    public function setValue(AbstractEntityFlexibleValue $value)
-    {
-        $this->value = $value;
-
-        return $this;
-    }
-
-    /**
-     * Get value
-     *
-     * @return AbstractEntityFlexibleValue
-     */
-    public function getValue()
-    {
-        return $this->value;
     }
 
     /**

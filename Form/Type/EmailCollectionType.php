@@ -12,7 +12,7 @@ class EmailCollectionType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add(
-            'emails',
+            'collection',
             'collection',
             array(
                 'type'           => new EmailType(),

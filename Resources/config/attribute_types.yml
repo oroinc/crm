@@ -100,14 +100,16 @@ services:
         tags:
             - { name: oro_flexibleentity.attributetype, alias: oro_flexibleentity_price }
 
+    # New attributes
     oro_flexibleentity.attributetype.email_collection:
         class: Oro\Bundle\FlexibleEntityBundle\AttributeType\EmailCollectionType
-        arguments: ["emails", "oro_flexibleentity_email_collection"]
+        arguments: ["collections", "oro_flexibleentity_email_collection"]
         tags:
             - { name: oro_flexibleentity.attributetype, alias: oro_flexibleentity_email_collection }
+
     oro_flexibleentity.attributetype.phone_collection:
         class: Oro\Bundle\FlexibleEntityBundle\AttributeType\PhoneCollectionType
-        arguments: ["phones", "oro_flexibleentity_phone_collection"]
+        arguments: ["collections", "oro_flexibleentity_phone_collection"]
         tags:
             - { name: oro_flexibleentity.attributetype, alias: oro_flexibleentity_phone_collection }
 

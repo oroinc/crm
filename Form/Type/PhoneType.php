@@ -2,11 +2,9 @@
 namespace Oro\Bundle\FlexibleEntityBundle\Form\Type;
 
 use Symfony\Component\Form\Extension\Core\ChoiceList\ChoiceList;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\AbstractType;
 
-class PhoneType extends AbstractType
+class PhoneType extends CollectionItemAbstract
 {
     /**
      * {@inheritdoc}
@@ -14,32 +12,28 @@ class PhoneType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('id', 'hidden');
-        $builder->add('phone', 'text');
-        $builder->add('area_code', 'text');
-        $builder->add('type', 'choice', array(
-            'empty_value'   => 'Choose type...',
-            'empty_data'    => null,
-            'choice_list'   => new ChoiceList(array_keys(self::getPhoneTypes()), array_values(self::getPhoneTypes()))
-        ));
+        $builder->add('data', 'text');
+        $builder->add(
+            'type',
+            'choice',
+            array(
+                'empty_value'   => 'Choose phone type...',
+                'empty_data'    => null,
+                'choice_list'   => new ChoiceList(
+                    array_keys(self::getTypesArray()),
+                    array_values(self::getTypesArray())
+                )
+            )
+        );
     }
 
     /**
      * {@inheritdoc}
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
-    {
-        $resolver
-            ->setDefaults(
-                array(
-                    'data_class'    => 'Oro\Bundle\FlexibleEntityBundle\Entity\Phone'
-                )
-            );
-    }
-
-    public static function getPhoneTypes()
+    public function getTypesArray()
     {
         return array(
-            1 => 'test'
+            1 => 'Test phone type'
         );
     }
 

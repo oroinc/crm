@@ -9,20 +9,16 @@ class PhoneCollectionType extends AbstractAttributeType
     /**
      * {@inheritdoc}
      */
-    protected function prepareValueFormOptions(FlexibleValueInterface $value)
+    public function getName()
     {
-        $options = parent::prepareValueFormOptions($value);
-        $options['expanded'] = true;
-        $options['multiple'] = true;
-
-        return $options;
+        return 'oro_flexibleentity_phone_collection';
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    protected function prepareValueFormData(FlexibleValueInterface $value)
     {
-        return 'oro_flexibleentity_phone_collection';
+        return $value;
     }
 }
