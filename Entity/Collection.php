@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Email
  *
- * @ORM\Table(name="oro_flexibleentity_email")
+ * @ORM\Table(name="oro_flexibleentity_collection")
  * @ORM\Entity
  */
 class Collection
