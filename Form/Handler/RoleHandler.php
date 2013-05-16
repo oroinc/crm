@@ -57,8 +57,6 @@ class RoleHandler
                 $removeUsers = $this->form->get('removeUsers')->getData();
                 $this->onSuccess($entity, $appendUsers, $removeUsers);
                 return true;
-            } else {
-                die('form is nod valid');
             }
         }
 
