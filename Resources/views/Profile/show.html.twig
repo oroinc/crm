@@ -10,9 +10,9 @@
         <div class="row">
             <div class="pull-right">
                 <div class="btn-group icons-holder">
-                    <a href="{{ app.session.get('back') ? app.session.get('back') : path('oro_user_index') }}" class="btn back"><i class="icon-chevron-left hide-text">{{ 'Back'|trans }}</i></a>
+                    <a href="{{ app.session.get('back') ? app.session.get('back') : path('oro_user_index') }}" class="btn back icons-holder-text" title="{{ 'Back'|trans }}"><i class="icon-chevron-left hide-text" >{{ 'Back'|trans }}</i>{{ 'Back'|trans }}</a>
                     {% if resource_granted('oro_user_profile_edit') %}
-                    <a href="{{ path('oro_user_edit', { id: user.id, back: app.request.uri }) }}" class="btn "><i class="icon-edit hide-text">{{ 'Edit'|trans }}</i></a>
+                    <a href="{{ path('oro_user_edit', { id: user.id, back: app.request.uri }) }}" class="btn icons-holder-text" title="{{ 'Edit1 profile'|trans }}"><i class="icon-edit hide-text">{{ 'Edit'|trans }}</i>{{ 'Edit'|trans }}</a>
                     {% endif %}
                     {% if resource_granted('oro_user_profile_remove') %}
                         <a href="javascript: void(0);" class="btn icons-holder-text no-hash" id="btn-remove-profile" data-id="{{ user.id }}" data-message="{{ 'Are you sure you want to delete this profile?'|trans }}" title="{{ 'Delete profile'|trans }}"><i class="icon-trash hide-text">{{ 'Remove'|trans }}</i>Delete</a>
