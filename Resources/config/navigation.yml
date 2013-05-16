@@ -63,8 +63,6 @@ oro_titles:
     oro_user_reset_request: Forgot password
     oro_user_reset_check_email: Password reset - check email
 
-    oro_user_acl_edit: Acl resources - User Management
-
     oro_user_group_create: Add group - User Management
     oro_user_group_edit: Edit group - User Management
     oro_user_group_index: Groups overview - User Management

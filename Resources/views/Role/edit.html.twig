@@ -20,6 +20,20 @@
         } %}
         {% include 'OroGridBundle:Include:Listener/column_form.html.twig' with {'datagridView': datagrid, 'parameters': listenerParameters} %}
     {% endif %}
+
+    <script type="text/javascript">
+        $(function() {
+            $('#acl_tree').jstree({
+                "checkbox": {
+                    real_checkboxes: true,
+                    real_checkboxes_names: function (n) {
+                        return ['resource[' + n.data('id') + ']', 1]
+                    }
+                },
+                "plugins": ["themes", "html_data", "ui", "checkbox", "hotkeys"]
+            });
+        });
+    </script>
 {% endblock %}
 
 {% block page_container %}
@@ -63,13 +77,12 @@
                         <div class="container-fluid" style="width: auto;">
                             <ul class="nav">
                                 <li class="active"><a href="#scroll-main">{{ 'Overview'|trans }}</a></li>
-
                                 {% if form.vars.value.id %}
                                     <li><a href="#scroll-ussers">{{ 'Users'|trans }}</a></li>
                                 {% endif %}
-
-                                <li><a href="#scroll-acl">{{ 'Edit ACL'|trans }}</a></li>
-
+                                {% if form.vars.value.id %}
+                                    <li><a href="#scroll-acl">{{ 'Edit ACL'|trans }}</a></li>
+                                {% endif %}
                             </ul>
                         </div>
                     </div>
@@ -98,22 +111,22 @@
                             </div>
                         </div>
                         {% endif %}
-
+                        {% if form.vars.value.id %}
                         <div class="usser-row">
                             <h4 id="scroll-acl" class="scrollspy-title">{{ 'Edit ACL'|trans }}</h4>
                             <div class="row-fluid">
                                 <fieldset class="form-horizontal">
+                                    <div id="acl_tree">
+                                        {% include 'OroUserBundle:Role:_aclSubTree.html.twig' with {'resources': resources} %}
+                                    </div>
                                 </fieldset>
                             </div>
                         </div>
-
+                        {% endif %}
                     </div>
                 </div>
             </div>
-
-
-
-
+        {{ form_rest(form) }}
     </form>
     {% endblock %}
 </div>

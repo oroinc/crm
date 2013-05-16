@@ -6,7 +6,7 @@
         <a href="#" for="resource_{{ resource.id }}" title="{{ resource.description }}">{{ resource.name }}</a>
 
         {% if hasChildren %}
-            {% include 'OroUserBundle:Acl:_subTree.html.twig' with {'resources': resource.__children}  %}
+            {% include 'OroUserBundle:Role:_aclSubTree.html.twig' with {'resources': resource.__children}  %}
         {% endif %}
     </li>
 {% endfor %}
