@@ -3,7 +3,7 @@
 namespace Oro\Bundle\TestFrameworkBundle\Test;
 
 use Symfony\Bundle\FrameworkBundle\Client as BaseClient;
-use Oro\Bundle\TestsBundle\Test\SoapClient;
+use Oro\Bundle\TestFrameworkBundle\Test\SoapClient;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\TerminableInterface;
 

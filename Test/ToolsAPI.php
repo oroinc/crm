@@ -114,6 +114,10 @@ class ToolsAPI
             $response->getStatusCode(),
             $response->getContent()
         );
+
+        \PHPUnit_Framework_TestCase::assertTrue(
+            $response->headers->contains('Content-Type', 'application/json')
+        );
     }
 
     /**
