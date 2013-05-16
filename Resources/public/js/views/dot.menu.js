@@ -27,6 +27,13 @@ navigation.dotMenu.MainView = Backbone.View.extend({
             },
             this
         );
+        Oro.Events.bind(
+            "pinbar:loaded",
+            function(hasPinbarTab) {
+                this.chooseActiveTab(hasPinbarTab);
+            },
+            this
+        );
     },
 
     init: function() {
@@ -94,6 +101,19 @@ navigation.dotMenu.MainView = Backbone.View.extend({
             this.hideTab(tabKey);
         } else {
             this.showTab(tabKey);
+        }
+    },
+
+    /**
+     * Set active dots menu tab. If pinbar tab is empty, history tab is shown by default
+     *
+     * @param hasPinbarTab
+     */
+    chooseActiveTab: function(hasPinbarTab) {
+        if (!hasPinbarTab) {
+            this.$('#history-tab a').tab('show');
+        } else {
+            this.$('#pinbar-tab a').tab('show');
         }
     },
 

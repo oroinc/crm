@@ -179,6 +179,11 @@ navigation.pinbar.MainView = navigation.MainViewAbstract.extend({
         this.markCurrentPageMaximized();
         this.options.collection.each(this.setItemPosition, this);
         this.massAdd = false;
+        /**
+         * Backbone event. Fired when pinbar is initialized and loaded
+         * @event pinbar:loaded
+         */
+        Oro.Events.trigger("pinbar:loaded", this.needPinbarTab());
     },
 
     /**
@@ -246,6 +251,15 @@ navigation.pinbar.MainView = navigation.MainViewAbstract.extend({
                 }
             }
         }
+    },
+
+    /**
+     * Checks if pinbar tab in 3 dots menu is used
+     *
+     * @return {Boolean}
+     */
+    needPinbarTab: function() {
+        return (this.options.collection.length > this.options.maxItems);
     },
 
     /**
