@@ -21,6 +21,9 @@ Oro.Navigation = Backbone.Router.extend({
      * searchDropdown - Selector for dropdown with search results
      * menuDropdowns - Selector for 3 dots menu and my profile dropdowns
      * pinbarHelp - Selector for pinbars help link
+     * historyTab - Selector for history 3 dots menu tab
+     * mostViwedTab - Selector for most viewed 3 dots menu tab
+     * flashMessages - Selector for system messages block
      *
      * @property
      */
@@ -32,7 +35,10 @@ Oro.Navigation = Backbone.Router.extend({
         loadingMask:    '.hash-loading-mask',
         searchDropdown: '#search-div',
         menuDropdowns:  '.pin-menus.dropdown, .nav .dropdown',
-        pinbarHelp:     '.pin-bar-empty'
+        pinbarHelp:     '.pin-bar-empty',
+        historyTab:     '#history-content',
+        mostViewedTab:  '#mostviewed-content',
+        flashMessages:  '#flash-messages'
     },
 
     /** @property {Oro.LoadingMask} */
@@ -326,7 +332,7 @@ Oro.Navigation = Backbone.Router.extend({
      * @param data
      */
     updateMessages: function(data) {
-        $('#flash-messages').html($(data).filter('#messages').html());
+        $(this.selectors.flashMessages).html($(data).filter(this.selectors.flashMessages).html());
     },
 
     /**
@@ -335,12 +341,13 @@ Oro.Navigation = Backbone.Router.extend({
      * @param data
      */
     updateMenuTabs: function (data) {
-        $('#history-content').html($(data).filter('#history-content').html());
-        $('#most-viewed-content').html($(data).filter('#most-viewed-content').html());
+        $(this.selectors.historyTab).html($(data).filter(this.selectors.historyTab).html());
+        $(this.selectors.mostViewedTab).html($(data).filter(this.selectors.mostViewedTab).html());
         /**
          * Processing links for history and most viewed tabs
          */
-        this.processClicks('#history-content ' + this.selectors.links + ', #most-viewed-content ' + this.selectors.links);
+        this.processClicks(this.selectors.historyTab + ' ' + this.selectors.links + ', ' +
+            this.selectors.mostViewedTab + ' ' + this.selectors.links);
     },
 
     /**

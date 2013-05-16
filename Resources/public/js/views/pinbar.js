@@ -3,8 +3,8 @@ navigation.pinbar = navigation.pinbar || {};
 
 navigation.pinbar.MainView = navigation.MainViewAbstract.extend({
     options: {
-        maxPinbarItems: 10,
-        tabTitle: 'Tabs',
+        maxItems: 10,
+        tabTitle: 'Pinbar',
         tabIcon: 'icon-folder-close',
         el: '.pin-bar',
         listBar: '.list-bar',
@@ -12,7 +12,7 @@ navigation.pinbar.MainView = navigation.MainViewAbstract.extend({
         closeButton: '.top-action-box .close-button',
         history: [],
         defaultUrl: '/',
-        tabId: 'tabs',
+        tabId: 'pinbar',
         collection: navigation.pinbar.Items
     },
 
@@ -179,6 +179,11 @@ navigation.pinbar.MainView = navigation.MainViewAbstract.extend({
         this.markCurrentPageMaximized();
         this.options.collection.each(this.setItemPosition, this);
         this.massAdd = false;
+        /**
+         * Backbone event. Fired when pinbar is initialized and loaded
+         * @event pinbar:loaded
+         */
+        Oro.Events.trigger("pinbar:loaded", this.needPinbarTab());
     },
 
     /**
@@ -224,7 +229,7 @@ navigation.pinbar.MainView = navigation.MainViewAbstract.extend({
      */
     renderItem: function(item) {
         var position = item.get('position');
-        var type = position >= this.options.maxPinbarItems ? 'tab': 'list';
+        var type = position >= this.options.maxItems ? 'tab': 'list';
 
         if (item.get('display_type') != type) {
             this.cleanup();
@@ -246,6 +251,15 @@ navigation.pinbar.MainView = navigation.MainViewAbstract.extend({
                 }
             }
         }
+    },
+
+    /**
+     * Checks if pinbar tab in 3 dots menu is used
+     *
+     * @return {Boolean}
+     */
+    needPinbarTab: function() {
+        return (this.options.collection.length > this.options.maxItems);
     },
 
     /**

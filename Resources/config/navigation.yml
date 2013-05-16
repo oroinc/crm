@@ -17,3 +17,34 @@ oro_menu_config:
             template: 'OroNavigationBundle:Menu:history.html.twig'
             rootClass: 'extra-list'
             currentAsLink: false
+
+    items:
+        pinbar:
+            label: 'Pinbar'
+            extras:
+                icon: 'icon-folder-close'
+                maxItems: 10
+            uri: '#'
+        history:
+            label: 'History'
+            extras:
+                icon: 'icon-time'
+            uri: '#'
+        favorite:
+            label: 'Favorites'
+            extras:
+                icon: 'icon-star-empty'
+            uri: '#'
+        mostviewed:
+            label: 'Most Viewed'
+            extras:
+                icon: 'icon-flag'
+            uri: '#'
+
+    tree:
+        dots_menu:
+            children:
+                pinbar: ~
+                history: ~
+                favorite: ~
+                mostviewed: ~

@@ -11,7 +11,7 @@ Oro.PageState.View = Backbone.View.extend({
         this.listenTo(this.model, 'change:pagestate', this.handleStateChange);
 
         /**
-         * Render links in favorites menu after hash navigation request is completed
+         * Init page state after hash navigation request is completed
          */
         Oro.Events.bind(
             "hash_navigation_request:complete",
@@ -21,7 +21,7 @@ Oro.PageState.View = Backbone.View.extend({
             this
         );
         /**
-         * Render links in favorites menu after hash navigation request is started
+         * Clear page state timer after hash navigation request is started
          */
         Oro.Events.bind(
             "hash_navigation_request:start",
