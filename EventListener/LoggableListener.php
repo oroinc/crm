@@ -39,34 +39,6 @@ class LoggableListener extends BaseListener
             return;
         }
 
-        // do not store log entries for flexible attributes - add them to a parent entity instead
-        if ($object instanceof AbstractEntityFlexibleValue) {
-            foreach ($this->loggedObjects as &$lo) {
-                foreach ($lo['object']->getValues() as $value) {
-                    if ($value == $object) {
-                        $logEntry = $lo['log'];
-                        $changes  = current($ea->getObjectChangeSet($uow, $object));
-                        $data     = array_merge(
-                            $logEntry->getData(),
-                            array(
-                                $object->getAttribute()->getCode() => array(
-                                    'old' => $changes[0],
-                                    'new' => $value->getData(),
-                                )
-                            )
-                        );
-
-                        $logEntry->setData($data);
-
-                        $om->persist($logEntry);
-                        $uow->recomputeSingleEntityChangeSet($lo['meta'], $logEntry);
-
-                        return;
-                    }
-                }
-            }
-        }
-
         $wrapped = AbstractWrapper::wrap($object, $om);
         $meta    = $wrapped->getMetadata();
 
@@ -74,6 +46,22 @@ class LoggableListener extends BaseListener
             $logEntryClass = $this->getLogEntryClass($ea, $meta->name);
             $logEntryMeta  = $om->getClassMetadata($logEntryClass);
             $logEntry      = $logEntryMeta->newInstance();
+
+            // do not store log entries for flexible attributes - add them to a parent entity instead
+            if ($object instanceof AbstractEntityFlexibleValue) {
+                if (!$this->logFlexible($object, $ea)) {
+                    $objectMeta = $om->getClassMetadata(get_class($object));
+
+                    // if no "parent" object has been saved previously - get it from attribute and save it's log
+                    if ($objectMeta->reflFields['entity']->getValue($object) instanceof AbstractEntityFlexible) {
+                        $this->createLogEntry($action, $objectMeta->reflFields['entity']->getValue($object), $ea);
+                    }
+
+                    $this->logFlexible($object, $ea);
+                }
+
+                return;
+            }
 
             $logEntry->setAction($action);
             $logEntry->setUsername($this->username);
@@ -127,7 +115,7 @@ class LoggableListener extends BaseListener
                 $logEntry->setData($newValues);
             }
 
-            if ($action === self::ACTION_UPDATE && 0 === count($newValues)) {
+            if ($action === self::ACTION_UPDATE && 0 === count($newValues) && !($object instanceof AbstractEntityFlexible)) {
                 return;
             }
 
@@ -158,5 +146,45 @@ class LoggableListener extends BaseListener
                 );
             }
         }
+    }
+
+    /**
+     * Add flexible attribute log to a parent entity's log entry
+     *
+     * @param  AbstractEntityFlexibleValue $object
+     * @param  LoggableAdapter             $ea
+     * @return boolean True if value has been saved, false otherwise
+     */
+    protected function logFlexible(AbstractEntityFlexibleValue $object, LoggableAdapter $ea)
+    {
+        $om   = $ea->getObjectManager();
+        $uow  = $om->getUnitOfWork();
+
+        foreach ($this->loggedObjects as &$lo) {
+            foreach ($lo['object']->getValues() as $value) {
+                if ($value == $object) {
+                    $logEntry = $lo['log'];
+                    $changes  = current($ea->getObjectChangeSet($uow, $object));
+                    $data     = array_merge(
+                        $logEntry->getData(),
+                        array(
+                            $object->getAttribute()->getCode() => array(
+                                'old' => $changes[0],
+                                'new' => $value->getData(),
+                            )
+                        )
+                    );
+
+                    $logEntry->setData($data);
+
+                    $om->persist($logEntry);
+                    $uow->recomputeSingleEntityChangeSet($lo['meta'], $logEntry);
+
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 }
