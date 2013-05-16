@@ -18,7 +18,7 @@
             {% for entry in history %}
             <tr>
                 <td>{{ entry.id }}</td>
-                <td>{% if entry.user.id is defined %}<a href="{{ path('oro_user_profile_show', { id: entry.user.id }) }}">{{ entry.user.username }}</a>{% else %}{{ entry.user }}{% endif %}</td>
+                <td><a href="{{ path('oro_user_show', { id: entry.user.id }) }}">{{ entry.user.username }}</a></td>
                 <td>{{ macros.time(entry.loggedAt) }}</td>
                 <td>{{ entry.version }}</td>
                 <td>
