@@ -46,18 +46,22 @@ class LoadContactAttrData extends AbstractFixture implements ContainerAwareInter
                 array(
                     'code'  => 'first_name',
                     'label' => 'First Name',
+                    'searchable' => true
                 ),
                 array(
                     'code'  => 'last_name',
                     'label' => 'Last Name',
+                    'searchable' => true
                 ),
                 array(
                     'code'  => 'name_prefix',
                     'label' => 'Name Prefix',
+                    'searchable' => true
                 ),
                 array(
                     'code'  => 'title',
                     'label' => 'Title',
+                    'searchable' => true
                 ),
                 array(
                     'code'  => 'birthday',
@@ -68,6 +72,7 @@ class LoadContactAttrData extends AbstractFixture implements ContainerAwareInter
                     'code'  => 'description',
                     'type'  => 'oro_flexibleentity_textarea',
                     'label' => 'Description',
+                    'searchable' => true
                 ),
                 array(
                     'code'  => 'lead_source',
@@ -75,22 +80,26 @@ class LoadContactAttrData extends AbstractFixture implements ContainerAwareInter
                     'label' => 'Lead Source',
                     'options' => array(
                         'other', 'call', 'TV', 'website'
-                    )
+                    ),
+                    'searchable' => true
                 ),
                 array(
                     'code'  => 'account',
                     'type'  => 'oro_account_attribute_account',
                     'label' => 'Account',
+                    'searchable' => true
                 ),
                 array(
                     'code'  => 'assigned_to',
                     'type'  => 'oro_user_attribute_user',
-                    'label' => 'Assigned To'
+                    'label' => 'Assigned To',
+                    'searchable' => true
                 ),
                 array(
                     'code'  => 'reports_to',
                     'type'  => 'oro_contact_attribute_contact',
-                    'label' => 'Reports To'
+                    'label' => 'Reports To',
+                    'searchable' => true
                 )
             )
         );

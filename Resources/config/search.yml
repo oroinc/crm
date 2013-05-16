@@ -6,5 +6,5 @@ Oro\Bundle\ContactBundle\Entity\Contact:
         name: oro_contact_view
         parameters:
             id: id
-    search_template: OroContactBundle:Account:searchResult.html.twig
+    search_template: OroContactBundle:Contact:searchResult.html.twig
     fields: []
