@@ -1,13 +1,13 @@
-<i>{{ value|json_encode }}</i>
+{#<i>{{ value|json_encode }}</i>#}
 
 <ul>
 {% for fieldKey, fieldValue in value %}
     <li>
         <b>{{ fieldKey }}:</b>
-    {% if fieldValue.timestamp is defined %}
-        <s>{{ fieldValue|date('m/d/Y') }}</s> {{ fieldValue|date('m/d/Y') }}
+    {% if fieldValue.old.timestamp is defined %}
+        <s>{{ fieldValue.old|date('m/d/Y') }}</s> {{ fieldValue.new|date('m/d/Y') }}
     {% else %}
-        <s>{{ fieldValue }}</s> {{ fieldValue }}
+        <s>{{ fieldValue.old }}</s> {{ fieldValue.new }}
     {% endif %}
     </li>
 {% endfor %}

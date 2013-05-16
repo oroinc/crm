@@ -2,6 +2,9 @@
 
 namespace Oro\Bundle\DataAuditBundle\Datagrid;
 
+use Doctrine\ORM\Query;
+use Gedmo\Loggable\LoggableListener;
+
 use Oro\Bundle\GridBundle\Datagrid\DatagridManager;
 use Oro\Bundle\GridBundle\Field\FieldDescription;
 use Oro\Bundle\GridBundle\Field\FieldDescriptionCollection;
@@ -9,6 +12,8 @@ use Oro\Bundle\GridBundle\Field\FieldDescriptionInterface;
 use Oro\Bundle\GridBundle\Filter\FilterInterface;
 
 use Oro\Bundle\GridBundle\Property\TwigTemplateProperty;
+use Oro\Bundle\DataAuditBundle\Entity\Audit;
+
 
 class AuditDatagridManager extends DatagridManager
 {
@@ -53,9 +58,9 @@ class AuditDatagridManager extends DatagridManager
                 'filterable'  => true,
                 'show_filter' => true,
                 'choices' => array(
-                    'update' => 'Updated',
-                    'create' => 'Created',
-                    'delete' => 'Deleted',
+                    LoggableListener::ACTION_UPDATE => 'Updated',
+                    LoggableListener::ACTION_CREATE => 'Created',
+                    LoggableListener::ACTION_REMOVE => 'Deleted',
                 ),
                 'multiple' => true,
             )
@@ -106,7 +111,8 @@ class AuditDatagridManager extends DatagridManager
                 'sortable'    => true,
                 'filterable'  => true,
                 'show_filter' => true,
-                'choices' => array(),
+                //'choices' => array(),
+                'choices' => $this->getObjectClassOptions(),
                 'multiple' => true,
             )
         );
@@ -171,5 +177,23 @@ class AuditDatagridManager extends DatagridManager
     protected function getListFields()
     {
         return $this->getFieldDescriptionCollection()->getElements();
+    }
+
+    protected function getObjectClassOptions()
+    {
+        $options = array();
+
+        $query = $this->createQuery()->getQueryBuilder()
+            ->add('select', 'a.objectClass')
+            ->add('from', 'Oro\Bundle\DataAuditBundle\Entity\Audit a')
+            ->distinct('a.objectClass');
+
+        $result = $query->getQuery()->getArrayResult();
+
+        foreach ((array)$result as $value) {
+            $options[$value['objectClass']] = str_replace('Oro\\Bundle\\', '', $value['objectClass']);
+        }
+
+        return $options;
     }
 }
