@@ -120,6 +120,7 @@
                 var default_selected = null;
 
                 var this_jstree = this;
+                this.get_tree_select().empty(); 
                 $.each(trees, function (index, tree) {
                     var option = $('<option>', {
                         id: tree.id,
