@@ -2,12 +2,13 @@
 
 namespace Oro\Bundle\UserBundle\Tests\Functional\API;
 
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Acme\Bundle\TestsBundle\Test\WebTestCase;
 use Acme\Bundle\TestsBundle\Test\ToolsAPI;
 use Acme\Bundle\TestsBundle\Test\Client;
 
 /**
  * @outputBuffering enabled
+ * @db_isolation
  */
 class RestApiGroupsTest extends WebTestCase
 {
@@ -16,20 +17,9 @@ class RestApiGroupsTest extends WebTestCase
      */
     protected $client = null;
 
-    protected static $hasLoaded = false;
-
     public function setUp()
     {
         $this->client = static::createClient(array(), ToolsAPI::generateWsseHeader());
-        if (!self::$hasLoaded) {
-            $this->client->startTransaction();
-        }
-        self::$hasLoaded = true;
-    }
-
-    public static function tearDownAfterClass()
-    {
-        Client::rollbackTransaction();
     }
 
     /**
@@ -99,7 +89,7 @@ class RestApiGroupsTest extends WebTestCase
      * @depends testApiUpdateGroup
      * @param $group
      */
-    public function testApiDeleteGroup($group)
+    public function ApiDeleteGroup($group)
     {
         $this->client->request('DELETE', 'http://localhost/api/rest/latest/groups' . '/' . $group['id']);
         $result = $this->client->getResponse();
