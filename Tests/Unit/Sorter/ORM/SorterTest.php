@@ -127,7 +127,7 @@ class SorterTest extends \PHPUnit_Framework_TestCase
         $this->createFieldDescription();
         $this->model->initialize($fieldDescription);
 
-        $proxyQuery = $this->getMock('Oro\Bundle\GridBundle\Datagrid\ProxyQueryInterface');
+        $proxyQuery = $this->getMockForAbstractClass('Oro\Bundle\GridBundle\Datagrid\ProxyQueryInterface');
         $proxyQuery->expects($this->once())
             ->method('addSortOrder')
             ->with($expectedAssociationMapping, $expectedFieldMapping, $expectedDirection);
@@ -148,7 +148,8 @@ class SorterTest extends \PHPUnit_Framework_TestCase
         $associationMapping = array(),
         $fieldMapping = array()
     ) {
-        $result = $this->getMockBuilder('Oro\Bundle\GridBundle\Field\FieldDescriptionInterface')->getMock();
+        $result = $this->getMockBuilder('Oro\Bundle\GridBundle\Field\FieldDescriptionInterface')
+            ->getMockForAbstractClass();
 
         $result->expects($this->any())
             ->method('getName')

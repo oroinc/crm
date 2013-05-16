@@ -42,7 +42,7 @@ class FilterFactoryTest extends \PHPUnit_Framework_TestCase
     protected function initializeFilterFactory($arguments = array())
     {
         $defaultArguments = array(
-            'container' => $this->getMock('Symfony\Component\DependencyInjection\ContainerInterface'),
+            'container' => $this->getMockForAbstractClass('Symfony\Component\DependencyInjection\ContainerInterface'),
             'types'     => $this->allowedTypes
         );
 

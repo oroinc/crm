@@ -7,18 +7,26 @@ use Oro\Bundle\GridBundle\Filter\ORM\BooleanFilter;
 
 class BooleanFilterTest extends FilterTestCase
 {
+    /**
+     * @return BooleanFilter
+     */
     protected function createTestFilter()
     {
         return new BooleanFilter($this->getTranslatorMock());
     }
 
+    /**
+     * @return array
+     */
     public function filterDataProvider()
     {
         $fieldExpression   = self::TEST_ALIAS . '.' . self::TEST_FIELD;
         $expressionFactory = $this->getExpressionFactory();
+        $compareExpression = $expressionFactory->neq($fieldExpression, $expressionFactory->literal(''));
+
         $summaryExpression = $expressionFactory->andX(
             $expressionFactory->isNotNull($fieldExpression),
-            $expressionFactory->neq($fieldExpression, $expressionFactory->literal(''))
+            $compareExpression
         );
 
         return array(
@@ -38,7 +46,7 @@ class BooleanFilterTest extends FilterTestCase
                 'data' => array('value' => 'incorrect_value'),
                 'expectProxyQueryCalls' => array()
             ),
-            'value_yes' => array(
+            'value_yes_nullable' => array(
                 'data' => array('value' => BooleanFilterType::TYPE_YES),
                 'expectProxyQueryCalls' => array(
                     array(
@@ -48,7 +56,18 @@ class BooleanFilterTest extends FilterTestCase
                     )
                 )
             ),
-            'value_no' => array(
+            'value_yes_not_nullable' => array(
+                'data' => array('value' => BooleanFilterType::TYPE_YES),
+                'expectProxyQueryCalls' => array(
+                    array(
+                        'andWhere',
+                        array($compareExpression),
+                        null
+                    )
+                ),
+                'options' => array('nullable' => false)
+            ),
+            'value_no_nullable' => array(
                 'data' => array('value' => BooleanFilterType::TYPE_NO),
                 'expectProxyQueryCalls' => array(
                     array(
@@ -57,6 +76,17 @@ class BooleanFilterTest extends FilterTestCase
                         null
                     )
                 )
+            ),
+            'value_no_not_nullable' => array(
+                'data' => array('value' => BooleanFilterType::TYPE_NO),
+                'expectProxyQueryCalls' => array(
+                    array(
+                        'andWhere',
+                        array($expressionFactory->not($compareExpression)),
+                        null
+                    )
+                ),
+                'options' => array('nullable' => false)
             ),
         );
     }
@@ -69,10 +99,5 @@ class BooleanFilterTest extends FilterTestCase
             ),
             $this->model->getDefaultOptions()
         );
-    }
-
-    public function testGetOperator()
-    {
-        // do nothing as getOperator method not exist in this class
     }
 }

@@ -26,10 +26,11 @@ class RequestParametersTest extends \PHPUnit_Framework_TestCase
      */
     protected $testParameters = array(
         self::TEST_ROOT_PARAMETER => array(
-            RequestParameters::FILTER_PARAMETERS => array('filter' => 'parameters'),
-            RequestParameters::PAGER_PARAMETERS  => array('pager' => 'parameters'),
-            RequestParameters::SORT_PARAMETERS   => array('sort' => 'parameters'),
-            self::TEST_EXISTING_PARAMETER        => self::TEST_EXISTING_VALUE,
+            RequestParameters::FILTER_PARAMETERS     => array('filter' => 'parameters'),
+            RequestParameters::PAGER_PARAMETERS      => array('pager' => 'parameters'),
+            RequestParameters::SORT_PARAMETERS       => array('sort' => 'parameters'),
+            RequestParameters::ADDITIONAL_PARAMETERS => array('additional' => 'parameters'),
+            self::TEST_EXISTING_PARAMETER            => self::TEST_EXISTING_VALUE,
         )
     );
 

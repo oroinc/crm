@@ -1,13 +1,13 @@
-var OroApp = OroApp || {};
-OroApp.Datagrid = OroApp.Datagrid || {};
+var Oro = Oro || {};
+Oro.Datagrid = Oro.Datagrid || {};
 
 /**
  * Router for basic datagrid
  *
- * @class   OroApp.Datagrid.Router
- * @extends OroApp.Router
+ * @class   Oro.Datagrid.Router
+ * @extends Backbone.Router
  */
-OroApp.Datagrid.Router = OroApp.Router.extend({
+Oro.Datagrid.Router = Backbone.Router.extend({
     /** @property */
     routes: {
         "g/*encodedStateData": "changeState",
@@ -17,7 +17,7 @@ OroApp.Datagrid.Router = OroApp.Router.extend({
     /**
      * Binded collection, passed in constructor as option
      *
-     * @property {OroApp.PageableCollection}
+     * @property {Oro.PageableCollection}
      */
     collection: null,
 
@@ -32,7 +32,7 @@ OroApp.Datagrid.Router = OroApp.Router.extend({
      * Initialize router
      *
      * @param {Object} options
-     * @param {OroApp.PageableCollection} options.collection Collection of models.
+     * @param {Oro.PageableCollection} options.collection Collection of models.
      */
     initialize: function(options) {
         options = options || {};
@@ -45,13 +45,20 @@ OroApp.Datagrid.Router = OroApp.Router.extend({
 
         this.collection.on('beforeReset', this._handleStateChange, this);
 
-        OroApp.Router.prototype.initialize.apply(this, arguments);
+        //this.init();
+
+        Backbone.Router.prototype.initialize.apply(this, arguments);
+        /**
+         * Backbone event. Fired when grid route is initialized
+         * @event grid_route:loaded
+         */
+        Oro.Events.trigger("grid_route:loaded", this);
     },
 
     /**
      * Triggers when collection is has new state and fetched
      *
-     * @param {OroApp.PageableCollection} collection
+     * @param {Oro.PageableCollection} collection
      * @param {Object} options Fetch options
      * @private
      */
@@ -61,7 +68,13 @@ OroApp.Datagrid.Router = OroApp.Router.extend({
             return;
         }
         var encodedStateData = collection.encodeStateData(collection.state);
-        this.navigate('g/' + encodedStateData);
+        var url = '';
+        if (Oro.hashNavigationEnabled()) {
+            url = 'url=' + Oro.Navigation.prototype.getHashUrl() + '|g/' + encodedStateData;
+        } else {
+            url = 'g/' + encodedStateData;
+        }
+        this.navigate(url);
     },
 
     /**
@@ -70,7 +83,12 @@ OroApp.Datagrid.Router = OroApp.Router.extend({
      * @param {String} encodedStateData String represents encoded state stored in URL
      */
     changeState: function(encodedStateData) {
-        var state = this.collection.decodeStateData(encodedStateData);
+        var state = null;
+        if (encodedStateData) {
+            state = this.collection.decodeStateData(encodedStateData);
+        } else {
+            state = this._initState;
+        }
         this.collection.updateState(state);
         this.collection.fetch({
             ignoreSaveStateInUrl: true
@@ -78,12 +96,11 @@ OroApp.Datagrid.Router = OroApp.Router.extend({
     },
 
     /**
-     * Route for initializing collection. Collection will retrieve initial state and call fetch.
+     * Init function to change collection state if page is loaded without hash navigation
      */
     init: function() {
-        this.collection.updateState(this._initState);
-        this.collection.fetch({
-            ignoreSaveStateInUrl: true
-        });
+        if (Backbone.history.fragment === '') {
+            this.changeState('');
+        }
     }
 });

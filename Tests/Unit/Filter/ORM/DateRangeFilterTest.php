@@ -7,6 +7,9 @@ use Oro\Bundle\FilterBundle\Form\Type\Filter\DateRangeFilterType;
 
 class DateRangeFilterTest extends AbstractDateFilterTest
 {
+    /**
+     * @return DateRangeFilter
+     */
     protected function createTestFilter()
     {
         return new DateRangeFilter($this->getTranslatorMock());

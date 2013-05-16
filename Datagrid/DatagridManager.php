@@ -4,10 +4,12 @@ namespace Oro\Bundle\GridBundle\Datagrid;
 
 use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\Validator\ValidatorInterface;
+use Symfony\Component\Routing\Router;
 
 use Oro\Bundle\GridBundle\Builder\DatagridBuilderInterface;
 use Oro\Bundle\GridBundle\Builder\ListBuilderInterface;
 use Oro\Bundle\GridBundle\Field\FieldDescriptionInterface;
+use Oro\Bundle\GridBundle\Field\FieldDescriptionCollection;
 use Oro\Bundle\GridBundle\Property\PropertyInterface;
 use Oro\Bundle\GridBundle\Datagrid\ParametersInterface;
 use Oro\Bundle\GridBundle\Route\RouteGeneratorInterface;
@@ -41,6 +43,11 @@ abstract class DatagridManager implements DatagridManagerInterface
     protected $validator;
 
     /**
+     * @var Router
+     */
+    protected $router;
+
+    /**
      * @var ParametersInterface
      */
     protected $parameters;
@@ -61,8 +68,12 @@ abstract class DatagridManager implements DatagridManagerInterface
     protected $routeGenerator;
 
     /**
-     * @param DatagridBuilderInterface $datagridBuilder
-     * @return void
+     * @var FieldDescriptionCollection
+     */
+    private $fieldsCollection;
+
+    /**
+     * {@inheritDoc}
      */
     public function setDatagridBuilder(DatagridBuilderInterface $datagridBuilder)
     {
@@ -70,8 +81,7 @@ abstract class DatagridManager implements DatagridManagerInterface
     }
 
     /**
-     * @param ListBuilderInterface $listBuilder
-     * @return void
+     * {@inheritDoc}
      */
     public function setListBuilder(ListBuilderInterface $listBuilder)
     {
@@ -79,8 +89,7 @@ abstract class DatagridManager implements DatagridManagerInterface
     }
 
     /**
-     * @param QueryFactoryInterface $queryManager
-     * @return void
+     * {@inheritDoc}
      */
     public function setQueryFactory(QueryFactoryInterface $queryManager)
     {
@@ -88,16 +97,15 @@ abstract class DatagridManager implements DatagridManagerInterface
     }
 
     /**
-     * @param TranslatorInterface $translator
-     * @return void
+     * {@inheritDoc}
      */
     public function setTranslator(TranslatorInterface $translator)
     {
         $this->translator = $translator;
     }
+
     /**
-     * @param ValidatorInterface $validator
-     * @return void
+     * {@inheritDoc}
      */
     public function setValidator(ValidatorInterface $validator)
     {
@@ -105,8 +113,15 @@ abstract class DatagridManager implements DatagridManagerInterface
     }
 
     /**
-     * @param RouteGeneratorInterface $routeGenerator
-     * @return void
+     * {@inheritDoc}
+     */
+    public function setRouter(Router $router)
+    {
+        $this->router = $router;
+    }
+
+    /**
+     * {@inheritDoc}
      */
     public function setRouteGenerator(RouteGeneratorInterface $routeGenerator)
     {
@@ -114,8 +129,7 @@ abstract class DatagridManager implements DatagridManagerInterface
     }
 
     /**
-     * @param string $name
-     * @return void
+     * {@inheritDoc}
      */
     public function setName($name)
     {
@@ -123,8 +137,7 @@ abstract class DatagridManager implements DatagridManagerInterface
     }
 
     /**
-     * @param string $entityHint
-     * @return void
+     * {@inheritDoc}
      */
     public function setEntityHint($entityHint)
     {
@@ -132,8 +145,7 @@ abstract class DatagridManager implements DatagridManagerInterface
     }
 
     /**
-     * @param ParametersInterface $parameters
-     * @return void
+     * {@inheritDoc}
      */
     public function setParameters(ParametersInterface $parameters)
     {
@@ -141,7 +153,7 @@ abstract class DatagridManager implements DatagridManagerInterface
     }
 
     /**
-     * @return DatagridInterface
+     * {@inheritDoc}
      */
     public function getDatagrid()
     {
@@ -161,9 +173,13 @@ abstract class DatagridManager implements DatagridManagerInterface
             }
         }
 
+        // create query
+        $query = $this->createQuery();
+        $this->applyQueryParameters($query);
+
         // create datagrid
         $datagrid = $this->datagridBuilder->getBaseDatagrid(
-            $this->queryFactory->createQuery(),
+            $query,
             $listCollection,
             $this->routeGenerator,
             $this->parameters,
@@ -197,6 +213,55 @@ abstract class DatagridManager implements DatagridManagerInterface
     }
 
     /**
+     * @return ProxyQueryInterface
+     */
+    protected function createQuery()
+    {
+        return $this->queryFactory->createQuery();
+    }
+
+    /**
+     * Apply query parameters to query object
+     */
+    protected function applyQueryParameters(ProxyQueryInterface $query)
+    {
+        foreach ($this->getQueryParameters() as $name => $value) {
+            // TODO Add method to ProxyQueryInterface
+            $query->setParameter($name, $value);
+        }
+    }
+
+    /**
+     * Get parameters for query
+     *
+     * @return array
+     */
+    protected function getQueryParameters()
+    {
+        return array();
+    }
+
+    protected function getFieldDescriptionCollection()
+    {
+        if (!$this->fieldsCollection) {
+            $this->fieldsCollection = new FieldDescriptionCollection();
+            $this->configureFields($this->fieldsCollection);
+        }
+
+        return $this->fieldsCollection;
+    }
+
+    /**
+     * Configure collection of field descriptions
+     *
+     * @param FieldDescriptionCollection $fieldCollection
+     */
+    protected function configureFields(FieldDescriptionCollection $fieldCollection)
+    {
+
+    }
+
+    /**
      * Get Route generator
      *
      * @return RouteGeneratorInterface
@@ -209,10 +274,12 @@ abstract class DatagridManager implements DatagridManagerInterface
     /**
      * Get list of datagrid fields
      *
-     * @abstract
      * @return FieldDescriptionInterface[]
      */
-    abstract protected function getListFields();
+    protected function getListFields()
+    {
+        return $this->getFieldDescriptionCollection()->getElements();
+    }
 
     /**
      * Get list of properties
@@ -231,7 +298,15 @@ abstract class DatagridManager implements DatagridManagerInterface
      */
     protected function getFilters()
     {
-        return array();
+        $fields = array();
+        /** @var $fieldDescription FieldDescriptionInterface */
+        foreach ($this->getFieldDescriptionCollection() as $fieldDescription) {
+            if ($fieldDescription->isFilterable()) {
+                $fields[] = $fieldDescription;
+            }
+        }
+
+        return $fields;
     }
 
     /**
@@ -241,7 +316,15 @@ abstract class DatagridManager implements DatagridManagerInterface
      */
     protected function getSorters()
     {
-        return array();
+        $fields = array();
+        /** @var $fieldDescription FieldDescriptionInterface */
+        foreach ($this->getFieldDescriptionCollection() as $fieldDescription) {
+            if ($fieldDescription->isSortable()) {
+                $fields[] = $fieldDescription;
+            }
+        }
+
+        return $fields;
     }
 
     /**

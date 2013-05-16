@@ -1,13 +1,13 @@
-var OroApp = OroApp || {};
-OroApp.Datagrid = OroApp.Datagrid || {};
+var Oro = Oro || {};
+Oro.Datagrid = Oro.Datagrid || {};
 
 /**
  * Datagrid page size widget
  *
- * @class   OroApp.Datagrid.PageSize
- * @extends OroApp.View
+ * @class   Oro.Datagrid.PageSize
+ * @extends Backbone.View
  */
-OroApp.Datagrid.PageSize = OroApp.View.extend({
+Oro.Datagrid.PageSize = Backbone.View.extend({
     /** @property */
     template: _.template(
         '<label class="control-label">View per page: &nbsp;</label>' +
@@ -56,7 +56,7 @@ OroApp.Datagrid.PageSize = OroApp.View.extend({
         this.listenTo(this.collection, "add", this.render);
         this.listenTo(this.collection, "remove", this.render);
         this.listenTo(this.collection, "reset", this.render);
-        OroApp.View.prototype.initialize.call(this, options);
+        Backbone.View.prototype.initialize.call(this, options);
     },
 
     /**

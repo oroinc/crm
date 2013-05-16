@@ -1,10 +1,12 @@
+var Oro = Oro || {};
+
 /**
  * Loading mask widget
  *
- * @class   OroApp.LoadingMask
- * @extends OroApp.View
+ * @class   Oro.LoadingMask
+ * @extends Backbone.View
  */
-OroApp.LoadingMask = OroApp.View.extend({
+Oro.LoadingMask = Backbone.View.extend({
 
     /** @property {Boolean} */
     displayed: false,
@@ -47,7 +49,7 @@ OroApp.LoadingMask = OroApp.View.extend({
             var updateProxy = $.proxy(this.updatePos, this);
             $(window).resize(updateProxy).scroll(updateProxy);
         }
-        OroApp.View.prototype.initialize.apply(this, arguments);
+        Backbone.View.prototype.initialize.apply(this, arguments);
     },
 
     /**

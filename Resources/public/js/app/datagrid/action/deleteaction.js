@@ -1,14 +1,14 @@
-var OroApp = OroApp || {};
-OroApp.Datagrid = OroApp.Datagrid || {};
-OroApp.Datagrid.Action = OroApp.Datagrid.Action || {};
+var Oro = Oro || {};
+Oro.Datagrid = Oro.Datagrid || {};
+Oro.Datagrid.Action = Oro.Datagrid.Action || {};
 
 /**
  * Delete action with confirm dialog, triggers REST DELETE request
  *
- * @class   OroApp.Datagrid.Action.DeleteAction
- * @extends OroApp.Datagrid.Action.ModelAction
+ * @class   Oro.Datagrid.Action.DeleteAction
+ * @extends Oro.Datagrid.Action.ModelAction
  */
-OroApp.Datagrid.Action.DeleteAction = OroApp.Datagrid.Action.ModelAction.extend({
+Oro.Datagrid.Action.DeleteAction = Oro.Datagrid.Action.ModelAction.extend({
 
     /** @property Backbone.BootstrapModal */
     errorModal: undefined,
@@ -47,7 +47,8 @@ OroApp.Datagrid.Action.DeleteAction = OroApp.Datagrid.Action.ModelAction.extend(
             this.confirmModal = new Oro.BootstrapModal({
                 title: 'Delete Confirmation',
                 content: 'Are you sure you want to delete this item?',
-                okText: 'Yes, Delete'
+                okText: 'Yes, Delete',
+                cancelText: 'Cancel'
             });
             this.confirmModal.on('ok', _.bind(this.doDelete, this));
         }

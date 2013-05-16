@@ -11,15 +11,15 @@ Action performs using instance of model and usually uses a link to do work on se
 
 Below is an example of initialization grid with actions:
 ``` javascript
-var grid = new OroApp.Datagrid.Grid({
+var grid = new Oro.Datagrid.Grid({
     actions: [
-        OroApp.Datagrid.Action.NavigateAction.extend({
+        Oro.Datagrid.Action.NavigateAction.extend({
             label: "Edit",
             icon: edit,
             placeholders: {"{id}":"id"},
             url: "/user/edit/{id}"
         }),
-        OroApp.Datagrid.Action.DeleteAction.extend({
+        Oro.Datagrid.Action.DeleteAction.extend({
             label: "Delete",
             icon: "trash",
             placeholders: {"{id}":"id"},
@@ -32,10 +32,9 @@ var grid = new OroApp.Datagrid.Grid({
 
 Main classes and responsibilities:
 
-* **OroApp.Datagrid.Grid** - grid contains collection of models and allowed actions that user can perform
-* **OroApp.BackboneModel** - model that is represented by one of grid rows. Action is performed on concrete instances of models
-* **OroApp.Datagrid.Action.Cell** - responsible for rendering grid's actions launchers
-* **OroApp.Datagrid.Action.AbstractAction** - abstract action that can be performed
-* **OroApp.Datagrid.Action.Launcher** - renders control that can be used by user to run action, for example a simple link
-* **OroApp.Datagrid.Action.DeleteAction** - concrete action responsible for model delete
-* **OroApp.Datagrid.Action.NavigateAction** - concrete action responsible for navigating user to some URL
+* **Oro.Datagrid.Grid** - grid contains collection of models and allowed actions that user can perform
+* **Oro.Datagrid.Action.Cell** - responsible for rendering grid's actions launchers
+* **Oro.Datagrid.Action.AbstractAction** - abstract action that can be performed
+* **Oro.Datagrid.Action.Launcher** - renders control that can be used by user to run action, for example a simple link
+* **Oro.Datagrid.Action.DeleteAction** - concrete action responsible for model delete
+* **Oro.Datagrid.Action.NavigateAction** - concrete action responsible for navigating user to some URL

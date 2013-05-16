@@ -17,7 +17,7 @@ class AbstractFilterTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $translator = $this->getMock('Symfony\Component\Translation\TranslatorInterface');
+        $translator = $this->getMockForAbstractClass('Symfony\Component\Translation\TranslatorInterface');
 
         $this->model = $this->getMockBuilder('Oro\Bundle\GridBundle\Filter\ORM\AbstractFilter')
             ->setConstructorArgs(array($translator))
@@ -30,6 +30,9 @@ class AbstractFilterTest extends \PHPUnit_Framework_TestCase
         unset($this->model);
     }
 
+    /**
+     * @return array
+     */
     public function getRenderSettingsDataProvider()
     {
         return array(
@@ -85,5 +88,15 @@ class AbstractFilterTest extends \PHPUnit_Framework_TestCase
         $fieldOptions = array('key' => 'value');
         $this->model->setOption('field_options', $fieldOptions);
         $this->assertEquals($fieldOptions, $this->model->getFieldOptions());
+    }
+
+    public function testIsNullable()
+    {
+        // default value
+        $this->assertTrue($this->model->isNullable());
+
+        // custom value
+        $this->model->setOption('nullable', false);
+        $this->assertFalse($this->model->isNullable());
     }
 }

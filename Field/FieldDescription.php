@@ -2,7 +2,7 @@
 
 namespace Oro\Bundle\GridBundle\Field;
 
-use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttributeType;
+use Oro\Bundle\FlexibleEntityBundle\AttributeType\AbstractAttributeType;
 use Oro\Bundle\GridBundle\Property\PropertyInterface;
 use Oro\Bundle\GridBundle\Property\FieldProperty;
 
@@ -344,5 +344,21 @@ class FieldDescription implements FieldDescriptionInterface
     public function getSortParentAssociationMapping()
     {
         return $this->getOption('sort_parent_association_mappings', array());
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isEditable()
+    {
+        return $this->getOption('editable', false);
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isShown()
+    {
+        return $this->getOption('show_column', true);
     }
 }

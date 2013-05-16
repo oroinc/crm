@@ -29,7 +29,7 @@ class FlexibleOptionsFilterTest extends FlexibleFilterTestCase
             'correct_equals' => array(
                 'data' => array('value' => 'test', 'type' => ChoiceFilterType::TYPE_CONTAINS),
                 'expectRepositoryCalls' => array(
-                    array('applyFilterByAttribute', array(self::TEST_FIELD, 'test', 'IN'), null)
+                    array('applyFilterByAttribute', array(self::TEST_FIELD, array('test'), 'IN'), null)
                 )
             ),
             'incorrect' => array(

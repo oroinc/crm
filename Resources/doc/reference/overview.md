@@ -39,7 +39,7 @@ use Oro\Bundle\GridBundle\Field\FieldDescriptionInterface;
 
 class DemoDatagridManager extends DatagridManager
 {
-    protected function getListFields()
+    protected function configureFields(FieldDescriptionCollection $fieldsCollection)
     {
         $fieldId = new FieldDescription();
         $fieldId->setName('id');
@@ -49,6 +49,8 @@ class DemoDatagridManager extends DatagridManager
                 'label' => 'ID',
             )
         );
+        $fieldsCollection->add($fieldId);
+
         $fieldName = new FieldDescription();
         $fieldName->setName('name');
         $fieldName->setOptions(
@@ -57,7 +59,18 @@ class DemoDatagridManager extends DatagridManager
                 'label' => 'name',
             )
         );
-        return array($fieldId, $fieldName);
+        $fieldsCollection->add($fieldName);
+    }
+
+    protected function createQuery()
+    {
+        $queryBuilder = $this->entityManager->createQueryBuilder();
+        $queryBuilder
+            ->select('id', 'name')
+            ->from('MyBundle:Entity', 'e');
+
+        $this->queryFactory->setQueryBuilder($queryBuilder);
+        return $this->queryFactory->createQuery();
     }
 }
 ```
@@ -89,19 +102,9 @@ class DemoController extends Controller
      */
     public function gridAction(Request $request)
     {
-        /** @var $em \Doctrine\ORM\EntityManager */
-        $em = $this->getDoctrine()->getManager();
-        $queryBuilder = $em->createQueryBuilder();
-        $queryBuilder
-            ->select('id', 'name')
-            ->from('MyBundle:Entity', 'e');
-
-        /** @var $queryFactory QueryFactory */
-        $queryFactory = $this->get('acme_demo_grid.demo_grid.manager.default_query_factory');
-        $queryFactory->setQueryBuilder($queryBuilder);
-
         /** @var $datagridManager DemoDatagridManager */
         $datagridManager = $this->get('acme_demo_grid.demo_grid.manager');
+        $datagridManager->setEntityManager($this->getDoctrine()->getManager());
         $datagrid = $datagridManager->getDatagrid();
 
         if ('json' == $request->getRequestFormat()) {
@@ -145,6 +148,5 @@ Dependencies
 * Moment.js - https://github.com/timrwood/moment/;
 * JQuery UI Datepicker - https://github.com/jquery/jquery-ui;
 * JQuery UI MultiSelect - https://github.com/ehynds/jquery-ui-multiselect-widget;
-* JQuery Timepicker - https://github.com/trentrichardson/jQuery-Timepicker-Addon;
 * JQuery Numeric - https://github.com/byllc/jquery-numeric;
 * JQuery UI - https://github.com/jquery/jquery-ui;

@@ -15,6 +15,7 @@ interface FieldDescriptionInterface
     const TYPE_INTEGER  = 'integer';
     const TYPE_OPTIONS  = 'options';
     const TYPE_TEXT     = 'text';
+    const TYPE_HTML     = 'html';
     const TYPE_BOOLEAN  = 'boolean';
 
     /**
@@ -250,4 +251,9 @@ interface FieldDescriptionInterface
      * @return array the parent association mapping definitions
      */
     public function getSortParentAssociationMapping();
+
+    /**
+     * @return boolean
+     */
+    public function isEditable();
 }

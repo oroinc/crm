@@ -6,6 +6,7 @@ use Doctrine\ORM\Query\Expr;
 use Symfony\Component\Translation\TranslatorInterface;
 
 use Oro\Bundle\GridBundle\Filter\ORM\AbstractFilter;
+use Oro\Bundle\GridBundle\Filter\FilterInterface;
 
 abstract class FilterTestCase extends \PHPUnit_Framework_TestCase
 {
@@ -37,24 +38,14 @@ abstract class FilterTestCase extends \PHPUnit_Framework_TestCase
         unset($this->model);
     }
 
+    /**
+     * @return FilterInterface
+     */
     abstract protected function createTestFilter();
 
-    public function getOperatorDataProvider()
-    {
-        return array();
-    }
-
     /**
-     * @dataProvider getOperatorDataProvider
-     *
-     * @param mixed $type
-     * @param string $expected
+     * @return array
      */
-    public function testGetOperator($type, $expected)
-    {
-        $this->assertEquals($expected, $this->model->getOperator($type));
-    }
-
     abstract public function filterDataProvider();
 
     /**
@@ -117,7 +108,7 @@ abstract class FilterTestCase extends \PHPUnit_Framework_TestCase
      */
     protected function getTranslatorMock()
     {
-        $translator = $this->getMock('Symfony\Component\Translation\TranslatorInterface');
+        $translator = $this->getMockForAbstractClass('Symfony\Component\Translation\TranslatorInterface');
         $translator->expects($this->any())
             ->method('trans')
             ->will($this->returnArgument(0));

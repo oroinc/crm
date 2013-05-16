@@ -8,6 +8,14 @@ use Oro\Bundle\FilterBundle\Form\Type\Filter\DateRangeFilterType;
 
 class AbstractDateFilterTest extends FilterTestCase
 {
+    /**
+     * @var AbstractDateFilter
+     */
+    protected $model;
+
+    /**
+     * @return AbstractDateFilter|\PHPUnit_Framework_MockObject_MockObject
+     */
     protected function createTestFilter()
     {
         return $this->getMockBuilder('Oro\Bundle\GridBundle\Filter\ORM\AbstractDateFilter')
@@ -15,6 +23,9 @@ class AbstractDateFilterTest extends FilterTestCase
             ->getMockForAbstractClass();
     }
 
+    /**
+     * @return array
+     */
     public function parseDataDataProvider()
     {
         return array(
@@ -77,6 +88,9 @@ class AbstractDateFilterTest extends FilterTestCase
         $this->assertEquals($expected, $this->model->parseData($data));
     }
 
+    /**
+     * @return array
+     */
     public function filterDataProvider()
     {
         return array(
@@ -146,13 +160,12 @@ class AbstractDateFilterTest extends FilterTestCase
         );
     }
 
+    /**
+     * @param \DateTime $dateTime
+     * @return string
+     */
     protected function dateTimeToString(\DateTime $dateTime)
     {
         return $dateTime->format(AbstractDateFilter::DATETIME_FORMAT);
-    }
-
-    public function testGetOperator()
-    {
-        // do nothing as getOperator method not exist in this class
     }
 }

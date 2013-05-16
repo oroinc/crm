@@ -1,42 +1,34 @@
-var OroApp = OroApp || {};
-OroApp.Datagrid = OroApp.Datagrid || {};
+var Oro = Oro || {};
+Oro.Datagrid = Oro.Datagrid || {};
 
 /**
  * Panel with action buttons
  *
- * @class   OroApp.Datagrid.ActionsPanel
+ * @class   Oro.Datagrid.ActionsPanel
  * @extends Backbone.View
  */
-OroApp.Datagrid.ActionsPanel = Backbone.View.extend({
+Oro.Datagrid.ActionsPanel = Backbone.View.extend({
     /** @property String */
     className: 'btn-group',
 
-    /** @property {OroApp.Datagrid.Action.AbstractAction[]} */
+    /** @property {Oro.Datagrid.Action.AbstractAction[]} */
     actions: [],
 
-    /** @property {OroApp.Datagrid.Action.Launcher[]} */
+    /** @property {Oro.Datagrid.Action.Launcher[]} */
     launchers: [],
 
     /**
      * Initialize view
      *
      * @param {Object} options
-     * @param {Array} options.actions List of actions
-     * @throws {TypeError} If "actions" is undefined
+     * @param {Array} [options.actions] List of actions
      */
     initialize: function(options) {
         options = options || {};
 
-        if (!options.actions) {
-            throw new TypeError("'actions' is required");
+        if (options.actions) {
+            this.setActions(options.actions);
         }
-
-        this.actions = options.actions;
-
-        this.launchers = [];
-        _.each(this.actions, function(action) {
-            this.launchers.push(action.createLauncher());
-        }, this);
 
         Backbone.View.prototype.initialize.apply(this, arguments);
     },
@@ -54,6 +46,29 @@ OroApp.Datagrid.ActionsPanel = Backbone.View.extend({
         }, this);
 
         return this;
+    },
+
+    /**
+     * Set actions
+     *
+     * @param {Oro.Datagrid.Action.AbstractAction[]} actions
+     */
+    setActions: function(actions) {
+        this.actions = [];
+        this.launchers = [];
+        _.each(actions, function(action) {
+            this.addAction(action);
+        }, this);
+    },
+
+    /**
+     * Adds action to toolbar
+     *
+     * @param {Oro.Datagrid.Action.AbstractAction} action
+     */
+    addAction: function(action) {
+        this.actions.push(action);
+        this.launchers.push(action.createLauncher());
     },
 
     /**

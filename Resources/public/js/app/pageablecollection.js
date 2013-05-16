@@ -1,3 +1,5 @@
+var Oro = Oro || {};
+
 /**
  * Pageable collection
  *
@@ -6,16 +8,16 @@
  * updateState: Fired when collection state is updated using updateState method
  * beforeFetch: Fired when collection starts to fetch, before request is formed
  *
- * @class   OroApp.PageableCollection
+ * @class   Oro.PageableCollection
  * @extends Backbone.PageableCollection
  */
-OroApp.PageableCollection = Backbone.PageableCollection.extend({
+Oro.PageableCollection = Backbone.PageableCollection.extend({
     /**
      * Basic model to store row data
      *
      * @property {Function}
      */
-    model: OroApp.Model,
+    model: Backbone.Model,
 
     /**
      * Initial state of collection
@@ -46,8 +48,7 @@ OroApp.PageableCollection = Backbone.PageableCollection.extend({
     stateShortKeys: {
         currentPage: 'i',
         pageSize: 'p',
-        sortKey: 's',
-        order: 'o',
+        sorters: 's',
         filters: 'f'
     },
 
@@ -60,9 +61,14 @@ OroApp.PageableCollection = Backbone.PageableCollection.extend({
     initialize: function(models, options) {
         options = options || {};
         if (options.state) {
+            if (options.state.sorters) {
+                _.each(options.state.sorters, function(direction, field) {
+                    options.state.sorters[field] = this.getSortDirectionKey(direction);
+                }, this);
+            }
             _.extend(this.state, options.state);
         }
-        this.initialState = OroApp.deepClone(this.state);
+        this.initialState = Oro.deepClone(this.state);
 
         if (options.url) {
             this.url = options.url;
@@ -74,15 +80,22 @@ OroApp.PageableCollection = Backbone.PageableCollection.extend({
             this.inputName = options.inputName;
         }
 
-        this.on('remove', this.onRemove, this);
-
         _.extend(this.queryParams, {
             currentPage: this.inputName + '[_pager][_page]',
             pageSize:    this.inputName + '[_pager][_per_page]',
-            sortBy:      this.inputName + '[_sort_by][%field%]'
+            sortBy:      this.inputName + '[_sort_by][%field%]',
+            parameters:  this.inputName + '[_parameters]'
         });
 
-        OroApp.Collection.prototype.initialize.apply(this, arguments);
+        this.on('remove', this.onRemove, this);
+
+        Backbone.PageableCollection.prototype.initialize.apply(this, arguments);
+
+        if (this.state.sorters) {
+            _.each(options.state.sorters, function(direction, field) {
+                this.setSorting(field, direction, {'reset': false});
+            }, this);
+        }
     },
 
     /**
@@ -106,8 +119,8 @@ OroApp.PageableCollection = Backbone.PageableCollection.extend({
      */
     encodeStateData: function(stateObject) {
         var data = _.pick(stateObject, _.keys(this.stateShortKeys));
-        data = OroApp.invertKeys(data, this.stateShortKeys);
-        return OroApp.packToQueryString(data);
+        data = Oro.invertKeys(data, this.stateShortKeys);
+        return Oro.packToQueryString(data);
     },
 
     /**
@@ -117,8 +130,8 @@ OroApp.PageableCollection = Backbone.PageableCollection.extend({
      * @return {Object}
      */
     decodeStateData: function(stateString) {
-        var data = OroApp.unpackFromQueryString(stateString);
-        data = OroApp.invertKeys(data, _.invert(this.stateShortKeys));
+        var data = Oro.unpackFromQueryString(stateString);
+        data = Oro.invertKeys(data, _.invert(this.stateShortKeys));
         return data;
     },
 
@@ -189,7 +202,7 @@ OroApp.PageableCollection = Backbone.PageableCollection.extend({
      */
     reset: function(models, options) {
         this.trigger('beforeReset', this, options);
-        OroApp.Collection.prototype.reset.apply(this, arguments);
+        Backbone.PageableCollection.prototype.reset.apply(this, arguments);
     },
 
     /**
@@ -368,11 +381,11 @@ OroApp.PageableCollection = Backbone.PageableCollection.extend({
      * @return {Object}
      */
     processQueryParams: function(data, state) {
-        var pageablePrototype = OroApp.PageableCollection.prototype;
+        var pageablePrototype = Oro.PageableCollection.prototype;
 
         // map params except directions
         var queryParams = this.mode == "client" ?
-            _.pick(this.queryParams, "sortKey", "order") :
+            _.pick(this.queryParams, "sorters") :
             _.omit(_.pick(this.queryParams, _.keys(pageablePrototype.queryParams)), "directions");
 
         var i, kvp, k, v, kvps = _.pairs(queryParams), thisCopy = _.clone(this);
@@ -384,11 +397,13 @@ OroApp.PageableCollection = Backbone.PageableCollection.extend({
             }
         }
 
-        // fix up sorting parameters
-        if (state.sortKey && state.order) {
-            data[queryParams.order] = this.queryParams.directions[state.order + ""];
+        // set sorting parameters
+        if (state.sorters) {
+            _.each(state.sorters, function(direction, field) {
+                var key = this.queryParams.sortBy.replace('%field%', field);
+                data[key] = this.queryParams.directions[direction];
+            }, this);
         }
-        else if (!state.sortKey) delete data[queryParams.order];
 
         // map extra query parameters
         var extraKvps = _.pairs(_.omit(this.queryParams,
@@ -398,11 +413,6 @@ OroApp.PageableCollection = Backbone.PageableCollection.extend({
             v = kvp[1];
             v = _.isFunction(v) ? v.call(thisCopy) : v;
             data[kvp[0]] = v;
-        }
-
-        if (state.sortKey) {
-            var key = this.queryParams.sortBy.replace('%field%', state.sortKey);
-            data[key] = this.queryParams.directions[state.order];
         }
 
         // unused parameters
@@ -426,5 +436,67 @@ OroApp.PageableCollection = Backbone.PageableCollection.extend({
             }
         });
         return directionKey;
+    },
+
+    /**
+     * Set sorting order
+     *
+     * @param {String} sortKey
+     * @param {String} order
+     * @param {Object} options
+     * @return {*}
+     */
+    setSorting: function (sortKey, order, options) {
+
+        var state = this.state;
+
+        if (!options || !_.has(options, 'reset') || options.reset) {
+            state.sorters = {};
+        }
+        state.sorters[sortKey] = order;
+
+        // multiple sorting, last sorting has lowest priority
+        //
+        // to enable uncomment this block, remove block that works with sorters several string higher
+        // and remove reset option usage in initialize method
+        /*
+        delete state.sorters[sortKey];
+        if (order) {
+            state.sorters[sortKey] = order;
+        }
+        */
+
+        var fullCollection = this.fullCollection;
+
+        var delComp = false, delFullComp = false;
+
+        if (!order) delComp = delFullComp = true;
+
+        var mode = this.mode;
+        options = _.extend({side: mode == "client" ? mode : "server", full: true},
+            options);
+
+        var comparator = this._makeComparator(sortKey, order);
+
+        var full = options.full, side = options.side;
+
+        if (side == "client") {
+            if (full) {
+                if (fullCollection) fullCollection.comparator = comparator;
+                delComp = true;
+            }
+            else {
+                this.comparator = comparator;
+                delFullComp = true;
+            }
+        }
+        else if (side == "server" && !full) {
+            this.comparator = comparator;
+        }
+
+        if (delComp) delete this.comparator;
+        if (delFullComp && fullCollection) delete fullCollection.comparator;
+
+        return this;
     }
 });

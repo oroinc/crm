@@ -195,4 +195,12 @@ abstract class AbstractFilter extends AbstractORMFilter implements FilterInterfa
     {
         return $this->getOption('field_options', array());
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isNullable()
+    {
+        return $this->getOption('nullable', true);
+    }
 }

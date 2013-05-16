@@ -2,6 +2,8 @@
 
 namespace Oro\Bundle\GridBundle\Property;
 
+use Oro\Bundle\GridBundle\Datagrid\ResultRecordInterface;
+
 class FixedProperty extends AbstractProperty
 {
     /**
@@ -22,8 +24,8 @@ class FixedProperty extends AbstractProperty
     /**
      * {@inheritdoc}
      */
-    public function getValue($data)
+    public function getValue(ResultRecordInterface $record)
     {
-        return $this->getDataValue($data, $this->valueKey);
+        return $record->getValue($this->valueKey);
     }
 }
