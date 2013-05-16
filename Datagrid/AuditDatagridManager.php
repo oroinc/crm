@@ -10,7 +10,7 @@ use Oro\Bundle\GridBundle\Filter\FilterInterface;
 
 use Oro\Bundle\GridBundle\Property\TwigTemplateProperty;
 
-class LogDatagridManager extends DatagridManager
+class AuditDatagridManager extends DatagridManager
 {
     /**
      * @var FieldDescriptionCollection

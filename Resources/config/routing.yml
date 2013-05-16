@@ -4,7 +4,7 @@ oro_dataaudit_bundle:
     prefix:       /audit
 
 oro_dataaudit_api_history:
-    resource:     "@OroDataAuditBundle/Controller/Api/Rest/LogController.php"
+    resource:     "@OroDataAuditBundle/Controller/Api/Rest/AuditController.php"
     type:         rest
     prefix:       api/rest/{version}/
     defaults:

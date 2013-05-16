@@ -10,16 +10,16 @@ use FOS\Rest\Util\Codes;
 
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
-use Oro\Bundle\DataAuditBundle\Entity\Log;
+use Oro\Bundle\DataAuditBundle\Entity\Audit;
 use Symfony\Component\Validator\Constraints\True;
 
 /**
  * @NamePrefix("oro_api_")
  */
-class LogController extends FOSRestController implements ClassResourceInterface
+class AuditController extends FOSRestController implements ClassResourceInterface
 {
     /**
-     * Get list of logs
+     * Get list of audit logs
      *
      * @ApiDoc(
      *  description="Get list of all logged entities",
@@ -32,7 +32,7 @@ class LogController extends FOSRestController implements ClassResourceInterface
     {
         return $this->handleView(
             $this->view(
-                $this->getDoctrine()->getRepository('OroDataAuditBundle:Log')->findAll(),
+                $this->getDoctrine()->getRepository('OroDataAuditBundle:Audit')->findAll(),
                 Codes::HTTP_OK
             )
         );
@@ -94,16 +94,16 @@ class LogController extends FOSRestController implements ClassResourceInterface
      */
     protected function getManager()
     {
-        return $this->getDoctrine()->getManagerForClass('OroDataAuditBundle:Log');
+        return $this->getDoctrine()->getManagerForClass('OroDataAuditBundle:Audit');
     }
 
     /**
      * Get entity by id
      *
-     * @return Log
+     * @return Audit
      */
     protected function getEntity($id)
     {
-        return $this->getDoctrine()->getRepository('OroDataAuditBundle:Log')->findOneById((int) $id);
+        return $this->getDoctrine()->getRepository('OroDataAuditBundle:Audit')->findOneById((int) $id);
     }
 }
