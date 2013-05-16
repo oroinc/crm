@@ -49,7 +49,12 @@ class GroupController extends FOSRestController implements ClassResourceInterfac
      *          {"name"="id", "dataType"="integer"},
      *      }
      * )
-     * @AclAncestor("oro_user_group_show")
+     * @Acl(
+     *      id="oro_user_group_show",
+     *      name="View user group",
+     *      description="View user group",
+     *      parent="oro_user_group"
+     * )
      */
     public function getAction($id)
     {
@@ -97,7 +102,7 @@ class GroupController extends FOSRestController implements ClassResourceInterfac
      *          {"name"="id", "dataType"="integer"},
      *      }
      * )
-     * @AclAncestor("oro_user_group_update")
+     * @AclAncestor("oro_user_group_edit")
      */
     public function putAction($id)
     {

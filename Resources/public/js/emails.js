@@ -1,8 +1,7 @@
 $(function () {
-    var cList  = $('#email-fields-list'),
+    $(document).on('click', '#add-another-email', function (event) {
+        var cList  = $('#email-fields-list'),
         cCount = cList.children().length;
-
-    $('#add-another-email').on('click', function () {
         widget = cList.attr('data-prototype').replace(/__name__/g, cCount++);
 
         $('<div></div>').html(widget).appendTo(cList);

@@ -93,7 +93,6 @@ class SoapGroupsApiTest extends WebTestCase
      */
     public function testDeleteGroups()
     {
-        $this->markTestSkipped('Due fatal error: Call to a member function remove() on a non-object in GroupController.php on line 70');
         //get roles
         $groups = $this->clientSoap->soapClient->getGroups();
         $groups = ToolsAPI::classToArray($groups);
