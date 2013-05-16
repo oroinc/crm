@@ -72,6 +72,11 @@ navigation.favorites.MainView = navigation.MainViewAbstract.extend({
         } else {
             this.inactivate();
         }
+        /**
+         * Backbone event. Fired when tab is changed
+         * @event tab:changed
+         */
+        Oro.Events.trigger("tab:changed", this.options.tabId);
         return this;
     }
 });

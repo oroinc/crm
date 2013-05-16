@@ -12,7 +12,11 @@
         {% import _self as oro_menu %}
         {%- set linkAttributes = item.linkAttributes %}
         {%- set labelAttributes = item.labelAttributes %}
-        <li id="{{- item.name|replace({' ': '_', '#': '_'})|lower|trim -}}-tab">
+        {% set class = [''] %}
+        {% if item.extras.activeIfFirstIsEmpty is defined and item.extras.activeIfFirstIsEmpty %}
+            {% set class = class|merge(['show-if-empty']) %}
+        {% endif %}
+        <li id="{{- item.name|replace({' ': '_', '#': '_'})|lower|trim -}}-tab" class="{{ class|join(' ') }}">
             {{ block('linkElement') }}
         </li>
     {% endif %}

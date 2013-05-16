@@ -28,12 +28,13 @@ navigation.dotMenu.MainView = Backbone.View.extend({
             this
         );
         Oro.Events.bind(
-            "pinbar:loaded",
-            function(hasPinbarTab) {
-                this.chooseActiveTab(hasPinbarTab);
+            "tab:changed",
+            function(tabId) {
+                this.chooseActiveTab(tabId);
             },
             this
         );
+        this.chooseActiveTab();
     },
 
     init: function() {
@@ -105,15 +106,41 @@ navigation.dotMenu.MainView = Backbone.View.extend({
     },
 
     /**
-     * Set active dots menu tab. If pinbar tab is empty, history tab is shown by default
+     * Checks if first tab in 3 dots menu is empty
      *
-     * @param hasPinbarTab
+     * @return {*Boolean}
      */
-    chooseActiveTab: function(hasPinbarTab) {
-        if (!hasPinbarTab) {
-            this.$('#history-tab a').tab('show');
+    isFirstTabEmpty: function() {
+        return this.$tabsContent.children().first() &&
+            (!this.$tabsContent.children().first().html().trim() ||
+            !this.$tabsContent.children().first().find('ul').html());
+    },
+
+    /**
+     * Set default tab as active based on config class
+     */
+    setDefaultNonEmptyTab: function() {
+        this.$('.show-if-empty a').tab('show');
+    },
+
+    /**
+     * Set active dots menu tab.
+     *
+     * @param tabId
+     */
+    chooseActiveTab: function(tabId) {
+        if (_.isUndefined(tabId)) {
+            if (this.isFirstTabEmpty()) {
+                this.setDefaultNonEmptyTab()
+            }
         } else {
-            this.$('#pinbar-tab a').tab('show');
+            if (this.getTab(tabId).$tab.index() == 0) {
+                if (!this.isTabEmpty(tabId)) {
+                    this.tabs[tabId].$tab.find('a').tab('show');
+                } else {
+                    this.setDefaultNonEmptyTab();
+                }
+            }
         }
     },
 
