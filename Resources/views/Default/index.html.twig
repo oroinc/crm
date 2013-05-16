@@ -333,8 +333,11 @@
                         </div>
                     </div>
                 {% endblock pin_bar %}
-                {% block application_menu %}
-                {% endblock application_menu %}
+                <div id="main-menu">
+                    {% block application_menu %}
+                    {% endblock application_menu %}
+                </div>
+
                 <div id="flash-messages">
                     {% block messages %}
                         {% if app.session.flashbag.peekAll|length > 0 %}
@@ -407,6 +410,6 @@
 {% else %}
 {# Template for hash tag navigation#}
 {% include 'OroNavigationBundle:HashNav:hashNavAjax.html.twig'
-    with {'script': block('head_script'), 'messages':block('messages'), 'content': block('page_container')}
+    with {'script': block('head_script'), 'messages':block('messages'), 'content': block('page_container'), 'menu': block('application_menu')}
 %}
 {% endif %}
