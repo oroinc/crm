@@ -10,19 +10,25 @@
                 <th style="width: 100px;">Author</th>
                 <th style="width: 100px;">Date</th>
                 <th style="width: 50px;">Version</th>
-                <th>Changed values</th>
+                <th style="width: 200px;">Old values</th>
+                <th>New values</th>
             </tr>
         </thead>
         <tbody>
             {% for entry in history %}
             <tr>
                 <td>{{ entry.id }}</td>
-                <td><strong>{{ entry.username }}</strong></td>
+                <td>{% if entry.user.id is defined %}<a href="{{ path('oro_user_profile_show', { id: entry.user.id }) }}">{{ entry.user.username }}</a>{% else %}{{ entry.user }}{% endif %}</td>
                 <td>{{ macros.time(entry.loggedAt) }}</td>
                 <td>{{ entry.version }}</td>
                 <td>
                     {% for key, value in entry.data %}
-                        {{ key }}: {{ value.timestamp is defined ? macros.time(value) : value }}<br />
+                    {{ key }}: {{ value.old.timestamp is defined ? macros.time(value.old) : value.old }}<br />
+                    {% endfor %}
+                </td>
+                <td>
+                    {% for key, value in entry.data %}
+                    {{ key }}: {{ value.new.timestamp is defined ? macros.time(value.new) : value.new }}<br />
                     {% endfor %}
                 </td>
             </tr>

@@ -63,7 +63,8 @@ class AuditController extends Controller
             array(
                 'objectClass' => $entity,
                 'objectId'    => $id,
-            )
+            ),
+            array('id' => 'DESC')
         );
 
         return array(
