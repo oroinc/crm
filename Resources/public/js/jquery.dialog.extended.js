@@ -295,6 +295,7 @@ $.widget( "ui.dialog", $.ui.dialog, {
         this.uiDialogTitlebarClose
             // override some unwanted jquery-ui styles
             .css({ "position": "static", "top": "auto", "right": "auto", "margin": 0 })
+            .attr('title', 'close')
             // change icon
             .find(".ui-icon").removeClass("ui-icon-closethick").addClass(this.options.icons.close).end()
             // move to button-pane
@@ -307,7 +308,7 @@ $.widget( "ui.dialog", $.ui.dialog, {
                 var type = types[key];
                 var button = this.options.icons[type];
                 if (typeof this.options.icons[type] == 'string') {
-                    button = '<a class="ui-dialog-titlebar-' + type + ' ui-corner-all" href="#"><span class="ui-icon ' + this.options.icons[type] + '">' + type + '</span></a>';
+                    button = '<a class="ui-dialog-titlebar-' + type + ' ui-corner-all" href="#" title="' + type+ '"><span class="ui-icon ' + this.options.icons[type] + '">' + type + '</span></a>';
 
                 } else {
                     button.addClass('ui-dialog-titlebar-' + type);
