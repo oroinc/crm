@@ -1,0 +1,17 @@
+{
+    "name": "oro/testframework-bundle",
+    "type": "symfony-bundle",
+    "description": "BAP TestFramework Bundle",
+    "keywords": ["BAP", "Test", "Framework"],
+    "homepage": "https://github.com/laboro/TestFrameworkBundle",
+    "license": "MIT",
+    "require": {
+        "php": ">=5.3.3",
+        "symfony/symfony": "2.1.*",
+    },
+    "autoload": {
+        "psr-0": { "Oro\\Bundle\\TestFrameworkBundle": "" }
+    },
+    "target-dir": "Oro/Bundle/TestFrameworkBundle",
+    "minimum-stability": "dev"
+}
