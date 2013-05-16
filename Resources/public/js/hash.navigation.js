@@ -294,6 +294,7 @@ Oro.Navigation = Backbone.Router.extend({
 
                 this.processClicks(this.selectors.menu + ' ' + this.selectors.links);
                 this.processClicks(this.selectors.container + ' ' + this.selectors.links);
+                this.updateMenuTabs(data);
                 this.processForms(this.selectors.container + ' ' + this.selectors.forms);
                 this.updateMessages(data);
                 this.hideActiveDropdowns();
@@ -321,6 +322,21 @@ Oro.Navigation = Backbone.Router.extend({
      */
     updateMessages: function(data) {
         $(this.selectors.flashMessages).html($(data).filter(this.selectors.flashMessages).html());
+    },
+
+    /**
+    * Update History and Most Viewed menu tabs
+    *
+    * @param data
+    */
+    updateMenuTabs: function (data) {
+        $(this.selectors.historyTab).html($(data).filter(this.selectors.historyTab).html());
+        $(this.selectors.mostViewedTab).html($(data).filter(this.selectors.mostViewedTab).html());
+        /**
+          * Processing links for history and most viewed tabs
+          */
+        this.processClicks(this.selectors.historyTab + ' ' + this.selectors.links + ', ' +
+                this.selectors.mostViewedTab + ' ' + this.selectors.links);
     },
 
     /**
