@@ -139,6 +139,7 @@ $.widget( "ui.dialog", $.ui.dialog, {
                 function(btnClass) {
                     return function() {
                         widget.find(btnClass).click();
+                        return false;
                     }
                 }(btnClass));
         }
