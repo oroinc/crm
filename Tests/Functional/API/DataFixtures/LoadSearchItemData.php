@@ -1,5 +1,6 @@
 <?php
-namespace Acme\Bundle\TestsBundle\Tests\Functional\SearchBundle\API\DataFixtures;
+
+namespace Oro\Bundle\SearchBundle\Tests\Functional\API\DataFixtures;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;

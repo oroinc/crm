@@ -1,6 +1,6 @@
 # common test case
 request:
-    query: "from demoSearchBundle:Item where datetime datetimeValue > 2016-01-01"
+    query: "from TestsBundle:Item where datetime datetimeValue > 2016-01-01"
     offset: ~
     max_results: ~
 response:
