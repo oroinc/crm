@@ -1,6 +1,6 @@
 # common test case
 request:
-    query: "from demoSearchBundle:Item where stringValue !~ item5"
+    query: "from TestsBundle:Item where stringValue !~ item5"
     offset: ~
     max_results: ~
 response:
@@ -9,5 +9,5 @@ response:
     rest:
         data:
             -
-                entity_name: Acme\Bundle\DemoSearchBundle\Entity\Item
+                entity_name: Acme\Bundle\TestsBundle\Entity\Item
                 record_string: item1@mail.com

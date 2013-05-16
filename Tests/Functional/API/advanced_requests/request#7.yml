@@ -1,6 +1,6 @@
 # common test case
 request:
-    query: "from demoSearchBundle:Item where integer integerValue < 2000"
+    query: "from TestsBundle:Item where integer integerValue < 2000"
     offset: ~
     max_results: ~
 response:
