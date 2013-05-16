@@ -12,8 +12,8 @@
         <h1>
             {{ 'Contacts'|trans }}
             <div class="pull-right">
-                <a class="btn btn-primary" href="{{ path('oro_contact_create', {back: app.request.uri}) }}">{{ 'Add new'|trans }}</a>
                 <a class="btn" href="{{ path('oro_contact_group_index') }}">{{ 'Manage groups'|trans }}</a>
+                <a class="btn btn-primary" href="{{ path('oro_contact_create', {back: app.request.uri}) }}">{{ 'Add contact'|trans }}</a>
             </div>
         </h1>
         <div id="contacts-grid"></div>

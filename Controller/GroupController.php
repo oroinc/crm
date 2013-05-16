@@ -30,7 +30,7 @@ class GroupController extends Controller
      * @Template("OroContactBundle:Group:update.html.twig")
      * @Acl(
      *      id="oro_contact_group_create",
-     *      name="Create group",
+     *      name="Create Group",
      *      description="Create new group",
      *      parent="oro_contact_group"
      * )
@@ -47,7 +47,7 @@ class GroupController extends Controller
      * @Template
      * @Acl(
      *      id="oro_contact_group_update",
-     *      name="Update group",
+     *      name="Update Group",
      *      description="Update group",
      *      parent="oro_contact_group"
      * )
@@ -109,7 +109,7 @@ class GroupController extends Controller
      * )
      * @Acl(
      *      id="oro_contact_group_list",
-     *      name="View contact group list",
+     *      name="View Contact Group List",
      *      description="List of contact groups",
      *      parent="oro_contact_group"
      * )
