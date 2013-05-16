@@ -36,7 +36,7 @@ class AuditController extends Controller
      */
     public function indexAction(Request $request)
     {
-        $datagrid = $this->get('oro_dataaudit.audit_datagrid.manager')->getDatagrid();
+        $datagrid = $this->get('oro_dataaudit.datagrid.manager')->getDatagrid();
         $view     = 'json' == $request->getRequestFormat()
             ? 'OroGridBundle:Datagrid:list.json.php'
             : 'OroDataAuditBundle:Audit:index.html.twig';
