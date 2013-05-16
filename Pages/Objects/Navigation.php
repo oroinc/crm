@@ -1,9 +1,9 @@
 <?php
 
-namespace Oro\Bundle\TestsBundle\Pages\BAP;
+namespace Oro\Bundle\TestFrameworkBundle\Pages\Objects;
 
 use PHPUnit_Framework_Assert;
-use Oro\Bundle\TestsBundle\Pages\Page;
+use Oro\Bundle\TestFrameworkBundle\Pages\Page;
 
 class Navigation extends Page
 {

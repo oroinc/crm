@@ -1,9 +1,9 @@
 <?php
 
-namespace Oro\Bundle\TestsBundle\Pages\BAP;
+namespace Oro\Bundle\TestFrameworkBundle\Pages\Objects;
 
-use Oro\Bundle\TestsBundle\Pages\Entity;
-use Oro\Bundle\TestsBundle\Pages\Page;
+use Oro\Bundle\TestFrameworkBundle\Pages\Entity;
+use Oro\Bundle\TestFrameworkBundle\Pages\Page;
 
 class Group extends Page implements Entity
 {

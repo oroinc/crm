@@ -1,8 +1,8 @@
 <?php
 
-namespace Oro\Bundle\TestsBundle\Pages\BAP;
+namespace Oro\Bundle\TestFrameworkBundle\Pages\Objects;
 
-use Oro\Bundle\TestsBundle\Pages\PageFilteredGrid;
+use Oro\Bundle\TestFrameworkBundle\Pages\PageFilteredGrid;
 
 class Users extends PageFilteredGrid
 {
