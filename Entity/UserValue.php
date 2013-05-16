@@ -12,7 +12,7 @@ use Oro\Bundle\FlexibleEntityBundle\Entity\Attribute;
 /**
  * @ORM\Table(name="oro_user_value")
  * @ORM\Entity
- * @Gedmo\Loggable(logEntryClass="Oro\Bundle\DataAuditBundle\Entity\Log")
+ * @Gedmo\Loggable(logEntryClass="Oro\Bundle\DataAuditBundle\Entity\Audit")
  */
 class UserValue extends AbstractEntityFlexibleValue
 {
