@@ -1,9 +1,9 @@
 parameters:
-    oro_dataaudit.audit_datagrid.manager.class: Oro\Bundle\DataAuditBundle\Datagrid\AuditDatagridManager
+    oro_dataaudit.datagrid.manager.class:       Oro\Bundle\DataAuditBundle\Datagrid\AuditDatagridManager
 
 services:
-    oro_dataaudit.audit_datagrid.manager:
-        class:                                  %oro_dataaudit.audit_datagrid.manager.class%
+    oro_dataaudit.datagrid.manager:
+        class:                                  %oro_dataaudit.datagrid.manager.class%
         tags:
             - name:                             oro_grid.datagrid.manager
               datagrid_name:                    audit

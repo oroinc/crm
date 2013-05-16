@@ -57,6 +57,14 @@ class Audit extends AbstractLogEntry
     protected $objectClass;
 
     /**
+     * @var string $objectName
+     *
+     * @ORM\Column(name="object_name", type="string", length=255)
+     * @Soap\ComplexType("string", nillable=true)
+     */
+    protected $objectName;
+
+    /**
      * @var integer $version
      *
      * @ORM\Column(type="integer")
@@ -74,9 +82,6 @@ class Audit extends AbstractLogEntry
 
     /**
      * @var string $username
-     *
-     * @ORM\Column(length=255, nullable=true)
-     * @Soap\ComplexType("string", nillable=true)
      */
     protected $username;
 
@@ -109,5 +114,26 @@ class Audit extends AbstractLogEntry
     public function getUser()
     {
         return $this->user;
+        //return is_null($this->user) ? '' : $this->user->getFirstname().' '.$this->user->getLastname();
+    }
+
+    /**
+     * Get object name
+     *
+     * @return string
+     */
+    public function getObjectName()
+    {
+        return $this->objectName;
+    }
+
+    /**
+     * Set object name
+     *
+     * @param string $objectName
+     */
+    public function setObjectName($objectName)
+    {
+        $this->objectName = $objectName;
     }
 }
