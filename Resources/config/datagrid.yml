@@ -1,14 +1,14 @@
 parameters:
-    oro_dataaudit.log_datagrid.manager.class: Oro\Bundle\DataAuditBundle\Datagrid\LogDatagridManager
+    oro_dataaudit.audit_datagrid.manager.class: Oro\Bundle\DataAuditBundle\Datagrid\AuditDatagridManager
 
 services:
-    oro_dataaudit.log_datagrid.manager:
-        class: %oro_dataaudit.log_datagrid.manager.class%
+    oro_dataaudit.audit_datagrid.manager:
+        class: %oro_dataaudit.audit_datagrid.manager.class%
         tags:
             - name: oro_grid.datagrid.manager
-              datagrid_name: log
-              entity_name: Oro\Bundle\DataAuditBundle\Entity\Log
-              entity_hint: log
+              datagrid_name: audit
+              entity_name: Oro\Bundle\DataAuditBundle\Entity\Audit
+              entity_hint: audit
               route_name: oro_dataaudit_index
         calls:
             - [ setRouter, [ @router ] ]

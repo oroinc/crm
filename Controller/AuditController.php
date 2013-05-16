@@ -9,7 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 use Oro\Bundle\UserBundle\Annotation\Acl;
-use Oro\Bundle\DataAuditBundle\Entity\Log;
+use Oro\Bundle\DataAuditBundle\Entity\Audit;
 
 /**
  * @Acl(
@@ -18,7 +18,7 @@ use Oro\Bundle\DataAuditBundle\Entity\Log;
  *      description="Data audit"
  * )
  */
-class LogController extends Controller
+class AuditController extends Controller
 {
     /**
      * @Route(
@@ -29,17 +29,17 @@ class LogController extends Controller
      * )
      * @Acl(
      *      id="oro_dataaudit_list",
-     *      name="View log stream",
-     *      description="View log stream",
+     *      name="View audit stream",
+     *      description="View audit stream",
      *      parent="oro_dataaudit"
      * )
      */
     public function indexAction(Request $request)
     {
-        $datagrid = $this->get('oro_dataaudit.log_datagrid.manager')->getDatagrid();
+        $datagrid = $this->get('oro_dataaudit.audit_datagrid.manager')->getDatagrid();
         $view     = 'json' == $request->getRequestFormat()
             ? 'OroGridBundle:Datagrid:list.json.php'
-            : 'OroDataAuditBundle:Log:index.html.twig';
+            : 'OroDataAuditBundle:Audit:index.html.twig';
 
         return $this->render(
             $view,
@@ -53,13 +53,13 @@ class LogController extends Controller
      * @Acl(
      *      id="oro_dataaudit_history",
      *      name="View entity history",
-     *      description="View entity history log",
+     *      description="View entity history audit log",
      *      parent="oro_dataaudit"
      * )
      */
     public function historyAction($entity, $id)
     {
-        $history = $this->getManager()->getRepository('OroDataAuditBundle:Log')->findBy(
+        $history = $this->getManager()->getRepository('OroDataAuditBundle:Audit')->findBy(
             array(
                 'objectClass' => $entity,
                 'objectId'    => $id,
@@ -81,7 +81,7 @@ class LogController extends Controller
      *      parent="oro_dataaudit"
      * )
      */
-    public function showAction(Log $entry)
+    public function showAction(Audit $entry)
     {
         return array(
             'entry' => $entry,
@@ -93,6 +93,6 @@ class LogController extends Controller
      */
     protected function getManager()
     {
-        return $this->getDoctrine()->getManagerForClass('OroDataAuditBundle:Log');
+        return $this->getDoctrine()->getManagerForClass('OroDataAuditBundle:Audit');
     }
 }

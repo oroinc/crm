@@ -7,38 +7,38 @@ use Symfony\Component\DependencyInjection\ContainerAware;
 use Doctrine\Common\Persistence\ObjectManager;
 use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 
-use Oro\Bundle\DataAuditBundle\Entity\Log;
+use Oro\Bundle\DataAuditBundle\Entity\Audit;
 
-class LogController extends ContainerAware
+class AuditController extends ContainerAware
 {
     /**
-     * @Soap\Method("getLogs")
-     * @Soap\Result(phpType = "Oro\Bundle\DataAuditBundle\Entity\Log[]")
+     * @Soap\Method("getAudits")
+     * @Soap\Result(phpType = "Oro\Bundle\DataAuditBundle\Entity\Audit[]")
      */
     public function cgetAction()
     {
-        return $this->getManager()->getRepository('OroDataAuditBundle:Log')->findAll();
+        return $this->getManager()->getRepository('OroDataAuditBundle:Audit')->findAll();
     }
 
     /**
-     * @Soap\Method("getLog")
+     * @Soap\Method("getAudit")
      * @Soap\Param("id", phpType = "int")
-     * @Soap\Result(phpType = "Oro\Bundle\DataAuditBundle\Entity\Log")
+     * @Soap\Result(phpType = "Oro\Bundle\DataAuditBundle\Entity\Audit")
      */
     public function getAction($id)
     {
-        return $this->getEntity('OroDataAuditBundle:Log', (int)$id);
+        return $this->getEntity('OroDataAuditBundle:Audit', (int)$id);
     }
 
     /**
-     * @Soap\Method("deleteLog")
+     * @Soap\Method("deleteAudit")
      * @Soap\Param("id", phpType = "int")
      * @Soap\Result(phpType = "boolean")
      */
     public function deleteAction($id)
     {
         $em = $this->getManager();
-        $entity = $this->getEntity('OroDataAuditBundle:Log', (int)$id);
+        $entity = $this->getEntity('OroDataAuditBundle:Audit', (int)$id);
 
         $em->remove($entity);
         $em->flush();
@@ -52,7 +52,7 @@ class LogController extends ContainerAware
      * @param string $repo
      * @param int|string $id
      * @throws \SoapFault
-     * @return Log
+     * @return Audit
      */
     protected function getEntity($repo, $id)
     {

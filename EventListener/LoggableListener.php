@@ -9,7 +9,7 @@ use Gedmo\Loggable\LoggableListener as BaseListener;
 use Gedmo\Loggable\Mapping\Event\LoggableAdapter;
 use Gedmo\Tool\Wrapper\AbstractWrapper;
 
-use Oro\Bundle\DataAuditBundle\Entity\Log;
+use Oro\Bundle\DataAuditBundle\Entity\Audit;
 use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityFlexibleValue;
 use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityFlexible;
 
@@ -23,7 +23,7 @@ class LoggableListener extends BaseListener
     protected $loggedObjects = array();
 
     /**
-     * Create a new Log instance
+     * Create a new Audit instance
      *
      * @param string $action
      * @param object $object

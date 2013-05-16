@@ -12,7 +12,7 @@ use Oro\Bundle\UserBundle\Entity\User;
  * @ORM\Entity
  * @ORM\Table(name="oro_audit")
  */
-class Log extends AbstractLogEntry
+class Audit extends AbstractLogEntry
 {
     /**
      * @var integer $id
@@ -92,7 +92,7 @@ class Log extends AbstractLogEntry
      * Set user
      *
      * @param  User $user
-     * @return Log
+     * @return Audit
      */
     public function setUser(User $user = null)
     {
