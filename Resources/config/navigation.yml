@@ -1,7 +1,7 @@
 oro_menu_config:
     items:
-        user_tab:
-            label: 'Users'
+        system_tab:
+            label: 'System'
             uri: '#'
         user_list:
             label: 'Users'
@@ -34,7 +34,7 @@ oro_menu_config:
     tree:
         application_menu:
             children:
-                user_tab:
+                system_tab:
                     children:
                         user_list: ~
                         user_roles: ~
