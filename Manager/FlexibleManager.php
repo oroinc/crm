@@ -360,14 +360,12 @@ class FlexibleManager implements TranslatableInterface, ScopableInterface
     public function createFlexibleValue()
     {
         $class = $this->getFlexibleValueName();
-        $object = new $class();
-        $object->setLocale($this->getLocale());
-        $object->setScope($this->getScope());
+        $value = new $class();
         // dispatch event
-        $event = new FilterFlexibleValueEvent($this, $object);
+        $event = new FilterFlexibleValueEvent($this, $value);
         $this->eventDispatcher->dispatch(FlexibleEntityEvents::CREATE_VALUE, $event);
 
-        return $object;
+        return $value;
     }
 
     /**
