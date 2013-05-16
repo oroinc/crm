@@ -1,2 +1,2 @@
 parameters:
-    test.client.class:    Acme\Bundle\TestsBundle\Test\Client
+    test.client.class:    Oro\Bundle\TestFrameworkBundle\Test\Client
