@@ -34,7 +34,7 @@ class Page
     public function __call($name, $arguments)
     {
         if (preg_match('/open(.*)/i', "{$name}", $result) > 0) {
-            $class = __NAMESPACE__ . '\\BAP\\' . $result[1];
+            $class = __NAMESPACE__ . '\\Objects\\' . $result[1];
             return new $class($this);
         }
 
