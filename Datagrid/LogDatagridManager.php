@@ -35,7 +35,7 @@ class LogDatagridManager extends DatagridManager
                 'required'    => false,
                 'sortable'    => true,
                 'filterable'  => true,
-                'show_filter' => true,
+                'show_filter' => false,
             )
         );
         $this->fieldsCollection->add($fieldId);
@@ -73,7 +73,7 @@ class LogDatagridManager extends DatagridManager
                 'required'    => false,
                 'sortable'    => true,
                 'filterable'  => true,
-                'show_filter' => true,
+                'show_filter' => false,
             )
         );
         $this->fieldsCollection->add($fieldVersion);
@@ -89,7 +89,7 @@ class LogDatagridManager extends DatagridManager
                 'required'    => false,
                 'sortable'    => true,
                 'filterable'  => true,
-                'show_filter' => true,
+                'show_filter' => false,
             )
         );
         $this->fieldsCollection->add($fieldLogged);
@@ -98,14 +98,16 @@ class LogDatagridManager extends DatagridManager
         $fieldObjectClass->setName('objectClass');
         $fieldObjectClass->setOptions(
             array(
-                'type'        => FieldDescriptionInterface::TYPE_TEXT,
+                'type'        => FieldDescriptionInterface::TYPE_OPTIONS,
                 'label'       => 'Object Class',
                 'field_name'  => 'objectClass',
-                'filter_type' => FilterInterface::TYPE_STRING,
+                'filter_type' => FilterInterface::TYPE_CHOICE,
                 'required'    => false,
                 'sortable'    => true,
                 'filterable'  => true,
                 'show_filter' => true,
+                'choices' => array(),
+                'multiple' => true,
             )
         );
         $this->fieldsCollection->add($fieldObjectClass);
@@ -135,8 +137,8 @@ class LogDatagridManager extends DatagridManager
                 'field_name'  => 'user',
                 'filter_type' => FilterInterface::TYPE_STRING,
                 'required'    => false,
-                'sortable'    => true,
-                'filterable'  => true,
+                'sortable'    => false,
+                'filterable'  => false,
                 'show_filter' => false,
             )
         );

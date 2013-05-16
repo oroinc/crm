@@ -45,7 +45,7 @@ class LogListener
             if ($security->getToken() && is_object($user = $security->getToken()->getUser())) {
                 $eventArgs->getEntity()->setUser($user);
             } else {
-                throw new \RuntimeException('Unauthorised entity operation');
+                //throw new \RuntimeException('Unauthorised entity operation');
             }
         }
     }
