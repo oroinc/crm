@@ -1,5 +1,5 @@
 {% extends 'OroAccountBundle::layout.html.twig' %}
-{% import 'OroUserBundle::macros.html.twig' as macros %}
+{% import 'OroUIBundle::macros.html.twig' as macros %}
 {% form_theme form with 'OroAddressBundle:Include:fields.html.twig' %}
 {% oro_title_set({params : {"%account.name%": form.vars.value.name|default('N/A')} }) %}
 
