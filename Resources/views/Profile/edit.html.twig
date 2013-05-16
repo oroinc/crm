@@ -122,12 +122,12 @@
                                     <label for="selectAccountName" class="control-label">{{ 'Additional emails'|trans }}:</label>
                                     <div class="controls">
                                         <div class="row-oro">
-                                            <div id="email-fields-list" data-prototype="{{ macros.collection_prototype(form.emails)|escape }}">
+                                            <div class="collection-fields-list" data-prototype="{{ macros.collection_prototype(form.emails)|escape }}">
                                                 {% for emailField in form.emails.children %}
                                                     {{ macros.collection_prototype(emailField) }}
                                                 {% endfor %}
                                             </div>
-                                            <a class="btn" href="javascript: void(0);" id="add-another-email">{{ 'Add another email'|trans }}</a>
+                                            <a class="btn add-list-item" href="javascript: void(0);">{{ 'Add another email'|trans }}</a>
                                         </div>
                                     </div>
                                 </div>
