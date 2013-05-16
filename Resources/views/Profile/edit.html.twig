@@ -19,14 +19,17 @@
                         </div>
                         <div class="pull-left btn-group icons-holder">
                             {% if form.vars.value.id and resource_granted('oro_user_profile_remove') %}
-                            <a href="javascript: void(0);" class="btn icons-holder-text" id="btn-remove-profile" data-id="{{ form.vars.value.id }}" data-message="{{ 'Are you sure you want to delete this profile?'|trans }}" title="{{ 'Delete profile'|trans }}"><i class="icon-trash hide-text">{{ 'Remove'|trans }}</i>Delete</a>
+                                <a href="javascript: void(0);" class="btn icons-holder-text" id="btn-remove-profile" data-id="{{ form.vars.value.id }}" data-message="{{ 'Are you sure you want to delete this profile?'|trans }}" title="{{ 'Delete profile'|trans }}"><i class="icon-trash hide-text">{{ 'Remove'|trans }}</i>Delete</a>
                             {% endif %}
+                        </div>
+                        <div class="pull-left">
+                            <div class="separator-btn"></div>
                         </div>
                         <div class="pull-left customer-info-top-actions">
                             <div class="btn-group">
                                 <a href="{{ app.session.get('back') ? app.session.get('back') : path('oro_user_index') }}" class="btn back">{{ 'Cancel'|trans }}</a>
-                                <button type="submit" class="btn btn-primary"><i class="icon-ok icon-white hide-text">Save </i> {{ ' Save'|trans }}</button>
                             </div>
+                            <button type="submit" class="btn btn-success">{{ ' Save'|trans }}</button>
                         </div>
                     </div>
                     <div class="pull-right pull-right-extra">
@@ -35,32 +38,32 @@
                     </div>
                 </div>
                 {% if form.vars.value.id %}
-                <div class="pull-left">
-                    <div class="customer-info well-small">
-                        <div class="visual"><img src="{{ form.vars.value.imagePath ? form.vars.value.imagePath | imagine_filter('avatar_med') : asset('bundles/oroui/img/info-usser.png') }}" alt="{{ form.vars.value.fullname(format) }}"/></div>
-                        <div class="customer-content pull-left">
-                            <div class="clearfix-oro">
-                                <div class="sub-title">{{ 'User'|trans }}</div>
-                                <span class="separator">/</span>
-                                <h1 class="usser-name">{{ form.vars.value.fullname(format)|default('N/A') }}</h1>
+                    <div class="pull-left">
+                        <div class="customer-info well-small">
+                            <div class="visual"><img src="{{ form.vars.value.imagePath ? form.vars.value.imagePath | imagine_filter('avatar_med') : asset('bundles/oroui/img/info-usser.png') }}" alt="{{ form.vars.value.fullname(format) }}"/></div>
+                            <div class="customer-content pull-left">
+                                <div class="clearfix-oro">
+                                    <div class="sub-title">{{ 'User'|trans }}</div>
+                                    <span class="separator">/</span>
+                                    <h1 class="usser-name">{{ form.vars.value.fullname(format)|default('N/A') }}</h1>
+                                </div>
+                                <ul class="inline">
+                                    <li>{{ 'Created'|trans }}: {{ form.vars.value.createdAt ? macros.time(form.vars.value.createdAt) : 'N/A' }}</li>
+                                    <li>{{ 'Updated'|trans }}: {{ form.vars.value.updatedAt ? macros.time(form.vars.value.updatedAt) : 'N/A' }}</li>
+                                    <li>{{ 'Last logged in'|trans }}: {{ form.vars.value.lastLogin ? macros.time(form.vars.value.lastLogin) : 'N/A' }}</li>
+                                    <li>{{ 'Login count'|trans }}: {{ form.vars.value.loginCount|default(0) }}</li>
+                                </ul>
                             </div>
-                            <ul class="inline">
-                                <li>{{ 'Created'|trans }}: {{ form.vars.value.createdAt ? macros.time(form.vars.value.createdAt) : 'N/A' }}</li>
-                                <li>{{ 'Updated'|trans }}: {{ form.vars.value.updatedAt ? macros.time(form.vars.value.updatedAt) : 'N/A' }}</li>
-                                <li>{{ 'Last logged in'|trans }}: {{ form.vars.value.lastLogin ? macros.time(form.vars.value.lastLogin) : 'N/A' }}</li>
-                                <li>{{ 'Login count'|trans }}: {{ form.vars.value.loginCount|default(0) }}</li>
-                           </ul>
-                       </div>
-                   </div>
-                </div>
-                {% else %}
-                <div class="pull-left">
-                    <div class="customer-info well-small">
-                        <div class="customer-content">
-                            <h1 class="usser-name">{{ title }}</h1>
                         </div>
                     </div>
-                </div>
+                {% else %}
+                    <div class="pull-left">
+                        <div class="customer-info well-small">
+                            <div class="customer-content">
+                                <h1 class="usser-name">{{ title }}</h1>
+                            </div>
+                        </div>
+                    </div>
                 {% endif %}
             </div>
         </div>
