@@ -1,6 +1,8 @@
 <?php
 namespace Oro\Bundle\FlexibleEntityBundle\Model;
 
+use Oro\Bundle\FlexibleEntityBundle\Exception\FlexibleConfigurationException;
+
 use Oro\Bundle\FlexibleEntityBundle\Model\Behavior\TranslatableInterface;
 use Oro\Bundle\FlexibleEntityBundle\Model\Behavior\ScopableInterface;
 
@@ -136,6 +138,13 @@ abstract class AbstractFlexibleValue implements FlexibleValueInterface, Translat
      */
     public function setLocale($locale)
     {
+        if ($locale and $this->getAttribute() and $this->getAttribute()->getTranslatable() === false) {
+            $attributeCode = $this->getAttribute()->getCode();
+            throw new FlexibleConfigurationException(
+                "This value '".$this->getId()."' can't be localized, see attribute '".$attributeCode."' configuration"
+            );
+        }
+
         $this->locale = $locale;
     }
 
@@ -154,6 +163,13 @@ abstract class AbstractFlexibleValue implements FlexibleValueInterface, Translat
      */
     public function setScope($scope)
     {
+        if ($scope and $this->getAttribute() and $this->getAttribute()->getScopable() === false) {
+            $attributeCode = $this->getAttribute()->getCode();
+            throw new FlexibleConfigurationException(
+                "This value '".$this->getId()."' can't be scopped, see attribute '".$attributeCode."' configuration"
+            );
+        }
+
         $this->scope = $scope;
     }
 }
