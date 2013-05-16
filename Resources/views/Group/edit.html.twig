@@ -1,4 +1,5 @@
 {% extends bap.layout is defined ? bap.layout : 'OroUserBundle::layout.html.twig' %}
+{% form_theme form with 'OroUIBundle:Form:fields.html.twig' %}
 
 {% set title = form.vars.value.id ? 'Edit group'|trans : 'Add group'|trans %}
 
@@ -23,24 +24,80 @@
 {% block page_container %}
 <div class="container-fluid">
     {% block content %}
-    <form action="{{ form.vars.value.id ? path('oro_user_group_edit', { id: form.vars.value.id, back: app.session.get('back') }) : path('oro_user_group_create', { back: app.session.get('back') }) }}" method="post" class="form-register">
-        <fieldset>
-            <legend>{{ title }}</legend>
-
-            {{ form_widget(form.appendUsers, {'id': 'groupAppendUsers'}) }}
-            {{ form_widget(form.removeUsers, {'id': 'groupRemoveUsers'}) }}
-            {{ form_rest(form) }}
-
-            {% if form.vars.value.id %}
-                {{ 'Users'|trans }}
-                <div id="users-grid"></div>
-            {% endif %}
-
-            <div class="form-row">
-                <button class="btn btn-large btn-primary" type="submit">{{ 'Save'|trans }}</button>
+    <form action="{{ form.vars.value.id ? path('oro_user_group_edit', { id: form.vars.value.id, back: app.session.get('back') }) : path('oro_user_group_create', { back: app.session.get('back') }) }}" method="post" class="form-register form-padding">
+        <div class="navigation clearfix navbar-extra">
+            <div class="row">
+                <div class="pull-right">
+                    <div class="pull-right">
+                        <div class="pull-left btn-group icons-holder">
+                            {% if form.vars.value.id and resource_granted('oro_user_profile_remove') %}
+                                <a href="javascript: void(0);" class="btn icons-holder-text" id="btn-remove-profile" data-id="{{ form.vars.value.id }}" data-message="{{ 'Are you sure you want to delete this profile?'|trans }}" title="{{ 'Delete profile'|trans }}"><i class="icon-trash hide-text">{{ 'Remove'|trans }}</i>Delete</a>
+                            {% endif %}
+                        </div>
+                        <div class="pull-left customer-info-top-actions">
+                            <div class="btn-group">
+                                <a href="{{ app.session.get('back') ? app.session.get('back') : path('oro_user_index') }}" class="btn back">{{ 'Cancel'|trans }}</a>
+                                <button type="submit" class="btn btn-primary"><i class="icon-ok icon-white hide-text">Save </i> {{ ' Save'|trans }}</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="pull-left">
+                    <div class="form-info clearfix">
+                        <div class="customer-content pull-left">
+                            <div class="clearfix-oro">
+                                <div class="sub-title">{{ 'Groups'|trans }}</div>
+                                <span class="separator">/</span>
+                                <h1 class="form-info-name">{{ title }}</h1>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </fieldset>
-    </form>
+        </div>
+        <div class="layout-content">
+            <div id="navbarExample" class="navbar navbar-static scrollspy-nav">
+                <div class="navbar-inner">
+                    <div class="container-fluid" style="width: auto;">
+                        <ul class="nav">
+                            <li class="active"><a href="#scroll-main">{{ 'Overview'|trans }}</a></li>
+
+                            {% if form.vars.value.id %}
+                                <li><a href="#scroll-ussers">{{ 'Users'|trans }}</a></li>
+                            {% endif %}
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix">
+                <div data-spy="scroll" data-target="#navbarExample" data-offset="50" class="scrollspy container-fluid">
+                    <div class="usser-row">
+                        <h4 id="scroll-main" class="scrollspy-title">{{ 'Overview'|trans }}</h4>
+                        <div class="row-fluid row-fluid-divider">
+                            <fieldset class="form-horizontal span6">
+                                {{ form_widget(form.appendUsers, {'id': 'groupAppendUsers'}) }}
+                                {{ form_widget(form.removeUsers, {'id': 'groupRemoveUsers'}) }}
+                                {{ form_row(form.name) }}
+                                {{ form_row(form.roles) }}
+                            </fieldset>
+                        </div>
+                    </div>
+
+                    {% if form.vars.value.id %}
+                        <div class="usser-row">
+                            <h4 id="scroll-ussers" class="scrollspy-title">{{ 'Users'|trans }}</h4>
+                            <div class="row-fluid">
+                                <fieldset class="form-horizontal">
+                                    <div id="users-grid"></div>
+                                </fieldset>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                </div>
+            </div>
+        </div>
     {% endblock %}
 </div>
 {% endblock %}
