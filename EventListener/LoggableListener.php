@@ -60,10 +60,10 @@ class LoggableListener extends BaseListener
             }
 
             $logEntry->setAction($action);
-            $logEntry->setUsername($this->username);
             $logEntry->setObjectClass($meta->name);
             $logEntry->setLoggedAt();
             $logEntry->setUser($user);
+            $logEntry->setObjectName(method_exists($object, '__toString') ? $object->__toString() : $meta->name);
 
             // check for the availability of the primary key
             $objectId = $wrapped->getIdentifier();

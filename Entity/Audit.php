@@ -130,10 +130,13 @@ class Audit extends AbstractLogEntry
     /**
      * Set object name
      *
-     * @param string $objectName
+     * @param  string $objectName
+     * @return Audit
      */
     public function setObjectName($objectName)
     {
         $this->objectName = $objectName;
+
+        return $this;
     }
 }
