@@ -24,6 +24,7 @@ Oro.Navigation = Backbone.Router.extend({
      * historyTab - Selector for history 3 dots menu tab
      * mostViwedTab - Selector for most viewed 3 dots menu tab
      * flashMessages - Selector for system messages block
+     * menu - Selector for system main menu
      *
      * @property
      */
@@ -38,7 +39,8 @@ Oro.Navigation = Backbone.Router.extend({
         pinbarHelp:     '.pin-bar-empty',
         historyTab:     '#history-content',
         mostViewedTab:  '#mostviewed-content',
-        flashMessages:  '#flash-messages'
+        flashMessages:  '#flash-messages',
+        menu:           '#main-menu'
     },
 
     /** @property {Oro.LoadingMask} */
@@ -116,20 +118,6 @@ Oro.Navigation = Backbone.Router.extend({
         this.init();
 
         Backbone.Router.prototype.initialize.apply(this, arguments);
-    },
-
-    /**
-     * Set active menu class depending on url
-     *
-     * @param {String} url
-     */
-    setActiveMenu: function (url) {
-        $('.application-menu:eq(1) a').parents('li').removeClass('active'); // handle only tabs content
-        var urlObject = new Url(url);
-        var li = $('.application-menu a[href="' + urlObject.path + '"]').parents('li');
-        li.addClass('active');
-        var tabId = li.parents('.tab-pane').attr('id');
-        $('.application-menu a[href=#' + tabId + ']').tab('show');
     },
 
     /**
@@ -282,6 +270,7 @@ Oro.Navigation = Backbone.Router.extend({
                 }
             } else {
                 $(this.selectors.container).html($(data).filter(this.selectors.content).html());
+                $(this.selectors.menu).html($(data).filter(this.selectors.menu).html());
                 /**
                  * Collecting javascript from head and append them to content
                  */
@@ -303,10 +292,9 @@ Oro.Navigation = Backbone.Router.extend({
                     $('.top-action-box .btn').filter('.minimize-button, .favorite-button').data('title', titleSerialized);
                 }
 
+                this.processClicks(this.selectors.menu + ' ' + this.selectors.links);
                 this.processClicks(this.selectors.container + ' ' + this.selectors.links);
                 this.processForms(this.selectors.container + ' ' + this.selectors.forms);
-                this.updateMenuTabs(data);
-                this.setActiveMenu(this.url);
                 this.updateMessages(data);
                 this.hideActiveDropdowns();
             }
@@ -333,21 +321,6 @@ Oro.Navigation = Backbone.Router.extend({
      */
     updateMessages: function(data) {
         $(this.selectors.flashMessages).html($(data).filter(this.selectors.flashMessages).html());
-    },
-
-    /**
-     * Update History and Most Viewed menu tabs
-     *
-     * @param data
-     */
-    updateMenuTabs: function (data) {
-        $(this.selectors.historyTab).html($(data).filter(this.selectors.historyTab).html());
-        $(this.selectors.mostViewedTab).html($(data).filter(this.selectors.mostViewedTab).html());
-        /**
-         * Processing links for history and most viewed tabs
-         */
-        this.processClicks(this.selectors.historyTab + ' ' + this.selectors.links + ', ' +
-            this.selectors.mostViewedTab + ' ' + this.selectors.links);
     },
 
     /**
