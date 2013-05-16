@@ -10,7 +10,8 @@
         "symfony/framework-bundle": ">=2.1,<2.3-dev",
         "kriswallsmith/assetic": "1.1.*@dev",
         "symfony/assetic-bundle": "2.1.*",
-        "leafo/lessphp": "dev-master"
+        "leafo/lessphp": "dev-master",
+        "willdurand/expose-translation-bundle": "0.2.*@dev"
     },
     "autoload": {
         "psr-0": { "Oro\\Bundle\\UIBundle": "" }

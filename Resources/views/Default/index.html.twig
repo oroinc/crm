@@ -39,6 +39,9 @@
             <script type="text/javascript" src="{{ asset_url }}"></script>
             {% endoro_js %}
 
+            {# Add translations #}
+            <script type="text/javascript" src="{{ url('bazinga_exposetranslation_js') }}"></script>
+
             {% if app.debug %}
                 <script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
                 <script type="text/javascript">
