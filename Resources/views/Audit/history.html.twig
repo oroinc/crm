@@ -6,10 +6,9 @@
     <table class="table table-striped">
         <thead>
             <tr>
-                <th style="width: 40px;">#</th>
+                <th style="width: 50px;">Version</th>
                 <th style="width: 100px;">Author</th>
                 <th style="width: 100px;">Date</th>
-                <th style="width: 50px;">Version</th>
                 <th style="width: 200px;">Old values</th>
                 <th>New values</th>
             </tr>
@@ -17,10 +16,9 @@
         <tbody>
             {% for entry in history %}
             <tr>
-                <td>{{ entry.id }}</td>
-                <td><a href="{{ path('oro_user_show', { id: entry.user.id }) }}">{{ entry.user.username }}</a></td>
-                <td>{{ macros.time(entry.loggedAt) }}</td>
                 <td>{{ entry.version }}</td>
+                <td><a href="{{ path('oro_user_show', { id: entry.user.id }) }}">{{ entry.user.fullname }}</a></td>
+                <td>{{ macros.time(entry.loggedAt) }}</td>
                 <td>
                     {% for key, value in entry.data %}
                     {{ key }}: {{ value.old.timestamp is defined ? macros.time(value.old) : value.old }}<br />
