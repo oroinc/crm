@@ -40,6 +40,8 @@ class FlexibleValueTest extends \PHPUnit_Framework_TestCase
         // create attribute
         $this->attribute = new Attribute();
         $this->attribute->setCode('mycode');
+        $this->attribute->setTranslatable(true);
+        $this->attribute->setScopable(true);
         $this->attribute->setBackendType(AbstractAttributeType::BACKEND_TYPE_VARCHAR);
         // create value
         $this->value = new FlexibleValue();
