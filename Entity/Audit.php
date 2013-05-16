@@ -91,7 +91,7 @@ class Audit extends AbstractLogEntry
     /**
      * Set user
      *
-     * @param  User $user
+     * @param  User  $user
      * @return Audit
      */
     public function setUser(User $user = null)

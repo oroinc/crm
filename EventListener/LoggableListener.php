@@ -2,14 +2,10 @@
 
 namespace Oro\Bundle\DataAuditBundle\EventListener;
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\Security\Core\SecurityContextInterface;
-
 use Gedmo\Loggable\LoggableListener as BaseListener;
 use Gedmo\Loggable\Mapping\Event\LoggableAdapter;
 use Gedmo\Tool\Wrapper\AbstractWrapper;
 
-use Oro\Bundle\DataAuditBundle\Entity\Audit;
 use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityFlexibleValue;
 use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityFlexible;
 
@@ -25,8 +21,8 @@ class LoggableListener extends BaseListener
     /**
      * Create a new Audit instance
      *
-     * @param string $action
-     * @param object $object
+     * @param string          $action
+     * @param object          $object
      * @param LoggableAdapter $ea
      */
     protected function createLogEntry($action, $object, LoggableAdapter $ea)
@@ -153,7 +149,7 @@ class LoggableListener extends BaseListener
      *
      * @param  AbstractEntityFlexibleValue $object
      * @param  LoggableAdapter             $ea
-     * @return boolean True if value has been saved, false otherwise
+     * @return boolean                     True if value has been saved, false otherwise
      */
     protected function logFlexible(AbstractEntityFlexibleValue $object, LoggableAdapter $ea)
     {
