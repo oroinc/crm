@@ -71,12 +71,17 @@ class FlexibleEntityRepository extends EntityRepository implements TranslatableI
     }
 
     /**
-     * Get locale code
+     * Return asked locale code or default one
      *
      * @return string
      */
     public function getLocale()
     {
+        if (!$this->locale) {
+            // use default locale
+            $this->locale = $this->flexibleConfig['default_locale'];
+        }
+
         return $this->locale;
     }
 
@@ -95,12 +100,17 @@ class FlexibleEntityRepository extends EntityRepository implements TranslatableI
     }
 
     /**
-     * Get scope code
+     * Return asked scope code or default one
      *
      * @return string
      */
     public function getScope()
     {
+        if (!$this->scope) {
+            // use default scope
+            $this->scope = $this->flexibleConfig['default_scope'];
+        }
+
         return $this->scope;
     }
 
