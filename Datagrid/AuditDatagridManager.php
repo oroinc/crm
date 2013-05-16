@@ -14,7 +14,6 @@ use Oro\Bundle\GridBundle\Filter\FilterInterface;
 use Oro\Bundle\GridBundle\Property\TwigTemplateProperty;
 use Oro\Bundle\DataAuditBundle\Entity\Audit;
 
-
 class AuditDatagridManager extends DatagridManager
 {
     /**
@@ -190,7 +189,7 @@ class AuditDatagridManager extends DatagridManager
 
         $result = $query->getQuery()->getArrayResult();
 
-        foreach ((array)$result as $value) {
+        foreach ((array) $result as $value) {
             $options[$value['objectClass']] = str_replace('Oro\\Bundle\\', '', $value['objectClass']);
         }
 
