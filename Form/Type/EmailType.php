@@ -6,6 +6,10 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 class EmailType extends CollectionItemAbstract
 {
+    const TYPE_CORPORATE = 1;
+    const TYPE_PERSONAL  = 2;
+
+
     /**
      * {@inheritdoc}
      */
@@ -33,7 +37,8 @@ class EmailType extends CollectionItemAbstract
     public function getTypesArray()
     {
         return array(
-            1 => 'Test email type'
+            self::TYPE_CORPORATE => 'Сorporate email',
+            self::TYPE_PERSONAL  => 'Personal email'
         );
     }
 

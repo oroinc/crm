@@ -134,11 +134,19 @@ abstract class AbstractEntityFlexibleValue extends AbstractFlexibleValue
     protected $option;
 
     /**
+     * To implement collection attribute storage, this field must be overridden in concret value class
+     *
+     * @var ArrayCollection
+     */
+    protected $collection;
+
+    /**
      * Constructor
      */
     public function __construct()
     {
         $this->options = new ArrayCollection();
+        $this->collection = new ArrayCollection();
     }
 
     /**
@@ -383,6 +391,52 @@ abstract class AbstractEntityFlexibleValue extends AbstractFlexibleValue
     public function addOption(AbstractEntityAttributeOption $option)
     {
         $this->options[] = $option;
+
+        return $this;
+    }
+
+    /**
+     * Get Collection attribute values
+     *
+     * @return Collection[]
+     */
+    public function getCollections()
+    {
+        return $this->collection;
+    }
+
+    /**
+     * Get Collection attribute values
+     *
+     * @return Collection[]
+     */
+    public function getCollection()
+    {
+        return $this->collection;
+    }
+
+    /**
+     * Set collections data from value object
+     *
+     * @param AbstractEntityFlexibleValue $value
+     * @return $this
+     */
+    public function setCollections(AbstractEntityFlexibleValue $value)
+    {
+        $this->collection = $value->getCollections();
+
+        return $this;
+    }
+
+    /**
+     * Set collection attribute values
+     *
+     * @param Collection[] $collection
+     * @return $this
+     */
+    public function setCollection($collection)
+    {
+        $this->collection = $collection;
 
         return $this;
     }

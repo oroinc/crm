@@ -6,6 +6,9 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 class PhoneType extends CollectionItemAbstract
 {
+    const TYPE_HOME = 1;
+    const TYPE_CELL = 2;
+
     /**
      * {@inheritdoc}
      */
@@ -33,7 +36,8 @@ class PhoneType extends CollectionItemAbstract
     public function getTypesArray()
     {
         return array(
-            1 => 'Test phone type'
+            self::TYPE_HOME      => 'Landline phone',
+            self::TYPE_CELL      => 'Cell phone'
         );
     }
 
