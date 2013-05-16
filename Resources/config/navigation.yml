@@ -4,6 +4,10 @@ oro_menu_config:
             template: 'OroUIBundle:Menu:application_menu.html.twig'
             currentClass: 'active'
             ancestorClass: 'active'
+
+        dots_menu:
+            template: 'OroUIBundle:Menu:dots_menu.html.twig'
+
         shortcuts:
             template: 'OroUIBundle:Menu:shortcuts.html.twig'
 
@@ -20,6 +24,9 @@ oro_menu_config:
             type: application_menu
             children:
                 home: ~
+
+        dots_menu:
+            type: dots_menu
 
         shortcuts:
             type: shortcuts
