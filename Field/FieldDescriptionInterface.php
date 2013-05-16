@@ -15,6 +15,7 @@ interface FieldDescriptionInterface
     const TYPE_INTEGER  = 'integer';
     const TYPE_OPTIONS  = 'options';
     const TYPE_TEXT     = 'text';
+    const TYPE_HTML     = 'html';
     const TYPE_BOOLEAN  = 'boolean';
 
     /**

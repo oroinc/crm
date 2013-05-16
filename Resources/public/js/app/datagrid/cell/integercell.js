@@ -28,7 +28,7 @@ Oro.Datagrid.Cell.IntegerCell = Backgrid.IntegerCell.extend({
      * @inheritDoc
      */
     exitEditMode: function (e) {
-        if (this.editable) {
+        if (this.column.get("editable")) {
             this.trigger("edited", this);
         }
         return Backgrid.IntegerCell.prototype.exitEditMode.apply(this, arguments);

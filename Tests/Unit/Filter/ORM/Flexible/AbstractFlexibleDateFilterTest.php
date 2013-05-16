@@ -3,7 +3,6 @@
 namespace Oro\Bundle\GridBundle\Tests\Unit\Filter\ORM\Flexible;
 
 use Oro\Bundle\FilterBundle\Form\Type\Filter\DateRangeFilterType;
-use Oro\Bundle\GridBundle\Filter\ORM\Flexible\AbstractFlexibleDateFilter;
 use Oro\Bundle\GridBundle\Filter\ORM\DateRangeFilter;
 
 class AbstractFlexibleDateFilterTest extends FlexibleFilterTestCase
@@ -16,6 +15,25 @@ class AbstractFlexibleDateFilterTest extends FlexibleFilterTestCase
         $parentFilter = new DateRangeFilter($this->getTranslatorMock());
         return $this->getMockBuilder('Oro\Bundle\GridBundle\Filter\ORM\Flexible\AbstractFlexibleDateFilter')
             ->setConstructorArgs(array($flexibleRegistry, $parentFilter))
+            ->getMockForAbstractClass();
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Parent filter must be an instance of Oro\Bundle\GridBundle\Filter\ORM\AbstractDateFilter
+     */
+    public function testConstructWithIncorrectFilter()
+    {
+        $flexibleRegistry = $this->getMock('\Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleManagerRegistry');
+        $incorrectParentFilter = $this->getMockForAbstractClass(
+            '\Oro\Bundle\GridBundle\Filter\FilterInterface',
+            array(),
+            '',
+            false
+        );
+
+        $this->getMockBuilder('Oro\Bundle\GridBundle\Filter\ORM\Flexible\AbstractFlexibleDateFilter')
+            ->setConstructorArgs(array($flexibleRegistry, $incorrectParentFilter))
             ->getMockForAbstractClass();
     }
 

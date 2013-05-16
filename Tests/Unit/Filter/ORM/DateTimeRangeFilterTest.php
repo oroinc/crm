@@ -7,6 +7,9 @@ use Oro\Bundle\FilterBundle\Form\Type\Filter\DateTimeRangeFilterType;
 
 class DateTimeRangeFilterTest extends AbstractDateFilterTest
 {
+    /**
+     * @return DateTimeRangeFilter
+     */
     protected function createTestFilter()
     {
         return new DateTimeRangeFilter($this->getTranslatorMock());
@@ -17,8 +20,10 @@ class DateTimeRangeFilterTest extends AbstractDateFilterTest
         $this->assertEquals(array('form_type' => DateTimeRangeFilterType::NAME), $this->model->getDefaultOptions());
     }
 
-
-
+    /**
+     * @param \DateTime $dateTime
+     * @return string
+     */
     protected function dateTimeToString(\DateTime $dateTime)
     {
         return $dateTime->format(DateTimeRangeFilter::DATETIME_FORMAT);
