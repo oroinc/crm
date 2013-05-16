@@ -29,6 +29,7 @@ oro_menu_config:
             label: 'History'
             extras:
                 icon: 'icon-time'
+                activeIfFirstIsEmpty: true
             uri: '#'
         favorite:
             label: 'Favorites'

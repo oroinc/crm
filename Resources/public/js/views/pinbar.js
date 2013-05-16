@@ -179,11 +179,6 @@ navigation.pinbar.MainView = navigation.MainViewAbstract.extend({
         this.markCurrentPageMaximized();
         this.options.collection.each(this.setItemPosition, this);
         this.massAdd = false;
-        /**
-         * Backbone event. Fired when pinbar is initialized and loaded
-         * @event pinbar:loaded
-         */
-        Oro.Events.trigger("pinbar:loaded", this.needPinbarTab());
     },
 
     /**
@@ -242,6 +237,11 @@ navigation.pinbar.MainView = navigation.MainViewAbstract.extend({
 
             if (type == 'tab') {
                 this.addItemToTab(view, !this.massAdd);
+                /**
+                 * Backbone event. Fired when tab is changed
+                 * @event tab:changed
+                 */
+                Oro.Events.trigger("tab:changed", this.options.tabId);
             } else {
                 var rowEl = view.render().el;
                 if (this.massAdd || position > 0) {
@@ -291,6 +291,11 @@ navigation.pinbar.MainView = navigation.MainViewAbstract.extend({
             }
 
             this.checkTabContent();
+            /**
+             * Backbone event. Fired when tab is changed
+             * @event tab:changed
+             */
+            Oro.Events.trigger("tab:changed", this.options.tabId);
         }
     }
 });
