@@ -20,6 +20,12 @@ oro_menu_config:
                 description: Create new contact instance
                 isCustomAction: true
 
+        shortcut_list_contacts:
+            label: Contacts List
+            route: oro_contact_index
+            extras:
+                description: List of contacts
+
     tree:
         application_menu:
             children:
@@ -32,6 +38,7 @@ oro_menu_config:
         shortcuts:
             children:
                 shortcut_new_contact: ~
+                shortcut_list_contacts: ~
 
 oro_titles:
     oro_contact_index: Contacts
