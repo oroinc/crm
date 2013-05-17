@@ -1,15 +1,12 @@
 oro_menu_config:
     items:
-        audit_tab:
-            label: 'Data Audit'
-            uri: '#'
         audit_list:
-            label: 'Grid'
+            label: 'Data Audit'
             route: 'oro_dataaudit_index'
 
     tree:
         application_menu:
             children:
-                audit_tab:
+                system_tab:
                     children:
                         audit_list: ~

@@ -38,7 +38,7 @@ class AuditDatagridManager extends DatagridManager
                 'sortable'    => true,
                 'filterable'  => true,
                 'show_filter' => true,
-                'choices' => array(
+                'choices'     => array(
                     LoggableListener::ACTION_UPDATE => 'Updated',
                     LoggableListener::ACTION_CREATE => 'Created',
                     LoggableListener::ACTION_REMOVE => 'Deleted',
@@ -76,8 +76,8 @@ class AuditDatagridManager extends DatagridManager
                 'sortable'    => true,
                 'filterable'  => true,
                 'show_filter' => true,
-                'choices' => $this->getObjectClassOptions(),
-                'multiple' => true,
+                'choices'     => $this->getObjectClassOptions(),
+                'multiple'    => true,
             )
         );
         $this->fieldsCollection->add($fieldObjectClass);
@@ -146,8 +146,7 @@ class AuditDatagridManager extends DatagridManager
                 'show_filter' => true,
             )
         );
-        $templateAuthorProperty = new TwigTemplateProperty($fieldAuthor, 'OroDataAuditBundle:Datagrid:Property/author.html.twig');
-        $fieldAuthor->setProperty($templateAuthorProperty);
+        $fieldAuthor->setFieldName('author');
         $this->fieldsCollection->add($fieldAuthor);
 
         $fieldLogged = new FieldDescription();
@@ -205,19 +204,18 @@ class AuditDatagridManager extends DatagridManager
     {
         $query = parent::createQuery();
 
-//        $query->getQueryBuilder()
-//            ->addSelect(
-//                'CONCAT(
-//                    CONCAT(
-//                        CONCAT(u.firstName, \' \'),
-//                        CONCAT(u.lastName, \' \')
-//                    ),
-//                    CONCAT(\' - \', u.email)
-//                ) AS author'
-//            )
-//            ->leftJoin('o.user', 'u');
+        $query->getQueryBuilder()
+            ->leftJoin('o.user', 'u')
+            ->addSelect(
+                'CONCAT(
+                    CONCAT(
+                        CONCAT(u.firstName, \' \'),
+                        CONCAT(u.lastName, \' \')
+                    ),
+                    CONCAT(\' - \', u.email)
+                ) AS author'
+            );
 
-        //print_r (($query->getQueryBuilder()->getQuery()->getSQL())); die;
         return $query;
     }
 
