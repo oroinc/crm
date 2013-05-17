@@ -84,6 +84,7 @@ class Audit extends AbstractLogEntry
      *
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
+     * @Type("string")
      */
     protected $user;
 
