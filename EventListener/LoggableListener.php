@@ -8,6 +8,7 @@ use Gedmo\Tool\Wrapper\AbstractWrapper;
 
 use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityFlexibleValue;
 use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityFlexible;
+use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityAttributeOption;
 
 class LoggableListener extends BaseListener
 {
@@ -161,12 +162,17 @@ class LoggableListener extends BaseListener
                 if ($value == $object) {
                     $logEntry = $lo['log'];
                     $changes  = current($ea->getObjectChangeSet($uow, $object));
+                    $newData  = $value->getData();
                     $data     = array_merge(
                         $logEntry->getData(),
                         array(
                             $object->getAttribute()->getCode() => array(
-                                'old' => $changes[0],
-                                'new' => $value->getData(),
+                                'old' => $changes[0] instanceof AbstractEntityAttributeOption
+                                    ? $changes[0]->getOptionValue()->getValue()
+                                    : $changes[0],
+                                'new' => $newData instanceof AbstractEntityAttributeOption
+                                    ? $newData->getOptionValue()->getValue()
+                                    : $newData,
                             )
                         )
                     );
