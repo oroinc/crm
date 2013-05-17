@@ -39,8 +39,9 @@
             <script type="text/javascript" src="{{ asset_url }}"></script>
             {% endoro_js %}
 
-            {# Add translations #}
-            <script type="text/javascript" src="{{ url('bazinga_exposetranslation_js') }}"></script>
+            {# Add translations, include only common domains translations until BAP-768 is not implemented #}
+            <script type="text/javascript" src="{{ url('bazinga_exposetranslation_js', { 'domain_name': 'messages' }) }}"></script>
+            <script type="text/javascript" src="{{ url('bazinga_exposetranslation_js', { 'domain_name': 'validators' }) }}"></script>
 
             {% if app.debug %}
                 <script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
