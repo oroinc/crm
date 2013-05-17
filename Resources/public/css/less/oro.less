@@ -1432,11 +1432,11 @@ footer{
   background:#efefef url("../../img/bg-gray-box.png") repeat-x;
   border: solid #ccc;
   border-width: 1px 0;
-  padding: 15px 150px 8px 20px;
+  padding: 15px 20px 8px 150px;
 }
 .filter-box .filter-list{
-  float: right;
-  margin: 0 -120px 0 0;
+  float: left;
+  margin: 0 0 0 -120px;
   position: relative;
 }
 .btn-group + .btn-group{
@@ -1538,10 +1538,15 @@ footer{
 .icon-trash{
   background-position: -456px -1px;
 }
-
+.badge-enabled,
+.badge-disabled{
+  padding: 3px 10px 3px 5px;
+  font-size: 12px;
+  font-weight: normal;
+}
 .badge-enabled{
   background-color: #dff2d4;
-  color: #2f8206;
+  color: #4c7940;
 }
 .badge-disabled{
   color: #aaa;
@@ -1552,6 +1557,9 @@ footer{
 }
 .status-enabled{
   color: #2f8206;
+}
+.customer-info .status-enabled{
+
 }
 .dib{
   display: inline-block;
@@ -2095,7 +2103,7 @@ footer{
     font-size: 18px;
   }
   .usser-name{
-    margin: 0 0 5px;
+    margin: 0 10px 5px 0;
     font-size: 19px;
     line-height: 22px;
     float: left;
@@ -2873,4 +2881,8 @@ select:focus:invalid:focus {
   border-left: 1px solid #e9e9e9;
   margin: 0 1px 0 8px;
   height: 24px;
+}
+#search-bar-button:hover,
+#search-bar-button:focus{
+  color: #fff;
 }
