@@ -29,7 +29,7 @@ class RestUsersApiTest extends WebTestCase
             "profile" => array (
                 "username" => 'user_' . mt_rand(),
                 "email" => 'test_'  . mt_rand() . '@test.com',
-                "enabled" => 'true',
+                "enabled" => '1',
                 "plainPassword" => '1231231q',
                 "firstName" => "firstName",
                 "lastName" => "lastName",
