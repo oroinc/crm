@@ -3,7 +3,12 @@
 namespace Oro\Bundle\DataAuditBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+
 use Gedmo\Loggable\Entity\MappedSuperclass\AbstractLogEntry;
+
+use JMS\Serializer\Annotation\Type;
+
 use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 
 use Oro\Bundle\UserBundle\Entity\User;
@@ -19,7 +24,7 @@ class Audit extends AbstractLogEntry
      *
      * @ORM\Column(type="integer")
      * @ORM\Id
-     * @ORM\GeneratedValue
+     * @ORM\GeneratedValue(strategy="AUTO")
      * @Soap\ComplexType("int", nillable=true)
      */
     protected $id;
@@ -43,7 +48,7 @@ class Audit extends AbstractLogEntry
     /**
      * @var string $objectId
      *
-     * @ORM\Column(name="object_id", length=32, nullable=true)
+     * @ORM\Column(name="object_id", type="integer", length=32, nullable=true)
      * @Soap\ComplexType("int", nillable=true)
      */
     protected $objectId;
@@ -75,8 +80,9 @@ class Audit extends AbstractLogEntry
     /**
      * @var text $data
      *
-     * @ORM\Column(type="array", nullable=true)
-     * @Soap\ComplexType("string[]", nillable=false)
+     * @ORM\Column(type="string", nullable=true)
+     * @Soap\ComplexType("string")
+     * @Type("string")
      */
     protected $data;
 
@@ -90,6 +96,8 @@ class Audit extends AbstractLogEntry
      *
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
+     * @Soap\ComplexType("string", nillable=false)
+     * @Type("string")
      */
     protected $user;
 
