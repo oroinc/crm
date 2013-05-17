@@ -91,9 +91,10 @@ class ProfileSubscriber implements EventSubscriberInterface
             // only admin granted to modify user state
             // but do not allow "admin" to disable his own account
             if ($this->aclManager->isResourceGranted('root', $user)) {
-                $form->add($this->factory->createNamed('enabled', 'checkbox', $entity->isEnabled(), array(
+                $form->add($this->factory->createNamed('enabled', 'choice', $entity->isEnabled(), array(
                     'required' => false,
                     'disabled' => $entity->getId() == $user->getId(),
+                    'choices'   => array('1' => 'Active', '0' => 'Inactive')
                 )));
             }
         } else {
