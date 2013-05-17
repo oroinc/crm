@@ -18,4 +18,16 @@ class AuditTest extends \PHPUnit_Framework_TestCase
 
         $this->assertNotEmpty($audit->getUser());
     }
+
+    public function testObjectName()
+    {
+        $audit = new Audit();
+        $name  = 'LoggedObject';
+
+        $this->assertEmpty($audit->getObjectName());
+
+        $audit->setObjectName($name);
+
+        $this->assertEquals($name, $audit->getObjectName());
+    }
 }
