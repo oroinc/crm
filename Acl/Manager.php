@@ -129,6 +129,14 @@ class Manager implements ManagerInterface
     }
 
     /**
+     * Get ACL Resources list for API
+     */
+    public function getList()
+    {
+        return $this->getAclResources(false);
+    }
+
+    /**
      * Get list of allowed ACL resources for roles array
      *
      * @param Role[] $roles
