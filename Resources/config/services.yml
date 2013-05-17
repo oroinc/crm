@@ -26,6 +26,8 @@ services:
             - [ addAttributeType, ['oro_flexibleentity_textarea'] ]
             - [ addAttributeType, ['oro_flexibleentity_money'] ]
             - [ addAttributeType, ['oro_flexibleentity_url'] ]
+            - [ addAttributeType, ['oro_flexibleentity_email_collection'] ]
+            - [ addAttributeType, ['oro_flexibleentity_phone_collection'] ]
             - [ addAttributeType, ['oro_address'] ]
         tags:
             - { name: oro_flexibleentity_manager, entity: %oro_account.account.entity.class%}

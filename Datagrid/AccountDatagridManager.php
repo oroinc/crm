@@ -14,6 +14,11 @@ use Oro\Bundle\GridBundle\Property\UrlProperty;
 
 class AccountDatagridManager extends FlexibleDatagridManager
 {
+    protected $excludeAttributes = array(
+        'emails',
+        'phones'
+    );
+
     /**
      * {@inheritDoc}
      */
@@ -24,6 +29,23 @@ class AccountDatagridManager extends FlexibleDatagridManager
             new UrlProperty('update_link', $this->router, 'oro_account_update', array('id')),
             new UrlProperty('delete_link', $this->router, 'oro_api_delete_account', array('id')),
         );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function getFlexibleAttributes()
+    {
+        parent::getFlexibleAttributes();
+
+        // exclude collections attributes from grid
+        foreach ($this->excludeAttributes as $attributeCode) {
+            if (isset($this->attributes[$attributeCode])) {
+                unset($this->attributes[$attributeCode]);
+            }
+        }
+
+        return $this->attributes;
     }
 
     /**
@@ -73,7 +95,7 @@ class AccountDatagridManager extends FlexibleDatagridManager
             $fieldsCollection,
             array(
                 'shipping_address'     => $specialAttributeOptions,
-                'billing_address' => $specialAttributeOptions
+                'billing_address'      => $specialAttributeOptions
             )
         );
 

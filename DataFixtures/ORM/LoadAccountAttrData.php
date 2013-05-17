@@ -81,6 +81,16 @@ class LoadAccountAttrData extends AbstractFixture implements ContainerAwareInter
                     'type' => 'oro_address',
                     'label' => 'Billing address'
                 ),
+                array(
+                    'code'  => 'emails',
+                    'type'  => 'oro_flexibleentity_email_collection',
+                    'label' => 'Emails'
+                ),
+                array(
+                    'code'  => 'phones',
+                    'type'  => 'oro_flexibleentity_phone_collection',
+                    'label' => 'Phones'
+                )
             )
         );
 
