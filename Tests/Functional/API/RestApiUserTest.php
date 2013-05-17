@@ -2,31 +2,22 @@
 
 namespace Oro\Bundle\UserBundle\Tests\Functional\API;
 
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Acme\Bundle\TestsBundle\Test\ToolsAPI;
-use Acme\Bundle\TestsBundle\Test\Client;
+use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
+use Oro\Bundle\TestFrameworkBundle\Test\ToolsAPI;
+use Oro\Bundle\TestFrameworkBundle\Test\Client;
 
 /**
  * @outputBuffering enabled
+ * @db_isolation
  */
 class RestApiUserTest extends WebTestCase
 {
 
     public $client = null;
-    protected static $hasLoaded = false;
 
     public function setUp()
     {
         $this->client = static::createClient(array(), ToolsAPI::generateWsseHeader());
-        if (!self::$hasLoaded) {
-            $this->client->startTransaction();
-        }
-        self::$hasLoaded = true;
-    }
-
-    public static function tearDownAfterClass()
-    {
-        Client::rollbackTransaction();
     }
 
     /**
