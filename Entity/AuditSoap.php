@@ -16,7 +16,7 @@ use Oro\Bundle\UserBundle\Entity\User;
  * @ORM\Entity
  * @ORM\Table(name="oro_audit")
  */
-class Audit extends AbstractLogEntry
+class AuditSoap extends AbstractLogEntry
 {
     /**
      * @var integer $id
@@ -24,6 +24,7 @@ class Audit extends AbstractLogEntry
      * @ORM\Column(type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     * @Soap\ComplexType("int", nillable=true)
      */
     protected $id;
 
@@ -31,6 +32,7 @@ class Audit extends AbstractLogEntry
      * @var string $action
      *
      * @ORM\Column(type="string", length=8)
+     * @Soap\ComplexType("string", nillable=true)
      */
     protected $action;
 
@@ -38,6 +40,7 @@ class Audit extends AbstractLogEntry
      * @var string $loggedAt
      *
      * @ORM\Column(name="logged_at", type="datetime")
+     * @Soap\ComplexType("dateTime", nillable=true)
      */
     protected $loggedAt;
 
@@ -45,6 +48,7 @@ class Audit extends AbstractLogEntry
      * @var string $objectId
      *
      * @ORM\Column(name="object_id", type="integer", length=32, nullable=true)
+     * @Soap\ComplexType("int", nillable=true)
      */
     protected $objectId;
 
@@ -52,6 +56,7 @@ class Audit extends AbstractLogEntry
      * @var string $objectClass
      *
      * @ORM\Column(name="object_class", type="string", length=255)
+     * @Soap\ComplexType("string", nillable=true)
      */
     protected $objectClass;
 
@@ -59,6 +64,7 @@ class Audit extends AbstractLogEntry
      * @var string $objectName
      *
      * @ORM\Column(name="object_name", type="string", length=255)
+     * @Soap\ComplexType("string", nillable=true)
      */
     protected $objectName;
 
@@ -66,13 +72,15 @@ class Audit extends AbstractLogEntry
      * @var integer $version
      *
      * @ORM\Column(type="integer")
+     * @Soap\ComplexType("int", nillable=false)
      */
     protected $version;
 
     /**
      * @var string $data
      *
-     * @ORM\Column(type="array", nullable=true)
+     * @ORM\Column(type="string", nullable=true)
+     * @Soap\ComplexType("string", nillable=true)
      */
     protected $data;
 
@@ -86,52 +94,8 @@ class Audit extends AbstractLogEntry
      *
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
+     * @Soap\ComplexType("string", nillable=false)
+     * @Type("string")
      */
     protected $user;
-
-    /**
-     * Set user
-     *
-     * @param  User  $user
-     * @return Audit
-     */
-    public function setUser(User $user = null)
-    {
-        $this->user = $user;
-
-        return $this;
-    }
-
-    /**
-     * Get user
-     *
-     * @return User
-     */
-    public function getUser()
-    {
-        return $this->user;
-    }
-
-    /**
-     * Get object name
-     *
-     * @return string
-     */
-    public function getObjectName()
-    {
-        return $this->objectName;
-    }
-
-    /**
-     * Set object name
-     *
-     * @param  string $objectName
-     * @return Audit
-     */
-    public function setObjectName($objectName)
-    {
-        $this->objectName = $objectName;
-
-        return $this;
-    }
 }
