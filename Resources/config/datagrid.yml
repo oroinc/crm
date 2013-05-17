@@ -10,5 +10,4 @@ services:
               entity_name:                      Oro\Bundle\DataAuditBundle\Entity\Audit
               entity_hint:                      audit
               route_name:                       oro_dataaudit_index
-        calls:
-            - [ setRouter, [ "@router" ] ]
+              query_entity_alias:               a

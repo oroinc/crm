@@ -11,6 +11,7 @@ use Oro\Bundle\GridBundle\Field\FieldDescriptionCollection;
 use Oro\Bundle\GridBundle\Field\FieldDescriptionInterface;
 use Oro\Bundle\GridBundle\Filter\FilterInterface;
 use Oro\Bundle\GridBundle\Property\TwigTemplateProperty;
+use Oro\Bundle\GridBundle\Datagrid\ProxyQueryInterface;
 
 class AuditDatagridManager extends DatagridManager
 {
@@ -20,12 +21,22 @@ class AuditDatagridManager extends DatagridManager
     protected $fieldsCollection;
 
     /**
-     * @return FieldDescriptionCollection
+     * @var string
      */
-    protected function getFieldDescriptionCollection()
-    {
-        $this->fieldsCollection = new FieldDescriptionCollection();
+    protected $authorExpression =
+        'CONCAT(
+            CONCAT(
+                CONCAT(u.firstName, \' \'),
+                CONCAT(u.lastName, \' \')
+            ),
+            CONCAT(\' - \', u.email)
+        )';
 
+    /**
+     * {@inheritDoc}
+     */
+    protected function configureFields(FieldDescriptionCollection $fieldsCollection)
+    {
         $fieldAction = new FieldDescription();
         $fieldAction->setName('action');
         $fieldAction->setOptions(
@@ -46,7 +57,7 @@ class AuditDatagridManager extends DatagridManager
                 'multiple' => true,
             )
         );
-        $this->fieldsCollection->add($fieldAction);
+        $fieldsCollection->add($fieldAction);
 
         $fieldVersion = new FieldDescription();
         $fieldVersion->setName('version');
@@ -62,7 +73,7 @@ class AuditDatagridManager extends DatagridManager
                 'show_filter' => false,
             )
         );
-        $this->fieldsCollection->add($fieldVersion);
+        $fieldsCollection->add($fieldVersion);
 
         $fieldObjectClass = new FieldDescription();
         $fieldObjectClass->setName('objectClass');
@@ -80,7 +91,7 @@ class AuditDatagridManager extends DatagridManager
                 'multiple'    => true,
             )
         );
-        $this->fieldsCollection->add($fieldObjectClass);
+        $fieldsCollection->add($fieldObjectClass);
 
         $fieldObjectName = new FieldDescription();
         $fieldObjectName->setName('objectName');
@@ -96,7 +107,7 @@ class AuditDatagridManager extends DatagridManager
                 'show_filter' => true,
             )
         );
-        $this->fieldsCollection->add($fieldObjectName);
+        $fieldsCollection->add($fieldObjectName);
 
         $fieldObjectId = new FieldDescription();
         $fieldObjectId->setName('objectId');
@@ -112,7 +123,7 @@ class AuditDatagridManager extends DatagridManager
                 'show_filter' => true,
             )
         );
-        $this->fieldsCollection->add($fieldObjectId);
+        $fieldsCollection->add($fieldObjectId);
 
         $fieldData = new FieldDescription();
         $fieldData->setName('data');
@@ -130,15 +141,16 @@ class AuditDatagridManager extends DatagridManager
         );
         $templateDataProperty = new TwigTemplateProperty($fieldData, 'OroDataAuditBundle:Datagrid:Property/data.html.twig');
         $fieldData->setProperty($templateDataProperty);
-        $this->fieldsCollection->add($fieldData);
+        $fieldsCollection->add($fieldData);
 
         $fieldAuthor = new FieldDescription();
-        $fieldAuthor->setName('user');
+        $fieldAuthor->setName('author');
         $fieldAuthor->setOptions(
             array(
                 'type'        => FieldDescriptionInterface::TYPE_TEXT,
                 'label'       => 'Author',
-                'field_name'  => 'user',
+                'field_name'  => 'author',
+                'expression'  => $this->authorExpression,
                 'filter_type' => FilterInterface::TYPE_STRING,
                 'required'    => false,
                 'sortable'    => true,
@@ -147,7 +159,7 @@ class AuditDatagridManager extends DatagridManager
             )
         );
         $fieldAuthor->setFieldName('author');
-        $this->fieldsCollection->add($fieldAuthor);
+        $fieldsCollection->add($fieldAuthor);
 
         $fieldLogged = new FieldDescription();
         $fieldLogged->setName('logged');
@@ -163,12 +175,12 @@ class AuditDatagridManager extends DatagridManager
                 'show_filter' => false,
             )
         );
-        $this->fieldsCollection->add($fieldLogged);
-
-        return $this->fieldsCollection;
+        $fieldsCollection->add($fieldLogged);
     }
 
     /**
+     * TODO Remove this method because Audit is not a flexible entity
+     *
      * Traverse all flexible attributes and add them as fields to collection
      *
      * @param FieldDescriptionCollection $fieldsCollection
@@ -190,36 +202,22 @@ class AuditDatagridManager extends DatagridManager
     }
 
     /**
-     * {@inheritdoc}
-     */
-    protected function getListFields()
-    {
-        return $this->getFieldDescriptionCollection()->getElements();
-    }
-
-    /**
      * @return ProxyQueryInterface
      */
     protected function createQuery()
     {
         $query = parent::createQuery();
-
-        $query->getQueryBuilder()
-            ->leftJoin('o.user', 'u')
-            ->addSelect(
-                'CONCAT(
-                    CONCAT(
-                        CONCAT(u.firstName, \' \'),
-                        CONCAT(u.lastName, \' \')
-                    ),
-                    CONCAT(\' - \', u.email)
-                ) AS author'
-            );
+        $query->leftJoin('a.user', 'u');
+        $query->addSelect('a', true);
+        $query->addSelect('u', true);
+        $query->addSelect($this->authorExpression . ' AS author', true);
 
         return $query;
     }
 
     /**
+     * TODO Refactor this method to get rid of createQuery usage
+     *
      * Get distinct object classes
      *
      * @return array
