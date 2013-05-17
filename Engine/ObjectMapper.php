@@ -334,16 +334,17 @@ class ObjectMapper
      */
     protected function saveFlexibleTextData($alias, $objectData, $attribute, $value)
     {
-        if (!isset($objectData[AbstractAttributeType::BACKEND_TYPE_TEXT][$attribute])) {
-            $objectData[AbstractAttributeType::BACKEND_TYPE_TEXT][$attribute] = '';
+        if ($value !== null) {
+            if (!isset($objectData[AbstractAttributeType::BACKEND_TYPE_TEXT][$attribute])) {
+                $objectData[AbstractAttributeType::BACKEND_TYPE_TEXT][$attribute] = '';
+            }
+            $objectData[AbstractAttributeType::BACKEND_TYPE_TEXT][$attribute] .= " " . $value;
+            if (!isset($objectData[AbstractAttributeType::BACKEND_TYPE_TEXT][Indexer::TEXT_ALL_DATA_FIELD])) {
+                $objectData[AbstractAttributeType::BACKEND_TYPE_TEXT][Indexer::TEXT_ALL_DATA_FIELD] = '';
+            }
+            $objectData[AbstractAttributeType::BACKEND_TYPE_TEXT][Indexer::TEXT_ALL_DATA_FIELD] .= " " . $value;
+            $objectData[AbstractAttributeType::BACKEND_TYPE_TEXT][$alias . '_' . $attribute] = $value;
         }
-        $objectData[AbstractAttributeType::BACKEND_TYPE_TEXT][$attribute] .= " " . $value;
-        if (!isset($objectData[AbstractAttributeType::BACKEND_TYPE_TEXT][Indexer::TEXT_ALL_DATA_FIELD])) {
-            $objectData[AbstractAttributeType::BACKEND_TYPE_TEXT][Indexer::TEXT_ALL_DATA_FIELD] = '';
-        }
-        $objectData[AbstractAttributeType::BACKEND_TYPE_TEXT][Indexer::TEXT_ALL_DATA_FIELD] .= " " . $value;
-        $objectData[AbstractAttributeType::BACKEND_TYPE_TEXT][$alias . '_' . $attribute] = $value;
-
         return $objectData;
     }
 
