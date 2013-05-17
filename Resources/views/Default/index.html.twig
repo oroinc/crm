@@ -171,7 +171,6 @@
 
         </header>
         {% endblock header %}
-        {% block top_action_box %}{% endblock %}
         {% block main %}
         <div id="main" >
             {% block right_panel %}{% endblock right_panel %}
@@ -336,7 +335,8 @@
                     {% block application_menu %}
                     {% endblock application_menu %}
                 </div>
-
+                {% block pin_button %}
+                {% endblock pin_button %}
                 <div id="flash-messages">
                     {% block messages %}
                         {% if app.session.flashbag.peekAll|length > 0 %}
