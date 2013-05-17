@@ -46,14 +46,14 @@ oro_menu_config:
                 shortcut_list_users: ~
 
 oro_titles:
-    oro_user_show: %%username%% - View Profile - User Management
-    oro_user_edit: %%username%% - Edit Profile - User Management
-    oro_user_create: New Profile - User Management
+    oro_user_show: %%username%% - View profile - User Management
+    oro_user_edit: %%username%% - Edit profile - User Management
+    oro_user_create: New profile - User Management
     oro_user_index: Users - User Management
 
-    oro_user_role_edit: Edit Role - User Management
-    oro_user_role_create: Add Role - User Management
-    oro_user_role_index: "Roles Overview - User Management"
+    oro_user_role_edit: Edit role - User management
+    oro_user_role_create: Add role - User management
+    oro_user_role_index: "Roles - User management"
 
     oro_user_security_login: Login
     oro_user_status_list: "User Statuses - User Management"
@@ -65,6 +65,6 @@ oro_titles:
 
     oro_user_acl_edit: Acl Resources - User Management
 
-    oro_user_group_create: Add Group - User Management
-    oro_user_group_edit: Edit Group - User Management
-    oro_user_group_index: Groups Overview - User Management
+    oro_user_group_create: Add group - User Management
+    oro_user_group_edit: Edit group - User Management
+    oro_user_group_index: Groups - User Management
