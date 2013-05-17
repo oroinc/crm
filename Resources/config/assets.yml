@@ -26,3 +26,4 @@ js:
   - 'js/routes.js'
 css:
   - 'bundles/oroui/lib/jstree/themes/default/style.css'
+  - 'bundles/oroui/css/jquery-ui.grid.css'
