@@ -40,6 +40,7 @@
                     this.data.tree_selector.ajax = settings.ajax;
                     this.data.tree_selector.data = settings.data;
                     this.data.tree_selector.auto_open_root = settings.auto_open_root;
+                    this.data.tree_selector.no_tree_message = settings.no_tree_message;
 
                     var tree_toolbar = $('<div>', {
                         id: 'tree_toolbar'
@@ -58,46 +59,51 @@
                     this.get_container_ul().before(tree_toolbar);
 
                     this.load_trees();
+
                 }, this))
                 // Rewrite the root node to link it to the selected tree
                 .bind("loaded.jstree", $.proxy(function () {
                     this.switch_tree();
 
-
                 }, this))
+                /*
                 .bind('refresh.jstree', $.proxy(function (e, data) {
                     this.load_trees();
                     this.switch_tree();
-                }, this));
+                }, this))*/;
         },
         defaults : {
             ajax : false,
             data : false,
-            tree_selector_buttons : false
+            tree_selector_buttons : false,
+            no_tree_message : false
         },
         _fn : {
             refresh : function(obj) {
-                this.switch_tree();
+                this.refresh_trees();
 
                 return this.__call_old();
             },
             switch_tree : function () {
-                root_node = this.get_container_ul().find('li')[0];
-
-                // Apply new tree id and new tree text to the root node
+                // Create new root node, place it into the tree and
+                // open it if setup to auto_open_root
                 var selected_tree = this.get_tree_select().find(':selected');
-                root_node.id = $(selected_tree).attr('id');
-                this.set_text(root_node,selected_tree.text());
+                var root_node_id = $(selected_tree).attr('id');
 
-                // Cleanup the tree
-                $(root_node).children('ul').remove();
+                if (!root_node_id) {
+                    return null;
+                }
+
+                root_node = this._prepare_node(
+                    $(selected_tree).attr('id'),
+                    selected_tree.text()
+                );
+
+                this.get_container_ul().empty();
+                this.get_container_ul().append(root_node);
+
                 this.close_node(root_node);
-                this.clean_node(root_node);
-
-                // Make the node "openable" by switching back to initial state
-                $(root_node).removeClass('jstree-leaf');
-                $(root_node).addClass('jstree-close');
-                $(root_node).addClass('jstree-closed');
+                this.clean_node();
 
                 if (this.data.tree_selector.auto_open_root) {
                     this.open_node(root_node);
@@ -119,8 +125,20 @@
 
                 var default_selected = null;
 
+                this.get_tree_select().empty();
+
+                // In case of no tree loaded, display the no_tree_message
+                // if setup
+                if (trees.length === 0 && this.data.tree_selector.no_tree_message) {
+                    var no_tree_option = $('<option>', {
+                        text: this.data.tree_selector.no_tree_message,
+                        disabled: true,
+                        selected: true
+                    });
+                    this.get_tree_select().append(no_tree_option);
+                }
+
                 var this_jstree = this;
-                this.get_tree_select().empty(); 
                 $.each(trees, function (index, tree) {
                     var option = $('<option>', {
                         id: tree.id,
@@ -153,6 +171,27 @@
 
                 return trees;
 
+            },
+            _prepare_node: function (id, node_name) {
+                var node = $('<li>', {
+                    id: id,
+                    rel: 'folder'
+                });
+
+                // Make the node "openable" by switching back to initial state
+                node.prepend("<ins class='jstree-icon'>&#160;</ins>");
+                node.removeClass('jstree-leaf');
+                node.addClass('jstree-close');
+                node.addClass('jstree-closed');
+
+                var node_link = $('<a>', {
+                    text: node_name
+                });
+
+                node_link.prepend("<ins class='jstree-icon'>&#160;</ins>");
+                node.append(node_link);
+
+                return node;
             },
             refresh_trees: function() {
                 this.get_tree_select().empty();
