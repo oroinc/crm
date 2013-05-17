@@ -10,7 +10,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  *
  * @ORM\Entity
  * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="windows_state",
+ * @ORM\Table(name="oro_windows_state",
  *      indexes={@ORM\Index(name="windows_user_idx", columns={"user_id"})})
  */
 class WindowsState
