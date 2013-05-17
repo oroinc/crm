@@ -1,8 +1,7 @@
 parameters:
-    oro_jsfv.event_listener.load_constraints_listener.class: Oro\Bundle\JsFormValidationBundle\EventListener\LoadConstraintsListener
+    oro_jsfv.generator.class: Oro\Bundle\JsFormValidationBundle\Generator\FormValidationScriptGenerator
 
 services:
-    oro_jsfv.event_listener.load_constraints_listener:
-        class: %oro_jsfv.event_listener.load_constraints_listener.class%
-        tags:
-            - { name: kernel.event_listener, event: jsfv.pre_process, method: onJsfvPreProcess, priority: 255 }
+    jsfv.generator:
+        class: %oro_jsfv.generator.class%
+        arguments: [@service_container, @validator.mapping.class_metadata_factory]
