@@ -13,6 +13,7 @@ js:
   - '@OroUIBundle/Resources/public/lib/bootstrap/js/bootstrap.switch.js'
 
   - '@OroUIBundle/Resources/public/js/layout.js'
+  - '@OroUIBundle/Resources/public/js/height_fix.js'
   - '@OroUIBundle/Resources/public/js/csrf.js'
   - '@OroUIBundle/Resources/public/js/backbone/error.js'
   - '@OroUIBundle/Resources/public/js/registry.js'
