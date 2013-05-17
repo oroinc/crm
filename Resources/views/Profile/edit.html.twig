@@ -14,9 +14,6 @@
             <div class="row">
                 <div class="pull-right">
                     <div class="pull-right">
-                        <div class="pull-left switch" data-off="danger" data-on-label="Enabled" data-off-label="Disabled" id="btn-enable">
-                            {{ form_widget(form.enabled) }}
-                        </div>
                         <div class="pull-left btn-group icons-holder">
                             {% if form.vars.value.id and resource_granted('oro_user_profile_remove') %}
                                 <a href="javascript: void(0);" class="btn icons-holder-text" id="btn-remove-profile" data-id="{{ form.vars.value.id }}" data-message="{{ 'Are you sure you want to delete this profile?'|trans }}" title="{{ 'Delete profile'|trans }}"><i class="icon-trash hide-text">{{ 'Remove'|trans }}</i>Delete</a>
@@ -31,10 +28,6 @@
                             </div>
                             <button type="submit" class="btn btn-success">{{ ' Save'|trans }}</button>
                         </div>
-                    </div>
-                    <div class="pull-right pull-right-extra">
-                        <div class="status-enabled{% if not form.vars.value.enabled %} hide{% endif %}"><i class="icon-status-enabled"></i>{{ 'Enabled'|trans }}</div>
-                        <div class="status-disabled{% if form.vars.value.enabled %} hide{% endif %}"><i class="icon-status-disabled"></i>{{ 'Disabled'|trans }}</div>
                     </div>
                 </div>
                 {% if form.vars.value.id %}
@@ -105,6 +98,7 @@
                         <div class="row-fluid row-fluid-divider">
                             <fieldset class="form-horizontal span6">
                                 <h5 class="usser-fiedset"><span>Basic Information</span></h5>
+                                {{ form_row(form.enabled) }}
                                 {{ form_row(form.username) }}
                                 {% if form.plainPassword is defined %}
                                     {{ form_row(form.plainPassword) }}
