@@ -236,7 +236,7 @@ class ProxyQuery extends BaseProxyQuery implements ProxyQueryInterface
     }
 
     /**
-     * Check is provided expression already is select clause
+     * Check whether provided expression already in select clause
      *
      * @param QueryBuilder $qb
      * @param string $selectString
