@@ -312,11 +312,11 @@ Oro.PageableCollection = Backbone.PageableCollection.extend({
 
         var data = options.data || {};
 
-        // dedup query params
+        // set up query params
         var url = options.url || _.result(this, "url") || '';
         var qsi = url.indexOf('?');
         if (qsi != -1) {
-            _.extend(data, queryStringToParams(url.slice(qsi + 1)));
+            _.extend(data, Oro.unpackFromQueryString(url.slice(qsi + 1)));
             url = url.slice(0, qsi);
         }
 
