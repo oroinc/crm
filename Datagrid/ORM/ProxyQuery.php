@@ -372,17 +372,32 @@ class ProxyQuery extends BaseProxyQuery implements ProxyQueryInterface
      */
     public function addSelect($select = null, $addToWhitelist = false)
     {
-        if (!$select) {
+        if (empty($select)) {
             return $this;
         }
 
+        if (is_array($select)) {
+            $selects = $select;
+        } else {
+            $arguments = func_get_args();
+            $lastElement = end($arguments);
+            if (is_bool($lastElement)) {
+                $selects = array_slice($arguments, 0, -1);
+                $addToWhitelist = $lastElement;
+            } else {
+                $selects = $arguments;
+            }
+        }
+
         if ($addToWhitelist) {
-            $this->selectWhitelist[] = $select;
+            $this->selectWhitelist = array_merge($this->selectWhitelist, $selects);
         }
 
         $queryBuilder = $this->getQueryBuilder();
-        if (!$addToWhitelist || $addToWhitelist && !$this->isInSelectExpression($queryBuilder, $select)) {
-            $queryBuilder->addSelect($select);
+        foreach ($selects as $select) {
+            if (!$addToWhitelist || $addToWhitelist && !$this->isInSelectExpression($queryBuilder, $select)) {
+                $queryBuilder->addSelect($select);
+            }
         }
 
         return $this;
