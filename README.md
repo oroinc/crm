@@ -35,7 +35,7 @@ public function registerBundles()
 }
 ```
 
-Enable Loggable behavior in your app/config/config.yml file and customize LoggableListener:
+Enable Loggable behavior in your `app/config/config.yml` file and customize `LoggableListener`:
 
 ``` yaml
 stof_doctrine_extensions:
@@ -46,6 +46,13 @@ stof_doctrine_extensions:
     class:
         [...]
         loggable: Oro\Bundle\DataAuditBundle\EventListener\LoggableListener
+```
+
+To enable log view and API calls, import routing rules in `app/config/routing.yml`
+
+``` yaml
+oro_dataaudit:
+    resource: "@OroDataAuditBundle/Resources/config/routing.yml"
 ```
 
 ## Run unit tests ##
@@ -80,6 +87,6 @@ class MyEntity
     // ...
 }
 
-That\'s it! `myField` becomes versioned and will be tracked by DataAudit bundle.
+That's it! `myField` becomes versioned and will be tracked by DataAudit bundle.
 
 You may also specify your own logEntryClass with custom logic.
