@@ -32,6 +32,11 @@ class ProxyQuery extends BaseProxyQuery implements ProxyQueryInterface
     protected $sortOrderList = array();
 
     /**
+     * @var array
+     */
+    protected $selectWhitelist = array();
+
+    /**
      * Get query builder
      *
      * @return QueryBuilder
@@ -221,7 +226,7 @@ class ProxyQuery extends BaseProxyQuery implements ProxyQueryInterface
 
         $selectExpressions = array('DISTINCT ' . $this->getIdFieldFQN());
         // We must leave expressions used in having
-        $selectExpressions = array_merge($selectExpressions, $this->getSelectExpressionsUsedByAliases($qb));
+        $selectExpressions = array_merge($selectExpressions, $this->selectWhitelist);
         $qb->select($selectExpressions);
 
         // Since DQL has been changed, some parameters potentially are not used anymore.
@@ -231,64 +236,21 @@ class ProxyQuery extends BaseProxyQuery implements ProxyQueryInterface
     }
 
     /**
-     * Returns select expressions used in DQL as aliases
-     *
-     * Example of usage:
-     *
-     * Assume $qb holds DQL as below:
-     * SELECT u, CASE WHEN :group MEMBER OF u.groups THEN 1 ELSE 0 END AS hasGroup FROM User HAVING hasGroup = 1
-     *
-     * Then method will return:
-     * array("CASE WHEN :group MEMBER OF u.groups THEN 1 ELSE 0 END AS hasGroup")
+     * Check is provided expression already is select clause
      *
      * @param QueryBuilder $qb
-     * @return array
+     * @param string $selectString
+     * @return bool
      */
-    protected function getSelectExpressionsUsedByAliases(QueryBuilder $qb)
+    protected function isInSelectExpression(QueryBuilder $qb, $selectString)
     {
-        $result = array();
-        $qb = clone $qb;
-        $selectExpressions = $this->getSelectExpressions($qb);
-        $dqlWithoutSelect = $qb->resetDQLPart('select')->getDQL();
-        foreach ($selectExpressions as $expression) {
-            if (preg_match('/^.* AS ([\w]+)$/i', $expression, $matches)) {
-                $alias = $matches[1];
-                if (preg_match(sprintf('/[^\w]%s[^\w]/', preg_quote($alias)), $dqlWithoutSelect . ' ')) {
-                    $result[] = $expression;
-                }
-            }
-        }
-        return $result;
-    }
-
-    /**
-     * Get list of select DQL part expressions strings of QueryBuilder.
-     *
-     * Example of usage:
-     *
-     * Assume $qb holds DQL as below:
-     * SELECT u.name, u.email FROM User
-     *
-     * Then method will return:
-     * array("u.name", "u.email")
-     *
-     * @param QueryBuilder $qb
-     * @return array
-     */
-    protected function getSelectExpressions(QueryBuilder $qb)
-    {
-        $result = array();
         /** @var $selectPart \Doctrine\ORM\Query\Expr\Select */
         foreach ($qb->getDQLPart('select') as $selectPart) {
-            foreach ($selectPart->getParts() as $part) {
-                if (is_string($part)) {
-                    $result = array_merge($result, array_map('trim', explode(',', $part)));
-                } else {
-                    $result[] = $part;
-                }
+            if (in_array($selectString, $selectPart->getParts())) {
+                return true;
             }
         }
-        return $result;
+        return false;
     }
 
     /**
@@ -399,5 +361,30 @@ class ProxyQuery extends BaseProxyQuery implements ProxyQueryInterface
             $fieldName = ($parentAlias ? : $this->getRootAlias()) . '.' . $fieldName;
         }
         return $fieldName;
+    }
+
+    /**
+     * Proxy of QueryBuilder::addSelect with flag that specified whether add select to internal whitelist
+     *
+     * @param string $select
+     * @param bool $addToWhitelist
+     * @return ProxyQuery
+     */
+    public function addSelect($select = null, $addToWhitelist = false)
+    {
+        if (!$select) {
+            return $this;
+        }
+
+        if ($addToWhitelist) {
+            $this->selectWhitelist[] = $select;
+        }
+
+        $queryBuilder = $this->getQueryBuilder();
+        if (!$addToWhitelist || $addToWhitelist && !$this->isInSelectExpression($queryBuilder, $select)) {
+            $queryBuilder->addSelect($select);
+        }
+
+        return $this;
     }
 }
