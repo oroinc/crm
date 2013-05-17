@@ -1,6 +1,6 @@
 Data Audit Bundle
 =================
-Bundle provides entity change log using "Loggable" Doctrine extension.
+Bundle provides entity change log functionality using "Loggable" Doctrine extension.
 
 ## Installation ##
 Add the `oro/data-audit-bundle` package to your `require` section in the `composer.json` file.
@@ -11,6 +11,7 @@ Add the `oro/data-audit-bundle` package to your `require` section in the `compos
     "oro/data-audit-bundle": "dev-master"
 },
 "repositories": [
+    [...]
     {
         "type": "vcs",
         "url": "git@github.com:laboro/DataAuditBundle.git",
@@ -30,7 +31,7 @@ public function registerBundles()
         new Oro\Bundle\DataAuditBundle\OroDataAuditBundle(),
         // ...
     );
-    ...
+    // ...
 }
 ```
 
@@ -54,7 +55,7 @@ $ phpunit --coverage-html=cov/
 ```
 
 ## Usage ##
-In your entities add special annotations to mark particular fields versioned.
+In your entity add special annotations to mark particular fields versioned.
 
 ``` php
 <?php
@@ -79,6 +80,6 @@ class MyEntity
     // ...
 }
 
-That's it! `myField` becomes versioned and will be tracked by DataAudit bundle.
+That\'s it! `myField` becomes versioned and will be tracked by DataAudit bundle.
 
 You may also specify your own logEntryClass with custom logic.
