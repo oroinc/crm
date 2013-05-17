@@ -12,10 +12,6 @@ use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 
 use Oro\Bundle\UserBundle\Entity\User;
 
-/**
- * @ORM\Entity
- * @ORM\Table(name="oro_audit")
- */
 class AuditSoap extends AbstractLogEntry
 {
     /**
