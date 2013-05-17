@@ -8,8 +8,6 @@ use Gedmo\Loggable\Entity\MappedSuperclass\AbstractLogEntry;
 
 use JMS\Serializer\Annotation\Type;
 
-use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
-
 use Oro\Bundle\UserBundle\Entity\User;
 
 /**

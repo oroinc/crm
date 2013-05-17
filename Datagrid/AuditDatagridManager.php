@@ -185,6 +185,7 @@ class AuditDatagridManager extends DatagridManager
     protected function createQuery()
     {
         $query = parent::createQuery();
+
         $query->leftJoin('a.user', 'u');
         $query->addSelect('a', true);
         $query->addSelect('u', true);
@@ -211,7 +212,7 @@ class AuditDatagridManager extends DatagridManager
 
         $result = $query->getQuery()->getArrayResult();
 
-        foreach ((array)$result as $value) {
+        foreach ((array) $result as $value) {
             $options[$value['objectClass']] = current(array_reverse(explode('\\', $value['objectClass'])));
         }
 

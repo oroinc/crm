@@ -28,7 +28,7 @@ class AuditController extends Controller
      *      defaults={"_format" = "html"}
      * )
      * @Acl(
-     *      id="oro_dataaudit_list",
+     *      id="oro_dataaudit_index",
      *      name="View audit stream",
      *      description="View audit stream",
      *      parent="oro_dataaudit"
@@ -41,10 +41,7 @@ class AuditController extends Controller
             ? 'OroGridBundle:Datagrid:list.json.php'
             : 'OroDataAuditBundle:Audit:index.html.twig';
 
-        return $this->render(
-            $view,
-            array('datagrid' => $datagrid->createView())
-        );
+        return $this->render($view, array('datagrid' => $datagrid->createView()));
     }
 
     /**
@@ -59,41 +56,18 @@ class AuditController extends Controller
      */
     public function historyAction($entity, $id)
     {
-        $history = $this->getManager()->getRepository('OroDataAuditBundle:Audit')->findBy(
-            array(
-                'objectClass' => $entity,
-                'objectId'    => $id,
-            ),
-            array('id' => 'DESC')
-        );
+        $history = $this->getDoctrine()
+            ->getManagerForClass('OroDataAuditBundle:Audit')
+            ->getRepository('OroDataAuditBundle:Audit')->findBy(
+                array(
+                    'objectClass' => $entity,
+                    'objectId'    => $id,
+                ),
+                array('id' => 'DESC')
+            );
 
         return array(
             'history' => $history,
         );
-    }
-
-    /**
-     * @Route("/show/{id}", name="oro_dataaudit_show", requirements={"id"="\d+"})
-     * @Template
-     * @Acl(
-     *      id="oro_dataaudit_show",
-     *      name="View event",
-     *      description="View event with changed data",
-     *      parent="oro_dataaudit"
-     * )
-     */
-    public function showAction(Audit $entry)
-    {
-        return array(
-            'entry' => $entry,
-        );
-    }
-
-    /**
-     * @return \Doctrine\Common\Persistence\ObjectManager
-     */
-    protected function getManager()
-    {
-        return $this->getDoctrine()->getManagerForClass('OroDataAuditBundle:Audit');
     }
 }
