@@ -3,7 +3,7 @@
     {% set isChecked = resource.accessRoles|length %}
     {% set hasChildren = resource.__children is defined and resource.__children %}
     <li class="{% if isChecked %}jstree-checked{% endif %} {% if hasChildren %}jstree-open{% else %}jstree-leaf{% endif %}" data-id="{{ resource.id }}">
-        <a href="#" for="resource_{{ resource.id }}" title="{{ resource.description }}">{{ resource.name }}</a>
+        <a href="#" for="resource_{{ resource.id }}" title="{{ resource.description|trans }}">{{ resource.name|trans }}</a>
 
         {% if hasChildren %}
             {% include 'OroUserBundle:Role:_aclSubTree.html.twig' with {'resources': resource.__children}  %}

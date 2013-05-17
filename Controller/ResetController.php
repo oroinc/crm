@@ -14,7 +14,7 @@ use Oro\Bundle\UserBundle\Annotation\Acl;
  * @Acl(
  *      id = "oro_reset_controller",
  *      name="Reset user password",
- *      description = "Oro Reset user password",
+ *      description = "Reset user password",
  *      parent = "oro_security"
  * )
  */
