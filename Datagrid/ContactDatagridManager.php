@@ -39,10 +39,7 @@ class ContactDatagridManager extends FlexibleDatagridManager
                 'label'       => 'ID',
                 'field_name'  => 'id',
                 'filter_type' => FilterInterface::TYPE_NUMBER,
-                'required'    => false,
-                'sortable'    => true,
-                'filterable'  => true,
-                'show_filter' => true,
+                'show_column' => false
             )
         );
         $fieldsCollection->add($fieldId);

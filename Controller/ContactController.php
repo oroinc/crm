@@ -32,7 +32,7 @@ class ContactController extends Controller
      * @Template
      * @Acl(
      *      id="oro_contact_view",
-     *      name="View contact",
+     *      name="View Contact",
      *      description="View contact",
      *      parent="oro_contact"
      * )
@@ -51,7 +51,7 @@ class ContactController extends Controller
      * @Template("OroContactBundle:Contact:update.html.twig")
      * @Acl(
      *      id="oro_contact_create",
-     *      name="Create contact",
+     *      name="Create Contact",
      *      description="Create contact",
      *      parent="oro_contact"
      * )
@@ -70,7 +70,7 @@ class ContactController extends Controller
      * @Template
      * @Acl(
      *      id="oro_contact_update",
-     *      name="Update contact",
+     *      name="Update Contact",
      *      description="Update contact",
      *      parent="oro_contact"
      * )
@@ -102,7 +102,7 @@ class ContactController extends Controller
      * )
      * @Acl(
      *      id="oro_contact_list",
-     *      name="View list of contacts",
+     *      name="View List of Contacts",
      *      description="View list of contacts",
      *      parent="oro_contact"
      * )

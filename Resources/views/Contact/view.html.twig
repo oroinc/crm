@@ -1,5 +1,5 @@
 {% extends 'OroContactBundle::layout.html.twig' %}
-{% import 'OroUserBundle::macros.html.twig' as macros %}
+{% import 'OroUIBundle::macros.html.twig' as macros %}
 {% oro_title_set({params : {"%contact.name%": contact.__toString} }) %}
 
 {% block head_script %}
@@ -38,7 +38,7 @@
                                    data-url="{{ path('oro_api_delete_contact', {'id': contact.id}) }}"
                                    data-redirect="{{ path('oro_contact_index') }}"
                                    data-message="{{ 'Are you sure you want to delete this contact?'|trans }}"
-                                   title="{{ 'Delete contact'|trans }}"><i class="icon-trash hide-text">{{ 'Delete'|trans }}</i>Delete</a>
+                                   title="{{ 'Delete Contact'|trans }}"><i class="icon-trash hide-text"></i>{{ 'Delete'|trans }}</a>
                             {% endif %}
                         </div>
                     </div>
@@ -78,7 +78,7 @@
                     <div class="form-horizontal">
                         {% for attr in contact.values %}
                         <div class="control-group">
-                            <label class="control-label">{{ attr.attribute.code|title }}</label>
+                            <label class="control-label">{{ attr.attribute.label|trans|title }}</label>
                             <div class="controls">
                                 <div class="clearfix-oro">
                                     <p class="control-label">{{ attr.__toString }}</p>

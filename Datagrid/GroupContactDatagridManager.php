@@ -35,11 +35,7 @@ class GroupContactDatagridManager extends FlexibleDatagridManager
                 'label'       => 'ID',
                 'field_name'  => 'id',
                 'filter_type' => FilterInterface::TYPE_NUMBER,
-                'required'    => false,
-                'sortable'    => false,
-                'filterable'  => false,
-                'show_column' => false,
-                'show_filter' => false,
+                'show_column' => false
             )
         );
         $fieldsCollection->add($fieldId);
