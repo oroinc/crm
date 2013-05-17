@@ -185,7 +185,6 @@
                 node.addClass('jstree-closed');
 
                 var node_link = $('<a>', {
-                    class: '',
                     text: node_name
                 });
 
