@@ -1,12 +1,12 @@
 {% extends bap.layout is defined ? bap.layout : 'OroDataFlowBundle::layout.html.twig' %}
 
-{% set title = 'Connectors overview' %}
+{% set title = 'Connectors' %}
 
 {% block content %}
 
     <fieldset>
         <legend>
-            {{ "Connectors overview" | trans }}
+            {{ "Connectors" | trans }}
             <a class="btn btn-primary pull-right" href="{{ path('oro_dataflow_connector_create') }}">{{ "Add new" | trans }}</a>
         </legend>
 
