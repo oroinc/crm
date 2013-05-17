@@ -9,6 +9,7 @@ use Sonata\AdminBundle\Filter\FilterInterface;
 
 use Oro\Bundle\GridBundle\Datagrid\DatagridInterface;
 use Oro\Bundle\GridBundle\Property\PropertyInterface;
+use Oro\Bundle\GridBundle\Property\PropertyCollection;
 use Oro\Bundle\GridBundle\Sorter\SorterInterface;
 use Oro\Bundle\GridBundle\Action\ActionInterface;
 use Oro\Bundle\GridBundle\Route\RouteGeneratorInterface;
@@ -16,6 +17,9 @@ use Oro\Bundle\GridBundle\Datagrid\DatagridView;
 use Oro\Bundle\GridBundle\Datagrid\ParametersInterface;
 use Oro\Bundle\GridBundle\Datagrid\PagerInterface;
 use Oro\Bundle\GridBundle\Datagrid\ResultRecord;
+use Oro\Bundle\GridBundle\Field\FieldDescription;
+use Oro\Bundle\GridBundle\Field\FieldDescriptionInterface;
+use Oro\Bundle\GridBundle\Field\FieldDescriptionCollection;
 use Oro\Bundle\SearchBundle\Datagrid\AllResultsPager;
 use Oro\Bundle\SearchBundle\Query\Result;
 use Oro\Bundle\SearchBundle\Engine\Indexer;
@@ -68,6 +72,11 @@ class AllResultsDatagrid implements DatagridInterface
     protected $pager;
 
     /**
+     * @var bool
+     */
+    protected $pagerInitialized = false;
+
+    /**
      * @var Result
      */
     protected $queryResult;
@@ -76,6 +85,21 @@ class AllResultsDatagrid implements DatagridInterface
      * @var null|string
      */
     protected $searchString = null;
+
+    /**
+     * @var string
+     */
+    protected $searchEntity = '';
+
+    /**
+     * @var FieldDescriptionCollection
+     */
+    protected $columns;
+
+    /**
+     * @var PropertyCollection
+     */
+    protected $properties;
 
     /**
      * @param FormFactoryInterface $formFactory
@@ -105,6 +129,14 @@ class AllResultsDatagrid implements DatagridInterface
     }
 
     /**
+     * @param string $searchEntity
+     */
+    public function setSearchEntity($searchEntity = '')
+    {
+        $this->searchEntity = $searchEntity;
+    }
+
+    /**
      * @param string $searchString
      */
     public function setSearchString($searchString)
@@ -129,7 +161,7 @@ class AllResultsDatagrid implements DatagridInterface
                 $this->searchString,
                 0,
                 $pager->getMaxPerPage(),
-                null,
+                $this->searchEntity,
                 $pager->getPage()
             );
         }
@@ -142,10 +174,8 @@ class AllResultsDatagrid implements DatagridInterface
      */
     public function getPager()
     {
-        if (!$this->pager) {
-            $this->createPager();
-            $this->initPager($this->getQueryResult());
-        }
+        $this->createPager();
+        $this->initPager($this->getQueryResult());
 
         return $this->pager;
     }
@@ -172,9 +202,15 @@ class AllResultsDatagrid implements DatagridInterface
      */
     protected function initPager(Result $queryResult)
     {
-        $pager = $this->getPager();
+        if ($this->pagerInitialized) {
+            return;
+        }
+
+        $pager = $this->createPager();
         $pager->setQuery($queryResult);
         $pager->init();
+
+        $this->pagerInitialized = true;
     }
 
     /**
@@ -194,8 +230,52 @@ class AllResultsDatagrid implements DatagridInterface
      */
     public function getColumns()
     {
-        // TODO implement one result column
-        return array();
+        if (null === $this->columns) {
+            $this->columns = array();
+
+            $description = new FieldDescription();
+            $description->setName('description');
+            $description->setOptions(
+                array(
+                    'type'        => FieldDescriptionInterface::TYPE_TEXT,
+                    'label'       => '',
+                    'field_name'  => 'recordText',
+                    'required'    => false,
+                    'sortable'    => false,
+                    'filterable'  => false,
+                    'show_filter' => false,
+                )
+            );
+
+            $this->columns[] = $description;
+        }
+
+        return $this->columns;
+    }
+
+    /**
+     * @return array
+     */
+    public function getProperties()
+    {
+        if (null === $this->properties) {
+            $this->properties = new PropertyCollection();
+            /** @var $field FieldDescriptionInterface */
+            foreach ($this->getColumns() as $field) {
+                $this->addProperty($field->getProperty());
+            }
+        }
+
+        return $this->properties;
+    }
+
+    /**
+     * @param PropertyInterface $property
+     * @return void
+     */
+    public function addProperty(PropertyInterface $property)
+    {
+        $this->properties->add($property);
     }
 
     /**
@@ -306,8 +386,6 @@ class AllResultsDatagrid implements DatagridInterface
     }
 
     /**
-     * @deprected Should not be used
-     *
      * @return void
      */
     public function buildPager()
@@ -316,8 +394,6 @@ class AllResultsDatagrid implements DatagridInterface
     }
 
     /**
-     * @deprected Should not be used
-     *
      * @param string $name
      * @param string $operator
      * @param mixed  $value
@@ -327,8 +403,6 @@ class AllResultsDatagrid implements DatagridInterface
     }
 
     /**
-     * @deprected Should not be used
-     *
      * @return boolean
      */
     public function hasActiveFilters()
@@ -337,8 +411,6 @@ class AllResultsDatagrid implements DatagridInterface
     }
 
     /**
-     * @deprected Should not be used
-     *
      * @param string $name
      * @return \Sonata\AdminBundle\Filter\FilterInterface
      */
@@ -348,8 +420,6 @@ class AllResultsDatagrid implements DatagridInterface
     }
 
     /**
-     * @deprected Should not be used
-     *
      * @param string $name
      * @return bool
      */
@@ -359,8 +429,6 @@ class AllResultsDatagrid implements DatagridInterface
     }
 
     /**
-     * @deprected Should not be used
-     *
      * @param string $name
      */
     public function removeFilter($name)
@@ -368,8 +436,6 @@ class AllResultsDatagrid implements DatagridInterface
     }
 
     /**
-     * @deprected Should not be used
-     *
      * @param \Sonata\AdminBundle\Filter\FilterInterface $filter
      * @return \Sonata\AdminBundle\Filter\FilterInterface
      */
@@ -378,18 +444,6 @@ class AllResultsDatagrid implements DatagridInterface
     }
 
     /**
-     * @deprected Should not be used
-     *
-     * @param PropertyInterface $property
-     * @return void
-     */
-    public function addProperty(PropertyInterface $property)
-    {
-    }
-
-    /**
-     * @deprected Should not be used
-     *
      * @param SorterInterface $sorter
      * @return void
      */
@@ -398,8 +452,6 @@ class AllResultsDatagrid implements DatagridInterface
     }
 
     /**
-     * @deprected Should not be used
-     *
      * @param ActionInterface $action
      * @return void
      */

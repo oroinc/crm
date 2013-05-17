@@ -6,6 +6,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 
 use Oro\Bundle\SearchBundle\Engine\Indexer;
 use Oro\Bundle\SearchBundle\Datagrid\AllResultsDatagrid;
@@ -43,45 +44,44 @@ class SearchController extends Controller
     /**
      * Show search results
      *
-     * @Route("/", name="oro_search_results", defaults={"limit"=10})
+     * @Route(
+     *      "/{_format}",
+     *      name="oro_search_results",
+     *      requirements={"_format"="html|json"},
+     *      defaults={"_format"="html", "limit"=10}
+     * )
      * @Template
      */
-    public function searchResultsAction()
+    public function searchResultsAction(Request $request)
     {
-        $request = $this->getRequest();
+        $from   = $request->get('from');
+        $search = $request->get('search');
 
-        /** @var $indexer Indexer */
-        $indexer = $this->get('oro_search.index');
-        $searchString = $request->get('search');
-        $from = $request->get('from');
-
-        $data = $indexer->simpleSearch(
-            $searchString,
-            null,
-            (int)$this->getRequest()->get('limit'),
-            $from,
-            (int)$request->get('page')
-        );
+        $view = 'json' == $request->getRequestFormat()
+            ? 'OroGridBundle:Datagrid:list.json.php'
+            : 'OroSearchBundle:Search:searchResults.html.twig';
 
         /** @var $datagrid AllResultsDatagrid */
         $datagrid = $this->get('oro_search.datagrid.all_results');
-        $datagrid->setSearchString($searchString);
-        $results = $datagrid->getResults();
 
-        if ($this->getRequest()->isXmlHttpRequest()) {
-            return new JsonResponse($data->toSearchResultData());
-        } else {
-            return array(
-                'searchResults' => $this->get('knp_paginator')->paginate(
-                    $data,
-                    $this->get('request')->query->get('page', 1),
-                    $request->get('limit')
-                ),
-                'searchString'  => $request->get('search'),
-                'entities'      => $indexer->getEntitiesLabels(),
-                'search'        => $searchString,
-                'from'          => $from
-            );
-        }
+        $datagrid->setSearchEntity($from);
+        $datagrid->setSearchString($search);
+
+        $datagrid->getRouteGenerator()->setRouteParameters(
+            array(
+                'search' => $search,
+                'from'   => $from
+            )
+        );
+
+        return $this->render(
+            $view,
+            array(
+                'searchString'  => $search,
+                'entities'      => $this->get('oro_search.index')->getEntitiesLabels(),
+                'from'          => $from,
+                'datagrid'      => $datagrid->createView()
+            )
+        );
     }
 }

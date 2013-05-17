@@ -9,13 +9,13 @@ services:
         class: %oro_grid.route.default_generator.class%
         arguments:
             - @router
-            - %oro_search.datagrid.all_results.name%
+            - "oro_search_results"
 
     oro_search.datagrid.all_results.parameters:
         class: %oro_grid.datagrid.parameters.class%
         arguments:
             - @service_container
-            - "oro_search_results"
+            - %oro_search.datagrid.all_results.name%
 
     oro_search.datagrid.all_results.pager:
         class: %oro_search.datagrid.all_results.pager.class%
