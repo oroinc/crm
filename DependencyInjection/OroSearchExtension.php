@@ -48,6 +48,8 @@ class OroSearchExtension extends Extension
         $loader->load('services.yml');
 
         $container->setParameter('oro_search.twig.result_template', $config['result_template']);
+
+        $loader->load('datagrid.yml');
     }
 
     /**

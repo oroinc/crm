@@ -1,10 +1,14 @@
 <?php
 namespace Oro\Bundle\SearchBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
+
+use Oro\Bundle\SearchBundle\Engine\Indexer;
+use Oro\Bundle\SearchBundle\Datagrid\AllResultsDatagrid;
 
 class SearchController extends Controller
 {
@@ -45,17 +49,24 @@ class SearchController extends Controller
     public function searchResultsAction()
     {
         $request = $this->getRequest();
-        $searchManager = $this->get('oro_search.index');
+
+        /** @var $indexer Indexer */
+        $indexer = $this->get('oro_search.index');
         $searchString = $request->get('search');
         $from = $request->get('from');
 
-        $data = $searchManager->simpleSearch(
+        $data = $indexer->simpleSearch(
             $searchString,
             null,
             (int)$this->getRequest()->get('limit'),
             $from,
             (int)$request->get('page')
         );
+
+        /** @var $datagrid AllResultsDatagrid */
+        $datagrid = $this->get('oro_search.datagrid.all_results');
+        $datagrid->setSearchString($searchString);
+        $results = $datagrid->getResults();
 
         if ($this->getRequest()->isXmlHttpRequest()) {
             return new JsonResponse($data->toSearchResultData());
@@ -67,7 +78,7 @@ class SearchController extends Controller
                     $request->get('limit')
                 ),
                 'searchString'  => $request->get('search'),
-                'entities'      => $searchManager->getEntitiesLabels(),
+                'entities'      => $indexer->getEntitiesLabels(),
                 'search'        => $searchString,
                 'from'          => $from
             );
