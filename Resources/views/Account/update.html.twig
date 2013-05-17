@@ -66,7 +66,7 @@
 {% block form_buttons %}
     <div class="pull-left customer-info-top-actions">
         <div class="btn-group">
-            <a href="{{ app.request.get('back') ? app.request.get('back') : path('oro_account_index') }}" class="btn">{{ 'Cancel'|trans }}</a>
+            <a href="{{ app.request.get('back') ? app.request.get('back') : path('oro_account_index') }}" class="btn back">{{ 'Cancel'|trans }}</a>
             <button type="submit" class="btn btn-primary"><i class="icon-ok icon-white hide-text">Save </i> {{ 'Save'|trans }}</button>
         </div>
     </div>
