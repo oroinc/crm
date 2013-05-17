@@ -3,6 +3,7 @@
 namespace Oro\Bundle\DataAuditBundle\Datagrid;
 
 use Doctrine\ORM\Query;
+
 use Gedmo\Loggable\LoggableListener;
 
 use Oro\Bundle\GridBundle\Datagrid\DatagridManager;
@@ -176,29 +177,6 @@ class AuditDatagridManager extends DatagridManager
             )
         );
         $fieldsCollection->add($fieldLogged);
-    }
-
-    /**
-     * TODO Remove this method because Audit is not a flexible entity
-     *
-     * Traverse all flexible attributes and add them as fields to collection
-     *
-     * @param FieldDescriptionCollection $fieldsCollection
-     * @param array $options
-     */
-    protected function configureFlexibleFields(
-        FieldDescriptionCollection $fieldsCollection,
-        array $options = array()
-    ) {
-        foreach ($this->getFlexibleAttributes() as $attribute) {
-            $attributeCode = $attribute->getCode();
-            $fieldsCollection->add(
-                $this->createFlexibleField(
-                    $attribute,
-                    isset($options[$attributeCode]) ? $options[$attributeCode] : array()
-                )
-            );
-        }
     }
 
     /**
