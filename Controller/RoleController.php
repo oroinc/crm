@@ -73,7 +73,7 @@ class RoleController extends Controller
         return array(
             'datagrid' => $this->getRoleUserDatagridManager($entity)->getDatagrid()->createView(),
             'form'     => $this->get('oro_user.form.role')->createView(),
-            'resources' => $entity->getId() ? $this->getAclManager()->getRoleAclTree($entity) : null
+            'resources' => $this->getAclManager()->getRoleAclTree($entity)
         );
     }
 

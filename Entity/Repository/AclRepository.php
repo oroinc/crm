@@ -143,12 +143,18 @@ class AclRepository extends NestedTreeRepository
      */
     public function getAclListWithRoles(Role $role)
     {
-        return $this->createQueryBuilder('acl')
+         $query = $this->createQueryBuilder('acl')
             ->select('acl', 'accessRoles')
-            ->leftJoin('acl.accessRoles', 'accessRoles', Expr\Join::WITH, 'accessRoles.id = :role')
-            ->setParameter('role', $role)
-            ->orderBy('acl.root, acl.lft', 'ASC')
-            ->getQuery()
+            ->orderBy('acl.root, acl.lft', 'ASC');
+
+         if ($role->getId()) {
+             $query->leftJoin('acl.accessRoles', 'accessRoles', Expr\Join::WITH, 'accessRoles.id = :role')
+                 ->setParameter('role', $role);
+         } else {
+             $query->leftJoin('acl.accessRoles', 'accessRoles');
+         }
+
+         return   $query->getQuery()
             ->getArrayResult();
     }
 
