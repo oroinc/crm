@@ -9,13 +9,15 @@ class OroJsFormValidationExtensionTest extends \PHPUnit_Framework_TestCase
 {
     public function testLoad()
     {
-        $container = $this->getMockBuilder('Symfony\Component\DependencyInjection\ContainerBuilder')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $container->expects($this->never())->method($this->anything());
+        $container = new ContainerBuilder();
+        $extension = new OroJsFormValidationExtension();
 
-        $gridExtension = new OroJsFormValidationExtension();
-        $configs = array();
-        $gridExtension->load($configs, $container);
+        $configs = array(array());
+        $extension->load($configs, $container);
+
+        $this->assertTrue(
+            $container->hasDefinition('oro_jsfv.event_listener.load_constraints_listener'),
+            'The load constraints listener is loaded'
+        );
     }
 }
