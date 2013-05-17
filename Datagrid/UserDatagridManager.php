@@ -30,22 +30,6 @@ class UserDatagridManager extends FlexibleDatagridManager
      */
     protected function configureFields(FieldDescriptionCollection $fieldsCollection)
     {
-        $fieldId = new FieldDescription();
-        $fieldId->setName('id');
-        $fieldId->setOptions(
-            array(
-                'type'        => FieldDescriptionInterface::TYPE_INTEGER,
-                'label'       => 'ID',
-                'field_name'  => 'id',
-                'filter_type' => FilterInterface::TYPE_NUMBER,
-                'required'    => false,
-                'sortable'    => true,
-                'filterable'  => true,
-                'show_filter' => true,
-            )
-        );
-        $fieldsCollection->add($fieldId);
-
         $fieldUsername = new FieldDescription();
         $fieldUsername->setName('username');
         $fieldUsername->setOptions(
@@ -110,24 +94,6 @@ class UserDatagridManager extends FlexibleDatagridManager
         );
         $fieldsCollection->add($fieldLastName);
 
-        $fieldBirthday = new FieldDescription();
-        $fieldBirthday->setName('birthday');
-        $fieldBirthday->setOptions(
-            array(
-                'type'        => FieldDescriptionInterface::TYPE_DATE,
-                'label'       => 'Birthday',
-                'field_name'  => 'birthday',
-                'filter_type' => FilterInterface::TYPE_DATE,
-                'required'    => false,
-                'sortable'    => true,
-                'filterable'  => true,
-                'show_filter' => true,
-            )
-        );
-        $fieldsCollection->add($fieldBirthday);
-
-        $this->configureFlexibleFields($fieldsCollection, array('gender' => array('multiple' => false)));
-
         $fieldCreated = new FieldDescription();
         $fieldCreated->setName('created');
         $fieldCreated->setOptions(
@@ -152,6 +118,22 @@ class UserDatagridManager extends FlexibleDatagridManager
                 'label'       => 'Updated At',
                 'field_name'  => 'updated',
                 'filter_type' => FilterInterface::TYPE_DATETIME,
+                'required'    => false,
+                'sortable'    => true,
+                'filterable'  => true,
+                'show_filter' => true,
+            )
+        );
+        $fieldsCollection->add($fieldUpdated);
+
+        $fieldUpdated = new FieldDescription();
+        $fieldUpdated->setName('status');
+        $fieldUpdated->setOptions(
+            array(
+                'type'        => FieldDescriptionInterface::TYPE_TEXT,
+                'label'       => 'Status',
+                'field_name'  => 'currentStatus',
+                'filter_type' => FilterInterface::TYPE_STRING,
                 'required'    => false,
                 'sortable'    => true,
                 'filterable'  => true,
