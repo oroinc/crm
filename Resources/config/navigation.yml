@@ -1,8 +1,10 @@
 oro_menu_config:
     items:
-        account_tab:
-            label: 'Accounts'
+        customers_tab:
+            label: 'Customers'
             uri: '#'
+            extras:
+                position: 10
         account_list:
             label: 'Accounts'
             route: 'oro_account_index'
@@ -22,7 +24,7 @@ oro_menu_config:
     tree:
         application_menu:
             children:
-                account_tab:
+                customers_tab:
                     children:
                         account_list: ~
 

@@ -46,18 +46,22 @@ class LoadAccountAttrData extends AbstractFixture implements ContainerAwareInter
                 array(
                     'code' => 'website',
                     'type' => 'oro_flexibleentity_url',
+                    'searchable' => true
                 ),
                 array(
                     'code' => 'office_phone',
-                    'label' => 'Office phone'
+                    'label' => 'Office phone',
+                    'searchable' => true
                 ),
                 array(
                     'code' => 'office_fax',
-                    'label' => 'Office fax'
+                    'label' => 'Office fax',
+                    'searchable' => true
                 ),
                 array(
                     'code' => 'description',
-                    'type' => 'oro_flexibleentity_textarea'
+                    'type' => 'oro_flexibleentity_textarea',
+                    'searchable' => true
                 ),
                 array(
                     'code' => 'annual_revenue',
@@ -68,8 +72,14 @@ class LoadAccountAttrData extends AbstractFixture implements ContainerAwareInter
                     'code' => 'employees',
                     'type' => 'oro_flexibleentity_integer'
                 ),
-                'ownership',
-                'ticker_symbol',
+                array(
+                    'code' => 'ownership',
+                    'searchable' => true
+                ),
+                array(
+                    'code' => 'ticker_symbol',
+                    'searchable' => true
+                ),
                 'rating',
                 array(
                     'code' => 'shipping_address',

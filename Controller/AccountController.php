@@ -32,7 +32,7 @@ class AccountController extends Controller
      * @Template
      * @Acl(
      *      id="oro_account_account_view",
-     *      name="View account",
+     *      name="View Account",
      *      description="View account",
      *      parent="oro_account_account"
      * )
@@ -52,7 +52,7 @@ class AccountController extends Controller
      * @Template("OroAccountBundle:Account:update.html.twig")
      * @Acl(
      *      id="oro_account_account_create",
-     *      name="Create account",
+     *      name="Create Account",
      *      description="Create account",
      *      parent="oro_account_account"
      * )
@@ -71,7 +71,7 @@ class AccountController extends Controller
      * @Template
      * @Acl(
      *      id="oro_account_account_update",
-     *      name="Edit account",
+     *      name="Edit Account",
      *      description="Edit account",
      *      parent="oro_account_account"
      * )
@@ -100,7 +100,7 @@ class AccountController extends Controller
      * )
      * @Acl(
      *      id="oro_account_account_list",
-     *      name="View list of accounts",
+     *      name="View List of Accounts",
      *      description="View list of accounts",
      *      parent="oro_account_account"
      * )
