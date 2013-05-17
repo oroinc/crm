@@ -114,7 +114,6 @@ class Audit extends AbstractLogEntry
     public function getUser()
     {
         return $this->user;
-        //return is_null($this->user) ? '' : $this->user->getFirstname().' '.$this->user->getLastname();
     }
 
     /**

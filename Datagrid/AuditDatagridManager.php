@@ -10,9 +10,7 @@ use Oro\Bundle\GridBundle\Field\FieldDescription;
 use Oro\Bundle\GridBundle\Field\FieldDescriptionCollection;
 use Oro\Bundle\GridBundle\Field\FieldDescriptionInterface;
 use Oro\Bundle\GridBundle\Filter\FilterInterface;
-
 use Oro\Bundle\GridBundle\Property\TwigTemplateProperty;
-//use Oro\Bundle\DataAuditBundle\Entity\Audit;
 
 class AuditDatagridManager extends DatagridManager
 {
@@ -27,22 +25,6 @@ class AuditDatagridManager extends DatagridManager
     protected function getFieldDescriptionCollection()
     {
         $this->fieldsCollection = new FieldDescriptionCollection();
-
-//        $fieldId = new FieldDescription();
-//        $fieldId->setName('id');
-//        $fieldId->setOptions(
-//            array(
-//                'type'        => FieldDescriptionInterface::TYPE_INTEGER,
-//                'label'       => 'ID',
-//                'field_name'  => 'id',
-//                'filter_type' => FilterInterface::TYPE_NUMBER,
-//                'required'    => false,
-//                'sortable'    => true,
-//                'filterable'  => true,
-//                'show_filter' => false,
-//            )
-//        );
-//        $this->fieldsCollection->add($fieldId);
 
         $fieldAction = new FieldDescription();
         $fieldAction->setName('action');
@@ -82,22 +64,6 @@ class AuditDatagridManager extends DatagridManager
         );
         $this->fieldsCollection->add($fieldVersion);
 
-        $fieldLogged = new FieldDescription();
-        $fieldLogged->setName('logged');
-        $fieldLogged->setOptions(
-            array(
-                'type'        => FieldDescriptionInterface::TYPE_DATETIME,
-                'label'       => 'Logged At',
-                'field_name'  => 'loggedAt',
-                'filter_type' => FilterInterface::TYPE_DATETIME,
-                'required'    => false,
-                'sortable'    => true,
-                'filterable'  => true,
-                'show_filter' => false,
-            )
-        );
-        $this->fieldsCollection->add($fieldLogged);
-
         $fieldObjectClass = new FieldDescription();
         $fieldObjectClass->setName('objectClass');
         $fieldObjectClass->setOptions(
@@ -116,12 +82,28 @@ class AuditDatagridManager extends DatagridManager
         );
         $this->fieldsCollection->add($fieldObjectClass);
 
+        $fieldObjectName = new FieldDescription();
+        $fieldObjectName->setName('objectName');
+        $fieldObjectName->setOptions(
+            array(
+                'type'        => FieldDescriptionInterface::TYPE_TEXT,
+                'label'       => 'Entity Name',
+                'field_name'  => 'objectName',
+                'filter_type' => FilterInterface::TYPE_STRING,
+                'required'    => false,
+                'sortable'    => true,
+                'filterable'  => true,
+                'show_filter' => true,
+            )
+        );
+        $this->fieldsCollection->add($fieldObjectName);
+
         $fieldObjectId = new FieldDescription();
         $fieldObjectId->setName('objectId');
         $fieldObjectId->setOptions(
             array(
                 'type'        => FieldDescriptionInterface::TYPE_INTEGER,
-                'label'       => 'Object Id',
+                'label'       => 'Entity Id',
                 'field_name'  => 'objectId',
                 'filter_type' => FilterInterface::TYPE_NUMBER,
                 'required'    => false,
@@ -131,22 +113,6 @@ class AuditDatagridManager extends DatagridManager
             )
         );
         $this->fieldsCollection->add($fieldObjectId);
-
-//        $fieldUserId = new FieldDescription();
-//        $fieldUserId->setName('user');
-//        $fieldUserId->setOptions(
-//            array(
-//                'type'        => FieldDescriptionInterface::TYPE_TEXT,
-//                'label'       => 'User',
-//                'field_name'  => 'user',
-//                'filter_type' => FilterInterface::TYPE_STRING,
-//                'required'    => false,
-//                'sortable'    => true,
-//                'filterable'  => true,
-//                'show_filter' => true,
-//            )
-//        );
-//        $this->fieldsCollection->add($fieldUserId);
 
         $fieldData = new FieldDescription();
         $fieldData->setName('data');
@@ -162,11 +128,66 @@ class AuditDatagridManager extends DatagridManager
                 'show_filter' => true,
             )
         );
-        $templateProperty = new TwigTemplateProperty($fieldData, 'OroDataAuditBundle:Datagrid:Property/data.html.twig');
-        $fieldData->setProperty($templateProperty);
+        $templateDataProperty = new TwigTemplateProperty($fieldData, 'OroDataAuditBundle:Datagrid:Property/data.html.twig');
+        $fieldData->setProperty($templateDataProperty);
         $this->fieldsCollection->add($fieldData);
 
+        $fieldAuthor = new FieldDescription();
+        $fieldAuthor->setName('user');
+        $fieldAuthor->setOptions(
+            array(
+                'type'        => FieldDescriptionInterface::TYPE_TEXT,
+                'label'       => 'Author',
+                'field_name'  => 'user',
+                'filter_type' => FilterInterface::TYPE_STRING,
+                'required'    => false,
+                'sortable'    => true,
+                'filterable'  => true,
+                'show_filter' => true,
+            )
+        );
+        $templateAuthorProperty = new TwigTemplateProperty($fieldAuthor, 'OroDataAuditBundle:Datagrid:Property/author.html.twig');
+        $fieldAuthor->setProperty($templateAuthorProperty);
+        $this->fieldsCollection->add($fieldAuthor);
+
+        $fieldLogged = new FieldDescription();
+        $fieldLogged->setName('logged');
+        $fieldLogged->setOptions(
+            array(
+                'type'        => FieldDescriptionInterface::TYPE_DATETIME,
+                'label'       => 'Logged At',
+                'field_name'  => 'loggedAt',
+                'filter_type' => FilterInterface::TYPE_DATETIME,
+                'required'    => false,
+                'sortable'    => true,
+                'filterable'  => true,
+                'show_filter' => false,
+            )
+        );
+        $this->fieldsCollection->add($fieldLogged);
+
         return $this->fieldsCollection;
+    }
+
+    /**
+     * Traverse all flexible attributes and add them as fields to collection
+     *
+     * @param FieldDescriptionCollection $fieldsCollection
+     * @param array $options
+     */
+    protected function configureFlexibleFields(
+        FieldDescriptionCollection $fieldsCollection,
+        array $options = array()
+    ) {
+        foreach ($this->getFlexibleAttributes() as $attribute) {
+            $attributeCode = $attribute->getCode();
+            $fieldsCollection->add(
+                $this->createFlexibleField(
+                    $attribute,
+                    isset($options[$attributeCode]) ? $options[$attributeCode] : array()
+                )
+            );
+        }
     }
 
     /**
@@ -177,6 +198,34 @@ class AuditDatagridManager extends DatagridManager
         return $this->getFieldDescriptionCollection()->getElements();
     }
 
+    /**
+     * @return ProxyQueryInterface
+     */
+    protected function createQuery()
+    {
+        $query = parent::createQuery();
+
+//        $query->getQueryBuilder()
+//            ->addSelect(
+//                'CONCAT(
+//                    CONCAT(
+//                        CONCAT(u.firstName, \' \'),
+//                        CONCAT(u.lastName, \' \')
+//                    ),
+//                    CONCAT(\' - \', u.email)
+//                ) AS author'
+//            )
+//            ->leftJoin('o.user', 'u');
+
+        //print_r (($query->getQueryBuilder()->getQuery()->getSQL())); die;
+        return $query;
+    }
+
+    /**
+     * Get distinct object classes
+     *
+     * @return array
+     */
     protected function getObjectClassOptions()
     {
         $options = array();
