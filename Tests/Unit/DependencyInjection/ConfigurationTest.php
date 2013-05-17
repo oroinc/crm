@@ -2,7 +2,7 @@
 
 namespace Oro\Bundle\JsFormValidationBundle\Tests\Unit\DependencyInjection;
 
-use Oro\Bundle\JsFormValidation\DependencyInjection\Configuration;
+use Oro\Bundle\JsFormValidationBundle\DependencyInjection\Configuration;
 
 class ConfigurationTest extends \PHPUnit_Framework_TestCase
 {
