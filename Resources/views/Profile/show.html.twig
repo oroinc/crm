@@ -29,7 +29,7 @@
                    <div class="customer-content pull-left">
                        <div class="clearfix">
                            <div class="pull-left">
-                                <div class="sub-title">{{ 'User'|trans }}</div>
+                                <div class="sub-title"><a href="{{ path('oro_user_index') }}">{{ 'Users'|trans }}</a></div>
                                 <span class="separator">/</span>
                                 <h1 class="usser-name">{{ user.fullname(format)|default('N/A') }}</h1>
                            </div>
