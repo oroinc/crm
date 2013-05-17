@@ -6,29 +6,25 @@ resetting:
     flash:
         success: The password has been reset successfully
 
-"%%username%% - View profile - User Management": "%%username%% -View profile - User Management"
-"%%username%% - Edit profile - User Management": "%%username%% - Edit profile - User Management"
-"New profile - User Management": "New profile - User Management"
-"Users overview - User Management": "Users overview - User Management"
+"%%username%% - View Profile - User Management": "%%username%% -View Profile - User Management"
+"%%username%% - Edit Profile - User Management": "%%username%% - Edit Profile - User Management"
+"New Profile - User Management": "New Profile - User Management"
+"Users - User Management": "Users - User Management"
 
-"Edit role - User management": "Edit role - User management"
-"Roles overview - User management": "Roles overview - User management"
-"Add role - User management": "Add role - User management"
-"Roles overview - User management": "Roles overview - User management"
+"Edit Role - User Management": "Edit Role - User Management"
+"Roles Overview - User Management": "Roles Overview - User Management"
+"Add Role - User Management": "Add Role - User Management"
+"Roles Overview - User Management": "Roles Overview - User Management"
 
 Login: Login
-"User statuses - User management": "User statuses - User management"
-"Add status - User management": "Add status - User management"
+"User Statuses - User Management": "User Statuses - User Management"
+"Add Status - User Management": "Add Status - User Management"
 
-"Password reset": Password reset
-"Forgot password": "Forgot password"
-"Password reset - check email": "Password reset - check email"
+"Password Reset": Password Reset
+"Forgot Password": "Forgot Password"
+"Password Reset - Check Email": "Password Reset - Check Email"
 
-"Acl resources - User Management": "Acl resources - User Management"
-
-"Edit group - User Management": "Edit group - User Management"
-"Add group - User Management": "Add group - User Management"
-"Groups overview - User Management": "Groups overview - User Management"
+"Acl Resources - User Management": "Acl Resources - User Management"
 
 "Group manipulation": "Group manipulation"
 "Create group": "Create group"
@@ -81,3 +77,7 @@ Login: Login
 "Template controller": "Template controller"
 "Actions from template controller": "Actions from template controller"
 "User manipulation": "User manipulation"
+
+"Edit Group - User Management": "Edit Group - User Management"
+"Add Group - User Management": "Add Group - User Management"
+"Groups Overview - User Management": "Groups Overview - User Management"
