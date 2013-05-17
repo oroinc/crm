@@ -1,9 +1,9 @@
 {% extends bap.layout is defined ? bap.layout : 'OroUserBundle::layout.html.twig' %}
 
 {% block content %}
-    <h2>{% trans %}User statuses.{% endtrans %}
+    <h2>{% trans %}User Statuses.{% endtrans %}
         {% if user.currentStatus %}
-            {% trans %}Current status{% endtrans %}: {{ user.currentStatus.status }}
+            {% trans %}Current Status{% endtrans %}: {{ user.currentStatus.status }}
         {% endif %}
     </h2>
     {{ knp_pagination_render(statuses) }}
