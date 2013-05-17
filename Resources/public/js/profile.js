@@ -50,6 +50,72 @@ $(function() {
         }
 
         return false;
+    })
+    $(document).on('click', '#btn-remove-role', function (e) {
+        var el = $(this),
+            message = el.attr('data-message'),
+            doAction = function() {
+                $.ajax({
+                    url: Routing.generate('oro_api_delete_role', { id: el.attr('data-id') }),
+                    type: 'DELETE',
+                    success: function (data) {
+                        if (Oro.hashNavigationEnabled()) {
+                            Oro.Navigation.prototype.setLocation(Routing.generate('oro_user_role_index'))
+                        } else {
+                            window.location.href = Routing.generate('oro_user_role_index');
+                        }
+                    }
+                });
+            };
+
+        if (!_.isUndefined(Oro.BootstrapModal)) {
+            var confirm = new Oro.BootstrapModal({
+                title: 'Delete Confirmation',
+                content: message,
+                okText: 'Yes, Delete',
+                cancelText: 'Cancel'
+
+            });
+            confirm.on('ok', doAction);
+            confirm.open();
+        } else if (window.confirm(message)) {
+            doAction();
+        }
+
+        return false;
+    });
+    $(document).on('click', '#btn-remove-group', function (e) {
+        var el = $(this),
+            message = el.attr('data-message'),
+            doAction = function() {
+                $.ajax({
+                    url: Routing.generate('oro_api_delete_group', { id: el.attr('data-id') }),
+                    type: 'DELETE',
+                    success: function (data) {
+                        if (Oro.hashNavigationEnabled()) {
+                            Oro.Navigation.prototype.setLocation(Routing.generate('oro_user_group_index'))
+                        } else {
+                            window.location.href = Routing.generate('oro_user_group_index');
+                        }
+                    }
+                });
+            };
+
+        if (!_.isUndefined(Oro.BootstrapModal)) {
+            var confirm = new Oro.BootstrapModal({
+                title: 'Delete Confirmation',
+                content: message,
+                okText: 'Yes, Delete',
+                cancelText: 'Cancel'
+
+            });
+            confirm.on('ok', doAction);
+            confirm.open();
+        } else if (window.confirm(message)) {
+            doAction();
+        }
+
+        return false;
     });
 
     /**
