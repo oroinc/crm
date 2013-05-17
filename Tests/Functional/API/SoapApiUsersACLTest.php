@@ -2,12 +2,13 @@
 
 namespace Oro\Bundle\UserBundle\Tests\Functional\API;
 
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Bundle\TestFrameworkBundle\Test\ToolsAPI;
 use Oro\Bundle\TestFrameworkBundle\Test\Client;
 
 /**
  * @outputBuffering enabled
+ * @db_isolation
  */
 class SoapApiUsersACLTest extends WebTestCase
 {
@@ -24,24 +25,9 @@ class SoapApiUsersACLTest extends WebTestCase
     {
         $this->clientSoap = static::createClient(array(), ToolsAPI::generateWsseHeader(self::USER_NAME, self::USER_PASSWORD));
         if (!self::$hasLoaded) {
-            //rebuild indexes before tests
-            $kernel = $this->clientSoap->getKernel();
-            $application = new \Symfony\Bundle\FrameworkBundle\Console\Application($kernel);
-            $application->setAutoExit(false);
-            $options = array('command' => 'oro:search:reindex');
-            $options['--env'] = "test";
-            $options['--quiet'] = null;
-            $application->run(new \Symfony\Component\Console\Input\ArrayInput($options));
-
-            $this->clientSoap->startTransaction();
             $this->clientSoap->appendFixtures(__DIR__ . DIRECTORY_SEPARATOR . 'DataFixtures');
         }
         self::$hasLoaded = true;
-    }
-
-    public static function tearDownAfterClass()
-    {
-        Client::rollbackTransaction();
     }
 
     public function testWsseAccess()
