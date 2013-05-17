@@ -128,4 +128,9 @@ class Status
     {
         $this->createdAt = new \DateTime();
     }
+
+    public function __toString()
+    {
+        return $this->getStatus();
+    }
 }
