@@ -1,7 +1,7 @@
 {% extends bap.layout is defined ? bap.layout : 'OroUserBundle::layout.html.twig' %}
 {% form_theme form with 'OroUIBundle:Form:fields.html.twig' %}
 
-{% set title = form.vars.value.id ? 'Edit group'|trans : 'Add group'|trans %}
+{% set title = form.vars.value.id ? 'Edit Group'|trans : 'Add Group'|trans %}
 
 {% block head_script %}
     {{ parent() }}

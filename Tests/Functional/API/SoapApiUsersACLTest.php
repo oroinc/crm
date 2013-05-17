@@ -3,8 +3,8 @@
 namespace Oro\Bundle\UserBundle\Tests\Functional\API;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Acme\Bundle\TestsBundle\Test\ToolsAPI;
-use Acme\Bundle\TestsBundle\Test\Client;
+use Oro\Bundle\TestFrameworkBundle\Test\ToolsAPI;
+use Oro\Bundle\TestFrameworkBundle\Test\Client;
 
 /**
  * @outputBuffering enabled

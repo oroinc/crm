@@ -19,7 +19,6 @@ class RoleDatagridManager extends DatagridManager
     {
         return array(
             new UrlProperty('edit_link', $this->router, 'oro_user_role_edit', array('id')),
-            new UrlProperty('edit_acl_link', $this->router, 'oro_user_acl_edit', array('id')),
             new UrlProperty('delete_link', $this->router, 'oro_api_delete_role', array('id')),
         );
     }
@@ -95,18 +94,6 @@ class RoleDatagridManager extends DatagridManager
             )
         );
 
-        $editAclAction = array(
-            'name'         => 'edit_acl',
-            'type'         => ActionInterface::TYPE_REDIRECT,
-            'acl_resource' => 'root',
-            'options'      => array(
-                'label'   => 'Edit ACL',
-                'icon'    => 'edit',
-                'link'    => 'edit_acl_link',
-                'backUrl' => true,
-            )
-        );
-
         $editAction = array(
             'name'         => 'edit',
             'type'         => ActionInterface::TYPE_REDIRECT,
@@ -130,6 +117,6 @@ class RoleDatagridManager extends DatagridManager
             )
         );
 
-        return array($clickAction, $editAclAction, $editAction, $deleteAction);
+        return array($clickAction, $editAction, $deleteAction);
     }
 }

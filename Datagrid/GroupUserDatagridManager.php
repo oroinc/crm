@@ -65,12 +65,12 @@ class GroupUserDatagridManager extends UserRelationDatagridManager
      */
     protected function createQuery()
     {
-        /** @var $query QueryBuilder */
         $query = parent::createQuery();
         $query->addSelect(
             'CASE WHEN ' .
             '(:group MEMBER OF u.groups OR u.id IN (:data_in)) AND u.id NOT IN (:data_not_in) '.
-            'THEN 1 ELSE 0 END AS hasCurrentGroup'
+            'THEN 1 ELSE 0 END AS hasCurrentGroup',
+            true
         );
         return $query;
     }

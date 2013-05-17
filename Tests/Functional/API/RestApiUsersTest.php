@@ -2,9 +2,9 @@
 
 namespace Oro\Bundle\UserBundle\Tests\Functional\API;
 
-use Acme\Bundle\TestsBundle\Test\WebTestCase;
-use Acme\Bundle\TestsBundle\Test\ToolsAPI;
-use Acme\Bundle\TestsBundle\Test\Client;
+use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
+use Oro\Bundle\TestFrameworkBundle\Test\ToolsAPI;
+use Oro\Bundle\TestFrameworkBundle\Test\Client;
 
 /**
  * @outputBuffering enabled
@@ -29,7 +29,7 @@ class RestUsersApiTest extends WebTestCase
             "profile" => array (
                 "username" => 'user_' . mt_rand(),
                 "email" => 'test_'  . mt_rand() . '@test.com',
-                "enabled" => 'true',
+                "enabled" => '1',
                 "plainPassword" => '1231231q',
                 "firstName" => "firstName",
                 "lastName" => "lastName",

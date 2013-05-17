@@ -15,6 +15,12 @@ use Oro\Bundle\UserBundle\Annotation\AclAncestor;
 
 /**
  * @NamePrefix("oro_api_")
+ * @Acl(
+ *      id="oro_user_acl",
+ *      name="ACL manipulation",
+ *      description="ACL manipulation from API",
+ *      parent="oro_user_role"
+ * )
  */
 class AclController extends FOSRestController implements ClassResourceInterface
 {
@@ -25,7 +31,12 @@ class AclController extends FOSRestController implements ClassResourceInterface
      *      description="Get ACL resources",
      *      resource=true
      * )
-     * @AclAncestor("oro_user_acl_edit")
+     * @Acl(
+     *      id="oro_user_acl_edit",
+     *      name="View ACL tree",
+     *      description="View ACL tree for a particular role",
+     *      parent="oro_user_acl"
+     * )
      */
     public function cgetAction()
     {
