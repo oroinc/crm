@@ -42,7 +42,7 @@ class RestApiUsersACLTest extends WebTestCase
             "profile" => array (
                 "username" => 'user_' . mt_rand(),
                 "email" => 'test_'  . mt_rand() . '@test.com',
-                "enabled" => 'true',
+                "enabled" => '1',
                 "plainPassword" => '1231231q',
                 "firstName" => "firstName",
                 "lastName" => "lastName",
@@ -76,7 +76,7 @@ class RestApiUsersACLTest extends WebTestCase
             "profile" => array (
                 "username" => 'user_' . mt_rand(),
                 "email" => 'test_'  . mt_rand() . '@test.com',
-                "enabled" => 'true',
+                "enabled" => '1',
                 "firstName" => "firstName",
                 "lastName" => "lastName",
                 "rolesCollection" => array("1")
