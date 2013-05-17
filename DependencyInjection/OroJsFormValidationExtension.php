@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\JsFormValidation\DependencyInjection;
+namespace Oro\Bundle\JsFormValidationBundle\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -8,7 +8,7 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Config\Definition\Processor;
 
-class OroGridExtension extends Extension
+class OroJsFormValidationExtension extends Extension
 {
     /**
      * {@inheritdoc}

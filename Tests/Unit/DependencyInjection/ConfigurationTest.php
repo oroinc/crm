@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\JsFormValidation\Tests\Unit\DependencyInjection;
+namespace Oro\Bundle\JsFormValidationBundle\Tests\Unit\DependencyInjection;
 
 use Oro\Bundle\JsFormValidation\DependencyInjection\Configuration;
 

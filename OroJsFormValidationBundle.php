@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\JsFormValidation;
+namespace Oro\Bundle\JsFormValidationBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 

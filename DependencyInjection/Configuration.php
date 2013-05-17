@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\JsFormValidation\DependencyInjection;
+namespace Oro\Bundle\JsFormValidationBundle\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
