@@ -28,7 +28,7 @@
                     <div class="pull-right">
                         <div class="btn-group icons-holder ">
                             <a href="{{ app.session.get('back') ? app.session.get('back') : path('oro_contact_index') }}"
-                               class="btn" title="{{ 'Back'|trans }}"><i class="icon-chevron-left hide-text">{{ 'Back'|trans }}</i></a>
+                               class="btn back" title="{{ 'Back'|trans }}"><i class="icon-chevron-left hide-text">{{ 'Back'|trans }}</i></a>
                             {% if resource_granted('oro_contact_update') %}
                                 <a href="{{ path('oro_contact_update', { id: contact.id }) }}"
                                    class="btn" title="{{ 'Update contact'|trans }}"><i class="icon-edit hide-text">{{ 'Update'|trans }}</i></a>

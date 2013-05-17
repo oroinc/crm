@@ -77,6 +77,20 @@ class ContactValue extends AbstractEntityFlexibleValue
     protected $contact;
 
     /**
+     * Store collection attributes relations
+     *
+     * @var ArrayCollection $collection
+     *
+     * @ORM\ManyToMany(targetEntity="Oro\Bundle\FlexibleEntityBundle\Entity\Collection",cascade={"persist"})
+     * @ORM\JoinTable(
+     *     name="oro_contact_collection_relation",
+     *     joinColumns={@ORM\JoinColumn(name="value_id", referencedColumnName="id", onDelete="CASCADE")},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="collection_data_id", referencedColumnName="id", onDelete="CASCADE")}
+     * )
+     */
+    protected $collection;
+
+    /**
      * Get account
      *
      * @return Account
