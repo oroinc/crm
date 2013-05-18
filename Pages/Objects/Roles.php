@@ -17,7 +17,7 @@ class Roles extends PageFilteredGrid
 
     public function add()
     {
-        $this->test->byXPath("//a[contains(., 'Add new')]")->click();
+        $this->test->byXPath("//a[contains(., 'Add role')]")->click();
         $this->waitPageToLoad();
         $this->waitForAjax();
         return new Role($this->test);
