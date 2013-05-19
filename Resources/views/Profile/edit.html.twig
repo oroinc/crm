@@ -16,7 +16,21 @@
                     <div class="pull-right">
                         <div class="pull-left btn-group icons-holder">
                             {% if form.vars.value.id and resource_granted('oro_user_profile_remove') %}
-                                <a href="javascript: void(0);" class="btn icons-holder-text" id="btn-remove-profile" data-id="{{ form.vars.value.id }}" data-message="{{ 'Are you sure you want to delete this profile?'|trans }}" title="{{ 'Delete profile'|trans }}"><i class="icon-trash hide-text">{{ 'Remove'|trans }}</i>Delete</a>
+                                <a href="#DellModal" role="button" class="btn icons-holder-text"  data-toggle="modal" id="btn-remove-profile" data-id="{{ form.vars.value.id }}"  title="{{ 'Delete profile'|trans }}"><i class="icon-trash hide-text">{{ 'Remove'|trans }}</i>Delete</a>
+                                <div id="DellModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                        <h3 id="myModalLabel">Is this something you really want to do?</h3>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p>{{ 'Are you sure you want to delete this profile?'|trans }}</p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button style="visibility: hidden" class="btn" data-dismiss="keyboard" aria-hidden="true">Close</button>
+                                        <button class="btn btn-danger">Yes, Delete.</button>
+                                    </div>
+
+                                </div>
                             {% endif %}
                         </div>
                         <div class="pull-left">
