@@ -340,19 +340,21 @@
                 <div id="flash-messages">
                     {% block messages %}
                         {% if app.session.flashbag.peekAll|length > 0 %}
-
-                            {% for type, messages in app.session.flashbag.all %}
-                                {% for message in messages %}
-                                    <div class="alert{{ type ? ' alert-'~type : '' }} fade in top-messages ">
-                                        <a class="close" data-dismiss="alert" href="#">&times;</a>
-                                        {{ message|trans|raw }}
-                                    </div>
+                            <div class="flash-messages-frame" >
+                                <div class="flash-messages-holder">
+                                {% for type, messages in app.session.flashbag.all %}
+                                    {% for message in messages %}
+                                        <div class="alert{{ type ? ' alert-'~type : '' }} fade in top-messages ">
+                                            <a class="close" data-dismiss="alert" href="#">&times;</a>
+                                            {{ message|trans|raw }}
+                                        </div>
+                                    {% endfor %}
                                 {% endfor %}
-                            {% endfor %}
-
+                                </div>
+                            </div>
                         {% endif %}
                     {% endblock messages %}
-                </div>
+                    </div>
             <div class="hash-loading-mask"></div>
             <div id="container">
                 {% block page_container %}
