@@ -6,6 +6,7 @@ use Symfony\Component\Security\Core\SecurityContextInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\Cache\CacheProvider;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Translation\MessageCatalogue;
 
 use Oro\Bundle\UserBundle\Acl\ResourceReader\Reader;
 use Oro\Bundle\UserBundle\Acl\ResourceReader\ConfigReader;
@@ -305,6 +306,41 @@ class Manager implements ManagerInterface
     }
 
     /**
+     * Get array with ACL translation tokens of bundle
+     *
+     * @param string $bundlePath
+     *
+     * @return array
+     */
+    public function getBundleAclTexts($bundlePath)
+    {
+        $messages = array();
+        $resources   = $this->getAclResourcesFromConfig($bundlePath);
+        foreach($resources as $resource) {
+            /** @var $resource \Oro\Bundle\UserBundle\Annotation\Acl */
+            $messages[] = $resource->getName();
+            $messages[] = $resource->getDescription();
+        }
+
+        return array_unique($messages);
+    }
+
+    /**
+     * Parse ACL translation tokens to the catalog
+     *
+     * @param string           $bundlePath
+     * @param MessageCatalogue $catalog
+     * @param string           $prefix
+     */
+    public function parseAclTokens($bundlePath, MessageCatalogue $catalog, $prefix ='')
+    {
+        $messages = $this->getBundleAclTexts($bundlePath);
+        foreach ($messages as $message) {
+            $catalog->set($message, $prefix.$message);
+        }
+    }
+
+    /**
      * Synchronize acl resources from db with resources from annotations
      */
     public function synchronizeAclResources()
@@ -524,12 +560,14 @@ class Manager implements ManagerInterface
     /**
      * Get Acl Resources from annotations and configs
      *
-     * @return AnnotationAcl[]
+     * @param string $directory
+     *
+     * @return \Oro\Bundle\UserBundle\Annotation\Acl[]
      */
-    protected function getAclResourcesFromConfig()
+    protected function getAclResourcesFromConfig($directory = '')
     {
-        $resourcesFromAnnotations = $this->aclReader->getResources();
-        $resourcesFromConfigs     = $this->configReader->getConfigResources();
+        $resourcesFromAnnotations = $this->aclReader->getResources($directory);
+        $resourcesFromConfigs     = $this->configReader->getConfigResources($directory);
 
         return $resourcesFromAnnotations + $resourcesFromConfigs;
     }
