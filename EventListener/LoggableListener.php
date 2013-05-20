@@ -48,7 +48,7 @@ class LoggableListener extends BaseListener
 
             // do not store log entries for flexible attributes - add them to a parent entity instead
             if ($object instanceof AbstractEntityFlexibleValue) {
-                if (!$this->logFlexible($object, $ea)) {
+                if ($action !== self::ACTION_REMOVE && !$this->logFlexible($object, $ea)) {
                     $objectMeta = $om->getClassMetadata(get_class($object));
 
                     // if no "parent" object has been saved previously - get it from attribute and save it's log
