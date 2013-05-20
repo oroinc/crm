@@ -23,19 +23,6 @@ class ContactTypeTest extends \PHPUnit_Framework_TestCase
         $this->type = new ContactType($flexibleManager, 'oro_contact');
     }
 
-    public function testAddDynamicAttributesFields()
-    {
-        /** @var FormBuilderInterface $builder */
-        $builder = $this->getMockBuilder('Symfony\Component\Form\FormBuilder')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $builder->expects($this->once())
-            ->method('add')
-            ->with('attributes', 'collection');
-        $this->type->addDynamicAttributesFields($builder);
-    }
-
     public function testSetDefaultOptions()
     {
         /** @var OptionsResolverInterface $resolver */
