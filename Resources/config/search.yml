@@ -4,7 +4,7 @@ Oro\Bundle\UserBundle\Entity\User:
     flexible_manager: oro_user.manager.flexible
     title_fields: [username]
     route:
-        name: oro_user_show
+        name: oro_user_view
         parameters:
             id: id
     search_template: OroUserBundle:Profile:searchResult.html.twig

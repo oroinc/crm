@@ -3,13 +3,13 @@
 {% set format = get_user_value('oro_user.name_format') %}
 {% form_theme form with 'OroUIBundle:Form:fields.html.twig' %}
 
-{% set title = form.vars.value.id ? form.vars.value.fullname(format)|default('N/A') ~ ' - ' ~ 'Edit Profile'|trans : 'New Profile'|trans %}
+{% set title = form.vars.value.id ? form.vars.value.fullname(format)|default('N/A') ~ ' - ' ~ 'Update Profile'|trans : 'New Profile'|trans %}
 {% oro_title_set({params : {"%username%": form.vars.value.fullname(format)|default('N/A') }}) %}
 
 {% block page_container %}
 <div class="container-fluid">
     {% block content %}
-    <form action="{{ form.vars.value.id ? path('oro_user_edit', { id: form.vars.value.id, back: app.session.get('back') }) : path('oro_user_create', { back: app.session.get('back') }) }}" {{ form_enctype(form) }} method="post" data-collect="true">
+    <form action="{{ form.vars.value.id ? path('oro_user_update', { id: form.vars.value.id, back: app.session.get('back') }) : path('oro_user_create', { back: app.session.get('back') }) }}" {{ form_enctype(form) }} method="post" data-collect="true">
         <div class="navigation clearfix navbar-extra">
             <div class="row">
                 <div class="pull-right">

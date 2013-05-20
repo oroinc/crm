@@ -1,7 +1,7 @@
 {% extends bap.layout is defined ? bap.layout : 'OroUserBundle::layout.html.twig' %}
 {% form_theme form with 'OroUIBundle:Form:fields.html.twig' %}
 
-{% set title = form.vars.value.id ? 'Edit Group'|trans : 'Add Group'|trans %}
+{% set title = form.vars.value.id ? 'Update Group'|trans : 'Create Group'|trans %}
 
 {% block head_script %}
     {{ parent() }}
@@ -24,7 +24,7 @@
 {% block page_container %}
 <div class="container-fluid">
     {% block content %}
-    <form action="{{ form.vars.value.id ? path('oro_user_group_edit', { id: form.vars.value.id, back: app.session.get('back') }) : path('oro_user_group_create', { back: app.session.get('back') }) }}" method="post" class="form-register form-padding">
+    <form action="{{ form.vars.value.id ? path('oro_user_group_update', { id: form.vars.value.id, back: app.session.get('back') }) : path('oro_user_group_create', { back: app.session.get('back') }) }}" method="post" class="form-register form-padding">
         <div class="navigation clearfix navbar-extra">
             <div class="row">
                 <div class="pull-right">
