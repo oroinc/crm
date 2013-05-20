@@ -24,4 +24,13 @@ interface ProxyQueryInterface extends BaseProxyQueryInterface
      * @return array
      */
     public function getTotalCount();
+
+    /**
+     * Adds select part to internal whitelist
+     *
+     * @param string $select
+     * @param bool $addToWhitelist
+     * @return ProxyQueryInterface
+     */
+    public function addSelect($select = null, $addToWhitelist = false);
 }
