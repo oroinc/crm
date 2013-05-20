@@ -22,7 +22,8 @@ abstract class CollectionItemAbstract extends AbstractType
         $resolver
             ->setDefaults(
                 array(
-                    'data_class'    => 'Oro\Bundle\FlexibleEntityBundle\Entity\Collection'
+                    'data_class'    => 'Oro\Bundle\FlexibleEntityBundle\Entity\Collection',
+                    'required'      => false
                 )
             );
     }

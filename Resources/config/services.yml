@@ -74,11 +74,19 @@ services:
     # Phone collection form type
     form.type.oro_flexibleentity_phone_collection:
         class: Oro\Bundle\FlexibleEntityBundle\Form\Type\PhoneCollectionType
+        arguments:
+            - @form.subscriber.collection_type_subscriber
         tags:
             - { name: form.type, alias: oro_flexibleentity_phone_collection }
 
     # Email collection form type
     form.type.oro_flexibleentity_email_collection:
         class: Oro\Bundle\FlexibleEntityBundle\Form\Type\EmailCollectionType
+        arguments:
+            - @form.subscriber.collection_type_subscriber
         tags:
             - { name: form.type, alias: oro_flexibleentity_email_collection }
+
+    # Collection form type subscriber
+    form.subscriber.collection_type_subscriber:
+        class: Oro\Bundle\FlexibleEntityBundle\Form\EventListener\CollectionTypeSubscriber
