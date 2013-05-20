@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\DataAuditBundle\EventListener;
 
+use Doctrine\Common\EventArgs;
 use Doctrine\Common\Collections\Collection;
 
 use Gedmo\Loggable\LoggableListener as BaseListener;
@@ -20,6 +21,26 @@ class LoggableListener extends BaseListener
      * @var array
      */
     protected $loggedObjects = array();
+
+    /**
+     * Looks for loggable objects being inserted or updated for further processing
+     *
+     * @param EventArgs $args
+     */
+    public function onFlush(EventArgs $eventArgs)
+    {
+        parent::onFlush($eventArgs);
+
+        // do not log flexible entity changes if data is empty
+        // this could not be checked in createLogEntry because of flexible attributes model
+        $om = $this->getEventAdapter($eventArgs)->getObjectManager();
+
+        foreach ($this->loggedObjects as &$lo) {
+            if ($lo['log']->getAction() == self::ACTION_UPDATE && !$lo['log']->getData()) {
+                $om->remove($lo['log']);
+            }
+        }
+    }
 
     /**
      * Create a new Audit instance
@@ -180,6 +201,12 @@ class LoggableListener extends BaseListener
                                 return $item->getOptionValue()->getValue();
                             })->toArray()
                         );
+                    }
+
+                    // special case for, as an example, decimal values
+                    // do not store changeset d:123 and s:3:"123"
+                    if ($oldData == $newData) {
+                        return true;
                     }
 
                     $data = array_merge(
