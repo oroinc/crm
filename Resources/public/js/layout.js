@@ -167,9 +167,6 @@ function initLayout() {
         var $spy = $(this)
         $spy.scrollspy($spy.data())
     })
-    $('#flash-messages').click( function(){
-        $(this).find('div.flash-messages-frame').remove();
-    });
 }
 
 /**

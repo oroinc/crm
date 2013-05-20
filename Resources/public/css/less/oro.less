@@ -2944,6 +2944,9 @@ select:focus:invalid:focus {
       color: @errorClose;
     }
   }
+  .alert-empty {
+    display: none;
+  }
 }
 .flash-messages-frame{
   position: fixed;
@@ -2952,10 +2955,6 @@ select:focus:invalid:focus {
   width: 100%;
   height: 100%;
   background: url("../../img/bg-overlay.png") repeat;
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
   z-index: 10000;
 }
 .flash-messages-holder{
