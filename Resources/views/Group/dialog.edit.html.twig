@@ -6,7 +6,8 @@
 </div>
 {% endfor %}
 
-<form action="{{ form.vars.value.id ? path('oro_user_group_edit', { id: form.vars.value.id }) : path('oro_user_group_create') }}" method="post" class="form-register form-dialog">
+{{ JSFV(form) }}
+<form id="{{ form.getName() }}" action="{{ form.vars.value.id ? path('oro_user_group_edit', { id: form.vars.value.id }) : path('oro_user_group_create') }}" method="post" class="form-register form-dialog">
     <fieldset class="form-horizontal">
         {{ form_widget(form) }}
         <div class="widget-actions form-actions">
