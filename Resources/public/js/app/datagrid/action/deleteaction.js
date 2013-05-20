@@ -48,7 +48,7 @@ Oro.Datagrid.Action.DeleteAction = Oro.Datagrid.Action.ModelAction.extend({
                 title: 'Delete Confirmation',
                 content: 'Are you sure you want to delete this item?',
                 okText: 'Yes, Delete',
-                cancelText: 'Cancel'
+                allowCancel: 'false'
             });
             this.confirmModal.on('ok', _.bind(this.doDelete, this));
         }
