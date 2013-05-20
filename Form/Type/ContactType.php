@@ -10,26 +10,6 @@ use Oro\Bundle\FlexibleEntityBundle\Form\Type\FlexibleType;
 class ContactType extends FlexibleType
 {
     /**
-     * Add entity fields to form builder
-     *
-     * @param FormBuilderInterface $builder
-     */
-    public function addDynamicAttributesFields(FormBuilderInterface $builder)
-    {
-        $builder->add(
-            'attributes',
-            'collection',
-            array(
-                'type' => $this->valueFormAlias,
-                'property_path' => 'values',
-                'allow_add' => true,
-                'allow_delete' => true,
-                'by_reference' => false
-            )
-        );
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function addEntityFields(FormBuilderInterface $builder)
