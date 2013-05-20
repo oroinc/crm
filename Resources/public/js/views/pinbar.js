@@ -122,9 +122,8 @@ navigation.pinbar.MainView = navigation.MainViewAbstract.extend({
         this.removeFromHistory(item);
         if (item.get('url') == this.getCurrentPageItemData().url) {
             this.goToLatestOpenedPage();
-        } else {
-            this.reorder();
         }
+        this.reorder();
     },
 
     /**
