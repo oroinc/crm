@@ -9,7 +9,7 @@
         $(function() {
             // hide header
             var searchDatagrid = Oro.Registry.getElement('datagrid', {{ datagrid.datagrid.name|json_encode|raw }});
-            searchDatagrid.header.$el.hide();
+            searchDatagrid.header.$el.remove();
         });
     </script>
 {% endblock %}
@@ -31,15 +31,6 @@
             <input type="text" id="search" class="span2 search" name="search" value="{{ searchString }}"/>
             <button type="submit" class="btn btn-search">Search</button>
         </form>
-        {#{% if searchResults.count > 0 %}#}
-            {#{% for searchResult in searchResults %}#}
-                {#{% set template = searchResult.entityConfig.search_template is defined ? searchResult.entityConfig.search_template : default__result_template %}#}
-                {#{% include template with {'result' : searchResult} %}#}
-            {#{% endfor %}#}
-            {#{{ knp_pagination_render(searchResults) }}#}
-        {#{% else %}#}
-            {#<h2>{% trans %}Sorry, there are no results for your request{% endtrans %}</h2>#}
-        {#{% endif %}#}
 
         <div id="search-result-grid"></div>
 

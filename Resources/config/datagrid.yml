@@ -1,32 +1,31 @@
 parameters:
-    oro_search.datagrid.all_results.class:       Oro\Bundle\SearchBundle\Datagrid\AllResultsDatagrid
-    oro_search.datagrid.all_results.pager.class: Oro\Bundle\SearchBundle\Datagrid\AllResultsPager
-
-    oro_search.datagrid.all_results.name:  "oro_search_results_all"
+    oro_search.datagrid_results.datagrid_manager.class: Oro\Bundle\SearchBundle\Datagrid\SearchDatagridManager
+    oro_search.datagrid_results.datagrid_builder.class: Oro\Bundle\SearchBundle\Datagrid\SearchDatagridBuilder
+    oro_search.datagrid_results.query_factory.class:    Oro\Bundle\SearchBundle\Datagrid\IndexerQueryFactory
 
 services:
-    oro_search.datagrid.all_results.route_generator:
-        class: %oro_grid.route.default_generator.class%
+    oro_search.datagrid_results.datagrid_manager:
+        class: %oro_search.datagrid_results.datagrid_manager.class%
+        tags:
+            - name: oro_grid.datagrid.manager
+              datagrid_name: oro_search_results
+              entity_hint: results
+              route_name: oro_search_results
+              query_factory: oro_search.datagrid_results.query_factory
+              datagrid_builder: oro_search.datagrid_results.datagrid_builder
+
+    oro_search.datagrid_results.query_factory:
+        class: %oro_search.datagrid_results.query_factory.class%
         arguments:
-            - @router
-            - "oro_search_results"
+            - @oro_search.index
 
-    oro_search.datagrid.all_results.parameters:
-        class: %oro_grid.datagrid.parameters.class%
-        arguments:
-            - @service_container
-            - %oro_search.datagrid.all_results.name%
-
-    oro_search.datagrid.all_results.pager:
-        class: %oro_search.datagrid.all_results.pager.class%
-
-    oro_search.datagrid.all_results:
-        class: %oro_search.datagrid.all_results.class%
+    oro_search.datagrid_results.datagrid_builder:
+        class: %oro_search.datagrid_results.datagrid_builder.class%
         arguments:
             - @form.factory
-            - @translator
-            - @oro_search.index
-            - @oro_search.datagrid.all_results.route_generator
-            - @oro_search.datagrid.all_results.parameters
-            - %oro_search.datagrid.all_results.name%
-            - "results"
+            - @oro_grid.filter.factory
+            - @oro_grid.sorter.factory
+            - @oro_grid.action.factory
+            - %oro_grid.datagrid.class%
+
+

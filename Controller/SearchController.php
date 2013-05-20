@@ -8,8 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
-use Oro\Bundle\SearchBundle\Engine\Indexer;
-use Oro\Bundle\SearchBundle\Datagrid\AllResultsDatagrid;
+use Oro\Bundle\SearchBundle\Datagrid\SearchDatagridManager;
 
 class SearchController extends Controller
 {
@@ -57,30 +56,29 @@ class SearchController extends Controller
         $from   = $request->get('from');
         $search = $request->get('search');
 
+        /** @var $datagridManager SearchDatagridManager */
+        $datagridManager = $this->get('oro_search.datagrid_results.datagrid_manager');
+
+        $datagridManager->setSearchEntity($from);
+        $datagridManager->setSearchString($search);
+        $datagridManager->getRouteGenerator()->setRouteParameters(
+            array(
+                'from'   => $from,
+                'search' => $search,
+            )
+        );
+
         $view = 'json' == $request->getRequestFormat()
             ? 'OroGridBundle:Datagrid:list.json.php'
             : 'OroSearchBundle:Search:searchResults.html.twig';
 
-        /** @var $datagrid AllResultsDatagrid */
-        $datagrid = $this->get('oro_search.datagrid.all_results');
-
-        $datagrid->setSearchEntity($from);
-        $datagrid->setSearchString($search);
-
-        $datagrid->getRouteGenerator()->setRouteParameters(
-            array(
-                'search' => $search,
-                'from'   => $from
-            )
-        );
-
         return $this->render(
             $view,
             array(
-                'searchString'  => $search,
-                'entities'      => $this->get('oro_search.index')->getEntitiesLabels(),
-                'from'          => $from,
-                'datagrid'      => $datagrid->createView()
+                'from'         => $from,
+                'entities'     => $this->get('oro_search.index')->getEntitiesLabels(),
+                'searchString' => $search,
+                'datagrid'     => $datagridManager->getDatagrid()->createView()
             )
         );
     }

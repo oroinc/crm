@@ -22,11 +22,6 @@ services:
         tags:
             - { name: twig.extension }
 
-    oro_search.result.subscriber:
-        class:        Oro\Bundle\SearchBundle\Query\Result\Subscriber\PaginateResultSubscriber
-        tags:
-            - { name: knp_paginator.subscriber }
-
     oro_search.mapper:
         class:        %oro_search.mapper.class%
         arguments:    [@service_container, @translator, %oro_search.entities_config%]

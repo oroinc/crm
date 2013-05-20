@@ -5,8 +5,9 @@ namespace Oro\Bundle\SearchBundle\Datagrid;
 use Oro\Bundle\GridBundle\Datagrid\PagerInterface;
 use Oro\Bundle\GridBundle\Datagrid\ProxyQueryInterface;
 use Oro\Bundle\SearchBundle\Query\Result;
+use Oro\Bundle\SearchBundle\Query\Query;
 
-class AllResultsPager implements PagerInterface
+class IndexerPager implements PagerInterface
 {
     /**
      * @var int
@@ -24,16 +25,16 @@ class AllResultsPager implements PagerInterface
     protected $nbResults = 0;
 
     /**
-     * @var Result
+     * @var ProxyQueryInterface
      */
-    protected $queryResult;
+    protected $query;
 
     /**
-     * @param Result $queryResult
+     * @param ProxyQueryInterface $query
      */
-    public function setQuery($queryResult)
+    public function setQuery($query)
     {
-        $this->queryResult = $queryResult;
+        $this->query = $query;
     }
 
     /**
@@ -41,11 +42,9 @@ class AllResultsPager implements PagerInterface
      */
     public function init()
     {
-        if (!$this->queryResult) {
-            throw new \LogicException('Indexer query result must be set');
+        if (!$this->query) {
+            throw new \LogicException('Indexer query must be set');
         }
-
-        $this->nbResults = $this->queryResult->getRecordsCount();
     }
 
     /**
@@ -55,7 +54,18 @@ class AllResultsPager implements PagerInterface
      */
     public function getNbResults()
     {
-        return $this->nbResults;
+        return $this->nbResults = $this->query->getTotalCount();
+    }
+
+    /**
+     * Calculate first result based on page and max-per-page
+     */
+    protected function calculateFirstResult()
+    {
+        $maxPerPage = $this->getMaxPerPage();
+        $page = $this->getPage();
+
+        $this->query->setFirstResult($maxPerPage * ($page - 1));
     }
 
     /**
@@ -63,7 +73,15 @@ class AllResultsPager implements PagerInterface
      */
     public function setMaxPerPage($maxPerPage)
     {
-        $this->maxPerPage = $maxPerPage;
+        if ($maxPerPage > 0) {
+            $this->maxPerPage = $maxPerPage;
+            $this->query->setMaxResults($maxPerPage);
+        } else {
+            $this->maxPerPage = 0;
+            $this->query->setMaxResults(Query::INFINITY);
+        }
+
+        $this->calculateFirstResult();
     }
 
     /**
@@ -81,6 +99,8 @@ class AllResultsPager implements PagerInterface
     public function setPage($page)
     {
         $this->page = $page;
+
+        $this->calculateFirstResult();
     }
 
     /**
