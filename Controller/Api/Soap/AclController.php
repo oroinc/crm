@@ -28,7 +28,6 @@ class AclController extends SoapController
      */
     public function getAction($id)
     {
-        return $this->handleGetRequest($id);
         $resource = $this->getManager()->getAclResource($id);
 
         if (!$resource) {
@@ -45,11 +44,9 @@ class AclController extends SoapController
 
     public function getForm()
     {
-
     }
 
     public function getFormHandler()
     {
-
     }
 }

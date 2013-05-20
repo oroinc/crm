@@ -3,11 +3,11 @@
 namespace Oro\Bundle\UserBundle\Controller\Api\Soap;
 
 use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
-
+use Oro\Bundle\SoapBundle\Controller\Api\Soap\SoapController;
 use Oro\Bundle\UserBundle\Entity\Group;
 use Oro\Bundle\UserBundle\Annotation\AclAncestor;
 
-class GroupController extends BaseController
+class GroupController extends SoapController
 {
     /**
      * @Soap\Method("getGroups")
@@ -16,7 +16,7 @@ class GroupController extends BaseController
      */
     public function cgetAction()
     {
-        return $this->getManager()->getRepository('OroUserBundle:Group')->findAll();
+        return $this->handleGetListRequest();
     }
 
     /**
@@ -27,7 +27,7 @@ class GroupController extends BaseController
      */
     public function getAction($id)
     {
-        return $this->getEntity('OroUserBundle:Group', $id);
+        return $this->handleGetRequest($id);
     }
 
     /**
@@ -38,12 +38,7 @@ class GroupController extends BaseController
      */
     public function createAction($group)
     {
-        $entity = new Group();
-        $form   = $this->container->get('oro_user.form.group.api');
-
-        $this->container->get('oro_soap.request')->fix($form->getName());
-
-        return $this->processForm($form->getName(), $entity);
+        return $this->handleCreateRequest();
     }
 
     /**
@@ -55,12 +50,7 @@ class GroupController extends BaseController
      */
     public function updateAction($id, $group)
     {
-        $entity = $this->getEntity('OroUserBundle:Group', $id);
-        $form   = $this->container->get('oro_user.form.group.api');
-
-        $this->container->get('oro_soap.request')->fix($form->getName());
-
-        return $this->processForm($form->getName(), $entity);
+        return $this->handleUpdateRequest($id);
     }
 
     /**
@@ -71,13 +61,7 @@ class GroupController extends BaseController
      */
     public function deleteAction($id)
     {
-        $entity = $this->getEntity('OroUserBundle:Group', $id);
-
-        $em = $this->getManager();
-        $em->remove($entity);
-        $em->flush();
-
-        return true;
+        return $this->handleDeleteRequest($id);
     }
 
     /**
@@ -91,5 +75,20 @@ class GroupController extends BaseController
         $entity = $this->getEntity('OroUserBundle:Group', $id);
 
         return $entity->getRoles()->toArray();
+    }
+
+    public function getManager()
+    {
+        return $this->container->get('oro_user.group_manager');
+    }
+
+    public function getForm()
+    {
+        return $this->container->get('oro_user.form.group.api');
+    }
+
+    public function getFormHandler()
+    {
+        return $this->container->get('oro_user.form.handler.group.api');
     }
 }

@@ -35,4 +35,35 @@ class GroupManager
     {
         return $this->em->getRepository('OroUserBundle:Group');
     }
+
+    /**
+     * Return group list
+     *
+     * @return \Oro\Bundle\UserBundle\Entity\Group[]
+     */
+    public function getList()
+    {
+        $this->em->getRepository('OroUserBundle:Group')->findAll();
+    }
+
+    /**
+     * Return group entity
+     *
+     * @param $id
+     * @return \Oro\Bundle\UserBundle\Entity\Group
+     */
+    public function find($id)
+    {
+        return $this->em->find('OroUserBundle:Group', $id);
+    }
+
+    public function createEntity()
+    {
+        return new $this->class;
+    }
+
+    public function getObjectManager()
+    {
+        return $this->em;
+    }
 }
