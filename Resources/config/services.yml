@@ -1,9 +1,13 @@
 parameters:
     oro_user.manager.class:           Oro\Bundle\UserBundle\Entity\UserManager
     oro_user.manager.flexible.class:  Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleManager
+    oro_user.manager.api.class:       Oro\Bundle\SoapBundle\Entity\Manager\ApiFlexibleEntityManager
     oro_user.status.manager.class:    Oro\Bundle\UserBundle\Entity\Manager\StatusManager
     oro_user.entity.class:            Oro\Bundle\UserBundle\Entity\User
     oro_user.entity.value.class:      Oro\Bundle\UserBundle\Entity\UserValue
+    oro_user.group.entity.class:      Oro\Bundle\UserBundle\Entity\Group
+    oro_user.role.entity.class:       Oro\Bundle\UserBundle\Entity\Role
+    oro_user.acl.entity.class:        Oro\Bundle\UserBundle\Entity\Acl
     oro_user.security.provider.class: Oro\Bundle\UserBundle\Security\UserProvider
     oro_user.security.login.class:    Oro\Bundle\UserBundle\EventListener\LoginSubscriber
     oro_user.type.profile.class:      Oro\Bundle\UserBundle\Form\Type\ProfileType
@@ -24,11 +28,14 @@ parameters:
     oro_user.acl.pointcut.class:      Oro\Bundle\UserBundle\Acl\AclPointcut
     oro_user.acl.interceptor.class:   Oro\Bundle\UserBundle\Acl\AclInterceptor
     oro_user.acl.manager.class:       Oro\Bundle\UserBundle\Acl\Manager
+    oro_user.acl_manager.api.class:   Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
     oro_user.acl.twig.class:          Oro\Bundle\UserBundle\Twig\OroUserExtension
     oro_user.user_menu.builder.class: Oro\Bundle\UserBundle\Menu\UserMenuBuilder
     oro_user.role.listener.class:     Oro\Bundle\UserBundle\EventListener\RoleListener
     oro_user.role.manager.class:      Oro\Bundle\UserBundle\Entity\Manager\RoleManager
+    oro_user.role.manager.api.class:  Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
     oro_user.group.manager.class:     Oro\Bundle\UserBundle\Entity\Manager\GroupManager
+    oro_user.group.manager.api.class: Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
     oro_user.attribute_type.user.class: Oro\Bundle\UserBundle\AttributeType\UserType
     oro_user.form.type.user_select.class: Oro\Bundle\UserBundle\Form\Type\UserSelectType
 
@@ -49,6 +56,13 @@ services:
     oro_user.manager:
         class:                        %oro_user.manager.class%
         arguments:                    [%oro_user.entity.class%, "@doctrine.orm.entity_manager", "@oro_user.manager.flexible", "@security.encoder_factory"]
+
+    oro_user.manager.api:
+        class: %oro_user.manager.api.class%
+        arguments:
+            - %oro_user.entity.class%
+            - @doctrine.orm.entity_manager
+            - @oro_user.manager.flexible
 
     oro_user.security.provider:
         class:                        %oro_user.security.provider.class%
@@ -198,6 +212,12 @@ services:
         class:                        %oro_user.acl.manager.class%
         arguments:                    ["@doctrine.orm.entity_manager", "@oro_user.acl_reader", "@cache", "@security.context", "@oro_user.acl_config_reader"]
 
+    oro_user.acl_manager.api:
+        class: %oro_user.acl_manager.api.class%
+        arguments:
+            - %oro_user.acl.entity.class%
+            - @doctrine.orm.entity_manager
+
     oro_user.user_menu:
         class:                        %oro_user.user_menu.builder.class%
         arguments:
@@ -240,9 +260,21 @@ services:
         class:                        %oro_user.role.manager.class%
         arguments:                    ["@doctrine.orm.entity_manager"]
 
+    oro_user.role_manager.api:
+        class: %oro_user.role.manager.api.class%
+        arguments:
+            - %oro_user.role.entity.class%
+            - @doctrine.orm.entity_manager
+
     oro_user.group_manager:
         class:                        %oro_user.group.manager.class%
         arguments:                    ["@doctrine.orm.entity_manager"]
+
+    oro_user.group_manager.api:
+        class: %oro_user.group.manager.api.class%
+        arguments:
+            - %oro_user.group.entity.class%
+            - @doctrine.orm.entity_manager
 
     # Form type
     oro_user.form.type.user_select:

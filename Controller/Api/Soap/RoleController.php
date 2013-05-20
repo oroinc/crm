@@ -4,10 +4,11 @@ namespace Oro\Bundle\UserBundle\Controller\Api\Soap;
 
 use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 
+use Oro\Bundle\SoapBundle\Controller\Api\Soap\SoapController;
 use Oro\Bundle\UserBundle\Entity\Role;
 use Oro\Bundle\UserBundle\Annotation\AclAncestor;
 
-class RoleController extends BaseController
+class RoleController extends SoapController
 {
     /**
      * @Soap\Method("getRoles")
@@ -16,7 +17,7 @@ class RoleController extends BaseController
      */
     public function cgetAction()
     {
-        return $this->getManager()->getRepository('OroUserBundle:Role')->findAll();
+        return $this->handleGetListRequest();
     }
 
     /**
@@ -27,7 +28,7 @@ class RoleController extends BaseController
      */
     public function getAction($id)
     {
-        return $this->getEntity('OroUserBundle:Role', $id);
+        return $this->handleGetRequest($id);
     }
 
     /**
@@ -38,12 +39,7 @@ class RoleController extends BaseController
      */
     public function createAction($role)
     {
-        $entity = new Role();
-        $form   = $this->container->get('oro_user.form.role.api');
-
-        $this->container->get('oro_soap.request')->fix($form->getName());
-
-        return $this->processForm($form->getName(), $entity);
+        return $this->handleCreateRequest();
     }
 
     /**
@@ -55,12 +51,7 @@ class RoleController extends BaseController
      */
     public function updateAction($id, $role)
     {
-        $entity = $this->getEntity('OroUserBundle:Role', $id);
-        $form   = $this->container->get('oro_user.form.role.api');
-
-        $this->container->get('oro_soap.request')->fix($form->getName());
-
-        return $this->processForm($form->getName(), $entity);
+        return $this->handleUpdateRequest($id);
     }
 
     /**
@@ -71,13 +62,7 @@ class RoleController extends BaseController
      */
     public function deleteAction($id)
     {
-        $em     = $this->getManager();
-        $entity = $this->getEntity('OroUserBundle:Role', $id);
-
-        $em->remove($entity);
-        $em->flush();
-
-        return true;
+        return $this->handleDeleteRequest($id);
     }
 
     /**
@@ -88,7 +73,7 @@ class RoleController extends BaseController
      */
     public function getBynameAction($name)
     {
-        $entity = $this->getManager()->getRepository('OroUserBundle:Role')->findOneBy(array('role' => $name));
+        $entity = $this->getManager()->getRepository()->findOneBy(array('role' => $name));
 
         if (!$entity) {
             throw new \SoapFault('NOT_FOUND', sprintf('Role "%s" can not be found', $name));
@@ -105,12 +90,12 @@ class RoleController extends BaseController
      */
     public function getAclAction($id)
     {
-        $role = $this->getManager()->find('OroUserBundle:Role', (int) $id);
+        $role = $this->getEntity($id);
         if (!$role) {
             throw new \SoapFault('NOT_FOUND', sprintf('Role with id "%s" can not be found', $id));
         }
 
-        return $this->container->get('oro_user.acl_manager')->getAllowedAclResourcesForRoles(array($role));
+        return $this->getAclManager()->getAllowedAclResourcesForRoles(array($role));
     }
 
     /**
@@ -127,7 +112,7 @@ class RoleController extends BaseController
      */
     public function postAclAction($id, $resource)
     {
-        $this->container->get('oro_user.acl_manager')->modifyAclForRole($id, $resource, true);
+        $this->getAclManager()->modifyAclForRole($id, $resource, true);
 
         return '';
     }
@@ -146,7 +131,7 @@ class RoleController extends BaseController
      */
     public function deleteAclAction($id, $resource)
     {
-        $this->container->get('oro_user.acl_manager')->modifyAclForRole($id, $resource, false);
+        $this->getAclManager()->modifyAclForRole($id, $resource, false);
 
         return '';
     }
@@ -165,7 +150,7 @@ class RoleController extends BaseController
      */
     public function addAclsToRoleAction($id, $resources)
     {
-        $this->container->get('oro_user.acl_manager')->modifyAclsForRole($id, $resources, true);
+        $this->getAclManager()->modifyAclsForRole($id, $resources, true);
 
         return '';
     }
@@ -184,8 +169,40 @@ class RoleController extends BaseController
      */
     public function deleteAclsAction($id, $resources)
     {
-        $this->container->get('oro_user.acl_manager')->modifysForRole($id, $resources, false);
+        $this->getAclManager()->modifysForRole($id, $resources, false);
 
         return '';
+    }
+
+    /**
+     * @return \Oro\Bundle\UserBundle\Acl\Manager
+     */
+    protected function getAclManager()
+    {
+        return $this->container->get('oro_user.acl_manager');
+    }
+
+    /**
+     * @return ApiFlexibleEntityManager
+     */
+    public function getManager()
+    {
+        return $this->container->get('oro_user.role_manager.api');
+    }
+
+    /**
+     * @return FormInterface
+     */
+    public function getForm()
+    {
+        return $this->container->get('oro_user.form.role.api');
+    }
+
+    /**
+     * @return ApiFormHandler
+     */
+    public function getFormHandler()
+    {
+        return $this->container->get('oro_user.form.handler.role.api');
     }
 }

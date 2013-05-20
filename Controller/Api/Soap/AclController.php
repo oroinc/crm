@@ -39,7 +39,7 @@ class AclController extends SoapController
 
     public function getManager()
     {
-        return $this->container->get('oro_user.acl_manager');
+        return $this->container->get('oro_user.acl_manager.api');
     }
 
     public function getForm()

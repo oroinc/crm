@@ -72,14 +72,14 @@ class GroupController extends SoapController
      */
     public function getRolesAction($id)
     {
-        $entity = $this->getEntity('OroUserBundle:Group', $id);
+        $entity = $this->getEntity($id);
 
         return $entity->getRoles()->toArray();
     }
 
     public function getManager()
     {
-        return $this->container->get('oro_user.group_manager');
+        return $this->container->get('oro_user.group_manager.api');
     }
 
     public function getForm()
