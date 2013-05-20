@@ -934,6 +934,7 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
      */
     public function preUpdate()
     {
+        $this->updated    = new DateTime();
         $this->preUpload();
     }
 
