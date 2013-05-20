@@ -2,10 +2,12 @@
 
 namespace Oro\Bundle\FlexibleEntityBundle\Form\EventListener;
 
-use Oro\Bundle\FlexibleEntityBundle\Entity\Collection;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+
+use Oro\Bundle\FlexibleEntityBundle\Entity\Collection;
 
 class CollectionTypeSubscriber implements EventSubscriberInterface
 {
@@ -15,20 +17,26 @@ class CollectionTypeSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-            FormEvents::POST_BIND  => 'postBind',
-//            FormEvents::PRE_SET_DATA  => 'preSet',
+            FormEvents::POST_BIND     => 'postBind',
+            FormEvents::PRE_SET_DATA  => 'preSet',
         );
     }
 
-//    public function preSet(FormEvent $event)
-//    {
-//        $data = $event->getData();
-//        $collection = $data->getCollections();
-//
-//        if ($collection->isEmpty()) {
-//            $collection->add(new Collection());
-//        }
-//    }
+    /**
+     * Pre set empty collection elements
+     *
+     * @param FormEvent $event
+     */
+    public function preSet(FormEvent $event)
+    {
+        $data = $event->getData();
+
+        /** @var ArrayCollection $collection */
+        $collection = $data->getCollections();
+        if ($collection->isEmpty()) {
+            $collection->add(new Collection());
+        }
+    }
 
     /**
      * Removes empty collection elements
@@ -39,9 +47,10 @@ class CollectionTypeSubscriber implements EventSubscriberInterface
     {
         $data = $event->getData();
 
+        /** @var ArrayCollection $collection */
         $collection = $data->getCollections();
         foreach ($collection as $k => $item) {
-            if (is_null($item) || $item->__toString() == '') {
+            if ($item->__toString() == '') {
                 $collection->remove($k);
             }
         }

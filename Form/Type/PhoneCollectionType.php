@@ -11,7 +11,6 @@ class PhoneCollectionType extends CollectionAbstract
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         parent::buildForm($builder, $options);
-        $builder->setAttribute('preset_fields_count', 1);
 
         $builder->add(
             'collection',
