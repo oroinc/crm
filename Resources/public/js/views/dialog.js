@@ -85,8 +85,13 @@ Oro.widget.DialogView = Backbone.View.extend({
             var self = this;
             actions.find('[type=submit]').each(function(idx, btn) {
                 $(btn).click(function() {
-                    self.loadContent(self.form.serialize(), self.form.attr('method'));
+                    self.form.submit();
+                    return false;
                 });
+            });
+            this.form.submit(function() {
+                self.loadContent(self.form.serialize(), self.form.attr('method'));
+                return false;
             });
             actions.find('[type=reset]').each(function(idx, btn) {
                 $(btn).click(function() {
