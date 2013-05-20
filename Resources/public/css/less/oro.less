@@ -1909,33 +1909,39 @@ footer{
 .grid .dropdown-menu > li{
   margin: 0;
 }
-.modal{
+
+.oro-modal-danger{
   top: 20%;
   background-color: #fde0e0;
   width: 525px;
-}
-.modal .modal-header{
-  background-color: #fdcece;
-  -webkit-border-radius: 6px 6px 0 0;
-  border-radius: 6px 6px 0 0;
-}
-.modal-body{
-  color: #444;
-  font-size: 14px;
-}
-.modal-header .close{
-  font-size: 25px;
-}
-.modal-footer{
-  background: none;
-  text-align: center;
-  border: none;
-  -webkit-box-shadow:  none;
-  box-shadow:  none;
-  padding: 15px 15px 35px;
-}
-.modal-header h3{
-  font: 16px/18px 'HelveticaNeue Medium', Arial, Helvetica, sans-serif;
+  .modal-header{
+    background-color: #fdcece;
+    border-bottom: 1px solid #d59c9c;
+    padding: 14px 15px 14px 20px;
+    .border-radius(6px 6px 0 0);
+    -webkit-box-shadow:  0px 0px 6px 0px rgba(0, 0, 0, 0.5);
+    box-shadow:  0px 0px 6px 0px rgba(0, 0, 0, 0.5);
+
+  }
+  .modal-body{
+    color: #444;
+    font-size: 14px;
+    padding-left: 20px;
+  }
+  .modal-header .close{
+    font-size: 25px;
+  }
+  .modal-footer{
+    background: none;
+    text-align: center;
+    border: none;
+    -webkit-box-shadow:  none;
+    box-shadow:  none;
+    padding: 15px 15px 35px;
+  }
+  .modal-header h3{
+    font:bold 16px/18px 'HelveticaNeue Medium', Arial, Helvetica, sans-serif;
+  }
 }
 .dropup:after,
 .dropdown:after{
