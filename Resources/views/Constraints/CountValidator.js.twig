@@ -1,6 +1,6 @@
 function Count(field, params)
 {
-    var value = [];
+    var value = null;
     if ($(field).filter('input[type="checkbox"]').length) {
         value = $(field).filter(':checked').map(function(i, cb) { return $(cb).val(); });
     } else if ($('input[type="checkbox"]', field).length) {
@@ -9,6 +9,10 @@ function Count(field, params)
         value = $(field).filter('select').val();
     } else if ($('select', field).length) {
         value = $('select', field).val();
+    }
+
+    if (!value) {
+        value = [];
     }
 
     if (params['exactMessage'] !== undefined &&

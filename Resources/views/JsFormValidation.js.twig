@@ -134,6 +134,9 @@ var jsfv = new function () {
                     form = jsfv.id('{{ formName }}__token').form;
                 }
 
+                // Remove HTML5 validation
+                $(form).attr('novalidate', 'novalidate');
+
                 jsfv.onFirstEvent(form, 'submit', function(e) {
                     var gv, submitForm = true;
 {% for fieldName, constraints in fieldConstraints %}
