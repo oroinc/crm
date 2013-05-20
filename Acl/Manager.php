@@ -18,7 +18,7 @@ use Oro\Bundle\UserBundle\Annotation\Acl as AnnotationAcl;
 
 class Manager implements ManagerInterface
 {
-    const ACL_ANNOTATION_CLASS          = 'Oro\Bundle\UserBundle\Annotation\Acl';
+    const ACL_ANNOTATION_CLASS = 'Oro\Bundle\UserBundle\Annotation\Acl';
     const ACL_ANCESTOR_ANNOTATION_CLASS = 'Oro\Bundle\UserBundle\Annotation\AclAncestor';
 
     /**
@@ -53,11 +53,11 @@ class Manager implements ManagerInterface
         SecurityContextInterface $securityContext,
         ConfigReader $configReader
     ) {
-        $this->em               = $em;
-        $this->aclReader        = $aclReader;
-        $this->cache            = $cache;
-        $this->securityContext  = $securityContext;
-        $this->configReader     = $configReader;
+        $this->em = $em;
+        $this->aclReader = $aclReader;
+        $this->cache = $cache;
+        $this->securityContext = $securityContext;
+        $this->configReader = $configReader;
 
         $this->cache->setNamespace('oro_user.cache');
     }
@@ -106,6 +106,7 @@ class Manager implements ManagerInterface
      * Search Acl resource by id
      *
      * @param  string $id
+     *
      * @return Acl
      */
     public function getAclResource($id)
@@ -117,6 +118,7 @@ class Manager implements ManagerInterface
      * Get ACL Resources list
      *
      * @param  bool        $useObjects [optional] Use objects (true by default) or plain ids in response
+     *
      * @return array|Acl[]
      */
     public function getAclResources($useObjects = true)
@@ -144,6 +146,7 @@ class Manager implements ManagerInterface
      *
      * @param  int  $aclResourceId ACL resource id
      * @param  User $user          [optional] User instance
+     *
      * @return bool
      */
     public function isResourceGranted($aclResourceId, User $user = null)
@@ -158,6 +161,7 @@ class Manager implements ManagerInterface
      * @param  string $class
      * @param  string $method
      * @param  User   $user   [optional]
+     *
      * @return bool
      */
     public function isClassMethodGranted($class, $method, User $user = null)
@@ -183,6 +187,7 @@ class Manager implements ManagerInterface
      * Get roles for acl id
      *
      * @param  $aclId
+     *
      * @return array
      */
     public function getAclRolesWithoutTree($aclId)
@@ -203,6 +208,7 @@ class Manager implements ManagerInterface
      *
      * @param  User        $user
      * @param  bool        $useObjects [optional]
+     *
      * @return array|Acl[]
      */
     public function getAclForUser(User $user, $useObjects = false)
@@ -211,7 +217,7 @@ class Manager implements ManagerInterface
             $acl = $this->getAclRepo()->getAllowedAclResourcesForRoles($user->getRoles(), true);
         } else {
             $cachePrefix = 'user-acl-' . $user->getId();
-            $acl         = $this->cache->fetch($cachePrefix);
+            $acl = $this->cache->fetch($cachePrefix);
 
             if (false === $acl) {
                 $acl = $this->getAclRepo()->getAllowedAclResourcesForRoles($user->getRoles());
@@ -227,6 +233,7 @@ class Manager implements ManagerInterface
      * Get roles for ACL resource from cache. If cache file does not exists - create new one.
      *
      * @param  string $aclId
+     *
      * @return array
      */
     public function getAclRoles($aclId)
@@ -254,7 +261,7 @@ class Manager implements ManagerInterface
     {
         $this->cache->deleteAll();
 
-        $aclRepo        = $this->getAclRepo();
+        $aclRepo = $this->getAclRepo();
         $aclCurrentList = $role->getAclResources();
 
         if ($aclCurrentList->count()) {
@@ -287,6 +294,7 @@ class Manager implements ManagerInterface
      * Get Acl tree for role
      *
      * @param  Role  $role
+     *
      * @return array
      */
     public function getRoleAclTree(Role $role)
@@ -298,6 +306,7 @@ class Manager implements ManagerInterface
      * Get Acl list for role
      *
      * @param  Role  $role
+     *
      * @return array
      */
     public function getRoleAcl(Role $role)
@@ -315,8 +324,8 @@ class Manager implements ManagerInterface
     public function getBundleAclTexts($bundlePath)
     {
         $messages = array();
-        $resources   = $this->getAclResourcesFromConfig($bundlePath);
-        foreach($resources as $resource) {
+        $resources = $this->getAclResourcesFromConfig($bundlePath);
+        foreach ($resources as $resource) {
             /** @var $resource \Oro\Bundle\UserBundle\Annotation\Acl */
             $messages[] = $resource->getName();
             $messages[] = $resource->getDescription();
@@ -332,11 +341,11 @@ class Manager implements ManagerInterface
      * @param MessageCatalogue $catalog
      * @param string           $prefix
      */
-    public function parseAclTokens($bundlePath, MessageCatalogue $catalog, $prefix ='')
+    public function parseAclTokens($bundlePath, MessageCatalogue $catalog, $prefix = '')
     {
         $messages = $this->getBundleAclTexts($bundlePath);
         foreach ($messages as $message) {
-            $catalog->set($message, $prefix.$message);
+            $catalog->set($message, $prefix . $message);
         }
     }
 
@@ -345,7 +354,7 @@ class Manager implements ManagerInterface
      */
     public function synchronizeAclResources()
     {
-        $resources   = $this->getAclResourcesFromConfig();
+        $resources = $this->getAclResourcesFromConfig();
         $bdResources = $this->getAclRepo()->findAll();
 
         // update old resources
@@ -409,9 +418,9 @@ class Manager implements ManagerInterface
      */
     protected function createNewResources(array $resources)
     {
-        $resource   = reset($resources);
+        $resource = reset($resources);
         $bdResource = $this->createResource($resource);
-        $resources  = $this->setResourceParent($resources, $bdResource);
+        $resources = $this->setResourceParent($resources, $bdResource);
 
         unset($resources[$bdResource->getId()]);
 
@@ -425,6 +434,7 @@ class Manager implements ManagerInterface
      *
      * @param  array $resources
      * @param  Acl   $bdResource
+     *
      * @return array
      */
     protected function setResourceParent(array $resources, Acl $bdResource)
@@ -438,7 +448,7 @@ class Manager implements ManagerInterface
 
             if (!$parentResource && isset($resources[$resource->getParent()])) {
                 $parentResource = $this->createResource($resources[$resource->getParent()]);
-                $resources      = $this->setResourceParent($resources, $parentResource);
+                $resources = $this->setResourceParent($resources, $parentResource);
 
                 unset($resources[$resource->getParent()]);
             }
@@ -453,6 +463,7 @@ class Manager implements ManagerInterface
      * Create new db ACL resource from annotation data
      *
      * @param  AnnotationAcl $resource
+     *
      * @return Acl
      */
     protected function createResource(AnnotationAcl $resource)
@@ -469,6 +480,7 @@ class Manager implements ManagerInterface
 
     /**
      * @param  Acl   $acl [optional]
+     *
      * @return array
      */
     protected function getRolesForAcl(Acl $acl = null)
@@ -479,7 +491,7 @@ class Manager implements ManagerInterface
             $aclNodes = $this->getAclRepo()->getFullNodeWithRoles($acl);
 
             foreach ($aclNodes as $node) {
-                $roles       = $node->getAccessRolesNames();
+                $roles = $node->getAccessRolesNames();
                 $accessRoles = array_unique(array_merge($roles, $accessRoles));
             }
         }
@@ -493,6 +505,7 @@ class Manager implements ManagerInterface
      * If user was not logged and was not set in parameters, then return IS_AUTHENTICATED_ANONYMOUSLY role
      *
      * @param  User  $user [optional]
+     *
      * @return array
      */
     protected function getUserRoles(User $user = null)
@@ -544,6 +557,7 @@ class Manager implements ManagerInterface
      *
      * @param  array $roles
      * @param  array $aclRoles
+     *
      * @return bool
      */
     protected function checkIsGrant(array $roles, array $aclRoles)
@@ -567,7 +581,7 @@ class Manager implements ManagerInterface
     protected function getAclResourcesFromConfig($directory = '')
     {
         $resourcesFromAnnotations = $this->aclReader->getResources($directory);
-        $resourcesFromConfigs     = $this->configReader->getConfigResources($directory);
+        $resourcesFromConfigs = $this->configReader->getConfigResources($directory);
 
         return $resourcesFromAnnotations + $resourcesFromConfigs;
     }
@@ -577,6 +591,7 @@ class Manager implements ManagerInterface
      *
      * @param  Acl  $acl
      * @param  Role $role
+     *
      * @return True if ACL has been added, false otherwise
      */
     protected function addAclToRole(Acl $acl, Role $role)
