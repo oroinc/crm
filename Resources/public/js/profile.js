@@ -45,8 +45,7 @@ $(function() {
             var confirm = new Oro.BootstrapModal({
                 title: 'Delete Confirmation',
                 content: message,
-                okText: 'Yes, Delete',
-                cancelText: 'Cancel'
+                okText: 'Yes, Delete'
 
             });
             confirm.on('ok', doAction);
@@ -78,8 +77,7 @@ $(function() {
             var confirm = new Oro.BootstrapModal({
                 title: 'Delete Confirmation',
                 content: message,
-                okText: 'Yes, Delete',
-                cancelText: 'Cancel'
+                okText: 'Yes, Delete'
 
             });
             confirm.on('ok', doAction);
@@ -111,8 +109,7 @@ $(function() {
             var confirm = new Oro.BootstrapModal({
                 title: 'Delete Confirmation',
                 content: message,
-                okText: 'Yes, Delete',
-                cancelText: 'Cancel'
+                okText: 'Yes, Delete'
 
             });
             confirm.on('ok', doAction);

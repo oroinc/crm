@@ -57,22 +57,20 @@
             </div>
         </div>
         <div class="layout-content">
-            <div id="navbarExample" class="navbar navbar-static scrollspy-nav">
+            <div id="groupsroll" class="navbar navbar-static scrollspy-nav">
                 <div class="navbar-inner">
                     <div class="container-fluid" style="width: auto;">
                         <ul class="nav">
-                            <li class="active"><a href="#scroll-main">{{ 'Overview'|trans }}</a></li>
-
+                            <li><a href="#scroll-main">{{ 'Overview'|trans }}</a></li>
                             {% if form.vars.value.id %}
                                 <li><a href="#scroll-ussers">{{ 'Users'|trans }}</a></li>
                             {% endif %}
-
                         </ul>
                     </div>
                 </div>
             </div>
             <div class="clearfix">
-                <div data-spy="scroll" data-target="#navbarExample" data-offset="50" class="scrollspy container-fluid">
+                <div data-spy="scroll" data-target="#groupsroll" data-offset="10" class="scrollspy container-fluid">
                     <div class="usser-row">
                         <h4 id="scroll-main" class="scrollspy-title">{{ 'Overview'|trans }}</h4>
                         <div class="row-fluid row-fluid-divider">
@@ -95,7 +93,6 @@
                             </div>
                         </div>
                     {% endif %}
-
                 </div>
             </div>
         </div>
