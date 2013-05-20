@@ -103,11 +103,11 @@
                     </div>
                 {% endif %}
                 <div data-spy="scroll" data-target="#navbarExample" data-offset="50" class="scrollspy container-fluid">
-                    {% if form.attributes is defined %}
+                    {% if form.values is defined %}
                         <h4 id="scroll-main" class="scrollspy-title">{{ 'Overview'|trans }}</h4>
                         <div class="row-fluid">
                             <fieldset class="form-horizontal" id="attributes-list">
-                                {{ form_row(form.attributes) }}
+                                {{ form_row(form.values) }}
                             </fieldset>
                         </div>
                     {% endif %}
