@@ -32,18 +32,14 @@ $(document).ready(function () {
     var waitForDebugBar = function()
     {
         if (debugBar.children().length) {
-            adjustHeight();
+            window.setTimeout(adjustHeight, 500);
         } else if (tries < 100) {
             tries++;
             window.setTimeout(waitForDebugBar, 500);
         }
     }
 
-    if (debugBar.length) {
-        waitForDebugBar();
-    } else {
-        adjustHeight();
-    }
-
+    debugBar.length ?  waitForDebugBar() : adjustHeight();
     $(window).on('resize', adjustHeight);
+    $(document).ajaxSuccess(adjustHeight);
 });

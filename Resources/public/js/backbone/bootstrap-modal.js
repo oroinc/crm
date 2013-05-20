@@ -11,6 +11,9 @@ var Oro = Oro || {};
      * @extends Backbone.BootstrapModal
      */
     Oro.BootstrapModal = Backbone.BootstrapModal.extend({
+        /** @property {String} */
+        className: 'modal oro-modal-danger',
+
         /** @property {Object} */
         template: _.template('\
             <% if (title) { %>\

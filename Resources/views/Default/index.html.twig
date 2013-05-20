@@ -343,14 +343,19 @@
                         {% if app.session.flashbag.peekAll|length > 0 %}
                             {% set allMessages = allMessages|merge(app.session.flashbag.all) %}
                         {% endif %}
-                        {% for type, messages in allMessages %}
-                            {% for message in messages %}
-                                <div class="alert{{ type ? ' alert-'~type : '' }} fade in top-messages ">
-                                    <a class="close" data-dismiss="alert" href="#">&times;</a>
-                                    <div class="message">{{ message|trans|raw }}</div>
-                                </div>
+                        <div class="flash-messages-frame"
+                                {% if allMessages|length < 2 %}style="display:none"{% endif %}>
+                            <div class="flash-messages-holder">
+                            {% for type, messages in allMessages %}
+                                {% for message in messages %}
+                                    <div class="alert{{ type ? ' alert-'~type : '' }} fade in top-messages ">
+                                        <a class="close" data-dismiss="alert" href="#">&times;</a>
+                                        <div class="message">{{ message|trans|raw }}</div>
+                                    </div>
+                                {% endfor %}
                             {% endfor %}
-                        {% endfor %}
+                            </div>
+                        </div>
                     {% endblock messages %}
                 </div>
             <div class="hash-loading-mask"></div>
