@@ -32,4 +32,12 @@ class ConfigReaderTest extends \PHPUnit_Framework_TestCase
         );
         $this->assertEquals('test_controller', $output);
     }
+
+    public function testGetConfigResourcesForDirectory()
+    {
+        $reflection = new \ReflectionClass('\Oro\Bundle\UserBundle\Tests\Unit\Fixture\FixtureBundle');
+        $output = $this->reader->getConfigResources($reflection->getFilename());
+        $acl = $output['test_controller'];
+        $this->assertEquals('testAction', $acl->getMethod());
+    }
 }
