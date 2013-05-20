@@ -92,7 +92,7 @@ class ResponseHistoryListener
         $historyItem->doUpdate();
 
         $this->em->persist($historyItem);
-        $this->em->flush();
+        $this->em->flush($historyItem);
 
         return true;
     }
