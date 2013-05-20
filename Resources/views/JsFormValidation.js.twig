@@ -91,6 +91,14 @@ var jsfv = new function () {
             $(field).bind(eventType, handler);
 {% endblock %}
         },
+        onFirstEvent: function (field, eventType, handler) {
+            if (typeof(field) == 'string') {
+                field = jsfv.id(field);
+            }
+{% block onFirstEvent %}
+            $(field).bindFirst(eventType, handler);
+{% endblock %}
+        },
 {% for fieldName, constraints in fieldConstraints %}
         check_{{ fieldName }}: function() {
             var gv;
@@ -126,13 +134,16 @@ var jsfv = new function () {
                     form = jsfv.id('{{ formName }}__token').form;
                 }
 
-                jsfv.onEvent(form, 'submit', function() {
+                jsfv.onFirstEvent(form, 'submit', function(e) {
                     var gv, submitForm = true;
 {% for fieldName, constraints in fieldConstraints %}
                     submitForm = jsfv.check_{{ fieldName }}() && submitForm;
 {% endfor %}
 {% set resultvar = 'submitForm' %}{% set fieldName = '.' %}
 {% block getters_constraints_submit %}{{ block('getters_constraints_field') }}{% endblock %}
+                    if (!submitForm) {
+                        e.stopImmediatePropagation();
+                    }
                     return submitForm;
                 });
             }
