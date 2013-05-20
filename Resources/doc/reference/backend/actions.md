@@ -65,7 +65,7 @@ class UserDatagridManager extends FlexibleDatagridManager
             'options'      => array(
                 'label'         => 'Show',
                 'link'          => 'show_link',
-                'route'         => 'oro_user_show',
+                'route'         => 'oro_user_view',
                 'runOnRowClick' => true,
             )
         );
