@@ -103,7 +103,7 @@ class RoleController extends FOSRestController implements ClassResourceInterface
      *          {"name"="id", "dataType"="integer"},
      *      }
      * )
-     * @AclAncestor("oro_user_role_edit")
+     * @AclAncestor("oro_user_role_update")
      */
     public function putAction($id)
     {

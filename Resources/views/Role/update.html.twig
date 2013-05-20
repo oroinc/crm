@@ -1,7 +1,7 @@
 {% extends bap.layout is defined ? bap.layout : 'OroUserBundle::layout.html.twig' %}
 {% form_theme form with 'OroUIBundle:Form:fields.html.twig' %}
 
-{% set title = form.vars.value.id ? 'Edit Role'|trans : 'Add Role'|trans %}
+{% set title = form.vars.value.id ? 'Update Role'|trans : 'Create Role'|trans %}
 {% oro_title_set({params : {"%role%": form.vars.value.label} }) %}
 
 {% block head_script %}
@@ -39,7 +39,7 @@
 {% block page_container %}
 <div class="container-fluid">
     {% block content %}
-    <form action="{{ form.vars.value.id ? path('oro_user_role_edit', { id: form.vars.value.id, back: app.session.get('back') }) : path('oro_user_role_create') }}" method="post" class="form-register form-padding">
+    <form action="{{ form.vars.value.id ? path('oro_user_role_update', { id: form.vars.value.id, back: app.session.get('back') }) : path('oro_user_role_create') }}" method="post" class="form-register form-padding">
             <div class="navigation clearfix navbar-extra">
                 <div class="row">
                     <div class="pull-right">

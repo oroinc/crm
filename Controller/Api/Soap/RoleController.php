@@ -51,7 +51,7 @@ class RoleController extends BaseController
      * @Soap\Param("id", phpType="int")
      * @Soap\Param("role", phpType="Oro\Bundle\UserBundle\Entity\Role")
      * @Soap\Result(phpType="boolean")
-     * @AclAncestor("oro_user_role_edit")
+     * @AclAncestor("oro_user_role_update")
      */
     public function updateAction($id, $role)
     {
