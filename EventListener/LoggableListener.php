@@ -2,6 +2,8 @@
 
 namespace Oro\Bundle\DataAuditBundle\EventListener;
 
+use Doctrine\Common\Collections\Collection;
+
 use Gedmo\Loggable\LoggableListener as BaseListener;
 use Gedmo\Loggable\Mapping\Event\LoggableAdapter;
 use Gedmo\Tool\Wrapper\AbstractWrapper;
@@ -162,17 +164,30 @@ class LoggableListener extends BaseListener
                 if ($value == $object) {
                     $logEntry = $lo['log'];
                     $changes  = current($ea->getObjectChangeSet($uow, $object));
+                    $oldData  = $changes[0];
                     $newData  = $value->getData();
-                    $data     = array_merge(
-                        $logEntry->getData(),
+
+                    if ($oldData instanceof AbstractEntityAttributeOption) {
+                        $oldData = $oldData->getOptionValue()->getValue();
+                    }
+
+                    if ($newData instanceof AbstractEntityAttributeOption) {
+                        $newData = $newData->getOptionValue()->getValue();
+                    } elseif ($newData instanceof Collection) {
+                        $newData = implode(
+                            ', ',
+                            $newData->map(function ($item) {
+                                return $item->getOptionValue()->getValue();
+                            })->toArray()
+                        );
+                    }
+
+                    $data = array_merge(
+                        (array) $logEntry->getData(),
                         array(
                             $object->getAttribute()->getCode() => array(
-                                'old' => $changes[0] instanceof AbstractEntityAttributeOption
-                                    ? $changes[0]->getOptionValue()->getValue()
-                                    : $changes[0],
-                                'new' => $newData instanceof AbstractEntityAttributeOption
-                                    ? $newData->getOptionValue()->getValue()
-                                    : $newData,
+                                'old' => $oldData,
+                                'new' => $newData,
                             )
                         )
                     );
