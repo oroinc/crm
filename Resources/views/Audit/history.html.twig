@@ -17,7 +17,7 @@
             {% for entry in history %}
             <tr>
                 <td>{{ entry.version }}</td>
-                <td><a href="{{ path('oro_user_show', { id: entry.user.id }) }}">{{ entry.user.fullname }}</a></td>
+                <td><a href="{{ path('oro_user_view', { id: entry.user.id }) }}">{{ entry.user.fullname }}</a></td>
                 <td>{{ macros.time(entry.loggedAt) }}</td>
                 <td>
                     {% for key, value in entry.data %}
