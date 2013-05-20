@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Loggable\Entity\MappedSuperclass\AbstractLogEntry;
 
 use JMS\Serializer\Annotation\Type;
+use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 
 use Oro\Bundle\UserBundle\Entity\User;
 
@@ -22,6 +23,7 @@ class Audit extends AbstractLogEntry
      * @ORM\Column(type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     * @Soap\ComplexType("int", nillable=true)
      */
     protected $id;
 
@@ -36,6 +38,7 @@ class Audit extends AbstractLogEntry
      * @var string $loggedAt
      *
      * @ORM\Column(name="logged_at", type="datetime")
+     * @Soap\ComplexType("dateTime", nillable=true)
      */
     protected $loggedAt;
 
@@ -43,6 +46,7 @@ class Audit extends AbstractLogEntry
      * @var string $objectId
      *
      * @ORM\Column(name="object_id", type="integer", length=32, nullable=true)
+     * @Soap\ComplexType("int", nillable=true)
      */
     protected $objectId;
 
@@ -50,6 +54,7 @@ class Audit extends AbstractLogEntry
      * @var string $objectClass
      *
      * @ORM\Column(name="object_class", type="string", length=255)
+     * @Soap\ComplexType("int", nillable=true)
      */
     protected $objectClass;
 
@@ -57,6 +62,7 @@ class Audit extends AbstractLogEntry
      * @var string $objectName
      *
      * @ORM\Column(name="object_name", type="string", length=255)
+     * @Soap\ComplexType("string", nillable=true)
      */
     protected $objectName;
 
@@ -64,6 +70,7 @@ class Audit extends AbstractLogEntry
      * @var integer $version
      *
      * @ORM\Column(type="integer")
+     * @Soap\ComplexType("string", nillable=true)
      */
     protected $version;
 
@@ -71,11 +78,14 @@ class Audit extends AbstractLogEntry
      * @var string $data
      *
      * @ORM\Column(type="array", nullable=true)
+     * @Soap\ComplexType("Oro\Bundle\DataAuditBundle\Entity\AuditData[]", nillable=true)
      */
     protected $data;
 
     /**
      * @var string $username
+     *
+     * @Soap\ComplexType("string", nillable=true)
      */
     protected $username;
 
@@ -85,6 +95,7 @@ class Audit extends AbstractLogEntry
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      * @Type("string")
+     * @Soap\ComplexType("string", nillable=true)
      */
     protected $user;
 

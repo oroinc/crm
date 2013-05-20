@@ -6,27 +6,27 @@ use Symfony\Component\DependencyInjection\ContainerAware;
 use Doctrine\Common\Persistence\ObjectManager;
 use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 
-use Oro\Bundle\DataAuditBundle\Entity\AuditSoap;
+use Oro\Bundle\DataAuditBundle\Entity\Audit;
 
 class AuditController extends ContainerAware
 {
     /**
      * @Soap\Method("getAudits")
-     * @Soap\Result(phpType = "Oro\Bundle\DataAuditBundle\Entity\AuditSoap[]")
+     * @Soap\Result(phpType = "Oro\Bundle\DataAuditBundle\Entity\Audit[]")
      */
     public function cgetAction()
     {
-        return $this->getManager()->getRepository('OroDataAuditBundle:AuditSoap')->findAll();
+        return $this->getManager()->getRepository('OroDataAuditBundle:Audit')->findAll();
     }
 
     /**
      * @Soap\Method("getAudit")
      * @Soap\Param("id", phpType = "int")
-     * @Soap\Result(phpType = "Oro\Bundle\DataAuditBundle\Entity\AuditSoap")
+     * @Soap\Result(phpType = "Oro\Bundle\DataAuditBundle\Entity\Audit")
      */
     public function getAction($id)
     {
-        return $this->getEntity('OroDataAuditBundle:AuditSoap', (int) $id);
+        return $this->getEntity('OroDataAuditBundle:Audit', (int) $id);
     }
 
     /**
@@ -37,7 +37,7 @@ class AuditController extends ContainerAware
     public function deleteAction($id)
     {
         $em = $this->getManager();
-        $entity = $this->getEntity('OroDataAuditBundle:AuditSoap', (int) $id);
+        $entity = $this->getEntity('OroDataAuditBundle:Audit', (int) $id);
 
         $em->remove($entity);
         $em->flush();
