@@ -49,9 +49,9 @@ class CollectionTypeSubscriber implements EventSubscriberInterface
 
         /** @var ArrayCollection $collection */
         $collection = $data->getCollections();
-        foreach ($collection as $k => $item) {
-            if ($item->__toString() == '') {
-                $collection->remove($k);
+        foreach ($collection as $item) {
+            if ($item == null || $item->__toString() == '') {
+                $collection->removeElement($item);
             }
         }
     }
