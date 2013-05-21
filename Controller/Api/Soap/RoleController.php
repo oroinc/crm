@@ -109,7 +109,7 @@ class RoleController extends SoapController
      *
      * @Soap\Method("addAclToRole")
      * @Soap\Param("id", phpType="int")
-         * @Soap\Param("resource", phpType="string")
+     * @Soap\Param("resource", phpType="string")
      * @Soap\Result(phpType="string")
      * @AclAncestor("oro_user_acl_save")
      */
