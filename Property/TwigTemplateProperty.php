@@ -76,7 +76,7 @@ class TwigTemplateProperty extends AbstractProperty implements TwigPropertyInter
         $context = array(
             'field'  => $this->field,
             'record' => $record,
-            'value'  => $record->getValue($this->getName()),
+            'value'  => $record->getValue($this->field->getFieldName()),
         );
 
         return $this->getTemplate()->render($context);
