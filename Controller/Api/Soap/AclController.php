@@ -38,10 +38,10 @@ class AclController extends ContainerAware
     }
 
     /**
-     * @return \Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
+     * @return \Oro\Bundle\UserBundle\Acl\Manager
      */
     public function getManager()
     {
-        return $this->container->get('oro_user.acl_manager.api');
+        return $this->container->get('oro_user.acl_manager');
     }
 }

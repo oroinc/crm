@@ -186,7 +186,7 @@ class RoleController extends SoapController
     }
 
     /**
-     * @return \Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
+     * {@inheritdoc}
      */
     public function getManager()
     {

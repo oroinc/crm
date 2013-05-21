@@ -80,7 +80,7 @@ class GroupController extends SoapController
     }
 
     /**
-     * @return \Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
+     * {@inheritdoc}
      */
     public function getManager()
     {
@@ -89,7 +89,7 @@ class GroupController extends SoapController
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getForm()
     {
@@ -97,7 +97,7 @@ class GroupController extends SoapController
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getFormHandler()
     {
