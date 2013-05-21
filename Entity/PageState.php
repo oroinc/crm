@@ -33,11 +33,22 @@ class PageState
     protected $user;
 
     /**
+     * Base64 encoded page URL
+     *
      * @var string $pageId
      *
-     * @ORM\Column(name="page_id", type="string", unique=true)
+     * @ORM\Column(name="page_id", type="string")
      */
     protected $pageId;
+
+    /**
+     * Hash of page id, used for quick access/search
+     *
+     * @var string $pageHash
+     *
+     * @ORM\Column(name="page_hash", type="string", length=32, unique=true)
+     */
+    protected $pageHash;
 
     /**
      * @var string $data
@@ -59,6 +70,11 @@ class PageState
      * @ORM\Column(name="updated_at", type="datetime")
      */
     protected $updatedAt;
+
+    public function __construct()
+    {
+        $this->pageHash = self::generateHash($this->pageId);
+    }
 
     /**
      * Get id
@@ -101,7 +117,8 @@ class PageState
      */
     public function setPageId($pageId)
     {
-        $this->pageId = $pageId;
+        $this->pageId   = $pageId;
+        $this->pageHash = self::generateHash($pageId);
 
         return $this;
     }
@@ -114,6 +131,27 @@ class PageState
     public function getPageId()
     {
         return $this->pageId;
+    }
+
+    /**
+     * Get page hash
+     *
+     * @return string
+     */
+    public function getPageHash()
+    {
+        return $this->pageHash;
+    }
+
+    /**
+     * Generate unique hash for page id
+     *
+     * @param  string $pageId
+     * @return string
+     */
+    public static function generateHash($pageId)
+    {
+        return md5($pageId);
     }
 
     /**
