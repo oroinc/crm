@@ -140,18 +140,24 @@ class ProfileController extends SoapController
     }
 
     /**
-     * @return \Oro\Bundle\UserBundle\Entity\UserManager
+     * @return \Oro\Bundle\SoapBundle\Entity\Manager\ApiFlexibleEntityManager
      */
     public function getManager()
     {
         return $this->container->get('oro_user.manager.api');
     }
 
+    /**
+     * @inheritdoc
+     */
     public function getForm()
     {
         return $this->container->get('oro_user.form.profile.api');
     }
 
+    /**
+     * @inheritdoc
+     */
     public function getFormHandler()
     {
         return $this->container->get('oro_user.form.handler.profile.api');

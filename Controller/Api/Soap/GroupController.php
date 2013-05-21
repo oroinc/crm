@@ -11,12 +11,14 @@ class GroupController extends SoapController
 {
     /**
      * @Soap\Method("getGroups")
+     * @Soap\Param("page", phpType="int")
+     * @Soap\Param("limit", phpType="int")
      * @Soap\Result(phpType="Oro\Bundle\UserBundle\Entity\Group[]")
      * @AclAncestor("oro_user_group_list")
      */
-    public function cgetAction()
+    public function cgetAction($page = 1, $limit = 10)
     {
-        return $this->handleGetListRequest();
+        return $this->handleGetListRequest($page, $limit);
     }
 
     /**
@@ -77,16 +79,26 @@ class GroupController extends SoapController
         return $entity->getRoles()->toArray();
     }
 
+    /**
+     * @return \Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
+     */
     public function getManager()
     {
         return $this->container->get('oro_user.group_manager.api');
+
     }
 
+    /**
+     * @inheritdoc
+     */
     public function getForm()
     {
         return $this->container->get('oro_user.form.group.api');
     }
 
+    /**
+     * @inheritdoc
+     */
     public function getFormHandler()
     {
         return $this->container->get('oro_user.form.handler.group.api');

@@ -2,11 +2,11 @@
 
 namespace Oro\Bundle\UserBundle\Controller\Api\Soap;
 
-use Oro\Bundle\SoapBundle\Controller\Api\Soap\SoapController;
+use Symfony\Component\DependencyInjection\ContainerAware;
 use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 use Oro\Bundle\UserBundle\Annotation\AclAncestor;
 
-class AclController extends SoapController
+class AclController extends ContainerAware
 {
     /**
      * Get ACL Resources
@@ -17,7 +17,7 @@ class AclController extends SoapController
      */
     public function cgetAction()
     {
-        return $this->handleGetListRequest();
+        return $this->getManager()->getAclResources(false);
     }
 
     /**
@@ -37,16 +37,11 @@ class AclController extends SoapController
         return $resource;
     }
 
+    /**
+     * @return \Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
+     */
     public function getManager()
     {
         return $this->container->get('oro_user.acl_manager.api');
-    }
-
-    public function getForm()
-    {
-    }
-
-    public function getFormHandler()
-    {
     }
 }

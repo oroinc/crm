@@ -5,6 +5,7 @@ namespace Oro\Bundle\UserBundle\Controller\Api\Soap;
 use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 
 use Oro\Bundle\SoapBundle\Controller\Api\Soap\SoapController;
+use Oro\Bundle\SoapBundle\Form\Handler\ApiFormHandler;
 use Oro\Bundle\UserBundle\Entity\Role;
 use Oro\Bundle\UserBundle\Annotation\AclAncestor;
 
@@ -12,12 +13,14 @@ class RoleController extends SoapController
 {
     /**
      * @Soap\Method("getRoles")
+     * @Soap\Param("page", phpType="int")
+     * @Soap\Param("limit", phpType="int")
      * @Soap\Result(phpType="Oro\Bundle\UserBundle\Entity\Role[]")
      * @AclAncestor("oro_user_role_list")
      */
-    public function cgetAction()
+    public function cgetAction($page = 1, $limit = 10)
     {
-        return $this->handleGetListRequest();
+        return $this->handleGetListRequest($page, $limit);
     }
 
     /**
@@ -183,7 +186,7 @@ class RoleController extends SoapController
     }
 
     /**
-     * @return ApiFlexibleEntityManager
+     * @return \Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
      */
     public function getManager()
     {
@@ -191,7 +194,7 @@ class RoleController extends SoapController
     }
 
     /**
-     * @return FormInterface
+     * @inheritdoc
      */
     public function getForm()
     {
@@ -199,7 +202,7 @@ class RoleController extends SoapController
     }
 
     /**
-     * @return ApiFormHandler
+     * @inheritdoc
      */
     public function getFormHandler()
     {
