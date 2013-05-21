@@ -37,7 +37,7 @@ class PageState
      *
      * @var string $pageId
      *
-     * @ORM\Column(name="page_id", type="string")
+     * @ORM\Column(name="page_id", type="string", length=4000)
      */
     protected $pageId;
 
