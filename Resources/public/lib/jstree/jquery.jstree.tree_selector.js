@@ -43,13 +43,16 @@
                     this.data.tree_selector.no_tree_message = settings.no_tree_message;
 
                     var tree_toolbar = $('<div>', {
-                        id: 'tree_toolbar'
+                        id: 'tree_toolbar',
+                        class: 'jstree-tree-toolbar'
                     });
-                    tree_toolbar.addClass('jstree-tree-toolbar');
+
                     var tree_select = $('<select>', {
-                        id: tree_select_id
+                        id: tree_select_id,
+                        class: 'jstree-tree-select',
+                        style: 'width:90%' 
                     });
-                    tree_select.addClass('jstree-tree-select');
+
                     var this_jstree = this;
                     tree_select.bind('change', function() {
                         this_jstree.switch_tree();
