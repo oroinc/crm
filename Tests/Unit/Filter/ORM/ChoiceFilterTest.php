@@ -66,6 +66,21 @@ class ChoiceFilterTest extends FilterTestCase
                 'data' => array('value' => ''),
                 'expectProxyQueryCalls' => array()
             ),
+            'zero_value' => array(
+                'data' => array('value' => 0),
+                'expectProxyQueryCalls' => array(
+                    array(
+                        'andWhere',
+                        array(
+                            $this->getExpressionFactory()->in(
+                                self::TEST_ALIAS . '.' . self::TEST_FIELD,
+                                array(0)
+                            )
+                        ),
+                        null
+                    )
+                )
+            ),
             'contains' => array(
                 'data' => array('value' => 'test', 'type' => ChoiceFilterType::TYPE_CONTAINS),
                 'expectProxyQueryCalls' => array(
