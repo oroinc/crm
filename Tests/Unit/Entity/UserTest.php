@@ -258,7 +258,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals('test', $user->getImage());
         $this->assertNotEmpty($user->getUploadDir());
-        $path = $user->getUploadDir() . '/' . $user->getImage();
+        $path = $user->getUploadDir(true) . '/' . $user->getImage();
         $this->assertEquals($path, $user->getImagePath());
     }
 
