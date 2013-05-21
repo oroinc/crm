@@ -39,7 +39,8 @@
 {% block page_container %}
 <div class="container-fluid">
     {% block content %}
-    <form action="{{ form.vars.value.id ? path('oro_user_role_update', { id: form.vars.value.id, back: app.session.get('back') }) : path('oro_user_role_create') }}" method="post" class="form-register form-padding">
+    <form action="{{ form.vars.value.id ? path('oro_user_role_update', { id: form.vars.value.id, back: app.session.get('back') }) : path('oro_user_role_create') }}"
+        method="post" class="form-register form-padding scrollable-substructure">
             <div class="navigation clearfix navbar-extra">
                 <div class="row">
                     <div class="pull-right">
@@ -87,7 +88,7 @@
                     </div>
                 </div>
                 <div class="clearfix">
-                    <div data-spy="scroll" data-target="#navbarExample" data-offset="50" class="scrollspy container-fluid">
+                    <div data-spy="scroll" data-target="#navbarExample" data-offset="50" class="scrollspy container-fluid scrollable-container">
                         <div class="usser-row">
                             <h4 id="scroll-main" class="scrollspy-title">{{ 'Overview'|trans }}</h4>
                             <div class="row-fluid row-fluid-divider">
