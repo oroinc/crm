@@ -126,21 +126,26 @@ class UserDatagridManager extends FlexibleDatagridManager
         );
         $fieldsCollection->add($fieldUpdated);
 
-        $fieldUpdated = new FieldDescription();
-        $fieldUpdated->setName('status');
-        $fieldUpdated->setOptions(
+
+        $fieldStatus = new FieldDescription();
+        $fieldStatus->setName('enabled');
+        $fieldStatus->setOptions(
             array(
-                'type'        => FieldDescriptionInterface::TYPE_TEXT,
+                'type'        => FieldDescriptionInterface::TYPE_OPTIONS,
                 'label'       => 'Status',
-                'field_name'  => 'currentStatus',
-                'filter_type' => FilterInterface::TYPE_STRING,
+                'field_name'  => 'enabled',
+                'filter_type' => FilterInterface::TYPE_CHOICE,
                 'required'    => false,
                 'sortable'    => true,
                 'filterable'  => true,
                 'show_filter' => true,
+                'choices'     => array(
+                    0  => $this->translator->trans('Inactive', array(), 'OroUserBundle'),
+                    1  => $this->translator->trans('Active', array(), 'OroUserBundle'),
+                ),
             )
         );
-        $fieldsCollection->add($fieldUpdated);
+        $fieldsCollection->add($fieldStatus);
     }
 
     /**
