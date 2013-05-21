@@ -58,6 +58,12 @@ class SearchDatagridBuilderTest extends \PHPUnit_Framework_TestCase
         $formFactory->expects($this->any())
             ->method('createNamedBuilder')
             ->will($this->returnValue($formBuilder));
+        $eventDispatcher = $this->getMockForAbstractClass(
+            'Symfony\Component\EventDispatcher\EventDispatcherInterface',
+            array(),
+            '',
+            false
+        );
         $filterFactory = $this->getMockForAbstractClass(
             'Oro\Bundle\GridBundle\Filter\FilterFactoryInterface',
             array(),
@@ -79,6 +85,7 @@ class SearchDatagridBuilderTest extends \PHPUnit_Framework_TestCase
 
         return new SearchDatagridBuilder(
             $formFactory,
+            $eventDispatcher,
             $filterFactory,
             $sorterFactory,
             $actionFactory,
