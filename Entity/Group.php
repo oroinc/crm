@@ -83,6 +83,7 @@ class Group
     public function getRoleLabelsAsString()
     {
         $labels = array();
+        /** @var $role Role */
         foreach ($this->getRoles() as $role) {
             $labels[] = $role->getLabel();
         }
@@ -93,7 +94,7 @@ class Group
     /**
      * Returns the group roles
      *
-     * @return ArrayCollection The roles
+     * @return Collection The roles
      */
     public function getRoles()
     {
@@ -103,13 +104,14 @@ class Group
     /**
      * Pass a string, get the desired Role object or null
      *
-     * @param  string    $role Role name
+     * @param string $roleName Role name
      * @return Role|null
      */
-    public function getRole($role)
+    public function getRole($roleName)
     {
+        /** @var $item Role */
         foreach ($this->getRoles() as $item) {
-            if ($role == $item->getRole()) {
+            if ($roleName == $item->getRole()) {
                 return $item;
             }
         }
@@ -118,23 +120,33 @@ class Group
     }
 
     /**
-     * @param  string  $role
+     * @param Role|string $role
      * @return boolean
+     * @throws \InvalidArgumentException
      */
     public function hasRole($role)
     {
-        return $this->getRole($role) ? true : false;
+        if ($role instanceof Role) {
+            $roleName = $role->getRole();
+        } elseif (is_string($role)) {
+            $roleName = $role;
+        } else {
+            throw new \InvalidArgumentException(
+                '$role must be an instance of Oro\Bundle\UserBundle\Entity\Role or a string'
+            );
+        }
+        return (bool)$this->getRole($roleName);
     }
 
     /**
-     * Adds a Role to the ArrayCollection
+     * Adds a Role to the Collection
      *
-     * @param  Role  $role
+     * @param Role $role
      * @return Group
      */
     public function addRole(Role $role)
     {
-        if (!$this->hasRole($role->getRole())) {
+        if (!$this->hasRole($role)) {
             $this->roles->add($role);
         }
 
@@ -142,19 +154,26 @@ class Group
     }
 
     /**
-     * Pass a string, remove the Role object from collection
+     * Remove the Role object from collection
      *
-     * @param  string $role
+     * @param Role|string $role
      * @return Group
+     * @throws \InvalidArgumentException
      */
     public function removeRole($role)
     {
-        $item = $this->getRole($role);
-
-        if ($item) {
-            $this->roles->removeElement($item);
+        if ($role instanceof Role) {
+            $roleObject = $role;
+        } elseif (is_string($role)) {
+            $roleObject = $this->getRole($role);
+        } else {
+            throw new \InvalidArgumentException(
+                '$role must be an instance of Oro\Bundle\UserBundle\Entity\Role or a string'
+            );
         }
-
+        if ($roleObject) {
+            $this->roles->removeElement($roleObject);
+        }
         return $this;
     }
 
@@ -163,6 +182,7 @@ class Group
      *
      * @param  array|Collection $roles
      * @return Group
+     * @throws \InvalidArgumentException
      */
     public function setRoles($roles)
     {
@@ -172,8 +192,12 @@ class Group
             foreach ($roles as $role) {
                 $this->addRole($role);
             }
-        } else {
+        } elseif (is_array($roles)) {
             $this->roles = new ArrayCollection($roles);
+        } else {
+            throw new \InvalidArgumentException(
+                '$roles must be an instance of Doctrine\Common\Collections\Collection or an array'
+            );
         }
 
         return $this;

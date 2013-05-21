@@ -3,7 +3,9 @@
 namespace Oro\Bundle\UserBundle\Entity\Manager;
 
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\QueryBuilder;
 
+use Oro\Bundle\UserBundle\Entity\Repository\GroupRepository;
 use Oro\Bundle\UserBundle\Entity\Group;
 
 class GroupManager
@@ -21,7 +23,8 @@ class GroupManager
     /**
      * Get user query builder
      *
-     * @param \Oro\Bundle\UserBundle\Entity\Group $role
+     * @param  Group $role
+     * @return QueryBuilder
      */
     public function getUserQueryBuilder(Group $group)
     {
@@ -29,7 +32,7 @@ class GroupManager
     }
 
     /**
-     * @return \Oro\Bundle\UserBundle\Entity\Repository\GroupRepository
+     * @return GroupRepository
      */
     protected function getGroupRepo()
     {

@@ -2,6 +2,8 @@
 
 namespace Oro\Bundle\UserBundle\Tests\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\UserBundle\Entity\UserApi;
 use Oro\Bundle\UserBundle\Entity\Role;
@@ -34,6 +36,14 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $user->setEmail($mail);
 
         $this->assertEquals($mail, $user->getEmail());
+    }
+
+    public function testLoginCount()
+    {
+        $user = $this->getUser();
+        $this->assertNull($user->getLoginCount());
+        $user->setLoginCount(100);
+        $this->assertEquals(100, $user->getLoginCount());
     }
 
     public function testIsPasswordRequestNonExpired()
@@ -72,25 +82,110 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($token, $user->getConfirmationToken());
     }
 
-    public function testHasRole()
+    public function testSetRolesWithArrayArgument()
     {
-        $user    = $this->getUser();
-        $role    = new Role(User::ROLE_DEFAULT);
-        $newRole = new Role('ROLE_FOO');
+        $roles = array(new Role(User::ROLE_DEFAULT));
+        $user = $this->getUser();
+        $this->assertEmpty($user->getRoles());
+        $user->setRoles($roles);
+        $this->assertEquals($roles, $user->getRoles());
+    }
 
-        $this->assertFalse($user->hasRole($newRole->getRole()));
+    public function testSetRolesWithCollectionArgument()
+    {
+        $roles = new ArrayCollection(array(new Role(User::ROLE_DEFAULT)));
+        $user = $this->getUser();
+        $this->assertEmpty($user->getRoles());
+        $user->setRoles($roles);
+        $this->assertEquals($roles->toArray(), $user->getRoles());
+    }
 
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage $roles must be an instance of Doctrine\Common\Collections\Collection or an array
+     */
+    public function testSetRolesThrowsInvalidArgumentException()
+    {
+        $user = $this->getUser();
+        $user->setRoles('roles');
+    }
+
+    public function testHasRoleWithStringArgument()
+    {
+        $user = $this->getUser();
+        $role = new Role(User::ROLE_DEFAULT);
+
+        $this->assertFalse($user->hasRole(User::ROLE_DEFAULT));
+        $user->addRole($role);
+        $this->assertTrue($user->hasRole(User::ROLE_DEFAULT));
+    }
+
+    public function testHasRoleWithObjectArgument()
+    {
+        $user = $this->getUser();
+        $role = new Role(User::ROLE_DEFAULT);
+
+        $this->assertFalse($user->hasRole($role));
+        $user->addRole($role);
+        $this->assertTrue($user->hasRole($role));
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage $role must be an instance of Oro\Bundle\UserBundle\Entity\Role or a string
+     */
+    public function testHasRoleThrowsInvalidArgumentException()
+    {
+        $this->getUser()->hasRole(new \stdClass());
+    }
+
+    public function testRemoveRoleWithStringArgument()
+    {
+        $user = $this->getUser();
+        $role = new Role(User::ROLE_DEFAULT);
         $user->addRole($role);
 
-        $this->assertTrue($user->hasRole(User::ROLE_DEFAULT));
+        $this->assertTrue($user->hasRole($role));
+        $user->removeRole(User::ROLE_DEFAULT);
+        $this->assertFalse($user->hasRole($role));
+    }
 
-        $user->addRole($newRole);
+    public function testRemoveRoleWithObjectArgument()
+    {
+        $user = $this->getUser();
+        $role = new Role(User::ROLE_DEFAULT);
+        $user->addRole($role);
 
-        $this->assertTrue($user->hasRole($newRole->getRole()));
+        $this->assertTrue($user->hasRole($role));
+        $user->removeRole($role);
+        $this->assertFalse($user->hasRole($role));
+    }
 
-        $user->removeRole($newRole);
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage $role must be an instance of Oro\Bundle\UserBundle\Entity\Role or a string
+     */
+    public function testRemoveRoleThrowsInvalidArgumentException()
+    {
+        $this->getUser()->removeRole(new \stdClass());
+    }
 
-        $this->assertFalse($user->hasRole($newRole->getRole()));
+    public function testSetRolesCollection()
+    {
+        $user = $this->getUser();
+        $role = new Role(User::ROLE_DEFAULT);
+        $roles = new ArrayCollection(array($role));
+        $user->setRolesCollection($roles);
+        $this->assertSame($roles, $user->getRolesCollection());
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage $collection must be an instance of Doctrine\Common\Collections\Collection
+     */
+    public function testSetRolesCollectionThrowsException()
+    {
+        $this->getUser()->setRolesCollection(array());
     }
 
     public function testGroups()

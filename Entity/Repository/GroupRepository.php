@@ -2,6 +2,7 @@
 namespace Oro\Bundle\UserBundle\Entity\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\QueryBuilder;
 
 use Oro\Bundle\UserBundle\Entity\Group;
 
@@ -10,8 +11,8 @@ class GroupRepository extends EntityRepository
     /**
      * Get user query builder
      *
-     * @param  \Oro\Bundle\UserBundle\Entity\Group $group
-     * @return \Doctrine\ORM\QueryBuilder
+     * @param  Group $group
+     * @return QueryBuilder
      */
     public function getUserQueryBuilder(Group $group)
     {
