@@ -56,6 +56,20 @@ class AccountValue extends AbstractEntityFlexibleValue
     protected $address;
 
     /**
+     * Store collection attributes relations
+     *
+     * @var ArrayCollection $collection
+     *
+     * @ORM\ManyToMany(targetEntity="Oro\Bundle\FlexibleEntityBundle\Entity\Collection",cascade={"persist"})
+     * @ORM\JoinTable(
+     *     name="oro_account_collection_relation",
+     *     joinColumns={@ORM\JoinColumn(name="value_id", referencedColumnName="id", onDelete="CASCADE")},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="collection_data_id", referencedColumnName="id", onDelete="CASCADE")}
+     * )
+     */
+    protected $collection;
+
+    /**
      * Get address
      *
      * @return Address
