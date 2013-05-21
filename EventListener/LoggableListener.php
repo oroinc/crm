@@ -181,51 +181,49 @@ class LoggableListener extends BaseListener
         $uow  = $om->getUnitOfWork();
 
         foreach ($this->loggedObjects as &$lo) {
-            foreach ($lo['object']->getValues() as $value) {
-                if ($value == $object) {
-                    $logEntry = $lo['log'];
-                    $changes  = current($ea->getObjectChangeSet($uow, $object));
-                    $oldData  = $changes[0];
-                    $newData  = $value->getData();
+            if ($lo['object']->getValues()->contains($object)) {
+                $logEntry = $lo['log'];
+                $changes  = current($ea->getObjectChangeSet($uow, $object));
+                $oldData  = $changes[0];
+                $newData  = $object->getData();
 
-                    if ($oldData instanceof AbstractEntityAttributeOption) {
-                        $oldData = $oldData->getOptionValue()->getValue();
-                    }
+                if ($oldData instanceof AbstractEntityAttributeOption) {
+                    $oldData = $oldData->getOptionValue()->getValue();
+                }
 
-                    if ($newData instanceof AbstractEntityAttributeOption) {
-                        $newData = $newData->getOptionValue()->getValue();
-                    } elseif ($newData instanceof Collection) {
-                        $newData = implode(
-                            ', ',
-                            $newData->map(function ($item) {
-                                return $item->getOptionValue()->getValue();
-                            })->toArray()
-                        );
-                    }
-
-                    // special case for, as an example, decimal values
-                    // do not store changeset d:123 and s:3:"123"
-                    if ($oldData == $newData) {
-                        return true;
-                    }
-
-                    $data = array_merge(
-                        (array) $logEntry->getData(),
-                        array(
-                            $object->getAttribute()->getCode() => array(
-                                'old' => $oldData,
-                                'new' => $newData,
-                            )
-                        )
+                if ($newData instanceof AbstractEntityAttributeOption) {
+                    $newData = $newData->getOptionValue()->getValue();
+                } elseif ($newData instanceof Collection) {
+                    $newData = implode(
+                        ', ',
+                        $newData->map(function ($item) {
+                            return $item->getOptionValue()->getValue();
+                        })->toArray()
                     );
+                }
 
-                    $logEntry->setData($data);
-
-                    $om->persist($logEntry);
-                    $uow->recomputeSingleEntityChangeSet($lo['meta'], $logEntry);
-
+                // special case for, as an example, decimal values
+                // do not store changeset d:123 and s:3:"123"
+                if ($oldData == $newData) {
                     return true;
                 }
+
+                $data = array_merge(
+                    (array) $logEntry->getData(),
+                    array(
+                        $object->getAttribute()->getCode() => array(
+                            'old' => $oldData,
+                            'new' => $newData,
+                        )
+                    )
+                );
+
+                $logEntry->setData($data);
+
+                $om->persist($logEntry);
+                $uow->recomputeSingleEntityChangeSet($lo['meta'], $logEntry);
+
+                return true;
             }
         }
 
