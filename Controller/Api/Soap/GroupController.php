@@ -3,20 +3,22 @@
 namespace Oro\Bundle\UserBundle\Controller\Api\Soap;
 
 use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
-
+use Oro\Bundle\SoapBundle\Controller\Api\Soap\SoapController;
 use Oro\Bundle\UserBundle\Entity\Group;
 use Oro\Bundle\UserBundle\Annotation\AclAncestor;
 
-class GroupController extends BaseController
+class GroupController extends SoapController
 {
     /**
      * @Soap\Method("getGroups")
+     * @Soap\Param("page", phpType="int")
+     * @Soap\Param("limit", phpType="int")
      * @Soap\Result(phpType="Oro\Bundle\UserBundle\Entity\Group[]")
      * @AclAncestor("oro_user_group_list")
      */
-    public function cgetAction()
+    public function cgetAction($page = 1, $limit = 10)
     {
-        return $this->getManager()->getRepository('OroUserBundle:Group')->findAll();
+        return $this->handleGetListRequest($page, $limit);
     }
 
     /**
@@ -27,7 +29,7 @@ class GroupController extends BaseController
      */
     public function getAction($id)
     {
-        return $this->getEntity('OroUserBundle:Group', $id);
+        return $this->handleGetRequest($id);
     }
 
     /**
@@ -38,12 +40,7 @@ class GroupController extends BaseController
      */
     public function createAction($group)
     {
-        $entity = new Group();
-        $form   = $this->container->get('oro_user.form.group.api');
-
-        $this->container->get('oro_soap.request')->fix($form->getName());
-
-        return $this->processForm($form->getName(), $entity);
+        return $this->handleCreateRequest();
     }
 
     /**
@@ -55,12 +52,7 @@ class GroupController extends BaseController
      */
     public function updateAction($id, $group)
     {
-        $entity = $this->getEntity('OroUserBundle:Group', $id);
-        $form   = $this->container->get('oro_user.form.group.api');
-
-        $this->container->get('oro_soap.request')->fix($form->getName());
-
-        return $this->processForm($form->getName(), $entity);
+        return $this->handleUpdateRequest($id);
     }
 
     /**
@@ -71,13 +63,7 @@ class GroupController extends BaseController
      */
     public function deleteAction($id)
     {
-        $entity = $this->getEntity('OroUserBundle:Group', $id);
-
-        $em = $this->getManager();
-        $em->remove($entity);
-        $em->flush();
-
-        return true;
+        return $this->handleDeleteRequest($id);
     }
 
     /**
@@ -88,8 +74,33 @@ class GroupController extends BaseController
      */
     public function getRolesAction($id)
     {
-        $entity = $this->getEntity('OroUserBundle:Group', $id);
+        $entity = $this->getEntity($id);
 
         return $entity->getRoles()->toArray();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getManager()
+    {
+        return $this->container->get('oro_user.group_manager.api');
+
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getForm()
+    {
+        return $this->container->get('oro_user.form.group.api');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFormHandler()
+    {
+        return $this->container->get('oro_user.form.handler.group.api');
     }
 }
