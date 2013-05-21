@@ -30,8 +30,6 @@
                     <div class="customer-info pull-right">
                         <ul class="inline">
                             <li><a class="no-hash" href="{{ path('oro_dataaudit_history') }}" id="view-activity-btn">{{ 'Activity Log '|trans }}</a></li>
-                            <li><a href="#">{{ 'Revision'|trans }}</a></li>
-                            <li>{{ user }}</li>
                         </ul>
                         <script type="text/javascript">
                         $(function() {
@@ -44,7 +42,7 @@
                                         allowMinimize: true,
                                         dblclick: 'maximize',
                                         maximizedHeightDecreaseBy: 'minimize-bar',
-                                        width : 800,
+                                        width : 1000,
                                         title: '{{ user }} - {{ 'Change History'|trans }}'
                                     }
                                 }).render();
