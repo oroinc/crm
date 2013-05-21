@@ -135,7 +135,7 @@ if (typeof Oro !== "undefined") {
  */
 function initLayout() {
     if ($.isPlainObject($.uniform)) {
-        $('input:file').uniform();
+        $('input:file, select').uniform();
     }
 
     if (typeof($.datepicker) != 'undefined') {
@@ -157,10 +157,6 @@ function initLayout() {
                 timeFormat: el.attr('data-timeformat') ? el.attr('data-timeformat') : 'hh:mm tt'
             });
         });
-    }
-
-    if (typeof $.fn['bootstrapSwitch'] != "undefined"){
-        $('.switch').not('.has-switch')['bootstrapSwitch']();
     }
 
     $('[data-spy="scroll"]').each(function () {
