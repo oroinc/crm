@@ -44,6 +44,7 @@ class ChoiceFilter extends AbstractFilter
             || !array_key_exists('value', $data)
             || $data['value'] === ''
             || is_null($data['value'])
+            || (is_array($data['value']) && !count($data['value']))
         ) {
             return false;
         }
