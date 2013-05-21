@@ -905,7 +905,7 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
     public function getImagePath()
     {
         if ($this->image) {
-            return $this->getUploadDir() . '/' . $this->image;
+            return  $this->getUploadDir(true) . '/' . $this->image;
         }
         return null;
     }
@@ -1041,11 +1041,16 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
     /**
      * Get the relative directory path to user avatar
      *
+     * @param  bool $forWeb
      * @return string
      */
-    public function getUploadDir()
+    public function getUploadDir($forWeb = false)
     {
+        $ds = DIRECTORY_SEPARATOR;
+        if ($forWeb) {
+            $ds = '/';
+        }
         $suffix = $this->getCreatedAt() ? $this->getCreatedAt()->format('Y-m') : date('Y-m');
-        return 'uploads' . DIRECTORY_SEPARATOR . 'users' . DIRECTORY_SEPARATOR . $suffix;
+        return 'uploads' . $ds . 'users' . $ds . $suffix;
     }
 }
