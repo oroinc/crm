@@ -1451,6 +1451,7 @@ footer{
 .btn-link{
   font-weight: bold;
   font-size: 12px;
+  background: transparent;
 }
 .nav-tabs > li{
   margin-bottom: 0;
@@ -2899,14 +2900,19 @@ select:focus:invalid:focus {
 #search-bar-button:focus{
   color: #fff;
 }
-.pagination-centered > .icons-holder,
-.pagination-centered > *{
+.pagination-centered > .icons-holder{
+  margin-right: -4px;
+}
+.pagination-centered > label{
   margin-right: -4px;
   padding-left: 5px;
 }
 .grid-toolbar .pagination-centered{
-  width: 270px;
+  width: 335px;
   margin: 0 auto;
+}
+.grid-toolbar .pagination-centered .icons-holder{
+  margin-left: 5px;
 }
 #flash-messages{
   .alert{

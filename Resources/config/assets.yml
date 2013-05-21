@@ -1,4 +1,6 @@
 js:
+  - '@OroUIBundle/Resources/public/lib/jquery.min.js'
+  - '@OroUIBundle/Resources/public/lib/public/lib/jquery-ui.min.js'
   - '@OroUIBundle/Resources/public/lib/base64.js'
   - '@OroUIBundle/Resources/public/lib/underscore.js'
   - '@OroUIBundle/Resources/public/lib/backbone.js'
