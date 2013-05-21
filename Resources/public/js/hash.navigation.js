@@ -404,7 +404,6 @@ Oro.Navigation = Backbone.Router.extend({
                     }
                     this.setLocation(url);
                 } else {
-                    this.setLocation(url);
                     this.beforeRequest();
                     $(target).ajaxSubmit({
                         data:{'x-oro-hash-navigation' : true},
@@ -414,6 +413,7 @@ Oro.Navigation = Backbone.Router.extend({
                             this.afterRequest();
                         }, this),
                         success: _.bind(function (data) {
+                            this.setLocation(url);
                             this.handleResponse(data);
                             this.afterRequest();
                         }, this)
