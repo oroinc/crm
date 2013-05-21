@@ -65,12 +65,7 @@
                 .bind("loaded.jstree", $.proxy(function () {
                     this.switch_tree();
 
-                }, this))
-                /*
-                .bind('refresh.jstree', $.proxy(function (e, data) {
-                    this.load_trees();
-                    this.switch_tree();
-                }, this))*/;
+                }, this));
         },
         defaults : {
             ajax : false,
@@ -88,14 +83,14 @@
                 // Create new root node, place it into the tree and
                 // open it if setup to auto_open_root
                 var selected_tree = this.get_tree_select().find(':selected');
-                var root_node_id = $(selected_tree).attr('id');
+                var root_node_id = $(selected_tree).attr('value');
 
                 if (!root_node_id) {
                     return null;
                 }
 
                 root_node = this._prepare_node(
-                    $(selected_tree).attr('id'),
+                    root_node_id,
                     selected_tree.text()
                 );
 
@@ -123,8 +118,6 @@
                     throw "jquery.jstree.tree_selector : Neither data nor ajax settings supplied for trees.";
                 }
 
-                var default_selected = null;
-
                 this.get_tree_select().empty();
 
                 // In case of no tree loaded, display the no_tree_message
@@ -132,6 +125,7 @@
                 if (trees.length === 0 && this.data.tree_selector.no_tree_message) {
                     var no_tree_option = $('<option>', {
                         text: this.data.tree_selector.no_tree_message,
+                        value: -1,
                         disabled: true,
                         selected: true
                     });
@@ -141,7 +135,7 @@
                 var this_jstree = this;
                 $.each(trees, function (index, tree) {
                     var option = $('<option>', {
-                        id: tree.id,
+                        value: tree.id,
                         text: tree.title
                     });
                     if (index === 0) {
