@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\FlexibleEntityBundle\Form\EventListener;
 
+use Oro\Bundle\FlexibleEntityBundle\Model\AbstractFlexibleValue;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -31,10 +32,12 @@ class CollectionTypeSubscriber implements EventSubscriberInterface
     {
         $data = $event->getData();
 
-        /** @var ArrayCollection $collection */
-        $collection = $data->getCollections();
-        if ($collection->isEmpty()) {
-            $collection->add(new Collection());
+        if ($data instanceof AbstractEntityFlexibleValue) {
+            /** @var ArrayCollection $collection */
+            $collection = $data->getCollections();
+            if ($collection->isEmpty()) {
+                $collection->add(new Collection());
+            }
         }
     }
 
@@ -47,11 +50,14 @@ class CollectionTypeSubscriber implements EventSubscriberInterface
     {
         $data = $event->getData();
 
-        /** @var ArrayCollection $collection */
-        $collection = $data->getCollections();
-        foreach ($collection as $item) {
-            if ($item == null || $item->__toString() == '') {
-                $collection->removeElement($item);
+
+        if ($data instanceof AbstractEntityFlexibleValue) {
+            /** @var ArrayCollection $collection */
+            $collection = $data->getCollections();
+            foreach ($collection as $item) {
+                if ($item == null || $item->__toString() == '') {
+                    $collection->removeElement($item);
+                }
             }
         }
     }
