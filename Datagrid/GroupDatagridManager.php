@@ -38,9 +38,9 @@ class GroupDatagridManager extends DatagridManager
                 'field_name' => 'id',
                 'filter_type' => FilterInterface::TYPE_NUMBER,
                 'required' => false,
-                'sortable' => true,
-                'filterable' => true,
-                'show_filter' => true,
+                'sortable' => false,
+                'filterable' => false,
+                'show_filter' => false,
                 'show_column' => false,
             )
         );
