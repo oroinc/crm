@@ -5,7 +5,6 @@ namespace Oro\Bundle\UserBundle\Controller\Api\Soap;
 use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 
 use Oro\Bundle\SoapBundle\Controller\Api\Soap\SoapController;
-use Oro\Bundle\SoapBundle\Form\Handler\ApiFormHandler;
 use Oro\Bundle\UserBundle\Entity\Role;
 use Oro\Bundle\UserBundle\Annotation\AclAncestor;
 
