@@ -29,7 +29,7 @@ class ProfileController extends BaseController
      * @Soap\Method("getUser")
      * @Soap\Param("id", phpType="int")
      * @Soap\Result(phpType="Oro\Bundle\UserBundle\Entity\User")
-     * @AclAncestor("oro_user_profile_show")
+     * @AclAncestor("oro_user_profile_view")
      */
     public function getAction($id)
     {
@@ -57,7 +57,7 @@ class ProfileController extends BaseController
      * @Soap\Param("id", phpType="int")
      * @Soap\Param("profile", phpType="Oro\Bundle\UserBundle\Entity\UserSoap")
      * @Soap\Result(phpType="boolean")
-     * @AclAncestor("oro_user_profile_edit")
+     * @AclAncestor("oro_user_profile_update")
      */
     public function updateAction($id, $profile)
     {
@@ -124,7 +124,7 @@ class ProfileController extends BaseController
      * @Soap\Method("getUserBy")
      * @Soap\Param("filters", phpType="BeSimple\SoapCommon\Type\KeyValue\String[]")
      * @Soap\Result(phpType="Oro\Bundle\UserBundle\Entity\User")
-     * @AclAncestor("oro_user_profile_show")
+     * @AclAncestor("oro_user_profile_view")
      */
     public function getByAction(array $filters)
     {

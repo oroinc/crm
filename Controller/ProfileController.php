@@ -28,16 +28,16 @@ use Oro\Bundle\UserBundle\Entity\UserManager;
 class ProfileController extends Controller
 {
     /**
-     * @Route("/show/{id}", name="oro_user_show", requirements={"id"="\d+"})
+     * @Route("/view/{id}", name="oro_user_view", requirements={"id"="\d+"})
      * @Template
      * @Acl(
-     *      id="oro_user_profile_show",
+     *      id="oro_user_profile_view",
      *      name="View user profile",
      *      description="View user profile",
      *      parent="oro_user_profile"
      * )
      */
-    public function showAction(User $user)
+    public function viewAction(User $user)
     {
         return array(
             'user' => $user,
@@ -77,7 +77,7 @@ class ProfileController extends Controller
      * Create user form
      *
      * @Route("/create", name="oro_user_create")
-     * @Template("OroUserBundle:Profile:edit.html.twig")
+     * @Template("OroUserBundle:Profile:update.html.twig")
      * @Acl(
      *      id="oro_user_profile_create",
      *      name="Create user profile",
@@ -89,22 +89,22 @@ class ProfileController extends Controller
     {
         $user = $this->getManager()->createFlexible();
 
-        return $this->editAction($user);
+        return $this->updateAction($user);
     }
 
     /**
      * Edit user form
      *
-     * @Route("/edit/{id}", name="oro_user_edit", requirements={"id"="\d+"}, defaults={"id"=0})
+     * @Route("/update/{id}", name="oro_user_update", requirements={"id"="\d+"}, defaults={"id"=0})
      * @Template
      * @Acl(
-     *      id="oro_user_profile_edit",
+     *      id="oro_user_profile_update",
      *      name="Edit user profile",
      *      description="Edit user profile",
      *      parent="oro_user_profile"
      * )
      */
-    public function editAction(User $entity)
+    public function updateAction(User $entity)
     {
         if ($this->get('oro_user.form.handler.profile')->process($entity)) {
             $this->get('session')->getFlashBag()->add('success', 'User successfully saved');

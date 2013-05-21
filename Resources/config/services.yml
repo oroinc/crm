@@ -208,7 +208,6 @@ services:
 
     oro_user.role.listener:
         class:                        %oro_user.role.listener.class%
-        arguments:                    ["@service_container"]
         tags:
             - { name: doctrine.event_listener, event: preUpdate }
 
@@ -237,7 +236,6 @@ services:
     oro_user.status_manager:
         class:                        %oro_user.status.manager.class%
         arguments:                    ["@doctrine.orm.entity_manager", "@oro_user.manager"]
-
 
     oro_user.role_manager:
         class:                        %oro_user.role.manager.class%

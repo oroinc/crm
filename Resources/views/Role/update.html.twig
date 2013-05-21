@@ -1,7 +1,7 @@
 {% extends bap.layout is defined ? bap.layout : 'OroUserBundle::layout.html.twig' %}
 {% form_theme form with 'OroUIBundle:Form:fields.html.twig' %}
 
-{% set title = form.vars.value.id ? 'Edit Role'|trans : 'Add Role'|trans %}
+{% set title = form.vars.value.id ? 'Update Role'|trans : 'Create Role'|trans %}
 {% oro_title_set({params : {"%role%": form.vars.value.label} }) %}
 
 {% block head_script %}
@@ -39,7 +39,7 @@
 {% block page_container %}
 <div class="container-fluid">
     {% block content %}
-    <form action="{{ form.vars.value.id ? path('oro_user_role_edit', { id: form.vars.value.id, back: app.session.get('back') }) : path('oro_user_role_create') }}" method="post" class="form-register form-padding">
+    <form action="{{ form.vars.value.id ? path('oro_user_role_update', { id: form.vars.value.id, back: app.session.get('back') }) : path('oro_user_role_create') }}" method="post" class="form-register form-padding">
             <div class="navigation clearfix navbar-extra">
                 <div class="row">
                     <div class="pull-right">
@@ -78,11 +78,9 @@
                         <div class="container-fluid" style="width: auto;">
                             <ul class="nav">
                                 <li class="active"><a href="#scroll-main">{{ 'Overview'|trans }}</a></li>
+                                <li><a href="#scroll-acl">{{ 'Edit ACL'|trans }}</a></li>
                                 {% if form.vars.value.id %}
                                     <li><a href="#scroll-ussers">{{ 'Users'|trans }}</a></li>
-                                {% endif %}
-                                {% if form.vars.value.id %}
-                                    <li><a href="#scroll-acl">{{ 'Edit ACL'|trans }}</a></li>
                                 {% endif %}
                             </ul>
                         </div>
@@ -102,24 +100,23 @@
                             </div>
                         </div>
 
+                        <div class="usser-row">
+                            <h4 id="scroll-acl" class="scrollspy-title">{{ 'Edit ACL'|trans }}</h4>
+                            <div class="row-fluid">
+                                <fieldset class="form-horizontal">
+                                    <div id="acl_tree">
+                                        {% include 'OroUserBundle:Role:_aclSubTree.html.twig' with {'resources': resources, 'hasId': form.vars.value.id ? true : false} %}
+                                    </div>
+                                </fieldset>
+                            </div>
+                        </div>
+
                         {% if form.vars.value.id %}
                         <div class="usser-row">
                             <h4 id="scroll-ussers" class="scrollspy-title">{{ 'Users'|trans }}</h4>
                             <div class="row-fluid">
                                 <fieldset class="form-horizontal">
                                     <div id="users-grid"></div>
-                                </fieldset>
-                            </div>
-                        </div>
-                        {% endif %}
-                        {% if form.vars.value.id %}
-                        <div class="usser-row">
-                            <h4 id="scroll-acl" class="scrollspy-title">{{ 'Edit ACL'|trans }}</h4>
-                            <div class="row-fluid">
-                                <fieldset class="form-horizontal">
-                                    <div id="acl_tree">
-                                        {% include 'OroUserBundle:Role:_aclSubTree.html.twig' with {'resources': resources} %}
-                                    </div>
                                 </fieldset>
                             </div>
                         </div>

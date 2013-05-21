@@ -6,6 +6,8 @@ use Oro\Bundle\UserBundle\Entity\Acl;
 use Oro\Bundle\UserBundle\Entity\Role;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\UserBundle\Annotation\Acl as AclAnnotation;
+use Symfony\Component\Translation\MessageCatalogue;
+
 
 class ManagerTest extends \PHPUnit_Framework_TestCase
 {
@@ -328,5 +330,33 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($aclWithParent));
 
         $this->manager->saveRoleAcl($this->testRole, $aclResourses);
+    }
+
+    public function testParseAclTokens()
+    {
+        $this->reader->expects($this->once())
+            ->method('getResources')
+            ->will($this->returnValue(array(
+                new AclAnnotation(
+                    array(
+                         'id'          => 'test_acl_1' ,
+                         'name'        => 'name_test_acl_1' ,
+                         'description' => 'description_test 1',
+                    )
+                )
+            )
+        ));
+
+        $this->configApiReader->expects($this->once())
+            ->method('getConfigResources')
+            ->will($this->returnValue(array()));
+
+        $messageCatalogue = new MessageCatalogue('en');
+        $this->manager->parseAclTokens('', $messageCatalogue, null);
+
+        $messages = $messageCatalogue->all();
+
+        $this->assertEquals('name_test_acl_1', $messages['messages']['name_test_acl_1']);
+        $this->assertEquals('description_test 1', $messages['messages']['description_test 1']);
     }
 }

@@ -29,13 +29,19 @@ class Reader
     /**
      * Return array tree with resources
      *
+     * @param string $directory
+     *
      * @return \Oro\Bundle\UserBundle\Annotation\Acl[]
      */
-    public function getResources()
+    public function getResources($directory = '')
     {
-        $directories = $this->getScanDirectories();
-        if (!$directories) {
-            return array();
+        if (!$directory){
+            $directories = $this->getScanDirectories();
+            if (!$directories) {
+                return array();
+            }
+        } else {
+            $directories[] = $directory;
         }
 
         $inTest = false;

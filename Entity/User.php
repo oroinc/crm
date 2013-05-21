@@ -5,6 +5,8 @@ namespace Oro\Bundle\UserBundle\Entity;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
+use Gedmo\Mapping\Annotation as Gedmo;
+
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -25,6 +27,7 @@ use DateTime;
  * @ORM\Entity(repositoryClass="Oro\Bundle\FlexibleEntityBundle\Entity\Repository\FlexibleEntityRepository")
  * @ORM\Table(name="oro_user")
  * @ORM\HasLifecycleCallbacks()
+ * @Gedmo\Loggable(logEntryClass="Oro\Bundle\DataAuditBundle\Entity\Audit")
  */
 class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Serializable, EntityUploadedImageInterface
 {
@@ -46,6 +49,7 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
      * @ORM\Column(type="string", length=255, unique=true)
      * @Soap\ComplexType("string")
      * @Type("string")
+     * @Gedmo\Versioned
      */
     protected $username;
 
@@ -55,6 +59,7 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
      * @ORM\Column(type="string", length=255, unique=true)
      * @Soap\ComplexType("string")
      * @Type("string")
+     * @Gedmo\Versioned
      */
     protected $email;
 
@@ -66,6 +71,7 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
      * @ORM\Column(name="firstname", type="string", length=100, nullable=true)
      * @Soap\ComplexType("string")
      * @Type("string")
+     * @Gedmo\Versioned
      */
     protected $firstName;
 
@@ -77,6 +83,7 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
      * @ORM\Column(name="lastname", type="string", length=100, nullable=true)
      * @Soap\ComplexType("string")
      * @Type("string")
+     * @Gedmo\Versioned
      */
     protected $lastName;
 
@@ -86,6 +93,7 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
      * @ORM\Column(name="birthday", type="datetime", nullable=true)
      * @Soap\ComplexType("dateTime", nillable=true)
      * @Type("dateTime")
+     * @Gedmo\Versioned
      */
     protected $birthday;
 
@@ -114,6 +122,7 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
      * @ORM\Column(type="boolean")
      * @Soap\ComplexType("boolean")
      * @Type("boolean")
+     * @Gedmo\Versioned
      */
     protected $enabled = true;
 
@@ -652,7 +661,9 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
     }
 
     /**
-     * @param string $token New confirmation token
+     * Set confirmation token.
+     *
+     * @param string $token
      * @return User
      */
     public function setConfirmationToken($token)

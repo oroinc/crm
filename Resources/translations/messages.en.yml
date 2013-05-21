@@ -6,15 +6,14 @@ resetting:
     flash:
         success: The password has been reset successfully
 
-"%%username%% - View Profile - User Management": "%%username%% -View Profile - User Management"
-"%%username%% - Edit Profile - User Management": "%%username%% - Edit Profile - User Management"
-"New Profile - User Management": "New Profile - User Management"
+"%%username%% - View profile - User Management": "%%username%% -View profile - User Management"
+"%%username%% - Edit profile - User Management": "%%username%% - Edit profile - User Management"
+"New profile - User Management": "New profile - User Management"
 "Users - User Management": "Users - User Management"
 
-"Edit Role - User Management": "Edit Role - User Management"
-"Roles Overview - User Management": "Roles Overview - User Management"
-"Add Role - User Management": "Add Role - User Management"
-"Roles Overview - User Management": "Roles Overview - User Management"
+"Edit role - User management": "Edit role - User management"
+"Add role - User management": "Add role - User management"
+"Roles - User management": "Roles - User management"
 
 Login: Login
 "User Statuses - User Management": "User Statuses - User Management"
@@ -26,6 +25,9 @@ Login: Login
 
 "Acl Resources - User Management": "Acl Resources - User Management"
 
+"Edit group - User Management": "Edit group - User Management"
+"Add group - User Management": "Add group - User Management"
+"Groups - User Management": "Groups - User Management"
 "Group manipulation": "Group manipulation"
 "Create group": "Create group"
 "Create new group": "Create new group"
@@ -77,7 +79,3 @@ Login: Login
 "Template controller": "Template controller"
 "Actions from template controller": "Actions from template controller"
 "User manipulation": "User manipulation"
-
-"Edit Group - User Management": "Edit Group - User Management"
-"Add Group - User Management": "Add Group - User Management"
-"Groups Overview - User Management": "Groups Overview - User Management"
