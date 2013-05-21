@@ -28,6 +28,24 @@ var jsfv = new function () {
         return (typeof(value) == 'undefined' || null === value || '' === value);
     }
 
+{% block getCollectionElementValue %}
+    function getCollectionElementValue(field) {
+        if ($(field).filter('input[type="checkbox"]').length) {
+            value = $(field).filter(':checked').map(function(i, cb) { return $(cb).val(); }).get();
+        } else if ($('input[type="checkbox"]', field).length) {
+            value = $('input:checked', field).map(function(i, cb) { return $(cb).val(); }).get();
+        } else if ($(field).filter('select').length) {
+            value = $(field).filter('select').val();
+        } else if ($('select', field).length) {
+            value = $('select', field).val();
+        }
+        if (!value) {
+            value = [];
+        }
+        return value;
+    }
+{% endblock %}
+
     function checkError(field, checkFunction, parameters, value) {
         field = jsfv.id(field);
         // Remove old errors of the field

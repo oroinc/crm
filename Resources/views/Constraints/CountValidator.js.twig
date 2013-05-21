@@ -1,19 +1,6 @@
 function Count(field, params)
 {
-    var value = null;
-    if ($(field).filter('input[type="checkbox"]').length) {
-        value = $(field).filter(':checked').map(function(i, cb) { return $(cb).val(); });
-    } else if ($('input[type="checkbox"]', field).length) {
-        value = $('input:checked', field).map(function(i, cb) { return $(cb).val(); });
-    } else if ($(field).filter('select').length) {
-        value = $(field).filter('select').val();
-    } else if ($('select', field).length) {
-        value = $('select', field).val();
-    }
-
-    if (!value) {
-        value = [];
-    }
+    var value = field && field.nodeName ? getCollectionElementValue(field) : field;
 
     if (params['exactMessage'] !== undefined &&
         params['min'] !== undefined && params['max'] !== undefined &&
