@@ -6,15 +6,13 @@
         <title>{{ oro_title_render() }}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-        <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js"></script>
-
         {% block head_style %}
             {% if app.debug %}
                 <script type="text/javascript">localStorage.clear();</script>
                 <link rel="stylesheet/less" media="all" href="{{ asset('bundles/oroui/css/less/main.less') }}" />
                 <script type="text/javascript" src="{{ asset('bundles/oroui/lib/less-1.3.1.min.js') }}"></script>
                 <link rel="stylesheet" media="all" href="{{ asset('bundles/oroui/css/all.css') }}" />
+                <link rel="stylesheet" media="all" href="{{ asset('bundles/oroui/css/jquery-ui.grid.css') }}" />
             {% else %}
                 {% stylesheets
                     'bundles/oroui/css/all.css'
@@ -32,7 +30,7 @@
             {% endoro_css %}
         {% endblock %}
 
-        {% block script %}
+        {% block head_script %}
             {# JS assetics #}
             {% oro_js filter='?yui_js' output='js/oro.all.js' %}
             <script type="text/javascript" src="{{ asset_url }}"></script>
@@ -45,8 +43,8 @@
                 </script>
             {% endif %}
             <!--[if lte IE 9]>
-                <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
                 <link href="{{ asset('bundles/oroui/css/ie.css') }}" rel="stylesheet" media="all" />
+                <script src="{{ asset('bundles/oroui/lib/html5.js') }}"></script>
                 <script src="{{ asset('bundles/oroui/lib/jquery/jquery.placeholder.js') }}"></script>
                 <script type="text/javascript">
                     jQuery(document).ready(function() {
