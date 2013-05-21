@@ -3,8 +3,8 @@ navigation.pinbar = navigation.pinbar || {};
 
 navigation.pinbar.MainView = navigation.MainViewAbstract.extend({
     options: {
-        maxPinbarItems: 10,
-        tabTitle: 'Tabs',
+        maxItems: 10,
+        tabTitle: 'Pinbar',
         tabIcon: 'icon-folder-close',
         el: '.pin-bar',
         listBar: '.list-bar',
@@ -12,7 +12,7 @@ navigation.pinbar.MainView = navigation.MainViewAbstract.extend({
         closeButton: '.top-action-box .close-button',
         history: [],
         defaultUrl: '/',
-        tabId: 'tabs',
+        tabId: 'pinbar',
         collection: navigation.pinbar.Items
     },
 
@@ -35,6 +35,7 @@ navigation.pinbar.MainView = navigation.MainViewAbstract.extend({
 
         this.listenTo(this.options.collection, 'positionChange', this.renderItem);
         this.listenTo(this.options.collection, 'stateChange', this.handleItemStateChange);
+        this.listenTo(this.options.collection, 'urlChange', this.renderItem);
 
         this.$minimizeButton.click(_.bind(this.minimizePage, this));
         this.$closeButton.click(_.bind(this.closePage, this));
@@ -77,12 +78,26 @@ navigation.pinbar.MainView = navigation.MainViewAbstract.extend({
             var url = null;
             if (item.get('maximized')) {
                 url = item.get('url');
+                this.removeFromHistory(item);
+                this.options.history.push(url);
             } else {
                 url = this.getLatestUrl();
             }
+            /**
+             * Add restore param to the url
+             */
+            if (Oro.hashNavigationEnabled() && !_.isUndefined(item.changed) && item.changed.restore) {
+                var itemUrl = item.get('url');
+                if (itemUrl.indexOf('?') !== -1) {
+                    itemUrl += '&restore=1';
+                } else {
+                    itemUrl += '?restore=1';
+                }
+                item.set('url', itemUrl);
+            }
             if (url != this.getCurrentPageItemData().url) {
                 item.save(null, {success: function() {
-                    window.location.href = url;
+                    Oro.Navigation.prototype.setLocation(url);
                 }});
             }
         }
@@ -107,9 +122,8 @@ navigation.pinbar.MainView = navigation.MainViewAbstract.extend({
         this.removeFromHistory(item);
         if (item.get('url') == this.getCurrentPageItemData().url) {
             this.goToLatestOpenedPage();
-        } else {
-            this.reorder();
         }
+        this.reorder();
     },
 
     /**
@@ -117,7 +131,11 @@ navigation.pinbar.MainView = navigation.MainViewAbstract.extend({
      */
     goToLatestOpenedPage: function()
     {
-        window.location.href = this.getLatestUrl();
+        if (Oro.hashNavigationEnabled()) {
+            Oro.Navigation.prototype.setLocation(this.getLatestUrl());
+        } else {
+            window.location.href = this.getLatestUrl();
+        }
     },
 
     /**
@@ -205,7 +223,7 @@ navigation.pinbar.MainView = navigation.MainViewAbstract.extend({
      */
     renderItem: function(item) {
         var position = item.get('position');
-        var type = position >= this.options.maxPinbarItems ? 'tab': 'list';
+        var type = position >= this.options.maxItems ? 'tab': 'list';
 
         if (item.get('display_type') != type) {
             this.cleanup();
@@ -218,6 +236,11 @@ navigation.pinbar.MainView = navigation.MainViewAbstract.extend({
 
             if (type == 'tab') {
                 this.addItemToTab(view, !this.massAdd);
+                /**
+                 * Backbone event. Fired when tab is changed
+                 * @event tab:changed
+                 */
+                Oro.Events.trigger("tab:changed", this.options.tabId);
             } else {
                 var rowEl = view.render().el;
                 if (this.massAdd || position > 0) {
@@ -227,6 +250,15 @@ navigation.pinbar.MainView = navigation.MainViewAbstract.extend({
                 }
             }
         }
+    },
+
+    /**
+     * Checks if pinbar tab in 3 dots menu is used
+     *
+     * @return {Boolean}
+     */
+    needPinbarTab: function() {
+        return (this.options.collection.length > this.options.maxItems);
     },
 
     /**
@@ -250,9 +282,19 @@ navigation.pinbar.MainView = navigation.MainViewAbstract.extend({
             if (this.options.collection.length == 0) {
                 this.requireCleanup = true;
                 this.$listBar.html(this.templates.noItemsMessage());
+                /**
+                 * Backbone event. Fired when pinbar help link is shown
+                 * @event pinbar_help:shown
+                 */
+                Oro.Events.trigger("pinbar_help:shown");
             }
 
             this.checkTabContent();
+            /**
+             * Backbone event. Fired when tab is changed
+             * @event tab:changed
+             */
+            Oro.Events.trigger("tab:changed", this.options.tabId);
         }
     }
 });

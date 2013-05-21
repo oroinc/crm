@@ -17,6 +17,7 @@ parameters:
     oro_navigation.event.response_history.listener.class:      Oro\Bundle\NavigationBundle\Event\ResponseHistoryListener
 
     oro_navigation.menu.matcher.voter.request:                 Oro\Bundle\NavigationBundle\Menu\Matcher\Voter\RequestVoter
+    oro_navigation.menu.matcher.voter.routepattern:            Oro\Bundle\NavigationBundle\Menu\Matcher\Voter\RoutePatternVoter
 
     oro_navigation.title_service.class:                        Oro\Bundle\NavigationBundle\Provider\TitleService
     oro_navigation.title_service.twig.extension.class:         Oro\Bundle\NavigationBundle\Twig\TitleExtension
@@ -27,8 +28,13 @@ parameters:
     oro_navigation.title_service.event.request.listener.class: Oro\Bundle\NavigationBundle\Event\RequestTitleListener
     oro_navigation.translation.extractor.class:                Oro\Bundle\NavigationBundle\Title\TranslationExtractor
 
+    oro_navigation.twig_assets_extension.class:                Oro\Bundle\NavigationBundle\Twig\AssetsConfigExtension
+
     oro_navigation.form.type.pagestate.class:                  Oro\Bundle\NavigationBundle\Form\Type\PageStateType
     oro_navigation.form.handler.pagestate.class:               Oro\Bundle\NavigationBundle\Form\Handler\PageStateHandler
+    oro_navigation.event.response_hashnav.listener.class:      Oro\Bundle\NavigationBundle\Event\ResponseHashnavListener
+
+    oro_navigation.twig_hash_nav_extension.class:              Oro\Bundle\NavigationBundle\Twig\HashNavExtension
 
 services:
     oro_menu.factory:
@@ -145,6 +151,10 @@ services:
         tags:
             - { name: knp_menu.voter, request: true }
 
+    knp_menu.voter.router:
+        class: %oro_navigation.menu.matcher.voter.routepattern%
+        tags:
+            - { name: knp_menu.voter, request: true }
 
     kernel.listener.nav_history_response:
         class: %oro_navigation.event.response_history.listener.class%
@@ -194,8 +204,19 @@ services:
         class: %oro_navigation.translation.extractor.class%
         arguments:
             - @oro_navigation.title_service
+            - @router
         tags:
             - { name: translation.extractor, alias: navigation_translation_extractor }
+
+    oro_navigation.twig.assets_extension:
+        class:        %oro_navigation.twig_assets_extension.class%
+        arguments:
+            - @assetic.asset_factory
+            - %oro_navigation.assets_config%
+            - @templating.name_parser
+            - %assetic.bundles%
+        tags:
+            - { name: twig.extension }
 
     oro_navigation.form.pagestate:
         class:                        Symfony\Component\Form\Form
@@ -212,3 +233,15 @@ services:
         class:                        %oro_navigation.form.handler.pagestate.class%
         scope:                        request
         arguments:                    ["@oro_navigation.form.pagestate", "@request", "@doctrine.orm.entity_manager", "@security.context"]
+
+    kernel.listener.hashnav_response:
+        class: %oro_navigation.event.response_hashnav.listener.class%
+        tags:
+            - { name: kernel.event_listener, event: kernel.response, method: onResponse }
+        arguments:                    [@security.context, @templating]
+
+    oro_navigation.twig.hash_nav_extension:
+        class:        %oro_navigation.twig_hash_nav_extension.class%
+        tags:
+            - { name: twig.extension }
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }

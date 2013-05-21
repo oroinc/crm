@@ -5,7 +5,7 @@ namespace Oro\Bundle\NavigationBundle\Tests\Functional\API;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
-use Acme\Bundle\TestsBundle\Test\ToolsAPI;
+use Oro\Bundle\TestFrameworkBundle\Test\ToolsAPI;
 
 class RestApiTest extends WebTestCase
 {
@@ -69,7 +69,7 @@ class RestApiTest extends WebTestCase
         /** @var $result Response */
         $result = $this->client->getResponse();
 
-        $this->assertJsonResponse($result, 201);
+        ToolsAPI::assertJsonResponse($result, 201);
 
         $resultJson = json_decode($result->getContent(), true);
 
@@ -104,7 +104,7 @@ class RestApiTest extends WebTestCase
         /** @var $result Response */
         $result = $this->client->getResponse();
 
-        $this->assertJsonResponse($result, 200);
+        ToolsAPI::assertJsonResponse($result, 200);
 
         $resultJson = json_decode($result->getContent(), true);
 
@@ -132,7 +132,7 @@ class RestApiTest extends WebTestCase
         /** @var $result Response */
         $result = $this->client->getResponse();
 
-        $this->assertJsonResponse($result, 200);
+        ToolsAPI::assertJsonResponse($result, 200);
         $resultJson = json_decode($result->getContent(), true);
         $this->assertNotEmpty($resultJson);
         $this->assertArrayHasKey('id', $resultJson[0]);
@@ -159,7 +159,7 @@ class RestApiTest extends WebTestCase
         /** @var $result Response */
         $result = $this->client->getResponse();
 
-        $this->assertJsonResponse($result, 204);
+        ToolsAPI::assertJsonResponse($result, 204);
         $this->assertEmpty($result->getContent());
     }
 
@@ -183,7 +183,7 @@ class RestApiTest extends WebTestCase
 
         /** @var $result Response */
         $result = $this->client->getResponse();
-        $this->assertJsonResponse($result, 404);
+        ToolsAPI::assertJsonResponse($result, 404);
 
         $this->client->restart();
 
@@ -196,7 +196,7 @@ class RestApiTest extends WebTestCase
         );
         /** @var $result Response */
         $result = $this->client->getResponse();
-        $this->assertJsonResponse($result, 404);
+        ToolsAPI::assertJsonResponse($result, 404);
     }
 
     /**
@@ -255,7 +255,7 @@ class RestApiTest extends WebTestCase
             /** @var $response Response */
             $response = $this->client->getResponse();
 
-            $this->assertJsonResponse($response, 400);
+            ToolsAPI::assertJsonResponse($response, 400);
 
             $responseJson = json_decode($response->getContent(), true);
 
@@ -264,23 +264,5 @@ class RestApiTest extends WebTestCase
 
             $this->client->restart();
         }
-    }
-
-    /**
-     * Test API response status
-     *
-     * @param Response $response
-     * @param int      $statusCode
-     */
-    protected function assertJsonResponse($response, $statusCode = 200)
-    {
-        $this->assertEquals(
-            $statusCode,
-            $response->getStatusCode()
-        );
-
-        $this->assertTrue(
-            $response->headers->contains('Content-Type', 'application/json')
-        );
     }
 }

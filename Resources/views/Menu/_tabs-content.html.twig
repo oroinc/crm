@@ -12,7 +12,10 @@
             {% set showNonAuthorized = item.extras.showNonAuthorized is defined and item.extras.showNonAuthorized %}
             {% set displayable = item.extras.isAllowed or showNonAuthorized %}
             {% if displayable and item.hasChildren and item.displayChildren %}
-                <div class="tab-pane {% if matcher.isAncestor(item, 2) %}{{ options.ancestorClass }}{% endif %}"
+                {% set tabClasses = ['tab-pane'] %}
+                {% set tabClasses = matcher.isAncestor(item, 2) ? tabClasses|merge([options.ancestorClass]) : tabClasses %}
+                {% set tabClasses = matcher.isCurrent(item) ? tabClasses|merge([options.currentClass]) : tabClasses %}
+                <div class="{{ tabClasses|join(' ')  }}"
                      id="{{- item.name|replace({' ': '_', '#': '_'})|lower|trim -}}">
                     {{ block('list') -}}
                 </div>

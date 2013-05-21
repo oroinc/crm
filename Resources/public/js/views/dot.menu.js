@@ -19,6 +19,25 @@ navigation.dotMenu.MainView = Backbone.View.extend({
     initialize: function() {
         this.$tabsContainer = this.$('.nav-tabs');
         this.$tabsContent = this.$('.tab-content');
+        this.init();
+        Oro.Events.bind(
+            "hash_navigation_request:complete",
+            function() {
+                this.init();
+            },
+            this
+        );
+        Oro.Events.bind(
+            "tab:changed",
+            function(tabId) {
+                this.chooseActiveTab(tabId);
+            },
+            this
+        );
+        this.chooseActiveTab();
+    },
+
+    init: function() {
         this.$tabsContent.find('.menu-close').click(_.bind(this.close, this));
     },
 
@@ -38,7 +57,7 @@ navigation.dotMenu.MainView = Backbone.View.extend({
         }
 
         data.$tabContentContainer = data.$tabContent.find('ul');
-        this.tabs[data.key] = data;
+        this.tabs[data.key] = _.clone(data);
     },
 
     getTab: function(key) {
@@ -66,6 +85,11 @@ navigation.dotMenu.MainView = Backbone.View.extend({
                 this.getTab(tabKey).$tabContentContainer.append(el);
             }
         }
+        /**
+         * Backbone event. Fired when item is added to menu
+         * @event navigaion_item:added
+         */
+        Oro.Events.trigger("navigaion_item:added", el);
     },
 
     cleanup: function(tabKey) {
@@ -78,6 +102,45 @@ navigation.dotMenu.MainView = Backbone.View.extend({
             this.hideTab(tabKey);
         } else {
             this.showTab(tabKey);
+        }
+    },
+
+    /**
+     * Checks if first tab in 3 dots menu is empty
+     *
+     * @return {*Boolean}
+     */
+    isFirstTabEmpty: function() {
+        return this.$tabsContent.children().first() &&
+            (!this.$tabsContent.children().first().html().trim() ||
+            !this.$tabsContent.children().first().find('ul').html());
+    },
+
+    /**
+     * Set default tab as active based on config class
+     */
+    setDefaultNonEmptyTab: function() {
+        this.$('.show-if-empty a').tab('show');
+    },
+
+    /**
+     * Set active dots menu tab.
+     *
+     * @param tabId
+     */
+    chooseActiveTab: function(tabId) {
+        if (_.isUndefined(tabId)) {
+            if (this.isFirstTabEmpty()) {
+                this.setDefaultNonEmptyTab()
+            }
+        } else {
+            if (this.getTab(tabId).$tab.index() == 0) {
+                if (!this.isTabEmpty(tabId)) {
+                    this.tabs[tabId].$tab.find('a').tab('show');
+                } else {
+                    this.setDefaultNonEmptyTab();
+                }
+            }
         }
     },
 
@@ -101,6 +164,7 @@ navigation.dotMenu.MainView = Backbone.View.extend({
 
     close: function() {
         this.$el.parents('.open').removeClass('open');
+        return false;
     }
 });
 

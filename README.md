@@ -9,6 +9,8 @@ ACL implementation from Oro UserBundle.
 * [Installation](#installation)
 * [Your first menu](#first-menu)
 * [Rendering Menus](#rendering-menus)
+* [Work with assets](#work-with-assets)
+* [Hash Navigation](#hash-navigation)
 
 <a name="installation"></a>
 
@@ -42,6 +44,11 @@ public function registerBundles()
 ```
 
 <a name="first-menu"></a>
+
+### Step 3) Initialize Page Titles
+```
+php app/console oro:navigation:init
+```
 
 ## Your first menu
 
@@ -146,6 +153,27 @@ options via sorting bundles in AppKernel.php.
 
 <a name="rendering-menus"></a>
 
+### Page Titles
+
+Navigation bundle helps to manage page titles for all routes and supports titles translation.
+Rout titles can be defined in navigation.yml file:
+```yaml
+oro_titles:
+    route_name_1: "%%parameter%% - Title"
+    route_name_2: "Edit %%parameter%% record"
+    route_name_3: "Static title"
+```
+
+Title can be defined with annotation together with route annotation:
+```
+@TitleTemplate("Route title with %%parameter%%")
+```
+
+After titles update following command should be executed:
+```
+php app/console oro:navigation:init
+```
+
 ## Rendering Menus
 
 To use configuration loaded from YAML files during render menu, twig-extension with template method oro_menu_render
@@ -159,3 +187,99 @@ arguments and call KmpMenu renderer with the resulting options.
     {{ oro_menu_render('navbar', array('template' => 'SomeUserBundle:Menu:customdesign.html.twig')) }}
 {% endblock content %}
 ```
+
+<a name="work-with-assets"></a>
+
+## Work with assets
+
+To implement hashtag navigation we must all basic javascript and css files was loaded in main template.
+To do this, each bundle can has config file assets.yml with the list of js and css files.
+
+```yaml
+js:
+  - '@Path/To/Js/first.js'
+  - '@Path/To/Js/second.js'
+  - '@Path/To/Js/third.js'
+css:
+  - '@Path/To/Css/first.css'
+  - '@Path/To/Css/second.css'
+  - '@Path/To/Css/third.css'
+```
+
+In main template must be added the next tags:
+
+```
+    {% oro_js filter='array with filters' output='js/name_of_output_file.js' %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endoro_js %}
+    {% oro_css filter='array with filters' output='css/name_of_output_file.css' %}
+        <link rel="stylesheet" media="all" href="{{ asset_url }}" />
+    {% endoro_css %}
+```
+This tags is the same as assettics "javascripts" and "stylesheets" tags but without list of files.
+
+When you run dump assets command, files from config files will be minimized and converted due the filters array.
+
+<a name="hash-navigation"></a>
+
+## Hashtag Navigation
+
+To simplify site navigation and make it work without full page reloads hashtag navigation is implemented.
+
+To enable hashtag navigation, we need to follow next steps:
+
+* In main layout template additional check must be added, so it should look like:
+
+```
+{% if not oro_is_hash_navigation() %}
+<!DOCTYPE html>
+<html>
+...
+[content]
+...
+</html>
+{% else %}
+{# Template for hash tag navigation#}
+{% include 'OroNavigationBundle:HashNav:hashNavAjax.html.twig'
+    with {'script': block('head_script'), 'messages':block('messages'), 'content': block('page_container')}
+%}
+{% endif %}
+```
+
+where
+
+block('head_script') - block with additional javascripts
+
+block('messages') - block with system messages
+
+block('page_container') - content area block (without header/footer), that will be realoaded during navigation
+
+* This code must be added at the end of head section of main layout template:
+
+```
+      <script type="text/javascript">
+            $(function() {
+                if (Oro.hashNavigationEnabled()) {
+                    new Oro.Navigation({baseUrl : '{{ app.request.getSchemeAndHttpHost() }}'});
+                    Backbone.history.start();
+                }
+            })
+      </script>
+```
+
+* To exclude links from processing with hash navigation (like windows open buttons, delete links), additional css class
+"no-hash" should be added to the tag, e.g.
+
+```
+      <a href="page-url" class="no-hash">
+```
+
+* To make tag open back url generated with YsTools/BackUrlBundle, additional css class "back" should be added,
+e.g.
+
+```
+      <a href="/some-back-url" class="back">
+```
+
+As a part of hashtag navigation, form submit is also processed with Ajax.
+

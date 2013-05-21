@@ -6,7 +6,7 @@ navigation.favorites.MainView = navigation.MainViewAbstract.extend({
         el: '.favorite-button',
         tabTitle: 'Favorites',
         tabIcon: 'icon-star-empty',
-        tabId: 'favorites'
+        tabId: 'favorite'
     },
 
     events: {
@@ -24,6 +24,16 @@ navigation.favorites.MainView = navigation.MainViewAbstract.extend({
 
         this.registerTab();
         this.cleanupTab();
+        /**
+         * Render links in favorites menu after hash navigation request is completed
+         */
+        Oro.Events.bind(
+            "hash_navigation_request:complete",
+            function() {
+                this.render();
+            },
+            this
+        );
     },
 
     activate: function() {
@@ -62,6 +72,11 @@ navigation.favorites.MainView = navigation.MainViewAbstract.extend({
         } else {
             this.inactivate();
         }
+        /**
+         * Backbone event. Fired when tab is changed
+         * @event tab:changed
+         */
+        Oro.Events.trigger("tab:changed", this.options.tabId);
         return this;
     }
 });
