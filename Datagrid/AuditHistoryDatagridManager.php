@@ -14,11 +14,17 @@ use Oro\Bundle\GridBundle\Filter\FilterInterface;
 use Oro\Bundle\GridBundle\Property\TwigTemplateProperty;
 use Oro\Bundle\GridBundle\Datagrid\ProxyQueryInterface;
 use Oro\Bundle\GridBundle\Sorter\SorterInterface;
+use Oro\Bundle\GridBundle\Datagrid\ParametersInterface;
 
 use Oro\Bundle\DataAuditBundle\Datagrid\AuditDatagridManager;
 
 class AuditHistoryDatagridManager extends AuditDatagridManager
 {
+    /**
+     * @var ParametersInterface
+     */
+    protected $parameters;
+
     /**
      * {@inheritDoc}
      */
@@ -59,7 +65,7 @@ class AuditHistoryDatagridManager extends AuditDatagridManager
         $fieldsCollection->add($fieldLogged);
 
         $fieldDataOld = new FieldDescription();
-        $fieldDataOld->setName('data');
+        $fieldDataOld->setName('old');
         $fieldDataOld->setOptions(
             array(
                 'type'        => FieldDescriptionInterface::TYPE_HTML,
@@ -80,10 +86,10 @@ class AuditHistoryDatagridManager extends AuditDatagridManager
         $fieldsCollection->add($fieldDataOld);
 
         $fieldDataNew = new FieldDescription();
-        $fieldDataNew->setName('data2');
+        $fieldDataNew->setName('new');
         $fieldDataNew->setOptions(
             array(
-                'type'        => FieldDescriptionInterface::TYPE_TEXT,
+                'type'        => FieldDescriptionInterface::TYPE_HTML,
                 'label'       => 'New values',
                 'field_name'  => 'data',
                 'filter_type' => FilterInterface::TYPE_STRING,
@@ -95,7 +101,7 @@ class AuditHistoryDatagridManager extends AuditDatagridManager
         );
         $templateDataNewProperty = new TwigTemplateProperty(
             $fieldDataNew,
-            'OroDataAuditBundle:Datagrid:Property/data.html.twig'
+            'OroDataAuditBundle:Datagrid:Property/new.html.twig'
         );
         $fieldDataNew->setProperty($templateDataNewProperty);
         $fieldsCollection->add($fieldDataNew);
@@ -109,5 +115,33 @@ class AuditHistoryDatagridManager extends AuditDatagridManager
         return array(
             'logged' => SorterInterface::DIRECTION_DESC
         );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setParameters(ParametersInterface $parameters)
+    {
+        $this->parameters = $parameters;
+
+        $this->parameters->set(ParametersInterface::PAGER_PARAMETERS, 5);
+    }
+
+    /**
+     * @return ProxyQueryInterface
+     */
+    protected function createQuery()
+    {
+        $query = parent::createQuery();
+
+        /**
+         * TODO
+         *  add default filter by ENTITY
+         *  change per page values
+         *
+         */
+
+
+        return $query;
     }
 }
