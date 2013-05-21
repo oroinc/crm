@@ -31,6 +31,7 @@ parameters:
     oro_user.group.manager.class:     Oro\Bundle\UserBundle\Entity\Manager\GroupManager
     oro_user.attribute_type.user.class: Oro\Bundle\UserBundle\AttributeType\UserType
     oro_user.form.type.user_select.class: Oro\Bundle\UserBundle\Form\Type\UserSelectType
+    oro_user.entity_with_image.subscriber.class: Oro\Bundle\UserBundle\Entity\EventListener\UploadedImageSubscriber
 
 services:
     oro_user.manager.flexible:
@@ -258,3 +259,10 @@ services:
             - "oro_user_select"
         tags:
             - { name: oro_flexibleentity.attributetype, alias: oro_user_attribute_user }
+
+    oro_user.entity_with_image.subscriber:
+        class: %oro_user.entity_with_image.subscriber.class%
+        arguments:
+            - %kernel.root_dir%
+        tags:
+            - { name: doctrine.event_subscriber }
