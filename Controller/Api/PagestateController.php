@@ -140,7 +140,10 @@ class PagestateController extends FOSRestController implements ClassResourceInte
      */
     public function getCheckidAction()
     {
-        $entity = $this->getDoctrine()->getRepository('OroNavigationBundle:PageState')->findOneByPageId($this->getRequest()->get('pageId'));
+        $entity = $this
+            ->getDoctrine()
+            ->getRepository('OroNavigationBundle:PageState')
+            ->findOneByPageHash(PageState::generateHash($this->getRequest()->get('pageId')));
 
         return $this->handleView($this->view($this->getState($entity), Codes::HTTP_OK));
     }
@@ -176,7 +179,7 @@ class PagestateController extends FOSRestController implements ClassResourceInte
         return array(
             'id' => $entity ? $entity->getId() : null,
             'pagestate' => array(
-                'data' => $entity ? $entity->getData() : '',
+                'data'   => $entity ? $entity->getData() : '',
                 'pageId' => $entity ? $entity->getPageId() : ''
             )
         );
