@@ -19,6 +19,7 @@ services:
         class:     %oro_grid.builder.datagrid.class%
         arguments:
             - @form.factory
+            - @event_dispatcher
             - @oro_grid.filter.factory
             - @oro_grid.sorter.factory
             - @oro_grid.action.factory

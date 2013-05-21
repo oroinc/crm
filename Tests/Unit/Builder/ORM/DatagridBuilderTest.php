@@ -52,17 +52,21 @@ class DatagridBuilderTest extends \PHPUnit_Framework_TestCase
     protected function initializeDatagridBuilder($arguments = array())
     {
         $defaultArguments = array(
-            'formFactory'   => $this->getMockForAbstractClass('Symfony\Component\Form\FormFactoryInterface'),
-            'filterFactory' => $this->getMockForAbstractClass('Oro\Bundle\GridBundle\Filter\FilterFactoryInterface'),
-            'sorterFactory' => $this->getMockForAbstractClass('Oro\Bundle\GridBundle\Sorter\SorterFactoryInterface'),
-            'actionFactory' => $this->getMockForAbstractClass('Oro\Bundle\GridBundle\Action\ActionFactoryInterface'),
-            'className'     => null,
+            'formFactory'     => $this->getMockForAbstractClass('Symfony\Component\Form\FormFactoryInterface'),
+            'eventDispatcher' => $this->getMockForAbstractClass(
+                'Symfony\Component\EventDispatcher\EventDispatcherInterface'
+            ),
+            'filterFactory'   => $this->getMockForAbstractClass('Oro\Bundle\GridBundle\Filter\FilterFactoryInterface'),
+            'sorterFactory'   => $this->getMockForAbstractClass('Oro\Bundle\GridBundle\Sorter\SorterFactoryInterface'),
+            'actionFactory'   => $this->getMockForAbstractClass('Oro\Bundle\GridBundle\Action\ActionFactoryInterface'),
+            'className'       => null,
         );
 
         $arguments = array_merge($defaultArguments, $arguments);
 
         $this->model = new DatagridBuilder(
             $arguments['formFactory'],
+            $arguments['eventDispatcher'],
             $arguments['filterFactory'],
             $arguments['sorterFactory'],
             $arguments['actionFactory'],
@@ -297,6 +301,12 @@ class DatagridBuilderTest extends \PHPUnit_Framework_TestCase
             ->method('createNamedBuilder')
             ->with(self::TEST_ENTITY_NAME, 'form', array(), array('csrf_protection' => false))
             ->will($this->returnValue($formBuilderMock));
+        $eventDispatcherMock = $this->getMockForAbstractClass(
+            'Symfony\Component\EventDispatcher\EventDispatcherInterface',
+            array(),
+            '',
+            false
+        );
 
         // datagrid input parameters
         $proxyQueryMock= $this->getMockForAbstractClass('Oro\Bundle\GridBundle\Datagrid\ProxyQueryInterface');
@@ -306,7 +316,11 @@ class DatagridBuilderTest extends \PHPUnit_Framework_TestCase
 
         // test datagrid
         $this->initializeDatagridBuilder(
-            array('formFactory' => $formFactoryMock, 'className' => self::DATAGRID_CLASS)
+            array(
+                'formFactory' => $formFactoryMock,
+                'eventDispatcher' => $eventDispatcherMock,
+                'className' => self::DATAGRID_CLASS
+            )
         );
 
         $datagrid = $this->model->getBaseDatagrid(
@@ -322,6 +336,7 @@ class DatagridBuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertAttributeEquals($proxyQueryMock, 'query', $datagrid);
         $this->assertAttributeEquals($fieldDescriptionCollection, 'columns', $datagrid);
         $this->assertAttributeEquals($formBuilderMock, 'formBuilder', $datagrid);
+        $this->assertAttributeEquals($eventDispatcherMock, 'eventDispatcher', $datagrid);
         $this->assertAttributeEquals($routeGeneratorMock, 'routeGenerator', $datagrid);
         $this->assertAttributeEquals($parametersMock, 'parameters', $datagrid);
         $this->assertAttributeEquals(self::TEST_ENTITY_NAME, 'name', $datagrid);

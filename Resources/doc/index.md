@@ -20,6 +20,7 @@ OroGridBundle Documentation
     - [Actions](./reference/backend/actions.md)
     - [Parameters](./reference/backend/parameters.md)
     - [Route Generator](./reference/backend/route-generator.md)
+    - [Events](./reference/backend/events.md)
 - **Frontend Architecture**
     - [Overview](./reference/frontend/overview.md)
     - [Backbone Developer Introduction](./reference/frontend/backbone-developer-introduction.md)

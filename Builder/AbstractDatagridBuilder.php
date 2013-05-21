@@ -3,6 +3,7 @@
 namespace Oro\Bundle\GridBundle\Builder;
 
 use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 use Oro\Bundle\GridBundle\Field\FieldDescriptionInterface;
 use Oro\Bundle\GridBundle\Field\FieldDescriptionCollection;
@@ -22,6 +23,11 @@ abstract class AbstractDatagridBuilder implements DatagridBuilderInterface
      * @var FilterFactoryInterface
      */
     protected $filterFactory;
+
+    /**
+     * @var EventDispatcherInterface
+     */
+    protected $eventDispatcher;
 
     /**
      * @var SorterFactoryInterface
@@ -45,6 +51,7 @@ abstract class AbstractDatagridBuilder implements DatagridBuilderInterface
 
     /**
      * @param FormFactoryInterface $formFactory
+     * @param EventDispatcherInterface $eventDispatcher
      * @param FilterFactoryInterface $filterFactory
      * @param SorterFactoryInterface $sorterFactory
      * @param ActionFactoryInterface $actionFactory
@@ -52,16 +59,18 @@ abstract class AbstractDatagridBuilder implements DatagridBuilderInterface
      */
     public function __construct(
         FormFactoryInterface $formFactory,
+        EventDispatcherInterface $eventDispatcher,
         FilterFactoryInterface $filterFactory,
         SorterFactoryInterface $sorterFactory,
         ActionFactoryInterface $actionFactory,
         $className
     ) {
-        $this->formFactory   = $formFactory;
-        $this->filterFactory = $filterFactory;
-        $this->sorterFactory = $sorterFactory;
-        $this->actionFactory = $actionFactory;
-        $this->className     = $className;
+        $this->formFactory     = $formFactory;
+        $this->eventDispatcher = $eventDispatcher;
+        $this->filterFactory   = $filterFactory;
+        $this->sorterFactory   = $sorterFactory;
+        $this->actionFactory   = $actionFactory;
+        $this->className       = $className;
     }
 
     /**
@@ -156,6 +165,7 @@ abstract class AbstractDatagridBuilder implements DatagridBuilderInterface
             $formBuilder,
             $routeGenerator,
             $parameters,
+            $this->eventDispatcher,
             $name,
             $entityHint
         );
