@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\FlexibleEntityBundle\Form\EventListener;
 
+use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityFlexibleValue;
 use Oro\Bundle\FlexibleEntityBundle\Model\AbstractFlexibleValue;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
