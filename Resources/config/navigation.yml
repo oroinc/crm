@@ -8,6 +8,8 @@ oro_menu_config:
         account_list:
             label: 'Accounts'
             route: 'oro_account_index'
+            extras:
+                routes: ['oro_account_*']
 
         shortcut_new_account:
             label: Create New Account
