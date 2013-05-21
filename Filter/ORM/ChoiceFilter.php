@@ -42,7 +42,7 @@ class ChoiceFilter extends AbstractFilter
     {
         if (!is_array($data)
             || !array_key_exists('value', $data)
-            || ($data['value'] === '')
+            || $data['value'] === ''
             || is_null($data['value'])
         ) {
             return false;
