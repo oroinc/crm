@@ -106,10 +106,11 @@ class RoleController extends SoapController
      *
      * @param int    $id       Role id
      * @param string $resource ACL resource id
+     * @return string
      *
      * @Soap\Method("addAclToRole")
      * @Soap\Param("id", phpType="int")
-     * @Soap\Param("resource", phpType="string")
+         * @Soap\Param("resource", phpType="string")
      * @Soap\Result(phpType="string")
      * @AclAncestor("oro_user_acl_save")
      */
@@ -125,6 +126,7 @@ class RoleController extends SoapController
      *
      * @param int    $id       Role id
      * @param string $resource ACL resource id
+     * @return string
      *
      * @Soap\Method("removeAclFromRole")
      * @Soap\Param("id", phpType="int")
@@ -144,6 +146,7 @@ class RoleController extends SoapController
      *
      * @param int   $id        Role id
      * @param array $resources Array of ACL resource ids
+     * @return string
      *
      * @Soap\Method("addAclsToRole")
      * @Soap\Param("id", phpType="int")
@@ -163,6 +166,7 @@ class RoleController extends SoapController
      *
      * @param int   $id        Role id
      * @param array $resources Array of ACL resource ids
+     * @return string
      *
      * @Soap\Method("removeAclsFromRole")
      * @Soap\Param("id", phpType="int")
@@ -172,7 +176,7 @@ class RoleController extends SoapController
      */
     public function deleteAclsAction($id, $resources)
     {
-        $this->getAclManager()->modifysForRole($id, $resources, false);
+        $this->getAclManager()->modifyAclForRole($id, $resources, false);
 
         return '';
     }
