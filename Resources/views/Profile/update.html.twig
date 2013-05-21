@@ -15,7 +15,7 @@
                 <div class="pull-right">
                     <div class="pull-right">
                         <div class="pull-left btn-group icons-holder">
-                            {% if form.vars.value.id and resource_granted('oro_user_profile_remove') %}
+                            {% if form.vars.value.id and resource_granted('oro_user_profile_delete') %}
                                 <a href="javascript: void(0);" class="btn icons-holder-text" id="btn-remove-profile" data-id="{{ form.vars.value.id }}" data-message="{{ 'Are you sure you want to delete this profile?'|trans }}" title="{{ 'Delete profile'|trans }}"><i class="icon-trash hide-text">{{ 'Remove'|trans }}</i>Delete</a>
                             {% endif %}
                         </div>
