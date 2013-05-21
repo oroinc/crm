@@ -394,7 +394,7 @@ Oro.Navigation = Backbone.Router.extend({
 
             var url = '';
             url = $(target).attr('action');
-            this.method = $(target).attr('method');
+            this.method = $(target).attr('method') ? $(target).attr('method') : "get";
 
             if (url) {
                 var data = $(target).serialize();
@@ -413,7 +413,6 @@ Oro.Navigation = Backbone.Router.extend({
                             this.afterRequest();
                         }, this),
                         success: _.bind(function (data) {
-                            this.setLocation(url);
                             this.handleResponse(data);
                             this.afterRequest();
                         }, this)
