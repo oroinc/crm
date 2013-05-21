@@ -68,7 +68,7 @@
 {% block form_buttons %}
     {% if form.vars.value.id and resource_granted('oro_account_account_remove') %}
     <div class="pull-left btn-group icons-holder">
-        <a href="javascript: void(0);" class="btn icons-holder-text remove-button" id="btn-remove-account"
+        <a href="javascript: void(0);" class="btn icons-holder-text no-hash remove-button" id="btn-remove-account"
            data-id="{{ form.vars.value.id }}"
            data-url="{{ path('oro_api_delete_account', {'id': form.vars.value.id}) }}"
            data-redirect="{{ path('oro_account_index') }}"
