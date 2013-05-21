@@ -8,6 +8,7 @@ use Oro\Bundle\GridBundle\Property\TwigTemplateProperty;
 class TwigTemplatePropertyTest extends \PHPUnit_Framework_TestCase
 {
     const TEST_FIELD_NAME        = 'test_field_name';
+    const TEST_DB_FIELD_NAME     = 'test_db_field_name';
     const TEST_FIELD_VALUE       = 'test_field_value';
     const TEST_TEMPLATE_NAME     = 'test_template_name';
     const TEST_RENDERED_TEMPLATE = 'test_rendered template';
@@ -26,6 +27,7 @@ class TwigTemplatePropertyTest extends \PHPUnit_Framework_TestCase
     {
         $this->fieldDescription = new FieldDescription();
         $this->fieldDescription->setName(self::TEST_FIELD_NAME);
+        $this->fieldDescription->setFieldName(self::TEST_DB_FIELD_NAME);
 
         $this->property = new TwigTemplateProperty($this->fieldDescription, self::TEST_TEMPLATE_NAME);
     }
@@ -62,7 +64,7 @@ class TwigTemplatePropertyTest extends \PHPUnit_Framework_TestCase
         );
         $record->expects($this->any())
             ->method('getValue')
-            ->with(self::TEST_FIELD_NAME)
+            ->with(self::TEST_DB_FIELD_NAME)
             ->will($this->returnValue(self::TEST_FIELD_VALUE));
 
         $template = $this->getMockForAbstractClass(
