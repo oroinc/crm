@@ -6,7 +6,7 @@ parameters:
     oro_grid.orm.query_factory.query.class:  Oro\Bundle\GridBundle\Datagrid\ORM\QueryFactory\QueryFactory
 
     oro_grid.builder.datagrid.class:         Oro\Bundle\GridBundle\Builder\ORM\DatagridBuilder
-    oro_grid.builder.list.class:             Oro\Bundle\GridBundle\Builder\ORM\ListBuilder
+    oro_grid.builder.list.class:             Oro\Bundle\GridBundle\Builder\ListBuilder
 
     oro_grid.filter.factory.class:           Oro\Bundle\GridBundle\Filter\FilterFactory
     oro_grid.sorter.factory.class:           Oro\Bundle\GridBundle\Sorter\SorterFactory

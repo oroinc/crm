@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\GridBundle\Builder\ORM;
+namespace Oro\Bundle\GridBundle\Builder;
 
 use Oro\Bundle\GridBundle\Builder\ListBuilderInterface;
 use Oro\Bundle\GridBundle\Field\FieldDescriptionCollection;
