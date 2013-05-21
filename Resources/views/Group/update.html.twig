@@ -20,27 +20,111 @@
     {% endif %}
 {% endblock %}
 
-{% block page_container %}
+{% block form_buttons %}
+    <div class="pull-left customer-info-top-actions">
+        <div class="btn-group">
+            <a href="{{ app.session.get('back') ? app.session.get('back') : path('oro_account_index') }}" class="btn back">{{ 'Cancel'|trans }}</a>
+        </div>
+        <button type="submit" class="btn btn-success">{{ ' Save'|trans }}</button>
+    </div>
+{% endblock %}
+
+{% block content %}
 <div class="container-fluid">
-    {% block content %}
-    <form action="{{ form.vars.value.id ? path('oro_contact_group_update', { id: form.vars.value.id }) : path('oro_contact_group_create') }}" method="post" class="form-register">
-        <fieldset>
-            <legend>{{ title }}</legend>
+    <form action="{{ form.vars.value.id ? path('oro_contact_group_update', { id: form.vars.value.id, back: app.session.get('back') }) : path('oro_contact_group_create', { back: app.session.get('back') }) }}" {{ form_enctype(form) }} method="post" data-collect="true" class="form-register">
+        <div class="navigation clearfix navbar-extra">
+            <div class="row">
+                <div class="pull-right">
+                    <div class="pull-right">
+                        {{ block('form_buttons') }}
+                    </div>
+                </div>
 
-            {{ form_widget(form.appendContacts, {'id': 'groupAppendContacts'}) }}
-            {{ form_widget(form.removeContacts, {'id': 'groupRemoveContacts'}) }}
-            {{ form_rest(form) }}
-
-            {% if form.vars.value.id %}
-                {{ 'Contacts'|trans }}
-                <div id="contacts-grid"></div>
-            {% endif %}
-
-            <div class="form-row">
-                <button class="btn btn-large btn-primary" type="submit">{{ 'Save'|trans }}</button>
+                {% if form.vars.value.id %}
+                    <div class="pull-left">
+                        <div class="customer-info well-small">
+                            <div class="customer-content pull-left">
+                                <div class="clearfix-oro">
+                                    <div class="sub-title">{{ title }}</div>
+                                    <span class="separator">/</span>
+                                    <h1 class="usser-name">{{ form.vars.value.name|default('N/A') }}</h1>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="pull-left">
+                        <div class="customer-info well-small">
+                            <div class="customer-content">
+                                <h1 class="usser-name">{{ title }}</h1>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
             </div>
-        </fieldset>
+        </div>
+
+        <div class="layout-content">
+            <div id="navbarExample" class="navbar navbar-static scrollspy-nav">
+                <div class="navbar-inner">
+                    <div class="container-fluid" style="width: auto;">
+                        <ul class="nav">
+                            <li class="active"><a href="#scroll-main">{{ 'Overview'|trans }}</a></li>
+                            {% if form.vars.value.id %}
+                                <li><a href="#scroll-attributes">{{ 'Contacts'|trans }}</a></li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="clearfix">
+                {% if form_errors(form) %}
+                    <div class="customer-info-actions container-fluid well-small">
+                        <div class="pull-left alert alert-error">
+                            <button class="close" type="button" data-dismiss="alert">×</button>
+                            {{ form_errors(form) }}
+                        </div>
+                    </div>
+                {% endif %}
+                <div data-spy="scroll" data-target="#navbarExample" data-offset="50" class="scrollspy container-fluid">
+                    <div class="usser-row">
+                        <h4 id="scroll-main" class="scrollspy-title">{{ 'Overview'|trans }}</h4>
+                        <div class="row-fluid row-fluid-divider">
+                            <fieldset class="form-horizontal span6">
+                                <h5 class="usser-fiedset"><span>{{ 'Basic Information'|trans }}</span></h5>
+                                {{ form_row(form.name) }}
+                            </fieldset>
+                        </div>
+                    </div>
+
+                    {% if form.vars.value.id %}
+                        <div class="usser-row">
+                            <h4 id="scroll-attributes" class="scrollspy-title">{{ 'Contacts'|trans }}</h4>
+                            <div class="row-fluid">
+                                <fieldset class="form-horizontal" id="attributes-list">
+                                    {{ form_widget(form.appendContacts, {'id': 'groupAppendContacts'}) }}
+                                    {{ form_widget(form.removeContacts, {'id': 'groupRemoveContacts'}) }}
+                                    {{ form_rest(form) }}
+
+                                    <div id="contacts-grid"></div>
+                                </fieldset>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    <div class="hide">
+                        {{ form_rest(form) }}
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+        </div>
     </form>
-    {% endblock %}
 </div>
 {% endblock %}
+
