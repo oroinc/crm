@@ -6,27 +6,6 @@
  * @copyright 2012 Akeneo SAS (http://www.akeneo.com)
  * @license   http://opensource.org/licenses/MIT  MIT
  *
- * Right now needs the following configuration on the json_data plugin, in order
- * to have a working root node which text and id will be replaced by the data from
- * the selected tree.
- *  "json_data" : {
- *      "data" : [
- *          {
- *              "data": "Loading root...",
- *              "state": "closed",
- *              "attr" : { "id" : "node_1"}
- *          }
- *      ],
- *      "ajax" : {
- *          "url" : "children",
- *          "data" : function (node) {
- *              return {
- *                  "id" : node.attr("id").replace('node_','')
- *              };
- *          }
- *      }
- *  }
- */
 /* Group: jstree tree_selector plugin */
 (function ($) {
     var tree_select_id = "tree_select";
