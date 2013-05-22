@@ -1,4 +1,6 @@
 js:
+  - '@OroUIBundle/Resources/public/lib/jquery.min.js'
+  - '@OroUIBundle/Resources/public/lib/jquery-ui.min.js'
   - '@OroUIBundle/Resources/public/lib/base64.js'
   - '@OroUIBundle/Resources/public/lib/underscore.js'
   - '@OroUIBundle/Resources/public/lib/backbone.js'
@@ -13,8 +15,10 @@ js:
   - '@OroUIBundle/Resources/public/lib/bootstrap/js/bootstrap.switch.js'
 
   - '@OroUIBundle/Resources/public/js/layout.js'
+  - '@OroUIBundle/Resources/public/js/height_fix.js'
   - '@OroUIBundle/Resources/public/js/csrf.js'
   - '@OroUIBundle/Resources/public/js/backbone/error.js'
+  - '@OroUIBundle/Resources/public/js/backbone/message.js'
   - '@OroUIBundle/Resources/public/js/registry.js'
 
   - '@OroUIBundle/Resources/public/lib/backbone.bootstrap-modal.js'
@@ -27,3 +31,4 @@ js:
   - 'bundles/bazingaexposetranslation/js/translator.min.js'
 css:
   - 'bundles/oroui/lib/jstree/themes/default/style.css'
+  - 'bundles/oroui/css/jquery-ui.grid.css'

@@ -1432,11 +1432,11 @@ footer{
   background:#efefef url("../../img/bg-gray-box.png") repeat-x;
   border: solid #ccc;
   border-width: 1px 0;
-  padding: 15px 150px 8px 20px;
+  padding: 15px 20px 8px 150px;
 }
 .filter-box .filter-list{
-  float: right;
-  margin: 0 -120px 0 0;
+  float: left;
+  margin: 0 0 0 -120px;
   position: relative;
 }
 .btn-group + .btn-group{
@@ -1451,6 +1451,7 @@ footer{
 .btn-link{
   font-weight: bold;
   font-size: 12px;
+  background: transparent;
 }
 .nav-tabs > li{
   margin-bottom: 0;
@@ -1538,10 +1539,15 @@ footer{
 .icon-trash{
   background-position: -456px -1px;
 }
-
+.badge-enabled,
+.badge-disabled{
+  padding: 3px 10px 3px 5px;
+  font-size: 12px;
+  font-weight: normal;
+}
 .badge-enabled{
   background-color: #dff2d4;
-  color: #2f8206;
+  color: #4c7940;
 }
 .badge-disabled{
   color: #aaa;
@@ -1552,6 +1558,9 @@ footer{
 }
 .status-enabled{
   color: #2f8206;
+}
+.customer-info .status-enabled{
+
 }
 .dib{
   display: inline-block;
@@ -1901,26 +1910,39 @@ footer{
 .grid .dropdown-menu > li{
   margin: 0;
 }
-.modal{
+
+.oro-modal-danger{
   top: 20%;
   background-color: #fde0e0;
-}
-.modal .modal-header{
-  background-color: #fdcece;
-  -webkit-border-radius: 6px 6px 0 0;
-  border-radius: 6px 6px 0 0;
-}
-.modal-header .close{
-  font-size: 25px;
-}
-.modal-footer{
-  background: none;
-  border: none;
-  -webkit-box-shadow:  none;
-  box-shadow:  none;
-}
-.modal-header h3{
-  font: 16px/18px 'HelveticaNeue Medium', Arial, Helvetica, sans-serif;
+  width: 525px;
+  .modal-header{
+    background-color: #fdcece;
+    border-bottom: 1px solid #d59c9c;
+    padding: 14px 15px 14px 20px;
+    .border-radius(6px 6px 0 0);
+    -webkit-box-shadow:  0px 0px 6px 0px rgba(0, 0, 0, 0.5);
+    box-shadow:  0px 0px 6px 0px rgba(0, 0, 0, 0.5);
+
+  }
+  .modal-body{
+    color: #444;
+    font-size: 14px;
+    padding-left: 20px;
+  }
+  .modal-header .close{
+    font-size: 25px;
+  }
+  .modal-footer{
+    background: none;
+    text-align: center;
+    border: none;
+    -webkit-box-shadow:  none;
+    box-shadow:  none;
+    padding: 15px 15px 35px;
+  }
+  .modal-header h3{
+    font:bold 16px/18px 'HelveticaNeue Medium', Arial, Helvetica, sans-serif;
+  }
 }
 .dropup:after,
 .dropdown:after{
@@ -1935,7 +1957,7 @@ footer{
   box-shadow:  0px 2px 32px 1px rgba(0, 0, 0, 0.8);
 
   .alert{
-    margin: -@verticalPadding/2 -@horizontalPadding/2 0;
+    margin: -@verticalPadding/2 -@horizontalPadding/2 @verticalPadding;
     background-color: @warningBackground;
     background-image: url('../../img/warning-ico.png');
     background-position: 10px 50%;
@@ -2095,7 +2117,7 @@ footer{
     font-size: 18px;
   }
   .usser-name{
-    margin: 0 0 5px;
+    margin: 0 10px 5px 0;
     font-size: 19px;
     line-height: 22px;
     float: left;
@@ -2228,7 +2250,7 @@ ul.inline-extra > li:first-child{
   font-size: 12px;
 }
 .scrollspy{
-  height: 500px;
+  /*height: 500px;*/
   position: relative;
   overflow: auto;
 }
@@ -2873,4 +2895,77 @@ select:focus:invalid:focus {
   border-left: 1px solid #e9e9e9;
   margin: 0 1px 0 8px;
   height: 24px;
+}
+#search-bar-button:hover,
+#search-bar-button:focus{
+  color: #fff;
+}
+.pagination-centered > .icons-holder{
+  margin-right: -4px;
+}
+.pagination-centered > label{
+  margin-right: -4px;
+  padding-left: 5px;
+}
+.grid-toolbar .pagination-centered{
+  width: 335px;
+  margin: 0 auto;
+}
+.grid-toolbar .pagination-centered .icons-holder{
+  margin-left: 5px;
+}
+#flash-messages{
+  .alert{
+    margin: 0;
+    background-color: @warningBackground;
+    background-image: url('../../img/warning-ico.png');
+    background-position: 10px 50%;
+    background-repeat: no-repeat;
+    padding: 12px 35px 12px 37px;
+    border: solid @warningBorder;
+    border-width: 0 0 1px;
+    text-shadow: 0 1px 0 rgba(255,255,255,.5);
+    .close{
+      font-size: 18px;
+      color: @warningClose;
+      .opacity(100);
+    }
+  }
+  .alert-success{
+    background-color: @successBackground;
+    background-image: url('../../img/sucsses-ico.png');
+    border-color: @successBorder;
+    color: @successText;
+    .close{
+      color: @successClose;
+    }
+  }
+  .alert-danger,
+  .alert-error {
+    background-image: url('../../img/error-ico.png');
+    background-color: @errorBackground;
+    border-color: @errorBorder;
+    color: @errorText;
+    .close{
+      color: @errorClose;
+    }
+  }
+  .alert-empty {
+    display: none;
+  }
+}
+.flash-messages-frame{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url("../../img/bg-overlay.png") repeat;
+  z-index: 10000;
+}
+.flash-messages-holder{
+  position: fixed;
+  top: 136px;
+  left: 45px;
+  width: 96%;
 }

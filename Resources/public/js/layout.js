@@ -1,15 +1,5 @@
 $(document).ready(function () {
     initLayout();
-    /* dinamic height for central column */
-   /* function changeHeight() {
-        var _chWindowHeight = $(window).height();
-        var _chMyHeight = _chWindowHeight - $("header").outerHeight() - $("footer").outerHeight() - 3;
-        $('div.layout-content').innerHeight(_chMyHeight);
-    };
-     changeHeight();
-    $(window).resize(function() {
-        changeHeight();
-    });            */
 
     /* side bar functionality */
     $('div.side-nav').each(function () {
@@ -145,7 +135,7 @@ if (typeof Oro !== "undefined") {
  */
 function initLayout() {
     if ($.isPlainObject($.uniform)) {
-        $('input:file').uniform();
+        $('input:file, select').uniform();
     }
 
     if (typeof($.datepicker) != 'undefined') {
@@ -167,10 +157,6 @@ function initLayout() {
                 timeFormat: el.attr('data-timeformat') ? el.attr('data-timeformat') : 'hh:mm tt'
             });
         });
-    }
-
-    if (typeof $.fn['bootstrapSwitch'] != "undefined"){
-        $('.switch').not('.has-switch')['bootstrapSwitch']();
     }
 
     $('[data-spy="scroll"]').each(function () {

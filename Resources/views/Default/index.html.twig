@@ -6,9 +6,6 @@
         <title>{{ oro_title_render() }}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-        <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js"></script>
-
         {% block head_style %}
             {% if app.debug %}
                 <script type="text/javascript">localStorage.clear();</script>
@@ -33,7 +30,7 @@
             {% endoro_css %}
         {% endblock %}
 
-        {% block script %}
+        {% block head_script %}
             {# JS assetics #}
             {% oro_js filter='?yui_js' output='js/oro.all.js' %}
             <script type="text/javascript" src="{{ asset_url }}"></script>
@@ -43,6 +40,9 @@
             <script type="text/javascript" src="{{ url('bazinga_exposetranslation_js', { 'domain_name': 'messages' }) }}"></script>
             <script type="text/javascript" src="{{ url('bazinga_exposetranslation_js', { 'domain_name': 'validators' }) }}"></script>
 
+            <script type="text/javascript" src="{{ asset('bundles/oroui/lib/jstree/jquery.jstree.js') }}"></script>
+            <script type="text/javascript" src="{{ asset('bundles/orosegmentationtree/js/lib/jstree/jquery.jstree.tree_selector.js') }}"></script>
+            <script type="text/javascript" src="{{ asset('bundles/oroui/lib/jstree/jquery.hotkeys.js') }}"></script>
             {% if app.debug %}
                 <script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
                 <script type="text/javascript">
@@ -50,8 +50,8 @@
                 </script>
             {% endif %}
             <!--[if lte IE 9]>
-                <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
                 <link href="{{ asset('bundles/oroui/css/ie.css') }}" rel="stylesheet" media="all" />
+                <script src="{{ asset('bundles/oroui/lib/html5.js') }}"></script>
                 <script src="{{ asset('bundles/oroui/lib/jquery/jquery.placeholder.js') }}"></script>
                 <script type="text/javascript">
                     jQuery(document).ready(function() {
@@ -70,8 +70,6 @@
                     }
                 })
             </script>
-            {% block head_script %}
-            {% endblock %}
         {% endblock %}
     {% endblock %}
 </head>
@@ -176,7 +174,6 @@
 
         </header>
         {% endblock header %}
-        {% block top_action_box %}{% endblock %}
         {% block main %}
         <div id="main" >
             {% block right_panel %}{% endblock right_panel %}
@@ -341,25 +338,31 @@
                     {% block application_menu %}
                     {% endblock application_menu %}
                 </div>
-
+                {% block pin_button %}
+                {% endblock pin_button %}
                 <div id="flash-messages">
                     {% block messages %}
+                        {% set allMessages = {'empty': ['']} %}
                         {% if app.session.flashbag.peekAll|length > 0 %}
-
-                            {% for type, messages in app.session.flashbag.all %}
+                            {% set allMessages = allMessages|merge(app.session.flashbag.all) %}
+                        {% endif %}
+                        <div class="flash-messages-frame"
+                                {% if allMessages|length < 2 %}style="display:none"{% endif %}>
+                            <div class="flash-messages-holder">
+                            {% for type, messages in allMessages %}
                                 {% for message in messages %}
                                     <div class="alert{{ type ? ' alert-'~type : '' }} fade in top-messages ">
                                         <a class="close" data-dismiss="alert" href="#">&times;</a>
-                                        {{ message|trans|raw }}
+                                        <div class="message">{{ message|trans|raw }}</div>
                                     </div>
                                 {% endfor %}
                             {% endfor %}
-
-                        {% endif %}
+                            </div>
+                        </div>
                     {% endblock messages %}
                 </div>
             <div class="hash-loading-mask"></div>
-            <div id="container">
+            <div id="container" class="scrollable-container">
                 {% block page_container %}
                 {% block content %}
                     <div class="container" style="background: #fff">

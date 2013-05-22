@@ -1,9 +1,4 @@
 {% extends "OroUIBundle:Default:index.html.twig" %}
-{% block head %}
-    {{ parent() }}
-    <script type="text/javascript" src="{{ asset('bundles/oroui/lib/bootstrap/js/bootstrap-tooltip.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('bundles/oroui/lib/bootstrap/js/bootstrap-popover.js') }}"></script>
-{% endblock %}
 {% block content %}
     <div class="layout-content">
     <div class="clearfix"><div class="navbar application-menu">
@@ -80,35 +75,6 @@
                         <button class="btn disabled" type="submit"> Disabled</button>
                     </div>
                 </div>
-                <div class="btn-group pull-left customer-info-top-actions">
-                    <div class="dropdown2">
-                        <a class="btn dropdown-toggle" data-toggle="dropdown2" href="#">
-                            Action
-                            <span class="caret"></span>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a href="{{ path('oro_default') }}">link 1</a></li>
-                            <li><a href="{{ path('oro_default') }}">link 1</a></li>
-                            <li><a href="{{ path('oro_default') }}">link 1</a></li>
-                            <li><a href="{{ path('oro_default') }}">link 1</a></li>
-                            <li><a href="{{ path('oro_default') }}">link 1</a></li>
-                        </ul>
-                    </div>
-                    <button class="btn">Assign</button>
-                    <div class="dropdown">
-                        <a class="btn dropdown-toggle" data-toggle="dropdown-menu2" href="#">
-                            Export
-                            <span class="caret"></span>
-                        </a>
-                        <ul class="dropdown-menu2">
-                            <li><a href="{{ path('oro_default') }}">link 1</a></li>
-                            <li><a href="{{ path('oro_default') }}">link 1</a></li>
-                            <li><a href="{{ path('oro_default') }}">link 1</a></li>
-                            <li><a href="{{ path('oro_default') }}">link 1</a></li>
-                            <li><a href="{{ path('oro_default') }}">link 1</a></li>
-                        </ul>
-                    </div>                  `
-                </div>                  `
                 <div class="pull-left customer-info-top-actions">
                     <div class="btn-group">
                         <a class="btn" href="http://bap-dev.loc/app_dev.php/user">Cancel</a>
