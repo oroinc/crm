@@ -40,7 +40,12 @@ class ChoiceFilter extends AbstractFilter
      */
     public function parseData($data)
     {
-        if (!is_array($data) || !array_key_exists('value', $data) || !$data['value']) {
+        if (!is_array($data)
+            || !array_key_exists('value', $data)
+            || $data['value'] === ''
+            || is_null($data['value'])
+            || (is_array($data['value']) && !count($data['value']))
+        ) {
             return false;
         }
 
