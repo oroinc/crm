@@ -25,6 +25,7 @@ Oro.Navigation = Backbone.Router.extend({
      * mostViwedTab - Selector for most viewed 3 dots menu tab
      * flashMessages - Selector for system messages block
      * menu - Selector for system main menu
+     * pinButton - Selector for pin, close and favorite buttons div
      *
      * @property
      */
@@ -40,7 +41,8 @@ Oro.Navigation = Backbone.Router.extend({
         historyTab:     '#history-content',
         mostViewedTab:  '#mostviewed-content',
         flashMessages:  '#flash-messages',
-        menu:           '#main-menu'
+        menu:           '#main-menu',
+        pinButton:      '#pin-button-div'
     },
 
     /** @property {Oro.LoadingMask} */
@@ -298,6 +300,7 @@ Oro.Navigation = Backbone.Router.extend({
                 this.processForms(this.selectors.container + ' ' + this.selectors.forms);
                 this.updateMessages(data);
                 this.hideActiveDropdowns();
+                this.processPinButton(data);
             }
         }
         catch (err) {
@@ -322,6 +325,19 @@ Oro.Navigation = Backbone.Router.extend({
      */
     updateMessages: function(data) {
         $(this.selectors.flashMessages).html($(data).filter(this.selectors.flashMessages).html());
+    },
+
+    /**
+     * View / hide pins div
+     *
+     * @param data
+     */
+    processPinButton: function(data) {
+        if ($(data).filter(this.selectors.pin).html().indexOf("true") != - 1) {
+            $(this.selectors.pinButton).show();
+        } else {
+            $(this.selectors.pinButton).hide();
+        }
     },
 
     /**

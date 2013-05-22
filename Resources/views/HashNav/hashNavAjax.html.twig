@@ -18,3 +18,6 @@
 <div id="content">
     {{ content|raw }}
 </div>
+<div id="pin-button-div">
+    {% if app.request.attributes.get('_route') == bap.start_route %}false{% else %}true{% endif %}
+</div>
