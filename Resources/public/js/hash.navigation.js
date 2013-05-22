@@ -25,7 +25,7 @@ Oro.Navigation = Backbone.Router.extend({
      * mostViwedTab - Selector for most viewed 3 dots menu tab
      * flashMessages - Selector for system messages block
      * menu - Selector for system main menu
-     * pin-button-div - Selector for pin, close and favorite buttons div
+     * pinButton - Selector for pin, close and favorite buttons div
      *
      * @property
      */
