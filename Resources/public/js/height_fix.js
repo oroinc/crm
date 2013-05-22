@@ -1,13 +1,8 @@
 /* dynamic height for central column */
 $(document).ready(function () {
     var debugBar = $('.sf-toolbar');
-    var content = $('#scrollable-container');
-    if (!content.length) {
-        content = $('#container');
-    }
-    content.css('overflow', 'auto');
-
     var anchor = $('#bottom-anchor');
+    var content = false;
     if (!anchor.length) {
         anchor = $('<div id="bottom-anchor"/>')
             .css({
@@ -20,12 +15,26 @@ $(document).ready(function () {
             .appendTo($(document.body));
     }
 
-    var adjustHeight = function() {
-        var debugBarHeight = 0;
-        if (debugBar.length && debugBar.is(':visible')) {
-            debugBarHeight = debugBar.height();
+    var initializeContent = function() {
+        if (!content) {
+            content = $('.scrollable-container');
+            content.css('overflow', 'auto');
+
+            $('.scrollable-substructure').css({
+                'padding-bottom': '0px',
+                'margin-bottom': '0px'
+            });
         }
-        content.height(anchor.position().top - content.position().top - debugBarHeight);
+    };
+
+    var adjustHeight = function() {
+        initializeContent();
+        var debugBarHeight = debugBar.length && debugBar.is(':visible') ? debugBar.height() : 0;
+        var anchorTop = anchor.position().top;
+        content.each(function(pos, el) {
+            el = $(el);
+            el.height(anchorTop - el.position().top - debugBarHeight);
+        });
     };
 
     var tries = 0;
@@ -41,5 +50,8 @@ $(document).ready(function () {
 
     debugBar.length ?  waitForDebugBar() : adjustHeight();
     $(window).on('resize', adjustHeight);
-    $(document).ajaxSuccess(adjustHeight);
+    $(document).ajaxSuccess(function() {
+        content = false;
+        adjustHeight();
+    });
 });
