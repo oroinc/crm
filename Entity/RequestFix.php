@@ -29,45 +29,6 @@ class RequestFix extends ContainerAware
     }
 
     /**
-     * @todo Remove this code after BAP-721 implementation
-     * @deprecated This method will be removed after all code will be refactored to use getFixedData()
-     * @param string $name
-     */
-    public function fix($name)
-    {
-        $request = $this->container->get('request');
-        $entity = $request->get($name);
-        if (!is_object($entity)) {
-            return;
-        }
-
-        $data = array();
-        foreach ((array)$entity as $field => $value) {
-            // special case for ordered arrays
-            if ($value instanceof \stdClass && isset($value->item) && is_array($value->item)) {
-                $value = (array) $value->item;
-            }
-
-            if ($value instanceof Collection) {
-                $value = $value->toArray();
-            }
-
-            if (!is_null($value)) {
-                $data[preg_replace('/[^\w+]+/i', '', $field)] = $value;
-            }
-        }
-
-        $entityClass = ClassUtils::getRealClass(get_class($entity));
-        $entityClass = str_replace('Soap', '', $entityClass);
-
-        if ($entity instanceof FlexibleInterface) {
-            $data = $this->getFixedAttributesData($entityClass, $data, 'attributes');
-        }
-
-        $request->request->set($name, $data);
-    }
-
-    /**
      * Fix Request object so forms can be handled correctly
      *
      * @param string $entityClass
