@@ -72,7 +72,7 @@ class RestApiUserTest extends WebTestCase
         );
         $this->client->request('PUT', 'http://localhost/api/rest/latest/roles/' . $roleId, $requestUpdate);
         $result = $this->client->getResponse();
-        $this->assertJsonResponse($result, 302);
+        $this->assertJsonResponse($result, 204);
         $this->client->request('GET', "http://localhost/api/rest/latest/roles");
         $result = $this->client->getResponse();
         $this->assertJsonResponse($result, 200);
@@ -136,7 +136,7 @@ class RestApiUserTest extends WebTestCase
             "group" => array ("name" => 'new_group_' . mt_rand()));
         $this->client->request('PUT', 'http://localhost/api/rest/latest/groups/' . $groupId, $requestUpdate);
         $result = $this->client->getResponse();
-        $this->assertJsonResponse($result, 302);
+        $this->assertJsonResponse($result, 204);
         $this->client->request('GET', "http://localhost/api/rest/latest/groups");
         $result = $this->client->getResponse();
         $this->assertJsonResponse($result, 200);
