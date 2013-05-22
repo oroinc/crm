@@ -12,7 +12,7 @@
                 <div class="clearfix">
                     <div class="pull-right">
                         <div class="btn-group icons-holder">
-                            <a href="{{ app.session.get('back') ? app.session.get('back') : path('oro_user_index') }}" class="btn back icons-holder-text" title="{{ 'Back'|trans }}"><i class="icon-chevron-left hide-text" >{{ 'Back'|trans }}</i>{{ 'Back'|trans }}</a>
+                            <a href="{{ app.session.get('back', path('oro_user_index')) }}" class="btn back icons-holder-text" title="{{ 'Back'|trans }}"><i class="icon-chevron-left hide-text" >{{ 'Back'|trans }}</i>{{ 'Back'|trans }}</a>
                         </div>
                         {% if resource_granted('oro_user_profile_update') %}
                         <div class="btn-group icons-holder">
@@ -21,7 +21,7 @@
                         {% endif %}
                         {% if resource_granted('oro_user_profile_delete') %}
                         <div class="btn-group icons-holder">
-                            <a href="javascript: void(0);" class="btn icons-holder-text no-hash" id="btn-remove-profile" data-id="{{ user.id }}" data-message="{{ 'Are you sure you want to delete this profile?'|trans }}" title="{{ 'Delete profile'|trans }}"><i class="icon-trash hide-text">{{ 'Remove'|trans }}</i>Delete</a>
+                            <a href="javascript: void(0);" class="btn icons-holder-text no-hash" id="btn-remove-profile" data-id="{{ user.id }}" data-message="{{ 'Are you sure you want to delete this profile?'|trans }}" title="{{ 'Delete profile'|trans }}"><i class="icon-trash hide-text">{{ 'Delete'|trans }}</i>{{ 'Delete'|trans }}</a>
                         </div>
                         {% endif %}
                     </div>
@@ -29,9 +29,9 @@
                 <div class="clearfix">
                     <div class="customer-info pull-right">
                         <ul class="inline">
-                            <li><a class="no-hash" href="{{ path('oro_dataaudit_history', {entity:'Oro\\Bundle\\UserBundle\\Entity\\User', id: user.id}) }}" id="view-activity-btn">{{ 'Activity Log '|trans }}</a></li>
-                            <li><a class="no-hash" href="#">Revision X.X</a></li>
-                            <li>Published</a></li>
+                            <li><a class="no-hash" href="{{ path('oro_dataaudit_history', {entity:'Oro\\Bundle\\UserBundle\\Entity\\User', id: user.id}) }}" id="view-activity-btn">{{ 'Activity Log'|trans }}</a></li>
+                            <li><a class="no-hash" href="#">{{ 'Revision %rev%'|trans({'%rev%': user.id}) }}</a></li>
+                            <li>{{ 'Published'|trans }}</li>
                         </ul>
                         <script type="text/javascript">
                         $(function() {
