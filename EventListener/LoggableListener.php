@@ -194,6 +194,16 @@ class LoggableListener extends BaseListener
                 if ($newData instanceof AbstractEntityAttributeOption) {
                     $newData = $newData->getOptionValue()->getValue();
                 } elseif ($newData instanceof Collection) {
+                    $oldData = implode(
+                        ', ',
+                        array_map(
+                            function ($item) {
+                                return $item->getOptionValue()->getValue();
+                            },
+                            $newData->getDeleteDiff()
+                        )
+                    );
+
                     $newData = implode(
                         ', ',
                         $newData->map(function ($item) {
