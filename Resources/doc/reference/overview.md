@@ -92,6 +92,7 @@ services:
 ``` php
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Oro\Bundle\GridBundle\Datagrid\ORM\QueryFactory\QueryFactory;
 use My\Bundle\Namespace\DemoDatagridManager;
 
@@ -99,6 +100,7 @@ class DemoController extends Controller
 {
     /**
      * @Route("/demo/grid", name="my_controller_action_route")
+     * @Template("MyBundle:Demo:grid.html.twig")
      */
     public function gridAction(Request $request)
     {
@@ -106,12 +108,12 @@ class DemoController extends Controller
         $datagridManager = $this->get('acme_demo_grid.demo_grid.manager');
         $datagridManager->setEntityManager($this->getDoctrine()->getManager());
         $datagrid = $datagridManager->getDatagrid();
+        $datagridView = $datagrid->createView();
 
         if ('json' == $request->getRequestFormat()) {
-            $view = 'OroGridBundle:Datagrid:list.json.php';
-        } else {
-            $view = 'MyBundle:Demo:grid.html.twig';
+            return $this->get('oro_grid.renderer')->renderResultsJson($datagridView);
         }
+
         return $this->render($view, array('datagrid' => $datagrid->createView()));
     }
 }
