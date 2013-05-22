@@ -166,7 +166,6 @@
                     text: node_name
                 });
         
-                node_link.attr('href', '#');
                 node_link.prepend("<ins class='jstree-icon'>&#160;</ins>");
                 node.append(node_link);
 
