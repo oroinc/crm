@@ -33,6 +33,14 @@ Oro.Datagrid.Action.DeleteAction = Oro.Datagrid.Action.ModelAction.extend({
             wait: true,
             error: function() {
                 self.getErrorDialog().open();
+            },
+            success: function() {
+                var messageText = 'Item was deleted';
+                if (!_.isUndefined(Oro.Messages)) {
+                    Oro.Messages.showMessage('success', messageText);
+                } else {
+                    alert(messageText);
+                }
             }
         });
     },
