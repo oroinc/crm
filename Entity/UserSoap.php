@@ -3,9 +3,12 @@
 namespace Oro\Bundle\UserBundle\Entity;
 
 use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
-
 use JMS\Serializer\Annotation\Exclude;
+use Doctrine\ORM\Mapping as ORM;
 
+/**
+ * @ORM\MappedSuperclass(repositoryClass="Oro\Bundle\FlexibleEntityBundle\Entity\Repository\FlexibleEntityRepository")
+ */
 class UserSoap extends User
 {
     /**
@@ -35,6 +38,7 @@ class UserSoap extends User
 
     /**
      * @Soap\ComplexType("boolean")
+     * @Exclude
      */
     protected $enabled = true;
 

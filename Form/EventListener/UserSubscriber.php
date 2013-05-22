@@ -98,8 +98,8 @@ class UserSubscriber implements EventSubscriberInterface
                 'empty_data'  => '',
             )));
         } else {
-            $form->remove('rolesCollection');
-            $form->remove('groups');
+//            $form->remove('rolesCollection');
+//            $form->remove('groups');
         }
     }
 }
