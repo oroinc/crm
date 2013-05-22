@@ -2,18 +2,14 @@
 
 namespace Oro\Bundle\SoapBundle\Entity;
 
-// TODO: Remove Collection and ContainerAware uses after BAP-721 implementation
-use Doctrine\Common\Collections\Collection;
 use Oro\Bundle\FlexibleEntityBundle\Model\FlexibleInterface;
-use Symfony\Component\DependencyInjection\ContainerAware;
-
 use Doctrine\Common\Persistence\ObjectRepository;
 use Doctrine\Common\Util\ClassUtils;
 use Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityAttribute;
 
-class RequestFix extends ContainerAware
+class RequestFix
 {
     /**
      * @var FlexibleManagerRegistry
