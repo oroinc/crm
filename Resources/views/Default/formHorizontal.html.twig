@@ -73,8 +73,8 @@
                     <h5 class="usser-fiedset"><span>Basic Information</span></h5>
                     <div class="control-group">
                         <label for="oro_user_profile_form_enabled" class="control-label">Enabled</label>
-                        <div class="controls">
-                            <select name="oro_user_profile_form[enabled]" id="oro_user_profile_form_enabled">
+                        <div class="controls validation-error">
+                            <select name="oro_user_profile_form[enabled]" id="oro_user_profile_form_enabled" class="error">
                                 <option selected="selected" value="1">Active</option>
                                 <option value="0">Inactive</option>
                             </select>
@@ -82,8 +82,9 @@
                     </div>
                     <div class="control-group">
                         <label for="oro_user_profile_form_username" class="control-label required"><em>*</em>Username</label>
-                        <div class="controls">
-                            <input type="text" value="micky.figueroa_36a4c" required="required" name="oro_user_profile_form[username]" id="oro_user_profile_form_username" />
+                        <div class="controls validation-error">
+                            <input class="error" type="text" value="micky.figueroa_36a4c" required="required" name="oro_user_profile_form[username]" id="oro_user_profile_form_username" />
+                            <a title="" class="validation-tooltip" data-placement="top" data-toggle="tooltip" href="javascript: void(0);" data-original-title="{{ 'should have min 3 symbols'|trans }}">{{ 'should have min 3 symbols'|trans }}</a>
                         </div>
                     </div>
                     <div class="control-group">
@@ -98,10 +99,11 @@
                             <input type="text" value="Figueroa" required="required" name="oro_user_profile_form[lastName]" id="oro_user_profile_form_lastName" />
                         </div>
                     </div>
-                    <div class="control-group datepicker">
+                    <div class="control-group datepicker ">
                         <label for="oro_user_profile_form_birthday" class="control-label">Date of birth</label>
-                        <div class="controls">
-                            <input type="text" value="11/16/56" data-dateformat="m/d/y" placeholder="m/d/y" class="datepicker hasDatepicker" name="oro_user_profile_form[birthday]" id="oro_user_profile_form_birthday" />
+                        <div class="controls validation-error">
+                            <input type="text" value="11/16/56" data-dateformat="m/d/y" placeholder="m/d/y" class="datepicker hasdatepicker error" name="oro_user_profile_form[birthday]" id="oro_user_profile_form_birthday" />
+                            <a title="" class="validation-tooltip" data-placement="top" data-toggle="tooltip" href="javascript: void(0);" data-original-title="some msgs span two lines <br/> use mm/dd/yy format">{{ 'some msgs span two lines <br/> use mm/dd/yy format'|trans }}</a>
                         </div>
                     </div>
                     <div class="control-group">
@@ -113,10 +115,10 @@
                 </fieldset>
                 <fieldset class="form-horizontal span6">
                     <h5 class="usser-fiedset"><span>Contact Information</span></h5>
-                    <div class="control-group">
+                    <div class="control-group validation-error">
                         <label for="oro_user_profile_form_email" class="control-label required"><em>*</em>E-mail</label>
                         <div class="controls">
-                            <input type="email" value="micky.figueroa_36a5a@example.com" required="required" name="oro_user_profile_form[email]" id="oro_user_profile_form_email" />
+                            <input type="email" value="micky.figueroa_36a5a@example.com" required="required" name="oro_user_profile_form[email]" id="oro_user_profile_form_email" class="error" />
                         </div>
                     </div>
                     <div class="control-group">
@@ -125,14 +127,19 @@
                             <div class="row-oro">
                                 <div data-prototype="&lt;div data-content=&quot;tag__name__&quot;&gt; &lt;div class=&quot;row-oro oro-multiselect-holder&quot;&gt;
                 &lt;input type=&quot;email&quot; id=&quot;oro_user_profile_form_emails_tag__name___email&quot; name=&quot;oro_user_profile_form[emails][tag__name__][email]&quot; /&gt;
+                &lt;select class=&quot;oro-multiselect&quot;&gt;
+                                &lt;option&gt;Work&lt;/option&gt;
+                                &lt;option&gt;Home&lt;/option&gt;
+                                &lt;option&gt;Cell&lt;/option&gt;
+                                &lt;/select&gt;
             &lt;button class=&quot;removeRow btn-action btn-link&quot; type=&quot;button&quot; data-related=&quot;tag__name__&quot;&gt;×&lt;/button&gt;
         &lt;/div&gt;
     &lt;/div&gt;
 " class="collection-fields-list">
                                     <div>
                                         <div data-content="tag0">
-                                            <div class="row-oro oro-multiselect-holder">
-                                                <input type="email" name="oro_user_profile_form[emails][tag0][email]" id="oro_user_profile_form_emails_tag0_email">
+                                            <div class="row-oro oro-multiselect-holder validation-error">
+                                                <input type="email" name="oro_user_profile_form[emails][tag0][email]" id="oro_user_profile_form_emails_tag0_email" class="error" />
                                                 <select class="oro-multiselect">
                                                     <option>Work</option>
                                                     <option>Home</option>
@@ -144,6 +151,51 @@
                                     </div>
                                 </div>
                                 <a href="javascript: void(0);" class="btn add-list-item">Add another email</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label for="oro_user_profile_form_imageFile" class="control-label">Avatar</label>
+                        <div class="controls validation-error">
+                            <textarea cols="30" rows="10" class="error" placeholder="Enter text"></textarea>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label for="oro_user_profile_form_imageFile" class="control-label">test</label>
+                        <div class="controls validation-error">
+                            <div class="error validate-group">
+                                <label class="checkbox">
+                                    <input type="checkbox" value="">
+                                    Option one is this and that—be sure to include why it's great
+                                </label>
+                                <label class="checkbox">
+                                    <input type="checkbox" value="">
+                                    Option one is this and that—be sure to include why it's great
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label for="oro_user_profile_form_imageFile" class="control-label">test</label>
+                        <div class="controls validation-error">
+                            <label class="checkbox error">
+                                <input type="checkbox" value="">
+                                Option one is this and that—be sure to include why it's great
+                            </label>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label for="oro_user_profile_form_imageFile" class="control-label">Radio</label>
+                        <div class="controls validation-error">
+                            <div class="error validate-group">
+                                <label class="radio">
+                                    <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked>
+                                    Option one is this and that—be sure to include why it's great
+                                </label>
+                                <label class="radio">
+                                    <input type="radio" name="optionsRadios" id="optionsRadios2" value="option2">
+                                    Option two can be something else and selecting it will deselect option one
+                                </label>
                             </div>
                         </div>
                     </div>
