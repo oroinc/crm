@@ -17,7 +17,7 @@ class Users extends PageFilteredGrid
 
     public function add()
     {
-        $this->test->byXPath("//a[contains(., 'Add user')]")->click();
+        $this->test->byXPath("//a[contains(., 'Create user')]")->click();
         $this->waitPageToLoad();
         $this->waitForAjax();
         $user = new User($this->test);
