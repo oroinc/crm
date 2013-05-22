@@ -20,6 +20,7 @@
                     this.data.tree_selector.data = settings.data;
                     this.data.tree_selector.auto_open_root = settings.auto_open_root;
                     this.data.tree_selector.no_tree_message = settings.no_tree_message;
+                    this.data.tree_selector.node_label_field = settings.node_label_field;
 
                     var tree_toolbar = $('<div>', {
                         id: 'tree_toolbar'
@@ -54,7 +55,8 @@
             ajax : false,
             data : false,
             tree_selector_buttons : false,
-            no_tree_message : false
+            no_tree_message : false,
+            node_label_field : 'code'
         },
         _fn : {
             refresh : function(obj) {
@@ -119,8 +121,11 @@
                 $.each(trees, function (index, tree) {
                     var option = $('<option>', {
                         value: tree.id,
-                        text: tree.code
+                        text: tree[this_jstree.data.tree_selector.node_label_field]
                     });
+
+//                    eval ('option.text = tree'.data.tree_selector.node_label_field);
+
                     if (index === 0) {
                         option.prop('defaultSelected', true);
                     }
