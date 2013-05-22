@@ -8,13 +8,6 @@ OroGridBundle has a couple of classes that can be used to render grid results.
 * **Twig \ GridExtension** - a Twig extension that can be used to render datagrid results as JSON in Twig template;
 * **Renderer \ GridRenderer** - a class that can be used to render datagrid responses.
 
-* **Action / ActionInterface** - basic interface for Action entity;
-* **Action / AbstracAction** - abstract implementation of Action entity, includes route processing;
-* **Action / RedirectAction** - redirect action implementation;
-* **Action / DeleteAction** - delete action implementation;
-* **Action / ActionFactoryInterface** - basic interface for Action Factory;
-* **Action / ActionFactory** - Action Factory interface implementation to create Action entities.
-
 #### Example of Usage
 
 Use renderer in controller to render JSON response of grid:
@@ -44,7 +37,7 @@ class BarController extends Controller
 
 Use Twig extension function to get JSON object of grid's results in javascript:
 
-``` javascript
+```
 <script type="text/javascript">
     var results = {{ oro_grid_render_results_json(datagridView) }};
 </script>
