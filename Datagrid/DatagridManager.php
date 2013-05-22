@@ -313,7 +313,7 @@ abstract class DatagridManager implements DatagridManagerInterface
     /**
      * Get list of datagrid sorters
      *
-     * @return FieldDescriptionInterface[]
+     * @return array
      */
     protected function getSorters()
     {
