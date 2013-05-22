@@ -1,6 +1,3 @@
-{#{% extends bap.layout %}#}
-{#{% extends bap.layout is defined ? bap.layout : 'OroDataAuditBundle::layout.html.twig' %}#}
-
 {% block head_script %}
     {% include 'OroGridBundle:Include:javascript.html.twig' with {'datagridView': datagrid, 'selector': '#entity-grid'} %}
     {% include 'OroGridBundle:Include:stylesheet.html.twig' %}
