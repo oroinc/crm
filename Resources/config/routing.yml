@@ -80,3 +80,6 @@ oro_ui_record_edit:
 oro_ui_title_bar:
     pattern: /entity-title-bar
     defaults: { _controller: FrameworkBundle:Template:template, template: "OroUIBundle:Default:EntityTitleBar.html.twig" }
+oro_ui_form_horizontal:
+    pattern: /form-horizontal
+    defaults: { _controller: FrameworkBundle:Template:template, template: "OroUIBundle:Default:formHorizontal.html.twig" }

@@ -163,6 +163,7 @@ function initLayout() {
         var $spy = $(this)
         $spy.scrollspy($spy.data())
     })
+    $('[data-toggle="tooltip"]').tooltip();
 }
 
 /**
