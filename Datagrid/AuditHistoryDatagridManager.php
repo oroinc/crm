@@ -6,7 +6,6 @@ use Doctrine\ORM\Query;
 
 use Gedmo\Loggable\LoggableListener;
 
-use Oro\Bundle\GridBundle\Datagrid\DatagridManager;
 use Oro\Bundle\GridBundle\Field\FieldDescription;
 use Oro\Bundle\GridBundle\Field\FieldDescriptionCollection;
 use Oro\Bundle\GridBundle\Field\FieldDescriptionInterface;
@@ -14,16 +13,18 @@ use Oro\Bundle\GridBundle\Filter\FilterInterface;
 use Oro\Bundle\GridBundle\Property\TwigTemplateProperty;
 use Oro\Bundle\GridBundle\Datagrid\ProxyQueryInterface;
 use Oro\Bundle\GridBundle\Sorter\SorterInterface;
-use Oro\Bundle\GridBundle\Datagrid\ParametersInterface;
-
-use Oro\Bundle\DataAuditBundle\Datagrid\AuditDatagridManager;
 
 class AuditHistoryDatagridManager extends AuditDatagridManager
 {
     /**
-     * @var ParametersInterface
+     * @var entityClass
      */
-    protected $parameters;
+    public $entityClass;
+
+    /**
+     * @var entityClassId
+     */
+    public $entityClassId;
 
     /**
      * {@inheritDoc}
@@ -41,7 +42,7 @@ class AuditHistoryDatagridManager extends AuditDatagridManager
                 'filter_type' => FilterInterface::TYPE_STRING,
                 'required'    => false,
                 'sortable'    => true,
-                'filterable'  => true,
+                'filterable'  => false,
                 'show_filter' => false,
             )
         );
@@ -58,7 +59,7 @@ class AuditHistoryDatagridManager extends AuditDatagridManager
                 'filter_type' => FilterInterface::TYPE_DATETIME,
                 'required'    => false,
                 'sortable'    => true,
-                'filterable'  => true,
+                'filterable'  => false,
                 'show_filter' => false,
             )
         );
@@ -108,7 +109,7 @@ class AuditHistoryDatagridManager extends AuditDatagridManager
     }
 
     /**
-     * @return array
+     * {@inheritDoc}
      */
     protected function getDefaultSorters()
     {
@@ -118,29 +119,19 @@ class AuditHistoryDatagridManager extends AuditDatagridManager
     }
 
     /**
-     * {@inheritDoc}
-     */
-    public function setParameters(ParametersInterface $parameters)
-    {
-        $this->parameters = $parameters;
-
-        $this->parameters->set(ParametersInterface::PAGER_PARAMETERS, 5);
-    }
-
-    /**
      * @return ProxyQueryInterface
      */
     protected function createQuery()
     {
         $query = parent::createQuery();
 
-        /**
-         * TODO
-         *  add default filter by ENTITY
-         *  change per page values
-         *
-         */
-
+        $query->where('a.objectClass = :objectClass AND a.objectId = :objectId');
+        $query->setParameters(
+            array(
+                'objectClass' => $this->entityClass,
+                'objectId'    => $this->entityClassId
+            )
+        );
 
         return $query;
     }

@@ -44,18 +44,12 @@ class AuditController extends Controller
         return $this->render($view, array('datagrid' => $datagrid->createView()));
     }
 
-    ///**
-   //  *      "/hist ory/{entity}/{id}",
-    // *      *      requ irements={"entity"="[a-zA-Z\\]+", "id"="\d+"}
-     //*/
-
-
     /**
      * @Route(
-     *      "/history/{_format}",
+     *      "/history/{entity}/{id}/{_format}",
      *      name="oro_dataaudit_history",
-     *      requirements={"_format"="html|json"},
-     *      defaults={"_format" = "html"}
+     *      requirements={"entity"="[a-zA-Z\\]+", "id"="\d+"},
+     *      defaults={"entity"="entity", "id"=0, "_format" = "html"}
      * )
      * @Acl(
      *      id="oro_dataaudit_history",
@@ -64,29 +58,27 @@ class AuditController extends Controller
      *      parent="oro_dataaudit"
      * )
      */
-    //public function historyAction(Request $request, $entity, $id)
-    public function historyAction(Request $request)
+    public function historyAction(Request $request, $entity, $id)
     {
-        $datagrid = $this->get('oro_dataaudit.history.datagrid.manager')->getDatagrid();
-        $view     = 'json' == $request->getRequestFormat()
+        /** @var $datagridManager AuditHistoryDatagridManager */
+        $datagridManager = $this->get('oro_dataaudit.history.datagrid.manager');
+
+        $datagridManager->entityClass   = $entity;
+        $datagridManager->entityClassId = $id;
+
+        $datagridManager->getRouteGenerator()->setRouteParameters(
+            array(
+                'entity' => $entity,
+                'id'     => $id
+            )
+        );
+
+        $datagrid = $datagridManager->getDatagrid();
+
+        $view = 'json' == $request->getRequestFormat()
             ? 'OroGridBundle:Datagrid:list.json.php'
             : 'OroDataAuditBundle:Audit:history.html.twig';
 
         return $this->render($view, array('datagrid' => $datagrid->createView()));
-
-
-//        $history = $this->getDoctrine()
-//            ->getManagerForClass('OroDataAuditBundle:Audit')
-//            ->getRepository('OroDataAuditBundle:Audit')->findBy(
-//                array(
-//                    'objectClass' => $entity,
-//                    'objectId'    => $id,
-//                ),
-//                array('id' => 'DESC')
-//            );
-//
-//        return array(
-//            'history' => $history,
-//        );
     }
 }
