@@ -75,7 +75,7 @@ class RestApiGroupsTest extends WebTestCase
         $request['group']['name'] .= '_updated';
         $this->client->request('PUT', 'http://localhost/api/rest/latest/groups' . '/' . $group['id'], $request);
         $result = $this->client->getResponse();
-        ToolsAPI::assertJsonResponse($result, 302);
+        ToolsAPI::assertJsonResponse($result, 204);
         $this->client->request('GET', 'http://localhost/api/rest/latest/groups' .'/'. $group['id']);
         $result = $this->client->getResponse();
         $result = json_decode($result->getContent(), true);
@@ -89,7 +89,7 @@ class RestApiGroupsTest extends WebTestCase
      * @depends testApiUpdateGroup
      * @param $group
      */
-    public function ApiDeleteGroup($group)
+    public function apiDeleteGroup($group)
     {
         $this->client->request('DELETE', 'http://localhost/api/rest/latest/groups' . '/' . $group['id']);
         $result = $this->client->getResponse();
