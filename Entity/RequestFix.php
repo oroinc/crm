@@ -2,7 +2,6 @@
 
 namespace Oro\Bundle\SoapBundle\Entity;
 
-use Oro\Bundle\FlexibleEntityBundle\Model\FlexibleInterface;
 use Doctrine\Common\Persistence\ObjectRepository;
 use Doctrine\Common\Util\ClassUtils;
 use Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleManagerRegistry;
