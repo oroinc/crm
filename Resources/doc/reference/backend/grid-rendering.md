@@ -28,7 +28,7 @@ class BarController extends Controller
         $datagrid = $gridManager->getDatagrid();
         $datagridView = $datagrid->createView();
         if ('json' == $request->getRequestFormat()) {
-            return $this->get('oro_grid.renderer')->renderResultsJson($datagridView);
+            return $this->get('oro_grid.renderer')->renderResultsJsonResponse($datagridView);
         }
         return $this->render('Foo:Bar:list.html.twig', array('datagrid' => $datagridView));
     }
