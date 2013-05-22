@@ -66,7 +66,7 @@ class ProfileController extends FOSRestController implements ClassResourceInterf
      *          {"name"="id", "dataType"="integer"},
      *      }
      * )
-     * @AclAncestor("oro_user_profile_show")
+     * @AclAncestor("oro_user_profile_view")
      */
     public function getAction($id)
     {
@@ -114,7 +114,7 @@ class ProfileController extends FOSRestController implements ClassResourceInterf
      *          {"name"="id", "dataType"="integer"},
      *      }
      * )
-     * @AclAncestor("oro_user_profile_edit")
+     * @AclAncestor("oro_user_profile_update")
      */
     public function putAction($id)
     {
@@ -269,7 +269,7 @@ class ProfileController extends FOSRestController implements ClassResourceInterf
      *          {"name"="username", "dataType"="string"}
      *      }
      * )
-     * @AclAncestor("oro_user_profile_show")
+     * @AclAncestor("oro_user_profile_view")
      */
     public function getFilterAction()
     {

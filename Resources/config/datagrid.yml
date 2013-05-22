@@ -13,7 +13,7 @@ services:
               datagrid_name: users
               entity_name: Oro\Bundle\UserBundle\Entity\User
               entity_hint: users
-              flexible: false
+              flexible: true
               route_name: oro_user_index
 
     oro_user.role_datagrid_manager:

@@ -102,7 +102,7 @@ class GroupController extends FOSRestController implements ClassResourceInterfac
      *          {"name"="id", "dataType"="integer"},
      *      }
      * )
-     * @AclAncestor("oro_user_group_edit")
+     * @AclAncestor("oro_user_group_update")
      */
     public function putAction($id)
     {
