@@ -58,7 +58,7 @@ class AuditController extends Controller
      *      parent="oro_dataaudit"
      * )
      */
-    public function historyAction(Request $request, $entity, $id)
+    public function historyAction($entity, $id)
     {
         /** @var $datagridManager AuditHistoryDatagridManager */
         $datagridManager = $this->get('oro_dataaudit.history.datagrid.manager');
@@ -75,7 +75,7 @@ class AuditController extends Controller
 
         $datagrid = $datagridManager->getDatagrid();
 
-        $view = 'json' == $request->getRequestFormat()
+        $view = 'json' == $this->getRequest()->getRequestFormat()
             ? 'OroGridBundle:Datagrid:list.json.php'
             : 'OroDataAuditBundle:Audit:history.html.twig';
 
