@@ -6,7 +6,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 use Oro\Bundle\UserBundle\Annotation\Acl;
 use Oro\Bundle\DataAuditBundle\Entity\Audit;
@@ -45,8 +44,12 @@ class AuditController extends Controller
     }
 
     /**
-     * @Route("/history/{entity}/{id}", name="oro_dataaudit_history", requirements={"entity"="[a-zA-Z\\]+", "id"="\d+"})
-     * @Template
+     * @Route(
+     *      "/history/{entity}/{id}/{_format}",
+     *      name="oro_dataaudit_history",
+     *      requirements={"entity"="[a-zA-Z\\]+", "id"="\d+"},
+     *      defaults={"entity"="entity", "id"=0, "_format" = "html"}
+     * )
      * @Acl(
      *      id="oro_dataaudit_history",
      *      name="View entity history",
@@ -56,18 +59,25 @@ class AuditController extends Controller
      */
     public function historyAction($entity, $id)
     {
-        $history = $this->getDoctrine()
-            ->getManagerForClass('OroDataAuditBundle:Audit')
-            ->getRepository('OroDataAuditBundle:Audit')->findBy(
-                array(
-                    'objectClass' => $entity,
-                    'objectId'    => $id,
-                ),
-                array('id' => 'DESC')
-            );
+        /** @var $datagridManager AuditHistoryDatagridManager */
+        $datagridManager = $this->get('oro_dataaudit.history.datagrid.manager');
 
-        return array(
-            'history' => $history,
+        $datagridManager->entityClass   = $entity;
+        $datagridManager->entityClassId = $id;
+
+        $datagridManager->getRouteGenerator()->setRouteParameters(
+            array(
+                'entity' => $entity,
+                'id'     => $id
+            )
         );
+
+        $datagrid = $datagridManager->getDatagrid();
+
+        $view = 'json' == $this->getRequest()->getRequestFormat()
+            ? 'OroGridBundle:Datagrid:list.json.php'
+            : 'OroDataAuditBundle:Audit:history.html.twig';
+
+        return $this->render($view, array('datagrid' => $datagrid->createView()));
     }
 }
