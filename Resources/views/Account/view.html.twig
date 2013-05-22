@@ -1,5 +1,6 @@
 {% extends 'OroAccountBundle::layout.html.twig' %}
 {% import 'OroUIBundle::macros.html.twig' as macros %}
+{% set format = get_user_value('oro_user.name_format') %}
 {% oro_title_set({params : {"%account.name%": account.name|default('N/A')} }) %}
 
 {% block head_script %}
@@ -23,36 +24,45 @@
     <div class="navigation clearfix navbar-extra navbar-extra-right">
         <div class="row">
                 <div class="pull-right">
-                    <div class="pull-right">
-                        <div class="btn-group icons-holder ">
-                            <a href="{{ app.session.get('back') ? app.session.get('back') : path('oro_account_index') }}"
-                               class="btn" title="{{ 'Back'|trans }}"><i class="icon-chevron-left hide-text">{{ 'Back'|trans }}</i></a>
-                            {% if resource_granted('oro_account_account_update') %}
-                                <a href="{{ path('oro_account_update', { id: account.id }) }}"
-                                   class="btn" title="{{ 'Edit account'|trans }}"><i class="icon-edit hide-text">{{ 'Edit'|trans }}</i></a>
-                            {% endif %}
-                            {% if resource_granted('oro_account_account_remove') %}
-                                <a href="javascript: void(0);" class="btn icons-holder-text remove-button"
-                                   data-url="{{ path('oro_api_delete_account', {'id': account.id}) }}"
-                                   data-redirect="{{ path('oro_account_index') }}"
-                                   data-message="{{ 'Are you sure you want to delete this account?'|trans }}"
-                                   title="{{ 'Delete Account'|trans }}"><i class="icon-trash hide-text">{{ 'Remove'|trans }}</i>Delete</a>
-                            {% endif %}
-                        </div>
+                    <div class="btn-group icons-holder ">
+                        <a href="{{ app.session.get('back') ? app.session.get('back') : path('oro_account_index') }}"
+                           class="btn back icons-holder-text" title="{{ 'Back'|trans }}"><i class="icon-chevron-left hide-text">{{ 'Back'|trans }}</i>{{ 'Back'|trans }}</a>
                     </div>
+                    {% if resource_granted('oro_account_account_update') %}
+                    <div class="btn-group icons-holder">
+                        <a href="{{ path('oro_account_update', { id: account.id, back: app.request.uri }) }}"
+                            class="btn icons-holder-text" title="{{ 'Edit account'|trans }}"><i class="icon-edit hide-text">{{ 'Edit'|trans }}</i>{{ 'Edit'|trans }}</a>
+                    </div>
+                    {% endif %}
+                    {% if resource_granted('oro_account_account_remove') %}
+                    <div class="btn-group icons-holder">
+                        <a href="javascript: void(0);" class="btn icons-holder-text no-hash remove-button"
+                           id="btn-remove-account"
+                           data-id="{{ account.id }}"
+                           data-url="{{ path('oro_api_delete_account', {'id': account.id}) }}"
+                           data-redirect="{{ path('oro_account_index') }}"
+                           data-message="{{ 'Are you sure you want to delete this account?'|trans }}"
+                           title="{{ 'Delete Account'|trans }}"><i class="icon-trash hide-text">{{ 'Remove'|trans }}</i>{{ 'Delete'|trans }}</a>
+                    </div>
+                    {% endif %}
                 </div>
-                <div class="pull-left">
+                <div class="span9">
                     <div class="customer-info well-small">
+                        <div class="visual"><img src="{{ asset('bundles/oroui/img/info-usser.png') }}" alt="{{ account.name(format) }}"/></div>
                         <div class="customer-content pull-left">
-                            <div class="clearfix-oro">
-                                <div class="sub-title">{{ 'Account'|trans }}</div>
-                                <span class="separator">/</span>
-                                <h1 class="usser-name">{{ account.name|default('N/A') }}</h1>
+                            <div class="clearfix">
+                                <div class="pull-left">
+                                    <div class="sub-title"><a href="{{ path('oro_account_index') }}">{{ 'Account'|trans }}</a></div>
+                                    <span class="separator">/</span>
+                                    <h1 class="usser-name">{{ account.name(format)|default('N/A') }}</h1>
+                                </div>
                             </div>
-                            <ul class="inline">
-                                <li>{{ 'Created'|trans }}: {{ account.createdAt ? macros.time(account.createdAt) : 'N/A' }}</li>
-                                <li>{{ 'Updated'|trans }}: {{ account.updatedAt ? macros.time(account.updatedAt) : 'N/A' }}</li>
-                            </ul>
+                            <div class="clearfix">
+                                <ul class="inline">
+                                    <li>{{ 'Created'|trans }}: {{ account.createdAt ? macros.time(account.createdAt) : 'N/A' }}</li>
+                                    <li>{{ 'Updated'|trans }}: {{ account.updatedAt ? macros.time(account.updatedAt) : 'N/A' }}</li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -69,35 +79,50 @@
                 </div>
             </div>
         </div>
-        <div class="clearfix-oro">
+        <div class="clearfix">
             <div data-spy="scroll" data-target="#navbar-profile" data-offset="50" class="scrollspy container-fluid">
-                <h4 id="scroll-main" class="scrollspy-title">{{ 'Overview'|trans }}</h4>
-                <div class="row-fluid">
-                    <div class="form-horizontal span6">
-                        <div class="control-group">
-                            <label class="control-label">{{ 'Account Name'|trans }}</label>
-                            <div class="controls">
-                                <div class="clearfix-oro">
-                                    <p class="control-label">{{ account.name }}</p>
+                <div class="usser-row">
+                    <h4 id="scroll-main" class="scrollspy-title">{{ 'Overview'|trans }}</h4>
+                    <div class="row-fluid row-fluid-divider">
+                        <div class="form-horizontal span6">
+                            <h5 class="usser-fiedset"><span>{{ 'Basic Information'|trans }}</span></h5>
+                            <div class="control-group">
+                                <label class="control-label">{{ 'Account Name'|trans }}</label>
+                                <div class="controls">
+                                    <div class="clearfix-oro">
+                                        <p class="control-label">{{ account.name }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-horizontal span6">
+                            <h5 class="usser-fiedset"><span>Contact Information</span></h5>
+                            <div class="control-group">
+                                <label class="control-label">{{ 'Email'|trans }}</label>
+                                <div class="controls">
+                                    <div class="clearfix-oro">
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <h4 id="scroll-attributes" class="scrollspy-title">{{ 'Additional Data'|trans }}</h4>
-                <div class="row-fluid">
-                    <div class="form-horizontal">
-                        {% for attr in account.values %}
-                        <div class="control-group">
-                            <label class="control-label">{{ attr.attribute.label|trans|title }}</label>
-                            <div class="controls">
-                                <div class="clearfix-oro">
-                                    <p class="control-label">{{ attr.__toString }}</p>
+                <div class="usser-row">
+                    <h4 id="scroll-attributes" class="scrollspy-title">{{ 'Additional Data'|trans }}</h4>
+                    <div class="row-fluid">
+                        <div class="form-horizontal">
+                            {% for attr in account.values %}
+                            <div class="control-group">
+                                <label class="control-label">{{ attr.attribute.label|trans|title }}</label>
+                                <div class="controls">
+                                    <div class="clearfix-oro">
+                                        <p class="control-label">{{ attr.__toString }}</p>
+                                    </div>
                                 </div>
                             </div>
+                            {% endfor %}
                         </div>
-                        {% endfor %}
                     </div>
                 </div>
             </div>
