@@ -35,7 +35,7 @@ class SearchDatagridManager extends DatagridManager
             array(
                 'type'        => FieldDescriptionInterface::TYPE_HTML,
                 'label'       => '',
-                'field_name'  => 'recordText',
+                'field_name'  => 'entity',
                 'required'    => false,
                 'sortable'    => false,
                 'filterable'  => false,

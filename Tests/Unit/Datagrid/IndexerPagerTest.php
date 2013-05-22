@@ -218,4 +218,9 @@ class SearchPagerTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($expected, $this->pager->haveToPaginate());
     }
+
+    public function testGetLinks()
+    {
+        $this->assertEmpty($this->pager->getLinks());
+    }
 }
