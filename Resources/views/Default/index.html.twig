@@ -30,7 +30,7 @@
             {% endoro_css %}
         {% endblock %}
 
-        {% block head_script %}
+        {% block script %}
             {# JS assetics #}
             {% oro_js filter='?yui_js' output='js/oro.all.js' %}
             <script type="text/javascript" src="{{ asset_url }}"></script>
@@ -61,10 +61,14 @@
                 $(function() {
                     if (Oro.hashNavigationEnabled()) {
                         new Oro.Navigation({baseUrl : '{{ app.request.getSchemeAndHttpHost() }}'});
-                        Backbone.history.start();
+                        if (!Backbone.History.started) {
+                            Backbone.history.start();
+                        }
                     }
                 })
             </script>
+            {% block head_script %}
+            {% endblock %}
         {% endblock %}
     {% endblock %}
 </head>
