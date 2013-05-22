@@ -7,6 +7,9 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ResponseHashnavListenerTest extends \PHPUnit_Framework_TestCase
 {
+    const TEST_URL = 'http://test_url/';
+    const TEMPLATE = 'OroNavigationBundle:HashNav:redirect.html.twig';
+
     /**
      * @var \Oro\Bundle\NavigationBundle\Event\ResponseHashnavListener
      */
@@ -28,18 +31,18 @@ class ResponseHashnavListenerTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->request = new Request();
         $this->response = new Response();
-
+        $this->request  = Request::create(self::TEST_URL);
+        $this->request->headers->add(array('x-oro-hash-navigation' => true));
         $this->event = $this->getMockBuilder('Symfony\Component\HttpKernel\Event\FilterResponseEvent')
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->event->expects($this->once())
+        $this->event->expects($this->any())
             ->method('getRequest')
             ->will($this->returnValue($this->request));
 
-        $this->event->expects($this->once())
+        $this->event->expects($this->any())
             ->method('getResponse')
             ->will($this->returnValue($this->response));
 
@@ -60,8 +63,8 @@ class ResponseHashnavListenerTest extends \PHPUnit_Framework_TestCase
 
     public function testHashRequestWOUser()
     {
-        $this->request->headers->add(array('x-oro-hash-navigation' => true));
         $this->response->setStatusCode(302);
+        $this->response->headers->add(array('location' => self::TEST_URL));
 
         $this->securityContext->expects($this->once())
             ->method('getToken')
@@ -72,6 +75,44 @@ class ResponseHashnavListenerTest extends \PHPUnit_Framework_TestCase
 
         $this->templating->expects($this->once())
             ->method('renderResponse')
+            ->with(
+                self::TEMPLATE,
+                array(
+                    'full_redirect' => true,
+                    'location' => self::TEST_URL
+                )
+            )
+            ->will($this->returnValue(new Response()));
+
+        $this->listener->onResponse($this->event);
+    }
+
+    public function testHashRequestNotFound()
+    {
+        $this->response->setStatusCode(404);
+        $this->serverErrorHandle();
+    }
+
+    public function testHashRequestServerError()
+    {
+        $this->response->setStatusCode(500);
+        $this->serverErrorHandle();
+    }
+
+    private function serverErrorHandle()
+    {
+        $this->event->expects($this->once())
+            ->method('setResponse');
+
+        $this->templating->expects($this->once())
+            ->method('renderResponse')
+            ->with(
+                self::TEMPLATE,
+                array(
+                    'full_redirect' => true,
+                    'location' => self::TEST_URL . '?no-cache=1'
+                )
+            )
             ->will($this->returnValue(new Response()));
 
         $this->listener->onResponse($this->event);
