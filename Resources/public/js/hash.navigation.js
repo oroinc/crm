@@ -333,7 +333,7 @@ Oro.Navigation = Backbone.Router.extend({
      * @param data
      */
     processPinButton: function(data) {
-        if ($(data).filter(this.selectors.pin).html().indexOf("true") != - 1) {
+        if ($(data).filter(this.selectors.pinButton).html().indexOf("true") != - 1) {
             $(this.selectors.pinButton).show();
         } else {
             $(this.selectors.pinButton).hide();
