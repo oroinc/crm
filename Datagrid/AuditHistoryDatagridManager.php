@@ -4,8 +4,6 @@ namespace Oro\Bundle\DataAuditBundle\Datagrid;
 
 use Doctrine\ORM\Query;
 
-use Gedmo\Loggable\LoggableListener;
-
 use Oro\Bundle\GridBundle\Field\FieldDescription;
 use Oro\Bundle\GridBundle\Field\FieldDescriptionCollection;
 use Oro\Bundle\GridBundle\Field\FieldDescriptionInterface;
