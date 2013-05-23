@@ -1236,7 +1236,7 @@ footer{
   border-left: 1px solid #ccd1d7;
   background-color: #fff;
   min-height: 151px;
-  max-height: 350px;
+  max-height: 330px;
   overflow: auto;
 }
 .pin-bar .list-bar{
@@ -1738,8 +1738,8 @@ footer{
   margin-left: 7px;
 }
 .navbar-extra .customer-info-top-actions button{
-  height: 26px;
-  line-height: 24px;
+  height: 28px;
+  line-height: 28px;
 }
 .navbar-extra .customer-info-top-actions a{
   height: 24px;
@@ -2370,14 +2370,31 @@ textarea{
   margin: 0;
 }
 .filter-criteria .oro-action .btn-group{
-  float: right;
+  float: left;
 }
 .filter-criteria .oro-action .btn{
   outline: none;
   position: static;
 }
+.filter-box .filter-item .filter-criteria{
+  top: 125%;
+}
+.filter-box .filter-item .filter-criteria:after {
+  content: "";
+  display: inline-block;
+  left: 10px;
+  position: absolute;
+  top: -9px;
+  width: 18px;
+  height: 9px;
+  background: url("../../img/bg-drop-arow.png") no-repeat;
+}
 .btn-group > .btn-small{
   font-size: 11px;
+}
+.btn-group > a.btn{
+  height: 28px;
+  line-height: 28px;
 }
 .popup-box-errors{
   width: 480px;
@@ -2900,15 +2917,15 @@ select:focus:invalid:focus {
 #search-bar-button:focus{
   color: #fff;
 }
-.pagination-centered > .icons-holder{
-  margin-right: -4px;
-}
+/*.pagination-centered > .icons-holder{
+margin-right: -4px;
+}*/
 .pagination-centered > label{
   margin-right: -4px;
   padding-left: 5px;
 }
 .grid-toolbar .pagination-centered{
-  width: 335px;
+  width: 375px;
   margin: 0 auto;
 }
 .grid-toolbar .pagination-centered .icons-holder{
