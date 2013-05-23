@@ -2,7 +2,7 @@
     <div id="search-div" class="input-append input-prepend pull-left header-search {% if searchString %}search-focus{% endif %}">
         <div class="btn-group">
             <button data-toggle="dropdown" class="btn dropdown-toggle" id="search-bar-button">
-                {% if fromString == '*' or fromString == '' %}
+                {% if fromString == '' %}
                     All
                 {% else %}
                     {% for entity in entities %}
@@ -14,7 +14,7 @@
                 <span class="caret"></span>
             </button>
             <ul class="dropdown-menu" id="search-bar-dropdown">
-                <li data-alias="*" {% if fromString == '*' or fromString == '' %}class="active"{% endif %}>
+                <li data-alias="" {% if fromString == '' %}class="active"{% endif %}>
                     <a href="#">{% trans %}All{% endtrans %}</a>
                 </li>
                 {% for entity in entities %}
@@ -25,7 +25,7 @@
             </ul>
         </div>
         <div class="header-search-frame">
-            <input type="hidden" name="from" id="search-bar-from" value="{{ fromString ? fromString : '*' }}"/>
+            <input type="hidden" name="from" id="search-bar-from" value="{{ fromString ? fromString : '' }}"/>
             <input type="text" id="search-bar-search" class="span2 search" placeholder="" name="search" value="{{ searchString }}"/>
             <button type="submit" class="btn btn-search">Search</button>
             <div class="custom-dropdown" id="search-dropdown">

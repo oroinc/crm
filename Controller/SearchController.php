@@ -9,6 +9,9 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 use Oro\Bundle\SearchBundle\Datagrid\SearchDatagridManager;
+use Oro\Bundle\SearchBundle\Engine\Indexer;
+use Oro\Bundle\GridBundle\Datagrid\DatagridView;
+use Oro\Bundle\SearchBundle\Provider\ResultProvider;
 
 class SearchController extends Controller
 {
@@ -41,45 +44,63 @@ class SearchController extends Controller
     }
 
     /**
+     * @param string $from
+     * @param string $string
+     * @return DatagridView
+     */
+    protected function getSearchResultsDatagridView($from, $string)
+    {
+        /** @var $datagridManager SearchDatagridManager */
+        $datagridManager = $this->get('oro_search.datagrid_results.datagrid_manager');
+
+        $datagridManager->setSearchEntity($from);
+        $datagridManager->setSearchString($string);
+        $datagridManager->getRouteGenerator()->setRouteParameters(
+            array(
+                'from'   => $from,
+                'search' => $string,
+            )
+        );
+
+        return $datagridManager->getDatagrid()->createView();
+    }
+
+    /**
      * Show search results
      *
-     * @Route(
-     *      "/{_format}",
-     *      name="oro_search_results",
-     *      requirements={"_format"="html|json"},
-     *      defaults={"_format"="html", "limit"=10}
-     * )
+     * @Route("/", name="oro_search_results")
      * @Template
      */
     public function searchResultsAction(Request $request)
     {
         $from   = $request->get('from');
-        $search = $request->get('search');
+        $string = $request->get('search');
 
-        /** @var $datagridManager SearchDatagridManager */
-        $datagridManager = $this->get('oro_search.datagrid_results.datagrid_manager');
+        $datagridView = $this->getSearchResultsDatagridView($from, $string);
 
-        $datagridManager->setSearchEntity($from);
-        $datagridManager->setSearchString($search);
-        $datagridManager->getRouteGenerator()->setRouteParameters(
-            array(
-                'from'   => $from,
-                'search' => $search,
-            )
+        /** @var $resultProvider ResultProvider */
+        $resultProvider = $this->get('oro_search.result_provider');
+
+        return array(
+            'from'           => $from,
+            'searchString'   => $string,
+            'groupedResults' => $resultProvider->getGroupedResults($string),
+            'datagrid'       => $datagridView
         );
+    }
 
-        $view = 'json' == $request->getRequestFormat()
-            ? 'OroGridBundle:Datagrid:list.json.php'
-            : 'OroSearchBundle:Search:searchResults.html.twig';
+    /**
+     * Return search results in json for datagrid
+     *
+     * @Route("/ajax", name="oro_search_results_ajax")
+     */
+    public function searchResultsAjaxAction(Request $request)
+    {
+        $from   = $request->get('from');
+        $string = $request->get('search');
 
-        return $this->render(
-            $view,
-            array(
-                'from'         => $from,
-                'entities'     => $this->get('oro_search.index')->getEntitiesLabels(),
-                'searchString' => $search,
-                'datagrid'     => $datagridManager->getDatagrid()->createView()
-            )
-        );
+        $datagridView = $this->getSearchResultsDatagridView($from, $string);
+
+        return $this->get('oro_grid.renderer')->renderResultsJsonResponse($datagridView);
     }
 }

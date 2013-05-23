@@ -4,7 +4,7 @@
 {# Entity of specific type #}
 {% set entity = record.getValue('entity') %}
 
-<div>
+<div style="height: 60px;">
     {% if entity %}
         {% if indexer_item.entityConfig.search_template %}
             {% include indexer_item.entityConfig.search_template with {'entity': entity, 'url': indexer_item.recordUrl} %}
@@ -12,6 +12,7 @@
             {{ entity }}
         {% endif %}
     {% else %}
+        <h3 style="margin: 0px;">{{ indexer_item.recordTitle }}</h3>
         <i>This entity is not available. Probably it was removed.</i>
     {% endif %}
 </div>

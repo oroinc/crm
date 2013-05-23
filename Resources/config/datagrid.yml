@@ -13,7 +13,7 @@ services:
             - name: oro_grid.datagrid.manager
               datagrid_name: %oro_search.datagrid_results.datagrid_name%
               entity_hint: results
-              route_name: oro_search_results
+              route_name: oro_search_results_ajax
               query_factory: oro_search.datagrid_results.query_factory
               datagrid_builder: oro_search.datagrid_results.datagrid_builder
 

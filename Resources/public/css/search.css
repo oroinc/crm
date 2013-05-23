@@ -1,0 +1,38 @@
+.search-entity-types-column {
+    width: 200px;
+    vertical-align: top;
+    border: 1px solid #cccccc;
+    background-color: #f8f8f8;
+}
+
+.search-entity-types-column .entity-type {
+    border-bottom: 1px solid #cccccc;
+    width: 190px;
+    height: 30px;
+    font-size: 13px;
+    padding: 10px 0 0 10px;
+}
+
+.search-entity-types-column .entity-type.selected {
+    font-weight: bold;
+    background-color: #e8e8e8;
+}
+
+.search-entity-types-column .entity-type.selected .arrow {
+    float: right;
+    padding-right: 5px;
+}
+
+.search-form {
+    display:inline;
+}
+
+.search-results-column {
+    vertical-align: top;
+    border: 1px solid #cccccc;
+    padding: 10px;
+}
+
+.container-fluid.search-header {
+    background-color: #f8f8f8;
+}

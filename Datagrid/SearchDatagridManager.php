@@ -81,8 +81,12 @@ class SearchDatagridManager extends DatagridManager
             $url->getName(),
             function (ResultRecordInterface $record) {
                 /** @var $indexerItem Item */
-                $indexerItem = $record->getValue('indexer_item');
-                return $indexerItem->getRecordUrl();
+                if ($record->getValue('entity')) {
+                    $indexerItem = $record->getValue('indexer_item');
+                    return $indexerItem->getRecordUrl();
+                }
+
+                return null;
             }
         );
         $url->setProperty($callbackProperty);
@@ -149,37 +153,5 @@ class SearchDatagridManager extends DatagridManager
     public function setSearchString($searchString)
     {
         $this->searchString = $searchString;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    protected function getRowActions()
-    {
-        /*$clickAction = array(
-            'name'         => 'rowClick',
-            'type'         => ActionInterface::TYPE_REDIRECT,
-            'acl_resource' => 'root',
-            'options'      => array(
-                'label'         => 'View',
-                'link'          => 'url',
-                'runOnRowClick' => true,
-                'backUrl'       => true,
-            )
-        );*/
-
-        $viewAction = array(
-            'name'         => 'view',
-            'type'         => ActionInterface::TYPE_REDIRECT,
-            'acl_resource' => 'root',
-            'options'      => array(
-                'label'   => 'View',
-                'icon'    => 'user',
-                'link'    => 'url',
-                'backUrl' => true,
-            )
-        );
-
-        return array(/*$clickAction,*/ $viewAction);
     }
 }

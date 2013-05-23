@@ -15,25 +15,62 @@
 {% endblock %}
 
 {% block page_container %}
-<div class="container-fluid">
     {% block content %}
-        <h2>{% trans %}Search results{% endtrans %}</h2>
+        <div class="container-fluid search-header">
+            <h2>
+                {% trans %}Search{% endtrans %}
+                <form method="get" action="{{ path('oro_search_results') }}" class="form-inline search-form">
+                    <input type="hidden" name="from" value="" />
+                    <input type="text" id="search" class="span2 search" name="search" value="{{ searchString }}" />
+                    <button type="submit" class="btn btn-search btn-primary">Search</button>
+                </form>
+            </h2>
+        </div>
 
-        <form method="get" action="{{ path('oro_search_results') }}" class="form-inline search-form">
-            <select name="from">
-                <option value="">{% trans %}All{% endtrans %}</option>
-                {% for entity in entities %}
-                    <option value="{{ entity.alias }}" {% if entity.alias == from %}selected="selected"{% endif %}>
-                        {{ entity.label }}
-                    </option>
-                {% endfor %}
-            </select>
-            <input type="text" id="search" class="span2 search" name="search" value="{{ searchString }}"/>
-            <button type="submit" class="btn btn-search">Search</button>
-        </form>
+        {% if groupedResults|length > 1 %}
+            <table width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                    <td class="search-entity-types-column">
+                        {% for alias, type in groupedResults %}
 
-        <div id="search-result-grid"></div>
+                            {% set selected = alias == from %}
+
+                            {% set label = '' %}
+                            {% if alias == '' %}
+                                {% set label = 'All' %}
+                            {% elseif 'label' in type.config|keys %}
+                                {% set label = type.config.label %}
+                            {% endif %}
+
+                            {% set entityIconClass = "icon-tags" %}
+                            {% if alias == '' %}
+                                {% set entityIconClass = "icon-search" %}
+                            {% elseif 'entity_icon_class' in type.config|keys %}
+                                {% set entityIconClass = type.config.entity_icon_class %}
+                            {% endif %}
+
+                            <div class="entity-type{% if selected %} selected{% endif %}">
+                                <i class="{{ entityIconClass }}"></i>
+                                {% if selected %}
+                                    {{ label }} ({{ type.count }})
+                                    <div class="arrow"><i class="icon-chevron-right"></i></div>
+                                {% else %}
+                                    <a href="{{ path('oro_search_results', { from: alias, search: searchString }) }}">
+                                        {{ label }} ({{ type.count }})
+                                    </a>
+                                {% endif %}
+                            </div>
+
+                        {% endfor %}
+                    </td>
+                    <td class="search-results-column">
+                        <div id="search-result-grid"></div>
+                    </td>
+                </tr>
+            </table>
+        {% else %}
+            <div id="search-result-grid"></div>
+        {% endif %}
 
     {% endblock %}
-</div>
 {% endblock %}
