@@ -8,30 +8,26 @@
 <div class="layout-content">
     <div class="navigation clearfix navbar-extra navbar-extra-right">
         <div class="row">
-            <div class="clearfix pull-right">
-                <div class="clearfix">
-                    <div class="pull-right">
-                        <div class="btn-group icons-holder">
-                            <a href="{{ app.session.get('back', path('oro_user_index')) }}" class="btn back icons-holder-text" title="{{ 'Back'|trans }}"><i class="icon-chevron-left hide-text" >{{ 'Back'|trans }}</i>{{ 'Back'|trans }}</a>
-                        </div>
-                        {% if resource_granted('oro_user_profile_update') %}
-                        <div class="btn-group icons-holder">
-                            <a href="{{ path('oro_user_update', { id: user.id, back: app.request.uri }) }}" class="btn icons-holder-text" title="{{ 'Edit1 profile'|trans }}"><i class="icon-edit hide-text">{{ 'Edit'|trans }}</i>{{ 'Edit'|trans }}</a>
-                        </div>
-                        {% endif %}
-                        {% if resource_granted('oro_user_profile_delete') %}
-                        <div class="btn-group icons-holder">
-                            <a href="javascript: void(0);" class="btn icons-holder-text no-hash" id="btn-remove-profile" data-id="{{ user.id }}" data-message="{{ 'Are you sure you want to delete this profile?'|trans }}" title="{{ 'Delete profile'|trans }}"><i class="icon-trash hide-text">{{ 'Delete'|trans }}</i>{{ 'Delete'|trans }}</a>
-                        </div>
-                        {% endif %}
+            <div class="pull-right">
+                <div class="pull-right">
+                    <div class="pull-left btn-group icons-holder">
+                        <a href="{{ app.session.get('back', path('oro_user_index')) }}" class="btn back icons-holder-text" title="{{ 'Back'|trans }}"><i class="icon-chevron-left hide-text" >{{ 'Back'|trans }}</i>{{ 'Back'|trans }}</a>
                     </div>
+                    {% if resource_granted('oro_user_profile_update') %}
+                    <div class="pull-left btn-group icons-holder">
+                        <a href="{{ path('oro_user_update', { id: user.id, back: app.request.uri }) }}" class="btn icons-holder-text" title="{{ 'Edit1 profile'|trans }}"><i class="icon-edit hide-text">{{ 'Edit'|trans }}</i>{{ 'Edit'|trans }}</a>
+                    </div>
+                    {% endif %}
+                    {% if resource_granted('oro_user_profile_delete') %}
+                    <div class="pull-left btn-group icons-holder">
+                        <a href="javascript: void(0);" class="btn icons-holder-text no-hash" id="btn-remove-profile" data-id="{{ user.id }}" data-message="{{ 'Are you sure you want to delete this profile?'|trans }}" title="{{ 'Delete profile'|trans }}"><i class="icon-trash hide-text">{{ 'Delete'|trans }}</i>{{ 'Delete'|trans }}</a>
+                    </div>
+                    {% endif %}
                 </div>
-                <div class="clearfix">
-                    <div class="customer-info pull-right">
-                        <ul class="inline">
-                            <li><a class="no-hash" href="{{ path('oro_dataaudit_history', {entity:'Oro\\Bundle\\UserBundle\\Entity\\User', id: user.id}) }}" id="view-activity-btn" title="{{ user }} - {{ 'Change History'|trans }}">{{ 'Activity Log'|trans }}</a></li>
-                        </ul>
-                    </div>
+                <div class="pull-right usser-info-state">
+                    <ul class="inline-decorate">
+                        <li><a class="no-hash" href="{{ path('oro_dataaudit_history', {entity:'Oro\\Bundle\\UserBundle\\Entity\\User', id: user.id}) }}" id="view-activity-btn" title="{{ user }} - {{ 'Change History'|trans }}">{{ 'Activity Log'|trans }}</a></li>
+                    </ul>
                 </div>
             </div>
             <div class="span9">
