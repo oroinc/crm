@@ -147,7 +147,7 @@ class ProfileController extends FOSRestController implements ClassResourceInterf
      *      }
      * )
      * @Acl(
-     *      id="oro_user_profile_remove",
+     *      id="oro_user_profile_delete",
      *      name="Remove user profile",
      *      description="Remove user profile",
      *      parent="oro_user_profile"
