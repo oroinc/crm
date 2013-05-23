@@ -19,12 +19,14 @@ class ConfigReader
     /**
      * Get ACL Resources array from config files
      *
-     * @return \Oro\Bundle\UserBundle\Annotation\Acl[]
+     * @param string $directory
+     *
+     * @return \Oro\Bundle\UserBundle\Annotation\Aclarray
      */
-    public function getConfigResources()
+    public function getConfigResources($directory = '')
     {
         $aclResources = array();
-        $aclConfig = $this->getConfigAclArray();
+        $aclConfig = $this->getConfigAclArray($directory);
         if (count($aclConfig)) {
             foreach ($aclConfig as $id => $acl) {
                 $aclObject = new Acl(
@@ -71,18 +73,37 @@ class ConfigReader
     /**
      * Get ACL array from config files
      *
+     * @param string $directory
+     *
      * @return array
      */
-    protected function getConfigAclArray()
+    protected function getConfigAclArray($directory = '')
     {
         $aclConfig = array();
-        foreach ($this->bundles as $bundle) {
-            $reflection = new \ReflectionClass($bundle);
-            if (is_file($file = dirname($reflection->getFilename()) . '/Resources/config/acl.yml')) {
-                $aclConfig += Yaml::parse(realpath($file));
+        if (!$directory) {
+            foreach ($this->bundles as $bundle) {
+                $reflection = new \ReflectionClass($bundle);
+                $aclConfig += $this->parseAclConfigFile($reflection->getFilename());
             }
+        } else {
+            $aclConfig += $this->parseAclConfigFile($directory);
         }
 
         return $aclConfig;
+    }
+
+    /**
+     * Get ACL resources from config files of bundle
+     *
+     * @param string $directory
+     *
+     * @return array
+     */
+    protected function parseAclConfigFile($directory){
+        if (is_file($file = dirname($directory) . '/Resources/config/acl.yml')) {
+            return Yaml::parse(realpath($file));
+        }
+
+        return array();
     }
 }

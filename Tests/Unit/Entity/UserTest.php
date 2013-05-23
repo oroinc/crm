@@ -13,7 +13,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
 {
     public function testUsername()
     {
-        $user = $this->getUser();
+        $user = new User;
         $name = 'Tony';
 
         $this->assertNull($user->getUsername());
@@ -26,7 +26,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
 
     public function testEmail()
     {
-        $user = $this->getUser();
+        $user = new User;
         $mail = 'tony@mail.org';
 
         $this->assertNull($user->getEmail());
@@ -38,7 +38,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
 
     public function testIsPasswordRequestNonExpired()
     {
-        $user      = $this->getUser();
+        $user      = new User;
         $requested = new \DateTime('-10 seconds');
 
         $user->setPasswordRequestedAt($requested);
@@ -50,7 +50,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
 
     public function testIsPasswordRequestAtCleared()
     {
-        $user = $this->getUser();
+        $user = new User;
         $requested = new \DateTime('-10 seconds');
 
         $user->setPasswordRequestedAt($requested);
@@ -62,7 +62,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
 
     public function testConfirmationToken()
     {
-        $user  = $this->getUser();
+        $user  = new User;
         $token = $user->generateToken();
 
         $this->assertNotEmpty($token);
@@ -74,7 +74,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
 
     public function testHasRole()
     {
-        $user    = $this->getUser();
+        $user    = new User;
         $role    = new Role(User::ROLE_DEFAULT);
         $newRole = new Role('ROLE_FOO');
 
@@ -95,7 +95,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
 
     public function testGroups()
     {
-        $user  = $this->getUser();
+        $user  = new User;
         $role  = new Role('ROLE_FOO');
         $group = new Group('Users');
 
@@ -117,7 +117,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
 
     public function testIsEnabled()
     {
-        $user = $this->getUser();
+        $user = new User;
 
         $this->assertTrue($user->isEnabled());
         $this->assertTrue($user->isAccountNonExpired());
@@ -131,7 +131,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
 
     public function testSerializing()
     {
-        $user  = $this->getUser();
+        $user  = new User;
         $clone = clone $user;
         $data  = $user->serialize();
 
@@ -148,7 +148,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
 
     public function testPassword()
     {
-        $user = $this->getUser();
+        $user = new User;
         $pass = 'anotherPassword';
 
         $user->setPassword($pass);
@@ -164,18 +164,14 @@ class UserTest extends \PHPUnit_Framework_TestCase
 
     public function testCallbacks()
     {
-        $user = $this->getUser();
-        $now  = new \DateTime();
-
+        $user = new User;
         $user->beforeSave();
-
-        $this->assertEquals($now, $user->getCreatedAt());
-        $this->assertEquals($now, $user->getUpdatedAt());
+        $this->assertInstanceOf('\DateTime', $user->getCreatedAt());
     }
 
     public function testStatuses()
     {
-        $user  = $this->getUser();
+        $user  = new User;
         $status  = new Status();
 
         $this->assertNotContains($status, $user->getStatuses());
@@ -198,7 +194,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
 
     public function testEmails()
     {
-        $user  = $this->getUser();
+        $user  = new User;
         $email  = new Email();
 
         $this->assertNotContains($email, $user->getEmails());
@@ -214,7 +210,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
 
     public function testNames()
     {
-        $user  = $this->getUser();
+        $user  = new User;
         $first = 'James';
         $last  = 'Bond';
 
@@ -230,7 +226,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
 
     public function testDates()
     {
-        $user = $this->getUser();
+        $user = new User;
         $now  = new \DateTime('-1 year');
 
         $user->setBirthday($now);
@@ -242,7 +238,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
 
     public function testApi()
     {
-        $user = $this->getUser();
+        $user = new User;
         $api  = new UserApi();
 
         $this->assertNull($user->getApi());
@@ -254,22 +250,101 @@ class UserTest extends \PHPUnit_Framework_TestCase
 
     public function testImage()
     {
-        $user = $this->getUser();
+        $user = new User;
 
         $this->assertNull($user->getImagePath());
 
         $user->setImage('test');
 
-        $this->assertNotEmpty($user->getImage());
-        $this->assertNotEmpty($user->getImagePath());
-        $this->assertNotEmpty($user->getImagePath(true));
+        $this->assertEquals('test', $user->getImage());
+        $this->assertNotEmpty($user->getUploadDir());
+        $path = $user->getUploadDir(true) . '/' . $user->getImage();
+        $this->assertEquals($path, $user->getImagePath());
+    }
+
+    public function testUnserialize()
+    {
+        $user = new User();
+        $serialized = array(
+            'password',
+            'salt',
+            'username',
+            true,
+            'confirmation_token',
+            10
+        );
+        $user->unserialize(serialize($serialized));
+
+        $this->assertEquals($serialized[0], $user->getPassword());
+        $this->assertEquals($serialized[1], $user->getSalt());
+        $this->assertEquals($serialized[2], $user->getUsername());
+        $this->assertEquals($serialized[3], $user->isEnabled());
+        $this->assertEquals($serialized[4], $user->getConfirmationToken());
+        $this->assertEquals($serialized[5], $user->getId());
+    }
+
+    public function testImageFile()
+    {
+        $file = $this->getMockBuilder('Symfony\Component\HttpFoundation\File\UploadedFile')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $user = new User();
+        $this->assertSame($user, $user->setImageFile($file));
+        $this->assertInstanceOf('\DateTime', $user->getUpdated());
+        $this->assertEquals($user->getUpdated(), $user->getUpdatedAt());
+        $this->assertEquals($file, $user->getImageFile());
+        $this->assertSame($user, $user->unsetImageFile());
+        $this->assertNull($user->getImageFile());
+    }
+
+    public function testIsCredentialsNonExpired()
+    {
+        $user = new User();
+        $this->assertTrue($user->isCredentialsNonExpired());
     }
 
     /**
-     * @return User
+     * @dataProvider provider
+     * @param string $property
+     * @param mixed $value
      */
-    protected function getUser()
+    public function testSettersAndGetters($property, $value)
     {
-        return $this->getMockForAbstractClass('Oro\Bundle\UserBundle\Entity\User');
+        $obj = new User();
+
+        call_user_func_array(array($obj, 'set' . ucfirst($property)), array($value));
+        $this->assertEquals($value, call_user_func_array(array($obj, 'get' . ucfirst($property)), array()));
+    }
+
+    /**
+     * Data provider
+     *
+     * @return array
+     */
+    public function provider()
+    {
+        return array(
+            array('username', 'test'),
+            array('email', 'test'),
+            array('firstname', 'test'),
+            array('lastname', 'test'),
+            array('birthday', new \DateTime()),
+            array('image', 'test'),
+            array('password', 'test'),
+            array('plainPassword', 'test'),
+            array('confirmationToken', 'test'),
+            array('passwordRequestedAt', new \DateTime()),
+            array('lastLogin', new \DateTime()),
+            array('loginCount', 11),
+            array('created', new \DateTime()),
+            array('updated', new \DateTime()),
+        );
+    }
+
+    public function testPreUpdate()
+    {
+        $user = new User();
+        $user->preUpdate();
+        $this->assertInstanceOf('\DateTime', $user->getUpdated());
     }
 }

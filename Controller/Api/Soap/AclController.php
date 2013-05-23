@@ -3,9 +3,7 @@
 namespace Oro\Bundle\UserBundle\Controller\Api\Soap;
 
 use Symfony\Component\DependencyInjection\ContainerAware;
-
 use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
-
 use Oro\Bundle\UserBundle\Annotation\AclAncestor;
 
 class AclController extends ContainerAware
@@ -19,7 +17,7 @@ class AclController extends ContainerAware
      */
     public function cgetAction()
     {
-        return $this->container->get('oro_user.acl_manager')->getAclResources(false);
+        return $this->getManager()->getAclResources(false);
     }
 
     /**
@@ -30,12 +28,20 @@ class AclController extends ContainerAware
      */
     public function getAction($id)
     {
-        $resource = $this->container->get('oro_user.acl_manager')->getAclResource($id);
+        $resource = $this->getManager()->getAclResource($id);
 
         if (!$resource) {
             throw new \SoapFault('NOT_FOUND', sprintf('Acl resource with id "%s" can not be found', $id));
         }
 
         return $resource;
+    }
+
+    /**
+     * @return \Oro\Bundle\UserBundle\Acl\Manager
+     */
+    public function getManager()
+    {
+        return $this->container->get('oro_user.acl_manager');
     }
 }

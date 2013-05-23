@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\UserBundle\Datagrid;
 
+use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\GridBundle\Datagrid\DatagridManager;
 use Oro\Bundle\GridBundle\Field\FieldDescription;
 use Oro\Bundle\GridBundle\Field\FieldDescriptionCollection;
@@ -28,6 +29,23 @@ class RoleDatagridManager extends DatagridManager
      */
     protected function configureFields(FieldDescriptionCollection $fieldsCollection)
     {
+        $fieldId = new FieldDescription();
+        $fieldId->setName('id');
+        $fieldId->setOptions(
+            array(
+                'type'        => FieldDescriptionInterface::TYPE_INTEGER,
+                'label'       => 'ID',
+                'field_name'  => 'id',
+                'filter_type' => FilterInterface::TYPE_NUMBER,
+                'required'    => false,
+                'sortable'    => false,
+                'filterable'  => false,
+                'show_filter' => false,
+                'show_column' => false,
+            )
+        );
+        $fieldsCollection->add($fieldId);
+
         $fieldRole = new FieldDescription();
         $fieldRole->setName('role');
         $fieldRole->setOptions(
@@ -59,6 +77,28 @@ class RoleDatagridManager extends DatagridManager
             )
         );
         $fieldsCollection->add($fieldLabel);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function createQuery()
+    {
+        $query = parent::createQuery();
+        $query->where('o.role <> :anon');
+
+        return $query;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function getQueryParameters()
+    {
+        return array_merge(
+            parent::getQueryParameters(),
+            array('anon' => User::ROLE_ANONYMOUS)
+        );
     }
 
     /**
