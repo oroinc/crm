@@ -10,7 +10,11 @@
 
 <div class="span9">
     <div class="customer-info well-small">
-        <div class="visual"><img src="{{ user.imagePath ? user.imagePath | imagine_filter('avatar_med') : asset('bundles/oroui/img/info-usser.png') }}" alt="{{ user.fullname(format) }}"/></div>
+        <div class="visual">
+            <a href="{{ url }}">
+                <img src="{{ user.imagePath ? user.imagePath | imagine_filter('avatar_med') : asset('bundles/oroui/img/info-usser.png') }}" alt="{{ user.fullname(format) }}"/>
+            </a>
+        </div>
         <div class="customer-content pull-left">
             <div class="clearfix">
                 <div class="pull-left">
