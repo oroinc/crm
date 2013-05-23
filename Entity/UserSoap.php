@@ -37,7 +37,6 @@ class UserSoap extends User
     protected $lastName;
 
     /**
-     * @Soap\ComplexType("boolean")
      * @Exclude
      */
     protected $enabled = true;
