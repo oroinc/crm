@@ -5,7 +5,7 @@ OroGridBundle has a couple of classes that can be used to render grid results.
 
 #### Class Description
 
-* **Twig \ GridExtension** - a Twig extension that can be used to render datagrid results as JSON in Twig template;
+* **Twig \ GridRendererExtension** - a Twig extension that can be used to render datagrid results as JSON in Twig template;
 * **Renderer \ GridRenderer** - a class that can be used to render datagrid responses.
 
 #### Example of Usage

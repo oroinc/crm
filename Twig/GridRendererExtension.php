@@ -5,9 +5,9 @@ namespace Oro\Bundle\GridBundle\Twig;
 use Oro\Bundle\GridBundle\Datagrid\DatagridView;
 use Oro\Bundle\GridBundle\Renderer\GridRenderer;
 
-class GridExtension extends \Twig_Extension
+class GridRendererExtension extends \Twig_Extension
 {
-    const NAME = 'oro_grid';
+    const NAME = 'oro_grid_renderer';
 
     /**
      * @var GridRenderer

@@ -2,14 +2,14 @@
 
 namespace Oro\Bundle\GridBundle\Tests\Unit\Twig;
 
-use Oro\Bundle\GridBundle\Twig\GridExtension;
+use Oro\Bundle\GridBundle\Twig\GridRendererExtension;
 use Oro\Bundle\GridBundle\Renderer\GridRenderer;
 use Oro\Bundle\GridBundle\Datagrid\DatagridView;
 
-class GridExtensionTest extends \PHPUnit_Framework_TestCase
+class GridRendererExtensionTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var GridExtension
+     * @var GridRendererExtension
      */
     protected $extension;
 
@@ -24,7 +24,7 @@ class GridExtensionTest extends \PHPUnit_Framework_TestCase
             ->setMethods(array('getResultsJson'))
             ->disableOriginalConstructor()
             ->getMock();
-        $this->extension = new GridExtension($this->renderer);
+        $this->extension = new GridRendererExtension($this->renderer);
     }
 
     public function testGetFunctions()
@@ -51,5 +51,10 @@ class GridExtensionTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($expectedResult));
 
         $this->assertEquals($expectedResult, $this->extension->renderResultsJson($datagridView));
+    }
+
+    public function testGetName()
+    {
+        $this->assertEquals(GridRendererExtension::NAME, $this->extension->getName());
     }
 }

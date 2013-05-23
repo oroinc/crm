@@ -15,7 +15,7 @@ parameters:
     oro_grid.route.default_generator.class:  Oro\Bundle\GridBundle\Route\DefaultRouteGenerator
 
     oro_grid.renderer.class:                 Oro\Bundle\GridBundle\Renderer\GridRenderer
-    oro_grid.twig.extension.class:           Oro\Bundle\GridBundle\Twig\GridExtension
+    oro_grid.twig.extension.class:           Oro\Bundle\GridBundle\Twig\GridRendererExtension
 
 services:
     oro_grid.builder.datagrid:

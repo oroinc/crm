@@ -114,7 +114,7 @@ class DemoController extends Controller
             return $this->get('oro_grid.renderer')->renderResultsJsonResponse($datagridView);
         }
 
-        return $this->render($view, array('datagrid' => $datagrid->createView()));
+        return $this->render($view, array('datagrid' => $datagridView));
     }
 }
 ```
