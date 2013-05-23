@@ -25,25 +25,43 @@ class ResponseHashnavListener
     }
 
     /**
+     * Checking request and response and decide whether we need a redirect
+     *
      * @param FilterResponseEvent $event
      */
     public function onResponse(FilterResponseEvent $event)
     {
         $request = $event->getRequest();
         $response = $event->getResponse();
-
-        if (($request->get('x-oro-hash-navigation') || $request->headers->get('x-oro-hash-navigation'))
-            && $response->isRedirect()
-        ) {
-            $event->setResponse(
-                $this->templating->renderResponse(
-                    'OroNavigationBundle:HashNav:redirect.html.twig',
-                    array(
-                         'token'    => $this->security->getToken(),
-                         'location' => $response->headers->get('location')
+        if ($request->get('x-oro-hash-navigation') || $request->headers->get('x-oro-hash-navigation')) {
+            $location = '';
+            $isFullRedirect = false;
+            if ($response->isRedirect()) {
+                $location = $response->headers->get('location');
+                if (!is_object($this->security->getToken())) {
+                    $isFullRedirect = true;
+                }
+            }
+            if ($response->isNotFound() || $response->isServerError()) {
+                $location = $request->getUri();
+                if (strpos($location, '?') === false) {
+                    $location .= '?no-cache=1';
+                } else {
+                    $location .= '&no-cache=1';
+                }
+                $isFullRedirect = true;
+            }
+            if ($location) {
+                $event->setResponse(
+                    $this->templating->renderResponse(
+                        'OroNavigationBundle:HashNav:redirect.html.twig',
+                        array(
+                            'full_redirect' => $isFullRedirect,
+                            'location' => $location,
+                        )
                     )
-                )
-            );
+                );
+            }
         }
     }
 }
