@@ -340,6 +340,7 @@ Oro.Datagrid.Grid = Backgrid.Grid.extend({
         this.$(this.selectors.noDataBlock).append($(this.noDataTemplate({
             hint: this.noDataHint.replace('\n', '<br />')
         }))).hide();
+        this._updateNoDataBlock();
     },
 
     /**
@@ -363,18 +364,27 @@ Oro.Datagrid.Grid = Backgrid.Grid.extend({
         if (this.requestsCount == 0) {
             this.loadingMask.hide();
             this.toolbar.enable();
-            if (this.collection.models.length > 0) {
-                this.$(this.selectors.grid).show();
-                this.$(this.selectors.noDataBlock).hide();
-            } else {
-                this.$(this.selectors.grid).hide();
-                this.$(this.selectors.noDataBlock).show();
-            }
+            this._updateNoDataBlock();
             /**
              * Backbone event. Fired when data for grid has been successfully rendered.
              * @event grid_load:complete
              */
             Oro.Events.trigger("grid_load:complete");
+        }
+    },
+
+    /**
+     * Update no data block status
+     *
+     * @private
+     */
+    _updateNoDataBlock: function() {
+        if (this.collection.models.length > 0) {
+            this.$(this.selectors.grid).show();
+            this.$(this.selectors.noDataBlock).hide();
+        } else {
+            this.$(this.selectors.grid).hide();
+            this.$(this.selectors.noDataBlock).show();
         }
     },
 
