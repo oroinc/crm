@@ -19,6 +19,8 @@ Oro\Bundle\UserBundle\Entity\User:
                 groups:     [Registration]
             - Length:
                 min:        2
+        enabled:
+            - NotNull:      ~
         roles:
             - Count:
                 min:        1

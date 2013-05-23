@@ -21,7 +21,8 @@
         "oro/ui-bundle": "dev-master",
         "oro/soap-bundle": "dev-master",
         "oro/grid-bundle": "dev-master",
-        "oro/navigation-bundle": "dev-master"
+        "oro/navigation-bundle": "dev-master",
+        "oro/data-audit-bundle": "dev-master"
     },
     "autoload": {
         "psr-0": { "Oro\\Bundle\\UserBundle": "" }

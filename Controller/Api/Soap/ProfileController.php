@@ -4,10 +4,11 @@ namespace Oro\Bundle\UserBundle\Controller\Api\Soap;
 
 use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 
+use Oro\Bundle\SoapBundle\Controller\Api\Soap\SoapController;
 use Oro\Bundle\UserBundle\Entity\UserSoap;
 use Oro\Bundle\UserBundle\Annotation\AclAncestor;
 
-class ProfileController extends BaseController
+class ProfileController extends SoapController
 {
     /**
      * @Soap\Method("getUsers")
@@ -18,11 +19,7 @@ class ProfileController extends BaseController
      */
     public function cgetAction($page = 1, $limit = 10)
     {
-        return $this->container->get('knp_paginator')->paginate(
-            $this->getUserManager()->getListQuery(),
-            (int) $page,
-            (int) $limit
-        );
+        return $this->handleGetListRequest($page, $limit);
     }
 
     /**
@@ -33,7 +30,7 @@ class ProfileController extends BaseController
      */
     public function getAction($id)
     {
-        return $this->getEntity('OroUserBundle:User', $id);
+        return $this->handleGetRequest($id);
     }
 
     /**
@@ -44,12 +41,7 @@ class ProfileController extends BaseController
      */
     public function createAction($profile)
     {
-        $entity = $this->getUserManager()->createFlexible();
-        $form   = $this->container->get('oro_user.form.profile.api')->getName();
-
-        $this->container->get('oro_soap.request')->fix($form);
-
-        return $this->processForm($form, $entity);
+        return $this->handleCreateRequest();
     }
 
     /**
@@ -61,28 +53,18 @@ class ProfileController extends BaseController
      */
     public function updateAction($id, $profile)
     {
-        $entity = $this->getEntity('OroUserBundle:User', $id);
-        $form   = $this->container->get('oro_user.form.profile.api')->getName();
-
-        $this->container->get('oro_soap.request')->fix($form);
-
-        return $this->processForm($form, $entity);
-
+        return $this->handleUpdateRequest($id);
     }
 
     /**
      * @Soap\Method("deleteUser")
      * @Soap\Param("id", phpType="int")
      * @Soap\Result(phpType="boolean")
-     * @AclAncestor("oro_user_profile_remove")
+     * @AclAncestor("oro_user_profile_delete")
      */
     public function deleteAction($id)
     {
-        $entity = $this->getEntity('OroUserBundle:User', $id);
-
-        $this->getUserManager()->deleteUser($entity);
-
-        return true;
+        return $this->handleDeleteRequest($id);
     }
 
     /**
@@ -93,7 +75,7 @@ class ProfileController extends BaseController
      */
     public function getRolesAction($id)
     {
-        return $this->getEntity('OroUserBundle:User', $id)->getRoles();
+        return $this->getEntity($id)->getRoles();
     }
 
     /**
@@ -104,7 +86,7 @@ class ProfileController extends BaseController
      */
     public function getGroupsAction($id)
     {
-        return $this->getEntity('OroUserBundle:User', $id)->getGroups();
+        return $this->getEntity($id)->getGroups();
     }
 
     /**
@@ -116,7 +98,7 @@ class ProfileController extends BaseController
     public function getAclAction($id)
     {
         return $this->getAclManager()->getAclForUser(
-            $this->getEntity('OroUserBundle:User', $id)
+            $this->getEntity($id)
         );
     }
 
@@ -155,5 +137,29 @@ class ProfileController extends BaseController
     protected function getUserManager()
     {
         return $this->container->get('oro_user.manager');
+    }
+
+    /**
+     * @return \Oro\Bundle\SoapBundle\Entity\Manager\ApiFlexibleEntityManager
+     */
+    public function getManager()
+    {
+        return $this->container->get('oro_user.manager.api');
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getForm()
+    {
+        return $this->container->get('oro_user.form.profile.api');
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getFormHandler()
+    {
+        return $this->container->get('oro_user.form.handler.profile.api');
     }
 }

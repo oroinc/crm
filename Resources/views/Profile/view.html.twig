@@ -8,21 +8,32 @@
 <div class="layout-content">
     <div class="navigation clearfix navbar-extra navbar-extra-right">
         <div class="row">
-                <div class="pull-right">
-                    <div class="btn-group icons-holder">
-                        <a href="{{ app.session.get('back') ? app.session.get('back') : path('oro_user_index') }}" class="btn back icons-holder-text" title="{{ 'Back'|trans }}"><i class="icon-chevron-left hide-text" >{{ 'Back'|trans }}</i>{{ 'Back'|trans }}</a>
+            <div class="clearfix pull-right">
+                <div class="clearfix">
+                    <div class="pull-right">
+                        <div class="btn-group icons-holder">
+                            <a href="{{ app.session.get('back', path('oro_user_index')) }}" class="btn back icons-holder-text" title="{{ 'Back'|trans }}"><i class="icon-chevron-left hide-text" >{{ 'Back'|trans }}</i>{{ 'Back'|trans }}</a>
+                        </div>
+                        {% if resource_granted('oro_user_profile_update') %}
+                        <div class="btn-group icons-holder">
+                            <a href="{{ path('oro_user_update', { id: user.id, back: app.request.uri }) }}" class="btn icons-holder-text" title="{{ 'Edit1 profile'|trans }}"><i class="icon-edit hide-text">{{ 'Edit'|trans }}</i>{{ 'Edit'|trans }}</a>
+                        </div>
+                        {% endif %}
+                        {% if resource_granted('oro_user_profile_delete') %}
+                        <div class="btn-group icons-holder">
+                            <a href="javascript: void(0);" class="btn icons-holder-text no-hash" id="btn-remove-profile" data-id="{{ user.id }}" data-message="{{ 'Are you sure you want to delete this profile?'|trans }}" title="{{ 'Delete profile'|trans }}"><i class="icon-trash hide-text">{{ 'Delete'|trans }}</i>{{ 'Delete'|trans }}</a>
+                        </div>
+                        {% endif %}
                     </div>
-                    {% if resource_granted('oro_user_profile_update') %}
-                    <div class="btn-group icons-holder">
-                        <a href="{{ path('oro_user_update', { id: user.id, back: app.request.uri }) }}" class="btn icons-holder-text" title="{{ 'Edit profile'|trans }}"><i class="icon-edit hide-text">{{ 'Edit'|trans }}</i>{{ 'Edit'|trans }}</a>
-                    </div>
-                    {% endif %}
-                    {% if resource_granted('oro_user_profile_remove') %}
-                    <div class="btn-group icons-holder">
-                        <a href="javascript: void(0);" class="btn icons-holder-text no-hash" id="btn-remove-profile" data-id="{{ user.id }}" data-message="{{ 'Are you sure you want to delete this profile?'|trans }}" title="{{ 'Delete profile'|trans }}"><i class="icon-trash hide-text">{{ 'Remove'|trans }}</i>Delete</a>
-                    </div>
-                    {% endif %}
                 </div>
+                <div class="clearfix">
+                    <div class="customer-info pull-right">
+                        <ul class="inline">
+                            <li><a class="no-hash" href="{{ path('oro_dataaudit_history', {entity:'Oro\\Bundle\\UserBundle\\Entity\\User', id: user.id}) }}" id="view-activity-btn" title="{{ user }} - {{ 'Change History'|trans }}">{{ 'Activity Log'|trans }}</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
             <div class="span9">
                <div class="customer-info well-small">
                    <div class="visual"><img src="{{ user.imagePath ? user.imagePath | imagine_filter('avatar_med') : asset('bundles/oroui/img/info-usser.png') }}" alt="{{ user.fullname(format) }}"/></div>
@@ -61,13 +72,13 @@
                     <ul class="nav">
                         <li class="active"><a href="#scroll-main">{{ 'Overview'|trans }}</a></li>
                         <li><a href="#scroll-api">{{ 'API'|trans }}</a></li>
-                        <li><a href="#scroll-attributes">{{ 'Additional Data'|trans }}</a></li>
+                        <li><a href="#scroll-attributes">{{ 'Additional data'|trans }}</a></li>
                     </ul>
                 </div>
             </div>
         </div>
         <div class="clearfix">
-            <div data-spy="scroll" data-target="#navbar-profile" data-offset="50" class="scrollspy container-fluid">
+            <div data-spy="scroll" data-target="#navbar-profile" data-offset="50" class="scrollspy container-fluid scrollable-container">
                 <div class="usser-row">
                    <h4 id="scroll-main" class="scrollspy-title">{{ 'Overview'|trans }}</h4>
                     <div class="row-fluid row-fluid-divider">
@@ -148,7 +159,7 @@
                 </div>
 
                 <div class="usser-row">
-                    <h4 id="scroll-attributes" class="scrollspy-title">{{ 'Additional Data'|trans }}</h4>
+                    <h4 id="scroll-attributes" class="scrollspy-title">{{ 'Additional data'|trans }}</h4>
                     <div class="row-fluid">
                         <div class="form-horizontal">
                             {% for attr in user.values %}
