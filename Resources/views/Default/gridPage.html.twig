@@ -102,183 +102,83 @@
                 </div>
             </div>
             <div class="filter-box container-fluid">
-                <div class="btn-group">
-                    <button class="btn dropdown-toggle" data-toggle="dropdown">Account Owner: <strong>Me</strong> <span class="caret"></span></button>
-                    <ul class="dropdown-menu">
-                        <li><a href="#"> Me2</a></li>
-                        <li><a href="#"> M3</a></li>
-                    </ul>
-                </div>
-
-                <div class="btn-group oro-drop dropdown-close-prevent">
-                    <button class="btn oro-drop-opener oro-dropdown-toggle">Test Owner 1: <strong>Me</strong> <span class="caret"></span></button>
-                    <a class="disable-filter" href="#"><i class="icon-remove hide-text">Close</i></a>
-                    <div class="oro-drop-holder dropdown-menu" data-width="300">
-                        <div class="drop-frame">
-                            <ul class="list-oro">
-                                <li>
-                                    <label for="radio1">
-                                        <input type="radio" id="radio1" />
-                                        radio 1
-                                    </label>
-                                </li>
-                                <li>
-                                    <label for="radio2">
-                                        <input type="radio" id="radio2" />
-                                        radio 2 test text
-                                    </label>
-                                </li>
-                                <li>
-                                    <label for="radio3">
-                                        <input type="radio" id="radio3" />
-                                        radio 2 test text with long text
-                                    </label>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-
-                </div>
-                <div class="btn-group oro-drop">
-                    <button class="btn oro-drop-opener">Just test: <strong>Me</strong> <span class="caret"></span></button>
-                    <a class="disable-filter" href="#"><i class="icon-remove hide-text">Close</i></a>
-                    <div class="oro-drop-holder">
-                        <div class="drop-frame">
-                            <ul class="list-oro">
-                                <li><a href="#">first</a></li>
-                                <li class="divider-vertical small-divider"></li>
-                                <li><a href="#">test</a></li>
-                            </ul>
+                <div class="btn-group filter-item oro-drop">
+                    <button class="btn filter-criteria-selector oro-drop-opener oro-dropdown-toggle" data-toggle="dropdown">
+                        Account Owner: <strong>Me</strong> <span class="caret"></span>
+                    </button>
+                    <a class="disable-filter" href="javascript:void(0);"><i class="icon-remove hide-text">Close</i></a>
+                    <div class="filter-criteria dropdvown-menu" style="display: block !important;">
+                        <div>
+                            <div class="horizontal clearfix">
+                                <select name="select-name" class="filter-select-oro" id="select">
+                                    <option value="1">between</option>
+                                    <option value="1">Contains</option>
+                                </select>
+                            </div>
+                            <div><input type="text" value="" name="value"></div>
+                            <div class="oro-action">
+                                <div class="btn-group">
+                                    <button class="btn btn-primary filter-update" type="button">Update</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="btn-group oro-drop">
-                    <button class="btn oro-drop-opener">Resolution Date: <strong>all</strong> <span class="caret"></span></button>
-                    <a class="disable-filter" href="#"><i class="icon-remove hide-text">Close</i></a>
-                    <div class="oro-drop-holder" data-width="370">
-                        <div class="drop-frame">
-                            <ul class="list-oro">
-                                <li class="one-row">
-                                    <input id="radio11" type="radio" name="date" />
-                                    <label for="radio11">Resolved within the last</label>
-                                    <input type="text" style="width:35px;" />
-                                    <select class="js-measurement" style="width:100px;">
-                                        <option value="m">minutes</option>
-                                        <option value="h">hours</option>
-                                        <option value="d">days</option>
-                                        <option value="w">weeks</option>
-                                    </select>
-                                </li>
-                                <li class="one-row">
-                                    <input id="radio12" type="radio" name="date" />
-                                    <label for="radio12">Date Range</label>
-                                    <label for="from">From</label>
-                                    <input type="text" id="from" name="from" style="width:50px;" />
-                                    <label for="to">to</label>
-                                    <input type="text" id="to" name="to" style="width:50px;" />
-                                </li>
-                            </ul>
+
+                <div class="btn-group filter-item oro-drop" style="margin: 0 0 0 145px;">
+                    <button class="btn filter-criteria-selector oro-drop-opener oro-dropdown-toggle" type="button">
+                        Updated At: <strong class="filter-criteria-hint">All</strong><span class="caret"></span>
+                    </button>
+                    <a class="disable-filter" href="javascript:void(0);"><i class="icon-remove hide-text">Close</i></a>
+                    <div class="filter-criteria dropdown-menu" style="display: block !important;">
+                        <div>
+                            <div class="horizontal clearfix">
+                                <select name="select-name" class="filter-select-oro" id="select">
+                                    <option value="1">between</option>
+                                    <option value="1">Contains</option>
+                                </select>
+                            </div>
+                            <div><input type="text" class="datetime-visual-element hasDatepicker date-filter-widget"
+                                        value="" name="start" placeholder="from" id="dp1369306486423"> <input
+                                        type="text" class="datetime-visual-element hasDatepicker date-filter-widget"
+                                        value="" name="end" placeholder="to" id="dp1369306486424"></div>
+                            <div class="oro-action">
+                                <div class="btn-group">
+                                    <button class="btn btn-primary filter-update" type="button">Update</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <script>
-                        $(function() {
-                            jQuery( "#from" ).datepicker({
-                                defaultDate: "+1w",
-                                changeMonth: true,
-                                numberOfMonths: 3,
-                                onClose: function( selectedDate ) {
-                                    jQuery( "#to" ).datepicker( "option", "minDate", selectedDate );
-                                }
-                            });
-                            jQuery( "#to" ).datepicker({
-                                defaultDate: "+1w",
-                                changeMonth: true,
-                                numberOfMonths: 3,
-                                onClose: function( selectedDate ) {
-                                    jQuery( "#from" ).datepicker( "option", "maxDate", selectedDate );
-                                }
-                            });
-                        });
-                    </script>
+                </div>
+                <div class="btn-group filter-item oro-drop" style="margin: 0 0 0 75px;">
+                    <button class="btn filter-criteria-selector oro-drop-opener oro-dropdown-toggle" data-toggle="dropdown">
+                        Account Owner: <strong>Me</strong> <span class="caret"></span>
+                    </button>
+                    <a class="disable-filter" href="javascript:void(0);"><i class="icon-remove hide-text">Close</i></a>
+                    <div class="filter-criteria dropdown-menu" style="display: block !important;">
+                        <div>
+                            <div class="input-prepend">
+                                <div class="btn-group">
+                                    <button class="btn dropdown-toggle" data-toggle="dropdown">
+                                        Action
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="#">=</a></li>
+                                        <li><a href="#">+</a></li>
+                                        <li><a href="#">+</a></li>
+                                        <li><a href="#">+</a></li>
+                                        <li><a href="#">+</a></li>
+                                    </ul>
+                                    <input class="span2" id="prependedDropdownButton" type="text">
+                                </div>
+
+                            </div>
+                            <button class="btn btn-primary filter-update" type="button">Update</button>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="btn-group">
-                    <button class="btn dropdown-toggle" data-toggle="dropdown">Last update: <strong>2012/12/12-2012/12/18</strong><span class="caret"></span></button>
-                    <ul class="dropdown-menu">
-                        <li><a href="#">Last update: <strong>2010/12/12-2013/18/18</strong></a></li>
-                        <li><a href="#">Last update: <strong>2011/12/12-2014/11/18</strong></a></li>
-                    </ul>
-                </div>
-                <div class="btn-group">
-                    <button class="btn dropdown-toggle" data-toggle="dropdown">Status: <strong>All</strong><span class="caret"></span></button>
-                    <ul class="dropdown-menu">
-                        <li><a href="#">only short</a></li>
-                        <li><a href="#">this is long text for test</a></li>
-                    </ul>
-                </div>
-                <div class="btn-group">
-                    <button class="btn dropdown-toggle" data-toggle="dropdown">Billing Country: <strong>United States</strong><span class="caret"></span></button>
-                    <ul class="dropdown-menu">
-                        <li><a href="#">Africa</a></li>
-                        <li><a href="#">Russia</a></li>
-                        <li><a href="#">Ukraine</a></li>
-                        <li><a href="#">Germany</a></li>
-                    </ul>
-                </div>
-                <div class="btn-group">
-                    <button class="btn dropdown-toggle" data-toggle="dropdown">Last update: <strong>2012/12/12-2012/12/18</strong><span class="caret"></span></button>
-                    <ul class="dropdown-menu">
-                        <li><a href="#">Last update: <strong>2010/12/12-2013/18/18</strong></a></li>
-                        <li><a href="#">Last update: <strong>2011/12/12-2014/11/18</strong></a></li>
-                    </ul>
-                </div>
-                <div class="btn-group">
-                    <button class="btn dropdown-toggle" data-toggle="dropdown">Last update: <strong>2012/12/12-2012/12/18</strong><span class="caret"></span></button>
-                    <ul class="dropdown-menu">
-                        <li><a href="#">Last update: <strong>2010/12/12-2013/18/18</strong></a></li>
-                        <li><a href="#">Last update: <strong>2011/12/12-2014/11/18</strong></a></li>
-                    </ul>
-                </div>
-                <div class="btn-group">
-                    <button class="btn dropdown-toggle" data-toggle="dropdown">Status: <strong>All</strong><span class="caret"></span></button>
-                    <ul class="dropdown-menu">
-                        <li><a href="#">only short</a></li>
-                        <li><a href="#">this is long text for test</a></li>
-                    </ul>
-                </div>
-                <div class="btn-group">
-                    <button class="btn dropdown-toggle" data-toggle="dropdown">Billing Country: <strong>United States</strong><span class="caret"></span></button>
-                    <ul class="dropdown-menu">
-                        <li><a href="#">Africa</a></li>
-                        <li><a href="#">Russia</a></li>
-                        <li><a href="#">Ukraine</a></li>
-                        <li><a href="#">Germany</a></li>
-                    </ul>
-                </div>
-                <div class="btn-group">
-                    <button class="btn dropdown-toggle" data-toggle="dropdown">Last update: <strong>2012/12/12-2012/12/18</strong><span class="caret"></span></button>
-                    <ul class="dropdown-menu">
-                        <li><a href="#">Last update: <strong>2010/12/12-2013/18/18</strong></a></li>
-                        <li><a href="#">Last update: <strong>2011/12/12-2014/11/18</strong></a></li>
-                    </ul>
-                </div>
-                <div class="btn-group">
-                    <button class="btn dropdown-toggle" data-toggle="dropdown">Status: <strong>All</strong><span class="caret"></span></button>
-                    <ul class="dropdown-menu">
-                        <li><a href="#">only short</a></li>
-                        <li><a href="#">this is long text for test</a></li>
-                    </ul>
-                </div>
-                <div class="btn-group">
-                    <button class="btn dropdown-toggle" data-toggle="dropdown">Billing Country: <strong>United States</strong><span class="caret"></span></button>
-                    <ul class="dropdown-menu">
-                        <li><a href="#">Africa</a></li>
-                        <li><a href="#">Russia</a></li>
-                        <li><a href="#">Ukraine</a></li>
-                        <li><a href="#">Germany</a></li>
-                    </ul>
-                </div>
-                <a href="#" class="btn btn-link btn-group">+ Add another</a>
             </div>
             <div class="grid-toolbar well-small">
                 <div class="pull-right form-horizontal">
