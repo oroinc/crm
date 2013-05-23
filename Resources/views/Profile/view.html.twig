@@ -30,8 +30,6 @@
                     <div class="customer-info pull-right">
                         <ul class="inline">
                             <li><a class="no-hash" href="{{ path('oro_dataaudit_history', {entity:'Oro\\Bundle\\UserBundle\\Entity\\User', id: user.id}) }}" id="view-activity-btn">{{ 'Activity Log'|trans }}</a></li>
-                            <li><a class="no-hash" href="#">{{ 'Revision %rev%'|trans({'%rev%': user.id}) }}</a></li>
-                            <li>{{ 'Published'|trans }}</li>
                         </ul>
                         <script type="text/javascript">
                         $(function() {
