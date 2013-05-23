@@ -9,6 +9,11 @@ use Oro\Bundle\GridBundle\Field\FieldDescriptionInterface;
 use Oro\Bundle\GridBundle\Field\FieldDescription;
 use Oro\Bundle\SearchBundle\Query\Query;
 use Oro\Bundle\SearchBundle\Engine\Indexer;
+use Oro\Bundle\GridBundle\Property\TwigTemplateProperty;
+use Oro\Bundle\GridBundle\Property\CallbackProperty;
+use Oro\Bundle\GridBundle\Datagrid\ResultRecordInterface;
+use Oro\Bundle\SearchBundle\Query\Result\Item;
+use Oro\Bundle\GridBundle\Action\ActionInterface;
 
 class SearchDatagridManager extends DatagridManager
 {
@@ -23,18 +28,31 @@ class SearchDatagridManager extends DatagridManager
     protected $searchString;
 
     /**
+     * @var string
+     */
+    protected $itemContainerTemplate;
+
+    /**
+     * @param string $itemContainerTemplate
+     */
+    public function __construct($itemContainerTemplate)
+    {
+        $this->itemContainerTemplate = $itemContainerTemplate;
+    }
+
+    /**
      * Configure collection of field descriptions
      *
      * @param FieldDescriptionCollection $fieldCollection
      */
     protected function configureFields(FieldDescriptionCollection $fieldCollection)
     {
-        $description = new FieldDescription();
-        $description->setName('description');
-        $description->setOptions(
+        $item = new FieldDescription();
+        $item->setName('item');
+        $item->setOptions(
             array(
                 'type'        => FieldDescriptionInterface::TYPE_HTML,
-                'label'       => '',
+                'label'       => 'Item',
                 'field_name'  => 'entity',
                 'required'    => false,
                 'sortable'    => false,
@@ -42,7 +60,33 @@ class SearchDatagridManager extends DatagridManager
                 'show_filter' => false,
             )
         );
-        $fieldCollection->add($description);
+        $templateProperty = new TwigTemplateProperty($item, $this->itemContainerTemplate);
+        $item->setProperty($templateProperty);
+        $fieldCollection->add($item);
+
+        $url = new FieldDescription();
+        $url->setName('url');
+        $url->setOptions(
+            array(
+                'type'        => FieldDescriptionInterface::TYPE_TEXT,
+                'label'       => 'URL',
+                'required'    => false,
+                'sortable'    => false,
+                'filterable'  => false,
+                'show_filter' => false,
+                'show_column' => false,
+            )
+        );
+        $callbackProperty = new CallbackProperty(
+            $url->getName(),
+            function (ResultRecordInterface $record) {
+                /** @var $indexerItem Item */
+                $indexerItem = $record->getValue('indexer_item');
+                return $indexerItem->getRecordUrl();
+            }
+        );
+        $url->setProperty($callbackProperty);
+        $fieldCollection->add($url);
     }
 
     /**
@@ -105,5 +149,37 @@ class SearchDatagridManager extends DatagridManager
     public function setSearchString($searchString)
     {
         $this->searchString = $searchString;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function getRowActions()
+    {
+        /*$clickAction = array(
+            'name'         => 'rowClick',
+            'type'         => ActionInterface::TYPE_REDIRECT,
+            'acl_resource' => 'root',
+            'options'      => array(
+                'label'         => 'View',
+                'link'          => 'url',
+                'runOnRowClick' => true,
+                'backUrl'       => true,
+            )
+        );*/
+
+        $viewAction = array(
+            'name'         => 'view',
+            'type'         => ActionInterface::TYPE_REDIRECT,
+            'acl_resource' => 'root',
+            'options'      => array(
+                'label'   => 'View',
+                'icon'    => 'user',
+                'link'    => 'url',
+                'backUrl' => true,
+            )
+        );
+
+        return array(/*$clickAction,*/ $viewAction);
     }
 }

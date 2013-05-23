@@ -8,6 +8,7 @@ parameters:
 services:
     oro_search.datagrid_results.datagrid_manager:
         class: %oro_search.datagrid_results.datagrid_manager.class%
+        arguments: [%oro_search.twig.item_container_template%]
         tags:
             - name: oro_grid.datagrid.manager
               datagrid_name: %oro_search.datagrid_results.datagrid_name%

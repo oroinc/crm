@@ -18,7 +18,6 @@ services:
 
     oro_search.twig.search_extension:
         class:        %oro_search.twig_extension.class%
-        arguments:    [@twig, %oro_search.twig.result_template%]
         tags:
             - { name: twig.extension }
 
