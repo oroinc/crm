@@ -104,7 +104,7 @@ Oro.Navigation = Backbone.Router.extend({
      *  Changing state for grid
      */
     gridChangeState: function () {
-        if (this.gridRoute) {
+        if (this.gridRoute && this.encodedStateData && this.encodedStateData.length) {
             this.gridRoute.changeState(this.encodedStateData);
         }
     },
