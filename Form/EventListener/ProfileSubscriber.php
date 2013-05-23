@@ -94,7 +94,8 @@ class ProfileSubscriber implements EventSubscriberInterface
                 $form->add($this->factory->createNamed('enabled', 'choice', $entity->isEnabled(), array(
                     'required' => false,
                     'disabled' => $entity->getId() == $user->getId(),
-                    'choices'   => array('1' => 'Active', '0' => 'Inactive')
+                    'choices'  => array('1' => 'Active', '0' => 'Inactive'),
+                    'label'    => 'Status'
                 )));
             }
         } else {
