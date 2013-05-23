@@ -25,6 +25,10 @@
     {% if item.hasChildren and item.displayChildren %}
         {% set linkAttributes = linkAttributes|merge({'data-toggle': 'tab'}) %}
         {% set itemLink = '#' ~ item.name|replace({' ': '_', '#': '_'})|lower|trim %}
+    {% else %}
+        {% set linkAttributes = linkAttributes|merge(
+        {'class': oro_menu.add_attribute_values(linkAttributes, 'class', ['empty'])})
+        %}
     {% endif %}
     <a href="{{ itemLink }}"{{ oro_menu.attributes(linkAttributes) }}>{{ block('label') }}</a>
 {% endblock %}
