@@ -130,7 +130,7 @@
                 <div class="navbar-inner">
                     <div class="container-fluid" style="width: auto;">
                         <ul class="nav">
-                            <li class="active"><a href="#scroll-main">{{ 'Overview'|trans }}</a></li>
+                            <li class="active"><a href="#scroll-main">{{ 'General'|trans }}</a></li>
                             {% if form.values is defined %}
                                 <li><a href="#scroll-attributes">{{ 'Additional Data'|trans }}</a></li>
                             {% endif %}
@@ -150,15 +150,11 @@
                 {% endif %}
                 <div data-spy="scroll" data-target="#navbarExample" data-offset="50" class="scrollspy container-fluid">
                     <div class="usser-row">
-                        <h4 id="scroll-main" class="scrollspy-title">{{ 'Overview'|trans }}</h4>
-                        <div class="row-fluid row-fluid-divider">
+                        <h4 id="scroll-main" class="scrollspy-title">{{ 'General'|trans }}</h4>
+                        <div class="row-fluid">
                             <fieldset class="form-horizontal span6">
                                 <h5 class="usser-fiedset"><span>{{ 'Basic Information'|trans }}</span></h5>
                                 {{ form_row(form.name) }}
-                            </fieldset>
-
-                            <fieldset class="form-horizontal span6">
-                                <h5 class="usser-fiedset"><span>Contact Information</span></h5>
                             </fieldset>
                         </div>
                     </div>
