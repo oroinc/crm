@@ -16,8 +16,9 @@ Oro.Filter.DateFilter = Oro.Filter.ChoiceFilter.extend({
     popupCriteriaTemplate: _.template(
         '<div>' +
             '<div>' +
-                'from <input type="text" name="start" value="" class="<%= inputClass %>" /> ' +
-                'to <input type="text" name="end" value="" class="<%= inputClass %>" />' +
+                '<input placeholder="from" type="text" name="start" value="" class="<%= inputClass %>" /> ' +
+                '<span class="divider">-</span> ' +
+                '<input placeholder="to" type="text" name="end" value="" class="<%= inputClass %>" />' +
             '</div>' +
             '<div class="horizontal">' +
                 '<% _.each(choices, function (hint, value) { %>' +
@@ -29,8 +30,7 @@ Oro.Filter.DateFilter = Oro.Filter.ChoiceFilter.extend({
             '</div>' +
             '<div class="oro-action">' +
                 '<div class="btn-group">' +
-                    '<button type="button" class="btn btn-small filter-criteria-hide">Close</button>' +
-                    '<button type="button" class="btn btn-small btn-primary filter-update">Update</button>' +
+                    '<button type="button" class="btn btn-primary filter-update">Update</button>' +
                 '</div>' +
             '</div>' +
         '</div>'
