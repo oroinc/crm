@@ -34,8 +34,7 @@ Oro.Filter.TextFilter = Oro.Filter.AbstractFilter.extend({
             '</div>' +
             '<div class="oro-action">' +
                 '<div class="btn-group">' +
-                    '<button type="button" class="btn btn-small filter-criteria-hide">Close</button>' +
-                    '<button type="button" class="btn btn-small btn-primary filter-update">Update</button>' +
+                    '<button type="button" class="btn btn-primary filter-update">Update</button>' +
                 '</div>' +
             '</div>' +
         '</div>'
