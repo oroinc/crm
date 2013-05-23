@@ -31,6 +31,7 @@ Oro.Datagrid.HeaderCell = Backgrid.HeaderCell.extend({
      */
     initialize: function() {
         Backgrid.HeaderCell.prototype.initialize.apply(this, arguments);
+        this._initCellDirection(this.collection);
         this.collection.on('reset', this._initCellDirection, this);
     },
 
