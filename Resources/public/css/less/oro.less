@@ -2430,6 +2430,8 @@ div.uploader {
   line-height: 28px;
   -webkit-border-radius: 3px;
   border-radius: 3px;
+  vertical-align: middle;
+  display: inline-block;
 }
 
 div.uploader span.action {
@@ -2988,6 +2990,10 @@ select:focus:invalid:focus {
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(211, 33, 33, 0.6);
   color: #555;
 }
+.validation-error div.selector {
+  display: inline-block;
+  vertical-align: middle;
+}
 /*.validation-error div.selector {
   border: 1px solid #d32121;
   outline: thin dotted \9;
@@ -3011,6 +3017,7 @@ select:focus:invalid:focus {
 }
 .validate-group{
   display: inline-block;
+  vertical-align: middle;
   min-width: 230px;
 }
 .validate-group:after{
