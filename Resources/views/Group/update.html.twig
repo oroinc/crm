@@ -62,7 +62,7 @@
                 <div class="navbar-inner">
                     <div class="container-fluid" style="width: auto;">
                         <ul class="nav">
-                            <li><a href="#scroll-main">{{ 'Overview'|trans }}</a></li>
+                            <li><a href="#scroll-main">{{ 'General'|trans }}</a></li>
                             {% if form.vars.value.id %}
                                 <li><a href="#scroll-ussers">{{ 'Users'|trans }}</a></li>
                             {% endif %}
@@ -73,7 +73,7 @@
             <div class="clearfix">
                 <div data-spy="scroll" data-target="#groupsroll" data-offset="10" class="scrollspy container-fluid scrollable-container">
                     <div class="usser-row">
-                        <h4 id="scroll-main" class="scrollspy-title">{{ 'Overview'|trans }}</h4>
+                        <h4 id="scroll-main" class="scrollspy-title">{{ 'General'|trans }}</h4>
                         <div class="row-fluid row-fluid-divider">
                             <fieldset class="form-horizontal span6">
                                 {{ form_widget(form.appendUsers, {'id': 'groupAppendUsers'}) }}
