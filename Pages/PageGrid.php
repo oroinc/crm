@@ -181,7 +181,7 @@ class PageGrid extends Page
      */
     public function getHeaders()
     {
-        $records = $this->elements($this->using('xpath')->value("{$this->gridPath}//table/thead/tr/th"));
+        $records = $this->elements($this->using('xpath')->value("{$this->gridPath}//table/thead/tr/th[not(contains(@style, 'display: none;'))]"));
         return $records;
     }
 
