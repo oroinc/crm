@@ -1,6 +1,6 @@
 Oro\Bundle\AccountBundle\Entity\Account:
     alias: oro_account
-    label: Account
+    label: Accounts
     flexible_manager: oro_account.account.manager.flexible
     title_fields: [name]
     route:
