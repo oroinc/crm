@@ -15,26 +15,25 @@ parameters:
     oro_navigation.item.pinbar.post_persist_listener.class:    Oro\Bundle\NavigationBundle\Entity\Listener\PinbarPostPersist
 
     oro_navigation.event.response_history.listener.class:      Oro\Bundle\NavigationBundle\Event\ResponseHistoryListener
+    oro_navigation.event.response_hashnav.listener.class:      Oro\Bundle\NavigationBundle\Event\ResponseHashnavListener
+    oro_navigation.event.response_pagestate.listener.class:    Oro\Bundle\NavigationBundle\Event\ResponsePagestateListener
 
     oro_navigation.menu.matcher.voter.request:                 Oro\Bundle\NavigationBundle\Menu\Matcher\Voter\RequestVoter
     oro_navigation.menu.matcher.voter.routepattern:            Oro\Bundle\NavigationBundle\Menu\Matcher\Voter\RoutePatternVoter
 
     oro_navigation.title_service.class:                        Oro\Bundle\NavigationBundle\Provider\TitleService
     oro_navigation.title_service.twig.extension.class:         Oro\Bundle\NavigationBundle\Twig\TitleExtension
-
     oro_navigation.title_service.annotations_reader.class:     Oro\Bundle\NavigationBundle\Title\TitleReader\AnnotationsReader
     oro_navigation.title_service.config_reader.class:          Oro\Bundle\NavigationBundle\Title\TitleReader\ConfigReader
-
     oro_navigation.title_service.event.request.listener.class: Oro\Bundle\NavigationBundle\Event\RequestTitleListener
+
     oro_navigation.translation.extractor.class:                Oro\Bundle\NavigationBundle\Title\TranslationExtractor
 
     oro_navigation.twig_assets_extension.class:                Oro\Bundle\NavigationBundle\Twig\AssetsConfigExtension
+    oro_navigation.twig_hash_nav_extension.class:              Oro\Bundle\NavigationBundle\Twig\HashNavExtension
 
     oro_navigation.form.type.pagestate.class:                  Oro\Bundle\NavigationBundle\Form\Type\PageStateType
     oro_navigation.form.handler.pagestate.class:               Oro\Bundle\NavigationBundle\Form\Handler\PageStateHandler
-    oro_navigation.event.response_hashnav.listener.class:      Oro\Bundle\NavigationBundle\Event\ResponseHashnavListener
-
-    oro_navigation.twig_hash_nav_extension.class:              Oro\Bundle\NavigationBundle\Twig\HashNavExtension
 
 services:
     oro_menu.factory:
@@ -239,6 +238,12 @@ services:
         tags:
             - { name: kernel.event_listener, event: kernel.response, method: onResponse }
         arguments:                    [@security.context, @templating]
+
+    kernel.listener.pagestate_response:
+        class: %oro_navigation.event.response_pagestate.listener.class%
+        tags:
+            - { name: kernel.event_listener, event: kernel.response, method: onResponse }
+        arguments:                    [@router, @templating, @security.context]
 
     oro_navigation.twig.hash_nav_extension:
         class:        %oro_navigation.twig_hash_nav_extension.class%
