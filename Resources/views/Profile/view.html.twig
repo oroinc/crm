@@ -29,29 +29,8 @@
                 <div class="clearfix">
                     <div class="customer-info pull-right">
                         <ul class="inline">
-                            <li><a class="no-hash" href="{{ path('oro_dataaudit_history', {entity:'Oro\\Bundle\\UserBundle\\Entity\\User', id: user.id}) }}" id="view-activity-btn">{{ 'Activity Log'|trans }}</a></li>
-                            <li><a class="no-hash" href="#">{{ 'Revision %rev%'|trans({'%rev%': user.id}) }}</a></li>
-                            <li>{{ 'Published'|trans }}</li>
+                            <li><a class="no-hash" href="{{ path('oro_dataaudit_history', {entity:'Oro\\Bundle\\UserBundle\\Entity\\User', id: user.id}) }}" id="view-activity-btn" title="{{ user }} - {{ 'Change History'|trans }}">{{ 'Activity Log'|trans }}</a></li>
                         </ul>
-                        <script type="text/javascript">
-                        $(function() {
-                            $("#view-activity-btn").click(function(e) {
-                                new Oro.widget.DialogView({
-                                    url: $(this).attr('href'),
-                                    dialogOptions: {
-                                        appendTo: '#main',
-                                        allowMaximize: true,
-                                        allowMinimize: true,
-                                        dblclick: 'maximize',
-                                        maximizedHeightDecreaseBy: 'minimize-bar',
-                                        width : 1000,
-                                        title: '{{ user }} - {{ 'Change History'|trans }}'
-                                    }
-                                }).render();
-                                return false;
-                            });
-                        });
-                        </script>
                     </div>
                 </div>
             </div>
