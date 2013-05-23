@@ -1,3 +1,5 @@
+{% import 'OroUIBundle::macros.html.twig' as macros %}
+
 {% block form_row %}
 {% spaceless %}
     {% if form|is_flexible %}
@@ -14,14 +16,37 @@
 {% endspaceless %}
 {% endblock form_row %}
 
-
-
 {% block form_row_flex %}
 {% spaceless %}
-    {% for attribute in form %}
-        {{ form_widget(attribute) }}
-        {{ form_errors(attribute) }}
-    {% endfor %}
+    {% set col = attribute(attr, 'data-col') %}
+
+    {% if col > 1 %}
+        {# calculate Bootstrap class for 12-columns grid system #}
+        {% set class = 'span' ~ (12 // col) %}
+
+        {% for attribute in form %}
+            {% if loop.first %}
+            <div class="{{ class }}">
+            {% endif %}
+
+            {{ form_widget(attribute) }}
+            {{ form_errors(attribute) }}
+
+            {% if loop.index % (loop.length / col) == 0  and not loop.last %}
+            </div>
+            <div class="{{ class }}">
+            {% endif %}
+
+            {% if loop.last %}
+            </div>
+            {% endif %}
+        {% endfor %}
+    {% else %}
+        {% for attribute in form %}
+            {{ form_widget(attribute) }}
+            {{ form_errors(attribute) }}
+        {% endfor %}
+    {% endif %}
 {% endspaceless %}
 {% endblock form_row_flex %}
 
@@ -40,27 +65,27 @@
     {% if widget == 'single_text' %}
         {{ block('form_widget_simple')|raw }}
     {% else %}
-        <div {{ block('widget_container_attributes') }}>
-            {{ date_pattern|replace({
+    <div {{ block('widget_container_attributes') }}>
+        {{ date_pattern|replace({
             '{{ year }}':  form_widget(form.year),
             '{{ month }}': form_widget(form.month),
             '{{ day }}':   form_widget(form.day),
-            })|raw }}
-        </div>
+        })|raw }}
+    </div>
     {% endif %}
 {% endspaceless %}
 {% endblock date_widget %}
 
 {% block choice_widget_expanded %}
 {% spaceless %}
-    <div {{ block('widget_container_attributes') }}>
-        {% for child in form %}
-            <div class="oro-clearfix">
-                {{ form_widget(child) }}
-                {{ form_label(child) }}
-            </div>
-        {% endfor %}
+<div {{ block('widget_container_attributes') }}>
+    {% for child in form %}
+    <div class="oro-clearfix">
+        {{ form_widget(child) }}
+        {{ form_label(child) }}
     </div>
+    {% endfor %}
+</div>
 {% endspaceless %}
 {% endblock choice_widget_expanded %}
 
@@ -80,26 +105,23 @@
 {% endblock form_label %}
 
 {% block oro_flexibleentity_email_collection_widget %}
-    {% import 'OroUIBundle::macros.html.twig' as macros %}
-    <div class="row-oro">
-        <div class="collection-fields-list" data-prototype="{{ macros.collection_prototype(form.collection)|escape }}">
-            {% for field in form.collection.children %}
-                {{ macros.collection_prototype(field) }}
-            {% endfor %}
-        </div>
-        <a class="btn add-list-item" href="javascript: void(0);"><i class="icon-plus"></i>{{ 'Add'|trans }}</a>
+<div class="row-oro">
+    <div class="collection-fields-list" data-prototype="{{ macros.collection_prototype(form.collection)|escape }}">
+        {% for field in form.collection.children %}
+            {{ macros.collection_prototype(field) }}
+        {% endfor %}
     </div>
+    <a class="btn add-list-item" href="javascript: void(0);"><i class="icon-plus"></i>{{ 'Add'|trans }}</a>
+</div>
 {%  endblock oro_flexibleentity_email_collection_widget %}
 
 {% block oro_flexibleentity_phone_collection_widget %}
-    {% import 'OroUIBundle::macros.html.twig' as macros %}
-    <div class="row-oro">
-        <div class="collection-fields-list" data-prototype="{{ macros.collection_prototype(form.collection)|escape }}">
-            {% for field in form.collection.children %}
-                {{ macros.collection_prototype(field) }}
-            {% endfor %}
-        </div>
-        <a class="btn add-list-item" href="javascript: void(0);"><i class="icon-plus"></i>{{ 'Add'|trans }}</a>
+<div class="row-oro">
+    <div class="collection-fields-list" data-prototype="{{ macros.collection_prototype(form.collection)|escape }}">
+        {% for field in form.collection.children %}
+            {{ macros.collection_prototype(field) }}
+        {% endfor %}
     </div>
+    <a class="btn add-list-item" href="javascript: void(0);"><i class="icon-plus"></i>{{ 'Add'|trans }}</a>
+</div>
 {%  endblock oro_flexibleentity_phone_collection_widget %}
-
