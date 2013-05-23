@@ -85,7 +85,7 @@
                             <li><a href="#scroll-roles">{{ 'Roles'|trans }}</a></li>
                             {% endif %}
 
-                            {% if form.attributes is defined %}
+                            {% if form.values is defined %}
                             <li><a href="#scroll-attributes">{{ 'Additional data'|trans }}</a></li>
                             {% endif %}
                         </ul>
@@ -160,12 +160,12 @@
                     </div>
                     {% endif %}
 
-                    {% if form.attributes is defined %}
+                    {% if form.values is defined %}
                     <div class="usser-row">
                         <h4 id="scroll-attributes" class="scrollspy-title">{{ 'Additional data'|trans }}</h4>
                         <div class="row-fluid">
                             <fieldset class="form-horizontal" id="attributes-list">
-                                {{ form_row(form.attributes) }}
+                                {{ form_row(form.values) }}
                             </fieldset>
                         </div>
                     </div>
