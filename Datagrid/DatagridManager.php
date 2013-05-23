@@ -359,7 +359,7 @@ abstract class DatagridManager implements DatagridManagerInterface
         $sorters = array();
 
         // get first field
-        $fields = $this->getListFields();
+        $fields = $this->getSorters();
         if (!empty($fields)) {
             /** @var $field FieldDescriptionInterface */
             $field = reset($fields);

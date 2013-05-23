@@ -107,6 +107,7 @@
     });
 
     $(function() {
+        var results = {{ oro_grid_render_results_json(datagridView) }};
         var containerSelector = {{ selector|json_encode|raw }};
         var datagridTemplateSelector = {{ ("#" ~ datagridName ~ "GridTemplate")|json_encode|raw }};
         var datagridName = {{ datagridName|json_encode|raw }};
@@ -115,6 +116,7 @@
         var datagridOptions = Oro.scope[datagridName];
 
         var initDatagrid = function(
+            results,
             datagridOptions,
             datagridTemplateSelector,
             containerSelector,
@@ -122,7 +124,7 @@
             datagridBodySelector
         ) {
             // Initialize grid collection
-            var datagridCollection = new Oro.PageableCollection([], datagridOptions.collection);
+            var datagridCollection = new Oro.PageableCollection(results, _.extend({parse: true}, datagridOptions.collection));
 
             // Basic grid layout
             var template = _.template($(datagridTemplateSelector).html());
@@ -160,6 +162,7 @@
         };
 
         initDatagrid(
+            results,
             datagridOptions,
             datagridTemplateSelector,
             containerSelector,

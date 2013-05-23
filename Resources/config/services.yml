@@ -14,6 +14,9 @@ parameters:
 
     oro_grid.route.default_generator.class:  Oro\Bundle\GridBundle\Route\DefaultRouteGenerator
 
+    oro_grid.renderer.class:                 Oro\Bundle\GridBundle\Renderer\GridRenderer
+    oro_grid.twig.extension.class:           Oro\Bundle\GridBundle\Twig\GridRendererExtension
+
 services:
     oro_grid.builder.datagrid:
         class:     %oro_grid.builder.datagrid.class%
@@ -39,3 +42,12 @@ services:
         class:     %oro_grid.action.factory.class%
         arguments: ["@service_container", ~]
 
+    oro_grid.renderer:
+        class:     %oro_grid.renderer.class%
+        arguments: ["@templating.engine.php", "OroGridBundle:Datagrid:list.json.php"]
+
+    oro_grid.twig.extension:
+        class:     %oro_grid.twig.extension.class%
+        arguments: ["@oro_grid.renderer"]
+        tags:
+            - { name: twig.extension }

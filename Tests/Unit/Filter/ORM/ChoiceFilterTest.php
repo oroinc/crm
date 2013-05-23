@@ -66,6 +66,10 @@ class ChoiceFilterTest extends FilterTestCase
                 'data' => array('value' => ''),
                 'expectProxyQueryCalls' => array()
             ),
+            'empty_array_value' => array(
+                'data' => array('value' => array()),
+                'expectProxyQueryCalls' => array()
+            ),
             'zero_value' => array(
                 'data' => array('value' => 0),
                 'expectProxyQueryCalls' => array(
