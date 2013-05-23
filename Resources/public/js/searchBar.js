@@ -13,12 +13,14 @@ $(document).ready(function () {
         Oro.Events.bind(
             "hash_navigation_request:form-start",
             function (form) {
-                var send = true;
-                var $searchString = $.trim($(form).find(".search").val());
-                if ($searchString.length == 0) {
-                    send = false;
+                if ($(form).hasClass('search-form')) {
+                    var send = true;
+                    var $searchString = $.trim($(form).find(".search").val());
+                    if ($searchString.length == 0) {
+                        send = false;
+                    }
+                    Oro.Registry.setElement('form_validate', send);
                 }
-                Oro.Registry.setElement('form_validate', send);
             },
             this
         );
