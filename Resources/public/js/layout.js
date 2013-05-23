@@ -1,39 +1,5 @@
 $(document).ready(function () {
-    if ($.isPlainObject($.uniform)) {
-        $('input:file').uniform();
-    }
-
-    if (typeof($.datepicker) != 'undefined') {
-        $('input.datepicker').each(function (index, el) {
-            el = $(el);
-
-            el.datepicker({
-                dateFormat: el.attr('data-dateformat') ? el.attr('data-dateformat') : 'm/d/y'
-            });
-        });
-    }
-
-    if (typeof($.timepicker) != 'undefined') {
-        $('input.datetimepicker').each(function (index, el) {
-            el = $(el);
-
-            el.datetimepicker({
-                dateFormat: el.attr('data-dateformat') ? el.attr('data-dateformat') : 'm/d/y',
-                timeFormat: el.attr('data-timeformat') ? el.attr('data-timeformat') : 'hh:mm tt'
-            });
-        });
-    }
-
-    /* dinamic height for central column */
-   /* function changeHeight() {
-        var _chWindowHeight = $(window).height();
-        var _chMyHeight = _chWindowHeight - $("header").outerHeight() - $("footer").outerHeight() - 3;
-        $('div.layout-content').innerHeight(_chMyHeight);
-    };
-     changeHeight();
-    $(window).resize(function() {
-        changeHeight();
-    });            */
+    initLayout();
 
     /* side bar functionality */
     $('div.side-nav').each(function () {
@@ -150,3 +116,81 @@ $(document).ready(function () {
         clickingTarget.removeClass('_currently_clicked');
     });
  });
+
+if (typeof Oro !== "undefined") {
+    /**
+     * Init page layout js after hash navigation request is completed
+     */
+    Oro.Events.bind(
+        "hash_navigation_request:complete",
+        function () {
+            initLayout();
+        },
+        this
+    );
+}
+
+/**
+ * Js updates
+ */
+function initLayout() {
+    if ($.isPlainObject($.uniform)) {
+        $('input:file, select').uniform();
+    }
+
+    if (typeof($.datepicker) != 'undefined') {
+        $('input.datepicker').each(function (index, el) {
+            el = $(el);
+
+            el.datepicker({
+                dateFormat: el.attr('data-dateformat') ? el.attr('data-dateformat') : 'm/d/y'
+            });
+        });
+    }
+
+    if (typeof($.timepicker) != 'undefined') {
+        $('input.datetimepicker').each(function (index, el) {
+            el = $(el);
+
+            el.datetimepicker({
+                dateFormat: el.attr('data-dateformat') ? el.attr('data-dateformat') : 'm/d/y',
+                timeFormat: el.attr('data-timeformat') ? el.attr('data-timeformat') : 'hh:mm tt'
+            });
+        });
+    }
+
+    $('[data-spy="scroll"]').each(function () {
+        var $spy = $(this)
+        $spy.scrollspy($spy.data())
+    })
+    $('[data-toggle="tooltip"]').tooltip();
+}
+
+/**
+ * Fix for IE8 compatibility
+ */
+if ( !Date.prototype.toISOString ) {
+
+    ( function() {
+
+        function pad(number) {
+            var r = String(number);
+            if ( r.length === 1 ) {
+                r = '0' + r;
+            }
+            return r;
+        }
+
+        Date.prototype.toISOString = function() {
+            return this.getUTCFullYear()
+                + '-' + pad( this.getUTCMonth() + 1 )
+                + '-' + pad( this.getUTCDate() )
+                + 'T' + pad( this.getUTCHours() )
+                + ':' + pad( this.getUTCMinutes() )
+                + ':' + pad( this.getUTCSeconds() )
+                + '.' + String( (this.getUTCMilliseconds()/1000).toFixed(3) ).slice( 2, 5 )
+                + 'Z';
+        };
+
+    }() );
+}

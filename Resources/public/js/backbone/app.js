@@ -1,8 +1,7 @@
 /**
  * Main Oro Application backbone.js namespace
  */
-window.OroApp = {
-
+var Oro = {
     /**
      * Pack object to string
      *
@@ -78,7 +77,7 @@ window.OroApp = {
      *
      * Example of usage:
      *
-     * OroApp.mirrorKeys({foo: 'x', bar: 'y'}, {foo: 'f', bar: 'b'})
+     * Oro.invertKeys({foo: 'x', bar: 'y'}, {foo: 'f', bar: 'b'})
      * will return {f: 'x', b: 'y'}
      *
      * @param {Object} object
@@ -98,5 +97,71 @@ window.OroApp = {
             }
         }
         return result;
+    },
+
+    /**
+     * Loosely compare two values
+     *
+     * @param {*} value1
+     * @param {*} value2
+     * @return {Boolean} TRUE if values are equal, otherwise - FALSE
+     */
+    isEqualsLoosely: function (value1, value2) {
+        if (!_.isObject(value1)) {
+            var equalsLoosely = (value1 || '') == (value2 || '');
+            var eitherNumber = _.isNumber(value1) || _.isNumber(value2);
+            var equalsNumbers = Number(value1) == Number(value2);
+            return equalsLoosely || (eitherNumber && equalsNumbers);
+
+        } else if (_.isObject(value1)) {
+            var valueKeys = _.keys(value1);
+
+            if (_.isObject(value2)) {
+                valueKeys = _.unique(valueKeys.concat(_.keys(value2)));
+            }
+
+            for (var index in valueKeys) {
+                var key = valueKeys[index];
+                if (!_.has(value2, key) || !this.isEqualsLoosely(value1[key], value2[key])) {
+                    return false;
+                }
+            }
+            return true;
+        } else {
+            return value1 == value2;
+        }
+    },
+
+    /**
+     * Creates instance based on constructor
+     *
+     * @param {Object} constructor
+     * @return {Object}
+     */
+    createInstanceFromConstructor: function(constructor) {
+        var instance = new constructor();
+        var instanceArguments = Array.prototype.splice.call(arguments, 1);
+        constructor.apply(instance, instanceArguments);
+
+        return instance;
+    },
+
+    /**
+     * Deep clone a value
+     *
+     * @param {*} value
+     * @return {*}
+     */
+    deepClone: function(value) {
+        return $.extend(true, {}, value);
+    },
+
+    /**
+     * Checks if hash navigation is enabled
+     *
+     * @return {Boolean}
+     */
+    hashNavigationEnabled: function() {
+        return ((typeof this.Navigation != "undefined") && this.Navigation.prototype.enabled);
     }
 };
