@@ -7,58 +7,57 @@
 {% oro_title_set({params : {"%username%": form.vars.value.fullname(format)|default('N/A') }}) %}
 
 {% block page_container %}
-<div class="container-fluid">
     {% block content %}
     <form action="{{ form.vars.value.id ? path('oro_user_update', { id: form.vars.value.id, back: app.session.get('back') }) : path('oro_user_create', { back: app.session.get('back') }) }}" {{ form_enctype(form) }}
         method="post" data-collect="true" class="scrollable-substructure">
-        <div class="navigation clearfix navbar-extra">
-            <div class="row">
-                <div class="pull-right">
+        <div class="container-fluid">
+            <div class="navigation clearfix navbar-extra">
+                <div class="clearfix">
                     <div class="pull-right">
-                        <div class="pull-left btn-group icons-holder">
+                        <div class="pull-right">
                             {% if form.vars.value.id and resource_granted('oro_user_profile_delete') %}
+                            <div class="pull-left btn-group icons-holder">
                                 <a href="javascript: void(0);" class="btn icons-holder-text" id="btn-remove-profile" data-id="{{ form.vars.value.id }}" data-message="{{ 'Are you sure you want to delete this profile?'|trans }}" title="{{ 'Delete profile'|trans }}"><i class="icon-trash hide-text">{{ 'Remove'|trans }}</i>Delete</a>
+                            </div>
+                            <div class="pull-left">
+                                <div class="separator-btn"></div>
+                            </div>
                             {% endif %}
-                        </div>
-                        <div class="pull-left">
-                            <div class="separator-btn"></div>
-                        </div>
-                        <div class="pull-left customer-info-top-actions">
-                            <div class="btn-group">
-                                <a href="{{ app.session.get('back') ? app.session.get('back') : path('oro_user_index') }}" class="btn back">{{ 'Cancel'|trans }}</a>
-                            </div>
-                            <button type="submit" class="btn btn-success">{{ ' Save'|trans }}</button>
-                        </div>
-                    </div>
-                </div>
-                {% if form.vars.value.id %}
-                    <div class="pull-left">
-                        <div class="customer-info well-small">
-                            <div class="visual"><img src="{{ form.vars.value.imagePath ? form.vars.value.imagePath | imagine_filter('avatar_med') : asset('bundles/oroui/img/info-usser.png') }}" alt="{{ form.vars.value.fullname(format) }}"/></div>
-                            <div class="customer-content pull-left">
-                                <div class="clearfix-oro">
-                                    <div class="sub-title">{{ 'User'|trans }}</div>
-                                    <span class="separator">/</span>
-                                    <h1 class="usser-name">{{ form.vars.value.fullname(format)|default('N/A') }}</h1>
+                            <div class="pull-left customer-info-top-actions">
+                                <div class="btn-group">
+                                    <a href="{{ app.session.get('back') ? app.session.get('back') : path('oro_user_index') }}" class="btn back">{{ 'Cancel'|trans }}</a>
                                 </div>
-                                <ul class="inline">
-                                    <li>{{ 'Created'|trans }}: {{ form.vars.value.createdAt ? macros.time(form.vars.value.createdAt) : 'N/A' }}</li>
-                                    <li>{{ 'Updated'|trans }}: {{ form.vars.value.updatedAt ? macros.time(form.vars.value.updatedAt) : 'N/A' }}</li>
-                                    <li>{{ 'Last logged in'|trans }}: {{ form.vars.value.lastLogin ? macros.time(form.vars.value.lastLogin) : 'N/A' }}</li>
-                                    <li>{{ 'Login count'|trans }}: {{ form.vars.value.loginCount|default(0) }}</li>
-                                </ul>
+                                <div class="btn-group">
+                                    <button type="submit" class="btn btn-success">{{ ' Save'|trans }}</button>
+                                </div>
                             </div>
                         </div>
                     </div>
-                {% else %}
-                    <div class="pull-left">
-                        <div class="customer-info well-small">
-                            <div class="customer-content">
-                                <h1 class="usser-name">{{ title }}</h1>
+                    {% if form.vars.value.id %}
+                        <div class="pull-left">
+                            <div class="customer-info well-small">
+                                <div class="visual"><img src="{{ form.vars.value.imagePath ? form.vars.value.imagePath | imagine_filter('avatar_med') : asset('bundles/oroui/img/info-usser.png') }}" alt="{{ form.vars.value.fullname(format) }}"/></div>
+                                <div class="customer-content pull-left">
+                                    <div class="clearfix-oro">
+                                        <div class="sub-title">{{ 'User'|trans }}</div>
+                                        <span class="separator">/</span>
+                                        <h1 class="usser-name">{{ form.vars.value.fullname(format)|default('N/A') }}</h1>
+                                    </div>
+                                    <ul class="inline">
+                                        <li>{{ 'Created'|trans }}: {{ form.vars.value.createdAt ? macros.time(form.vars.value.createdAt) : 'N/A' }}</li>
+                                        <li>{{ 'Updated'|trans }}: {{ form.vars.value.updatedAt ? macros.time(form.vars.value.updatedAt) : 'N/A' }}</li>
+                                        <li>{{ 'Last logged in'|trans }}: {{ form.vars.value.lastLogin ? macros.time(form.vars.value.lastLogin) : 'N/A' }}</li>
+                                        <li>{{ 'Login count'|trans }}: {{ form.vars.value.loginCount|default(0) }}</li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                {% endif %}
+                    {% else %}
+                        <div class="pull-left">
+                            <h1 class="oro-subtitle">{{ title }}</h1>
+                        </div>
+                    {% endif %}
+                </div>
             </div>
         </div>
         <div class="layout-content">
@@ -171,6 +170,5 @@
         </div>
     </form>
     {% endblock content %}
-</div>
 {% endblock %}
 

@@ -6,10 +6,10 @@
 {% endblock %}
 
 {% block page_container %}
-<div class="container-fluid">
     {% block content %}
-    <h1>{{ 'Roles'|trans }} <a class="btn btn-primary pull-right" href="{{ path('oro_user_role_create') }}">{{ 'Create role'|trans }}</a></h1>
+    <div class="container-fluid">
+        <h1>{{ 'Roles'|trans }} <a class="btn btn-primary pull-right" href="{{ path('oro_user_role_create') }}">{{ 'Create role'|trans }}</a></h1>
+    </div>
     <div id="roles-grid"></div>
     {% endblock %}
-</div>
 {% endblock %}
