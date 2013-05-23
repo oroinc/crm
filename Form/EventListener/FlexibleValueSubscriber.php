@@ -1,12 +1,14 @@
 <?php
 namespace Oro\Bundle\FlexibleEntityBundle\Form\EventListener;
 
+use Oro\Bundle\FlexibleEntityBundle\Model\FlexibleValueInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleManagerRegistry;
 use Oro\Bundle\FlexibleEntityBundle\AttributeType\AttributeTypeFactory;
+use Symfony\Component\Form\FormInterface;
 
 /**
  * Add a relevant form for each flexible entity value
@@ -66,6 +68,7 @@ class FlexibleValueSubscriber implements EventSubscriberInterface
      */
     public function preSetData(FormEvent $event)
     {
+        /** @var FlexibleValueInterface $value */
         $value = $event->getData();
         $form  = $event->getForm();
 
@@ -76,6 +79,7 @@ class FlexibleValueSubscriber implements EventSubscriberInterface
 
         $attributeTypeAlias = $value->getAttribute()->getAttributeType();
         $attributeType = $this->attributeTypeFactory->get($attributeTypeAlias);
+        /** @var FormInterface $valueForm */
         $valueForm = $attributeType->buildValueFormType($this->factory, $value);
 
         // Initialize subforms which connected to flexible entities
