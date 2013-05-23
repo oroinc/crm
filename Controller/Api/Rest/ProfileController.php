@@ -148,7 +148,7 @@ class ProfileController extends FlexibleRestController implements ClassResourceI
      */
     public function getRolesAction($id)
     {
-        $entity = $this->getManager()->findUserBy(array('id' => (int) $id));
+        $entity = $this->getManager()->getRepository()->findOneBy(array('id' => (int) $id));
 
         if (!$entity) {
             return $this->handleView($this->view('', Codes::HTTP_NOT_FOUND));
@@ -179,7 +179,7 @@ class ProfileController extends FlexibleRestController implements ClassResourceI
      */
     public function getGroupsAction($id)
     {
-        $entity = $this->getManager()->findUserBy(array('id' => (int) $id));
+        $entity = $this->getManager()->getRepository()->findOneBy(array('id' => (int) $id));
 
         if (!$entity) {
             return $this->handleView($this->view('', Codes::HTTP_NOT_FOUND));
@@ -210,7 +210,7 @@ class ProfileController extends FlexibleRestController implements ClassResourceI
      */
     public function getAclAction($id)
     {
-        $user = $this->getManager()->findUserBy(array('id' => (int) $id));
+        $user = $this->getManager()->getRepository()->findOneBy(array('id' => (int) $id));
 
         if (!$user) {
             return $this->handleView($this->view('', Codes::HTTP_NOT_FOUND));
@@ -243,7 +243,7 @@ class ProfileController extends FlexibleRestController implements ClassResourceI
             return $this->handleView($this->view('', Codes::HTTP_BAD_REQUEST));
         }
 
-        $entity = $this->getManager()->findUserBy($params);
+        $entity = $this->getManager()->getRepository()->findOneBy($params);
 
         return $this->handleView(
             $this->view(
