@@ -140,7 +140,10 @@ class AuditDatagridManager extends DatagridManager
                 'show_filter' => true,
             )
         );
-        $templateDataProperty = new TwigTemplateProperty($fieldData, 'OroDataAuditBundle:Datagrid:Property/data.html.twig');
+        $templateDataProperty = new TwigTemplateProperty(
+            $fieldData,
+            'OroDataAuditBundle:Datagrid:Property/data.html.twig'
+        );
         $fieldData->setProperty($templateDataProperty);
         $fieldsCollection->add($fieldData);
 

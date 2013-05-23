@@ -15,7 +15,6 @@
         "oro/ui-bundle": "dev-master",
         "oro/flexible-entity-bundle": "dev-master",
         "oro/user-bundle": "dev-master",
-        "oro/grid-bundle": "dev-master",
         "oro/soap-bundle": "dev-master",
         "oro/grid-bundle": "dev-master"
     },

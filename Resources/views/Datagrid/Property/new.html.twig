@@ -1,0 +1,8 @@
+<ul>
+    {% for fieldKey, fieldValue in value %}
+    <li>
+        <b>{{ fieldKey }}:</b>
+        {{ fieldValue.new.timestamp is defined ? fieldValue.new|date('m/d/Y') : fieldValue.new }}
+    </li>
+    {% endfor %}
+</ul>
