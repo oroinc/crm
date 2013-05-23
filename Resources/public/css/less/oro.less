@@ -1,3 +1,4 @@
+
 //oro variables
 @horizontalPadding:               20px;
 @verticalPadding:                 20px;
@@ -1004,6 +1005,7 @@ footer{
   border-color: #5387be #5387be #5387be;
   text-shadow: 1px 1px 2px #00324d;
   filter: dropshadow(color=#00324d, offx=1, offy=1);
+  font-weight: bold;
 }
 .btn-primary:hover{
   #gradient > .vertical(#85ace8, #567fbf);
@@ -1793,8 +1795,8 @@ footer{
 .navbar-extra .has-switch span.switch-danger
 
 .navbar-extra .pull-left.btn-group {
-  margin: 0 7px 0 0;
-}
+                   margin: 0 7px 0 0;
+                 }
 .brand-extra{
   font-size: 18px;
   font-weight: bold;
@@ -2082,7 +2084,7 @@ footer{
   border: 0;
 }
 .ui-dialog.ui-widget-content{
-    border: 1px solid #8e9195;
+  border: 1px solid #8e9195;
 }
 .usser-info-state{
   padding: 10px 0 0;
@@ -2259,7 +2261,7 @@ ul.inline-extra > li:first-child{
   font-size: 12px;
 }
 .scrollspy{
-  /*height: 500px;*/
+/*height: 500px;*/
   position: relative;
   overflow: auto;
 }
@@ -2379,7 +2381,7 @@ textarea{
   margin: 0;
 }
 .filter-criteria .oro-action .btn-group{
-  float: left;
+  float: right;
 }
 .filter-criteria .oro-action .btn{
   outline: none;
@@ -2387,23 +2389,72 @@ textarea{
 }
 .filter-box .filter-item .filter-criteria{
   top: 125%;
+
+
+}
+.filter-box .filter-item .filter-criteria:before{
+  border-bottom: 9px solid rgba(0, 0, 0, 0.2);
+  border-left: 9px solid transparent;
+  border-right: 9px solid transparent;
+  content: "";
+  display: inline-block;
+  left: 11px;
+  position: absolute;
+  top: -9px;
 }
 .filter-box .filter-item .filter-criteria:after {
+  border-bottom: 10px solid #FFFFFF;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
   content: "";
   display: inline-block;
   left: 10px;
   position: absolute;
-  top: -9px;
-  width: 18px;
-  height: 9px;
-  background: url("../../img/bg-drop-arow.png") no-repeat;
+  top: -8px;
 }
+.filter-box .filter-select-oro{
+  width: 110px;
+  height: 20px;
+  line-height: 20px;
+}
+.filter-item div.selector{
+  height: 20px;
+  line-height: 20px;
+  margin: 0 0 7px;
+  float: right;
+}
+.filter-item div.selector span{
+  background-position: 100% -298px;
+  line-height: 20px;
+  height: 20px;
+}
+.filter-box .filter-item .divider{
+  background: none;
+  line-height: 40px;
+  font-size: 16px;
+  padding: 0 3px;
+  margin: 0;
+  position: relative;
+  top: -3px;
+}
+.filter-item .btn{
+  vertical-align: top;
+}
+
 .btn-group > .btn-small{
   font-size: 11px;
 }
 .btn-group > a.btn{
   height: 28px;
   line-height: 28px;
+}
+.oro-action .btn-group > .btn,
+.oro-action .btn-group > .dropdown-menu,
+.oro-action .btn-group > .popover{
+  font-size: 14px;
+}
+.oro-action .btn-group{
+  margin-right: 0;
 }
 .popup-box-errors{
   width: 480px;
