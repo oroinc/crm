@@ -2,6 +2,7 @@
 {% form_theme form with 'OroUIBundle:Form:fields.html.twig' %}
 
 {% set title = form.vars.value.id ? 'Update Group'|trans : 'Create Group'|trans %}
+{% oro_title_set({params : { "%group%": form.vars.value.name } }) %}
 
 {% block head_script %}
     {{ parent() }}
@@ -38,18 +39,22 @@
                     </div>
                     <div class="pull-left customer-info-top-actions">
                         <div class="btn-group">
-                            <a href="{{ app.session.get('back') ? app.session.get('back') : path('oro_user_index') }}" class="btn back">{{ 'Cancel'|trans }}</a>
+                            <a href="{{ app.session.get('back') ? app.session.get('back') : path('oro_user_index') }}" class="btn back" title="{{ 'Cancel'|trans }}">{{ 'Cancel'|trans }}</a>
                         </div>
-                        <button type="submit" class="btn btn-success">{{ ' Save'|trans }}</button>
+                        <button type="submit" class="btn btn-success" title="{{ 'Save group'|trans }}">{{ ' Save'|trans }}</button>
                     </div>
                 </div>
                 <div class="pull-left">
                     <div class="form-info clearfix">
                         <div class="customer-content pull-left">
                             <div class="clearfix-oro">
-                                <div class="sub-title">{{ 'Groups'|trans }}</div>
+                                <div class="sub-title"><div class="sub-title"><a href="{{ path('oro_user_group_index') }}">{{ 'Groups'|trans }}</a></div></div>
                                 <span class="separator">/</span>
-                                <h1 class="form-info-name">{{ title }}</h1>
+                                {% if form.vars.value.id %}
+                                    <h1 class="form-info-name">{{ form.vars.value.name }}</h1>
+                                {% else %}
+                                    <h1 class="form-info-name">{{ title }}</h1>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
