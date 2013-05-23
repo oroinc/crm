@@ -200,7 +200,7 @@ class LoggableListener extends BaseListener
                             function ($item) {
                                 return $item->getOptionValue()->getValue();
                             },
-                            $newData->getDeleteDiff()
+                            $newData->getSnapshot()
                         )
                     );
 
