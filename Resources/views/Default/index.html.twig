@@ -6,15 +6,13 @@
         <title>{{ oro_title_render() }}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-        <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js"></script>
-
         {% block head_style %}
             {% if app.debug %}
                 <script type="text/javascript">localStorage.clear();</script>
                 <link rel="stylesheet/less" media="all" href="{{ asset('bundles/oroui/css/less/main.less') }}" />
                 <script type="text/javascript" src="{{ asset('bundles/oroui/lib/less-1.3.1.min.js') }}"></script>
                 <link rel="stylesheet" media="all" href="{{ asset('bundles/oroui/css/all.css') }}" />
+                <link rel="stylesheet" media="all" href="{{ asset('bundles/oroui/css/jquery-ui.grid.css') }}" />
             {% else %}
                 {% stylesheets
                     'bundles/oroui/css/all.css'
@@ -37,7 +35,9 @@
             {% oro_js filter='?yui_js' output='js/oro.all.js' %}
             <script type="text/javascript" src="{{ asset_url }}"></script>
             {% endoro_js %}
-
+            <script type="text/javascript" src="{{ asset('bundles/oroui/lib/jstree/jquery.jstree.js') }}"></script>
+            <script type="text/javascript" src="{{ asset('bundles/orosegmentationtree/js/lib/jstree/jquery.jstree.tree_selector.js') }}"></script>
+            <script type="text/javascript" src="{{ asset('bundles/oroui/lib/jstree/jquery.hotkeys.js') }}"></script>
             {% if app.debug %}
                 <script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
                 <script type="text/javascript">
@@ -45,8 +45,8 @@
                 </script>
             {% endif %}
             <!--[if lte IE 9]>
-                <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
                 <link href="{{ asset('bundles/oroui/css/ie.css') }}" rel="stylesheet" media="all" />
+                <script src="{{ asset('bundles/oroui/lib/html5.js') }}"></script>
                 <script src="{{ asset('bundles/oroui/lib/jquery/jquery.placeholder.js') }}"></script>
                 <script type="text/javascript">
                     jQuery(document).ready(function() {
@@ -61,7 +61,9 @@
                 $(function() {
                     if (Oro.hashNavigationEnabled()) {
                         new Oro.Navigation({baseUrl : '{{ app.request.getSchemeAndHttpHost() }}'});
-                        Backbone.history.start();
+                        if (!Backbone.History.started) {
+                            Backbone.history.start();
+                        }
                     }
                 })
             </script>
@@ -359,7 +361,7 @@
                     {% endblock messages %}
                 </div>
             <div class="hash-loading-mask"></div>
-            <div id="container">
+            <div id="container" class="scrollable-container">
                 {% block page_container %}
                 {% block content %}
                     <div class="container" style="background: #fff">
@@ -388,6 +390,7 @@
                                 <h3>Example pages</h3>
                                 <ul>
                                     <li><a href="{{ path('oro_ui_form_elements') }}">Form elements</a></li>
+                                    <li><a href="{{ path('oro_ui_form_horizontal') }}">Form Horizontal</a></li>
                                     <li><a href="{{ path('oro_ui_messages') }}">System messages</a></li>
                                     <li><a href="{{ path('oro_ui_title_bar') }}">Entity Title Bar</a></li>
                                     <li><a href="{{ path('oro_ui_buttons') }}">Buttons</a></li>

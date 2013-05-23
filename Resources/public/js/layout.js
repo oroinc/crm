@@ -135,7 +135,7 @@ if (typeof Oro !== "undefined") {
  */
 function initLayout() {
     if ($.isPlainObject($.uniform)) {
-        $('input:file').uniform();
+        $('input:file, select').uniform();
     }
 
     if (typeof($.datepicker) != 'undefined') {
@@ -159,15 +159,12 @@ function initLayout() {
         });
     }
 
-    if (typeof $.fn['bootstrapSwitch'] != "undefined"){
-        $('.switch').not('.has-switch')['bootstrapSwitch']();
-    }
-
     $('[data-spy="scroll"]').each(function () {
         var $spy = $(this)
         $spy.scrollspy($spy.data())
         var $spy = $(this).scrollspy('refresh');
     })
+    $('[data-toggle="tooltip"]').tooltip();
 }
 
 /**
