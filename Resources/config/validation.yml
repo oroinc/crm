@@ -1,6 +1,6 @@
 Oro\Bundle\NavigationBundle\Entity\PageState:
     constraints:
-        - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity: pageId
+        - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity: pageHash
     properties:
         pageId:
             - NotBlank:     ~
