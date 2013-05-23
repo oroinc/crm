@@ -179,7 +179,7 @@ class ProfileController extends FlexibleRestController implements ClassResourceI
      */
     public function getGroupsAction($id)
     {
-        $entity = $this->getManager()->getRepository()->findOneBy(array('id' => (int) $id));
+        $entity = $this->getManager()->find($id);
 
         if (!$entity) {
             return $this->handleView($this->view('', Codes::HTTP_NOT_FOUND));
@@ -210,7 +210,7 @@ class ProfileController extends FlexibleRestController implements ClassResourceI
      */
     public function getAclAction($id)
     {
-        $user = $this->getManager()->getRepository()->findOneBy(array('id' => (int) $id));
+        $user = $this->getManager()->find($id);
 
         if (!$user) {
             return $this->handleView($this->view('', Codes::HTTP_NOT_FOUND));
