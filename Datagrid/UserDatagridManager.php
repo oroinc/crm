@@ -116,7 +116,7 @@ class UserDatagridManager extends FlexibleDatagridManager
         $fieldCreated->setOptions(
             array(
                 'type'        => FieldDescriptionInterface::TYPE_DATETIME,
-                'label'       => 'Created At',
+                'label'       => 'Created at',
                 'field_name'  => 'created',
                 'filter_type' => FilterInterface::TYPE_DATETIME,
                 'required'    => false,
@@ -132,7 +132,7 @@ class UserDatagridManager extends FlexibleDatagridManager
         $fieldUpdated->setOptions(
             array(
                 'type'        => FieldDescriptionInterface::TYPE_DATETIME,
-                'label'       => 'Updated At',
+                'label'       => 'Updated at',
                 'field_name'  => 'updated',
                 'filter_type' => FilterInterface::TYPE_DATETIME,
                 'required'    => false,
