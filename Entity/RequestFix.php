@@ -32,7 +32,7 @@ class RequestFix
      * @param string $requestAttributeKey
      * @return array
      */
-    public function getFixedAttributesData($entityClass, array $data, $attributeKey = 'values', $requestAttributeKey = 'values')
+    public function getFixedAttributesData($entityClass, array $data, $attributeKey = 'values', $requestAttributeKey = 'attributes')
     {
         /** @var ObjectRepository $attrRepository */
         $attrRepository = $this->managerRegistry
