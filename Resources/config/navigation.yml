@@ -10,3 +10,6 @@ oro_menu_config:
                 system_tab:
                     children:
                         audit_list: ~
+
+oro_titles:
+    oro_dataaudit_index: Data Audit
