@@ -98,8 +98,9 @@
                 <div data-spy="scroll" data-target="#navbarExample" data-offset="50" class="scrollspy container-fluid scrollable-container">
                     <div class="usser-row">
                         <h4 id="scroll-main" class="scrollspy-title">{{ 'General'|trans }}</h4>
-                        <div class="row-fluid row-fluid-divider">
-                            <fieldset class="form-horizontal span6">
+                        <div class="row-fluid">
+                            <fieldset class="form-horizontal">
+                                <h5 class="usser-fiedset"><span>{{ 'Basic Information'|trans }}</span></h5>
                                 {{ form_row(form.name) }}
                             </fieldset>
                         </div>

@@ -95,7 +95,7 @@
                 <div class="navbar-inner">
                     <div class="container-fluid" style="width: auto;">
                         <ul class="nav">
-                            <li class="active"><a href="#scroll-main">{{ 'Overview'|trans }}</a></li>
+                            <li class="active"><a href="#scroll-main">{{ 'General'|trans }}</a></li>
                             {% if form.groups is defined %}
                                 <li><a href="#scroll-groups">{{ 'Groups'|trans }}</a></li>
                             {% endif %}
@@ -116,15 +116,11 @@
                 <div data-spy="scroll" data-target="#navbarExample" data-offset="50" class="scrollspy container-fluid scrollable-container">
                     {% if form.values is defined %}
                     <div class="usser-row">
-                        <h4 id="scroll-main" class="scrollspy-title">{{ 'Overview'|trans }}</h4>
-                        <div class="row-fluid row-fluid-divider">
-                            <fieldset class="form-horizontal span6">
+                        <h4 id="scroll-main" class="scrollspy-title">{{ 'General'|trans }}</h4>
+                        <div class="row-fluid">
+                            <fieldset class="form-horizontal">
                                 <h5 class="usser-fiedset"><span>{{ 'Basic Information'|trans }}</span></h5>
                                 {{ form_row(form.values) }}
-                            </fieldset>
-
-                            <fieldset class="form-horizontal span6">
-                                <h5 class="usser-fiedset"><span>Contact Information</span></h5>
                             </fieldset>
                         </div>
                     </div>
