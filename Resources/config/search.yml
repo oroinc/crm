@@ -1,6 +1,6 @@
 Oro\Bundle\ContactBundle\Entity\Contact:
     alias: oro_contact
-    label: Contact
+    label: Contacts
     flexible_manager: oro_contact.manager.flexible
     route:
         name: oro_contact_view
