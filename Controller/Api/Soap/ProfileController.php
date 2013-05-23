@@ -60,7 +60,7 @@ class ProfileController extends SoapController
      * @Soap\Method("deleteUser")
      * @Soap\Param("id", phpType="int")
      * @Soap\Result(phpType="boolean")
-     * @AclAncestor("oro_user_profile_remove")
+     * @AclAncestor("oro_user_profile_delete")
      */
     public function deleteAction($id)
     {
