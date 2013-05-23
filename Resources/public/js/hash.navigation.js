@@ -480,7 +480,11 @@ Oro.Navigation = Backbone.Router.extend({
     setLocation: function (url) {
         if (this.enabled && !this.checkThirdPartyLink(url)) {
             url = url.replace(this.baseUrl, '').replace(/^(#\!?|\.)/, '').replace('#g/', '|g/');
-            window.location.hash = '#url=' + url;
+            if (url == this.url) {
+                this.loadPage();
+            } else {
+                window.location.hash = '#url=' + url;
+            }
         } else {
             window.location = url;
         }
