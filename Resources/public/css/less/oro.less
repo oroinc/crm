@@ -1236,7 +1236,7 @@ footer{
   border-left: 1px solid #ccd1d7;
   background-color: #fff;
   min-height: 151px;
-  max-height: 350px;
+  max-height: 330px;
   overflow: auto;
 }
 .pin-bar .list-bar{
@@ -2369,11 +2369,24 @@ textarea{
   margin: 0;
 }
 .filter-criteria .oro-action .btn-group{
-  float: right;
+  float: left;
 }
 .filter-criteria .oro-action .btn{
   outline: none;
   position: static;
+}
+.filter-box .filter-item .filter-criteria{
+  top: 125%;
+}
+.filter-box .filter-item .filter-criteria:after {
+  content: "";
+  display: inline-block;
+  left: 10px;
+  position: absolute;
+  top: -9px;
+  width: 18px;
+  height: 9px;
+  background: url("../../img/bg-drop-arow.png") no-repeat;
 }
 .btn-group > .btn-small{
   font-size: 11px;
