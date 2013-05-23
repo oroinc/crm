@@ -18,7 +18,7 @@
 
 {% block form_row_flex %}
 {% spaceless %}
-    {% set col = attribute(attr, 'data-col') %}
+    {% set col = attr['data-col'] is defined ? attr['data-col'] : 0 %}
 
     {% if col > 1 %}
         {# calculate Bootstrap class for 12-columns grid system #}
