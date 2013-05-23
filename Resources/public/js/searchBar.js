@@ -1,6 +1,31 @@
 $(document).ready(function () {
     var _searcjFlag = false;
 
+    if (!_.isUndefined(Oro.Events)) {
+        Oro.Events.bind(
+            "hash_navigation_request:complete",
+            function () {
+                SearchByTagClose()
+            },
+            this
+        );
+
+        Oro.Events.bind(
+            "hash_navigation_request:form-start",
+            function (form) {
+                if ($(form).hasClass('search-form')) {
+                    var send = true;
+                    var $searchString = $.trim($(form).find(".search").val());
+                    if ($searchString.length == 0) {
+                        send = false;
+                    }
+                    Oro.Registry.setElement('form_validate', send);
+                }
+            },
+            this
+        );
+    }
+
     $(".search-form").submit(function(){
         var $searchString = $.trim($(this).find('.search').val());
         if ($searchString.length == 0) {
