@@ -24,10 +24,12 @@ Oro.Datagrid.Grid = Backgrid.Grid.extend({
     /** @property */
     template: _.template(
         '<div class="toolbar"></div>' +
-        '<div class="grid-container" style="position: relative;">' +
-            '<table class="grid table-hover table table-bordered table-condensed"></table>' +
-            '<div class="no-data"></div>' +
-            '<div class="loading-mask"></div>' +
+        '<div class="container-fluid">' +
+            '<div class="grid-container">' +
+                '<table class="grid table-hover table table-bordered table-condensed"></table>' +
+                '<div class="no-data"></div>' +
+                '<div class="loading-mask"></div>' +
+            '</div>' +
         '</div>'
     ),
 

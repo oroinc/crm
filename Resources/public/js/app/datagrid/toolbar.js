@@ -11,7 +11,7 @@ Oro.Datagrid.Toolbar = Backbone.View.extend({
 
     /** @property */
     template:_.template(
-        '<div class="grid-toolbar well-small">' +
+        '<div class="grid-toolbar">' +
             '<div class="pull-left">' +
                 '<div class="btn-group icons-holder" style="display: none;">' +
                     '<button class="btn"><i class="icon-edit hide-text">edit</i></button>' +
