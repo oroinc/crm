@@ -283,8 +283,8 @@ class AddressBase extends AbstractEntityFlexible
      */
     public function beforeSave()
     {
-        $this->created = new \DateTime();
-        $this->updated = new \DateTime();
+        $this->created = new \DateTime('now', new \DateTimeZone('UTC'));
+        $this->updated = new \DateTime('now', new \DateTimeZone('UTC'));
     }
 
     /**
