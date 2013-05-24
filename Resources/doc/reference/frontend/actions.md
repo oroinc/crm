@@ -23,7 +23,7 @@ var grid = new Oro.Datagrid.Grid({
             label: "Delete",
             icon: "trash",
             placeholders: {"{id}":"id"},
-            url: "/api/rest/latest/profiles/{id}.json"
+            url: "/api/rest/latest/users/{id}.json"
         })
     ]
     // other configuration

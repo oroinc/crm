@@ -41,7 +41,7 @@ class UserDatagridManager extends FlexibleDatagridManager
         return array(
             new UrlProperty('show_link', $this->router, 'oro_user_view', array('id')),
             new UrlProperty('edit_link', $this->router, 'oro_user_update', array('id')),
-            new UrlProperty('delete_link', $this->router, 'oro_api_delete_profile', array('id')),
+            new UrlProperty('delete_link', $this->router, 'oro_api_delete_user', array('id')),
         );
     }
     // ... other methods
