@@ -117,7 +117,7 @@ class ProfileController extends SoapController
         $entity = $this->getUserManager()->findUserBy($filters);
 
         if (!$entity) {
-            throw new \SoapFault('NOT_FOUND', 'User can not be found using specified filter');
+            throw new \SoapFault('NOT_FOUND', 'User cannot be found using specified filter');
         }
 
         return $entity;

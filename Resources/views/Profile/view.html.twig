@@ -15,7 +15,7 @@
                     </div>
                     {% if resource_granted('oro_user_profile_update') %}
                     <div class="pull-left btn-group icons-holder">
-                        <a href="{{ path('oro_user_update', { id: user.id, back: app.request.uri }) }}" class="btn icons-holder-text" title="{{ 'Edit1 profile'|trans }}"><i class="icon-edit hide-text">{{ 'Edit'|trans }}</i>{{ 'Edit'|trans }}</a>
+                        <a href="{{ path('oro_user_update', { id: user.id, back: app.request.uri }) }}" class="btn icons-holder-text" title="{{ 'Edit profile'|trans }}"><i class="icon-edit hide-text">{{ 'Edit'|trans }}</i>{{ 'Edit'|trans }}</a>
                     </div>
                     {% endif %}
                     {% if resource_granted('oro_user_profile_delete') %}
@@ -81,7 +81,7 @@
                         <div class="form-horizontal span6">
                             <h5 class="usser-fiedset"><span>Basic Information</span></h5>
                             <div class="control-group">
-                                <label class="control-label">{{ 'Account name'|trans }}</label>
+                                <label class="control-label">{{ 'User name'|trans }}</label>
                                 <div class="controls">
                                     <div class="clearfix-oro">
                                         <p class="control-label">{{ user.username }}</p>
