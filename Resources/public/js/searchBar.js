@@ -5,7 +5,7 @@ $(document).ready(function () {
         Oro.Events.bind(
             "hash_navigation_request:complete",
             function () {
-                SearchByTagClose()
+                SearchByTagClose();
             },
             this
         );
@@ -31,6 +31,9 @@ $(document).ready(function () {
         if ($searchString.length == 0) {
             return false;
         }
+        // clear value after search
+        $(this).find('.search').val('').blur();
+        SearchByTagClose();
     });
 
     $("#search-bar-dropdown li a").click(function (e) {
@@ -40,12 +43,12 @@ $(document).ready(function () {
         $(this).parent().addClass('active');
         $("#search-bar-from").val($(this).parent().attr('data-alias'));
         $("#search-bar-button").html($(this).html() + '<span class="caret"></span>');
-        SearchByTagClose()
-        SearchInputWidth()
+        SearchByTagClose();
+        SearchInputWidth();
         e.preventDefault();
     });
 
-    SearchInputWidth()
+    SearchInputWidth();
     function SearchByTag() {
         var queryString = jQuery('#search-bar-search').val();
         if (queryString == '' || queryString.length < 3) {
@@ -124,7 +127,7 @@ $(document).ready(function () {
                 return false;
             default:
                 SearchByTag();
-        };
+        }
     });
 
     $(document).on('keydown', '#search-dropdown a', function (evt) {

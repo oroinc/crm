@@ -18,7 +18,7 @@
     {% block content %}
         <div class="container-fluid search-header">
             <h2>
-                {% trans %}Search{% endtrans %}
+                {% trans %}Search results{% endtrans %}
                 <form method="get" action="{{ path('oro_search_results') }}" class="form-inline search-form">
                     <input type="hidden" name="from" value="" />
                     <input type="text" id="search" class="span2 search" name="search" value="{{ searchString }}" />
@@ -42,21 +42,20 @@
                                 {% set label = type.config.label %}
                             {% endif %}
 
-                            {% set entityIconClass = "icon-tags" %}
-                            {% if alias == '' %}
-                                {% set entityIconClass = "icon-search" %}
-                            {% elseif 'entity_icon_class' in type.config|keys %}
-                                {% set entityIconClass = type.config.entity_icon_class %}
+                            {% set entityIcon = "bundles/orosearch/img/search.png" %}
+                            {% if 'entity_icon' in type.config|keys %}
+                                {% set entityIcon = type.config.entity_icon %}
                             {% endif %}
 
                             <div class="entity-type{% if selected %} selected{% endif %}">
-                                <i class="{{ entityIconClass }}"></i>
+                                <img src="{{ asset(entityIcon) }}" alt="{{ label|trans }}" />
+
                                 {% if selected %}
-                                    {{ label }} ({{ type.count }})
+                                    {{ label|trans }} ({{ type.count }})
                                     <div class="arrow"><i class="icon-chevron-right"></i></div>
                                 {% else %}
                                     <a href="{{ path('oro_search_results', { from: alias, search: searchString }) }}">
-                                        {{ label }} ({{ type.count }})
+                                        {{ label|trans }} ({{ type.count }})
                                     </a>
                                 {% endif %}
                             </div>
@@ -69,7 +68,11 @@
                 </tr>
             </table>
         {% else %}
-            <div id="search-result-grid"></div>
+            <div class="search-no-results">
+                {% trans %}No results were found to match your search.{% endtrans %}
+                <br />
+                {% trans %}Try modifying your search criteria or creating a new ...{% endtrans %}
+            </div>
         {% endif %}
 
     {% endblock %}

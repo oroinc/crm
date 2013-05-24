@@ -5,14 +5,9 @@
 {% set entity = record.getValue('entity') %}
 
 <div style="height: 60px;">
-    {% if entity %}
-        {% if indexer_item.entityConfig.search_template %}
-            {% include indexer_item.entityConfig.search_template with {'entity': entity, 'url': indexer_item.recordUrl} %}
-        {% else %}
-            {{ entity }}
-        {% endif %}
+    {% if indexer_item.entityConfig.search_template %}
+        {% include indexer_item.entityConfig.search_template with {'entity': entity, 'indexer_item': indexer_item} %}
     {% else %}
-        <h3 style="margin: 0px;">{{ indexer_item.recordTitle }}</h3>
-        <i>This entity is not available. Probably it was removed.</i>
+        {{ entity }}
     {% endif %}
 </div>

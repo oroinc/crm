@@ -32,7 +32,7 @@ class SearchController extends Controller
     /**
      * Show search block
      *
-     * @Template
+     * @Template("OroSearchBundle:Search:searchBar.html.twig")
      */
     public function searchBarAction()
     {
@@ -69,7 +69,7 @@ class SearchController extends Controller
      * Show search results
      *
      * @Route("/", name="oro_search_results")
-     * @Template
+     * @Template("OroSearchBundle:Search:searchResults.html.twig")
      */
     public function searchResultsAction(Request $request)
     {
