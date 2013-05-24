@@ -10,7 +10,7 @@
 
 <div class="span9">
     <div class="customer-info well-small">
-        {% if entity %}
+        {% if user %}
             <div class="visual">
                 <a href="{{ indexer_item.recordUrl }}">
                     <img src="{{ user.imagePath ? user.imagePath | imagine_filter('avatar_med') : asset('bundles/oroui/img/info-usser.png') }}" alt="{{ user.fullname(format) }}"/>
