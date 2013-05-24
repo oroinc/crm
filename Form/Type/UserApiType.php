@@ -8,7 +8,7 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Oro\Bundle\UserBundle\Form\EventListener\UserApiSubscriber;
 use Oro\Bundle\UserBundle\Form\EventListener\PatchSubscriber;
 
-class UserApiType extends ProfileType
+class UserApiType extends UserType
 {
     /**
      * {@inheritdoc}
@@ -42,6 +42,6 @@ class UserApiType extends ProfileType
      */
     public function getName()
     {
-        return 'profile';
+        return 'user';
     }
 }
