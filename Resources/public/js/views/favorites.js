@@ -37,11 +37,11 @@ navigation.favorites.MainView = navigation.MainViewAbstract.extend({
     },
 
     activate: function() {
-        this.$icon.removeClass('icon-white');
+        this.$icon.removeClass('icon-gold');
     },
 
     inactivate: function() {
-        this.$icon.addClass('icon-white');
+        this.$icon.addClass('icon-gold');
     },
 
     toggleItem: function(e) {

@@ -493,10 +493,29 @@ Oro.Navigation = Backbone.Router.extend({
             this.method = $(target).attr('method') ? $(target).attr('method') : "get";
 
             if (url) {
-                var data = $(target).serialize();
-                if (this.method == 'get') {
-                    if (data) {
-                        url += '?' + data;
+                Oro.Registry.setElement('form_validate', true);
+                Oro.Events.trigger("hash_navigation_request:form-start", target);
+                if (Oro.Registry.getElement('form_validate')) {
+                    var data = $(target).serialize();
+                    if (this.method == 'get') {
+                        if (data) {
+                            url += '?' + data;
+                        }
+                        this.setLocation(url);
+                    } else {
+                        this.beforeRequest();
+                        $(target).ajaxSubmit({
+                            data:{'x-oro-hash-navigation' : true},
+                            headers: { 'x-oro-hash-navigation': true },
+                            error: _.bind(function (XMLHttpRequest, textStatus, errorThrown) {
+                                alert('Error Message: ' + textStatus + ' HTTP Error: ' + errorThrown);
+                                this.afterRequest();
+                            }, this),
+                            success: _.bind(function (data) {
+                                this.handleResponse(data);
+                                this.afterRequest();
+                            }, this)
+                        });
                     }
                     this.setLocation(url);
                 } else {
