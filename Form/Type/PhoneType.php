@@ -6,7 +6,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 class PhoneType extends CollectionItemAbstract
 {
-    const TYPE_HOME = 1;
+    const TYPE_OFFICE = 1;
     const TYPE_CELL = 2;
 
     /**
@@ -25,7 +25,8 @@ class PhoneType extends CollectionItemAbstract
                 'choice_list'   => new ChoiceList(
                     array_keys(self::getTypesArray()),
                     array_values(self::getTypesArray())
-                )
+                ),
+                'attr' => array ('class' => 'oro-multiselect')
             )
         );
     }
@@ -36,8 +37,8 @@ class PhoneType extends CollectionItemAbstract
     public function getTypesArray()
     {
         return array(
-            self::TYPE_HOME      => 'Landline phone',
-            self::TYPE_CELL      => 'Cell phone'
+            self::TYPE_OFFICE      => 'Office phone',
+            self::TYPE_CELL        => 'Cell phone'
         );
     }
 
