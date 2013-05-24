@@ -31,7 +31,7 @@ class AclController extends ContainerAware
         $resource = $this->getManager()->getAclResource($id);
 
         if (!$resource) {
-            throw new \SoapFault('NOT_FOUND', sprintf('Acl resource with id "%s" can not be found', $id));
+            throw new \SoapFault('NOT_FOUND', sprintf('Acl resource with id "%s" cannot be found', $id));
         }
 
         return $resource;
