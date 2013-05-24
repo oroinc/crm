@@ -25,7 +25,7 @@
                             {% endif %}
                             <div class="pull-left customer-info-top-actions">
                                 <div class="btn-group">
-                                    <a href="{{ app.session.get('back') ? app.session.get('back') : path('oro_user_index') }}" class="btn back">{{ 'Cancel'|trans }}</a>
+                                    <a href="{{ app.session.get('back') ? app.session.get('back') : path('oro_user_index') }}" title="{{ 'Cancel'|trans }}" class="btn back">{{ 'Cancel'|trans }}</a>
                                 </div>
                                 <div class="btn-group">
                                     <button type="submit" class="btn btn-success">{{ ' Save'|trans }}</button>

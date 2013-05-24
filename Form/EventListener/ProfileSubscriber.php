@@ -88,16 +88,15 @@ class ProfileSubscriber implements EventSubscriberInterface
                 $form->remove('groups');
             }
 
-            // only admin granted to modify user state
-            // but do not allow "admin" to disable his own account
-            if ($this->aclManager->isResourceGranted('root', $user)) {
-                $form->add($this->factory->createNamed('enabled', 'choice', $entity->isEnabled(), array(
-                    'required' => false,
-                    'disabled' => $entity->getId() == $user->getId(),
-                    'choices'  => array('1' => 'Active', '0' => 'Inactive'),
-                    'label'    => 'Status'
-                )));
-            }
+            // do not allow "admin" to disable his own account
+            $form->add($this->factory->createNamed('enabled', 'choice', $entity->getId() ? $entity->isEnabled() : '', array(
+                'label'       => 'Status',
+                'required'    => true,
+                'disabled'    => $this->aclManager->isResourceGranted('root', $user) && $entity->getId() == $user->getId(),
+                'choices'     => array('Inactive', 'Active'),
+                'empty_value' => 'Please select',
+                'empty_data'  => '',
+            )));
         } else {
             $form->remove('rolesCollection');
             $form->remove('groups');

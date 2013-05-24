@@ -1,8 +1,8 @@
 {% extends bap.layout is defined ? bap.layout : 'OroUserBundle::layout.html.twig' %}
 {% form_theme form with 'OroUIBundle:Form:fields.html.twig' %}
 
-{% set title = form.vars.value.id ? 'Update Role'|trans : 'Create Role'|trans %}
-{% oro_title_set({params : {"%role%": form.vars.value.label} }) %}
+{% set title = form.vars.value.id ? 'Update Role'|trans : 'New Role'|trans %}
+{% oro_title_set({params : { "%role%": form.vars.value.label } }) %}
 
 {% block head_script %}
     {{ parent() }}
@@ -47,26 +47,29 @@
                             {% if form.vars.value.id and resource_granted('oro_user_profile_delete') %}
                             <div class="pull-left btn-group icons-holder">
                                 <a href="javascript: void(0);" class="btn icons-holder-text" id="btn-remove-role" data-id="{{ form.vars.value.id }}" data-message="{{ 'Are you sure you want to delete this Role?'|trans }}" title="{{ 'Delete role'|trans }}"><i class="icon-trash hide-text">{{ 'Remove'|trans }}</i>Delete</a>
-                            </div>
-                            <div class="pull-left">
-                                <div class="separator-btn"></div>
-                            </div>
-                            {% endif %}
-                            <div class="pull-left customer-info-top-actions">
-                                <div class="btn-group">
-                                    <a href="{{ app.session.get('back') ? app.session.get('back') : path('oro_user_index') }}" class="btn back">{{ 'Cancel'|trans }}</a>
-                                </div>
-                                <button type="submit" class="btn btn-success">{{ ' Save'|trans }}</button>
-                            </div>
                         </div>
                         <div class="pull-left">
-                            <div class="form-info clearfix">
-                                <div class="customer-content pull-left">
-                                    <div class="clearfix-oro">
-                                        <div class="sub-title">{{ 'Role'|trans }}</div>
-                                        <span class="separator">/</span>
+                            <div class="separator-btn"></div>
+                        </div>
+                        {% endif %}
+                        <div class="pull-left customer-info-top-actions">
+                            <div class="btn-group">
+                                <a href="{{ app.session.get('back') ? app.session.get('back') : path('oro_user_index') }}" class="btn back" title="{{ 'Cancel'|trans }}">{{ 'Cancel'|trans }}</a>
+                            </div>
+                            <button type="submit" class="btn btn-success" title="{{ 'Save role'|trans }}">{{ ' Save'|trans }}</button>
+                        </div>
+                    </div>
+                    <div class="pull-left">
+                        <div class="form-info clearfix">
+                            <div class="customer-content pull-left">
+                                <div class="clearfix-oro">
+                                    <div class="sub-title"><div class="sub-title"><a href="{{ path('oro_user_role_index') }}">{{ 'Roles'|trans }}</a></div></div>
+                                    <span class="separator">/</span>
+                                    {% if form.vars.value.id %}
+                                        <h1 class="form-info-name">{{ form.vars.value.label }}</h1>
+                                    {% else %}
                                         <h1 class="form-info-name">{{ title }}</h1>
-                                    </div>
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>
