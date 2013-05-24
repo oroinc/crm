@@ -2,17 +2,21 @@
 
 namespace Oro\Bundle\AccountBundle\Entity\Value;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityFlexibleValue;
-use Oro\Bundle\FlexibleEntityBundle\Entity\Attribute;
-use Oro\Bundle\AccountBundle\Entity\Account;
-use Oro\Bundle\AddressBundle\Entity\Address;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+
+use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityFlexibleValue;
+use Oro\Bundle\FlexibleEntityBundle\Entity\Attribute;
+
+use Oro\Bundle\AccountBundle\Entity\Account;
+use Oro\Bundle\AddressBundle\Entity\Address;
 
 /**
  * @ORM\Table(name="oro_account_value")
  * @ORM\Entity
+ * @Gedmo\Loggable(logEntryClass="Oro\Bundle\DataAuditBundle\Entity\Audit")
  */
 class AccountValue extends AbstractEntityFlexibleValue
 {
@@ -44,6 +48,66 @@ class AccountValue extends AbstractEntityFlexibleValue
      * )
      */
     protected $options;
+
+    /**
+     * Store varchar value
+     *
+     * @var string $varchar
+     *
+     * @ORM\Column(name="value_string", type="string", length=255, nullable=true)
+     * @Gedmo\Versioned
+     */
+    protected $varchar;
+
+    /**
+     * Store int value
+     *
+     * @var integer $integer
+     *
+     * @ORM\Column(name="value_integer", type="integer", nullable=true)
+     * @Gedmo\Versioned
+     */
+    protected $integer;
+
+    /**
+     * Store decimal value
+     *
+     * @var double $decimal
+     *
+     * @ORM\Column(name="value_decimal", type="decimal", nullable=true)
+     * @Gedmo\Versioned
+     */
+    protected $decimal;
+
+    /**
+     * Store text value
+     *
+     * @var string $text
+     *
+     * @ORM\Column(name="value_text", type="text", nullable=true)
+     * @Gedmo\Versioned
+     */
+    protected $text;
+
+    /**
+     * Store date value
+     *
+     * @var date $date
+     *
+     * @ORM\Column(name="value_date", type="date", nullable=true)
+     * @Gedmo\Versioned
+     */
+    protected $date;
+
+    /**
+     * Store datetime value
+     *
+     * @var date $datetime
+     *
+     * @ORM\Column(name="value_datetime", type="datetime", nullable=true)
+     * @Gedmo\Versioned
+     */
+    protected $datetime;
 
     /**
      * Store upload values
