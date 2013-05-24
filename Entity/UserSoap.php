@@ -5,7 +5,6 @@ namespace Oro\Bundle\UserBundle\Entity;
 use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 use JMS\Serializer\Annotation\Exclude;
 use Doctrine\ORM\Mapping as ORM;
-use Oro\Bundle\FlexibleEntityBundle\Model\FlexibleValueInterface;
 
 /**
  * @ORM\MappedSuperclass(repositoryClass="Oro\Bundle\FlexibleEntityBundle\Entity\Repository\FlexibleEntityRepository")
