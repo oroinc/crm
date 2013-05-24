@@ -9,7 +9,7 @@
 
 {% block content %}
     <div class="container-fluid">
-        <h1>{{ 'Accounts Overview'|trans }} <a class="btn btn-primary pull-right" href="{{ path('oro_account_create', {back: app.request.uri}) }}">{{ 'Add account'|trans }}</a></h1>
+        <h1>{{ 'Accounts'|trans }} <a class="btn btn-primary pull-right" href="{{ path('oro_account_create', {back: app.request.uri}) }}" title="{{ 'Add account'|trans }}">{{ 'Add account'|trans }}</a></h1>
         <div id="accounts-grid"></div>
     </div>
 {% endblock %}

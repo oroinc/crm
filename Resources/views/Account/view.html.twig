@@ -82,7 +82,7 @@
                     <ul class="nav">
                         <li class="active"><a href="#scroll-main">{{ 'General'|trans }}</a></li>
                         {% if account.values is defined %}
-                        <li><a href="#scroll-attributes">{{ 'Additional Data'|trans }}</a></li>
+                        <li><a href="#scroll-attributes">{{ 'Additional Information'|trans }}</a></li>
                         {% endif %}
                     </ul>
                 </div>
@@ -109,7 +109,7 @@
 
                 {% if account.values is defined %}
                 <div class="usser-row">
-                    <h4 id="scroll-attributes" class="scrollspy-title">{{ 'Additional Data'|trans }}</h4>
+                    <h4 id="scroll-attributes" class="scrollspy-title">{{ 'Additional Information'|trans }}</h4>
                     <div class="row-fluid">
                         <div class="form-horizontal">
                             {% for attr in account.values %}
