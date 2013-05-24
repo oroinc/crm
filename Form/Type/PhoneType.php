@@ -6,7 +6,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 class PhoneType extends CollectionItemAbstract
 {
-    const TYPE_HOME = 1;
+    const TYPE_OFFICE = 1;
     const TYPE_CELL = 2;
 
     /**
@@ -37,8 +37,8 @@ class PhoneType extends CollectionItemAbstract
     public function getTypesArray()
     {
         return array(
-            self::TYPE_HOME      => 'Office phone',
-            self::TYPE_CELL      => 'Cell phone'
+            self::TYPE_OFFICE      => 'Office phone',
+            self::TYPE_CELL        => 'Cell phone'
         );
     }
 
