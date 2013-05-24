@@ -26,7 +26,7 @@ abstract class FlexibleSoapController extends SoapController
 
         $entityClass = ClassUtils::getRealClass(get_class($entity));
         $entityClass = str_replace('Soap', '', $entityClass);
-        $data = $this->container->get('oro_soap.request')->getFixedAttributesData($entityClass, $data, 'values', $attributeKey);
+        $data = $this->container->get('oro_soap.request')->getFixedAttributesData($entityClass, $data, 'attributes', $attributeKey);
 
         $request->request->set($this->getForm()->getName(), $data);
     }
