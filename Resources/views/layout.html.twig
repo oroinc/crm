@@ -24,6 +24,7 @@
     {% endif %}
 
     {% javascripts
+        '@OroUIBundle/Resources/public/lib/jquery.min.js'
         '@OroUIBundle/Resources/public/lib/bootstrap.min.js'
         '@OroUIBundle/Resources/public/lib/bootstrap/js/bootstrap-tooltip.js'
         '@OroUIBundle/Resources/public/lib/bootstrap/js/bootstrap-popover.js'
@@ -73,10 +74,8 @@
             {% endblock header %}
 
             {% block main %}
-            <div class="container-fluid">
                 {% block content %}
                 {% endblock content %}
-            </div>
             {% endblock main %}
         </div>
     </div>

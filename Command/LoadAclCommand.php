@@ -29,12 +29,6 @@ class LoadAclCommand extends ContainerAwareCommand
         $output->writeln('Completed');
 
         //clear cache
-        $command = $this->getApplication()->find('cache:clear');
-        $arguments = array(
-            'command' => 'cache:clear',
-            '--no-warmup' => true
-        );
-        $input = new ArrayInput($arguments);
-        $command->run($input, $output);
+        $this->getApplication()->find('cache:clear')->run($input, $output);
     }
 }
