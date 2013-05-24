@@ -49,7 +49,12 @@
                 .bind("loaded.jstree", $.proxy(function () {
                     this.switch_tree();
 
-                }, this));
+                }, this))
+                /*
+                .bind("load_node.jstree", $.proxy(function (e,data) {
+                    alert("load node event");
+                }, this))*/
+                ;
         },
         defaults : {
             ajax : false,
@@ -59,7 +64,7 @@
             node_label_field : 'code'
         },
         _fn : {
-            refresh : function(obj) {
+            refresh : function (obj) {
                 this.refresh_trees();
 
                 return this.__call_old();
@@ -106,7 +111,7 @@
                 this.get_tree_select().empty();
 
                 // In case of no tree loaded, display the no_tree_message
-                // if setup
+                // if set up
                 if (trees.length === 0 && this.data.tree_selector.no_tree_message) {
                     var no_tree_option = $('<option>', {
                         text: this.data.tree_selector.no_tree_message,
@@ -119,15 +124,22 @@
 
                 var this_jstree = this;
                 $.each(trees, function (index, tree) {
+                    var option_text = tree[this_jstree.data.tree_selector.node_label_field];
+
                     var option = $('<option>', {
                         value: tree.id,
-                        text: tree[this_jstree.data.tree_selector.node_label_field]
+                        text: option_text
                     });
-
-//                    eval ('option.text = tree'.data.tree_selector.node_label_field);
 
                     if (index === 0) {
                         option.prop('defaultSelected', true);
+                        this_jstree._get_settings().json_data.data = [
+                            {
+                                "data": option_text,
+                                "state": "closed",
+                                "attr" : { "id" : tree.id}
+                            }
+                        ];
                     }
                     this_jstree.get_tree_select().append(option);
                 });
