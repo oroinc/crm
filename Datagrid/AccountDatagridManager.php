@@ -82,19 +82,17 @@ class AccountDatagridManager extends FlexibleDatagridManager
         );
         $fieldsCollection->add($fieldId);
 
-        $specialAttributeOptions = array(
+        $this->configureFlexibleField($fieldsCollection, 'email');
+        $this->configureFlexibleField($fieldsCollection, 'annual_revenue');
+
+        $addressOptions = array(
             'type'        => FieldDescriptionInterface::TYPE_TEXT,
             'filter_type' => FilterInterface::TYPE_STRING,
             'sortable'    => false,
             'filterable'  => false
         );
-        $this->configureFlexibleFields(
-            $fieldsCollection,
-            array(
-                'shipping_address'     => $specialAttributeOptions,
-                'billing_address'      => $specialAttributeOptions
-            )
-        );
+        $this->configureFlexibleField($fieldsCollection, 'shipping_address', $addressOptions);
+        $this->configureFlexibleField($fieldsCollection, 'billing_address', $addressOptions);
 
         $fieldCreated = new FieldDescription();
         $fieldCreated->setName('created');
