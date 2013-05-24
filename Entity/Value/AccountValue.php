@@ -49,9 +49,6 @@ class AccountValue extends AbstractEntityFlexibleValue
      */
     protected $options;
 
-
-
-
     /**
      * Store varchar value
      *
@@ -111,9 +108,6 @@ class AccountValue extends AbstractEntityFlexibleValue
      * @Gedmo\Versioned
      */
     protected $datetime;
-
-
-
 
     /**
      * Store upload values
