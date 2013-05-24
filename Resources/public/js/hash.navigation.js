@@ -19,7 +19,7 @@ Oro.Navigation = Backbone.Router.extend({
      * container - Selector for main content area
      * loadingMask - Selector for loading spinner
      * searchDropdown - Selector for dropdown with search results
-     * menuDropdowns - Selector for 3 dots menu and my profile dropdowns
+     * menuDropdowns - Selector for 3 dots menu and user dropdowns
      * pinbarHelp - Selector for pinbars help link
      * historyTab - Selector for history 3 dots menu tab
      * mostViwedTab - Selector for most viewed 3 dots menu tab

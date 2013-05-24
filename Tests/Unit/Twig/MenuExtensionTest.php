@@ -154,7 +154,7 @@ class MenuExtensionTest extends \PHPUnit_Framework_TestCase
                         'routeParameters' => array(),
                         'extras' => array()
                     ),
-                    'user_profile_show' => array(
+                    'user_user_show' => array(
                         'translateDomain' => 'SomeBundle',
                         'translateParameters' => array(),
                         'routeParameters' => array(),
@@ -169,7 +169,7 @@ class MenuExtensionTest extends \PHPUnit_Framework_TestCase
                             'brandLink' => '/'
                         ),
                         'children' => array(
-                            'user_profile_show' => array(
+                            'user_user_show' => array(
                                 'position' => '10',
                                 'children' => array(
                                     'user_registration_register' => array(
@@ -223,7 +223,7 @@ class MenuExtensionTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue('menu'));
 
         $this->container->setParameter('oro_menu_config', $menuConfig);
-        $this->menuExtension->render(array('navbar', 'user_profile_show'));
+        $this->menuExtension->render(array('navbar', 'user_user_show'));
     }
 
     /**
@@ -253,6 +253,6 @@ class MenuExtensionTest extends \PHPUnit_Framework_TestCase
 
         $this->container->setParameter('oro_menu_config', $menuConfig);
         $this->menuExtension
-            ->render(array('navbar', 'user_profile_show'), array('type' => 'some_menu'), 'some_renderer');
+            ->render(array('navbar', 'user_user_show'), array('type' => 'some_menu'), 'some_renderer');
     }
 }

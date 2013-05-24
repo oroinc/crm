@@ -74,10 +74,10 @@ class ConfigurationBuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(2, $menu->getChildren());
         $this->assertEquals($options['tree']['navbar']['type'], $menu->getExtra('type'));
         $this->assertCount(
-            count($options['tree']['navbar']['children']['user_profile_show']['children']),
-            $menu->getChild('user_profile_show')
+            count($options['tree']['navbar']['children']['user_user_show']['children']),
+            $menu->getChild('user_user_show')
         );
-        $this->assertEquals('user_profile_show', $menu->getChild('user_profile_show')->getName());
+        $this->assertEquals('user_user_show', $menu->getChild('user_user_show')->getName());
     }
 
     /**
@@ -112,7 +112,7 @@ class ConfigurationBuilderTest extends \PHPUnit_Framework_TestCase
                         'routeParameters' => array(),
                         'extras' => array()
                     ),
-                    'user_profile_show' => array(
+                    'user_user_show' => array(
                         'translateDomain' => 'SomeBundle',
                         'translateParameters' => array(),
                         'routeParameters' => array(),
@@ -127,7 +127,7 @@ class ConfigurationBuilderTest extends \PHPUnit_Framework_TestCase
                             'brandLink' => '/'
                         ),
                         'children' => array(
-                            'user_profile_show' => array(
+                            'user_user_show' => array(
                                 'position' => '10',
                                 'children' => array(
                                     'user_registration_register' => array(
