@@ -56,9 +56,14 @@ abstract class SoapController extends ContainerAware implements
     {
         $entity = $this->getEntity($id);
 
-        $em = $this->getManager()->getObjectManager();
-        $em->remove($entity);
-        $em->flush();
+        $securityToken = $this->container->get('security.context')->getToken();
+        if ($securityToken && is_object($user = $securityToken->getUser()) && $entity->getId() != $user->getId()) {
+            $em = $this->getManager()->getObjectManager();
+            $em->remove($entity);
+            $em->flush();
+        } else {
+            throw new \SoapFault('BAD_REQUEST', 'User can not delete his account');
+        }
 
         return true;
     }
