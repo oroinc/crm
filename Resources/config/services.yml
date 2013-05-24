@@ -11,6 +11,7 @@ parameters:
     oro_user.security.provider.class: Oro\Bundle\UserBundle\Security\UserProvider
     oro_user.security.login.class:    Oro\Bundle\UserBundle\EventListener\LoginSubscriber
     oro_user.type.profile.class:      Oro\Bundle\UserBundle\Form\Type\ProfileType
+    oro_user.type.profile_value.class: Oro\Bundle\UserBundle\Form\Type\ProfileValueType
     oro_user.type.profile.api.class:  Oro\Bundle\UserBundle\Form\Type\ProfileApiType
     oro_user.type.reset.class:        Oro\Bundle\UserBundle\Form\Type\ResetType
     oro_user.type.role.class:         Oro\Bundle\UserBundle\Form\Type\RoleType
@@ -123,6 +124,14 @@ services:
         arguments:                    [@oro_user.manager.flexible, "@oro_user.acl_manager", "@security.context"]
         tags:
             - { name: form.type, alias: oro_user_profile }
+
+    oro_user.type.profile_value:
+        class: %oro_user.type.profile_value.class%
+        arguments:
+            - @oro_user.manager.flexible
+            - @oro_flexibleentity.value_form.value_subscriber
+        tags:
+            - { name: form.type, alias: oro_user_profile_value }
 
     oro_user.form.type.profile.api:
         class:                        %oro_user.type.profile.api.class%
