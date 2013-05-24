@@ -11,7 +11,7 @@ class SearchDatagridManagerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->datagridManager = new SearchDatagridManager();
+        $this->datagridManager = new SearchDatagridManager('test_template');
     }
 
     protected function tearDown()
