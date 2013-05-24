@@ -1,11 +1,14 @@
 <?php
 namespace Oro\Bundle\FlexibleEntityBundle\Form\EventListener;
 
+use Oro\Bundle\FlexibleEntityBundle\Model\FlexibleValueInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleManager;
+use Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleManagerRegistry;
+use Oro\Bundle\FlexibleEntityBundle\AttributeType\AttributeTypeFactory;
+use Symfony\Component\Form\FormInterface;
 
 /**
  * Add a relevant form for each flexible entity value
@@ -23,20 +26,27 @@ class FlexibleValueSubscriber implements EventSubscriberInterface
     protected $factory;
 
     /**
-     * @var FlexibleManager
+     * @var AttributeTypeFactory
      */
-    protected $flexibleManager;
+    protected $attributeTypeFactory;
+
+    /**
+     * @var FlexibleManagerRegistry
+     */
+    protected $flexibleManagerRegistry;
 
     /**
      * Constructor
      *
      * @param FormFactoryInterface $factory         the form factory
-     * @param FlexibleManager      $flexibleManager the flexible manager
+     * @param AttributeTypeFactory $attributeTypeFactory
+     * @param FlexibleManagerRegistry $flexibleManagerRegistry
      */
-    public function __construct(FormFactoryInterface $factory, FlexibleManager $flexibleManager)
+    public function __construct(FormFactoryInterface $factory, AttributeTypeFactory $attributeTypeFactory, FlexibleManagerRegistry $flexibleManagerRegistry)
     {
-        $this->factory         = $factory;
-        $this->flexibleManager = $flexibleManager;
+        $this->factory = $factory;
+        $this->attributeTypeFactory = $attributeTypeFactory;
+        $this->flexibleManagerRegistry = $flexibleManagerRegistry;
     }
 
     /**
@@ -58,6 +68,7 @@ class FlexibleValueSubscriber implements EventSubscriberInterface
      */
     public function preSetData(FormEvent $event)
     {
+        /** @var FlexibleValueInterface $value */
         $value = $event->getData();
         $form  = $event->getForm();
 
@@ -67,8 +78,17 @@ class FlexibleValueSubscriber implements EventSubscriberInterface
         }
 
         $attributeTypeAlias = $value->getAttribute()->getAttributeType();
-        $attributeType      = $this->flexibleManager->getAttributeTypeFactory()->get($attributeTypeAlias);
-        $valueForm          = $attributeType->buildValueFormType($this->factory, $value);
+        $attributeType = $this->attributeTypeFactory->get($attributeTypeAlias);
+        /** @var FormInterface $valueForm */
+        $valueForm = $attributeType->buildValueFormType($this->factory, $value);
+
+        // Initialize subforms which connected to flexible entities
+        $dataClass = $valueForm->getConfig()->getDataClass();
+        if (is_subclass_of($dataClass, 'Oro\Bundle\FlexibleEntityBundle\Model\FlexibleInterface')) {
+            $flexibleManager = $this->flexibleManagerRegistry->getManager($dataClass);
+            $entity = $flexibleManager->createFlexible();
+            $valueForm->setData($entity);
+        }
 
         $form->add($valueForm);
     }
