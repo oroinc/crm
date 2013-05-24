@@ -50,6 +50,7 @@ services:
         class: %oro_account.type.account_value.class%
         arguments:
             - @oro_account.account.manager.flexible
+            - @oro_flexibleentity.value_form.value_subscriber
         tags:
             - { name: form.type, alias: oro_account_value }
 
