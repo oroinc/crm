@@ -2,6 +2,8 @@
 
 namespace Oro\Bundle\ContactBundle\Entity;
 
+use Gedmo\Mapping\Annotation as Gedmo;
+
 use Doctrine\ORM\Mapping as ORM;
 
 use JMS\Serializer\Annotation\Type;
@@ -12,6 +14,7 @@ use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 /**
  * @ORM\Entity
  * @ORM\Table(name="oro_contact_group")
+ * @Gedmo\Loggable(logEntryClass="Oro\Bundle\DataAuditBundle\Entity\Audit")
  */
 class Group
 {
@@ -28,6 +31,7 @@ class Group
      * @ORM\Column(type="string", unique=true, length=30, nullable=false)
      * @Soap\ComplexType("string")
      * @Type("string")
+     * @Gedmo\Versioned
      */
     protected $name;
 
@@ -64,5 +68,10 @@ class Group
         $this->name = $name;
 
         return $this;
+    }
+
+    public function __toString()
+    {
+        return (string)$this->getName();
     }
 }

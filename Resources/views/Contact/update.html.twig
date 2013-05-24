@@ -53,6 +53,13 @@
                     <div class="pull-right">
                         {{ block('form_buttons') }}
                     </div>
+                    {% if form.vars.value.id %}
+                    <div class="pull-right usser-info-state">
+                        <ul class="inline-decorate">
+                            <li><a class="no-hash" href="{{ path('oro_dataaudit_history', {entity:'Oro\\Bundle\\ContactBundle\\Entity\\Contact', id: form.vars.value.id}) }}" id="view-activity-btn" title="{{ form.vars.value }} - {{ 'Change History'|trans }}">{{ 'Activity Log'|trans }}</a></li>
+                        </ul>
+                    </div>
+                    {% endif %}
                 </div>
                 {% if form.vars.value.id %}
                     <div class="pull-left">
