@@ -51,12 +51,8 @@ class UserType extends FlexibleType
 
         // user fields
         $builder
-<<<<<<< HEAD:Form/Type/ProfileType.php
-            ->addEventSubscriber(new ProfileSubscriber($builder->getFormFactory(), $this->aclManager, $this->security))
             ->addEventSubscriber(new AuditableSubscriber())
-=======
             ->addEventSubscriber(new UserSubscriber($builder->getFormFactory(), $this->aclManager, $this->security))
->>>>>>> BAP-839:Form/Type/UserType.php
             ->add('username', 'text', array(
                 'required'       => true,
             ))
