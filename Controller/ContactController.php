@@ -19,8 +19,8 @@ use Oro\Bundle\SoapBundle\Entity\Manager\ApiFlexibleEntityManager;
 /**
  * @Acl(
  *      id="oro_contact",
- *      name="contact controller",
- *      description="contact manipulation",
+ *      name="Contact manipulation",
+ *      description="Contact manipulation",
  *      parent="root"
  * )
  * @BackUrl("back", useSession=true)

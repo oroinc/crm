@@ -19,6 +19,12 @@ use Oro\Bundle\ContactBundle\Datagrid\GroupContactDatagridManager;
 
 /**
  * @Route("/group")
+ * @Acl(
+ *      id="oro_contact_group",
+ *      name="Contact groups manipulation",
+ *      description="Contact groups manipulation",
+ *      parent="root"
+ * )
  * @BackUrl("back", useSession=true)
  */
 class GroupController extends Controller
