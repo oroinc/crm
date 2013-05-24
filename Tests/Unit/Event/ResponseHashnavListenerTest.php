@@ -110,7 +110,7 @@ class ResponseHashnavListenerTest extends \PHPUnit_Framework_TestCase
                 self::TEMPLATE,
                 array(
                     'full_redirect' => true,
-                    'location' => self::TEST_URL . '?no-cache=1'
+                    'location' => self::TEST_URL
                 )
             )
             ->will($this->returnValue(new Response()));

@@ -44,13 +44,9 @@ class ResponseHashnavListener
             }
             if ($response->isNotFound() || $response->isServerError()) {
                 $location = $request->getUri();
-                if (strpos($location, '?') === false) {
-                    $location .= '?no-cache=1';
-                } else {
-                    $location .= '&no-cache=1';
-                }
                 $isFullRedirect = true;
             }
+            $location = preg_replace('/[\?&](is_hash_ajax=1)/', '', $location);
             if ($location) {
                 $event->setResponse(
                     $this->templating->renderResponse(
