@@ -6,7 +6,9 @@ parameters:
     oro_account.type.account_value.class: Oro\Bundle\AccountBundle\Form\Type\AccountValueType
     oro_account.handler.account.class: Oro\Bundle\AccountBundle\Form\Handler\AccountHandler
     oro_account.attribute_type.account.class: Oro\Bundle\AccountBundle\AttributeType\AccountType
+    oro_account.attribute_type.ticker_symbol.class: Oro\Bundle\AccountBundle\AttributeType\TickerSymbolType
     oro_account.form.type.account_select.class: Oro\Bundle\AccountBundle\Form\Type\AccountSelectType
+    oro_account.form.type.ticker_symbol.class: Oro\Bundle\AccountBundle\Form\Type\TickerSymbolType
 
     oro_account.account.manager.api.class:  Oro\Bundle\SoapBundle\Entity\Manager\ApiFlexibleEntityManager
     oro_account.type.account.api.class: Oro\Bundle\AccountBundle\Form\Type\AccountApiType
@@ -26,9 +28,10 @@ services:
             - [ addAttributeType, ['oro_flexibleentity_textarea'] ]
             - [ addAttributeType, ['oro_flexibleentity_money'] ]
             - [ addAttributeType, ['oro_flexibleentity_url'] ]
-            - [ addAttributeType, ['oro_flexibleentity_email_collection'] ]
+            - [ addAttributeType, ['oro_flexibleentity_email'] ]
             - [ addAttributeType, ['oro_flexibleentity_phone_collection'] ]
             - [ addAttributeType, ['oro_address'] ]
+            - [ addAttributeType, ['oro_account_ticker_symbol'] ]
         tags:
             - { name: oro_flexibleentity_manager, entity: %oro_account.account.entity.class%}
 
@@ -68,6 +71,11 @@ services:
         tags:
             - { name: form.type, alias: oro_account_select }
 
+    oro_account.form.type.ticker_symbol:
+        class: %oro_account.form.type.ticker_symbol.class%
+        tags:
+            - { name: form.type, alias: oro_ticker_symbol }
+
     # Flexible attribute
     oro_account.attribute_type.account:
         class: %oro_account.attribute_type.account.class%
@@ -76,6 +84,14 @@ services:
             - "oro_account_select"
         tags:
             - { name: oro_flexibleentity.attributetype, alias: oro_account_attribute_account }
+
+    oro_account.attribute_type.ticker_symbol:
+        class: %oro_account.attribute_type.ticker_symbol.class%
+        arguments:
+            - "varchar"
+            - "oro_ticker_symbol"
+        tags:
+            - { name: oro_flexibleentity.attributetype, alias: oro_account_ticker_symbol }
 
     # Account API
     oro_account.account.manager.api:
