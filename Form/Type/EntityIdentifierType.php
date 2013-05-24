@@ -100,7 +100,7 @@ class EntityIdentifierType extends AbstractType
             if (null === $em) {
                 throw new FormException(
                     sprintf(
-                        'Class "%s" seems not to be a managed Doctrine entity. Did you forget to map it?',
+                        'Class "%s" is not a managed Doctrine entity. Did you forget to map it?',
                         $options['class']
                     )
                 );
