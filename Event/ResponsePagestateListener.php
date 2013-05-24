@@ -26,9 +26,13 @@ class ResponsePagestateListener
      */
     protected $templating;
 
+    /**
+     * @param Router $router
+     * @param EngineInterface $templating
+     * @param SecurityContextInterface $security
+     */
     public function __construct(Router $router, EngineInterface $templating, SecurityContextInterface $security)
     {
-
         $this->router     = $router;
         $this->security   = $security;
         $this->templating = $templating;
@@ -55,7 +59,7 @@ class ResponsePagestateListener
                 $this->templating->renderResponse(
                     'OroNavigationBundle:Pagestate:redirect.html.twig',
                     array(
-                        'location'      => $this->router->generate('oro_user_security_login'),
+                        'location' => $this->router->generate('oro_user_security_login'),
                     )
                 )
             );
