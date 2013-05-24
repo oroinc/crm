@@ -29,6 +29,28 @@ class AccountType extends FlexibleType
     }
 
     /**
+     * Add entity fields to form builder
+     *
+     * @param FormBuilderInterface $builder
+     */
+    public function addDynamicAttributesFields(FormBuilderInterface $builder)
+    {
+        $builder->add(
+            'values',
+            'collection',
+            array(
+                'type'         => $this->valueFormAlias,
+                'allow_add'    => true,
+                'allow_delete' => true,
+                'by_reference' => false,
+                'attr'          => array(
+                    'data-col'  => 2,
+                )
+            )
+        );
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
