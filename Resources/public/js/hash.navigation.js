@@ -76,6 +76,12 @@ Oro.Navigation = Backbone.Router.extend({
 
     skipAjaxCall: false,
 
+    maxCachedPages: 2,
+
+    contentCache: [],
+
+    contentCacheUrls: [],
+
     /**
      * Routing default action
      *
@@ -125,7 +131,10 @@ Oro.Navigation = Backbone.Router.extend({
             //skip ajax page refresh for the current page
             this.skipAjaxCall = true;
             //change location hash to current url
-            this.setLocation(window.location.href);
+            setTimeout(_.bind(function () {
+                this.setLocation(window.location.href);
+            }, this), 100);
+
         }
 
         this.init();
@@ -139,26 +148,62 @@ Oro.Navigation = Backbone.Router.extend({
     loadPage: function () {
         if (this.url) {
             this.beforeRequest();
-            var pageUrl = this.baseUrl + this.url;
-            $.ajax({
-                url: pageUrl,
-                headers: { 'x-oro-hash-navigation': true },
-                beforeSend: function( xhr ) {
-                    //remove standard ajax header because we already have a custom header sent
-                    xhr.setRequestHeader('X-Requested-With', {toString: function(){ return ''; }});
-                },
-
-                error: _.bind(function (XMLHttpRequest, textStatus, errorThrown) {
-                    this.showError('Error Message: ' + textStatus, 'HTTP Error: ' + errorThrown);
+            var i;
+            if ((i = this.contentCacheUrls.indexOf(this.removePageStateParam(this.url))) !== -1) {
+                if (this.contentCache[i]) {
+                    this.handleResponse(this.contentCache[i], {skipMessages: true});
                     this.afterRequest();
-                }, this),
+                }
+            } else {
+                var pageUrl = this.baseUrl + this.url;
+                $.ajax({
+                    url: pageUrl,
+                    data: {'is_hash_ajax' : 1}, //added to prevent browser caching of raw requests without hash nav
+                    headers: { 'x-oro-hash-navigation': true },
+                    beforeSend: function( xhr ) {
+                        //remove standard ajax header because we already have a custom header sent
+                        xhr.setRequestHeader('X-Requested-With', {toString: function(){ return ''; }});
+                    },
 
-                success: _.bind(function (data) {
-                    this.handleResponse(data);
-                    this.afterRequest();
-                }, this)
-            });
+                    error: _.bind(function (XMLHttpRequest, textStatus, errorThrown) {
+                        this.showError('Error Message: ' + textStatus, 'HTTP Error: ' + errorThrown);
+                        this.afterRequest();
+                    }, this),
+
+                    success: _.bind(function (data) {
+                        this.handleResponse(data);
+                        this.afterRequest();
+                        this.savePageToCache(data);
+                    }, this)
+                });
+            }
         }
+    },
+
+    savePageToCache: function(data) {
+        if (this.contentCacheUrls.length == this.maxCachedPages) {
+            this.clearPageCache(0);
+        }
+        var j = this.contentCacheUrls.indexOf(this.removePageStateParam(this.url));
+        if (j !== -1) {
+            this.clearPageCache(j);
+        }
+        this.contentCacheUrls.push(this.removePageStateParam(this.url));
+        this.contentCache[this.contentCacheUrls.length - 1] = data;
+    },
+
+    clearPageCache: function(i) {
+        if (!_.isUndefined(i)) {
+            this.contentCacheUrls.splice(i, 1);
+            this.contentCache.splice(i, 1);
+        } else {
+            this.contentCacheUrls = [];
+            this.contentCache = [];
+        }
+    },
+
+    removePageStateParam: function(url) {
+        return url.replace(/[\?&]restore=1/g,'');
     },
 
     /**
@@ -264,7 +309,10 @@ Oro.Navigation = Backbone.Router.extend({
      *
      * @param {String} data
      */
-    handleResponse: function (data) {
+    handleResponse: function (data, options) {
+        if (_.isUndefined(options)) {
+            var options = {};
+        }
         try {
             /**
              * Clearing content area with native js, prevents freezing of firefox with firebug enabled
@@ -309,7 +357,9 @@ Oro.Navigation = Backbone.Router.extend({
                 this.processClicks(this.selectors.container + ' ' + this.selectors.links);
                 this.updateMenuTabs(data);
                 this.processForms(this.selectors.container + ' ' + this.selectors.forms);
-                this.updateMessages(data);
+                if (!options.skipMessages) {
+                    this.updateMessages(data);
+                }
                 this.hideActiveDropdowns();
                 this.processPinButton(data);
             }
@@ -321,6 +371,12 @@ Oro.Navigation = Backbone.Router.extend({
         this.triggerCompleteEvent();
     },
 
+    /**
+     * Show error message
+     *
+     * @param title
+     * @param message
+     */
     showError: function(title, message) {
         if (!_.isUndefined(Oro.BootstrapModal)) {
             var errorModal = new Oro.BootstrapModal({
@@ -365,18 +421,18 @@ Oro.Navigation = Backbone.Router.extend({
     },
 
     /**
-    * Update History and Most Viewed menu tabs
-    *
-    * @param data
-    */
+     * Update History and Most Viewed menu tabs
+     *
+     * @param data
+     */
     updateMenuTabs: function (data) {
         $(this.selectors.historyTab).html($(data).filter(this.selectors.historyTab).html());
         $(this.selectors.mostViewedTab).html($(data).filter(this.selectors.mostViewedTab).html());
         /**
-          * Processing links for history and most viewed tabs
-          */
+         * Processing links for history and most viewed tabs
+         */
         this.processClicks(this.selectors.historyTab + ' ' + this.selectors.links + ', ' +
-                this.selectors.mostViewedTab + ' ' + this.selectors.links);
+            this.selectors.mostViewedTab + ' ' + this.selectors.links);
     },
 
     /**
@@ -461,6 +517,22 @@ Oro.Navigation = Backbone.Router.extend({
                             }, this)
                         });
                     }
+                    this.setLocation(url);
+                } else {
+                    this.beforeRequest();
+                    $(target).ajaxSubmit({
+                        data:{'x-oro-hash-navigation' : 1},
+                        headers: { 'x-oro-hash-navigation': true },
+                        error: _.bind(function (XMLHttpRequest, textStatus, errorThrown) {
+                            this.showError('Error Message: ' + textStatus, 'HTTP Error: ' + errorThrown);
+                            this.afterRequest();
+                        }, this),
+                        success: _.bind(function (data) {
+                            this.handleResponse(data);
+                            this.afterRequest();
+                            this.clearPageCache(); //clearing page cache after post request
+                        }, this)
+                    });
                 }
             }
             return false;
@@ -506,15 +578,17 @@ Oro.Navigation = Backbone.Router.extend({
      * @param {String} url
      */
     setLocation: function (url) {
-        if (this.enabled && !this.checkThirdPartyLink(url)) {
-            url = url.replace(this.baseUrl, '').replace(/^(#\!?|\.)/, '').replace('#g/', '|g/');
-            if (url == this.url) {
-                this.loadPage();
+        if (!_.isUndefined(url)) {
+            if (this.enabled && !this.checkThirdPartyLink(url)) {
+                url = url.replace(this.baseUrl, '').replace(/^(#\!?|\.)/, '').replace('#g/', '|g/');
+                if (url == this.url) {
+                    this.loadPage();
+                } else {
+                    window.location.hash = '#url=' + url;
+                }
             } else {
-                window.location.hash = '#url=' + url;
+                window.location.href = url;
             }
-        } else {
-            window.location.href = url;
         }
     },
 
