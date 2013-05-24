@@ -60,7 +60,7 @@ Oro.Filter.List = Backbone.View.extend({
      *
      * @property
      */
-    addButtonHint: '+ Add filter',
+    addButtonHint: 'Manage filters',
 
     /**
      * Select widget object
