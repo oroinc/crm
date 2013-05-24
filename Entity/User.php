@@ -628,7 +628,11 @@ class User
     public function setImageFile(UploadedFile $imageFile)
     {
         $this->imageFile = $imageFile;
+<<<<<<< Updated upstream
         $this->updated   = new DateTime(); // this will trigger PreUpdate callback even if only image has been changed
+=======
+        $this->updated = new DateTime('now', new \DateTimeZone('UTC')); // this will trigger PreUpdate callback even if only image has been changed
+>>>>>>> Stashed changes
 
         return $this;
     }
@@ -950,7 +954,7 @@ class User
      */
     public function beforeSave()
     {
-        $this->created    = new DateTime();
+        $this->created = new DateTime('now', new \DateTimeZone('UTC'));
         $this->loginCount = 0;
     }
 
@@ -961,7 +965,7 @@ class User
      */
     public function preUpdate()
     {
-        $this->updated = new DateTime();
+        $this->updated = new DateTime('now', new \DateTimeZone('UTC'));
     }
 
     /**

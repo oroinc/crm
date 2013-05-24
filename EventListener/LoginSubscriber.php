@@ -21,7 +21,7 @@ class LoginSubscriber
         $user = $event->getAuthenticationToken()->getUser();
 
         if ($user instanceof User) {
-            $user->setLastLogin(new \DateTime())
+            $user->setLastLogin(new \DateTime('now', new \DateTimeZone('UTC')))
                  ->setLoginCount($user->getLoginCount() + 1);
 
             $this->userManager->updateUser($user);

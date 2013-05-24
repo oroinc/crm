@@ -86,7 +86,7 @@ class ResetController extends Controller
                 'text/html'
             );
 
-        $user->setPasswordRequestedAt(new \DateTime());
+        $user->setPasswordRequestedAt(new \DateTime('now', new \DateTimeZone('UTC')));
 
         $this->get('mailer')->send($message);
         $this->get('oro_user.manager')->updateUser($user);
