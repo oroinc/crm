@@ -57,6 +57,7 @@
             <!--[if lte IE 7]>
                 <script src="{{ asset ('bundles/oroui/js/ie.js') }}"></script>
             <![endif]-->
+            {% block hash_nav %}
             <script type="text/javascript">
                 $(function() {
                     if (Oro.hashNavigationEnabled()) {
@@ -67,6 +68,7 @@
                     }
                 })
             </script>
+            {% endblock %}
             {% block head_script %}
             {% endblock %}
         {% endblock %}
