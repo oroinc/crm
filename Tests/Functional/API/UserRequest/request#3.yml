@@ -8,6 +8,6 @@ request:
     plainPassword: 123123q
     rolesCollection: [1]
     groups: ~
-    attributes: ~
+    values: ~
 response:
     return: true

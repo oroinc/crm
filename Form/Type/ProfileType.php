@@ -125,7 +125,10 @@ class ProfileType extends FlexibleType
             'property_path' => 'values',
             'allow_add'     => true,
             'allow_delete'  => true,
-            'by_reference'  => false
+            'by_reference'  => false,
+            'attr'          => array(
+                'data-col'  => 2,
+            )
         ));
     }
 

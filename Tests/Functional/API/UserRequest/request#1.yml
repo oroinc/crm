@@ -9,6 +9,6 @@ request:
     lastLogin: ~
     rolesCollection: [1]
     groups: ~
-    attributes: ~
+    values: ~
 response:
     return: true

@@ -2,40 +2,40 @@
 
 namespace Oro\Bundle\UserBundle\Controller\Api\Rest;
 
-use FOS\RestBundle\Controller\Annotations\NamePrefix;
-use FOS\RestBundle\Controller\FOSRestController;
-use FOS\RestBundle\Routing\ClassResourceInterface;
 use FOS\Rest\Util\Codes;
+use FOS\RestBundle\Controller\Annotations\NamePrefix;
+use FOS\RestBundle\Routing\ClassResourceInterface;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
 
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
-use Oro\Bundle\UserBundle\Entity\Role;
 use Oro\Bundle\UserBundle\Annotation\Acl;
 use Oro\Bundle\UserBundle\Annotation\AclAncestor;
+use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
 
 /**
  * @NamePrefix("oro_api_")
  */
-class RoleController extends FOSRestController implements ClassResourceInterface
+class RoleController extends RestController implements ClassResourceInterface
 {
     /**
      * Get the list of roles
      *
+     * @return \Symfony\Component\HttpFoundation\Response
      * @ApiDoc(
      *      description="Get the list of roles",
      *      resource=true
      * )
+     * @QueryParam(name="page", requirements="\d+", nullable=true, description="Page number, starting from 1. Defaults to 1.")
+     * @QueryParam(name="limit", requirements="\d+", nullable=true, description="Number of items per page. defaults to 10.")
      * @AclAncestor("oro_user_role_list")
      */
     public function cgetAction()
     {
-        return $this->handleView(
-            $this->view(
-                $this->getManager()->getRepository('OroUserBundle:Role')->findAll(),
-                Codes::HTTP_OK
-            )
-        );
+        $page = (int)$this->getRequest()->get('page', 1);
+        $limit = (int)$this->getRequest()->get('limit', self::ITEMS_PER_PAGE);
+
+        return $this->handleGetListRequest($page, $limit);
     }
 
     /**
@@ -43,6 +43,7 @@ class RoleController extends FOSRestController implements ClassResourceInterface
      *
      * @param int $id Role id
      *
+     * @return \Symfony\Component\HttpFoundation\Response
      * @ApiDoc(
      *      description="Get role data",
      *      resource=true,
@@ -59,19 +60,13 @@ class RoleController extends FOSRestController implements ClassResourceInterface
      */
     public function getAction($id)
     {
-        $entity = $this->getManager()->find('OroUserBundle:Role', (int) $id);
-
-        return $this->handleView(
-            $this->view(
-                $entity,
-                $entity ? Codes::HTTP_OK : Codes::HTTP_NOT_FOUND
-            )
-        );
+        return $this->handleGetRequest($id);
     }
 
     /**
      * Create new role
      *
+     * @return \Symfony\Component\HttpFoundation\Response
      * @ApiDoc(
      *      description="Create new role",
      *      resource=true
@@ -80,15 +75,7 @@ class RoleController extends FOSRestController implements ClassResourceInterface
      */
     public function postAction()
     {
-        $entity = new Role();
-        $view   = $this->get('oro_user.form.handler.role.api')->process($entity)
-            ? $this->redirectView(
-                $this->generateUrl('oro_api_get_role', array('id' => $entity->getId())),
-                Codes::HTTP_CREATED
-            )
-            : $this->view($this->get('oro_user.form.role.api'), Codes::HTTP_BAD_REQUEST);
-
-        return $this->handleView($view);
+        return $this->handleCreateRequest();
     }
 
     /**
@@ -96,6 +83,7 @@ class RoleController extends FOSRestController implements ClassResourceInterface
      *
      * @param int $id Role id
      *
+     * @return \Symfony\Component\HttpFoundation\Response
      * @ApiDoc(
      *      description="Update existing role",
      *      resource=true,
@@ -107,17 +95,7 @@ class RoleController extends FOSRestController implements ClassResourceInterface
      */
     public function putAction($id)
     {
-        $entity = $this->getManager()->find('OroUserBundle:Role', (int) $id);
-
-        if (!$entity) {
-            return $this->handleView($this->view('', Codes::HTTP_NOT_FOUND));
-        }
-
-        $view = $this->get('oro_user.form.handler.role.api')->process($entity)
-            ? $this->redirectView($this->generateUrl('oro_api_get_role', array('id' => $entity->getId())))
-            : $this->view($this->get('oro_user.form.role.api'), Codes::HTTP_BAD_REQUEST);
-
-        return $this->handleView($view);
+        return $this->handleUpdateRequest($id);
     }
 
     /**
@@ -125,6 +103,7 @@ class RoleController extends FOSRestController implements ClassResourceInterface
      *
      * @param int $id Role id
      *
+     * @return \Symfony\Component\HttpFoundation\Response
      * @ApiDoc(
      *      description="Delete role",
      *      resource=true,
@@ -141,17 +120,7 @@ class RoleController extends FOSRestController implements ClassResourceInterface
      */
     public function deleteAction($id)
     {
-        $em     = $this->getManager();
-        $entity = $em->find('OroUserBundle:Role', (int) $id);
-
-        if (!$entity) {
-            return $this->handleView($this->view('', Codes::HTTP_NOT_FOUND));
-        }
-
-        $em->remove($entity);
-        $em->flush();
-
-        return $this->handleView($this->view('', Codes::HTTP_NO_CONTENT));
+        return $this->handleDeleteRequest($id);
     }
 
     /**
@@ -159,6 +128,7 @@ class RoleController extends FOSRestController implements ClassResourceInterface
      *
      * @param string $name Role name
      *
+     * @return \Symfony\Component\HttpFoundation\Response
      * @ApiDoc(
      *      description="Get role by name",
      *      resource=true,
@@ -170,7 +140,7 @@ class RoleController extends FOSRestController implements ClassResourceInterface
      */
     public function getBynameAction($name)
     {
-        $entity = $this->getManager()->getRepository('OroUserBundle:Role')->findOneBy(array('role' => $name));
+        $entity = $this->getManager()->getRepository()->findOneBy(array('role' => $name));
 
         return $this->handleView(
             $this->view(
@@ -185,6 +155,7 @@ class RoleController extends FOSRestController implements ClassResourceInterface
      *
      * @param int $id User id
      *
+     * @return \Symfony\Component\HttpFoundation\Response
      * @ApiDoc(
      *      description="Get ACL resources granted by a role",
      *      resource=true,
@@ -196,7 +167,7 @@ class RoleController extends FOSRestController implements ClassResourceInterface
      */
     public function getAclAction($id)
     {
-        $role = $this->getManager()->find('OroUserBundle:Role', (int) $id);
+        $role = $this->getManager()->find($id);
 
         if (!$role) {
             return $this->handleView($this->view('', Codes::HTTP_NOT_FOUND));
@@ -216,6 +187,7 @@ class RoleController extends FOSRestController implements ClassResourceInterface
      * @param int    $id       Role id
      * @param string $resource ACL resource id
      *
+     * @return \Symfony\Component\HttpFoundation\Response
      * @ApiDoc(
      *      description="Link ACL resource to role",
      *      requirements={
@@ -227,7 +199,7 @@ class RoleController extends FOSRestController implements ClassResourceInterface
      */
     public function postAclAction($id, $resource)
     {
-        $this->get('oro_user.acl_manager')->modifyAclForRole($id, $resource, true);
+        $this->getAclManager()->modifyAclForRole($id, $resource, true);
 
         return $this->handleView($this->view('', Codes::HTTP_NO_CONTENT));
     }
@@ -238,6 +210,7 @@ class RoleController extends FOSRestController implements ClassResourceInterface
      * @param int    $id       Role id
      * @param string $resource ACL resource id
      *
+     * @return \Symfony\Component\HttpFoundation\Response
      * @ApiDoc(
      *      description="Unlink ACL resource from role",
      *      requirements={
@@ -249,7 +222,7 @@ class RoleController extends FOSRestController implements ClassResourceInterface
      */
     public function deleteAclAction($id, $resource)
     {
-        $this->get('oro_user.acl_manager')->modifyAclForRole($id, $resource, false);
+        $this->getAclManager()->modifyAclForRole($id, $resource, false);
 
         return $this->handleView($this->view('', Codes::HTTP_NO_CONTENT));
     }
@@ -259,6 +232,7 @@ class RoleController extends FOSRestController implements ClassResourceInterface
      *
      * @param int $id Role id
      *
+     * @return \Symfony\Component\HttpFoundation\Response
      * @QueryParam(name="resources", nullable=false, description="Array of ACL resource ids")
      * @ApiDoc(
      *      description="Link ACL resources to role",
@@ -270,7 +244,7 @@ class RoleController extends FOSRestController implements ClassResourceInterface
      */
     public function postAclArrayAction($id)
     {
-        $this->container->get('oro_user.acl_manager')->modifyAclsForRole(
+        $this->getAclManager()->modifyAclsForRole(
             $id,
             $this->getRequest()->request->get('resources'),
             true
@@ -284,6 +258,7 @@ class RoleController extends FOSRestController implements ClassResourceInterface
      *
      * @param int $id Role id
      *
+     * @return \Symfony\Component\HttpFoundation\Response
      * @QueryParam(name="resources", nullable=false, description="Array of ACL resource ids")
      * @ApiDoc(
      *      description="Unlink ACL resources from roles",
@@ -295,7 +270,7 @@ class RoleController extends FOSRestController implements ClassResourceInterface
      */
     public function deleteAclArrayAction($id)
     {
-        $this->container->get('oro_user.acl_manager')->modifyAclsForRole(
+        $this->getAclManager()->modifyAclsForRole(
             $id,
             $this->getRequest()->request->get('resources'),
             false
@@ -305,10 +280,34 @@ class RoleController extends FOSRestController implements ClassResourceInterface
     }
 
     /**
-     * @return \Doctrine\Common\Persistence\ObjectManager
+     * @return \Oro\Bundle\UserBundle\Acl\Manager
      */
-    protected function getManager()
+    protected function getAclManager()
     {
-        return $this->getDoctrine()->getManagerForClass('OroUserBundle:Role');
+        return $this->get('oro_user.acl_manager');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getManager()
+    {
+        return $this->get('oro_user.role_manager.api');
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getForm()
+    {
+        return $this->get('oro_user.form.role.api');
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getFormHandler()
+    {
+        return $this->get('oro_user.form.handler.role.api');
     }
 }
