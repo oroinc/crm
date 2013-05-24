@@ -1,6 +1,6 @@
 {% extends 'OroAccountBundle::layout.html.twig' %}
 {% import 'OroUIBundle::macros.html.twig' as macros %}
-{% form_theme form with 'OroAddressBundle:Include:fields.html.twig' %}
+{% form_theme form with ['OroAddressBundle:Include:fields.html.twig', 'OroAccountBundle:Form:fields.html.twig'] %}
 {% set format = get_user_value('oro_user.name_format') %}
 {% set title = form.vars.value.id ? form.vars.value.fullname(format)|default('N/A') ~ ' - ' ~ 'Update Account'|trans : 'New Account'|trans %}
 {% oro_title_set({params : {"%account.name%": form.vars.value.name|default('N/A')} }) %}
@@ -19,50 +19,6 @@
     {% endjavascripts %}
 
     {% include 'OroAccountBundle:Account:remove.confirm.js.twig' %}
-
-    {# TODO: Move this to ticker symbol Flexible type #}
-    <script type="text/javascript">
-        $(function() {
-            var cache = {};
-            $("#oro_account_form_attributes_7_varchar").typeahead({
-                source: function (request, process) {
-                    YAHOO = {
-                        Finance: {
-                            SymbolSuggest: {
-                                ssCallback: function (data) {
-                                    var result = $.map(data.ResultSet.Result, function (item) {
-                                        return item.name + " (" + item.symbol + ")";
-                                    });
-                                    $.each(data.ResultSet.Result, function (itemKey, item) {
-                                        cache[item.name + " (" + item.symbol + ")"] = item.symbol;
-                                    });
-                                    process(result)
-                                }
-                            }
-                        }
-                    };
-                    $.ajax({
-                        type: "GET",
-                        dataType: "jsonp",
-                        jsonp: "callback",
-                        jsonpCallback: "YAHOO.Finance.SymbolSuggest.ssCallback",
-                        data: {
-                            query: request
-                        },
-                        cache: true,
-                        url: "http://autoc.finance.yahoo.com/autoc"
-                    });
-                },
-                updater: function(item) {
-                    if (typeof cache[item] != 'undefined') {
-                        return cache[item];
-                    } else {
-                        return item;
-                    }
-                }
-            });
-        });
-    </script>
 {% endblock %}
 
 {% block form_buttons %}
@@ -89,7 +45,8 @@
 
 {% block content %}
     <div class="container-fluid">
-    <form action="{{ form.vars.value.id ? path('oro_account_update', { id: form.vars.value.id, back: app.session.get('back') }) : path('oro_account_create', { back: app.session.get('back') }) }}" {{ form_enctype(form) }} method="post" data-collect="true">
+    <form action="{{ form.vars.value.id ? path('oro_account_update', { id: form.vars.value.id, back: app.session.get('back') }) : path('oro_account_create', { back: app.session.get('back') }) }}" {{ form_enctype(form) }}
+        method="post" data-collect="true" class="scrollable-substructure">
         <div class="navigation clearfix navbar-extra">
             <div class="row">
                 <div class="pull-right">
@@ -155,7 +112,7 @@
                         </div>
                     </div>
                 {% endif %}
-                <div data-spy="scroll" data-target="#navbarExample" data-offset="50" class="scrollspy container-fluid">
+                <div data-spy="scroll" data-target="#navbarExample" data-offset="50" class="scrollspy container-fluid scrollable-container">
                     <div class="usser-row">
                         <h4 id="scroll-main" class="scrollspy-title">{{ 'Overview'|trans }}</h4>
                         <div class="row-fluid row-fluid-divider">

@@ -44,23 +44,39 @@ class LoadAccountAttrData extends AbstractFixture implements ContainerAwareInter
         $this->addAttributes(
             array(
                 array(
-                    'code' => 'website',
-                    'type' => 'oro_flexibleentity_url',
-                    'searchable' => true
-                ),
-                array(
-                    'code' => 'office_phone',
-                    'label' => 'Office phone',
-                    'searchable' => true
-                ),
-                array(
-                    'code' => 'office_fax',
-                    'label' => 'Office fax',
-                    'searchable' => true
-                ),
-                array(
                     'code' => 'description',
                     'type' => 'oro_flexibleentity_textarea',
+                    'searchable' => true
+                ),
+                array(
+                    'code'  => 'phones',
+                    'type'  => 'oro_flexibleentity_phone_collection',
+                    'label' => 'Phones'
+                ),
+                array(
+                    'code'  => 'email',
+                    'type'  => 'oro_flexibleentity_email',
+                    'label' => 'Email',
+                    'searchable' => true
+                ),
+                array(
+                    'code' => 'fax',
+                    'label' => 'Fax',
+                    'searchable' => true
+                ),
+                array(
+                    'code' => 'billing_address',
+                    'type' => 'oro_address',
+                    'label' => 'Billing address'
+                ),
+                array(
+                    'code' => 'shipping_address',
+                    'type' => 'oro_address',
+                    'label' => 'Shipping address'
+                ),
+                array(
+                    'code' => 'website',
+                    'type' => 'oro_flexibleentity_url',
                     'searchable' => true
                 ),
                 array(
@@ -78,29 +94,10 @@ class LoadAccountAttrData extends AbstractFixture implements ContainerAwareInter
                 ),
                 array(
                     'code' => 'ticker_symbol',
+                    'type' => 'oro_account_ticker_symbol',
                     'searchable' => true
                 ),
                 'rating',
-                array(
-                    'code' => 'shipping_address',
-                    'type' => 'oro_address',
-                    'label' => 'Shipping address'
-                ),
-                array(
-                    'code' => 'billing_address',
-                    'type' => 'oro_address',
-                    'label' => 'Billing address'
-                ),
-                array(
-                    'code'  => 'emails',
-                    'type'  => 'oro_flexibleentity_email_collection',
-                    'label' => 'Emails'
-                ),
-                array(
-                    'code'  => 'phones',
-                    'type'  => 'oro_flexibleentity_phone_collection',
-                    'label' => 'Phones'
-                )
             )
         );
 

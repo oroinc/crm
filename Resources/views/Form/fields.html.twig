@@ -1,0 +1,46 @@
+{% block oro_ticker_symbol_widget %}
+    <script type="text/javascript">
+        $(function() {
+            var cache = {};
+            $("#{{ id }}").typeahead({
+                source: function (request, process) {
+                    YAHOO = {
+                        Finance: {
+                            SymbolSuggest: {
+                                ssCallback: function (data) {
+                                    var result = $.map(data.ResultSet.Result, function (item) {
+                                        return item.name + " (" + item.symbol + ")";
+                                    });
+                                    $.each(data.ResultSet.Result, function (itemKey, item) {
+                                        cache[item.name + " (" + item.symbol + ")"] = item.symbol;
+                                    });
+                                    process(result)
+                                }
+                            }
+                        }
+                    };
+                    $.ajax({
+                        type: "GET",
+                        dataType: "jsonp",
+                        jsonp: "callback",
+                        jsonpCallback: "YAHOO.Finance.SymbolSuggest.ssCallback",
+                        data: {
+                            query: request
+                        },
+                        cache: true,
+                        url: "http://autoc.finance.yahoo.com/autoc"
+                    });
+                },
+                updater: function(item) {
+                    if (typeof cache[item] != 'undefined') {
+                        return cache[item];
+                    } else {
+                        return item;
+                    }
+                }
+            });
+        });
+    </script>
+
+    {{ form_widget(form) }}
+{% endblock %}
