@@ -2,32 +2,78 @@
 
 {% oro_title_set({params : {"%keyword%": searchString} }) %}
 
-{% block page_container %}
-<div class="container-fluid">
-    {% block content %}
-        <h2>{% trans %}Search results{% endtrans %}</h2>
+{% block head_script %}
+    {{ parent() }}
+    {% include 'OroGridBundle:Include:javascript.html.twig' with {'datagridView': datagrid, 'selector': '#search-result-grid'} %}
+    <script type="text/javascript">
+        $(function() {
+            // hide header
+            var searchDatagrid = Oro.Registry.getElement('datagrid', {{ datagrid.datagrid.name|json_encode|raw }});
+            searchDatagrid.header.$el.remove();
+        });
+    </script>
+{% endblock %}
 
-        <form method="get" action="{{ path('oro_search_results') }}" class="form-inline search-form">
-            <select name="from">
-                <option value="">{% trans %}All{% endtrans %}</option>
-                {% for entity in entities %}
-                    <option value="{{ entity.alias }}" {% if entity.alias == from %}selected="selected"{% endif %}>
-                        {{ entity.label }}
-                    </option>
-                {% endfor %}
-            </select>
-            <input type="text" id="search" class="span2 search" name="search" value="{{ searchString }}"/>
-            <button type="submit" class="btn btn-search">Search</button>
-        </form>
-        {% if searchResults.count > 0 %}
-            {% for searchResult in searchResults %}
-                {% set template = searchResult.entityConfig.search_template is defined ? searchResult.entityConfig.search_template : default__result_template %}
-                {% include template with {'result' : searchResult} %}
-            {% endfor %}
-            {{ knp_pagination_render(searchResults) }}
+{% block page_container %}
+    {% block content %}
+        <div class="container-fluid search-header">
+            <h2>
+                {% trans %}Search results{% endtrans %}
+                <form method="get" action="{{ path('oro_search_results') }}" class="form-inline search-form">
+                    <input type="hidden" name="from" value="" />
+                    <input type="text" id="search" class="span2 search" name="search" value="{{ searchString }}" />
+                    <button type="submit" class="btn btn-search btn-primary">Search</button>
+                </form>
+            </h2>
+        </div>
+
+        {% if groupedResults|length > 1 %}
+            <table width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                    <td class="search-entity-types-column">
+                        {% for alias, type in groupedResults %}
+
+                            {% set selected = alias == from %}
+
+                            {% set label = '' %}
+                            {% if alias == '' %}
+                                {% set label = 'All' %}
+                            {% elseif 'label' in type.config|keys %}
+                                {% set label = type.config.label %}
+                            {% endif %}
+
+                            {% set entityIcon = "bundles/orosearch/img/search.png" %}
+                            {% if 'entity_icon' in type.config|keys %}
+                                {% set entityIcon = type.config.entity_icon %}
+                            {% endif %}
+
+                            <div class="entity-type{% if selected %} selected{% endif %}">
+                                <img src="{{ asset(entityIcon) }}" alt="{{ label|trans }}" />
+
+                                {% if selected %}
+                                    {{ label|trans }} ({{ type.count }})
+                                    <div class="arrow"><i class="icon-chevron-right"></i></div>
+                                {% else %}
+                                    <a href="{{ path('oro_search_results', { from: alias, search: searchString }) }}">
+                                        {{ label|trans }} ({{ type.count }})
+                                    </a>
+                                {% endif %}
+                            </div>
+
+                        {% endfor %}
+                    </td>
+                    <td class="search-results-column">
+                        <div id="search-result-grid"></div>
+                    </td>
+                </tr>
+            </table>
         {% else %}
-            <h2>{% trans %}Sorry, there are no results for your request{% endtrans %}</h2>
+            <div class="search-no-results">
+                {% trans %}No results were found to match your search.{% endtrans %}
+                <br />
+                {% trans %}Try modifying your search criteria or creating a new ...{% endtrans %}
+            </div>
         {% endif %}
+
     {% endblock %}
-</div>
 {% endblock %}

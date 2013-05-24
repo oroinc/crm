@@ -19,9 +19,9 @@ Main bundle config store in config.yml file in oro_search section.
 
 oro_search parameter supports next parameter strings:
 
-- **engine** set engine to use for indexing. Now supports only orm engine
-- **entities_config** set array with mapping entities config.
-- **result_template** set the default template for search result items (By default it has 'OroSearchBundle::searchResult.html.twig' value)
+- **engine** - engine to use for indexing. Now supports only orm engine
+- **entities_config** - array with mapping entities config.
+- **item_container_template** - the default template for search result items (by default it is OroSearchBundle:Datagrid:itemContainer.html.twig)
 
 Mapping config
 ----------------------------------

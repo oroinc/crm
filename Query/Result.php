@@ -35,7 +35,7 @@ class Result extends ArrayCollection
      * @Soap\ComplexType("Oro\Bundle\SearchBundle\Query\Result\Item[]")
      * @var \Oro\Bundle\SearchBundle\Query\Result\Item[]
      */
-    public $elements;
+    protected $elements;
 
     /**
      * Initializes a new Result.
@@ -90,5 +90,13 @@ class Result extends ArrayCollection
         }
 
         return $resultData;
+    }
+
+    /**
+     * @return Result\Item[]
+     */
+    public function getElements()
+    {
+        return $this->elements;
     }
 }
