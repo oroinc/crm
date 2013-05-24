@@ -80,8 +80,10 @@
             <div class="navbar-inner">
                 <div class="container-fluid" style="width: auto;">
                     <ul class="nav">
-                        <li class="active"><a href="#scroll-main">{{ 'Overview'|trans }}</a></li>
+                        <li class="active"><a href="#scroll-main">{{ 'General'|trans }}</a></li>
+                        {% if account.values is defined %}
                         <li><a href="#scroll-attributes">{{ 'Additional Data'|trans }}</a></li>
+                        {% endif %}
                     </ul>
                 </div>
             </div>
@@ -91,7 +93,7 @@
                 <div class="usser-row">
                     <h4 id="scroll-main" class="scrollspy-title">{{ 'Overview'|trans }}</h4>
                     <div class="row-fluid row-fluid-divider">
-                        <div class="form-horizontal span6">
+                        <div class="form-horizontal">
                             <h5 class="usser-fiedset"><span>{{ 'Basic Information'|trans }}</span></h5>
                             <div class="control-group">
                                 <label class="control-label">{{ 'Account Name'|trans }}</label>
@@ -102,19 +104,10 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="form-horizontal span6">
-                            <h5 class="usser-fiedset"><span>Contact Information</span></h5>
-                            <div class="control-group">
-                                <label class="control-label">{{ 'Email'|trans }}</label>
-                                <div class="controls">
-                                    <div class="clearfix-oro">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
 
+                {% if account.values is defined %}
                 <div class="usser-row">
                     <h4 id="scroll-attributes" class="scrollspy-title">{{ 'Additional Data'|trans }}</h4>
                     <div class="row-fluid">
@@ -132,6 +125,7 @@
                         </div>
                     </div>
                 </div>
+                {% endif %}
             </div>
         </div>
     </div>
