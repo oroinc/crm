@@ -17,6 +17,9 @@ use JMS\Serializer\Annotation\Exclude;
 use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 
 use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityFlexible;
+
+use Oro\Bundle\DataAuditBundle\Entity\AuditableInterface;
+
 use Oro\Bundle\UserBundle\Entity\Status;
 use Oro\Bundle\UserBundle\Entity\Email;
 use Oro\Bundle\UserBundle\Entity\EntityUploadedImageInterface;
@@ -29,7 +32,9 @@ use DateTime;
  * @ORM\HasLifecycleCallbacks()
  * @Gedmo\Loggable(logEntryClass="Oro\Bundle\DataAuditBundle\Entity\Audit")
  */
-class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Serializable, EntityUploadedImageInterface
+class User
+    extends AbstractEntityFlexible
+    implements AdvancedUserInterface, \Serializable, EntityUploadedImageInterface, AuditableInterface
 {
     const ROLE_DEFAULT   = 'ROLE_USER';
     const ROLE_ANONYMOUS = 'IS_AUTHENTICATED_ANONYMOUSLY';
@@ -150,6 +155,7 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
      * Plain password. Used for model validation. Must not be persisted.
      *
      * @var string
+     *
      * @Soap\ComplexType("string", nillable=true)
      * @Exclude
      */
@@ -262,6 +268,17 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
      * @ORM\OneToMany(targetEntity="Email", mappedBy="user", orphanRemoval=true, cascade={"persist"})
      */
     protected $emails;
+
+    /**
+     * Workaround to track "versioned" collections
+     *
+     * @var array
+     * @see AuditableInterface
+     *
+     * @ORM\Column(name="collections_audit", type="array", nullable=true)
+     * @Gedmo\Versioned
+     */
+    protected $auditData;
 
     public function __construct()
     {
@@ -611,7 +628,7 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
     public function setImageFile(UploadedFile $imageFile)
     {
         $this->imageFile = $imageFile;
-        $this->updated = new DateTime(); // this will trigger PreUpdate callback even if only image has been changed
+        $this->updated   = new DateTime(); // this will trigger PreUpdate callback even if only image has been changed
 
         return $this;
     }
@@ -624,6 +641,7 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
     public function unsetImageFile()
     {
         $this->imageFile = null;
+
         return $this;
     }
 
@@ -787,8 +805,7 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
      */
     public function hasRole($role)
     {
-        $role = $role instanceof Role ? $role->getRole() : $role;
-        return (bool)$this->getRole($role);
+        return (bool) $this->getRole($role instanceof Role ? $role->getRole() : $role);
     }
 
     /**
@@ -905,8 +922,9 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
     public function getImagePath()
     {
         if ($this->image) {
-            return  $this->getUploadDir(true) . '/' . $this->image;
+            return $this->getUploadDir(true) . '/' . $this->image;
         }
+
         return null;
     }
 
@@ -932,7 +950,7 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
      */
     public function beforeSave()
     {
-        $this->created = new DateTime();
+        $this->created    = new DateTime();
         $this->loginCount = 0;
     }
 
@@ -1047,10 +1065,34 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
     public function getUploadDir($forWeb = false)
     {
         $ds = DIRECTORY_SEPARATOR;
+
         if ($forWeb) {
             $ds = '/';
         }
+
         $suffix = $this->getCreatedAt() ? $this->getCreatedAt()->format('Y-m') : date('Y-m');
+        
         return 'uploads' . $ds . 'users' . $ds . $suffix;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setAuditData()
+    {
+        $this->auditData = array(
+            'roles'  => implode(
+                ', ',
+                $this->getRolesCollection()->map(function ($item) {
+                    return $item->getLabel();
+                })->toArray()
+            ),
+            'groups' => implode(
+                ', ',
+                $this->getGroups()->map(function ($item) {
+                    return $item->getName();
+                })->toArray()
+            ),
+        );
     }
 }
