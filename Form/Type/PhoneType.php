@@ -25,9 +25,9 @@ class PhoneType extends CollectionItemAbstract
                 'choice_list'   => new ChoiceList(
                     array_keys(self::getTypesArray()),
                     array_values(self::getTypesArray())
-                )
-            ),
-            'attr' => array ('class' => 'oro-multiselect')
+                ),
+                'attr' => array ('class' => 'oro-multiselect')
+            )
         );
     }
 
