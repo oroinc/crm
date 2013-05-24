@@ -514,6 +514,7 @@ Oro.Navigation = Backbone.Router.extend({
                             success: _.bind(function (data) {
                                 this.handleResponse(data);
                                 this.afterRequest();
+                                this.clearPageCache(); //clearing page cache after post request
                             }, this)
                         });
                     }
