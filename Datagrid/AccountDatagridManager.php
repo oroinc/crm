@@ -4,6 +4,7 @@ namespace Oro\Bundle\AccountBundle\Datagrid;
 
 use Doctrine\ORM\QueryBuilder;
 
+use Oro\Bundle\FlexibleEntityBundle\Entity\Collection;
 use Oro\Bundle\GridBundle\Datagrid\FlexibleDatagridManager;
 use Oro\Bundle\GridBundle\Field\FieldDescription;
 use Oro\Bundle\GridBundle\Field\FieldDescriptionCollection;
@@ -11,6 +12,9 @@ use Oro\Bundle\GridBundle\Field\FieldDescriptionInterface;
 use Oro\Bundle\GridBundle\Filter\FilterInterface;
 use Oro\Bundle\GridBundle\Action\ActionInterface;
 use Oro\Bundle\GridBundle\Property\UrlProperty;
+use Oro\Bundle\GridBundle\Property\CallbackProperty;
+use Oro\Bundle\GridBundle\Datagrid\ResultRecordInterface;
+use Oro\Bundle\FlexibleEntityBundle\Form\Type\PhoneType;
 
 class AccountDatagridManager extends FlexibleDatagridManager
 {
@@ -66,9 +70,9 @@ class AccountDatagridManager extends FlexibleDatagridManager
         );
         $fieldsCollection->add($fieldId);
 
-        $fieldId = new FieldDescription();
-        $fieldId->setName('name');
-        $fieldId->setOptions(
+        $fieldName = new FieldDescription();
+        $fieldName->setName('name');
+        $fieldName->setOptions(
             array(
                 'type'        => FieldDescriptionInterface::TYPE_TEXT,
                 'label'       => 'Name',
@@ -80,21 +84,48 @@ class AccountDatagridManager extends FlexibleDatagridManager
                 'show_filter' => true,
             )
         );
-        $fieldsCollection->add($fieldId);
+        $fieldsCollection->add($fieldName);
 
-        $specialAttributeOptions = array(
+        $fieldPhone = new FieldDescription();
+        $fieldPhone->setName('office_phone');
+        $fieldPhone->setOptions(
+            array(
+                'type'        => FieldDescriptionInterface::TYPE_TEXT,
+                'label'       => 'Phone',
+                'field_name'  => 'phones',
+                'filter_type' => FilterInterface::TYPE_STRING,
+                'required'    => false,
+                'sortable'    => false,
+                'filterable'  => false,
+                'show_filter' => false,
+            )
+        );
+        $phoneProperty = new CallbackProperty(
+            $fieldPhone->getName(),
+            function (ResultRecordInterface $record) {
+                $phones = $record->getValue('phones')->getData();
+                /** @var $phone Collection */
+                foreach ($phones as $phone) {
+                    if ($phone->getType() == PhoneType::TYPE_OFFICE) {
+                        return $phone->getData();
+                    }
+                }
+                return null;
+            }
+        );
+        $fieldPhone->setProperty($phoneProperty);
+        $fieldsCollection->add($fieldPhone);
+
+        $this->configureFlexibleField($fieldsCollection, 'email', array('show_filter' => true));
+
+        $addressOptions = array(
             'type'        => FieldDescriptionInterface::TYPE_TEXT,
             'filter_type' => FilterInterface::TYPE_STRING,
             'sortable'    => false,
             'filterable'  => false
         );
-        $this->configureFlexibleFields(
-            $fieldsCollection,
-            array(
-                'shipping_address'     => $specialAttributeOptions,
-                'billing_address'      => $specialAttributeOptions
-            )
-        );
+        $this->configureFlexibleField($fieldsCollection, 'shipping_address', $addressOptions);
+        $this->configureFlexibleField($fieldsCollection, 'billing_address', $addressOptions);
 
         $fieldCreated = new FieldDescription();
         $fieldCreated->setName('created');
