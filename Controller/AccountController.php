@@ -19,9 +19,9 @@ use Oro\Bundle\AccountBundle\Datagrid\AccountDatagridManager;
 /**
  * @Acl(
  *      id="oro_account_account",
- *      name="Account controller",
+ *      name="Account manipulation",
  *      description="Account manipulation",
- *      parent="oro_account"
+ *      parent="root"
  * )
  * @BackUrl("back", useSession=true)
  */
