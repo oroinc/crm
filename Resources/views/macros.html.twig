@@ -15,7 +15,7 @@
         {% set name = widget.get('full_name') %}
     {% endif %}
     <div data-content="{{ name }}">
-        <div class="row-oro">
+        <div class="row-oro oro-multiselect-holder">
             {{ form_errors(form) }}
             {% for child in form %}
                 {{ form_errors(child) }}
