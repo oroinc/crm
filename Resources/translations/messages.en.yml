@@ -6,9 +6,9 @@ resetting:
     flash:
         success: The password has been successfully reset
 
-"%%username%% - View profile - User Management": "%%username%% -View profile - User Management"
-"%%username%% - Edit profile - User Management": "%%username%% - Edit profile - User Management"
-"New profile - User Management": "New profile - User Management"
+"%%username%% - View user - User Management": "%%username%% -View user - User Management"
+"%%username%% - Edit user - User Management": "%%username%% - Edit user - User Management"
+"New user - User Management": "New user - User Management"
 "Users - User Management": "Users - User Management"
 
 "Edit role - User management": "Edit role - User management"
@@ -35,11 +35,11 @@ Login: Login
 "View group list": "View group list"
 "List of groups": "List of groups"
 "Profile manipulation": "Profile manipulation"
-"View user profile": "View user profile"
+"View user user": "View user user"
 "Generate new API key": "Generate new API key"
-"Create user profile": "Create user profile"
-"Edit user profile": "Edit user profile"
-"View list of user profiles": "View list of user profiles"
+"Create user user": "Create user user"
+"Edit user user": "Edit user user"
+"View list of user users": "View list of user users"
 "Reset user password": "Reset user password"
 "reset password": "reset password"
 "Oro Reset password page": "Oro Reset password page"
@@ -70,7 +70,7 @@ Login: Login
 "View user group": "View user group"
 "Remove group": "Remove group"
 "View group roles": "View group roles"
-"Remove user profile": "Remove user profile"
+"Remove user user": "Remove user user"
 "View user roles": "View user roles"
 "View user groups": "View user groups"
 "View user ACL": "View user ACL"

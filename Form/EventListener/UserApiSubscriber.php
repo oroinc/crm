@@ -7,7 +7,7 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-class ProfileApiSubscriber implements EventSubscriberInterface
+class UserApiSubscriber implements EventSubscriberInterface
 {
     /**
      * @var FormFactoryInterface

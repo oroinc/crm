@@ -10,16 +10,16 @@ parameters:
     oro_user.acl.entity.class:        Oro\Bundle\UserBundle\Entity\Acl
     oro_user.security.provider.class: Oro\Bundle\UserBundle\Security\UserProvider
     oro_user.security.login.class:    Oro\Bundle\UserBundle\EventListener\LoginSubscriber
-    oro_user.type.profile.class:      Oro\Bundle\UserBundle\Form\Type\ProfileType
-    oro_user.type.profile_value.class: Oro\Bundle\UserBundle\Form\Type\ProfileValueType
-    oro_user.type.profile.api.class:  Oro\Bundle\UserBundle\Form\Type\ProfileApiType
+    oro_user.type.user.class:         Oro\Bundle\UserBundle\Form\Type\UserType
+    oro_user.type.user_value.class:   Oro\Bundle\UserBundle\Form\Type\UserValueType
+    oro_user.type.user.api.class:     Oro\Bundle\UserBundle\Form\Type\UserApiType
     oro_user.type.reset.class:        Oro\Bundle\UserBundle\Form\Type\ResetType
     oro_user.type.role.class:         Oro\Bundle\UserBundle\Form\Type\RoleType
     oro_user.type.role.api.class:     Oro\Bundle\UserBundle\Form\Type\RoleApiType
     oro_user.type.group.class:        Oro\Bundle\UserBundle\Form\Type\GroupType
     oro_user.type.group.api.class:    Oro\Bundle\UserBundle\Form\Type\GroupApiType
     oro_user.type.status.class:       Oro\Bundle\UserBundle\Form\Type\StatusType
-    oro_user.handler.profile.class:   Oro\Bundle\UserBundle\Form\Handler\ProfileHandler
+    oro_user.handler.user.class:      Oro\Bundle\UserBundle\Form\Handler\UserHandler
     oro_user.handler.reset.class:     Oro\Bundle\UserBundle\Form\Handler\ResetHandler
     oro_user.handler.role.class:      Oro\Bundle\UserBundle\Form\Handler\RoleHandler
     oro_user.handler.group.class:     Oro\Bundle\UserBundle\Form\Handler\GroupHandler
@@ -77,17 +77,17 @@ services:
         tags:
             - { name: kernel.event_listener, event: security.interactive_login, method: onLogin }
 
-    oro_user.form.profile:
+    oro_user.form.user:
         class:                        Symfony\Component\Form\Form
         factory_method:               createNamed
         factory_service:              form.factory
-        arguments:                    ["oro_user_profile_form", "oro_user_profile", null]
+        arguments:                    ["oro_user_user_form", "oro_user_user", null]
 
-    oro_user.form.profile.api:
+    oro_user.form.user.api:
         class:                        Symfony\Component\Form\Form
         factory_method:               createNamed
         factory_service:              form.factory
-        arguments:                    ["profile", "profile", null]
+        arguments:                    ["user", "user", null]
 
     oro_user.form.role:
         class:                        Symfony\Component\Form\Form
@@ -119,25 +119,25 @@ services:
         factory_service:              form.factory
         arguments:                    ["oro_user_reset_form", "oro_user_reset", null, { validation_groups: [ResetPassword, Default] }]
 
-    oro_user.form.type.profile:
-        class:                        %oro_user.type.profile.class%
+    oro_user.form.type.user:
+        class:                        %oro_user.type.user.class%
         arguments:                    [@oro_user.manager.flexible, "@oro_user.acl_manager", "@security.context"]
         tags:
-            - { name: form.type, alias: oro_user_profile }
+            - { name: form.type, alias: oro_user_user }
 
-    oro_user.type.profile_value:
-        class: %oro_user.type.profile_value.class%
+    oro_user.type.user_value:
+        class: %oro_user.type.user_value.class%
         arguments:
             - @oro_user.manager.flexible
             - @oro_flexibleentity.value_form.value_subscriber
         tags:
-            - { name: form.type, alias: oro_user_profile_value }
+            - { name: form.type, alias: oro_user_user_value }
 
-    oro_user.form.type.profile.api:
-        class:                        %oro_user.type.profile.api.class%
+    oro_user.form.type.user.api:
+        class:                        %oro_user.type.user.api.class%
         arguments:                    [@oro_user.manager.flexible, "@oro_user.acl_manager", "@security.context"]
         tags:
-            - { name: form.type, alias: profile }
+            - { name: form.type, alias: user }
 
     oro_user.form.type.role:
         class:                        %oro_user.type.role.class%
@@ -165,15 +165,15 @@ services:
         tags:
             - { name: form.type, alias: oro_user_reset }
 
-    oro_user.form.handler.profile:
-        class:                        %oro_user.handler.profile.class%
+    oro_user.form.handler.user:
+        class:                        %oro_user.handler.user.class%
         scope:                        request
-        arguments:                    ["@oro_user.form.profile", "@request", "@oro_user.manager"]
+        arguments:                    ["@oro_user.form.user", "@request", "@oro_user.manager"]
 
-    oro_user.form.handler.profile.api:
-        class:                        %oro_user.handler.profile.class%
+    oro_user.form.handler.user.api:
+        class:                        %oro_user.handler.user.class%
         scope:                        request
-        arguments:                    ["@oro_user.form.profile.api", "@request", "@oro_user.manager"]
+        arguments:                    ["@oro_user.form.user.api", "@request", "@oro_user.manager"]
 
     oro_user.form.handler.role:
         class:                        %oro_user.handler.role.class%

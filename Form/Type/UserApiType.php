@@ -5,10 +5,10 @@ namespace Oro\Bundle\UserBundle\Form\Type;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-use Oro\Bundle\UserBundle\Form\EventListener\ProfileApiSubscriber;
+use Oro\Bundle\UserBundle\Form\EventListener\UserApiSubscriber;
 use Oro\Bundle\UserBundle\Form\EventListener\PatchSubscriber;
 
-class ProfileApiType extends ProfileType
+class UserApiType extends ProfileType
 {
     /**
      * {@inheritdoc}
@@ -19,7 +19,7 @@ class ProfileApiType extends ProfileType
         parent::addEntityFields($builder);
 
         $builder
-            ->addEventSubscriber(new ProfileApiSubscriber($builder->getFormFactory()))
+            ->addEventSubscriber(new UserApiSubscriber($builder->getFormFactory()))
             ->addEventSubscriber(new PatchSubscriber());
     }
 
@@ -30,9 +30,11 @@ class ProfileApiType extends ProfileType
     {
         parent::setDefaultOptions($resolver);
 
-        $resolver->setDefaults(array(
-            'csrf_protection' => false,
-        ));
+        $resolver->setDefaults(
+            array(
+                'csrf_protection' => false,
+            )
+        );
     }
 
     /**

@@ -4,13 +4,13 @@ namespace Oro\Bundle\UserBundle\Form\Type;
 
 use Oro\Bundle\FlexibleEntityBundle\Form\Type\FlexibleValueType;
 
-class ProfileValueType extends FlexibleValueType
+class UserValueType extends FlexibleValueType
 {
     /**
      * {@inheritdoc}
      */
     public function getName()
     {
-        return 'oro_user_profile_value';
+        return 'oro_user_user_value';
     }
 }

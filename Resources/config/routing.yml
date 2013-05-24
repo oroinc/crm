@@ -3,8 +3,8 @@ oro_user_bundle:
     type:         annotation
     prefix:       /user
 
-oro_user_api_profile:
-    resource:     "@OroUserBundle/Controller/Api/Rest/ProfileController.php"
+oro_user_api_user:
+    resource:     "@OroUserBundle/Controller/Api/Rest/UserController.php"
     type:         rest
     prefix:       api/rest/{version}/
     defaults:

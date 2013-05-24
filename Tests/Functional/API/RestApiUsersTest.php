@@ -26,7 +26,7 @@ class RestUsersApiTest extends WebTestCase
     public function testApiCreateUser()
     {
         $request = array(
-            "profile" => array (
+            "user" => array (
                 "username" => 'user_' . mt_rand(),
                 "email" => 'test_'  . mt_rand() . '@test.com',
                 "enabled" => '1',
@@ -36,7 +36,7 @@ class RestUsersApiTest extends WebTestCase
                 "rolesCollection" => array("1")
             )
         );
-        $this->client->request('POST', 'http://localhost/api/rest/latest/profile', $request);
+        $this->client->request('POST', 'http://localhost/api/rest/latest/user', $request);
         $result = $this->client->getResponse();
         $this->assertJsonResponse($result, 201);
 
@@ -51,25 +51,25 @@ class RestUsersApiTest extends WebTestCase
     public function testApiUpdateUser($request)
     {
         //get user id
-        $this->client->request('GET', 'http://localhost/api/rest/latest/profiles?limit=100');
+        $this->client->request('GET', 'http://localhost/api/rest/latest/users?limit=100');
         $result = $this->client->getResponse();
         $this->assertJsonResponse($result, 200);
         $result = json_decode($result->getContent(), true);
         $userId = $this->assertEqualsUser($request, $result);
-        //update profile
-        $request['profile']['username'] .= '_Updated';
-        unset($request['profile']['plainPassword']);
-        $this->client->request('PUT', 'http://localhost/api/rest/latest/profiles' . '/' . $userId, $request);
+        //update user
+        $request['user']['username'] .= '_Updated';
+        unset($request['user']['plainPassword']);
+        $this->client->request('PUT', 'http://localhost/api/rest/latest/users' . '/' . $userId, $request);
         $result = $this->client->getResponse();
         $this->assertJsonResponse($result, 204);
         //open user by id
-        $this->client->request('GET', 'http://localhost/api/rest/latest/profiles' . '/' . $userId);
+        $this->client->request('GET', 'http://localhost/api/rest/latest/users' . '/' . $userId);
         $result = $this->client->getResponse();
         $this->assertJsonResponse($result, 200);
 
         $result = json_decode($result->getContent(), true);
         //compare result
-        $this->assertEquals($request['profile']['username'], $result['username']);
+        $this->assertEquals($request['user']['username'], $result['username']);
 
         return $userId;
     }
@@ -80,10 +80,10 @@ class RestUsersApiTest extends WebTestCase
      */
     public function testApiDeleteUser($userId)
     {
-        $this->client->request('DELETE', 'http://localhost/api/rest/latest/profiles' . '/' . $userId);
+        $this->client->request('DELETE', 'http://localhost/api/rest/latest/users' . '/' . $userId);
         $result = $this->client->getResponse();
         $this->assertJsonResponse($result, 204);
-        $this->client->request('GET', 'http://localhost/api/rest/latest/profiles' . '/' . $userId);
+        $this->client->request('GET', 'http://localhost/api/rest/latest/users' . '/' . $userId);
         $result = $this->client->getResponse();
         $this->assertJsonResponse($result, 404);
     }
