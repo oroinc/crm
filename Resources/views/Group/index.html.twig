@@ -7,6 +7,6 @@
 
 {% block content %}
 <div class="container-fluid">
-    <h1>{{ 'Groups'|trans }} <a class="btn btn-primary pull-right no-hash" href="{{ path('oro_user_group_create') }}" id="add-new-btn">{{ 'Create group'|trans }}</a></h1>
+    <h1>{{ 'Groups'|trans }} <a class="btn btn-primary pull-right no-hash" href="{{ path('oro_user_group_create') }}" id="add-new-btn" title="{{ 'Create group'|trans }}">{{ 'Create group'|trans }}</a></h1>
     <div id="groups-grid"></div>
 {% endblock %}

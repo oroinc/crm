@@ -84,7 +84,7 @@ class RestApiRolesTest extends WebTestCase
         $request['role']['role'] .= '_Update';
         $this->client->request('PUT', 'http://localhost/api/rest/latest/roles' . '/' . $roleId, $request);
         $result = $this->client->getResponse();
-        ToolsAPI::assertJsonResponse($result, 302);
+        ToolsAPI::assertJsonResponse($result, 204);
         $this->client->request('GET', 'http://localhost/api/rest/latest/roles' .'/'. $roleId);
         $result = $this->client->getResponse();
         $result = json_decode($result->getContent(), true);
