@@ -99,6 +99,7 @@ services:
         class: %oro_address.type.address_value.class%
         arguments:
             - @oro_address.address.manager.flexible
+            - @oro_flexibleentity.value_form.value_subscriber
         tags:
             - { name: form.type, alias: oro_address_value }
 
@@ -115,6 +116,7 @@ services:
         class: %oro_address.type.address_api_value.class%
         arguments:
             - @oro_address.address.manager.flexible
+            - @oro_flexibleentity.value_form.value_subscriber
         tags:
             - { name: form.type, alias: oro_address_api_value }
 
