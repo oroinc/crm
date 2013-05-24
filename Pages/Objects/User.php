@@ -8,6 +8,7 @@ use Oro\Bundle\TestFrameworkBundle\Pages\Page;
 class User extends Page implements Entity
 {
     protected $username;
+    protected $enabled;
     protected $first_password;
     protected $second_password;
     protected $first_name;
@@ -37,6 +38,7 @@ class User extends Page implements Entity
             $this->first_password = $this->byId('oro_user_profile_form_plainPassword_first');
             $this->second_password = $this->byId('oro_user_profile_form_plainPassword_second');
         }
+        $this->enabled = $this->select($this->byId('oro_user_profile_form_enabled'));
         $this->first_name = $this->byId('oro_user_profile_form_firstName');
         $this->last_name = $this->byId('oro_user_profile_form_lastName');
         $this->email = $this->byId('oro_user_profile_form_email');
@@ -55,6 +57,18 @@ class User extends Page implements Entity
     public function getName()
     {
         return $this->username->value();
+    }
+
+    public function enable()
+    {
+        $this->enabled->selectOptionByLabel('Active');
+        return $this;
+    }
+
+    public function disable()
+    {
+        $this->enabled->selectOptionByLabel('Inactive');
+        return $this;
     }
 
     public function setFirstpassword($password)
