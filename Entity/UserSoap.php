@@ -66,7 +66,7 @@ class UserSoap extends User
     /**
      * @Soap\ComplexType("Oro\Bundle\SoapBundle\Entity\FlexibleAttribute[]", nillable=true)
      */
-    protected $attributes;
+    protected $values;
 
     public function setRolesCollection($collection)
     {
