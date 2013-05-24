@@ -508,7 +508,7 @@ Oro.Navigation = Backbone.Router.extend({
                             data:{'x-oro-hash-navigation' : true},
                             headers: { 'x-oro-hash-navigation': true },
                             error: _.bind(function (XMLHttpRequest, textStatus, errorThrown) {
-                                alert('Error Message: ' + textStatus + ' HTTP Error: ' + errorThrown);
+                                this.showError('Error Message: ' + textStatus, 'HTTP Error: ' + errorThrown);
                                 this.afterRequest();
                             }, this),
                             success: _.bind(function (data) {
@@ -517,22 +517,6 @@ Oro.Navigation = Backbone.Router.extend({
                             }, this)
                         });
                     }
-                    this.setLocation(url);
-                } else {
-                    this.beforeRequest();
-                    $(target).ajaxSubmit({
-                        data:{'x-oro-hash-navigation' : 1},
-                        headers: { 'x-oro-hash-navigation': true },
-                        error: _.bind(function (XMLHttpRequest, textStatus, errorThrown) {
-                            this.showError('Error Message: ' + textStatus, 'HTTP Error: ' + errorThrown);
-                            this.afterRequest();
-                        }, this),
-                        success: _.bind(function (data) {
-                            this.handleResponse(data);
-                            this.afterRequest();
-                            this.clearPageCache(); //clearing page cache after post request
-                        }, this)
-                    });
                 }
             }
             return false;
