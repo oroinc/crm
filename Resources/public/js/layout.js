@@ -162,6 +162,9 @@ function initLayout() {
     $('[data-spy="scroll"]').each(function () {
         var $spy = $(this)
         $spy.scrollspy($spy.data())
+        var $spy = $(this).scrollspy('refresh');
+        $('.scrollspy-nav ul.nav li').removeClass('active');
+        $('.scrollspy-nav ul.nav li:first').addClass('active');
     })
     $('[data-toggle="tooltip"]').tooltip();
 }

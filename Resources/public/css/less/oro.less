@@ -1,3 +1,4 @@
+
 //oro variables
 @horizontalPadding:               20px;
 @verticalPadding:                 20px;
@@ -44,6 +45,12 @@
 @linkColor:             #064eb1;
 @linkColorHover:        darken(@linkColor, 15%);
 
+
+.box-sizing(@sizing : content-box ) {
+  -webkit-box-sizing: @sizing !important;
+  -moz-box-sizing: @sizing !important;
+  box-sizing: @sizing !important;
+}
 
 body{
   font-family: @baseFontFamily;
@@ -761,8 +768,7 @@ footer{
   max-width: 400px;
   padding: 0;
   background: #fff;
-  border: 1px solid @navbarBorder;
-  .border-radius(@baseBorderRadius*2);
+  border: 0;
   .box-shadow(0 1px 4px rgba(0,0,0,.065));
   fieldset{
     padding: 30px 40px;
@@ -771,7 +777,7 @@ footer{
   }
   .add-on{
     padding: 4px 10px;
-    min-width: 70px;
+    min-width: 71px;
   }
   .btn {
     float: right;
@@ -781,6 +787,69 @@ footer{
     font-weight: bold;
     margin: 9px 10px 0 0;
   }
+  .oro-title{
+    float: left;
+    font-size: 34px;
+    line-height: 40px;
+    text-transform: uppercase;
+    margin: 0;
+    text-shadow: 1px 1px 2px #000000;
+    filter: dropshadow(color=#000000, offx=1, offy=1);
+  }
+  .oro-title a{
+    color: #fff;
+  }
+  .oro-title a:hover{
+    text-decoration: none;
+  }
+  .title{
+    font: 26px/40px Arial, Helvetica, sans-serif;
+    margin: 0;
+    text-shadow: 1px 1px 2px #000000;
+    filter: dropshadow(color=#000000, offx=1, offy=1);
+  }
+  .input-prepend {
+    .add-on{
+      height: 36px;
+      font: bold 14px/36px Arial, Helvetica, sans-serif;
+      color: #5b636d;
+      #gradient > .vertical(#dde0e3, #d2d7db);
+      padding: 0 10px;
+    }
+    input[type="text"],
+    input[type="password"]{
+      height: 36px;
+      font: 14px/36px Arial, Helvetica, sans-serif;
+      color: #000;
+      padding: 0 10px;
+      width: 205px;
+    }
+  }
+  .form-row{
+    padding-top: 4px;
+  }
+  .extra-btn-large{
+    height: 32px;
+    line-height: 32px;
+    min-width: 95px;
+    float: left;
+  }
+  .extra-submit{
+    float: right;
+    min-width: 130px;
+  }
+  fieldset{
+    .border-radius(0 0 @baseBorderRadius*2 @baseBorderRadius*2);
+    border: solid @navbarBorder;
+    border-width: 0 1px 1px 1px;
+    padding: 30px 39px;
+  }
+}
+.oro-subtitle{
+  font-size: 24px;
+  line-height: 40px;
+  margin: 0;
+  padding: 0;
 }
 .form-pass-reset{
   margin: 0 auto 20px;
@@ -906,52 +975,7 @@ footer{
     margin: 5px 10px 0;
   }
 }
-.form-signin{
 
-  .oro-title{
-    float: left;
-    font-size: 34px;
-    line-height: 40px;
-    text-transform: uppercase;
-    margin: 0;
-    text-shadow: 1px 1px 2px #000000;
-    filter: dropshadow(color=#000000, offx=1, offy=1);
-
-  }
-  .oro-title a{
-    color: #fff;
-  }
-  .oro-title a:hover{
-    text-decoration: none;
-  }
-  .title{
-    font: 26px/40px Arial, Helvetica, sans-serif;
-    margin: 0;
-    text-shadow: 1px 1px 2px #000000;
-    filter: dropshadow(color=#000000, offx=1, offy=1);
-  }
-  .input-prepend {
-    .add-on{
-      height: 36px;
-      font: bold 14px/36px Arial, Helvetica, sans-serif;
-      color: #5b636d;
-      #gradient > .vertical(#dde0e3, #d2d7db);
-      padding: 0 10px;
-    }
-    input[type="text"],
-    input[type="password"]{
-      height: 36px;
-      font: 14px/36px Arial, Helvetica, sans-serif;
-      color: #000;
-      padding: 0 10px;
-      width: 205px;
-    }
-  }
-  .form-row{
-    padding-top: 4px;
-  }
-/* custom button */
-}
 .input-prepend-right {
   input[type="text"] {
     width: 180px;
@@ -1004,6 +1028,7 @@ footer{
   border-color: #5387be #5387be #5387be;
   text-shadow: 1px 1px 2px #00324d;
   filter: dropshadow(color=#00324d, offx=1, offy=1);
+  font-weight: bold;
 }
 .btn-primary:hover{
   #gradient > .vertical(#85ace8, #567fbf);
@@ -1236,7 +1261,7 @@ footer{
   border-left: 1px solid #ccd1d7;
   background-color: #fff;
   min-height: 151px;
-  max-height: 350px;
+  max-height: 330px;
   overflow: auto;
 }
 .pin-bar .list-bar{
@@ -1348,6 +1373,15 @@ footer{
   box-shadow: none;
   font-weight: bold;
 }
+.application-menu .nav-tabs > li > a.empty,
+.application-menu .nav-tabs > li.active > a.empty,
+.application-menu .nav-tabs > li.active > a.empty:hover,
+.application-menu .nav-tabs > li > a.empty:hover,
+.application-menu .nav-tabs > li > a.empty:focus{
+  border-radius:  5px;
+  height:23px;
+  border-width: 1px;
+}
 .application-menu .nav-tabs > li.active > a,
 .application-menu .nav-tabs > li.active > a:hover,
 .application-menu .nav-tabs > li > a:hover,
@@ -1438,12 +1472,6 @@ footer{
   float: left;
   margin: 0 0 0 -120px;
   position: relative;
-}
-.btn-group + .btn-group{
-  margin-left: 0;
-}
-.btn-group{
-  margin-right: 5px;
 }
 .btn .caret{
   margin-left: 5px;
@@ -1539,6 +1567,9 @@ footer{
 .icon-trash{
   background-position: -456px -1px;
 }
+.icon-star.icon-gold{
+  background-position: 0 -188px;
+}
 .badge-enabled,
 .badge-disabled{
   padding: 3px 10px 3px 5px;
@@ -1568,10 +1599,15 @@ footer{
   padding: 0 5px;
   line-height: 32px;
 }
-.grid-toolbar .pagination{
-  margin: 0 0 20px;
-  input[type="text"]{
-    width: 23px;
+.grid-toolbar{
+  .actions-panel{
+    margin-left: 5px;
+  }
+  .pagination{
+    margin: 0 0 20px;
+    input[type="text"]{
+      width: 23px;
+    }
   }
 }
 .grid-container{
@@ -1737,10 +1773,6 @@ footer{
   margin-right: 0;
   margin-left: 7px;
 }
-.navbar-extra .customer-info-top-actions button{
-  height: 26px;
-  line-height: 24px;
-}
 .navbar-extra .customer-info-top-actions a{
   height: 24px;
   line-height: 24px;
@@ -1803,7 +1835,7 @@ footer{
     position: absolute;
     right: 0;
     top: -33px;
-    padding: 5px 14px;
+    padding: 5px 20px;
     background-color: #fff;
   }
 }
@@ -2073,7 +2105,7 @@ footer{
   border: 0;
 }
 .ui-dialog.ui-widget-content{
-    border: 1px solid #8e9195;
+  border: 1px solid #8e9195;
 }
 .usser-info-state{
   padding: 10px 0 0;
@@ -2230,9 +2262,6 @@ ul.inline-extra > li:first-child{
   background-color: #f6f6f6;
   border-bottom: 1px solid #ebebeb;
 }
-.customer-info-top-actions button{
-  height: 32px;
-}
 .customer-info-top-actions .btn .caret{
   margin-top: 10px;
 }
@@ -2250,7 +2279,7 @@ ul.inline-extra > li:first-child{
   font-size: 12px;
 }
 .scrollspy{
-  /*height: 500px;*/
+/*height: 500px;*/
   position: relative;
   overflow: auto;
 }
@@ -2348,16 +2377,6 @@ textarea{
 .dot-menu-empty-message{
   padding: 15px;
 }
-.form-signin .extra-btn-large{
-  height: 32px;
-  line-height: 32px;
-  min-width: 95px;
-  float: left;
-}
-.form-signin .extra-submit{
-  float: right;
-  min-width: 130px;
-}
 .oro-forgot-password #prependedInput{
   width: 160px;
 }
@@ -2376,8 +2395,74 @@ textarea{
   outline: none;
   position: static;
 }
+.filter-box .filter-item .filter-criteria{
+  top: 125%;
+
+
+}
+.filter-box .filter-item .filter-criteria:before{
+  border-bottom: 9px solid rgba(0, 0, 0, 0.2);
+  border-left: 9px solid transparent;
+  border-right: 9px solid transparent;
+  content: "";
+  display: inline-block;
+  left: 11px;
+  position: absolute;
+  top: -9px;
+}
+.filter-box .filter-item .filter-criteria:after {
+  border-bottom: 10px solid #FFFFFF;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  content: "";
+  display: inline-block;
+  left: 10px;
+  position: absolute;
+  top: -8px;
+}
+.filter-box .filter-select-oro{
+  width: 110px;
+  height: 20px;
+  line-height: 20px;
+}
+.filter-item div.selector{
+  height: 20px;
+  line-height: 20px;
+  margin: 0 0 7px;
+  float: right;
+}
+.filter-item div.selector span{
+  background-position: 100% -298px;
+  line-height: 20px;
+  height: 20px;
+}
+.filter-box .filter-item .divider{
+  background: none;
+  line-height: 40px;
+  font-size: 16px;
+  padding: 0 3px;
+  margin: 0;
+  position: relative;
+  top: -3px;
+}
+.filter-item .btn{
+  vertical-align: top;
+}
+
 .btn-group > .btn-small{
   font-size: 11px;
+}
+.btn-group > a.btn{
+  height: 28px;
+  line-height: 28px;
+}
+.oro-action .btn-group > .btn,
+.oro-action .btn-group > .dropdown-menu,
+.oro-action .btn-group > .popover{
+  font-size: 14px;
+}
+.oro-action .btn-group{
+  margin-right: 0;
 }
 .popup-box-errors{
   width: 480px;
@@ -2895,35 +2980,38 @@ select:focus:invalid:focus {
 }
 .separator-btn{
   border-left: 1px solid #e9e9e9;
-  margin: 0 1px 0 8px;
+  margin: 4px 1px 0 8px;
   height: 24px;
 }
 #search-bar-button:hover,
 #search-bar-button:focus{
   color: #fff;
 }
-.pagination-centered > .icons-holder{
-  margin-right: -4px;
-}
+/*.pagination-centered > .icons-holder{
+margin-right: -4px;
+}*/
 .pagination-centered > label{
   margin-right: -4px;
   padding-left: 5px;
 }
-.grid-toolbar .pagination-centered{
-  width: 335px;
-  margin: 0 auto;
-}
-.grid-toolbar .pagination-centered .icons-holder{
-  margin-left: 5px;
+.grid-toolbar{
+  padding: 9px 20px;
+  .pagination-centered{
+    width: 375px;
+    margin: 0 auto;
+    .icons-holder{
+      margin-left: 5px;
+    }
+  }
 }
 #flash-messages{
   .alert{
     margin: 0;
     background-color: @warningBackground;
     background-image: url('../../img/warning-ico.png');
-    background-position: 10px 50%;
+    background-position: 10px 48%;
     background-repeat: no-repeat;
-    padding: 12px 35px 12px 37px;
+    padding: 6px 35px 6px 37px;
     border: solid @warningBorder;
     border-width: 0 0 1px;
     text-shadow: 0 1px 0 rgba(255,255,255,.5);
@@ -2958,18 +3046,18 @@ select:focus:invalid:focus {
 }
 .flash-messages-frame{
   position: fixed;
-  top: 0;
+  top: 138px;
   left: 0;
-  width: 100%;
-  height: 100%;
-  background: url("../../img/bg-overlay.png") repeat;
   z-index: 10000;
+  .box-sizing(border-box);
+  /*-webkit-box-sizing: border-box !important;
+  -moz-box-sizing: border-box !important;
+  box-sizing: border-box !important;*/
+  padding: 0 10px;
+  width: 100%;
 }
 .flash-messages-holder{
-  position: fixed;
-  top: 136px;
-  left: 45px;
-  width: 96%;
+  width: 100%;
 }
 .oro-multiselect{
   display: inline-block;
