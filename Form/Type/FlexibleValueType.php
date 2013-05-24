@@ -6,7 +6,6 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleManager;
-use Oro\Bundle\FlexibleEntityBundle\Form\EventListener\FlexibleValueSubscriber;
 
 /**
  * Base flexible value form type
@@ -19,9 +18,9 @@ use Oro\Bundle\FlexibleEntityBundle\Form\EventListener\FlexibleValueSubscriber;
 class FlexibleValueType extends AbstractType
 {
     /**
-     * @var FlexibleManager
+     * @var EventSubscriberInterface
      */
-    protected $flexibleManager;
+    protected $subscriber;
 
     /**
      * @var string
@@ -32,11 +31,12 @@ class FlexibleValueType extends AbstractType
      * Constructor
      *
      * @param FlexibleManager $flexibleManager the manager
+     * @param EventSubscriberInterface $subscriber
      */
-    public function __construct(FlexibleManager $flexibleManager)
+    public function __construct(FlexibleManager $flexibleManager, EventSubscriberInterface $subscriber)
     {
-        $this->flexibleManager = $flexibleManager;
-        $this->valueClass      = $flexibleManager->getFlexibleValueName();
+        $this->subscriber = $subscriber;
+        $this->valueClass = $flexibleManager->getFlexibleValueName();
     }
 
     /**
@@ -45,18 +45,7 @@ class FlexibleValueType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('id', 'hidden');
-        $this->addSubscriber($builder);
-    }
-
-    /**
-     * Add subscriber
-     *
-     * @param FormBuilderInterface $builder
-     */
-    public function addSubscriber(FormBuilderInterface $builder)
-    {
-        $subscriber = new FlexibleValueSubscriber($builder->getFormFactory(), $this->flexibleManager);
-        $builder->addEventSubscriber($subscriber);
+        $builder->addEventSubscriber($this->subscriber);
     }
 
     /**
