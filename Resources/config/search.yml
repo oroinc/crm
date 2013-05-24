@@ -7,4 +7,5 @@ Oro\Bundle\ContactBundle\Entity\Contact:
         parameters:
             id: id
     search_template: OroContactBundle:Contact:searchResult.html.twig
+    entity_icon: bundles/orocontact/img/search.png
     fields: []
