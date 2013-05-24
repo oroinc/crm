@@ -70,14 +70,10 @@
                 <div class="navbar-inner">
                     <div class="container-fluid" style="width: auto;">
                         <ul class="nav">
-                            <li class="active"><a href="#scroll-main">{{ 'Overview'|trans }}</a></li>
+                            <li class="active"><a href="#scroll-main">{{ 'General'|trans }}</a></li>
 
-                            {% if form.groups is defined %}
-                            <li><a href="#scroll-groups">{{ 'Groups'|trans }}</a></li>
-                            {% endif %}
-
-                            {% if form.rolesCollection is defined %}
-                            <li><a href="#scroll-roles">{{ 'Roles'|trans }}</a></li>
+                            {% if form.groups is defined or form.rolesCollection is defined %}
+                            <li><a href="#scroll-roles-groups">{{ 'Groups and Roles'|trans }}</a></li>
                             {% endif %}
 
                             {% if form.values  is defined %}
@@ -98,7 +94,7 @@
                 {% endif %}
                 <div data-spy="scroll" data-target="#navbarExample" data-offset="50" class="scrollspy container-fluid scrollable-container">
                     <div class="usser-row">
-                        <h4 id="scroll-main" class="scrollspy-title">{{ 'Overview'|trans }}</h4>
+                        <h4 id="scroll-main" class="scrollspy-title">{{ 'General'|trans }}</h4>
                         <div class="row-fluid row-fluid-divider">
                             <fieldset class="form-horizontal span6">
                                 <h5 class="usser-fiedset"><span>Basic Information</span></h5>
@@ -133,24 +129,21 @@
                         </div>
                     </div>
 
-                    {% if form.groups is defined %}
+                    {% if form.groups is defined or form.rolesCollection is defined %}
                     <div class="usser-row">
-                        <h4 id="scroll-groups" class="scrollspy-title">{{ 'Groups'|trans }}</h4>
+                        <h4 id="scroll-roles-groups" class="scrollspy-title">{{ 'Groups and Roles'|trans }}</h4>
                         <div class="row-fluid">
+                            {% if form.groups is defined %}
                             <fieldset class="form-horizontal">
                                 {{ form_row(form.groups, { attr: { class: 'horizontal' } }) }}
                             </fieldset>
-                        </div>
-                    </div>
-                    {% endif %}
+                            {% endif %}
 
-                    {% if form.rolesCollection is defined %}
-                    <div class="usser-row">
-                        <h4 id="scroll-roles" class="scrollspy-title">{{ 'Roles'|trans }}</h4>
-                        <div class="row-fluid">
+                            {% if form.rolesCollection is defined %}
                             <fieldset class="form-horizontal" id="roles-list">
                                 {{ form_row(form.rolesCollection, { attr: { class: 'horizontal' } }) }}
                             </fieldset>
+                            {% endif %}
                         </div>
                     </div>
                     {% endif %}
