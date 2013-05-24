@@ -1,5 +1,16 @@
 <ul>
-    {% for fieldKey, fieldValue in value %}
+{% for fieldKey, fieldValue in value %}
+    {% if fieldKey == 'auditData' %}
+    {% for collKey, collValue in fieldValue.new %}
+    <li>
+        <b>{{ collKey }}:</b>
+        {% if fieldValue.old|length %}
+        <s>{{ fieldValue.old[collKey] }}</s>
+        {% endif %}
+        {{ collValue }}
+    </li>
+    {% endfor %}
+    {% else %}
     <li>
         <b>{{ fieldKey }}:</b>
         {% if fieldValue.old.timestamp is defined %}
@@ -9,5 +20,6 @@
         {% endif %}
         {{ fieldValue.new.timestamp is defined ? fieldValue.new|date('m/d/Y') : fieldValue.new }}
     </li>
-    {% endfor %}
+    {% endif %}
+{% endfor %}
 </ul>
