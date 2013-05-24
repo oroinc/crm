@@ -178,8 +178,9 @@ Oro.Datagrid.Listener.ColumnFormListener = Oro.Datagrid.Listener.AbstractListene
         if (!this.confirmModal[type]) {
             this.confirmModal[type] = new Oro.BootstrapModal(_.extend({
                 title: 'Confirmation',
-                okText: 'Yes',
-                cancelText: 'Cancel'
+                okText: 'Ok, got it.',
+                className: 'modal modal-primary',
+                okButtonClass: 'btn-primary btn-large'
             }, options));
             this.confirmModal[type].on('ok', _.bind(callback, this));
         }
