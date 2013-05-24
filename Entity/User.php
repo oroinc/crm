@@ -149,6 +149,7 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
      * Plain password. Used for model validation. Must not be persisted.
      *
      * @var string
+     *
      * @Soap\ComplexType("string", nillable=true)
      * @Exclude
      */
@@ -261,6 +262,16 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
      * @ORM\OneToMany(targetEntity="Email", mappedBy="user", orphanRemoval=true, cascade={"persist"})
      */
     protected $emails;
+
+    /**
+     * Workaround to track "versioned" collections
+     *
+     * @var array
+     *
+     * @ORM\Column(name="collections_audit", type="array", nullable=true)
+     * @Gedmo\Versioned
+     */
+    protected $collAudit;
 
     public function __construct()
     {
@@ -512,6 +523,17 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
     }
 
     /**
+     * Get collections changeset
+     *
+     * @internal
+     * @return   array
+     */
+    public function getCollAudit()
+    {
+        return $this->collAudit;
+    }
+
+    /**
      * {@inheritDoc}
      */
     public function isEnabled()
@@ -714,6 +736,28 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
         $this->api = $api;
 
         return $this;
+    }
+
+    /**
+     *
+     * @internal
+     */
+    public function setCollAudit()
+    {
+        $this->collAudit = array(
+            'roles'  => implode(
+                ', ',
+                $this->getRolesCollection()->map(function ($item) {
+                    return $item->getLabel();
+                })->toArray()
+            ),
+            'groups' => implode(
+                ', ',
+                $this->getGroups()->map(function ($item) {
+                    return $item->getName();
+                })->toArray()
+            ),
+        );
     }
 
     /**
