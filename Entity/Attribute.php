@@ -73,7 +73,7 @@ class Attribute extends AbstractEntityAttribute
         if ($this->getDefaultValue()) {
             // TODO : must be moved and avoid to use service name here
             if ($this->getAttributeType() === 'oro_flexibleentity_date') {
-                $date = new \DateTime();
+                $date = new \DateTime('now', new \DateTimeZone('UTC'));
                 $date->setTimestamp(intval($this->getDefaultValue()));
 
                 $this->setDefaultValue($date);
