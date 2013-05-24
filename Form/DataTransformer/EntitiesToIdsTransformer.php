@@ -117,7 +117,7 @@ class EntitiesToIdsTransformer implements DataTransformerInterface
         $entities = $this->loadEntitiesByIds($value);
 
         if (count($entities) !== count($value)) {
-            throw new TransformationFailedException('Could not find all entities for the given ids');
+            throw new TransformationFailedException('Could not find all entities for the given IDs');
         }
 
         return $entities;
