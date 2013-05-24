@@ -17,8 +17,5 @@ $(function() {
         $(Oro.Messages.topMessageContainer + ' ' + Oro.Messages.topMessageHolder).append(newMessage);
         $(Oro.Messages.topMessageContainer).show();
     }
-    $(document).on('click', Oro.Messages.topMessageContainer, function (e) {
-        $(this).hide().find(Oro.Messages.topMessageHolder).children().not(Oro.Messages.messageContentContainer).remove();
-    });
 });
 
