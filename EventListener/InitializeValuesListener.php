@@ -45,17 +45,14 @@ class InitializeValuesListener implements EventSubscriberInterface
 
             if ($manager->getFlexibleInitMode() !== 'empty') {
 
+                $findBy = array('entityType' => $manager->getFlexibleName());
                 // get initialization mode
                 if ($manager->getFlexibleInitMode() === 'required_attributes') {
-                    $onlyRequired = true;
-                } else {
-                    $onlyRequired = false;
+                    $findBy['required'] = true;
                 }
 
                 // initialize expected values with default value if exists
-                $attributes = $manager->getAttributeRepository()->findBy(
-                    array('entityType' => $manager->getFlexibleName(), 'required' => $onlyRequired)
-                );
+                $attributes = $manager->getAttributeRepository()->findBy($findBy);
 
                 foreach ($attributes as $attribute) {
                     $value = $manager->createFlexibleValue();
