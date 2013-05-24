@@ -8,7 +8,7 @@ Oro\Bundle\UserBundle\Entity\User:
         parameters:
             id: id
     search_template: OroUserBundle:Profile:searchResult.html.twig
-    entity_icon_class: icon-user
+    entity_icon: bundles/orouser/img/search.png
     fields:
         -
             name: username
