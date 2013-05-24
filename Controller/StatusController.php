@@ -36,7 +36,7 @@ class StatusController extends Controller
      * @Route("/create", name="oro_user_status_create")
      * @Template()
      */
-    public function addAction()
+    public function createAction()
     {
         $result = false;
 
@@ -67,10 +67,10 @@ class StatusController extends Controller
     }
 
     /**
-     * @Route("/remove/{id}", name="oro_user_status_remove", requirements={"id"="\d+"})
+     * @Route("/delete/{id}", name="oro_user_status_delete", requirements={"id"="\d+"})
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function removeAction(Status $status)
+    public function deleteAction(Status $status)
     {
         if ($this->get('oro_user.status_manager')->deleteStatus($this->getUser(), $status, true)) {
             $this->get('session')->getFlashBag()->add('success', 'Status deleted');

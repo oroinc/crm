@@ -8,6 +8,7 @@ use Oro\Bundle\TestFrameworkBundle\Test\Client;
 
 /**
  * @outputBuffering enabled
+ * @db_isolation
  */
 class SoapUsersApiTest extends WebTestCase
 {

@@ -19,13 +19,13 @@ oro_menu_config:
             extras:
                 routes: ['oro_user_group_*']
         shortcut_new_user:
-            label: Create New User
+            label: Create user
             route: oro_user_create
             extras:
                 description: Create new user instance
                 isCustomAction: true
         shortcut_list_users:
-            label: Users List
+            label: Users list
             route: oro_user_index
             extras:
                 description: List of users
@@ -46,14 +46,14 @@ oro_menu_config:
                 shortcut_list_users: ~
 
 oro_titles:
-    oro_user_show: %%username%% - View profile - User Management
-    oro_user_edit: %%username%% - Edit profile - User Management
-    oro_user_create: New profile - User Management
+    oro_user_view: %%username%% - View Profile - User Management
+    oro_user_update: %%username%% - Update Profile - User Management
+    oro_user_create: New Profile - User Management
     oro_user_index: Users - User Management
 
-    oro_user_role_edit: Edit role - User management
-    oro_user_role_create: Add role - User management
-    oro_user_role_index: "Roles - User management"
+    oro_user_role_update: %%role%% - Update Role - User Management
+    oro_user_role_create: Create Role - User Management
+    oro_user_role_index: "Roles - User Management"
 
     oro_user_security_login: Login
     oro_user_status_list: "User Statuses - User Management"
@@ -63,6 +63,6 @@ oro_titles:
     oro_user_reset_request: Forgot Password
     oro_user_reset_check_email: Password Reset - Check Email
 
-    oro_user_group_create: Add group - User Management
-    oro_user_group_edit: Edit group - User Management
+    oro_user_group_create: Create Group - User Management
+    oro_user_group_update: %%group%% - Update Group - User Management
     oro_user_group_index: Groups - User Management

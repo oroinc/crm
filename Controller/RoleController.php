@@ -30,7 +30,7 @@ class RoleController extends Controller
      * Create role form
      *
      * @Route("/create", name="oro_user_role_create")
-     * @Template("OroUserBundle:Role:edit.html.twig")
+     * @Template("OroUserBundle:Role:update.html.twig")
      * @Acl(
      *      id="oro_user_role_create",
      *      name="Create role",
@@ -40,22 +40,22 @@ class RoleController extends Controller
      */
     public function createAction()
     {
-        return $this->editAction(new Role());
+        return $this->updateAction(new Role());
     }
 
     /**
      * Edit role form
      *
-     * @Route("/edit/{id}", name="oro_user_role_edit", requirements={"id"="\d+"}, defaults={"id"=0})
+     * @Route("/update/{id}", name="oro_user_role_update", requirements={"id"="\d+"}, defaults={"id"=0})
      * @Template
      * @Acl(
-     *      id="oro_user_role_edit",
+     *      id="oro_user_role_update",
      *      name="Edit role",
      *      description="Edit role",
      *      parent="oro_user_role"
      * )
      */
-    public function editAction(Role $entity)
+    public function updateAction(Role $entity)
     {
         $resources = $this->getRequest()->request->get('resource');
         if ($this->get('oro_user.form.handler.role')->process($entity)) {
@@ -73,7 +73,7 @@ class RoleController extends Controller
         return array(
             'datagrid' => $this->getRoleUserDatagridManager($entity)->getDatagrid()->createView(),
             'form'     => $this->get('oro_user.form.role')->createView(),
-            'resources' => $entity->getId() ? $this->getAclManager()->getRoleAclTree($entity) : null
+            'resources' => $this->getAclManager()->getRoleAclTree($entity)
         );
     }
 

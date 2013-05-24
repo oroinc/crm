@@ -39,6 +39,7 @@ abstract class UserRelationDatagridManager extends DatagridManager
                 'filterable'  => false,
                 'show_column' => false,
                 'show_filter' => false,
+                'show_column' => false,
             )
         );
         $fieldsCollection->add($fieldId);

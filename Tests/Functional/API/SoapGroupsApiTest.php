@@ -87,8 +87,8 @@ class SoapGroupsApiTest extends WebTestCase
         $groups = $this->client->soapClient->getGroups();
         $groups = ToolsAPI::classToArray($groups);
         $this->assertEquals(5, count($groups['item']));
-        foreach ($groups['item'] as $group) {
-            if ($group['id'] > 2) {
+        foreach ($groups['item'] as $k => $group) {
+            if ($k > 1) {
                 //do not delete default groups
                 $result = $this->client->soapClient->deleteGroup($group['id']);
                 $this->assertTrue($result);

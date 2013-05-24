@@ -2,21 +2,21 @@
 
 namespace Oro\Bundle\UserBundle\Controller\Api\Rest;
 
-use FOS\RestBundle\Controller\Annotations\NamePrefix;
-use FOS\RestBundle\Controller\FOSRestController;
-use FOS\RestBundle\Routing\ClassResourceInterface;
 use FOS\Rest\Util\Codes;
+use FOS\RestBundle\Controller\Annotations\QueryParam;
+use FOS\RestBundle\Routing\ClassResourceInterface;
+use FOS\RestBundle\Controller\Annotations\NamePrefix;
 
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
-use Oro\Bundle\UserBundle\Entity\Group;
 use Oro\Bundle\UserBundle\Annotation\Acl;
 use Oro\Bundle\UserBundle\Annotation\AclAncestor;
+use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
 
 /**
  * @NamePrefix("oro_api_")
  */
-class GroupController extends FOSRestController implements ClassResourceInterface
+class GroupController extends RestController implements ClassResourceInterface
 {
     /**
      * Get the list of groups
@@ -25,16 +25,17 @@ class GroupController extends FOSRestController implements ClassResourceInterfac
      *      description="Get the list of groups",
      *      resource=true
      * )
+     * @QueryParam(name="page", requirements="\d+", nullable=true, description="Page number, starting from 1. Defaults to 1.")
+     * @QueryParam(name="limit", requirements="\d+", nullable=true, description="Number of items per page. defaults to 10.")
      * @AclAncestor("oro_user_group_list")
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function cgetAction()
     {
-        return $this->handleView(
-            $this->view(
-                $this->getManager()->getRepository('OroUserBundle:Group')->findAll(),
-                Codes::HTTP_OK
-            )
-        );
+        $page = (int)$this->getRequest()->get('page', 1);
+        $limit = (int)$this->getRequest()->get('limit', self::ITEMS_PER_PAGE);
+
+        return $this->handleGetListRequest($page, $limit);
     }
 
     /**
@@ -55,17 +56,11 @@ class GroupController extends FOSRestController implements ClassResourceInterfac
      *      description="View user group",
      *      parent="oro_user_group"
      * )
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function getAction($id)
     {
-        $entity = $this->getManager()->find('OroUserBundle:Group', (int) $id);
-
-        return $this->handleView(
-            $this->view(
-                $entity,
-                $entity ? Codes::HTTP_OK : Codes::HTTP_NOT_FOUND
-            )
-        );
+        return $this->handleGetRequest($id);
     }
 
     /**
@@ -76,18 +71,11 @@ class GroupController extends FOSRestController implements ClassResourceInterfac
      *      resource=true
      * )
      * @AclAncestor("oro_user_group_create")
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function postAction()
     {
-        $entity = new Group();
-        $view   = $this->get('oro_user.form.handler.group.api')->process($entity)
-            ? $this->redirectView(
-                $this->generateUrl('oro_api_get_group', array('id' => $entity->getId())),
-                Codes::HTTP_CREATED
-            )
-            : $this->view($this->get('oro_user.form.group.api'), Codes::HTTP_BAD_REQUEST);
-
-        return $this->handleView($view);
+        return $this->handleCreateRequest();
     }
 
     /**
@@ -102,21 +90,12 @@ class GroupController extends FOSRestController implements ClassResourceInterfac
      *          {"name"="id", "dataType"="integer"},
      *      }
      * )
-     * @AclAncestor("oro_user_group_edit")
+     * @AclAncestor("oro_user_group_update")
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function putAction($id)
     {
-        $entity = $this->getManager()->find('OroUserBundle:Group', (int) $id);
-
-        if (!$entity) {
-            return $this->handleView($this->view('', Codes::HTTP_NOT_FOUND));
-        }
-
-        $view = $this->get('oro_user.form.handler.group.api')->process($entity)
-            ? $this->redirectView($this->generateUrl('oro_api_get_group', array('id' => $entity->getId())))
-            : $this->view($this->get('oro_user.form.group.api'), Codes::HTTP_BAD_REQUEST);
-
-        return $this->handleView($view);
+        return $this->handleUpdateRequest($id);
     }
 
     /**
@@ -137,20 +116,11 @@ class GroupController extends FOSRestController implements ClassResourceInterfac
      *      description="Remove group",
      *      parent="oro_user_group"
      * )
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function deleteAction($id)
     {
-        $em = $this->getManager();
-        $entity = $em->find('OroUserBundle:Group', (int) $id);
-
-        if (!$entity) {
-            return $this->handleView($this->view('', Codes::HTTP_NOT_FOUND));
-        }
-
-        $em->remove($entity);
-        $em->flush();
-
-        return $this->handleView($this->view('', Codes::HTTP_NO_CONTENT));
+        return $this->handleDeleteRequest($id);
     }
 
     /**
@@ -171,10 +141,11 @@ class GroupController extends FOSRestController implements ClassResourceInterfac
      *      description="View group roles",
      *      parent="oro_user_group"
      * )
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function getRolesAction($id)
     {
-        $entity = $this->getManager()->find('OroUserBundle:Group', (int) $id);
+        $entity = $this->getManager()->find($id);
 
         if (!$entity) {
             return $this->handleView($this->view('', Codes::HTTP_NOT_FOUND));
@@ -184,10 +155,27 @@ class GroupController extends FOSRestController implements ClassResourceInterfac
     }
 
     /**
-     * @return \Doctrine\Common\Persistence\ObjectManager
+     * {@inheritdoc}
      */
-    protected function getManager()
+    public function getManager()
     {
-        return $this->getDoctrine()->getManagerForClass('OroUserBundle:Group');
+        return $this->container->get('oro_user.group_manager.api');
+
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getForm()
+    {
+        return $this->container->get('oro_user.form.group.api');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFormHandler()
+    {
+        return $this->container->get('oro_user.form.handler.group.api');
     }
 }

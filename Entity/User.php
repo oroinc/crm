@@ -19,6 +19,7 @@ use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityFlexible;
 use Oro\Bundle\UserBundle\Entity\Status;
 use Oro\Bundle\UserBundle\Entity\Email;
+use Oro\Bundle\UserBundle\Entity\EntityUploadedImageInterface;
 
 use DateTime;
 
@@ -28,7 +29,7 @@ use DateTime;
  * @ORM\HasLifecycleCallbacks()
  * @Gedmo\Loggable(logEntryClass="Oro\Bundle\DataAuditBundle\Entity\Audit")
  */
-class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Serializable
+class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Serializable, EntityUploadedImageInterface
 {
     const ROLE_DEFAULT   = 'ROLE_USER';
     const ROLE_ANONYMOUS = 'IS_AUTHENTICATED_ANONYMOUSLY';
@@ -632,8 +633,19 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
     public function setImageFile(UploadedFile $imageFile)
     {
         $this->imageFile = $imageFile;
-        $this->updated   = new DateTime(); // this will trigger PreUpdate callback even if only image has been changed
+        $this->updated = new DateTime(); // this will trigger PreUpdate callback even if only image has been changed
 
+        return $this;
+    }
+
+    /**
+     * Unset image file.
+     *
+     * @return User
+     */
+    public function unsetImageFile()
+    {
+        $this->imageFile = null;
         return $this;
     }
 
@@ -671,7 +683,9 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
     }
 
     /**
-     * @param  string $confirmationToken New confirmation token
+     * Set confirmation token.
+     *
+     * @param string $token
      * @return User
      */
     public function setConfirmationToken($token)
@@ -769,6 +783,7 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
     {
         $roles = $this->roles->toArray();
 
+        /** @var Group $group */
         foreach ($this->getGroups() as $group) {
             $roles = array_merge($roles, $group->getRoles()->toArray());
         }
@@ -794,6 +809,7 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
      */
     public function getRole($role)
     {
+        /** @var Role $item */
         foreach ($this->getRoles() as $item) {
             if ($role == $item->getRole()) {
                 return $item;
@@ -896,6 +912,7 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
     {
         $names = array();
 
+        /** @var Group $group */
         foreach ($this->getGroups() as $group) {
             $names[] = $group->getName();
         }
@@ -927,19 +944,14 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
     }
 
     /**
-     *
-     * @param bool $absolute [optional] Return absolute (true) or relative to web dir (false) path to image. False
-     *                        by default
      * @return string|null
      */
-    public function getImagePath($absolute = false)
+    public function getImagePath()
     {
-        return null === $this->image
-            ? null
-            : ($absolute
-                ? $this->getUploadRootDir() . '/' . $this->image
-                : $this->getUploadDir() . '/' . $this->image
-            );
+        if ($this->image) {
+            return  $this->getUploadDir(true) . '/' . $this->image;
+        }
+        return null;
     }
 
     /**
@@ -964,11 +976,8 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
      */
     public function beforeSave()
     {
-        $this->created    =
-        $this->updated    = new DateTime();
+        $this->created = new DateTime();
         $this->loginCount = 0;
-
-        $this->preUpload();
     }
 
     /**
@@ -978,38 +987,7 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
      */
     public function preUpdate()
     {
-        $this->preUpload();
-    }
-
-    /**
-     * @ORM\PostPersist()
-     * @ORM\PostUpdate()
-     */
-    public function upload()
-    {
-        if (null === $this->imageFile) {
-            return;
-        }
-
-        $dir = $this->getUploadRootDir();
-
-        if (!file_exists($dir)) {
-            mkdir($dir, 0755, true);
-        }
-
-        $this->imageFile->move($dir, $this->image);
-
-        unset($this->imageFile);
-    }
-
-    /**
-     * @ORM\PostRemove()
-     */
-    public function postRemove()
-    {
-        if ($file = $this->getImagePath(true)) {
-            unlink($file);
-        }
+        $this->updated = new DateTime();
     }
 
     /**
@@ -1105,35 +1083,18 @@ class User extends AbstractEntityFlexible implements AdvancedUserInterface, \Ser
     }
 
     /**
-     * Get the absolute directory path where uploaded avatars should be saved
-     *
-     * @return string
-     */
-    protected function getUploadRootDir()
-    {
-        return __DIR__ . '/../../../../../web/' . $this->getUploadDir();
-    }
-
-    /**
      * Get the relative directory path to user avatar
      *
+     * @param  bool $forWeb
      * @return string
      */
-    protected function getUploadDir()
+    public function getUploadDir($forWeb = false)
     {
-        $suffix = $this->getCreatedAt() ? $this->getCreatedAt()->format('Y-m') : date('Y-m');
-
-        return 'uploads'
-            . DIRECTORY_SEPARATOR . 'users'
-            . DIRECTORY_SEPARATOR . $suffix;
-    }
-
-    protected function preUpload()
-    {
-        if (null !== $this->imageFile) {
-            $filename = sha1(uniqid(mt_rand(), true));
-
-            $this->image = $filename . '.' . $this->imageFile->guessExtension();
+        $ds = DIRECTORY_SEPARATOR;
+        if ($forWeb) {
+            $ds = '/';
         }
+        $suffix = $this->getCreatedAt() ? $this->getCreatedAt()->format('Y-m') : date('Y-m');
+        return 'uploads' . $ds . 'users' . $ds . $suffix;
     }
 }

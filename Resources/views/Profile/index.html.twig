@@ -6,12 +6,12 @@
 {% endblock %}
 
 {% block page_container %}
-<div class="container-fluid">
     {% block content %}
     <div class="usser-row">
-        <h1>{{ 'Users'|trans }} <a class="btn btn-primary pull-right" href="{{ path('oro_user_create', { back: app.request.uri }) }}">{{ 'Add user'|trans }}</a></h1>
+        <div class="container-fluid">
+            <h1>{{ 'Users'|trans }} <a class="btn btn-primary pull-right" href="{{ path('oro_user_create', { back: app.request.uri }) }}" title="{{ 'Create user'|trans }}">{{ 'Create user'|trans }}</a></h1>
+        </div>
         <div id="users-grid"></div>
     </div>
     {% endblock %}
-</div>
 {% endblock %}

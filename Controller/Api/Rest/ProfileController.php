@@ -2,29 +2,32 @@
 
 namespace Oro\Bundle\UserBundle\Controller\Api\Rest;
 
-use FOS\RestBundle\Controller\Annotations\NamePrefix;
-use FOS\RestBundle\Controller\Annotations\QueryParam;
-use FOS\RestBundle\Controller\FOSRestController;
-use FOS\RestBundle\Routing\ClassResourceInterface;
-use FOS\RestBundle\View\RouteRedirectView;
-use FOS\Rest\Util\Codes;
-
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
-use Oro\Bundle\UserBundle\Entity\User;
+use Symfony\Component\Form\FormInterface;
+
+use FOS\Rest\Util\Codes;
+use FOS\RestBundle\Routing\ClassResourceInterface;
+use FOS\RestBundle\Controller\Annotations\NamePrefix;
+use FOS\RestBundle\Controller\Annotations\QueryParam;
+
 use Oro\Bundle\UserBundle\Annotation\Acl;
 use Oro\Bundle\UserBundle\Annotation\AclAncestor;
+use Oro\Bundle\SoapBundle\Form\Handler\ApiFormHandler;
+use Oro\Bundle\SoapBundle\Entity\Manager\ApiFlexibleEntityManager;
+use Oro\Bundle\SoapBundle\Controller\Api\Rest\FlexibleRestController;
 
 /**
  * @NamePrefix("oro_api_")
  */
-class ProfileController extends FOSRestController implements ClassResourceInterface
+class ProfileController extends FlexibleRestController implements ClassResourceInterface
 {
     /**
      * Get the list of users
      *
      * @QueryParam(name="page", requirements="\d+", nullable=true, description="Page number, starting from 1. Defaults to 1.")
      * @QueryParam(name="limit", requirements="\d+", nullable=true, description="Number of items per page. defaults to 10.")
+     * @return \Symfony\Component\HttpFoundation\Response
      * @ApiDoc(
      *      description="Get the list of users",
      *      resource=true,
@@ -37,21 +40,10 @@ class ProfileController extends FOSRestController implements ClassResourceInterf
      */
     public function cgetAction()
     {
-        $pager = $this->get('knp_paginator')->paginate(
-            $this->getManager()
-                ->getListQuery()
-                ->getQuery()
-                ->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY),
-            (int) $this->getRequest()->get('page', 1),
-            (int) $this->getRequest()->get('limit', 10)
-        );
+        $page = (int)$this->getRequest()->get('page', 1);
+        $limit = (int)$this->getRequest()->get('limit', self::ITEMS_PER_PAGE);
 
-        return $this->handleView(
-            $this->view(
-                $pager->getItems(),
-                Codes::HTTP_OK
-            )
-        );
+        return $this->handleGetListRequest($page, $limit);
     }
 
     /**
@@ -59,6 +51,7 @@ class ProfileController extends FOSRestController implements ClassResourceInterf
      *
      * @param int $id User id
      *
+     * @return \Symfony\Component\HttpFoundation\Response
      * @ApiDoc(
      *      description="Get user data",
      *      resource=true,
@@ -66,23 +59,17 @@ class ProfileController extends FOSRestController implements ClassResourceInterf
      *          {"name"="id", "dataType"="integer"},
      *      }
      * )
-     * @AclAncestor("oro_user_profile_show")
+     * @AclAncestor("oro_user_profile_view")
      */
     public function getAction($id)
     {
-        $entity = $this->getManager()->findUserBy(array('id' => (int) $id));
-
-        return $this->handleView(
-            $this->view(
-                $entity,
-                $entity ? Codes::HTTP_OK : Codes::HTTP_NOT_FOUND
-            )
-        );
+        return $this->handleGetRequest($id);
     }
 
     /**
      * Create new user
      *
+     * @return \Symfony\Component\HttpFoundation\Response
      * @ApiDoc(
      *      description="Create new user",
      *      resource=true
@@ -91,15 +78,7 @@ class ProfileController extends FOSRestController implements ClassResourceInterf
      */
     public function postAction()
     {
-        $entity = $this->getManager()->createFlexible();
-
-        $this->fixFlexRequest($entity);
-
-        $view = $this->get('oro_user.form.handler.profile.api')->process($entity)
-            ? RouteRedirectView::create('oro_api_get_profile', array('id' => $entity->getId()), Codes::HTTP_CREATED)
-            : $this->view($this->get('oro_user.form.profile.api'), Codes::HTTP_BAD_REQUEST);
-
-        return $this->handleView($view);
+        return $this->handleCreateRequest();
     }
 
     /**
@@ -107,6 +86,7 @@ class ProfileController extends FOSRestController implements ClassResourceInterf
      *
      * @param int $id User id
      *
+     * @return \Symfony\Component\HttpFoundation\Response
      * @ApiDoc(
      *      description="Update existing user",
      *      resource=true,
@@ -114,24 +94,11 @@ class ProfileController extends FOSRestController implements ClassResourceInterf
      *          {"name"="id", "dataType"="integer"},
      *      }
      * )
-     * @AclAncestor("oro_user_profile_edit")
+     * @AclAncestor("oro_user_profile_update")
      */
     public function putAction($id)
     {
-        /* @var $entity \Oro\Bundle\UserBundle\Entity\User */
-        $entity = $this->getManager()->findUserBy(array('id' => (int) $id));
-
-        if (!$entity) {
-            return $this->handleView($this->view('', Codes::HTTP_NOT_FOUND));
-        }
-
-        $this->fixFlexRequest($entity);
-
-        $view = $this->get('oro_user.form.handler.profile.api')->process($entity)
-            ? RouteRedirectView::create('oro_api_get_profile', array('id' => $entity->getId()), Codes::HTTP_NO_CONTENT)
-            : $this->view($this->get('oro_user.form.profile.api'), Codes::HTTP_BAD_REQUEST);
-
-        return $this->handleView($view);
+        return $this->handleUpdateRequest($id);
     }
 
     /**
@@ -139,6 +106,7 @@ class ProfileController extends FOSRestController implements ClassResourceInterf
      *
      * @param int $id User id
      *
+     * @return \Symfony\Component\HttpFoundation\Response
      * @ApiDoc(
      *      description="Delete user",
      *      resource=true,
@@ -147,7 +115,7 @@ class ProfileController extends FOSRestController implements ClassResourceInterf
      *      }
      * )
      * @Acl(
-     *      id="oro_user_profile_remove",
+     *      id="oro_user_profile_delete",
      *      name="Remove user profile",
      *      description="Remove user profile",
      *      parent="oro_user_profile"
@@ -155,15 +123,7 @@ class ProfileController extends FOSRestController implements ClassResourceInterf
      */
     public function deleteAction($id)
     {
-        $entity = $this->getManager()->findUserBy(array('id' => (int) $id));
-
-        if (!$entity) {
-            return $this->handleView($this->view('', Codes::HTTP_NOT_FOUND));
-        }
-
-        $this->getManager()->deleteUser($entity);
-
-        return $this->handleView($this->view('', Codes::HTTP_NO_CONTENT));
+        return $this->handleDeleteRequest($id);
     }
 
     /**
@@ -171,6 +131,7 @@ class ProfileController extends FOSRestController implements ClassResourceInterf
      *
      * @param int $id User id
      *
+     * @return \Symfony\Component\HttpFoundation\Response
      * @ApiDoc(
      *      description="Get user roles",
      *      resource=true,
@@ -187,7 +148,7 @@ class ProfileController extends FOSRestController implements ClassResourceInterf
      */
     public function getRolesAction($id)
     {
-        $entity = $this->getManager()->findUserBy(array('id' => (int) $id));
+        $entity = $this->getManager()->getRepository()->findOneBy(array('id' => (int) $id));
 
         if (!$entity) {
             return $this->handleView($this->view('', Codes::HTTP_NOT_FOUND));
@@ -201,6 +162,7 @@ class ProfileController extends FOSRestController implements ClassResourceInterf
      *
      * @param int $id User id
      *
+     * @return \Symfony\Component\HttpFoundation\Response
      * @ApiDoc(
      *      description="Get user groups",
      *      resource=true,
@@ -217,7 +179,7 @@ class ProfileController extends FOSRestController implements ClassResourceInterf
      */
     public function getGroupsAction($id)
     {
-        $entity = $this->getManager()->findUserBy(array('id' => (int) $id));
+        $entity = $this->getManager()->find($id);
 
         if (!$entity) {
             return $this->handleView($this->view('', Codes::HTTP_NOT_FOUND));
@@ -231,6 +193,7 @@ class ProfileController extends FOSRestController implements ClassResourceInterf
      *
      * @param int $id User id
      *
+     * @return \Symfony\Component\HttpFoundation\Response
      * @ApiDoc(
      *      description="Get user's granted ACL resources",
      *      resource=true,
@@ -247,7 +210,7 @@ class ProfileController extends FOSRestController implements ClassResourceInterf
      */
     public function getAclAction($id)
     {
-        $user = $this->getManager()->findUserBy(array('id' => (int) $id));
+        $user = $this->getManager()->find($id);
 
         if (!$user) {
             return $this->handleView($this->view('', Codes::HTTP_NOT_FOUND));
@@ -261,6 +224,7 @@ class ProfileController extends FOSRestController implements ClassResourceInterf
      *
      * @QueryParam(name="email", requirements="[a-zA-Z0-9\-_\.@]+", nullable=true, description="Email to filter")
      * @QueryParam(name="username", requirements="[a-zA-Z0-9\-_\.]+", nullable=true, description="Username to filter")
+     * @return \Symfony\Component\HttpFoundation\Response
      * @ApiDoc(
      *      description="Get user by username or email",
      *      resource=true,
@@ -269,7 +233,7 @@ class ProfileController extends FOSRestController implements ClassResourceInterf
      *          {"name"="username", "dataType"="string"}
      *      }
      * )
-     * @AclAncestor("oro_user_profile_show")
+     * @AclAncestor("oro_user_profile_view")
      */
     public function getFilterAction()
     {
@@ -279,7 +243,7 @@ class ProfileController extends FOSRestController implements ClassResourceInterf
             return $this->handleView($this->view('', Codes::HTTP_BAD_REQUEST));
         }
 
-        $entity = $this->getManager()->findUserBy($params);
+        $entity = $this->getManager()->getRepository()->findOneBy($params);
 
         return $this->handleView(
             $this->view(
@@ -298,64 +262,28 @@ class ProfileController extends FOSRestController implements ClassResourceInterf
     }
 
     /**
-     * @return \Oro\Bundle\UserBundle\Entity\UserManager
+     * Get entity Manager
+     *
+     * @return ApiFlexibleEntityManager
      */
-    protected function getManager()
+    public function getManager()
     {
-        return $this->get('oro_user.manager');
+        return $this->get('oro_user.manager.api');
     }
 
     /**
-     * This is temporary fix for flexible entity values processing.
-     *
-     * Assumed that user will post data in the following format:
-     * {"profile":{"username":"john123","email":"john@doe.com","attributes":{"firstname":"John"}}}
-     *
-     * @param User $user
+     * @return FormInterface
      */
-    protected function fixFlexRequest(User $entity)
+    public function getForm()
     {
-        $request = $this->getRequest()->request;
-        $data = $request->get('profile', array());
-        $attrDef = $this->getManager()->getAttributeRepository()->findBy(array('entityType' => get_class($entity)));
-        $attrVal = isset($data['attributes']) ? $data['attributes'] : array();
+        return $this->get('oro_user.form.profile.api');
+    }
 
-        $data['attributes'] = array();
-
-        foreach ($attrDef as $i => $attr) {
-            /* @var $attr \Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityAttribute */
-            if ($attr->getBackendType() == 'options') {
-                if (in_array(
-                    $attr->getAttributeType(),
-                    array(
-                        'oro_flexibleentity_multiselect',
-                        'oro_flexibleentity_multicheckbox',
-                    )
-                )) {
-                    $type    = 'options';
-                    $default = array($attr->getOptions()->offsetGet(0)->getId());
-                } else {
-                    $type    = 'option';
-                    $default = $attr->getOptions()->offsetGet(0)->getId();
-                }
-            } else {
-                $type    = $attr->getBackendType();
-                $default = null;
-            }
-
-            $data['attributes'][$i]        = array();
-            $data['attributes'][$i]['id']  = $attr->getId();
-            $data['attributes'][$i][$type] = $default;
-
-            foreach ($attrVal as $field) {
-                if ($attr->getCode() == (string) $field->code) {
-                    $data['attributes'][$i][$type] = (string) $field->value;
-
-                    break;
-                }
-            }
-        }
-
-        $request->set('profile', $data);
+    /**
+     * @return ApiFormHandler
+     */
+    public function getFormHandler()
+    {
+        return $this->get('oro_user.form.handler.profile.api');
     }
 }

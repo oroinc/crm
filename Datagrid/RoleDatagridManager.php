@@ -2,6 +2,7 @@
 
 namespace Oro\Bundle\UserBundle\Datagrid;
 
+use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\GridBundle\Datagrid\DatagridManager;
 use Oro\Bundle\GridBundle\Field\FieldDescription;
 use Oro\Bundle\GridBundle\Field\FieldDescriptionCollection;
@@ -18,7 +19,7 @@ class RoleDatagridManager extends DatagridManager
     protected function getProperties()
     {
         return array(
-            new UrlProperty('edit_link', $this->router, 'oro_user_role_edit', array('id')),
+            new UrlProperty('update_link', $this->router, 'oro_user_role_update', array('id')),
             new UrlProperty('delete_link', $this->router, 'oro_api_delete_role', array('id')),
         );
     }
@@ -37,9 +38,10 @@ class RoleDatagridManager extends DatagridManager
                 'field_name'  => 'id',
                 'filter_type' => FilterInterface::TYPE_NUMBER,
                 'required'    => false,
-                'sortable'    => true,
-                'filterable'  => true,
-                'show_filter' => true,
+                'sortable'    => false,
+                'filterable'  => false,
+                'show_filter' => false,
+                'show_column' => false,
             )
         );
         $fieldsCollection->add($fieldId);
@@ -80,6 +82,28 @@ class RoleDatagridManager extends DatagridManager
     /**
      * {@inheritDoc}
      */
+    protected function createQuery()
+    {
+        $query = parent::createQuery();
+        $query->where('o.role <> :anon');
+
+        return $query;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function getQueryParameters()
+    {
+        return array_merge(
+            parent::getQueryParameters(),
+            array('anon' => User::ROLE_ANONYMOUS)
+        );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     protected function getRowActions()
     {
         $clickAction = array(
@@ -87,21 +111,21 @@ class RoleDatagridManager extends DatagridManager
             'type'         => ActionInterface::TYPE_REDIRECT,
             'acl_resource' => 'root',
             'options'      => array(
-                'label'         => 'Edit',
-                'link'          => 'edit_link',
+                'label'         => 'Update',
+                'link'          => 'update_link',
                 'runOnRowClick' => true,
                 'backUrl'       => true,
             )
         );
 
-        $editAction = array(
+        $updateAction = array(
             'name'         => 'edit',
             'type'         => ActionInterface::TYPE_REDIRECT,
             'acl_resource' => 'root',
             'options'      => array(
-                'label'   => 'Edit',
+                'label'   => 'Update',
                 'icon'    => 'edit',
-                'link'    => 'edit_link',
+                'link'    => 'update_link',
                 'backUrl' => true,
             )
         );
@@ -117,6 +141,6 @@ class RoleDatagridManager extends DatagridManager
             )
         );
 
-        return array($clickAction, $editAction, $deleteAction);
+        return array($clickAction, $updateAction, $deleteAction);
     }
 }

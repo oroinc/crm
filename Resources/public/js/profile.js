@@ -10,13 +10,8 @@ $(function() {
         $.get(el.attr('href'), function (data) {
             el.prev().text(data);
             var messageText = el.attr('data-message') + ' <strong>' + data + '</strong>';
-            if (!_.isUndefined(Oro.BootstrapModal)) {
-                var message = new Oro.BootstrapModal({
-                    title: el.attr('data-title'),
-                    content: messageText,
-                    okText: 'Ok'
-                });
-                message.open();
+            if (!_.isUndefined(Oro.Messages)) {
+                Oro.Messages.showMessage('success', messageText);
             } else {
                 alert(messageText);
             }
@@ -50,8 +45,7 @@ $(function() {
             var confirm = new Oro.BootstrapModal({
                 title: 'Delete Confirmation',
                 content: message,
-                okText: 'Yes, Delete',
-                cancelText: 'Cancel'
+                okText: 'Yes, Delete'
 
             });
             confirm.on('ok', doAction);
@@ -83,8 +77,7 @@ $(function() {
             var confirm = new Oro.BootstrapModal({
                 title: 'Delete Confirmation',
                 content: message,
-                okText: 'Yes, Delete',
-                cancelText: 'Cancel'
+                okText: 'Yes, Delete'
 
             });
             confirm.on('ok', doAction);
@@ -116,8 +109,7 @@ $(function() {
             var confirm = new Oro.BootstrapModal({
                 title: 'Delete Confirmation',
                 content: message,
-                okText: 'Yes, Delete',
-                cancelText: 'Cancel'
+                okText: 'Yes, Delete'
 
             });
             confirm.on('ok', doAction);
@@ -143,5 +135,22 @@ $(function() {
     $(document).on('change', '#btn-enable input', function(e) {
         $('.status-enabled').toggleClass('hide');
         $('.status-disabled').toggleClass('hide');
+    });
+
+    $(document).on('click', '#view-activity-btn', function (e) {
+        new Oro.widget.DialogView({
+            url: $(this).attr('href'),
+            dialogOptions: {
+                appendTo: '#main',
+                allowMaximize: true,
+                allowMinimize: true,
+                dblclick: 'maximize',
+                maximizedHeightDecreaseBy: 'minimize-bar',
+                width : 1000,
+                title: $(this).attr('title')
+            }
+        }).render();
+
+        return false;
     });
 });
