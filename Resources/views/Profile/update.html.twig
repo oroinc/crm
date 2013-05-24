@@ -25,11 +25,16 @@
                             {% endif %}
                             <div class="pull-left customer-info-top-actions">
                                 <div class="btn-group">
-                                    <a href="{{ app.session.get('back') ? app.session.get('back') : path('oro_user_index') }}" title="{{ 'Cancel'|trans }}" class="btn back">{{ 'Cancel'|trans }}</a>
+                                    <a href="{{ app.session.get('back') ? app.session.get('back') : path('oro_user_index') }}" class="btn back">{{ 'Cancel'|trans }}</a>
                                 </div>
                                 <div class="btn-group">
                                     <button type="submit" class="btn btn-success">{{ ' Save'|trans }}</button>
                                 </div>
+                            </div>
+                            <div class="pull-right usser-info-state">
+                                <ul class="inline-decorate">
+                                    <li><a class="no-hash" href="{{ path('oro_dataaudit_history', {entity:'Oro\\Bundle\\UserBundle\\Entity\\User', id: form.vars.value.id}) }}" id="view-activity-btn" title="{{ form.vars.value }} - {{ 'Change History'|trans }}">{{ 'Activity Log'|trans }}</a></li>
+                                </ul>
                             </div>
                         </div>
                     </div>
@@ -66,7 +71,6 @@
                     <div class="container-fluid" style="width: auto;">
                         <ul class="nav">
                             <li class="active"><a href="#scroll-main">{{ 'Overview'|trans }}</a></li>
-                            {#<li><a href="#scroll-attributes">{{ 'Additional data'|trans }}</a></li>#}
 
                             {% if form.groups is defined %}
                             <li><a href="#scroll-groups">{{ 'Groups'|trans }}</a></li>
@@ -76,7 +80,7 @@
                             <li><a href="#scroll-roles">{{ 'Roles'|trans }}</a></li>
                             {% endif %}
 
-                            {% if form.attributes is defined %}
+                            {% if form.values  is defined %}
                             <li><a href="#scroll-attributes">{{ 'Additional data'|trans }}</a></li>
                             {% endif %}
                         </ul>
@@ -151,12 +155,12 @@
                     </div>
                     {% endif %}
 
-                    {% if form.attributes is defined %}
+                    {% if form.values  is defined %}
                     <div class="usser-row">
                         <h4 id="scroll-attributes" class="scrollspy-title">{{ 'Additional data'|trans }}</h4>
                         <div class="row-fluid">
                             <fieldset class="form-horizontal" id="attributes-list">
-                                {{ form_row(form.attributes) }}
+                                {{ form_row(form.values) }}
                             </fieldset>
                         </div>
                     </div>
@@ -171,4 +175,3 @@
     </form>
     {% endblock content %}
 {% endblock %}
-
