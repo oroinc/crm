@@ -33,17 +33,17 @@ class User extends Page implements Entity
 
     public function init($new = false)
     {
-        $this->username = $this->byId('oro_user_profile_form_username');
+        $this->username = $this->byId('oro_user_user_form_username');
         if ($new) {
-            $this->first_password = $this->byId('oro_user_profile_form_plainPassword_first');
-            $this->second_password = $this->byId('oro_user_profile_form_plainPassword_second');
+            $this->first_password = $this->byId('oro_user_user_form_plainPassword_first');
+            $this->second_password = $this->byId('oro_user_user_form_plainPassword_second');
         }
-        $this->enabled = $this->select($this->byId('oro_user_profile_form_enabled'));
-        $this->first_name = $this->byId('oro_user_profile_form_firstName');
-        $this->last_name = $this->byId('oro_user_profile_form_lastName');
-        $this->email = $this->byId('oro_user_profile_form_email');
-        $this->groups = $this->byId('oro_user_profile_form_groups');
-        $this->roles = $this->byId('oro_user_profile_form_rolesCollection');
+        $this->enabled = $this->select($this->byId('oro_user_user_form_enabled'));
+        $this->first_name = $this->byId('oro_user_user_form_firstName');
+        $this->last_name = $this->byId('oro_user_user_form_lastName');
+        $this->email = $this->byId('oro_user_user_form_email');
+        $this->groups = $this->byId('oro_user_user_form_groups');
+        $this->roles = $this->byId('oro_user_user_form_rolesCollection');
 
         return $this;
     }
