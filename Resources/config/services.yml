@@ -63,6 +63,7 @@ services:
         class: %oro_contact.type.contact_value.class%
         arguments:
             - @oro_contact.manager.flexible
+            - @oro_flexibleentity.value_form.value_subscriber
         tags:
             - { name: form.type, alias: oro_contact_value }
 
