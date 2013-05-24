@@ -26,7 +26,8 @@ class PhoneType extends CollectionItemAbstract
                     array_keys(self::getTypesArray()),
                     array_values(self::getTypesArray())
                 )
-            )
+            ),
+            'attr' => array ('class' => 'oro-multiselect')
         );
     }
 
@@ -36,7 +37,7 @@ class PhoneType extends CollectionItemAbstract
     public function getTypesArray()
     {
         return array(
-            self::TYPE_HOME      => 'Landline phone',
+            self::TYPE_HOME      => 'Office phone',
             self::TYPE_CELL      => 'Cell phone'
         );
     }
