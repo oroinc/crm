@@ -2,15 +2,16 @@
 namespace Oro\Bundle\FlexibleEntityBundle\Form\Type;
 
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\AbstractType;
 
-class PhoneCollectionType extends AbstractType
+class PhoneCollectionType extends CollectionAbstract
 {
     /**
      * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        parent::buildForm($builder, $options);
+
         $builder->add(
             'collection',
             'collection',
