@@ -7,7 +7,7 @@ Oro\Bundle\UserBundle\Entity\User:
         name: oro_user_view
         parameters:
             id: id
-    search_template: OroUserBundle:Profile:searchResult.html.twig
+    search_template: OroUserBundle:User:searchResult.html.twig
     entity_icon: bundles/orouser/img/search.png
     fields:
         -

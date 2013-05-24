@@ -4,7 +4,7 @@ namespace Oro\Bundle\UserBundle\Form\Handler;
 
 use Oro\Bundle\UserBundle\Entity\User;
 
-class ProfileHandler extends AbstractUserHandler
+class UserHandler extends AbstractUserHandler
 {
     protected function onSuccess(User $user)
     {

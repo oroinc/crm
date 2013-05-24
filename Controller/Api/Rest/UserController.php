@@ -20,7 +20,7 @@ use Oro\Bundle\SoapBundle\Controller\Api\Rest\FlexibleRestController;
 /**
  * @NamePrefix("oro_api_")
  */
-class ProfileController extends FlexibleRestController implements ClassResourceInterface
+class UserController extends FlexibleRestController implements ClassResourceInterface
 {
     /**
      * Get the list of users
@@ -36,7 +36,7 @@ class ProfileController extends FlexibleRestController implements ClassResourceI
      *          {"name"="limit", "dataType"="integer"}
      *      }
      * )
-     * @AclAncestor("oro_user_profile_list")
+     * @AclAncestor("oro_user_user_list")
      */
     public function cgetAction()
     {
@@ -59,7 +59,7 @@ class ProfileController extends FlexibleRestController implements ClassResourceI
      *          {"name"="id", "dataType"="integer"},
      *      }
      * )
-     * @AclAncestor("oro_user_profile_view")
+     * @AclAncestor("oro_user_user_view")
      */
     public function getAction($id)
     {
@@ -74,7 +74,7 @@ class ProfileController extends FlexibleRestController implements ClassResourceI
      *      description="Create new user",
      *      resource=true
      * )
-     * @AclAncestor("oro_user_profile_create")
+     * @AclAncestor("oro_user_user_create")
      */
     public function postAction()
     {
@@ -94,7 +94,7 @@ class ProfileController extends FlexibleRestController implements ClassResourceI
      *          {"name"="id", "dataType"="integer"},
      *      }
      * )
-     * @AclAncestor("oro_user_profile_update")
+     * @AclAncestor("oro_user_user_update")
      */
     public function putAction($id)
     {
@@ -115,10 +115,10 @@ class ProfileController extends FlexibleRestController implements ClassResourceI
      *      }
      * )
      * @Acl(
-     *      id="oro_user_profile_delete",
-     *      name="Remove user profile",
-     *      description="Remove user profile",
-     *      parent="oro_user_profile"
+     *      id="oro_user_user_delete",
+     *      name="Remove user user",
+     *      description="Remove user user",
+     *      parent="oro_user_user"
      * )
      */
     public function deleteAction($id)
@@ -140,7 +140,7 @@ class ProfileController extends FlexibleRestController implements ClassResourceI
      *      }
      * )
      * @Acl(
-     *      id="oro_user_profile_roles",
+     *      id="oro_user_user_roles",
      *      name="View user roles",
      *      description="View user roles",
      *      parent="oro_user"
@@ -171,7 +171,7 @@ class ProfileController extends FlexibleRestController implements ClassResourceI
      *      }
      * )
      * @Acl(
-     *      id="oro_user_profile_groups",
+     *      id="oro_user_user_groups",
      *      name="View user groups",
      *      description="View user groups",
      *      parent="oro_user"
@@ -202,7 +202,7 @@ class ProfileController extends FlexibleRestController implements ClassResourceI
      *      }
      * )
      * @Acl(
-     *      id="oro_user_profile_acl",
+     *      id="oro_user_user_acl",
      *      name="View user ACL",
      *      description="View user's granted ACL resources",
      *      parent="oro_user"
@@ -233,7 +233,7 @@ class ProfileController extends FlexibleRestController implements ClassResourceI
      *          {"name"="username", "dataType"="string"}
      *      }
      * )
-     * @AclAncestor("oro_user_profile_view")
+     * @AclAncestor("oro_user_user_view")
      */
     public function getFilterAction()
     {
@@ -276,7 +276,7 @@ class ProfileController extends FlexibleRestController implements ClassResourceI
      */
     public function getForm()
     {
-        return $this->get('oro_user.form.profile.api');
+        return $this->get('oro_user.form.user.api');
     }
 
     /**
@@ -284,6 +284,6 @@ class ProfileController extends FlexibleRestController implements ClassResourceI
      */
     public function getFormHandler()
     {
-        return $this->get('oro_user.form.handler.profile.api');
+        return $this->get('oro_user.form.handler.user.api');
     }
 }

@@ -23,7 +23,7 @@ class RestInvalidUsersTest extends WebTestCase
         $this->client = static::createClient(array(), ToolsAPI::generateWsseHeader(ToolsAPI::USER_NAME, self::USER_PASSWORD));
 
         $request = array(
-            "profile" => array (
+            "user" => array (
                 "username" => 'user_' . mt_rand(),
                 "email" => 'test_'  . mt_rand() . '@test.com',
                 "enabled" => 'true',
@@ -33,7 +33,7 @@ class RestInvalidUsersTest extends WebTestCase
                 "rolesCollection" => array("1")
             )
         );
-        $this->client->request('POST', 'http://localhost/api/rest/latest/profile', $request);
+        $this->client->request('POST', 'http://localhost/api/rest/latest/user', $request);
         $result = $this->client->getResponse();
         ToolsAPI::assertJsonResponse($result, 401);
     }
@@ -43,7 +43,7 @@ class RestInvalidUsersTest extends WebTestCase
         $this->client = static::createClient(array(), ToolsAPI::generateWsseHeader(self::USER_NAME, ToolsAPI::USER_PASSWORD));
 
         $request = array(
-            "profile" => array (
+            "user" => array (
                 "username" => 'user_' . mt_rand(),
                 "email" => 'test_'  . mt_rand() . '@test.com',
                 "enabled" => 'true',
@@ -53,7 +53,7 @@ class RestInvalidUsersTest extends WebTestCase
                 "rolesCollection" => array("1")
             )
         );
-        $this->client->request('POST', 'http://localhost/api/rest/latest/profile', $request);
+        $this->client->request('POST', 'http://localhost/api/rest/latest/user', $request);
         $result = $this->client->getResponse();
         ToolsAPI::assertJsonResponse($result, 401);
     }
