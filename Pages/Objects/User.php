@@ -175,7 +175,7 @@ class User extends Page implements Entity
 
     public function edit()
     {
-        $this->byXPath("//div[@class='btn-group icons-holder']/a[contains(., 'Edit')]")->click();
+        $this->byXPath("//div[@class='pull-left btn-group icons-holder']/a[@title = 'Edit profile']")->click();
         $this->waitPageToLoad();
         $this->waitForAjax();
         $this->init();
