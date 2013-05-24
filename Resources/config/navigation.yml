@@ -12,13 +12,13 @@ oro_menu_config:
                 routes: ['oro_account_*']
 
         shortcut_new_account:
-            label: Create New Account
+            label: Create new account
             route: oro_account_create
             extras:
                 description: Create new account instance
                 isCustomAction: true
         shortcut_list_accounts:
-            label: Accounts List
+            label: Show accounts list
             route: oro_account_index
             extras:
                 description: List of accounts
