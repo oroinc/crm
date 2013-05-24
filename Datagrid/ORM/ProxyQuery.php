@@ -402,4 +402,15 @@ class ProxyQuery extends BaseProxyQuery implements ProxyQueryInterface
 
         return $this;
     }
+
+    /**
+     * Set query parameter
+     *
+     * @param string $name
+     * @param mixed $value
+     */
+    public function setParameter($name, $value)
+    {
+        $this->getQueryBuilder()->setParameter($name, $value);
+    }
 }

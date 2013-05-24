@@ -222,11 +222,12 @@ abstract class DatagridManager implements DatagridManagerInterface
 
     /**
      * Apply query parameters to query object
+     *
+     * @param ProxyQueryInterface $query
      */
     protected function applyQueryParameters(ProxyQueryInterface $query)
     {
         foreach ($this->getQueryParameters() as $name => $value) {
-            // TODO Add method to ProxyQueryInterface
             $query->setParameter($name, $value);
         }
     }
@@ -358,7 +359,7 @@ abstract class DatagridManager implements DatagridManagerInterface
     {
         $sorters = array();
 
-        // get first field
+        // get first sortable field
         $fields = $this->getSorters();
         if (!empty($fields)) {
             /** @var $field FieldDescriptionInterface */

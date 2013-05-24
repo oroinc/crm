@@ -15,6 +15,7 @@ use Oro\Bundle\GridBundle\Field\FieldDescriptionInterface;
 use Oro\Bundle\GridBundle\Property\PropertyInterface;
 use Oro\Bundle\GridBundle\Datagrid\RequestParameters;
 use Oro\Bundle\GridBundle\Datagrid\PagerInterface;
+use Oro\Bundle\GridBundle\EventDispatcher\ResultDatagridEvent;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyMethods)
@@ -368,6 +369,22 @@ class DatagridTest extends \PHPUnit_Framework_TestCase
         $formBuilder = $this->getMockForAbstractClass('Symfony\Component\Form\Tests\FormBuilderInterface');
         $formBuilder->expects($this->once())->method('getForm')->will($this->returnValue($form));
 
+        $eventDispatcher = $this->getMockForAbstractClass(
+            'Symfony\Component\EventDispatcher\EventDispatcherInterface',
+            array(),
+            '',
+            false,
+            true,
+            true,
+            array('dispatch')
+        );
+        $eventDispatcher->expects($this->once())
+            ->method('dispatch')
+            ->with(
+                ResultDatagridEvent::NAME,
+                $this->isInstanceOf('Oro\Bundle\GridBundle\EventDispatcher\ResultDatagridEvent')
+            );
+
         $parameters = $this->createParameters($parametersData);
 
         $datagrid = $this->createDatagrid(
@@ -375,7 +392,8 @@ class DatagridTest extends \PHPUnit_Framework_TestCase
                 'query' => $query,
                 'pager' => $pager,
                 'formBuilder' => $formBuilder,
-                'parameters' => $parameters
+                'parameters' => $parameters,
+                'eventDispatcher' => $eventDispatcher,
             )
         );
 
@@ -474,6 +492,7 @@ class DatagridTest extends \PHPUnit_Framework_TestCase
             $arguments['formBuilder'],
             $arguments['routeGenerator'],
             $arguments['parameters'],
+            $arguments['eventDispatcher'],
             $arguments['name'],
             $arguments['entityHint']
         );
@@ -482,14 +501,17 @@ class DatagridTest extends \PHPUnit_Framework_TestCase
     private function getDatagridMockArguments(array $arguments = array())
     {
         $defaultArguments = array(
-            'query'          => $this->getMockForAbstractClass('Oro\Bundle\GridBundle\Datagrid\ProxyQueryInterface'),
-            'columns'        => $this->getMock('Oro\Bundle\GridBundle\Field\FieldDescriptionCollection'),
-            'pager'          => $this->getMockForAbstractClass('Oro\Bundle\GridBundle\Datagrid\PagerInterface'),
-            'formBuilder'    => $this->getMockForAbstractClass('Symfony\Component\Form\Tests\FormBuilderInterface'),
-            'routeGenerator' => $this->getMockForAbstractClass('Oro\Bundle\GridBundle\Route\RouteGeneratorInterface'),
-            'parameters'     => $this->getMockForAbstractClass('Oro\Bundle\GridBundle\Datagrid\ParametersInterface'),
-            'name'           => null,
-            'entityHint'     => null,
+            'query'           => $this->getMockForAbstractClass('Oro\Bundle\GridBundle\Datagrid\ProxyQueryInterface'),
+            'columns'         => $this->getMock('Oro\Bundle\GridBundle\Field\FieldDescriptionCollection'),
+            'pager'           => $this->getMockForAbstractClass('Oro\Bundle\GridBundle\Datagrid\PagerInterface'),
+            'formBuilder'     => $this->getMockForAbstractClass('Symfony\Component\Form\Tests\FormBuilderInterface'),
+            'routeGenerator'  => $this->getMockForAbstractClass('Oro\Bundle\GridBundle\Route\RouteGeneratorInterface'),
+            'parameters'      => $this->getMockForAbstractClass('Oro\Bundle\GridBundle\Datagrid\ParametersInterface'),
+            'eventDispatcher' => $this->getMockForAbstractClass(
+                'Symfony\Component\EventDispatcher\EventDispatcherInterface'
+            ),
+            'name'            => null,
+            'entityHint'      => null,
         );
         return array_merge($defaultArguments, $arguments);
     }

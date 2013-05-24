@@ -4,6 +4,7 @@ namespace Oro\Bundle\GridBundle\Datagrid;
 
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Form;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 use Sonata\AdminBundle\Filter\FilterInterface as SonataFilterInterface;
 
@@ -15,6 +16,7 @@ use Oro\Bundle\GridBundle\Property\PropertyInterface;
 use Oro\Bundle\GridBundle\Sorter\SorterInterface;
 use Oro\Bundle\GridBundle\Route\RouteGeneratorInterface;
 use Oro\Bundle\GridBundle\Action\ActionInterface;
+use Oro\Bundle\GridBundle\EventDispatcher\ResultDatagridEvent;
 
 class Datagrid implements DatagridInterface
 {
@@ -68,6 +70,11 @@ class Datagrid implements DatagridInterface
     protected $parameters;
 
     /**
+     * @var EventDispatcherInterface
+     */
+    protected $eventDispatcher;
+
+    /**
      * @var array
      */
     protected $filters = array();
@@ -104,6 +111,7 @@ class Datagrid implements DatagridInterface
      * @param FormBuilderInterface $formBuilder
      * @param RouteGeneratorInterface $routeGenerator
      * @param ParametersInterface $parameters
+     * @param EventDispatcherInterface $eventDispatcher
      * @param string $name
      * @param string $entityHint
      */
@@ -114,18 +122,20 @@ class Datagrid implements DatagridInterface
         FormBuilderInterface $formBuilder,
         RouteGeneratorInterface $routeGenerator,
         ParametersInterface $parameters,
+        EventDispatcherInterface $eventDispatcher,
         $name,
         $entityHint = null
     ) {
-        $this->query          = $query;
-        $this->columns        = $columns;
-        $this->pager          = $pager;
-        $this->formBuilder    = $formBuilder;
-        $this->routeGenerator = $routeGenerator;
-        $this->parameters     = $parameters;
-        $this->name           = $name;
-        $this->entityHint     = $entityHint;
-        $this->properties     = new PropertyCollection();
+        $this->query           = $query;
+        $this->columns         = $columns;
+        $this->pager           = $pager;
+        $this->formBuilder     = $formBuilder;
+        $this->routeGenerator  = $routeGenerator;
+        $this->parameters      = $parameters;
+        $this->eventDispatcher = $eventDispatcher;
+        $this->name            = $name;
+        $this->entityHint      = $entityHint;
+        $this->properties      = new PropertyCollection();
 
         /** @var $field FieldDescriptionInterface */
         if (count($this->columns)) {
@@ -338,15 +348,24 @@ class Datagrid implements DatagridInterface
     }
 
     /**
-     * @return ResultRecord
+     * @return ResultRecord[]
      */
     public function getResults()
     {
         $this->applyParameters();
+        $rows = $this->getQuery()->execute();
+
+        // dispatch result event
+        $event = new ResultDatagridEvent($this);
+        $event->setRows($rows);
+        $this->eventDispatcher->dispatch(ResultDatagridEvent::NAME, $event);
+        $rows = $event->getRows();
+
         $result = array();
-        foreach ($this->getQuery()->execute() as $row) {
+        foreach ($rows as $row) {
             $result[] = new ResultRecord($row);
         }
+
         return $result;
     }
 

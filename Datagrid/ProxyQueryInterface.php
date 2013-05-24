@@ -33,4 +33,12 @@ interface ProxyQueryInterface extends BaseProxyQueryInterface
      * @return ProxyQueryInterface
      */
     public function addSelect($select = null, $addToWhitelist = false);
+
+    /**
+     * Set query parameter
+     *
+     * @param string $name
+     * @param mixed $value
+     */
+    public function setParameter($name, $value);
 }

@@ -2,7 +2,7 @@
 
 namespace Oro\Bundle\GridBundle\Tests\Unit\Builder\ORM;
 
-use Oro\Bundle\GridBundle\Builder\ORM\ListBuilder;
+use Oro\Bundle\GridBundle\Builder\ListBuilder;
 use Oro\Bundle\GridBundle\Field\FieldDescription;
 use Oro\Bundle\GridBundle\Field\FieldDescriptionCollection;
 
