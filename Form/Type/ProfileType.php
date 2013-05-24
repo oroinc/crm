@@ -11,8 +11,11 @@ use Symfony\Component\Security\Core\SecurityContextInterface;
 
 use Doctrine\ORM\EntityRepository;
 
-use Oro\Bundle\UserBundle\Acl\Manager as AclManager;
 use Oro\Bundle\FlexibleEntityBundle\Form\Type\FlexibleType;
+
+use Oro\Bundle\DataAuditBundle\Form\EventListener\AuditableSubscriber;
+
+use Oro\Bundle\UserBundle\Acl\Manager as AclManager;
 use Oro\Bundle\UserBundle\Form\EventListener\ProfileSubscriber;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\UserBundle\Form\Type\EmailType;
@@ -53,6 +56,7 @@ class ProfileType extends FlexibleType
         // user fields
         $builder
             ->addEventSubscriber(new ProfileSubscriber($builder->getFormFactory(), $this->aclManager, $this->security))
+            ->addEventSubscriber(new AuditableSubscriber())
             ->add('username', 'text', array(
                 'required'       => true,
             ))
