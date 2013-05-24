@@ -13,7 +13,6 @@ use Doctrine\ORM\EntityRepository;
 
 use Oro\Bundle\UserBundle\Acl\Manager as AclManager;
 use Oro\Bundle\FlexibleEntityBundle\Form\Type\FlexibleType;
-use Oro\Bundle\FlexibleEntityBundle\Form\Type\FlexibleValueType;
 use Oro\Bundle\UserBundle\Form\EventListener\ProfileSubscriber;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\UserBundle\Form\Type\EmailType;
@@ -121,8 +120,8 @@ class ProfileType extends FlexibleType
      */
     public function addDynamicAttributesFields(FormBuilderInterface $builder)
     {
-        $builder->add('attributes', 'collection', array(
-            'type'          => new FlexibleValueType($this->flexibleManager),
+        $builder->add('values', 'collection', array(
+            'type'          => 'oro_user_profile_value',
             'property_path' => 'values',
             'allow_add'     => true,
             'allow_delete'  => true,

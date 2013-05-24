@@ -11,6 +11,7 @@ parameters:
     oro_user.security.provider.class: Oro\Bundle\UserBundle\Security\UserProvider
     oro_user.security.login.class:    Oro\Bundle\UserBundle\EventListener\LoginSubscriber
     oro_user.type.profile.class:      Oro\Bundle\UserBundle\Form\Type\ProfileType
+    oro_user.type.profile_value.class: Oro\Bundle\UserBundle\Form\Type\ProfileValueType
     oro_user.type.profile.api.class:  Oro\Bundle\UserBundle\Form\Type\ProfileApiType
     oro_user.type.reset.class:        Oro\Bundle\UserBundle\Form\Type\ResetType
     oro_user.type.role.class:         Oro\Bundle\UserBundle\Form\Type\RoleType
@@ -28,6 +29,7 @@ parameters:
     oro_user.acl.pointcut.class:      Oro\Bundle\UserBundle\Acl\AclPointcut
     oro_user.acl.interceptor.class:   Oro\Bundle\UserBundle\Acl\AclInterceptor
     oro_user.acl.manager.class:       Oro\Bundle\UserBundle\Acl\Manager
+    oro_user.acl.manager.api.class:   Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
     oro_user.acl.twig.class:          Oro\Bundle\UserBundle\Twig\OroUserExtension
     oro_user.user_menu.builder.class: Oro\Bundle\UserBundle\Menu\UserMenuBuilder
     oro_user.role.listener.class:     Oro\Bundle\UserBundle\EventListener\RoleListener
@@ -123,6 +125,14 @@ services:
         tags:
             - { name: form.type, alias: oro_user_profile }
 
+    oro_user.type.profile_value:
+        class: %oro_user.type.profile_value.class%
+        arguments:
+            - @oro_user.manager.flexible
+            - @oro_flexibleentity.value_form.value_subscriber
+        tags:
+            - { name: form.type, alias: oro_user_profile_value }
+
     oro_user.form.type.profile.api:
         class:                        %oro_user.type.profile.api.class%
         arguments:                    [@oro_user.manager.flexible, "@oro_user.acl_manager", "@security.context"]
@@ -211,6 +221,10 @@ services:
     oro_user.acl_manager:
         class:                        %oro_user.acl.manager.class%
         arguments:                    ["@doctrine.orm.entity_manager", "@oro_user.acl_reader", "@cache", "@security.context", "@oro_user.acl_config_reader"]
+
+    oro_user.acl_manager.api:
+        class:                        %oro_user.acl.manager.api.class%
+        arguments:                    [%oro_user.acl.entity.class%, @doctrine.orm.entity_manager]
 
     oro_user.user_menu:
         class:                        %oro_user.user_menu.builder.class%
