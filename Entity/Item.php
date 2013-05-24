@@ -331,8 +331,8 @@ class Item
      */
     public function beforeSave()
     {
-        $this->createdAt = new \DateTime();
-        $this->updatedAt = new \DateTime();
+        $this->createdAt = new \DateTime('now', new \DateTimeZone('UTC'));
+        $this->updatedAt = new \DateTime('now', new \DateTimeZone('UTC'));
     }
 
     /**
@@ -341,7 +341,7 @@ class Item
      */
     public function beforeUpdate()
     {
-        $this->updatedAt = new \DateTime();
+        $this->updatedAt = new \DateTime('now', new \DateTimeZone('UTC'));
     }
 
     /**
