@@ -69,9 +69,15 @@ class ResponseHistoryListener
         if (!$this->matchRequest($response, $request)) {
             return false;
         }
+        //Remove hash navigation param from url
+        $url = preg_replace(
+            '/[\?&](' . ResponseHashnavListener::HASH_NAV_PARAM . '=1)/',
+            '',
+            $request->getRequestUri()
+        );
 
         $postArray = array(
-            'url'      => $request->getRequestUri(),
+            'url'      => $url,
             'user'     => $this->user,
         );
 
@@ -113,6 +119,7 @@ class ResponseHistoryListener
             || $request->getMethod() != 'GET'
             || ($request->isXmlHttpRequest() && !$request->headers->get('x-oro-hash-navigation'))
             || $route[0] == '_'
+            || $route == 'oro_default'
             || is_null($this->user));
     }
 }
