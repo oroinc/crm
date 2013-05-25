@@ -47,7 +47,7 @@ class AuditController extends Controller
      * @Route(
      *      "/history/{entity}/{id}/{_format}",
      *      name="oro_dataaudit_history",
-     *      requirements={"entity"="[a-zA-Z\\]+", "id"="\d+"},
+     *      requirements={"entity"="[a-zA-Z_]+", "id"="\d+"},
      *      defaults={"entity"="entity", "id"=0, "_format" = "html"}
      * )
      * @Acl(
@@ -62,7 +62,7 @@ class AuditController extends Controller
         /** @var $datagridManager AuditHistoryDatagridManager */
         $datagridManager = $this->get('oro_dataaudit.history.datagrid.manager');
 
-        $datagridManager->entityClass   = $entity;
+        $datagridManager->entityClass   = str_replace('_', '\\', $entity);
         $datagridManager->entityClassId = $id;
 
         $datagridManager->getRouteGenerator()->setRouteParameters(
