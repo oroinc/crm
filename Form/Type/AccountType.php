@@ -45,7 +45,8 @@ class AccountType extends FlexibleType
                 'by_reference' => false,
                 'attr'          => array(
                     'data-col'  => 2,
-                )
+                ),
+                'cascade_validation' => true
             )
         );
     }
@@ -60,6 +61,7 @@ class AccountType extends FlexibleType
                 'data_class' => $this->flexibleClass,
                 'intention' => 'account',
                 'extra_fields_message' => 'This form should not contain extra fields: "{{ extra_fields }}"',
+                'cascade_validation' => true
             )
         );
     }
