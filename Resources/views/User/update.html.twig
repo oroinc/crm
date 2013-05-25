@@ -15,7 +15,7 @@
                 <div class="clearfix">
                     <div class="pull-right">
                         <div class="pull-right">
-                            {% if form.vars.value.id and resource_granted('oro_user_user_delete') %}
+                            {% if form.vars.value.id and resource_granted('oro_user_user_delete') and current_user is defined and form.vars.value.id!=current_user.id %}
                             <div class="pull-left btn-group icons-holder">
                                 <a href="javascript: void(0);" class="btn icons-holder-text" id="btn-remove-user" data-id="{{ form.vars.value.id }}" data-message="{{ 'Are you sure you want to delete this user?'|trans }}" title="{{ 'Delete user'|trans }}"><i class="icon-trash hide-text">{{ 'Remove'|trans }}</i>Delete</a>
                             </div>
