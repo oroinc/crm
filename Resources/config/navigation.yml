@@ -19,16 +19,16 @@ oro_menu_config:
             extras:
                 routes: ['oro_user_group_*']
         shortcut_new_user:
-            label: Create user
+            label: Create new user
             route: oro_user_create
             extras:
                 description: Create new user instance
                 isCustomAction: true
         shortcut_list_users:
-            label: Users list
+            label: Show users list
             route: oro_user_index
             extras:
-                description: List of users
+                description: List of all system users
                 isCustomAction: true
 
     tree:

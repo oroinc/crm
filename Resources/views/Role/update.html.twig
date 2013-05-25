@@ -55,14 +55,16 @@
                                 <div class="btn-group">
                                     <a href="{{ app.session.get('back') ? app.session.get('back') : path('oro_user_index') }}" class="btn back" title="{{ 'Cancel'|trans }}">{{ 'Cancel'|trans }}</a>
                                 </div>
-                                <button type="submit" class="btn btn-success" title="{{ 'Save role'|trans }}">{{ ' Save'|trans }}</button>
+                                <div class="btn-group">
+                                    <button type="submit" class="btn btn-success" title="{{ 'Save role'|trans }}">{{ ' Save'|trans }}</button>
+                                </div>
                             </div>
                         </div>
                         <div class="pull-left">
-                            <div class="form-info clearfix">
+                            <div class="form-info form-info-edit clearfix">
                                 <div class="customer-content pull-left">
                                     <div class="clearfix-oro oro-padding">
-                                        <div class="sub-title"><div class="sub-title"><a href="{{ path('oro_user_role_index') }}">{{ 'Roles'|trans }}</a></div></div>
+                                        <div class="sub-title"><a href="{{ path('oro_user_role_index') }}">{{ 'Roles'|trans }}</a></div>
                                         <span class="separator">/</span>
                                         {% if form.vars.value.id %}
                                             <h1 class="form-info-name">{{ form.vars.value.label }}</h1>
