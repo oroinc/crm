@@ -97,13 +97,12 @@ navigation.pinbar.MainView = navigation.MainViewAbstract.extend({
                 item.set('url', itemUrl);
             }
             if (url != this.getCurrentPageItemData().url) {
-                item.save(null, {success: _.bind(function() {
-                    if (!goBack) {
-                        Oro.Navigation.prototype.setLocation(url);
-                    } else {
-                        this.goToLatestOpenedPage();
-                    }}, this)
-                });
+                if (!goBack) {
+                    Oro.Navigation.prototype.setLocation(url);
+                } else {
+                    this.goToLatestOpenedPage();
+                }
+                item.save(null);
             }
         }
     },
@@ -162,7 +161,8 @@ navigation.pinbar.MainView = navigation.MainViewAbstract.extend({
         } else {
             var currentItem = new navigation.pinbar.Item(this.getNewItemData(Backbone.$(e.currentTarget)));
             this.options.collection.unshift(currentItem);
-            currentItem.save(null, {success: _.bind(this.handleItemStateChange, this)});
+            this.handleItemStateChange(currentItem);
+            //currentItem.save(null);
         }
     },
 
@@ -173,7 +173,7 @@ navigation.pinbar.MainView = navigation.MainViewAbstract.extend({
     {
         var pinnedItem = this.getItemForCurrentPage();
         if (pinnedItem.length) {
-            _.each(pinnedItem, function(item) {item.destroy({wait: true});});
+            _.each(pinnedItem, function(item) {item.destroy({wait: false});});
         } else {
             this.goToLatestOpenedPage();
         }
