@@ -1,4 +1,5 @@
 {% extends 'OroContactBundle::layout.html.twig' %}
+{% form_theme form with 'OroUIBundle:Form:fields.html.twig' %}
 
 {% set title = form.vars.value.id ? 'Update group'|trans : 'Add group'|trans %}
 
@@ -25,15 +26,17 @@
         <div class="btn-group">
             <a href="{{ app.session.get('back') ? app.session.get('back') : path('oro_account_index') }}" class="btn back">{{ 'Cancel'|trans }}</a>
         </div>
-        <button type="submit" class="btn btn-success">{{ ' Save'|trans }}</button>
+        <div class="btn-group">
+            <button type="submit" class="btn btn-success">{{ ' Save'|trans }}</button>
+        </div>
     </div>
 {% endblock %}
 
 {% block content %}
-<div class="container-fluid">
-    <form action="{{ form.vars.value.id ? path('oro_contact_group_update', { id: form.vars.value.id, back: app.session.get('back') }) : path('oro_contact_group_create', { back: app.session.get('back') }) }}" {{ form_enctype(form) }}
+    {{ JSFV(form) }}
+    <form id="{{ form.getName() }}" action="{{ form.vars.value.id ? path('oro_contact_group_update', { id: form.vars.value.id, back: app.session.get('back') }) : path('oro_contact_group_create', { back: app.session.get('back') }) }}" {{ form_enctype(form) }}
         method="post" data-collect="true" class="form-register scrollable-substructure">
-        <div class="navigation clearfix navbar-extra">
+        <div class="navigation clearfix navbar-extra navbar-extra-right">
             <div class="row">
                 <div class="pull-right">
                     <div class="pull-right">
@@ -49,7 +52,7 @@
                 </div>
 
                 {% if form.vars.value.id %}
-                    <div class="pull-left">
+                    <div class="span9">
                         <div class="customer-info well-small">
                             <div class="customer-content pull-left">
                                 <div class="clearfix-oro">
@@ -61,11 +64,9 @@
                         </div>
                     </div>
                 {% else %}
-                    <div class="pull-left">
-                        <div class="customer-info well-small">
-                            <div class="customer-content">
-                                <h1 class="usser-name">{{ title }}</h1>
-                            </div>
+                    <div class="container-fluid">
+                        <div class="container-fluid">
+                            <h1 class="oro-subtitle">{{ title }}</h1>
                         </div>
                     </div>
                 {% endif %}
@@ -73,7 +74,7 @@
         </div>
 
         <div class="layout-content">
-            <div id="navbarExample" class="navbar navbar-static scrollspy-nav">
+            <div id="navbarGroupupdate" class="navbar navbar-static scrollspy-nav">
                 <div class="navbar-inner">
                     <div class="container-fluid" style="width: auto;">
                         <ul class="nav">
@@ -95,7 +96,7 @@
                         </div>
                     </div>
                 {% endif %}
-                <div data-spy="scroll" data-target="#navbarExample" data-offset="50" class="scrollspy container-fluid scrollable-container">
+                <div data-spy="scroll" data-target="#navbarGroupupdate" data-offset="50" class="scrollspy container-fluid scrollable-container">
                     <div class="usser-row">
                         <h4 id="scroll-main" class="scrollspy-title">{{ 'General'|trans }}</h4>
                         <div class="row-fluid">
@@ -126,5 +127,4 @@
             </div>
         </div>
     </form>
-</div>
 {% endblock %}
