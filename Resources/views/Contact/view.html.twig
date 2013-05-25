@@ -122,6 +122,7 @@
                                             </div>
                                         </div>
                                     </div>
+                                    {% if address.state %}
                                     <div class="control-group">
                                         <label class="control-label">{{ 'State'|trans }}</label>
                                         <div class="controls">
@@ -130,6 +131,7 @@
                                             </div>
                                         </div>
                                     </div>
+                                    {% endif %}
                                     <div class="control-group">
                                         <label class="control-label">{{ 'Postal code'|trans }}</label>
                                         <div class="controls">
