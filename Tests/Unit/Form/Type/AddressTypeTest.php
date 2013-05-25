@@ -38,7 +38,7 @@ class AddressTypeTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $builder->expects($this->exactly(8))
+        $builder->expects($this->exactly(7))
             ->method('add')
             ->will($this->returnSelf());
 
@@ -73,10 +73,6 @@ class AddressTypeTest extends \PHPUnit_Framework_TestCase
         $builder->expects($this->at(7))
             ->method('add')
             ->with('state', 'oro_region');
-
-        $builder->expects($this->at(8))
-            ->method('add')
-            ->with('mark', 'text');
 
         $builder->expects($this->once())
             ->method('addEventSubscriber')
