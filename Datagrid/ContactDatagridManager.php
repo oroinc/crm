@@ -11,6 +11,11 @@ use Oro\Bundle\GridBundle\Field\FieldDescriptionInterface;
 use Oro\Bundle\GridBundle\Filter\FilterInterface;
 use Oro\Bundle\GridBundle\Action\ActionInterface;
 use Oro\Bundle\GridBundle\Property\UrlProperty;
+use Oro\Bundle\GridBundle\Property\CallbackProperty;
+use Oro\Bundle\GridBundle\Datagrid\ResultRecordInterface;
+use Oro\Bundle\FlexibleEntityBundle\Entity\Collection;
+use Oro\Bundle\FlexibleEntityBundle\Form\Type\PhoneType;
+use Doctrine\ORM\PersistentCollection;
 
 class ContactDatagridManager extends FlexibleDatagridManager
 {
@@ -66,20 +71,60 @@ class ContactDatagridManager extends FlexibleDatagridManager
         );
         $fieldsCollection->add($fieldId);
 
-        $specialAttributeOptions = array(
-            'type'        => FieldDescriptionInterface::TYPE_TEXT,
-            'filter_type' => FilterInterface::TYPE_STRING,
-            'sortable'    => false,
-            'filterable'  => false
-        );
-        $this->configureFlexibleFields(
-            $fieldsCollection,
+        $this->configureFlexibleField($fieldsCollection, 'first_name');
+        $this->configureFlexibleField($fieldsCollection, 'last_name');
+
+        $fieldPhone = new FieldDescription();
+        $fieldPhone->setName('office_phone');
+        $fieldPhone->setOptions(
             array(
-                'account'     => $specialAttributeOptions,
-                'assigned_to' => $specialAttributeOptions,
-                'reports_to'  => $specialAttributeOptions,
+                'type'        => FieldDescriptionInterface::TYPE_TEXT,
+                'label'       => 'Phone',
+                'field_name'  => 'phones',
+                'filter_type' => FilterInterface::TYPE_STRING,
             )
         );
+        $phoneProperty = new CallbackProperty(
+            $fieldPhone->getName(),
+            function (ResultRecordInterface $record) use ($fieldPhone) {
+                $phones = $record->getValue($fieldPhone->getFieldName())->getData();
+                /** @var $phone Collection */
+                foreach ($phones as $phone) {
+                    if ($phone->getType() == PhoneType::TYPE_OFFICE) {
+                        return $phone->getData();
+                    }
+                }
+                return null;
+            }
+        );
+        $fieldPhone->setProperty($phoneProperty);
+        $fieldsCollection->add($fieldPhone);
+
+        $fieldEmail = new FieldDescription();
+        $fieldEmail->setName('email');
+        $fieldEmail->setOptions(
+            array(
+                'type'        => FieldDescriptionInterface::TYPE_TEXT,
+                'label'       => 'Email',
+                'field_name'  => 'emails',
+                'filter_type' => FilterInterface::TYPE_STRING,
+            )
+        );
+        $emailProperty = new CallbackProperty(
+            $fieldEmail->getName(),
+            function (ResultRecordInterface $record) use ($fieldEmail) {
+                /** @var $emails PersistentCollection */
+                $emails = $record->getValue($fieldEmail->getFieldName())->getData();
+                if (!empty($emails)) {
+                    /** @var $email Collection */
+                    $email = $emails->first();
+                    return $email->getData();
+                }
+                return null;
+            }
+        );
+        $fieldEmail->setProperty($emailProperty);
+        $fieldsCollection->add($fieldEmail);
 
         $fieldCreated = new FieldDescription();
         $fieldCreated->setName('created');
