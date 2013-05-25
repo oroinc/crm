@@ -76,16 +76,6 @@ class AddressBase extends AbstractEntityFlexible
     protected $country;
 
     /**
-     * Label is reserved word, so decided to use mark
-     *
-     * @var string
-     *
-     * @ORM\Column(name="mark", type="string", length=255, nullable=true)
-     * @Soap\ComplexType("string", nillable=true)
-     */
-    protected $mark;
-
-    /**
      * Get id
      *
      * @return integer 
@@ -231,29 +221,6 @@ class AddressBase extends AbstractEntityFlexible
     public function getCountry()
     {
         return $this->country;
-    }
-
-    /**
-     * Set mark
-     *
-     * @param string $mark
-     * @return AddressBase
-     */
-    public function setMark($mark)
-    {
-        $this->mark = $mark;
-    
-        return $this;
-    }
-
-    /**
-     * Get mark
-     *
-     * @return string 
-     */
-    public function getMark()
-    {
-        return $this->mark;
     }
 
     /**

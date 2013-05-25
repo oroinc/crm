@@ -69,7 +69,6 @@ class AddressTest extends \PHPUnit_Framework_TestCase
             array('state', $regionMock),
             array('postalCode', '12345'),
             array('country', $countryMock),
-            array('mark', 'T'),
             array('created', new \DateTime()),
             array('updated', new \DateTime()),
         );

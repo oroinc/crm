@@ -48,10 +48,9 @@ class AddressType extends FlexibleType
             ->add('street', 'text', $required)
             ->add('street2', 'text', $notRequired)
             ->add('city', 'text', $required)
-            ->add('postalCode', 'text', $required)
+            ->add('postalCode', 'text', array('required' => true, 'label' => 'ZIP/Postal code'))
             ->add('country', 'oro_country', $required)
-            ->add('state', 'oro_region', $required)
-            ->add('mark', 'text', $notRequired);
+            ->add('state', 'oro_region', $required);
     }
 
     /**
