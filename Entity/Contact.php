@@ -151,9 +151,12 @@ class Contact extends AbstractEntityFlexible
     public function __toString()
     {
         try {
-            $firstName = (string)$this->getValue('first_name')->getData();
-            $lastName = (string)$this->getValue('last_name')->getData();
-            return $firstName . ' ' . $lastName;
+            $firstNameAttr = $this->getValue('first_name');
+            $lastNameAttr = $this->getValue('last_name');
+
+            $firstName = $firstNameAttr ? (string)$firstNameAttr->getData() : '';
+            $lastName = $lastNameAttr ? (string)$lastNameAttr->getData(): '';
+            return trim($firstName . ' ' . $lastName);
         } catch (\Exception $e) {
             return 'N/A';
         }
