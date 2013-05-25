@@ -64,7 +64,13 @@ class UserController extends SoapController
      */
     public function deleteAction($id)
     {
-        return $this->handleDeleteRequest($id);
+        $securityToken = $this->container->get('security.context')->getToken();
+        $user = $securityToken ? $securityToken->getUser() : null;
+        if (is_object($user) && $user->getId() != $id) {
+            return $this->handleDeleteRequest($id);
+        } else {
+            throw new \SoapFault('BAD_REQUEST', 'Self delete forbidden');
+        }
     }
 
     /**
