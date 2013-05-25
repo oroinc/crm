@@ -16,15 +16,15 @@
 
 {% block page_container %}
     {% block content %}
-        <div class="container-fluid search-header">
+        <div class="container-fluid search-header clearfix">
             <h2>
                 {% trans %}Search results{% endtrans %}
-                <form method="get" action="{{ path('oro_search_results') }}" class="form-inline search-form">
-                    <input type="hidden" name="from" value="" />
-                    <input type="text" id="search" class="span2 search" name="search" value="{{ searchString }}" />
-                    <button type="submit" class="btn btn-search btn-primary">Search</button>
-                </form>
             </h2>
+            <form method="get" action="{{ path('oro_search_results') }}" class="form-inline search-form">
+                <input type="hidden" name="from" value="" />
+                <input type="text" id="search" class="span2 search" name="search" value="{{ searchString }}" />
+                <button type="submit" class="btn btn-search btn-primary">Search</button>
+            </form>
         </div>
 
         {% if groupedResults|length > 1 %}

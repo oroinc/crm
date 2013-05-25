@@ -4,10 +4,8 @@
 {# Entity of specific type #}
 {% set entity = record.getValue('entity') %}
 
-<div style="height: 60px;">
-    {% if indexer_item.entityConfig.search_template %}
-        {% include indexer_item.entityConfig.search_template with {'entity': entity, 'indexer_item': indexer_item} %}
-    {% else %}
-        {{ entity }}
-    {% endif %}
-</div>
+{% if indexer_item.entityConfig.search_template %}
+    {% include indexer_item.entityConfig.search_template with {'entity': entity, 'indexer_item': indexer_item} %}
+{% else %}
+    {{ entity }}
+{% endif %}
