@@ -68,7 +68,7 @@
                             <div class="visual"><img src="{{ asset('bundles/oroui/img/info-usser.png') }}" alt="{{ fullname }}"/></div>
                             <div class="customer-content pull-left">
                                 <div class="clearfix-oro">
-                                    <div class="sub-title">{{ 'Contact'|trans }}</div>
+                                    <div class="sub-title"><a href="{{ path('oro_contact_index') }}">{{ 'Contact'|trans }}</a></div>
                                     <span class="separator">/</span>
                                     <h1 class="usser-name">{{ entity.first_name ~ ' ' ~ entity.last_name|default('N/A') }}</h1>
                                 </div>
