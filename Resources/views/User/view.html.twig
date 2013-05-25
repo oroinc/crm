@@ -18,7 +18,7 @@
                         <a href="{{ path('oro_user_update', { id: user.id, back: app.request.uri }) }}" class="btn icons-holder-text" title="{{ 'Edit1 user'|trans }}"><i class="icon-edit hide-text">{{ 'Edit'|trans }}</i>{{ 'Edit'|trans }}</a>
                     </div>
                     {% endif %}
-                    {% if resource_granted('oro_user_user_delete') %}
+                    {% if resource_granted('oro_user_user_delete') and user.id!=app.user.id %}
                     <div class="pull-left btn-group icons-holder">
                         <a href="javascript: void(0);" class="btn icons-holder-text no-hash" id="btn-remove-user" data-id="{{ user.id }}" data-message="{{ 'Are you sure you want to delete this user?'|trans }}" title="{{ 'Delete user'|trans }}"><i class="icon-trash hide-text">{{ 'Delete'|trans }}</i>{{ 'Delete'|trans }}</a>
                     </div>
