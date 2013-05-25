@@ -1,4 +1,5 @@
-<form method="get" action="{{ path('oro_search_results') }}" style="margin: 0" autocomplete="off" id="top-search-form" class="search-form">
+<form method="get" action="{{ path('oro_search_results') }}" style="margin: 0" autocomplete="off" id="top-search-form" class="search-form"
+      data-ajax-action="{{ path('oro_api_get_search') }}">
     <div id="search-div" class="input-append input-prepend pull-left header-search">
         <div class="btn-group">
             <button data-toggle="dropdown" class="btn dropdown-toggle" id="search-bar-button">
