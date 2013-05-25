@@ -225,7 +225,7 @@ class EntityIdentifierTypeTest extends FormIntegrationTestCase
                 ),
                 'expectedException' => 'Symfony\Component\Form\Exception\FormException',
                 'expectedExceptionMessage'
-                    => 'Class "TestClass" seems not to be a managed Doctrine entity. Did you forget to map it?'
+                    => 'Class "TestClass" is not a managed Doctrine entity. Did you forget to map it?'
             ),
             'cannot resolve entity manager by name' => array(
                 array('class' => 'TestClass', 'em' => 'custom_entity_manager'),
@@ -236,7 +236,7 @@ class EntityIdentifierTypeTest extends FormIntegrationTestCase
                 ),
                 'expectedException' => 'Symfony\Component\Form\Exception\FormException',
                 'expectedExceptionMessage'
-                    => 'Class "TestClass" seems not to be a managed Doctrine entity. Did you forget to map it?'
+                    => 'Class "TestClass" is not a managed Doctrine entity. Did you forget to map it?'
             ),
             'invalid em' => array(
                 array('class' => 'TestClass', 'em' => new \stdClass()),
