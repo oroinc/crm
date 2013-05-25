@@ -16,6 +16,7 @@ use Oro\Bundle\GridBundle\Datagrid\ResultRecordInterface;
 use Oro\Bundle\FlexibleEntityBundle\Entity\Collection;
 use Oro\Bundle\FlexibleEntityBundle\Form\Type\PhoneType;
 use Doctrine\ORM\PersistentCollection;
+use Symfony\Component\Security\Acl\Exception\Exception;
 
 class ContactDatagridManager extends FlexibleDatagridManager
 {
@@ -87,14 +88,21 @@ class ContactDatagridManager extends FlexibleDatagridManager
         $phoneProperty = new CallbackProperty(
             $fieldPhone->getName(),
             function (ResultRecordInterface $record) use ($fieldPhone) {
-                $phones = $record->getValue($fieldPhone->getFieldName())->getData();
-                /** @var $phone Collection */
-                foreach ($phones as $phone) {
-                    if ($phone->getType() == PhoneType::TYPE_OFFICE) {
-                        return $phone->getData();
+                try {
+                    $phonesValue = $record->getValue($fieldPhone->getFieldName());
+                    if ($phonesValue) {
+                        $phones = $phonesValue->getData();
+                        /** @var $phone Collection */
+                        foreach ($phones as $phone) {
+                            if ($phone && $phone->getType() == PhoneType::TYPE_OFFICE) {
+                                return $phone->getData();
+                            }
+                        }
                     }
+                    return null;
+                } catch (\Exception $e) {
+                    return null;
                 }
-                return null;
             }
         );
         $fieldPhone->setProperty($phoneProperty);
@@ -113,14 +121,21 @@ class ContactDatagridManager extends FlexibleDatagridManager
         $emailProperty = new CallbackProperty(
             $fieldEmail->getName(),
             function (ResultRecordInterface $record) use ($fieldEmail) {
-                /** @var $emails PersistentCollection */
-                $emails = $record->getValue($fieldEmail->getFieldName())->getData();
-                if ($emails->count() > 0) {
-                    /** @var $email Collection */
-                    $email = $emails->first();
-                    return $email->getData();
+                try {
+                    $emailsValue = $record && $record->getValue($fieldEmail->getFieldName());
+                    if ($emailsValue) {
+                        /** @var $emails PersistentCollection */
+                        $emails = $emailsValue->getData();
+                        if ($emails->count() > 0) {
+                            /** @var $email Collection */
+                            $email = $emails->first();
+                            return $email->getData();
+                        }
+                    }
+                    return null;
+                } catch (\Exception $e) {
+                    return null;
                 }
-                return null;
             }
         );
         $fieldEmail->setProperty($emailProperty);
