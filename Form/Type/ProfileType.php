@@ -166,10 +166,10 @@ class ProfileType extends FlexibleType
     public function addDynamicAttributesFields(FormBuilderInterface $builder)
     {
         $builder->add(
-            'attributes',
+            'values',
             'collection',
             array(
-                'type'          => new FlexibleValueType($this->flexibleManager),
+                'type'          => 'oro_user_profile_value',
                 'property_path' => 'values',
                 'allow_add'     => true,
                 'allow_delete'  => true,
