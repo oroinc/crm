@@ -3,6 +3,7 @@
 namespace Oro\Bundle\UserBundle\Entity\Manager;
 
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityRepository;
 
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\UserBundle\Entity\Status;
@@ -11,12 +12,12 @@ use Oro\Bundle\UserBundle\Entity\UserManager;
 class StatusManager
 {
     /**
-     * @var \Doctrine\ORM\EntityManager
+     * @var EntityManager
      */
     private $em;
 
     /**
-     * @var \Oro\Bundle\UserBundle\Entity\UserManager
+     * @var UserManager
      */
     private $um;
 
@@ -27,8 +28,8 @@ class StatusManager
     }
 
     /**
-     * @param  \Oro\Bundle\UserBundle\Entity\User     $user
-     * @return \Oro\Bundle\UserBundle\Entity\Status[]
+     * @param  User $user
+     * @return Status[]
      */
     public function getUserStatuses(User $user)
     {
@@ -38,9 +39,9 @@ class StatusManager
     /**
      * Delete user status
      *
-     * @param  \Oro\Bundle\UserBundle\Entity\User   $user
-     * @param  \Oro\Bundle\UserBundle\Entity\Status $status
-     * @param  bool                                 $reloadUser
+     * @param  User $user
+     * @param  Status $status
+     * @param  bool $reloadUser
      * @return bool
      */
     public function deleteStatus(User $user, Status $status, $reloadUser = true)
@@ -65,9 +66,9 @@ class StatusManager
     /**
      * Set status as current
      *
-     * @param \Oro\Bundle\UserBundle\Entity\User   $user
-     * @param \Oro\Bundle\UserBundle\Entity\Status $status
-     * @param bool                                 $reloadUser
+     * @param User $user
+     * @param Status $status
+     * @param bool $reloadUser
      */
     public function setCurrentStatus(User $user, Status $status = null, $reloadUser = true)
     {
@@ -79,7 +80,7 @@ class StatusManager
     }
 
     /**
-     * @return \Doctrine\ORM\EntityRepository
+     * @return EntityRepository
      */
     protected function getStatusRepo()
     {

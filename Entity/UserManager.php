@@ -8,6 +8,8 @@ use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\User\UserInterface as SecurityUserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 
+use Doctrine\ORM\QueryBuilder;
+use Doctrine\Common\Persistence\ObjectRepository;
 use Doctrine\Common\Persistence\ObjectManager;
 
 use Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleManager;
@@ -76,7 +78,8 @@ class UserManager implements UserProviderInterface
 
         // we need to make sure to have at least one role
         if ($user->getRolesCollection()->isEmpty()) {
-            $role = $this->getStorageManager()->getRepository('OroUserBundle:Role')->findOneBy(array('role' => User::ROLE_DEFAULT));
+            $role = $this->getStorageManager()
+                ->getRepository('OroUserBundle:Role')->findOneBy(array('role' => User::ROLE_DEFAULT));
 
             if (!$role) {
                 throw new \RuntimeException('Default user role not found');
@@ -200,14 +203,14 @@ class UserManager implements UserProviderInterface
     /**
      * Refreshed a user by User Instance
      *
-     * Throws UnsupportedUserException if a User Instance is given which is not
-     * managed by this UserManager (so another Manager could try managing it)
-     *
      * It is strongly discouraged to use this method manually as it bypasses
      * all ACL checks.
      *
      * @param  SecurityUserInterface $user
      * @return User
+     * @throws UnsupportedUserException if a User Instance is given which is not managed by this UserManager
+     *                                  (so another Manager could try managing it)
+     * @throws UsernameNotFoundException if user could not be reloaded
      */
     public function refreshUser(SecurityUserInterface $user)
     {
@@ -218,7 +221,9 @@ class UserManager implements UserProviderInterface
         }
 
         if (!$user instanceof User) {
-            throw new UnsupportedUserException(sprintf('Expected an instance of Oro\Bundle\UserBundle\Entity\User, but got "%s"', get_class($user)));
+            throw new UnsupportedUserException(
+                sprintf('Expected an instance of Oro\Bundle\UserBundle\Entity\User, but got "%s"', get_class($user))
+            );
         }
 
         $refreshedUser = $this->findUserBy(array('id' => $user->getId()));
@@ -237,6 +242,7 @@ class UserManager implements UserProviderInterface
      *
      * @param  string $username
      * @return User
+     * @throws UsernameNotFoundException if user not found
      */
     public function loadUserByUsername($username)
     {
@@ -275,7 +281,7 @@ class UserManager implements UserProviderInterface
     /**
      * Returns basic query instance to get collection with all user instances
      *
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return QueryBuilder
      */
     public function getListQuery()
     {
@@ -289,7 +295,7 @@ class UserManager implements UserProviderInterface
     /**
      * Return related repository
      *
-     * @return \Doctrine\Common\Persistence\ObjectRepository
+     * @return ObjectRepository
      */
     public function getRepository()
     {
@@ -297,7 +303,7 @@ class UserManager implements UserProviderInterface
     }
 
     /**
-     * @return \Doctrine\Common\Persistence\ObjectManager
+     * @return ObjectManager
      */
     public function getStorageManager()
     {
