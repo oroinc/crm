@@ -134,7 +134,7 @@ Oro.Filter.ChoiceFilter = Oro.Filter.TextFilter.extend({
      * @protected
      */
     _onClickChoiceValue: function(e) {
-        $(e.currentTarget).parent().parent().find('li').each(function( index ) {
+        $(e.currentTarget).parent().parent().find('li').each(function() {
             $(this).removeClass('active');
         });
         $(e.currentTarget).parent().addClass('active');
