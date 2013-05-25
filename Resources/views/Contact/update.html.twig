@@ -96,7 +96,7 @@
                     <div class="container-fluid" style="width: auto;">
                         <ul class="nav">
                             <li class="active"><a href="#scroll-main">{{ 'General'|trans }}</a></li>
-                            {% if form.groups is defined %}
+                            {% if form.groups is defined and form.groups.children|length > 0 %}
                                 <li><a href="#scroll-groups">{{ 'Groups'|trans }}</a></li>
                             {% endif %}
                         </ul>
