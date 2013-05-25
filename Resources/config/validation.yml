@@ -20,7 +20,7 @@ Oro\Bundle\UserBundle\Entity\User:
             - Length:
                 min:        2
         enabled:
-            - NotBlank:      ~
+            - NotNull:      ~
         roles:
             - Count:
                 min:        1
