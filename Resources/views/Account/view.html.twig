@@ -90,7 +90,6 @@
             </div>
         </div>
 
-
         <div class="clearfix">
             <div data-spy="scroll" data-target="#navbar-account-view" data-offset="50" class="scrollspy container-fluid scrollable-container">
                 <div class="usser-row">
@@ -126,98 +125,98 @@
                                 <div class="row-fluid clearfix">
                                     {% for attribute in account.values %}
                                         {% if 'address' in attribute.attribute.code %}
+                                            {% set address = attribute.data %}
+                                            {% if address is defined and address is not null %}
                                             <div class="form-horizontal span6 pull-left">
-                                                {% set address = attribute.data %}
-                                                    {% if address is defined and address is not null %}
-                                                    <h5 class="usser-fiedset"><span>{{ attribute.attribute.label|trans }}</span></h5>
-                                                    <div class="control-group">
-                                                        <label class="control-label">{{ 'First name'|trans }}</label>
+                                                <h5 class="usser-fiedset"><span>{{ attribute.attribute.label|trans }}</span></h5>
+                                                <div class="control-group">
+                                                    <label class="control-label">{{ 'First name'|trans }}</label>
 
-                                                        <div class="controls">
-                                                            <div class="clearfix-oro">
-                                                                <p class="control-label">{{ address.firstName|default('N/A') }}</p>
-                                                            </div>
+                                                    <div class="controls">
+                                                        <div class="clearfix-oro">
+                                                            <p class="control-label">{{ address.firstName|default('N/A') }}</p>
                                                         </div>
                                                     </div>
-                                                    <div class="control-group">
-                                                        <label class="control-label">{{ 'Last name'|trans }}</label>
+                                                </div>
+                                                <div class="control-group">
+                                                    <label class="control-label">{{ 'Last name'|trans }}</label>
 
-                                                        <div class="controls">
-                                                            <div class="clearfix-oro">
-                                                                <p class="control-label">{{ address.lastName|default('N/A') }}</p>
-                                                            </div>
+                                                    <div class="controls">
+                                                        <div class="clearfix-oro">
+                                                            <p class="control-label">{{ address.lastName|default('N/A') }}</p>
                                                         </div>
                                                     </div>
-                                                    <div class="control-group">
-                                                        <label class="control-label">{{ 'Street'|trans }}</label>
+                                                </div>
+                                                <div class="control-group">
+                                                    <label class="control-label">{{ 'Street'|trans }}</label>
 
-                                                        <div class="controls">
-                                                            <div class="clearfix-oro">
-                                                                <p class="control-label">{{ address.street|default('N/A') }}</p>
-                                                            </div>
+                                                    <div class="controls">
+                                                        <div class="clearfix-oro">
+                                                            <p class="control-label">{{ address.street|default('N/A') }}</p>
                                                         </div>
                                                     </div>
-                                                    <div class="control-group">
-                                                        <label class="control-label">{{ 'Street 2'|trans }}</label>
+                                                </div>
+                                                <div class="control-group">
+                                                    <label class="control-label">{{ 'Street 2'|trans }}</label>
 
-                                                        <div class="controls">
-                                                            <div class="clearfix-oro">
-                                                                <p class="control-label">{{ address.street2|default('N/A') }}</p>
-                                                            </div>
+                                                    <div class="controls">
+                                                        <div class="clearfix-oro">
+                                                            <p class="control-label">{{ address.street2|default('N/A') }}</p>
                                                         </div>
                                                     </div>
-                                                    <div class="control-group">
-                                                        <label class="control-label">{{ 'City'|trans }}</label>
+                                                </div>
+                                                <div class="control-group">
+                                                    <label class="control-label">{{ 'City'|trans }}</label>
 
-                                                        <div class="controls">
-                                                            <div class="clearfix-oro">
-                                                                <p class="control-label">{{ address.city|default('N/A') }}</p>
-                                                            </div>
+                                                    <div class="controls">
+                                                        <div class="clearfix-oro">
+                                                            <p class="control-label">{{ address.city|default('N/A') }}</p>
                                                         </div>
                                                     </div>
-                                                    <div class="control-group">
-                                                        <label class="control-label">{{ 'State'|trans }}</label>
+                                                </div>
+                                                <div class="control-group">
+                                                    <label class="control-label">{{ 'State'|trans }}</label>
 
-                                                        <div class="controls">
-                                                            <div class="clearfix-oro">
-                                                                <p class="control-label">{{ address.state|default('N/A') }}</p>
-                                                            </div>
+                                                    <div class="controls">
+                                                        <div class="clearfix-oro">
+                                                            <p class="control-label">{{ address.state|default('N/A') }}</p>
                                                         </div>
                                                     </div>
-                                                    <div class="control-group">
-                                                        <label class="control-label">{{ 'Country'|trans }}</label>
+                                                </div>
+                                                <div class="control-group">
+                                                    <label class="control-label">{{ 'Country'|trans }}</label>
 
-                                                        <div class="controls">
-                                                            <div class="clearfix-oro">
-                                                                <p class="control-label">{{ address.country|default('N/A') }}</p>
-                                                            </div>
+                                                    <div class="controls">
+                                                        <div class="clearfix-oro">
+                                                            <p class="control-label">{{ address.country|default('N/A') }}</p>
                                                         </div>
                                                     </div>
-                                                    <div class="control-group">
-                                                        <label class="control-label">{{ 'Zip/postal code'|trans }}</label>
+                                                </div>
+                                                <div class="control-group">
+                                                    <label class="control-label">{{ 'Zip/postal code'|trans }}</label>
 
-                                                        <div class="controls">
-                                                            <div class="clearfix-oro">
-                                                                <p class="control-label">{{ address.postalCode }}</p>
-                                                            </div>
+                                                    <div class="controls">
+                                                        <div class="clearfix-oro">
+                                                            <p class="control-label">{{ address.postalCode }}</p>
                                                         </div>
                                                     </div>
+                                                </div>
 
-                                                    {% if (address.values is defined) %}
-                                                        {% for attr in address.values %}
-                                                            <div class="control-group">
-                                                                <label class="control-label">{{ attr.attribute.label|trans|title }}</label>
+                                                {% if (address.values is defined) %}
+                                                    {% for attr in address.values %}
+                                                        <div class="control-group">
+                                                            <label class="control-label">{{ attr.attribute.label|trans|title }}</label>
 
-                                                                <div class="controls">
-                                                                    <div class="clearfix-oro">
-                                                                        <p class="control-label">{{ attr.__toString|default('N/A') }}</p>
-                                                                    </div>
+                                                            <div class="controls">
+                                                                <div class="clearfix-oro">
+                                                                    <p class="control-label">{{ attr.__toString|default('N/A') }}</p>
                                                                 </div>
                                                             </div>
-                                                        {% endfor %}
-                                                    {% endif %}
+                                                        </div>
+                                                    {% endfor %}
                                                 {% endif %}
-                                            </div>
+                                                </div>
+                                            {% endif %}
                                         {% endif %}
                                     {% endfor %}
                                 </div>
