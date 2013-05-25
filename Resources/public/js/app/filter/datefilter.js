@@ -15,22 +15,20 @@ Oro.Filter.DateFilter = Oro.Filter.ChoiceFilter.extend({
      */
     popupCriteriaTemplate: _.template(
         '<div>' +
-            '<div>' +
-                '<input placeholder="from" type="text" name="start" value="" class="<%= inputClass %>" /> ' +
-                '<span class="divider">-</span> ' +
-                '<input placeholder="to" type="text" name="end" value="" class="<%= inputClass %>" />' +
+            '<div class="horizontal clearfix">' +
+                '<select name="<%= name %>" class="filter-select-oro">' +
+                    '<% _.each(choices, function (hint, value) { %>' +
+                        '<option value="<%= value %>"><%= hint %></option>' +
+                    '<% }); %>' +
+                '</select>' +
             '</div>' +
-            '<div class="horizontal">' +
-                '<% _.each(choices, function (hint, value) { %>' +
-                    '<div class="oro-clearfix">' +
-                        '<input type="radio" id="<%= name %>-<%= value %>" name="<%= name %>" value="<%= value %>" /><label for ="<%= name %>-<%= value %>"><%= hint %></label>' +
-                    '</div>' +
-                '<% }); %>' +
-                '<br/>' +
+            '<div>' +
+                '<input type="text" class="<%= inputClass %>" value="" name="start" placeholder="from">' +
+                '<input type="text" class="<%= inputClass %>" value="" name="end" placeholder="to">' +
             '</div>' +
             '<div class="oro-action">' +
                 '<div class="btn-group">' +
-                    '<button type="button" class="btn btn-primary filter-update">Update</button>' +
+                    '<button class="btn btn-primary filter-update" type="button">Update</button>' +
                 '</div>' +
             '</div>' +
         '</div>'
@@ -42,7 +40,7 @@ Oro.Filter.DateFilter = Oro.Filter.ChoiceFilter.extend({
      * @property
      */
     criteriaValueSelectors: {
-        type: 'input[type="radio"]',
+        type: 'select',
         value: {
             start: 'input[name="start"]',
             end:   'input[name="end"]'

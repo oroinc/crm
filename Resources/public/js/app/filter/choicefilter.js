@@ -23,7 +23,7 @@ Oro.Filter.ChoiceFilter = Oro.Filter.TextFilter.extend({
                     '</button>' +
                     '<ul class="dropdown-menu">' +
                         '<% _.each(choices, function (hint, value) { %>' +
-                            '<li><a href="#" data-value="<%= value %>"><%= hint %></a></li>' +
+                            '<li><a class="choice_value" href="#" data-value="<%= value %>"><%= hint %></a></li>' +
                         '<% }); %>' +
                     '</ul>' +
                     '<input class="span2" type="text" name="value" value="">' +
@@ -111,6 +111,33 @@ Oro.Filter.ChoiceFilter = Oro.Filter.TextFilter.extend({
         if (newValue.value || oldValue.value) {
             this.trigger('update');
         }
+    },
+
+    /**
+     * Filter events
+     *
+     * @property
+     */
+    events: {
+        'keyup input': '_onReadCriteriaInputKey',
+        'click .filter-update': '_onClickUpdateCriteria',
+        'click .filter-criteria-selector': '_onClickCriteriaSelector',
+        'click .filter-criteria .filter-criteria-hide': '_onClickCloseCriteria',
+        'click .disable-filter': '_onClickDisableFilter',
+        'click .choice_value': '_onClickChoiceValue'
+    },
+
+    /**
+     * Open/close select dropdown
+     *
+     * @param {Event} e
+     * @protected
+     */
+    _onClickChoiceValue: function(e) {
+        var parentDiv = $(e.currentTarget).parent().parent().parent();
+        parentDiv.find('.name_input').val($(e.currentTarget).attr('data-value'));
+        parentDiv.find('button').html($(e.currentTarget).html());
+        e.preventDefault();
     }
 });
 

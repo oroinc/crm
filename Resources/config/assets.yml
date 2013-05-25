@@ -19,5 +19,3 @@ js:
   - '@OroFilterBundle/Resources/public/js/app/filter/multiselectfilter.js'
 
   - '@OroFilterBundle/Resources/public/js/app/filter/list.js'
-
-  - '@OroFilterBundle/Resources/public/js/filters.js'
