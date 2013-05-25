@@ -19,12 +19,7 @@ class EmailType extends CollectionItemAbstract
         $builder->add('id', 'hidden');
         $builder->add(
             'data',
-            'email',
-            array(
-                'constraints' => array(
-                    new Email()
-                )
-            )
+            'email'
         );
         $builder->add(
             'type',
