@@ -39,8 +39,10 @@ class UserController extends Controller
      */
     public function viewAction(User $user)
     {
+        $securityToken = $this->get('security.context')->getToken();
         return array(
             'user' => $user,
+            'current_user' => ($securityToken && is_object($current_user = $securityToken->getUser())) ? $current_user : false,
         );
     }
 
