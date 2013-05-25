@@ -34,7 +34,9 @@
                         </div>
                         <div class="pull-right usser-info-state">
                             <ul class="inline-decorate">
-                                <li><a class="no-hash" href="{{ path('oro_dataaudit_history', {entity:'Oro\\Bundle\\UserBundle\\Entity\\User', id: form.vars.value.id}) }}" id="view-activity-btn" title="{{ form.vars.value }} - {{ 'Change History'|trans }}">{{ 'Activity Log'|trans }}</a></li>
+                                {% if form.vars.value.id %}
+                                <li><a class="no-hash" href="{{ path('oro_dataaudit_history', {entity:'Oro_Bundle_UserBundle_Entity_User', id: form.vars.value.id}) }}" id="view-activity-btn" title="{{ form.vars.value }} - {{ 'Change History'|trans }}">{{ 'Change History'|trans }}</a></li>
+                                {% endif %}
                             </ul>
                         </div>
                     </div>
