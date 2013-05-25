@@ -122,7 +122,7 @@ class ContactDatagridManager extends FlexibleDatagridManager
             $fieldEmail->getName(),
             function (ResultRecordInterface $record) use ($fieldEmail) {
                 try {
-                    $emailsValue = $record && $record->getValue($fieldEmail->getFieldName());
+                    $emailsValue = $record->getValue($fieldEmail->getFieldName());
                     if ($emailsValue) {
                         /** @var $emails PersistentCollection */
                         $emails = $emailsValue->getData();
