@@ -46,7 +46,8 @@
 {% endblock %}
 
 {% block content %}
-    <form action="{{ form.vars.value.id ? path('oro_account_update', { id: form.vars.value.id, back: app.session.get('back') }) : path('oro_account_create', { back: app.session.get('back') }) }}" {{ form_enctype(form) }}
+    {{ JSFV(form) }}
+    <form id="{{ form.getName() }}" action="{{ form.vars.value.id ? path('oro_account_update', { id: form.vars.value.id, back: app.session.get('back') }) : path('oro_account_create', { back: app.session.get('back') }) }}" {{ form_enctype(form) }}
         method="post" data-collect="true" class="scrollable-substructure">
         <div class="navigation clearfix navbar-extra navbar-extra-right">
             <div class="row">
