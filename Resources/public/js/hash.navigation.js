@@ -14,6 +14,7 @@ Oro.Navigation = Backbone.Router.extend({
 
     /**
      * links - Selector for all links that will be processed by hash navigation
+     * scrollLinks - Selector for anchor links
      * forms - Selector for all forms that will be processed by hash navigation
      * content - Selector for ajax response content area
      * container - Selector for main content area
@@ -31,6 +32,7 @@ Oro.Navigation = Backbone.Router.extend({
      */
     selectors: {
         links:          'a:not([href^=#],[href^=javascript]),span[data-url]',
+        scrollLinks:    'a[href^=#]',
         forms:          'form',
         content:        '#content',
         container:      '#container',
@@ -42,7 +44,8 @@ Oro.Navigation = Backbone.Router.extend({
         mostViewedTab:  '#mostviewed-content',
         flashMessages:  '#flash-messages',
         menu:           '#main-menu',
-        pinButton:      '#pin-button-div'
+        pinButton:      '#pin-button-div',
+        scrollSpy:      '.scrollspy'
     },
 
     /** @property {Oro.LoadingMask} */
@@ -151,33 +154,33 @@ Oro.Navigation = Backbone.Router.extend({
             var i;
             if ((i = this.contentCacheUrls.indexOf(this.removePageStateParam(this.url))) !== -1) {
                 if (this.contentCache[i]) {
-                    this.handleResponse(this.contentCache[i], {skipMessages: true, skipMenuTabs: true});
-                    this.reorderCache(i);
-                    this.afterRequest();
+                    this.handleResponse(this.contentCache[i], {skipMessages: true, skipMenuTabs: true, skipTriggerComplete: true});
+                    this.clearPageCache(i);
+                    //this.reorderCache(i);
+                    //this.afterRequest();
                 }
-            } else {
-                var pageUrl = this.baseUrl + this.url;
-                $.ajax({
-                    url: pageUrl,
-                    data: {'is_hash_ajax' : 1}, //added to prevent browser caching of raw requests without hash nav
-                    headers: { 'x-oro-hash-navigation': true },
-                    beforeSend: function( xhr ) {
-                        //remove standard ajax header because we already have a custom header sent
-                        xhr.setRequestHeader('X-Requested-With', {toString: function(){ return ''; }});
-                    },
-
-                    error: _.bind(function (XMLHttpRequest, textStatus, errorThrown) {
-                        this.showError('Error Message: ' + textStatus, 'HTTP Error: ' + errorThrown);
-                        this.afterRequest();
-                    }, this),
-
-                    success: _.bind(function (data) {
-                        this.handleResponse(data);
-                        this.afterRequest();
-                        this.savePageToCache(data);
-                    }, this)
-                });
             }
+            var pageUrl = this.baseUrl + this.url;
+            $.ajax({
+                url: pageUrl,
+                data: {'is_hash_ajax' : 1}, //added to prevent browser caching of raw requests without hash nav
+                headers: { 'x-oro-hash-navigation': true },
+                beforeSend: function( xhr ) {
+                    //remove standard ajax header because we already have a custom header sent
+                    xhr.setRequestHeader('X-Requested-With', {toString: function(){ return ''; }});
+                },
+
+                error: _.bind(function (XMLHttpRequest, textStatus, errorThrown) {
+                    this.showError('Error Message: ' + textStatus, 'HTTP Error: ' + errorThrown);
+                    this.afterRequest();
+                }, this),
+
+                success: _.bind(function (data) {
+                    this.handleResponse(data);
+                    this.afterRequest();
+                    this.savePageToCache(data);
+                }, this)
+            });
         }
     },
 
@@ -343,6 +346,7 @@ Oro.Navigation = Backbone.Router.extend({
      * Handling ajax response data. Updating content area with new content, processing title and js
      *
      * @param {String} data
+     * @param options
      */
     handleResponse: function (data, options) {
         if (_.isUndefined(options)) {
@@ -389,6 +393,7 @@ Oro.Navigation = Backbone.Router.extend({
                 }
                 this.processClicks(this.selectors.menu + ' ' + this.selectors.links);
                 this.processClicks(this.selectors.container + ' ' + this.selectors.links);
+                this.processAnchors(this.selectors.container + ' ' + this.selectors.scrollLinks);
                 if (!options.skipMenuTabs) {
                     this.updateMenuTabs(data);
                 }
@@ -404,7 +409,9 @@ Oro.Navigation = Backbone.Router.extend({
             console.log(err);
             this.showError('', "Sorry, page was not loaded correctly");
         }
-        this.triggerCompleteEvent();
+        if (!options.skipTriggerComplete) {
+            this.triggerCompleteEvent();
+        }
     },
 
     /**
@@ -514,6 +521,21 @@ Oro.Navigation = Backbone.Router.extend({
         }, this));
     },
 
+    processAnchors: function(selector) {
+        $(selector).on('click', _.bind(function (e) {
+            var target = e.currentTarget;
+            if ($(target).is('a')) {
+                e.preventDefault();
+                var href = $(target).attr('href');
+                var $href = /^#\w/.test(href) && $(href);
+                if ($(this.selectors.scrollSpy)) {
+                    $(this.selectors.scrollSpy).scrollTop($href.position().top + $(this.selectors.scrollSpy).scrollTop());
+                    $(target).blur();
+                }
+            }
+        }, this))
+    },
+
     /**
      * Processing forms submit events
      *
@@ -550,7 +572,7 @@ Oro.Navigation = Backbone.Router.extend({
                             success: _.bind(function (data) {
                                 this.handleResponse(data);
                                 this.afterRequest();
-                                this.clearPageCache(); //clearing page cache after post request
+                                //this.clearPageCache(); //clearing page cache after post request
                             }, this)
                         });
                     }
@@ -597,19 +619,24 @@ Oro.Navigation = Backbone.Router.extend({
      * Change location hash with new url
      *
      * @param {String} url
+     * @param options
      */
-    setLocation: function (url) {
-        if (!_.isUndefined(url)) {
-            if (this.enabled && !this.checkThirdPartyLink(url)) {
-                url = url.replace(this.baseUrl, '').replace(/^(#\!?|\.)/, '').replace('#g/', '|g/');
-                if (url == this.url) {
-                    this.loadPage();
-                } else {
-                    window.location.hash = '#url=' + url;
-                }
-            } else {
-                window.location.href = url;
+    setLocation: function (url, options) {
+        if (_.isUndefined(options)) {
+            var options = {};
+        }
+        if (this.enabled && !this.checkThirdPartyLink(url)) {
+            if (options.clearCache) {
+                this.clearPageCache();
             }
+            url = url.replace(this.baseUrl, '').replace(/^(#\!?|\.)/, '').replace('#g/', '|g/');
+            if (url == this.url) {
+                this.loadPage();
+            } else {
+                window.location.hash = '#url=' + url;
+            }
+        } else {
+            window.location.href = url;
         }
     },
 

@@ -84,26 +84,34 @@ navigation.pinbar.MainView = navigation.MainViewAbstract.extend({
             } else {
                 goBack = true;
             }
-            /**
-             * Add restore param to the url
-             */
-            if (Oro.hashNavigationEnabled() && !_.isUndefined(item.changed) && item.changed.restore) {
-                var itemUrl = item.get('url');
-                if (itemUrl.indexOf('?') !== -1) {
-                    itemUrl += '&restore=1';
-                } else {
-                    itemUrl += '?restore=1';
-                }
-                item.set('url', itemUrl);
-            }
             if (url != this.getCurrentPageItemData().url) {
+                item.save(null, {success: _.bind(this.handleRestoreChange, this)});
                 if (!goBack) {
                     Oro.Navigation.prototype.setLocation(url);
                 } else {
                     this.goToLatestOpenedPage();
                 }
-                item.save(null);
             }
+        }
+    },
+
+    /**
+     * Checking for page states and adding restore param to the item url
+     *
+     * @param item
+     */
+    handleRestoreChange: function(item) {
+        /**
+         * Add restore param to the url
+         */
+        if (Oro.hashNavigationEnabled() && !_.isUndefined(item.changed) && item.changed.restore) {
+            var itemUrl = item.get('url');
+            if (itemUrl.indexOf('?') !== -1) {
+                itemUrl += '&restore=1';
+            } else {
+                itemUrl += '?restore=1';
+            }
+            item.set('url', itemUrl);
         }
     },
 
@@ -162,7 +170,6 @@ navigation.pinbar.MainView = navigation.MainViewAbstract.extend({
             var currentItem = new navigation.pinbar.Item(this.getNewItemData(Backbone.$(e.currentTarget)));
             this.options.collection.unshift(currentItem);
             this.handleItemStateChange(currentItem);
-            //currentItem.save(null);
         }
     },
 
