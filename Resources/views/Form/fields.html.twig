@@ -54,7 +54,10 @@
 {% block choice_widget_collapsed %}
     <script type="text/javascript">
         $(function() {
-            $('#{{ id }}').filter('.error:not([multiple])').removeClass('error').closest('.selector').addClass('error');
+            {# @todo Replace setTimeout in BAP-858 #}
+            setTimeout(function() {
+                $('#{{ id }}').filter('.error:not([multiple])').removeClass('error').closest('.selector').addClass('error');
+            }, 100);
         })
     </script>
     {{ parent() }}
@@ -64,7 +67,10 @@
     {% if type is defined and type == 'file' %}
         <script type="text/javascript">
             $(function() {
-                $('#{{ id }}').filter('.error').removeClass('error').closest('.uploader').addClass('error');
+                {# @todo Replace setTimeout in BAP-858 #}
+                setTimeout(function() {
+                    $('#{{ id }}').filter('.error').removeClass('error').closest('.uploader').addClass('error');
+                }, 100);
             })
         </script>
     {% endif %}
