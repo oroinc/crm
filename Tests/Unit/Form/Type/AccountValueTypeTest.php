@@ -12,7 +12,10 @@ class AccountValueTypeTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $type = new AccountValueType($flexibleManager, 'oro_account_value');
+        $subscriber = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventSubscriberInterface')
+            ->getMock();
+
+        $type = new AccountValueType($flexibleManager, $subscriber);
         $this->assertEquals('oro_account_value', $type->getName());
     }
 }
