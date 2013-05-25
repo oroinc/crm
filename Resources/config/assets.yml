@@ -27,8 +27,8 @@ js:
   - '@OroUIBundle/Resources/public/js/backbone/setup.js'
 
   - '@FOSJsRoutingBundle/Resources/public/js/router.js'
+  - '@BazingaExposeTranslationBundle/Resources/public/js/translator.min.js'
   - 'js/routes.js'
-  - 'bundles/bazingaexposetranslation/js/translator.min.js'
 css:
   - 'bundles/oroui/lib/jstree/themes/default/style.css'
   - 'bundles/oroui/css/jquery-ui.grid.css'
