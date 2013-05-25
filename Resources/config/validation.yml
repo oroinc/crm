@@ -27,8 +27,8 @@ Oro\Bundle\AddressBundle\Entity\Address:
 
         firstName:
             - Length:
-                  max: 500
+                  max: 255
 
         lastName:
             - Length:
-                  max: 500
+                  max: 255

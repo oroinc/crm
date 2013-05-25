@@ -78,7 +78,7 @@ class AddressBase extends AbstractEntityFlexible
     /**
      * @var string
      *
-     * @ORM\Column(name="first_name", type="string", length=20)
+     * @ORM\Column(name="first_name", type="string", length=255)
      * @Soap\ComplexType("string", nillable=true)
      */
     protected $firstName;
@@ -86,7 +86,7 @@ class AddressBase extends AbstractEntityFlexible
     /**
      * @var string
      *
-     * @ORM\Column(name="last_name", type="string", length=20)
+     * @ORM\Column(name="last_name", type="string", length=255)
      * @Soap\ComplexType("string", nillable=true)
      */
     protected $lastName;
