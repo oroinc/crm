@@ -24,12 +24,12 @@ $(function() {
         checkRoleInputs();
     });
 
-    $(document).on('click', '#btn-remove-profile', function (e) {
+    $(document).on('click', '#btn-remove-user', function (e) {
         var el = $(this),
             message = el.attr('data-message'),
             doAction = function() {
                 $.ajax({
-                    url: Routing.generate('oro_api_delete_profile', { id: el.attr('data-id') }),
+                    url: Routing.generate('oro_api_delete_user', { id: el.attr('data-id') }),
                     type: 'DELETE',
                     success: function (data) {
                         if (Oro.hashNavigationEnabled()) {
@@ -45,7 +45,8 @@ $(function() {
             var confirm = new Oro.BootstrapModal({
                 title: 'Delete Confirmation',
                 content: message,
-                okText: 'Yes, Delete'
+                okText: 'Yes, Delete',
+                okButtonClass: 'btn-large  btn-danger'
 
             });
             confirm.on('ok', doAction);
@@ -77,7 +78,8 @@ $(function() {
             var confirm = new Oro.BootstrapModal({
                 title: 'Delete Confirmation',
                 content: message,
-                okText: 'Yes, Delete'
+                okText: 'Yes, Delete',
+                okButtonClass: 'btn-large  btn-danger'
 
             });
             confirm.on('ok', doAction);
@@ -109,7 +111,8 @@ $(function() {
             var confirm = new Oro.BootstrapModal({
                 title: 'Delete Confirmation',
                 content: message,
-                okText: 'Yes, Delete'
+                okText: 'Yes, Delete',
+                okButtonClass: 'btn-large btn-danger'
 
             });
             confirm.on('ok', doAction);

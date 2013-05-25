@@ -46,9 +46,9 @@ oro_menu_config:
                 shortcut_list_users: ~
 
 oro_titles:
-    oro_user_view: %%username%% - View Profile - User Management
-    oro_user_update: %%username%% - Update Profile - User Management
-    oro_user_create: New Profile - User Management
+    oro_user_view: %%username%% - View User - User Management
+    oro_user_update: %%username%% - Update User - User Management
+    oro_user_create: New User - User Management
     oro_user_index: Users - User Management
 
     oro_user_role_update: %%role%% - Update Role - User Management
@@ -56,7 +56,7 @@ oro_titles:
     oro_user_role_index: "Roles - User Management"
 
     oro_user_security_login: Login
-    oro_user_status_list: "User Statuses - User Management"
+    oro_user_status_list: "User Status - User Management"
     oro_user_status_create: "Add Status - User Management"
 
     oro_user_reset_reset: Password Reset

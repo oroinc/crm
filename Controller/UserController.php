@@ -18,23 +18,23 @@ use Oro\Bundle\UserBundle\Entity\UserManager;
 
 /**
  * @Acl(
- *      id="oro_user_profile",
- *      name="Profile manipulation",
- *      description="Profile manipulation",
+ *      id="oro_user_user",
+ *      name="User manipulation",
+ *      description="User manipulation",
  *      parent="oro_user"
  * )
  * @BackUrl("back", useSession=true)
  */
-class ProfileController extends Controller
+class UserController extends Controller
 {
     /**
      * @Route("/view/{id}", name="oro_user_view", requirements={"id"="\d+"})
      * @Template
      * @Acl(
-     *      id="oro_user_profile_view",
-     *      name="View user profile",
-     *      description="View user profile",
-     *      parent="oro_user_profile"
+     *      id="oro_user_user_view",
+     *      name="View user user",
+     *      description="View user user",
+     *      parent="oro_user_user"
      * )
      */
     public function viewAction(User $user)
@@ -48,10 +48,10 @@ class ProfileController extends Controller
      * @Route("/apigen/{id}", name="oro_user_apigen", requirements={"id"="\d+"})
      * @Template
      * @Acl(
-     *      id="oro_user_profile_apigen",
+     *      id="oro_user_user_apigen",
      *      name="Generate new API key",
      *      description="Generate new API key",
-     *      parent="oro_user_profile"
+     *      parent="oro_user_user"
      * )
      */
     public function apigenAction(User $user)
@@ -70,19 +70,19 @@ class ProfileController extends Controller
 
         return $this->getRequest()->isXmlHttpRequest()
             ? new JsonResponse($api->getApiKey())
-            : $this->forward('OroUserBundle:Profile:show', array('user' => $user));
+            : $this->forward('OroUserBundle:User:show', array('user' => $user));
     }
 
     /**
      * Create user form
      *
      * @Route("/create", name="oro_user_create")
-     * @Template("OroUserBundle:Profile:update.html.twig")
+     * @Template("OroUserBundle:User:update.html.twig")
      * @Acl(
-     *      id="oro_user_profile_create",
-     *      name="Create user profile",
-     *      description="Create user profile",
-     *      parent="oro_user_profile"
+     *      id="oro_user_user_create",
+     *      name="Create user",
+     *      description="Create user",
+     *      parent="oro_user_user"
      * )
      */
     public function createAction()
@@ -98,15 +98,15 @@ class ProfileController extends Controller
      * @Route("/update/{id}", name="oro_user_update", requirements={"id"="\d+"}, defaults={"id"=0})
      * @Template
      * @Acl(
-     *      id="oro_user_profile_update",
-     *      name="Edit user profile",
-     *      description="Edit user profile",
-     *      parent="oro_user_profile"
+     *      id="oro_user_user_update",
+     *      name="Edit user",
+     *      description="Edit user",
+     *      parent="oro_user_user"
      * )
      */
     public function updateAction(User $entity)
     {
-        if ($this->get('oro_user.form.handler.profile')->process($entity)) {
+        if ($this->get('oro_user.form.handler.user')->process($entity)) {
             $this->get('session')->getFlashBag()->add('success', 'User successfully saved');
 
             BackUrl::triggerRedirect();
@@ -115,7 +115,7 @@ class ProfileController extends Controller
         }
 
         return array(
-            'form' => $this->get('oro_user.form.profile')->createView(),
+            'form' => $this->get('oro_user.form.user')->createView(),
         );
     }
 
@@ -127,10 +127,10 @@ class ProfileController extends Controller
      *      defaults={"_format" = "html"}
      * )
      * @Acl(
-     *      id="oro_user_profile_list",
-     *      name="View list of user profiles",
-     *      description="View list of user profiles",
-     *      parent="oro_user_profile"
+     *      id="oro_user_user_list",
+     *      name="View list of users",
+     *      description="View list of users",
+     *      parent="oro_user_user"
      * )
      */
     public function indexAction(Request $request)
@@ -138,7 +138,7 @@ class ProfileController extends Controller
         $datagrid = $this->get('oro_user.user_datagrid_manager')->getDatagrid();
         $view     = 'json' == $request->getRequestFormat()
             ? 'OroGridBundle:Datagrid:list.json.php'
-            : 'OroUserBundle:Profile:index.html.twig';
+            : 'OroUserBundle:User:index.html.twig';
 
         return $this->render(
             $view,

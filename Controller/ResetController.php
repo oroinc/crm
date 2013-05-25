@@ -158,7 +158,7 @@ class ResetController extends Controller
         }
 
         if ($this->get('oro_user.form.handler.reset')->process($user)) {
-            $session->getFlashBag()->add('success', 'The password has been reset successfully. You may login now.');
+            $session->getFlashBag()->add('success', 'Your password has been successfully reset. You may login now.');
 
             // force user logout
             $session->invalidate();

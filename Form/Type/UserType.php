@@ -9,17 +9,15 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Security\Core\SecurityContextInterface;
-
 use Doctrine\ORM\EntityRepository;
-
-use Oro\Bundle\UserBundle\Acl\Manager as AclManager;
 use Oro\Bundle\FlexibleEntityBundle\Form\Type\FlexibleType;
-use Oro\Bundle\FlexibleEntityBundle\Form\Type\FlexibleValueType;
-use Oro\Bundle\UserBundle\Form\EventListener\ProfileSubscriber;
+use Oro\Bundle\DataAuditBundle\Form\EventListener\AuditableSubscriber;
+use Oro\Bundle\UserBundle\Acl\Manager as AclManager;
+use Oro\Bundle\UserBundle\Form\EventListener\UserSubscriber;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\UserBundle\Form\Type\EmailType;
 
-class ProfileType extends FlexibleType
+class UserType extends FlexibleType
 {
     /**
      * @var AclManager
@@ -57,7 +55,8 @@ class ProfileType extends FlexibleType
 
         // user fields
         $builder
-            ->addEventSubscriber(new ProfileSubscriber($builder->getFormFactory(), $this->aclManager, $this->security))
+            ->addEventSubscriber(new AuditableSubscriber())
+            ->addEventSubscriber(new UserSubscriber($builder->getFormFactory(), $this->aclManager, $this->security))
             ->add(
                 'username',
                 'text',
@@ -169,7 +168,7 @@ class ProfileType extends FlexibleType
             'values',
             'collection',
             array(
-                'type'          => 'oro_user_profile_value',
+                'type'          => 'oro_user_user_value',
                 'property_path' => 'values',
                 'allow_add'     => true,
                 'allow_delete'  => true,
@@ -189,7 +188,7 @@ class ProfileType extends FlexibleType
         $resolver->setDefaults(
             array(
                 'data_class'           => $this->flexibleClass,
-                'intention'            => 'profile',
+                'intention'            => 'user',
                 'validation_groups'    => function ($form) {
                     if ($form instanceof FormInterface) {
                         $user = $form->getData();
@@ -203,9 +202,6 @@ class ProfileType extends FlexibleType
                         : array('Registration', 'Profile', 'Default');
                 },
                 'extra_fields_message' => 'This form should not contain extra fields: "{{ extra_fields }}"',
-                'error_mapping' => array(
-                    'roles' => 'rolesCollection'
-                ),
             )
         );
     }
@@ -215,6 +211,6 @@ class ProfileType extends FlexibleType
      */
     public function getName()
     {
-        return 'oro_user_profile';
+        return 'oro_user_user';
     }
 }
