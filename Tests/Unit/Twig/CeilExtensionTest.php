@@ -24,10 +24,20 @@ class CeilExtensionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('oro_ceil', $this->extension->getName());
     }
 
-    public function testCeil()
+    /**
+     * @dataProvider provider
+     */
+    public function testCeil($expected, $testValue)
     {
-        $this->assertEquals(5, $this->extension->ceil(4.6));
-        $this->assertEquals(5, $this->extension->ceil(4.1));
+        $this->assertEquals($expected, $this->extension->ceil($testValue));
+    }
+
+    public function provider()
+    {
+        return array(
+            array(5, 4.6),
+            array(5, 4.1)
+        );
     }
 
     public function testSetFilters()
