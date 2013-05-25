@@ -202,6 +202,9 @@ class UserType extends FlexibleType
                         : array('Registration', 'Profile', 'Default');
                 },
                 'extra_fields_message' => 'This form should not contain extra fields: "{{ extra_fields }}"',
+                'error_mapping' => array(
+                    'roles' => 'rolesCollection'
+                ),
             )
         );
     }
