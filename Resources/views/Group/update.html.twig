@@ -40,7 +40,7 @@
                     {% if form.vars.value.id %}
                     <div class="pull-right usser-info-state">
                         <ul class="inline-decorate">
-                            <li><a class="no-hash" href="{{ path('oro_dataaudit_history', {entity:'Oro\\Bundle\\ContactBundle\\Entity\\Group', id: form.vars.value.id}) }}" id="view-activity-btn" title="{{ form.vars.value }} - {{ 'Change History'|trans }}">{{ 'Activity Log'|trans }}</a></li>
+                            <li><a class="no-hash" href="{{ path('oro_dataaudit_history', {entity:'Oro_Bundle_ContactBundle_Entity_Group', id: form.vars.value.id}) }}" id="view-activity-btn" title="{{ form.vars.value }} - {{ 'Change History'|trans }}">{{ 'Change History'|trans }}</a></li>
                         </ul>
                     </div>
                     {% endif %}
