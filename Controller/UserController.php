@@ -39,10 +39,8 @@ class UserController extends Controller
      */
     public function viewAction(User $user)
     {
-        $securityToken = $this->get('security.context')->getToken();
         return array(
             'user' => $user,
-            'current_user' => ($securityToken && is_object($current_user = $securityToken->getUser())) ? $current_user : false,
         );
     }
 
@@ -116,10 +114,8 @@ class UserController extends Controller
             return $this->redirect($this->generateUrl('oro_user_index'));
         }
 
-        $securityToken = $this->get('security.context')->getToken();
         return array(
             'form' => $this->get('oro_user.form.user')->createView(),
-            'current_user' => ($securityToken && is_object($current_user = $securityToken->getUser())) ? $current_user : false,
         );
     }
 
