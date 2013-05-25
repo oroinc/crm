@@ -11,7 +11,7 @@ use Symfony\Component\Security\Core\SecurityContextInterface;
 use Oro\Bundle\UserBundle\Acl\Manager as AclManager;
 use Oro\Bundle\UserBundle\Entity\User;
 
-class ProfileSubscriber implements EventSubscriberInterface
+class UserSubscriber implements EventSubscriberInterface
 {
     /**
      * @var FormFactoryInterface

@@ -25,7 +25,7 @@ class UserMenuBuilder implements BuilderInterface
     {
         $menu->setExtra('type', 'dropdown');
         $menu->addChild(
-            'My Profile',
+            'My User',
             array(
                  'route'           => 'oro_user_view',
                  'routeParameters' => array('id' => $this->securityContext->getToken()->getUser()->getId())

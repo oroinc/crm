@@ -66,12 +66,14 @@ class OroUserExtension extends \Twig_Extension
      */
     public function isFlexible($form)
     {
-        return
-            $form instanceof FormView
-            && isset($form->vars['value'])
-            && $form->vars['value'] instanceof Collection
-            && !empty($form->vars['value'])
-            && $form->vars['value'][0] instanceof FlexibleValueInterface;
+        if ($form instanceof FormView && isset($form->vars['value'])) {
+            return (
+                $form->vars['value'] instanceof Collection
+                    && $form->vars['value']->first() instanceof FlexibleValueInterface
+            ) || ($form->vars['value'] instanceof FlexibleValueInterface && !$form->offsetExists('collection'));
+        }
+
+        return false;
     }
 
     /**

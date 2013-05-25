@@ -8,14 +8,14 @@ use Oro\Bundle\SoapBundle\Controller\Api\Soap\SoapController;
 use Oro\Bundle\UserBundle\Entity\UserSoap;
 use Oro\Bundle\UserBundle\Annotation\AclAncestor;
 
-class ProfileController extends SoapController
+class UserController extends SoapController
 {
     /**
      * @Soap\Method("getUsers")
      * @Soap\Param("page", phpType="int")
      * @Soap\Param("limit", phpType="int")
      * @Soap\Result(phpType="Oro\Bundle\UserBundle\Entity\User[]")
-     * @AclAncestor("oro_user_profile_list")
+     * @AclAncestor("oro_user_user_list")
      */
     public function cgetAction($page = 1, $limit = 10)
     {
@@ -26,7 +26,7 @@ class ProfileController extends SoapController
      * @Soap\Method("getUser")
      * @Soap\Param("id", phpType="int")
      * @Soap\Result(phpType="Oro\Bundle\UserBundle\Entity\User")
-     * @AclAncestor("oro_user_profile_view")
+     * @AclAncestor("oro_user_user_view")
      */
     public function getAction($id)
     {
@@ -35,11 +35,11 @@ class ProfileController extends SoapController
 
     /**
      * @Soap\Method("createUser")
-     * @Soap\Param("profile", phpType="Oro\Bundle\UserBundle\Entity\UserSoap")
+     * @Soap\Param("user", phpType="Oro\Bundle\UserBundle\Entity\UserSoap")
      * @Soap\Result(phpType="boolean")
-     * @AclAncestor("oro_user_profile_create")
+     * @AclAncestor("oro_user_user_create")
      */
-    public function createAction($profile)
+    public function createAction($user)
     {
         return $this->handleCreateRequest();
     }
@@ -47,11 +47,11 @@ class ProfileController extends SoapController
     /**
      * @Soap\Method("updateUser")
      * @Soap\Param("id", phpType="int")
-     * @Soap\Param("profile", phpType="Oro\Bundle\UserBundle\Entity\UserSoap")
+     * @Soap\Param("user", phpType="Oro\Bundle\UserBundle\Entity\UserSoap")
      * @Soap\Result(phpType="boolean")
-     * @AclAncestor("oro_user_profile_update")
+     * @AclAncestor("oro_user_user_update")
      */
-    public function updateAction($id, $profile)
+    public function updateAction($id, $user)
     {
         return $this->handleUpdateRequest($id);
     }
@@ -60,7 +60,7 @@ class ProfileController extends SoapController
      * @Soap\Method("deleteUser")
      * @Soap\Param("id", phpType="int")
      * @Soap\Result(phpType="boolean")
-     * @AclAncestor("oro_user_profile_delete")
+     * @AclAncestor("oro_user_user_delete")
      */
     public function deleteAction($id)
     {
@@ -71,7 +71,7 @@ class ProfileController extends SoapController
      * @Soap\Method("getUserRoles")
      * @Soap\Param("id", phpType="int")
      * @Soap\Result(phpType="Oro\Bundle\UserBundle\Entity\Role[]")
-     * @AclAncestor("oro_user_profile_roles")
+     * @AclAncestor("oro_user_user_roles")
      */
     public function getRolesAction($id)
     {
@@ -82,7 +82,7 @@ class ProfileController extends SoapController
      * @Soap\Method("getUserGroups")
      * @Soap\Param("id", phpType="int")
      * @Soap\Result(phpType="Oro\Bundle\UserBundle\Entity\Group[]")
-     * @AclAncestor("oro_user_profile_groups")
+     * @AclAncestor("oro_user_user_groups")
      */
     public function getGroupsAction($id)
     {
@@ -93,7 +93,7 @@ class ProfileController extends SoapController
      * @Soap\Method("getUserAcl")
      * @Soap\Param("id", phpType="int")
      * @Soap\Result(phpType="string[]")
-     * @AclAncestor("oro_user_profile_acl")
+     * @AclAncestor("oro_user_user_acl")
      */
     public function getAclAction($id)
     {
@@ -106,7 +106,7 @@ class ProfileController extends SoapController
      * @Soap\Method("getUserBy")
      * @Soap\Param("filters", phpType="BeSimple\SoapCommon\Type\KeyValue\String[]")
      * @Soap\Result(phpType="Oro\Bundle\UserBundle\Entity\User")
-     * @AclAncestor("oro_user_profile_view")
+     * @AclAncestor("oro_user_user_view")
      */
     public function getByAction(array $filters)
     {
@@ -117,7 +117,7 @@ class ProfileController extends SoapController
         $entity = $this->getUserManager()->findUserBy($filters);
 
         if (!$entity) {
-            throw new \SoapFault('NOT_FOUND', 'User can not be found using specified filter');
+            throw new \SoapFault('NOT_FOUND', 'User cannot be found using specified filter');
         }
 
         return $entity;
@@ -152,7 +152,7 @@ class ProfileController extends SoapController
      */
     public function getForm()
     {
-        return $this->container->get('oro_user.form.profile.api');
+        return $this->container->get('oro_user.form.user.api');
     }
 
     /**
@@ -160,6 +160,6 @@ class ProfileController extends SoapController
      */
     public function getFormHandler()
     {
-        return $this->container->get('oro_user.form.handler.profile.api');
+        return $this->container->get('oro_user.form.handler.user.api');
     }
 }

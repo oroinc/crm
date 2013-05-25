@@ -86,7 +86,7 @@ class ResetController extends Controller
                 'text/html'
             );
 
-        $user->setPasswordRequestedAt(new \DateTime());
+        $user->setPasswordRequestedAt(new \DateTime('now', new \DateTimeZone('UTC')));
 
         $this->get('mailer')->send($message);
         $this->get('oro_user.manager')->updateUser($user);
@@ -158,7 +158,7 @@ class ResetController extends Controller
         }
 
         if ($this->get('oro_user.form.handler.reset')->process($user)) {
-            $session->getFlashBag()->add('success', 'The password has been reset successfully. You may login now.');
+            $session->getFlashBag()->add('success', 'Your password has been successfully reset. You may login now.');
 
             // force user logout
             $session->invalidate();

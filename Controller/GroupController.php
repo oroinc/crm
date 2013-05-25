@@ -30,7 +30,7 @@ class GroupController extends Controller
      * Create group form
      *
      * @Route("/create", name="oro_user_group_create")
-     * @Template("OroUserBundle:Group:edit.html.twig")
+     * @Template("OroUserBundle:Group:update.html.twig")
      * @Acl(
      *      id="oro_user_group_create",
      *      name="Create group",

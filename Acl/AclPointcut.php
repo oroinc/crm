@@ -20,7 +20,7 @@ class AclPointcut implements PointcutInterface
         if (
             substr($className, -10, 10) == 'Controller' &&
             strpos($className, 'ExceptionController') === false &&
-            strpos($className, 'ProfilerController') === false
+            strpos($className, 'UserController') === false
         ) {
             return true;
         }
