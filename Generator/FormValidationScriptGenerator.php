@@ -15,6 +15,9 @@ use APY\JsFormValidationBundle\Generator\PreProcessEvent;
 use APY\JsFormValidationBundle\Generator\FieldsConstraints;
 use APY\JsFormValidationBundle\Generator\FormValidationScriptGenerator as BaseFormValidationScriptGenerator;
 
+/**
+ * @SuppressWarnings(PHPMD)
+ */
 class FormValidationScriptGenerator extends BaseFormValidationScriptGenerator
 {
     /**
