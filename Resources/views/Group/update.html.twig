@@ -1,7 +1,11 @@
 {% extends 'OroContactBundle::layout.html.twig' %}
 {% form_theme form with 'OroUIBundle:Form:fields.html.twig' %}
-
-{% set title = form.vars.value.id ? 'Update group'|trans : 'Add group'|trans %}
+{% if form.vars.value.id %}
+    {% set title = 'Update group'|trans %}
+    {% oro_title_set({params : {"%group.name%": form.vars.value.name} }) %}
+{% else %}
+    {% set title = 'Add group'|trans %}
+{% endif %}
 
 {% block head_script %}
     {{ parent() }}
