@@ -152,7 +152,7 @@
                                         <label class="control-label">{{ attr.attribute.label|trans|title }}</label>
                                         <div class="controls">
                                             <div class="clearfix-oro">
-                                                <p class="control-label">{{ attr.__toString }}</p>
+                                                <p class="control-label">{{ attr.__toString|default('N/A') }}</p>
                                             </div>
                                         </div>
                                     </div>
@@ -169,7 +169,7 @@
                                     <label class="control-label">{{ attr.attribute.label|trans|title }}</label>
                                     <div class="controls">
                                         <div class="clearfix-oro">
-                                            <p class="control-label">{{ attr.__toString }}</p>
+                                            <p class="control-label">{{ attr.__toString|default('N/A') }}</p>
                                         </div>
                                     </div>
                                 </div>
