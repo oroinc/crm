@@ -32,9 +32,11 @@ use DateTime;
  * @ORM\HasLifecycleCallbacks()
  * @Gedmo\Loggable(logEntryClass="Oro\Bundle\DataAuditBundle\Entity\Audit")
  */
-class User
-    extends AbstractEntityFlexible
-    implements AdvancedUserInterface, \Serializable, EntityUploadedImageInterface, AuditableInterface
+class User extends AbstractEntityFlexible implements
+    AdvancedUserInterface,
+    \Serializable,
+    EntityUploadedImageInterface,
+    AuditableInterface
 {
     const ROLE_DEFAULT   = 'ROLE_USER';
     const ROLE_ANONYMOUS = 'IS_AUTHENTICATED_ANONYMOUSLY';
@@ -286,6 +288,7 @@ class User
 
         $this->salt     = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
         $this->roles    = new ArrayCollection();
+        $this->groups    = new ArrayCollection();
         $this->statuses = new ArrayCollection();
         $this->emails   = new ArrayCollection();
     }
@@ -749,9 +752,9 @@ class User
     }
 
     /**
-     * Returns the user roles
+     * Returns the user roles merged with associated groups roles
      *
-     * @return array The roles
+     * @return Role[] The array of roles
      */
     public function getRoles()
     {
@@ -766,9 +769,9 @@ class User
     }
 
     /**
-     * Returns the true ArrayCollection of Roles.
+     * Returns the true Collection of Roles.
      *
-     * @return ArrayCollection
+     * @return Collection
      */
     public function getRolesCollection()
     {
@@ -778,14 +781,14 @@ class User
     /**
      * Pass a string, get the desired Role object or null
      *
-     * @param  string    $role Role name
+     * @param  string $roleName Role name
      * @return Role|null
      */
-    public function getRole($role)
+    public function getRole($roleName)
     {
         /** @var Role $item */
         foreach ($this->getRoles() as $item) {
-            if ($role == $item->getRole()) {
+            if ($roleName == $item->getRole()) {
                 return $item;
             }
         }
@@ -800,21 +803,29 @@ class User
      *
      *         $securityContext->isGranted('ROLE_USER');
      *
-     * @param  Role|string $role
+     * @param Role|string $role
      * @return boolean
+     * @throws \InvalidArgumentException
      */
     public function hasRole($role)
     {
-        return (bool) $this->getRole($role instanceof Role ? $role->getRole() : $role);
+        if ($role instanceof Role) {
+            $roleName = $role->getRole();
+        } elseif (is_string($role)) {
+            $roleName = $role;
+        } else {
+            throw new \InvalidArgumentException(
+                '$role must be an instance of Oro\Bundle\UserBundle\Entity\Role or a string'
+            );
+        }
+        return (bool)$this->getRole($roleName);
     }
 
     /**
-     * Adds a Role to the ArrayCollection.
-     * Can't type hint due to interface so throws RuntimeException.
+     * Adds a Role to the Collection.
      *
-     * @param  Role              $role
+     * @param Role $role
      * @return User
-     * @throws \RuntimeException
      */
     public function addRole(Role $role)
     {
@@ -826,29 +837,43 @@ class User
     }
 
     /**
-     * Pass a string, remove the Role object from collection
+     * Remove the Role object from collection
      *
      * @param Role|string $role
+     * @throws \InvalidArgumentException
      */
     public function removeRole($role)
     {
-        $role = $role instanceof Role ? $role->getRole() : $role;
-        $item = $this->getRole($role);
-
-        if ($item) {
-            $this->roles->removeElement($item);
+        if ($role instanceof Role) {
+            $roleObject = $role;
+        } elseif (is_string($role)) {
+            $roleObject = $this->getRole($role);
+        } else {
+            throw new \InvalidArgumentException(
+                '$role must be an instance of Oro\Bundle\UserBundle\Entity\Role or a string'
+            );
+        }
+        if ($roleObject) {
+            $this->roles->removeElement($roleObject);
         }
     }
 
     /**
-     * Pass an array of Role objects and re-set roles collection with new Roles.
+     * Pass an array or Collection of Role objects and re-set roles collection with new Roles.
      * Type hinted array due to interface.
      *
-     * @param  array $roles Array of Role objects
+     * @param  array|Collection $roles Array of Role objects
      * @return User
+     * @throws \InvalidArgumentException
      */
-    public function setRoles(array $roles)
+    public function setRoles($roles)
     {
+        if (!$roles instanceof Collection && !is_array($roles)) {
+            throw new \InvalidArgumentException(
+                '$roles must be an instance of Doctrine\Common\Collections\Collection or an array'
+            );
+        }
+
         $this->roles->clear();
 
         foreach ($roles as $role) {
@@ -859,13 +884,19 @@ class User
     }
 
     /**
-     * Directly set the ArrayCollection of Roles.
+     * Directly set the Collection of Roles.
      *
-     * @param  ArrayCollection $collection
+     * @param  Collection $collection
      * @return User
+     * @throws \InvalidArgumentException
      */
     public function setRolesCollection($collection)
     {
+        if (!$collection instanceof Collection) {
+            throw new \InvalidArgumentException(
+                '$collection must be an instance of Doctrine\Common\Collections\Collection'
+            );
+        }
         $this->roles = $collection;
 
         return $this;
@@ -878,9 +909,12 @@ class User
      */
     public function getGroups()
     {
-        return $this->groups ?: $this->groups = new ArrayCollection();
+        return $this->groups;
     }
 
+    /**
+     * @return array
+     */
     public function getGroupNames()
     {
         $names = array();
@@ -893,11 +927,19 @@ class User
         return $names;
     }
 
+    /**
+     * @param string $name
+     * @return bool
+     */
     public function hasGroup($name)
     {
         return in_array($name, $this->getGroupNames());
     }
 
+    /**
+     * @param Group $group
+     * @return User
+     */
     public function addGroup(Group $group)
     {
         if (!$this->getGroups()->contains($group)) {
@@ -907,6 +949,10 @@ class User
         return $this;
     }
 
+    /**
+     * @param Group $group
+     * @return User
+     */
     public function removeGroup(Group $group)
     {
         if ($this->getGroups()->contains($group)) {
@@ -1071,7 +1117,7 @@ class User
         }
 
         $suffix = $this->getCreatedAt() ? $this->getCreatedAt()->format('Y-m') : date('Y-m');
-        
+
         return 'uploads' . $ds . 'users' . $ds . $suffix;
     }
 

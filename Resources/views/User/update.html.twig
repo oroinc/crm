@@ -8,7 +8,8 @@
 
 {% block page_container %}
     {% block content %}
-    <form action="{{ form.vars.value.id ? path('oro_user_update', { id: form.vars.value.id, back: app.session.get('back') }) : path('oro_user_create', { back: app.session.get('back') }) }}" {{ form_enctype(form) }}
+    {{ JSFV(form) }}
+    <form id="{{ form.name }}" action="{{ form.vars.value.id ? path('oro_user_update', { id: form.vars.value.id, back: app.session.get('back') }) : path('oro_user_create', { back: app.session.get('back') }) }}" {{ form_enctype(form) }}
         method="post" data-collect="true" class="scrollable-substructure">
         <div class="navigation clearfix navbar-extra navbar-extra-right">
             <div class="row">
@@ -29,6 +30,25 @@
                             <div class="btn-group">
                                 <button type="submit" class="btn btn-success">{{ ' Save'|trans }}</button>
                             </div>
+<<<<<<< HEAD
+=======
+                            {% endif %}
+                            <div class="pull-left customer-info-top-actions">
+                                <div class="btn-group">
+                                    <a href="{{ app.session.get('back') ? app.session.get('back') : path('oro_user_index') }}" class="btn back">{{ 'Cancel'|trans }}</a>
+                                </div>
+                                <div class="btn-group">
+                                    <button type="submit" class="btn btn-success">{{ ' Save'|trans }}</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="pull-right usser-info-state">
+                            <ul class="inline-decorate">
+                                {% if form.vars.value.id %}
+                                <li><a class="no-hash" href="{{ path('oro_dataaudit_history', {entity:'Oro_Bundle_UserBundle_Entity_User', id: form.vars.value.id}) }}" id="view-activity-btn" title="{{ form.vars.value }} - {{ 'Change History'|trans }}">{{ 'Change History'|trans }}</a></li>
+                                {% endif %}
+                            </ul>
+>>>>>>> master
                         </div>
                     </div>
                     <div class="pull-right usser-info-state">

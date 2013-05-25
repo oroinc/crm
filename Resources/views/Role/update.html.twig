@@ -36,7 +36,8 @@
 
 {% block page_container %}
     {% block content %}
-    <form action="{{ form.vars.value.id ? path('oro_user_role_update', { id: form.vars.value.id, back: app.session.get('back') }) : path('oro_user_role_create') }}"
+    {{ JSFV(form) }}
+    <form id="{{ form.name }}" action="{{ form.vars.value.id ? path('oro_user_role_update', { id: form.vars.value.id, back: app.session.get('back') }) : path('oro_user_role_create') }}"
         method="post" class="form-register scrollable-substructure">
             <div class="container-fluid">
                 <div class="navigation clearfix navbar-extra">

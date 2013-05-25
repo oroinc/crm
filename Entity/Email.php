@@ -67,7 +67,7 @@ class Email
     /**
      * Set user
      *
-     * @param  \Oro\Bundle\UserBundle\Entity\User $user
+     * @param  User $user
      * @return Email
      */
     public function setUser(User $user = null)
@@ -80,7 +80,7 @@ class Email
     /**
      * Get user
      *
-     * @return \Oro\Bundle\UserBundle\Entity\User
+     * @return User
      */
     public function getUser()
     {

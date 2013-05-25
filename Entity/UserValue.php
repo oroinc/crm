@@ -2,9 +2,11 @@
 
 namespace Oro\Bundle\UserBundle\Entity;
 
-use Gedmo\Mapping\Annotation as Gedmo;
+use Doctrine\Common\Collections\Collection;
 
 use Doctrine\ORM\Mapping as ORM;
+
+use Gedmo\Mapping\Annotation as Gedmo;
 
 use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityFlexibleValue;
 use Oro\Bundle\FlexibleEntityBundle\Entity\Attribute;
@@ -17,7 +19,7 @@ use Oro\Bundle\FlexibleEntityBundle\Entity\Attribute;
 class UserValue extends AbstractEntityFlexibleValue
 {
     /**
-     * @var Oro\Bundle\FlexibleEntityBundle\Entity\Attribute $attribute
+     * @var Attribute $attribute
      *
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\FlexibleEntityBundle\Entity\Attribute")
      * @ORM\JoinColumn(name="attribute_id", referencedColumnName="id", onDelete="CASCADE")
@@ -34,7 +36,7 @@ class UserValue extends AbstractEntityFlexibleValue
     /**
      * Store values data when backend is option (deal to select, multi-select)
      *
-     * @var options ArrayCollection
+     * @var Collection $options
      *
      * @ORM\ManyToMany(targetEntity="Oro\Bundle\FlexibleEntityBundle\Entity\AttributeOption")
      * @ORM\JoinTable(
@@ -88,7 +90,7 @@ class UserValue extends AbstractEntityFlexibleValue
     /**
      * Store date value
      *
-     * @var date $date
+     * @var \DateTime $date
      *
      * @ORM\Column(name="value_date", type="date", nullable=true)
      * @Gedmo\Versioned
@@ -98,7 +100,7 @@ class UserValue extends AbstractEntityFlexibleValue
     /**
      * Store datetime value
      *
-     * @var date $datetime
+     * @var \DateTime $datetime
      *
      * @ORM\Column(name="value_datetime", type="datetime", nullable=true)
      * @Gedmo\Versioned

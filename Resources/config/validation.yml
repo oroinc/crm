@@ -33,6 +33,8 @@ Oro\Bundle\UserBundle\Entity\User:
             - NotBlank:     ~
             - Length:
                 max:        100
+        birthday:
+            - Date:         ~
 
 Oro\Bundle\UserBundle\Entity\Role:
     constraints:
@@ -42,7 +44,9 @@ Oro\Bundle\UserBundle\Entity\Role:
             - NotBlank:     ~
             - Length:
                 max:        30
-            - Regex:        "/^ROLE_[a-zA-Z0-9_]+$/"
+            - Regex:
+                pattern: "/^[a-zA-Z0-9_]+$/"
+                message: "Role must be an alphanumeric value"
         label:
             - Length:
                 max:        30
@@ -55,3 +59,7 @@ Oro\Bundle\UserBundle\Entity\Group:
             - NotBlank:     ~
             - Length:
                 max:        30
+        roles:
+            - Count:
+                min:        1
+                minMessage: "You must select at least {{ limit }} role"
