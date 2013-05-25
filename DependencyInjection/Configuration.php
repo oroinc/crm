@@ -58,7 +58,7 @@ class Configuration implements ConfigurationInterface
                         ->isRequired()
                         ->cannotBeEmpty()
                     ->end()
-                    ->scalarNode('entity_icon')
+                    ->scalarNode('entity_icon_class')
                         ->isRequired()
                         ->cannotBeEmpty()
                     ->end()
