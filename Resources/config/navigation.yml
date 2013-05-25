@@ -42,10 +42,10 @@ oro_menu_config:
 
 oro_titles:
     oro_contact_index: Contacts
-    oro_contact_view: %%contact.name%% - View Contact
-    oro_contact_create: New Contact
-    oro_contact_update: Update Contact
+    oro_contact_view: %%contact.name%% - Contacts
+    oro_contact_create: Create Contact
+    oro_contact_update: %%contact.name%% - Contacts
 
-    oro_contact_group_index: Groups
-    oro_contact_group_create: New Group
-    oro_contact_group_update: Update Group
+    oro_contact_group_index: Contact Groups
+    oro_contact_group_create: Create Contact Group
+    oro_contact_group_update: %%group.name%% - Contact Group
