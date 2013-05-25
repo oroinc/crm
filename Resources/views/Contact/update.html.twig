@@ -117,8 +117,17 @@
                     {% if form.values is defined %}
                     <div class="usser-row">
                         <h4 id="scroll-main" class="scrollspy-title">{{ 'General'|trans }}</h4>
-                        <div class="row-fluid">
-                            <fieldset class="form-horizontal">
+                        <div class="row-fluid row-fluid-divider oro-form-contains-address">
+                            {% for attribute in form.values %}
+                                {% if (attribute.children.address is defined) %}
+                                    <fieldset class="form-horizontal pull-right span6">
+                                        <h5 class="usser-fiedset"><span>{{ 'Address'|trans }}</span></h5>
+                                        {{ form_row(attribute) }}
+                                    </fieldset>
+                                {% endif %}
+                            {% endfor %}
+
+                            <fieldset class="form-horizontal pull-left span6">
                                 <h5 class="usser-fiedset"><span>{{ 'Basic Information'|trans }}</span></h5>
                                 {{ form_row(form.values) }}
                             </fieldset>

@@ -36,6 +36,7 @@ services:
             - [ addAttributeType, ['oro_contact_attribute_contact'] ]
             - [ addAttributeType, ['oro_flexibleentity_email_collection'] ]
             - [ addAttributeType, ['oro_flexibleentity_phone_collection'] ]
+            - [ addAttributeType, ['oro_address'] ]
         tags:
             - { name: oro_flexibleentity_manager, entity: %oro_contact.entity.class%}
 
