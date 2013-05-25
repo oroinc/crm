@@ -2,6 +2,7 @@ parameters:
     oro_ui.date.class:                   Oro\Bundle\UIBundle\Form\Type\OroDateType
     oro_ui.datetime.class:               Oro\Bundle\UIBundle\Form\Type\OroDateTimeType
     oro_ui.type.entity_identifier.class: Oro\Bundle\UIBundle\Form\Type\EntityIdentifierType
+    oro_ui.twig.ceil.class:              Oro\Bundle\UIBundle\Twig\CeilExtension
 
 services:
     oro_ui.type.oro_date:
@@ -19,3 +20,8 @@ services:
         tags:
             - { name: form.type, alias: oro_entity_identifier }
         arguments: ["@doctrine"]
+
+    oro_ui.twig.ceil_extension:
+        class: %oro_ui.twig.ceil.class%
+        tags:
+            - { name: twig.extension }
