@@ -27,7 +27,7 @@
             </form>
         </div>
 
-        {% if groupedResults|length > 1 %}
+        {% if '' in groupedResults|keys and groupedResults[''].count > 0 or groupedResults|length > 1 %}
             <table width="100%" cellpadding="0" cellspacing="0">
                 <tr>
                     <td class="search-entity-types-column">
@@ -42,14 +42,15 @@
                                 {% set label = type.config.label %}
                             {% endif %}
 
-                            {% set entityIcon = "bundles/orosearch/img/search.png" %}
-                            {% if 'entity_icon' in type.config|keys %}
-                                {% set entityIcon = type.config.entity_icon %}
+                            {% set entityIconClass = "icon-tag" %}
+                            {% if alias == '' %}
+                                {% set entityIconClass = "icon-search" %}
+                            {% elseif 'entity_icon_class' in type.config|keys %}
+                                {% set entityIconClass = type.config.entity_icon_class %}
                             {% endif %}
 
                             <div class="entity-type{% if selected %} selected{% endif %}">
-                                <img src="{{ asset(entityIcon) }}" alt="{{ label|trans }}" />
-
+                                <i class="{{ entityIconClass }}"></i>
                                 {% if selected %}
                                     {{ label|trans }} ({{ type.count }})
                                     <div class="arrow"><i class="icon-chevron-right"></i></div>
