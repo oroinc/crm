@@ -26,7 +26,7 @@ Oro.Filter.ChoiceFilter = Oro.Filter.TextFilter.extend({
                             '<li><a class="choice_value" href="#" data-value="<%= value %>"><%= hint %></a></li>' +
                         '<% }); %>' +
                     '</ul>' +
-                    '<input class="span2" type="text" name="value" value="">' +
+                    '<input type="text" name="value" value="">' +
                     '<input class="name_input" type="hidden" name="<%= name %>" id="<%= name %>" value=""/>' +
                     '</div>' +
 
