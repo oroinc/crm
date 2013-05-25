@@ -102,8 +102,8 @@ class AccountDatagridManager extends FlexibleDatagridManager
         );
         $phoneProperty = new CallbackProperty(
             $fieldPhone->getName(),
-            function (ResultRecordInterface $record) {
-                $phones = $record->getValue('phones')->getData();
+            function (ResultRecordInterface $record) use ($fieldPhone) {
+                $phones = $record->getValue($fieldPhone->getFieldName())->getData();
                 /** @var $phone Collection */
                 foreach ($phones as $phone) {
                     if ($phone->getType() == PhoneType::TYPE_OFFICE) {
