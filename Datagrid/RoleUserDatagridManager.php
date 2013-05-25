@@ -66,12 +66,20 @@ class RoleUserDatagridManager extends UserRelationDatagridManager
     protected function createQuery()
     {
         $query = parent::createQuery();
-        $query->addSelect(
-            'CASE WHEN ' .
-            '(:role MEMBER OF u.roles OR u.id IN (:data_in)) AND u.id NOT IN (:data_not_in) '.
-            'THEN 1 ELSE 0 END AS hasCurrentRole',
-            true
-        );
+        if ($this->getRole()->getId()) {
+            $query->addSelect(
+                'CASE WHEN ' .
+                '(:role MEMBER OF u.roles OR u.id IN (:data_in)) AND u.id NOT IN (:data_not_in) '.
+                'THEN 1 ELSE 0 END AS hasCurrentRole',
+                true
+            );
+        } else {
+            $query->addSelect(
+                ' 0 as hasCurrentRole',
+                true
+            );
+        }
+
         return $query;
     }
 
