@@ -63,6 +63,6 @@ oro_titles:
     oro_user_reset_request: Forgot Password
     oro_user_reset_check_email: Password Reset - Check Email
 
-    oro_user_group_create: Create User Group
-    oro_user_group_update: %%group%% - User Groups
-    oro_user_group_index: User Groups
+    oro_user_group_create: Create Group
+    oro_user_group_update: %%group%% - Groups
+    oro_user_group_index: Groups
