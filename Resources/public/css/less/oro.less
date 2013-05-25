@@ -402,7 +402,7 @@ footer{
   left: 25px;
   width: 320px;
   padding:0 1px 0 5px;
-  z-index: 9999;
+  z-index: 995;
   color: #fff;
   background: #424850 url("../../img/bg-sidebar.png")repeat-y;
   -webkit-box-shadow:  6px 4px 6px 1px rgba(0, 0, 0, 0.60);
@@ -898,7 +898,7 @@ footer{
 .ui-dialog-content{
   padding: @verticalPadding/2 @horizontalPadding/2;
   position: relative;
-
+  min-width: 250px;
   .ui-resizable-handle{
     cursor: move;
   }
@@ -1052,8 +1052,7 @@ footer{
   background-color: #f35e3c;
   #gradient > .vertical(#f35e3c, #d42f13);
   border-color: #c2270d #c2270d #c2270d;
-  text-shadow: 1px 1px 2px #520e03;
-  filter: dropshadow(color=#520e03, offx=1, offy=1);
+  text-shadow: none;
 }
 .btn-danger:hover{
   background-color: #f66952;
@@ -1072,8 +1071,7 @@ footer{
   background-color: #4fae0d;
   #gradient > .vertical(#70c813, #49982b);
   border-color: #49982b #49982b #49982b;
-  text-shadow: 1px 1px 2px #0a521d;
-  filter: dropshadow(color=#0a521d, offx=1, offy=1);
+  text-shadow: none;
 }
 .btn-success:hover{
   background-color: #8cd42f;
@@ -1093,8 +1091,7 @@ footer{
   background-color: #ffb322;
   #gradient > .vertical(#ffb322, #d7920b);
   border-color: #d7920b #dc9f28 #d7920b;
-  text-shadow: 1px 1px 2px #520e03;
-  filter: dropshadow(color=#520e03, offx=1, offy=1);
+  text-shadow: none;
 }
 .btn-warning:hover{
   background-color: #fdc247;
@@ -1662,7 +1659,7 @@ footer{
   }
 }
 .grid thead .caret{
-  margin: 10px 0 0;
+  margin: 8px 0 0;
 }
 .grid-info{
 
@@ -1770,10 +1767,6 @@ footer{
 }
 .navbar-extra{
   padding: 10px 0;
-}
-.navbar-extra .btn-group{
-  margin-right: 0;
-  margin-left: 7px;
 }
 .navbar-extra .customer-info-top-actions a{
   height: 24px;
@@ -2140,6 +2133,7 @@ footer{
 }
 .ui-widget-content{
   border: 0;
+
 }
 .ui-dialog.ui-widget-content{
   border: 1px solid #8e9195;
@@ -2169,6 +2163,9 @@ footer{
     float: left;
     font: bold 17px/18px 'HelveticaNeue bold', Helvetica, Arial, sans-serif;
   }
+}
+.form-info-edit{
+  padding-left: 0;
 }
 .customer-info{
   padding-left: 76px;
@@ -2491,6 +2488,9 @@ textarea{
 }
 .btn-group > a.btn{
   height: 28px;
+  line-height: 28px;
+}
+.btn-group > button.btn-success{
   line-height: 28px;
 }
 .oro-action .btn-group > .btn,
@@ -3022,7 +3022,7 @@ select:focus:invalid:focus {
 }
 .separator-btn{
   border-left: 1px solid #e9e9e9;
-  margin: 4px 1px 0 8px;
+  margin: 4px 8px 0;
   height: 24px;
 }
 #search-bar-button:hover,
@@ -3100,13 +3100,13 @@ margin-right: -4px;
 }
 .oro-multiselect{
   display: inline-block;
-  width: 95px;
+  width: auto;
   vertical-align: middle;
 }
 
 .oro-multiselect-holder .selector{
   display: inline-block;
-  width: 85px;
+  width: auto;
   overflow: hidden;
   vertical-align: middle;
 }
@@ -3187,4 +3187,12 @@ label.radio.error{
 .search-entity-types-column .entity-type > img{
   position: relative;
   top: -2px;
+}
+#historyDatagridBody .toolbar label.control-label{
+  white-space: nowrap;
+  padding-right: 10px;
+}
+#historyDatagridBody .grid-toolbar .pagination-centered{
+  width: auto;
+  margin: 0;
 }
