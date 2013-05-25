@@ -128,8 +128,8 @@
                                         {% if 'address' in attribute.attribute.code %}
                                             <div class="form-horizontal span6 pull-left">
                                                 {% set address = attribute.data %}
-                                                <h5 class="usser-fiedset"><span>{{ attribute.attribute.label|trans }}</span></h5>
-                                                {% if address is defined and address is not null %}
+                                                    {% if address is defined and address is not null %}
+                                                    <h5 class="usser-fiedset"><span>{{ attribute.attribute.label|trans }}</span></h5>
                                                     <div class="control-group">
                                                         <label class="control-label">{{ 'First name'|trans }}</label>
 
