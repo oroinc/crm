@@ -115,18 +115,11 @@ abstract class RestController extends FOSRestController implements
             return $this->handleView($this->view(null, Codes::HTTP_NOT_FOUND));
         }
 
-        $securityToken = $this->get('security.context')->getToken();
-        if ($securityToken && is_object($user = $securityToken->getUser()) && !(get_class($entity) == get_class($user) && $entity->getId() == $user->getId())) {
-            $em = $this->getManager()->getObjectManager();
-            $em->remove($entity);
-            $em->flush();
+        $em = $this->getManager()->getObjectManager();
+        $em->remove($entity);
+        $em->flush();
 
-            $responseCode = Codes::HTTP_NO_CONTENT;
-        } else {
-            $responseCode = Codes::HTTP_FORBIDDEN;
-        }
-
-        return $this->handleView($this->view(null, $responseCode));
+        return $this->handleView($this->view(null, Codes::HTTP_NO_CONTENT));
     }
 
     /**
