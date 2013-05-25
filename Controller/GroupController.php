@@ -40,7 +40,6 @@ class GroupController extends Controller
      */
     public function createAction()
     {
-        $this->get('request')->getSession()->set('back', $this->get('request')->getUriForPath('/user/group'));
         return $this->updateAction(new Group());
     }
 
