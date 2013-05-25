@@ -134,9 +134,13 @@ Oro.Filter.ChoiceFilter = Oro.Filter.TextFilter.extend({
      * @protected
      */
     _onClickChoiceValue: function(e) {
+        $(e.currentTarget).parent().parent().find('li').each(function( index ) {
+            $(this).removeClass('active');
+        });
+        $(e.currentTarget).parent().addClass('active');
         var parentDiv = $(e.currentTarget).parent().parent().parent();
         parentDiv.find('.name_input').val($(e.currentTarget).attr('data-value'));
-        parentDiv.find('button').html($(e.currentTarget).html());
+        parentDiv.find('button').html($(e.currentTarget).html() + '<span class="caret"></span>');
         e.preventDefault();
     }
 });
