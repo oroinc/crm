@@ -282,7 +282,7 @@ class NavigationItem implements NavigationItemInterface
      */
     public function doPrePersist()
     {
-        $this->createdAt = new \DateTime();
+        $this->createdAt = new \DateTime('now', new \DateTimeZone('UTC'));
         $this->updatedAt = $this->createdAt;
     }
 
@@ -293,6 +293,6 @@ class NavigationItem implements NavigationItemInterface
      */
     public function doPreUpdate()
     {
-        $this->updatedAt = new \DateTime();
+        $this->updatedAt = new \DateTime('now', new \DateTimeZone('UTC'));
     }
 }
