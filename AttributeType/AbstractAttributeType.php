@@ -1,6 +1,7 @@
 <?php
 namespace Oro\Bundle\FlexibleEntityBundle\AttributeType;
 
+use Symfony\Component\Validator\Constraints;
 use Symfony\Component\Form\FormFactoryInterface;
 use Oro\Bundle\FlexibleEntityBundle\AttributeType\AttributeTypeInterface;
 use Oro\Bundle\FlexibleEntityBundle\Model\FlexibleValueInterface;
@@ -135,9 +136,26 @@ abstract class AbstractAttributeType implements AttributeTypeInterface
     protected function prepareValueFormOptions(FlexibleValueInterface $value)
     {
         $options = array(
-            'label'    => $value->getAttribute()->getLabel(),
-            'required' => $value->getAttribute()->getRequired()
+            'label'       => $value->getAttribute()->getLabel(),
+            'required'    => $value->getAttribute()->getRequired(),
+            'constraints' => array()
         );
+
+        if ($options['required']) {
+            $options['constraints'][] = new Constraints\NotBlank();
+        }
+
+        switch ($value->getAttribute()->getBackendType()) {
+            case self::BACKEND_TYPE_DATE:
+                $options['constraints'][] = new Constraints\Date();
+                break;
+            case self::BACKEND_TYPE_DATE:
+                $options['constraints'][] = new Constraints\Date();
+                break;
+            case self::BACKEND_TYPE_DATETIME:
+                $options['constraints'][] = new Constraints\DateTime();
+                break;
+        }
 
         return $options;
     }
