@@ -231,7 +231,7 @@ class PageState
     public function doPrePersist()
     {
         $this->createdAt =
-        $this->updatedAt = new \DateTime();
+        $this->updatedAt = new \DateTime('now', new \DateTimeZone('UTC'));
     }
 
     /**
@@ -241,6 +241,6 @@ class PageState
      */
     public function doPreUpdate()
     {
-        $this->updatedAt = new \DateTime();
+        $this->updatedAt = new \DateTime('now', new \DateTimeZone('UTC'));
     }
 }

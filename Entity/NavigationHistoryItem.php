@@ -223,7 +223,7 @@ class NavigationHistoryItem implements NavigationItemInterface
      */
     public function doPrePersist()
     {
-        $this->visitedAt = new \DateTime();
+        $this->visitedAt = new \DateTime('now', new \DateTimeZone('UTC'));
     }
 
     /**
@@ -231,7 +231,7 @@ class NavigationHistoryItem implements NavigationItemInterface
      */
     public function doUpdate()
     {
-        $this->visitedAt = new \DateTime();
+        $this->visitedAt = new \DateTime('now', new \DateTimeZone('UTC'));
         $this->visitCount++;
     }
 }

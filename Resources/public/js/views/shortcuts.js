@@ -44,6 +44,7 @@ navigation.shortcut.MainView = Backbone.View.extend({
 
     onChange: function() {
         var key = this.$el.val();
+        this.$el.val('');
         if (!_.isUndefined(this.data[key])) {
             var dataItem = this.data[key];
             this.$form.attr("action", dataItem.url).submit();
