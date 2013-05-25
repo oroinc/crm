@@ -14,6 +14,9 @@ var Oro = Oro || {};
         /** @property {String} */
         className: 'modal oro-modal-danger',
 
+        /** @property {String} */
+        okButtonClass: 'btn-danger',
+
         /** @property {Object} */
         template: _.template('\
             <% if (title) { %>\
@@ -31,7 +34,7 @@ var Oro = Oro || {};
                   <a href="#" class="btn cancel"><%= cancelText %></a>\
                 <% } %>\
               <% } %>\
-              <a href="#" class="btn ok btn-danger"><%= okText %></a>\
+              <a href="#" class="btn ok <%= okButtonClass %>"><%= okText %></a>\
             </div>\
         '),
 
@@ -41,6 +44,9 @@ var Oro = Oro || {};
         initialize: function(options) {
             if (!options.cancelText) {
                 options.cancelText = '';
+            }
+            if (!options.okButtonClass) {
+                options.okButtonClass = this.okButtonClass;
             }
             options = _.extend({
                 template: this.template
