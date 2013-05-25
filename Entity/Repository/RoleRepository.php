@@ -2,6 +2,7 @@
 namespace Oro\Bundle\UserBundle\Entity\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\QueryBuilder;
 
 use Oro\Bundle\UserBundle\Entity\Role;
 
@@ -10,8 +11,8 @@ class RoleRepository extends EntityRepository
     /**
      * Get user query builder
      *
-     * @param  \Oro\Bundle\UserBundle\Entity\Role $role
-     * @return \Doctrine\ORM\QueryBuilder
+     * @param  Role $role
+     * @return QueryBuilder
      */
     public function getUserQueryBuilder(Role $role)
     {

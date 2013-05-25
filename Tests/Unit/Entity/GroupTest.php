@@ -9,61 +9,124 @@ use Oro\Bundle\UserBundle\Entity\Role;
 
 class GroupTest extends \PHPUnit_Framework_TestCase
 {
-    public function testGroup()
-    {
-        $group = $this->getGroup();
-        $name  = 'Users';
+    const TEST_ROLE = 'ROLE_FOO';
 
-        $this->assertEmpty($group->getId());
-        $this->assertEmpty($group->getName());
-
-        $group->setName($name);
-
-        $this->assertEquals($name, $group->getName());
-    }
-
-    public function testRoles()
-    {
-        $group = $this->getGroup();
-        $role  = new Role('ROLE_FOO');
-
-        $this->assertCount(0, $group->getRoles());
-        $this->assertNull($group->getRole($role));
-        $this->assertFalse($group->hasRole($role));
-
-        $group->addRole($role);
-
-        $this->assertTrue($group->hasRole($role));
-        $this->assertEquals($role, $group->getRole($role));
-
-        $group->removeRole($role);
-
-        $this->assertFalse($group->hasRole($role));
-
-        $roles = array($role);
-
-        $group->setRoles($roles);
-
-        $this->assertEquals($roles, $group->getRoles()->toArray());
-
-        $roles = new ArrayCollection(array($role));
-
-        $group->setRoles($roles);
-
-        $this->assertEquals($roles, $group->getRoles());
-        $this->assertNotEmpty($group->getRoleLabelsAsString());
-    }
+    /**
+     * @var Group
+     */
+    protected $group;
 
     protected function setUp()
     {
         $this->group = new Group();
     }
 
-    /**
-     * @return Group
-     */
-    protected function getGroup()
+    public function testGroup()
     {
-        return $this->group;
+        $name  = 'Users';
+
+        $this->assertEmpty($this->group->getId());
+        $this->assertEmpty($this->group->getName());
+
+        $this->group->setName($name);
+
+        $this->assertEquals($name, $this->group->getName());
+    }
+
+    public function testGetRoleLabelsAsString()
+    {
+        $roleFoo  = new Role('ROLE_FOO');
+        $roleFoo->setLabel('Role foo');
+        $this->group->addRole($roleFoo);
+
+        $roleBar  = new Role('ROLE_BAR');
+        $roleBar->setLabel('Role bar');
+        $this->group->addRole($roleBar);
+
+        $this->assertEquals(
+            'Role foo, Role bar',
+            $this->group->getRoleLabelsAsString()
+        );
+    }
+
+    public function testHasRoleWithStringArgument()
+    {
+        $role = new Role(self::TEST_ROLE);
+
+        $this->assertFalse($this->group->hasRole(self::TEST_ROLE));
+        $this->group->addRole($role);
+        $this->assertTrue($this->group->hasRole(self::TEST_ROLE));
+    }
+
+    public function testHasRoleWithObjectArgument()
+    {
+        $role = new Role(self::TEST_ROLE);
+
+        $this->assertFalse($this->group->hasRole($role));
+        $this->group->addRole($role);
+        $this->assertTrue($this->group->hasRole($role));
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage $role must be an instance of Oro\Bundle\UserBundle\Entity\Role or a string
+     */
+    public function testHasRoleThrowsInvalidArgumentException()
+    {
+        $this->group->hasRole(new \stdClass());
+    }
+
+    public function testRemoveRoleWithStringArgument()
+    {
+        $role = new Role(self::TEST_ROLE);
+        $this->group->addRole($role);
+
+        $this->assertTrue($this->group->hasRole($role));
+        $this->group->removeRole(self::TEST_ROLE);
+        $this->assertFalse($this->group->hasRole($role));
+    }
+
+    public function testRemoveRoleWithObjectArgument()
+    {
+        $role = new Role(self::TEST_ROLE);
+        $this->group->addRole($role);
+
+        $this->assertTrue($this->group->hasRole($role));
+        $this->group->removeRole($role);
+        $this->assertFalse($this->group->hasRole($role));
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage $role must be an instance of Oro\Bundle\UserBundle\Entity\Role or a string
+     */
+    public function testRemoveRoleThrowsInvalidArgumentException()
+    {
+        $this->group->removeRole(new \stdClass());
+    }
+
+    public function testSetRolesWithArrayArgument()
+    {
+        $roles = array(new Role(self::TEST_ROLE));
+        $this->assertCount(0, $this->group->getRoles());
+        $this->group->setRoles($roles);
+        $this->assertEquals($roles, $this->group->getRoles()->toArray());
+    }
+
+    public function testSetRolesWithCollectionArgument()
+    {
+        $roles = new ArrayCollection(array(new Role(self::TEST_ROLE)));
+        $this->assertCount(0, $this->group->getRoles());
+        $this->group->setRoles($roles);
+        $this->assertEquals($roles->toArray(), $this->group->getRoles()->toArray());
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage $roles must be an instance of Doctrine\Common\Collections\Collection or an array
+     */
+    public function testSetRolesThrowsInvalidArgumentException()
+    {
+        $this->group->setRoles('roles');
     }
 }

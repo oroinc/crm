@@ -4,6 +4,7 @@ namespace Oro\Bundle\UserBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 use JMS\Serializer\Annotation\Exclude;
 use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
@@ -218,7 +219,7 @@ class Acl
     /**
      * Add children
      *
-     * @param  \Oro\Bundle\UserBundle\Entity\Acl $children
+     * @param  Acl $children
      * @return Acl
      */
     public function addChildren(Acl $children)
@@ -231,7 +232,7 @@ class Acl
     /**
      * Remove children
      *
-     * @param \Oro\Bundle\UserBundle\Entity\Acl $children
+     * @param Acl $children
      */
     public function removeChildren(Acl $children)
     {
@@ -241,7 +242,7 @@ class Acl
     /**
      * Get children
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getChildren()
     {
@@ -251,7 +252,7 @@ class Acl
     /**
      * Set parent
      *
-     * @param  \Oro\Bundle\UserBundle\Entity\Acl $parent
+     * @param  Acl $parent
      * @return Acl
      */
     public function setParent(Acl $parent = null)
@@ -264,7 +265,7 @@ class Acl
     /**
      * Get parent
      *
-     * @return \Oro\Bundle\UserBundle\Entity\Acl
+     * @return Acl
      */
     public function getParent()
     {
@@ -274,7 +275,7 @@ class Acl
     /**
      * Set lft
      *
-     * @param  integer $lft
+     * @param integer $lft
      * @return Acl
      */
     public function setLft($lft)
@@ -371,6 +372,7 @@ class Acl
     public function getAccessRolesNames()
     {
         $roles = array();
+        /** @var $role Role */
         foreach ($this->accessRoles as $role) {
             $roles[] = $role->getRole();
         }
@@ -381,7 +383,7 @@ class Acl
     /**
      * Add accessRoles
      *
-     * @param  \Oro\Bundle\UserBundle\Entity\Role $accessRoles
+     * @param  Role $accessRoles
      * @return Acl
      */
     public function addAccessRole(Role $accessRoles)
@@ -394,7 +396,7 @@ class Acl
     /**
      * Remove accessRole
      *
-     * @param \Oro\Bundle\UserBundle\Entity\Role $accessRole
+     * @param Role $accessRole
      */
     public function removeAccessRole(Role $accessRole)
     {
@@ -404,7 +406,7 @@ class Acl
     /**
      * Get accessRoles
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getAccessRoles()
     {
@@ -414,10 +416,10 @@ class Acl
     /**
      * Set new access roles collection
      *
-     * @param  ArrayCollection $roles
+     * @param Collection $roles
      * @return Acl
      */
-    public function setAccessRoles(ArrayCollection $roles)
+    public function setAccessRoles(Collection $roles)
     {
         $this->accessRoles = $roles;
 

@@ -13,9 +13,9 @@ class AclRepository extends NestedTreeRepository
     /**
      * Get array with allowed acl resources for role array
      *
-     * @param  \Oro\Bundle\UserBundle\Entity\Role[]      $roles
-     * @param  bool                                      $useObjects
-     * @return \Oro\Bundle\UserBundle\Entity\Acl[]|array
+     * @param  Role[] $roles
+     * @param  bool $useObjects
+     * @return Acl[]|array
      */
     public function getAllowedAclResourcesForRoles(array $roles, $useObjects = false)
     {
@@ -83,7 +83,7 @@ class AclRepository extends NestedTreeRepository
         } else {
             $final = array();
             foreach ($array as $object) {
-                if ( ! in_array($object, $final)) {
+                if (!in_array($object, $final)) {
                     $final[] = $object;
                 }
             }
@@ -95,8 +95,8 @@ class AclRepository extends NestedTreeRepository
     /**
      * Get full node list with roles for acl resource
      *
-     * @param  \Oro\Bundle\UserBundle\Entity\Acl   $acl
-     * @return \Oro\Bundle\UserBundle\Entity\Acl[]
+     * @param  Acl $acl
+     * @return Acl[]
      */
     public function getFullNodeWithRoles(Acl $acl)
     {
@@ -137,8 +137,7 @@ class AclRepository extends NestedTreeRepository
     /**
      * Get Acl array for role
      *
-     * @param \Oro\Bundle\UserBundle\Entity\Role $role
-     *
+     * @param  Role $role
      * @return array
      */
     public function getAclListWithRoles(Role $role)
@@ -147,22 +146,21 @@ class AclRepository extends NestedTreeRepository
             ->select('acl', 'accessRoles')
             ->orderBy('acl.root, acl.lft', 'ASC');
 
-         if ($role->getId()) {
+        if ($role->getId()) {
              $query->leftJoin('acl.accessRoles', 'accessRoles', Expr\Join::WITH, 'accessRoles.id = :role')
                  ->setParameter('role', $role);
-         } else {
-             $query->leftJoin('acl.accessRoles', 'accessRoles');
-         }
+        } else {
+            $query->leftJoin('acl.accessRoles', 'accessRoles');
+        }
 
-         return   $query->getQuery()
+         return $query->getQuery()
             ->getArrayResult();
     }
 
     /**
      * Get Acl tree for role
      *
-     * @param \Oro\Bundle\UserBundle\Entity\Role $role
-     *
+     * @param  Role $role
      * @return array
      */
     public function getRoleAclTree(Role $role)
@@ -172,6 +170,7 @@ class AclRepository extends NestedTreeRepository
 
     /**
      * Get ACL Resources ids list
+     *
      * @return array
      */
     public function getAclResourcesIds()

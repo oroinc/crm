@@ -34,6 +34,8 @@ Oro\Bundle\UserBundle\Entity\User:
             - NotBlank:     ~
             - Length:
                 max:        100
+        birthday:
+            - Date:         ~
 
 Oro\Bundle\UserBundle\Entity\Role:
     constraints:
@@ -56,3 +58,7 @@ Oro\Bundle\UserBundle\Entity\Group:
             - NotBlank:     ~
             - Length:
                 max:        30
+        roles:
+            - Count:
+                min:        1
+                minMessage: "You must select at least {{ limit }} role"

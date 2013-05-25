@@ -6,6 +6,7 @@ use Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleManager;
 
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Security\Core\SecurityContextInterface;
 use Doctrine\ORM\EntityRepository;
@@ -33,8 +34,11 @@ class UserType extends FlexibleType
      * @param AclManager               $aclManager      ACL manager
      * @param SecurityContextInterface $security        Security context
      */
-    public function __construct(FlexibleManager $flexibleManager, AclManager $aclManager, SecurityContextInterface $security)
-    {
+    public function __construct(
+        FlexibleManager $flexibleManager,
+        AclManager $aclManager,
+        SecurityContextInterface $security
+    ) {
         parent::__construct($flexibleManager, '');
 
         $this->aclManager = $aclManager;
@@ -185,12 +189,23 @@ class UserType extends FlexibleType
             array(
                 'data_class'           => $this->flexibleClass,
                 'intention'            => 'user',
-                'validation_groups'    => function (FormInterface $form) {
-                    return $form->getData() && $form->getData()->getId()
+                'validation_groups'    => function ($form) {
+                    if ($form instanceof FormInterface) {
+                        $user = $form->getData();
+                    } elseif ($form instanceof FormView) {
+                        $user = $form->vars['value'];
+                    } else {
+                        $user = null;
+                    }
+                    return $user && $user->getId()
                         ? array('User', 'Default')
                         : array('Registration', 'User', 'Default');
                 },
                 'extra_fields_message' => 'This form should not contain extra fields: "{{ extra_fields }}"',
+                'error_mapping' => array(
+                    'roles' => 'rolesCollection'
+                ),
+
             )
         );
     }

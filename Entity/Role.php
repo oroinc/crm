@@ -6,6 +6,7 @@ use Symfony\Component\Security\Core\Role\RoleInterface;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 use Oro\Bundle\UserBundle\Entity\Acl;
 
@@ -142,7 +143,7 @@ class Role implements RoleInterface
     /**
      * Add aclResources
      *
-     * @param  \Oro\Bundle\UserBundle\Entity\Acl $aclResources
+     * @param  Acl $aclResources
      * @return Role
      */
     public function addAclResource(Acl $aclResources)
@@ -155,7 +156,7 @@ class Role implements RoleInterface
     /**
      * Remove aclResources
      *
-     * @param \Oro\Bundle\UserBundle\Entity\Acl $aclResources
+     * @param Acl $aclResources
      */
     public function removeAclResource(Acl $aclResources)
     {
@@ -165,7 +166,7 @@ class Role implements RoleInterface
     /**
      * Get aclResources
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getAclResources()
     {

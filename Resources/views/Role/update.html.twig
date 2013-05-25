@@ -7,19 +7,17 @@
 {% block head_script %}
     {{ parent() }}
 
-    {% if form.vars.value.id %}
-        {% include 'OroGridBundle:Include:javascript.html.twig' with {'datagridView': datagrid, 'selector': '#users-grid'} %}
-        {% include 'OroGridBundle:Include:stylesheet.html.twig' %}
+    {% include 'OroGridBundle:Include:javascript.html.twig' with {'datagridView': datagrid, 'selector': '#users-grid'} %}
+    {% include 'OroGridBundle:Include:stylesheet.html.twig' %}
 
-        {% set listenerParameters = {
-            'columnName': 'has_role',
-            'selectors': {
-                'included': '#roleAppendUsers',
-                'excluded': '#roleRemoveUsers'
-            }
-        } %}
-        {% include 'OroGridBundle:Include:Listener/column_form.html.twig' with {'datagridView': datagrid, 'parameters': listenerParameters} %}
-    {% endif %}
+    {% set listenerParameters = {
+        'columnName': 'has_role',
+        'selectors': {
+            'included': '#roleAppendUsers',
+            'excluded': '#roleRemoveUsers'
+        }
+    } %}
+    {% include 'OroGridBundle:Include:Listener/column_form.html.twig' with {'datagridView': datagrid, 'parameters': listenerParameters} %}
 
     <script type="text/javascript">
         $(function() {
@@ -38,7 +36,8 @@
 
 {% block page_container %}
     {% block content %}
-    <form action="{{ form.vars.value.id ? path('oro_user_role_update', { id: form.vars.value.id, back: app.session.get('back') }) : path('oro_user_role_create') }}"
+    {{ JSFV(form) }}
+    <form id="{{ form.name }}" action="{{ form.vars.value.id ? path('oro_user_role_update', { id: form.vars.value.id, back: app.session.get('back') }) : path('oro_user_role_create') }}"
         method="post" class="form-register scrollable-substructure">
             <div class="container-fluid">
                 <div class="navigation clearfix navbar-extra">
@@ -84,9 +83,7 @@
                             <ul class="nav">
                                 <li class="active"><a href="#scroll-main">{{ 'General'|trans }}</a></li>
                                 <li><a href="#scroll-acl">{{ 'ACL'|trans }}</a></li>
-                                {% if form.vars.value.id %}
-                                    <li><a href="#scroll-ussers">{{ 'Users'|trans }}</a></li>
-                                {% endif %}
+                                <li><a href="#scroll-ussers">{{ 'Users'|trans }}</a></li>
                             </ul>
                         </div>
                     </div>
@@ -116,7 +113,7 @@
                             </div>
                         </div>
 
-                        {% if form.vars.value.id %}
+
                         <div class="usser-row">
                             <h4 id="scroll-ussers" class="scrollspy-title">{{ 'Users'|trans }}</h4>
                             <div class="row-fluid">
@@ -125,7 +122,6 @@
                                 </fieldset>
                             </div>
                         </div>
-                        {% endif %}
                     </div>
                 </div>
             </div>

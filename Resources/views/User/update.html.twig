@@ -8,14 +8,15 @@
 
 {% block page_container %}
     {% block content %}
-    <form action="{{ form.vars.value.id ? path('oro_user_update', { id: form.vars.value.id, back: app.session.get('back') }) : path('oro_user_create', { back: app.session.get('back') }) }}" {{ form_enctype(form) }}
+    {{ JSFV(form) }}
+    <form id="{{ form.name }}" action="{{ form.vars.value.id ? path('oro_user_update', { id: form.vars.value.id, back: app.session.get('back') }) : path('oro_user_create', { back: app.session.get('back') }) }}" {{ form_enctype(form) }}
         method="post" data-collect="true" class="scrollable-substructure">
         <div class="container-fluid">
             <div class="navigation clearfix navbar-extra">
                 <div class="clearfix">
                     <div class="pull-right">
                         <div class="pull-right">
-                            {% if form.vars.value.id and resource_granted('oro_user_user_delete') %}
+                            {% if form.vars.value.id and resource_granted('oro_user_user_delete') and  form.vars.value.id!=app.user.id %}
                             <div class="pull-left btn-group icons-holder">
                                 <a href="javascript: void(0);" class="btn icons-holder-text" id="btn-remove-user" data-id="{{ form.vars.value.id }}" data-message="{{ 'Are you sure you want to delete this user?'|trans }}" title="{{ 'Delete user'|trans }}"><i class="icon-trash hide-text">{{ 'Remove'|trans }}</i>Delete</a>
                             </div>
@@ -34,7 +35,9 @@
                         </div>
                         <div class="pull-right usser-info-state">
                             <ul class="inline-decorate">
-                                <li><a class="no-hash" href="{{ path('oro_dataaudit_history', {entity:'Oro\\Bundle\\UserBundle\\Entity\\User', id: form.vars.value.id}) }}" id="view-activity-btn" title="{{ form.vars.value }} - {{ 'Change History'|trans }}">{{ 'Activity Log'|trans }}</a></li>
+                                {% if form.vars.value.id %}
+                                <li><a class="no-hash" href="{{ path('oro_dataaudit_history', {entity:'Oro_Bundle_UserBundle_Entity_User', id: form.vars.value.id}) }}" id="view-activity-btn" title="{{ form.vars.value }} - {{ 'Change History'|trans }}">{{ 'Change History'|trans }}</a></li>
+                                {% endif %}
                             </ul>
                         </div>
                     </div>

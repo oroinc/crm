@@ -3,7 +3,9 @@
 namespace Oro\Bundle\UserBundle\Entity\Manager;
 
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\QueryBuilder;
 
+use Oro\Bundle\UserBundle\Entity\Repository\RoleRepository;
 use Oro\Bundle\UserBundle\Entity\Role;
 
 class RoleManager
@@ -21,7 +23,8 @@ class RoleManager
     /**
      * Get user query builder
      *
-     * @param \Oro\Bundle\UserBundle\Entity\Role $role
+     * @param  Role $role
+     * @return QueryBuilder
      */
     public function getUserQueryBuilder(Role $role)
     {
@@ -29,7 +32,7 @@ class RoleManager
     }
 
     /**
-     * @return \Oro\Bundle\UserBundle\Entity\Repository\RoleRepository
+     * @return RoleRepository
      */
     protected function getRoleRepo()
     {

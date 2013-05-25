@@ -99,7 +99,7 @@ class Status
     /**
      * Set user
      *
-     * @param  \Oro\Bundle\UserBundle\Entity\User $user
+     * @param  User|null $user
      * @return Status
      */
     public function setUser(User $user = null)
@@ -112,7 +112,7 @@ class Status
     /**
      * Get user
      *
-     * @return \Oro\Bundle\UserBundle\Entity\User
+     * @return User
      */
     public function getUser()
     {
@@ -126,7 +126,7 @@ class Status
      */
     public function beforeSave()
     {
-        $this->createdAt = new \DateTime();
+        $this->createdAt = new \DateTime('now', new \DateTimeZone('UTC'));
     }
 
     public function __toString()
