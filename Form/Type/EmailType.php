@@ -2,6 +2,7 @@
 namespace Oro\Bundle\FlexibleEntityBundle\Form\Type;
 
 use Symfony\Component\Form\Extension\Core\ChoiceList\ChoiceList;
+use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Form\FormBuilderInterface;
 
 class EmailType extends CollectionItemAbstract
@@ -16,7 +17,15 @@ class EmailType extends CollectionItemAbstract
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('id', 'hidden');
-        $builder->add('data', 'email');
+        $builder->add(
+            'data',
+            'email',
+            array(
+                'constraints' => array(
+                    new Email()
+                )
+            )
+        );
         $builder->add(
             'type',
             'choice',
