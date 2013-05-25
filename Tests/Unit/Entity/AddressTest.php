@@ -43,13 +43,15 @@ class AddressTest extends \PHPUnit_Framework_TestCase
             ->method('__toString')
             ->will($this->returnValue('Kharkivs\'ka oblast\''));
 
-        $obj->setStreet('Street')
+        $obj->setFirstName('FirstName')
+            ->setLastName('LastName')
+            ->setStreet('Street')
             ->setState($regionMock)
             ->setPostalCode('12345')
             ->setCountry($country);
 
         $this->assertTrue(method_exists($obj, '__toString'));
-        $this->assertEquals('Street  , 12345  , Kharkivs\'ka oblast\' Ukraine', $obj->__toString());
+        $this->assertEquals('FirstName LastName , Street   Kharkivs\'ka oblast\' , Ukraine 12345', $obj->__toString());
     }
 
     /**
@@ -63,6 +65,8 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         $regionMock = $this->getMock('Oro\Bundle\AddressBundle\Entity\Region');
         return array(
             array('id', 1),
+            array('lastName', 'last name'),
+            array('firstName', 'first_name'),
             array('street', 'street'),
             array('street2', 'street2'),
             array('city', 'city'),
