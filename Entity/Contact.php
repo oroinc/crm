@@ -95,7 +95,7 @@ class Contact extends AbstractEntityFlexible
      */
     public function beforeSave()
     {
-        $this->created = new \DateTime();
+        $this->created = new \DateTime('now', new \DateTimeZone('UTC'));
     }
 
     /**
@@ -105,7 +105,7 @@ class Contact extends AbstractEntityFlexible
      */
     public function doPreUpdate()
     {
-        $this->updated = new \DateTime();
+        $this->updated = new \DateTime('now', new \DateTimeZone('UTC'));
     }
 
     /**

@@ -110,12 +110,20 @@ class GroupContactDatagridManager extends FlexibleDatagridManager
     protected function createQuery()
     {
         $query = parent::createQuery();
-        $query->addSelect(
-            'CASE WHEN ' .
-            '(:group MEMBER OF c.groups OR c.id IN (:data_in)) AND c.id NOT IN (:data_not_in) '.
-            'THEN 1 ELSE 0 END AS hasCurrentGroup',
-            true
-        );
+        if ($this->getGroup()->getId()) {
+            $query->addSelect(
+                'CASE WHEN ' .
+                '(:group MEMBER OF c.groups OR c.id IN (:data_in)) AND c.id NOT IN (:data_not_in) '.
+                'THEN 1 ELSE 0 END AS hasCurrentGroup',
+                true
+            );
+        } else {
+            $query->addSelect(
+                '0 AS hasCurrentGroup',
+                true
+            );
+        }
+
         return $query;
     }
 

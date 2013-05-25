@@ -5,7 +5,7 @@
 {% block head_script %}
     {{ parent() }}
 
-    {% if form.vars.value.id %}
+    {% if showContactsGrid %}
         {% include 'OroGridBundle:Include:javascript.html.twig' with {'datagridView': datagrid, 'selector': '#contacts-grid'} %}
         {% include 'OroGridBundle:Include:stylesheet.html.twig' %}
 
@@ -42,7 +42,7 @@
                     {% if form.vars.value.id %}
                     <div class="pull-right usser-info-state">
                         <ul class="inline-decorate">
-                            <li><a class="no-hash" href="{{ path('oro_dataaudit_history', {entity:'Oro\\Bundle\\ContactBundle\\Entity\\Group', id: form.vars.value.id}) }}" id="view-activity-btn" title="{{ form.vars.value }} - {{ 'Change History'|trans }}">{{ 'Activity Log'|trans }}</a></li>
+                            <li><a class="no-hash" href="{{ path('oro_dataaudit_history', {entity:'Oro_Bundle_ContactBundle_Entity_Group', id: form.vars.value.id}) }}" id="view-activity-btn" title="{{ form.vars.value }} - {{ 'Change History'|trans }}">{{ 'Change History'|trans }}</a></li>
                         </ul>
                     </div>
                     {% endif %}
@@ -78,7 +78,7 @@
                     <div class="container-fluid" style="width: auto;">
                         <ul class="nav">
                             <li class="active"><a href="#scroll-main">{{ 'General'|trans }}</a></li>
-                            {% if form.vars.value.id %}
+                            {% if showContactsGrid %}
                                 <li><a href="#scroll-attributes">{{ 'Contacts'|trans }}</a></li>
                             {% endif %}
                         </ul>
@@ -105,8 +105,7 @@
                             </fieldset>
                         </div>
                     </div>
-
-                    {% if form.vars.value.id %}
+                    {% if showContactsGrid %}
                         <div class="usser-row">
                             <h4 id="scroll-attributes" class="scrollspy-title">{{ 'Contacts'|trans }}</h4>
                             <div class="row-fluid">
@@ -120,7 +119,6 @@
                             </div>
                         </div>
                     {% endif %}
-
                     <div class="hide">
                         {{ form_rest(form) }}
                     </div>

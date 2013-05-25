@@ -57,7 +57,7 @@
                     {% if form.vars.value.id %}
                     <div class="pull-right usser-info-state">
                         <ul class="inline-decorate">
-                            <li><a class="no-hash" href="{{ path('oro_dataaudit_history', {entity:'Oro\\Bundle\\ContactBundle\\Entity\\Contact', id: form.vars.value.id}) }}" id="view-activity-btn" title="{{ form.vars.value }} - {{ 'Change History'|trans }}">{{ 'Activity Log'|trans }}</a></li>
+                            <li><a class="no-hash" href="{{ path('oro_dataaudit_history', {entity:'Oro_Bundle_ContactBundle_Entity_Contact', id: form.vars.value.id}) }}" id="view-activity-btn" title="{{ form.vars.value }} - {{ 'Change History'|trans }}">{{ 'Change History'|trans }}</a></li>
                         </ul>
                     </div>
                     {% endif %}
@@ -68,7 +68,7 @@
                             <div class="visual"><img src="{{ asset('bundles/oroui/img/info-usser.png') }}" alt="{{ fullname }}"/></div>
                             <div class="customer-content pull-left">
                                 <div class="clearfix-oro">
-                                    <div class="sub-title">{{ 'Contact'|trans }}</div>
+                                    <div class="sub-title"><a href="{{ path('oro_contact_index') }}">{{ 'Contact'|trans }}</a></div>
                                     <span class="separator">/</span>
                                     <h1 class="usser-name">{{ entity.first_name ~ ' ' ~ entity.last_name|default('N/A') }}</h1>
                                 </div>
@@ -96,7 +96,7 @@
                     <div class="container-fluid" style="width: auto;">
                         <ul class="nav">
                             <li class="active"><a href="#scroll-main">{{ 'General'|trans }}</a></li>
-                            {% if form.groups is defined %}
+                            {% if form.groups is defined and form.groups.children|length > 0 %}
                                 <li><a href="#scroll-groups">{{ 'Groups'|trans }}</a></li>
                             {% endif %}
                         </ul>
@@ -117,8 +117,17 @@
                     {% if form.values is defined %}
                     <div class="usser-row">
                         <h4 id="scroll-main" class="scrollspy-title">{{ 'General'|trans }}</h4>
-                        <div class="row-fluid">
-                            <fieldset class="form-horizontal">
+                        <div class="row-fluid row-fluid-divider oro-form-contains-address">
+                            {% for attribute in form.values %}
+                                {% if (attribute.children.address is defined) %}
+                                    <fieldset class="form-horizontal pull-right span6">
+                                        <h5 class="usser-fiedset"><span>{{ 'Address'|trans }}</span></h5>
+                                        {{ form_row(attribute) }}
+                                    </fieldset>
+                                {% endif %}
+                            {% endfor %}
+
+                            <fieldset class="form-horizontal pull-left span6">
                                 <h5 class="usser-fiedset"><span>{{ 'Basic Information'|trans }}</span></h5>
                                 {{ form_row(form.values) }}
                             </fieldset>
@@ -126,7 +135,7 @@
                     </div>
                     {% endif %}
 
-                    {% if form.groups is defined %}
+                    {% if form.groups is defined and form.groups.children|length > 0 %}
                     <div class="usser-row">
                         <h4 id="scroll-groups" class="scrollspy-title">{{ 'Groups'|trans }}</h4>
                         <div class="row-fluid">
