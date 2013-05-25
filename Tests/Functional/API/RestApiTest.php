@@ -27,7 +27,7 @@ class RestApiTest extends WebTestCase
                 'city'        => 'Old York',
                 'state'       => 'AL',
                 'country'     => 'US',
-                'postalCode' => '32422',
+                'postalCode'  => '32422',
             )
         );
 

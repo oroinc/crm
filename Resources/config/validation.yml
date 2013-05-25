@@ -24,3 +24,11 @@ Oro\Bundle\AddressBundle\Entity\Address:
 
         country:
             - NotBlank: ~
+
+        firstName:
+            - Length:
+                  max: 500
+
+        lastName:
+            - Length:
+                  max: 500

@@ -76,6 +76,22 @@ class AddressBase extends AbstractEntityFlexible
     protected $country;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="first_name", type="string", length=20)
+     * @Soap\ComplexType("string", nillable=true)
+     */
+    protected $firstName;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="last_name", type="string", length=20)
+     * @Soap\ComplexType("string", nillable=true)
+     */
+    protected $lastName;
+
+    /**
      * Get id
      *
      * @return integer 
@@ -224,6 +240,53 @@ class AddressBase extends AbstractEntityFlexible
     }
 
     /**
+
+     * Set first name
+     *
+     * @param string $firstName
+     * @return $this
+     */
+    public function setFirstName($firstName)
+    {
+        $this->firstName = $firstName;
+
+        return $this;
+    }
+
+    /**
+     * Get first name
+     *
+     * @return string
+     */
+    public function getFirstName()
+    {
+        return $this->firstName;
+    }
+
+    /**
+     * Set last name
+     *
+     * @param string $lastName
+     * @return $this
+     */
+    public function setLastName($lastName)
+    {
+        $this->lastName = $lastName;
+
+        return $this;
+    }
+
+    /**
+     * Get last name
+     *
+     * @return string
+     */
+    public function getLastName()
+    {
+        return $this->lastName;
+    }
+
+    /**
      * Get address created date/time
      *
      * @return \DateTime
@@ -263,14 +326,16 @@ class AddressBase extends AbstractEntityFlexible
     public function __toString()
     {
         $data = array(
+            $this->getFirstName(),
+            $this->getLastName(),
+            ',',
             $this->getStreet(),
             $this->getStreet2(),
-            ',',
-            $this->getPostalCode(),
             $this->getCity(),
-            ',',
             $this->getState(),
-            $this->getCountry()
+            ',',
+            $this->getCountry(),
+            $this->getPostalCode(),
         );
         return implode(' ', $data);
     }

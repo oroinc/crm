@@ -66,7 +66,7 @@ class AddressProvider
     private function assertAlias($alias)
     {
         if (empty($alias)) {
-            throw new \InvalidArgumentException('Menu alias was not set.');
+            throw new \InvalidArgumentException('Storage alias was not set.');
         }
     }
 }

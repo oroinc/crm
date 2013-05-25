@@ -30,10 +30,12 @@
 {% endblock oro_region_widget %}
 
 {% block oro_address_widget %}
+    {{ form_row(form.firstName) }}
+    {{ form_row(form.lastName) }}
     {{ form_row(form.street) }}
     {{ form_row(form.street2) }}
-    {{ form_row(form.country) }}
-    {{ form_row(form.state) }}
     {{ form_row(form.city) }}
+    {{ form_row(form.state) }}
+    {{ form_row(form.country) }}
     {{ form_row(form.postalCode) }}
 {%  endblock oro_address_widget %}
