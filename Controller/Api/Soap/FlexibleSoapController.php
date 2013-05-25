@@ -9,7 +9,7 @@ abstract class FlexibleSoapController extends SoapController
     /**
      * {@inheritDoc}
      */
-    protected function fixRequestAttributes($entity, $attributeKey = 'attributes', $requestAttributeKey = 'attributes')
+    protected function fixRequestAttributes($entity, $attributeKey = 'values', $requestAttributeKey = 'attributes')
     {
         parent::fixRequestAttributes($entity);
 
@@ -19,17 +19,17 @@ abstract class FlexibleSoapController extends SoapController
         // fix attributes array format to make it associative
         // and compatible with SoapBundle\Entity\FlexibleAttribute
         $values = array();
-        if (isset($data[$attributeKey])) {
-            foreach ($data[$attributeKey] as $attr) {
+        if (isset($data[$requestAttributeKey])) {
+            foreach ($data[$requestAttributeKey] as $attr) {
                 $values[$attr->code] = $attr->value;
             }
-            $data[$attributeKey] = $values;
+            $data[$requestAttributeKey] = $values;
         }
 
         $entityClass = ClassUtils::getRealClass(get_class($entity));
         $entityClass = str_replace('Soap', '', $entityClass);
-        $data = $this->container->get('oro_soap.request')->getFixedAttributesData($entityClass, $data, $attributeKey, $requestAttributeKey);
 
+        $data = $this->container->get('oro_soap.request')->getFixedAttributesData($entityClass, $data, $attributeKey, $requestAttributeKey);
         $request->request->set($this->getForm()->getName(), $data);
     }
 }
