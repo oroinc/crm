@@ -122,7 +122,7 @@
                                 {% if (attribute.children.address is defined) %}
                                     <fieldset class="form-horizontal pull-right span6">
                                         <h5 class="usser-fiedset"><span>{{ 'Address'|trans }}</span></h5>
-                                        {{ form_row(attribute) }}
+                                        {{ form_widget(attribute.address) }}
                                     </fieldset>
                                 {% endif %}
                             {% endfor %}
