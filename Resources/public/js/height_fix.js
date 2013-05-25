@@ -48,10 +48,12 @@ $(document).ready(function () {
         }
     }
 
-    debugBar.length ?  waitForDebugBar() : adjustHeight();
-    $(window).on('resize', adjustHeight);
-    $(document).ajaxSuccess(function() {
+    var adjustReloaded = function() {
         content = false;
         adjustHeight();
-    });
+    };
+
+    debugBar.length ?  waitForDebugBar() : adjustHeight();
+    $(window).on('resize', adjustHeight);
+    Oro.Events.bind("hash_navigation_request:complete", adjustReloaded);
 });
