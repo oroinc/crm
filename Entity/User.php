@@ -32,9 +32,11 @@ use DateTime;
  * @ORM\HasLifecycleCallbacks()
  * @Gedmo\Loggable(logEntryClass="Oro\Bundle\DataAuditBundle\Entity\Audit")
  */
-class User
-    extends AbstractEntityFlexible
-    implements AdvancedUserInterface, \Serializable, EntityUploadedImageInterface, AuditableInterface
+class User extends AbstractEntityFlexible implements
+    AdvancedUserInterface,
+    \Serializable,
+    EntityUploadedImageInterface,
+    AuditableInterface
 {
     const ROLE_DEFAULT   = 'ROLE_USER';
     const ROLE_ANONYMOUS = 'IS_AUTHENTICATED_ANONYMOUSLY';
@@ -286,6 +288,7 @@ class User
 
         $this->salt     = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
         $this->roles    = new ArrayCollection();
+        $this->groups    = new ArrayCollection();
         $this->statuses = new ArrayCollection();
         $this->emails   = new ArrayCollection();
     }
@@ -1114,7 +1117,7 @@ class User
         }
 
         $suffix = $this->getCreatedAt() ? $this->getCreatedAt()->format('Y-m') : date('Y-m');
-        
+
         return 'uploads' . $ds . 'users' . $ds . $suffix;
     }
 
