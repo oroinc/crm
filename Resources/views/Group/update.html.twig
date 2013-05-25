@@ -5,17 +5,19 @@
 {% block head_script %}
     {{ parent() }}
 
-    {% include 'OroGridBundle:Include:javascript.html.twig' with {'datagridView': datagrid, 'selector': '#contacts-grid'} %}
-    {% include 'OroGridBundle:Include:stylesheet.html.twig' %}
+    {% if showContactsGrid %}
+        {% include 'OroGridBundle:Include:javascript.html.twig' with {'datagridView': datagrid, 'selector': '#contacts-grid'} %}
+        {% include 'OroGridBundle:Include:stylesheet.html.twig' %}
 
-    {% set listenerParameters = {
-        'columnName': 'has_group',
-        'selectors': {
-            'included': '#groupAppendContacts',
-            'excluded': '#groupRemoveContacts'
-        }
-    } %}
-    {% include 'OroGridBundle:Include:Listener/column_form.html.twig' with {'datagridView': datagrid, 'parameters': listenerParameters} %}
+        {% set listenerParameters = {
+            'columnName': 'has_group',
+            'selectors': {
+                'included': '#groupAppendContacts',
+                'excluded': '#groupRemoveContacts'
+            }
+        } %}
+        {% include 'OroGridBundle:Include:Listener/column_form.html.twig' with {'datagridView': datagrid, 'parameters': listenerParameters} %}
+    {% endif %}
 {% endblock %}
 
 {% block form_buttons %}
@@ -76,7 +78,9 @@
                     <div class="container-fluid" style="width: auto;">
                         <ul class="nav">
                             <li class="active"><a href="#scroll-main">{{ 'General'|trans }}</a></li>
-                            <li><a href="#scroll-attributes">{{ 'Contacts'|trans }}</a></li>
+                            {% if showContactsGrid %}
+                                <li><a href="#scroll-attributes">{{ 'Contacts'|trans }}</a></li>
+                            {% endif %}
                         </ul>
                     </div>
                 </div>
@@ -101,20 +105,20 @@
                             </fieldset>
                         </div>
                     </div>
+                    {% if showContactsGrid %}
+                        <div class="usser-row">
+                            <h4 id="scroll-attributes" class="scrollspy-title">{{ 'Contacts'|trans }}</h4>
+                            <div class="row-fluid">
+                                <fieldset class="form-horizontal" id="attributes-list">
+                                    {{ form_widget(form.appendContacts, {'id': 'groupAppendContacts'}) }}
+                                    {{ form_widget(form.removeContacts, {'id': 'groupRemoveContacts'}) }}
+                                    {{ form_rest(form) }}
 
-                    <div class="usser-row">
-                        <h4 id="scroll-attributes" class="scrollspy-title">{{ 'Contacts'|trans }}</h4>
-                        <div class="row-fluid">
-                            <fieldset class="form-horizontal" id="attributes-list">
-                                {{ form_widget(form.appendContacts, {'id': 'groupAppendContacts'}) }}
-                                {{ form_widget(form.removeContacts, {'id': 'groupRemoveContacts'}) }}
-                                {{ form_rest(form) }}
-
-                                <div id="contacts-grid"></div>
-                            </fieldset>
+                                    <div id="contacts-grid"></div>
+                                </fieldset>
+                            </div>
                         </div>
-                    </div>
-
+                    {% endif %}
                     <div class="hide">
                         {{ form_rest(form) }}
                     </div>

@@ -73,6 +73,7 @@ class GroupController extends Controller
         return array(
             'datagrid' => $this->getGroupContactDatagridManager($entity)->getDatagrid()->createView(),
             'form'     => $this->get('oro_contact.form.group')->createView(),
+            'showContactsGrid' => count($this->get('oro_contact.contact.manager')->getList()) ? true : false
         );
     }
 
