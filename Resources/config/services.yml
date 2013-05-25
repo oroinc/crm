@@ -26,7 +26,6 @@ services:
             - [ addAttributeType, ['oro_flexibleentity_text'] ]
             - [ addAttributeType, ['oro_flexibleentity_integer'] ]
             - [ addAttributeType, ['oro_flexibleentity_textarea'] ]
-            - [ addAttributeType, ['oro_flexibleentity_money'] ]
             - [ addAttributeType, ['oro_flexibleentity_url'] ]
             - [ addAttributeType, ['oro_flexibleentity_email'] ]
             - [ addAttributeType, ['oro_flexibleentity_phone_collection'] ]
