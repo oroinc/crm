@@ -16,8 +16,8 @@ class OroJsFormValidationExtensionTest extends \PHPUnit_Framework_TestCase
         $extension->load($configs, $container);
 
         $this->assertTrue(
-            $container->hasDefinition('oro_jsfv.event_listener.load_constraints_listener'),
-            'The load constraints listener is loaded'
+            $container->hasDefinition('jsfv.generator'),
+            'The jsfv.generator is overridden'
         );
     }
 }
