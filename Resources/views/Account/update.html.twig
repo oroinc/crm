@@ -90,12 +90,13 @@
             </div>
         </div>
         <div class="layout-content">
-            <div id="navbarExample" class="navbar navbar-static scrollspy-nav">
+            <div id="navbarAccountsUpdate" class="navbar navbar-static scrollspy-nav">
                 <div class="navbar-inner">
                     <div class="container-fluid" style="width: auto;">
                         <ul class="nav">
                             <li class="active"><a href="#scroll-main">{{ 'General'|trans }}</a></li>
                             {% if form.values is defined %}
+                                <li><a href="#scroll-addresses">{{ 'Addresses'|trans }}</a></li>
                                 <li><a href="#scroll-attributes">{{ 'Additional Information'|trans }}</a></li>
                             {% endif %}
                         </ul>
@@ -112,26 +113,42 @@
                         </div>
                     </div>
                 {% endif %}
-                <div data-spy="scroll" data-target="#navbarExample" data-offset="50" class="scrollspy container-fluid scrollable-container">
+                <div data-spy="scroll" data-target="#navbarAccountsUpdate" data-offset="50" class="scrollspy container-fluid  scrollable-container">
                     <div class="usser-row">
-                        <h4 id="scroll-main" class="scrollspy-title">{{ 'General'|trans }}</h4>
-                        <div class="row-fluid">
-                            <fieldset class="form-horizontal span6">
-                                <h5 class="usser-fiedset"><span>{{ 'Basic Information'|trans }}</span></h5>
-                                {{ form_row(form.name) }}
-                            </fieldset>
+                        <div class="row-fluid-divider">
+                            <h4 id="scroll-main" class="scrollspy-title">{{ 'General'|trans }}</h4>
+                            <div class="row-fluid clearfix">
+                                <fieldset class="form-horizontal pull-left span6">
+                                    <h5 class="usser-fiedset"><span>{{ 'Basic Information'|trans }}</span></h5>
+                                    {{ form_row(form.name) }}
+                                </fieldset>
+                            </div>
+
+                            {% if form.values is defined %}
+                                <h4 id="scroll-addresses" class="scrollspy-title">{{ 'Addresses'|trans }}</h4>
+                                <div class="row-fluid clearfix">
+                                    {% for attribute in form.values %}
+                                        {% if (attribute.children.address is defined) %}
+                                            <fieldset class="form-horizontal pull-left span6">
+                                                <h5 class="usser-fiedset"><span>{{ attribute.address.vars.label|trans }}</span></h5>
+                                                {{ form_row(attribute) }}
+                                            </fieldset>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
                         </div>
                     </div>
 
                     {% if form.values is defined %}
-                    <div class="usser-row">
-                        <h4 id="scroll-attributes" class="scrollspy-title">{{ 'Additional Information'|trans }}</h4>
-                        <div class="row-fluid">
-                            <fieldset class="form-horizontal" id="attributes-list">
-                                {{ form_row(form.values) }}
-                            </fieldset>
+                        <div class="usser-row">
+                            <h4 id="scroll-attributes" class="scrollspy-title">{{ 'Additional Information'|trans }}</h4>
+                            <div class="row-fluid">
+                                <fieldset class="form-horizontal" id="attributes-list">
+                                    {{ form_row(form.values) }}
+                                </fieldset>
+                            </div>
                         </div>
-                    </div>
                     {% endif %}
 
                     <div class="hide">
