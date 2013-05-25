@@ -124,6 +124,9 @@ var jsfv = new function () {
 {% block removeErrors_method %}
         removeErrors: function (field) {
             field = $(field);
+            if (field.parent().filter('.error').length) {
+                field = field.parent();
+            }
             field.removeClass('error').parent().filter('.controls').removeClass('validation-error');
         },
 {% endblock %}

@@ -8,7 +8,7 @@ function Date(field, params)
 
     var date = new window.Date(String(value))
 
-    if (!isNaN(date.getTime())) {
+    if (!/^\d+$/.test(value) && !isNaN(date.getTime())) {
         return true;
     }
 
