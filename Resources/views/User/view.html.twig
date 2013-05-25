@@ -11,11 +11,11 @@
             <div class="pull-right">
                 <div class="pull-right">
                     <div class="pull-left btn-group icons-holder">
-                        <a href="{{ app.session.get('back', path('oro_user_index')) }}" class="btn back icons-holder-text" title="{{ 'Back'|trans }}"><i class="icon-chevron-left hide-text" >{{ 'Back'|trans }}</i>{{ 'Back'|trans }}</a>
+                        <a href="{{ path('oro_user_index') }}" class="btn back icons-holder-text" title="{{ 'Back'|trans }}"><i class="icon-chevron-left hide-text" >{{ 'Back'|trans }}</i>{{ 'Back'|trans }}</a>
                     </div>
                     {% if resource_granted('oro_user_user_update') %}
                     <div class="pull-left btn-group icons-holder">
-                        <a href="{{ path('oro_user_update', { id: user.id, back: app.request.uri }) }}" class="btn icons-holder-text" title="{{ 'Edit1 user'|trans }}"><i class="icon-edit hide-text">{{ 'Edit'|trans }}</i>{{ 'Edit'|trans }}</a>
+                        <a href="{{ path('oro_user_update', { id: user.id }) }}" class="btn icons-holder-text" title="{{ 'Edit1 user'|trans }}"><i class="icon-edit hide-text">{{ 'Edit'|trans }}</i>{{ 'Edit'|trans }}</a>
                     </div>
                     {% endif %}
                     {% if resource_granted('oro_user_user_delete') and user.id!=app.user.id %}
