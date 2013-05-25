@@ -23,7 +23,7 @@
 {% block page_container %}
     {% block content %}
     {{ JSFV(form) }}
-    <form id="{{ form.getName() }}" action="{{ form.vars.value.id ? path('oro_user_group_update', { id: form.vars.value.id) : path('oro_user_group_create') }}"
+    <form id="{{ form.getName() }}" action="{{ form.vars.value.id ? path('oro_user_group_update', { id: form.vars.value.id}) : path('oro_user_group_create') }}"
         method="post" class="form-register scrollable-substructure">
         <div class="container-fluid">
             <div class="navigation clearfix navbar-extra">
