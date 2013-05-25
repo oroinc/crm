@@ -16,6 +16,7 @@ use Oro\Bundle\UserBundle\Annotation\AclAncestor;
 use Oro\Bundle\SoapBundle\Form\Handler\ApiFormHandler;
 use Oro\Bundle\SoapBundle\Entity\Manager\ApiFlexibleEntityManager;
 use Oro\Bundle\SoapBundle\Controller\Api\Rest\FlexibleRestController;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @NamePrefix("oro_api_")
@@ -123,7 +124,13 @@ class UserController extends FlexibleRestController implements ClassResourceInte
      */
     public function deleteAction($id)
     {
-        return $this->handleDeleteRequest($id);
+        $securityToken = $this->get('security.context')->getToken();
+        $user = $securityToken ? $securityToken->getUser() : null;
+        if (is_object($user) && $user->getId() != $id) {
+            return $this->handleDeleteRequest($id);
+        } else {
+            return $this->handleView($this->view(null, Codes::HTTP_FORBIDDEN));
+        }
     }
 
     /**
