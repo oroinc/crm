@@ -8,7 +8,7 @@ Oro\Bundle\AccountBundle\Entity\Account:
         parameters:
             id: id
     search_template: OroAccountBundle:Account:searchResult.html.twig
-    entity_icon: bundles/oroaccount/img/search.png
+    entity_icon_class: icon-home
     fields:
         -
             name: name
