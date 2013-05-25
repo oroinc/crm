@@ -55,9 +55,8 @@ abstract class SoapController extends ContainerAware implements
     public function handleDeleteRequest($id)
     {
         $entity = $this->getEntity($id);
-
         $securityToken = $this->container->get('security.context')->getToken();
-        if ($securityToken && is_object($user = $securityToken->getUser()) && $entity->getId() != $user->getId()) {
+        if ($securityToken && is_object($user = $securityToken->getUser()) && !(get_class($entity) == get_class($user) && $entity->getId() == $user->getId())) {
             $em = $this->getManager()->getObjectManager();
             $em->remove($entity);
             $em->flush();
