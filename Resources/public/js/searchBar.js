@@ -56,7 +56,7 @@ $(document).ready(function () {
             $('#search-dropdown ul li').remove();
         } else {
             $.ajax({
-                url: $('#top-search-form').attr('action'),
+                url: $('#top-search-form').attr('data-ajax-action'),
                 dataType: "json",
                 data: {
                     search: queryString,
