@@ -298,7 +298,7 @@ class EntitiesToIdsTransformerTest extends \PHPUnit_Framework_TestCase
                 null,
                 array(1, 2, 3, 4, 5),
                 'Symfony\Component\Form\Exception\TransformationFailedException',
-                'Could not find all entities for the given ids',
+                'Could not find all entities for the given IDs',
                 'expectedCalls' => array(
                     'entityManager' => array(
                         array('getRepository', array('TestClass'), array('self', 'getMockRepository')),
