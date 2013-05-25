@@ -151,7 +151,8 @@ Oro.Navigation = Backbone.Router.extend({
             var i;
             if ((i = this.contentCacheUrls.indexOf(this.removePageStateParam(this.url))) !== -1) {
                 if (this.contentCache[i]) {
-                    this.handleResponse(this.contentCache[i], {skipMessages: true});
+                    this.handleResponse(this.contentCache[i], {skipMessages: true, skipMenuTabs: true});
+                    this.reorderCache(i);
                     this.afterRequest();
                 }
             } else {
@@ -180,6 +181,11 @@ Oro.Navigation = Backbone.Router.extend({
         }
     },
 
+    /**
+     * Save page content to cache
+     *
+     * @param data
+     */
     savePageToCache: function(data) {
         if (this.contentCacheUrls.length == this.maxCachedPages) {
             this.clearPageCache(0);
@@ -192,6 +198,29 @@ Oro.Navigation = Backbone.Router.extend({
         this.contentCache[this.contentCacheUrls.length - 1] = data;
     },
 
+    /**
+     * Reorder cache history to put current page to the end
+     *
+     * @param pos
+     */
+    reorderCache: function(pos) {
+        var tempUrl = this.contentCacheUrls[pos];
+        var tempContent = this.contentCache[pos];
+        for (var i = pos + 1; i < this.contentCacheUrls.length; i++) {
+            this.contentCacheUrls[i - 1] = this.contentCacheUrls[i];
+        }
+        this.contentCacheUrls[this.contentCacheUrls.length - 1] = tempUrl;
+        for (var i = pos + 1; i < this.contentCache.length; i++) {
+            this.contentCache[i - 1] = this.contentCache[i];
+        }
+        this.contentCache[this.contentCacheUrls.length - 1] = tempContent;
+    },
+
+    /**
+     * Clear cache data
+     *
+     * @param i
+     */
     clearPageCache: function(i) {
         if (!_.isUndefined(i)) {
             this.contentCacheUrls.splice(i, 1);
@@ -202,6 +231,12 @@ Oro.Navigation = Backbone.Router.extend({
         }
     },
 
+    /**
+     * Remove restore params from url
+     *
+     * @param url
+     * @return {String|XML|void}
+     */
     removePageStateParam: function(url) {
         return url.replace(/[\?&]restore=1/g,'');
     },
@@ -352,10 +387,11 @@ Oro.Navigation = Backbone.Router.extend({
                     titleSerialized = $.parseJSON(titleSerialized);
                     $('.top-action-box .btn').filter('.minimize-button, .favorite-button').data('title', titleSerialized);
                 }
-
                 this.processClicks(this.selectors.menu + ' ' + this.selectors.links);
                 this.processClicks(this.selectors.container + ' ' + this.selectors.links);
-                this.updateMenuTabs(data);
+                if (!options.skipMenuTabs) {
+                    this.updateMenuTabs(data);
+                }
                 this.processForms(this.selectors.container + ' ' + this.selectors.forms);
                 if (!options.skipMessages) {
                     this.updateMessages(data);
@@ -366,7 +402,7 @@ Oro.Navigation = Backbone.Router.extend({
         }
         catch (err) {
             console.log(err);
-            this.showError('', "Sorry, unable to load the page");
+            this.showError('', "Sorry, page was not loaded correctly");
         }
         this.triggerCompleteEvent();
     },
