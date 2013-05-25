@@ -72,14 +72,17 @@ class ContactDatagridManager extends FlexibleDatagridManager
             'sortable'    => false,
             'filterable'  => false
         );
+
         $this->configureFlexibleFields(
             $fieldsCollection,
             array(
                 'account'     => $specialAttributeOptions,
                 'assigned_to' => $specialAttributeOptions,
                 'reports_to'  => $specialAttributeOptions,
+                'address'     => $specialAttributeOptions
             )
         );
+
 
         $fieldCreated = new FieldDescription();
         $fieldCreated->setName('created');

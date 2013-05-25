@@ -5,6 +5,7 @@ namespace Oro\Bundle\ContactBundle\Entity\Value;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\Common\Collections\ArrayCollection;
 use Oro\Bundle\AccountBundle\Entity\Account;
+use Oro\Bundle\AddressBundle\Entity\Address;
 use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityFlexibleValue;
 use Oro\Bundle\FlexibleEntityBundle\Entity\Attribute;
 use Oro\Bundle\ContactBundle\Entity\Contact;
@@ -220,6 +221,40 @@ class ContactValue extends AbstractEntityFlexibleValue
     public function setContact($contact)
     {
         $this->contact = $contact;
+
+        return $this;
+    }
+
+    /**
+     * Store address values
+     *
+     * @var Address $media
+     *
+     * @ORM\OneToOne(targetEntity="Oro\Bundle\AddressBundle\Entity\Address", cascade="persist")
+     * @ORM\JoinColumn(name="address_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    protected $address;
+
+    /**
+     * Get address
+     *
+     * @return Address
+     */
+    public function getAddress()
+    {
+        return $this->address;
+    }
+
+    /**
+     * Set address
+     *
+     * @param Address $address
+     *
+     * @return ContactValue
+     */
+    public function setAddress(Address $address)
+    {
+        $this->address = $address;
 
         return $this;
     }
