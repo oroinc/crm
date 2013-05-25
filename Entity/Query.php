@@ -135,7 +135,7 @@ class Query
      */
     public function beforeSave()
     {
-        $this->createdAt = new \DateTime();
+        $this->createdAt = new \DateTime('now', new \DateTimeZone('UTC'));
     }
 
     /**

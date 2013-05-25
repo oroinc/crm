@@ -88,7 +88,7 @@ class LoadSearchItemData extends AbstractFixture implements OrderedFixtureInterf
             //array
             $customer->arrayValue = array($ind);
             //datetime
-            $date = new \DateTime();
+            $date = new \DateTime('now', new \DateTimeZone('UTC'));
             $date->add(new \DateInterval("P{$ind}Y"));
             $customer->datetimeValue = $date;
             //guid
