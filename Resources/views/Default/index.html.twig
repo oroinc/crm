@@ -23,20 +23,6 @@
 {% endmacro %}
 {% import _self as __ %}
 
-{% block head_style %}
-    {{ parent() }}
-    {% stylesheets
-        'bundles/orodashboard/css/dashboard.less'
-
-        debug=false
-        filter='cssrewrite, lessphp, yui_css'
-        output='css/oro.dashboard.css'
-    %}
-        <link rel="stylesheet" media="all" href="{{ asset_url }}" />
-    {% endstylesheets %}
-
-{% endblock %}
-
 {% block content %}
     {# bodyclass block could not be used due to has navigation issues #}
     <script type="text/javascript">
