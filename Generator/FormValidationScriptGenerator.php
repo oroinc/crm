@@ -6,6 +6,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Validator\Mapping\ClassMetadataFactoryInterface;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
 use Symfony\Component\Form\FormView;
+use Symfony\Component\Validator\Constraint;
 use Assetic\Asset\AssetCollection;
 use Assetic\Filter\Yui\JsCompressorFilter;
 
@@ -210,6 +211,17 @@ class FormValidationScriptGenerator extends BaseFormValidationScriptGenerator
             }
         }
 
+        $formViewsWithConstraints = $this->filterFormViewsWithConstraints($formView);
+        foreach ($formViewsWithConstraints as $formViewsWithConstraint) {
+            foreach ($formViewsWithConstraint->vars['constraints'] as $constraint) {
+                $this->addFieldConstraint(
+                    $formViewsWithConstraint,
+                    $fieldsConstraints,
+                    $constraint
+                );
+            }
+        }
+
         if (!empty($constraintsTarget)) {
             // we look through each field of the form
             foreach ($formView->children as $formField) {
@@ -236,49 +248,10 @@ class FormValidationScriptGenerator extends BaseFormValidationScriptGenerator
                     }
                     // we look through each field constraint
                     foreach ($constraintList as $constraint) {
-                        $constraintName = end((explode(chr(92), get_class($constraint))));
-                        $constraintProperties = get_object_vars($constraint);
-
-                        // Groups are no longer needed
-                        unset($constraintProperties['groups']);
-
-                        if (!$fieldsConstraints->hasLibrary($constraintName)) {
-                            $library = "APYJsFormValidationBundle:Constraints:{$constraintName}Validator.js.twig";
-                            $fieldsConstraints->addLibrary($constraintName, $library);
-                        }
-
-                        $constraintParameters = array();
-                        //We need to know entity class for the field which is applied by UniqueEntity constraint
-                        if ($constraintName == 'UniqueEntity' && !empty($formField->parent)) {
-                            $entity = isset($formField->parent->vars['value']) ?
-                                $formField->parent->vars['value'] : null;
-                            $constraintParameters += array(
-                                'entity:' . json_encode(get_class($entity)),
-                                'identifier_field_id:'
-                                    . json_encode(
-                                        $formView->children[$this->getParameter('identifier_field')]->vars['id']
-                                    ),
-                            );
-                        }
-                        foreach ($constraintProperties as $variable => $value) {
-                            if (is_array($value)) {
-                                $value = json_encode($value);
-                            } else {
-                                // regex
-                                if (stristr('pattern', $variable) === false) {
-                                    $value = json_encode($value);
-                                }
-                            }
-
-                            $constraintParameters[] = "$variable:$value";
-                        }
-
-                        $fieldsConstraints->addFieldConstraint(
-                            $formField->vars['id'],
-                            array(
-                                'name'       => $constraintName,
-                                'parameters' => '{' . join(', ', $constraintParameters) . '}'
-                            )
+                        $this->addFieldConstraint(
+                            $formField,
+                            $fieldsConstraints,
+                            $constraint
                         );
                     }
                 }
@@ -331,6 +304,81 @@ class FormValidationScriptGenerator extends BaseFormValidationScriptGenerator
         if (false === @file_put_contents($asset->getTargetPath(), $asset->getContent())) {
             throw new \RuntimeException('Unable to write file '.$asset->getTargetPath());
         }
+    }
+
+    /**
+     * Collect recursively all form views with constraints and returns them
+     *
+     * @param FormView $target
+     * @return FormView[]
+     */
+    protected function filterFormViewsWithConstraints(FormView $target)
+    {
+        $result = array();
+        if (!empty($target->vars['constraints'])) {
+            $result[] = $target;
+        }
+        foreach ($target->children as $child) {
+            $result = array_merge($result, $this->filterFormViewsWithConstraints($child));
+        }
+        return $result;
+    }
+
+    /**
+     * @param FormView $formType
+     * @param FieldsConstraints $fieldsConstraints
+     * @param Constraint $constraint
+     */
+    protected function addFieldConstraint(
+        FormView $formType,
+        FieldsConstraints $fieldsConstraints,
+        Constraint $constraint
+    ) {
+        $constraintName = end((explode(chr(92), get_class($constraint))));
+        $constraintProperties = get_object_vars($constraint);
+
+        // Groups are no longer needed
+        unset($constraintProperties['groups']);
+
+        if (!$fieldsConstraints->hasLibrary($constraintName)) {
+            $library = "APYJsFormValidationBundle:Constraints:{$constraintName}Validator.js.twig";
+            $fieldsConstraints->addLibrary($constraintName, $library);
+        }
+
+        $constraintParameters = array();
+        $identifierField = $this->getParameter('identifier_field');
+        //We need to know entity class for the field which is applied by UniqueEntity constraint
+        if ($constraintName == 'UniqueEntity'
+            && !empty($formType->parent)
+            && !empty($formType->children[$identifierField])
+        ) {
+            $entity = isset($formType->parent->vars['value']) ?
+                $formType->parent->vars['value'] : null;
+            $constraintParameters += array(
+                'entity:' . json_encode(get_class($entity)),
+                'identifier_field_id:' . json_encode($formType->children[$identifierField]->vars['id']),
+            );
+        }
+        foreach ($constraintProperties as $variable => $value) {
+            if (is_array($value)) {
+                $value = json_encode($value);
+            } else {
+                // regex
+                if (stristr('pattern', $variable) === false) {
+                    $value = json_encode($value);
+                }
+            }
+
+            $constraintParameters[] = "$variable:$value";
+        }
+
+        $fieldsConstraints->addFieldConstraint(
+            $formType->vars['id'],
+            array(
+                'name'       => $constraintName,
+                'parameters' => '{' . join(', ', $constraintParameters) . '}'
+            )
+        );
     }
 
     /**
