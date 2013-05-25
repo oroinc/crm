@@ -24,6 +24,7 @@ Oro.Filter.DateFilter = Oro.Filter.ChoiceFilter.extend({
             '</div>' +
             '<div>' +
                 '<input type="text" class="<%= inputClass %>" value="" name="start" placeholder="from">' +
+                '<span class="filter-separator">-</span>' +
                 '<input type="text" class="<%= inputClass %>" value="" name="end" placeholder="to">' +
             '</div>' +
             '<div class="oro-action">' +
