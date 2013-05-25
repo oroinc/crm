@@ -17,7 +17,6 @@ use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityFlexible;
  * @ORM\Entity(repositoryClass="Oro\Bundle\FlexibleEntityBundle\Entity\Repository\FlexibleEntityRepository")
  * @ORM\Table(name="oro_account")
  * @ORM\HasLifecycleCallbacks()
- * @Gedmo\Loggable(logEntryClass="Oro\Bundle\DataAuditBundle\Entity\Audit")
  */
 class Account extends AbstractEntityFlexible
 {
@@ -36,7 +35,6 @@ class Account extends AbstractEntityFlexible
      * @ORM\Column(type="string", length=255, unique=true)
      * @Soap\ComplexType("string")
      * @Type("string")
-     * @Gedmo\Versioned
      */
     protected $name;
 

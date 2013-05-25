@@ -16,7 +16,6 @@ use Oro\Bundle\AddressBundle\Entity\Address;
 /**
  * @ORM\Table(name="oro_account_value")
  * @ORM\Entity
- * @Gedmo\Loggable(logEntryClass="Oro\Bundle\DataAuditBundle\Entity\Audit")
  */
 class AccountValue extends AbstractEntityFlexibleValue
 {
@@ -55,7 +54,6 @@ class AccountValue extends AbstractEntityFlexibleValue
      * @var string $varchar
      *
      * @ORM\Column(name="value_string", type="string", length=255, nullable=true)
-     * @Gedmo\Versioned
      */
     protected $varchar;
 
@@ -65,7 +63,6 @@ class AccountValue extends AbstractEntityFlexibleValue
      * @var integer $integer
      *
      * @ORM\Column(name="value_integer", type="integer", nullable=true)
-     * @Gedmo\Versioned
      */
     protected $integer;
 
@@ -75,7 +72,6 @@ class AccountValue extends AbstractEntityFlexibleValue
      * @var double $decimal
      *
      * @ORM\Column(name="value_decimal", type="decimal", nullable=true)
-     * @Gedmo\Versioned
      */
     protected $decimal;
 
@@ -85,7 +81,6 @@ class AccountValue extends AbstractEntityFlexibleValue
      * @var string $text
      *
      * @ORM\Column(name="value_text", type="text", nullable=true)
-     * @Gedmo\Versioned
      */
     protected $text;
 
@@ -95,7 +90,6 @@ class AccountValue extends AbstractEntityFlexibleValue
      * @var date $date
      *
      * @ORM\Column(name="value_date", type="date", nullable=true)
-     * @Gedmo\Versioned
      */
     protected $date;
 
@@ -105,7 +99,6 @@ class AccountValue extends AbstractEntityFlexibleValue
      * @var date $datetime
      *
      * @ORM\Column(name="value_datetime", type="datetime", nullable=true)
-     * @Gedmo\Versioned
      */
     protected $datetime;
 
