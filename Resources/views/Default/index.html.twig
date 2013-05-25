@@ -23,55 +23,36 @@
 {% endmacro %}
 {% import _self as __ %}
 
-{% block head_style %}
-    {{ parent() }}
-    {% stylesheets
-        'bundles/orodashboard/css/dashboard.less'
-
-        debug=false
-        filter='cssrewrite, lessphp, yui_css'
-        output='css/oro.dashboard.css'
-    %}
-        <link rel="stylesheet" media="all" href="{{ asset_url }}" />
-    {% endstylesheets %}
-
-{% endblock %}
-
 {% block content %}
-    {# bodyclass block could not be used due to has navigation issues #}
-    <script type="text/javascript">
-        $(function() {
-            $('body').addClass('quick-launchpad');
-        })
-    </script>
+    <div class="scrollable-container quick-launchpad">
+        <div class="container">
+            <h3>{{ 'Quick Launchpad'|trans }}</h3>
 
-    <div class="container">
-        <h3>{{ 'Quick Launchpad'|trans }}</h3>
-
-        {% set widgetsArray = [
-            {
-                label: 'Accounts',
-                links: [
-                    {url: path('oro_account_index'), label: 'Account list'},
-                    {url: path('oro_account_create'), label: 'Create account'}
+            {% set widgetsArray = [
+                {
+                    label: 'Accounts',
+                    links: [
+                        {url: path('oro_account_index'), label: 'List'},
+                        {url: path('oro_account_create'), label: 'Create account'}
+                    ],
+                    image: 'accounts-image'
+                },
+                {
+                    label: 'Contacts',
+                    links: [
+                        {url: path('oro_contact_index'), label: 'List'},
+                        {url: path('oro_contact_create'), label: 'Create contact'},
+                        {url: path('oro_contact_group_index'), label: 'Manage groups'}
                 ],
-                image: 'accounts-image'
-            },
-            {
-                label: 'Contacts',
-                links: [
-                    {url: path('oro_contact_index'), label: 'Contact list'},
-                    {url: path('oro_contact_create'), label: 'Create contact'},
-                    {url: path('oro_contact_group_index'), label: 'Manage groups'}
-            ],
-                image: 'contacts-image'
-            },
-        ] %}
+                    image: 'contacts-image'
+                },
+            ] %}
 
-        {% for widget in widgetsArray %}
-            {% if loop.index is odd %}<div class="row">{% endif %}
-            {{ __.renderWidget(widget) }}
-            {% if loop.index is even %}</div>{% endif %}
-        {% endfor %}
+            {% for widget in widgetsArray %}
+                {% if loop.index is odd %}<div class="row">{% endif %}
+                {{ __.renderWidget(widget) }}
+                {% if loop.index is even %}</div>{% endif %}
+            {% endfor %}
+        </div>
     </div>
 {% endblock %}
