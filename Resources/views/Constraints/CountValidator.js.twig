@@ -1,6 +1,10 @@
 function Count(field, params)
 {
-    var value = field && field.nodeName ? getCollectionElementValue(field) : field;
+    var value = field && field.nodeName ? getFieldValue(field) : field;
+
+    if (!value || !value.length) {
+        value = [];
+    }
 
     if (params['exactMessage'] !== undefined &&
         params['min'] !== undefined && params['max'] !== undefined &&

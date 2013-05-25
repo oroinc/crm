@@ -78,7 +78,7 @@ class FormValidationScriptGenerator extends BaseFormValidationScriptGenerator
      * This method is copied from APY\JsFormValidationBundle\Generator\FormValidationScriptGenerator::generate
      * because there was a requirement to replace GettersLibraries with custom implementation
      *
-     * TODO This method should be refactored and covered with tests.
+     * TODO This method should be refactored and covered with tests (BAP-859).
      *
      * @param FormView $formView
      * @param string $scriptRealPath
