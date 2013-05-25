@@ -1,12 +1,13 @@
+{% extends 'form_div_layout.html.twig' %}
 
 {% block form_row %}
     {% spaceless %}
         {% if form|is_flexible %}
             {{ block('form_row_flex') }}
         {% else %}
-            <div class="control-group{% if errors|length > 0 %} error{% endif %}{% if attr.class is defined %} {{ attr.class }}{% endif %}">
+            <div class="control-group{% if attr.class is defined %} {{ attr.class }}{% endif %}">
                 {{ form_label(form, '' , { label_attr: label_attr|merge({ class: 'control-label' })}) }}
-                <div class="controls">
+                <div class="controls{% if errors|length > 0 %} validation-error{% endif %}">
                     {{ form_widget(form) }}
                     {{ form_errors(form) }}
                 </div>
@@ -55,6 +56,65 @@
     {% endspaceless %}
 {% endblock form_row_flex %}
 
+{% block choice_widget_collapsed %}
+    <script type="text/javascript">
+        $(function() {
+            {# @todo Replace setTimeout in BAP-858 #}
+            setTimeout(function() {
+                $('#{{ id }}').filter('.error:not([multiple])').removeClass('error').closest('.selector').addClass('error');
+            }, 100);
+        })
+    </script>
+    {{ parent() }}
+{% endblock choice_widget_collapsed %}
+
+{% block form_widget_simple %}
+    {% if type is defined and type == 'file' %}
+        <script type="text/javascript">
+            $(function() {
+                {# @todo Replace setTimeout in BAP-858 #}
+                setTimeout(function() {
+                    $('#{{ id }}').filter('.error').removeClass('error').closest('.uploader').addClass('error');
+                }, 100);
+            })
+        </script>
+    {% endif %}
+    {{ parent() }}
+{% endblock form_widget_simple %}
+
+{% block widget_attributes %}
+    {% if errors|length > 0 %}
+        {% set attr = attr|merge({'class': attr.class is defined ? attr.class ~ ' error' : 'error'}) %}
+    {% endif %}
+    {{ parent() }}
+{% endblock widget_attributes %}
+
+{% block widget_container_attributes %}
+    {% if errors|length > 0 %}
+        {% set attr = attr|merge({'class': attr.class is defined ? attr.class ~ ' error' : 'error'}) %}
+    {% endif %}
+    {{ parent() }}
+{% endblock widget_container_attributes %}
+
+{% block form_errors %}
+    {%- spaceless -%}
+        {% if errors|length > 0 %}
+            {% if form.parent %}
+                {% set combinedError = '' %}
+                {% for error in errors %}
+                    {% set error = error.messagePluralization is null
+                        ? error.messageTemplate|trans(error.messageParameters, 'validators')
+                        : error.messageTemplate|transchoice(error.messagePluralization, error.messageParameters, 'validators') %}
+                    {% set combinedError = (combinedError != '') ? combinedError ~ '; ' ~ error : error %}
+                {% endfor %}
+                <a class="validation-tooltip" data-placement="top" data-toggle="tooltip" data-original-title="{{ combinedError }}">{{ combinedError }}</a>
+            {% else %}
+                {{ parent() }}
+            {% endif %}
+        {% endif %}
+    {% endspaceless %}
+{% endblock form_errors %}
+
 {% block money_widget %}
     {% spaceless %}
         <div class="input-prepend input-prepend-right">
@@ -83,6 +143,8 @@
 
 {% block choice_widget_expanded %}
     {% spaceless %}
+        {% set attr = attr|merge({'class': attr.class is defined ? attr.class ~ ' horizontal' : 'horizontal'}) %}
+        {% set attr = attr|merge({'class': attr.class ~ ' validate-group'}) %}
         <div {{ block('widget_container_attributes') }}>
             {% for child in form %}
                 <div class="oro-clearfix">
@@ -105,7 +167,8 @@
         {% if label is empty %}
             {% set label = name|humanize %}
         {% endif %}
-        <label{% for attrname, attrvalue in label_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>{% if required %}<em>*</em>{% endif %}{{ label|trans({}, translation_domain)|capitalize }}</label>
+        {% set isRadioLabel = form.parent.vars.expanded|default(false) and checked is defined %}
+        <label{% for attrname, attrvalue in label_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>{% if required and not isRadioLabel %}<em>*</em>{% endif %}{{ label|trans({}, translation_domain)|capitalize }}</label>
     {% endspaceless %}
 {% endblock form_label %}
 
