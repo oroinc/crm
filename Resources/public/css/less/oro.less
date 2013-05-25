@@ -2456,6 +2456,7 @@ textarea{
 .filter-box .filter-select-oro{
   height: 20px;
   line-height: 20px;
+  width: 85px; /* need for flexible width at filter grid */
 }
 .filter-box .filter-criteria .selector{
   width: auto;
@@ -2475,7 +2476,7 @@ textarea{
   background: none;
   line-height: 40px;
   font-size: 16px;
-  padding: 0 3px;
+  padding: 0;
   margin: 0;
   position: relative;
   top: -3px;
@@ -3216,4 +3217,17 @@ label.radio.error{
 .collection-fields-list select,
 .collection-fields-list button{
   margin: 0 0 0 4px;
+}
+button.filter-update{
+  margin: 0 0 0 6px;
+}
+.choicefilter .input-append,
+.choicefilter .input-prepend{
+  margin-bottom: 0;
+}
+.filter-separator{
+  font-size: 16px;
+  padding: 0 3px;
+  position: relative;
+  top: -3px;
 }

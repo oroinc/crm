@@ -16,7 +16,6 @@ $(function() {
         newMessage.addClass('alert-' + type);
         $(Oro.Messages.topMessageContainer + ' ' + Oro.Messages.topMessageHolder).append(newMessage);
         $(Oro.Messages.topMessageContainer).show();
-        setTimeout(function(){ $(Oro.Messages.topMessageContainer).hide()}, 5000)
     }
 });
 
