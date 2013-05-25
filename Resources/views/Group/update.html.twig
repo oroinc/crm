@@ -28,19 +28,21 @@
             <div class="navigation clearfix navbar-extra">
                 <div class="row">
                     <div class="pull-right">
-                        <div class="pull-left btn-group icons-holder">
                         {% if form.vars.value.id and resource_granted('oro_user_user_delete') %}
-                            <a href="javascript: void(0);" class="btn icons-holder-text" id="btn-remove-group" data-id="{{ form.vars.value.id }}" data-message="{{ 'Are you sure you want to delete this Group?'|trans }}" title="{{ 'Delete group'|trans }}"><i class="icon-trash hide-text">{{ 'Remove'|trans }}</i>Delete</a>
+                            <div class="pull-left btn-group icons-holder">
+                                <a href="javascript: void(0);" class="btn icons-holder-text" id="btn-remove-group" data-id="{{ form.vars.value.id }}" data-message="{{ 'Are you sure you want to delete this Group?'|trans }}" title="{{ 'Delete group'|trans }}"><i class="icon-trash hide-text">{{ 'Remove'|trans }}</i>Delete</a>
+                            </div>
+                            <div class="pull-left">
+                                <div class="separator-btn"></div>
+                            </div>
                         {% endif %}
-                        </div>
-                        <div class="pull-left">
-                            <div class="separator-btn"></div>
-                        </div>
                         <div class="pull-left customer-info-top-actions">
                             <div class="btn-group">
                                 <a href="{{ app.session.get('back') ? app.session.get('back') : path('oro_user_index') }}" class="btn back" title="{{ 'Cancel'|trans }}">{{ 'Cancel'|trans }}</a>
                             </div>
-                            <button type="submit" class="btn btn-success" title="{{ 'Save group'|trans }}">{{ ' Save'|trans }}</button>
+                            <div class="btn-group">
+                                <button type="submit" class="btn btn-success" title="{{ 'Save group'|trans }}">{{ ' Save'|trans }}</button>
+                            </div>
                         </div>
                     </div>
                     <div class="pull-left">
