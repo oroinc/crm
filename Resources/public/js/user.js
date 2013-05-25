@@ -141,10 +141,12 @@ $(function() {
     });
 
     $(document).on('click', '#view-activity-btn', function (e) {
+        var scrollable = $('.scrollable-container');
+        var container = scrollable.length ? scrollable.get(scrollable.length - 1) : '#container';
         new Oro.widget.DialogView({
             url: $(this).attr('href'),
             dialogOptions: {
-                appendTo: '#main',
+                appendTo: container,
                 allowMaximize: true,
                 allowMinimize: true,
                 dblclick: 'maximize',
