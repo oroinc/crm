@@ -115,7 +115,7 @@ class ContactDatagridManager extends FlexibleDatagridManager
             function (ResultRecordInterface $record) use ($fieldEmail) {
                 /** @var $emails PersistentCollection */
                 $emails = $record->getValue($fieldEmail->getFieldName())->getData();
-                if (!empty($emails)) {
+                if ($emails->count() > 0) {
                     /** @var $email Collection */
                     $email = $emails->first();
                     return $email->getData();
