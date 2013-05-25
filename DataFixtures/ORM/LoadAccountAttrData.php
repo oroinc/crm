@@ -80,11 +80,6 @@ class LoadAccountAttrData extends AbstractFixture implements ContainerAwareInter
                     'searchable' => true
                 ),
                 array(
-                    'code' => 'annual_revenue',
-                    'type' => 'oro_flexibleentity_money',
-                    'label' => 'Annual revenue'
-                ),
-                array(
                     'code' => 'employees',
                     'type' => 'oro_flexibleentity_integer'
                 ),
