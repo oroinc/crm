@@ -63,12 +63,11 @@
             </div>
         </div>
         <div class="span9">
-            <div class="customer-info well-small">
-                <div class="visual"><img src="{{ asset('bundles/oroui/img/info-usser.png') }}" alt="{{ account.name(format) }}"/></div>
+            <div class="customer-info customer-simple well-small">
                 <div class="customer-content pull-left">
                     <div class="clearfix">
                         <div class="pull-left">
-                            <div class="sub-title"><a href="{{ path('oro_account_index') }}">{{ 'Account'|trans }}</a></div>
+                            <div class="sub-title"><a href="{{ path('oro_account_index') }}">{{ 'Accounts'|trans }}</a></div>
                             <span class="separator">/</span>
                             <h1 class="usser-name">{{ account.name(format)|default('N/A') }}</h1>
                         </div>

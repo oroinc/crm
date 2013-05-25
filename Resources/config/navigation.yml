@@ -37,6 +37,6 @@ oro_menu_config:
 
 oro_titles:
     oro_account_index: Accounts
-    oro_account_view: %%account.name%% - View Account
-    oro_account_create: New Account
-    oro_account_update: %%account.name%% - Edit Account
+    oro_account_view: %%account.name%% - Accounts
+    oro_account_create: Create Account
+    oro_account_update: %%account.name%% - Accounts
