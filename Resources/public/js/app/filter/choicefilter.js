@@ -14,22 +14,24 @@ Oro.Filter.ChoiceFilter = Oro.Filter.TextFilter.extend({
      * @property {function(Object, ?Object=): String}
      */
     popupCriteriaTemplate: _.template(
-        '<div>' +
-            '<div>' +
-                '<input type="text" name="value" value=""/>' +
-            '</div>' +
-            '<div class="horizontal">' +
-                '<% _.each(choices, function (hint, value) { %>' +
-                    '<div class="oro-clearfix">' +
-                        '<input type="radio" id="<%= name %>-<%= value %>" name="<%= name %>" value="<%= value %>" /><label for ="<%= name %>-<%= value %>"><%= hint %></label>' +
-                    '</div>'+
-                '<% }); %>' +
-                '<br/>' +
-            '</div>' +
-            '<div class="oro-action">' +
+        '<div class="choicefilter">' +
+            '<div class="input-prepend">' +
                 '<div class="btn-group">' +
-                    '<button type="button" class="btn btn-primary filter-update">Update</button>' +
+                    '<button class="btn dropdown-toggle" data-toggle="dropdown">' +
+                        'Action' +
+                        '<span class="caret"></span>' +
+                    '</button>' +
+                    '<ul class="dropdown-menu">' +
+                        '<% _.each(choices, function (hint, value) { %>' +
+                            '<li><a class="choice_value" href="#" data-value="<%= value %>"><%= hint %></a></li>' +
+                        '<% }); %>' +
+                    '</ul>' +
+                    '<input class="span2" type="text" name="value" value="">' +
+                    '<input class="name_input" type="hidden" name="<%= name %>" id="<%= name %>" value=""/>' +
+                    '</div>' +
+
                 '</div>' +
+                '<button class="btn btn-primary filter-update" type="button">Update</button>' +
             '</div>' +
         '</div>'
     ),
@@ -41,7 +43,7 @@ Oro.Filter.ChoiceFilter = Oro.Filter.TextFilter.extend({
      */
     criteriaValueSelectors: {
         value: 'input[name="value"]',
-        type: 'input[type="radio"]'
+        type: 'input[type="hidden"]'
     },
 
     /** @property */
@@ -109,6 +111,33 @@ Oro.Filter.ChoiceFilter = Oro.Filter.TextFilter.extend({
         if (newValue.value || oldValue.value) {
             this.trigger('update');
         }
+    },
+
+    /**
+     * Filter events
+     *
+     * @property
+     */
+    events: {
+        'keyup input': '_onReadCriteriaInputKey',
+        'click .filter-update': '_onClickUpdateCriteria',
+        'click .filter-criteria-selector': '_onClickCriteriaSelector',
+        'click .filter-criteria .filter-criteria-hide': '_onClickCloseCriteria',
+        'click .disable-filter': '_onClickDisableFilter',
+        'click .choice_value': '_onClickChoiceValue'
+    },
+
+    /**
+     * Open/close select dropdown
+     *
+     * @param {Event} e
+     * @protected
+     */
+    _onClickChoiceValue: function(e) {
+        var parentDiv = $(e.currentTarget).parent().parent().parent();
+        parentDiv.find('.name_input').val($(e.currentTarget).attr('data-value'));
+        parentDiv.find('button').html($(e.currentTarget).html());
+        e.preventDefault();
     }
 });
 
