@@ -32,7 +32,7 @@
                 {{ form_widget(attribute) }}
                 {{ form_errors(attribute) }}
 
-                {% if loop.index % (loop.length / col) == 0  and not loop.last %}
+                {% if loop.index % ((loop.length / col)|ceil) == 0  and not loop.last %}
                     </div>
                     <div class="{{ class }}">
                 {% endif %}
