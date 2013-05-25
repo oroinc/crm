@@ -35,8 +35,8 @@ class TimestampableListener implements EventSubscriber
     {
         $entity = $args->getEntity();
         if ($entity instanceof TimestampableInterface) {
-            $entity->setCreated(new \DateTime());
-            $entity->setUpdated(new \DateTime());
+            $entity->setCreated(new \DateTime('now', new \DateTimeZone('UTC')));
+            $entity->setUpdated(new \DateTime('now', new \DateTimeZone('UTC')));
         }
     }
 
@@ -48,7 +48,7 @@ class TimestampableListener implements EventSubscriber
     {
         $entity = $args->getEntity();
         if ($entity instanceof \Oro\Bundle\FlexibleEntityBundle\Model\Behavior\TimestampableInterface) {
-            $entity->setUpdated(new \DateTime());
+            $entity->setUpdated(new \DateTime('now', new \DateTimeZone('UTC')));
         }
     }
 }
