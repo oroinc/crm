@@ -45,12 +45,14 @@ class AddressType extends FlexibleType
 
         // address fields
         $builder
+            ->add('firstName', 'text', $required)
+            ->add('lastName', 'text', $required)
             ->add('street', 'text', $required)
             ->add('street2', 'text', $notRequired)
             ->add('city', 'text', $required)
-            ->add('postalCode', 'text', array('required' => true, 'label' => 'ZIP/Postal code'))
+            ->add('state', 'oro_region', $required)
             ->add('country', 'oro_country', $required)
-            ->add('state', 'oro_region', $required);
+            ->add('postalCode', 'text', array('required' => true, 'label' => 'ZIP/Postal code'));
     }
 
     /**
