@@ -135,7 +135,7 @@
                     </div>
                     {% endif %}
 
-                    {% if form.groups is defined %}
+                    {% if form.groups is defined and form.groups.children|length > 0 %}
                     <div class="usser-row">
                         <h4 id="scroll-groups" class="scrollspy-title">{{ 'Groups'|trans }}</h4>
                         <div class="row-fluid">
