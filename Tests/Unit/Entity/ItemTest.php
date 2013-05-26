@@ -134,7 +134,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     public function testBeforeSave()
     {
         $this->item->beforeSave();
-        $date = new \DateTime();
+        $date = new \DateTime('now', new \DateTimeZone('UTC'));
         $createdAt = $this->item->getCreatedAt();
         $this->assertEquals($date->format('Y-m-d'), $createdAt->format('Y-m-d'));
         $updatedAt = $this->item->getUpdatedAt();
