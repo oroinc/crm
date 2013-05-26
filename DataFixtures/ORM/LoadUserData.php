@@ -39,6 +39,7 @@ class LoadUserData extends AbstractFixture implements ContainerAwareInterface, O
             ->setFirstname('John')
             ->setLastname('Doe')
             ->addRole($this->getReference('admin_role'))
+            ->addGroup($this->getReference('oro_group_administrators'))
             ->setEmail('admin@example.com')
             ->setApi($api);
 
