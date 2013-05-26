@@ -1,10 +1,7 @@
 {% extends 'OroContactBundle::layout.html.twig' %}
 {% form_theme form with 'OroUIBundle:Form:fields.html.twig' %}
 {% if form.vars.value.id %}
-    {% set title = 'Update group'|trans %}
     {% oro_title_set({params : {"%group.name%": form.vars.value.name} }) %}
-{% else %}
-    {% set title = 'Add group'|trans %}
 {% endif %}
 
 {% block head_script %}
@@ -28,7 +25,7 @@
 {% block form_buttons %}
     <div class="pull-left customer-info-top-actions">
         <div class="btn-group">
-            <a href="{{ path('oro_account_index') }}" class="btn back">{{ 'Cancel'|trans }}</a>
+            <a href="{{ path('oro_contact_group_index') }}" class="btn back">{{ 'Cancel'|trans }}</a>
         </div>
         <div class="btn-group">
             <button type="submit" class="btn btn-success">{{ ' Save'|trans }}</button>
@@ -54,13 +51,12 @@
                     </div>
                     {% endif %}
                 </div>
-
                 {% if form.vars.value.id %}
                     <div class="span9">
-                        <div class="customer-info well-small">
+                        <div class="customer-info customer-simple well-small">
                             <div class="customer-content pull-left">
                                 <div class="clearfix-oro">
-                                    <div class="sub-title">{{ title }}</div>
+                                    <div class="sub-title"><a href="{{ path('oro_contact_group_index') }}">{{ 'Contact Groups'|trans }}</a></div>
                                     <span class="separator">/</span>
                                     <h1 class="usser-name">{{ form.vars.value.name|default('N/A') }}</h1>
                                 </div>
@@ -70,7 +66,7 @@
                 {% else %}
                     <div class="container-fluid">
                         <div class="container-fluid">
-                            <h1 class="oro-subtitle">{{ title }}</h1>
+                            <h1 class="oro-subtitle">{{ 'Add Customer Group'|trans }}</h1>
                         </div>
                     </div>
                 {% endif %}
