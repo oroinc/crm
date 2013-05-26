@@ -49,11 +49,13 @@ class ResponsePagestateListener
         $request  = $event->getRequest();
         $response = $event->getResponse();
 
+        $isTest = $request->server->get('HTTP_USER_AGENT') == 'Symfony2 BrowserKit' && $request->server->get('HTTP_HOST') == 'localhost';
         if (!is_object($this->security->getToken())
             && HttpKernel::MASTER_REQUEST == $event->getRequestType()
             && $request->getMethod() == 'PUT'
             && $request->getRequestFormat() == 'json'
             && $response->getStatusCode() == 401
+            && !$isTest
         ) {
             return $event->setResponse(
                 $this->templating->renderResponse(
