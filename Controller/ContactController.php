@@ -6,7 +6,6 @@ namespace Oro\Bundle\ContactBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBag;
-use YsTools\BackUrlBundle\Annotation\BackUrl;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -23,7 +22,6 @@ use Oro\Bundle\SoapBundle\Entity\Manager\ApiFlexibleEntityManager;
  *      description="Contact manipulation",
  *      parent="root"
  * )
- * @BackUrl("back", useSession=true)
  */
 class ContactController extends Controller
 {
@@ -81,9 +79,6 @@ class ContactController extends Controller
 
         if ($this->get('oro_contact.form.handler.contact')->process($entity)) {
             $this->getFlashBag()->add('success', 'Contact successfully saved');
-
-            BackUrl::triggerRedirect();
-
             return $this->redirect($backUrl);
         }
 
