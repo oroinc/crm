@@ -84,8 +84,12 @@ class GroupController extends Controller
      * @Template("OroGridBundle:Datagrid:list.json.php")
      * @AclAncestor("orocrm_contact_group_update")
      */
-    public function gridDataAction(Group $entity)
+    public function gridDataAction(Group $entity = null)
     {
+        if (!$entity) {
+            $entity = new Group();
+        }
+
         return array('datagrid' => $this->getGroupContactDatagridManager($entity)->getDatagrid()->createView());
     }
 
