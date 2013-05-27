@@ -173,7 +173,6 @@ class AccountDatagridManager extends FlexibleDatagridManager
                 'label'         => 'View',
                 'link'          => 'view_link',
                 'runOnRowClick' => true,
-//                'backUrl' => true,
             )
         );
 
@@ -185,7 +184,6 @@ class AccountDatagridManager extends FlexibleDatagridManager
                 'label' => 'View',
                 'icon'  => 'user',
                 'link'  => 'view_link',
-//                'backUrl' => true,
             )
         );
 
@@ -197,7 +195,6 @@ class AccountDatagridManager extends FlexibleDatagridManager
                 'label'   => 'Update',
                 'icon'    => 'edit',
                 'link'    => 'update_link',
-//                'backUrl' => true,
             )
         );
 

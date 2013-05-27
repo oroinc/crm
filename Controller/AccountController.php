@@ -24,7 +24,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBag;
 use Symfony\Component\Security\Acl\Exception\Exception;
-use YsTools\BackUrlBundle\Annotation\BackUrl;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -43,8 +42,7 @@ use Ddeboer\DataImport\Reader\CsvReader;
  *      description="Account manipulation",
  *      parent="root"
  * )
- * @BackUrl("back", useSession=true)
- */
+  */
 class AccountController extends Controller
 {
     /**
@@ -56,7 +54,6 @@ class AccountController extends Controller
      *      description="View account",
      *      parent="oro_account_account"
      * )
-     * @BackUrl("back")
      */
     public function viewAction(Account $account)
     {
@@ -102,7 +99,6 @@ class AccountController extends Controller
 
         if ($this->get('oro_account.form.handler.account')->process($entity)) {
             $this->getFlashBag()->add('success', 'Account successfully saved');
-            BackUrl::triggerRedirect();
             return $this->redirect($backUrl);
         }
 
@@ -124,7 +120,6 @@ class AccountController extends Controller
      *      description="View list of accounts",
      *      parent="oro_account_account"
      * )
-     * @BackUrl("back")
      */
     public function indexAction(Request $request)
     {
