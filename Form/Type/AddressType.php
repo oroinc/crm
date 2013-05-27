@@ -36,23 +36,16 @@ class AddressType extends FlexibleType
 
         $builder->addEventSubscriber($this->eventListener);
 
-        $required =  array(
-            'required' => true,
-        );
-        $notRequired =  array(
-            'required' => false,
-        );
-
         // address fields
         $builder
-            ->add('firstName', 'text', $required)
-            ->add('lastName', 'text', $required)
-            ->add('street', 'text', $required)
-            ->add('street2', 'text', $notRequired)
-            ->add('city', 'text', $required)
-            ->add('state', 'oro_region', $notRequired)
-            ->add('state_text', 'hidden', $notRequired)
-            ->add('country', 'oro_country', $required)
+            ->add('firstName', 'text', array('required' => false, 'label' => 'First Name'))
+            ->add('lastName', 'text', array('required' => false, 'label' => 'Last Name'))
+            ->add('street', 'text', array('required' => true, 'label' => 'Street'))
+            ->add('street2', 'text', array('required' => false, 'label' => 'Street 2'))
+            ->add('city', 'text', array('required' => true, 'label' => 'City'))
+            ->add('state', 'oro_region', array('required' => false, 'label' => 'State'))
+            ->add('state_text', 'hidden', array('required' => false, 'label' => 'Custom State'))
+            ->add('country', 'oro_country', array('required' => true, 'label' => 'Country'))
             ->add('postalCode', 'text', array('required' => true, 'label' => 'ZIP/Postal code'));
     }
 
