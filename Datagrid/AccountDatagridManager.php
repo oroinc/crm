@@ -53,6 +53,7 @@ class AccountDatagridManager extends FlexibleDatagridManager
     }
 
     /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * {@inheritDoc}
      */
     protected function configureFields(FieldDescriptionCollection $fieldsCollection)
