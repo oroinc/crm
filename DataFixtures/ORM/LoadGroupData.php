@@ -1,11 +1,11 @@
 <?php
 
-namespace Oro\Bundle\ContactBundle\DataFixtures\ORM;
+namespace OroCRM\Bundle\ContactBundle\DataFixtures\ORM;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
 
-use Oro\Bundle\ContactBundle\Entity\Group;
+use OroCRM\Bundle\ContactBundle\Entity\Group;
 
 class LoadGroupData extends AbstractFixture
 {

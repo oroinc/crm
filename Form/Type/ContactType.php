@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\ContactBundle\Form\Type;
+namespace OroCRM\Bundle\ContactBundle\Form\Type;
 
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -21,7 +21,7 @@ class ContactType extends FlexibleType
             'groups',
             'entity',
             array(
-                'class'    => 'OroContactBundle:Group',
+                'class'    => 'OroCRMContactBundle:Group',
                 'property' => 'name',
                 'multiple' => true,
                 'expanded' => true,
@@ -50,6 +50,6 @@ class ContactType extends FlexibleType
      */
     public function getName()
     {
-        return 'oro_contact';
+        return 'orocrm_contact';
     }
 }

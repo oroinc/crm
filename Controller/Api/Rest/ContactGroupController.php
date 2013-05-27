@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\ContactBundle\Controller\Api\Rest;
+namespace OroCRM\Bundle\ContactBundle\Controller\Api\Rest;
 
 use FOS\RestBundle\Controller\Annotations\NamePrefix;
 use FOS\RestBundle\Controller\Annotations\RouteResource;
@@ -31,7 +31,7 @@ class ContactGroupController extends RestController implements ClassResourceInte
      *      description="Get all contact group items",
      *      resource=true
      * )
-     * @AclAncestor("oro_contact_group_list")
+     * @AclAncestor("orocrm_contact_group_list")
      * @return Response
      */
     public function cgetAction()
@@ -52,10 +52,10 @@ class ContactGroupController extends RestController implements ClassResourceInte
      *      resource=true
      * )
      * @Acl(
-     *      id="oro_contact_group_view",
+     *      id="orocrm_contact_group_view",
      *      name="View contact group",
      *      description="View contact group",
-     *      parent="oro_contact_group"
+     *      parent="orocrm_contact_group"
      * )
      * @return Response
      */
@@ -73,7 +73,7 @@ class ContactGroupController extends RestController implements ClassResourceInte
      *      description="Update contact group",
      *      resource=true
      * )
-     * @AclAncestor("oro_contact_group_update")
+     * @AclAncestor("orocrm_contact_group_update")
      * @return Response
      */
     public function putAction($id)
@@ -88,7 +88,7 @@ class ContactGroupController extends RestController implements ClassResourceInte
      *      description="Create new contact group",
      *      resource=true
      * )
-     * @AclAncestor("oro_contact_group_create")
+     * @AclAncestor("orocrm_contact_group_create")
      */
     public function postAction()
     {
@@ -105,10 +105,10 @@ class ContactGroupController extends RestController implements ClassResourceInte
      *      resource=true
      * )
      * @Acl(
-     *      id="oro_contact_group_delete",
+     *      id="orocrm_contact_group_delete",
      *      name="Delete contact group",
      *      description="Delete contact group",
-     *      parent="oro_contact_group"
+     *      parent="orocrm_contact_group"
      * )
      * @return Response
      */
@@ -124,7 +124,7 @@ class ContactGroupController extends RestController implements ClassResourceInte
      */
     public function getManager()
     {
-        return $this->get('oro_contact.group.manager.api');
+        return $this->get('orocrm_contact.group.manager.api');
     }
 
     /**
@@ -132,7 +132,7 @@ class ContactGroupController extends RestController implements ClassResourceInte
      */
     public function getForm()
     {
-        return $this->get('oro_contact.form.group.api');
+        return $this->get('orocrm_contact.form.group.api');
     }
 
     /**
@@ -140,6 +140,6 @@ class ContactGroupController extends RestController implements ClassResourceInte
      */
     public function getFormHandler()
     {
-        return $this->get('oro_contact.form.handler.group.api');
+        return $this->get('orocrm_contact.form.handler.group.api');
     }
 }

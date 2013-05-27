@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\ContactBundle\Entity;
+namespace OroCRM\Bundle\ContactBundle\Entity;
 
 use Gedmo\Mapping\Annotation as Gedmo;
 
@@ -13,7 +13,7 @@ use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="oro_contact_group")
+ * @ORM\Table(name="orocrm_contact_group")
  * @Gedmo\Loggable(logEntryClass="Oro\Bundle\DataAuditBundle\Entity\Audit")
  */
 class Group

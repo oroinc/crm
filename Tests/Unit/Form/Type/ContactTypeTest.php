@@ -1,11 +1,11 @@
 <?php
 
-namespace Oro\Bundle\ContactBundle\Tests\Unit\Form\Type;
+namespace OroCRM\Bundle\ContactBundle\Tests\Unit\Form\Type;
 
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-use Oro\Bundle\ContactBundle\Form\Type\ContactType;
+use OroCRM\Bundle\ContactBundle\Form\Type\ContactType;
 
 class ContactTypeTest extends \PHPUnit_Framework_TestCase
 {
@@ -20,7 +20,7 @@ class ContactTypeTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->type = new ContactType($flexibleManager, 'oro_contact');
+        $this->type = new ContactType($flexibleManager, 'orocrm_contact');
     }
 
     public function testSetDefaultOptions()
@@ -35,6 +35,6 @@ class ContactTypeTest extends \PHPUnit_Framework_TestCase
 
     public function testGetName()
     {
-        $this->assertEquals('oro_contact', $this->type->getName());
+        $this->assertEquals('orocrm_contact', $this->type->getName());
     }
 }

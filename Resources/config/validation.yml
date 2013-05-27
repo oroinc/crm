@@ -1,4 +1,4 @@
-Oro\Bundle\ContactBundle\Entity\Group:
+OroCRM\Bundle\ContactBundle\Entity\Group:
     constraints:
         - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity: name
     properties:

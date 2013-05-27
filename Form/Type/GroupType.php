@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\ContactBundle\Form\Type;
+namespace OroCRM\Bundle\ContactBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -25,7 +25,7 @@ class GroupType extends AbstractType
                 'appendContacts',
                 'oro_entity_identifier',
                 array(
-                    'class'    => 'OroContactBundle:Contact',
+                    'class'    => 'OroCRMContactBundle:Contact',
                     'required' => false,
                     'mapped'   => false,
                     'multiple' => true,
@@ -35,7 +35,7 @@ class GroupType extends AbstractType
                 'removeContacts',
                 'oro_entity_identifier',
                 array(
-                    'class'    => 'OroContactBundle:Contact',
+                    'class'    => 'OroCRMContactBundle:Contact',
                     'required' => false,
                     'mapped'   => false,
                     'multiple' => true,
@@ -50,7 +50,7 @@ class GroupType extends AbstractType
     {
         $resolver->setDefaults(
             array(
-                'data_class' => 'Oro\Bundle\ContactBundle\Entity\Group',
+                'data_class' => 'OroCRM\Bundle\ContactBundle\Entity\Group',
                 'intention'  => 'group',
             )
         );
@@ -61,6 +61,6 @@ class GroupType extends AbstractType
      */
     public function getName()
     {
-        return 'oro_contact_group';
+        return 'orocrm_contact_group';
     }
 }

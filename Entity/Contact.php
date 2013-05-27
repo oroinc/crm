@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\ContactBundle\Entity;
+namespace OroCRM\Bundle\ContactBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -15,7 +15,7 @@ use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityFlexible;
 
 /**
  * @ORM\Entity(repositoryClass="Oro\Bundle\FlexibleEntityBundle\Entity\Repository\FlexibleEntityRepository")
- * @ORM\Table(name="oro_contact")
+ * @ORM\Table(name="orocrm_contact")
  * @ORM\HasLifecycleCallbacks()
  */
 class Contact extends AbstractEntityFlexible
@@ -33,7 +33,7 @@ class Contact extends AbstractEntityFlexible
      * @var Group[]
      *
      * @ORM\ManyToMany(targetEntity="Group")
-     * @ORM\JoinTable(name="oro_contact_to_contact_group",
+     * @ORM\JoinTable(name="orocrm_contact_to_contact_group",
      *      joinColumns={@ORM\JoinColumn(name="contact_id", referencedColumnName="id", onDelete="CASCADE")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="contact_group_id", referencedColumnName="id", onDelete="CASCADE")}
      * )
@@ -44,7 +44,7 @@ class Contact extends AbstractEntityFlexible
 
     /**
      * @var \Oro\Bundle\FlexibleEntityBundle\Model\AbstractFlexibleValue[]
-     * @ORM\OneToMany(targetEntity="Oro\Bundle\ContactBundle\Entity\Value\ContactValue", mappedBy="entity", cascade={"persist", "remove"}, orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="OroCRM\Bundle\ContactBundle\Entity\Value\ContactValue", mappedBy="entity", cascade={"persist", "remove"}, orphanRemoval=true)
      * @Exclude
      */
     protected $values;

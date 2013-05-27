@@ -1,13 +1,13 @@
 <?php
 
-namespace Oro\Bundle\ContactBundle\Tests\Unit\Form\Handler;
+namespace OroCRM\Bundle\ContactBundle\Tests\Unit\Form\Handler;
 
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Common\Persistence\ObjectManager;
-use Oro\Bundle\ContactBundle\Entity\Contact;
+use OroCRM\Bundle\ContactBundle\Entity\Contact;
 
-use Oro\Bundle\ContactBundle\Form\Handler\ContactHandler;
+use OroCRM\Bundle\ContactBundle\Form\Handler\ContactHandler;
 
 class ContactHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -48,7 +48,7 @@ class ContactHandlerTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->entity = $this->getMock('Oro\Bundle\ContactBundle\Entity\Contact');
+        $this->entity = $this->getMock('OroCRM\Bundle\ContactBundle\Entity\Contact');
         $this->handler = new ContactHandler($this->form, $this->request, $this->manager);
     }
 

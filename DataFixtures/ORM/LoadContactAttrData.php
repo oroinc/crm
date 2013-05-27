@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\ContactBundle\DataFixtures\ORM;
+namespace OroCRM\Bundle\ContactBundle\DataFixtures\ORM;
 
 use Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleManager;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
@@ -30,7 +30,7 @@ class LoadContactAttrData extends AbstractFixture implements ContainerAwareInter
     public function setContainer(ContainerInterface $container = null)
     {
         $this->container = $container;
-        $this->fm = $this->container->get('oro_contact.manager.flexible');
+        $this->fm = $this->container->get('orocrm_contact.manager.flexible');
         $this->sm = $this->fm->getStorageManager();
     }
 
@@ -92,7 +92,7 @@ class LoadContactAttrData extends AbstractFixture implements ContainerAwareInter
                 ),
                 array(
                     'code'  => 'account',
-                    'type'  => 'oro_account_attribute_account',
+                    'type'  => 'orocrm_account_attribute_account',
                     'label' => 'Account',
                     'searchable' => true
                 ),
@@ -104,7 +104,7 @@ class LoadContactAttrData extends AbstractFixture implements ContainerAwareInter
                 ),
                 array(
                     'code'  => 'reports_to',
-                    'type'  => 'oro_contact_attribute_contact',
+                    'type'  => 'orocrm_contact_attribute_contact',
                     'label' => 'Reports To',
                     'searchable' => true
                 ),

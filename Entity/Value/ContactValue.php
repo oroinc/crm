@@ -1,20 +1,20 @@
 <?php
 
-namespace Oro\Bundle\ContactBundle\Entity\Value;
+namespace OroCRM\Bundle\ContactBundle\Entity\Value;
 
 use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\Common\Collections\ArrayCollection;
-use Oro\Bundle\AccountBundle\Entity\Account;
+use OroCRM\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\AddressBundle\Entity\Address;
 use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityFlexibleValue;
 use Oro\Bundle\FlexibleEntityBundle\Entity\Attribute;
-use Oro\Bundle\ContactBundle\Entity\Contact;
+use OroCRM\Bundle\ContactBundle\Entity\Contact;
 
 use Doctrine\ORM\Mapping as ORM;
 use Oro\Bundle\UserBundle\Entity\User;
 
 /**
- * @ORM\Table(name="oro_contact_value")
+ * @ORM\Table(name="orocrm_contact_value")
  * @ORM\Entity
  * @Gedmo\Loggable(logEntryClass="Oro\Bundle\DataAuditBundle\Entity\Audit")
  */
@@ -31,7 +31,7 @@ class ContactValue extends AbstractEntityFlexibleValue
     /**
      * @var Contact $entity
      *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\ContactBundle\Entity\Contact", inversedBy="values")
+     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ContactBundle\Entity\Contact", inversedBy="values")
      */
     protected $entity;
 
@@ -42,7 +42,7 @@ class ContactValue extends AbstractEntityFlexibleValue
      *
      * @ORM\ManyToMany(targetEntity="Oro\Bundle\FlexibleEntityBundle\Entity\AttributeOption")
      * @ORM\JoinTable(
-     *     name="oro_contact_value_option",
+     *     name="orocrm_contact_value_option",
      *     joinColumns={@ORM\JoinColumn(name="value_id", referencedColumnName="id", onDelete="CASCADE")},
      *     inverseJoinColumns={@ORM\JoinColumn(name="option_id", referencedColumnName="id", onDelete="CASCADE")}
      * )
@@ -54,7 +54,7 @@ class ContactValue extends AbstractEntityFlexibleValue
      *
      * @var Account $account
      *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\AccountBundle\Entity\Account", cascade="persist")
+     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\AccountBundle\Entity\Account", cascade="persist")
      * @ORM\JoinColumn(name="account_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $account;
@@ -74,7 +74,7 @@ class ContactValue extends AbstractEntityFlexibleValue
      *
      * @var Contact $contact
      *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\ContactBundle\Entity\Contact", cascade="persist")
+     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ContactBundle\Entity\Contact", cascade="persist")
      * @ORM\JoinColumn(name="contact_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $contact;
@@ -86,7 +86,7 @@ class ContactValue extends AbstractEntityFlexibleValue
      *
      * @ORM\ManyToMany(targetEntity="Oro\Bundle\FlexibleEntityBundle\Entity\Collection",cascade={"persist"})
      * @ORM\JoinTable(
-     *     name="oro_contact_collection_relation",
+     *     name="orocrm_contact_collection_relation",
      *     joinColumns={@ORM\JoinColumn(name="value_id", referencedColumnName="id", onDelete="CASCADE")},
      *     inverseJoinColumns={@ORM\JoinColumn(name="collection_data_id", referencedColumnName="id", onDelete="CASCADE")}
      * )

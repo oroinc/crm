@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\ContactBundle\Entity;
+namespace OroCRM\Bundle\ContactBundle\Entity;
 
 use JMS\Serializer\Annotation\Exclude;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\ContactBundle\Controller\Api\Rest;
+namespace OroCRM\Bundle\ContactBundle\Controller\Api\Rest;
 
 use FOS\RestBundle\Controller\Annotations\NamePrefix;
 use FOS\RestBundle\Controller\Annotations\RouteResource;
@@ -31,7 +31,7 @@ class ContactController extends FlexibleRestController implements ClassResourceI
      *      description="Get all contacts items",
      *      resource=true
      * )
-     * @AclAncestor("oro_contact_list")
+     * @AclAncestor("orocrm_contact_list")
      * @return Response
      */
     public function cgetAction()
@@ -51,7 +51,7 @@ class ContactController extends FlexibleRestController implements ClassResourceI
      *      description="Get contact item",
      *      resource=true
      * )
-     * @AclAncestor("oro_contact_view")
+     * @AclAncestor("orocrm_contact_view")
      * @return Response
      */
     public function getAction($id)
@@ -68,7 +68,7 @@ class ContactController extends FlexibleRestController implements ClassResourceI
      *      description="Update contact",
      *      resource=true
      * )
-     * @AclAncestor("oro_contact_update")
+     * @AclAncestor("orocrm_contact_update")
      * @return Response
      */
     public function putAction($id)
@@ -83,7 +83,7 @@ class ContactController extends FlexibleRestController implements ClassResourceI
      *      description="Create new contact",
      *      resource=true
      * )
-     * @AclAncestor("oro_contact_create")
+     * @AclAncestor("orocrm_contact_create")
      */
     public function postAction()
     {
@@ -100,10 +100,10 @@ class ContactController extends FlexibleRestController implements ClassResourceI
      *      resource=true
      * )
      * @Acl(
-     *      id="oro_contact_delete",
+     *      id="orocrm_contact_delete",
      *      name="Delete contact",
      *      description="Delete contact",
-     *      parent="oro_contact"
+     *      parent="orocrm_contact"
      * )
      * @return Response
      */
@@ -119,7 +119,7 @@ class ContactController extends FlexibleRestController implements ClassResourceI
      */
     public function getManager()
     {
-        return $this->get('oro_contact.contact.manager.api');
+        return $this->get('orocrm_contact.contact.manager.api');
     }
 
     /**
@@ -127,7 +127,7 @@ class ContactController extends FlexibleRestController implements ClassResourceI
      */
     public function getForm()
     {
-        return $this->get('oro_contact.form.contact.api');
+        return $this->get('orocrm_contact.form.contact.api');
     }
 
     /**
@@ -135,6 +135,6 @@ class ContactController extends FlexibleRestController implements ClassResourceI
      */
     public function getFormHandler()
     {
-        return $this->get('oro_contact.form.handler.contact.api');
+        return $this->get('orocrm_contact.form.handler.contact.api');
     }
 }

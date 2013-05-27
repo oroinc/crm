@@ -1,4 +1,4 @@
-{% extends 'OroContactBundle::layout.html.twig' %}
+{% extends 'OroCRMContactBundle::layout.html.twig' %}
 
 {% block head_script %}
     {{ parent() }}
@@ -12,7 +12,7 @@
         <h1>
             {{ 'Contacts'|trans }}
             <div class="pull-right">
-                <a class="btn btn-primary" href="{{ path('oro_contact_create') }}" title="{{ 'Create contact'|trans }}">{{ 'Create contact'|trans }}</a>
+                <a class="btn btn-primary" href="{{ path('orocrm_contact_create') }}" title="{{ 'Create contact'|trans }}">{{ 'Create contact'|trans }}</a>
             </div>
         </h1>
         </div>

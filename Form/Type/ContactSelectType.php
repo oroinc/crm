@@ -1,5 +1,5 @@
 <?php
-namespace Oro\Bundle\ContactBundle\Form\Type;
+namespace OroCRM\Bundle\ContactBundle\Form\Type;
 
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\AbstractType;
@@ -11,7 +11,7 @@ class ContactSelectType extends AbstractType
     {
         $resolver->setDefaults(
             array(
-                'class' => 'OroContactBundle:Contact',
+                'class' => 'OroCRMContactBundle:Contact',
                 'query_builder' => function (EntityRepository $er) {
                     return $er->createFlexibleQueryBuilder('c', array('first_name', 'last_name'));
                 },
@@ -31,6 +31,6 @@ class ContactSelectType extends AbstractType
      */
     public function getName()
     {
-        return 'oro_contact_select';
+        return 'orocrm_contact_select';
     }
 }

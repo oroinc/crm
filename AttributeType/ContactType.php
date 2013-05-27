@@ -1,5 +1,5 @@
 <?php
-namespace Oro\Bundle\ContactBundle\AttributeType;
+namespace OroCRM\Bundle\ContactBundle\AttributeType;
 
 use Oro\Bundle\FlexibleEntityBundle\AttributeType\AbstractAttributeType;
 
@@ -10,6 +10,6 @@ class ContactType extends AbstractAttributeType
      */
     public function getName()
     {
-        return 'oro_contact_attribute_contact';
+        return 'orocrm_contact_attribute_contact';
     }
 }

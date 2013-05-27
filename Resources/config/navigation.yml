@@ -7,23 +7,23 @@ oro_menu_config:
                 position: 10
         contact_list:
             label: 'Contacts'
-            route: 'oro_contact_index'
+            route: 'orocrm_contact_index'
             extras:
-                routes: ['/^oro_contact_(?!group\w+|group\w+)\w+$/']
+                routes: ['/^orocrm_contact_(?!group\w+|group\w+)\w+$/']
         contact_group_list:
             label: 'Contact Groups'
-            route: 'oro_contact_group_index'
+            route: 'orocrm_contact_group_index'
             extras:
-                routes: ['oro_contact_group_*']
+                routes: ['orocrm_contact_group_*']
         shortcut_new_contact:
             label: Create new contact
-            route: oro_contact_create
+            route: orocrm_contact_create
             extras:
                 description: Create new contact instance
                 isCustomAction: true
         shortcut_list_contacts:
             label: Show contacts list
-            route: oro_contact_index
+            route: orocrm_contact_index
             extras:
                 description: List of contacts
 
@@ -41,11 +41,11 @@ oro_menu_config:
                 shortcut_list_contacts: ~
 
 oro_titles:
-    oro_contact_index: Contacts
-    oro_contact_view: %%contact.name%% - Contacts
-    oro_contact_create: Create Contact
-    oro_contact_update: %%contact.name%% - Contacts
+    orocrm_contact_index: Contacts
+    orocrm_contact_view: %%contact.name%% - Contacts
+    orocrm_contact_create: Create Contact
+    orocrm_contact_update: %%contact.name%% - Contacts
 
-    oro_contact_group_index: Contact Groups
-    oro_contact_group_create: Create Contact Group
-    oro_contact_group_update: %%group.name%% - Contact Group
+    orocrm_contact_group_index: Contact Groups
+    orocrm_contact_group_create: Create Contact Group
+    orocrm_contact_group_update: %%group.name%% - Contact Group
