@@ -112,7 +112,7 @@ class UserSubscriber implements EventSubscriberInterface
                 array(
                     'label'       => 'Status',
                     'required'    => true,
-                    'disabled'    => !$this->isCurrentUser($entity),
+                    'disabled'    => $this->isCurrentUser($entity),
                     'choices'     => array('Inactive', 'Active'),
                     'empty_value' => 'Please select',
                     'empty_data'  => '',
@@ -130,7 +130,7 @@ class UserSubscriber implements EventSubscriberInterface
     protected function isCurrentUser(User $user)
     {
         $token = $this->security->getToken();
-        $currentUser = $token && $token->getUser();
+        $currentUser = $token ? $token->getUser() : null;
         if ($user->getId() && is_object($currentUser)) {
             return $currentUser->getId() == $user->getId();
         }
