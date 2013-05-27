@@ -521,11 +521,9 @@ Oro.Navigation = Backbone.Router.extend({
             if ($(target).is('a')) {
                 e.preventDefault();
                 var href = $(target).attr('href');
-                if (/^#\w/.test(href)) {
-                    if ($(this.selectors.scrollSpy)) {
-                        $(this.selectors.scrollSpy).scrollTop($(href).position().top + $(this.selectors.scrollSpy).scrollTop());
-                        $(target).blur();
-                    }
+                if (/^#\w/.test(href) && $(this.selectors.scrollSpy).length) {
+                    $(this.selectors.scrollSpy).scrollTop($(href).position().top + $(this.selectors.scrollSpy).scrollTop());
+                    $(target).blur();
                 }
             }
         }, this))
