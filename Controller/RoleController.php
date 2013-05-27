@@ -8,8 +8,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
-use YsTools\BackUrlBundle\Annotation\BackUrl;
-
 use Oro\Bundle\UserBundle\Entity\Role;
 use Oro\Bundle\UserBundle\Annotation\Acl;
 use Oro\Bundle\UserBundle\Annotation\AclAncestor;
@@ -22,7 +20,6 @@ use Oro\Bundle\UserBundle\Datagrid\RoleUserDatagridManager;
  *      name="Role manipulation",
  *      description="Role manipulation"
  * )
- * @BackUrl("back", useSession=true)
  */
 class RoleController extends Controller
 {
@@ -64,8 +61,6 @@ class RoleController extends Controller
             }
 
             $this->get('session')->getFlashBag()->add('success', 'Role successfully saved');
-
-            BackUrl::triggerRedirect();
 
             return $this->redirect($this->generateUrl('oro_user_role_index'));
         }

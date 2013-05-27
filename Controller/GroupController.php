@@ -8,8 +8,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
-use YsTools\BackUrlBundle\Annotation\BackUrl;
-
 use Oro\Bundle\UserBundle\Entity\Group;
 use Oro\Bundle\UserBundle\Annotation\Acl;
 use Oro\Bundle\UserBundle\Annotation\AclAncestor;
@@ -22,7 +20,6 @@ use Oro\Bundle\UserBundle\Datagrid\GroupUserDatagridManager;
  *      name="Group manipulation",
  *      description="Group manipulation"
  * )
- * @BackUrl("back", useSession=true)
  */
 class GroupController extends Controller
 {
@@ -61,8 +58,6 @@ class GroupController extends Controller
             $this->get('session')->getFlashBag()->add('success', 'Group successfully saved');
 
             if (!$this->getRequest()->get('_widgetContainer')) {
-                BackUrl::triggerRedirect();
-
                 return $this->redirect($this->generateUrl('oro_user_group_index'));
             }
         }

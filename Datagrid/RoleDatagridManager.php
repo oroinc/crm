@@ -111,10 +111,9 @@ class RoleDatagridManager extends DatagridManager
             'type'         => ActionInterface::TYPE_REDIRECT,
             'acl_resource' => 'root',
             'options'      => array(
-                'label'         => 'Edit',
+                'label'         => 'Update',
                 'link'          => 'update_link',
                 'runOnRowClick' => true,
-//                'backUrl'       => true,
             )
         );
 
@@ -123,10 +122,9 @@ class RoleDatagridManager extends DatagridManager
             'type'         => ActionInterface::TYPE_REDIRECT,
             'acl_resource' => 'root',
             'options'      => array(
-                'label'   => 'Edit',
-                'icon'    => 'edit',
-                'link'    => 'update_link',
-//                'backUrl' => true,
+                'label' => 'Update',
+                'icon'  => 'edit',
+                'link'  => 'update_link',
             )
         );
 
