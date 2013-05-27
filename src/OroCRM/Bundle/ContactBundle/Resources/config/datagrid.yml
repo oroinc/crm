@@ -1,0 +1,35 @@
+parameters:
+    orocrm_contact.contact.datagrid_manager.class: OroCRM\Bundle\ContactBundle\Datagrid\ContactDatagridManager
+    orocrm_contact.group.datagrid_manager.class: OroCRM\Bundle\ContactBundle\Datagrid\GroupDatagridManager
+    orocrm_contact.group_contact.datagrid_manager.class: OroCRM\Bundle\ContactBundle\Datagrid\GroupContactDatagridManager
+
+services:
+    orocrm_contact.contact.datagrid_manager:
+        class: %orocrm_contact.contact.datagrid_manager.class%
+        tags:
+            - name: oro_grid.datagrid.manager
+              datagrid_name: contacts
+              entity_name: %orocrm_contact.entity.class%
+              entity_hint: contacts
+              flexible: true
+              route_name: orocrm_contact_index
+
+    orocrm_contact.group.datagrid_manager:
+        class: %orocrm_contact.group.datagrid_manager.class%
+        tags:
+            - name: oro_grid.datagrid.manager
+              datagrid_name: groups
+              entity_name: OroCRM\Bundle\ContactBundle\Entity\Group
+              entity_hint: groups
+              route_name: orocrm_contact_group_index
+
+    orocrm_contact.group_contact.datagrid_manager:
+        class: %orocrm_contact.group_contact.datagrid_manager.class%
+        tags:
+            - name: oro_grid.datagrid.manager
+              datagrid_name: groupcontacts
+              entity_name: %orocrm_contact.entity.class%
+              entity_hint: contacts
+              flexible: true
+              query_entity_alias: c
+              route_name: orocrm_contact_group_contact_grid

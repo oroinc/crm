@@ -1,0 +1,11 @@
+OroCRM\Bundle\ContactBundle\Entity\Contact:
+    alias: orocrm_contact
+    label: Contacts
+    flexible_manager: orocrm_contact.manager.flexible
+    route:
+        name: orocrm_contact_view
+        parameters:
+            id: id
+    search_template: OroCRMContactBundle:Contact:searchResult.html.twig
+    entity_icon_class: icon-envelope
+    fields: []

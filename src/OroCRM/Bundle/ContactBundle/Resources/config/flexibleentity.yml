@@ -1,0 +1,6 @@
+entities_config:
+    OroCRM\Bundle\ContactBundle\Entity\Contact:
+        flexible_manager:     orocrm_contact.manager.flexible
+        flexible_class:       %orocrm_contact.entity.class%
+        flexible_value_class: %orocrm_contact.entity.value.class%
+        flexible_init_mode:   all_attributes
