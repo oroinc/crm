@@ -42,7 +42,7 @@ use Ddeboer\DataImport\Reader\CsvReader;
  *      description="Account manipulation",
  *      parent="root"
  * )
-  */
+ */
 class AccountController extends Controller
 {
     /**
