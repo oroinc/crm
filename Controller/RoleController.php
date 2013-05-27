@@ -84,8 +84,12 @@ class RoleController extends Controller
      * @Template("OroGridBundle:Datagrid:list.json.php")
      * @AclAncestor("oro_user_role_list")
      */
-    public function gridDataAction(Role $entity)
+    public function gridDataAction(Role $entity = null)
     {
+        if (!$entity) {
+            $entity = new Role();
+        }
+
         return array('datagrid' => $this->getRoleUserDatagridManager($entity)->getDatagrid()->createView());
     }
 

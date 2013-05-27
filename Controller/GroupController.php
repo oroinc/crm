@@ -80,8 +80,12 @@ class GroupController extends Controller
      * @Template("OroGridBundle:Datagrid:list.json.php")
      * @AclAncestor("oro_user_group_update")
      */
-    public function gridDataAction(Group $entity)
+    public function gridDataAction(Group $entity = null)
     {
+        if (!$entity) {
+            $entity = new Group();
+        }
+
         return array('datagrid' => $this->getGroupUserDatagridManager($entity)->getDatagrid()->createView());
     }
 
