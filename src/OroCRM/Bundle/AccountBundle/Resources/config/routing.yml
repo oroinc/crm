@@ -1,0 +1,11 @@
+orocrm_account_bundle:
+    resource:     "@OroCRMAccountBundle/Controller"
+    type:         annotation
+    prefix:       /account
+
+orocrm_account_api_account:
+    resource:     "@OroCRMAccountBundle/Controller/Api/Rest/AccountController.php"
+    type:         rest
+    prefix:       api/rest/{version}/
+    defaults:
+        version:  latest

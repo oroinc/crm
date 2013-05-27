@@ -1,0 +1,42 @@
+oro_menu_config:
+    items:
+        customers_tab:
+            label: 'Customers'
+            uri: '#'
+            extras:
+                position: 10
+        account_list:
+            label: 'Accounts'
+            route: 'orocrm_account_index'
+            extras:
+                routes: ['orocrm_account_*']
+
+        shortcut_new_account:
+            label: Create new account
+            route: orocrm_account_create
+            extras:
+                description: Create new account instance
+                isCustomAction: true
+        shortcut_list_accounts:
+            label: Show accounts list
+            route: orocrm_account_index
+            extras:
+                description: List of accounts
+
+    tree:
+        application_menu:
+            children:
+                customers_tab:
+                    children:
+                        account_list: ~
+
+        shortcuts:
+            children:
+                shortcut_new_account: ~
+                shortcut_list_accounts: ~
+
+oro_titles:
+    orocrm_account_index: Accounts
+    orocrm_account_view: %%account.name%% - Accounts
+    orocrm_account_create: Create Account
+    orocrm_account_update: %%account.name%% - Accounts

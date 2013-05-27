@@ -1,0 +1,6 @@
+entities_config:
+    OroCRM\Bundle\AccountBundle\Entity\Account:
+        flexible_manager:     orocrm_account.account.manager.flexible
+        flexible_class:       %orocrm_account.account.entity.class%
+        flexible_value_class: %orocrm_account.account.entity.value.class%
+        flexible_init_mode:   all_attributes

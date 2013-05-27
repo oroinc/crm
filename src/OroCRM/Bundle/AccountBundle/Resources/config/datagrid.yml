@@ -1,0 +1,15 @@
+parameters:
+    orocrm_account.account.datagrid_manager.class: OroCRM\Bundle\AccountBundle\Datagrid\AccountDatagridManager
+
+services:
+    orocrm_account.account.datagrid_manager:
+        class: %orocrm_account.account.datagrid_manager.class%
+        tags:
+            - name: oro_grid.datagrid.manager
+              datagrid_name: accounts
+              entity_name: %orocrm_account.account.entity.class%
+              entity_hint: acounts
+              flexible: true
+              route_name: orocrm_account_index
+        calls:
+            - [ setRouter, [ @router ] ]

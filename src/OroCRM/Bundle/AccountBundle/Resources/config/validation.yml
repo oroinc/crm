@@ -1,0 +1,9 @@
+OroCRM\Bundle\AccountBundle\Entity\Account:
+    constraints:
+        - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity: name
+    properties:
+        name:
+            - NotBlank:     ~
+            - Length:
+                min:        3
+                max:        255

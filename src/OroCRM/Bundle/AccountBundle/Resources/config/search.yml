@@ -1,0 +1,16 @@
+OroCRM\Bundle\AccountBundle\Entity\Account:
+    alias: orocrm_account
+    label: Accounts
+    flexible_manager: orocrm_account.account.manager.flexible
+    title_fields: [name]
+    route:
+        name: orocrm_account_view
+        parameters:
+            id: id
+    search_template: OroCRMAccountBundle:Account:searchResult.html.twig
+    entity_icon_class: icon-home
+    fields:
+        -
+            name: name
+            target_type: text
+            target_fields: [name]
