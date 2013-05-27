@@ -1,0 +1,23 @@
+{
+    "name": "oro/crm",
+    "description": "OroCRM",
+    "autoload": {
+        "psr-0": { "OroCRM\\Bundle": "src/" }
+    },
+    "require": {
+        "php": ">=5.3.3",
+        "oro/platform": "dev-master"
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "http://gitlab.orocrm.com/platform.git"
+        },
+        {
+            "type": "vcs",
+            "url": "http://gitlab.orocrm.com/vendors/sonataadminbundle.git"
+        }
+    ],
+    "minimum-stability": "dev"
+}
+
