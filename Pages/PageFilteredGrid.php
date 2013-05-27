@@ -61,16 +61,19 @@ class PageFilteredGrid extends PageGrid
             "{$this->filtersPath}//div[contains(@class, 'filter-box')]/div[contains(@class, 'filter-item')]"
             . "[button[contains(.,'{$filterName}')]]/div[contains(@class, 'filter-criteria')]"
         );
-        $input = $criteria->element($this->using('xpath')->value("div/div/input[@name='value']"));
+        $input = $criteria->element($this->using('xpath')->value("div/div/div/input[@name='value']"));
 
         $input->clear();
         $input->value($value);
 
         //select criteria
         if ($condition != '') {
-            $criteria->element($this->using('xpath')->value("div/div/div[label[text()='{$condition}']]/input"))->click();
+            //expand condition list
+            $criteria->element($this->using('xpath')->value("/div/div/div/button[@class ='btn dropdown-toggle']"))->click();
+
+            $criteria->element($this->using('xpath')->value("div/div/div/ul/li/a[text()='{$condition}']"))->click();
         }
-        $criteria->element($this->using('xpath')->value("div/div/div/button[contains(@class, 'filter-update')]"))->click();
+        $criteria->element($this->using('xpath')->value("div/button[contains(@class, 'filter-update')]"))->click();
         $this->waitForAjax();
         return $this;
     }

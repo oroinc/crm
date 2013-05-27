@@ -175,7 +175,7 @@ class User extends Page implements Entity
 
     public function edit()
     {
-        $this->byXPath("//div[@class='pull-left btn-group icons-holder']/a[@title = 'Edit profile']")->click();
+        $this->byXPath("//div[@class='pull-left btn-group icons-holder']/a[@title = 'Edit user']")->click();
         $this->waitPageToLoad();
         $this->waitForAjax();
         $this->init();
@@ -184,7 +184,7 @@ class User extends Page implements Entity
 
     public function delete()
     {
-        $this->byXPath("//div[@class='btn-group icons-holder']/a[contains(., 'Delete')]")->click();
+        $this->byXPath("//div[@class='pull-left btn-group icons-holder']/a[contains(., 'Delete')]")->click();
         $this->byXPath("//div[div[contains(., 'Delete Confirmation')]]//a[text()='Yes, Delete']")->click();
         $this->waitPageToLoad();
         $this->waitForAjax();
