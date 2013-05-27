@@ -1,6 +1,3 @@
-[submodule "src/Oro/Bundle/UserBundle"]
-	path = src/Oro/Bundle/UserBundle
-	url = git@github.com:laboro/UserBundle.git
 [submodule "src/Oro/Bundle/WindowsBundle"]
 	path = src/Oro/Bundle/WindowsBundle
 	url = git@github.com:laboro/WindowsBundle.git
