@@ -84,27 +84,13 @@ class GroupController extends Controller
      * @Template("OroGridBundle:Datagrid:list.json.php")
      * @AclAncestor("orocrm_contact_group_update")
      */
-    public function gridDataAction($id)
+    public function gridDataAction(Group $entity = null)
     {
-        $entity = $this->getGroupById($id);
-
-        return array('datagrid' => $this->getGroupContactDatagridManager($entity)->getDatagrid()->createView());
-    }
-
-    /**
-     * @param int|null $id
-     * @return Group
-     */
-    protected function getGroupById($id = null)
-    {
-        /** @var $doctrine \Doctrine\Bundle\DoctrineBundle\Registry */
-        $doctrine = $this->get('doctrine');
-        $repository = $doctrine->getManager()->getRepository('OroCRMContactBundle:Group');
-        $entity = $repository->findOneById($id);
         if (!$entity) {
             $entity = new Group();
         }
-        return $entity;
+
+        return array('datagrid' => $this->getGroupContactDatagridManager($entity)->getDatagrid()->createView());
     }
 
     /**
