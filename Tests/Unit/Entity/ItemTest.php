@@ -144,7 +144,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     public function testBeforeUpdate()
     {
         $this->item->beforeUpdate();
-        $date = new \DateTime();
+        $date = new \DateTime('now', new \DateTimeZone('UTC'));
         $updatedAt = $this->item->getUpdatedAt();
         $this->assertEquals($date->format('Y-m-d'), $updatedAt->format('Y-m-d'));
     }
