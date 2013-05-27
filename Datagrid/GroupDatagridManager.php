@@ -91,7 +91,7 @@ class GroupDatagridManager extends DatagridManager
             'type'         => ActionInterface::TYPE_REDIRECT,
             'acl_resource' => 'root',
             'options'      => array(
-                'label'         => 'Update',
+                'label'         => 'Edit',
                 'link'          => 'update_link',
                 'runOnRowClick' => true,
             )
@@ -102,7 +102,7 @@ class GroupDatagridManager extends DatagridManager
             'type'         => ActionInterface::TYPE_REDIRECT,
             'acl_resource' => 'root',
             'options'      => array(
-                'label' => 'Update',
+                'label' => 'Edit',
                 'icon'  => 'edit',
                 'link'  => 'update_link',
             )
