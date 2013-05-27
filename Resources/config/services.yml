@@ -4,7 +4,6 @@ parameters:
     oro_user.manager.api.class:       Oro\Bundle\SoapBundle\Entity\Manager\ApiFlexibleEntityManager
     oro_user.status.manager.class:    Oro\Bundle\UserBundle\Entity\Manager\StatusManager
     oro_user.entity.class:            Oro\Bundle\UserBundle\Entity\User
-    oro_user.entity.soap.class:       Oro\Bundle\UserBundle\Entity\UserSoap
     oro_user.entity.value.class:      Oro\Bundle\UserBundle\Entity\UserValue
     oro_user.group.entity.class:      Oro\Bundle\UserBundle\Entity\Group
     oro_user.role.entity.class:       Oro\Bundle\UserBundle\Entity\Role
