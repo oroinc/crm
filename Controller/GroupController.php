@@ -80,27 +80,13 @@ class GroupController extends Controller
      * @Template("OroGridBundle:Datagrid:list.json.php")
      * @AclAncestor("oro_user_group_update")
      */
-    public function gridDataAction($id)
+    public function gridDataAction(Group $entity = null)
     {
-        $entity = $this->getRoleById($id);
-
-        return array('datagrid' => $this->getGroupUserDatagridManager($entity)->getDatagrid()->createView());
-    }
-
-    /**
-     * @param int|null $id
-     * @return Group
-     */
-    protected function getRoleById($id = null)
-    {
-        /** @var $doctrine \Doctrine\Bundle\DoctrineBundle\Registry */
-        $doctrine = $this->get('doctrine');
-        $repository = $doctrine->getManager()->getRepository('OroUserBundle:Group');
-        $entity = $repository->findOneById($id);
         if (!$entity) {
             $entity = new Group();
         }
-        return $entity;
+
+        return array('datagrid' => $this->getGroupUserDatagridManager($entity)->getDatagrid()->createView());
     }
 
     /**
