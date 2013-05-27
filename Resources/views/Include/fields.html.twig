@@ -12,6 +12,10 @@
         {% set country_field = "#" ~ id|replace({'_state': '_country'}) %}
     {% endif %}
 
+    {% if state_text_field is not defined or state_text_field is empty %}
+        {% set state_text_field = "#" ~ id ~ "_text" %}
+    {% endif %}
+
     {{ form_widget(form) }}
 
     <script type="text/javascript">
@@ -21,12 +25,31 @@
             var regionView = new Oro.RegionUpdater.View ({
                 el: $('{{ country_field }}'),
                 target: $('#{{ id }}'),
+                simpleEl: $('{{ state_text_field }}'),
                 collection: regions
             });
-
-            regionView.sync();
         });
     </script>
+
+    <style type="text/css">
+        {% if choices %}
+            #{{ id }} {
+                display: block;
+            }
+
+            {{ state_text_field }} {
+                display: none;
+            }
+        {% else %}
+            #{{ id }} {
+                display: none;
+            }
+
+            {{ state_text_field }} {
+                display: block;
+            }
+        {% endif %}
+    </style>
 {% endblock oro_region_widget %}
 
 {% block oro_address_widget %}
@@ -35,6 +58,7 @@
     {{ form_row(form.street) }}
     {{ form_row(form.street2) }}
     {{ form_row(form.city) }}
+    {{ form_row(form.state_text) }}
     {{ form_row(form.state) }}
     {{ form_row(form.country) }}
     {{ form_row(form.postalCode) }}
