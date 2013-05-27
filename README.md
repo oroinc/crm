@@ -274,12 +274,5 @@ block('page_container') - content area block (without header/footer), that will 
       <a href="page-url" class="no-hash">
 ```
 
-* To make tag open back url generated with YsTools/BackUrlBundle, additional css class "back" should be added,
-e.g.
-
-```
-      <a href="/some-back-url" class="back">
-```
-
 As a part of hashtag navigation, form submit is also processed with Ajax.
 

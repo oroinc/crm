@@ -505,12 +505,6 @@ Oro.Navigation = Backbone.Router.extend({
             var link = '';
             if ($(target).is('a')) {
                 link = $(target).attr('href');
-                if ($(target).hasClass('back')) {
-                    //if back link is found, go back and don't do further processing
-                    if (this.back()) {
-                        return false;
-                    }
-                }
             } else if ($(target).is('span')) {
                 link = $(target).attr('data-url');
             }
@@ -641,25 +635,12 @@ Oro.Navigation = Backbone.Router.extend({
     },
 
     /**
-     * Processing back clicks. If we have back attribute in url, use it, otherwise using browser back
+     * Processing back clicks
      *
      * @return {Boolean}
      */
     back: function () {
-        var backFound = false;
-        var url = new Url(this.getHashUrl());
-        if (url.query.back) {
-            var backUrl = new Url(url.query.back);
-            if (backUrl.hash.indexOf('url=') !== -1) {
-                window.location.href = url.query.back;
-            } else {
-                this.setLocation(backUrl.path);
-            }
-            backFound = true;
-        } else {
-            window.history.back();
-            backFound = true;
-        }
-        return backFound;
+        window.history.back();
+        return true;
     }
 });
