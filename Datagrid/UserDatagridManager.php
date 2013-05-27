@@ -179,7 +179,7 @@ class UserDatagridManager extends FlexibleDatagridManager
                 'link'          => 'view_link',
                 'route'         => 'oro_user_view',
                 'runOnRowClick' => true,
-                'backUrl' => true,
+//                'backUrl' => true,
             )
         );
 
@@ -191,7 +191,7 @@ class UserDatagridManager extends FlexibleDatagridManager
                 'label' => 'View',
                 'icon'  => 'user',
                 'link'  => 'view_link',
-                'backUrl' => true,
+//                'backUrl' => true,
             )
         );
 
@@ -203,7 +203,7 @@ class UserDatagridManager extends FlexibleDatagridManager
                 'label'   => 'Update',
                 'icon'    => 'edit',
                 'link'    => 'update_link',
-                'backUrl' => true,
+//                'backUrl' => true,
             )
         );
 

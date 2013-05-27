@@ -37,7 +37,7 @@
 {% block page_container %}
     {% block content %}
     {{ JSFV(form) }}
-    <form id="{{ form.name }}" action="{{ form.vars.value.id ? path('oro_user_role_update', { id: form.vars.value.id, back: app.session.get('back') }) : path('oro_user_role_create') }}"
+    <form id="{{ form.name }}" action="{{ form.vars.value.id ? path('oro_user_role_update', { id: form.vars.value.id }) : path('oro_user_role_create') }}"
         method="post" class="form-register scrollable-substructure">
             <div class="container-fluid">
                 <div class="navigation clearfix navbar-extra">
@@ -53,16 +53,18 @@
                             {% endif %}
                             <div class="pull-left customer-info-top-actions">
                                 <div class="btn-group">
-                                    <a href="{{ app.session.get('back') ? app.session.get('back') : path('oro_user_index') }}" class="btn back" title="{{ 'Cancel'|trans }}">{{ 'Cancel'|trans }}</a>
+                                    <a href="{{ path('oro_user_index') }}" class="btn back" title="{{ 'Cancel'|trans }}">{{ 'Cancel'|trans }}</a>
                                 </div>
-                                <button type="submit" class="btn btn-success" title="{{ 'Save role'|trans }}">{{ ' Save'|trans }}</button>
+                                <div class="btn-group">
+                                    <button type="submit" class="btn btn-success" title="{{ 'Save role'|trans }}">{{ ' Save'|trans }}</button>
+                                </div>
                             </div>
                         </div>
                         <div class="pull-left">
-                            <div class="form-info clearfix">
+                            <div class="form-info form-info-edit clearfix">
                                 <div class="customer-content pull-left">
                                     <div class="clearfix-oro oro-padding">
-                                        <div class="sub-title"><div class="sub-title"><a href="{{ path('oro_user_role_index') }}">{{ 'Roles'|trans }}</a></div></div>
+                                        <div class="sub-title"><a href="{{ path('oro_user_role_index') }}">{{ 'Roles'|trans }}</a></div>
                                         <span class="separator">/</span>
                                         {% if form.vars.value.id %}
                                             <h1 class="form-info-name">{{ form.vars.value.label }}</h1>

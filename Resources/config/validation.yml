@@ -45,7 +45,9 @@ Oro\Bundle\UserBundle\Entity\Role:
             - NotBlank:     ~
             - Length:
                 max:        30
-            - Regex:        "/^ROLE_[a-zA-Z0-9_]+$/"
+            - Regex:
+                pattern: "/^[a-zA-Z0-9_]+$/"
+                message: "Role must be an alphanumeric value"
         label:
             - Length:
                 max:        30

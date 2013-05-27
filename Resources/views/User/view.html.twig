@@ -11,11 +11,11 @@
             <div class="pull-right">
                 <div class="pull-right">
                     <div class="pull-left btn-group icons-holder">
-                        <a href="{{ app.session.get('back', path('oro_user_index')) }}" class="btn back icons-holder-text" title="{{ 'Back'|trans }}"><i class="icon-chevron-left hide-text" >{{ 'Back'|trans }}</i>{{ 'Back'|trans }}</a>
+                        <a href="{{ path('oro_user_index') }}" class="btn back icons-holder-text" title="{{ 'Back'|trans }}"><i class="icon-chevron-left hide-text" >{{ 'Back'|trans }}</i>{{ 'Back'|trans }}</a>
                     </div>
                     {% if resource_granted('oro_user_user_update') %}
                     <div class="pull-left btn-group icons-holder">
-                        <a href="{{ path('oro_user_update', { id: user.id, back: app.request.uri }) }}" class="btn icons-holder-text" title="{{ 'Edit1 user'|trans }}"><i class="icon-edit hide-text">{{ 'Edit'|trans }}</i>{{ 'Edit'|trans }}</a>
+                        <a href="{{ path('oro_user_update', { id: user.id }) }}" class="btn icons-holder-text" title="{{ 'Edit1 user'|trans }}"><i class="icon-edit hide-text">{{ 'Edit'|trans }}</i>{{ 'Edit'|trans }}</a>
                     </div>
                     {% endif %}
                     {% if resource_granted('oro_user_user_delete') and user.id!=app.user.id %}
@@ -67,7 +67,6 @@
                 <div class="container-fluid" style="width: auto;">
                     <ul class="nav">
                         <li class="active"><a href="#scroll-main">{{ 'General'|trans }}</a></li>
-                        <li><a href="#scroll-api">{{ 'API'|trans }}</a></li>
                         <li><a href="#scroll-attributes">{{ 'Additional data'|trans }}</a></li>
                     </ul>
                 </div>
@@ -112,6 +111,20 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="control-group">
+                                <label class="control-label">{{ 'API key'|trans }}</label>
+                                <div class="controls">
+                                    <div class="horizontal">
+                                        <strong class="label label-info">{{ user.api ? user.api.apiKey : 'N/A' }}</strong>
+                                        {% if resource_granted('oro_user_user_apigen') %}
+                                            <a class="btn btn-small no-hash" id="btn-apigen" href="{{ path('oro_user_apigen', { id: user.id }) }}"
+                                               data-title="{{ 'Generate key'|trans }}" data-message="{{ 'Generate key was successful. New key:'|trans }}">
+                                                {{ 'Generate key'|trans }}
+                                            </a>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <div class="form-horizontal span6">
                             <h5 class="usser-fiedset"><span>Contact Information</span></h5>
@@ -131,29 +144,6 @@
                         </div>
                     </div>
                 </div>
-
-                <div class="usser-row">
-                    <h4 id="scroll-api" class="scrollspy-title">{{ 'API'|trans }}</h4>
-                    <div class="row-fluid">
-                        <div class="form-horizontal">
-                            <div class="control-group">
-                                <label class="control-label">{{ 'API key'|trans }}</label>
-                                <div class="controls">
-                                    <div class="horizontal">
-                                        <strong class="label label-info">{{ user.api ? user.api.apiKey : 'N/A' }}</strong>
-                                        {% if resource_granted('oro_user_user_apigen') %}
-                                        <a class="btn btn-small no-hash" id="btn-apigen" href="{{ path('oro_user_apigen', { id: user.id }) }}"
-                                                data-title="{{ 'Generate key'|trans }}" data-message="{{ 'Generate key was successful. New key:'|trans }}">
-                                            {{ 'Generate key'|trans }}
-                                        </a>
-                                        {% endif %}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
                 <div class="usser-row">
                     <h4 id="scroll-attributes" class="scrollspy-title">{{ 'Additional data'|trans }}</h4>
                     <div class="row-fluid">

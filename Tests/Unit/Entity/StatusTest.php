@@ -47,7 +47,7 @@ class StatusTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertNull($this->status->getCreatedAt());
         $this->status->beforeSave();
-        $currentDate = new \DateTime();
+        $currentDate = new \DateTime('now', new \DateTimeZone('UTC'));
         $this->assertEquals($currentDate->format('Y-m-d'), $this->status->getCreatedAt()->format('Y-m-d'));
     }
 }
