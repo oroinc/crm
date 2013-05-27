@@ -1,5 +1,5 @@
 {
-    "name": "oro/account-bundle",
+    "name": "orocrm/account-bundle",
     "type": "symfony-bundle",
     "description": "Oro CRM Accounts",
     "keywords": ["CRM", "Accounts"],
@@ -19,7 +19,7 @@
     "autoload": {
         "psr-0": { "": "src/" }
     },
-    "target-dir": "Oro/Bundle/AccountBundle",
+    "target-dir": "OroCRM/Bundle/AccountBundle",
     "minimum-stability": "dev",
     "extra": {
         "branch-alias": {

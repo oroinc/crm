@@ -1,5 +1,5 @@
 <?php
-namespace Oro\Bundle\AccountBundle\AttributeType;
+namespace OroCRM\Bundle\AccountBundle\AttributeType;
 
 use Oro\Bundle\FlexibleEntityBundle\AttributeType\AbstractAttributeType;
 
@@ -10,6 +10,6 @@ class AccountType extends AbstractAttributeType
      */
     public function getName()
     {
-        return 'oro_account_attribute_account';
+        return 'orocrm_account_attribute_account';
     }
 }

@@ -1,5 +1,5 @@
 <?php
-namespace Oro\Bundle\AccountBundle\Form\Type;
+namespace OroCRM\Bundle\AccountBundle\Form\Type;
 
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\AbstractType;
@@ -11,7 +11,7 @@ class AccountSelectType extends AbstractType
     {
         $resolver->setDefaults(
             array(
-                'class' => 'OroAccountBundle:Account',
+                'class' => 'OroCRMAccountBundle:Account',
                 'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder('a')
                         ->orderBy('a.name', 'ASC');
@@ -32,6 +32,6 @@ class AccountSelectType extends AbstractType
      */
     public function getName()
     {
-        return 'oro_account_select';
+        return 'orocrm_account_select';
     }
 }

@@ -1,8 +1,8 @@
 <?php
 
-namespace Oro\Bundle\AccountBundle\Tests\Unit\Form\Type;
+namespace OroCRM\Bundle\AccountBundle\Tests\Unit\Form\Type;
 
-use Oro\Bundle\AccountBundle\Form\Type\AccountValueType;
+use OroCRM\Bundle\AccountBundle\Form\Type\AccountValueType;
 
 class AccountValueTypeTest extends \PHPUnit_Framework_TestCase
 {
@@ -16,6 +16,6 @@ class AccountValueTypeTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $type = new AccountValueType($flexibleManager, $subscriber);
-        $this->assertEquals('oro_account_value', $type->getName());
+        $this->assertEquals('orocrm_account_value', $type->getName());
     }
 }

@@ -1,13 +1,13 @@
-Oro\Bundle\AccountBundle\Entity\Account:
-    alias: oro_account
+OroCRM\Bundle\AccountBundle\Entity\Account:
+    alias: orocrm_account
     label: Accounts
-    flexible_manager: oro_account.account.manager.flexible
+    flexible_manager: orocrm_account.account.manager.flexible
     title_fields: [name]
     route:
-        name: oro_account_view
+        name: orocrm_account_view
         parameters:
             id: id
-    search_template: OroAccountBundle:Account:searchResult.html.twig
+    search_template: OroCRMAccountBundle:Account:searchResult.html.twig
     entity_icon_class: icon-home
     fields:
         -

@@ -1,4 +1,4 @@
-{% extends 'OroAccountBundle::layout.html.twig' %}
+{% extends 'OroCRMAccountBundle::layout.html.twig' %}
 
 {% block head_script %}
     {{ parent() }}
@@ -9,7 +9,7 @@
 
 {% block content %}
     <div class="container-fluid">
-        <h1>{{ 'Accounts'|trans }} <a class="btn btn-primary pull-right" href="{{ path('oro_account_create') }}" title="{{ 'Create account'|trans }}">{{ 'Create account'|trans }}</a></h1>
+        <h1>{{ 'Accounts'|trans }} <a class="btn btn-primary pull-right" href="{{ path('orocrm_account_create') }}" title="{{ 'Create account'|trans }}">{{ 'Create account'|trans }}</a></h1>
     </div>
     <div id="accounts-grid"></div>
 

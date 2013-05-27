@@ -1,9 +1,9 @@
 <?php
 
-namespace Oro\Bundle\AccountBundle\Tests\Unit\Entity;
+namespace OroCRM\Bundle\AccountBundle\Tests\Unit\Entity;
 
 
-use Oro\Bundle\AccountBundle\Entity\Account;
+use OroCRM\Bundle\AccountBundle\Entity\Account;
 
 class AccountTest extends \PHPUnit_Framework_TestCase
 {

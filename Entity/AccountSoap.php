@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\AccountBundle\Entity;
+namespace OroCRM\Bundle\AccountBundle\Entity;
 
 use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 use JMS\Serializer\Annotation\Exclude;

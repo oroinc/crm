@@ -1,12 +1,12 @@
 <?php
 
-namespace Oro\Bundle\AccountBundle\Form\Handler;
+namespace OroCRM\Bundle\AccountBundle\Form\Handler;
 
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 use Doctrine\Common\Persistence\ObjectManager;
-use Oro\Bundle\AccountBundle\Entity\Account;
+use OroCRM\Bundle\AccountBundle\Entity\Account;
 
 class AccountHandler
 {

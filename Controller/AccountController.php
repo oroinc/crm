@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\AccountBundle\Controller;
+namespace OroCRM\Bundle\AccountBundle\Controller;
 
 use Ddeboer\DataImport\Reader\ArrayReader;
 use Ddeboer\DataImport\Source\StreamSource;
@@ -9,7 +9,7 @@ use Ddeboer\DataImport\Writer\CallbackWriter;
 use Doctrine\Common\Util\ClassUtils;
 use Doctrine\ORM\Query;
 
-use Oro\Bundle\AccountBundle\Entity\Value\AccountValue;
+use OroCRM\Bundle\AccountBundle\Entity\Value\AccountValue;
 use Oro\Bundle\FlexibleEntityBundle\Doctrine\ORM\FlexibleQueryBuilder;
 use Oro\Bundle\FlexibleEntityBundle\Entity\Attribute;
 use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityAttribute;
@@ -29,15 +29,15 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Oro\Bundle\UserBundle\Annotation\Acl;
 
-use Oro\Bundle\AccountBundle\Entity\Account;
-use Oro\Bundle\AccountBundle\Datagrid\AccountDatagridManager;
+use OroCRM\Bundle\AccountBundle\Entity\Account;
+use OroCRM\Bundle\AccountBundle\Datagrid\AccountDatagridManager;
 
 use Ddeboer\DataImport\Writer\CsvWriter;
 use Ddeboer\DataImport\Reader\CsvReader;
 
 /**
  * @Acl(
- *      id="oro_account_account",
+ *      id="orocrm_account_account",
  *      name="Account manipulation",
  *      description="Account manipulation",
  *      parent="root"
@@ -46,13 +46,13 @@ use Ddeboer\DataImport\Reader\CsvReader;
 class AccountController extends Controller
 {
     /**
-     * @Route("/view/{id}", name="oro_account_view", requirements={"id"="\d+"})
+     * @Route("/view/{id}", name="orocrm_account_view", requirements={"id"="\d+"})
      * @Template
      * @Acl(
-     *      id="oro_account_account_view",
+     *      id="orocrm_account_account_view",
      *      name="View Account",
      *      description="View account",
-     *      parent="oro_account_account"
+     *      parent="orocrm_account_account"
      * )
      */
     public function viewAction(Account $account)
@@ -65,13 +65,13 @@ class AccountController extends Controller
     /**
      * Create account form
      *
-     * @Route("/create", name="oro_account_create")
-     * @Template("OroAccountBundle:Account:update.html.twig")
+     * @Route("/create", name="orocrm_account_create")
+     * @Template("OroCRMAccountBundle:Account:update.html.twig")
      * @Acl(
-     *      id="oro_account_account_create",
+     *      id="orocrm_account_account_create",
      *      name="Create Account",
      *      description="Create account",
-     *      parent="oro_account_account"
+     *      parent="orocrm_account_account"
      * )
      */
     public function createAction()
@@ -84,53 +84,53 @@ class AccountController extends Controller
     /**
      * Edit user form
      *
-     * @Route("/update/{id}", name="oro_account_update", requirements={"id"="\d+"}, defaults={"id"=0})
+     * @Route("/update/{id}", name="orocrm_account_update", requirements={"id"="\d+"}, defaults={"id"=0})
      * @Template
      * @Acl(
-     *      id="oro_account_account_update",
+     *      id="orocrm_account_account_update",
      *      name="Edit Account",
      *      description="Edit account",
-     *      parent="oro_account_account"
+     *      parent="orocrm_account_account"
      * )
      */
     public function updateAction(Account $entity)
     {
-        $backUrl = $this->generateUrl('oro_account_index');
+        $backUrl = $this->generateUrl('orocrm_account_index');
 
-        if ($this->get('oro_account.form.handler.account')->process($entity)) {
+        if ($this->get('orocrm_account.form.handler.account')->process($entity)) {
             $this->getFlashBag()->add('success', 'Account successfully saved');
             return $this->redirect($backUrl);
         }
 
         return array(
-            'form' => $this->get('oro_account.form.account')->createView(),
+            'form' => $this->get('orocrm_account.form.account')->createView(),
         );
     }
 
     /**
      * @Route(
      *      "/{_format}",
-     *      name="oro_account_index",
+     *      name="orocrm_account_index",
      *      requirements={"_format"="html|json"},
      *      defaults={"_format" = "html"}
      * )
      * @Acl(
-     *      id="oro_account_account_list",
+     *      id="orocrm_account_account_list",
      *      name="View List of Accounts",
      *      description="View list of accounts",
-     *      parent="oro_account_account"
+     *      parent="orocrm_account_account"
      * )
      */
     public function indexAction(Request $request)
     {
         /** @var $gridManager AccountDatagridManager */
-        $gridManager = $this->get('oro_account.account.datagrid_manager');
+        $gridManager = $this->get('orocrm_account.account.datagrid_manager');
         $datagrid = $gridManager->getDatagrid();
 
         if ('json' == $request->getRequestFormat()) {
             $view = 'OroGridBundle:Datagrid:list.json.php';
         } else {
-            $view = 'OroAccountBundle:Account:index.html.twig';
+            $view = 'OroCRMAccountBundle:Account:index.html.twig';
         }
 
         return $this->render(
@@ -142,13 +142,13 @@ class AccountController extends Controller
     /**
      * @Route(
      *      "/export",
-     *      name="oro_account_export"
+     *      name="orocrm_account_export"
      * )
      * @Acl(
-     *      id="oro_account_account_export",
+     *      id="orocrm_account_account_export",
      *      name="Export Accounts",
      *      description="Export accounts",
-     *      parent="oro_account_account"
+     *      parent="orocrm_account_account"
      * )
      */
     public function exportAction()
@@ -241,13 +241,13 @@ class AccountController extends Controller
     /**
      * @Route(
      *      "/import",
-     *      name="oro_account_import"
+     *      name="orocrm_account_import"
      * )
      * @Acl(
-     *      id="oro_account_account_import",
+     *      id="orocrm_account_account_import",
      *      name="Import Accounts",
      *      description="Import accounts",
-     *      parent="oro_account_account"
+     *      parent="orocrm_account_account"
      * )
      */
     public function importAction()
@@ -263,7 +263,7 @@ class AccountController extends Controller
         $em = $this->getManager();
         $writer = new CallbackWriter(
             function ($row) use ($em) {
-                $double = $em->getRepository('OroAccountBundle:Account')->findBy(array('name' => $row['name']));
+                $double = $em->getRepository('OroCRMAccountBundle:Account')->findBy(array('name' => $row['name']));
                 if (!$double) {
                     $entity = new Account();
                     foreach ($row as $property => $val) {
@@ -323,6 +323,6 @@ class AccountController extends Controller
      */
     protected function getManager()
     {
-        return $this->get('oro_account.account.manager.api');
+        return $this->get('orocrm_account.account.manager.api');
     }
 }
