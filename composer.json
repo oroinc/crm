@@ -1,5 +1,5 @@
 {
-    "name": "oro/contact-bundle",
+    "name": "orocrm/contact-bundle",
     "type": "symfony-bundle",
     "description": "Oro CRM Contacts",
     "keywords": ["CRM", "Contacts"],
@@ -14,12 +14,12 @@
         "oro/ui-bundle": "dev-master",
         "oro/user-bundle": "dev-master",
         "oro/address-bundle": "dev-master",
-        "oro/contact-bundle": "dev-master"
+        "orocrm/contact-bundle": "dev-master"
     },
     "autoload": {
         "psr-0": { "": "src/" }
     },
-    "target-dir": "Oro/Bundle/ContactBundle",
+    "target-dir": "OroCRM/Bundle/ContactBundle",
     "minimum-stability": "dev",
     "extra": {
         "branch-alias": {
