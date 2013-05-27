@@ -6,8 +6,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
-use YsTools\BackUrlBundle\Annotation\BackUrl;
-
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
@@ -23,7 +21,6 @@ use Oro\Bundle\UserBundle\Entity\UserManager;
  *      description="User manipulation",
  *      parent="oro_user"
  * )
- * @BackUrl("back", useSession=true)
  */
 class UserController extends Controller
 {
@@ -108,9 +105,6 @@ class UserController extends Controller
     {
         if ($this->get('oro_user.form.handler.user')->process($entity)) {
             $this->get('session')->getFlashBag()->add('success', 'User successfully saved');
-
-            BackUrl::triggerRedirect();
-
             return $this->redirect($this->generateUrl('oro_user_index'));
         }
 
