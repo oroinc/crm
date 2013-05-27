@@ -25,6 +25,7 @@ Oro\Bundle\UserBundle\Entity\User:
             - Count:
                 min:        1
                 minMessage: "You must select at least {{ limit }} role"
+                groups:     [User]
         firstName:
             - NotBlank:     ~
             - Length:

@@ -71,6 +71,7 @@ class UserManager implements UserProviderInterface
      *
      * @param User $user
      * @param bool $flush Whether to flush the changes (default true)
+     * @throws \RuntimeException
      */
     public function updateUser(User $user, $flush = true)
     {

@@ -3,9 +3,12 @@
 namespace Oro\Bundle\UserBundle\Entity;
 
 use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
-
 use JMS\Serializer\Annotation\Exclude;
+use Doctrine\ORM\Mapping as ORM;
 
+/**
+ * @ORM\MappedSuperclass(repositoryClass="Oro\Bundle\FlexibleEntityBundle\Entity\Repository\FlexibleEntityRepository")
+ */
 class UserSoap extends User
 {
     /**
@@ -34,7 +37,7 @@ class UserSoap extends User
     protected $lastName;
 
     /**
-     * @Soap\ComplexType("boolean")
+     * @Exclude
      */
     protected $enabled = true;
 
@@ -66,7 +69,7 @@ class UserSoap extends User
     /**
      * @Soap\ComplexType("Oro\Bundle\SoapBundle\Entity\FlexibleAttribute[]", nillable=true)
      */
-    protected $values;
+    protected $attributes;
 
     public function setRolesCollection($collection)
     {
@@ -76,5 +79,13 @@ class UserSoap extends User
     public function getRolesCollection()
     {
         return $this->rolesCollection;
+    }
+
+    /**
+     * @return \Oro\Bundle\SoapBundle\Entity\FlexibleAttribute[]
+     */
+    public function getAttributes()
+    {
+        return $this->attributes;
     }
 }

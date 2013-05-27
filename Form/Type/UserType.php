@@ -198,13 +198,14 @@ class UserType extends FlexibleType
                         $user = null;
                     }
                     return $user && $user->getId()
-                        ? array('Profile', 'Default')
-                        : array('Registration', 'Profile', 'Default');
+                        ? array('User', 'Default')
+                        : array('Registration', 'User', 'Default');
                 },
                 'extra_fields_message' => 'This form should not contain extra fields: "{{ extra_fields }}"',
                 'error_mapping' => array(
                     'roles' => 'rolesCollection'
                 ),
+
             )
         );
     }
