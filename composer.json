@@ -1,0 +1,62 @@
+{
+    "name": "oro/platform",
+    "description": "Business Application Platform (BAP)",
+    "homepage": "git@gitlab.orocrm.com:platform.git",
+    "license": "MIT",
+    "require": {
+        "symfony/symfony": "2.1.*",
+        "doctrine/orm": ">=2.2.3,<2.5-dev",
+        "doctrine/doctrine-bundle": "1.1.*",
+        "doctrine/data-fixtures": "@dev",
+        "doctrine/doctrine-fixtures-bundle": "@dev",
+        "twig/extensions": "1.0.*@dev",
+        "symfony/assetic-bundle": "2.1.*@dev",
+        "symfony/swiftmailer-bundle": "2.1.*",
+        "symfony/monolog-bundle": "2.1.*",
+        "sensio/distribution-bundle": "2.1.*",
+        "sensio/framework-extra-bundle": "2.1.*",
+        "sensio/generator-bundle": "2.1.*",
+        "jms/di-extra-bundle": "1.3.*@dev",
+        "jms/job-queue-bundle": "dev-master",
+        "jms/aop-bundle": "dev-master",
+        "jms/serializer": "0.12.*@dev",
+        "jms/serializer-bundle": "0.12.*@dev",
+        "kriswallsmith/assetic": "1.1.*@dev",
+        "knplabs/knp-menu": "dev-master",
+        "knplabs/knp-menu-bundle": "dev-master",
+        "knplabs/knp-paginator-bundle": "dev-master",
+        "friendsofsymfony/rest-bundle": "0.11.*",
+        "friendsofsymfony/jsrouting-bundle": "1.1.*@dev",
+        "nelmio/api-doc-bundle": "dev-master",
+        "ass/xmlsecurity": "dev-master",
+        "besimple/soap-common": "dev-master",
+        "besimple/soap-server": "dev-master",
+        "besimple/soap-bundle": "dev-master",
+        "ddeboer/data-import": "dev-master",
+        "stof/doctrine-extensions-bundle": "dev-master",
+        "escapestudios/wsse-authentication-bundle": "2.1.x-dev",
+        "sonata-project/admin-bundle": "2.1.x-dev",
+        "sonata-project/doctrine-orm-admin-bundle": "2.1.x-dev",
+        "liip/imagine-bundle": "dev-master",
+        "leafo/lessphp": "dev-master",
+        "symfony/icu": "1.2.*@dev",
+        "symfony/intl": "2.3.*@dev",
+        "willdurand/expose-translation-bundle": "0.2.*@dev",
+        "apy/jsfv-bundle": "2.1.*@dev"
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "http://gitlab.orocrm.com/vendors/sonataadminbundle.git"
+        }
+    ],
+    "autoload": {
+        "psr-0": { "Oro\\Bundle": "src/" }
+    },
+    "minimum-stability": "dev",
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0-dev"
+        }
+    }
+}

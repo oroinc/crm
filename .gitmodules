@@ -1,3 +1,0 @@
-[submodule "src/Oro/Bundle/JsFormValidationBundle"]
-	path = src/Oro/Bundle/JsFormValidationBundle
-	url = git@github.com:laboro/JsFormValidationBundle.git
