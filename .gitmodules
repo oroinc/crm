@@ -1,6 +1,3 @@
-[submodule "src/Oro/Bundle/FlexibleEntityBundle"]
-	path = src/Oro/Bundle/FlexibleEntityBundle
-	url = git@github.com:laboro/FlexibleEntityBundle.git
 [submodule "src/Oro/Bundle/GridBundle"]
 	path = src/Oro/Bundle/GridBundle
 	url = git@github.com:laboro/GridBundle.git
