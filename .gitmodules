@@ -1,6 +1,3 @@
-[submodule "src/Oro/Bundle/AddressBundle"]
-	path = src/Oro/Bundle/AddressBundle
-	url = git@github.com:laboro/AddressBundle.git
 [submodule "src/Oro/Bundle/ConfigBundle"]
 	path = src/Oro/Bundle/ConfigBundle
 	url = git@github.com:laboro/ConfigBundle.git
