@@ -1,0 +1,51 @@
+[submodule "src/Oro/Bundle/AddressBundle"]
+	path = src/Oro/Bundle/AddressBundle
+	url = git@github.com:laboro/AddressBundle.git
+[submodule "src/Oro/Bundle/ConfigBundle"]
+	path = src/Oro/Bundle/ConfigBundle
+	url = git@github.com:laboro/ConfigBundle.git
+[submodule "src/Oro/Bundle/DataAuditBundle"]
+	path = src/Oro/Bundle/DataAuditBundle
+	url = git@github.com:laboro/DataAuditBundle.git
+[submodule "src/Oro/Bundle/DataFlowBundle"]
+	path = src/Oro/Bundle/DataFlowBundle
+	url = git@github.com:laboro/DataFlowBundle.git
+[submodule "src/Oro/Bundle/FilterBundle"]
+	path = src/Oro/Bundle/FilterBundle
+	url = git@github.com:laboro/FilterBundle.git
+[submodule "src/Oro/Bundle/FlexibleEntityBundle"]
+	path = src/Oro/Bundle/FlexibleEntityBundle
+	url = git@github.com:laboro/FlexibleEntityBundle.git
+[submodule "src/Oro/Bundle/GridBundle"]
+	path = src/Oro/Bundle/GridBundle
+	url = git@github.com:laboro/GridBundle.git
+[submodule "src/Oro/Bundle/MeasureBundle"]
+	path = src/Oro/Bundle/MeasureBundle
+	url = git@github.com:laboro/MeasureBundle.git
+[submodule "src/Oro/Bundle/NavigationBundle"]
+	path = src/Oro/Bundle/NavigationBundle
+	url = git@github.com:laboro/NavigationBundle.git
+[submodule "src/Oro/Bundle/SearchBundle"]
+	path = src/Oro/Bundle/SearchBundle
+	url = git@github.com:laboro/SearchBundle.git
+[submodule "src/Oro/Bundle/SegmentationTreeBundle"]
+	path = src/Oro/Bundle/SegmentationTreeBundle
+	url = git@github.com:laboro/SegmentationTreeBundle.git
+[submodule "src/Oro/Bundle/SoapBundle"]
+	path = src/Oro/Bundle/SoapBundle
+	url = git@github.com:laboro/SoapBundle.git
+[submodule "src/Oro/Bundle/TestFrameworkBundle"]
+	path = src/Oro/Bundle/TestFrameworkBundle
+	url = git@github.com:laboro/TestFrameworkBundle.git
+[submodule "src/Oro/Bundle/UIBundle"]
+	path = src/Oro/Bundle/UIBundle
+	url = git@github.com:laboro/UIBundle.git
+[submodule "src/Oro/Bundle/UserBundle"]
+	path = src/Oro/Bundle/UserBundle
+	url = git@github.com:laboro/UserBundle.git
+[submodule "src/Oro/Bundle/WindowsBundle"]
+	path = src/Oro/Bundle/WindowsBundle
+	url = git@github.com:laboro/WindowsBundle.git
+[submodule "src/Oro/Bundle/JsFormValidationBundle"]
+	path = src/Oro/Bundle/JsFormValidationBundle
+	url = git@github.com:laboro/JsFormValidationBundle.git
