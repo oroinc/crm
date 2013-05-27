@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\AccountBundle\Entity;
+namespace OroCRM\Bundle\AccountBundle\Entity;
 
 use Gedmo\Mapping\Annotation as Gedmo;
 
@@ -15,7 +15,7 @@ use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityFlexible;
 
 /**
  * @ORM\Entity(repositoryClass="Oro\Bundle\FlexibleEntityBundle\Entity\Repository\FlexibleEntityRepository")
- * @ORM\Table(name="oro_account")
+ * @ORM\Table(name="orocrm_account")
  * @ORM\HasLifecycleCallbacks()
  */
 class Account extends AbstractEntityFlexible
@@ -41,7 +41,7 @@ class Account extends AbstractEntityFlexible
     /**
      * @var \Oro\Bundle\FlexibleEntityBundle\Model\AbstractFlexibleValue[]
      *
-     * @ORM\OneToMany(targetEntity="Oro\Bundle\AccountBundle\Entity\Value\AccountValue", mappedBy="entity", cascade={"persist", "remove"}, orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="OroCRM\Bundle\AccountBundle\Entity\Value\AccountValue", mappedBy="entity", cascade={"persist", "remove"}, orphanRemoval=true)
      * @Exclude
      */
     protected $values;

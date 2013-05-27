@@ -1,11 +1,11 @@
 <?php
 
-namespace Oro\Bundle\AccountBundle\Tests\Unit\Form\Type;
+namespace OroCRM\Bundle\AccountBundle\Tests\Unit\Form\Type;
 
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-use Oro\Bundle\AccountBundle\Form\Type\AccountType;
+use OroCRM\Bundle\AccountBundle\Form\Type\AccountType;
 
 class AccountTypeTest extends \PHPUnit_Framework_TestCase
 {
@@ -20,7 +20,7 @@ class AccountTypeTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->type = new AccountType($flexibleManager, 'oro_account');
+        $this->type = new AccountType($flexibleManager, 'orocrm_account');
     }
 
     public function testAddEntityFields()
@@ -61,6 +61,6 @@ class AccountTypeTest extends \PHPUnit_Framework_TestCase
 
     public function testGetName()
     {
-        $this->assertEquals('oro_account', $this->type->getName());
+        $this->assertEquals('orocrm_account', $this->type->getName());
     }
 }

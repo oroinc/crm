@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\AccountBundle\DataFixtures\ORM;
+namespace OroCRM\Bundle\AccountBundle\DataFixtures\ORM;
 
 use Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleManager;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
@@ -30,7 +30,7 @@ class LoadAccountAttrData extends AbstractFixture implements ContainerAwareInter
     public function setContainer(ContainerInterface $container = null)
     {
         $this->container = $container;
-        $this->fm = $this->container->get('oro_account.account.manager.flexible');
+        $this->fm = $this->container->get('orocrm_account.account.manager.flexible');
         $this->sm = $this->fm->getStorageManager();
     }
 
@@ -89,7 +89,7 @@ class LoadAccountAttrData extends AbstractFixture implements ContainerAwareInter
                 ),
                 array(
                     'code' => 'ticker_symbol',
-                    'type' => 'oro_account_ticker_symbol',
+                    'type' => 'orocrm_account_ticker_symbol',
                     'searchable' => true
                 ),
                 'rating',

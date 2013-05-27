@@ -1,13 +1,13 @@
 <?php
 
-namespace Oro\Bundle\AccountBundle\Tests\Unit\Form\Handler;
+namespace OroCRM\Bundle\AccountBundle\Tests\Unit\Form\Handler;
 
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Common\Persistence\ObjectManager;
-use Oro\Bundle\AccountBundle\Entity\Account;
+use OroCRM\Bundle\AccountBundle\Entity\Account;
 
-use Oro\Bundle\AccountBundle\Form\Handler\AccountHandler;
+use OroCRM\Bundle\AccountBundle\Form\Handler\AccountHandler;
 
 class AccountHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -48,7 +48,7 @@ class AccountHandlerTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->entity = $this->getMock('Oro\Bundle\AccountBundle\Entity\Account');
+        $this->entity = $this->getMock('OroCRM\Bundle\AccountBundle\Entity\Account');
         $this->handler = new AccountHandler($this->form, $this->request, $this->manager);
     }
 

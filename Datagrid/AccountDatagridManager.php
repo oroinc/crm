@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\AccountBundle\Datagrid;
+namespace OroCRM\Bundle\AccountBundle\Datagrid;
 
 use Doctrine\ORM\QueryBuilder;
 
@@ -29,8 +29,8 @@ class AccountDatagridManager extends FlexibleDatagridManager
     protected function getProperties()
     {
         return array(
-            new UrlProperty('view_link', $this->router, 'oro_account_view', array('id')),
-            new UrlProperty('update_link', $this->router, 'oro_account_update', array('id')),
+            new UrlProperty('view_link', $this->router, 'orocrm_account_view', array('id')),
+            new UrlProperty('update_link', $this->router, 'orocrm_account_update', array('id')),
             new UrlProperty('delete_link', $this->router, 'oro_api_delete_account', array('id')),
         );
     }

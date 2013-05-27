@@ -1,7 +1,7 @@
 <?php
-namespace Oro\Bundle\AccountBundle\Tests\Unit\DependencyInjection;
+namespace OroCRM\Bundle\AccountBundle\Tests\Unit\DependencyInjection;
 
-use Oro\Bundle\AccountBundle\DependencyInjection\Configuration;
+use OroCRM\Bundle\AccountBundle\DependencyInjection\Configuration;
 
 class ConfigurationTest extends \PHPUnit_Framework_TestCase
 {

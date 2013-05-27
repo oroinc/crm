@@ -1,8 +1,8 @@
 <?php
 
-namespace Oro\Bundle\AccountBundle\Tests\Unit\Form\Type;
+namespace OroCRM\Bundle\AccountBundle\Tests\Unit\Form\Type;
 
-use Oro\Bundle\AccountBundle\Form\Type\AccountApiType;
+use OroCRM\Bundle\AccountBundle\Form\Type\AccountApiType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 

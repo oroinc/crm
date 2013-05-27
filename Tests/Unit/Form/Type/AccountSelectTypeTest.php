@@ -1,8 +1,8 @@
 <?php
 
-namespace Oro\Bundle\AccountBundle\Tests\Unit\Form\Type;
+namespace OroCRM\Bundle\AccountBundle\Tests\Unit\Form\Type;
 
-use Oro\Bundle\AccountBundle\Form\Type\AccountSelectType;
+use OroCRM\Bundle\AccountBundle\Form\Type\AccountSelectType;
 
 class AccountSelectTypeTest extends \PHPUnit_Framework_TestCase
 {
@@ -20,12 +20,12 @@ class AccountSelectTypeTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->type = new AccountSelectType($flexibleManager, 'oro_account_select');
+        $this->type = new AccountSelectType($flexibleManager, 'orocrm_account_select');
     }
 
     public function testName()
     {
-        $this->assertEquals('oro_account_select', $this->type->getName());
+        $this->assertEquals('orocrm_account_select', $this->type->getName());
     }
 
     public function testParent()

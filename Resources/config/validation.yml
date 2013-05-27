@@ -1,4 +1,4 @@
-Oro\Bundle\AccountBundle\Entity\Account:
+OroCRM\Bundle\AccountBundle\Entity\Account:
     constraints:
         - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity: name
     properties:

@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\AccountBundle\Form\Type;
+namespace OroCRM\Bundle\AccountBundle\Form\Type;
 
 use Oro\Bundle\FlexibleEntityBundle\Form\Type\FlexibleValueType;
 
@@ -11,6 +11,6 @@ class AccountValueType extends FlexibleValueType
      */
     public function getName()
     {
-        return 'oro_account_value';
+        return 'orocrm_account_value';
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\AccountBundle\Entity\Value;
+namespace OroCRM\Bundle\AccountBundle\Entity\Value;
 
 use Gedmo\Mapping\Annotation as Gedmo;
 
@@ -10,11 +10,11 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityFlexibleValue;
 use Oro\Bundle\FlexibleEntityBundle\Entity\Attribute;
 
-use Oro\Bundle\AccountBundle\Entity\Account;
+use OroCRM\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\AddressBundle\Entity\Address;
 
 /**
- * @ORM\Table(name="oro_account_value")
+ * @ORM\Table(name="orocrm_account_value")
  * @ORM\Entity
  */
 class AccountValue extends AbstractEntityFlexibleValue
@@ -30,7 +30,7 @@ class AccountValue extends AbstractEntityFlexibleValue
     /**
      * @var Account $entity
      *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\AccountBundle\Entity\Account", inversedBy="values")
+     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\AccountBundle\Entity\Account", inversedBy="values")
      */
     protected $entity;
 
@@ -41,7 +41,7 @@ class AccountValue extends AbstractEntityFlexibleValue
      *
      * @ORM\ManyToMany(targetEntity="Oro\Bundle\FlexibleEntityBundle\Entity\AttributeOption")
      * @ORM\JoinTable(
-     *     name="oro_account_value_option",
+     *     name="orocrm_account_value_option",
      *     joinColumns={@ORM\JoinColumn(name="value_id", referencedColumnName="id", onDelete="CASCADE")},
      *     inverseJoinColumns={@ORM\JoinColumn(name="option_id", referencedColumnName="id", onDelete="CASCADE")}
      * )
@@ -119,7 +119,7 @@ class AccountValue extends AbstractEntityFlexibleValue
      *
      * @ORM\ManyToMany(targetEntity="Oro\Bundle\FlexibleEntityBundle\Entity\Collection",cascade={"persist"})
      * @ORM\JoinTable(
-     *     name="oro_account_collection_relation",
+     *     name="orocrm_account_collection_relation",
      *     joinColumns={@ORM\JoinColumn(name="value_id", referencedColumnName="id", onDelete="CASCADE")},
      *     inverseJoinColumns={@ORM\JoinColumn(name="collection_data_id", referencedColumnName="id", onDelete="CASCADE")}
      * )
