@@ -48,7 +48,7 @@ class QueryTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertNull($this->query->getCreatedAt());
         $this->query->beforeSave();
-        $currentDate = new \DateTime();
+        $currentDate = new \DateTime('now', new \DateTimeZone('UTC'));
         $this->assertEquals($currentDate->format('Y-m-d'), $this->query->getCreatedAt()->format('Y-m-d'));
     }
 
