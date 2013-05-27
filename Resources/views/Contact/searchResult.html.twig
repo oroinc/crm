@@ -8,20 +8,21 @@
 
 {% import 'OroUIBundle::macros.html.twig' as macros %}
 
-<div class="span9">
-    <div class="customer-info well-small">
-        {% if contact %}
-            <div class="visual">
-                <a href="{{ indexer_item.recordUrl }}">
-                    <img src="{{ asset('bundles/oroui/img/info-usser.png') }}" alt="{{ contact.__toString }}"/>
-                </a>
+<div class="customer-info well-small">
+    {% if contact %}
+        <div class="visual">
+            <a href="{{ indexer_item.recordUrl }}">
+                <img src="{{ asset('bundles/oroui/img/info-usser.png') }}" alt="{{ contact.__toString }}"/>
+            </a>
+        </div>
+        <div class="clearfix">
+            <div class="pull-right">
+                <div class="sub-title">{{ 'Contact'|trans }}</div>
             </div>
             <div class="customer-content pull-left">
                 <div class="clearfix">
                     <div class="pull-left">
                         <h1 class="usser-name">
-                            <div class="sub-title">{{ 'Contact'|trans }}</div>
-                            <span class="separator">/</span>
                             <a href="{{ indexer_item.recordUrl }}">{{ contact.__toString }}</a>
                         </h1>
                     </div>
@@ -33,16 +34,19 @@
                     </ul>
                 </div>
             </div>
-        {% else %}
-            <div class="visual">
-                <img src="{{ asset('bundles/oroui/img/info-usser.png') }}" alt="{{ indexer_item.recordTitle }}"/>
+        </div>
+    {% else %}
+        <div class="visual">
+            <img src="{{ asset('bundles/oroui/img/info-usser.png') }}" alt="{{ indexer_item.recordTitle }}"/>
+        </div>
+        <div class="clearfix">
+            <div class="pull-right">
+                <div class="sub-title">{{ 'Contact'|trans }}</div>
             </div>
             <div class="customer-content pull-left">
                 <div class="clearfix">
                     <div class="pull-left">
                         <h1 class="usser-name">
-                            <div class="sub-title">{{ 'Contact'|trans }}</div>
-                            <span class="separator">/</span>
                             {{ indexer_item.recordTitle }}
                         </h1>
                     </div>
@@ -54,7 +58,7 @@
                     </ul>
                 </div>
             </div>
-        {% endif %}
-    </div>
+        </div>
+    {% endif %}
 </div>
 
