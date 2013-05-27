@@ -67,13 +67,6 @@ services:
             - @doctrine.orm.entity_manager
             - @oro_user.manager.flexible
 
-    oro_user.manager.soap.api:
-        class: %oro_user.manager.api.class%
-        arguments:
-            - %oro_user.entity.soap.class%
-            - @doctrine.orm.entity_manager
-            - @oro_user.manager.flexible
-
     oro_user.security.provider:
         class:                        %oro_user.security.provider.class%
         public:                       false

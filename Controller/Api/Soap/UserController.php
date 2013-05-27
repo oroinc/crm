@@ -148,7 +148,7 @@ class UserController extends FlexibleSoapController
      */
     public function getManager()
     {
-        return $this->container->get('oro_user.manager.soap.api');
+        return $this->container->get('oro_user.manager.api');
     }
 
     /**
