@@ -18,7 +18,7 @@ oro_menu_config:
             extras:
                 icon: 'icon-home icon-white'
                 position: 1
-            uri: '#'
+            route: 'oro_default'
 
     tree:
         application_menu:
