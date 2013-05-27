@@ -8,7 +8,6 @@ use Oro\Bundle\GridBundle\Field\FieldDescriptionCollection;
 use Oro\Bundle\GridBundle\Field\FieldDescriptionInterface;
 use Oro\Bundle\GridBundle\Filter\FilterInterface;
 use Oro\Bundle\GridBundle\Action\ActionInterface;
-use Oro\Bundle\GridBundle\Property\FixedProperty;
 use Oro\Bundle\GridBundle\Property\UrlProperty;
 
 class GroupDatagridManager extends DatagridManager
@@ -72,7 +71,7 @@ class GroupDatagridManager extends DatagridManager
                 'label'         => 'Update',
                 'link'          => 'update_link',
                 'runOnRowClick' => true,
-//                'backUrl'       => true,
+                //'backUrl'       => true,
             )
         );
 
@@ -84,7 +83,7 @@ class GroupDatagridManager extends DatagridManager
                 'label'   => 'Update',
                 'icon'    => 'edit',
                 'link'    => 'update_link',
-//                'backUrl' => true,
+                //'backUrl' => true,
             )
         );
 
