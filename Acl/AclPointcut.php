@@ -17,10 +17,8 @@ class AclPointcut implements PointcutInterface
     {
         $className = $class->getName();
 
-        if (
-            substr($className, -10, 10) == 'Controller' &&
-            strpos($className, 'ExceptionController') === false &&
-            strpos($className, 'UserController') === false
+        if (substr($className, -10, 10) == 'Controller' &&
+            strpos($className, 'ExceptionController') === false
         ) {
             return true;
         }

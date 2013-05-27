@@ -33,6 +33,7 @@ class UserApiType extends UserType
         $resolver->setDefaults(
             array(
                 'csrf_protection' => false,
+                'validation_groups'    => array('ProfileAPI', 'Default'),
             )
         );
     }

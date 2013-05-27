@@ -33,8 +33,11 @@ class UserSubscriber implements EventSubscriberInterface
      * @param AclManager               $aclManager ACL manager
      * @param SecurityContextInterface $security   Security context
      */
-    public function __construct(FormFactoryInterface $factory, AclManager $aclManager, SecurityContextInterface $security)
-    {
+    public function __construct(
+        FormFactoryInterface $factory,
+        AclManager $aclManager,
+        SecurityContextInterface $security
+    ) {
         $this->factory    = $factory;
         $this->aclManager = $aclManager;
         $this->security   = $security;
@@ -51,18 +54,31 @@ class UserSubscriber implements EventSubscriberInterface
         );
     }
 
+    /**
+     * @param FormEvent $event
+     */
     public function preBind(FormEvent $event)
     {
-        $inputData = $event->getData();
-        if (isset($inputData['emails'])) {
-            foreach ($inputData['emails'] as $id => $email) {
-                if (!$email['email']) {
-                    unset($inputData['emails'][$id]);
-                }
-            }
+        $submittedData = $event->getData();
 
-            $event->setData($inputData);
+        if (isset($submittedData['emails'])) {
+            foreach ($submittedData['emails'] as $id => $email) {
+                if (!$email['email']) {
+                    unset($submittedData['emails'][$id]);
+                }
+
+            }
         }
+
+        if (!$this->aclManager->isResourceGranted('oro_user_role')) {
+            unset($submittedData['rolesCollection']);
+        }
+
+        if (!$this->aclManager->isResourceGranted('oro_user_group')) {
+            unset($submittedData['groups']);
+        }
+
+        $event->setData($submittedData);
     }
 
     public function preSetData(FormEvent $event)
@@ -79,27 +95,45 @@ class UserSubscriber implements EventSubscriberInterface
             $form->remove('plainPassword');
         }
 
-        if ($this->security->getToken() && is_object($user = $this->security->getToken()->getUser())) {
-            if (!$this->aclManager->isResourceGranted('oro_user_role', $user)) {
-                $form->remove('rolesCollection');
-            }
-
-            if (!$this->aclManager->isResourceGranted('oro_user_group', $user)) {
-                $form->remove('groups');
-            }
-
-            // do not allow "admin" to disable his own account
-            $form->add($this->factory->createNamed('enabled', 'choice', $entity->getId() ? $entity->isEnabled() : '', array(
-                'label'       => 'Status',
-                'required'    => true,
-                'disabled'    => $this->aclManager->isResourceGranted('root', $user) && $entity->getId() == $user->getId(),
-                'choices'     => array('Inactive', 'Active'),
-                'empty_value' => 'Please select',
-                'empty_data'  => '',
-            )));
-        } else {
+        if (!$this->aclManager->isResourceGranted('oro_user_role')) {
             $form->remove('rolesCollection');
+        }
+
+        if (!$this->aclManager->isResourceGranted('oro_user_group')) {
             $form->remove('groups');
         }
+
+        // do not allow user to disable his own account
+        $form->add(
+            $this->factory->createNamed(
+                'enabled',
+                'choice',
+                $entity->getId() ? $entity->isEnabled() : '',
+                array(
+                    'label'       => 'Status',
+                    'required'    => true,
+                    'disabled'    => !$this->isCurrentUser($entity),
+                    'choices'     => array('Inactive', 'Active'),
+                    'empty_value' => 'Please select',
+                    'empty_data'  => '',
+                )
+            )
+        );
+    }
+
+    /**
+     * Returns true if passed user is currently authenticated
+     *
+     * @param User $user
+     * @return bool
+     */
+    protected function isCurrentUser(User $user)
+    {
+        $token = $this->security->getToken();
+        $currentUser = $token && $token->getUser();
+        if ($user->getId() && is_object($currentUser)) {
+            return $currentUser->getId() == $user->getId();
+        }
+        return false;
     }
 }
