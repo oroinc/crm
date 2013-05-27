@@ -1,6 +1,3 @@
-[submodule "src/Oro/Bundle/FilterBundle"]
-	path = src/Oro/Bundle/FilterBundle
-	url = git@github.com:laboro/FilterBundle.git
 [submodule "src/Oro/Bundle/FlexibleEntityBundle"]
 	path = src/Oro/Bundle/FlexibleEntityBundle
 	url = git@github.com:laboro/FlexibleEntityBundle.git
