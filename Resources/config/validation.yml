@@ -14,9 +14,6 @@ Oro\Bundle\AddressBundle\Entity\Address:
             - Length:
                   max: 255
 
-        state:
-            - NotBlank: ~
-
         postalCode:
             - NotBlank: ~
             - Length:
@@ -32,3 +29,6 @@ Oro\Bundle\AddressBundle\Entity\Address:
         lastName:
             - Length:
                   max: 255
+    constraints:
+        - Callback:
+            methods: [isStateValid]

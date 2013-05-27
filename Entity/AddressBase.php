@@ -7,6 +7,7 @@ use JMS\Serializer\Annotation\Type;
 use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 
 use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityFlexible;
+use Symfony\Component\Validator\ExecutionContext;
 
 /**
  * Address
@@ -57,6 +58,14 @@ class AddressBase extends AbstractEntityFlexible
      * @Soap\ComplexType("string", nillable=true)
      */
     protected $state;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="state_text", type="string", length=255, nullable=true)
+     * @Soap\ComplexType("string", nillable=true)
+     */
+    protected $stateText;
 
     /**
      * @var string
@@ -190,7 +199,34 @@ class AddressBase extends AbstractEntityFlexible
      */
     public function getState()
     {
-        return $this->state;
+        if (!empty($this->stateText)) {
+            return $this->stateText;
+        } else {
+            return $this->state;
+        }
+    }
+
+    /**
+     * Set state text
+     *
+     * @param Region $stateText
+     * @return AddressBase
+     */
+    public function setStateText($stateText)
+    {
+        $this->stateText = $stateText;
+
+        return $this;
+    }
+
+    /**
+     * Get state test
+     *
+     * @return Region
+     */
+    public function getStateText()
+    {
+        return $this->stateText;
     }
 
     /**
@@ -315,6 +351,18 @@ class AddressBase extends AbstractEntityFlexible
     {
         $this->created = new \DateTime('now', new \DateTimeZone('UTC'));
         $this->updated = new \DateTime('now', new \DateTimeZone('UTC'));
+    }
+
+    public function isStateValid(ExecutionContext $context)
+    {
+        if ($this->getCountry() && $this->getCountry()->hasRegions() && !$this->state) {
+            $propertyPath = $context->getPropertyPath() . '.state';
+            $context->addViolationAtPath(
+                $propertyPath,
+                'State is required for country %country%',
+                array('%country%' => $this->getCountry()->getName())
+            );
+        }
     }
 
     /**

@@ -13,7 +13,14 @@ Oro.RegionUpdater.View = Backbone.View.extend({
      */
     initialize: function (options) {
         this.target = $(options.target);
+        this.$simpleEl = $(options.simpleEl);
+
+        this.target.closest('.controls').append(this.$simpleEl);
+        this.$simpleEl.attr('type', 'text');
+
         this.template = $('#region-chooser-template').html();
+
+        this.listenTo(this.collection, 'reset', this.render);
     },
 
     /**
@@ -31,20 +38,26 @@ Oro.RegionUpdater.View = Backbone.View.extend({
      * @param e {Object}
      */
     selectionChanged: function (e) {
-        var self = this;
-
         var countryId = $(e.currentTarget).val();
-
         this.collection.setCountryId(countryId);
-        this.collection.fetch({
-            success: function () {
-                var regionSelect = $(self.target);
+        this.collection.fetch();
+    },
 
-                regionSelect.val('').trigger('change');
-                regionSelect.find('option[value!=""]').remove();
-                regionSelect.append(_.template(self.template, {regions: self.collection.models}));
-            }
-        });
+    render: function() {
+        if (this.collection.models.length > 0) {
+            this.target.show();
+            $('#uniform-' + this.target[0].id).show();
 
+            this.target.val('').trigger('change');
+            this.target.find('option[value!=""]').remove();
+            this.target.append(_.template(this.template, {regions: this.collection.models}));
+
+            this.$simpleEl.hide();
+            this.$simpleEl.val('');
+        } else {
+            this.target.hide();
+            $('#uniform-' + this.target[0].id).hide();
+            this.$simpleEl.show();
+        }
     }
 });
