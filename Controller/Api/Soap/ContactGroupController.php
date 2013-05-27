@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\ContactBundle\Controller\Api\Soap;
+namespace OroCRM\Bundle\ContactBundle\Controller\Api\Soap;
 
 use Symfony\Component\Form\FormInterface;
 use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
@@ -15,7 +15,7 @@ class ContactGroupController extends SoapController
      * @Soap\Method("getContactGroups")
      * @Soap\Param("page", phpType="int")
      * @Soap\Param("limit", phpType="int")
-     * @Soap\Result(phpType = "Oro\Bundle\ContactBundle\Entity\Group[]")
+     * @Soap\Result(phpType = "OroCRM\Bundle\ContactBundle\Entity\Group[]")
      */
     public function cgetAction($page = 1, $limit = 10)
     {
@@ -25,7 +25,7 @@ class ContactGroupController extends SoapController
     /**
      * @Soap\Method("getContactGroup")
      * @Soap\Param("id", phpType = "int")
-     * @Soap\Result(phpType = "Oro\Bundle\ContactBundle\Entity\Group")
+     * @Soap\Result(phpType = "OroCRM\Bundle\ContactBundle\Entity\Group")
      */
     public function getAction($id)
     {
@@ -34,7 +34,7 @@ class ContactGroupController extends SoapController
 
     /**
      * @Soap\Method("createContactGroup")
-     * @Soap\Param("contact_group", phpType = "Oro\Bundle\ContactBundle\Entity\GroupSoap")
+     * @Soap\Param("contact_group", phpType = "OroCRM\Bundle\ContactBundle\Entity\GroupSoap")
      * @Soap\Result(phpType = "boolean")
      */
     public function createAction($contact_group)
@@ -45,7 +45,7 @@ class ContactGroupController extends SoapController
     /**
      * @Soap\Method("updateContactGroup")
      * @Soap\Param("id", phpType = "int")
-     * @Soap\Param("contact_group", phpType = "Oro\Bundle\ContactBundle\Entity\GroupSoap")
+     * @Soap\Param("contact_group", phpType = "OroCRM\Bundle\ContactBundle\Entity\GroupSoap")
      * @Soap\Result(phpType = "boolean")
      */
     public function updateAction($id, $contact_group)
@@ -70,7 +70,7 @@ class ContactGroupController extends SoapController
      */
     public function getManager()
     {
-        return $this->container->get('oro_contact.group.manager.api');
+        return $this->container->get('orocrm_contact.group.manager.api');
     }
 
     /**
@@ -78,7 +78,7 @@ class ContactGroupController extends SoapController
      */
     public function getForm()
     {
-        return $this->container->get('oro_contact.form.group.api');
+        return $this->container->get('orocrm_contact.form.group.api');
     }
 
     /**
@@ -86,6 +86,6 @@ class ContactGroupController extends SoapController
      */
     public function getFormHandler()
     {
-        return $this->container->get('oro_contact.form.handler.group.api');
+        return $this->container->get('orocrm_contact.form.handler.group.api');
     }
 }

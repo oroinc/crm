@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\ContactBundle\Controller;
+namespace OroCRM\Bundle\ContactBundle\Controller;
 
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -11,13 +11,13 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Oro\Bundle\UserBundle\Annotation\Acl;
 
-use Oro\Bundle\ContactBundle\Entity\Contact;
-use Oro\Bundle\ContactBundle\Datagrid\ContactDatagridManager;
+use OroCRM\Bundle\ContactBundle\Entity\Contact;
+use OroCRM\Bundle\ContactBundle\Datagrid\ContactDatagridManager;
 use Oro\Bundle\SoapBundle\Entity\Manager\ApiFlexibleEntityManager;
 
 /**
  * @Acl(
- *      id="oro_contact",
+ *      id="orocrm_contact",
  *      name="Contact manipulation",
  *      description="Contact manipulation",
  *      parent="root"
@@ -26,13 +26,13 @@ use Oro\Bundle\SoapBundle\Entity\Manager\ApiFlexibleEntityManager;
 class ContactController extends Controller
 {
     /**
-     * @Route("/view/{id}", name="oro_contact_view", requirements={"id"="\d+"})
+     * @Route("/view/{id}", name="orocrm_contact_view", requirements={"id"="\d+"})
      * @Template
      * @Acl(
-     *      id="oro_contact_view",
+     *      id="orocrm_contact_view",
      *      name="View Contact",
      *      description="View contact",
-     *      parent="oro_contact"
+     *      parent="orocrm_contact"
      * )
      */
     public function viewAction(Contact $contact)
@@ -45,13 +45,13 @@ class ContactController extends Controller
     /**
      * Create contact form
      *
-     * @Route("/create", name="oro_contact_create")
-     * @Template("OroContactBundle:Contact:update.html.twig")
+     * @Route("/create", name="orocrm_contact_create")
+     * @Template("OroCRMContactBundle:Contact:update.html.twig")
      * @Acl(
-     *      id="oro_contact_create",
+     *      id="orocrm_contact_create",
      *      name="Create Contact",
      *      description="Create contact",
-     *      parent="oro_contact"
+     *      parent="orocrm_contact"
      * )
      */
     public function createAction()
@@ -64,54 +64,54 @@ class ContactController extends Controller
     /**
      * Update user form
      *
-     * @Route("/update/{id}", name="oro_contact_update", requirements={"id"="\d+"}, defaults={"id"=0})
+     * @Route("/update/{id}", name="orocrm_contact_update", requirements={"id"="\d+"}, defaults={"id"=0})
      * @Template
      * @Acl(
-     *      id="oro_contact_update",
+     *      id="orocrm_contact_update",
      *      name="Update Contact",
      *      description="Update contact",
-     *      parent="oro_contact"
+     *      parent="orocrm_contact"
      * )
      */
     public function updateAction(Contact $entity)
     {
-        $backUrl = $this->generateUrl('oro_contact_index');
+        $backUrl = $this->generateUrl('orocrm_contact_index');
 
-        if ($this->get('oro_contact.form.handler.contact')->process($entity)) {
+        if ($this->get('orocrm_contact.form.handler.contact')->process($entity)) {
             $this->getFlashBag()->add('success', 'Contact successfully saved');
             return $this->redirect($backUrl);
         }
 
         return array(
             'entity' => $entity,
-            'form'   => $this->get('oro_contact.form.contact')->createView(),
+            'form'   => $this->get('orocrm_contact.form.contact')->createView(),
         );
     }
 
     /**
      * @Route(
      *      "/{_format}",
-     *      name="oro_contact_index",
+     *      name="orocrm_contact_index",
      *      requirements={"_format"="html|json"},
      *      defaults={"_format" = "html"}
      * )
      * @Acl(
-     *      id="oro_contact_list",
+     *      id="orocrm_contact_list",
      *      name="View List of Contacts",
      *      description="View list of contacts",
-     *      parent="oro_contact"
+     *      parent="orocrm_contact"
      * )
      */
     public function indexAction(Request $request)
     {
         /** @var $gridManager ContactDatagridManager */
-        $gridManager = $this->get('oro_contact.contact.datagrid_manager');
+        $gridManager = $this->get('orocrm_contact.contact.datagrid_manager');
         $datagrid = $gridManager->getDatagrid();
 
         if ('json' == $request->getRequestFormat()) {
             $view = 'OroGridBundle:Datagrid:list.json.php';
         } else {
-            $view = 'OroContactBundle:Contact:index.html.twig';
+            $view = 'OroCRMContactBundle:Contact:index.html.twig';
         }
 
         return $this->render(
@@ -133,6 +133,6 @@ class ContactController extends Controller
      */
     protected function getManager()
     {
-        return $this->get('oro_contact.contact.manager');
+        return $this->get('orocrm_contact.contact.manager');
     }
 }

@@ -1,9 +1,9 @@
 <?php
 
-namespace Oro\Bundle\ContactBundle\Tests\Unit\Entity;
+namespace OroCRM\Bundle\ContactBundle\Tests\Unit\Entity;
 
 
-use Oro\Bundle\ContactBundle\Entity\Contact;
+use OroCRM\Bundle\ContactBundle\Entity\Contact;
 
 class ContactTest extends \PHPUnit_Framework_TestCase
 {

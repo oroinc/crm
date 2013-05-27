@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\ContactBundle\Datagrid;
+namespace OroCRM\Bundle\ContactBundle\Datagrid;
 
 use Oro\Bundle\GridBundle\Datagrid\DatagridManager;
 use Oro\Bundle\GridBundle\Field\FieldDescription;
@@ -18,7 +18,7 @@ class GroupDatagridManager extends DatagridManager
     protected function getProperties()
     {
         return array(
-            new UrlProperty('update_link', $this->router, 'oro_contact_group_update', array('id')),
+            new UrlProperty('update_link', $this->router, 'orocrm_contact_group_update', array('id')),
             new UrlProperty('delete_link', $this->router, 'oro_api_delete_contactgroup', array('id')),
         );
     }

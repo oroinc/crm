@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\ContactBundle\Datagrid;
+namespace OroCRM\Bundle\ContactBundle\Datagrid;
 
 use Doctrine\ORM\QueryBuilder;
 use Oro\Bundle\GridBundle\Field\FieldDescription;
@@ -11,7 +11,7 @@ use Oro\Bundle\GridBundle\Field\FieldDescriptionCollection;
 use Oro\Bundle\GridBundle\Datagrid\FlexibleDatagridManager;
 use Oro\Bundle\GridBundle\Datagrid\ParametersInterface;
 
-use Oro\Bundle\ContactBundle\Entity\Group;
+use OroCRM\Bundle\ContactBundle\Entity\Group;
 
 class GroupContactDatagridManager extends FlexibleDatagridManager
 {

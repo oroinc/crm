@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\ContactBundle\Form\Type;
+namespace OroCRM\Bundle\ContactBundle\Form\Type;
 
 use Oro\Bundle\UserBundle\Form\EventListener\PatchSubscriber;
 use Symfony\Component\Form\FormBuilderInterface;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\ContactBundle\Controller\Api\Soap;
+namespace OroCRM\Bundle\ContactBundle\Controller\Api\Soap;
 
 use Symfony\Component\Form\FormInterface;
 use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
@@ -15,7 +15,7 @@ class ContactController extends FlexibleSoapController
      * @Soap\Method("getContacts")
      * @Soap\Param("page", phpType="int")
      * @Soap\Param("limit", phpType="int")
-     * @Soap\Result(phpType = "Oro\Bundle\ContactBundle\Entity\Contact[]")
+     * @Soap\Result(phpType = "OroCRM\Bundle\ContactBundle\Entity\Contact[]")
      */
     public function cgetAction($page = 1, $limit = 10)
     {
@@ -25,7 +25,7 @@ class ContactController extends FlexibleSoapController
     /**
      * @Soap\Method("getContact")
      * @Soap\Param("id", phpType = "int")
-     * @Soap\Result(phpType = "Oro\Bundle\ContactBundle\Entity\Contact")
+     * @Soap\Result(phpType = "OroCRM\Bundle\ContactBundle\Entity\Contact")
      */
     public function getAction($id)
     {
@@ -34,7 +34,7 @@ class ContactController extends FlexibleSoapController
 
     /**
      * @Soap\Method("createContact")
-     * @Soap\Param("contact", phpType = "Oro\Bundle\ContactBundle\Entity\ContactSoap")
+     * @Soap\Param("contact", phpType = "OroCRM\Bundle\ContactBundle\Entity\ContactSoap")
      * @Soap\Result(phpType = "boolean")
      */
     public function createAction($contact)
@@ -45,7 +45,7 @@ class ContactController extends FlexibleSoapController
     /**
      * @Soap\Method("updateContact")
      * @Soap\Param("id", phpType = "int")
-     * @Soap\Param("contact", phpType = "Oro\Bundle\ContactBundle\Entity\ContactSoap")
+     * @Soap\Param("contact", phpType = "OroCRM\Bundle\ContactBundle\Entity\ContactSoap")
      * @Soap\Result(phpType = "boolean")
      */
     public function updateAction($id, $contact)
@@ -68,7 +68,7 @@ class ContactController extends FlexibleSoapController
      */
     public function getManager()
     {
-        return $this->container->get('oro_contact.contact.manager.api');
+        return $this->container->get('orocrm_contact.contact.manager.api');
     }
 
     /**
@@ -76,7 +76,7 @@ class ContactController extends FlexibleSoapController
      */
     public function getForm()
     {
-        return $this->container->get('oro_contact.form.contact.api');
+        return $this->container->get('orocrm_contact.form.contact.api');
     }
 
     /**
@@ -84,6 +84,6 @@ class ContactController extends FlexibleSoapController
      */
     public function getFormHandler()
     {
-        return $this->container->get('oro_contact.form.handler.contact.api');
+        return $this->container->get('orocrm_contact.form.handler.contact.api');
     }
 }
