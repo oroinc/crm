@@ -1,6 +1,3 @@
-[submodule "src/Oro/Bundle/SegmentationTreeBundle"]
-	path = src/Oro/Bundle/SegmentationTreeBundle
-	url = git@github.com:laboro/SegmentationTreeBundle.git
 [submodule "src/Oro/Bundle/SoapBundle"]
 	path = src/Oro/Bundle/SoapBundle
 	url = git@github.com:laboro/SoapBundle.git
