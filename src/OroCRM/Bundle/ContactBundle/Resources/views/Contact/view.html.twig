@@ -1,5 +1,6 @@
 {% extends 'OroCRMContactBundle::layout.html.twig' %}
 {% import 'OroUIBundle::macros.html.twig' as macros %}
+{% import 'OroAddressBundle:Include:viewMacro.html.twig' as addressView %}
 {% oro_title_set({params : {"%contact.name%": contact.__toString} }) %}
 
 {% block head_script %}
@@ -94,108 +95,28 @@
                 <div class="usser-row">
                     <h4 id="scroll-main" class="scrollspy-title">{{ 'General'|trans }}</h4>
                     <div class="row-fluid row-fluid-divider oro-form-contains-address">
-                        {% for attr in contact.values %}
-                            {% if attr.attribute.code == 'address' %}
-                                {% set address = attr.data %}
-
-                                {% if address is defined and address is not null %}
-                                <div class="form-horizontal span6 pull-right">
-                                    <h5 class="usser-fiedset"><span>{{ 'Address'|trans }}</span></h5>
-                                    <div class="control-group">
-                                        <label class="control-label">{{ 'First name'|trans }}</label>
-                                        <div class="controls">
-                                            <div class="clearfix-oro">
-                                                <p class="control-label">{{ address.firstName|default('N/A') }}</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="control-group">
-                                        <label class="control-label">{{ 'Last name'|trans }}</label>
-                                        <div class="controls">
-                                            <div class="clearfix-oro">
-                                                <p class="control-label">{{ address.lastName|default('N/A') }}</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="control-group">
-                                        <label class="control-label">{{ 'Street'|trans }}</label>
-                                        <div class="controls">
-                                            <div class="clearfix-oro">
-                                                <p class="control-label">{{ address.street|default('N/A') }}</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="control-group">
-                                        <label class="control-label">{{ 'Street 2'|trans }}</label>
-                                        <div class="controls">
-                                            <div class="clearfix-oro">
-                                                <p class="control-label">{{ address.street2|default('N/A') }}</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="control-group">
-                                        <label class="control-label">{{ 'City'|trans }}</label>
-                                        <div class="controls">
-                                            <div class="clearfix-oro">
-                                                <p class="control-label">{{ address.city|default('N/A') }}</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="control-group">
-                                        <label class="control-label">{{ 'State'|trans }}</label>
-                                        <div class="controls">
-                                            <div class="clearfix-oro">
-                                                <p class="control-label">{{ address.state|default('N/A') }}</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="control-group">
-                                        <label class="control-label">{{ 'Country'|trans }}</label>
-                                        <div class="controls">
-                                            <div class="clearfix-oro">
-                                                <p class="control-label">{{ address.country|default('N/A') }}</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="control-group">
-                                        <label class="control-label">{{ 'Zip/postal code'|trans }}</label>
-                                        <div class="controls">
-                                            <div class="clearfix-oro">
-                                                <p class="control-label">{{ address.postalCode }}</p>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    {% if (address.values is defined) %}
-                                        {% for attr in address.values %}
-                                        <div class="control-group">
-                                            <label class="control-label">{{ attr.attribute.label|trans|title }}</label>
-                                            <div class="controls">
-                                                <div class="clearfix-oro">
-                                                    <p class="control-label">{{ attr.__toString|default('N/A') }}</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        {% endfor %}
-                                    {% endif %}
-                                </div>
-                                {% endif %}
+                        {% if contact|hasAddress('address') %}
+                            {% set addressValue = contact.getValue('address') %}
+                            {% if addressValue.data is not null %}
+                            <div class="form-horizontal span6 pull-right">
+                                <h5 class="usser-fiedset"><span>{{ addressValue.attribute.label|trans }}</span></h5>
+                                {{ addressView.renderAddress(addressValue.data) }}
+                            </div>
                             {% endif %}
-                        {% endfor %}
+                        {% endif %}
 
                         <div class="form-horizontal span6 pull-left">
                             <h5 class="usser-fiedset"><span>{{ 'Basic Information'|trans }}</span></h5>
-                            {% for attr in contact.values %}
-                                {% if attr.attribute.code != 'address' %}
-                                <div class="control-group">
-                                    <label class="control-label">{{ attr.attribute.label|trans|title }}</label>
-                                    <div class="controls">
-                                        <div class="clearfix-oro">
-                                            <p class="control-label">{{ attr.__toString|default('N/A') }}</p>
-                                        </div>
+
+                            {% for value in contact|getAttributes(['address'], true) %}
+                            <div class="control-group">
+                                <label class="control-label">{{ value.attribute.label|trans|title }}</label>
+                                <div class="controls">
+                                    <div class="clearfix-oro">
+                                        <p class="control-label">{{ value.__toString|default('N/A') }}</p>
                                     </div>
                                 </div>
-                                {% endif %}
+                            </div>
                             {% endfor %}
                         </div>
                     </div>
