@@ -96,7 +96,10 @@
                             <li class="active"><a href="#scroll-main">{{ 'General'|trans }}</a></li>
                             {% if form.values is defined %}
                                 <li><a href="#scroll-addresses">{{ 'Addresses'|trans }}</a></li>
-                                <li><a href="#scroll-attributes">{{ 'Additional Information'|trans }}</a></li>
+                                <li><a href="#scroll-contacts">{{ 'Contacts'|trans }}</a></li>
+                                {% if form.values is defined %}
+                                    <li><a href="#scroll-attributes">{{ 'Additional Information'|trans }}</a></li>
+                                {% endif %}
                             {% endif %}
                         </ul>
                     </div>
@@ -136,6 +139,14 @@
                                     {% endfor %}
                                 </div>
                             {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="usser-row">
+                        <h4 id="scroll-contacts" class="scrollspy-title">{{ 'Contacts'|trans }}</h4>
+                        <div class="row-fluid">
+                            {# TODO Should be replaced with grid #}
+                            {{ form_widget(form.contacts) }}
                         </div>
                     </div>
 

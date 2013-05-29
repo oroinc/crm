@@ -226,18 +226,4 @@ class ContactDatagridManager extends FlexibleDatagridManager
 
         return array($clickAction, $viewAction, $updateAction, $deleteAction);
     }
-
-    /**
-     * {@inheritDoc}
-     */
-    protected function createQuery()
-    {
-        /** @var $query QueryBuilder */
-        $query = parent::createQuery();
-        $query->leftJoin('Value.account', 'a');
-        $query->addSelect('a');
-        $query->addSelect('a.name as accountName');
-
-        return $query;
-    }
 }

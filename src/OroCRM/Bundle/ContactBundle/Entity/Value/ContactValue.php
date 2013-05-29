@@ -50,16 +50,6 @@ class ContactValue extends AbstractEntityFlexibleValue
     protected $options;
 
     /**
-     * Store account
-     *
-     * @var Account $account
-     *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\AccountBundle\Entity\Account", cascade="persist")
-     * @ORM\JoinColumn(name="account_id", referencedColumnName="id", onDelete="SET NULL")
-     */
-    protected $account;
-
-    /**
      * Store user
      *
      * @var User $user
@@ -152,30 +142,6 @@ class ContactValue extends AbstractEntityFlexibleValue
      * @Gedmo\Versioned
      */
     protected $datetime;
-
-    /**
-     * Get account
-     *
-     * @return Account
-     */
-    public function getAccount()
-    {
-        return $this->account;
-    }
-
-    /**
-     * Set account
-     *
-     * @param Account $account
-     *
-     * @return ContactValue
-     */
-    public function setAccount($account)
-    {
-        $this->account = $account;
-
-        return $this;
-    }
 
     /**
      * Get user

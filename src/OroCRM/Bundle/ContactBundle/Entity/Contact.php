@@ -5,6 +5,7 @@ namespace OroCRM\Bundle\ContactBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use OroCRM\Bundle\AccountBundle\Entity\Account;
 
 use JMS\Serializer\Annotation\Type;
 use JMS\Serializer\Annotation\Exclude;
@@ -43,6 +44,17 @@ class Contact extends AbstractEntityFlexible
     protected $groups;
 
     /**
+     * Accounts storage
+     *
+     * @var ArrayCollection $accounts
+     *
+     * @ORM\ManyToMany(targetEntity="OroCRM\Bundle\AccountBundle\Entity\Account", inversedBy="contacts")
+     * @ORM\JoinTable(name="orocrm_contact_to_account")
+     * @Exclude
+     */
+    protected $accounts;
+
+    /**
      * @var \Oro\Bundle\FlexibleEntityBundle\Model\AbstractFlexibleValue[]
      * @ORM\OneToMany(targetEntity="OroCRM\Bundle\ContactBundle\Entity\Value\ContactValue", mappedBy="entity", cascade={"persist", "remove"}, orphanRemoval=true)
      * @Exclude
@@ -52,7 +64,8 @@ class Contact extends AbstractEntityFlexible
     public function __construct()
     {
         parent::__construct();
-        $this->groups = new ArrayCollection();
+        $this->groups   = new ArrayCollection();
+        $this->accounts = new ArrayCollection();
     }
 
     /**
@@ -140,6 +153,46 @@ class Contact extends AbstractEntityFlexible
     {
         if ($this->getGroups()->contains($group)) {
             $this->getGroups()->removeElement($group);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Get accounts collection
+     *
+     * @return ArrayCollection
+     */
+    public function getAccounts()
+    {
+        return $this->accounts;
+    }
+
+    /**
+     * Add specified account
+     *
+     * @param Account $account
+     * @return Contact
+     */
+    public function addAccount(Account $account)
+    {
+        if (!$this->getAccounts()->contains($account)) {
+            $this->getAccounts()->add($account);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Remove specified account
+     *
+     * @param Account $account
+     * @return Contact
+     */
+    public function removeAccount(Account $account)
+    {
+        if ($this->getAccounts()->contains($account)) {
+            $this->getAccounts()->removeElement($account);
         }
 
         return $this;

@@ -4,6 +4,7 @@ namespace OroCRM\Bundle\AccountBundle\Form\Type;
 
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Oro\Bundle\FlexibleEntityBundle\Entity\Repository\FlexibleEntityRepository;
 
 use Oro\Bundle\FlexibleEntityBundle\Form\Type\FlexibleType;
 
@@ -24,6 +25,19 @@ class AccountType extends FlexibleType
             array(
                 'label' => 'Name',
                 'required' => true,
+            )
+        );
+
+        $builder->add(
+            'contacts',
+            'entity',
+            array(
+                'class' => 'OroCRMContactBundle:Contact',
+                'query_builder' => function (FlexibleEntityRepository $er) {
+                    return $er->createFlexibleQueryBuilder('c', array('first_name', 'last_name'));
+                },
+                'multiple' => true,
+                'required' => false,
             )
         );
     }
