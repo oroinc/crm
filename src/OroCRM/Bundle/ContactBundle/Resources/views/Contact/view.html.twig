@@ -109,14 +109,7 @@
                             <h5 class="usser-fiedset"><span>{{ 'Basic Information'|trans }}</span></h5>
 
                             {% for value in contact|getAttributes(['address'], true) %}
-                            <div class="control-group">
-                                <label class="control-label">{{ value.attribute.label|trans|title }}</label>
-                                <div class="controls">
-                                    <div class="clearfix-oro">
-                                        <p class="control-label">{{ value.__toString|default('N/A') }}</p>
-                                    </div>
-                                </div>
-                            </div>
+                                {{ macros.flexibleAttributeRow(value) }}
                             {% endfor %}
                         </div>
                     </div>
