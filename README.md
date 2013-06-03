@@ -16,7 +16,7 @@ Installation
 ------------
 
 ```bash
-git clone http://gitlab.orocrm.com/crm.git
+git clone https://github.com/orocrm/crm.git
 
 curl -s https://getcomposer.org/installer | php
 
@@ -43,7 +43,7 @@ Until it's a private repository and it's not published on packagist :
     "repositories": [
         {
             "type": "vcs",
-            "url": "http://gitlab.orocrm.com/crm.git",
+            "url": "https://github.com/orocrm/crm.git",
             "branch": "master"
         }
     ],
