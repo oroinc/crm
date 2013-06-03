@@ -1,23 +1,11 @@
 <?php
 namespace OroCRM\Bundle\AccountBundle\Form\Type;
 
-use Doctrine\ORM\EntityManager;
-use Oro\Bundle\FormBundle\Form\DataTransformer\EntityToIdTransformer;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class AccountSelectType extends AbstractType
 {
-    /**
-     * @var EntityToIdTransformer
-     */
-    protected $transformer;
-
-    public function __construct(EntityManager $em)
-    {
-        $this->transformer = new EntityToIdTransformer($em, 'OroCRMAccountBundle:Account');
-    }
-
     /**
      * {@inheritdoc}
      */
@@ -25,7 +13,6 @@ class AccountSelectType extends AbstractType
     {
         $resolver->setDefaults(
             array(
-                'autocompleter_alias' => 'test',
                 'configs' => array(
                     'placeholder' => 'Choose an account...',
                     'datasource' => 'grid',
@@ -35,7 +22,8 @@ class AccountSelectType extends AbstractType
                         'property' => 'name'
                     )
                 ),
-                'transformer' => $this->transformer
+                'autocompleter_alias' => 'test',
+                'class' => 'OroCRMAccountBundle:Account'
             )
         );
     }
