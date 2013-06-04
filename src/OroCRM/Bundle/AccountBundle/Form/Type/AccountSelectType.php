@@ -14,15 +14,9 @@ class AccountSelectType extends AbstractType
         $resolver->setDefaults(
             array(
                 'configs' => array(
-                    'placeholder' => 'Choose an account...',
-                    'datasource' => 'grid',
-                    'route' => 'orocrm_account_index',
-                    'grid' => array(
-                        'name' => 'accounts',
-                        'property' => 'name'
-                    )
+                    'placeholder' => 'Choose an account...'
                 ),
-                'autocompleter_alias' => 'test',
+                'autocomplete_alias' => 'accounts',
                 'class' => 'OroCRMAccountBundle:Account'
             )
         );

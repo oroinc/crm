@@ -1,6 +1,6 @@
 {% extends 'OroCRMAccountBundle::layout.html.twig' %}
 {% import 'OroUIBundle::macros.html.twig' as macros %}
-{% form_theme form with ['OroAddressBundle:Include:fields.html.twig', 'OroCRMAccountBundle:Form:fields.html.twig'] %}
+{% form_theme form with ['OroAddressBundle:Include:fields.html.twig', 'OroFormBundle:Form:fields.html.twig'] %}
 {% set format = oro_config_value('oro_user.name_format') %}
 {% set title = form.vars.value.id ? form.vars.value.fullname(format)|default('N/A') ~ ' - ' ~ 'Update Account'|trans : 'New Account'|trans %}
 {% oro_title_set({params : {"%account.name%": form.vars.value.name|default('N/A')} }) %}
@@ -16,7 +16,12 @@
     output='js/orocrm.account.account.js'
     %}
     <script src="{{ asset_url }}" type="text/javascript"></script>
+    {{ form_javascript(form) }}
     {% endjavascripts %}
+
+    {% block stylesheets %}
+        {{ form_stylesheet(form) }}
+    {% endblock %}
 
     {% include 'OroCRMAccountBundle:Account:remove.confirm.js.twig' %}
 {% endblock %}

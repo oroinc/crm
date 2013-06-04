@@ -11,15 +11,9 @@ class ContactSelectType extends AbstractType
         $resolver->setDefaults(
             array(
                 'configs' => array(
-                    'placeholder' => 'Choose a contact...',
-                    'datasource' => 'grid',
-                    'route' => 'orocrm_contact_index',
-                    'grid' => array(
-                        'name' => 'contact',
-                        'property' => 'first_name'
-                    )
+                    'placeholder' => 'Choose a contact...'
                 ),
-                'autocompleter_alias' => 'test2',
+                'autocomplete_alias' => 'contacts',
                 'class' => 'OroCRMContactBundle:Contact'
             )
         );
