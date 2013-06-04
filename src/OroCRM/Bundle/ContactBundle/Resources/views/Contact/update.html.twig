@@ -1,7 +1,7 @@
 {% extends 'OroCRMContactBundle::layout.html.twig' %}
 {% import 'OroUIBundle::macros.html.twig' as macros %}
-{% form_theme form with ['OroAddressBundle:Include:fields.html.twig', 'OroUIBundle:Form:fields.html.twig', 'OroFormBundle:Form:fields.html.twig'] %}
-{% set format = get_user_value('oro_user.name_format') %}
+{% form_theme form with 'OroAddressBundle:Include:fields.html.twig' %}
+{% set format = oro_config_value('oro_user.name_format') %}
 {% set fullname = entity.__toString|title %}
 {% oro_title_set({params : {"%contact.name%": fullname} }) %}
 {% set title = form.vars.value.id ? fullname ~ ' - ' ~ 'Update Contact'|trans : 'New Contact'|trans %}
@@ -9,8 +9,16 @@
 {% block head_script %}
     {{ parent() }}
 
-    {{ form_stylesheet(form) }}
-    {{ form_javascript(form) }}
+    {% javascripts
+    '@OroUIBundle/Resources/public/lib/bootstrap/js/bootstrap-scrollspy.js'
+    '@OroUIBundle/Resources/public/lib/backbone.bootstrap-modal.js'
+
+    filter='?yui_js'
+    output='js/orocrm.contact.js'
+    %}
+    <script src="{{ asset_url }}" type="text/javascript"></script>
+    {% endjavascripts %}
+
     {% include 'OroCRMAccountBundle:Account:remove.confirm.js.twig' %}
 {% endblock %}
 

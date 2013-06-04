@@ -1,15 +1,23 @@
 {% extends 'OroCRMAccountBundle::layout.html.twig' %}
 {% import 'OroUIBundle::macros.html.twig' as macros %}
-{% form_theme form with ['OroAddressBundle:Include:fields.html.twig', 'OroUIBundle:Form:fields.html.twig', 'OroFormBundle:Form:fields.html.twig'] %}
-{% set format = get_user_value('oro_user.name_format') %}
+{% form_theme form with ['OroAddressBundle:Include:fields.html.twig', 'OroCRMAccountBundle:Form:fields.html.twig'] %}
+{% set format = oro_config_value('oro_user.name_format') %}
 {% set title = form.vars.value.id ? form.vars.value.fullname(format)|default('N/A') ~ ' - ' ~ 'Update Account'|trans : 'New Account'|trans %}
 {% oro_title_set({params : {"%account.name%": form.vars.value.name|default('N/A')} }) %}
 
 {% block head_script %}
     {{ parent() }}
 
-    {{ form_stylesheet(form) }}
-    {{ form_javascript(form) }}
+    {% javascripts
+    '@OroUIBundle/Resources/public/lib/bootstrap/js/bootstrap-scrollspy.js'
+    '@OroUIBundle/Resources/public/lib/backbone.bootstrap-modal.js'
+
+    filter='?yui_js'
+    output='js/orocrm.account.account.js'
+    %}
+    <script src="{{ asset_url }}" type="text/javascript"></script>
+    {% endjavascripts %}
+
     {% include 'OroCRMAccountBundle:Account:remove.confirm.js.twig' %}
 {% endblock %}
 
