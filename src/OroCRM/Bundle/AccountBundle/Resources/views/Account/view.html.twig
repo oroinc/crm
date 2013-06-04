@@ -1,16 +1,8 @@
 {% extends 'OroCRMAccountBundle::layout.html.twig' %}
 {% import 'OroUIBundle::macros.html.twig' as macros %}
-{% set format = get_user_value('oro_user.name_format') %}
+{% import 'OroAddressBundle:Include:viewMacro.html.twig' as addressView %}
+{% set format = oro_config_value('oro_user.name_format') %}
 {% oro_title_set({params : {"%account.name%": account.name|default('N/A')} }) %}
-
-{% if account.values is defined %}
-    {% set hasAddress = false %}
-    {% for attribute in account.values %}
-        {% if 'address' in attribute.attribute.code and attribute.data is not null %}
-            {% set hasAddress = true %}
-        {% endif %}
-    {% endfor %}
-{% endif %}
 
 {% block head_script %}
     {{ parent() }}
@@ -89,7 +81,7 @@
                 <div class="container-fluid" style="width: auto;">
                     <ul class="nav">
                         <li class="active"><a href="#scroll-main">{{ 'General'|trans }}</a></li>
-                        {% if(hasAddress) %}
+                        {% if account|hasAddress %}
                             <li><a href="#scroll-addresses">{{ 'Addresses'|trans }}</a></li>
                         {% endif %}
                         {% if account.values is defined %}
@@ -122,109 +114,19 @@
                             </div>
                         </div>
 
-                        {% if account.values is defined %}
-
-                            {% if (hasAddress) %}
-                                <h4 id="scroll-addresses" class="scrollspy-title">{{ 'Addresses'|trans }}</h4>
-                                <div class="row-fluid clearfix">
-                                    {% for attribute in account.values %}
-                                        {% if 'address' in attribute.attribute.code %}
-                                            {% set address = attribute.data %}
-                                            {% if address is defined and address is not null %}
-                                            <div class="form-horizontal span6 pull-left">
-                                                <h5 class="usser-fiedset"><span>{{ attribute.attribute.label|trans }}</span></h5>
-                                                <div class="control-group">
-                                                    <label class="control-label">{{ 'First name'|trans }}</label>
-
-                                                    <div class="controls">
-                                                        <div class="clearfix-oro">
-                                                            <p class="control-label">{{ address.firstName|default('N/A') }}</p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="control-group">
-                                                    <label class="control-label">{{ 'Last name'|trans }}</label>
-
-                                                    <div class="controls">
-                                                        <div class="clearfix-oro">
-                                                            <p class="control-label">{{ address.lastName|default('N/A') }}</p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="control-group">
-                                                    <label class="control-label">{{ 'Street'|trans }}</label>
-
-                                                    <div class="controls">
-                                                        <div class="clearfix-oro">
-                                                            <p class="control-label">{{ address.street|default('N/A') }}</p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="control-group">
-                                                    <label class="control-label">{{ 'Street 2'|trans }}</label>
-
-                                                    <div class="controls">
-                                                        <div class="clearfix-oro">
-                                                            <p class="control-label">{{ address.street2|default('N/A') }}</p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="control-group">
-                                                    <label class="control-label">{{ 'City'|trans }}</label>
-
-                                                    <div class="controls">
-                                                        <div class="clearfix-oro">
-                                                            <p class="control-label">{{ address.city|default('N/A') }}</p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="control-group">
-                                                    <label class="control-label">{{ 'State'|trans }}</label>
-
-                                                    <div class="controls">
-                                                        <div class="clearfix-oro">
-                                                            <p class="control-label">{{ address.state|default('N/A') }}</p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="control-group">
-                                                    <label class="control-label">{{ 'Country'|trans }}</label>
-
-                                                    <div class="controls">
-                                                        <div class="clearfix-oro">
-                                                            <p class="control-label">{{ address.country|default('N/A') }}</p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="control-group">
-                                                    <label class="control-label">{{ 'Zip/postal code'|trans }}</label>
-
-                                                    <div class="controls">
-                                                        <div class="clearfix-oro">
-                                                            <p class="control-label">{{ address.postalCode }}</p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                {% if (address.values is defined) %}
-                                                    {% for attr in address.values %}
-                                                        <div class="control-group">
-                                                            <label class="control-label">{{ attr.attribute.label|trans|title }}</label>
-
-                                                            <div class="controls">
-                                                                <div class="clearfix-oro">
-                                                                    <p class="control-label">{{ attr.__toString|default('N/A') }}</p>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    {% endfor %}
-                                                {% endif %}
-                                                </div>
-                                            {% endif %}
-                                        {% endif %}
-                                    {% endfor %}
-                                </div>
-                            {% endif %}
+                        {% if account|hasAddress %}
+                            <h4 id="scroll-addresses" class="scrollspy-title">{{ 'Addresses'|trans }}</h4>
+                            <div class="row-fluid clearfix">
+                                {% for value in account|getAttributes(['shipping_address', 'billing_address']) %}
+                                    {% set address = value.data %}
+                                    {% if address is not null %}
+                                        <div class="form-horizontal span6 pull-left">
+                                            <h5 class="usser-fiedset"><span>{{ value.attribute.label|trans }}</span></h5>
+                                            {{ addressView.renderAddress(address) }}
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
                         {% endif %}
                     </div>
                 </div>
@@ -233,36 +135,22 @@
                         <h4 id="scroll-attributes" class="scrollspy-title">{{ 'Additional Information'|trans }}</h4>
                         <div class="row-fluid">
                             <div class="form-horizontal">
-                                {% set col = 2 %}
-                                {% set class = 'span' ~ (12 // col) %}
-                                {% set index = 1 %}
-                                {% set total = account.values|length - 2  %}
-                                {% set half = (total / col)|ceil %}
+                            {% set col = 2 %}
+                            {% set class = 'span' ~ (12 // col) %}
+                            {% set values = account|getAttributes(['shipping_address', 'billing_address'], true) %}
+                            {% set half = (values|length / col)|ceil %}
 
-                            {% for attr in account.values %}
-                                {% if 'address' not in attr.attribute.code %}
-                                    {% if index == 1 %}
-                                        <div class="{{ class }}">
-                                    {% endif %}
+                            {% for value in values %}
+                                {% if loop.first %}<div class="{{ class }}">{% endif %}
 
-                                    <div class="control-group">
-                                        <label class="control-label">{{ attr.attribute.label|trans|title }}</label>
-                                        <div class="controls">
-                                            <div class="clearfix-oro">
-                                                <p class="control-label">{{ attr.__toString|default('N/A')  }}</p>
-                                            </div>
-                                        </div>
+                                {{ macros.flexibleAttributeRow(value) }}
+
+                                {% if loop.index % half == 0  and not loop.last %}
                                     </div>
-                                        {% if index % half == 0  and (index != (total)) %}
-                                            </div>
-                                            <div class="{{ class }}">
-                                        {% endif %}
-
-                                    {% if index == (total) %}
-                                        </div>
-                                    {% endif %}
-                                    {% set index = index + 1 %}
+                                    <div class="{{ class }}">
                                 {% endif %}
+
+                                {% if loop.last %}</div>{% endif %}
                             {% endfor %}
                         </div>
                     </div>

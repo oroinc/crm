@@ -4,7 +4,7 @@
     * indexer_item - indexer item Oro\Bundle\SearchBundle\Query\Result\Item
 #}
 {% set contact = entity %}
-{% set format = get_user_value('oro_user.name_format') %}
+{% set format = oro_config_value('oro_user.name_format') %}
 
 {% import 'OroUIBundle::macros.html.twig' as macros %}
 
