@@ -2,8 +2,8 @@
 
 namespace OroCRM\Bundle\AccountBundle\Tests\Unit\Entity;
 
-
 use OroCRM\Bundle\AccountBundle\Entity\Account;
+use OroCRM\Bundle\ContactBundle\Entity\Contact;
 
 class AccountTest extends \PHPUnit_Framework_TestCase
 {
@@ -27,5 +27,36 @@ class AccountTest extends \PHPUnit_Framework_TestCase
         $entity = new Account();
         $entity->doPreUpdate();
         $this->assertInstanceOf('\DateTime', $entity->getUpdatedAt());
+    }
+
+    public function testAddContact()
+    {
+        $account = new Account();
+        $account->setId(1);
+
+        $contact = new Contact();
+        $contact->setId(2);
+
+        $this->assertEmpty($account->getContacts()->toArray());
+
+        $account->addContact($contact);
+        $actualContacts = $account->getContacts()->toArray();
+        $this->assertCount(1, $actualContacts);
+        $this->assertEquals($contact, current($actualContacts));
+    }
+
+    public function testRemoveContact()
+    {
+        $account = new Account();
+        $account->setId(1);
+
+        $contact = new Contact();
+        $contact->setId(2);
+
+        $account->addContact($contact);
+        $this->assertCount(1, $account->getContacts()->toArray());
+
+        $account->removeContact($contact);
+        $this->assertEmpty($account->getContacts()->toArray());
     }
 }

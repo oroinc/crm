@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 use Doctrine\Common\Persistence\ObjectManager;
 use OroCRM\Bundle\AccountBundle\Entity\Account;
+use OroCRM\Bundle\ContactBundle\Entity\Contact;
 
 class AccountHandler
 {
@@ -52,7 +53,9 @@ class AccountHandler
             $this->form->bind($this->request);
 
             if ($this->form->isValid()) {
-                $this->onSuccess($entity);
+                $appendContacts = $this->form->get('appendContacts')->getData();
+                $removeContacts = $this->form->get('removeContacts')->getData();
+                $this->onSuccess($entity, $appendContacts, $removeContacts);
 
                 return true;
             }
@@ -65,10 +68,40 @@ class AccountHandler
      * "Success" form handler
      *
      * @param Account $entity
+     * @param array $appendContacts
+     * @param array $removeContacts
      */
-    protected function onSuccess(Account $entity)
+    protected function onSuccess(Account $entity, array $appendContacts, array $removeContacts)
     {
+        $this->appendContacts($entity, $appendContacts);
+        $this->removeContacts($entity, $removeContacts);
         $this->manager->persist($entity);
         $this->manager->flush();
+    }
+
+    /**
+     * Append contacts to account
+     *
+     * @param Account $account
+     * @param Contact[] $contacts
+     */
+    protected function appendContacts(Account $account, array $contacts)
+    {
+        foreach ($contacts as $contact) {
+            $account->addContact($contact);
+        }
+    }
+
+    /**
+     * Remove contacts from account
+     *
+     * @param Account $account
+     * @param Contact[] $contacts
+     */
+    protected function removeContacts(Account $account, array $contacts)
+    {
+        foreach ($contacts as $contact) {
+            $account->removeContact($contact);
+        }
     }
 }

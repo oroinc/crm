@@ -48,7 +48,7 @@ class Contact extends AbstractEntityFlexible
      *
      * @var ArrayCollection $accounts
      *
-     * @ORM\ManyToMany(targetEntity="OroCRM\Bundle\AccountBundle\Entity\Account", inversedBy="contacts")
+     * @ORM\ManyToMany(targetEntity="OroCRM\Bundle\AccountBundle\Entity\Account", mappedBy="contacts")
      * @ORM\JoinTable(name="orocrm_contact_to_account")
      * @Exclude
      */
@@ -178,6 +178,7 @@ class Contact extends AbstractEntityFlexible
     {
         if (!$this->getAccounts()->contains($account)) {
             $this->getAccounts()->add($account);
+            $account->addContact($this);
         }
 
         return $this;
@@ -193,6 +194,7 @@ class Contact extends AbstractEntityFlexible
     {
         if ($this->getAccounts()->contains($account)) {
             $this->getAccounts()->removeElement($account);
+            $account->removeContact($this);
         }
 
         return $this;

@@ -4,7 +4,6 @@ namespace OroCRM\Bundle\ContactBundle\Entity\Value;
 
 use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\Common\Collections\ArrayCollection;
-use OroCRM\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\AddressBundle\Entity\Address;
 use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityFlexibleValue;
 use Oro\Bundle\FlexibleEntityBundle\Entity\Attribute;
@@ -106,7 +105,7 @@ class ContactValue extends AbstractEntityFlexibleValue
     /**
      * Store decimal value
      *
-     * @var double $decimal
+     * @var float $decimal
      *
      * @ORM\Column(name="value_decimal", type="decimal", nullable=true)
      * @Gedmo\Versioned
@@ -126,7 +125,7 @@ class ContactValue extends AbstractEntityFlexibleValue
     /**
      * Store date value
      *
-     * @var date $date
+     * @var \DateTime $date
      *
      * @ORM\Column(name="value_date", type="date", nullable=true)
      * @Gedmo\Versioned
@@ -136,7 +135,7 @@ class ContactValue extends AbstractEntityFlexibleValue
     /**
      * Store datetime value
      *
-     * @var date $datetime
+     * @var \DateTime $datetime
      *
      * @ORM\Column(name="value_datetime", type="datetime", nullable=true)
      * @Gedmo\Versioned

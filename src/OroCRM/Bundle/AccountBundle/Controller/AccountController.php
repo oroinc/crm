@@ -9,7 +9,6 @@ use Ddeboer\DataImport\Writer\CallbackWriter;
 use Doctrine\Common\Util\ClassUtils;
 use Doctrine\ORM\Query;
 
-use OroCRM\Bundle\AccountBundle\Entity\Value\AccountValue;
 use Oro\Bundle\FlexibleEntityBundle\Doctrine\ORM\FlexibleQueryBuilder;
 use Oro\Bundle\FlexibleEntityBundle\Entity\Attribute;
 use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityAttribute;
@@ -28,9 +27,12 @@ use Symfony\Component\Security\Acl\Exception\Exception;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Oro\Bundle\UserBundle\Annotation\Acl;
+use Oro\Bundle\UserBundle\Annotation\AclAncestor;
 
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\AccountBundle\Datagrid\AccountDatagridManager;
+use OroCRM\Bundle\AccountBundle\Datagrid\AccountContactDatagridManager;
+use OroCRM\Bundle\AccountBundle\Datagrid\AccountContactUpdateDatagridManager;
 
 use Ddeboer\DataImport\Writer\CsvWriter;
 use Ddeboer\DataImport\Reader\CsvReader;
@@ -57,8 +59,20 @@ class AccountController extends Controller
      */
     public function viewAction(Account $account)
     {
+        /** @var $contactDatagridManager AccountContactDatagridManager */
+        $contactDatagridManager = $this->get('orocrm_account.contact.view_datagrid_manager');
+        $contactDatagridManager->setAccount($account);
+        $contactDatagridManager->getRouteGenerator()->setRouteParameters(array('id' => $account->getId()));
+
+        $datagridView = $contactDatagridManager->getDatagrid()->createView();
+
+        if ('json' == $this->getRequest()->getRequestFormat()) {
+            return $this->get('oro_grid.renderer')->renderResultsJsonResponse($datagridView);
+        }
+
         return array(
-            'account' => $account,
+            'datagrid' => $datagridView,
+            'account'  => $account,
         );
     }
 
@@ -103,8 +117,45 @@ class AccountController extends Controller
         }
 
         return array(
-            'form' => $this->get('orocrm_account.form.account')->createView(),
+            'form'     => $this->get('orocrm_account.form.account')->createView(),
+            'datagrid' => $this->getContactUpdateDatagridManager($entity)->getDatagrid()->createView(),
         );
+    }
+
+    /**
+     * Get grid data
+     *
+     * @Route(
+     *      "/grid/{id}",
+     *      name="orocrm_account_update_contacts_grid",
+     *      requirements={"id"="\d+"},
+     *      defaults={"id"=0, "_format"="json"}
+     * )
+     * @AclAncestor("orocrm_account_account_update")
+     */
+    public function gridDataAction(Account $entity = null)
+    {
+        if (!$entity) {
+            $entity = $this->getManager()->createEntity();;
+        }
+
+        $datagridView = $this->getContactUpdateDatagridManager($entity)->getDatagrid()->createView();
+
+        return $this->get('oro_grid.renderer')->renderResultsJsonResponse($datagridView);
+    }
+
+    /**
+     * @param Account $account
+     * @return AccountContactUpdateDatagridManager
+     */
+    protected function getContactUpdateDatagridManager(Account $account)
+    {
+        /** @var $datagridManager AccountContactUpdateDatagridManager */
+        $datagridManager = $this->get('orocrm_account.contact.update_datagrid_manager');
+        $datagridManager->setAccount($account);
+        $datagridManager->getRouteGenerator()->setRouteParameters(array('id' => $account->getId()));
+
+        return $datagridManager;
     }
 
     /**
@@ -120,23 +171,19 @@ class AccountController extends Controller
      *      description="View list of accounts",
      *      parent="orocrm_account_account"
      * )
+     * @Template
      */
-    public function indexAction(Request $request)
+    public function indexAction()
     {
         /** @var $gridManager AccountDatagridManager */
         $gridManager = $this->get('orocrm_account.account.datagrid_manager');
-        $datagrid = $gridManager->getDatagrid();
+        $datagridView = $gridManager->getDatagrid()->createView();
 
-        if ('json' == $request->getRequestFormat()) {
-            $view = 'OroGridBundle:Datagrid:list.json.php';
-        } else {
-            $view = 'OroCRMAccountBundle:Account:index.html.twig';
+        if ('json' == $this->getRequest()->getRequestFormat()) {
+            return $this->get('oro_grid.renderer')->renderResultsJsonResponse($datagridView);
         }
 
-        return $this->render(
-            $view,
-            array('datagrid' => $datagrid->createView())
-        );
+        return array('datagrid' => $datagridView);
     }
 
     /**
