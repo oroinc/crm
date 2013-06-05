@@ -1,0 +1,10 @@
+# common test case
+request:
+    groups: ~
+    attributes:
+        first_name: Contact_fname_%str%
+        last_name: Contact_lname
+        name_prefix: Contact name prefix
+        description: Contact description
+response:
+    return: true
