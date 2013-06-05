@@ -71,8 +71,8 @@ class AccountController extends Controller
         }
 
         return array(
-            'datagrid' => $datagridView,
             'account'  => $account,
+            'datagrid' => $datagridView,
         );
     }
 
@@ -123,7 +123,7 @@ class AccountController extends Controller
     }
 
     /**
-     * Get grid data
+     * Get list of related contacts
      *
      * @Route(
      *      "/grid/{id}",

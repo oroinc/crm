@@ -52,8 +52,8 @@ class ContactController extends Controller
         }
 
         return array(
-            'datagrid' => $datagridView,
             'contact'  => $contact,
+            'datagrid' => $datagridView,
         );
     }
 
@@ -105,7 +105,7 @@ class ContactController extends Controller
     }
 
     /**
-     * Get grid data
+     * Get list of related accounts
      *
      * @Route(
      *      "/grid/{id}",
@@ -155,7 +155,7 @@ class ContactController extends Controller
      *      parent="orocrm_contact"
      * )
      */
-    public function indexAction(Request $request)
+    public function indexAction()
     {
         /** @var $gridManager ContactDatagridManager */
         $gridManager = $this->get('orocrm_contact.contact.datagrid_manager');

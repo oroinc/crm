@@ -47,7 +47,7 @@ class ContactAccountUpdateDatagridManager extends ContactAccountDatagridManager
     {
         $query = parent::createQuery();
 
-        // remove current group filter
+        // remove current contact filter
         $query->resetDQLPart('where');
 
         if ($this->getContact()->getId()) {
@@ -60,7 +60,7 @@ class ContactAccountUpdateDatagridManager extends ContactAccountDatagridManager
         } else {
             $query->addSelect(
                 'CASE WHEN ' .
-                '(a.id IN (:data_in)) AND a.id NOT IN (:data_not_in) '.
+                'a.id IN (:data_in) AND a.id NOT IN (:data_not_in) '.
                 'THEN 1 ELSE 0 END AS hasCurrentContact',
                 true
             );

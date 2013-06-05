@@ -86,6 +86,8 @@
                         <li class="active"><a href="#scroll-main">{{ 'General'|trans }}</a></li>
                         {% if account|hasAddress %}
                             <li><a href="#scroll-addresses">{{ 'Addresses'|trans }}</a></li>
+                        {% endif %}
+                        {% if account.values is defined %}
                             <li><a href="#scroll-attributes">{{ 'Additional Information'|trans }}</a></li>
                         {% endif %}
                         <li><a href="#scroll-contacts">{{ 'Contacts'|trans }}</a></li>

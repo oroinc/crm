@@ -45,7 +45,7 @@ class AccountContactUpdateDatagridManager extends AccountContactDatagridManager
     {
         $query = parent::createQuery();
 
-        // remove current group filter
+        // remove current account filter
         $query->resetDQLPart('where');
 
         if ($this->getAccount()->getId()) {
@@ -58,7 +58,7 @@ class AccountContactUpdateDatagridManager extends AccountContactDatagridManager
         } else {
             $query->addSelect(
                 'CASE WHEN ' .
-                '(c.id IN (:data_in)) AND c.id NOT IN (:data_not_in) '.
+                'c.id IN (:data_in) AND c.id NOT IN (:data_not_in) '.
                 'THEN 1 ELSE 0 END AS hasCurrentAccount',
                 true
             );
