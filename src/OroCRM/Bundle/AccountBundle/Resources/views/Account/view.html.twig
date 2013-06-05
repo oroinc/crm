@@ -1,7 +1,7 @@
 {% extends 'OroCRMAccountBundle::layout.html.twig' %}
 {% import 'OroUIBundle::macros.html.twig' as macros %}
 {% import 'OroAddressBundle:Include:viewMacro.html.twig' as addressView %}
-{% set format = get_user_value('oro_user.name_format') %}
+{% set format = oro_config_value('oro_user.name_format') %}
 {% oro_title_set({params : {"%account.name%": account.name|default('N/A')} }) %}
 
 {% block head_script %}
