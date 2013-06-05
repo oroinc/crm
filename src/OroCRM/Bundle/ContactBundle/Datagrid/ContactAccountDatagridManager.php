@@ -1,39 +1,39 @@
 <?php
 
-namespace OroCRM\Bundle\AccountBundle\Datagrid;
+namespace OroCRM\Bundle\ContactBundle\Datagrid;
 
 use Doctrine\ORM\QueryBuilder;
 
 use Oro\Bundle\GridBundle\Datagrid\FlexibleDatagridManager;
-use OroCRM\Bundle\AccountBundle\Entity\Account;
-use OroCRM\Bundle\ContactBundle\Datagrid\ContactDatagridManager;
+use OroCRM\Bundle\ContactBundle\Entity\Contact;
+use OroCRM\Bundle\AccountBundle\Datagrid\AccountDatagridManager;
 
-class AccountContactDatagridManager extends ContactDatagridManager
+class ContactAccountDatagridManager extends AccountDatagridManager
 {
     /**
-     * @var Account
+     * @var Contact
      */
-    protected $account;
+    protected $contact;
 
     /**
-     * @param Account $account
+     * @param Contact $account
      */
-    public function setAccount(Account $account)
+    public function setContact(Contact $account)
     {
-        $this->account = $account;
+        $this->contact = $account;
     }
 
     /**
-     * @return Account
+     * @return Contact
      * @throws \LogicException
      */
-    public function getAccount()
+    public function getContact()
     {
-        if (!$this->account) {
-            throw new \LogicException('Datagrid manager has no configured Account entity');
+        if (!$this->contact) {
+            throw new \LogicException('Datagrid manager has no configured Contact entity');
         }
 
-        return $this->account;
+        return $this->contact;
     }
 
     /**
@@ -43,7 +43,7 @@ class AccountContactDatagridManager extends ContactDatagridManager
     {
         /** @var $query QueryBuilder */
         $query = parent::createQuery();
-        $query->andWhere(':account MEMBER OF c.accounts');
+        $query->andWhere(':contact MEMBER OF a.contacts');
 
         return $query;
     }
@@ -53,7 +53,7 @@ class AccountContactDatagridManager extends ContactDatagridManager
      */
     protected function getQueryParameters()
     {
-        return array('account' => $this->getAccount());
+        return array('contact' => $this->getContact());
     }
 
     /**

@@ -1,7 +1,9 @@
 parameters:
-    orocrm_contact.contact.datagrid_manager.class: OroCRM\Bundle\ContactBundle\Datagrid\ContactDatagridManager
-    orocrm_contact.group.datagrid_manager.class: OroCRM\Bundle\ContactBundle\Datagrid\GroupDatagridManager
-    orocrm_contact.group_contact.datagrid_manager.class: OroCRM\Bundle\ContactBundle\Datagrid\GroupContactDatagridManager
+    orocrm_contact.contact.datagrid_manager.class:        OroCRM\Bundle\ContactBundle\Datagrid\ContactDatagridManager
+    orocrm_contact.group.datagrid_manager.class:          OroCRM\Bundle\ContactBundle\Datagrid\GroupDatagridManager
+    orocrm_contact.group_contact.datagrid_manager.class:  OroCRM\Bundle\ContactBundle\Datagrid\GroupContactDatagridManager
+    orocrm_contact.contact.view_datagrid_manager.class:   OroCRM\Bundle\ContactBundle\Datagrid\ContactAccountDatagridManager
+    orocrm_contact.account.update_datagrid_manager.class: OroCRM\Bundle\ContactBundle\Datagrid\ContactAccountUpdateDatagridManager
 
 services:
     orocrm_contact.contact.datagrid_manager:
@@ -33,3 +35,25 @@ services:
               flexible: true
               query_entity_alias: c
               route_name: orocrm_contact_group_contact_grid
+
+    orocrm_contact.account.view_datagrid_manager:
+        class: %orocrm_contact.contact.view_datagrid_manager.class%
+        tags:
+            - name: oro_grid.datagrid.manager
+              datagrid_name: accounts_view
+              entity_name: %orocrm_account.account.entity.class%
+              query_entity_alias: a
+              entity_hint: acounts
+              flexible: true
+              route_name: orocrm_contact_view
+
+    orocrm_contact.account.update_datagrid_manager:
+        class: %orocrm_contact.account.update_datagrid_manager.class%
+        tags:
+            - name: oro_grid.datagrid.manager
+              datagrid_name: accounts_update
+              entity_name: %orocrm_account.account.entity.class%
+              query_entity_alias: a
+              entity_hint: acounts
+              flexible: true
+              route_name: orocrm_contact_update_accounts_grid

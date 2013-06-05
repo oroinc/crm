@@ -19,6 +19,7 @@ class ContactType extends FlexibleType
         // add default flexible fields
         parent::addEntityFields($builder);
 
+        // groups
         $builder->add(
             'groups',
             'entity',
@@ -31,14 +32,25 @@ class ContactType extends FlexibleType
             )
         );
 
+        // accounts
         $builder->add(
-            'accounts',
-            'entity',
+            'appendAccounts',
+            'oro_entity_identifier',
             array(
                 'class'    => 'OroCRMAccountBundle:Account',
-                'property' => 'name',
-                'multiple' => true,
                 'required' => false,
+                'mapped'   => false,
+                'multiple' => true,
+            )
+        )
+        ->add(
+            'removeAccounts',
+            'oro_entity_identifier',
+            array(
+                'class'    => 'OroCRMAccountBundle:Account',
+                'required' => false,
+                'mapped'   => false,
+                'multiple' => true,
             )
         );
     }

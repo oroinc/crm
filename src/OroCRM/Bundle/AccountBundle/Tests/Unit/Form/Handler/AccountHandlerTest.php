@@ -18,7 +18,7 @@ class AccountHandlerTest extends \PHPUnit_Framework_TestCase
     protected $form;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|Request
+     * @var Request
      */
     protected $request;
 
@@ -148,8 +148,8 @@ class AccountHandlerTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($this->handler->process($this->entity));
 
-        $actualAccounts = $this->entity->getContacts()->toArray();
-        $this->assertCount(1, $actualAccounts);
-        $this->assertEquals($appendedContact, current($actualAccounts));
+        $actualContacts = $this->entity->getContacts()->toArray();
+        $this->assertCount(1, $actualContacts);
+        $this->assertEquals($appendedContact, current($actualContacts));
     }
 }

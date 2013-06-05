@@ -39,7 +39,7 @@ use Ddeboer\DataImport\Reader\CsvReader;
 
 /**
  * @Acl(
- *      id="orocrm_account_account",
+ *      id="orocrm_account",
  *      name="Account manipulation",
  *      description="Account manipulation",
  *      parent="root"
@@ -51,10 +51,10 @@ class AccountController extends Controller
      * @Route("/view/{id}", name="orocrm_account_view", requirements={"id"="\d+"})
      * @Template
      * @Acl(
-     *      id="orocrm_account_account_view",
+     *      id="orocrm_account_view",
      *      name="View Account",
      *      description="View account",
-     *      parent="orocrm_account_account"
+     *      parent="orocrm_account"
      * )
      */
     public function viewAction(Account $account)
@@ -82,10 +82,10 @@ class AccountController extends Controller
      * @Route("/create", name="orocrm_account_create")
      * @Template("OroCRMAccountBundle:Account:update.html.twig")
      * @Acl(
-     *      id="orocrm_account_account_create",
+     *      id="orocrm_account_create",
      *      name="Create Account",
      *      description="Create account",
-     *      parent="orocrm_account_account"
+     *      parent="orocrm_account"
      * )
      */
     public function createAction()
@@ -101,10 +101,10 @@ class AccountController extends Controller
      * @Route("/update/{id}", name="orocrm_account_update", requirements={"id"="\d+"}, defaults={"id"=0})
      * @Template
      * @Acl(
-     *      id="orocrm_account_account_update",
+     *      id="orocrm_account_update",
      *      name="Edit Account",
      *      description="Edit account",
-     *      parent="orocrm_account_account"
+     *      parent="orocrm_account"
      * )
      */
     public function updateAction(Account $entity)
@@ -131,12 +131,12 @@ class AccountController extends Controller
      *      requirements={"id"="\d+"},
      *      defaults={"id"=0, "_format"="json"}
      * )
-     * @AclAncestor("orocrm_account_account_update")
+     * @AclAncestor("orocrm_account_update")
      */
     public function gridDataAction(Account $entity = null)
     {
         if (!$entity) {
-            $entity = $this->getManager()->createEntity();;
+            $entity = $this->getManager()->createEntity();
         }
 
         $datagridView = $this->getContactUpdateDatagridManager($entity)->getDatagrid()->createView();
@@ -166,10 +166,10 @@ class AccountController extends Controller
      *      defaults={"_format" = "html"}
      * )
      * @Acl(
-     *      id="orocrm_account_account_list",
+     *      id="orocrm_account_list",
      *      name="View List of Accounts",
      *      description="View list of accounts",
-     *      parent="orocrm_account_account"
+     *      parent="orocrm_account"
      * )
      * @Template
      */
@@ -192,10 +192,10 @@ class AccountController extends Controller
      *      name="orocrm_account_export"
      * )
      * @Acl(
-     *      id="orocrm_account_account_export",
+     *      id="orocrm_account_export",
      *      name="Export Accounts",
      *      description="Export accounts",
-     *      parent="orocrm_account_account"
+     *      parent="orocrm_account"
      * )
      */
     public function exportAction()
@@ -291,10 +291,10 @@ class AccountController extends Controller
      *      name="orocrm_account_import"
      * )
      * @Acl(
-     *      id="orocrm_account_account_import",
+     *      id="orocrm_account_import",
      *      name="Import Accounts",
      *      description="Import accounts",
-     *      parent="orocrm_account_account"
+     *      parent="orocrm_account"
      * )
      */
     public function importAction()

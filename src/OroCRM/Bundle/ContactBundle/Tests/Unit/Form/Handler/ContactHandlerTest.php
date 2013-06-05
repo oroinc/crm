@@ -6,6 +6,7 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Common\Persistence\ObjectManager;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
+use OroCRM\Bundle\AccountBundle\Entity\Account;
 
 use OroCRM\Bundle\ContactBundle\Form\Handler\ContactHandler;
 
@@ -17,7 +18,7 @@ class ContactHandlerTest extends \PHPUnit_Framework_TestCase
     protected $form;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|Request
+     * @var Request
      */
     protected $request;
 
@@ -41,14 +42,12 @@ class ContactHandlerTest extends \PHPUnit_Framework_TestCase
         $this->form = $this->getMockBuilder('Symfony\Component\Form\Form')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->request = $this->getMockBuilder('Symfony\Component\HttpFoundation\Request')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->request = new Request();
         $this->manager = $this->getMockBuilder('Doctrine\Common\Persistence\ObjectManager')
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->entity = $this->getMock('OroCRM\Bundle\ContactBundle\Entity\Contact');
+        $this->entity  = new Contact();
         $this->handler = new ContactHandler($this->form, $this->request, $this->manager);
     }
 
@@ -75,9 +74,7 @@ class ContactHandlerTest extends \PHPUnit_Framework_TestCase
             ->method('setData')
             ->with($this->entity);
 
-        $this->request->expects($this->once())
-            ->method('getMethod')
-            ->will($this->returnValue($method));
+        $this->request->setMethod($method);
 
         $this->form->expects($this->once())
             ->method('bind')
@@ -96,13 +93,19 @@ class ContactHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testProcessValidData()
     {
+        $appendedAccount = new Account();
+        $appendedAccount->setId(1);
+
+        $removedAccount = new Account();
+        $removedAccount->setId(2);
+
+        $this->entity->addAccount($removedAccount);
+
+        $this->request->setMethod('POST');
+
         $this->form->expects($this->once())
             ->method('setData')
             ->with($this->entity);
-
-        $this->request->expects($this->once())
-            ->method('getMethod')
-            ->will($this->returnValue('POST'));
 
         $this->form->expects($this->once())
             ->method('bind')
@@ -112,6 +115,28 @@ class ContactHandlerTest extends \PHPUnit_Framework_TestCase
             ->method('isValid')
             ->will($this->returnValue(true));
 
+        $appendForm = $this->getMockBuilder('Symfony\Component\Form\Form')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $appendForm->expects($this->once())
+            ->method('getData')
+            ->will($this->returnValue(array($appendedAccount)));
+        $this->form->expects($this->at(3))
+            ->method('get')
+            ->with('appendAccounts')
+            ->will($this->returnValue($appendForm));
+
+        $removeForm = $this->getMockBuilder('Symfony\Component\Form\Form')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $removeForm->expects($this->once())
+            ->method('getData')
+            ->will($this->returnValue(array($removedAccount)));
+        $this->form->expects($this->at(4))
+            ->method('get')
+            ->with('removeAccounts')
+            ->will($this->returnValue($removeForm));
+
         $this->manager->expects($this->once())
             ->method('persist')
             ->with($this->entity);
@@ -120,5 +145,9 @@ class ContactHandlerTest extends \PHPUnit_Framework_TestCase
             ->method('flush');
 
         $this->assertTrue($this->handler->process($this->entity));
+
+        $actualAccounts = $this->entity->getAccounts()->toArray();
+        $this->assertCount(1, $actualAccounts);
+        $this->assertEquals($appendedAccount, current($actualAccounts));
     }
 }

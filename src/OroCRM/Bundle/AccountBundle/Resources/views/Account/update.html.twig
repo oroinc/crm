@@ -34,7 +34,7 @@
 {% endblock %}
 
 {% block form_buttons %}
-    {% if form.vars.value.id and resource_granted('orocrm_account_account_remove') %}
+    {% if form.vars.value.id and resource_granted('orocrm_account_remove') %}
     <div class="pull-left btn-group icons-holder">
         <a href="javascript: void(0);" class="btn icons-holder-text no-hash remove-button" id="btn-remove-account"
            data-id="{{ form.vars.value.id }}"
@@ -108,11 +108,9 @@
                             <li class="active"><a href="#scroll-main">{{ 'General'|trans }}</a></li>
                             {% if form.values is defined %}
                                 <li><a href="#scroll-addresses">{{ 'Addresses'|trans }}</a></li>
-                            {% endif %}
-                            <li><a href="#scroll-contacts">{{ 'Contacts'|trans }}</a></li>
-                            {% if form.values is defined %}
                                 <li><a href="#scroll-attributes">{{ 'Additional Information'|trans }}</a></li>
                             {% endif %}
+                            <li><a href="#scroll-contacts">{{ 'Contacts'|trans }}</a></li>
                         </ul>
                     </div>
                 </div>
@@ -154,15 +152,6 @@
                         </div>
                     </div>
 
-                    <div class="usser-row">
-                        <h4 id="scroll-contacts" class="scrollspy-title">{{ 'Contacts'|trans }}</h4>
-                        <div class="row-fluid clearfix">
-                            {{ form_widget(form.appendContacts, {'id': 'appendContacts'}) }}
-                            {{ form_widget(form.removeContacts, {'id': 'removeContacts'}) }}
-                            <div id="contacts-grid"></div>
-                        </div>
-                    </div>
-
                     {% if form.values is defined %}
                         <div class="usser-row">
                             <h4 id="scroll-attributes" class="scrollspy-title">{{ 'Additional Information'|trans }}</h4>
@@ -173,6 +162,15 @@
                             </div>
                         </div>
                     {% endif %}
+
+                    <div class="usser-row">
+                        <h4 id="scroll-contacts" class="scrollspy-title">{{ 'Contacts'|trans }}</h4>
+                        <div class="row-fluid clearfix">
+                            {{ form_widget(form.appendContacts, {'id': 'appendContacts'}) }}
+                            {{ form_widget(form.removeContacts, {'id': 'removeContacts'}) }}
+                            <div id="contacts-grid"></div>
+                        </div>
+                    </div>
 
                     <div class="hide">
                         {{ form_rest(form) }}
