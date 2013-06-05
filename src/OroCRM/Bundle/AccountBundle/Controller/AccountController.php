@@ -22,7 +22,6 @@ use Symfony\Component\HttpFoundation\Request;
 
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBag;
-use Symfony\Component\Security\Acl\Exception\Exception;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -62,7 +61,6 @@ class AccountController extends Controller
         /** @var $contactDatagridManager AccountContactDatagridManager */
         $contactDatagridManager = $this->get('orocrm_account.contact.view_datagrid_manager');
         $contactDatagridManager->setAccount($account);
-        $contactDatagridManager->getRouteGenerator()->setRouteParameters(array('id' => $account->getId()));
 
         $datagridView = $contactDatagridManager->getDatagrid()->createView();
 
@@ -153,7 +151,6 @@ class AccountController extends Controller
         /** @var $datagridManager AccountContactUpdateDatagridManager */
         $datagridManager = $this->get('orocrm_account.contact.update_datagrid_manager');
         $datagridManager->setAccount($account);
-        $datagridManager->getRouteGenerator()->setRouteParameters(array('id' => $account->getId()));
 
         return $datagridManager;
     }

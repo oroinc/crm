@@ -19,9 +19,9 @@ class ContactAccountUpdateDatagridManager extends ContactAccountDatagridManager
      */
     protected function configureFields(FieldDescriptionCollection $fieldsCollection)
     {
-        $fieldHasAccount = new FieldDescription();
-        $fieldHasAccount->setName('has_contact');
-        $fieldHasAccount->setOptions(
+        $fieldHasContact = new FieldDescription();
+        $fieldHasContact->setName('has_contact');
+        $fieldHasContact->setOptions(
             array(
                 'type'        => FieldDescriptionInterface::TYPE_BOOLEAN,
                 'label'       => 'Has contact',
@@ -35,7 +35,7 @@ class ContactAccountUpdateDatagridManager extends ContactAccountDatagridManager
                 'show_filter' => true,
             )
         );
-        $fieldsCollection->add($fieldHasAccount);
+        $fieldsCollection->add($fieldHasContact);
 
         parent::configureFields($fieldsCollection);
     }

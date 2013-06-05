@@ -16,11 +16,12 @@ class ContactAccountDatagridManager extends AccountDatagridManager
     protected $contact;
 
     /**
-     * @param Contact $account
+     * @param Contact $contact
      */
-    public function setContact(Contact $account)
+    public function setContact(Contact $contact)
     {
-        $this->contact = $account;
+        $this->contact = $contact;
+        $this->routeGenerator->setRouteParameters(array('id' => $contact->getId()));
     }
 
     /**

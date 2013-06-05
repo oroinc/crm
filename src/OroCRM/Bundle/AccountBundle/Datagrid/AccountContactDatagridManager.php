@@ -21,6 +21,7 @@ class AccountContactDatagridManager extends ContactDatagridManager
     public function setAccount(Account $account)
     {
         $this->account = $account;
+        $this->routeGenerator->setRouteParameters(array('id' => $account->getId()));
     }
 
     /**

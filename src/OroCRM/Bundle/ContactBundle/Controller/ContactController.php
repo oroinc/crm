@@ -43,7 +43,6 @@ class ContactController extends Controller
         /** @var $accountDatagridManager ContactAccountDatagridManager */
         $accountDatagridManager = $this->get('orocrm_contact.account.view_datagrid_manager');
         $accountDatagridManager->setContact($contact);
-        $accountDatagridManager->getRouteGenerator()->setRouteParameters(array('id' => $contact->getId()));
 
         $datagridView = $accountDatagridManager->getDatagrid()->createView();
 
@@ -135,7 +134,6 @@ class ContactController extends Controller
         /** @var $datagridManager ContactAccountUpdateDatagridManager */
         $datagridManager = $this->get('orocrm_contact.account.update_datagrid_manager');
         $datagridManager->setContact($contact);
-        $datagridManager->getRouteGenerator()->setRouteParameters(array('id' => $contact->getId()));
 
         return $datagridManager;
     }
