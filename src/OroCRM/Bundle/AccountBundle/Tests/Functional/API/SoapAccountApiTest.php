@@ -17,6 +17,7 @@ class SoapAccountApiTest extends WebTestCase
 
     public function setUp()
     {
+        $this->markTestSkipped('BAP-717');
         $this->clientSoap = static::createClient(array(), ToolsAPI::generateWsseHeader());
 
         $this->clientSoap->soap(
