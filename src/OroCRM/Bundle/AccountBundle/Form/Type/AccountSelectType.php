@@ -16,8 +16,7 @@ class AccountSelectType extends AbstractType
                 'configs' => array(
                     'placeholder' => 'Choose an account...'
                 ),
-                'autocomplete_alias' => 'accounts',
-                'class' => 'OroCRMAccountBundle:Account'
+                'autocomplete_alias' => 'accounts'
             )
         );
     }

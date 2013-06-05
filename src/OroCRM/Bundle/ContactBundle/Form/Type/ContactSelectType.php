@@ -13,8 +13,7 @@ class ContactSelectType extends AbstractType
                 'configs' => array(
                     'placeholder' => 'Choose a contact...'
                 ),
-                'autocomplete_alias' => 'contacts',
-                'class' => 'OroCRMContactBundle:Contact'
+                'autocomplete_alias' => 'contacts'
             )
         );
     }
