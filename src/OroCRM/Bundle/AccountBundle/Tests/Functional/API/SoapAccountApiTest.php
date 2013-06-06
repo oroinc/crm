@@ -37,7 +37,6 @@ class SoapAccountApiTest extends WebTestCase
      */
     public function testCreateAccount($request, $response)
     {
-//        $this->markTestIncomplete('Tests skipped due to the bug BAP-717');
         $result = $this->clientSoap->soapClient->createAccount($request);
         ToolsAPI::assertEqualsResponse($response, $result, $this->clientSoap->soapClient->__getLastResponse());
 
