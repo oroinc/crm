@@ -51,7 +51,16 @@ class AccountApiTypeTest extends \PHPUnit_Framework_TestCase
 
         $builder->expects($this->at(1))
             ->method('add')
-            ->with('name');
+            ->with('name', 'text')
+            ->will($this->returnSelf());
+        $builder->expects($this->at(2))
+            ->method('add')
+            ->with('appendContacts', 'oro_entity_identifier')
+            ->will($this->returnSelf());
+        $builder->expects($this->at(3))
+            ->method('add')
+            ->with('removeContacts', 'oro_entity_identifier')
+            ->will($this->returnSelf());
         $builder->expects($this->once())
             ->method('addEventSubscriber')
             ->with($this->isInstanceOf('Symfony\Component\EventDispatcher\EventSubscriberInterface'));

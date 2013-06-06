@@ -31,7 +31,7 @@ class AccountController extends FlexibleRestController implements ClassResourceI
      *      description="Get all account items",
      *      resource=true
      * )
-     * @AclAncestor("orocrm_account_account_list")
+     * @AclAncestor("orocrm_account_list")
      * @return Response
      */
     public function cgetAction()
@@ -48,7 +48,7 @@ class AccountController extends FlexibleRestController implements ClassResourceI
      *      description="Get account item",
      *      resource=true
      * )
-     * @AclAncestor("orocrm_account_account_view")
+     * @AclAncestor("orocrm_account_view")
      * @return Response
      */
     public function getAction($id)
@@ -65,7 +65,7 @@ class AccountController extends FlexibleRestController implements ClassResourceI
      *      description="Update account",
      *      resource=true
      * )
-     * @AclAncestor("orocrm_account_account_update")
+     * @AclAncestor("orocrm_account_update")
      * @return Response
      */
     public function putAction($id)
@@ -80,7 +80,7 @@ class AccountController extends FlexibleRestController implements ClassResourceI
      *      description="Create new account",
      *      resource=true
      * )
-     * @AclAncestor("orocrm_account_account_create")
+     * @AclAncestor("orocrm_account_create")
      */
     public function postAction()
     {
@@ -97,10 +97,10 @@ class AccountController extends FlexibleRestController implements ClassResourceI
      *      resource=true
      * )
      * @Acl(
-     *      id="orocrm_account_account_remove",
+     *      id="orocrm_account_remove",
      *      name="Delete account",
      *      description="Delete account",
-     *      parent="orocrm_account_account"
+     *      parent="orocrm_account"
      * )
      * @return Response
      */

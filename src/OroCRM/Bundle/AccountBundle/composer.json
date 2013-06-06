@@ -10,11 +10,12 @@
         "symfony/symfony": "2.1.*",
         "friendsofsymfony/rest-bundle": "0.11.*",
         "nelmio/api-doc-bundle": "dev-master",
+        "ddeboer/data-import": "dev-master",
 
         "oro/ui-bundle": "dev-master",
         "oro/user-bundle": "dev-master",
         "oro/address-bundle": "dev-master",
-        "ddeboer/data-import": "dev-master"
+        "orocrm/contact-bundle": "dev-master"
     },
     "autoload": {
         "psr-0": { "": "src/" }
