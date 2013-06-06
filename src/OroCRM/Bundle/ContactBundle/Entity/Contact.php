@@ -161,7 +161,7 @@ class Contact extends AbstractEntityFlexible
     /**
      * Get accounts collection
      *
-     * @return ArrayCollection
+     * @return Collection
      */
     public function getAccounts()
     {

@@ -5,6 +5,7 @@ namespace OroCRM\Bundle\AccountBundle\Entity;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 
 use JMS\Serializer\Annotation\Type;
@@ -122,7 +123,7 @@ class Account extends AbstractEntityFlexible
     /**
      * Get contacts collection
      *
-     * @return ArrayCollection
+     * @return Collection
      */
     public function getContacts()
     {
