@@ -10,7 +10,7 @@ services:
             - name: oro_grid.datagrid.manager
               datagrid_name: accounts
               entity_name: %orocrm_account.account.entity.class%
-              entity_hint: acounts
+              entity_hint: accounts
               flexible: true
               route_name: orocrm_account_index
 

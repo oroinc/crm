@@ -1,6 +1,6 @@
 {% extends 'OroCRMContactBundle::layout.html.twig' %}
 {% import 'OroUIBundle::macros.html.twig' as macros %}
-{% form_theme form with 'OroAddressBundle:Include:fields.html.twig' %}
+{% form_theme form with ['OroAddressBundle:Include:fields.html.twig', 'OroFormBundle:Form:fields.html.twig'] %}
 {% set format = oro_config_value('oro_user.name_format') %}
 {% set fullname = entity.__toString|title %}
 {% oro_title_set({params : {"%contact.name%": fullname} }) %}
@@ -17,7 +17,13 @@
     output='js/orocrm.contact.js'
     %}
     <script src="{{ asset_url }}" type="text/javascript"></script>
+
+    {{ form_javascript(form) }}
     {% endjavascripts %}
+
+    {% block stylesheets %}
+        {{ form_stylesheet(form) }}
+    {% endblock %}
 
     {% include 'OroCRMAccountBundle:Account:remove.confirm.js.twig' %}
 
