@@ -56,4 +56,4 @@ services:
               query_entity_alias: a
               entity_hint: acounts
               flexible: true
-              route_name: orocrm_contact_update_accounts_grid
+              route_name: orocrm_contact_update

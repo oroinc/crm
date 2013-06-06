@@ -34,4 +34,4 @@ services:
               query_entity_alias: c
               entity_hint: contacts
               flexible: true
-              route_name: orocrm_account_update_contacts_grid
+              route_name: orocrm_account_update
