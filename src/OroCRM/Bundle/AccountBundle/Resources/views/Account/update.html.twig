@@ -19,10 +19,22 @@
     {% endjavascripts %}
 
     {% include 'OroCRMAccountBundle:Account:remove.confirm.js.twig' %}
+
+    {% include 'OroGridBundle:Include:javascript.html.twig' with {'datagridView': datagrid, 'selector': '#contacts-grid'} %}
+    {% include 'OroGridBundle:Include:stylesheet.html.twig' %}
+
+    {% set listenerParameters = {
+        'columnName': 'has_account',
+        'selectors': {
+            'included': '#appendContacts',
+            'excluded': '#removeContacts'
+        }
+    } %}
+    {% include 'OroGridBundle:Include:Listener/column_form.html.twig' with {'datagridView': datagrid, 'parameters': listenerParameters} %}
 {% endblock %}
 
 {% block form_buttons %}
-    {% if form.vars.value.id and resource_granted('orocrm_account_account_remove') %}
+    {% if form.vars.value.id and resource_granted('orocrm_account_remove') %}
     <div class="pull-left btn-group icons-holder">
         <a href="javascript: void(0);" class="btn icons-holder-text no-hash remove-button" id="btn-remove-account"
            data-id="{{ form.vars.value.id }}"
@@ -40,7 +52,7 @@
             <a href="{{ path('orocrm_account_index') }}" class="btn back">{{ 'Cancel'|trans }}</a>
         </div>
         <div class="btn-group">
-            <button type="submit" class="btn btn-success">{{ ' Save'|trans }}</button>
+            <button type="submit" class="btn btn-success">{{ 'Save'|trans }}</button>
         </div>
     </div>
 {% endblock %}
@@ -98,6 +110,7 @@
                                 <li><a href="#scroll-addresses">{{ 'Addresses'|trans }}</a></li>
                                 <li><a href="#scroll-attributes">{{ 'Additional Information'|trans }}</a></li>
                             {% endif %}
+                            <li><a href="#scroll-contacts">{{ 'Contacts'|trans }}</a></li>
                         </ul>
                     </div>
                 </div>
@@ -149,6 +162,15 @@
                             </div>
                         </div>
                     {% endif %}
+
+                    <div class="usser-row">
+                        <h4 id="scroll-contacts" class="scrollspy-title">{{ 'Contacts'|trans }}</h4>
+                        <div class="row-fluid clearfix">
+                            {{ form_widget(form.appendContacts, {'id': 'appendContacts'}) }}
+                            {{ form_widget(form.removeContacts, {'id': 'removeContacts'}) }}
+                            <div id="contacts-grid"></div>
+                        </div>
+                    </div>
 
                     <div class="hide">
                         {{ form_rest(form) }}

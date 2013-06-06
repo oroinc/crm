@@ -49,7 +49,6 @@ class GroupDatagridManager extends DatagridManager
                 'label'       => 'Name',
                 'field_name'  => 'name',
                 'filter_type' => FilterInterface::TYPE_STRING,
-                'required'    => false,
                 'sortable'    => true,
                 'filterable'  => true,
                 'show_filter' => true,

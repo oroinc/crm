@@ -25,7 +25,6 @@ class ContactTypeTest extends \PHPUnit_Framework_TestCase
 
     public function testSetDefaultOptions()
     {
-        /** @var OptionsResolverInterface $resolver */
         $resolver = $this->getMock('Symfony\Component\OptionsResolver\OptionsResolverInterface');
         $resolver->expects($this->once())
             ->method('setDefaults')
@@ -36,5 +35,27 @@ class ContactTypeTest extends \PHPUnit_Framework_TestCase
     public function testGetName()
     {
         $this->assertEquals('orocrm_contact', $this->type->getName());
+    }
+
+    public function testAddEntityFields()
+    {
+        $builder = $this->getMockBuilder('Symfony\Component\Form\FormBuilder')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $builder->expects($this->at(1))
+            ->method('add')
+            ->with('groups', 'entity')
+            ->will($this->returnSelf());
+        $builder->expects($this->at(2))
+            ->method('add')
+            ->with('appendAccounts', 'oro_entity_identifier')
+            ->will($this->returnSelf());
+        $builder->expects($this->at(3))
+            ->method('add')
+            ->with('removeAccounts', 'oro_entity_identifier')
+            ->will($this->returnSelf());
+
+        $this->type->addEntityFields($builder);
     }
 }

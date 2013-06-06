@@ -17,6 +17,9 @@
     {% endjavascripts %}
 
     {% include 'OroCRMAccountBundle:Account:remove.confirm.js.twig' %}
+
+    {% include 'OroGridBundle:Include:javascript.html.twig' with {'datagridView': datagrid, 'selector': '#accounts-grid'} %}
+    {% include 'OroGridBundle:Include:stylesheet.html.twig' %}
 {% endblock %}
 
 {% block content %}
@@ -85,6 +88,7 @@
                 <div class="container-fluid" style="width: auto;">
                     <ul class="nav">
                         <li class="active"><a href="#scroll-main">{{ 'General'|trans }}</a></li>
+                        <li><a href="#scroll-accounts">{{ 'Accounts'|trans }}</a></li>
                         <li class="clearfix"></li>
                     </ul>
                 </div>
@@ -112,6 +116,13 @@
                                 {{ macros.flexibleAttributeRow(value) }}
                             {% endfor %}
                         </div>
+                    </div>
+                </div>
+
+                <div class="usser-row">
+                    <h4 id="scroll-accounts" class="scrollspy-title">{{ 'Accounts'|trans }}</h4>
+                    <div class="row-fluid">
+                        <div id="accounts-grid"></div>
                     </div>
                 </div>
             </div>

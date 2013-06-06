@@ -1,5 +1,7 @@
 parameters:
-    orocrm_account.account.datagrid_manager.class: OroCRM\Bundle\AccountBundle\Datagrid\AccountDatagridManager
+    orocrm_account.account.datagrid_manager.class:        OroCRM\Bundle\AccountBundle\Datagrid\AccountDatagridManager
+    orocrm_account.contact.view_datagrid_manager.class:   OroCRM\Bundle\AccountBundle\Datagrid\AccountContactDatagridManager
+    orocrm_account.contact.update_datagrid_manager.class: OroCRM\Bundle\AccountBundle\Datagrid\AccountContactUpdateDatagridManager
 
 services:
     orocrm_account.account.datagrid_manager:
@@ -11,5 +13,25 @@ services:
               entity_hint: acounts
               flexible: true
               route_name: orocrm_account_index
-        calls:
-            - [ setRouter, [ @router ] ]
+
+    orocrm_account.contact.view_datagrid_manager:
+        class: %orocrm_account.contact.view_datagrid_manager.class%
+        tags:
+            - name: oro_grid.datagrid.manager
+              datagrid_name: contacts_view
+              entity_name: %orocrm_contact.entity.class%
+              query_entity_alias: c
+              entity_hint: contacts
+              flexible: true
+              route_name: orocrm_account_view
+
+    orocrm_account.contact.update_datagrid_manager:
+        class: %orocrm_account.contact.update_datagrid_manager.class%
+        tags:
+            - name: oro_grid.datagrid.manager
+              datagrid_name: contacts_update
+              entity_name: %orocrm_contact.entity.class%
+              query_entity_alias: c
+              entity_hint: contacts
+              flexible: true
+              route_name: orocrm_account_update

@@ -150,7 +150,6 @@ class ContactDatagridManager extends FlexibleDatagridManager
                 'label'       => 'Created At',
                 'field_name'  => 'created',
                 'filter_type' => FilterInterface::TYPE_DATETIME,
-                'required'    => false,
                 'sortable'    => true,
                 'filterable'  => true,
                 'show_filter' => true,
@@ -166,7 +165,6 @@ class ContactDatagridManager extends FlexibleDatagridManager
                 'label'       => 'Updated At',
                 'field_name'  => 'updated',
                 'filter_type' => FilterInterface::TYPE_DATETIME,
-                'required'    => false,
                 'sortable'    => true,
                 'filterable'  => true,
                 'show_filter' => true,
@@ -225,19 +223,5 @@ class ContactDatagridManager extends FlexibleDatagridManager
         );
 
         return array($clickAction, $viewAction, $updateAction, $deleteAction);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    protected function createQuery()
-    {
-        /** @var $query QueryBuilder */
-        $query = parent::createQuery();
-        $query->leftJoin('Value.account', 'a');
-        $query->addSelect('a');
-        $query->addSelect('a.name as accountName');
-
-        return $query;
     }
 }
