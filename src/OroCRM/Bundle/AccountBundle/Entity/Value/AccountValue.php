@@ -110,9 +110,9 @@ class AccountValue extends AbstractEntityFlexibleValue
     protected $datetime;
 
     /**
-     * Store upload values
+     * Store address
      *
-     * @var Address $media
+     * @var Address $address
      *
      * @ORM\OneToOne(targetEntity="Oro\Bundle\AddressBundle\Entity\Address", cascade="persist")
      * @ORM\JoinColumn(name="address_id", referencedColumnName="id", onDelete="SET NULL")
@@ -132,6 +132,22 @@ class AccountValue extends AbstractEntityFlexibleValue
      * )
      */
     protected $collection;
+
+    /**
+     * @var ArrayCollection $multiAddress
+     * @ORM\ManyToMany(targetEntity="Oro\Bundle\AddressBundle\Entity\Address",cascade={"persist"})
+     * @ORM\JoinTable(name="orocrm_account_value_to_address",
+     *     joinColumns={@ORM\JoinColumn(name="value_id", referencedColumnName="id")},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="multi_address_id", referencedColumnName="id", unique=true)}
+     * )
+     */
+    protected $multiAddress;
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->multiAddress = new ArrayCollection();
+    }
 
     /**
      * Get address
@@ -155,5 +171,64 @@ class AccountValue extends AbstractEntityFlexibleValue
         $this->address = $address;
 
         return $this;
+    }
+
+    /**
+     * Set addresses
+     *
+     * @param $addresses
+     * @return Account
+     */
+    public function setMultiAddress($addresses)
+    {
+        if ($addresses instanceof ArrayCollection) {
+            $this->multiAddress->clear();
+
+            foreach ($addresses as $address) {
+                $this->addMultiAddress($address);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * Add address
+     *
+     * @param Address $address
+     * @return Account
+     */
+    public function addMultiAddress(Address $address)
+    {
+        if (!$this->multiAddress->contains($address)) {
+            $this->multiAddress->add($address);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Remove address
+     *
+     * @param mixed $address
+     * @return Account
+     */
+    public function removeMultiAddress($address)
+    {
+        if ($this->multiAddress->contains($address)) {
+            $this->multiAddress->removeElement($address);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Get addresses
+     *
+     * @return ArrayCollection
+     */
+    public function getMultiAddress()
+    {
+        return $this->multiAddress;
     }
 }

@@ -30,6 +30,7 @@ services:
             - [ addAttributeType, ['oro_flexibleentity_email'] ]
             - [ addAttributeType, ['oro_flexibleentity_phone_collection'] ]
             - [ addAttributeType, ['oro_address'] ]
+            - [ addAttributeType, ['oro_address_collection'] ]
             - [ addAttributeType, ['orocrm_account_ticker_symbol'] ]
         tags:
             - { name: oro_flexibleentity_manager, entity: %orocrm_account.account.entity.class%}
