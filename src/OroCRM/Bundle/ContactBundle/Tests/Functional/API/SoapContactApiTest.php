@@ -36,7 +36,6 @@ class SoapContactApiTest extends WebTestCase
      */
     public function testCreateContact($request, $response)
     {
-//        $this->markTestIncomplete('Tests skipped due to bug BAP-717');
         $result = $this->clientSoap->soapClient->createContact($request);
         $result = ToolsAPI::classToArray($result);
         ToolsAPI::assertEqualsResponse($response, $result, $this->clientSoap->soapClient->__getLastResponse());

@@ -79,7 +79,7 @@ class SoapContactGroupApiTest extends WebTestCase
         $group = $this->clientSoap->soapClient->getContactGroup($group['id']);
         $group = ToolsAPI::classToArray($group);
         $result = false;
-        if ($group['name'] == $request['name']){
+        if ($group['name'] == $request['name']) {
             $result = true;
         }
         $this->assertTrue($result);
