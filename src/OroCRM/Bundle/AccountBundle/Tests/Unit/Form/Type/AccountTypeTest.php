@@ -55,7 +55,7 @@ class AccountTypeTest extends \PHPUnit_Framework_TestCase
         $builder->expects($this->once())
             ->method('add')
             ->with('values', 'collection');
-        $this->type->addDynamicAttributesFields($builder);
+        $this->type->addDynamicAttributesFields($builder, array());
     }
 
     public function testSetDefaultOptions()
