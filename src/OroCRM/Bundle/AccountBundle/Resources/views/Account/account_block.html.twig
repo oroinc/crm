@@ -1,0 +1,17 @@
+<div class="customer-info customer-simple well-small">
+    <div class="customer-content pull-left">
+        <div class="clearfix">
+            <div class="pull-left">
+                <div class="sub-title"><a href="{{ path('orocrm_account_index') }}">{{ 'Accounts'|trans }}</a></div>
+                <span class="separator">/</span>
+                <h1 class="usser-name">{{ account.name(format)|default('N/A') }}</h1>
+            </div>
+        </div>
+        <div class="clearfix">
+            <ul class="inline">
+                <li>{{ 'Created'|trans }}: {{ account.createdAt ? UI.time(account.createdAt) : 'N/A' }}</li>
+                <li>{{ 'Updated'|trans }}: {{ account.updatedAt ? UI.time(account.updatedAt) : 'N/A' }}</li>
+            </ul>
+        </div>
+    </div>
+</div>
