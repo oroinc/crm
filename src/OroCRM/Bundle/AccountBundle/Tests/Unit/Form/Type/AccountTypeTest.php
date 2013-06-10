@@ -25,14 +25,23 @@ class AccountTypeTest extends \PHPUnit_Framework_TestCase
 
     public function testAddEntityFields()
     {
-        /** @var FormBuilderInterface $builder */
         $builder = $this->getMockBuilder('Symfony\Component\Form\FormBuilder')
             ->disableOriginalConstructor()
             ->getMock();
 
         $builder->expects($this->at(1))
             ->method('add')
-            ->with('name');
+            ->with('name', 'text')
+            ->will($this->returnSelf());
+        $builder->expects($this->at(2))
+            ->method('add')
+            ->with('appendContacts', 'oro_entity_identifier')
+            ->will($this->returnSelf());
+        $builder->expects($this->at(3))
+            ->method('add')
+            ->with('removeContacts', 'oro_entity_identifier')
+            ->will($this->returnSelf());
+
         $this->type->addEntityFields($builder);
     }
 
@@ -46,7 +55,7 @@ class AccountTypeTest extends \PHPUnit_Framework_TestCase
         $builder->expects($this->once())
             ->method('add')
             ->with('values', 'collection');
-        $this->type->addDynamicAttributesFields($builder);
+        $this->type->addDynamicAttributesFields($builder, array());
     }
 
     public function testSetDefaultOptions()

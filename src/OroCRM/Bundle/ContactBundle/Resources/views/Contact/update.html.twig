@@ -1,6 +1,6 @@
 {% extends 'OroCRMContactBundle::layout.html.twig' %}
 {% import 'OroUIBundle::macros.html.twig' as macros %}
-{% form_theme form with 'OroAddressBundle:Include:fields.html.twig' %}
+{% form_theme form with ['OroAddressBundle:Include:fields.html.twig', 'OroFormBundle:Form:fields.html.twig'] %}
 {% set format = oro_config_value('oro_user.name_format') %}
 {% set fullname = entity.__toString|title %}
 {% oro_title_set({params : {"%contact.name%": fullname} }) %}
@@ -17,9 +17,27 @@
     output='js/orocrm.contact.js'
     %}
     <script src="{{ asset_url }}" type="text/javascript"></script>
+
+    {{ form_javascript(form) }}
     {% endjavascripts %}
 
+    {% block stylesheets %}
+        {{ form_stylesheet(form) }}
+    {% endblock %}
+
     {% include 'OroCRMAccountBundle:Account:remove.confirm.js.twig' %}
+
+    {% include 'OroGridBundle:Include:javascript.html.twig' with {'datagridView': datagrid, 'selector': '#accounts-grid'} %}
+    {% include 'OroGridBundle:Include:stylesheet.html.twig' %}
+
+    {% set listenerParameters = {
+        'columnName': 'has_contact',
+        'selectors': {
+            'included': '#appendAccounts',
+            'excluded': '#removeAccounts'
+        }
+    } %}
+    {% include 'OroGridBundle:Include:Listener/column_form.html.twig' with {'datagridView': datagrid, 'parameters': listenerParameters} %}
 {% endblock %}
 
 {% block form_buttons %}
@@ -100,6 +118,7 @@
                             {% if form.groups is defined and form.groups.children|length > 0 %}
                                 <li><a href="#scroll-groups">{{ 'Groups'|trans }}</a></li>
                             {% endif %}
+                            <li class="active"><a href="#scroll-accounts">{{ 'Accounts'|trans }}</a></li>
                         </ul>
                     </div>
                 </div>
@@ -146,6 +165,15 @@
                         </div>
                     </div>
                     {% endif %}
+
+                    <div class="usser-row">
+                        <h4 id="scroll-accounts" class="scrollspy-title">{{ 'Accounts'|trans }}</h4>
+                        <div class="row-fluid">
+                            {{ form_widget(form.appendAccounts, {'id': 'appendAccounts'}) }}
+                            {{ form_widget(form.removeAccounts, {'id': 'removeAccounts'}) }}
+                            <div id="accounts-grid"></div>
+                        </div>
+                    </div>
 
                     <div class="hide">
                         {{ form_rest(form) }}

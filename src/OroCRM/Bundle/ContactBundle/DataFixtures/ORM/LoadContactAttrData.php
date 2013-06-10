@@ -91,12 +91,6 @@ class LoadContactAttrData extends AbstractFixture implements ContainerAwareInter
                     'searchable' => true
                 ),
                 array(
-                    'code'  => 'account',
-                    'type'  => 'orocrm_account_attribute_account',
-                    'label' => 'Account',
-                    'searchable' => true
-                ),
-                array(
                     'code'  => 'assigned_to',
                     'type'  => 'oro_user_attribute_user',
                     'label' => 'Assigned To',

@@ -1,0 +1,7 @@
+autocomplete_entities:
+    contacts:
+        type: flexible
+        form_options:
+            datasource: autocomplete
+        entity_class: OroCRM\Bundle\ContactBundle\Entity\Contact
+        properties: ["first_name", "last_name"]

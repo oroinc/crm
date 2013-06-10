@@ -1,30 +1,32 @@
 <?php
 namespace OroCRM\Bundle\AccountBundle\Form\Type;
 
-use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class AccountSelectType extends AbstractType
 {
+    /**
+     * {@inheritdoc}
+     */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(
             array(
-                'class' => 'OroCRMAccountBundle:Account',
-                'query_builder' => function (EntityRepository $er) {
-                    return $er->createQueryBuilder('a')
-                        ->orderBy('a.name', 'ASC');
-                },
-                'empty_value' => 'Choose an account...',
-                'empty_data'  => null
+                'configs' => array(
+                    'placeholder' => 'Choose an account...'
+                ),
+                'autocomplete_alias' => 'accounts'
             )
         );
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getParent()
     {
-        return 'entity';
+        return 'oro_jqueryselect2_hidden';
     }
 
     /**

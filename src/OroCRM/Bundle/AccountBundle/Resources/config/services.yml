@@ -67,6 +67,8 @@ services:
     # Form type
     orocrm_account.form.type.account_select:
         class: %orocrm_account.form.type.account_select.class%
+        arguments:
+            - @doctrine.orm.entity_manager
         tags:
             - { name: form.type, alias: orocrm_account_select }
 

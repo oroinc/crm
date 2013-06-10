@@ -5,6 +5,8 @@ namespace OroCRM\Bundle\ContactBundle\Form\Type;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
+use Doctrine\ORM\EntityRepository;
+
 use Oro\Bundle\FlexibleEntityBundle\Form\Type\FlexibleType;
 
 class ContactType extends FlexibleType
@@ -17,6 +19,7 @@ class ContactType extends FlexibleType
         // add default flexible fields
         parent::addEntityFields($builder);
 
+        // groups
         $builder->add(
             'groups',
             'entity',
@@ -26,6 +29,28 @@ class ContactType extends FlexibleType
                 'multiple' => true,
                 'expanded' => true,
                 'required' => false,
+            )
+        );
+
+        // accounts
+        $builder->add(
+            'appendAccounts',
+            'oro_entity_identifier',
+            array(
+                'class'    => 'OroCRMAccountBundle:Account',
+                'required' => false,
+                'mapped'   => false,
+                'multiple' => true,
+            )
+        )
+        ->add(
+            'removeAccounts',
+            'oro_entity_identifier',
+            array(
+                'class'    => 'OroCRMAccountBundle:Account',
+                'required' => false,
+                'mapped'   => false,
+                'multiple' => true,
             )
         );
     }
