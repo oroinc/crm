@@ -150,11 +150,6 @@
                                                 <h5 class="usser-fiedset"><span>{{ attribute.address.vars.label|trans }}</span></h5>
                                                 {{ form_widget(attribute.address) }}
                                             </fieldset>
-                                        {% elseif (attribute.children.multiAddress is defined) %}
-                                            <fieldset class="form-horizontal pull-left span6">
-                                                <h5 class="usser-fiedset"><span>{{ attribute.multiAddress.vars.label|trans }}</span></h5>
-                                                {{ form_widget(attribute.multiAddress) }}
-                                            </fieldset>
                                         {% endif %}
                                     {% endfor %}
                                 </div>

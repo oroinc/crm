@@ -99,20 +99,19 @@
                 <div class="usser-row">
                     <h4 id="scroll-main" class="scrollspy-title">{{ 'General'|trans }}</h4>
                     <div class="row-fluid row-fluid-divider oro-form-contains-address">
-                        {% if contact|hasAddress('address') %}
-                            {% set addressValue = contact.getValue('address') %}
-                            {% if addressValue.data is not null %}
+                        {% if contact.multiAddress %}
                             <div class="form-horizontal span6 pull-right">
-                                <h5 class="usser-fiedset"><span>{{ addressValue.attribute.label|trans }}</span></h5>
-                                {{ addressView.renderAddress(addressValue.data) }}
+                                <h5 class="usser-fiedset"><span>{{ 'Address'|trans }}</span></h5>
+                                {% for addressValue in contact.multiAddress %}
+                                    {{ addressView.renderAddress(addressValue) }}
+                                {% endfor %}
                             </div>
-                            {% endif %}
                         {% endif %}
 
                         <div class="form-horizontal span6 pull-left">
                             <h5 class="usser-fiedset"><span>{{ 'Basic Information'|trans }}</span></h5>
 
-                            {% for value in contact|getAttributes(['address'], true) %}
+                            {% for value in contact|getAttributes() %}
                                 {{ macros.flexibleAttributeRow(value) }}
                             {% endfor %}
                         </div>

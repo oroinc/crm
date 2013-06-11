@@ -54,8 +54,9 @@ class AccountType extends FlexibleType
      * Add entity fields to form builder
      *
      * @param FormBuilderInterface $builder
+     * @param array $options
      */
-    public function addDynamicAttributesFields(FormBuilderInterface $builder)
+    public function addDynamicAttributesFields(FormBuilderInterface $builder, array $options)
     {
         $builder->add(
             'values',
