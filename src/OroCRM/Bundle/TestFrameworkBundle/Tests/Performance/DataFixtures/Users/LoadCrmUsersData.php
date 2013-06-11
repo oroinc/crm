@@ -62,7 +62,7 @@ class LoadCrmUsersData extends AbstractFixture implements ContainerAwareInterfac
      */
     public function loadAttributes()
     {
-        $this->assertHasRequiredAttributes(array('company', 'salary','gender'));
+        $this->assertHasRequiredAttributes(array('company', 'gender'));
 
         if (!$this->findAttribute('website')) {
             $websiteAttribute = $this->createAttribute('oro_flexibleentity_url', 'website');
@@ -119,7 +119,7 @@ class LoadCrmUsersData extends AbstractFixture implements ContainerAwareInterfac
             $lastName = $this->generateLastName();
             $middleName = $this->generateMiddleName();
             $birthday = $this->generateBirthday();
-            $salary = $this->generateSalary();
+            //$salary = $this->generateSalary();
             $username = $this->generateUsername($firstName, $lastName);
             $email = $this->generateEmail($firstName, $lastName);
             $company = $this->generateCompany();
