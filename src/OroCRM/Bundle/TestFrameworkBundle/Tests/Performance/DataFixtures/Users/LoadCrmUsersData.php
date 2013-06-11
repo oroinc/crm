@@ -375,7 +375,6 @@ class LoadCrmUsersData extends AbstractFixture implements ContainerAwareInterfac
      */
     private function generateUsername($firstName, $lastName)
     {
-        var_dump(sprintf("%s.%s", strtolower($firstName), strtolower($lastName)));
         return sprintf("%s.%s", strtolower($firstName), strtolower($lastName));
     }
 
