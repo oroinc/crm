@@ -167,7 +167,7 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
         /** @var $account Account */
         $account = $this->accountManager->createFlexible();
 
-        $account->setName($data['Username']);
+        $account->setName($data['Username'] . $data['MiddleInitial']);
 
         $phone = new Collection;
         $phone->setData($data['TelephoneNumber']);
