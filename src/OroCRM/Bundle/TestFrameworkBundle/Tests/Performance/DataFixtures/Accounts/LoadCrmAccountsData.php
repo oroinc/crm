@@ -117,7 +117,7 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
         $arrResult = array();
         $handle = fopen(__DIR__ . DIRECTORY_SEPARATOR . "data.csv", "r");
         if ( $handle ) {
-            $j=$i=0;
+            $i=0;
             if (($data = fgetcsv($handle, 1000, ",")) !== false) {
                 //read headers
                 $headers = $data;
@@ -141,12 +141,16 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
                 $this->persist($this->contactManager, $contact);
 
                 $i++;
-                $j++;
-                if ($i >= self::FLUSH_MAX) {
+                if ($i % self::FLUSH_MAX == 0) {
                     $this->flush($this->accountManager);
                     $this->flush($this->contactManager);
-                    echo ">> {$j}\n";
-                    $i = 0;
+
+                    $this->contactManager->getStorageManager()->clear('OroCRM\Bundle\ContactBundle\Entity\Contact');
+                    $this->contactManager->getStorageManager()->clear('OroCRM\Bundle\ContactBundle\Entity\Value\ContactValue');
+                    $this->accountManager->getStorageManager()->clear('OroCRM\Bundle\AccountBundle\Entity\Account');
+                    $this->contactManager->getStorageManager()->clear('OroCRM\Bundle\AccountBundle\Entity\Value\AccountValue');
+
+                    echo ">> {$i}\n";
                 }
             }
             fclose($handle);
