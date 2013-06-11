@@ -33,8 +33,7 @@ class ContactType extends FlexibleType
             'multiAddress',
             'oro_address_collection',
             array(
-                'required' => false,
-                'label' => ' '
+                'required' => true
             )
         );
 
