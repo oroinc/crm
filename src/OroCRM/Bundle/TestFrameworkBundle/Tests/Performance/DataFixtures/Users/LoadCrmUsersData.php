@@ -22,6 +22,7 @@ use Oro\Bundle\UserBundle\Entity\User;
 class LoadCrmUsersData extends AbstractFixture implements ContainerAwareInterface
 {
     const USERS_NUMBER = 200;
+    const USER_PASSWORD = '123123q';
     /**
      * @var UserManager
      */
@@ -143,7 +144,7 @@ class LoadCrmUsersData extends AbstractFixture implements ContainerAwareInterfac
                 $lastVisit
             );
 
-            $user->setPlainPassword(uniqid());
+            $user->setPlainPassword(self::USER_PASSWORD);
             $this->userManager->updatePassword($user);
 
             $this->persist($user);
