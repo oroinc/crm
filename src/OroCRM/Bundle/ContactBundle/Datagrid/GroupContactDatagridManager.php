@@ -10,7 +10,7 @@ use Oro\Bundle\GridBundle\Sorter\SorterInterface;
 use Oro\Bundle\GridBundle\Field\FieldDescriptionCollection;
 use Oro\Bundle\GridBundle\Datagrid\FlexibleDatagridManager;
 use Oro\Bundle\GridBundle\Datagrid\ParametersInterface;
-use Oro\Bundle\GridBundle\Datagrid\ORM\ProxyQuery;
+use Oro\Bundle\GridBundle\Datagrid\ProxyQueryInterface;
 
 use OroCRM\Bundle\ContactBundle\Entity\Group;
 
@@ -112,11 +112,8 @@ class GroupContactDatagridManager extends FlexibleDatagridManager
     /**
      * {@inheritDoc}
      */
-    protected function createQuery()
+    protected function prepareQuery(ProxyQueryInterface $query)
     {
-        $query = parent::createQuery();
-
-        /** @var $query ProxyQuery */
         $entityAlias = $query->getRootAlias();
 
         if ($this->getGroup()->getId()) {
@@ -135,8 +132,6 @@ class GroupContactDatagridManager extends FlexibleDatagridManager
                 true
             );
         }
-
-        return $query;
     }
 
     /**

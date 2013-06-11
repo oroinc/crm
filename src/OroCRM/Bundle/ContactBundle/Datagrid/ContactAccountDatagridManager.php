@@ -7,6 +7,7 @@ use Doctrine\ORM\QueryBuilder;
 use Oro\Bundle\GridBundle\Datagrid\FlexibleDatagridManager;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\AccountBundle\Datagrid\AccountDatagridManager;
+use Oro\Bundle\GridBundle\Datagrid\ProxyQueryInterface;
 
 class ContactAccountDatagridManager extends AccountDatagridManager
 {
@@ -40,13 +41,10 @@ class ContactAccountDatagridManager extends AccountDatagridManager
     /**
      * {@inheritDoc}
      */
-    protected function createQuery()
+    protected function prepareQuery(ProxyQueryInterface $query)
     {
-        $query = parent::createQuery();
         $entityAlias = $query->getRootAlias();
         $query->andWhere(":contact MEMBER OF $entityAlias.contacts");
-
-        return $query;
     }
 
     /**

@@ -9,6 +9,7 @@ use Oro\Bundle\GridBundle\Field\FieldDescriptionInterface;
 use Oro\Bundle\GridBundle\Filter\FilterInterface;
 use Oro\Bundle\GridBundle\Sorter\SorterInterface;
 use Oro\Bundle\GridBundle\Datagrid\ParametersInterface;
+use Oro\Bundle\GridBundle\Datagrid\ProxyQueryInterface;
 
 class AccountContactUpdateDatagridManager extends AccountContactDatagridManager
 {
@@ -41,13 +42,8 @@ class AccountContactUpdateDatagridManager extends AccountContactDatagridManager
     /**
      * {@inheritDoc}
      */
-    protected function createQuery()
+    protected function prepareQuery(ProxyQueryInterface $query)
     {
-        $query = parent::createQuery();
-
-        // remove current account filter
-        $query->resetDQLPart('where');
-
         $entityAlias = $query->getRootAlias();
 
         if ($this->getAccount()->getId()) {
@@ -66,8 +62,6 @@ class AccountContactUpdateDatagridManager extends AccountContactDatagridManager
                 true
             );
         }
-
-        return $query;
     }
 
     /**
