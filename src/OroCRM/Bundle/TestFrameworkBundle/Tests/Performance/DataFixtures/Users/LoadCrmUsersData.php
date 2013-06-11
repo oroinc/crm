@@ -119,7 +119,7 @@ class LoadCrmUsersData extends AbstractFixture implements ContainerAwareInterfac
             $lastName = $this->generateLastName();
             $middleName = $this->generateMiddleName();
             $birthday = $this->generateBirthday();
-            //$salary = $this->generateSalary();
+            $salary = $this->generateSalary();
             $username = $this->generateUsername($firstName, $lastName);
             $email = $this->generateEmail($firstName, $lastName);
             $company = $this->generateCompany();
@@ -194,10 +194,10 @@ class LoadCrmUsersData extends AbstractFixture implements ContainerAwareInterfac
         $user->addRole($this->role[0]);
 
         $this->setFlexibleAttributeValue($user, 'company', $company);
-        $this->setFlexibleAttributeValue($user, 'salary', $salary);
+        //$this->setFlexibleAttributeValue($user, 'salary', $salary);
         $this->setFlexibleAttributeValueOption($user, 'gender', $gender);
-        $this->setFlexibleAttributeValue($user, 'website', $website);
-        $this->addFlexibleAttributeValueOptions($user, 'hobby', $hobbies);
+        //$this->setFlexibleAttributeValue($user, 'website', $website);
+        //$this->addFlexibleAttributeValueOptions($user, 'hobby', $hobbies);
         // $this->setFlexibleAttributeValue($user, 'last_visit', $lastVisit);
 
         return $user;
