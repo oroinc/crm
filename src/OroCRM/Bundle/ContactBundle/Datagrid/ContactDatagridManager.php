@@ -65,7 +65,7 @@ class ContactDatagridManager extends FlexibleDatagridManager
         $fieldId->setOptions(
             array(
                 'type'        => FieldDescriptionInterface::TYPE_INTEGER,
-                'label'       => 'ID',
+                'label'       => $this->translate('ID'),
                 'field_name'  => 'id',
                 'filter_type' => FilterInterface::TYPE_NUMBER,
                 'show_column' => false
@@ -81,7 +81,7 @@ class ContactDatagridManager extends FlexibleDatagridManager
         $fieldPhone->setOptions(
             array(
                 'type'        => FieldDescriptionInterface::TYPE_TEXT,
-                'label'       => 'Phone',
+                'label'       => $this->translate('Phone'),
                 'field_name'  => 'phones',
                 'filter_type' => FilterInterface::TYPE_STRING,
             )
@@ -114,7 +114,7 @@ class ContactDatagridManager extends FlexibleDatagridManager
         $fieldEmail->setOptions(
             array(
                 'type'        => FieldDescriptionInterface::TYPE_TEXT,
-                'label'       => 'Email',
+                'label'       => $this->translate('Email'),
                 'field_name'  => 'emails',
                 'filter_type' => FilterInterface::TYPE_STRING,
             )
@@ -147,7 +147,7 @@ class ContactDatagridManager extends FlexibleDatagridManager
         $fieldCreated->setOptions(
             array(
                 'type'        => FieldDescriptionInterface::TYPE_DATETIME,
-                'label'       => 'Created At',
+                'label'       => $this->translate('Created At'),
                 'field_name'  => 'created',
                 'filter_type' => FilterInterface::TYPE_DATETIME,
                 'sortable'    => true,
@@ -162,7 +162,7 @@ class ContactDatagridManager extends FlexibleDatagridManager
         $fieldUpdated->setOptions(
             array(
                 'type'        => FieldDescriptionInterface::TYPE_DATETIME,
-                'label'       => 'Updated At',
+                'label'       => $this->translate('Updated At'),
                 'field_name'  => 'updated',
                 'filter_type' => FilterInterface::TYPE_DATETIME,
                 'sortable'    => true,
@@ -183,7 +183,7 @@ class ContactDatagridManager extends FlexibleDatagridManager
             'type'         => ActionInterface::TYPE_REDIRECT,
             'acl_resource' => 'root',
             'options'      => array(
-                'label'         => 'View',
+                'label'         => $this->translate('View'),
                 'link'          => 'view_link',
                 'runOnRowClick' => true,
             )
@@ -194,7 +194,7 @@ class ContactDatagridManager extends FlexibleDatagridManager
             'type'         => ActionInterface::TYPE_REDIRECT,
             'acl_resource' => 'root',
             'options'      => array(
-                'label' => 'View',
+                'label' => $this->translate('View'),
                 'icon'  => 'user',
                 'link'  => 'view_link',
             )
@@ -205,7 +205,7 @@ class ContactDatagridManager extends FlexibleDatagridManager
             'type'         => ActionInterface::TYPE_REDIRECT,
             'acl_resource' => 'root',
             'options'      => array(
-                'label'   => 'Update',
+                'label'   => $this->translate('Update'),
                 'icon'    => 'edit',
                 'link'    => 'update_link',
             )
@@ -216,7 +216,7 @@ class ContactDatagridManager extends FlexibleDatagridManager
             'type'         => ActionInterface::TYPE_DELETE,
             'acl_resource' => 'root',
             'options'      => array(
-                'label' => 'Delete',
+                'label' => $this->translate('Delete'),
                 'icon'  => 'trash',
                 'link'  => 'delete_link',
             )
