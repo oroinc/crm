@@ -22,7 +22,7 @@ class AccountContactUpdateDatagridManager extends AccountContactDatagridManager
         $fieldHasAccount->setOptions(
             array(
                 'type'        => FieldDescriptionInterface::TYPE_BOOLEAN,
-                'label'       => 'Has account',
+                'label'       => $this->translate('Assigned'),
                 'field_name'  => 'hasCurrentAccount',
                 'expression'  => 'hasCurrentAccount',
                 'nullable'    => false,
@@ -48,18 +48,21 @@ class AccountContactUpdateDatagridManager extends AccountContactDatagridManager
         // remove current account filter
         $query->resetDQLPart('where');
 
+        $entityAlias = $query->getRootAlias();
+
         if ($this->getAccount()->getId()) {
             $query->addSelect(
-                'CASE WHEN ' .
-                '(:account MEMBER OF c.accounts OR c.id IN (:data_in)) AND c.id NOT IN (:data_not_in) '.
-                'THEN 1 ELSE 0 END AS hasCurrentAccount',
+                "CASE WHEN " .
+                "(:account MEMBER OF $entityAlias.accounts OR $entityAlias.id IN (:data_in)) AND " .
+                "$entityAlias.id NOT IN (:data_not_in) ".
+                "THEN 1 ELSE 0 END AS hasCurrentAccount",
                 true
             );
         } else {
             $query->addSelect(
-                'CASE WHEN ' .
-                'c.id IN (:data_in) AND c.id NOT IN (:data_not_in) '.
-                'THEN 1 ELSE 0 END AS hasCurrentAccount',
+                "CASE WHEN " .
+                "$entityAlias.id IN (:data_in) AND $entityAlias.id NOT IN (:data_not_in) ".
+                "THEN 1 ELSE 0 END AS hasCurrentAccount",
                 true
             );
         }

@@ -42,9 +42,9 @@ class ContactAccountDatagridManager extends AccountDatagridManager
      */
     protected function createQuery()
     {
-        /** @var $query QueryBuilder */
         $query = parent::createQuery();
-        $query->andWhere(':contact MEMBER OF a.contacts');
+        $entityAlias = $query->getRootAlias();
+        $query->andWhere(":contact MEMBER OF $entityAlias.contacts");
 
         return $query;
     }
