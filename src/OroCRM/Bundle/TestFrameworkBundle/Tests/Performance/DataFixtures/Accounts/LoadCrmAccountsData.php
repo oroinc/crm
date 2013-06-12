@@ -69,6 +69,8 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
 
     protected $groups;
     protected $users;
+    protected $countries;
+
 
     /**
      * {@inheritDoc}
@@ -85,6 +87,8 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
         $this->userManager = $container->get('oro_user.manager');
         $this->userRepository = $this->userManager->getFlexibleRepository();
         $this->users = $this->userManager->getStorageManager()->getRepository('OroUserBundle:User')->findAll();
+
+        $this->countries = $this->userManager->getStorageManager()->getRepository('OroAddressBundle:Country')->findAll();
     }
 
     /**
@@ -92,8 +96,6 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
      */
     public function load(ObjectManager $manager)
     {
-        $this->countryRepository = $manager->getRepository('OroAddressBundle:Country');
-
         $this->loadAttributes();
         $this->loadAccounts();
     }
@@ -152,6 +154,7 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
 
                     echo ">> {$i}\n";
                 }
+                if ($i == 1) {break;}
             }
             fclose($handle);
         }
@@ -187,8 +190,12 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
         $address->setFirstName($data['GivenName']);
         $address->setLastName($data['Surname']);
 
+        $isoCode = $data['Country'];
+        $country = array_filter($this->countries, function ($a) use ($isoCode) { return $a->getIso2Code() == $isoCode; });
+        $country = array_values($country);
         /** @var Country $country */
-        $country = $this->countryRepository->find($data['Country']);
+        $country = $country[0];
+
         $idRegion = $data['State'];
         $idRegion = 'AL';
         /** @var ArrayCollection $regions */
@@ -247,8 +254,13 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
         $address->setFirstName($data['GivenName']);
         $address->setLastName($data['Surname']);
 
+
+        $isoCode = $data['Country'];
+        $country = array_filter($this->countries, function ($a) use ($isoCode) { return $a->getIso2Code() == $isoCode; });
+        $country = array_values($country);
         /** @var Country $country */
-        $country = $this->countryRepository->find($data['Country']);
+        $country = $country[0];
+
         $idRegion = $data['State'];
         $idRegion = 'AL';
         /** @var ArrayCollection $regions */
