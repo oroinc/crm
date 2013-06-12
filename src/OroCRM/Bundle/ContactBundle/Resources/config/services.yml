@@ -95,6 +95,7 @@ services:
         arguments:
             - "contact"
             - "orocrm_contact_select"
+            - @oro_flexibleentity.validator.attribute_constraint_guesser
         tags:
             - { name: oro_flexibleentity.attributetype, alias: orocrm_contact_attribute_contact }
     orocrm_contact.form.handler.group:
