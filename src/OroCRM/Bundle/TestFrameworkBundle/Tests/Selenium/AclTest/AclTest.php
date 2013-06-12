@@ -166,10 +166,10 @@ class AclTest extends \PHPUnit_Extensions_Selenium2TestCase
             ->assertTitle('Contact Groups')
             ->assertElementNotPresent("//div[@class='container-fluid']//a[@title='Create contact group']")
             ->openAclCheck()
-            ->checkFor403('account/create')
-            ->checkFor403('contact/create')
-            ->checkFor403('contact/group/create')
-            ->checkFor403('contact/group/create');
+            ->assertAcl('account/create')
+            ->assertAcl('contact/create')
+            ->assertAcl('contact/group/create')
+            ->assertAcl('contact/group/create');
     }
 
     /**
@@ -208,7 +208,6 @@ class AclTest extends \PHPUnit_Extensions_Selenium2TestCase
             ->openUser()
             ->viewInfo($username)
             ->openAclCheck()
-            ->checkFor403('user/view/' . $adminId);
-
+            ->assertAcl('user/view/' . $adminId);
     }
 }
