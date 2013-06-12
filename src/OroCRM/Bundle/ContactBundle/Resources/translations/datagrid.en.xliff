@@ -1,0 +1,70 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="en" datatype="plaintext" original="" >
+        <body>
+            <!-- General labels -->
+            <trans-unit id="orocrm_contact.view">
+                <source>View</source>
+                <target>View</target>
+            </trans-unit>
+            <trans-unit id="orocrm_contact.update">
+                <source>Update</source>
+                <target>Update</target>
+            </trans-unit>
+            <trans-unit id="orocrm_contact.delete">
+                <source>Delete</source>
+                <target>Delete</target>
+            </trans-unit>
+
+            <!-- ContactDatagridManager -->
+            <trans-unit id="orocrm_contact.contact.datagrid_manager.id">
+                <source>ID</source>
+                <target>ID</target>
+            </trans-unit>
+            <trans-unit id="orocrm_contact.contact.datagrid_manager.office_phone">
+                <source>Phone</source>
+                <target>Phone</target>
+            </trans-unit>
+            <trans-unit id="orocrm_contact.contact.datagrid_manager.email">
+                <source>Email</source>
+                <target>Email</target>
+            </trans-unit>
+            <trans-unit id="orocrm_contact.contact.datagrid_manager.created">
+                <source>Created At</source>
+                <target>Created At</target>
+            </trans-unit>
+            <trans-unit id="orocrm_contact.contact.datagrid_manager.updated">
+                <source>Updated At</source>
+                <target>Updated At</target>
+            </trans-unit>
+
+            <!-- GroupDatagridManager -->
+            <trans-unit id="orocrm_contact.group.datagrid_manager.id">
+                <source>ID</source>
+                <target>ID</target>
+            </trans-unit>
+            <trans-unit id="orocrm_contact.group.datagrid_manager.name">
+                <source>Name</source>
+                <target>Name</target>
+            </trans-unit>
+
+            <!-- GroupContactDatagridManager -->
+            <trans-unit id="orocrm_contact.group_contact.datagrid_manager.id">
+                <source>ID</source>
+                <target>ID</target>
+            </trans-unit>
+            <trans-unit id="orocrm_contact.group_contact.datagrid_manager.has_group">
+                <source>Has group</source>
+                <target>Has group</target>
+            </trans-unit>
+
+            <!-- ContactAccountUpdateDatagridManager -->
+            <trans-unit id="orocrm_contact.account.update_datagrid_manager.has_contact">
+                <source>Assigned</source>
+                <target>Assigned</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>
+
+

@@ -20,7 +20,7 @@ services:
             - name: oro_grid.datagrid.manager
               datagrid_name: contacts_view
               entity_name: %orocrm_contact.entity.class%
-              query_entity_alias: c
+              query_entity_alias: contact
               entity_hint: contacts
               flexible: true
               route_name: orocrm_account_view
@@ -31,7 +31,7 @@ services:
             - name: oro_grid.datagrid.manager
               datagrid_name: contacts_update
               entity_name: %orocrm_contact.entity.class%
-              query_entity_alias: c
+              query_entity_alias: contact
               entity_hint: contacts
               flexible: true
               route_name: orocrm_account_update
