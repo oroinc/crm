@@ -3,62 +3,22 @@
     * entity       - user entity OroCRM\Bundle\ContactBundle\Entity\Contact
     * indexer_item - indexer item Oro\Bundle\SearchBundle\Query\Result\Item
 #}
-{% set contact = entity %}
+{% extends 'OroSearchBundle:Search:searchResultItem.html.twig' %}
+{% import 'OroUserBundle::macros.html.twig' as macros %}
+
 {% set format = oro_config_value('oro_user.name_format') %}
+{% set showImage = false %}
 
-{% import 'OroUIBundle::macros.html.twig' as macros %}
+{% if entity %}
+    {% set recordUrl = indexer_item.recordUrl %}
+    {% set title = entity.__toString %}
+{% else %}
+    {% set title = indexer_item.recordTitle %}
+{% endif %}
 
-<div class="customer-info well-small">
-    {% if contact %}
-        <div class="visual">
-            <a href="{{ indexer_item.recordUrl }}">
-                <img src="{{ asset('bundles/oroui/img/info-usser.png') }}" alt="{{ contact.__toString }}"/>
-            </a>
-        </div>
-        <div class="clearfix">
-            <div class="pull-right">
-                <div class="sub-title">{{ 'Contact'|trans }}</div>
-            </div>
-            <div class="customer-content pull-left">
-                <div class="clearfix">
-                    <div class="pull-left">
-                        <h1 class="usser-name">
-                            <a href="{{ indexer_item.recordUrl }}">{{ contact.__toString }}</a>
-                        </h1>
-                    </div>
-                </div>
-                <div class="clearfix">
-                    <ul class="inline">
-                        <li>{{ 'Created'|trans }}: {{ contact.createdAt ? macros.time(contact.createdAt) : 'N/A' }}</li>
-                        <li>{{ 'Updated'|trans }}: {{ contact.updatedAt ? macros.time(contact.updatedAt) : 'N/A' }}</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    {% else %}
-        <div class="visual">
-            <img src="{{ asset('bundles/oroui/img/info-usser.png') }}" alt="{{ indexer_item.recordTitle }}"/>
-        </div>
-        <div class="clearfix">
-            <div class="pull-right">
-                <div class="sub-title">{{ 'Contact'|trans }}</div>
-            </div>
-            <div class="customer-content pull-left">
-                <div class="clearfix">
-                    <div class="pull-left">
-                        <h1 class="usser-name">
-                            {{ indexer_item.recordTitle }}
-                        </h1>
-                    </div>
-                </div>
-                <div class="clearfix">
-                    <ul class="inline">
-                        <li>{{ 'Created'|trans }}: N/A</li>
-                        <li>{{ 'Updated'|trans }}: N/A</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    {% endif %}
-</div>
+{% set entityType = 'Contact'|trans %}
 
+{% set entityInfo = [
+    {'title': 'Created', 'value': entity.createdAt ? macros.time(entity.createdAt) : 'N/A'},
+    {'title': 'Updated', 'value': entity.updatedAt ? macros.time(entity.updatedAt) : 'N/A'},
+] %}
