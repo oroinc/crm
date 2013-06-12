@@ -2,24 +2,24 @@
 {% import 'OroUIBundle::macros.html.twig' as macros %}
 {% import 'OroAddressBundle:Include:viewMacro.html.twig' as addressView %}
 {% set format = oro_config_value('oro_user.name_format') %}
-{% oro_title_set({params : {"%account.name%": account.name|default('N/A')} }) %}
+{% oro_title_set({params : {"%account.name%": entity.name|default('N/A')} }) %}
 {% set gridId = 'contacts-grid' %}
 {% block head_script %}
-    {% include 'OroCRMAccountBundle:Account:remove.confirm.js.twig' %}
     {% placeholder prepare_grid with {'datagrid': datagrid, 'selector': '#' ~ gridId} %}
 {% endblock %}
 
 {% block navButtons %}
     {{ UI.button({'path': path('orocrm_account_index'), 'iClass': 'icon-chevron-left ', 'title': 'Back', 'label': 'Back'}) }}
     {% if resource_granted('orocrm_account_update') %}
-       {{ UI.button({'path': path('orocrm_account_update', {'id': account.id}), 'iClass': 'icon-edit', 'title': 'Edit account', 'label': 'Edit'}) }}
+       {{ UI.button({'path': path('orocrm_account_update', {'id': entity.id}), 'iClass': 'icon-edit', 'title': 'Edit account', 'label': 'Edit'}) }}
     {% endif %}
     {% if resource_granted('orocrm_account_remove') %}
         {{ UI.deleteButton({
-                'dataUrl': path('oro_api_delete_account', {id: account.id}),
-                'data-redirect': path('orocrm_account_index'),
+                'dataUrl': path('oro_api_delete_account', {'id': entity.id}),
+                'dataRedirect': path('orocrm_account_index'),
                 'aCss': 'no-hash remove-button',
-                'dataId': account.id,
+                'dataId': entity.id,
+                'id': 'btn-remove-account',
                 'dataMessage': 'Are you sure you want to delete this account?',
                 'title': 'Delete Account',
                 'label': 'Delete'
@@ -29,7 +29,7 @@
 {% endblock navButtons %}
 
 {% block pageHeader %}
-    {% set breadcrumbs = {'entity': account, 'indexPath': path('orocrm_account_index'), 'indexLabel': 'Accounts', 'entityTitle': account.name(format)|default('N/A') } %}
+    {% set breadcrumbs = {'entity': entity, 'indexPath': path('orocrm_account_index'), 'indexLabel': 'Accounts', 'entityTitle': entity.name(format)|default('N/A') } %}
     {{ parent() }}
 {% endblock pageHeader %}
 
@@ -37,13 +37,13 @@
     {% set id = 'navbarAccountsUpdate' %}
 
     {% set attributes = {} %}
-    {% for value in account|getAttributes() %}
+    {% for value in entity|getAttributes() %}
         {% set attributes = attributes | merge([UI.flexibleAttributeRow(value)]) %}
     {% endfor %}
 
     {% set accountAddresses = {} %}
-    {% if account|hasAddress %}
-        {% for value in account|getAttributes(['shipping_address', 'billing_address']) %}
+    {% if entity|hasAddress %}
+        {% for value in entity|getAttributes(['shipping_address', 'billing_address']) %}
             {% set address = value.data %}
             {% if address is not null %}
                 {% set accountAddresses = accountAddresses|merge([{'title': value.attribute.label, 'data': [addressView.renderAddress(address)]}]) %}
@@ -51,10 +51,10 @@
         {% endfor %}
     {% endif %}
 
-    {% if account.values is defined %}
+    {% if entity.values is defined %}
         {% set col = 2 %}
         {% set additional = {} %}
-        {% set additionalAttributes = account|getAttributes(['shipping_address', 'billing_address'], true) %}
+        {% set additionalAttributes = entity|getAttributes(['shipping_address', 'billing_address'], true) %}
         {% set attributes = {} %}
         {% set half = (additionalAttributes|length / col)|ceil %}
 
@@ -80,7 +80,7 @@
                         {
                             'title': 'Basic Information',
                             'data': [
-                                UI.attibuteRow('Account Name', account.name),
+                                UI.attibuteRow('Account Name', entity.name),
                             ]
                         }
                     ]

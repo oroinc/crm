@@ -1,25 +1,25 @@
 {% extends 'OroUIBundle:actions:view.html.twig' %}
 {% import 'OroUIBundle::macros.html.twig' as macros %}
 {% import 'OroAddressBundle:Include:viewMacro.html.twig' as addressView %}
-{% oro_title_set({params : {"%contact.name%": contact.__toString} }) %}
+{% oro_title_set({params : {"%contact.name%": entity.__toString} }) %}
 {% set gridId = 'accounts-grid' %}
 {% block head_script %}
     {{ parent() }}
-    {% include 'OroCRMAccountBundle:Account:remove.confirm.js.twig' %}
     {% placeholder prepare_grid with {'datagrid': datagrid, 'selector': '#' ~ gridId} %}
 {% endblock %}
 
 {% block navButtons %}
     {{ UI.button({'path' : path('orocrm_contact_index'), 'iClass' : 'icon-chevron-left ', 'title' : 'Back', 'label' : 'Back'}) }}
     {% if resource_granted('orocrm_contact_update') %}
-        {{ UI.button({'path' : path('orocrm_contact_update', { 'id': contact.id }), 'iClass' : 'icon-edit ', 'title' : 'Update contact', 'label' : 'Edit'}) }}
+        {{ UI.button({'path' : path('orocrm_contact_update', { 'id': entity.id }), 'iClass' : 'icon-edit ', 'title' : 'Update contact', 'label' : 'Edit'}) }}
     {% endif %}
     {% if resource_granted('orocrm_contact_delete') %}
         {{ UI.deleteButton({
-                'dataUrl': path('oro_api_delete_contact', {'id': contact.id}) ,
-                'data-redirect': path('orocrm_contact_index'),
+                'dataUrl': path('oro_api_delete_contact', {'id': entity.id}) ,
+                'dataRedirect': path('orocrm_contact_index'),
                 'aCss': 'no-hash remove-button',
-                'dataId': contact.id,
+                'id': 'btn-remove-contact',
+                'dataId': entity.id,
                 'dataMessage': 'Are you sure you want to delete this contact?',
                 'title': 'Delete Contact',
                 'label': 'Delete'
@@ -29,20 +29,20 @@
 {% endblock navButtons %}
 
 {% block pageHeader %}
-    {% set breadcrumbs = {'entity': contact, 'indexPath': path('orocrm_contact_index'), 'indexLabel': 'Contacts', 'entityTitle': contact.__toString } %}
+    {% set breadcrumbs = {'entity': entity, 'indexPath': path('orocrm_contact_index'), 'indexLabel': 'Contacts', 'entityTitle': entity.__toString } %}
     {{ parent() }}
 {% endblock pageHeader %}
 
 {% block scroll_data %}
     {% set id = 'navbarContactsUpdate' %}
     {% set attributes = {} %}
-    {% for value in contact|getAttributes(['address'], true) %}
+    {% for value in entity|getAttributes(['address'], true) %}
         {% set attributes = attributes | merge([UI.flexibleAttributeRow(value)]) %}
     {% endfor %}
 
     {% set addresses = {} %}
-    {% if contact|hasAddress('address') %}
-        {% set addressValue = contact.getValue('address') %}
+    {% if entity|hasAddress('address') %}
+        {% set addressValue = entity.getValue('address') %}
         {% if addressValue.data is not null %}
              {% set addresses = [{'title': addressValue.attribute.label, 'data': [addressView.renderAddress(addressValue.data)]}] %}
         {% endif %}
