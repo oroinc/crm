@@ -154,7 +154,6 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
 
                     echo ">> {$i}\n";
                 }
-                if ($i == 1) {break;}
             }
             fclose($handle);
         }
