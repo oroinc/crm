@@ -50,7 +50,7 @@ class ContactController extends Controller
         }
 
         return array(
-            'entity'  => $contact,
+            'entity'   => $contact,
             'datagrid' => $datagridView,
         );
     }
