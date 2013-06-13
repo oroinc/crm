@@ -28,7 +28,7 @@ use Oro\Bundle\UserBundle\Entity\User;
 
 class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInterface
 {
-    const FLUSH_MAX = 200;
+    const FLUSH_MAX = 20;
 
     /** @var array Lead Sources */
     protected $leadSource = array('other', 'call', 'TV', 'website');
@@ -116,7 +116,6 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
      */
     public function loadAccounts()
     {
-        $arrResult = array();
         $handle = fopen(__DIR__ . DIRECTORY_SEPARATOR . "data.csv", "r");
         if ( $handle ) {
             $i=0;
@@ -126,6 +125,7 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
             }
             echo "\nLoading...\n";
             while (($data = fgetcsv($handle, 1000, ",")) !== false) {
+                $s = microtime(true);
                 $data = array_combine($headers, array_values($data));
                 $account = $this->createAccount($data);
                 $contact = $this->createContact($data);
@@ -146,15 +146,15 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
                 if ($i % self::FLUSH_MAX == 0) {
                     $this->flush($this->accountManager);
                     $this->flush($this->contactManager);
+                    $this->contactManager->getStorageManager()->clear();
 
-                    $this->contactManager->getStorageManager()->clear('OroCRM\Bundle\ContactBundle\Entity\Contact');
-                    $this->contactManager->getStorageManager()->clear('OroCRM\Bundle\ContactBundle\Entity\Value\ContactValue');
-                    $this->accountManager->getStorageManager()->clear('OroCRM\Bundle\AccountBundle\Entity\Account');
-                    $this->contactManager->getStorageManager()->clear('OroCRM\Bundle\AccountBundle\Entity\Value\AccountValue');
+                    $this->groups = $this->contactManager->getStorageManager()->getRepository('OroCRMContactBundle:Group')->findAll();
+                    $this->users = $this->userManager->getStorageManager()->getRepository('OroUserBundle:User')->findAll();
+                    $this->countries = $this->userManager->getStorageManager()->getRepository('OroAddressBundle:Country')->findAll();
 
-                    echo ">> {$i}\n";
+                    $e = microtime(true);
+                    echo ">> {$i} " . ($e-$s) . "\n";
                 }
-                if ($i == 1) {break;}
             }
             fclose($handle);
         }
