@@ -33,7 +33,7 @@
     {{ parent() }}
 {% endblock pageHeader %}
 
-{% block scroll_data %}
+{% block content_data %}
     {% set id = 'navbarContactsUpdate' %}
     {% set attributes = {} %}
     {% for value in entity|getAttributes(['address'], true) %}
@@ -48,7 +48,7 @@
         {% endif %}
     {% endif %}
 
-    {% set scrollBlocks =
+    {% set dataBlocks =
             [
                 {
                     'title': 'General',
@@ -62,11 +62,11 @@
                 }
             ]
     %}
-    {% set scrollBlocks = scrollBlocks|merge([{'title' : 'Accounts', 'subblocks': [{'title' : null, 'data' : [UI.gridBlock(gridId)]}] }])%}
+    {% set dataBlocks = dataBlocks|merge([{'title' : 'Accounts', 'subblocks': [{'title' : null, 'data' : [UI.gridBlock(gridId)]}] }])%}
     {% set data =
         {
-            'scrollBlocks': scrollBlocks,
+            'dataBlocks': dataBlocks,
         }
     %}
     {{ parent() }}
-{% endblock scroll_data %}
+{% endblock content_data %}

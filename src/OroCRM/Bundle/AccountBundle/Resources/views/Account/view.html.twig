@@ -33,7 +33,7 @@
     {{ parent() }}
 {% endblock pageHeader %}
 
-{% block scroll_data %}
+{% block content_data %}
     {% set id = 'navbarAccountsUpdate' %}
 
     {% set attributes = {} %}
@@ -71,7 +71,7 @@
         {% set additional = additional|merge([{'title' : null, 'data' : attributes}]) %}
     {% endif %}
 
-    {% set scrollBlocks =
+    {% set dataBlocks =
             [
                 {
                     'title': 'General',
@@ -89,19 +89,19 @@
     %}
 
     {% if (accountAddresses|length) %}
-    {% set scrollBlocks = scrollBlocks|merge([{'title' : 'Addresses', 'subblocks': accountAddresses}])%}
+    {% set dataBlocks = dataBlocks|merge([{'title' : 'Addresses', 'subblocks': accountAddresses}])%}
     {% endif %}
 
     {% if (additional|length) %}
-        {% set scrollBlocks = scrollBlocks|merge([{'title' : 'Additional Information', 'subblocks': additional}])%}
+        {% set dataBlocks = dataBlocks|merge([{'title' : 'Additional Information', 'subblocks': additional}])%}
     {% endif %}
 
-    {% set scrollBlocks = scrollBlocks|merge([{'title' : 'Contacts', 'subblocks': [{'title' : null, 'data' : [UI.gridBlock(gridId)]}] }])%}
+    {% set dataBlocks = dataBlocks|merge([{'title' : 'Contacts', 'subblocks': [{'title' : null, 'data' : [UI.gridBlock(gridId)]}] }])%}
 
     {% set data =
         {
-            'scrollBlocks': scrollBlocks,
+            'dataBlocks': dataBlocks,
         }
     %}
     {{ parent() }}
-{% endblock scroll_data %}
+{% endblock content_data %}

@@ -61,10 +61,10 @@
     {% endif %}
 {% endblock pageHeader %}
 
-{% block scroll_data %}
+{% block content_data %}
     {% set id = 'account-profile' %}
 
-    {% set scrollBlocks = [{
+    {% set dataBlocks = [{
             'title': 'General',
             'class': 'active',
             'subblocks': [
@@ -86,14 +86,14 @@
 
             {% endif %}
         {% endfor %}
-        {% set scrollBlocks = scrollBlocks|merge(
+        {% set dataBlocks = dataBlocks|merge(
             [{
                 'title' : 'Addresses',
                 'subblocks': accountAddresses
             }]
         )
         %}
-        {% set scrollBlocks = scrollBlocks|merge(
+        {% set dataBlocks = dataBlocks|merge(
             [{
                 'title' : 'Additional Information',
                 'subblocks':
@@ -111,7 +111,7 @@
         %}
     {% endif %}
 
-    {% set scrollBlocks = scrollBlocks|merge(
+    {% set dataBlocks = dataBlocks|merge(
         [{
             'title' : 'Contacts',
             'subblocks':
@@ -133,9 +133,9 @@
     {% set data =
         {
             'formErrors': form_errors(form)? form_errors(form) : null,
-            'scrollBlocks': scrollBlocks,
+            'dataBlocks': dataBlocks,
             'hiddenData': form_rest(form)
         }
     %}
     {{ parent() }}
-{% endblock scroll_data %}
+{% endblock content_data %}
