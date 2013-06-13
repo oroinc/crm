@@ -2,6 +2,6 @@ autocomplete_entities:
     accounts:
         type: flexible
         form_options:
-            datasource: autocomplete
+            extra_config: autocomplete
         entity_class: OroCRM\Bundle\AccountBundle\Entity\Account
         property: name
