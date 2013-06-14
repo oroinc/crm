@@ -15,6 +15,8 @@ use FOS\RestBundle\Routing\ClassResourceInterface;
 use Oro\Bundle\SoapBundle\Form\Handler\ApiFormHandler;
 use Oro\Bundle\SoapBundle\Controller\Api\Rest\FlexibleRestController;
 use Oro\Bundle\SoapBundle\Entity\Manager\ApiFlexibleEntityManager;
+use OroCRM\Bundle\ContactBundle\Entity\Contact;
+use Oro\Bundle\AddressBundle\Entity\TypedAddress;
 
 /**
  * @RouteResource("contact")
@@ -136,5 +138,44 @@ class ContactController extends FlexibleRestController implements ClassResourceI
     public function getFormHandler()
     {
         return $this->get('orocrm_contact.form.handler.contact.api');
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function getPreparedItem($entity)
+    {
+        // convert addresses to plain array
+        $addressData = array();
+        /** @var $entity Contact */
+        /** @var $address TypedAddress */
+        foreach ($entity->getMultiAddress() as $address) {
+            $addressArray = parent::getPreparedItem($address);
+            $addressArray['type'] = $address->getType()->getType();
+            $addressData[] = $addressArray;
+        }
+
+        $result = parent::getPreparedItem($entity);
+        $result['addresses'] = $addressData;
+        unset($result['multiAddress']);
+
+        return $result;
+    }
+
+    /**
+     * @param Contact $entity
+     */
+    protected function fixRequestAttributes($entity)
+    {
+        parent::fixRequestAttributes($entity);
+
+        $requestVariable = $this->getForm()->getName();
+        $request = $this->getRequest()->request;
+        $data = $request->get($requestVariable, array());
+
+        $data['multiAddress'] = !empty($data['addresses']) ? $data['addresses'] : array();
+        unset($data['addresses']);
+
+        $request->set($requestVariable, $data);
     }
 }
