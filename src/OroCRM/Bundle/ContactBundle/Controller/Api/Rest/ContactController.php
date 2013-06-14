@@ -6,6 +6,8 @@ use FOS\RestBundle\Controller\Annotations\NamePrefix;
 use FOS\RestBundle\Controller\Annotations\RouteResource;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
+use Oro\Bundle\AddressBundle\Entity\AddressType;
+use Oro\Bundle\AddressBundle\Form\DataTransformer\AddressTypeToTypeTransformer;
 use Oro\Bundle\UserBundle\Annotation\Acl;
 use Oro\Bundle\UserBundle\Annotation\AclAncestor;
 
@@ -141,6 +143,14 @@ class ContactController extends FlexibleRestController implements ClassResourceI
     }
 
     /**
+     * @return AddressTypeToTypeTransformer
+     */
+    protected function getAddressTypeTransformer()
+    {
+        return $this->get('oro_address.typed.transformer');
+    }
+
+    /**
      * {@inheritDoc}
      */
     protected function getPreparedItem($entity)
@@ -151,7 +161,7 @@ class ContactController extends FlexibleRestController implements ClassResourceI
         /** @var $address TypedAddress */
         foreach ($entity->getMultiAddress() as $address) {
             $addressArray = parent::getPreparedItem($address);
-            $addressArray['type'] = $address->getType()->getType();
+            $addressArray['type'] = $this->getAddressTypeTransformer()->transform($address->getType());
             $addressData[] = $addressArray;
         }
 
@@ -174,6 +184,13 @@ class ContactController extends FlexibleRestController implements ClassResourceI
         $data = $request->get($requestVariable, array());
 
         $data['multiAddress'] = !empty($data['addresses']) ? $data['addresses'] : array();
+        foreach ($data['multiAddress'] as &$address) {
+            /** @var bool|AddressType $addressType */
+            $addressType = isset($address['type']) ? $this->getAddressTypeTransformer()->reverseTransform($address['type']) : false;
+            if ($addressType) {
+                $address['type'] = $addressType->getId();
+            }
+        }
         unset($data['addresses']);
 
         $request->set($requestVariable, $data);
