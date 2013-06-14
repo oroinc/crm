@@ -103,6 +103,7 @@
                             <div class="form-horizontal span6 pull-right">
                                 <h5 class="usser-fiedset"><span>{{ 'Address'|trans }}</span></h5>
                                 {% for addressValue in contact.multiAddress %}
+                                    {{ addressView.renderAddressView(addressValue, [{'label': 'Type', 'data': 'type'}]) }}
                                     {{ addressView.renderAddress(addressValue) }}
                                 {% endfor %}
                             </div>
