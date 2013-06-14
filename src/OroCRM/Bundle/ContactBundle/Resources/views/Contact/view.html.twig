@@ -99,7 +99,7 @@
                 <div class="usser-row">
                     <h4 id="scroll-main" class="scrollspy-title">{{ 'General'|trans }}</h4>
                     <div class="row-fluid row-fluid-divider oro-form-contains-address">
-                        {% if contact.multiAddress %}
+                        {% if contact.multiAddress.values %}
                             <div class="form-horizontal span6 pull-right">
                                 <h5 class="usser-fiedset"><span>{{ 'Address'|trans }}</span></h5>
                                 {% for addressValue in contact.multiAddress %}

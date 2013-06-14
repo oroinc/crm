@@ -186,7 +186,9 @@ class ContactController extends FlexibleRestController implements ClassResourceI
         $data['multiAddress'] = !empty($data['addresses']) ? $data['addresses'] : array();
         foreach ($data['multiAddress'] as &$address) {
             /** @var bool|AddressType $addressType */
-            $addressType = isset($address['type']) ? $this->getAddressTypeTransformer()->reverseTransform($address['type']) : false;
+            $addressType = isset($address['type'])
+                ? $this->getAddressTypeTransformer()->reverseTransform($address['type'])
+                : null;
             if ($addressType) {
                 $address['type'] = $addressType->getId();
             }
