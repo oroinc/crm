@@ -1,0 +1,4 @@
+entity:
+    account:
+        name:           Account
+        description:    Represent account
