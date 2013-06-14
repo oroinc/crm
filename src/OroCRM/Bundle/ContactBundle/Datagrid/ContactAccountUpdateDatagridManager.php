@@ -11,6 +11,7 @@ use Oro\Bundle\GridBundle\Field\FieldDescriptionInterface;
 use Oro\Bundle\GridBundle\Filter\FilterInterface;
 use Oro\Bundle\GridBundle\Sorter\SorterInterface;
 use Oro\Bundle\GridBundle\Datagrid\ParametersInterface;
+use Oro\Bundle\GridBundle\Datagrid\ProxyQueryInterface;
 
 class ContactAccountUpdateDatagridManager extends ContactAccountDatagridManager
 {
@@ -24,7 +25,7 @@ class ContactAccountUpdateDatagridManager extends ContactAccountDatagridManager
         $fieldHasContact->setOptions(
             array(
                 'type'        => FieldDescriptionInterface::TYPE_BOOLEAN,
-                'label'       => 'Has contact',
+                'label'       => $this->translate('Assigned'),
                 'field_name'  => 'hasCurrentContact',
                 'expression'  => 'hasCurrentContact',
                 'nullable'    => false,
@@ -43,30 +44,26 @@ class ContactAccountUpdateDatagridManager extends ContactAccountDatagridManager
     /**
      * {@inheritDoc}
      */
-    protected function createQuery()
+    protected function prepareQuery(ProxyQueryInterface $query)
     {
-        $query = parent::createQuery();
-
-        // remove current contact filter
-        $query->resetDQLPart('where');
+        $entityAlias = $query->getRootAlias();
 
         if ($this->getContact()->getId()) {
             $query->addSelect(
-                'CASE WHEN ' .
-                '(:contact MEMBER OF a.contacts OR a.id IN (:data_in)) AND a.id NOT IN (:data_not_in) '.
+                "CASE WHEN " .
+                "(:contact MEMBER OF $entityAlias.contacts OR $entityAlias.id IN (:data_in)) AND " .
+                "$entityAlias.id NOT IN (:data_not_in) ".
                 'THEN 1 ELSE 0 END AS hasCurrentContact',
                 true
             );
         } else {
             $query->addSelect(
-                'CASE WHEN ' .
-                'a.id IN (:data_in) AND a.id NOT IN (:data_not_in) '.
-                'THEN 1 ELSE 0 END AS hasCurrentContact',
+                "CASE WHEN ".
+                "$entityAlias.id IN (:data_in) AND $entityAlias.id NOT IN (:data_not_in) ".
+                "THEN 1 ELSE 0 END AS hasCurrentContact",
                 true
             );
         }
-
-        return $query;
     }
 
     /**

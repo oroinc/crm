@@ -83,6 +83,7 @@ services:
         arguments:
             - "account"
             - "orocrm_account_select"
+            - @oro_flexibleentity.validator.attribute_constraint_guesser
         tags:
             - { name: oro_flexibleentity.attributetype, alias: orocrm_account_attribute_account }
 
@@ -91,6 +92,7 @@ services:
         arguments:
             - "varchar"
             - "oro_ticker_symbol"
+            - @oro_flexibleentity.validator.attribute_constraint_guesser
         tags:
             - { name: oro_flexibleentity.attributetype, alias: orocrm_account_ticker_symbol }
 
