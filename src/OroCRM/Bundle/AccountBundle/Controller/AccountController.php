@@ -68,7 +68,7 @@ class AccountController extends Controller
         }
 
         return array(
-            'account'  => $account,
+            'entity'   => $account,
             'datagrid' => $datagridView,
         );
     }

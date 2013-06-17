@@ -1,0 +1,4 @@
+OroCRM\Bundle\ContactBundle\Entity\Contact:
+    icon_class:                         icon-user
+    name:                               entity.contact.name
+    description:                        entity.contact.description

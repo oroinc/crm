@@ -33,7 +33,7 @@ class GroupDatagridManager extends DatagridManager
         $fieldId->setOptions(
             array(
                 'type'        => FieldDescriptionInterface::TYPE_INTEGER,
-                'label'       => 'ID',
+                'label'       => $this->translate('ID'),
                 'field_name'  => 'id',
                 'filter_type' => FilterInterface::TYPE_NUMBER,
                 'show_column' => false
@@ -46,7 +46,7 @@ class GroupDatagridManager extends DatagridManager
         $fieldName->setOptions(
             array(
                 'type'        => FieldDescriptionInterface::TYPE_TEXT,
-                'label'       => 'Name',
+                'label'       => $this->translate('Name'),
                 'field_name'  => 'name',
                 'filter_type' => FilterInterface::TYPE_STRING,
                 'sortable'    => true,
@@ -67,7 +67,7 @@ class GroupDatagridManager extends DatagridManager
             'type'         => ActionInterface::TYPE_REDIRECT,
             'acl_resource' => 'root',
             'options'      => array(
-                'label'         => 'Update',
+                'label'         => $this->translate('Update'),
                 'link'          => 'update_link',
                 'runOnRowClick' => true,
             )
@@ -78,7 +78,7 @@ class GroupDatagridManager extends DatagridManager
             'type'         => ActionInterface::TYPE_REDIRECT,
             'acl_resource' => 'root',
             'options'      => array(
-                'label'   => 'Update',
+                'label'   => $this->translate('Update'),
                 'icon'    => 'edit',
                 'link'    => 'update_link',
             )
@@ -89,7 +89,7 @@ class GroupDatagridManager extends DatagridManager
             'type'         => ActionInterface::TYPE_DELETE,
             'acl_resource' => 'root',
             'options'      => array(
-                'label' => 'Delete',
+                'label' => $this->translate('Delete'),
                 'icon'  => 'trash',
                 'link'  => 'delete_link',
             )

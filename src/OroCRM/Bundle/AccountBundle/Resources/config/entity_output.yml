@@ -1,0 +1,4 @@
+OroCRM\Bundle\AccountBundle\Entity\Account:
+    icon_class:                         icon-user
+    name:                               entity.account.name
+    description:                        entity.account.description

@@ -63,7 +63,7 @@ class AccountDatagridManager extends FlexibleDatagridManager
         $fieldId->setOptions(
             array(
                 'type'        => FieldDescriptionInterface::TYPE_INTEGER,
-                'label'       => 'ID',
+                'label'       => $this->translate('ID'),
                 'field_name'  => 'id',
                 'filter_type' => FilterInterface::TYPE_NUMBER,
                 'show_column' => false
@@ -76,7 +76,7 @@ class AccountDatagridManager extends FlexibleDatagridManager
         $fieldName->setOptions(
             array(
                 'type'        => FieldDescriptionInterface::TYPE_TEXT,
-                'label'       => 'Name',
+                'label'       => $this->translate('Name'),
                 'field_name'  => 'name',
                 'filter_type' => FilterInterface::TYPE_STRING,
                 'sortable'    => true,
@@ -91,7 +91,7 @@ class AccountDatagridManager extends FlexibleDatagridManager
         $fieldPhone->setOptions(
             array(
                 'type'        => FieldDescriptionInterface::TYPE_TEXT,
-                'label'       => 'Phone',
+                'label'       => $this->translate('Phone'),
                 'field_name'  => 'phones',
                 'filter_type' => FilterInterface::TYPE_STRING,
                 'sortable'    => false,
@@ -131,7 +131,7 @@ class AccountDatagridManager extends FlexibleDatagridManager
         $fieldCreated->setOptions(
             array(
                 'type'        => FieldDescriptionInterface::TYPE_DATETIME,
-                'label'       => 'Created At',
+                'label'       => $this->translate('Created At'),
                 'field_name'  => 'created',
                 'filter_type' => FilterInterface::TYPE_DATETIME,
                 'sortable'    => true,
@@ -146,7 +146,7 @@ class AccountDatagridManager extends FlexibleDatagridManager
         $fieldUpdated->setOptions(
             array(
                 'type'        => FieldDescriptionInterface::TYPE_DATETIME,
-                'label'       => 'Updated At',
+                'label'       => $this->translate('Updated At'),
                 'field_name'  => 'updated',
                 'filter_type' => FilterInterface::TYPE_DATETIME,
                 'sortable'    => true,
@@ -167,7 +167,7 @@ class AccountDatagridManager extends FlexibleDatagridManager
             'type'         => ActionInterface::TYPE_REDIRECT,
             'acl_resource' => 'root',
             'options'      => array(
-                'label'         => 'View',
+                'label'         => $this->translate('View'),
                 'link'          => 'view_link',
                 'runOnRowClick' => true,
             )
@@ -178,7 +178,7 @@ class AccountDatagridManager extends FlexibleDatagridManager
             'type'         => ActionInterface::TYPE_REDIRECT,
             'acl_resource' => 'root',
             'options'      => array(
-                'label' => 'View',
+                'label' => $this->translate('View'),
                 'icon'  => 'user',
                 'link'  => 'view_link',
             )
@@ -189,7 +189,7 @@ class AccountDatagridManager extends FlexibleDatagridManager
             'type'         => ActionInterface::TYPE_REDIRECT,
             'acl_resource' => 'root',
             'options'      => array(
-                'label'   => 'Update',
+                'label'   => $this->translate('Update'),
                 'icon'    => 'edit',
                 'link'    => 'update_link',
             )
@@ -200,7 +200,7 @@ class AccountDatagridManager extends FlexibleDatagridManager
             'type'         => ActionInterface::TYPE_DELETE,
             'acl_resource' => 'root',
             'options'      => array(
-                'label' => 'Delete',
+                'label' => $this->translate('Delete'),
                 'icon'  => 'trash',
                 'link'  => 'delete_link',
             )
