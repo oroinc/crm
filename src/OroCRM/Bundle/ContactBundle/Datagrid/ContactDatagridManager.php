@@ -3,7 +3,10 @@
 namespace OroCRM\Bundle\ContactBundle\Datagrid;
 
 use Doctrine\ORM\QueryBuilder;
+use Doctrine\ORM\PersistentCollection;
 
+use Oro\Bundle\FlexibleEntityBundle\Entity\Collection;
+use Oro\Bundle\FlexibleEntityBundle\Form\Type\PhoneType;
 use Oro\Bundle\GridBundle\Datagrid\FlexibleDatagridManager;
 use Oro\Bundle\GridBundle\Field\FieldDescription;
 use Oro\Bundle\GridBundle\Field\FieldDescriptionCollection;
@@ -13,18 +16,10 @@ use Oro\Bundle\GridBundle\Action\ActionInterface;
 use Oro\Bundle\GridBundle\Property\UrlProperty;
 use Oro\Bundle\GridBundle\Property\CallbackProperty;
 use Oro\Bundle\GridBundle\Datagrid\ResultRecordInterface;
-use Oro\Bundle\FlexibleEntityBundle\Entity\Collection;
-use Oro\Bundle\FlexibleEntityBundle\Form\Type\PhoneType;
-use Doctrine\ORM\PersistentCollection;
-use Symfony\Component\Security\Acl\Exception\Exception;
+use Oro\Bundle\GridBundle\Datagrid\ProxyQueryInterface;
 
 class ContactDatagridManager extends FlexibleDatagridManager
 {
-    protected $excludeAttributes = array(
-        'emails',
-        'phones'
-    );
-
     /**
      * {@inheritDoc}
      */
@@ -35,23 +30,6 @@ class ContactDatagridManager extends FlexibleDatagridManager
             new UrlProperty('update_link', $this->router, 'orocrm_contact_update', array('id')),
             new UrlProperty('delete_link', $this->router, 'oro_api_delete_contact', array('id')),
         );
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    protected function getFlexibleAttributes()
-    {
-        parent::getFlexibleAttributes();
-
-        // exclude collections attributes from grid
-        foreach ($this->excludeAttributes as $attributeCode) {
-            if (isset($this->attributes[$attributeCode])) {
-                unset($this->attributes[$attributeCode]);
-            }
-        }
-
-        return $this->attributes;
     }
 
     /**
@@ -142,6 +120,27 @@ class ContactDatagridManager extends FlexibleDatagridManager
         $fieldEmail->setProperty($emailProperty);
         $fieldsCollection->add($fieldEmail);
 
+        $fieldCountry = new FieldDescription();
+        $fieldCountry->setName('country');
+        $fieldCountry->setOptions(
+            array(
+                'type'            => FieldDescriptionInterface::TYPE_TEXT,
+                'label'           => $this->translate('Country'),
+                'field_name'      => 'countryName',
+                'expression'      => 'address.country',
+                'filter_type'     => FilterInterface::TYPE_ENTITY,
+                'sortable'        => true,
+                'filterable'      => true,
+                'show_filter'     => true,
+                // entity filter options
+                'multiple'        => true,
+                'class'           => 'OroAddressBundle:Country',
+                'property'        => 'name',
+                'filter_by_where' => true,
+            )
+        );
+        $fieldsCollection->add($fieldCountry);
+
         $fieldCreated = new FieldDescription();
         $fieldCreated->setName('created');
         $fieldCreated->setOptions(
@@ -223,5 +222,19 @@ class ContactDatagridManager extends FlexibleDatagridManager
         );
 
         return array($clickAction, $viewAction, $updateAction, $deleteAction);
+    }
+
+    /**
+     * @param \Oro\Bundle\GridBundle\Datagrid\ProxyQueryInterface $query
+     */
+    protected function prepareQuery(ProxyQueryInterface $query)
+    {
+        $entityAlias = $query->getRootAlias();
+
+        /** @var $query QueryBuilder */
+        $query->leftJoin("$entityAlias.multiAddress", 'address', 'WITH', 'address.city = \'donetsk\'')
+            ->leftJoin('address.country', 'country');
+
+        $query->addSelect('country.name as countryName', true);
     }
 }
