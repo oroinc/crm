@@ -232,7 +232,7 @@ class ContactDatagridManager extends FlexibleDatagridManager
         $entityAlias = $query->getRootAlias();
 
         /** @var $query QueryBuilder */
-        $query->leftJoin("$entityAlias.multiAddress", 'address', 'WITH', 'address.city = \'donetsk\'')
+        $query->leftJoin("$entityAlias.multiAddress", 'address', 'WITH', 'address.primary = 1')
             ->leftJoin('address.country', 'country');
 
         $query->addSelect('country.name as countryName', true);
