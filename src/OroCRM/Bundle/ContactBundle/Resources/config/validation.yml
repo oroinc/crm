@@ -7,3 +7,8 @@ OroCRM\Bundle\ContactBundle\Entity\Group:
             - Length:
                 min:        3
                 max:        255
+
+OroCRM\Bundle\ContactBundle\Entity\Contact:
+    properties:
+        multiAddress:
+            - Oro\Bundle\AddressBundle\Validator\Constraints\ContainsPrimary: ~

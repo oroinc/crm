@@ -12,11 +12,39 @@ use Oro\Bundle\TestFrameworkBundle\Test\Client;
  */
 class RestContactApiTest extends WebTestCase
 {
+    /**
+     * @var Client
+     */
     public $client = null;
+
+    /**
+     * @var array
+     */
+    protected $testAddress = array(
+        'type' => 'shipping',
+        'street' => 'contact_street',
+        'city' => 'contact_city',
+        'country' => 'RU',
+        'postalCode' => '12345',
+    );
 
     public function setUp()
     {
         $this->client = static::createClient(array(), ToolsAPI::generateWsseHeader());
+    }
+
+    /**
+     * @param array $actualAddresses
+     */
+    protected function assertAddresses(array $actualAddresses)
+    {
+        $this->assertCount(1, $actualAddresses);
+        $address = current($actualAddresses);
+
+        foreach (array('type', 'street', 'city') as $key) {
+            $this->assertArrayHasKey($key, $address);
+            $this->assertEquals($this->testAddress[$key], $address[$key]);
+        }
     }
 
     /**
@@ -30,15 +58,18 @@ class RestContactApiTest extends WebTestCase
                     "first_name" => 'Contact_fname_' . mt_rand(),
                     "last_name" => 'Contact_lname',
                     "name_prefix" => 'Contact name prefix',
-                    "description" => 'Contact description'
-                )
+                    "description" => 'Contact description',
+                ),
+                "addresses" => array($this->testAddress)
             )
         );
         $this->client->request('POST', 'http://localhost/api/rest/latest/contact', $request);
         $result = $this->client->getResponse();
-        //we can get Id
-        $id = json_decode($result->getContent(), true);
         ToolsAPI::assertJsonResponse($result, 201);
+
+        $contact = json_decode($result->getContent(), true);
+        $this->assertArrayHasKey('id', $contact);
+        $this->assertNotEmpty($contact['id']);
 
         return $request;
     }
@@ -52,21 +83,29 @@ class RestContactApiTest extends WebTestCase
     {
         $this->client->request('GET', 'http://localhost/api/rest/latest/contacts');
         $result = $this->client->getResponse();
-        $result = json_decode($result->getContent(), true);
-        $flag = 1;
-        foreach ($result as $contact) {
-            if ($contact['attributes']['first_name']['value'] == $request['contact']['attributes']['first_name']) {
-                $flag = 0;
+        $entities = json_decode($result->getContent(), true);
+        $this->assertNotEmpty($entities);
+
+        $requiredContact = null;
+        foreach ($entities as $entity) {
+            if ($entity['attributes']['first_name']['value'] == $request['contact']['attributes']['first_name']) {
+                $requiredContact = $entity;
                 break;
             }
         }
-        $this->assertEquals(0, $flag);
+        $this->assertNotNull($requiredContact);
 
-        $this->client->request('GET', 'http://localhost/api/rest/latest/contacts' . '/' . $contact['id']);
+        $this->client->request('GET', 'http://localhost/api/rest/latest/contacts/' . $requiredContact['id']);
         $result = $this->client->getResponse();
         ToolsAPI::assertJsonResponse($result, 200);
 
-        return $contact;
+        $selectedContact = json_decode($result->getContent(), true);
+        $this->assertEquals($requiredContact, $selectedContact);
+
+        $this->assertArrayHasKey('addresses', $selectedContact);
+        $this->assertAddresses($selectedContact['addresses']);
+
+        return $selectedContact;
     }
 
     /**
@@ -77,15 +116,29 @@ class RestContactApiTest extends WebTestCase
      */
     public function testUpdateContact($contact, $request)
     {
+        $this->testAddress['type'] = 'billing';
+
         $request['contact']['attributes']['first_name'] .= "_Updated";
-        $this->client->request('PUT', 'http://localhost/api/rest/latest/contacts' . '/' . $contact['id'], $request);
+        $request['contact']['addresses'][0]['type'] = $this->testAddress['type'];
+        $request['contact']['addresses'][0]['primary'] = true;
+
+        $this->client->request('PUT', 'http://localhost/api/rest/latest/contacts/' . $contact['id'], $request);
         $result = $this->client->getResponse();
         ToolsAPI::assertJsonResponse($result, 204);
-        $this->client->request('GET', 'http://localhost/api/rest/latest/contacts' . '/' . $contact['id']);
+
+        $this->client->request('GET', 'http://localhost/api/rest/latest/contacts/' . $contact['id']);
         $result = $this->client->getResponse();
         ToolsAPI::assertJsonResponse($result, 200);
-        $result = json_decode($result->getContent(), true);
-        $this->assertEquals($request['contact']['attributes']['first_name'], $result['attributes']['first_name']['value'], 'Contact does not updated');
+
+        $contact = json_decode($result->getContent(), true);
+        $this->assertEquals(
+            $request['contact']['attributes']['first_name'],
+            $contact['attributes']['first_name']['value'],
+            'Contact was not updated'
+        );
+
+        $this->assertArrayHasKey('addresses', $contact);
+        $this->assertAddresses($contact['addresses']);
     }
 
     /**
@@ -97,6 +150,7 @@ class RestContactApiTest extends WebTestCase
         $this->client->request('DELETE', 'http://localhost/api/rest/latest/contacts' . '/' . $contact['id']);
         $result = $this->client->getResponse();
         ToolsAPI::assertJsonResponse($result, 204);
+
         $this->client->request('GET', 'http://localhost/api/rest/latest/contacts' . '/' . $contact['id']);
         $result = $this->client->getResponse();
         ToolsAPI::assertJsonResponse($result, 404);

@@ -110,9 +110,9 @@ class AccountValue extends AbstractEntityFlexibleValue
     protected $datetime;
 
     /**
-     * Store upload values
+     * Store address
      *
-     * @var Address $media
+     * @var Address $address
      *
      * @ORM\OneToOne(targetEntity="Oro\Bundle\AddressBundle\Entity\Address", cascade="persist")
      * @ORM\JoinColumn(name="address_id", referencedColumnName="id", onDelete="SET NULL")

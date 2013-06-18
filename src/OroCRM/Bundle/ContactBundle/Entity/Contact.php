@@ -13,6 +13,7 @@ use JMS\Serializer\Annotation\Exclude;
 use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 
 use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityFlexible;
+use Oro\Bundle\AddressBundle\Entity\TypedAddress;
 
 /**
  * @ORM\Entity(repositoryClass="Oro\Bundle\FlexibleEntityBundle\Entity\Repository\FlexibleEntityRepository")
@@ -55,6 +56,18 @@ class Contact extends AbstractEntityFlexible
     protected $accounts;
 
     /**
+     * @var ArrayCollection $multiAddress
+     * @ORM\ManyToMany(targetEntity="Oro\Bundle\AddressBundle\Entity\TypedAddress",cascade={"persist"})
+     * @ORM\JoinTable(name="orocrm_contact_to_address",
+     *     joinColumns={@ORM\JoinColumn(name="contact_id", referencedColumnName="id")},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="address_id", referencedColumnName="id", unique=true)}
+     * )
+     *
+     * @Exclude
+     */
+    protected $multiAddress;
+
+    /**
      * @var \Oro\Bundle\FlexibleEntityBundle\Model\AbstractFlexibleValue[]
      * @ORM\OneToMany(targetEntity="OroCRM\Bundle\ContactBundle\Entity\Value\ContactValue", mappedBy="entity", cascade={"persist", "remove"},orphanRemoval=true)
      * @Exclude
@@ -66,6 +79,7 @@ class Contact extends AbstractEntityFlexible
         parent::__construct();
         $this->groups   = new ArrayCollection();
         $this->accounts = new ArrayCollection();
+        $this->multiAddress = new ArrayCollection();
     }
 
     /**
@@ -198,6 +212,63 @@ class Contact extends AbstractEntityFlexible
         }
 
         return $this;
+    }
+
+    /**
+     * Set addresses
+     *
+     * @param TypedAddress[] $addresses
+     * @return Contact
+     */
+    public function setMultiAddress($addresses)
+    {
+        $this->multiAddress->clear();
+
+        foreach ($addresses as $address) {
+            $this->addMultiAddress($address);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Add address
+     *
+     * @param TypedAddress $address
+     * @return Contact
+     */
+    public function addMultiAddress(TypedAddress $address)
+    {
+        if (!$this->multiAddress->contains($address)) {
+            $this->multiAddress->add($address);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Remove address
+     *
+     * @param mixed $address
+     * @return Contact
+     */
+    public function removeMultiAddress($address)
+    {
+        if ($this->multiAddress->contains($address)) {
+            $this->multiAddress->removeElement($address);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Get addresses
+     *
+     * @return ArrayCollection
+     */
+    public function getMultiAddress()
+    {
+        return $this->multiAddress;
     }
 
     public function __toString()

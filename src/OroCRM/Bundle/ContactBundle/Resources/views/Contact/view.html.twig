@@ -40,13 +40,18 @@
         {% set attributes = attributes | merge([UI.flexibleAttributeRow(value)]) %}
     {% endfor %}
 
-    {% set addresses = {} %}
-    {% if entity|hasAddress('address') %}
-        {% set addressValue = entity.getValue('address') %}
-        {% if addressValue.data is not null %}
-             {% set addresses = [{'title': addressValue.attribute.label, 'data': [addressView.renderAddress(addressValue.data)]}] %}
-        {% endif %}
-    {% endif %}
+    {% set addresses = [] %}
+    {% set yesNoChoices = {0: 'No'|trans, 1: 'Yes'|trans} %}
+    {% for addressValue in entity.multiAddress %}
+        {% set primaryData = attribute(addressValue, 'primary') %}
+        {% set primaryData = yesNoChoices[primaryData]|default('No'|trans) %}
+        {% set addresses = addresses|merge([
+            addressView.renderAddressView(addressValue, [{'label': 'Type', 'data': 'type'}]),
+            addressView.renderAddressView(addressValue, [{'label': 'Primary', 'value': primaryData}]),
+            addressView.renderAddress(addressValue),
+            '<hr/>'
+        ]) %}
+    {% endfor %}
 
     {% set dataBlocks =
             [
@@ -57,8 +62,12 @@
                         {
                             'title': 'Basic Information',
                             'data': attributes
-                        }
-                    ]|merge(addresses)
+                        },
+                        {
+                            'title': 'Addresses',
+                            'data': addresses
+                        },
+                    ]
                 }
             ]
     %}

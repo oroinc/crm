@@ -6,6 +6,8 @@ use FOS\RestBundle\Controller\Annotations\NamePrefix;
 use FOS\RestBundle\Controller\Annotations\RouteResource;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
+use Oro\Bundle\AddressBundle\Entity\AddressType;
+use Oro\Bundle\AddressBundle\Form\DataTransformer\AddressTypeToTypeTransformer;
 use Oro\Bundle\UserBundle\Annotation\Acl;
 use Oro\Bundle\UserBundle\Annotation\AclAncestor;
 
@@ -15,6 +17,8 @@ use FOS\RestBundle\Routing\ClassResourceInterface;
 use Oro\Bundle\SoapBundle\Form\Handler\ApiFormHandler;
 use Oro\Bundle\SoapBundle\Controller\Api\Rest\FlexibleRestController;
 use Oro\Bundle\SoapBundle\Entity\Manager\ApiFlexibleEntityManager;
+use OroCRM\Bundle\ContactBundle\Entity\Contact;
+use Oro\Bundle\AddressBundle\Entity\TypedAddress;
 
 /**
  * @RouteResource("contact")
@@ -136,5 +140,61 @@ class ContactController extends FlexibleRestController implements ClassResourceI
     public function getFormHandler()
     {
         return $this->get('orocrm_contact.form.handler.contact.api');
+    }
+
+    /**
+     * @return AddressTypeToTypeTransformer
+     */
+    protected function getAddressTypeTransformer()
+    {
+        return $this->get('oro_address.typed.transformer');
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function getPreparedItem($entity)
+    {
+        // convert addresses to plain array
+        $addressData = array();
+        /** @var $entity Contact */
+        /** @var $address TypedAddress */
+        foreach ($entity->getMultiAddress() as $address) {
+            $addressArray = parent::getPreparedItem($address);
+            $addressArray['type'] = $this->getAddressTypeTransformer()->transform($address->getType());
+            $addressData[] = $addressArray;
+        }
+
+        $result = parent::getPreparedItem($entity);
+        $result['addresses'] = $addressData;
+        unset($result['multiAddress']);
+
+        return $result;
+    }
+
+    /**
+     * @param Contact $entity
+     */
+    protected function fixRequestAttributes($entity)
+    {
+        parent::fixRequestAttributes($entity);
+
+        $requestVariable = $this->getForm()->getName();
+        $request = $this->getRequest()->request;
+        $data = $request->get($requestVariable, array());
+
+        $data['multiAddress'] = !empty($data['addresses']) ? $data['addresses'] : array();
+        foreach ($data['multiAddress'] as &$address) {
+            /** @var bool|AddressType $addressType */
+            $addressType = isset($address['type'])
+                ? $this->getAddressTypeTransformer()->reverseTransform($address['type'])
+                : null;
+            if ($addressType) {
+                $address['type'] = $addressType->getId();
+            }
+        }
+        unset($data['addresses']);
+
+        $request->set($requestVariable, $data);
     }
 }
