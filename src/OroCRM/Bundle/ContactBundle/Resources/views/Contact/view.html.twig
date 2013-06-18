@@ -41,13 +41,13 @@
     {% endfor %}
 
     {% set addresses = [] %}
-    {% set yesNoChoices = {'0': 'No'|trans({}), '1': 'Yes'|trans({})} %}
+    {% set yesNoChoices = {'0': 'No'|trans, '1': 'Yes'|trans} %}
     {% for addressValue in entity.multiAddress %}
         {% set primaryData = attribute(addressValue, 'primary') %}
-        {% set primaryData = yesNoChoices[primaryData]|default('No'|trans({})) %}
+        {% set primaryData = yesNoChoices[primaryData]|default('No'|trans) %}
         {% set addresses = addresses|merge([
             addressView.renderAddressView(addressValue, [{'label': 'Type', 'data': 'type'}]),
-            addressView.renderAddressView(addressValue, [{'label': 'Primary', 'value': primaryData, 'defaultValue': 'No'|trans({})}]),
+            addressView.renderAddressView(addressValue, [{'label': 'Primary', 'value': primaryData}]),
             addressView.renderAddress(addressValue),
             '<hr/>'
         ]) %}
