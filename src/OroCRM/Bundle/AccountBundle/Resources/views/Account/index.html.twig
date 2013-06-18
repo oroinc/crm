@@ -1,16 +1,8 @@
-{% extends 'OroCRMAccountBundle::layout.html.twig' %}
-
-{% block head_script %}
-    {{ parent() }}
-
-    {% include 'OroGridBundle:Include:javascript.html.twig' with {'datagridView': datagrid, 'selector': '#accounts-grid'} %}
-    {% include 'OroGridBundle:Include:stylesheet.html.twig' %}
-{% endblock %}
-
+{% extends 'OroUIBundle:actions:index.html.twig' %}
+{% import 'OroUIBundle::macros.html.twig' as UI %}
+{% set gridId = 'accounts-grid' %}
 {% block content %}
-    <div class="container-fluid">
-        <h1>{{ 'Accounts'|trans }} <a class="btn btn-primary pull-right" href="{{ path('orocrm_account_create') }}" title="{{ 'Create account'|trans }}">{{ 'Create account'|trans }}</a></h1>
-    </div>
-    <div id="accounts-grid"></div>
-
+    {% set pageTitle = 'Accounts' %}
+    {% set buttons = [UI.addButton({'path' : path('orocrm_account_create'), 'title' : 'Create account', 'label' : 'Create account'})] %}
+    {{ parent() }}
 {% endblock %}

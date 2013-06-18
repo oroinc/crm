@@ -245,7 +245,7 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
         $email = new Collection;
         $email->setData($data['EmailAddress']);
         $email->setType(rand(EmailType::TYPE_CORPORATE, EmailType::TYPE_PERSONAL));
-        $this->addFlexibleAttributeCollection($this->contactRepository, $contact, 'emails', $phone);
+        $this->addFlexibleAttributeCollection($this->contactRepository, $contact, 'emails', $email);
 
         $address = new Address();
         $address->setCity($data['City']);

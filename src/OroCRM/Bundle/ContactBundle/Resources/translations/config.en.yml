@@ -1,0 +1,4 @@
+entity:
+    contact:
+        name:           Contact
+        description:    Represent contact
