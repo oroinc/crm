@@ -19,6 +19,9 @@ use Oro\Bundle\FlexibleEntityBundle\Entity\Repository\FlexibleEntityRepository;
 use Oro\Bundle\UserBundle\Entity\UserManager;
 use Oro\Bundle\UserBundle\Entity\User;
 
+/**
+ * @SuppressWarnings(PHPMD)
+ */
 class LoadCrmUsersData extends AbstractFixture implements ContainerAwareInterface
 {
     const USERS_NUMBER = 200;

@@ -111,11 +111,6 @@ class LoadContactAttrData extends AbstractFixture implements ContainerAwareInter
                     'code'  => 'phones',
                     'type'  => 'oro_flexibleentity_phone_collection',
                     'label' => 'Phones'
-                ),
-                array(
-                    'code'  => 'address',
-                    'type'  => 'oro_address',
-                    'label' => 'Address'
                 )
             )
         );

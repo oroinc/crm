@@ -28,6 +28,7 @@ class ContactApiType extends ContactType
                 'intention'            => 'contact',
                 'extra_fields_message' => 'This form should not contain extra fields: "{{ extra_fields }}"',
                 'csrf_protection'      => false,
+                'cascade_validation'   => true,
             )
         );
     }

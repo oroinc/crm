@@ -4,9 +4,9 @@ namespace OroCRM\Bundle\ContactBundle\Form\Type;
 
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-
 use Doctrine\ORM\EntityRepository;
 
+use Oro\Bundle\AddressBundle\Form\EventListener\AddressCollectionTypeSubscriber;
 use Oro\Bundle\FlexibleEntityBundle\Form\Type\FlexibleType;
 
 class ContactType extends FlexibleType
@@ -14,10 +14,28 @@ class ContactType extends FlexibleType
     /**
      * {@inheritdoc}
      */
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {
+        parent::buildForm($builder, $options);
+        $builder->addEventSubscriber(new AddressCollectionTypeSubscriber('multiAddress'));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function addEntityFields(FormBuilderInterface $builder)
     {
         // add default flexible fields
         parent::addEntityFields($builder);
+
+        // Addresses
+        $builder->add(
+            'multiAddress',
+            'oro_address_collection',
+            array(
+                'required' => true
+            )
+        );
 
         // groups
         $builder->add(
