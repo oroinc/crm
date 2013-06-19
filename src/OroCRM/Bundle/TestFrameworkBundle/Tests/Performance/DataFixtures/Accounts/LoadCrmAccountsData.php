@@ -192,7 +192,12 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
         $address->setLastName($data['Surname']);
 
         $isoCode = $data['Country'];
-        $country = array_filter($this->countries, function ($a) use ($isoCode) { return $a->getIso2Code() == $isoCode; });
+        $country = array_filter(
+            $this->countries,
+            function ($a) use ($isoCode) {
+                return $a->getIso2Code() == $isoCode;
+            }
+        );
         $country = array_values($country);
         /** @var Country $country */
         $country = $country[0];
@@ -257,7 +262,13 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
 
 
         $isoCode = $data['Country'];
-        $country = array_filter($this->countries, function ($a) use ($isoCode) { return $a->getIso2Code() == $isoCode; });
+        $country = array_filter(
+            $this->countries,
+            function ($a) use ($isoCode) {
+                return $a->getIso2Code() == $isoCode;
+            }
+        );
+
         $country = array_values($country);
         /** @var Country $country */
         $country = $country[0];
