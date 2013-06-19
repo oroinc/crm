@@ -5,6 +5,7 @@ namespace OroCRM\Bundle\TestFrameworkBundle\Tests\DataFixtures;
 use Oro\Bundle\AddressBundle\Entity\Address;
 use Oro\Bundle\AddressBundle\Entity\Country;
 
+use Oro\Bundle\AddressBundle\Entity\TypedAddress;
 use Oro\Bundle\FlexibleEntityBundle\Entity\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 
@@ -247,7 +248,7 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
         $email->setType(rand(EmailType::TYPE_CORPORATE, EmailType::TYPE_PERSONAL));
         $this->addFlexibleAttributeCollection($this->contactRepository, $contact, 'emails', $email);
 
-        $address = new Address();
+        $address = new TypedAddress();
         $address->setCity($data['City']);
         $address->setStreet($data['StreetAddress']);
         $address->setPostalCode($data['ZipCode']);
@@ -275,8 +276,7 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
         $address->setCountry($country);
         $address->setState($region->get(0));
 
-        $this->setFlexibleAttributeValue($this->contactRepository, $contact, 'address', $address);
-
+        $contact->addMultiAddress($address);
         return $contact;
     }
 
