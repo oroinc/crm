@@ -57,7 +57,7 @@ class Contact extends AbstractEntityFlexible
 
     /**
      * @var ArrayCollection $multiAddress
-     * @ORM\OneToMany(targetEntity="ContactAddress", mappedBy="owner", cascade={"all"}, orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="ContactAddress", mappedBy="owner", cascade={"all"})
      * @ORM\OrderBy({"primary" = "DESC"})
      *
      * @Exclude
