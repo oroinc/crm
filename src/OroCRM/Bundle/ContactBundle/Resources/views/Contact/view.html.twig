@@ -53,24 +53,27 @@
         ]) %}
     {% endfor %}
 
-    {% set dataBlocks =
-            [
-                {
-                    'title': 'General',
-                    'class': 'active',
-                    'subblocks': [
-                        {
-                            'title': 'Basic Information',
-                            'data': attributes
-                        },
-                        {
-                            'title': 'Addresses',
-                            'data': addresses
-                        },
-                    ]
-                }
-            ]
-    %}
+    {% set dataSubBlocks = [
+        {
+            'title': 'Basic Information',
+            'data': attributes
+        }
+    ] %}
+    {% if addresses is not empty %}
+        {% set addressSubBlock = {
+            'title': 'Addresses',
+            'data': addresses
+        } %}
+        {% set dataSubBlocks = dataSubBlocks|merge([addressSubBlock]) %}
+    {% endif %}
+
+    {% set dataBlocks = [
+        {
+            'title': 'General',
+            'class': 'active',
+            'subblocks': dataSubBlocks
+        }
+    ] %}
     {% set dataBlocks = dataBlocks|merge([{'title' : 'Accounts', 'subblocks': [{'title' : null, 'data' : [UI.gridBlock(gridId)]}] }])%}
     {% set data =
         {

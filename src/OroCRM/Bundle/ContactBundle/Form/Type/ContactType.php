@@ -2,9 +2,13 @@
 
 namespace OroCRM\Bundle\ContactBundle\Form\Type;
 
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityRepository;
+use Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleManager;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 use Oro\Bundle\AddressBundle\Form\EventListener\AddressCollectionTypeSubscriber;
 use Oro\Bundle\FlexibleEntityBundle\Form\Type\FlexibleType;
@@ -12,12 +16,30 @@ use Oro\Bundle\FlexibleEntityBundle\Form\Type\FlexibleType;
 class ContactType extends FlexibleType
 {
     /**
+     * @var string
+     */
+    protected $addressClass;
+
+    /**
+     * @param FlexibleManager $flexibleManager
+     * @param string $valueFormAlias
+     * @param string $addressClass
+     */
+    public function __construct(FlexibleManager $flexibleManager, $valueFormAlias, $addressClass)
+    {
+        parent::__construct($flexibleManager, $valueFormAlias);
+        $this->addressClass = $addressClass;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         parent::buildForm($builder, $options);
-        $builder->addEventSubscriber(new AddressCollectionTypeSubscriber('multiAddress'));
+        $builder->addEventSubscriber(
+            new AddressCollectionTypeSubscriber('multiAddress', $this->addressClass)
+        );
     }
 
     /**
@@ -33,7 +55,8 @@ class ContactType extends FlexibleType
             'multiAddress',
             'oro_address_collection',
             array(
-                'required' => true
+                'required' => true,
+                'type' => 'orocrm_contact_address',
             )
         );
 

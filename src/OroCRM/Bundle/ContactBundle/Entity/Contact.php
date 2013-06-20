@@ -57,11 +57,8 @@ class Contact extends AbstractEntityFlexible
 
     /**
      * @var ArrayCollection $multiAddress
-     * @ORM\ManyToMany(targetEntity="Oro\Bundle\AddressBundle\Entity\TypedAddress",cascade={"persist"})
-     * @ORM\JoinTable(name="orocrm_contact_to_address",
-     *     joinColumns={@ORM\JoinColumn(name="contact_id", referencedColumnName="id")},
-     *     inverseJoinColumns={@ORM\JoinColumn(name="address_id", referencedColumnName="id", unique=true)}
-     * )
+     * @ORM\OneToMany(targetEntity="ContactAddress", mappedBy="owner", cascade={"persist"})
+     * @ORM\OrderBy({"primary" = "DESC"})
      *
      * @Exclude
      */
@@ -217,7 +214,7 @@ class Contact extends AbstractEntityFlexible
     /**
      * Set addresses
      *
-     * @param TypedAddress[] $addresses
+     * @param ContactAddress[] $addresses
      * @return Contact
      */
     public function setMultiAddress($addresses)
@@ -234,13 +231,14 @@ class Contact extends AbstractEntityFlexible
     /**
      * Add address
      *
-     * @param TypedAddress $address
+     * @param ContactAddress $address
      * @return Contact
      */
-    public function addMultiAddress(TypedAddress $address)
+    public function addMultiAddress(ContactAddress $address)
     {
         if (!$this->multiAddress->contains($address)) {
             $this->multiAddress->add($address);
+            $address->setOwner($this);
         }
 
         return $this;
@@ -264,7 +262,7 @@ class Contact extends AbstractEntityFlexible
     /**
      * Get addresses
      *
-     * @return ArrayCollection
+     * @return ContactAddress[]
      */
     public function getMultiAddress()
     {

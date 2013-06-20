@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\ContactBundle\Datagrid;
 
+use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\PersistentCollection;
 
