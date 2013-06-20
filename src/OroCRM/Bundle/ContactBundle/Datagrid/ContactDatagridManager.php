@@ -234,8 +234,11 @@ class ContactDatagridManager extends FlexibleDatagridManager
 
         /** @var $query QueryBuilder */
         $query->leftJoin("$entityAlias.multiAddress", 'address', 'WITH', 'address.primary = 1')
-            ->leftJoin('address.country', 'country');
+            ->leftJoin('address.country', 'country')
+            ->leftJoin('country.translation', 'country_translation', 'WITH', 'country_translation.locale = :locale');
 
-        $query->addSelect('country.name as countryName', true);
+        $query->addSelect('country_translation.content as countryName', true);
+
+        $query->setParameter('locale', $this->parameters->getLocale());
     }
 }

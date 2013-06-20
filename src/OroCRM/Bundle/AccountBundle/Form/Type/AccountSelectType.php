@@ -14,7 +14,7 @@ class AccountSelectType extends AbstractType
         $resolver->setDefaults(
             array(
                 'configs' => array(
-                    'placeholder' => 'Choose an account...'
+                    'placeholder' => 'orocrm.account.form.choose_account'
                 ),
                 'autocomplete_alias' => 'accounts'
             )

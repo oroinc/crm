@@ -192,3 +192,11 @@ services:
             - @oro_address.form.listener.address
         tags:
             - { name: form.type, alias: orocrm_contact_address }
+
+    orocrm_contact.form.autocomplete.contact.search_handler:
+        parent: oro_form.autocomplete.search_handler
+        arguments:
+            - %orocrm_contact.entity.class%
+            - ["first_name", "last_name"]
+        tags:
+            - { name: oro_form.autocomplete.search_handler, alias: contacts, acl_resource: orocrm_contact_list }

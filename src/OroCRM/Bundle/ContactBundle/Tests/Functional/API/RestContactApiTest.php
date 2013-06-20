@@ -24,7 +24,8 @@ class RestContactApiTest extends WebTestCase
         'type' => 'shipping',
         'street' => 'contact_street',
         'city' => 'contact_city',
-        'country' => 'RU',
+        'country' => 'US',
+        'state' => 'FL',
         'postalCode' => '12345',
     );
 
