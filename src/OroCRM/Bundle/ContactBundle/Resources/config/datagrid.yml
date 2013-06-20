@@ -8,8 +8,6 @@ parameters:
 services:
     orocrm_contact.contact.datagrid_manager:
         class: %orocrm_contact.contact.datagrid_manager.class%
-        arguments:
-            - @doctrine.orm.entity_manager
         tags:
             - name: oro_grid.datagrid.manager
               datagrid_name: contacts
