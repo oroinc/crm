@@ -132,4 +132,4 @@ services:
             - %orocrm_account.account.entity.class%
             - ["name"]
         tags:
-            - { name: oro_form.autocomplete.search_handler, alias: accounts }
+            - { name: oro_form.autocomplete.search_handler, alias: accounts, acl_resource: orocrm_account_list }
