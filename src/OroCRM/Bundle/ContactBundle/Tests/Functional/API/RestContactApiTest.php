@@ -121,6 +121,7 @@ class RestContactApiTest extends WebTestCase
 
         $request['contact']['attributes']['first_name'] .= "_Updated";
         $request['contact']['addresses'][0]['type'] = $this->testAddress['type'];
+        $request['contact']['addresses'][0]['city'] = $this->testAddress['city'] . ' updated';
         $request['contact']['addresses'][0]['primary'] = true;
 
         $this->client->request('PUT', 'http://localhost/api/rest/latest/contacts/' . $contact['id'], $request);
