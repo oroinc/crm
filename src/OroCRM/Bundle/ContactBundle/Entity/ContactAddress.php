@@ -4,6 +4,7 @@ namespace OroCRM\Bundle\ContactBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Oro\Bundle\AddressBundle\Entity\TypedAddress;
+use JMS\Serializer\Annotation\Exclude;
 
 /**
  * @ORM\Table("orocrm_contact_address")
@@ -17,6 +18,14 @@ class ContactAddress extends TypedAddress
      * @ORM\JoinColumn(name="owner_id", referencedColumnName="id")
      */
     protected $owner;
+
+    /**
+     * @var \Oro\Bundle\FlexibleEntityBundle\Model\AbstractFlexibleValue[]
+     *
+     * @ORM\OneToMany(targetEntity="Oro\Bundle\AddressBundle\Entity\Value\AddressValue", mappedBy="entity", cascade={"persist", "remove"}, orphanRemoval=true)
+     * @Exclude
+     */
+    protected $values;
 
     /**
      * Set owner.

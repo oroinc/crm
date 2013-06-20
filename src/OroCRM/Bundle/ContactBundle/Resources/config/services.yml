@@ -60,6 +60,7 @@ services:
         arguments:
             - @orocrm_contact.manager.flexible
             - "orocrm_contact_value"
+            - %orocrm_contact.contact_address.entity.class%
         tags:
             - { name: form.type, alias: orocrm_contact }
 
