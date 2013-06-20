@@ -11,7 +11,7 @@ class ContactSelectType extends AbstractType
         $resolver->setDefaults(
             array(
                 'configs' => array(
-                    'placeholder' => 'Choose a contact...'
+                    'placeholder' => 'orocrm.contact.form.choose_contact'
                 ),
                 'autocomplete_alias' => 'contacts'
             )
