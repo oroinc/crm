@@ -2,9 +2,9 @@
 
 namespace OroCRM\Bundle\ContactBundle\Tests\Unit\Entity;
 
-use Oro\Bundle\AddressBundle\Entity\TypedAddress;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\AccountBundle\Entity\Account;
+use OroCRM\Bundle\ContactBundle\Entity\ContactAddress;
 
 class ContactTest extends \PHPUnit_Framework_TestCase
 {
@@ -55,11 +55,11 @@ class ContactTest extends \PHPUnit_Framework_TestCase
 
     public function testMultiAddress()
     {
-        $addressOne = new TypedAddress();
+        $addressOne = new ContactAddress();
         $addressOne->setCountry('US');
-        $addressTwo = new TypedAddress();
+        $addressTwo = new ContactAddress();
         $addressTwo->setCountry('UK');
-        $addressThree = new TypedAddress();
+        $addressThree = new ContactAddress();
         $addressThree->setCountry('RU');
         $addresses = array($addressOne, $addressTwo);
 

@@ -2,6 +2,8 @@
 
 namespace OroCRM\Bundle\ContactBundle\Datagrid;
 
+use Doctrine\ORM\AbstractQuery;
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\PersistentCollection;
 
@@ -20,6 +22,19 @@ use Oro\Bundle\GridBundle\Datagrid\ProxyQueryInterface;
 
 class ContactDatagridManager extends FlexibleDatagridManager
 {
+    /**
+     * @var EntityManager
+     */
+    protected $em;
+
+    /**
+     * @param EntityManager $em
+     */
+    public function __construct(EntityManager $em)
+    {
+        $this->em = $em;
+    }
+
     /**
      * {@inheritDoc}
      */
