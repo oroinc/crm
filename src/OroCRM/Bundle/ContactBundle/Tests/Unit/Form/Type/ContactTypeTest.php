@@ -20,7 +20,7 @@ class ContactTypeTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->type = new ContactType($flexibleManager, 'orocrm_contact');
+        $this->type = new ContactType($flexibleManager, 'orocrm_contact', 'OroCRM\Bundle\ContactBundle\Entity\ContactAddress');
     }
 
     public function testSetDefaultOptions()

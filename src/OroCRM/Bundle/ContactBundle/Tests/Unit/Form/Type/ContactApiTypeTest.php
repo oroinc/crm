@@ -20,7 +20,7 @@ class ContactApiTypeTest extends \PHPUnit_Framework_TestCase
         $flexibleManager = $this->getMockBuilder('Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleManager')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->type = new ContactApiType($flexibleManager, 'test');
+        $this->type = new ContactApiType($flexibleManager, 'test', 'OroCRM\Bundle\ContactBundle\Entity\ContactAddress');
     }
 
     public function testSetDefaultOptions()
