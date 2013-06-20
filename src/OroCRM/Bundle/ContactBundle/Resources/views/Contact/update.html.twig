@@ -62,16 +62,6 @@
 {% block content_data %}
     {% set id = 'contact-profile' %}
 
-    {% if form.values is defined %}
-        {% set addresses = [] %}
-        {% for attribute in form.values %}
-            {% if (attribute.children.address is defined) %}
-                {% set addresses = addresses|merge([{'title': 'Address', 'data': [form_widget(attribute.address)]}]) %}
-
-            {% endif %}
-        {% endfor %}
-    {% endif %}
-
     {% set dataBlocks = [{
             'title': 'General',
             'class': 'active',
@@ -81,8 +71,14 @@
                     'data': [
                         form_row(form.values)
                     ]
-                }
-            ]|merge(addresses)
+                },
+                {
+                    'title': 'Addresses',
+                    'data': [
+                        form_widget(form.multiAddress),
+                    ]
+                },
+            ]
         }]
     %}
 

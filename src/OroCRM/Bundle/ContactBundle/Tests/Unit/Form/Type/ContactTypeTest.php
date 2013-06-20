@@ -45,17 +45,35 @@ class ContactTypeTest extends \PHPUnit_Framework_TestCase
 
         $builder->expects($this->at(1))
             ->method('add')
-            ->with('groups', 'entity')
+            ->with('multiAddress', 'oro_address_collection')
             ->will($this->returnSelf());
         $builder->expects($this->at(2))
             ->method('add')
-            ->with('appendAccounts', 'oro_entity_identifier')
+            ->with('groups', 'entity')
             ->will($this->returnSelf());
         $builder->expects($this->at(3))
+            ->method('add')
+            ->with('appendAccounts', 'oro_entity_identifier')
+            ->will($this->returnSelf());
+        $builder->expects($this->at(4))
             ->method('add')
             ->with('removeAccounts', 'oro_entity_identifier')
             ->will($this->returnSelf());
 
         $this->type->addEntityFields($builder);
+    }
+
+    public function testBuildForm()
+    {
+        $builder = $this->getMockBuilder('Symfony\Component\Form\FormBuilder')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $builder->expects($this->any())
+            ->method('add')
+            ->will($this->returnSelf());
+        $builder->expects($this->once())
+            ->method('addEventSubscriber')
+            ->with($this->isInstanceOf('Oro\Bundle\AddressBundle\Form\EventListener\AddressCollectionTypeSubscriber'));
+        $this->type->buildForm($builder, array());
     }
 }
