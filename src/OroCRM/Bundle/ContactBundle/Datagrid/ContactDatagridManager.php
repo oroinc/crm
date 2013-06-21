@@ -5,6 +5,7 @@ namespace OroCRM\Bundle\ContactBundle\Datagrid;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\PersistentCollection;
 use Doctrine\ORM\Query;
+use Doctrine\ORM\EntityRepository;
 
 use Oro\Bundle\FlexibleEntityBundle\Entity\Collection;
 use Oro\Bundle\FlexibleEntityBundle\Form\Type\PhoneType;
@@ -137,6 +138,10 @@ class ContactDatagridManager extends FlexibleDatagridManager
                 'multiple'        => true,
                 'class'           => 'OroAddressBundle:Country',
                 'property'        => 'name',
+                'query_builder'   => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('c')
+                        ->orderBy('c.name', 'ASC');
+                },
                 'translatable'    => true,
                 'filter_by_where' => true,
             )
