@@ -203,7 +203,7 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
         $country = $country[0];
 
         $idRegion = $data['State'];
-        $idRegion = 'AL';
+        //$idRegion = 'AL';
         /** @var ArrayCollection $regions */
         $regions = $country->getRegions();
 
@@ -214,7 +214,7 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
         );
 
         $address->setCountry($country);
-        $address->setState($region->get(0));
+        $address->setState($region->first());
 
         $this->setFlexibleAttributeValue($this->accountRepository, $account, 'shipping_address', $address);
         $a = clone $address;
@@ -253,13 +253,14 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
         $email->setType(rand(EmailType::TYPE_CORPORATE, EmailType::TYPE_PERSONAL));
         $this->addFlexibleAttributeCollection($this->contactRepository, $contact, 'emails', $email);
 
+        /** @var ContactAddress $address */
         $address = new ContactAddress();
         $address->setCity($data['City']);
         $address->setStreet($data['StreetAddress']);
         $address->setPostalCode($data['ZipCode']);
         $address->setFirstName($data['GivenName']);
         $address->setLastName($data['Surname']);
-
+        $address->setPrimary(true);
 
         $isoCode = $data['Country'];
         $country = array_filter(
@@ -274,7 +275,7 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
         $country = $country[0];
 
         $idRegion = $data['State'];
-        $idRegion = 'AL';
+        //$idRegion = 'AL';
         /** @var ArrayCollection $regions */
         $regions = $country->getRegions();
 
@@ -285,7 +286,7 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
         );
 
         $address->setCountry($country);
-        $address->setState($region->get(0));
+        $address->setState($region->first());
 
         $contact->addMultiAddress($address);
         return $contact;
