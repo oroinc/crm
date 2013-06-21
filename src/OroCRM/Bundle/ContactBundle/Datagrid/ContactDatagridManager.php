@@ -2,9 +2,9 @@
 
 namespace OroCRM\Bundle\ContactBundle\Datagrid;
 
-use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\PersistentCollection;
+use Doctrine\ORM\Query;
 
 use Oro\Bundle\FlexibleEntityBundle\Entity\Collection;
 use Oro\Bundle\FlexibleEntityBundle\Form\Type\PhoneType;
@@ -137,6 +137,7 @@ class ContactDatagridManager extends FlexibleDatagridManager
                 'multiple'        => true,
                 'class'           => 'OroAddressBundle:Country',
                 'property'        => 'name',
+                'translatable'    => true,
                 'filter_by_where' => true,
             )
         );
@@ -230,15 +231,18 @@ class ContactDatagridManager extends FlexibleDatagridManager
      */
     protected function prepareQuery(ProxyQueryInterface $query)
     {
+        // need to translate countries
+        $query->setQueryHint(
+            Query::HINT_CUSTOM_OUTPUT_WALKER,
+            'Gedmo\\Translatable\\Query\\TreeWalker\\TranslationWalker'
+        );
+
         $entityAlias = $query->getRootAlias();
 
         /** @var $query QueryBuilder */
         $query->leftJoin("$entityAlias.multiAddress", 'address', 'WITH', 'address.primary = 1')
-            ->leftJoin('address.country', 'country')
-            ->leftJoin('country.translation', 'country_translation', 'WITH', 'country_translation.locale = :locale');
+            ->leftJoin('address.country', 'country');
 
-        $query->addSelect('country_translation.content as countryName', true);
-
-        $query->setParameter('locale', $this->parameters->getLocale());
+        $query->addSelect('country.name as countryName', true);
     }
 }
