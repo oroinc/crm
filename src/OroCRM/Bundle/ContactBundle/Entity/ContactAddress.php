@@ -28,9 +28,9 @@ class ContactAddress extends TypedAddress
     protected $values;
 
     /**
-     * Set owner.
+     * Set contact as owner.
      *
-     * @param mixed $owner
+     * @param Contact $owner
      */
     public function setOwner($owner)
     {
@@ -38,9 +38,9 @@ class ContactAddress extends TypedAddress
     }
 
     /**
-     * Get owner.
+     * Get owner contact.
      *
-     * @return mixed
+     * @return Contact
      */
     public function getOwner()
     {
