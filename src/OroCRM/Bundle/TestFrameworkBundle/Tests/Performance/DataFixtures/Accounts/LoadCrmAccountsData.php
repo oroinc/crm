@@ -214,7 +214,9 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
         );
 
         $address->setCountry($country);
-        $address->setState($region->first());
+        if (!$region->isEmpty()) {
+            $address->setState($region->first());
+        }
 
         $this->setFlexibleAttributeValue($this->accountRepository, $account, 'shipping_address', $address);
         $a = clone $address;
@@ -286,7 +288,9 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
         );
 
         $address->setCountry($country);
-        $address->setState($region->first());
+        if (!$region->isEmpty()) {
+            $address->setState($region->first());
+        }
 
         $contact->addMultiAddress($address);
         return $contact;
