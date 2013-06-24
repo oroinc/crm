@@ -50,8 +50,7 @@
             'entity':      form.vars.value,
             'indexPath':   path('orocrm_contact_group_index'),
             'indexLabel': 'Contact Groups',
-            'entityTitle': form.vars.value.name|default('N/A'),
-            'hasAvatar':   false,
+            'entityTitle': form.vars.value.name|default('N/A')
         }
         %}
         {{ parent() }}
