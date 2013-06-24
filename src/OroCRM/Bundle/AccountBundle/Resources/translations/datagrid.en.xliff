@@ -25,10 +25,6 @@
                 <source>Name</source>
                 <target>Name</target>
             </trans-unit>
-            <trans-unit id="orocrm_account.account.datagrid_manager.office_phone">
-                <source>Phone</source>
-                <target>Phone</target>
-            </trans-unit>
             <trans-unit id="orocrm_account.account.datagrid_manager.created">
                 <source>Created At</source>
                 <target>Created At</target>

@@ -21,14 +21,6 @@
                 <source>ID</source>
                 <target>ID</target>
             </trans-unit>
-            <trans-unit id="orocrm_contact.contact.datagrid_manager.office_phone">
-                <source>Phone</source>
-                <target>Phone</target>
-            </trans-unit>
-            <trans-unit id="orocrm_contact.contact.datagrid_manager.email">
-                <source>Email</source>
-                <target>Email</target>
-            </trans-unit>
             <trans-unit id="orocrm_contact.contact.datagrid_manager.created">
                 <source>Created At</source>
                 <target>Created At</target>
