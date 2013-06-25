@@ -90,7 +90,7 @@ class ContactTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(array(1 => $addressTwo, 2 => $addressThree), $actual->toArray());
     }
 
-    public function testToStringException()
+    public function testGetAttributeDataException()
     {
         $contact = new Contact();
         $attribute = $this->getMockBuilder('Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttribute')
@@ -116,7 +116,7 @@ class ContactTest extends \PHPUnit_Framework_TestCase
                 )
             );
         $contact->addValue($firstNameVal);
-        $this->assertEquals('N/A', $contact->__toString());
+        $this->assertEquals('', $contact->getAttributeData('first_name'));
     }
 
     public function testToStringNoAttributes()
@@ -125,7 +125,7 @@ class ContactTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('', $contact->__toString());
     }
 
-    public function testToString()
+    public function testNames()
     {
         $contact = new Contact();
         $attributeFN = $this->getMockBuilder('Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttribute')
@@ -141,7 +141,7 @@ class ContactTest extends \PHPUnit_Framework_TestCase
         $firstNameVal->expects($this->any())
             ->method('getAttribute')
             ->will($this->returnValue($attributeFN));
-        $firstNameVal->expects($this->once())
+        $firstNameVal->expects($this->any())
             ->method('getData')
             ->will($this->returnValue('First'));
         $contact->addValue($firstNameVal);
@@ -159,10 +159,40 @@ class ContactTest extends \PHPUnit_Framework_TestCase
         $lastNameVal->expects($this->any())
             ->method('getAttribute')
             ->will($this->returnValue($attributeLN));
-        $lastNameVal->expects($this->once())
+        $lastNameVal->expects($this->any())
             ->method('getData')
             ->will($this->returnValue('Last'));
         $contact->addValue($lastNameVal);
+        $this->getAttributeDataTest($contact);
+        $this->toStringTest($contact);
+        $this->getFullNameTest($contact);
+    }
+
+    /**
+     * @param \OroCRM\Bundle\ContactBundle\Entity\Contact $contact
+     */
+    protected function getAttributeDataTest($contact)
+    {
+        $this->assertEquals('First', $contact->getAttributeData('first_name'));
+    }
+
+    /**
+     * @param \OroCRM\Bundle\ContactBundle\Entity\Contact $contact
+     */
+    protected function toStringTest($contact)
+    {
         $this->assertEquals('First Last', $contact->__toString());
+    }
+
+    /**
+     * @param \OroCRM\Bundle\ContactBundle\Entity\Contact $contact
+     */
+    protected function getFullNameTest($contact)
+    {
+        $this->assertEquals($contact->getFullname(), sprintf('%s %s', 'First', 'Last'));
+
+        $contact->setNameFormat('%last%, %first%');
+
+        $this->assertEquals($contact->getFullname(), sprintf('%s, %s', 'Last', 'First'));
     }
 }

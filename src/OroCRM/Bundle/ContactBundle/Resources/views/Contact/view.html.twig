@@ -1,7 +1,9 @@
 {% extends 'OroUIBundle:actions:view.html.twig' %}
 {% import 'OroUIBundle::macros.html.twig' as macros %}
 {% import 'OroAddressBundle:Include:viewMacro.html.twig' as addressView %}
-{% oro_title_set({params : {"%contact.name%": entity.__toString} }) %}
+{% set format = oro_config_value('oro_user.name_format') %}
+{% set fullname = entity.fullname(format)|default('N/A') %}
+{% oro_title_set({params : {"%contact.name%": fullname} }) %}
 {% set gridId = 'accounts-grid' %}
 {% block head_script %}
     {{ parent() }}
@@ -29,7 +31,7 @@
 {% endblock navButtons %}
 
 {% block pageHeader %}
-    {% set breadcrumbs = {'entity': entity, 'indexPath': path('orocrm_contact_index'), 'indexLabel': 'Contacts', 'entityTitle': entity.__toString } %}
+    {% set breadcrumbs = {'entity': entity, 'indexPath': path('orocrm_contact_index'), 'indexLabel': 'Contacts', 'entityTitle': fullname } %}
     {{ parent() }}
 {% endblock pageHeader %}
 
