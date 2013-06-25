@@ -28,7 +28,6 @@ services:
             - [ addAttributeType, ['oro_flexibleentity_textarea'] ]
             - [ addAttributeType, ['oro_flexibleentity_url'] ]
             - [ addAttributeType, ['oro_flexibleentity_email'] ]
-            - [ addAttributeType, ['oro_flexibleentity_phone_collection'] ]
             - [ addAttributeType, ['oro_address'] ]
             - [ addAttributeType, ['orocrm_account_ticker_symbol'] ]
         tags:
