@@ -49,7 +49,7 @@
             'entity':      form.vars.value,
             'indexPath':   path('orocrm_contact_index'),
             'indexLabel': 'Contacts',
-            'entityTitle': form.vars.value.name|default('N/A')
+            'entityTitle': entity.__toString|default('N/A')
         }
         %}
         {{ parent() }}
