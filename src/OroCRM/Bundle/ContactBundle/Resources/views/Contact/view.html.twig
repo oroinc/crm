@@ -74,7 +74,7 @@
             'subblocks': dataSubBlocks
         }
     ] %}
-    {% set dataBlocks = dataBlocks|merge([{'title' : 'Accounts', 'subblocks': [{'title' : null, 'data' : [UI.gridBlock(gridId)]}] }])%}
+    {% set dataBlocks = dataBlocks|merge([{'title' : 'Accounts', 'subblocks': [{'title' : null, 'data' : [UI.gridBlock(gridId)], 'useSpan': false}] }])%}
     {% set data =
         {
             'dataBlocks': dataBlocks,
