@@ -43,6 +43,8 @@ class AccountContactDatagridManager extends ContactDatagridManager
      */
     protected function prepareQuery(ProxyQueryInterface $query)
     {
+        $this->applyJoinWithAddressAndCountry($query);
+
         $entityAlias = $query->getRootAlias();
         $query->andWhere(":account MEMBER OF $entityAlias.accounts");
     }

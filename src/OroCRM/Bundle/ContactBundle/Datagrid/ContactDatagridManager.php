@@ -2,8 +2,9 @@
 
 namespace OroCRM\Bundle\ContactBundle\Datagrid;
 
-use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\QueryBuilder;
+use Doctrine\ORM\Query;
+use Doctrine\ORM\EntityRepository;
 
 use Oro\Bundle\GridBundle\Datagrid\FlexibleDatagridManager;
 use Oro\Bundle\GridBundle\Field\FieldDescription;
@@ -68,6 +69,11 @@ class ContactDatagridManager extends FlexibleDatagridManager
                 'multiple'        => true,
                 'class'           => 'OroAddressBundle:Country',
                 'property'        => 'name',
+                'query_builder'   => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('c')
+                        ->orderBy('c.name', 'ASC');
+                },
+                'translatable'    => true,
                 'filter_by_where' => true,
             )
         );
@@ -157,19 +163,30 @@ class ContactDatagridManager extends FlexibleDatagridManager
     }
 
     /**
-     * @param \Oro\Bundle\GridBundle\Datagrid\ProxyQueryInterface $query
+     * @param ProxyQueryInterface $query
      */
     protected function prepareQuery(ProxyQueryInterface $query)
     {
+        $this->applyJoinWithAddressAndCountry($query);
+    }
+
+    /**
+     * @param ProxyQueryInterface $query
+     */
+    protected function applyJoinWithAddressAndCountry(ProxyQueryInterface $query)
+    {
+        // need to translate countries
+        $query->setQueryHint(
+            Query::HINT_CUSTOM_OUTPUT_WALKER,
+            'Gedmo\\Translatable\\Query\\TreeWalker\\TranslationWalker'
+        );
+
         $entityAlias = $query->getRootAlias();
 
         /** @var $query QueryBuilder */
         $query->leftJoin("$entityAlias.multiAddress", 'address', 'WITH', 'address.primary = 1')
-            ->leftJoin('address.country', 'country')
-            ->leftJoin('country.translation', 'country_translation', 'WITH', 'country_translation.locale = :locale');
+            ->leftJoin('address.country', 'country');
 
-        $query->addSelect('country_translation.content as countryName', true);
-
-        $query->setParameter('locale', $this->parameters->getLocale());
+        $query->addSelect('country.name as countryName', true);
     }
 }
