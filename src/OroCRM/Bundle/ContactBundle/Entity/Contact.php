@@ -71,6 +71,15 @@ class Contact extends AbstractEntityFlexible
      */
     protected $values;
 
+    /**
+     * Set name formatting using "%first%" and "%last%" placeholders
+     *
+     * @var string
+     *
+     * @Exclude
+     */
+    protected $nameFormat;
+
     public function __construct()
     {
         parent::__construct();
@@ -269,17 +278,67 @@ class Contact extends AbstractEntityFlexible
         return $this->multiAddress;
     }
 
+    /**
+     * Get full name format. Defaults to "%first% %last%".
+     *
+     * @return string
+     */
+    public function getNameFormat()
+    {
+        return $this->nameFormat ?  $this->nameFormat : '%first% %last%';
+    }
+
+    /**
+     * Set new format for a full name display. Use %first% and %last% placeholders, for example: "%last%, %first%".
+     *
+     * @param  string $format New format string
+     * @return Contact
+     */
+    public function setNameFormat($format)
+    {
+        $this->nameFormat = $format;
+
+        return $this;
+    }
+
+    /**
+     * Return full contact name according to name format
+     *
+     * @see Contact::setNameFormat()
+     * @param  string $format [optional]
+     * @return string
+     */
+    public function getFullname($format = '')
+    {
+        return str_replace(
+            array('%first%', '%last%'),
+            array($this->getAttributeData('first_name'), $this->getAttributeData('last_name')),
+            $format ? $format : $this->getNameFormat()
+        );
+    }
+
     public function __toString()
     {
-        try {
-            $firstNameAttr = $this->getValue('first_name');
-            $lastNameAttr = $this->getValue('last_name');
+        return trim($this->getAttributeData('first_name') . ' ' . $this->getAttributeData('last_name'));
+    }
 
-            $firstName = $firstNameAttr ? (string)$firstNameAttr->getData() : '';
-            $lastName = $lastNameAttr ? (string)$lastNameAttr->getData(): '';
-            return trim($firstName . ' ' . $lastName);
+    /**
+     * Get attribute value data by code
+     *
+     * @param $attributeCode
+     * @return \Oro\Bundle\FlexibleEntityBundle\Model\FlexibleValueInterface|string
+     */
+    public function getAttributeData($attributeCode)
+    {
+        try {
+            $value = $this->getValue($attributeCode);
+            if ($value) {
+                $value = trim($value->getData());
+            }
         } catch (\Exception $e) {
-            return 'N/A';
+            $value = '';
         }
+
+        return $value;
     }
 }
