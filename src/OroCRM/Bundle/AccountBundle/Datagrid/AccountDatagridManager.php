@@ -4,7 +4,6 @@ namespace OroCRM\Bundle\AccountBundle\Datagrid;
 
 use Doctrine\ORM\QueryBuilder;
 
-use Oro\Bundle\FlexibleEntityBundle\Entity\Collection;
 use Oro\Bundle\GridBundle\Datagrid\FlexibleDatagridManager;
 use Oro\Bundle\GridBundle\Field\FieldDescription;
 use Oro\Bundle\GridBundle\Field\FieldDescriptionCollection;
@@ -12,17 +11,9 @@ use Oro\Bundle\GridBundle\Field\FieldDescriptionInterface;
 use Oro\Bundle\GridBundle\Filter\FilterInterface;
 use Oro\Bundle\GridBundle\Action\ActionInterface;
 use Oro\Bundle\GridBundle\Property\UrlProperty;
-use Oro\Bundle\GridBundle\Property\CallbackProperty;
-use Oro\Bundle\GridBundle\Datagrid\ResultRecordInterface;
-use Oro\Bundle\FlexibleEntityBundle\Form\Type\PhoneType;
 
 class AccountDatagridManager extends FlexibleDatagridManager
 {
-    protected $excludeAttributes = array(
-        'emails',
-        'phones'
-    );
-
     /**
      * {@inheritDoc}
      */
@@ -33,23 +24,6 @@ class AccountDatagridManager extends FlexibleDatagridManager
             new UrlProperty('update_link', $this->router, 'orocrm_account_update', array('id')),
             new UrlProperty('delete_link', $this->router, 'oro_api_delete_account', array('id')),
         );
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    protected function getFlexibleAttributes()
-    {
-        parent::getFlexibleAttributes();
-
-        // exclude collections attributes from grid
-        foreach ($this->excludeAttributes as $attributeCode) {
-            if (isset($this->attributes[$attributeCode])) {
-                unset($this->attributes[$attributeCode]);
-            }
-        }
-
-        return $this->attributes;
     }
 
     /**
@@ -86,35 +60,7 @@ class AccountDatagridManager extends FlexibleDatagridManager
         );
         $fieldsCollection->add($fieldName);
 
-        $fieldPhone = new FieldDescription();
-        $fieldPhone->setName('office_phone');
-        $fieldPhone->setOptions(
-            array(
-                'type'        => FieldDescriptionInterface::TYPE_TEXT,
-                'label'       => $this->translate('Phone'),
-                'field_name'  => 'phones',
-                'filter_type' => FilterInterface::TYPE_STRING,
-                'sortable'    => false,
-                'filterable'  => false,
-                'show_filter' => false,
-            )
-        );
-        $phoneProperty = new CallbackProperty(
-            $fieldPhone->getName(),
-            function (ResultRecordInterface $record) use ($fieldPhone) {
-                $phones = $record->getValue($fieldPhone->getFieldName())->getData();
-                /** @var $phone Collection */
-                foreach ($phones as $phone) {
-                    if ($phone->getType() == PhoneType::TYPE_OFFICE) {
-                        return $phone->getData();
-                    }
-                }
-                return null;
-            }
-        );
-        $fieldPhone->setProperty($phoneProperty);
-        $fieldsCollection->add($fieldPhone);
-
+        $this->configureFlexibleField($fieldsCollection, 'phone');
         $this->configureFlexibleField($fieldsCollection, 'email', array('show_filter' => true));
 
         $addressOptions = array(

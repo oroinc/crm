@@ -2,13 +2,10 @@
 
 namespace OroCRM\Bundle\ContactBundle\Datagrid;
 
+use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\QueryBuilder;
-use Doctrine\ORM\PersistentCollection;
 use Doctrine\ORM\Query;
-use Doctrine\ORM\EntityRepository;
 
-use Oro\Bundle\FlexibleEntityBundle\Entity\Collection;
-use Oro\Bundle\FlexibleEntityBundle\Form\Type\PhoneType;
 use Oro\Bundle\GridBundle\Datagrid\FlexibleDatagridManager;
 use Oro\Bundle\GridBundle\Field\FieldDescription;
 use Oro\Bundle\GridBundle\Field\FieldDescriptionCollection;
@@ -16,8 +13,6 @@ use Oro\Bundle\GridBundle\Field\FieldDescriptionInterface;
 use Oro\Bundle\GridBundle\Filter\FilterInterface;
 use Oro\Bundle\GridBundle\Action\ActionInterface;
 use Oro\Bundle\GridBundle\Property\UrlProperty;
-use Oro\Bundle\GridBundle\Property\CallbackProperty;
-use Oro\Bundle\GridBundle\Datagrid\ResultRecordInterface;
 use Oro\Bundle\GridBundle\Datagrid\ProxyQueryInterface;
 
 class ContactDatagridManager extends FlexibleDatagridManager
@@ -55,72 +50,8 @@ class ContactDatagridManager extends FlexibleDatagridManager
 
         $this->configureFlexibleField($fieldsCollection, 'first_name');
         $this->configureFlexibleField($fieldsCollection, 'last_name');
-
-        $fieldPhone = new FieldDescription();
-        $fieldPhone->setName('office_phone');
-        $fieldPhone->setOptions(
-            array(
-                'type'        => FieldDescriptionInterface::TYPE_TEXT,
-                'label'       => $this->translate('Phone'),
-                'field_name'  => 'phones',
-                'filter_type' => FilterInterface::TYPE_STRING,
-            )
-        );
-        $phoneProperty = new CallbackProperty(
-            $fieldPhone->getName(),
-            function (ResultRecordInterface $record) use ($fieldPhone) {
-                try {
-                    $phonesValue = $record->getValue($fieldPhone->getFieldName());
-                    if ($phonesValue) {
-                        $phones = $phonesValue->getData();
-                        /** @var $phone Collection */
-                        foreach ($phones as $phone) {
-                            if ($phone && $phone->getType() == PhoneType::TYPE_OFFICE) {
-                                return $phone->getData();
-                            }
-                        }
-                    }
-                    return null;
-                } catch (\Exception $e) {
-                    return null;
-                }
-            }
-        );
-        $fieldPhone->setProperty($phoneProperty);
-        $fieldsCollection->add($fieldPhone);
-
-        $fieldEmail = new FieldDescription();
-        $fieldEmail->setName('email');
-        $fieldEmail->setOptions(
-            array(
-                'type'        => FieldDescriptionInterface::TYPE_TEXT,
-                'label'       => $this->translate('Email'),
-                'field_name'  => 'emails',
-                'filter_type' => FilterInterface::TYPE_STRING,
-            )
-        );
-        $emailProperty = new CallbackProperty(
-            $fieldEmail->getName(),
-            function (ResultRecordInterface $record) use ($fieldEmail) {
-                try {
-                    $emailsValue = $record->getValue($fieldEmail->getFieldName());
-                    if ($emailsValue) {
-                        /** @var $emails PersistentCollection */
-                        $emails = $emailsValue->getData();
-                        if ($emails->count() > 0) {
-                            /** @var $email Collection */
-                            $email = $emails->first();
-                            return $email->getData();
-                        }
-                    }
-                    return null;
-                } catch (\Exception $e) {
-                    return null;
-                }
-            }
-        );
-        $fieldEmail->setProperty($emailProperty);
-        $fieldsCollection->add($fieldEmail);
+        $this->configureFlexibleField($fieldsCollection, 'phone');
+        $this->configureFlexibleField($fieldsCollection, 'email', array('show_filter' => true));
 
         $fieldCountry = new FieldDescription();
         $fieldCountry->setName('country');

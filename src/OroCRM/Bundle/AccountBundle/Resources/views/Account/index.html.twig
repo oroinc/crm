@@ -3,6 +3,9 @@
 {% set gridId = 'accounts-grid' %}
 {% block content %}
     {% set pageTitle = 'Accounts' %}
-    {% set buttons = [UI.addButton({'path' : path('orocrm_account_create'), 'title' : 'Create account', 'label' : 'Create account'})] %}
+    {% set buttons = [] %}
+    {% if resource_granted('orocrm_account_create') %}
+        {% set buttons = buttons|merge([UI.addButton({'path' : path('orocrm_account_create'), 'title' : 'Create account', 'label' : 'Create account'})]) %}
+    {% endif %}
     {{ parent() }}
 {% endblock %}

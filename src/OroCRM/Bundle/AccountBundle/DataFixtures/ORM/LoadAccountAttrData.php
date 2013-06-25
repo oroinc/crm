@@ -49,9 +49,9 @@ class LoadAccountAttrData extends AbstractFixture implements ContainerAwareInter
                     'searchable' => true
                 ),
                 array(
-                    'code'  => 'phones',
-                    'type'  => 'oro_flexibleentity_phone_collection',
-                    'label' => 'Phones'
+                    'code'  => 'phone',
+                    'label' => 'Phone',
+                    'searchable' => true
                 ),
                 array(
                     'code'  => 'email',

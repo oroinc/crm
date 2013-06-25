@@ -103,14 +103,15 @@ class LoadContactAttrData extends AbstractFixture implements ContainerAwareInter
                     'searchable' => true
                 ),
                 array(
-                    'code'  => 'emails',
-                    'type'  => 'oro_flexibleentity_email_collection',
-                    'label' => 'Emails'
+                    'code'  => 'email',
+                    'type'  => 'oro_flexibleentity_email',
+                    'label' => 'Email',
+                    'searchable' => true
                 ),
                 array(
-                    'code'  => 'phones',
-                    'type'  => 'oro_flexibleentity_phone_collection',
-                    'label' => 'Phones'
+                    'code'  => 'phone',
+                    'label' => 'Phone',
+                    'searchable' => true
                 )
             )
         );
