@@ -44,6 +44,8 @@ class AccountContactUpdateDatagridManager extends AccountContactDatagridManager
      */
     protected function prepareQuery(ProxyQueryInterface $query)
     {
+        $this->applyJoinWithAddressAndCountry($query);
+
         $entityAlias = $query->getRootAlias();
 
         if ($this->getAccount()->getId()) {

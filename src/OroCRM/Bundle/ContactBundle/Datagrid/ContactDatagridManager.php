@@ -2,9 +2,9 @@
 
 namespace OroCRM\Bundle\ContactBundle\Datagrid;
 
-use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Query;
+use Doctrine\ORM\EntityRepository;
 
 use Oro\Bundle\GridBundle\Datagrid\FlexibleDatagridManager;
 use Oro\Bundle\GridBundle\Field\FieldDescription;
@@ -163,9 +163,17 @@ class ContactDatagridManager extends FlexibleDatagridManager
     }
 
     /**
-     * @param \Oro\Bundle\GridBundle\Datagrid\ProxyQueryInterface $query
+     * @param ProxyQueryInterface $query
      */
     protected function prepareQuery(ProxyQueryInterface $query)
+    {
+        $this->applyJoinWithAddressAndCountry($query);
+    }
+
+    /**
+     * @param ProxyQueryInterface $query
+     */
+    protected function applyJoinWithAddressAndCountry(ProxyQueryInterface $query)
     {
         // need to translate countries
         $query->setQueryHint(
