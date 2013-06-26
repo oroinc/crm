@@ -44,6 +44,11 @@ class LoadContactAttrData extends AbstractFixture implements ContainerAwareInter
         $this->addAttributes(
             array(
                 array(
+                    'code'  => 'name_prefix',
+                    'label' => 'Name Prefix',
+                    'searchable' => true
+                ),
+                array(
                     'code'  => 'first_name',
                     'label' => 'First Name',
                     'searchable' => true,
@@ -58,11 +63,6 @@ class LoadContactAttrData extends AbstractFixture implements ContainerAwareInter
                 array(
                     'code'  => 'name_suffix',
                     'label' => 'Name Suffix',
-                    'searchable' => true
-                ),
-                array(
-                    'code'  => 'name_prefix',
-                    'label' => 'Name Prefix',
                     'searchable' => true
                 ),
                 array(
