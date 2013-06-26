@@ -8,7 +8,7 @@
     },
     "require": {
         "php": ">=5.3.3",
-        "oro/platform": "dev-master"
+        "oro/platform": "dev-released/alpha3"
     },
     "repositories": [
         {
