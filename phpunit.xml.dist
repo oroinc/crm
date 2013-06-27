@@ -15,9 +15,7 @@
 
     <testsuites>
         <testsuite name="Project Unit Tests">
-            <directory suffix="Test.php">src/OroCRM/Bundle/AccountBundle/Tests/Unit</directory>
-            <directory suffix="Test.php">src/OroCRM/Bundle/ContactBundle/Tests/Unit</directory>
-            <directory suffix="Test.php">src/OroCRM/Bundle/DashboardBundle/Tests/Unit</directory>
+            <directory suffix="Test.php">src/*/Bundle/*Bundle/Tests/Unit</directory>
         </testsuite>
     </testsuites>
 

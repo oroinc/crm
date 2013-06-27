@@ -5,6 +5,7 @@ namespace OroCRM\Bundle\ContactBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use OroCRM\Bundle\AccountBundle\Entity\Account;
 
 use JMS\Serializer\Annotation\Type;
 use JMS\Serializer\Annotation\Exclude;
@@ -12,6 +13,7 @@ use JMS\Serializer\Annotation\Exclude;
 use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 
 use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityFlexible;
+use Oro\Bundle\AddressBundle\Entity\TypedAddress;
 
 /**
  * @ORM\Entity(repositoryClass="Oro\Bundle\FlexibleEntityBundle\Entity\Repository\FlexibleEntityRepository")
@@ -43,16 +45,47 @@ class Contact extends AbstractEntityFlexible
     protected $groups;
 
     /**
+     * Accounts storage
+     *
+     * @var ArrayCollection $accounts
+     *
+     * @ORM\ManyToMany(targetEntity="OroCRM\Bundle\AccountBundle\Entity\Account", mappedBy="contacts")
+     * @ORM\JoinTable(name="orocrm_contact_to_account")
+     * @Exclude
+     */
+    protected $accounts;
+
+    /**
+     * @var ArrayCollection $multiAddress
+     * @ORM\OneToMany(targetEntity="ContactAddress", mappedBy="owner", cascade={"all"})
+     * @ORM\OrderBy({"primary" = "DESC"})
+     *
+     * @Exclude
+     */
+    protected $multiAddress;
+
+    /**
      * @var \Oro\Bundle\FlexibleEntityBundle\Model\AbstractFlexibleValue[]
-     * @ORM\OneToMany(targetEntity="OroCRM\Bundle\ContactBundle\Entity\Value\ContactValue", mappedBy="entity", cascade={"persist", "remove"}, orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="OroCRM\Bundle\ContactBundle\Entity\Value\ContactValue", mappedBy="entity", cascade={"persist", "remove"},orphanRemoval=true)
      * @Exclude
      */
     protected $values;
 
+    /**
+     * Set name formatting using "%first%" and "%last%" placeholders
+     *
+     * @var string
+     *
+     * @Exclude
+     */
+    protected $nameFormat;
+
     public function __construct()
     {
         parent::__construct();
-        $this->groups = new ArrayCollection();
+        $this->groups   = new ArrayCollection();
+        $this->accounts = new ArrayCollection();
+        $this->multiAddress = new ArrayCollection();
     }
 
     /**
@@ -145,17 +178,167 @@ class Contact extends AbstractEntityFlexible
         return $this;
     }
 
+    /**
+     * Get accounts collection
+     *
+     * @return Collection
+     */
+    public function getAccounts()
+    {
+        return $this->accounts;
+    }
+
+    /**
+     * Add specified account
+     *
+     * @param Account $account
+     * @return Contact
+     */
+    public function addAccount(Account $account)
+    {
+        if (!$this->getAccounts()->contains($account)) {
+            $this->getAccounts()->add($account);
+            $account->addContact($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Remove specified account
+     *
+     * @param Account $account
+     * @return Contact
+     */
+    public function removeAccount(Account $account)
+    {
+        if ($this->getAccounts()->contains($account)) {
+            $this->getAccounts()->removeElement($account);
+            $account->removeContact($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Set addresses
+     *
+     * @param ContactAddress[] $addresses
+     * @return Contact
+     */
+    public function setMultiAddress($addresses)
+    {
+        $this->multiAddress->clear();
+
+        foreach ($addresses as $address) {
+            $this->addMultiAddress($address);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Add address
+     *
+     * @param ContactAddress $address
+     * @return Contact
+     */
+    public function addMultiAddress(ContactAddress $address)
+    {
+        if (!$this->multiAddress->contains($address)) {
+            $this->multiAddress->add($address);
+            $address->setOwner($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Remove address
+     *
+     * @param mixed $address
+     * @return Contact
+     */
+    public function removeMultiAddress($address)
+    {
+        if ($this->multiAddress->contains($address)) {
+            $this->multiAddress->removeElement($address);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Get addresses
+     *
+     * @return ContactAddress[]
+     */
+    public function getMultiAddress()
+    {
+        return $this->multiAddress;
+    }
+
+    /**
+     * Get full name format. Defaults to "%first% %last%".
+     *
+     * @return string
+     */
+    public function getNameFormat()
+    {
+        return $this->nameFormat ?  $this->nameFormat : '%first% %last%';
+    }
+
+    /**
+     * Set new format for a full name display. Use %first% and %last% placeholders, for example: "%last%, %first%".
+     *
+     * @param  string $format New format string
+     * @return Contact
+     */
+    public function setNameFormat($format)
+    {
+        $this->nameFormat = $format;
+
+        return $this;
+    }
+
+    /**
+     * Return full contact name according to name format
+     *
+     * @see Contact::setNameFormat()
+     * @param  string $format [optional]
+     * @return string
+     */
+    public function getFullname($format = '')
+    {
+        return str_replace(
+            array('%first%', '%last%'),
+            array($this->getAttributeData('first_name'), $this->getAttributeData('last_name')),
+            $format ? $format : $this->getNameFormat()
+        );
+    }
+
     public function __toString()
     {
-        try {
-            $firstNameAttr = $this->getValue('first_name');
-            $lastNameAttr = $this->getValue('last_name');
+        return trim($this->getAttributeData('first_name') . ' ' . $this->getAttributeData('last_name'));
+    }
 
-            $firstName = $firstNameAttr ? (string)$firstNameAttr->getData() : '';
-            $lastName = $lastNameAttr ? (string)$lastNameAttr->getData(): '';
-            return trim($firstName . ' ' . $lastName);
+    /**
+     * Get attribute value data by code
+     *
+     * @param $attributeCode
+     * @return \Oro\Bundle\FlexibleEntityBundle\Model\FlexibleValueInterface|string
+     */
+    public function getAttributeData($attributeCode)
+    {
+        try {
+            $value = $this->getValue($attributeCode);
+            if ($value) {
+                $value = trim($value->getData());
+            }
         } catch (\Exception $e) {
-            return 'N/A';
+            $value = '';
         }
+
+        return $value;
     }
 }

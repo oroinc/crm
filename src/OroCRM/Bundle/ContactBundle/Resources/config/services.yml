@@ -17,6 +17,10 @@ parameters:
     orocrm_contact.group.manager.api.class:  Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
     orocrm_contact.type.group.api.class: OroCRM\Bundle\ContactBundle\Form\Type\GroupApiType
 
+    orocrm_contact.contact_address.entity.class: OroCRM\Bundle\ContactBundle\Entity\ContactAddress
+    orocrm_contact.contact_address.manager.flexible.class: Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleManager
+    orocrm_contact.type.contact_address.class: OroCRM\Bundle\ContactBundle\Form\Type\ContactAddressType
+
 services:
     orocrm_contact.manager.flexible:
         class: %orocrm_contact.manager.flexible.class%
@@ -31,12 +35,10 @@ services:
             - [ addAttributeType, ['oro_flexibleentity_simpleselect'] ]
             - [ addAttributeType, ['oro_flexibleentity_textarea'] ]
             - [ addAttributeType, ['oro_flexibleentity_date'] ]
+            - [ addAttributeType, ['oro_flexibleentity_email'] ]
             - [ addAttributeType, ['orocrm_account_attribute_account'] ]
             - [ addAttributeType, ['oro_user_attribute_user'] ]
             - [ addAttributeType, ['orocrm_contact_attribute_contact'] ]
-            - [ addAttributeType, ['oro_flexibleentity_email_collection'] ]
-            - [ addAttributeType, ['oro_flexibleentity_phone_collection'] ]
-            - [ addAttributeType, ['oro_address'] ]
         tags:
             - { name: oro_flexibleentity_manager, entity: %orocrm_contact.entity.class%}
 
@@ -57,6 +59,7 @@ services:
         arguments:
             - @orocrm_contact.manager.flexible
             - "orocrm_contact_value"
+            - %orocrm_contact.contact_address.entity.class%
         tags:
             - { name: form.type, alias: orocrm_contact }
 
@@ -95,6 +98,7 @@ services:
         arguments:
             - "contact"
             - "orocrm_contact_select"
+            - @oro_flexibleentity.validator.attribute_constraint_guesser
         tags:
             - { name: oro_flexibleentity.attributetype, alias: orocrm_contact_attribute_contact }
     orocrm_contact.form.handler.group:
@@ -123,6 +127,7 @@ services:
         arguments:
             - @orocrm_contact.manager.flexible
             - "orocrm_contact_value"
+            - %orocrm_contact.contact_address.entity.class%
         tags:
             - { name: form.type, alias: contact }
 
@@ -165,3 +170,33 @@ services:
             - @orocrm_contact.form.group.api
             - @request
             - @doctrine.orm.entity_manager
+
+    orocrm_contact.contact_address.manager.flexible:
+        class: %orocrm_contact.contact_address.manager.flexible.class%
+        arguments:
+            - %orocrm_contact.contact_address.entity.class%
+            - %oro_flexibleentity.flexible_config%
+            - @doctrine.orm.entity_manager
+            - @event_dispatcher
+            - @oro_flexibleentity.attributetype.factory
+        tags:
+            - { name: oro_flexibleentity_manager, entity: %orocrm_contact.contact_address.entity.class%}
+        calls:
+            - [ addAttributeType, ['oro_flexibleentity_text'] ]
+
+    orocrm_contact.type.contact_address:
+        class: %orocrm_contact.type.contact_address.class%
+        arguments:
+            - @orocrm_contact.contact_address.manager.flexible
+            - "oro_address_value"
+            - @oro_address.form.listener.address
+        tags:
+            - { name: form.type, alias: orocrm_contact_address }
+
+    orocrm_contact.form.autocomplete.contact.search_handler:
+        parent: oro_form.autocomplete.search_handler
+        arguments:
+            - %orocrm_contact.entity.class%
+            - ["first_name", "last_name"]
+        tags:
+            - { name: oro_form.autocomplete.search_handler, alias: contacts, acl_resource: orocrm_contact_list }

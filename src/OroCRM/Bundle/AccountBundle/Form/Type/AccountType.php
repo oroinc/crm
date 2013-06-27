@@ -17,7 +17,7 @@ class AccountType extends FlexibleType
         // add default flexible fields
         parent::addEntityFields($builder);
 
-        // account fields
+        // name
         $builder->add(
             'name',
             'text',
@@ -26,14 +26,37 @@ class AccountType extends FlexibleType
                 'required' => true,
             )
         );
+
+        // contacts
+        $builder->add(
+            'appendContacts',
+            'oro_entity_identifier',
+            array(
+                'class'    => 'OroCRMContactBundle:Contact',
+                'required' => false,
+                'mapped'   => false,
+                'multiple' => true,
+            )
+        )
+        ->add(
+            'removeContacts',
+            'oro_entity_identifier',
+            array(
+                'class'    => 'OroCRMContactBundle:Contact',
+                'required' => false,
+                'mapped'   => false,
+                'multiple' => true,
+            )
+        );
     }
 
     /**
      * Add entity fields to form builder
      *
      * @param FormBuilderInterface $builder
+     * @param array $options
      */
-    public function addDynamicAttributesFields(FormBuilderInterface $builder)
+    public function addDynamicAttributesFields(FormBuilderInterface $builder, array $options)
     {
         $builder->add(
             'values',

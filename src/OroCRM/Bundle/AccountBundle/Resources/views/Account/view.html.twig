@@ -1,275 +1,107 @@
-{% extends 'OroCRMAccountBundle::layout.html.twig' %}
+{% extends 'OroUIBundle:actions:view.html.twig' %}
 {% import 'OroUIBundle::macros.html.twig' as macros %}
-{% set format = get_user_value('oro_user.name_format') %}
-{% oro_title_set({params : {"%account.name%": account.name|default('N/A')} }) %}
-
-{% if account.values is defined %}
-    {% set hasAddress = false %}
-    {% for attribute in account.values %}
-        {% if 'address' in attribute.attribute.code and attribute.data is not null %}
-            {% set hasAddress = true %}
-        {% endif %}
-    {% endfor %}
-{% endif %}
-
+{% import 'OroAddressBundle:Include:viewMacro.html.twig' as addressView %}
+{% set format = oro_config_value('oro_user.name_format') %}
+{% oro_title_set({params : {"%account.name%": entity.name|default('N/A')} }) %}
+{% set gridId = 'contacts-grid' %}
 {% block head_script %}
-    {{ parent() }}
-
-    {% javascripts
-    '@OroUIBundle/Resources/public/lib/bootstrap/js/bootstrap-scrollspy.js'
-    '@OroUIBundle/Resources/public/lib/backbone.bootstrap-modal.js'
-
-    filter='?yui_js'
-    output='js/orocrm.account.account.js'
-    %}
-    <script src="{{ asset_url }}" type="text/javascript"></script>
-    {% endjavascripts %}
-
-    {% include 'OroCRMAccountBundle:Account:remove.confirm.js.twig' %}
+    {% placeholder prepare_grid with {'datagrid': datagrid, 'selector': '#' ~ gridId} %}
 {% endblock %}
 
-{% block content %}
-<div class="layout-content">
-<div class="navigation clearfix navbar-extra navbar-extra-right">
-    <div class="row">
-        <div class="pull-right">
-            <div class="pull-right">
-                <div class="pull-left btn-group icons-holder ">
-                    <a href="{{ path('orocrm_account_index') }}"
-                       class="btn back icons-holder-text" title="{{ 'Back'|trans }}"><i class="icon-chevron-left hide-text">{{ 'Back'|trans }}</i>{{ 'Back'|trans }}</a>
-                </div>
-                {% if resource_granted('orocrm_account_account_update') %}
-                <div class="pull-left btn-group icons-holder">
-                    <a href="{{ path('orocrm_account_update', { id: account.id }) }}"
-                       class="btn icons-holder-text" title="{{ 'Edit account'|trans }}"><i class="icon-edit hide-text">{{ 'Edit'|trans }}</i>{{ 'Edit'|trans }}</a>
-                </div>
-                {% endif %}
-                {% if resource_granted('orocrm_account_account_remove') %}
-                <div class="pull-left btn-group icons-holder">
-                    <a href="javascript: void(0);" class="btn icons-holder-text no-hash remove-button"
-                       id="btn-remove-account"
-                       data-id="{{ account.id }}"
-                       data-url="{{ path('oro_api_delete_account', {'id': account.id}) }}"
-                       data-redirect="{{ path('orocrm_account_index') }}"
-                       data-message="{{ 'Are you sure you want to delete this account?'|trans }}"
-                       title="{{ 'Delete Account'|trans }}"><i class="icon-trash hide-text">{{ 'Remove'|trans }}</i>{{ 'Delete'|trans }}</a>
-                </div>
-                {% endif %}
-            </div>
-            <div class="pull-right usser-info-state">
-                <ul class="inline-decorate">
-                    {# <li><a class="no-hash" href="{{ path('oro_dataaudit_history', {entity:'Oro_Bundle_AccountBundle_Entity_Account', id: account.id}) }}" id="view-activity-btn" title="{{ account }} - {{ 'Change History'|trans }}">{{ 'Change History'|trans }}</a></li>#}
-                </ul>
-            </div>
-        </div>
-        <div class="span9">
-            <div class="customer-info customer-simple well-small">
-                <div class="customer-content pull-left">
-                    <div class="clearfix">
-                        <div class="pull-left">
-                            <div class="sub-title"><a href="{{ path('orocrm_account_index') }}">{{ 'Accounts'|trans }}</a></div>
-                            <span class="separator">/</span>
-                            <h1 class="usser-name">{{ account.name(format)|default('N/A') }}</h1>
-                        </div>
-                    </div>
-                    <div class="clearfix">
-                        <ul class="inline">
-                            <li>{{ 'Created'|trans }}: {{ account.createdAt ? macros.time(account.createdAt) : 'N/A' }}</li>
-                            <li>{{ 'Updated'|trans }}: {{ account.updatedAt ? macros.time(account.updatedAt) : 'N/A' }}</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    </div>
-    <div class="layout-content">
-        <div id="navbar-account-view" class="navbar navbar-static scrollspy-nav">
-            <div class="navbar-inner">
-                <div class="container-fluid" style="width: auto;">
-                    <ul class="nav">
-                        <li class="active"><a href="#scroll-main">{{ 'General'|trans }}</a></li>
-                        {% if(hasAddress) %}
-                            <li><a href="#scroll-addresses">{{ 'Addresses'|trans }}</a></li>
-                        {% endif %}
-                        {% if account.values is defined %}
-                            <li><a href="#scroll-attributes">{{ 'Additional Information'|trans }}</a></li>
-                        {% endif %}
-                        <li class="clearfix"></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-        <div class="clearfix">
-            <div data-spy="scroll" data-target="#navbar-account-view" data-offset="50" class="scrollspy container-fluid scrollable-container">
-                <div class="usser-row">
-                    <div class="row-fluid-divider">
-                        <h4 id="scroll-main" class="scrollspy-title">{{ 'General'|trans }}</h4>
+{% block navButtons %}
+    {{ UI.button({'path': path('orocrm_account_index'), 'iClass': 'icon-chevron-left ', 'title': 'Back', 'label': 'Back'}) }}
+    {% if resource_granted('orocrm_account_update') %}
+       {{ UI.button({'path': path('orocrm_account_update', {'id': entity.id}), 'iClass': 'icon-edit', 'title': 'Edit account', 'label': 'Edit'}) }}
+    {% endif %}
+    {% if resource_granted('orocrm_account_remove') %}
+        {{ UI.deleteButton({
+                'dataUrl': path('oro_api_delete_account', {'id': entity.id}),
+                'dataRedirect': path('orocrm_account_index'),
+                'aCss': 'no-hash remove-button',
+                'dataId': entity.id,
+                'id': 'btn-remove-account',
+                'dataMessage': 'Are you sure you want to delete this account?',
+                'title': 'Delete Account',
+                'label': 'Delete'
+            })
+        }}
+    {% endif %}
+{% endblock navButtons %}
 
-                        <div class="row-fluid clearfix">
-                            <div class="form-horizontal span6 pull-left">
-                                <h5 class="usser-fiedset"><span>{{ 'Basic Information'|trans }}</span></h5>
+{% block pageHeader %}
+    {% set breadcrumbs = {'entity': entity, 'indexPath': path('orocrm_account_index'), 'indexLabel': 'Accounts', 'entityTitle': entity.name(format)|default('N/A') } %}
+    {{ parent() }}
+{% endblock pageHeader %}
 
-                                <div class="control-group">
-                                    <label class="control-label">{{ 'Account Name'|trans }}</label>
+{% block content_data %}
+    {% set id = 'navbarAccountsUpdate' %}
 
-                                    <div class="controls">
-                                        <div class="clearfix-oro">
-                                            <p class="control-label">{{ account.name }}</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+    {% set attributes = {} %}
+    {% for value in entity|getAttributes() %}
+        {% set attributes = attributes | merge([UI.flexibleAttributeRow(value)]) %}
+    {% endfor %}
 
-                        {% if account.values is defined %}
-
-                            {% if (hasAddress) %}
-                                <h4 id="scroll-addresses" class="scrollspy-title">{{ 'Addresses'|trans }}</h4>
-                                <div class="row-fluid clearfix">
-                                    {% for attribute in account.values %}
-                                        {% if 'address' in attribute.attribute.code %}
-                                            {% set address = attribute.data %}
-                                            {% if address is defined and address is not null %}
-                                            <div class="form-horizontal span6 pull-left">
-                                                <h5 class="usser-fiedset"><span>{{ attribute.attribute.label|trans }}</span></h5>
-                                                <div class="control-group">
-                                                    <label class="control-label">{{ 'First name'|trans }}</label>
-
-                                                    <div class="controls">
-                                                        <div class="clearfix-oro">
-                                                            <p class="control-label">{{ address.firstName|default('N/A') }}</p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="control-group">
-                                                    <label class="control-label">{{ 'Last name'|trans }}</label>
-
-                                                    <div class="controls">
-                                                        <div class="clearfix-oro">
-                                                            <p class="control-label">{{ address.lastName|default('N/A') }}</p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="control-group">
-                                                    <label class="control-label">{{ 'Street'|trans }}</label>
-
-                                                    <div class="controls">
-                                                        <div class="clearfix-oro">
-                                                            <p class="control-label">{{ address.street|default('N/A') }}</p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="control-group">
-                                                    <label class="control-label">{{ 'Street 2'|trans }}</label>
-
-                                                    <div class="controls">
-                                                        <div class="clearfix-oro">
-                                                            <p class="control-label">{{ address.street2|default('N/A') }}</p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="control-group">
-                                                    <label class="control-label">{{ 'City'|trans }}</label>
-
-                                                    <div class="controls">
-                                                        <div class="clearfix-oro">
-                                                            <p class="control-label">{{ address.city|default('N/A') }}</p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="control-group">
-                                                    <label class="control-label">{{ 'State'|trans }}</label>
-
-                                                    <div class="controls">
-                                                        <div class="clearfix-oro">
-                                                            <p class="control-label">{{ address.state|default('N/A') }}</p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="control-group">
-                                                    <label class="control-label">{{ 'Country'|trans }}</label>
-
-                                                    <div class="controls">
-                                                        <div class="clearfix-oro">
-                                                            <p class="control-label">{{ address.country|default('N/A') }}</p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="control-group">
-                                                    <label class="control-label">{{ 'Zip/postal code'|trans }}</label>
-
-                                                    <div class="controls">
-                                                        <div class="clearfix-oro">
-                                                            <p class="control-label">{{ address.postalCode }}</p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                {% if (address.values is defined) %}
-                                                    {% for attr in address.values %}
-                                                        <div class="control-group">
-                                                            <label class="control-label">{{ attr.attribute.label|trans|title }}</label>
-
-                                                            <div class="controls">
-                                                                <div class="clearfix-oro">
-                                                                    <p class="control-label">{{ attr.__toString|default('N/A') }}</p>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    {% endfor %}
-                                                {% endif %}
-                                                </div>
-                                            {% endif %}
-                                        {% endif %}
-                                    {% endfor %}
-                                </div>
-                            {% endif %}
-                        {% endif %}
-                    </div>
-                </div>
-                {% if account.values is defined %}
-                    <div class="usser-row">
-                        <h4 id="scroll-attributes" class="scrollspy-title">{{ 'Additional Information'|trans }}</h4>
-                        <div class="row-fluid">
-                            <div class="form-horizontal">
-                                {% set col = 2 %}
-                                {% set class = 'span' ~ (12 // col) %}
-                                {% set index = 1 %}
-                                {% set total = account.values|length - 2  %}
-                                {% set half = (total / col)|ceil %}
-
-                            {% for attr in account.values %}
-                                {% if 'address' not in attr.attribute.code %}
-                                    {% if index == 1 %}
-                                        <div class="{{ class }}">
-                                    {% endif %}
-
-                                    <div class="control-group">
-                                        <label class="control-label">{{ attr.attribute.label|trans|title }}</label>
-                                        <div class="controls">
-                                            <div class="clearfix-oro">
-                                                <p class="control-label">{{ attr.__toString|default('N/A')  }}</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                        {% if index % half == 0  and (index != (total)) %}
-                                            </div>
-                                            <div class="{{ class }}">
-                                        {% endif %}
-
-                                    {% if index == (total) %}
-                                        </div>
-                                    {% endif %}
-                                    {% set index = index + 1 %}
-                                {% endif %}
-                            {% endfor %}
-                        </div>
-                    </div>
-                </div>
+    {% set accountAddresses = {} %}
+    {% if entity|hasAddress %}
+        {% for value in entity|getAttributes(['shipping_address', 'billing_address']) %}
+            {% set address = value.data %}
+            {% if address is not null %}
+                {% set accountAddresses = accountAddresses|merge([{'title': value.attribute.label, 'data': [addressView.renderAddress(address)]}]) %}
             {% endif %}
-        </div>
-    </div>
-</div>
-</div>
-{% endblock content %}
+        {% endfor %}
+    {% endif %}
+
+    {% if entity.values is defined %}
+        {% set col = 2 %}
+        {% set additional = {} %}
+        {% set additionalAttributes = entity|getAttributes(['shipping_address', 'billing_address'], true) %}
+        {% set attributes = {} %}
+        {% set half = (additionalAttributes|length / col)|ceil %}
+
+        {% for value in additionalAttributes %}
+
+            {% set attributes = attributes | merge([UI.flexibleAttributeRow(value)]) %}
+
+            {% if loop.index % half == 0  and not loop.last %}
+                {% set additional = additional|merge([{'title' : null, 'data' : attributes}]) %}
+                {% set attributes = {} %}
+            {% endif %}
+
+        {% endfor %}
+        {% set additional = additional|merge([{'title' : null, 'data' : attributes}]) %}
+    {% endif %}
+
+    {% set dataBlocks =
+            [
+                {
+                    'title': 'General',
+                    'class': 'active',
+                    'subblocks': [
+                        {
+                            'title': 'Basic Information',
+                            'data': [
+                                UI.attibuteRow('Account Name', entity.name),
+                            ]
+                        }
+                    ]
+                }
+            ]
+    %}
+
+    {% if (accountAddresses|length) %}
+    {% set dataBlocks = dataBlocks|merge([{'title' : 'Addresses', 'subblocks': accountAddresses}])%}
+    {% endif %}
+
+    {% if (additional|length) %}
+        {% set dataBlocks = dataBlocks|merge([{'title' : 'Additional Information', 'subblocks': additional}])%}
+    {% endif %}
+
+    {% set dataBlocks = dataBlocks|merge([{'title' : 'Contacts', 'subblocks': [{'title' : null, 'data' : [UI.gridBlock(gridId)], 'useSpan': false}] }])%}
+
+    {% set data =
+        {
+            'dataBlocks': dataBlocks,
+        }
+    %}
+    {{ parent() }}
+{% endblock content_data %}

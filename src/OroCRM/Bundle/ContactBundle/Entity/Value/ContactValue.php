@@ -4,7 +4,6 @@ namespace OroCRM\Bundle\ContactBundle\Entity\Value;
 
 use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\Common\Collections\ArrayCollection;
-use OroCRM\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\AddressBundle\Entity\Address;
 use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityFlexibleValue;
 use Oro\Bundle\FlexibleEntityBundle\Entity\Attribute;
@@ -50,21 +49,11 @@ class ContactValue extends AbstractEntityFlexibleValue
     protected $options;
 
     /**
-     * Store account
-     *
-     * @var Account $account
-     *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\AccountBundle\Entity\Account", cascade="persist")
-     * @ORM\JoinColumn(name="account_id", referencedColumnName="id", onDelete="SET NULL")
-     */
-    protected $account;
-
-    /**
      * Store user
      *
      * @var User $user
      *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User", cascade="persist")
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $user;
@@ -74,7 +63,7 @@ class ContactValue extends AbstractEntityFlexibleValue
      *
      * @var Contact $contact
      *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ContactBundle\Entity\Contact", cascade="persist")
+     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ContactBundle\Entity\Contact")
      * @ORM\JoinColumn(name="contact_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $contact;
@@ -116,7 +105,7 @@ class ContactValue extends AbstractEntityFlexibleValue
     /**
      * Store decimal value
      *
-     * @var double $decimal
+     * @var float $decimal
      *
      * @ORM\Column(name="value_decimal", type="decimal", nullable=true)
      * @Gedmo\Versioned
@@ -136,7 +125,7 @@ class ContactValue extends AbstractEntityFlexibleValue
     /**
      * Store date value
      *
-     * @var date $date
+     * @var \DateTime $date
      *
      * @ORM\Column(name="value_date", type="date", nullable=true)
      * @Gedmo\Versioned
@@ -146,36 +135,12 @@ class ContactValue extends AbstractEntityFlexibleValue
     /**
      * Store datetime value
      *
-     * @var date $datetime
+     * @var \DateTime $datetime
      *
      * @ORM\Column(name="value_datetime", type="datetime", nullable=true)
      * @Gedmo\Versioned
      */
     protected $datetime;
-
-    /**
-     * Get account
-     *
-     * @return Account
-     */
-    public function getAccount()
-    {
-        return $this->account;
-    }
-
-    /**
-     * Set account
-     *
-     * @param Account $account
-     *
-     * @return ContactValue
-     */
-    public function setAccount($account)
-    {
-        $this->account = $account;
-
-        return $this;
-    }
 
     /**
      * Get user

@@ -1,7 +1,6 @@
 <?php
 namespace OroCRM\Bundle\ContactBundle\Form\Type;
 
-use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
@@ -11,19 +10,17 @@ class ContactSelectType extends AbstractType
     {
         $resolver->setDefaults(
             array(
-                'class' => 'OroCRMContactBundle:Contact',
-                'query_builder' => function (EntityRepository $er) {
-                    return $er->createFlexibleQueryBuilder('c', array('first_name', 'last_name'));
-                },
-                'empty_value' => 'Choose a contact...',
-                'empty_data'  => null
+                'configs' => array(
+                    'placeholder' => 'orocrm.contact.form.choose_contact'
+                ),
+                'autocomplete_alias' => 'contacts'
             )
         );
     }
 
     public function getParent()
     {
-        return 'entity';
+        return 'oro_jqueryselect2_hidden';
     }
 
     /**

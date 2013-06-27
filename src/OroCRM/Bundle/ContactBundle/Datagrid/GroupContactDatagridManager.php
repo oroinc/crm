@@ -10,6 +10,7 @@ use Oro\Bundle\GridBundle\Sorter\SorterInterface;
 use Oro\Bundle\GridBundle\Field\FieldDescriptionCollection;
 use Oro\Bundle\GridBundle\Datagrid\FlexibleDatagridManager;
 use Oro\Bundle\GridBundle\Datagrid\ParametersInterface;
+use Oro\Bundle\GridBundle\Datagrid\ProxyQueryInterface;
 
 use OroCRM\Bundle\ContactBundle\Entity\Group;
 
@@ -32,7 +33,7 @@ class GroupContactDatagridManager extends FlexibleDatagridManager
         $fieldId->setOptions(
             array(
                 'type'        => FieldDescriptionInterface::TYPE_INTEGER,
-                'label'       => 'ID',
+                'label'       => $this->translate('ID'),
                 'field_name'  => 'id',
                 'filter_type' => FilterInterface::TYPE_NUMBER,
                 'show_column' => false
@@ -74,7 +75,7 @@ class GroupContactDatagridManager extends FlexibleDatagridManager
         $fieldHasGroup->setOptions(
             array(
                 'type'        => FieldDescriptionInterface::TYPE_BOOLEAN,
-                'label'       => 'Has group',
+                'label'       => $this->translate('Has group'),
                 'field_name'  => 'hasCurrentGroup',
                 'expression'  => 'hasCurrentGroup',
                 'nullable'    => false,
@@ -97,34 +98,40 @@ class GroupContactDatagridManager extends FlexibleDatagridManager
         $dataIn    = !empty($additionalParameters['data_in']) ? $additionalParameters['data_in'] : array(0);
         $dataNotIn = !empty($additionalParameters['data_not_in']) ? $additionalParameters['data_not_in'] : array(0);
 
-        return array(
+        $parameters = array(
             'data_in'     => $dataIn,
-            'data_not_in' => $dataNotIn,
-            'group'       => $this->getGroup()
+            'data_not_in' => $dataNotIn
         );
+        if ($this->getGroup()->getId()) {
+            $parameters['group'] = $this->getGroup();
+        }
+
+        return $parameters;
     }
 
     /**
      * {@inheritDoc}
      */
-    protected function createQuery()
+    protected function prepareQuery(ProxyQueryInterface $query)
     {
-        $query = parent::createQuery();
+        $entityAlias = $query->getRootAlias();
+
         if ($this->getGroup()->getId()) {
             $query->addSelect(
-                'CASE WHEN ' .
-                '(:group MEMBER OF c.groups OR c.id IN (:data_in)) AND c.id NOT IN (:data_not_in) '.
-                'THEN 1 ELSE 0 END AS hasCurrentGroup',
+                "CASE WHEN " .
+                "(:group MEMBER OF $entityAlias.groups OR $entityAlias.id IN (:data_in)) " .
+                "AND $entityAlias.id NOT IN (:data_not_in) ".
+                "THEN 1 ELSE 0 END AS hasCurrentGroup",
                 true
             );
         } else {
             $query->addSelect(
-                '0 AS hasCurrentGroup',
+                "CASE WHEN " .
+                "$entityAlias.id IN (:data_in) AND $entityAlias.id NOT IN (:data_not_in) ".
+                "THEN 1 ELSE 0 END AS hasCurrentGroup",
                 true
             );
         }
-
-        return $query;
     }
 
     /**

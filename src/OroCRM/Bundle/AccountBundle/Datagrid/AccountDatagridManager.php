@@ -4,7 +4,6 @@ namespace OroCRM\Bundle\AccountBundle\Datagrid;
 
 use Doctrine\ORM\QueryBuilder;
 
-use Oro\Bundle\FlexibleEntityBundle\Entity\Collection;
 use Oro\Bundle\GridBundle\Datagrid\FlexibleDatagridManager;
 use Oro\Bundle\GridBundle\Field\FieldDescription;
 use Oro\Bundle\GridBundle\Field\FieldDescriptionCollection;
@@ -12,17 +11,9 @@ use Oro\Bundle\GridBundle\Field\FieldDescriptionInterface;
 use Oro\Bundle\GridBundle\Filter\FilterInterface;
 use Oro\Bundle\GridBundle\Action\ActionInterface;
 use Oro\Bundle\GridBundle\Property\UrlProperty;
-use Oro\Bundle\GridBundle\Property\CallbackProperty;
-use Oro\Bundle\GridBundle\Datagrid\ResultRecordInterface;
-use Oro\Bundle\FlexibleEntityBundle\Form\Type\PhoneType;
 
 class AccountDatagridManager extends FlexibleDatagridManager
 {
-    protected $excludeAttributes = array(
-        'emails',
-        'phones'
-    );
-
     /**
      * {@inheritDoc}
      */
@@ -36,23 +27,6 @@ class AccountDatagridManager extends FlexibleDatagridManager
     }
 
     /**
-     * {@inheritDoc}
-     */
-    protected function getFlexibleAttributes()
-    {
-        parent::getFlexibleAttributes();
-
-        // exclude collections attributes from grid
-        foreach ($this->excludeAttributes as $attributeCode) {
-            if (isset($this->attributes[$attributeCode])) {
-                unset($this->attributes[$attributeCode]);
-            }
-        }
-
-        return $this->attributes;
-    }
-
-    /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * {@inheritDoc}
      */
@@ -63,7 +37,7 @@ class AccountDatagridManager extends FlexibleDatagridManager
         $fieldId->setOptions(
             array(
                 'type'        => FieldDescriptionInterface::TYPE_INTEGER,
-                'label'       => 'ID',
+                'label'       => $this->translate('ID'),
                 'field_name'  => 'id',
                 'filter_type' => FilterInterface::TYPE_NUMBER,
                 'show_column' => false
@@ -76,10 +50,9 @@ class AccountDatagridManager extends FlexibleDatagridManager
         $fieldName->setOptions(
             array(
                 'type'        => FieldDescriptionInterface::TYPE_TEXT,
-                'label'       => 'Name',
+                'label'       => $this->translate('Name'),
                 'field_name'  => 'name',
                 'filter_type' => FilterInterface::TYPE_STRING,
-                'required'    => false,
                 'sortable'    => true,
                 'filterable'  => true,
                 'show_filter' => true,
@@ -87,36 +60,7 @@ class AccountDatagridManager extends FlexibleDatagridManager
         );
         $fieldsCollection->add($fieldName);
 
-        $fieldPhone = new FieldDescription();
-        $fieldPhone->setName('office_phone');
-        $fieldPhone->setOptions(
-            array(
-                'type'        => FieldDescriptionInterface::TYPE_TEXT,
-                'label'       => 'Phone',
-                'field_name'  => 'phones',
-                'filter_type' => FilterInterface::TYPE_STRING,
-                'required'    => false,
-                'sortable'    => false,
-                'filterable'  => false,
-                'show_filter' => false,
-            )
-        );
-        $phoneProperty = new CallbackProperty(
-            $fieldPhone->getName(),
-            function (ResultRecordInterface $record) use ($fieldPhone) {
-                $phones = $record->getValue($fieldPhone->getFieldName())->getData();
-                /** @var $phone Collection */
-                foreach ($phones as $phone) {
-                    if ($phone->getType() == PhoneType::TYPE_OFFICE) {
-                        return $phone->getData();
-                    }
-                }
-                return null;
-            }
-        );
-        $fieldPhone->setProperty($phoneProperty);
-        $fieldsCollection->add($fieldPhone);
-
+        $this->configureFlexibleField($fieldsCollection, 'phone');
         $this->configureFlexibleField($fieldsCollection, 'email', array('show_filter' => true));
 
         $addressOptions = array(
@@ -133,10 +77,9 @@ class AccountDatagridManager extends FlexibleDatagridManager
         $fieldCreated->setOptions(
             array(
                 'type'        => FieldDescriptionInterface::TYPE_DATETIME,
-                'label'       => 'Created At',
+                'label'       => $this->translate('Created At'),
                 'field_name'  => 'created',
                 'filter_type' => FilterInterface::TYPE_DATETIME,
-                'required'    => false,
                 'sortable'    => true,
                 'filterable'  => true,
                 'show_filter' => true,
@@ -149,10 +92,9 @@ class AccountDatagridManager extends FlexibleDatagridManager
         $fieldUpdated->setOptions(
             array(
                 'type'        => FieldDescriptionInterface::TYPE_DATETIME,
-                'label'       => 'Updated At',
+                'label'       => $this->translate('Updated At'),
                 'field_name'  => 'updated',
                 'filter_type' => FilterInterface::TYPE_DATETIME,
-                'required'    => false,
                 'sortable'    => true,
                 'filterable'  => true,
                 'show_filter' => true,
@@ -169,9 +111,9 @@ class AccountDatagridManager extends FlexibleDatagridManager
         $clickAction = array(
             'name'         => 'rowClick',
             'type'         => ActionInterface::TYPE_REDIRECT,
-            'acl_resource' => 'root',
+            'acl_resource' => 'orocrm_account_view',
             'options'      => array(
-                'label'         => 'View',
+                'label'         => $this->translate('View'),
                 'link'          => 'view_link',
                 'runOnRowClick' => true,
             )
@@ -180,9 +122,9 @@ class AccountDatagridManager extends FlexibleDatagridManager
         $viewAction = array(
             'name'         => 'view',
             'type'         => ActionInterface::TYPE_REDIRECT,
-            'acl_resource' => 'root',
+            'acl_resource' => 'orocrm_account_view',
             'options'      => array(
-                'label' => 'View',
+                'label' => $this->translate('View'),
                 'icon'  => 'user',
                 'link'  => 'view_link',
             )
@@ -191,9 +133,9 @@ class AccountDatagridManager extends FlexibleDatagridManager
         $updateAction = array(
             'name'         => 'update',
             'type'         => ActionInterface::TYPE_REDIRECT,
-            'acl_resource' => 'root',
+            'acl_resource' => 'orocrm_account_update',
             'options'      => array(
-                'label'   => 'Update',
+                'label'   => $this->translate('Update'),
                 'icon'    => 'edit',
                 'link'    => 'update_link',
             )
@@ -202,9 +144,9 @@ class AccountDatagridManager extends FlexibleDatagridManager
         $deleteAction = array(
             'name'         => 'delete',
             'type'         => ActionInterface::TYPE_DELETE,
-            'acl_resource' => 'root',
+            'acl_resource' => 'orocrm_account_remove',
             'options'      => array(
-                'label' => 'Delete',
+                'label' => $this->translate('Delete'),
                 'icon'  => 'trash',
                 'link'  => 'delete_link',
             )

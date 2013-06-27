@@ -44,6 +44,11 @@ class LoadContactAttrData extends AbstractFixture implements ContainerAwareInter
         $this->addAttributes(
             array(
                 array(
+                    'code'  => 'name_prefix',
+                    'label' => 'Name Prefix',
+                    'searchable' => true
+                ),
+                array(
                     'code'  => 'first_name',
                     'label' => 'First Name',
                     'searchable' => true,
@@ -58,11 +63,6 @@ class LoadContactAttrData extends AbstractFixture implements ContainerAwareInter
                 array(
                     'code'  => 'name_suffix',
                     'label' => 'Name Suffix',
-                    'searchable' => true
-                ),
-                array(
-                    'code'  => 'name_prefix',
-                    'label' => 'Name Prefix',
                     'searchable' => true
                 ),
                 array(
@@ -91,12 +91,6 @@ class LoadContactAttrData extends AbstractFixture implements ContainerAwareInter
                     'searchable' => true
                 ),
                 array(
-                    'code'  => 'account',
-                    'type'  => 'orocrm_account_attribute_account',
-                    'label' => 'Account',
-                    'searchable' => true
-                ),
-                array(
                     'code'  => 'assigned_to',
                     'type'  => 'oro_user_attribute_user',
                     'label' => 'Assigned To',
@@ -109,19 +103,15 @@ class LoadContactAttrData extends AbstractFixture implements ContainerAwareInter
                     'searchable' => true
                 ),
                 array(
-                    'code'  => 'emails',
-                    'type'  => 'oro_flexibleentity_email_collection',
-                    'label' => 'Emails'
+                    'code'  => 'email',
+                    'type'  => 'oro_flexibleentity_email',
+                    'label' => 'Email',
+                    'searchable' => true
                 ),
                 array(
-                    'code'  => 'phones',
-                    'type'  => 'oro_flexibleentity_phone_collection',
-                    'label' => 'Phones'
-                ),
-                array(
-                    'code'  => 'address',
-                    'type'  => 'oro_address',
-                    'label' => 'Address'
+                    'code'  => 'phone',
+                    'label' => 'Phone',
+                    'searchable' => true
                 )
             )
         );

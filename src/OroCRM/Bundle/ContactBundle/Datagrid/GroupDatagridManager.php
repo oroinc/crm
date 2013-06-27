@@ -33,7 +33,7 @@ class GroupDatagridManager extends DatagridManager
         $fieldId->setOptions(
             array(
                 'type'        => FieldDescriptionInterface::TYPE_INTEGER,
-                'label'       => 'ID',
+                'label'       => $this->translate('ID'),
                 'field_name'  => 'id',
                 'filter_type' => FilterInterface::TYPE_NUMBER,
                 'show_column' => false
@@ -46,10 +46,9 @@ class GroupDatagridManager extends DatagridManager
         $fieldName->setOptions(
             array(
                 'type'        => FieldDescriptionInterface::TYPE_TEXT,
-                'label'       => 'Name',
+                'label'       => $this->translate('Name'),
                 'field_name'  => 'name',
                 'filter_type' => FilterInterface::TYPE_STRING,
-                'required'    => false,
                 'sortable'    => true,
                 'filterable'  => true,
                 'show_filter' => true,
@@ -66,9 +65,9 @@ class GroupDatagridManager extends DatagridManager
         $clickAction = array(
             'name'         => 'rowClick',
             'type'         => ActionInterface::TYPE_REDIRECT,
-            'acl_resource' => 'root',
+            'acl_resource' => 'orocrm_contact_group_update',
             'options'      => array(
-                'label'         => 'Update',
+                'label'         => $this->translate('Update'),
                 'link'          => 'update_link',
                 'runOnRowClick' => true,
             )
@@ -77,9 +76,9 @@ class GroupDatagridManager extends DatagridManager
         $updateAction = array(
             'name'         => 'update',
             'type'         => ActionInterface::TYPE_REDIRECT,
-            'acl_resource' => 'root',
+            'acl_resource' => 'orocrm_contact_group_update',
             'options'      => array(
-                'label'   => 'Update',
+                'label'   => $this->translate('Update'),
                 'icon'    => 'edit',
                 'link'    => 'update_link',
             )
@@ -88,9 +87,9 @@ class GroupDatagridManager extends DatagridManager
         $deleteAction = array(
             'name'         => 'delete',
             'type'         => ActionInterface::TYPE_DELETE,
-            'acl_resource' => 'root',
+            'acl_resource' => 'orocrm_contact_group_delete',
             'options'      => array(
-                'label' => 'Delete',
+                'label' => $this->translate('Delete'),
                 'icon'  => 'trash',
                 'link'  => 'delete_link',
             )
