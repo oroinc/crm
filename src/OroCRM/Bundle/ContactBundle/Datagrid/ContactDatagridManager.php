@@ -3,10 +3,9 @@
 namespace OroCRM\Bundle\ContactBundle\Datagrid;
 
 use Doctrine\ORM\QueryBuilder;
-use Doctrine\ORM\PersistentCollection;
+use Doctrine\ORM\Query;
+use Doctrine\ORM\EntityRepository;
 
-use Oro\Bundle\FlexibleEntityBundle\Entity\Collection;
-use Oro\Bundle\FlexibleEntityBundle\Form\Type\PhoneType;
 use Oro\Bundle\GridBundle\Datagrid\FlexibleDatagridManager;
 use Oro\Bundle\GridBundle\Field\FieldDescription;
 use Oro\Bundle\GridBundle\Field\FieldDescriptionCollection;
@@ -14,8 +13,6 @@ use Oro\Bundle\GridBundle\Field\FieldDescriptionInterface;
 use Oro\Bundle\GridBundle\Filter\FilterInterface;
 use Oro\Bundle\GridBundle\Action\ActionInterface;
 use Oro\Bundle\GridBundle\Property\UrlProperty;
-use Oro\Bundle\GridBundle\Property\CallbackProperty;
-use Oro\Bundle\GridBundle\Datagrid\ResultRecordInterface;
 use Oro\Bundle\GridBundle\Datagrid\ProxyQueryInterface;
 
 class ContactDatagridManager extends FlexibleDatagridManager
@@ -53,72 +50,8 @@ class ContactDatagridManager extends FlexibleDatagridManager
 
         $this->configureFlexibleField($fieldsCollection, 'first_name');
         $this->configureFlexibleField($fieldsCollection, 'last_name');
-
-        $fieldPhone = new FieldDescription();
-        $fieldPhone->setName('office_phone');
-        $fieldPhone->setOptions(
-            array(
-                'type'        => FieldDescriptionInterface::TYPE_TEXT,
-                'label'       => $this->translate('Phone'),
-                'field_name'  => 'phones',
-                'filter_type' => FilterInterface::TYPE_STRING,
-            )
-        );
-        $phoneProperty = new CallbackProperty(
-            $fieldPhone->getName(),
-            function (ResultRecordInterface $record) use ($fieldPhone) {
-                try {
-                    $phonesValue = $record->getValue($fieldPhone->getFieldName());
-                    if ($phonesValue) {
-                        $phones = $phonesValue->getData();
-                        /** @var $phone Collection */
-                        foreach ($phones as $phone) {
-                            if ($phone && $phone->getType() == PhoneType::TYPE_OFFICE) {
-                                return $phone->getData();
-                            }
-                        }
-                    }
-                    return null;
-                } catch (\Exception $e) {
-                    return null;
-                }
-            }
-        );
-        $fieldPhone->setProperty($phoneProperty);
-        $fieldsCollection->add($fieldPhone);
-
-        $fieldEmail = new FieldDescription();
-        $fieldEmail->setName('email');
-        $fieldEmail->setOptions(
-            array(
-                'type'        => FieldDescriptionInterface::TYPE_TEXT,
-                'label'       => $this->translate('Email'),
-                'field_name'  => 'emails',
-                'filter_type' => FilterInterface::TYPE_STRING,
-            )
-        );
-        $emailProperty = new CallbackProperty(
-            $fieldEmail->getName(),
-            function (ResultRecordInterface $record) use ($fieldEmail) {
-                try {
-                    $emailsValue = $record->getValue($fieldEmail->getFieldName());
-                    if ($emailsValue) {
-                        /** @var $emails PersistentCollection */
-                        $emails = $emailsValue->getData();
-                        if ($emails->count() > 0) {
-                            /** @var $email Collection */
-                            $email = $emails->first();
-                            return $email->getData();
-                        }
-                    }
-                    return null;
-                } catch (\Exception $e) {
-                    return null;
-                }
-            }
-        );
-        $fieldEmail->setProperty($emailProperty);
-        $fieldsCollection->add($fieldEmail);
+        $this->configureFlexibleField($fieldsCollection, 'phone');
+        $this->configureFlexibleField($fieldsCollection, 'email', array('show_filter' => true));
 
         $fieldCountry = new FieldDescription();
         $fieldCountry->setName('country');
@@ -136,6 +69,11 @@ class ContactDatagridManager extends FlexibleDatagridManager
                 'multiple'        => true,
                 'class'           => 'OroAddressBundle:Country',
                 'property'        => 'name',
+                'query_builder'   => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('c')
+                        ->orderBy('c.name', 'ASC');
+                },
+                'translatable'    => true,
                 'filter_by_where' => true,
             )
         );
@@ -180,7 +118,7 @@ class ContactDatagridManager extends FlexibleDatagridManager
         $clickAction = array(
             'name'         => 'rowClick',
             'type'         => ActionInterface::TYPE_REDIRECT,
-            'acl_resource' => 'root',
+            'acl_resource' => 'orocrm_contact_view',
             'options'      => array(
                 'label'         => $this->translate('View'),
                 'link'          => 'view_link',
@@ -191,7 +129,7 @@ class ContactDatagridManager extends FlexibleDatagridManager
         $viewAction = array(
             'name'         => 'view',
             'type'         => ActionInterface::TYPE_REDIRECT,
-            'acl_resource' => 'root',
+            'acl_resource' => 'orocrm_contact_view',
             'options'      => array(
                 'label' => $this->translate('View'),
                 'icon'  => 'user',
@@ -202,7 +140,7 @@ class ContactDatagridManager extends FlexibleDatagridManager
         $updateAction = array(
             'name'         => 'update',
             'type'         => ActionInterface::TYPE_REDIRECT,
-            'acl_resource' => 'root',
+            'acl_resource' => 'orocrm_contact_update',
             'options'      => array(
                 'label'   => $this->translate('Update'),
                 'icon'    => 'edit',
@@ -213,7 +151,7 @@ class ContactDatagridManager extends FlexibleDatagridManager
         $deleteAction = array(
             'name'         => 'delete',
             'type'         => ActionInterface::TYPE_DELETE,
-            'acl_resource' => 'root',
+            'acl_resource' => 'orocrm_contact_delete',
             'options'      => array(
                 'label' => $this->translate('Delete'),
                 'icon'  => 'trash',
@@ -225,10 +163,24 @@ class ContactDatagridManager extends FlexibleDatagridManager
     }
 
     /**
-     * @param \Oro\Bundle\GridBundle\Datagrid\ProxyQueryInterface $query
+     * @param ProxyQueryInterface $query
      */
     protected function prepareQuery(ProxyQueryInterface $query)
     {
+        $this->applyJoinWithAddressAndCountry($query);
+    }
+
+    /**
+     * @param ProxyQueryInterface $query
+     */
+    protected function applyJoinWithAddressAndCountry(ProxyQueryInterface $query)
+    {
+        // need to translate countries
+        $query->setQueryHint(
+            Query::HINT_CUSTOM_OUTPUT_WALKER,
+            'Gedmo\\Translatable\\Query\\TreeWalker\\TranslationWalker'
+        );
+
         $entityAlias = $query->getRootAlias();
 
         /** @var $query QueryBuilder */

@@ -96,7 +96,7 @@
         {% set dataBlocks = dataBlocks|merge([{'title' : 'Additional Information', 'subblocks': additional}])%}
     {% endif %}
 
-    {% set dataBlocks = dataBlocks|merge([{'title' : 'Contacts', 'subblocks': [{'title' : null, 'data' : [UI.gridBlock(gridId)]}] }])%}
+    {% set dataBlocks = dataBlocks|merge([{'title' : 'Contacts', 'subblocks': [{'title' : null, 'data' : [UI.gridBlock(gridId)], 'useSpan': false}] }])%}
 
     {% set data =
         {

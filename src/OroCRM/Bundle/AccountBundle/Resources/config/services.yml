@@ -28,7 +28,6 @@ services:
             - [ addAttributeType, ['oro_flexibleentity_textarea'] ]
             - [ addAttributeType, ['oro_flexibleentity_url'] ]
             - [ addAttributeType, ['oro_flexibleentity_email'] ]
-            - [ addAttributeType, ['oro_flexibleentity_phone_collection'] ]
             - [ addAttributeType, ['oro_address'] ]
             - [ addAttributeType, ['orocrm_account_ticker_symbol'] ]
         tags:
@@ -125,3 +124,11 @@ services:
             - @orocrm_account.form.account.api
             - @request
             - @doctrine.orm.entity_manager
+
+    orocrm_account.form.autocomplete.account.search_handler:
+        parent: oro_form.autocomplete.search_handler
+        arguments:
+            - %orocrm_account.account.entity.class%
+            - ["name"]
+        tags:
+            - { name: oro_form.autocomplete.search_handler, alias: accounts, acl_resource: orocrm_account_list }

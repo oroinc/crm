@@ -47,8 +47,7 @@
             'entity':      form.vars.value,
             'indexPath':   path('orocrm_account_index'),
             'indexLabel': 'Accounts',
-            'entityTitle': form.vars.value.name|default('N/A'),
-            'hasAvatar':   false,
+            'entityTitle': form.vars.value.name|default('N/A')
         }
         %}
         {{ parent() }}

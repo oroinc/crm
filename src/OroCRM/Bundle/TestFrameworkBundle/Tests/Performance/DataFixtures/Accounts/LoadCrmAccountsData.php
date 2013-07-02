@@ -5,12 +5,11 @@ namespace OroCRM\Bundle\TestFrameworkBundle\Tests\DataFixtures;
 use Oro\Bundle\AddressBundle\Entity\Address;
 use Oro\Bundle\AddressBundle\Entity\Country;
 
-use Oro\Bundle\AddressBundle\Entity\TypedAddress;
-use Oro\Bundle\FlexibleEntityBundle\Entity\Collection;
-use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 use Oro\Bundle\FlexibleEntityBundle\Form\Type\PhoneType;
 use Oro\Bundle\FlexibleEntityBundle\Form\Type\EmailType;
+use OroCRM\Bundle\ContactBundle\Entity\ContactAddress;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
@@ -118,8 +117,8 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
     public function loadAccounts()
     {
         $handle = fopen(__DIR__ . DIRECTORY_SEPARATOR . "data.csv", "r");
-        if ( $handle ) {
-            $i=0;
+        if ($handle) {
+            $i = 0;
             if (($data = fgetcsv($handle, 1000, ",")) !== false) {
                 //read headers
                 $headers = $data;
@@ -177,10 +176,7 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
 
         $account->setName($data['Username'] . $data['MiddleInitial'] . '_' . $data['Surname']);
 
-        $phone = new Collection;
-        $phone->setData($data['TelephoneNumber']);
-        $phone->setType(rand(PhoneType::TYPE_OFFICE, PhoneType::TYPE_CELL));
-        $this->addFlexibleAttributeCollection($this->accountRepository, $account, 'phones', $phone);
+        $this->setFlexibleAttributeValue($this->accountRepository, $account, 'phone', $data['TelephoneNumber']);
         $this->setFlexibleAttributeValue($this->accountRepository, $account, 'email', $data['EmailAddress']);
         $this->setFlexibleAttributeValue($this->accountRepository, $account, 'website', $data['Domain']);
 
@@ -203,8 +199,8 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
         $country = $country[0];
 
         $idRegion = $data['State'];
-        $idRegion = 'AL';
-        /** @var ArrayCollection $regions */
+        //$idRegion = 'AL';
+        /** @var Collection $regions */
         $regions = $country->getRegions();
 
         $region = $regions->filter(
@@ -214,7 +210,9 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
         );
 
         $address->setCountry($country);
-        $address->setState($region->get(0));
+        if (!$region->isEmpty()) {
+            $address->setState($region->first());
+        }
 
         $this->setFlexibleAttributeValue($this->accountRepository, $account, 'shipping_address', $address);
         $a = clone $address;
@@ -237,29 +235,21 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
         $this->setFlexibleAttributeValue($this->contactRepository, $contact, 'first_name', $data['GivenName']);
         $this->setFlexibleAttributeValue($this->contactRepository, $contact, 'last_name', $data['Surname']);
         $this->setFlexibleAttributeValue($this->contactRepository, $contact, 'title', $data['Title']);
+        $this->setFlexibleAttributeValue($this->contactRepository, $contact, 'phone', $data['TelephoneNumber']);
+        $this->setFlexibleAttributeValue($this->contactRepository, $contact, 'email', $data['EmailAddress']);
 
         $date = date('m/d/y', strtotime($data['Birthday']));
         $date = new \DateTime($date);
-
         $this->setFlexibleAttributeValue($this->contactRepository, $contact, 'birthday', $date);
 
-        $phone = new Collection;
-        $phone->setData($data['TelephoneNumber']);
-        $phone->setType(rand(PhoneType::TYPE_OFFICE, PhoneType::TYPE_CELL));
-        $this->addFlexibleAttributeCollection($this->contactRepository, $contact, 'phones', $phone);
-
-        $email = new Collection;
-        $email->setData($data['EmailAddress']);
-        $email->setType(rand(EmailType::TYPE_CORPORATE, EmailType::TYPE_PERSONAL));
-        $this->addFlexibleAttributeCollection($this->contactRepository, $contact, 'emails', $email);
-
-        $address = new TypedAddress();
+        /** @var ContactAddress $address */
+        $address = new ContactAddress();
         $address->setCity($data['City']);
         $address->setStreet($data['StreetAddress']);
         $address->setPostalCode($data['ZipCode']);
         $address->setFirstName($data['GivenName']);
         $address->setLastName($data['Surname']);
-
+        $address->setPrimary(true);
 
         $isoCode = $data['Country'];
         $country = array_filter(
@@ -274,8 +264,8 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
         $country = $country[0];
 
         $idRegion = $data['State'];
-        $idRegion = 'AL';
-        /** @var ArrayCollection $regions */
+        //$idRegion = 'AL';
+        /** @var Collection $regions */
         $regions = $country->getRegions();
 
         $region = $regions->filter(
@@ -285,7 +275,9 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
         );
 
         $address->setCountry($country);
-        $address->setState($region->get(0));
+        if (!$region->isEmpty()) {
+            $address->setState($region->first());
+        }
 
         $contact->addMultiAddress($address);
         return $contact;
@@ -298,30 +290,14 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
      * @param AbstractFlexible $flexibleEntity
      * @param string $attributeCode
      * @param string $value
-     * @return void
      * @throws \LogicException
      */
-    private function addFlexibleAttributeCollection(FlexibleEntityRepository $repository, AbstractFlexible $flexibleEntity, $attributeCode, $value)
-    {
-        if ($attribute = $this->findAttribute($repository, $attributeCode)) {
-            $this->getFlexibleValueForAttribute($flexibleEntity, $attribute)->getCollection()->add($value);
-        } else {
-            throw new \LogicException(sprintf('Cannot set value, attribute "%s" is missing', $attributeCode));
-        }
-    }
-
-    /**
-     * Sets a flexible attribute value
-     *
-     * @param FlexibleEntityRepository $repository
-     * @param AbstractFlexible $flexibleEntity
-     * @param string $attributeCode
-     * @param string $value
-     * @return void
-     * @throws \LogicException
-     */
-    private function setFlexibleAttributeValue(FlexibleEntityRepository $repository, AbstractFlexible $flexibleEntity, $attributeCode, $value)
-    {
+    private function setFlexibleAttributeValue(
+        FlexibleEntityRepository $repository,
+        AbstractFlexible $flexibleEntity,
+        $attributeCode,
+        $value
+    ) {
         if ($attribute = $this->findAttribute($repository, $attributeCode)) {
             $this->getFlexibleValueForAttribute($flexibleEntity, $attribute)->setData($value);
         } else {
@@ -336,11 +312,14 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
      * @param AbstractFlexible $flexibleEntity
      * @param string $attributeCode
      * @param string $value
-     * @return void
      * @throws \LogicException
      */
-    private function setFlexibleAttributeValueOption(FlexibleEntityRepository $repository, AbstractFlexible $flexibleEntity, $attributeCode, $value)
-    {
+    private function setFlexibleAttributeValueOption(
+        FlexibleEntityRepository $repository,
+        AbstractFlexible $flexibleEntity,
+        $attributeCode,
+        $value
+    ) {
         if ($attribute = $this->findAttribute($repository, $attributeCode)) {
             $option = $this->findAttributeOptionWithValue($attribute, $value);
             $this->getFlexibleValueForAttribute($flexibleEntity, $attribute)->setOption($option);
@@ -405,7 +384,6 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
      *
      * @param mixed $manager
      * @param mixed $object
-     * @return void
      */
     private function persist($manager, $object)
     {
@@ -416,7 +394,6 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
      * Flush objects
      *
      * @param mixed $manager
-     * @return void
      */
     private function flush($manager)
     {
