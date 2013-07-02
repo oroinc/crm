@@ -53,6 +53,8 @@ class RestContactApiTest extends WebTestCase
      */
     public function testCreateContact()
     {
+        $this->markTestIncomplete('Should be fixed in scope of CRM-221');
+
         $request = array(
             "contact" => array (
                 "attributes" => array(
