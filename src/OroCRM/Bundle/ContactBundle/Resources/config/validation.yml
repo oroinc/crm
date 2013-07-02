@@ -12,3 +12,4 @@ OroCRM\Bundle\ContactBundle\Entity\Contact:
     properties:
         multiAddress:
             - Oro\Bundle\AddressBundle\Validator\Constraints\ContainsPrimary: ~
+            - Oro\Bundle\AddressBundle\Validator\Constraints\UniqueAddressTypes: ~
