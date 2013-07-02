@@ -3,7 +3,7 @@
 namespace OroCRM\Bundle\ContactBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use JMS\Serializer\Annotation\Exclude;
 
 use Oro\Bundle\AddressBundle\Entity\TypedAddress;
@@ -22,7 +22,7 @@ class ContactAddress extends TypedAddress
     protected $owner;
 
     /**
-     * @var ArrayCollection
+     * @var Collection
      *
      * @ORM\ManyToMany(targetEntity="Oro\Bundle\AddressBundle\Entity\AddressType")
      * @ORM\JoinTable(

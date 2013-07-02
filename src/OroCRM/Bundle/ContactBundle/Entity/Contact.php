@@ -32,7 +32,7 @@ class Contact extends AbstractEntityFlexible
     protected $id;
 
     /**
-     * @var Group[]
+     * @var Collection
      *
      * @ORM\ManyToMany(targetEntity="Group")
      * @ORM\JoinTable(name="orocrm_contact_to_contact_group",
@@ -47,7 +47,7 @@ class Contact extends AbstractEntityFlexible
     /**
      * Accounts storage
      *
-     * @var ArrayCollection $accounts
+     * @var Collection
      *
      * @ORM\ManyToMany(targetEntity="OroCRM\Bundle\AccountBundle\Entity\Account", mappedBy="contacts")
      * @ORM\JoinTable(name="orocrm_contact_to_account")
@@ -56,7 +56,7 @@ class Contact extends AbstractEntityFlexible
     protected $accounts;
 
     /**
-     * @var ArrayCollection $multiAddress
+     * @var Collection
      * @ORM\OneToMany(targetEntity="ContactAddress", mappedBy="owner", cascade={"all"})
      * @ORM\OrderBy({"primary" = "DESC"})
      *
