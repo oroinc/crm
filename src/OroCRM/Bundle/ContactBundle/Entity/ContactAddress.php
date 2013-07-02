@@ -3,8 +3,10 @@
 namespace OroCRM\Bundle\ContactBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Oro\Bundle\AddressBundle\Entity\TypedAddress;
+use Doctrine\Common\Collections\ArrayCollection;
 use JMS\Serializer\Annotation\Exclude;
+
+use Oro\Bundle\AddressBundle\Entity\TypedAddress;
 
 /**
  * @ORM\Table("orocrm_contact_address")
@@ -20,9 +22,27 @@ class ContactAddress extends TypedAddress
     protected $owner;
 
     /**
+     * @var ArrayCollection
+     *
+     * @ORM\ManyToMany(targetEntity="Oro\Bundle\AddressBundle\Entity\AddressType")
+     * @ORM\JoinTable(
+     *     name="orocrm_contact_address_to_address_type",
+     *     joinColumns={@ORM\JoinColumn(name="contact_address_id", referencedColumnName="id")},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="type_name", referencedColumnName="name")}
+     * )
+     * @Exclude
+     **/
+    protected $types;
+
+    /**
      * @var \Oro\Bundle\FlexibleEntityBundle\Model\AbstractFlexibleValue[]
      *
-     * @ORM\OneToMany(targetEntity="Oro\Bundle\AddressBundle\Entity\Value\AddressValue", mappedBy="entity", cascade={"persist", "remove"}, orphanRemoval=true)
+     * @ORM\OneToMany(
+     *     targetEntity="Oro\Bundle\AddressBundle\Entity\Value\AddressValue",
+     *     mappedBy="entity",
+     *     cascade={"persist", "remove"},
+     *     orphanRemoval=true
+     * )
      * @Exclude
      */
     protected $values;

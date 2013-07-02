@@ -190,7 +190,7 @@ class ContactController extends FlexibleRestController implements ClassResourceI
                 ? $this->getAddressTypeTransformer()->reverseTransform($address['type'])
                 : null;
             if ($addressType) {
-                $address['type'] = $addressType->getId();
+                $address['type'] = $addressType->getName();
             }
         }
         unset($data['addresses']);
