@@ -53,7 +53,7 @@ class ContactTest extends \PHPUnit_Framework_TestCase
         $this->assertEmpty($contact->getAccounts()->toArray());
     }
 
-    public function testMultiAddress()
+    public function testAddresses()
     {
         $addressOne = new ContactAddress();
         $addressOne->setCountry('US');
@@ -64,28 +64,28 @@ class ContactTest extends \PHPUnit_Framework_TestCase
         $addresses = array($addressOne, $addressTwo);
 
         $contact = new Contact();
-        $this->assertSame($contact, $contact->setMultiAddress($addresses));
-        $actual = $contact->getMultiAddress();
+        $this->assertSame($contact, $contact->setAddresses($addresses));
+        $actual = $contact->getAddresses();
         $this->assertInstanceOf('Doctrine\Common\Collections\ArrayCollection', $actual);
         $this->assertEquals($addresses, $actual->toArray());
 
-        $this->assertSame($contact, $contact->addMultiAddress($addressTwo));
-        $actual = $contact->getMultiAddress();
+        $this->assertSame($contact, $contact->addAddress($addressTwo));
+        $actual = $contact->getAddresses();
         $this->assertInstanceOf('Doctrine\Common\Collections\ArrayCollection', $actual);
         $this->assertEquals($addresses, $actual->toArray());
 
-        $this->assertSame($contact, $contact->addMultiAddress($addressThree));
-        $actual = $contact->getMultiAddress();
+        $this->assertSame($contact, $contact->addAddress($addressThree));
+        $actual = $contact->getAddresses();
         $this->assertInstanceOf('Doctrine\Common\Collections\ArrayCollection', $actual);
         $this->assertEquals(array($addressOne, $addressTwo, $addressThree), $actual->toArray());
 
-        $this->assertSame($contact, $contact->removeMultiAddress($addressOne));
-        $actual = $contact->getMultiAddress();
+        $this->assertSame($contact, $contact->removeAddress($addressOne));
+        $actual = $contact->getAddresses();
         $this->assertInstanceOf('Doctrine\Common\Collections\ArrayCollection', $actual);
         $this->assertEquals(array(1 => $addressTwo, 2 => $addressThree), $actual->toArray());
 
-        $this->assertSame($contact, $contact->removeMultiAddress($addressOne));
-        $actual = $contact->getMultiAddress();
+        $this->assertSame($contact, $contact->removeAddress($addressOne));
+        $actual = $contact->getAddresses();
         $this->assertInstanceOf('Doctrine\Common\Collections\ArrayCollection', $actual);
         $this->assertEquals(array(1 => $addressTwo, 2 => $addressThree), $actual->toArray());
     }

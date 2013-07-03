@@ -56,12 +56,12 @@ class Contact extends AbstractEntityFlexible
 
     /**
      * @var Collection
-     * @ORM\OneToMany(targetEntity="ContactAddress", mappedBy="owner", cascade={"all"})
+     * @ORM\OneToMany(targetEntity="ContactAddress", mappedBy="owner", cascade={"all"}, orphanRemoval=true)
      * @ORM\OrderBy({"primary" = "DESC"})
      *
      * @Exclude
      */
-    protected $multiAddress;
+    protected $addresses;
 
     /**
      * @var \Oro\Bundle\FlexibleEntityBundle\Model\AbstractFlexibleValue[]
@@ -84,7 +84,7 @@ class Contact extends AbstractEntityFlexible
         parent::__construct();
         $this->groups   = new ArrayCollection();
         $this->accounts = new ArrayCollection();
-        $this->multiAddress = new ArrayCollection();
+        $this->addresses = new ArrayCollection();
     }
 
     /**
@@ -222,15 +222,15 @@ class Contact extends AbstractEntityFlexible
     /**
      * Set addresses
      *
-     * @param ContactAddress[] $addresses
+     * @param Collection|ContactAddress[] $addresses
      * @return Contact
      */
-    public function setMultiAddress($addresses)
+    public function setAddresses($addresses)
     {
-        $this->multiAddress->clear();
+        $this->addresses->clear();
 
         foreach ($addresses as $address) {
-            $this->addMultiAddress($address);
+            $this->addAddress($address);
         }
 
         return $this;
@@ -242,10 +242,10 @@ class Contact extends AbstractEntityFlexible
      * @param ContactAddress $address
      * @return Contact
      */
-    public function addMultiAddress(ContactAddress $address)
+    public function addAddress(ContactAddress $address)
     {
-        if (!$this->multiAddress->contains($address)) {
-            $this->multiAddress->add($address);
+        if (!$this->addresses->contains($address)) {
+            $this->addresses->add($address);
             $address->setOwner($this);
         }
 
@@ -255,13 +255,13 @@ class Contact extends AbstractEntityFlexible
     /**
      * Remove address
      *
-     * @param mixed $address
+     * @param ContactAddress $address
      * @return Contact
      */
-    public function removeMultiAddress($address)
+    public function removeAddress(ContactAddress $address)
     {
-        if ($this->multiAddress->contains($address)) {
-            $this->multiAddress->removeElement($address);
+        if ($this->addresses->contains($address)) {
+            $this->addresses->removeElement($address);
         }
 
         return $this;
@@ -270,11 +270,11 @@ class Contact extends AbstractEntityFlexible
     /**
      * Get addresses
      *
-     * @return ContactAddress[]
+     * @return Collection
      */
-    public function getMultiAddress()
+    public function getAddresses()
     {
-        return $this->multiAddress;
+        return $this->addresses;
     }
 
     /**

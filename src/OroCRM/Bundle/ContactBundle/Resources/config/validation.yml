@@ -10,6 +10,6 @@ OroCRM\Bundle\ContactBundle\Entity\Group:
 
 OroCRM\Bundle\ContactBundle\Entity\Contact:
     properties:
-        multiAddress:
+        addresses:
             - Oro\Bundle\AddressBundle\Validator\Constraints\ContainsPrimary: ~
             - Oro\Bundle\AddressBundle\Validator\Constraints\UniqueAddressTypes: ~

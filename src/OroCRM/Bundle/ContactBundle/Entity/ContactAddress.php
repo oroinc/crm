@@ -16,7 +16,7 @@ use Oro\Bundle\AddressBundle\Entity\AbstractTypedAddress;
 class ContactAddress extends AbstractTypedAddress
 {
     /**
-     * @ORM\ManyToOne(targetEntity="Contact", inversedBy="multiAddress")
+     * @ORM\ManyToOne(targetEntity="Contact", inversedBy="addresses")
      * @ORM\JoinColumn(name="owner_id", referencedColumnName="id")
      */
     protected $owner;
@@ -52,7 +52,7 @@ class ContactAddress extends AbstractTypedAddress
      *
      * @param Contact $owner
      */
-    public function setOwner($owner)
+    public function setOwner(Contact $owner = null)
     {
         $this->owner = $owner;
     }

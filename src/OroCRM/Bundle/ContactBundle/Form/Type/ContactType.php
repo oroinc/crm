@@ -38,7 +38,7 @@ class ContactType extends FlexibleType
     {
         parent::buildForm($builder, $options);
         $builder->addEventSubscriber(
-            new AddressCollectionTypeSubscriber('multiAddress', $this->addressClass)
+            new AddressCollectionTypeSubscriber('addresses', $this->addressClass)
         );
     }
 
@@ -52,7 +52,7 @@ class ContactType extends FlexibleType
 
         // Addresses
         $builder->add(
-            'multiAddress',
+            'addresses',
             'oro_address_collection',
             array(
                 'required' => true,

@@ -155,7 +155,7 @@ class ContactController extends FlexibleRestController implements ClassResourceI
         $addressData = array();
         /** @var $entity Contact */
         /** @var ContactAddress $address */
-        foreach ($entity->getMultiAddress() as $address) {
+        foreach ($entity->getAddresses() as $address) {
             $addressArray = parent::getPreparedItem($address);
             $addressArray['types'] = $address->getTypeNames();
             $addressData[] = $addressArray;
@@ -163,7 +163,6 @@ class ContactController extends FlexibleRestController implements ClassResourceI
 
         $result = parent::getPreparedItem($entity);
         $result['addresses'] = $addressData;
-        unset($result['multiAddress']);
 
         return $result;
     }
@@ -178,9 +177,6 @@ class ContactController extends FlexibleRestController implements ClassResourceI
         $requestVariable = $this->getForm()->getName();
         $request = $this->getRequest()->request;
         $data = $request->get($requestVariable, array());
-
-        $data['multiAddress'] = !empty($data['addresses']) ? $data['addresses'] : array();
-        unset($data['addresses']);
 
         $request->set($requestVariable, $data);
     }
