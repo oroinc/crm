@@ -211,7 +211,7 @@ class Account extends AbstractEntityFlexible implements Taggable
      */
     public function getTaggableType()
     {
-        return strtolower(__NAMESPACE__ . __CLASS__);
+        return 'oro_'.strtolower(__CLASS__);
     }
 
     /**

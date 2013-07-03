@@ -354,7 +354,7 @@ class Contact extends AbstractEntityFlexible
      */
     public function getTaggableType()
     {
-        return strtolower(__NAMESPACE__ . __CLASS__);
+        return 'oro_'.strtolower(__CLASS__);
     }
 
     /**
