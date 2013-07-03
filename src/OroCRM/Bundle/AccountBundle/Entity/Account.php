@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 
+use DoctrineExtensions\Taggable\Taggable;
 use JMS\Serializer\Annotation\Type;
 use JMS\Serializer\Annotation\Exclude;
 
@@ -21,7 +22,7 @@ use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
  * @ORM\HasLifecycleCallbacks()
  * @Oro\Loggable
  */
-class Account extends AbstractEntityFlexible
+class Account extends AbstractEntityFlexible implements Taggable
 {
     /**
      * @ORM\Id
@@ -61,6 +62,11 @@ class Account extends AbstractEntityFlexible
      * @Exclude
      */
     protected $values;
+
+    /**
+     * @var ArrayCollection $tags
+     */
+    protected $tags;
 
     public function __construct()
     {
@@ -184,5 +190,37 @@ class Account extends AbstractEntityFlexible
     public function doPreUpdate()
     {
         $this->updated = new \DateTime('now', new \DateTimeZone('UTC'));
+    }
+
+    /**
+     * Return related tags
+     *
+     * @return ArrayCollection
+     */
+    public function getTags()
+    {
+        $this->tags = $this->tags ?: new ArrayCollection();
+
+        return $this->tags;
+    }
+
+    /**
+     * Return unique entity type identifier
+     *
+     * @return string
+     */
+    public function getTaggableType()
+    {
+        return 'account';
+    }
+
+    /**
+     * Return unique record identifier
+     *
+     * @return mixed
+     */
+    public function getTaggableId()
+    {
+        return $this->getId();
     }
 }
