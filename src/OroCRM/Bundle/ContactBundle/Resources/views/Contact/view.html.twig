@@ -48,7 +48,7 @@
         {% set primaryData = attribute(addressValue, 'primary') %}
         {% set primaryData = yesNoChoices[primaryData]|default('No'|trans) %}
         {% set addresses = addresses|merge([
-            addressView.renderAddressView(addressValue, [{'label': 'Type', 'data': 'type'}]),
+            addressView.renderAddressView(addressValue, [{'label': 'Types', 'value': addressValue.typeLabels|join(', ')}]),
             addressView.renderAddressView(addressValue, [{'label': 'Primary', 'value': primaryData}]),
             addressView.renderAddress(addressValue),
             '<hr/>'

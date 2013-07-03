@@ -2,9 +2,9 @@
 
 namespace OroCRM\Bundle\ContactBundle\Form\Type;
 
-use Oro\Bundle\AddressBundle\Form\Type\AddressTypedType;
+use Oro\Bundle\AddressBundle\Form\Type\AbstractTypedAddressType;
 
-class ContactAddressType extends AddressTypedType
+class ContactAddressType extends AbstractTypedAddressType
 {
     /**
      * {@inheritdoc}

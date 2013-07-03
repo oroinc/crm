@@ -6,14 +6,14 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 use JMS\Serializer\Annotation\Exclude;
 
-use Oro\Bundle\AddressBundle\Entity\TypedAddress;
+use Oro\Bundle\AddressBundle\Entity\AbstractTypedAddress;
 
 /**
  * @ORM\Table("orocrm_contact_address")
  * @ORM\HasLifecycleCallbacks()
  * @ORM\Entity(repositoryClass="Oro\Bundle\AddressBundle\Entity\Repository\AddressRepository")
  */
-class ContactAddress extends TypedAddress
+class ContactAddress extends AbstractTypedAddress
 {
     /**
      * @ORM\ManyToOne(targetEntity="Contact", inversedBy="multiAddress")

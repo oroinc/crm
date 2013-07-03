@@ -13,7 +13,6 @@ use JMS\Serializer\Annotation\Exclude;
 use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 
 use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityFlexible;
-use Oro\Bundle\AddressBundle\Entity\TypedAddress;
 
 /**
  * @ORM\Entity(repositoryClass="Oro\Bundle\FlexibleEntityBundle\Entity\Repository\FlexibleEntityRepository")

@@ -13,7 +13,6 @@ use FOS\RestBundle\Routing\ClassResourceInterface;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
 use Oro\Bundle\AddressBundle\Entity\AddressType;
-use Oro\Bundle\AddressBundle\Entity\TypedAddress;
 
 use Oro\Bundle\UserBundle\Annotation\Acl;
 use Oro\Bundle\UserBundle\Annotation\AclAncestor;
@@ -23,6 +22,7 @@ use Oro\Bundle\SoapBundle\Controller\Api\Rest\FlexibleRestController;
 use Oro\Bundle\SoapBundle\Entity\Manager\ApiFlexibleEntityManager;
 
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
+use OroCRM\Bundle\ContactBundle\Entity\ContactAddress;
 
 /**
  * @RouteResource("contact")
@@ -154,7 +154,7 @@ class ContactController extends FlexibleRestController implements ClassResourceI
         // convert addresses to plain array
         $addressData = array();
         /** @var $entity Contact */
-        /** @var $address TypedAddress */
+        /** @var ContactAddress $address */
         foreach ($entity->getMultiAddress() as $address) {
             $addressArray = parent::getPreparedItem($address);
             $addressArray['types'] = $address->getTypeNames();
