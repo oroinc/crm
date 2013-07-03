@@ -352,7 +352,7 @@ class Contact extends AbstractEntityFlexible
      *
      * @return string
      */
-    function getTaggableType()
+    public function getTaggableType()
     {
         return strtolower(__NAMESPACE__ . __CLASS__);
     }
@@ -362,7 +362,7 @@ class Contact extends AbstractEntityFlexible
      *
      * @return string
      */
-    function getTaggableId()
+    public function getTaggableId()
     {
         return $this->getId();
     }
@@ -370,9 +370,9 @@ class Contact extends AbstractEntityFlexible
     /**
      * Returns the collection of tags for this Taggable entity
      *
-     * @return Doctrine\Common\Collections\Collection
+     * @return ArrayCollection
      */
-    function getTags()
+    public function getTags()
     {
         $this->tags = $this->tags ?: new ArrayCollection();
 

@@ -219,7 +219,7 @@ class Account extends AbstractEntityFlexible implements Taggable
      *
      * @return string
      */
-    function getTaggableId()
+    public function getTaggableId()
     {
         return $this->getId();
     }
