@@ -211,15 +211,15 @@ class Account extends AbstractEntityFlexible implements Taggable
      */
     public function getTaggableType()
     {
-        return 'account';
+        return strtolower(__NAMESPACE__ . __CLASS__);
     }
 
     /**
-     * Return unique record identifier
+     * Returns the unique taggable resource identifier
      *
-     * @return mixed
+     * @return string
      */
-    public function getTaggableId()
+    function getTaggableId()
     {
         return $this->getId();
     }

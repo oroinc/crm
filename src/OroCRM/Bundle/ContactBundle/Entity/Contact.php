@@ -80,6 +80,11 @@ class Contact extends AbstractEntityFlexible
      */
     protected $nameFormat;
 
+    /**
+     * @var ArrayCollection
+     */
+    private $tags;
+
     public function __construct()
     {
         parent::__construct();
@@ -340,5 +345,37 @@ class Contact extends AbstractEntityFlexible
         }
 
         return $value;
+    }
+
+    /**
+     * Returns the unique taggable resource type
+     *
+     * @return string
+     */
+    function getTaggableType()
+    {
+        return strtolower(__NAMESPACE__ . __CLASS__);
+    }
+
+    /**
+     * Returns the unique taggable resource identifier
+     *
+     * @return string
+     */
+    function getTaggableId()
+    {
+        return $this->getId();
+    }
+
+    /**
+     * Returns the collection of tags for this Taggable entity
+     *
+     * @return Doctrine\Common\Collections\Collection
+     */
+    function getTags()
+    {
+        $this->tags = $this->tags ?: new ArrayCollection();
+
+        return $this->tags;
     }
 }
