@@ -7,13 +7,15 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 
 use DoctrineExtensions\Taggable\Taggable;
+
 use JMS\Serializer\Annotation\Type;
 use JMS\Serializer\Annotation\Exclude;
 
 use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 
-use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityFlexible;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
+
+use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityFlexible;
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 
 /**

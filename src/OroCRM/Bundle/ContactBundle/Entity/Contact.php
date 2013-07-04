@@ -5,22 +5,23 @@ namespace OroCRM\Bundle\ContactBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use OroCRM\Bundle\AccountBundle\Entity\Account;
+use DoctrineExtensions\Taggable\Taggable;
 
 use JMS\Serializer\Annotation\Type;
 use JMS\Serializer\Annotation\Exclude;
 
 use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 
+use OroCRM\Bundle\AccountBundle\Entity\Account;
+
 use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityFlexible;
-use Oro\Bundle\AddressBundle\Entity\TypedAddress;
 
 /**
  * @ORM\Entity(repositoryClass="Oro\Bundle\FlexibleEntityBundle\Entity\Repository\FlexibleEntityRepository")
  * @ORM\Table(name="orocrm_contact")
  * @ORM\HasLifecycleCallbacks()
  */
-class Contact extends AbstractEntityFlexible
+class Contact extends AbstractEntityFlexible implements Taggable
 {
     /**
      * @ORM\Id
