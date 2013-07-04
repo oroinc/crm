@@ -5,6 +5,7 @@ namespace OroCRM\Bundle\ContactBundle\Tests\Unit\Entity;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\ContactBundle\Entity\ContactAddress;
+use Oro\Bundle\AddressBundle\Entity\AddressType;
 
 class ContactTest extends \PHPUnit_Framework_TestCase
 {
@@ -64,7 +65,7 @@ class ContactTest extends \PHPUnit_Framework_TestCase
         $addresses = array($addressOne, $addressTwo);
 
         $contact = new Contact();
-        $this->assertSame($contact, $contact->setAddresses($addresses));
+        $this->assertSame($contact, $contact->resetAddresses($addresses));
         $actual = $contact->getAddresses();
         $this->assertInstanceOf('Doctrine\Common\Collections\ArrayCollection', $actual);
         $this->assertEquals($addresses, $actual->toArray());
@@ -88,6 +89,31 @@ class ContactTest extends \PHPUnit_Framework_TestCase
         $actual = $contact->getAddresses();
         $this->assertInstanceOf('Doctrine\Common\Collections\ArrayCollection', $actual);
         $this->assertEquals(array(1 => $addressTwo, 2 => $addressThree), $actual->toArray());
+    }
+
+    public function testGetAddressByTypeName()
+    {
+        $contact = new Contact();
+        $this->assertNull($contact->getAddressByTypeName('billing'));
+
+        $address = new ContactAddress();
+        $address->addType(new AddressType('billing'));
+        $contact->addAddress($address);
+
+        $this->assertSame($address, $contact->getAddressByTypeName('billing'));
+    }
+
+    public function testGetAddressByType()
+    {
+        $address = new ContactAddress();
+        $addressType = new AddressType('billing');
+        $address->addType($addressType);
+
+        $contact = new Contact();
+        $this->assertNull($contact->getAddressByType($addressType));
+
+        $contact->addAddress($address);
+        $this->assertSame($address, $contact->getAddressByType($addressType));
     }
 
     public function testGetAttributeDataException()

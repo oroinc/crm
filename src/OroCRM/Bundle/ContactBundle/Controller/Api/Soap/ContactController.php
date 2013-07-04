@@ -9,6 +9,8 @@ use Oro\Bundle\SoapBundle\Controller\Api\Soap\FlexibleSoapController;
 use Oro\Bundle\SoapBundle\Entity\Manager\ApiFlexibleEntityManager;
 use Oro\Bundle\SoapBundle\Form\Handler\ApiFormHandler;
 
+use OroCRM\Bundle\ContactBundle\Entity\Contact;
+
 class ContactController extends FlexibleSoapController
 {
     /**
@@ -30,6 +32,19 @@ class ContactController extends FlexibleSoapController
     public function getAction($id)
     {
         return $this->handleGetRequest($id);
+    }
+
+    /**
+     * @Soap\Method("getContactAddressByTypeName")
+     * @Soap\Param("id", phpType = "int")
+     * @Soap\Param("typeName", phpType = "string")
+     * @Soap\Result(phpType = "Oro\Bundle\AddressBundle\Entity\AddressType")
+     */
+    public function getAddressByTypeNameAction($id, $typeName)
+    {
+        /** @var Contact $contact */
+        $contact = $this->getEntity($id);
+        return $contact->getAddressByTypeName($typeName);
     }
 
     /**

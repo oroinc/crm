@@ -5,6 +5,7 @@ namespace OroCRM\Bundle\ContactBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 use JMS\Serializer\Annotation\Exclude;
+use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 
 use Oro\Bundle\AddressBundle\Entity\AbstractTypedAddress;
 
@@ -30,6 +31,7 @@ class ContactAddress extends AbstractTypedAddress
      *     joinColumns={@ORM\JoinColumn(name="contact_address_id", referencedColumnName="id")},
      *     inverseJoinColumns={@ORM\JoinColumn(name="type_name", referencedColumnName="name")}
      * )
+     * @Soap\ComplexType("Oro\Bundle\AddressBundle\Entity\AddressType[]", nillable=true)
      * @Exclude
      **/
     protected $types;

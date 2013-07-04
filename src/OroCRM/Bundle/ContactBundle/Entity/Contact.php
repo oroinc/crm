@@ -12,6 +12,7 @@ use JMS\Serializer\Annotation\Exclude;
 
 use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 
+use Oro\Bundle\AddressBundle\Entity\AddressType;
 use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityFlexible;
 
 /**
@@ -38,7 +39,7 @@ class Contact extends AbstractEntityFlexible
      *      joinColumns={@ORM\JoinColumn(name="contact_id", referencedColumnName="id", onDelete="CASCADE")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="contact_group_id", referencedColumnName="id", onDelete="CASCADE")}
      * )
-     * @Soap\ComplexType("int[]", nillable=true)
+     * @Soap\ComplexType("OroCRM\Bundle\ContactBundle\Entity\Group[]", nillable=true)
      * @Exclude
      */
     protected $groups;
@@ -58,7 +59,7 @@ class Contact extends AbstractEntityFlexible
      * @var Collection
      * @ORM\OneToMany(targetEntity="ContactAddress", mappedBy="owner", cascade={"all"}, orphanRemoval=true)
      * @ORM\OrderBy({"primary" = "DESC"})
-     *
+     * @Soap\ComplexType("OroCRM\Bundle\ContactBundle\Entity\ContactAddress[]", nillable=true)
      * @Exclude
      */
     protected $addresses;
@@ -220,12 +221,14 @@ class Contact extends AbstractEntityFlexible
     }
 
     /**
-     * Set addresses
+     * Set addresses.
+     *
+     * This method could not be named setAddresses because of bug CRM-253.
      *
      * @param Collection|ContactAddress[] $addresses
      * @return Contact
      */
-    public function setAddresses($addresses)
+    public function resetAddresses($addresses)
     {
         $this->addresses->clear();
 
@@ -270,11 +273,41 @@ class Contact extends AbstractEntityFlexible
     /**
      * Get addresses
      *
-     * @return Collection
+     * @return Collection|ContactAddress[]
      */
     public function getAddresses()
     {
         return $this->addresses;
+    }
+
+    /**
+     * Gets one address that has specified type.
+     *
+     * @param AddressType $type
+     * @return ContactAddress|null
+     */
+    public function getAddressByType(AddressType $type)
+    {
+        return $this->getAddressByTypeName($type->getName());
+    }
+
+    /**
+     * Gets one address that has specified type name.
+     *
+     * @param string $typeName
+     * @return ContactAddress|null
+     */
+    public function getAddressByTypeName($typeName)
+    {
+        $result = null;
+
+        foreach ($this->getAddresses() as $address) {
+            if ($address->hasTypeWithName($typeName)) {
+                $result = $address;
+                break;
+            }
+        }
+        return $result;
     }
 
     /**
