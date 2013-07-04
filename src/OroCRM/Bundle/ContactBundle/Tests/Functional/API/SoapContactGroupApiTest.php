@@ -12,14 +12,14 @@ use Oro\Bundle\TestFrameworkBundle\Test\Client;
  */
 class SoapContactGroupApiTest extends WebTestCase
 {
-    /** @var \SoapClient */
-    protected $clientSoap = null;
+    /** @var Client */
+    protected $client = null;
 
     public function setUp()
     {
-        $this->clientSoap = static::createClient(array(), ToolsAPI::generateWsseHeader());
+        $this->client = static::createClient(array(), ToolsAPI::generateWsseHeader());
 
-        $this->clientSoap->soap(
+        $this->client->soap(
             "http://localhost/api/soap",
             array(
                 'location' => 'http://localhost/api/soap',
@@ -36,7 +36,7 @@ class SoapContactGroupApiTest extends WebTestCase
         $request = array(
             "name" => 'Group name_' . mt_rand()
         );
-        $result = $this->clientSoap->soapClient->createContactGroup($request);
+        $result = $this->client->soapClient->createContactGroup($request);
         $this->assertTrue($result);
 
         return $request;
@@ -49,7 +49,7 @@ class SoapContactGroupApiTest extends WebTestCase
      */
     public function testGetContactGroups($request)
     {
-        $groups = $this->clientSoap->soapClient->getContactGroups(1, 1000);
+        $groups = $this->client->soapClient->getContactGroups(1, 1000);
         $groups = ToolsAPI::classToArray($groups);
         $result = false;
         foreach ($groups as $group) {
@@ -74,9 +74,9 @@ class SoapContactGroupApiTest extends WebTestCase
     public function testUpdateContact($request, $group)
     {
         $request['name'] .= '_Updated';
-        $result = $this->clientSoap->soapClient->updateContactGroup($group['id'], $request);
+        $result = $this->client->soapClient->updateContactGroup($group['id'], $request);
         $this->assertTrue($result);
-        $group = $this->clientSoap->soapClient->getContactGroup($group['id']);
+        $group = $this->client->soapClient->getContactGroup($group['id']);
         $group = ToolsAPI::classToArray($group);
         $result = false;
         if ($group['name'] == $request['name']) {
@@ -92,10 +92,10 @@ class SoapContactGroupApiTest extends WebTestCase
      */
     public function testDeleteContactGroup($group)
     {
-        $result = $this->clientSoap->soapClient->deleteContactGroup($group['id']);
+        $result = $this->client->soapClient->deleteContactGroup($group['id']);
         $this->assertTrue($result);
         try {
-            $this->clientSoap->soapClient->getContactGroup($group['id']);
+            $this->client->soapClient->getContactGroup($group['id']);
         } catch (\SoapFault $e) {
             if ($e->faultcode != 'NOT_FOUND') {
                 throw $e;
