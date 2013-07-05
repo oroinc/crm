@@ -6,8 +6,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 
-use DoctrineExtensions\Taggable\Taggable;
-
 use JMS\Serializer\Annotation\Type;
 use JMS\Serializer\Annotation\Exclude;
 
@@ -15,6 +13,7 @@ use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 
+use Oro\Bundle\TagBundle\Entity\Taggable;
 use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityFlexible;
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 
@@ -204,16 +203,6 @@ class Account extends AbstractEntityFlexible implements Taggable
         $this->tags = $this->tags ?: new ArrayCollection();
 
         return $this->tags;
-    }
-
-    /**
-     * Return unique entity type identifier
-     *
-     * @return string
-     */
-    public function getTaggableType()
-    {
-        return 'oro_account';
     }
 
     /**

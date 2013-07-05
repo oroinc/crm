@@ -5,7 +5,6 @@ namespace OroCRM\Bundle\ContactBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use DoctrineExtensions\Taggable\Taggable;
 
 use JMS\Serializer\Annotation\Type;
 use JMS\Serializer\Annotation\Exclude;
@@ -14,6 +13,7 @@ use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 
+use Oro\Bundle\TagBundle\Entity\Taggable;
 use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityFlexible;
 
 /**
@@ -346,16 +346,6 @@ class Contact extends AbstractEntityFlexible implements Taggable
         }
 
         return $value;
-    }
-
-    /**
-     * Returns the unique taggable resource type
-     *
-     * @return string
-     */
-    public function getTaggableType()
-    {
-        return 'oro_contact';
     }
 
     /**
