@@ -158,6 +158,9 @@ class ContactController extends FlexibleRestController implements ClassResourceI
         foreach ($entity->getAddresses() as $address) {
             $addressArray = parent::getPreparedItem($address);
             $addressArray['types'] = $address->getTypeNames();
+
+            unset($addressArray['owner']);
+
             $addressData[] = $addressArray;
         }
 

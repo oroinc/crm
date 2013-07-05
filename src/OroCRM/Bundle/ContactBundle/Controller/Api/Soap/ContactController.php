@@ -38,13 +38,19 @@ class ContactController extends FlexibleSoapController
      * @Soap\Method("getContactAddressByTypeName")
      * @Soap\Param("id", phpType = "int")
      * @Soap\Param("typeName", phpType = "string")
-     * @Soap\Result(phpType = "Oro\Bundle\AddressBundle\Entity\AddressType")
+     * @Soap\Result(phpType = "OroCRM\Bundle\ContactBundle\Entity\ContactAddress")
      */
     public function getAddressByTypeNameAction($id, $typeName)
     {
         /** @var Contact $contact */
         $contact = $this->getEntity($id);
-        return $contact->getAddressByTypeName($typeName);
+        $address = $contact->getAddressByTypeName($typeName);
+
+        if (!$address) {
+            throw new \SoapFault('NOT_FOUND', sprintf('Contact "%s" address can not be found', $typeName));
+        }
+
+        return $address;
     }
 
     /**

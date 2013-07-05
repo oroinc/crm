@@ -39,7 +39,7 @@ class Contact extends AbstractEntityFlexible
      *      joinColumns={@ORM\JoinColumn(name="contact_id", referencedColumnName="id", onDelete="CASCADE")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="contact_group_id", referencedColumnName="id", onDelete="CASCADE")}
      * )
-     * @Soap\ComplexType("OroCRM\Bundle\ContactBundle\Entity\Group[]", nillable=true)
+     * @Soap\ComplexType("int[]", nillable=true)
      * @Exclude
      */
     protected $groups;

@@ -31,7 +31,7 @@ class ContactAddress extends AbstractTypedAddress
      *     joinColumns={@ORM\JoinColumn(name="contact_address_id", referencedColumnName="id")},
      *     inverseJoinColumns={@ORM\JoinColumn(name="type_name", referencedColumnName="name")}
      * )
-     * @Soap\ComplexType("Oro\Bundle\AddressBundle\Entity\AddressType[]", nillable=true)
+     * @Soap\ComplexType("string[]", nillable=true)
      * @Exclude
      **/
     protected $types;
