@@ -281,6 +281,25 @@ class Contact extends AbstractEntityFlexible
     }
 
     /**
+     * Gets primary address if it's available.
+     *
+     * @return ContactAddress|null
+     */
+    public function getPrimaryAddress()
+    {
+        $result = null;
+
+        foreach ($this->getAddresses() as $address) {
+            if ($address->isPrimary()) {
+                $result = $address;
+                break;
+            }
+        }
+
+        return $result;
+    }
+
+    /**
      * Gets one address that has specified type.
      *
      * @param AddressType $type
@@ -307,6 +326,7 @@ class Contact extends AbstractEntityFlexible
                 break;
             }
         }
+
         return $result;
     }
 

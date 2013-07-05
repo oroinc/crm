@@ -5,6 +5,8 @@ namespace OroCRM\Bundle\ContactBundle\Controller\Api\Soap;
 use Symfony\Component\Form\FormInterface;
 use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 
+use Oro\Bundle\UserBundle\Annotation\AclAncestor;
+
 use Oro\Bundle\SoapBundle\Controller\Api\Soap\FlexibleSoapController;
 use Oro\Bundle\SoapBundle\Entity\Manager\ApiFlexibleEntityManager;
 use Oro\Bundle\SoapBundle\Form\Handler\ApiFormHandler;
@@ -18,6 +20,7 @@ class ContactController extends FlexibleSoapController
      * @Soap\Param("page", phpType="int")
      * @Soap\Param("limit", phpType="int")
      * @Soap\Result(phpType = "OroCRM\Bundle\ContactBundle\Entity\Contact[]")
+     * @AclAncestor("orocrm_contact_list")
      */
     public function cgetAction($page = 1, $limit = 10)
     {
@@ -28,6 +31,7 @@ class ContactController extends FlexibleSoapController
      * @Soap\Method("getContact")
      * @Soap\Param("id", phpType = "int")
      * @Soap\Result(phpType = "OroCRM\Bundle\ContactBundle\Entity\Contact")
+     * @AclAncestor("orocrm_contact_view")
      */
     public function getAction($id)
     {
@@ -39,6 +43,7 @@ class ContactController extends FlexibleSoapController
      * @Soap\Param("id", phpType = "int")
      * @Soap\Param("typeName", phpType = "string")
      * @Soap\Result(phpType = "OroCRM\Bundle\ContactBundle\Entity\ContactAddress")
+     * @AclAncestor("orocrm_contact_view")
      */
     public function getAddressByTypeNameAction($id, $typeName)
     {
@@ -48,6 +53,25 @@ class ContactController extends FlexibleSoapController
 
         if (!$address) {
             throw new \SoapFault('NOT_FOUND', sprintf('Contact "%s" address can not be found', $typeName));
+        }
+
+        return $address;
+    }
+
+    /**
+     * @Soap\Method("getContactPrimaryAddress")
+     * @Soap\Param("id", phpType = "int")
+     * @Soap\Result(phpType = "OroCRM\Bundle\ContactBundle\Entity\ContactAddress")
+     * @AclAncestor("orocrm_contact_view")
+     */
+    public function getPrimaryAddressAction($id)
+    {
+        /** @var Contact $contact */
+        $contact = $this->getEntity($id);
+        $address = $contact->getPrimaryAddress();
+
+        if (!$address) {
+            throw new \SoapFault('NOT_FOUND', sprintf('Contact has no primary address', $address));
         }
 
         return $address;

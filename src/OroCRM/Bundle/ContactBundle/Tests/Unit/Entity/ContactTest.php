@@ -91,6 +91,19 @@ class ContactTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(array(1 => $addressTwo, 2 => $addressThree), $actual->toArray());
     }
 
+    public function testGetPrimaryAddress()
+    {
+        $contact = new Contact();
+        $this->assertNull($contact->getPrimaryAddress());
+
+        $address = new ContactAddress();
+        $contact->addAddress($address);
+        $this->assertNull($contact->getPrimaryAddress());
+
+        $address->setPrimary(true);
+        $this->assertSame($address, $contact->getPrimaryAddress());
+    }
+
     public function testGetAddressByTypeName()
     {
         $contact = new Contact();

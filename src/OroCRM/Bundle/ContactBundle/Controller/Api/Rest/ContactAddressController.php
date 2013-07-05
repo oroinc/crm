@@ -4,6 +4,7 @@ namespace OroCRM\Bundle\ContactBundle\Controller\Api\Rest;
 
 use Symfony\Component\HttpFoundation\Response;
 
+use FOS\RestBundle\Controller\Annotations\RouteResource;
 use FOS\RestBundle\Routing\ClassResourceInterface;
 use FOS\Rest\Util\Codes;
 
@@ -14,10 +15,13 @@ use Oro\Bundle\SoapBundle\Controller\Api\Rest\FlexibleRestController;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\ContactBundle\Entity\ContactAddress;
 
-class AddressController extends FlexibleRestController implements ClassResourceInterface
+/**
+ * @RouteResource("address")
+ */
+class ContactAddressController extends FlexibleRestController implements ClassResourceInterface
 {
     /**
-     * REST GET item
+     * REST GET address by type
      *
      * @param string $id
      * @param string $typeName
@@ -36,6 +40,34 @@ class AddressController extends FlexibleRestController implements ClassResourceI
 
         if ($contact) {
             $address = $contact->getAddressByTypeName($typeName);
+        } else {
+            $address = null;
+        }
+
+        $responseData = $address ? json_encode($this->getPreparedItem($address)) : '';
+
+        return new Response($responseData, $address ? Codes::HTTP_OK : Codes::HTTP_NOT_FOUND);
+    }
+
+    /**
+     * REST GET primary address
+     *
+     * @param string $id
+     *
+     * @ApiDoc(
+     *      description="Get contact primary address",
+     *      resource=true
+     * )
+     * @AclAncestor("orocrm_contact_view")
+     * @return Response
+     */
+    public function getPrimaryAction($id)
+    {
+        /** @var Contact $contact */
+        $contact = $this->getManager()->find($id);
+
+        if ($contact) {
+            $address = $contact->getPrimaryAddress();
         } else {
             $address = null;
         }
