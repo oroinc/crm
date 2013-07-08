@@ -35,12 +35,35 @@ class CreateAccountTest extends \PHPUnit_Extensions_Selenium2TestCase
             ->submit()
             ->openAccounts()
             ->add()
-            ->setAccount_name($accountname)
+            ->setAccountName($accountname)
             ->save()
             ->assertTitle('Accounts')
             ->assertMessage('Account successfully saved');
 
         return $accountname;
+    }
+
+    /**
+     * @depends testCreateAccount
+     * @param $accountname
+     */
+    public function testAccountAutocmplete($accountname)
+    {
+        $login = new Login($this);
+        $login->setUsername(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_LOGIN)
+            ->setPassword(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_PASS)
+            ->submit()
+            ->openAccounts()
+            ->add()
+            ->setAccountName($accountname . '_autocomplete_test')
+            ->setStreet('Street')
+            ->setCity('City')
+            ->setCountry('Kazak')
+            ->setState('Aqm')
+            ->setZipCode('Zip Code 000')
+            ->save()
+            ->assertTitle('Accounts')
+            ->assertMessage('Account successfully saved');
     }
 
     /**
@@ -61,7 +84,7 @@ class CreateAccountTest extends \PHPUnit_Extensions_Selenium2TestCase
             ->open(array($accountname))
             ->edit()
             ->assertTitle($accountname . ' - Accounts')
-            ->setAccount_name($newAccountname)
+            ->setAccountName($newAccountname)
             ->save()
             ->assertTitle('Accounts')
             ->assertMessage('Account successfully saved')

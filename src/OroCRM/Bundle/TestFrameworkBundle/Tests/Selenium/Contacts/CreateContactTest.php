@@ -34,14 +34,41 @@ class CreateContactTest extends \PHPUnit_Extensions_Selenium2TestCase
             ->submit()
             ->openContacts()
             ->add()
-            ->setFirst_name($contactname . '_first')
-            ->setLast_name($contactname . '_last')
+            ->setFirstName($contactname . '_first')
+            ->setLastName($contactname . '_last')
             ->setEmail($contactname . '@mail.com')
             ->save()
             ->assertTitle('Contacts')
             ->assertMessage('Contact successfully saved');
 
         return $contactname;
+    }
+
+    /**
+     * @depends testCreateContact
+     * @param $contactname
+     */
+    public function testContactAutocmplete($contactname)
+    {
+        $login = new Login($this);
+        $login->setUsername(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_LOGIN)
+            ->setPassword(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_PASS)
+            ->submit()
+            ->openContacts()
+            ->add()
+            ->setFirstName($contactname . '_first_autocomplete')
+            ->setLastName($contactname . '_last_autocomplete')
+            ->setAssignedTo('admin')
+            ->setReportsTo($contactname)
+            ->setStreet('Street')
+            ->setCity('City')
+            ->setZipCode('Zip Code 000')
+            ->setCountry('Kazak')
+            ->setState('Aqm')
+            ->save()
+            ->assertTitle('Contacts')
+            ->assertMessage('Contact successfully saved')
+            ->close();
     }
 
     /**
@@ -60,9 +87,9 @@ class CreateContactTest extends \PHPUnit_Extensions_Selenium2TestCase
             ->openContacts()
             ->filterBy('Email', $contactname . '@mail.com')
             ->open(array($contactname))
-            ->edit()
             ->assertTitle($contactname . '_last, ' . $contactname . '_first - Contacts')
-            ->setFirst_name($newContactname . '_first')
+            ->edit()
+            ->setFirstName($newContactname . '_first')
             ->save()
             ->assertTitle('Contacts')
             ->assertMessage('Contact successfully saved')
@@ -83,12 +110,12 @@ class CreateContactTest extends \PHPUnit_Extensions_Selenium2TestCase
             ->setPassword(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_PASS)
             ->submit()
             ->openContacts()
-            ->filterBy('Email', $contactname . 'mail.com')
+            ->filterBy('Email', $contactname . '@mail.com')
             ->open(array($contactname))
             ->delete()
             ->assertTitle('Contacts')
             ->assertMessage('Item was deleted');
 
-        $login->openUsers()->filterBy('Email', $contactname . 'mail.com')->assertNoDataMessage('No Contacts were found to match your search');
+        $login->openUsers()->filterBy('Email', $contactname . '@mail.com')->assertNoDataMessage('No Contacts were found to match your search');
     }
 }
