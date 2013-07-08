@@ -45,7 +45,7 @@ class ContactTypeTest extends \PHPUnit_Framework_TestCase
 
         $builder->expects($this->at(1))
             ->method('add')
-            ->with('multiAddress', 'oro_address_collection')
+            ->with('addresses', 'oro_address_collection')
             ->will($this->returnSelf());
         $builder->expects($this->at(2))
             ->method('add')
