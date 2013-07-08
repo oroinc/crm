@@ -279,7 +279,7 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
             $address->setState($region->first());
         }
 
-        $contact->addMultiAddress($address);
+        $contact->addAddress($address);
         return $contact;
     }
 

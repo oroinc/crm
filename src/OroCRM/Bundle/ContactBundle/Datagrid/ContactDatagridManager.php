@@ -178,13 +178,13 @@ class ContactDatagridManager extends FlexibleDatagridManager
         // need to translate countries
         $query->setQueryHint(
             Query::HINT_CUSTOM_OUTPUT_WALKER,
-            'Gedmo\\Translatable\\Query\\TreeWalker\\TranslationWalker'
+            'Gedmo\Translatable\Query\TreeWalker\TranslationWalker'
         );
 
         $entityAlias = $query->getRootAlias();
 
         /** @var $query QueryBuilder */
-        $query->leftJoin("$entityAlias.multiAddress", 'address', 'WITH', 'address.primary = 1')
+        $query->leftJoin("$entityAlias.addresses", 'address', 'WITH', 'address.primary = 1')
             ->leftJoin('address.country', 'country');
 
         $query->addSelect('country.name as countryName', true);
