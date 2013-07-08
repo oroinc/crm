@@ -52,7 +52,7 @@ class ContactController extends FlexibleSoapController
         $address = $contact->getAddressByTypeName($typeName);
 
         if (!$address) {
-            throw new \SoapFault('NOT_FOUND', sprintf('Contact "%s" address can not be found', $typeName));
+            throw new \SoapFault('NOT_FOUND', sprintf('Contact address with type "%s" can\'t be found', $typeName));
         }
 
         return $address;
