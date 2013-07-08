@@ -4,6 +4,7 @@ namespace OroCRM\Bundle\ContactBundle\Controller\Api\Rest;
 
 use Symfony\Component\HttpFoundation\Response;
 
+use FOS\RestBundle\Controller\Annotations\NamePrefix;
 use FOS\RestBundle\Controller\Annotations\RouteResource;
 use FOS\RestBundle\Routing\ClassResourceInterface;
 use FOS\Rest\Util\Codes;
@@ -17,6 +18,7 @@ use OroCRM\Bundle\ContactBundle\Entity\ContactAddress;
 
 /**
  * @RouteResource("address")
+ * @NamePrefix("oro_api_")
  */
 class ContactAddressController extends FlexibleRestController implements ClassResourceInterface
 {
