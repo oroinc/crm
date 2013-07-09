@@ -19,7 +19,7 @@ class RestContactApiTest extends WebTestCase
      * @var array
      */
     protected $testAddress = array(
-        'type' => 'shipping',
+        'types' => array('shipping'),
         'street' => 'contact_street',
         'city' => 'contact_city',
         'country' => 'US',
@@ -40,7 +40,7 @@ class RestContactApiTest extends WebTestCase
         $this->assertCount(1, $actualAddresses);
         $address = current($actualAddresses);
 
-        foreach (array('type', 'street', 'city') as $key) {
+        foreach (array('types', 'street', 'city') as $key) {
             $this->assertArrayHasKey($key, $address);
             $this->assertEquals($this->testAddress[$key], $address[$key]);
         }
@@ -115,10 +115,10 @@ class RestContactApiTest extends WebTestCase
      */
     public function testUpdateContact($contact, $request)
     {
-        $this->testAddress['type'] = 'billing';
+        $this->testAddress['types'] = array('billing');
 
         $request['contact']['attributes']['first_name'] .= "_Updated";
-        $request['contact']['addresses'][0]['type'] = $this->testAddress['type'];
+        $request['contact']['addresses'][0]['types'] = $this->testAddress['types'];
         $request['contact']['addresses'][0]['primary'] = true;
 
         $this->client->request('PUT', $this->client->generate('oro_api_put_contact', array('id' => $contact['id'])), $request);

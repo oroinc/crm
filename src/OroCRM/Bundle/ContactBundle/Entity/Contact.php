@@ -12,8 +12,8 @@ use JMS\Serializer\Annotation\Exclude;
 
 use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 
+use Oro\Bundle\AddressBundle\Entity\AddressType;
 use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityFlexible;
-use Oro\Bundle\AddressBundle\Entity\TypedAddress;
 
 /**
  * @ORM\Entity(repositoryClass="Oro\Bundle\FlexibleEntityBundle\Entity\Repository\FlexibleEntityRepository")
@@ -32,7 +32,7 @@ class Contact extends AbstractEntityFlexible
     protected $id;
 
     /**
-     * @var Group[]
+     * @var Collection
      *
      * @ORM\ManyToMany(targetEntity="Group")
      * @ORM\JoinTable(name="orocrm_contact_to_contact_group",
@@ -47,7 +47,7 @@ class Contact extends AbstractEntityFlexible
     /**
      * Accounts storage
      *
-     * @var ArrayCollection $accounts
+     * @var Collection
      *
      * @ORM\ManyToMany(targetEntity="OroCRM\Bundle\AccountBundle\Entity\Account", mappedBy="contacts")
      * @ORM\JoinTable(name="orocrm_contact_to_account")
@@ -56,13 +56,13 @@ class Contact extends AbstractEntityFlexible
     protected $accounts;
 
     /**
-     * @var ArrayCollection $multiAddress
-     * @ORM\OneToMany(targetEntity="ContactAddress", mappedBy="owner", cascade={"all"})
+     * @var Collection
+     * @ORM\OneToMany(targetEntity="ContactAddress", mappedBy="owner", cascade={"all"}, orphanRemoval=true)
      * @ORM\OrderBy({"primary" = "DESC"})
-     *
+     * @Soap\ComplexType("OroCRM\Bundle\ContactBundle\Entity\ContactAddress[]", nillable=true)
      * @Exclude
      */
-    protected $multiAddress;
+    protected $addresses;
 
     /**
      * @var \Oro\Bundle\FlexibleEntityBundle\Model\AbstractFlexibleValue[]
@@ -85,7 +85,7 @@ class Contact extends AbstractEntityFlexible
         parent::__construct();
         $this->groups   = new ArrayCollection();
         $this->accounts = new ArrayCollection();
-        $this->multiAddress = new ArrayCollection();
+        $this->addresses = new ArrayCollection();
     }
 
     /**
@@ -221,17 +221,19 @@ class Contact extends AbstractEntityFlexible
     }
 
     /**
-     * Set addresses
+     * Set addresses.
      *
-     * @param ContactAddress[] $addresses
+     * This method could not be named setAddresses because of bug CRM-253.
+     *
+     * @param Collection|ContactAddress[] $addresses
      * @return Contact
      */
-    public function setMultiAddress($addresses)
+    public function resetAddresses($addresses)
     {
-        $this->multiAddress->clear();
+        $this->addresses->clear();
 
         foreach ($addresses as $address) {
-            $this->addMultiAddress($address);
+            $this->addAddress($address);
         }
 
         return $this;
@@ -243,10 +245,10 @@ class Contact extends AbstractEntityFlexible
      * @param ContactAddress $address
      * @return Contact
      */
-    public function addMultiAddress(ContactAddress $address)
+    public function addAddress(ContactAddress $address)
     {
-        if (!$this->multiAddress->contains($address)) {
-            $this->multiAddress->add($address);
+        if (!$this->addresses->contains($address)) {
+            $this->addresses->add($address);
             $address->setOwner($this);
         }
 
@@ -256,13 +258,13 @@ class Contact extends AbstractEntityFlexible
     /**
      * Remove address
      *
-     * @param mixed $address
+     * @param ContactAddress $address
      * @return Contact
      */
-    public function removeMultiAddress($address)
+    public function removeAddress(ContactAddress $address)
     {
-        if ($this->multiAddress->contains($address)) {
-            $this->multiAddress->removeElement($address);
+        if ($this->addresses->contains($address)) {
+            $this->addresses->removeElement($address);
         }
 
         return $this;
@@ -271,11 +273,61 @@ class Contact extends AbstractEntityFlexible
     /**
      * Get addresses
      *
-     * @return ContactAddress[]
+     * @return Collection|ContactAddress[]
      */
-    public function getMultiAddress()
+    public function getAddresses()
     {
-        return $this->multiAddress;
+        return $this->addresses;
+    }
+
+    /**
+     * Gets primary address if it's available.
+     *
+     * @return ContactAddress|null
+     */
+    public function getPrimaryAddress()
+    {
+        $result = null;
+
+        foreach ($this->getAddresses() as $address) {
+            if ($address->isPrimary()) {
+                $result = $address;
+                break;
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * Gets one address that has specified type.
+     *
+     * @param AddressType $type
+     * @return ContactAddress|null
+     */
+    public function getAddressByType(AddressType $type)
+    {
+        return $this->getAddressByTypeName($type->getName());
+    }
+
+    /**
+     * Gets one address that has specified type name.
+     *
+     * @param string $typeName
+     * @return ContactAddress|null
+     */
+    public function getAddressByTypeName($typeName)
+    {
+        $result = null;
+
+        foreach ($this->getAddresses() as $address) {
+            if ($address->hasTypeWithName($typeName)) {
+                $result = $address;
+                break;
+            }
+        }
+
+        return $result;
     }
 
     /**
