@@ -141,7 +141,6 @@ class ContactDatagridManager extends FlexibleDatagridManager
                 'filter_type'     => FilterInterface::TYPE_STRING,
                 'sortable'        => true,
                 'filterable'      => true,
-                'show_filter'     => true,
                 'filter_by_where' => true,
             )
         );
