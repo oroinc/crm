@@ -33,7 +33,7 @@ class RestAccountApiTest extends WebTestCase
                 )
             )
         );
-        $this->client->request('POST',  $this->client->generate('oro_api_post_account'), $request);
+        $this->client->request('POST', $this->client->generate('oro_api_post_account'), $request);
         $result = $this->client->getResponse();
         ToolsAPI::assertJsonResponse($result, 201);
 
