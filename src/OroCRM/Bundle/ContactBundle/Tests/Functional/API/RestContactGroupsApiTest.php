@@ -27,7 +27,7 @@ class RestContactGroupsApiTest extends WebTestCase
     {
         $request = array(
             "contact_group" => array(
-            "name" => 'Contact_Group_Name_' . mt_rand()
+            "label" => 'Contact_Group_Name_' . mt_rand()
             )
         );
         $this->client->request('POST', $this->client->generate('oro_api_post_contactgroup'), $request);
@@ -49,7 +49,7 @@ class RestContactGroupsApiTest extends WebTestCase
         $result = json_decode($result->getContent(), true);
         $flag = 1;
         foreach ($result as $group) {
-            if ($group['name'] == $request['contact_group']['name']) {
+            if ($group['label'] == $request['contact_group']['label']) {
                 $flag = 0;
                 break;
             }
@@ -71,7 +71,7 @@ class RestContactGroupsApiTest extends WebTestCase
      */
     public function testUpdateContactGroup($group, $request)
     {
-        $group['name'] .= "_Updated";
+        $group['label'] .= "_Updated";
         $this->client->request('PUT', $this->client->generate('oro_api_put_contactgroup', array('id' => $group['id'])), $request);
         $result = $this->client->getResponse();
         ToolsAPI::assertJsonResponse($result, 204);
@@ -79,7 +79,7 @@ class RestContactGroupsApiTest extends WebTestCase
         $result = $this->client->getResponse();
         ToolsAPI::assertJsonResponse($result, 200);
         $result = json_decode($result->getContent(), true);
-        $this->assertEquals($request['contact_group']['name'], $result['name'], 'ContactGroup does not updated');
+        $this->assertEquals($request['contact_group']['label'], $result['label'], 'ContactGroup does not updated');
     }
 
     /**

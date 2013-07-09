@@ -1,8 +1,8 @@
 {% extends 'OroUIBundle:actions:update.html.twig' %}
 {% form_theme form with 'OroUIBundle:Form:fields.html.twig' %}
-{% set title = form.vars.value.id ? form.vars.value.name|default('N/A') : 'Add Customer Group'|trans %}
+{% set title = form.vars.value.id ? form.vars.value.label|default('N/A') : 'Add Customer Group'|trans %}
 {% if form.vars.value.id %}
-    {% oro_title_set({params : {"%group.name%": form.vars.value.name} }) %}
+    {% oro_title_set({params : {"%group.label%": form.vars.value.label} }) %}
 {% endif %}
 {% set gridId = 'contacts-grid' %}
 {% set formAction = form.vars.value.id ? path('orocrm_contact_group_update', { id: form.vars.value.id }) : path('orocrm_contact_group_create') %}
@@ -50,7 +50,7 @@
             'entity':      form.vars.value,
             'indexPath':   path('orocrm_contact_group_index'),
             'indexLabel': 'Contact Groups',
-            'entityTitle': form.vars.value.name|default('N/A')
+            'entityTitle': form.vars.value.label|default('N/A')
         }
         %}
         {{ parent() }}
@@ -69,7 +69,7 @@
                 {
                     'title': 'Basic Information',
                     'data': [
-                        form_row(form.name)
+                        form_row(form.label)
                     ]
                 }
             ]
