@@ -42,12 +42,12 @@ class GroupDatagridManager extends DatagridManager
         $fieldsCollection->add($fieldId);
 
         $fieldName = new FieldDescription();
-        $fieldName->setName('name');
+        $fieldName->setName('label');
         $fieldName->setOptions(
             array(
                 'type'        => FieldDescriptionInterface::TYPE_TEXT,
-                'label'       => $this->translate('Name'),
-                'field_name'  => 'name',
+                'label'       => $this->translate('Label'),
+                'field_name'  => 'label',
                 'filter_type' => FilterInterface::TYPE_STRING,
                 'sortable'    => true,
                 'filterable'  => true,
