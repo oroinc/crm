@@ -18,6 +18,14 @@ use Oro\Bundle\GridBundle\Datagrid\ProxyQueryInterface;
 class ContactDatagridManager extends FlexibleDatagridManager
 {
     /**
+     * Expression to get region text or label, CONCAT is used as type cast function
+     *
+     * @var string
+     */
+    protected $regionExpression
+        = "CONCAT(CASE WHEN address.stateText IS NOT NULL THEN address.stateText ELSE region.name END, '')";
+
+    /**
      * {@inheritDoc}
      */
     protected function getProperties()
@@ -40,7 +48,7 @@ class ContactDatagridManager extends FlexibleDatagridManager
         $fieldId->setOptions(
             array(
                 'type'        => FieldDescriptionInterface::TYPE_INTEGER,
-                'label'       => $this->translate('ID'),
+                'label'       => $this->translate('orocrm.contact.datagrid.contact_id'),
                 'field_name'  => 'id',
                 'filter_type' => FilterInterface::TYPE_NUMBER,
                 'show_column' => false
@@ -58,7 +66,7 @@ class ContactDatagridManager extends FlexibleDatagridManager
         $fieldCountry->setOptions(
             array(
                 'type'            => FieldDescriptionInterface::TYPE_TEXT,
-                'label'           => $this->translate('Country'),
+                'label'           => $this->translate('orocrm.contact.datagrid.country'),
                 'field_name'      => 'countryName',
                 'expression'      => 'address.country',
                 'filter_type'     => FilterInterface::TYPE_ENTITY,
@@ -79,12 +87,29 @@ class ContactDatagridManager extends FlexibleDatagridManager
         );
         $fieldsCollection->add($fieldCountry);
 
+        $fieldRegion = new FieldDescription();
+        $fieldRegion->setName('region');
+        $fieldRegion->setOptions(
+            array(
+                'type'            => FieldDescriptionInterface::TYPE_TEXT,
+                'label'           => $this->translate('orocrm.contact.datagrid.region'),
+                'field_name'      => 'regionLabel',
+                'expression'      => $this->regionExpression,
+                'filter_type'     => FilterInterface::TYPE_STRING,
+                'sortable'        => true,
+                'filterable'      => true,
+                'show_filter'     => true,
+                'filter_by_where' => true,
+            )
+        );
+        $fieldsCollection->add($fieldRegion);
+
         $fieldCreated = new FieldDescription();
         $fieldCreated->setName('created');
         $fieldCreated->setOptions(
             array(
                 'type'        => FieldDescriptionInterface::TYPE_DATETIME,
-                'label'       => $this->translate('Created At'),
+                'label'       => $this->translate('orocrm.contact.datagrid.created_at'),
                 'field_name'  => 'created',
                 'filter_type' => FilterInterface::TYPE_DATETIME,
                 'sortable'    => true,
@@ -99,7 +124,7 @@ class ContactDatagridManager extends FlexibleDatagridManager
         $fieldUpdated->setOptions(
             array(
                 'type'        => FieldDescriptionInterface::TYPE_DATETIME,
-                'label'       => $this->translate('Updated At'),
+                'label'       => $this->translate('orocrm.contact.datagrid.updated_at'),
                 'field_name'  => 'updated',
                 'filter_type' => FilterInterface::TYPE_DATETIME,
                 'sortable'    => true,
@@ -120,7 +145,7 @@ class ContactDatagridManager extends FlexibleDatagridManager
             'type'         => ActionInterface::TYPE_REDIRECT,
             'acl_resource' => 'orocrm_contact_view',
             'options'      => array(
-                'label'         => $this->translate('View'),
+                'label'         => $this->translate('orocrm.contact.datagrid.view'),
                 'link'          => 'view_link',
                 'runOnRowClick' => true,
             )
@@ -131,7 +156,7 @@ class ContactDatagridManager extends FlexibleDatagridManager
             'type'         => ActionInterface::TYPE_REDIRECT,
             'acl_resource' => 'orocrm_contact_view',
             'options'      => array(
-                'label' => $this->translate('View'),
+                'label' => $this->translate('orocrm.contact.datagrid.view'),
                 'icon'  => 'user',
                 'link'  => 'view_link',
             )
@@ -142,7 +167,7 @@ class ContactDatagridManager extends FlexibleDatagridManager
             'type'         => ActionInterface::TYPE_REDIRECT,
             'acl_resource' => 'orocrm_contact_update',
             'options'      => array(
-                'label'   => $this->translate('Update'),
+                'label'   => $this->translate('orocrm.contact.datagrid.update'),
                 'icon'    => 'edit',
                 'link'    => 'update_link',
             )
@@ -153,7 +178,7 @@ class ContactDatagridManager extends FlexibleDatagridManager
             'type'         => ActionInterface::TYPE_DELETE,
             'acl_resource' => 'orocrm_contact_delete',
             'options'      => array(
-                'label' => $this->translate('Delete'),
+                'label' => $this->translate('orocrm.contact.datagrid.delete'),
                 'icon'  => 'trash',
                 'link'  => 'delete_link',
             )
@@ -185,8 +210,10 @@ class ContactDatagridManager extends FlexibleDatagridManager
 
         /** @var $query QueryBuilder */
         $query->leftJoin("$entityAlias.addresses", 'address', 'WITH', 'address.primary = 1')
-            ->leftJoin('address.country', 'country');
+            ->leftJoin('address.country', 'country')
+            ->leftJoin('address.state', 'region');
 
         $query->addSelect('country.name as countryName', true);
+        $query->addSelect($this->regionExpression . ' AS regionLabel', true);
     }
 }
