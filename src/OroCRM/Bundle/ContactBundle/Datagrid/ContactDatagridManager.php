@@ -13,7 +13,9 @@ use Oro\Bundle\GridBundle\Field\FieldDescriptionInterface;
 use Oro\Bundle\GridBundle\Filter\FilterInterface;
 use Oro\Bundle\GridBundle\Action\ActionInterface;
 use Oro\Bundle\GridBundle\Property\UrlProperty;
+use Oro\Bundle\GridBundle\Property\FixedProperty;
 use Oro\Bundle\GridBundle\Datagrid\ProxyQueryInterface;
+use Oro\Bundle\GridBundle\Sorter\SorterInterface;
 
 class ContactDatagridManager extends FlexibleDatagridManager
 {
@@ -56,10 +58,36 @@ class ContactDatagridManager extends FlexibleDatagridManager
         );
         $fieldsCollection->add($fieldId);
 
-        $this->configureFlexibleField($fieldsCollection, 'first_name');
-        $this->configureFlexibleField($fieldsCollection, 'last_name');
-        $this->configureFlexibleField($fieldsCollection, 'phone');
+        $this->configureFlexibleField($fieldsCollection, 'first_name', array('show_filter' => true));
+        $this->configureFlexibleField($fieldsCollection, 'last_name', array('show_filter' => true));
         $this->configureFlexibleField($fieldsCollection, 'email', array('show_filter' => true));
+        $this->configureFlexibleField($fieldsCollection, 'phone', array('show_filter' => true));
+
+        $rolesLabel = new FieldDescription();
+        $rolesLabel->setName('groups');
+        $rolesLabel->setProperty(new FixedProperty('groups', 'groupLabelsAsString'));
+        $rolesLabel->setOptions(
+            array(
+                'type'            => FieldDescriptionInterface::TYPE_TEXT,
+                'label'           => $this->translate('orocrm.contact.datagrid.groups'),
+                'field_name'      => 'groups',
+                'expression'      => 'contactGroup',
+                'filter_type'     => FilterInterface::TYPE_ENTITY,
+                'sort_field_mapping' => array(
+                    'entityAlias' => 'contactGroup',
+                    'fieldName' => 'label',
+                ),
+                'sortable'        => true,
+                'filterable'      => true,
+                // entity filter options
+                'class'           => 'OroCRMContactBundle:Group',
+                'property'        => 'label',
+                'filter_by_where' => true
+            )
+        );
+        $fieldsCollection->add($rolesLabel);
+
+        $this->configureFlexibleField($fieldsCollection, 'lead_source');
 
         $fieldCountry = new FieldDescription();
         $fieldCountry->setName('country');
@@ -72,7 +100,6 @@ class ContactDatagridManager extends FlexibleDatagridManager
                 'filter_type'     => FilterInterface::TYPE_ENTITY,
                 'sortable'        => true,
                 'filterable'      => true,
-                'show_filter'     => true,
                 // entity filter options
                 'multiple'        => true,
                 'class'           => 'OroAddressBundle:Country',
@@ -98,7 +125,6 @@ class ContactDatagridManager extends FlexibleDatagridManager
                 'filter_type'     => FilterInterface::TYPE_STRING,
                 'sortable'        => true,
                 'filterable'      => true,
-                'show_filter'     => true,
                 'filter_by_where' => true,
             )
         );
@@ -129,7 +155,6 @@ class ContactDatagridManager extends FlexibleDatagridManager
                 'filter_type' => FilterInterface::TYPE_DATETIME,
                 'sortable'    => true,
                 'filterable'  => true,
-                'show_filter' => true,
             )
         );
         $fieldsCollection->add($fieldUpdated);
@@ -209,11 +234,21 @@ class ContactDatagridManager extends FlexibleDatagridManager
         $entityAlias = $query->getRootAlias();
 
         /** @var $query QueryBuilder */
-        $query->leftJoin("$entityAlias.addresses", 'address', 'WITH', 'address.primary = 1')
+        $query
+            ->leftJoin("$entityAlias.groups", 'contactGroup')
+            ->leftJoin("$entityAlias.addresses", 'address', 'WITH', 'address.primary = 1')
             ->leftJoin('address.country', 'country')
             ->leftJoin('address.state', 'region');
 
         $query->addSelect('country.name as countryName', true);
         $query->addSelect($this->regionExpression . ' AS regionLabel', true);
+    }
+
+    protected function getDefaultSorters()
+    {
+        return array(
+            'first_name' => SorterInterface::DIRECTION_ASC,
+            'last_name' => SorterInterface::DIRECTION_ASC,
+        );
     }
 }

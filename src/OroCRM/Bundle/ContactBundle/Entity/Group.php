@@ -33,14 +33,14 @@ class Group
      * @Type("string")
      * @Oro\Versioned
      */
-    protected $name;
+    protected $label;
 
     /**
-     * @param string $name [optional] Group name
+     * @param string|null $label [optional] Group name
      */
-    public function __construct($name = '')
+    public function __construct($label = null)
     {
-        $this->name = $name;
+        $this->label = $label;
     }
 
     /**
@@ -54,24 +54,24 @@ class Group
     /**
      * @return string
      */
-    public function getName()
+    public function getLabel()
     {
-        return $this->name;
+        return $this->label;
     }
 
     /**
      * @param  string $name
      * @return Group
      */
-    public function setName($name)
+    public function setLabel($name)
     {
-        $this->name = $name;
+        $this->label = $name;
 
         return $this;
     }
 
     public function __toString()
     {
-        return (string)$this->getName();
+        return (string)$this->getLabel();
     }
 }
