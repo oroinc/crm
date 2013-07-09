@@ -75,7 +75,7 @@ class ContactDatagridManager extends FlexibleDatagridManager
                 'filter_type'     => FilterInterface::TYPE_ENTITY,
                 'sort_field_mapping' => array(
                     'entityAlias' => 'contactGroup',
-                    'fieldName' => 'label',
+                    'fieldName'   => 'label',
                 ),
                 'sortable'        => true,
                 'filterable'      => true,
@@ -129,6 +129,23 @@ class ContactDatagridManager extends FlexibleDatagridManager
             )
         );
         $fieldsCollection->add($fieldRegion);
+
+        $fieldPostalCode = new FieldDescription();
+        $fieldPostalCode->setName('postal_code');
+        $fieldPostalCode->setOptions(
+            array(
+                'type'            => FieldDescriptionInterface::TYPE_TEXT,
+                'label'           => $this->translate('orocrm.contact.datagrid.postal_code'),
+                'field_name'      => 'addressPostalCode',
+                'expression'      => 'address.postalCode',
+                'filter_type'     => FilterInterface::TYPE_STRING,
+                'sortable'        => true,
+                'filterable'      => true,
+                'show_filter'     => true,
+                'filter_by_where' => true,
+            )
+        );
+        $fieldsCollection->add($fieldPostalCode);
 
         $fieldCreated = new FieldDescription();
         $fieldCreated->setName('created');
@@ -235,12 +252,13 @@ class ContactDatagridManager extends FlexibleDatagridManager
 
         /** @var $query QueryBuilder */
         $query
-            ->leftJoin("$entityAlias.groups", 'contactGroup')
             ->leftJoin("$entityAlias.addresses", 'address', 'WITH', 'address.primary = 1')
+            ->leftJoin("$entityAlias.groups", 'contactGroup')
             ->leftJoin('address.country', 'country')
             ->leftJoin('address.state', 'region');
 
         $query->addSelect('country.name as countryName', true);
+        $query->addSelect('address.postalCode as addressPostalCode', true);
         $query->addSelect($this->regionExpression . ' AS regionLabel', true);
     }
 
