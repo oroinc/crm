@@ -12,15 +12,15 @@ use Oro\Bundle\TestFrameworkBundle\Test\Client;
  */
 class SoapContactApiTest extends WebTestCase
 {
-    /** @var \SoapClient */
-    protected $clientSoap = null;
+    /** @var Client */
+    protected $client = null;
 
     public function setUp()
     {
         $this->markTestSkipped('BAP-717');
-        $this->clientSoap = static::createClient(array(), ToolsAPI::generateWsseHeader());
+        $this->client = static::createClient(array(), ToolsAPI::generateWsseHeader());
 
-        $this->clientSoap->soap(
+        $this->client->soap(
             "http://localhost/api/soap",
             array(
                 'location' => 'http://localhost/api/soap',
@@ -36,9 +36,9 @@ class SoapContactApiTest extends WebTestCase
      */
     public function testCreateContact($request, $response)
     {
-        $result = $this->clientSoap->soapClient->createContact($request);
+        $result = $this->client->soapClient->createContact($request);
         $result = ToolsAPI::classToArray($result);
-        ToolsAPI::assertEqualsResponse($response, $result, $this->clientSoap->soapClient->__getLastResponse());
+        ToolsAPI::assertEqualsResponse($response, $result, $this->client->soapClient->__getLastResponse());
     }
 
     /**
@@ -49,7 +49,7 @@ class SoapContactApiTest extends WebTestCase
      */
     public function testGetContacts($request)
     {
-        $contacts = $this->clientSoap->soapClient->getContacts(1, 1000);
+        $contacts = $this->client->soapClient->getContacts(1, 1000);
         $contacts = ToolsAPI::classToArray($contacts);
         $result = false;
         foreach ($contacts as $contact) {
@@ -73,7 +73,7 @@ class SoapContactApiTest extends WebTestCase
      */
     public function testUpdateContact($request)
     {
-        $contacts = $this->clientSoap->soapClient->getContacts(1, 1000);
+        $contacts = $this->client->soapClient->getContacts(1, 1000);
         $contacts = ToolsAPI::classToArray($contacts);
         $result = false;
         foreach ($contacts as $contact) {
@@ -86,9 +86,9 @@ class SoapContactApiTest extends WebTestCase
             }
         }
         $request['attributes']['description'] .= '_Updated';
-        $result = $this->clientSoap->soapClient->updateContact($contactId, $request);
+        $result = $this->client->soapClient->updateContact($contactId, $request);
         $this->assertTrue($result);
-        $contact = $this->clientSoap->soapClient->getContactGroup($contactId);
+        $contact = $this->client->soapClient->getContactGroup($contactId);
         $contact = ToolsAPI::classToArray($contact);
         $result = false;
         if ($contact['attributes']['description'] == $request['attributes']['description']) {
@@ -106,10 +106,10 @@ class SoapContactApiTest extends WebTestCase
      */
     public function testDeleteContact($contactId)
     {
-        $result = $this->clientSoap->soapClient->deleteContact($contactId);
+        $result = $this->client->soapClient->deleteContact($contactId);
         $this->assertTrue($result);
         try {
-            $this->clientSoap->soapClient->getContact($contactId);
+            $this->client->soapClient->getContact($contactId);
         } catch (\SoapFault $e) {
             if ($e->faultcode != 'NOT_FOUND') {
                 throw $e;

@@ -3,16 +3,9 @@ orocrm_contact_bundle:
     type:         annotation
     prefix:       /contact
 
-orocrm_contact_api:
-    resource:     "@OroCRMContactBundle/Controller/Api/Rest/ContactController.php"
-    type:         rest
-    prefix:       api/rest/{version}/
-    defaults:
-        version:  latest
-
-orocrm_contact_group_api:
-    resource:     "@OroCRMContactBundle/Controller/Api/Rest/ContactGroupController.php"
-    type:         rest
-    prefix:       api/rest/{version}/
+orocrm_contact_bundle_api:
+    resource: "@OroCRMContactBundle/Resources/config/routing_api.yml"
+    type: rest
+    prefix:       api/rest/{version}
     defaults:
         version:  latest

@@ -5,6 +5,7 @@ namespace OroCRM\Bundle\ContactBundle\Tests\Unit\Entity;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\ContactBundle\Entity\ContactAddress;
+use Oro\Bundle\AddressBundle\Entity\AddressType;
 
 class ContactTest extends \PHPUnit_Framework_TestCase
 {
@@ -53,7 +54,7 @@ class ContactTest extends \PHPUnit_Framework_TestCase
         $this->assertEmpty($contact->getAccounts()->toArray());
     }
 
-    public function testMultiAddress()
+    public function testAddresses()
     {
         $addressOne = new ContactAddress();
         $addressOne->setCountry('US');
@@ -64,30 +65,68 @@ class ContactTest extends \PHPUnit_Framework_TestCase
         $addresses = array($addressOne, $addressTwo);
 
         $contact = new Contact();
-        $this->assertSame($contact, $contact->setMultiAddress($addresses));
-        $actual = $contact->getMultiAddress();
+        $this->assertSame($contact, $contact->resetAddresses($addresses));
+        $actual = $contact->getAddresses();
         $this->assertInstanceOf('Doctrine\Common\Collections\ArrayCollection', $actual);
         $this->assertEquals($addresses, $actual->toArray());
 
-        $this->assertSame($contact, $contact->addMultiAddress($addressTwo));
-        $actual = $contact->getMultiAddress();
+        $this->assertSame($contact, $contact->addAddress($addressTwo));
+        $actual = $contact->getAddresses();
         $this->assertInstanceOf('Doctrine\Common\Collections\ArrayCollection', $actual);
         $this->assertEquals($addresses, $actual->toArray());
 
-        $this->assertSame($contact, $contact->addMultiAddress($addressThree));
-        $actual = $contact->getMultiAddress();
+        $this->assertSame($contact, $contact->addAddress($addressThree));
+        $actual = $contact->getAddresses();
         $this->assertInstanceOf('Doctrine\Common\Collections\ArrayCollection', $actual);
         $this->assertEquals(array($addressOne, $addressTwo, $addressThree), $actual->toArray());
 
-        $this->assertSame($contact, $contact->removeMultiAddress($addressOne));
-        $actual = $contact->getMultiAddress();
+        $this->assertSame($contact, $contact->removeAddress($addressOne));
+        $actual = $contact->getAddresses();
         $this->assertInstanceOf('Doctrine\Common\Collections\ArrayCollection', $actual);
         $this->assertEquals(array(1 => $addressTwo, 2 => $addressThree), $actual->toArray());
 
-        $this->assertSame($contact, $contact->removeMultiAddress($addressOne));
-        $actual = $contact->getMultiAddress();
+        $this->assertSame($contact, $contact->removeAddress($addressOne));
+        $actual = $contact->getAddresses();
         $this->assertInstanceOf('Doctrine\Common\Collections\ArrayCollection', $actual);
         $this->assertEquals(array(1 => $addressTwo, 2 => $addressThree), $actual->toArray());
+    }
+
+    public function testGetPrimaryAddress()
+    {
+        $contact = new Contact();
+        $this->assertNull($contact->getPrimaryAddress());
+
+        $address = new ContactAddress();
+        $contact->addAddress($address);
+        $this->assertNull($contact->getPrimaryAddress());
+
+        $address->setPrimary(true);
+        $this->assertSame($address, $contact->getPrimaryAddress());
+    }
+
+    public function testGetAddressByTypeName()
+    {
+        $contact = new Contact();
+        $this->assertNull($contact->getAddressByTypeName('billing'));
+
+        $address = new ContactAddress();
+        $address->addType(new AddressType('billing'));
+        $contact->addAddress($address);
+
+        $this->assertSame($address, $contact->getAddressByTypeName('billing'));
+    }
+
+    public function testGetAddressByType()
+    {
+        $address = new ContactAddress();
+        $addressType = new AddressType('billing');
+        $address->addType($addressType);
+
+        $contact = new Contact();
+        $this->assertNull($contact->getAddressByType($addressType));
+
+        $contact->addAddress($address);
+        $this->assertSame($address, $contact->getAddressByType($addressType));
     }
 
     public function testGetAttributeDataException()
