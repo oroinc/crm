@@ -87,7 +87,7 @@ class ContactDatagridManager extends FlexibleDatagridManager
         );
         $fieldsCollection->add($rolesLabel);
 
-        $this->configureFlexibleField($fieldsCollection, 'lead_source');
+        $this->configureFlexibleField($fieldsCollection, 'source');
 
         $fieldCountry = new FieldDescription();
         $fieldCountry->setName('country');
