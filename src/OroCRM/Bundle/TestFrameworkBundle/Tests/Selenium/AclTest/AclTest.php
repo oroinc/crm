@@ -157,7 +157,6 @@ class AclTest extends \PHPUnit_Extensions_Selenium2TestCase
      */
     public function testViewAccountsContacts($username)
     {
-        $this->markTestSkipped('Due bug CRM-147');
         $login = new Login($this);
         $login->setUsername($username)
             ->setPassword('123123q')
