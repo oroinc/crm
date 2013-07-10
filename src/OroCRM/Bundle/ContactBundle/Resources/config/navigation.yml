@@ -48,4 +48,4 @@ oro_titles:
 
     orocrm_contact_group_index: Contact Groups
     orocrm_contact_group_create: Create Contact Group
-    orocrm_contact_group_update: %%group.name%% - Contact Group
+    orocrm_contact_group_update: %%group.label%% - Contact Group

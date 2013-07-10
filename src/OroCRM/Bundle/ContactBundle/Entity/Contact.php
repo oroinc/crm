@@ -139,6 +139,33 @@ class Contact extends AbstractEntityFlexible
     }
 
     /**
+     * Get group labels separated with comma.
+     *
+     * @return string
+     */
+    public function getGroupLabelsAsString()
+    {
+        return implode(', ', $this->getGroupLabels());
+    }
+
+    /**
+     * Get list of group labels
+     *
+     * @return array
+     */
+    public function getGroupLabels()
+    {
+        $result = array();
+
+        /** @var Group $group */
+        foreach ($this->getGroups() as $group) {
+            $result[] = $group->getLabel();
+        }
+
+        return $result;
+    }
+
+    /**
      * Gets the groups related to contact
      *
      * @return Collection

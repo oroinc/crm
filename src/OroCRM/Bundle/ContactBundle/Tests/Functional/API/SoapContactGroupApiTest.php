@@ -34,7 +34,7 @@ class SoapContactGroupApiTest extends WebTestCase
     public function testCreateContactGroup()
     {
         $request = array(
-            "name" => 'Group name_' . mt_rand()
+            "label" => 'Group name_' . mt_rand()
         );
         $result = $this->client->soapClient->createContactGroup($request);
         $this->assertTrue($result);
@@ -54,7 +54,7 @@ class SoapContactGroupApiTest extends WebTestCase
         $result = false;
         foreach ($groups as $group) {
             foreach ($group as $groupDetails) {
-                $result = $groupDetails['name'] == $request['name'];
+                $result = $groupDetails['label'] == $request['label'];
                 if ($result) {
                     break;
                 }
@@ -73,13 +73,13 @@ class SoapContactGroupApiTest extends WebTestCase
      */
     public function testUpdateContact($request, $group)
     {
-        $request['name'] .= '_Updated';
+        $request['label'] .= '_Updated';
         $result = $this->client->soapClient->updateContactGroup($group['id'], $request);
         $this->assertTrue($result);
         $group = $this->client->soapClient->getContactGroup($group['id']);
         $group = ToolsAPI::classToArray($group);
         $result = false;
-        if ($group['name'] == $request['name']) {
+        if ($group['label'] == $request['label']) {
             $result = true;
         }
         $this->assertTrue($result);
