@@ -50,6 +50,12 @@ class ContactType extends FlexibleType
         // add default flexible fields
         parent::addEntityFields($builder);
 
+        // tags
+        $builder->add(
+            'tags',
+            'oro_tag_select'
+        );
+
         // Addresses
         $builder->add(
             'addresses',

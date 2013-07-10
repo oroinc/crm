@@ -1,5 +1,6 @@
 {% extends 'OroUIBundle:actions:view.html.twig' %}
 {% import 'OroUIBundle::macros.html.twig' as macros %}
+{% import 'OroTagBundle::macros.html.twig' as _tag %}
 {% import 'OroAddressBundle:Include:viewMacro.html.twig' as addressView %}
 {% set format = oro_config_value('oro_user.name_format') %}
 {% oro_title_set({params : {"%account.name%": entity.name|default('N/A')} }) %}
@@ -81,6 +82,7 @@
                             'title': 'Basic Information',
                             'data': [
                                 UI.attibuteRow('Account Name', entity.name),
+                                UI.renderAttribute('Tags', _tag.renderView(entity))
                             ]
                         }
                     ]

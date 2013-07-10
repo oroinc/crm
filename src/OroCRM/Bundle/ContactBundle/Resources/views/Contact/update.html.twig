@@ -1,4 +1,5 @@
 {% extends 'OroUIBundle:actions:update.html.twig' %}
+{% import 'OroTagBundle::macros.html.twig' as _tag %}
 {% form_theme form with ['OroAddressBundle:Include:fields.html.twig', 'OroFormBundle:Form:fields.html.twig'] %}
 {% set format = oro_config_value('oro_user.name_format') %}
 {% set fullname = entity.fullname(format)|default('N/A') %}
@@ -68,7 +69,8 @@
                 {
                     'title': 'Basic Information',
                     'data': [
-                        form_row(form.values)
+                        form_row(form.values),
+                        _tag.tagInputField('Tags', form)
                     ]
                 },
                 {

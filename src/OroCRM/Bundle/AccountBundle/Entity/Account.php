@@ -194,9 +194,15 @@ class Account extends AbstractEntityFlexible implements Taggable
     }
 
     /**
-     * Return related tags
-     *
-     * @return ArrayCollection
+     * {@inheritdoc}
+     */
+    public function getTaggableId()
+    {
+        return $this->getId();
+    }
+
+    /**
+     * {@inheritdoc}
      */
     public function getTags()
     {
@@ -206,12 +212,12 @@ class Account extends AbstractEntityFlexible implements Taggable
     }
 
     /**
-     * Returns the unique taggable resource identifier
-     *
-     * @return string
+     * {@inheritdoc}
      */
-    public function getTaggableId()
+    public function setTags($tags)
     {
-        return $this->getId();
+        $this->tags = $tags;
+
+        return $this;
     }
 }

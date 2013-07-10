@@ -78,6 +78,8 @@ services:
             - @orocrm_contact.form.contact
             - @request
             - @doctrine.orm.entity_manager
+        tags:
+            - { name: oro_tag.tag_manager }
 
     orocrm_contact.contact.manager:
         class: %orocrm_contact.contact.manager.api.class%
