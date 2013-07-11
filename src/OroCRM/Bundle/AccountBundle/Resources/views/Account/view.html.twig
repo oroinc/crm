@@ -72,6 +72,11 @@
         {% set additional = additional|merge([{'title' : null, 'data' : attributes}]) %}
     {% endif %}
 
+    {% set dataSubBlocks = [UI.attibuteRow('Account Name', entity.name)] %}
+    {% if resource_granted('oro_tag_view_tag_cloud') %}
+        {% set dataSubBlocks = dataSubBlocks|merge([UI.renderAttribute('Tags', _tag.renderView(entity))]) %}
+    {% endif %}
+
     {% set dataBlocks =
             [
                 {
@@ -80,15 +85,14 @@
                     'subblocks': [
                         {
                             'title': 'Basic Information',
-                            'data': [
-                                UI.attibuteRow('Account Name', entity.name),
-                                UI.renderAttribute('Tags', _tag.renderView(entity))
-                            ]
+                            'data' : dataSubBlocks
                         }
                     ]
                 }
             ]
     %}
+
+
 
     {% if (accountAddresses|length) %}
     {% set dataBlocks = dataBlocks|merge([{'title' : 'Addresses', 'subblocks': accountAddresses}])%}

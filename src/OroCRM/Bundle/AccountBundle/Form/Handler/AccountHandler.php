@@ -82,7 +82,7 @@ class AccountHandler implements TagHandlerInterface
     {
         $this->appendContacts($entity, $appendContacts);
         $this->removeContacts($entity, $removeContacts);
-        
+
         $this->manager->persist($entity);
         $this->manager->flush();
         $this->tagManager->saveTagging($entity);

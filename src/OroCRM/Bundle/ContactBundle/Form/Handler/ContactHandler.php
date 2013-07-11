@@ -7,8 +7,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Common\Persistence\ObjectManager;
 
 use Oro\Bundle\TagBundle\Entity\TagManager;
-use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\AccountBundle\Entity\Account;
+use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\TagBundle\Form\Handler\TagHandlerInterface;
 
 class ContactHandler implements TagHandlerInterface

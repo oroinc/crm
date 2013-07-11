@@ -70,10 +70,12 @@
         {% set dataSubBlocks = dataSubBlocks|merge([addressSubBlock]) %}
     {% endif %}
 
-    {% set dataSubBlocks = dataSubBlocks|merge([{
-        title: '',
-        data : [UI.renderAttribute('Tags', _tag.renderView(entity))]
-    }]) %}
+    {% if resource_granted('oro_tag_view_tag_cloud') %}
+        {% set dataSubBlocks = dataSubBlocks|merge([{
+            title: '',
+            data : [UI.renderAttribute('Tags', _tag.renderView(entity))]
+        }]) %}
+    {% endif %}
 
     {% set dataBlocks = [
         {
