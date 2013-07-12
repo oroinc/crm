@@ -3,6 +3,7 @@
 namespace OroCRM\Bundle\ContactBundle\Tests\Unit\Entity;
 
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
+use OroCRM\Bundle\ContactBundle\Entity\Group;
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\ContactBundle\Entity\ContactAddress;
 use Oro\Bundle\AddressBundle\Entity\AddressType;
@@ -21,6 +22,30 @@ class ContactTest extends \PHPUnit_Framework_TestCase
         $entity = new Contact();
         $entity->doPreUpdate();
         $this->assertInstanceOf('\DateTime', $entity->getUpdatedAt());
+    }
+
+    public function testGetGroupLabels()
+    {
+        $entity = new Contact();
+        $this->assertEquals(array(), $entity->getGroupLabels());
+
+        $entity->addGroup(new Group('Group One'));
+        $this->assertEquals(array('Group One'), $entity->getGroupLabels());
+
+        $entity->addGroup(new Group('Group Two'));
+        $this->assertEquals(array('Group One', 'Group Two'), $entity->getGroupLabels());
+    }
+
+    public function testGetGroupLabelsAsString()
+    {
+        $entity = new Contact();
+        $this->assertEquals('', $entity->getGroupLabelsAsString());
+
+        $entity->addGroup(new Group('Group One'));
+        $this->assertEquals('Group One', $entity->getGroupLabelsAsString());
+
+        $entity->addGroup(new Group('Group Two'));
+        $this->assertEquals('Group One, Group Two', $entity->getGroupLabelsAsString());
     }
 
     public function testAddAccount()

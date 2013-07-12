@@ -1,0 +1,11 @@
+orocrm.contact.datagrid.contact_id: ID
+orocrm.contact.datagrid.groups: Groups
+orocrm.contact.datagrid.country: Country
+orocrm.contact.datagrid.region: State
+orocrm.contact.datagrid.postal_code: ZIP/Postal Code
+orocrm.contact.datagrid.created_at: Created At
+orocrm.contact.datagrid.updated_at: Updated At
+
+orocrm.contact.datagrid.view: View
+orocrm.contact.datagrid.update: Update
+orocrm.contact.datagrid.delete: Delete

@@ -72,7 +72,7 @@ class ContactType extends FlexibleType
             'entity',
             array(
                 'class'    => 'OroCRMContactBundle:Group',
-                'property' => 'name',
+                'property' => 'label',
                 'multiple' => true,
                 'expanded' => true,
                 'required' => false,
