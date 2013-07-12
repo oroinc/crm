@@ -55,9 +55,13 @@ class AccountApiTypeTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnSelf());
         $builder->expects($this->at(2))
             ->method('add')
-            ->with('appendContacts', 'oro_entity_identifier')
+            ->with('tags', 'oro_tag_select')
             ->will($this->returnSelf());
         $builder->expects($this->at(3))
+            ->method('add')
+            ->with('appendContacts', 'oro_entity_identifier')
+            ->will($this->returnSelf());
+        $builder->expects($this->at(4))
             ->method('add')
             ->with('removeContacts', 'oro_entity_identifier')
             ->will($this->returnSelf());
