@@ -251,7 +251,7 @@ class ContactDatagridManager extends FlexibleDatagridManager
 
         /** @var $query QueryBuilder */
         $query
-            ->leftJoin("$entityAlias.addresses", 'address', 'WITH', 'address.primary = 1')
+            ->leftJoin("$entityAlias.addresses", 'address', 'WITH', 'address.primary = true')
             ->leftJoin("$entityAlias.groups", 'contactGroup')
             ->leftJoin('address.country', 'country')
             ->leftJoin('address.state', 'region');
@@ -261,6 +261,9 @@ class ContactDatagridManager extends FlexibleDatagridManager
         $query->addSelect($this->regionExpression . ' AS regionLabel', true);
     }
 
+    /**
+     * @return array
+     */
     protected function getDefaultSorters()
     {
         return array(

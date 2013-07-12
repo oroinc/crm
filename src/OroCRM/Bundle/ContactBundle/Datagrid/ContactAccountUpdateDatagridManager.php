@@ -4,7 +4,6 @@ namespace OroCRM\Bundle\ContactBundle\Datagrid;
 
 use Doctrine\ORM\QueryBuilder;
 
-use Oro\Bundle\GridBundle\Datagrid\FlexibleDatagridManager;
 use Oro\Bundle\GridBundle\Field\FieldDescriptionCollection;
 use Oro\Bundle\GridBundle\Field\FieldDescription;
 use Oro\Bundle\GridBundle\Field\FieldDescriptionInterface;
@@ -12,9 +11,15 @@ use Oro\Bundle\GridBundle\Filter\FilterInterface;
 use Oro\Bundle\GridBundle\Sorter\SorterInterface;
 use Oro\Bundle\GridBundle\Datagrid\ParametersInterface;
 use Oro\Bundle\GridBundle\Datagrid\ProxyQueryInterface;
+use Oro\Bundle\GridBundle\Datagrid\ORM\QueryFactory\EntityQueryFactory;
 
 class ContactAccountUpdateDatagridManager extends ContactAccountDatagridManager
 {
+    /**
+     * @var string
+     */
+    protected $hasContactExpression;
+
     /**
      * {@inheritDoc}
      */
@@ -24,16 +29,17 @@ class ContactAccountUpdateDatagridManager extends ContactAccountDatagridManager
         $fieldHasContact->setName('has_contact');
         $fieldHasContact->setOptions(
             array(
-                'type'        => FieldDescriptionInterface::TYPE_BOOLEAN,
-                'label'       => $this->translate('Assigned'),
-                'field_name'  => 'hasCurrentContact',
-                'expression'  => 'hasCurrentContact',
-                'nullable'    => false,
-                'editable'    => true,
-                'sortable'    => true,
-                'filter_type' => FilterInterface::TYPE_BOOLEAN,
-                'filterable'  => true,
-                'show_filter' => true,
+                'type'            => FieldDescriptionInterface::TYPE_BOOLEAN,
+                'label'           => $this->translate('Assigned'),
+                'field_name'      => 'hasCurrentContact',
+                'expression'      => $this->getHasContactExpression(),
+                'nullable'        => false,
+                'editable'        => true,
+                'sortable'        => true,
+                'filter_type'     => FilterInterface::TYPE_BOOLEAN,
+                'filterable'      => true,
+                'show_filter'     => true,
+                'filter_by_where' => true,
             )
         );
         $fieldsCollection->add($fieldHasContact);
@@ -46,24 +52,34 @@ class ContactAccountUpdateDatagridManager extends ContactAccountDatagridManager
      */
     protected function prepareQuery(ProxyQueryInterface $query)
     {
-        $entityAlias = $query->getRootAlias();
+        $query->addSelect($this->getHasContactExpression() . ' AS hasCurrentContact', true);
+    }
 
-        if ($this->getContact()->getId()) {
-            $query->addSelect(
-                "CASE WHEN " .
-                "(:contact MEMBER OF $entityAlias.contacts OR $entityAlias.id IN (:data_in)) AND " .
-                "$entityAlias.id NOT IN (:data_not_in) ".
-                'THEN 1 ELSE 0 END AS hasCurrentContact',
-                true
-            );
-        } else {
-            $query->addSelect(
-                "CASE WHEN ".
-                "$entityAlias.id IN (:data_in) AND $entityAlias.id NOT IN (:data_not_in) ".
-                "THEN 1 ELSE 0 END AS hasCurrentContact",
-                true
-            );
+    /**
+     * @return string
+     */
+    protected function getHasContactExpression()
+    {
+        if (null === $this->hasContactExpression) {
+            /** @var EntityQueryFactory $queryFactory */
+            $queryFactory = $this->queryFactory;
+            $entityAlias = $queryFactory->getAlias();
+
+            if ($this->getContact()->getId()) {
+                $this->hasContactExpression =
+                    "CASE WHEN " .
+                    "(:contact MEMBER OF $entityAlias.accounts OR $entityAlias.id IN (:data_in)) AND " .
+                    "$entityAlias.id NOT IN (:data_not_in) ".
+                    "THEN true ELSE false END";
+            } else {
+                $this->hasContactExpression =
+                    "CASE WHEN " .
+                    "$entityAlias.id IN (:data_in) AND $entityAlias.id NOT IN (:data_not_in) ".
+                    "THEN true ELSE false END";
+            }
         }
+
+        return $this->hasContactExpression;
     }
 
     /**
