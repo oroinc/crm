@@ -1,5 +1,0 @@
-js:
-  'crm_accounts':
-      - '@OroUIBundle/Resources/public/lib/bootstrap/js/bootstrap-scrollspy.js'
-      - '@OroUIBundle/Resources/public/lib/backbone.bootstrap-modal.js'
-      - '@OroUIBundle/Resources/public/lib/jquery/select2.min.js'

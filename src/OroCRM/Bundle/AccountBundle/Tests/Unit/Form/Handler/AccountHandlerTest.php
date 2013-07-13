@@ -66,7 +66,7 @@ class AccountHandlerTest extends \PHPUnit_Framework_TestCase
             ->with($this->entity);
 
         $this->form->expects($this->never())
-            ->method('bind');
+            ->method('submit');
 
         $this->assertFalse($this->handler->process($this->entity));
     }
@@ -84,7 +84,7 @@ class AccountHandlerTest extends \PHPUnit_Framework_TestCase
             ->with($this->entity);
 
         $this->form->expects($this->once())
-            ->method('bind')
+            ->method('submit')
             ->with($this->request);
 
         $this->assertFalse($this->handler->process($this->entity));
@@ -115,7 +115,7 @@ class AccountHandlerTest extends \PHPUnit_Framework_TestCase
             ->with($this->entity);
 
         $this->form->expects($this->once())
-            ->method('bind')
+            ->method('submit')
             ->with($this->request);
 
         $this->form->expects($this->once())

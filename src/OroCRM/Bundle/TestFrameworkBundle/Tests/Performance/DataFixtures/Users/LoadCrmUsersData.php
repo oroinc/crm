@@ -20,7 +20,9 @@ use Oro\Bundle\UserBundle\Entity\UserManager;
 use Oro\Bundle\UserBundle\Entity\User;
 
 /**
- * @SuppressWarnings(PHPMD)
+ * @SuppressWarnings(PHPMD.TooManyMethods)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * TODO: This class should be refactored (BAP-975)
  */
 class LoadCrmUsersData extends AbstractFixture implements ContainerAwareInterface
 {
@@ -171,6 +173,8 @@ class LoadCrmUsersData extends AbstractFixture implements ContainerAwareInterfac
      * @param array $hobbies
      * @param \DateTime $lastVisit
      * @return User
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * TODO: This method should be refactored (BAP-975)
      */
     private function createUser(
         $username,

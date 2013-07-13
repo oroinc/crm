@@ -1,6 +1,6 @@
 {#
     Available variables:
-    * entity       - user entity OroCRM\Bundle\ContactBundle\Entity\Contact
+    * entity       - user entity OroCRM\Bundle\ContactBundle\Entity\Contact or null
     * indexer_item - indexer item Oro\Bundle\SearchBundle\Query\Result\Item
 #}
 {% extends 'OroSearchBundle:Search:searchResultItem.html.twig' %}
@@ -9,12 +9,8 @@
 {% set format = oro_config_value('oro_user.name_format') %}
 {% set showImage = false %}
 
-{% if entity %}
-    {% set recordUrl = indexer_item.recordUrl %}
-    {% set title = entity.__toString %}
-{% else %}
-    {% set title = indexer_item.recordTitle %}
-{% endif %}
+{% set recordUrl = indexer_item.recordUrl %}
+{% set title = entity ? entity.__toString : indexer_item.recordTitle %}
 
 {% set entityType = 'Contact'|trans %}
 

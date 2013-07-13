@@ -1,6 +1,5 @@
 {% extends 'OroUIBundle:actions:update.html.twig' %}
-{% form_theme form with 'OroUIBundle:Form:fields.html.twig' %}
-{% set title = form.vars.value.id ? form.vars.value.label|default('N/A') : 'Add Customer Group'|trans %}
+{% set title = form.vars.value.id ? form.vars.value.name|default('N/A') : 'Add Customer Group'|trans %}
 {% if form.vars.value.id %}
     {% oro_title_set({params : {"%group.label%": form.vars.value.label} }) %}
 {% endif %}
