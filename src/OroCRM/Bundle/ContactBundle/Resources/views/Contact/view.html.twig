@@ -11,7 +11,6 @@
 {% endblock %}
 
 {% block navButtons %}
-    {{ UI.button({'path' : path('orocrm_contact_index'), 'iClass' : 'icon-chevron-left ', 'title' : 'Back', 'label' : 'Back'}) }}
     {% if resource_granted('orocrm_contact_update') %}
         {{ UI.button({'path' : path('orocrm_contact_update', { 'id': entity.id }), 'iClass' : 'icon-edit ', 'title' : 'Update contact', 'label' : 'Edit'}) }}
     {% endif %}
