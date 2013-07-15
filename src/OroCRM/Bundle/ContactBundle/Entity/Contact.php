@@ -5,13 +5,15 @@ namespace OroCRM\Bundle\ContactBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use OroCRM\Bundle\AccountBundle\Entity\Account;
 
 use JMS\Serializer\Annotation\Type;
 use JMS\Serializer\Annotation\Exclude;
 
 use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 
+use OroCRM\Bundle\AccountBundle\Entity\Account;
+
+use Oro\Bundle\TagBundle\Entity\Taggable;
 use Oro\Bundle\AddressBundle\Entity\AddressType;
 use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityFlexible;
 
@@ -20,7 +22,7 @@ use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityFlexible;
  * @ORM\Table(name="orocrm_contact")
  * @ORM\HasLifecycleCallbacks()
  */
-class Contact extends AbstractEntityFlexible
+class Contact extends AbstractEntityFlexible implements Taggable
 {
     /**
      * @ORM\Id
@@ -79,6 +81,11 @@ class Contact extends AbstractEntityFlexible
      * @Exclude
      */
     protected $nameFormat;
+
+    /**
+     * @var ArrayCollection
+     */
+    private $tags;
 
     public function __construct()
     {
@@ -419,5 +426,33 @@ class Contact extends AbstractEntityFlexible
         }
 
         return $value;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTaggableId()
+    {
+        return $this->getId();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTags()
+    {
+        $this->tags = $this->tags ?: new ArrayCollection();
+
+        return $this->tags;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setTags($tags)
+    {
+        $this->tags = $tags;
+
+        return $this;
     }
 }
