@@ -2,7 +2,6 @@
 
 namespace OroCRM\Bundle\AccountBundle\Datagrid;
 
-use Oro\Bundle\GridBundle\Datagrid\FlexibleDatagridManager;
 use Oro\Bundle\GridBundle\Field\FieldDescriptionCollection;
 use Oro\Bundle\GridBundle\Field\FieldDescription;
 use Oro\Bundle\GridBundle\Field\FieldDescriptionInterface;
@@ -10,9 +9,15 @@ use Oro\Bundle\GridBundle\Filter\FilterInterface;
 use Oro\Bundle\GridBundle\Sorter\SorterInterface;
 use Oro\Bundle\GridBundle\Datagrid\ParametersInterface;
 use Oro\Bundle\GridBundle\Datagrid\ProxyQueryInterface;
+use Oro\Bundle\GridBundle\Datagrid\ORM\QueryFactory\EntityQueryFactory;
 
 class AccountContactUpdateDatagridManager extends AccountContactDatagridManager
 {
+    /**
+     * @var string
+     */
+    protected $hasAccountExpression;
+
     /**
      * {@inheritDoc}
      */
@@ -22,16 +27,17 @@ class AccountContactUpdateDatagridManager extends AccountContactDatagridManager
         $fieldHasAccount->setName('has_account');
         $fieldHasAccount->setOptions(
             array(
-                'type'        => FieldDescriptionInterface::TYPE_BOOLEAN,
-                'label'       => $this->translate('Assigned'),
-                'field_name'  => 'hasCurrentAccount',
-                'expression'  => 'hasCurrentAccount',
-                'nullable'    => false,
-                'editable'    => true,
-                'sortable'    => true,
-                'filter_type' => FilterInterface::TYPE_BOOLEAN,
-                'filterable'  => true,
-                'show_filter' => true,
+                'type'            => FieldDescriptionInterface::TYPE_BOOLEAN,
+                'label'           => $this->translate('Assigned'),
+                'field_name'      => 'hasCurrentAccount',
+                'expression'      => $this->getHasAccountExpression(),
+                'nullable'        => false,
+                'editable'        => true,
+                'sortable'        => true,
+                'filter_type'     => FilterInterface::TYPE_BOOLEAN,
+                'filterable'      => true,
+                'show_filter'     => true,
+                'filter_by_where' => true,
             )
         );
         $fieldsCollection->add($fieldHasAccount);
@@ -46,24 +52,34 @@ class AccountContactUpdateDatagridManager extends AccountContactDatagridManager
     {
         $this->applyJoinWithAddressAndCountry($query);
 
-        $entityAlias = $query->getRootAlias();
+        $query->addSelect($this->getHasAccountExpression() . ' AS hasCurrentAccount', true);
+    }
 
-        if ($this->getAccount()->getId()) {
-            $query->addSelect(
-                "CASE WHEN " .
-                "(:account MEMBER OF $entityAlias.accounts OR $entityAlias.id IN (:data_in)) AND " .
-                "$entityAlias.id NOT IN (:data_not_in) ".
-                "THEN 1 ELSE 0 END AS hasCurrentAccount",
-                true
-            );
-        } else {
-            $query->addSelect(
-                "CASE WHEN " .
-                "$entityAlias.id IN (:data_in) AND $entityAlias.id NOT IN (:data_not_in) ".
-                "THEN 1 ELSE 0 END AS hasCurrentAccount",
-                true
-            );
+    /**
+     * @return string
+     */
+    protected function getHasAccountExpression()
+    {
+        if (null === $this->hasAccountExpression) {
+            /** @var EntityQueryFactory $queryFactory */
+            $queryFactory = $this->queryFactory;
+            $entityAlias = $queryFactory->getAlias();
+
+            if ($this->getAccount()->getId()) {
+                $this->hasAccountExpression =
+                    "CASE WHEN " .
+                    "(:account MEMBER OF $entityAlias.accounts OR $entityAlias.id IN (:data_in)) AND " .
+                    "$entityAlias.id NOT IN (:data_not_in) ".
+                    "THEN true ELSE false END";
+            } else {
+                $this->hasAccountExpression =
+                    "CASE WHEN " .
+                    "$entityAlias.id IN (:data_in) AND $entityAlias.id NOT IN (:data_not_in) ".
+                    "THEN true ELSE false END";
+            }
         }
+
+        return $this->hasAccountExpression;
     }
 
     /**
