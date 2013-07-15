@@ -68,7 +68,7 @@ class ContactAccountUpdateDatagridManager extends ContactAccountDatagridManager
             if ($this->getContact()->getId()) {
                 $this->hasContactExpression =
                     "CASE WHEN " .
-                    "(:contact MEMBER OF $entityAlias.accounts OR $entityAlias.id IN (:data_in)) AND " .
+                    "(:contact MEMBER OF $entityAlias.contacts OR $entityAlias.id IN (:data_in)) AND " .
                     "$entityAlias.id NOT IN (:data_not_in) ".
                     "THEN true ELSE false END";
             } else {
