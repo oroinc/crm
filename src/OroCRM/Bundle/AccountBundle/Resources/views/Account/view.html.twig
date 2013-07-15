@@ -1,5 +1,6 @@
 {% extends 'OroUIBundle:actions:view.html.twig' %}
 {% import 'OroUIBundle::macros.html.twig' as macros %}
+{% import 'OroTagBundle::macros.html.twig' as _tag %}
 {% import 'OroAddressBundle:Include:viewMacro.html.twig' as addressView %}
 {% set format = oro_config_value('oro_user.name_format') %}
 {% oro_title_set({params : {"%account.name%": entity.name|default('N/A')} }) %}
@@ -71,6 +72,11 @@
         {% set additional = additional|merge([{'title' : null, 'data' : attributes}]) %}
     {% endif %}
 
+    {% set dataSubBlocks = [UI.attibuteRow('Account Name', entity.name)] %}
+    {% if resource_granted('oro_tag_view_tag_cloud') %}
+        {% set dataSubBlocks = dataSubBlocks|merge([UI.renderAttribute('Tags', _tag.renderView(entity))]) %}
+    {% endif %}
+
     {% set dataBlocks =
             [
                 {
@@ -79,14 +85,14 @@
                     'subblocks': [
                         {
                             'title': 'Basic Information',
-                            'data': [
-                                UI.attibuteRow('Account Name', entity.name),
-                            ]
+                            'data' : dataSubBlocks
                         }
                     ]
                 }
             ]
     %}
+
+
 
     {% if (accountAddresses|length) %}
     {% set dataBlocks = dataBlocks|merge([{'title' : 'Addresses', 'subblocks': accountAddresses}])%}
