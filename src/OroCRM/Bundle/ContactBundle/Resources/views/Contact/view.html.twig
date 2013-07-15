@@ -1,4 +1,5 @@
 {% extends 'OroUIBundle:actions:view.html.twig' %}
+{% import 'OroTagBundle::macros.html.twig' as _tag %}
 {% import 'OroUIBundle::macros.html.twig' as macros %}
 {% import 'OroAddressBundle:Include:viewMacro.html.twig' as addressView %}
 {% set format = oro_config_value('oro_user.name_format') %}
@@ -66,6 +67,13 @@
             'data': addresses
         } %}
         {% set dataSubBlocks = dataSubBlocks|merge([addressSubBlock]) %}
+    {% endif %}
+
+    {% if resource_granted('oro_tag_view_tag_cloud') %}
+        {% set dataSubBlocks = dataSubBlocks|merge([{
+            title: '',
+            data : [UI.renderAttribute('Tags', _tag.renderView(entity))]
+        }]) %}
     {% endif %}
 
     {% set dataBlocks = [

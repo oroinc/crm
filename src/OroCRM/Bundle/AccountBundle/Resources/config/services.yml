@@ -62,6 +62,8 @@ services:
             - @orocrm_account.form.account
             - @request
             - @doctrine.orm.entity_manager
+        tags:
+            - { name: oro_tag.tag_manager }
 
     # Form type
     orocrm_account.form.type.account_select:
@@ -124,6 +126,8 @@ services:
             - @orocrm_account.form.account.api
             - @request
             - @doctrine.orm.entity_manager
+        tags:
+            - { name: oro_tag.tag_manager }
 
     orocrm_account.form.autocomplete.account.search_handler:
         parent: oro_form.autocomplete.search_handler

@@ -27,6 +27,12 @@ class AccountType extends FlexibleType
             )
         );
 
+        // tags
+        $builder->add(
+            'tags',
+            'oro_tag_select'
+        );
+
         // contacts
         $builder->add(
             'appendContacts',
