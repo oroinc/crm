@@ -99,11 +99,17 @@ class ContactController extends Controller
             return $this->get('oro_grid.renderer')->renderResultsJsonResponse($datagridView);
         }
 
-        $backUrl = $this->generateUrl('orocrm_contact_index');
-
         if ($this->get('orocrm_contact.form.handler.contact')->process($entity)) {
             $this->getFlashBag()->add('success', 'Contact successfully saved');
-            return $this->redirect($backUrl);
+            if ($this->getRequest()->get('additional_data') == 'save_and_stay') {
+                $routeName =  'orocrm_contact_update';
+                $params = array('id' => $entity->getId());
+            } else {
+                $routeName =  'orocrm_contact_index';
+                $params = null;
+            }
+
+            return $this->redirect($this->generateUrl($routeName,$params));
         }
 
         return array(
