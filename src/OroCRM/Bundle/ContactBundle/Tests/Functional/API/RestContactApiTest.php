@@ -13,7 +13,7 @@ use Oro\Bundle\TestFrameworkBundle\Test\Client;
 class RestContactApiTest extends WebTestCase
 {
     /** @var Client  */
-    public $client = null;
+    protected $client;
 
     /**
      * @var array
@@ -29,7 +29,11 @@ class RestContactApiTest extends WebTestCase
 
     public function setUp()
     {
-        $this->client = static::createClient(array(), ToolsAPI::generateWsseHeader());
+        if (!isset($this->client)) {
+            $this->client = static::createClient(array(), ToolsAPI::generateWsseHeader());
+        } else {
+            $this->client->restart();
+        }
     }
 
     /**
