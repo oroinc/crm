@@ -10,6 +10,7 @@ oro_menu_config:
             route: 'orocrm_account_index'
             extras:
                 routes: ['orocrm_account_*']
+                description: List of accounts
 
         shortcut_new_account:
             label: Create new account

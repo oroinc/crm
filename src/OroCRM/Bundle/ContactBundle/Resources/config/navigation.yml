@@ -10,11 +10,13 @@ oro_menu_config:
             route: 'orocrm_contact_index'
             extras:
                 routes: ['/^orocrm_contact_(?!group\w+|group\w+)\w+$/']
+                description: List of contacts
         contact_group_list:
             label: 'Contact Groups'
             route: 'orocrm_contact_group_index'
             extras:
                 routes: ['orocrm_contact_group_*']
+                description: List of contact groups
         shortcut_new_contact:
             label: Create new contact
             route: orocrm_contact_create
@@ -26,6 +28,11 @@ oro_menu_config:
             route: orocrm_contact_index
             extras:
                 description: List of contacts
+        shortcut_new_contact_group:
+            label: Create new contact group
+            route: orocrm_contact_group_create
+            extras:
+                description: Create new contact group instance
 
     tree:
         application_menu:
@@ -39,6 +46,7 @@ oro_menu_config:
             children:
                 shortcut_new_contact: ~
                 shortcut_list_contacts: ~
+                shortcut_new_contact_group: ~
 
 oro_titles:
     orocrm_contact_index: Contacts
