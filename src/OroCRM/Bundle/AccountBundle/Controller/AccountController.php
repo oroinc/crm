@@ -119,15 +119,16 @@ class AccountController extends Controller
 
         if ($this->get('orocrm_account.form.handler.account')->process($entity)) {
             $this->getFlashBag()->add('success', 'Account successfully saved');
-            if ($this->getRequest()->get('additional_data') == 'save_and_stay') {
-                $routeName =  'orocrm_account_update';
-                $params = array('id' => $entity->getId());
-            } else {
-                $routeName =  'orocrm_account_index';
-                $params = null;
-            }
 
-            return $this->redirect($this->generateUrl($routeName,$params));
+            return $this->get('oro_ui.router')->actionRedirect(
+                array(
+                    'route' => 'orocrm_account_update',
+                    'parameters' => array('id' => $entity->getId()),
+                ),
+                array(
+                    'route' => 'orocrm_account_index',
+                )
+            );
         }
 
         return array(
