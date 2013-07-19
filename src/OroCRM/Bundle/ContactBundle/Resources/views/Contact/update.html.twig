@@ -41,7 +41,8 @@
         {{ UI.buttonSeparator() }}
     {% endif %}
     {{ UI.button({'path' : path('orocrm_contact_index'), 'title' : 'Cancel', 'label' : 'Cancel'}) }}
-    {{ UI.buttonType({'type': 'submit', 'class': 'btn-success', 'label': 'Save'}) }}
+    {{ UI.saveAndStayButton() }}
+    {{ UI.saveAndCloseButton() }}
 {% endblock %}
 
 {% block pageHeader %}
