@@ -2,9 +2,20 @@
 request:
     groups: ~
     attributes:
-        first_name: Contact_fname_%str%
-        last_name: Contact_lname
-        name_prefix: Contact name prefix
-        description: Contact description
+            first_name: Contact_fname_%str%
+            last_name: Contact_lname
+            name_prefix: Contact name prefix
+            description: Contact description
+    addresses:
+        -
+            firstName: Contact_fname_%str%_address
+            lastName: Contact_lnamea_ddress
+            street: avenu 230
+            city: New York
+            country: US
+            postalCode: 10001
+            types: ['billing']
+            primary: true
+
 response:
     return: true
