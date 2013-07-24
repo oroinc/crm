@@ -5,6 +5,7 @@ namespace OroCRM\Bundle\ContactBundle\Tests\Functional\API;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Bundle\TestFrameworkBundle\Test\ToolsAPI;
 use Oro\Bundle\TestFrameworkBundle\Test\Client;
+use Oro\Bundle\AddressBundle\Entity\AddressType;
 
 /**
  * @outputBuffering enabled
@@ -13,23 +14,28 @@ use Oro\Bundle\TestFrameworkBundle\Test\Client;
 class RestContactApiTest extends WebTestCase
 {
     /** @var Client  */
-    public $client = null;
+    protected $client;
 
     /**
      * @var array
      */
     protected $testAddress = array(
-        'types' => array('shipping'),
         'street' => 'contact_street',
         'city' => 'contact_city',
         'country' => 'US',
         'state' => 'US.FL',
         'postalCode' => '12345',
+        'primary' => true,
+        'types' => array(AddressType::TYPE_BILLING, AddressType::TYPE_SHIPPING),
     );
 
     public function setUp()
     {
-        $this->client = static::createClient(array(), ToolsAPI::generateWsseHeader());
+        if (!isset($this->client)) {
+            $this->client = static::createClient(array(), ToolsAPI::generateWsseHeader());
+        } else {
+            $this->client->restart();
+        }
     }
 
     /**

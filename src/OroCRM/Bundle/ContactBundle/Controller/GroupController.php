@@ -61,7 +61,16 @@ class GroupController extends Controller
             $this->get('session')->getFlashBag()->add('success', 'Group successfully saved');
 
             if (!$this->getRequest()->get('_widgetContainer')) {
-                return $this->redirect($this->generateUrl('orocrm_contact_group_index'));
+
+                return $this->get('oro_ui.router')->actionRedirect(
+                    array(
+                        'route' => 'orocrm_contact_group_update',
+                        'parameters' => array('id' => $entity->getId()),
+                    ),
+                    array(
+                        'route' => 'orocrm_contact_group_index',
+                    )
+                );
             }
         }
 

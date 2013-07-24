@@ -117,11 +117,18 @@ class AccountController extends Controller
             return $this->get('oro_grid.renderer')->renderResultsJsonResponse($datagridView);
         }
 
-        $backUrl = $this->generateUrl('orocrm_account_index');
-
         if ($this->get('orocrm_account.form.handler.account')->process($entity)) {
             $this->getFlashBag()->add('success', 'Account successfully saved');
-            return $this->redirect($backUrl);
+
+            return $this->get('oro_ui.router')->actionRedirect(
+                array(
+                    'route' => 'orocrm_account_update',
+                    'parameters' => array('id' => $entity->getId()),
+                ),
+                array(
+                    'route' => 'orocrm_account_index',
+                )
+            );
         }
 
         return array(
