@@ -90,11 +90,20 @@ class AclTest extends \PHPUnit_Extensions_Selenium2TestCase
         $login->setUsername($username)
             ->setPassword('123123q')
             ->submit();
-        $login->byXPath("//div[@class='navbar application-menu']//a[contains(.,'System')]")->click();
-        $login->assertElementNotPresent("//div[@id='system_tab']//a[contains(.,'Users')]", 'Element present so ACL for Users do not work');
-        $login->assertElementNotPresent("//div[@id='system_tab']//a[contains(.,'Roles')]", 'Element present so ACL for User Roles do not work');
-        $login->assertElementNotPresent("//div[@id='system_tab']//a[contains(.,'Groups')]", 'Element present so ACL for User Groups do not work');
-        $login->assertElementNotPresent("//div[@id='system_tab']//a[contains(.,'Data Audit')]", 'Element present so ACL for Data Audit do not work');
+        $login->moveto($login->byXPath("//div[@id='main-menu']/ul/li/a[contains(.,'System')]"));
+        $login->assertElementNotPresent(
+            "//div[@id='main-menu']/ul/li[a[contains(.,'System')]]//a[contains(.,'Users')]",
+            'Element present so ACL for Users do not work'
+        );
+        $login->assertElementNotPresent(
+            "//div[@id='main-menu']/ul/li[a[contains(.,'System')]]//a[contains(.,'Roles')]",
+            'Element present so ACL for User Roles do not work');
+        $login->assertElementNotPresent(
+            "//div[@id='main-menu']/ul/li[a[contains(.,'System')]]//a[contains(.,'Groups')]",
+            'Element present so ACL for User Groups do not work');
+        $login->assertElementNotPresent(
+            "//div[@id='main-menu']/ul/li[a[contains(.,'System')]]//a[contains(.,'Data Audit')]",
+            'Element present so ACL for Data Audit do not work');
         $login->assertElementNotPresent("//div[@id='search-div']", 'Element present so ACL for Search do not work');
         $login->byXPath("//ul[@class='nav pull-right']//a[@class='dropdown-toggle']")->click();
         $login->assertElementNotPresent("//ul[@class='dropdown-menu']//a[contains(., 'My User')]", 'Element present so ACL for Search do not work');
