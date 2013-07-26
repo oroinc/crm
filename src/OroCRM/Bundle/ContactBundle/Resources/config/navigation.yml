@@ -49,11 +49,11 @@ oro_menu_config:
                 shortcut_new_contact_group: ~
 
 oro_titles:
-    orocrm_contact_index: Contacts
-    orocrm_contact_view: %%contact.name%% - Contacts
+    orocrm_contact_index: ~
+    orocrm_contact_view: %%contact.name%%
     orocrm_contact_create: Create Contact
-    orocrm_contact_update: %%contact.name%% - Contacts
+    orocrm_contact_update: %%contact.name%%
 
-    orocrm_contact_group_index: Contact Groups
+    orocrm_contact_group_index: ~
     orocrm_contact_group_create: Create Contact Group
-    orocrm_contact_group_update: %%group.label%% - Contact Group
+    orocrm_contact_group_update: %%group.label%%
