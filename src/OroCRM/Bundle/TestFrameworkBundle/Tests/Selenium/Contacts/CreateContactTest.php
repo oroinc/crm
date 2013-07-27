@@ -125,7 +125,7 @@ class CreateContactTest extends \PHPUnit_Extensions_Selenium2TestCase
             ->openContacts()
             ->filterBy('Email', $contactname . '@mail.com')
             ->open(array($contactname))
-            ->assertTitle($contactname . '_last, ' . $contactname . '_first - Contacts')
+            ->assertTitle($contactname . '_last, ' . $contactname . '_first - Contacts - Customers - ORO')
             ->edit()
             ->setFirstName($newContactname . '_first')
             ->save()
