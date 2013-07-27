@@ -63,7 +63,7 @@ class AclTest extends \PHPUnit_Extensions_Selenium2TestCase
             ->submit()
             ->openUsers()
             ->add()
-            ->assertTitle('Create User')
+            ->assertTitle('Create User - Users - System - ORO')
             ->setUsername($username)
             ->enable()
             ->setFirstpassword('123123q')

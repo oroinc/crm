@@ -37,7 +37,7 @@ class CreateAccountTest extends \PHPUnit_Extensions_Selenium2TestCase
             ->add()
             ->setAccountName($accountname)
             ->save()
-            ->assertTitle('Accounts')
+            ->assertTitle('Accounts - Customers - ORO')
             ->assertMessage('Account successfully saved');
 
         return $accountname;
