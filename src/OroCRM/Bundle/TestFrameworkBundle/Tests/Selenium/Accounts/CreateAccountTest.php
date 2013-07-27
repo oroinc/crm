@@ -108,7 +108,7 @@ class CreateAccountTest extends \PHPUnit_Extensions_Selenium2TestCase
             ->filterBy('Name', $accountname)
             ->open(array($accountname))
             ->delete()
-            ->assertTitle('Accounts')
+            ->assertTitle('Accounts - Customers - ORO')
             ->assertMessage('Item was deleted');
 
         $login->openUsers()->filterBy('Name', $accountname)->assertNoDataMessage('No Accounts were found to match your search');
