@@ -62,7 +62,7 @@ class CreateAccountTest extends \PHPUnit_Extensions_Selenium2TestCase
             ->setState('Aqm')
             ->setZipCode('Zip Code 000')
             ->save()
-            ->assertTitle('Accounts')
+            ->assertTitle('Accounts - Customers - OR')
             ->assertMessage('Account successfully saved');
     }
 
@@ -83,7 +83,7 @@ class CreateAccountTest extends \PHPUnit_Extensions_Selenium2TestCase
             ->filterBy('Name', $accountname)
             ->open(array($accountname))
             ->edit()
-            ->assertTitle($accountname . ' - Accounts')
+            ->assertTitle($accountname . ' - Accounts - Customers - ORO')
             ->setAccountName($newAccountname)
             ->save()
             ->assertTitle('Accounts')

@@ -75,7 +75,7 @@ class AclTest extends \PHPUnit_Extensions_Selenium2TestCase
             ->save()
             ->assertMessage('User successfully saved')
             ->close()
-            ->assertTitle('Users');
+            ->assertTitle('Users - System - ORO');
 
         return $username;
     }
