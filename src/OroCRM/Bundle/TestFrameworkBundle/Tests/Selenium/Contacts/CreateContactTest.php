@@ -66,7 +66,7 @@ class CreateContactTest extends \PHPUnit_Extensions_Selenium2TestCase
             ->setAddress($this->addressPrimary)
             ->setAddress($this->addressSecondary, 1)
             ->save()
-            ->assertTitle('Contacts')
+            ->assertTitle('Contacts - Customers - ORO')
             ->assertMessage('Contact successfully saved')
             ->close()
             ->filterBy('Email', $contactname . '@mail.com')
