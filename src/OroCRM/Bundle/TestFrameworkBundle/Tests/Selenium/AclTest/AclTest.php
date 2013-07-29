@@ -63,7 +63,7 @@ class AclTest extends \PHPUnit_Extensions_Selenium2TestCase
             ->submit()
             ->openUsers()
             ->add()
-            ->assertTitle('Create User - Users - System - OroCRM')
+            ->assertTitle('Create User - Users - System')
             ->setUsername($username)
             ->enable()
             ->setFirstpassword('123123q')
@@ -75,7 +75,7 @@ class AclTest extends \PHPUnit_Extensions_Selenium2TestCase
             ->save()
             ->assertMessage('User successfully saved')
             ->close()
-            ->assertTitle('Users - System - OroCRM');
+            ->assertTitle('Users - System');
 
         return $username;
     }
@@ -174,13 +174,13 @@ class AclTest extends \PHPUnit_Extensions_Selenium2TestCase
             ->setPassword('123123q')
             ->submit()
             ->openAccounts()
-            ->assertTitle('Accounts - Customers - OroCRM')
+            ->assertTitle('Accounts - Customers')
             ->assertElementNotPresent("//div[@class='container-fluid']//a[@title='Create account']")
             ->openContacts()
-            ->assertTitle('Contacts - Customers - OroCRM')
+            ->assertTitle('Contacts - Customers')
             ->assertElementNotPresent("//div[@class='container-fluid']//a[@title='Create contact']")
             ->openContactGroups()
-            ->assertTitle('Contact Groups - Customers - OroCRM')
+            ->assertTitle('Contact Groups - Customers')
             ->assertElementNotPresent("//div[@class='container-fluid']//a[@title='Create contact group']")
             ->openAclCheck()
             ->assertAcl('account/create')
