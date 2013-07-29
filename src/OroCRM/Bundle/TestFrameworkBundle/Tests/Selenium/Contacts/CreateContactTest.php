@@ -66,12 +66,12 @@ class CreateContactTest extends \PHPUnit_Extensions_Selenium2TestCase
             ->setAddress($this->addressPrimary)
             ->setAddress($this->addressSecondary, 1)
             ->save()
-            ->assertTitle('Contacts - Customers - ORO')
+            ->assertTitle('Contacts - Customers - OroCRM')
             ->assertMessage('Contact successfully saved')
             ->close()
             ->filterBy('Email', $contactname . '@mail.com')
             ->open(array($contactname))
-            ->assertTitle($contactname . '_last, ' . $contactname . '_first - Contacts - Customers - ORO')
+            ->assertTitle($contactname . '_last, ' . $contactname . '_first - Contacts - Customers - OroCRM')
             ->edit()
             ->getAddress($addressPrimary)
             ->getAddress($addressSecondary, 1);
@@ -104,7 +104,7 @@ class CreateContactTest extends \PHPUnit_Extensions_Selenium2TestCase
             ->setAddressCountry('Kazak')
             ->setAddressState('Aqm')
             ->save()
-            ->assertTitle('Contacts - Customers - ORO')
+            ->assertTitle('Contacts - Customers - OroCRM')
             ->assertMessage('Contact successfully saved')
             ->close();
     }
@@ -125,11 +125,11 @@ class CreateContactTest extends \PHPUnit_Extensions_Selenium2TestCase
             ->openContacts()
             ->filterBy('Email', $contactname . '@mail.com')
             ->open(array($contactname))
-            ->assertTitle($contactname . '_last, ' . $contactname . '_first - Contacts - Customers - ORO')
+            ->assertTitle($contactname . '_last, ' . $contactname . '_first - Contacts - Customers - OroCRM')
             ->edit()
             ->setFirstName($newContactname . '_first')
             ->save()
-            ->assertTitle('Contacts - Customers - ORO')
+            ->assertTitle('Contacts - Customers - OroCRM')
             ->assertMessage('Contact successfully saved')
             ->close();
 
@@ -151,7 +151,7 @@ class CreateContactTest extends \PHPUnit_Extensions_Selenium2TestCase
             ->filterBy('Email', $contactname . '@mail.com')
             ->open(array($contactname))
             ->delete()
-            ->assertTitle('Contacts - Customers - ORO')
+            ->assertTitle('Contacts - Customers - OroCRM')
             ->assertMessage('Item was deleted');
 
         $login->openUsers()->filterBy('Email', $contactname . '@mail.com')->assertNoDataMessage('No Contacts were found to match your search');
