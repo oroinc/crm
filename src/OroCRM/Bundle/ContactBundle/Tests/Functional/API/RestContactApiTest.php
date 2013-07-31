@@ -5,6 +5,7 @@ namespace OroCRM\Bundle\ContactBundle\Tests\Functional\API;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Bundle\TestFrameworkBundle\Test\ToolsAPI;
 use Oro\Bundle\TestFrameworkBundle\Test\Client;
+use Oro\Bundle\AddressBundle\Entity\AddressType;
 
 /**
  * @outputBuffering enabled
@@ -12,26 +13,29 @@ use Oro\Bundle\TestFrameworkBundle\Test\Client;
  */
 class RestContactApiTest extends WebTestCase
 {
-    /**
-     * @var Client
-     */
-    public $client = null;
+    /** @var Client  */
+    protected $client;
 
     /**
      * @var array
      */
     protected $testAddress = array(
-        'type' => 'shipping',
         'street' => 'contact_street',
         'city' => 'contact_city',
         'country' => 'US',
         'state' => 'US.FL',
         'postalCode' => '12345',
+        'primary' => true,
+        'types' => array(AddressType::TYPE_BILLING, AddressType::TYPE_SHIPPING),
     );
 
     public function setUp()
     {
-        $this->client = static::createClient(array(), ToolsAPI::generateWsseHeader());
+        if (!isset($this->client)) {
+            $this->client = static::createClient(array(), ToolsAPI::generateWsseHeader());
+        } else {
+            $this->client->restart();
+        }
     }
 
     /**
@@ -42,7 +46,7 @@ class RestContactApiTest extends WebTestCase
         $this->assertCount(1, $actualAddresses);
         $address = current($actualAddresses);
 
-        foreach (array('type', 'street', 'city') as $key) {
+        foreach (array('types', 'street', 'city') as $key) {
             $this->assertArrayHasKey($key, $address);
             $this->assertEquals($this->testAddress[$key], $address[$key]);
         }
@@ -64,7 +68,7 @@ class RestContactApiTest extends WebTestCase
                 "addresses" => array($this->testAddress)
             )
         );
-        $this->client->request('POST', 'http://localhost/api/rest/latest/contact', $request);
+        $this->client->request('POST', $this->client->generate('oro_api_post_contact'), $request);
         $result = $this->client->getResponse();
         ToolsAPI::assertJsonResponse($result, 201);
 
@@ -82,7 +86,7 @@ class RestContactApiTest extends WebTestCase
      */
     public function testGetContact($request)
     {
-        $this->client->request('GET', 'http://localhost/api/rest/latest/contacts');
+        $this->client->request('GET', $this->client->generate('oro_api_get_contacts'));
         $result = $this->client->getResponse();
         $entities = json_decode($result->getContent(), true);
         $this->assertNotEmpty($entities);
@@ -96,7 +100,7 @@ class RestContactApiTest extends WebTestCase
         }
         $this->assertNotNull($requiredContact);
 
-        $this->client->request('GET', 'http://localhost/api/rest/latest/contacts/' . $requiredContact['id']);
+        $this->client->request('GET', $this->client->generate('oro_api_get_contact', array('id' => $requiredContact['id'])));
         $result = $this->client->getResponse();
         ToolsAPI::assertJsonResponse($result, 200);
 
@@ -117,17 +121,17 @@ class RestContactApiTest extends WebTestCase
      */
     public function testUpdateContact($contact, $request)
     {
-        $this->testAddress['type'] = 'billing';
+        $this->testAddress['types'] = array('billing');
 
         $request['contact']['attributes']['first_name'] .= "_Updated";
-        $request['contact']['addresses'][0]['type'] = $this->testAddress['type'];
+        $request['contact']['addresses'][0]['types'] = $this->testAddress['types'];
         $request['contact']['addresses'][0]['primary'] = true;
 
-        $this->client->request('PUT', 'http://localhost/api/rest/latest/contacts/' . $contact['id'], $request);
+        $this->client->request('PUT', $this->client->generate('oro_api_put_contact', array('id' => $contact['id'])), $request);
         $result = $this->client->getResponse();
         ToolsAPI::assertJsonResponse($result, 204);
 
-        $this->client->request('GET', 'http://localhost/api/rest/latest/contacts/' . $contact['id']);
+        $this->client->request('GET', $this->client->generate('oro_api_get_contact', array('id' => $contact['id'])));
         $result = $this->client->getResponse();
         ToolsAPI::assertJsonResponse($result, 200);
 
@@ -148,11 +152,11 @@ class RestContactApiTest extends WebTestCase
      */
     public function testDeleteContact($contact)
     {
-        $this->client->request('DELETE', 'http://localhost/api/rest/latest/contacts' . '/' . $contact['id']);
+        $this->client->request('DELETE', $this->client->generate('oro_api_delete_contact', array('id' => $contact['id'])));
         $result = $this->client->getResponse();
         ToolsAPI::assertJsonResponse($result, 204);
 
-        $this->client->request('GET', 'http://localhost/api/rest/latest/contacts' . '/' . $contact['id']);
+        $this->client->request('GET', $this->client->generate('oro_api_get_contact', array('id' => $contact['id'])));
         $result = $this->client->getResponse();
         ToolsAPI::assertJsonResponse($result, 404);
     }

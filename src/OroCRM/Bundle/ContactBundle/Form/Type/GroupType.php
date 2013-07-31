@@ -15,7 +15,7 @@ class GroupType extends AbstractType
     {
         $builder
             ->add(
-                'name',
+                'label',
                 'text',
                 array(
                     'required' => true,

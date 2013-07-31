@@ -45,17 +45,21 @@ class ContactTypeTest extends \PHPUnit_Framework_TestCase
 
         $builder->expects($this->at(1))
             ->method('add')
-            ->with('multiAddress', 'oro_address_collection')
+            ->with('tags', 'oro_tag_select')
             ->will($this->returnSelf());
         $builder->expects($this->at(2))
             ->method('add')
-            ->with('groups', 'entity')
+            ->with('addresses', 'oro_address_collection')
             ->will($this->returnSelf());
         $builder->expects($this->at(3))
             ->method('add')
-            ->with('appendAccounts', 'oro_entity_identifier')
+            ->with('groups', 'entity')
             ->will($this->returnSelf());
         $builder->expects($this->at(4))
+            ->method('add')
+            ->with('appendAccounts', 'oro_entity_identifier')
+            ->will($this->returnSelf());
+        $builder->expects($this->at(5))
             ->method('add')
             ->with('removeAccounts', 'oro_entity_identifier')
             ->will($this->returnSelf());

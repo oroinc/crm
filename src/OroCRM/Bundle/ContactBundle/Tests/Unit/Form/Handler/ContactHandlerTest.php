@@ -49,6 +49,11 @@ class ContactHandlerTest extends \PHPUnit_Framework_TestCase
 
         $this->entity  = new Contact();
         $this->handler = new ContactHandler($this->form, $this->request, $this->manager);
+        $this->handler->setTagManager(
+            $this->getMockBuilder('Oro\Bundle\TagBundle\Entity\TagManager')
+                ->disableOriginalConstructor()
+                ->getMock()
+        );
     }
 
 
@@ -59,7 +64,7 @@ class ContactHandlerTest extends \PHPUnit_Framework_TestCase
             ->with($this->entity);
 
         $this->form->expects($this->never())
-            ->method('bind');
+            ->method('submit');
 
         $this->assertFalse($this->handler->process($this->entity));
     }
@@ -77,7 +82,7 @@ class ContactHandlerTest extends \PHPUnit_Framework_TestCase
         $this->request->setMethod($method);
 
         $this->form->expects($this->once())
-            ->method('bind')
+            ->method('submit')
             ->with($this->request);
 
         $this->assertFalse($this->handler->process($this->entity));
@@ -108,7 +113,7 @@ class ContactHandlerTest extends \PHPUnit_Framework_TestCase
             ->with($this->entity);
 
         $this->form->expects($this->once())
-            ->method('bind')
+            ->method('submit')
             ->with($this->request);
 
         $this->form->expects($this->once())

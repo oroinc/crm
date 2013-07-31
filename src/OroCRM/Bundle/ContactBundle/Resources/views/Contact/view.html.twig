@@ -1,4 +1,5 @@
 {% extends 'OroUIBundle:actions:view.html.twig' %}
+{% import 'OroTagBundle::macros.html.twig' as _tag %}
 {% import 'OroUIBundle::macros.html.twig' as macros %}
 {% import 'OroAddressBundle:Include:viewMacro.html.twig' as addressView %}
 {% set format = oro_config_value('oro_user.name_format') %}
@@ -11,7 +12,6 @@
 {% endblock %}
 
 {% block navButtons %}
-    {{ UI.button({'path' : path('orocrm_contact_index'), 'iClass' : 'icon-chevron-left ', 'title' : 'Back', 'label' : 'Back'}) }}
     {% if resource_granted('orocrm_contact_update') %}
         {{ UI.button({'path' : path('orocrm_contact_update', { 'id': entity.id }), 'iClass' : 'icon-edit ', 'title' : 'Update contact', 'label' : 'Edit'}) }}
     {% endif %}
@@ -44,11 +44,11 @@
 
     {% set addresses = [] %}
     {% set yesNoChoices = {0: 'No'|trans, 1: 'Yes'|trans} %}
-    {% for addressValue in entity.multiAddress %}
+    {% for addressValue in entity.addresses %}
         {% set primaryData = attribute(addressValue, 'primary') %}
         {% set primaryData = yesNoChoices[primaryData]|default('No'|trans) %}
         {% set addresses = addresses|merge([
-            addressView.renderAddressView(addressValue, [{'label': 'Type', 'data': 'type'}]),
+            addressView.renderAddressView(addressValue, [{'label': 'Types', 'value': addressValue.typeLabels|join(', ')}]),
             addressView.renderAddressView(addressValue, [{'label': 'Primary', 'value': primaryData}]),
             addressView.renderAddress(addressValue),
             '<hr/>'
@@ -67,6 +67,13 @@
             'data': addresses
         } %}
         {% set dataSubBlocks = dataSubBlocks|merge([addressSubBlock]) %}
+    {% endif %}
+
+    {% if resource_granted('oro_tag_view_tag_cloud') %}
+        {% set dataSubBlocks = dataSubBlocks|merge([{
+            title: '',
+            data : [UI.renderAttribute('Tags', _tag.renderView(entity))]
+        }]) %}
     {% endif %}
 
     {% set dataBlocks = [

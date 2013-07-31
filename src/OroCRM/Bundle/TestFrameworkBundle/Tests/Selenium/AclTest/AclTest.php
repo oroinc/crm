@@ -38,10 +38,10 @@ class AclTest extends \PHPUnit_Extensions_Selenium2TestCase
             ->setName($this->newRole['ROLE_NAME'] . $randomPrefix)
             ->setLabel($this->newRole['LABEL'] . $randomPrefix)
             ->selectAcl('Template controller')
-            ->selectACl('Contact groups manipulation')
-            ->selectACl('Contact manipulation')
-            ->selectACl('Account manipulation')
-            ->selectACl('Oro Security')
+            ->selectAcl('Contact groups manipulation')
+            ->selectAcl('Contact manipulation')
+            ->selectAcl('Account manipulation')
+            ->selectAcl('Oro Security')
             ->save()
             ->assertMessage('Role successfully saved');
 
@@ -63,7 +63,7 @@ class AclTest extends \PHPUnit_Extensions_Selenium2TestCase
             ->submit()
             ->openUsers()
             ->add()
-            ->assertTitle('Create User')
+            ->assertTitle('Create User - Users - System')
             ->setUsername($username)
             ->enable()
             ->setFirstpassword('123123q')
@@ -75,7 +75,7 @@ class AclTest extends \PHPUnit_Extensions_Selenium2TestCase
             ->save()
             ->assertMessage('User successfully saved')
             ->close()
-            ->assertTitle('Users');
+            ->assertTitle('Users - System');
 
         return $username;
     }
@@ -90,11 +90,23 @@ class AclTest extends \PHPUnit_Extensions_Selenium2TestCase
         $login->setUsername($username)
             ->setPassword('123123q')
             ->submit();
-        $login->byXPath("//div[@class='navbar application-menu']//a[contains(.,'System')]")->click();
-        $login->assertElementNotPresent("//div[@id='system_tab']//a[contains(.,'Users')]", 'Element present so ACL for Users do not work');
-        $login->assertElementNotPresent("//div[@id='system_tab']//a[contains(.,'Roles')]", 'Element present so ACL for User Roles do not work');
-        $login->assertElementNotPresent("//div[@id='system_tab']//a[contains(.,'Groups')]", 'Element present so ACL for User Groups do not work');
-        $login->assertElementNotPresent("//div[@id='system_tab']//a[contains(.,'Data Audit')]", 'Element present so ACL for Data Audit do not work');
+        $login->moveto($login->byXPath("//div[@id='main-menu']/ul/li/a[contains(.,'System')]"));
+        $login->assertElementNotPresent(
+            "//div[@id='main-menu']/ul/li[a[contains(.,'System')]]//a[contains(.,'Users')]",
+            'Element present so ACL for Users do not work'
+        );
+        $login->assertElementNotPresent(
+            "//div[@id='main-menu']/ul/li[a[contains(.,'System')]]//a[contains(.,'Roles')]",
+            'Element present so ACL for User Roles do not work'
+        );
+        $login->assertElementNotPresent(
+            "//div[@id='main-menu']/ul/li[a[contains(.,'System')]]//a[contains(.,'Groups')]",
+            'Element present so ACL for User Groups do not work'
+        );
+        $login->assertElementNotPresent(
+            "//div[@id='main-menu']/ul/li[a[contains(.,'System')]]//a[contains(.,'Data Audit')]",
+            'Element present so ACL for Data Audit do not work'
+        );
         $login->assertElementNotPresent("//div[@id='search-div']", 'Element present so ACL for Search do not work');
         $login->byXPath("//ul[@class='nav pull-right']//a[@class='dropdown-toggle']")->click();
         $login->assertElementNotPresent("//ul[@class='dropdown-menu']//a[contains(., 'My User')]", 'Element present so ACL for Search do not work');
@@ -135,17 +147,17 @@ class AclTest extends \PHPUnit_Extensions_Selenium2TestCase
             ->menu('Roles')
             ->openRoles(false)
             ->open(array($roleName))
-            ->selectACl('Contact groups manipulation')
-            ->selectACl('Contact manipulation')
-            ->selectACl('Account manipulation')
-            ->selectACl('View Account')
-            ->selectACl('View List of Accounts')
-            ->selectACl('View Contact')
-            ->selectACl('View List of Contacts')
-            ->selectACl('View contact group')
-            ->selectACl('View Contact Group List')
+            ->selectAcl('Contact groups manipulation')
+            ->selectAcl('Contact manipulation')
+            ->selectAcl('Account manipulation')
+            ->selectAcl('View Account')
+            ->selectAcl('View List of Accounts')
+            ->selectAcl('View Contact')
+            ->selectAcl('View List of Contacts')
+            ->selectAcl('View contact group')
+            ->selectAcl('View Contact Group List')
             ->selectAcl('View user user')
-            ->selectACl('Edit user')
+            ->selectAcl('Edit user')
             ->save()
             ->assertMessage('Role successfully saved');
     }
@@ -157,19 +169,18 @@ class AclTest extends \PHPUnit_Extensions_Selenium2TestCase
      */
     public function testViewAccountsContacts($username)
     {
-        $this->markTestSkipped('Due bug CRM-147');
         $login = new Login($this);
         $login->setUsername($username)
             ->setPassword('123123q')
             ->submit()
             ->openAccounts()
-            ->assertTitle('Accounts')
+            ->assertTitle('Accounts - Customers')
             ->assertElementNotPresent("//div[@class='container-fluid']//a[@title='Create account']")
             ->openContacts()
-            ->assertTitle('Contacts')
+            ->assertTitle('Contacts - Customers')
             ->assertElementNotPresent("//div[@class='container-fluid']//a[@title='Create contact']")
             ->openContactGroups()
-            ->assertTitle('Contact Groups')
+            ->assertTitle('Contact Groups - Customers')
             ->assertElementNotPresent("//div[@class='container-fluid']//a[@title='Create contact group']")
             ->openAclCheck()
             ->assertAcl('account/create')

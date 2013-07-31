@@ -10,6 +10,7 @@ oro_menu_config:
             route: 'orocrm_account_index'
             extras:
                 routes: ['orocrm_account_*']
+                description: List of accounts
 
         shortcut_new_account:
             label: Create new account
@@ -36,7 +37,7 @@ oro_menu_config:
                 shortcut_list_accounts: ~
 
 oro_titles:
-    orocrm_account_index: Accounts
-    orocrm_account_view: %%account.name%% - Accounts
+    orocrm_account_index: ~
+    orocrm_account_view: %%account.name%%
     orocrm_account_create: Create Account
-    orocrm_account_update: %%account.name%% - Accounts
+    orocrm_account_update: %%account.name%%

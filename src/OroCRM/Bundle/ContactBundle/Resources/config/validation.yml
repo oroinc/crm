@@ -1,8 +1,8 @@
 OroCRM\Bundle\ContactBundle\Entity\Group:
     constraints:
-        - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity: name
+        - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity: label
     properties:
-        name:
+        label:
             - NotBlank:     ~
             - Length:
                 min:        3
@@ -10,5 +10,6 @@ OroCRM\Bundle\ContactBundle\Entity\Group:
 
 OroCRM\Bundle\ContactBundle\Entity\Contact:
     properties:
-        multiAddress:
+        addresses:
             - Oro\Bundle\AddressBundle\Validator\Constraints\ContainsPrimary: ~
+            - Oro\Bundle\AddressBundle\Validator\Constraints\UniqueAddressTypes: ~

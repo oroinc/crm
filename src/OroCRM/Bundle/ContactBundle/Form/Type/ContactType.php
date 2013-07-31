@@ -38,7 +38,7 @@ class ContactType extends FlexibleType
     {
         parent::buildForm($builder, $options);
         $builder->addEventSubscriber(
-            new AddressCollectionTypeSubscriber('multiAddress', $this->addressClass)
+            new AddressCollectionTypeSubscriber('addresses', $this->addressClass)
         );
     }
 
@@ -50,9 +50,15 @@ class ContactType extends FlexibleType
         // add default flexible fields
         parent::addEntityFields($builder);
 
+        // tags
+        $builder->add(
+            'tags',
+            'oro_tag_select'
+        );
+
         // Addresses
         $builder->add(
-            'multiAddress',
+            'addresses',
             'oro_address_collection',
             array(
                 'required' => true,
@@ -66,7 +72,7 @@ class ContactType extends FlexibleType
             'entity',
             array(
                 'class'    => 'OroCRMContactBundle:Group',
-                'property' => 'name',
+                'property' => 'label',
                 'multiple' => true,
                 'expanded' => true,
                 'required' => false,

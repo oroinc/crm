@@ -4,12 +4,14 @@ namespace OroCRM\Bundle\AccountBundle\Form\Handler;
 
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
-
 use Doctrine\Common\Persistence\ObjectManager;
+
+use Oro\Bundle\TagBundle\Entity\TagManager;
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
+use Oro\Bundle\TagBundle\Form\Handler\TagHandlerInterface;
 
-class AccountHandler
+class AccountHandler implements TagHandlerInterface
 {
     /**
      * @var FormInterface
@@ -25,6 +27,11 @@ class AccountHandler
      * @var ObjectManager
      */
     protected $manager;
+
+    /**
+     * @var TagManager
+     */
+    protected $tagManager;
 
     /**
      *
@@ -50,7 +57,7 @@ class AccountHandler
         $this->form->setData($entity);
 
         if (in_array($this->request->getMethod(), array('POST', 'PUT'))) {
-            $this->form->bind($this->request);
+            $this->form->submit($this->request);
 
             if ($this->form->isValid()) {
                 $appendContacts = $this->form->get('appendContacts')->getData();
@@ -75,8 +82,10 @@ class AccountHandler
     {
         $this->appendContacts($entity, $appendContacts);
         $this->removeContacts($entity, $removeContacts);
+
         $this->manager->persist($entity);
         $this->manager->flush();
+        $this->tagManager->saveTagging($entity);
     }
 
     /**
@@ -103,5 +112,13 @@ class AccountHandler
         foreach ($contacts as $contact) {
             $account->removeContact($contact);
         }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setTagManager(TagManager $tagManager)
+    {
+        $this->tagManager = $tagManager;
     }
 }

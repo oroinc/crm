@@ -31,7 +31,7 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
     const FLUSH_MAX = 20;
 
     /** @var array Lead Sources */
-    protected $leadSource = array('other', 'call', 'TV', 'website');
+    protected $sources = array('other', 'call', 'TV', 'website');
     /**
      * @var Account Manager
      */
@@ -135,8 +135,8 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
                 $user = $this->users[rand(0, count($this->users)-1)];
                 $this->setFlexibleAttributeValue($this->contactRepository, $contact, 'assigned_to', $user);
                 $this->setFlexibleAttributeValue($this->contactRepository, $contact, 'reports_to', $contact);
-                $leadSource = $this->leadSource[rand(0, count($this->leadSource)-1)];
-                $this->setFlexibleAttributeValueOption($this->contactRepository, $contact, 'lead_source', $leadSource);
+                $source = $this->sources[rand(0, count($this->sources)-1)];
+                $this->setFlexibleAttributeValueOption($this->contactRepository, $contact, 'source', $source);
 
 
                 $this->persist($this->accountManager, $account);
@@ -279,7 +279,7 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
             $address->setState($region->first());
         }
 
-        $contact->addMultiAddress($address);
+        $contact->addAddress($address);
         return $contact;
     }
 
