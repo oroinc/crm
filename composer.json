@@ -1,7 +1,7 @@
 {
     "name": "oro/crm",
     "description": "OroCRM",
-    "homepage": "https://github.com/laboro/crm.git",
+    "homepage": "https://github.com/orocrm/crm.git",
     "license": "The Open Software License version 3.0",
     "autoload": {
         "psr-0": { "OroCRM\\Bundle": "src/" }
@@ -13,11 +13,7 @@
     "repositories": [
         {
             "type": "vcs",
-            "url": "https://github.com/laboro/platform.git"
-        },
-        {
-            "type": "vcs",
-            "url": "https://github.com/laboro/SonataAdminBundle.git"
+            "url": "https://github.com/orocrm/SonataAdminBundle.git"
         }
     ],
     "minimum-stability": "dev"
