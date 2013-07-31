@@ -455,4 +455,22 @@ class Contact extends AbstractEntityFlexible implements Taggable
 
         return $this;
     }
+
+    /**
+     * Gets all contact's emails
+     *
+     * @return string[]
+     *
+     * TODO: We need a separate method to get emails because, as discussed with Dima, emails are one of the key characteristic of the contact.
+     *       Make necessary changes in this method when the database schema is changed.
+     *       Do not forget to search code use this method and make sure that it works correctly
+     */
+    public function getEmails()
+    {
+        $emails = new ArrayCollection();
+
+        $emails->add($this->getValue('email'));
+
+        return $emails;
+    }
 }
