@@ -11,8 +11,10 @@ use JMS\Serializer\Annotation\Exclude;
 
 use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 
-use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityFlexible;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
+
+use Oro\Bundle\TagBundle\Entity\Taggable;
+use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityFlexible;
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 
 /**
@@ -21,7 +23,7 @@ use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
  * @ORM\HasLifecycleCallbacks()
  * @Oro\Loggable
  */
-class Account extends AbstractEntityFlexible
+class Account extends AbstractEntityFlexible implements Taggable
 {
     /**
      * @ORM\Id
@@ -61,6 +63,11 @@ class Account extends AbstractEntityFlexible
      * @Exclude
      */
     protected $values;
+
+    /**
+     * @var ArrayCollection $tags
+     */
+    protected $tags;
 
     public function __construct()
     {
@@ -184,5 +191,33 @@ class Account extends AbstractEntityFlexible
     public function doPreUpdate()
     {
         $this->updated = new \DateTime('now', new \DateTimeZone('UTC'));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTaggableId()
+    {
+        return $this->getId();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTags()
+    {
+        $this->tags = $this->tags ?: new ArrayCollection();
+
+        return $this->tags;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setTags($tags)
+    {
+        $this->tags = $tags;
+
+        return $this;
     }
 }

@@ -1,4 +1,6 @@
 {% extends 'OroUIBundle:actions:update.html.twig' %}
+{% import 'OroTagBundle::macros.html.twig' as _tag %}
+{% form_theme form with ['OroAddressBundle:Include:fields.html.twig', 'OroFormBundle:Form:fields.html.twig', 'OroTagBundle:Form:fields.html.twig'] %}
 {% set format = oro_config_value('oro_user.name_format') %}
 {% set title = form.vars.value.id ? form.vars.value.fullname(format)|default('N/A') ~ ' - ' ~ 'Update Account'|trans : 'New Account'|trans %}
 {% oro_title_set({params : {"%account.name%": form.vars.value.name|default('N/A')} }) %}
@@ -37,7 +39,8 @@
         {{ UI.buttonSeparator() }}
     {% endif %}
     {{ UI.button({'path' : path('orocrm_account_index'), 'title' : 'Cancel', 'label' : 'Cancel'}) }}
-    {{ UI.buttonType({'type': 'submit', 'class': 'btn-success', 'label': 'Save'}) }}
+    {{ UI.saveAndStayButton() }}
+    {{ UI.saveAndCloseButton() }}
 {% endblock %}
 
 {% block pageHeader %}
@@ -65,7 +68,8 @@
                 {
                     'title': 'Basic Information',
                     'data': [
-                        form_row(form.name)
+                        form_row(form.name),
+                        _tag.tagInputField('Tags', form)
                     ]
                 }
             ]

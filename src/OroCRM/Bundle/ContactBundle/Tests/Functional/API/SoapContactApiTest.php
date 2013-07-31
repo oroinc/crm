@@ -13,20 +13,25 @@ use Oro\Bundle\TestFrameworkBundle\Test\Client;
 class SoapContactApiTest extends WebTestCase
 {
     /** @var Client */
-    protected $client = null;
+    protected $client;
 
     public function setUp()
     {
         $this->markTestSkipped('BAP-717');
-        $this->client = static::createClient(array(), ToolsAPI::generateWsseHeader());
+        if (!isset($this->client)) {
+            $this->client = static::createClient(array(), ToolsAPI::generateWsseHeader());
 
-        $this->client->soap(
-            "http://localhost/api/soap",
-            array(
-                'location' => 'http://localhost/api/soap',
-                'soap_version' => SOAP_1_2
-            )
-        );
+            $this->client->soap(
+                "http://localhost/api/soap",
+                array(
+                    'location' => 'http://localhost/api/soap',
+                    'soap_version' => SOAP_1_2
+                )
+            );
+
+        } else {
+            $this->client->restart();
+        }
     }
 
     /**

@@ -53,6 +53,11 @@
                 {{ __.renderWidget(widget) }}
                 {% if loop.index is even %}</div>{% endif %}
             {% endfor %}
+
+        </div>
+        <div class="version-container">
+            {# TODO Replace hardcoded version with data from backend #}
+            <strong>Version:</strong> 1.0.0-alpha4
         </div>
     </div>
 {% endblock %}
