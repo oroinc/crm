@@ -37,10 +37,6 @@
 
 {% block content_data %}
     {% set id = 'navbarContactsUpdate' %}
-    {% set attributes = {} %}
-    {% for value in entity|getAttributes(['address'], true) %}
-        {% set attributes = attributes | merge([UI.flexibleAttributeRow(value)]) %}
-    {% endfor %}
 
     {% set addresses = [] %}
     {% set yesNoChoices = {0: 'No'|trans, 1: 'Yes'|trans} %}
@@ -58,7 +54,20 @@
     {% set dataSubBlocks = [
         {
             'title': 'Basic Information',
-            'data': attributes
+            'data': [
+                UI.attibuteRow('Name Prefix', entity.namePrefix|default('N/A')),
+                UI.attibuteRow('First Name', entity.firstName),
+                UI.attibuteRow('Last Name', entity.lastName),
+                UI.attibuteRow('Name Suffix', entity.nameSuffix|default('N/A')),
+                UI.attibuteRow('Title', entity.title|default('N/A')),
+                UI.attibuteRow('Birthday', entity.birthday ? UI.date(entity.birthday) : 'N/A'),
+                UI.attibuteRow('Description', entity.description|default('N/A')),
+                UI.attibuteRow('Source', entity.source|default('N/A')),
+                UI.attibuteRow('Assigned To', entity.assignedTo.__toString|default('N/A')),
+                UI.attibuteRow('Reports To', entity.reportsTo.__toString|default('N/A')),
+                UI.attibuteRow('Email', entity.email|default('N/A')),
+                UI.attibuteRow('Phone', entity.phone|default('N/A'))
+            ]
         }
     ] %}
     {% if addresses is not empty %}

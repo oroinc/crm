@@ -12,19 +12,28 @@ use JMS\Serializer\Annotation\Exclude;
 use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 
 use OroCRM\Bundle\AccountBundle\Entity\Account;
-
 use Oro\Bundle\TagBundle\Entity\Taggable;
 use Oro\Bundle\AddressBundle\Entity\AddressType;
-use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityFlexible;
+use Oro\Bundle\UserBundle\Entity\User;
+use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 
 /**
- * @ORM\Entity(repositoryClass="Oro\Bundle\FlexibleEntityBundle\Entity\Repository\FlexibleEntityRepository")
+ * @SuppressWarnings(PHPMD.TooManyMethods)
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.ExcessiveClassLength)
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ *
+ * @ORM\Entity
  * @ORM\Table(name="orocrm_contact")
  * @ORM\HasLifecycleCallbacks()
+ * @Oro\Loggable
  */
-class Contact extends AbstractEntityFlexible implements Taggable
+class Contact implements Taggable
 {
     /**
+     * @var int
+     *
      * @ORM\Id
      * @ORM\Column(type="integer", name="id")
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -36,7 +45,7 @@ class Contact extends AbstractEntityFlexible implements Taggable
     /**
      * @var Collection
      *
-     * @ORM\ManyToMany(targetEntity="Group")
+     * @ORM\ManyToMany(targetEntity="OroCRM\Bundle\ContactBundle\Entity\Group")
      * @ORM\JoinTable(name="orocrm_contact_to_contact_group",
      *      joinColumns={@ORM\JoinColumn(name="contact_id", referencedColumnName="id", onDelete="CASCADE")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="contact_group_id", referencedColumnName="id", onDelete="CASCADE")}
@@ -47,8 +56,6 @@ class Contact extends AbstractEntityFlexible implements Taggable
     protected $groups;
 
     /**
-     * Accounts storage
-     *
      * @var Collection
      *
      * @ORM\ManyToMany(targetEntity="OroCRM\Bundle\AccountBundle\Entity\Account", mappedBy="contacts")
@@ -59,19 +66,14 @@ class Contact extends AbstractEntityFlexible implements Taggable
 
     /**
      * @var Collection
-     * @ORM\OneToMany(targetEntity="ContactAddress", mappedBy="owner", cascade={"all"}, orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="OroCRM\Bundle\ContactBundle\Entity\ContactAddress",
+     *     mappedBy="owner", cascade={"all"}, orphanRemoval=true
+     * )
      * @ORM\OrderBy({"primary" = "DESC"})
      * @Soap\ComplexType("OroCRM\Bundle\ContactBundle\Entity\ContactAddress[]", nillable=true)
      * @Exclude
      */
     protected $addresses;
-
-    /**
-     * @var \Oro\Bundle\FlexibleEntityBundle\Model\AbstractFlexibleValue[]
-     * @ORM\OneToMany(targetEntity="OroCRM\Bundle\ContactBundle\Entity\Value\ContactValue", mappedBy="entity", cascade={"persist", "remove"},orphanRemoval=true)
-     * @Exclude
-     */
-    protected $values;
 
     /**
      * Set name formatting using "%first%" and "%last%" placeholders
@@ -85,14 +87,135 @@ class Contact extends AbstractEntityFlexible implements Taggable
     /**
      * @var ArrayCollection
      */
-    private $tags;
+    protected $tags;
+
+    /**
+     * @var \DateTime $created
+     *
+     * @ORM\Column(type="datetime")
+     */
+    protected $createdAt;
+
+    /**
+     * @var \DateTime $updated
+     *
+     * @ORM\Column(type="datetime")
+     */
+    protected $updatedAt;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="name_prefix", type="string", length=255, nullable=true)
+     * @Soap\ComplexType("string")
+     * @Type("string")
+     * @Oro\Versioned
+     */
+    protected $namePrefix;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="firstname", type="string", length=255, nullable=true)
+     * @Soap\ComplexType("string")
+     * @Type("string")
+     * @Oro\Versioned
+     */
+    protected $firstName;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="lastname", type="string", length=255, nullable=true)
+     * @Soap\ComplexType("string")
+     * @Type("string")
+     * @Oro\Versioned
+     */
+    protected $lastName;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="name_suffix", type="string", length=255, nullable=true)
+     * @Soap\ComplexType("string")
+     * @Type("string")
+     * @Oro\Versioned
+     */
+    protected $nameSuffix;
+
+    /**
+     * @ORM\Column(name="title", type="string", length=255, nullable=true)
+     * @Soap\ComplexType("string")
+     * @Type("string")
+     * @Oro\Versioned
+     */
+    protected $title;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="birthday", type="datetime", nullable=true)
+     * @Soap\ComplexType("dateTime", nillable=true)
+     * @Type("dateTime")
+     * @Oro\Versioned
+     */
+    protected $birthday;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="description", type="text", nullable=true)
+     * @Soap\ComplexType("string")
+     * @Type("string")
+     */
+    protected $description;
+
+    /**
+     * @var ContactSource
+     *
+     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ContactBundle\Entity\ContactSource")
+     * @ORM\JoinColumn(name="source_name", referencedColumnName="name")
+     **/
+    protected $source;
+
+    /**
+     * @var User $user
+     *
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
+     * @ORM\JoinColumn(name="assigned_to_user_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    protected $assignedTo;
+
+    /**
+     * @var Contact $contact
+     *
+     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ContactBundle\Entity\Contact")
+     * @ORM\JoinColumn(name="reports_to_contact_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    protected $reportsTo;
+
+    /**
+     * @ORM\Column(name="email", type="string", length=255, nullable=true)
+     * @Soap\ComplexType("string")
+     * @Type("string")
+     * @Oro\Versioned
+     */
+    protected $email;
+
+    /**
+     * @ORM\Column(name="phone", type="string", length=255, nullable=true)
+     * @Soap\ComplexType("string")
+     * @Type("string")
+     * @Oro\Versioned
+     */
+    protected $phone;
 
     public function __construct()
     {
-        parent::__construct();
-        $this->groups   = new ArrayCollection();
-        $this->accounts = new ArrayCollection();
+        $this->groups    = new ArrayCollection();
+        $this->accounts  = new ArrayCollection();
         $this->addresses = new ArrayCollection();
+        $this->tags      = new ArrayCollection();
     }
 
     /**
@@ -106,13 +229,24 @@ class Contact extends AbstractEntityFlexible implements Taggable
     }
 
     /**
+     * @param int $id
+     * @return Contact
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    /**
      * Get contact created date/time
      *
      * @return \DateTime
      */
     public function getCreatedAt()
     {
-        return $this->created;
+        return $this->createdAt;
     }
 
     /**
@@ -122,7 +256,7 @@ class Contact extends AbstractEntityFlexible implements Taggable
      */
     public function getUpdatedAt()
     {
-        return $this->updated;
+        return $this->updatedAt;
     }
 
     /**
@@ -132,7 +266,8 @@ class Contact extends AbstractEntityFlexible implements Taggable
      */
     public function beforeSave()
     {
-        $this->created = new \DateTime('now', new \DateTimeZone('UTC'));
+        $this->createdAt = new \DateTime('now', new \DateTimeZone('UTC'));
+        $this->doPreUpdate();
     }
 
     /**
@@ -142,7 +277,7 @@ class Contact extends AbstractEntityFlexible implements Taggable
      */
     public function doPreUpdate()
     {
-        $this->updated = new \DateTime('now', new \DateTimeZone('UTC'));
+        $this->updatedAt = new \DateTime('now', new \DateTimeZone('UTC'));
     }
 
     /**
@@ -398,38 +533,18 @@ class Contact extends AbstractEntityFlexible implements Taggable
     {
         return str_replace(
             array('%first%', '%last%'),
-            array($this->getAttributeData('first_name'), $this->getAttributeData('last_name')),
+            array($this->getFirstName(), $this->getLastName()),
             $format ? $format : $this->getNameFormat()
         );
     }
 
     public function __toString()
     {
-        return trim($this->getAttributeData('first_name') . ' ' . $this->getAttributeData('last_name'));
+        return trim($this->getFirstName() . ' ' . $this->getLastName());
     }
 
     /**
-     * Get attribute value data by code
-     *
-     * @param $attributeCode
-     * @return \Oro\Bundle\FlexibleEntityBundle\Model\FlexibleValueInterface|string
-     */
-    public function getAttributeData($attributeCode)
-    {
-        try {
-            $value = $this->getValue($attributeCode);
-            if ($value) {
-                $value = trim($value->getData());
-            }
-        } catch (\Exception $e) {
-            $value = '';
-        }
-
-        return $value;
-    }
-
-    /**
-     * {@inheritdoc}
+     * @return int
      */
     public function getTaggableId()
     {
@@ -437,21 +552,270 @@ class Contact extends AbstractEntityFlexible implements Taggable
     }
 
     /**
-     * {@inheritdoc}
+     * @return ArrayCollection
      */
     public function getTags()
     {
-        $this->tags = $this->tags ?: new ArrayCollection();
-
         return $this->tags;
     }
 
     /**
-     * {@inheritdoc}
+     * @param array|Collection $tags
+     * @return Contact
      */
     public function setTags($tags)
     {
         $this->tags = $tags;
+
+        return $this;
+    }
+
+    /**
+     * @param User $assignedTo
+     * @return Contact
+     */
+    public function setAssignedTo($assignedTo)
+    {
+        $this->assignedTo = $assignedTo;
+
+        return $this;
+    }
+
+    /**
+     * @return User
+     */
+    public function getAssignedTo()
+    {
+        return $this->assignedTo;
+    }
+
+    /**
+     * @param \DateTime $birthday
+     * @return Contact
+     */
+    public function setBirthday($birthday)
+    {
+        $this->birthday = $birthday;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getBirthday()
+    {
+        return $this->birthday;
+    }
+
+    /**
+     * @param \DateTime $created
+     * @return Contact
+     */
+    public function setCreatedAt($created)
+    {
+        $this->createdAt = $created;
+
+        return $this;
+    }
+
+    /**
+     * @param string $description
+     * @return Contact
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * @param mixed $email
+     * @return Contact
+     */
+    public function setEmail($email)
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getEmail()
+    {
+        return $this->email;
+    }
+
+    /**
+     * @param string $firstName
+     * @return Contact
+     */
+    public function setFirstName($firstName)
+    {
+        $this->firstName = $firstName;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFirstName()
+    {
+        return $this->firstName;
+    }
+
+    /**
+     * @param string $lastName
+     * @return Contact
+     */
+    public function setLastName($lastName)
+    {
+        $this->lastName = $lastName;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLastName()
+    {
+        return $this->lastName;
+    }
+
+    /**
+     * @param string $namePrefix
+     * @return Contact
+     */
+    public function setNamePrefix($namePrefix)
+    {
+        $this->namePrefix = $namePrefix;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNamePrefix()
+    {
+        return $this->namePrefix;
+    }
+
+    /**
+     * @param string $nameSuffix
+     * @return Contact
+     */
+    public function setNameSuffix($nameSuffix)
+    {
+        $this->nameSuffix = $nameSuffix;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNameSuffix()
+    {
+        return $this->nameSuffix;
+    }
+
+    /**
+     * @param mixed $phone
+     * @return Contact
+     */
+    public function setPhone($phone)
+    {
+        $this->phone = $phone;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPhone()
+    {
+        return $this->phone;
+    }
+
+    /**
+     * @param Contact $reportsTo
+     * @return Contact
+     */
+    public function setReportsTo($reportsTo)
+    {
+        $this->reportsTo = $reportsTo;
+
+        return $this;
+    }
+
+    /**
+     * @return Contact
+     */
+    public function getReportsTo()
+    {
+        return $this->reportsTo;
+    }
+
+    /**
+     * @param ContactSource $source
+     * @return Contact
+     */
+    public function setSource($source)
+    {
+        $this->source = $source;
+
+        return $this;
+    }
+
+    /**
+     * @return ContactSource
+     */
+    public function getSource()
+    {
+        return $this->source;
+    }
+
+    /**
+     * @param mixed $title
+     * @return Contact
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    /**
+     * @param \DateTime $updated
+     * @return Contact
+     */
+    public function setUpdatedAt($updated)
+    {
+        $this->updatedAt = $updated;
 
         return $this;
     }

@@ -22,7 +22,6 @@ services:
               entity_name: %orocrm_contact.entity.class%
               query_entity_alias: contact
               entity_hint: contacts
-              flexible: true
               route_name: orocrm_account_view
 
     orocrm_account.contact.update_datagrid_manager:
@@ -33,5 +32,4 @@ services:
               entity_name: %orocrm_contact.entity.class%
               query_entity_alias: contact
               entity_hint: contacts
-              flexible: true
               route_name: orocrm_account_update

@@ -10,6 +10,18 @@ OroCRM\Bundle\ContactBundle\Entity\Group:
 
 OroCRM\Bundle\ContactBundle\Entity\Contact:
     properties:
+        firstName:
+            - NotBlank:     ~
+            - Length:
+                max:        100
+        lastName:
+            - NotBlank:     ~
+            - Length:
+                max:        100
+        birthday:
+            - Date:         ~
+        email:
+            - Email:        ~
         addresses:
             - Oro\Bundle\AddressBundle\Validator\Constraints\ContainsPrimary: ~
             - Oro\Bundle\AddressBundle\Validator\Constraints\UniqueAddressTypes: ~

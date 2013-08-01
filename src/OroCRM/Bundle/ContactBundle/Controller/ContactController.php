@@ -12,7 +12,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Oro\Bundle\UserBundle\Annotation\Acl;
 use Oro\Bundle\UserBundle\Annotation\AclAncestor;
 
-use Oro\Bundle\SoapBundle\Entity\Manager\ApiFlexibleEntityManager;
+use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\ContactBundle\Datagrid\ContactDatagridManager;
 use OroCRM\Bundle\ContactBundle\Datagrid\ContactAccountDatagridManager;
@@ -157,7 +157,7 @@ class ContactController extends Controller
     }
 
     /**
-     * @return ApiFlexibleEntityManager
+     * @return ApiEntityManager
      */
     protected function getManager()
     {

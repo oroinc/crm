@@ -2,32 +2,31 @@
 
 namespace OroCRM\Bundle\ContactBundle\Form\Type;
 
-use Doctrine\Common\Collections\Collection;
-use Doctrine\ORM\EntityRepository;
-use Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleManager;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormInterface;
-use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Form\AbstractType;
 
 use Oro\Bundle\AddressBundle\Form\EventListener\AddressCollectionTypeSubscriber;
-use Oro\Bundle\FlexibleEntityBundle\Form\Type\FlexibleType;
 
-class ContactType extends FlexibleType
+class ContactType extends AbstractType
 {
+    /**
+     * @var string
+     */
+    protected $contactClass;
+
     /**
      * @var string
      */
     protected $addressClass;
 
     /**
-     * @param FlexibleManager $flexibleManager
-     * @param string $valueFormAlias
+     * @param string $contactClass
      * @param string $addressClass
      */
-    public function __construct(FlexibleManager $flexibleManager, $valueFormAlias, $addressClass)
+    public function __construct($contactClass, $addressClass)
     {
-        parent::__construct($flexibleManager, $valueFormAlias);
+        $this->contactClass = $contactClass;
         $this->addressClass = $addressClass;
     }
 
@@ -36,19 +35,39 @@ class ContactType extends FlexibleType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        parent::buildForm($builder, $options);
-        $builder->addEventSubscriber(
-            new AddressCollectionTypeSubscriber('addresses', $this->addressClass)
-        );
-    }
+        // basic plain fields
+        $builder
+            ->add('namePrefix', 'text', array('label' => 'Name prefix', 'required' => false))
+            ->add('firstName', 'text', array('label' => 'First name', 'required' => true))
+            ->add('lastName', 'text', array('label' => 'Last name', 'required' => true))
+            ->add('nameSuffix', 'text', array('label' => 'Name suffix', 'required' => false))
+            ->add('title', 'text', array('label' => 'Title', 'required' => false))
+            ->add('birthday', 'oro_date', array('label' => 'Birthday', 'required' => false))
+            ->add('description', 'textarea', array('label' => 'Description', 'required' => false));
 
-    /**
-     * {@inheritdoc}
-     */
-    public function addEntityFields(FormBuilderInterface $builder)
-    {
-        // add default flexible fields
-        parent::addEntityFields($builder);
+        // contact source
+        $builder->add(
+            'source',
+            'entity',
+            array(
+                'class'       => 'OroCRMContactBundle:ContactSource',
+                'property'    => 'label',
+                'required'    => false,
+                'empty_value' => false,
+            )
+        );
+
+        // assigned to (user)
+        $builder->add('assignedTo', 'oro_user_select', array('label' => 'Assigned to', 'required' => false));
+
+        // reports to (contact)
+        $builder->add('reportsTo', 'orocrm_contact_select', array('label' => 'Reports to', 'required' => false));
+
+        // email and phone
+        // TODO Implement as collections with primary item
+        $builder
+            ->add('email', 'email', array('label' => 'Email', 'required' => false))
+            ->add('phone', 'text', array('label' => 'Phone', 'required' => false));
 
         // tags
         $builder->add(
@@ -100,6 +119,10 @@ class ContactType extends FlexibleType
                 'multiple' => true,
             )
         );
+
+        $builder->addEventSubscriber(
+            new AddressCollectionTypeSubscriber('addresses', $this->addressClass)
+        );
     }
 
     /**
@@ -109,10 +132,10 @@ class ContactType extends FlexibleType
     {
         $resolver->setDefaults(
             array(
-                'data_class' => $this->flexibleClass,
-                'intention' => 'account',
+                'data_class'           => $this->contactClass,
+                'intention'            => 'contact',
                 'extra_fields_message' => 'This form should not contain extra fields: "{{ extra_fields }}"',
-                'cascade_validation' => true,
+                'cascade_validation'   => true,
             )
         );
     }

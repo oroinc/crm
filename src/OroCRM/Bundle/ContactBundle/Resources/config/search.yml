@@ -1,11 +1,50 @@
 OroCRM\Bundle\ContactBundle\Entity\Contact:
     alias: orocrm_contact
     label: Contacts
-    flexible_manager: orocrm_contact.manager.flexible
     route:
         name: orocrm_contact_view
         parameters:
             id: id
     search_template: OroCRMContactBundle:Contact:searchResult.html.twig
     entity_icon_class: icon-envelope
-    fields: []
+    fields:
+        -
+            name:                   namePrefix
+            target_type:            text
+            target_fields:          [namePrefix]
+        -
+            name:                   firstName
+            target_type:            text
+            target_fields:          [firstName]
+        -
+            name:                   lastName
+            target_type:            text
+            target_fields:          [lastName]
+        -
+            name:                   nameSuffix
+            target_type:            text
+            target_fields:          [nameSuffix]
+        -
+            name:                   title
+            target_type:            text
+            target_fields:          [title]
+        -
+            name:                   description
+            target_type:            text
+            target_fields:          [description]
+        -
+            name:                   source
+            relation_type:          many-to-one
+            relation_fields:
+                -
+                    name:           label
+                    target_type:    text
+                    target_fields:  [label]
+        -
+            name:                   email
+            target_type:            text
+            target_fields:          [email]
+        -
+            name:                   phone
+            target_type:            text
+            target_fields:          [phone]
