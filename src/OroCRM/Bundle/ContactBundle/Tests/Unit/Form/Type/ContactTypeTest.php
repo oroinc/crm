@@ -16,10 +16,7 @@ class ContactTypeTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->type = new ContactType(
-            'OroCRM\Bundle\ContactBundle\Entity\Contact',
-            'OroCRM\Bundle\ContactBundle\Entity\ContactAddress'
-        );
+        $this->type = new ContactType();
     }
 
     public function testSetDefaultOptions()

@@ -11,26 +11,6 @@ use Oro\Bundle\AddressBundle\Form\EventListener\AddressCollectionTypeSubscriber;
 class ContactType extends AbstractType
 {
     /**
-     * @var string
-     */
-    protected $contactClass;
-
-    /**
-     * @var string
-     */
-    protected $addressClass;
-
-    /**
-     * @param string $contactClass
-     * @param string $addressClass
-     */
-    public function __construct($contactClass, $addressClass)
-    {
-        $this->contactClass = $contactClass;
-        $this->addressClass = $addressClass;
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -121,7 +101,7 @@ class ContactType extends AbstractType
         );
 
         $builder->addEventSubscriber(
-            new AddressCollectionTypeSubscriber('addresses', $this->addressClass)
+            new AddressCollectionTypeSubscriber('addresses', 'OroCRM\Bundle\ContactBundle\Entity\ContactAddress')
         );
     }
 
@@ -132,7 +112,7 @@ class ContactType extends AbstractType
     {
         $resolver->setDefaults(
             array(
-                'data_class'           => $this->contactClass,
+                'data_class'           => 'OroCRM\Bundle\ContactBundle\Entity\Contact',
                 'intention'            => 'contact',
                 'extra_fields_message' => 'This form should not contain extra fields: "{{ extra_fields }}"',
                 'cascade_validation'   => true,

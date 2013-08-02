@@ -208,13 +208,6 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
         $this->setFlexibleAttributeValue($this->accountRepository, $account, 'email', $data['EmailAddress']);
         $this->setFlexibleAttributeValue($this->accountRepository, $account, 'website', $data['Domain']);
 
-        $address = new Address();
-        $address->setCity($data['City']);
-        $address->setStreet($data['StreetAddress']);
-        $address->setPostalCode($data['ZipCode']);
-        $address->setFirstName($data['GivenName']);
-        $address->setLastName($data['Surname']);
-
         $isoCode = $data['Country'];
         $country = array_filter(
             $this->countries,
@@ -237,14 +230,20 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
             }
         );
 
+        $address = new Address();
+        $address->setCity($data['City']);
+        $address->setStreet($data['StreetAddress']);
+        $address->setPostalCode($data['ZipCode']);
+        $address->setFirstName($data['GivenName']);
+        $address->setLastName($data['Surname']);
+
         $address->setCountry($country);
         if (!$region->isEmpty()) {
             $address->setState($region->first());
         }
 
-        $this->setFlexibleAttributeValue($this->accountRepository, $account, 'shipping_address', $address);
-        $a = clone $address;
-        $this->setFlexibleAttributeValue($this->accountRepository, $account, 'billing_address', $a);
+        $account->setShippingAddress($address);
+        $account->setBillingAddress(clone $address);
 
         return $account;
     }

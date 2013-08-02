@@ -6,9 +6,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
-use JMS\Serializer\Annotation\Type;
-use JMS\Serializer\Annotation\Exclude;
-
 use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 
 use OroCRM\Bundle\AccountBundle\Entity\Account;
@@ -38,7 +35,6 @@ class Contact implements Taggable
      * @ORM\Column(type="integer", name="id")
      * @ORM\GeneratedValue(strategy="AUTO")
      * @Soap\ComplexType("int", nillable=true)
-     * @Type("integer")
      */
     protected $id;
 
@@ -47,7 +43,6 @@ class Contact implements Taggable
      *
      * @ORM\Column(name="name_prefix", type="string", length=255, nullable=true)
      * @Soap\ComplexType("string")
-     * @Type("string")
      * @Oro\Versioned
      */
     protected $namePrefix;
@@ -57,7 +52,6 @@ class Contact implements Taggable
      *
      * @ORM\Column(name="firstname", type="string", length=255, nullable=true)
      * @Soap\ComplexType("string")
-     * @Type("string")
      * @Oro\Versioned
      */
     protected $firstName;
@@ -67,7 +61,6 @@ class Contact implements Taggable
      *
      * @ORM\Column(name="lastname", type="string", length=255, nullable=true)
      * @Soap\ComplexType("string")
-     * @Type("string")
      * @Oro\Versioned
      */
     protected $lastName;
@@ -77,7 +70,6 @@ class Contact implements Taggable
      *
      * @ORM\Column(name="name_suffix", type="string", length=255, nullable=true)
      * @Soap\ComplexType("string")
-     * @Type("string")
      * @Oro\Versioned
      */
     protected $nameSuffix;
@@ -86,8 +78,6 @@ class Contact implements Taggable
      * Set name formatting using "%first%" and "%last%" placeholders
      *
      * @var string
-     *
-     * @Exclude
      */
     protected $nameFormat;
 
@@ -96,7 +86,6 @@ class Contact implements Taggable
      *
      * @ORM\Column(name="title", type="string", length=255, nullable=true)
      * @Soap\ComplexType("string")
-     * @Type("string")
      * @Oro\Versioned
      */
     protected $title;
@@ -106,7 +95,6 @@ class Contact implements Taggable
      *
      * @ORM\Column(name="birthday", type="datetime", nullable=true)
      * @Soap\ComplexType("dateTime", nillable=true)
-     * @Type("dateTime")
      * @Oro\Versioned
      */
     protected $birthday;
@@ -116,7 +104,6 @@ class Contact implements Taggable
      *
      * @ORM\Column(name="description", type="text", nullable=true)
      * @Soap\ComplexType("string")
-     * @Type("string")
      */
     protected $description;
 
@@ -149,7 +136,6 @@ class Contact implements Taggable
      *
      * @ORM\Column(name="email", type="string", length=255, nullable=true)
      * @Soap\ComplexType("string")
-     * @Type("string")
      * @Oro\Versioned
      */
     protected $email;
@@ -159,7 +145,6 @@ class Contact implements Taggable
      *
      * @ORM\Column(name="phone", type="string", length=255, nullable=true)
      * @Soap\ComplexType("string")
-     * @Type("string")
      * @Oro\Versioned
      */
     protected $phone;
@@ -177,7 +162,6 @@ class Contact implements Taggable
      * )
      * @ORM\OrderBy({"primary" = "DESC"})
      * @Soap\ComplexType("OroCRM\Bundle\ContactBundle\Entity\ContactAddress[]", nillable=true)
-     * @Exclude
      */
     protected $addresses;
 
@@ -190,7 +174,6 @@ class Contact implements Taggable
      *      inverseJoinColumns={@ORM\JoinColumn(name="contact_group_id", referencedColumnName="id", onDelete="CASCADE")}
      * )
      * @Soap\ComplexType("int[]", nillable=true)
-     * @Exclude
      */
     protected $groups;
 
@@ -199,7 +182,6 @@ class Contact implements Taggable
      *
      * @ORM\ManyToMany(targetEntity="OroCRM\Bundle\AccountBundle\Entity\Account", mappedBy="contacts")
      * @ORM\JoinTable(name="orocrm_contact_to_account")
-     * @Exclude
      */
     protected $accounts;
 

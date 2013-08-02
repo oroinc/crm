@@ -34,26 +34,46 @@ class AccountType extends FlexibleType
         );
 
         // contacts
-        $builder->add(
-            'appendContacts',
-            'oro_entity_identifier',
-            array(
-                'class'    => 'OroCRMContactBundle:Contact',
-                'required' => false,
-                'mapped'   => false,
-                'multiple' => true,
+        $builder
+            ->add(
+                'appendContacts',
+                'oro_entity_identifier',
+                array(
+                    'class'    => 'OroCRMContactBundle:Contact',
+                    'required' => false,
+                    'mapped'   => false,
+                    'multiple' => true,
+                )
             )
-        )
-        ->add(
-            'removeContacts',
-            'oro_entity_identifier',
-            array(
-                'class'    => 'OroCRMContactBundle:Contact',
-                'required' => false,
-                'mapped'   => false,
-                'multiple' => true,
+            ->add(
+                'removeContacts',
+                'oro_entity_identifier',
+                array(
+                    'class'    => 'OroCRMContactBundle:Contact',
+                    'required' => false,
+                    'mapped'   => false,
+                    'multiple' => true,
+                )
+            );
+
+        // addresses
+        $builder
+            ->add(
+                'shippingAddress',
+                'oro_address',
+                array(
+                    'cascade_validation' => true,
+                    'required' => false
+                )
             )
-        );
+            ->add(
+                'billingAddress',
+                'oro_address',
+                array(
+                    'cascade_validation' => true,
+                    'required' => false
+                )
+            );
     }
 
     /**

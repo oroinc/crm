@@ -9,6 +9,14 @@ class ContactAddressType extends AbstractTypedAddressType
     /**
      * {@inheritdoc}
      */
+    protected function getDataClass()
+    {
+        return 'OroCRM\Bundle\ContactBundle\Entity\ContactAddress';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getName()
     {
         return 'orocrm_contact_address';

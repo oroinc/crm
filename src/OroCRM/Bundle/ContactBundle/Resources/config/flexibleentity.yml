@@ -1,6 +1,0 @@
-entities_config:
-    OroCRM\Bundle\ContactBundle\Entity\ContactAddress:
-        flexible_manager:     orocrm_contact.contact_address.manager.flexible
-        flexible_class:       %orocrm_contact.contact_address.entity.class%
-        flexible_value_class: %oro_address.address.entity.value.class%
-        flexible_init_mode:   all_attributes

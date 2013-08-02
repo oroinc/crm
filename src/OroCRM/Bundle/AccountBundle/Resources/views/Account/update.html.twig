@@ -76,38 +76,39 @@
         }]
     %}
 
-    {% if form.values is defined %}
-        {% set accountAddresses = [] %}
-        {% for attribute in form.values %}
-            {% if (attribute.children.address is defined) %}
-                {% set accountAddresses = accountAddresses|merge([{'title': attribute.address.vars.label, 'data': [form_widget(attribute.address)]}]) %}
+    {% set dataBlocks = dataBlocks|merge(
+        [{
+            'title' : 'Addresses',
+            'subblocks': [
+                {
+                    'title': 'Billing address'|trans,
+                    'data': [form_widget(form.billingAddress)]
+                },
+                {
+                    'title': 'Shipping address'|trans,
+                    'data': [form_widget(form.shippingAddress)]
+                },
+            ]
+        }]
+    )
+    %}
 
-            {% endif %}
-        {% endfor %}
-        {% set dataBlocks = dataBlocks|merge(
-            [{
-                'title' : 'Addresses',
-                'subblocks': accountAddresses
-            }]
-        )
-        %}
-        {% set dataBlocks = dataBlocks|merge(
-            [{
-                'title' : 'Additional Information',
-                'subblocks':
-                [
-                    {
-                        'title' : null,
-                        'useSpan': false,
-                        'data' : [
-                            form_row(form.values)
-                        ]
-                    }
-                ]
-            }]
-        )
-        %}
-    {% endif %}
+    {% set dataBlocks = dataBlocks|merge(
+        [{
+            'title' : 'Additional Information',
+            'subblocks':
+            [
+                {
+                    'title' : null,
+                    'useSpan': false,
+                    'data' : [
+                        form_row(form.values)
+                    ]
+                }
+            ]
+        }]
+    )
+    %}
 
     {% set dataBlocks = dataBlocks|merge(
         [{
