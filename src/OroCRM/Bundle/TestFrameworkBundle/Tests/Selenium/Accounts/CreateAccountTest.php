@@ -37,7 +37,7 @@ class CreateAccountTest extends \PHPUnit_Extensions_Selenium2TestCase
             ->add()
             ->setAccountName($accountname)
             ->save()
-            ->assertTitle('Accounts - Customers - ORO')
+            ->assertTitle('Accounts - Customers')
             ->assertMessage('Account successfully saved');
 
         return $accountname;
@@ -62,7 +62,7 @@ class CreateAccountTest extends \PHPUnit_Extensions_Selenium2TestCase
             ->setState('Aqm')
             ->setZipCode('Zip Code 000')
             ->save()
-            ->assertTitle('Accounts - Customers - ORO')
+            ->assertTitle('Accounts - Customers')
             ->assertMessage('Account successfully saved');
     }
 
@@ -83,10 +83,10 @@ class CreateAccountTest extends \PHPUnit_Extensions_Selenium2TestCase
             ->filterBy('Name', $accountname)
             ->open(array($accountname))
             ->edit()
-            ->assertTitle($accountname . ' - Accounts - Customers - ORO')
+            ->assertTitle($accountname . ' - Accounts - Customers')
             ->setAccountName($newAccountname)
             ->save()
-            ->assertTitle('Accounts - Customers - ORO')
+            ->assertTitle('Accounts - Customers')
             ->assertMessage('Account successfully saved')
             ->close();
 
@@ -108,7 +108,7 @@ class CreateAccountTest extends \PHPUnit_Extensions_Selenium2TestCase
             ->filterBy('Name', $accountname)
             ->open(array($accountname))
             ->delete()
-            ->assertTitle('Accounts - Customers - ORO')
+            ->assertTitle('Accounts - Customers')
             ->assertMessage('Item was deleted');
 
         $login->openUsers()->filterBy('Name', $accountname)->assertNoDataMessage('No Accounts were found to match your search');

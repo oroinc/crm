@@ -63,7 +63,7 @@ class AclTest extends \PHPUnit_Extensions_Selenium2TestCase
             ->submit()
             ->openUsers()
             ->add()
-            ->assertTitle('Create User - Users - System - ORO')
+            ->assertTitle('Create User - Users - System')
             ->setUsername($username)
             ->enable()
             ->setFirstpassword('123123q')
@@ -75,7 +75,7 @@ class AclTest extends \PHPUnit_Extensions_Selenium2TestCase
             ->save()
             ->assertMessage('User successfully saved')
             ->close()
-            ->assertTitle('Users - System - ORO');
+            ->assertTitle('Users - System');
 
         return $username;
     }
@@ -174,13 +174,13 @@ class AclTest extends \PHPUnit_Extensions_Selenium2TestCase
             ->setPassword('123123q')
             ->submit()
             ->openAccounts()
-            ->assertTitle('Accounts')
+            ->assertTitle('Accounts - Customers')
             ->assertElementNotPresent("//div[@class='container-fluid']//a[@title='Create account']")
             ->openContacts()
-            ->assertTitle('Contacts')
+            ->assertTitle('Contacts - Customers')
             ->assertElementNotPresent("//div[@class='container-fluid']//a[@title='Create contact']")
             ->openContactGroups()
-            ->assertTitle('Contact Groups')
+            ->assertTitle('Contact Groups - Customers')
             ->assertElementNotPresent("//div[@class='container-fluid']//a[@title='Create contact group']")
             ->openAclCheck()
             ->assertAcl('account/create')
