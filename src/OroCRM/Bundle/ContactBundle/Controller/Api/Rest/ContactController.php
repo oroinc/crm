@@ -18,7 +18,7 @@ use Oro\Bundle\UserBundle\Annotation\Acl;
 use Oro\Bundle\UserBundle\Annotation\AclAncestor;
 
 use Oro\Bundle\SoapBundle\Form\Handler\ApiFormHandler;
-use Oro\Bundle\SoapBundle\Controller\Api\Rest\FlexibleRestController;
+use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
 use Oro\Bundle\SoapBundle\Entity\Manager\ApiFlexibleEntityManager;
 
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
@@ -28,13 +28,17 @@ use OroCRM\Bundle\ContactBundle\Entity\ContactAddress;
  * @RouteResource("contact")
  * @NamePrefix("oro_api_")
  */
-class ContactController extends FlexibleRestController implements ClassResourceInterface
+class ContactController extends RestController implements ClassResourceInterface
 {
     /**
      * REST GET list
      *
-     * @QueryParam(name="page", requirements="\d+", nullable=true, description="Page number, starting from 1. Defaults to 1.")
-     * @QueryParam(name="limit", requirements="\d+", nullable=true, description="Number of items per page. defaults to 10.")
+     * @QueryParam(
+     *     name="page", requirements="\d+", nullable=true, description="Page number, starting from 1. Defaults to 1."
+     * )
+     * @QueryParam(
+     *     name="limit", requirements="\d+", nullable=true, description="Number of items per page. defaults to 10."
+     * )
      * @ApiDoc(
      *      description="Get all contacts items",
      *      resource=true
@@ -151,36 +155,70 @@ class ContactController extends FlexibleRestController implements ClassResourceI
      */
     protected function getPreparedItem($entity)
     {
+        /** @var Contact $entity */
+        // basic result
+        $result = parent::getPreparedItem($entity);
+
+        // use contact code instead of label
+        $result['source'] = $entity->getSource()->getName();
+
+        // set assigned to user data
+        $assignedTo = $entity->getAssignedTo();
+        if ($assignedTo) {
+            $result['assignedTo'] = $assignedTo->getId();
+        } else {
+            $result['assignedTo'] = null;
+        }
+
+        // set reports to contact data
+        $reportsTo = $entity->getReportsTo();
+        if ($reportsTo) {
+            $result['reportsTo'] = $reportsTo->getId();
+        } else {
+            $result['reportsTo'] = null;
+        }
+
+        // set contact group data
+        $groupsData = array();
+        foreach ($entity->getGroups() as $group) {
+            $groupsData[] = parent::getPreparedItem($group);
+        }
+        $result['groups'] = $groupsData;
+
         // convert addresses to plain array
         $addressData = array();
         /** @var $entity Contact */
-        /** @var ContactAddress $address */
         foreach ($entity->getAddresses() as $address) {
             $addressArray = parent::getPreparedItem($address);
             $addressArray['types'] = $address->getTypeNames();
-
-            unset($addressArray['owner']);
-
+            $addressArray = $this->removeUnusedValues($addressArray, array('owner'));
             $addressData[] = $addressArray;
         }
-
-        $result = parent::getPreparedItem($entity);
         $result['addresses'] = $addressData;
+
+        // convert accounts to plain array
+        $accountsIds = array();
+        foreach ($entity->getAccounts() as $account) {
+            $accountsIds[] = $account->getId();
+        }
+        $result['accounts'] = $accountsIds;
 
         return $result;
     }
 
     /**
-     * @param Contact $entity
+     * @param array $data
+     * @param array $unusedKeys
+     * @return array
      */
-    protected function fixRequestAttributes($entity)
+    protected function removeUnusedValues(array $data, array $unusedKeys)
     {
-        parent::fixRequestAttributes($entity);
+        foreach ($unusedKeys as $key) {
+            if (array_key_exists($key, $data)) {
+                unset($data[$key]);
+            }
+        }
 
-        $requestVariable = $this->getForm()->getName();
-        $request = $this->getRequest()->request;
-        $data = $request->get($requestVariable, array());
-
-        $request->set($requestVariable, $data);
+        return $data;
     }
 }

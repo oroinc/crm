@@ -662,7 +662,7 @@ class Contact implements Taggable
     /**
      * Gets the groups related to contact
      *
-     * @return Collection
+     * @return Group[]|Collection
      */
     public function getGroups()
     {
@@ -702,7 +702,7 @@ class Contact implements Taggable
     /**
      * Get accounts collection
      *
-     * @return Collection
+     * @return Collection|Account[]
      */
     public function getAccounts()
     {
