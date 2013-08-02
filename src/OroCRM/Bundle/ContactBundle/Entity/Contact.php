@@ -43,67 +43,6 @@ class Contact implements Taggable
     protected $id;
 
     /**
-     * @var Collection
-     *
-     * @ORM\ManyToMany(targetEntity="OroCRM\Bundle\ContactBundle\Entity\Group")
-     * @ORM\JoinTable(name="orocrm_contact_to_contact_group",
-     *      joinColumns={@ORM\JoinColumn(name="contact_id", referencedColumnName="id", onDelete="CASCADE")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="contact_group_id", referencedColumnName="id", onDelete="CASCADE")}
-     * )
-     * @Soap\ComplexType("int[]", nillable=true)
-     * @Exclude
-     */
-    protected $groups;
-
-    /**
-     * @var Collection
-     *
-     * @ORM\ManyToMany(targetEntity="OroCRM\Bundle\AccountBundle\Entity\Account", mappedBy="contacts")
-     * @ORM\JoinTable(name="orocrm_contact_to_account")
-     * @Exclude
-     */
-    protected $accounts;
-
-    /**
-     * @var Collection
-     * @ORM\OneToMany(targetEntity="OroCRM\Bundle\ContactBundle\Entity\ContactAddress",
-     *     mappedBy="owner", cascade={"all"}, orphanRemoval=true
-     * )
-     * @ORM\OrderBy({"primary" = "DESC"})
-     * @Soap\ComplexType("OroCRM\Bundle\ContactBundle\Entity\ContactAddress[]", nillable=true)
-     * @Exclude
-     */
-    protected $addresses;
-
-    /**
-     * Set name formatting using "%first%" and "%last%" placeholders
-     *
-     * @var string
-     *
-     * @Exclude
-     */
-    protected $nameFormat;
-
-    /**
-     * @var ArrayCollection
-     */
-    protected $tags;
-
-    /**
-     * @var \DateTime $created
-     *
-     * @ORM\Column(type="datetime")
-     */
-    protected $createdAt;
-
-    /**
-     * @var \DateTime $updated
-     *
-     * @ORM\Column(type="datetime")
-     */
-    protected $updatedAt;
-
-    /**
      * @var string
      *
      * @ORM\Column(name="name_prefix", type="string", length=255, nullable=true)
@@ -144,6 +83,17 @@ class Contact implements Taggable
     protected $nameSuffix;
 
     /**
+     * Set name formatting using "%first%" and "%last%" placeholders
+     *
+     * @var string
+     *
+     * @Exclude
+     */
+    protected $nameFormat;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="title", type="string", length=255, nullable=true)
      * @Soap\ComplexType("string")
      * @Type("string")
@@ -179,7 +129,7 @@ class Contact implements Taggable
     protected $source;
 
     /**
-     * @var User $user
+     * @var User
      *
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="assigned_to_user_id", referencedColumnName="id", onDelete="SET NULL")
@@ -187,7 +137,7 @@ class Contact implements Taggable
     protected $assignedTo;
 
     /**
-     * @var Contact $contact
+     * @var Contact
      *
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ContactBundle\Entity\Contact")
      * @ORM\JoinColumn(name="reports_to_contact_id", referencedColumnName="id", onDelete="SET NULL")
@@ -195,6 +145,8 @@ class Contact implements Taggable
     protected $reportsTo;
 
     /**
+     * @var string
+     *
      * @ORM\Column(name="email", type="string", length=255, nullable=true)
      * @Soap\ComplexType("string")
      * @Type("string")
@@ -203,12 +155,67 @@ class Contact implements Taggable
     protected $email;
 
     /**
+     * @var string
+     *
      * @ORM\Column(name="phone", type="string", length=255, nullable=true)
      * @Soap\ComplexType("string")
      * @Type("string")
      * @Oro\Versioned
      */
     protected $phone;
+
+    /**
+     * @var ArrayCollection
+     */
+    protected $tags;
+
+    /**
+     * @var Collection
+     *
+     * @ORM\OneToMany(targetEntity="OroCRM\Bundle\ContactBundle\Entity\ContactAddress",
+     *     mappedBy="owner", cascade={"all"}, orphanRemoval=true
+     * )
+     * @ORM\OrderBy({"primary" = "DESC"})
+     * @Soap\ComplexType("OroCRM\Bundle\ContactBundle\Entity\ContactAddress[]", nillable=true)
+     * @Exclude
+     */
+    protected $addresses;
+
+    /**
+     * @var Collection
+     *
+     * @ORM\ManyToMany(targetEntity="OroCRM\Bundle\ContactBundle\Entity\Group")
+     * @ORM\JoinTable(name="orocrm_contact_to_contact_group",
+     *      joinColumns={@ORM\JoinColumn(name="contact_id", referencedColumnName="id", onDelete="CASCADE")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="contact_group_id", referencedColumnName="id", onDelete="CASCADE")}
+     * )
+     * @Soap\ComplexType("int[]", nillable=true)
+     * @Exclude
+     */
+    protected $groups;
+
+    /**
+     * @var Collection
+     *
+     * @ORM\ManyToMany(targetEntity="OroCRM\Bundle\AccountBundle\Entity\Account", mappedBy="contacts")
+     * @ORM\JoinTable(name="orocrm_contact_to_account")
+     * @Exclude
+     */
+    protected $accounts;
+
+    /**
+     * @var \DateTime $created
+     *
+     * @ORM\Column(type="datetime")
+     */
+    protected $createdAt;
+
+    /**
+     * @var \DateTime $updated
+     *
+     * @ORM\Column(type="datetime")
+     */
+    protected $updatedAt;
 
     public function __construct()
     {
@@ -240,151 +247,295 @@ class Contact implements Taggable
     }
 
     /**
-     * Get contact created date/time
-     *
-     * @return \DateTime
+     * @param string $firstName
+     * @return Contact
      */
-    public function getCreatedAt()
+    public function setFirstName($firstName)
     {
-        return $this->createdAt;
+        $this->firstName = $firstName;
+
+        return $this;
     }
 
     /**
-     * Get contact last update date/time
-     *
-     * @return \DateTime
+     * @return string
      */
-    public function getUpdatedAt()
+    public function getFirstName()
     {
-        return $this->updatedAt;
+        return $this->firstName;
     }
 
     /**
-     * Pre persist event listener
-     *
-     * @ORM\PrePersist
+     * @param string $lastName
+     * @return Contact
      */
-    public function beforeSave()
+    public function setLastName($lastName)
     {
-        $this->createdAt = new \DateTime('now', new \DateTimeZone('UTC'));
-        $this->doPreUpdate();
+        $this->lastName = $lastName;
+
+        return $this;
     }
 
     /**
-     * Pre update event handler
-     *
-     * @ORM\PreUpdate
+     * @return string
      */
-    public function doPreUpdate()
+    public function getLastName()
     {
-        $this->updatedAt = new \DateTime('now', new \DateTimeZone('UTC'));
+        return $this->lastName;
     }
 
     /**
-     * Get group labels separated with comma.
+     * @param string $namePrefix
+     * @return Contact
+     */
+    public function setNamePrefix($namePrefix)
+    {
+        $this->namePrefix = $namePrefix;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNamePrefix()
+    {
+        return $this->namePrefix;
+    }
+
+    /**
+     * @param string $nameSuffix
+     * @return Contact
+     */
+    public function setNameSuffix($nameSuffix)
+    {
+        $this->nameSuffix = $nameSuffix;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNameSuffix()
+    {
+        return $this->nameSuffix;
+    }
+
+    /**
+     * Get full name format. Defaults to "%first% %last%".
      *
      * @return string
      */
-    public function getGroupLabelsAsString()
+    public function getNameFormat()
     {
-        return implode(', ', $this->getGroupLabels());
+        return $this->nameFormat ?  $this->nameFormat : '%first% %last%';
     }
 
     /**
-     * Get list of group labels
+     * Set new format for a full name display. Use %first% and %last% placeholders, for example: "%last%, %first%".
      *
-     * @return array
-     */
-    public function getGroupLabels()
-    {
-        $result = array();
-
-        /** @var Group $group */
-        foreach ($this->getGroups() as $group) {
-            $result[] = $group->getLabel();
-        }
-
-        return $result;
-    }
-
-    /**
-     * Gets the groups related to contact
-     *
-     * @return Collection
-     */
-    public function getGroups()
-    {
-        return $this->groups;
-    }
-
-    /**
-     * Add specified group
-     *
-     * @param Group $group
+     * @param  string $format New format string
      * @return Contact
      */
-    public function addGroup(Group $group)
+    public function setNameFormat($format)
     {
-        if (!$this->getGroups()->contains($group)) {
-            $this->getGroups()->add($group);
-        }
+        $this->nameFormat = $format;
 
         return $this;
     }
 
     /**
-     * Remove specified group
+     * Return full contact name according to name format
      *
-     * @param Group $group
+     * @see Contact::setNameFormat()
+     * @param  string $format [optional]
+     * @return string
+     */
+    public function getFullname($format = '')
+    {
+        return str_replace(
+            array('%first%', '%last%'),
+            array($this->getFirstName(), $this->getLastName()),
+            $format ? $format : $this->getNameFormat()
+        );
+    }
+
+    /**
+     * @param User $assignedTo
      * @return Contact
      */
-    public function removeGroup(Group $group)
+    public function setAssignedTo($assignedTo)
     {
-        if ($this->getGroups()->contains($group)) {
-            $this->getGroups()->removeElement($group);
-        }
+        $this->assignedTo = $assignedTo;
 
         return $this;
     }
 
     /**
-     * Get accounts collection
-     *
-     * @return Collection
+     * @return User
      */
-    public function getAccounts()
+    public function getAssignedTo()
     {
-        return $this->accounts;
+        return $this->assignedTo;
     }
 
     /**
-     * Add specified account
-     *
-     * @param Account $account
+     * @param \DateTime $birthday
      * @return Contact
      */
-    public function addAccount(Account $account)
+    public function setBirthday($birthday)
     {
-        if (!$this->getAccounts()->contains($account)) {
-            $this->getAccounts()->add($account);
-            $account->addContact($this);
-        }
+        $this->birthday = $birthday;
 
         return $this;
     }
 
     /**
-     * Remove specified account
-     *
-     * @param Account $account
+     * @return \DateTime
+     */
+    public function getBirthday()
+    {
+        return $this->birthday;
+    }
+
+    /**
+     * @param string $description
      * @return Contact
      */
-    public function removeAccount(Account $account)
+    public function setDescription($description)
     {
-        if ($this->getAccounts()->contains($account)) {
-            $this->getAccounts()->removeElement($account);
-            $account->removeContact($this);
-        }
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * @param mixed $email
+     * @return Contact
+     */
+    public function setEmail($email)
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getEmail()
+    {
+        return $this->email;
+    }
+
+    /**
+     * @param mixed $phone
+     * @return Contact
+     */
+    public function setPhone($phone)
+    {
+        $this->phone = $phone;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPhone()
+    {
+        return $this->phone;
+    }
+
+    /**
+     * @param Contact $reportsTo
+     * @return Contact
+     */
+    public function setReportsTo($reportsTo)
+    {
+        $this->reportsTo = $reportsTo;
+
+        return $this;
+    }
+
+    /**
+     * @return Contact
+     */
+    public function getReportsTo()
+    {
+        return $this->reportsTo;
+    }
+
+    /**
+     * @param ContactSource $source
+     * @return Contact
+     */
+    public function setSource($source)
+    {
+        $this->source = $source;
+
+        return $this;
+    }
+
+    /**
+     * @return ContactSource
+     */
+    public function getSource()
+    {
+        return $this->source;
+    }
+
+    /**
+     * @param mixed $title
+     * @return Contact
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    /**
+     * @return int
+     */
+    public function getTaggableId()
+    {
+        return $this->getId();
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getTags()
+    {
+        return $this->tags;
+    }
+
+    /**
+     * @param array|Collection $tags
+     * @return Contact
+     */
+    public function setTags($tags)
+    {
+        $this->tags = $tags;
 
         return $this;
     }
@@ -500,112 +651,122 @@ class Contact implements Taggable
     }
 
     /**
-     * Get full name format. Defaults to "%first% %last%".
+     * Get group labels separated with comma.
      *
      * @return string
      */
-    public function getNameFormat()
+    public function getGroupLabelsAsString()
     {
-        return $this->nameFormat ?  $this->nameFormat : '%first% %last%';
+        return implode(', ', $this->getGroupLabels());
     }
 
     /**
-     * Set new format for a full name display. Use %first% and %last% placeholders, for example: "%last%, %first%".
+     * Get list of group labels
      *
-     * @param  string $format New format string
-     * @return Contact
+     * @return array
      */
-    public function setNameFormat($format)
+    public function getGroupLabels()
     {
-        $this->nameFormat = $format;
+        $result = array();
 
-        return $this;
+        /** @var Group $group */
+        foreach ($this->getGroups() as $group) {
+            $result[] = $group->getLabel();
+        }
+
+        return $result;
     }
 
     /**
-     * Return full contact name according to name format
+     * Gets the groups related to contact
      *
-     * @see Contact::setNameFormat()
-     * @param  string $format [optional]
-     * @return string
+     * @return Collection
      */
-    public function getFullname($format = '')
+    public function getGroups()
     {
-        return str_replace(
-            array('%first%', '%last%'),
-            array($this->getFirstName(), $this->getLastName()),
-            $format ? $format : $this->getNameFormat()
-        );
-    }
-
-    public function __toString()
-    {
-        return trim($this->getFirstName() . ' ' . $this->getLastName());
+        return $this->groups;
     }
 
     /**
-     * @return int
-     */
-    public function getTaggableId()
-    {
-        return $this->getId();
-    }
-
-    /**
-     * @return ArrayCollection
-     */
-    public function getTags()
-    {
-        return $this->tags;
-    }
-
-    /**
-     * @param array|Collection $tags
-     * @return Contact
-     */
-    public function setTags($tags)
-    {
-        $this->tags = $tags;
-
-        return $this;
-    }
-
-    /**
-     * @param User $assignedTo
+     * Add specified group
+     *
+     * @param Group $group
      * @return Contact
      */
-    public function setAssignedTo($assignedTo)
+    public function addGroup(Group $group)
     {
-        $this->assignedTo = $assignedTo;
+        if (!$this->getGroups()->contains($group)) {
+            $this->getGroups()->add($group);
+        }
 
         return $this;
     }
 
     /**
-     * @return User
-     */
-    public function getAssignedTo()
-    {
-        return $this->assignedTo;
-    }
-
-    /**
-     * @param \DateTime $birthday
+     * Remove specified group
+     *
+     * @param Group $group
      * @return Contact
      */
-    public function setBirthday($birthday)
+    public function removeGroup(Group $group)
     {
-        $this->birthday = $birthday;
+        if ($this->getGroups()->contains($group)) {
+            $this->getGroups()->removeElement($group);
+        }
 
         return $this;
     }
 
     /**
+     * Get accounts collection
+     *
+     * @return Collection
+     */
+    public function getAccounts()
+    {
+        return $this->accounts;
+    }
+
+    /**
+     * Add specified account
+     *
+     * @param Account $account
+     * @return Contact
+     */
+    public function addAccount(Account $account)
+    {
+        if (!$this->getAccounts()->contains($account)) {
+            $this->getAccounts()->add($account);
+            $account->addContact($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Remove specified account
+     *
+     * @param Account $account
+     * @return Contact
+     */
+    public function removeAccount(Account $account)
+    {
+        if ($this->getAccounts()->contains($account)) {
+            $this->getAccounts()->removeElement($account);
+            $account->removeContact($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Get contact created date/time
+     *
      * @return \DateTime
      */
-    public function getBirthday()
+    public function getCreatedAt()
     {
-        return $this->birthday;
+        return $this->createdAt;
     }
 
     /**
@@ -620,193 +781,13 @@ class Contact implements Taggable
     }
 
     /**
-     * @param string $description
-     * @return Contact
+     * Get contact last update date/time
+     *
+     * @return \DateTime
      */
-    public function setDescription($description)
+    public function getUpdatedAt()
     {
-        $this->description = $description;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getDescription()
-    {
-        return $this->description;
-    }
-
-    /**
-     * @param mixed $email
-     * @return Contact
-     */
-    public function setEmail($email)
-    {
-        $this->email = $email;
-
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getEmail()
-    {
-        return $this->email;
-    }
-
-    /**
-     * @param string $firstName
-     * @return Contact
-     */
-    public function setFirstName($firstName)
-    {
-        $this->firstName = $firstName;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getFirstName()
-    {
-        return $this->firstName;
-    }
-
-    /**
-     * @param string $lastName
-     * @return Contact
-     */
-    public function setLastName($lastName)
-    {
-        $this->lastName = $lastName;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getLastName()
-    {
-        return $this->lastName;
-    }
-
-    /**
-     * @param string $namePrefix
-     * @return Contact
-     */
-    public function setNamePrefix($namePrefix)
-    {
-        $this->namePrefix = $namePrefix;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getNamePrefix()
-    {
-        return $this->namePrefix;
-    }
-
-    /**
-     * @param string $nameSuffix
-     * @return Contact
-     */
-    public function setNameSuffix($nameSuffix)
-    {
-        $this->nameSuffix = $nameSuffix;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getNameSuffix()
-    {
-        return $this->nameSuffix;
-    }
-
-    /**
-     * @param mixed $phone
-     * @return Contact
-     */
-    public function setPhone($phone)
-    {
-        $this->phone = $phone;
-
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getPhone()
-    {
-        return $this->phone;
-    }
-
-    /**
-     * @param Contact $reportsTo
-     * @return Contact
-     */
-    public function setReportsTo($reportsTo)
-    {
-        $this->reportsTo = $reportsTo;
-
-        return $this;
-    }
-
-    /**
-     * @return Contact
-     */
-    public function getReportsTo()
-    {
-        return $this->reportsTo;
-    }
-
-    /**
-     * @param ContactSource $source
-     * @return Contact
-     */
-    public function setSource($source)
-    {
-        $this->source = $source;
-
-        return $this;
-    }
-
-    /**
-     * @return ContactSource
-     */
-    public function getSource()
-    {
-        return $this->source;
-    }
-
-    /**
-     * @param mixed $title
-     * @return Contact
-     */
-    public function setTitle($title)
-    {
-        $this->title = $title;
-
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getTitle()
-    {
-        return $this->title;
+        return $this->updatedAt;
     }
 
     /**
@@ -818,5 +799,27 @@ class Contact implements Taggable
         $this->updatedAt = $updated;
 
         return $this;
+    }
+
+    /**
+     * @ORM\PrePersist
+     */
+    public function onCreate()
+    {
+        $this->createdAt = new \DateTime('now', new \DateTimeZone('UTC'));
+    }
+
+    /**
+     * @ORM\PrePersist
+     * @ORM\PreUpdate
+     */
+    public function onUpdate()
+    {
+        $this->updatedAt = new \DateTime('now', new \DateTimeZone('UTC'));
+    }
+
+    public function __toString()
+    {
+        return trim($this->getFirstName() . ' ' . $this->getLastName());
     }
 }

@@ -10,17 +10,17 @@ use Oro\Bundle\AddressBundle\Entity\AddressType;
 
 class ContactTest extends \PHPUnit_Framework_TestCase
 {
-    public function testBeforeSave()
+    public function testOnCreate()
     {
         $entity = new Contact();
-        $entity->beforeSave();
+        $entity->onCreate();
         $this->assertInstanceOf('\DateTime', $entity->getCreatedAt());
     }
 
-    public function testDoPreUpdate()
+    public function testOnUpdate()
     {
         $entity = new Contact();
-        $entity->doPreUpdate();
+        $entity->onUpdate();
         $this->assertInstanceOf('\DateTime', $entity->getUpdatedAt());
     }
 
