@@ -21,6 +21,8 @@ parameters:
     orocrm_contact.contact_address.manager.flexible.class: Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleManager
     orocrm_contact.type.contact_address.class: OroCRM\Bundle\ContactBundle\Form\Type\ContactAddressType
 
+    orocrm_contact.email.owner.provider.class: OroCRM\Bundle\ContactBundle\Entity\Provider\EmailOwnerProvider
+
 services:
     orocrm_contact.manager.flexible:
         class: %orocrm_contact.manager.flexible.class%
@@ -204,3 +206,10 @@ services:
             - ["first_name", "last_name"]
         tags:
             - { name: oro_form.autocomplete.search_handler, alias: contacts, acl_resource: orocrm_contact_list }
+
+    orocrm_contact.email.owner.provider:
+        class: %orocrm_contact.email.owner.provider.class%
+        arguments:
+            - @doctrine.orm.entity_manager
+        tags:
+            - { name: oro_email.owner.provider, order: 2 }

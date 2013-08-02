@@ -16,13 +16,15 @@ use OroCRM\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\TagBundle\Entity\Taggable;
 use Oro\Bundle\AddressBundle\Entity\AddressType;
 use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityFlexible;
+use Oro\Bundle\EmailBundle\Entity\EmailOwnerInterface;
 
 /**
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @ORM\Entity(repositoryClass="Oro\Bundle\FlexibleEntityBundle\Entity\Repository\FlexibleEntityRepository")
  * @ORM\Table(name="orocrm_contact")
  * @ORM\HasLifecycleCallbacks()
  */
-class Contact extends AbstractEntityFlexible implements Taggable
+class Contact extends AbstractEntityFlexible implements Taggable, EmailOwnerInterface
 {
     /**
      * @ORM\Id
@@ -96,7 +98,17 @@ class Contact extends AbstractEntityFlexible implements Taggable
     }
 
     /**
-     * Returns the account unique id.
+     * Get entity class name.
+     *
+     * @return string
+     */
+    public function getClass()
+    {
+        return 'OroCRM\Bundle\ContactBundle\Entity\Contact';
+    }
+
+    /**
+     * Returns the contact unique id.
      *
      * @return mixed
      */
@@ -401,6 +413,26 @@ class Contact extends AbstractEntityFlexible implements Taggable
             array($this->getAttributeData('first_name'), $this->getAttributeData('last_name')),
             $format ? $format : $this->getNameFormat()
         );
+    }
+
+    /**
+     * Get contact' first name
+     *
+     * @return string
+     */
+    public function getFirstname()
+    {
+        return $this->getAttributeData('first_name');
+    }
+
+    /**
+     * Get contact' last name
+     *
+     * @return string
+     */
+    public function getLastname()
+    {
+        return $this->getAttributeData('last_name');
     }
 
     public function __toString()
