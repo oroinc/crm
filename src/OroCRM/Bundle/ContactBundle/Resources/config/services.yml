@@ -209,7 +209,5 @@ services:
 
     orocrm_contact.email.owner.provider:
         class: %orocrm_contact.email.owner.provider.class%
-        arguments:
-            - @doctrine.orm.entity_manager
         tags:
             - { name: oro_email.owner.provider, order: 2 }

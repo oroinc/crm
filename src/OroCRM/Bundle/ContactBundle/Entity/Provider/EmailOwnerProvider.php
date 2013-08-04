@@ -5,29 +5,21 @@ namespace OroCRM\Bundle\ContactBundle\Entity\Provider;
 use Doctrine\ORM\EntityManager;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\EmailBundle\Entity\Provider\EmailOwnerProviderInterface;
-use Oro\Bundle\FlexibleEntityBundle\Entity\Repository\FlexibleEntityRepository;
 
 class EmailOwnerProvider implements EmailOwnerProviderInterface
 {
     /**
-     * @var EntityManager
+     * {@inheritdoc}
      */
-    private $em;
-
-    /**
-     * Constructor
-     *
-     * @param EntityManager $em
-     */
-    public function __construct(EntityManager $em)
+    public function getEmailOwnerClass()
     {
-        $this->em = $em;
+        return 'OroCRM\Bundle\ContactBundle\Entity\Contact';
     }
 
     /**
      * {@inheritdoc}
      */
-    public function findEmailOwner($emailAddress)
+    public function findEmailOwner(EntityManager $em, $email)
     {
         // TODO: Need to be refactored after contact emails database structure is arranged
 
@@ -35,9 +27,9 @@ class EmailOwnerProvider implements EmailOwnerProviderInterface
         $contact = null;
 
         /** @var Contact $c */
-        foreach ($this->em->getRepository('OroCRM\Bundle\ContactBundle\Entity\Contact')->findAll() as $c) {
-            foreach ($c->getEmails() as $email) {
-                if (strcasecmp($email, $emailAddress)) {
+        foreach ($em->getRepository('OroCRMContactBundle:Contact')->findAll() as $c) {
+            foreach ($c->getEmails() as $contactEmail) {
+                if (strcasecmp($contactEmail, $email)) {
                     $contact = $c;
                     break;
                 }

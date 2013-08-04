@@ -108,6 +108,17 @@ class Contact extends AbstractEntityFlexible implements Taggable, EmailOwnerInte
     }
 
     /**
+     * Get name of field contains the primary email address
+     *
+     * @return string
+     */
+    public function getPrimaryEmailField()
+    {
+        // TODO: Return correct field name after refactoring of contact class
+        return null;
+    }
+
+    /**
      * Returns the contact unique id.
      *
      * @return mixed
