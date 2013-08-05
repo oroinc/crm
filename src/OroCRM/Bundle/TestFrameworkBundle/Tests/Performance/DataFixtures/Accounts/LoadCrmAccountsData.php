@@ -29,6 +29,14 @@ use Oro\Bundle\UserBundle\Entity\User;
 class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInterface
 {
     const FLUSH_MAX = 20;
+    const MAX_RECORDS = 10000;
+
+    protected $maxRecords;
+
+    /**
+     * @var ContainerInterface
+     */
+    protected $container;
 
     /** @var array Lead Sources */
     protected $sources = array('other', 'call', 'TV', 'website');
@@ -77,18 +85,35 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
      */
     public function setContainer(ContainerInterface $container = null)
     {
-        $this->accountManager = $container->get('orocrm_account.account.manager.flexible');
+        $this->container = $container;
+
+        if (isset($container->counter)) {
+            $this->maxRecords = $container->counter;
+        } else {
+            $this->maxRecords = self::MAX_RECORDS;
+        }
+
+        $this->accountManager = $this->container->get('orocrm_account.account.manager.flexible');
         $this->accountRepository = $this->accountManager->getFlexibleRepository();
 
-        $this->contactManager = $container->get('orocrm_contact.manager.flexible');
+        $this->contactManager = $this->container->get('orocrm_contact.manager.flexible');
         $this->contactRepository = $this->contactManager->getFlexibleRepository();
-        $this->groups = $this->contactManager->getStorageManager()->getRepository('OroCRMContactBundle:Group')->findAll();
+        $this->groups = $this->contactManager
+            ->getStorageManager()
+            ->getRepository('OroCRMContactBundle:Group')
+            ->findAll();
 
-        $this->userManager = $container->get('oro_user.manager');
+        $this->userManager = $this->container->get('oro_user.manager');
         $this->userRepository = $this->userManager->getFlexibleRepository();
-        $this->users = $this->userManager->getStorageManager()->getRepository('OroUserBundle:User')->findAll();
+        $this->users = $this->userManager
+            ->getStorageManager()
+            ->getRepository('OroUserBundle:User')
+            ->findAll();
 
-        $this->countries = $this->userManager->getStorageManager()->getRepository('OroAddressBundle:Country')->findAll();
+        $this->countries = $this->userManager
+            ->getStorageManager()
+            ->getRepository('OroAddressBundle:Country')
+            ->findAll();
     }
 
     /**
@@ -124,6 +149,7 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
                 $headers = $data;
             }
             echo "\nLoading...\n";
+            $averageTime = 0.0;
             while (($data = fgetcsv($handle, 1000, ",")) !== false) {
                 $s = microtime(true);
                 $data = array_combine($headers, array_values($data));
@@ -148,19 +174,35 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
                     $this->flush($this->contactManager);
                     $this->contactManager->getStorageManager()->clear();
 
-                    $this->groups = $this->contactManager->getStorageManager()->getRepository('OroCRMContactBundle:Group')->findAll();
-                    $this->users = $this->userManager->getStorageManager()->getRepository('OroUserBundle:User')->findAll();
-                    $this->countries = $this->userManager->getStorageManager()->getRepository('OroAddressBundle:Country')->findAll();
+                    $this->groups = $this->contactManager
+                        ->getStorageManager()
+                        ->getRepository('OroCRMContactBundle:Group')
+                        ->findAll();
+                    $this->users = $this->userManager
+                        ->getStorageManager()
+                        ->getRepository('OroUserBundle:User')
+                        ->findAll();
+                    $this->countries = $this->userManager
+                        ->getStorageManager()
+                        ->getRepository('OroAddressBundle:Country')
+                        ->findAll();
 
                     $e = microtime(true);
                     echo ">> {$i} " . ($e-$s) . "\n";
+                    $averageTime += ($e-$s);
+                    ob_flush();
+                }
+
+                if ($i % $this->maxRecords == 0) {
+                    break;
                 }
             }
             fclose($handle);
+            $this->flush($this->accountManager);
+            $this->flush($this->contactManager);
+            echo ">> Average time: " . ($averageTime / ($this->maxRecords / self::FLUSH_MAX)) . "\n";
+            $this->container->averageTime = $averageTime / ($this->maxRecords / self::FLUSH_MAX);
         }
-        $this->flush($this->accountManager);
-        $this->flush($this->contactManager);
-
     }
 
     /**
