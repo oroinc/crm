@@ -31,11 +31,7 @@ class RestContactApiTest extends WebTestCase
 
     public function setUp()
     {
-        if (!isset($this->client)) {
-            $this->client = static::createClient(array(), ToolsAPI::generateWsseHeader());
-        } else {
-            $this->client->restart();
-        }
+        $this->client = static::createClient(array(), ToolsAPI::generateWsseHeader());
     }
 
     /**
@@ -100,7 +96,10 @@ class RestContactApiTest extends WebTestCase
         }
         $this->assertNotNull($requiredContact);
 
-        $this->client->request('GET', $this->client->generate('oro_api_get_contact', array('id' => $requiredContact['id'])));
+        $this->client->request(
+            'GET',
+            $this->client->generate('oro_api_get_contact', array('id' => $requiredContact['id']))
+        );
         $result = $this->client->getResponse();
         ToolsAPI::assertJsonResponse($result, 200);
 
@@ -127,7 +126,11 @@ class RestContactApiTest extends WebTestCase
         $request['contact']['addresses'][0]['types'] = $this->testAddress['types'];
         $request['contact']['addresses'][0]['primary'] = true;
 
-        $this->client->request('PUT', $this->client->generate('oro_api_put_contact', array('id' => $contact['id'])), $request);
+        $this->client->request(
+            'PUT',
+            $this->client->generate('oro_api_put_contact', array('id' => $contact['id'])),
+            $request
+        );
         $result = $this->client->getResponse();
         ToolsAPI::assertJsonResponse($result, 204);
 
@@ -152,7 +155,10 @@ class RestContactApiTest extends WebTestCase
      */
     public function testDeleteContact($contact)
     {
-        $this->client->request('DELETE', $this->client->generate('oro_api_delete_contact', array('id' => $contact['id'])));
+        $this->client->request(
+            'DELETE',
+            $this->client->generate('oro_api_delete_contact', array('id' => $contact['id']))
+        );
         $result = $this->client->getResponse();
         ToolsAPI::assertJsonResponse($result, 204);
 
