@@ -1,0 +1,2 @@
+OroAddress = Backbone.Model.extend({
+});

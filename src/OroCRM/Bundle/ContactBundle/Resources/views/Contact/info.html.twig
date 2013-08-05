@@ -1,0 +1,92 @@
+{% import 'OroUIBundle::macros.html.twig' as macros %}
+
+{# TODO: Move this to OroUIBundle::macros.html.twig #}
+{% macro renderRow(label, value) %}
+    {% import 'OroUIBundle::macros.html.twig' as macros %}
+    {{ macros.renderAttribute(label, '<p class="control-label">' ~ value ~ '</p>') }}
+{% endmacro %}
+
+<div class="widget-content">
+<div class="span6">
+    {{ _self.renderRow('Phone'|trans, entity.phone) }}
+    {{ _self.renderRow('Email'|trans, entity.email) }}
+
+    <div class="control-group">
+        <label class="control-label">Fax</label>
+        <div class="controls">
+            <div class="clearfix-oro">
+                <p class="control-label">(310) 123-1234</p>
+            </div>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label">Skype</label>
+        <div class="controls">
+            <div class="clearfix-oro">
+                <p class="control-label">
+                    <a href="#">dima.magecore</a>
+                    {# <script type="text/javascript" src="http://cdn.dev.skype.com/uri/skype-uri.js"></script>
+                     <div id="SkypeButton_Dropdown_dima.magecore_1">
+                         <script type="text/javascript">
+                             Skype.ui({
+                                 "name": "dropdown",
+                                 "element": "SkypeButton_Dropdown_dima.magecore_1",
+                                 "participants": ["dima.magecore"],
+                                 "imageSize": 32
+                             });
+                         </script>
+                     </div>#}
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label">Contact Method</label>
+        <div class="controls">
+            <div class="clearfix-oro">
+                <p class="control-label">Email</p>
+            </div>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label">Social</label>
+        <div class="controls">
+            <div class="clearfix-oro">
+                <div class="control-label">
+                    <ul class="list-inline">
+                        <li><a href="#"><i class="icon-twitter-new hide-text">twitter</i></a></li>
+                        <li><a href="#"><i class="icon-facebook-new hide-text">facebook</i></a></li>
+                        <li><a href="#"><i class="icon-google-new hide-text">google+</i></a></li>
+                        <li><a href="#"><i class="icon-linkedin-new hide-text">linkedIn</i></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="span6">
+    {{ _self.renderRow('Job Title'|trans, entity.title) }}
+
+    <div class="control-group">
+        <label class="control-label">Companies</label>
+        <div class="controls">
+            <div class="clearfix-oro">
+                <p class="control-label"><a href="www.magecore.com">MageCore, Oro</a></p>
+            </div>
+        </div>
+    </div>
+
+    {{ _self.renderRow('Birthday'|trans, macros.date(entity.birthday)) }}
+
+    <div class="control-group">
+        <label class="control-label">Gender</label>
+        <div class="controls">
+            <div class="clearfix-oro">
+                <p class="control-label">Male</p>
+            </div>
+        </div>
+    </div>
+
+    {{ _self.renderRow('Source'|trans, entity.source) }}
+</div>
+</div>

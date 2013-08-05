@@ -56,6 +56,40 @@ class ContactController extends Controller
     }
 
     /**
+     * @Route("/info/{id}", name="orocrm_contact_info", requirements={"id"="\d+"})
+     * @Template
+     * @Acl(
+     *      id="orocrm_contact_info",
+     *      name="View Contact Info",
+     *      description="View contact info",
+     *      parent="orocrm_contact_view"
+     * )
+     */
+    public function infoAction(Contact $contact)
+    {
+        return array(
+            'entity' => $contact
+        );
+    }
+
+    /**
+     * @Route("/address-book/{id}", name="orocrm_contact_address_book", requirements={"id"="\d+"})
+     * @Template
+     * @Acl(
+     *      id="orocrm_contact_address_book",
+     *      name="View Contact Address Book",
+     *      description="View contact Address Boo",
+     *      parent="orocrm_contact_view"
+     * )
+     */
+    public function addressBookAction(Contact $contact)
+    {
+        return array(
+            'entity' => $contact
+        );
+    }
+
+    /**
      * Create contact form
      *
      * @Route("/create", name="orocrm_contact_create")
