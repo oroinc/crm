@@ -13,7 +13,6 @@ use FOS\RestBundle\Routing\ClassResourceInterface;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
 use Oro\Bundle\AddressBundle\Entity\AddressType;
-
 use Oro\Bundle\UserBundle\Annotation\Acl;
 use Oro\Bundle\UserBundle\Annotation\AclAncestor;
 
@@ -22,7 +21,7 @@ use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
 use Oro\Bundle\SoapBundle\Entity\Manager\ApiFlexibleEntityManager;
 
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
-use OroCRM\Bundle\ContactBundle\Entity\ContactAddress;
+use OroCRM\Bundle\ContactBundle\Form\Type\ContactApiType;
 
 /**
  * @RouteResource("contact")
@@ -160,7 +159,12 @@ class ContactController extends RestController implements ClassResourceInterface
         $result = parent::getPreparedItem($entity);
 
         // use contact code instead of label
-        $result['source'] = $entity->getSource()->getName();
+        $source = $entity->getSource();
+        if ($source) {
+            $result['source'] = $source->getName();
+        } else {
+            $result['source'] = null;
+        }
 
         // set assigned to user data
         $assignedTo = $entity->getAssignedTo();
@@ -220,5 +224,55 @@ class ContactController extends RestController implements ClassResourceInterface
         }
 
         return $data;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function processForm($entity)
+    {
+        $this->fixRequest($entity);
+        return parent::processForm($entity);
+    }
+
+    /**
+     * @param Contact $contact
+     */
+    protected function fixRequest($contact)
+    {
+        $formAlias = $this->getFormAlias();
+        $contactData = $this->getRequest()->request->get($formAlias);
+
+        if (array_key_exists('accounts', $contactData)) {
+            $accounts = $contactData['accounts'];
+            $appendAccounts = array_key_exists('appendAccounts', $contactData)
+                ? $contactData['appendAccounts']
+                : array();
+            $removeAccounts = array_key_exists('removeAccounts', $contactData)
+                ? $contactData['removeAccounts']
+                : array();
+
+            if ($contact->getId()) {
+                foreach ($contact->getAccounts() as $account) {
+                    if (!in_array($account->getId(), $accounts)) {
+                        $removeAccounts[] = $account->getId();
+                    }
+                }
+            }
+
+            $contactData['appendAccounts'] = array_merge($appendAccounts, $accounts);
+            $contactData['removeAccounts'] = $removeAccounts;
+            unset($contactData['accounts']);
+
+            $this->getRequest()->request->set($formAlias, $contactData);
+        }
+    }
+
+    /**
+     * @return string
+     */
+    protected function getFormAlias()
+    {
+        return ContactApiType::NAME;
     }
 }

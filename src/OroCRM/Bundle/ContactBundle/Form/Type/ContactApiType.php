@@ -10,6 +10,8 @@ use Oro\Bundle\UserBundle\Form\EventListener\PatchSubscriber;
 
 class ContactApiType extends AbstractType
 {
+    const NAME = 'contact';
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->addEventSubscriber(new PatchSubscriber());
@@ -22,7 +24,7 @@ class ContactApiType extends AbstractType
     {
         $resolver->setDefaults(
             array(
-                'csrf_protection'      => false,
+                'csrf_protection' => false,
             )
         );
     }
@@ -40,6 +42,6 @@ class ContactApiType extends AbstractType
      */
     public function getName()
     {
-        return 'contact';
+        return self::NAME;
     }
 }
