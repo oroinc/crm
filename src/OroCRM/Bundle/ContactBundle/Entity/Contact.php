@@ -510,9 +510,9 @@ class Contact extends AbstractEntityFlexible implements Taggable, EmailOwnerInte
      */
     public function getEmails()
     {
-        $emails = new ArrayCollection();
+        $emails = array();
 
-        $emails->add($this->getValue('email'));
+        $emails[] = $this->getValue('email')->getData();
 
         return $emails;
     }
