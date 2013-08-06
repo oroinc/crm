@@ -1,3 +1,3 @@
-OroAddressCollection = Backbone.Collection.extend({
+var OroAddressCollection = Backbone.Collection.extend({
     model: OroAddress
 });

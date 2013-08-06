@@ -50,55 +50,63 @@
                 {#</div>#}
                 <div class="span6">
                     <script type="text/html" id="template-contact-address">
-                        <div class="map-item <% if (isPrimary) { %>active<% } %>">
-                            <div class="clearfix">
-                                <div class="title-item"><%= label %></div>
-                                <div class="map-actions">
-                                    <button class="btn"><i class="icon-edit hide-text"><%= _.__('Edit') %></i></button>
-                                    <button class="btn"><i class="icon-remove hide-text"><%= _.__('Close') %></i></button>
-                                </div>
+                        <div class="clearfix">
+                            <div class="title-item"><%= label %></div>
+                            <div class="map-actions">
+                                <button class="btn"><i class="icon-edit hide-text"><%= _.__('Edit') %></i></button>
+                                <% if (!isPrimary) { %><button class="btn"><i class="icon-remove hide-text"><%= _.__('Close') %></i></button><% } %>
                             </div>
-                            <ul class="inline">
-                                <% if(isPrimary) { %> <li><span class="label label-info"><%= _.__('Primary') %></span></li> <% } %>
-                                <% _.each(types, function(type) { %>
-                                <li><span class="label"><%= type %></span></li>
-                                <% } %>
-                            </ul>
-                            <address>
-                                <%= street %> <%= street2 %><br />
-                                <% city %>, <%= state %><br />
-                                <%= postalCode %><br />
-                                <%= country =><br />
-                            </address>
                         </div>
+                        <ul class="inline">
+                            <% if(isPrimary) { %> <li><span class="label label-info"><%= _.__('Primary') %></span></li> <% } %>
+                            <% _.each(types, function(type) { %>
+                            <li><span class="label"><%= type %></span></li>
+                            <% }) %>
+                        </ul>
+                        <address>
+                            <%= street %>&nbsp;<%= street2 %><br />
+                            <%= city %>, <%= state %><br />
+                            <%= postalCode %><br />
+                            <%= country %><br />
+                        </address>
                     </script>
 
-                    <script type="text/html" id="template-contact-address-book">
-                        <div class="map-box">
-                            <div class="map-address-list"></div>
-                            <div class="map-visual"></div>
-                        </div>
-                    </script>
+                    <div class="map-box" id="address-book">
+                        <div class="span6"><div class="map-address-list"></div></div>
+                        <div class="span6"><div class="map-visual"></div></div>
+                    </div>
 
-                    <div id="address-book"></div>
                     <script type="text/javascript">
                         $(function() {
-                            new OroAddressBook({
-                                el: '#address-book',
-                                collection: new OroAddressCollection([
-                                    new OroAddress({
-                                        'id': 1,
-                                        'street': 'Street',
-                                        'street2': 'Street2',
-                                        'city': 'City',
-                                        'country': 'Country',
-                                        'postalCode': 'postalCode',
-                                        'state': 'State',
-                                        'isPrimary': true,
-                                        'types': ['type1', 'type2']
-                                    })
-                                ])
-                            }).render();
+                            var addressBook = new OroAddressBook({
+                                el: '#address-book'
+                            });
+                            addressBook.getCollection().reset([
+                                new OroAddress({
+                                    'id': 1,
+                                    'label': 'Home address',
+                                    'street': '185 Artema st.',
+                                    'street2': '',
+                                    'city': 'Donetsk',
+                                    'country': 'Ukraine',
+                                    'postalCode': '83000',
+                                    'state': 'Donetskaya obl.',
+                                    'isPrimary': true,
+                                    'types': ['Billing', 'Home']
+                                }),
+                                new OroAddress({
+                                    'id': 2,
+                                    'label': 'Work address',
+                                    'street': '34 Pushkina st.',
+                                    'street2': '',
+                                    'city': 'Donetsk',
+                                    'country': 'Ukraine',
+                                    'postalCode': '83000',
+                                    'state': 'Donetskaya obl.',
+                                    'isPrimary': false,
+                                    'types': ['Shipping']
+                                })
+                            ]);
                         });
                     </script>
                     {#{{#}
