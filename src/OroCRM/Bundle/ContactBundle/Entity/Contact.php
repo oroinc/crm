@@ -42,7 +42,7 @@ class Contact implements Taggable
      * @var string
      *
      * @ORM\Column(name="name_prefix", type="string", length=255, nullable=true)
-     * @Soap\ComplexType("string")
+     * @Soap\ComplexType("string", nillable=true)
      * @Oro\Versioned
      */
     protected $namePrefix;
@@ -50,7 +50,7 @@ class Contact implements Taggable
     /**
      * @var string
      *
-     * @ORM\Column(name="firstname", type="string", length=255, nullable=true)
+     * @ORM\Column(name="firstname", type="string", length=255)
      * @Soap\ComplexType("string")
      * @Oro\Versioned
      */
@@ -59,7 +59,7 @@ class Contact implements Taggable
     /**
      * @var string
      *
-     * @ORM\Column(name="lastname", type="string", length=255, nullable=true)
+     * @ORM\Column(name="lastname", type="string", length=255)
      * @Soap\ComplexType("string")
      * @Oro\Versioned
      */
@@ -69,7 +69,7 @@ class Contact implements Taggable
      * @var string
      *
      * @ORM\Column(name="name_suffix", type="string", length=255, nullable=true)
-     * @Soap\ComplexType("string")
+     * @Soap\ComplexType("string", nillable=true)
      * @Oro\Versioned
      */
     protected $nameSuffix;
@@ -85,7 +85,7 @@ class Contact implements Taggable
      * @var string
      *
      * @ORM\Column(name="title", type="string", length=255, nullable=true)
-     * @Soap\ComplexType("string")
+     * @Soap\ComplexType("string", nillable=true)
      * @Oro\Versioned
      */
     protected $title;
@@ -94,7 +94,7 @@ class Contact implements Taggable
      * @var \DateTime
      *
      * @ORM\Column(name="birthday", type="datetime", nullable=true)
-     * @Soap\ComplexType("dateTime", nillable=true)
+     * @Soap\ComplexType("date", nillable=true)
      * @Oro\Versioned
      */
     protected $birthday;
@@ -103,7 +103,7 @@ class Contact implements Taggable
      * @var string
      *
      * @ORM\Column(name="description", type="text", nullable=true)
-     * @Soap\ComplexType("string")
+     * @Soap\ComplexType("string", nillable=true)
      */
     protected $description;
 
@@ -135,7 +135,7 @@ class Contact implements Taggable
      * @var string
      *
      * @ORM\Column(name="email", type="string", length=255, nullable=true)
-     * @Soap\ComplexType("string")
+     * @Soap\ComplexType("string", nillable=true)
      * @Oro\Versioned
      */
     protected $email;
@@ -144,7 +144,7 @@ class Contact implements Taggable
      * @var string
      *
      * @ORM\Column(name="phone", type="string", length=255, nullable=true)
-     * @Soap\ComplexType("string")
+     * @Soap\ComplexType("string", nillable=true)
      * @Oro\Versioned
      */
     protected $phone;
@@ -161,7 +161,6 @@ class Contact implements Taggable
      *     mappedBy="owner", cascade={"all"}, orphanRemoval=true
      * )
      * @ORM\OrderBy({"primary" = "DESC"})
-     * @Soap\ComplexType("OroCRM\Bundle\ContactBundle\Entity\ContactAddress[]", nillable=true)
      */
     protected $addresses;
 
@@ -173,7 +172,6 @@ class Contact implements Taggable
      *      joinColumns={@ORM\JoinColumn(name="contact_id", referencedColumnName="id", onDelete="CASCADE")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="contact_group_id", referencedColumnName="id", onDelete="CASCADE")}
      * )
-     * @Soap\ComplexType("int[]", nillable=true)
      */
     protected $groups;
 
@@ -189,6 +187,7 @@ class Contact implements Taggable
      * @var \DateTime $created
      *
      * @ORM\Column(type="datetime")
+     * @Soap\ComplexType("dateTime", nillable=true)
      */
     protected $createdAt;
 
@@ -196,6 +195,7 @@ class Contact implements Taggable
      * @var \DateTime $updated
      *
      * @ORM\Column(type="datetime")
+     * @Soap\ComplexType("dateTime", nillable=true)
      */
     protected $updatedAt;
 

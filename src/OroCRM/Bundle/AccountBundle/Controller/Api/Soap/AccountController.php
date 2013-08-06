@@ -35,7 +35,7 @@ class AccountController extends FlexibleSoapController
     /**
      * @Soap\Method("createAccount")
      * @Soap\Param("account", phpType = "OroCRM\Bundle\AccountBundle\Entity\AccountSoap")
-     * @Soap\Result(phpType = "boolean")
+     * @Soap\Result(phpType = "int")
      */
     public function createAction($account)
     {
