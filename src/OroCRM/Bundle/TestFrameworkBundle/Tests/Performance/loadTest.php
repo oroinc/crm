@@ -13,6 +13,10 @@ class LoadTest extends WebTestCase
 {
     const MAX_PAGES = 1000;
     const MAX_PAGE_TESTS = 100;
+
+    protected $result_data;
+    protected $result_limit;
+
     /** @var  Client */
     protected $client;
 
@@ -49,12 +53,19 @@ class LoadTest extends WebTestCase
 
         echo "\n Average Time: " . $container->averageTime;
         //export result
+        $this->result_limit = PHPUNIT_LOAD_LIMIT ;
+        $this->result_data = $container->averageTime;
+    }
+
+    protected function assertPostConditions()
+    {
+        $data = $this->getName() . ',' . date('d/m/y') .  ',' . $this->result_limit. ',' . $this->result_data . "\n";
         file_put_contents(
             getcwd() . DIRECTORY_SEPARATOR . 'build' . DIRECTORY_SEPARATOR . 'statistics.txt',
-            $container->averageTime
+            $data,
+            FILE_APPEND
         );
-
-        $this->assertLessThan(floatval(PHPUNIT_LOAD_LIMIT), $container->averageTime);
+        $this->assertLessThan(floatval($this->result_limit), floatval($this->result_data), $this->getName());
     }
 
     public function testPager()
@@ -77,11 +88,9 @@ class LoadTest extends WebTestCase
             }
         }
         echo "\n>> Average Time: " . $averageTime/self::MAX_PAGE_TESTS;
+
         //export result
-        file_put_contents(
-            getcwd() . DIRECTORY_SEPARATOR . 'build' . DIRECTORY_SEPARATOR . 'statistics.txt',
-            "\n" . $averageTime/self::MAX_PAGE_TESTS,
-            FILE_APPEND
-        );
+        $this->result_limit = PHPUNIT_PAGE_LIMIT;
+        $this->result_data = $averageTime/self::MAX_PAGE_TESTS;
     }
 }
