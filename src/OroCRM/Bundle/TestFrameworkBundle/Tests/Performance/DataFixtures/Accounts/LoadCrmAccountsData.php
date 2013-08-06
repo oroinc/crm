@@ -190,7 +190,6 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
                     $e = microtime(true);
                     echo ">> {$i} " . ($e-$s) . "\n";
                     $averageTime += ($e-$s);
-                    ob_flush();
                 }
 
                 if ($i % $this->maxRecords == 0) {
