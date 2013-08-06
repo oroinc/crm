@@ -17,20 +17,14 @@ class SoapContactGroupApiTest extends WebTestCase
 
     public function setUp()
     {
-        if (!isset($this->client)) {
-            $this->client = static::createClient(array(), ToolsAPI::generateWsseHeader());
-
-            $this->client->soap(
-                "http://localhost/api/soap",
-                array(
-                    'location' => 'http://localhost/api/soap',
-                    'soap_version' => SOAP_1_2
-                )
-            );
-
-        } else {
-            $this->client->restart();
-        }
+        $this->client = static::createClient(array(), ToolsAPI::generateWsseHeader());
+        $this->client->soap(
+            "http://localhost/api/soap",
+            array(
+                'location' => 'http://localhost/api/soap',
+                'soap_version' => SOAP_1_2
+            )
+        );
     }
 
     /**
@@ -41,7 +35,7 @@ class SoapContactGroupApiTest extends WebTestCase
         $request = array(
             "label" => 'Group name_' . mt_rand()
         );
-        $result = $this->client->soapClient->createContactGroup($request);
+        $result = $this->client->getSoap()->createContactGroup($request);
         $this->assertTrue($result);
 
         return $request;
@@ -54,7 +48,7 @@ class SoapContactGroupApiTest extends WebTestCase
      */
     public function testGetContactGroups($request)
     {
-        $groups = $this->client->soapClient->getContactGroups(1, 1000);
+        $groups = $this->client->getSoap()->getContactGroups(1, 1000);
         $groups = ToolsAPI::classToArray($groups);
         $result = false;
         foreach ($groups as $group) {
@@ -79,9 +73,9 @@ class SoapContactGroupApiTest extends WebTestCase
     public function testUpdateContact($request, $group)
     {
         $request['label'] .= '_Updated';
-        $result = $this->client->soapClient->updateContactGroup($group['id'], $request);
+        $result = $this->client->getSoap()->updateContactGroup($group['id'], $request);
         $this->assertTrue($result);
-        $group = $this->client->soapClient->getContactGroup($group['id']);
+        $group = $this->client->getSoap()->getContactGroup($group['id']);
         $group = ToolsAPI::classToArray($group);
         $result = false;
         if ($group['label'] == $request['label']) {
@@ -97,10 +91,10 @@ class SoapContactGroupApiTest extends WebTestCase
      */
     public function testDeleteContactGroup($group)
     {
-        $result = $this->client->soapClient->deleteContactGroup($group['id']);
+        $result = $this->client->getSoap()->deleteContactGroup($group['id']);
         $this->assertTrue($result);
         try {
-            $this->client->soapClient->getContactGroup($group['id']);
+            $this->client->getSoap()->getContactGroup($group['id']);
         } catch (\SoapFault $e) {
             if ($e->faultcode != 'NOT_FOUND') {
                 throw $e;
