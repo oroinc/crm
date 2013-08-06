@@ -3,6 +3,8 @@
 namespace OroCRM\Bundle\ContactBundle\Tests\Unit\Entity;
 
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
+use OroCRM\Bundle\ContactBundle\Entity\ContactEmail;
+use OroCRM\Bundle\ContactBundle\Entity\ContactPhone;
 use OroCRM\Bundle\ContactBundle\Entity\Group;
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\ContactBundle\Entity\ContactAddress;
@@ -77,6 +79,100 @@ class ContactTest extends \PHPUnit_Framework_TestCase
 
         $contact->removeAccount($account);
         $this->assertEmpty($contact->getAccounts()->toArray());
+    }
+
+    public function testEmails()
+    {
+        $emailOne = new ContactEmail('emailone@example.com');
+        $emailTwo = new ContactEmail('emailtwo@example.com');
+        $emailThree = new ContactEmail('emailthree@example.com');
+        $emails = array($emailOne, $emailTwo);
+
+        $contact = new Contact();
+        $this->assertSame($contact, $contact->resetEmails($emails));
+        $actual = $contact->getEmails();
+        $this->assertInstanceOf('Doctrine\Common\Collections\ArrayCollection', $actual);
+        $this->assertEquals($emails, $actual->toArray());
+
+        $this->assertSame($contact, $contact->addEmail($emailTwo));
+        $actual = $contact->getEmails();
+        $this->assertInstanceOf('Doctrine\Common\Collections\ArrayCollection', $actual);
+        $this->assertEquals($emails, $actual->toArray());
+
+        $this->assertSame($contact, $contact->addEmail($emailThree));
+        $actual = $contact->getEmails();
+        $this->assertInstanceOf('Doctrine\Common\Collections\ArrayCollection', $actual);
+        $this->assertEquals(array($emailOne, $emailTwo, $emailThree), $actual->toArray());
+
+        $this->assertSame($contact, $contact->removeEmail($emailOne));
+        $actual = $contact->getEmails();
+        $this->assertInstanceOf('Doctrine\Common\Collections\ArrayCollection', $actual);
+        $this->assertEquals(array(1 => $emailTwo, 2 => $emailThree), $actual->toArray());
+
+        $this->assertSame($contact, $contact->removeEmail($emailOne));
+        $actual = $contact->getEmails();
+        $this->assertInstanceOf('Doctrine\Common\Collections\ArrayCollection', $actual);
+        $this->assertEquals(array(1 => $emailTwo, 2 => $emailThree), $actual->toArray());
+    }
+
+    public function testGetPrimaryEmail()
+    {
+        $contact = new Contact();
+        $this->assertNull($contact->getPrimaryEmail());
+
+        $email = new ContactEmail('email@example.com');
+        $contact->addEmail($email);
+        $this->assertNull($contact->getPrimaryEmail());
+
+        $email->setPrimary(true);
+        $this->assertSame($email, $contact->getPrimaryEmail());
+    }
+
+    public function testPhones()
+    {
+        $phoneOne = new ContactPhone('06001122334455');
+        $phoneTwo = new ContactPhone('07001122334455');
+        $phoneThree = new ContactPhone('08001122334455');
+        $phones = array($phoneOne, $phoneTwo);
+
+        $contact = new Contact();
+        $this->assertSame($contact, $contact->resetPhones($phones));
+        $actual = $contact->getPhones();
+        $this->assertInstanceOf('Doctrine\Common\Collections\ArrayCollection', $actual);
+        $this->assertEquals($phones, $actual->toArray());
+
+        $this->assertSame($contact, $contact->addPhone($phoneTwo));
+        $actual = $contact->getPhones();
+        $this->assertInstanceOf('Doctrine\Common\Collections\ArrayCollection', $actual);
+        $this->assertEquals($phones, $actual->toArray());
+
+        $this->assertSame($contact, $contact->addPhone($phoneThree));
+        $actual = $contact->getPhones();
+        $this->assertInstanceOf('Doctrine\Common\Collections\ArrayCollection', $actual);
+        $this->assertEquals(array($phoneOne, $phoneTwo, $phoneThree), $actual->toArray());
+
+        $this->assertSame($contact, $contact->removePhone($phoneOne));
+        $actual = $contact->getPhones();
+        $this->assertInstanceOf('Doctrine\Common\Collections\ArrayCollection', $actual);
+        $this->assertEquals(array(1 => $phoneTwo, 2 => $phoneThree), $actual->toArray());
+
+        $this->assertSame($contact, $contact->removePhone($phoneOne));
+        $actual = $contact->getPhones();
+        $this->assertInstanceOf('Doctrine\Common\Collections\ArrayCollection', $actual);
+        $this->assertEquals(array(1 => $phoneTwo, 2 => $phoneThree), $actual->toArray());
+    }
+
+    public function testGetPrimaryPhone()
+    {
+        $contact = new Contact();
+        $this->assertNull($contact->getPrimaryPhone());
+
+        $phone = new ContactPhone('06001122334455');
+        $contact->addPhone($phone);
+        $this->assertNull($contact->getPrimaryPhone());
+
+        $phone->setPrimary(true);
+        $this->assertSame($phone, $contact->getPrimaryPhone());
     }
 
     public function testAddresses()

@@ -84,11 +84,9 @@ class SoapContactApiTest extends WebTestCase
         $contacts = ToolsAPI::classToArray($contacts);
         $contactFound = false;
         foreach ($contacts as $contact) {
-            foreach ($contact as $contactDetails) {
-                if ($contactDetails['id'] == $contactId) {
-                    $contactFound = true;
-                    break;
-                }
+            if ($contact['id'] == $contactId) {
+                $contactFound = true;
+                break;
             }
         }
         $this->assertTrue($contactFound);
