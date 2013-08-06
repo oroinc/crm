@@ -141,6 +141,17 @@ class Contact implements Taggable
     protected $email;
 
     /**
+     * @var Collection
+     *
+     * @ORM\OneToMany(targetEntity="OroCRM\Bundle\ContactBundle\Entity\ContactEmail",
+     *     mappedBy="owner", cascade={"all"}, orphanRemoval=true
+     * )
+     * @ORM\OrderBy({"primary" = "DESC"})
+     * @Soap\ComplexType("OroCRM\Bundle\ContactBundle\Entity\ContactEmail[]", nillable=true)
+     */
+    protected $emails;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="phone", type="string", length=255, nullable=true)
@@ -148,6 +159,17 @@ class Contact implements Taggable
      * @Oro\Versioned
      */
     protected $phone;
+
+    /**
+     * @var Collection
+     *
+     * @ORM\OneToMany(targetEntity="OroCRM\Bundle\ContactBundle\Entity\ContactPhone",
+     *     mappedBy="owner", cascade={"all"}, orphanRemoval=true
+     * )
+     * @ORM\OrderBy({"primary" = "DESC"})
+     * @Soap\ComplexType("OroCRM\Bundle\ContactBundle\Entity\ContactPhone[]", nillable=true)
+     */
+    protected $phones;
 
     /**
      * @var ArrayCollection
@@ -204,6 +226,8 @@ class Contact implements Taggable
         $this->groups    = new ArrayCollection();
         $this->accounts  = new ArrayCollection();
         $this->addresses = new ArrayCollection();
+        $this->emails    = new ArrayCollection();
+        $this->phones    = new ArrayCollection();
         $this->tags      = new ArrayCollection();
     }
 
@@ -508,6 +532,9 @@ class Contact implements Taggable
      */
     public function getTags()
     {
+        if (null === $this->tags) {
+            $this->tags = new ArrayCollection();
+        }
         return $this->tags;
     }
 
@@ -520,6 +547,164 @@ class Contact implements Taggable
         $this->tags = $tags;
 
         return $this;
+    }
+
+    /**
+     * Set emails.
+     *
+     * This method could not be named setEmails because of bug CRM-253.
+     *
+     * @param Collection|ContactEmail[] $emails
+     * @return Contact
+     */
+    public function resetEmails($emails)
+    {
+        $this->emails->clear();
+
+        foreach ($emails as $email) {
+            $this->addEmail($email);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Add address
+     *
+     * @param ContactEmail $email
+     * @return Contact
+     */
+    public function addEmail(ContactEmail $email)
+    {
+        if (!$this->emails->contains($email)) {
+            $this->emails->add($email);
+            $email->setOwner($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Remove address
+     *
+     * @param ContactEmail $email
+     * @return Contact
+     */
+    public function removeEmail(ContactEmail $email)
+    {
+        if ($this->emails->contains($email)) {
+            $this->emails->removeElement($email);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Get emails
+     *
+     * @return Collection|ContactEmail[]
+     */
+    public function getEmails()
+    {
+        return $this->emails;
+    }
+
+    /**
+     * Gets primary email if it's available.
+     *
+     * @return ContactEmail|null
+     */
+    public function getPrimaryEmail()
+    {
+        $result = null;
+
+        foreach ($this->getEmails() as $email) {
+            if ($email->isPrimary()) {
+                $result = $email;
+                break;
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * Set phones.
+     *
+     * This method could not be named setPhones because of bug CRM-253.
+     *
+     * @param Collection|ContactPhone[] $phones
+     * @return Contact
+     */
+    public function resetPhones($phones)
+    {
+        $this->phones->clear();
+
+        foreach ($phones as $phone) {
+            $this->addPhone($phone);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Add address
+     *
+     * @param ContactPhone $phone
+     * @return Contact
+     */
+    public function addPhone(ContactPhone $phone)
+    {
+        if (!$this->phones->contains($phone)) {
+            $this->phones->add($phone);
+            $phone->setOwner($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Remove address
+     *
+     * @param ContactPhone $phone
+     * @return Contact
+     */
+    public function removePhone(ContactPhone $phone)
+    {
+        if ($this->phones->contains($phone)) {
+            $this->phones->removeElement($phone);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Get phones
+     *
+     * @return Collection|ContactPhone[]
+     */
+    public function getPhones()
+    {
+        return $this->phones;
+    }
+
+    /**
+     * Gets primary phone if it's available.
+     *
+     * @return ContactPhone|null
+     */
+    public function getPrimaryPhone()
+    {
+        $result = null;
+
+        foreach ($this->getPhones() as $phone) {
+            if ($phone->isPrimary()) {
+                $result = $phone;
+                break;
+            }
+        }
+
+        return $result;
     }
 
     /**
