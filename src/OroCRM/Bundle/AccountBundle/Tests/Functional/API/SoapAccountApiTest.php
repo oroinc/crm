@@ -18,20 +18,14 @@ class SoapAccountApiTest extends WebTestCase
     public function setUp()
     {
         $this->markTestSkipped('BAP-717');
-        if (!isset($this->client)) {
-            $this->client = static::createClient(array(), ToolsAPI::generateWsseHeader());
-
-            $this->client->soap(
-                "http://localhost/api/soap",
-                array(
-                    'location' => 'http://localhost/api/soap',
-                    'soap_version' => SOAP_1_2
-                )
-            );
-
-        } else {
-            $this->client->restart();
-        }
+        $this->client = static::createClient(array(), ToolsAPI::generateWsseHeader());
+        $this->client->soap(
+            "http://localhost/api/soap",
+            array(
+                'location' => 'http://localhost/api/soap',
+                'soap_version' => SOAP_1_2
+            )
+        );
     }
 
     /**
@@ -42,8 +36,8 @@ class SoapAccountApiTest extends WebTestCase
      */
     public function testCreateAccount($request, $response)
     {
-        $result = $this->client->soapClient->createAccount($request);
-        ToolsAPI::assertEqualsResponse($response, $result, $this->client->soapClient->__getLastResponse());
+        $result = $this->client->getSoap()->createAccount($request);
+        ToolsAPI::assertEqualsResponse($response, $result, $this->client->getSoap()->__getLastResponse());
 
         return $request;
     }
@@ -56,7 +50,7 @@ class SoapAccountApiTest extends WebTestCase
      */
     public function testGetAccounts($request)
     {
-        $accounts = $this->client->soapClient->getAccounts(1, 1000);
+        $accounts = $this->client->getSoap()->getAccounts(1, 1000);
         $accounts = ToolsAPI::classToArray($accounts);
         $result = false;
         foreach ($accounts as $account) {
@@ -77,7 +71,7 @@ class SoapAccountApiTest extends WebTestCase
      */
     public function testUpdateAccount($request, $response)
     {
-        $accounts = $this->client->soapClient->getAccounts(1, 1000);
+        $accounts = $this->client->getSoap()->getAccounts(1, 1000);
         $accounts = ToolsAPI::classToArray($accounts);
         $result = false;
         foreach ($accounts as $account) {
@@ -88,9 +82,9 @@ class SoapAccountApiTest extends WebTestCase
             }
         }
         $request['attributes']['description'] .= '_Updated';
-        $result = $this->client->soapClient->updateAccount($accountId, $request);
+        $result = $this->client->getSoap()->updateAccount($accountId, $request);
         $this->assertTrue($result);
-        $account = $this->client->soapClient->getAccount($accountId);
+        $account = $this->client->getSoap()->getAccount($accountId);
         $account = ToolsAPI::classToArray($account);
         $result = false;
         if ($account['attributes']['description'] == $request['attributes']['description']) {
@@ -110,7 +104,7 @@ class SoapAccountApiTest extends WebTestCase
      */
     public function testDeleteAccount($request, $response)
     {
-        $accounts = $this->client->soapClient->getAccounts(1, 1000);
+        $accounts = $this->client->getSoap()->getAccounts(1, 1000);
         $accounts = ToolsAPI::classToArray($accounts);
         $result = false;
         foreach ($accounts as $account) {
@@ -120,10 +114,10 @@ class SoapAccountApiTest extends WebTestCase
                 break;
             }
         }
-        $result = $this->client->soapClient->deleteAccount($accountId);
+        $result = $this->client->getSoap()->deleteAccount($accountId);
         $this->assertTrue($result);
         try {
-            $this->client->soapClient->getAccount($accountId);
+            $this->client->getSoap()->getAccount($accountId);
         } catch (\SoapFault $e) {
             if ($e->faultcode != 'NOT_FOUND') {
                 throw $e;
