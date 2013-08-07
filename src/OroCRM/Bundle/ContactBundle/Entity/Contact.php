@@ -75,6 +75,15 @@ class Contact implements Taggable
     protected $nameSuffix;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="gender", type="string", length=8, nullable=true)
+     * @Soap\ComplexType("string", nillable=true)
+     * @Oro\Versioned
+     */
+    protected $gender;
+
+    /**
      * Set name formatting using "%first%" and "%last%" placeholders
      *
      * @var string
@@ -108,12 +117,28 @@ class Contact implements Taggable
     protected $description;
 
     /**
-     * @var ContactSource
+     * @var Source
      *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ContactBundle\Entity\ContactSource")
+     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ContactBundle\Entity\Source")
      * @ORM\JoinColumn(name="source_name", referencedColumnName="name")
      **/
     protected $source;
+
+    /**
+     * @var Method
+     *
+     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ContactBundle\Entity\Method")
+     * @ORM\JoinColumn(name="method_name", referencedColumnName="name")
+     **/
+    protected $method;
+
+    /**
+     * @var User
+     *
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
+     * @ORM\JoinColumn(name="owner_user_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    protected $owner;
 
     /**
      * @var User
@@ -130,6 +155,15 @@ class Contact implements Taggable
      * @ORM\JoinColumn(name="reports_to_contact_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $reportsTo;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="job_title", type="string", length=255, nullable=true)
+     * @Soap\ComplexType("string", nillable=true)
+     * @Oro\Versioned
+     */
+    protected $jobTitle;
 
     /**
      * @var string
@@ -170,6 +204,60 @@ class Contact implements Taggable
      * @Soap\ComplexType("OroCRM\Bundle\ContactBundle\Entity\ContactPhone[]", nillable=true)
      */
     protected $phones;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="fax", type="string", length=255, nullable=true)
+     * @Soap\ComplexType("string", nillable=true)
+     * @Oro\Versioned
+     */
+    protected $fax;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="skype", type="string", length=255, nullable=true)
+     * @Soap\ComplexType("string", nillable=true)
+     * @Oro\Versioned
+     */
+    protected $skype;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="twitter_url", type="string", length=255, nullable=true)
+     * @Soap\ComplexType("string", nillable=true)
+     * @Oro\Versioned
+     */
+    protected $twitterUrl;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="facebook_url", type="string", length=255, nullable=true)
+     * @Soap\ComplexType("string", nillable=true)
+     * @Oro\Versioned
+     */
+    protected $facebookUrl;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="google_plus_url", type="string", length=255, nullable=true)
+     * @Soap\ComplexType("string", nillable=true)
+     * @Oro\Versioned
+     */
+    protected $googlePlusUrl;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="linkedin_url", type="string", length=255, nullable=true)
+     * @Soap\ComplexType("string", nillable=true)
+     * @Oro\Versioned
+     */
+    protected $linkedInUrl;
 
     /**
      * @var ArrayCollection
@@ -329,6 +417,25 @@ class Contact implements Taggable
     }
 
     /**
+     * @param string $gender
+     * @return Contact
+     */
+    public function setGender($gender)
+    {
+        $this->gender = $gender;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getGender()
+    {
+        return $this->gender;
+    }
+
+    /**
      * Get full name format. Defaults to "%first% %last%".
      *
      * @return string
@@ -425,6 +532,120 @@ class Contact implements Taggable
     }
 
     /**
+     * @param Source $source
+     * @return Contact
+     */
+    public function setSource($source)
+    {
+        $this->source = $source;
+
+        return $this;
+    }
+
+    /**
+     * @return Source
+     */
+    public function getSource()
+    {
+        return $this->source;
+    }
+
+    /**
+     * @param Method $method
+     * @return Contact
+     */
+    public function setMethod($method)
+    {
+        $this->method = $method;
+
+        return $this;
+    }
+
+    /**
+     * @return Method
+     */
+    public function getMethod()
+    {
+        return $this->method;
+    }
+
+    /**
+     * @param User $owner
+     * @return Contact
+     */
+    public function setOwner($owner)
+    {
+        $this->owner = $owner;
+
+        return $this;
+    }
+
+    /**
+     * @return User
+     */
+    public function getOwner()
+    {
+        return $this->owner;
+    }
+
+    /**
+     * @param Contact $reportsTo
+     * @return Contact
+     */
+    public function setReportsTo($reportsTo)
+    {
+        $this->reportsTo = $reportsTo;
+
+        return $this;
+    }
+
+    /**
+     * @return Contact
+     */
+    public function getReportsTo()
+    {
+        return $this->reportsTo;
+    }
+
+    /**
+     * @param mixed $title
+     * @return Contact
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    /**
+     * @param string $jobTitle
+     * @return Contact
+     */
+    public function setJobTitle($jobTitle)
+    {
+        $this->jobTitle = $jobTitle;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getJobTitle()
+    {
+        return $this->jobTitle;
+    }
+
+    /**
      * @param mixed $email
      * @return Contact
      */
@@ -463,60 +684,117 @@ class Contact implements Taggable
     }
 
     /**
-     * @param Contact $reportsTo
+     * @param string $fax
      * @return Contact
      */
-    public function setReportsTo($reportsTo)
+    public function setFax($fax)
     {
-        $this->reportsTo = $reportsTo;
+        $this->fax = $fax;
 
         return $this;
     }
 
     /**
-     * @return Contact
+     * @return string
      */
-    public function getReportsTo()
+    public function getFax()
     {
-        return $this->reportsTo;
+        return $this->fax;
     }
 
     /**
-     * @param ContactSource $source
+     * @param string $skype
      * @return Contact
      */
-    public function setSource($source)
+    public function setSkype($skype)
     {
-        $this->source = $source;
+        $this->skype = $skype;
 
         return $this;
     }
 
     /**
-     * @return ContactSource
+     * @return string
      */
-    public function getSource()
+    public function getSkype()
     {
-        return $this->source;
+        return $this->skype;
     }
 
     /**
-     * @param mixed $title
+     * @param string $facebookUrl
      * @return Contact
      */
-    public function setTitle($title)
+    public function setFacebookUrl($facebookUrl)
     {
-        $this->title = $title;
+        $this->facebookUrl = $facebookUrl;
 
         return $this;
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getTitle()
+    public function getFacebookUrl()
     {
-        return $this->title;
+        return $this->facebookUrl;
+    }
+
+    /**
+     * @param string $googlePlusUrl
+     * @return Contact
+     */
+    public function setGooglePlusUrl($googlePlusUrl)
+    {
+        $this->googlePlusUrl = $googlePlusUrl;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getGooglePlusUrl()
+    {
+        return $this->googlePlusUrl;
+    }
+
+    /**
+     * @param string $linkedInUrl
+     * @return Contact
+     */
+    public function setLinkedInUrl($linkedInUrl)
+    {
+        $this->linkedInUrl = $linkedInUrl;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLinkedInUrl()
+    {
+        return $this->linkedInUrl;
+    }
+
+    /**
+     * @param string $twitterUrl
+     * @return Contact
+     */
+    public function setTwitterUrl($twitterUrl)
+    {
+        $this->twitterUrl = $twitterUrl;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTwitterUrl()
+    {
+        return $this->twitterUrl;
     }
 
     /**

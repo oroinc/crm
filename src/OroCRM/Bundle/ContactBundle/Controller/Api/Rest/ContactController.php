@@ -158,12 +158,20 @@ class ContactController extends RestController implements ClassResourceInterface
         // basic result
         $result = parent::getPreparedItem($entity);
 
-        // use contact code instead of label
+        // use contact source name instead of label
         $source = $entity->getSource();
         if ($source) {
             $result['source'] = $source->getName();
         } else {
             $result['source'] = null;
+        }
+
+        // use contact method name instead of label
+        $method = $entity->getMethod();
+        if ($method) {
+            $result['method'] = $method->getName();
+        } else {
+            $result['method'] = null;
         }
 
         // set assigned to user data
@@ -172,6 +180,14 @@ class ContactController extends RestController implements ClassResourceInterface
             $result['assignedTo'] = $assignedTo->getId();
         } else {
             $result['assignedTo'] = null;
+        }
+
+        // set owner user data
+        $owner = $entity->getOwner();
+        if ($owner) {
+            $result['owner'] = $owner->getId();
+        } else {
+            $result['owner'] = null;
         }
 
         // set reports to contact data

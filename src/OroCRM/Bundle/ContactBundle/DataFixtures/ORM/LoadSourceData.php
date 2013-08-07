@@ -5,14 +5,14 @@ namespace OroCRM\Bundle\ContactBundle\DataFixtures\ORM;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
 
-use OroCRM\Bundle\ContactBundle\Entity\ContactSource;
+use OroCRM\Bundle\ContactBundle\Entity\Source;
 
-class LoadContactSourceData extends AbstractFixture
+class LoadSourceData extends AbstractFixture
 {
     /**
      * @var array
      */
-    protected $sourceData = array(
+    protected $data = array(
         'call'    => 'Phone Call',
         'tv'      => 'TV',
         'website' => 'Website',
@@ -24,8 +24,8 @@ class LoadContactSourceData extends AbstractFixture
      */
     public function load(ObjectManager $manager)
     {
-        foreach ($this->sourceData as $sourceName => $sourceLabel) {
-            $source = new ContactSource($sourceName);
+        foreach ($this->data as $sourceName => $sourceLabel) {
+            $source = new Source($sourceName);
             $source->setLabel($sourceLabel);
             $manager->persist($source);
         }

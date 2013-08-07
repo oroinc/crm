@@ -25,7 +25,7 @@ use Oro\Bundle\AddressBundle\Entity\Region;
 use Oro\Bundle\FlexibleEntityBundle\Form\Type\PhoneType;
 use Oro\Bundle\FlexibleEntityBundle\Form\Type\EmailType;
 use OroCRM\Bundle\ContactBundle\Entity\ContactAddress;
-use OroCRM\Bundle\ContactBundle\Entity\ContactSource;
+use OroCRM\Bundle\ContactBundle\Entity\Source;
 use OroCRM\Bundle\ContactBundle\Entity\Group;
 use Oro\Bundle\UserBundle\Entity\User;
 
@@ -74,7 +74,7 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
     protected $contactGroups;
 
     /**
-     * @var ContactSource[]
+     * @var Source[]
      */
     protected $contactSources;
 
@@ -111,7 +111,7 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
     protected function initSupportingEntities()
     {
         $this->contactGroups = $this->contactManager->getRepository('OroCRMContactBundle:Group')->findAll();
-        $this->contactSources = $this->contactManager->getRepository('OroCRMContactBundle:ContactSource')->findAll();
+        $this->contactSources = $this->contactManager->getRepository('OroCRMContactBundle:Source')->findAll();
 
         $userStorageManager = $this->userManager->getStorageManager();
         $this->users = $userStorageManager->getRepository('OroUserBundle:User')->findAll();

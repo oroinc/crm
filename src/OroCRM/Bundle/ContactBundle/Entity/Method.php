@@ -8,9 +8,9 @@ use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="orocrm_contact_source")
+ * @ORM\Table(name="orocrm_contact_method")
  */
-class ContactSource
+class Method
 {
     /**
      * @var string
@@ -51,7 +51,7 @@ class ContactSource
      * Set address type label
      *
      * @param string $label
-     * @return ContactSource
+     * @return Source
      */
     public function setLabel($label)
     {

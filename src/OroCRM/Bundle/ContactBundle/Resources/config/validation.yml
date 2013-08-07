@@ -1,13 +1,3 @@
-OroCRM\Bundle\ContactBundle\Entity\Group:
-    constraints:
-        - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity: label
-    properties:
-        label:
-            - NotBlank:     ~
-            - Length:
-                min:        3
-                max:        255
-
 OroCRM\Bundle\ContactBundle\Entity\Contact:
     properties:
         firstName:
@@ -22,6 +12,24 @@ OroCRM\Bundle\ContactBundle\Entity\Contact:
             - Date:         ~
         email:
             - Email:        ~
+        twitterUrl:
+            - Url:          ~
+        facebookUrl:
+            - Url:          ~
+        googlePlusUrl:
+            - Url:          ~
+        linkedInUrl:
+            - Url:          ~
         addresses:
             - Oro\Bundle\AddressBundle\Validator\Constraints\ContainsPrimary: ~
             - Oro\Bundle\AddressBundle\Validator\Constraints\UniqueAddressTypes: ~
+
+OroCRM\Bundle\ContactBundle\Entity\Group:
+    constraints:
+        - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity: label
+    properties:
+        label:
+            - NotBlank:     ~
+            - Length:
+                min:        3
+                max:        255
