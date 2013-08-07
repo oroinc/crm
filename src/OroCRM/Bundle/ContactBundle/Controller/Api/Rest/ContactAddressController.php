@@ -65,6 +65,22 @@ class ContactAddressController extends RestController implements ClassResourceIn
     }
 
     /**
+     * REST DELETE address
+     *
+     * @ApiDoc(
+     *      description="Delete address items",
+     *      resource=true
+     * )
+     * @AclAncestor("orocrm_contact_view")
+     * @param int $id
+     * @return Response
+     */
+    public function deleteAction($id)
+    {
+        return $this->handleDeleteRequest($id);
+    }
+
+    /**
      * REST GET address by type
      *
      * @param string $id
