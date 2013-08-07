@@ -23,6 +23,52 @@ use OroCRM\Bundle\ContactBundle\Entity\ContactAddress;
 class ContactAddressController extends RestController implements ClassResourceInterface
 {
     /**
+     * REST GET address
+     *
+     * @param string $id
+     *
+     * @ApiDoc(
+     *      description="Get contact address",
+     *      resource=true
+     * )
+     * @AclAncestor("orocrm_contact_view")
+     * @return Response
+     */
+    public function getAction($id)
+    {
+        return $this->handleGetRequest($id);
+    }
+
+    /**
+     * REST GET list
+     *
+     * @ApiDoc(
+     *      description="Get all addresses items",
+     *      resource=true
+     * )
+     * filters={
+     *      {"name"="page", "dataType"="integer"},
+     *      {"name"="limit", "dataType"="integer"}
+     *  }
+     * @AclAncestor("orocrm_contact_view")
+     * @param int $contactId
+     * @return Response
+     */
+    public function cgetAction($contactId)
+    {
+        /** @var Contact $contact */
+        $contact = $this->getContactManager()->find($contactId);
+        $items = $contact->getAddresses();
+        $result = array();
+        foreach ($items as $item) {
+            $result[] = $this->getPreparedItem($item);
+        }
+        unset($items);
+
+        return new Response(json_encode($result), $result ? Codes::HTTP_OK : Codes::HTTP_NOT_FOUND);
+    }
+
+    /**
      * REST GET address by type
      *
      * @param string $id
@@ -35,10 +81,10 @@ class ContactAddressController extends RestController implements ClassResourceIn
      * @AclAncestor("orocrm_contact_view")
      * @return Response
      */
-    public function getAction($id, $typeName)
+    public function getByTypeAction($id, $typeName)
     {
         /** @var Contact $contact */
-        $contact = $this->getManager()->find($id);
+        $contact = $this->getContactManager()->find($id);
 
         if ($contact) {
             $address = $contact->getAddressByTypeName($typeName);
@@ -66,7 +112,7 @@ class ContactAddressController extends RestController implements ClassResourceIn
     public function getPrimaryAction($id)
     {
         /** @var Contact $contact */
-        $contact = $this->getManager()->find($id);
+        $contact = $this->getContactManager()->find($id);
 
         if ($contact) {
             $address = $contact->getPrimaryAddress();
@@ -79,12 +125,17 @@ class ContactAddressController extends RestController implements ClassResourceIn
         return new Response($responseData, $address ? Codes::HTTP_OK : Codes::HTTP_NOT_FOUND);
     }
 
+    public function getContactManager()
+    {
+        return $this->get('orocrm_contact.contact.manager.api');
+    }
+
     /**
      * {@inheritdoc}
      */
     public function getManager()
     {
-        return $this->get('orocrm_contact.contact.manager.api');
+        return $this->get('orocrm_contact.contact_address.manager.api');
     }
 
     /**

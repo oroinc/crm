@@ -2,7 +2,8 @@ var OroAddressBook = Backbone.View.extend({
     options: {
         'mapZoom': 17,
         'mapType': null,
-        'template': null
+        'template': null,
+        'entityId': null
     },
 
     mapLocationCache: {},
@@ -12,7 +13,10 @@ var OroAddressBook = Backbone.View.extend({
     },
 
     initialize: function() {
-        this.options.collection = this.options.collection || new OroAddressCollection();
+        this.options.collection = this.options.collection || new OroAddressCollection(null, {
+            'route': 'oro_api_get_contact_addresses',
+            'routeParameters': {'contactId': this.options.entityId}
+        });
 
         this.listenTo(this.getCollection(), 'add', this.addAddress);
         this.listenTo(this.getCollection(), 'reset', this.addAll);
@@ -44,15 +48,26 @@ var OroAddressBook = Backbone.View.extend({
 
     editAddress: function(addressView, address) {
         this._openAddressEditForm(
-            _.__('Create Address'),
-            Routing.generate('orocrm_contact_address_update', {'id': address.get('id')})
+            _.__('Update Address'),
+            Routing.generate(
+                'orocrm_contact_address_update',
+                {
+                    'contactId': this.options.entityId,
+                    'id': address.get('id')
+                }
+            )
         );
     },
 
     createAddress: function() {
         this._openAddressEditForm(
-            _.__('Update Address'),
-            Routing.generate('orocrm_contact_address_create')
+            _.__('Create Address'),
+            Routing.generate(
+                'orocrm_contact_address_create',
+                {
+                    'contactId': this.options.entityId
+                }
+            )
         );
     },
 
@@ -62,10 +77,18 @@ var OroAddressBook = Backbone.View.extend({
             'title': title,
             'stateEnabled': false,
             'dialogOptions': {
-                'modal': true
+                'modal': false,
+                'resizable': false,
+                'width': 400,
+                'height': 420
             }
-        }).render();
-        addressEditDialog.on('formSave', _.bind(this.reloadAddresses, this));
+        });
+        addressEditDialog.render();
+        addressEditDialog.on('formSave', _.bind(function() {
+            addressEditDialog.close();
+            Oro.NotificationFlashMessage('success', _.__('Address successfully saved'));
+            this.reloadAddresses();
+        }, this));
     },
 
     reloadAddresses: function() {
@@ -119,6 +142,15 @@ var OroAddressBook = Backbone.View.extend({
         this.$mapContainer.show();
         var mapOptions = {
             zoom: this.options.mapZoom,
+            mapTypeControl: true,
+            mapTypeControlOptions: {
+                style: google.maps.MapTypeControlStyle.DROPDOWN_MENU
+            },
+            panControl: false,
+            zoomControl: true,
+            zoomControlOptions: {
+                style: google.maps.ZoomControlStyle.SMALL
+            },
             mapTypeId: this.options.mapType || google.maps.MapTypeId.ROADMAP,
             center: location
         };

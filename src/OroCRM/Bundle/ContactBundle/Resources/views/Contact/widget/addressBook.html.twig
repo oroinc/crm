@@ -29,36 +29,34 @@
     <script type="text/javascript">
         $('#addressBookWidget').on('widgetize', function(e, widget) {
             var addressBook = new OroAddressBook({
-                el: '#address-book'
+                el: '#address-book',
+                entityId: {{ entity.id|json_encode|raw }}
             });
             $(widget.getAction('add_address', 'adopted')).on('click', _.bind(addressBook.createAddress, addressBook));
 
-            addressBook.getCollection().reset([
-                new OroAddress({
-                    'id': 1,
-                    'label': 'Home address',
-                    'street': '185 Artema st.',
-                    'street2': '',
-                    'city': 'Donetsk',
-                    'country': 'Ukraine',
-                    'postalCode': '83000',
-                    'state': 'Donetskaya obl.',
-                    'isPrimary': true,
-                    'types': ['Billing', 'Home']
-                }),
-                new OroAddress({
-                    'id': 2,
-                    'label': 'Work address',
-                    'street': '34 Pushkina st.',
-                    'street2': '',
-                    'city': 'Donetsk',
-                    'country': 'Ukraine',
-                    'postalCode': '83000',
-                    'state': 'Donetskaya obl.',
-                    'isPrimary': false,
-                    'types': ['Shipping']
-                })
-            ]);
+            {# TODO: change a way how serialized collection of addresses is prepared #}
+            var addresses = [];
+            {% for address in entity.addresses %}
+                {% set addressData = {
+                    id: address.id,
+                    label: address.label,
+                    street: address.street,
+                    street2: address.street2,
+                    city: address.city,
+                    country: address.country.__toString,
+                    postalCode: address.postalCode,
+                    state: address.state.__toString,
+                    isPrimary: address.primary,
+                    types: []
+                } %}
+                var addressData = {{ addressData|json_encode|raw }};
+                {% for type in address.types %}
+                    addressData.types.push({{ type.__toString|json_encode|raw }});
+                {% endfor %}
+                addresses.push(new OroAddress(addressData));
+            {% endfor %}
+            {# end _todo #}
+            addressBook.getCollection().reset(addresses);
         });
     </script>
 </div>
