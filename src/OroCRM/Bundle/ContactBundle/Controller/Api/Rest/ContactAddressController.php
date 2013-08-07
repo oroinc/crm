@@ -46,10 +46,6 @@ class ContactAddressController extends RestController implements ClassResourceIn
      *      description="Get all addresses items",
      *      resource=true
      * )
-     * filters={
-     *      {"name"="page", "dataType"="integer"},
-     *      {"name"="limit", "dataType"="integer"}
-     *  }
      * @AclAncestor("orocrm_contact_view")
      * @param int $contactId
      * @return Response
