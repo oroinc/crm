@@ -76,7 +76,8 @@
         </div>
     </div>
 
-    {{ _self.renderRow('Birthday'|trans, macros.date(entity.birthday)) }}
+    {% set birthday = entity.birthday is empty ? 'N/A': macros.date(entity.birthday) %}
+    {{ _self.renderRow('Birthday'|trans, birthday) }}
 
     <div class="control-group">
         <label class="control-label">Gender</label>

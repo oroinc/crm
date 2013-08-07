@@ -32,6 +32,14 @@ use Oro\Bundle\UserBundle\Entity\User;
 class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInterface
 {
     const FLUSH_MAX = 20;
+    const MAX_RECORDS = 100;
+
+    protected $maxRecords;
+
+    /**
+     * @var ContainerInterface
+     */
+    protected $container;
 
     /**
      * @var Account Manager
@@ -93,6 +101,14 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
      */
     public function setContainer(ContainerInterface $container = null)
     {
+        $this->container = $container;
+
+        if (isset($container->counter)) {
+            $this->maxRecords = $container->counter;
+        } else {
+            $this->maxRecords = self::MAX_RECORDS;
+        }
+
         $this->accountManager = $container->get('orocrm_account.account.manager.flexible');
         $this->accountRepository = $this->accountManager->getFlexibleRepository();
 
@@ -144,6 +160,7 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
     public function loadAccounts()
     {
         $handle = fopen(__DIR__ . DIRECTORY_SEPARATOR . "data.csv", "r");
+        $averageTime = 0.0;
         if ($handle) {
             $i = 0;
             $headers = array();
@@ -182,13 +199,20 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
 
                     $e = microtime(true);
                     echo ">> {$i} " . ($e-$s) . "\n";
+                    $averageTime += ($e-$s);
+                }
+
+                if ($i % $this->maxRecords == 0) {
+                    break;
                 }
             }
             fclose($handle);
         }
         $this->flush($this->accountManager);
         $this->contactManager->flush();
-
+        $avg = $averageTime * self::FLUSH_MAX / $this->maxRecords;
+        echo ">> Average time: " . $avg . "\n";
+        $this->container->averageTime = $avg;
     }
 
     /**

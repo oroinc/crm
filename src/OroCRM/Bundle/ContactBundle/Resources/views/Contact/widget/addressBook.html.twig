@@ -1,0 +1,64 @@
+<div class="widget-content" id="addressBookWidget">
+    <div class="widget-actions">
+        <button class="btn btn-mini btn-primary btn-uppercase" type="button" data-action-name="add_address"> + add Address</button>
+    </div>
+    <div class="map-box" id="address-book"></div>
+
+    <script type="text/html" id="template-contact-address">
+        <div class="clearfix">
+            <div class="title-item"><%= label %></div>
+            <div class="map-actions">
+                <button class="btn"><i class="icon-edit hide-text"><%= _.__('Edit') %></i></button>
+                <% if (!isPrimary) { %><button class="btn"><i class="icon-remove hide-text"><%= _.__('Close') %></i></button><% } %>
+            </div>
+        </div>
+        <ul class="inline">
+            <% if(isPrimary) { %> <li><span class="label label-info"><%= _.__('Primary') %></span></li> <% } %>
+            <% _.each(types, function(type) { %>
+            <li><span class="label"><%= type %></span></li>
+            <% }) %>
+        </ul>
+        <address>
+            <%= street %>&nbsp;<%= street2 %><br />
+            <%= city %>, <%= state %><br />
+            <%= postalCode %><br />
+            <%= country %><br />
+        </address>
+    </script>
+
+    <script type="text/javascript">
+        $('#addressBookWidget').on('widgetize', function(e, widget) {
+            var addressBook = new OroAddressBook({
+                el: '#address-book'
+            });
+            $(widget.getAction('add_address', 'adopted')).on('click', _.bind(addressBook.createAddress, addressBook));
+
+            addressBook.getCollection().reset([
+                new OroAddress({
+                    'id': 1,
+                    'label': 'Home address',
+                    'street': '185 Artema st.',
+                    'street2': '',
+                    'city': 'Donetsk',
+                    'country': 'Ukraine',
+                    'postalCode': '83000',
+                    'state': 'Donetskaya obl.',
+                    'isPrimary': true,
+                    'types': ['Billing', 'Home']
+                }),
+                new OroAddress({
+                    'id': 2,
+                    'label': 'Work address',
+                    'street': '34 Pushkina st.',
+                    'street2': '',
+                    'city': 'Donetsk',
+                    'country': 'Ukraine',
+                    'postalCode': '83000',
+                    'state': 'Donetskaya obl.',
+                    'isPrimary': false,
+                    'types': ['Shipping']
+                })
+            ]);
+        });
+    </script>
+</div>

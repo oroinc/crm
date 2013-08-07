@@ -78,7 +78,7 @@ class ContactController extends Controller
      * @Acl(
      *      id="orocrm_contact_address_book",
      *      name="View Contact Address Book",
-     *      description="View contact Address Boo",
+     *      description="View contact Address Book",
      *      parent="orocrm_contact_view"
      * )
      */
@@ -87,6 +87,36 @@ class ContactController extends Controller
         return array(
             'entity' => $contact
         );
+    }
+
+    /**
+     * @Route("/address-create", name="orocrm_contact_address_create")
+     * @Template("OroCRMContactBundle:ContactAddress:update.html.twig")
+     * @Acl(
+     *      id="orocrm_contact_address_create",
+     *      name="Create Contact Address",
+     *      description="Create Contact Address",
+     *      parent="orocrm_contact_view"
+     * )
+     */
+    public function createAddressAction()
+    {
+        return $this->updateAddressAction();
+    }
+
+    /**
+     * @Route("/address-update/{id}", name="orocrm_contact_address_update",requirements={"id"="\d+"},defaults={"id"=0})
+     * @Template("OroCRMContactBundle:ContactAddress:update.html.twig")
+     * @Acl(
+     *      id="orocrm_contact_address_update",
+     *      name="Update Contact Address",
+     *      description="Update Contact Address",
+     *      parent="orocrm_contact_view"
+     * )
+     */
+    public function updateAddressAction()
+    {
+        return array();
     }
 
     /**

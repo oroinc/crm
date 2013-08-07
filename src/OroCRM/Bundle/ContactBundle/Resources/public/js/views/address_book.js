@@ -1,31 +1,25 @@
 var OroAddressBook = Backbone.View.extend({
     options: {
-        'containerEl': '.map-address-list',
-        'mapEl': '.map-visual',
         'mapZoom': 17,
-        'mapType': null
+        'mapType': null,
+        'template': null
+    },
+
+    mapLocationCache: {},
+
+    attributes: {
+        'class': 'map-box'
     },
 
     initialize: function() {
-        function initialize() {
-            var mapOptions = {
-                zoom: 8,
-                center: new google.maps.LatLng(-34.397, 150.644),
-                mapTypeId: google.maps.MapTypeId.ROADMAP
-            };
-
-            var map = new google.maps.Map(document.getElementById('map-canvas'),
-                mapOptions);
-        }
-
         this.options.collection = this.options.collection || new OroAddressCollection();
 
         this.listenTo(this.getCollection(), 'add', this.addAddress);
         this.listenTo(this.getCollection(), 'reset', this.addAll);
-        this.listenTo(this.getCollection(), 'all', this.render);
+        //this.listenTo(this.getCollection(), 'all', this.render);
 
-        this.$adressesContainer = this.$el.find(this.options.containerEl);
-        this.$mapContainer = this.$el.find(this.options.mapEl);
+        this.$adressesContainer = Backbone.$('<div class="map-address-list"/>').appendTo(this.$el);
+        this.$mapContainer = Backbone.$('<div class="map-visual"/>').appendTo(this.$el);
     },
 
     getCollection: function() {
@@ -33,6 +27,7 @@ var OroAddressBook = Backbone.View.extend({
     },
 
     addAll: function(items) {
+        this.$adressesContainer.empty();
         items.each(function(item) {
             this.addAddress(item);
         }, this);
@@ -47,14 +42,34 @@ var OroAddressBook = Backbone.View.extend({
         this.$adressesContainer.append(addressView.render().$el);
     },
 
-    editAddress: function() {
-        Oro.widget.Manager.createWidget('dialog', {
-            'el': '<div/>',
-            'title': 'Edit Address',
+    editAddress: function(addressView, address) {
+        this._openAddressEditForm(
+            _.__('Create Address'),
+            Routing.generate('orocrm_contact_address_update', {'id': address.get('id')})
+        );
+    },
+
+    createAddress: function() {
+        this._openAddressEditForm(
+            _.__('Update Address'),
+            Routing.generate('orocrm_contact_address_create')
+        );
+    },
+
+    _openAddressEditForm: function(title, url) {
+        var addressEditDialog = Oro.widget.Manager.createWidget('dialog', {
+            'url': url,
+            'title': title,
+            'stateEnabled': false,
             'dialogOptions': {
                 'modal': true
             }
         }).render();
+        addressEditDialog.on('formSave', _.bind(this.reloadAddresses, this));
+    },
+
+    reloadAddresses: function() {
+        this.getCollection().fetch({reset: true});
     },
 
     activateAddress: function(addressView, address) {
@@ -64,12 +79,17 @@ var OroAddressBook = Backbone.View.extend({
     },
 
     updateMap: function(address) {
-        this.getGeocoder().geocode({'address': this.getAddressString(address)}, _.bind(function(results, status) {
-            if(status == google.maps.GeocoderStatus.OK) {
-                //Move location marker and map center to new coordinates
-                this.updateMapLocation(results[0].geometry.location, address);
-            }
-        }, this));
+        var addressString = this.getAddressString(address);
+        if (this.mapLocationCache.hasOwnProperty(addressString)) {
+            this.updateMapLocation(this.mapLocationCache[addressString], address);
+        } else {
+            this.getGeocoder().geocode({'address': addressString}, _.bind(function(results, status) {
+                if(status == google.maps.GeocoderStatus.OK) {
+                    //Move location marker and map center to new coordinates
+                    this.updateMapLocation(results[0].geometry.location, address);
+                }
+            }, this));
+        }
     },
 
     getAddressString: function(address) {
@@ -79,10 +99,13 @@ var OroAddressBook = Backbone.View.extend({
     },
 
     updateMapLocation: function(location, address) {
-        this._initMap(location);
-        this.map.setCenter(location);
-        this.mapLocationMarker.setPosition(location);
-        this.mapLocationMarker.setTitle(address.get('label'))
+        if (location && (!this.location || location.toString() != this.location.toString())) {
+            this._initMap(location);
+            this.map.setCenter(location);
+            this.mapLocationMarker.setPosition(location);
+            this.mapLocationMarker.setTitle(address.get('label'));
+            this.location = location;
+        }
     },
 
     getGeocoder: function() {
@@ -93,10 +116,6 @@ var OroAddressBook = Backbone.View.extend({
     },
 
     _initMap: function(location) {
-        this.$mapContainer.css({
-            'width': '100%',
-            'height': '400px'
-        });
         this.$mapContainer.show();
         var mapOptions = {
             zoom: this.options.mapZoom,
