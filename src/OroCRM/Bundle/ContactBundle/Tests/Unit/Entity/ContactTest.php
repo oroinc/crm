@@ -12,20 +12,6 @@ use Oro\Bundle\AddressBundle\Entity\AddressType;
 
 class ContactTest extends \PHPUnit_Framework_TestCase
 {
-    public function testOnCreate()
-    {
-        $entity = new Contact();
-        $entity->onCreate();
-        $this->assertInstanceOf('\DateTime', $entity->getCreatedAt());
-    }
-
-    public function testOnUpdate()
-    {
-        $entity = new Contact();
-        $entity->onUpdate();
-        $this->assertInstanceOf('\DateTime', $entity->getUpdatedAt());
-    }
-
     public function testGetGroupLabels()
     {
         $entity = new Contact();

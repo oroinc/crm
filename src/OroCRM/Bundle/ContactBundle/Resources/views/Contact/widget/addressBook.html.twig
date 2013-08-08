@@ -1,0 +1,62 @@
+<div class="widget-content" id="addressBookWidget">
+    <div class="widget-actions">
+        <button class="btn btn-mini btn-primary btn-uppercase" type="button" data-action-name="add_address"> + add Address</button>
+    </div>
+    <div class="map-box" id="address-book"></div>
+
+    <script type="text/html" id="template-contact-address">
+        <div class="clearfix">
+            <div class="title-item"><%= label %></div>
+            <div class="map-actions">
+                <button class="btn"><i class="icon-edit hide-text"><%= _.__('Edit') %></i></button>
+                <% if (!isPrimary) { %><button class="btn"><i class="icon-remove hide-text"><%= _.__('Close') %></i></button><% } %>
+            </div>
+        </div>
+        <ul class="inline">
+            <% if(isPrimary) { %> <li><span class="label label-info"><%= _.__('Primary') %></span></li> <% } %>
+            <% _.each(types, function(type) { %>
+            <li><span class="label"><%= type %></span></li>
+            <% }) %>
+        </ul>
+        <address>
+            <%= street %>&nbsp;<%= street2 %><br />
+            <%= city %>, <%= state %><br />
+            <%= postalCode %><br />
+            <%= country %><br />
+        </address>
+    </script>
+
+    <script type="text/javascript">
+        $('#addressBookWidget').on('widgetize', function(e, widget) {
+            var addressBook = new OroAddressBook({
+                el: '#address-book',
+                entityId: {{ entity.id|json_encode|raw }}
+            });
+            $(widget.getAction('add_address', 'adopted')).on('click', _.bind(addressBook.createAddress, addressBook));
+
+            {# TODO: change a way how serialized collection of addresses is prepared #}
+            var addresses = [];
+            {% for address in entity.addresses %}
+                {% set addressData = {
+                    id: address.id,
+                    label: address.label,
+                    street: address.street,
+                    street2: address.street2,
+                    city: address.city,
+                    country: address.country.__toString,
+                    postalCode: address.postalCode,
+                    state: address.state.__toString,
+                    isPrimary: address.primary,
+                    types: []
+                } %}
+                var addressData = {{ addressData|json_encode|raw }};
+                {% for type in address.types %}
+                    addressData.types.push({{ type.__toString|json_encode|raw }});
+                {% endfor %}
+                addresses.push(new OroAddress(addressData));
+            {% endfor %}
+            {# end _todo #}
+            addressBook.getCollection().reset(addresses);
+        });
+    </script>
+</div>

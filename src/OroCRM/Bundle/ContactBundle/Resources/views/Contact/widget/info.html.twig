@@ -8,8 +8,12 @@
 
 <div class="widget-content">
 <div class="span6">
-    {{ _self.renderRow('Phone'|trans, entity.phone) }}
-    {{ _self.renderRow('Email'|trans, entity.email) }}
+    {% if entity.phones.count %}
+        {{ _self.renderRow('Phone'|trans, entity.phones.first.phone) }}
+    {% endif %}
+    {% if entity.emails.count %}
+        {{ _self.renderRow('Email'|trans, entity.emails.first.email) }}
+    {% endif %}
 
     <div class="control-group">
         <label class="control-label">Fax</label>
@@ -76,7 +80,8 @@
         </div>
     </div>
 
-    {{ _self.renderRow('Birthday'|trans, macros.date(entity.birthday)) }}
+    {% set birthday = entity.birthday is empty ? 'N/A': macros.date(entity.birthday) %}
+    {{ _self.renderRow('Birthday'|trans, birthday) }}
 
     <div class="control-group">
         <label class="control-label">Gender</label>

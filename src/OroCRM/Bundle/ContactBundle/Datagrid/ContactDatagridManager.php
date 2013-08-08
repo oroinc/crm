@@ -158,7 +158,7 @@ class ContactDatagridManager extends DatagridManager
                 'sortable'        => true,
                 'filterable'      => true,
                 // entity filter options
-                'class'           => 'OroCRMContactBundle:ContactSource',
+                'class'           => 'OroCRMContactBundle:Source',
                 'property'        => 'label',
                 'filter_by_where' => true
             )

@@ -3,7 +3,7 @@
 {% import 'OroUIBundle::macros.html.twig' as macros %}
 {% import 'OroAddressBundle:Include:viewMacro.html.twig' as addressView %}
 {% set format = oro_config_value('oro_user.name_format') %}
-{% set fullname = entity.fullname(format)|default('N/A') %}
+{% set fullname = entity.fullname(format)|default('N/A'|trans) %}
 {% oro_title_set({params : {"%contact.name%": fullname} }) %}
 {% set gridId = 'accounts-grid' %}
 {% block head_script %}
@@ -35,79 +35,73 @@
     {{ parent() }}
 {% endblock pageHeader %}
 
+{% block stats %}
+    <li>
+        {{ 'Created'|trans }}:
+        {{ entity.createdAt ? UI.time(entity.createdAt) : 'N/A'|trans }}
+        {% if entity.createdBy %}
+            {% if resource_granted('oro_user_user_view') %}
+                <a href="{{ path('oro_user_view', {'id': entity.createdBy.id}) }}">{{ entity.createdBy.fullname }}</a>
+            {% else %}
+                {{ entity.createdBy.fullname }}
+            {% endif %}
+        {% endif %}
+    </li>
+    <li>
+        {{ 'Updated'|trans }}:
+        {{ entity.updatedAt ? UI.time(entity.updatedAt) : 'N/A'|trans }}
+        {% if entity.updatedBy %}
+            {% if resource_granted('oro_user_user_view') %}
+                <a href="{{ path('oro_user_view', {'id': entity.updatedBy.id}) }}">{{ entity.updatedBy.fullname }}</a>
+            {% else %}
+                {{ entity.updatedBy.fullname }}
+            {% endif %}
+        {% endif %}
+    </li>
+{% endblock stats %}
+
+{% block pageActions %}
+    {{ parent() }}
+    <div class="pull-right user-info-state">
+        <ul class="inline-decorate">
+            <li>
+                {{ 'Owner'|trans }}:
+                {% if entity.owner %}
+                    {% if resource_granted('oro_user_user_view') %}
+                        <a href="{{ path('oro_user_view', {'id': entity.owner.id}) }}">{{ entity.owner.fullname }}</a>
+                    {% else %}
+                        {{ entity.owner.fullname }}
+                    {% endif %}
+                {% else %}
+                    {{ 'N/A'|trans  }}
+                {% endif %}
+            </li>
+        </ul>
+    </div>
+{% endblock pageActions %}
+
 {% block content_data %}
     <div class="well-small form-horizontal dark-bg">
         <div class="clearfix">
-            <div class="row-fluid  well-small-bottom">
-                {#<div class="span6">#}
-                    {#{{#}
-                        {#oro_widget_render({#}
-                            {#'widgetType': 'block',#}
-                            {#'url': path('orocrm_contact_info', {id: entity.id}),#}
-                            {#'title': 'Contact Information'#}
-                        {#})#}
-                    {#}}#}
-                {#</div>#}
+            <div class="row-fluid well-small-bottom">
                 <div class="span6">
-                    <script type="text/html" id="template-contact-address">
-                        <div class="map-item <% if (isPrimary) { %>active<% } %>">
-                            <div class="clearfix">
-                                <div class="title-item"><%= label %></div>
-                                <div class="map-actions">
-                                    <button class="btn"><i class="icon-edit hide-text"><%= _.__('Edit') %></i></button>
-                                    <button class="btn"><i class="icon-remove hide-text"><%= _.__('Close') %></i></button>
-                                </div>
-                            </div>
-                            <ul class="inline">
-                                <% if(isPrimary) { %> <li><span class="label label-info"><%= _.__('Primary') %></span></li> <% } %>
-                                <% _.each(types, function(type) { %>
-                                <li><span class="label"><%= type %></span></li>
-                                <% } %>
-                            </ul>
-                            <address>
-                                <%= street %> <%= street2 %><br />
-                                <% city %>, <%= state %><br />
-                                <%= postalCode %><br />
-                                <%= country =><br />
-                            </address>
-                        </div>
-                    </script>
-
-                    <script type="text/html" id="template-contact-address-book">
-                        <div class="map-box">
-                            <div class="map-address-list"></div>
-                            <div class="map-visual"></div>
-                        </div>
-                    </script>
-
-                    <div id="address-book"></div>
-                    <script type="text/javascript">
-                        $(function() {
-                            new OroAddressBook({
-                                el: '#address-book',
-                                collection: new OroAddressCollection([
-                                    new OroAddress({
-                                        'id': 1,
-                                        'street': 'Street',
-                                        'street2': 'Street2',
-                                        'city': 'City',
-                                        'country': 'Country',
-                                        'postalCode': 'postalCode',
-                                        'state': 'State',
-                                        'isPrimary': true,
-                                        'types': ['type1', 'type2']
-                                    })
-                                ])
-                            }).render();
-                        });
-                    </script>
-                    {#{{#}
-                        {#oro_widget_render({#}
-                            {#'widgetType': 'block',#}
-                            {#'url': path('orocrm_contact_address_book', {id: entity.id}),#}
-                            {#'title': 'Address Book'#}
-                        {#})#}
-                    {#}}#}
+                    {{
+                        oro_widget_render({
+                            'widgetType': 'block',
+                            'url': path('orocrm_contact_info', {id: entity.id}),
+                            'title': 'Contact Information'
+                        })
+                    }}
+                </div>
+                <div class="span6">
+                    {{
+                        oro_widget_render({
+                            'widgetType': 'block',
+                            'contentClasses': [],
+                            'url': path('orocrm_contact_address_book', {id: entity.id}),
+                            'title': 'Address Book'
+                        })
+                    }}
                 </div>
             </div>
         </div>

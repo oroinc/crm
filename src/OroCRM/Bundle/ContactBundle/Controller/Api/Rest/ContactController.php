@@ -150,15 +150,13 @@ class ContactController extends RestController implements ClassResourceInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @param Contact $entity
+     * @param array $result
+     * @return array
      */
-    protected function getPreparedItem($entity)
+    protected function prepareContactEntities(Contact $entity, array $result)
     {
-        /** @var Contact $entity */
-        // basic result
-        $result = parent::getPreparedItem($entity);
-
-        // use contact code instead of label
+        // use contact source name instead of label
         $source = $entity->getSource();
         if ($source) {
             $result['source'] = $source->getName();
@@ -166,20 +164,12 @@ class ContactController extends RestController implements ClassResourceInterface
             $result['source'] = null;
         }
 
-        // set assigned to user data
-        $assignedTo = $entity->getAssignedTo();
-        if ($assignedTo) {
-            $result['assignedTo'] = $assignedTo->getId();
+        // use contact method name instead of label
+        $method = $entity->getMethod();
+        if ($method) {
+            $result['method'] = $method->getName();
         } else {
-            $result['assignedTo'] = null;
-        }
-
-        // set reports to contact data
-        $reportsTo = $entity->getReportsTo();
-        if ($reportsTo) {
-            $result['reportsTo'] = $reportsTo->getId();
-        } else {
-            $result['reportsTo'] = null;
+            $result['method'] = null;
         }
 
         // set contact group data
@@ -200,12 +190,75 @@ class ContactController extends RestController implements ClassResourceInterface
         }
         $result['addresses'] = $addressData;
 
+        return $result;
+    }
+
+    /**
+     * @param Contact $entity
+     * @param array $result
+     * @return array
+     */
+    protected function prepareExternalEntities(Contact $entity, array $result)
+    {
+        // set assigned to user data
+        $assignedTo = $entity->getAssignedTo();
+        if ($assignedTo) {
+            $result['assignedTo'] = $assignedTo->getId();
+        } else {
+            $result['assignedTo'] = null;
+        }
+
+        // set owner user data
+        $owner = $entity->getOwner();
+        if ($owner) {
+            $result['owner'] = $owner->getId();
+        } else {
+            $result['owner'] = null;
+        }
+
+        // set reports to contact data
+        $reportsTo = $entity->getReportsTo();
+        if ($reportsTo) {
+            $result['reportsTo'] = $reportsTo->getId();
+        } else {
+            $result['reportsTo'] = null;
+        }
+
         // convert accounts to plain array
         $accountsIds = array();
         foreach ($entity->getAccounts() as $account) {
             $accountsIds[] = $account->getId();
         }
         $result['accounts'] = $accountsIds;
+
+        // set created and updated users
+        $createdBy = $entity->getCreatedBy();
+        if ($createdBy) {
+            $result['createdBy'] = $createdBy->getId();
+        } else {
+            $result['createdBy'] = null;
+        }
+
+        $updatedBy = $entity->getUpdatedBy();
+        if ($updatedBy) {
+            $result['updatedBy'] = $updatedBy->getId();
+        } else {
+            $result['updatedBy'] = null;
+        }
+
+        return $result;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function getPreparedItem($entity)
+    {
+        /** @var Contact $entity */
+        $result = parent::getPreparedItem($entity);
+
+        $result = $this->prepareContactEntities($entity, $result);
+        $result = $this->prepareExternalEntities($entity, $result);
 
         return $result;
     }

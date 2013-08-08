@@ -1,6 +1,5 @@
 parameters:
     orocrm_contact.entity.class: OroCRM\Bundle\ContactBundle\Entity\Contact
-    orocrm_contact.entity.value.class: OroCRM\Bundle\ContactBundle\Entity\Value\ContactValue
     orocrm_contact.type.contact.class: OroCRM\Bundle\ContactBundle\Form\Type\ContactType
     orocrm_contact.type.group.class: OroCRM\Bundle\ContactBundle\Form\Type\GroupType
     orocrm_contact.handler.contact.class: OroCRM\Bundle\ContactBundle\Form\Handler\ContactHandler
@@ -15,6 +14,7 @@ parameters:
     orocrm_contact.form.type.group.api.class: OroCRM\Bundle\ContactBundle\Form\Type\GroupApiType
 
     orocrm_contact.contact_address.entity.class: OroCRM\Bundle\ContactBundle\Entity\ContactAddress
+    orocrm_contact.subscriber.contact_subscriber.class: OroCRM\Bundle\ContactBundle\EventListener\ContactSubscriber
 
 services:
     orocrm_contact.form.contact:
@@ -80,6 +80,12 @@ services:
             - %orocrm_contact.entity.class%
             - @doctrine.orm.entity_manager
 
+    orocrm_contact.contact_address.manager.api:
+        class: %oro_address.address.manager.api.class%
+        arguments:
+            - %orocrm_contact.contact_address.entity.class%
+            - @doctrine.orm.entity_manager
+
     orocrm_contact.form.type.contact.api:
         class: %orocrm_contact.form.type.contact.api.class%
         arguments:
@@ -130,6 +136,23 @@ services:
             - @request
             - @doctrine.orm.entity_manager
 
+    orocrm_contact.contact_address.form:
+        class: Symfony\Component\Form\Form
+        factory_method: createNamed
+        factory_service: form.factory
+        arguments:
+            - "orocrm_contact_address_form"
+            - "oro_typed_address"
+            - ~
+
+    orocrm_contact.form.handler.contact_address:
+        class: %oro_address.form.handler.address.class%
+        scope: request
+        arguments:
+            - @orocrm_contact.contact_address.form
+            - @request
+            - @doctrine.orm.entity_manager
+
     orocrm_contact.form.autocomplete.contact.search_handler:
         parent: oro_form.autocomplete.search_handler
         arguments:
@@ -137,3 +160,10 @@ services:
             - ["first_name", "last_name"]
         tags:
             - { name: oro_form.autocomplete.search_handler, alias: contacts, acl_resource: orocrm_contact_list }
+
+    orocrm_contact.subscriber.contact_subscriber:
+        class: %orocrm_contact.subscriber.contact_subscriber.class%
+        arguments:
+            - @service_container
+        tags:
+            - { name: doctrine.event_subscriber }
