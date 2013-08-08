@@ -26,6 +26,9 @@ var OroAddressBook = Backbone.View.extend({
 
         this.$adressesContainer = Backbone.$('<div class="map-address-list"/>').appendTo(this.$el);
         this.$mapContainer = Backbone.$('<div class="map-visual"/>').appendTo(this.$el);
+        this.$unknownAddress = Backbone.$('<div class="map-unknown map-visual">' + _.__('Address Not Found') + '</div>')
+            .appendTo(this.$el);
+        this.mapLocationUnknown();
     },
 
     getCollection: function() {
@@ -120,9 +123,21 @@ var OroAddressBook = Backbone.View.extend({
                 if(status == google.maps.GeocoderStatus.OK) {
                     //Move location marker and map center to new coordinates
                     this.updateMapLocation(results[0].geometry.location, address);
+                } else {
+                    this.mapLocationUnknown();
                 }
             }, this));
         }
+    },
+
+    mapLocationUnknown: function() {
+        this.$mapContainer.hide();
+        this.$unknownAddress.show();
+    },
+
+    mapLocationKnown: function() {
+        this.$mapContainer.show();
+        this.$unknownAddress.hide();
     },
 
     getAddressString: function(address) {
@@ -132,6 +147,7 @@ var OroAddressBook = Backbone.View.extend({
     },
 
     updateMapLocation: function(location, address) {
+        this.mapLocationKnown();
         if (location && (!this.location || location.toString() != this.location.toString())) {
             this._initMap(location);
             this.map.setCenter(location);
@@ -149,7 +165,6 @@ var OroAddressBook = Backbone.View.extend({
     },
 
     _initMap: function(location) {
-        this.$mapContainer.show();
         var mapOptions = {
             zoom: this.options.mapZoom,
             mapTypeControl: true,
