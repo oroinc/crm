@@ -9,7 +9,9 @@ var OroAddress = Backbone.Model.extend({
         'country': '',
         'postalCode': '',
         'state': '',
-        'isPrimary': false,
-        'types': []
+        'primary': false,
+        'types': [],
+
+        'active': false
     }
 });

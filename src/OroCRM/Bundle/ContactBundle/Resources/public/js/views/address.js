@@ -14,14 +14,19 @@ var OroAddressView = Backbone.View.extend({
     initialize: function() {
         this.template = _.template($("#template-contact-address").html());
         this.listenTo(this.model, 'destroy', this.remove)
-    },
-
-    markActive: function() {
-        this.$el.addClass('active');
+        this.listenTo(this.model, 'change:active', this.toggleActive)
     },
 
     activate: function() {
-        this.trigger('activate', this, this.model)
+        this.model.set('active', true);
+    },
+
+    toggleActive: function() {
+        if (this.model.get('active')) {
+            this.$el.addClass('active');
+        } else {
+            this.$el.removeClass('active');
+        }
     },
 
     edit: function(e) {

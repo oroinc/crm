@@ -19,9 +19,10 @@ var OroAddressBook = Backbone.View.extend({
             {'contactId': this.options.entityId}
         );
 
+        this.listenTo(this.getCollection(), 'activeChange', this.activateAddress);
         this.listenTo(this.getCollection(), 'add', this.addAddress);
         this.listenTo(this.getCollection(), 'reset', this.addAll);
-        //this.listenTo(this.getCollection(), 'all', this.render);
+        this.listenTo(this.getCollection(), 'remove', this.onAddressRemove);
 
         this.$adressesContainer = Backbone.$('<div class="map-address-list"/>').appendTo(this.$el);
         this.$mapContainer = Backbone.$('<div class="map-visual"/>').appendTo(this.$el);
@@ -29,6 +30,17 @@ var OroAddressBook = Backbone.View.extend({
 
     getCollection: function() {
         return this.options.collection;
+    },
+
+    onAddressRemove: function() {
+        if (!this.getCollection().where({active: true}).length) {
+            var primaryAddress = this.getCollection().where({primary: true})
+            if (primaryAddress.length) {
+                primaryAddress[0].set('active', true);
+            } else if (this.getCollection().length) {
+                this.getCollection().at(0).set('active', true);
+            }
+        }
     },
 
     addAll: function(items) {
@@ -43,7 +55,6 @@ var OroAddressBook = Backbone.View.extend({
             model: address
         });
         addressView.on('edit', _.bind(this.editAddress, this));
-        addressView.on('activate', _.bind(this.activateAddress, this));
         this.$adressesContainer.append(addressView.render().$el);
     },
 
@@ -96,9 +107,7 @@ var OroAddressBook = Backbone.View.extend({
         this.getCollection().fetch({reset: true});
     },
 
-    activateAddress: function(addressView, address) {
-        this.$adressesContainer.find('.active').removeClass('active');
-        addressView.markActive();
+    activateAddress: function(address) {
         this.updateMap(address);
     },
 
