@@ -2,15 +2,12 @@
 
 namespace OroCRM\Bundle\ContactBundle\Controller;
 
-
-use OroCRM\Bundle\ContactBundle\Entity\ContactAddress;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBag;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Oro\Bundle\UserBundle\Annotation\Acl;
 use Oro\Bundle\UserBundle\Annotation\AclAncestor;
 
@@ -72,76 +69,6 @@ class ContactController extends Controller
         return array(
             'entity' => $contact
         );
-    }
-
-    /**
-     * @Route("/address-book/{id}", name="orocrm_contact_address_book", requirements={"id"="\d+"})
-     * @Template
-     * @Acl(
-     *      id="orocrm_contact_address_book",
-     *      name="View Contact Address Book",
-     *      description="View contact Address Book",
-     *      parent="orocrm_contact_view"
-     * )
-     */
-    public function addressBookAction(Contact $contact)
-    {
-        return array(
-            'entity' => $contact
-        );
-    }
-
-    /**
-     * @Route(
-     *      "/{contactId}/address-create",
-     *      name="orocrm_contact_address_create",
-     *      requirements={"contactId"="\d+"}
-     * )
-     * @Template("OroCRMContactBundle:ContactAddress:update.html.twig")
-     * @Acl(
-     *      id="orocrm_contact_address_create",
-     *      name="Create Contact Address",
-     *      description="Create Contact Address",
-     *      parent="orocrm_contact_view"
-     * )
-     * @ParamConverter("contact", options={"id" = "contactId"})
-     */
-    public function createAddressAction(Contact $contact)
-    {
-        return $this->updateAddressAction($contact, new ContactAddress());
-    }
-
-    /**
-     * @Route(
-     *      "/{contactId}/address-update/{id}",
-     *      name="orocrm_contact_address_update",
-     *      requirements={"contactId"="\d+","id"="\d+"},defaults={"id"=0}
-     * )
-     * @Template("OroCRMContactBundle:ContactAddress:update.html.twig")
-     * @Acl(
-     *      id="orocrm_contact_address_update",
-     *      name="Update Contact Address",
-     *      description="Update Contact Address",
-     *      parent="orocrm_contact_view"
-     * )
-     * @ParamConverter("contact", options={"id" = "contactId"})
-     */
-    public function updateAddressAction(Contact $contact, ContactAddress $entity)
-    {
-        $responseData = array(
-            'saved' => false,
-            'contact' => $contact
-        );
-        // TODO: Create custom address handler, where reset primary and types to current address
-        if ($this->get('orocrm_contact.form.handler.contact_address')->process($entity)) {
-            // Add address to contact addresses
-            $contact->addAddress($entity);
-            $this->getDoctrine()->getManager()->flush();
-            $responseData['entity'] = $entity;
-            $responseData['saved'] = true;
-        }
-        $responseData['form'] = $this->get('orocrm_contact.contact_address.form')->createView();
-        return $responseData;
     }
 
     /**
