@@ -42,7 +42,12 @@
     </ul>
 {% endmacro %}
 
-<div class="widget-content">
+<style>
+    .contact-info {
+        min-height: 360px;
+    }
+</style>
+<div class="widget-content contact-info">
     <div class="span6">
         {{ _self.renderRow('Title'|trans, entity.title) }}
 

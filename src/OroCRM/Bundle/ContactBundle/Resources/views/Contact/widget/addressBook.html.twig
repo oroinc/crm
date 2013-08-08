@@ -35,38 +35,11 @@
                 el: '#address-book',
                 entityId: {{ entity.id|json_encode|raw }}
             });
-            $(widget.getAction('add_address', 'adopted')).on('click', _.bind(addressBook.createAddress, addressBook));
-            $(widget.getAction('refresh', 'adopted')).on('click', function() {addressBook.getCollection().fetch({reset: true})});
-
-            {# TODO: change a way how serialized collection of addresses is prepared #}
-            var addresses = [];
-            {% for address in entity.addresses %}
-                {% set addressData = {
-                    id: address.id,
-                    label: address.label,
-                    firstName: address.firstName,
-                    lastName: address.lastName,
-                    street: address.street,
-                    street2: address.street2,
-                    city: address.city,
-                    country: address.country.__toString,
-                    postalCode: address.postalCode,
-                    state: address.state.__toString,
-                    primary: address.primary,
-                    types: []
-                } %}
-                var addressData = {{ addressData|json_encode|raw }};
-                {% for type in address.types %}
-                    {% set typeData = {
-                        name: type.name,
-                        label: type.label
-                    } %}
-                    addressData.types.push({{ typeData|json_encode|raw }});
-                {% endfor %}
-                addresses.push(new OroAddress(addressData));
-            {% endfor %}
-            {# end _todo #}
-            addressBook.getCollection().reset(addresses);
+            $(widget.getAction('add_address', 'adopted'))
+                .on('click', _.bind(addressBook.createAddress, addressBook));
+            addressBook
+                .getCollection()
+                .reset({{ render(path('oro_api_get_contact_addresses', {contactId: entity.id})) }});
         });
     </script>
 </div>
