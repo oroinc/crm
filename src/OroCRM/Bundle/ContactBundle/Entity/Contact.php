@@ -309,6 +309,22 @@ class Contact implements Taggable
      */
     protected $updatedAt;
 
+    /**
+     * @var User
+     *
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
+     * @ORM\JoinColumn(name="created_by_user_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    protected $createdBy;
+
+    /**
+     * @var User
+     *
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
+     * @ORM\JoinColumn(name="updated_by_user_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    protected $updatedBy;
+
     public function __construct()
     {
         $this->groups    = new ArrayCollection();
@@ -1247,20 +1263,41 @@ class Contact implements Taggable
     }
 
     /**
-     * @ORM\PrePersist
+     * @param \Oro\Bundle\UserBundle\Entity\User $createdBy
+     * @return Contact
      */
-    public function onCreate()
+    public function setCreatedBy($createdBy)
     {
-        $this->createdAt = new \DateTime('now', new \DateTimeZone('UTC'));
+        $this->createdBy = $createdBy;
+
+        return $this;
     }
 
     /**
-     * @ORM\PrePersist
-     * @ORM\PreUpdate
+     * @return \Oro\Bundle\UserBundle\Entity\User
      */
-    public function onUpdate()
+    public function getCreatedBy()
     {
-        $this->updatedAt = new \DateTime('now', new \DateTimeZone('UTC'));
+        return $this->createdBy;
+    }
+
+    /**
+     * @param \Oro\Bundle\UserBundle\Entity\User $updatedBy
+     * @return Contact
+     */
+    public function setUpdatedBy($updatedBy)
+    {
+        $this->updatedBy = $updatedBy;
+
+        return $this;
+    }
+
+    /**
+     * @return \Oro\Bundle\UserBundle\Entity\User
+     */
+    public function getUpdatedBy()
+    {
+        return $this->updatedBy;
     }
 
     public function __toString()

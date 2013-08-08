@@ -15,6 +15,7 @@ parameters:
 
     orocrm_contact.contact_address.entity.class: OroCRM\Bundle\ContactBundle\Entity\ContactAddress
     orocrm_contact.form.type.contact_address.class: OroCRM\Bundle\ContactBundle\Form\Type\ContactAddressType
+    orocrm_contact.subscriber.contact_subscriber.class: OroCRM\Bundle\ContactBundle\EventListener\ContactSubscriber
 
 services:
     orocrm_contact.form.contact:
@@ -165,3 +166,10 @@ services:
             - ["first_name", "last_name"]
         tags:
             - { name: oro_form.autocomplete.search_handler, alias: contacts, acl_resource: orocrm_contact_list }
+
+    orocrm_contact.subscriber.contact_subscriber:
+        class: %orocrm_contact.subscriber.contact_subscriber.class%
+        arguments:
+            - @service_container
+        tags:
+            - { name: doctrine.event_subscriber }
