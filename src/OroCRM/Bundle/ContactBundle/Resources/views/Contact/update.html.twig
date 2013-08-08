@@ -59,6 +59,10 @@
     {% endif %}
 {% endblock pageHeader %}
 
+{% block stats %}
+    {% include 'OroCRMContactBundle:Contact:headerStats.html.twig' with {'entity': entity} %}
+{% endblock stats %}
+
 {% block content_data %}
     {% set id = 'contact-profile' %}
 

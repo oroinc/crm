@@ -7,6 +7,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LifecycleEventArgs;
+use Doctrine\ORM\Event\PreUpdateEventArgs;
 
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\UserBundle\Entity\User;
@@ -68,9 +69,9 @@ class ContactSubscriber implements EventSubscriber
     }
 
     /**
-     * @param LifecycleEventArgs $args
+     * @param PreUpdateEventArgs $args
      */
-    public function preUpdate(LifecycleEventArgs $args)
+    public function preUpdate(PreUpdateEventArgs $args)
     {
         $entity = $args->getEntity();
         if (!$this->isContactEntity($entity)) {
@@ -78,7 +79,7 @@ class ContactSubscriber implements EventSubscriber
         }
 
         /** @var Contact $entity */
-        $this->setUpdatedProperties($entity);
+        $this->setUpdatedProperties($entity, $args);
     }
 
     /**
@@ -120,10 +121,20 @@ class ContactSubscriber implements EventSubscriber
 
     /**
      * @param Contact $contact
+     * @param PreUpdateEventArgs $args
      */
-    protected function setUpdatedProperties(Contact $contact)
+    protected function setUpdatedProperties(Contact $contact, PreUpdateEventArgs $args = null)
     {
-        $contact->setUpdatedAt(new \DateTime('now', new \DateTimeZone('UTC')));
-        $contact->setUpdatedBy($this->getUser());
+        $newUpdatedAt = new \DateTime('now', new \DateTimeZone('UTC'));
+        $newUpdatedBy = $this->getUser();
+
+        if ($args) {
+            $uow = $args->getEntityManager()->getUnitOfWork();
+            $uow->propertyChanged($contact, 'updatedAt', $contact->getUpdatedAt(), $newUpdatedAt);
+            $uow->propertyChanged($contact, 'updatedBy', $contact->getUpdatedBy(), $newUpdatedBy);
+        }
+
+        $contact->setUpdatedAt($newUpdatedAt);
+        $contact->setUpdatedBy($newUpdatedBy);
     }
 }
