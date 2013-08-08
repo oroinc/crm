@@ -95,6 +95,7 @@ class ContactType extends AbstractType
             'oro_address_collection',
             array(
                 'type' => 'oro_typed_address',
+                'required' => false,
                 'options' => array(
                     'data_class' => 'OroCRM\Bundle\ContactBundle\Entity\ContactAddress'
                 )
@@ -107,6 +108,7 @@ class ContactType extends AbstractType
             'oro_email_collection',
             array(
                 'type' => 'oro_email',
+                'required' => false,
                 'options' => array(
                     'data_class' => 'OroCRM\Bundle\ContactBundle\Entity\ContactEmail'
                 )
@@ -119,6 +121,7 @@ class ContactType extends AbstractType
             'oro_phone_collection',
             array(
                 'type' => 'oro_phone',
+                'required' => false,
                 'options' => array(
                     'data_class' => 'OroCRM\Bundle\ContactBundle\Entity\ContactPhone'
                 )
