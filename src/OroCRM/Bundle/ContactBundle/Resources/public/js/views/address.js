@@ -30,12 +30,10 @@ var OroAddressView = Backbone.View.extend({
 
     close: function()
     {
-        if (this.model.get('isPrimary')) {
+        if (this.model.get('primary')) {
             alert(_.__('Primary address can not be removed'));
         } else {
-            // TODO: destroy model on delete, remove will be called on destroy event
-            //this.model.destroy();
-            this.remove();
+            this.model.destroy({wait: true});
         }
     },
 
@@ -43,7 +41,7 @@ var OroAddressView = Backbone.View.extend({
         this.$el.append(
             this.template(this.model.toJSON())
         );
-        if (this.model.get('isPrimary')) {
+        if (this.model.get('primary')) {
             this.activate();
         }
         return this;

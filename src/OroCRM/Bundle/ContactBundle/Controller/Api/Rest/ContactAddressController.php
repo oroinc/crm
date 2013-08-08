@@ -25,7 +25,8 @@ class ContactAddressController extends RestController implements ClassResourceIn
     /**
      * REST GET address
      *
-     * @param string $id
+     * @param string $contactId
+     * @param string $addressId
      *
      * @ApiDoc(
      *      description="Get contact address",
@@ -34,9 +35,20 @@ class ContactAddressController extends RestController implements ClassResourceIn
      * @AclAncestor("orocrm_contact_view")
      * @return Response
      */
-    public function getAction($id)
+    public function getAction($contactId, $addressId)
     {
-        return $this->handleGetRequest($id);
+        /** @var Contact $contact */
+        $contact = $this->getContactManager()->find($contactId);
+
+        /** @var ContactAddress $address */
+        $address = $this->getManager()->find($addressId);
+
+        $addressData = null;
+        if ($address && $contact->getAddresses()->contains($address)) {
+            $addressData = $this->getPreparedItem($address);
+        }
+        $responseData = $addressData ? json_encode($addressData) : '';
+        return new Response($responseData, $address ? Codes::HTTP_OK : Codes::HTTP_NOT_FOUND);
     }
 
     /**
@@ -72,18 +84,28 @@ class ContactAddressController extends RestController implements ClassResourceIn
      *      resource=true
      * )
      * @AclAncestor("orocrm_contact_view")
-     * @param int $id
+     * @param $contactId
+     * @param int $addressId
      * @return Response
      */
-    public function deleteAction($id)
+    public function deleteAction($contactId, $addressId)
     {
-        return $this->handleDeleteRequest($id);
+        /** @var ContactAddress $address */
+        $address = $this->getManager()->find($addressId);
+        /** @var Contact $contact */
+        $contact = $this->getContactManager()->find($contactId);
+        if ($contact->getAddresses()->contains($address)) {
+            $contact->removeAddress($address);
+            return $this->handleDeleteRequest($addressId);
+        } else {
+            return $this->handleView($this->view(null, Codes::HTTP_NOT_FOUND));
+        }
     }
 
     /**
      * REST GET address by type
      *
-     * @param string $id
+     * @param string $contactId
      * @param string $typeName
      *
      * @ApiDoc(
@@ -93,10 +115,10 @@ class ContactAddressController extends RestController implements ClassResourceIn
      * @AclAncestor("orocrm_contact_view")
      * @return Response
      */
-    public function getByTypeAction($id, $typeName)
+    public function getByTypeAction($contactId, $typeName)
     {
         /** @var Contact $contact */
-        $contact = $this->getContactManager()->find($id);
+        $contact = $this->getContactManager()->find($contactId);
 
         if ($contact) {
             $address = $contact->getAddressByTypeName($typeName);
@@ -112,7 +134,7 @@ class ContactAddressController extends RestController implements ClassResourceIn
     /**
      * REST GET primary address
      *
-     * @param string $id
+     * @param string $contactId
      *
      * @ApiDoc(
      *      description="Get contact primary address",
@@ -121,10 +143,10 @@ class ContactAddressController extends RestController implements ClassResourceIn
      * @AclAncestor("orocrm_contact_view")
      * @return Response
      */
-    public function getPrimaryAction($id)
+    public function getPrimaryAction($contactId)
     {
         /** @var Contact $contact */
-        $contact = $this->getContactManager()->find($id);
+        $contact = $this->getContactManager()->find($contactId);
 
         if ($contact) {
             $address = $contact->getPrimaryAddress();
