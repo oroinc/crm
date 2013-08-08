@@ -44,10 +44,6 @@
 
 <div class="widget-content">
     <div class="span6">
-        {{ _self.renderRow('Name prefix'|trans, entity.namePrefix) }}
-        {{ _self.renderRow('First name'|trans, entity.firstName) }}
-        {{ _self.renderRow('Last name'|trans, entity.lastName) }}
-        {{ _self.renderRow('Name suffix'|trans, entity.nameSuffix) }}
         {{ _self.renderRow('Title'|trans, entity.title) }}
 
         <div class="control-group">
@@ -144,6 +140,10 @@
 
     </div>
     <div class="span6">
+        {{ _self.renderRow('Name prefix'|trans, entity.namePrefix) }}
+        {{ _self.renderRow('First name'|trans, entity.firstName) }}
+        {{ _self.renderRow('Last name'|trans, entity.lastName) }}
+        {{ _self.renderRow('Name suffix'|trans, entity.nameSuffix) }}
         {{ _self.renderRow('Job Title'|trans, entity.jobTitle) }}
 
         <div class="control-group">
