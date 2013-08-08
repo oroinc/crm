@@ -15,7 +15,6 @@ parameters:
     orocrm_contact.form.type.group.api.class: OroCRM\Bundle\ContactBundle\Form\Type\GroupApiType
 
     orocrm_contact.contact_address.entity.class: OroCRM\Bundle\ContactBundle\Entity\ContactAddress
-    orocrm_contact.form.type.contact_address.class: OroCRM\Bundle\ContactBundle\Form\Type\ContactAddressType
 
 services:
     orocrm_contact.form.contact:
@@ -130,11 +129,6 @@ services:
             - @orocrm_contact.form.group.api
             - @request
             - @doctrine.orm.entity_manager
-
-    orocrm_contact.type.contact_address:
-        class: %orocrm_contact.form.type.contact_address.class%
-        tags:
-            - { name: form.type, alias: orocrm_contact_address }
 
     orocrm_contact.form.autocomplete.contact.search_handler:
         parent: oro_form.autocomplete.search_handler

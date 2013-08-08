@@ -6,8 +6,6 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Form\AbstractType;
 
-use Oro\Bundle\AddressBundle\Form\EventListener\AddressCollectionTypeSubscriber;
-
 class ContactType extends AbstractType
 {
     /**
@@ -43,25 +41,45 @@ class ContactType extends AbstractType
         // reports to (contact)
         $builder->add('reportsTo', 'orocrm_contact_select', array('label' => 'Reports to', 'required' => false));
 
-        // email and phone
-        // TODO Implement as collections with primary item
-        $builder
-            ->add('email', 'email', array('label' => 'Email', 'required' => false))
-            ->add('phone', 'text', array('label' => 'Phone', 'required' => false));
-
         // tags
         $builder->add(
             'tags',
             'oro_tag_select'
         );
 
-        // Addresses
+        // addresses
         $builder->add(
             'addresses',
             'oro_address_collection',
             array(
-                'required' => true,
-                'type' => 'orocrm_contact_address',
+                'type' => 'oro_typed_address',
+                'options' => array(
+                    'data_class' => 'OroCRM\Bundle\ContactBundle\Entity\ContactAddress'
+                )
+            )
+        );
+
+        // emails
+        $builder->add(
+            'emails',
+            'oro_email_collection',
+            array(
+                'type' => 'oro_email',
+                'options' => array(
+                    'data_class' => 'OroCRM\Bundle\ContactBundle\Entity\ContactEmail'
+                )
+            )
+        );
+
+        // phones
+        $builder->add(
+            'phones',
+            'oro_phone_collection',
+            array(
+                'type' => 'oro_phone',
+                'options' => array(
+                    'data_class' => 'OroCRM\Bundle\ContactBundle\Entity\ContactPhone'
+                )
             )
         );
 
@@ -98,10 +116,6 @@ class ContactType extends AbstractType
                 'mapped'   => false,
                 'multiple' => true,
             )
-        );
-
-        $builder->addEventSubscriber(
-            new AddressCollectionTypeSubscriber('addresses', 'OroCRM\Bundle\ContactBundle\Entity\ContactAddress')
         );
     }
 

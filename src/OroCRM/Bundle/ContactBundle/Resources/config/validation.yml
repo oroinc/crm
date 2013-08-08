@@ -20,8 +20,13 @@ OroCRM\Bundle\ContactBundle\Entity\Contact:
                 max:        100
         birthday:
             - Date:         ~
-        email:
-            - Email:        ~
         addresses:
-            - Oro\Bundle\AddressBundle\Validator\Constraints\ContainsPrimary: ~
+            - Oro\Bundle\AddressBundle\Validator\Constraints\ContainsPrimary:
+                message: One of addresses must be set as primary.
             - Oro\Bundle\AddressBundle\Validator\Constraints\UniqueAddressTypes: ~
+        emails:
+            - Oro\Bundle\AddressBundle\Validator\Constraints\ContainsPrimary:
+                message: One of emails must be set as primary.
+        phones:
+            - Oro\Bundle\AddressBundle\Validator\Constraints\ContainsPrimary:
+                message: One of phones must be set as primary.

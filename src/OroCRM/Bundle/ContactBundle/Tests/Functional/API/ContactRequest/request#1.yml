@@ -5,8 +5,14 @@ request:
     nameSuffix: Contact name suffix
     description: Contact description
     title: contact title
-    email: asd@asd.com
-    phone: 123-45-67
+    emails:
+        -
+          email: asd@asd.com
+          primary: true
+    phones:
+        -
+          phone: 123-45-67
+          primary: true
 
 response:
     return: true

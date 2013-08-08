@@ -132,15 +132,6 @@ class Contact implements Taggable
     protected $reportsTo;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="email", type="string", length=255, nullable=true)
-     * @Soap\ComplexType("string", nillable=true)
-     * @Oro\Versioned
-     */
-    protected $email;
-
-    /**
      * @var Collection
      *
      * @ORM\OneToMany(targetEntity="OroCRM\Bundle\ContactBundle\Entity\ContactEmail",
@@ -150,15 +141,6 @@ class Contact implements Taggable
      * @Soap\ComplexType("OroCRM\Bundle\ContactBundle\Entity\ContactEmail[]", nillable=true)
      */
     protected $emails;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="phone", type="string", length=255, nullable=true)
-     * @Soap\ComplexType("string", nillable=true)
-     * @Oro\Versioned
-     */
-    protected $phone;
 
     /**
      * @var Collection
@@ -422,44 +404,6 @@ class Contact implements Taggable
     public function getDescription()
     {
         return $this->description;
-    }
-
-    /**
-     * @param mixed $email
-     * @return Contact
-     */
-    public function setEmail($email)
-    {
-        $this->email = $email;
-
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getEmail()
-    {
-        return $this->email;
-    }
-
-    /**
-     * @param mixed $phone
-     * @return Contact
-     */
-    public function setPhone($phone)
-    {
-        $this->phone = $phone;
-
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getPhone()
-    {
-        return $this->phone;
     }
 
     /**

@@ -41,10 +41,10 @@ OroCRM\Bundle\ContactBundle\Entity\Contact:
                     target_type:    text
                     target_fields:  [label]
         -
-            name:                   email
+            name:                   primaryEmail
             target_type:            text
-            target_fields:          [email]
+            target_fields:          [primaryEmail]
         -
-            name:                   phone
+            name:                   primaryPhone
             target_type:            text
-            target_fields:          [phone]
+            target_fields:          [primaryPhone]

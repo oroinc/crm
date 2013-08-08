@@ -46,10 +46,11 @@ class ContactTypeTest extends \PHPUnit_Framework_TestCase
             'source' => 'entity',
             'assignedTo' => 'oro_user_select',
             'reportsTo' => 'orocrm_contact_select',
-            'email' => 'email',
             'phone' => 'text',
             'tags' => 'oro_tag_select',
             'addresses' => 'oro_address_collection',
+            'emails' => 'oro_email_collection',
+            'phones' => 'oro_phone_collection',
             'groups' => 'entity',
             'appendAccounts' => 'oro_entity_identifier',
             'removeAccounts' => 'oro_entity_identifier',
@@ -58,9 +59,6 @@ class ContactTypeTest extends \PHPUnit_Framework_TestCase
         $builder = $this->getMockBuilder('Symfony\Component\Form\FormBuilder')
             ->disableOriginalConstructor()
             ->getMock();
-        $builder->expects($this->once())
-            ->method('addEventSubscriber')
-            ->with($this->isInstanceOf('Oro\Bundle\AddressBundle\Form\EventListener\AddressCollectionTypeSubscriber'));
 
         $counter = 0;
         foreach ($expectedFields as $fieldName => $formType) {
