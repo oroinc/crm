@@ -644,12 +644,12 @@ class Contact implements Taggable
     }
 
     /**
-     * @param mixed $email
+     * @param string $fax
      * @return Contact
      */
-    public function setEmail($email)
+    public function setFax($fax)
     {
-        $this->email = $email;
+        $this->fax = $fax;
 
         return $this;
     }
