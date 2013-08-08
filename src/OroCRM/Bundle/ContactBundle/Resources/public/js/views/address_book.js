@@ -51,6 +51,16 @@ var OroAddressBook = Backbone.View.extend({
         items.each(function(item) {
             this.addAddress(item);
         }, this);
+        this._activatePreviousAddress();
+    },
+
+    _activatePreviousAddress: function() {
+        if (this.activeAddress !== undefined) {
+            var previouslyActive = this.getCollection().where({id: this.activeAddress.get('id')})
+            if (previouslyActive.length) {
+                previouslyActive[0].set('active', true);
+            }
+        }
     },
 
     addAddress: function(address) {
@@ -111,6 +121,9 @@ var OroAddressBook = Backbone.View.extend({
     },
 
     activateAddress: function(address) {
+        if (!address.get('primary')) {
+            this.activeAddress = address;
+        }
         this.updateMap(address);
     },
 
