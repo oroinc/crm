@@ -19,6 +19,8 @@
                 {{ form_row(form.types) }}
                 {{ form_row(form.primary) }}
                 {{ form_row(form.label) }}
+                {{ form_row(form.firstName) }}
+                {{ form_row(form.lastName) }}
                 {{ form_row(form.street) }}
                 {{ form_row(form.street2) }}
                 {{ form_row(form.city) }}
@@ -29,11 +31,9 @@
                 <div style="display:none;">
                     {{ form_rest(form) }}
                 </div>
-                <div class="widget-actions form-actions">
-                    <div class="pull-right">
-                        <button class="btn" type="reset">{{ 'Cancel'|trans }}</button>
-                        <button class="btn btn-primary" type="submit">{{ 'Save'|trans }}</button>
-                    </div>
+                <div class="widget-actions form-actions" style="display: none;">
+                    <button class="btn" type="reset">{{ 'Cancel'|trans }}</button>
+                    <button class="btn btn-primary" type="submit">{{ 'Save'|trans }}</button>
                 </div>
             </fieldset>
         </form>

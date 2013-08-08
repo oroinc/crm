@@ -1,24 +1,27 @@
 <div class="widget-content" id="addressBookWidget">
+    {# widget container and actions #}
     <div class="widget-actions">
-        <button class="btn btn-mini btn-primary btn-uppercase" type="button" data-action-name="add_address"> + add Address</button>
+        <button class="btn btn-mini btn-primary btn-uppercase" type="button" data-action-name="add_address"> + {{ 'add Address'|trans }}</button>
     </div>
     <div class="map-box" id="address-book"></div>
 
+    {# JS template for address view #}
     <script type="text/html" id="template-contact-address">
         <div class="clearfix">
             <div class="title-item"><%= label %></div>
             <div class="map-actions">
-                <button class="btn"><i class="icon-edit hide-text"><%= _.__('Edit') %></i></button>
-                <% if (!isPrimary) { %><button class="btn"><i class="icon-remove hide-text"><%= _.__('Close') %></i></button><% } %>
+                <button class="btn" title="<%= _.__('Edit') %>"><i class="icon-edit hide-text"><%= _.__('Edit') %></i></button>
+                <% if (!primary) { %><button class="btn" title="<%= _.__('Remove') %>"><i class="icon-remove hide-text"><%= _.__('Remove') %></i></button><% } %>
             </div>
         </div>
         <ul class="inline">
-            <% if(isPrimary) { %> <li><span class="label label-info"><%= _.__('Primary') %></span></li> <% } %>
+            <% if(primary) { %> <li><span class="label label-info"><%= _.__('Primary') %></span></li> <% } %>
             <% _.each(types, function(type) { %>
-            <li><span class="label"><%= type %></span></li>
+            <li><span class="label"><%= type.label %></span></li>
             <% }) %>
         </ul>
         <address>
+            <% if (firstName || lastName) { %><%= firstName %>&nbsp;<%= lastName %><br /><% } %>
             <%= street %>&nbsp;<%= street2 %><br />
             <%= city %>, <%= state %><br />
             <%= postalCode %><br />
@@ -33,6 +36,7 @@
                 entityId: {{ entity.id|json_encode|raw }}
             });
             $(widget.getAction('add_address', 'adopted')).on('click', _.bind(addressBook.createAddress, addressBook));
+            $(widget.getAction('refresh', 'adopted')).on('click', function() {addressBook.getCollection().fetch({reset: true})});
 
             {# TODO: change a way how serialized collection of addresses is prepared #}
             var addresses = [];
@@ -40,18 +44,24 @@
                 {% set addressData = {
                     id: address.id,
                     label: address.label,
+                    firstName: address.firstName,
+                    lastName: address.lastName,
                     street: address.street,
                     street2: address.street2,
                     city: address.city,
                     country: address.country.__toString,
                     postalCode: address.postalCode,
                     state: address.state.__toString,
-                    isPrimary: address.primary,
+                    primary: address.primary,
                     types: []
                 } %}
                 var addressData = {{ addressData|json_encode|raw }};
                 {% for type in address.types %}
-                    addressData.types.push({{ type.__toString|json_encode|raw }});
+                    {% set typeData = {
+                        name: type.name,
+                        label: type.label
+                    } %}
+                    addressData.types.push({{ typeData|json_encode|raw }});
                 {% endfor %}
                 addresses.push(new OroAddress(addressData));
             {% endfor %}

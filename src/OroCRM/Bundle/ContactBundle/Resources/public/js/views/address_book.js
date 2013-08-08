@@ -13,10 +13,11 @@ var OroAddressBook = Backbone.View.extend({
     },
 
     initialize: function() {
-        this.options.collection = this.options.collection || new OroAddressCollection(null, {
-            'route': 'oro_api_get_contact_addresses',
-            'routeParameters': {'contactId': this.options.entityId}
-        });
+        this.options.collection = this.options.collection || new OroAddressCollection();
+        this.options.collection.url = Routing.generate(
+            'oro_api_get_contact_addresses',
+            {'contactId': this.options.entityId}
+        );
 
         this.listenTo(this.getCollection(), 'add', this.addAddress);
         this.listenTo(this.getCollection(), 'reset', this.addAll);
@@ -61,7 +62,7 @@ var OroAddressBook = Backbone.View.extend({
 
     createAddress: function() {
         this._openAddressEditForm(
-            _.__('Create Address'),
+            _.__('Add Address'),
             Routing.generate(
                 'orocrm_contact_address_create',
                 {
@@ -80,12 +81,12 @@ var OroAddressBook = Backbone.View.extend({
                 'modal': false,
                 'resizable': false,
                 'width': 400,
-                'height': 420
+                'autoResize':true
             }
         });
         addressEditDialog.render();
         addressEditDialog.on('formSave', _.bind(function() {
-            addressEditDialog.close();
+            addressEditDialog.remove();
             Oro.NotificationFlashMessage('success', _.__('Address successfully saved'));
             this.reloadAddresses();
         }, this));
