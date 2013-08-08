@@ -1025,6 +1025,50 @@ class Contact implements Taggable
     }
 
     /**
+     * Gets primary address if it's available
+     *
+     * @param ContactAddress $address
+     * @return Contact
+     */
+    public function setPrimaryAddress(ContactAddress $address)
+    {
+        if ($this->hasAddress($address)) {
+            foreach ($this->getAddresses() as $address) {
+                $address->setPrimary(false);
+            }
+            $address->setPrimary(true);
+        }
+        return $this;
+    }
+
+    /**
+     * @param ContactAddress $address
+     * @return bool
+     */
+    public function hasAddress(ContactAddress $address)
+    {
+        return $this->getAddresses()->contains($address);
+    }
+
+    /**
+     * Gets address type if it's available.
+     *
+     * @param ContactAddress $address
+     * @param AddressType $addressType
+     * @return Contact
+     */
+    public function setAddressType(ContactAddress $address, AddressType $addressType)
+    {
+        if ($this->hasAddress($address)) {
+            foreach ($this->getAddresses() as $address) {
+                $address->removeType($addressType);
+            }
+            $address->addType($addressType);
+        }
+        return $this;
+    }
+
+    /**
      * Gets one address that has specified type.
      *
      * @param AddressType $type

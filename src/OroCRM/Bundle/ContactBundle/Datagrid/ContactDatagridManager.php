@@ -94,7 +94,8 @@ class ContactDatagridManager extends DatagridManager
             array(
                 'type'            => FieldDescriptionInterface::TYPE_TEXT,
                 'label'           => $this->translate('orocrm.contact.datagrid.email'),
-                'field_name'      => 'email',
+                'field_name'      => 'primaryEmail',
+                'expression'      => 'email.email',
                 'filter_type'     => FilterInterface::TYPE_STRING,
                 'sortable'        => true,
                 'filterable'      => true,
@@ -109,7 +110,8 @@ class ContactDatagridManager extends DatagridManager
             array(
                 'type'            => FieldDescriptionInterface::TYPE_TEXT,
                 'label'           => $this->translate('orocrm.contact.datagrid.phone'),
-                'field_name'      => 'phone',
+                'field_name'      => 'primaryPhone',
+                'expression'      => 'phone.phone',
                 'filter_type'     => FilterInterface::TYPE_STRING,
                 'sortable'        => true,
                 'filterable'      => true,
@@ -328,13 +330,16 @@ class ContactDatagridManager extends DatagridManager
         /** @var $query QueryBuilder */
         $query
             ->leftJoin("$entityAlias.addresses", 'address', 'WITH', 'address.primary = true')
+            ->leftJoin("$entityAlias.emails", 'email', 'WITH', 'email.primary = true')
+            ->leftJoin("$entityAlias.phones", 'phone', 'WITH', 'phone.primary = true')
             ->leftJoin("$entityAlias.groups", 'contactGroup')
             ->leftJoin("$entityAlias.source", 'contactSource')
             ->leftJoin('address.country', 'country')
             ->leftJoin('address.state', 'region');
 
         $query->addSelect('country.name as countryName', true);
-        $query->addSelect('address.postalCode as addressPostalCode', true);
+        $query->addSelect('email.email as primaryEmail', true);
+        $query->addSelect('phone.phone as primaryPhone', true);
         $query->addSelect($this->regionExpression . ' AS regionLabel', true);
     }
 
