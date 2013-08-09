@@ -87,6 +87,9 @@ class ContactAddressController extends Controller
         if ($this->getRequest()->getMethod() == 'GET' && !$address->getId()) {
             $address->setFirstName($contact->getFirstName());
             $address->setLastName($contact->getLastName());
+            if (!$contact->getAddresses()->count()) {
+                $address->setPrimary(true);
+            }
         }
 
         if ($address->getOwner() && $address->getOwner()->getId() != $contact->getId()) {
@@ -95,9 +98,7 @@ class ContactAddressController extends Controller
             $contact->addAddress($address);
         }
 
-        if (!$contact->getPrimaryAddress()) {
-            $this->getFlashBag()->add('error', 'Contact must have one primary address');
-        } elseif ($this->get('orocrm_contact.form.handler.contact_address')->process($address)) {
+        if ($this->get('orocrm_contact.form.handler.contact_address')->process($address)) {
             $this->getDoctrine()->getManager()->flush();
             $responseData['entity'] = $address;
             $responseData['saved'] = true;
