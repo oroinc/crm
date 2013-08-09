@@ -1,0 +1,13 @@
+.skype-button {
+    display: inline;
+    padding-left: 5px;
+}
+
+.skype-button p {
+    display: inline;
+}
+
+.skype-button p a img {
+    margin: 0 !important;
+    vertical-align: bottom !important;
+}

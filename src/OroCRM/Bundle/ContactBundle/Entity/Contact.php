@@ -91,15 +91,6 @@ class Contact implements Taggable
     protected $nameFormat;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="title", type="string", length=255, nullable=true)
-     * @Soap\ComplexType("string", nillable=true)
-     * @Oro\Versioned
-     */
-    protected $title;
-
-    /**
      * @var \DateTime
      *
      * @ORM\Column(name="birthday", type="datetime", nullable=true)
@@ -208,38 +199,38 @@ class Contact implements Taggable
     /**
      * @var string
      *
-     * @ORM\Column(name="twitter_url", type="string", length=255, nullable=true)
+     * @ORM\Column(name="twitter", type="string", length=255, nullable=true)
      * @Soap\ComplexType("string", nillable=true)
      * @Oro\Versioned
      */
-    protected $twitterUrl;
+    protected $twitter;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="facebook_url", type="string", length=255, nullable=true)
+     * @ORM\Column(name="facebook", type="string", length=255, nullable=true)
      * @Soap\ComplexType("string", nillable=true)
      * @Oro\Versioned
      */
-    protected $facebookUrl;
+    protected $facebook;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="google_plus_url", type="string", length=255, nullable=true)
+     * @ORM\Column(name="google_plus", type="string", length=255, nullable=true)
      * @Soap\ComplexType("string", nillable=true)
      * @Oro\Versioned
      */
-    protected $googlePlusUrl;
+    protected $googlePlus;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="linkedin_url", type="string", length=255, nullable=true)
+     * @ORM\Column(name="linkedin", type="string", length=255, nullable=true)
      * @Soap\ComplexType("string", nillable=true)
      * @Oro\Versioned
      */
-    protected $linkedInUrl;
+    protected $linkedIn;
 
     /**
      * @var ArrayCollection
@@ -440,7 +431,7 @@ class Contact implements Taggable
      */
     public function getNameFormat()
     {
-        return $this->nameFormat ?  $this->nameFormat : '%first% %last%';
+        return $this->nameFormat ? $this->nameFormat : '%prefix% %first% %last% %suffix%';
     }
 
     /**
@@ -460,15 +451,17 @@ class Contact implements Taggable
      * Return full contact name according to name format
      *
      * @see Contact::setNameFormat()
-     * @param  string $format [optional]
+     * @param  string|null $format [optional]
      * @return string
      */
-    public function getFullname($format = '')
+    public function getFullname($format = null)
     {
-        return str_replace(
-            array('%first%', '%last%'),
-            array($this->getFirstName(), $this->getLastName()),
-            $format ? $format : $this->getNameFormat()
+        return trim(
+            str_replace(
+                array('%prefix%', '%first%', '%last%', '%suffix%'),
+                array($this->getNamePrefix(), $this->getFirstName(), $this->getLastName(), $this->getNameSuffix()),
+                $format ? $format : $this->getNameFormat()
+            )
         );
     }
 
@@ -606,25 +599,6 @@ class Contact implements Taggable
     }
 
     /**
-     * @param mixed $title
-     * @return Contact
-     */
-    public function setTitle($title)
-    {
-        $this->title = $title;
-
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getTitle()
-    {
-        return $this->title;
-    }
-
-    /**
      * @param string $jobTitle
      * @return Contact
      */
@@ -685,9 +659,9 @@ class Contact implements Taggable
      * @param string $facebookUrl
      * @return Contact
      */
-    public function setFacebookUrl($facebookUrl)
+    public function setFacebook($facebookUrl)
     {
-        $this->facebookUrl = $facebookUrl;
+        $this->facebook = $facebookUrl;
 
         return $this;
     }
@@ -695,18 +669,18 @@ class Contact implements Taggable
     /**
      * @return string
      */
-    public function getFacebookUrl()
+    public function getFacebook()
     {
-        return $this->facebookUrl;
+        return $this->facebook;
     }
 
     /**
      * @param string $googlePlusUrl
      * @return Contact
      */
-    public function setGooglePlusUrl($googlePlusUrl)
+    public function setGooglePlus($googlePlusUrl)
     {
-        $this->googlePlusUrl = $googlePlusUrl;
+        $this->googlePlus = $googlePlusUrl;
 
         return $this;
     }
@@ -714,18 +688,18 @@ class Contact implements Taggable
     /**
      * @return string
      */
-    public function getGooglePlusUrl()
+    public function getGooglePlus()
     {
-        return $this->googlePlusUrl;
+        return $this->googlePlus;
     }
 
     /**
      * @param string $linkedInUrl
      * @return Contact
      */
-    public function setLinkedInUrl($linkedInUrl)
+    public function setLinkedIn($linkedInUrl)
     {
-        $this->linkedInUrl = $linkedInUrl;
+        $this->linkedIn = $linkedInUrl;
 
         return $this;
     }
@@ -733,18 +707,18 @@ class Contact implements Taggable
     /**
      * @return string
      */
-    public function getLinkedInUrl()
+    public function getLinkedIn()
     {
-        return $this->linkedInUrl;
+        return $this->linkedIn;
     }
 
     /**
      * @param string $twitterUrl
      * @return Contact
      */
-    public function setTwitterUrl($twitterUrl)
+    public function setTwitter($twitterUrl)
     {
-        $this->twitterUrl = $twitterUrl;
+        $this->twitter = $twitterUrl;
 
         return $this;
     }
@@ -752,9 +726,9 @@ class Contact implements Taggable
     /**
      * @return string
      */
-    public function getTwitterUrl()
+    public function getTwitter()
     {
-        return $this->twitterUrl;
+        return $this->twitter;
     }
 
     /**
@@ -1292,8 +1266,11 @@ class Contact implements Taggable
         return $this->updatedBy;
     }
 
+    /**
+     * @return string
+     */
     public function __toString()
     {
-        return trim($this->getFirstName() . ' ' . $this->getLastName());
+        return $this->getFullname();
     }
 }

@@ -1,4 +1,5 @@
 {% import 'OroUIBundle::macros.html.twig' as macros %}
+{% import 'OroTagBundle::macros.html.twig' as _tag %}
 
 {# TODO: Move this to OroUIBundle::macros.html.twig #}
 {% macro renderRow(label, value) %}
@@ -42,6 +43,14 @@
     </ul>
 {% endmacro %}
 
+{%- macro getSocialUrl(type, value) -%}
+    {% if value|slice(0, 5) == 'http:' or value|slice(0, 6) == 'https:' %}
+        {{ value }}
+    {% else %}
+        {{ oro_social_url(type, value) }}
+    {% endif %}
+{%- endmacro -%}
+
 <style>
     .contact-info {
         min-height: 380px;
@@ -49,8 +58,6 @@
 </style>
 <div class="widget-content contact-info">
     <div class="span6">
-        {{ _self.renderRow('Title'|trans, entity.title) }}
-
         <div class="control-group">
             <label class="control-label">{% trans %}Phones{% endtrans %}</label>
             <div class="controls">
@@ -89,18 +96,8 @@
                 <div class="clearfix-oro">
                     <p class="control-label">
                         {% if entity.skype %}
-                            <a href="#">{{ entity.skype }}</a>
-                            {# <script type="text/javascript" src="http://cdn.dev.skype.com/uri/skype-uri.js"></script>
-                             <div id="SkypeButton_Dropdown_dima.magecore_1">
-                                 <script type="text/javascript">
-                                     Skype.ui({
-                                         "name": "dropdown",
-                                         "element": "SkypeButton_Dropdown_dima.magecore_1",
-                                         "participants": ["dima.magecore"],
-                                         "imageSize": 32
-                                     });
-                                 </script>
-                             </div>#}
+                            {{ entity.skype }}
+                            {% include 'OroCRMContactBundle:Contact:skypeButton.html.twig' with {'username': entity.skype} %}
                         {% else %}
                             {% trans %}N/A{% endtrans %}
                         {% endif %}
@@ -117,22 +114,18 @@
                 <div class="clearfix-oro">
                     <div class="control-label">
                         <ul class="list-inline">
-                            {% if entity.twitterUrl or
-                            entity.facebookUrl or
-                            entity.googlePlusUrl or
-                            entity.linkedInUrl
-                            %}
-                                {% if entity.twitterUrl %}
-                                    <li><a href="{{ entity.twitterUrl }}"><i class="icon-twitter-new hide-text">twitter</i></a></li>
+                            {% if entity.twitter or entity.facebook or entity.googlePlus or entity.linkedIn %}
+                                {% if entity.twitter %}
+                                    <li><a href="{{ _self.getSocialUrl('twitter', entity.twitter) }}"><i class="icon-twitter-new hide-text">twitter</i></a></li>
                                 {% endif %}
-                                {% if entity.facebookUrl %}
-                                    <li><a href="{{ entity.facebookUrl }}"><i class="icon-facebook-new hide-text">facebook</i></a></li>
+                                {% if entity.facebook %}
+                                    <li><a href="{{ _self.getSocialUrl('facebook', entity.facebook) }}"><i class="icon-facebook-new hide-text">facebook</i></a></li>
                                 {% endif %}
-                                {% if entity.googlePlusUrl %}
-                                    <li><a href="{{ entity.googlePlusUrl }}"><i class="icon-google-new hide-text">google+</i></a></li>
+                                {% if entity.googlePlus %}
+                                    <li><a href="{{ _self.getSocialUrl('google_plus', entity.googlePlus) }}"><i class="icon-google-new hide-text">google+</i></a></li>
                                 {% endif %}
-                                {% if entity.linkedInUrl %}
-                                    <li><a href="{{ entity.linkedInUrl }}"><i class="icon-linkedin-new hide-text">linkedIn</i></a></li>
+                                {% if entity.linkedIn %}
+                                    <li><a href="{{ _self.getSocialUrl('linked_in', entity.linkedIn) }}"><i class="icon-linkedin-new hide-text">linkedIn</i></a></li>
                                 {% endif %}
                             {% else %}
                                 {% trans %}N/A{% endtrans %}
@@ -142,13 +135,8 @@
                 </div>
             </div>
         </div>
-
     </div>
     <div class="span6">
-        {{ _self.renderRow('Name prefix'|trans, entity.namePrefix) }}
-        {{ _self.renderRow('First name'|trans, entity.firstName) }}
-        {{ _self.renderRow('Last name'|trans, entity.lastName) }}
-        {{ _self.renderRow('Name suffix'|trans, entity.nameSuffix) }}
         {{ _self.renderRow('Job Title'|trans, entity.jobTitle) }}
 
         <div class="control-group">
@@ -216,7 +204,28 @@
             </div>
         </div>
 
-        {#form_row(form.reportsTo, {'label': ''}),#}
+        <div class="control-group">
+            <label class="control-label">{% trans %}Groups{% endtrans %}</label>
+            <div class="controls">
+                <div class="clearfix-oro">
+                    <p class="control-label">
+                        {% if entity.groups.count > 0 %}
+                            {{ entity.groupLabels|join(', ') }}
+                        {% else %}
+                            {% trans %}N/A{% endtrans %}
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+        </div>
 
+        <div class="control-group">
+            <label class="control-label">{% trans %}Tags{% endtrans %}</label>
+            <div class="controls">
+                <div class="clearfix-oro">
+                    {{ _tag.renderView(entity) }}
+                </div>
+            </div>
+        </div>
     </div>
 </div>

@@ -10,14 +10,6 @@ OroCRM\Bundle\ContactBundle\Entity\Contact:
                 max: 100
         birthday:
             - Date: ~
-        twitterUrl:
-            - Url: ~
-        facebookUrl:
-            - Url: ~
-        googlePlusUrl:
-            - Url: ~
-        linkedInUrl:
-            - Url: ~
         addresses:
             - Oro\Bundle\AddressBundle\Validator\Constraints\ContainsPrimary:
                 message: One of addresses must be set as primary.
