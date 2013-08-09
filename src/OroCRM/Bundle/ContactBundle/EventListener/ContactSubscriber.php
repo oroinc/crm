@@ -129,9 +129,9 @@ class ContactSubscriber implements EventSubscriber
         $newUpdatedBy = $this->getUser();
 
         if ($args) {
-            $uow = $args->getEntityManager()->getUnitOfWork();
-            $uow->propertyChanged($contact, 'updatedAt', $contact->getUpdatedAt(), $newUpdatedAt);
-            $uow->propertyChanged($contact, 'updatedBy', $contact->getUpdatedBy(), $newUpdatedBy);
+            $unitOfWork = $args->getEntityManager()->getUnitOfWork();
+            $unitOfWork->propertyChanged($contact, 'updatedAt', $contact->getUpdatedAt(), $newUpdatedAt);
+            $unitOfWork->propertyChanged($contact, 'updatedBy', $contact->getUpdatedBy(), $newUpdatedBy);
         }
 
         $contact->setUpdatedAt($newUpdatedAt);
