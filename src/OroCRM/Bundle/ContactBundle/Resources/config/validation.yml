@@ -1,23 +1,23 @@
 OroCRM\Bundle\ContactBundle\Entity\Contact:
     properties:
         firstName:
-            - NotBlank:     ~
+            - NotBlank: ~
             - Length:
-                max:        100
+                max: 100
         lastName:
-            - NotBlank:     ~
+            - NotBlank: ~
             - Length:
-                max:        100
+                max: 100
         birthday:
-            - Date:         ~
+            - Date: ~
         twitterUrl:
-            - Url:          ~
+            - Url: ~
         facebookUrl:
-            - Url:          ~
+            - Url: ~
         googlePlusUrl:
-            - Url:          ~
+            - Url: ~
         linkedInUrl:
-            - Url:          ~
+            - Url: ~
         addresses:
             - Oro\Bundle\AddressBundle\Validator\Constraints\ContainsPrimary:
                 message: One of addresses must be set as primary.
@@ -34,7 +34,7 @@ OroCRM\Bundle\ContactBundle\Entity\Group:
         - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity: label
     properties:
         label:
-            - NotBlank:     ~
+            - NotBlank: ~
             - Length:
-                min:        3
-                max:        255
+                min: 3
+                max: 255

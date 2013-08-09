@@ -1033,21 +1033,14 @@ class Contact implements Taggable
     public function setPrimaryAddress(ContactAddress $address)
     {
         if ($this->hasAddress($address)) {
-            foreach ($this->getAddresses() as $address) {
-                $address->setPrimary(false);
-            }
             $address->setPrimary(true);
+            foreach ($this->getAddresses() as $otherAddress) {
+                if (!$address->isEqual($otherAddress)) {
+                    $otherAddress->setPrimary(false);
+                }
+            }
         }
         return $this;
-    }
-
-    /**
-     * @param ContactAddress $address
-     * @return bool
-     */
-    public function hasAddress(ContactAddress $address)
-    {
-        return $this->getAddresses()->contains($address);
     }
 
     /**
@@ -1060,12 +1053,23 @@ class Contact implements Taggable
     public function setAddressType(ContactAddress $address, AddressType $addressType)
     {
         if ($this->hasAddress($address)) {
-            foreach ($this->getAddresses() as $address) {
-                $address->removeType($addressType);
-            }
             $address->addType($addressType);
+            foreach ($this->getAddresses() as $otherAddress) {
+                if (!$address->isEqual($otherAddress)) {
+                    $otherAddress->removeType($addressType);
+                }
+            }
         }
         return $this;
+    }
+
+    /**
+     * @param ContactAddress $address
+     * @return bool
+     */
+    public function hasAddress(ContactAddress $address)
+    {
+        return $this->getAddresses()->contains($address);
     }
 
     /**

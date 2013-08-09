@@ -3,7 +3,6 @@ parameters:
     orocrm_contact.type.contact.class: OroCRM\Bundle\ContactBundle\Form\Type\ContactType
     orocrm_contact.type.group.class: OroCRM\Bundle\ContactBundle\Form\Type\GroupType
     orocrm_contact.handler.contact.class: OroCRM\Bundle\ContactBundle\Form\Handler\ContactHandler
-    orocrm_contact.handler.contact_address.class: OroCRM\Bundle\ContactBundle\Form\Handler\ContactAddressHandler
     orocrm_contact.form.type.contact_select.class: OroCRM\Bundle\ContactBundle\Form\Type\ContactSelectType
     orocrm_contact.handler.group.class: OroCRM\Bundle\ContactBundle\Form\Handler\GroupHandler
 
@@ -147,7 +146,7 @@ services:
             - ~
 
     orocrm_contact.form.handler.contact_address:
-        class: %orocrm_contact.handler.contact_address.class%
+        class: %oro_address.form.handler.address.class%
         scope: request
         arguments:
             - @orocrm_contact.contact_address.form
