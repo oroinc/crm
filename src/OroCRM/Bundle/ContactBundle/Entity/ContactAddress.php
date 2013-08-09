@@ -11,7 +11,7 @@ use Oro\Bundle\AddressBundle\Entity\AbstractTypedAddress;
 /**
  * @ORM\Table("orocrm_contact_address")
  * @ORM\HasLifecycleCallbacks()
- * @ORM\Entity(repositoryClass="Oro\Bundle\AddressBundle\Entity\Repository\AddressRepository")
+ * @ORM\Entity
  */
 class ContactAddress extends AbstractTypedAddress
 {
