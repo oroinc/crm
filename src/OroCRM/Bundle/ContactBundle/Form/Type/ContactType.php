@@ -54,8 +54,7 @@ class ContactType extends AbstractType
     {
         // contact source
         $builder->add(
-            'source',
-            'entity',
+            'source', 'entity',
             array(
                 'class'       => 'OroCRMContactBundle:Source',
                 'property'    => 'label',
@@ -84,54 +83,41 @@ class ContactType extends AbstractType
         );
 
         // tags
-        $builder->add(
-            'tags',
-            'oro_tag_select'
-        );
+        $builder->add('tags', 'oro_tag_select');
 
         // addresses
         $builder->add(
-            'addresses',
-            'oro_address_collection',
+            'addresses', 'oro_address_collection',
             array(
                 'type' => 'oro_typed_address',
                 'required' => false,
-                'options' => array(
-                    'data_class' => 'OroCRM\Bundle\ContactBundle\Entity\ContactAddress'
-                )
+                'options' => array('data_class' => 'OroCRM\Bundle\ContactBundle\Entity\ContactAddress')
             )
         );
 
         // emails
         $builder->add(
-            'emails',
-            'oro_email_collection',
+            'emails', 'oro_email_collection',
             array(
                 'type' => 'oro_email',
                 'required' => false,
-                'options' => array(
-                    'data_class' => 'OroCRM\Bundle\ContactBundle\Entity\ContactEmail'
-                )
+                'options' => array('data_class' => 'OroCRM\Bundle\ContactBundle\Entity\ContactEmail')
             )
         );
 
         // phones
         $builder->add(
-            'phones',
-            'oro_phone_collection',
+            'phones', 'oro_phone_collection',
             array(
                 'type' => 'oro_phone',
                 'required' => false,
-                'options' => array(
-                    'data_class' => 'OroCRM\Bundle\ContactBundle\Entity\ContactPhone'
-                )
+                'options' => array('data_class' => 'OroCRM\Bundle\ContactBundle\Entity\ContactPhone')
             )
         );
 
         // groups
         $builder->add(
-            'groups',
-            'entity',
+            'groups', 'entity',
             array(
                 'class'    => 'OroCRMContactBundle:Group',
                 'property' => 'label',
@@ -143,8 +129,7 @@ class ContactType extends AbstractType
 
         // accounts
         $builder->add(
-            'appendAccounts',
-            'oro_entity_identifier',
+            'appendAccounts', 'oro_entity_identifier',
             array(
                 'class'    => 'OroCRMAccountBundle:Account',
                 'required' => false,
@@ -153,8 +138,7 @@ class ContactType extends AbstractType
             )
         )
         ->add(
-            'removeAccounts',
-            'oro_entity_identifier',
+            'removeAccounts', 'oro_entity_identifier',
             array(
                 'class'    => 'OroCRMAccountBundle:Account',
                 'required' => false,

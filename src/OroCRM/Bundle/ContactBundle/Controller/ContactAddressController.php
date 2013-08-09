@@ -84,6 +84,11 @@ class ContactAddressController extends Controller
             'contact' => $contact
         );
 
+        if ($this->getRequest()->getMethod() == 'GET' && !$address->getId()) {
+            $address->setFirstName($contact->getFirstName());
+            $address->setLastName($contact->getLastName());
+        }
+
         if ($address->getOwner() && $address->getOwner()->getId() != $contact->getId()) {
             throw new BadRequestHttpException('Address must belong to contact');
         } elseif (!$address->getOwner()) {
