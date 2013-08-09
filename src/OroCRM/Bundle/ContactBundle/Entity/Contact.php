@@ -13,6 +13,7 @@ use Oro\Bundle\TagBundle\Entity\Taggable;
 use Oro\Bundle\AddressBundle\Entity\AddressType;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
+use Zend\Stdlib\DateTime;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyMethods)
@@ -501,6 +502,12 @@ class Contact implements Taggable
     public function getBirthday()
     {
         return $this->birthday;
+    }
+
+    public function getAge()
+    {
+        $now = new \DateTime('now');
+        return $now->diff($this->getBirthday())->y;
     }
 
     /**

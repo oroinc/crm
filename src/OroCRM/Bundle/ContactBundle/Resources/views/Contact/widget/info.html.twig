@@ -180,7 +180,18 @@
             </div>
         </div>
 
-        {{ _self.renderRow('Birthday'|trans, entity.birthday is empty ? 'N/A'|trans : macros.date(entity.birthday)) }}
+        <div class="control-group">
+            <label class="control-label">{% trans %}Birthday{% endtrans %}</label>
+            <div class="controls">
+                <div class="clearfix-oro">
+                    <p class="control-label">
+                        {{ entity.birthday is empty ? 'N/A'|trans : macros.date(entity.birthday) }}
+                        ({{ 'age'|trans }} {{ entity.age }})
+                    </p>
+                </div>
+            </div>
+        </div>
+
         {{ _self.renderRow('Gender'|trans, oro_gender(entity.gender)) }}
         {{ _self.renderRow('Source'|trans, entity.source) }}
 

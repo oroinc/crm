@@ -295,8 +295,7 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
         $email->setPrimary(true);
         $contact->addEmail($email);
 
-        $date = date('m/d/y', strtotime($data['Birthday']));
-        $date = new \DateTime($date);
+        $date = \DateTime::createFromFormat('m/d/Y', $data['Birthday']);
         $contact->setBirthday($date);
 
         /** @var ContactAddress $address */
