@@ -8,11 +8,6 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Oro\Bundle\ConfigBundle\DependencyInjection\SettingsBuilder;
 use OroCRM\Bundle\ContactBundle\Model\Social;
 
-/**
- * This is the class that validates and merges configuration from your app/config files
- *
- * To learn more see {@link http://symfony.com/doc/current/cookbook/bundles/extension.html#cookbook-bundles-extension-config-class}
- */
 class Configuration implements ConfigurationInterface
 {
     /**
@@ -51,7 +46,7 @@ class Configuration implements ConfigurationInterface
             $rootNode,
             array(
                 'name_format' => array(
-                    'value' => str_replace('%', '%%', '%prefix% %first% %last% %suffix%')
+                    'value' => str_replace('%', '%%', '%first% %last% %suffix%')
                 ),
             )
         );
