@@ -25,21 +25,9 @@ OroCRM\Bundle\ContactBundle\Entity\Contact:
             target_type:            text
             target_fields:          [nameSuffix]
         -
-            name:                   title
-            target_type:            text
-            target_fields:          [title]
-        -
             name:                   description
             target_type:            text
             target_fields:          [description]
-        -
-            name:                   source
-            relation_type:          many-to-one
-            relation_fields:
-                -
-                    name:           label
-                    target_type:    text
-                    target_fields:  [label]
         -
             name:                   primaryEmail
             target_type:            text
@@ -48,3 +36,31 @@ OroCRM\Bundle\ContactBundle\Entity\Contact:
             name:                   primaryPhone
             target_type:            text
             target_fields:          [primaryPhone]
+        -
+            name:                   fax
+            target_type:            text
+            target_fields:          [fax]
+        -
+            name:                   skype
+            target_type:            text
+            target_fields:          [skype]
+        -
+            name:                   jobTitle
+            target_type:            text
+            target_fields:          [jobTitle]
+        -
+            name:                   twitter
+            target_type:            text
+            target_fields:          [twitter]
+        -
+            name:                   facebook
+            target_type:            text
+            target_fields:          [facebook]
+        -
+            name:                   linkedIn
+            target_type:            text
+            target_fields:          [linkedIn]
+        -
+            name:                   googlePlus
+            target_type:            text
+            target_fields:          [googlePlus]

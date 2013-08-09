@@ -30,7 +30,6 @@ class ContactType extends AbstractType
             ->add('lastName', 'text', array('required' => true))
             ->add('nameSuffix', 'text', array('required' => false))
             ->add('gender', 'oro_gender', array('required' => false))
-            ->add('title', 'text', array('required' => false))
             ->add('birthday', 'oro_date', array('required' => false))
             ->add('description', 'textarea', array('required' => false));
 
@@ -40,10 +39,10 @@ class ContactType extends AbstractType
             ->add('skype', 'text', array('required' => false));
 
         $builder
-            ->add('twitterUrl', 'text', array('required' => false))
-            ->add('facebookUrl', 'text', array('required' => false))
-            ->add('googlePlusUrl', 'text', array('required' => false))
-            ->add('linkedInUrl', 'text', array('required' => false));
+            ->add('twitter', 'text', array('required' => false))
+            ->add('facebook', 'text', array('required' => false))
+            ->add('googlePlus', 'text', array('required' => false))
+            ->add('linkedIn', 'text', array('required' => false));
     }
 
     /**

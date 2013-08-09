@@ -1,7 +1,7 @@
 {% extends 'OroUIBundle:actions:view.html.twig' %}
 {% import 'OroTagBundle::macros.html.twig' as _tag %}
 {% import 'OroUIBundle::macros.html.twig' as macros %}
-{% set format = oro_config_value('oro_user.name_format') %}
+{% set format = oro_config_value('oro_crm_contact.name_format') %}
 {% set fullname = entity.fullname(format)|default('N/A'|trans) %}
 {% oro_title_set({params : {"%contact.name%": fullname} }) %}
 {% set gridId = 'accounts-grid' %}

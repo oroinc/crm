@@ -16,6 +16,8 @@ parameters:
     orocrm_contact.contact_address.entity.class: OroCRM\Bundle\ContactBundle\Entity\ContactAddress
     orocrm_contact.subscriber.contact_subscriber.class: OroCRM\Bundle\ContactBundle\EventListener\ContactSubscriber
 
+    orocrm_contact.social_url_formatter.class: OroCRM\Bundle\ContactBundle\Formatter\SocialUrlFormatter
+
 services:
     orocrm_contact.form.contact:
         class: Symfony\Component\Form\Form
@@ -167,3 +169,8 @@ services:
             - @service_container
         tags:
             - { name: doctrine.event_subscriber }
+
+    orocrm_contact.social_url_formatter:
+        class: %orocrm_contact.social_url_formatter.class%
+        arguments:
+            - %oro_contact.social_url_format%
