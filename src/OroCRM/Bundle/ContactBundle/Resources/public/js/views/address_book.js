@@ -25,9 +25,10 @@ var OroAddressBook = Backbone.View.extend({
         this.listenTo(this.getCollection(), 'remove', this.onAddressRemove);
 
         this.$adressesContainer = Backbone.$('<div class="map-address-list"/>').appendTo(this.$el);
-        this.$mapContainer = Backbone.$('<div class="map-visual"/>').appendTo(this.$el);
-        this.$unknownAddress = Backbone.$('<div class="map-unknown map-visual">' + _.__('Address Not Found') + '</div>')
-            .appendTo(this.$el);
+        this.$mapContainerFrame = Backbone.$('<div class="map-visual-frame"/>').appendTo(this.$el);
+        this.$mapContainer = Backbone.$('<div class="map-visual"/>').appendTo(this.$mapContainerFrame);
+        this.$unknownAddress = Backbone.$('<div class="map-unknown">' + _.__('Address Not Found') + '</div>')
+            .appendTo(this.$mapContainerFrame);
         this.mapLocationUnknown();
     },
 
