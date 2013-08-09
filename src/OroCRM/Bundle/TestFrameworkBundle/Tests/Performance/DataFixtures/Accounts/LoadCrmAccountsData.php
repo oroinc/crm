@@ -236,7 +236,7 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
         $isoCode = $data['Country'];
         $country = array_filter(
             $this->countries,
-            function ($a) use ($isoCode) {
+            function (Country $a) use ($isoCode) {
                 return $a->getIso2Code() == $isoCode;
             }
         );
@@ -250,7 +250,7 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
         $regions = $country->getRegions();
 
         $region = $regions->filter(
-            function ($a) use ($idRegion) {
+            function (Region $a) use ($idRegion) {
                 return $a->getCode() == $idRegion;
             }
         );
@@ -285,7 +285,7 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
 
         $contact->setFirstName($data['GivenName']);
         $contact->setLastName($data['Surname']);
-        $contact->setTitle($data['Title']);
+        $contact->setNamePrefix($data['Title']);
 
         $phone = new ContactPhone($data['TelephoneNumber']);
         $phone->setPrimary(true);
