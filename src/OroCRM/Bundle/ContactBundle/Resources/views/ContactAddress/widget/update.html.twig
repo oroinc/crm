@@ -23,21 +23,7 @@
               }}"
               method="post" class="form-register form-dialog">
             <fieldset class="form-horizontal">
-                {{ form_row(form.types) }}
-                {{ form_row(form.primary) }}
-                {{ form_row(form.label) }}
-                {{ form_row(form.firstName) }}
-                {{ form_row(form.lastName) }}
-                {{ form_row(form.street) }}
-                {{ form_row(form.street2) }}
-                {{ form_row(form.city) }}
-                {{ form_row(form.state_text) }}
-                {{ form_row(form.state) }}
-                {{ form_row(form.country) }}
-                {{ form_row(form.postalCode) }}
-                <div style="display:none;">
-                    {{ form_rest(form) }}
-                </div>
+                {{ form_widget(form) }}
                 <div class="widget-actions form-actions" style="display: none;">
                     <button class="btn" type="reset">{{ 'Cancel'|trans }}</button>
                     <button class="btn btn-primary" type="submit">{{ 'Save'|trans }}</button>
