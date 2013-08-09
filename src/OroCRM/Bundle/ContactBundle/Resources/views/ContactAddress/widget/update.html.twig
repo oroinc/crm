@@ -17,7 +17,7 @@
         {% endif %}
 
         <form id="{{ form.vars.name }}"
-              action="{{ form.vars.value.id
+              action="{{ 'id' in form.vars.value|keys
               ? path('orocrm_contact_address_update', { id: form.vars.value.id, contactId: contact.id })
               : path('orocrm_contact_address_create', { contactId: contact.id })
               }}"

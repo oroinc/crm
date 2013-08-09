@@ -1,6 +1,6 @@
 {% extends 'OroUIBundle:actions:update.html.twig' %}
 {% form_theme form with ['OroAddressBundle:Include:fields.html.twig', 'OroFormBundle:Form:fields.html.twig', 'OroTagBundle:Form:fields.html.twig'] %}
-{% set format = oro_config_value('oro_user.name_format') %}
+{% set format = oro_config_value('oro_crm_contact.name_format') %}
 {% set fullname = entity.fullname(format)|default('N/A') %}
 {% oro_title_set({params : {"%contact.name%": fullname} }) %}
 {% set title = form.vars.value.id ? fullname ~ ' - ' ~ 'Update Contact'|trans : 'New Contact'|trans %}
