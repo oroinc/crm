@@ -58,6 +58,8 @@
 </style>
 <div class="widget-content contact-info">
     <div class="span6">
+        {{ _self.renderRow('Name'|trans, entity) }}
+
         <div class="control-group">
             <label class="control-label">{% trans %}Phones{% endtrans %}</label>
             <div class="controls">
@@ -116,16 +118,32 @@
                         <ul class="list-inline">
                             {% if entity.twitter or entity.facebook or entity.googlePlus or entity.linkedIn %}
                                 {% if entity.twitter %}
-                                    <li><a href="{{ _self.getSocialUrl('twitter', entity.twitter) }}"><i class="icon-twitter-new hide-text">twitter</i></a></li>
+                                    <li>
+                                        <a class="no-hash" href="{{ _self.getSocialUrl('twitter', entity.twitter) }}" target="_blank">
+                                            <i class="icon-twitter-new hide-text">twitter</i>
+                                        </a>
+                                    </li>
                                 {% endif %}
                                 {% if entity.facebook %}
-                                    <li><a href="{{ _self.getSocialUrl('facebook', entity.facebook) }}"><i class="icon-facebook-new hide-text">facebook</i></a></li>
+                                    <li>
+                                        <a class="no-hash" href="{{ _self.getSocialUrl('facebook', entity.facebook) }}" target="_blank">
+                                            <i class="icon-facebook-new hide-text">facebook</i>
+                                        </a>
+                                    </li>
                                 {% endif %}
                                 {% if entity.googlePlus %}
-                                    <li><a href="{{ _self.getSocialUrl('google_plus', entity.googlePlus) }}"><i class="icon-google-new hide-text">google+</i></a></li>
+                                    <li>
+                                        <a class="no-hash" href="{{ _self.getSocialUrl('google_plus', entity.googlePlus) }}" target="_blank">
+                                            <i class="icon-google-new hide-text">google+</i>
+                                        </a>
+                                    </li>
                                 {% endif %}
                                 {% if entity.linkedIn %}
-                                    <li><a href="{{ _self.getSocialUrl('linked_in', entity.linkedIn) }}"><i class="icon-linkedin-new hide-text">linkedIn</i></a></li>
+                                    <li>
+                                        <a class="no-hash" href="{{ _self.getSocialUrl('linked_in', entity.linkedIn) }}" target="_blank">
+                                            <i class="icon-linkedin-new hide-text">linkedIn</i>
+                                        </a>
+                                    </li>
                                 {% endif %}
                             {% else %}
                                 {% trans %}N/A{% endtrans %}
