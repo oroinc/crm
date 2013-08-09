@@ -26,7 +26,7 @@ class SocialUrlFormatter
     public function getSocialUrl($socialType, $username)
     {
         if (empty($this->socialUrlFormat[$socialType])) {
-            throw new \InvalidArgumentException(sprintf('Unknown social network type %s', $socialType));
+            throw new \InvalidArgumentException(sprintf('Unknown social network type "%s"', $socialType));
         }
 
         return str_replace('%username%', $username, $this->socialUrlFormat[$socialType]);
