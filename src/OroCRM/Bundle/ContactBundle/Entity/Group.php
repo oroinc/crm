@@ -4,9 +4,6 @@ namespace OroCRM\Bundle\ContactBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-use JMS\Serializer\Annotation\Type;
-use JMS\Serializer\Annotation\Exclude;
-
 use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
@@ -23,14 +20,12 @@ class Group
      * @ORM\Column(type="smallint", name="id")
      * @ORM\GeneratedValue(strategy="AUTO")
      * @Soap\ComplexType("int", nillable=true)
-     * @Type("integer")
      */
     protected $id;
 
     /**
      * @ORM\Column(type="string", unique=true, length=30, nullable=false)
      * @Soap\ComplexType("string")
-     * @Type("string")
      * @Oro\Versioned
      */
     protected $label;

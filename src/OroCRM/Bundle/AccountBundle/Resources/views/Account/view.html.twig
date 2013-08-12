@@ -41,16 +41,6 @@
         {% set attributes = attributes | merge([UI.flexibleAttributeRow(value)]) %}
     {% endfor %}
 
-    {% set accountAddresses = {} %}
-    {% if entity|hasAddress %}
-        {% for value in entity|getAttributes(['shipping_address', 'billing_address']) %}
-            {% set address = value.data %}
-            {% if address is not null %}
-                {% set accountAddresses = accountAddresses|merge([{'title': value.attribute.label, 'data': [addressView.renderAddress(address)]}]) %}
-            {% endif %}
-        {% endfor %}
-    {% endif %}
-
     {% if entity.values is defined %}
         {% set col = 2 %}
         {% set additional = {} %}
@@ -77,24 +67,30 @@
     {% endif %}
 
     {% set dataBlocks =
-            [
-                {
-                    'title': 'General',
-                    'class': 'active',
-                    'subblocks': [
-                        {
-                            'title': 'Basic Information',
-                            'data' : dataSubBlocks
-                        }
-                    ]
-                }
-            ]
+        [
+            {
+                'title': 'General',
+                'class': 'active',
+                'subblocks': [
+                    {
+                        'title': 'Basic Information',
+                        'data' : dataSubBlocks
+                    }
+                ]
+            }
+        ]
     %}
 
-
+    {% set accountAddresses = [] %}
+    {%  if entity.billingAddress is defined %}
+        {% set accountAddresses = accountAddresses|merge([{'title': 'Billing address', 'data': [addressView.renderAddress(entity.billingAddress)]}]) %}
+    {% endif %}
+    {%  if entity.shippingAddress is defined %}
+        {% set accountAddresses = accountAddresses|merge([{'title': 'Shipping address', 'data': [addressView.renderAddress(entity.shippingAddress)]}]) %}
+    {% endif %}
 
     {% if (accountAddresses|length) %}
-    {% set dataBlocks = dataBlocks|merge([{'title' : 'Addresses', 'subblocks': accountAddresses}])%}
+        {% set dataBlocks = dataBlocks|merge([{'title' : 'Addresses', 'subblocks': accountAddresses}])%}
     {% endif %}
 
     {% if (additional|length) %}

@@ -4,7 +4,6 @@ namespace OroCRM\Bundle\ContactBundle\Datagrid;
 
 use Doctrine\ORM\QueryBuilder;
 
-use Oro\Bundle\GridBundle\Datagrid\FlexibleDatagridManager;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\AccountBundle\Datagrid\AccountDatagridManager;
 use Oro\Bundle\GridBundle\Datagrid\ProxyQueryInterface;
