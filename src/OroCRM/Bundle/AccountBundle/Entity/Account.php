@@ -16,12 +16,21 @@ use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\TagBundle\Entity\Taggable;
 use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityFlexible;
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
+use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Configurable;
+
+use Oro\Bundle\UserBundle\Entity\User;
 
 /**
  * @ORM\Entity(repositoryClass="Oro\Bundle\FlexibleEntityBundle\Entity\Repository\FlexibleEntityRepository")
  * @ORM\Table(name="orocrm_account")
  * @ORM\HasLifecycleCallbacks()
  * @Oro\Loggable
+ * @Configurable(
+ *  defaultValues={
+ *      "entity"={"label"="Account", "plural_label"="Accounts"},
+ *      "acl"={"owner_type"="USER"}
+ *  }
+ * )
  */
 class Account extends AbstractEntityFlexible implements Taggable
 {
@@ -43,6 +52,13 @@ class Account extends AbstractEntityFlexible implements Taggable
      * @Oro\Versioned
      */
     protected $name;
+
+    /**
+     * @var User
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
+     * @ORM\JoinColumn(name="user_owner_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    protected $userOwner;
 
     /**
      * Contacts storage
@@ -217,6 +233,25 @@ class Account extends AbstractEntityFlexible implements Taggable
     public function setTags($tags)
     {
         $this->tags = $tags;
+
+        return $this;
+    }
+
+    /**
+     * @return User
+     */
+    public function getOwner()
+    {
+        return $this->userOwner;
+    }
+
+    /**
+     * @param User $userOwner
+     * @return Account
+     */
+    public function setOwner(User $userOwner)
+    {
+        $this->userOwner = $userOwner;
 
         return $this;
     }

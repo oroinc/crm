@@ -2,11 +2,15 @@
 
 namespace OroCRM\Bundle\ContactBundle\Tests\Unit\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\ContactBundle\Entity\Group;
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\ContactBundle\Entity\ContactAddress;
 use Oro\Bundle\AddressBundle\Entity\AddressType;
+
+use Oro\Bundle\UserBundle\Entity\User;
 
 class ContactTest extends \PHPUnit_Framework_TestCase
 {
@@ -258,5 +262,17 @@ class ContactTest extends \PHPUnit_Framework_TestCase
         $contact->setNameFormat('%last%, %first%');
 
         $this->assertEquals($contact->getFullname(), sprintf('%s, %s', 'Last', 'First'));
+    }
+
+    public function testOwners()
+    {
+        $entity = new Contact();
+        $user = new User();
+
+        $this->assertEmpty($entity->getOwner());
+
+        $entity->setOwner($user);
+
+        $this->assertEquals($user, $entity->getOwner());
     }
 }
