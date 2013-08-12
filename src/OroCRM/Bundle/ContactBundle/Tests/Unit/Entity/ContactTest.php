@@ -17,11 +17,16 @@ class ContactTest extends \PHPUnit_Framework_TestCase
         $entity = new Contact();
         $this->assertEquals(array(), $entity->getGroupLabels());
 
-        $entity->addGroup(new Group('Group One'));
+        $groupOne = new Group('Group One');
+        $entity->addGroup($groupOne);
         $this->assertEquals(array('Group One'), $entity->getGroupLabels());
 
-        $entity->addGroup(new Group('Group Two'));
+        $groupTwo = new Group('Group Two');
+        $entity->addGroup($groupTwo);
         $this->assertEquals(array('Group One', 'Group Two'), $entity->getGroupLabels());
+
+        $entity->removeGroup($groupOne);
+        $this->assertEquals(array('Group Two'), $entity->getGroupLabels());
     }
 
     public function testGetGroupLabelsAsString()
@@ -209,6 +214,14 @@ class ContactTest extends \PHPUnit_Framework_TestCase
 
         $address->setPrimary(true);
         $this->assertSame($address, $contact->getPrimaryAddress());
+
+        $newPrimary = new ContactAddress();
+        $contact->addAddress($newPrimary);
+
+        $contact->setPrimaryAddress($newPrimary);
+        $this->assertSame($newPrimary, $contact->getPrimaryAddress());
+
+        $this->assertFalse($address->isPrimary());
     }
 
     public function testGetAddressByTypeName()
@@ -281,6 +294,16 @@ class ContactTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($contact->getFullname(), sprintf('%s, %s', 'Last', 'First'));
     }
 
+    public function testGetTags()
+    {
+        $contact = new Contact();
+        $this->assertInstanceOf('Doctrine\Common\Collections\ArrayCollection', $contact->getTags());
+        $this->assertTrue($contact->getTags()->isEmpty());
+
+        $contact->setTags(array('tag'));
+        $this->assertEquals(array('tag'), $contact->getTags());
+    }
+
     /**
      * @dataProvider flatPropertiesDataProvider
      */
@@ -290,6 +313,23 @@ class ContactTest extends \PHPUnit_Framework_TestCase
 
         call_user_func_array(array($obj, 'set' . ucfirst($property)), array($value));
         $this->assertEquals($expected, call_user_func_array(array($obj, 'get' . ucfirst($property)), array()));
+    }
+
+    public function testSetAddressType()
+    {
+        $contact = new Contact();
+
+        $shippingType = new AddressType('shipping');
+        $addressOne = new ContactAddress();
+        $addressOne->addType($shippingType);
+        $contact->addAddress($addressOne);
+
+        $addressTwo = new ContactAddress();
+        $contact->addAddress($addressTwo);
+
+        $contact->setAddressType($addressTwo, $shippingType);
+        $this->assertFalse($addressOne->hasTypeWithName('shipping'));
+        $this->assertTrue($addressTwo->hasTypeWithName('shipping'));
     }
 
     public function flatPropertiesDataProvider()
@@ -319,6 +359,10 @@ class ContactTest extends \PHPUnit_Framework_TestCase
             'linkedIn' => array('linkedIn', 'test', 'test'),
             'googlePlus' => array('googlePlus', 'test', 'test'),
             'twitter' => array('twitter', 'test', 'test'),
+            'createdAt' => array('createdAt', $now, $now),
+            'updatedAt' => array('updatedAt', $now, $now),
+            'createdBy' => array('createdBy', $user, $user),
+            'updatedBy' => array('updatedBy', $user, $user),
         );
     }
 }

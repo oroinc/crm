@@ -752,7 +752,7 @@ class Contact implements Taggable
     }
 
     /**
-     * @param array|Collection $tags
+     * @param ArrayCollection $tags
      * @return Contact
      */
     public function setTags($tags)
