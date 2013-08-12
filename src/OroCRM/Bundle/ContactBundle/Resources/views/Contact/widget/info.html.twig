@@ -98,8 +98,7 @@
                 <div class="clearfix-oro">
                     <p class="control-label">
                         {% if entity.skype %}
-                            {{ entity.skype }}
-                            {% include 'OroCRMContactBundle:Contact:skypeButton.html.twig' with {'username': entity.skype} %}
+                            {{ entity.skype }} {{ skype_button(entity.skype) }}
                         {% else %}
                             {% trans %}N/A{% endtrans %}
                         {% endif %}
@@ -186,7 +185,9 @@
                 <div class="clearfix-oro">
                     <p class="control-label">
                         {{ entity.birthday is empty ? 'N/A'|trans : macros.date(entity.birthday) }}
-                        ({{ 'age'|trans }} {{ entity.age }})
+                        {% if entity.birthday is not empty %}
+                            ({{ entity.birthday|age_string({'default': 'N/A'}) }})
+                        {% endif %}
                     </p>
                 </div>
             </div>

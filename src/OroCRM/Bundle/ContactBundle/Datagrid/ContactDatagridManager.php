@@ -338,6 +338,7 @@ class ContactDatagridManager extends DatagridManager
             ->leftJoin('address.state', 'region');
 
         $query->addSelect('country.name as countryName', true);
+        $query->addSelect('address.postalCode as addressPostalCode', true);
         $query->addSelect('email.email as primaryEmail', true);
         $query->addSelect('phone.phone as primaryPhone', true);
         $query->addSelect($this->regionExpression . ' AS regionLabel', true);

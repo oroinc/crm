@@ -504,12 +504,6 @@ class Contact implements Taggable
         return $this->birthday;
     }
 
-    public function getAge()
-    {
-        $now = new \DateTime('now');
-        return $now->diff($this->getBirthday())->y;
-    }
-
     /**
      * @param string $description
      * @return Contact

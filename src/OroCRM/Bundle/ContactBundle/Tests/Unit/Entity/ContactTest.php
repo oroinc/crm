@@ -280,4 +280,45 @@ class ContactTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($contact->getFullname(), sprintf('%s, %s', 'Last', 'First'));
     }
+
+    /**
+     * @dataProvider flatPropertiesDataProvider
+     */
+    public function testGetSet($property, $value, $expected)
+    {
+        $obj = new Contact();
+
+        call_user_func_array(array($obj, 'set' . ucfirst($property)), array($value));
+        $this->assertEquals($expected, call_user_func_array(array($obj, 'get' . ucfirst($property)), array()));
+    }
+
+    public function flatPropertiesDataProvider()
+    {
+        $now = new \DateTime('now');
+        $user = $this->getMockBuilder('Oro\Bundle\UserBundle\Entity\User');
+        $contact = $this->getMockBuilder('OroCRM\Bundle\ContactBundle\Entity\Source');
+        $source = $this->getMockBuilder('OroCRM\Bundle\ContactBundle\Entity\Source');
+        $method = $this->getMockBuilder('OroCRM\Bundle\ContactBundle\Entity\Method');
+        return array(
+            'namePrefix' => array('namePrefix', 'test', 'test'),
+            'firstName' => array('firstName', 'test', 'test'),
+            'lastName' => array('lastName', 'test', 'test'),
+            'nameSuffix' => array('nameSuffix', 'test', 'test'),
+            'gender' => array('gender', 'male', 'male'),
+            'assignedTo' => array('assignedTo', $user, $user),
+            'birthday' => array('birthday', $now, $now),
+            'description' => array('description', 'test', 'test'),
+            'source' => array('source', $source, $source),
+            'method' => array('method', $method, $method),
+            'owner' => array('owner', $user, $user),
+            'reportsTo' => array('reportsTo', $contact, $contact),
+            'jobTitle' => array('jobTitle', 'test', 'test'),
+            'fax' => array('fax', 'test', 'test'),
+            'skype' => array('skype', 'test', 'test'),
+            'facebook' => array('facebook', 'test', 'test'),
+            'linkedIn' => array('linkedIn', 'test', 'test'),
+            'googlePlus' => array('googlePlus', 'test', 'test'),
+            'twitter' => array('twitter', 'test', 'test'),
+        );
+    }
 }

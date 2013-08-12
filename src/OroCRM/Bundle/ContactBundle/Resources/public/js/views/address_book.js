@@ -98,28 +98,37 @@ var OroAddressBook = Backbone.View.extend({
     },
 
     _openAddressEditForm: function(title, url) {
-        var addressEditDialog = Oro.widget.Manager.createWidget('dialog', {
-            'url': url,
-            'title': title,
-            'stateEnabled': false,
-            'incrementalPosition': false,
-            'dialogOptions': {
-                'modal': false,
-                'resizable': false,
-                'width': 400,
-                'autoResize':true
-            }
-        });
-        addressEditDialog.render();
-        Oro.Events.bind(
-            "hash_navigation_request:start",
-            _.bind(addressEditDialog.remove, addressEditDialog)
-        );
-        addressEditDialog.on('formSave', _.bind(function() {
-            addressEditDialog.remove();
-            Oro.NotificationFlashMessage('success', _.__('Address successfully saved'));
-            this.reloadAddresses();
-        }, this));
+        if (!this.addressEditDialog) {
+            this.addressEditDialog = Oro.widget.Manager.createWidget('dialog', {
+                'url': url,
+                'title': title,
+                'stateEnabled': false,
+                'incrementalPosition': false,
+                'dialogOptions': {
+                    'modal': false,
+                    'resizable': false,
+                    'width': 400,
+                    'autoResize':true,
+                    'close': _.bind(function() {
+                        delete this.addressEditDialog;
+                    }, this)
+                }
+            });
+            this.addressEditDialog.render();
+            Oro.Events.bind(
+                "hash_navigation_request:start",
+                _.bind(function () {
+                    if (this.addressEditDialog) {
+                        this.addressEditDialog.remove();
+                    }
+                }, this)
+            );
+            this.addressEditDialog.on('formSave', _.bind(function() {
+                this.addressEditDialog.remove();
+                Oro.NotificationFlashMessage('success', _.__('Address successfully saved'));
+                this.reloadAddresses();
+            }, this));
+        }
     },
 
     reloadAddresses: function() {
