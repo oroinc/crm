@@ -1217,24 +1217,6 @@ class Contact implements Taggable, EmailOwnerInterface
     }
 
     /**
-     * Gets all contact's emails
-     *
-     * @return string[]
-     *
-     * TODO: We need a separate method to get emails because, as discussed with Dima, emails are one of the key characteristic of the contact.
-     *       Make necessary changes in this method when the database schema is changed.
-     *       Do not forget to search code use this method and make sure that it works correctly
-     */
-    public function getEmails()
-    {
-        $emails = array();
-
-        $emails[] = $this->getValue('email')->getData();
-
-        return $emails;
-    }
-
-    /**
      * Get contact created date/time
      *
      * @return \DateTime
