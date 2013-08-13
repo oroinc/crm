@@ -11,6 +11,7 @@ use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\TagBundle\Entity\Taggable;
 use Oro\Bundle\AddressBundle\Entity\AddressType;
+use Oro\Bundle\EmailBundle\Entity\EmailOwnerInterface;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 use Zend\Stdlib\DateTime;
@@ -27,7 +28,7 @@ use Zend\Stdlib\DateTime;
  * @ORM\HasLifecycleCallbacks()
  * @Oro\Loggable
  */
-class Contact implements Taggable
+class Contact implements Taggable, EmailOwnerInterface
 {
     /**
      * @var int
@@ -310,7 +311,28 @@ class Contact implements Taggable
     }
 
     /**
-     * Returns the account unique id.
+     * Get entity class name.
+     *
+     * @return string
+     */
+    public function getClass()
+    {
+        return 'OroCRM\Bundle\ContactBundle\Entity\Contact';
+    }
+
+    /**
+     * Get name of field contains the primary email address
+     *
+     * @return string
+     */
+    public function getPrimaryEmailField()
+    {
+        // TODO: Return correct field name after refactoring of contact class
+        return null;
+    }
+
+    /**
+     * Returns the contact unique id.
      *
      * @return mixed
      */
@@ -1146,6 +1168,26 @@ class Contact implements Taggable
     }
 
     /**
+     * Get contact' first name
+     *
+     * @return string
+     */
+    public function getFirstname()
+    {
+        return $this->getAttributeData('first_name');
+    }
+
+    /**
+     * Get contact' last name
+     *
+     * @return string
+     */
+    public function getLastname()
+    {
+        return $this->getAttributeData('last_name');
+    }
+
+    /**
      * Get accounts collection
      *
      * @return Collection|Account[]
@@ -1185,6 +1227,24 @@ class Contact implements Taggable
         }
 
         return $this;
+    }
+
+    /**
+     * Gets all contact's emails
+     *
+     * @return string[]
+     *
+     * TODO: We need a separate method to get emails because, as discussed with Dima, emails are one of the key characteristic of the contact.
+     *       Make necessary changes in this method when the database schema is changed.
+     *       Do not forget to search code use this method and make sure that it works correctly
+     */
+    public function getEmails()
+    {
+        $emails = array();
+
+        $emails[] = $this->getValue('email')->getData();
+
+        return $emails;
     }
 
     /**
