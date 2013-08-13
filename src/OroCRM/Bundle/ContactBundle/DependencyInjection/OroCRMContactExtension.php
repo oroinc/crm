@@ -14,6 +14,8 @@ use Symfony\Component\DependencyInjection\Loader;
  */
 class OroCRMContactExtension extends Extension
 {
+    const PARAMETER_SOCIAL_URL_FORMAT = 'oro_contact.social_url_format';
+
     /**
      * {@inheritDoc}
      */
@@ -22,8 +24,11 @@ class OroCRMContactExtension extends Extension
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
 
+        $container->setParameter(self::PARAMETER_SOCIAL_URL_FORMAT, $config['social_url_format']);
+
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
         $loader->load('datagrid.yml');
+        $loader->load('twig_extensions.yml');
     }
 }

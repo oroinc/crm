@@ -2,7 +2,6 @@
 
 namespace OroCRM\Bundle\ContactBundle\Controller;
 
-
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBag;
@@ -12,7 +11,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Oro\Bundle\UserBundle\Annotation\Acl;
 use Oro\Bundle\UserBundle\Annotation\AclAncestor;
 
-use Oro\Bundle\SoapBundle\Entity\Manager\ApiFlexibleEntityManager;
+use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\ContactBundle\Datagrid\ContactDatagridManager;
 use OroCRM\Bundle\ContactBundle\Datagrid\ContactAccountDatagridManager;
@@ -52,6 +51,23 @@ class ContactController extends Controller
         return array(
             'entity'   => $contact,
             'datagrid' => $datagridView,
+        );
+    }
+
+    /**
+     * @Route("/info/{id}", name="orocrm_contact_info", requirements={"id"="\d+"})
+     * @Template
+     * @Acl(
+     *      id="orocrm_contact_info",
+     *      name="View Contact Info",
+     *      description="View contact info",
+     *      parent="orocrm_contact_view"
+     * )
+     */
+    public function infoAction(Contact $contact)
+    {
+        return array(
+            'entity' => $contact
         );
     }
 
@@ -157,7 +173,7 @@ class ContactController extends Controller
     }
 
     /**
-     * @return ApiFlexibleEntityManager
+     * @return ApiEntityManager
      */
     protected function getManager()
     {

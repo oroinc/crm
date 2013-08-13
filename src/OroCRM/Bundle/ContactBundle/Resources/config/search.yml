@@ -1,11 +1,66 @@
 OroCRM\Bundle\ContactBundle\Entity\Contact:
     alias: orocrm_contact
     label: Contacts
-    flexible_manager: orocrm_contact.manager.flexible
     route:
         name: orocrm_contact_view
         parameters:
             id: id
     search_template: OroCRMContactBundle:Contact:searchResult.html.twig
     entity_icon_class: icon-envelope
-    fields: []
+    fields:
+        -
+            name:                   namePrefix
+            target_type:            text
+            target_fields:          [namePrefix]
+        -
+            name:                   firstName
+            target_type:            text
+            target_fields:          [firstName]
+        -
+            name:                   lastName
+            target_type:            text
+            target_fields:          [lastName]
+        -
+            name:                   nameSuffix
+            target_type:            text
+            target_fields:          [nameSuffix]
+        -
+            name:                   description
+            target_type:            text
+            target_fields:          [description]
+        -
+            name:                   primaryEmail
+            target_type:            text
+            target_fields:          [primaryEmail]
+        -
+            name:                   primaryPhone
+            target_type:            text
+            target_fields:          [primaryPhone]
+        -
+            name:                   fax
+            target_type:            text
+            target_fields:          [fax]
+        -
+            name:                   skype
+            target_type:            text
+            target_fields:          [skype]
+        -
+            name:                   jobTitle
+            target_type:            text
+            target_fields:          [jobTitle]
+        -
+            name:                   twitter
+            target_type:            text
+            target_fields:          [twitter]
+        -
+            name:                   facebook
+            target_type:            text
+            target_fields:          [facebook]
+        -
+            name:                   linkedIn
+            target_type:            text
+            target_fields:          [linkedIn]
+        -
+            name:                   googlePlus
+            target_type:            text
+            target_fields:          [googlePlus]

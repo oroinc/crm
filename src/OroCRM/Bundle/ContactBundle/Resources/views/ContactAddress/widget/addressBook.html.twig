@@ -1,0 +1,45 @@
+<div class="widget-content" id="addressBookWidget">
+    {# widget container and actions #}
+    <div class="widget-actions">
+        <button class="btn btn-mini btn-primary btn-uppercase" type="button" data-action-name="add_address"> + {{ 'add Address'|trans }}</button>
+    </div>
+    <div class="map-box" id="address-book"></div>
+
+    {# JS template for address view #}
+    <script type="text/html" id="template-contact-address">
+        <div class="clearfix">
+            <div class="title-item"><%= label %></div>
+            <div class="map-actions">
+                <button class="btn" title="<%= _.__('Edit') %>"><i class="icon-edit hide-text"><%= _.__('Edit') %></i></button>
+                <% if (!primary) { %><button class="btn" title="<%= _.__('Remove') %>"><i class="icon-remove hide-text"><%= _.__('Remove') %></i></button><% } %>
+            </div>
+        </div>
+        <ul class="inline">
+            <% if(primary) { %> <li><span class="label label-info"><%= _.__('Primary') %></span></li> <% } %>
+            <% _.each(types, function(type) { %>
+            <li><span class="label"><%= type.label %></span></li>
+            <% }) %>
+        </ul>
+        <address>
+            <% if (firstName || lastName) { %><%= firstName %>&nbsp;<%= lastName %><br /><% } %>
+            <%= street %>&nbsp;<%= street2 %><br />
+            <%= city %>, <%= state %><br />
+            <%= postalCode %><br />
+            <%= country %><br />
+        </address>
+    </script>
+
+    <script type="text/javascript">
+        $('#addressBookWidget').on('widgetize', function(e, widget) {
+            var addressBook = new OroAddressBook({
+                el: '#address-book',
+                entityId: {{ entity.id|json_encode|raw }}
+            });
+            $(widget.getAction('add_address', 'adopted'))
+                .on('click', _.bind(addressBook.createAddress, addressBook));
+            addressBook
+                .getCollection()
+                .reset({{ render(path('oro_api_get_contact_addresses', {contactId: entity.id})) }});
+        });
+    </script>
+</div>

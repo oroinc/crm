@@ -7,13 +7,13 @@ use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 
 use Oro\Bundle\UserBundle\Annotation\AclAncestor;
 
-use Oro\Bundle\SoapBundle\Controller\Api\Soap\FlexibleSoapController;
+use Oro\Bundle\SoapBundle\Controller\Api\Soap\SoapController;
 use Oro\Bundle\SoapBundle\Entity\Manager\ApiFlexibleEntityManager;
 use Oro\Bundle\SoapBundle\Form\Handler\ApiFormHandler;
 
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 
-class ContactController extends FlexibleSoapController
+class ContactController extends SoapController
 {
     /**
      * @Soap\Method("getContacts")
@@ -79,8 +79,8 @@ class ContactController extends FlexibleSoapController
 
     /**
      * @Soap\Method("createContact")
-     * @Soap\Param("contact", phpType = "OroCRM\Bundle\ContactBundle\Entity\ContactSoap")
-     * @Soap\Result(phpType = "boolean")
+     * @Soap\Param("contact", phpType = "OroCRM\Bundle\ContactBundle\Entity\Contact")
+     * @Soap\Result(phpType = "int")
      */
     public function createAction($contact)
     {
@@ -90,7 +90,7 @@ class ContactController extends FlexibleSoapController
     /**
      * @Soap\Method("updateContact")
      * @Soap\Param("id", phpType = "int")
-     * @Soap\Param("contact", phpType = "OroCRM\Bundle\ContactBundle\Entity\ContactSoap")
+     * @Soap\Param("contact", phpType = "OroCRM\Bundle\ContactBundle\Entity\Contact")
      * @Soap\Result(phpType = "boolean")
      */
     public function updateAction($id, $contact)
