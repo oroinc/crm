@@ -1168,26 +1168,6 @@ class Contact implements Taggable, EmailOwnerInterface
     }
 
     /**
-     * Get contact' first name
-     *
-     * @return string
-     */
-    public function getFirstname()
-    {
-        return $this->getAttributeData('first_name');
-    }
-
-    /**
-     * Get contact' last name
-     *
-     * @return string
-     */
-    public function getLastname()
-    {
-        return $this->getAttributeData('last_name');
-    }
-
-    /**
      * Get accounts collection
      *
      * @return Collection|Account[]
