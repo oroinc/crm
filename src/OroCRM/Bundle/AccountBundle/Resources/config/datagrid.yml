@@ -13,6 +13,7 @@ services:
               entity_hint: accounts
               flexible: true
               route_name: orocrm_account_index
+              identifier_field: id
 
     orocrm_account.contact.view_datagrid_manager:
         class: %orocrm_account.contact.view_datagrid_manager.class%
