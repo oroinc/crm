@@ -1,0 +1,9 @@
+js:
+    'addresses':
+        - '@OroCRMContactBundle/Resources/public/js/models/address.js'
+        - '@OroCRMContactBundle/Resources/public/js/collections/address.js'
+        - '@OroCRMContactBundle/Resources/public/js/views/address.js'
+        - '@OroCRMContactBundle/Resources/public/js/views/address_book.js'
+css:
+    'skype':
+        - 'bundles/orocrmcontact/css/oro.skype.css'

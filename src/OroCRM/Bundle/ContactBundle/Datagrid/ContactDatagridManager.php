@@ -6,7 +6,7 @@ use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\EntityRepository;
 
-use Oro\Bundle\GridBundle\Datagrid\FlexibleDatagridManager;
+use Oro\Bundle\GridBundle\Datagrid\DatagridManager;
 use Oro\Bundle\GridBundle\Field\FieldDescription;
 use Oro\Bundle\GridBundle\Field\FieldDescriptionCollection;
 use Oro\Bundle\GridBundle\Field\FieldDescriptionInterface;
@@ -17,7 +17,7 @@ use Oro\Bundle\GridBundle\Property\FixedProperty;
 use Oro\Bundle\GridBundle\Datagrid\ProxyQueryInterface;
 use Oro\Bundle\GridBundle\Sorter\SorterInterface;
 
-class ContactDatagridManager extends FlexibleDatagridManager
+class ContactDatagridManager extends DatagridManager
 {
     /**
      * Expression to get region text or label, CONCAT is used as type cast function
@@ -58,10 +58,67 @@ class ContactDatagridManager extends FlexibleDatagridManager
         );
         $fieldsCollection->add($fieldId);
 
-        $this->configureFlexibleField($fieldsCollection, 'first_name', array('show_filter' => true));
-        $this->configureFlexibleField($fieldsCollection, 'last_name', array('show_filter' => true));
-        $this->configureFlexibleField($fieldsCollection, 'email', array('show_filter' => true));
-        $this->configureFlexibleField($fieldsCollection, 'phone', array('show_filter' => true));
+        $fieldFirstName = new FieldDescription();
+        $fieldFirstName->setName('first_name');
+        $fieldFirstName->setOptions(
+            array(
+                'type'        => FieldDescriptionInterface::TYPE_TEXT,
+                'label'       => $this->translate('orocrm.contact.datagrid.first_name'),
+                'field_name'  => 'firstName',
+                'filter_type' => FilterInterface::TYPE_STRING,
+                'sortable'    => true,
+                'filterable'  => true,
+                'show_filter' => true,
+            )
+        );
+        $fieldsCollection->add($fieldFirstName);
+
+        $fieldLastName = new FieldDescription();
+        $fieldLastName->setName('last_name');
+        $fieldLastName->setOptions(
+            array(
+                'type'        => FieldDescriptionInterface::TYPE_TEXT,
+                'label'       => $this->translate('orocrm.contact.datagrid.last_name'),
+                'field_name'  => 'lastName',
+                'filter_type' => FilterInterface::TYPE_STRING,
+                'sortable'    => true,
+                'filterable'  => true,
+                'show_filter' => true,
+            )
+        );
+        $fieldsCollection->add($fieldLastName);
+
+        $fieldEmail = new FieldDescription();
+        $fieldEmail->setName('email');
+        $fieldEmail->setOptions(
+            array(
+                'type'            => FieldDescriptionInterface::TYPE_TEXT,
+                'label'           => $this->translate('orocrm.contact.datagrid.email'),
+                'field_name'      => 'primaryEmail',
+                'expression'      => 'email.email',
+                'filter_type'     => FilterInterface::TYPE_STRING,
+                'sortable'        => true,
+                'filterable'      => true,
+                'show_filter'     => true,
+            )
+        );
+        $fieldsCollection->add($fieldEmail);
+
+        $fieldPhone = new FieldDescription();
+        $fieldPhone->setName('phone');
+        $fieldPhone->setOptions(
+            array(
+                'type'            => FieldDescriptionInterface::TYPE_TEXT,
+                'label'           => $this->translate('orocrm.contact.datagrid.phone'),
+                'field_name'      => 'primaryPhone',
+                'expression'      => 'phone.phone',
+                'filter_type'     => FilterInterface::TYPE_STRING,
+                'sortable'        => true,
+                'filterable'      => true,
+                'show_filter'     => true,
+            )
+        );
+        $fieldsCollection->add($fieldPhone);
 
         $rolesLabel = new FieldDescription();
         $rolesLabel->setName('groups');
@@ -87,7 +144,28 @@ class ContactDatagridManager extends FlexibleDatagridManager
         );
         $fieldsCollection->add($rolesLabel);
 
-        $this->configureFlexibleField($fieldsCollection, 'source');
+        $fieldSource = new FieldDescription();
+        $fieldSource->setName('source');
+        $fieldSource->setOptions(
+            array(
+                'type'            => FieldDescriptionInterface::TYPE_TEXT,
+                'label'           => $this->translate('orocrm.contact.datagrid.source'),
+                'field_name'      => 'source',
+                'expression'      => 'contactSource',
+                'filter_type'     => FilterInterface::TYPE_ENTITY,
+                'sort_field_mapping' => array(
+                    'entityAlias' => 'contactSource',
+                    'fieldName'   => 'label',
+                ),
+                'sortable'        => true,
+                'filterable'      => true,
+                // entity filter options
+                'class'           => 'OroCRMContactBundle:Source',
+                'property'        => 'label',
+                'filter_by_where' => true
+            )
+        );
+        $fieldsCollection->add($fieldSource);
 
         $fieldCountry = new FieldDescription();
         $fieldCountry->setName('country');
@@ -152,7 +230,7 @@ class ContactDatagridManager extends FlexibleDatagridManager
             array(
                 'type'        => FieldDescriptionInterface::TYPE_DATETIME,
                 'label'       => $this->translate('orocrm.contact.datagrid.created_at'),
-                'field_name'  => 'created',
+                'field_name'  => 'createdAt',
                 'filter_type' => FilterInterface::TYPE_DATETIME,
                 'sortable'    => true,
                 'filterable'  => true,
@@ -167,7 +245,7 @@ class ContactDatagridManager extends FlexibleDatagridManager
             array(
                 'type'        => FieldDescriptionInterface::TYPE_DATETIME,
                 'label'       => $this->translate('orocrm.contact.datagrid.updated_at'),
-                'field_name'  => 'updated',
+                'field_name'  => 'updatedAt',
                 'filter_type' => FilterInterface::TYPE_DATETIME,
                 'sortable'    => true,
                 'filterable'  => true,
@@ -252,12 +330,17 @@ class ContactDatagridManager extends FlexibleDatagridManager
         /** @var $query QueryBuilder */
         $query
             ->leftJoin("$entityAlias.addresses", 'address', 'WITH', 'address.primary = true')
+            ->leftJoin("$entityAlias.emails", 'email', 'WITH', 'email.primary = true')
+            ->leftJoin("$entityAlias.phones", 'phone', 'WITH', 'phone.primary = true')
             ->leftJoin("$entityAlias.groups", 'contactGroup')
+            ->leftJoin("$entityAlias.source", 'contactSource')
             ->leftJoin('address.country', 'country')
             ->leftJoin('address.state', 'region');
 
         $query->addSelect('country.name as countryName', true);
         $query->addSelect('address.postalCode as addressPostalCode', true);
+        $query->addSelect('email.email as primaryEmail', true);
+        $query->addSelect('phone.phone as primaryPhone', true);
         $query->addSelect($this->regionExpression . ' AS regionLabel', true);
     }
 

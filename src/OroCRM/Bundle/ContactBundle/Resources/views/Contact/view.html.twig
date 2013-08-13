@@ -1,9 +1,8 @@
 {% extends 'OroUIBundle:actions:view.html.twig' %}
 {% import 'OroTagBundle::macros.html.twig' as _tag %}
 {% import 'OroUIBundle::macros.html.twig' as macros %}
-{% import 'OroAddressBundle:Include:viewMacro.html.twig' as addressView %}
-{% set format = oro_config_value('oro_user.name_format') %}
-{% set fullname = entity.fullname(format)|default('N/A') %}
+{% set format = oro_config_value('oro_crm_contact.name_format') %}
+{% set fullname = entity.fullname(format)|default('N/A'|trans) %}
 {% oro_title_set({params : {"%contact.name%": fullname} }) %}
 {% set gridId = 'accounts-grid' %}
 {% block head_script %}
@@ -35,61 +34,56 @@
     {{ parent() }}
 {% endblock pageHeader %}
 
-{% block content_data %}
-    {% set id = 'navbarContactsUpdate' %}
-    {% set attributes = {} %}
-    {% for value in entity|getAttributes(['address'], true) %}
-        {% set attributes = attributes | merge([UI.flexibleAttributeRow(value)]) %}
-    {% endfor %}
+{% block stats %}
+    {% include 'OroCRMContactBundle:Contact:headerStats.html.twig' with {'entity': entity} %}
+{% endblock stats %}
 
-    {% set addresses = [] %}
-    {% set yesNoChoices = {0: 'No'|trans, 1: 'Yes'|trans} %}
-    {% for addressValue in entity.addresses %}
-        {% set primaryData = attribute(addressValue, 'primary') %}
-        {% set primaryData = yesNoChoices[primaryData]|default('No'|trans) %}
-        {% set addresses = addresses|merge([
-            addressView.renderAddressView(addressValue, [{'label': 'Types', 'value': addressValue.typeLabels|join(', ')}]),
-            addressView.renderAddressView(addressValue, [{'label': 'Primary', 'value': primaryData}]),
-            addressView.renderAddress(addressValue),
-            '<hr/>'
-        ]) %}
-    {% endfor %}
-
-    {% set dataSubBlocks = [
-        {
-            'title': 'Basic Information',
-            'data': attributes
-        }
-    ] %}
-    {% if addresses is not empty %}
-        {% set addressSubBlock = {
-            'title': 'Addresses',
-            'data': addresses
-        } %}
-        {% set dataSubBlocks = dataSubBlocks|merge([addressSubBlock]) %}
-    {% endif %}
-
-    {% if resource_granted('oro_tag_view_tag_cloud') %}
-        {% set dataSubBlocks = dataSubBlocks|merge([{
-            title: '',
-            data : [UI.renderAttribute('Tags', _tag.renderView(entity))]
-        }]) %}
-    {% endif %}
-
-    {% set dataBlocks = [
-        {
-            'title': 'General',
-            'class': 'active',
-            'subblocks': dataSubBlocks
-        }
-    ] %}
-    {% set dataBlocks = dataBlocks|merge([{'title' : 'Accounts', 'subblocks': [{'title' : null, 'data' : [UI.gridBlock(gridId)], 'useSpan': false}] }])%}
-    {% set data =
-        {
-            'dataBlocks': dataBlocks,
-        }
-    %}
+{% block pageActions %}
     {{ parent() }}
+    <div class="pull-right user-info-state">
+        <ul class="inline-decorate">
+            <li>
+                {{ 'Owner'|trans }}:
+                {% if entity.owner %}
+                    {% if resource_granted('oro_user_user_view') %}
+                        <a href="{{ path('oro_user_view', {'id': entity.owner.id}) }}">{{ entity.owner.fullname }}</a>
+                    {% else %}
+                        {{ entity.owner.fullname }}
+                    {% endif %}
+                {% else %}
+                    {{ 'N/A'|trans  }}
+                {% endif %}
+            </li>
+        </ul>
+    </div>
+{% endblock pageActions %}
+
+{% block content_data %}
+    <div class="well-small form-horizontal dark-bg">
+        <div class="clearfix">
+            <div class="row-fluid well-small-bottom">
+                <div class="span6">
+                    {{
+                        oro_widget_render({
+                            'widgetType': 'block',
+                            'url': path('orocrm_contact_info', {id: entity.id}),
+                            'title': 'Contact Information'
+                        })
+                    }}
+                </div>
+                <div class="span6">
+                    {{
+                        oro_widget_render({
+                            'widgetType': 'block',
+                            'contentClasses': [],
+                            'url': path('orocrm_contact_address_book', {id: entity.id}),
+                            'title': 'Address Book'
+                        })
+                    }}
+                </div>
+            </div>
+        </div>
+    </div>
     {# TODO: This is a temporary list of emails for demo purposes. It will be removed when 'display activities' functionality is implemented  #}
     {% if resource_granted('oro_email_view') %}
         {% render(controller('OroEmailBundle:Email:activities', {'emails': entity.emails})) %}

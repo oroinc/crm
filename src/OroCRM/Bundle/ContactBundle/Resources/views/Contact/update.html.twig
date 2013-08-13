@@ -1,6 +1,6 @@
 {% extends 'OroUIBundle:actions:update.html.twig' %}
 {% form_theme form with ['OroAddressBundle:Include:fields.html.twig', 'OroFormBundle:Form:fields.html.twig', 'OroTagBundle:Form:fields.html.twig'] %}
-{% set format = oro_config_value('oro_user.name_format') %}
+{% set format = oro_config_value('oro_crm_contact.name_format') %}
 {% set fullname = entity.fullname(format)|default('N/A') %}
 {% oro_title_set({params : {"%contact.name%": fullname} }) %}
 {% set title = form.vars.value.id ? fullname ~ ' - ' ~ 'Update Contact'|trans : 'New Contact'|trans %}
@@ -59,6 +59,10 @@
     {% endif %}
 {% endblock pageHeader %}
 
+{% block stats %}
+    {% include 'OroCRMContactBundle:Contact:headerStats.html.twig' with {'entity': entity} %}
+{% endblock stats %}
+
 {% block content_data %}
     {% set id = 'contact-profile' %}
 
@@ -67,9 +71,31 @@
             'class': 'active',
             'subblocks': [
                 {
-                    'title': 'Basic Information',
+                    'title': 'Contact Information',
                     'data': [
-                        form_row(form.values),
+                        form_row(form.namePrefix, {'label': 'Name prefix'}),
+                        form_row(form.firstName, {'label': 'First name'}),
+                        form_row(form.lastName, {'label': 'Last name'}),
+                        form_row(form.nameSuffix, {'label': 'Name suffix'}),
+                        form_row(form.description, {'label': 'Description'}),
+                        form_row(form.owner, {'label': 'Owner'}),
+                        form_row(form.assignedTo, {'label': 'Assigned to'}),
+                        form_row(form.reportsTo, {'label': 'Reports to'}),
+
+                        form_row(form.emails, {'label': 'Emails'}),
+                        form_row(form.phones, {'label': 'Phones'}),
+                        form_row(form.fax, {'label': 'Fax'}),
+                        form_row(form.skype, {'label': 'Skype'}),
+                        form_row(form.method, {'label': 'Contact Method'}),
+                        form_row(form.twitter, {'label': 'Twitter'}),
+                        form_row(form.facebook, {'label': 'Facebook'}),
+                        form_row(form.googlePlus, {'label': 'Google+'}),
+                        form_row(form.linkedIn, {'label': 'LinkedIn'}),
+                        form_row(form.jobTitle, {'label': 'Job Title'}),
+                        form_row(form.birthday, {'label': 'Birthday'}),
+                        form_row(form.gender, {'label': 'Gender'}),
+                        form_row(form.source, {'label': 'Source'}),
+
                         form_row(form.tags)
                     ]
                 },

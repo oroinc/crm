@@ -1,5 +1,10 @@
 orocrm.contact.datagrid.contact_id: ID
+orocrm.contact.datagrid.first_name: First Name
+orocrm.contact.datagrid.last_name: Last Name
+orocrm.contact.datagrid.email: Email
+orocrm.contact.datagrid.phone: Phone
 orocrm.contact.datagrid.groups: Groups
+orocrm.contact.datagrid.source: Source
 orocrm.contact.datagrid.country: Country
 orocrm.contact.datagrid.region: State
 orocrm.contact.datagrid.postal_code: ZIP/Postal Code

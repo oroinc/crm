@@ -29,5 +29,6 @@ class GroupTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($this->group->getLabel());
         $this->group->setLabel('Label');
         $this->assertEquals('Label', $this->group->getLabel());
+        $this->assertEquals('Label', $this->group->__toString());
     }
 }

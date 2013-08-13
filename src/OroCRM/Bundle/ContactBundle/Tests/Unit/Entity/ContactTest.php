@@ -3,6 +3,8 @@
 namespace OroCRM\Bundle\ContactBundle\Tests\Unit\Entity;
 
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
+use OroCRM\Bundle\ContactBundle\Entity\ContactEmail;
+use OroCRM\Bundle\ContactBundle\Entity\ContactPhone;
 use OroCRM\Bundle\ContactBundle\Entity\Group;
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\ContactBundle\Entity\ContactAddress;
@@ -10,30 +12,21 @@ use Oro\Bundle\AddressBundle\Entity\AddressType;
 
 class ContactTest extends \PHPUnit_Framework_TestCase
 {
-    public function testBeforeSave()
-    {
-        $entity = new Contact();
-        $entity->beforeSave();
-        $this->assertInstanceOf('\DateTime', $entity->getCreatedAt());
-    }
-
-    public function testDoPreUpdate()
-    {
-        $entity = new Contact();
-        $entity->doPreUpdate();
-        $this->assertInstanceOf('\DateTime', $entity->getUpdatedAt());
-    }
-
     public function testGetGroupLabels()
     {
         $entity = new Contact();
         $this->assertEquals(array(), $entity->getGroupLabels());
 
-        $entity->addGroup(new Group('Group One'));
+        $groupOne = new Group('Group One');
+        $entity->addGroup($groupOne);
         $this->assertEquals(array('Group One'), $entity->getGroupLabels());
 
-        $entity->addGroup(new Group('Group Two'));
+        $groupTwo = new Group('Group Two');
+        $entity->addGroup($groupTwo);
         $this->assertEquals(array('Group One', 'Group Two'), $entity->getGroupLabels());
+
+        $entity->removeGroup($groupOne);
+        $this->assertEquals(array('Group Two'), $entity->getGroupLabels());
     }
 
     public function testGetGroupLabelsAsString()
@@ -77,6 +70,100 @@ class ContactTest extends \PHPUnit_Framework_TestCase
 
         $contact->removeAccount($account);
         $this->assertEmpty($contact->getAccounts()->toArray());
+    }
+
+    public function testEmails()
+    {
+        $emailOne = new ContactEmail('emailone@example.com');
+        $emailTwo = new ContactEmail('emailtwo@example.com');
+        $emailThree = new ContactEmail('emailthree@example.com');
+        $emails = array($emailOne, $emailTwo);
+
+        $contact = new Contact();
+        $this->assertSame($contact, $contact->resetEmails($emails));
+        $actual = $contact->getEmails();
+        $this->assertInstanceOf('Doctrine\Common\Collections\ArrayCollection', $actual);
+        $this->assertEquals($emails, $actual->toArray());
+
+        $this->assertSame($contact, $contact->addEmail($emailTwo));
+        $actual = $contact->getEmails();
+        $this->assertInstanceOf('Doctrine\Common\Collections\ArrayCollection', $actual);
+        $this->assertEquals($emails, $actual->toArray());
+
+        $this->assertSame($contact, $contact->addEmail($emailThree));
+        $actual = $contact->getEmails();
+        $this->assertInstanceOf('Doctrine\Common\Collections\ArrayCollection', $actual);
+        $this->assertEquals(array($emailOne, $emailTwo, $emailThree), $actual->toArray());
+
+        $this->assertSame($contact, $contact->removeEmail($emailOne));
+        $actual = $contact->getEmails();
+        $this->assertInstanceOf('Doctrine\Common\Collections\ArrayCollection', $actual);
+        $this->assertEquals(array(1 => $emailTwo, 2 => $emailThree), $actual->toArray());
+
+        $this->assertSame($contact, $contact->removeEmail($emailOne));
+        $actual = $contact->getEmails();
+        $this->assertInstanceOf('Doctrine\Common\Collections\ArrayCollection', $actual);
+        $this->assertEquals(array(1 => $emailTwo, 2 => $emailThree), $actual->toArray());
+    }
+
+    public function testGetPrimaryEmail()
+    {
+        $contact = new Contact();
+        $this->assertNull($contact->getPrimaryEmail());
+
+        $email = new ContactEmail('email@example.com');
+        $contact->addEmail($email);
+        $this->assertNull($contact->getPrimaryEmail());
+
+        $email->setPrimary(true);
+        $this->assertSame($email, $contact->getPrimaryEmail());
+    }
+
+    public function testPhones()
+    {
+        $phoneOne = new ContactPhone('06001122334455');
+        $phoneTwo = new ContactPhone('07001122334455');
+        $phoneThree = new ContactPhone('08001122334455');
+        $phones = array($phoneOne, $phoneTwo);
+
+        $contact = new Contact();
+        $this->assertSame($contact, $contact->resetPhones($phones));
+        $actual = $contact->getPhones();
+        $this->assertInstanceOf('Doctrine\Common\Collections\ArrayCollection', $actual);
+        $this->assertEquals($phones, $actual->toArray());
+
+        $this->assertSame($contact, $contact->addPhone($phoneTwo));
+        $actual = $contact->getPhones();
+        $this->assertInstanceOf('Doctrine\Common\Collections\ArrayCollection', $actual);
+        $this->assertEquals($phones, $actual->toArray());
+
+        $this->assertSame($contact, $contact->addPhone($phoneThree));
+        $actual = $contact->getPhones();
+        $this->assertInstanceOf('Doctrine\Common\Collections\ArrayCollection', $actual);
+        $this->assertEquals(array($phoneOne, $phoneTwo, $phoneThree), $actual->toArray());
+
+        $this->assertSame($contact, $contact->removePhone($phoneOne));
+        $actual = $contact->getPhones();
+        $this->assertInstanceOf('Doctrine\Common\Collections\ArrayCollection', $actual);
+        $this->assertEquals(array(1 => $phoneTwo, 2 => $phoneThree), $actual->toArray());
+
+        $this->assertSame($contact, $contact->removePhone($phoneOne));
+        $actual = $contact->getPhones();
+        $this->assertInstanceOf('Doctrine\Common\Collections\ArrayCollection', $actual);
+        $this->assertEquals(array(1 => $phoneTwo, 2 => $phoneThree), $actual->toArray());
+    }
+
+    public function testGetPrimaryPhone()
+    {
+        $contact = new Contact();
+        $this->assertNull($contact->getPrimaryPhone());
+
+        $phone = new ContactPhone('06001122334455');
+        $contact->addPhone($phone);
+        $this->assertNull($contact->getPrimaryPhone());
+
+        $phone->setPrimary(true);
+        $this->assertSame($phone, $contact->getPrimaryPhone());
     }
 
     public function testAddresses()
@@ -127,6 +214,14 @@ class ContactTest extends \PHPUnit_Framework_TestCase
 
         $address->setPrimary(true);
         $this->assertSame($address, $contact->getPrimaryAddress());
+
+        $newPrimary = new ContactAddress();
+        $contact->addAddress($newPrimary);
+
+        $contact->setPrimaryAddress($newPrimary);
+        $this->assertSame($newPrimary, $contact->getPrimaryAddress());
+
+        $this->assertFalse($address->isPrimary());
     }
 
     public function testGetAddressByTypeName()
@@ -154,35 +249,6 @@ class ContactTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($address, $contact->getAddressByType($addressType));
     }
 
-    public function testGetAttributeDataException()
-    {
-        $contact = new Contact();
-        $attribute = $this->getMockBuilder('Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttribute')
-            ->setMethods(array('getCode'))
-            ->getMockForAbstractClass();
-        $attribute->expects($this->any())
-            ->method('getCode')
-            ->will($this->returnValue('first_name'));
-
-        $firstNameVal = $this->getMockBuilder('Oro\Bundle\FlexibleEntityBundle\Model\FlexibleValueInterface')
-            ->setMethods(array('setEntity', 'getData', 'getAttribute'))
-            ->getMock();
-        $firstNameVal->expects($this->any())
-            ->method('getAttribute')
-            ->will($this->returnValue($attribute));
-        $firstNameVal->expects($this->once())
-            ->method('getData')
-            ->will(
-                $this->returnCallback(
-                    function () {
-                        throw new \Exception('TEST');
-                    }
-                )
-            );
-        $contact->addValue($firstNameVal);
-        $this->assertEquals('', $contact->getAttributeData('first_name'));
-    }
-
     public function testToStringNoAttributes()
     {
         $contact = new Contact();
@@ -192,42 +258,10 @@ class ContactTest extends \PHPUnit_Framework_TestCase
     public function testNames()
     {
         $contact = new Contact();
-        $attributeFN = $this->getMockBuilder('Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttribute')
-            ->setMethods(array('getCode'))
-            ->getMockForAbstractClass();
-        $attributeFN->expects($this->any())
-            ->method('getCode')
-            ->will($this->returnValue('first_name'));
+        $contact->setFirstName('First');
+        $contact->setLastName('Last');
 
-        $firstNameVal = $this->getMockBuilder('Oro\Bundle\FlexibleEntityBundle\Model\FlexibleValueInterface')
-            ->setMethods(array('setEntity', 'getData', 'getAttribute'))
-            ->getMock();
-        $firstNameVal->expects($this->any())
-            ->method('getAttribute')
-            ->will($this->returnValue($attributeFN));
-        $firstNameVal->expects($this->any())
-            ->method('getData')
-            ->will($this->returnValue('First'));
-        $contact->addValue($firstNameVal);
-
-        $attributeLN = $this->getMockBuilder('Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttribute')
-            ->setMethods(array('getCode'))
-            ->getMockForAbstractClass();
-        $attributeLN->expects($this->any())
-            ->method('getCode')
-            ->will($this->returnValue('last_name'));
-
-        $lastNameVal = $this->getMockBuilder('Oro\Bundle\FlexibleEntityBundle\Model\FlexibleValueInterface')
-            ->setMethods(array('setEntity', 'getData', 'getAttribute'))
-            ->getMock();
-        $lastNameVal->expects($this->any())
-            ->method('getAttribute')
-            ->will($this->returnValue($attributeLN));
-        $lastNameVal->expects($this->any())
-            ->method('getData')
-            ->will($this->returnValue('Last'));
-        $contact->addValue($lastNameVal);
-        $this->getAttributeDataTest($contact);
+        $this->getFirstNameTest($contact);
         $this->toStringTest($contact);
         $this->getFullNameTest($contact);
     }
@@ -235,9 +269,9 @@ class ContactTest extends \PHPUnit_Framework_TestCase
     /**
      * @param \OroCRM\Bundle\ContactBundle\Entity\Contact $contact
      */
-    protected function getAttributeDataTest($contact)
+    protected function getFirstNameTest($contact)
     {
-        $this->assertEquals('First', $contact->getAttributeData('first_name'));
+        $this->assertEquals('First', $contact->getFirstName());
     }
 
     /**
@@ -258,5 +292,77 @@ class ContactTest extends \PHPUnit_Framework_TestCase
         $contact->setNameFormat('%last%, %first%');
 
         $this->assertEquals($contact->getFullname(), sprintf('%s, %s', 'Last', 'First'));
+    }
+
+    public function testGetTags()
+    {
+        $contact = new Contact();
+        $this->assertInstanceOf('Doctrine\Common\Collections\ArrayCollection', $contact->getTags());
+        $this->assertTrue($contact->getTags()->isEmpty());
+
+        $contact->setTags(array('tag'));
+        $this->assertEquals(array('tag'), $contact->getTags());
+    }
+
+    /**
+     * @dataProvider flatPropertiesDataProvider
+     */
+    public function testGetSet($property, $value, $expected)
+    {
+        $obj = new Contact();
+
+        call_user_func_array(array($obj, 'set' . ucfirst($property)), array($value));
+        $this->assertEquals($expected, call_user_func_array(array($obj, 'get' . ucfirst($property)), array()));
+    }
+
+    public function testSetAddressType()
+    {
+        $contact = new Contact();
+
+        $shippingType = new AddressType('shipping');
+        $addressOne = new ContactAddress();
+        $addressOne->addType($shippingType);
+        $contact->addAddress($addressOne);
+
+        $addressTwo = new ContactAddress();
+        $contact->addAddress($addressTwo);
+
+        $contact->setAddressType($addressTwo, $shippingType);
+        $this->assertFalse($addressOne->hasTypeWithName('shipping'));
+        $this->assertTrue($addressTwo->hasTypeWithName('shipping'));
+    }
+
+    public function flatPropertiesDataProvider()
+    {
+        $now = new \DateTime('now');
+        $user = $this->getMockBuilder('Oro\Bundle\UserBundle\Entity\User');
+        $contact = $this->getMockBuilder('OroCRM\Bundle\ContactBundle\Entity\Source');
+        $source = $this->getMockBuilder('OroCRM\Bundle\ContactBundle\Entity\Source');
+        $method = $this->getMockBuilder('OroCRM\Bundle\ContactBundle\Entity\Method');
+        return array(
+            'namePrefix' => array('namePrefix', 'test', 'test'),
+            'firstName' => array('firstName', 'test', 'test'),
+            'lastName' => array('lastName', 'test', 'test'),
+            'nameSuffix' => array('nameSuffix', 'test', 'test'),
+            'gender' => array('gender', 'male', 'male'),
+            'assignedTo' => array('assignedTo', $user, $user),
+            'birthday' => array('birthday', $now, $now),
+            'description' => array('description', 'test', 'test'),
+            'source' => array('source', $source, $source),
+            'method' => array('method', $method, $method),
+            'owner' => array('owner', $user, $user),
+            'reportsTo' => array('reportsTo', $contact, $contact),
+            'jobTitle' => array('jobTitle', 'test', 'test'),
+            'fax' => array('fax', 'test', 'test'),
+            'skype' => array('skype', 'test', 'test'),
+            'facebook' => array('facebook', 'test', 'test'),
+            'linkedIn' => array('linkedIn', 'test', 'test'),
+            'googlePlus' => array('googlePlus', 'test', 'test'),
+            'twitter' => array('twitter', 'test', 'test'),
+            'createdAt' => array('createdAt', $now, $now),
+            'updatedAt' => array('updatedAt', $now, $now),
+            'createdBy' => array('createdBy', $user, $user),
+            'updatedBy' => array('updatedBy', $user, $user),
+        );
     }
 }

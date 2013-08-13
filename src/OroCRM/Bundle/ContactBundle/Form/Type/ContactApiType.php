@@ -2,18 +2,18 @@
 
 namespace OroCRM\Bundle\ContactBundle\Form\Type;
 
-use Oro\Bundle\UserBundle\Form\EventListener\PatchSubscriber;
+use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-class ContactApiType extends ContactType
+use Oro\Bundle\UserBundle\Form\EventListener\PatchSubscriber;
+
+class ContactApiType extends AbstractType
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function addEntityFields(FormBuilderInterface $builder)
+    const NAME = 'contact';
+
+    public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        parent::addEntityFields($builder);
         $builder->addEventSubscriber(new PatchSubscriber());
     }
 
@@ -24,11 +24,7 @@ class ContactApiType extends ContactType
     {
         $resolver->setDefaults(
             array(
-                'data_class'           => $this->flexibleClass,
-                'intention'            => 'contact',
-                'extra_fields_message' => 'This form should not contain extra fields: "{{ extra_fields }}"',
-                'csrf_protection'      => false,
-                'cascade_validation'   => true,
+                'csrf_protection' => false,
             )
         );
     }
@@ -36,8 +32,16 @@ class ContactApiType extends ContactType
     /**
      * {@inheritdoc}
      */
+    public function getParent()
+    {
+        return 'orocrm_contact';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getName()
     {
-        return 'contact';
+        return self::NAME;
     }
 }
