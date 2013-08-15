@@ -324,8 +324,16 @@ class ContactDatagridManager extends DatagridManager
         $windowMassAction = new WindowMassAction(
             array(
                 'name'             => 'window',
-                'label'            => 'Window',
-                'route'            => 'oro_user_view',
+                'label'            => 'Address Book',
+                'route'            => 'orocrm_contact_address_book',
+                'confirmation'     => false,
+                'frontend_options' => array(
+                    'stateEnabled' => false,
+                    'dialogOptions' => array(
+                        'width' => 780,
+                        'height' => 460
+                    )
+                ),
                 'route_parameters' => array('id' => 1),
             )
         );
