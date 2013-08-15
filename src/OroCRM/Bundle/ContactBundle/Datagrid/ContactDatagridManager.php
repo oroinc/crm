@@ -16,6 +16,7 @@ use Oro\Bundle\GridBundle\Property\UrlProperty;
 use Oro\Bundle\GridBundle\Property\FixedProperty;
 use Oro\Bundle\GridBundle\Datagrid\ProxyQueryInterface;
 use Oro\Bundle\GridBundle\Sorter\SorterInterface;
+use Oro\Bundle\GridBundle\Action\MassAction\DeleteMassAction;
 
 class ContactDatagridManager extends DatagridManager
 {
@@ -291,6 +292,22 @@ class ContactDatagridManager extends DatagridManager
         );
 
         return array($clickAction, $viewAction, $updateAction, $deleteAction);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function getMassActions()
+    {
+        $deleteMassAction = new DeleteMassAction(
+            array(
+                'acl_resource' => 'orocrm_contact_delete',
+                'label'        => $this->translate('orocrm.contact.datagrid.delete'),
+                'icon'         => 'trash',
+            )
+        );
+
+        return array($deleteMassAction);
     }
 
     /**

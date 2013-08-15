@@ -19,7 +19,7 @@ services:
         class: %orocrm_account.contact.view_datagrid_manager.class%
         tags:
             - name: oro_grid.datagrid.manager
-              datagrid_name: contacts_view
+              datagrid_name: account_contacts_view
               entity_name: %orocrm_contact.entity.class%
               query_entity_alias: contact
               entity_hint: contacts
@@ -29,7 +29,7 @@ services:
         class: %orocrm_account.contact.update_datagrid_manager.class%
         tags:
             - name: oro_grid.datagrid.manager
-              datagrid_name: contacts_update
+              datagrid_name: account_contacts_update
               entity_name: %orocrm_contact.entity.class%
               query_entity_alias: contact
               entity_hint: contacts
