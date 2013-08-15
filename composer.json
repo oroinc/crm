@@ -14,10 +14,6 @@
         {
             "type": "vcs",
             "url": "https://github.com/laboro/platform.git"
-        },
-        {
-            "type": "vcs",
-            "url": "https://github.com/laboro/SonataAdminBundle.git"
         }
     ],
     "minimum-stability": "dev"
