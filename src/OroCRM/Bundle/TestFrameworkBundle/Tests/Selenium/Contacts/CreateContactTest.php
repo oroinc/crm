@@ -71,7 +71,7 @@ class CreateContactTest extends \PHPUnit_Extensions_Selenium2TestCase
             ->close()
             ->filterBy('Email', $contactname . '@mail.com')
             ->open(array($contactname))
-            ->assertTitle($contactname . '_last, ' . $contactname . '_first - Contacts - Customers')
+            ->assertTitle($contactname . '_first ' . $contactname . '_last' . ' - Contacts - Customers')
             ->edit()
             ->getAddress($addressPrimary)
             ->getAddress($addressSecondary, 1);
@@ -125,7 +125,7 @@ class CreateContactTest extends \PHPUnit_Extensions_Selenium2TestCase
             ->openContacts()
             ->filterBy('Email', $contactname . '@mail.com')
             ->open(array($contactname))
-            ->assertTitle($contactname . '_last, ' . $contactname . '_first - Contacts - Customers')
+            ->assertTitle($contactname . '_first ' . $contactname . '_last' . ' - Contacts - Customers')
             ->edit()
             ->setFirstName($newContactname . '_first')
             ->save()

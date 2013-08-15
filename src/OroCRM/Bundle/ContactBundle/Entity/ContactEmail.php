@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 
 use Oro\Bundle\AddressBundle\Entity\AbstractEmail;
+use Oro\Bundle\EmailBundle\Entity\EmailInterface;
 
 /**
  * @ORM\Entity
@@ -13,13 +14,29 @@ use Oro\Bundle\AddressBundle\Entity\AbstractEmail;
  *      @ORM\Index(name="primary_email_idx", columns={"email", "is_primary"})
  * })
  */
-class ContactEmail extends AbstractEmail
+class ContactEmail extends AbstractEmail implements EmailInterface
 {
     /**
      * @ORM\ManyToOne(targetEntity="Contact", inversedBy="emails")
      * @ORM\JoinColumn(name="owner_id", referencedColumnName="id")
      */
     protected $owner;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getEmailField()
+    {
+        return 'email';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getEmailOwner()
+    {
+        return $this->getOwner();
+    }
 
     /**
      * Set contact as owner.
