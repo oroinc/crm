@@ -16,7 +16,9 @@ use Oro\Bundle\GridBundle\Property\UrlProperty;
 use Oro\Bundle\GridBundle\Property\FixedProperty;
 use Oro\Bundle\GridBundle\Datagrid\ProxyQueryInterface;
 use Oro\Bundle\GridBundle\Sorter\SorterInterface;
-use Oro\Bundle\GridBundle\Action\MassAction\DeleteMassAction;
+use Oro\Bundle\GridBundle\Action\MassAction\Ajax\DeleteMassAction;
+use Oro\Bundle\GridBundle\Action\MassAction\Redirect\RedirectMassAction;
+use Oro\Bundle\GridBundle\Action\MassAction\Widget\WindowMassAction;
 
 class ContactDatagridManager extends DatagridManager
 {
@@ -301,13 +303,34 @@ class ContactDatagridManager extends DatagridManager
     {
         $deleteMassAction = new DeleteMassAction(
             array(
+                'name'         => 'delete',
                 'acl_resource' => 'orocrm_contact_delete',
                 'label'        => $this->translate('orocrm.contact.datagrid.delete'),
                 'icon'         => 'trash',
             )
         );
 
-        return array($deleteMassAction);
+        // TODO Remove this mass action after development
+        $redirectMassAction = new RedirectMassAction(
+            array(
+                'name'             => 'redirect',
+                'label'            => 'Redirect',
+                'route'            => 'oro_user_view',
+                'route_parameters' => array('id' => 1)
+            )
+        );
+
+        // TODO Remove this mass action after development
+        $windowMassAction = new WindowMassAction(
+            array(
+                'name'             => 'window',
+                'label'            => 'Window',
+                'route'            => 'oro_user_view',
+                'route_parameters' => array('id' => 1),
+            )
+        );
+
+        return array($deleteMassAction, $redirectMassAction, $windowMassAction);
     }
 
     /**
