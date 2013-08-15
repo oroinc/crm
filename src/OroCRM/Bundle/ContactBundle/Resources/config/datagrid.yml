@@ -15,7 +15,6 @@ services:
               query_entity_alias: contact
               entity_hint: contacts
               route_name: orocrm_contact_index
-              identifier_field: id
 
     orocrm_contact.group.datagrid_manager:
         class: %orocrm_contact.group.datagrid_manager.class%
@@ -25,7 +24,6 @@ services:
               entity_name: OroCRM\Bundle\ContactBundle\Entity\Group
               entity_hint: groups
               route_name: orocrm_contact_group_index
-              identifier_field: id
 
     orocrm_contact.group_contact.datagrid_manager:
         class: %orocrm_contact.group_contact.datagrid_manager.class%
@@ -36,7 +34,6 @@ services:
               query_entity_alias: contact
               entity_hint: contacts
               route_name: orocrm_contact_group_contact_grid
-              identifier_field: id
 
     orocrm_contact.account.view_datagrid_manager:
         class: %orocrm_contact.contact.view_datagrid_manager.class%
@@ -48,7 +45,6 @@ services:
               entity_hint: acounts
               flexible: true
               route_name: orocrm_contact_view
-              identifier_field: id
 
     orocrm_contact.account.update_datagrid_manager:
         class: %orocrm_contact.account.update_datagrid_manager.class%
@@ -60,4 +56,3 @@ services:
               entity_hint: acounts
               flexible: true
               route_name: orocrm_contact_update
-              identifier_field: id
