@@ -1,0 +1,7 @@
+parameters:
+#    oro_crm_sales.example.class: OroCRM\Bundle\SalesBundle\Example
+
+services:
+#    oro_crm_sales.example:
+#        class: %oro_crm_sales.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]
