@@ -16,6 +16,9 @@ use Oro\Bundle\GridBundle\Property\UrlProperty;
 use Oro\Bundle\GridBundle\Property\FixedProperty;
 use Oro\Bundle\GridBundle\Datagrid\ProxyQueryInterface;
 use Oro\Bundle\GridBundle\Sorter\SorterInterface;
+use Oro\Bundle\GridBundle\Action\MassAction\Ajax\DeleteMassAction;
+use Oro\Bundle\GridBundle\Action\MassAction\Redirect\RedirectMassAction;
+use Oro\Bundle\GridBundle\Action\MassAction\Widget\WindowMassAction;
 
 class ContactDatagridManager extends DatagridManager
 {
@@ -45,19 +48,6 @@ class ContactDatagridManager extends DatagridManager
      */
     protected function configureFields(FieldDescriptionCollection $fieldsCollection)
     {
-        $fieldId = new FieldDescription();
-        $fieldId->setName('id');
-        $fieldId->setOptions(
-            array(
-                'type'        => FieldDescriptionInterface::TYPE_INTEGER,
-                'label'       => $this->translate('orocrm.contact.datagrid.contact_id'),
-                'field_name'  => 'id',
-                'filter_type' => FilterInterface::TYPE_NUMBER,
-                'show_column' => false
-            )
-        );
-        $fieldsCollection->add($fieldId);
-
         $fieldFirstName = new FieldDescription();
         $fieldFirstName->setName('first_name');
         $fieldFirstName->setOptions(
@@ -304,6 +294,23 @@ class ContactDatagridManager extends DatagridManager
         );
 
         return array($clickAction, $viewAction, $updateAction, $deleteAction);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function getMassActions()
+    {
+        $deleteMassAction = new DeleteMassAction(
+            array(
+                'name'         => 'delete',
+                'acl_resource' => 'orocrm_contact_delete',
+                'label'        => $this->translate('orocrm.contact.datagrid.delete'),
+                'icon'         => 'trash',
+            )
+        );
+
+        return array($deleteMassAction);
     }
 
     /**

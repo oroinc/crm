@@ -20,7 +20,7 @@ services:
         class: %orocrm_contact.group.datagrid_manager.class%
         tags:
             - name: oro_grid.datagrid.manager
-              datagrid_name: groups
+              datagrid_name: contact_groups
               entity_name: OroCRM\Bundle\ContactBundle\Entity\Group
               entity_hint: groups
               route_name: orocrm_contact_group_index
@@ -29,7 +29,7 @@ services:
         class: %orocrm_contact.group_contact.datagrid_manager.class%
         tags:
             - name: oro_grid.datagrid.manager
-              datagrid_name: groupcontacts
+              datagrid_name: contact_groupcontacts
               entity_name: %orocrm_contact.entity.class%
               query_entity_alias: contact
               entity_hint: contacts
@@ -39,7 +39,7 @@ services:
         class: %orocrm_contact.contact.view_datagrid_manager.class%
         tags:
             - name: oro_grid.datagrid.manager
-              datagrid_name: accounts_view
+              datagrid_name: contact_accounts_view
               entity_name: %orocrm_account.account.entity.class%
               query_entity_alias: account
               entity_hint: acounts
@@ -50,7 +50,7 @@ services:
         class: %orocrm_contact.account.update_datagrid_manager.class%
         tags:
             - name: oro_grid.datagrid.manager
-              datagrid_name: accounts_update
+              datagrid_name: contact_accounts_update
               entity_name: %orocrm_account.account.entity.class%
               query_entity_alias: account
               entity_hint: acounts

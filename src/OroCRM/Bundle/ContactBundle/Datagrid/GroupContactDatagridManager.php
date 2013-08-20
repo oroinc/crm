@@ -26,21 +26,6 @@ class GroupContactDatagridManager extends DatagridManager
      */
     protected function configureFields(FieldDescriptionCollection $fieldsCollection)
     {
-        $fieldsCollection->add($this->createUserRelationColumn());
-
-        $fieldId = new FieldDescription();
-        $fieldId->setName('id');
-        $fieldId->setOptions(
-            array(
-                'type'        => FieldDescriptionInterface::TYPE_INTEGER,
-                'label'       => $this->translate('ID'),
-                'field_name'  => 'id',
-                'filter_type' => FilterInterface::TYPE_NUMBER,
-                'show_column' => false
-            )
-        );
-        $fieldsCollection->add($fieldId);
-
         $fieldFirstName = new FieldDescription();
         $fieldFirstName->setName('first_name');
         $fieldFirstName->setOptions(
