@@ -45,7 +45,7 @@ class Group
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="user_owner_id", referencedColumnName="id", onDelete="SET NULL")
      */
-    protected $userOwner;
+    protected $owningUser;
 
     /**
      * @param string|null $label [optional] Group name
@@ -92,16 +92,16 @@ class Group
      */
     public function getOwner()
     {
-        return $this->userOwner;
+        return $this->owningUser;
     }
 
     /**
-     * @param User $userOwner
+     * @param User $owningUser
      * @return Group
      */
-    public function setOwner(User $userOwner)
+    public function setOwner(User $owningUser)
     {
-        $this->userOwner = $userOwner;
+        $this->owningUser = $owningUser;
 
         return $this;
     }

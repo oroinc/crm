@@ -54,7 +54,7 @@ class Account extends AbstractEntityFlexible implements Taggable
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="user_owner_id", referencedColumnName="id", onDelete="SET NULL")
      */
-    protected $userOwner;
+    protected $owningUser;
 
     /**
      * @var Address $shippingAddress
@@ -300,16 +300,16 @@ class Account extends AbstractEntityFlexible implements Taggable
      */
     public function getOwner()
     {
-        return $this->userOwner;
+        return $this->owningUser;
     }
 
     /**
-     * @param User $userOwner
+     * @param User $owningUser
      * @return Account
      */
-    public function setOwner(User $userOwner)
+    public function setOwner(User $owningUser)
     {
-        $this->userOwner = $userOwner;
+        $this->owningUser = $owningUser;
 
         return $this;
     }
