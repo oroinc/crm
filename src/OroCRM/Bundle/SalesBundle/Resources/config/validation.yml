@@ -1,0 +1,9 @@
+OroCRM\Bundle\SalesBundle\Entity\Opportunity:
+    properties:
+        probability:
+            - Range:
+                min: 0
+                max: 100
+        budgetAmount:
+            - Range:
+                min: 0
