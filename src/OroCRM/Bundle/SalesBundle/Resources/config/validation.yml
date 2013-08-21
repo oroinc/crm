@@ -9,3 +9,22 @@ OroCRM\Bundle\SalesBundle\Entity\Opportunity:
         budgetAmount:
             - Range:
                 min: 0
+
+OroCRM\Bundle\SalesBundle\Entity\Lead:
+    properties:
+        topic:
+            - NotBlank: ~
+            - Length:
+                max: 255
+        firstName:
+            - NotBlank: ~
+            - Length:
+                max: 255
+        lastName:
+            - NotBlank: ~
+            - Length:
+                max: 255
+        email:
+            - Email: ~
+        website:
+            - Url: ~

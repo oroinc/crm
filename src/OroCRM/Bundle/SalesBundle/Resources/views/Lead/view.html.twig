@@ -1,0 +1,62 @@
+{% extends 'OroUIBundle:actions:view.html.twig' %}
+{% import 'OroUIBundle::macros.html.twig' as macros %}
+
+{% oro_title_set({params : {"%lead.topic%": entity.topic} }) %}
+
+{% block navButtons %}
+    {% if resource_granted('orocrm_sales_lead_update') %}
+        {{ UI.button({'path' : path('orocrm_sales_lead_update', { 'id': entity.id }), 'iClass' : 'icon-edit ', 'title' : 'Update Lead', 'label' : 'Edit'}) }}
+    {% endif %}
+    {% if resource_granted('orocrm_sales_lead_delete') %}
+        {{ UI.deleteButton({
+                'dataUrl': path('oro_api_delete_lead', {'id': entity.id}) ,
+                'dataRedirect': path('orocrm_sales_lead_index'),
+                'aCss': 'no-hash remove-button',
+                'id': 'btn-remove-lead',
+                'dataId': entity.id,
+                'dataMessage': 'Are you sure you want to delete this lead?',
+                'title': 'Delete Lead',
+                'label': 'Delete'
+            })
+        }}
+    {% endif %}
+{% endblock navButtons %}
+
+{% block pageHeader %}
+    {% set breadcrumbs = {
+            'entity': entity,
+            'indexPath': path('orocrm_sales_lead_index'),
+            'indexLabel': 'Leads',
+            'entityTitle': entity.topic
+        }
+    %}
+    {{ parent() }}
+{% endblock pageHeader %}
+
+{% block content_data %}
+    <div class="well-small form-horizontal dark-bg">
+        <div class="clearfix">
+            <div class="row-fluid well-small-bottom">
+                <div class="span6">
+                    {{
+                        oro_widget_render({
+                            'widgetType': 'block',
+                            'url': path('orocrm_sales_lead_info', {id: entity.id}),
+                            'title': 'Lead Information'
+                        })
+                    }}
+                </div>
+                <div class="span6">
+                    {#{{#}
+                        {#oro_widget_render({#}
+                            {#'widgetType': 'block',#}
+                            {#'contentClasses': [],#}
+                            {#'url': path('orocrm_sales_lead_address_book', {id: entity.id}),#}
+                            {#'title': 'Address Book'#}
+                        {#})#}
+                    {#}}#}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content_data %}

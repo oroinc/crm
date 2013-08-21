@@ -10,6 +10,7 @@ use Oro\Bundle\AddressBundle\Entity\Address;
  *
  * @ORM\Table(name="orocrm_sales_lead")
  * @ORM\Entity
+ * @ORM\HasLifecycleCallbacks()
  */
 class Lead
 {
@@ -106,6 +107,19 @@ class Lead
      */
     protected $address;
 
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(type="datetime")
+     */
+    protected $createdAt;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    protected $updatedAt;
 
     /**
      * Get id
@@ -387,5 +401,74 @@ class Lead
         $this->address = $address;
 
         return $this;
+    }
+
+    /**
+     * Get contact created date/time
+     *
+     * @return \DateTime
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * @param \DateTime $created
+     * @return Lead
+     */
+    public function setCreatedAt($created)
+    {
+        $this->createdAt = $created;
+
+        return $this;
+    }
+
+    /**
+     * Get contact last update date/time
+     *
+     * @return \DateTime
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
+    }
+
+    /**
+     * @param \DateTime $updated
+     * @return Lead
+     */
+    public function setUpdatedAt($updated)
+    {
+        $this->updatedAt = $updated;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string)$this->getTopic();
+    }
+
+    /**
+     * Pre persist event listener
+     *
+     * @ORM\PrePersist
+     */
+    public function beforeSave()
+    {
+        $this->createdAt = new \DateTime('now', new \DateTimeZone('UTC'));
+    }
+
+    /**
+     * Pre update event handler
+     * @ORM\PreUpdate
+     */
+    public function beforeUpdate()
+    {
+        $this->updatedAt = new \DateTime('now', new \DateTimeZone('UTC'));
     }
 }

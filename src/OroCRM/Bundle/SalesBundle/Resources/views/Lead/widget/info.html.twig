@@ -1,0 +1,21 @@
+{% import 'OroUIBundle::macros.html.twig' as macros %}
+
+{# TODO: Move this to OroUIBundle::macros.html.twig #}
+{% macro renderRow(label, value) %}
+    {% import 'OroUIBundle::macros.html.twig' as macros %}
+    {{ macros.renderAttribute(label, '<p class="control-label">' ~ value|default('N/A'|trans) ~ '</p>') }}
+{% endmacro %}
+
+<style>
+    .lead-info {
+        min-height: 380px;
+    }
+</style>
+<div class="widget-content lead-info">
+    <div class="span6">
+        {{ _self.renderRow('Topic'|trans, entity.topic) }}
+    </div>
+    <div class="span6">
+        {{ _self.renderRow('Job Title'|trans, entity.jobTitle) }}
+    </div>
+</div>
