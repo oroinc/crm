@@ -26,6 +26,8 @@ class GroupContactDatagridManager extends DatagridManager
      */
     protected function configureFields(FieldDescriptionCollection $fieldsCollection)
     {
+        $fieldsCollection->add($this->createContactRelationColumn());
+
         $fieldFirstName = new FieldDescription();
         $fieldFirstName->setName('first_name');
         $fieldFirstName->setOptions(
@@ -80,7 +82,7 @@ class GroupContactDatagridManager extends DatagridManager
     /**
      * {@inheritDoc}
      */
-    protected function createUserRelationColumn()
+    protected function createContactRelationColumn()
     {
         $fieldHasGroup = new FieldDescription();
         $fieldHasGroup->setName('has_group');
