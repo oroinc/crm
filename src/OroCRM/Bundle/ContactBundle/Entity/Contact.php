@@ -137,8 +137,9 @@ class Contact implements Taggable, EmailOwnerInterface
      *
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="user_owner_id", referencedColumnName="id", onDelete="SET NULL")
+     * @Soap\ComplexType("int", nillable=true)
      */
-    protected $owningUser;
+    protected $owner;
 
     /**
      * @var User
@@ -596,7 +597,7 @@ class Contact implements Taggable, EmailOwnerInterface
      */
     public function setOwner($owningUser)
     {
-        $this->owningUser = $owningUser;
+        $this->owner = $owningUser;
 
         return $this;
     }
@@ -606,7 +607,7 @@ class Contact implements Taggable, EmailOwnerInterface
      */
     public function getOwner()
     {
-        return $this->owningUser;
+        return $this->owner;
     }
 
     /**
