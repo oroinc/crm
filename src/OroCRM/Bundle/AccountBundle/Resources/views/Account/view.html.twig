@@ -82,10 +82,10 @@
     %}
 
     {% set accountAddresses = [] %}
-    {%  if entity.billingAddress is defined %}
+    {%  if entity.billingAddress is not empty %}
         {% set accountAddresses = accountAddresses|merge([{'title': 'Billing address', 'data': [addressView.renderAddress(entity.billingAddress)]}]) %}
     {% endif %}
-    {%  if entity.shippingAddress is defined %}
+    {%  if entity.shippingAddress is not empty %}
         {% set accountAddresses = accountAddresses|merge([{'title': 'Shipping address', 'data': [addressView.renderAddress(entity.shippingAddress)]}]) %}
     {% endif %}
 
