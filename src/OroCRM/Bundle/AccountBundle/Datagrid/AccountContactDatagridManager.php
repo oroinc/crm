@@ -72,4 +72,12 @@ class AccountContactDatagridManager extends ContactDatagridManager
     {
         return array();
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function getMassActions()
+    {
+        return array();
+    }
 }
