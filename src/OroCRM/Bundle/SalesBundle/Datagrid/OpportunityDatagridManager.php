@@ -20,7 +20,7 @@ class OpportunityDatagridManager extends DatagridManager
         return array(
             new UrlProperty('view_link', $this->router, 'orocrm_opportunity_view', array('id')),
             new UrlProperty('update_link', $this->router, 'orocrm_opportunity_update', array('id')),
-//            new UrlProperty('delete_link', $this->router, 'oro_api_delete_contactgroup', array('id')),
+            new UrlProperty('delete_link', $this->router, 'oro_api_delete_opportunity', array('id')),
         );
     }
 

@@ -30,6 +30,6 @@ oro_menu_config:
 
 oro_titles:
     orocrm_opportunity_index: Opportunities
-    orocrm_opportunity_view: %%opportunity.topic%%
+    orocrm_opportunity_view: %%opportunity.topic%% - Opportunities
     orocrm_opportunity_create: Create Opportunity
-    orocrm_opportunity_update: %%opportunity.topic%%
+    orocrm_opportunity_update: %%opportunity.topic%% - Opportunities

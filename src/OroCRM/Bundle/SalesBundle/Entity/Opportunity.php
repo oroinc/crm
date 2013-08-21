@@ -10,6 +10,7 @@ use OroCRM\Bundle\AccountBundle\Entity\Account;
 /**
  * @ORM\Entity
  * @ORM\Table(name="orocrm_sales_opportunity")
+ * @ORM\HasLifecycleCallbacks()
  */
 class Opportunity
 {
@@ -34,7 +35,7 @@ class Opportunity
      * @var Contact
      *
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ContactBundle\Entity\Contact")
-     * @ORM\JoinColumn(name="contact_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="contact_id", referencedColumnName="id", onDelete="SET NULL")
      **/
     protected $contact;
 
@@ -42,7 +43,7 @@ class Opportunity
      * @var Account
      *
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\AccountBundle\Entity\Account")
-     * @ORM\JoinColumn(name="account_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="account_id", referencedColumnName="id", onDelete="SET NULL")
      **/
     protected $account;
 
@@ -56,7 +57,7 @@ class Opportunity
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="close_date", type="datetime", nullable=true)
+     * @ORM\Column(name="close_date", type="date", nullable=true)
      */
     protected $closeDate;
 

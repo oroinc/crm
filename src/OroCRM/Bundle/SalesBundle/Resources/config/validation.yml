@@ -1,5 +1,7 @@
 OroCRM\Bundle\SalesBundle\Entity\Opportunity:
     properties:
+        topic:
+            - NotBlank: ~
         probability:
             - Range:
                 min: 0

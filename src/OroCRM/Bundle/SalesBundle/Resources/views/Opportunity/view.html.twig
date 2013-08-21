@@ -1,0 +1,73 @@
+{% extends 'OroUIBundle:actions:view.html.twig' %}
+{% set topic = entity.topic|default('N/A') %}
+{% oro_title_set({params : {"%opportunity.topic%": topic} }) %}
+
+{% macro renderRow(label, value) %}
+    {% import 'OroUIBundle::macros.html.twig' as macros %}
+    {{ macros.attibuteRow(label, value|default('N/A'|trans)) }}
+{% endmacro %}
+
+{% block navButtons %}
+    {% if resource_granted('orocrm_opportunity_update') %}
+        {{ UI.button({
+            'path' : path('orocrm_opportunity_update', { 'id': entity.id }),
+            'iClass' : 'icon-edit ',
+            'title' : 'Update contact',
+            'label' : 'Edit'
+        }) }}
+    {% endif %}
+    {% if resource_granted('orocrm_opportunity_delete') %}
+        {{ UI.deleteButton({
+                'dataUrl': path('oro_api_delete_opportunity', {'id': entity.id}) ,
+                'dataRedirect': path('orocrm_opportunity_index'),
+                'aCss': 'no-hash remove-button',
+                'id': 'btn-remove-contact',
+                'dataId': entity.id,
+                'dataMessage': 'Are you sure you want to delete this opportunity?',
+                'title': 'Delete Opportunity',
+                'label': 'Delete'
+            })
+        }}
+    {% endif %}
+{% endblock navButtons %}
+
+{% block pageHeader %}
+    {% set breadcrumbs = {
+        'entity':      entity,
+        'indexPath':   path('orocrm_opportunity_index'),
+        'indexLabel': 'Opportunities',
+        'entityTitle': topic
+    } %}
+    {{ parent() }}
+{% endblock pageHeader %}
+
+{% block content_data %}
+    {% set id = 'opportunity-view' %}
+    {% set defaultRowValue = 'N/A'|trans %}
+
+    {% set data = {
+        'dataBlocks': [
+            {
+                'title': 'General'|trans,
+                'class': 'active',
+                'subblocks': [
+                    {
+                        'title': 'Basic Information'|trans,
+                        'data': [
+                            _self.renderRow('Topic'|trans, entity.topic),
+                            _self.renderRow('Status'|trans, entity.status),
+                            _self.renderRow('Contact'|trans, entity.contact),
+                            _self.renderRow('Account'|trans, entity.account ? entity.account.__toString() : defaultRowValue),
+                            _self.renderRow('Close date'|trans, entity.closeDate ? UI.date(entity.closeDate) : defaultRowValue),
+                            _self.renderRow('Probability'|trans, entity.probability ? entity.probability ~ '%' : defaultRowValue),
+                            _self.renderRow('Budget amount'|trans, entity.budgetAmount ? entity.budgetAmount|number_format(2), defaultRowValue),
+                            _self.renderRow('Customer need'|trans, entity.customerNeed),
+                            _self.renderRow('Proposed solution'|trans, entity.proposedSolution),
+                        ]
+                    }
+                ]
+            }
+        ]
+    } %}
+    {{ parent() }}
+{% endblock content_data %}

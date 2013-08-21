@@ -1,0 +1,3 @@
+orocrm_opportunity_api:
+    resource:     "@OroCRMSalesBundle/Controller/Api/Rest/OpportunityController.php"
+    type:         rest

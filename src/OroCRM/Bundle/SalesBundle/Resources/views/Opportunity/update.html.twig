@@ -1,0 +1,82 @@
+{% extends 'OroUIBundle:actions:update.html.twig' %}
+{% set topic = entity.topic|default('N/A') %}
+{% oro_title_set({params : {"%opportunity.topic%": topic} }) %}
+{% set title = form.vars.value.id ? topic ~ ' - ' ~ 'Update Opportunity'|trans : 'New Opportunity'|trans %}
+{% set formAction = form.vars.value.id
+    ? path('orocrm_opportunity_update', { 'id': form.vars.value.id })
+    : path('orocrm_opportunity_create')
+%}
+
+{% block head_script %}
+    {{ parent() }}
+
+    {% block stylesheets %}
+        {{ form_stylesheet(form) }}
+    {% endblock %}
+{% endblock %}
+
+{% block navButtons %}
+    {% if form.vars.value.id and resource_granted('orocrm_opportunity_delete') %}
+        {{ UI.deleteButton({
+            'dataUrl': path('oro_api_delete_opportunity', {'id': form.vars.value.id}),
+            'dataRedirect': path('orocrm_opportunity_index'),
+            'aCss': 'no-hash remove-button',
+            'id': 'btn-remove-contact',
+            'dataId': form.vars.value.id,
+            'dataMessage': 'Are you sure you want to delete this opportunity?',
+            'title': 'Delete Opportunity',
+            'label': 'Delete'
+        }) }}
+        {{ UI.buttonSeparator() }}
+    {% endif %}
+    {{ UI.button({'path' : path('orocrm_opportunity_index'), 'title' : 'Cancel', 'label' : 'Cancel'}) }}
+    {{ UI.saveAndStayButton() }}
+    {{ UI.saveAndCloseButton() }}
+{% endblock %}
+
+{% block pageHeader %}
+    {% if form.vars.value.id %}
+        {% set breadcrumbs = {
+            'entity':      form.vars.value,
+            'indexPath':   path('orocrm_opportunity_index'),
+            'indexLabel': 'Opportunities',
+            'entityTitle': topic
+        } %}
+        {{ parent() }}
+    {% else %}
+        {% include 'OroUIBundle::page_title_block.html.twig' %}
+    {% endif %}
+{% endblock pageHeader %}
+
+{% block content_data %}
+    {% set id = 'opportunity-profile' %}
+
+    {% set dataBlocks = [{
+            'title': 'General',
+            'class': 'active',
+            'subblocks': [
+                {
+                    'title': 'Contact Information',
+                    'data': [
+                        form_row(form.topic, {'label': 'Topic'|trans}),
+                        form_row(form.status, {'label': 'Status'|trans}),
+                        form_row(form.contact, {'label': 'Contact'|trans}),
+                        form_row(form.account, {'label': 'Account'}),
+                        form_row(form.closeDate, {'label': 'Close date'}),
+                        form_row(form.probability, {'label': 'Probability'}),
+                        form_row(form.budgetAmount, {'label': 'Budget amount'}),
+                        form_row(form.customerNeed, {'label': 'Customer need'}),
+                        form_row(form.proposedSolution, {'label': 'Proposed solution'}),
+                    ]
+                }
+            ]
+        }]
+    %}
+
+    {% set data = {
+            'formErrors': form_errors(form) ? form_errors(form) : null,
+            'dataBlocks': dataBlocks,
+            'hiddenData': form_rest(form)
+    } %}
+    {{ parent() }}
+{% endblock content_data %}

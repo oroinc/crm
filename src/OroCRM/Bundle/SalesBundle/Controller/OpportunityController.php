@@ -11,7 +11,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Oro\Bundle\UserBundle\Annotation\Acl;
 use Oro\Bundle\UserBundle\Annotation\AclAncestor;
 
-use OroCRM\Bundle\ContactBundle\Entity\Contact;
+use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
 use OroCRM\Bundle\SalesBundle\Datagrid\OpportunityDatagridManager;
 
 /**
@@ -35,21 +35,11 @@ class OpportunityController extends Controller
      *      parent="orocrm_opportunity"
      * )
      */
-    public function viewAction(Contact $contact)
+    public function viewAction(Opportunity $entity)
     {
-//        /** @var $accountDatagridManager ContactAccountDatagridManager */
-//        $accountDatagridManager = $this->get('orocrm_contact.account.view_datagrid_manager');
-//        $accountDatagridManager->setContact($contact);
-//        $datagridView = $accountDatagridManager->getDatagrid()->createView();
-//
-//        if ('json' == $this->getRequest()->getRequestFormat()) {
-//            return $this->get('oro_grid.renderer')->renderResultsJsonResponse($datagridView);
-//        }
-//
-//        return array(
-//            'entity'   => $contact,
-//            'datagrid' => $datagridView,
-//        );
+        return array(
+            'entity' => $entity,
+        );
     }
 
     /**
@@ -77,40 +67,30 @@ class OpportunityController extends Controller
      *      parent="orocrm_opportunity"
      * )
      */
-    public function updateAction(Contact $entity = null)
+    public function updateAction(Opportunity $entity = null)
     {
-//        if (!$entity) {
-//            $entity = $this->getManager()->createEntity();
-//        }
-//
-//        /** @var $accountDatagridManager ContactAccountUpdateDatagridManager */
-//        $accountDatagridManager = $this->get('orocrm_contact.account.update_datagrid_manager');
-//        $accountDatagridManager->setContact($entity);
-//        $datagridView = $accountDatagridManager->getDatagrid()->createView();
-//
-//        if ('json' == $this->getRequest()->getRequestFormat()) {
-//            return $this->get('oro_grid.renderer')->renderResultsJsonResponse($datagridView);
-//        }
-//
-//        if ($this->get('orocrm_contact.form.handler.contact')->process($entity)) {
-//            $this->getFlashBag()->add('success', 'Contact successfully saved');
-//
-//            return $this->get('oro_ui.router')->actionRedirect(
-//                array(
-//                    'route' => 'orocrm_contact_update',
-//                    'parameters' => array('id' => $entity->getId()),
-//                ),
-//                array(
-//                    'route' => 'orocrm_contact_index',
-//                )
-//            );
-//        }
-//
-//        return array(
-//            'entity'   => $entity,
-//            'form'     => $this->get('orocrm_contact.form.contact')->createView(),
-//            'datagrid' => $datagridView,
-//        );
+        if (!$entity) {
+            $entity = new Opportunity();
+        }
+
+        if ($this->get('orocrm_sales.form.handler.opportunity')->process($entity)) {
+            $this->getFlashBag()->add('success', 'Opportunity successfully saved');
+
+            return $this->get('oro_ui.router')->actionRedirect(
+                array(
+                    'route' => 'orocrm_opportunity_update',
+                    'parameters' => array('id' => $entity->getId()),
+                ),
+                array(
+                    'route' => 'orocrm_opportunity_index',
+                )
+            );
+        }
+
+        return array(
+            'entity' => $entity,
+            'form'   => $this->get('orocrm_sales.form.opportunity')->createView(),
+        );
     }
 
     /**

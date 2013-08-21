@@ -1,0 +1,25 @@
+parameters:
+    orocrm_sales.form.type.opportunity.class: OroCRM\Bundle\SalesBundle\Form\Type\OpportunityType
+    orocrm_sales.form.handler.opportunity.class: OroCRM\Bundle\SalesBundle\Form\Handler\OpportunityHandler
+
+services:
+    orocrm_sales.form.type.opportunity:
+        class: %orocrm_sales.form.type.opportunity.class%
+        tags:
+            - { name: form.type, alias: orocrm_opportunity }
+
+    orocrm_sales.form.opportunity:
+        class:           Symfony\Component\Form\Form
+        factory_method:  createNamed
+        factory_service: form.factory
+        arguments:
+            - "orocrm_opportunity_form"
+            - "orocrm_opportunity"
+
+    orocrm_sales.form.handler.opportunity:
+        class: %orocrm_sales.form.handler.opportunity.class%
+        scope: request
+        arguments:
+            - @orocrm_sales.form.opportunity
+            - @request
+            - @doctrine.orm.entity_manager

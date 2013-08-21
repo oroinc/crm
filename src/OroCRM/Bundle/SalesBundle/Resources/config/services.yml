@@ -1,7 +1,10 @@
 parameters:
     orocrm_sales.opportunity.class: OroCRM\Bundle\SalesBundle\Entity\Opportunity
+    orocrm_sales.opportunity.manager.api.class: Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
 
 services:
-#    oro_crm_sales.example:
-#        class: %oro_crm_sales.example.class%
-#        arguments: [@service_id, "plain_value", %parameter%]
+    orocrm_sales.opportunity.manager.api:
+        class: %orocrm_sales.opportunity.manager.api.class%
+        arguments:
+            - %orocrm_sales.opportunity.class%
+            - @doctrine.orm.entity_manager
