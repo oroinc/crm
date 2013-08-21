@@ -1,5 +1,5 @@
 parameters:
-#    oro_crm_sales.example.class: OroCRM\Bundle\SalesBundle\Example
+    orocrm_sales.opportunity.class: OroCRM\Bundle\SalesBundle\Entity\Opportunity
 
 services:
 #    oro_crm_sales.example:

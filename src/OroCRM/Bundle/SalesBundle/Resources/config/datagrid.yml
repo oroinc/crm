@@ -1,0 +1,13 @@
+parameters:
+    orocrm_sales.opportunity.datagrid_manager.class: OroCRM\Bundle\SalesBundle\Datagrid\OpportunityDatagridManager
+
+services:
+    orocrm_sales.opportunity.datagrid_manager:
+        class: %orocrm_sales.opportunity.datagrid_manager.class%
+        tags:
+            - name: oro_grid.datagrid.manager
+              datagrid_name: sales_opportunities
+              entity_name: %orocrm_sales.opportunity.class%
+              query_entity_alias: opportunity
+              entity_hint: opportunities
+              route_name: orocrm_opportunity_index

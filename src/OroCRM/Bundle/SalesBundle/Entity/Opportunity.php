@@ -77,16 +77,30 @@ class Opportunity
     /**
      * @var string
      *
-     * @ORM\Column(name="customer_need", type="string", length=255, nullable=false)
+     * @ORM\Column(name="customer_need", type="string", length=255, nullable=true)
      */
     protected $customerNeed;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="proposed_solution", type="string", length=255, nullable=false)
+     * @ORM\Column(name="proposed_solution", type="string", length=255, nullable=true)
      */
     protected $proposedSolution;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="created_at", type="datetime")
+     */
+    protected $createdAt;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="updated_at", type="datetime")
+     */
+    protected $updatedAt;
 
     /**
      * @return int
@@ -256,5 +270,58 @@ class Opportunity
     public function getTopic()
     {
         return $this->topic;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * @param \DateTime $created
+     * @return Opportunity
+     */
+    public function setCreatedAt($created)
+    {
+        $this->createdAt = $created;
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
+    }
+
+    /**
+     * @param \DateTime $updated
+     * @return Opportunity
+     */
+    public function setUpdatedAt($updated)
+    {
+        $this->updatedAt = $updated;
+        return $this;
+    }
+
+    /**
+     * @ORM\PrePersist
+     */
+    public function prePersist()
+    {
+        $this->createdAt = new \DateTime('now', new \DateTimeZone('UTC'));
+        $this->preUpdate();
+    }
+
+    /**
+     * @ORM\PreUpdate
+     */
+    public function preUpdate()
+    {
+        $this->updatedAt = new \DateTime('now', new \DateTimeZone('UTC'));
     }
 }
