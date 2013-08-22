@@ -30,6 +30,7 @@
         <div class="container">
             <h3>{{ 'Quick Launchpad'|trans }}</h3>
 
+            {# TODO: Set appropriate icons for leads and opportunities #}
             {% set widgetsArray = [
                 {
                     label: 'Accounts',
@@ -53,14 +54,16 @@
                     links: [
                         {url: path('orocrm_sales_lead_index'), label: 'List'|trans},
                         {url: path('orocrm_sales_lead_create'), label: 'Create lead'|trans}
-                    ]
+                    ],
+                    image: 'contacts-image'
                 },
                 {
                     label: 'Opportunities',
                     links: [
                         {url: path('orocrm_sales_opportunity_index'), label: 'List'|trans},
                         {url: path('orocrm_sales_opportunity_create'), label: 'Create opportunity'|trans}
-                    ]
+                    ],
+                    image: 'accounts-image'
                 },
             ] %}
 
