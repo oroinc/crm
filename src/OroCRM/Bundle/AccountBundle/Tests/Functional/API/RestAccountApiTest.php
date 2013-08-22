@@ -25,6 +25,7 @@ class RestAccountApiTest extends WebTestCase
         $request = array(
             "account" => array (
                 "name" => 'Account_name_' . mt_rand(),
+                "owner" => '1',
                 "attributes" => array(
                     "website" => 'http://website.com',
                     "office_phone" => '123456789',

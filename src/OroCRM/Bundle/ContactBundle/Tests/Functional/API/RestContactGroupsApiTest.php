@@ -27,7 +27,8 @@ class RestContactGroupsApiTest extends WebTestCase
     {
         $request = array(
             "contact_group" => array(
-            "label" => 'Contact_Group_Name_' . mt_rand()
+                "label" => 'Contact_Group_Name_' . mt_rand(),
+                "owner" => '1'
             )
         );
         $this->client->request('POST', $this->client->generate('oro_api_post_contactgroup'), $request);

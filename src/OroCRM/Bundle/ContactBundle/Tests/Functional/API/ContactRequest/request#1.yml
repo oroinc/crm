@@ -5,6 +5,7 @@ request:
     nameSuffix: Contact name suffix
     description: Contact description
     title: contact title
+    owner: 1
     emails:
         -
           email: asd@asd.com
