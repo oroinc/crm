@@ -1,0 +1,31 @@
+{% import 'OroUIBundle::macros.html.twig' as macros %}
+
+{# TODO: Move this to OroUIBundle::macros.html.twig #}
+{% macro renderRow(label, value) %}
+    {% import 'OroUIBundle::macros.html.twig' as macros %}
+    {{ macros.renderAttribute(label, '<p class="control-label">' ~ value|default('N/A'|trans) ~ '</p>') }}
+{% endmacro %}
+
+<style>
+    .opportunity-info {
+        min-height: 160px;
+    }
+</style>
+
+{% set defaultRowValue = 'N/A'|trans %}
+
+<div class="widget-content opportunity-info">
+    <div class="span6">
+        {{ _self.renderRow('Topic'|trans, entity.topic) }}
+        {{ _self.renderRow('Status'|trans, entity.status) }}
+        {{ _self.renderRow('Contact'|trans, entity.contact) }}
+        {{ _self.renderRow('Account'|trans, entity.account ? entity.account.__toString() : defaultRowValue) }}
+        {{ _self.renderRow('Close date'|trans, entity.closeDate ? macros.date(entity.closeDate) : defaultRowValue) }}
+    </div>
+    <div class="span6">
+        {{ _self.renderRow('Probability'|trans, entity.probability ? entity.probability ~ '%' : defaultRowValue) }}
+        {{ _self.renderRow('Budget amount'|trans, entity.budgetAmount ? entity.budgetAmount|number_format(2), defaultRowValue) }}
+        {{ _self.renderRow('Customer need'|trans, entity.customerNeed) }}
+        {{ _self.renderRow('Proposed solution'|trans, entity.proposedSolution) }}
+    </div>
+</div>

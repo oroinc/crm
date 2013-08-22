@@ -43,6 +43,18 @@ class OpportunityController extends Controller
     }
 
     /**
+     * @Route("/info/{id}", name="orocrm_opportunity_info", requirements={"id"="\d+"})
+     * @Template
+     * @AclAncestor("orocrm_opportunity_view")
+     */
+    public function infoAction(Opportunity $entity)
+    {
+        return array(
+            'entity' => $entity
+        );
+    }
+
+    /**
      * @Route("/create", name="orocrm_opportunity_create")
      * @Template("OroCRMSalesBundle:Opportunity:update.html.twig")
      * @Acl(

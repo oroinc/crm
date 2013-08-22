@@ -51,12 +51,7 @@ class LeadController extends RestController implements ClassResourceInterface
      *      description="Get contact item",
      *      resource=true
      * )
-     * @Acl(
-     *      id="orocrm_sales_lead_view",
-     *      name="View lead",
-     *      description="View lead",
-     *      parent="orocrm_sales_lead"
-     * )
+     * @AclAncestor("orocrm_sales_lead_view")
      * @return Response
      */
     public function getAction($id)

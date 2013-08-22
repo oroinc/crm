@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Session\Flash\FlashBag;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Oro\Bundle\UserBundle\Annotation\Acl;
+use Oro\Bundle\UserBundle\Annotation\AclAncestor;
 
 use OroCRM\Bundle\SalesBundle\Entity\Lead;
 use OroCRM\Bundle\SalesBundle\Datagrid\LeadDatagridManager;
@@ -45,12 +46,7 @@ class LeadController extends Controller
     /**
      * @Route("/info/{id}", name="orocrm_sales_lead_info", requirements={"id"="\d+"})
      * @Template
-     * @Acl(
-     *      id="orocrm_sales_lead_info",
-     *      name="View Lead Info",
-     *      description="View lead info",
-     *      parent="orocrm_sales_lead_view"
-     * )
+     * @AclAncestor("orocrm_sales_lead_view")
      */
     public function infoAction(Lead $lead)
     {

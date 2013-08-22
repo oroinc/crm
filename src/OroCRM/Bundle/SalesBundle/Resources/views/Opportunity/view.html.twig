@@ -2,11 +2,6 @@
 {% set topic = entity.topic|default('N/A') %}
 {% oro_title_set({params : {"%opportunity.topic%": topic} }) %}
 
-{% macro renderRow(label, value) %}
-    {% import 'OroUIBundle::macros.html.twig' as macros %}
-    {{ macros.attibuteRow(label, value|default('N/A'|trans)) }}
-{% endmacro %}
-
 {% block navButtons %}
     {% if resource_granted('orocrm_opportunity_update') %}
         {{ UI.button({
@@ -42,32 +37,21 @@
 {% endblock pageHeader %}
 
 {% block content_data %}
-    {% set id = 'opportunity-view' %}
-    {% set defaultRowValue = 'N/A'|trans %}
-
-    {% set data = {
-        'dataBlocks': [
-            {
-                'title': 'General'|trans,
-                'class': 'active',
-                'subblocks': [
-                    {
-                        'title': 'Basic Information'|trans,
-                        'data': [
-                            _self.renderRow('Topic'|trans, entity.topic),
-                            _self.renderRow('Status'|trans, entity.status),
-                            _self.renderRow('Contact'|trans, entity.contact),
-                            _self.renderRow('Account'|trans, entity.account ? entity.account.__toString() : defaultRowValue),
-                            _self.renderRow('Close date'|trans, entity.closeDate ? UI.date(entity.closeDate) : defaultRowValue),
-                            _self.renderRow('Probability'|trans, entity.probability ? entity.probability ~ '%' : defaultRowValue),
-                            _self.renderRow('Budget amount'|trans, entity.budgetAmount ? entity.budgetAmount|number_format(2), defaultRowValue),
-                            _self.renderRow('Customer need'|trans, entity.customerNeed),
-                            _self.renderRow('Proposed solution'|trans, entity.proposedSolution),
-                        ]
-                    }
-                ]
-            }
-        ]
-    } %}
-    {{ parent() }}
+    <div class="well-small form-horizontal dark-bg">
+        <div class="clearfix">
+            <div class="row-fluid well-small-bottom">
+                <div class="span6">
+                    {{
+                        oro_widget_render({
+                            'widgetType': 'block',
+                            'url': path('orocrm_opportunity_info', { id: entity.id }),
+                            'title': 'Opportunity Information'
+                        })
+                    }}
+                </div>
+                <div class="span6">
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock content_data %}
