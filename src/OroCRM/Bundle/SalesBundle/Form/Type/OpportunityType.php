@@ -8,7 +8,7 @@ use Symfony\Component\Form\AbstractType;
 
 class OpportunityType extends AbstractType
 {
-    const NAME = 'orocrm_opportunity';
+    const NAME = 'orocrm_sales_opportunity';
 
     /**
      * {@inheritdoc}

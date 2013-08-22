@@ -13,20 +13,32 @@ oro_menu_config:
                 description: List of leads
         opportunity_list:
             label: 'Opportunities'
-            route: orocrm_opportunity_index
+            route: orocrm_sales_opportunity_index
             extras:
                 description: List of opportunities
 
-        shortcut_list_sales_leads:
+        shortcut_list_leads:
             label: 'Show leads list'
             route: orocrm_sales_lead_index
             extras:
                 description: List of leads
         shortcut_list_opportunities:
             label: 'Show opportunities list'
-            route: orocrm_opportunity_index
+            route: orocrm_sales_opportunity_index
             extras:
                 description: List of opportunities
+        shortcut_new_lead:
+            label: Create new lead
+            route: orocrm_sales_lead_create
+            extras:
+                description: Create new lead
+                isCustomAction: true
+        shortcut_new_opportunity:
+            label: Create new opportunity
+            route: orocrm_sales_opportunity_create
+            extras:
+                description: Create new opportunity
+                isCustomAction: true
 
     tree:
         application_menu:
@@ -37,14 +49,16 @@ oro_menu_config:
                         opportunity_list: ~
         shortcuts:
             children:
-                shortcut_list_sales_leads: ~
+                shortcut_list_leads: ~
                 shortcut_list_opportunities: ~
+                shortcut_new_lead: ~
+                shortcut_new_opportunity: ~
 
 oro_titles:
-    orocrm_opportunity_index: Opportunities
-    orocrm_opportunity_view: %%opportunity.topic%% - Opportunities
-    orocrm_opportunity_create: Create Opportunity
-    orocrm_opportunity_update: %%opportunity.topic%% - Opportunities
+    orocrm_sales_opportunity_index: Opportunities
+    orocrm_sales_opportunity_view: %%opportunity.topic%% - Opportunities
+    orocrm_sales_opportunity_create: Create Opportunity
+    orocrm_sales_opportunity_update: %%opportunity.topic%% - Opportunities
     
     orocrm_sales_lead_index: Leads
     orocrm_sales_lead_view: %%lead.topic%% - Leads

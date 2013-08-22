@@ -3,8 +3,8 @@
 {% oro_title_set({params : {"%opportunity.topic%": topic} }) %}
 {% set title = form.vars.value.id ? topic ~ ' - ' ~ 'Update Opportunity'|trans : 'New Opportunity'|trans %}
 {% set formAction = form.vars.value.id
-    ? path('orocrm_opportunity_update', { 'id': form.vars.value.id })
-    : path('orocrm_opportunity_create')
+    ? path('orocrm_sales_opportunity_update', { 'id': form.vars.value.id })
+    : path('orocrm_sales_opportunity_create')
 %}
 
 {% block head_script %}
@@ -16,10 +16,10 @@
 {% endblock %}
 
 {% block navButtons %}
-    {% if form.vars.value.id and resource_granted('orocrm_opportunity_delete') %}
+    {% if form.vars.value.id and resource_granted('orocrm_sales_opportunity_delete') %}
         {{ UI.deleteButton({
             'dataUrl': path('oro_api_delete_opportunity', {'id': form.vars.value.id}),
-            'dataRedirect': path('orocrm_opportunity_index'),
+            'dataRedirect': path('orocrm_sales_opportunity_index'),
             'aCss': 'no-hash remove-button',
             'id': 'btn-remove-contact',
             'dataId': form.vars.value.id,
@@ -29,7 +29,7 @@
         }) }}
         {{ UI.buttonSeparator() }}
     {% endif %}
-    {{ UI.button({'path' : path('orocrm_opportunity_index'), 'title' : 'Cancel', 'label' : 'Cancel'}) }}
+    {{ UI.button({'path' : path('orocrm_sales_opportunity_index'), 'title' : 'Cancel', 'label' : 'Cancel'}) }}
     {{ UI.saveAndStayButton() }}
     {{ UI.saveAndCloseButton() }}
 {% endblock %}
@@ -38,7 +38,7 @@
     {% if form.vars.value.id %}
         {% set breadcrumbs = {
             'entity':      form.vars.value,
-            'indexPath':   path('orocrm_opportunity_index'),
+            'indexPath':   path('orocrm_sales_opportunity_index'),
             'indexLabel': 'Opportunities',
             'entityTitle': topic
         } %}

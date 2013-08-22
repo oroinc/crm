@@ -26,8 +26,8 @@ class OpportunityDatagridManager extends DatagridManager
     protected function getProperties()
     {
         return array(
-            new UrlProperty('view_link', $this->router, 'orocrm_opportunity_view', array('id')),
-            new UrlProperty('update_link', $this->router, 'orocrm_opportunity_update', array('id')),
+            new UrlProperty('view_link', $this->router, 'orocrm_sales_opportunity_view', array('id')),
+            new UrlProperty('update_link', $this->router, 'orocrm_sales_opportunity_update', array('id')),
             new UrlProperty('delete_link', $this->router, 'oro_api_delete_opportunity', array('id')),
         );
     }
@@ -148,7 +148,7 @@ class OpportunityDatagridManager extends DatagridManager
         $clickAction = array(
             'name'         => 'rowClick',
             'type'         => ActionInterface::TYPE_REDIRECT,
-            'acl_resource' => 'orocrm_opportunity_view',
+            'acl_resource' => 'orocrm_sales_opportunity_view',
             'options'      => array(
                 'label'         => $this->translate('orocrm.sales.opportunity.datagrid.view'),
                 'link'          => 'view_link',
@@ -159,7 +159,7 @@ class OpportunityDatagridManager extends DatagridManager
         $viewAction = array(
             'name'         => 'view',
             'type'         => ActionInterface::TYPE_REDIRECT,
-            'acl_resource' => 'orocrm_opportunity_view',
+            'acl_resource' => 'orocrm_sales_opportunity_view',
             'options'      => array(
                 'label' => $this->translate('orocrm.sales.opportunity.datagrid.view'),
                 'icon'  => 'user',
@@ -170,7 +170,7 @@ class OpportunityDatagridManager extends DatagridManager
         $updateAction = array(
             'name'         => 'update',
             'type'         => ActionInterface::TYPE_REDIRECT,
-            'acl_resource' => 'orocrm_opportunity_update',
+            'acl_resource' => 'orocrm_sales_opportunity_update',
             'options'      => array(
                 'label'   => $this->translate('orocrm.sales.opportunity.datagrid.update'),
                 'icon'    => 'edit',
@@ -181,7 +181,7 @@ class OpportunityDatagridManager extends DatagridManager
         $deleteAction = array(
             'name'         => 'delete',
             'type'         => ActionInterface::TYPE_DELETE,
-            'acl_resource' => 'orocrm_opportunity_delete',
+            'acl_resource' => 'orocrm_sales_opportunity_delete',
             'options'      => array(
                 'label' => $this->translate('orocrm.sales.opportunity.datagrid.delete'),
                 'icon'  => 'trash',

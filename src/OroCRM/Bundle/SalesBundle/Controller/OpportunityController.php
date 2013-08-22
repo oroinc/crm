@@ -17,7 +17,7 @@ use OroCRM\Bundle\SalesBundle\Datagrid\OpportunityDatagridManager;
 /**
  * @Route("/opportunity")
  * @Acl(
- *      id="orocrm_opportunity",
+ *      id="orocrm_sales_opportunity",
  *      name="Opportunity manipulation",
  *      description="Opportunity manipulation",
  *      parent="root"
@@ -26,13 +26,13 @@ use OroCRM\Bundle\SalesBundle\Datagrid\OpportunityDatagridManager;
 class OpportunityController extends Controller
 {
     /**
-     * @Route("/view/{id}", name="orocrm_opportunity_view", requirements={"id"="\d+"})
+     * @Route("/view/{id}", name="orocrm_sales_opportunity_view", requirements={"id"="\d+"})
      * @Template
      * @Acl(
-     *      id="orocrm_opportunity_view",
+     *      id="orocrm_sales_opportunity_view",
      *      name="View opportunity",
      *      description="View opportunity",
-     *      parent="orocrm_opportunity"
+     *      parent="orocrm_sales_opportunity"
      * )
      */
     public function viewAction(Opportunity $entity)
@@ -43,9 +43,9 @@ class OpportunityController extends Controller
     }
 
     /**
-     * @Route("/info/{id}", name="orocrm_opportunity_info", requirements={"id"="\d+"})
+     * @Route("/info/{id}", name="orocrm_sales_opportunity_info", requirements={"id"="\d+"})
      * @Template
-     * @AclAncestor("orocrm_opportunity_view")
+     * @AclAncestor("orocrm_sales_opportunity_view")
      */
     public function infoAction(Opportunity $entity)
     {
@@ -55,13 +55,13 @@ class OpportunityController extends Controller
     }
 
     /**
-     * @Route("/create", name="orocrm_opportunity_create")
+     * @Route("/create", name="orocrm_sales_opportunity_create")
      * @Template("OroCRMSalesBundle:Opportunity:update.html.twig")
      * @Acl(
-     *      id="orocrm_opportunity_create",
+     *      id="orocrm_sales_opportunity_create",
      *      name="Create opportunity",
      *      description="Create opportunity",
-     *      parent="orocrm_opportunity"
+     *      parent="orocrm_sales_opportunity"
      * )
      */
     public function createAction()
@@ -74,13 +74,13 @@ class OpportunityController extends Controller
     }
 
     /**
-     * @Route("/update/{id}", name="orocrm_opportunity_update", requirements={"id"="\d+"}, defaults={"id"=0})
+     * @Route("/update/{id}", name="orocrm_sales_opportunity_update", requirements={"id"="\d+"}, defaults={"id"=0})
      * @Template
      * @Acl(
-     *      id="orocrm_opportunity_update",
+     *      id="orocrm_sales_opportunity_update",
      *      name="Update opportunity",
      *      description="Update opportunity",
-     *      parent="orocrm_opportunity"
+     *      parent="orocrm_sales_opportunity"
      * )
      */
     public function updateAction(Opportunity $entity)
@@ -90,11 +90,11 @@ class OpportunityController extends Controller
 
             return $this->get('oro_ui.router')->actionRedirect(
                 array(
-                    'route' => 'orocrm_opportunity_update',
+                    'route' => 'orocrm_sales_opportunity_update',
                     'parameters' => array('id' => $entity->getId()),
                 ),
                 array(
-                    'route' => 'orocrm_opportunity_index',
+                    'route' => 'orocrm_sales_opportunity_index',
                 )
             );
         }
@@ -108,16 +108,16 @@ class OpportunityController extends Controller
     /**
      * @Route(
      *      "/{_format}",
-     *      name="orocrm_opportunity_index",
+     *      name="orocrm_sales_opportunity_index",
      *      requirements={"_format"="html|json"},
      *      defaults={"_format" = "html"}
      * )
      * @Template
      * @Acl(
-     *      id="orocrm_opportunity_list",
+     *      id="orocrm_sales_opportunity_list",
      *      name="View list of opportunities",
      *      description="View list of opportunities",
-     *      parent="orocrm_opportunity"
+     *      parent="orocrm_sales_opportunity"
      * )
      */
     public function indexAction()

@@ -7,7 +7,9 @@
                 <p class="text-center">
                     {{ widget.label|trans }}
                 </p>
-                <a href="javascript:void(0);" class="widget-image {{ widget.image }}"></a>
+                {% if widget.image is defined and widget.image %}
+                    <a href="javascript:void(0);" class="widget-image {{ widget.image }}"></a>
+                {% endif %}
             </div>
             <div class="list-wrap pull-left">
                 <ul class="nav nav-list">
@@ -32,19 +34,33 @@
                 {
                     label: 'Accounts',
                     links: [
-                        {url: path('orocrm_account_index'), label: 'List'},
-                        {url: path('orocrm_account_create'), label: 'Create account'}
+                        {url: path('orocrm_account_index'), label: 'List'|trans},
+                        {url: path('orocrm_account_create'), label: 'Create account'|trans}
                     ],
                     image: 'accounts-image'
                 },
                 {
                     label: 'Contacts',
                     links: [
-                        {url: path('orocrm_contact_index'), label: 'List'},
-                        {url: path('orocrm_contact_create'), label: 'Create contact'},
-                        {url: path('orocrm_contact_group_index'), label: 'Manage groups'}
-                ],
+                        {url: path('orocrm_contact_index'), label: 'List'|trans},
+                        {url: path('orocrm_contact_create'), label: 'Create contact'|trans},
+                        {url: path('orocrm_contact_group_index'), label: 'Manage groups'|trans}
+                    ],
                     image: 'contacts-image'
+                },
+                {
+                    label: 'Leads',
+                    links: [
+                        {url: path('orocrm_sales_lead_index'), label: 'List'|trans},
+                        {url: path('orocrm_sales_lead_create'), label: 'Create lead'|trans}
+                    ]
+                },
+                {
+                    label: 'Opportunities',
+                    links: [
+                        {url: path('orocrm_sales_opportunity_index'), label: 'List'|trans},
+                        {url: path('orocrm_sales_opportunity_create'), label: 'Create opportunity'|trans}
+                    ]
                 },
             ] %}
 

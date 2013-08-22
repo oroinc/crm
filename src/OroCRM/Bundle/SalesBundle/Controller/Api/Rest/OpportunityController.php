@@ -45,7 +45,7 @@ class OpportunityController extends RestController implements ClassResourceInter
      *      description="Get all opportunities",
      *      resource=true
      * )
-     * @AclAncestor("orocrm_opportunity_list")
+     * @AclAncestor("orocrm_sales_opportunity_list")
      * @return Response
      */
     public function cgetAction()
@@ -65,7 +65,7 @@ class OpportunityController extends RestController implements ClassResourceInter
      *      description="Get opportunity",
      *      resource=true
      * )
-     * @AclAncestor("orocrm_opportunity_view")
+     * @AclAncestor("orocrm_sales_opportunity_view")
      * @return Response
      */
     public function getAction($id)
@@ -82,7 +82,7 @@ class OpportunityController extends RestController implements ClassResourceInter
      *      description="Update opportunity",
      *      resource=true
      * )
-     * @AclAncestor("orocrm_opportunity_update")
+     * @AclAncestor("orocrm_sales_opportunity_update")
      * @return Response
      */
     public function putAction($id)
@@ -97,7 +97,7 @@ class OpportunityController extends RestController implements ClassResourceInter
      *      description="Create new opportunity",
      *      resource=true
      * )
-     * @AclAncestor("orocrm_opportunity_create")
+     * @AclAncestor("orocrm_sales_opportunity_create")
      */
     public function postAction()
     {
@@ -114,10 +114,10 @@ class OpportunityController extends RestController implements ClassResourceInter
      *      resource=true
      * )
      * @Acl(
-     *      id="orocrm_opportunity_delete",
+     *      id="orocrm_sales_opportunity_delete",
      *      name="Delete opportunity",
      *      description="Delete opportunity",
-     *      parent="orocrm_opportunity"
+     *      parent="orocrm_sales_opportunity"
      * )
      * @return Response
      */

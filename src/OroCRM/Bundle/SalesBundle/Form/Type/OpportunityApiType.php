@@ -10,7 +10,7 @@ use Oro\Bundle\UserBundle\Form\EventListener\PatchSubscriber;
 
 class OpportunityApiType extends OpportunityType
 {
-    const NAME = 'orocrm_opportunity_api';
+    const NAME = 'orocrm_sales_opportunity_api';
 
     /**
      * {@inheritdoc}

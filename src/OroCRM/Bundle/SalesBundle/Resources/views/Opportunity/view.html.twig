@@ -3,18 +3,18 @@
 {% oro_title_set({params : {"%opportunity.topic%": topic} }) %}
 
 {% block navButtons %}
-    {% if resource_granted('orocrm_opportunity_update') %}
+    {% if resource_granted('orocrm_sales_opportunity_update') %}
         {{ UI.button({
-            'path' : path('orocrm_opportunity_update', { 'id': entity.id }),
+            'path' : path('orocrm_sales_opportunity_update', { 'id': entity.id }),
             'iClass' : 'icon-edit ',
             'title' : 'Update contact',
             'label' : 'Edit'
         }) }}
     {% endif %}
-    {% if resource_granted('orocrm_opportunity_delete') %}
+    {% if resource_granted('orocrm_sales_opportunity_delete') %}
         {{ UI.deleteButton({
                 'dataUrl': path('oro_api_delete_opportunity', {'id': entity.id}) ,
-                'dataRedirect': path('orocrm_opportunity_index'),
+                'dataRedirect': path('orocrm_sales_opportunity_index'),
                 'aCss': 'no-hash remove-button',
                 'id': 'btn-remove-contact',
                 'dataId': entity.id,
@@ -29,7 +29,7 @@
 {% block pageHeader %}
     {% set breadcrumbs = {
         'entity':      entity,
-        'indexPath':   path('orocrm_opportunity_index'),
+        'indexPath':   path('orocrm_sales_opportunity_index'),
         'indexLabel': 'Opportunities',
         'entityTitle': topic
     } %}
@@ -44,7 +44,7 @@
                     {{
                         oro_widget_render({
                             'widgetType': 'block',
-                            'url': path('orocrm_opportunity_info', { id: entity.id }),
+                            'url': path('orocrm_sales_opportunity_info', { id: entity.id }),
                             'title': 'Opportunity Information'
                         })
                     }}

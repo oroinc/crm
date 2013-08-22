@@ -11,7 +11,7 @@ services:
               entity_name: %orocrm_sales.opportunity.class%
               query_entity_alias: opportunity
               entity_hint: opportunities
-              route_name: orocrm_opportunity_index
+              route_name: orocrm_sales_opportunity_index
 
     orocrm_sales.lead.datagrid_manager:
         class: %orocrm_sales.lead.datagrid_manager.class%

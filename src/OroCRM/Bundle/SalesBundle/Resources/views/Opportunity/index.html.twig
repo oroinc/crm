@@ -4,9 +4,9 @@
 {% block content %}
     {% set pageTitle = 'Opportunities' %}
     {% set buttons = [] %}
-    {% if resource_granted('orocrm_opportunity_create') %}
+    {% if resource_granted('orocrm_sales_opportunity_create') %}
         {% set buttons = buttons|merge([UI.addButton({
-            'path' : path('orocrm_opportunity_create'),
+            'path' : path('orocrm_sales_opportunity_create'),
             'title' : 'Create opportunity',
             'label' : 'Create opportunity'
         })]) %}
