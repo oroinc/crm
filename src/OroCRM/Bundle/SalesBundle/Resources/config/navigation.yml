@@ -5,18 +5,23 @@ oro_menu_config:
             uri: '#'
             extras:
                 position: 10
-        opportunity_list:
-            label: 'Opportunities'
-            route: orocrm_opportunity_index
-            extras:
-                description: List of opportunities
 
         lead_list:
             label: 'Leads'
             route: orocrm_sales_lead_index
             extras:
                 description: List of leads
+        opportunity_list:
+            label: 'Opportunities'
+            route: orocrm_opportunity_index
+            extras:
+                description: List of opportunities
 
+        shortcut_list_sales_leads:
+            label: 'Show leads list'
+            route: orocrm_sales_lead_index
+            extras:
+                description: List of leads
         shortcut_list_opportunities:
             label: 'Show opportunities list'
             route: orocrm_opportunity_index
@@ -28,11 +33,11 @@ oro_menu_config:
             children:
                 customers_tab:
                     children:
-                        opportunity_list: ~
                         lead_list: ~
-
+                        opportunity_list: ~
         shortcuts:
             children:
+                shortcut_list_sales_leads: ~
                 shortcut_list_opportunities: ~
 
 oro_titles:

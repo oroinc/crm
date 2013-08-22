@@ -66,7 +66,11 @@ class OpportunityController extends Controller
      */
     public function createAction()
     {
-        return $this->updateAction();
+        $entity = new Opportunity();
+        $defaultStatus = $this->getDoctrine()->getManager()->find('OroCRMSalesBundle:OpportunityStatus', 'in_progress');
+        $entity->setStatus($defaultStatus);
+
+        return $this->updateAction($entity);
     }
 
     /**
@@ -79,12 +83,8 @@ class OpportunityController extends Controller
      *      parent="orocrm_opportunity"
      * )
      */
-    public function updateAction(Opportunity $entity = null)
+    public function updateAction(Opportunity $entity)
     {
-        if (!$entity) {
-            $entity = new Opportunity();
-        }
-
         if ($this->get('orocrm_sales.opportunity.form.handler')->process($entity)) {
             $this->getFlashBag()->add('success', 'Opportunity successfully saved');
 

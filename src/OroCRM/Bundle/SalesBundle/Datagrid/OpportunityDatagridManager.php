@@ -2,6 +2,8 @@
 
 namespace OroCRM\Bundle\SalesBundle\Datagrid;
 
+use Doctrine\ORM\QueryBuilder;
+
 use Oro\Bundle\GridBundle\Datagrid\DatagridManager;
 use Oro\Bundle\GridBundle\Field\FieldDescription;
 use Oro\Bundle\GridBundle\Field\FieldDescriptionCollection;
@@ -9,9 +11,15 @@ use Oro\Bundle\GridBundle\Field\FieldDescriptionInterface;
 use Oro\Bundle\GridBundle\Filter\FilterInterface;
 use Oro\Bundle\GridBundle\Action\ActionInterface;
 use Oro\Bundle\GridBundle\Property\UrlProperty;
+use Oro\Bundle\GridBundle\Datagrid\ProxyQueryInterface;
 
 class OpportunityDatagridManager extends DatagridManager
 {
+    /**
+     * @var string
+     */
+    protected $contactNameExpression = "CONCAT(contact.firstName, CONCAT(' ', contact.lastName))";
+
     /**
      * {@inheritDoc}
      */
@@ -26,6 +34,7 @@ class OpportunityDatagridManager extends DatagridManager
 
     /**
      * {@inheritDoc}
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function configureFields(FieldDescriptionCollection $fieldsCollection)
     {
@@ -43,6 +52,23 @@ class OpportunityDatagridManager extends DatagridManager
             )
         );
         $fieldsCollection->add($fieldTopic);
+
+        $fieldContactName = new FieldDescription();
+        $fieldContactName->setName('contact_name');
+        $fieldContactName->setOptions(
+            array(
+                'type'        => FieldDescriptionInterface::TYPE_TEXT,
+                'label'       => $this->translate('orocrm.sales.opportunity.datagrid.contact_name'),
+                'field_name'  => 'contactName',
+                'expression'  => $this->contactNameExpression,
+                'filter_type' => FilterInterface::TYPE_STRING,
+                'sortable'    => true,
+                'filterable'  => true,
+                'show_filter' => true,
+                'filter_by_where' => true
+            )
+        );
+        $fieldsCollection->add($fieldContactName);
 
         $fieldCloseDate = new FieldDescription();
         $fieldCloseDate->setName('close_date');
@@ -63,7 +89,7 @@ class OpportunityDatagridManager extends DatagridManager
         $fieldProbability->setName('probability');
         $fieldProbability->setOptions(
             array(
-                'type'        => FieldDescriptionInterface::TYPE_INTEGER,
+                'type'        => FieldDescriptionInterface::TYPE_PERCENT,
                 'label'       => $this->translate('orocrm.sales.opportunity.datagrid.probability'),
                 'field_name'  => 'probability',
                 'filter_type' => FilterInterface::TYPE_NUMBER,
@@ -74,20 +100,44 @@ class OpportunityDatagridManager extends DatagridManager
         );
         $fieldsCollection->add($fieldProbability);
 
-        $fieldBudgetAmount = new FieldDescription();
-        $fieldBudgetAmount->setName('budget_amount');
-        $fieldBudgetAmount->setOptions(
+        $fieldStatus = new FieldDescription();
+        $fieldStatus->setName('status');
+        $fieldStatus->setOptions(
             array(
-                'type'        => FieldDescriptionInterface::TYPE_DECIMAL,
-                'label'       => $this->translate('orocrm.sales.opportunity.datagrid.budget_amount'),
-                'field_name'  => 'budgetAmount',
-                'filter_type' => FilterInterface::TYPE_NUMBER,
-                'sortable'    => true,
-                'filterable'  => true,
-                'show_filter' => true,
+                'type'            => FieldDescriptionInterface::TYPE_TEXT,
+                'label'           => $this->translate('orocrm.sales.opportunity.datagrid.status'),
+                'field_name'      => 'status',
+                'filter_type'     => FilterInterface::TYPE_ENTITY,
+                'sort_field_mapping' => array(
+                    'entityAlias' => 'status',
+                    'fieldName'   => 'label',
+                ),
+                'sortable'        => true,
+                'filterable'      => true,
+                'show_filter'     => true,
+                // entity filter options
+                'class'           => 'OroCRMSalesBundle:OpportunityStatus',
+                'property'        => 'label',
+                'filter_by_where' => true
             )
         );
-        $fieldsCollection->add($fieldBudgetAmount);
+        $fieldsCollection->add($fieldStatus);
+
+        $fieldEmail = new FieldDescription();
+        $fieldEmail->setName('email');
+        $fieldEmail->setOptions(
+            array(
+                'type'            => FieldDescriptionInterface::TYPE_TEXT,
+                'label'           => $this->translate('orocrm.sales.opportunity.datagrid.email'),
+                'field_name'      => 'primaryEmail',
+                'expression'      => 'email.email',
+                'filter_type'     => FilterInterface::TYPE_STRING,
+                'sortable'        => true,
+                'filterable'      => true,
+                'show_filter'     => true,
+            )
+        );
+        $fieldsCollection->add($fieldEmail);
     }
 
     /**
@@ -140,5 +190,23 @@ class OpportunityDatagridManager extends DatagridManager
         );
 
         return array($clickAction, $viewAction, $updateAction, $deleteAction);
+    }
+
+    /**
+     * @param ProxyQueryInterface $query
+     */
+    protected function prepareQuery(ProxyQueryInterface $query)
+    {
+        $entityAlias = $query->getRootAlias();
+
+        /** @var $query QueryBuilder */
+        $query
+            ->leftJoin("$entityAlias.contact", 'contact')
+            ->leftJoin("$entityAlias.status", 'status')
+            ->leftJoin('contact.emails', 'email', 'WITH', 'email.primary = true');
+
+        $query->addSelect($this->contactNameExpression . ' AS contactName', true);
+        $query->addSelect('status.label as statusLabel', true);
+        $query->addSelect('email.email as primaryEmail', true);
     }
 }

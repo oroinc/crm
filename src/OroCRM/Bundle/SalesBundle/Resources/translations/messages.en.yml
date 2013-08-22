@@ -1,7 +1,9 @@
 orocrm.sales.opportunity.datagrid.topic: Topic
+orocrm.sales.opportunity.datagrid.contact_name: Potential Customer
 orocrm.sales.opportunity.datagrid.close_date: Close Date
 orocrm.sales.opportunity.datagrid.probability: Probability
-orocrm.sales.opportunity.datagrid.budget_amount: Budget Amount
+orocrm.sales.opportunity.datagrid.status: Status
+orocrm.sales.opportunity.datagrid.email: Email
 orocrm.sales.opportunity.datagrid.view: View
 orocrm.sales.opportunity.datagrid.update: Update
 orocrm.sales.opportunity.datagrid.delete: Delete

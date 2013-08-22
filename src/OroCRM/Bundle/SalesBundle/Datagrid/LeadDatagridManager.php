@@ -45,14 +45,13 @@ class LeadDatagridManager extends DatagridManager
      */
     protected function configureFields(FieldDescriptionCollection $fieldsCollection)
     {
-        $fieldSource = new FieldDescription();
-        $fieldSource->setName('status');
-        $fieldSource->setOptions(
+        $fieldStatus = new FieldDescription();
+        $fieldStatus->setName('status');
+        $fieldStatus->setOptions(
             array(
                 'type'            => FieldDescriptionInterface::TYPE_TEXT,
                 'label'           => $this->translate('orocrm.sales_lead.datagrid.status'),
                 'field_name'      => 'status',
-                'expression'      => 'statusLabel',
                 'filter_type'     => FilterInterface::TYPE_ENTITY,
                 'sort_field_mapping' => array(
                     'entityAlias' => 'status',
@@ -66,7 +65,7 @@ class LeadDatagridManager extends DatagridManager
                 'filter_by_where' => true
             )
         );
-        $fieldsCollection->add($fieldSource);
+        $fieldsCollection->add($fieldStatus);
 
         $fieldTopic = new FieldDescription();
         $fieldTopic->setName('topic');

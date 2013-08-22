@@ -62,9 +62,9 @@ class Opportunity
     protected $closeDate;
 
     /**
-     * @var int
+     * @var float
      *
-     * @ORM\Column(name="probability", type="smallint", nullable=true)
+     * @ORM\Column(name="probability", type="float", nullable=true)
      */
     protected $probability;
 
@@ -202,7 +202,7 @@ class Opportunity
     }
 
     /**
-     * @param int $probability
+     * @param float $probability
      * @return Opportunity
      */
     public function setProbability($probability)
@@ -212,7 +212,7 @@ class Opportunity
     }
 
     /**
-     * @return int
+     * @return float
      */
     public function getProbability()
     {
