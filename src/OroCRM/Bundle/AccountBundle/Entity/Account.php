@@ -53,7 +53,7 @@ class Account extends AbstractEntityFlexible implements Taggable
      * @var User
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="user_owner_id", referencedColumnName="id", onDelete="SET NULL")
-     * @Soap\ComplexType("int", nillable=true)
+     * @Soap\ComplexType("string", nillable=true)
      */
     protected $owner;
 
@@ -308,7 +308,7 @@ class Account extends AbstractEntityFlexible implements Taggable
      * @param User $owningUser
      * @return Account
      */
-    public function setOwner(User $owningUser)
+    public function setOwner($owningUser)
     {
         $this->owner = $owningUser;
 

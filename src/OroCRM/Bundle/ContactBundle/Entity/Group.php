@@ -44,7 +44,7 @@ class Group
      * @var User
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="user_owner_id", referencedColumnName="id", onDelete="SET NULL")
-     * @Soap\ComplexType("int", nillable=true)
+     * @Soap\ComplexType("string", nillable=true)
      */
     protected $owner;
 
@@ -100,7 +100,7 @@ class Group
      * @param User $owningUser
      * @return Group
      */
-    public function setOwner(User $owningUser)
+    public function setOwner($owningUser)
     {
         $this->owner = $owningUser;
 
