@@ -6,6 +6,7 @@ orocrm.sales.opportunity.datagrid.view: View
 orocrm.sales.opportunity.datagrid.update: Update
 orocrm.sales.opportunity.datagrid.delete: Delete
 
+orocrm.sales_lead.datagrid.status: Status
 orocrm.sales_lead.datagrid.topic: Topic
 orocrm.sales_lead.datagrid.first_name: First Name
 orocrm.sales_lead.datagrid.last_name: Last Name

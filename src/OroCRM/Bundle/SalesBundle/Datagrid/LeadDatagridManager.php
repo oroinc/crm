@@ -45,6 +45,29 @@ class LeadDatagridManager extends DatagridManager
      */
     protected function configureFields(FieldDescriptionCollection $fieldsCollection)
     {
+        $fieldSource = new FieldDescription();
+        $fieldSource->setName('status');
+        $fieldSource->setOptions(
+            array(
+                'type'            => FieldDescriptionInterface::TYPE_TEXT,
+                'label'           => $this->translate('orocrm.sales_lead.datagrid.status'),
+                'field_name'      => 'status',
+                'expression'      => 'statusLabel',
+                'filter_type'     => FilterInterface::TYPE_ENTITY,
+                'sort_field_mapping' => array(
+                    'entityAlias' => 'status',
+                    'fieldName'   => 'label',
+                ),
+                'sortable'        => true,
+                'filterable'      => true,
+                // entity filter options
+                'class'           => 'OroCRMSalesBundle:LeadStatus',
+                'property'        => 'label',
+                'filter_by_where' => true
+            )
+        );
+        $fieldsCollection->add($fieldSource);
+
         $fieldTopic = new FieldDescription();
         $fieldTopic->setName('topic');
         $fieldTopic->setOptions(
@@ -253,10 +276,12 @@ class LeadDatagridManager extends DatagridManager
 
         /** @var $query QueryBuilder */
         $query
+            ->leftJoin("$entityAlias.status", 'status')
             ->leftJoin("$entityAlias.address", 'address')
             ->leftJoin('address.country', 'country')
             ->leftJoin('address.state', 'region');
 
+        $query->addSelect('status.label as statusLabel', true);
         $query->addSelect('country.name as countryName', true);
         $query->addSelect('address.postalCode as addressPostalCode', true);
         $query->addSelect($this->regionExpression . ' AS regionLabel', true);

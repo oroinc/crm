@@ -7,6 +7,8 @@ parameters:
     orocrm_sales.lead.form.type.api.class: OroCRM\Bundle\SalesBundle\Form\Type\LeadApiType
     orocrm_sales.lead.form.handler.class: OroCRM\Bundle\SalesBundle\Form\Handler\LeadHandler
 
+    orocrm_sales.lead_address.form.type.class: OroCRM\Bundle\SalesBundle\Form\Type\LeadAddressType
+
 services:
     orocrm_sales.opportunity.form.type:
         class: %orocrm_sales.opportunity.form.type.class%
@@ -91,3 +93,10 @@ services:
             - @orocrm_sales.lead.form.api
             - @request
             - @doctrine.orm.entity_manager
+
+    orocrm_sales.lead_address.form.type:
+        class: %orocrm_sales.lead_address.form.type.class%
+        arguments:
+            - @oro_address.form.listener.address
+        tags:
+            - { name: form.type, alias: orocrm_lead_address }

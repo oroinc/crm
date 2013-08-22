@@ -31,11 +31,10 @@ class LeadType extends AbstractType
                 array(
                     'class' => 'OroCRMSalesBundle:LeadStatus',
                     'property' => 'label',
-                    'required' => false,
-                    'empty_value' => false,
+                    'required' => true
                 )
             )
-            ->add('address', 'oro_address', array('required' => false));
+            ->add('address', 'orocrm_lead_address', array('required' => false));
     }
 
     /**

@@ -86,7 +86,10 @@ class LeadController extends Controller
      */
     public function createAction()
     {
-        return $this->updateAction(new Lead());
+        $lead = new Lead();
+        $newStatus = $this->getDoctrine()->getManager()->find('OroCRMSalesBundle:LeadStatus', 'new');
+        $lead->setStatus($newStatus);
+        return $this->updateAction($lead);
     }
 
     /**
