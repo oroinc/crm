@@ -1,14 +1,9 @@
 parameters:
     orocrm_sales.opportunity.class: OroCRM\Bundle\SalesBundle\Entity\Opportunity
     orocrm_sales.opportunity.manager.api.class: Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
+
     orocrm_sales.lead.entity.class: OroCRM\Bundle\SalesBundle\Entity\Lead
-    orocrm_sales.lead.form.type.class: OroCRM\Bundle\SalesBundle\Form\Type\LeadType
-    orocrm_sales.lead.form.handler.class: OroCRM\Bundle\SalesBundle\Form\Handler\LeadHandler
-
     orocrm_sales.lead.manager.api.class: Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
-    orocrm_sales.lead.form.type.api.class: OroCRM\Bundle\SalesBundle\Form\Type\LeadApiType
-
-    orocrm_sales.lead.datagrid_manager.class: OroCRM\Bundle\SalesBundle\Datagrid\LeadDatagridManager
 
 services:
     orocrm_sales.opportunity.manager.api:
@@ -16,56 +11,9 @@ services:
         arguments:
             - %orocrm_sales.opportunity.class%
             - @doctrine.orm.entity_manager
-    orocrm_sales.lead.form:
-        class: Symfony\Component\Form\Form
-        factory_method: createNamed
-        factory_service: form.factory
-        arguments: ["orocrm_sales_lead_form", "orocrm_sales_lead", null]
-
-    orocrm_sales.lead.form.type:
-        class: %orocrm_sales.lead.form.type.class%
-        tags:
-            - { name: "form.type", alias: "orocrm_sales_lead" }
-
-    orocrm_sales.lead.form.handler:
-        class: %orocrm_sales.lead.form.handler.class%
-        scope: request
-        arguments:
-            - @orocrm_sales.lead.form
-            - @request
-            - @doctrine.orm.entity_manager
-
-    orocrm_sales.lead.datagrid_manager:
-        class: %orocrm_sales.lead.datagrid_manager.class%
-        tags:
-            - name: oro_grid.datagrid.manager
-              datagrid_name: leads
-              entity_name: %orocrm_sales.lead.entity.class%
-              query_entity_alias: lead
-              entity_hint: leads
-              route_name: orocrm_sales_lead_index
 
     orocrm_sales.lead.manager.api:
         class: %orocrm_sales.lead.manager.api.class%
         arguments:
             - %orocrm_sales.lead.entity.class%
-            - @doctrine.orm.entity_manager
-
-    orocrm_sales.lead.form.type.api:
-        class: %orocrm_sales.lead.form.type.api.class%
-        tags:
-            - { name: "form.type", alias: "lead" }
-
-    orocrm_sales.lead.form.api:
-        class: Symfony\Component\Form\Form
-        factory_method: createNamed
-        factory_service: form.factory
-        arguments: ["lead", "lead", null]
-
-    orocrm_sales.lead.form.handler.api:
-        class: %orocrm_sales.lead.form.handler.class%
-        scope: request
-        arguments:
-            - @orocrm_sales.lead.form.type.api
-            - @request
             - @doctrine.orm.entity_manager
