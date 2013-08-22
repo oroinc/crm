@@ -96,8 +96,7 @@ class LeadDatagridManager extends DatagridManager
             array(
                 'type'            => FieldDescriptionInterface::TYPE_TEXT,
                 'label'           => $this->translate('orocrm.sales_lead.datagrid.email'),
-                'field_name'      => 'primaryEmail',
-                'expression'      => 'email.email',
+                'field_name'      => 'email',
                 'filter_type'     => FilterInterface::TYPE_STRING,
                 'sortable'        => true,
                 'filterable'      => true,
@@ -112,8 +111,7 @@ class LeadDatagridManager extends DatagridManager
             array(
                 'type'            => FieldDescriptionInterface::TYPE_TEXT,
                 'label'           => $this->translate('orocrm.sales_lead.datagrid.phone'),
-                'field_name'      => 'primaryPhone',
-                'expression'      => 'phone.phone',
+                'field_name'      => 'phoneNumber',
                 'filter_type'     => FilterInterface::TYPE_STRING,
                 'sortable'        => true,
                 'filterable'      => true,

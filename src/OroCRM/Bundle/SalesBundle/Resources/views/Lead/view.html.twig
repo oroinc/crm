@@ -47,14 +47,14 @@
                     }}
                 </div>
                 <div class="span6">
-                    {#{{#}
-                        {#oro_widget_render({#}
-                            {#'widgetType': 'block',#}
-                            {#'contentClasses': [],#}
-                            {#'url': path('orocrm_sales_lead_address_book', {id: entity.id}),#}
-                            {#'title': 'Address Book'#}
-                        {#})#}
-                    {#}}#}
+                    {{
+                        oro_widget_render({
+                            'widgetType': 'block',
+                            'contentClasses': [],
+                            'url': path('orocrm_sales_lead_address_book', {id: entity.id}),
+                            'title': 'Address Book'
+                        })
+                    }}
                 </div>
             </div>
         </div>

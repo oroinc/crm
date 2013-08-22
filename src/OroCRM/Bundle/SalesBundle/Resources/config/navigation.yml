@@ -11,6 +11,12 @@ oro_menu_config:
             extras:
                 description: List of opportunities
 
+        lead_list:
+            label: 'Leads'
+            route: orocrm_sales_lead_index
+            extras:
+                description: List of leads
+
         shortcut_list_opportunities:
             label: 'Show opportunities list'
             route: orocrm_opportunity_index
@@ -23,6 +29,7 @@ oro_menu_config:
                 customers_tab:
                     children:
                         opportunity_list: ~
+                        lead_list: ~
 
         shortcuts:
             children:
@@ -35,6 +42,6 @@ oro_titles:
     orocrm_opportunity_update: %%opportunity.topic%% - Opportunities
     
     orocrm_sales_lead_index: Leads
-    orocrm_sales_lead_view: %%lead.topic%%
+    orocrm_sales_lead_view: %%lead.topic%% - Leads
     orocrm_sales_lead_create: Create Lead
-    orocrm_sales_lead_update: %%lead.topic%%
+    orocrm_sales_lead_update: %%lead.topic%% - Leads

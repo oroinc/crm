@@ -1,0 +1,39 @@
+<div class="widget-content" id="addressBookWidget">
+    {# JS template for address view #}
+    <script type="text/html" id="template-addressbook-item">
+        <address>
+            <%= street %>&nbsp;<%= street2 %><br />
+            <%= city %>, <%= state %><br />
+            <%= postalCode %><br />
+            <%= country %><br />
+        </address>
+    </script>
+
+    <style>
+        .lead-map-box .map-address-list,
+        .lead-map-box .map-visual-frame {
+            height: 270px;
+        }
+
+        .lead-map-box .map-visual {
+            height: 260px;
+        }
+    </style>
+
+    {# widget container and actions #}
+    <div class="map-box lead-map-box" id="address-book"></div>
+
+    <script type="text/javascript">
+        $('#addressBookWidget').on('widgetize', function(e, widget) {
+            var addressBook = new OroAddressBook({
+                el: '#address-book',
+                addressListUrl: {{ path('oro_api_get_lead_address', {leadId: entity.id})|json_encode|raw }}
+            });
+            addressBook
+                .getCollection()
+                .reset([
+                    {{ render(path('oro_api_get_lead_address', {leadId: entity.id})) }}
+                ]);
+        });
+    </script>
+</div>

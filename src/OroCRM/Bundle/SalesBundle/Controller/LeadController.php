@@ -56,6 +56,23 @@ class LeadController extends Controller
     }
 
     /**
+     * @Route("/address-book/{id}", name="orocrm_sales_lead_address_book", requirements={"id"="\d+"})
+     * @Template
+     * @Acl(
+     *      id="orocrm_sales_lead_address_book",
+     *      name="View Lead Address Book",
+     *      description="View Lead Address Book",
+     *      parent="orocrm_sales_lead_view"
+     * )
+     */
+    public function addressBookAction(Lead $lead)
+    {
+        return array(
+            'entity' => $lead
+        );
+    }
+
+    /**
      * Create lead form
      *
      * @Route("/create", name="orocrm_sales_lead_create")

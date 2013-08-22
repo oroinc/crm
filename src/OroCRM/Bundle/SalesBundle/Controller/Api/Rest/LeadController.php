@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\SalesBundle\Controller\Api\Rest;
 
+use FOS\Rest\Util\Codes;
 use FOS\RestBundle\Controller\Annotations\NamePrefix;
 use FOS\RestBundle\Controller\Annotations\RouteResource;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
@@ -9,6 +10,7 @@ use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Oro\Bundle\UserBundle\Annotation\Acl;
 use Oro\Bundle\UserBundle\Annotation\AclAncestor;
 
+use OroCRM\Bundle\SalesBundle\Entity\Lead;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Response;
 use FOS\RestBundle\Routing\ClassResourceInterface;
@@ -22,6 +24,37 @@ use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
  */
 class LeadController extends RestController implements ClassResourceInterface
 {
+    /**
+     * REST GET lead address
+     *
+     * @param string $leadId
+     *
+     * @ApiDoc(
+     *      description="Get lead address",
+     *      resource=true
+     * )
+     * @Acl(
+     *      id="orocrm_sales_lead_address",
+     *      name="View lead address",
+     *      description="View lead address",
+     *      parent="orocrm_sales_lead_view"
+     * )
+     * @return Response
+     */
+    public function getAddressAction($leadId)
+    {
+        /** @var Lead $item */
+        $item = $this->getManager()->find($leadId);
+
+        $address = null;
+        if ($item) {
+            $address = $this->getPreparedItem($item->getAddress());
+        }
+        $responseData = $address ? json_encode($address) : '';
+
+        return new Response($responseData, Codes::HTTP_OK);
+    }
+
     /**
      * REST GET list
      *
