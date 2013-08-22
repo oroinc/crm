@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 use FOS\RestBundle\Controller\Annotations\NamePrefix;
 use FOS\RestBundle\Controller\Annotations\RouteResource;
+use FOS\RestBundle\Controller\Annotations\QueryParam;
 use FOS\RestBundle\Routing\ClassResourceInterface;
 
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
@@ -25,6 +26,84 @@ use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
  */
 class OpportunityController extends RestController implements ClassResourceInterface
 {
+    /**
+     * REST GET list
+     *
+     * @QueryParam(
+     *      name="page",
+     *      requirements="\d+",
+     *      nullable=true,
+     *      description="Page number, starting from 1. Defaults to 1."
+     * )
+     * @QueryParam(
+     *      name="limit",
+     *      requirements="\d+",
+     *      nullable=true,
+     *      description="Number of items per page. defaults to 10."
+     * )
+     * @ApiDoc(
+     *      description="Get all opportunities",
+     *      resource=true
+     * )
+     * @AclAncestor("orocrm_opportunity_list")
+     * @return Response
+     */
+    public function cgetAction()
+    {
+        $page = (int)$this->getRequest()->get('page', 1);
+        $limit = (int)$this->getRequest()->get('limit', self::ITEMS_PER_PAGE);
+
+        return $this->handleGetListRequest($page, $limit);
+    }
+
+    /**
+     * REST GET item
+     *
+     * @param string $id
+     *
+     * @ApiDoc(
+     *      description="Get opportunity",
+     *      resource=true
+     * )
+     * @AclAncestor("orocrm_opportunity_view")
+     * @return Response
+     */
+    public function getAction($id)
+    {
+        return $this->handleGetRequest($id);
+    }
+
+    /**
+     * REST PUT
+     *
+     * @param int $id
+     *
+     * @ApiDoc(
+     *      description="Update opportunity",
+     *      resource=true
+     * )
+     * @AclAncestor("orocrm_opportunity_update")
+     * @return Response
+     */
+    public function putAction($id)
+    {
+        return $this->handleUpdateRequest($id);
+    }
+
+    /**
+     * Create new lead
+     *
+     * @ApiDoc(
+     *      description="Create new opportunity",
+     *      resource=true
+     * )
+     * @AclAncestor("orocrm_opportunity_create")
+     */
+    public function postAction()
+    {
+        return $this->handleCreateRequest();
+    }
+
     /**
      * REST DELETE
      *
@@ -59,19 +138,17 @@ class OpportunityController extends RestController implements ClassResourceInter
 
     /**
      * @return FormInterface
-     * @throws \LogicException
      */
     public function getForm()
     {
-        throw new \LogicException('Need to create API form for opportunity');
+        return $this->get('orocrm_sales.opportunity.form.api');
     }
 
     /**
      * @return ApiFormHandler
-     * @throws \LogicException
      */
     public function getFormHandler()
     {
-        throw new \LogicException('Need to create API form handler for opportunity');
+        return $this->get('orocrm_sales.opportunity.form.handler.api');
     }
 }

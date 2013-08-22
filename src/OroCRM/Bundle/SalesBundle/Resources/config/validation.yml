@@ -2,6 +2,8 @@ OroCRM\Bundle\SalesBundle\Entity\Opportunity:
     properties:
         topic:
             - NotBlank: ~
+            - Length:
+                max: 255
         probability:
             - Range:
                 min: 0

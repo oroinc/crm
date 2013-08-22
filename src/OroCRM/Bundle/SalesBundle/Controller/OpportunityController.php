@@ -73,7 +73,7 @@ class OpportunityController extends Controller
             $entity = new Opportunity();
         }
 
-        if ($this->get('orocrm_sales.form.handler.opportunity')->process($entity)) {
+        if ($this->get('orocrm_sales.opportunity.form.handler')->process($entity)) {
             $this->getFlashBag()->add('success', 'Opportunity successfully saved');
 
             return $this->get('oro_ui.router')->actionRedirect(
@@ -89,7 +89,7 @@ class OpportunityController extends Controller
 
         return array(
             'entity' => $entity,
-            'form'   => $this->get('orocrm_sales.form.opportunity')->createView(),
+            'form'   => $this->get('orocrm_sales.opportunity.form')->createView(),
         );
     }
 

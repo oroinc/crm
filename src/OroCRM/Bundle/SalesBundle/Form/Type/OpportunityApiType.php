@@ -2,12 +2,16 @@
 
 namespace OroCRM\Bundle\SalesBundle\Form\Type;
 
-use Oro\Bundle\UserBundle\Form\EventListener\PatchSubscriber;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Form\AbstractType;
 
-class LeadApiType extends LeadType
+use Oro\Bundle\UserBundle\Form\EventListener\PatchSubscriber;
+
+class OpportunityApiType extends OpportunityType
 {
+    const NAME = 'orocrm_opportunity_api';
+
     /**
      * {@inheritdoc}
      */
@@ -24,8 +28,8 @@ class LeadApiType extends LeadType
     {
         $resolver->setDefaults(
             array(
-                'data_class' => 'OroCRM\Bundle\SalesBundle\Entity\Lead',
-                'intention'  => 'group',
+                'data_class' => 'OroCRM\Bundle\SalesBundle\Entity\Opportunity',
+                'intention'  => 'opportunity',
                 'csrf_protection' => false,
             )
         );
@@ -36,6 +40,6 @@ class LeadApiType extends LeadType
      */
     public function getName()
     {
-        return 'orocrm_sales_lead_api';
+        return self::NAME;
     }
 }
