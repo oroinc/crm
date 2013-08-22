@@ -40,6 +40,7 @@ class ControllersTest extends WebTestCase
         /** @var Form $form */
         $form = $crawler->selectButton('Save and Close')->form();
         $form['orocrm_account_form[name]'] = 'Account_name';
+        $form['orocrm_account_form[owner]'] = 1;
 
         $this->client->followRedirects(true);
         $crawler = $this->client->submit($form);

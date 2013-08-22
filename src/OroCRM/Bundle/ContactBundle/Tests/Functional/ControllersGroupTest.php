@@ -40,6 +40,7 @@ class ControllersGroupTest extends WebTestCase
         /** @var Form $form */
         $form = $crawler->selectButton('Save and Close')->form();
         $form['orocrm_contact_group_form[label]'] = 'Contact Group Label';
+        $form['orocrm_contact_group_form[owner]'] = 1;
         //$form['orocrm_contact_group_form[appendContacts]'] = 1;
         $this->client->followRedirects(true);
         $crawler = $this->client->submit($form);
