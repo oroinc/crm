@@ -33,7 +33,7 @@ use Oro\Bundle\UserBundle\Entity\User;
 class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInterface
 {
     const FLUSH_MAX = 20;
-    const MAX_RECORDS = 10000;
+    const MAX_RECORDS = 20;
 
     protected $maxRecords;
 
@@ -183,9 +183,12 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
                 $user = $this->users[rand(0, count($this->users)-1)];
                 $contact->setAssignedTo($user);
                 $contact->setReportsTo($contact);
+                $contact->setOwner($user);
 
                 $source = $this->contactSources[rand(0, count($this->contactSources)-1)];
                 $contact->setSource($source);
+
+                $account->setOwner($user);
 
                 $this->persist($this->accountManager, $account);
                 $this->contactManager->persist($contact);
