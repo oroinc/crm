@@ -26,7 +26,7 @@ use Oro\Bundle\UserBundle\Entity\User;
  * @Configurable(
  *  defaultValues={
  *      "entity"={"label"="Account", "plural_label"="Accounts"},
- *      "acl"={"owner_type"="USER"}
+ *      "ownership"={"owner_type"="USER"}
  *  }
  * )
  */
