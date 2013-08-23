@@ -33,7 +33,7 @@ use Oro\Bundle\UserBundle\Entity\User;
 class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInterface
 {
     const FLUSH_MAX = 20;
-    const MAX_RECORDS = 20;
+    const MAX_RECORDS = 10000;
 
     protected $maxRecords;
 
