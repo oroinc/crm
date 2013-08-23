@@ -33,7 +33,8 @@ class SoapContactGroupApiTest extends WebTestCase
     public function testCreateContactGroup()
     {
         $request = array(
-            "label" => 'Group name_' . mt_rand()
+            "label" => 'Group name_' . mt_rand(),
+            "owner" => '1'
         );
         $result = $this->client->getSoap()->createContactGroup($request);
         $this->assertTrue($result);

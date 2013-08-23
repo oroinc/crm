@@ -4,10 +4,11 @@ namespace OroCRM\Bundle\ContactBundle\DataFixtures\ORM;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 
 use OroCRM\Bundle\ContactBundle\Entity\Group;
 
-class LoadGroupData extends AbstractFixture
+class LoadGroupData extends AbstractFixture implements OrderedFixtureInterface
 {
     /**
      * Load sample groups
@@ -16,10 +17,17 @@ class LoadGroupData extends AbstractFixture
      */
     public function load(ObjectManager $manager)
     {
-        $manager->persist(new Group('Administrators'));
-        $manager->persist(new Group('Sales'));
-        $manager->persist(new Group('Marketing'));
-
+        $groups = array('Administrators','Sales','Marketing');
+        foreach ($groups as $group) {
+            $contactGroup = new Group($group);
+            $contactGroup->setOwner($this->getReference('default_user'));
+            $manager->persist($contactGroup);
+        }
         $manager->flush();
+    }
+
+    public function getOrder()
+    {
+        return 200;
     }
 }
