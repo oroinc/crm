@@ -96,9 +96,9 @@ class ContactAddressControllersTest extends WebTestCase
         $doc = new \DOMDocument("1.0");
         $doc->loadHTML(
             '<select name="orocrm_contact_address_form[country]" id="orocrm_contact_address_form_country" ' .
-                'tabindex="-1" class="select2-offscreen"> ' .
-                '<option value="" selected="selected"></option> ' .
-                '<option value="AF">Afghanistan</option> </select>'
+            'tabindex="-1" class="select2-offscreen"> ' .
+            '<option value="" selected="selected"></option> ' .
+            '<option value="AF">Afghanistan</option> </select>'
         );
         $field = new ChoiceFormField($doc->getElementsByTagName('select')->item(0));
         $form->set($field);
@@ -106,9 +106,9 @@ class ContactAddressControllersTest extends WebTestCase
 
         $doc->loadHTML(
             '<select name="orocrm_contact_address_form[state]" id="orocrm_contact_address_form_state" ' .
-                'tabindex="-1" class="select2-offscreen"> ' .
-                '<option value="" selected="selected"></option> ' .
-                '<option value="AF.01">Badakhshan</option> </select>'
+            'tabindex="-1" class="select2-offscreen"> ' .
+            '<option value="" selected="selected"></option> ' .
+            '<option value="AF.01">Badakhshan</option> </select>'
         );
         $field = new ChoiceFormField($doc->getElementsByTagName('select')->item(0));
         $form->set($field);
@@ -195,9 +195,9 @@ class ContactAddressControllersTest extends WebTestCase
         $doc = new \DOMDocument("1.0");
         $doc->loadHTML(
             '<select name="orocrm_contact_address_form[country]" id="orocrm_contact_address_form_country" ' .
-                'tabindex="-1" class="select2-offscreen"> ' .
-                '<option value="" selected="selected"></option> ' .
-                '<option value="ZW">Zimbabwe</option> </select>'
+            'tabindex="-1" class="select2-offscreen"> ' .
+            '<option value="" selected="selected"></option> ' .
+            '<option value="ZW">Zimbabwe</option> </select>'
         );
         $field = new ChoiceFormField($doc->getElementsByTagName('select')->item(0));
         $form->set($field);
@@ -205,9 +205,9 @@ class ContactAddressControllersTest extends WebTestCase
 
         $doc->loadHTML(
             '<select name="orocrm_contact_address_form[state]" id="orocrm_contact_address_form_state" ' .
-                'tabindex="-1" class="select2-offscreen"> ' .
-                '<option value="" selected="selected"></option> ' .
-                '<option value="ZW.01">Manicaland</option> </select>'
+            'tabindex="-1" class="select2-offscreen"> ' .
+            '<option value="" selected="selected"></option> ' .
+            '<option value="ZW.01">Manicaland</option> </select>'
         );
         $field = new ChoiceFormField($doc->getElementsByTagName('select')->item(0));
         $form->set($field);
