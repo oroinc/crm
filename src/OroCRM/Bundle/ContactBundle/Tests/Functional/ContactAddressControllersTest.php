@@ -58,7 +58,7 @@ class ContactAddressControllersTest extends WebTestCase
     {
         $this->client->request(
             'GET',
-            $this->client->generate('orocrm_contact_index', array('_format' =>'json')),
+            $this->client->generate('orocrm_contact_index', array('_format' => 'json')),
             array(
                 'contacts[_filter][first_name][value]' => 'Contact_fname',
                 'contacts[_pager][_per_page]' => '10',
@@ -75,7 +75,10 @@ class ContactAddressControllersTest extends WebTestCase
 
         $crawler = $this->client->request(
             'GET',
-            $this->client->generate('orocrm_contact_address_create', array('contactId' => $result['id'], '_widgetContainer' => 'dialog'))
+            $this->client->generate(
+                'orocrm_contact_address_create',
+                array('contactId' => $result['id'], '_widgetContainer' => 'dialog')
+            )
         );
 
         $result = $this->client->getResponse();
@@ -119,7 +122,7 @@ class ContactAddressControllersTest extends WebTestCase
 
         $this->client->request(
             'GET',
-            $this->client->generate('orocrm_contact_index', array('_format' =>'json')),
+            $this->client->generate('orocrm_contact_index', array('_format' => 'json')),
             array(
                 'contacts[_filter][first_name][value]' => 'Contact_fname',
                 'contacts[_pager][_per_page]' => '10',
@@ -151,7 +154,7 @@ class ContactAddressControllersTest extends WebTestCase
     {
         $this->client->request(
             'GET',
-            $this->client->generate('orocrm_contact_index', array('_format' =>'json')),
+            $this->client->generate('orocrm_contact_index', array('_format' => 'json')),
             array(
                 'contacts[_filter][first_name][value]' => 'Contact_fname',
                 'contacts[_pager][_per_page]' => '10',
@@ -176,7 +179,9 @@ class ContactAddressControllersTest extends WebTestCase
         $crawler = $this->client->request(
             'GET',
             $this->client->generate(
-                'orocrm_contact_address_update', array('contactId' => $contact['id'], 'id' => $address['id'], '_widgetContainer' => 'dialog'))
+                'orocrm_contact_address_update',
+                array('contactId' => $contact['id'], 'id' => $address['id'], '_widgetContainer' => 'dialog')
+            )
         );
 
         $result = $this->client->getResponse();
@@ -216,7 +221,7 @@ class ContactAddressControllersTest extends WebTestCase
 
         $this->client->request(
             'GET',
-            $this->client->generate('orocrm_contact_index', array('_format' =>'json')),
+            $this->client->generate('orocrm_contact_index', array('_format' => 'json')),
             array(
                 'contacts[_filter][first_name][value]' => 'Contact_fname',
                 'contacts[_pager][_per_page]' => '10',
