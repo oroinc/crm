@@ -19,7 +19,11 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Configurable;
  * @Configurable(
  *  defaultValues={
  *      "entity"={"label"="Contact Group", "plural_label"="Contact Groups"},
- *      "ownership"={"owner_type"="USER"}
+ *      "ownership"={
+ *          "owner_type"="USER",
+ *          "owner_field_name"="owner",
+ *          "owner_column_name"="user_owner_id"
+ *      }
  *  }
  * )
  */
