@@ -175,7 +175,9 @@ class ContactAddressControllersTest extends WebTestCase
 
         $crawler = $this->client->request(
             'GET',
-            $this->client->generate('orocrm_contact_address_update', array('contactId' => $contact['id'], 'id' => $address['id'], '_widgetContainer' => 'dialog')));
+            $this->client->generate(
+                'orocrm_contact_address_update', array('contactId' => $contact['id'], 'id' => $address['id'], '_widgetContainer' => 'dialog'))
+        );
 
         $result = $this->client->getResponse();
         $this->assertEquals(200, $result->getStatusCode());
