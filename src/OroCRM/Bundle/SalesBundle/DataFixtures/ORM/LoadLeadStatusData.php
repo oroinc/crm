@@ -13,7 +13,7 @@ class LoadLeadStatusData extends AbstractFixture
      * @var array
      */
     protected $data = array(
-        'new' => 'New',
+        'new'      => 'New',
         'approved' => 'Approved',
         'canceled' => 'Canceled',
     );

@@ -1,0 +1,171 @@
+workflows:
+    # Unqualified Sales Lead Workflow
+    sales_lead:
+        label: 'Unqualified Sales Lead'
+        enabled: true
+        type: entity
+        steps:
+            new:
+                label: 'New'
+                allowed_transitions:
+                    - approve_new
+                    - cancel_new
+            approved:
+                label: 'Approved'
+                allowed_transitions:
+                    - reactivate_approved
+            cancelled:
+                label: 'Cancelled'
+                allowed_transitions:
+                    - reactivate_cancelled
+        attributes:
+            lead:
+                label: 'Sales Lead'
+                type: entity
+                options:
+                    class: OroCRM\Bundle\SalesBundle\Entity\Lead
+                    managed_entity: true
+            lead_status:
+                label: 'Sales Lead Status'
+                type: entity
+                options:
+                    class: OroCRM\Bundle\SalesBundle\Entity\LeadStatus
+        transitions:
+            approve_new:
+                label: 'Approve'
+                step_to: approved
+                is_start: true
+                transition_definition: approve_definition
+            cancel_new:
+                label: 'Cancel'
+                step_to: cancelled
+                is_start: true
+                transition_definition: cancel_definition
+            reactivate_approved:
+                label: 'Reactivate'
+                step_to: new
+                is_start: true
+                transition_definition: reactivate_definition
+            reactivate_cancelled:
+                label: 'Reactivate'
+                step_to: new
+                is_start: true
+                transition_definition: reactivate_definition
+        transition_definitions:
+            approve_definition:
+                conditions: # if lead.status = "new" or lead.status is empty
+                    @or:
+                        - @equal: [$lead.status.name, 'new']
+                        - @empty: $lead.status.name
+                post_actions: # set lead.status = "approved"
+                    - @request_entity:
+                        class: OroCRM\Bundle\SalesBundle\Entity\LeadStatus
+                        identifier: 'approved'
+                        attribute: $lead_status
+                    - @assign_value:
+                        parameters: [$lead.status, $lead_status]
+            cancel_definition: # if lead.status = "new" or lead.status is empty
+                conditions:
+                    @or:
+                        - @equal: [$lead.status.name, 'new']
+                        - @empty: $lead.status.name
+                post_actions: # set lead.status = "canceled"
+                    - @request_entity:
+                        class: OroCRM\Bundle\SalesBundle\Entity\LeadStatus
+                        identifier: 'canceled'
+                        attribute: $lead_status
+                    - @assign_value:
+                        parameters: [$lead.status, $lead_status]
+            reactivate_definition:  # if lead.status = "approved" or lead.status = "canceled"
+                conditions:
+                    @or:
+                        - @equal: [$lead.status.name, 'approved']
+                        - @equal: [$lead.status.name, 'canceled']
+                post_actions: # set lead.status = "new"
+                    - @request_entity:
+                        class: OroCRM\Bundle\SalesBundle\Entity\LeadStatus
+                        identifier: 'new'
+                        attribute: $lead_status
+                    - @assign_value:
+                        parameters: [$lead.status, $lead_status]
+
+    # Qualified Sales Opportunity Workflow
+    sales_opportunity:
+        label: 'Qualified Sales Opportunity'
+        enabled: true
+        type: entity
+        steps:
+            new:
+                label: 'New'
+                allowed_transitions:
+                    - close_as_won
+                    - close_as_lost
+            closed:
+                label: 'Closed'
+                allowed_transitions:
+                    - reopen
+        attributes:
+            opportunity:
+                label: Sales Opportunity
+                type: entity
+                options:
+                    class: OroCRM\Bundle\SalesBundle\Entity\Opportunity
+                    managed_entity: true
+            opportunity_status:
+                label: Sales Opportunity Status
+                type: entity
+                options:
+                    class: OroCRM\Bundle\SalesBundle\Entity\OpportunityStatus
+        transitions:
+            close_as_won:
+                label: 'Close as Won'
+                step_to: closed
+                is_start: true
+                transition_definition: close_as_won_definition
+            close_as_lost:
+                label: 'Close as Lost'
+                step_to: closed
+                is_start: true
+                transition_definition: close_as_lost_definition
+            reopen:
+                label: 'Reopen'
+                step_to: new
+                is_start: true
+                transition_definition: reopen_definition
+        transition_definitions:
+            close_as_won_definition:
+                conditions: # if opportunity.status = "in_progress" or opportunity.status is empty
+                    @or:
+                        - @equal: [$opportunity.status.name, 'in_progress']
+                        - @empty: $opportunity.status.name
+                post_actions: # set opportunity.status = "won"
+                    - @request_entity:
+                        class: OroCRM\Bundle\SalesBundle\Entity\OpportunityStatus
+                        identifier: 'won'
+                        attribute: $opportunity_status
+                    - @assign_value:
+                        parameters: [$opportunity.status, $opportunity_status]
+            close_as_lost_definition:
+                conditions: # if opportunity.status = "in_progress" or opportunity.status is empty
+                    @or:
+                        - @equal: [$opportunity.status.name, 'in_progress']
+                        - @empty: $opportunity.status.name
+                post_actions: # set opportunity.status = "lost"
+                    - @request_entity:
+                        class: OroCRM\Bundle\SalesBundle\Entity\OpportunityStatus
+                        identifier: 'lost'
+                        attribute: $opportunity_status
+                    - @assign_value:
+                        parameters: [$opportunity.status, $opportunity_status]
+            reopen_definition:
+                conditions: # if opportunity.status = "won" or opportunity.status = "lost"
+                    @or:
+                        - @equal: [$opportunity.status.name, 'won']
+                        - @equal: [$opportunity.status.name, 'lost']
+                post_actions: # set opportunity.status = "in_progress"
+                    - @request_entity:
+                        class: OroCRM\Bundle\SalesBundle\Entity\OpportunityStatus
+                        identifier: 'in_progress'
+                        attribute: $opportunity_status
+                    - @assign_value:
+                        parameters: [$opportunity.status, $opportunity_status]
