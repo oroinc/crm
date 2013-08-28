@@ -13,11 +13,11 @@ workflows:
             approved:
                 label: 'Approved'
                 allowed_transitions:
-                    - reactivate_approved
+                    - reactivate
             cancelled:
                 label: 'Cancelled'
                 allowed_transitions:
-                    - reactivate_cancelled
+                    - reactivate
         attributes:
             lead:
                 label: 'Sales Lead'
@@ -41,12 +41,7 @@ workflows:
                 step_to: cancelled
                 is_start: true
                 transition_definition: cancel_definition
-            reactivate_approved:
-                label: 'Reactivate'
-                step_to: new
-                is_start: true
-                transition_definition: reactivate_definition
-            reactivate_cancelled:
+            reactivate:
                 label: 'Reactivate'
                 step_to: new
                 is_start: true
@@ -59,9 +54,10 @@ workflows:
                         - @empty: $lead.status.name
                 post_actions: # set lead.status = "approved"
                     - @request_entity:
-                        class: OroCRM\Bundle\SalesBundle\Entity\LeadStatus
-                        identifier: 'approved'
-                        attribute: $lead_status
+                        parameters:
+                            class: OroCRM\Bundle\SalesBundle\Entity\LeadStatus
+                            identifier: 'approved'
+                            attribute: $lead_status
                     - @assign_value:
                         parameters: [$lead.status, $lead_status]
             cancel_definition: # if lead.status = "new" or lead.status is empty
@@ -71,9 +67,10 @@ workflows:
                         - @empty: $lead.status.name
                 post_actions: # set lead.status = "canceled"
                     - @request_entity:
-                        class: OroCRM\Bundle\SalesBundle\Entity\LeadStatus
-                        identifier: 'canceled'
-                        attribute: $lead_status
+                        parameters:
+                            class: OroCRM\Bundle\SalesBundle\Entity\LeadStatus
+                            identifier: 'canceled'
+                            attribute: $lead_status
                     - @assign_value:
                         parameters: [$lead.status, $lead_status]
             reactivate_definition:  # if lead.status = "approved" or lead.status = "canceled"
@@ -83,9 +80,10 @@ workflows:
                         - @equal: [$lead.status.name, 'canceled']
                 post_actions: # set lead.status = "new"
                     - @request_entity:
-                        class: OroCRM\Bundle\SalesBundle\Entity\LeadStatus
-                        identifier: 'new'
-                        attribute: $lead_status
+                        parameters:
+                            class: OroCRM\Bundle\SalesBundle\Entity\LeadStatus
+                            identifier: 'new'
+                            attribute: $lead_status
                     - @assign_value:
                         parameters: [$lead.status, $lead_status]
 
@@ -140,9 +138,10 @@ workflows:
                         - @empty: $opportunity.status.name
                 post_actions: # set opportunity.status = "won"
                     - @request_entity:
-                        class: OroCRM\Bundle\SalesBundle\Entity\OpportunityStatus
-                        identifier: 'won'
-                        attribute: $opportunity_status
+                        parameters:
+                            class: OroCRM\Bundle\SalesBundle\Entity\OpportunityStatus
+                            identifier: 'won'
+                            attribute: $opportunity_status
                     - @assign_value:
                         parameters: [$opportunity.status, $opportunity_status]
             close_as_lost_definition:
@@ -152,9 +151,10 @@ workflows:
                         - @empty: $opportunity.status.name
                 post_actions: # set opportunity.status = "lost"
                     - @request_entity:
-                        class: OroCRM\Bundle\SalesBundle\Entity\OpportunityStatus
-                        identifier: 'lost'
-                        attribute: $opportunity_status
+                        parameters:
+                            class: OroCRM\Bundle\SalesBundle\Entity\OpportunityStatus
+                            identifier: 'lost'
+                            attribute: $opportunity_status
                     - @assign_value:
                         parameters: [$opportunity.status, $opportunity_status]
             reopen_definition:
@@ -164,8 +164,9 @@ workflows:
                         - @equal: [$opportunity.status.name, 'lost']
                 post_actions: # set opportunity.status = "in_progress"
                     - @request_entity:
-                        class: OroCRM\Bundle\SalesBundle\Entity\OpportunityStatus
-                        identifier: 'in_progress'
-                        attribute: $opportunity_status
+                        parameters:
+                            class: OroCRM\Bundle\SalesBundle\Entity\OpportunityStatus
+                            identifier: 'in_progress'
+                            attribute: $opportunity_status
                     - @assign_value:
                         parameters: [$opportunity.status, $opportunity_status]
