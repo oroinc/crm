@@ -115,7 +115,7 @@ class TagsAssignTest extends \PHPUnit_Extensions_Selenium2TestCase
             ->openUsers()
             ->add()
             ->setUsername($username)
-            ->setOwner('Default')
+            ->setOwner('Main')
             ->enable()
             ->setFirstpassword('123123q')
             ->setSecondpassword('123123q')
