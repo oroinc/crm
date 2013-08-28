@@ -30,7 +30,12 @@
 {% endblock navButtons %}
 
 {% block pageHeader %}
-    {% set breadcrumbs = {'entity': entity, 'indexPath': path('orocrm_contact_index'), 'indexLabel': 'Contacts', 'entityTitle': fullname } %}
+    {% set breadcrumbs = {
+        'entity': entity,
+        'indexPath': path('orocrm_contact_index'),
+        'indexLabel': 'Contacts',
+        'entityTitle': fullname
+    } %}
     {{ parent() }}
 {% endblock pageHeader %}
 
