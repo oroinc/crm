@@ -12,7 +12,12 @@
 
 {% block navButtons %}
     {% if resource_granted('orocrm_contact_update') %}
-        {{ UI.button({'path' : path('orocrm_contact_update', { 'id': entity.id }), 'iClass' : 'icon-edit ', 'title' : 'Update contact', 'label' : 'Edit'}) }}
+        {{ UI.button({
+            'path' : path('orocrm_contact_update', { 'id': entity.id }),
+            'iClass' : 'icon-edit ',
+            'title' : 'Update contact'|trans,
+            'label' : 'Edit'|trans
+        }) }}
     {% endif %}
     {% if resource_granted('orocrm_contact_delete') %}
         {{ UI.deleteButton({
@@ -21,9 +26,9 @@
                 'aCss': 'no-hash remove-button',
                 'id': 'btn-remove-contact',
                 'dataId': entity.id,
-                'dataMessage': 'Are you sure you want to delete this contact?',
-                'title': 'Delete Contact',
-                'label': 'Delete'
+                'dataMessage': 'Are you sure you want to delete this contact?'|trans,
+                'title': 'Delete Contact'|trans,
+                'label': 'Delete'|trans
             })
         }}
     {% endif %}
@@ -33,7 +38,7 @@
     {% set breadcrumbs = {
         'entity': entity,
         'indexPath': path('orocrm_contact_index'),
-        'indexLabel': 'Contacts',
+        'indexLabel': 'Contacts'|trans,
         'entityTitle': fullname
     } %}
     {{ parent() }}
@@ -52,7 +57,7 @@
                         oro_widget_render({
                             'widgetType': 'block',
                             'url': path('orocrm_contact_info', {id: entity.id}),
-                            'title': 'Contact Information'
+                            'title': 'Contact Information'|trans
                         })
                     }}
                 </div>
@@ -62,7 +67,7 @@
                             'widgetType': 'block',
                             'contentClasses': [],
                             'url': path('orocrm_contact_address_book', {id: entity.id}),
-                            'title': 'Address Book'
+                            'title': 'Address Book'|trans
                         })
                     }}
                 </div>
