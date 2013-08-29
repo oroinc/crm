@@ -1,5 +1,4 @@
 {% extends 'OroUIBundle:actions:update.html.twig' %}
-{% import 'OroTagBundle::macros.html.twig' as _tag %}
 {% form_theme form with ['OroAddressBundle:Include:fields.html.twig', 'OroFormBundle:Form:fields.html.twig', 'OroTagBundle:Form:fields.html.twig'] %}
 {% set format = oro_config_value('oro_user.name_format') %}
 {% set title = form.vars.value.id ? form.vars.value.fullname(format)|default('N/A') ~ ' - ' ~ 'Update Account'|trans : 'New Account'|trans %}
@@ -69,45 +68,46 @@
                     'title': 'Basic Information',
                     'data': [
                         form_row(form.name),
-                        _tag.tagInputField('Tags', form)
+                        form_row(form.tags)
                     ]
                 }
             ]
         }]
     %}
 
-    {% if form.values is defined %}
-        {% set accountAddresses = [] %}
-        {% for attribute in form.values %}
-            {% if (attribute.children.address is defined) %}
-                {% set accountAddresses = accountAddresses|merge([{'title': attribute.address.vars.label, 'data': [form_widget(attribute.address)]}]) %}
+    {% set dataBlocks = dataBlocks|merge(
+        [{
+            'title' : 'Addresses',
+            'subblocks': [
+                {
+                    'title': 'Billing address'|trans,
+                    'data': [form_widget(form.billingAddress)]
+                },
+                {
+                    'title': 'Shipping address'|trans,
+                    'data': [form_widget(form.shippingAddress)]
+                },
+            ]
+        }]
+    )
+    %}
 
-            {% endif %}
-        {% endfor %}
-        {% set dataBlocks = dataBlocks|merge(
-            [{
-                'title' : 'Addresses',
-                'subblocks': accountAddresses
-            }]
-        )
-        %}
-        {% set dataBlocks = dataBlocks|merge(
-            [{
-                'title' : 'Additional Information',
-                'subblocks':
-                [
-                    {
-                        'title' : null,
-                        'useSpan': false,
-                        'data' : [
-                            form_row(form.values)
-                        ]
-                    }
-                ]
-            }]
-        )
-        %}
-    {% endif %}
+    {% set dataBlocks = dataBlocks|merge(
+        [{
+            'title' : 'Additional Information',
+            'subblocks':
+            [
+                {
+                    'title' : null,
+                    'useSpan': false,
+                    'data' : [
+                        form_row(form.values)
+                    ]
+                }
+            ]
+        }]
+    )
+    %}
 
     {% set dataBlocks = dataBlocks|merge(
         [{
@@ -132,7 +132,6 @@
         {
             'formErrors': form_errors(form)? form_errors(form) : null,
             'dataBlocks': dataBlocks,
-            'hiddenData': form_rest(form)
         }
     %}
     {{ parent() }}

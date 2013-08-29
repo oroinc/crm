@@ -1,21 +1,19 @@
-# common test case
 request:
-    groups: ~
-    attributes:
-            first_name: Contact_fname_%str%
-            last_name: Contact_lname
-            name_prefix: Contact name prefix
-            description: Contact description
-    addresses:
+    namePrefix: Contact name prefix
+    firstName: Contact_fname_%str%
+    lastName: Contact_lname
+    nameSuffix: Contact name suffix
+    description: Contact description
+    title: contact title
+    owner: 1
+    emails:
         -
-            firstName: Contact_fname_%str%_address
-            lastName: Contact_lnamea_ddress
-            street: avenu 230
-            city: New York
-            country: US
-            postalCode: 10001
-            types: ['billing']
-            primary: true
+          email: asd@asd.com
+          primary: true
+    phones:
+        -
+          phone: 123-45-67
+          primary: true
 
 response:
     return: true

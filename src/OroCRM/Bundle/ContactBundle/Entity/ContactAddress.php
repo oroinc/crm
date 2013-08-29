@@ -4,7 +4,6 @@ namespace OroCRM\Bundle\ContactBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
-use JMS\Serializer\Annotation\Exclude;
 use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 
 use Oro\Bundle\AddressBundle\Entity\AbstractTypedAddress;
@@ -12,7 +11,7 @@ use Oro\Bundle\AddressBundle\Entity\AbstractTypedAddress;
 /**
  * @ORM\Table("orocrm_contact_address")
  * @ORM\HasLifecycleCallbacks()
- * @ORM\Entity(repositoryClass="Oro\Bundle\AddressBundle\Entity\Repository\AddressRepository")
+ * @ORM\Entity
  */
 class ContactAddress extends AbstractTypedAddress
 {
@@ -32,22 +31,8 @@ class ContactAddress extends AbstractTypedAddress
      *     inverseJoinColumns={@ORM\JoinColumn(name="type_name", referencedColumnName="name")}
      * )
      * @Soap\ComplexType("string[]", nillable=true)
-     * @Exclude
      **/
     protected $types;
-
-    /**
-     * @var \Oro\Bundle\FlexibleEntityBundle\Model\AbstractFlexibleValue[]
-     *
-     * @ORM\OneToMany(
-     *     targetEntity="Oro\Bundle\AddressBundle\Entity\Value\AddressValue",
-     *     mappedBy="entity",
-     *     cascade={"persist", "remove"},
-     *     orphanRemoval=true
-     * )
-     * @Exclude
-     */
-    protected $values;
 
     /**
      * Set contact as owner.

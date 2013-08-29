@@ -1,9 +1,13 @@
 <?php
+
 namespace OroCRM\Bundle\ContactBundle\Tests\Unit\Type;
 
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 use OroCRM\Bundle\ContactBundle\Form\Type\ContactApiType;
+use Oro\Bundle\AddressBundle\Form\EventListener\AddressCollectionTypeSubscriber;
+use Oro\Bundle\UserBundle\Form\EventListener\PatchSubscriber;
 
 class ContactApiTypeTest extends \PHPUnit_Framework_TestCase
 {
@@ -17,38 +21,42 @@ class ContactApiTypeTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $flexibleManager = $this->getMockBuilder('Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleManager')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->type = new ContactApiType($flexibleManager, 'test', 'OroCRM\Bundle\ContactBundle\Entity\ContactAddress');
+        $this->type = new ContactApiType();
     }
 
-    public function testSetDefaultOptions()
-    {
-        /** @var OptionsResolverInterface $resolver */
-        $resolver = $this->getMock('Symfony\Component\OptionsResolver\OptionsResolverInterface');
-        $resolver->expects($this->once())
-            ->method('setDefaults')
-            ->with($this->isType('array'));
-        $this->type->setDefaultOptions($resolver);
-    }
-
-    public function testAddEntityFields()
+    public function testBuildForm()
     {
         $builder = $this->getMockBuilder('Symfony\Component\Form\FormBuilder')
             ->disableOriginalConstructor()
             ->getMock();
-        $builder->expects($this->any())
-            ->method('add')
-            ->will($this->returnSelf());
+
         $builder->expects($this->once())
             ->method('addEventSubscriber')
-            ->with($this->isInstanceOf('Oro\Bundle\UserBundle\Form\EventListener\PatchSubscriber'));
-        $this->type->addEntityFields($builder);
+            ->with($this->isInstanceOf('Symfony\Component\EventDispatcher\EventSubscriberInterface'));
+
+        $this->type->buildForm($builder, array());
+    }
+
+    public function testSetDefaultOptions()
+    {
+        $resolver = $this->getMock('Symfony\Component\OptionsResolver\OptionsResolverInterface');
+        $resolver->expects($this->once())
+            ->method('setDefaults')
+            ->with(
+                array(
+                    'csrf_protection' => false,
+                )
+            );
+        $this->type->setDefaultOptions($resolver);
     }
 
     public function testGetName()
     {
         $this->assertEquals('contact', $this->type->getName());
+    }
+
+    public function testGetParent()
+    {
+        $this->assertEquals('orocrm_contact', $this->type->getParent());
     }
 }

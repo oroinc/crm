@@ -34,7 +34,7 @@ class ContactGroupController extends SoapController
 
     /**
      * @Soap\Method("createContactGroup")
-     * @Soap\Param("contact_group", phpType = "OroCRM\Bundle\ContactBundle\Entity\GroupSoap")
+     * @Soap\Param("contact_group", phpType = "OroCRM\Bundle\ContactBundle\Entity\Group")
      * @Soap\Result(phpType = "boolean")
      */
     public function createAction($contact_group)
@@ -45,7 +45,7 @@ class ContactGroupController extends SoapController
     /**
      * @Soap\Method("updateContactGroup")
      * @Soap\Param("id", phpType = "int")
-     * @Soap\Param("contact_group", phpType = "OroCRM\Bundle\ContactBundle\Entity\GroupSoap")
+     * @Soap\Param("contact_group", phpType = "OroCRM\Bundle\ContactBundle\Entity\Group")
      * @Soap\Result(phpType = "boolean")
      */
     public function updateAction($id, $contact_group)

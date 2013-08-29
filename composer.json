@@ -10,12 +10,6 @@
         "php": ">=5.3.3",
         "oro/platform": "1.0.*@dev"
     },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/orocrm/SonataAdminBundle.git"
-        }
-    ],
     "minimum-stability": "dev",
     "extra": {
         "branch-alias": {

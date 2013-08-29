@@ -38,6 +38,8 @@ class CreateContactTest extends \PHPUnit_Extensions_Selenium2TestCase
         $this->setPort(intval(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_PORT));
         $this->setBrowser(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM2_BROWSER);
         $this->setBrowserUrl(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_TESTS_URL);
+        $this->prepareSession();
+        $this->url('/');
     }
 
     protected function tearDown()
@@ -62,6 +64,7 @@ class CreateContactTest extends \PHPUnit_Extensions_Selenium2TestCase
             ->add()
             ->setFirstName($contactname . '_first')
             ->setLastName($contactname . '_last')
+            ->setOwner('admin')
             ->setEmail($contactname . '@mail.com')
             ->setAddress($this->addressPrimary)
             ->setAddress($this->addressSecondary, 1)
@@ -71,7 +74,7 @@ class CreateContactTest extends \PHPUnit_Extensions_Selenium2TestCase
             ->close()
             ->filterBy('Email', $contactname . '@mail.com')
             ->open(array($contactname))
-            ->assertTitle($contactname . '_last, ' . $contactname . '_first - Contacts - Customers')
+            ->assertTitle($contactname . '_first ' . $contactname . '_last' . ' - Contacts - Customers')
             ->edit()
             ->getAddress($addressPrimary)
             ->getAddress($addressSecondary, 1);
@@ -96,6 +99,7 @@ class CreateContactTest extends \PHPUnit_Extensions_Selenium2TestCase
             ->add()
             ->setFirstName($contactname . '_first_autocomplete')
             ->setLastName($contactname . '_last_autocomplete')
+            ->setOwner('admin')
             ->setAssignedTo('admin')
             ->setReportsTo($contactname)
             ->setAddressStreet('Street')
@@ -125,7 +129,7 @@ class CreateContactTest extends \PHPUnit_Extensions_Selenium2TestCase
             ->openContacts()
             ->filterBy('Email', $contactname . '@mail.com')
             ->open(array($contactname))
-            ->assertTitle($contactname . '_last, ' . $contactname . '_first - Contacts - Customers')
+            ->assertTitle($contactname . '_first ' . $contactname . '_last' . ' - Contacts - Customers')
             ->edit()
             ->setFirstName($newContactname . '_first')
             ->save()

@@ -8,13 +8,13 @@ use Oro\Bundle\GridBundle\Field\FieldDescriptionInterface;
 use Oro\Bundle\GridBundle\Filter\FilterInterface;
 use Oro\Bundle\GridBundle\Sorter\SorterInterface;
 use Oro\Bundle\GridBundle\Field\FieldDescriptionCollection;
-use Oro\Bundle\GridBundle\Datagrid\FlexibleDatagridManager;
+use Oro\Bundle\GridBundle\Datagrid\DatagridManager;
 use Oro\Bundle\GridBundle\Datagrid\ParametersInterface;
 use Oro\Bundle\GridBundle\Datagrid\ProxyQueryInterface;
 
 use OroCRM\Bundle\ContactBundle\Entity\Group;
 
-class GroupContactDatagridManager extends FlexibleDatagridManager
+class GroupContactDatagridManager extends DatagridManager
 {
     /**
      * @var Group
@@ -26,23 +26,37 @@ class GroupContactDatagridManager extends FlexibleDatagridManager
      */
     protected function configureFields(FieldDescriptionCollection $fieldsCollection)
     {
-        $fieldsCollection->add($this->createUserRelationColumn());
+        $fieldsCollection->add($this->createContactRelationColumn());
 
-        $fieldId = new FieldDescription();
-        $fieldId->setName('id');
-        $fieldId->setOptions(
+        $fieldFirstName = new FieldDescription();
+        $fieldFirstName->setName('first_name');
+        $fieldFirstName->setOptions(
             array(
-                'type'        => FieldDescriptionInterface::TYPE_INTEGER,
-                'label'       => $this->translate('ID'),
-                'field_name'  => 'id',
-                'filter_type' => FilterInterface::TYPE_NUMBER,
-                'show_column' => false
+                'type'        => FieldDescriptionInterface::TYPE_TEXT,
+                'label'       => $this->translate('orocrm.contact.datagrid.first_name'),
+                'field_name'  => 'firstName',
+                'filter_type' => FilterInterface::TYPE_STRING,
+                'sortable'    => true,
+                'filterable'  => true,
+                'show_filter' => true,
             )
         );
-        $fieldsCollection->add($fieldId);
+        $fieldsCollection->add($fieldFirstName);
 
-        $this->configureFlexibleField($fieldsCollection, 'first_name');
-        $this->configureFlexibleField($fieldsCollection, 'last_name');
+        $fieldLastName = new FieldDescription();
+        $fieldLastName->setName('last_name');
+        $fieldLastName->setOptions(
+            array(
+                'type'        => FieldDescriptionInterface::TYPE_TEXT,
+                'label'       => $this->translate('orocrm.contact.datagrid.last_name'),
+                'field_name'  => 'lastName',
+                'filter_type' => FilterInterface::TYPE_STRING,
+                'sortable'    => true,
+                'filterable'  => true,
+                'show_filter' => true,
+            )
+        );
+        $fieldsCollection->add($fieldLastName);
     }
 
     /**
@@ -68,7 +82,7 @@ class GroupContactDatagridManager extends FlexibleDatagridManager
     /**
      * {@inheritDoc}
      */
-    protected function createUserRelationColumn()
+    protected function createContactRelationColumn()
     {
         $fieldHasGroup = new FieldDescription();
         $fieldHasGroup->setName('has_group');

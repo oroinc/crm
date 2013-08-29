@@ -2,36 +2,46 @@
 
 namespace OroCRM\Bundle\TestFrameworkBundle\Tests\DataFixtures;
 
-use Oro\Bundle\AddressBundle\Entity\Address;
-use Oro\Bundle\AddressBundle\Entity\Country;
 
-use Doctrine\Common\Collections\Collection;
-
-use Oro\Bundle\FlexibleEntityBundle\Form\Type\PhoneType;
-use Oro\Bundle\FlexibleEntityBundle\Form\Type\EmailType;
-use OroCRM\Bundle\ContactBundle\Entity\ContactAddress;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\EntityManager;
+use Doctrine\Common\Collections\Collection;
 
 use Oro\Bundle\FlexibleEntityBundle\Model\FlexibleValueInterface;
 use Oro\Bundle\FlexibleEntityBundle\Model\AbstractFlexible;
 use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttribute;
-use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttributeOption;
 use Oro\Bundle\FlexibleEntityBundle\Entity\Repository\FlexibleEntityRepository;
 
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
+use Oro\Bundle\UserBundle\Entity\UserManager;
+use Oro\Bundle\AddressBundle\Entity\Address;
+use Oro\Bundle\AddressBundle\Entity\Country;
+use Oro\Bundle\AddressBundle\Entity\Region;
+use OroCRM\Bundle\ContactBundle\Entity\ContactEmail;
+use OroCRM\Bundle\ContactBundle\Entity\ContactPhone;
+use OroCRM\Bundle\ContactBundle\Entity\ContactAddress;
+use OroCRM\Bundle\ContactBundle\Entity\Source;
+use OroCRM\Bundle\ContactBundle\Entity\Group;
 use Oro\Bundle\UserBundle\Entity\User;
 
 class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInterface
 {
     const FLUSH_MAX = 20;
+    const MAX_RECORDS = 10000;
 
-    /** @var array Lead Sources */
-    protected $sources = array('other', 'call', 'TV', 'website');
+    protected $maxRecords;
+
+    /**
+     * @var ContainerInterface
+     */
+    protected $container;
+
     /**
      * @var Account Manager
      */
@@ -43,52 +53,86 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
     protected $accountRepository;
 
     /**
-     * @var Contact Manager
+     * @var EntityManager
      */
     protected $contactManager;
 
     /**
-     * @var FlexibleEntityRepository
+     * @var EntityRepository
      */
     protected $contactRepository;
 
     /**
-     * @var User Manager
+     * @var UserManager
      */
     protected $userManager;
 
     /**
-     * @var FlexibleEntityRepository
+     * @var EntityRepository
      */
     protected $userRepository;
 
     /**
-     * @var FlexibleEntityRepository
+     * @var EntityRepository
      */
     protected $countryRepository;
 
-    protected $groups;
-    protected $users;
-    protected $countries;
+    /**
+     * @var Group[]
+     */
+    protected $contactGroups;
 
+    /**
+     * @var Source[]
+     */
+    protected $contactSources;
+
+    /**
+     * @var User[]
+     */
+    protected $users;
+
+    /**
+     * @var Country[]
+     */
+    protected $countries;
 
     /**
      * {@inheritDoc}
      */
     public function setContainer(ContainerInterface $container = null)
     {
+        $this->container = $container;
+
+        if (isset($container->counter)) {
+            $this->maxRecords = $container->counter;
+        } else {
+            $this->maxRecords = self::MAX_RECORDS;
+        }
+
         $this->accountManager = $container->get('orocrm_account.account.manager.flexible');
         $this->accountRepository = $this->accountManager->getFlexibleRepository();
 
-        $this->contactManager = $container->get('orocrm_contact.manager.flexible');
-        $this->contactRepository = $this->contactManager->getFlexibleRepository();
-        $this->groups = $this->contactManager->getStorageManager()->getRepository('OroCRMContactBundle:Group')->findAll();
+        $this->contactManager = $container->get('doctrine.orm.entity_manager');
+        $this->contactRepository = $this->contactManager->getRepository('OroCRMContactBundle:Contact');
 
         $this->userManager = $container->get('oro_user.manager');
         $this->userRepository = $this->userManager->getFlexibleRepository();
-        $this->users = $this->userManager->getStorageManager()->getRepository('OroUserBundle:User')->findAll();
 
-        $this->countries = $this->userManager->getStorageManager()->getRepository('OroAddressBundle:Country')->findAll();
+        $this->initSupportingEntities();
+    }
+
+    /**
+     * Initialize all supporting entities
+     */
+    protected function initSupportingEntities()
+    {
+        $this->contactGroups = $this->contactManager->getRepository('OroCRMContactBundle:Group')->findAll();
+        $this->contactSources = $this->contactManager->getRepository('OroCRMContactBundle:Source')->findAll();
+
+        $userStorageManager = $this->userManager->getStorageManager();
+        $this->users = $userStorageManager->getRepository('OroUserBundle:User')->findAll();
+        $this->countries = $userStorageManager->getRepository('OroAddressBundle:Country')->findAll();
     }
 
     /**
@@ -117,8 +161,10 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
     public function loadAccounts()
     {
         $handle = fopen(__DIR__ . DIRECTORY_SEPARATOR . "data.csv", "r");
+        $averageTime = 0.0;
         if ($handle) {
             $i = 0;
+            $headers = array();
             if (($data = fgetcsv($handle, 1000, ",")) !== false) {
                 //read headers
                 $headers = $data;
@@ -130,37 +176,47 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
                 $account = $this->createAccount($data);
                 $contact = $this->createContact($data);
                 $contact->addAccount($account);
-                $group = $this->groups[rand(0, count($this->groups)-1)];
-                $contact->addGroup($group);
-                $user = $this->users[rand(0, count($this->users)-1)];
-                $this->setFlexibleAttributeValue($this->contactRepository, $contact, 'assigned_to', $user);
-                $this->setFlexibleAttributeValue($this->contactRepository, $contact, 'reports_to', $contact);
-                $source = $this->sources[rand(0, count($this->sources)-1)];
-                $this->setFlexibleAttributeValueOption($this->contactRepository, $contact, 'source', $source);
 
+                $group = $this->contactGroups[rand(0, count($this->contactGroups)-1)];
+                $contact->addGroup($group);
+
+                $user = $this->users[rand(0, count($this->users)-1)];
+                $contact->setAssignedTo($user);
+                $contact->setReportsTo($contact);
+                $contact->setOwner($user);
+
+                $source = $this->contactSources[rand(0, count($this->contactSources)-1)];
+                $contact->setSource($source);
+
+                $account->setOwner($user);
 
                 $this->persist($this->accountManager, $account);
-                $this->persist($this->contactManager, $contact);
+                $this->contactManager->persist($contact);
 
                 $i++;
                 if ($i % self::FLUSH_MAX == 0) {
                     $this->flush($this->accountManager);
-                    $this->flush($this->contactManager);
-                    $this->contactManager->getStorageManager()->clear();
+                    $this->contactManager->flush();
+                    $this->contactManager->clear();
 
-                    $this->groups = $this->contactManager->getStorageManager()->getRepository('OroCRMContactBundle:Group')->findAll();
-                    $this->users = $this->userManager->getStorageManager()->getRepository('OroUserBundle:User')->findAll();
-                    $this->countries = $this->userManager->getStorageManager()->getRepository('OroAddressBundle:Country')->findAll();
+                    $this->initSupportingEntities();
 
                     $e = microtime(true);
                     echo ">> {$i} " . ($e-$s) . "\n";
+                    $averageTime += ($e-$s);
+                }
+
+                if ($i % $this->maxRecords == 0) {
+                    break;
                 }
             }
             fclose($handle);
         }
         $this->flush($this->accountManager);
-        $this->flush($this->contactManager);
-
+        $this->contactManager->flush();
+        $avg = $averageTime * self::FLUSH_MAX / $this->maxRecords;
+        echo ">> Average time: " . $avg . "\n";
+        $this->container->averageTime = $avg;
     }
 
     /**
@@ -180,17 +236,10 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
         $this->setFlexibleAttributeValue($this->accountRepository, $account, 'email', $data['EmailAddress']);
         $this->setFlexibleAttributeValue($this->accountRepository, $account, 'website', $data['Domain']);
 
-        $address = new Address();
-        $address->setCity($data['City']);
-        $address->setStreet($data['StreetAddress']);
-        $address->setPostalCode($data['ZipCode']);
-        $address->setFirstName($data['GivenName']);
-        $address->setLastName($data['Surname']);
-
         $isoCode = $data['Country'];
         $country = array_filter(
             $this->countries,
-            function ($a) use ($isoCode) {
+            function (Country $a) use ($isoCode) {
                 return $a->getIso2Code() == $isoCode;
             }
         );
@@ -204,19 +253,25 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
         $regions = $country->getRegions();
 
         $region = $regions->filter(
-            function ($a) use ($idRegion) {
+            function (Region $a) use ($idRegion) {
                 return $a->getCode() == $idRegion;
             }
         );
+
+        $address = new Address();
+        $address->setCity($data['City']);
+        $address->setStreet($data['StreetAddress']);
+        $address->setPostalCode($data['ZipCode']);
+        $address->setFirstName($data['GivenName']);
+        $address->setLastName($data['Surname']);
 
         $address->setCountry($country);
         if (!$region->isEmpty()) {
             $address->setState($region->first());
         }
 
-        $this->setFlexibleAttributeValue($this->accountRepository, $account, 'shipping_address', $address);
-        $a = clone $address;
-        $this->setFlexibleAttributeValue($this->accountRepository, $account, 'billing_address', $a);
+        $account->setShippingAddress($address);
+        $account->setBillingAddress(clone $address);
 
         return $account;
     }
@@ -229,18 +284,22 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
      */
     private function createContact(array $data)
     {
-        /** @var $contact  Contact */
-        $contact = $this->contactManager->createFlexible();
+        $contact = new Contact();
 
-        $this->setFlexibleAttributeValue($this->contactRepository, $contact, 'first_name', $data['GivenName']);
-        $this->setFlexibleAttributeValue($this->contactRepository, $contact, 'last_name', $data['Surname']);
-        $this->setFlexibleAttributeValue($this->contactRepository, $contact, 'title', $data['Title']);
-        $this->setFlexibleAttributeValue($this->contactRepository, $contact, 'phone', $data['TelephoneNumber']);
-        $this->setFlexibleAttributeValue($this->contactRepository, $contact, 'email', $data['EmailAddress']);
+        $contact->setFirstName($data['GivenName']);
+        $contact->setLastName($data['Surname']);
+        $contact->setNamePrefix($data['Title']);
 
-        $date = date('m/d/y', strtotime($data['Birthday']));
-        $date = new \DateTime($date);
-        $this->setFlexibleAttributeValue($this->contactRepository, $contact, 'birthday', $date);
+        $phone = new ContactPhone($data['TelephoneNumber']);
+        $phone->setPrimary(true);
+        $contact->addPhone($phone);
+
+        $email = new ContactEmail($data['EmailAddress']);
+        $email->setPrimary(true);
+        $contact->addEmail($email);
+
+        $date = \DateTime::createFromFormat('m/d/Y', $data['Birthday']);
+        $contact->setBirthday($date);
 
         /** @var ContactAddress $address */
         $address = new ContactAddress();
@@ -254,7 +313,7 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
         $isoCode = $data['Country'];
         $country = array_filter(
             $this->countries,
-            function ($a) use ($isoCode) {
+            function (Country $a) use ($isoCode) {
                 return $a->getIso2Code() == $isoCode;
             }
         );
@@ -264,12 +323,11 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
         $country = $country[0];
 
         $idRegion = $data['State'];
-        //$idRegion = 'AL';
         /** @var Collection $regions */
         $regions = $country->getRegions();
 
         $region = $regions->filter(
-            function ($a) use ($idRegion) {
+            function (Region $a) use ($idRegion) {
                 return $a->getCode() == $idRegion;
             }
         );
@@ -306,29 +364,6 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
     }
 
     /**
-     * Sets a flexible attribute value as option with given value
-     *
-     * @param FlexibleEntityRepository $repository
-     * @param AbstractFlexible $flexibleEntity
-     * @param string $attributeCode
-     * @param string $value
-     * @throws \LogicException
-     */
-    private function setFlexibleAttributeValueOption(
-        FlexibleEntityRepository $repository,
-        AbstractFlexible $flexibleEntity,
-        $attributeCode,
-        $value
-    ) {
-        if ($attribute = $this->findAttribute($repository, $attributeCode)) {
-            $option = $this->findAttributeOptionWithValue($attribute, $value);
-            $this->getFlexibleValueForAttribute($flexibleEntity, $attribute)->setOption($option);
-        } else {
-            throw new \LogicException(sprintf('Cannot set value, attribute "%s" is missing', $attributeCode));
-        }
-    }
-
-    /**
      * Gets or creates a flexible value for attribute
      *
      * @param AbstractFlexible $flexibleEntity
@@ -340,31 +375,6 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
         $flexibleValue = $flexibleEntity->getValue($attribute->getCode());
 
         return $flexibleValue;
-    }
-    /**
-     * Finds an attribute option with value
-     *
-     * @param AbstractAttribute $attribute
-     * @param string $value
-     * @return AbstractAttributeOption
-     * @throws \LogicException
-     */
-
-    private function findAttributeOptionWithValue(AbstractAttribute $attribute, $value)
-    {
-        /** @var $options \Oro\Bundle\FlexibleEntityBundle\Entity\AttributeOption[] */
-        $options = $this->contactManager->getAttributeOptionRepository()->findBy(
-            array('attribute' => $attribute)
-        );
-
-        $selectedOption = null;
-        foreach ($options as $option) {
-            if ($value == $option->getOptionValue()->getValue()) {
-                return $option;
-            }
-        }
-
-        throw new \LogicException(sprintf('Cannot find attribute option with value "%s"', $value));
     }
 
     /**

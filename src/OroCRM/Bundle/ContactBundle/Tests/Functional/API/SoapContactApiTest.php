@@ -12,113 +12,126 @@ use Oro\Bundle\TestFrameworkBundle\Test\Client;
  */
 class SoapContactApiTest extends WebTestCase
 {
-    /** @var Client */
+    /**
+     * @var array
+     */
+    protected static $contactIds = array();
+
+    /**
+     * @var Client
+     */
     protected $client;
 
     public function setUp()
     {
-        $this->markTestSkipped('BAP-717');
-        if (!isset($this->client)) {
-            $this->client = static::createClient(array(), ToolsAPI::generateWsseHeader());
+        $this->client = static::createClient(array(), ToolsAPI::generateWsseHeader());
+        $this->client->soap(
+            "http://localhost/api/soap",
+            array(
+                'location' => 'http://localhost/api/soap',
+                'soap_version' => SOAP_1_2
+            )
+        );
+    }
 
-            $this->client->soap(
-                "http://localhost/api/soap",
-                array(
-                    'location' => 'http://localhost/api/soap',
-                    'soap_version' => SOAP_1_2
-                )
-            );
-
-        } else {
-            $this->client->restart();
-        }
+    public static function tearDownAfterClass()
+    {
+        parent::tearDownAfterClass();
+        self::$contactIds = null;
     }
 
     /**
      * @param string $request
-     * @param array  $response
      * @dataProvider requestsApi
      */
-    public function testCreateContact($request, $response)
+    public function testCreateContact($request)
     {
-        $result = $this->client->soapClient->createContact($request);
-        $result = ToolsAPI::classToArray($result);
-        ToolsAPI::assertEqualsResponse($response, $result, $this->client->soapClient->__getLastResponse());
+        $this->markTestIncomplete('Should be fixed in scope of BAP-1383');
+
+        $result = $this->client->getSoap()->createContact($request);
+        $this->assertInternalType('int', $result);
+        $this->assertGreaterThan(0, $result, $this->client->getSoap()->__getLastResponse());
+
+        self::$contactIds[$request['firstName']] = $result;
     }
 
     /**
-     * @param $request
+     * @param string $firstName
+     * @return int
+     */
+    protected function getContactIdByFirstName($firstName)
+    {
+        $this->assertArrayHasKey($firstName, self::$contactIds);
+        return self::$contactIds[$firstName];
+    }
+
+    /**
+     * @param array $request
      * @dataProvider requestsApi
      * @depends testCreateContact
-     * @return array
      */
-    public function testGetContacts($request)
+    public function testGetContact($request)
     {
-        $contacts = $this->client->soapClient->getContacts(1, 1000);
+        $contactId = $this->getContactIdByFirstName($request['firstName']);
+
+        // test getContact
+        $contact = $this->client->getSoap()->getContact($contactId);
+        $contact = ToolsAPI::classToArray($contact);
+        $this->assertNotEmpty($contact);
+        $this->assertArrayHasKey('firstName', $contact);
+        $this->assertEquals($request['firstName'], $contact['firstName']);
+
+        // get getContacts
+        $contacts = $this->client->getSoap()->getContacts(1, 1000);
         $contacts = ToolsAPI::classToArray($contacts);
-        $result = false;
+        $contactFound = false;
         foreach ($contacts as $contact) {
-            foreach ($contact as $contactDetails) {
-                $result = $contactDetails['first_name'] == $request['first_name'];
-                if ($result) {
-                    break;
-                }
+            if ($contact['id'] == $contactId) {
+                $contactFound = true;
+                break;
             }
         }
-        $this->assertTrue($contact);
-
-        return $result;
+        $this->assertTrue($contactFound);
     }
 
     /**
-     * @param $request
+     * @param array $request
      * @dataProvider requestsApi
      * @depends testCreateContact
-     * @return $contactId
      */
     public function testUpdateContact($request)
     {
-        $contacts = $this->client->soapClient->getContacts(1, 1000);
-        $contacts = ToolsAPI::classToArray($contacts);
-        $result = false;
-        foreach ($contacts as $contact) {
-            foreach ($contact as $contactDetails) {
-                $result = $contactDetails['first_name'] == $request['first_name'];
-                if ($result) {
-                    $contactId = $contactDetails['id'];
-                    break;
-                }
-            }
-        }
-        $request['attributes']['description'] .= '_Updated';
-        $result = $this->client->soapClient->updateContact($contactId, $request);
-        $this->assertTrue($result);
-        $contact = $this->client->soapClient->getContactGroup($contactId);
-        $contact = ToolsAPI::classToArray($contact);
-        $result = false;
-        if ($contact['attributes']['description'] == $request['attributes']['description']) {
-            $result = true;
-        }
+        $contactId = $this->getContactIdByFirstName($request['firstName']);
+
+        $request['description'] .= '_Updated';
+        $result = $this->client->getSoap()->updateContact($contactId, $request);
         $this->assertTrue($result);
 
-        return $contactId;
+        $contact = $this->client->getSoap()->getContact($contactId);
+        $contact = ToolsAPI::classToArray($contact);
+        $this->assertArrayHasKey('description', $contact);
+        $this->assertEquals($request['description'], $contact['description']);
     }
 
     /**
-     * @param $contactId
-     * @depends testGetContacts
+     * @param $request
+     * @dataProvider requestsApi
+     * @depends testCreateContact
      * @throws \Exception|\SoapFault
      */
-    public function testDeleteContact($contactId)
+    public function testDeleteContact($request)
     {
-        $result = $this->client->soapClient->deleteContact($contactId);
+        $contactId = $this->getContactIdByFirstName($request['firstName']);
+
+        $result = $this->client->getSoap()->deleteContact($contactId);
         $this->assertTrue($result);
+
+        $this->setExpectedException('\SoapFault', 'Record #' . $contactId . ' can not be found');
         try {
-            $this->client->soapClient->getContact($contactId);
+            $this->client->getSoap()->getContact($contactId);
         } catch (\SoapFault $e) {
-            if ($e->faultcode != 'NOT_FOUND') {
-                throw $e;
-            }
+            $this->assertEquals('NOT_FOUND', $e->faultcode);
+            throw $e;
         }
     }
 
