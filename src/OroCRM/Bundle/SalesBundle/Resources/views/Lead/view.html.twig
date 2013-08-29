@@ -4,13 +4,6 @@
 {% oro_title_set({params : {"%lead.topic%": entity.topic} }) %}
 
 {% block navButtons %}
-    {{
-        oro_widget_render({
-            'widgetType': 'buttons',
-            'url': path('oro_workflow_widget_buttons', {entityClass: oro_class_name(entity), entityId: entity.id})
-        })
-    }}
-
     {% if resource_granted('orocrm_sales_lead_update') %}
         {{ UI.button({'path' : path('orocrm_sales_lead_update', { 'id': entity.id }), 'iClass' : 'icon-edit ', 'title' : 'Update Lead', 'label' : 'Edit'}) }}
     {% endif %}
