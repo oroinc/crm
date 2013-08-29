@@ -59,28 +59,26 @@
 {% endblock pageActions %}
 
 {% block content_data %}
-    <div class="well-small form-horizontal dark-bg">
-        <div class="clearfix">
-            <div class="row-fluid well-small-bottom">
-                <div class="span6">
-                    {{
-                        oro_widget_render({
-                            'widgetType': 'block',
-                            'url': path('orocrm_contact_info', {id: entity.id}),
-                            'title': 'Contact Information'
-                        })
-                    }}
-                </div>
-                <div class="span6">
-                    {{
-                        oro_widget_render({
-                            'widgetType': 'block',
-                            'contentClasses': [],
-                            'url': path('orocrm_contact_address_book', {id: entity.id}),
-                            'title': 'Address Book'
-                        })
-                    }}
-                </div>
+    <div class="contact-info-col-set well-small form-horizontal dark-bg">
+        <div class="row-fluid well-small-bottom clearfix">
+            <div class="span6 contact-info-col">
+                {{
+                    oro_widget_render({
+                        'widgetType': 'block',
+                        'url': path('orocrm_contact_info', {id: entity.id}),
+                        'title': 'Contact Information'
+                    })
+                }}
+            </div>
+            <div class="span6 contact-info-col">
+                {{
+                    oro_widget_render({
+                        'widgetType': 'block',
+                        'contentClasses': [],
+                        'url': path('orocrm_contact_address_book', {id: entity.id}),
+                        'title': 'Address Book'
+                    })
+                }}
             </div>
         </div>
     </div>
