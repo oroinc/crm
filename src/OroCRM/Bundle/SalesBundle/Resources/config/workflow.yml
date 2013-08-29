@@ -35,16 +35,25 @@ workflows:
                 label: 'Approve'
                 step_to: approved
                 is_start: true
+                options:
+                    frontend:
+                        icon: 'icon-ok'
                 transition_definition: approve_definition
             cancel_new:
                 label: 'Cancel'
                 step_to: cancelled
                 is_start: true
+                options:
+                    frontend:
+                        icon: 'icon-remove'
                 transition_definition: cancel_definition
             reactivate:
                 label: 'Reactivate'
                 step_to: new
                 is_start: true
+                options:
+                    frontend:
+                        icon: 'icon-repeat'
                 transition_definition: reactivate_definition
         transition_definitions:
             approve_definition:
@@ -119,16 +128,25 @@ workflows:
                 label: 'Close as Won'
                 step_to: closed
                 is_start: true
+                options:
+                    frontend:
+                        icon: 'icon-ok-circle'
                 transition_definition: close_as_won_definition
             close_as_lost:
                 label: 'Close as Lost'
                 step_to: closed
                 is_start: true
+                options:
+                    frontend:
+                        icon: 'icon-remove-circle'
                 transition_definition: close_as_lost_definition
             reopen:
                 label: 'Reopen'
                 step_to: new
                 is_start: true
+                options:
+                    frontend:
+                        icon: 'icon-repeat'
                 transition_definition: reopen_definition
         transition_definitions:
             close_as_won_definition:

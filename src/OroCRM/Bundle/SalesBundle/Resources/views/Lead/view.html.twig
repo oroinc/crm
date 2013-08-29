@@ -6,9 +6,8 @@
 {% block navButtons %}
     {{
         oro_widget_render({
-            'widgetType': 'block',
-            'url': path('oro_workflow_widget_buttons', {entityClass: oro_class_name(entity), entityId: entity.id}),
-            'title': 'Workflows'
+            'widgetType': 'buttons',
+            'url': path('oro_workflow_widget_buttons', {entityClass: oro_class_name(entity), entityId: entity.id})
         })
     }}
 
