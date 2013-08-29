@@ -6,22 +6,29 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 
-use JMS\Serializer\Annotation\Type;
-use JMS\Serializer\Annotation\Exclude;
-
 use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 
+use Oro\Bundle\AddressBundle\Entity\Address;
 use Oro\Bundle\TagBundle\Entity\Taggable;
 use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityFlexible;
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
+use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
+
+use Oro\Bundle\UserBundle\Entity\User;
 
 /**
  * @ORM\Entity(repositoryClass="Oro\Bundle\FlexibleEntityBundle\Entity\Repository\FlexibleEntityRepository")
  * @ORM\Table(name="orocrm_account")
  * @ORM\HasLifecycleCallbacks()
  * @Oro\Loggable
+ * @Config(
+ *  defaultValues={
+ *      "entity"={"label"="Account", "plural_label"="Accounts"},
+ *      "ownership"={"owner_type"="USER"}
+ *  }
+ * )
  */
 class Account extends AbstractEntityFlexible implements Taggable
 {
@@ -30,7 +37,6 @@ class Account extends AbstractEntityFlexible implements Taggable
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      * @Soap\ComplexType("int", nillable=true)
-     * @Type("integer")
      */
     protected $id;
 
@@ -39,10 +45,33 @@ class Account extends AbstractEntityFlexible implements Taggable
      *
      * @ORM\Column(type="string", length=255, unique=true)
      * @Soap\ComplexType("string")
-     * @Type("string")
      * @Oro\Versioned
      */
     protected $name;
+
+    /**
+     * @var User
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
+     * @ORM\JoinColumn(name="user_owner_id", referencedColumnName="id", onDelete="SET NULL")
+     * @Soap\ComplexType("string", nillable=true)
+     */
+    protected $owner;
+
+    /**
+     * @var Address $shippingAddress
+     *
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\AddressBundle\Entity\Address", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(name="shipping_address_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    protected $shippingAddress;
+
+    /**
+     * @var Address $billingAddress
+     *
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\AddressBundle\Entity\Address", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(name="billing_address_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    protected $billingAddress;
 
     /**
      * Contacts storage
@@ -51,16 +80,16 @@ class Account extends AbstractEntityFlexible implements Taggable
      *
      * @ORM\ManyToMany(targetEntity="OroCRM\Bundle\ContactBundle\Entity\Contact", inversedBy="accounts")
      * @ORM\JoinTable(name="orocrm_account_to_contact")
-     *
-     * @Exclude
      */
     protected $contacts;
 
     /**
      * @var \Oro\Bundle\FlexibleEntityBundle\Model\AbstractFlexibleValue[]
      *
-     * @ORM\OneToMany(targetEntity="OroCRM\Bundle\AccountBundle\Entity\Value\AccountValue", mappedBy="entity", cascade={"persist", "remove"},orphanRemoval=true)
-     * @Exclude
+     * @ORM\OneToMany(
+     *  targetEntity="OroCRM\Bundle\AccountBundle\Entity\Value\AccountValue", mappedBy="entity",
+     *  cascade={"persist", "remove"}, orphanRemoval=true
+     * )
      */
     protected $values;
 
@@ -153,6 +182,52 @@ class Account extends AbstractEntityFlexible implements Taggable
     }
 
     /**
+     * Get shipping address
+     *
+     * @return Address
+     */
+    public function getShippingAddress()
+    {
+        return $this->shippingAddress;
+    }
+
+    /**
+     * Set shipping address
+     *
+     * @param Address $address
+     * @return Account
+     */
+    public function setShippingAddress(Address $address)
+    {
+        $this->shippingAddress = $address;
+
+        return $this;
+    }
+
+    /**
+     * Get shipping address
+     *
+     * @return Address
+     */
+    public function getBillingAddress()
+    {
+        return $this->billingAddress;
+    }
+
+    /**
+     * Set billing address
+     *
+     * @param Address $address
+     * @return Account
+     */
+    public function setBillingAddress(Address $address)
+    {
+        $this->billingAddress = $address;
+
+        return $this;
+    }
+
+    /**
      * Remove specified contact
      *
      * @param Contact $contact
@@ -217,6 +292,25 @@ class Account extends AbstractEntityFlexible implements Taggable
     public function setTags($tags)
     {
         $this->tags = $tags;
+
+        return $this;
+    }
+
+    /**
+     * @return User
+     */
+    public function getOwner()
+    {
+        return $this->owner;
+    }
+
+    /**
+     * @param User $owningUser
+     * @return Account
+     */
+    public function setOwner($owningUser)
+    {
+        $this->owner = $owningUser;
 
         return $this;
     }

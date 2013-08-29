@@ -13,38 +13,36 @@ services:
               datagrid_name: contacts
               entity_name: %orocrm_contact.entity.class%
               query_entity_alias: contact
-              entity_hint: contacts
-              flexible: true
+              entity_hint: contact
               route_name: orocrm_contact_index
 
     orocrm_contact.group.datagrid_manager:
         class: %orocrm_contact.group.datagrid_manager.class%
         tags:
             - name: oro_grid.datagrid.manager
-              datagrid_name: groups
+              datagrid_name: contact_groups
               entity_name: OroCRM\Bundle\ContactBundle\Entity\Group
-              entity_hint: groups
+              entity_hint: group
               route_name: orocrm_contact_group_index
 
     orocrm_contact.group_contact.datagrid_manager:
         class: %orocrm_contact.group_contact.datagrid_manager.class%
         tags:
             - name: oro_grid.datagrid.manager
-              datagrid_name: groupcontacts
+              datagrid_name: contact_groupcontacts
               entity_name: %orocrm_contact.entity.class%
               query_entity_alias: contact
-              entity_hint: contacts
-              flexible: true
+              entity_hint: contact
               route_name: orocrm_contact_group_contact_grid
 
     orocrm_contact.account.view_datagrid_manager:
         class: %orocrm_contact.contact.view_datagrid_manager.class%
         tags:
             - name: oro_grid.datagrid.manager
-              datagrid_name: accounts_view
+              datagrid_name: contact_accounts_view
               entity_name: %orocrm_account.account.entity.class%
               query_entity_alias: account
-              entity_hint: acounts
+              entity_hint: account
               flexible: true
               route_name: orocrm_contact_view
 
@@ -52,9 +50,9 @@ services:
         class: %orocrm_contact.account.update_datagrid_manager.class%
         tags:
             - name: oro_grid.datagrid.manager
-              datagrid_name: accounts_update
+              datagrid_name: contact_accounts_update
               entity_name: %orocrm_account.account.entity.class%
               query_entity_alias: account
-              entity_hint: acounts
+              entity_hint: account
               flexible: true
               route_name: orocrm_contact_update

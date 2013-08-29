@@ -36,6 +36,7 @@ class CreateAccountTest extends \PHPUnit_Extensions_Selenium2TestCase
             ->openAccounts()
             ->add()
             ->setAccountName($accountname)
+            ->setOwner('admin')
             ->save()
             ->assertTitle('Accounts - Customers')
             ->assertMessage('Account successfully saved');
@@ -56,6 +57,7 @@ class CreateAccountTest extends \PHPUnit_Extensions_Selenium2TestCase
             ->openAccounts()
             ->add()
             ->setAccountName($accountname . '_autocomplete_test')
+            ->setOwner('admin')
             ->setStreet('Street')
             ->setCity('City')
             ->setCountry('Kazak')

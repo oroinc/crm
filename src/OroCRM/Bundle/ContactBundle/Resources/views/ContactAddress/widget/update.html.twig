@@ -1,0 +1,34 @@
+{% form_theme form with ['OroAddressBundle:Include:fields.html.twig', 'OroFormBundle:Form:fields.html.twig', _self] %}
+<div class="widget-content" id="addressDialog">
+    {% if saved %}
+        <script type="text/javascript">
+            var widget = Oro.widget.Manager.getWidgetInstance({{ app.request.get('_wid')|json_encode|raw }});
+            widget.trigger('formSave', {{ form.vars.value.id|json_encode|raw }});
+        </script>
+    {% else %}
+        {{ JSFV(form) }}
+
+        {% if not form.vars.valid %}
+        <div class="alert alert-error">
+            <div class="message">
+                {{ form_errors(form) }}
+            </div>
+        </div>
+        {% endif %}
+
+        <form id="{{ form.vars.name }}"
+              action="{{ form.vars.value and form.vars.value.id > 0
+              ? path('orocrm_contact_address_update', { id: form.vars.value.id, contactId: contact.id })
+              : path('orocrm_contact_address_create', { contactId: contact.id })
+              }}"
+              method="post" class="form-register form-dialog">
+            <fieldset class="form-horizontal">
+                {{ form_widget(form) }}
+                <div class="widget-actions form-actions" style="display: none;">
+                    <button class="btn" type="reset">{{ 'Cancel'|trans }}</button>
+                    <button class="btn btn-primary" type="submit">{{ 'Save'|trans }}</button>
+                </div>
+            </fieldset>
+        </form>
+    {% endif %}
+</div>

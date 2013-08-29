@@ -16,11 +16,7 @@ class ContactTypeTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $flexibleManager = $this->getMockBuilder('Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleManager')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->type = new ContactType($flexibleManager, 'orocrm_contact', 'OroCRM\Bundle\ContactBundle\Entity\ContactAddress');
+        $this->type = new ContactType();
     }
 
     public function testSetDefaultOptions()
@@ -37,47 +33,50 @@ class ContactTypeTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('orocrm_contact', $this->type->getName());
     }
 
-    public function testAddEntityFields()
-    {
-        $builder = $this->getMockBuilder('Symfony\Component\Form\FormBuilder')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $builder->expects($this->at(1))
-            ->method('add')
-            ->with('tags', 'oro_tag_select')
-            ->will($this->returnSelf());
-        $builder->expects($this->at(2))
-            ->method('add')
-            ->with('addresses', 'oro_address_collection')
-            ->will($this->returnSelf());
-        $builder->expects($this->at(3))
-            ->method('add')
-            ->with('groups', 'entity')
-            ->will($this->returnSelf());
-        $builder->expects($this->at(4))
-            ->method('add')
-            ->with('appendAccounts', 'oro_entity_identifier')
-            ->will($this->returnSelf());
-        $builder->expects($this->at(5))
-            ->method('add')
-            ->with('removeAccounts', 'oro_entity_identifier')
-            ->will($this->returnSelf());
-
-        $this->type->addEntityFields($builder);
-    }
-
     public function testBuildForm()
     {
+        $expectedFields = array(
+            'namePrefix' => 'text',
+            'firstName' => 'text',
+            'lastName' => 'text',
+            'nameSuffix' => 'text',
+            'gender' => 'oro_gender',
+            'birthday' => 'oro_date',
+            'description' => 'textarea',
+            'jobTitle' => 'text',
+            'fax' => 'text',
+            'skype' => 'text',
+            'twitter' => 'text',
+            'facebook' => 'text',
+            'googlePlus' => 'text',
+            'linkedIn' => 'text',
+
+            'source' => 'entity',
+            'assignedTo' => 'oro_user_select',
+            'reportsTo' => 'orocrm_contact_select',
+            'method' => 'entity',
+            'tags' => 'oro_tag_select',
+            'addresses' => 'oro_address_collection',
+            'emails' => 'oro_email_collection',
+            'phones' => 'oro_phone_collection',
+            'groups' => 'entity',
+            'appendAccounts' => 'oro_entity_identifier',
+            'removeAccounts' => 'oro_entity_identifier',
+        );
+
         $builder = $this->getMockBuilder('Symfony\Component\Form\FormBuilder')
             ->disableOriginalConstructor()
             ->getMock();
-        $builder->expects($this->any())
-            ->method('add')
-            ->will($this->returnSelf());
-        $builder->expects($this->once())
-            ->method('addEventSubscriber')
-            ->with($this->isInstanceOf('Oro\Bundle\AddressBundle\Form\EventListener\AddressCollectionTypeSubscriber'));
+
+        $counter = 0;
+        foreach ($expectedFields as $fieldName => $formType) {
+            $builder->expects($this->at($counter))
+                ->method('add')
+                ->with($fieldName, $formType)
+                ->will($this->returnSelf());
+            $counter++;
+        }
+
         $this->type->buildForm($builder, array());
     }
 }
