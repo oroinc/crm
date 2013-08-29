@@ -1,7 +1,7 @@
-UPGRADE FROM 1.0.0-alpha2 to 1.0.0-alpha3
+UPGRADE FROM 1.0.0-alpha versions
 =======================
 
 ### General
 
-  * Upgrade to 1.0.0-alpha3 is not supported and full reinstall is required
+  * Upgrade to any 1.0.0-alpha is not supported and full reinstall is required
   
