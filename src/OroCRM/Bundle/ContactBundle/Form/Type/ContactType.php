@@ -63,8 +63,7 @@ class ContactType extends AbstractType
             )
         );
 
-        // owner and assigned to (users)
-        $builder->add('owner', 'oro_user_select', array('required' => false));
+        // assigned to (user)
         $builder->add('assignedTo', 'oro_user_select', array('required' => false));
 
         // reports to (contact)
@@ -91,7 +90,7 @@ class ContactType extends AbstractType
             'oro_address_collection',
             array(
                 'type' => 'oro_typed_address',
-                'required' => false,
+                'required' => true,
                 'options' => array('data_class' => 'OroCRM\Bundle\ContactBundle\Entity\ContactAddress')
             )
         )->add(

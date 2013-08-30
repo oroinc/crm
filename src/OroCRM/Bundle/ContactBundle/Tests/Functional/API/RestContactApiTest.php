@@ -111,7 +111,7 @@ class RestContactApiTest extends WebTestCase
      */
     protected function getUser()
     {
-        return $this->getEntityManager()->getRepository('OroCRMContactBundle:Group')->find(1);
+        return $this->getEntityManager()->getRepository('OroUserBundle:User')->find(1);
     }
 
     /**
@@ -131,6 +131,7 @@ class RestContactApiTest extends WebTestCase
                 'namePrefix'  => 'Contact name prefix',
                 'description' => 'Contact description',
                 'source'      => 'other',
+                'owner'       => '1',
                 'addresses'   => array($this->testAddress),
                 'accounts'    => array($account->getId()),
                 'groups'      => $contactGroupIds,

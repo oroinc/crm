@@ -46,7 +46,7 @@ class Configuration implements ConfigurationInterface
             $rootNode,
             array(
                 'name_format' => array(
-                    'value' => str_replace('%', '%%', '%first% %last% %suffix%')
+                    'value' => str_replace('%', '%%', '%prefix% %first% %last% %suffix%')
                 ),
             )
         );

@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCrRM\Bundle\ContactBundle\Tests\Functional;
+namespace OroCrRM\Bundle\AccountBundle\Tests\Functional;
 
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Bundle\TestFrameworkBundle\Test\ToolsAPI;
@@ -29,38 +29,38 @@ class ControllersTest extends WebTestCase
 
     public function testIndex()
     {
-        $this->client->request('GET', $this->client->generate('orocrm_contact_index'));
+        $this->client->request('GET', $this->client->generate('orocrm_account_index'));
         $result = $this->client->getResponse();
         ToolsAPI::assertJsonResponse($result, 200, 'text/html; charset=UTF-8');
     }
 
     public function testCreate()
     {
-        $crawler = $this->client->request('GET', $this->client->generate('orocrm_contact_create'));
+        $crawler = $this->client->request('GET', $this->client->generate('orocrm_account_create'));
         /** @var Form $form */
         $form = $crawler->selectButton('Save and Close')->form();
-        $form['orocrm_contact_form[firstName]'] = 'Contact_fname';
-        $form['orocrm_contact_form[lastName]'] = 'Contact_lname';
-        $form['orocrm_contact_form[owner]'] = '1';
+        $form['orocrm_account_form[name]'] = 'Account_name';
+        $form['orocrm_account_form[owner]'] = 1;
 
         $this->client->followRedirects(true);
         $crawler = $this->client->submit($form);
 
         $result = $this->client->getResponse();
         ToolsAPI::assertJsonResponse($result, 200, 'text/html; charset=UTF-8');
-        $this->assertContains("Contact successfully saved", $crawler->html());
+        $this->assertContains("Account successfully saved", $crawler->html());
     }
 
     public function testUpdate()
     {
         $this->client->request(
             'GET',
-            $this->client->generate('orocrm_contact_index', array('_format' =>'json')),
+            $this->client->generate('orocrm_account_index', array('_format' =>'json')),
             array(
-                'contacts[_filter][first_name][value]' => 'Contact_fname',
-                'contacts[_pager][_per_page]' => '10',
-                'contacts[_sort_by][first_name]' => 'ASC',
-                'contacts[_sort_by][last_name]' => 'ASC',
+                'accounts[_filter][name][type]=1' => '1',
+                'accounts[_filter][name][value]' => 'Account_name',
+                'accounts[_pager][_page]' => '1',
+                'accounts[_pager][_per_page]' => '10',
+                'accounts[_sort_by][name]' => 'ASC',
             )
         );
 
@@ -72,31 +72,31 @@ class ControllersTest extends WebTestCase
 
         $crawler = $this->client->request(
             'GET',
-            $this->client->generate('orocrm_contact_update', array('id' => $result['id']))
+            $this->client->generate('orocrm_account_update', array('id' => $result['id']))
         );
         /** @var Form $form */
         $form = $crawler->selectButton('Save and Close')->form();
-        $form['orocrm_contact_form[firstName]'] = 'Contact_fname';
-        $form['orocrm_contact_form[lastName]'] = 'Contact_lname';
+        $form['orocrm_account_form[name]'] = 'Account_name';
 
         $this->client->followRedirects(true);
         $crawler = $this->client->submit($form);
 
         $result = $this->client->getResponse();
         ToolsAPI::assertJsonResponse($result, 200, 'text/html; charset=UTF-8');
-        $this->assertContains("Contact successfully saved", $crawler->html());
+        $this->assertContains("Account successfully saved", $crawler->html());
     }
 
     public function testView()
     {
         $this->client->request(
             'GET',
-            $this->client->generate('orocrm_contact_index', array('_format' =>'json')),
+            $this->client->generate('orocrm_account_index', array('_format' =>'json')),
             array(
-                'contacts[_filter][first_name][value]' => 'Contact_fname',
-                'contacts[_pager][_per_page]' => '10',
-                'contacts[_sort_by][first_name]' => 'ASC',
-                'contacts[_sort_by][last_name]' => 'ASC',
+                'accounts[_filter][name][type]=1' => '1',
+                'accounts[_filter][name][value]' => 'Account_name',
+                'accounts[_pager][_page]' => '1',
+                'accounts[_pager][_per_page]' => '10',
+                'accounts[_sort_by][name]' => 'ASC',
             )
         );
 
@@ -108,24 +108,25 @@ class ControllersTest extends WebTestCase
 
         $crawler = $this->client->request(
             'GET',
-            $this->client->generate('orocrm_contact_view', array('id' => $result['id']))
+            $this->client->generate('orocrm_account_view', array('id' => $result['id']))
         );
 
         $result = $this->client->getResponse();
         ToolsAPI::assertJsonResponse($result, 200, 'text/html; charset=UTF-8');
-        $this->assertContains("Contact_fname Contact_lname - Contacts - Customers", $crawler->html());
+        $this->assertContains("Account_name - Accounts - Customers", $crawler->html());
     }
 
     public function testDelete()
     {
         $this->client->request(
             'GET',
-            $this->client->generate('orocrm_contact_index', array('_format' =>'json')),
+            $this->client->generate('orocrm_account_index', array('_format' =>'json')),
             array(
-                'contacts[_filter][first_name][value]' => 'Contact_fname',
-                'contacts[_pager][_per_page]' => '10',
-                'contacts[_sort_by][first_name]' => 'ASC',
-                'contacts[_sort_by][last_name]' => 'ASC',
+                'accounts[_filter][name][type]=1' => '1',
+                'accounts[_filter][name][value]' => 'Account_name',
+                'accounts[_pager][_page]' => '1',
+                'accounts[_pager][_per_page]' => '10',
+                'accounts[_sort_by][name]' => 'ASC',
             )
         );
 
@@ -137,7 +138,7 @@ class ControllersTest extends WebTestCase
 
         $this->client->request(
             'DELETE',
-            $this->client->generate('oro_api_delete_contact', array('id' => $result['id']))
+            $this->client->generate('oro_api_delete_account', array('id' => $result['id']))
         );
 
         $result = $this->client->getResponse();

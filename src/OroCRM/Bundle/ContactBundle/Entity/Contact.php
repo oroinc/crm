@@ -15,6 +15,7 @@ use Oro\Bundle\EmailBundle\Entity\EmailOwnerInterface;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 use Zend\Stdlib\DateTime;
+use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyMethods)
@@ -27,6 +28,12 @@ use Zend\Stdlib\DateTime;
  * @ORM\Table(name="orocrm_contact")
  * @ORM\HasLifecycleCallbacks()
  * @Oro\Loggable
+ * @Config(
+ *  defaultValues={
+ *      "entity"={"label"="Contact", "plural_label"="Contacts"},
+ *      "ownership"={"owner_type"="USER"}
+ *  }
+ * )
  */
 class Contact implements Taggable, EmailOwnerInterface
 {
@@ -129,7 +136,8 @@ class Contact implements Taggable, EmailOwnerInterface
      * @var User
      *
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
-     * @ORM\JoinColumn(name="owner_user_id", referencedColumnName="id", onDelete="SET NULL")
+     * @ORM\JoinColumn(name="user_owner_id", referencedColumnName="id", onDelete="SET NULL")
+     * @Soap\ComplexType("string", nillable=true)
      */
     protected $owner;
 
@@ -584,12 +592,12 @@ class Contact implements Taggable, EmailOwnerInterface
     }
 
     /**
-     * @param User $owner
+     * @param User $owningUser
      * @return Contact
      */
-    public function setOwner($owner)
+    public function setOwner($owningUser)
     {
-        $this->owner = $owner;
+        $this->owner = $owningUser;
 
         return $this;
     }

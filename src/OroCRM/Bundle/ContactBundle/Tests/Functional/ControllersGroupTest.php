@@ -12,7 +12,7 @@ use Symfony\Component\DomCrawler\Field\ChoiceFormField;
  * @outputBuffering enabled
  * @db_isolation
  */
-class ControllersTest extends WebTestCase
+class ControllersGroupTest extends WebTestCase
 {
     /**
      * @var Client
@@ -29,35 +29,38 @@ class ControllersTest extends WebTestCase
 
     public function testIndex()
     {
-        $this->client->request('GET', $this->client->generate('orocrm_contact_index'));
+        $this->client->request('GET', $this->client->generate('orocrm_contact_group_index'));
         $result = $this->client->getResponse();
         ToolsAPI::assertJsonResponse($result, 200, 'text/html; charset=UTF-8');
     }
 
     public function testCreate()
     {
-        $crawler = $this->client->request('GET', $this->client->generate('orocrm_contact_create'));
+        $crawler = $this->client->request('GET', $this->client->generate('orocrm_contact_group_create'));
         /** @var Form $form */
         $form = $crawler->selectButton('Save and Close')->form();
-        $form['orocrm_contact_form[firstName]'] = 'Contact_fname';
-        $form['orocrm_contact_form[lastName]'] = 'Contact_lname';
-        $form['orocrm_contact_form[owner]'] = '1';
-
+        $form['orocrm_contact_group_form[label]'] = 'Contact Group Label';
+        $form['orocrm_contact_group_form[owner]'] = 1;
+        //$form['orocrm_contact_group_form[appendContacts]'] = 1;
         $this->client->followRedirects(true);
         $crawler = $this->client->submit($form);
 
         $result = $this->client->getResponse();
-        ToolsAPI::assertJsonResponse($result, 200, 'text/html; charset=UTF-8');
-        $this->assertContains("Contact successfully saved", $crawler->html());
+        ToolsAPI::assertJsonResponse($result, 200, '');
+        $this->assertContains("Group successfully saved", $crawler->html());
     }
 
+    /**
+     * @depends testCreate
+     */
     public function testUpdate()
     {
         $this->client->request(
             'GET',
-            $this->client->generate('orocrm_contact_index', array('_format' =>'json')),
+            $this->client->generate('orocrm_contact_group_index', array('_format' =>'json')),
             array(
-                'contacts[_filter][first_name][value]' => 'Contact_fname',
+                'contact_groups[_filter][label][value]' => 'Contact Group Label',
+                'contact_groups[_filter][label][type]' => '1',
                 'contacts[_pager][_per_page]' => '10',
                 'contacts[_sort_by][first_name]' => 'ASC',
                 'contacts[_sort_by][last_name]' => 'ASC',
@@ -72,28 +75,31 @@ class ControllersTest extends WebTestCase
 
         $crawler = $this->client->request(
             'GET',
-            $this->client->generate('orocrm_contact_update', array('id' => $result['id']))
+            $this->client->generate('orocrm_contact_group_update', array('id' => $result['id']))
         );
         /** @var Form $form */
         $form = $crawler->selectButton('Save and Close')->form();
-        $form['orocrm_contact_form[firstName]'] = 'Contact_fname';
-        $form['orocrm_contact_form[lastName]'] = 'Contact_lname';
+        $form['orocrm_contact_group_form[label]'] = 'Contact Group Label Updated';
 
         $this->client->followRedirects(true);
         $crawler = $this->client->submit($form);
 
         $result = $this->client->getResponse();
-        ToolsAPI::assertJsonResponse($result, 200, 'text/html; charset=UTF-8');
-        $this->assertContains("Contact successfully saved", $crawler->html());
+        ToolsAPI::assertJsonResponse($result, 200, '');
+        $this->assertContains("Group successfully saved", $crawler->html());
     }
 
-    public function testView()
+    /**
+     * @depends testCreate
+     */
+    public function testGrid()
     {
         $this->client->request(
             'GET',
-            $this->client->generate('orocrm_contact_index', array('_format' =>'json')),
+            $this->client->generate('orocrm_contact_group_index', array('_format' =>'json')),
             array(
-                'contacts[_filter][first_name][value]' => 'Contact_fname',
+                'contact_groups[_filter][label][value]' => 'Contact Group Label',
+                'contact_groups[_filter][label][type]' => '1',
                 'contacts[_pager][_per_page]' => '10',
                 'contacts[_sort_by][first_name]' => 'ASC',
                 'contacts[_sort_by][last_name]' => 'ASC',
@@ -106,23 +112,27 @@ class ControllersTest extends WebTestCase
         $result = ToolsAPI::jsonToArray($result->getContent());
         $result = reset($result['data']);
 
-        $crawler = $this->client->request(
+        $this->client->request(
             'GET',
-            $this->client->generate('orocrm_contact_view', array('id' => $result['id']))
+            $this->client->generate('orocrm_contact_group_contact_grid', array('id' => $result['id']))
         );
-
         $result = $this->client->getResponse();
-        ToolsAPI::assertJsonResponse($result, 200, 'text/html; charset=UTF-8');
-        $this->assertContains("Contact_fname Contact_lname - Contacts - Customers", $crawler->html());
+        ToolsAPI::assertJsonResponse($result, 200);
+        $result = ToolsAPI::jsonToArray($result);
+        $this->assertEquals(0, $result['options']['TotalRecords']);
     }
 
+    /**
+     * @depends testUpdate
+     */
     public function testDelete()
     {
         $this->client->request(
             'GET',
-            $this->client->generate('orocrm_contact_index', array('_format' =>'json')),
+            $this->client->generate('orocrm_contact_group_index', array('_format' =>'json')),
             array(
-                'contacts[_filter][first_name][value]' => 'Contact_fname',
+                'contact_groups[_filter][label][value]' => 'Contact Group Label Updated',
+                'contact_groups[_filter][label][type]' => '1',
                 'contacts[_pager][_per_page]' => '10',
                 'contacts[_sort_by][first_name]' => 'ASC',
                 'contacts[_sort_by][last_name]' => 'ASC',
@@ -137,7 +147,7 @@ class ControllersTest extends WebTestCase
 
         $this->client->request(
             'DELETE',
-            $this->client->generate('oro_api_delete_contact', array('id' => $result['id']))
+            $this->client->generate('oro_api_delete_contactgroup', array('id' => $result['id']))
         );
 
         $result = $this->client->getResponse();

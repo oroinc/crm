@@ -14,12 +14,21 @@ use Oro\Bundle\AddressBundle\Entity\Address;
 use Oro\Bundle\TagBundle\Entity\Taggable;
 use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityFlexible;
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
+use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
+
+use Oro\Bundle\UserBundle\Entity\User;
 
 /**
  * @ORM\Entity(repositoryClass="Oro\Bundle\FlexibleEntityBundle\Entity\Repository\FlexibleEntityRepository")
  * @ORM\Table(name="orocrm_account")
  * @ORM\HasLifecycleCallbacks()
  * @Oro\Loggable
+ * @Config(
+ *  defaultValues={
+ *      "entity"={"label"="Account", "plural_label"="Accounts"},
+ *      "ownership"={"owner_type"="USER"}
+ *  }
+ * )
  */
 class Account extends AbstractEntityFlexible implements Taggable
 {
@@ -39,6 +48,14 @@ class Account extends AbstractEntityFlexible implements Taggable
      * @Oro\Versioned
      */
     protected $name;
+
+    /**
+     * @var User
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
+     * @ORM\JoinColumn(name="user_owner_id", referencedColumnName="id", onDelete="SET NULL")
+     * @Soap\ComplexType("string", nillable=true)
+     */
+    protected $owner;
 
     /**
      * @var Address $shippingAddress
@@ -275,6 +292,25 @@ class Account extends AbstractEntityFlexible implements Taggable
     public function setTags($tags)
     {
         $this->tags = $tags;
+
+        return $this;
+    }
+
+    /**
+     * @return User
+     */
+    public function getOwner()
+    {
+        return $this->owner;
+    }
+
+    /**
+     * @param User $owningUser
+     * @return Account
+     */
+    public function setOwner($owningUser)
+    {
+        $this->owner = $owningUser;
 
         return $this;
     }
