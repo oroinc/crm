@@ -45,6 +45,21 @@ class LeadDatagridManager extends DatagridManager
      */
     protected function configureFields(FieldDescriptionCollection $fieldsCollection)
     {
+        $fieldTopic = new FieldDescription();
+        $fieldTopic->setName('topic');
+        $fieldTopic->setOptions(
+            array(
+                'type'        => FieldDescriptionInterface::TYPE_TEXT,
+                'label'       => $this->translate('orocrm.sales_lead.datagrid.topic'),
+                'field_name'  => 'topic',
+                'filter_type' => FilterInterface::TYPE_STRING,
+                'sortable'    => true,
+                'filterable'  => true,
+                'show_filter' => true,
+            )
+        );
+        $fieldsCollection->add($fieldTopic);
+
         $fieldStatus = new FieldDescription();
         $fieldStatus->setName('status');
         $fieldStatus->setOptions(
@@ -66,21 +81,6 @@ class LeadDatagridManager extends DatagridManager
             )
         );
         $fieldsCollection->add($fieldStatus);
-
-        $fieldTopic = new FieldDescription();
-        $fieldTopic->setName('topic');
-        $fieldTopic->setOptions(
-            array(
-                'type'        => FieldDescriptionInterface::TYPE_TEXT,
-                'label'       => $this->translate('orocrm.sales_lead.datagrid.topic'),
-                'field_name'  => 'topic',
-                'filter_type' => FilterInterface::TYPE_STRING,
-                'sortable'    => true,
-                'filterable'  => true,
-                'show_filter' => true,
-            )
-        );
-        $fieldsCollection->add($fieldTopic);
 
         $fieldFirstName = new FieldDescription();
         $fieldFirstName->setName('first_name');

@@ -11,7 +11,7 @@ workflows:
                     - approve_new
                     - cancel_new
             approved:
-                label: 'Approved'
+                label: 'Qualified'
                 allowed_transitions:
                     - reactivate
             cancelled:
@@ -32,7 +32,7 @@ workflows:
                     class: OroCRM\Bundle\SalesBundle\Entity\LeadStatus
         transitions:
             approve_new:
-                label: 'Approve'
+                label: 'Qualify'
                 step_to: approved
                 is_start: true
                 options:
@@ -40,7 +40,7 @@ workflows:
                         icon: 'icon-ok'
                 transition_definition: approve_definition
             cancel_new:
-                label: 'Cancel'
+                label: 'Disqualify'
                 step_to: cancelled
                 is_start: true
                 options:

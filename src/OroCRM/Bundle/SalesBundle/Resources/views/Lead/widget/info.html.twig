@@ -13,7 +13,6 @@
 </style>
 <div class="widget-content lead-info">
     <div class="span6">
-        {{ _self.renderRow('Topic'|trans, entity.topic) }}
         {{ _self.renderRow('First Name'|trans, entity.firstName) }}
         {{ _self.renderRow('Last Name'|trans, entity.lastName) }}
 
@@ -23,9 +22,8 @@
         {{ _self.renderRow('Number Of Employees'|trans, entity.numberOfEmployees) }}
     </div>
     <div class="span6">
-        {{ _self.renderRow('Status'|trans, entity.status) }}
-        {{ _self.renderRow('Email'|trans, '<a href="mailto:' ~ entity.email ~ '">' ~ entity.email ~ '</a>') }}
-        {{ _self.renderRow('Phone'|trans, '<a href="tel:' ~ entity.phoneNumber ~ '">' ~ entity.phoneNumber ~ '</a>') }}
-        {{ _self.renderRow('Website'|trans, '<a href="' ~ entity.website ~ '">' ~ entity.website ~ '</a>') }}
+        {{ _self.renderRow('Email'|trans, entity.email ? '<a href="mailto:' ~ entity.email ~ '">' ~ entity.email ~ '</a>' : '') }}
+        {{ _self.renderRow('Phone'|trans, entity.phoneNumber ? '<a href="tel:' ~ entity.phoneNumber ~ '">' ~ entity.phoneNumber ~ '</a>' : '') }}
+        {{ _self.renderRow('Website'|trans, entity.website ? '<a href="' ~ entity.website ~ '">' ~ entity.website ~ '</a>' : '') }}
     </div>
 </div>

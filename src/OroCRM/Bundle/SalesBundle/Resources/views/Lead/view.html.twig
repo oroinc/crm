@@ -33,6 +33,17 @@
     {{ parent() }}
 {% endblock pageHeader %}
 
+{% block breadcrumbs %}
+    {{ parent() }}
+    <div class="status-enabled pull-left">
+        {% if entity.status.name != 'canceled' %}
+            <div class="badge badge-enabled status-enabled"><i class="icon-status-enabled"></i>{{ entity.status.label }}</div>
+        {% else %}
+            <div class="badge badge-disabled status-disabled"><i class="icon-status-disabled"></i>{{ entity.status.label  }}</div>
+        {% endif %}
+    </div>
+{% endblock breadcrumbs %}
+
 {% block content_data %}
     <div class="well-small form-horizontal dark-bg">
         <div class="clearfix">
@@ -42,7 +53,7 @@
                         oro_widget_render({
                             'widgetType': 'block',
                             'url': path('orocrm_sales_lead_info', {id: entity.id}),
-                            'title': 'Lead Information'
+                            'title': 'Lead Information'|trans
                         })
                     }}
                 </div>
@@ -52,7 +63,7 @@
                             'widgetType': 'block',
                             'contentClasses': [],
                             'url': path('orocrm_sales_lead_address_book', {id: entity.id}),
-                            'title': 'Address Book'
+                            'title': 'Address'|trans
                         })
                     }}
                 </div>
