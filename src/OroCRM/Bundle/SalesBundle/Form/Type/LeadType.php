@@ -36,7 +36,7 @@ class LeadType extends AbstractType
                     'empty_value' => false,
                 )
             )
-            ->add('address', 'orocrm_lead_address', array('required' => false));
+            ->add('address', 'orocrm_lead_address', array('required' => true));
     }
 
     /**

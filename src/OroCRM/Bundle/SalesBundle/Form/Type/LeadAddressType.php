@@ -13,7 +13,7 @@ class LeadAddressType extends AddressType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         parent::buildForm($builder, $options);
-        $builder->remove('label')
+        $builder
             ->remove('firstName')
             ->remove('lastName');
     }
