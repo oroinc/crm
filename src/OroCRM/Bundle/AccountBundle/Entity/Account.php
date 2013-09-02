@@ -26,6 +26,7 @@ use Oro\Bundle\UserBundle\Entity\User;
  * @Config(
  *  defaultValues={
  *      "entity"={"label"="Account", "plural_label"="Accounts"},
+ *      "extend"={"is_extend"=true},
  *      "ownership"={"owner_type"="USER"}
  *  }
  * )

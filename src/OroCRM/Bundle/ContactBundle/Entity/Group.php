@@ -3,7 +3,6 @@
 namespace OroCRM\Bundle\ContactBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\Common\Collections\ArrayCollection;
 
 use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 
@@ -19,6 +18,7 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
  * @Config(
  *  defaultValues={
  *      "entity"={"label"="Contact Group", "plural_label"="Contact Groups"},
+ *      "extend"={"is_extend"=true},
  *      "ownership"={"owner_type"="USER"}
  *  }
  * )

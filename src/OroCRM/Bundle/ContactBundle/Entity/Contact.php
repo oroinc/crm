@@ -31,6 +31,7 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
  * @Config(
  *  defaultValues={
  *      "entity"={"label"="Contact", "plural_label"="Contacts"},
+ *      "extend"={"is_extend"=true},
  *      "ownership"={"owner_type"="USER"}
  *  }
  * )
