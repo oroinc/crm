@@ -4,6 +4,7 @@ namespace OroCRM\Bundle\SalesBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Oro\Bundle\AddressBundle\Entity\Address;
+use OroCRM\Bundle\ContactBundle\Entity\Contact;
 
 /**
  * Lead
@@ -28,6 +29,14 @@ class Lead
      * @ORM\JoinColumn(name="status_name", referencedColumnName="name")
      */
     protected $status;
+
+    /**
+     * @var Contact
+     *
+     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ContactBundle\Entity\Contact")
+     * @ORM\JoinColumn(name="contact_id", referencedColumnName="id", onDelete="SET NULL")
+     **/
+    protected $contact;
 
     /**
      * @var string
@@ -401,6 +410,24 @@ class Lead
         $this->address = $address;
 
         return $this;
+    }
+
+    /**
+     * @param Contact $contact
+     * @return Lead
+     */
+    public function setContact($contact)
+    {
+        $this->contact = $contact;
+        return $this;
+    }
+
+    /**
+     * @return Contact
+     */
+    public function getContact()
+    {
+        return $this->contact;
     }
 
     /**
