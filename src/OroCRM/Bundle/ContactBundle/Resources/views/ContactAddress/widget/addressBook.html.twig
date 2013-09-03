@@ -9,14 +9,17 @@
     <div class="map-box" id="address-book"></div>
 
     <script type="text/javascript">
+    require(['jquery', 'routing', 'oro/address-book'],
+    function($, routing, AddressBook) {
         $('#addressBookWidget').on('widgetize', function(e, widget) {
-            var addressBook = new OroAddressBook({
+            /** @type oro.AddressBook */
+            var addressBook = new AddressBook({
                 el: '#address-book',
                 addressListUrl: {{ path('oro_api_get_contact_addresses', {'contactId': entity.id})|json_encode|raw }},
                 addressCreateUrl: {{ path('orocrm_contact_address_create', {'contactId': entity.id})|json_encode|raw }},
                 addressUpdateUrl: function() {
                     var address = arguments[0];
-                    return Routing.generate(
+                    return routing.generate(
                         'orocrm_contact_address_update',
                         {
                             'contactId': {{ entity.id|json_encode|raw }},
@@ -31,5 +34,6 @@
                 .getCollection()
                 .reset({{ render(path('oro_api_get_contact_addresses', {contactId: entity.id})) }});
         });
+    });
     </script>
 </div>
