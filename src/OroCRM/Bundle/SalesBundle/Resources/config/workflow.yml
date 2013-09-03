@@ -54,8 +54,8 @@ workflows:
             qualify_definition:
                 conditions: # if lead.status = "new" or lead.status is empty
                     @or:
+                        - @empty: $lead.status
                         - @equal: [$lead.status.name, 'new']
-                        - @empty: $lead.status.name
                 post_actions: # set lead.status = "qualified"
                     - @find_entity:
                           class: OroCRM\Bundle\SalesBundle\Entity\LeadStatus
@@ -73,11 +73,23 @@ workflows:
                                     lastName: $lead.lastName
                                     description: $lead.topic
                             # TODO: add contact email, phone and address
+                    - @create_entity: # create an opportunity
+                        class: OroCRM\Bundle\SalesBundle\Entity\Opportunity
+                        attribute: $.result[opportunity]
+                        data:
+                            topic: $lead.topic
+                            contact: $lead.contact
+                    - @start_workflow: # start workflow and create workflow item
+                        name: sales_opportunity
+                        attribute: $.result[workflow]
+                        entity: $.result[opportunity]
+                        transition: close_as_won
+                        # TODO update start workflow action after creating of sales workflow (wizard)
             cancel_definition: # if lead.status = "new" or lead.status is empty
                 conditions:
                     @or:
+                        - @empty: $lead.status
                         - @equal: [$lead.status.name, 'new']
-                        - @empty: $lead.status.name
                 post_actions: # set lead.status = "canceled"
                     - @find_entity:
                         class: OroCRM\Bundle\SalesBundle\Entity\LeadStatus
@@ -145,8 +157,8 @@ workflows:
             close_as_won_definition:
                 conditions: # if opportunity.status = "in_progress" or opportunity.status is empty
                     @or:
+                        - @empty: $opportunity.status
                         - @equal: [$opportunity.status.name, 'in_progress']
-                        - @empty: $opportunity.status.name
                 post_actions: # set opportunity.status = "won"
                     - @find_entity:
                         class: OroCRM\Bundle\SalesBundle\Entity\OpportunityStatus
@@ -155,8 +167,8 @@ workflows:
             close_as_lost_definition:
                 conditions: # if opportunity.status = "in_progress" or opportunity.status is empty
                     @or:
+                        - @empty: $opportunity.status
                         - @equal: [$opportunity.status.name, 'in_progress']
-                        - @empty: $opportunity.status.name
                 post_actions: # set opportunity.status = "lost"
                     - @find_entity:
                         class: OroCRM\Bundle\SalesBundle\Entity\OpportunityStatus
