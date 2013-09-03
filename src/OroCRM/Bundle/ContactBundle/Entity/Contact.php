@@ -15,7 +15,7 @@ use Oro\Bundle\EmailBundle\Entity\EmailOwnerInterface;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 use Zend\Stdlib\DateTime;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Configurable;
+use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyMethods)
@@ -28,7 +28,7 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Configurable;
  * @ORM\Table(name="orocrm_contact")
  * @ORM\HasLifecycleCallbacks()
  * @Oro\Loggable
- * @Configurable(
+ * @Config(
  *  defaultValues={
  *      "entity"={"label"="Contact", "plural_label"="Contacts"},
  *      "ownership"={"owner_type"="USER"}

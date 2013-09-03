@@ -10,13 +10,13 @@ use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 
 use Oro\Bundle\UserBundle\Entity\User;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Configurable;
+use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 
 /**
  * @ORM\Entity
  * @ORM\Table(name="orocrm_contact_group")
  * @Oro\Loggable
- * @Configurable(
+ * @Config(
  *  defaultValues={
  *      "entity"={"label"="Contact Group", "plural_label"="Contact Groups"},
  *      "ownership"={"owner_type"="USER"}
