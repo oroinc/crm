@@ -63,7 +63,6 @@ class ContactType extends AbstractType
         );
 
         // owner and assigned to (users)
-        $builder->add('owner', 'oro_user_select', array('required' => false));
         $builder->add('assignedTo', 'oro_user_select', array('required' => false));
 
         // reports to (contact)

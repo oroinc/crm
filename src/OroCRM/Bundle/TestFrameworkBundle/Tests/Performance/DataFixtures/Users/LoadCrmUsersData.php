@@ -41,6 +41,7 @@ class LoadCrmUsersData extends AbstractFixture implements ContainerAwareInterfac
     protected $firstNamesDictionary = null;
     protected $lastNamesDictionary = null;
     protected $role;
+    protected $businessUnit;
 
     /**
      * {@inheritDoc}
@@ -49,7 +50,11 @@ class LoadCrmUsersData extends AbstractFixture implements ContainerAwareInterfac
     {
         $this->userManager = $container->get('oro_user.manager');
         $this->userRepository = $this->userManager->getFlexibleRepository();
-        $this->role = $this->userManager->getStorageManager()->getRepository('OroUserBundle:Role')->findBy(array('role' => 'ROLE_USER'));
+        $this->role = $this->userManager->getStorageManager()->getRepository('OroUserBundle:Role')
+            ->findBy(array('role' => 'ROLE_USER'));
+        $this->businessUnitManager = $container->get('oro_organization.business_unit_manager');
+        $this->businessUnit = $this->businessUnitManager->getBusinessUnitRepo()->findAll();
+        $this->businessUnit = $this->businessUnit[0];
     }
 
     /**
@@ -200,6 +205,7 @@ class LoadCrmUsersData extends AbstractFixture implements ContainerAwareInterfac
         $user->setLastname($lastName);
         $user->setBirthday($birthday);
         $user->addRole($this->role[0]);
+        $user->setOwner($this->businessUnit);
 
         $this->setFlexibleAttributeValue($user, 'company', $company);
         //$this->setFlexibleAttributeValue($user, 'salary', $salary);

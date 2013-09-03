@@ -2,7 +2,13 @@
 
 namespace OroCRM\Bundle\ContactBundle\Tests\Unit\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+
 use OroCRM\Bundle\ContactBundle\Entity\Group;
+
+use Oro\Bundle\UserBundle\Entity\User;
+use Oro\Bundle\OrganizationBundle\Entity\BusinessUnit;
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
 
 class GroupTest extends \PHPUnit_Framework_TestCase
 {
@@ -30,5 +36,17 @@ class GroupTest extends \PHPUnit_Framework_TestCase
         $this->group->setLabel('Label');
         $this->assertEquals('Label', $this->group->getLabel());
         $this->assertEquals('Label', $this->group->__toString());
+    }
+
+    public function testOwners()
+    {
+        $entity = new Group();
+        $user = new User();
+
+        $this->assertEmpty($entity->getOwner());
+
+        $entity->setOwner($user);
+
+        $this->assertEquals($user, $entity->getOwner());
     }
 }

@@ -2,8 +2,12 @@
 
 namespace OroCRM\Bundle\AccountBundle\Tests\Unit\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
+
+use Oro\Bundle\UserBundle\Entity\User;
 
 class AccountTest extends \PHPUnit_Framework_TestCase
 {
@@ -58,5 +62,17 @@ class AccountTest extends \PHPUnit_Framework_TestCase
 
         $account->removeContact($contact);
         $this->assertEmpty($account->getContacts()->toArray());
+    }
+
+    public function testOwners()
+    {
+        $entity = new Account();
+        $user = new User();
+
+        $this->assertEmpty($entity->getOwner());
+
+        $entity->setOwner($user);
+
+        $this->assertEquals($user, $entity->getOwner());
     }
 }
