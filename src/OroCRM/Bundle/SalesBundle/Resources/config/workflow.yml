@@ -279,22 +279,37 @@ workflows:
                 label: 'Qualify'
                 step_to: qualification
                 is_start: true
+                options:
+                    frontend:
+                        icon: 'icon-ok'
                 transition_definition: start_qualify_definition
             qualify:
                 label: 'Qualify'
                 step_to: development
+                options:
+                    frontend:
+                        icon: 'icon-ok'
                 transition_definition: qualify_definition
             develop:
                 label: 'Develop'
                 step_to: closing
+                options:
+                    frontend:
+                        icon: 'icon-play'
                 transition_definition: develop_definition
             close_as_won:
                 label: 'Close as Won'
                 step_to: closed
+                options:
+                    frontend:
+                        icon: 'icon-ok-circle'
                 transition_definition: close_as_won_definition
             close_as_lost:
                 label: 'Close as Lost'
                 step_to: closed
+                options:
+                    frontend:
+                        icon: 'icon-remove-circle'
                 transition_definition: close_as_lost_definition
         transition_definitions:
             start_qualify_definition:
