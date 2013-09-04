@@ -191,6 +191,7 @@ workflows:
         steps:
             qualification:
                 label: 'Qualification'
+                template: 'OroCRMSalesBundle:Workflow:sales.html.twig'
                 allowed_transitions:
                     - qualify
                 form_options:
@@ -203,6 +204,7 @@ workflows:
                             form_type: money
             development:
                 label: 'Development'
+                template: 'OroCRMSalesBundle:Workflow:sales.html.twig'
                 allowed_transitions:
                     - develop
                 form_options:
@@ -213,6 +215,7 @@ workflows:
                             form_type: text
             closing:
                 label: 'Closing'
+                template: 'OroCRMSalesBundle:Workflow:sales.html.twig'
                 allowed_transitions:
                     - close_as_won
                     - close_as_lost
@@ -232,6 +235,7 @@ workflows:
                                 required: true
             closed:
                 label: 'Closed'
+                template: 'OroCRMSalesBundle:Workflow:sales.html.twig'
                 is_final: true
         attributes:
             opportunity:

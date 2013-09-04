@@ -1,0 +1,13 @@
+{% extends "OroWorkflowBundle:WorkflowStep:edit.html.twig" %}
+
+{% block workflow_entities %}
+    {{
+        oro_widget_render({
+            'widgetType': 'block',
+            'url': path('orocrm_sales_opportunity_info', { id: workflowItem.data.opportunity.id }),
+            'title': 'Opportunity Information'|trans,
+            'alias': 'opportunity_info',
+            'contentClasses': ['form-horizontal']
+        })
+    }}
+{% endblock %}
