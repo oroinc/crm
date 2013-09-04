@@ -59,18 +59,75 @@ workflows:
                           class: OroCRM\Bundle\SalesBundle\Entity\LeadStatus
                           identifier: 'qualified'
                           attribute: $lead.status
-                    - @tree:
+                    - @tree: # create Contact entity
                         conditions: # if contact not specified
                             @empty: $lead.contact
                         post_actions:
-                            - @create_entity: # create Contact based on Lead data
+                            - @create_entity: # create Contact based on Lead
                                 class: OroCRM\Bundle\ContactBundle\Entity\Contact
                                 attribute: $lead.contact
                                 data:
                                     firstName: $lead.firstName
                                     lastName: $lead.lastName
                                     description: $lead.topic
-                            # TODO: add contact email, phone and address
+                            - @tree: # set Contact Address
+                                conditions: # if lead has address
+                                    @not_empty: $lead.address
+                                post_actions:
+                                    - @create_entity: # create Contact Address based on Lead address
+                                        class: OroCRM\Bundle\ContactBundle\Entity\ContactAddress
+                                        attribute: $.result.address
+                                        data:
+                                            label: $lead.address.label
+                                            street: $lead.address.street
+                                            street2: $lead.address.street2
+                                            city: $lead.address.city
+                                            postalCode: $lead.address.postalCode
+                                            country: $lead.address.country
+                                            state: $lead.address.state
+                                            stateText: $lead.address.stateText
+                                            firstName: $lead.firstName
+                                            lastName: $lead.lastName
+                                            primary: true
+                                    - @call_method: # add Address to Contact
+                                        object: $lead.contact
+                                        method: addAddress
+                                        method_parameters: [$.result.address]
+                                    - @unset_value: # unset temporary property
+                                        [$.result.address]
+                            - @tree: # set Contact Email
+                                conditions: # if lead has email
+                                    @not_empty: $lead.email
+                                post_actions:
+                                    - @create_entity: # create Contact Address based on Lead address
+                                        class: OroCRM\Bundle\ContactBundle\Entity\ContactEmail
+                                        attribute: $.result.email
+                                        data:
+                                            email: $lead.email
+                                            owner: $lead.contact
+                                            primary: true
+                                    - @call_method: # add Email to Contact
+                                        object: $lead.contact
+                                        method: addEmail
+                                        method_parameters: [$.result.email]
+                                    - @unset_value: # unset temporary property
+                                        [$.result.email]
+                            - @tree: # set Contact Phone
+                                conditions: # if lead has phone
+                                    @not_empty: $lead.phoneNumber
+                                post_actions:
+                                    - @create_entity: # create Contact Address based on Lead address
+                                        class: OroCRM\Bundle\ContactBundle\Entity\ContactPhone
+                                        attribute: $.result.phone
+                                        data:
+                                            phone: $lead.phoneNumber
+                                            primary: true
+                                    - @call_method: # add Phone to Contact
+                                        object: $lead.contact
+                                        method: addPhone
+                                        method_parameters: [$.result.phone]
+                                    - @unset_value: # unset temporary property
+                                        [$.result.phone]
                     - @create_entity: # create an opportunity
                         class: OroCRM\Bundle\SalesBundle\Entity\Opportunity
                         attribute: $.result.opportunity
@@ -82,13 +139,12 @@ workflows:
                         identifier: 'in_progress'
                         attribute: $.result.opportunity.status
                     - @start_workflow: # start workflow and create workflow item
-                        name: sales_opportunity
+                        name: sales
                         attribute: $.result.workflowItem
                         entity: $.result.opportunity
-                        transition: close_as_won
-                        # TODO update start workflow action after creating of sales workflow (wizard)
-                    - @redirect_to_workflow:
-                        workflow_item: $.result.workflowItem
+                        transition: start_qualify
+                    - @redirect_to_workflow: # redirect to workflow item edit page
+                        [$.result.workflowItem]
             cancel_definition: # if lead.status = "new"
                 conditions:
                     @equal: [$lead.status.name, 'new']
@@ -119,6 +175,7 @@ workflows:
                 allowed_transitions:
                     - close_as_won
                     - close_as_lost
+                    - reopen
             closed:
                 label: 'Closed'
                 allowed_transitions:
@@ -185,13 +242,14 @@ workflows:
 
     # Sales Workflow
     sales:
-        label: 'Qualified Sales Opportunity'
+        label: 'Sales Flow'
         enabled: true
         type: wizard
         steps:
             qualification:
                 label: 'Qualification'
                 template: 'OroCRMSalesBundle:Workflow:sales.html.twig'
+                order: 10
                 allowed_transitions:
                     - qualify
                 form_options:
@@ -205,6 +263,7 @@ workflows:
             development:
                 label: 'Development'
                 template: 'OroCRMSalesBundle:Workflow:sales.html.twig'
+                order: 20
                 allowed_transitions:
                     - develop
                 form_options:
@@ -216,6 +275,7 @@ workflows:
             closing:
                 label: 'Closing'
                 template: 'OroCRMSalesBundle:Workflow:sales.html.twig'
+                order: 30
                 allowed_transitions:
                     - close_as_won
                     - close_as_lost
@@ -236,6 +296,7 @@ workflows:
             closed:
                 label: 'Closed'
                 template: 'OroCRMSalesBundle:Workflow:sales.html.twig'
+                order: 40
                 is_final: true
         attributes:
             opportunity:
