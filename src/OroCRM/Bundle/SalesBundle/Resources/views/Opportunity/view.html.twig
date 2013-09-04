@@ -50,6 +50,14 @@
                     }}
                 </div>
                 <div class="span6">
+                    {{
+                        oro_widget_render({
+                            'widgetType': 'block',
+                            'url': path('oro_workflow_widget_workflow_items', {entityClass: oro_class_name(entity), entityId: entity.id}),
+                            'title': 'Workflow Items',
+                            'contentClasses': []
+                        })
+                    }}
                 </div>
             </div>
         </div>
