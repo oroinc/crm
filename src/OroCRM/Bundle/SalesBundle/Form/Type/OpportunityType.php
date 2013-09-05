@@ -27,6 +27,17 @@ class OpportunityType extends AbstractType
             )
         );
 
+        $builder->add(
+            'closeReason',
+            'entity',
+            array(
+                'class'       => 'OroCRMSalesBundle:OpportunityCloseReason',
+                'property'    => 'label',
+                'required'    => false,
+                'disabled'    => false,
+            )
+        );
+
         $builder
             ->add('contact', 'orocrm_contact_select', array('required' => false))
             ->add('account', 'orocrm_account_select', array('required' => false))
@@ -34,6 +45,7 @@ class OpportunityType extends AbstractType
             ->add('closeDate', 'oro_date', array('required' => false))
             ->add('probability', 'percent', array('required' => false, 'precision' => 2))
             ->add('budgetAmount', 'money', array('required' => false))
+            ->add('revenue', 'money', array('required' => false))
             ->add('customerNeed', 'text', array('required' => false))
             ->add('proposedSolution', 'text', array('required' => false));
     }

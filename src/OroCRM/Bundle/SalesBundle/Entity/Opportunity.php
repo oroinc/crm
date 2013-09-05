@@ -32,6 +32,14 @@ class Opportunity
     protected $status;
 
     /**
+     * @var OpportunityCloseReason
+     *
+     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\SalesBundle\Entity\OpportunityCloseReason")
+     * @ORM\JoinColumn(name="close_reason_name", referencedColumnName="name")
+     **/
+    protected $closeReason;
+
+    /**
      * @var Contact
      *
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ContactBundle\Entity\Contact")
@@ -74,6 +82,13 @@ class Opportunity
      * @ORM\Column(name="budget_amount", type="float", nullable=true)
      */
     protected $budgetAmount;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="revenue", type="float", nullable=true)
+     */
+    protected $revenue;
 
     /**
      * @var string
@@ -271,6 +286,40 @@ class Opportunity
     public function getTopic()
     {
         return $this->topic;
+    }
+
+    /**
+     * @param OpportunityCloseReason $closeReason
+     * @return Opportunity
+     */
+    public function setCloseReason($closeReason)
+    {
+        $this->closeReason = $closeReason;
+        return $this;
+    }
+
+    /**
+     * @return OpportunityCloseReason
+     */
+    public function getCloseReason()
+    {
+        return $this->closeReason;
+    }
+
+    /**
+     * @param float $revenue
+     */
+    public function setRevenue($revenue)
+    {
+        $this->revenue = $revenue;
+    }
+
+    /**
+     * @return float
+     */
+    public function getRevenue()
+    {
+        return $this->revenue;
     }
 
     /**
