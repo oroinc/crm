@@ -6,6 +6,7 @@ use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\EntityRepository;
 
+use Oro\Bundle\EntityBundle\Datagrid\ExtendEntityDatagrid;
 use Oro\Bundle\GridBundle\Datagrid\DatagridManager;
 use Oro\Bundle\GridBundle\Field\FieldDescription;
 use Oro\Bundle\GridBundle\Field\FieldDescriptionCollection;
@@ -20,7 +21,8 @@ use Oro\Bundle\GridBundle\Action\MassAction\Ajax\DeleteMassAction;
 use Oro\Bundle\GridBundle\Action\MassAction\Redirect\RedirectMassAction;
 use Oro\Bundle\GridBundle\Action\MassAction\Widget\WindowMassAction;
 
-class ContactDatagridManager extends DatagridManager
+//class ContactDatagridManager extends DatagridManager
+class ContactDatagridManager extends ExtendEntityDatagrid
 {
     /**
      * Expression to get region text or label, CONCAT is used as type cast function
@@ -48,6 +50,9 @@ class ContactDatagridManager extends DatagridManager
      */
     protected function configureFields(FieldDescriptionCollection $fieldsCollection)
     {
+        $this->getDynamicFields($fieldsCollection);
+
+
         $fieldFirstName = new FieldDescription();
         $fieldFirstName->setName('first_name');
         $fieldFirstName->setOptions(

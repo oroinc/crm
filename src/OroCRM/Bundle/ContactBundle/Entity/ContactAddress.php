@@ -18,6 +18,7 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
  *      "extend"={"is_extend"=true},
  *      "ownership"={"owner_type"="USER"}
  *  }
+ * )
  * @ORM\Entity
  */
 class ContactAddress extends AbstractTypedAddress

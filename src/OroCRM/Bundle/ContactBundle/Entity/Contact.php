@@ -8,14 +8,16 @@ use Doctrine\Common\Collections\Collection;
 
 use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 
-use OroCRM\Bundle\AccountBundle\Entity\Account;
+use Zend\Stdlib\DateTime;
+
 use Oro\Bundle\TagBundle\Entity\Taggable;
 use Oro\Bundle\AddressBundle\Entity\AddressType;
 use Oro\Bundle\EmailBundle\Entity\EmailOwnerInterface;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
-use Zend\Stdlib\DateTime;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
+
+use OroCRM\Bundle\AccountBundle\Entity\Account;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyMethods)
