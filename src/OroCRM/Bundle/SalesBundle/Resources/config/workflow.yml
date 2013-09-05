@@ -288,7 +288,7 @@ workflows:
                                 required: false
             close:
                 label: 'Close'
-                template: 'OroCRMSalesBundle:Workflow:salesClose.html.twig'
+                template: 'OroCRMSalesBundle:Workflow:sales.html.twig'
                 order: 30
                 allowed_transitions:
                     - close_as_won
