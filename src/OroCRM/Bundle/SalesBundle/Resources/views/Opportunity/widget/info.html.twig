@@ -12,22 +12,33 @@
     }
 </style>
 
-{% set defaultRowValue = 'N/A'|trans %}
-
 <div class="widget-content opportunity-info box-content">
     <div class="span6">
         {{ _self.renderRow('Topic'|trans, entity.topic) }}
         {{ _self.renderRow('Status'|trans, entity.status) }}
-        {{ _self.renderRow('Contact'|trans, entity.contact) }}
-        {{ _self.renderRow('Account'|trans, entity.account ? entity.account.__toString() : defaultRowValue) }}
-        {{ _self.renderRow('Probability'|trans, entity.probability ? (entity.probability * 100) ~ '%' : defaultRowValue) }}
-        {{ _self.renderRow('Budget amount'|trans, entity.budgetAmount ? entity.budgetAmount|number_format(2), defaultRowValue) }}
+
+        {%- if resource_granted('orocrm_contact_view') and entity.contact -%}
+            {% set contactView = '<a href="' ~ path('orocrm_contact_view', {'id': entity.contact.id}) ~ '">' ~ entity.contact ~ '</a>' %}
+        {%- else -%}
+            {% set contactView = entity.contact ? entity.contact : '' %}
+        {%- endif -%}
+        {{ _self.renderRow('Contact'|trans, contactView) }}
+
+        {%- if resource_granted('orocrm_account_view') and entity.account -%}
+            {% set accountView = '<a href="' ~ path('orocrm_account_view', {'id': entity.account.id}) ~ '">' ~ entity.account.__toString() ~ '</a>' %}
+        {%- else -%}
+            {% set accountView = entity.account ? entity.account.__toString() : '' %}
+        {%- endif -%}
+        {{ _self.renderRow('Account'|trans, accountView) }}
+
+        {{ _self.renderRow('Probability'|trans, entity.probability ? (entity.probability * 100) ~ '%' : '') }}
+        {{ _self.renderRow('Budget amount'|trans, entity.budgetAmount ? entity.budgetAmount|number_format(2), '') }}
     </div>
     <div class="span6">
         {{ _self.renderRow('Customer need'|trans, entity.customerNeed) }}
         {{ _self.renderRow('Proposed solution'|trans, entity.proposedSolution) }}
         {{ _self.renderRow('Close reason'|trans, entity.closeReason) }}
         {{ _self.renderRow('Revenue'|trans, entity.revenue) }}
-        {{ _self.renderRow('Close date'|trans, entity.closeDate ? macros.date(entity.closeDate) : defaultRowValue) }}
+        {{ _self.renderRow('Close date'|trans, entity.closeDate ? macros.date(entity.closeDate) : '') }}
     </div>
 </div>
