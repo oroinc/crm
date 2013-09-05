@@ -33,6 +33,7 @@ workflows:
                 options:
                     frontend:
                         icon: 'icon-ok'
+                        class: 'btn-primary'
                 transition_definition: qualify_definition
             cancel:
                 label: 'Disqualify'
@@ -196,6 +197,7 @@ workflows:
                 options:
                     frontend:
                         icon: 'icon-ok-circle'
+                        class: 'btn-success'
                 transition_definition: close_as_won_definition
             close_as_lost:
                 label: 'Close as Lost'
@@ -204,6 +206,7 @@ workflows:
                 options:
                     frontend:
                         icon: 'icon-remove-circle'
+                        class: 'btn-danger'
                 transition_definition: close_as_lost_definition
             reopen:
                 label: 'Reopen'
@@ -358,6 +361,7 @@ workflows:
                 options:
                     frontend:
                         icon: 'icon-ok'
+                        class: 'btn-primary'
                 transition_definition: qualify_definition
             develop:
                 label: 'Develop'
@@ -379,6 +383,7 @@ workflows:
                 options:
                     frontend:
                         icon: 'icon-ok-circle'
+                        class: 'btn-success'
                 transition_definition: close_as_won_definition
             close_as_lost:
                 label: 'Close as Lost'
@@ -386,6 +391,7 @@ workflows:
                 options:
                     frontend:
                         icon: 'icon-remove-circle'
+                        class: 'btn-danger'
                 transition_definition: close_as_lost_definition
         transition_definitions:
             qualify_definition:
