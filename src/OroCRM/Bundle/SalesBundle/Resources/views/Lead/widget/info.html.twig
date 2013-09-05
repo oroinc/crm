@@ -15,7 +15,13 @@
     <div class="span6">
         {{ _self.renderRow('First Name'|trans, entity.firstName) }}
         {{ _self.renderRow('Last Name'|trans, entity.lastName) }}
-        {{ _self.renderRow('Contact'|trans, entity.contact) }}
+
+        {%- if resource_granted('orocrm_contact_view') and entity.contact -%}
+            {% set contactView = '<a href="' ~ path('orocrm_contact_view', {'id': entity.contact.id}) ~ '">' ~ entity.contact ~ '</a>' %}
+        {%- else -%}
+            {% set contactView = entity.contact ? entity.contact : '' %}
+        {%- endif -%}
+        {{ _self.renderRow('Contact'|trans, contactView) }}
 
         {{ _self.renderRow('Job Title'|trans, entity.jobTitle) }}
         {{ _self.renderRow('Company Name'|trans, entity.companyName) }}
