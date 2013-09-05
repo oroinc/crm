@@ -7,10 +7,17 @@ use Doctrine\Common\Collections\Collection;
 use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 
 use Oro\Bundle\AddressBundle\Entity\AbstractTypedAddress;
+use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 
 /**
  * @ORM\Table("orocrm_contact_address")
  * @ORM\HasLifecycleCallbacks()
+ * @Config(
+ *  defaultValues={
+ *      "entity"={"label"="Contact Address", "plural_label"="Contact Addresses"},
+ *      "extend"={"is_extend"=true},
+ *      "ownership"={"owner_type"="USER"}
+ *  }
  * @ORM\Entity
  */
 class ContactAddress extends AbstractTypedAddress
