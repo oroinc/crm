@@ -143,7 +143,7 @@ workflows:
                         name: sales
                         attribute: $.result.workflowItem
                         entity: $.result.opportunity
-                        transition: start_qualify
+                        transition: qualify
                     - @redirect_to_workflow: # redirect to workflow item edit page
                         [$.result.workflowItem]
             cancel_definition: # if lead.status = "new"
@@ -393,41 +393,30 @@ workflows:
                     @equal: [$opportunity.status.name, 'in_progress']
                 post_actions: # copy opportunity properties to attributes
                     - @assign_value:
-                        [$contact, $opportunity.contact]
-                    - @assign_value:
-                        [$account, $opportunity.account]
-                    - @assign_value:
-                        [$budget_amount, $opportunity.budgetAmount]
-                    - @assign_value:
-                        [$customer_need, $opportunity.customerNeed]
-                    - @assign_value:
-                        [$proposed_solution, $opportunity.proposedSolution]
-                    - @assign_value:
-                        [$probability, $opportunity.probability]
-                    - @assign_value:
-                        [$close_reason, $opportunity.closeReason]
-                    - @assign_value:
-                        [$close_revenue, $opportunity.closeRevenue]
-                    - @assign_value:
-                        [$close_date, $opportunity.closeDate]
+                        - [$contact, $opportunity.contact]
+                        - [$account, $opportunity.account]
+                        - [$budget_amount, $opportunity.budgetAmount]
+                        - [$customer_need, $opportunity.customerNeed]
+                        - [$proposed_solution, $opportunity.proposedSolution]
+                        - [$probability, $opportunity.probability]
+                        - [$close_reason, $opportunity.closeReason]
+                        - [$close_revenue, $opportunity.closeRevenue]
+                        - [$close_date, $opportunity.closeDate]
             develop_definition:
                 conditions: # if opportunity.status = "in_progress"
                     @equal: [$opportunity.status.name, 'in_progress']
                 post_actions: # update opportunity properties
                     - @assign_value:
-                        [$opportunity.budgetAmount, $budget_amount]
-                    - @assign_value:
-                        [$opportunity.contact, $contact]
-                    - @assign_value:
-                        [$opportunity.account, $account]
+                        - [$opportunity.budgetAmount, $budget_amount]
+                        - [$opportunity.contact, $contact]
+                        - [$opportunity.account, $account]
             close_definition:
                 conditions: # if opportunity.status = "in_progress"
                     @equal: [$opportunity.status.name, 'in_progress']
                 post_actions: # update opportunity properties
                     - @assign_value:
-                        [$opportunity.customerNeed, $customer_need]
-                    - @assign_value:
-                        [$opportunity.proposedSolution, $proposed_solution]
+                        - [$opportunity.customerNeed, $customer_need]
+                        - [$opportunity.proposedSolution, $proposed_solution]
             close_as_won_definition:
                 conditions: # if opportunity.status = "in_progress", required data is entered and reason = "won" or "outsold"
                     @and:
@@ -440,11 +429,9 @@ workflows:
                             - @equal: [$close_reason.name, 'outsold']
                 post_actions: # update opportunity properties, set opportunity.status = "won"
                     - @assign_value:
-                        [$opportunity.closeDate, $close_date]
-                    - @assign_value:
-                        [$opportunity.closeRevenue, $close_revenue]
-                    - @assign_value:
-                        [$opportunity.closeReason, $close_reason]
+                        - [$opportunity.closeDate, $close_date]
+                        - [$opportunity.closeRevenue, $close_revenue]
+                        - [$opportunity.closeReason, $close_reason]
                     - @find_entity:
                         class: OroCRM\Bundle\SalesBundle\Entity\OpportunityStatus
                         identifier: 'won'
@@ -461,11 +448,9 @@ workflows:
                         - @equal: [$close_reason.name, 'cancelled']
                 post_actions: # update opportunity properties, set opportunity.status = "lost"
                     - @assign_value:
-                        [$opportunity.closeDate, $close_date]
-                    - @assign_value:
-                        [$opportunity.closeRevenue, $close_revenue]
-                    - @assign_value:
-                        [$opportunity.closeReason, $close_reason]
+                        - [$opportunity.closeDate, $close_date]
+                        - [$opportunity.closeRevenue, $close_revenue]
+                        - [$opportunity.closeReason, $close_reason]
                     - @find_entity:
                         class: OroCRM\Bundle\SalesBundle\Entity\OpportunityStatus
                         identifier: 'lost'
