@@ -3,7 +3,7 @@
 {% block step_info %}
     {% if workflowItem.closed %}
         <h4>
-            {% trans %}Sales flow is closed.{% endtrans %}
+            {% trans %}Sales flow is finished.{% endtrans %}
             <a href="{{ path('orocrm_sales_opportunity_view', {'id': workflowItem.data.opportunity.id}) }}">
                 {% trans %}Go to opportunity view page{% endtrans %}
             </a>
