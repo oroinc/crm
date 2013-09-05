@@ -69,6 +69,7 @@ workflows:
                                 data:
                                     firstName: $lead.firstName
                                     lastName: $lead.lastName
+                                    jobTitle: $lead.jobTitle
                                     description: $lead.topic
                             - @tree: # set Contact Address
                                 conditions: # if lead has address
@@ -256,10 +257,16 @@ workflows:
                     attribute_fields:
                         account:
                             form_type: orocrm_account_select
+                            options:
+                                required: false
                         contact:
                             form_type: orocrm_contact_select
+                            options:
+                                required: false
                         budget_amount:
                             form_type: money
+                            options:
+                                required: false
             development:
                 label: 'Development'
                 template: 'OroCRMSalesBundle:Workflow:sales.html.twig'
@@ -270,8 +277,12 @@ workflows:
                     attribute_fields:
                         customer_need:
                             form_type: text
+                            options:
+                                required: false
                         proposed_solution:
                             form_type: text
+                            options:
+                                required: false
             closing:
                 label: 'Closing'
                 template: 'OroCRMSalesBundle:Workflow:sales.html.twig'
@@ -282,9 +293,12 @@ workflows:
                 form_options:
                     attribute_fields:
                         close_reason:
-                            form_type: text
+                            form_type: entity
                             options:
                                 required: true
+                                class: OroCRMSalesBundle:OpportunityCloseReason
+                                property: 'label'
+                                empty_value: false
                         close_revenue:
                             form_type: money
                             options:
@@ -295,7 +309,7 @@ workflows:
                                 required: true
             closed:
                 label: 'Closed'
-                template: 'OroCRMSalesBundle:Workflow:sales.html.twig'
+                template: 'OroCRMSalesBundle:Workflow:salesClosed.html.twig'
                 order: 40
                 is_final: true
         attributes:
@@ -329,8 +343,10 @@ workflows:
                 label: Proposed Solution
                 type: string
             close_reason:
-                label: Reason
-                type: string
+                label: Close Reason
+                type: entity
+                options:
+                    class: OroCRM\Bundle\SalesBundle\Entity\OpportunityCloseReason
             close_revenue:
                 label: Revenue
                 type: float
@@ -382,55 +398,71 @@ workflows:
                     @equal: [$opportunity.status.name, 'in_progress']
                 post_actions: # copy opportunity properties
                     - @assign_value:
-                        parameters: [$contact, $opportunity.contact]
+                        [$contact, $opportunity.contact]
                     - @assign_value:
-                        parameters: [$account, $opportunity.account]
+                        [$account, $opportunity.account]
                     - @assign_value:
-                        parameters: [$budget_amount, $opportunity.budgetAmount]
+                        [$budget_amount, $opportunity.budgetAmount]
                     - @assign_value:
-                        parameters: [$customer_need, $opportunity.customerNeed]
+                        [$customer_need, $opportunity.customerNeed]
                     - @assign_value:
-                        parameters: [$proposed_solution, $opportunity.proposedSolution]
+                        [$proposed_solution, $opportunity.proposedSolution]
                     - @assign_value:
-                        parameters: [$probability, $opportunity.probability]
+                        [$probability, $opportunity.probability]
             qualify_definition:
-                conditions: ~
+                conditions: # if opportunity.status = "in_progress"
+                    @equal: [$opportunity.status.name, 'in_progress']
                 post_actions: # update opportunity properties
                     - @assign_value:
-                        parameters: [$opportunity.budgetAmount, $budget_amount]
+                        [$opportunity.budgetAmount, $budget_amount]
                     - @assign_value:
-                        parameters: [$opportunity.contact, $contact]
+                        [$opportunity.contact, $contact]
                     - @assign_value:
-                        parameters: [$opportunity.account, $account]
+                        [$opportunity.account, $account]
             develop_definition:
-                conditions: ~
+                conditions: # if opportunity.status = "in_progress"
+                    @equal: [$opportunity.status.name, 'in_progress']
                 post_actions: # update opportunity properties
                     - @assign_value:
-                        parameters: [$opportunity.customerNeed, $customer_need]
+                        [$opportunity.customerNeed, $customer_need]
                     - @assign_value:
-                        parameters: [$opportunity.proposedSolution, $proposed_solution]
+                        [$opportunity.proposedSolution, $proposed_solution]
             close_as_won_definition:
-                conditions:
+                conditions: # if required data is entered and reason = "won" or "outsold"
                     @and:
+                        - @equal: [$opportunity.status.name, 'in_progress']
                         - @not_empty: $close_date
                         - @not_empty: $close_revenue
                         - @not_empty: $close_reason
+                        - @or:
+                            - @equal: [$close_reason.name, 'won']
+                            - @equal: [$close_reason.name, 'outsold']
                 post_actions: # update opportunity properties, set won status
                     - @assign_value:
-                        parameters: [$opportunity.closeDate, $close_date]
+                        [$opportunity.closeDate, $close_date]
+                    - @assign_value:
+                        [$opportunity.closeRevenue, $close_revenue]
+                    - @assign_value:
+                        [$opportunity.closeReason, $close_reason]
                     - @find_entity:
                         class: OroCRM\Bundle\SalesBundle\Entity\OpportunityStatus
                         identifier: 'won'
                         attribute: $opportunity.status
             close_as_lost_definition:
-                conditions:
+                conditions: # if required data is entered and reason = "cancelled"
                     @and:
+                        - @equal: [$opportunity.status.name, 'in_progress']
                         - @not_empty: $close_date
                         - @not_empty: $close_revenue
                         - @not_empty: $close_reason
+                        - @equal: [$close_reason.name, 'cancelled']
                 post_actions: # update opportunity properties, set lost status
                     - @assign_value:
-                        parameters: [$opportunity.closeDate, $close_date]
+                        [$opportunity.closeDate, $close_date]
+                    - @assign_value:
+                        [$opportunity.closeRevenue, $close_revenue]
+                    - @assign_value:
+                        [$opportunity.closeReason, $close_reason]
                     - @find_entity:
                         class: OroCRM\Bundle\SalesBundle\Entity\OpportunityStatus
                         identifier: 'lost'

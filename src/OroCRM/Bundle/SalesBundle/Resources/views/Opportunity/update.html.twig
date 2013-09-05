@@ -52,33 +52,32 @@
     {% set id = 'opportunity-profile' %}
 
     {% set dataBlocks = [{
-            'title': 'General',
-            'class': 'active',
-            'subblocks': [
-                {
-                    'title': 'Contact Information',
-                    'data': [
-                        form_row(form.topic, {'label': 'Topic'|trans}),
-                        form_row(form.status, {'label': 'Status'|trans}),
-                        form_row(form.contact, {'label': 'Contact'|trans}),
-                        form_row(form.account, {'label': 'Account'|trans}),
-                        form_row(form.probability, {'label': 'Probability'|trans}),
-                        form_row(form.budgetAmount, {'label': 'Budget amount'|trans}),
-                        form_row(form.customerNeed, {'label': 'Customer need'|trans}),
-                        form_row(form.proposedSolution, {'label': 'Proposed solution'|trans}),
-                        form_row(form.closeReason, {'label': 'Close reason'|trans}),
-                        form_row(form.revenue, {'label': 'Revenue'|trans}),
-                        form_row(form.closeDate, {'label': 'Close date'|trans})
-                    ]
-                }
-            ]
-        }]
-    %}
+        'title': 'General',
+        'class': 'active',
+        'subblocks': [
+            {
+                'title': 'Contact Information',
+                'data': [
+                    form_row(form.topic, {'label': 'Topic'|trans}),
+                    form_row(form.status, {'label': 'Status'|trans}),
+                    form_row(form.contact, {'label': 'Contact'|trans}),
+                    form_row(form.account, {'label': 'Account'|trans}),
+                    form_row(form.probability, {'label': 'Probability'|trans}),
+                    form_row(form.budgetAmount, {'label': 'Budget amount'|trans}),
+                    form_row(form.customerNeed, {'label': 'Customer need'|trans}),
+                    form_row(form.proposedSolution, {'label': 'Proposed solution'|trans}),
+                    form_row(form.closeReason, {'label': 'Close reason'|trans}),
+                    form_row(form.closeRevenue, {'label': 'Close revenue'|trans}),
+                    form_row(form.closeDate, {'label': 'Close date'|trans})
+                ]
+            }
+        ]
+    }] %}
 
     {% set data = {
-            'formErrors': form_errors(form) ? form_errors(form) : null,
-            'dataBlocks': dataBlocks,
-            'hiddenData': form_rest(form)
+        'formErrors': form_errors(form) ? form_errors(form) : null,
+        'dataBlocks': dataBlocks,
+        'hiddenData': form_rest(form)
     } %}
     {{ parent() }}
 {% endblock content_data %}

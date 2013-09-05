@@ -86,9 +86,9 @@ class Opportunity
     /**
      * @var float
      *
-     * @ORM\Column(name="revenue", type="float", nullable=true)
+     * @ORM\Column(name="close_revenue", type="float", nullable=true)
      */
-    protected $revenue;
+    protected $closeRevenue;
 
     /**
      * @var string
@@ -309,17 +309,17 @@ class Opportunity
     /**
      * @param float $revenue
      */
-    public function setRevenue($revenue)
+    public function setCloseRevenue($revenue)
     {
-        $this->revenue = $revenue;
+        $this->closeRevenue = $revenue;
     }
 
     /**
      * @return float
      */
-    public function getRevenue()
+    public function getCloseRevenue()
     {
-        return $this->revenue;
+        return $this->closeRevenue;
     }
 
     /**

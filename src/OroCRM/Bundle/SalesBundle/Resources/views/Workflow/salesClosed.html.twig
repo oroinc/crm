@@ -1,0 +1,10 @@
+{% extends "OroCRMSalesBundle:Workflow:sales.html.twig" %}
+
+{% block step_info %}
+    <h4>
+        {% trans %}Sales flow is closed.{% endtrans %}
+        <a href="{{ path('orocrm_sales_opportunity_view', {'id': workflowItem.data.opportunity.id}) }}">
+            {% trans %}Go to opportunity view page{% endtrans %}
+        </a>
+    </h4>
+{% endblock step_info %}
