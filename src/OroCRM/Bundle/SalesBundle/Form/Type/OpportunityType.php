@@ -43,7 +43,7 @@ class OpportunityType extends AbstractType
             ->add('account', 'orocrm_account_select', array('required' => false))
             ->add('topic', 'text', array('required' => true))
             ->add('closeDate', 'oro_date', array('required' => false))
-            ->add('probability', 'percent', array('required' => false, 'precision' => 2))
+            ->add('probability', 'percent', array('required' => false))
             ->add('budgetAmount', 'money', array('required' => false))
             ->add('closeRevenue', 'money', array('required' => false))
             ->add('customerNeed', 'text', array('required' => false))

@@ -267,7 +267,11 @@ workflows:
                             options:
                                 required: false
                         budget_amount:
-                            form_type: money
+                            form_type: number # TODO: replace with valid money form type
+                            options:
+                                required: false
+                        probability:
+                            form_type: percent
                             options:
                                 required: false
             develop:
@@ -284,6 +288,10 @@ workflows:
                                 required: false
                         proposed_solution:
                             form_type: text
+                            options:
+                                required: false
+                        probability:
+                            form_type: percent
                             options:
                                 required: false
             close:
@@ -303,13 +311,17 @@ workflows:
                                 property: 'label'
                                 empty_value: false
                         close_revenue:
-                            form_type: money
+                            form_type: number # TODO: replace with valid money form type
                             options:
                                 required: true
                         close_date:
                             form_type: oro_date
                             options:
                                 required: true
+                        probability:
+                            form_type: percent
+                            options:
+                                required: false
         attributes:
             opportunity:
                 label: Opportunity
@@ -416,6 +428,7 @@ workflows:
                         - [$opportunity.budgetAmount, $budget_amount]
                         - [$opportunity.contact, $contact]
                         - [$opportunity.account, $account]
+                        - [$opportunity.probability, $probability]
             close_definition:
                 conditions: # if opportunity.status = "in_progress"
                     @equal: [$opportunity.status.name, 'in_progress']
@@ -423,6 +436,7 @@ workflows:
                     - @assign_value:
                         - [$opportunity.customerNeed, $customer_need]
                         - [$opportunity.proposedSolution, $proposed_solution]
+                        - [$opportunity.probability, $probability]
             close_as_won_definition:
                 conditions: # if opportunity.status = "in_progress", required data is entered and reason = "won" or "outsold"
                     @and:
@@ -438,11 +452,16 @@ workflows:
                         - [$opportunity.closeDate, $close_date]
                         - [$opportunity.closeRevenue, $close_revenue]
                         - [$opportunity.closeReason, $close_reason]
+                        - [$opportunity.probability, $probability]
                     - @find_entity:
                         class: OroCRM\Bundle\SalesBundle\Entity\OpportunityStatus
                         identifier: 'won'
                         attribute: $opportunity.status
                     - @close_workflow: ~
+                    - @redirect:
+                        route: orocrm_sales_opportunity_view
+                        route_parameters:
+                            id: $opportunity.id
             close_as_lost_definition:
                 conditions: # opportunity.status = "in_progress", required data is entered and reason = "cancelled"
                     @and:
@@ -450,14 +469,21 @@ workflows:
                         - @not_empty: $close_date
                         - @not_empty: $close_revenue
                         - @not_empty: $close_reason
-                        - @equal: [$close_reason.name, 'cancelled']
+                        - @or:
+                            - @equal: [$close_reason.name, 'cancelled']
+                            - @equal: [$close_reason.name, 'outsold']
                 post_actions: # update opportunity properties, set opportunity.status = "lost"
                     - @assign_value:
                         - [$opportunity.closeDate, $close_date]
                         - [$opportunity.closeRevenue, $close_revenue]
                         - [$opportunity.closeReason, $close_reason]
+                        - [$opportunity.probability, $probability]
                     - @find_entity:
                         class: OroCRM\Bundle\SalesBundle\Entity\OpportunityStatus
                         identifier: 'lost'
                         attribute: $opportunity.status
                     - @close_workflow: ~
+                    - @redirect:
+                        route: orocrm_sales_opportunity_view
+                        route_parameters:
+                            id: $opportunity.id
