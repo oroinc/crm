@@ -40,9 +40,11 @@
     {{ parent() }}
     <div class="status-enabled pull-left">
         {% if entity.status.name != 'lost' %}
-            <div class="badge badge-enabled status-enabled"><i class="icon-status-enabled icon-circle"></i>{{ entity.status.label }}</div>
+            <div class="badge badge-enabled status-enabled">
+                <i class="icon-status-enabled icon-circle"></i>{{ entity.status.label }}</div>
         {% else %}
-            <div class="badge badge-disabled status-disabled"><i class="icon-status-disabled icon-circle"></i>{{ entity.status.label  }}</div>
+            <div class="badge badge-disabled status-disabled">
+                <i class="icon-status-disabled icon-circle"></i>{{ entity.status.label  }}</div>
         {% endif %}
     </div>
 {% endblock breadcrumbs %}
@@ -65,10 +67,21 @@
                     'widgetType': 'block',
                     'url': path('oro_workflow_widget_workflow_items', {entityClass: oro_class_name(entity), entityId: entity.id}),
                     'title': 'Workflow Items',
-                    'contentClasses': []
+                    'alias': 'bind_workflow_items'
                 })
             }}
         </div>
     </div>
 </div>
+<script type="text/javascript">
+    $(function() {// workflow_entity_buttons
+        Oro.widget.Manager.getWidgetInstanceByAlias('bind_workflow_items')
+            .on('workflowItemRemoved', function() {
+                var buttonsWidget = Oro.widget.Manager.getWidgetInstanceByAlias('workflow_entity_buttons');
+                if (buttonsWidget) {
+                    buttonsWidget.loadContent();
+                }
+            });
+    });
+</script>
 {% endblock content_data %}
