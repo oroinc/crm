@@ -135,13 +135,6 @@ class LoadUsersData extends AbstractFlexibleFixture implements OrderedFixtureInt
     {
         /** @var \Oro\Bundle\UserBundle\Entity\Role $role */
         $role = $this->roles->findOneBy(array('role' => 'ROLE_MANAGER'));
-        $tags = $this->tags->findAll();
-        $keys = array();
-        foreach ($tags as $tag) {
-            /** @var Tag $tag */
-            $keys[] =  $tag->getName();
-        }
-        $tags = array_combine($keys, array_values($tags));
 
         for ($i = 0; $i < 50; ++$i) {
             $firstName = $this->generateFirstName();

@@ -110,15 +110,7 @@ class LoadAccountData extends AbstractFlexibleFixture implements ContainerAwareI
      */
     public function loadAccounts()
     {
-        $tags = $this->tagsRepository->findAll();
-        $keys = array();
-        foreach ($tags as $tag) {
-            /** @var Tag $tag */
-            $keys[] =  $tag->getName();
-        }
-        $tags = array_combine($keys, array_values($tags));
-
-        $companies = array();
+         $companies = array();
 
         $handle = fopen(__DIR__ . DIRECTORY_SEPARATOR . "accounts.csv", "r");
         if ($handle) {
