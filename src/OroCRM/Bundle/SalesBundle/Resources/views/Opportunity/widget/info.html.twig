@@ -32,13 +32,13 @@
         {{ _self.renderRow('Account'|trans, accountView) }}
 
         {{ _self.renderRow('Probability'|trans, entity.probability ? (entity.probability * 100) ~ '%' : '') }}
-        {{ _self.renderRow('Budget amount'|trans, entity.budgetAmount ? entity.budgetAmount|number_format(2), '') }}
+        {{ _self.renderRow('Budget amount'|trans, entity.budgetAmount|length ? entity.budgetAmount|number_format(2), '') }}
     </div>
     <div class="span6">
         {{ _self.renderRow('Customer need'|trans, entity.customerNeed) }}
         {{ _self.renderRow('Proposed solution'|trans, entity.proposedSolution) }}
         {{ _self.renderRow('Close reason'|trans, entity.closeReason) }}
-        {{ _self.renderRow('Close revenue'|trans, entity.closeRevenue ? entity.closeRevenue|number_format(2), '') }}
+        {{ _self.renderRow('Close revenue'|trans, entity.closeRevenue|length ? entity.closeRevenue|number_format(2), '') }}
         {{ _self.renderRow('Close date'|trans, entity.closeDate ? macros.date(entity.closeDate) : '') }}
     </div>
 </div>
