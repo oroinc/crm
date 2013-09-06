@@ -151,7 +151,10 @@ class LoadContactData extends AbstractFlexibleFixture implements ContainerAwareI
             /** @var Tag $tag */
             $keys[] =  $tag->getName();
         }
-        $tags = array_combine($keys, array_values($tags));
+
+        if (count($keys) > 0) {
+            $tags = array_combine($keys, array_values($tags));
+        }
 
         $handle = fopen(__DIR__ . DIRECTORY_SEPARATOR . "accounts.csv", "r");
         if ($handle) {
