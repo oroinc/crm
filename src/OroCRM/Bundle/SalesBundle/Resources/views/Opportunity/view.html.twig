@@ -56,7 +56,7 @@
                         oro_widget_render({
                             'widgetType': 'block',
                             'url': path('orocrm_sales_opportunity_info', { id: entity.id }),
-                            'title': 'Opportunity Information'
+                            'title': 'Opportunity Information',
                         })
                     }}
                 </div>
@@ -66,11 +66,22 @@
                             'widgetType': 'block',
                             'url': path('oro_workflow_widget_workflow_items', {entityClass: oro_class_name(entity), entityId: entity.id}),
                             'title': 'Workflow Items',
-                            'contentClasses': []
+                            'alias': 'bind_workflow_items'
                         })
                     }}
                 </div>
             </div>
         </div>
     </div>
+    <script type="text/javascript">
+        $(function() {// workflow_entity_buttons
+            Oro.widget.Manager.getWidgetInstanceByAlias('bind_workflow_items')
+                    .on('workflowItemRemoved', function() {
+                        var buttonsWidget = Oro.widget.Manager.getWidgetInstanceByAlias('workflow_entity_buttons');
+                        if (buttonsWidget) {
+                            buttonsWidget.loadContent();
+                        }
+                    });
+        });
+    </script>
 {% endblock content_data %}
