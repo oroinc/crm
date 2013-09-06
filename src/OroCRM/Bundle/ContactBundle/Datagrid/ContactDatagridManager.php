@@ -6,23 +6,26 @@ use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\EntityRepository;
 
-use Oro\Bundle\EntityBundle\Datagrid\ExtendEntityDatagrid;
 use Oro\Bundle\GridBundle\Datagrid\DatagridManager;
+use Oro\Bundle\GridBundle\Datagrid\ProxyQueryInterface;
+
 use Oro\Bundle\GridBundle\Field\FieldDescription;
 use Oro\Bundle\GridBundle\Field\FieldDescriptionCollection;
 use Oro\Bundle\GridBundle\Field\FieldDescriptionInterface;
+
 use Oro\Bundle\GridBundle\Filter\FilterInterface;
-use Oro\Bundle\GridBundle\Action\ActionInterface;
+
 use Oro\Bundle\GridBundle\Property\UrlProperty;
 use Oro\Bundle\GridBundle\Property\FixedProperty;
-use Oro\Bundle\GridBundle\Datagrid\ProxyQueryInterface;
+
 use Oro\Bundle\GridBundle\Sorter\SorterInterface;
+
+use Oro\Bundle\GridBundle\Action\ActionInterface;
 use Oro\Bundle\GridBundle\Action\MassAction\Ajax\DeleteMassAction;
 use Oro\Bundle\GridBundle\Action\MassAction\Redirect\RedirectMassAction;
 use Oro\Bundle\GridBundle\Action\MassAction\Widget\WindowMassAction;
 
-//class ContactDatagridManager extends DatagridManager
-class ContactDatagridManager extends ExtendEntityDatagrid
+class ContactDatagridManager extends DatagridManager
 {
     /**
      * Expression to get region text or label, CONCAT is used as type cast function
@@ -50,9 +53,6 @@ class ContactDatagridManager extends ExtendEntityDatagrid
      */
     protected function configureFields(FieldDescriptionCollection $fieldsCollection)
     {
-        $this->getDynamicFields($fieldsCollection);
-
-
         $fieldFirstName = new FieldDescription();
         $fieldFirstName->setName('first_name');
         $fieldFirstName->setOptions(
@@ -87,14 +87,14 @@ class ContactDatagridManager extends ExtendEntityDatagrid
         $fieldEmail->setName('email');
         $fieldEmail->setOptions(
             array(
-                'type'            => FieldDescriptionInterface::TYPE_TEXT,
-                'label'           => $this->translate('orocrm.contact.datagrid.email'),
-                'field_name'      => 'primaryEmail',
-                'expression'      => 'email.email',
-                'filter_type'     => FilterInterface::TYPE_STRING,
-                'sortable'        => true,
-                'filterable'      => true,
-                'show_filter'     => true,
+                'type'        => FieldDescriptionInterface::TYPE_TEXT,
+                'label'       => $this->translate('orocrm.contact.datagrid.email'),
+                'field_name'  => 'primaryEmail',
+                'expression'  => 'email.email',
+                'filter_type' => FilterInterface::TYPE_STRING,
+                'sortable'    => true,
+                'filterable'  => true,
+                'show_filter' => true,
             )
         );
         $fieldsCollection->add($fieldEmail);
@@ -103,14 +103,14 @@ class ContactDatagridManager extends ExtendEntityDatagrid
         $fieldPhone->setName('phone');
         $fieldPhone->setOptions(
             array(
-                'type'            => FieldDescriptionInterface::TYPE_TEXT,
-                'label'           => $this->translate('orocrm.contact.datagrid.phone'),
-                'field_name'      => 'primaryPhone',
-                'expression'      => 'phone.phone',
-                'filter_type'     => FilterInterface::TYPE_STRING,
-                'sortable'        => true,
-                'filterable'      => true,
-                'show_filter'     => true,
+                'type'        => FieldDescriptionInterface::TYPE_TEXT,
+                'label'       => $this->translate('orocrm.contact.datagrid.phone'),
+                'field_name'  => 'primaryPhone',
+                'expression'  => 'phone.phone',
+                'filter_type' => FilterInterface::TYPE_STRING,
+                'sortable'    => true,
+                'filterable'  => true,
+                'show_filter' => true,
             )
         );
         $fieldsCollection->add($fieldPhone);
@@ -120,21 +120,21 @@ class ContactDatagridManager extends ExtendEntityDatagrid
         $rolesLabel->setProperty(new FixedProperty('groups', 'groupLabelsAsString'));
         $rolesLabel->setOptions(
             array(
-                'type'            => FieldDescriptionInterface::TYPE_TEXT,
-                'label'           => $this->translate('orocrm.contact.datagrid.groups'),
-                'field_name'      => 'groups',
-                'expression'      => 'contactGroup',
-                'filter_type'     => FilterInterface::TYPE_ENTITY,
+                'type'               => FieldDescriptionInterface::TYPE_TEXT,
+                'label'              => $this->translate('orocrm.contact.datagrid.groups'),
+                'field_name'         => 'groups',
+                'expression'         => 'contactGroup',
+                'filter_type'        => FilterInterface::TYPE_ENTITY,
                 'sort_field_mapping' => array(
                     'entityAlias' => 'contactGroup',
                     'fieldName'   => 'label',
                 ),
-                'sortable'        => true,
-                'filterable'      => true,
+                'sortable'           => true,
+                'filterable'         => true,
                 // entity filter options
-                'class'           => 'OroCRMContactBundle:Group',
-                'property'        => 'label',
-                'filter_by_where' => true
+                'class'              => 'OroCRMContactBundle:Group',
+                'property'           => 'label',
+                'filter_by_where'    => true
             )
         );
         $fieldsCollection->add($rolesLabel);
@@ -143,21 +143,21 @@ class ContactDatagridManager extends ExtendEntityDatagrid
         $fieldSource->setName('source');
         $fieldSource->setOptions(
             array(
-                'type'            => FieldDescriptionInterface::TYPE_TEXT,
-                'label'           => $this->translate('orocrm.contact.datagrid.source'),
-                'field_name'      => 'source',
-                'expression'      => 'contactSource',
-                'filter_type'     => FilterInterface::TYPE_ENTITY,
+                'type'               => FieldDescriptionInterface::TYPE_TEXT,
+                'label'              => $this->translate('orocrm.contact.datagrid.source'),
+                'field_name'         => 'source',
+                'expression'         => 'contactSource',
+                'filter_type'        => FilterInterface::TYPE_ENTITY,
                 'sort_field_mapping' => array(
                     'entityAlias' => 'contactSource',
                     'fieldName'   => 'label',
                 ),
-                'sortable'        => true,
-                'filterable'      => true,
+                'sortable'           => true,
+                'filterable'         => true,
                 // entity filter options
-                'class'           => 'OroCRMContactBundle:Source',
-                'property'        => 'label',
-                'filter_by_where' => true
+                'class'              => 'OroCRMContactBundle:Source',
+                'property'           => 'label',
+                'filter_by_where'    => true
             )
         );
         $fieldsCollection->add($fieldSource);
@@ -281,9 +281,9 @@ class ContactDatagridManager extends ExtendEntityDatagrid
             'type'         => ActionInterface::TYPE_REDIRECT,
             'acl_resource' => 'orocrm_contact_update',
             'options'      => array(
-                'label'   => $this->translate('orocrm.contact.datagrid.update'),
-                'icon'    => 'edit',
-                'link'    => 'update_link',
+                'label' => $this->translate('orocrm.contact.datagrid.update'),
+                'icon'  => 'edit',
+                'link'  => 'update_link',
             )
         );
 
@@ -363,7 +363,7 @@ class ContactDatagridManager extends ExtendEntityDatagrid
     {
         return array(
             'first_name' => SorterInterface::DIRECTION_ASC,
-            'last_name' => SorterInterface::DIRECTION_ASC,
+            'last_name'  => SorterInterface::DIRECTION_ASC,
         );
     }
 }
