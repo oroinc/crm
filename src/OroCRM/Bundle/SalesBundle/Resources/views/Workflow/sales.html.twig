@@ -13,10 +13,12 @@
 
     {%- if resource_granted('orocrm_sales_opportunity_view') and workflowItem.data.opportunity -%}
     <script type="text/javascript">
-        $(function() {
-            var viewLink = $('<a href="{{ path('orocrm_sales_opportunity_view', {id:  workflowItem.data.opportunity.id}) }}" class="btn btn-small">{{ 'View'|trans }}</a>');
-            Oro.widget.Manager.getWidgetInstanceByAlias('opportunity_info')
-                .addAction('view', viewLink, 'default');
+        require(['jquery', 'oro/widget-manager'],
+        function($, widgetManager){
+            widgetManager.getWidgetInstanceByAlias('opportunity_info', function(widget) {
+                var viewLink = $('<a href="{{ path('orocrm_sales_opportunity_view', {id:  workflowItem.data.opportunity.id}) }}" class="btn btn-small">{{ 'View'|trans }}</a>');
+                widget.addAction('view', viewLink, 'default');
+            });
         });
     </script>
     {% endif %}

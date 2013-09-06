@@ -28,16 +28,20 @@
     <div class="map-box lead-map-box" id="address-book"></div>
 
     <script type="text/javascript">
-        $('#addressBookWidget').on('widgetize', function(e, widget) {
-            var addressBook = new OroAddressBook({
-                el: '#address-book',
-                addressListUrl: {{ path('oro_api_get_lead_address', {leadId: entity.id})|json_encode|raw }}
+        require(['jquery', 'oro/address-book', 'oro/widget-manager'],
+        function($, AddressBook, widgetManager) {
+            widgetManager.getWidgetInstance({{ app.request.get('_wid')|json_encode|raw }}, function(){
+                /** @type oro.AddressBook */
+                var addressBook = new AddressBook({
+                    el: '#address-book',
+                    addressListUrl: {{ path('oro_api_get_lead_address', {leadId: entity.id})|json_encode|raw }}
+                });
+                addressBook
+                    .getCollection()
+                    .reset([
+                        {{ render(path('oro_api_get_lead_address', {leadId: entity.id})) }}
+                    ]);
             });
-            addressBook
-                .getCollection()
-                .reset([
-                    {{ render(path('oro_api_get_lead_address', {leadId: entity.id})) }}
-                ]);
         });
     </script>
 </div>

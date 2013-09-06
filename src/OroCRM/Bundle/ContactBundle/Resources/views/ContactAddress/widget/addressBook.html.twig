@@ -1,4 +1,4 @@
-<div class="widget-content" id="addressBookWidget">
+<div class="widget-content">
     {# JS template for address view #}
     {% include "OroAddressBundle:Js:address.js.twig" %}
 
@@ -9,9 +9,9 @@
     <div class="map-box" id="address-book"></div>
 
     <script type="text/javascript">
-    require(['jquery', 'routing', 'oro/address-book'],
-    function($, routing, AddressBook) {
-        $('#addressBookWidget').on('widgetize', function(e, widget) {
+    require(['jquery', 'routing', 'oro/address-book', 'oro/widget-manager'],
+    function($, routing, AddressBook, widgetManager) {
+        widgetManager.getWidgetInstance({{ app.request.get('_wid')|json_encode|raw }}, function(widget){
             /** @type oro.AddressBook */
             var addressBook = new AddressBook({
                 el: '#address-book',

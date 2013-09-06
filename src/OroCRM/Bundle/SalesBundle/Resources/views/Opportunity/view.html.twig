@@ -74,14 +74,15 @@
     </div>
 </div>
 <script type="text/javascript">
-    $(function() {// workflow_entity_buttons
-        Oro.widget.Manager.getWidgetInstanceByAlias('bind_workflow_items')
-            .on('workflowItemRemoved', function() {
-                var buttonsWidget = Oro.widget.Manager.getWidgetInstanceByAlias('workflow_entity_buttons');
-                if (buttonsWidget) {
-                    buttonsWidget.loadContent();
-                }
+    require(['oro/widget-manager'],
+    function(widgetManager){
+        widgetManager.getWidgetInstanceByAlias('bind_workflow_items', function(widget) {
+            widget.on('workflowItemRemoved', function() {
+                widgetManager.getWidgetInstanceByAlias('workflow_entity_buttons', function(widget) {
+                    widget.loadContent();
+                });
             });
+        });
     });
 </script>
 {% endblock content_data %}
