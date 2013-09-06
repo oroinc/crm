@@ -37,37 +37,35 @@
     {{ parent() }}
     <div class="status-enabled pull-left">
         {% if entity.status.name != 'canceled' %}
-            <div class="badge badge-enabled status-enabled"><i class="icon-status-enabled"></i>{{ entity.status.label }}</div>
+            <div class="badge badge-enabled status-enabled"><i class="icon-status-enabled icon-circle"></i>{{ entity.status.label }}</div>
         {% else %}
-            <div class="badge badge-disabled status-disabled"><i class="icon-status-disabled"></i>{{ entity.status.label  }}</div>
+            <div class="badge badge-disabled status-disabled"><i class="icon-status-disabled icon-circle"></i>{{ entity.status.label  }}</div>
         {% endif %}
     </div>
 {% endblock breadcrumbs %}
 
 {% block content_data %}
-    <div class="well-small form-horizontal dark-bg">
-        <div class="clearfix">
-            <div class="row-fluid well-small-bottom">
-                <div class="span6">
-                    {{
-                        oro_widget_render({
-                            'widgetType': 'block',
-                            'url': path('orocrm_sales_lead_info', {id: entity.id}),
-                            'title': 'Lead Information'|trans
-                        })
-                    }}
-                </div>
-                <div class="span6">
-                    {{
-                        oro_widget_render({
-                            'widgetType': 'block',
-                            'contentClasses': [],
-                            'url': path('orocrm_sales_lead_address_book', {id: entity.id}),
-                            'title': 'Address'|trans
-                        })
-                    }}
-                </div>
-            </div>
+<div class="contact-info-col-set well-small dark-bg">
+    <div class="row-fluid well-small-bottom clearfix">
+        <div class="span6 contact-info-col">
+            {{
+                oro_widget_render({
+                    'widgetType': 'block',
+                    'url': path('orocrm_sales_lead_info', {id: entity.id}),
+                    'title': 'Lead Information'|trans
+                })
+            }}
+        </div>
+        <div class="span6 contact-info-col">
+            {{
+                oro_widget_render({
+                    'widgetType': 'block',
+                    'contentClasses': [],
+                    'url': path('orocrm_sales_lead_address_book', {id: entity.id}),
+                    'title': 'Address'|trans
+                })
+            }}
         </div>
     </div>
+</div>
 {% endblock content_data %}
