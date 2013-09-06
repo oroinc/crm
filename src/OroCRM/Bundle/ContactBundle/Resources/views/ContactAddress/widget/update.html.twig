@@ -2,8 +2,11 @@
 <div class="widget-content" id="addressDialog">
     {% if saved %}
         <script type="text/javascript">
-            var widget = Oro.widget.Manager.getWidgetInstance({{ app.request.get('_wid')|json_encode|raw }});
+        require(['oro/widget-manager'],
+        function(widgetManager) {
+            var widget = widgetManager.getWidgetInstance({{ app.request.get('_wid')|json_encode|raw }});
             widget.trigger('formSave', {{ form.vars.value.id|json_encode|raw }});
+        });
         </script>
     {% else %}
         {{ JSFV(form) }}
