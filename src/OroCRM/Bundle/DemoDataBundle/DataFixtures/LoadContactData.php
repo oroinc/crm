@@ -188,15 +188,8 @@ class LoadContactData extends AbstractFlexibleFixture implements ContainerAwareI
 
                 $tagged = array(
                         $data['Company'],
-                        $data['EmailAddress'],
-                        $data['Domain'],
-                        $data['GivenName'],
-                        $data['Surname'],
-                        $data['City'],
-                        $data['StreetAddress'],
-                        $data['ZipCode'],
-                        $data['State']
-                 );
+                        $data['Domain']
+                );
                 $ownTags = array();
                 foreach ($tagged as $taggedField) {
                     if (array_key_exists($taggedField, $tags)) {
