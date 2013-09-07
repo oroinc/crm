@@ -9,9 +9,11 @@
     <div class="map-box" id="address-book"></div>
 
     <script type="text/javascript">
-    require(['jquery', 'routing', 'oro/address-book'],
-    function($, routing, AddressBook) {
-        $('#addressBookWidget').on('widgetize', function(e, widget) {
+    require(['jquery', 'routing', 'oro/address-book', 'oro/widget-manager'],
+    function($, routing, AddressBook, widgetManager) {
+        var $addressBook = $('#addressBookWidget'),
+            widgetId = $addressBook.data('wid');
+        function initAddressBook(e, widget) {
             /** @type oro.AddressBook */
             var addressBook = new AddressBook({
                 el: '#address-book',
@@ -20,20 +22,25 @@
                 addressUpdateUrl: function() {
                     var address = arguments[0];
                     return routing.generate(
-                        'orocrm_contact_address_update',
-                        {
-                            'contactId': {{ entity.id|json_encode|raw }},
-                            'id': address.get('id')
-                        }
+                            'orocrm_contact_address_update',
+                            {
+                                'contactId': {{ entity.id|json_encode|raw }},
+                                'id': address.get('id')
+                            }
                     )
                 }
             });
             $(widget.getAction('add_address', 'adopted'))
-                .on('click', _.bind(addressBook.createAddress, addressBook));
+                    .on('click', _.bind(addressBook.createAddress, addressBook));
             addressBook
-                .getCollection()
-                .reset({{ render(path('oro_api_get_contact_addresses', {contactId: entity.id})) }});
-        });
+                    .getCollection()
+                    .reset({{ render(path('oro_api_get_contact_addresses', {contactId: entity.id})) }});
+        }
+        if (!widgetId) {
+            $addressBook.one('widgetize', initAddressBook);
+        } else {
+            initAddressBook(null, widgetManager.getWidgetInstance(widgetId));
+        }
     });
     </script>
 </div>
