@@ -1,4 +1,4 @@
-<div class="widget-content" id="addressBookWidget">
+<div class="widget-content">
     {# JS template for address view #}
     {% include "OroAddressBundle:Js:address.js.twig" %}
 
@@ -11,9 +11,7 @@
     <script type="text/javascript">
     require(['jquery', 'routing', 'oro/address-book', 'oro/widget-manager'],
     function($, routing, AddressBook, widgetManager) {
-        var $addressBook = $('#addressBookWidget'),
-            widgetId = $addressBook.data('wid');
-        function initAddressBook(e, widget) {
+        widgetManager.getWidgetInstance({{ app.request.get('_wid')|json_encode|raw }}, function(widget){
             /** @type oro.AddressBook */
             var addressBook = new AddressBook({
                 el: '#address-book',
@@ -22,25 +20,20 @@
                 addressUpdateUrl: function() {
                     var address = arguments[0];
                     return routing.generate(
-                            'orocrm_contact_address_update',
-                            {
-                                'contactId': {{ entity.id|json_encode|raw }},
-                                'id': address.get('id')
-                            }
+                        'orocrm_contact_address_update',
+                        {
+                            'contactId': {{ entity.id|json_encode|raw }},
+                            'id': address.get('id')
+                        }
                     )
                 }
             });
             $(widget.getAction('add_address', 'adopted'))
-                    .on('click', _.bind(addressBook.createAddress, addressBook));
+                .on('click', _.bind(addressBook.createAddress, addressBook));
             addressBook
-                    .getCollection()
-                    .reset({{ render(path('oro_api_get_contact_addresses', {contactId: entity.id})) }});
-        }
-        if (!widgetId) {
-            $addressBook.one('widgetize', initAddressBook);
-        } else {
-            initAddressBook(null, widgetManager.getWidgetInstance(widgetId));
-        }
+                .getCollection()
+                .reset({{ render(path('oro_api_get_contact_addresses', {contactId: entity.id})) }});
+        });
     });
     </script>
 </div>

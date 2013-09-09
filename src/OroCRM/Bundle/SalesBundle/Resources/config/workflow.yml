@@ -1,0 +1,489 @@
+workflows:
+    # Unqualified Sales Lead Workflow
+    sales_lead:
+        label: 'Unqualified Sales Lead'
+        enabled: true
+        type: entity
+        steps:
+            new:
+                label: 'New'
+                allowed_transitions:
+                    - qualify
+                    - cancel
+            qualified:
+                label: 'Qualified'
+                allowed_transitions:
+                    - reactivate
+            cancelled:
+                label: 'Cancelled'
+                allowed_transitions:
+                    - reactivate
+        attributes:
+            lead:
+                label: 'Sales Lead'
+                type: entity
+                options:
+                    class: OroCRM\Bundle\SalesBundle\Entity\Lead
+                    managed_entity: true
+        transitions:
+            qualify:
+                label: 'Qualify'
+                step_to: qualified
+                is_start: true
+                options:
+                    frontend:
+                        icon: 'icon-ok'
+                        class: 'btn-primary'
+                transition_definition: qualify_definition
+            cancel:
+                label: 'Disqualify'
+                step_to: cancelled
+                is_start: true
+                options:
+                    frontend:
+                        icon: 'icon-remove'
+                transition_definition: cancel_definition
+            reactivate:
+                label: 'Reactivate'
+                step_to: new
+                is_start: true
+                options:
+                    frontend:
+                        icon: 'icon-repeat'
+                transition_definition: reactivate_definition
+        transition_definitions:
+            qualify_definition:
+                conditions: # if lead.status = "new"
+                    @equal: [$lead.status.name, 'new']
+                post_actions: # set lead.status = "qualified"
+                    - @find_entity:
+                          class: OroCRM\Bundle\SalesBundle\Entity\LeadStatus
+                          identifier: 'qualified'
+                          attribute: $lead.status
+                    - @tree: # create Contact entity
+                        conditions: # if contact not specified
+                            @empty: $lead.contact
+                        post_actions:
+                            - @create_entity: # create Contact based on Lead
+                                class: OroCRM\Bundle\ContactBundle\Entity\Contact
+                                attribute: $lead.contact
+                                data:
+                                    firstName: $lead.firstName
+                                    lastName: $lead.lastName
+                                    jobTitle: $lead.jobTitle
+                                    description: $lead.topic
+                            - @tree: # set Contact Address
+                                conditions: # if lead has address
+                                    @not_empty: $lead.address
+                                post_actions:
+                                    - @create_entity: # create Contact Address based on Lead address
+                                        class: OroCRM\Bundle\ContactBundle\Entity\ContactAddress
+                                        attribute: $.result.address
+                                        data:
+                                            label: $lead.address.label
+                                            street: $lead.address.street
+                                            street2: $lead.address.street2
+                                            city: $lead.address.city
+                                            postalCode: $lead.address.postalCode
+                                            country: $lead.address.country
+                                            state: $lead.address.state
+                                            stateText: $lead.address.stateText
+                                            firstName: $lead.firstName
+                                            lastName: $lead.lastName
+                                            primary: true
+                                    - @call_method: # add Address to Contact
+                                        object: $lead.contact
+                                        method: addAddress
+                                        method_parameters: [$.result.address]
+                                    - @unset_value: # unset temporary property
+                                        [$.result.address]
+                            - @tree: # set Contact Email
+                                conditions: # if lead has email
+                                    @not_empty: $lead.email
+                                post_actions:
+                                    - @create_entity: # create Contact Address based on Lead address
+                                        class: OroCRM\Bundle\ContactBundle\Entity\ContactEmail
+                                        attribute: $.result.email
+                                        data:
+                                            email: $lead.email
+                                            owner: $lead.contact
+                                            primary: true
+                                    - @call_method: # add Email to Contact
+                                        object: $lead.contact
+                                        method: addEmail
+                                        method_parameters: [$.result.email]
+                                    - @unset_value: # unset temporary property
+                                        [$.result.email]
+                            - @tree: # set Contact Phone
+                                conditions: # if lead has phone
+                                    @not_empty: $lead.phoneNumber
+                                post_actions:
+                                    - @create_entity: # create Contact Address based on Lead address
+                                        class: OroCRM\Bundle\ContactBundle\Entity\ContactPhone
+                                        attribute: $.result.phone
+                                        data:
+                                            phone: $lead.phoneNumber
+                                            primary: true
+                                    - @call_method: # add Phone to Contact
+                                        object: $lead.contact
+                                        method: addPhone
+                                        method_parameters: [$.result.phone]
+                                    - @unset_value: # unset temporary property
+                                        [$.result.phone]
+                    - @create_entity: # create an opportunity
+                        class: OroCRM\Bundle\SalesBundle\Entity\Opportunity
+                        attribute: $.result.opportunity
+                        data:
+                            topic: $lead.topic
+                            contact: $lead.contact
+                    - @find_entity: # set status "In progress" to opportunity
+                        class: OroCRM\Bundle\SalesBundle\Entity\OpportunityStatus
+                        identifier: 'in_progress'
+                        attribute: $.result.opportunity.status
+                    - @start_workflow: # start workflow and create workflow item
+                        name: sales
+                        attribute: $.result.workflowItem
+                        entity: $.result.opportunity
+                        transition: qualify
+                    - @redirect_to_workflow: # redirect to workflow item edit page
+                        [$.result.workflowItem]
+            cancel_definition: # if lead.status = "new"
+                conditions:
+                    @equal: [$lead.status.name, 'new']
+                post_actions: # set lead.status = "canceled"
+                    - @find_entity:
+                        class: OroCRM\Bundle\SalesBundle\Entity\LeadStatus
+                        identifier: 'canceled'
+                        attribute: $lead.status
+            reactivate_definition:  # if lead.status = "qualified" or lead.status = "canceled"
+                conditions:
+                    @or:
+                        - @equal: [$lead.status.name, 'qualified']
+                        - @equal: [$lead.status.name, 'canceled']
+                post_actions: # set lead.status = "new"
+                    - @find_entity:
+                        class: OroCRM\Bundle\SalesBundle\Entity\LeadStatus
+                        identifier: 'new'
+                        attribute: $lead.status
+
+    # Qualified Sales Opportunity Workflow
+    sales_opportunity:
+        label: 'Qualified Sales Opportunity'
+        enabled: true
+        type: entity
+        steps:
+            new:
+                label: 'New'
+                allowed_transitions:
+                    - close_as_won
+                    - close_as_lost
+                    - reopen
+            closed:
+                label: 'Closed'
+                allowed_transitions:
+                    - reopen
+        attributes:
+            opportunity:
+                label: Sales Opportunity
+                type: entity
+                options:
+                    class: OroCRM\Bundle\SalesBundle\Entity\Opportunity
+                    managed_entity: true
+        transitions:
+            close_as_won:
+                label: 'Close as Won'
+                step_to: closed
+                is_start: true
+                options:
+                    frontend:
+                        icon: 'icon-ok-circle'
+                        class: 'btn-success'
+                transition_definition: close_as_won_definition
+            close_as_lost:
+                label: 'Close as Lost'
+                step_to: closed
+                is_start: true
+                options:
+                    frontend:
+                        icon: 'icon-remove-circle'
+                        class: 'btn-danger'
+                transition_definition: close_as_lost_definition
+            reopen:
+                label: 'Reopen'
+                step_to: new
+                is_start: true
+                options:
+                    frontend:
+                        icon: 'icon-repeat'
+                transition_definition: reopen_definition
+        transition_definitions:
+            close_as_won_definition:
+                conditions: # if opportunity.status = "in_progress"
+                    @equal: [$opportunity.status.name, 'in_progress']
+                post_actions: # set opportunity.status = "won"
+                    - @find_entity:
+                        class: OroCRM\Bundle\SalesBundle\Entity\OpportunityStatus
+                        identifier: 'won'
+                        attribute: $opportunity.status
+            close_as_lost_definition:
+                conditions: # if opportunity.status = "in_progress"
+                    @equal: [$opportunity.status.name, 'in_progress']
+                post_actions: # set opportunity.status = "lost"
+                    - @find_entity:
+                        class: OroCRM\Bundle\SalesBundle\Entity\OpportunityStatus
+                        identifier: 'lost'
+                        attribute: $opportunity.status
+            reopen_definition:
+                conditions: # if opportunity.status = "won" or opportunity.status = "lost"
+                    @or:
+                        - @equal: [$opportunity.status.name, 'won']
+                        - @equal: [$opportunity.status.name, 'lost']
+                post_actions: # set opportunity.status = "in_progress"
+                    - @find_entity:
+                        class: OroCRM\Bundle\SalesBundle\Entity\OpportunityStatus
+                        identifier: 'in_progress'
+                        attribute: $opportunity.status
+
+    # Sales Workflow
+    sales:
+        label: 'Sales Flow'
+        enabled: true
+        type: wizard
+        steps:
+            qualify:
+                label: 'Qualify'
+                template: 'OroCRMSalesBundle:Workflow:sales.html.twig'
+                order: 10
+                allowed_transitions:
+                    - develop
+                form_options:
+                    attribute_fields:
+                        account:
+                            form_type: orocrm_account_select
+                            options:
+                                required: false
+                        contact:
+                            form_type: orocrm_contact_select
+                            options:
+                                required: false
+                        budget_amount:
+                            form_type: number # TODO: replace with valid money form type
+                            options:
+                                required: false
+                        probability:
+                            form_type: percent
+                            options:
+                                required: false
+            develop:
+                label: 'Develop'
+                template: 'OroCRMSalesBundle:Workflow:sales.html.twig'
+                order: 20
+                allowed_transitions:
+                    - close
+                form_options:
+                    attribute_fields:
+                        customer_need:
+                            form_type: text
+                            options:
+                                required: false
+                        proposed_solution:
+                            form_type: text
+                            options:
+                                required: false
+                        probability:
+                            form_type: percent
+                            options:
+                                required: false
+            close:
+                label: 'Close'
+                template: 'OroCRMSalesBundle:Workflow:sales.html.twig'
+                order: 30
+                allowed_transitions:
+                    - close_as_won
+                    - close_as_lost
+                form_options:
+                    attribute_fields:
+                        close_reason:
+                            form_type: entity
+                            options:
+                                required: true
+                                class: OroCRMSalesBundle:OpportunityCloseReason
+                                property: 'label'
+                                empty_value: false
+                        close_revenue:
+                            form_type: number # TODO: replace with valid money form type
+                            options:
+                                required: true
+                        close_date:
+                            form_type: oro_date
+                            options:
+                                required: true
+                        probability:
+                            form_type: percent
+                            options:
+                                required: false
+        attributes:
+            opportunity:
+                label: Opportunity
+                type: entity
+                options:
+                    class: OroCRM\Bundle\SalesBundle\Entity\Opportunity
+                    managed_entity: true
+                    multiple: false
+            contact:
+                label: Contact
+                type: entity
+                options:
+                    class: OroCRM\Bundle\ContactBundle\Entity\Contact
+            account:
+                label: Account
+                type: entity
+                options:
+                    class: OroCRM\Bundle\AccountBundle\Entity\Account
+            budget_amount:
+                label: Budget
+                type: float
+            probability:
+                label: Probability
+                type: float
+            customer_need:
+                label: Customer Need
+                type: string
+            proposed_solution:
+                label: Proposed Solution
+                type: string
+            close_reason:
+                label: Close reason
+                type: entity
+                options:
+                    class: OroCRM\Bundle\SalesBundle\Entity\OpportunityCloseReason
+            close_revenue:
+                label: Close revenue
+                type: float
+            close_date:
+                label: Close date
+                type: object
+                options:
+                    class: DateTime
+        transitions:
+            qualify:
+                label: 'Qualify'
+                step_to: qualify
+                is_start: true
+                options:
+                    frontend:
+                        icon: 'icon-ok'
+                        class: 'btn-primary'
+                transition_definition: qualify_definition
+            develop:
+                label: 'Develop'
+                step_to: develop
+                options:
+                    frontend:
+                        icon: 'icon-play'
+                transition_definition: develop_definition
+            close:
+                label: 'Close'
+                step_to: close
+                options:
+                    frontend:
+                        icon: 'icon-play'
+                transition_definition: close_definition
+            close_as_won:
+                label: 'Close as Won'
+                step_to: close
+                options:
+                    frontend:
+                        icon: 'icon-ok-circle'
+                        class: 'btn-success'
+                transition_definition: close_as_won_definition
+            close_as_lost:
+                label: 'Close as Lost'
+                step_to: close
+                options:
+                    frontend:
+                        icon: 'icon-remove-circle'
+                        class: 'btn-danger'
+                transition_definition: close_as_lost_definition
+        transition_definitions:
+            qualify_definition:
+                conditions: # if opportunity.status = "in_progress"
+                    @equal: [$opportunity.status.name, 'in_progress']
+                post_actions: # copy opportunity properties to attributes
+                    - @assign_value:
+                        - [$contact, $opportunity.contact]
+                        - [$account, $opportunity.account]
+                        - [$budget_amount, $opportunity.budgetAmount]
+                        - [$customer_need, $opportunity.customerNeed]
+                        - [$proposed_solution, $opportunity.proposedSolution]
+                        - [$probability, $opportunity.probability]
+                        - [$close_reason, $opportunity.closeReason]
+                        - [$close_revenue, $opportunity.closeRevenue]
+                        - [$close_date, $opportunity.closeDate]
+            develop_definition:
+                conditions: # if opportunity.status = "in_progress"
+                    @equal: [$opportunity.status.name, 'in_progress']
+                post_actions: # update opportunity properties
+                    - @assign_value:
+                        - [$opportunity.budgetAmount, $budget_amount]
+                        - [$opportunity.contact, $contact]
+                        - [$opportunity.account, $account]
+                        - [$opportunity.probability, $probability]
+            close_definition:
+                conditions: # if opportunity.status = "in_progress"
+                    @equal: [$opportunity.status.name, 'in_progress']
+                post_actions: # update opportunity properties
+                    - @assign_value:
+                        - [$opportunity.customerNeed, $customer_need]
+                        - [$opportunity.proposedSolution, $proposed_solution]
+                        - [$opportunity.probability, $probability]
+            close_as_won_definition:
+                conditions: # if opportunity.status = "in_progress", required data is entered and reason = "won" or "outsold"
+                    @and:
+                        - @equal: [$opportunity.status.name, 'in_progress']
+                        - @not_empty: $close_date
+                        - @not_empty: $close_revenue
+                        - @not_empty: $close_reason
+                        - @or:
+                            - @equal: [$close_reason.name, 'won']
+                            - @equal: [$close_reason.name, 'outsold']
+                post_actions: # update opportunity properties, set opportunity.status = "won"
+                    - @assign_value:
+                        - [$opportunity.closeDate, $close_date]
+                        - [$opportunity.closeRevenue, $close_revenue]
+                        - [$opportunity.closeReason, $close_reason]
+                        - [$opportunity.probability, $probability]
+                    - @find_entity:
+                        class: OroCRM\Bundle\SalesBundle\Entity\OpportunityStatus
+                        identifier: 'won'
+                        attribute: $opportunity.status
+                    - @close_workflow: ~
+                    - @redirect:
+                        route: orocrm_sales_opportunity_view
+                        route_parameters:
+                            id: $opportunity.id
+            close_as_lost_definition:
+                conditions: # opportunity.status = "in_progress", required data is entered and reason = "cancelled"
+                    @and:
+                        - @equal: [$opportunity.status.name, 'in_progress']
+                        - @not_empty: $close_date
+                        - @not_empty: $close_revenue
+                        - @not_empty: $close_reason
+                        - @or:
+                            - @equal: [$close_reason.name, 'cancelled']
+                            - @equal: [$close_reason.name, 'outsold']
+                post_actions: # update opportunity properties, set opportunity.status = "lost"
+                    - @assign_value:
+                        - [$opportunity.closeDate, $close_date]
+                        - [$opportunity.closeRevenue, $close_revenue]
+                        - [$opportunity.closeReason, $close_reason]
+                        - [$opportunity.probability, $probability]
+                    - @find_entity:
+                        class: OroCRM\Bundle\SalesBundle\Entity\OpportunityStatus
+                        identifier: 'lost'
+                        attribute: $opportunity.status
+                    - @close_workflow: ~
+                    - @redirect:
+                        route: orocrm_sales_opportunity_view
+                        route_parameters:
+                            id: $opportunity.id

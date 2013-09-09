@@ -1,0 +1,25 @@
+{% extends "OroWorkflowBundle:WorkflowStep:edit.html.twig" %}
+
+{% block workflow_entities %}
+    {{
+        oro_widget_render({
+            'widgetType': 'block',
+            'url': path('orocrm_sales_opportunity_info', { id: workflowItem.data.opportunity.id }),
+            'title': 'Opportunity Information'|trans,
+            'alias': 'opportunity_info',
+            'contentClasses': ['form-horizontal']
+        })
+    }}
+
+    {%- if resource_granted('orocrm_sales_opportunity_view') and workflowItem.data.opportunity -%}
+    <script type="text/javascript">
+        require(['jquery', 'oro/widget-manager'],
+        function($, widgetManager){
+            widgetManager.getWidgetInstanceByAlias('opportunity_info', function(widget) {
+                var viewLink = $('<a href="{{ path('orocrm_sales_opportunity_view', {id:  workflowItem.data.opportunity.id}) }}" class="btn btn-small">{{ 'View'|trans }}</a>');
+                widget.addAction('view', viewLink, 'default');
+            });
+        });
+    </script>
+    {% endif %}
+{% endblock %}
