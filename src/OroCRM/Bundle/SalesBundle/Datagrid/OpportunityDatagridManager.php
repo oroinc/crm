@@ -92,7 +92,7 @@ class OpportunityDatagridManager extends DatagridManager
                 'type'        => FieldDescriptionInterface::TYPE_PERCENT,
                 'label'       => $this->translate('orocrm.sales.opportunity.datagrid.probability'),
                 'field_name'  => 'probability',
-                'filter_type' => FilterInterface::TYPE_NUMBER,
+                'filter_type' => FilterInterface::TYPE_PERCENT,
                 'sortable'    => true,
                 'filterable'  => true,
                 'show_filter' => true,
