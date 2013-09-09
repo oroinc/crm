@@ -16,6 +16,7 @@ use Oro\Bundle\EmailBundle\Entity\EmailOwnerInterface;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
+use Oro\Bundle\EntityExtendBundle\Metadata\Annotation\Extend;
 
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 
@@ -37,6 +38,7 @@ use OroCRM\Bundle\AccountBundle\Entity\Account;
  *      "ownership"={"owner_type"="USER"}
  *  }
  * )
+ * @Extend
  */
 class Contact implements Taggable, EmailOwnerInterface
 {
@@ -781,6 +783,7 @@ class Contact implements Taggable, EmailOwnerInterface
         if (null === $this->tags) {
             $this->tags = new ArrayCollection();
         }
+
         return $this->tags;
     }
 
@@ -1048,6 +1051,7 @@ class Contact implements Taggable, EmailOwnerInterface
                 }
             }
         }
+
         return $this;
     }
 
@@ -1055,7 +1059,7 @@ class Contact implements Taggable, EmailOwnerInterface
      * Gets address type if it's available.
      *
      * @param ContactAddress $address
-     * @param AddressType $addressType
+     * @param AddressType    $addressType
      * @return Contact
      */
     public function setAddressType(ContactAddress $address, AddressType $addressType)
@@ -1068,6 +1072,7 @@ class Contact implements Taggable, EmailOwnerInterface
                 }
             }
         }
+
         return $this;
     }
 

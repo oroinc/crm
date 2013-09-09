@@ -9,7 +9,9 @@ use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 
 use Oro\Bundle\UserBundle\Entity\User;
+
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
+use Oro\Bundle\EntityExtendBundle\Metadata\Annotation\Extend;
 
 /**
  * @ORM\Entity
@@ -18,10 +20,10 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
  * @Config(
  *  defaultValues={
  *      "entity"={"label"="Contact Group", "plural_label"="Contact Groups"},
- *      "extend"={"is_extend"=true},
  *      "ownership"={"owner_type"="USER"}
  *  }
  * )
+ * @Extend
  */
 class Group
 {
