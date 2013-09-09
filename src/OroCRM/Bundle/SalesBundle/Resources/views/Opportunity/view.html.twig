@@ -1,0 +1,88 @@
+{% extends 'OroUIBundle:actions:view.html.twig' %}
+{% set topic = entity.topic|default('N/A') %}
+{% oro_title_set({params : {"%opportunity.topic%": topic} }) %}
+
+{% block navButtons %}
+    {% if resource_granted('orocrm_sales_opportunity_update') %}
+        {{ UI.button({
+            'path' : path('orocrm_sales_opportunity_update', { 'id': entity.id }),
+            'iClass' : 'icon-edit ',
+            'title' : 'Update contact',
+            'label' : 'Edit'
+        }) }}
+    {% endif %}
+    {% if resource_granted('orocrm_sales_opportunity_delete') %}
+        {{ UI.deleteButton({
+                'dataUrl': path('oro_api_delete_opportunity', {'id': entity.id}) ,
+                'dataRedirect': path('orocrm_sales_opportunity_index'),
+                'aCss': 'no-hash remove-button',
+                'id': 'btn-remove-contact',
+                'dataId': entity.id,
+                'dataMessage': 'Are you sure you want to delete this opportunity?',
+                'title': 'Delete Opportunity',
+                'label': 'Delete'
+            })
+        }}
+    {% endif %}
+{% endblock navButtons %}
+
+{% block pageHeader %}
+    {% set breadcrumbs = {
+        'entity':      entity,
+        'indexPath':   path('orocrm_sales_opportunity_index'),
+        'indexLabel': 'Opportunities',
+        'entityTitle': topic
+    } %}
+    {{ parent() }}
+{% endblock pageHeader %}
+
+{% block breadcrumbs %}
+    {{ parent() }}
+    <div class="status-enabled pull-left">
+        {% if entity.status.name != 'lost' %}
+            <div class="badge badge-enabled status-enabled">
+                <i class="icon-status-enabled icon-circle"></i>{{ entity.status.label }}</div>
+        {% else %}
+            <div class="badge badge-disabled status-disabled">
+                <i class="icon-status-disabled icon-circle"></i>{{ entity.status.label  }}</div>
+        {% endif %}
+    </div>
+{% endblock breadcrumbs %}
+
+{% block content_data %}
+<div class="contact-info-col-set well-small dark-bg">
+    <div class="row-fluid well-small-bottom clearfix">
+        <div class="span6 contact-info-col">
+            {{
+                oro_widget_render({
+                    'widgetType': 'block',
+                    'url': path('orocrm_sales_opportunity_info', { id: entity.id }),
+                    'title': 'Opportunity Information'
+                })
+            }}
+        </div>
+        <div class="span6 contact-info-col">
+            {{
+                oro_widget_render({
+                    'widgetType': 'block',
+                    'url': path('oro_workflow_widget_workflow_items', {entityClass: oro_class_name(entity), entityId: entity.id}),
+                    'title': 'Workflow Items',
+                    'alias': 'bind_workflow_items'
+                })
+            }}
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    require(['oro/widget-manager'],
+    function(widgetManager){
+        widgetManager.getWidgetInstanceByAlias('bind_workflow_items', function(widget) {
+            widget.on('workflowItemRemoved', function() {
+                widgetManager.getWidgetInstanceByAlias('workflow_entity_buttons', function(widget) {
+                    widget.loadContent();
+                });
+            });
+        });
+    });
+</script>
+{% endblock content_data %}

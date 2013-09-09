@@ -1,0 +1,10 @@
+orocrm_sales_bundle:
+    resource: "@OroCRMSalesBundle/Controller"
+    type:     annotation
+
+orocrm_sales_bundle_api:
+    resource: "@OroCRMSalesBundle/Resources/config/routing_api.yml"
+    type: rest
+    prefix: api/rest/{version}
+    defaults:
+        version:  latest
