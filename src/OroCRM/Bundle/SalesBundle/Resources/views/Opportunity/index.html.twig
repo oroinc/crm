@@ -1,0 +1,15 @@
+{% extends 'OroUIBundle:actions:index.html.twig' %}
+{% import 'OroUIBundle::macros.html.twig' as UI %}
+{% set gridId = 'opportunities-grid' %}
+{% block content %}
+    {% set pageTitle = 'Opportunities' %}
+    {% set buttons = [] %}
+    {% if resource_granted('orocrm_sales_opportunity_create') %}
+        {% set buttons = buttons|merge([UI.addButton({
+            'path' : path('orocrm_sales_opportunity_create'),
+            'title' : 'Create opportunity',
+            'label' : 'Create opportunity'
+        })]) %}
+    {% endif %}
+    {{ parent() }}
+{% endblock %}

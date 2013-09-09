@@ -1,0 +1,36 @@
+OroCRM\Bundle\SalesBundle\Entity\Opportunity:
+    properties:
+        status:
+            - NotBlank: ~
+        topic:
+            - NotBlank: ~
+            - Length:
+                max: 255
+        probability:
+            - Range:
+                min: 0
+                max: 100
+        budgetAmount:
+            - Range:
+                min: 0
+
+OroCRM\Bundle\SalesBundle\Entity\Lead:
+    properties:
+        status:
+            - NotBlank: ~
+        topic:
+            - NotBlank: ~
+            - Length:
+                max: 255
+        firstName:
+            - NotBlank: ~
+            - Length:
+                max: 255
+        lastName:
+            - NotBlank: ~
+            - Length:
+                max: 255
+        email:
+            - Email: ~
+        website:
+            - Url: ~
