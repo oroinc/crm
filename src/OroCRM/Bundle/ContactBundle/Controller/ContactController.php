@@ -4,7 +4,12 @@ namespace OroCRM\Bundle\ContactBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBag;
+
+use JMS\Serializer\SerializationContext;
+use JMS\Serializer\DeserializationContext;
+use Symfony\Component\Serializer\SerializerInterface;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -162,6 +167,100 @@ class ContactController extends Controller
         }
 
         return array('datagrid' => $datagridView);
+    }
+
+    /**
+     * @Route(
+     *      "/export{_format}",
+     *      name="orocrm_contact_export",
+     *      requirements={"_format"="csv"},
+     *      defaults={"_format" = "csv"}
+     * )
+     * @Acl(
+     *      id="orocrm_contact_export",
+     *      name="Export List of Contacts",
+     *      description="Export list of contacts",
+     *      parent="orocrm_contact"
+     * )
+     */
+    public function exportAction()
+    {
+        $doctrine = $this->getDoctrine();
+        $contacts = $doctrine->getRepository('OroCRMContactBundle:Contact')->findAll();
+
+        /** @var SerializerInterface $serializer */
+        $serializer = $this->get('serializer');
+        $serializedData = $serializer->serialize(
+            $contacts,
+            'array',
+            SerializationContext::create()
+                ->setGroups(array('orocrm_contact_export', 'export'))
+                ->enableMaxDepthChecks()
+        );
+
+        return new Response('<pre>' . var_export($serializedData, true) . '</pre>');
+    }
+
+    /**
+     * @Route(
+     *      "/import{_format}",
+     *      name="orocrm_contact_import",
+     *      requirements={"_format"="csv"},
+     *      defaults={"_format" = "csv"}
+     * )
+     * @Acl(
+     *      id="orocrm_contact_import",
+     *      name="Import List of Contacts",
+     *      description="Import list of contacts",
+     *      parent="orocrm_contact"
+     * )
+     */
+    public function importAction()
+    {
+        $contacts = array (
+            array (
+                'ID' => 1,
+                'Name Prefix' => 'Mr.',
+                'First Name' => 'Jerry',
+                'Last Name' => 'Coleman',
+                'Owner' =>
+                array (
+                    'First Name' => 'Ione',
+                    'Last Name' => 'Duchesne',
+                ),
+                'Reports To' =>
+                array (
+                    'ID' => 13,
+                    'Name Prefix' => 'Dr.',
+                    'First Name' => 'Andre',
+                    'Last Name' => 'Larson',
+                    'Accounts' =>
+                    array (
+                    ),
+                ),
+                'Accounts' =>
+                array (
+                    0 =>
+                    array (
+                        'Name' => 'Welsight73A_Coleman',
+                    ),
+                ),
+                'emails' => 'JerryAColeman@armyspy.com,sss@sss.ss',
+            )
+        );
+
+        /** @var SerializerInterface $serializer */
+        $serializer = $this->get('serializer');
+        $deserializedData = $serializer->deserialize(
+            json_encode($contacts),
+            'ArrayCollection<OroCRM\Bundle\ContactBundle\Entity\Contact>',
+            'json',
+            DeserializationContext::create()
+                ->setGroups(array('orocrm_contact_import', 'import'))
+                ->enableMaxDepthChecks()
+        );
+
+        return new Response('<pre>' . print_r($deserializedData, true) . '</pre>');
     }
 
     /**

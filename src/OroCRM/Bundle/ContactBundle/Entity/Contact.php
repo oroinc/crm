@@ -17,6 +17,8 @@ use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 use Zend\Stdlib\DateTime;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 
+use JMS\Serializer\Annotation as Serializer;
+
 /**
  * @SuppressWarnings(PHPMD.TooManyMethods)
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
@@ -34,6 +36,7 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
  *      "ownership"={"owner_type"="USER"}
  *  }
  * )
+ * Serializer\ExclusionPolicy("ALL")
  */
 class Contact implements Taggable, EmailOwnerInterface
 {
@@ -44,6 +47,7 @@ class Contact implements Taggable, EmailOwnerInterface
      * @ORM\Column(type="integer", name="id")
      * @ORM\GeneratedValue(strategy="AUTO")
      * @Soap\ComplexType("int", nillable=true)
+     * Serializer\Expose
      */
     protected $id;
 

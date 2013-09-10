@@ -1,0 +1,44 @@
+OroCRM\Bundle\ContactBundle\Entity\Contact:
+    exclusion_policy: ALL
+    properties:
+        id:
+            expose: true
+            type: integer
+            serialized_name: ID
+            groups: [orocrm_contact_export, orocrm_contact_import]
+        namePrefix:
+            expose: true
+            type: string
+            serialized_name: Name Prefix
+            groups: [orocrm_contact_export, orocrm_contact_import]
+        firstName:
+            expose: true
+            type: string
+            serialized_name: First Name
+            groups: [orocrm_contact_export, orocrm_contact_import, export, import]
+        lastName:
+            expose: true
+            type: string
+            serialized_name: Last Name
+            groups: [orocrm_contact_export, orocrm_contact_import, export, import]
+        owner:
+            expose: true
+            type: Oro\Bundle\UserBundle\Entity\User
+            serialized_name: Owner
+            groups: [orocrm_contact_export, orocrm_contact_import]
+        reportsTo:
+            expose: true
+            type: OroCRM\Bundle\ContactBundle\Entity\Contact
+            serialized_name: Reports To
+            max_depth: 1
+            groups: [orocrm_contact_export, orocrm_contact_import]
+        accounts:
+            expose: true
+            type: ArrayCollection<OroCRM\Bundle\AccountBundle\Entity\Account>
+            serialized_name: Accounts
+            groups: [orocrm_contact_export, orocrm_contact_import]
+        emails:
+            expose: true
+            type: ArrayCollection<OroCRM\Bundle\ContactBundle\Entity\ContactEmail>
+            serialized_name: Emails
+            groups: [orocrm_contact_export, orocrm_contact_import]
