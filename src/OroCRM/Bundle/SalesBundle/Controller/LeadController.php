@@ -116,7 +116,8 @@ class LeadController extends Controller
                     'parameters' => array('id' => $entity->getId()),
                 ),
                 array(
-                    'route' => 'orocrm_sales_lead_index',
+                    'route' => 'orocrm_sales_lead_view',
+                    'parameters' => array('id' => $entity->getId()),
                 )
             );
         }
