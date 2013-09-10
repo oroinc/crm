@@ -10,8 +10,21 @@
 {% endblock %}
 
 {% block navButtons %}
+    {% if resource_granted('orocrm_contact_create') %}
+        {{ UI.button({
+            'path': path('orocrm_contact_create', {'account': entity.id}),
+            'iClass': 'icon-user',
+            'title': 'Add Contact'|trans,
+            'label': 'Add Contact'|trans
+        }) }}
+    {% endif %}
     {% if resource_granted('orocrm_account_update') %}
-       {{ UI.button({'path': path('orocrm_account_update', {'id': entity.id}), 'iClass': 'icon-edit', 'title': 'Edit account', 'label': 'Edit'}) }}
+        {{ UI.button({
+            'path': path('orocrm_account_update', {'id': entity.id}),
+            'iClass': 'icon-edit',
+            'title': 'Edit Account'|trans,
+            'label': 'Edit'|trans
+        }) }}
     {% endif %}
     {% if resource_granted('orocrm_account_remove') %}
         {{ UI.deleteButton({
@@ -20,9 +33,9 @@
                 'aCss': 'no-hash remove-button',
                 'dataId': entity.id,
                 'id': 'btn-remove-account',
-                'dataMessage': 'Are you sure you want to delete this account?',
-                'title': 'Delete Account',
-                'label': 'Delete'
+                'dataMessage': 'Are you sure you want to delete this account?'|trans,
+                'title': 'Delete Account'|trans,
+                'label': 'Delete'|trans
             })
         }}
     {% endif %}

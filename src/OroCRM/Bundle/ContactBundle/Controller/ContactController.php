@@ -5,6 +5,8 @@ namespace OroCRM\Bundle\ContactBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBag;
+use Symfony\Component\Form\Form;
+use Symfony\Component\HttpFoundation\Response;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -16,6 +18,7 @@ use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\ContactBundle\Datagrid\ContactDatagridManager;
 use OroCRM\Bundle\ContactBundle\Datagrid\ContactAccountDatagridManager;
 use OroCRM\Bundle\ContactBundle\Datagrid\ContactAccountUpdateDatagridManager;
+use OroCRM\Bundle\AccountBundle\Entity\Account;
 
 /**
  * @Acl(
@@ -72,35 +75,10 @@ class ContactController extends Controller
     }
 
     /**
-     * Create contact form
-     *
-     * @Route("/create", name="orocrm_contact_create")
-     * @Template("OroCRMContactBundle:Contact:update.html.twig")
-     * @Acl(
-     *      id="orocrm_contact_create",
-     *      name="Create Contact",
-     *      description="Create contact",
-     *      parent="orocrm_contact"
-     * )
+     * @param Contact $entity
+     * @return array
      */
-    public function createAction()
-    {
-        return $this->updateAction();
-    }
-
-    /**
-     * Update user form
-     *
-     * @Route("/update/{id}", name="orocrm_contact_update", requirements={"id"="\d+"}, defaults={"id"=0})
-     * @Template
-     * @Acl(
-     *      id="orocrm_contact_update",
-     *      name="Update Contact",
-     *      description="Update contact",
-     *      parent="orocrm_contact"
-     * )
-     */
-    public function updateAction(Contact $entity = null)
+    protected function processUpdate(Contact $entity = null)
     {
         if (!$entity) {
             $entity = $this->getManager()->createEntity();
@@ -131,9 +109,78 @@ class ContactController extends Controller
 
         return array(
             'entity'   => $entity,
-            'form'     => $this->get('orocrm_contact.form.contact')->createView(),
+            'form'     => $this->get('orocrm_contact.form.contact'),
             'datagrid' => $datagridView,
         );
+    }
+
+    /**
+     * Create contact form
+     *
+     * @Route("/create", name="orocrm_contact_create")
+     * @Template("OroCRMContactBundle:Contact:update.html.twig")
+     * @Acl(
+     *      id="orocrm_contact_create",
+     *      name="Create Contact",
+     *      description="Create contact",
+     *      parent="orocrm_contact"
+     * )
+     */
+    public function createAction()
+    {
+        // add predefined account to contact
+        $contact = null;
+        $accountId = $this->getRequest()->get('account');
+        if ($accountId) {
+            /** @var Account $account */
+            $account = $this->getDoctrine()->getRepository('OroCRMAccountBundle:Account')->find($accountId);
+            if ($account) {
+                /** @var Contact $contact */
+                $contact = $this->getManager()->createEntity();
+                $contact->addAccount($account);
+            }
+        }
+
+        $response = $this->processUpdate($contact);
+        if ($response instanceof Response) {
+            return $response;
+        }
+
+        // set predefined accounts data
+        /** @var Form $form */
+        $form = $response['form'];
+        if ($contact) {
+            $form->get('appendAccounts')->setData($contact->getAccounts());
+        }
+        $response['form'] = $form->createView();
+
+        return $response;
+    }
+
+    /**
+     * Update user form
+     *
+     * @Route("/update/{id}", name="orocrm_contact_update", requirements={"id"="\d+"}, defaults={"id"=0})
+     * @Template
+     * @Acl(
+     *      id="orocrm_contact_update",
+     *      name="Update Contact",
+     *      description="Update contact",
+     *      parent="orocrm_contact"
+     * )
+     */
+    public function updateAction(Contact $entity = null)
+    {
+        $response = $this->processUpdate($entity);
+        if ($response instanceof Response) {
+            return $response;
+        }
+
+        /** @var Form $form */
+        $form = $response['form'];
+        $response['form'] = $form->createView();
+
+        return $response;
     }
 
     /**
