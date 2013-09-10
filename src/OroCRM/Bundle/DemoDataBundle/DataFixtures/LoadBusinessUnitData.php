@@ -52,13 +52,13 @@ class LoadBusinessUnitData extends AbstractFixture implements ContainerAwareInte
         /** @var Organization $organization */
         $organization = $this->organizationRepository->findOneBy(array('name' => 'default'));
         if (!$organization) {
-            $organization = $this->organizationRepository->findOneBy(array('name' => 'Oro, Inc'));
+            $organization = $this->organizationRepository->findOneBy(array('name' => 'Acme, Inc'));
         }
         if (!$organization) {
             throw new \Exception('"default" company is not defined');
         }
 
-        $organization->setName('Oro, Inc');
+        $organization->setName('Acme, Inc');
 
         $this->persistAndFlush($this->organizationManager, $organization);
         $this->addReference('default_organization', $organization);
@@ -66,14 +66,16 @@ class LoadBusinessUnitData extends AbstractFixture implements ContainerAwareInte
         /** @var BusinessUnit $oroMain */
         $oroMain = $this->businessUnitRepository->findOneBy(array('name' => 'Main'));
         if (!$oroMain ) {
-            $oroMain = $this->businessUnitRepository->findOneBy(array('name' => 'Oro, Inc'));
+            $oroMain = $this->businessUnitRepository->findOneBy(array('name' => 'Acme, General'));
         }
 
         if (!$oroMain) {
             throw new \Exception('"Main" business unit is not defined');
         }
 
-        $oroMain->setName('Oro, Inc');
+        $oroMain->setName('Acme, General');
+        $oroMain->setEmail('general@acme.inc');
+        $oroMain->setPhone('798-682-5917');
 
         $this->persistAndFlush($this->organizationManager, $oroMain);
 
@@ -86,18 +88,22 @@ class LoadBusinessUnitData extends AbstractFixture implements ContainerAwareInte
         $mageCoreUnit = new BusinessUnit();
 
         $oroUnit
-            ->setName('OroCRM')
+            ->setName('Acme, West')
             ->setWebsite('http://www.orocrm.com')
             ->setOrganization($organization)
+            ->setEmail('west@acme.inc')
+            ->setPhone('798-682-5918')
             ->setOwner($oroMain);
 
         $this->persistAndFlush($this->organizationManager, $oroUnit);
         $this->addReference('default_crm_business', $oroUnit);
 
         $mageCoreUnit
-            ->setName('MageCore')
+            ->setName('Acme, East')
             ->setWebsite('http://www.magecore.com/')
             ->setOrganization($organization)
+            ->setEmail('east@acme.inc')
+            ->setPhone('798-682-5919')
             ->setOwner($oroMain);
 
         $this->persistAndFlush($this->organizationManager, $mageCoreUnit);
