@@ -1,5 +1,38 @@
 {% extends "OroWorkflowBundle:WorkflowStep:edit.html.twig" %}
 
+{% block set_title %}
+{% oro_title_set({
+    params : {
+        '%section%': 'Opportunities'|trans,
+        '%entity%': workflowItem.data.opportunity.topic,
+        '%workflow_data%': workflow.label ~ ' (' ~ currentStep.label ~ ')',
+    }
+}) %}
+{% endblock %}
+
+{% block breadcrumb %}
+    {% set breadcrumbs = [
+        {label: 'Sales'|trans},
+        {label: 'Opportunities'|trans}
+    ] %}
+    {{ parent() }}
+{% endblock %}
+
+{% block workflow_title %}
+    {% set titleParts = {
+        'indexPath':   path('orocrm_sales_opportunity_index'),
+        'indexLabel': 'Opportunities'|trans,
+        'additional': [
+            {
+                'indexPath': path('orocrm_sales_opportunity_view', {id:  workflowItem.data.opportunity.id}),
+                'indexLabel': workflowItem.data.opportunity.topic
+            }
+        ],
+        'entityTitle': workflow.label ~ ' (' ~ currentStep.label ~ ')'
+    } %}
+    {{ parent() }}
+{% endblock %}
+
 {% block workflow_entities %}
     {{
         oro_widget_render({
@@ -13,10 +46,11 @@
 
     {%- if resource_granted('orocrm_sales_opportunity_view') and workflowItem.data.opportunity -%}
     <script type="text/javascript">
-        require(['jquery', 'oro/widget-manager'],
-        function($, widgetManager){
+        require(['jquery', 'oro/widget-manager', 'oro/navigation'],
+        function($, widgetManager, Navigation){
             widgetManager.getWidgetInstanceByAlias('opportunity_info', function(widget) {
                 var viewLink = $('<a href="{{ path('orocrm_sales_opportunity_view', {id:  workflowItem.data.opportunity.id}) }}" class="btn btn-small">{{ 'View'|trans }}</a>');
+                Navigation.getInstance().processClicks(viewLink);
                 widget.addAction('view', viewLink, 'default');
             });
         });

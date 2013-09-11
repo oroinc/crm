@@ -129,7 +129,8 @@ class ContactController extends Controller
                     'parameters' => array('id' => $entity->getId()),
                 ),
                 array(
-                    'route' => 'orocrm_contact_index',
+                    'route' => 'orocrm_contact_view',
+                    'parameters' => array('id' => $entity->getId())
                 )
             );
         }

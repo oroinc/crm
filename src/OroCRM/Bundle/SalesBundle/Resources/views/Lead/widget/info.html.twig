@@ -31,6 +31,6 @@
     <div class="span6">
         {{ _self.renderRow('Email'|trans, entity.email ? '<a href="mailto:' ~ entity.email ~ '">' ~ entity.email ~ '</a>' : '') }}
         {{ _self.renderRow('Phone'|trans, entity.phoneNumber ? '<a href="tel:' ~ entity.phoneNumber ~ '">' ~ entity.phoneNumber ~ '</a>' : '') }}
-        {{ _self.renderRow('Website'|trans, entity.website ? '<a href="' ~ entity.website ~ '">' ~ entity.website ~ '</a>' : '') }}
+        {{ _self.renderRow('Website'|trans, entity.website ? '<a href="' ~ entity.website ~ '" class="no-hash">' ~ entity.website ~ '</a>' : '') }}
     </div>
 </div>

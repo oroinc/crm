@@ -186,41 +186,13 @@ class LoadContactData extends AbstractFlexibleFixture implements ContainerAwareI
                 $contact->setReportsTo($contact);
                 $contact->setOwner($user);
 
-                $tagged = array(
-                        $data['Company'],
-                        $data['Domain']
-                );
-                $ownTags = array();
-                foreach ($tagged as $taggedField) {
-                    if (array_key_exists($taggedField, $tags)) {
-                        $ownTags[$taggedField] = $tags[$taggedField];
-                    } else {
-                        $ownTags[$taggedField] = new Tag($taggedField);
-                        $tags[$taggedField] = $ownTags[$taggedField];
-                    }
-                }
-
                 $source = $this->contactSources[rand(0, count($this->contactSources)-1)];
                 $contact->setSource($source);
 
-                $securityContext = $this->container->get('security.context');
-                $token = new UsernamePasswordToken($user, '123123q', 'main');
-                $securityContext->setToken($token);
-
                 $this->persist($this->contactManager, $contact);
-
-                $contact->setTags(
-                    array(
-                        'owner' => $ownTags,
-                        'all' => array()
-                    )
-                );
-                $this->persist($this->contactManager, $contact);
-                $this->flush($this->contactManager);
-
-                $this->tagManager->saveTagging($contact);
             }
 
+            $this->flush($this->contactManager);
             fclose($handle);
         }
     }

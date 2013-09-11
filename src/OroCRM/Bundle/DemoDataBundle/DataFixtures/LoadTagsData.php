@@ -70,8 +70,10 @@ class LoadTagsData extends AbstractFlexibleFixture implements ContainerAwareInte
     protected $tagsRepository;
 
     /** @var Tag[] */
-    protected $tags;
+    protected $tagsUser;
 
+    /** @var Tag[] */
+    protected $tagsAccount;
 
     /**
      * {@inheritDoc}
@@ -91,9 +93,9 @@ class LoadTagsData extends AbstractFlexibleFixture implements ContainerAwareInte
     public function load(ObjectManager $manager)
     {
         $this->initSupportingEntities();
-        $this->tags = $this->getTags();
         $this->loadUsersTags();
         $this->loadAccountsTags();
+        $this->loadContactsTags();
     }
 
     protected function initSupportingEntities()
@@ -111,51 +113,30 @@ class LoadTagsData extends AbstractFlexibleFixture implements ContainerAwareInte
 
 
     /**
+     * @param $tagsNames
      * @return Tag[]
      */
-    protected function getTags()
+    protected function createTags($tagsNames)
     {
-        $tags = $this->tagsRepository->findAll();
-        $keys = array();
-        foreach ($tags as $tag) {
-            /** @var Tag $tag */
-            $keys[] =  $tag->getName();
+        $tags = array();
+        foreach ($tagsNames as $tagName) {
+            $tags[] = new Tag($tagName);
         }
-        $tags = array_combine($keys, array_values($tags));
         return $tags;
-    }
-
-    /**
-     * @param array $tagged
-     * @return array
-     */
-    protected function getOwnTags(array $tagged)
-    {
-        $ownTags = array();
-        foreach ($tagged as $taggedField) {
-            if (array_key_exists($taggedField, $this->tags)) {
-                $ownTags[$taggedField] = $this->tags[$taggedField];
-            } else {
-                $ownTags[$taggedField] = new Tag($taggedField);
-                $this->tags[$taggedField] = $ownTags[$taggedField];
-            }
-        }
-        return $ownTags;
     }
 
     public function loadUsersTags()
     {
+        $this->tagsUser = $this->createTags(array('Friends', 'Developer', 'Wholesale'));
         foreach ($this->users as $user) {
             $securityContext = $this->container->get('security.context');
             $token = new UsernamePasswordToken($user, '123123q', 'main');
             $securityContext->setToken($token);
 
-
-            $ownTags = $this->getOwnTags(array($user->getFirstname(), $user->getLastname(), $user->getEmail()));
-
+            $ownTag = array($this->tagsUser[rand(0, count($this->tagsUser)-1)]);
             $user->setTags(
                 array(
-                    'owner' => $ownTags ,
+                    'owner' => $ownTag,
                     'all' => array()
                 )
             );
@@ -167,6 +148,20 @@ class LoadTagsData extends AbstractFlexibleFixture implements ContainerAwareInte
 
     public function loadAccountsTags()
     {
+        $this->tagsAccount = $this->createTags(
+            array(
+                'Commercial',
+                'Business',
+                'Vendor',
+                'Gold Partner',
+                'Service',
+                '#new',
+                '#vip',
+                '#popular',
+                '#call',
+                '#discontinued',
+                'Premium')
+        );
         foreach ($this->accounts as $account) {
             $user = $this->users[rand(0, count($this->users)-1)];
 
@@ -174,13 +169,11 @@ class LoadTagsData extends AbstractFlexibleFixture implements ContainerAwareInte
             $token = new UsernamePasswordToken($user, '123123q', 'main');
             $securityContext->setToken($token);
 
-            $ownTags = $this->getOwnTags(
-                array(
-                    $account->getName(),
-                    $account->getValue('website')->getVarchar(),
-                    $account->getValue('email')->getVarchar()
-                )
+            $ownTags = array(
+                $this->tagsUser[rand(0, count($this->tagsUser)-1)],
+                $this->tagsAccount[rand(0, count($this->tagsAccount)-1)]
             );
+
             $account->setTags(
                 array(
                     'owner' => $ownTags ,
@@ -189,6 +182,32 @@ class LoadTagsData extends AbstractFlexibleFixture implements ContainerAwareInte
             );
             $this->persist($this->contactManager, $account);
             $this->tagManager->saveTagging($account);
+        }
+        $this->flush($this->contactManager);
+    }
+
+    public function loadContactsTags()
+    {
+        foreach ($this->contacts as $contact) {
+            $user = $this->users[rand(0, count($this->users)-1)];
+
+            $securityContext = $this->container->get('security.context');
+            $token = new UsernamePasswordToken($user, '123123q', 'main');
+            $securityContext->setToken($token);
+
+            $ownTags = array(
+                $this->tagsUser[rand(0, count($this->tagsUser)-1)],
+                $this->tagsAccount[rand(0, count($this->tagsAccount)-1)]
+            );
+
+            $contact->setTags(
+                array(
+                    'owner' => $ownTags ,
+                    'all' => array()
+                )
+            );
+            $this->persist($this->contactManager, $contact);
+            $this->tagManager->saveTagging($contact);
         }
         $this->flush($this->contactManager);
     }
