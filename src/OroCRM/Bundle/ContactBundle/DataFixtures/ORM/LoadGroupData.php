@@ -17,7 +17,7 @@ class LoadGroupData extends AbstractFixture implements OrderedFixtureInterface
      */
     public function load(ObjectManager $manager)
     {
-        $groups = array('Administrators','Sales','Marketing');
+        $groups = array('Sales Group','Marketing Group');
         foreach ($groups as $group) {
             $contactGroup = new Group($group);
             $contactGroup->setOwner($this->getReference('default_user'));
