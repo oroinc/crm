@@ -94,7 +94,8 @@ class OpportunityController extends Controller
                     'parameters' => array('id' => $entity->getId()),
                 ),
                 array(
-                    'route' => 'orocrm_sales_opportunity_index',
+                    'route' => 'orocrm_sales_opportunity_view',
+                    'parameters' => array('id' => $entity->getId()),
                 )
             );
         }
