@@ -136,7 +136,6 @@ class TagsAssignTest extends \PHPUnit_Extensions_Selenium2TestCase
             ->verifyTag($tagname);
     }
 
-
     /**
      * @depends testCreateTag
      * @depends testAccountTag
