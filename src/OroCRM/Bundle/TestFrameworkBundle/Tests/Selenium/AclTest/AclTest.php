@@ -76,6 +76,7 @@ class AclTest extends \PHPUnit_Extensions_Selenium2TestCase
             ->setRoles(array($roleName))
             ->save()
             ->assertMessage('User successfully saved')
+            ->toGrid()
             ->close()
             ->assertTitle('Users - System');
 

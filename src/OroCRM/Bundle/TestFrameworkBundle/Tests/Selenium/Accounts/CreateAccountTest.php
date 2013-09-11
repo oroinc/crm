@@ -38,8 +38,9 @@ class CreateAccountTest extends \PHPUnit_Extensions_Selenium2TestCase
             ->setAccountName($accountname)
             ->setOwner('admin')
             ->save()
-            ->assertTitle('Accounts - Customers')
-            ->assertMessage('Account successfully saved');
+            ->assertMessage('Account successfully saved')
+            ->toGrid()
+            ->assertTitle('Accounts - Customers');
 
         return $accountname;
     }
@@ -64,8 +65,9 @@ class CreateAccountTest extends \PHPUnit_Extensions_Selenium2TestCase
             ->setState('Aqm')
             ->setZipCode('Zip Code 000')
             ->save()
-            ->assertTitle('Accounts - Customers')
-            ->assertMessage('Account successfully saved');
+            ->assertMessage('Account successfully saved')
+            ->toGrid()
+            ->assertTitle('Accounts - Customers');
     }
 
     /**
@@ -88,8 +90,9 @@ class CreateAccountTest extends \PHPUnit_Extensions_Selenium2TestCase
             ->assertTitle($accountname . ' - Accounts - Customers')
             ->setAccountName($newAccountname)
             ->save()
-            ->assertTitle('Accounts - Customers')
             ->assertMessage('Account successfully saved')
+            ->toGrid()
+            ->assertTitle('Accounts - Customers')
             ->close();
 
         return $newAccountname;
