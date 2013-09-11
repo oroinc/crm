@@ -16,7 +16,6 @@ use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityFlexible;
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
-use Oro\Bundle\EntityExtendBundle\Metadata\Annotation\Extend;
 
 use Oro\Bundle\UserBundle\Entity\User;
 
@@ -31,7 +30,6 @@ use Oro\Bundle\UserBundle\Entity\User;
  *      "ownership"={"owner_type"="USER"}
  *  }
  * )
- * @Extend
  */
 class Account extends AbstractEntityFlexible implements Taggable
 {

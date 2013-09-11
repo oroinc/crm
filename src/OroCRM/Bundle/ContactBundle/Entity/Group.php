@@ -11,7 +11,6 @@ use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\UserBundle\Entity\User;
 
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
-use Oro\Bundle\EntityExtendBundle\Metadata\Annotation\Extend;
 
 /**
  * @ORM\Entity
@@ -23,7 +22,6 @@ use Oro\Bundle\EntityExtendBundle\Metadata\Annotation\Extend;
  *      "ownership"={"owner_type"="USER"}
  *  }
  * )
- * @Extend
  */
 class Group
 {

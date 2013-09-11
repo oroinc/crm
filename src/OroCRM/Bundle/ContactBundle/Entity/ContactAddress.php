@@ -9,7 +9,6 @@ use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 use Oro\Bundle\AddressBundle\Entity\AbstractTypedAddress;
 
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
-use Oro\Bundle\EntityExtendBundle\Metadata\Annotation\Extend;
 
 /**
  * @ORM\Table("orocrm_contact_address")
@@ -20,7 +19,6 @@ use Oro\Bundle\EntityExtendBundle\Metadata\Annotation\Extend;
  *      "ownership"={"owner_type"="USER"}
  *  }
  * )
- * @Extend
  * @ORM\Entity
  */
 class ContactAddress extends AbstractTypedAddress
