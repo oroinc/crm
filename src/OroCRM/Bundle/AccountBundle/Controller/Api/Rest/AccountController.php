@@ -6,8 +6,8 @@ use FOS\RestBundle\Controller\Annotations\NamePrefix;
 use FOS\RestBundle\Controller\Annotations\RouteResource;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
-use Oro\Bundle\UserBundle\Annotation\Acl;
-use Oro\Bundle\UserBundle\Annotation\AclAncestor;
+use Oro\Bundle\SecurityBundle\Annotation\Acl;
+use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Response;
@@ -98,9 +98,9 @@ class AccountController extends FlexibleRestController implements ClassResourceI
      * )
      * @Acl(
      *      id="orocrm_account_remove",
-     *      name="Delete account",
-     *      description="Delete account",
-     *      parent="orocrm_account"
+     *      type="entity",
+     *      permission="DELETE",
+     *      class="OroCRMAccountBundle:Account"
      * )
      * @return Response
      */

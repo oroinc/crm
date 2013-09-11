@@ -8,8 +8,8 @@ use Symfony\Component\HttpFoundation\Session\Flash\FlashBag;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Oro\Bundle\UserBundle\Annotation\Acl;
-use Oro\Bundle\UserBundle\Annotation\AclAncestor;
+use Oro\Bundle\SecurityBundle\Annotation\Acl;
+use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 
 use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
@@ -17,14 +17,6 @@ use OroCRM\Bundle\ContactBundle\Datagrid\ContactDatagridManager;
 use OroCRM\Bundle\ContactBundle\Datagrid\ContactAccountDatagridManager;
 use OroCRM\Bundle\ContactBundle\Datagrid\ContactAccountUpdateDatagridManager;
 
-/**
- * @Acl(
- *      id="orocrm_contact",
- *      name="Contact manipulation",
- *      description="Contact manipulation",
- *      parent="root"
- * )
- */
 class ContactController extends Controller
 {
     /**
@@ -32,9 +24,9 @@ class ContactController extends Controller
      * @Template
      * @Acl(
      *      id="orocrm_contact_view",
-     *      name="View Contact",
-     *      description="View contact",
-     *      parent="orocrm_contact"
+     *      type="entity",
+     *      permission="VIEW",
+     *      class="OroCRMContactBundle:Contact"
      * )
      */
     public function viewAction(Contact $contact)
@@ -59,9 +51,9 @@ class ContactController extends Controller
      * @Template
      * @Acl(
      *      id="orocrm_contact_info",
-     *      name="View Contact Info",
-     *      description="View contact info",
-     *      parent="orocrm_contact_view"
+     *      label="View Contact Info",
+     *      type="action",
+     *      group_name=""
      * )
      */
     public function infoAction(Contact $contact)
@@ -78,9 +70,9 @@ class ContactController extends Controller
      * @Template("OroCRMContactBundle:Contact:update.html.twig")
      * @Acl(
      *      id="orocrm_contact_create",
-     *      name="Create Contact",
-     *      description="Create contact",
-     *      parent="orocrm_contact"
+     *      type="entity",
+     *      permission="CREATE",
+     *      class="OroCRMContactBundle:Contact"
      * )
      */
     public function createAction()
@@ -95,9 +87,9 @@ class ContactController extends Controller
      * @Template
      * @Acl(
      *      id="orocrm_contact_update",
-     *      name="Update Contact",
-     *      description="Update contact",
-     *      parent="orocrm_contact"
+     *      type="entity",
+     *      permission="EDIT",
+     *      class="OroCRMContactBundle:Contact"
      * )
      */
     public function updateAction(Contact $entity = null)
@@ -147,9 +139,9 @@ class ContactController extends Controller
      * @Template
      * @Acl(
      *      id="orocrm_contact_list",
-     *      name="View List of Contacts",
-     *      description="View list of contacts",
-     *      parent="orocrm_contact"
+     *      type="entity",
+     *      permission="VIEW",
+     *      class="OroCRMContactBundle:Contact"
      * )
      */
     public function indexAction()

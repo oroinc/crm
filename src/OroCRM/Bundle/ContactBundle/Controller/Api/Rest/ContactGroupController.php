@@ -6,8 +6,8 @@ use FOS\RestBundle\Controller\Annotations\NamePrefix;
 use FOS\RestBundle\Controller\Annotations\RouteResource;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
-use Oro\Bundle\UserBundle\Annotation\Acl;
-use Oro\Bundle\UserBundle\Annotation\AclAncestor;
+use Oro\Bundle\SecurityBundle\Annotation\Acl;
+use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Response;
@@ -53,9 +53,9 @@ class ContactGroupController extends RestController implements ClassResourceInte
      * )
      * @Acl(
      *      id="orocrm_contact_group_view",
-     *      name="View contact group",
-     *      description="View contact group",
-     *      parent="orocrm_contact_group"
+     *      type="entity",
+     *      permission="VIEW",
+     *      class="OroCRMContactBundle:Group"
      * )
      * @return Response
      */
@@ -106,9 +106,9 @@ class ContactGroupController extends RestController implements ClassResourceInte
      * )
      * @Acl(
      *      id="orocrm_contact_group_delete",
-     *      name="Delete contact group",
-     *      description="Delete contact group",
-     *      parent="orocrm_contact_group"
+     *      type="entity",
+     *      permission="DELETE",
+     *      class="OroCRMContactBundle:Group""
      * )
      * @return Response
      */

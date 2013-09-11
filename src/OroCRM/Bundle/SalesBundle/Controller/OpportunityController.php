@@ -8,20 +8,14 @@ use Symfony\Component\HttpFoundation\Session\Flash\FlashBag;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Oro\Bundle\UserBundle\Annotation\Acl;
-use Oro\Bundle\UserBundle\Annotation\AclAncestor;
+use Oro\Bundle\SecurityBundle\Annotation\Acl;
+use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 
 use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
 use OroCRM\Bundle\SalesBundle\Datagrid\OpportunityDatagridManager;
 
 /**
  * @Route("/opportunity")
- * @Acl(
- *      id="orocrm_sales_opportunity",
- *      name="Opportunity manipulation",
- *      description="Opportunity manipulation",
- *      parent="root"
- * )
  */
 class OpportunityController extends Controller
 {
@@ -30,9 +24,9 @@ class OpportunityController extends Controller
      * @Template
      * @Acl(
      *      id="orocrm_sales_opportunity_view",
-     *      name="View opportunity",
-     *      description="View opportunity",
-     *      parent="orocrm_sales_opportunity"
+     *      type="entity",
+     *      permission="VIEW",
+     *      class="OroCRMSalesBundle:Opportunity"
      * )
      */
     public function viewAction(Opportunity $entity)
@@ -59,9 +53,9 @@ class OpportunityController extends Controller
      * @Template("OroCRMSalesBundle:Opportunity:update.html.twig")
      * @Acl(
      *      id="orocrm_sales_opportunity_create",
-     *      name="Create opportunity",
-     *      description="Create opportunity",
-     *      parent="orocrm_sales_opportunity"
+     *      type="entity",
+     *      permission="CREATE",
+     *      class="OroCRMSalesBundle:Opportunity"
      * )
      */
     public function createAction()
@@ -78,9 +72,9 @@ class OpportunityController extends Controller
      * @Template
      * @Acl(
      *      id="orocrm_sales_opportunity_update",
-     *      name="Update opportunity",
-     *      description="Update opportunity",
-     *      parent="orocrm_sales_opportunity"
+     *      type="entity",
+     *      permission="EDIT",
+     *      class="OroCRMSalesBundle:Opportunity"
      * )
      */
     public function updateAction(Opportunity $entity)
@@ -116,9 +110,9 @@ class OpportunityController extends Controller
      * @Template
      * @Acl(
      *      id="orocrm_sales_opportunity_list",
-     *      name="View list of opportunities",
-     *      description="View list of opportunities",
-     *      parent="orocrm_sales_opportunity"
+     *      type="entity",
+     *      permission="VIEW",
+     *      class="OroCRMSalesBundle:Opportunity"
      * )
      */
     public function indexAction()

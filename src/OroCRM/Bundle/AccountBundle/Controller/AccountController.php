@@ -25,8 +25,8 @@ use Symfony\Component\HttpFoundation\Session\Flash\FlashBag;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Oro\Bundle\UserBundle\Annotation\Acl;
-use Oro\Bundle\UserBundle\Annotation\AclAncestor;
+use Oro\Bundle\SecurityBundle\Annotation\Acl;
+use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\AccountBundle\Datagrid\AccountDatagridManager;
@@ -36,14 +36,6 @@ use OroCRM\Bundle\AccountBundle\Datagrid\AccountContactUpdateDatagridManager;
 use Ddeboer\DataImport\Writer\CsvWriter;
 use Ddeboer\DataImport\Reader\CsvReader;
 
-/**
- * @Acl(
- *      id="orocrm_account",
- *      name="Account manipulation",
- *      description="Account manipulation",
- *      parent="root"
- * )
- */
 class AccountController extends Controller
 {
     /**
@@ -51,9 +43,9 @@ class AccountController extends Controller
      * @Template
      * @Acl(
      *      id="orocrm_account_view",
-     *      name="View Account",
-     *      description="View account",
-     *      parent="orocrm_account"
+     *      type="entity",
+     *      permission="VIEW",
+     *      class="OroCRMAccountBundle:Account"
      * )
      */
     public function viewAction(Account $account)
@@ -80,9 +72,9 @@ class AccountController extends Controller
      * @Template("OroCRMAccountBundle:Account:update.html.twig")
      * @Acl(
      *      id="orocrm_account_create",
-     *      name="Create Account",
-     *      description="Create account",
-     *      parent="orocrm_account"
+     *      type="entity",
+     *      permission="CREATE",
+     *      class="OroCRMAccountBundle:Account"
      * )
      */
     public function createAction()
@@ -97,9 +89,9 @@ class AccountController extends Controller
      * @Template
      * @Acl(
      *      id="orocrm_account_update",
-     *      name="Edit Account",
-     *      description="Edit account",
-     *      parent="orocrm_account"
+     *      type="entity",
+     *      permission="EDIT",
+     *      class="OroCRMAccountBundle:Account"
      * )
      */
     public function updateAction(Account $entity = null)
@@ -147,9 +139,9 @@ class AccountController extends Controller
      * )
      * @Acl(
      *      id="orocrm_account_list",
-     *      name="View List of Accounts",
-     *      description="View list of accounts",
-     *      parent="orocrm_account"
+     *      type="entity",
+     *      permission="VIEW",
+     *      class="OroCRMAccountBundle:Account"
      * )
      * @Template
      */
@@ -173,9 +165,9 @@ class AccountController extends Controller
      * )
      * @Acl(
      *      id="orocrm_account_export",
-     *      name="Export Accounts",
-     *      description="Export accounts",
-     *      parent="orocrm_account"
+     *      type="action",
+     *      label="Export Accounts",
+     *      group_name=""
      * )
      */
     public function exportAction()
@@ -272,9 +264,9 @@ class AccountController extends Controller
      * )
      * @Acl(
      *      id="orocrm_account_import",
-     *      name="Import Accounts",
-     *      description="Import accounts",
-     *      parent="orocrm_account"
+     *      type="action",
+     *      label="Import Accounts",
+     *      group_name=""
      * )
      */
     public function importAction()

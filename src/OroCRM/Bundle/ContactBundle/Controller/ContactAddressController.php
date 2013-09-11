@@ -11,18 +11,10 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
-use Oro\Bundle\UserBundle\Annotation\Acl;
+use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use OroCRM\Bundle\ContactBundle\Entity\ContactAddress;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 
-/**
- * @Acl(
- *      id="orocrm_contact_address",
- *      name="Contact address manipulation",
- *      description="Contact address manipulation",
- *      parent="orocrm_contact"
- * )
- */
 class ContactAddressController extends Controller
 {
     /**
@@ -30,9 +22,9 @@ class ContactAddressController extends Controller
      * @Template
      * @Acl(
      *      id="orocrm_contact_address_book",
-     *      name="View Contact Address Book",
-     *      description="View contact Address Book",
-     *      parent="orocrm_contact_address"
+     *      type="entity",
+     *      permission="VIEW",
+     *      class="OroCRMContactBundle:Contact"
      * )
      */
     public function addressBookAction(Contact $contact)
@@ -51,9 +43,9 @@ class ContactAddressController extends Controller
      * @Template("OroCRMContactBundle:ContactAddress:update.html.twig")
      * @Acl(
      *      id="orocrm_contact_address_create",
-     *      name="Create Contact Address",
-     *      description="Create Contact Address",
-     *      parent="orocrm_contact_address"
+     *      type="entity",
+     *      permission="CREATE",
+     *      class="OroCRMContactBundle:Contact"
      * )
      * @ParamConverter("contact", options={"id" = "contactId"})
      */
@@ -71,9 +63,9 @@ class ContactAddressController extends Controller
      * @Template
      * @Acl(
      *      id="orocrm_contact_address_update",
-     *      name="Update Contact Address",
-     *      description="Update Contact Address",
-     *      parent="orocrm_contact_address"
+     *      type="entity",
+     *      permission="EDIT",
+     *      class="OroCRMContactBundle:Contact"
      * )
      * @ParamConverter("contact", options={"id" = "contactId"})
      */

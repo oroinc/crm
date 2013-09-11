@@ -7,8 +7,8 @@ use FOS\RestBundle\Controller\Annotations\NamePrefix;
 use FOS\RestBundle\Controller\Annotations\RouteResource;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
-use Oro\Bundle\UserBundle\Annotation\Acl;
-use Oro\Bundle\UserBundle\Annotation\AclAncestor;
+use Oro\Bundle\SecurityBundle\Annotation\Acl;
+use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 
 use OroCRM\Bundle\SalesBundle\Entity\Lead;
 use Symfony\Component\Form\FormInterface;
@@ -35,9 +35,9 @@ class LeadController extends RestController implements ClassResourceInterface
      * )
      * @Acl(
      *      id="orocrm_sales_lead_address",
-     *      name="View lead address",
-     *      description="View lead address",
-     *      parent="orocrm_sales_lead_view"
+     *      label="View lead address",
+     *      type="action",
+     *      group_name=""
      * )
      * @return Response
      */
@@ -143,9 +143,9 @@ class LeadController extends RestController implements ClassResourceInterface
      * )
      * @Acl(
      *      id="orocrm_sales_lead_delete",
-     *      name="Delete lead",
-     *      description="Delete lead",
-     *      parent="orocrm_sales_lead"
+     *      type="entity",
+     *      permission="DELETE",
+     *      class="OroCRMSalesBundle:Lead"
      * )
      * @return Response
      */
