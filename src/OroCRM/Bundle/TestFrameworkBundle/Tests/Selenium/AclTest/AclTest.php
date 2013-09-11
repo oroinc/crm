@@ -211,7 +211,6 @@ class AclTest extends \PHPUnit_Extensions_Selenium2TestCase
         return $adminId;
     }
 
-
     /**
      * @param $username
      * @param $adminId

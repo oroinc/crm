@@ -98,7 +98,6 @@ class CreateAccountTest extends \PHPUnit_Extensions_Selenium2TestCase
         return $newAccountname;
     }
 
-
     /**
      * @depends testUpdateContact
      * @param $accountname
