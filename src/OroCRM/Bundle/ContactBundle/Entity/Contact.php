@@ -34,13 +34,11 @@ use OroCRM\Bundle\AccountBundle\Entity\Account;
  * @Config(
  *  defaultValues={
  *      "entity"={"label"="Contact", "plural_label"="Contacts"},
- *      "extend"={"is_extend"=true},
  *      "ownership"={"owner_type"="USER"}
  *  }
  * )
- * @Extend
  */
-class Contact implements Taggable, EmailOwnerInterface
+class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
 {
     /**
      * @var int

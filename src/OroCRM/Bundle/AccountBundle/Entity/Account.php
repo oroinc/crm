@@ -31,7 +31,6 @@ use Oro\Bundle\UserBundle\Entity\User;
  *      "ownership"={"owner_type"="USER"}
  *  }
  * )
- * @Extend
  */
 class Account extends AbstractEntityFlexible implements Taggable
 {
