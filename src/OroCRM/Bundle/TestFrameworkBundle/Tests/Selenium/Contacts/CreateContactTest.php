@@ -69,8 +69,9 @@ class CreateContactTest extends \PHPUnit_Extensions_Selenium2TestCase
             ->setAddress($this->addressPrimary)
             ->setAddress($this->addressSecondary, 1)
             ->save()
-            ->assertTitle('Contacts - Customers')
             ->assertMessage('Contact successfully saved')
+            ->toGrid()
+            ->assertTitle('Contacts - Customers')
             ->close()
             ->filterBy('Email', $contactname . '@mail.com')
             ->open(array($contactname))
@@ -108,8 +109,9 @@ class CreateContactTest extends \PHPUnit_Extensions_Selenium2TestCase
             ->setAddressCountry('Kazak')
             ->setAddressState('Aqm')
             ->save()
-            ->assertTitle('Contacts - Customers')
             ->assertMessage('Contact successfully saved')
+            ->toGrid()
+            ->assertTitle('Contacts - Customers')
             ->close();
     }
 
@@ -133,8 +135,9 @@ class CreateContactTest extends \PHPUnit_Extensions_Selenium2TestCase
             ->edit()
             ->setFirstName($newContactname . '_first')
             ->save()
-            ->assertTitle('Contacts - Customers')
             ->assertMessage('Contact successfully saved')
+            ->toGrid()
+            ->assertTitle('Contacts - Customers')
             ->close();
 
         return $newContactname;
