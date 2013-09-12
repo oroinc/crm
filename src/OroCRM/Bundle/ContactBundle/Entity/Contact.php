@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\Collection;
 
 use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 
+use OroCRM\Bundle\ContactBundle\Model\ExtendContact;
 use Zend\Stdlib\DateTime;
 
 use Oro\Bundle\TagBundle\Entity\Taggable;
@@ -16,7 +17,6 @@ use Oro\Bundle\EmailBundle\Entity\EmailOwnerInterface;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
-use Oro\Bundle\EntityExtendBundle\Metadata\Annotation\Extend;
 
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 
