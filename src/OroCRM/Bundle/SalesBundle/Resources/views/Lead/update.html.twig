@@ -1,0 +1,97 @@
+{% extends 'OroUIBundle:actions:update.html.twig' %}
+{% form_theme form with ['OroAddressBundle:Include:fields.html.twig', 'OroFormBundle:Form:fields.html.twig'] %}
+
+{% oro_title_set({params : {"%lead.topic%": entity.topic} }) %}
+
+{% set title = form.vars.value.id ? entity.topic ~ ' - ' ~ 'Update Lead'|trans : 'New Lead'|trans %}
+{% set formAction = form.vars.value.id ? path('orocrm_sales_lead_update', { 'id': form.vars.value.id }) : path('orocrm_sales_lead_create')  %}
+
+{% block head_script %}
+    {{ parent() }}
+
+    {% block stylesheets %}
+        {{ form_stylesheet(form) }}
+    {% endblock %}
+{% endblock %}
+
+{% block navButtons %}
+    {% if form.vars.value.id and resource_granted('orocrm_sales_lead_delete') %}
+        {{ UI.deleteButton({
+            'dataUrl': path('oro_api_delete_lead', {'id': form.vars.value.id}),
+            'dataRedirect': path('orocrm_sales_lead_index'),
+            'aCss': 'no-hash remove-button',
+            'id': 'btn-remove-lead',
+            'dataId': form.vars.value.id,
+            'dataMessage': 'Are you sure you want to delete this lead?',
+            'title': 'Delete Lead',
+            'label': 'Delete'
+        })
+        }}
+        {{ UI.buttonSeparator() }}
+    {% endif %}
+    {{ UI.button({'path' : path('orocrm_sales_lead_index'), 'title' : 'Cancel', 'label' : 'Cancel'}) }}
+    {{ UI.saveAndStayButton() }}
+    {{ UI.saveAndCloseButton() }}
+{% endblock %}
+
+{% block pageHeader %}
+    {% if form.vars.value.id %}
+        {% set breadcrumbs = {
+            'entity':      form.vars.value,
+            'indexPath':   path('orocrm_sales_lead_index'),
+            'indexLabel': 'Leads',
+            'entityTitle': entity.topic
+        }
+        %}
+        {{ parent() }}
+    {% else %}
+        {% include 'OroUIBundle::page_title_block.html.twig' %}
+    {% endif %}
+{% endblock pageHeader %}
+
+{% block content_data %}
+    {% set id = 'lead-profile' %}
+
+    {% set dataBlocks = [{
+            'title': 'General',
+            'class': 'active',
+            'subblocks': [
+                {
+                    'title': 'Lead Information',
+                    'data': [
+                        form_row(form.status, {'label': 'Status'}),
+                        form_row(form.topic, {'label': 'Topic'}),
+                        form_row(form.firstName, {'label': 'First name'}),
+                        form_row(form.lastName, {'label': 'Last name'}),
+                        form_row(form.contact, {'label': 'Contact'}),
+                        form_row(form.jobTitle, {'label': 'Job Title'}),
+
+                        form_row(form.phoneNumber, {'label': 'Phone Number'}),
+                        form_row(form.email, {'label': 'Email'}),
+
+                        form_row(form.companyName, {'label': 'Company Name'}),
+                        form_row(form.website, {'label': 'Website'}),
+                        form_row(form.numberOfEmployees, {'label': 'Number Of Employees'}),
+                        form_row(form.industry, {'label': 'Industry'}),
+
+                    ]
+                },
+                {
+                    'title': 'Address',
+                    'data': [
+                        form_widget(form.address),
+                    ]
+                },
+            ]
+        }]
+    %}
+
+    {% set data =
+        {
+            'formErrors': form_errors(form)? form_errors(form) : null,
+            'dataBlocks': dataBlocks,
+            'hiddenData': form_rest(form)
+        }
+    %}
+    {{ parent() }}
+{% endblock content_data %}

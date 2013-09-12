@@ -66,6 +66,7 @@ class TagsAssignTest extends \PHPUnit_Extensions_Selenium2TestCase
             ->setTag('New_' . $tagname)
             ->save()
             ->assertMessage('Account successfully saved')
+            ->toGrid()
             ->close()
             ->filterBy('Name', $accountname)
             ->open(array($accountname))
@@ -94,6 +95,7 @@ class TagsAssignTest extends \PHPUnit_Extensions_Selenium2TestCase
             ->setTag('New_' . $tagname)
             ->save()
             ->assertMessage('Contact successfully saved')
+            ->toGrid()
             ->close()
             ->filterBy('Email', $contactname . '@mail.com')
             ->open(array($contactname))
@@ -127,12 +129,12 @@ class TagsAssignTest extends \PHPUnit_Extensions_Selenium2TestCase
             ->setTag('New_' . $tagname)
             ->save()
             ->assertMessage('User successfully saved')
+            ->toGrid()
             ->close()
             ->filterBy('Username', $username)
             ->open(array($username))
             ->verifyTag($tagname);
     }
-
 
     /**
      * @depends testCreateTag

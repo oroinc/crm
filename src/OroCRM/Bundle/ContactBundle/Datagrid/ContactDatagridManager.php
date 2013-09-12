@@ -17,8 +17,6 @@ use Oro\Bundle\GridBundle\Property\FixedProperty;
 use Oro\Bundle\GridBundle\Datagrid\ProxyQueryInterface;
 use Oro\Bundle\GridBundle\Sorter\SorterInterface;
 use Oro\Bundle\GridBundle\Action\MassAction\Ajax\DeleteMassAction;
-use Oro\Bundle\GridBundle\Action\MassAction\Redirect\RedirectMassAction;
-use Oro\Bundle\GridBundle\Action\MassAction\Widget\WindowMassAction;
 
 class ContactDatagridManager extends DatagridManager
 {
