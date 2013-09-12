@@ -1,11 +1,12 @@
 {% form_theme form with ['OroAddressBundle:Include:fields.html.twig', 'OroFormBundle:Form:fields.html.twig', _self] %}
-<div class="widget-content" id="addressDialog">
+<div class="widget-content">
     {% if saved %}
         <script type="text/javascript">
         require(['oro/widget-manager'],
         function(widgetManager) {
-            var widget = widgetManager.getWidgetInstance({{ app.request.get('_wid')|json_encode|raw }});
-            widget.trigger('formSave', {{ form.vars.value.id|json_encode|raw }});
+            widgetManager.getWidgetInstance({{ app.request.get('_wid')|json_encode|raw }}, function(widget) {
+                widget.trigger('formSave', {{ form.vars.value.id|json_encode|raw }});
+            });
         });
         </script>
     {% else %}
