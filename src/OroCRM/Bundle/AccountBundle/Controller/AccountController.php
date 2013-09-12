@@ -126,7 +126,8 @@ class AccountController extends Controller
                     'parameters' => array('id' => $entity->getId()),
                 ),
                 array(
-                    'route' => 'orocrm_account_index',
+                    'route' => 'orocrm_account_view',
+                    'parameters' => array('id' => $entity->getId())
                 )
             );
         }
