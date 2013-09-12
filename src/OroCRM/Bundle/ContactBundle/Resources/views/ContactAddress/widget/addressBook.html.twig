@@ -1,22 +1,25 @@
-<div class="widget-content" id="addressBookWidget">
+<div class="widget-content">
     {# JS template for address view #}
     {% include "OroAddressBundle:Js:address.js.twig" %}
 
     {# widget container and actions #}
     <div class="widget-actions">
-        <button class="btn btn-mini btn-primary btn-uppercase" type="button" data-action-name="add_address"> + {{ 'add Address'|trans }}</button>
+        <button class="btn btn-mini btn-primary btn-uppercase" type="button" data-action-name="add_address"> + {{ 'Add Address'|trans }}</button>
     </div>
     <div class="map-box" id="address-book"></div>
 
     <script type="text/javascript">
-        $('#addressBookWidget').on('widgetize', function(e, widget) {
-            var addressBook = new OroAddressBook({
+    require(['jquery', 'routing', 'oro/address-book', 'oro/widget-manager'],
+    function($, routing, AddressBook, widgetManager) {
+        widgetManager.getWidgetInstance({{ app.request.get('_wid')|json_encode|raw }}, function(widget){
+            /** @type oro.AddressBook */
+            var addressBook = new AddressBook({
                 el: '#address-book',
                 addressListUrl: {{ path('oro_api_get_contact_addresses', {'contactId': entity.id})|json_encode|raw }},
                 addressCreateUrl: {{ path('orocrm_contact_address_create', {'contactId': entity.id})|json_encode|raw }},
                 addressUpdateUrl: function() {
                     var address = arguments[0];
-                    return Routing.generate(
+                    return routing.generate(
                         'orocrm_contact_address_update',
                         {
                             'contactId': {{ entity.id|json_encode|raw }},
@@ -31,5 +34,6 @@
                 .getCollection()
                 .reset({{ render(path('oro_api_get_contact_addresses', {contactId: entity.id})) }});
         });
+    });
     </script>
 </div>
