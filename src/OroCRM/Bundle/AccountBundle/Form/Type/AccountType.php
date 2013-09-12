@@ -2,13 +2,28 @@
 
 namespace OroCRM\Bundle\AccountBundle\Form\Type;
 
+use Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleManager;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 use Oro\Bundle\FlexibleEntityBundle\Form\Type\FlexibleType;
+use Symfony\Component\Routing\Router;
 
 class AccountType extends FlexibleType
 {
+    /**
+     * @var Router
+     */
+    protected $router;
+
+    public function __construct(FlexibleManager $flexibleManager, $valueFormAlias, Router $router)
+    {
+        parent::__construct($flexibleManager, $valueFormAlias);
+        $this->router = $router;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -34,27 +49,14 @@ class AccountType extends FlexibleType
         );
 
         // contacts
-        $builder
-            ->add(
-                'appendContacts',
-                'oro_entity_identifier',
-                array(
-                    'class'    => 'OroCRMContactBundle:Contact',
-                    'required' => false,
-                    'mapped'   => false,
-                    'multiple' => true,
-                )
+        $builder->add(
+            'contacts',
+            'oro_multiple_entity',
+            array(
+                'class' => 'OroCRMContactBundle:Contact',
+                'required' => false
             )
-            ->add(
-                'removeContacts',
-                'oro_entity_identifier',
-                array(
-                    'class'    => 'OroCRMContactBundle:Contact',
-                    'required' => false,
-                    'mapped'   => false,
-                    'multiple' => true,
-                )
-            );
+        );
 
         // addresses
         $builder
@@ -74,6 +76,12 @@ class AccountType extends FlexibleType
                     'required' => false
                 )
             );
+    }
+
+    public function finishView(FormView $view, FormInterface $form, array $options)
+    {
+        $view->children['contacts']->vars['grid_url'] =
+            $this->router->generate('orocrm_account_contact_select', array('id' => $form->getData()->getId()));
     }
 
     /**

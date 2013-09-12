@@ -108,15 +108,6 @@ class AccountController extends Controller
             $entity = $this->getManager()->createEntity();
         }
 
-        /** @var $contactDatagridManager AccountContactUpdateDatagridManager */
-        $contactDatagridManager = $this->get('orocrm_account.contact.update_datagrid_manager');
-        $contactDatagridManager->setAccount($entity);
-        $datagridView = $contactDatagridManager->getDatagrid()->createView();
-
-        if ('json' == $this->getRequest()->getRequestFormat()) {
-            return $this->get('oro_grid.renderer')->renderResultsJsonResponse($datagridView);
-        }
-
         if ($this->get('orocrm_account.form.handler.account')->process($entity)) {
             $this->getFlashBag()->add('success', 'Account successfully saved');
 
@@ -133,7 +124,32 @@ class AccountController extends Controller
         }
 
         return array(
-            'form'     => $this->get('orocrm_account.form.account')->createView(),
+            'form'     => $this->get('orocrm_account.form.account')->createView()
+        );
+    }
+
+
+    /**
+     * @Route(
+     *      "/contact/select/{id}",
+     *      name="orocrm_account_contact_select",
+     *      requirements={"id"="\d+"},
+     *      defaults={"id"=0}
+     * )
+     * @Template
+     * @AclAncestor("orocrm_contact_list")
+     */
+    public function contactDatagridAction(Account $entity = null)
+    {
+        /** @var $datagridManager AccountContactUpdateDatagridManager */
+        $datagridManager = $this->get('orocrm_account.contact.update_datagrid_manager');
+        $datagridManager->setAccount($entity);
+        $datagridView = $datagridManager->getDatagrid()->createView();
+
+        if ('json' == $this->getRequest()->getRequestFormat()) {
+            return $this->get('oro_grid.renderer')->renderResultsJsonResponse($datagridView);
+        }
+        return array(
             'datagrid' => $datagridView,
         );
     }

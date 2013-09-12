@@ -19,7 +19,7 @@
             'excluded': '#removeContacts'
         }
     } %}
-    {% placeholder prepare_grid with {'datagrid': datagrid, 'selector': '#' ~ gridId, 'parameters': listenerParameters} %}
+    {#{% placeholder prepare_grid with {'datagrid': datagrid, 'selector': '#' ~ gridId, 'parameters': listenerParameters} %}#}
 {% endblock %}
 
 {% block navButtons %}
@@ -118,9 +118,7 @@
                     'title' : null,
                     'useSpan': false,
                     'data' : [
-                        form_widget(form.appendContacts, {'id': 'appendContacts'}),
-                        form_widget(form.removeContacts, {'id': 'removeContacts'}),
-                        UI.gridBlock(gridId)
+                        form_widget(form.contacts)
                     ]
                 }
             ]

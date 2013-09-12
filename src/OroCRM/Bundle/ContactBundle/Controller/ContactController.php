@@ -57,12 +57,7 @@ class ContactController extends Controller
     /**
      * @Route("/info/{id}", name="orocrm_contact_info", requirements={"id"="\d+"})
      * @Template
-     * @Acl(
-     *      id="orocrm_contact_info",
-     *      name="View Contact Info",
-     *      description="View contact info",
-     *      parent="orocrm_contact_view"
-     * )
+     * @AclAncestor("orocrm_contact_view")
      */
     public function infoAction(Contact $contact)
     {
