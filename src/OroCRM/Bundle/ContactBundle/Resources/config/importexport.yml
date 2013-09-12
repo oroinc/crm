@@ -1,0 +1,9 @@
+parameters:
+    orocrm_contact.import_export.contact_normalizer.class: OroCRM\Bundle\ContactBundle\ImportExport\Serializer\Normalizer\ContactNormalizer
+
+services:
+    orocrm_contact.import_export.contact_normalizer:
+        class: %orocrm_contact.import_export.contact_normalizer.class%
+        arguments: [@orocrm_contact.social_url_formatter]
+        tags:
+            - { name: oro_importexport.normalizer }
