@@ -5,6 +5,9 @@ namespace OroCRM\Bundle\ContactBundle\Form\Type;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Form\FormEvent;
+use OroCRM\Bundle\ContactBundle\Entity\Contact;
 
 class ContactType extends AbstractType
 {
@@ -15,6 +18,18 @@ class ContactType extends AbstractType
     {
         $this->buildPlainFields($builder, $options);
         $this->buildRelationFields($builder, $options);
+
+        // set predefined accounts in case of creating a new contact
+        $builder->addEventListener(
+            FormEvents::POST_SET_DATA,
+            function (FormEvent $event) {
+                $contact = $event->getData();
+                if ($contact && $contact instanceof Contact && !$contact->getId() && $contact->hasAccounts()) {
+                    $form = $event->getForm();
+                    $form->get('appendAccounts')->setData($contact->getAccounts());
+                }
+            }
+        );
     }
 
     /**
