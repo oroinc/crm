@@ -4,7 +4,6 @@ namespace OroCRM\Bundle\AccountBundle\Datagrid;
 
 use Doctrine\ORM\QueryBuilder;
 
-use Oro\Bundle\GridBundle\Datagrid\FlexibleDatagridManager;
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\ContactBundle\Datagrid\ContactDatagridManager;
 use Oro\Bundle\GridBundle\Datagrid\ProxyQueryInterface;
@@ -46,6 +45,7 @@ class AccountContactDatagridManager extends ContactDatagridManager
         $this->applyJoinWithAddressAndCountry($query);
 
         $entityAlias = $query->getRootAlias();
+        /** @var QueryBuilder $query */
         $query->andWhere(":account MEMBER OF $entityAlias.accounts");
     }
 
