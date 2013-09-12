@@ -11,9 +11,15 @@ use Oro\Bundle\GridBundle\Field\FieldDescriptionInterface;
 use Oro\Bundle\GridBundle\Filter\FilterInterface;
 use Oro\Bundle\GridBundle\Action\ActionInterface;
 use Oro\Bundle\GridBundle\Property\UrlProperty;
+use Oro\Bundle\GridBundle\Datagrid\ProxyQueryInterface;
 
 class AccountDatagridManager extends FlexibleDatagridManager
 {
+    /**
+     * @var string
+     */
+    protected $ownerExpression = "CONCAT(accountOwner.firstName, CONCAT(' ', accountOwner.lastName))";
+
     /**
      * {@inheritDoc}
      */
@@ -47,17 +53,86 @@ class AccountDatagridManager extends FlexibleDatagridManager
         );
         $fieldsCollection->add($fieldName);
 
-        $this->configureFlexibleField($fieldsCollection, 'phone');
-        $this->configureFlexibleField($fieldsCollection, 'email', array('show_filter' => true));
-
-        $addressOptions = array(
-            'type'        => FieldDescriptionInterface::TYPE_TEXT,
-            'filter_type' => FilterInterface::TYPE_STRING,
-            'sortable'    => false,
-            'filterable'  => false
+        $fieldFirstName = new FieldDescription();
+        $fieldFirstName->setName('contact_first_name');
+        $fieldFirstName->setOptions(
+            array(
+                'type'        => FieldDescriptionInterface::TYPE_TEXT,
+                'label'       => $this->translate('First Name'),
+                'field_name'  => 'contactFirstName',
+                'expression'  => 'defaultContact.firstName',
+                'filter_type' => FilterInterface::TYPE_STRING,
+                'sortable'    => true,
+                'filterable'  => true,
+                'show_filter' => true,
+            )
         );
-        $this->configureFlexibleField($fieldsCollection, 'shipping_address', $addressOptions);
-        $this->configureFlexibleField($fieldsCollection, 'billing_address', $addressOptions);
+        $fieldsCollection->add($fieldFirstName);
+
+        $fieldLastName = new FieldDescription();
+        $fieldLastName->setName('contact_last_name');
+        $fieldLastName->setOptions(
+            array(
+                'type'        => FieldDescriptionInterface::TYPE_TEXT,
+                'label'       => $this->translate('Last Name'),
+                'field_name'  => 'contactLastName',
+                'expression'  => 'defaultContact.lastName',
+                'filter_type' => FilterInterface::TYPE_STRING,
+                'sortable'    => true,
+                'filterable'  => true,
+                'show_filter' => true,
+            )
+        );
+        $fieldsCollection->add($fieldLastName);
+
+        $fieldEmail = new FieldDescription();
+        $fieldEmail->setName('email');
+        $fieldEmail->setOptions(
+            array(
+                'type'            => FieldDescriptionInterface::TYPE_TEXT,
+                'label'           => $this->translate('Email'),
+                'field_name'      => 'contactEmail',
+                'expression'      => 'defaultContactEmail.email',
+                'filter_type'     => FilterInterface::TYPE_STRING,
+                'sortable'        => true,
+                'filterable'      => true,
+                'show_filter'     => true,
+            )
+        );
+        $fieldsCollection->add($fieldEmail);
+
+        $fieldPhone = new FieldDescription();
+        $fieldPhone->setName('phone');
+        $fieldPhone->setOptions(
+            array(
+                'type'            => FieldDescriptionInterface::TYPE_TEXT,
+                'label'           => $this->translate('Phone'),
+                'field_name'      => 'contactPhone',
+                'expression'      => 'defaultContactPhone.phone',
+                'filter_type'     => FilterInterface::TYPE_STRING,
+                'sortable'        => true,
+                'filterable'      => true,
+                'show_filter'     => true,
+            )
+        );
+        $fieldsCollection->add($fieldPhone);
+
+        $fieldContactName = new FieldDescription();
+        $fieldContactName->setName('owner');
+        $fieldContactName->setOptions(
+            array(
+                'type'        => FieldDescriptionInterface::TYPE_TEXT,
+                'label'       => $this->translate('Owner'),
+                'field_name'  => 'ownerName',
+                'expression'  => $this->ownerExpression,
+                'filter_type' => FilterInterface::TYPE_STRING,
+                'sortable'    => true,
+                'filterable'  => true,
+                'show_filter' => true,
+                'filter_by_where' => true
+            )
+        );
+        $fieldsCollection->add($fieldContactName);
 
         $fieldCreated = new FieldDescription();
         $fieldCreated->setName('created');
@@ -140,5 +215,34 @@ class AccountDatagridManager extends FlexibleDatagridManager
         );
 
         return array($clickAction, $viewAction, $updateAction, $deleteAction);
+    }
+
+    /**
+     * @param ProxyQueryInterface $query
+     */
+    protected function prepareQuery(ProxyQueryInterface $query)
+    {
+        $this->applyJoinWithDefaultContact($query);
+    }
+
+    /**
+     * @param ProxyQueryInterface $query
+     */
+    protected function applyJoinWithDefaultContact(ProxyQueryInterface $query)
+    {
+        $entityAlias = $query->getRootAlias();
+
+        /** @var $query QueryBuilder */
+        $query
+            ->leftJoin("$entityAlias.defaultContact", 'defaultContact')
+            ->leftJoin("defaultContact.emails", 'defaultContactEmail', 'WITH', 'defaultContactEmail.primary = true')
+            ->leftJoin("defaultContact.phones", 'defaultContactPhone', 'WITH', 'defaultContactPhone.primary = true')
+            ->leftJoin("$entityAlias.owner", 'accountOwner');
+
+        $query->addSelect('defaultContact.firstName as contactFirstName', true);
+        $query->addSelect('defaultContact.lastName as contactLastName', true);
+        $query->addSelect('defaultContactEmail.email as contactEmail', true);
+        $query->addSelect('defaultContactPhone.phone as contactPhone', true);
+        $query->addSelect($this->ownerExpression . ' AS ownerName', true);
     }
 }
