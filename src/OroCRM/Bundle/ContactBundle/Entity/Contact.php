@@ -28,7 +28,7 @@ use OroCRM\Bundle\AccountBundle\Entity\Account;
  * @SuppressWarnings(PHPMD.TooManyFields)
  *
  * @ORM\Entity
- * @ORM\Table(name="orocrm_contact")
+ * @ORM\Table(name="orocrm_contact", indexes={@ORM\Index(name="search_idx", columns={"field_testHiddenField"})})
  * @ORM\HasLifecycleCallbacks()
  * @Oro\Loggable
  * @Config(
