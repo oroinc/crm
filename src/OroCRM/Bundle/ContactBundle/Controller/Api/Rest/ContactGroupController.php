@@ -108,7 +108,7 @@ class ContactGroupController extends RestController implements ClassResourceInte
      *      id="orocrm_contact_group_delete",
      *      type="entity",
      *      permission="DELETE",
-     *      class="OroCRMContactBundle:Group""
+     *      class="OroCRMContactBundle:Group"
      * )
      * @return Response
      */

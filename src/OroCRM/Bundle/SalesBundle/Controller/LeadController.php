@@ -54,7 +54,7 @@ class LeadController extends Controller
      * @Template
      * @Acl(
      *      id="orocrm_sales_lead_address_book",
-     *      type="action"
+     *      type="action",
      *      label="View Lead Address Book",
      *      group_name=""
      * )
