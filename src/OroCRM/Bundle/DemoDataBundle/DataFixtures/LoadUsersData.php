@@ -160,7 +160,7 @@ class LoadUsersData extends AbstractFlexibleFixture implements OrderedFixtureInt
                 $role
             );
 
-            $user->setPlainPassword('123123q');
+            $user->setPlainPassword($username);
             $this->userManager->updatePassword($user);
 
             $this->persist($user);
