@@ -2,6 +2,8 @@
 
 namespace OroCRM\Bundle\ContactBundle\Tests\Unit\ImportExport\Serializer\Normalizer;
 
+use Oro\Bundle\UserBundle\Entity\User;
+
 use OroCRM\Bundle\ContactBundle\ImportExport\Serializer\Normalizer\ContactNormalizer;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\ContactBundle\Entity\Source;
@@ -13,6 +15,7 @@ class ContactNormalizerTest extends \PHPUnit_Framework_TestCase
     const CONTACT_TYPE = 'OroCRM\Bundle\ContactBundle\Entity\Contact';
     const SOURCE_TYPE = 'OroCRM\Bundle\ContactBundle\Entity\Source';
     const METHOD_TYPE = 'OroCRM\Bundle\ContactBundle\Entity\Method';
+    const USER_TYPE = 'Oro\Bundle\UserBundle\Entity\User';
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -121,6 +124,7 @@ class ContactNormalizerTest extends \PHPUnit_Framework_TestCase
                     'linkedIn' => null,
                     'source' => null,
                     'method' => null,
+                    'owner' => null,
                 )
             ),
             'empty' => array(
@@ -143,6 +147,7 @@ class ContactNormalizerTest extends \PHPUnit_Framework_TestCase
                     'linkedIn' => null,
                     'source' => null,
                     'method' => null,
+                    'owner' => null,
                 )
             ),
         );
@@ -207,17 +212,16 @@ class ContactNormalizerTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider normalizeObjectFieldDataProvider
      */
-    public function testNormalizeObjectField(Contact $contact, $fieldName, $object, $expectedValue)
+    public function testNormalizeObjectField(Contact $contact, $fieldName, $object, $expectedValue, $context = array())
     {
         $format = null;
-        $context = array('context');
 
         $this->serializer->expects($this->once())
             ->method('serialize')
             ->with($object, $format, $context)
             ->will($this->returnValue($expectedValue));
 
-        $normalizedData = $this->normalizer->normalize($contact, $format, $context);
+        $normalizedData = $this->normalizer->normalize($contact, $format);
         $this->assertInternalType('array', $normalizedData);
 
         $this->assertArrayHasKey($fieldName, $normalizedData);
@@ -239,6 +243,13 @@ class ContactNormalizerTest extends \PHPUnit_Framework_TestCase
                 'object'        => $method,
                 'expectedValue' => 'method_value'
             ),
+            'owner' => array(
+                'contact'       => $this->createContact()->setOwner($owner = new User()),
+                'fieldName'     => 'owner',
+                'object'        => $owner,
+                'expectedValue' => array('firstName' => 'John', 'lastName' => 'Doe'),
+                'context'       => array('mode' => 'short')
+            ),
         );
     }
 
@@ -249,10 +260,10 @@ class ContactNormalizerTest extends \PHPUnit_Framework_TestCase
         $data,
         $fieldName,
         $object,
-        Contact $expectedContact
+        Contact $expectedContact,
+        array $context = array()
     ) {
         $format = null;
-        $context = array('context');
 
         $this->serializer->expects($this->once())
             ->method('deserialize')
@@ -261,7 +272,7 @@ class ContactNormalizerTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             $expectedContact,
-            $this->normalizer->denormalize($data, self::CONTACT_TYPE, $format, $context)
+            $this->normalizer->denormalize($data, self::CONTACT_TYPE, $format)
         );
     }
 
@@ -272,13 +283,22 @@ class ContactNormalizerTest extends \PHPUnit_Framework_TestCase
                 'data'            => array('source' => 'source_value'),
                 'fieldName'       => 'source',
                 'object'          => $source = new Source('source'),
-                'expectedContact' => $this->createContact()->setSource($source)
+                'expectedContact' => $this->createContact()->setSource($source),
+                'context'         => array(),
             ),
             'method' => array(
                 'data'            => array('source' => 'source_value'),
                 'fieldName'       => 'source',
                 'object'          => $source = new Source('source'),
-                'expectedContact' => $this->createContact()->setSource($source)
+                'expectedContact' => $this->createContact()->setSource($source),
+                'context'         => array(),
+            ),
+            'owner' => array(
+                'data'            => array('owner' => 'owner_value'),
+                'fieldName'       => 'owner',
+                'object'          => $owner = new User(),
+                'expectedContact' => $this->createContact()->setOwner($owner),
+                'context'         => array('mode' => 'short'),
             ),
         );
     }

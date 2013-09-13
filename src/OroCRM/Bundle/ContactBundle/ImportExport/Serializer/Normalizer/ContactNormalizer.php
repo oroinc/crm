@@ -17,6 +17,7 @@ class ContactNormalizer implements NormalizerInterface, DenormalizerInterface, S
     const CONTACT_TYPE = 'OroCRM\Bundle\ContactBundle\Entity\Contact';
     const SOURCE_TYPE = 'OroCRM\Bundle\ContactBundle\Entity\Source';
     const METHOD_TYPE = 'OroCRM\Bundle\ContactBundle\Entity\Method';
+    const USER_TYPE = 'Oro\Bundle\UserBundle\Entity\User';
 
     static protected $scalarFields = array(
         'id',
@@ -74,6 +75,11 @@ class ContactNormalizer implements NormalizerInterface, DenormalizerInterface, S
         $result = $this->getScalarFieldsValues($object);
         $result['source'] = $this->normalizeObject($object->getSource(), $format, $context);
         $result['method'] = $this->normalizeObject($object->getMethod(), $format, $context);
+        $result['owner'] = $this->normalizeObject(
+            $object->getOwner(),
+            $format,
+            array_merge($context, array('mode' => 'short'))
+        );
 
         return $result;
     }
@@ -89,7 +95,6 @@ class ContactNormalizer implements NormalizerInterface, DenormalizerInterface, S
         $result = null;
         if (is_object($object)) {
             $result = $this->serializer->serialize($object, $format, $context);
-
         }
         return $result;
     }
@@ -137,6 +142,17 @@ class ContactNormalizer implements NormalizerInterface, DenormalizerInterface, S
         $method = $this->denormalizeObject($data, 'method', static::METHOD_TYPE, $format, $context);
         if ($method) {
             $result->setMethod($method);
+        }
+
+        $owner = $this->denormalizeObject(
+            $data,
+            'owner',
+            static::USER_TYPE,
+            $format,
+            array_merge($context, array('mode' => 'short'))
+        );
+        if ($owner) {
+            $result->setOwner($owner);
         }
 
         return $result;
