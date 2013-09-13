@@ -6,7 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBag;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -100,7 +100,7 @@ class ContactController extends Controller
                 $contact = $this->getManager()->createEntity();
                 $contact->addAccount($account);
             } else {
-                throw new HttpException(404, sprintf('Account with ID %s is not found', $accountId));
+                throw new NotFoundHttpException(sprintf('Account with ID %s is not found', $accountId));
             }
         }
 
