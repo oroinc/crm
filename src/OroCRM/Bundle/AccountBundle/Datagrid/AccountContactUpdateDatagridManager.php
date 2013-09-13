@@ -46,6 +46,14 @@ class AccountContactUpdateDatagridManager extends AccountContactDatagridManager
     }
 
     /**
+     * @param FieldDescriptionCollection $fieldsCollection
+     */
+    protected function updateFieldsConfiguration(FieldDescriptionCollection $fieldsCollection)
+    {
+        // filters must be enabled
+    }
+
+    /**
      * {@inheritDoc}
      */
     protected function prepareQuery(ProxyQueryInterface $query)
