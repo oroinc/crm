@@ -1306,6 +1306,6 @@ class Contact implements Taggable, EmailOwnerInterface
      */
     public function __toString()
     {
-        return $this->getFullname();
+        return (string) $this->getFullname();
     }
 }

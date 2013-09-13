@@ -4,16 +4,24 @@ namespace OroCRM\Bundle\ContactBundle\Tests\Unit\ImportExport\Serializer\Normali
 
 use OroCRM\Bundle\ContactBundle\ImportExport\Serializer\Normalizer\ContactNormalizer;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
+use OroCRM\Bundle\ContactBundle\Entity\Source;
+use OroCRM\Bundle\ContactBundle\Entity\Method;
 use OroCRM\Bundle\ContactBundle\Model\Social;
 
 class ContactNormalizerTest extends \PHPUnit_Framework_TestCase
 {
     const CONTACT_TYPE = 'OroCRM\Bundle\ContactBundle\Entity\Contact';
+    const SOURCE_TYPE = 'OroCRM\Bundle\ContactBundle\Entity\Source';
+    const METHOD_TYPE = 'OroCRM\Bundle\ContactBundle\Entity\Method';
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $socialUrlFormatter;
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $serializer;
 
     /**
      * @var ContactNormalizer
@@ -25,13 +33,25 @@ class ContactNormalizerTest extends \PHPUnit_Framework_TestCase
         $this->socialUrlFormatter = $this->getMockBuilder('OroCRM\Bundle\ContactBundle\Formatter\SocialUrlFormatter')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->normalizer = new ContactNormalizer($this->socialUrlFormatter);
+
+        $this->serializer = $this->getMock('Symfony\Component\Serializer\SerializerInterface');
+
+        $this->normalizer = new ContactNormalizer();
+        $this->normalizer->setSerializer($this->serializer);
+        $this->normalizer->setSocialUrlFormatter($this->socialUrlFormatter);
     }
 
     public function testSupportsNormalization()
     {
         $this->assertFalse($this->normalizer->supportsNormalization(array()));
         $this->assertTrue($this->normalizer->supportsNormalization($this->createContact()));
+    }
+
+    public function testSupportsDenormalization()
+    {
+        $this->assertFalse($this->normalizer->supportsDenormalization(array(), 'stdClass'));
+        $this->assertFalse($this->normalizer->supportsDenormalization('string', self::CONTACT_TYPE));
+        $this->assertTrue($this->normalizer->supportsDenormalization(array(), self::CONTACT_TYPE));
     }
 
     /**
@@ -42,6 +62,7 @@ class ContactNormalizerTest extends \PHPUnit_Framework_TestCase
      */
     public function testNormalizeScalarFields(Contact $contact, array $expectedData)
     {
+        $this->serializer->expects($this->never())->method($this->anything());
         $this->socialUrlFormatter->expects($this->never())->method($this->anything());
         $this->assertEquals(
             $expectedData,
@@ -58,6 +79,7 @@ class ContactNormalizerTest extends \PHPUnit_Framework_TestCase
     public function testDenormalizeScalarFields(Contact $expectedContact, array $data)
     {
         $this->socialUrlFormatter->expects($this->never())->method($this->anything());
+        $this->serializer->expects($this->never())->method($this->anything());
         $this->assertEquals(
             $expectedContact,
             $this->normalizer->denormalize($data, self::CONTACT_TYPE)
@@ -97,6 +119,8 @@ class ContactNormalizerTest extends \PHPUnit_Framework_TestCase
                     'facebook' => null,
                     'googlePlus' => null,
                     'linkedIn' => null,
+                    'source' => null,
+                    'method' => null,
                 )
             ),
             'empty' => array(
@@ -117,6 +141,8 @@ class ContactNormalizerTest extends \PHPUnit_Framework_TestCase
                     'facebook' => null,
                     'googlePlus' => null,
                     'linkedIn' => null,
+                    'source' => null,
+                    'method' => null,
                 )
             ),
         );
@@ -137,6 +163,7 @@ class ContactNormalizerTest extends \PHPUnit_Framework_TestCase
             array(Social::LINKED_IN, $contact->getLinkedIn(), 'linkedin_url'),
         );
 
+        $this->serializer->expects($this->never())->method($this->anything());
         $this->socialUrlFormatter->expects($this->exactly(count($socialValueMap)))
             ->method('getSocialUrl')
             ->will($this->returnValueMap($socialValueMap));
@@ -175,6 +202,85 @@ class ContactNormalizerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($data['facebook'], $contact->getFacebook());
         $this->assertEquals($data['googlePlus'], $contact->getGooglePlus());
         $this->assertEquals($data['linkedIn'], $contact->getLinkedIn());
+    }
+
+    /**
+     * @dataProvider normalizeObjectFieldDataProvider
+     */
+    public function testNormalizeObjectField(Contact $contact, $fieldName, $object, $expectedValue)
+    {
+        $format = null;
+        $context = array('context');
+
+        $this->serializer->expects($this->once())
+            ->method('serialize')
+            ->with($object, $format, $context)
+            ->will($this->returnValue($expectedValue));
+
+        $normalizedData = $this->normalizer->normalize($contact, $format, $context);
+        $this->assertInternalType('array', $normalizedData);
+
+        $this->assertArrayHasKey($fieldName, $normalizedData);
+        $this->assertEquals($expectedValue, $normalizedData[$fieldName]);
+    }
+
+    public function normalizeObjectFieldDataProvider()
+    {
+        return array(
+            'source' => array(
+                'contact'       => $this->createContact()->setSource($source = new Source('source')),
+                'fieldName'     => 'source',
+                'object'        => $source,
+                'expectedValue' => 'source_value'
+            ),
+            'method' => array(
+                'contact'       => $this->createContact()->setMethod($method = new Method('method')),
+                'fieldName'     => 'method',
+                'object'        => $method,
+                'expectedValue' => 'method_value'
+            ),
+        );
+    }
+
+    /**
+     * @dataProvider denormalizeObjectFieldDataProvider
+     */
+    public function testDenormalizeObjectField(
+        $data,
+        $fieldName,
+        $object,
+        Contact $expectedContact
+    ) {
+        $format = null;
+        $context = array('context');
+
+        $this->serializer->expects($this->once())
+            ->method('deserialize')
+            ->with($data[$fieldName], get_class($object), $format, $context)
+            ->will($this->returnValue($object));
+
+        $this->assertEquals(
+            $expectedContact,
+            $this->normalizer->denormalize($data, self::CONTACT_TYPE, $format, $context)
+        );
+    }
+
+    public function denormalizeObjectFieldDataProvider()
+    {
+        return array(
+            'source' => array(
+                'data'            => array('source' => 'source_value'),
+                'fieldName'       => 'source',
+                'object'          => $source = new Source('source'),
+                'expectedContact' => $this->createContact()->setSource($source)
+            ),
+            'method' => array(
+                'data'            => array('source' => 'source_value'),
+                'fieldName'       => 'source',
+                'object'          => $source = new Source('source'),
+                'expectedContact' => $this->createContact()->setSource($source)
+            ),
+        );
     }
 
     /**

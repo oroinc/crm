@@ -2,6 +2,8 @@
 
 namespace OroCRM\Bundle\ContactBundle\ImportExport\Serializer\Normalizer;
 
+use Symfony\Component\Serializer\SerializerAwareInterface;
+use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
@@ -10,9 +12,11 @@ use OroCRM\Bundle\ContactBundle\Model\Social;
 
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 
-class ContactNormalizer implements NormalizerInterface, DenormalizerInterface
+class ContactNormalizer implements NormalizerInterface, DenormalizerInterface, SerializerAwareInterface
 {
     const CONTACT_TYPE = 'OroCRM\Bundle\ContactBundle\Entity\Contact';
+    const SOURCE_TYPE = 'OroCRM\Bundle\ContactBundle\Entity\Source';
+    const METHOD_TYPE = 'OroCRM\Bundle\ContactBundle\Entity\Method';
 
     static protected $scalarFields = array(
         'id',
@@ -44,7 +48,17 @@ class ContactNormalizer implements NormalizerInterface, DenormalizerInterface
      */
     protected $socialUrlFormatter;
 
-    public function __construct(SocialUrlFormatter $socialUrlFormatter)
+    /**
+     * @var SerializerInterface
+     */
+    protected $serializer;
+
+    public function setSerializer(SerializerInterface $serializer)
+    {
+        $this->serializer = $serializer;
+    }
+
+    public function setSocialUrlFormatter(SocialUrlFormatter $socialUrlFormatter)
     {
         $this->socialUrlFormatter = $socialUrlFormatter;
     }
@@ -57,7 +71,27 @@ class ContactNormalizer implements NormalizerInterface, DenormalizerInterface
      */
     public function normalize($object, $format = null, array $context = array())
     {
-        return $this->getScalarFieldsValues($object);
+        $result = $this->getScalarFieldsValues($object);
+        $result['source'] = $this->normalizeObject($object->getSource(), $format, $context);
+        $result['method'] = $this->normalizeObject($object->getMethod(), $format, $context);
+
+        return $result;
+    }
+
+    /**
+     * @param mixed $object
+     * @param mixed $format
+     * @param array $context
+     * @return mixed
+     */
+    protected function normalizeObject($object, $format = null, array $context = array())
+    {
+        $result = null;
+        if (is_object($object)) {
+            $result = $this->serializer->serialize($object, $format, $context);
+
+        }
+        return $result;
     }
 
     /**
@@ -91,8 +125,38 @@ class ContactNormalizer implements NormalizerInterface, DenormalizerInterface
      */
     public function denormalize($data, $class, $format = null, array $context = array())
     {
+        $data = is_array($data) ? $data : array();
         $result = new Contact();
         $this->setScalarFieldsValues($result, $data);
+
+        $source = $this->denormalizeObject($data, 'source', static::SOURCE_TYPE, $format, $context);
+        if ($source) {
+            $result->setSource($source);
+        }
+
+        $method = $this->denormalizeObject($data, 'method', static::METHOD_TYPE, $format, $context);
+        if ($method) {
+            $result->setMethod($method);
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param array $data
+     * @param string $name
+     * @param string $type
+     * @param mixed $format
+     * @param array $context
+     * @return null|object
+     */
+    protected function denormalizeObject(array $data, $name, $type, $format = null, $context = array())
+    {
+        $result = null;
+        if (!empty($data[$name])) {
+            $result = $this->serializer->deserialize($data[$name], $type, $format, $context);
+
+        }
         return $result;
     }
 
@@ -123,6 +187,6 @@ class ContactNormalizer implements NormalizerInterface, DenormalizerInterface
      */
     public function supportsDenormalization($data, $type, $format = null)
     {
-        return $type = self::CONTACT_TYPE;
+        return is_array($data) && $type == static::CONTACT_TYPE;
     }
 }
