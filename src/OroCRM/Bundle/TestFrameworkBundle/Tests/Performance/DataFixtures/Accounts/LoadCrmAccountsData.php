@@ -388,7 +388,7 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
      */
     private function findAttribute(FlexibleEntityRepository $repository, $attributeCode)
     {
-        if (is_null($this->attributes[$repository->getClassName()][$attributeCode])) {
+        if (!isset($this->attributes[$repository->getClassName()][$attributeCode])) {
             $this->attributes[$repository->getClassName()][$attributeCode] =
                 $repository->findAttributeByCode($attributeCode);
         }
