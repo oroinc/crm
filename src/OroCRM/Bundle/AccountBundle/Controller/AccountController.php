@@ -141,6 +141,9 @@ class AccountController extends Controller
      */
     public function contactDatagridAction(Account $entity = null)
     {
+        if (!$entity) {
+            $entity = $this->getManager()->createEntity();
+        }
         /** @var $datagridManager AccountContactUpdateDatagridManager */
         $datagridManager = $this->get('orocrm_account.contact.update_datagrid_manager');
         $datagridManager->setAccount($entity);
