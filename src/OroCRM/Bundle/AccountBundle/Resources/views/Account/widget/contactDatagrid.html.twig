@@ -1,4 +1,4 @@
-<div class="widget-content">
+<div class="widget-content grid-widget-content">
     {% set gridId = "entity-grid-" ~ random() %}
     {% set listenerParameters = {
         'columnName': 'has_account',
@@ -9,9 +9,43 @@
     } %}
     {% placeholder prepare_grid with {'datagrid': datagrid, 'selector': '#' ~ gridId, 'parameters': listenerParameters} %}
 
+    <style type="text/css">
+        .grid-widget-content .grid,
+        .grid-widget-content .table {
+            margin-bottom: 0;
+        }
+    </style>
+
+    {% block content %}
+        <div id="{{ gridId }}"></div>
+        <input type="hidden" name="appendContacts" id="appendContacts" value="{{ app.request.get('added') }}" />
+        <input type="hidden" name="removeContacts" id="removeContacts" value="{{ app.request.get('removed') }}" />
+    {% endblock %}
+
     <script type="text/javascript">
-        require(['jquery', 'oro/datagrid/callback-listener'],
-        function($, CallbackListener) {
+        {% set wid = app.request.get('_wid') %}
+        require(['jquery', 'oro/datagrid/callback-listener', 'oro/widget-manager'],
+        function($, CallbackListener, WidgetManager) {
+            var addedModels = {};
+            WidgetManager.getWidgetInstance({{ wid|json_encode|raw }}, function(widget) {
+                if (widget.options.type == 'dialog') {
+                    widget.getWidget().css({
+                        'padding': 0,
+                        'max-height': 500,
+                        'overflow': 'auto'
+                    });
+                }
+
+                var selectBtn = widget.getAction('select', 'adopted');
+                selectBtn.click(function() {
+                    var addedVal = $('#appendContacts').val();
+                    var removedVal = $('#removeContacts').val();
+                    var appendedIds = addedVal.length ? addedVal.split(',') : [];
+                    var removedIds = removedVal.length ? removedVal.split(',') : [];
+                    widget.trigger('completeSelection', appendedIds, addedModels, removedIds);
+                });
+            });
+
             $(function() {
                 /** @type {oro.datagrid.CallbackListener} */
                 new CallbackListener({
@@ -20,23 +54,20 @@
                     columnName: 'has_account',
                     processCallback: function (value, model, listener) {
                         var isActive = model.get(listener.columnName);
-                        console.log(isActive, model);
+                        var id = model.get('id');
+                        if (isActive) {
+                            addedModels[id] = model;
+                        } else if (addedModels.hasOwnProperty(id)) {
+                            delete addedModels[id];
+                        }
                     }
                 });
             });
         });
     </script>
 
-    <div class="container-fluid">
-        {% block content %}
-            <div id="{{ gridId }}"></div>
-            <input type="hidden" name="appendContacts" id="appendContacts" value="" />
-            <input type="hidden" name="removeContacts" id="removeContacts" value="" />
-        {% endblock %}
-    </div>
-
     <div class="widget-actions">
         <button type="reset" class="btn">{{ 'Cancel'|trans }}</button>
-        <button type="button" class="btn btn-primary">{{ 'Select'|trans }}</button>
+        <button type="button" class="btn btn-primary" data-action-name="select">{{ 'Select'|trans }}</button>
     </div>
 </div>
