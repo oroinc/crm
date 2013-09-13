@@ -100,7 +100,6 @@ class ContactNormalizerTest extends \PHPUnit_Framework_TestCase
                     ->setLastName('last_name')
                     ->setNameSuffix('name_suffix')
                     ->setGender('male')
-                    ->setBirthday(new \DateTime('1980-01-01'))
                     ->setDescription('description')
                     ->setJobTitle('job_title')
                     ->setFax('fax')
@@ -113,11 +112,11 @@ class ContactNormalizerTest extends \PHPUnit_Framework_TestCase
                     'lastName' => 'last_name',
                     'nameSuffix' => 'name_suffix',
                     'gender' => 'male',
-                    'birthday' => new \DateTime('1980-01-01'),
                     'description' => 'description',
                     'jobTitle' => 'job_title',
                     'fax' => 'fax',
                     'skype' => 'skype',
+                    'birthday' => null,
                     'twitter' => null,
                     'facebook' => null,
                     'googlePlus' => null,
@@ -231,6 +230,12 @@ class ContactNormalizerTest extends \PHPUnit_Framework_TestCase
     public function normalizeObjectFieldDataProvider()
     {
         return array(
+            'birthday' => array(
+                'contact'       => $this->createContact()->setBirthday($birthday = new \DateTime()),
+                'fieldName'     => 'birthday',
+                'object'        => $birthday,
+                'expectedValue' => '1928-06-14'
+            ),
             'source' => array(
                 'contact'       => $this->createContact()->setSource($source = new Source('source')),
                 'fieldName'     => 'source',
@@ -279,6 +284,13 @@ class ContactNormalizerTest extends \PHPUnit_Framework_TestCase
     public function denormalizeObjectFieldDataProvider()
     {
         return array(
+            'birthday' => array(
+                'data'            => array('birthday' => '1928-06-14'),
+                'fieldName'       => 'birthday',
+                'object'          => $birthday = new \DateTime('1928-06-14'),
+                'expectedContact' => $this->createContact()->setBirthday($birthday),
+                'context'         => array(),
+            ),
             'source' => array(
                 'data'            => array('source' => 'source_value'),
                 'fieldName'       => 'source',

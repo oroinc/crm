@@ -26,7 +26,6 @@ class ContactNormalizer implements NormalizerInterface, DenormalizerInterface, S
         'lastName',
         'nameSuffix',
         'gender',
-        'birthday',
         'description',
         'jobTitle',
         'fax',
@@ -73,6 +72,8 @@ class ContactNormalizer implements NormalizerInterface, DenormalizerInterface, S
     public function normalize($object, $format = null, array $context = array())
     {
         $result = $this->getScalarFieldsValues($object);
+
+        $result['birthday'] = $this->normalizeObject($object->getBirthday(), $format, $context);
         $result['source'] = $this->normalizeObject($object->getSource(), $format, $context);
         $result['method'] = $this->normalizeObject($object->getMethod(), $format, $context);
         $result['owner'] = $this->normalizeObject(
@@ -133,6 +134,11 @@ class ContactNormalizer implements NormalizerInterface, DenormalizerInterface, S
         $data = is_array($data) ? $data : array();
         $result = new Contact();
         $this->setScalarFieldsValues($result, $data);
+
+        $birthday = $this->denormalizeObject($data, 'birthday', 'DateTime', $format, $context);
+        if ($birthday) {
+            $result->setBirthday($birthday);
+        }
 
         $source = $this->denormalizeObject($data, 'source', static::SOURCE_TYPE, $format, $context);
         if ($source) {

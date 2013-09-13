@@ -5,7 +5,7 @@ namespace OroCRM\Bundle\ContactBundle\Tests\Unit\ImportExport\Serializer\Normali
 use OroCRM\Bundle\ContactBundle\ImportExport\Serializer\Normalizer\ContactEmailNormalizer;
 use OroCRM\Bundle\ContactBundle\Entity\ContactEmail;
 
-class ContactPhoneNormalizerTest extends \PHPUnit_Framework_TestCase
+class ContactEmailNormalizerTest extends \PHPUnit_Framework_TestCase
 {
     const CONTACT_EMAIL_TYPE = 'OroCRM\Bundle\ContactBundle\Entity\ContactEmail';
 
