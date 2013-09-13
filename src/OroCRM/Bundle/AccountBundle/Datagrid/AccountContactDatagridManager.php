@@ -4,7 +4,8 @@ namespace OroCRM\Bundle\AccountBundle\Datagrid;
 
 use Doctrine\ORM\QueryBuilder;
 
-use Oro\Bundle\GridBundle\Datagrid\FlexibleDatagridManager;
+use Oro\Bundle\GridBundle\Field\FieldDescriptionCollection;
+use Oro\Bundle\GridBundle\Field\FieldDescriptionInterface;
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\ContactBundle\Datagrid\ContactDatagridManager;
 use Oro\Bundle\GridBundle\Datagrid\ProxyQueryInterface;
@@ -15,6 +16,28 @@ class AccountContactDatagridManager extends ContactDatagridManager
      * @var Account
      */
     protected $account;
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function configureFields(FieldDescriptionCollection $fieldsCollection)
+    {
+        parent::configureFields($fieldsCollection);
+        $this->updateFieldsConfiguration($fieldsCollection);
+    }
+
+    /**
+     * @param FieldDescriptionCollection $fieldsCollection
+     */
+    protected function updateFieldsConfiguration(FieldDescriptionCollection $fieldsCollection)
+    {
+        // disable all filters
+        /** @var $fieldDescription FieldDescriptionInterface */
+        foreach ($fieldsCollection as $fieldDescription) {
+            $fieldDescription->setOption('filterable', false);
+            $fieldDescription->setOption('show_filter', false);
+        }
+    }
 
     /**
      * @param Account $account
@@ -46,6 +69,7 @@ class AccountContactDatagridManager extends ContactDatagridManager
         $this->applyJoinWithAddressAndCountry($query);
 
         $entityAlias = $query->getRootAlias();
+        /** @var QueryBuilder $query */
         $query->andWhere(":account MEMBER OF $entityAlias.accounts");
     }
 
