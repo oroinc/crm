@@ -149,6 +149,7 @@ class AccountController extends Controller
         if ('json' == $this->getRequest()->getRequestFormat()) {
             return $this->get('oro_grid.renderer')->renderResultsJsonResponse($datagridView);
         }
+
         return array(
             'datagrid' => $datagridView,
         );
