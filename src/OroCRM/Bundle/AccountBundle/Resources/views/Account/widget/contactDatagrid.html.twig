@@ -4,6 +4,24 @@
     {% include 'OroGridBundle:Include:javascript.html.twig' with {'datagridView': datagrid, 'selector': '#' ~ gridId} %}
     {% include 'OroGridBundle:Include:stylesheet.html.twig' %}
 
+    <script type="text/javascript">
+        require(['jquery', 'oro/datagrid/callback-listener'],
+        function($, CallbackListener) {
+            $(function() {
+                /** @type {oro.datagrid.CallbackListener} */
+                new CallbackListener({
+                    datagridName: {{ datagrid.datagrid.name|json_encode|raw }},
+                    dataField: 'id',
+                    columnName: 'has_account',
+                    processCallback: function (value, model, listener) {
+                        var isActive = model.get(listener.columnName);
+                        console.log(isActive, model);
+                    }
+                });
+            });
+        });
+    </script>
+
     <div class="container-fluid">
         {% block content %}
             <div id="{{ gridId }}"></div>
