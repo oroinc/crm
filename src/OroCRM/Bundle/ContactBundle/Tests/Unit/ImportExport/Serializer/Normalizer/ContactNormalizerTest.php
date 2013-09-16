@@ -2,8 +2,11 @@
 
 namespace OroCRM\Bundle\ContactBundle\Tests\Unit\ImportExport\Serializer\Normalizer;
 
+use Doctrine\Common\Collections\ArrayCollection;
+
 use Oro\Bundle\UserBundle\Entity\User;
 
+use OroCRM\Bundle\ContactBundle\Entity\Group;
 use OroCRM\Bundle\ContactBundle\ImportExport\Serializer\Normalizer\ContactNormalizer;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\ContactBundle\Entity\Source;
@@ -130,6 +133,7 @@ class ContactNormalizerTest extends \PHPUnit_Framework_TestCase
                     'owner' => null,
                     'emails' => array(),
                     'phones' => array(),
+                    'groups' => array(),
                 )
             ),
             'empty' => array(
@@ -155,6 +159,7 @@ class ContactNormalizerTest extends \PHPUnit_Framework_TestCase
                     'owner' => null,
                     'emails' => array(),
                     'phones' => array(),
+                    'groups' => array(),
                 )
             ),
         );
@@ -287,6 +292,15 @@ class ContactNormalizerTest extends \PHPUnit_Framework_TestCase
                 'object'        => $contact->getPhones(),
                 'expectedValue' => array('080011223344', '080011223355'),
             ),
+            'groups' => array(
+                'contact'       =>
+                    $contact = $this->createContact()
+                        ->addGroup(new Group('First Group'))
+                        ->addGroup(new Group('Second Group')),
+                'fieldName'     => 'groups',
+                'object'        => $contact->getGroups(),
+                'expectedValue' => array('First Group', 'Second Group'),
+            ),
         );
     }
 
@@ -297,6 +311,7 @@ class ContactNormalizerTest extends \PHPUnit_Framework_TestCase
         $data,
         $fieldName,
         $object,
+        $type,
         Contact $expectedContact,
         array $context = array()
     ) {
@@ -304,7 +319,7 @@ class ContactNormalizerTest extends \PHPUnit_Framework_TestCase
 
         $this->serializer->expects($this->once())
             ->method('deserialize')
-            ->with($data[$fieldName], get_class($object), $format, $context)
+            ->with($data[$fieldName], $type, $format, $context)
             ->will($this->returnValue($object));
 
         $this->assertEquals(
@@ -320,6 +335,7 @@ class ContactNormalizerTest extends \PHPUnit_Framework_TestCase
                 'data'            => array('birthday' => '1928-06-14'),
                 'fieldName'       => 'birthday',
                 'object'          => $birthday = new \DateTime('1928-06-14'),
+                'type'            => 'DateTime',
                 'expectedContact' => $this->createContact()->setBirthday($birthday),
                 'context'         => array(),
             ),
@@ -327,22 +343,67 @@ class ContactNormalizerTest extends \PHPUnit_Framework_TestCase
                 'data'            => array('source' => 'source_value'),
                 'fieldName'       => 'source',
                 'object'          => $source = new Source('source'),
+                'type'            => 'OroCRM\Bundle\ContactBundle\Entity\Source',
                 'expectedContact' => $this->createContact()->setSource($source),
                 'context'         => array(),
             ),
             'method' => array(
-                'data'            => array('source' => 'source_value'),
-                'fieldName'       => 'source',
-                'object'          => $source = new Source('source'),
-                'expectedContact' => $this->createContact()->setSource($source),
+                'data'            => array('method' => 'source_value'),
+                'fieldName'       => 'method',
+                'object'          => $method = new Method('method'),
+                'type'            => 'OroCRM\Bundle\ContactBundle\Entity\Method',
+                'expectedContact' => $this->createContact()->setMethod($method),
                 'context'         => array(),
             ),
             'owner' => array(
                 'data'            => array('owner' => 'owner_value'),
                 'fieldName'       => 'owner',
                 'object'          => $owner = new User(),
+                'type'            => 'Oro\Bundle\UserBundle\Entity\User',
                 'expectedContact' => $this->createContact()->setOwner($owner),
                 'context'         => array('mode' => 'short'),
+            ),
+            'emails' => array(
+                'data'            => array('emails' => array('first@example.com', 'second@example.com')),
+                'fieldName'       => 'emails',
+                'object'          =>
+                    $emails = new ArrayCollection(
+                        array(
+                            new ContactEmail('first@example.com'),
+                            new ContactEmail('second@example.com'),
+                        )
+                    ),
+                'type'            => 'ArrayCollection<OroCRM\Bundle\ContactBundle\Entity\ContactEmail>',
+                'expectedContact' => $this->createContact()->resetEmails($emails),
+                'context'         => array(),
+            ),
+            'phones' => array(
+                'data'            => array('phones' => array('080011223344', '080011223355')),
+                'fieldName'       => 'phones',
+                'object'          =>
+                    $phones = new ArrayCollection(
+                        array(
+                            new ContactPhone('080011223344'),
+                            new ContactPhone('080011223355'),
+                        )
+                    ),
+                'type'            => 'ArrayCollection<OroCRM\Bundle\ContactBundle\Entity\ContactPhone>',
+                'expectedContact' => $this->createContact()->resetPhones($phones),
+                'context'         => array(),
+            ),
+            'groups' => array(
+                'data'            => array('groups' => array('First Group', 'Second Group')),
+                'fieldName'       => 'groups',
+                'object'          =>
+                    $phones = new ArrayCollection(
+                        array(
+                            new Group('First Group'),
+                            new Group('Second Group'),
+                        )
+                    ),
+                'type'            => 'ArrayCollection<OroCRM\Bundle\ContactBundle\Entity\Group>',
+                'expectedContact' => $this->createContact()->addGroup($phones->get(0))->addGroup($phones->get(1)),
+                'context'         => array(),
             ),
         );
     }

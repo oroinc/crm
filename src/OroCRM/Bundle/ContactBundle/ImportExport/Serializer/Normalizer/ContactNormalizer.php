@@ -22,6 +22,7 @@ class ContactNormalizer implements NormalizerInterface, DenormalizerInterface, S
     const USER_TYPE = 'Oro\Bundle\UserBundle\Entity\User';
     const EMAILS_TYPE = 'ArrayCollection<OroCRM\Bundle\ContactBundle\Entity\ContactEmail>';
     const PHONES_TYPE = 'ArrayCollection<OroCRM\Bundle\ContactBundle\Entity\ContactPhone>';
+    const GROUPS_TYPE = 'ArrayCollection<OroCRM\Bundle\ContactBundle\Entity\Group>';
 
     static protected $scalarFields = array(
         'id',
@@ -87,6 +88,7 @@ class ContactNormalizer implements NormalizerInterface, DenormalizerInterface, S
         );
         $result['emails'] = $this->normalizeCollection($object->getEmails(), $format, $context);
         $result['phones'] = $this->normalizeCollection($object->getPhones(), $format, $context);
+        $result['groups'] = $this->normalizeCollection($object->getGroups(), $format, $context);
 
         return $result;
     }
@@ -155,20 +157,46 @@ class ContactNormalizer implements NormalizerInterface, DenormalizerInterface, S
         $data = is_array($data) ? $data : array();
         $result = new Contact();
         $this->setScalarFieldsValues($result, $data);
+        $this->setObjectFieldsValues($result, $data);
 
+        return $result;
+    }
+
+    /**
+     * @param Contact $object
+     * @param array $data
+     */
+    protected function setScalarFieldsValues(Contact $object, array $data)
+    {
+        foreach (static::$scalarFields as $fieldName) {
+            $setter = 'set' .ucfirst($fieldName);
+            if (array_key_exists($fieldName, $data)) {
+                $object->$setter($data[$fieldName]);
+            }
+        }
+    }
+
+    /**
+     * @param Contact $object
+     * @param array $data
+     * @param mixed $format
+     * @param array $context
+     */
+    protected function setObjectFieldsValues(Contact $object, array $data, $format = null, array $context = array())
+    {
         $birthday = $this->denormalizeObject($data, 'birthday', 'DateTime', $format, $context);
         if ($birthday) {
-            $result->setBirthday($birthday);
+            $object->setBirthday($birthday);
         }
 
         $source = $this->denormalizeObject($data, 'source', static::SOURCE_TYPE, $format, $context);
         if ($source) {
-            $result->setSource($source);
+            $object->setSource($source);
         }
 
         $method = $this->denormalizeObject($data, 'method', static::METHOD_TYPE, $format, $context);
         if ($method) {
-            $result->setMethod($method);
+            $object->setMethod($method);
         }
 
         $owner = $this->denormalizeObject(
@@ -179,20 +207,25 @@ class ContactNormalizer implements NormalizerInterface, DenormalizerInterface, S
             array_merge($context, array('mode' => 'short'))
         );
         if ($owner) {
-            $result->setOwner($owner);
+            $object->setOwner($owner);
         }
 
         $emails = $this->denormalizeObject($data, 'emails', static::EMAILS_TYPE, $format, $context);
         if ($emails) {
-            $result->resetEmails($emails);
+            $object->resetEmails($emails);
         }
 
         $phones = $this->denormalizeObject($data, 'phones', static::PHONES_TYPE, $format, $context);
-        if ($emails) {
-            $result->resetPhones($phones);
+        if ($phones) {
+            $object->resetPhones($phones);
         }
 
-        return $result;
+        $groups = $this->denormalizeObject($data, 'groups', static::GROUPS_TYPE, $format, $context);
+        if ($groups) {
+            foreach ($groups as $group) {
+                $object->addGroup($group);
+            }
+        }
     }
 
     /**
@@ -211,20 +244,6 @@ class ContactNormalizer implements NormalizerInterface, DenormalizerInterface, S
 
         }
         return $result;
-    }
-
-    /**
-     * @param Contact $object
-     * @param array $data
-     */
-    protected function setScalarFieldsValues(Contact $object, array $data)
-    {
-        foreach (static::$scalarFields as $fieldName) {
-            $setter = 'set' .ucfirst($fieldName);
-            if (array_key_exists($fieldName, $data)) {
-                $object->$setter($data[$fieldName]);
-            }
-        }
     }
 
     /**
