@@ -16,13 +16,14 @@ use OroCRM\Bundle\ContactBundle\Entity\Contact;
 
 class ContactNormalizer implements NormalizerInterface, DenormalizerInterface, SerializerAwareInterface
 {
-    const CONTACT_TYPE = 'OroCRM\Bundle\ContactBundle\Entity\Contact';
-    const SOURCE_TYPE = 'OroCRM\Bundle\ContactBundle\Entity\Source';
-    const METHOD_TYPE = 'OroCRM\Bundle\ContactBundle\Entity\Method';
-    const USER_TYPE = 'Oro\Bundle\UserBundle\Entity\User';
-    const EMAILS_TYPE = 'ArrayCollection<OroCRM\Bundle\ContactBundle\Entity\ContactEmail>';
-    const PHONES_TYPE = 'ArrayCollection<OroCRM\Bundle\ContactBundle\Entity\ContactPhone>';
-    const GROUPS_TYPE = 'ArrayCollection<OroCRM\Bundle\ContactBundle\Entity\Group>';
+    const CONTACT_TYPE  = 'OroCRM\Bundle\ContactBundle\Entity\Contact';
+    const SOURCE_TYPE   = 'OroCRM\Bundle\ContactBundle\Entity\Source';
+    const METHOD_TYPE   = 'OroCRM\Bundle\ContactBundle\Entity\Method';
+    const USER_TYPE     = 'Oro\Bundle\UserBundle\Entity\User';
+    const EMAILS_TYPE   = 'ArrayCollection<OroCRM\Bundle\ContactBundle\Entity\ContactEmail>';
+    const PHONES_TYPE   = 'ArrayCollection<OroCRM\Bundle\ContactBundle\Entity\ContactPhone>';
+    const GROUPS_TYPE   = 'ArrayCollection<OroCRM\Bundle\ContactBundle\Entity\Group>';
+    const ACCOUNTS_TYPE = 'ArrayCollection<OroCRM\Bundle\AccountBundle\Entity\Account>';
 
     static protected $scalarFields = array(
         'id',
@@ -89,6 +90,11 @@ class ContactNormalizer implements NormalizerInterface, DenormalizerInterface, S
         $result['emails'] = $this->normalizeCollection($object->getEmails(), $format, $context);
         $result['phones'] = $this->normalizeCollection($object->getPhones(), $format, $context);
         $result['groups'] = $this->normalizeCollection($object->getGroups(), $format, $context);
+        $result['accounts'] = $this->normalizeCollection(
+            $object->getAccounts(),
+            $format,
+            array_merge($context, array('mode' => 'short'))
+        );
 
         return $result;
     }
@@ -224,6 +230,19 @@ class ContactNormalizer implements NormalizerInterface, DenormalizerInterface, S
         if ($groups) {
             foreach ($groups as $group) {
                 $object->addGroup($group);
+            }
+        }
+
+        $accounts = $this->denormalizeObject(
+            $data,
+            'accounts',
+            static::ACCOUNTS_TYPE,
+            $format,
+            array_merge($context, array('mode' => 'short'))
+        );
+        if ($accounts) {
+            foreach ($accounts as $account) {
+                $object->addAccount($account);
             }
         }
     }

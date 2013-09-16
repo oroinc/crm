@@ -6,23 +6,25 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 use Oro\Bundle\UserBundle\Entity\User;
 
-use OroCRM\Bundle\ContactBundle\Entity\Group;
 use OroCRM\Bundle\ContactBundle\ImportExport\Serializer\Normalizer\ContactNormalizer;
+use OroCRM\Bundle\ContactBundle\Model\Social;
+use OroCRM\Bundle\ContactBundle\Entity\Group;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\ContactBundle\Entity\Source;
 use OroCRM\Bundle\ContactBundle\Entity\Method;
 use OroCRM\Bundle\ContactBundle\Entity\ContactEmail;
 use OroCRM\Bundle\ContactBundle\Entity\ContactPhone;
-use OroCRM\Bundle\ContactBundle\Model\Social;
+use OroCRM\Bundle\AccountBundle\Entity\Account;
 
 class ContactNormalizerTest extends \PHPUnit_Framework_TestCase
 {
-    const CONTACT_TYPE = 'OroCRM\Bundle\ContactBundle\Entity\Contact';
-    const SOURCE_TYPE = 'OroCRM\Bundle\ContactBundle\Entity\Source';
-    const METHOD_TYPE = 'OroCRM\Bundle\ContactBundle\Entity\Method';
-    const USER_TYPE = 'Oro\Bundle\UserBundle\Entity\User';
-    const EMAILS_TYPE = 'ArrayCollection<OroCRM\Bundle\ContactBundle\Entity\ContactEmail>';
-    const PHONES_TYPE = 'ArrayCollection<OroCRM\Bundle\ContactBundle\Entity\ContactPhone>';
+    const CONTACT_TYPE  = 'OroCRM\Bundle\ContactBundle\Entity\Contact';
+    const SOURCE_TYPE   = 'OroCRM\Bundle\ContactBundle\Entity\Source';
+    const METHOD_TYPE   = 'OroCRM\Bundle\ContactBundle\Entity\Method';
+    const USER_TYPE     = 'Oro\Bundle\UserBundle\Entity\User';
+    const EMAILS_TYPE   = 'ArrayCollection<OroCRM\Bundle\ContactBundle\Entity\ContactEmail>';
+    const PHONES_TYPE   = 'ArrayCollection<OroCRM\Bundle\ContactBundle\Entity\ContactPhone>';
+    const ACCOUNTS_TYPE = 'ArrayCollection<OroCRM\Bundle\AccountBundle\Entity\Account>';
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -134,6 +136,7 @@ class ContactNormalizerTest extends \PHPUnit_Framework_TestCase
                     'emails' => array(),
                     'phones' => array(),
                     'groups' => array(),
+                    'accounts' => array(),
                 )
             ),
             'empty' => array(
@@ -160,6 +163,7 @@ class ContactNormalizerTest extends \PHPUnit_Framework_TestCase
                     'emails' => array(),
                     'phones' => array(),
                     'groups' => array(),
+                    'accounts' => array(),
                 )
             ),
         );
@@ -301,6 +305,16 @@ class ContactNormalizerTest extends \PHPUnit_Framework_TestCase
                 'object'        => $contact->getGroups(),
                 'expectedValue' => array('First Group', 'Second Group'),
             ),
+            'accounts' => array(
+                'contact'       =>
+                    $contact = $this->createContact()
+                        ->addAccount($this->createAccount('First Account'))
+                        ->addAccount($this->createAccount('Second Account')),
+                'fieldName'     => 'accounts',
+                'object'        => $contact->getAccounts(),
+                'expectedValue' => array('First Account', 'Second Account'),
+                'context'       => array('mode' => 'short')
+            ),
         );
     }
 
@@ -405,6 +419,23 @@ class ContactNormalizerTest extends \PHPUnit_Framework_TestCase
                 'expectedContact' => $this->createContact()->addGroup($phones->get(0))->addGroup($phones->get(1)),
                 'context'         => array(),
             ),
+            'accounts' => array(
+                'data'            => array('accounts' => array('First Account', 'Second Account')),
+                'fieldName'       => 'accounts',
+                'object'          =>
+                    $accounts = new ArrayCollection(
+                        array(
+                            $this->createAccount('First Account'),
+                            $this->createAccount('Second Account'),
+                        )
+                    ),
+                'type'            => 'ArrayCollection<OroCRM\Bundle\AccountBundle\Entity\Account>',
+                'expectedContact' =>
+                    $this->createContact()
+                        ->addAccount($accounts->get(0))
+                        ->addAccount($accounts->get(1)),
+                'context'         => array('mode' => 'short'),
+            ),
         );
     }
 
@@ -414,6 +445,17 @@ class ContactNormalizerTest extends \PHPUnit_Framework_TestCase
     protected function createContact()
     {
         $result = new Contact();
+        return $result;
+    }
+
+    /**
+     * @param string|null $name
+     * @return Account
+     */
+    protected function createAccount($name = null)
+    {
+        $result = new Account();
+        $result->setName($name);
         return $result;
     }
 }
