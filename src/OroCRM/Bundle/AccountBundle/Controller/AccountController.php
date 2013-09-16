@@ -147,6 +147,12 @@ class AccountController extends Controller
         /** @var $datagridManager AccountContactUpdateDatagridManager */
         $datagridManager = $this->get('orocrm_account.contact.update_datagrid_manager');
         $datagridManager->setAccount($entity);
+        $datagridManager->setAdditionalParameters(
+            array(
+                'data_in' => explode(',', $this->getRequest()->get('added')),
+                'data_not_in' => explode(',', $this->getRequest()->get('removed'))
+            )
+        );
         $datagridView = $datagridManager->getDatagrid()->createView();
 
         if ('json' == $this->getRequest()->getRequestFormat()) {

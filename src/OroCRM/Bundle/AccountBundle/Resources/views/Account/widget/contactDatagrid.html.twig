@@ -7,7 +7,18 @@
             'excluded': '#removeContacts'
         }
     } %}
-    {% placeholder prepare_grid with {'datagrid': datagrid, 'selector': '#' ~ gridId, 'parameters': listenerParameters} %}
+    {% set stateParameters = {
+        'parameters': {
+            'data_in': app.request.get('added'),
+            'data_not_in': app.request.get('removed')
+        }
+    } %}
+    {% placeholder prepare_grid with {
+        'datagrid': datagrid,
+        'selector': '#' ~ gridId,
+        'parameters': listenerParameters,
+        'state': stateParameters
+    } %}
 
     <style type="text/css">
         .grid-widget-content .grid,
