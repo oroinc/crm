@@ -9,27 +9,27 @@ class CreateContactTest extends \PHPUnit_Extensions_Selenium2TestCase
     protected $coverageScriptUrl = PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_TESTS_URL_COVERAGE;
 
     protected $addressPrimary = array(
-                    'types' => array('billing'),
-                    'primary' => true,
-                    'firstName' => 'Address First Name',
-                    'lastName' => 'Address Last Name',
-                    'street' => 'Address Street',
-                    'city' => 'Address City',
-                    'postalCode' => '10001',
-                    'country' => 'United States',
-                    'state' => 'New York'
+        'types' => array('billing'),
+        'primary' => true,
+        'firstName' => 'Address First Name',
+        'lastName' => 'Address Last Name',
+        'street' => 'Address Street',
+        'city' => 'Address City',
+        'postalCode' => '10001',
+        'country' => 'United States',
+        'state' => 'New York'
     );
 
     protected $addressSecondary = array(
-            'types' => array('shipping'),
-            'primary' => false,
-            'firstName' => 'Address1 First Name',
-            'lastName' => 'Address1 Last Name',
-            'street' => 'Address1 Street',
-            'city' => 'Address1 City',
-            'postalCode' => '10001',
-            'country' => 'United States',
-            'state' => 'New York'
+        'types' => array('shipping'),
+        'primary' => false,
+        'firstName' => 'Address1 First Name',
+        'lastName' => 'Address1 Last Name',
+        'street' => 'Address1 Street',
+        'city' => 'Address1 City',
+        'postalCode' => '10001',
+        'country' => 'United States',
+        'state' => 'New York'
     );
 
     protected function setUp()
@@ -69,8 +69,9 @@ class CreateContactTest extends \PHPUnit_Extensions_Selenium2TestCase
             ->setAddress($this->addressPrimary)
             ->setAddress($this->addressSecondary, 1)
             ->save()
-            ->assertTitle('Contacts - Customers')
             ->assertMessage('Contact successfully saved')
+            ->toGrid()
+            ->assertTitle('Contacts - Customers')
             ->close()
             ->filterBy('Email', $contactname . '@mail.com')
             ->open(array($contactname))
@@ -108,8 +109,9 @@ class CreateContactTest extends \PHPUnit_Extensions_Selenium2TestCase
             ->setAddressCountry('Kazak')
             ->setAddressState('Aqm')
             ->save()
-            ->assertTitle('Contacts - Customers')
             ->assertMessage('Contact successfully saved')
+            ->toGrid()
+            ->assertTitle('Contacts - Customers')
             ->close();
     }
 
@@ -133,8 +135,9 @@ class CreateContactTest extends \PHPUnit_Extensions_Selenium2TestCase
             ->edit()
             ->setFirstName($newContactname . '_first')
             ->save()
-            ->assertTitle('Contacts - Customers')
             ->assertMessage('Contact successfully saved')
+            ->toGrid()
+            ->assertTitle('Contacts - Customers')
             ->close();
 
         return $newContactname;

@@ -99,8 +99,31 @@ class ContactAccountUpdateDatagridManager extends ContactAccountDatagridManager
     protected function getQueryParameters()
     {
         $additionalParameters = $this->parameters->get(ParametersInterface::ADDITIONAL_PARAMETERS);
-        $dataIn    = !empty($additionalParameters['data_in']) ? $additionalParameters['data_in'] : array(0);
-        $dataNotIn = !empty($additionalParameters['data_not_in']) ? $additionalParameters['data_not_in'] : array(0);
+        $contact = $this->getContact();
+
+        // get list of included accounts
+        $dataIn = array();
+        if (!empty($additionalParameters['data_in'])) {
+            $dataIn = $additionalParameters['data_in'];
+        }
+        if (!$contact->getId() && $contact->hasAccounts()) {
+            // add predefined accounts
+            foreach ($contact->getAccounts() as $account) {
+                $accountId = $account->getId();
+                if ($accountId) {
+                    $dataIn[] = $accountId;
+                }
+            }
+        }
+        if (empty($dataIn)) {
+            $dataIn[] = 0;
+        }
+
+        // get list of excluded accounts
+        $dataNotIn = array(0);
+        if (!empty($additionalParameters['data_not_in'])) {
+            $dataNotIn = $additionalParameters['data_not_in'];
+        }
 
         $parameters = array('data_in' => $dataIn, 'data_not_in' => $dataNotIn);
 

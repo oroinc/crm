@@ -365,4 +365,13 @@ class ContactTest extends \PHPUnit_Framework_TestCase
             'updatedBy' => array('updatedBy', $user, $user),
         );
     }
+
+    public function testHasAccounts()
+    {
+        $contact = new Contact();
+        $this->assertFalse($contact->hasAccounts());
+
+        $contact->addAccount(new Account());
+        $this->assertTrue($contact->hasAccounts());
+    }
 }

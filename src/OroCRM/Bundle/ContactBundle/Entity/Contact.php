@@ -1223,6 +1223,14 @@ class Contact extends \OroCRM\Bundle\ContactBundle\Model\ExtendContact implement
     }
 
     /**
+     * @return bool
+     */
+    public function hasAccounts()
+    {
+        return count($this->accounts) > 0;
+    }
+
+    /**
      * Get contact created date/time
      *
      * @return \DateTime
