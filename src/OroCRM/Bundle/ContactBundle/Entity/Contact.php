@@ -8,7 +8,6 @@ use Doctrine\Common\Collections\Collection;
 
 use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 
-use OroCRM\Bundle\ContactBundle\Model\ExtendContact;
 use Zend\Stdlib\DateTime;
 
 use Oro\Bundle\TagBundle\Entity\Taggable;
@@ -38,7 +37,7 @@ use OroCRM\Bundle\AccountBundle\Entity\Account;
  *  }
  * )
  */
-class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
+class Contact extends \OroCRM\Bundle\ContactBundle\Model\ExtendContact implements Taggable, EmailOwnerInterface
 {
     /**
      * @var int

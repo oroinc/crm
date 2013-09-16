@@ -108,6 +108,22 @@
         }]
     %}
 
+    {% if form.additional is defined and form.additional.children|length > 0 %}
+        {% set additionalData = [] %}
+        {% for value in form.additional %}
+            {% set additionalData = additionalData|merge([form_row(value, { attr: { class: 'horizontal' } })]) %}
+        {% endfor %}
+
+        {% set dataBlocks = dataBlocks|merge([{
+            'title': 'Additional',
+            'subblocks': [{
+                'title': '',
+                'useSpan': false,
+                'data' : additionalData
+            }]
+        }] ) %}
+    {% endif %}
+
     {% if form.groups is defined and form.groups.children|length > 0 %}
         {% set dataBlocks = dataBlocks|merge(
             [{

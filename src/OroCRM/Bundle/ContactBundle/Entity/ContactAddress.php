@@ -15,8 +15,7 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
  * @ORM\HasLifecycleCallbacks()
  * @Config(
  *  defaultValues={
- *      "entity"={"label"="Contact Address", "plural_label"="Contact Addresses"},
- *      "ownership"={"owner_type"="USER"}
+ *      "entity"={"label"="Contact Address", "plural_label"="Contact Addresses"}
  *  }
  * )
  * @ORM\Entity
