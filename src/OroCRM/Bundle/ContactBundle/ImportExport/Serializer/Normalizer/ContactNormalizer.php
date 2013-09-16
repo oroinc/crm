@@ -2,6 +2,8 @@
 
 namespace OroCRM\Bundle\ContactBundle\ImportExport\Serializer\Normalizer;
 
+use Doctrine\Common\Collections\Collection;
+
 use Symfony\Component\Serializer\SerializerAwareInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
@@ -18,6 +20,8 @@ class ContactNormalizer implements NormalizerInterface, DenormalizerInterface, S
     const SOURCE_TYPE = 'OroCRM\Bundle\ContactBundle\Entity\Source';
     const METHOD_TYPE = 'OroCRM\Bundle\ContactBundle\Entity\Method';
     const USER_TYPE = 'Oro\Bundle\UserBundle\Entity\User';
+    const EMAILS_TYPE = 'ArrayCollection<OroCRM\Bundle\ContactBundle\Entity\ContactEmail>';
+    const PHONES_TYPE = 'ArrayCollection<OroCRM\Bundle\ContactBundle\Entity\ContactPhone>';
 
     static protected $scalarFields = array(
         'id',
@@ -81,6 +85,8 @@ class ContactNormalizer implements NormalizerInterface, DenormalizerInterface, S
             $format,
             array_merge($context, array('mode' => 'short'))
         );
+        $result['emails'] = $this->normalizeCollection($object->getEmails(), $format, $context);
+        $result['phones'] = $this->normalizeCollection($object->getPhones(), $format, $context);
 
         return $result;
     }
@@ -96,6 +102,21 @@ class ContactNormalizer implements NormalizerInterface, DenormalizerInterface, S
         $result = null;
         if (is_object($object)) {
             $result = $this->serializer->serialize($object, $format, $context);
+        }
+        return $result;
+    }
+
+    /**
+     * @param mixed $object
+     * @param mixed $format
+     * @param array $context
+     * @return mixed
+     */
+    protected function normalizeCollection($collection, $format = null, array $context = array())
+    {
+        $result = array();
+        if ($collection instanceof Collection && !$collection->isEmpty()) {
+            $result = $this->serializer->serialize($collection, $format, $context);
         }
         return $result;
     }
@@ -159,6 +180,16 @@ class ContactNormalizer implements NormalizerInterface, DenormalizerInterface, S
         );
         if ($owner) {
             $result->setOwner($owner);
+        }
+
+        $emails = $this->denormalizeObject($data, 'emails', static::EMAILS_TYPE, $format, $context);
+        if ($emails) {
+            $result->resetEmails($emails);
+        }
+
+        $phones = $this->denormalizeObject($data, 'phones', static::PHONES_TYPE, $format, $context);
+        if ($emails) {
+            $result->resetPhones($phones);
         }
 
         return $result;

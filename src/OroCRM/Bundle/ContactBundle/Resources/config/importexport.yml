@@ -2,9 +2,7 @@ parameters:
     orocrm_contact.importexport.contact_normalizer.class: OroCRM\Bundle\ContactBundle\ImportExport\Serializer\Normalizer\ContactNormalizer
     orocrm_contact.importexport.source_normalizer.class: OroCRM\Bundle\ContactBundle\ImportExport\Serializer\Normalizer\SourceNormalizer
     orocrm_contact.importexport.method_normalizer.class: OroCRM\Bundle\ContactBundle\ImportExport\Serializer\Normalizer\MethodNormalizer
-    orocrm_contact.importexport.contact_phone_normalizer.class: OroCRM\Bundle\ContactBundle\ImportExport\Serializer\Normalizer\ContactPhoneNormalizer
-    orocrm_contact.importexport.contact_email_normalizer.class: OroCRM\Bundle\ContactBundle\ImportExport\Serializer\Normalizer\ContactEmailNormalizer
-    
+
     orocrm_contact.importexport.max_data_provider.class: OroCRM\Bundle\ContactBundle\ImportExport\Provider\MaxDataProvider
 
 services:
@@ -25,16 +23,6 @@ services:
         tags:
             - { name: oro_importexport.normalizer }
 
-    orocrm_contact.importexport.contact_phone_normalizer:
-        class: %orocrm_contact.importexport.contact_phone_normalizer.class%
-        tags:
-            - { name: oro_importexport.normalizer }
-
-    orocrm_contact.importexport.contact_email_normalizer:
-        class: %orocrm_contact.importexport.contact_email_normalizer.class%
-        tags:
-            - { name: oro_importexport.normalizer }
-            
     orocrm_contact.importexport.max_data_provider:
         class: %orocrm_contact.importexport.max_data_provider.class%
         arguments:

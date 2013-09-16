@@ -8,6 +8,8 @@ use OroCRM\Bundle\ContactBundle\ImportExport\Serializer\Normalizer\ContactNormal
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\ContactBundle\Entity\Source;
 use OroCRM\Bundle\ContactBundle\Entity\Method;
+use OroCRM\Bundle\ContactBundle\Entity\ContactEmail;
+use OroCRM\Bundle\ContactBundle\Entity\ContactPhone;
 use OroCRM\Bundle\ContactBundle\Model\Social;
 
 class ContactNormalizerTest extends \PHPUnit_Framework_TestCase
@@ -16,6 +18,8 @@ class ContactNormalizerTest extends \PHPUnit_Framework_TestCase
     const SOURCE_TYPE = 'OroCRM\Bundle\ContactBundle\Entity\Source';
     const METHOD_TYPE = 'OroCRM\Bundle\ContactBundle\Entity\Method';
     const USER_TYPE = 'Oro\Bundle\UserBundle\Entity\User';
+    const EMAILS_TYPE = 'ArrayCollection<OroCRM\Bundle\ContactBundle\Entity\ContactEmail>';
+    const PHONES_TYPE = 'ArrayCollection<OroCRM\Bundle\ContactBundle\Entity\ContactPhone>';
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -124,6 +128,8 @@ class ContactNormalizerTest extends \PHPUnit_Framework_TestCase
                     'source' => null,
                     'method' => null,
                     'owner' => null,
+                    'emails' => array(),
+                    'phones' => array(),
                 )
             ),
             'empty' => array(
@@ -147,6 +153,8 @@ class ContactNormalizerTest extends \PHPUnit_Framework_TestCase
                     'source' => null,
                     'method' => null,
                     'owner' => null,
+                    'emails' => array(),
+                    'phones' => array(),
                 )
             ),
         );
@@ -254,6 +262,30 @@ class ContactNormalizerTest extends \PHPUnit_Framework_TestCase
                 'object'        => $owner,
                 'expectedValue' => array('firstName' => 'John', 'lastName' => 'Doe'),
                 'context'       => array('mode' => 'short')
+            ),
+            'emails' => array(
+                'contact'       =>
+                    $contact = $this->createContact()->resetEmails(
+                        array(
+                            new ContactEmail('first@example.com'),
+                            new ContactEmail('second@example.com'),
+                        )
+                    ),
+                'fieldName'     => 'emails',
+                'object'        => $contact->getEmails(),
+                'expectedValue' => array('first@example.com', 'second@example.com'),
+            ),
+            'phones' => array(
+                'contact'       =>
+                    $contact = $this->createContact()->resetPhones(
+                        array(
+                            new ContactPhone('080011223344'),
+                            new ContactPhone('080011223355'),
+                        )
+                    ),
+                'fieldName'     => 'phones',
+                'object'        => $contact->getPhones(),
+                'expectedValue' => array('080011223344', '080011223355'),
             ),
         );
     }
