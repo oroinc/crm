@@ -23,6 +23,8 @@ use OroCRM\Bundle\ContactBundle\Datagrid\ContactDatagridManager;
 use OroCRM\Bundle\ContactBundle\Datagrid\ContactAccountDatagridManager;
 use OroCRM\Bundle\ContactBundle\Datagrid\ContactAccountUpdateDatagridManager;
 use OroCRM\Bundle\AccountBundle\Entity\Account;
+use Oro\Bundle\ImportExportBundle\Serializer\Serializer;
+use OroCRM\Bundle\ContactBundle\ImportExport\Converter\ContactDataConverter;
 
 /**
  * @Acl(
@@ -206,18 +208,94 @@ class ContactController extends Controller
     {
         $doctrine = $this->getDoctrine();
         $contacts = $doctrine->getRepository('OroCRMContactBundle:Contact')->findAll();
+        $contact = current($contacts);
 
-        /** @var SerializerInterface $serializer */
-        $serializer = $this->get('serializer');
-        $serializedData = $serializer->serialize(
-            $contacts,
-            'array',
-            SerializationContext::create()
-                ->setGroups(array('orocrm_contact_export', 'export'))
-                ->enableMaxDepthChecks()
+        /** @var Serializer $importExportSerializer */
+        $importExportSerializer = $this->get('oro_importexport.serializer');
+        $serializedData = $importExportSerializer->serialize($contact, null);
+
+        /*
+        $serializedData = array(
+            'id' => 69,
+            'namePrefix' => 'Ms.',
+            'firstName' => 'April',
+            'lastName' => 'Lynch',
+            'nameSuffix' => null,
+            'gender' => null,
+            'description' => null,
+            'jobTitle' => null,
+            'fax' => null,
+            'skype' => null,
+            'twitter' => null,
+            'facebook' => null,
+            'googlePlus' => null,
+            'linkedIn' => null,
+            'birthday' => '1944-08-29T16:52:09+0200',
+            'source' => 'tv',
+            'method' => null,
+            'owner' => array(
+                'firstName' => 'William',
+                'lastName' => 'Stewart',
+            ),
+            'assignedTo' => array(
+                'firstName' => 'William',
+                'lastName' => 'Stewart',
+            ),
+            'addresses' => array(
+                array(
+                    'label' => null,
+                    'firstName' => null,
+                    'lastName' => null,
+                    'street' => null,
+                    'street2' => null,
+                    'city' => null,
+                    'state' => null,
+                    'country' => null,
+                    'postalCode' => null,
+                    'types' => array()
+                ),
+                array(
+                    'label' => null,
+                    'firstName' => null,
+                    'lastName' => null,
+                    'street' => null,
+                    'street2' => null,
+                    'city' => null,
+                    'state' => null,
+                    'country' => null,
+                    'postalCode' => null,
+                    'types' => array(
+                        'billing',
+                        'shipping'
+                    )
+                ),
+            ),
+            'emails' => array(
+                'primary-email@example.com',
+                'another-email@example.com',
+            ),
+            'phones' => array(
+                '0 800 11 22 444',
+                '0 800 11 22 555',
+            ),
+            'groups' => array(
+                'first_group',
+                'second_group',
+            ),
+            'accounts' => array(
+                'First Account Name',
+                'Second Account Name',
+            )
         );
+        */
 
-        return new Response('<pre>' . var_export($serializedData, true) . '</pre>');
+        /** @var ContactDataConverter $contactDataConverter */
+        $contactDataConverter = $this->get('orocrm_contact.importexport.data_converter.contact');
+        $contactExportData = $contactDataConverter->convertToExportFormat($serializedData);
+
+        return new Response(
+            '<pre>' . var_export($serializedData, true) . "\n\n" . var_export($contactExportData, true) .  '</pre>'
+        );
     }
 
     /**
@@ -236,50 +314,73 @@ class ContactController extends Controller
      */
     public function importAction()
     {
-        $contacts = array (
-            array (
-                'ID' => 1,
-                'Name Prefix' => 'Mr.',
-                'First Name' => 'Jerry',
-                'Last Name' => 'Coleman',
-                'Owner' =>
-                array (
-                    'First Name' => 'Ione',
-                    'Last Name' => 'Duchesne',
-                ),
-                'Reports To' =>
-                array (
-                    'ID' => 13,
-                    'Name Prefix' => 'Dr.',
-                    'First Name' => 'Andre',
-                    'Last Name' => 'Larson',
-                    'Accounts' =>
-                    array (
-                    ),
-                ),
-                'Accounts' =>
-                array (
-                    0 =>
-                    array (
-                        'Name' => 'Welsight73A_Coleman',
-                    ),
-                ),
-                'emails' => 'JerryAColeman@armyspy.com,sss@sss.ss',
-            )
+        $contactData = array (
+            'ID' => '69',
+            'Name Prefix' => 'Ms.',
+            'First Name' => 'April',
+            'Last Name' => 'Lynch',
+            'Name Suffix' => '',
+            'gender' => '',
+            'Description' => '',
+            'Job Title' => '',
+            'Fax' => '',
+            'Skype' => '',
+            'Twitter' => '',
+            'Facebook' => '',
+            'GooglePlus' => '',
+            'LinkedIn' => '',
+            'Birthday' => '1944-08-29T16:52:09+0200',
+            'Source' => 'tv',
+            'Method' => '',
+            'Owner First Name' => 'William',
+            'Owner Last Name' => 'Stewart',
+            'Assigned To First Name' => 'William',
+            'Assigned To Last Name' => 'Stewart',
+            'Address Label' => '',
+            'Address First Name' => '',
+            'Address Last Name' => '',
+            'Address Street' => '',
+            'Address Street2' => '',
+            'Address City' => '',
+            'Address State' => '',
+            'Address Country' => '',
+            'Address Postal Code' => '',
+            'Address 1 Label' => '',
+            'Address 1 First Name' => '',
+            'Address 1 Last Name' => '',
+            'Address 1 Street' => '',
+            'Address 1 Street2' => '',
+            'Address 1 City' => '',
+            'Address 1 State' => '',
+            'Address 1 Country' => '',
+            'Address 1 Postal Code' => '',
+            'Address 1 Type' => 'billing',
+            'Address 1 Type 1' => 'shipping',
+            'Email' => 'primary-email@example.com',
+            'Email 1' => 'another-email@example.com',
+            'Phone' => '0 800 11 22 444',
+            'Phone 1' => '0 800 11 22 555',
+            'Group' => 'first_group',
+            'Group 1' => 'second_group',
+            'Account' => 'First Account Name',
+            'Account 1' => 'Second Account Name',
         );
 
-        /** @var SerializerInterface $serializer */
-        $serializer = $this->get('serializer');
-        $deserializedData = $serializer->deserialize(
-            json_encode($contacts),
-            'ArrayCollection<OroCRM\Bundle\ContactBundle\Entity\Contact>',
-            'json',
-            DeserializationContext::create()
-                ->setGroups(array('orocrm_contact_import', 'import'))
-                ->enableMaxDepthChecks()
+        /** @var ContactDataConverter $contactDataConverter */
+        $contactDataConverter = $this->get('orocrm_contact.importexport.data_converter.contact');
+        $contactImportData = $contactDataConverter->convertToImportFormat($contactData);
+
+        /** @var Serializer $importExportSerializer */
+        $importExportSerializer = $this->get('oro_importexport.serializer');
+        $deserializedData = $importExportSerializer->deserialize(
+            $contactImportData,
+            'OroCRM\Bundle\ContactBundle\Entity\Contact',
+            null
         );
 
-        return new Response('<pre>' . print_r($deserializedData, true) . '</pre>');
+        return new Response(
+            '<pre>' . print_r($contactImportData, true). "\n\n" . print_r($deserializedData, true) . '</pre>'
+        );
     }
 
     /**

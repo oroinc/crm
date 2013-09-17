@@ -1,16 +1,16 @@
 <?php
 
-namespace OroCRM\Bundle\ContactBundle\Tests\Unit\ImportExport\Serializer\Normalizer;
+namespace OroCRM\Bundle\ContactBundle\Tests\Unit\ImportExport\Provider;
 
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Query;
 
-use OroCRM\Bundle\ContactBundle\ImportExport\Provider\MaxDataProvider;
+use OroCRM\Bundle\ContactBundle\ImportExport\Provider\ContactMaxDataProvider;
 
-class MaxDataProviderTest extends \PHPUnit_Framework_TestCase
+class ContactMaxDataProviderTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var MaxDataProvider
+     * @var ContactMaxDataProvider
      */
     protected $provider;
 
@@ -25,7 +25,7 @@ class MaxDataProviderTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $this->provider = new MaxDataProvider($this->registry);
+        $this->provider = new ContactMaxDataProvider($this->registry);
     }
 
     protected function tearDown()
@@ -50,6 +50,24 @@ class MaxDataProviderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @expectedException \LogicException
+     * @expectedExceptionMessage Max data query builder must have root alias
+     */
+    public function testGetRootAliasIsNotDefined()
+    {
+        $queryBuilder = $this->getMockBuilder('Doctrine\ORM\QueryBuilder')
+            ->disableOriginalConstructor()
+            ->setMethods(array('getRootAliases'))
+            ->getMock();
+        $queryBuilder->expects($this->once())
+            ->method('getRootAliases')
+            ->will($this->returnValue(array()));
+
+        $this->provider->setQueryBuilder($queryBuilder);
+        $this->provider->getMaxAccountsCount();
+    }
+
+    /**
      * @return array
      */
     public function getMaxEntitiesDataProvider()
@@ -66,6 +84,9 @@ class MaxDataProviderTest extends \PHPUnit_Framework_TestCase
             ),
             'phones count' => array(
                 'method' => 'getMaxPhonesCount',
+            ),
+            'groups count' => array(
+                'method' => 'getMaxGroupsCount',
             ),
         );
     }
