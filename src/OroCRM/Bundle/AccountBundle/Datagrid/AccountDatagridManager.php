@@ -43,7 +43,7 @@ class AccountDatagridManager extends FlexibleDatagridManager
         $fieldName->setOptions(
             array(
                 'type'        => FieldDescriptionInterface::TYPE_TEXT,
-                'label'       => $this->translate('Name'),
+                'label'       => $this->translate('orocrm.account.datagrid.account_name'),
                 'field_name'  => 'name',
                 'filter_type' => FilterInterface::TYPE_STRING,
                 'sortable'    => true,

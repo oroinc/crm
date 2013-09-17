@@ -15,7 +15,7 @@
 <div class="widget-content opportunity-info form-horizontal box-content row-fluid">
 
     <div class="span6">
-        {{ _self.renderRow('Topic'|trans, entity.topic) }}
+        {{ _self.renderRow('Opportunity name'|trans, entity.name) }}
         {{ _self.renderRow('Status'|trans, entity.status) }}
 
         {%- if resource_granted('orocrm_contact_view') and entity.contact -%}

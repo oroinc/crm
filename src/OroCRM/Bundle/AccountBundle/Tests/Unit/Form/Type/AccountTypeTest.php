@@ -131,6 +131,24 @@ class AccountTypeTest extends \PHPUnit_Framework_TestCase
         $contact->expects($this->once())
             ->method('getLastName')
             ->will($this->returnValue('Doe'));
+        $phone = $this->getMockBuilder('OroCRM\Bundle\ContactBundle\Entity\ContactPhone')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $phone->expects($this->once())
+            ->method('getPhone')
+            ->will($this->returnValue('911'));
+        $contact->expects($this->once())
+            ->method('getPrimaryPhone')
+            ->will($this->returnValue($phone));
+        $email = $this->getMockBuilder('OroCRM\Bundle\ContactBundle\Entity\ContactEmail')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $email->expects($this->once())
+            ->method('getEmail')
+            ->will($this->returnValue('john.doe@dummy.net'));
+        $contact->expects($this->once())
+            ->method('getPrimaryEmail')
+            ->will($this->returnValue($email));
         $contacts = new ArrayCollection(array($contact));
 
         $account = $this->getMockBuilder('OroCRM\Bundle\AccountBundle\Entity\Account')
@@ -159,7 +177,11 @@ class AccountTypeTest extends \PHPUnit_Framework_TestCase
             array(
                 'id' => 1,
                 'label' => 'John Doe',
-                'link' => '/test-info/1'
+                'link' => '/test-info/1',
+                'extraData' => array(
+                    array('label' => 'Phone', 'value' => '911'),
+                    array('label' => 'Email', 'value' => 'john.doe@dummy.net')
+                )
             )
         );
         $this->assertEquals($expectedInitialElements, $contactsFormView->vars['initial_elements']);

@@ -1,6 +1,6 @@
 {% extends 'OroUIBundle:actions:view.html.twig' %}
-{% set topic = entity.topic|default('N/A') %}
-{% oro_title_set({params : {"%opportunity.topic%": topic} }) %}
+{% set name = entity.name|default('N/A') %}
+{% oro_title_set({params : {"%opportunity.name%": name} }) %}
 
 {% block navButtons %}
     {% if resource_granted('orocrm_sales_opportunity_update') %}
@@ -31,7 +31,7 @@
         'entity':      entity,
         'indexPath':   path('orocrm_sales_opportunity_index'),
         'indexLabel': 'Opportunities',
-        'entityTitle': topic
+        'entityTitle': name
     } %}
     {{ parent() }}
 {% endblock pageHeader %}

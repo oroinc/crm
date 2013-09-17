@@ -39,7 +39,7 @@ class AccountType extends FlexibleType
             'name',
             'text',
             array(
-                'label' => 'Name',
+                'label' => 'orocrm.account.form.account_name',
                 'required' => true,
             )
         );
@@ -66,7 +66,8 @@ class AccountType extends FlexibleType
             array(
                 'class' => 'OroCRMContactBundle:Contact',
                 'required' => false,
-                'default_element' => $builder->get('default_contact')->getForm()
+                'default_element' => $builder->get('default_contact')->getForm(),
+                'selector_window_title' => 'orocrm.account.form.select_contacts'
             )
         );
 
@@ -109,7 +110,11 @@ class AccountType extends FlexibleType
             $result[] = array(
                 'id' => $contact->getId(),
                 'label' => $contact->getFirstName() . ' ' . $contact->getLastName(),
-                'link' => $this->router->generate('orocrm_contact_info', array('id' => $contact->getId()))
+                'link' => $this->router->generate('orocrm_contact_info', array('id' => $contact->getId())),
+                'extraData' => array(
+                    array('label' => 'Phone', 'value' => $contact->getPrimaryPhone()->getPhone()),
+                    array('label' => 'Email', 'value' => $contact->getPrimaryEmail()->getEmail()),
+                )
             );
         }
         return $result;
