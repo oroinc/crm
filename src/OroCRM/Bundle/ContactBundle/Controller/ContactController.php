@@ -81,7 +81,7 @@ class ContactController extends Controller
 
         $fields = $extendProvider->filter(
             function (ConfigInterface $config) {
-                return $config->is('owner', ExtendManager::OWNER_CUSTOM);
+                return $config->is('owner', ExtendManager::OWNER_CUSTOM) && !$config->is('is_deleted');
             },
             get_class($contact)
         );
