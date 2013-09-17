@@ -6,6 +6,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBag;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 use JMS\Serializer\SerializationContext;
 use JMS\Serializer\DeserializationContext;
@@ -21,6 +23,7 @@ use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\ContactBundle\Datagrid\ContactDatagridManager;
 use OroCRM\Bundle\ContactBundle\Datagrid\ContactAccountDatagridManager;
 use OroCRM\Bundle\ContactBundle\Datagrid\ContactAccountUpdateDatagridManager;
+use OroCRM\Bundle\AccountBundle\Entity\Account;
 
 /**
  * @Acl(
@@ -90,7 +93,23 @@ class ContactController extends Controller
      */
     public function createAction()
     {
-        return $this->updateAction();
+        // add predefined account to contact
+        $contact = null;
+        $accountId = $this->getRequest()->get('account');
+        if ($accountId) {
+            $repository = $this->getDoctrine()->getRepository('OroCRMAccountBundle:Account');
+            /** @var Account $account */
+            $account = $repository->find($accountId);
+            if ($account) {
+                /** @var Contact $contact */
+                $contact = $this->getManager()->createEntity();
+                $contact->addAccount($account);
+            } else {
+                throw new NotFoundHttpException(sprintf('Account with ID %s is not found', $accountId));
+            }
+        }
+
+        return $this->updateAction($contact);
     }
 
     /**

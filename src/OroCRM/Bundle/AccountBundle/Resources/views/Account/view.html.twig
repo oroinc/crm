@@ -10,8 +10,21 @@
 {% endblock %}
 
 {% block navButtons %}
+    {% if resource_granted('orocrm_contact_create') %}
+        {{ UI.button({
+            'path': path('orocrm_contact_create', {'account': entity.id}),
+            'iClass': 'icon-user',
+            'title': 'Add contact'|trans,
+            'label': 'Add contact'|trans
+        }) }}
+    {% endif %}
     {% if resource_granted('orocrm_account_update') %}
-       {{ UI.button({'path': path('orocrm_account_update', {'id': entity.id}), 'iClass': 'icon-edit', 'title': 'Edit account', 'label': 'Edit'}) }}
+        {{ UI.button({
+            'path': path('orocrm_account_update', {'id': entity.id}),
+            'iClass': 'icon-edit',
+            'title': 'Edit account'|trans,
+            'label': 'Edit'|trans
+        }) }}
     {% endif %}
     {% if resource_granted('orocrm_account_remove') %}
         {{ UI.deleteButton({
@@ -20,9 +33,9 @@
                 'aCss': 'no-hash remove-button',
                 'dataId': entity.id,
                 'id': 'btn-remove-account',
-                'dataMessage': 'Are you sure you want to delete this account?',
-                'title': 'Delete Account',
-                'label': 'Delete'
+                'dataMessage': 'Are you sure you want to delete this account?'|trans,
+                'title': 'Delete account'|trans,
+                'label': 'Delete'|trans
             })
         }}
     {% endif %}
@@ -83,10 +96,10 @@
 
     {% set accountAddresses = [] %}
     {%  if entity.billingAddress is not empty %}
-        {% set accountAddresses = accountAddresses|merge([{'title': 'Billing address', 'data': [addressView.renderAddress(entity.billingAddress)]}]) %}
+        {% set accountAddresses = accountAddresses|merge([{'title': 'Billing Address', 'data': [addressView.renderAddress(entity.billingAddress)]}]) %}
     {% endif %}
     {%  if entity.shippingAddress is not empty %}
-        {% set accountAddresses = accountAddresses|merge([{'title': 'Shipping address', 'data': [addressView.renderAddress(entity.shippingAddress)]}]) %}
+        {% set accountAddresses = accountAddresses|merge([{'title': 'Shipping Address', 'data': [addressView.renderAddress(entity.shippingAddress)]}]) %}
     {% endif %}
 
     {% if (accountAddresses|length) %}
