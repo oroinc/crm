@@ -7,7 +7,7 @@ use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\EntityRepository;
 
-class MaxDataProvider
+class ContactMaxDataProvider
 {
     /**
      * @var ManagerRegistry
@@ -126,5 +126,13 @@ class MaxDataProvider
     public function getMaxPhonesCount()
     {
         return $this->getMaxEntitiesCount('phones');
+    }
+
+    /**
+     * @return int
+     */
+    public function getMaxGroupsCount()
+    {
+        return $this->getMaxEntitiesCount('groups');
     }
 }

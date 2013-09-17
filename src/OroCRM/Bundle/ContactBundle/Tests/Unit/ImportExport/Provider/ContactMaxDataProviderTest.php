@@ -5,12 +5,12 @@ namespace OroCRM\Bundle\ContactBundle\Tests\Unit\ImportExport\Serializer\Normali
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Query;
 
-use OroCRM\Bundle\ContactBundle\ImportExport\Provider\MaxDataProvider;
+use OroCRM\Bundle\ContactBundle\ImportExport\Provider\ContactMaxDataProvider;
 
-class MaxDataProviderTest extends \PHPUnit_Framework_TestCase
+class ContactMaxDataProviderTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var MaxDataProvider
+     * @var ContactMaxDataProvider
      */
     protected $provider;
 
@@ -25,7 +25,7 @@ class MaxDataProviderTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $this->provider = new MaxDataProvider($this->registry);
+        $this->provider = new ContactMaxDataProvider($this->registry);
     }
 
     protected function tearDown()
@@ -65,6 +65,9 @@ class MaxDataProviderTest extends \PHPUnit_Framework_TestCase
                 'method' => 'getMaxEmailsCount',
             ),
             'phones count' => array(
+                'method' => 'getMaxPhonesCount',
+            ),
+            'groups count' => array(
                 'method' => 'getMaxPhonesCount',
             ),
         );

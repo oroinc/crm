@@ -3,8 +3,11 @@ parameters:
     orocrm_contact.importexport.source_normalizer.class: OroCRM\Bundle\ContactBundle\ImportExport\Serializer\Normalizer\SourceNormalizer
     orocrm_contact.importexport.method_normalizer.class: OroCRM\Bundle\ContactBundle\ImportExport\Serializer\Normalizer\MethodNormalizer
     orocrm_contact.importexport.group_normalizer.class: OroCRM\Bundle\ContactBundle\ImportExport\Serializer\Normalizer\GroupNormalizer
-
-    orocrm_contact.importexport.max_data_provider.class: OroCRM\Bundle\ContactBundle\ImportExport\Provider\MaxDataProvider
+    
+    orocrm_contact.importexport.contact_max_data_provider.class: OroCRM\Bundle\ContactBundle\ImportExport\Provider\ContactMaxDataProvider
+    orocrm_contact.importexport.contact_header_provider.class: OroCRM\Bundle\ContactBundle\ImportExport\Provider\ContactHeaderProvider
+    
+    orocrm_contact.importexport.data_converter.contact.class: OroCRM\Bundle\ContactBundle\ImportExport\Converter\ContactDataConverter
 
 services:
     orocrm_contact.importexport.contact_normalizer:
@@ -28,8 +31,22 @@ services:
         class: %orocrm_contact.importexport.group_normalizer.class%
         tags:
             - { name: oro_importexport.normalizer }
-
-    orocrm_contact.importexport.max_data_provider:
-        class: %orocrm_contact.importexport.max_data_provider.class%
+            
+    orocrm_contact.importexport.contact_max_data_provider:
+        class: %orocrm_contact.importexport.contact_max_data_provider.class%
         arguments:
             - @doctrine
+
+    orocrm_contact.importexport.contact_header_provider:
+        class: %orocrm_contact.importexport.contact_header_provider.class%
+        arguments:
+            - @doctrine
+            - @oro_importexport.serializer
+            - @oro_importexport.data_converter.default
+            - @orocrm_contact.importexport.contact_max_data_provider
+
+    orocrm_contact.importexport.data_converter.contact:
+        class: %orocrm_contact.importexport.data_converter.contact.class%
+        arguments:
+            - @orocrm_contact.importexport.contact_header_provider
+
