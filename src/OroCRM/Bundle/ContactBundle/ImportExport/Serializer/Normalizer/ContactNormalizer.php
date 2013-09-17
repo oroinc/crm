@@ -8,6 +8,8 @@ use Symfony\Component\Serializer\SerializerAwareInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+use Symfony\Component\Serializer\Exception\InvalidArgumentException;
+use Symfony\Component\Serializer\Exception\LogicException;
 
 use OroCRM\Bundle\ContactBundle\Formatter\SocialUrlFormatter;
 use OroCRM\Bundle\ContactBundle\Model\Social;
@@ -16,14 +18,15 @@ use OroCRM\Bundle\ContactBundle\Entity\Contact;
 
 class ContactNormalizer implements NormalizerInterface, DenormalizerInterface, SerializerAwareInterface
 {
-    const CONTACT_TYPE  = 'OroCRM\Bundle\ContactBundle\Entity\Contact';
-    const SOURCE_TYPE   = 'OroCRM\Bundle\ContactBundle\Entity\Source';
-    const METHOD_TYPE   = 'OroCRM\Bundle\ContactBundle\Entity\Method';
-    const USER_TYPE     = 'Oro\Bundle\UserBundle\Entity\User';
-    const EMAILS_TYPE   = 'ArrayCollection<OroCRM\Bundle\ContactBundle\Entity\ContactEmail>';
-    const PHONES_TYPE   = 'ArrayCollection<OroCRM\Bundle\ContactBundle\Entity\ContactPhone>';
-    const GROUPS_TYPE   = 'ArrayCollection<OroCRM\Bundle\ContactBundle\Entity\Group>';
-    const ACCOUNTS_TYPE = 'ArrayCollection<OroCRM\Bundle\AccountBundle\Entity\Account>';
+    const CONTACT_TYPE   = 'OroCRM\Bundle\ContactBundle\Entity\Contact';
+    const SOURCE_TYPE    = 'OroCRM\Bundle\ContactBundle\Entity\Source';
+    const METHOD_TYPE    = 'OroCRM\Bundle\ContactBundle\Entity\Method';
+    const USER_TYPE      = 'Oro\Bundle\UserBundle\Entity\User';
+    const EMAILS_TYPE    = 'ArrayCollection<OroCRM\Bundle\ContactBundle\Entity\ContactEmail>';
+    const PHONES_TYPE    = 'ArrayCollection<OroCRM\Bundle\ContactBundle\Entity\ContactPhone>';
+    const GROUPS_TYPE    = 'ArrayCollection<OroCRM\Bundle\ContactBundle\Entity\Group>';
+    const ACCOUNTS_TYPE  = 'ArrayCollection<OroCRM\Bundle\AccountBundle\Entity\Account>';
+    const ADDRESSES_TYPE = 'ArrayCollection<OroCRM\Bundle\ContactBundle\Entity\ContactAddress>';
 
     static protected $scalarFields = array(
         'id',
@@ -55,12 +58,21 @@ class ContactNormalizer implements NormalizerInterface, DenormalizerInterface, S
     protected $socialUrlFormatter;
 
     /**
-     * @var SerializerInterface
+     * @var SerializerInterface|NormalizerInterface|DenormalizerInterface
      */
     protected $serializer;
 
     public function setSerializer(SerializerInterface $serializer)
     {
+        if (!$serializer instanceof NormalizerInterface || !$serializer instanceof DenormalizerInterface) {
+            throw new InvalidArgumentException(
+                sprintf(
+                    'Serializer must implement "%s" and "%s"',
+                    'Symfony\Component\Serializer\Normalizer\NormalizerInterface',
+                    'Symfony\Component\Serializer\Normalizer\DenormalizerInterface'
+                )
+            );
+        }
         $this->serializer = $serializer;
     }
 
@@ -87,6 +99,11 @@ class ContactNormalizer implements NormalizerInterface, DenormalizerInterface, S
             $format,
             array_merge($context, array('mode' => 'short'))
         );
+        $result['assignedTo'] = $this->normalizeObject(
+            $object->getAssignedTo(),
+            $format,
+            array_merge($context, array('mode' => 'short'))
+        );
         $result['emails'] = $this->normalizeCollection($object->getEmails(), $format, $context);
         $result['phones'] = $this->normalizeCollection($object->getPhones(), $format, $context);
         $result['groups'] = $this->normalizeCollection($object->getGroups(), $format, $context);
@@ -94,6 +111,11 @@ class ContactNormalizer implements NormalizerInterface, DenormalizerInterface, S
             $object->getAccounts(),
             $format,
             array_merge($context, array('mode' => 'short'))
+        );
+        $result['addresses'] = $this->normalizeCollection(
+            $object->getAddresses(),
+            $format,
+            $context
         );
 
         return $result;
@@ -109,7 +131,7 @@ class ContactNormalizer implements NormalizerInterface, DenormalizerInterface, S
     {
         $result = null;
         if (is_object($object)) {
-            $result = $this->serializer->serialize($object, $format, $context);
+            $result = $this->serializer->normalize($object, $format, $context);
         }
         return $result;
     }
@@ -124,7 +146,7 @@ class ContactNormalizer implements NormalizerInterface, DenormalizerInterface, S
     {
         $result = array();
         if ($collection instanceof Collection && !$collection->isEmpty()) {
-            $result = $this->serializer->serialize($collection, $format, $context);
+            $result = $this->serializer->normalize($collection, $format, $context);
         }
         return $result;
     }
@@ -190,59 +212,93 @@ class ContactNormalizer implements NormalizerInterface, DenormalizerInterface, S
      */
     protected function setObjectFieldsValues(Contact $object, array $data, $format = null, array $context = array())
     {
-        $birthday = $this->denormalizeObject($data, 'birthday', 'DateTime', $format, $context);
-        if ($birthday) {
-            $object->setBirthday($birthday);
-        }
-
-        $source = $this->denormalizeObject($data, 'source', static::SOURCE_TYPE, $format, $context);
-        if ($source) {
-            $object->setSource($source);
-        }
-
-        $method = $this->denormalizeObject($data, 'method', static::METHOD_TYPE, $format, $context);
-        if ($method) {
-            $object->setMethod($method);
-        }
-
-        $owner = $this->denormalizeObject(
-            $data,
-            'owner',
-            static::USER_TYPE,
-            $format,
-            array_merge($context, array('mode' => 'short'))
+        $this->setNotEmptyValues(
+            $object,
+            array(
+                array(
+                    'name' => 'birthday',
+                    'value' => $this->denormalizeObject($data, 'birthday', 'DateTime', $format, $context)
+                ),
+                array(
+                    'name' => 'source',
+                    'value' => $this->denormalizeObject($data, 'source', static::SOURCE_TYPE, $format, $context)
+                ),
+                array(
+                    'name' => 'method',
+                    'value' => $this->denormalizeObject($data, 'method', static::METHOD_TYPE, $format, $context)
+                ),
+                array(
+                    'name' => 'owner',
+                    'value' => $this->denormalizeObject(
+                        $data,
+                        'owner',
+                        static::USER_TYPE,
+                        $format,
+                        array_merge($context, array('mode' => 'short'))
+                    )
+                ),
+                array(
+                    'name' => 'assignedTo',
+                    'value' => $this->denormalizeObject(
+                        $data,
+                        'assignedTo',
+                        static::USER_TYPE,
+                        $format,
+                        array_merge($context, array('mode' => 'short'))
+                    )
+                ),
+                array(
+                    'setter' => 'resetEmails',
+                    'value' => $this->denormalizeObject($data, 'emails', static::EMAILS_TYPE, $format, $context)
+                ),
+                array(
+                    'setter' => 'resetPhones',
+                    'value' => $this->denormalizeObject($data, 'phones', static::PHONES_TYPE, $format, $context)
+                ),
+                array(
+                    'adder' => 'addGroup',
+                    'value' => $this->denormalizeObject($data, 'groups', static::GROUPS_TYPE, $format, $context)
+                ),
+                array(
+                    'adder' => 'addAccount',
+                    'value' => $this->denormalizeObject(
+                        $data,
+                        'accounts',
+                        static::ACCOUNTS_TYPE,
+                        $format,
+                        array_merge($context, array('mode' => 'short'))
+                    )
+                ),
+                array(
+                    'adder' => 'addAddress',
+                    'value' => $this->denormalizeObject($data, 'addresses', static::ADDRESSES_TYPE, $format, $context)
+                ),
+            )
         );
-        if ($owner) {
-            $object->setOwner($owner);
-        }
+    }
 
-        $emails = $this->denormalizeObject($data, 'emails', static::EMAILS_TYPE, $format, $context);
-        if ($emails) {
-            $object->resetEmails($emails);
-        }
-
-        $phones = $this->denormalizeObject($data, 'phones', static::PHONES_TYPE, $format, $context);
-        if ($phones) {
-            $object->resetPhones($phones);
-        }
-
-        $groups = $this->denormalizeObject($data, 'groups', static::GROUPS_TYPE, $format, $context);
-        if ($groups) {
-            foreach ($groups as $group) {
-                $object->addGroup($group);
+    /**
+     * @param Contact $object
+     * @param array $valuesData
+     */
+    protected function setNotEmptyValues(Contact $object, array $valuesData)
+    {
+        foreach ($valuesData as $data) {
+            $value = $data['value'];
+            if (!$value) {
+                continue;
             }
-        }
-
-        $accounts = $this->denormalizeObject(
-            $data,
-            'accounts',
-            static::ACCOUNTS_TYPE,
-            $format,
-            array_merge($context, array('mode' => 'short'))
-        );
-        if ($accounts) {
-            foreach ($accounts as $account) {
-                $object->addAccount($account);
+            if (isset($data['name'])) {
+                $setter = 'set' . ucfirst($data['name']);
+                $object->$setter($value);
+            } elseif (isset($data['setter'])) {
+                $setter = $data['setter'];
+                $object->$setter($value);
+            } elseif (is_array($value) || $value instanceof \Traversable) {
+                $adder = $data['adder'];
+                foreach ($value as $element) {
+                    $object->$adder($element);
+                }
             }
         }
     }
@@ -259,7 +315,7 @@ class ContactNormalizer implements NormalizerInterface, DenormalizerInterface, S
     {
         $result = null;
         if (!empty($data[$name])) {
-            $result = $this->serializer->deserialize($data[$name], $type, $format, $context);
+            $result = $this->serializer->denormalize($data[$name], $type, $format, $context);
 
         }
         return $result;
