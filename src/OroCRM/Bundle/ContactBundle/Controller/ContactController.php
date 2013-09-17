@@ -77,11 +77,14 @@ class ContactController extends Controller
     {
         $extendProvider = $this->get('oro_entity_config.provider.extend');
         $entityProvider = $this->get('oro_entity_config.provider.entity');
-
+        $viewProvider   = $this->get('oro_entity_config.provider.view');
 
         $fields = $extendProvider->filter(
-            function (ConfigInterface $config) {
-                return $config->is('owner', ExtendManager::OWNER_CUSTOM) && !$config->is('is_deleted');
+            function (ConfigInterface $config) use ($viewProvider) {
+                return
+                    $config->is('owner', ExtendManager::OWNER_CUSTOM)
+                    && !$config->is('is_deleted')
+                    && $viewProvider->getConfigById($config->getId())->is('is_displayable');
             },
             get_class($contact)
         );

@@ -247,6 +247,8 @@ class ContactDatagridManager extends AbstractDatagrid
             )
         );
         $fieldsCollection->add($fieldUpdated);
+
+        $this->addDynamicFields();
     }
 
     /**
