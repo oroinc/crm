@@ -7,8 +7,6 @@ use OroCRM\Bundle\ContactBundle\Entity\Method;
 
 class MethodNormalizerTest extends \PHPUnit_Framework_TestCase
 {
-    const METHOD_TYPE = 'OroCRM\Bundle\ContactBundle\Entity\Method';
-
     /**
      * @var MethodNormalizer
      */
@@ -28,8 +26,8 @@ class MethodNormalizerTest extends \PHPUnit_Framework_TestCase
     public function testSupportsDenormalization()
     {
         $this->assertFalse($this->normalizer->supportsDenormalization(array(), 'stdClass'));
-        $this->assertFalse($this->normalizer->supportsDenormalization(array(), self::METHOD_TYPE));
-        $this->assertTrue($this->normalizer->supportsDenormalization('method', self::METHOD_TYPE));
+        $this->assertFalse($this->normalizer->supportsDenormalization(array(), MethodNormalizer::METHOD_TYPE));
+        $this->assertTrue($this->normalizer->supportsDenormalization('method', MethodNormalizer::METHOD_TYPE));
     }
 
     public function testNormalize()

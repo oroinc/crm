@@ -7,8 +7,6 @@ use OroCRM\Bundle\ContactBundle\Entity\Group;
 
 class GroupNormalizerTest extends \PHPUnit_Framework_TestCase
 {
-    const GROUP_TYPE = 'OroCRM\Bundle\ContactBundle\Entity\Group';
-
     /**
      * @var GroupNormalizer
      */
@@ -28,8 +26,8 @@ class GroupNormalizerTest extends \PHPUnit_Framework_TestCase
     public function testSupportsDenormalization()
     {
         $this->assertFalse($this->normalizer->supportsDenormalization(array(), 'stdClass'));
-        $this->assertFalse($this->normalizer->supportsDenormalization(array(), self::GROUP_TYPE));
-        $this->assertTrue($this->normalizer->supportsDenormalization('group', self::GROUP_TYPE));
+        $this->assertFalse($this->normalizer->supportsDenormalization(array(), GroupNormalizer::GROUP_TYPE));
+        $this->assertTrue($this->normalizer->supportsDenormalization('group', GroupNormalizer::GROUP_TYPE));
     }
 
     public function testNormalize()

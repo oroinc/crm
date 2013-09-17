@@ -7,8 +7,6 @@ use OroCRM\Bundle\ContactBundle\Entity\Source;
 
 class SourceNormalizerTest extends \PHPUnit_Framework_TestCase
 {
-    const SOURCE_TYPE = 'OroCRM\Bundle\ContactBundle\Entity\Source';
-
     /**
      * @var SourceNormalizer
      */
@@ -28,8 +26,8 @@ class SourceNormalizerTest extends \PHPUnit_Framework_TestCase
     public function testSupportsDenormalization()
     {
         $this->assertFalse($this->normalizer->supportsDenormalization(array(), 'stdClass'));
-        $this->assertFalse($this->normalizer->supportsDenormalization(array(), self::SOURCE_TYPE));
-        $this->assertTrue($this->normalizer->supportsDenormalization('source', self::SOURCE_TYPE));
+        $this->assertFalse($this->normalizer->supportsDenormalization(array(), SourceNormalizer::SOURCE_TYPE));
+        $this->assertTrue($this->normalizer->supportsDenormalization('source', SourceNormalizer::SOURCE_TYPE));
     }
 
     public function testNormalize()
