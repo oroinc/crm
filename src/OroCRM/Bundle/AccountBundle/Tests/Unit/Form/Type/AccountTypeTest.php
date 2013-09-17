@@ -112,7 +112,7 @@ class AccountTypeTest extends \PHPUnit_Framework_TestCase
         $contact = $this->getMockBuilder('OroCRM\Bundle\ContactBundle\Entity\Contact')
             ->disableOriginalConstructor()
             ->getMock();
-        $contact->expects($this->exactly(2))
+        $contact->expects($this->any())
             ->method('getId')
             ->will($this->returnValue(1));
         $contact->expects($this->once())
@@ -150,10 +150,13 @@ class AccountTypeTest extends \PHPUnit_Framework_TestCase
         $account->expects($this->once())
             ->method('getContacts')
             ->will($this->returnValue($contacts));
+        $account->expects($this->once())
+            ->method('getDefaultContact')
+            ->will($this->returnValue($contact));
         $form = $this->getMockBuilder('Symfony\Component\Form\Form')
             ->disableOriginalConstructor()
             ->getMock();
-        $form->expects($this->exactly(2))
+        $form->expects($this->once())
             ->method('getData')
             ->will($this->returnValue($account));
 
@@ -168,6 +171,7 @@ class AccountTypeTest extends \PHPUnit_Framework_TestCase
                 'id' => 1,
                 'label' => 'John Doe',
                 'link' => '/test-info/1',
+                'isDefault' => true,
                 'extraData' => array(
                     array('label' => 'Phone', 'value' => '911'),
                     array('label' => 'Email', 'value' => 'john.doe@dummy.net')

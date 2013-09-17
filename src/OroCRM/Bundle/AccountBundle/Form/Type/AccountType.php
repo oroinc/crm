@@ -4,6 +4,7 @@ namespace OroCRM\Bundle\AccountBundle\Form\Type;
 
 use Doctrine\Common\Collections\Collection;
 use Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleManager;
+use OroCRM\Bundle\AccountBundle\Entity\Account;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
@@ -55,10 +56,7 @@ class AccountType extends FlexibleType
             'oro_entity_identifier',
             array(
                 'class'    => 'OroCRMContactBundle:Contact',
-                'multiple' => false,
-                'attr' => array(
-                    'id' => 'account_default_contact'
-                )
+                'multiple' => false
             )
         );
 
@@ -69,7 +67,7 @@ class AccountType extends FlexibleType
             array(
                 'class' => 'OroCRMContactBundle:Contact',
                 'required' => false,
-                'default_element' => 'account_default_contact',
+                'default_element' => 'default_contact',
                 'selector_window_title' => 'orocrm.account.form.select_contacts'
             )
         );
@@ -96,17 +94,19 @@ class AccountType extends FlexibleType
 
     public function finishView(FormView $view, FormInterface $form, array $options)
     {
+        /** @var Account $account */
+        $account = $form->getData();
         $view->children['contacts']->vars['grid_url']
-            = $this->router->generate('orocrm_account_contact_select', array('id' => $form->getData()->getId()));
+            = $this->router->generate('orocrm_account_contact_select', array('id' => $account->getId()));
         $view->children['contacts']->vars['initial_elements']
-            = $this->getInitialElements($form->getData()->getContacts());
+            = $this->getInitialElements($account->getContacts(), $account->getDefaultContact()->getId());
     }
 
     /**
      * @param Contact[] $contacts
      * @return array
      */
-    protected function getInitialElements(Collection $contacts)
+    protected function getInitialElements(Collection $contacts, $default)
     {
         $result = array();
         foreach ($contacts as $contact) {
@@ -117,7 +117,8 @@ class AccountType extends FlexibleType
                 'extraData' => array(
                     array('label' => 'Phone', 'value' => $contact->getPrimaryPhone()->getPhone()),
                     array('label' => 'Email', 'value' => $contact->getPrimaryEmail()->getEmail()),
-                )
+                ),
+                'isDefault' => $default == $contact->getId()
             );
         }
         return $result;
