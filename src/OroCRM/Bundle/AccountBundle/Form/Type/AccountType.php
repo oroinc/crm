@@ -55,7 +55,10 @@ class AccountType extends FlexibleType
             'oro_entity_identifier',
             array(
                 'class'    => 'OroCRMContactBundle:Contact',
-                'multiple' => false
+                'multiple' => false,
+                'attr' => array(
+                    'id' => 'account_default_contact'
+                )
             )
         );
 
@@ -66,7 +69,7 @@ class AccountType extends FlexibleType
             array(
                 'class' => 'OroCRMContactBundle:Contact',
                 'required' => false,
-                'default_element' => $builder->get('default_contact')->getForm(),
+                'default_element' => 'account_default_contact',
                 'selector_window_title' => 'orocrm.account.form.select_contacts'
             )
         );
