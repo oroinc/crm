@@ -150,7 +150,14 @@
                 </div>
             </div>
         </div>
+
+        {% if dynamic|length %}
+            {% for label, item in dynamic %}
+                {{ _self.renderRow(label|trans, item) }}
+            {% endfor %}
+        {% endif %}
     </div>
+
     <div class="span6">
         {{ _self.renderRow('Job Title'|trans, entity.jobTitle) }}
 
