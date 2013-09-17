@@ -22,6 +22,7 @@ class ContactDataConverter extends AbstractTableDataConverter
         'First Name'  => 'firstName',
         'Last Name'   => 'lastName',
         'Name Suffix' => 'nameSuffix',
+        'Gender'      => 'gender',
         'Birthday'    => 'birthday',
         'Description' => 'description',
         'Job Title'   => 'jobTitle',
@@ -45,7 +46,8 @@ class ContactDataConverter extends AbstractTableDataConverter
         'Address Street'      => 'addresses:0:street',
         'Address Street2'     => 'addresses:0:street2',
         'Address City'        => 'addresses:0:city',
-        'Address State'       => 'addresses:0:state',
+        'Address Region'      => 'addresses:0:region',
+        'Address Region Text' => 'addresses:0:regionText',
         'Address Country'     => 'addresses:0:country',
         'Address Postal Code' => 'addresses:0:postalCode',
         'Address Type'        => 'addresses:0:types:0',
@@ -77,9 +79,13 @@ class ContactDataConverter extends AbstractTableDataConverter
             self::FRONTEND_TO_BACKEND => array('Address (\d+) City', 'addresses:$1:city'),
             self::BACKEND_TO_FRONTEND => array('addresses:(\d+):city', 'Address $1 City'),
         ),
-        'Numeric Address State' => array(
-            self::FRONTEND_TO_BACKEND => array('Address (\d+) State', 'addresses:$1:state'),
-            self::BACKEND_TO_FRONTEND => array('addresses:(\d+):state', 'Address $1 State'),
+        'Numeric Address Region' => array(
+            self::FRONTEND_TO_BACKEND => array('Address (\d+) Region', 'addresses:$1:region'),
+            self::BACKEND_TO_FRONTEND => array('addresses:(\d+):region', 'Address $1 Region'),
+        ),
+        'Numeric Address Region Text' => array(
+            self::FRONTEND_TO_BACKEND => array('Address (\d+) Region Text', 'addresses:$1:regionText'),
+            self::BACKEND_TO_FRONTEND => array('addresses:(\d+):regionText', 'Address $1 Region Text'),
         ),
         'Numeric Address Country' => array(
             self::FRONTEND_TO_BACKEND => array('Address (\d+) Country', 'addresses:$1:country'),
