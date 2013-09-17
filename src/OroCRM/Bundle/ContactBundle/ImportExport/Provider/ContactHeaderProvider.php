@@ -2,10 +2,10 @@
 
 namespace OroCRM\Bundle\ContactBundle\ImportExport\Provider;
 
+use Symfony\Component\Serializer\SerializerInterface;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityRepository;
 
-use Oro\Bundle\ImportExportBundle\Serializer\Serializer;
 use Oro\Bundle\ImportExportBundle\Converter\DataConverterInterface;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\ContactBundle\Entity\ContactAddress;
@@ -24,7 +24,7 @@ class ContactHeaderProvider
     protected $managerRegistry;
 
     /**
-     * @var Serializer
+     * @var SerializerInterface
      */
     protected $serializer;
 
@@ -45,13 +45,13 @@ class ContactHeaderProvider
 
     /**
      * @param ManagerRegistry $managerRegistry
+     * @param SerializerInterface $serializer
      * @param DataConverterInterface $dataConverter
      * @param ContactMaxDataProvider $maxDataProvider
-     * @param Serializer $serializer
      */
     public function __construct(
         ManagerRegistry $managerRegistry,
-        Serializer $serializer,
+        SerializerInterface $serializer,
         DataConverterInterface $dataConverter,
         ContactMaxDataProvider $maxDataProvider
     ) {

@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ContactBundle\Tests\Unit\ImportExport\Serializer\Normalizer;
+namespace OroCRM\Bundle\ContactBundle\Tests\Unit\ImportExport\Provider;
 
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Query;
@@ -50,6 +50,24 @@ class ContactMaxDataProviderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @expectedException \LogicException
+     * @expectedExceptionMessage Max data query builder must have root alias
+     */
+    public function testGetRootAliasIsNotDefined()
+    {
+        $queryBuilder = $this->getMockBuilder('Doctrine\ORM\QueryBuilder')
+            ->disableOriginalConstructor()
+            ->setMethods(array('getRootAliases'))
+            ->getMock();
+        $queryBuilder->expects($this->once())
+            ->method('getRootAliases')
+            ->will($this->returnValue(array()));
+
+        $this->provider->setQueryBuilder($queryBuilder);
+        $this->provider->getMaxAccountsCount();
+    }
+
+    /**
      * @return array
      */
     public function getMaxEntitiesDataProvider()
@@ -68,7 +86,7 @@ class ContactMaxDataProviderTest extends \PHPUnit_Framework_TestCase
                 'method' => 'getMaxPhonesCount',
             ),
             'groups count' => array(
-                'method' => 'getMaxPhonesCount',
+                'method' => 'getMaxGroupsCount',
             ),
         );
     }
