@@ -35,29 +35,6 @@ use OroCRM\Bundle\AccountBundle\Entity\Account;
 class ContactController extends Controller
 {
     /**
-     * @Route("/export/test/{id}", name="orocrm_contact_test_export", requirements={"id"="\d+"})
-     * @Template
-     * @Acl(
-     *      id="orocrm_contact_view",
-     *      name="View Contact",
-     *      description="Test export contact",
-     *      parent="orocrm_contact"
-     * )
-     */
-    public function testExportAction(Contact $contact)
-    {
-        /** @var SerializerInterface $serializer */
-        $serializer = $this->get('oro_importexport.serializer');
-        $data = $serializer->serialize($contact, null);
-        $contacts = $serializer->deserialize($data, 'OroCRM\Bundle\ContactBundle\Entity\Contact', null);
-
-        return new Response(
-            '<pre>' . var_export($data, true) . '</pre>' .
-            '<pre>' . @var_export($contacts, true) . '</pre>'
-        );
-    }
-
-    /**
      * @Route("/view/{id}", name="orocrm_contact_view", requirements={"id"="\d+"})
      * @Template
      * @Acl(
