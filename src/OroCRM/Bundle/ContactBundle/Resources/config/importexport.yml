@@ -9,6 +9,8 @@ parameters:
     
     orocrm_contact.importexport.data_converter.contact.class: OroCRM\Bundle\ContactBundle\ImportExport\Converter\ContactDataConverter
 
+    orocrm_contact.importexport.strategy.import.contact.add_or_replace.class: OroCRM\Bundle\ContactBundle\ImportExport\Strategy\Import\AddOrReplaceStrategy
+
 services:
     orocrm_contact.importexport.contact_normalizer:
         class: %orocrm_contact.importexport.contact_normalizer.class%
@@ -50,3 +52,9 @@ services:
         arguments:
             - @orocrm_contact.importexport.contact_header_provider
 
+    orocrm_contact.importexport.strategy.import.contact.add_or_replace:
+        class: %orocrm_contact.importexport.strategy.import.contact.add_or_replace.class%
+        tags:
+            - name: oro_importexport.strategy.import
+              entity: %orocrm_contact.entity.class%
+              alias: add_or_replace
