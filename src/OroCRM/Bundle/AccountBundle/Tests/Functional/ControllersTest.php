@@ -47,7 +47,6 @@ class ControllersTest extends WebTestCase
 
         $result = $this->client->getResponse();
         ToolsAPI::assertJsonResponse($result, 200, 'text/html; charset=UTF-8');
-        file_put_contents('/tmp/save.html', $crawler->html());
         $this->assertContains("Account successfully saved", $crawler->html());
     }
 
