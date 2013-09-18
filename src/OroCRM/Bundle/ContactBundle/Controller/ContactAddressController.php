@@ -12,6 +12,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
+use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use OroCRM\Bundle\ContactBundle\Entity\ContactAddress;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 
@@ -20,12 +21,7 @@ class ContactAddressController extends Controller
     /**
      * @Route("/address-book/{id}", name="orocrm_contact_address_book", requirements={"id"="\d+"})
      * @Template
-     * @Acl(
-     *      id="orocrm_contact_address_book",
-     *      type="entity",
-     *      permission="VIEW",
-     *      class="OroCRMContactBundle:Contact"
-     * )
+     * @AclAncestor("orocrm_contact_view")
      */
     public function addressBookAction(Contact $contact)
     {
@@ -41,12 +37,7 @@ class ContactAddressController extends Controller
      *      requirements={"contactId"="\d+"}
      * )
      * @Template("OroCRMContactBundle:ContactAddress:update.html.twig")
-     * @Acl(
-     *      id="orocrm_contact_address_create",
-     *      type="entity",
-     *      permission="CREATE",
-     *      class="OroCRMContactBundle:Contact"
-     * )
+     * @AclAncestor("orocrm_contact_create")
      * @ParamConverter("contact", options={"id" = "contactId"})
      */
     public function createAction(Contact $contact)
@@ -61,12 +52,7 @@ class ContactAddressController extends Controller
      *      requirements={"contactId"="\d+","id"="\d+"},defaults={"id"=0}
      * )
      * @Template
-     * @Acl(
-     *      id="orocrm_contact_address_update",
-     *      type="entity",
-     *      permission="EDIT",
-     *      class="OroCRMContactBundle:Contact"
-     * )
+     * @AclAncestor("orocrm_contact_update")
      * @ParamConverter("contact", options={"id" = "contactId"})
      */
     public function updateAction(Contact $contact, ContactAddress $address)

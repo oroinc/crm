@@ -108,12 +108,7 @@ class OpportunityController extends Controller
      *      defaults={"_format" = "html"}
      * )
      * @Template
-     * @Acl(
-     *      id="orocrm_sales_opportunity_list",
-     *      type="entity",
-     *      permission="VIEW",
-     *      class="OroCRMSalesBundle:Opportunity"
-     * )
+     * @AclAncestor("orocrm_sales_opportunity_view")
      */
     public function indexAction()
     {

@@ -42,7 +42,7 @@ class ContactController extends RestController implements ClassResourceInterface
      *      description="Get all contacts items",
      *      resource=true
      * )
-     * @AclAncestor("orocrm_contact_list")
+     * @AclAncestor("orocrm_contact_view")
      * @return Response
      */
     public function cgetAction()

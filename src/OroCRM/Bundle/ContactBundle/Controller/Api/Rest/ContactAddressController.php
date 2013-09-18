@@ -58,7 +58,7 @@ class ContactAddressController extends RestController implements ClassResourceIn
      *      description="Get all addresses items",
      *      resource=true
      * )
-     * @AclAncestor("orocrm_contact_address")
+     * @AclAncestor("orocrm_contact_view")
      * @param int $contactId
      * @return Response
      */
@@ -83,7 +83,7 @@ class ContactAddressController extends RestController implements ClassResourceIn
      *      description="Delete address items",
      *      resource=true
      * )
-     * @AclAncestor("orocrm_contact_address")
+     * @AclAncestor("orocrm_contact_delete")
      * @param $contactId
      * @param int $addressId
      * @return Response
@@ -112,7 +112,7 @@ class ContactAddressController extends RestController implements ClassResourceIn
      *      description="Get contact address by type",
      *      resource=true
      * )
-     * @AclAncestor("orocrm_contact_address")
+     * @AclAncestor("orocrm_contact_view")
      * @return Response
      */
     public function getByTypeAction($contactId, $typeName)
@@ -140,7 +140,7 @@ class ContactAddressController extends RestController implements ClassResourceIn
      *      description="Get contact primary address",
      *      resource=true
      * )
-     * @AclAncestor("orocrm_contact_address")
+     * @AclAncestor("orocrm_contact_view")
      * @return Response
      */
     public function getPrimaryAction($contactId)

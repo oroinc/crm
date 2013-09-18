@@ -52,12 +52,7 @@ class LeadController extends Controller
     /**
      * @Route("/address-book/{id}", name="orocrm_sales_lead_address_book", requirements={"id"="\d+"})
      * @Template
-     * @Acl(
-     *      id="orocrm_sales_lead_address_book",
-     *      type="action",
-     *      label="View Lead Address Book",
-     *      group_name=""
-     * )
+     * @AclAncestor("orocrm_sales_lead_view")
      */
     public function addressBookAction(Lead $lead)
     {
@@ -130,12 +125,7 @@ class LeadController extends Controller
      *      defaults={"_format" = "html"}
      * )
      * @Template
-     * @Acl(
-     *      id="orocrm_sales_lead_list",
-     *      type="entity",
-     *      permission="VIEW",
-     *      class="OroCRMSalesBundle:Lead"
-     * )
+     * @AclAncestor("orocrm_sales_lead_view")
      */
     public function indexAction()
     {

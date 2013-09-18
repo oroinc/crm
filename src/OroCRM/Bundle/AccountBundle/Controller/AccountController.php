@@ -137,12 +137,7 @@ class AccountController extends Controller
      *      requirements={"_format"="html|json"},
      *      defaults={"_format" = "html"}
      * )
-     * @Acl(
-     *      id="orocrm_account_list",
-     *      type="entity",
-     *      permission="VIEW",
-     *      class="OroCRMAccountBundle:Account"
-     * )
+     * @AclAncestor("orocrm_account_view")
      * @Template
      */
     public function indexAction()
@@ -163,12 +158,7 @@ class AccountController extends Controller
      *      "/export",
      *      name="orocrm_account_export"
      * )
-     * @Acl(
-     *      id="orocrm_account_export",
-     *      type="action",
-     *      label="Export Accounts",
-     *      group_name=""
-     * )
+     * TODO: add acl resource for export after it's implemented
      */
     public function exportAction()
     {
@@ -262,12 +252,7 @@ class AccountController extends Controller
      *      "/import",
      *      name="orocrm_account_import"
      * )
-     * @Acl(
-     *      id="orocrm_account_import",
-     *      type="action",
-     *      label="Import Accounts",
-     *      group_name=""
-     * )
+     * TODO: add acl resource for import after it's implemented
      */
     public function importAction()
     {

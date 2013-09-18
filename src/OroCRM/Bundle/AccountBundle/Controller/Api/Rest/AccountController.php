@@ -31,7 +31,7 @@ class AccountController extends FlexibleRestController implements ClassResourceI
      *      description="Get all account items",
      *      resource=true
      * )
-     * @AclAncestor("orocrm_account_list")
+     * @AclAncestor("orocrm_account_view")
      * @return Response
      */
     public function cgetAction()

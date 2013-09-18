@@ -52,12 +52,7 @@ class ContactController extends Controller
     /**
      * @Route("/info/{id}", name="orocrm_contact_info", requirements={"id"="\d+"})
      * @Template
-     * @Acl(
-     *      id="orocrm_contact_info",
-     *      label="View Contact Info",
-     *      type="action",
-     *      group_name=""
-     * )
+     * @AclAncestor("orocrm_contact_view")
      */
     public function infoAction(Contact $contact)
     {
@@ -156,12 +151,7 @@ class ContactController extends Controller
      *      defaults={"_format" = "html"}
      * )
      * @Template
-     * @Acl(
-     *      id="orocrm_contact_list",
-     *      type="entity",
-     *      permission="VIEW",
-     *      class="OroCRMContactBundle:Contact"
-     * )
+     * @AclAncestor("orocrm_contact_view")
      */
     public function indexAction()
     {

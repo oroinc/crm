@@ -33,12 +33,7 @@ class LeadController extends RestController implements ClassResourceInterface
      *      description="Get lead address",
      *      resource=true
      * )
-     * @Acl(
-     *      id="orocrm_sales_lead_address",
-     *      label="View lead address",
-     *      type="action",
-     *      group_name=""
-     * )
+     * @AclAncestor("orocrm_sales_lead_view")
      * @return Response
      */
     public function getAddressAction($leadId)
@@ -73,7 +68,7 @@ class LeadController extends RestController implements ClassResourceInterface
      *      description="Get all lead items",
      *      resource=true
      * )
-     * @AclAncestor("orocrm_sales_lead_list")
+     * @AclAncestor("orocrm_sales_lead_view")
      * @return Response
      */
     public function cgetAction()

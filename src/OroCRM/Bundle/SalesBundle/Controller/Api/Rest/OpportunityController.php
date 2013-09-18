@@ -45,7 +45,7 @@ class OpportunityController extends RestController implements ClassResourceInter
      *      description="Get all opportunities",
      *      resource=true
      * )
-     * @AclAncestor("orocrm_sales_opportunity_list")
+     * @AclAncestor("orocrm_sales_opportunity_view")
      * @return Response
      */
     public function cgetAction()

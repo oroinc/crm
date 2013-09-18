@@ -31,7 +31,7 @@ class ContactGroupController extends RestController implements ClassResourceInte
      *      description="Get all contact group items",
      *      resource=true
      * )
-     * @AclAncestor("orocrm_contact_group_list")
+     * @AclAncestor("orocrm_contact_group_view")
      * @return Response
      */
     public function cgetAction()
@@ -51,12 +51,7 @@ class ContactGroupController extends RestController implements ClassResourceInte
      *      description="Get contact item",
      *      resource=true
      * )
-     * @Acl(
-     *      id="orocrm_contact_group_view",
-     *      type="entity",
-     *      permission="VIEW",
-     *      class="OroCRMContactBundle:Group"
-     * )
+     * @AclAncestor("orocrm_contact_group_view")
      * @return Response
      */
     public function getAction($id)
