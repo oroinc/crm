@@ -150,7 +150,7 @@ class AccountTypeTest extends \PHPUnit_Framework_TestCase
         $account->expects($this->once())
             ->method('getContacts')
             ->will($this->returnValue($contacts));
-        $account->expects($this->once())
+        $account->expects($this->exactly(2))
             ->method('getDefaultContact')
             ->will($this->returnValue($contact));
         $form = $this->getMockBuilder('Symfony\Component\Form\Form')

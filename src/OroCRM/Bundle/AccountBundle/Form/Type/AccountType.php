@@ -3,16 +3,17 @@
 namespace OroCRM\Bundle\AccountBundle\Form\Type;
 
 use Doctrine\Common\Collections\Collection;
-use Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleManager;
-use OroCRM\Bundle\AccountBundle\Entity\Account;
+
+use Symfony\Component\Routing\Router;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 use Oro\Bundle\FlexibleEntityBundle\Form\Type\FlexibleType;
-use Symfony\Component\Routing\Router;
+use Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleManager;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
+use OroCRM\Bundle\AccountBundle\Entity\Account;
 
 class AccountType extends FlexibleType
 {
@@ -92,23 +93,29 @@ class AccountType extends FlexibleType
             );
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function finishView(FormView $view, FormInterface $form, array $options)
     {
         /** @var Account $account */
         $account = $form->getData();
         $view->children['contacts']->vars['grid_url']
             = $this->router->generate('orocrm_account_contact_select', array('id' => $account->getId()));
+        $defaultContactId = $account->getDefaultContact() ? $account->getDefaultContact()->getId() : null;
         $view->children['contacts']->vars['initial_elements']
-            = $this->getInitialElements($account->getContacts(), $account->getDefaultContact()->getId());
+            = $this->getInitialElements($account->getContacts(), $defaultContactId);
     }
 
     /**
-     * @param Contact[] $contacts
+     * @param Collection $contacts
+     * @param int|null $default
      * @return array
      */
     protected function getInitialElements(Collection $contacts, $default)
     {
         $result = array();
+        /** @var Contact $contact */
         foreach ($contacts as $contact) {
             $result[] = array(
                 'id' => $contact->getId(),
