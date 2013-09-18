@@ -43,21 +43,16 @@ class ContactDataConverter extends AbstractTableDataConverter implements QueryBu
         'Assigned To First Name' => 'assignedTo:firstName',
         'Assigned To Last Name'  => 'assignedTo:lastName',
         // contact typed addresses (OroCRMContactBundle:ContactAddress)
-        'Address Label'       => 'addresses:0:label',
-        'Address First Name'  => 'addresses:0:firstName',
-        'Address Last Name'   => 'addresses:0:lastName',
-        'Address Street'      => 'addresses:0:street',
-        'Address Street2'     => 'addresses:0:street2',
-        'Address City'        => 'addresses:0:city',
-        'Address Region'      => 'addresses:0:region',
-        'Address Region Text' => 'addresses:0:regionText',
-        'Address Country'     => 'addresses:0:country',
-        'Address Postal Code' => 'addresses:0:postalCode',
-        'Address Type'        => 'addresses:0:types:0',
-        'Address Numeric Type' => array(
-            self::FRONTEND_TO_BACKEND => array('Address Type (\d+)', 'addresses:0:types:$1'),
-            self::BACKEND_TO_FRONTEND => array('addresses:0:types:(\d+)', 'Address Type $1'),
-        ),
+        'Primary Address Label'       => 'addresses:0:label',
+        'Primary Address First Name'  => 'addresses:0:firstName',
+        'Primary Address Last Name'   => 'addresses:0:lastName',
+        'Primary Address Street'      => 'addresses:0:street',
+        'Primary Address Street2'     => 'addresses:0:street2',
+        'Primary Address City'        => 'addresses:0:city',
+        'Primary Address Region'      => 'addresses:0:region',
+        'Primary Address Region Text' => 'addresses:0:regionText',
+        'Primary Address Country'     => 'addresses:0:country',
+        'Primary Address Postal Code' => 'addresses:0:postalCode',
         'Numeric Address Label' => array(
             self::FRONTEND_TO_BACKEND => array('Address (\d+) Label', 'addresses:$1:label'),
             self::BACKEND_TO_FRONTEND => array('addresses:(\d+):label', 'Address $1 Label'),
@@ -98,37 +93,17 @@ class ContactDataConverter extends AbstractTableDataConverter implements QueryBu
             self::FRONTEND_TO_BACKEND => array('Address (\d+) Postal Code', 'addresses:$1:postalCode'),
             self::BACKEND_TO_FRONTEND => array('addresses:(\d+):postalCode', 'Address $1 Postal Code'),
         ),
-        'Numeric Address Type' => array(
-            self::FRONTEND_TO_BACKEND => array('Address (\d+) Type', 'addresses:$1:types:0'),
-            self::BACKEND_TO_FRONTEND => array('addresses:(\d+):types:0', 'Address $1 Type'),
-        ),
-        'Numeric Address Numeric Type' => array(
-            self::FRONTEND_TO_BACKEND => array('Address (\d+) Type (\d+)', 'addresses:$1:types:$2'),
-            self::BACKEND_TO_FRONTEND => array('addresses:(\d+):types:(\d+)', 'Address $1 Type $2'),
-        ),
         // contact emails (OroCRMContactBundle:ContactEmail)
-        'Email' => 'emails:0',
+        'Primary Email' => 'emails:0',
         'Numeric Email' => array(
             self::FRONTEND_TO_BACKEND => array('Email (\d+)', 'emails:$1'),
             self::BACKEND_TO_FRONTEND => array('emails:(\d+)', 'Email $1'),
         ),
         // contact phones (OroCRMContactBundle:ContactPhone)
-        'Phone' => 'phones:0',
+        'Primary Phone' => 'phones:0',
         'Numeric Phone' => array(
             self::FRONTEND_TO_BACKEND => array('Phone (\d+)', 'phones:$1'),
             self::BACKEND_TO_FRONTEND => array('phones:(\d+)', 'Phone $1'),
-        ),
-        // contact groups (OroCRMContactBundle:Group)
-        'Group' => 'groups:0',
-        'Numeric Group' => array(
-            self::FRONTEND_TO_BACKEND => array('Group (\d+)', 'groups:$1'),
-            self::BACKEND_TO_FRONTEND => array('groups:(\d+)', 'Group $1'),
-        ),
-        // accounts (OroCRMAccountBundle:Account)
-        'Account' => 'accounts:0',
-        'Numeric Account' => array(
-            self::FRONTEND_TO_BACKEND => array('Account (\d+)', 'accounts:$1'),
-            self::BACKEND_TO_FRONTEND => array('accounts:(\d+)', 'Account $1'),
         ),
     );
 
@@ -153,7 +128,69 @@ class ContactDataConverter extends AbstractTableDataConverter implements QueryBu
      */
     protected function getHeaderConversionRules()
     {
-        return $this->headerConversionRules;
+        $complexConversionRules = array(
+            // contact typed addresses (OroCRMContactBundle:ContactAddress)
+            'Primary Address Type' => array(
+                self::FRONTEND_TO_BACKEND => array(
+                    'Primary Address Type (\d+)',
+                    function (array $matches) {
+                        return 'addresses:0:types:' . ($matches[1] - 1);
+                    }
+                ),
+                self::BACKEND_TO_FRONTEND => array(
+                    'addresses:0:types:(\d+)',
+                    function (array $matches) {
+                        return 'Primary Address Type ' . ($matches[1] + 1);
+                    }
+                ),
+            ),
+            'Numeric Address Type' => array(
+                self::FRONTEND_TO_BACKEND => array(
+                    'Address (\d+) Type (\d+)',
+                    function (array $matches) {
+                        return 'addresses:' . $matches[1] . ':types:' . ($matches[2] - 1);
+                    }
+                ),
+                self::BACKEND_TO_FRONTEND => array(
+                    'addresses:(\d+):types:(\d+)',
+                    function (array $matches) {
+                        return 'Address ' . $matches[1] . ' Type ' . ($matches[2] + 1);
+                    }
+                ),
+            ),
+            // contact groups (OroCRMContactBundle:Group)
+            'Numeric Group' => array(
+                self::FRONTEND_TO_BACKEND => array(
+                    'Group (\d+)',
+                    function (array $matches) {
+                        return 'groups:' . ($matches[1] - 1);
+                    }
+                ),
+                self::BACKEND_TO_FRONTEND => array(
+                    'groups:(\d+)',
+                    function (array $matches) {
+                        return 'Group ' . ($matches[1] + 1);
+                    }
+                ),
+            ),
+            // accounts (OroCRMAccountBundle:Account)
+            'Numeric Account' => array(
+                self::FRONTEND_TO_BACKEND => array(
+                    'Account (\d+)',
+                    function (array $matches) {
+                        return 'accounts:' . ($matches[1] - 1);
+                    }
+                ),
+                self::BACKEND_TO_FRONTEND => array(
+                    'accounts:(\d+)',
+                    function (array $matches) {
+                        return 'Account ' . ($matches[1] + 1);
+                    }
+                ),
+            ),
+        );
+
+        return array_merge($this->headerConversionRules, $complexConversionRules);
     }
 
     /**

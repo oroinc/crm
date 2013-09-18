@@ -64,7 +64,7 @@ class AddOrReplaceStrategy extends AbstractContactImportStrategy
     {
         foreach ($contact->getAccounts() as $account) {
             $contact->removeAccount($account);
-            $existingAccount= $this->getAccountOrNull($account);
+            $existingAccount = $this->getAccountOrNull($account);
             if ($existingAccount) {
                 $contact->addAccount($existingAccount);
             }
@@ -205,6 +205,7 @@ class AddOrReplaceStrategy extends AbstractContactImportStrategy
             /** @var Contact $existingContact */
             $existingContact = $this->getEntityRepository($this->entityClass)->find($contactId);
             if ($existingContact) {
+                $this->removeCreatedRelatedEntities($existingContact);
                 $this->importEntity(
                     $existingContact,
                     $contact,
@@ -219,5 +220,19 @@ class AddOrReplaceStrategy extends AbstractContactImportStrategy
         }
 
         return $contact;
+    }
+
+    /**
+     * @param Contact $contact
+     * @return AddOrReplaceStrategy
+     */
+    protected function removeCreatedRelatedEntities(Contact $contact)
+    {
+        $contact
+            ->resetAddresses(array())
+            ->resetEmails(array())
+            ->resetPhones(array());
+
+        return $this;
     }
 }
