@@ -2,10 +2,13 @@
 
 namespace OroCRM\Bundle\ContactBundle\ImportExport\Converter;
 
+use Doctrine\ORM\QueryBuilder;
+
 use Oro\Bundle\ImportExportBundle\Converter\AbstractTableDataConverter;
+use Oro\Bundle\ImportExportBundle\Converter\QueryBuilderAwareInterface;
 use OroCRM\Bundle\ContactBundle\ImportExport\Provider\ContactHeaderProvider;
 
-class ContactDataConverter extends AbstractTableDataConverter
+class ContactDataConverter extends AbstractTableDataConverter implements QueryBuilderAwareInterface
 {
     /**
      * @var ContactHeaderProvider
@@ -135,6 +138,14 @@ class ContactDataConverter extends AbstractTableDataConverter
     public function __construct(ContactHeaderProvider $headerProvider)
     {
         $this->headerProvider = $headerProvider;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setQueryBuilder(QueryBuilder $queryBuilder)
+    {
+        $this->headerProvider->setQueryBuilder($queryBuilder);
     }
 
     /**

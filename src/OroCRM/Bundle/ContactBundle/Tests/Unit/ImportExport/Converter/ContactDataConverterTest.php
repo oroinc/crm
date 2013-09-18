@@ -12,6 +12,11 @@ class ContactDataConverterTest extends \PHPUnit_Framework_TestCase
     protected $dataConverter;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $headerProvider;
+
+    /**
      * @var array
      */
     protected $backendHeader = array(
@@ -72,16 +77,16 @@ class ContactDataConverterTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $headerProvider
+        $this->headerProvider
             = $this->getMockBuilder('OroCRM\Bundle\ContactBundle\ImportExport\Provider\ContactHeaderProvider')
                 ->disableOriginalConstructor()
-                ->setMethods(array('getHeader'))
+                ->setMethods(array('getHeader', 'setQueryBuilder'))
                 ->getMock();
-        $headerProvider->expects($this->any())
+        $this->headerProvider->expects($this->any())
             ->method('getHeader')
             ->will($this->returnValue($this->backendHeader));
 
-        $this->dataConverter = new ContactDataConverter($headerProvider);
+        $this->dataConverter = new ContactDataConverter($this->headerProvider);
     }
 
     protected function tearDown()
@@ -451,5 +456,18 @@ class ContactDataConverterTest extends \PHPUnit_Framework_TestCase
                 )
             ),
         );
+    }
+
+    public function testSetQueryBuilder()
+    {
+        $queryBuilder = $this->getMockBuilder('Doctrine\ORM\QueryBuilder')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->headerProvider->expects($this->once())
+            ->method('setQueryBuilder')
+            ->with($queryBuilder);
+
+        $this->dataConverter->setQueryBuilder($queryBuilder);
     }
 }

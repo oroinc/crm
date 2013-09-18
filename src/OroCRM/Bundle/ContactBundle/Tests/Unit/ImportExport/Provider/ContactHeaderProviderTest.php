@@ -170,4 +170,33 @@ class ContactHeaderProviderTest extends \PHPUnit_Framework_TestCase
 
         return $managerRegistry;
     }
+
+    public function testSetQueryBuilder()
+    {
+        $queryBuilder = $this->getMockBuilder('Doctrine\ORM\QueryBuilder')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $managerRegistry = $this->getMockForAbstractClass('Doctrine\Common\Persistence\ManagerRegistry');
+        $serializer = $this->getMockForAbstractClass('Symfony\Component\Serializer\SerializerInterface');
+        $dataConverter
+            = $this->getMockForAbstractClass('Oro\Bundle\ImportExportBundle\Converter\DataConverterInterface');
+
+        $contactMaxDataProvider
+            = $this->getMockBuilder('OroCRM\Bundle\ContactBundle\ImportExport\Provider\ContactMaxDataProvider')
+                ->disableOriginalConstructor()
+                ->setMethods(array('setQueryBuilder'))
+                ->getMock();
+        $contactMaxDataProvider->expects($this->once())
+            ->method('setQueryBuilder')
+            ->with($queryBuilder);
+
+        $headerProvider = new ContactHeaderProvider(
+            $managerRegistry,
+            $serializer,
+            $dataConverter,
+            $contactMaxDataProvider
+        );
+        $headerProvider->setQueryBuilder($queryBuilder);
+    }
 }

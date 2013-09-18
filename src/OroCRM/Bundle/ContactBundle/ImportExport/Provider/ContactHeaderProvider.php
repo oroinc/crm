@@ -5,6 +5,7 @@ namespace OroCRM\Bundle\ContactBundle\ImportExport\Provider;
 use Symfony\Component\Serializer\SerializerInterface;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\QueryBuilder;
 
 use Oro\Bundle\ImportExportBundle\Converter\DataConverterInterface;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
@@ -59,6 +60,14 @@ class ContactHeaderProvider
         $this->serializer      = $serializer;
         $this->dataConverter   = $dataConverter;
         $this->maxDataProvider = $maxDataProvider;
+    }
+
+    /**
+     * @param QueryBuilder $queryBuilder
+     */
+    public function setQueryBuilder(QueryBuilder $queryBuilder)
+    {
+        $this->maxDataProvider->setQueryBuilder($queryBuilder);
     }
 
     /**
