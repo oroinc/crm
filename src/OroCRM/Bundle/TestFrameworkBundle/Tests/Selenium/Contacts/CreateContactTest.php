@@ -86,6 +86,39 @@ class CreateContactTest extends \PHPUnit_Extensions_Selenium2TestCase
         return $contactname;
     }
 
+    public function testAddAddress()
+    {
+        $contactname = 'Contact_'.mt_rand();
+        $addressPrimary = array();
+
+        $login = new Login($this);
+        $login->setUsername(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_LOGIN)
+            ->setPassword(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_PASS)
+            ->submit()
+            ->openContacts()
+            ->add()
+            ->setFirstName($contactname . '_first')
+            ->setLastName($contactname . '_last')
+            ->setEmail($contactname . '@mail.com')
+            ->setOwner('admin')
+            ->save()
+            ->assertMessage('Contact successfully saved')
+            ->toGrid()
+            ->assertTitle('Contacts - Customers')
+            ->close()
+            ->filterBy('Email', $contactname . '@mail.com')
+            ->open(array($contactname))
+            ->setAddress($this->addressPrimary)
+            ->toGrid()
+            ->close()
+            ->filterBy('Email', $contactname . '@mail.com')
+            ->open(array($contactname))
+            ->edit()
+            ->getAddress($addressPrimary);
+
+        $this->assertEquals($this->addressPrimary, $addressPrimary);
+    }
+
     /**
      * @depends testCreateContact
      * @param $contactname
