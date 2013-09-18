@@ -24,17 +24,26 @@ class LoadAclData extends AbstractFixture implements ContainerAwareInterface, Or
      * @return string
      */
     protected $aclTree = array(
-        'oro_security',
-        'oro_form_autocomplete',
-        'oro_user',
-        'oro_grid',
+        'bazinga_expose_translation',
         'oro_address',
+        'oro_change_record_owner',
+        'oro_form_autocomplete_search',
+        'oro_grid_mass_action',
+        'oro_security',
+        'oro_navigation_item_api',
+        'oro_pagestate_api',
+        'oro_search',
+        'oro_shortcut',
         'oro_tag',
+        'oro_user_user_list',
+        'oro_user_user_view',
+        'oro_windows_state_api_rest',
+        'oro_workflow',
         'orocrm_account',
         'orocrm_contact',
         'orocrm_contact_group',
-        'oro_change_record_owner',
-        'external_bundle_actions',
+        'orocrm_sales_lead',
+        'orocrm_sales_opportunity',
         'template_controller',
     );
 
