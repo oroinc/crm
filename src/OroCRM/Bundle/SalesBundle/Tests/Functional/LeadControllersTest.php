@@ -12,7 +12,7 @@ use Symfony\Component\DomCrawler\Field\ChoiceFormField;
  * @outputBuffering enabled
  * @db_isolation
  */
-class ControllersTest extends WebTestCase
+class LeadControllersTest extends WebTestCase
 {
     /**
      * @var Client
