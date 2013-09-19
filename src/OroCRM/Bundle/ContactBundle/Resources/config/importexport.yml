@@ -70,7 +70,7 @@ services:
 
     # Import processor
     orocrm_contact.importexport.processor.import:
-        parent: @oro_importexport.processor.import_abstract
+        parent: oro_importexport.processor.import_abstract
         calls:
              - [setDataConverter, [@orocrm_contact.importexport.data_converter.contact]]
              - [setStrategy, [@orocrm_contact.importexport.strategy.import.contact.add_or_replace]]
@@ -81,7 +81,7 @@ services:
 
     # Export processor
     orocrm_contact.importexport.processor.export:
-        parent: @oro_importexport.processor.export_abstract
+        parent: oro_importexport.processor.export_abstract
         calls:
              - [setDataConverter, [@orocrm_contact.importexport.data_converter.contact]]
         tags:
