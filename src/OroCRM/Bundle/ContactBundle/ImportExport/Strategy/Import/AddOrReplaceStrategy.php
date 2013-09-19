@@ -3,12 +3,15 @@
 namespace OroCRM\Bundle\ContactBundle\ImportExport\Strategy\Import;
 
 use Oro\Bundle\ImportExportBundle\Exception\InvalidArgumentException;
+use Oro\Bundle\ImportExportBundle\Exception\LogicException;
 use Oro\Bundle\ImportExportBundle\Strategy\StrategyInterface;
 use Oro\Bundle\ImportExportBundle\Strategy\Import\ImportStrategyHelper;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\ContactBundle\ImportExport\Strategy\Import\ContactImportStrategyHelper;
+use Oro\Bundle\ImportExportBundle\Context\ContextAwareInterface;
+use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
 
-class AddOrReplaceStrategy implements StrategyInterface
+class AddOrReplaceStrategy implements StrategyInterface, ContextAwareInterface
 {
     /**
      * @var ImportStrategyHelper
@@ -19,6 +22,11 @@ class AddOrReplaceStrategy implements StrategyInterface
      * @var ContactImportStrategyHelper
      */
     protected $contactStrategyHelper;
+
+    /**
+     * @var ContextInterface
+     */
+    protected $importExportContext;
 
     /**
      * @param ImportStrategyHelper $strategyHelper
@@ -37,6 +45,10 @@ class AddOrReplaceStrategy implements StrategyInterface
      */
     public function process($entity)
     {
+        if (!$this->importExportContext) {
+            throw new LogicException('Strategy must have import/export context');
+        }
+
         if (!$entity instanceof Contact) {
             throw new InvalidArgumentException('Imported entity must be instance of Contact');
         }
@@ -57,7 +69,22 @@ class AddOrReplaceStrategy implements StrategyInterface
         // update owner for addresses, emails and phones
         $this->updateRelatedEntitiesOwner($entity);
 
+        // increment context counter
+        if ($entity->getId()) {
+            $this->importExportContext->incrementReplaceCount();
+        } else {
+            $this->importExportContext->incrementAddCount();
+        }
+
         return $entity;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setImportExportContext(ContextInterface $importExportContext)
+    {
+        $this->importExportContext = $importExportContext;
     }
 
     /**

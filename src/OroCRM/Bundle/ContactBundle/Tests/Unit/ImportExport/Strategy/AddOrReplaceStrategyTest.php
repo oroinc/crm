@@ -111,7 +111,17 @@ class AddOrReplaceStrategyTest extends \PHPUnit_Framework_TestCase
             ->with($this->isInstanceOf('OroCRM\Bundle\AccountBundle\Entity\Account'))
             ->will($this->returnCallback(array($this, 'getAccountOrNull')));
 
+        $context = $this->getMockBuilder('Oro\Bundle\ImportExportBundle\Context\ContextInterface')
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        if ($expectedContact->getId()) {
+            $context->expects($this->once())->method('incrementReplaceCount');
+        } else {
+            $context->expects($this->once())->method('incrementAddCount');
+        }
+
         $strategy = new AddOrReplaceStrategy($strategyHelper, $contactStrategyHelper);
+        $strategy->setImportExportContext($context);
         $actualContact = $strategy->process($sourceContact);
 
         if ($actualContact->getId()) {
