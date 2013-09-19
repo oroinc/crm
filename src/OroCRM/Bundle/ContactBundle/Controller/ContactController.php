@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\ContactBundle\Controller;
 
+use Oro\Bundle\EmailBundle\Datagrid\EmailDatagridManager;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBag;
@@ -16,7 +17,6 @@ use Oro\Bundle\UserBundle\Annotation\AclAncestor;
 use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\ContactBundle\Datagrid\ContactDatagridManager;
-use OroCRM\Bundle\ContactBundle\Datagrid\ContactAccountDatagridManager;
 use OroCRM\Bundle\ContactBundle\Datagrid\ContactAccountUpdateDatagridManager;
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 
@@ -42,10 +42,10 @@ class ContactController extends Controller
      */
     public function viewAction(Contact $contact)
     {
-        /** @var $accountDatagridManager ContactAccountDatagridManager */
-        $accountDatagridManager = $this->get('orocrm_contact.account.view_datagrid_manager');
-        $accountDatagridManager->setContact($contact);
-        $datagridView = $accountDatagridManager->getDatagrid()->createView();
+        /** @var EmailDatagridManager $manager */
+        $manager = $this->get('oro_email.email_datagrid_manager');
+        $manager->setEntity($contact);
+        $datagridView = $manager->getDatagrid()->createView();
 
         if ('json' == $this->getRequest()->getRequestFormat()) {
             return $this->get('oro_grid.renderer')->renderResultsJsonResponse($datagridView);
