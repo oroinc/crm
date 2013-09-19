@@ -8,14 +8,16 @@ use Doctrine\Common\Collections\Collection;
 
 use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 
-use OroCRM\Bundle\AccountBundle\Entity\Account;
+use Zend\Stdlib\DateTime;
+
 use Oro\Bundle\TagBundle\Entity\Taggable;
 use Oro\Bundle\AddressBundle\Entity\AddressType;
 use Oro\Bundle\EmailBundle\Entity\EmailOwnerInterface;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
-use Zend\Stdlib\DateTime;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
+
+use OroCRM\Bundle\AccountBundle\Entity\Account;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyMethods)
@@ -43,7 +45,7 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
  *  }
  * )
  */
-class Contact implements Taggable, EmailOwnerInterface
+class Contact extends \OroCRM\Bundle\ContactBundle\Model\ExtendContact implements Taggable, EmailOwnerInterface
 {
     /**
      * @var int
@@ -786,6 +788,7 @@ class Contact implements Taggable, EmailOwnerInterface
         if (null === $this->tags) {
             $this->tags = new ArrayCollection();
         }
+
         return $this->tags;
     }
 
@@ -1053,6 +1056,7 @@ class Contact implements Taggable, EmailOwnerInterface
                 }
             }
         }
+
         return $this;
     }
 
@@ -1060,7 +1064,7 @@ class Contact implements Taggable, EmailOwnerInterface
      * Gets address type if it's available.
      *
      * @param ContactAddress $address
-     * @param AddressType $addressType
+     * @param AddressType    $addressType
      * @return Contact
      */
     public function setAddressType(ContactAddress $address, AddressType $addressType)
@@ -1073,6 +1077,7 @@ class Contact implements Taggable, EmailOwnerInterface
                 }
             }
         }
+
         return $this;
     }
 

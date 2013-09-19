@@ -14,6 +14,7 @@ use Oro\Bundle\AddressBundle\Entity\Address;
 use Oro\Bundle\TagBundle\Entity\Taggable;
 use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityFlexible;
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
+
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 
 use Oro\Bundle\UserBundle\Entity\User;
@@ -90,6 +91,16 @@ class Account extends AbstractEntityFlexible implements Taggable
      * @ORM\JoinTable(name="orocrm_account_to_contact")
      */
     protected $contacts;
+
+    /**
+     * Default contact entity
+     *
+     * @var Contact
+     *
+     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ContactBundle\Entity\Contact")
+     * @ORM\JoinColumn(name="default_contact_id", referencedColumnName="id")
+     */
+    protected $defaultContact;
 
     /**
      * @var \Oro\Bundle\FlexibleEntityBundle\Model\AbstractFlexibleValue[]
@@ -321,5 +332,24 @@ class Account extends AbstractEntityFlexible implements Taggable
         $this->owner = $owningUser;
 
         return $this;
+    }
+
+    /**
+     * @param Contact $defaultContact
+     * @return Account
+     */
+    public function setDefaultContact($defaultContact)
+    {
+        $this->defaultContact = $defaultContact;
+
+        return $this;
+    }
+
+    /**
+     * @return Contact
+     */
+    public function getDefaultContact()
+    {
+        return $this->defaultContact;
     }
 }

@@ -5,7 +5,7 @@
 
 {% block navButtons %}
     {% if resource_granted('orocrm_sales_lead_update') %}
-        {{ UI.button({'path' : path('orocrm_sales_lead_update', { 'id': entity.id }), 'iClass' : 'icon-edit ', 'title' : 'Update Lead', 'label' : 'Edit'}) }}
+        {{ UI.button({'path' : path('orocrm_sales_lead_update', { 'id': entity.id }), 'iClass' : 'icon-edit ', 'title' : 'Update lead', 'label' : 'Edit'}) }}
     {% endif %}
     {% if resource_granted('orocrm_sales_lead_delete') %}
         {{ UI.deleteButton({

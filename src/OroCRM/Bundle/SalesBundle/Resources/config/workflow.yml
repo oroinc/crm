@@ -134,7 +134,7 @@ workflows:
                         class: OroCRM\Bundle\SalesBundle\Entity\Opportunity
                         attribute: $.result.opportunity
                         data:
-                            topic: $lead.topic
+                            name: $lead.topic
                             contact: $lead.contact
                     - @find_entity: # set status "In progress" to opportunity
                         class: OroCRM\Bundle\SalesBundle\Entity\OpportunityStatus

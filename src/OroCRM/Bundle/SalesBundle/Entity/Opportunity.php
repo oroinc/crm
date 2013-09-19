@@ -68,9 +68,9 @@ class Opportunity
     /**
      * @var string
      *
-     * @ORM\Column(name="topic", type="string", length=255, nullable=false)
+     * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
-    protected $topic;
+    protected $name;
 
     /**
      * @var \DateTime
@@ -281,21 +281,21 @@ class Opportunity
     }
 
     /**
-     * @param string $topic
+     * @param string $name
      * @return Opportunity
      */
-    public function setTopic($topic)
+    public function setName($name)
     {
-        $this->topic = $topic;
+        $this->name = $name;
         return $this;
     }
 
     /**
      * @return string
      */
-    public function getTopic()
+    public function getName()
     {
-        return $this->topic;
+        return $this->name;
     }
 
     /**

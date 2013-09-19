@@ -1,7 +1,7 @@
 {% extends 'OroUIBundle:actions:update.html.twig' %}
-{% set topic = entity.topic|default('N/A') %}
-{% oro_title_set({params : {"%opportunity.topic%": topic} }) %}
-{% set title = form.vars.value.id ? topic ~ ' - ' ~ 'Update Opportunity'|trans : 'New Opportunity'|trans %}
+{% set name = entity.name|default('N/A') %}
+{% oro_title_set({params : {"%opportunity.name%": name} }) %}
+{% set title = form.vars.value.id ? name ~ ' - ' ~ 'Update Opportunity'|trans : 'New Opportunity'|trans %}
 {% set formAction = form.vars.value.id
     ? path('orocrm_sales_opportunity_update', { 'id': form.vars.value.id })
     : path('orocrm_sales_opportunity_create')
@@ -40,7 +40,7 @@
             'entity':      form.vars.value,
             'indexPath':   path('orocrm_sales_opportunity_index'),
             'indexLabel': 'Opportunities',
-            'entityTitle': topic
+            'entityTitle': name
         } %}
         {{ parent() }}
     {% else %}
@@ -58,7 +58,7 @@
             {
                 'title': 'Contact Information',
                 'data': [
-                    form_row(form.topic, {'label': 'Topic'|trans}),
+                    form_row(form.name, {'label': 'Opportunity name'|trans}),
                     form_row(form.status, {'label': 'Status'|trans}),
                     form_row(form.contact, {'label': 'Contact'|trans}),
                     form_row(form.account, {'label': 'Account'|trans}),
