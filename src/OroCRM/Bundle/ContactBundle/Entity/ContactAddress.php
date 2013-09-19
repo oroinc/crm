@@ -8,9 +8,16 @@ use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 
 use Oro\Bundle\AddressBundle\Entity\AbstractTypedAddress;
 
+use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
+
 /**
  * @ORM\Table("orocrm_contact_address")
  * @ORM\HasLifecycleCallbacks()
+ * @Config(
+ *  defaultValues={
+ *      "entity"={"label"="Contact Address", "plural_label"="Contact Addresses"}
+ *  }
+ * )
  * @ORM\Entity
  */
 class ContactAddress extends AbstractTypedAddress
