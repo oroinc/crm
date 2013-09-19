@@ -4,8 +4,8 @@ namespace OroCRM\Bundle\ContactBundle\ImportExport\Strategy\Import;
 
 use Symfony\Component\Security\Core\SecurityContextInterface;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\ORM\EntityRepository;
 
-use Oro\Bundle\ImportExportBundle\Strategy\Import\AbstractImportStrategy;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\AddressBundle\Entity\Country;
 use Oro\Bundle\AddressBundle\Entity\Region;
@@ -14,13 +14,24 @@ use OroCRM\Bundle\ContactBundle\Entity\Group;
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\ContactBundle\Entity\Source;
 use OroCRM\Bundle\ContactBundle\Entity\Method;
+use OroCRM\Bundle\ContactBundle\Entity\Contact;
 
-abstract class AbstractContactImportStrategy extends AbstractImportStrategy
+class ContactImportStrategyHelper
 {
     /**
      * @var SecurityContextInterface
      */
     protected $securityContext;
+
+    /**
+     * @var ManagerRegistry
+     */
+    protected $managerRegistry;
+
+    /**
+     * @var EntityRepository[]
+     */
+    protected $repositories;
 
     /**
      * @var Country[]
@@ -55,29 +66,41 @@ abstract class AbstractContactImportStrategy extends AbstractImportStrategy
     /**
      * @param SecurityContextInterface $securityContext
      * @param ManagerRegistry $managerRegistry
-     * @param string $entityClass
      */
-    public function __construct(
-        SecurityContextInterface $securityContext,
-        ManagerRegistry $managerRegistry,
-        $entityClass
-    ) {
+    public function __construct(SecurityContextInterface $securityContext, ManagerRegistry $managerRegistry)
+    {
         $this->securityContext = $securityContext;
-        parent::__construct($managerRegistry, $entityClass);
+        $this->managerRegistry = $managerRegistry;
+    }
+
+    /**
+     * @param string $entityName
+     * @return EntityRepository
+     */
+    protected function getEntityRepository($entityName)
+    {
+        if (empty($this->repositories[$entityName])) {
+            $this->repositories[$entityName] = $this->managerRegistry->getRepository($entityName);
+        }
+
+        return $this->repositories[$entityName];
     }
 
     /**
      * @param User $user
      * @return User|null
      */
-    protected function getUserOrNull(User $user)
+    public function getUserOrNull(User $user)
     {
         $existingUser = null;
-        if ($user->getFirstname() && $user->getLastname()) {
+        $userFirstName = $user->getFirstname();
+        $userLastName = $user->getLastname();
+
+        if ($userFirstName && $userLastName) {
             $existingUser = $this->getEntityRepository('OroUserBundle:User')->findOneBy(
                 array(
-                    'firstName' => $user->getFirstname(),
-                    'lastName'  => $user->getLastname(),
+                    'firstName' => $userFirstName,
+                    'lastName'  => $userLastName,
                 )
             );
         }
@@ -89,7 +112,7 @@ abstract class AbstractContactImportStrategy extends AbstractImportStrategy
      * @param AddressType $addressType
      * @return null|AddressType
      */
-    protected function getAddressTypeOrNull(AddressType $addressType)
+    public function getAddressTypeOrNull(AddressType $addressType)
     {
         if (null === $this->addressTypes) {
             $types = $this->getEntityRepository('OroAddressBundle:AddressType')->findAll();
@@ -109,7 +132,7 @@ abstract class AbstractContactImportStrategy extends AbstractImportStrategy
      * @param Region $country
      * @return Region|null
      */
-    protected function getRegionOrNull(Region $country)
+    public function getRegionOrNull(Region $country)
     {
         $existingRegion = null;
         $combinedCode = $country->getCombinedCode();
@@ -128,7 +151,7 @@ abstract class AbstractContactImportStrategy extends AbstractImportStrategy
      * @param Country $country
      * @return Country|null
      */
-    protected function getCountryOrNull(Country $country)
+    public function getCountryOrNull(Country $country)
     {
         $existingCountry = null;
         $iso2Code = $country->getIso2Code();
@@ -147,7 +170,7 @@ abstract class AbstractContactImportStrategy extends AbstractImportStrategy
      * @param Group $group
      * @return null|Group
      */
-    protected function getGroupOrNull(Group $group)
+    public function getGroupOrNull(Group $group)
     {
         if (null === $this->groups) {
             $existingGroups = $this->getEntityRepository('OroCRMContactBundle:Group')->findAll();
@@ -167,7 +190,7 @@ abstract class AbstractContactImportStrategy extends AbstractImportStrategy
      * @param Source $source
      * @return null|Source
      */
-    protected function getSourceOrNull(Source $source)
+    public function getSourceOrNull(Source $source)
     {
         if (null === $this->sources) {
             $existingSources = $this->getEntityRepository('OroCRMContactBundle:Source')->findAll();
@@ -187,7 +210,7 @@ abstract class AbstractContactImportStrategy extends AbstractImportStrategy
      * @param Method $method
      * @return null|Method
      */
-    protected function getMethodOrNull(Method $method)
+    public function getMethodOrNull(Method $method)
     {
         if (null === $this->methods) {
             $existingMethods = $this->getEntityRepository('OroCRMContactBundle:Method')->findAll();
@@ -207,12 +230,13 @@ abstract class AbstractContactImportStrategy extends AbstractImportStrategy
      * @param Account $account
      * @return Account|null
      */
-    protected function getAccountOrNull(Account $account)
+    public function getAccountOrNull(Account $account)
     {
         $existingAccount = null;
-        if ($account->getName()) {
+        $accountName = $account->getName();
+        if ($accountName) {
             $existingAccount = $this->getEntityRepository('OroCRMAccountBundle:Account')->findOneBy(
-                array('name' => $account->getName())
+                array('name' => $accountName)
             );
         }
 
@@ -220,9 +244,24 @@ abstract class AbstractContactImportStrategy extends AbstractImportStrategy
     }
 
     /**
+     * @param Contact $contact
+     * @return Contact|null
+     */
+    public function getContactOrNull(Contact $contact)
+    {
+        $existingContact = null;
+        $contactId = $contact->getId();
+        if ($contactId) {
+            $existingContact = $this->getEntityRepository('OroCRMContactBundle:Contact')->find($contactId);
+        }
+
+        return $existingContact ?: null;
+    }
+
+    /**
      * @return User|null
      */
-    protected function getCurrentUser()
+    public function getSecurityContextUserOrNull()
     {
         $token = $this->securityContext->getToken();
         if (!$token) {

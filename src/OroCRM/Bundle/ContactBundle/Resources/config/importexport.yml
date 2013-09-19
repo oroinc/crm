@@ -8,6 +8,7 @@ parameters:
     orocrm_contact.importexport.contact_header_provider.class: OroCRM\Bundle\ContactBundle\ImportExport\Provider\ContactHeaderProvider
     orocrm_contact.importexport.data_converter.contact.class: OroCRM\Bundle\ContactBundle\ImportExport\Converter\ContactDataConverter
 
+    orocrm_contact.importexport.strategy.import.contact.helper.class: OroCRM\Bundle\ContactBundle\ImportExport\Strategy\Import\ContactImportStrategyHelper
     orocrm_contact.importexport.strategy.import.contact.add_or_replace.class: OroCRM\Bundle\ContactBundle\ImportExport\Strategy\Import\AddOrReplaceStrategy
 
 services:
@@ -51,9 +52,14 @@ services:
         arguments:
             - @orocrm_contact.importexport.contact_header_provider
 
-    orocrm_contact.importexport.strategy.import.contact.add_or_replace:
-        class: %orocrm_contact.importexport.strategy.import.contact.add_or_replace.class%
+    orocrm_contact.importexport.strategy.import.contact.helper:
+        class: %orocrm_contact.importexport.strategy.import.contact.helper.class%
         arguments:
             - @security.context
             - @doctrine
-            - %orocrm_contact.entity.class%
+
+    orocrm_contact.importexport.strategy.import.contact.add_or_replace:
+        class: %orocrm_contact.importexport.strategy.import.contact.add_or_replace.class%
+        arguments:
+            - @oro_importexport.strategy.import.helper
+            - @orocrm_contact.importexport.strategy.import.contact.helper

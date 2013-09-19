@@ -2,11 +2,36 @@
 
 namespace OroCRM\Bundle\ContactBundle\ImportExport\Strategy\Import;
 
-use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\ImportExportBundle\Exception\InvalidArgumentException;
+use Oro\Bundle\ImportExportBundle\Strategy\StrategyInterface;
+use Oro\Bundle\ImportExportBundle\Strategy\Import\ImportStrategyHelper;
+use OroCRM\Bundle\ContactBundle\Entity\Contact;
+use OroCRM\Bundle\ContactBundle\ImportExport\Strategy\Import\ContactImportStrategyHelper;
 
-class AddOrReplaceStrategy extends AbstractContactImportStrategy
+class AddOrReplaceStrategy implements StrategyInterface
 {
+    /**
+     * @var ImportStrategyHelper
+     */
+    protected $strategyHelper;
+
+    /**
+     * @var ContactImportStrategyHelper
+     */
+    protected $contactStrategyHelper;
+
+    /**
+     * @param ImportStrategyHelper $strategyHelper
+     * @param ContactImportStrategyHelper $contactStrategyHelper
+     */
+    public function __construct(
+        ImportStrategyHelper $strategyHelper,
+        ContactImportStrategyHelper $contactStrategyHelper
+    ) {
+        $this->strategyHelper = $strategyHelper;
+        $this->contactStrategyHelper = $contactStrategyHelper;
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -64,7 +89,7 @@ class AddOrReplaceStrategy extends AbstractContactImportStrategy
     {
         foreach ($contact->getAccounts() as $account) {
             $contact->removeAccount($account);
-            $existingAccount = $this->getAccountOrNull($account);
+            $existingAccount = $this->contactStrategyHelper->getAccountOrNull($account);
             if ($existingAccount) {
                 $contact->addAccount($existingAccount);
             }
@@ -81,7 +106,7 @@ class AddOrReplaceStrategy extends AbstractContactImportStrategy
     {
         foreach ($contact->getGroups() as $contactGroup) {
             $contact->removeGroup($contactGroup);
-            $existingGroup = $this->getGroupOrNull($contactGroup);
+            $existingGroup = $this->contactStrategyHelper->getGroupOrNull($contactGroup);
             if ($existingGroup) {
                 $contact->addGroup($existingGroup);
             }
@@ -100,7 +125,7 @@ class AddOrReplaceStrategy extends AbstractContactImportStrategy
             // update country
             $country = $contactAddress->getCountry();
             if ($country) {
-                $existingCountry = $this->getCountryOrNull($country);
+                $existingCountry = $this->contactStrategyHelper->getCountryOrNull($country);
                 $contactAddress->setCountry($existingCountry);
             } else {
                 $contactAddress->setCountry(null);
@@ -109,7 +134,7 @@ class AddOrReplaceStrategy extends AbstractContactImportStrategy
             // update region
             $region = $contactAddress->getRegion();
             if ($region) {
-                $existingRegion = $this->getRegionOrNull($region);
+                $existingRegion = $this->contactStrategyHelper->getRegionOrNull($region);
                 $contactAddress->setRegion($existingRegion);
             } else {
                 $contactAddress->setRegion(null);
@@ -118,7 +143,7 @@ class AddOrReplaceStrategy extends AbstractContactImportStrategy
             // update address types
             foreach ($contactAddress->getTypes() as $addressType) {
                 $contactAddress->removeType($addressType);
-                $existingAddressType = $this->getAddressTypeOrNull($addressType);
+                $existingAddressType = $this->contactStrategyHelper->getAddressTypeOrNull($addressType);
                 if ($existingAddressType) {
                     $contactAddress->addType($existingAddressType);
                 }
@@ -136,7 +161,7 @@ class AddOrReplaceStrategy extends AbstractContactImportStrategy
     {
         $source = $contact->getSource();
         if ($source) {
-            $existingSource = $this->getSourceOrNull($source);
+            $existingSource = $this->contactStrategyHelper->getSourceOrNull($source);
             $contact->setSource($existingSource);
         } else {
             $contact->setSource(null);
@@ -153,7 +178,7 @@ class AddOrReplaceStrategy extends AbstractContactImportStrategy
     {
         $method = $contact->getMethod();
         if ($method) {
-            $existingMethod = $this->getMethodOrNull($method);
+            $existingMethod = $this->contactStrategyHelper->getMethodOrNull($method);
             $contact->setMethod($existingMethod);
         } else {
             $contact->setMethod(null);
@@ -169,7 +194,7 @@ class AddOrReplaceStrategy extends AbstractContactImportStrategy
     protected function updateOwner(Contact $contact)
     {
         if ($contact->getOwner()) {
-            $existingOwner = $this->getUserOrNull($contact->getOwner());
+            $existingOwner = $this->contactStrategyHelper->getUserOrNull($contact->getOwner());
             $contact->setOwner($existingOwner);
         } else {
             $contact->setOwner(null);
@@ -185,7 +210,7 @@ class AddOrReplaceStrategy extends AbstractContactImportStrategy
     protected function updateAssignedTo(Contact $contact)
     {
         if ($contact->getAssignedTo()) {
-            $existingAssignedTo = $this->getUserOrNull($contact->getAssignedTo());
+            $existingAssignedTo = $this->contactStrategyHelper->getUserOrNull($contact->getAssignedTo());
             $contact->setAssignedTo($existingAssignedTo);
         } else {
             $contact->setAssignedTo(null);
@@ -200,23 +225,14 @@ class AddOrReplaceStrategy extends AbstractContactImportStrategy
      */
     protected function findAndReplaceContact(Contact $contact)
     {
-        $contactId = $contact->getId();
-        if ($contactId) {
-            /** @var Contact $existingContact */
-            $existingContact = $this->getEntityRepository($this->entityClass)->find($contactId);
-            if ($existingContact) {
-                $this->removeCreatedRelatedEntities($existingContact);
-                $this->importEntity(
-                    $existingContact,
-                    $contact,
-                    array('tags', 'reportsTo', 'nameFormat', 'createdAt', 'createdBy')
-                );
-                $contact = $existingContact;
-                $contact->setUpdatedAt(new \DateTime('now', new \DateTimeZone('UTC')));
-                $contact->setUpdatedBy($this->getCurrentUser());
-            } else {
-                $contact->setId(null);
-            }
+        $existingContact = $this->contactStrategyHelper->getContactOrNull($contact);
+        if ($existingContact) {
+            $this->removeRelatedCreatedEntities($existingContact);
+            $this->strategyHelper->importEntity($existingContact, $contact);
+            $this->updateCreatedAndUpdatedFields($existingContact);
+            $contact = $existingContact;
+        } else {
+            $contact->setId(null);
         }
 
         return $contact;
@@ -226,7 +242,25 @@ class AddOrReplaceStrategy extends AbstractContactImportStrategy
      * @param Contact $contact
      * @return AddOrReplaceStrategy
      */
-    protected function removeCreatedRelatedEntities(Contact $contact)
+    protected function updateCreatedAndUpdatedFields(Contact $contact)
+    {
+        $currentDate = new \DateTime('now', new \DateTimeZone('UTC'));
+        $currentUser = $this->contactStrategyHelper->getSecurityContextUserOrNull();
+
+        $contact
+            ->setCreatedAt($currentDate)
+            ->setUpdatedAt($currentDate)
+            ->setCreatedBy($currentUser)
+            ->setUpdatedBy($currentUser);
+
+        return $this;
+    }
+
+    /**
+     * @param Contact $contact
+     * @return AddOrReplaceStrategy
+     */
+    protected function removeRelatedCreatedEntities(Contact $contact)
     {
         $contact
             ->resetAddresses(array())
