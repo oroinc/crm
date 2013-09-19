@@ -318,6 +318,16 @@ class Contact implements Taggable, EmailOwnerInterface
         $this->tags      = new ArrayCollection();
     }
 
+    public function __clone()
+    {
+        $this->groups    = clone $this->groups;
+        $this->accounts  = clone $this->accounts;
+        $this->addresses = clone $this->addresses;
+        $this->emails    = clone $this->emails;
+        $this->phones    = clone $this->phones;
+        $this->tags      = clone $this->tags;
+    }
+
     /**
      * Get entity class name.
      *
