@@ -63,3 +63,10 @@ services:
         arguments:
             - @oro_importexport.strategy.import.helper
             - @orocrm_contact.importexport.strategy.import.contact.helper
+
+    orocrm_contact.importexport.processor.import:
+        parent: @oro_importexport.processor.import_abstract
+        calls:
+             - [setDataConverter, [@orocrm_contact.importexport.data_converter.contact]]
+             - [setStrategy, [@orocrm_contact.importexport.strategy.import.contact.add_or_replace]]
+             - [setValidator, [@validator]]
