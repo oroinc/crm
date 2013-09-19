@@ -6,8 +6,6 @@ use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\EntityRepository;
 
-use Oro\Bundle\EntityBundle\Datagrid\AbstractDatagrid;
-use Oro\Bundle\GridBundle\Datagrid\DatagridManager;
 use Oro\Bundle\GridBundle\Datagrid\ProxyQueryInterface;
 
 use Oro\Bundle\GridBundle\Field\FieldDescription;
@@ -24,7 +22,8 @@ use Oro\Bundle\GridBundle\Sorter\SorterInterface;
 use Oro\Bundle\GridBundle\Action\ActionInterface;
 use Oro\Bundle\GridBundle\Action\MassAction\Ajax\DeleteMassAction;
 
-//class ContactDatagridManager extends DatagridManager
+use Oro\Bundle\EntityBundle\Datagrid\AbstractDatagrid;
+
 class ContactDatagridManager extends AbstractDatagrid
 {
     /**
