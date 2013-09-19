@@ -39,9 +39,9 @@ class OpportunityControllersTest extends WebTestCase
         $crawler = $this->client->request('GET', $this->client->generate('orocrm_sales_opportunity_create'));
         /** @var Form $form */
         $form = $crawler->selectButton('Save and Close')->form();
-        $topic = 'topic' . ToolsAPI::generateRandomString();
+        $name = 'name' . ToolsAPI::generateRandomString();
         $form['orocrm_sales_opportunity_form[status]']              = 'in_progress';
-        $form['orocrm_sales_opportunity_form[topic]']               = $topic;
+        $form['orocrm_sales_opportunity_form[name]']               = $name;
         $form['orocrm_sales_opportunity_form[probability]']         = 50;
         $form['orocrm_sales_opportunity_form[budgetAmount]']         = 10000;
         $form['orocrm_sales_opportunity_form[customerNeed]']         = 10001;
@@ -54,23 +54,23 @@ class OpportunityControllersTest extends WebTestCase
         ToolsAPI::assertJsonResponse($result, 200, 'text/html; charset=UTF-8');
         $this->assertContains("Opportunity successfully saved", $crawler->html());
 
-        return $topic;
+        return $name;
     }
 
     /**
-     * @param $topic
+     * @param $name
      * @depends testCreate
      *
      * @return string
      */
-    public function testUpdate($topic)
+    public function testUpdate($name)
     {
         $this->client->request(
             'GET',
             $this->client->generate('orocrm_sales_opportunity_index', array('_format' =>'json')),
             array(
-                'opportunity[_filter][topic][type]=3' => '3',
-                'opportunity[_filter][topic][value]' => $topic,
+                'opportunity[_filter][name][type]=3' => '3',
+                'opportunity[_filter][name][value]' => $name,
                 'opportunity[_pager][_page]' => '1',
                 'opportunity[_pager][_per_page]' => '10',
             )
@@ -89,8 +89,8 @@ class OpportunityControllersTest extends WebTestCase
 
         /** @var Form $form */
         $form = $crawler->selectButton('Save and Close')->form();
-        $topic = 'topic' . ToolsAPI::generateRandomString();
-        $form['orocrm_sales_opportunity_form[topic]'] = $topic;
+        $name = 'name' . ToolsAPI::generateRandomString();
+        $form['orocrm_sales_opportunity_form[name]'] = $name;
 
         $this->client->followRedirects(true);
         $crawler = $this->client->submit($form);
@@ -99,23 +99,23 @@ class OpportunityControllersTest extends WebTestCase
         ToolsAPI::assertJsonResponse($result, 200, 'text/html; charset=UTF-8');
         $this->assertContains("Opportunity successfully saved", $crawler->html());
 
-        return $topic;
+        return $name;
     }
 
     /**
-     * @param $topic
+     * @param $name
      * @depends testUpdate
      *
      * @return string
      */
-    public function testView($topic)
+    public function testView($name)
     {
         $this->client->request(
             'GET',
             $this->client->generate('orocrm_sales_opportunity_index', array('_format' =>'json')),
             array(
-                'opportunity[_filter][topic][type]=3' => '3',
-                'opportunity[_filter][topic][value]' => $topic,
+                'opportunity[_filter][name][type]=3' => '3',
+                'opportunity[_filter][name][value]' => $name,
                 'opportunity[_pager][_page]' => '1',
                 'opportunity[_pager][_per_page]' => '10',
             )
@@ -134,23 +134,23 @@ class OpportunityControllersTest extends WebTestCase
 
         $result = $this->client->getResponse();
         ToolsAPI::assertJsonResponse($result, 200, 'text/html; charset=UTF-8');
-        $this->assertContains("{$topic} - Opportunities - Sales", $crawler->html());
+        $this->assertContains("{$name} - Opportunities - Sales", $crawler->html());
     }
 
     /**
-     * @param $topic
+     * @param $name
      * @depends testUpdate
      *
      * @return string
      */
-    public function testInfo($topic)
+    public function testInfo($name)
     {
         $this->client->request(
             'GET',
             $this->client->generate('orocrm_sales_opportunity_index', array('_format' =>'json')),
             array(
-                'opportunity[_filter][topic][type]=3' => '3',
-                'opportunity[_filter][topic][value]' => $topic,
+                'opportunity[_filter][name][type]=3' => '3',
+                'opportunity[_filter][name][value]' => $name,
                 'opportunity[_pager][_page]' => '1',
                 'opportunity[_pager][_per_page]' => '10',
             )
@@ -175,17 +175,17 @@ class OpportunityControllersTest extends WebTestCase
     }
 
     /**
-     * @param $topic
+     * @param $name
      * @depends testUpdate
      */
-    public function testDelete($topic)
+    public function testDelete($name)
     {
         $this->client->request(
             'GET',
             $this->client->generate('orocrm_sales_opportunity_index', array('_format' =>'json')),
             array(
-                'opportunity[_filter][topic][type]=3' => '3',
-                'opportunity[_filter][topic][value]' => $topic,
+                'opportunity[_filter][name][type]=3' => '3',
+                'opportunity[_filter][name][value]' => $name,
                 'opportunity[_pager][_page]' => '1',
                 'opportunity[_pager][_per_page]' => '10',
             )

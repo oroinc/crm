@@ -14,9 +14,29 @@ use Oro\Bundle\GridBundle\Datagrid\ORM\QueryFactory\EntityQueryFactory;
 class AccountContactUpdateDatagridManager extends AccountContactDatagridManager
 {
     /**
+     * @var array
+     */
+    public $additionalParameters = array();
+
+    /**
      * @var string
      */
     protected $hasAccountExpression;
+
+    /**
+     * @param array $parameters
+     */
+    public function setAdditionalParameters(array $parameters)
+    {
+        $this->additionalParameters = $parameters;
+    }
+
+    protected function getDefaultParameters()
+    {
+        $parameters = parent::getDefaultParameters();
+        $parameters[ParametersInterface::ADDITIONAL_PARAMETERS] = $this->additionalParameters;
+        return $parameters;
+    }
 
     /**
      * {@inheritDoc}
@@ -50,7 +70,10 @@ class AccountContactUpdateDatagridManager extends AccountContactDatagridManager
      */
     protected function updateFieldsConfiguration(FieldDescriptionCollection $fieldsCollection)
     {
-        // filters must be enabled
+        // remove unused fields
+        foreach (array('groups', 'source', 'created', 'updated') as $fieldName) {
+            $fieldsCollection->remove($fieldName);
+        }
     }
 
     /**
