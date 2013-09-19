@@ -2,7 +2,9 @@
 
 namespace OroCRM\Bundle\AccountBundle\Tests\Unit\Form\Type;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 use OroCRM\Bundle\AccountBundle\Form\Type\AccountType;
@@ -14,13 +16,21 @@ class AccountTypeTest extends \PHPUnit_Framework_TestCase
      */
     protected $type;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $router;
+
     protected function setUp()
     {
         $flexibleManager = $this->getMockBuilder('Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleManager')
             ->disableOriginalConstructor()
             ->getMock();
+        $this->router = $this->getMockBuilder('Symfony\Component\Routing\Router')
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->type = new AccountType($flexibleManager, 'orocrm_account');
+        $this->type = new AccountType($flexibleManager, 'orocrm_account', $this->router);
     }
 
     public function testAddEntityFields()
@@ -28,6 +38,9 @@ class AccountTypeTest extends \PHPUnit_Framework_TestCase
         $builder = $this->getMockBuilder('Symfony\Component\Form\FormBuilder')
             ->disableOriginalConstructor()
             ->getMock();
+        $builder->expects($this->any(3))
+            ->method('add')
+            ->will($this->returnSelf());
 
         $builder->expects($this->at(1))
             ->method('add')
@@ -39,11 +52,11 @@ class AccountTypeTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnSelf());
         $builder->expects($this->at(3))
             ->method('add')
-            ->with('appendContacts', 'oro_entity_identifier')
+            ->with('default_contact', 'oro_entity_identifier')
             ->will($this->returnSelf());
         $builder->expects($this->at(4))
             ->method('add')
-            ->with('removeContacts', 'oro_entity_identifier')
+            ->with('contacts', 'oro_multiple_entity')
             ->will($this->returnSelf());
         $builder->expects($this->at(5))
             ->method('add')
@@ -83,5 +96,88 @@ class AccountTypeTest extends \PHPUnit_Framework_TestCase
     public function testGetName()
     {
         $this->assertEquals('orocrm_account', $this->type->getName());
+    }
+
+    public function testFinishView()
+    {
+        $this->router->expects($this->at(0))
+            ->method('generate')
+            ->with('orocrm_account_contact_select', array('id' => 100))
+            ->will($this->returnValue('/test-path/100'));
+        $this->router->expects($this->at(1))
+            ->method('generate')
+            ->with('orocrm_contact_info', array('id' => 1))
+            ->will($this->returnValue('/test-info/1'));
+
+        $contact = $this->getMockBuilder('OroCRM\Bundle\ContactBundle\Entity\Contact')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $contact->expects($this->any())
+            ->method('getId')
+            ->will($this->returnValue(1));
+        $contact->expects($this->once())
+            ->method('getFirstName')
+            ->will($this->returnValue('John'));
+        $contact->expects($this->once())
+            ->method('getLastName')
+            ->will($this->returnValue('Doe'));
+        $phone = $this->getMockBuilder('OroCRM\Bundle\ContactBundle\Entity\ContactPhone')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $phone->expects($this->once())
+            ->method('getPhone')
+            ->will($this->returnValue('911'));
+        $contact->expects($this->once())
+            ->method('getPrimaryPhone')
+            ->will($this->returnValue($phone));
+        $email = $this->getMockBuilder('OroCRM\Bundle\ContactBundle\Entity\ContactEmail')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $email->expects($this->once())
+            ->method('getEmail')
+            ->will($this->returnValue('john.doe@dummy.net'));
+        $contact->expects($this->once())
+            ->method('getPrimaryEmail')
+            ->will($this->returnValue($email));
+        $contacts = new ArrayCollection(array($contact));
+
+        $account = $this->getMockBuilder('OroCRM\Bundle\AccountBundle\Entity\Account')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $account->expects($this->once())
+            ->method('getId')
+            ->will($this->returnValue(100));
+        $account->expects($this->once())
+            ->method('getContacts')
+            ->will($this->returnValue($contacts));
+        $account->expects($this->exactly(2))
+            ->method('getDefaultContact')
+            ->will($this->returnValue($contact));
+        $form = $this->getMockBuilder('Symfony\Component\Form\Form')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $form->expects($this->once())
+            ->method('getData')
+            ->will($this->returnValue($account));
+
+        $formView = new FormView();
+        $contactsFormView = new FormView($formView);
+        $formView->children['contacts'] = $contactsFormView;
+        $this->type->finishView($formView, $form, array());
+
+        $this->assertEquals($contactsFormView->vars['grid_url'], '/test-path/100');
+        $expectedInitialElements = array(
+            array(
+                'id' => 1,
+                'label' => 'John Doe',
+                'link' => '/test-info/1',
+                'isDefault' => true,
+                'extraData' => array(
+                    array('label' => 'Phone', 'value' => '911'),
+                    array('label' => 'Email', 'value' => 'john.doe@dummy.net')
+                )
+            )
+        );
+        $this->assertEquals($expectedInitialElements, $contactsFormView->vars['initial_elements']);
     }
 }
