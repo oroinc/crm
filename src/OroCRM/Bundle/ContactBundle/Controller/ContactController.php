@@ -10,7 +10,6 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 use JMS\Serializer\SerializationContext;
 use JMS\Serializer\DeserializationContext;
-use Symfony\Component\Serializer\SerializerInterface;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -25,6 +24,8 @@ use OroCRM\Bundle\ContactBundle\Datagrid\ContactAccountUpdateDatagridManager;
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\ImportExportBundle\Serializer\Serializer;
 use OroCRM\Bundle\ContactBundle\ImportExport\Converter\ContactDataConverter;
+use Oro\Bundle\BatchBundle\Entity\JobExecution;
+use Oro\Bundle\BatchBundle\Entity\JobInstance;
 
 /**
  * @Acl(
@@ -206,6 +207,28 @@ class ContactController extends Controller
      */
     public function exportAction()
     {
+        /*
+        $jobInstance = new JobInstance(
+            'oro_importexport',
+            JobInstance::TYPE_IMPORT,
+            'entity_import_validation_from_csv'
+        );
+        $jobInstance->setCode('contact_export');
+        $jobInstance->setLabel('Default Entity Export');
+        $this->getDoctrine()->getManager()->persist($jobInstance);
+
+        $jobRegistry = $this->get('oro_batch.connectors');
+        $job = $jobRegistry->getJob($jobInstance);
+
+        $jobExecution = new JobExecution();
+        $jobExecution->setJobInstance($jobInstance);
+        $this->getDoctrine()->getManager()->persist($jobExecution);
+
+        $job->execute($jobExecution);
+
+        $this->getDoctrine()->getManager()->flush();
+        */
+
         $doctrine = $this->getDoctrine();
         $contacts = $doctrine->getRepository('OroCRMContactBundle:Contact')->findAll();
         $contact = current($contacts);
@@ -213,81 +236,6 @@ class ContactController extends Controller
         /** @var Serializer $importExportSerializer */
         $importExportSerializer = $this->get('oro_importexport.serializer');
         $serializedData = $importExportSerializer->serialize($contact, null);
-
-        /*
-        $serializedData = array(
-            'id' => 69,
-            'namePrefix' => 'Ms.',
-            'firstName' => 'April',
-            'lastName' => 'Lynch',
-            'nameSuffix' => null,
-            'gender' => null,
-            'description' => null,
-            'jobTitle' => null,
-            'fax' => null,
-            'skype' => null,
-            'twitter' => null,
-            'facebook' => null,
-            'googlePlus' => null,
-            'linkedIn' => null,
-            'birthday' => '1944-08-29T16:52:09+0200',
-            'source' => 'tv',
-            'method' => null,
-            'owner' => array(
-                'firstName' => 'William',
-                'lastName' => 'Stewart',
-            ),
-            'assignedTo' => array(
-                'firstName' => 'William',
-                'lastName' => 'Stewart',
-            ),
-            'addresses' => array(
-                array(
-                    'label' => null,
-                    'firstName' => null,
-                    'lastName' => null,
-                    'street' => null,
-                    'street2' => null,
-                    'city' => null,
-                    'state' => null,
-                    'country' => null,
-                    'postalCode' => null,
-                    'types' => array()
-                ),
-                array(
-                    'label' => null,
-                    'firstName' => null,
-                    'lastName' => null,
-                    'street' => null,
-                    'street2' => null,
-                    'city' => null,
-                    'state' => null,
-                    'country' => null,
-                    'postalCode' => null,
-                    'types' => array(
-                        'billing',
-                        'shipping'
-                    )
-                ),
-            ),
-            'emails' => array(
-                'primary-email@example.com',
-                'another-email@example.com',
-            ),
-            'phones' => array(
-                '0 800 11 22 444',
-                '0 800 11 22 555',
-            ),
-            'groups' => array(
-                'first_group',
-                'second_group',
-            ),
-            'accounts' => array(
-                'First Account Name',
-                'Second Account Name',
-            )
-        );
-        */
 
         /** @var ContactDataConverter $contactDataConverter */
         $contactDataConverter = $this->get('orocrm_contact.importexport.data_converter.contact');
@@ -336,34 +284,34 @@ class ContactController extends Controller
             'Owner Last Name' => 'Stewart',
             'Assigned To First Name' => 'William',
             'Assigned To Last Name' => 'Stewart',
-            'Address Label' => '',
-            'Address First Name' => '',
-            'Address Last Name' => '',
-            'Address Street' => '',
-            'Address Street2' => '',
-            'Address City' => '',
-            'Address State' => '',
-            'Address Country' => '',
-            'Address Postal Code' => '',
+            'Primary Address Label' => '',
+            'Primary Address First Name' => '',
+            'Primary Address Last Name' => '',
+            'Primary Address Street' => '',
+            'Primary Address Street2' => '',
+            'Primary Address City' => '',
+            'Primary Address Region' => '',
+            'Primary Address Country' => '',
+            'Primary Address Postal Code' => '',
             'Address 1 Label' => '',
             'Address 1 First Name' => '',
             'Address 1 Last Name' => '',
             'Address 1 Street' => '',
             'Address 1 Street2' => '',
             'Address 1 City' => '',
-            'Address 1 State' => '',
+            'Address 1 Region' => '',
             'Address 1 Country' => '',
             'Address 1 Postal Code' => '',
-            'Address 1 Type' => 'billing',
-            'Address 1 Type 1' => 'shipping',
-            'Email' => 'primary-email@example.com',
+            'Address 1 Type 1' => 'billing',
+            'Address 1 Type 2' => 'shipping',
+            'Primary Email' => 'primary-email@example.com',
             'Email 1' => 'another-email@example.com',
-            'Phone' => '0 800 11 22 444',
+            'Primary Phone' => '0 800 11 22 444',
             'Phone 1' => '0 800 11 22 555',
-            'Group' => 'first_group',
-            'Group 1' => 'second_group',
-            'Account' => 'First Account Name',
-            'Account 1' => 'Second Account Name',
+            'Group 1' => 'first_group',
+            'Group 2' => 'second_group',
+            'Account 1' => 'First Account Name',
+            'Account 2' => 'Second Account Name',
         );
 
         /** @var ContactDataConverter $contactDataConverter */
