@@ -84,6 +84,16 @@ class Account extends AbstractEntityFlexible implements Taggable
     protected $contacts;
 
     /**
+     * Default contact entity
+     *
+     * @var Contact
+     *
+     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ContactBundle\Entity\Contact")
+     * @ORM\JoinColumn(name="default_contact_id", referencedColumnName="id")
+     */
+    protected $defaultContact;
+
+    /**
      * @var \Oro\Bundle\FlexibleEntityBundle\Model\AbstractFlexibleValue[]
      *
      * @ORM\OneToMany(
@@ -313,5 +323,24 @@ class Account extends AbstractEntityFlexible implements Taggable
         $this->owner = $owningUser;
 
         return $this;
+    }
+
+    /**
+     * @param Contact $defaultContact
+     * @return Account
+     */
+    public function setDefaultContact($defaultContact)
+    {
+        $this->defaultContact = $defaultContact;
+
+        return $this;
+    }
+
+    /**
+     * @return Contact
+     */
+    public function getDefaultContact()
+    {
+        return $this->defaultContact;
     }
 }

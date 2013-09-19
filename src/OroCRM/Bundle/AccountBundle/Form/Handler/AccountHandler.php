@@ -60,8 +60,8 @@ class AccountHandler implements TagHandlerInterface
             $this->form->submit($this->request);
 
             if ($this->form->isValid()) {
-                $appendContacts = $this->form->get('appendContacts')->getData();
-                $removeContacts = $this->form->get('removeContacts')->getData();
+                $appendContacts = $this->form->get('contacts')->get('added')->getData();
+                $removeContacts = $this->form->get('contacts')->get('removed')->getData();
                 $this->onSuccess($entity, $appendContacts, $removeContacts);
 
                 return true;

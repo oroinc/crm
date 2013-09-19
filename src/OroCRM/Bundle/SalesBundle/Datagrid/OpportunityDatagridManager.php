@@ -38,20 +38,20 @@ class OpportunityDatagridManager extends DatagridManager
      */
     protected function configureFields(FieldDescriptionCollection $fieldsCollection)
     {
-        $fieldTopic = new FieldDescription();
-        $fieldTopic->setName('topic');
-        $fieldTopic->setOptions(
+        $fieldName = new FieldDescription();
+        $fieldName->setName('name');
+        $fieldName->setOptions(
             array(
                 'type'        => FieldDescriptionInterface::TYPE_TEXT,
-                'label'       => $this->translate('orocrm.sales.opportunity.datagrid.topic'),
-                'field_name'  => 'topic',
+                'label'       => $this->translate('orocrm.sales.opportunity.datagrid.name'),
+                'field_name'  => 'name',
                 'filter_type' => FilterInterface::TYPE_STRING,
                 'sortable'    => true,
                 'filterable'  => true,
                 'show_filter' => true,
             )
         );
-        $fieldsCollection->add($fieldTopic);
+        $fieldsCollection->add($fieldName);
 
         $fieldContactName = new FieldDescription();
         $fieldContactName->setName('contact_name');

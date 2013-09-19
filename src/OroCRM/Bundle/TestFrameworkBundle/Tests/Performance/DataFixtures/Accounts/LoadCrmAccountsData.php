@@ -178,6 +178,7 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
                 $account = $this->createAccount($data);
                 $contact = $this->createContact($data);
                 $contact->addAccount($account);
+                $account->setDefaultContact($contact);
 
                 $group = $this->contactGroups[rand(0, count($this->contactGroups)-1)];
                 $contact->addGroup($group);
