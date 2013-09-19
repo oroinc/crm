@@ -320,12 +320,24 @@ class Contact implements Taggable, EmailOwnerInterface
 
     public function __clone()
     {
-        $this->groups    = clone $this->groups;
-        $this->accounts  = clone $this->accounts;
-        $this->addresses = clone $this->addresses;
-        $this->emails    = clone $this->emails;
-        $this->phones    = clone $this->phones;
-        $this->tags      = clone $this->tags;
+        if ($this->groups) {
+            $this->groups = clone $this->groups;
+        }
+        if ($this->accounts) {
+            $this->accounts = clone $this->accounts;
+        }
+        if ($this->addresses) {
+            $this->addresses = clone $this->addresses;
+        }
+        if ($this->emails) {
+            $this->emails = clone $this->emails;
+        }
+        if ($this->phones) {
+            $this->phones = clone $this->phones;
+        }
+        if ($this->tags) {
+            $this->tags = clone $this->tags;
+        }
     }
 
     /**
