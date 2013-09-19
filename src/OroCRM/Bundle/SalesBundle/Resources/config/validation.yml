@@ -2,7 +2,7 @@ OroCRM\Bundle\SalesBundle\Entity\Opportunity:
     properties:
         status:
             - NotBlank: ~
-        topic:
+        name:
             - NotBlank: ~
             - Length:
                 max: 255

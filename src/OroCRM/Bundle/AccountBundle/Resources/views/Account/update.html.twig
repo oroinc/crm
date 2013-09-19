@@ -11,15 +11,6 @@
     {% block stylesheets %}
         {{ form_stylesheet(form) }}
     {% endblock %}
-
-    {% set listenerParameters = {
-        'columnName': 'has_account',
-        'selectors': {
-            'included': '#appendContacts',
-            'excluded': '#removeContacts'
-        }
-    } %}
-    {% placeholder prepare_grid with {'datagrid': datagrid, 'selector': '#' ~ gridId, 'parameters': listenerParameters} %}
 {% endblock %}
 
 {% block navButtons %}
@@ -118,9 +109,8 @@
                     'title' : null,
                     'useSpan': false,
                     'data' : [
-                        form_widget(form.appendContacts, {'id': 'appendContacts'}),
-                        form_widget(form.removeContacts, {'id': 'removeContacts'}),
-                        UI.gridBlock(gridId)
+                        form_widget(form.default_contact),
+                        form_widget(form.contacts)
                     ]
                 }
             ]
