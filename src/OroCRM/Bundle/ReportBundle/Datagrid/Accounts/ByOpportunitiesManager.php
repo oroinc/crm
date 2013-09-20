@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ReportBundle\Datagrid;
+namespace OroCRM\Bundle\ReportBundle\Datagrid\Accounts;
 
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\Yaml\Yaml;
@@ -12,7 +12,7 @@ use Oro\Bundle\GridBundle\Field\FieldDescriptionCollection;
 use Oro\Bundle\GridBundle\Field\FieldDescriptionInterface;
 use Oro\Bundle\GridBundle\Filter\FilterInterface;
 
-class AccountsByOpportunities extends DatagridManager
+class ByOpportunitiesManager extends DatagridManager
 {
     /**
      * @var EntityManager
@@ -126,12 +126,14 @@ class AccountsByOpportunities extends DatagridManager
      */
     protected function createQuery()
     {
-        $input     = Yaml::parse(file_get_contents(__DIR__ . '/../Resources/config/reports.yml'));
+        $input     = Yaml::parse(file_get_contents(__DIR__ . '/../../Resources/config/reports.yml'));
         $converter = new YamlConverter();
 
-        $this->queryFactory->setQueryBuilder(
-            $converter->parse($input['reports'][0], $this->entityManager)
-        );
+        list($reportGroupName, $reportName) = array_slice(explode('-', $this->name), -2, 2);
+        if (isset($input['reports'][$reportGroupName][$reportName])) {
+            $qb = $converter->parse($input['reports'][$reportGroupName][$reportName], $this->entityManager);
+            //$this->queryFactory->setQueryBuilder($qb);
+        }
 
         return $this->queryFactory->createQuery();
     }

@@ -8,10 +8,9 @@ reports:
 
         by_opportunities:
             name:     "Accounts by Opportunities"
-            distinct: false
-            select:   "u.username, u.firstName, u.loginCount, a.apiKey, COUNT(u.firstName) AS cnt"
+            select:   "a.name, u.firstName, u.loginCount, a.apiKey, COUNT(u.firstName) AS cnt"
             from:
-                - { table: OroUserBundle:User, alias: u }
+                - { table: OroSalesBundle:Opportunity, alias: a }
             join:
                 left:
                     - { join: u.api, alias: a }
@@ -26,7 +25,7 @@ reports:
             orderBy:
                 - { column: "u.firstName", dir: "asc" }
 
-        -
+        mage_order_state:
             name:     MageOrderState
             select:   "m.createdAt, m.state, SUM(m.orderCount) AS orderCount, AVG(m.avgBaseGrandTotal) AS avgTotal"
             from:
