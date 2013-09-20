@@ -4,7 +4,7 @@ oro_menu_config:
             label: 'Reports'
             uri: '#'
             extras:
-                position: 10
+                position: 30
 
         accounts_life_time_value:
             label: 'Accounts Life Time'
@@ -19,6 +19,7 @@ oro_menu_config:
                 reports_tab:
                     children:
                         accounts_life_time_value: ~
+                        accounts_life_time_values: ~
 
 oro_titles:
-    orocrm_report_index: ~
+    orocrm_report_index: %%reportName%% - Reports

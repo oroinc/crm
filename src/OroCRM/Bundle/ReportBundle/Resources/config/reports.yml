@@ -2,8 +2,19 @@ reports:
     accounts:
         life_time_value:
             name:   "Account Life Time Value"
-            select: "u.username, u.firstName, u.loginCount"
+            select: >
+                a.name as name,
+                SUM( o.closeRevenue ) as value
             from:
-                - { table: OroUserBundle:User, alias: u }
+                - { table: OroCRMSalesBundle:Opportunity, alias: o }
+            join:
+                left:
+                    - { join: o.account, alias: a }
+                    - { join: o.status,  alias: s }
+            where:
+                and:
+                    - s.name = 'won'
+
+            groupBy:  a.id
 
     leads: ~
