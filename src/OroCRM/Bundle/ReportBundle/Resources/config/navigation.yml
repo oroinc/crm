@@ -1,0 +1,21 @@
+oro_menu_config:
+    items:
+        reports_tab:
+            label: 'Reports'
+            uri: '#'
+            extras:
+                position: 10
+
+        accounts_life_time_value:
+            label: 'Accounts Life Time'
+            route: 'orocrm_report_index'
+            routeParameters:
+                reportGroupName: accounts
+                reportName:      life_time_value
+
+    tree:
+        application_menu:
+            children:
+                reports_tab:
+                    children:
+                        accounts_life_time_value: ~
