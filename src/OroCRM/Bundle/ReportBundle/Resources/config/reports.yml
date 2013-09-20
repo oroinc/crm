@@ -8,22 +8,30 @@ reports:
 
         by_opportunities:
             name:     "Accounts by Opportunities"
-            select:   "a.name, u.firstName, u.loginCount, a.apiKey, COUNT(u.firstName) AS cnt"
             from:
-                - { table: OroSalesBundle:Opportunity, alias: a }
+                - { table: OroCRMSalesBundle:Opportunity, alias: o }
+            select: >
+                a.name,
+                s.label,
+                cr.label,
+                SUM( (CASE WHEN (s.name='won') THEN o.closeRevenue ELSE 0 END) ) as won,
+                SUM( (CASE WHEN (s.name='lost') THEN o.closeRevenue ELSE 0 END) ) as lost,
+                SUM( (CASE WHEN (s.name='in_progress') THEN o.closeRevenue ELSE 0 END) ) as in_progress,
+                COUNT(o.id) as total_ops
             join:
                 left:
-                    - { join: u.api, alias: a }
-                    - { join: u.statuses, alias: s }
-            where:
-                and:
-                    - "u.loginCount >= 0"
-                or:
-                    - "u.enabled = 0"
-            groupBy:  "u.firstName"
-            having:   "COUNT(u.firstName) > 1"
+                    - { join: o.account, alias: a }
+                    - { join: o.status, alias: s }
+                    - { join: o.closeReason, alias: cr }
+#            where:
+#                and:
+#                    - "u.loginCount >= 0"
+#                or:
+#                    - "u.enabled = 0"
+            groupBy:  "a.name"
+#            having:   "COUNT(u.firstName) > 1"
             orderBy:
-                - { column: "u.firstName", dir: "asc" }
+                - { column: "a.name", dir: "asc" }
 
         mage_order_state:
             name:     MageOrderState

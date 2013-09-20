@@ -2,23 +2,14 @@
 
 namespace OroCRM\Bundle\ReportBundle\Datagrid\Accounts;
 
-use Doctrine\ORM\EntityManager;
-use Symfony\Component\Yaml\Yaml;
-
-use Oro\Bundle\GridBundle\Datagrid\DatagridManager;
-use Oro\Bundle\GridBundle\Datagrid\QueryConverter\YamlConverter;
+use OroCRM\Bundle\ReportBundle\Datagrid\ReportGridManagerAbstract;
 use Oro\Bundle\GridBundle\Field\FieldDescription;
 use Oro\Bundle\GridBundle\Field\FieldDescriptionCollection;
 use Oro\Bundle\GridBundle\Field\FieldDescriptionInterface;
 use Oro\Bundle\GridBundle\Filter\FilterInterface;
 
-class ByOpportunitiesManager extends DatagridManager
+class ByOpportunitiesManager extends ReportGridManagerAbstract
 {
-    /**
-     * @var EntityManager
-     */
-    protected $entityManager;
-
     /**
      * {@inheritDoc}
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -26,123 +17,106 @@ class ByOpportunitiesManager extends DatagridManager
     protected function configureFields(FieldDescriptionCollection $fieldsCollection)
     {
         $field = new FieldDescription();
-
-        $field->setName('username');
+        $field->setName('name');
         $field->setOptions(
             array(
                 'type'         => FieldDescriptionInterface::TYPE_TEXT,
-                'label'        => 'Username',
-                'entity_alias' => 'u',
-                'field_name'   => 'username',
-                'filter_type'  => FilterInterface::TYPE_STRING,
-                'required'     => false,
-                'sortable'     => true,
-                'filterable'   => true,
-                'show_filter'  => true,
-            )
-        );
-
-        $fieldsCollection->add($field);
-
-        $field = new FieldDescription();
-
-        $field->setName('firstname');
-        $field->setOptions(
-            array(
-                'type'         => FieldDescriptionInterface::TYPE_TEXT,
-                'label'        => 'First name',
-                'entity_alias' => 'u',
-                'field_name'   => 'firstName',
-                'filter_type'  => FilterInterface::TYPE_STRING,
-                'required'     => false,
-                'sortable'     => true,
-                'filterable'   => true,
-                'show_filter'  => true,
-            )
-        );
-
-        $fieldsCollection->add($field);
-
-        $field = new FieldDescription();
-
-        $field->setName('nameCount');
-        $field->setOptions(
-            array(
-                'type'         => FieldDescriptionInterface::TYPE_INTEGER,
-                'label'        => 'Name count',
-                'field_name'   => 'cnt',
-                'filter_type'  => FilterInterface::TYPE_NUMBER,
-                'expression'   => 'COUNT(u.firstName)',
-                'required'     => false,
-                'sortable'     => true,
-                'filterable'   => true,
-                'show_filter'  => true,
-            )
-        );
-
-        $fieldsCollection->add($field);
-
-        $field = new FieldDescription();
-
-        $field->setName('loginCount');
-        $field->setOptions(
-            array(
-                'type'         => FieldDescriptionInterface::TYPE_INTEGER,
-                'label'        => 'Login count',
-                'entity_alias' => 'u',
-                'field_name'   => 'loginCount',
-                'filter_type'  => FilterInterface::TYPE_NUMBER,
-                'required'     => false,
-                'sortable'     => true,
-                'filterable'   => true,
-                'show_filter'  => true,
-            )
-        );
-
-        $fieldsCollection->add($field);
-
-        $field = new FieldDescription();
-
-        $field->setName('api');
-        $field->setOptions(
-            array(
-                'type'         => FieldDescriptionInterface::TYPE_TEXT,
-                'label'        => 'API key',
+                'label'        => 'Account name',
                 'entity_alias' => 'a',
-                'field_name'   => 'apiKey',
+                'field_name'   => 'name',
                 'filter_type'  => FilterInterface::TYPE_STRING,
                 'required'     => false,
-                'sortable'     => false,
+                'sortable'     => true,
                 'filterable'   => true,
-                'show_filter'  => false,
+                'show_filter'  => true,
             )
         );
+        $fieldsCollection->add($field);
 
+        $this->addMoneyField('won', $fieldsCollection);
+        $this->addMoneyField('lost', $fieldsCollection);
+        $this->addMoneyField('in_progress', $fieldsCollection);
+
+        $field = new FieldDescription();
+        $field->setName('status');
+        $field->setOptions(
+            array(
+                'type'         => FieldDescriptionInterface::TYPE_TEXT,
+                'label'        => 'Status',
+                'entity_alias' => 's',
+                'field_name'   => 'label',
+                'filter_type'  => FilterInterface::TYPE_STRING,
+                'required'     => false,
+                'sortable'     => true,
+                'filterable'   => true,
+                'show_filter'  => true,
+            )
+        );
+        $fieldsCollection->add($field);
+
+        $field = new FieldDescription();
+        $field->setName('close_reason');
+        $field->setOptions(
+            array(
+                'type'         => FieldDescriptionInterface::TYPE_TEXT,
+                'label'        => 'Close Reason',
+                'entity_alias' => 'cr',
+                'field_name'   => 'label',
+                'filter_type'  => FilterInterface::TYPE_STRING,
+                'required'     => false,
+                'sortable'     => true,
+                'filterable'   => true,
+                'show_filter'  => true,
+            )
+        );
+        $fieldsCollection->add($field);
+
+        $field = new FieldDescription();
+        $field->setName('total_ops');
+        $field->setOptions(
+            array(
+                'type'         => FieldDescriptionInterface::TYPE_INTEGER,
+                'label'        => 'Total opportunities',
+                'field_name'   => 'total_ops',
+                'filter_type'  => FilterInterface::TYPE_NUMBER,
+                'required'     => false,
+                'sortable'     => true,
+                'filterable'   => true,
+                'show_filter'  => true,
+            )
+        );
         $fieldsCollection->add($field);
     }
 
     /**
-     * {@inheritdoc}
+     * Add won field
+     *
+     * @param string $name won|lost|in_progress
+     * @param FieldDescriptionCollection $fieldsCollection
+     * @return $this
      */
-    protected function createQuery()
+    public function addMoneyField($name, FieldDescriptionCollection $fieldsCollection)
     {
-        $input     = Yaml::parse(file_get_contents(__DIR__ . '/../../Resources/config/reports.yml'));
-        $converter = new YamlConverter();
-
-        list($reportGroupName, $reportName) = array_slice(explode('-', $this->name), -2, 2);
-        if (isset($input['reports'][$reportGroupName][$reportName])) {
-            $qb = $converter->parse($input['reports'][$reportGroupName][$reportName], $this->entityManager);
-            //$this->queryFactory->setQueryBuilder($qb);
+        if (!in_array($name, array('won', 'lost', 'in_progress'))) {
+            return $this;
         }
 
-        return $this->queryFactory->createQuery();
-    }
+        $field = new FieldDescription();
+        $field->setName($name);
+        $field->setOptions(
+            array(
+                'type'         => FieldDescriptionInterface::TYPE_DECIMAL,
+                'label'        => ucfirst($name),
+                'field_name'   => $name,
+                'filter_type'  => FilterInterface::TYPE_NUMBER,
+                'required'     => false,
+                'sortable'     => true,
+                'filterable'   => true,
+                'show_filter'  => true,
+            )
+        );
+        $fieldsCollection->add($field);
 
-    /**
-     * @param EntityManager $entityManager
-     */
-    public function setEntityManager(EntityManager $entityManager)
-    {
-        $this->entityManager = $entityManager;
+        return $this;
     }
 }

@@ -13,12 +13,20 @@ oro_menu_config:
                 reportGroupName: accounts
                 reportName:      life_time_value
 
+        accounts_by_opportunities:
+            label: 'Accounts by Opportunities'
+            route: 'orocrm_report_index'
+            routeParameters:
+                reportGroupName: accounts
+                reportName:      by_opportunities
+
     tree:
         application_menu:
             children:
                 reports_tab:
                     children:
                         accounts_life_time_value: ~
+                        accounts_by_opportunities: ~
 
 oro_titles:
     orocrm_report_index: ~
