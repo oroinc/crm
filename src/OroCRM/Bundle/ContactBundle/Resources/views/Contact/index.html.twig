@@ -4,11 +4,19 @@
 {% set pageTitle = 'Contacts' %}
 
 {% block navButtons %}
+    {% include 'OroImportExportBundle:ImportExport:buttons.html.twig' with {
+        entityClass: 'OroCRM\\Bundle\\ContactBundle\\Entity\\Contact',
+        importProcessor: 'orocrm_contact.validate_import',
+        exportProcessor: 'orocrm_contact.export'
+    } %}
+
     {% if resource_granted('orocrm_contact_create') %}
+    <div class="btn-group">
         {{ UI.addButton({
             'path' : path('orocrm_contact_create'),
             'title' : 'Create contact',
             'label' : 'Create contact'
         }) }}
+    </div>
     {% endif %}
 {% endblock %}
