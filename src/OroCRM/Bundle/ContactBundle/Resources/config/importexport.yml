@@ -76,8 +76,8 @@ services:
              - [setStrategy, [@orocrm_contact.importexport.strategy.import.contact.add_or_replace]]
              - [setValidator, [@validator]]
         tags:
-            - { name: oro_importexport.processor, type: import, entity: %orocrm_contact.entity.class%, alias: orocrm_contact.import }
-            - { name: oro_importexport.processor, type: validate_import, entity: %orocrm_contact.entity.class%, alias: orocrm_contact.validate_import }
+            - { name: oro_importexport.processor, type: import, entity: %orocrm_contact.entity.class%, alias: orocrm_contact.add_or_replace }
+            - { name: oro_importexport.processor, type: validate_import, entity: %orocrm_contact.entity.class%, alias: orocrm_contact.add_or_replace }
 
     # Export processor
     orocrm_contact.importexport.processor.export:
@@ -85,4 +85,4 @@ services:
         calls:
              - [setDataConverter, [@orocrm_contact.importexport.data_converter.contact]]
         tags:
-            - { name: oro_importexport.processor, type: export, entity: %orocrm_contact.entity.class%, alias: orocrm_contact.export }
+            - { name: oro_importexport.processor, type: export, entity: %orocrm_contact.entity.class%, alias: orocrm_contact }

@@ -18,4 +18,4 @@ orocrm.contact.datagrid.view: View
 orocrm.contact.datagrid.update: Update
 orocrm.contact.datagrid.delete: Delete
 
-oro_importexport.export.entity_export_to_csv.orocrm_contact.export: Export of Contacts
+oro_importexport.export.entity_export_to_csv.orocrm_contact: Export to CSV

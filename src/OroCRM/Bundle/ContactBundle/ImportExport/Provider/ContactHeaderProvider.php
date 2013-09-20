@@ -78,7 +78,7 @@ class ContactHeaderProvider
         if (null === $this->maxHeader) {
             $contact = $this->getMaxContactEntity();
             $complexContactData = $this->serializer->serialize($contact, null);
-            $plainContactData = $this->dataConverter->convertToExportFormat($complexContactData);
+            $plainContactData = $this->dataConverter->convertToExportFormat($complexContactData, false);
             $this->maxHeader = array_keys($plainContactData);
         }
 
