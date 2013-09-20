@@ -1,0 +1,6 @@
+reports:
+    account:
+        life_time_value:
+            name: "Account Life Time Value"
+
+    leads: ~
