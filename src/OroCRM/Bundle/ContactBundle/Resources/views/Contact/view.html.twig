@@ -15,8 +15,8 @@
         {{ UI.button({
             'path' : path('orocrm_contact_update', { 'id': entity.id }),
             'iClass' : 'icon-edit ',
-            'title' : 'Update contact'|trans,
-            'label' : 'Edit'|trans
+            'title' : 'Update contact',
+            'label' : 'Edit'
         }) }}
     {% endif %}
     {% if resource_granted('orocrm_contact_delete') %}
@@ -26,9 +26,9 @@
                 'aCss': 'no-hash remove-button',
                 'id': 'btn-remove-contact',
                 'dataId': entity.id,
-                'dataMessage': 'Are you sure you want to delete this contact?'|trans,
-                'title': 'Delete contact'|trans,
-                'label': 'Delete'|trans
+                'dataMessage': 'Are you sure you want to delete this contact?',
+                'title': 'Delete contact',
+                'label': 'Delete'
             })
         }}
     {% endif %}
