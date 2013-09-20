@@ -11,12 +11,11 @@ reports:
             from:
                 - { table: OroCRMSalesBundle:Opportunity, alias: o }
             select: >
+                a.id,
                 a.name,
-                s.label,
-                cr.label,
-                SUM( (CASE WHEN (s.name='won') THEN o.closeRevenue ELSE 0 END) ) as won,
-                SUM( (CASE WHEN (s.name='lost') THEN o.closeRevenue ELSE 0 END) ) as lost,
-                SUM( (CASE WHEN (s.name='in_progress') THEN o.closeRevenue ELSE 0 END) ) as in_progress,
+                SUM( (CASE WHEN (s.name='won') THEN 1 ELSE 0 END) ) as won,
+                SUM( (CASE WHEN (s.name='lost') THEN 1 ELSE 0 END) ) as lost,
+                SUM( (CASE WHEN (s.name='in_progress') THEN 1 ELSE 0 END) ) as in_progress,
                 COUNT(o.id) as total_ops
             join:
                 left:
@@ -28,10 +27,10 @@ reports:
 #                    - "u.loginCount >= 0"
 #                or:
 #                    - "u.enabled = 0"
-            groupBy:  "a.name"
+            groupBy:  "a.id"
 #            having:   "COUNT(u.firstName) > 1"
-            orderBy:
-                - { column: "a.name", dir: "asc" }
+#            orderBy:
+#                - { column: "a.name", dir: "asc" }
 
         mage_order_state:
             name:     MageOrderState
