@@ -91,7 +91,11 @@ class ContactNormalizer implements NormalizerInterface, DenormalizerInterface, S
     {
         $result = $this->getScalarFieldsValues($object);
 
-        $result['birthday'] = $this->normalizeObject($object->getBirthday(), $format, $context);
+        $result['birthday'] = $this->normalizeObject(
+            $object->getBirthday(),
+            $format,
+            array_merge($context, array('type' => 'date'))
+        );
         $result['source'] = $this->normalizeObject($object->getSource(), $format, $context);
         $result['method'] = $this->normalizeObject($object->getMethod(), $format, $context);
         $result['owner'] = $this->normalizeObject(
@@ -217,7 +221,13 @@ class ContactNormalizer implements NormalizerInterface, DenormalizerInterface, S
             array(
                 array(
                     'name' => 'birthday',
-                    'value' => $this->denormalizeObject($data, 'birthday', 'DateTime', $format, $context)
+                    'value' => $this->denormalizeObject(
+                        $data,
+                        'birthday',
+                        'DateTime',
+                        $format,
+                        array_merge($context, array('type' => 'date'))
+                    )
                 ),
                 array(
                     'name' => 'source',

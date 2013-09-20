@@ -8,8 +8,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
-use Oro\Bundle\UserBundle\Annotation\Acl;
-use Oro\Bundle\UserBundle\Annotation\AclAncestor;
+use Oro\Bundle\SecurityBundle\Annotation\Acl;
+use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 
 use Oro\Bundle\GridBundle\Datagrid\DatagridInterface;
 use OroCRM\Bundle\ContactBundle\Entity\Group;
@@ -17,12 +17,6 @@ use OroCRM\Bundle\ContactBundle\Datagrid\GroupContactDatagridManager;
 
 /**
  * @Route("/group")
- * @Acl(
- *      id="orocrm_contact_group",
- *      name="Contact groups manipulation",
- *      description="Contact groups manipulation",
- *      parent="root"
- * )
  */
 class GroupController extends Controller
 {
@@ -33,9 +27,9 @@ class GroupController extends Controller
      * @Template("OroCRMContactBundle:Group:update.html.twig")
      * @Acl(
      *      id="orocrm_contact_group_create",
-     *      name="Create Group",
-     *      description="Create new group",
-     *      parent="orocrm_contact_group"
+     *      type="entity",
+     *      permission="CREATE",
+     *      class="OroCRMContactBundle:Group"
      * )
      */
     public function createAction()
@@ -50,9 +44,9 @@ class GroupController extends Controller
      * @Template
      * @Acl(
      *      id="orocrm_contact_group_update",
-     *      name="Update Group",
-     *      description="Update group",
-     *      parent="orocrm_contact_group"
+     *      type="entity",
+     *      permission="EDIT",
+     *      class="OroCRMContactBundle:Group"
      * )
      */
     public function updateAction(Group $entity)
@@ -91,7 +85,7 @@ class GroupController extends Controller
      *      defaults={"id"=0, "_format"="json"}
      * )
      * @Template("OroGridBundle:Datagrid:list.json.php")
-     * @AclAncestor("orocrm_contact_group_update")
+     * @AclAncestor("orocrm_contact_view")
      */
     public function gridDataAction(Group $entity = null)
     {
@@ -123,10 +117,10 @@ class GroupController extends Controller
      *      defaults={"_format" = "html"}
      * )
      * @Acl(
-     *      id="orocrm_contact_group_list",
-     *      name="View Contact Group List",
-     *      description="List of contact groups",
-     *      parent="orocrm_contact_group"
+     *      id="orocrm_contact_group_view",
+     *      type="entity",
+     *      permission="VIEW",
+     *      class="OroCRMContactBundle:Group"
      * )
      */
     public function indexAction(Request $request)

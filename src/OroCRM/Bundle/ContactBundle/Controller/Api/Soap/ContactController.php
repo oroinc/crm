@@ -5,7 +5,7 @@ namespace OroCRM\Bundle\ContactBundle\Controller\Api\Soap;
 use Symfony\Component\Form\FormInterface;
 use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 
-use Oro\Bundle\UserBundle\Annotation\AclAncestor;
+use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 
 use Oro\Bundle\SoapBundle\Controller\Api\Soap\SoapController;
 use Oro\Bundle\SoapBundle\Entity\Manager\ApiFlexibleEntityManager;
@@ -20,7 +20,7 @@ class ContactController extends SoapController
      * @Soap\Param("page", phpType="int")
      * @Soap\Param("limit", phpType="int")
      * @Soap\Result(phpType = "OroCRM\Bundle\ContactBundle\Entity\Contact[]")
-     * @AclAncestor("orocrm_contact_list")
+     * @AclAncestor("orocrm_contact_view")
      */
     public function cgetAction($page = 1, $limit = 10)
     {
@@ -81,6 +81,7 @@ class ContactController extends SoapController
      * @Soap\Method("createContact")
      * @Soap\Param("contact", phpType = "OroCRM\Bundle\ContactBundle\Entity\Contact")
      * @Soap\Result(phpType = "int")
+     * @AclAncestor("orocrm_contact_create")
      */
     public function createAction($contact)
     {
@@ -92,6 +93,7 @@ class ContactController extends SoapController
      * @Soap\Param("id", phpType = "int")
      * @Soap\Param("contact", phpType = "OroCRM\Bundle\ContactBundle\Entity\Contact")
      * @Soap\Result(phpType = "boolean")
+     * @AclAncestor("orocrm_contact_update")
      */
     public function updateAction($id, $contact)
     {
@@ -102,6 +104,7 @@ class ContactController extends SoapController
      * @Soap\Method("deleteContact")
      * @Soap\Param("id", phpType = "int")
      * @Soap\Result(phpType = "boolean")
+     * @AclAncestor("orocrm_contact_delete")
      */
     public function deleteAction($id)
     {

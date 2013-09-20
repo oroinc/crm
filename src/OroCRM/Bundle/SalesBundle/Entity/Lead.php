@@ -4,6 +4,7 @@ namespace OroCRM\Bundle\SalesBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Oro\Bundle\AddressBundle\Entity\Address;
+use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 
 /**
@@ -12,6 +13,15 @@ use OroCRM\Bundle\ContactBundle\Entity\Contact;
  * @ORM\Table(name="orocrm_sales_lead")
  * @ORM\Entity
  * @ORM\HasLifecycleCallbacks()
+ * @Config(
+ *  defaultValues={
+ *      "entity"={"label"="Lead", "plural_label"="Leads"},
+ *      "security"={
+ *          "type"="ACL",
+ *          "group_name"=""
+ *      }
+ *  }
+ * )
  */
 class Lead
 {
