@@ -45,16 +45,16 @@ class ByOpportunitiesManager extends ReportGridManagerAbstract
         );
         $fieldsCollection->add($field);
 
-        $this->addIntField('wonCount', 'Won', $fieldsCollection);
-        $this->addIntField('lostCount', 'Lost', $fieldsCollection);
-        $this->addIntField('inProgressCount', 'In Progress', $fieldsCollection);
+        $this->addIntField('wonCount', 'Number Won', $fieldsCollection);
+        $this->addIntField('lostCount', 'Number Lost', $fieldsCollection);
+        $this->addIntField('inProgressCount', 'Number In Progress', $fieldsCollection);
 
         $field = new FieldDescription();
         $field->setName('total_ops');
         $field->setOptions(
             array(
                 'type'         => FieldDescriptionInterface::TYPE_INTEGER,
-                'label'        => 'Total opportunities',
+                'label'        => 'Total',
                 'field_name'   => 'total_ops',
                 'expression'   => 'total_ops',
                 'filter_type'  => FilterInterface::TYPE_NUMBER,
