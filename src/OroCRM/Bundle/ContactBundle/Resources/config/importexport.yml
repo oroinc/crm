@@ -61,13 +61,13 @@ services:
         arguments:
             - @oro_importexport.strategy.import.helper
             - @orocrm_contact.importexport.strategy.import.contact.helper
+            - @translator
 
     orocrm_contact.importexport.strategy.import.contact.helper:
         class: %orocrm_contact.importexport.strategy.import.contact.helper.class%
         arguments:
             - @security.context
             - @doctrine
-            - @translator
 
     # Import processor
     orocrm_contact.importexport.processor.import:
