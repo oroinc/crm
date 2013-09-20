@@ -84,7 +84,7 @@ class CreateAccountTest extends \PHPUnit_Extensions_Selenium2TestCase
             ->setPassword(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_PASS)
             ->submit()
             ->openAccounts()
-            ->filterBy('Name', $accountname)
+            ->filterBy('Account name', $accountname)
             ->open(array($accountname))
             ->edit()
             ->assertTitle($accountname . ' - Accounts - Customers')

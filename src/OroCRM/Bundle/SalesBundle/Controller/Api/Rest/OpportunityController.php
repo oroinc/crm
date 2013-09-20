@@ -13,8 +13,8 @@ use FOS\RestBundle\Routing\ClassResourceInterface;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
 use Oro\Bundle\AddressBundle\Entity\AddressType;
-use Oro\Bundle\UserBundle\Annotation\Acl;
-use Oro\Bundle\UserBundle\Annotation\AclAncestor;
+use Oro\Bundle\SecurityBundle\Annotation\Acl;
+use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 
 use Oro\Bundle\SoapBundle\Form\Handler\ApiFormHandler;
 use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
@@ -45,7 +45,7 @@ class OpportunityController extends RestController implements ClassResourceInter
      *      description="Get all opportunities",
      *      resource=true
      * )
-     * @AclAncestor("orocrm_sales_opportunity_list")
+     * @AclAncestor("orocrm_sales_opportunity_view")
      * @return Response
      */
     public function cgetAction()
@@ -115,9 +115,9 @@ class OpportunityController extends RestController implements ClassResourceInter
      * )
      * @Acl(
      *      id="orocrm_sales_opportunity_delete",
-     *      name="Delete opportunity",
-     *      description="Delete opportunity",
-     *      parent="orocrm_sales_opportunity"
+     *      type="entity",
+     *      permission="DELETE",
+     *      class="OroCRMSalesBundle:Opportunity"
      * )
      * @return Response
      */

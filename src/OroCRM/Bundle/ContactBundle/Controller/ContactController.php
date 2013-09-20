@@ -14,8 +14,8 @@ use JMS\Serializer\DeserializationContext;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Oro\Bundle\UserBundle\Annotation\Acl;
-use Oro\Bundle\UserBundle\Annotation\AclAncestor;
+use Oro\Bundle\SecurityBundle\Annotation\Acl;
+use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 
 use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
@@ -31,14 +31,6 @@ use Oro\Bundle\BatchBundle\Entity\JobInstance;
 use Oro\Bundle\EntityConfigBundle\Config\ConfigInterface;
 use Oro\Bundle\EntityExtendBundle\Extend\ExtendManager;
 
-/**
- * @Acl(
- *      id="orocrm_contact",
- *      name="Contact manipulation",
- *      description="Contact manipulation",
- *      parent="root"
- * )
- */
 class ContactController extends Controller
 {
     /**
@@ -47,9 +39,9 @@ class ContactController extends Controller
      * @Template
      * @Acl(
      *      id="orocrm_contact_view",
-     *      name="View Contact",
-     *      description="View contact",
-     *      parent="orocrm_contact"
+     *      type="entity",
+     *      permission="VIEW",
+     *      class="OroCRMContactBundle:Contact"
      * )
      */
     public function viewAction(Contact $contact)
@@ -110,9 +102,9 @@ class ContactController extends Controller
      * @Template("OroCRMContactBundle:Contact:update.html.twig")
      * @Acl(
      *      id="orocrm_contact_create",
-     *      name="Create Contact",
-     *      description="Create contact",
-     *      parent="orocrm_contact"
+     *      type="entity",
+     *      permission="CREATE",
+     *      class="OroCRMContactBundle:Contact"
      * )
      */
     public function createAction()
@@ -143,9 +135,9 @@ class ContactController extends Controller
      * @Template
      * @Acl(
      *      id="orocrm_contact_update",
-     *      name="Update Contact",
-     *      description="Update contact",
-     *      parent="orocrm_contact"
+     *      type="entity",
+     *      permission="EDIT",
+     *      class="OroCRMContactBundle:Contact"
      * )
      */
     public function updateAction(Contact $entity = null)
@@ -194,12 +186,7 @@ class ContactController extends Controller
      * )
      *
      * @Template
-     * @Acl(
-     *      id="orocrm_contact_list",
-     *      name="View List of Contacts",
-     *      description="View list of contacts",
-     *      parent="orocrm_contact"
-     * )
+     * @AclAncestor("orocrm_contact_view")
      */
     public function indexAction()
     {
@@ -212,146 +199,6 @@ class ContactController extends Controller
         }
 
         return array('datagrid' => $datagridView);
-    }
-
-    /**
-     * @Route(
-     *      "/export{_format}",
-     *      name="orocrm_contact_export",
-     *      requirements={"_format"="csv"},
-     *      defaults={"_format" = "csv"}
-     * )
-     * @Acl(
-     *      id="orocrm_contact_export",
-     *      name="Export List of Contacts",
-     *      description="Export list of contacts",
-     *      parent="orocrm_contact"
-     * )
-     */
-    public function exportAction()
-    {
-        /*
-        $jobInstance = new JobInstance(
-            'oro_importexport',
-            JobInstance::TYPE_IMPORT,
-            'entity_import_validation_from_csv'
-        );
-        $jobInstance->setCode('contact_export');
-        $jobInstance->setLabel('Default Entity Export');
-        $this->getDoctrine()->getManager()->persist($jobInstance);
-
-        $jobRegistry = $this->get('oro_batch.connectors');
-        $job = $jobRegistry->getJob($jobInstance);
-
-        $jobExecution = new JobExecution();
-        $jobExecution->setJobInstance($jobInstance);
-        $this->getDoctrine()->getManager()->persist($jobExecution);
-
-        $job->execute($jobExecution);
-
-        $this->getDoctrine()->getManager()->flush();
-        */
-
-        $doctrine = $this->getDoctrine();
-        $contacts = $doctrine->getRepository('OroCRMContactBundle:Contact')->findAll();
-        $contact = current($contacts);
-
-        /** @var Serializer $importExportSerializer */
-        $importExportSerializer = $this->get('oro_importexport.serializer');
-        $serializedData = $importExportSerializer->serialize($contact, null);
-
-        /** @var ContactDataConverter $contactDataConverter */
-        $contactDataConverter = $this->get('orocrm_contact.importexport.data_converter.contact');
-        $contactExportData = $contactDataConverter->convertToExportFormat($serializedData);
-
-        return new Response(
-            '<pre>' . var_export($serializedData, true) . "\n\n" . var_export($contactExportData, true) .  '</pre>'
-        );
-    }
-
-    /**
-     * @Route(
-     *      "/import{_format}",
-     *      name="orocrm_contact_import",
-     *      requirements={"_format"="csv"},
-     *      defaults={"_format" = "csv"}
-     * )
-     * @Acl(
-     *      id="orocrm_contact_import",
-     *      name="Import List of Contacts",
-     *      description="Import list of contacts",
-     *      parent="orocrm_contact"
-     * )
-     */
-    public function importAction()
-    {
-        $contactData = array (
-            'ID' => '69',
-            'Name Prefix' => 'Ms.',
-            'First Name' => 'April',
-            'Last Name' => 'Lynch',
-            'Name Suffix' => '',
-            'gender' => '',
-            'Description' => '',
-            'Job Title' => '',
-            'Fax' => '',
-            'Skype' => '',
-            'Twitter' => '',
-            'Facebook' => '',
-            'GooglePlus' => '',
-            'LinkedIn' => '',
-            'Birthday' => '1944-08-29T16:52:09+0200',
-            'Source' => 'tv',
-            'Method' => '',
-            'Owner First Name' => 'William',
-            'Owner Last Name' => 'Stewart',
-            'Assigned To First Name' => 'William',
-            'Assigned To Last Name' => 'Stewart',
-            'Primary Address Label' => '',
-            'Primary Address First Name' => '',
-            'Primary Address Last Name' => '',
-            'Primary Address Street' => '',
-            'Primary Address Street2' => '',
-            'Primary Address City' => '',
-            'Primary Address Region' => '',
-            'Primary Address Country' => '',
-            'Primary Address Postal Code' => '',
-            'Address 1 Label' => '',
-            'Address 1 First Name' => '',
-            'Address 1 Last Name' => '',
-            'Address 1 Street' => '',
-            'Address 1 Street2' => '',
-            'Address 1 City' => '',
-            'Address 1 Region' => '',
-            'Address 1 Country' => '',
-            'Address 1 Postal Code' => '',
-            'Address 1 Type 1' => 'billing',
-            'Address 1 Type 2' => 'shipping',
-            'Primary Email' => 'primary-email@example.com',
-            'Email 1' => 'another-email@example.com',
-            'Primary Phone' => '0 800 11 22 444',
-            'Phone 1' => '0 800 11 22 555',
-            'Group 1' => 'first_group',
-            'Group 2' => 'second_group',
-            'Account 1' => 'First Account Name',
-            'Account 2' => 'Second Account Name',
-        );
-
-        /** @var ContactDataConverter $contactDataConverter */
-        $contactDataConverter = $this->get('orocrm_contact.importexport.data_converter.contact');
-        $contactImportData = $contactDataConverter->convertToImportFormat($contactData);
-
-        /** @var Serializer $importExportSerializer */
-        $importExportSerializer = $this->get('oro_importexport.serializer');
-        $deserializedData = $importExportSerializer->deserialize(
-            $contactImportData,
-            'OroCRM\Bundle\ContactBundle\Entity\Contact',
-            null
-        );
-
-        return new Response(
-            '<pre>' . print_r($contactImportData, true). "\n\n" . print_r($deserializedData, true) . '</pre>'
-        );
     }
 
     /**
