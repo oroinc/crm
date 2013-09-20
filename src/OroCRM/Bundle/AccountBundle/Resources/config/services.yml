@@ -44,6 +44,7 @@ services:
         arguments:
             - @orocrm_account.account.manager.flexible
             - "orocrm_account_value"
+            - @router
         tags:
             - { name: form.type, alias: orocrm_account }
 
@@ -110,6 +111,7 @@ services:
         arguments:
             - @orocrm_account.account.manager.flexible
             - "orocrm_account_value"
+            - @router
         tags:
             - { name: form.type, alias: account }
 

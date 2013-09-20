@@ -52,6 +52,8 @@ class ContactAccountUpdateDatagridManager extends ContactAccountDatagridManager
      */
     protected function prepareQuery(ProxyQueryInterface $query)
     {
+        $this->applyJoinWithDefaultContact($query);
+
         $query->addSelect($this->getHasContactExpression() . ' AS hasCurrentContact', true);
     }
 
