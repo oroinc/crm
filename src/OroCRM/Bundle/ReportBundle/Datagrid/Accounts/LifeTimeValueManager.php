@@ -17,13 +17,13 @@ class LifeTimeValueManager extends ReportGridManagerAbstract
     {
         $field = new FieldDescription();
 
-        $field->setName('username');
+        $field->setName('name');
         $field->setOptions(
             array(
                 'type'         => FieldDescriptionInterface::TYPE_TEXT,
-                'label'        => 'Username',
-                'entity_alias' => 'u',
-                'field_name'   => 'username',
+                'label'        => 'Account Name',
+                'entity_alias' => 'a',
+                'field_name'   => 'name',
                 'filter_type'  => FilterInterface::TYPE_STRING,
                 'required'     => false,
                 'sortable'     => true,
@@ -36,18 +36,18 @@ class LifeTimeValueManager extends ReportGridManagerAbstract
 
         $field = new FieldDescription();
 
-        $field->setName('firstname');
+        $field->setName('value');
         $field->setOptions(
             array(
-                'type'         => FieldDescriptionInterface::TYPE_TEXT,
-                'label'        => 'First name',
-                'entity_alias' => 'u',
-                'field_name'   => 'firstName',
-                'filter_type'  => FilterInterface::TYPE_STRING,
-                'required'     => false,
-                'sortable'     => true,
-                'filterable'   => true,
-                'show_filter'  => true,
+                'type'        => FieldDescriptionInterface::TYPE_DECIMAL,
+                'label'       => 'Total value',
+                'field_name'  => 'value',
+                'expression'  => 'value',
+                'filter_type' => FilterInterface::TYPE_NUMBER,
+                'required'    => false,
+                'sortable'    => true,
+                'filterable'  => true,
+                'show_filter' => true,
             )
         );
 
@@ -55,18 +55,37 @@ class LifeTimeValueManager extends ReportGridManagerAbstract
 
         $field = new FieldDescription();
 
-        $field->setName('nameCount');
+        $field->setName('close_date');
         $field->setOptions(
             array(
-                'type'         => FieldDescriptionInterface::TYPE_INTEGER,
-                'label'        => 'Name count',
-                'field_name'   => 'cnt',
-                'filter_type'  => FilterInterface::TYPE_NUMBER,
-                'expression'   => 'COUNT(u.firstName)',
-                'required'     => false,
-                'sortable'     => true,
-                'filterable'   => true,
-                'show_filter'  => true,
+                'type'        => FieldDescriptionInterface::TYPE_DATE,
+                'label'       => 'Close date',
+                'field_name'  => 'closeDate',
+                'filter_type' => FilterInterface::TYPE_DATE,
+                'required'    => false,
+                'sortable'    => false,
+                'show_column' => false,
+                'filterable'  => true,
+                'show_filter' => true,
+            )
+        );
+
+        $fieldsCollection->add($field);
+
+        $field = new FieldDescription();
+
+        $field->setName('created_at');
+        $field->setOptions(
+            array(
+                'type'        => FieldDescriptionInterface::TYPE_DATE,
+                'label'       => 'Created date',
+                'field_name'  => 'createdAt',
+                'filter_type' => FilterInterface::TYPE_DATE,
+                'required'    => false,
+                'sortable'    => false,
+                'show_column' => false,
+                'filterable'  => true,
+                'show_filter' => true,
             )
         );
 
