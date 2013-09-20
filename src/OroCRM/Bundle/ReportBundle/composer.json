@@ -1,0 +1,25 @@
+{
+    "name": "orocrm/report-bundle",
+    "type": "symfony-bundle",
+    "description": "OroCRM Report Bundle",
+    "keywords": ["OroCRM"],
+    "license": "MIT",
+    "require": {
+        "php": ">=5.3.3",
+        "symfony/symfony": "2.3.*",
+
+        "oro/ui-bundle": "dev-master",
+        "orocrm/account-bundle": "dev-master",
+        "orocrm/sales-bundle": "dev-master"
+    },
+    "autoload": {
+        "psr-0": { "OroCRM\\Bundle\\ReportBundle": "" }
+    },
+    "target-dir": "OroCRM/Bundle/ReportBundle",
+    "minimum-stability": "dev",
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0-dev"
+        }
+    }
+}

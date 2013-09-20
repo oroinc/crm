@@ -1,30 +1,36 @@
 reports:
-    -
-        name:     AccountsByOpportunities
-        distinct: false
-        select:   "u.username, u.firstName, u.loginCount, a.apiKey, COUNT(u.firstName) AS cnt"
-        from:
-            - { table: OroUserBundle:User, alias: u }
-        join:
-            left:
-                - { join: u.api, alias: a }
-                - { join: u.statuses, alias: s }
-        where:
-            and:
-                - "u.loginCount >= 0"
-            or:
-                - "u.enabled = 0"
-        groupBy:  "u.firstName"
-        having:   "COUNT(u.firstName) > 1"
-        orderBy:
-            - { column: "u.firstName", dir: "asc" }
+    account:
+        life_time_value:
+            name: "Account Life Time Value"
 
-    -
-        name:     MageOrderState
-        select:   "m.createdAt, m.state, SUM(m.orderCount) AS orderCount, AVG(m.avgBaseGrandTotal) AS avgTotal"
-        from:
-            - { table: AcmeDemoBundle:ReportMage\ReportMageOrderState, alias: m }
-        groupBy:  "m.createdAt, m.state"
-        orderBy:
-            - { column: "m.createdAt", dir: "desc" }
-            - { column: "avgTotal" }
+        by_opportunities:
+            name:     "Accounts by Opportunities"
+            distinct: false
+            select:   "u.username, u.firstName, u.loginCount, a.apiKey, COUNT(u.firstName) AS cnt"
+            from:
+                - { table: OroUserBundle:User, alias: u }
+            join:
+                left:
+                    - { join: u.api, alias: a }
+                    - { join: u.statuses, alias: s }
+            where:
+                and:
+                    - "u.loginCount >= 0"
+                or:
+                    - "u.enabled = 0"
+            groupBy:  "u.firstName"
+            having:   "COUNT(u.firstName) > 1"
+            orderBy:
+                - { column: "u.firstName", dir: "asc" }
+
+        -
+            name:     MageOrderState
+            select:   "m.createdAt, m.state, SUM(m.orderCount) AS orderCount, AVG(m.avgBaseGrandTotal) AS avgTotal"
+            from:
+                - { table: AcmeDemoBundle:ReportMage\ReportMageOrderState, alias: m }
+            groupBy:  "m.createdAt, m.state"
+            orderBy:
+                - { column: "m.createdAt", dir: "desc" }
+                - { column: "avgTotal" }
+
+    leads: ~
