@@ -2,6 +2,10 @@
 
 namespace OroCRM\Bundle\ContactBundle\ImportExport\Strategy\Import;
 
+use Symfony\Component\Validator\ValidatorInterface;
+use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Component\Validator\ConstraintViolationInterface;
+
 use Oro\Bundle\ImportExportBundle\Exception\InvalidArgumentException;
 use Oro\Bundle\ImportExportBundle\Exception\LogicException;
 use Oro\Bundle\ImportExportBundle\Strategy\StrategyInterface;
@@ -24,6 +28,11 @@ class AddOrReplaceStrategy implements StrategyInterface, ContextAwareInterface
     protected $contactStrategyHelper;
 
     /**
+     * @var TranslatorInterface
+     */
+    protected $translator;
+
+    /**
      * @var ContextInterface
      */
     protected $importExportContext;
@@ -31,13 +40,16 @@ class AddOrReplaceStrategy implements StrategyInterface, ContextAwareInterface
     /**
      * @param ImportStrategyHelper $strategyHelper
      * @param ContactImportStrategyHelper $contactStrategyHelper
+     * @param TranslatorInterface $translator
      */
     public function __construct(
         ImportStrategyHelper $strategyHelper,
-        ContactImportStrategyHelper $contactStrategyHelper
+        ContactImportStrategyHelper $contactStrategyHelper,
+        TranslatorInterface $translator
     ) {
         $this->strategyHelper = $strategyHelper;
         $this->contactStrategyHelper = $contactStrategyHelper;
+        $this->translator = $translator;
     }
 
     /**
@@ -69,12 +81,8 @@ class AddOrReplaceStrategy implements StrategyInterface, ContextAwareInterface
         // update owner for addresses, emails and phones
         $this->updateRelatedEntitiesOwner($entity);
 
-        // increment context counter
-        if ($entity->getId()) {
-            $this->importExportContext->incrementReplaceCount();
-        } else {
-            $this->importExportContext->incrementAddCount();
-        }
+        // validate and update context - increment counter or add validation error
+        $entity = $this->validateAndUpdateContext($entity);
 
         return $entity;
     }
@@ -85,6 +93,38 @@ class AddOrReplaceStrategy implements StrategyInterface, ContextAwareInterface
     public function setImportExportContext(ContextInterface $importExportContext)
     {
         $this->importExportContext = $importExportContext;
+    }
+
+    /**
+     * @param Contact $contact
+     * @return null|Contact
+     */
+    protected function validateAndUpdateContext(Contact $contact)
+    {
+        // validate contact
+        $validationErrors = $this->strategyHelper->validateEntity($contact);
+        if ($validationErrors) {
+            $errorMessage = $this->translator->trans(
+                'orocrm.contact.importexport.import.contact_error %contact% %number%',
+                array(
+                    '%contact%' => (string)$contact,
+                    '%number%' => $this->importExportContext->getReadCount()
+                )
+            );
+            $errorMessage .= ' ' . implode(' ', $validationErrors);
+            $this->importExportContext->addError($errorMessage);
+
+            return null;
+        }
+
+        // increment context counter
+        if ($contact->getId()) {
+            $this->importExportContext->incrementReplaceCount();
+        } else {
+            $this->importExportContext->incrementAddCount();
+        }
+
+        return $contact;
     }
 
     /**

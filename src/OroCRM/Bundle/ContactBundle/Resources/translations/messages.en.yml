@@ -19,3 +19,4 @@ orocrm.contact.datagrid.update: Update
 orocrm.contact.datagrid.delete: Delete
 
 oro_importexport.export.entity_export_to_csv.orocrm_contact: Export to CSV
+orocrm.contact.importexport.import.contact_error %contact% %number%: Error in contact %contact% (\#%number%).

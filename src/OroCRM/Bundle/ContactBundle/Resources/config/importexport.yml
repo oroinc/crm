@@ -67,6 +67,7 @@ services:
         arguments:
             - @security.context
             - @doctrine
+            - @translator
 
     # Import processor
     orocrm_contact.importexport.processor.import:
@@ -74,7 +75,6 @@ services:
         calls:
              - [setDataConverter, [@orocrm_contact.importexport.data_converter.contact]]
              - [setStrategy, [@orocrm_contact.importexport.strategy.import.contact.add_or_replace]]
-             - [setValidator, [@validator]]
         tags:
             - { name: oro_importexport.processor, type: import, entity: %orocrm_contact.entity.class%, alias: orocrm_contact.add_or_replace }
             - { name: oro_importexport.processor, type: import_validation, entity: %orocrm_contact.entity.class%, alias: orocrm_contact.add_or_replace }
