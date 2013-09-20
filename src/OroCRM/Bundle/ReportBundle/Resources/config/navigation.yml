@@ -19,3 +19,6 @@ oro_menu_config:
                 reports_tab:
                     children:
                         accounts_life_time_value: ~
+
+oro_titles:
+    orocrm_report_index: ~
