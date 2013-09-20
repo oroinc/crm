@@ -1,7 +1,10 @@
 reports:
-    account:
+    accounts:
         life_time_value:
-            name: "Account Life Time Value"
+            name:   "Account Life Time Value"
+            select: "u.username, u.firstName, u.loginCount"
+            from:
+                - { table: OroUserBundle:User, alias: u }
 
         by_opportunities:
             name:     "Accounts by Opportunities"
