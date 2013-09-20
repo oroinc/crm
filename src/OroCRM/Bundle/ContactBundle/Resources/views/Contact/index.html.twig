@@ -7,7 +7,8 @@
     {% include 'OroImportExportBundle:ImportExport:buttons.html.twig' with {
         entityClass: 'OroCRM\\Bundle\\ContactBundle\\Entity\\Contact',
         importProcessor: 'orocrm_contact.validate_import',
-        exportProcessor: 'orocrm_contact.export'
+        exportProcessor: 'orocrm_contact.export',
+        imortTitle: 'Import Contacts'|trans
     } %}
 
     {% if resource_granted('orocrm_contact_create') %}
