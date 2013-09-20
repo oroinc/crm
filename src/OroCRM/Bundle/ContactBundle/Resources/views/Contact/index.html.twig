@@ -6,7 +6,7 @@
 {% block navButtons %}
     {% include 'OroImportExportBundle:ImportExport:buttons.html.twig' with {
         entityClass: 'OroCRM\\Bundle\\ContactBundle\\Entity\\Contact',
-        importProcessor: 'orocrm_contact.validate_import',
+        importProcessor: 'orocrm_contact.import_validation',
         exportProcessor: 'orocrm_contact.export',
         imortTitle: 'Import Contacts'|trans
     } %}

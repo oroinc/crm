@@ -77,7 +77,7 @@ services:
              - [setValidator, [@validator]]
         tags:
             - { name: oro_importexport.processor, type: import, entity: %orocrm_contact.entity.class%, alias: orocrm_contact.add_or_replace }
-            - { name: oro_importexport.processor, type: validate_import, entity: %orocrm_contact.entity.class%, alias: orocrm_contact.add_or_replace }
+            - { name: oro_importexport.processor, type: import_validation, entity: %orocrm_contact.entity.class%, alias: orocrm_contact.add_or_replace }
 
     # Export processor
     orocrm_contact.importexport.processor.export:
