@@ -38,6 +38,7 @@ class ReportController extends Controller
             );
 
             $pageTitle = $definition['name'];
+            $this->get('oro_navigation.title_service')->setParams(array('%reportName%' => $pageTitle));
         }
         $datagridView = $datagridManager->getDatagrid()->createView();
 
