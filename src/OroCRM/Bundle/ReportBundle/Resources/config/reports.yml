@@ -17,4 +17,13 @@ reports:
 
             groupBy:  a.id
 
-    leads: ~
+    leads:
+        by_date_and_source:
+            name:      "Number Leads by date and source"
+            select: >
+                l.topic,
+                l.firstName,
+                l.lastName
+            from:
+                - { table: OroCRMSalesBundle:Lead, alias: l }
+
