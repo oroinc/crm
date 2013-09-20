@@ -163,7 +163,7 @@ services:
             - %orocrm_contact.entity.class%
             - ["first_name", "last_name"]
         tags:
-            - { name: oro_form.autocomplete.search_handler, alias: contacts, acl_resource: orocrm_contact_list }
+            - { name: oro_form.autocomplete.search_handler, alias: contacts, acl_resource: orocrm_contact_view }
 
     orocrm_contact.email.owner.provider:
         class: %orocrm_contact.email.owner.provider.class%
