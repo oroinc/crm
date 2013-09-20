@@ -45,9 +45,9 @@ class ByOpportunitiesManager extends ReportGridManagerAbstract
         );
         $fieldsCollection->add($field);
 
-        $this->addIntField('won', $fieldsCollection);
-        $this->addIntField('lost', $fieldsCollection);
-        $this->addIntField('in_progress', $fieldsCollection);
+        $this->addIntField('wonCount', 'Won', $fieldsCollection);
+        $this->addIntField('lostCount', 'Lost', $fieldsCollection);
+        $this->addIntField('inProgressCount', 'In Progress', $fieldsCollection);
 
         $field = new FieldDescription();
         $field->setName('total_ops');
@@ -56,11 +56,46 @@ class ByOpportunitiesManager extends ReportGridManagerAbstract
                 'type'         => FieldDescriptionInterface::TYPE_INTEGER,
                 'label'        => 'Total opportunities',
                 'field_name'   => 'total_ops',
+                'expression'   => 'total_ops',
                 'filter_type'  => FilterInterface::TYPE_NUMBER,
                 'required'     => false,
                 'sortable'     => true,
                 'filterable'   => true,
                 'show_filter'  => true,
+            )
+        );
+        $fieldsCollection->add($field);
+
+        $field = new FieldDescription();
+        $field->setName('close_date');
+        $field->setOptions(
+            array(
+                'type'        => FieldDescriptionInterface::TYPE_DATE,
+                'label'       => 'Close date',
+                'field_name'  => 'closeDate',
+                'filter_type' => FilterInterface::TYPE_DATE,
+                'required'    => false,
+                'sortable'    => false,
+                'show_column' => false,
+                'filterable'  => true,
+                'show_filter' => true,
+            )
+        );
+        $fieldsCollection->add($field);
+
+        $field = new FieldDescription();
+        $field->setName('created_at');
+        $field->setOptions(
+            array(
+                'type'        => FieldDescriptionInterface::TYPE_DATE,
+                'label'       => 'Created date',
+                'field_name'  => 'createdAt',
+                'filter_type' => FilterInterface::TYPE_DATE,
+                'required'    => false,
+                'sortable'    => false,
+                'show_column' => false,
+                'filterable'  => true,
+                'show_filter' => true,
             )
         );
         $fieldsCollection->add($field);
@@ -70,12 +105,13 @@ class ByOpportunitiesManager extends ReportGridManagerAbstract
      * Add won field
      *
      * @param string $name won|lost|in_progress
+     * @param string $label
      * @param FieldDescriptionCollection $fieldsCollection
      * @return $this
      */
-    public function addIntField($name, FieldDescriptionCollection $fieldsCollection)
+    public function addIntField($name, $label, FieldDescriptionCollection $fieldsCollection)
     {
-        if (!in_array($name, array('won', 'lost', 'in_progress'))) {
+        if (!in_array($name, array('wonCount', 'lostCount', 'inProgressCount'))) {
             return $this;
         }
 
@@ -84,8 +120,9 @@ class ByOpportunitiesManager extends ReportGridManagerAbstract
         $field->setOptions(
             array(
                 'type'         => FieldDescriptionInterface::TYPE_INTEGER,
-                'label'        => ucfirst($name),
-                'field_name'   => $name,
+                'label'        => $label,
+                'expression'   => $name,
+                'filter_by_having' => true,
                 'filter_type'  => FilterInterface::TYPE_NUMBER,
                 'required'     => false,
                 'sortable'     => true,
@@ -114,18 +151,7 @@ class ByOpportunitiesManager extends ReportGridManagerAbstract
             )
         );
 
-        $viewAction = array(
-            'name'         => 'view',
-            'type'         => ActionInterface::TYPE_REDIRECT,
-            'acl_resource' => 'orocrm_account_view',
-            'options'      => array(
-                'label' => $this->translate('View'),
-                'icon'  => 'user',
-                'link'  => 'view_link',
-            )
-        );
-
-        return array($clickAction, $viewAction);
+        return array($clickAction);
     }
 
 }

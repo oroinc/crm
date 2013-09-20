@@ -24,9 +24,9 @@ reports:
             select: >
                 a.id,
                 a.name,
-                SUM( (CASE WHEN (s.name='won') THEN 1 ELSE 0 END) ) as won,
-                SUM( (CASE WHEN (s.name='lost') THEN 1 ELSE 0 END) ) as lost,
-                SUM( (CASE WHEN (s.name='in_progress') THEN 1 ELSE 0 END) ) as in_progress,
+                SUM( (CASE WHEN (s.name='won') THEN 1 ELSE 0 END) ) as wonCount,
+                SUM( (CASE WHEN (s.name='lost') THEN 1 ELSE 0 END) ) as lostCount,
+                SUM( (CASE WHEN (s.name='in_progress') THEN 1 ELSE 0 END) ) as inProgressCount,
                 COUNT(o.id) as total_ops
             join:
                 left:
