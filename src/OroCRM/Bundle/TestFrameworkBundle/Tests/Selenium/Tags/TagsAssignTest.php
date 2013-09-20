@@ -68,7 +68,7 @@ class TagsAssignTest extends \PHPUnit_Extensions_Selenium2TestCase
             ->assertMessage('Account successfully saved')
             ->toGrid()
             ->close()
-            ->filterBy('Name', $accountname)
+            ->filterBy('Account name', $accountname)
             ->open(array($accountname))
             ->verifyTag($tagname);
     }

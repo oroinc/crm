@@ -33,7 +33,15 @@ use OroCRM\Bundle\AccountBundle\Entity\Account;
  * @Config(
  *  defaultValues={
  *      "entity"={"label"="Contact", "plural_label"="Contacts"},
- *      "ownership"={"owner_type"="USER"}
+ *      "ownership"={
+ *          "owner_type"="USER",
+ *          "owner_field_name"="owner",
+ *          "owner_column_name"="user_owner_id"
+ *      },
+ *      "security"={
+ *          "type"="ACL",
+ *          "group_name"=""
+ *      }
  *  }
  * )
  */
