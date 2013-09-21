@@ -9,7 +9,7 @@ use Oro\Bundle\GridBundle\Filter\FilterInterface;
 
 use OroCRM\Bundle\ReportBundle\Datagrid\ReportGridManagerAbstract;
 
-class ByDate extends ReportGridManagerAbstract
+class ByDateManager extends ReportGridManagerAbstract
 {
     /**
      * {@inheritDoc}

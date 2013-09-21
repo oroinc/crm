@@ -1,6 +1,6 @@
 parameters:
     orocrm_report.datagrid.accounts.life_time_value.class: OroCRM\Bundle\ReportBundle\Datagrid\Accounts\LifeTimeValueManager
-    orocrm_report.datagrid.leads.by_date.class: OroCRM\Bundle\ReportBundle\Datagrid\Leads\ByDate
+    orocrm_report.datagrid.leads.by_date.class: OroCRM\Bundle\ReportBundle\Datagrid\Leads\ByDateManager
 
 services:
     orocrm_report.datagrid.accounts.life_time_value:
