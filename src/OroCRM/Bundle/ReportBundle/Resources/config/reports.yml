@@ -52,6 +52,7 @@ reports:
             from:
                 - { table: OroCRMSalesBundle:Opportunity, alias: o }
             select:
+                - 1 as period
                 - CONCAT( CONCAT( SUBSTRING( o.closeDate, 6, 2 ), '/'), SUBSTRING( o.closeDate, 1, 4 ) ) as monthPeriod
                 - >
                   CONCAT(

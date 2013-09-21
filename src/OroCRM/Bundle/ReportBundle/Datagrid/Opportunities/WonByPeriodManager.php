@@ -2,12 +2,15 @@
 
 namespace OroCRM\Bundle\ReportBundle\Datagrid\Opportunities;
 
+use Oro\Bundle\GridBundle\Datagrid\ResultRecord;
 use Oro\Bundle\GridBundle\Filter\FilterInterface;
 use Oro\Bundle\GridBundle\Field\FieldDescription;
 use Oro\Bundle\GridBundle\Field\FieldDescriptionCollection;
 use Oro\Bundle\GridBundle\Field\FieldDescriptionInterface;
 
+use Oro\Bundle\GridBundle\Property\CallbackProperty;
 use OroCRM\Bundle\ReportBundle\Datagrid\ReportGridManagerAbstract;
+use OroCRM\Bundle\ReportBundle\Filter\PeriodFilter;
 
 class WonByPeriodManager extends ReportGridManagerAbstract
 {
@@ -18,19 +21,32 @@ class WonByPeriodManager extends ReportGridManagerAbstract
     {
         $field = new FieldDescription();
 
-        $field->setName('yearPeriod');
+        $periodName = 'yearPeriod';
+        $field->setName('period');
         $field->setOptions(
             array(
                 'type'        => FieldDescriptionInterface::TYPE_TEXT,
                 'label'       => $this->translate('orocrm.report.datagrid.columns.period'),
-                'expression'  => 'yearPeriod',
-                'required'    => false,
+                'expression'  => 'period',
+                'required'    => true,
                 'sortable'    => true,
                 'show_column' => true,
-                'filter_type' => FilterInterface::TYPE_CHOICE,
+                'filter_type' => PeriodFilter::SERVICE_NAME,
                 'filterable'  => true,
                 'show_filter' => true,
-                'choices'     => array()
+                'choices'     => array(
+                    'monthPeriod'   => 'Monthly',
+                    'quarterPeriod' => 'Quarterly',
+                    'yearPeriod'    => 'Yearly'
+                )
+            )
+        );
+        $field->setProperty(
+            new CallbackProperty(
+                'period',
+                function (ResultRecord $record) use ($periodName) {
+                    return $record->getValue($periodName);
+                }
             )
         );
 
@@ -110,5 +126,17 @@ class WonByPeriodManager extends ReportGridManagerAbstract
         );
 
         $fieldCollection->add($field);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function getDefaultFilters()
+    {
+        return array(
+            'period' => array(
+                'value' => 'monthPeriod'
+            )
+        );
     }
 }
