@@ -104,16 +104,7 @@ class AddOrReplaceStrategy implements StrategyInterface, ContextAwareInterface
         // validate contact
         $validationErrors = $this->strategyHelper->validateEntity($contact);
         if ($validationErrors) {
-            $errorMessage = $this->translator->trans(
-                'orocrm.contact.importexport.import.contact_error %contact% %number%',
-                array(
-                    '%contact%' => (string)$contact,
-                    '%number%' => $this->importExportContext->getReadCount()
-                )
-            );
-            $errorMessage .= ' ' . implode(' ', $validationErrors);
-            $this->importExportContext->addError($errorMessage);
-
+            $this->strategyHelper->addValidationErrors($validationErrors, $this->importExportContext);
             return null;
         }
 
