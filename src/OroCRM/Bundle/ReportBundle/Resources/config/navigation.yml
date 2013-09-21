@@ -25,12 +25,12 @@ oro_menu_config:
                 reportGroupName: accounts
                 reportName:      life_time_value
 
-        leads_by_date_and_source:
-            label: 'Leads by date and source'
+        leads_by_date:
+            label: 'Leads by date'
             route: 'orocrm_report_index'
             routeParameters:
                 reportGroupName: leads
-                reportName:      by_date_and_source
+                reportName:      by_date
 
     tree:
         application_menu:
@@ -43,7 +43,7 @@ oro_menu_config:
 
                         leads_report_tab:
                             children:
-                                leads_by_date_and_source: ~
+                                leads_by_date: ~
 
 oro_titles:
     orocrm_report_index: %%reportName%% - Reports

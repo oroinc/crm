@@ -2,9 +2,9 @@ reports:
     accounts:
         life_time_value:
             name:   "Account Life Time Value"
-            select: >
-                a.name,
-                SUM( o.closeRevenue ) as value
+            select:
+                - a.name
+                - SUM( o.closeRevenue ) as value
             from:
                 - { table: OroCRMSalesBundle:Opportunity, alias: o }
             join:
@@ -18,12 +18,12 @@ reports:
             groupBy:  a.id
 
     leads:
-        by_date_and_source:
-            name:      "Number Leads by date and source"
-            select: >
-                l.topic,
-                l.firstName,
-                l.lastName
+        by_date:
+            name:      "Number Leads by date"
+            select:
+                - COUNT(l.id) as leadsCount
+                - SUBSTRING(l.createdAt, 1, 10) as createdDate
             from:
                 - { table: OroCRMSalesBundle:Lead, alias: l }
 
+            groupBy: createdDate
