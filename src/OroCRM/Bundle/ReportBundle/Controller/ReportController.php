@@ -24,22 +24,26 @@ class ReportController extends Controller
     public function indexAction($reportGroupName, $reportName)
     {
         $input = Yaml::parse(file_get_contents(__DIR__ . '/../Resources/config/reports.yml'));
-        /** @var ReportGridManagerAbstract $datagridManager */
-        $datagridManager = $this->get('orocrm_report.datagrid.' . implode('.', array($reportGroupName, $reportName)));
-
-        if (isset($input['reports'][$reportGroupName][$reportName])) {
-            $definition = $input['reports'][$reportGroupName][$reportName];
-            $datagridManager->setReportDefinitionArray($definition);
-            $datagridManager->getRouteGenerator()->setRouteParameters(
-                array(
-                    'reportGroupName' => $reportGroupName,
-                    'reportName'      => $reportName
-                )
-            );
-
-            $pageTitle = $definition['name'];
-            $this->get('oro_navigation.title_service')->setParams(array('%reportName%' => $pageTitle));
+        $gridServiceName = 'orocrm_report.datagrid.' . implode('.', array($reportGroupName, $reportName));
+        if (!$this->has($gridServiceName) || !isset($input['reports'][$reportGroupName][$reportName])) {
+            throw $this->createNotFoundException();
         }
+
+        /** @var ReportGridManagerAbstract $datagridManager */
+        $datagridManager = $this->get($gridServiceName);
+
+        $definition = $input['reports'][$reportGroupName][$reportName];
+        $datagridManager->setReportDefinitionArray($definition);
+        $datagridManager->getRouteGenerator()->setRouteParameters(
+            array(
+                'reportGroupName' => $reportGroupName,
+                'reportName'      => $reportName
+            )
+        );
+
+        $pageTitle = $definition['name'];
+        $this->get('oro_navigation.title_service')->setParams(array('%reportName%' => $pageTitle));
+
         $datagridView = $datagridManager->getDatagrid()->createView();
 
         if ('json' == $this->getRequest()->getRequestFormat()) {
