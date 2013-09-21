@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ReportBundle\Datagrid\Accounts;
+namespace OroCRM\Bundle\ReportBundle\Datagrid\Opportunities;
 
 use Oro\Bundle\GridBundle\Filter\FilterInterface;
 use Oro\Bundle\GridBundle\Field\FieldDescription;
@@ -9,31 +9,50 @@ use Oro\Bundle\GridBundle\Field\FieldDescriptionInterface;
 
 use OroCRM\Bundle\ReportBundle\Datagrid\ReportGridManagerAbstract;
 
-class LifeTimeValueManager extends ReportGridManagerAbstract
+class WonByPeriodManager extends ReportGridManagerAbstract
 {
     /**
      * {@inheritDoc}
      */
-    protected function configureFields(FieldDescriptionCollection $fieldsCollection)
+    protected function configureFields(FieldDescriptionCollection $fieldCollection)
     {
         $field = new FieldDescription();
 
-        $field->setName('name');
+        $field->setName('yearPeriod');
         $field->setOptions(
             array(
-                'type'         => FieldDescriptionInterface::TYPE_TEXT,
-                'label'        => $this->translate('orocrm.report.datagrid.columns.account_name'),
-                'entity_alias' => 'a',
-                'field_name'   => 'name',
-                'filter_type'  => FilterInterface::TYPE_STRING,
-                'required'     => false,
-                'sortable'     => true,
-                'filterable'   => true,
-                'show_filter'  => true,
+                'type'        => FieldDescriptionInterface::TYPE_TEXT,
+                'label'       => $this->translate('orocrm.report.datagrid.columns.period'),
+                'expression'  => 'yearPeriod',
+                'required'    => false,
+                'sortable'    => true,
+                'show_column' => true,
+                'filter_type' => FilterInterface::TYPE_CHOICE,
+                'filterable'  => true,
+                'show_filter' => true,
+                'choices'     => array()
             )
         );
 
-        $fieldsCollection->add($field);
+        $fieldCollection->add($field);
+
+        $field = new FieldDescription();
+        $field->setName('cnt');
+        $field->setOptions(
+            array(
+                'type'             => FieldDescriptionInterface::TYPE_INTEGER,
+                'label'            => $this->translate('orocrm.report.datagrid.columns.number_won'),
+                'expression'       => 'cnt',
+                'filter_by_having' => true,
+                'filter_type'      => FilterInterface::TYPE_NUMBER,
+                'required'         => false,
+                'sortable'         => true,
+                'filterable'       => true,
+                'show_filter'      => true,
+            )
+        );
+        $fieldCollection->add($field);
+
 
         $field = new FieldDescription();
 
@@ -52,7 +71,7 @@ class LifeTimeValueManager extends ReportGridManagerAbstract
             )
         );
 
-        $fieldsCollection->add($field);
+        $fieldCollection->add($field);
 
         $field = new FieldDescription();
 
@@ -71,7 +90,7 @@ class LifeTimeValueManager extends ReportGridManagerAbstract
             )
         );
 
-        $fieldsCollection->add($field);
+        $fieldCollection->add($field);
 
         $field = new FieldDescription();
 
@@ -90,6 +109,6 @@ class LifeTimeValueManager extends ReportGridManagerAbstract
             )
         );
 
-        $fieldsCollection->add($field);
+        $fieldCollection->add($field);
     }
 }

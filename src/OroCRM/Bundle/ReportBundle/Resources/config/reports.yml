@@ -1,7 +1,7 @@
 reports:
     accounts:
         life_time_value:
-            name:   "Account Life Time Value"
+            name:   "Account life time value"
             select:
                 - a.name
                 - SUM( o.closeRevenue ) as value
@@ -18,7 +18,7 @@ reports:
             groupBy:  a.id
 
         by_opportunities:
-            name:     "Accounts by Opportunities"
+            name:     "Accounts by opportunities"
             from:
                 - { table: OroCRMSalesBundle:Opportunity, alias: o }
             select:
@@ -45,3 +45,34 @@ reports:
                 - { table: OroCRMSalesBundle:Lead, alias: l }
 
             groupBy: createdDate
+
+    opportunities:
+        won_by_period:
+            name: "Won opportunities by date period"
+            from:
+                - { table: OroCRMSalesBundle:Opportunity, alias: o }
+            select:
+                - CONCAT( CONCAT( SUBSTRING( o.closeDate, 6, 2 ), '/'), SUBSTRING( o.closeDate, 1, 4 ) ) as monthPeriod
+                - >
+                  CONCAT(
+                    CONCAT(
+                      CASE
+                        WHEN SUBSTRING(o.closeDate, 6, 2) BETWEEN 1 AND 3 THEN 1
+                        WHEN SUBSTRING(o.closeDate, 6, 2) BETWEEN 4 AND 6 THEN 2
+                        WHEN SUBSTRING(o.closeDate, 6, 2) BETWEEN 7 AND 9 THEN 3
+                        ELSE 4
+                      END, '/'
+                    ), SUBSTRING( o.closeDate, 1, 4 )
+                  ) as quarterPeriod
+                - SUBSTRING( o.closeDate, 1, 4 ) as yearPeriod
+                - SUM( o.closeRevenue ) as value
+                - COUNT( o.id ) as cnt
+            join:
+                left:
+                    - { join: o.status, alias: s }
+            where:
+                and:
+                    - s.name = 'won'
+                    - o.closeDate IS NOT NULL
+            # group will be changed dynamically dependent on filter
+            groupBy: monthPeriod
