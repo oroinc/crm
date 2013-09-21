@@ -2,29 +2,17 @@
 
 namespace OroCRM\Bundle\ReportBundle\Datagrid\Accounts;
 
-use Oro\Bundle\GridBundle\Action\ActionInterface;
-use Oro\Bundle\GridBundle\Property\UrlProperty;
-use OroCRM\Bundle\ReportBundle\Datagrid\ReportGridManagerAbstract;
 use Oro\Bundle\GridBundle\Field\FieldDescription;
 use Oro\Bundle\GridBundle\Field\FieldDescriptionCollection;
 use Oro\Bundle\GridBundle\Field\FieldDescriptionInterface;
 use Oro\Bundle\GridBundle\Filter\FilterInterface;
 
+use OroCRM\Bundle\ReportBundle\Datagrid\ReportGridManagerAbstract;
+
 class ByOpportunitiesManager extends ReportGridManagerAbstract
 {
     /**
      * {@inheritDoc}
-     */
-    protected function getProperties()
-    {
-        return array(
-            new UrlProperty('view_link', $this->router, 'orocrm_account_view', array('id')),
-        );
-    }
-
-    /**
-     * {@inheritDoc}
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function configureFields(FieldDescriptionCollection $fieldsCollection)
     {
@@ -134,24 +122,4 @@ class ByOpportunitiesManager extends ReportGridManagerAbstract
 
         return $this;
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getRowActions()
-    {
-        $clickAction = array(
-            'name'         => 'rowClick',
-            'type'         => ActionInterface::TYPE_REDIRECT,
-            'acl_resource' => 'orocrm_account_view',
-            'options'      => array(
-                'label'         => $this->translate('View'),
-                'link'          => 'view_link',
-                'runOnRowClick' => true,
-            )
-        );
-
-        return array($clickAction);
-    }
-
 }
