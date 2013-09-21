@@ -2,7 +2,6 @@
 
 namespace OroCRM\Bundle\ContactBundle\Controller;
 
-use Oro\Bundle\EmailBundle\Datagrid\EmailDatagridManager;
 use Doctrine\Common\Inflector\Inflector;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,6 +19,7 @@ use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\ContactBundle\Datagrid\ContactDatagridManager;
 use OroCRM\Bundle\ContactBundle\Datagrid\ContactAccountUpdateDatagridManager;
 use OroCRM\Bundle\AccountBundle\Entity\Account;
+use OroCRM\Bundle\ContactBundle\Datagrid\ContactEmailDatagridManager;
 
 use Oro\Bundle\EntityConfigBundle\Config\ConfigInterface;
 use Oro\Bundle\EntityExtendBundle\Extend\ExtendManager;
@@ -39,9 +39,9 @@ class ContactController extends Controller
      */
     public function viewAction(Contact $contact)
     {
-        /** @var EmailDatagridManager $manager */
-        $manager = $this->get('oro_email.email_datagrid_manager');
-        $manager->setEntity($contact);
+        /** @var ContactEmailDatagridManager $manager */
+        $manager = $this->get('orocrm_contact.email.datagrid_manager');
+        $manager->setContact($contact);
         $datagridView = $manager->getDatagrid()->createView();
 
         if ('json' == $this->getRequest()->getRequestFormat()) {
