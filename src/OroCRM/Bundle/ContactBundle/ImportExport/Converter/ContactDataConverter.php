@@ -38,10 +38,10 @@ class ContactDataConverter extends AbstractTableDataConverter implements QueryBu
         'Source'      => 'source',
         'Method'      => 'method',
         // users (OroUserBundle:User)
-        'Owner First Name'       => 'owner:firstName',
-        'Owner Last Name'        => 'owner:lastName',
-        'Assigned To First Name' => 'assignedTo:firstName',
-        'Assigned To Last Name'  => 'assignedTo:lastName',
+        'Owner Username'       => 'owner:username',
+        'Owner'                => 'owner:fullName',
+        'Assigned To Username' => 'assignedTo:username',
+        'Assigned To'          => 'assignedTo:fullName',
         // contact typed addresses (OroCRMContactBundle:ContactAddress)
         'Primary Address Label'       => 'addresses:0:label',
         'Primary Address First Name'  => 'addresses:0:firstName',

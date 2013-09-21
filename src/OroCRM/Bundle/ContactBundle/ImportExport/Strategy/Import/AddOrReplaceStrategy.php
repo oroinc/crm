@@ -2,10 +2,6 @@
 
 namespace OroCRM\Bundle\ContactBundle\ImportExport\Strategy\Import;
 
-use Symfony\Component\Validator\ValidatorInterface;
-use Symfony\Component\Translation\TranslatorInterface;
-use Symfony\Component\Validator\ConstraintViolationInterface;
-
 use Oro\Bundle\ImportExportBundle\Exception\InvalidArgumentException;
 use Oro\Bundle\ImportExportBundle\Exception\LogicException;
 use Oro\Bundle\ImportExportBundle\Strategy\StrategyInterface;
@@ -28,11 +24,6 @@ class AddOrReplaceStrategy implements StrategyInterface, ContextAwareInterface
     protected $contactStrategyHelper;
 
     /**
-     * @var TranslatorInterface
-     */
-    protected $translator;
-
-    /**
      * @var ContextInterface
      */
     protected $importExportContext;
@@ -40,16 +31,13 @@ class AddOrReplaceStrategy implements StrategyInterface, ContextAwareInterface
     /**
      * @param ImportStrategyHelper $strategyHelper
      * @param ContactImportStrategyHelper $contactStrategyHelper
-     * @param TranslatorInterface $translator
      */
     public function __construct(
         ImportStrategyHelper $strategyHelper,
-        ContactImportStrategyHelper $contactStrategyHelper,
-        TranslatorInterface $translator
+        ContactImportStrategyHelper $contactStrategyHelper
     ) {
         $this->strategyHelper = $strategyHelper;
         $this->contactStrategyHelper = $contactStrategyHelper;
-        $this->translator = $translator;
     }
 
     /**

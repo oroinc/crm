@@ -258,7 +258,8 @@ class ContactNormalizerTest extends \PHPUnit_Framework_TestCase
                 'contact' => $this->createContact()->setBirthday($birthday = new \DateTime()),
                 'fieldName' => 'birthday',
                 'object' => $birthday,
-                'expectedValue' => '1928-06-14'
+                'expectedValue' => '1928-06-14',
+                'context' => array('type' => 'date'),
             ),
             'source' => array(
                 'contact' => $this->createContact()->setSource($source = new Source('source')),
@@ -374,6 +375,7 @@ class ContactNormalizerTest extends \PHPUnit_Framework_TestCase
                 'object' => $birthday = new \DateTime('1928-06-14'),
                 'type' => 'DateTime',
                 'expectedContact' => $this->createContact()->setBirthday($birthday),
+                'context' => array('type' => 'date'),
             ),
             'source' => array(
                 'data' => array('source' => 'source_value'),

@@ -37,10 +37,10 @@ class ContactDataConverterTest extends \PHPUnit_Framework_TestCase
         'birthday',
         'source',
         'method',
-        'owner:firstName',
-        'owner:lastName',
-        'assignedTo:firstName',
-        'assignedTo:lastName',
+        'owner:username',
+        'owner:fullName',
+        'assignedTo:username',
+        'assignedTo:fullName',
         'addresses:0:label',
         'addresses:0:firstName',
         'addresses:0:lastName',
@@ -95,13 +95,13 @@ class ContactDataConverterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param array $importedRecord
+     * @param array $exportedRecord
      * @param array $result
      * @dataProvider convertToExportFormatDataProvider
      */
-    public function testConvertToExportFormat(array $importedRecord, array $result)
+    public function testConvertToExportFormat(array $exportedRecord, array $result)
     {
-        $this->assertEquals($result, $this->dataConverter->convertToExportFormat($importedRecord));
+        $this->assertEquals($result, $this->dataConverter->convertToExportFormat($exportedRecord));
     }
 
     /**
@@ -112,7 +112,7 @@ class ContactDataConverterTest extends \PHPUnit_Framework_TestCase
     {
         return array(
             'minimal data' => array(
-                'importedRecord' => array(
+                'exportedRecord' => array(
                     'firstName' => 'John',
                     'lastName'  => 'Doe',
                 ),
@@ -134,10 +134,10 @@ class ContactDataConverterTest extends \PHPUnit_Framework_TestCase
                     'Birthday' => '',
                     'Source' => '',
                     'Method' => '',
-                    'Owner First Name' => '',
-                    'Owner Last Name' => '',
-                    'Assigned To First Name' => '',
-                    'Assigned To Last Name' => '',
+                    'Owner Username' => '',
+                    'Owner' => '',
+                    'Assigned To Username' => '',
+                    'Assigned To' => '',
                     'Primary Address Label' => '',
                     'Primary Address First Name' => '',
                     'Primary Address Last Name' => '',
@@ -173,7 +173,7 @@ class ContactDataConverterTest extends \PHPUnit_Framework_TestCase
                 )
             ),
             'full data' => array(
-                'importedRecord' => array(
+                'exportedRecord' => array(
                     'id' => 69,
                     'namePrefix' => 'Mr.',
                     'firstName' => 'John',
@@ -192,12 +192,12 @@ class ContactDataConverterTest extends \PHPUnit_Framework_TestCase
                     'source' => 'tv',
                     'method' => 'email',
                     'owner' => array(
-                        'firstName' => 'William',
-                        'lastName' => 'Stewart',
+                        'username' => 'w.stewart',
+                        'fullName' => 'William Stewart',
                     ),
                     'assignedTo' => array(
-                        'firstName' => 'William',
-                        'lastName' => 'Stewart',
+                        'username' => 'w.stewart',
+                        'fullName' => 'William Stewart',
                     ),
                     'addresses' => array(
                         array(
@@ -262,10 +262,10 @@ class ContactDataConverterTest extends \PHPUnit_Framework_TestCase
                     'Birthday' => '1944-08-29T16:52:09+0200',
                     'Source' => 'tv',
                     'Method' => 'email',
-                    'Owner First Name' => 'William',
-                    'Owner Last Name' => 'Stewart',
-                    'Assigned To First Name' => 'William',
-                    'Assigned To Last Name' => 'Stewart',
+                    'Owner Username' => 'w.stewart',
+                    'Owner' => 'William Stewart',
+                    'Assigned To Username' => 'w.stewart',
+                    'Assigned To' => 'William Stewart',
                     'Primary Address Label' => 'Billing Address',
                     'Primary Address First Name' => 'John',
                     'Primary Address Last Name' => 'Doe',
@@ -304,13 +304,13 @@ class ContactDataConverterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param array $exportedRecord
+     * @param array $importedRecord
      * @param array $result
      * @dataProvider convertToImportFormatDataProvider
      */
-    public function testConvertToImportFormat(array $exportedRecord, array $result)
+    public function testConvertToImportFormat(array $importedRecord, array $result)
     {
-        $this->assertEquals($result, $this->dataConverter->convertToImportFormat($exportedRecord));
+        $this->assertEquals($result, $this->dataConverter->convertToImportFormat($importedRecord));
     }
 
     /**
@@ -321,7 +321,7 @@ class ContactDataConverterTest extends \PHPUnit_Framework_TestCase
     {
         return array(
             'minimal data' => array(
-                'exportedRecord' => array(
+                'importedRecord' => array(
                     'First Name' => 'John',
                     'Last Name'  => 'Doe',
                 ),
@@ -331,7 +331,7 @@ class ContactDataConverterTest extends \PHPUnit_Framework_TestCase
                 )
             ),
             'full data' => array(
-                'exportedRecord' => array(
+                'importedRecord' => array(
                     'ID' => '69',
                     'Name Prefix' => 'Mr.',
                     'First Name' => 'John',
@@ -349,10 +349,10 @@ class ContactDataConverterTest extends \PHPUnit_Framework_TestCase
                     'Birthday' => '1944-08-29T16:52:09+0200',
                     'Source' => 'tv',
                     'Method' => 'email',
-                    'Owner First Name' => 'William',
-                    'Owner Last Name' => 'Stewart',
-                    'Assigned To First Name' => 'William',
-                    'Assigned To Last Name' => 'Stewart',
+                    'Owner Username' => 'w.stewart',
+                    'Owner' => 'William Stewart',
+                    'Assigned To Username' => 'w.stewart',
+                    'Assigned To' => 'William Stewart',
                     'Primary Address Label' => 'Billing Address',
                     'Primary Address First Name' => 'John',
                     'Primary Address Last Name' => 'Doe',
@@ -405,12 +405,12 @@ class ContactDataConverterTest extends \PHPUnit_Framework_TestCase
                     'source' => 'tv',
                     'method' => 'email',
                     'owner' => array(
-                        'firstName' => 'William',
-                        'lastName' => 'Stewart',
+                        'username' => 'w.stewart',
+                        'fullName' => 'William Stewart',
                     ),
                     'assignedTo' => array(
-                        'firstName' => 'William',
-                        'lastName' => 'Stewart',
+                        'username' => 'w.stewart',
+                        'fullName' => 'William Stewart',
                     ),
                     'addresses' => array(
                         array(

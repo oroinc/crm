@@ -12,11 +12,12 @@ use OroCRM\Bundle\ContactBundle\ImportExport\Provider\ContactMaxDataProvider;
 
 class ContactHeaderProviderTest extends \PHPUnit_Framework_TestCase
 {
-    const MAX_ACCOUNTS  = 2;
-    const MAX_ADDRESSES = 3;
-    const MAX_EMAILS    = 4;
-    const MAX_PHONES    = 5;
-    const MAX_GROUPS    = 6;
+    const MAX_ACCOUNTS      = 2;
+    const MAX_ADDRESSES     = 3;
+    const MAX_EMAILS        = 4;
+    const MAX_PHONES        = 5;
+    const MAX_GROUPS        = 6;
+    const MAX_ADDRESS_TYPES = 1;
 
     /**
      * @var array
@@ -53,9 +54,6 @@ class ContactHeaderProviderTest extends \PHPUnit_Framework_TestCase
         $test = $this;
         $serializedContact = $this->serializedContact;
 
-        // user to get list of account types
-        $managerRegistry = $this->getManagerRegistryMock();
-
         // used to receive max counts for contact related entities
         $contactMaxDataProvider = $this->getContactMaxDataProviderMock();
 
@@ -85,7 +83,6 @@ class ContactHeaderProviderTest extends \PHPUnit_Framework_TestCase
 
         // test
         $headerProvider = new ContactHeaderProvider(
-            $managerRegistry,
             $serializer,
             $dataConverter,
             $contactMaxDataProvider
@@ -111,7 +108,7 @@ class ContactHeaderProviderTest extends \PHPUnit_Framework_TestCase
 
         /** @var ContactAddress $address */
         foreach ($contact->getAddresses() as $address) {
-            $this->assertSameSize($this->addressTypes, $address->getTypes());
+            $this->assertCount(self::MAX_ADDRESS_TYPES, $address->getTypes());
         }
     }
 
@@ -121,11 +118,12 @@ class ContactHeaderProviderTest extends \PHPUnit_Framework_TestCase
     protected function getContactMaxDataProviderMock()
     {
         $expectedMethods = array(
-            'getMaxAccountsCount'  => self::MAX_ACCOUNTS,
-            'getMaxAddressesCount' => self::MAX_ADDRESSES,
-            'getMaxEmailsCount'    => self::MAX_EMAILS,
-            'getMaxPhonesCount'    => self::MAX_PHONES,
-            'getMaxGroupsCount'    => self::MAX_GROUPS,
+            'getMaxAccountsCount'     => self::MAX_ACCOUNTS,
+            'getMaxAddressesCount'    => self::MAX_ADDRESSES,
+            'getMaxEmailsCount'       => self::MAX_EMAILS,
+            'getMaxPhonesCount'       => self::MAX_PHONES,
+            'getMaxGroupsCount'       => self::MAX_GROUPS,
+            'getMaxAddressTypesCount' => self::MAX_ADDRESS_TYPES,
         );
 
         $provider = $this->getMockBuilder('OroCRM\Bundle\ContactBundle\ImportExport\Provider\ContactMaxDataProvider')
@@ -192,7 +190,6 @@ class ContactHeaderProviderTest extends \PHPUnit_Framework_TestCase
             ->with($queryBuilder);
 
         $headerProvider = new ContactHeaderProvider(
-            $managerRegistry,
             $serializer,
             $dataConverter,
             $contactMaxDataProvider

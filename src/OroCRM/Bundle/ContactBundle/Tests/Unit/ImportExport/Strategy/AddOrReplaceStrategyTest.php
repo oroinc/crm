@@ -33,7 +33,7 @@ class AddOrReplaceStrategyTest extends \PHPUnit_Framework_TestCase
     {
         $strategyHelper = $this->getMockBuilder('Oro\Bundle\ImportExportBundle\Strategy\Import\ImportStrategyHelper')
             ->disableOriginalConstructor()
-            ->setMethods(array('importEntity'))
+            ->setMethods(array('importEntity', 'validateEntity'))
             ->getMock();
         $strategyHelper->expects($this->any())
             ->method('importEntity')

@@ -39,7 +39,6 @@ services:
     orocrm_contact.importexport.provider.contact_header:
         class: %orocrm_contact.importexport.provider.contact_header.class%
         arguments:
-            - @doctrine
             - @oro_importexport.serializer
             - @oro_importexport.data_converter.default
             - @orocrm_contact.importexport.provider.contact_max_data
