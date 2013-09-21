@@ -17,6 +17,24 @@ reports:
 
             groupBy:  a.id
 
+        by_opportunities:
+            name:     "Accounts by Opportunities"
+            from:
+                - { table: OroCRMSalesBundle:Opportunity, alias: o }
+            select:
+                - a.id
+                - a.name
+                - SUM( (CASE WHEN (s.name='won') THEN 1 ELSE 0 END) ) as wonCount
+                - SUM( (CASE WHEN (s.name='lost') THEN 1 ELSE 0 END) ) as lostCount
+                - SUM( (CASE WHEN (s.name='in_progress') THEN 1 ELSE 0 END) ) as inProgressCount
+                - COUNT(o.id) as total_ops
+            join:
+                left:
+                    - { join: o.account, alias: a }
+                    - { join: o.status, alias: s }
+                    - { join: o.closeReason, alias: cr }
+            groupBy:  "a.id"
+
     leads:
         by_date:
             name:      "Number Leads by date"
