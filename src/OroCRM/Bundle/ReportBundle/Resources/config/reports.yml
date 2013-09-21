@@ -35,6 +35,21 @@ reports:
                     - { join: o.closeReason, alias: cr }
             groupBy:  "a.id"
 
+    opportunities:
+        by_step:
+            name: "Opportunities by Step"
+            from:
+                - { table: OroCRMReportBundle:OpportunityByWorkflowItem, alias: owi }
+            select:
+                - wi.currentStepName
+                - o.name
+                - COUNT(o.id) as total_ops
+            join:
+                left:
+                    - { join: owi.opportunity, alias: o }
+                    - { join: owi.workflowItem, alias: wi }
+            groupBy:  "wi.currentStepName"
+
     leads:
         by_date:
             name:      "Number Leads by date"

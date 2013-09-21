@@ -11,13 +11,19 @@ oro_menu_config:
             uri: '#'
             extras:
                 position: 10
-                
+
         leads_report_tab:
             label: 'Leads'
             uri: '#'
             extras:
                 position: 20
-                
+
+        opportunities_report_tab:
+            label: 'Opportunities'
+            uri: '#'
+            extras:
+                position: 30
+
         accounts_life_time_value:
             label: 'Life Time'
             route: 'orocrm_report_index'
@@ -39,6 +45,13 @@ oro_menu_config:
                 reportGroupName: leads
                 reportName:      by_date
 
+        opportunities_by_step:
+            label: 'Opportunities by Step'
+            route: 'orocrm_report_index'
+            routeParameters:
+                reportGroupName: opportunities
+                reportName:      by_step
+
     tree:
         application_menu:
             children:
@@ -52,6 +65,10 @@ oro_menu_config:
                         leads_report_tab:
                             children:
                                 leads_by_date: ~
+
+                        opportunities_report_tab:
+                            children:
+                                opportunities_by_step: ~
 
 oro_titles:
     orocrm_report_index: %%reportName%% - Reports
