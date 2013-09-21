@@ -2,10 +2,11 @@
 
 namespace OroCRM\Bundle\ReportBundle\Datagrid\Accounts;
 
+use Oro\Bundle\GridBundle\Filter\FilterInterface;
 use Oro\Bundle\GridBundle\Field\FieldDescription;
 use Oro\Bundle\GridBundle\Field\FieldDescriptionCollection;
 use Oro\Bundle\GridBundle\Field\FieldDescriptionInterface;
-use Oro\Bundle\GridBundle\Filter\FilterInterface;
+
 use OroCRM\Bundle\ReportBundle\Datagrid\ReportGridManagerAbstract;
 
 class LifeTimeValueManager extends ReportGridManagerAbstract
@@ -83,8 +84,8 @@ class LifeTimeValueManager extends ReportGridManagerAbstract
                 'filter_type' => FilterInterface::TYPE_DATE,
                 'required'    => false,
                 'sortable'    => false,
-                'show_column' => false,
                 'filterable'  => true,
+                'show_column' => false,
                 'show_filter' => true,
             )
         );
