@@ -135,4 +135,26 @@ class ContactMaxDataProvider
     {
         return $this->getMaxEntitiesCount('groups');
     }
+
+    /**
+     * @return int
+     */
+    public function getMaxAddressTypesCount()
+    {
+        $queryBuilder = $this->getQueryBuilder();
+        $contactAlias = $this->getRootAlias($queryBuilder);
+
+        $queryBuilder
+            ->select("COUNT(contactAddressType.name) as maxCount")
+            ->join("$contactAlias.addresses", 'contactAddress')
+            ->join('contactAddress.types', 'contactAddressType')
+            ->groupBy('contactAddress.id')
+            ->orderBy('maxCount', 'DESC')
+            ->setMaxResults(1);
+
+        $query = $queryBuilder->getQuery();
+        $result = $query->getOneOrNullResult(Query::HYDRATE_ARRAY);
+
+        return !empty($result['maxCount']) ? (int)$result['maxCount'] : 0;
+    }
 }

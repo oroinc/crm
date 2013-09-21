@@ -99,14 +99,12 @@ class ContactHeaderProvider
             $contact->addAccount(new Account());
         }
 
-        /** @var AddressType[] $allAddressTypes */
-        $allAddressTypes = $this->getAllAddressTypes();
-
         $maxAddresses = $this->maxDataProvider->getMaxAddressesCount();
+        $maxAddressTypes = $this->maxDataProvider->getMaxAddressTypesCount();
         for ($i = 0; $i < $maxAddresses; $i++) {
             $contactAddress = new ContactAddress();
-            foreach ($allAddressTypes as $addressType) {
-                $contactAddress->addType($addressType);
+            for ($j = 0; $j < $maxAddressTypes; $j++) {
+                $contactAddress->addType(new AddressType('type' . $j));
             }
             $contact->addAddress($contactAddress);
         }
@@ -127,15 +125,5 @@ class ContactHeaderProvider
         }
 
         return $contact;
-    }
-
-    /**
-     * @return array
-     */
-    protected function getAllAddressTypes()
-    {
-        /** @var EntityRepository $repository */
-        $repository = $this->managerRegistry->getRepository('OroAddressBundle:AddressType');
-        return $repository->findAll();
     }
 }
