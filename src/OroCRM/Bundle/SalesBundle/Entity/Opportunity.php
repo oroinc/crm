@@ -308,6 +308,7 @@ class Opportunity
 
     /**
      * @param float $revenue
+     * @return $this
      */
     public function setCloseRevenue($revenue)
     {

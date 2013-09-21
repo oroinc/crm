@@ -92,7 +92,7 @@ class ByOpportunitiesManager extends ReportGridManagerAbstract
     /**
      * Add won field
      *
-     * @param string $name won|lost|in_progress
+     * @param string $name wonCount|lostCount|inProgressCount
      * @param string $label
      * @param FieldDescriptionCollection $fieldsCollection
      * @return $this
