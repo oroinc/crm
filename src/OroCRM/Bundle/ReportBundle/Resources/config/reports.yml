@@ -2,9 +2,9 @@ reports:
     accounts:
         life_time_value:
             name:   "Account Life Time Value"
-            select: >
-                a.name,
-                SUM( o.closeRevenue ) as value
+            select:
+                - a.name
+                - SUM( o.closeRevenue ) as value
             from:
                 - { table: OroCRMSalesBundle:Opportunity, alias: o }
             join:
@@ -16,7 +16,7 @@ reports:
                     - s.name = 'won'
 
             groupBy:  a.id
-
+            
         by_opportunities:
             name:     "Accounts by Opportunities"
             from:
@@ -33,24 +33,14 @@ reports:
                     - { join: o.account, alias: a }
                     - { join: o.status, alias: s }
                     - { join: o.closeReason, alias: cr }
-#            where:
-#                and:
-#                    - "u.loginCount >= 0"
-#                or:
-#                    - "u.enabled = 0"
-            groupBy:  "a.id"
-#            having:   "COUNT(u.firstName) > 1"
-#            orderBy:
-#                - { column: "a.name", dir: "asc" }
-
-        mage_order_state:
-            name:     MageOrderState
-            select:   "m.createdAt, m.state, SUM(m.orderCount) AS orderCount, AVG(m.avgBaseGrandTotal) AS avgTotal"
+                    
+    leads:
+        by_date:
+            name:      "Number Leads by date"
+            select:
+                - COUNT(l.id) as leadsCount
+                - SUBSTRING(l.createdAt, 1, 10) as createdDate
             from:
-                - { table: AcmeDemoBundle:ReportMage\ReportMageOrderState, alias: m }
-            groupBy:  "m.createdAt, m.state"
-            orderBy:
-                - { column: "m.createdAt", dir: "desc" }
-                - { column: "avgTotal" }
+                - { table: OroCRMSalesBundle:Lead, alias: l }
 
-    leads: ~
+            groupBy: createdDate

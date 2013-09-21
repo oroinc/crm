@@ -1,6 +1,7 @@
 parameters:
-    orocrm_report.datagrid.accounts.life_time_value.class: OroCRM\Bundle\ReportBundle\Datagrid\Accounts\LifeTimeValueManager
+    orocrm_report.datagrid.accounts.life_time_value.class:  OroCRM\Bundle\ReportBundle\Datagrid\Accounts\LifeTimeValueManager
     orocrm_report.datagrid.accounts.by_opportunities.class: OroCRM\Bundle\ReportBundle\Datagrid\Accounts\ByOpportunitiesManager
+    orocrm_report.datagrid.leads.by_date.class:             OroCRM\Bundle\ReportBundle\Datagrid\Leads\ByDateManager
 
 services:
     orocrm_report.datagrid.accounts.life_time_value:
@@ -20,5 +21,15 @@ services:
         tags:
             - name: oro_grid.datagrid.manager
               datagrid_name: accounts-by_opportunities
+              entity_hint:   report data
+              route_name:    orocrm_report_index
+
+    orocrm_report.datagrid.leads.by_date:
+        class: %orocrm_report.datagrid.leads.by_date.class%
+        arguments:
+            - @doctrine.orm.entity_manager
+        tags:
+            - name: oro_grid.datagrid.manager
+              datagrid_name: leads-by_date
               entity_hint:   report data
               route_name:    orocrm_report_index
