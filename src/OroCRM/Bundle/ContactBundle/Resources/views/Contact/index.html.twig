@@ -8,7 +8,8 @@
         entityClass: 'OroCRM\\Bundle\\ContactBundle\\Entity\\Contact',
         importProcessor: 'orocrm_contact.import_validation',
         exportProcessor: 'orocrm_contact',
-        imortTitle: 'Import Contacts'|trans
+        imortTitle: 'Import Contacts'|trans,
+        dataGridName: datagrid.datagrid.name
     } %}
 
     {% if resource_granted('orocrm_contact_create') %}
