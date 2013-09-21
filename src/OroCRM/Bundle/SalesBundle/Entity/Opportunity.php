@@ -308,10 +308,12 @@ class Opportunity
 
     /**
      * @param float $revenue
+     * @return $this
      */
     public function setCloseRevenue($revenue)
     {
         $this->closeRevenue = $revenue;
+        return $this;
     }
 
     /**
