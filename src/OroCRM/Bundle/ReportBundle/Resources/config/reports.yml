@@ -16,7 +16,7 @@ reports:
                     - s.name = 'won'
 
             groupBy:  a.id
-            
+
         by_opportunities:
             name:     "Accounts by Opportunities"
             from:
@@ -33,7 +33,8 @@ reports:
                     - { join: o.account, alias: a }
                     - { join: o.status, alias: s }
                     - { join: o.closeReason, alias: cr }
-                    
+            groupBy:  "a.id"
+
     leads:
         by_date:
             name:      "Number Leads by date"
