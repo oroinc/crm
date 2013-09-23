@@ -52,7 +52,8 @@ class ReportUpdateCommand extends ContainerAwareCommand
           WHERE entity_class = 'OroCRM\\\Bundle\\\SalesBundle\\\Entity\\\Opportunity'
         ";
 
-        $stmt = $this->getSourceConn()->prepare($query);
+        $conn = $this->getConn();
+        $stmt = $conn->prepare($query);
         $stmt->execute();
 
         $data = & $stmt->fetchAll(Query::HYDRATE_ARRAY);
@@ -69,7 +70,7 @@ class ReportUpdateCommand extends ContainerAwareCommand
      */
     protected function importData($table, $data)
     {
-        $conn = $this->getTargetConn();
+        $conn = $this->getConn();
 
         $conn->beginTransaction();
         $conn->executeQuery($conn->getDatabasePlatform()->getTruncateTableSQL($table));
@@ -105,19 +106,9 @@ class ReportUpdateCommand extends ContainerAwareCommand
     /**
      * @return \Doctrine\DBAL\Connection
      */
-    protected function getTargetConn()
+    protected function getConn()
     {
-        return $this->getContainer()->get('doctrine.dbal.report_target_connection');
-    }
-
-    /**
-     * Source (Magento) DB connection
-     *
-     * @return \Doctrine\DBAL\Connection
-     */
-    protected function getSourceConn()
-    {
-        return $this->getContainer()->get('doctrine.dbal.report_source_connection');
+        return $this->getContainer()->get('doctrine.dbal.default_connection');
     }
 }
 
