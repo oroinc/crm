@@ -1,10 +1,12 @@
 {% extends 'OroUIBundle:actions:view.html.twig' %}
 {% import 'OroTagBundle::macros.html.twig' as _tag %}
 {% import 'OroUIBundle::macros.html.twig' as macros %}
+{% import 'OroEmailBundle::macros.html.twig' as Email %}
+
 {% set format = oro_config_value('oro_crm_contact.name_format') %}
 {% set fullname = entity.fullname(format)|default('N/A'|trans) %}
 {% oro_title_set({params : {"%contact.name%": fullname} }) %}
-{% set gridId = 'accounts-grid' %}
+{% set gridId = 'contact-email-grid' %}
 {% block head_script %}
     {{ parent() }}
     {% placeholder prepare_grid with {'datagrid': datagrid, 'selector': '#' ~ gridId} %}
@@ -73,7 +75,12 @@
         </div>
     </div>
     {# TODO: This is a temporary list of emails for demo purposes. It will be removed when 'display activities' functionality is implemented  #}
-    {# if resource_granted('oro_email_view') #}
-        {# render(controller('OroEmailBundle:Email:activities', {'emails': entity.emails})) #}
-    {# endif #}
+    {#{% if resource_granted('oro_email_view') %}#}
+        {#{{ render(controller('OroEmailBundle:Email:activities', {'emails': entity.emails})) }}#}
+    {#{% endif %}#}
+
+    <div>
+    {{ UI.gridBlock(gridId) }}
+    {{ Email.renderJs() }}
+    </div>
 {% endblock content_data %}

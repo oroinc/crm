@@ -8,8 +8,8 @@ use Symfony\Component\HttpFoundation\Session\Flash\FlashBag;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Oro\Bundle\UserBundle\Annotation\Acl;
-use Oro\Bundle\UserBundle\Annotation\AclAncestor;
+use Oro\Bundle\SecurityBundle\Annotation\Acl;
+use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 
 use OroCRM\Bundle\SalesBundle\Entity\Lead;
 use OroCRM\Bundle\SalesBundle\Datagrid\LeadDatagridManager;
@@ -17,12 +17,6 @@ use OroCRM\Bundle\SalesBundle\Datagrid\LeadDatagridManager;
 /**
  *
  * @Route("/lead")
- * @Acl(
- *      id="orocrm_sales_lead",
- *      name="Lead manipulation",
- *      description="Lead manipulation",
- *      parent="root"
- * )
  */
 class LeadController extends Controller
 {
@@ -31,9 +25,9 @@ class LeadController extends Controller
      * @Template
      * @Acl(
      *      id="orocrm_sales_lead_view",
-     *      name="View Lead",
-     *      description="View lead",
-     *      parent="orocrm_sales_lead"
+     *      type="entity",
+     *      permission="VIEW",
+     *      class="OroCRMSalesBundle:Lead"
      * )
      */
     public function viewAction(Lead $lead)
@@ -58,12 +52,7 @@ class LeadController extends Controller
     /**
      * @Route("/address-book/{id}", name="orocrm_sales_lead_address_book", requirements={"id"="\d+"})
      * @Template
-     * @Acl(
-     *      id="orocrm_sales_lead_address_book",
-     *      name="View Lead Address Book",
-     *      description="View Lead Address Book",
-     *      parent="orocrm_sales_lead_view"
-     * )
+     * @AclAncestor("orocrm_sales_lead_view")
      */
     public function addressBookAction(Lead $lead)
     {
@@ -79,9 +68,9 @@ class LeadController extends Controller
      * @Template("OroCRMSalesBundle:Lead:update.html.twig")
      * @Acl(
      *      id="orocrm_sales_lead_create",
-     *      name="Create Lead",
-     *      description="Create lead",
-     *      parent="orocrm_sales_lead"
+     *      type="entity",
+     *      permission="CREATE",
+     *      class="OroCRMSalesBundle:Lead"
      * )
      */
     public function createAction()
@@ -90,7 +79,7 @@ class LeadController extends Controller
         $defaultStatus = $this->getDoctrine()->getManager()->find('OroCRMSalesBundle:LeadStatus', 'new');
         $lead->setStatus($defaultStatus);
 
-        return $this->updateAction($lead);
+        return $this->update($lead);
     }
 
     /**
@@ -100,32 +89,14 @@ class LeadController extends Controller
      * @Template
      * @Acl(
      *      id="orocrm_sales_lead_update",
-     *      name="Update Lead",
-     *      description="Update lead",
-     *      parent="orocrm_sales_lead"
+     *      type="entity",
+     *      permission="EDIT",
+     *      class="OroCRMSalesBundle:Lead"
      * )
      */
     public function updateAction(Lead $entity)
     {
-        if ($this->get('orocrm_sales.lead.form.handler')->process($entity)) {
-            $this->getFlashBag()->add('success', 'Lead successfully saved');
-
-            return $this->get('oro_ui.router')->actionRedirect(
-                array(
-                    'route' => 'orocrm_sales_lead_update',
-                    'parameters' => array('id' => $entity->getId()),
-                ),
-                array(
-                    'route' => 'orocrm_sales_lead_view',
-                    'parameters' => array('id' => $entity->getId()),
-                )
-            );
-        }
-
-        return array(
-            'entity'   => $entity,
-            'form'     => $this->get('orocrm_sales.lead.form')->createView()
-        );
+        return $this->update($entity);
     }
 
     /**
@@ -136,12 +107,7 @@ class LeadController extends Controller
      *      defaults={"_format" = "html"}
      * )
      * @Template
-     * @Acl(
-     *      id="orocrm_sales_lead_list",
-     *      name="View List of Leads",
-     *      description="View list of leads",
-     *      parent="orocrm_sales_lead"
-     * )
+     * @AclAncestor("orocrm_sales_lead_view")
      */
     public function indexAction()
     {
@@ -162,5 +128,32 @@ class LeadController extends Controller
     protected function getFlashBag()
     {
         return $this->get('session')->getFlashBag();
+    }
+
+    /**
+     * @param Lead $entity
+     * @return array
+     */
+    protected function update(Lead $entity)
+    {
+        if ($this->get('orocrm_sales.lead.form.handler')->process($entity)) {
+            $this->getFlashBag()->add('success', 'Lead successfully saved');
+
+            return $this->get('oro_ui.router')->actionRedirect(
+                array(
+                    'route' => 'orocrm_sales_lead_update',
+                    'parameters' => array('id' => $entity->getId()),
+                ),
+                array(
+                    'route' => 'orocrm_sales_lead_view',
+                    'parameters' => array('id' => $entity->getId()),
+                )
+            );
+        }
+
+        return array(
+            'entity'   => $entity,
+            'form'     => $this->get('orocrm_sales.lead.form')->createView()
+        );
     }
 }
