@@ -4,10 +4,7 @@ namespace OroCRM\Bundle\SalesBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
-
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
-use Oro\Bundle\UserBundle\Entity\User;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 
@@ -18,7 +15,10 @@ use OroCRM\Bundle\AccountBundle\Entity\Account;
  * @Config(
  *  defaultValues={
  *      "entity"={"label"="Opportunity", "plural_label"="Opportunities"},
- *      "ownership"={"owner_type"="USER"}
+ *      "security"={
+ *          "type"="ACL",
+ *          "group_name"=""
+ *      }
  *  }
  * )
  */
@@ -56,14 +56,6 @@ class Opportunity
      * @ORM\JoinColumn(name="contact_id", referencedColumnName="id", onDelete="SET NULL")
      **/
     protected $contact;
-
-    /**
-     * @var User
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
-     * @ORM\JoinColumn(name="user_owner_id", referencedColumnName="id", onDelete="SET NULL")
-     * @Soap\ComplexType("string", nillable=true)
-     */
-    protected $owner;
 
     /**
      * @var Account
@@ -217,25 +209,6 @@ class Opportunity
     }
 
     /**
-     * @return User
-     */
-    public function getOwner()
-    {
-        return $this->owner;
-    }
-
-    /**
-     * @param User $owningUser
-     * @return Opportunity
-     */
-    public function setOwner($owningUser)
-    {
-        $this->owner = $owningUser;
-
-        return $this;
-    }
-
-    /**
      * @param string $customerNeed
      * @return Opportunity
      */
@@ -345,12 +318,10 @@ class Opportunity
 
     /**
      * @param float $revenue
-     * @return $this
      */
     public function setCloseRevenue($revenue)
     {
         $this->closeRevenue = $revenue;
-        return $this;
     }
 
     /**

@@ -27,7 +27,15 @@ use Oro\Bundle\UserBundle\Entity\User;
  * @Config(
  *  defaultValues={
  *      "entity"={"label"="Account", "plural_label"="Accounts"},
- *      "ownership"={"owner_type"="USER"}
+ *      "ownership"={
+ *          "owner_type"="USER",
+ *          "owner_field_name"="owner",
+ *          "owner_column_name"="user_owner_id"
+ *      },
+ *      "security"={
+ *          "type"="ACL",
+ *          "group_name"=""
+ *      }
  *  }
  * )
  */
