@@ -18,7 +18,7 @@ class ByStepManager extends ReportGridManagerAbstract
         $this->addField(
             'step',
             array(
-                'label'        => 'Step',
+                'label'        => $this->translate('orocrm.report.datagrid.columns.step'),
                 'entity_alias' => 'wi',
                 'field_name'   => 'currentStepName',
             ),
@@ -30,7 +30,7 @@ class ByStepManager extends ReportGridManagerAbstract
             array(
                 'type'         => FieldDescriptionInterface::TYPE_INTEGER,
                 'filter_type'  => FilterInterface::TYPE_NUMBER,
-                'label'        => 'Number of opportunities',
+                'label'        => $this->translate('orocrm.report.datagrid.columns.nof_opportunities'),
                 'field_name'   => 'numberOfOpp',
                 'expression'   => 'numberOfOpp',
             ),
@@ -42,7 +42,7 @@ class ByStepManager extends ReportGridManagerAbstract
             array(
                 'type'         => FieldDescriptionInterface::TYPE_DECIMAL,
                 'filter_type'  => FilterInterface::TYPE_NUMBER,
-                'label'        => 'Close Revenue',
+                'label'        => $this->translate('orocrm.report.datagrid.columns.close_revenue'),
                 'field_name'   => 'closeRevenue',
                 'expression'   => 'closeRevenue',
             ),
@@ -54,7 +54,7 @@ class ByStepManager extends ReportGridManagerAbstract
             array(
                 'type'         => FieldDescriptionInterface::TYPE_DECIMAL,
                 'filter_type'  => FilterInterface::TYPE_NUMBER,
-                'label'        => 'Budget Value',
+                'label'        => $this->translate('orocrm.report.datagrid.columns.budget_amount'),
                 'field_name'   => 'budgetAmount',
                 'expression'   => 'budgetAmount',
             ),
@@ -68,7 +68,7 @@ class ByStepManager extends ReportGridManagerAbstract
                 'filter_type'  => FilterInterface::TYPE_ENTITY,
                 'class'               => 'OroWorkflowBundle:WorkflowDefinition',
                 'property'            => 'name',
-                'label'        => 'Workflow',
+                'label'        => $this->translate('orocrm.report.datagrid.columns.workflow'),
                 'entity_alias' => 'wi',
                 'field_name'   => 'workflowName',
                 'show_column'  => false,
