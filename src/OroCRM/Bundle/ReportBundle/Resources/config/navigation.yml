@@ -25,14 +25,14 @@ oro_menu_config:
                 position: 30
 
         accounts_life_time_value:
-            label: 'Life Time'
+            label: 'Life time'
             route: 'orocrm_report_index'
             routeParameters:
                 reportGroupName: accounts
                 reportName:      life_time_value
 
         accounts_by_opportunities:
-            label: 'By Opportunities'
+            label: 'By opportunities'
             route: 'orocrm_report_index'
             routeParameters:
                 reportGroupName: accounts
@@ -52,6 +52,13 @@ oro_menu_config:
                 reportGroupName: opportunities
                 reportName:      by_step
 
+        won_by_period:
+            label: 'Won opportunities by period'
+            route: 'orocrm_report_index'
+            routeParameters:
+                reportGroupName: opportunities
+                reportName:      won_by_period
+
     tree:
         application_menu:
             children:
@@ -69,6 +76,7 @@ oro_menu_config:
                         opportunities_report_tab:
                             children:
                                 opportunities_by_step: ~
+                                won_by_period: ~
 
 oro_titles:
     orocrm_report_index: %%reportName%% - Reports

@@ -22,7 +22,7 @@ class LifeTimeValueManager extends ReportGridManagerAbstract
         $field->setOptions(
             array(
                 'type'         => FieldDescriptionInterface::TYPE_TEXT,
-                'label'        => 'Account Name',
+                'label'        => $this->translate('orocrm.report.datagrid.columns.account_name'),
                 'entity_alias' => 'a',
                 'field_name'   => 'name',
                 'filter_type'  => FilterInterface::TYPE_STRING,
@@ -41,7 +41,7 @@ class LifeTimeValueManager extends ReportGridManagerAbstract
         $field->setOptions(
             array(
                 'type'        => FieldDescriptionInterface::TYPE_DECIMAL,
-                'label'       => 'Total value',
+                'label'       => $this->translate('orocrm.report.datagrid.columns.total_value'),
                 'field_name'  => 'value',
                 'expression'  => 'value',
                 'filter_type' => FilterInterface::TYPE_NUMBER,
@@ -60,7 +60,7 @@ class LifeTimeValueManager extends ReportGridManagerAbstract
         $field->setOptions(
             array(
                 'type'        => FieldDescriptionInterface::TYPE_DATE,
-                'label'       => 'Close date',
+                'label'       => $this->translate('orocrm.report.datagrid.columns.close_date'),
                 'field_name'  => 'closeDate',
                 'filter_type' => FilterInterface::TYPE_DATE,
                 'required'    => false,
@@ -79,7 +79,7 @@ class LifeTimeValueManager extends ReportGridManagerAbstract
         $field->setOptions(
             array(
                 'type'        => FieldDescriptionInterface::TYPE_DATE,
-                'label'       => 'Created date',
+                'label'       => $this->translate('orocrm.report.datagrid.columns.created_date'),
                 'field_name'  => 'createdAt',
                 'filter_type' => FilterInterface::TYPE_DATE,
                 'required'    => false,

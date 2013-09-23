@@ -22,7 +22,7 @@ class ByDateManager extends ReportGridManagerAbstract
         $field->setOptions(
             array(
                 'type'        => FieldDescriptionInterface::TYPE_DATE,
-                'label'       => 'Created date',
+                'label'       => $this->translate('orocrm.report.datagrid.columns.created_date'),
                 'expression'  => 'createdDate',
                 'filter_type' => FilterInterface::TYPE_DATE,
                 'required'    => false,
@@ -41,7 +41,7 @@ class ByDateManager extends ReportGridManagerAbstract
         $field->setOptions(
             array(
                 'type'        => FieldDescriptionInterface::TYPE_INTEGER,
-                'label'       => 'Leads count',
+                'label'       => $this->translate('orocrm.report.datagrid.columns.leads_count'),
                 'expression'  => 'leadsCount',
                 'filter_type' => FilterInterface::TYPE_NUMBER,
                 'required'    => false,
