@@ -56,18 +56,6 @@ reports:
                     - { join: owi.workflowItem, alias: wi }
             groupBy:  "wi.currentStepName"
 
-    leads:
-        by_date:
-            name:      "Number Leads by date"
-            select:
-                - COUNT(l.id) as leadsCount
-                - SUBSTRING(l.createdAt, 1, 10) as createdDate
-            from:
-                - { table: OroCRMSalesBundle:Lead, alias: l }
-
-            groupBy: createdDate
-
-    opportunities:
         won_by_period:
             name: "Won opportunities by date period"
             from:
@@ -93,3 +81,14 @@ reports:
                 and:
                     - s.name = 'won'
                     - o.closeDate IS NOT NULL
+    leads:
+        by_date:
+            name:      "Number Leads by date"
+            select:
+                - COUNT(l.id) as leadsCount
+                - SUBSTRING(l.createdAt, 1, 10) as createdDate
+            from:
+                - { table: OroCRMSalesBundle:Lead, alias: l }
+
+            groupBy: createdDate
+
