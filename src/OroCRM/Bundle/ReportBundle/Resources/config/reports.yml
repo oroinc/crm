@@ -43,7 +43,13 @@ reports:
             select:
                 - wi.currentStepName
                 - o.name
-                - COUNT(o.id) as total_ops
+                - COUNT(o.id) as numberOfOpp
+                - >
+                  SUM(
+                    (CASE WHEN (wi.currentStepName='closed') THEN o.closeRevenue ELSE o.budgetAmount END)
+                  ) as value
+                # for filtering
+                - wi.workflowName
             join:
                 left:
                     - { join: owi.opportunity, alias: o }
