@@ -117,13 +117,15 @@ class AccountType extends FlexibleType
         $result = array();
         /** @var Contact $contact */
         foreach ($contacts as $contact) {
+            $primaryPhone = $contact->getPrimaryPhone();
+            $primaryEmail = $contact->getPrimaryEmail();
             $result[] = array(
                 'id' => $contact->getId(),
                 'label' => $contact->getFirstName() . ' ' . $contact->getLastName(),
                 'link' => $this->router->generate('orocrm_contact_info', array('id' => $contact->getId())),
                 'extraData' => array(
-                    array('label' => 'Phone', 'value' => $contact->getPrimaryPhone()->getPhone()),
-                    array('label' => 'Email', 'value' => $contact->getPrimaryEmail()->getEmail()),
+                    array('label' => 'Phone', 'value' => $primaryPhone ? $primaryPhone->getPhone() : null),
+                    array('label' => 'Email', 'value' => $primaryEmail ? $primaryEmail->getEmail() : null),
                 ),
                 'isDefault' => $default == $contact->getId()
             );
