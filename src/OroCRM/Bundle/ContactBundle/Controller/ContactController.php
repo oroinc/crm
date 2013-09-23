@@ -11,27 +11,19 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Oro\Bundle\UserBundle\Annotation\Acl;
-use Oro\Bundle\UserBundle\Annotation\AclAncestor;
+use Oro\Bundle\SecurityBundle\Annotation\Acl;
+use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 
 use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\ContactBundle\Datagrid\ContactDatagridManager;
-use OroCRM\Bundle\ContactBundle\Datagrid\ContactAccountDatagridManager;
 use OroCRM\Bundle\ContactBundle\Datagrid\ContactAccountUpdateDatagridManager;
 use OroCRM\Bundle\AccountBundle\Entity\Account;
+use OroCRM\Bundle\ContactBundle\Datagrid\ContactEmailDatagridManager;
 
 use Oro\Bundle\EntityConfigBundle\Config\ConfigInterface;
 use Oro\Bundle\EntityExtendBundle\Extend\ExtendManager;
 
-/**
- * @Acl(
- *      id="orocrm_contact",
- *      name="Contact manipulation",
- *      description="Contact manipulation",
- *      parent="root"
- * )
- */
 class ContactController extends Controller
 {
     /**
@@ -40,17 +32,17 @@ class ContactController extends Controller
      * @Template
      * @Acl(
      *      id="orocrm_contact_view",
-     *      name="View Contact",
-     *      description="View contact",
-     *      parent="orocrm_contact"
+     *      type="entity",
+     *      permission="VIEW",
+     *      class="OroCRMContactBundle:Contact"
      * )
      */
     public function viewAction(Contact $contact)
     {
-        /** @var $accountDatagridManager ContactAccountDatagridManager */
-        $accountDatagridManager = $this->get('orocrm_contact.account.view_datagrid_manager');
-        $accountDatagridManager->setContact($contact);
-        $datagridView = $accountDatagridManager->getDatagrid()->createView();
+        /** @var ContactEmailDatagridManager $manager */
+        $manager = $this->get('orocrm_contact.email.datagrid_manager');
+        $manager->setContact($contact);
+        $datagridView = $manager->getDatagrid()->createView();
 
         if ('json' == $this->getRequest()->getRequestFormat()) {
             return $this->get('oro_grid.renderer')->renderResultsJsonResponse($datagridView);
@@ -103,9 +95,9 @@ class ContactController extends Controller
      * @Template("OroCRMContactBundle:Contact:update.html.twig")
      * @Acl(
      *      id="orocrm_contact_create",
-     *      name="Create Contact",
-     *      description="Create contact",
-     *      parent="orocrm_contact"
+     *      type="entity",
+     *      permission="CREATE",
+     *      class="OroCRMContactBundle:Contact"
      * )
      */
     public function createAction()
@@ -126,7 +118,7 @@ class ContactController extends Controller
             }
         }
 
-        return $this->updateAction($contact);
+        return $this->update($contact);
     }
 
     /**
@@ -136,12 +128,57 @@ class ContactController extends Controller
      * @Template
      * @Acl(
      *      id="orocrm_contact_update",
-     *      name="Update Contact",
-     *      description="Update contact",
-     *      parent="orocrm_contact"
+     *      type="entity",
+     *      permission="EDIT",
+     *      class="OroCRMContactBundle:Contact"
      * )
      */
     public function updateAction(Contact $entity = null)
+    {
+        return $this->update();
+    }
+
+    /**
+     * @Route(
+     *      "/{_format}",
+     *      name="orocrm_contact_index",
+     *      requirements={"_format"="html|json"},
+     *      defaults={"_format" = "html"}
+     * )
+     *
+     * @Template
+     * @AclAncestor("orocrm_contact_view")
+     */
+    public function indexAction()
+    {
+        /** @var $gridManager ContactDatagridManager */
+        $gridManager  = $this->get('orocrm_contact.contact.datagrid_manager');
+        $datagridView = $gridManager->getDatagrid()->createView();
+
+        if ('json' == $this->getRequest()->getRequestFormat()) {
+            return $this->get('oro_grid.renderer')->renderResultsJsonResponse($datagridView);
+        }
+
+        return array('datagrid' => $datagridView);
+    }
+
+    /**
+     * @return FlashBag
+     */
+    protected function getFlashBag()
+    {
+        return $this->get('session')->getFlashBag();
+    }
+
+    /**
+     * @return ApiEntityManager
+     */
+    protected function getManager()
+    {
+        return $this->get('orocrm_contact.contact.manager');
+    }
+
+    protected function update(Contact $entity = null)
     {
         if (!$entity) {
             $entity = $this->getManager()->createEntity();
@@ -176,50 +213,5 @@ class ContactController extends Controller
             'form'     => $this->get('orocrm_contact.form.contact')->createView(),
             'datagrid' => $datagridView,
         );
-    }
-
-    /**
-     * @Route(
-     *      "/{_format}",
-     *      name="orocrm_contact_index",
-     *      requirements={"_format"="html|json"},
-     *      defaults={"_format" = "html"}
-     * )
-     *
-     * @Template
-     * @Acl(
-     *      id="orocrm_contact_list",
-     *      name="View List of Contacts",
-     *      description="View list of contacts",
-     *      parent="orocrm_contact"
-     * )
-     */
-    public function indexAction()
-    {
-        /** @var $gridManager ContactDatagridManager */
-        $gridManager  = $this->get('orocrm_contact.contact.datagrid_manager');
-        $datagridView = $gridManager->getDatagrid()->createView();
-
-        if ('json' == $this->getRequest()->getRequestFormat()) {
-            return $this->get('oro_grid.renderer')->renderResultsJsonResponse($datagridView);
-        }
-
-        return array('datagrid' => $datagridView);
-    }
-
-    /**
-     * @return FlashBag
-     */
-    protected function getFlashBag()
-    {
-        return $this->get('session')->getFlashBag();
-    }
-
-    /**
-     * @return ApiEntityManager
-     */
-    protected function getManager()
-    {
-        return $this->get('orocrm_contact.contact.manager');
     }
 }

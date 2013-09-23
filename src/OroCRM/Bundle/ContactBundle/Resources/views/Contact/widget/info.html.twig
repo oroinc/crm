@@ -24,7 +24,7 @@
             <li>
                 <strong>
                     {% if isEmail %}
-                        <a href="mailto:{{ primaryElement }}">{{ primaryElement }}</a>
+                        <a href="mailto:{{ primaryElement }}" title="{{ primaryElement }}">{{ primaryElement }}</a>
                     {% else %}
                         {{ primaryElement }}
                     {% endif %}
@@ -77,7 +77,7 @@
             <label class="control-label">{% trans %}Emails{% endtrans %}</label>
             <div class="controls">
                 <div class="clearfix-oro">
-                    <div class="control-label">
+                    <div class="control-label email-field">
                         {% if entity.emails.count %}
                             {{ _self.renderCollectionWithPrimaryElement(entity.emails, true) }}
                         {% else %}
