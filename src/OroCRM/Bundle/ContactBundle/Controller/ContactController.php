@@ -17,9 +17,9 @@ use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\ContactBundle\Datagrid\ContactDatagridManager;
-use OroCRM\Bundle\ContactBundle\Datagrid\ContactAccountDatagridManager;
 use OroCRM\Bundle\ContactBundle\Datagrid\ContactAccountUpdateDatagridManager;
 use OroCRM\Bundle\AccountBundle\Entity\Account;
+use OroCRM\Bundle\ContactBundle\Datagrid\ContactEmailDatagridManager;
 
 use Oro\Bundle\EntityConfigBundle\Config\ConfigInterface;
 use Oro\Bundle\EntityExtendBundle\Extend\ExtendManager;
@@ -39,10 +39,10 @@ class ContactController extends Controller
      */
     public function viewAction(Contact $contact)
     {
-        /** @var $accountDatagridManager ContactAccountDatagridManager */
-        $accountDatagridManager = $this->get('orocrm_contact.account.view_datagrid_manager');
-        $accountDatagridManager->setContact($contact);
-        $datagridView = $accountDatagridManager->getDatagrid()->createView();
+        /** @var ContactEmailDatagridManager $manager */
+        $manager = $this->get('orocrm_contact.email.datagrid_manager');
+        $manager->setContact($contact);
+        $datagridView = $manager->getDatagrid()->createView();
 
         if ('json' == $this->getRequest()->getRequestFormat()) {
             return $this->get('oro_grid.renderer')->renderResultsJsonResponse($datagridView);
