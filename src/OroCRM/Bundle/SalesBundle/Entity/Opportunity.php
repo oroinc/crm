@@ -4,10 +4,7 @@ namespace OroCRM\Bundle\SalesBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
-
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
-use Oro\Bundle\UserBundle\Entity\User;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 
@@ -214,25 +211,6 @@ class Opportunity
     public function getContact()
     {
         return $this->contact;
-    }
-
-    /**
-     * @return User
-     */
-    public function getOwner()
-    {
-        return $this->owner;
-    }
-
-    /**
-     * @param User $owningUser
-     * @return Opportunity
-     */
-    public function setOwner($owningUser)
-    {
-        $this->owner = $owningUser;
-
-        return $this;
     }
 
     /**
