@@ -239,8 +239,9 @@ class AddOrReplaceStrategy implements StrategyInterface, ContextAwareInterface
      */
     protected function updateOwner(Contact $contact)
     {
-        if ($contact->getOwner()) {
-            $existingOwner = $this->contactStrategyHelper->getUserOrNull($contact->getOwner());
+        $owner = $contact->getOwner();
+        if ($owner) {
+            $existingOwner = $this->contactStrategyHelper->getUserOrNull($owner);
             $contact->setOwner($existingOwner);
         } else {
             $contact->setOwner(null);
@@ -255,8 +256,9 @@ class AddOrReplaceStrategy implements StrategyInterface, ContextAwareInterface
      */
     protected function updateAssignedTo(Contact $contact)
     {
-        if ($contact->getAssignedTo()) {
-            $existingAssignedTo = $this->contactStrategyHelper->getUserOrNull($contact->getAssignedTo());
+        $assignedTo = $contact->getAssignedTo();
+        if ($assignedTo) {
+            $existingAssignedTo = $this->contactStrategyHelper->getUserOrNull($assignedTo);
             $contact->setAssignedTo($existingAssignedTo);
         } else {
             $contact->setAssignedTo(null);

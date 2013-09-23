@@ -34,36 +34,6 @@ class ContactImportStrategyHelper
     protected $repositories;
 
     /**
-     * @var Country[]
-     */
-    protected $countries = array();
-
-    /**
-     * @var Region[]
-     */
-    protected $regions = array();
-
-    /**
-     * @var AddressType[]
-     */
-    protected $addressTypes;
-
-    /**
-     * @var Group[]
-     */
-    protected $groups;
-
-    /**
-     * @var Source[]
-     */
-    protected $sources;
-
-    /**
-     * @var Method[]
-     */
-    protected $methods;
-
-    /**
      * @param SecurityContextInterface $securityContext
      * @param ManagerRegistry $managerRegistry
      */
@@ -93,15 +63,11 @@ class ContactImportStrategyHelper
     public function getUserOrNull(User $user)
     {
         $existingUser = null;
-        $userFirstName = $user->getFirstname();
-        $userLastName = $user->getLastname();
+        $username = $user->getUsername();
 
-        if ($userFirstName && $userLastName) {
+        if ($username) {
             $existingUser = $this->getEntityRepository('OroUserBundle:User')->findOneBy(
-                array(
-                    'firstName' => $userFirstName,
-                    'lastName'  => $userLastName,
-                )
+                array('username' => $username)
             );
         }
 
@@ -114,18 +80,13 @@ class ContactImportStrategyHelper
      */
     public function getAddressTypeOrNull(AddressType $addressType)
     {
-        if (null === $this->addressTypes) {
-            $types = $this->getEntityRepository('OroAddressBundle:AddressType')->findAll();
-            $this->addressTypes = array();
-            /** @var AddressType $type */
-            foreach ($types as $type) {
-                $this->addressTypes[$type->getName()] = $type;
-            }
+        $existingAddressType = null;
+        $addressTypeName = $addressType->getName();
+        if ($addressTypeName) {
+            $existingAddressType = $this->getEntityRepository('OroAddressBundle:AddressType')->find($addressTypeName);
         }
 
-        $addressTypeName = $addressType->getName();
-
-        return !empty($this->addressTypes[$addressTypeName]) ? $this->addressTypes[$addressTypeName] : null;
+        return $existingAddressType ?: null;
     }
 
     /**
@@ -137,11 +98,7 @@ class ContactImportStrategyHelper
         $existingRegion = null;
         $combinedCode = $country->getCombinedCode();
         if ($combinedCode) {
-            if (!array_key_exists($combinedCode, $this->regions)) {
-                $this->regions[$combinedCode]
-                    = $this->getEntityRepository('OroAddressBundle:Region')->find($combinedCode);
-            }
-            $existingRegion = $this->regions[$combinedCode];
+            $existingRegion = $this->getEntityRepository('OroAddressBundle:Region')->find($combinedCode);
         }
 
         return $existingRegion ?: null;
@@ -156,11 +113,7 @@ class ContactImportStrategyHelper
         $existingCountry = null;
         $iso2Code = $country->getIso2Code();
         if ($iso2Code) {
-            if (!array_key_exists($iso2Code, $this->countries)) {
-                $this->countries[$iso2Code]
-                    = $this->getEntityRepository('OroAddressBundle:Country')->find($iso2Code);
-            }
-            $existingCountry = $this->countries[$iso2Code];
+            $existingCountry = $this->getEntityRepository('OroAddressBundle:Country')->find($iso2Code);
         }
 
         return $existingCountry ?: null;
@@ -172,18 +125,15 @@ class ContactImportStrategyHelper
      */
     public function getGroupOrNull(Group $group)
     {
-        if (null === $this->groups) {
-            $existingGroups = $this->getEntityRepository('OroCRMContactBundle:Group')->findAll();
-            $this->groups = array();
-            /** @var Group $existingGroup */
-            foreach ($existingGroups as $existingGroup) {
-                $this->groups[$existingGroup->getLabel()] = $existingGroup;
-            }
+        $existingGroup = null;
+        $groupLabel = $group->getLabel();
+        if ($groupLabel) {
+            $existingGroup = $this->getEntityRepository('OroCRMContactBundle:Group')->findOneBy(
+                array('label' => $groupLabel)
+            );
         }
 
-        $groupLabel = $group->getLabel();
-
-        return !empty($this->groups[$groupLabel]) ? $this->groups[$groupLabel] : null;
+        return $existingGroup ?: null;
     }
 
     /**
@@ -192,18 +142,13 @@ class ContactImportStrategyHelper
      */
     public function getSourceOrNull(Source $source)
     {
-        if (null === $this->sources) {
-            $existingSources = $this->getEntityRepository('OroCRMContactBundle:Source')->findAll();
-            $this->sources = array();
-            /** @var Source $existingSource */
-            foreach ($existingSources as $existingSource) {
-                $this->sources[$existingSource->getName()] = $existingSource;
-            }
+        $existingSource = null;
+        $sourceName = $source->getName();
+        if ($sourceName) {
+            $existingSource = $this->getEntityRepository('OroCRMContactBundle:Source')->find($sourceName);
         }
 
-        $sourceName = $source->getName();
-
-        return !empty($this->sources[$sourceName]) ? $this->sources[$sourceName] : null;
+        return $existingSource ?: null;
     }
 
     /**
@@ -212,18 +157,13 @@ class ContactImportStrategyHelper
      */
     public function getMethodOrNull(Method $method)
     {
-        if (null === $this->methods) {
-            $existingMethods = $this->getEntityRepository('OroCRMContactBundle:Method')->findAll();
-            $this->methods = array();
-            /** @var Method $existingMethod */
-            foreach ($existingMethods as $existingMethod) {
-                $this->methods[$existingMethod->getName()] = $existingMethod;
-            }
+        $existingMethod = null;
+        $methodName = $method->getName();
+        if ($methodName) {
+            $existingMethod = $this->getEntityRepository('OroCRMContactBundle:Method')->find($methodName);
         }
 
-        $methodName = $method->getName();
-
-        return !empty($this->methods[$methodName]) ? $this->methods[$methodName] : null;
+        return $existingMethod ?: null;
     }
 
     /**
