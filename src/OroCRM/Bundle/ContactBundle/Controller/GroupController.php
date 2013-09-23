@@ -34,7 +34,7 @@ class GroupController extends Controller
      */
     public function createAction()
     {
-        return $this->updateAction(new Group());
+        return $this->update(new Group());
     }
 
     /**
@@ -51,28 +51,7 @@ class GroupController extends Controller
      */
     public function updateAction(Group $entity)
     {
-        if ($this->get('orocrm_contact.form.handler.group')->process($entity)) {
-            $this->get('session')->getFlashBag()->add('success', 'Group successfully saved');
-
-            if (!$this->getRequest()->get('_widgetContainer')) {
-
-                return $this->get('oro_ui.router')->actionRedirect(
-                    array(
-                        'route' => 'orocrm_contact_group_update',
-                        'parameters' => array('id' => $entity->getId()),
-                    ),
-                    array(
-                        'route' => 'orocrm_contact_group_index',
-                    )
-                );
-            }
-        }
-
-        return array(
-            'datagrid' => $this->getGroupContactDatagridManager($entity)->getDatagrid()->createView(),
-            'form'     => $this->get('orocrm_contact.form.group')->createView(),
-            'showContactsGrid' => count($this->get('orocrm_contact.contact.manager')->getList()) ? true : false
-        );
+        return $this->update($entity);
     }
 
     /**
@@ -134,6 +113,36 @@ class GroupController extends Controller
         return $this->render(
             $view,
             array('datagrid' => $datagrid->createView())
+        );
+    }
+
+    /**
+     * @param Group $entity
+     * @return array
+     */
+    protected function update(Group $entity)
+    {
+        if ($this->get('orocrm_contact.form.handler.group')->process($entity)) {
+            $this->get('session')->getFlashBag()->add('success', 'Group successfully saved');
+
+            if (!$this->getRequest()->get('_widgetContainer')) {
+
+                return $this->get('oro_ui.router')->actionRedirect(
+                    array(
+                        'route' => 'orocrm_contact_group_update',
+                        'parameters' => array('id' => $entity->getId()),
+                    ),
+                    array(
+                        'route' => 'orocrm_contact_group_index',
+                    )
+                );
+            }
+        }
+
+        return array(
+            'datagrid' => $this->getGroupContactDatagridManager($entity)->getDatagrid()->createView(),
+            'form'     => $this->get('orocrm_contact.form.group')->createView(),
+            'showContactsGrid' => count($this->get('orocrm_contact.contact.manager')->getList()) ? true : false
         );
     }
 }

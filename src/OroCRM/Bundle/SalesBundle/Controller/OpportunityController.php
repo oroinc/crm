@@ -64,7 +64,7 @@ class OpportunityController extends Controller
         $defaultStatus = $this->getDoctrine()->getManager()->find('OroCRMSalesBundle:OpportunityStatus', 'in_progress');
         $entity->setStatus($defaultStatus);
 
-        return $this->updateAction($entity);
+        return $this->update($entity);
     }
 
     /**
@@ -79,25 +79,7 @@ class OpportunityController extends Controller
      */
     public function updateAction(Opportunity $entity)
     {
-        if ($this->get('orocrm_sales.opportunity.form.handler')->process($entity)) {
-            $this->getFlashBag()->add('success', 'Opportunity successfully saved');
-
-            return $this->get('oro_ui.router')->actionRedirect(
-                array(
-                    'route' => 'orocrm_sales_opportunity_update',
-                    'parameters' => array('id' => $entity->getId()),
-                ),
-                array(
-                    'route' => 'orocrm_sales_opportunity_view',
-                    'parameters' => array('id' => $entity->getId()),
-                )
-            );
-        }
-
-        return array(
-            'entity' => $entity,
-            'form'   => $this->get('orocrm_sales.opportunity.form')->createView(),
-        );
+        return $this->update($entity);
     }
 
     /**
@@ -129,5 +111,32 @@ class OpportunityController extends Controller
     protected function getFlashBag()
     {
         return $this->get('session')->getFlashBag();
+    }
+
+    /**
+     * @param Opportunity $entity
+     * @return array
+     */
+    protected function update(Opportunity $entity)
+    {
+        if ($this->get('orocrm_sales.opportunity.form.handler')->process($entity)) {
+            $this->getFlashBag()->add('success', 'Opportunity successfully saved');
+
+            return $this->get('oro_ui.router')->actionRedirect(
+                array(
+                    'route' => 'orocrm_sales_opportunity_update',
+                    'parameters' => array('id' => $entity->getId()),
+                ),
+                array(
+                    'route' => 'orocrm_sales_opportunity_view',
+                    'parameters' => array('id' => $entity->getId()),
+                )
+            );
+        }
+
+        return array(
+            'entity' => $entity,
+            'form'   => $this->get('orocrm_sales.opportunity.form')->createView(),
+        );
     }
 }

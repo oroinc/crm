@@ -118,7 +118,7 @@ class ContactController extends Controller
             }
         }
 
-        return $this->updateAction($contact);
+        return $this->update($contact);
     }
 
     /**
@@ -135,39 +135,7 @@ class ContactController extends Controller
      */
     public function updateAction(Contact $entity = null)
     {
-        if (!$entity) {
-            $entity = $this->getManager()->createEntity();
-        }
-
-        /** @var $accountDatagridManager ContactAccountUpdateDatagridManager */
-        $accountDatagridManager = $this->get('orocrm_contact.account.update_datagrid_manager');
-        $accountDatagridManager->setContact($entity);
-        $datagridView = $accountDatagridManager->getDatagrid()->createView();
-
-        if ('json' == $this->getRequest()->getRequestFormat()) {
-            return $this->get('oro_grid.renderer')->renderResultsJsonResponse($datagridView);
-        }
-
-        if ($this->get('orocrm_contact.form.handler.contact')->process($entity)) {
-            $this->getFlashBag()->add('success', 'Contact successfully saved');
-
-            return $this->get('oro_ui.router')->actionRedirect(
-                array(
-                    'route'      => 'orocrm_contact_update',
-                    'parameters' => array('id' => $entity->getId()),
-                ),
-                array(
-                    'route'      => 'orocrm_contact_view',
-                    'parameters' => array('id' => $entity->getId())
-                )
-            );
-        }
-
-        return array(
-            'entity'   => $entity,
-            'form'     => $this->get('orocrm_contact.form.contact')->createView(),
-            'datagrid' => $datagridView,
-        );
+        return $this->update();
     }
 
     /**
@@ -208,5 +176,42 @@ class ContactController extends Controller
     protected function getManager()
     {
         return $this->get('orocrm_contact.contact.manager');
+    }
+
+    protected function update(Contact $entity = null)
+    {
+        if (!$entity) {
+            $entity = $this->getManager()->createEntity();
+        }
+
+        /** @var $accountDatagridManager ContactAccountUpdateDatagridManager */
+        $accountDatagridManager = $this->get('orocrm_contact.account.update_datagrid_manager');
+        $accountDatagridManager->setContact($entity);
+        $datagridView = $accountDatagridManager->getDatagrid()->createView();
+
+        if ('json' == $this->getRequest()->getRequestFormat()) {
+            return $this->get('oro_grid.renderer')->renderResultsJsonResponse($datagridView);
+        }
+
+        if ($this->get('orocrm_contact.form.handler.contact')->process($entity)) {
+            $this->getFlashBag()->add('success', 'Contact successfully saved');
+
+            return $this->get('oro_ui.router')->actionRedirect(
+                array(
+                    'route'      => 'orocrm_contact_update',
+                    'parameters' => array('id' => $entity->getId()),
+                ),
+                array(
+                    'route'      => 'orocrm_contact_view',
+                    'parameters' => array('id' => $entity->getId())
+                )
+            );
+        }
+
+        return array(
+            'entity'   => $entity,
+            'form'     => $this->get('orocrm_contact.form.contact')->createView(),
+            'datagrid' => $datagridView,
+        );
     }
 }
