@@ -46,8 +46,12 @@ reports:
                 - COUNT(o.id) as numberOfOpp
                 - >
                   SUM(
-                    (CASE WHEN (wi.currentStepName='closed') THEN o.closeRevenue ELSE o.budgetAmount END)
-                  ) as value
+                    (CASE WHEN (wi.currentStepName='closed') THEN o.closeRevenue ELSE 0 END)
+                  ) as closeRevenue
+                - >
+                  SUM(
+                    (CASE WHEN (wi.currentStepName='closed') THEN 0 ELSE o.budgetAmount END)
+                  ) as budgetAmount
                 # for filtering
                 - wi.workflowName
             join:

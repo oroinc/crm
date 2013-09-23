@@ -30,7 +30,7 @@ class ByStepManager extends ReportGridManagerAbstract
             array(
                 'type'         => FieldDescriptionInterface::TYPE_INTEGER,
                 'filter_type'  => FilterInterface::TYPE_NUMBER,
-                'label'        => 'Number of opp',
+                'label'        => 'Number of opportunities',
                 'field_name'   => 'numberOfOpp',
                 'expression'   => 'numberOfOpp',
             ),
@@ -38,13 +38,25 @@ class ByStepManager extends ReportGridManagerAbstract
         );
 
         $this->addField(
-            'value',
+            'closeRevenue',
             array(
                 'type'         => FieldDescriptionInterface::TYPE_DECIMAL,
                 'filter_type'  => FilterInterface::TYPE_NUMBER,
-                'label'        => 'Value',
-                'field_name'   => 'value',
-                'expression'   => 'value',
+                'label'        => 'Close Revenue',
+                'field_name'   => 'closeRevenue',
+                'expression'   => 'closeRevenue',
+            ),
+            $fieldsCollection
+        );
+
+        $this->addField(
+            'budget',
+            array(
+                'type'         => FieldDescriptionInterface::TYPE_DECIMAL,
+                'filter_type'  => FilterInterface::TYPE_NUMBER,
+                'label'        => 'Budget Value',
+                'field_name'   => 'budgetAmount',
+                'expression'   => 'budgetAmount',
             ),
             $fieldsCollection
         );
