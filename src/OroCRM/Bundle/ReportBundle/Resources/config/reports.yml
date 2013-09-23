@@ -52,19 +52,16 @@ reports:
             from:
                 - { table: OroCRMSalesBundle:Opportunity, alias: o }
             select:
-                - 1 as period
-                - CONCAT( CONCAT( SUBSTRING( o.closeDate, 6, 2 ), '/'), SUBSTRING( o.closeDate, 1, 4 ) ) as monthPeriod
+                - CONCAT( CONCAT( SUBSTRING( o.closeDate, 6, 2 ), ' / '), SUBSTRING( o.closeDate, 1, 4 ) ) as monthPeriod
                 - >
                   CONCAT(
-                    CONCAT(
-                      CASE
-                        WHEN SUBSTRING(o.closeDate, 6, 2) BETWEEN 1 AND 3 THEN 1
-                        WHEN SUBSTRING(o.closeDate, 6, 2) BETWEEN 4 AND 6 THEN 2
-                        WHEN SUBSTRING(o.closeDate, 6, 2) BETWEEN 7 AND 9 THEN 3
-                        ELSE 4
-                      END, '/'
-                    ), SUBSTRING( o.closeDate, 1, 4 )
-                  ) as quarterPeriod
+                    CASE
+                      WHEN SUBSTRING(o.closeDate, 6, 2) BETWEEN 1 AND 3 THEN '1'
+                      WHEN SUBSTRING(o.closeDate, 6, 2) BETWEEN 4 AND 6 THEN '2'
+                      WHEN SUBSTRING(o.closeDate, 6, 2) BETWEEN 7 AND 9 THEN '3'
+                      ELSE '4'
+                    END,
+                    CONCAT(' / ' , SUBSTRING( o.closeDate, 1, 4 ) ) as quarterPeriod
                 - SUBSTRING( o.closeDate, 1, 4 ) as yearPeriod
                 - SUM( o.closeRevenue ) as value
                 - COUNT( o.id ) as cnt
@@ -75,5 +72,3 @@ reports:
                 and:
                     - s.name = 'won'
                     - o.closeDate IS NOT NULL
-            # group will be changed dynamically dependent on filter
-            groupBy: monthPeriod
