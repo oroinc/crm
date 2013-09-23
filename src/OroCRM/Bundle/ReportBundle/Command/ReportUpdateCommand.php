@@ -5,6 +5,7 @@ namespace OroCRM\Bundle\ReportBundle\Command;
 use Doctrine\DBAL\ConnectionException;
 use Doctrine\ORM\Query;
 
+use Oro\Bundle\CronBundle\Command\CronCommandInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
@@ -13,8 +14,13 @@ use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
  * Class ReportUpdateCommand
  * @package OroCRM\Bundle\ReportBundle\Command
  */
-class ReportUpdateCommand extends ContainerAwareCommand
+class ReportUpdateCommand extends ContainerAwareCommand implements CronCommandInterface
 {
+    public function getDefaultDefinition()
+    {
+        return '* */2 * * *';
+    }
+
     /**
      * Console command configuration
      */
@@ -56,7 +62,7 @@ class ReportUpdateCommand extends ContainerAwareCommand
         $stmt = $conn->prepare($query);
         $stmt->execute();
 
-        $data = & $stmt->fetchAll(Query::HYDRATE_ARRAY);
+        $data = $stmt->fetchAll(Query::HYDRATE_ARRAY);
 
         $stmt->closeCursor();
 
@@ -70,6 +76,10 @@ class ReportUpdateCommand extends ContainerAwareCommand
      */
     protected function importData($table, $data)
     {
+        if (empty($data)) {
+            return false;
+        }
+
         $conn = $this->getConn();
 
         $conn->beginTransaction();
