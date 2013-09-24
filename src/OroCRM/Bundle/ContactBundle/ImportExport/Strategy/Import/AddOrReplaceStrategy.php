@@ -92,6 +92,7 @@ class AddOrReplaceStrategy implements StrategyInterface, ContextAwareInterface
         // validate contact
         $validationErrors = $this->strategyHelper->validateEntity($contact);
         if ($validationErrors) {
+            $this->importExportContext->incrementErrorEntriesCount();
             $this->strategyHelper->addValidationErrors($validationErrors, $this->importExportContext);
             return null;
         }
