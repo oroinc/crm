@@ -57,7 +57,8 @@ class LoadAclData extends AbstractFixture implements ContainerAwareInterface, Or
                 'Action:oro_jobs',
                 'Action:oro_email_view',
                 'Action:oro_dataaudit_history',
-                'Action:oro_config_system'
+                'Action:oro_config_system',
+                'Action:assign_roles_groups_to_user'
             )
         );
 
