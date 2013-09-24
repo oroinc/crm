@@ -8,13 +8,12 @@ use Doctrine\Common\Collections\Collection;
 
 use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 
-use Zend\Stdlib\DateTime;
-
 use Oro\Bundle\TagBundle\Entity\Taggable;
 use Oro\Bundle\AddressBundle\Entity\AddressType;
 use Oro\Bundle\EmailBundle\Entity\EmailOwnerInterface;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
+use OroCRM\Bundle\ContactBundle\Model\ExtendContact;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 
 use OroCRM\Bundle\AccountBundle\Entity\Account;
@@ -45,7 +44,7 @@ use OroCRM\Bundle\AccountBundle\Entity\Account;
  *  }
  * )
  */
-class Contact extends \OroCRM\Bundle\ContactBundle\Model\ExtendContact implements Taggable, EmailOwnerInterface
+class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
 {
     /**
      * @var int
@@ -326,6 +325,28 @@ class Contact extends \OroCRM\Bundle\ContactBundle\Model\ExtendContact implement
         $this->emails    = new ArrayCollection();
         $this->phones    = new ArrayCollection();
         $this->tags      = new ArrayCollection();
+    }
+
+    public function __clone()
+    {
+        if ($this->groups) {
+            $this->groups = clone $this->groups;
+        }
+        if ($this->accounts) {
+            $this->accounts = clone $this->accounts;
+        }
+        if ($this->addresses) {
+            $this->addresses = clone $this->addresses;
+        }
+        if ($this->emails) {
+            $this->emails = clone $this->emails;
+        }
+        if ($this->phones) {
+            $this->phones = clone $this->phones;
+        }
+        if ($this->tags) {
+            $this->tags = clone $this->tags;
+        }
     }
 
     /**
@@ -1323,6 +1344,6 @@ class Contact extends \OroCRM\Bundle\ContactBundle\Model\ExtendContact implement
      */
     public function __toString()
     {
-        return $this->getFullname();
+        return (string) $this->getFullname();
     }
 }

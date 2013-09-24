@@ -1,11 +1,14 @@
 {% extends 'OroUIBundle:actions:index.html.twig' %}
 {% import 'OroUIBundle::macros.html.twig' as UI %}
 {% set gridId = 'contacts-grid' %}
-{% block content %}
-    {% set pageTitle = 'Leads' %}
-    {% set buttons = [] %}
+{% set pageTitle = 'Leads' %}
+
+{% block navButtons %}
     {% if resource_granted('orocrm_sales_lead_create') %}
-        {% set buttons = buttons|merge([UI.addButton({'path' : path('orocrm_sales_lead_create'), 'title' : 'Create lead', 'label' : 'Create lead'})]) %}
+        {{ UI.addButton({
+            'path' : path('orocrm_sales_lead_create'),
+            'title' : 'Create lead',
+            'label' : 'Create lead'
+        }) }}
     {% endif %}
-    {{ parent() }}
 {% endblock %}
