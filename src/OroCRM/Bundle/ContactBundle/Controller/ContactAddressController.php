@@ -42,7 +42,7 @@ class ContactAddressController extends Controller
      */
     public function createAction(Contact $contact)
     {
-        return $this->updateAction($contact, new ContactAddress());
+        return $this->update($contact, new ContactAddress());
     }
 
     /**
@@ -56,6 +56,33 @@ class ContactAddressController extends Controller
      * @ParamConverter("contact", options={"id" = "contactId"})
      */
     public function updateAction(Contact $contact, ContactAddress $address)
+    {
+        return $this->update($contact, $address);
+    }
+
+    /**
+     * @return FlashBag
+     */
+    protected function getFlashBag()
+    {
+        return $this->get('session')->getFlashBag();
+    }
+
+    /**
+     * @return ApiEntityManager
+     */
+    protected function getManager()
+    {
+        return $this->get('orocrm_contact.contact.manager');
+    }
+
+    /**
+     * @param Contact $contact
+     * @param ContactAddress $address
+     * @return array
+     * @throws BadRequestHttpException
+     */
+    protected function update(Contact $contact, ContactAddress $address)
     {
         $responseData = array(
             'saved' => false,
@@ -84,21 +111,5 @@ class ContactAddressController extends Controller
 
         $responseData['form'] = $this->get('orocrm_contact.contact_address.form')->createView();
         return $responseData;
-    }
-
-    /**
-     * @return FlashBag
-     */
-    protected function getFlashBag()
-    {
-        return $this->get('session')->getFlashBag();
-    }
-
-    /**
-     * @return ApiEntityManager
-     */
-    protected function getManager()
-    {
-        return $this->get('orocrm_contact.contact.manager');
     }
 }

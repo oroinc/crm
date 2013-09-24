@@ -12,7 +12,6 @@ class AclTest extends \PHPUnit_Extensions_Selenium2TestCase
 
     protected function setUp()
     {
-        $this->markTestSkipped('Update tests with new acl implementation');
         $this->setHost(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_HOST);
         $this->setPort(intval(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_PORT));
         $this->setBrowser(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM2_BROWSER);
@@ -39,11 +38,9 @@ class AclTest extends \PHPUnit_Extensions_Selenium2TestCase
             ->setName($this->newRole['ROLE_NAME'] . $randomPrefix)
             ->setLabel($this->newRole['LABEL'] . $randomPrefix)
             ->setOwner('Main')
-            ->selectAcl('Template controller')
-            ->selectAcl('Contact groups manipulation')
-            ->selectAcl('Contact manipulation')
-            ->selectAcl('Account manipulation')
-            ->selectAcl('Oro Security')
+            ->setEntity('Contact Group', array('Create', 'Edit', 'Delete', 'View', 'Assign'))
+            ->setEntity('Contact', array('Create', 'Edit', 'Delete', 'View', 'Assign'))
+            ->setEntity('Account', array('Create', 'Edit', 'Delete', 'View', 'Assign'))
             ->save()
             ->assertMessage('Role successfully saved');
 
@@ -146,22 +143,13 @@ class AclTest extends \PHPUnit_Extensions_Selenium2TestCase
         $login->setUsername(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_LOGIN)
             ->setPassword(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_PASS)
             ->submit()
-            ->openNavigation()
-            ->tab('System')
-            ->menu('Roles')
-            ->openRoles(false)
+            ->openRoles()
+            ->filterBy('Label', $roleName)
             ->open(array($roleName))
-            ->selectAcl('Contact groups manipulation')
-            ->selectAcl('Contact manipulation')
-            ->selectAcl('Account manipulation')
-            ->selectAcl('View Account')
-            ->selectAcl('View List of Accounts')
-            ->selectAcl('View Contact')
-            ->selectAcl('View List of Contacts')
-            ->selectAcl('View contact group')
-            ->selectAcl('View Contact Group List')
-            ->selectAcl('View user user')
-            ->selectAcl('Edit user')
+            ->setEntity('Account', array('Create', 'Edit', 'Delete', 'Assign'))
+            ->setEntity('Contact Group', array('Create', 'Edit', 'Delete', 'Assign'))
+            ->setEntity('Contact', array('Create', 'Edit', 'Delete', 'Assign'))
+            ->setEntity('User', array('View', 'Edit'))
             ->save()
             ->assertMessage('Role successfully saved');
     }

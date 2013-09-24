@@ -40,7 +40,7 @@
         {{ UI.buttonSeparator() }}
     {% endif %}
     {{ UI.button({'path' : path('orocrm_contact_index'), 'title' : 'Cancel', 'label' : 'Cancel'}) }}
-    {{ UI.saveAndStayButton() }}
+    {{ UI.saveAndStayButton('orocrm_contact_update') }}
     {{ UI.saveAndCloseButton() }}
 {% endblock %}
 
