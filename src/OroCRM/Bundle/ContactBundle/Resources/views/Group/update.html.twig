@@ -3,6 +3,7 @@
 {% if form.vars.value.id %}
     {% oro_title_set({params : {"%group.label%": form.vars.value.label} }) %}
 {% endif %}
+{% set audit_entity_class = 'OroCRM_Bundle_ContactBundle_Entity_Group' %}
 {% set gridId = 'contacts-grid' %}
 {% set formAction = form.vars.value.id ? path('orocrm_contact_group_update', { id: form.vars.value.id }) : path('orocrm_contact_group_create') %}
 {% block head_script %}
