@@ -70,6 +70,7 @@ class ContactController extends Controller
             function (ConfigInterface $config) use ($viewProvider) {
                 return
                     $config->is('owner', ExtendManager::OWNER_CUSTOM)
+                    && !$config->is('state', ExtendManager::STATE_NEW)
                     && !$config->is('is_deleted')
                     && $viewProvider->getConfigById($config->getId())->is('is_displayable');
             },
