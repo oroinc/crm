@@ -123,7 +123,10 @@ class GroupController extends Controller
     protected function update(Group $entity)
     {
         if ($this->get('orocrm_contact.form.handler.group')->process($entity)) {
-            $this->get('session')->getFlashBag()->add('success', 'Group successfully saved');
+            $this->get('session')->getFlashBag()->add(
+                'success',
+                $this->get('translator')->trans('orocrm.contact.controller.contact_group.saved.message')
+            );
 
             if (!$this->getRequest()->get('_widgetContainer')) {
 

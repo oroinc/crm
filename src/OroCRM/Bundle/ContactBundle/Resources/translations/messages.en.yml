@@ -17,3 +17,5 @@ orocrm.contact.datagrid.updated_at: Updated At
 orocrm.contact.datagrid.view: View
 orocrm.contact.datagrid.update: Update
 orocrm.contact.datagrid.delete: Delete
+orocrm.contact.controller.contact.saved.message: "Contact saved"
+orocrm.contact.controller.contact_group.saved.message: "Contact Group saved"
