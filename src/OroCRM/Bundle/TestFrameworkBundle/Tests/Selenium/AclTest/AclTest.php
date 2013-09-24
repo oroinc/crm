@@ -35,7 +35,6 @@ class AclTest extends \PHPUnit_Extensions_Selenium2TestCase
             ->menu('Roles')
             ->openRoles(false)
             ->add()
-            ->setName($this->newRole['ROLE_NAME'] . $randomPrefix)
             ->setLabel($this->newRole['LABEL'] . $randomPrefix)
             ->setOwner('Main')
             ->setEntity('Contact Group', array('Create', 'Edit', 'Delete', 'View', 'Assign'))
