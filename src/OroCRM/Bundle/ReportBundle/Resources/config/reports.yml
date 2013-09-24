@@ -37,7 +37,7 @@ reports:
 
     opportunities:
         by_step:
-            name: "Opportunities by Step"
+            name: "Opportunities by step"
             from:
                 - { table: OroCRMReportBundle:OpportunityByWorkflowItem, alias: owi }
             select:
@@ -87,7 +87,7 @@ reports:
                     - o.closeDate IS NOT NULL
     leads:
         by_date:
-            name:      "Number Leads by date"
+            name:      "Number leads by date"
             select:
                 - COUNT(l.id) as leadsCount
                 - SUBSTRING(l.createdAt, 1, 10) as createdDate

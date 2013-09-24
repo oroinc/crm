@@ -46,7 +46,7 @@ oro_menu_config:
                 reportName:      by_date
 
         opportunities_by_step:
-            label: 'Opportunities by Step'
+            label: 'Opportunities by step'
             route: 'orocrm_report_index'
             routeParameters:
                 reportGroupName: opportunities
