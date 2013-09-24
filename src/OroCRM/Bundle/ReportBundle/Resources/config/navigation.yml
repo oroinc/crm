@@ -45,6 +45,13 @@ oro_menu_config:
                 reportGroupName: leads
                 reportName:      by_date
 
+        opportunities_by_step:
+            label: 'Opportunities by Step'
+            route: 'orocrm_report_index'
+            routeParameters:
+                reportGroupName: opportunities
+                reportName:      by_step
+
         won_by_period:
             label: 'Won opportunities by period'
             route: 'orocrm_report_index'
@@ -68,6 +75,7 @@ oro_menu_config:
 
                         opportunities_report_tab:
                             children:
+                                opportunities_by_step: ~
                                 won_by_period: ~
 
 oro_titles:

@@ -4,7 +4,6 @@ namespace OroCRM\Bundle\SalesBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 
@@ -12,15 +11,6 @@ use OroCRM\Bundle\AccountBundle\Entity\Account;
  * @ORM\Entity
  * @ORM\Table(name="orocrm_sales_opportunity")
  * @ORM\HasLifecycleCallbacks()
- * @Config(
- *  defaultValues={
- *      "entity"={"label"="Opportunity", "plural_label"="Opportunities"},
- *      "security"={
- *          "type"="ACL",
- *          "group_name"=""
- *      }
- *  }
- * )
  */
 class Opportunity
 {
@@ -318,12 +308,10 @@ class Opportunity
 
     /**
      * @param float $revenue
-     * @return $this
      */
     public function setCloseRevenue($revenue)
     {
         $this->closeRevenue = $revenue;
-        return $this;
     }
 
     /**

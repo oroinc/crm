@@ -35,18 +35,31 @@ reports:
                     - { join: o.closeReason, alias: cr }
             groupBy:  "a.id"
 
-    leads:
-        by_date:
-            name:      "Number Leads by date"
-            select:
-                - COUNT(l.id) as leadsCount
-                - SUBSTRING(l.createdAt, 1, 10) as createdDate
-            from:
-                - { table: OroCRMSalesBundle:Lead, alias: l }
-
-            groupBy: createdDate
-
     opportunities:
+        by_step:
+            name: "Opportunities by Step"
+            from:
+                - { table: OroCRMReportBundle:OpportunityByWorkflowItem, alias: owi }
+            select:
+                - wi.currentStepName
+                - o.name
+                - COUNT(o.id) as numberOfOpp
+                - >
+                  SUM(
+                    (CASE WHEN (wi.currentStepName='closed') THEN o.closeRevenue ELSE 0 END)
+                  ) as closeRevenue
+                - >
+                  SUM(
+                    (CASE WHEN (wi.currentStepName='closed') THEN 0 ELSE o.budgetAmount END)
+                  ) as budgetAmount
+                # for filtering
+                - wi.workflowName
+            join:
+                left:
+                    - { join: owi.opportunity, alias: o }
+                    - { join: owi.workflowItem, alias: wi }
+            groupBy:  "wi.currentStepName"
+
         won_by_period:
             name: "Won opportunities by date period"
             from:
@@ -72,3 +85,14 @@ reports:
                 and:
                     - s.name = 'won'
                     - o.closeDate IS NOT NULL
+    leads:
+        by_date:
+            name:      "Number Leads by date"
+            select:
+                - COUNT(l.id) as leadsCount
+                - SUBSTRING(l.createdAt, 1, 10) as createdDate
+            from:
+                - { table: OroCRMSalesBundle:Lead, alias: l }
+
+            groupBy: createdDate
+
