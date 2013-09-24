@@ -79,6 +79,31 @@ class AccountHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $this->request->setMethod($method);
 
+        $contactsForm = $this->getMockBuilder('Symfony\Component\Form\Form')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $appendForm = $this->getMockBuilder('Symfony\Component\Form\Form')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $appendForm->expects($this->once())
+            ->method('getData')
+            ->will($this->returnValue(array()));
+        $contactsForm->expects($this->at(0))
+            ->method('get')
+            ->with('added')
+            ->will($this->returnValue($appendForm));
+
+        $removeForm = $this->getMockBuilder('Symfony\Component\Form\Form')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $removeForm->expects($this->once())
+            ->method('getData')
+            ->will($this->returnValue(array()));
+        $contactsForm->expects($this->at(1))
+            ->method('get')
+            ->with('removed')
+            ->will($this->returnValue($removeForm));
+
         $this->form->expects($this->once())
             ->method('setData')
             ->with($this->entity);
@@ -86,6 +111,11 @@ class AccountHandlerTest extends \PHPUnit_Framework_TestCase
         $this->form->expects($this->once())
             ->method('submit')
             ->with($this->request);
+
+        $this->form->expects($this->exactly(2))
+            ->method('get')
+            ->with('contacts')
+            ->will($this->returnValue($contactsForm));
 
         $this->assertFalse($this->handler->process($this->entity));
     }

@@ -1,0 +1,18 @@
+orocrm:
+    report:
+        datagrid:
+            columns:
+                account_name:      Account name
+                total_value:       Close revenue
+                close_date:        Close date
+                created_date:      Created date
+                leads_count:       Leads count
+                period:            Period
+                number_won:        Number won
+                step:              Step
+                nof_opportunities: Number of opportunities
+                close_revenue:     Close Revenue
+                budget_amount:     Budget Amount
+                workflow:          Workflow
+
+
