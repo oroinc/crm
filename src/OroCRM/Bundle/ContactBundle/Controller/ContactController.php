@@ -136,7 +136,7 @@ class ContactController extends Controller
      */
     public function updateAction(Contact $entity = null)
     {
-        return $this->update();
+        return $this->update($entity);
     }
 
     /**

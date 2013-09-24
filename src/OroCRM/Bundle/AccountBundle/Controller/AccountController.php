@@ -96,7 +96,7 @@ class AccountController extends Controller
      */
     public function updateAction(Account $entity = null)
     {
-        return $this->update();
+        return $this->update($entity);
     }
 
     /**

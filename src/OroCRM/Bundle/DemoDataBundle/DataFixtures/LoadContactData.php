@@ -167,14 +167,17 @@ class LoadContactData extends AbstractFlexibleFixture implements ContainerAwareI
                 $data = array_combine($headers, array_values($data));
                 //find accounts
                 $company = $data['Company'];
+
                 $account = array_filter(
                     $this->accounts,
                     function (Account $a) use ($company) {
                         return $a->getName() == $company;
                     }
                 );
-                $contact = $this->createContact($data);
                 $account = reset($account);
+                $contact = $this->createContact($data);
+
+                /** @var Account $account */
                 $contact->addAccount($account);
 
                 $group = $this->contactGroups[rand(0, count($this->contactGroups)-1)];
@@ -188,8 +191,11 @@ class LoadContactData extends AbstractFlexibleFixture implements ContainerAwareI
 
                 $source = $this->contactSources[rand(0, count($this->contactSources)-1)];
                 $contact->setSource($source);
+                $account->setDefaultContact($contact);
 
                 $this->persist($this->contactManager, $contact);
+
+                $this->persist($this->contactManager, $account);
             }
 
             $this->flush($this->contactManager);
