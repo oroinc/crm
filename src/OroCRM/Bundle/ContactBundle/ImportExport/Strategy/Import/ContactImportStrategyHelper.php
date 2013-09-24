@@ -3,6 +3,7 @@
 namespace OroCRM\Bundle\ContactBundle\ImportExport\Strategy\Import;
 
 use Symfony\Component\Security\Core\SecurityContextInterface;
+
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityRepository;
 
@@ -29,11 +30,6 @@ class ContactImportStrategyHelper
     protected $managerRegistry;
 
     /**
-     * @var EntityRepository[]
-     */
-    protected $repositories;
-
-    /**
      * @param SecurityContextInterface $securityContext
      * @param ManagerRegistry $managerRegistry
      */
@@ -49,11 +45,7 @@ class ContactImportStrategyHelper
      */
     protected function getEntityRepository($entityName)
     {
-        if (empty($this->repositories[$entityName])) {
-            $this->repositories[$entityName] = $this->managerRegistry->getRepository($entityName);
-        }
-
-        return $this->repositories[$entityName];
+        return $this->managerRegistry->getRepository($entityName);
     }
 
     /**
@@ -213,6 +205,6 @@ class ContactImportStrategyHelper
             return null;
         }
 
-        return $user;
+        return $this->getEntityRepository('OroUserBundle:User')->find($user->getId());
     }
 }
