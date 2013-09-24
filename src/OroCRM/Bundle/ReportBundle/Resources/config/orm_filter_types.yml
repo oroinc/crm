@@ -1,0 +1,6 @@
+services:
+    orocrm.report.filter.type.period:
+        class:     OroCRM\Bundle\ReportBundle\Filter\PeriodFilter
+        arguments: ["@translator"]
+        tags:
+            - { name: oro_grid.filter.type, alias: orocrm_report_filter_period }

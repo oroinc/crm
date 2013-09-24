@@ -79,7 +79,7 @@ class AccountController extends Controller
      */
     public function createAction()
     {
-        return $this->updateAction();
+        return $this->update();
     }
 
     /**
@@ -96,30 +96,8 @@ class AccountController extends Controller
      */
     public function updateAction(Account $entity = null)
     {
-        if (!$entity) {
-            $entity = $this->getManager()->createEntity();
-        }
-
-        if ($this->get('orocrm_account.form.handler.account')->process($entity)) {
-            $this->getFlashBag()->add('success', 'Account successfully saved');
-
-            return $this->get('oro_ui.router')->actionRedirect(
-                array(
-                    'route' => 'orocrm_account_update',
-                    'parameters' => array('id' => $entity->getId()),
-                ),
-                array(
-                    'route' => 'orocrm_account_view',
-                    'parameters' => array('id' => $entity->getId())
-                )
-            );
-        }
-
-        return array(
-            'form'     => $this->get('orocrm_account.form.account')->createView()
-        );
+        return $this->update($entity);
     }
-
 
     /**
      * @Route(
@@ -354,5 +332,35 @@ class AccountController extends Controller
     protected function getManager()
     {
         return $this->get('orocrm_account.account.manager.api');
+    }
+
+    /**
+     * @param Account $entity
+     * @return array
+     */
+    protected function update(Account $entity = null)
+    {
+        if (!$entity) {
+            $entity = $this->getManager()->createEntity();
+        }
+
+        if ($this->get('orocrm_account.form.handler.account')->process($entity)) {
+            $this->getFlashBag()->add('success', 'Account successfully saved');
+
+            return $this->get('oro_ui.router')->actionRedirect(
+                array(
+                    'route' => 'orocrm_account_update',
+                    'parameters' => array('id' => $entity->getId()),
+                ),
+                array(
+                    'route' => 'orocrm_account_view',
+                    'parameters' => array('id' => $entity->getId())
+                )
+            );
+        }
+
+        return array(
+            'form'     => $this->get('orocrm_account.form.account')->createView()
+        );
     }
 }
