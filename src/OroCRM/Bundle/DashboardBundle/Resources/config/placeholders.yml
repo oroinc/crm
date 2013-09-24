@@ -1,9 +1,0 @@
-placeholders:
-    head_style:
-        items:
-            dashboard_styles:
-                order: 200
-
-items:
-   dashboard_styles:
-        template: OroCRMDashboardBundle:Default:head.html.twig
