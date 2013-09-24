@@ -26,7 +26,8 @@ class ContactAddressController extends Controller
     public function addressBookAction(Contact $contact)
     {
         return array(
-            'entity' => $contact
+            'entity' => $contact,
+            'address_edit_acl_resource' => 'orocrm_contact_update'
         );
     }
 
