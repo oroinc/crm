@@ -4,7 +4,9 @@
 
     {# widget container and actions #}
     <div class="widget-actions">
+        {% if address_edit_acl_resource is not defined or resource_granted(address_edit_acl_resource) %}
         <button class="btn btn-mini btn-primary btn-uppercase" type="button" data-action-name="add_address"> + {{ 'Add Address'|trans }}</button>
+        {% endif %}
     </div>
     <div class="map-box" id="address-book"></div>
 
