@@ -8,6 +8,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\Yaml\Yaml;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
+use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use OroCRM\Bundle\ReportBundle\Datagrid\ReportGridManagerAbstract;
 
 class ReportController extends Controller
@@ -20,6 +21,12 @@ class ReportController extends Controller
      *      defaults={"_format" = "html"}
      * )
      * @Template()
+     * @Acl(
+     *      id="orocrm_reports",
+     *      type="action",
+     *      label="Reports",
+     *      group_name=""
+     * )
      */
     public function indexAction($reportGroupName, $reportName)
     {
