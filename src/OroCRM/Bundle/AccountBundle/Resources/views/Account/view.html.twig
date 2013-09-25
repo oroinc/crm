@@ -35,7 +35,7 @@
                 'dataId': entity.id,
                 'id': 'btn-remove-account',
                 'dataMessage': 'Are you sure you want to delete this account?'|trans,
-                'successMessage': 'Account was successfully deleted'|trans,
+                'successMessage': 'Account deleted'|trans,
                 'title': 'Delete account'|trans,
                 'label': 'Delete'|trans
             })
@@ -44,7 +44,7 @@
 {% endblock navButtons %}
 
 {% block pageHeader %}
-    {% set breadcrumbs = {'entity': entity, 'indexPath': path('orocrm_account_index'), 'indexLabel': 'Accounts', 'entityTitle': entity.name(format)|default('N/A') } %}
+    {% set breadcrumbs = {'entity': entity, 'indexPath': path('orocrm_account_index'), 'indexLabel': 'Accounts'|trans, 'entityTitle': entity.name(format)|default('N/A') } %}
     {{ parent() }}
 {% endblock pageHeader %}
 
@@ -84,11 +84,11 @@
     {% set dataBlocks =
         [
             {
-                'title': 'General',
+                'title': 'General'|trans,
                 'class': 'active',
                 'subblocks': [
                     {
-                        'title': 'Basic Information',
+                        'title': 'Basic Information'|trans,
                         'data' : dataSubBlocks
                     }
                 ]
@@ -98,18 +98,18 @@
 
     {% set accountAddresses = [] %}
     {%  if entity.billingAddress is not empty %}
-        {% set accountAddresses = accountAddresses|merge([{'title': 'Billing Address', 'data': [addressView.renderAddress(entity.billingAddress)]}]) %}
+        {% set accountAddresses = accountAddresses|merge([{'title': 'Billing Address'|trans, 'data': [addressView.renderAddress(entity.billingAddress)]}]) %}
     {% endif %}
     {%  if entity.shippingAddress is not empty %}
-        {% set accountAddresses = accountAddresses|merge([{'title': 'Shipping Address', 'data': [addressView.renderAddress(entity.shippingAddress)]}]) %}
+        {% set accountAddresses = accountAddresses|merge([{'title': 'Shipping Address'|trans, 'data': [addressView.renderAddress(entity.shippingAddress)]}]) %}
     {% endif %}
 
     {% if (accountAddresses|length) %}
-        {% set dataBlocks = dataBlocks|merge([{'title' : 'Addresses', 'subblocks': accountAddresses}])%}
+        {% set dataBlocks = dataBlocks|merge([{'title' : 'Addresses'|trans, 'subblocks': accountAddresses}])%}
     {% endif %}
 
     {% if (additional|length) %}
-        {% set dataBlocks = dataBlocks|merge([{'title' : 'Additional Information', 'subblocks': additional}])%}
+        {% set dataBlocks = dataBlocks|merge([{'title' : 'Additional Information'|trans, 'subblocks': additional}])%}
     {% endif %}
 
     {% set dataBlocks = dataBlocks|merge([{'title' : 'Contacts', 'subblocks': [{'title' : null, 'data' : [UI.gridBlock(gridId)], 'useSpan': false}] }])%}

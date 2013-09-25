@@ -38,7 +38,7 @@ class CreateAccountTest extends \PHPUnit_Extensions_Selenium2TestCase
             ->setAccountName($accountname)
             ->setOwner('admin')
             ->save()
-            ->assertMessage('Account successfully saved')
+            ->assertMessage('Account saved')
             ->toGrid()
             ->assertTitle('Accounts - Customers');
 
@@ -65,7 +65,7 @@ class CreateAccountTest extends \PHPUnit_Extensions_Selenium2TestCase
             ->setState('Aqm')
             ->setZipCode('Zip Code 000')
             ->save()
-            ->assertMessage('Account successfully saved')
+            ->assertMessage('Account saved')
             ->toGrid()
             ->assertTitle('Accounts - Customers');
     }
@@ -90,7 +90,7 @@ class CreateAccountTest extends \PHPUnit_Extensions_Selenium2TestCase
             ->assertTitle($accountname . ' - Accounts - Customers')
             ->setAccountName($newAccountname)
             ->save()
-            ->assertMessage('Account successfully saved')
+            ->assertMessage('Account saved')
             ->toGrid()
             ->assertTitle('Accounts - Customers')
             ->close();
@@ -114,7 +114,7 @@ class CreateAccountTest extends \PHPUnit_Extensions_Selenium2TestCase
             ->open(array($accountname))
             ->delete()
             ->assertTitle('Accounts - Customers')
-            ->assertMessage('Item was deleted');
+            ->assertMessage('Item deleted');
 
         $login->openUsers()->filterBy('Name', $accountname)->assertNoDataMessage('No Accounts were found to match your search');
     }

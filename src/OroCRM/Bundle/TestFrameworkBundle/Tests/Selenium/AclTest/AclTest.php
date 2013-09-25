@@ -41,7 +41,7 @@ class AclTest extends \PHPUnit_Extensions_Selenium2TestCase
             ->setEntity('Contact', array('Create', 'Edit', 'Delete', 'View', 'Assign'))
             ->setEntity('Account', array('Create', 'Edit', 'Delete', 'View', 'Assign'))
             ->save()
-            ->assertMessage('Role successfully saved');
+            ->assertMessage('Role saved');
 
         return ($this->newRole['LABEL'] . $randomPrefix);
     }
@@ -72,7 +72,7 @@ class AclTest extends \PHPUnit_Extensions_Selenium2TestCase
             ->setEmail($username.'@mail.com')
             ->setRoles(array($roleName))
             ->save()
-            ->assertMessage('User successfully saved')
+            ->assertMessage('User saved')
             ->toGrid()
             ->close()
             ->assertTitle('Users - System');
@@ -150,7 +150,7 @@ class AclTest extends \PHPUnit_Extensions_Selenium2TestCase
             ->setEntity('Contact', array('Create', 'Edit', 'Delete', 'Assign'))
             ->setEntity('User', array('View', 'Edit'))
             ->save()
-            ->assertMessage('Role successfully saved');
+            ->assertMessage('Role saved');
     }
 
     /**

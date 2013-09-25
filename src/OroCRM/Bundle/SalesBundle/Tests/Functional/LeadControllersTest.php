@@ -78,7 +78,7 @@ class LeadControllersTest extends WebTestCase
 
         $result = $this->client->getResponse();
         ToolsAPI::assertJsonResponse($result, 200, 'text/html; charset=UTF-8');
-        $this->assertContains("Lead successfully saved", $crawler->html());
+        $this->assertContains("Lead saved", $crawler->html());
 
         return $topic;
     }
@@ -125,7 +125,7 @@ class LeadControllersTest extends WebTestCase
 
         $result = $this->client->getResponse();
         ToolsAPI::assertJsonResponse($result, 200, 'text/html; charset=UTF-8');
-        $this->assertContains("Lead successfully saved", $crawler->html());
+        $this->assertContains("Lead saved", $crawler->html());
 
         return $topic;
     }

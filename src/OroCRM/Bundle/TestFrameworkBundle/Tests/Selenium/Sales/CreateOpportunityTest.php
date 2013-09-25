@@ -43,7 +43,7 @@ class CreateOpportunityTest extends \PHPUnit_Extensions_Selenium2TestCase
             ->setCloseRevenue('200')
             ->setCloseDate('9/26/13')
             ->save()
-            ->assertMessage('Opportunity successfully saved')
+            ->assertMessage('Opportunity saved')
             ->toGrid()
             ->assertTitle('Opportunities - Sales');
 
@@ -70,7 +70,7 @@ class CreateOpportunityTest extends \PHPUnit_Extensions_Selenium2TestCase
             ->assertTitle($name . ' - Opportunities - Sales')
             ->setName($newName)
             ->save()
-            ->assertMessage('Opportunity successfully saved')
+            ->assertMessage('Opportunity saved')
             ->toGrid()
             ->assertTitle('Opportunities - Sales')
             ->close();
@@ -94,7 +94,7 @@ class CreateOpportunityTest extends \PHPUnit_Extensions_Selenium2TestCase
             ->open(array($name))
             ->delete()
             ->assertTitle('Opportunities - Sales')
-            ->assertMessage('Item was deleted');
+            ->assertMessage('Item deleted');
 
         $login->openUsers()->filterBy('Opportunity Name', $name)->assertNoDataMessage('No Opporunities were found to match your search');
     }
