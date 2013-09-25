@@ -145,17 +145,6 @@ class LoadContactData extends AbstractFlexibleFixture implements ContainerAwareI
      */
     public function loadContacts()
     {
-        $tags = $this->tagsRepository->findAll();
-        $keys = array();
-        foreach ($tags as $tag) {
-            /** @var Tag $tag */
-            $keys[] =  $tag->getName();
-        }
-
-        if (count($keys) > 0) {
-            $tags = array_combine($keys, array_values($tags));
-        }
-
         $handle = fopen(__DIR__ . DIRECTORY_SEPARATOR . 'dictionaries' . DIRECTORY_SEPARATOR. "accounts.csv", "r");
         if ($handle) {
             $headers = array();
