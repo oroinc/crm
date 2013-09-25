@@ -2,6 +2,7 @@
 {% import 'OroUIBundle::macros.html.twig' as macros %}
 
 {% oro_title_set({params : {"%lead.topic%": entity.topic} }) %}
+{% set audit_entity_class = 'OroCRM_Bundle_SalesBundle_Entity_Lead' %}
 
 {% block navButtons %}
     {% if resource_granted('orocrm_sales_lead_update') %}

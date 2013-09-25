@@ -2,9 +2,11 @@
 
 namespace OroCRM\Bundle\ContactBundle\EventListener;
 
+use Doctrine\ORM\UnitOfWork;
 use Symfony\Component\Security\Core\SecurityContextInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
+use Doctrine\ORM\EntityManager;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
@@ -64,8 +66,8 @@ class ContactSubscriber implements EventSubscriber
         }
 
         /** @var Contact $entity */
-        $this->setCreatedProperties($entity);
-        $this->setUpdatedProperties($entity);
+        $this->setCreatedProperties($entity, $args->getEntityManager());
+        $this->setUpdatedProperties($entity, $args->getEntityManager());
     }
 
     /**
@@ -79,7 +81,7 @@ class ContactSubscriber implements EventSubscriber
         }
 
         /** @var Contact $entity */
-        $this->setUpdatedProperties($entity, $args);
+        $this->setUpdatedProperties($entity, $args->getEntityManager(), true);
     }
 
     /**
@@ -92,10 +94,10 @@ class ContactSubscriber implements EventSubscriber
     }
 
     /**
+     * @param EntityManager $entityManager
      * @return User|null
-     * @throws \LogicException
      */
-    protected function getUser()
+    protected function getUser(EntityManager $entityManager)
     {
         $token = $this->getSecurityContext()->getToken();
         if (!$token) {
@@ -107,29 +109,35 @@ class ContactSubscriber implements EventSubscriber
             return null;
         }
 
+        if ($entityManager->getUnitOfWork()->getEntityState($user) == UnitOfWork::STATE_DETACHED) {
+            $user = $entityManager->find('OroUserBundle:User', $user->getId());
+        }
+
         return $user;
     }
 
     /**
      * @param Contact $contact
+     * @param EntityManager $entityManager
      */
-    protected function setCreatedProperties(Contact $contact)
+    protected function setCreatedProperties(Contact $contact, EntityManager $entityManager)
     {
         $contact->setCreatedAt(new \DateTime('now', new \DateTimeZone('UTC')));
-        $contact->setCreatedBy($this->getUser());
+        $contact->setCreatedBy($this->getUser($entityManager));
     }
 
     /**
      * @param Contact $contact
-     * @param PreUpdateEventArgs $args
+     * @param EntityManager $entityManager
+     * @param bool $update
      */
-    protected function setUpdatedProperties(Contact $contact, PreUpdateEventArgs $args = null)
+    protected function setUpdatedProperties(Contact $contact, EntityManager $entityManager, $update = false)
     {
         $newUpdatedAt = new \DateTime('now', new \DateTimeZone('UTC'));
-        $newUpdatedBy = $this->getUser();
+        $newUpdatedBy = $this->getUser($entityManager);
 
-        if ($args) {
-            $unitOfWork = $args->getEntityManager()->getUnitOfWork();
+        $unitOfWork = $entityManager->getUnitOfWork();
+        if ($update) {
             $unitOfWork->propertyChanged($contact, 'updatedAt', $contact->getUpdatedAt(), $newUpdatedAt);
             $unitOfWork->propertyChanged($contact, 'updatedBy', $contact->getUpdatedBy(), $newUpdatedBy);
         }

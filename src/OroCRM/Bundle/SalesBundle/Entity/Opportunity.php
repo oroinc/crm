@@ -4,6 +4,7 @@ namespace OroCRM\Bundle\SalesBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
+use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\AccountBundle\Entity\Account;
@@ -12,6 +13,7 @@ use OroCRM\Bundle\AccountBundle\Entity\Account;
  * @ORM\Entity
  * @ORM\Table(name="orocrm_sales_opportunity")
  * @ORM\HasLifecycleCallbacks()
+ * @Oro\Loggable
  * @Config(
  *  defaultValues={
  *      "entity"={"label"="Opportunity", "plural_label"="Opportunities"},
@@ -46,6 +48,7 @@ class Opportunity
      *
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\SalesBundle\Entity\OpportunityCloseReason")
      * @ORM\JoinColumn(name="close_reason_name", referencedColumnName="name")
+     * @Oro\Versioned
      **/
     protected $closeReason;
 
@@ -54,6 +57,7 @@ class Opportunity
      *
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ContactBundle\Entity\Contact")
      * @ORM\JoinColumn(name="contact_id", referencedColumnName="id", onDelete="SET NULL")
+     * @Oro\Versioned
      **/
     protected $contact;
 
@@ -62,6 +66,7 @@ class Opportunity
      *
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\AccountBundle\Entity\Account")
      * @ORM\JoinColumn(name="account_id", referencedColumnName="id", onDelete="SET NULL")
+     * @Oro\Versioned
      **/
     protected $account;
 
@@ -69,6 +74,7 @@ class Opportunity
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
+     * @Oro\Versioned
      */
     protected $name;
 
@@ -76,6 +82,7 @@ class Opportunity
      * @var \DateTime
      *
      * @ORM\Column(name="close_date", type="date", nullable=true)
+     * @Oro\Versioned
      */
     protected $closeDate;
 
@@ -83,6 +90,7 @@ class Opportunity
      * @var float
      *
      * @ORM\Column(name="probability", type="float", nullable=true)
+     * @Oro\Versioned
      */
     protected $probability;
 
@@ -90,6 +98,7 @@ class Opportunity
      * @var float
      *
      * @ORM\Column(name="budget_amount", type="float", nullable=true)
+     * @Oro\Versioned
      */
     protected $budgetAmount;
 
@@ -97,6 +106,7 @@ class Opportunity
      * @var float
      *
      * @ORM\Column(name="close_revenue", type="float", nullable=true)
+     * @Oro\Versioned
      */
     protected $closeRevenue;
 
@@ -104,6 +114,7 @@ class Opportunity
      * @var string
      *
      * @ORM\Column(name="customer_need", type="string", length=255, nullable=true)
+     * @Oro\Versioned
      */
     protected $customerNeed;
 
@@ -111,6 +122,7 @@ class Opportunity
      * @var string
      *
      * @ORM\Column(name="proposed_solution", type="string", length=255, nullable=true)
+     * @Oro\Versioned
      */
     protected $proposedSolution;
 
@@ -368,6 +380,10 @@ class Opportunity
         return $this;
     }
 
+    public function __toString()
+    {
+        return (string)$this->getName();
+    }
     /**
      * @ORM\PrePersist
      */
