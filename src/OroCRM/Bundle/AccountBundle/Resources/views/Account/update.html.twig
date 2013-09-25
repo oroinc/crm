@@ -23,14 +23,14 @@
             'dataId': form.vars.value.id,
             'id': 'btn-remove-account',
             'dataMessage': 'Are you sure you want to delete this account?'|trans,
-            'successMessage': 'Account was successfully deleted'|trans,
+            'successMessage': 'Account deleted'|trans,
             'title': 'Delete account',
             'label': 'Delete'
         })
         }}
         {{ UI.buttonSeparator() }}
     {% endif %}
-    {{ UI.button({'path' : path('orocrm_account_index'), 'title' : 'Cancel', 'label' : 'Cancel'}) }}
+    {{ UI.button({'path' : path('orocrm_account_index'), 'title' : 'Cancel'|trans, 'label' : 'Cancel'|trans}) }}
     {{ UI.saveAndStayButton('orocrm_account_update') }}
     {{ UI.saveAndCloseButton() }}
 {% endblock %}
@@ -40,7 +40,7 @@
         {% set breadcrumbs = {
             'entity':      form.vars.value,
             'indexPath':   path('orocrm_account_index'),
-            'indexLabel': 'Accounts',
+            'indexLabel': 'Accounts'|trans,
             'entityTitle': form.vars.value.name|default('N/A')
         }
         %}
@@ -54,11 +54,11 @@
     {% set id = 'account-profile' %}
 
     {% set dataBlocks = [{
-            'title': 'General',
+            'title': 'General'|trans,
             'class': 'active',
             'subblocks': [
                 {
-                    'title': 'Basic Information',
+                    'title': 'Basic Information'|trans,
                     'data': [
                         form_row(form.name),
                         form_row(form.tags)
@@ -70,7 +70,7 @@
 
     {% set dataBlocks = dataBlocks|merge(
         [{
-            'title' : 'Addresses',
+            'title' : 'Addresses'|trans,
             'subblocks': [
                 {
                     'title': 'Billing Address'|trans,
@@ -87,7 +87,7 @@
 
     {% set dataBlocks = dataBlocks|merge(
         [{
-            'title' : 'Additional Information',
+            'title' : 'Additional Information'|trans,
             'subblocks':
             [
                 {
@@ -104,7 +104,7 @@
 
     {% set dataBlocks = dataBlocks|merge(
         [{
-            'title' : 'Contacts',
+            'title' : 'Contacts'|trans,
             'subblocks':
             [
                 {

@@ -36,18 +36,6 @@ class ContactSubscriber implements EventSubscriber
     }
 
     /**
-     * @return SecurityContextInterface
-     */
-    protected function getSecurityContext()
-    {
-        if (!$this->securityContext) {
-            $this->securityContext = $this->container->get('security.context');
-        }
-
-        return $this->securityContext;
-    }
-
-    /**
      * {@inheritDoc}
      */
     public function getSubscribedEvents()
@@ -85,35 +73,12 @@ class ContactSubscriber implements EventSubscriber
     }
 
     /**
-     * @param $entity
+     * @param object $entity
      * @return bool
      */
     protected function isContactEntity($entity)
     {
         return $entity instanceof Contact;
-    }
-
-    /**
-     * @param EntityManager $entityManager
-     * @return User|null
-     */
-    protected function getUser(EntityManager $entityManager)
-    {
-        $token = $this->getSecurityContext()->getToken();
-        if (!$token) {
-            return null;
-        }
-
-        $user = $token->getUser();
-        if (!$user) {
-            return null;
-        }
-
-        if ($entityManager->getUnitOfWork()->getEntityState($user) == UnitOfWork::STATE_DETACHED) {
-            $user = $entityManager->find('OroUserBundle:User', $user->getId());
-        }
-
-        return $user;
     }
 
     /**
@@ -144,5 +109,40 @@ class ContactSubscriber implements EventSubscriber
 
         $contact->setUpdatedAt($newUpdatedAt);
         $contact->setUpdatedBy($newUpdatedBy);
+    }
+
+    /**
+     * @param EntityManager $entityManager
+     * @return User|null
+     */
+    protected function getUser(EntityManager $entityManager)
+    {
+        $token = $this->getSecurityContext()->getToken();
+        if (!$token) {
+            return null;
+        }
+
+        $user = $token->getUser();
+        if (!$user) {
+            return null;
+        }
+
+        if ($entityManager->getUnitOfWork()->getEntityState($user) == UnitOfWork::STATE_DETACHED) {
+            $user = $entityManager->find('OroUserBundle:User', $user->getId());
+        }
+
+        return $user;
+    }
+
+    /**
+     * @return SecurityContextInterface
+     */
+    protected function getSecurityContext()
+    {
+        if (!$this->securityContext) {
+            $this->securityContext = $this->container->get('security.context');
+        }
+
+        return $this->securityContext;
     }
 }

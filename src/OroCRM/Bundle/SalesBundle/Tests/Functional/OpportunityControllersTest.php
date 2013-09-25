@@ -52,7 +52,7 @@ class OpportunityControllersTest extends WebTestCase
 
         $result = $this->client->getResponse();
         ToolsAPI::assertJsonResponse($result, 200, 'text/html; charset=UTF-8');
-        $this->assertContains("Opportunity successfully saved", $crawler->html());
+        $this->assertContains("Opportunity saved", $crawler->html());
 
         return $name;
     }
@@ -97,7 +97,7 @@ class OpportunityControllersTest extends WebTestCase
 
         $result = $this->client->getResponse();
         ToolsAPI::assertJsonResponse($result, 200, 'text/html; charset=UTF-8');
-        $this->assertContains("Opportunity successfully saved", $crawler->html());
+        $this->assertContains("Opportunity saved", $crawler->html());
 
         return $name;
     }
