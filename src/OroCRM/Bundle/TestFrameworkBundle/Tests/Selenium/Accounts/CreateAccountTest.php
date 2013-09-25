@@ -87,7 +87,7 @@ class CreateAccountTest extends \PHPUnit_Extensions_Selenium2TestCase
             ->filterBy('Account name', $accountname)
             ->open(array($accountname))
             ->edit()
-            ->assertTitle($accountname . ' - Accounts - Customers')
+            ->assertTitle('Edit ' . $accountname . ' - Accounts - Customers')
             ->setAccountName($newAccountname)
             ->save()
             ->assertMessage('Account saved')
