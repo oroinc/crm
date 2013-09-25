@@ -100,7 +100,7 @@
     {% if form.additional is defined and form.additional.children|length > 0 %}
         {% set additionalData = [] %}
         {% for value in form.additional %}
-            {% set additionalData = additionalData|merge([form_row(value, { attr: { class: 'horizontal' } })]) %}
+            {% set additionalData = additionalData|merge([form_row(value)]) %}
         {% endfor %}
 
         {% set dataBlocks = dataBlocks|merge([{
