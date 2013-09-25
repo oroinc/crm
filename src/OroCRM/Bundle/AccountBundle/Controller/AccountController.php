@@ -170,7 +170,10 @@ class AccountController extends Controller
         }
 
         if ($this->get('orocrm_account.form.handler.account')->process($entity)) {
-            $this->getFlashBag()->add('success', 'Account successfully saved');
+            $this->get('session')->getFlashBag()->add(
+                'success',
+                $this->get('translator')->trans('orocrm.account.controller.account.saved.message')
+            );
 
             return $this->get('oro_ui.router')->actionRedirect(
                 array(

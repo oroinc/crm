@@ -2,3 +2,4 @@ orocrm.account.form.account_name: Account name
 orocrm.account.datagrid.account_name: Account name
 orocrm.account.form.choose_account: Choose an account...
 orocrm.account.form.select_contacts: Select contacts
+orocrm.account.controller.account.saved.message: "Account saved"

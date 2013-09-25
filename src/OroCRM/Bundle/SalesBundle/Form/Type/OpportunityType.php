@@ -16,18 +16,6 @@ class OpportunityType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add(
-            'status',
-            'entity',
-            array(
-                'class'       => 'OroCRMSalesBundle:OpportunityStatus',
-                'property'    => 'label',
-                'required'    => true,
-                'disabled'    => true,
-                'empty_value' => false,
-            )
-        );
-
-        $builder->add(
             'closeReason',
             'entity',
             array(

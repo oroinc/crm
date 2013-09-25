@@ -30,6 +30,8 @@ oro_menu_config:
             routeParameters:
                 reportGroupName: accounts
                 reportName:      life_time_value
+            extras:
+                description: 'Accounts lifetime report'
 
         accounts_by_opportunities:
             label: 'By opportunities'
@@ -37,6 +39,8 @@ oro_menu_config:
             routeParameters:
                 reportGroupName: accounts
                 reportName:      by_opportunities
+            extras:
+                description: 'Accounts by opportunities report'
 
         leads_by_date:
             label: 'Leads by date'
@@ -44,6 +48,8 @@ oro_menu_config:
             routeParameters:
                 reportGroupName: leads
                 reportName:      by_date
+            extras:
+                description: 'Leads by date report'
 
         opportunities_by_step:
             label: 'Opportunities by step'
@@ -51,6 +57,8 @@ oro_menu_config:
             routeParameters:
                 reportGroupName: opportunities
                 reportName:      by_step
+            extras:
+                description: 'Opportunities by step report'
 
         won_by_period:
             label: 'Won opportunities by period'
@@ -58,6 +66,8 @@ oro_menu_config:
             routeParameters:
                 reportGroupName: opportunities
                 reportName:      won_by_period
+            extras:
+                description: 'Won opportunities by period report'
 
     tree:
         application_menu:

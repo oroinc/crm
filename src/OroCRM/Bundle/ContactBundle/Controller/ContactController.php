@@ -195,7 +195,10 @@ class ContactController extends Controller
         }
 
         if ($this->get('orocrm_contact.form.handler.contact')->process($entity)) {
-            $this->getFlashBag()->add('success', 'Contact successfully saved');
+            $this->get('session')->getFlashBag()->add(
+                'success',
+                $this->get('translator')->trans('orocrm.contact.controller.contact.saved.message')
+            );
 
             return $this->get('oro_ui.router')->actionRedirect(
                 array(

@@ -55,7 +55,7 @@ class CreateLeadTest extends \PHPUnit_Extensions_Selenium2TestCase
             ->setEmployees('100')
             ->setAddress($this->address)
             ->save()
-            ->assertMessage('Lead successfully saved')
+            ->assertMessage('Lead saved')
             ->toGrid()
             ->assertTitle('Leads - Sales');
 
@@ -79,10 +79,10 @@ class CreateLeadTest extends \PHPUnit_Extensions_Selenium2TestCase
             ->filterBy('Topic', $topic)
             ->open(array($topic))
             ->edit()
-            ->assertTitle($topic . ' - Leads - Sales')
+            ->assertTitle('Edit ' . $topic . ' - Leads - Sales')
             ->setTopic($newTopic)
             ->save()
-            ->assertMessage('Lead successfully saved')
+            ->assertMessage('Lead saved')
             ->toGrid()
             ->assertTitle('Leads - Sales')
             ->close();
@@ -106,7 +106,7 @@ class CreateLeadTest extends \PHPUnit_Extensions_Selenium2TestCase
             ->open(array($topic))
             ->delete()
             ->assertTitle('Leads - Sales')
-            ->assertMessage('Item was deleted');
+            ->assertMessage('Item deleted');
 
         $login->openUsers()->filterBy('Topic', $topic)->assertNoDataMessage('No Leads were found to match your search');
     }

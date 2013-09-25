@@ -3,10 +3,13 @@
 namespace OroCRM\Bundle\SalesBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+
 use Oro\Bundle\AddressBundle\Entity\Address;
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
+
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
+use OroCRM\Bundle\SalesBundle\Model\ExtendLead;
 
 /**
  * Lead
@@ -25,7 +28,7 @@ use OroCRM\Bundle\ContactBundle\Entity\Contact;
  *  }
  * )
  */
-class Lead
+class Lead extends ExtendLead
 {
     /**
      * @var integer

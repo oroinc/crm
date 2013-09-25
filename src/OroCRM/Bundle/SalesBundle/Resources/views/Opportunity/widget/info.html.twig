@@ -34,6 +34,12 @@
 
         {{ _self.renderRow('Probability'|trans, entity.probability ? (entity.probability * 100) ~ '%' : '') }}
         {{ _self.renderRow('Budget amount'|trans, entity.budgetAmount|length ? entity.budgetAmount|number_format(2), '') }}
+
+        {% if dynamic|length %}
+            {% for label, item in dynamic %}
+                {{ _self.renderRow(label|trans, item) }}
+            {% endfor %}
+        {% endif %}
     </div>
     <div class="span6">
         {{ _self.renderRow('Customer need'|trans, entity.customerNeed) }}

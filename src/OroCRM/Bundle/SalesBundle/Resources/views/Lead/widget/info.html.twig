@@ -27,6 +27,12 @@
         {{ _self.renderRow('Company Name'|trans, entity.companyName) }}
         {{ _self.renderRow('Industry'|trans, entity.industry) }}
         {{ _self.renderRow('Number Of Employees'|trans, entity.numberOfEmployees) }}
+
+        {% if dynamic|length %}
+            {% for label, item in dynamic %}
+                {{ _self.renderRow(label|trans, item) }}
+            {% endfor %}
+        {% endif %}
     </div>
     <div class="span6">
         {{ _self.renderRow('Email'|trans, entity.email ? '<a href="mailto:' ~ entity.email ~ '">' ~ entity.email ~ '</a>' : '') }}

@@ -2,6 +2,6 @@
 
 namespace OroCRM\Bundle\ContactBundle\Model;
 
-class ExtendContact extends TestClass
+class ExtendContact
 {
 }
