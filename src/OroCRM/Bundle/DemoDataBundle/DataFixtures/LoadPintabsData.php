@@ -71,7 +71,7 @@ class LoadPintabsData extends AbstractFixture implements ContainerAwareInterface
             'account' => array(
                 "url" => "/account",
                 "title_rendered" => "Accounts - Customers",
-                "title" => "{\"template\":\"Accounts - Customers\",\"params\":[]}",
+                "title" => "{\"template\":\"Accounts - Customers\",\"short_template\":\"Accounts\",\"params\":[]}",
                 "position" => 0,
                 "type" => "pinbar",
                 "display_type" => "list",
@@ -81,7 +81,7 @@ class LoadPintabsData extends AbstractFixture implements ContainerAwareInterface
             'contact' => array(
                 "url" => "/contact",
                 "title_rendered" => "Contacts - Customers",
-                "title" => "{\"template\":\"Contacts - Customers\",\"params\":[]}",
+                "title" => "{\"template\":\"Contacts - Customers\",\"short_template\":\"Contacts\",\"params\":[]}",
                 "position" => 0,
                 "type" => "pinbar",
                 "display_type" => "list",
@@ -91,7 +91,7 @@ class LoadPintabsData extends AbstractFixture implements ContainerAwareInterface
             'leads' => array(
                 "url" => "/sales/lead",
                 "title_rendered" => "Leads - Sales",
-                "title" => "{\"template\":\"Leads - Sales\",\"params\":[]}",
+                "title" => "{\"template\":\"Leads - Sales\",\"short_template\":\"Leads\",\"params\":[]}",
                 "position" => 0,
                 "type" => "pinbar",
                 "display_type" => "list",
@@ -101,7 +101,7 @@ class LoadPintabsData extends AbstractFixture implements ContainerAwareInterface
             'opportunities' => array(
                 "url" => "/sales/opportunity",
                 "title_rendered" => "Opportunities - Sales",
-                "title" => "{\"template\":\"Opportunities - Sales\",\"params\":[]}",
+                "title" => "{\"template\":\"Opportunities - Sales\",\"short_template\":\"Opportunities\",\"params\":[]}",
                 "position" => 0,
                 "type" => "pinbar",
                 "display_type" => "list",
