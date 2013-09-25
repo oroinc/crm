@@ -40,4 +40,4 @@ oro_titles:
     orocrm_account_index: ~
     orocrm_account_view: %%account.name%%
     orocrm_account_create: Create Account
-    orocrm_account_update: %%account.name%%
+    orocrm_account_update: Edit %%account.name%%
