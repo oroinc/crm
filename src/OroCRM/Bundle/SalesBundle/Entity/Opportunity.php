@@ -6,8 +6,10 @@ use Doctrine\ORM\Mapping as ORM;
 
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
+
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\AccountBundle\Entity\Account;
+use OroCRM\Bundle\SalesBundle\Model\ExtendOpportunity;
 
 /**
  * @ORM\Entity
@@ -24,7 +26,7 @@ use OroCRM\Bundle\AccountBundle\Entity\Account;
  *  }
  * )
  */
-class Opportunity
+class Opportunity extends ExtendOpportunity
 {
     /**
      * @var int
