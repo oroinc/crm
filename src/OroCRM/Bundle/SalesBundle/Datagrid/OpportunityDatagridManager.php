@@ -4,16 +4,18 @@ namespace OroCRM\Bundle\SalesBundle\Datagrid;
 
 use Doctrine\ORM\QueryBuilder;
 
-use Oro\Bundle\GridBundle\Datagrid\DatagridManager;
+use Oro\Bundle\EntityBundle\Datagrid\AbstractDatagrid;
+
 use Oro\Bundle\GridBundle\Field\FieldDescription;
 use Oro\Bundle\GridBundle\Field\FieldDescriptionCollection;
 use Oro\Bundle\GridBundle\Field\FieldDescriptionInterface;
+
 use Oro\Bundle\GridBundle\Filter\FilterInterface;
 use Oro\Bundle\GridBundle\Action\ActionInterface;
 use Oro\Bundle\GridBundle\Property\UrlProperty;
 use Oro\Bundle\GridBundle\Datagrid\ProxyQueryInterface;
 
-class OpportunityDatagridManager extends DatagridManager
+class OpportunityDatagridManager extends AbstractDatagrid
 {
     /**
      * @var string
@@ -138,6 +140,8 @@ class OpportunityDatagridManager extends DatagridManager
             )
         );
         $fieldsCollection->add($fieldEmail);
+
+        $this->addDynamicFields();
     }
 
     /**

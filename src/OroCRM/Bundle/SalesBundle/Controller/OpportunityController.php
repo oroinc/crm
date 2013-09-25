@@ -2,14 +2,21 @@
 
 namespace OroCRM\Bundle\SalesBundle\Controller;
 
+use Doctrine\Common\Inflector\Inflector;
+
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBag;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
+
+use Oro\Bundle\EntityExtendBundle\Extend\ExtendManager;
+use Oro\Bundle\EntityConfigBundle\Config\ConfigInterface;
 
 use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
 use OroCRM\Bundle\SalesBundle\Datagrid\OpportunityDatagridManager;
@@ -43,8 +50,31 @@ class OpportunityController extends Controller
      */
     public function infoAction(Opportunity $entity)
     {
+        $extendProvider = $this->get('oro_entity_config.provider.extend');
+        $entityProvider = $this->get('oro_entity_config.provider.entity');
+        $viewProvider   = $this->get('oro_entity_config.provider.view');
+
+        $fields = $extendProvider->filter(
+            function (ConfigInterface $config) use ($viewProvider) {
+                return
+                    $config->is('owner', ExtendManager::OWNER_CUSTOM)
+                    && !$config->is('state', ExtendManager::STATE_NEW)
+                    && !$config->is('is_deleted')
+                    && $viewProvider->getConfigById($config->getId())->is('is_displayable');
+            },
+            get_class($entity)
+        );
+
+        $dynamicRow = array();
+        foreach ($fields as $field) {
+            $label = $entityProvider->getConfigById($field->getId())->get('label') ? : $field->getId()->getFieldName();
+
+            $dynamicRow[$label] = $entity->{'get' . ucfirst(Inflector::camelize($field->getId()->getFieldName()))}();
+        }
+
         return array(
-            'entity' => $entity
+            'dynamic' => $dynamicRow,
+            'entity'  => $entity
         );
     }
 
@@ -60,7 +90,7 @@ class OpportunityController extends Controller
      */
     public function createAction()
     {
-        $entity = new Opportunity();
+        $entity        = new Opportunity();
         $defaultStatus = $this->getDoctrine()->getManager()->find('OroCRMSalesBundle:OpportunityStatus', 'in_progress');
         $entity->setStatus($defaultStatus);
 
@@ -96,7 +126,7 @@ class OpportunityController extends Controller
     {
         /** @var OpportunityDatagridManager $datagridManager */
         $datagridManager = $this->get('orocrm_sales.opportunity.datagrid_manager');
-        $datagridView = $datagridManager->getDatagrid()->createView();
+        $datagridView    = $datagridManager->getDatagrid()->createView();
 
         if ('json' == $this->getRequest()->getRequestFormat()) {
             return $this->get('oro_grid.renderer')->renderResultsJsonResponse($datagridView);
@@ -127,11 +157,11 @@ class OpportunityController extends Controller
 
             return $this->get('oro_ui.router')->actionRedirect(
                 array(
-                    'route' => 'orocrm_sales_opportunity_update',
+                    'route'      => 'orocrm_sales_opportunity_update',
                     'parameters' => array('id' => $entity->getId()),
                 ),
                 array(
-                    'route' => 'orocrm_sales_opportunity_view',
+                    'route'      => 'orocrm_sales_opportunity_view',
                     'parameters' => array('id' => $entity->getId()),
                 )
             );
