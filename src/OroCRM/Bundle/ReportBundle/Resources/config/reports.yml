@@ -50,7 +50,7 @@ reports:
                   ) as closeRevenue
                 - >
                   SUM(
-                    o.budgetAmount
+                    (CASE WHEN (o.budgetAmount IS NOT NULL) THEN o.budgetAmount ELSE 0 END)
                   ) as budgetAmount
                 # for filtering
                 - wi.workflowName
