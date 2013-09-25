@@ -3,6 +3,7 @@
 namespace OroCRM\Bundle\ContactBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
@@ -13,9 +14,10 @@ use Oro\Bundle\AddressBundle\Entity\AddressType;
 use Oro\Bundle\EmailBundle\Entity\EmailOwnerInterface;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
-use OroCRM\Bundle\ContactBundle\Model\ExtendContact;
+
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 
+use OroCRM\Bundle\ContactBundle\Model\ExtendContact;
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 
 /**

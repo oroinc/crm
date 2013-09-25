@@ -2,20 +2,26 @@
 
 namespace OroCRM\Bundle\SalesBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Doctrine\Common\Inflector\Inflector;
+
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBag;
 
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
+
+use Oro\Bundle\EntityConfigBundle\Config\ConfigInterface;
+use Oro\Bundle\EntityExtendBundle\Extend\ExtendManager;
 
 use OroCRM\Bundle\SalesBundle\Entity\Lead;
 use OroCRM\Bundle\SalesBundle\Datagrid\LeadDatagridManager;
 
 /**
- *
  * @Route("/lead")
  */
 class LeadController extends Controller
@@ -44,8 +50,31 @@ class LeadController extends Controller
      */
     public function infoAction(Lead $lead)
     {
+        $extendProvider = $this->get('oro_entity_config.provider.extend');
+        $entityProvider = $this->get('oro_entity_config.provider.entity');
+        $viewProvider   = $this->get('oro_entity_config.provider.view');
+
+        $fields = $extendProvider->filter(
+            function (ConfigInterface $config) use ($viewProvider) {
+                return
+                    $config->is('owner', ExtendManager::OWNER_CUSTOM)
+                    && !$config->is('state', ExtendManager::STATE_NEW)
+                    && !$config->is('is_deleted')
+                    && $viewProvider->getConfigById($config->getId())->is('is_displayable');
+            },
+            get_class($lead)
+        );
+
+        $dynamicRow = array();
+        foreach ($fields as $field) {
+            $label = $entityProvider->getConfigById($field->getId())->get('label') ? : $field->getId()->getFieldName();
+
+            $dynamicRow[$label] = $lead->{'get' . ucfirst(Inflector::camelize($field->getId()->getFieldName()))}();
+        }
+
         return array(
-            'entity' => $lead
+            'dynamic' => $dynamicRow,
+            'entity'  => $lead
         );
     }
 
@@ -63,7 +92,6 @@ class LeadController extends Controller
 
     /**
      * Create lead form
-     *
      * @Route("/create", name="orocrm_sales_lead_create")
      * @Template("OroCRMSalesBundle:Lead:update.html.twig")
      * @Acl(
@@ -75,7 +103,7 @@ class LeadController extends Controller
      */
     public function createAction()
     {
-        $lead = new Lead();
+        $lead          = new Lead();
         $defaultStatus = $this->getDoctrine()->getManager()->find('OroCRMSalesBundle:LeadStatus', 'new');
         $lead->setStatus($defaultStatus);
 
@@ -84,8 +112,8 @@ class LeadController extends Controller
 
     /**
      * Update user form
-     *
      * @Route("/update/{id}", name="orocrm_sales_lead_update", requirements={"id"="\d+"}, defaults={"id"=0})
+     *
      * @Template
      * @Acl(
      *      id="orocrm_sales_lead_update",
@@ -112,7 +140,7 @@ class LeadController extends Controller
     public function indexAction()
     {
         /** @var $gridManager LeadDatagridManager */
-        $gridManager = $this->get('orocrm_sales.lead.datagrid_manager');
+        $gridManager  = $this->get('orocrm_sales.lead.datagrid_manager');
         $datagridView = $gridManager->getDatagrid()->createView();
 
         if ('json' == $this->getRequest()->getRequestFormat()) {
@@ -137,23 +165,26 @@ class LeadController extends Controller
     protected function update(Lead $entity)
     {
         if ($this->get('orocrm_sales.lead.form.handler')->process($entity)) {
-            $this->getFlashBag()->add('success', 'Lead successfully saved');
+            $this->get('session')->getFlashBag()->add(
+                'success',
+                $this->get('translator')->trans('orocrm.sales.controller.lead.saved.message')
+            );
 
             return $this->get('oro_ui.router')->actionRedirect(
                 array(
-                    'route' => 'orocrm_sales_lead_update',
+                    'route'      => 'orocrm_sales_lead_update',
                     'parameters' => array('id' => $entity->getId()),
                 ),
                 array(
-                    'route' => 'orocrm_sales_lead_view',
+                    'route'      => 'orocrm_sales_lead_view',
                     'parameters' => array('id' => $entity->getId()),
                 )
             );
         }
 
         return array(
-            'entity'   => $entity,
-            'form'     => $this->get('orocrm_sales.lead.form')->createView()
+            'entity' => $entity,
+            'form'   => $this->get('orocrm_sales.lead.form')->createView()
         );
     }
 }

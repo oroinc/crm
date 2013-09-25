@@ -20,3 +20,6 @@ orocrm.sales_lead.datagrid.postal_code: Postal Code
 orocrm.sales_lead.datagrid.view: View
 orocrm.sales_lead.datagrid.update: Update
 orocrm.sales_lead.datagrid.delete: Delete
+
+orocrm.sales.controller.lead.saved.message: "Lead saved"
+orocrm.sales.controller.opportunity.saved.message: "Opportunity saved"

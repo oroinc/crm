@@ -50,6 +50,17 @@
     {% endif %}
 {% endblock pageHeader %}
 
+{% block breadcrumbs %}
+    {{ parent() }}
+    <div class="status-enabled pull-left">
+        {% if entity.status.name != 'canceled' %}
+            <div class="badge badge-enabled status-enabled"><i class="icon-status-enabled icon-circle"></i>{{ entity.status.label }}</div>
+        {% else %}
+            <div class="badge badge-disabled status-disabled"><i class="icon-status-disabled icon-circle"></i>{{ entity.status.label  }}</div>
+        {% endif %}
+    </div>
+{% endblock breadcrumbs %}
+
 {% block content_data %}
     {% set id = 'lead-profile' %}
 
@@ -60,7 +71,6 @@
                 {
                     'title': 'Lead Information',
                     'data': [
-                        form_row(form.status, {'label': 'Status'}),
                         form_row(form.topic, {'label': 'Topic'}),
                         form_row(form.firstName, {'label': 'First name'}),
                         form_row(form.lastName, {'label': 'Last name'}),
@@ -86,6 +96,22 @@
             ]
         }]
     %}
+
+    {% if form.additional is defined and form.additional.children|length > 0 %}
+        {% set additionalData = [] %}
+        {% for value in form.additional %}
+            {% set additionalData = additionalData|merge([form_row(value, { attr: { class: 'horizontal' } })]) %}
+        {% endfor %}
+
+        {% set dataBlocks = dataBlocks|merge([{
+            'title': 'Additional',
+            'subblocks': [{
+                'title': '',
+                'useSpan': false,
+                'data' : additionalData
+            }]
+        }] ) %}
+    {% endif %}
 
     {% set data =
         {
