@@ -120,7 +120,10 @@ class OpportunityController extends Controller
     protected function update(Opportunity $entity)
     {
         if ($this->get('orocrm_sales.opportunity.form.handler')->process($entity)) {
-            $this->getFlashBag()->add('success', 'Opportunity successfully saved');
+            $this->get('session')->getFlashBag()->add(
+                'success',
+                $this->get('translator')->trans('orocrm.sales.controller.opportunity.saved.message')
+            );
 
             return $this->get('oro_ui.router')->actionRedirect(
                 array(

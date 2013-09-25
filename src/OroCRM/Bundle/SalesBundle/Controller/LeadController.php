@@ -137,7 +137,10 @@ class LeadController extends Controller
     protected function update(Lead $entity)
     {
         if ($this->get('orocrm_sales.lead.form.handler')->process($entity)) {
-            $this->getFlashBag()->add('success', 'Lead successfully saved');
+            $this->get('session')->getFlashBag()->add(
+                'success',
+                $this->get('translator')->trans('orocrm.sales.controller.lead.saved.message')
+            );
 
             return $this->get('oro_ui.router')->actionRedirect(
                 array(

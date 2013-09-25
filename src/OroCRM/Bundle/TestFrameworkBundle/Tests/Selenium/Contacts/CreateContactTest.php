@@ -69,7 +69,7 @@ class CreateContactTest extends \PHPUnit_Extensions_Selenium2TestCase
             ->setAddress($this->addressPrimary)
             ->setAddress($this->addressSecondary, 1)
             ->save()
-            ->assertMessage('Contact successfully saved')
+            ->assertMessage('Contact saved')
             ->toGrid()
             ->assertTitle('Contacts - Customers')
             ->close()
@@ -102,7 +102,7 @@ class CreateContactTest extends \PHPUnit_Extensions_Selenium2TestCase
             ->setEmail($contactname . '@mail.com')
             ->setOwner('admin')
             ->save()
-            ->assertMessage('Contact successfully saved')
+            ->assertMessage('Contact saved')
             ->toGrid()
             ->assertTitle('Contacts - Customers')
             ->close()
@@ -142,7 +142,7 @@ class CreateContactTest extends \PHPUnit_Extensions_Selenium2TestCase
             ->setAddressCountry('Kazak')
             ->setAddressState('Aqm')
             ->save()
-            ->assertMessage('Contact successfully saved')
+            ->assertMessage('Contact saved')
             ->toGrid()
             ->assertTitle('Contacts - Customers')
             ->close();
@@ -168,7 +168,7 @@ class CreateContactTest extends \PHPUnit_Extensions_Selenium2TestCase
             ->edit()
             ->setFirstName($newContactname . '_first')
             ->save()
-            ->assertMessage('Contact successfully saved')
+            ->assertMessage('Contact saved')
             ->toGrid()
             ->assertTitle('Contacts - Customers')
             ->close();
@@ -192,7 +192,7 @@ class CreateContactTest extends \PHPUnit_Extensions_Selenium2TestCase
             ->open(array($contactname))
             ->delete()
             ->assertTitle('Contacts - Customers')
-            ->assertMessage('Item was deleted');
+            ->assertMessage('Item deleted');
 
         $login->openUsers()->filterBy('Email', $contactname . '@mail.com')->assertNoDataMessage('No Contacts were found to match your search');
     }
