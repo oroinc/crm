@@ -178,8 +178,8 @@ workflows:
                     - close_as_won
                     - close_as_lost
                     - reopen
-            closed:
-                label: 'Closed'
+            close:
+                label: 'Close'
                 allowed_transitions:
                     - reopen
         attributes:
@@ -192,7 +192,7 @@ workflows:
         transitions:
             close_as_won:
                 label: 'Close as Won'
-                step_to: closed
+                step_to: close
                 is_start: true
                 options:
                     frontend:
@@ -201,7 +201,7 @@ workflows:
                 transition_definition: close_as_won_definition
             close_as_lost:
                 label: 'Close as Lost'
-                step_to: closed
+                step_to: close
                 is_start: true
                 options:
                     frontend:

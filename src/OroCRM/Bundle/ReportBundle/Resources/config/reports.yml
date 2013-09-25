@@ -8,7 +8,7 @@ reports:
             from:
                 - { table: OroCRMSalesBundle:Opportunity, alias: o }
             join:
-                left:
+                inner:
                     - { join: o.account, alias: a }
                     - { join: o.status,  alias: s }
             where:
@@ -29,7 +29,7 @@ reports:
                 - SUM( (CASE WHEN (s.name='in_progress') THEN 1 ELSE 0 END) ) as inProgressCount
                 - COUNT(o.id) as total_ops
             join:
-                left:
+                inner:
                     - { join: o.account, alias: a }
                     - { join: o.status, alias: s }
                     - { join: o.closeReason, alias: cr }
@@ -46,16 +46,16 @@ reports:
                 - COUNT(o.id) as numberOfOpp
                 - >
                   SUM(
-                    (CASE WHEN (wi.currentStepName='closed') THEN o.closeRevenue ELSE 0 END)
+                    (CASE WHEN (wi.currentStepName='close') THEN o.closeRevenue ELSE 0 END)
                   ) as closeRevenue
                 - >
                   SUM(
-                    (CASE WHEN (wi.currentStepName='closed') THEN 0 ELSE o.budgetAmount END)
+                    (CASE WHEN (o.budgetAmount IS NOT NULL) THEN o.budgetAmount ELSE 0 END)
                   ) as budgetAmount
                 # for filtering
                 - wi.workflowName
             join:
-                left:
+                inner:
                     - { join: owi.opportunity, alias: o }
                     - { join: owi.workflowItem, alias: wi }
             groupBy:  "wi.currentStepName"
@@ -79,7 +79,7 @@ reports:
                 - SUM( o.closeRevenue ) as value
                 - COUNT( o.id ) as cnt
             join:
-                left:
+                inner:
                     - { join: o.status, alias: s }
             where:
                 and:
