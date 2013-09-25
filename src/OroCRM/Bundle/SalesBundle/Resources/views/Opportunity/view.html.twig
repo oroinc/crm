@@ -1,6 +1,7 @@
 {% extends 'OroUIBundle:actions:view.html.twig' %}
 {% set name = entity.name|default('N/A') %}
 {% oro_title_set({params : {"%opportunity.name%": name} }) %}
+{% set audit_entity_class = 'OroCRM_Bundle_SalesBundle_Entity_Opportunity' %}
 
 {% block navButtons %}
     {% if resource_granted('orocrm_sales_opportunity_update') %}

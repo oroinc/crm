@@ -98,7 +98,7 @@ class Account extends AbstractEntityFlexible implements Taggable
      * @var Contact
      *
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ContactBundle\Entity\Contact")
-     * @ORM\JoinColumn(name="default_contact_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="default_contact_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $defaultContact;
 

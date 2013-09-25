@@ -15,6 +15,14 @@ class SocialUrlFormatterTest extends \PHPUnit_Framework_TestCase
 
         $formatter = new SocialUrlFormatter($format);
         $this->assertEquals('http://twitter.domain/me', $formatter->getSocialUrl(Social::TWITTER, 'me'));
+        $this->assertEquals(
+            'http://twitter.domain/me',
+            $formatter->getSocialUrl(Social::TWITTER, 'http://twitter.domain/me')
+        );
+        $this->assertEquals(
+            'https://twitter.domain/me',
+            $formatter->getSocialUrl(Social::TWITTER, 'https://twitter.domain/me')
+        );
     }
 
     /**

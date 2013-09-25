@@ -2,6 +2,7 @@
 {% form_theme form with ['OroAddressBundle:Include:fields.html.twig', 'OroFormBundle:Form:fields.html.twig'] %}
 
 {% oro_title_set({params : {"%lead.topic%": entity.topic} }) %}
+{% set audit_entity_class = 'OroCRM_Bundle_SalesBundle_Entity_Lead' %}
 
 {% set title = form.vars.value.id ? entity.topic ~ ' - ' ~ 'Update Lead'|trans : 'New Lead'|trans %}
 {% set formAction = form.vars.value.id ? path('orocrm_sales_lead_update', { 'id': form.vars.value.id }) : path('orocrm_sales_lead_create')  %}

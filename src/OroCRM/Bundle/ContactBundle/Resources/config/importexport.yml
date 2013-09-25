@@ -1,0 +1,87 @@
+parameters:
+    orocrm_contact.importexport.normalizer.contact.class: OroCRM\Bundle\ContactBundle\ImportExport\Serializer\Normalizer\ContactNormalizer
+    orocrm_contact.importexport.normalizer.source.class: OroCRM\Bundle\ContactBundle\ImportExport\Serializer\Normalizer\SourceNormalizer
+    orocrm_contact.importexport.normalizer.method.class: OroCRM\Bundle\ContactBundle\ImportExport\Serializer\Normalizer\MethodNormalizer
+    orocrm_contact.importexport.normalizer.group.class: OroCRM\Bundle\ContactBundle\ImportExport\Serializer\Normalizer\GroupNormalizer
+
+    orocrm_contact.importexport.provider.contact_max_data.class: OroCRM\Bundle\ContactBundle\ImportExport\Provider\ContactMaxDataProvider
+    orocrm_contact.importexport.provider.contact_header.class: OroCRM\Bundle\ContactBundle\ImportExport\Provider\ContactHeaderProvider
+    orocrm_contact.importexport.data_converter.contact.class: OroCRM\Bundle\ContactBundle\ImportExport\Converter\ContactDataConverter
+
+    orocrm_contact.importexport.strategy.import.contact.helper.class: OroCRM\Bundle\ContactBundle\ImportExport\Strategy\Import\ContactImportStrategyHelper
+    orocrm_contact.importexport.strategy.import.contact.add_or_replace.class: OroCRM\Bundle\ContactBundle\ImportExport\Strategy\Import\AddOrReplaceStrategy
+
+services:
+    # Normalizers
+    orocrm_contact.importexport.normalizer.contact:
+        class: %orocrm_contact.importexport.normalizer.contact.class%
+        calls:
+            - [setSocialUrlFormatter, [@orocrm_contact.social_url_formatter]]
+        tags:
+            - { name: oro_importexport.normalizer }
+
+    orocrm_contact.importexport.normalizer.source:
+        class: %orocrm_contact.importexport.normalizer.source.class%
+        tags:
+            - { name: oro_importexport.normalizer }
+
+    orocrm_contact.importexport.normalizer.method:
+        class: %orocrm_contact.importexport.normalizer.method.class%
+        tags:
+            - { name: oro_importexport.normalizer }
+
+    orocrm_contact.importexport.normalizer.group:
+        class: %orocrm_contact.importexport.normalizer.group.class%
+        tags:
+            - { name: oro_importexport.normalizer }
+
+    # Providers
+    orocrm_contact.importexport.provider.contact_header:
+        class: %orocrm_contact.importexport.provider.contact_header.class%
+        arguments:
+            - @oro_importexport.serializer
+            - @oro_importexport.data_converter.default
+            - @orocrm_contact.importexport.provider.contact_max_data
+
+    orocrm_contact.importexport.provider.contact_max_data:
+        class: %orocrm_contact.importexport.provider.contact_max_data.class%
+        arguments:
+            - @doctrine
+
+    # Converter
+    orocrm_contact.importexport.data_converter.contact:
+        class: %orocrm_contact.importexport.data_converter.contact.class%
+        arguments:
+            - @orocrm_contact.importexport.provider.contact_header
+
+    # Strategy
+    orocrm_contact.importexport.strategy.import.contact.add_or_replace:
+        class: %orocrm_contact.importexport.strategy.import.contact.add_or_replace.class%
+        arguments:
+            - @oro_importexport.strategy.import.helper
+            - @orocrm_contact.importexport.strategy.import.contact.helper
+            - @translator
+
+    orocrm_contact.importexport.strategy.import.contact.helper:
+        class: %orocrm_contact.importexport.strategy.import.contact.helper.class%
+        arguments:
+            - @security.context
+            - @doctrine
+
+    # Import processor
+    orocrm_contact.importexport.processor.import:
+        parent: oro_importexport.processor.import_abstract
+        calls:
+             - [setDataConverter, [@orocrm_contact.importexport.data_converter.contact]]
+             - [setStrategy, [@orocrm_contact.importexport.strategy.import.contact.add_or_replace]]
+        tags:
+            - { name: oro_importexport.processor, type: import, entity: %orocrm_contact.entity.class%, alias: orocrm_contact.add_or_replace }
+            - { name: oro_importexport.processor, type: import_validation, entity: %orocrm_contact.entity.class%, alias: orocrm_contact.add_or_replace }
+
+    # Export processor
+    orocrm_contact.importexport.processor.export:
+        parent: oro_importexport.processor.export_abstract
+        calls:
+             - [setDataConverter, [@orocrm_contact.importexport.data_converter.contact]]
+        tags:
+            - { name: oro_importexport.processor, type: export, entity: %orocrm_contact.entity.class%, alias: orocrm_contact }

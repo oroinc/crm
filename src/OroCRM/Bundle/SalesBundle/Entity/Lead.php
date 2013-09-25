@@ -4,6 +4,7 @@ namespace OroCRM\Bundle\SalesBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Oro\Bundle\AddressBundle\Entity\Address;
+use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 
@@ -13,6 +14,7 @@ use OroCRM\Bundle\ContactBundle\Entity\Contact;
  * @ORM\Table(name="orocrm_sales_lead")
  * @ORM\Entity
  * @ORM\HasLifecycleCallbacks()
+ * @Oro\Loggable
  * @Config(
  *  defaultValues={
  *      "entity"={"label"="Lead", "plural_label"="Leads"},
@@ -45,6 +47,7 @@ class Lead
      *
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ContactBundle\Entity\Contact")
      * @ORM\JoinColumn(name="contact_id", referencedColumnName="id", onDelete="SET NULL")
+     * @Oro\Versioned
      **/
     protected $contact;
 
@@ -52,6 +55,7 @@ class Lead
      * @var string
      *
      * @ORM\Column(name="topic", type="string", length=255)
+     * @Oro\Versioned
      */
     protected $topic;
 
@@ -59,6 +63,7 @@ class Lead
      * @var string
      *
      * @ORM\Column(name="first_name", type="string", length=255)
+     * @Oro\Versioned
      */
     protected $firstName;
 
@@ -66,6 +71,7 @@ class Lead
      * @var string
      *
      * @ORM\Column(name="last_name", type="string", length=255)
+     * @Oro\Versioned
      */
     protected $lastName;
 
@@ -73,6 +79,7 @@ class Lead
      * @var string
      *
      * @ORM\Column(name="job_title", type="string", length=255, nullable=true)
+     * @Oro\Versioned
      */
     protected $jobTitle;
 
@@ -80,6 +87,7 @@ class Lead
      * @var string
      *
      * @ORM\Column(name="phone_number", type="string", length=255, nullable=true)
+     * @Oro\Versioned
      */
     protected $phoneNumber;
 
@@ -87,6 +95,7 @@ class Lead
      * @var string
      *
      * @ORM\Column(name="email", type="string", length=255, nullable=true)
+     * @Oro\Versioned
      */
     protected $email;
 
@@ -94,6 +103,7 @@ class Lead
      * @var string
      *
      * @ORM\Column(name="company_name", type="string", length=255, nullable=true)
+     * @Oro\Versioned
      */
     protected $companyName;
 
@@ -101,6 +111,7 @@ class Lead
      * @var string
      *
      * @ORM\Column(name="website", type="string", length=255, nullable=true)
+     * @Oro\Versioned
      */
     protected $website;
 
@@ -108,6 +119,7 @@ class Lead
      * @var integer
      *
      * @ORM\Column(name="number_of_employees", type="integer", nullable=true)
+     * @Oro\Versioned
      */
     protected $numberOfEmployees;
 
@@ -115,6 +127,7 @@ class Lead
      * @var string
      *
      * @ORM\Column(name="industry", type="string", length=255, nullable=true)
+     * @Oro\Versioned
      */
     protected $industry;
 

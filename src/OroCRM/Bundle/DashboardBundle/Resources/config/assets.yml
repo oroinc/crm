@@ -1,0 +1,3 @@
+css:
+    'Crm dashboard':
+         - 'bundles/orocrmdashboard/css/dashboard.less'
