@@ -62,7 +62,7 @@ class OpportunityController extends Controller
                     && !$config->is('is_deleted')
                     && $viewProvider->getConfigById($config->getId())->is('is_displayable');
             },
-            get_class($entity)
+            $entity
         );
 
         $dynamicRow = array();
