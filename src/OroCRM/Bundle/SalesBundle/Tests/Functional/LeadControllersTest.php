@@ -40,7 +40,6 @@ class LeadControllersTest extends WebTestCase
         /** @var Form $form */
         $form = $crawler->selectButton('Save and Close')->form();
         $topic = 'topic' . ToolsAPI::generateRandomString();
-        $form['orocrm_sales_lead_form[status]']              = 'new';
         $form['orocrm_sales_lead_form[topic]']               = $topic;
         $form['orocrm_sales_lead_form[firstName]']           = 'firstName';
         $form['orocrm_sales_lead_form[lastName]']            = 'lastName';
