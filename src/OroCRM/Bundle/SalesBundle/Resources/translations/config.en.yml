@@ -6,3 +6,4 @@ entity:
     opportunity:
         name:           Opportunity
         description:    Represent opportunity
+
