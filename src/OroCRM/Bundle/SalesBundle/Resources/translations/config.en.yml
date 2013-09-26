@@ -1,8 +1,9 @@
 entity:
-    opportunity:
-        name:           Lead
-        description:    Lead
-
     lead:
+        name:           Lead
+        description:    Represent lead
+
+    opportunity:
         name:           Opportunity
-        description:    Opportunity
+        description:    Represent opportunity
+
