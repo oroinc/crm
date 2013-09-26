@@ -52,8 +52,8 @@ oro_titles:
     orocrm_contact_index: ~
     orocrm_contact_view: %%contact.name%%
     orocrm_contact_create: Create Contact
-    orocrm_contact_update: Edit %%contact.name%%
+    orocrm_contact_update: %%contact.name%% - Edit
 
     orocrm_contact_group_index: ~
     orocrm_contact_group_create: Create Contact Group
-    orocrm_contact_group_update: Edit %%group.label%%
+    orocrm_contact_group_update: %%group.label%% - Edit

@@ -79,7 +79,7 @@ class CreateLeadTest extends \PHPUnit_Extensions_Selenium2TestCase
             ->filterBy('Topic', $topic)
             ->open(array($topic))
             ->edit()
-            ->assertTitle('Edit ' . $topic . ' - Leads - Sales')
+            ->assertTitle($topic . ' - Edit - Leads - Sales')
             ->setTopic($newTopic)
             ->save()
             ->assertMessage('Lead saved')
