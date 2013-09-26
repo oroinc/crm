@@ -67,7 +67,7 @@ class CreateOpportunityTest extends \PHPUnit_Extensions_Selenium2TestCase
             ->filterBy('Opportunity Name', $name)
             ->open(array($name))
             ->edit()
-            ->assertTitle('Edit ' . $name . ' - Opportunities - Sales')
+            ->assertTitle($name . ' - Edit - Opportunities - Sales')
             ->setName($newName)
             ->save()
             ->assertMessage('Opportunity saved')

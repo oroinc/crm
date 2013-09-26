@@ -60,9 +60,9 @@ oro_titles:
     orocrm_sales_opportunity_index: ~
     orocrm_sales_opportunity_view: %%opportunity.name%%
     orocrm_sales_opportunity_create: Create Opportunity
-    orocrm_sales_opportunity_update: Edit %%opportunity.name%%
+    orocrm_sales_opportunity_update: %%opportunity.name%% - Edit
     
     orocrm_sales_lead_index: ~
     orocrm_sales_lead_view: %%lead.topic%%
     orocrm_sales_lead_create: Create Lead
-    orocrm_sales_lead_update: Edit %%lead.topic%%
+    orocrm_sales_lead_update: %%lead.topic%% - Edit
