@@ -1,0 +1,8 @@
+entity:
+    opportunity:
+        name:           Lead
+        description:    Lead
+
+    lead:
+        name:           Opportunity
+        description:    Opportunity

@@ -1,0 +1,7 @@
+OroCRM\Bundle\SalesBundle\Entity\Lead:
+    name:                               entity.lead.name
+    description:                        entity.lead.description
+
+OroCRM\Bundle\SalesBundle\Entity\Opportunity:
+    name:                               entity.opportunity.name
+    description:                        entity.opportunity.description
