@@ -1,6 +1,6 @@
 {#
     Available variables:
-    * entity       - user entity OroCRM\Bundle\SalesBundle\Entity\Lead or null
+    * entity       - user entity OroCRM\Bundle\SalesBundle\Entity\Opportunity or null
     * indexer_item - indexer item Oro\Bundle\SearchBundle\Query\Result\Item
 #}
 {% extends 'OroSearchBundle:Search:searchResultItem.html.twig' %}
@@ -12,7 +12,7 @@
 {% set recordUrl = indexer_item.recordUrl %}
 {% set title = entity ? entity.__toString : indexer_item.recordTitle %}
 
-{% set entityType = 'Lead'|trans %}
+{% set entityType = 'Opportunity'|trans %}
 
 {% set entityInfo = [
     {'title': 'Created', 'value': entity.createdAt ? Locale.time(entity.createdAt) : 'N/A'},

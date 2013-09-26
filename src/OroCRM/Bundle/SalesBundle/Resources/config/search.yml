@@ -5,7 +5,7 @@ OroCRM\Bundle\SalesBundle\Entity\Lead:
         name:                       orocrm_sales_lead_view
         parameters:
             id:                     id
-    search_template:                ~
+    search_template:                OroCRMSalesBundle:Lead:searchResult.html.twig
     fields:
         -
             name:                   topic
@@ -31,7 +31,7 @@ OroCRM\Bundle\SalesBundle\Entity\Opportunity:
         name:                       orocrm_sales_opportunity_view
         parameters:
             id:                     id
-    search_template:                ~
+    search_template:                OroCRMSalesBundle:Opportunity:searchResult.html.twig
     fields:
         -
             name:                   name
