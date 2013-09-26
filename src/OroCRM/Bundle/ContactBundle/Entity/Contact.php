@@ -816,7 +816,7 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
     }
 
     /**
-     * @param ArrayCollection $tags
+     * @param $tags
      * @return Contact
      */
     public function setTags($tags)

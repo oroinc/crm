@@ -2,7 +2,7 @@
 {% import 'OroUIBundle::macros.html.twig' as macros %}
 {% import 'OroTagBundle::macros.html.twig' as _tag %}
 {% import 'OroAddressBundle:Include:viewMacro.html.twig' as addressView %}
-{% set format = oro_config_value('oro_user.name_format') %}
+{% set format = oro_config_value('oro_locale.name_format') %}
 {% oro_title_set({params : {"%account.name%": entity.name|default('N/A')} }) %}
 {% set audit_entity_class = 'OroCRM_Bundle_AccountBundle_Entity_Account' %}
 {% set gridId = 'contacts-grid' %}

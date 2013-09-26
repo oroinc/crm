@@ -1,6 +1,6 @@
 <li>
     {{ 'Created'|trans }}:
-    {{ entity.createdAt ? UI.time(entity.createdAt) : 'N/A'|trans }}
+    {{ entity.createdAt ? Locale.time(entity.createdAt) : 'N/A'|trans }}
     {% if entity.createdBy %}
         {% if resource_granted('oro_user_user_view') %}
          <a href="{{ path('oro_user_view', {'id': entity.createdBy.id}) }}">{{ entity.createdBy.fullname }}</a>
@@ -11,7 +11,7 @@
 </li>
 <li>
     {{ 'Updated'|trans }}:
-    {{ entity.updatedAt ? UI.time(entity.updatedAt) : 'N/A'|trans }}
+    {{ entity.updatedAt ? Locale.time(entity.updatedAt) : 'N/A'|trans }}
     {% if entity.updatedBy %}
         {% if resource_granted('oro_user_user_view') %}
             <a href="{{ path('oro_user_view', {'id': entity.updatedBy.id}) }}">{{ entity.updatedBy.fullname }}</a>
