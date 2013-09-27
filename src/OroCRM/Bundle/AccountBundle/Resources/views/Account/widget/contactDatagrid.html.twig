@@ -47,13 +47,14 @@
                             });
                         }
 
-                        var selectBtn = widget.getAction('select', 'adopted');
-                        selectBtn.click(function() {
-                            var addedVal = $('#appendContacts').val();
-                            var removedVal = $('#removeContacts').val();
-                            var appendedIds = addedVal.length ? addedVal.split(',') : [];
-                            var removedIds = removedVal.length ? removedVal.split(',') : [];
-                            widget.trigger('completeSelection', appendedIds, addedModels, removedIds);
+                        widget.getAction('select', 'adopted', function(selectBtn) {
+                            selectBtn.click(function() {
+                                var addedVal = $('#appendContacts').val();
+                                var removedVal = $('#removeContacts').val();
+                                var appendedIds = addedVal.length ? addedVal.split(',') : [];
+                                var removedIds = removedVal.length ? removedVal.split(',') : [];
+                                widget.trigger('completeSelection', appendedIds, addedModels, removedIds);
+                            });
                         });
                     });
 
