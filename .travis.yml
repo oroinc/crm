@@ -7,14 +7,10 @@ php:
 
 env:
   - SYMFONY_VERSION=2.3.*
-  - SYMFONY_VERSION=dev-master
 
 before_script:
   - composer self-update
+  - phpenv config-add travis.php.ini
   - composer require symfony/symfony:${SYMFONY_VERSION} --prefer-source
 
 script: phpunit --coverage-text
-
-matrix:
-  allow_failures:
-    - env: SYMFONY_VERSION=dev-master
