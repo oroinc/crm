@@ -11,7 +11,7 @@ env:
 
 before_script:
   - composer self-update
-  - composer require symfony/symfony:${SYMFONY_VERSION} --prefer-source
+  - php -dmemory_limit=1G composer require symfony/symfony:${SYMFONY_VERSION} --prefer-source
 
 script: phpunit --coverage-text
 
