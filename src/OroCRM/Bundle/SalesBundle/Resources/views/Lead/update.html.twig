@@ -33,6 +33,28 @@
     {{ UI.button({'path' : path('orocrm_sales_lead_index'), 'title' : 'Cancel', 'label' : 'Cancel'}) }}
     {{ UI.saveAndStayButton('orocrm_sales_lead_update') }}
     {{ UI.saveAndCloseButton() }}
+
+    {% if resource_granted('orocrm_sales_lead_create') and resource_granted('oro_workflow') and form.vars.value.id is empty %}
+        <div class="btn-group">
+            <button type="button" class="btn btn-primary" id="save_and_qualify">
+                {% trans %}Save and Qualify{% endtrans %}
+            </button>
+            <script type="text/javascript">
+                require(['jquery'],
+                    function($){
+                        $('button#save_and_qualify').click(
+                            function() {
+                                var form = $(this).closest('form');
+                                var defaultAction = form.attr('action');
+                                form.attr('action', {{ path('orocrm_sales_lead_create_and_qualify')|json_encode|raw }});
+                                form.submit();
+                                form.attr('action', defaultAction);
+                            }
+                        );
+                    });
+            </script>
+        </div>
+    {% endif %}
 {% endblock %}
 
 {% block pageHeader %}
