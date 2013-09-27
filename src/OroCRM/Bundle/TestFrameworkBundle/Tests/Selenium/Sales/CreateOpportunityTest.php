@@ -25,7 +25,7 @@ class CreateOpportunityTest extends \PHPUnit_Extensions_Selenium2TestCase
     /**
      * @return string
      */
-    public function testCreateOpporunity()
+    public function testCreateOpportunity()
     {
         $name = 'Opportunity_'.mt_rand();
 
@@ -52,11 +52,11 @@ class CreateOpportunityTest extends \PHPUnit_Extensions_Selenium2TestCase
     }
 
     /**
-     * @depends testCreateOpporunity
+     * @depends testCreateOpportunity
      * @param $name
      * @return string
      */
-    public function testUpdateOpporunity($name)
+    public function testUpdateOpportunity($name)
     {
         $newName = 'Update_' . $name;
 
@@ -80,12 +80,11 @@ class CreateOpportunityTest extends \PHPUnit_Extensions_Selenium2TestCase
     }
 
     /**
-     * @depends testUpdateOpporunity
+     * @depends testUpdateOpportunity
      * @param $name
      */
-    public function testDeleteOpporunity($name)
+    public function testDeleteOpportunity($name)
     {
-        $this->markTestSkipped('BAP-726');
         $login = new Login($this);
         $login->setUsername(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_LOGIN)
             ->setPassword(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_PASS)
@@ -95,8 +94,7 @@ class CreateOpportunityTest extends \PHPUnit_Extensions_Selenium2TestCase
             ->open(array($name))
             ->delete()
             ->assertTitle('Opportunities - Sales')
-            ->assertMessage('Item deleted');
-
-        $login->openUsers()->filterBy('Opportunity Name', $name)->assertNoDataMessage('No Opporunities were found to match your search');
+            ->assertMessage('Item deleted')
+            ->assertNoDataMessage('No opportunities exists');
     }
 }
