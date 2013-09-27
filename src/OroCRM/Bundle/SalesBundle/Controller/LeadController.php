@@ -3,9 +3,12 @@
 namespace OroCRM\Bundle\SalesBundle\Controller;
 
 use Doctrine\Common\Inflector\Inflector;
+use Doctrine\Common\Util\ClassUtils;
 
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBag;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -103,11 +106,56 @@ class LeadController extends Controller
      */
     public function createAction()
     {
-        $lead          = new Lead();
+        $lead = new Lead();
         $defaultStatus = $this->getDoctrine()->getManager()->find('OroCRMSalesBundle:LeadStatus', 'new');
         $lead->setStatus($defaultStatus);
 
         return $this->update($lead);
+    }
+
+    /**
+     * Create lead and redirect to qualification
+     *
+     * @Route("/createAndQualify", name="orocrm_sales_lead_create_and_qualify")
+     * @AclAncestor("orocrm_sales_lead_create")
+     */
+    public function createAndQualifyAction()
+    {
+        // TODO: refactor workflow functionality to allow custom transition buttons on forms,
+        // TODO: should be done in scope of https://magecore.atlassian.net/browse/CRM-544
+        $lead = new Lead();
+        $defaultStatus = $this->getDoctrine()->getManager()->find('OroCRMSalesBundle:LeadStatus', 'new');
+        $lead->setStatus($defaultStatus);
+
+        $response = $this->update($lead);
+
+        if (is_object($response) && $response instanceof RedirectResponse) {
+            // start workflow using qualify transition
+            $jsonResponse = $this->forward(
+                'OroWorkflowBundle:Api/Rest/Workflow:start',
+                array(
+                    'entityClass' => ClassUtils::getClass($lead),
+                    'entityId' => $lead->getId(),
+                    'workflowName' => 'sales_lead',
+                    'transitionName' => 'qualify',
+                    '_format' => 'json',
+                )
+            );
+
+            // throw an exception if forward action wasn't successful
+            $responseStatusCode = $jsonResponse->getStatusCode();
+            if ($responseStatusCode != 200) {
+                throw new HttpException($responseStatusCode, 'Can\'t qualify created lead');
+            }
+
+            // redirect to Sales flow
+            $jsonResponseData = json_decode($jsonResponse->getContent(), true);
+            if (!empty($jsonResponseData['workflowItem']['result']['redirectUrl'])) {
+                return $this->redirect($jsonResponseData['workflowItem']['result']['redirectUrl']);
+            }
+        }
+
+        return $response;
     }
 
     /**
