@@ -93,7 +93,6 @@ class AclTest extends \PHPUnit_Extensions_Selenium2TestCase
         );
         $login->assertElementNotPresent("//div[@id='search-div']", 'Element present so ACL for Search do not work');
         $login->byXPath("//ul[@class='nav pull-right']//a[@class='dropdown-toggle']")->click();
-        $login->assertElementNotPresent("//ul[@class='dropdown-menu']//a[contains(., 'My User')]", 'Element present so ACL for Search do not work');
     }
 
     /**
