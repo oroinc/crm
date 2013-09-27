@@ -42,6 +42,7 @@ class CreateOpportunityTest extends \PHPUnit_Extensions_Selenium2TestCase
             ->setProposedSolution('150')
             ->setCloseRevenue('200')
             ->setCloseDate('9/26/13')
+            ->setOwner('admin')
             ->save()
             ->assertMessage('Opportunity saved')
             ->toGrid()

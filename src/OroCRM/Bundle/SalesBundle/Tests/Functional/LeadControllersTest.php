@@ -50,6 +50,7 @@ class LeadControllersTest extends WebTestCase
         $form['orocrm_sales_lead_form[address][street]']     = 'Main Street';
         $form['orocrm_sales_lead_form[companyName]']         = 'Company';
         $form['orocrm_sales_lead_form[email]']               = 'test@example.test';
+        $form['orocrm_sales_lead_form[owner]']               = 1;
 
         $doc = new \DOMDocument("1.0");
         $doc->loadHTML(

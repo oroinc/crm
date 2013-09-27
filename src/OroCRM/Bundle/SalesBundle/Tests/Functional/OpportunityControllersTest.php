@@ -45,6 +45,7 @@ class OpportunityControllersTest extends WebTestCase
         $form['orocrm_sales_opportunity_form[budgetAmount]']         = 10000;
         $form['orocrm_sales_opportunity_form[customerNeed]']         = 10001;
         $form['orocrm_sales_opportunity_form[closeReason]']         = 'cancelled';
+        $form['orocrm_sales_opportunity_form[owner]']         = 1;
 
         $this->client->followRedirects(true);
         $crawler = $this->client->submit($form);

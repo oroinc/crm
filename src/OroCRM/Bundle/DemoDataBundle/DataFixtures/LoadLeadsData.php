@@ -171,6 +171,7 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
      */
     protected function createLead(array $data)
     {
+        $user = $this->users[rand(0, count($this->users)-1)];
         $lead = new Lead();
         $defaultStatus = $this->em->find('OroCRMSalesBundle:LeadStatus', 'new');
         $lead->setStatus($defaultStatus);
@@ -179,6 +180,7 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
         $lead->setLastName($data['Surname']);
         $lead->setEmail($data['EmailAddress']);
         $lead->setPhoneNumber($data['TelephoneNumber']);
+        $lead->setOwner($user);
         /** @var Address $address */
         $address = new Address();
         $address->setLabel('Primary Address');
