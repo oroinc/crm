@@ -15,7 +15,7 @@ class LeadType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('topic', 'text', array('required' => true))
+            ->add('name', 'text', array('required' => true))
             ->add('firstName', 'text', array('required' => true))
             ->add('lastName', 'text', array('required' => true))
             ->add('contact', 'orocrm_contact_select', array('required' => false))

@@ -39,8 +39,8 @@ class LeadControllersTest extends WebTestCase
         $crawler = $this->client->request('GET', $this->client->generate('orocrm_sales_lead_create'));
         /** @var Form $form */
         $form = $crawler->selectButton('Save and Close')->form();
-        $topic = 'topic' . ToolsAPI::generateRandomString();
-        $form['orocrm_sales_lead_form[topic]']               = $topic;
+        $name = 'name' . ToolsAPI::generateRandomString();
+        $form['orocrm_sales_lead_form[name]']                = $name;
         $form['orocrm_sales_lead_form[firstName]']           = 'firstName';
         $form['orocrm_sales_lead_form[lastName]']            = 'lastName';
         $form['orocrm_sales_lead_form[address][city]']       = 'City Name';
@@ -80,23 +80,23 @@ class LeadControllersTest extends WebTestCase
         ToolsAPI::assertJsonResponse($result, 200, 'text/html; charset=UTF-8');
         $this->assertContains("Lead saved", $crawler->html());
 
-        return $topic;
+        return $name;
     }
 
     /**
-     * @param $topic
+     * @param $name
      * @depends testCreate
      *
      * @return string
      */
-    public function testUpdate($topic)
+    public function testUpdate($name)
     {
         $this->client->request(
             'GET',
             $this->client->generate('orocrm_sales_lead_index', array('_format' =>'json')),
             array(
-                'leads[_filter][topic][type]=3' => '3',
-                'leads[_filter][topic][value]' => $topic,
+                'leads[_filter][name][type]=3' => '3',
+                'leads[_filter][name][value]' => $name,
                 'leads[_pager][_page]' => '1',
                 'leads[_pager][_per_page]' => '10',
                 'leads[_sort_by][first_name]' => 'ASC',
@@ -117,8 +117,8 @@ class LeadControllersTest extends WebTestCase
 
         /** @var Form $form */
         $form = $crawler->selectButton('Save and Close')->form();
-        $topic = 'topic' . ToolsAPI::generateRandomString();
-        $form['orocrm_sales_lead_form[topic]'] = $topic;
+        $name = 'name' . ToolsAPI::generateRandomString();
+        $form['orocrm_sales_lead_form[name]'] = $name;
 
         $this->client->followRedirects(true);
         $crawler = $this->client->submit($form);
@@ -127,23 +127,23 @@ class LeadControllersTest extends WebTestCase
         ToolsAPI::assertJsonResponse($result, 200, 'text/html; charset=UTF-8');
         $this->assertContains("Lead saved", $crawler->html());
 
-        return $topic;
+        return $name;
     }
 
     /**
-     * @param $topic
+     * @param $name
      * @depends testUpdate
      *
      * @return string
      */
-    public function testView($topic)
+    public function testView($name)
     {
         $this->client->request(
             'GET',
             $this->client->generate('orocrm_sales_lead_index', array('_format' =>'json')),
             array(
-                'leads[_filter][topic][type]=3' => '3',
-                'leads[_filter][topic][value]' => $topic,
+                'leads[_filter][name][type]=3' => '3',
+                'leads[_filter][name][value]' => $name,
                 'leads[_pager][_page]' => '1',
                 'leads[_pager][_per_page]' => '10',
                 'leads[_sort_by][first_name]' => 'ASC',
@@ -164,23 +164,23 @@ class LeadControllersTest extends WebTestCase
 
         $result = $this->client->getResponse();
         ToolsAPI::assertJsonResponse($result, 200, 'text/html; charset=UTF-8');
-        $this->assertContains("{$topic} - Leads - Sales", $crawler->html());
+        $this->assertContains("{$name} - Leads - Sales", $crawler->html());
     }
 
     /**
-     * @param $topic
+     * @param $name
      * @depends testUpdate
      *
      * @return string
      */
-    public function testInfo($topic)
+    public function testInfo($name)
     {
         $this->client->request(
             'GET',
             $this->client->generate('orocrm_sales_lead_index', array('_format' =>'json')),
             array(
-                'leads[_filter][topic][type]=3' => '3',
-                'leads[_filter][topic][value]' => $topic,
+                'leads[_filter][name][type]=3' => '3',
+                'leads[_filter][name][value]' => $name,
                 'leads[_pager][_page]' => '1',
                 'leads[_pager][_per_page]' => '10',
                 'leads[_sort_by][first_name]' => 'ASC',
@@ -209,17 +209,17 @@ class LeadControllersTest extends WebTestCase
     }
 
     /**
-     * @param $topic
+     * @param $name
      * @depends testUpdate
      */
-    public function testDelete($topic)
+    public function testDelete($name)
     {
         $this->client->request(
             'GET',
             $this->client->generate('orocrm_sales_lead_index', array('_format' =>'json')),
             array(
-                'leads[_filter][topic][type]=3' => '3',
-                'leads[_filter][topic][value]' => $topic,
+                'leads[_filter][name][type]=3' => '3',
+                'leads[_filter][name][value]' => $name,
                 'leads[_pager][_page]' => '1',
                 'leads[_pager][_per_page]' => '10',
                 'leads[_sort_by][first_name]' => 'ASC',

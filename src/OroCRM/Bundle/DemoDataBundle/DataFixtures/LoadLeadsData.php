@@ -175,7 +175,7 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
         $lead = new Lead();
         $defaultStatus = $this->em->find('OroCRMSalesBundle:LeadStatus', 'new');
         $lead->setStatus($defaultStatus);
-        $lead->setTopic($data['Company']);
+        $lead->setName($data['Company']);
         $lead->setFirstName($data['GivenName']);
         $lead->setLastName($data['Surname']);
         $lead->setEmail($data['EmailAddress']);

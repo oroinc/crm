@@ -1,10 +1,10 @@
 {% extends 'OroUIBundle:actions:update.html.twig' %}
 {% form_theme form with ['OroAddressBundle:Include:fields.html.twig', 'OroFormBundle:Form:fields.html.twig'] %}
 
-{% oro_title_set({params : {"%lead.topic%": entity.topic} }) %}
+{% oro_title_set({params : {"%lead.name%": entity.name} }) %}
 {% set audit_entity_class = 'OroCRM_Bundle_SalesBundle_Entity_Lead' %}
 
-{% set title = form.vars.value.id ? entity.topic ~ ' - ' ~ 'Update Lead'|trans : 'New Lead'|trans %}
+{% set title = form.vars.value.id ? entity.name ~ ' - ' ~ 'Update Lead'|trans : 'New Lead'|trans %}
 {% set formAction = form.vars.value.id ? path('orocrm_sales_lead_update', { 'id': form.vars.value.id }) : path('orocrm_sales_lead_create')  %}
 
 {% block head_script %}
@@ -41,7 +41,7 @@
             'entity':      form.vars.value,
             'indexPath':   path('orocrm_sales_lead_index'),
             'indexLabel': 'Leads',
-            'entityTitle': entity.topic
+            'entityTitle': entity.name
         }
         %}
         {{ parent() }}
@@ -71,7 +71,7 @@
                 {
                     'title': 'Lead Information',
                     'data': [
-                        form_row(form.topic, {'label': 'Topic'}),
+                        form_row(form.name, {'label': 'Lead Name'}),
                         form_row(form.firstName, {'label': 'First name'}),
                         form_row(form.lastName, {'label': 'Last name'}),
                         form_row(form.contact, {'label': 'Contact'}),

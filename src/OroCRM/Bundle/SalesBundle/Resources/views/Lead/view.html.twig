@@ -1,7 +1,7 @@
 {% extends 'OroUIBundle:actions:view.html.twig' %}
 {% import 'OroUIBundle::macros.html.twig' as macros %}
 
-{% oro_title_set({params : {"%lead.topic%": entity.topic} }) %}
+{% oro_title_set({params : {"%lead.name%": entity.name} }) %}
 {% set audit_entity_class = 'OroCRM_Bundle_SalesBundle_Entity_Lead' %}
 
 {% block navButtons %}
@@ -28,7 +28,7 @@
             'entity': entity,
             'indexPath': path('orocrm_sales_lead_index'),
             'indexLabel': 'Leads',
-            'entityTitle': entity.topic
+            'entityTitle': entity.name
         }
     %}
     {{ parent() }}
