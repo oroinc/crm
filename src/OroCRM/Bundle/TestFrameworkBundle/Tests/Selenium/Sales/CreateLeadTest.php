@@ -36,7 +36,7 @@ class CreateLeadTest extends \PHPUnit_Extensions_Selenium2TestCase
      */
     public function testCreateLead()
     {
-        $topic = 'Lead_'.mt_rand();
+        $name = 'Lead_'.mt_rand();
 
         $login = new Login($this);
         $login->setUsername(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_LOGIN)
@@ -44,12 +44,12 @@ class CreateLeadTest extends \PHPUnit_Extensions_Selenium2TestCase
             ->submit()
             ->openLeads()
             ->add()
-            ->setTopic($topic)
-            ->setFirstName($topic . '_first_name')
-            ->setLastName($topic . '_last_name')
+            ->setName($name)
+            ->setFirstName($name . '_first_name')
+            ->setLastName($name . '_last_name')
             ->setJobTitle('Manager')
             ->setPhone('712-566-3002')
-            ->setEmail($topic . '@mail.com')
+            ->setEmail($name . '@mail.com')
             ->setCompany('Some Company')
             ->setWebsite('http://www.orocrm.com')
             ->setEmployees('100')
@@ -59,42 +59,42 @@ class CreateLeadTest extends \PHPUnit_Extensions_Selenium2TestCase
             ->toGrid()
             ->assertTitle('Leads - Sales');
 
-        return $topic;
+        return $name;
     }
 
     /**
      * @depends testCreateLead
-     * @param $topic
+     * @param $name
      * @return string
      */
-    public function testUpdateLead($topic)
+    public function testUpdateLead($name)
     {
-        $newTopic = 'Update_' . $topic;
+        $newName = 'Update_' . $name;
 
         $login = new Login($this);
         $login->setUsername(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_LOGIN)
             ->setPassword(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_PASS)
             ->submit()
             ->openLeads()
-            ->filterBy('Topic', $topic)
-            ->open(array($topic))
+            ->filterBy('Name', $name)
+            ->open(array($name))
             ->edit()
-            ->assertTitle($topic . ' - Edit - Leads - Sales')
-            ->setTopic($newTopic)
+            ->assertTitle($name . ' - Edit - Leads - Sales')
+            ->setName($newName)
             ->save()
             ->assertMessage('Lead saved')
             ->toGrid()
             ->assertTitle('Leads - Sales')
             ->close();
 
-        return $newTopic;
+        return $newName;
     }
 
     /**
      * @depends testUpdateLead
-     * @param $topic
+     * @param $name
      */
-    public function testDeleteAccount($topic)
+    public function testDeleteAccount($name)
     {
         $this->markTestSkipped('BAP-726');
         $login = new Login($this);
@@ -102,12 +102,12 @@ class CreateLeadTest extends \PHPUnit_Extensions_Selenium2TestCase
             ->setPassword(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_PASS)
             ->submit()
             ->openLeads()
-            ->filterBy('Topic', $topic)
-            ->open(array($topic))
+            ->filterBy('Name', $name)
+            ->open(array($name))
             ->delete()
             ->assertTitle('Leads - Sales')
             ->assertMessage('Item deleted');
 
-        $login->openUsers()->filterBy('Topic', $topic)->assertNoDataMessage('No Leads were found to match your search');
+        $login->openUsers()->filterBy('Name', $name)->assertNoDataMessage('No Leads were found to match your search');
     }
 }

@@ -169,12 +169,12 @@ class Lead extends ExtendLead
     /**
      * Set topic
      *
-     * @param string $topic
+     * @param string $name
      * @return Lead
      */
-    public function setName($topic)
+    public function setName($name)
     {
-        $this->name = $topic;
+        $this->name = $name;
     
         return $this;
     }
