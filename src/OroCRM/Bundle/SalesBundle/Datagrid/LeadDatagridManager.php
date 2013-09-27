@@ -46,20 +46,20 @@ class LeadDatagridManager extends AbstractDatagrid
      */
     protected function configureFields(FieldDescriptionCollection $fieldsCollection)
     {
-        $fieldTopic = new FieldDescription();
-        $fieldTopic->setName('topic');
-        $fieldTopic->setOptions(
+        $fieldName = new FieldDescription();
+        $fieldName->setName('name');
+        $fieldName->setOptions(
             array(
                 'type'        => FieldDescriptionInterface::TYPE_TEXT,
-                'label'       => $this->translate('orocrm.sales_lead.datagrid.topic'),
-                'field_name'  => 'topic',
+                'label'       => $this->translate('orocrm.sales_lead.datagrid.name'),
+                'field_name'  => 'name',
                 'filter_type' => FilterInterface::TYPE_STRING,
                 'sortable'    => true,
                 'filterable'  => true,
                 'show_filter' => true,
             )
         );
-        $fieldsCollection->add($fieldTopic);
+        $fieldsCollection->add($fieldName);
 
         $fieldStatus = new FieldDescription();
         $fieldStatus->setName('status');

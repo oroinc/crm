@@ -1,6 +1,6 @@
 OroCRM\Bundle\SalesBundle\Entity\Lead:
     alias:                          oro_crm_lead
-    title_fields:                   [topic]
+    title_fields:                   [name]
     route:
         name:                       orocrm_sales_lead_view
         parameters:
@@ -8,9 +8,9 @@ OroCRM\Bundle\SalesBundle\Entity\Lead:
     search_template:                OroCRMSalesBundle:Lead:searchResult.html.twig
     fields:
         -
-            name:                   topic
+            name:                   name
             target_type:            text
-            target_fields:          [topic]
+            target_fields:          [name]
         -
             name:                   firstName
             target_type:            text

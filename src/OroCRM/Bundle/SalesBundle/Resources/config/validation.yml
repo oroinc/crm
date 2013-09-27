@@ -18,7 +18,7 @@ OroCRM\Bundle\SalesBundle\Entity\Lead:
     properties:
         status:
             - NotBlank: ~
-        topic:
+        name:
             - NotBlank: ~
             - Length:
                 max: 255

@@ -57,10 +57,10 @@ class Lead extends ExtendLead
     /**
      * @var string
      *
-     * @ORM\Column(name="topic", type="string", length=255)
+     * @ORM\Column(name="name", type="string", length=255)
      * @Oro\Versioned
      */
-    protected $topic;
+    protected $name;
 
     /**
      * @var string
@@ -172,9 +172,9 @@ class Lead extends ExtendLead
      * @param string $topic
      * @return Lead
      */
-    public function setTopic($topic)
+    public function setName($topic)
     {
-        $this->topic = $topic;
+        $this->name = $topic;
     
         return $this;
     }
@@ -184,9 +184,9 @@ class Lead extends ExtendLead
      *
      * @return string 
      */
-    public function getTopic()
+    public function getName()
     {
-        return $this->topic;
+        return $this->name;
     }
 
     /**
@@ -503,7 +503,7 @@ class Lead extends ExtendLead
      */
     public function __toString()
     {
-        return (string)$this->getTopic();
+        return (string)$this->getName();
     }
 
     /**
