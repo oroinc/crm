@@ -34,7 +34,7 @@
     {{ UI.saveAndStayButton('orocrm_sales_lead_update') }}
     {{ UI.saveAndCloseButton() }}
 
-    {% if form.vars.value.id is empty %}
+    {% if resource_granted('orocrm_sales_lead_create') and resource_granted('oro_workflow') and form.vars.value.id is empty %}
         <div class="btn-group">
             <button type="button" class="btn btn-primary" id="save_and_qualify">
                 {% trans %}Save and Qualify{% endtrans %}

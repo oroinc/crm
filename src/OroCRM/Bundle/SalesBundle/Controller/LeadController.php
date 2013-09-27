@@ -8,6 +8,7 @@ use Doctrine\Common\Util\ClassUtils;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBag;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -140,8 +141,11 @@ class LeadController extends Controller
                     '_format' => 'json',
                 )
             );
-            if ($jsonResponse->getStatusCode() != 200) {
-                throw new \LogicException('Can\'t qualify created lead');
+
+            // throw an exception if forward action wasn't successful
+            $responseStatusCode = $jsonResponse->getStatusCode();
+            if ($responseStatusCode != 200) {
+                throw new HttpException($responseStatusCode, 'Can\'t qualify created lead');
             }
 
             // redirect to Sales flow
