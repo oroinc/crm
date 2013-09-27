@@ -403,7 +403,11 @@ workflows:
                         - [$close_date, $opportunity.closeDate]
             close_definition:
                 conditions: # if opportunity.status = "in_progress"
-                    @equal: [$opportunity.status.name, 'in_progress']
+                    @and:
+                        - @equal: [$opportunity.status.name, 'in_progress']
+                        - @and:
+                            - @greater_or_equal: [$probability, 0]
+                            - @less_or_equal: [$probability, 1]
                 post_actions: # update opportunity properties
                     - @assign_value:
                         - [$opportunity.customerNeed, $customer_need]
@@ -416,6 +420,9 @@ workflows:
                         - @not_empty: $close_date
                         - @not_empty: $close_revenue
                         - @not_empty: $close_reason
+                        - @and:
+                            - @greater_or_equal: [$probability, 0]
+                            - @less_or_equal: [$probability, 1]
                         - @or:
                             - @equal: [$close_reason.name, 'won']
                             - @equal: [$close_reason.name, 'outsold']
@@ -441,6 +448,9 @@ workflows:
                         - @not_empty: $close_date
                         - @not_empty: $close_revenue
                         - @not_empty: $close_reason
+                        - @and:
+                            - @greater_or_equal: [$probability, 0]
+                            - @less_or_equal: [$probability, 1]
                         - @or:
                             - @equal: [$close_reason.name, 'cancelled']
                             - @equal: [$close_reason.name, 'outsold']
