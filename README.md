@@ -15,13 +15,9 @@ OroCRM requires Symfony 2, Doctrine 2 and PHP 5.3.3 or above.
 Installation
 ------------
 
-```bash
-git clone https://github.com/orocrm/crm.git
-
-curl -s https://getcomposer.org/installer | php
-
-php composer.phar install
-```
+1. [Install composer](http://getcomposer.org/download/)
+2. `git clone https://github.com/orocrm/crm.git orocrm`
+3. `php composer.phar install`
 
 Run unit tests
 --------------
