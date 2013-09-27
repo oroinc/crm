@@ -98,55 +98,45 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
 
                 $workFlow = $this->workflowManager->startWorkflow('sales_lead', $lead, 'qualify');
                 if ((bool)rand(0, 1)) {
-                    /** @var WorkflowItem $opportunityFlow */
-                    $opportunityFlow = $workFlow->getResult()->get('workflowItem');
+                    /** @var WorkflowItem $salesFlow */
+                    $salesFlow = $workFlow->getResult()->get('workflowItem');
                     $this->transit(
                         $this->workflowManager,
-                        $opportunityFlow,
-                        'develop',
+                        $salesFlow,
+                        'close',
                         array(
                             'budget_amount' => rand(10, 10000),
-                            'probability' => round(rand(5, 75) / 100.00, 2)
+                            'customer_need' => rand(10, 10000),
+                            'proposed_solution' => rand(10, 10000),
+                            'probability' => round(rand(50, 85) / 100.00, 2)
                         )
                     );
                     if ((bool)rand(0, 1)) {
+                        $reason = $this->em->find('OroCRMSalesBundle:OpportunityCloseReason', 'won');
                         $this->transit(
                             $this->workflowManager,
-                            $opportunityFlow,
-                            'close',
+                            $salesFlow,
+                            'close_as_won',
                             array(
-                                'customer_need' => rand(10, 10000),
-                                'proposed_solution' => rand(10, 10000),
-                                'probability' => round(rand(50, 85) / 100.00, 2)
+                                'close_reason' => $reason,
+                                'close_revenue' => rand(100, 1000),
+                                'close_date' => new \DateTime('now'),
+                                'probability' => 1
                             )
                         );
-                        if ((bool)rand(0, 1)) {
-                            $reason = $this->em->find('OroCRMSalesBundle:OpportunityCloseReason', 'won');
-                            $this->transit(
-                                $this->workflowManager,
-                                $opportunityFlow,
-                                'close_as_won',
-                                array(
-                                    'close_reason' => $reason,
-                                    'close_revenue' => rand(100, 1000),
-                                    'close_date' => new \DateTime('now'),
-                                    'probability' => 1
-                                )
-                            );
-                        } elseif ((bool)rand(0, 1)) {
-                            $reason = $this->em->find('OroCRMSalesBundle:OpportunityCloseReason', 'cancelled');
-                            $this->transit(
-                                $this->workflowManager,
-                                $opportunityFlow,
-                                'close_as_lost',
-                                array(
-                                    'close_reason' => $reason,
-                                    'close_revenue' => rand(100, 1000),
-                                    'close_date' => new \DateTime('now'),
-                                    'probability' => 0.0
-                                )
-                            );
-                        }
+                    } elseif ((bool)rand(0, 1)) {
+                        $reason = $this->em->find('OroCRMSalesBundle:OpportunityCloseReason', 'cancelled');
+                        $this->transit(
+                            $this->workflowManager,
+                            $salesFlow,
+                            'close_as_lost',
+                            array(
+                                'close_reason' => $reason,
+                                'close_revenue' => rand(100, 1000),
+                                'close_date' => new \DateTime('now'),
+                                'probability' => 0.0
+                            )
+                        );
                     }
                 }
             }
