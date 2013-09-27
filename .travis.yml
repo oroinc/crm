@@ -1,0 +1,20 @@
+language: php
+
+php:
+    - 5.3
+    - 5.4
+    - 5.5
+
+env:
+  - SYMFONY_VERSION=2.3.*
+  - SYMFONY_VERSION=dev-master
+
+before_script:
+  - composer self-update
+  - composer require symfony/symfony:${SYMFONY_VERSION} --prefer-source
+
+script: phpunit --coverage-text
+
+matrix:
+  allow_failures:
+    - env: SYMFONY_VERSION=dev-master
