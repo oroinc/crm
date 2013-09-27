@@ -306,10 +306,6 @@ workflows:
                             form_type: oro_date
                             options:
                                 required: true
-                        probability:
-                            form_type: percent
-                            options:
-                                required: false
         attributes:
             opportunity:
                 label: Opportunity
@@ -410,11 +406,15 @@ workflows:
                             - @less_or_equal: [$probability, 1]
                 post_actions: # update opportunity properties
                     - @assign_value:
+                        - [$opportunity.contact, $contact]
+                        - [$opportunity.account, $account]
+                        - [$opportunity.budgetAmount, $budget_amount]
+                        - [$opportunity.probability, $probability]
                         - [$opportunity.customerNeed, $customer_need]
                         - [$opportunity.proposedSolution, $proposed_solution]
-                        - [$opportunity.probability, $probability]
+                        - [$close_revenue, 0]
             close_as_won_definition:
-                conditions: # if opportunity.status = "in_progress", required data is entered and reason = "won" or "outsold"
+                conditions: # if opportunity.status = "in_progress", required data is entered and reason = "won"
                     @and:
                         - @equal: [$opportunity.status.name, 'in_progress']
                         - @not_empty: $close_date
@@ -423,11 +423,10 @@ workflows:
                         - @and:
                             - @greater_or_equal: [$probability, 0]
                             - @less_or_equal: [$probability, 1]
-                        - @or:
-                            - @equal: [$close_reason.name, 'won']
-                            - @equal: [$close_reason.name, 'outsold']
+                        - @equal: [$close_reason.name, 'won']
                 post_actions: # update opportunity properties, set opportunity.status = "won"
                     - @assign_value:
+                        - [$probability, 1]
                         - [$opportunity.closeDate, $close_date]
                         - [$opportunity.closeRevenue, $close_revenue]
                         - [$opportunity.closeReason, $close_reason]
@@ -456,6 +455,7 @@ workflows:
                             - @equal: [$close_reason.name, 'outsold']
                 post_actions: # update opportunity properties, set opportunity.status = "lost"
                     - @assign_value:
+                        - [$probability, 0]
                         - [$opportunity.closeDate, $close_date]
                         - [$opportunity.closeRevenue, $close_revenue]
                         - [$opportunity.closeReason, $close_reason]
