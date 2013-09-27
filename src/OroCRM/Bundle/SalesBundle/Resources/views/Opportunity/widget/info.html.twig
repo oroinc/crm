@@ -33,7 +33,7 @@
         {%- endif -%}
         {{ _self.renderRow('Account'|trans, accountView) }}
 
-        {{ _self.renderRow('Probability'|trans, entity.probability ? (entity.probability * 100) ~ '%' : '') }}
+        {{ _self.renderRow('Probability'|trans, entity.probability|length ? (entity.probability * 100) ~ '%' : '') }}
         {{ _self.renderRow('Budget amount'|trans, entity.budgetAmount|length ? entity.budgetAmount|number_format(2), '') }}
 
         {% if dynamic|length %}
