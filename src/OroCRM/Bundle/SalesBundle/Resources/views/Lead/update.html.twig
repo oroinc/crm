@@ -48,10 +48,7 @@
                                 var defaultAction = form.attr('action');
                                 form.attr('action', {{ path('orocrm_sales_lead_create_and_qualify')|json_encode|raw }});
                                 form.submit();
-                                {# TODO: find better way to define whether form has errors #}
-                                if (form.find('.error>:input,:input.error').length) {
-                                    form.attr('action', defaultAction);
-                                }
+                                form.attr('action', defaultAction);
                             }
                         );
                     });
