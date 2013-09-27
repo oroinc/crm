@@ -53,6 +53,7 @@ class CreateLeadTest extends \PHPUnit_Extensions_Selenium2TestCase
             ->setCompany('Some Company')
             ->setWebsite('http://www.orocrm.com')
             ->setEmployees('100')
+            ->setOwner('admin')
             ->setAddress($this->address)
             ->save()
             ->assertMessage('Lead saved')

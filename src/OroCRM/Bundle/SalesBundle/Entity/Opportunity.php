@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
+use Oro\Bundle\UserBundle\Entity\User;
 
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\AccountBundle\Entity\Account;
@@ -19,6 +20,11 @@ use OroCRM\Bundle\SalesBundle\Model\ExtendOpportunity;
  * @Config(
  *  defaultValues={
  *      "entity"={"label"="Opportunity", "plural_label"="Opportunities"},
+ *      "ownership"={
+ *          "owner_type"="USER",
+ *          "owner_field_name"="owner",
+ *          "owner_column_name"="user_owner_id"
+ *      },
  *      "security"={
  *          "type"="ACL",
  *          "group_name"=""
@@ -71,6 +77,14 @@ class Opportunity extends ExtendOpportunity
      * @Oro\Versioned
      **/
     protected $account;
+
+    /**
+     * @var User
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
+     * @ORM\JoinColumn(name="user_owner_id", referencedColumnName="id", onDelete="SET NULL")
+     * @Oro\Versioned
+     */
+    protected $owner;
 
     /**
      * @var string
@@ -401,5 +415,24 @@ class Opportunity extends ExtendOpportunity
     public function preUpdate()
     {
         $this->updatedAt = new \DateTime('now', new \DateTimeZone('UTC'));
+    }
+
+    /**
+     * @return User
+     */
+    public function getOwner()
+    {
+        return $this->owner;
+    }
+
+    /**
+     * @param User $owningUser
+     * @return Opportunity
+     */
+    public function setOwner($owningUser)
+    {
+        $this->owner = $owningUser;
+
+        return $this;
     }
 }
