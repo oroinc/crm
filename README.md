@@ -17,7 +17,8 @@ Installation
 
 1. [Install composer](http://getcomposer.org/download/)
 2. `git clone https://github.com/orocrm/crm.git orocrm`
-3. `php composer.phar install`
+3. `cd orocmm`
+4. `php composer.phar install`
 
 Run unit tests
 --------------
