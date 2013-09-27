@@ -167,7 +167,7 @@ class CreateContactTest extends \PHPUnit_Extensions_Selenium2TestCase
             ->assertTitle($contactName . '_first ' . $contactName . '_last' . ' - Contacts - Customers')
             ->edit()
             ->setFirstName($newContactName . '_first')
-            ->setFirstName($newContactName . '@mail.com')
+            ->setEmail($newContactName . '@mail.com')
             ->save()
             ->assertMessage('Contact saved')
             ->toGrid()
