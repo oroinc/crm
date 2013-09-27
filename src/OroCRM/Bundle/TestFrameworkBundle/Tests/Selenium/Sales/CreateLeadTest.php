@@ -97,7 +97,6 @@ class CreateLeadTest extends \PHPUnit_Extensions_Selenium2TestCase
      */
     public function testDeleteAccount($name)
     {
-        $this->markTestSkipped('BAP-726');
         $login = new Login($this);
         $login->setUsername(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_LOGIN)
             ->setPassword(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_PASS)
@@ -107,8 +106,7 @@ class CreateLeadTest extends \PHPUnit_Extensions_Selenium2TestCase
             ->open(array($name))
             ->delete()
             ->assertTitle('Leads - Sales')
-            ->assertMessage('Item deleted');
-
-        $login->openUsers()->filterBy('Name', $name)->assertNoDataMessage('No Leads were found to match your search');
+            ->assertMessage('Item deleted')
+            ->assertNoDataMessage('No leads exists');
     }
 }
