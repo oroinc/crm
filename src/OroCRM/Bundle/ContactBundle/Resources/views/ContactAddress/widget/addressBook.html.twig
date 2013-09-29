@@ -4,13 +4,15 @@
 
     {# widget container and actions #}
     <div class="widget-actions">
+        {% if address_edit_acl_resource is not defined or resource_granted(address_edit_acl_resource) %}
         <button class="btn btn-mini btn-primary btn-uppercase" type="button" data-action-name="add_address"> + {{ 'Add Address'|trans }}</button>
+        {% endif %}
     </div>
     <div class="map-box" id="address-book"></div>
 
     <script type="text/javascript">
-    require(['jquery', 'routing', 'oro/address-book', 'oro/widget-manager'],
-    function($, routing, AddressBook, widgetManager) {
+    require(['jquery', 'underscore', 'routing', 'oro/address-book', 'oro/widget-manager'],
+    function($, _, routing, AddressBook, widgetManager) {
         widgetManager.getWidgetInstance({{ app.request.get('_wid')|json_encode|raw }}, function(widget){
             /** @type oro.AddressBook */
             var addressBook = new AddressBook({
@@ -28,8 +30,9 @@
                     )
                 }
             });
-            $(widget.getAction('add_address', 'adopted'))
-                .on('click', _.bind(addressBook.createAddress, addressBook));
+            widget.getAction('add_address', 'adopted', function(action) {
+                action.on('click', _.bind(addressBook.createAddress, addressBook));
+            });
             addressBook
                 .getCollection()
                 .reset({{ render(path('oro_api_get_contact_addresses', {contactId: entity.id})) }});

@@ -1,7 +1,8 @@
 {% extends 'OroUIBundle:actions:update.html.twig' %}
-{% set topic = entity.topic|default('N/A') %}
-{% oro_title_set({params : {"%opportunity.topic%": topic} }) %}
-{% set title = form.vars.value.id ? topic ~ ' - ' ~ 'Update Opportunity'|trans : 'New Opportunity'|trans %}
+{% set name = entity.name|default('N/A') %}
+{% oro_title_set({params : {"%opportunity.name%": name} }) %}
+{% set audit_entity_class = 'OroCRM_Bundle_SalesBundle_Entity_Opportunity' %}
+{% set title = form.vars.value.id ? name ~ ' - ' ~ 'Update Opportunity'|trans : 'New Opportunity'|trans %}
 {% set formAction = form.vars.value.id
     ? path('orocrm_sales_opportunity_update', { 'id': form.vars.value.id })
     : path('orocrm_sales_opportunity_create')
@@ -30,7 +31,7 @@
         {{ UI.buttonSeparator() }}
     {% endif %}
     {{ UI.button({'path' : path('orocrm_sales_opportunity_index'), 'title' : 'Cancel', 'label' : 'Cancel'}) }}
-    {{ UI.saveAndStayButton() }}
+    {{ UI.saveAndStayButton('orocrm_sales_opportunity_update') }}
     {{ UI.saveAndCloseButton() }}
 {% endblock %}
 
@@ -40,13 +41,26 @@
             'entity':      form.vars.value,
             'indexPath':   path('orocrm_sales_opportunity_index'),
             'indexLabel': 'Opportunities',
-            'entityTitle': topic
+            'entityTitle': name
         } %}
         {{ parent() }}
     {% else %}
         {% include 'OroUIBundle::page_title_block.html.twig' %}
     {% endif %}
 {% endblock pageHeader %}
+
+{% block breadcrumbs %}
+    {{ parent() }}
+    <div class="status-enabled pull-left">
+        {% if entity.status.name != 'lost' %}
+            <div class="badge badge-enabled status-enabled">
+                <i class="icon-status-enabled icon-circle"></i>{{ entity.status.label }}</div>
+        {% else %}
+            <div class="badge badge-disabled status-disabled">
+                <i class="icon-status-disabled icon-circle"></i>{{ entity.status.label  }}</div>
+        {% endif %}
+    </div>
+{% endblock breadcrumbs %}
 
 {% block content_data %}
     {% set id = 'opportunity-profile' %}
@@ -58,8 +72,7 @@
             {
                 'title': 'Contact Information',
                 'data': [
-                    form_row(form.topic, {'label': 'Topic'|trans}),
-                    form_row(form.status, {'label': 'Status'|trans}),
+                    form_row(form.name, {'label': 'Opportunity name'|trans}),
                     form_row(form.contact, {'label': 'Contact'|trans}),
                     form_row(form.account, {'label': 'Account'|trans}),
                     form_row(form.probability, {'label': 'Probability'|trans}),
@@ -74,10 +87,25 @@
         ]
     }] %}
 
+    {% if form.additional is defined and form.additional.children|length > 0 %}
+        {% set additionalData = [] %}
+        {% for value in form.additional %}
+            {% set additionalData = additionalData|merge([form_row(value)]) %}
+        {% endfor %}
+
+        {% set dataBlocks = dataBlocks|merge([{
+            'title': 'Additional',
+            'subblocks': [{
+                'title': '',
+                'useSpan': false,
+                'data' : additionalData
+            }]
+        }] ) %}
+    {% endif %}
+
     {% set data = {
         'formErrors': form_errors(form) ? form_errors(form) : null,
         'dataBlocks': dataBlocks,
-        'hiddenData': form_rest(form)
     } %}
     {{ parent() }}
 {% endblock content_data %}

@@ -3,8 +3,13 @@
 namespace OroCRM\Bundle\ContactBundle\Form\Type;
 
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Form\FormEvent;
+use OroCRM\Bundle\ContactBundle\Entity\Contact;
 
 class ContactType extends AbstractType
 {
@@ -15,6 +20,18 @@ class ContactType extends AbstractType
     {
         $this->buildPlainFields($builder, $options);
         $this->buildRelationFields($builder, $options);
+
+        // set predefined accounts in case of creating a new contact
+        $builder->addEventListener(
+            FormEvents::POST_SET_DATA,
+            function (FormEvent $event) {
+                $contact = $event->getData();
+                if ($contact && $contact instanceof Contact && !$contact->getId() && $contact->hasAccounts()) {
+                    $form = $event->getForm();
+                    $form->get('appendAccounts')->setData($contact->getAccounts());
+                }
+            }
+        );
     }
 
     /**
@@ -158,6 +175,16 @@ class ContactType extends AbstractType
                 'extra_fields_message' => 'This form should not contain extra fields: "{{ extra_fields }}"',
                 'cascade_validation'   => true,
             )
+        );
+    }
+
+    public function finishView(FormView $view, FormInterface $form, array $options)
+    {
+        /** @var Contact $contact */
+        $contact = $form->getData();
+        $view->children['reportsTo']->vars['excluded'] = array_merge(
+            $view->children['reportsTo']->vars['excluded'],
+            array($contact->getId())
         );
     }
 

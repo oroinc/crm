@@ -1,4 +1,5 @@
 {% import 'OroUIBundle::macros.html.twig' as macros %}
+{% import 'OroLocaleBundle::macros.html.twig' as Locale %}
 {% import 'OroTagBundle::macros.html.twig' as _tag %}
 
 {# TODO: Move this to OroUIBundle::macros.html.twig #}
@@ -24,7 +25,7 @@
             <li>
                 <strong>
                     {% if isEmail %}
-                        <a href="mailto:{{ primaryElement }}">{{ primaryElement }}</a>
+                        <a href="mailto:{{ primaryElement }}" title="{{ primaryElement }}">{{ primaryElement }}</a>
                     {% else %}
                         {{ primaryElement }}
                     {% endif %}
@@ -77,7 +78,7 @@
             <label class="control-label">{% trans %}Emails{% endtrans %}</label>
             <div class="controls">
                 <div class="clearfix-oro">
-                    <div class="control-label">
+                    <div class="control-label email-field">
                         {% if entity.emails.count %}
                             {{ _self.renderCollectionWithPrimaryElement(entity.emails, true) }}
                         {% else %}
@@ -110,47 +111,52 @@
         <div class="control-group">
             <label class="control-label">{% trans %}Social{% endtrans %}</label>
             <div class="controls">
-                <div class="clearfix-oro">
-                    <div class="control-label">
-                        <ul class="list-inline">
-                            {% if entity.twitter or entity.facebook or entity.googlePlus or entity.linkedIn %}
-                                {% if entity.twitter %}
-                                    <li>
-                                        <a class="no-hash" href="{{ _self.getSocialUrl('twitter', entity.twitter) }}" target="_blank">
-                                            <i class="icon-twitter-new hide-text">twitter</i>
-                                        </a>
-                                    </li>
-                                {% endif %}
-                                {% if entity.facebook %}
-                                    <li>
-                                        <a class="no-hash" href="{{ _self.getSocialUrl('facebook', entity.facebook) }}" target="_blank">
-                                            <i class="icon-facebook-new hide-text">facebook</i>
-                                        </a>
-                                    </li>
-                                {% endif %}
-                                {% if entity.googlePlus %}
-                                    <li>
-                                        <a class="no-hash" href="{{ _self.getSocialUrl('google_plus', entity.googlePlus) }}" target="_blank">
-                                            <i class="icon-google-new hide-text">google+</i>
-                                        </a>
-                                    </li>
-                                {% endif %}
-                                {% if entity.linkedIn %}
-                                    <li>
-                                        <a class="no-hash" href="{{ _self.getSocialUrl('linked_in', entity.linkedIn) }}" target="_blank">
-                                            <i class="icon-linkedin-new hide-text">linkedIn</i>
-                                        </a>
-                                    </li>
-                                {% endif %}
-                            {% else %}
-                                {% trans %}N/A{% endtrans %}
-                            {% endif %}
-                        </ul>
-                    </div>
+                <div class="control-label">
+                    {% if entity.twitter or entity.facebook or entity.googlePlus or entity.linkedIn %}
+                    <ul class="list-inline">
+                        {% if entity.twitter %}
+                            <li>
+                                <a class="no-hash" href="{{ _self.getSocialUrl('twitter', entity.twitter) }}" target="_blank" title="Twitter">
+                                    <i class="icon-twitter"></i>
+                                </a>
+                            </li>
+                        {% endif %}
+                        {% if entity.facebook %}
+                            <li>
+                                <a class="no-hash" href="{{ _self.getSocialUrl('facebook', entity.facebook) }}" target="_blank" title="Facebook">
+                                    <i class="icon-facebook"></i>
+                                </a>
+                            </li>
+                        {% endif %}
+                        {% if entity.googlePlus %}
+                            <li>
+                                <a class="no-hash" href="{{ _self.getSocialUrl('google_plus', entity.googlePlus) }}" target="_blank" title="Google+">
+                                    <i class="icon-google-plus"></i>
+                                </a>
+                            </li>
+                        {% endif %}
+                        {% if entity.linkedIn %}
+                            <li>
+                                <a class="no-hash" href="{{ _self.getSocialUrl('linked_in', entity.linkedIn) }}" target="_blank" title="LinkedIn">
+                                    <i class="icon-linkedin"></i>
+                                </a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                    {% else %}
+                        {% trans %}N/A{% endtrans %}
+                    {% endif %}
                 </div>
             </div>
         </div>
+
+        {% if dynamic|length %}
+            {% for label, item in dynamic %}
+                {{ _self.renderRow(label|trans, item) }}
+            {% endfor %}
+        {% endif %}
     </div>
+
     <div class="span6">
         {{ _self.renderRow('Job Title'|trans, entity.jobTitle) }}
 
@@ -182,7 +188,7 @@
             <div class="controls">
                 <div class="clearfix-oro">
                     <p class="control-label">
-                        {{ entity.birthday is empty ? 'N/A'|trans : macros.date(entity.birthday) }}
+                        {{ entity.birthday is empty ? 'N/A'|trans : Locale.date(entity.birthday) }}
                         {% if entity.birthday is not empty %}
                             ({{ entity.birthday|age_string({'default': 'N/A'}) }})
                         {% endif %}

@@ -44,6 +44,7 @@ services:
         arguments:
             - @orocrm_account.account.manager.flexible
             - "orocrm_account_value"
+            - @router
         tags:
             - { name: form.type, alias: orocrm_account }
 
@@ -110,6 +111,7 @@ services:
         arguments:
             - @orocrm_account.account.manager.flexible
             - "orocrm_account_value"
+            - @router
         tags:
             - { name: form.type, alias: account }
 
@@ -135,4 +137,4 @@ services:
             - %orocrm_account.account.entity.class%
             - ["name"]
         tags:
-            - { name: oro_form.autocomplete.search_handler, alias: accounts, acl_resource: orocrm_account_list }
+            - { name: oro_form.autocomplete.search_handler, alias: accounts, acl_resource: orocrm_account_view }

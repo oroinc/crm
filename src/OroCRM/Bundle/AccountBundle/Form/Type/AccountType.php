@@ -2,13 +2,32 @@
 
 namespace OroCRM\Bundle\AccountBundle\Form\Type;
 
+use Doctrine\Common\Collections\Collection;
+
+use Symfony\Component\Routing\Router;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 use Oro\Bundle\FlexibleEntityBundle\Form\Type\FlexibleType;
+use Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleManager;
+use OroCRM\Bundle\ContactBundle\Entity\Contact;
+use OroCRM\Bundle\AccountBundle\Entity\Account;
 
 class AccountType extends FlexibleType
 {
+    /**
+     * @var Router
+     */
+    protected $router;
+
+    public function __construct(FlexibleManager $flexibleManager, $valueFormAlias, Router $router)
+    {
+        parent::__construct($flexibleManager, $valueFormAlias);
+        $this->router = $router;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -22,7 +41,7 @@ class AccountType extends FlexibleType
             'name',
             'text',
             array(
-                'label' => 'Name',
+                'label' => 'orocrm.account.form.account_name',
                 'required' => true,
             )
         );
@@ -33,28 +52,26 @@ class AccountType extends FlexibleType
             'oro_tag_select'
         );
 
-        // contacts
-        $builder
-            ->add(
-                'appendContacts',
-                'oro_entity_identifier',
-                array(
-                    'class'    => 'OroCRMContactBundle:Contact',
-                    'required' => false,
-                    'mapped'   => false,
-                    'multiple' => true,
-                )
+        $builder->add(
+            'default_contact',
+            'oro_entity_identifier',
+            array(
+                'class'    => 'OroCRMContactBundle:Contact',
+                'multiple' => false
             )
-            ->add(
-                'removeContacts',
-                'oro_entity_identifier',
-                array(
-                    'class'    => 'OroCRMContactBundle:Contact',
-                    'required' => false,
-                    'mapped'   => false,
-                    'multiple' => true,
-                )
-            );
+        );
+
+        // contacts
+        $builder->add(
+            'contacts',
+            'oro_multiple_entity',
+            array(
+                'class' => 'OroCRMContactBundle:Contact',
+                'required' => false,
+                'default_element' => 'default_contact',
+                'selector_window_title' => 'orocrm.account.form.select_contacts'
+            )
+        );
 
         // addresses
         $builder
@@ -74,6 +91,46 @@ class AccountType extends FlexibleType
                     'required' => false
                 )
             );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function finishView(FormView $view, FormInterface $form, array $options)
+    {
+        /** @var Account $account */
+        $account = $form->getData();
+        $view->children['contacts']->vars['grid_url']
+            = $this->router->generate('orocrm_account_contact_select', array('id' => $account->getId()));
+        $defaultContactId = $account->getDefaultContact() ? $account->getDefaultContact()->getId() : null;
+        $view->children['contacts']->vars['initial_elements']
+            = $this->getInitialElements($account->getContacts(), $defaultContactId);
+    }
+
+    /**
+     * @param Collection $contacts
+     * @param int|null $default
+     * @return array
+     */
+    protected function getInitialElements(Collection $contacts, $default)
+    {
+        $result = array();
+        /** @var Contact $contact */
+        foreach ($contacts as $contact) {
+            $primaryPhone = $contact->getPrimaryPhone();
+            $primaryEmail = $contact->getPrimaryEmail();
+            $result[] = array(
+                'id' => $contact->getId(),
+                'label' => $contact->getFirstName() . ' ' . $contact->getLastName(),
+                'link' => $this->router->generate('orocrm_contact_info', array('id' => $contact->getId())),
+                'extraData' => array(
+                    array('label' => 'Phone', 'value' => $primaryPhone ? $primaryPhone->getPhone() : null),
+                    array('label' => 'Email', 'value' => $primaryEmail ? $primaryEmail->getEmail() : null),
+                ),
+                'isDefault' => $default == $contact->getId()
+            );
+        }
+        return $result;
     }
 
     /**

@@ -58,11 +58,10 @@ class AccountHandler implements TagHandlerInterface
 
         if (in_array($this->request->getMethod(), array('POST', 'PUT'))) {
             $this->form->submit($this->request);
+            $this->handleContacts($entity);
 
             if ($this->form->isValid()) {
-                $appendContacts = $this->form->get('appendContacts')->getData();
-                $removeContacts = $this->form->get('removeContacts')->getData();
-                $this->onSuccess($entity, $appendContacts, $removeContacts);
+                $this->onSuccess($entity);
 
                 return true;
             }
@@ -72,17 +71,23 @@ class AccountHandler implements TagHandlerInterface
     }
 
     /**
+     * @param Account $entity
+     */
+    protected function handleContacts($entity)
+    {
+        $appendContacts = $this->form->get('contacts')->get('added')->getData();
+        $removeContacts = $this->form->get('contacts')->get('removed')->getData();
+        $this->appendContacts($entity, $appendContacts);
+        $this->removeContacts($entity, $removeContacts);
+    }
+
+    /**
      * "Success" form handler
      *
      * @param Account $entity
-     * @param array $appendContacts
-     * @param array $removeContacts
      */
-    protected function onSuccess(Account $entity, array $appendContacts, array $removeContacts)
+    protected function onSuccess(Account $entity)
     {
-        $this->appendContacts($entity, $appendContacts);
-        $this->removeContacts($entity, $removeContacts);
-
         $this->manager->persist($entity);
         $this->manager->flush();
         $this->tagManager->saveTagging($entity);

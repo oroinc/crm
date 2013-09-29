@@ -30,21 +30,15 @@ class AclTest extends \PHPUnit_Extensions_Selenium2TestCase
         $login->setUsername(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_LOGIN)
             ->setPassword(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_PASS)
             ->submit()
-            ->openNavigation()
-            ->tab('System')
-            ->menu('Roles')
-            ->openRoles(false)
+            ->openRoles()
             ->add()
-            ->setName($this->newRole['ROLE_NAME'] . $randomPrefix)
             ->setLabel($this->newRole['LABEL'] . $randomPrefix)
             ->setOwner('Main')
-            ->selectAcl('Template controller')
-            ->selectAcl('Contact groups manipulation')
-            ->selectAcl('Contact manipulation')
-            ->selectAcl('Account manipulation')
-            ->selectAcl('Oro Security')
+            ->setEntity('Contact Group', array('Create', 'Edit', 'Delete', 'View', 'Assign'))
+            ->setEntity('Contact', array('Create', 'Edit', 'Delete', 'View', 'Assign'))
+            ->setEntity('Account', array('Create', 'Edit', 'Delete', 'View', 'Assign'))
             ->save()
-            ->assertMessage('Role successfully saved');
+            ->assertMessage('Role saved');
 
         return ($this->newRole['LABEL'] . $randomPrefix);
     }
@@ -64,7 +58,7 @@ class AclTest extends \PHPUnit_Extensions_Selenium2TestCase
             ->submit()
             ->openUsers()
             ->add()
-            ->assertTitle('Create User - Users - System')
+            ->assertTitle('Create User - Users - Users Management - System')
             ->setUsername($username)
             ->setOwner('Main')
             ->enable()
@@ -75,10 +69,10 @@ class AclTest extends \PHPUnit_Extensions_Selenium2TestCase
             ->setEmail($username.'@mail.com')
             ->setRoles(array($roleName))
             ->save()
-            ->assertMessage('User successfully saved')
+            ->assertMessage('User saved')
             ->toGrid()
             ->close()
-            ->assertTitle('Users - System');
+            ->assertTitle('Users - Users Management - System');
 
         return $username;
     }
@@ -93,26 +87,12 @@ class AclTest extends \PHPUnit_Extensions_Selenium2TestCase
         $login->setUsername($username)
             ->setPassword('123123q')
             ->submit();
-        $login->moveto($login->byXPath("//div[@id='main-menu']/ul/li/a[contains(.,'System')]"));
         $login->assertElementNotPresent(
-            "//div[@id='main-menu']/ul/li[a[contains(.,'System')]]//a[contains(.,'Users')]",
+            "//div[@id='main-menu']/ul/li/a[normalize-space(.) = 'System']",
             'Element present so ACL for Users do not work'
-        );
-        $login->assertElementNotPresent(
-            "//div[@id='main-menu']/ul/li[a[contains(.,'System')]]//a[contains(.,'Roles')]",
-            'Element present so ACL for User Roles do not work'
-        );
-        $login->assertElementNotPresent(
-            "//div[@id='main-menu']/ul/li[a[contains(.,'System')]]//a[contains(.,'Groups')]",
-            'Element present so ACL for User Groups do not work'
-        );
-        $login->assertElementNotPresent(
-            "//div[@id='main-menu']/ul/li[a[contains(.,'System')]]//a[contains(.,'Data Audit')]",
-            'Element present so ACL for Data Audit do not work'
         );
         $login->assertElementNotPresent("//div[@id='search-div']", 'Element present so ACL for Search do not work');
         $login->byXPath("//ul[@class='nav pull-right']//a[@class='dropdown-toggle']")->click();
-        $login->assertElementNotPresent("//ul[@class='dropdown-menu']//a[contains(., 'My User')]", 'Element present so ACL for Search do not work');
     }
 
     /**
@@ -145,24 +125,15 @@ class AclTest extends \PHPUnit_Extensions_Selenium2TestCase
         $login->setUsername(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_LOGIN)
             ->setPassword(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_PASS)
             ->submit()
-            ->openNavigation()
-            ->tab('System')
-            ->menu('Roles')
-            ->openRoles(false)
+            ->openRoles()
+            ->filterBy('Role', $roleName)
             ->open(array($roleName))
-            ->selectAcl('Contact groups manipulation')
-            ->selectAcl('Contact manipulation')
-            ->selectAcl('Account manipulation')
-            ->selectAcl('View Account')
-            ->selectAcl('View List of Accounts')
-            ->selectAcl('View Contact')
-            ->selectAcl('View List of Contacts')
-            ->selectAcl('View contact group')
-            ->selectAcl('View Contact Group List')
-            ->selectAcl('View user user')
-            ->selectAcl('Edit user')
+            ->setEntity('Account', array('Create', 'Edit', 'Delete', 'Assign'))
+            ->setEntity('Contact Group', array('Create', 'Edit', 'Delete', 'Assign'))
+            ->setEntity('Contact', array('Create', 'Edit', 'Delete', 'Assign'))
+            //->setEntity('User', array('View', 'Edit'))
             ->save()
-            ->assertMessage('Role successfully saved');
+            ->assertMessage('Role saved');
     }
 
     /**
@@ -220,7 +191,7 @@ class AclTest extends \PHPUnit_Extensions_Selenium2TestCase
      */
     public function testViewUserInfo($username, $adminId)
     {
-        $this->markTestSkipped('Due bug CRM-126');
+        //$this->markTestSkipped('Due bug CRM-126');
         $login = new Login($this);
         $login->setUsername($username)
             ->setPassword('123123q')

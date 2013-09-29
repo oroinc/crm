@@ -15,7 +15,7 @@ class LeadType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('topic', 'text', array('required' => true))
+            ->add('name', 'text', array('required' => true))
             ->add('firstName', 'text', array('required' => true))
             ->add('lastName', 'text', array('required' => true))
             ->add('contact', 'orocrm_contact_select', array('required' => false))
@@ -26,17 +26,6 @@ class LeadType extends AbstractType
             ->add('website', 'url', array('required' => false))
             ->add('numberOfEmployees', 'number', array('required' => false))
             ->add('industry', 'text', array('required' => false))
-            ->add(
-                'status',
-                'entity',
-                array(
-                    'class' => 'OroCRMSalesBundle:LeadStatus',
-                    'property' => 'label',
-                    'required' => true,
-                    'disabled' => true,
-                    'empty_value' => false,
-                )
-            )
             ->add('address', 'orocrm_lead_address', array('required' => false));
     }
 
@@ -47,7 +36,8 @@ class LeadType extends AbstractType
     {
         $resolver->setDefaults(
             array(
-                'data_class' => 'OroCRM\Bundle\SalesBundle\Entity\Lead'
+                'data_class' => 'OroCRM\Bundle\SalesBundle\Entity\Lead',
+                'cascade_validation' => true,
             )
         );
     }

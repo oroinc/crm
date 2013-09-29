@@ -97,6 +97,8 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
      */
     protected $countries;
 
+    /** @var AbstractAttribute */
+    protected $attributes;
     /**
      * {@inheritDoc}
      */
@@ -176,6 +178,7 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
                 $account = $this->createAccount($data);
                 $contact = $this->createContact($data);
                 $contact->addAccount($account);
+                $account->setDefaultContact($contact);
 
                 $group = $this->contactGroups[rand(0, count($this->contactGroups)-1)];
                 $contact->addGroup($group);
@@ -386,7 +389,11 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
      */
     private function findAttribute(FlexibleEntityRepository $repository, $attributeCode)
     {
-        return $repository->findAttributeByCode($attributeCode);
+        if (!isset($this->attributes[$repository->getClassName()][$attributeCode])) {
+            $this->attributes[$repository->getClassName()][$attributeCode] =
+                $repository->findAttributeByCode($attributeCode);
+        }
+        return $this->attributes[$repository->getClassName()][$attributeCode];
     }
 
     /**

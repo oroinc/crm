@@ -4,6 +4,8 @@ parameters:
     orocrm_contact.group_contact.datagrid_manager.class:  OroCRM\Bundle\ContactBundle\Datagrid\GroupContactDatagridManager
     orocrm_contact.contact.view_datagrid_manager.class:   OroCRM\Bundle\ContactBundle\Datagrid\ContactAccountDatagridManager
     orocrm_contact.account.update_datagrid_manager.class: OroCRM\Bundle\ContactBundle\Datagrid\ContactAccountUpdateDatagridManager
+    orocrm_contact.email.datagrid_manager.class:          OroCRM\Bundle\ContactBundle\Datagrid\ContactEmailDatagridManager
+    orocrm_contact.email.datagrid_query_factory.class:    OroCRM\Bundle\ContactBundle\Datagrid\ContactEmailQueryFactory
 
 services:
     orocrm_contact.contact.datagrid_manager:
@@ -56,3 +58,21 @@ services:
               entity_hint: account
               flexible: true
               route_name: orocrm_contact_update
+
+    orocrm_contact.email.datagrid_manager:
+        class: %orocrm_contact.email.datagrid_manager.class%
+        tags:
+            - name: oro_grid.datagrid.manager
+              datagrid_name: contact_emails
+              entity_name: %oro_email.email.entity.class%
+              query_factory: orocrm_contact.email.datagrid_query_factory
+              entity_hint: email
+              route_name: orocrm_contact_view
+
+    orocrm_contact.email.datagrid_query_factory:
+        class: %orocrm_contact.email.datagrid_query_factory.class%
+        arguments:
+            - @doctrine
+            - %oro_email.email.entity.class%
+            - @oro_email.email.owner.provider.storage
+            - @oro_config.user

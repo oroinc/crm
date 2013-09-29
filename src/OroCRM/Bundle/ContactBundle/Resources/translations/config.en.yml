@@ -2,3 +2,9 @@ entity:
     contact:
         name:           Contact
         description:    Represent contact
+    contact_address:
+        name:           Contact Address
+        description:    Represent contact's address
+    contact_group:
+        name:           Contact Group
+        description:    Represent contact's group

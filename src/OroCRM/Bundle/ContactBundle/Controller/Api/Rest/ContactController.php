@@ -13,8 +13,8 @@ use FOS\RestBundle\Routing\ClassResourceInterface;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
 use Oro\Bundle\AddressBundle\Entity\AddressType;
-use Oro\Bundle\UserBundle\Annotation\Acl;
-use Oro\Bundle\UserBundle\Annotation\AclAncestor;
+use Oro\Bundle\SecurityBundle\Annotation\Acl;
+use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 
 use Oro\Bundle\SoapBundle\Form\Handler\ApiFormHandler;
 use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
@@ -42,7 +42,7 @@ class ContactController extends RestController implements ClassResourceInterface
      *      description="Get all contacts items",
      *      resource=true
      * )
-     * @AclAncestor("orocrm_contact_list")
+     * @AclAncestor("orocrm_contact_view")
      * @return Response
      */
     public function cgetAction()
@@ -112,9 +112,9 @@ class ContactController extends RestController implements ClassResourceInterface
      * )
      * @Acl(
      *      id="orocrm_contact_delete",
-     *      name="Delete contact",
-     *      description="Delete contact",
-     *      parent="orocrm_contact"
+     *      type="entity",
+     *      permission="DELETE",
+     *      class="OroCRMContactBundle:Contact"
      * )
      * @return Response
      */

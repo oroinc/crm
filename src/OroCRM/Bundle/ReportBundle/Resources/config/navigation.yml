@@ -1,0 +1,92 @@
+oro_menu_config:
+    items:
+        reports_tab:
+            label: 'Reports'
+            uri: '#'
+            extras:
+                position: 30
+
+        accounts_report_tab:
+            label: 'Accounts'
+            uri: '#'
+            extras:
+                position: 10
+
+        leads_report_tab:
+            label: 'Leads'
+            uri: '#'
+            extras:
+                position: 20
+
+        opportunities_report_tab:
+            label: 'Opportunities'
+            uri: '#'
+            extras:
+                position: 30
+
+        accounts_life_time_value:
+            label: 'Life time'
+            route: 'orocrm_report_index'
+            routeParameters:
+                reportGroupName: accounts
+                reportName:      life_time_value
+            extras:
+                description: 'Accounts lifetime report'
+
+        accounts_by_opportunities:
+            label: 'By opportunities'
+            route: 'orocrm_report_index'
+            routeParameters:
+                reportGroupName: accounts
+                reportName:      by_opportunities
+            extras:
+                description: 'Accounts by opportunities report'
+
+        leads_by_date:
+            label: 'Leads by date'
+            route: 'orocrm_report_index'
+            routeParameters:
+                reportGroupName: leads
+                reportName:      by_date
+            extras:
+                description: 'Leads by date report'
+
+        opportunities_by_step:
+            label: 'Opportunities by step'
+            route: 'orocrm_report_index'
+            routeParameters:
+                reportGroupName: opportunities
+                reportName:      by_step
+            extras:
+                description: 'Opportunities by step report'
+
+        won_by_period:
+            label: 'Won opportunities by period'
+            route: 'orocrm_report_index'
+            routeParameters:
+                reportGroupName: opportunities
+                reportName:      won_by_period
+            extras:
+                description: 'Won opportunities by period report'
+
+    tree:
+        application_menu:
+            children:
+                reports_tab:
+                    children:
+                        accounts_report_tab:
+                            children:
+                                accounts_life_time_value: ~
+                                accounts_by_opportunities: ~
+
+                        leads_report_tab:
+                            children:
+                                leads_by_date: ~
+
+                        opportunities_report_tab:
+                            children:
+                                opportunities_by_step: ~
+                                won_by_period: ~
+
+oro_titles:
+    orocrm_report_index: %%reportName%% - Reports

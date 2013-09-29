@@ -14,9 +14,11 @@
             <div class="list-wrap pull-left">
                 <ul class="nav nav-list">
                     {% for link in widget.links %}
+                        {%  if resource_granted(link.acl) %}
                         <li class="{{ loop.last ? 'last' : '' }}">
                             <a href="{{  link.url|raw }}" title="{{ link.label|trans }}">{{ link.label|trans }}</a>
                         </li>
+                        {% endif %}
                     {% endfor %}
                 </ul>
             </div>
@@ -35,35 +37,35 @@
                 {
                     label: 'Accounts',
                     links: [
-                        {url: path('orocrm_account_index'), label: 'List'|trans},
-                        {url: path('orocrm_account_create'), label: 'Create account'|trans}
+                        {url: path('orocrm_account_index'), label: 'List'|trans, acl: 'orocrm_account_view'},
+                        {url: path('orocrm_account_create'), label: 'Create account'|trans, acl: 'orocrm_account_create'}
                     ],
                     image: 'accounts-image'
                 },
                 {
                     label: 'Contacts',
                     links: [
-                        {url: path('orocrm_contact_index'), label: 'List'|trans},
-                        {url: path('orocrm_contact_create'), label: 'Create contact'|trans},
-                        {url: path('orocrm_contact_group_index'), label: 'Manage groups'|trans}
+                        {url: path('orocrm_contact_index'), label: 'List'|trans, acl: 'orocrm_contact_view'},
+                        {url: path('orocrm_contact_create'), label: 'Create contact'|trans, acl: 'orocrm_contact_create'},
+                        {url: path('orocrm_contact_group_index'), label: 'Manage groups'|trans, acl: 'orocrm_contact_group_view'}
                     ],
                     image: 'contacts-image'
                 },
                 {
                     label: 'Leads',
                     links: [
-                        {url: path('orocrm_sales_lead_index'), label: 'List'|trans},
-                        {url: path('orocrm_sales_lead_create'), label: 'Create lead'|trans}
+                        {url: path('orocrm_sales_lead_index'), label: 'List'|trans, acl: 'orocrm_sales_lead_view'},
+                        {url: path('orocrm_sales_lead_create'), label: 'Create lead'|trans, acl: 'orocrm_sales_lead_create'}
                     ],
-                    image: 'contacts-image'
+                    image: 'lead-image'
                 },
                 {
                     label: 'Opportunities',
                     links: [
-                        {url: path('orocrm_sales_opportunity_index'), label: 'List'|trans},
-                        {url: path('orocrm_sales_opportunity_create'), label: 'Create opportunity'|trans}
+                        {url: path('orocrm_sales_opportunity_index'), label: 'List'|trans, acl: 'orocrm_sales_opportunity_view'},
+                        {url: path('orocrm_sales_opportunity_create'), label: 'Create opportunity'|trans, acl: 'orocrm_sales_opportunity_create'}
                     ],
-                    image: 'accounts-image'
+                    image: 'opportunity-image'
                 },
             ] %}
 
@@ -75,8 +77,7 @@
 
         </div>
         <div class="version-container">
-            {# TODO Replace hardcoded version with data from backend #}
-            <strong>Version:</strong> 1.0.0-alpha6
+            Version: {{ constant('Oro\\Bundle\\PlatformBundle\\OroPlatformBundle::VERSION') }}
         </div>
     </div>
 {% endblock %}

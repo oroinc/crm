@@ -16,18 +16,6 @@ class OpportunityType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add(
-            'status',
-            'entity',
-            array(
-                'class'       => 'OroCRMSalesBundle:OpportunityStatus',
-                'property'    => 'label',
-                'required'    => true,
-                'disabled'    => true,
-                'empty_value' => false,
-            )
-        );
-
-        $builder->add(
             'closeReason',
             'entity',
             array(
@@ -41,7 +29,7 @@ class OpportunityType extends AbstractType
         $builder
             ->add('contact', 'orocrm_contact_select', array('required' => false))
             ->add('account', 'orocrm_account_select', array('required' => false))
-            ->add('topic', 'text', array('required' => true))
+            ->add('name', 'text', array('required' => true))
             ->add('closeDate', 'oro_date', array('required' => false))
             ->add('probability', 'percent', array('required' => false))
             ->add('budgetAmount', 'number', array('required' => false))

@@ -42,7 +42,10 @@ class ContactAccountDatagridManager extends AccountDatagridManager
      */
     protected function prepareQuery(ProxyQueryInterface $query)
     {
+        $this->applyJoinWithDefaultContact($query);
+
         $entityAlias = $query->getRootAlias();
+        /** @var QueryBuilder $query */
         $query->andWhere(":contact MEMBER OF $entityAlias.contacts");
     }
 

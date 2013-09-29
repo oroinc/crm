@@ -1,0 +1,39 @@
+OroCRM\Bundle\SalesBundle\Entity\Lead:
+    alias:                          oro_crm_lead
+    title_fields:                   [name]
+    route:
+        name:                       orocrm_sales_lead_view
+        parameters:
+            id:                     id
+    search_template:                OroCRMSalesBundle:Lead:searchResult.html.twig
+    fields:
+        -
+            name:                   name
+            target_type:            text
+            target_fields:          [name]
+        -
+            name:                   firstName
+            target_type:            text
+            target_fields:          [firstName]
+        -
+            name:                   lastName
+            target_type:            text
+            target_fields:          [lastName]
+        -
+            name:                   companyName
+            target_type:            text
+            target_fields:          [companyName]
+
+OroCRM\Bundle\SalesBundle\Entity\Opportunity:
+    alias:                          oro_crm_opportunity
+    title_fields:                   [name]
+    route:
+        name:                       orocrm_sales_opportunity_view
+        parameters:
+            id:                     id
+    search_template:                OroCRMSalesBundle:Opportunity:searchResult.html.twig
+    fields:
+        -
+            name:                   name
+            target_type:            text
+            target_fields:          [name]

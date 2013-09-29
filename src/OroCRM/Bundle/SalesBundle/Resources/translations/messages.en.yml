@@ -1,4 +1,4 @@
-orocrm.sales.opportunity.datagrid.topic: Topic
+orocrm.sales.opportunity.datagrid.name: Opportunity Name
 orocrm.sales.opportunity.datagrid.contact_name: Potential Customer
 orocrm.sales.opportunity.datagrid.close_date: Close Date
 orocrm.sales.opportunity.datagrid.probability: Probability
@@ -9,7 +9,7 @@ orocrm.sales.opportunity.datagrid.update: Update
 orocrm.sales.opportunity.datagrid.delete: Delete
 
 orocrm.sales_lead.datagrid.status: Status
-orocrm.sales_lead.datagrid.topic: Topic
+orocrm.sales_lead.datagrid.name: Lead Name
 orocrm.sales_lead.datagrid.first_name: First Name
 orocrm.sales_lead.datagrid.last_name: Last Name
 orocrm.sales_lead.datagrid.email: Email
@@ -20,3 +20,6 @@ orocrm.sales_lead.datagrid.postal_code: Postal Code
 orocrm.sales_lead.datagrid.view: View
 orocrm.sales_lead.datagrid.update: Update
 orocrm.sales_lead.datagrid.delete: Delete
+
+orocrm.sales.controller.lead.saved.message: "Lead saved"
+orocrm.sales.controller.opportunity.saved.message: "Opportunity saved"

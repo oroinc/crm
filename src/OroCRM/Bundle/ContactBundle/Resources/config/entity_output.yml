@@ -2,3 +2,11 @@ OroCRM\Bundle\ContactBundle\Entity\Contact:
     icon_class:                         icon-user
     name:                               entity.contact.name
     description:                        entity.contact.description
+
+OroCRM\Bundle\ContactBundle\Entity\ContactAddress:
+    name:                               entity.contact_address.name
+    description:                        entity.contact_address.description
+
+OroCRM\Bundle\ContactBundle\Entity\Group:
+    name:                               entity.contact_group.name
+    description:                        entity.contact_group.description

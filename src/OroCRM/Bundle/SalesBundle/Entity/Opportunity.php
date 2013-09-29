@@ -4,15 +4,35 @@ namespace OroCRM\Bundle\SalesBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
+use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
+use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
+use Oro\Bundle\UserBundle\Entity\User;
+
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\AccountBundle\Entity\Account;
+use OroCRM\Bundle\SalesBundle\Model\ExtendOpportunity;
 
 /**
  * @ORM\Entity
  * @ORM\Table(name="orocrm_sales_opportunity")
  * @ORM\HasLifecycleCallbacks()
+ * @Oro\Loggable
+ * @Config(
+ *  defaultValues={
+ *      "entity"={"label"="Opportunity", "plural_label"="Opportunities"},
+ *      "ownership"={
+ *          "owner_type"="USER",
+ *          "owner_field_name"="owner",
+ *          "owner_column_name"="user_owner_id"
+ *      },
+ *      "security"={
+ *          "type"="ACL",
+ *          "group_name"=""
+ *      }
+ *  }
+ * )
  */
-class Opportunity
+class Opportunity extends ExtendOpportunity
 {
     /**
      * @var int
@@ -36,6 +56,7 @@ class Opportunity
      *
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\SalesBundle\Entity\OpportunityCloseReason")
      * @ORM\JoinColumn(name="close_reason_name", referencedColumnName="name")
+     * @Oro\Versioned
      **/
     protected $closeReason;
 
@@ -44,6 +65,7 @@ class Opportunity
      *
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ContactBundle\Entity\Contact")
      * @ORM\JoinColumn(name="contact_id", referencedColumnName="id", onDelete="SET NULL")
+     * @Oro\Versioned
      **/
     protected $contact;
 
@@ -52,20 +74,31 @@ class Opportunity
      *
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\AccountBundle\Entity\Account")
      * @ORM\JoinColumn(name="account_id", referencedColumnName="id", onDelete="SET NULL")
+     * @Oro\Versioned
      **/
     protected $account;
 
     /**
+     * @var User
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
+     * @ORM\JoinColumn(name="user_owner_id", referencedColumnName="id", onDelete="SET NULL")
+     * @Oro\Versioned
+     */
+    protected $owner;
+
+    /**
      * @var string
      *
-     * @ORM\Column(name="topic", type="string", length=255, nullable=false)
+     * @ORM\Column(name="name", type="string", length=255, nullable=false)
+     * @Oro\Versioned
      */
-    protected $topic;
+    protected $name;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="close_date", type="date", nullable=true)
+     * @Oro\Versioned
      */
     protected $closeDate;
 
@@ -73,6 +106,7 @@ class Opportunity
      * @var float
      *
      * @ORM\Column(name="probability", type="float", nullable=true)
+     * @Oro\Versioned
      */
     protected $probability;
 
@@ -80,6 +114,7 @@ class Opportunity
      * @var float
      *
      * @ORM\Column(name="budget_amount", type="float", nullable=true)
+     * @Oro\Versioned
      */
     protected $budgetAmount;
 
@@ -87,6 +122,7 @@ class Opportunity
      * @var float
      *
      * @ORM\Column(name="close_revenue", type="float", nullable=true)
+     * @Oro\Versioned
      */
     protected $closeRevenue;
 
@@ -94,6 +130,7 @@ class Opportunity
      * @var string
      *
      * @ORM\Column(name="customer_need", type="string", length=255, nullable=true)
+     * @Oro\Versioned
      */
     protected $customerNeed;
 
@@ -101,6 +138,7 @@ class Opportunity
      * @var string
      *
      * @ORM\Column(name="proposed_solution", type="string", length=255, nullable=true)
+     * @Oro\Versioned
      */
     protected $proposedSolution;
 
@@ -271,21 +309,21 @@ class Opportunity
     }
 
     /**
-     * @param string $topic
+     * @param string $name
      * @return Opportunity
      */
-    public function setTopic($topic)
+    public function setName($name)
     {
-        $this->topic = $topic;
+        $this->name = $name;
         return $this;
     }
 
     /**
      * @return string
      */
-    public function getTopic()
+    public function getName()
     {
-        return $this->topic;
+        return $this->name;
     }
 
     /**
@@ -358,6 +396,10 @@ class Opportunity
         return $this;
     }
 
+    public function __toString()
+    {
+        return (string)$this->getName();
+    }
     /**
      * @ORM\PrePersist
      */
@@ -373,5 +415,24 @@ class Opportunity
     public function preUpdate()
     {
         $this->updatedAt = new \DateTime('now', new \DateTimeZone('UTC'));
+    }
+
+    /**
+     * @return User
+     */
+    public function getOwner()
+    {
+        return $this->owner;
+    }
+
+    /**
+     * @param User $owningUser
+     * @return Opportunity
+     */
+    public function setOwner($owningUser)
+    {
+        $this->owner = $owningUser;
+
+        return $this;
     }
 }

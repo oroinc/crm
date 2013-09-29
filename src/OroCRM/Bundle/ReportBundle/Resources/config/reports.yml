@@ -1,0 +1,98 @@
+reports:
+    accounts:
+        life_time_value:
+            name:   "Account life time value"
+            select:
+                - a.name
+                - SUM( o.closeRevenue ) as value
+            from:
+                - { table: OroCRMSalesBundle:Opportunity, alias: o }
+            join:
+                inner:
+                    - { join: o.account, alias: a }
+                    - { join: o.status,  alias: s }
+            where:
+                and:
+                    - s.name = 'won'
+
+            groupBy:  a.id
+
+        by_opportunities:
+            name:     "Accounts by opportunities"
+            from:
+                - { table: OroCRMSalesBundle:Opportunity, alias: o }
+            select:
+                - a.id
+                - a.name
+                - SUM( (CASE WHEN (s.name='won') THEN 1 ELSE 0 END) ) as wonCount
+                - SUM( (CASE WHEN (s.name='lost') THEN 1 ELSE 0 END) ) as lostCount
+                - SUM( (CASE WHEN (s.name='in_progress') THEN 1 ELSE 0 END) ) as inProgressCount
+                - COUNT(o.id) as total_ops
+            join:
+                inner:
+                    - { join: o.account, alias: a }
+                    - { join: o.status, alias: s }
+                    - { join: o.closeReason, alias: cr }
+            groupBy:  "a.id"
+
+    opportunities:
+        by_step:
+            name: "Opportunities by step"
+            from:
+                - { table: OroCRMReportBundle:OpportunityByWorkflowItem, alias: owi }
+            select:
+                - wi.currentStepName
+                - o.name
+                - COUNT(o.id) as numberOfOpp
+                - >
+                  SUM(
+                    (CASE WHEN (wi.currentStepName='close') THEN o.closeRevenue ELSE 0 END)
+                  ) as closeRevenue
+                - >
+                  SUM(
+                    (CASE WHEN (o.budgetAmount IS NOT NULL) THEN o.budgetAmount ELSE 0 END)
+                  ) as budgetAmount
+                # for filtering
+                - wi.workflowName
+            join:
+                inner:
+                    - { join: owi.opportunity, alias: o }
+                    - { join: owi.workflowItem, alias: wi }
+            groupBy:  "wi.currentStepName"
+
+        won_by_period:
+            name: "Won opportunities by date period"
+            from:
+                - { table: OroCRMSalesBundle:Opportunity, alias: o }
+            select:
+                - CONCAT( CONCAT( SUBSTRING( o.closeDate, 6, 2 ), ' / '), SUBSTRING( o.closeDate, 1, 4 ) ) as monthPeriod
+                - >
+                  CONCAT(
+                    CASE
+                      WHEN SUBSTRING(o.closeDate, 6, 2) BETWEEN 1 AND 3 THEN '1'
+                      WHEN SUBSTRING(o.closeDate, 6, 2) BETWEEN 4 AND 6 THEN '2'
+                      WHEN SUBSTRING(o.closeDate, 6, 2) BETWEEN 7 AND 9 THEN '3'
+                      ELSE '4'
+                    END,
+                    CONCAT(' / ' , SUBSTRING( o.closeDate, 1, 4 ) ) as quarterPeriod
+                - SUBSTRING( o.closeDate, 1, 4 ) as yearPeriod
+                - SUM( o.closeRevenue ) as value
+                - COUNT( o.id ) as cnt
+            join:
+                inner:
+                    - { join: o.status, alias: s }
+            where:
+                and:
+                    - s.name = 'won'
+                    - o.closeDate IS NOT NULL
+    leads:
+        by_date:
+            name:      "Number leads by date"
+            select:
+                - COUNT(l.id) as leadsCount
+                - SUBSTRING(l.createdAt, 1, 10) as createdDate
+            from:
+                - { table: OroCRMSalesBundle:Lead, alias: l }
+
+            groupBy: createdDate
+
