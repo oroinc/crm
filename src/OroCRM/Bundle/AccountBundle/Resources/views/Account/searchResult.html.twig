@@ -4,9 +4,9 @@
     * indexer_item - indexer item Oro\Bundle\SearchBundle\Query\Result\Item
 #}
 {% extends 'OroSearchBundle:Search:searchResultItem.html.twig' %}
-{% import 'OroUserBundle::macros.html.twig' as macros %}
+{% import 'OroLocaleBundle::macros.html.twig' as Locale %}
 
-{% set format = oro_config_value('oro_user.name_format') %}
+{% set format = oro_config_value('oro_locale.name_format') %}
 {% set showImage = false %}
 
 {% set recordUrl = indexer_item.recordUrl %}
@@ -15,6 +15,6 @@
 {% set entityType = 'Account'|trans %}
 
 {% set entityInfo = [
-    {'title': 'Created', 'value': entity.createdAt ? macros.time(entity.createdAt) : 'N/A'},
-    {'title': 'Updated', 'value': entity.updatedAt ? macros.time(entity.updatedAt) : 'N/A'},
+    {'title': 'Created', 'value': entity.createdAt ? Locale.time(entity.createdAt) : 'N/A'},
+    {'title': 'Updated', 'value': entity.updatedAt ? Locale.time(entity.updatedAt) : 'N/A'},
 ] %}

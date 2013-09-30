@@ -1,9 +1,10 @@
 {% extends 'OroUIBundle:actions:update.html.twig' %}
 {% form_theme form with ['OroAddressBundle:Include:fields.html.twig', 'OroFormBundle:Form:fields.html.twig'] %}
 
-{% oro_title_set({params : {"%lead.topic%": entity.topic} }) %}
+{% oro_title_set({params : {"%lead.name%": entity.name} }) %}
+{% set audit_entity_class = 'OroCRM_Bundle_SalesBundle_Entity_Lead' %}
 
-{% set title = form.vars.value.id ? entity.topic ~ ' - ' ~ 'Update Lead'|trans : 'New Lead'|trans %}
+{% set title = form.vars.value.id ? entity.name ~ ' - ' ~ 'Update Lead'|trans : 'New Lead'|trans %}
 {% set formAction = form.vars.value.id ? path('orocrm_sales_lead_update', { 'id': form.vars.value.id }) : path('orocrm_sales_lead_create')  %}
 
 {% block head_script %}
@@ -30,8 +31,30 @@
         {{ UI.buttonSeparator() }}
     {% endif %}
     {{ UI.button({'path' : path('orocrm_sales_lead_index'), 'title' : 'Cancel', 'label' : 'Cancel'}) }}
-    {{ UI.saveAndStayButton() }}
+    {{ UI.saveAndStayButton('orocrm_sales_lead_update') }}
     {{ UI.saveAndCloseButton() }}
+
+    {% if resource_granted('orocrm_sales_lead_create') and resource_granted('oro_workflow') and form.vars.value.id is empty %}
+        <div class="btn-group">
+            <button type="button" class="btn btn-primary" id="save_and_qualify">
+                {% trans %}Save and Qualify{% endtrans %}
+            </button>
+            <script type="text/javascript">
+                require(['jquery'],
+                    function($){
+                        $('button#save_and_qualify').click(
+                            function() {
+                                var form = $(this).closest('form');
+                                var defaultAction = form.attr('action');
+                                form.attr('action', {{ path('orocrm_sales_lead_create_and_qualify')|json_encode|raw }});
+                                form.submit();
+                                form.attr('action', defaultAction);
+                            }
+                        );
+                    });
+            </script>
+        </div>
+    {% endif %}
 {% endblock %}
 
 {% block pageHeader %}
@@ -40,7 +63,7 @@
             'entity':      form.vars.value,
             'indexPath':   path('orocrm_sales_lead_index'),
             'indexLabel': 'Leads',
-            'entityTitle': entity.topic
+            'entityTitle': entity.name
         }
         %}
         {{ parent() }}
@@ -48,6 +71,17 @@
         {% include 'OroUIBundle::page_title_block.html.twig' %}
     {% endif %}
 {% endblock pageHeader %}
+
+{% block breadcrumbs %}
+    {{ parent() }}
+    <div class="status-enabled pull-left">
+        {% if entity.status.name != 'canceled' %}
+            <div class="badge badge-enabled status-enabled"><i class="icon-status-enabled icon-circle"></i>{{ entity.status.label }}</div>
+        {% else %}
+            <div class="badge badge-disabled status-disabled"><i class="icon-status-disabled icon-circle"></i>{{ entity.status.label  }}</div>
+        {% endif %}
+    </div>
+{% endblock breadcrumbs %}
 
 {% block content_data %}
     {% set id = 'lead-profile' %}
@@ -59,8 +93,7 @@
                 {
                     'title': 'Lead Information',
                     'data': [
-                        form_row(form.status, {'label': 'Status'}),
-                        form_row(form.topic, {'label': 'Topic'}),
+                        form_row(form.name, {'label': 'Lead Name'}),
                         form_row(form.firstName, {'label': 'First name'}),
                         form_row(form.lastName, {'label': 'Last name'}),
                         form_row(form.contact, {'label': 'Contact'}),
@@ -86,11 +119,26 @@
         }]
     %}
 
+    {% if form.additional is defined and form.additional.children|length > 0 %}
+        {% set additionalData = [] %}
+        {% for value in form.additional %}
+            {% set additionalData = additionalData|merge([form_row(value)]) %}
+        {% endfor %}
+
+        {% set dataBlocks = dataBlocks|merge([{
+            'title': 'Additional',
+            'subblocks': [{
+                'title': '',
+                'useSpan': false,
+                'data' : additionalData
+            }]
+        }] ) %}
+    {% endif %}
+
     {% set data =
         {
             'formErrors': form_errors(form)? form_errors(form) : null,
             'dataBlocks': dataBlocks,
-            'hiddenData': form_rest(form)
         }
     %}
     {{ parent() }}

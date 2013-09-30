@@ -1,13 +1,14 @@
 {% extends 'OroUIBundle:actions:view.html.twig' %}
-{% set topic = entity.topic|default('N/A') %}
-{% oro_title_set({params : {"%opportunity.topic%": topic} }) %}
+{% set name = entity.name|default('N/A') %}
+{% oro_title_set({params : {"%opportunity.name%": name} }) %}
+{% set audit_entity_class = 'OroCRM_Bundle_SalesBundle_Entity_Opportunity' %}
 
 {% block navButtons %}
     {% if resource_granted('orocrm_sales_opportunity_update') %}
         {{ UI.button({
             'path' : path('orocrm_sales_opportunity_update', { 'id': entity.id }),
             'iClass' : 'icon-edit ',
-            'title' : 'Update contact',
+            'title' : 'Update opportunity',
             'label' : 'Edit'
         }) }}
     {% endif %}
@@ -31,7 +32,7 @@
         'entity':      entity,
         'indexPath':   path('orocrm_sales_opportunity_index'),
         'indexLabel': 'Opportunities',
-        'entityTitle': topic
+        'entityTitle': name
     } %}
     {{ parent() }}
 {% endblock pageHeader %}

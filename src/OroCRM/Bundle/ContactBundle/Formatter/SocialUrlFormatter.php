@@ -29,6 +29,10 @@ class SocialUrlFormatter
             throw new \InvalidArgumentException(sprintf('Unknown social network type "%s"', $socialType));
         }
 
+        if (strpos($username, 'http://') === 0 || strpos($username, 'https://') === 0) {
+            return $username;
+        }
+
         return str_replace('%username%', $username, $this->socialUrlFormat[$socialType]);
     }
 }

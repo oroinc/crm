@@ -10,7 +10,7 @@ chapter.
 Requirements
 ------------
 
-OroCRM requires Symfony 2, Doctrine 2 and PHP 5.3.3 or above.
+OroCRM requires Symfony 2, Doctrine 2 and PHP 5.3.8 or above.
 
 Installation
 ------------
@@ -30,4 +30,13 @@ To run unit tests of any bundnles :
 
 ```bash
 phpunit
+```
+
+Use as dependency in composer
+-----------------------------
+
+```yaml
+    "require": {
+        "oro/crm": "dev-master",
+    }
 ```

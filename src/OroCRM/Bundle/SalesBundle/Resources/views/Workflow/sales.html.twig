@@ -1,14 +1,12 @@
 {% extends "OroWorkflowBundle:WorkflowStep:edit.html.twig" %}
 
-{% block set_title %}
 {% oro_title_set({
     params : {
         '%section%': 'Opportunities'|trans,
-        '%entity%': workflowItem.data.opportunity.topic,
+        '%entity%': workflowItem.data.opportunity.name,
         '%workflow_data%': workflow.label ~ ' (' ~ currentStep.label ~ ')',
     }
 }) %}
-{% endblock %}
 
 {% block breadcrumb %}
     {% set breadcrumbs = [
@@ -25,7 +23,7 @@
         'additional': [
             {
                 'indexPath': path('orocrm_sales_opportunity_view', {id:  workflowItem.data.opportunity.id}),
-                'indexLabel': workflowItem.data.opportunity.topic
+                'indexLabel': workflowItem.data.opportunity.name
             }
         ],
         'entityTitle': workflow.label ~ ' (' ~ currentStep.label ~ ')'
@@ -51,7 +49,7 @@
             widgetManager.getWidgetInstanceByAlias('opportunity_info', function(widget) {
                 var viewLink = $('<a href="{{ path('orocrm_sales_opportunity_view', {id:  workflowItem.data.opportunity.id}) }}" class="btn btn-small">{{ 'View'|trans }}</a>');
                 Navigation.getInstance().processClicks(viewLink);
-                widget.addAction('view', viewLink, 'default');
+                widget.addAction('view', 'default', viewLink);
             });
         });
     </script>

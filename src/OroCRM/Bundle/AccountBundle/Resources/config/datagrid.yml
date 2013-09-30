@@ -32,4 +32,4 @@ services:
               entity_name: %orocrm_contact.entity.class%
               query_entity_alias: contact
               entity_hint: contact
-              route_name: orocrm_account_update
+              route_name: orocrm_account_contact_select

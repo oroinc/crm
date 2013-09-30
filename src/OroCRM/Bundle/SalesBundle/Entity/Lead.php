@@ -3,8 +3,14 @@
 namespace OroCRM\Bundle\SalesBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+
 use Oro\Bundle\AddressBundle\Entity\Address;
+use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
+use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
+use Oro\Bundle\UserBundle\Entity\User;
+
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
+use OroCRM\Bundle\SalesBundle\Model\ExtendLead;
 
 /**
  * Lead
@@ -12,8 +18,23 @@ use OroCRM\Bundle\ContactBundle\Entity\Contact;
  * @ORM\Table(name="orocrm_sales_lead")
  * @ORM\Entity
  * @ORM\HasLifecycleCallbacks()
+ * @Oro\Loggable
+ * @Config(
+ *  defaultValues={
+ *      "entity"={"label"="Lead", "plural_label"="Leads"},
+ *      "ownership"={
+ *          "owner_type"="USER",
+ *          "owner_field_name"="owner",
+ *          "owner_column_name"="user_owner_id"
+ *      },
+ *      "security"={
+ *          "type"="ACL",
+ *          "group_name"=""
+ *      }
+ *  }
+ * )
  */
-class Lead
+class Lead extends ExtendLead
 {
     /**
      * @var integer
@@ -35,20 +56,23 @@ class Lead
      *
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ContactBundle\Entity\Contact")
      * @ORM\JoinColumn(name="contact_id", referencedColumnName="id", onDelete="SET NULL")
+     * @Oro\Versioned
      **/
     protected $contact;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="topic", type="string", length=255)
+     * @ORM\Column(name="name", type="string", length=255)
+     * @Oro\Versioned
      */
-    protected $topic;
+    protected $name;
 
     /**
      * @var string
      *
      * @ORM\Column(name="first_name", type="string", length=255)
+     * @Oro\Versioned
      */
     protected $firstName;
 
@@ -56,6 +80,7 @@ class Lead
      * @var string
      *
      * @ORM\Column(name="last_name", type="string", length=255)
+     * @Oro\Versioned
      */
     protected $lastName;
 
@@ -63,6 +88,7 @@ class Lead
      * @var string
      *
      * @ORM\Column(name="job_title", type="string", length=255, nullable=true)
+     * @Oro\Versioned
      */
     protected $jobTitle;
 
@@ -70,6 +96,7 @@ class Lead
      * @var string
      *
      * @ORM\Column(name="phone_number", type="string", length=255, nullable=true)
+     * @Oro\Versioned
      */
     protected $phoneNumber;
 
@@ -77,6 +104,7 @@ class Lead
      * @var string
      *
      * @ORM\Column(name="email", type="string", length=255, nullable=true)
+     * @Oro\Versioned
      */
     protected $email;
 
@@ -84,6 +112,7 @@ class Lead
      * @var string
      *
      * @ORM\Column(name="company_name", type="string", length=255, nullable=true)
+     * @Oro\Versioned
      */
     protected $companyName;
 
@@ -91,6 +120,7 @@ class Lead
      * @var string
      *
      * @ORM\Column(name="website", type="string", length=255, nullable=true)
+     * @Oro\Versioned
      */
     protected $website;
 
@@ -98,6 +128,7 @@ class Lead
      * @var integer
      *
      * @ORM\Column(name="number_of_employees", type="integer", nullable=true)
+     * @Oro\Versioned
      */
     protected $numberOfEmployees;
 
@@ -105,6 +136,7 @@ class Lead
      * @var string
      *
      * @ORM\Column(name="industry", type="string", length=255, nullable=true)
+     * @Oro\Versioned
      */
     protected $industry;
 
@@ -131,6 +163,14 @@ class Lead
     protected $updatedAt;
 
     /**
+     * @var User
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
+     * @ORM\JoinColumn(name="user_owner_id", referencedColumnName="id", onDelete="SET NULL")
+     * @Oro\Versioned
+     */
+    protected $owner;
+
+    /**
      * Get id
      *
      * @return integer 
@@ -143,12 +183,12 @@ class Lead
     /**
      * Set topic
      *
-     * @param string $topic
+     * @param string $name
      * @return Lead
      */
-    public function setTopic($topic)
+    public function setName($name)
     {
-        $this->topic = $topic;
+        $this->name = $name;
     
         return $this;
     }
@@ -158,9 +198,9 @@ class Lead
      *
      * @return string 
      */
-    public function getTopic()
+    public function getName()
     {
-        return $this->topic;
+        return $this->name;
     }
 
     /**
@@ -477,7 +517,7 @@ class Lead
      */
     public function __toString()
     {
-        return (string)$this->getTopic();
+        return (string)$this->getName();
     }
 
     /**
@@ -497,5 +537,24 @@ class Lead
     public function beforeUpdate()
     {
         $this->updatedAt = new \DateTime('now', new \DateTimeZone('UTC'));
+    }
+
+    /**
+     * @return User
+     */
+    public function getOwner()
+    {
+        return $this->owner;
+    }
+
+    /**
+     * @param User $owningUser
+     * @return Lead
+     */
+    public function setOwner($owningUser)
+    {
+        $this->owner = $owningUser;
+
+        return $this;
     }
 }

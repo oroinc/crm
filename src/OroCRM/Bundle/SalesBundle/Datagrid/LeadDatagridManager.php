@@ -6,18 +6,19 @@ use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\EntityRepository;
 
-use Oro\Bundle\GridBundle\Datagrid\DatagridManager;
+use Oro\Bundle\EntityBundle\Datagrid\AbstractDatagrid;
+
 use Oro\Bundle\GridBundle\Field\FieldDescription;
 use Oro\Bundle\GridBundle\Field\FieldDescriptionCollection;
 use Oro\Bundle\GridBundle\Field\FieldDescriptionInterface;
+
 use Oro\Bundle\GridBundle\Filter\FilterInterface;
 use Oro\Bundle\GridBundle\Action\ActionInterface;
 use Oro\Bundle\GridBundle\Property\UrlProperty;
-use Oro\Bundle\GridBundle\Property\FixedProperty;
 use Oro\Bundle\GridBundle\Datagrid\ProxyQueryInterface;
 use Oro\Bundle\GridBundle\Sorter\SorterInterface;
 
-class LeadDatagridManager extends DatagridManager
+class LeadDatagridManager extends AbstractDatagrid
 {
     /**
      * Expression to get region text or label, CONCAT is used as type cast function
@@ -45,20 +46,20 @@ class LeadDatagridManager extends DatagridManager
      */
     protected function configureFields(FieldDescriptionCollection $fieldsCollection)
     {
-        $fieldTopic = new FieldDescription();
-        $fieldTopic->setName('topic');
-        $fieldTopic->setOptions(
+        $fieldName = new FieldDescription();
+        $fieldName->setName('name');
+        $fieldName->setOptions(
             array(
                 'type'        => FieldDescriptionInterface::TYPE_TEXT,
-                'label'       => $this->translate('orocrm.sales_lead.datagrid.topic'),
-                'field_name'  => 'topic',
+                'label'       => $this->translate('orocrm.sales_lead.datagrid.name'),
+                'field_name'  => 'name',
                 'filter_type' => FilterInterface::TYPE_STRING,
                 'sortable'    => true,
                 'filterable'  => true,
                 'show_filter' => true,
             )
         );
-        $fieldsCollection->add($fieldTopic);
+        $fieldsCollection->add($fieldName);
 
         $fieldStatus = new FieldDescription();
         $fieldStatus->setName('status');
@@ -198,6 +199,8 @@ class LeadDatagridManager extends DatagridManager
             )
         );
         $fieldsCollection->add($fieldPostalCode);
+
+        $this->addDynamicFields();
     }
 
     /**

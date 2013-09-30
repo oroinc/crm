@@ -1,9 +1,19 @@
+CHANGELOG for 1.0.0-beta1
+===================
+This changelog references the relevant changes (new features, changes and bugs) done in 1.0.0-beta1 versions.
+
+* 1.0.0-beta1 (2013-09-30)
+  * CRM Entities reports
+  * Contacts Import/Export
+  * Account association with contacts
+  * Custom entities and fields in usage
+
 CHANGELOG for 1.0.0-alpha6
 ===================
 
 * 1.0.0-alpha6 (2013-09-12)
-   * Leads and Opportunities
-   * Flexible Workflow Engine (FWE)
+  * Leads and Opportunities
+  * Flexible Workflow Engine (FWE)
 
 CHANGELOG for 1.0.0-alpha5
 ===================

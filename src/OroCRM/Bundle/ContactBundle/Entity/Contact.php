@@ -3,19 +3,22 @@
 namespace OroCRM\Bundle\ContactBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
 use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 
-use OroCRM\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\TagBundle\Entity\Taggable;
 use Oro\Bundle\AddressBundle\Entity\AddressType;
 use Oro\Bundle\EmailBundle\Entity\EmailOwnerInterface;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
-use Zend\Stdlib\DateTime;
+
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
+
+use OroCRM\Bundle\ContactBundle\Model\ExtendContact;
+use OroCRM\Bundle\AccountBundle\Entity\Account;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyMethods)
@@ -31,11 +34,19 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
  * @Config(
  *  defaultValues={
  *      "entity"={"label"="Contact", "plural_label"="Contacts"},
- *      "ownership"={"owner_type"="USER"}
+ *      "ownership"={
+ *          "owner_type"="USER",
+ *          "owner_field_name"="owner",
+ *          "owner_column_name"="user_owner_id"
+ *      },
+ *      "security"={
+ *          "type"="ACL",
+ *          "group_name"=""
+ *      }
  *  }
  * )
  */
-class Contact implements Taggable, EmailOwnerInterface
+class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
 {
     /**
      * @var int
@@ -316,6 +327,28 @@ class Contact implements Taggable, EmailOwnerInterface
         $this->emails    = new ArrayCollection();
         $this->phones    = new ArrayCollection();
         $this->tags      = new ArrayCollection();
+    }
+
+    public function __clone()
+    {
+        if ($this->groups) {
+            $this->groups = clone $this->groups;
+        }
+        if ($this->accounts) {
+            $this->accounts = clone $this->accounts;
+        }
+        if ($this->addresses) {
+            $this->addresses = clone $this->addresses;
+        }
+        if ($this->emails) {
+            $this->emails = clone $this->emails;
+        }
+        if ($this->phones) {
+            $this->phones = clone $this->phones;
+        }
+        if ($this->tags) {
+            $this->tags = clone $this->tags;
+        }
     }
 
     /**
@@ -778,11 +811,12 @@ class Contact implements Taggable, EmailOwnerInterface
         if (null === $this->tags) {
             $this->tags = new ArrayCollection();
         }
+
         return $this->tags;
     }
 
     /**
-     * @param ArrayCollection $tags
+     * @param $tags
      * @return Contact
      */
     public function setTags($tags)
@@ -1045,6 +1079,7 @@ class Contact implements Taggable, EmailOwnerInterface
                 }
             }
         }
+
         return $this;
     }
 
@@ -1052,7 +1087,7 @@ class Contact implements Taggable, EmailOwnerInterface
      * Gets address type if it's available.
      *
      * @param ContactAddress $address
-     * @param AddressType $addressType
+     * @param AddressType    $addressType
      * @return Contact
      */
     public function setAddressType(ContactAddress $address, AddressType $addressType)
@@ -1065,6 +1100,7 @@ class Contact implements Taggable, EmailOwnerInterface
                 }
             }
         }
+
         return $this;
     }
 
@@ -1218,6 +1254,14 @@ class Contact implements Taggable, EmailOwnerInterface
     }
 
     /**
+     * @return bool
+     */
+    public function hasAccounts()
+    {
+        return count($this->accounts) > 0;
+    }
+
+    /**
      * Get contact created date/time
      *
      * @return \DateTime
@@ -1302,6 +1346,6 @@ class Contact implements Taggable, EmailOwnerInterface
      */
     public function __toString()
     {
-        return $this->getFullname();
+        return (string) $this->getFullname();
     }
 }

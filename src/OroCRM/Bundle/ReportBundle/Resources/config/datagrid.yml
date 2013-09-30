@@ -1,0 +1,57 @@
+parameters:
+    orocrm_report.datagrid.accounts.life_time_value.class:  OroCRM\Bundle\ReportBundle\Datagrid\Accounts\LifeTimeValueManager
+    orocrm_report.datagrid.accounts.by_opportunities.class: OroCRM\Bundle\ReportBundle\Datagrid\Accounts\ByOpportunitiesManager
+    orocrm_report.datagrid.leads.by_date.class:             OroCRM\Bundle\ReportBundle\Datagrid\Leads\ByDateManager
+    orocrm_report.datagrid.opportunities.by_step.class:     OroCRM\Bundle\ReportBundle\Datagrid\Opportunities\ByStepManager
+    orocrm_report.datagrid.opportunities.won_by_period.class: OroCRM\Bundle\ReportBundle\Datagrid\Opportunities\WonByPeriodManager
+
+services:
+    orocrm_report.datagrid.accounts.life_time_value:
+        class: %orocrm_report.datagrid.accounts.life_time_value.class%
+        arguments:
+            - @doctrine.orm.entity_manager
+        tags:
+            - name: oro_grid.datagrid.manager
+              datagrid_name: accounts-life_time_value
+              entity_hint:   report data
+              route_name:    orocrm_report_index
+
+    orocrm_report.datagrid.accounts.by_opportunities:
+        class: %orocrm_report.datagrid.accounts.by_opportunities.class%
+        arguments:
+            - @doctrine.orm.entity_manager
+        tags:
+            - name: oro_grid.datagrid.manager
+              datagrid_name: accounts-by_opportunities
+              entity_hint:   report data
+              route_name:    orocrm_report_index
+
+    orocrm_report.datagrid.leads.by_date:
+        class: %orocrm_report.datagrid.leads.by_date.class%
+        arguments:
+            - @doctrine.orm.entity_manager
+        tags:
+            - name: oro_grid.datagrid.manager
+              datagrid_name: leads-by_date
+              entity_hint:   report data
+              route_name:    orocrm_report_index
+
+    orocrm_report.datagrid.opportunities.by_step:
+        class: %orocrm_report.datagrid.opportunities.by_step.class%
+        arguments:
+            - @doctrine.orm.entity_manager
+        tags:
+            - name: oro_grid.datagrid.manager
+              datagrid_name: opportunities-by_step
+              entity_hint:   report data
+              route_name:    orocrm_report_index
+
+    orocrm_report.datagrid.opportunities.won_by_period:
+        class: %orocrm_report.datagrid.opportunities.won_by_period.class%
+        arguments:
+            - @doctrine.orm.entity_manager
+        tags:
+            - name: oro_grid.datagrid.manager
+              datagrid_name: opportunities-won_by_period
+              entity_hint:   report data
+              route_name:    orocrm_report_index

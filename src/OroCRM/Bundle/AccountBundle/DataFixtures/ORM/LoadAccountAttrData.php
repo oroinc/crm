@@ -45,6 +45,7 @@ class LoadAccountAttrData extends AbstractFixture implements ContainerAwareInter
             array(
                 array(
                     'code' => 'description',
+                    'label' => 'Description',
                     'type' => 'oro_flexibleentity_textarea',
                     'searchable' => true
                 ),
@@ -66,23 +67,30 @@ class LoadAccountAttrData extends AbstractFixture implements ContainerAwareInter
                 ),
                 array(
                     'code' => 'website',
+                    'label' => 'Website',
                     'type' => 'oro_flexibleentity_url',
                     'searchable' => true
                 ),
                 array(
                     'code' => 'employees',
+                    'label' => 'Employees',
                     'type' => 'oro_flexibleentity_integer'
                 ),
                 array(
                     'code' => 'ownership',
+                    'label' => 'Ownership',
                     'searchable' => true
                 ),
                 array(
                     'code' => 'ticker_symbol',
+                    'label' => 'Ticker Symbol',
                     'type' => 'orocrm_account_ticker_symbol',
                     'searchable' => true
                 ),
-                'rating',
+                array(
+                    'code' => 'rating',
+                    'label' => 'Rating',
+                ),
             )
         );
 
@@ -157,7 +165,14 @@ class LoadAccountAttrData extends AbstractFixture implements ContainerAwareInter
         if (!is_array($data)) {
             return;
         }
-        $supportedProperties = array('entityType', 'attributeType', 'backendType', 'backendStorage', 'defaultValue', 'id');
+        $supportedProperties = array(
+            'entityType',
+            'attributeType',
+            'backendType',
+            'backendStorage',
+            'defaultValue',
+            'id'
+        );
         foreach ($supportedProperties as $property) {
             if (array_key_exists($property, $data)) {
                 $method = 'set' . ucfirst($property);

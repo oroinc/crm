@@ -47,7 +47,7 @@ class ControllersGroupTest extends WebTestCase
 
         $result = $this->client->getResponse();
         ToolsAPI::assertJsonResponse($result, 200, '');
-        $this->assertContains("Group successfully saved", $crawler->html());
+        $this->assertContains("Group saved", $crawler->html());
     }
 
     /**
@@ -86,7 +86,7 @@ class ControllersGroupTest extends WebTestCase
 
         $result = $this->client->getResponse();
         ToolsAPI::assertJsonResponse($result, 200, '');
-        $this->assertContains("Group successfully saved", $crawler->html());
+        $this->assertContains("Group saved", $crawler->html());
     }
 
     /**

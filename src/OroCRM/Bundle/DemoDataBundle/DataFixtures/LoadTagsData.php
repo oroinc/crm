@@ -202,7 +202,7 @@ class LoadTagsData extends AbstractFlexibleFixture implements ContainerAwareInte
 
             $contact->setTags(
                 array(
-                    'owner' => $ownTags ,
+                    'owner' => $ownTags,
                     'all' => array()
                 )
             );

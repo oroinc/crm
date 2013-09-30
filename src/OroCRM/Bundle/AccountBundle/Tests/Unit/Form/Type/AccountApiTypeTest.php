@@ -9,7 +9,7 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 class AccountApiTypeTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var AccountSelectType
+     * @var AccountApiType
      */
     private $type;
 
@@ -21,8 +21,11 @@ class AccountApiTypeTest extends \PHPUnit_Framework_TestCase
         $flexibleManager = $this->getMockBuilder('Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleManager')
             ->disableOriginalConstructor()
             ->getMock();
+        $router = $this->getMockBuilder('Symfony\Component\Routing\Router')
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->type = new AccountApiType($flexibleManager, 'account');
+        $this->type = new AccountApiType($flexibleManager, 'account', $router);
     }
 
     public function testSetDefaultOptions()
@@ -48,6 +51,9 @@ class AccountApiTypeTest extends \PHPUnit_Framework_TestCase
         $builder = $this->getMockBuilder('Symfony\Component\Form\FormBuilder')
             ->disableOriginalConstructor()
             ->getMock();
+        $builder->expects($this->any(3))
+            ->method('add')
+            ->will($this->returnSelf());
 
         $builder->expects($this->at(1))
             ->method('add')
@@ -59,11 +65,11 @@ class AccountApiTypeTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnSelf());
         $builder->expects($this->at(3))
             ->method('add')
-            ->with('appendContacts', 'oro_entity_identifier')
+            ->with('default_contact', 'oro_entity_identifier')
             ->will($this->returnSelf());
         $builder->expects($this->at(4))
             ->method('add')
-            ->with('removeContacts', 'oro_entity_identifier')
+            ->with('contacts', 'oro_multiple_entity')
             ->will($this->returnSelf());
         $builder->expects($this->at(5))
             ->method('add')

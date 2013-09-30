@@ -1,11 +1,35 @@
 {% extends 'OroUIBundle:actions:index.html.twig' %}
 {% import 'OroUIBundle::macros.html.twig' as UI %}
 {% set gridId = 'contacts-grid' %}
-{% block content %}
-    {% set pageTitle = 'Contacts' %}
-    {% set buttons = [] %}
-    {% if resource_granted('orocrm_contact_create') %}
-        {% set buttons = buttons|merge([UI.addButton({'path' : path('orocrm_contact_create'), 'title' : 'Create contact', 'label' : 'Create contact'})]) %}
+{% set pageTitle = 'Contacts' %}
+
+{% block navButtons %}
+    {% if resource_granted('oro_importexport_import') %}
+        <div class="btn-group">
+            <a type="button"
+               class="btn no-hash"
+               target="_blank"
+               href="{{ asset('bundles/orocrmcontact/import/contacts_sample.csv') }}">
+                {{ 'Import Data Template'|trans }}
+            </a>
+        </div>
     {% endif %}
-    {{ parent() }}
+
+    {% include 'OroImportExportBundle:ImportExport:buttons.html.twig' with {
+        entityClass: 'OroCRM\\Bundle\\ContactBundle\\Entity\\Contact',
+        importProcessor: 'orocrm_contact.import_validation',
+        exportProcessor: 'orocrm_contact',
+        imortTitle: 'Import Contacts'|trans,
+        dataGridName: datagrid.datagrid.name
+    } %}
+
+    {% if resource_granted('orocrm_contact_create') %}
+    <div class="btn-group">
+        {{ UI.addButton({
+            'path' : path('orocrm_contact_create'),
+            'title' : 'Create contact',
+            'label' : 'Create contact'
+        }) }}
+    </div>
+    {% endif %}
 {% endblock %}

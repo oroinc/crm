@@ -27,7 +27,7 @@ class CreateAccountTest extends \PHPUnit_Extensions_Selenium2TestCase
      */
     public function testCreateAccount()
     {
-        $accountname = 'Account_'.mt_rand();
+        $accountName = 'Account_'.mt_rand();
 
         $login = new Login($this);
         $login->setUsername(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_LOGIN)
@@ -35,21 +35,21 @@ class CreateAccountTest extends \PHPUnit_Extensions_Selenium2TestCase
             ->submit()
             ->openAccounts()
             ->add()
-            ->setAccountName($accountname)
+            ->setAccountName($accountName)
             ->setOwner('admin')
             ->save()
-            ->assertMessage('Account successfully saved')
+            ->assertMessage('Account saved')
             ->toGrid()
             ->assertTitle('Accounts - Customers');
 
-        return $accountname;
+        return $accountName;
     }
 
     /**
      * @depends testCreateAccount
-     * @param $accountname
+     * @param $accountName
      */
-    public function testAccountAutocmplete($accountname)
+    public function testAccountAutocomplete($accountName)
     {
         $login = new Login($this);
         $login->setUsername(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_LOGIN)
@@ -57,7 +57,7 @@ class CreateAccountTest extends \PHPUnit_Extensions_Selenium2TestCase
             ->submit()
             ->openAccounts()
             ->add()
-            ->setAccountName($accountname . '_autocomplete_test')
+            ->setAccountName($accountName . '_autocomplete_test')
             ->setOwner('admin')
             ->setStreet('Street')
             ->setCity('City')
@@ -65,57 +65,58 @@ class CreateAccountTest extends \PHPUnit_Extensions_Selenium2TestCase
             ->setState('Aqm')
             ->setZipCode('Zip Code 000')
             ->save()
-            ->assertMessage('Account successfully saved')
+            ->assertMessage('Account saved')
             ->toGrid()
             ->assertTitle('Accounts - Customers');
     }
 
     /**
      * @depends testCreateAccount
-     * @param $accountname
+     * @param $accountName
      * @return string
      */
-    public function testUpdateAccount($accountname)
+    public function testUpdateAccount($accountName)
     {
-        $newAccountname = 'Update_' . $accountname;
+        $newAccountName = 'Update_' . $accountName;
 
         $login = new Login($this);
         $login->setUsername(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_LOGIN)
             ->setPassword(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_PASS)
             ->submit()
             ->openAccounts()
-            ->filterBy('Name', $accountname)
-            ->open(array($accountname))
+            ->filterBy('Account name', $accountName)
+            ->open(array($accountName))
             ->edit()
-            ->assertTitle($accountname . ' - Accounts - Customers')
-            ->setAccountName($newAccountname)
+            ->assertTitle($accountName . ' - Edit - Accounts - Customers')
+            ->setAccountName($newAccountName)
             ->save()
-            ->assertMessage('Account successfully saved')
+            ->assertMessage('Account saved')
             ->toGrid()
             ->assertTitle('Accounts - Customers')
             ->close();
 
-        return $newAccountname;
+        return $newAccountName;
     }
 
     /**
-     * @depends testUpdateContact
-     * @param $accountname
+     * @depends testUpdateAccount
+     * @param $accountName
      */
-    public function testDeleteAccount($accountname)
+    public function testDeleteAccount($accountName)
     {
-        $this->markTestSkipped('BAP-726');
         $login = new Login($this);
         $login->setUsername(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_LOGIN)
             ->setPassword(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_PASS)
             ->submit()
             ->openAccounts()
-            ->filterBy('Name', $accountname)
-            ->open(array($accountname))
+            ->filterBy('Account name', $accountName)
+            ->open(array($accountName))
             ->delete()
             ->assertTitle('Accounts - Customers')
-            ->assertMessage('Item was deleted');
+            ->assertMessage('Account deleted');
 
-        $login->openUsers()->filterBy('Name', $accountname)->assertNoDataMessage('No Accounts were found to match your search');
+        $login->openAccounts()
+            ->filterBy('Account name', $accountName)
+            ->assertNoDataMessage('No account was found to match your search');
     }
 }

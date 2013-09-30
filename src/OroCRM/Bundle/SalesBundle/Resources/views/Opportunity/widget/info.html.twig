@@ -1,4 +1,5 @@
 {% import 'OroUIBundle::macros.html.twig' as macros %}
+{% import 'OroLocaleBundle::macros.html.twig' as Locale %}
 
 {# TODO: Move this to OroUIBundle::macros.html.twig #}
 {% macro renderRow(label, value) %}
@@ -15,7 +16,7 @@
 <div class="widget-content opportunity-info form-horizontal box-content row-fluid">
 
     <div class="span6">
-        {{ _self.renderRow('Topic'|trans, entity.topic) }}
+        {{ _self.renderRow('Opportunity name'|trans, entity.name) }}
         {{ _self.renderRow('Status'|trans, entity.status) }}
 
         {%- if resource_granted('orocrm_contact_view') and entity.contact -%}
@@ -32,14 +33,20 @@
         {%- endif -%}
         {{ _self.renderRow('Account'|trans, accountView) }}
 
-        {{ _self.renderRow('Probability'|trans, entity.probability ? (entity.probability * 100) ~ '%' : '') }}
+        {{ _self.renderRow('Probability'|trans, entity.probability|length ? (entity.probability * 100) ~ '%' : '') }}
         {{ _self.renderRow('Budget amount'|trans, entity.budgetAmount|length ? entity.budgetAmount|number_format(2), '') }}
+
+        {% if dynamic|length %}
+            {% for label, item in dynamic %}
+                {{ _self.renderRow(label|trans, item) }}
+            {% endfor %}
+        {% endif %}
     </div>
     <div class="span6">
         {{ _self.renderRow('Customer need'|trans, entity.customerNeed) }}
         {{ _self.renderRow('Proposed solution'|trans, entity.proposedSolution) }}
         {{ _self.renderRow('Close reason'|trans, entity.closeReason) }}
         {{ _self.renderRow('Close revenue'|trans, entity.closeRevenue|length ? entity.closeRevenue|number_format(2), '') }}
-        {{ _self.renderRow('Close date'|trans, entity.closeDate ? macros.date(entity.closeDate) : '') }}
+        {{ _self.renderRow('Close date'|trans, entity.closeDate ? Locale.date(entity.closeDate) : '') }}
     </div>
 </div>

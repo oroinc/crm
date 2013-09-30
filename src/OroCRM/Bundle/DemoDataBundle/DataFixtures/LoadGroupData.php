@@ -42,7 +42,7 @@ class LoadGroupData extends AbstractFixture implements ContainerAwareInterface, 
         foreach ($groups as $group => $user) {
             $newGroup = new Group($group);
             $newGroup->setOwner($user);
-            $newGroup->setRoles(array($role));
+            //$newGroup->setRoles(array($role));
             $entityManager->persist($newGroup);
         }
         $entityManager->flush();
