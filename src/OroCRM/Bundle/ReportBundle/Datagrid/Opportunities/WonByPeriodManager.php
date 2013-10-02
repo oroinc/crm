@@ -24,7 +24,6 @@ class WonByPeriodManager extends ReportGridManagerAbstract
     protected function configureFields(FieldDescriptionCollection $fieldCollection)
     {
         $field = new FieldDescription();
-
         $field->setName(self::PERIOD_COLUMN_NAME);
         $field->setOptions(
             array(
@@ -65,9 +64,7 @@ class WonByPeriodManager extends ReportGridManagerAbstract
         );
         $fieldCollection->add($field);
 
-
         $field = new FieldDescription();
-
         $field->setName('value');
         $field->setOptions(
             array(
@@ -86,7 +83,6 @@ class WonByPeriodManager extends ReportGridManagerAbstract
         $fieldCollection->add($field);
 
         $field = new FieldDescription();
-
         $field->setName('close_date');
         $field->setOptions(
             array(
@@ -105,7 +101,6 @@ class WonByPeriodManager extends ReportGridManagerAbstract
         $fieldCollection->add($field);
 
         $field = new FieldDescription();
-
         $field->setName('created_at');
         $field->setOptions(
             array(

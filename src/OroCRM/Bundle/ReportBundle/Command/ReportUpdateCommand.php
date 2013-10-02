@@ -6,6 +6,7 @@ use Doctrine\DBAL\ConnectionException;
 use Doctrine\ORM\Query;
 
 use Oro\Bundle\CronBundle\Command\CronCommandInterface;
+
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
@@ -35,6 +36,7 @@ class ReportUpdateCommand extends ContainerAwareCommand implements CronCommandIn
      *
      * @param  InputInterface  $input
      * @param  OutputInterface $output
+     *
      * @return int|null|void
      */
     public function execute(InputInterface $input, OutputInterface $output)
@@ -72,6 +74,7 @@ class ReportUpdateCommand extends ContainerAwareCommand implements CronCommandIn
     /**
      * @param $table
      * @param $data
+     *
      * @return bool
      */
     protected function importData($table, $data)
@@ -85,8 +88,8 @@ class ReportUpdateCommand extends ContainerAwareCommand implements CronCommandIn
         $conn->beginTransaction();
         $conn->executeQuery($conn->getDatabasePlatform()->getTruncateTableSQL($table));
 
-        $query  = "INSERT INTO %s VALUES (" . str_repeat('?, ', count($data[0])) . " ?)";
-        $stmt   = $conn->prepare(sprintf($query, $table));
+        $query = "INSERT INTO %s VALUES (" . str_repeat('?, ', count($data[0])) . " ?)";
+        $stmt  = $conn->prepare(sprintf($query, $table));
 
         foreach ($data as $rec) {
             $i = 1;
