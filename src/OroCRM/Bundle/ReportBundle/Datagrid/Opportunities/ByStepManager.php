@@ -76,6 +76,4 @@ class ByStepManager extends ReportGridManagerAbstract
             $fieldsCollection
         );
     }
-
-
 }

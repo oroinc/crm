@@ -121,5 +121,3 @@ class ReportUpdateCommand extends ContainerAwareCommand implements CronCommandIn
         return $this->getContainer()->get('doctrine.dbal.default_connection');
     }
 }
-
-
