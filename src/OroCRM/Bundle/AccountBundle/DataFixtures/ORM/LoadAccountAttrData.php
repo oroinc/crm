@@ -74,7 +74,7 @@ class LoadAccountAttrData extends AbstractFixture implements ContainerAwareInter
                 array(
                     'code' => 'employees',
                     'label' => 'Employees',
-                    'type' => 'oro_flexibleentity_integer'
+                    'type' => 'oro_flexibleentity_integer_unsigned'
                 ),
                 array(
                     'code' => 'ownership',
