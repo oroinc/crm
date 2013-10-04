@@ -130,12 +130,29 @@ Sales Flow
 * **Managed entity:** Opportunity (OroCRM\Bundle\SalesBundle\Entity\Opportunity).
 * **Workflow Type:** wizard
 
-### Steps And Allowed Transitions
+### Steps
 
-**Develop Step**
+#### Develop Step
+
+**Attributes**
+* Account
+* Contact
+* Budget
+* Probability
+* Customer Need
+* Proposed Solution
+
+**Allowed Transitions**
 * Close
 
-**Close Step**
+#### Close Step**
+
+**Attributes**
+* Close Reason
+* Close Revenue
+* Close Date
+
+**Allowed Transitions**
 * Close As Won
 * Close As Lost
 
