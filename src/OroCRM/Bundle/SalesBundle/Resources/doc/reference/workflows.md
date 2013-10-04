@@ -53,6 +53,8 @@ Unqualified Sales Lead
  * Start workflow *Sales Flow* with created *Opportunity*
  * Redirect user to created workflow
 
+**Step To:** Qualified
+
 #### Reactivate
 
 **Conditions:**
@@ -60,6 +62,8 @@ Unqualified Sales Lead
 
 **Post Actions:**
  * Switch *Lead* status to *Cancelled*
+
+**Step To:** New
 
 #### Cancel
 
@@ -69,14 +73,59 @@ Unqualified Sales Lead
 **Post Actions:**
  * Switch *Lead* status to *Cancelled*
 
+**Step To:** Cancelled
 
 
 Qualified Sales Opportunity
 ---------------------------
 
+* **Managed entity:** Opportunity (OroCRM\Bundle\SalesBundle\Entity\Opportunity).
+* **Workflow Type:** entity
 
+### Steps And Allowed Transitions
 
+**New Step**
+* Close As Won
+* Close As Lost
+* Reopen
 
+**Close Step**
+* Reopen
+
+### Transitions
+
+#### Close As Won
+
+**Conditions:**
+ * *Opportunity* has *In Progress* status
+
+**Post Actions:**
+ * Switch *Opportunity* status to *Won*
+
+**Step To:**
+* Close
+
+#### Close As Lost
+
+**Conditions:**
+ * *Opportunity* has *In Progress* status
+
+**Post Actions:**
+ * Switch *Opportunity* status to *Lost*
+
+**Step To:**
+* Close
+
+#### Reopen
+
+**Conditions:**
+ * *Opportunity* has *Won* or *Lost* status
+
+**Post Actions:**
+ * Switch *Opportunity* status to *In Progress*
+
+**Step To:**
+* New
 
 Sales Flow
 ----------
