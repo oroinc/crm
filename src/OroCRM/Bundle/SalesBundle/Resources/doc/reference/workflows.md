@@ -19,12 +19,12 @@ Following diagram shows available workflows steps and transitions.
 Unqualified Sales Lead
 ----------------------
 
-**Managed entity:** Lead (OroCRM\Bundle\SalesBundle\Entity\Lead).
-**Workflow Type:** entity
+* **Managed entity:** Lead (OroCRM\Bundle\SalesBundle\Entity\Lead).
+* **Workflow Type:** entity
 
-### Steps
+### Steps And Allowed Transitions
 
-#### New Step And Allowed Transitions
+#### New Step
 
 * Qualify
 * Cancel
