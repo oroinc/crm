@@ -102,8 +102,7 @@ Qualified Sales Opportunity
 **Post Actions:**
  * Switch *Opportunity* status to *Won*
 
-**Step To:**
-* Close
+**Step To:** Close
 
 #### Close As Lost
 
@@ -113,8 +112,7 @@ Qualified Sales Opportunity
 **Post Actions:**
  * Switch *Opportunity* status to *Lost*
 
-**Step To:**
-* Close
+**Step To:** Close
 
 #### Reopen
 
@@ -124,8 +122,81 @@ Qualified Sales Opportunity
 **Post Actions:**
  * Switch *Opportunity* status to *In Progress*
 
-**Step To:**
-* New
+**Step To:** New
 
 Sales Flow
 ----------
+
+* **Managed entity:** Opportunity (OroCRM\Bundle\SalesBundle\Entity\Opportunity).
+* **Workflow Type:** wizard
+
+### Steps And Allowed Transitions
+
+**Develop Step**
+* Close
+
+**Close Step**
+* Close As Won
+* Close As Lost
+
+### Transitions
+
+#### Develop
+
+**Conditions:**
+ * *Opportunity* has *In Progress* status
+
+**Post Actions:**
+ * import values of *Opportunity* to workflow
+
+**Step To:** Develop
+
+#### Close
+
+**Conditions:**
+ * *Opportunity* has *In Progress* status
+ * *Probability* is between 0 and 1
+
+**Post Actions:**
+ * import values of *Opportunity* to workflow
+ * set *Close Revenue* to 0
+
+**Step To:** Close
+
+#### Close As Won
+
+**Conditions:**
+ * *Opportunity* has *In Progress* status
+ * *Close Date* is not empty
+ * *Close Revenue* is not empty
+ * *Close Reason* is not empty
+ * *Probability* is between 0 and 1
+ * *Close Reason* is set to "Won"
+
+**Post Actions:**
+ * Set *Probability* to 1
+ * Set values of *Close Data*, *Close Revenue*, *Close Reason*, *Probability* to *Opportunity*
+ * Switch *Opportunity* status to *Won*
+ * Close workflow
+ * Redirect to *Opportunity* view page
+
+**Step To:** Close
+
+#### Close As Lost
+
+**Conditions:**
+ * *Opportunity* has *In Progress* status
+ * *Close Date* is not empty
+ * *Close Revenue* is not empty
+ * *Close Reason* is not empty
+ * *Probability* is between 0 and 1
+ * *Close Reason* is set to "Cancelled" or "Outsold"
+
+**Post Actions:**
+ * Set *Probability* to 0
+ * Set values of *Close Data*, *Close Revenue*, *Close Reason*, *Probability* to *Opportunity*
+ * Switch *Opportunity* status to *Lost*
+ * Close workflow
+ * Redirect to *Opportunity* view page
+
+**Step To:** Close
