@@ -7,7 +7,6 @@ use Oro\Bundle\TestFrameworkBundle\Test\ToolsAPI;
 use Oro\Bundle\TestFrameworkBundle\Test\Client;
 use Symfony\Component\DomCrawler\Form;
 use Symfony\Component\DomCrawler\Crawler;
-use Symfony\Component\HttpFoundation\File\File;
 
 /**
  * @outputBuffering enabled
@@ -123,6 +122,7 @@ class ImportExportTest extends WebTestCase
 
         return $data['url'];
     }
+
     /**
      * @param $url
      *
@@ -162,7 +162,7 @@ class ImportExportTest extends WebTestCase
         // compare header
         for ($column = 0; $column < count($data[0]); $column++) {
             //skip account
-            if (trim($data[0][$column]) != 'Account 1' && trim($data[0][$column]) != 'Account 2') {
+            if (strpos($column, 'Account') != 0) {
                 $this->assertTrue(in_array($data[0][$column], $content[0]), $data[0][$column]);
             }
         }
