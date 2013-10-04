@@ -24,17 +24,14 @@ Unqualified Sales Lead
 
 ### Steps And Allowed Transitions
 
-#### New Step
-
+**New Step**
 * Qualify
 * Cancel
 
-#### Cancelled Step
-
+**Cancelled Step**
 * Reactivate
 
-#### Qualified Step
-
+**Qualified Step**
 * Reactivate
 
 ### Transitions
