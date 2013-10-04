@@ -24,20 +24,17 @@ Unqualified Sales Lead
 
 ### Steps
 
-#### New Step
+#### New Step And Allowed Transitions
 
-**Allowed Transitions:**
 * Qualify
 * Cancel
 
 #### Cancelled Step
 
-**Allowed Transitions:**
 * Reactivate
 
 #### Qualified Step
 
-**Allowed Transitions:**
 * Reactivate
 
 ### Transitions
@@ -49,12 +46,12 @@ Unqualified Sales Lead
 
 **Post Actions:**
  * Switch *Lead* status to *Qualified*
- * If *Lead* doesn't have *Contact* entity (OroCRM\Bundle\ContactBundle\Entity\Contact) create it with first name, last
+ * If *Lead* doesn't have *Contact* entity create it with first name, last
  name, job title, and name as a description of *Contact*
- * If *Lead* has *Address* entity (Oro\Bundle\AddressBundle\Entity\Address) add it to *Contact* as *Contact Address*
+ * If *Lead* has *Address* entity add it to *Contact* as *Contact Address*
  * If *Lead* has *Email* entity, add it to *Contact*
  * If *Lead* has *Phone* entity, add it to *Contact*
- * Create *Opportunity* entity (OroCRM\Bundle\SalesBundle\Entity\Opportunity) based on *Lead* with *In Progress*
+ * Create *Opportunity* entity based on *Lead* with *In Progress*
  status
  * Start workflow *Sales Flow* with created *Opportunity*
  * Redirect user to created workflow
