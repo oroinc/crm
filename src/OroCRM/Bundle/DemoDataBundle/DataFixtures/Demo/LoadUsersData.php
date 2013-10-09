@@ -1,5 +1,5 @@
 <?php
-namespace OroCRM\Bundle\DemoDataBundle\DataFixtures;
+namespace OroCRM\Bundle\DemoDataBundle\DataFixtures\Demo;
 
 use Oro\Bundle\TagBundle\Entity\Tag;
 use Oro\Bundle\TagBundle\Entity\TagManager;
@@ -12,8 +12,6 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 
 use OroCRM\Bundle\DemoDataBundle\DataFixtures\AbstractFlexibleFixture;
-use Oro\Bundle\FlexibleEntityBundle\Model\FlexibleValueInterface;
-use Oro\Bundle\FlexibleEntityBundle\Model\AbstractFlexible;
 use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttributeOption;
 use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttribute;
 use Oro\Bundle\FlexibleEntityBundle\Entity\Repository\FlexibleEntityRepository;
@@ -107,8 +105,8 @@ class LoadUsersData extends AbstractFlexibleFixture implements OrderedFixtureInt
     /**
      * Asserts required attributes were created
      *
-     * @param EntityManager $entityManager
-     * @param string $attributeCodes
+     * @param  EntityManager   $entityManager
+     * @param  string          $attributeCodes
      * @throws \LogicException
      */
     private function assertHasRequiredAttributes($entityManager, $attributeCodes)
@@ -174,16 +172,16 @@ class LoadUsersData extends AbstractFlexibleFixture implements OrderedFixtureInt
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      *
-     * @param string $username
-     * @param string $email
-     * @param string $firstName
-     * @param string $lastName
-     * @param \DateTime $birthday
-     * @param string $company
-     * @param string $website
-     * @param string $gender
-     * @param array $hobbies
-     * @param mixed $role
+     * @param  string    $username
+     * @param  string    $email
+     * @param  string    $firstName
+     * @param  string    $lastName
+     * @param  \DateTime $birthday
+     * @param  string    $company
+     * @param  string    $website
+     * @param  string    $gender
+     * @param  array     $hobbies
+     * @param  mixed     $role
      * @return User
      */
     private function createUser(
@@ -213,15 +211,16 @@ class LoadUsersData extends AbstractFlexibleFixture implements OrderedFixtureInt
         $this->setFlexibleAttributeValue($this->userManager, $user, 'website', $website);
         $this->addFlexibleAttributeValueOptions($this->userManager, $user, 'hobby', $hobbies);
         $user->addRole($role);
+
         return $user;
     }
     /**
      * Create an attribute with options
      *
-     * @param EntityManager $entityManager
-     * @param string $attributeType
-     * @param string $attributeCode
-     * @param array $optionValues
+     * @param  EntityManager     $entityManager
+     * @param  string            $attributeType
+     * @param  string            $attributeCode
+     * @param  array             $optionValues
      * @return AbstractAttribute
      */
     private function createAttributeWithOptions(
@@ -234,14 +233,15 @@ class LoadUsersData extends AbstractFlexibleFixture implements OrderedFixtureInt
         foreach ($optionValues as $value) {
             $attribute->addOption($this->createAttributeOptionWithValue($entityManager, $value));
         }
+
         return $attribute;
     }
 
     /**
      * Create an attribute option with value
      *
-     * @param EntityManager $entityManager
-     * @param string $value
+     * @param  EntityManager           $entityManager
+     * @param  string                  $value
      * @return AbstractAttributeOption
      */
     private function createAttributeOptionWithValue($entityManager, $value)
@@ -249,27 +249,29 @@ class LoadUsersData extends AbstractFlexibleFixture implements OrderedFixtureInt
         $option = $entityManager->createAttributeOption();
         $optionValue = $entityManager->createAttributeOptionValue()->setValue($value);
         $option->addOptionValue($optionValue);
+
         return $option;
     }
 
     /**
      * Generates a username
      *
-     * @param string $firstName
-     * @param string $lastName
+     * @param  string $firstName
+     * @param  string $lastName
      * @return string
      */
     private function generateUsername($firstName, $lastName)
     {
         $uniqueString = substr(uniqid(rand()), -5, 5);
+
         return sprintf("%s.%s_%s", strtolower($firstName), strtolower($lastName), $uniqueString);
     }
 
     /**
      * Generates an email
      *
-     * @param string $firstName
-     * @param string $lastName
+     * @param  string $firstName
+     * @param  string $lastName
      * @return string
      */
     private function generateEmail($firstName, $lastName)
@@ -278,6 +280,7 @@ class LoadUsersData extends AbstractFlexibleFixture implements OrderedFixtureInt
         $domains = array('yahoo.com', 'gmail.com', 'example.com', 'hotmail.com', 'aol.com', 'msn.com');
         $randomIndex = rand(0, count($domains) - 1);
         $domain = $domains[$randomIndex];
+
         return sprintf("%s.%s_%s@%s", strtolower($firstName), strtolower($lastName), $uniqueString, $domain);
     }
 
@@ -297,7 +300,7 @@ class LoadUsersData extends AbstractFlexibleFixture implements OrderedFixtureInt
     /**
      * Loads dictionary from file by name
      *
-     * @param string $name
+     * @param  string $name
      * @return array
      */
     private function loadDictionary($name)
@@ -363,13 +366,14 @@ class LoadUsersData extends AbstractFlexibleFixture implements OrderedFixtureInt
     /**
      * Generates a website
      *
-     * @param string $firstName
-     * @param string $lastName
+     * @param  string $firstName
+     * @param  string $lastName
      * @return string
      */
     private function generateWebsite($firstName, $lastName)
     {
         $domain = 'example.com';
+
         return sprintf("http://%s%s.%s", strtolower($firstName), strtolower($lastName), $domain);
     }
 
@@ -381,6 +385,7 @@ class LoadUsersData extends AbstractFlexibleFixture implements OrderedFixtureInt
     private function generateGender()
     {
         $genders = array('Male', 'Female');
+
         return $genders[rand(0, 1)];
     }
 
@@ -394,6 +399,7 @@ class LoadUsersData extends AbstractFlexibleFixture implements OrderedFixtureInt
         $hobbies = self::getHobbies();
         $randomCount = rand(1, count($hobbies));
         shuffle($hobbies);
+
         return array_slice($hobbies, 0, $randomCount);
     }
 
@@ -410,7 +416,7 @@ class LoadUsersData extends AbstractFlexibleFixture implements OrderedFixtureInt
     /**
      * Persist object
      *
-     * @param mixed $object
+     * @param  mixed $object
      * @return void
      */
     private function persist($object)

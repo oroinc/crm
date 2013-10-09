@@ -1,5 +1,5 @@
 <?php
-namespace OroCRM\Bundle\DemoDataBundle\DataFixtures;
+namespace OroCRM\Bundle\DemoDataBundle\DataFixtures\Demo;
 
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -13,7 +13,6 @@ use OroCRM\Bundle\DemoDataBundle\DataFixtures\AbstractFlexibleFixture;
 
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\Security\Core\SecurityContext;
 
 class LoadUserData extends AbstractFlexibleFixture implements ContainerAwareInterface, OrderedFixtureInterface
 {
