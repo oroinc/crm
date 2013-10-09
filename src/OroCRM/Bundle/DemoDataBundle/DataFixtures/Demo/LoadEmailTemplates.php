@@ -1,5 +1,5 @@
 <?php
-namespace OroCRM\Bundle\DemoDataBundle\DataFixtures;
+namespace OroCRM\Bundle\DemoDataBundle\DataFixtures\Demo;
 
 use Oro\Bundle\EmailBundle\DataFixtures\ORM\AbstractEmailFixture;
 

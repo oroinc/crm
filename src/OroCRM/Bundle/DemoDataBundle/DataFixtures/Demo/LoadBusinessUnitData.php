@@ -1,6 +1,5 @@
 <?php
-namespace OroCRM\Bundle\DemoDataBundle\DataFixtures;
-
+namespace OroCRM\Bundle\DemoDataBundle\DataFixtures\Demo;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
@@ -65,7 +64,7 @@ class LoadBusinessUnitData extends AbstractFixture implements ContainerAwareInte
 
         /** @var BusinessUnit $oroMain */
         $oroMain = $this->businessUnitRepository->findOneBy(array('name' => 'Main'));
-        if (!$oroMain ) {
+        if (!$oroMain) {
             $oroMain = $this->businessUnitRepository->findOneBy(array('name' => 'Acme, General'));
         }
 
@@ -112,13 +111,14 @@ class LoadBusinessUnitData extends AbstractFixture implements ContainerAwareInte
 
     /**
      * @param EntityManager $manager
-     * @param mixed $object
+     * @param mixed         $object
      */
     private function persistAndFlush($manager, $object)
     {
         $manager->persist($object);
         $manager->flush();
     }
+
     public function getOrder()
     {
         return 100;

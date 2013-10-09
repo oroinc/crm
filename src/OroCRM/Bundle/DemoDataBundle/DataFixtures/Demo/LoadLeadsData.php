@@ -1,7 +1,6 @@
 <?php
-namespace OroCRM\Bundle\DemoDataBundle\DataFixtures;
+namespace OroCRM\Bundle\DemoDataBundle\DataFixtures\Demo;
 
-use Faker\Factory;
 use OroCRM\Bundle\SalesBundle\Entity\Lead;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
@@ -97,7 +96,7 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
                 $this->persist($this->em, $lead);
 
                 $workFlow = $this->workflowManager->startWorkflow('sales_lead', $lead, 'qualify');
-                if ((bool)rand(0, 1)) {
+                if ((bool) rand(0, 1)) {
                     /** @var WorkflowItem $salesFlow */
                     $salesFlow = $workFlow->getResult()->get('workflowItem');
                     $this->transit(
@@ -111,7 +110,7 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
                             'probability' => round(rand(50, 85) / 100.00, 2)
                         )
                     );
-                    if ((bool)rand(0, 1)) {
+                    if ((bool) rand(0, 1)) {
                         $reason = $this->em->find('OroCRMSalesBundle:OpportunityCloseReason', 'won');
                         $this->transit(
                             $this->workflowManager,
@@ -124,7 +123,7 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
                                 'probability' => 1
                             )
                         );
-                    } elseif ((bool)rand(0, 1)) {
+                    } elseif ((bool) rand(0, 1)) {
                         $reason = $this->em->find('OroCRMSalesBundle:OpportunityCloseReason', 'cancelled');
                         $this->transit(
                             $this->workflowManager,
@@ -156,7 +155,7 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
         $securityContext->setToken($token);
     }
     /**
-     * @param array $data
+     * @param  array $data
      * @return Lead
      */
     protected function createLead(array $data)
@@ -214,9 +213,9 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
 
     /**
      * @param WorkflowManager $workflowManager
-     * @param WorkflowItem $workflowItem
-     * @param string $step
-     * @param array $data
+     * @param WorkflowItem    $workflowItem
+     * @param string          $step
+     * @param array           $data
      */
     protected function transit($workflowManager, $workflowItem, $step, array $data)
     {

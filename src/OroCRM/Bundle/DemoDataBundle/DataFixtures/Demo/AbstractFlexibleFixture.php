@@ -1,5 +1,5 @@
 <?php
-namespace OroCRM\Bundle\DemoDataBundle\DataFixtures;
+namespace OroCRM\Bundle\DemoDataBundle\DataFixtures\Demo;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\ORM\EntityManager;
@@ -14,10 +14,10 @@ abstract class AbstractFlexibleFixture extends AbstractFixture
     /**
      * Sets a flexible attribute value
      *
-     * @param EntityManager $entityManger
-     * @param AbstractFlexible $flexibleEntity
-     * @param string $attributeCode
-     * @param string $value
+     * @param  EntityManager    $entityManger
+     * @param  AbstractFlexible $flexibleEntity
+     * @param  string           $attributeCode
+     * @param  string           $value
      * @return void
      * @throws \LogicException
      */
@@ -37,10 +37,10 @@ abstract class AbstractFlexibleFixture extends AbstractFixture
     /**
      * Sets a flexible attribute value as option with given value
      *
-     * @param EntityManager $entityManger
-     * @param AbstractFlexible $flexibleEntity
-     * @param string $attributeCode
-     * @param string $value
+     * @param  EntityManager    $entityManger
+     * @param  AbstractFlexible $flexibleEntity
+     * @param  string           $attributeCode
+     * @param  string           $value
      * @return void
      * @throws \LogicException
      */
@@ -60,10 +60,10 @@ abstract class AbstractFlexibleFixture extends AbstractFixture
     /**
      * Adds option values to flexible attribute value
      *
-     * @param EntityManager $entityManger
-     * @param AbstractFlexible $flexibleEntity
-     * @param string $attributeCode
-     * @param array $values
+     * @param  EntityManager    $entityManger
+     * @param  AbstractFlexible $flexibleEntity
+     * @param  string           $attributeCode
+     * @param  array            $values
      * @return void
      * @throws \LogicException
      */
@@ -87,9 +87,9 @@ abstract class AbstractFlexibleFixture extends AbstractFixture
     /**
      * Finds an attribute option with value
      *
-     * @param EntityManager $entityManger
-     * @param AbstractAttribute $attribute
-     * @param string $value
+     * @param  EntityManager           $entityManger
+     * @param  AbstractAttribute       $attribute
+     * @param  string                  $value
      * @return AbstractAttributeOption
      * @throws \LogicException
      */
@@ -112,9 +112,9 @@ abstract class AbstractFlexibleFixture extends AbstractFixture
     /**
      * Gets or creates a flexible value for attribute
      *
-     * @param EntityManager $entityManger
-     * @param AbstractFlexible $flexibleEntity
-     * @param AbstractAttribute $attribute
+     * @param  EntityManager          $entityManger
+     * @param  AbstractFlexible       $flexibleEntity
+     * @param  AbstractAttribute      $attribute
      * @return FlexibleValueInterface
      */
     protected function getFlexibleValueForAttribute(
@@ -128,14 +128,15 @@ abstract class AbstractFlexibleFixture extends AbstractFixture
             $flexibleValue->setAttribute($attribute);
             $flexibleEntity->addValue($flexibleValue);
         }
+
         return $flexibleValue;
     }
 
     /**
      * Finds an attribute
      *
-     * @param EntityManager $entityManger
-     * @param string $attributeCode
+     * @param  EntityManager     $entityManger
+     * @param  string            $attributeCode
      * @return AbstractAttribute
      */
     protected function findAttribute($entityManger, $attributeCode)
@@ -146,9 +147,9 @@ abstract class AbstractFlexibleFixture extends AbstractFixture
     /**
      * Create an attribute
      *
-     * @param EntityManager $entityManger
-     * @param string $attributeType
-     * @param string $attributeCode
+     * @param  EntityManager     $entityManger
+     * @param  string            $attributeType
+     * @param  string            $attributeCode
      * @return AbstractAttribute
      */
     protected function createAttribute($entityManger, $attributeType, $attributeCode)
