@@ -11,7 +11,6 @@ use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\EntityManager;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 
-use OroCRM\Bundle\DemoDataBundle\DataFixtures\AbstractFlexibleFixture;
 use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttributeOption;
 use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttribute;
 use Oro\Bundle\FlexibleEntityBundle\Entity\Repository\FlexibleEntityRepository;

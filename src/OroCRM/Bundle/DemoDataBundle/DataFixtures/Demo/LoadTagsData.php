@@ -8,7 +8,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 
-use OroCRM\Bundle\DemoDataBundle\DataFixtures\AbstractFlexibleFixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\EntityManager;

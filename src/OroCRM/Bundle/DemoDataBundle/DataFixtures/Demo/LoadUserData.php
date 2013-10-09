@@ -9,7 +9,6 @@ use Doctrine\ORM\EntityManager;
 
 use Oro\Bundle\FlexibleEntityBundle\Entity\Repository\FlexibleEntityRepository;
 use Oro\Bundle\TagBundle\Entity\TagManager;
-use OroCRM\Bundle\DemoDataBundle\DataFixtures\AbstractFlexibleFixture;
 
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
