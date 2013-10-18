@@ -9,6 +9,7 @@ use Doctrine\Common\Collections\Collection;
 
 use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 
+use Oro\Bundle\LocaleBundle\Model\FullNameInterface;
 use Oro\Bundle\TagBundle\Entity\Taggable;
 use Oro\Bundle\AddressBundle\Entity\AddressType;
 use Oro\Bundle\EmailBundle\Entity\EmailOwnerInterface;
@@ -46,7 +47,7 @@ use OroCRM\Bundle\AccountBundle\Entity\Account;
  *  }
  * )
  */
-class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
+class Contact extends ExtendContact implements Taggable, EmailOwnerInterface, FullNameInterface
 {
     /**
      * @var int
@@ -75,6 +76,15 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
      * @Oro\Versioned
      */
     protected $firstName;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="middlename", type="string", length=255)
+     * @Soap\ComplexType("string")
+     * @Oro\Versioned
+     */
+    protected $middleName;
 
     /**
      * @var string
@@ -1347,5 +1357,24 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
     public function __toString()
     {
         return (string) $this->getFullname();
+    }
+
+    /**
+     * @return string
+     */
+    public function getMiddleName()
+    {
+        return $this->middleName;
+    }
+
+    /**
+     * @param string $middleName
+     * @return Contact
+     */
+    public function setMiddleName($middleName)
+    {
+        $this->middleName = $middleName;
+
+        return $this;
     }
 }

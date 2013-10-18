@@ -35,8 +35,9 @@
 
     <script type="text/javascript">
         {% set wid = app.request.get('_wid') %}
-        require(['jquery', 'oro/datagrid/callback-listener', 'oro/widget-manager', 'oro/multiple-entity/model'],
-                function($, CallbackListener, WidgetManager, MultipleEntityModel) {
+        require(['jquery', 'oro/datagrid/callback-listener', 'oro/widget-manager', 'oro/multiple-entity/model',
+            'oro/formatter/name'],
+                function($, CallbackListener, WidgetManager, MultipleEntityModel, nameFormatter) {
                     var addedModels = {};
                     WidgetManager.getWidgetInstance({{ wid|json_encode|raw }}, function(widget) {
                         if (widget.options.type == 'dialog') {
@@ -71,7 +72,7 @@
                                     addedModels[id] = new MultipleEntityModel({
                                         'id': model.get('id'),
                                         'link': Routing.generate('orocrm_contact_info', {id: model.get('id')}),
-                                        'label': model.get('first_name') + ' ' + model.get('last_name'),
+                                        'label': nameFormatter.format(model.toJSON()),
                                         'extraData': [
                                             {
                                                 'label': 'Phone',
