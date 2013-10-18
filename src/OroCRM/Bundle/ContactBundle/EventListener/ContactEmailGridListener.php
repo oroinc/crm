@@ -2,7 +2,9 @@
 
 namespace OroCRM\Bundle\ContactBundle\EventListener;
 
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\QueryBuilder;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 use Oro\Bundle\DataGridBundle\Datasource\OrmDatasource;
 use Oro\Bundle\DataGridBundle\Event\BuildAfter;
@@ -14,8 +16,16 @@ class ContactEmailGridListener
     /** @var  EmailQueryFactory */
     protected $queryFactory;
 
-    public function __construct(EmailQueryFactory $factory)
+    /** @var \Symfony\Component\HttpFoundation\Request  */
+    protected $request;
+
+    /** @var  EntityManager */
+    protected $em;
+
+    public function __construct(ContainerInterface $container, EmailQueryFactory $factory)
     {
+        $this->request = $container->get('request');
+        $this->em      = $container->get('doctrine.orm.entity_manager');
         $this->queryFactory = $factory;
     }
 
@@ -31,10 +41,17 @@ class ContactEmailGridListener
 
             $this->queryFactory->prepareQuery($queryBuilder);
 
-            // TODO: find contact
-            $contact = 'something';
-            $emailAddresses = EmailUtil::extractEmailAddresses($contact->getEmails());
+            if ($id = $this->request->get('contactId')) {
+                $contact = $this->em
+                    ->getRepository('OroCRMContactBundle:Contact')
+                    ->find($id);
 
+                $emails = $contact->getEmails();
+            } else {
+                $emails = false;
+            }
+
+            $emailAddresses = EmailUtil::extractEmailAddresses($emails);
 
             $this->addRecipientsQuery($queryBuilder, $emailAddresses);
         }
