@@ -80,7 +80,7 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface, Fu
     /**
      * @var string
      *
-     * @ORM\Column(name="middlename", type="string", length=255)
+     * @ORM\Column(name="middlename", type="string", length=255, nullable=true)
      * @Soap\ComplexType("string")
      * @Oro\Versioned
      */
