@@ -71,7 +71,7 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface, Fu
     /**
      * @var string
      *
-     * @ORM\Column(name="firstname", type="string", length=255)
+     * @ORM\Column(name="first_name", type="string", length=255)
      * @Soap\ComplexType("string")
      * @Oro\Versioned
      */
@@ -80,7 +80,7 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface, Fu
     /**
      * @var string
      *
-     * @ORM\Column(name="middlename", type="string", length=255, nullable=true)
+     * @ORM\Column(name="middle_name", type="string", length=255, nullable=true)
      * @Soap\ComplexType("string")
      * @Oro\Versioned
      */
@@ -89,7 +89,7 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface, Fu
     /**
      * @var string
      *
-     * @ORM\Column(name="lastname", type="string", length=255)
+     * @ORM\Column(name="last_name", type="string", length=255)
      * @Soap\ComplexType("string")
      * @Oro\Versioned
      */

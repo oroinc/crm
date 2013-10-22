@@ -16,8 +16,11 @@ class LeadType extends AbstractType
     {
         $builder
             ->add('name', 'text', array('required' => true))
+            ->add('namePrefix', 'text', array('required' => false))
             ->add('firstName', 'text', array('required' => true))
+            ->add('middleName', 'text', array('required' => false))
             ->add('lastName', 'text', array('required' => true))
+            ->add('nameSuffix', 'text', array('required' => false))
             ->add('contact', 'orocrm_contact_select', array('required' => false))
             ->add('jobTitle', 'text', array('required' => false))
             ->add('phoneNumber', 'text', array('required' => false))
