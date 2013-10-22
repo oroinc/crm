@@ -61,8 +61,8 @@ class LoadUserData extends AbstractFlexibleFixture implements ContainerAwareInte
         $sale
             ->setUsername('sale')
             ->setPlainPassword('sale')
-            ->setFirstname('Ellen')
-            ->setLastname('Rowell')
+            ->setFirstName('Ellen')
+            ->setLastName('Rowell')
             ->addRole($saleRole)
             ->addGroup($salesGroup)
             ->setEmail('sale@example.com')
@@ -90,8 +90,8 @@ class LoadUserData extends AbstractFlexibleFixture implements ContainerAwareInte
         $marketing
             ->setUsername('marketing')
             ->setPlainPassword('marketing')
-            ->setFirstname('Michael')
-            ->setLastname('Buckley')
+            ->setFirstName('Michael')
+            ->setLastName('Buckley')
             ->addRole($marketingRole)
             ->addGroup($marketingGroup)
             ->setEmail('marketing@example.com')

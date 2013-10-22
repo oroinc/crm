@@ -287,11 +287,11 @@ class ContactTest extends \PHPUnit_Framework_TestCase
      */
     protected function getFullNameTest($contact)
     {
-        $this->assertEquals($contact->getFullname(), sprintf('%s %s', 'First', 'Last'));
+        $this->assertEquals($contact->getFullName(), sprintf('%s %s', 'First', 'Last'));
 
         $contact->setNameFormat('%last%, %first%');
 
-        $this->assertEquals($contact->getFullname(), sprintf('%s, %s', 'Last', 'First'));
+        $this->assertEquals($contact->getFullName(), sprintf('%s, %s', 'Last', 'First'));
     }
 
     public function testGetTags()

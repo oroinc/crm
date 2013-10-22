@@ -528,7 +528,7 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface, Fu
      * @param  string|null $format [optional]
      * @return string
      */
-    public function getFullname($format = null)
+    public function getFullName($format = null)
     {
         return trim(
             str_replace(
@@ -1356,7 +1356,7 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface, Fu
      */
     public function __toString()
     {
-        return (string) $this->getFullname();
+        return (string) $this->getFullName();
     }
 
     /**
