@@ -404,6 +404,25 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface, Fu
     }
 
     /**
+     * @param string $namePrefix
+     * @return Contact
+     */
+    public function setNamePrefix($namePrefix)
+    {
+        $this->namePrefix = $namePrefix;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNamePrefix()
+    {
+        return $this->namePrefix;
+    }
+
+    /**
      * @param string $firstName
      * @return Contact
      */
@@ -423,6 +442,25 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface, Fu
     }
 
     /**
+     * @return string
+     */
+    public function getMiddleName()
+    {
+        return $this->middleName;
+    }
+
+    /**
+     * @param string $middleName
+     * @return Contact
+     */
+    public function setMiddleName($middleName)
+    {
+        $this->middleName = $middleName;
+
+        return $this;
+    }
+
+    /**
      * @param string $lastName
      * @return Contact
      */
@@ -439,25 +477,6 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface, Fu
     public function getLastName()
     {
         return $this->lastName;
-    }
-
-    /**
-     * @param string $namePrefix
-     * @return Contact
-     */
-    public function setNamePrefix($namePrefix)
-    {
-        $this->namePrefix = $namePrefix;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getNamePrefix()
-    {
-        return $this->namePrefix;
     }
 
     /**
@@ -1357,24 +1376,5 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface, Fu
     public function __toString()
     {
         return (string) $this->getFullName();
-    }
-
-    /**
-     * @return string
-     */
-    public function getMiddleName()
-    {
-        return $this->middleName;
-    }
-
-    /**
-     * @param string $middleName
-     * @return Contact
-     */
-    public function setMiddleName($middleName)
-    {
-        $this->middleName = $middleName;
-
-        return $this;
     }
 }

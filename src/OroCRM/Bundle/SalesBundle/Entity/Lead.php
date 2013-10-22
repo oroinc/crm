@@ -8,6 +8,7 @@ use Oro\Bundle\AddressBundle\Entity\Address;
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\UserBundle\Entity\User;
+use Oro\Bundle\LocaleBundle\Model\FullNameInterface;
 
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\SalesBundle\Model\ExtendLead;
@@ -34,7 +35,7 @@ use OroCRM\Bundle\SalesBundle\Model\ExtendLead;
  *  }
  * )
  */
-class Lead extends ExtendLead
+class Lead extends ExtendLead implements FullNameInterface
 {
     /**
      * @var integer
@@ -71,6 +72,14 @@ class Lead extends ExtendLead
     /**
      * @var string
      *
+     * @ORM\Column(name="name_prefix", type="string", length=255, nullable=true)
+     * @Oro\Versioned
+     */
+    protected $namePrefix;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="first_name", type="string", length=255)
      * @Oro\Versioned
      */
@@ -79,10 +88,26 @@ class Lead extends ExtendLead
     /**
      * @var string
      *
+     * @ORM\Column(name="middle_name", type="string", length=255, nullable=true)
+     * @Oro\Versioned
+     */
+    protected $middleName;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="last_name", type="string", length=255)
      * @Oro\Versioned
      */
     protected $lastName;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="name_suffix", type="string", length=255, nullable=true)
+     * @Oro\Versioned
+     */
+    protected $nameSuffix;
 
     /**
      * @var string
@@ -173,7 +198,7 @@ class Lead extends ExtendLead
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -189,18 +214,37 @@ class Lead extends ExtendLead
     public function setName($name)
     {
         $this->name = $name;
-    
+
         return $this;
     }
 
     /**
      * Get topic
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * @param string $namePrefix
+     * @return Contact
+     */
+    public function setNamePrefix($namePrefix)
+    {
+        $this->namePrefix = $namePrefix;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNamePrefix()
+    {
+        return $this->namePrefix;
     }
 
     /**
@@ -212,18 +256,37 @@ class Lead extends ExtendLead
     public function setFirstName($firstName)
     {
         $this->firstName = $firstName;
-    
+
         return $this;
     }
 
     /**
      * Get first name
      *
-     * @return string 
+     * @return string
      */
     public function getFirstName()
     {
         return $this->firstName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMiddleName()
+    {
+        return $this->middleName;
+    }
+
+    /**
+     * @param string $middleName
+     * @return Contact
+     */
+    public function setMiddleName($middleName)
+    {
+        $this->middleName = $middleName;
+
+        return $this;
     }
 
     /**
@@ -235,18 +298,37 @@ class Lead extends ExtendLead
     public function setLastName($lastName)
     {
         $this->lastName = $lastName;
-    
+
         return $this;
     }
 
     /**
      * Get lastName
      *
-     * @return string 
+     * @return string
      */
     public function getLastName()
     {
         return $this->lastName;
+    }
+
+    /**
+     * @param string $nameSuffix
+     * @return Contact
+     */
+    public function setNameSuffix($nameSuffix)
+    {
+        $this->nameSuffix = $nameSuffix;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNameSuffix()
+    {
+        return $this->nameSuffix;
     }
 
     /**
@@ -258,14 +340,14 @@ class Lead extends ExtendLead
     public function setJobTitle($jobTitle)
     {
         $this->jobTitle = $jobTitle;
-    
+
         return $this;
     }
 
     /**
      * Get job title
      *
-     * @return string 
+     * @return string
      */
     public function getJobTitle()
     {
@@ -281,14 +363,14 @@ class Lead extends ExtendLead
     public function setPhoneNumber($phoneNumber)
     {
         $this->phoneNumber = $phoneNumber;
-    
+
         return $this;
     }
 
     /**
      * Get phone number
      *
-     * @return string 
+     * @return string
      */
     public function getPhoneNumber()
     {
@@ -304,14 +386,14 @@ class Lead extends ExtendLead
     public function setEmail($email)
     {
         $this->email = $email;
-    
+
         return $this;
     }
 
     /**
      * Get email
      *
-     * @return string 
+     * @return string
      */
     public function getEmail()
     {
@@ -327,14 +409,14 @@ class Lead extends ExtendLead
     public function setCompanyName($companyName)
     {
         $this->companyName = $companyName;
-    
+
         return $this;
     }
 
     /**
      * Get company name
      *
-     * @return string 
+     * @return string
      */
     public function getCompanyName()
     {
@@ -350,14 +432,14 @@ class Lead extends ExtendLead
     public function setWebsite($website)
     {
         $this->website = $website;
-    
+
         return $this;
     }
 
     /**
      * Get website
      *
-     * @return string 
+     * @return string
      */
     public function getWebsite()
     {
@@ -373,14 +455,14 @@ class Lead extends ExtendLead
     public function setNumberOfEmployees($numberOfEmployees)
     {
         $this->numberOfEmployees = $numberOfEmployees;
-    
+
         return $this;
     }
 
     /**
      * Get number of employees
      *
-     * @return integer 
+     * @return integer
      */
     public function getNumberOfEmployees()
     {
@@ -396,14 +478,14 @@ class Lead extends ExtendLead
     public function setIndustry($industry)
     {
         $this->industry = $industry;
-    
+
         return $this;
     }
 
     /**
      * Get industry
      *
-     * @return string 
+     * @return string
      */
     public function getIndustry()
     {

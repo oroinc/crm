@@ -342,6 +342,7 @@ class ContactTest extends \PHPUnit_Framework_TestCase
         return array(
             'namePrefix' => array('namePrefix', 'test', 'test'),
             'firstName' => array('firstName', 'test', 'test'),
+            'middleName' => array('middleName', 'test', 'test'),
             'lastName' => array('lastName', 'test', 'test'),
             'nameSuffix' => array('nameSuffix', 'test', 'test'),
             'gender' => array('gender', 'male', 'male'),
