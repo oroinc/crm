@@ -1,23 +1,23 @@
 <div class="widget-content grid-widget-content">
     {% set gridId = "entity-grid-" ~ random() %}
     {% set listenerParameters = {
-    'columnName': 'has_account',
-    'selectors': {
-    'included': '#appendContacts',
-    'excluded': '#removeContacts'
-    }
+        'columnName': 'has_account',
+        'selectors': {
+            'included': '#appendContacts',
+            'excluded': '#removeContacts'
+        }
     } %}
     {% set stateParameters = {
-    'parameters': {
-    'data_in': app.request.get('added'),
-    'data_not_in': app.request.get('removed')
-    }
+        'parameters': {
+            'data_in': app.request.get('added'),
+            'data_not_in': app.request.get('removed')
+        }
     } %}
     {% placeholder prepare_grid with {
-    'datagrid': datagrid,
-    'selector': '#' ~ gridId,
-    'parameters': listenerParameters,
-    'state': stateParameters
+        'datagrid': datagrid,
+        'selector': '#' ~ gridId,
+        'parameters': listenerParameters,
+        'state': stateParameters
     } %}
 
     <style type="text/css">
