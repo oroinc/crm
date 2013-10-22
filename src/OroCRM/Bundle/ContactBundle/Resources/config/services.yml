@@ -186,6 +186,7 @@ services:
     orocrm_contact.event_listener.contact_email_grid_listener:
         class: %orocrm_contact.event_listener.contact_email_grid_listener.class%
         arguments:
+          - @service_container
           - @oro_email.datagrid_query_factory
         tags:
-          - { name: kernel.event_listener, event: oro_grid.datgrid.build.after.users-email-grid, method: onBuildAfter }
+          - { name: kernel.event_listener, event: oro_grid.datgrid.build.after.contacts-email-grid, method: onBuildAfter }
