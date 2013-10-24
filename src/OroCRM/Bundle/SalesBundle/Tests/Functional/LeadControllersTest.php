@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCrRM\Bundle\SalesBundle\Tests\Functional;
+namespace OroCRM\Bundle\SalesBundle\Tests\Functional;
 
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Bundle\TestFrameworkBundle\Test\ToolsAPI;
