@@ -1,13 +1,11 @@
 <?php
-namespace OroCRM\Bundle\DemoDataBundle\DataFixtures;
+namespace OroCRM\Bundle\DemoDataBundle\DataFixtures\Demo;
 
 use Oro\Bundle\TagBundle\Entity\Tag;
 use Oro\Bundle\TagBundle\Entity\TagManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
-
-use OroCRM\Bundle\DemoDataBundle\DataFixtures\AbstractFlexibleFixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\EntityRepository;
@@ -139,7 +137,7 @@ class LoadAccountData extends AbstractFlexibleFixture implements ContainerAwareI
     /**
      * Create an Account
      *
-     * @param array $data
+     * @param  array   $data
      * @return Account
      */
     private function createAccount(array $data)

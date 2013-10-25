@@ -1,5 +1,5 @@
 <?php
-namespace OroCRM\Bundle\DemoDataBundle\DataFixtures;
+namespace OroCRM\Bundle\DemoDataBundle\DataFixtures\Demo;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
@@ -16,7 +16,6 @@ use Oro\Bundle\NavigationBundle\Entity\Builder\ItemFactory;
 
 class LoadPintabsData extends AbstractFixture implements ContainerAwareInterface, OrderedFixtureInterface
 {
-
     /**
      * @var ContainerInterface
      */

@@ -1,5 +1,5 @@
 <?php
-namespace OroCRM\Bundle\DemoDataBundle\DataFixtures;
+namespace OroCRM\Bundle\DemoDataBundle\DataFixtures\Demo;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
@@ -21,7 +21,6 @@ class LoadAclData extends AbstractFixture implements ContainerAwareInterface, Or
     {
         $this->container = $container;
         $this->aclmanager = $container->get('oro_security.acl.manager');
-
     }
 
     public function load(ObjectManager $manager)
@@ -51,11 +50,11 @@ class LoadAclData extends AbstractFixture implements ContainerAwareInterface, Or
                 'Entity:OroOrganizationBundle:BusinessUnit',
                 'Entity:OroNotificationBundle:EmailNotification',
                 'Entity:OroEmailBundle:EmailTemplate',
+                'Entity:OroEmailBundle:Email',
                 'Entity:OroUserBundle:Group',
                 'Entity:OroUserBundle:Role',
                 'Entity:OroUserBundle:User',
                 'Action:oro_jobs',
-                'Action:oro_email_view',
                 'Action:oro_dataaudit_history',
                 'Action:oro_config_system',
                 'Action:oro_entityconfig_manage'

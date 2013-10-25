@@ -1,5 +1,5 @@
 <?php
-namespace OroCRM\Bundle\DemoDataBundle\DataFixtures;
+namespace OroCRM\Bundle\DemoDataBundle\DataFixtures\Demo;
 
 use Oro\Bundle\TagBundle\Entity\Tag;
 use Oro\Bundle\TagBundle\Entity\TagManager;
@@ -8,7 +8,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 
-use OroCRM\Bundle\DemoDataBundle\DataFixtures\AbstractFlexibleFixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\EntityManager;
@@ -28,12 +27,9 @@ use OroCRM\Bundle\ContactBundle\Entity\Group;
 use OroCRM\Bundle\ContactBundle\Entity\ContactEmail;
 use OroCRM\Bundle\ContactBundle\Entity\ContactPhone;
 use OroCRM\Bundle\ContactBundle\Entity\ContactAddress;
-use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
-
 
 class LoadContactData extends AbstractFlexibleFixture implements ContainerAwareInterface, OrderedFixtureInterface
 {
-
     /**
      * @var ContainerInterface
      */
@@ -129,14 +125,12 @@ class LoadContactData extends AbstractFlexibleFixture implements ContainerAwareI
         $this->users = $userStorageManager->getRepository('OroUserBundle:User')->findAll();
         $this->countries = $userStorageManager->getRepository('OroAddressBundle:Country')->findAll();
 
-
         $this->accounts = $this->contactManager->getRepository('OroCRMAccountBundle:Account')->findAll();
         $this->contactGroups = $this->contactManager->getRepository('OroCRMContactBundle:Group')->findAll();
         $this->contactSources = $this->contactManager->getRepository('OroCRMContactBundle:Source')->findAll();
 
         $this->tagsRepository = $entityManager->getRepository('OroTagBundle:Tag');
     }
-
 
     /**
      * Load Contacts
@@ -195,7 +189,7 @@ class LoadContactData extends AbstractFlexibleFixture implements ContainerAwareI
     /**
      * Create a Contact
      *
-     * @param array $data
+     * @param  array   $data
      * @return Contact
      */
     private function createContact(array $data)

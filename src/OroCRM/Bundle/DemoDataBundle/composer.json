@@ -1,0 +1,22 @@
+{
+    "name": "oro/demodata-bundle",
+    "type": "symfony-bundle",
+    "description": "CRM Demo Data Bundle",
+    "keywords": ["CRM", "Demo"],
+    "homepage": "https://github.com/laboro/DemoDataBundle",
+    "license": "MIT",
+    "require": {
+        "php": ">=5.3.3",
+        "doctrine/data-fixtures": "@dev"
+    },
+    "autoload": {
+        "psr-0": { "OroCRM\\Bundle\\DemoDataBundle": "" }
+    },
+    "target-dir": "OroCRM/Bundle/DemoDataBundle",
+    "minimum-stability": "dev",
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0-dev"
+        }
+    }
+}
