@@ -32,6 +32,8 @@ use OroCRM\Bundle\AccountBundle\Entity\Account;
  * @ORM\HasLifecycleCallbacks()
  * @Oro\Loggable
  * @Config(
+ *  routeName="orocrm_contact_index",
+ *  routeView="orocrm_contact_view",
  *  defaultValues={
  *      "entity"={"label"="Contact", "plural_label"="Contacts"},
  *      "ownership"={
