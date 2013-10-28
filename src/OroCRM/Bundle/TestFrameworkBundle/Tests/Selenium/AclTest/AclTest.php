@@ -3,6 +3,7 @@
 namespace OroCRM\Bundle\TestsBundle\Tests\Selenium;
 
 use Oro\Bundle\TestFrameworkBundle\Pages\Objects\Login;
+use Oro\Bundle\TestFrameworkBundle\Pages\Page;
 
 class AclTest extends \PHPUnit_Extensions_Selenium2TestCase
 {
@@ -92,7 +93,7 @@ class AclTest extends \PHPUnit_Extensions_Selenium2TestCase
             'Element present so ACL for Users do not work'
         );
         $login->assertElementNotPresent("//div[@id='search-div']", 'Element present so ACL for Search do not work');
-        $login->byXPath("//ul[@class='nav pull-right']//a[@class='dropdown-toggle']")->click();
+        $login->byXPath("//ul[@class='nav pull-right user-menu']//a[@class='dropdown-toggle']")->click();
     }
 
     /**
@@ -164,41 +165,18 @@ class AclTest extends \PHPUnit_Extensions_Selenium2TestCase
     }
 
     /**
-     * @return integer
-     */
-    public function testGetAdminId()
-    {
-        $username = 'admin';
-        $login = new Login($this);
-        $login->setUsername(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_LOGIN)
-            ->setPassword(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_PASS)
-            ->submit()
-            ->openUsers()
-            ->filterBy('Username', $username)
-            ->open(array($username));
-        $array = explode('/', ($this->url()));
-        $adminId = end($array);
-
-        return $adminId;
-    }
-
-    /**
      * @param $username
-     * @param $adminId
      * @depends testCreateUser
-     * @depends testGetAdminId
      * @depends testEditRole
      */
-    public function testViewUserInfo($username, $adminId)
+    public function testEditUserProfile($username)
     {
-        //$this->markTestSkipped('Due bug CRM-126');
         $login = new Login($this);
         $login->setUsername($username)
             ->setPassword('123123q')
             ->submit()
             ->openUser()
             ->viewInfo($username)
-            ->openAclCheck()
-            ->assertAcl('user/view/' . $adminId);
+            ->checkRoleSelector();
     }
 }

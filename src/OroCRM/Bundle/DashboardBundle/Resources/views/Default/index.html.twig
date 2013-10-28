@@ -69,12 +69,23 @@
                 },
             ] %}
 
+            {% set index = 0 %}
             {% for widget in widgetsArray %}
-                {% if loop.index is odd %}<div class="row">{% endif %}
-                {{ __.renderWidget(widget) }}
-                {% if loop.index is even %}</div>{% endif %}
+                {% set index = index + 1 %}
+                {% set allowedLinks = 0 %}
+                {% for link in widget.links %}
+                    {%  if resource_granted(link.acl) %}
+                        {% set allowedLinks = allowedLinks + 1 %}
+                    {% endif %}
+                {% endfor %}
+                {% if allowedLinks > 0 %}
+                    {% if index is odd %}<div class="row">{% endif %}
+                    {{ __.renderWidget(widget) }}
+                    {% if index is even %}</div>{% endif %}
+                {% else %}
+                    {% set index = index - 1 %}
+                {% endif %}
             {% endfor %}
-
         </div>
         <div class="version-container">
             Version: {{ constant('Oro\\Bundle\\PlatformBundle\\OroPlatformBundle::VERSION') }}

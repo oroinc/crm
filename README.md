@@ -10,7 +10,7 @@ chapter.
 Requirements
 ------------
 
-OroCRM requires Symfony 2, Doctrine 2 and PHP 5.3.8 or above.
+OroCRM requires Symfony 2, Doctrine 2 and PHP 5.4.4 or above.
 
 Installation
 ------------

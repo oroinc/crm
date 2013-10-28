@@ -1,5 +1,5 @@
 <?php
-namespace OroCRM\Bundle\DemoDataBundle\DataFixtures;
+namespace OroCRM\Bundle\DemoDataBundle\DataFixtures\Demo;
 
 use Oro\Bundle\TagBundle\Entity\Tag;
 use Oro\Bundle\TagBundle\Entity\TagManager;
@@ -8,31 +8,18 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 
-use OroCRM\Bundle\DemoDataBundle\DataFixtures\AbstractFlexibleFixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\EntityManager;
-use Doctrine\Common\Collections\Collection;
-
-use Oro\Bundle\FlexibleEntityBundle\Entity\Repository\FlexibleEntityRepository;
 
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\UserBundle\Entity\UserManager;
-use Oro\Bundle\AddressBundle\Entity\Address;
-use Oro\Bundle\AddressBundle\Entity\Country;
-use Oro\Bundle\AddressBundle\Entity\Region;
 use Oro\Bundle\UserBundle\Entity\User;
-use OroCRM\Bundle\ContactBundle\Entity\Source;
-use OroCRM\Bundle\ContactBundle\Entity\Group;
-use OroCRM\Bundle\ContactBundle\Entity\ContactEmail;
-use OroCRM\Bundle\ContactBundle\Entity\ContactPhone;
-use OroCRM\Bundle\ContactBundle\Entity\ContactAddress;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 class LoadTagsData extends AbstractFlexibleFixture implements ContainerAwareInterface, OrderedFixtureInterface
 {
-
     /**
      * @var ContainerInterface
      */
@@ -111,7 +98,6 @@ class LoadTagsData extends AbstractFlexibleFixture implements ContainerAwareInte
         $this->tagsRepository = $entityManager->getRepository('OroTagBundle:Tag');
     }
 
-
     /**
      * @param $tagsNames
      * @return Tag[]
@@ -122,6 +108,7 @@ class LoadTagsData extends AbstractFlexibleFixture implements ContainerAwareInte
         foreach ($tagsNames as $tagName) {
             $tags[] = new Tag($tagName);
         }
+
         return $tags;
     }
 
