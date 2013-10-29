@@ -4,7 +4,6 @@
     * indexer_item - indexer item Oro\Bundle\SearchBundle\Query\Result\Item
 #}
 {% extends 'OroSearchBundle:Search:searchResultItem.html.twig' %}
-{% import 'OroLocaleBundle::macros.html.twig' as Locale %}
 
 {% set format = oro_config_value('oro_locale.name_format') %}
 {% set showImage = false %}
@@ -15,6 +14,6 @@
 {% set entityType = 'Opportunity'|trans %}
 
 {% set entityInfo = [
-    {'title': 'Created', 'value': entity.createdAt ? Locale.time(entity.createdAt) : 'N/A'},
-    {'title': 'Updated', 'value': entity.updatedAt ? Locale.time(entity.updatedAt) : 'N/A'},
+    {'title': 'Created', 'value': entity.createdAt ? entity.createdAt|oro_format_datetime : 'N/A'},
+    {'title': 'Updated', 'value': entity.updatedAt ? entity.updatedAt|oro_format_datetime : 'N/A'},
 ] %}

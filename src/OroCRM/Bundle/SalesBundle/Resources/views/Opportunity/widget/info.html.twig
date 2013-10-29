@@ -1,5 +1,4 @@
 {% import 'OroUIBundle::macros.html.twig' as macros %}
-{% import 'OroLocaleBundle::macros.html.twig' as Locale %}
 
 {# TODO: Move this to OroUIBundle::macros.html.twig #}
 {% macro renderRow(label, value) %}
@@ -47,6 +46,6 @@
         {{ _self.renderRow('Proposed solution'|trans, entity.proposedSolution) }}
         {{ _self.renderRow('Close reason'|trans, entity.closeReason) }}
         {{ _self.renderRow('Close revenue'|trans, entity.closeRevenue|length ? entity.closeRevenue|number_format(2), '') }}
-        {{ _self.renderRow('Close date'|trans, entity.closeDate ? Locale.date(entity.closeDate) : '') }}
+        {{ _self.renderRow('Close date'|trans, entity.closeDate ? entity.closeDate|oro_format_date : '') }}
     </div>
 </div>
