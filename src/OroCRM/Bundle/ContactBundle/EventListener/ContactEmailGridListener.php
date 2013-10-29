@@ -6,7 +6,7 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-use Oro\Bundle\DataGridBundle\Datasource\OrmDatasource;
+use Oro\Bundle\DataGridBundle\Datasource\Orm\OrmDatasource;
 use Oro\Bundle\DataGridBundle\Event\BuildAfter;
 use Oro\Bundle\EmailBundle\Datagrid\EmailQueryFactory;
 use Oro\Bundle\EmailBundle\Entity\Util\EmailUtil;
