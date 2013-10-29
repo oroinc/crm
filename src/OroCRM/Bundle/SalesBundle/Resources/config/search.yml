@@ -12,13 +12,25 @@ OroCRM\Bundle\SalesBundle\Entity\Lead:
             target_type:            text
             target_fields:          [name]
         -
+            name:                   namePrefix
+            target_type:            text
+            target_fields:          [namePrefix]
+        -
             name:                   firstName
             target_type:            text
             target_fields:          [firstName]
         -
+            name:                   middleName
+            target_type:            text
+            target_fields:          [middleName]
+        -
             name:                   lastName
             target_type:            text
             target_fields:          [lastName]
+        -
+            name:                   nameSuffix
+            target_type:            text
+            target_fields:          [nameSuffix]
         -
             name:                   companyName
             target_type:            text
