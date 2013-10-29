@@ -114,13 +114,6 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface, Fu
     protected $gender;
 
     /**
-     * Set name formatting using "%first%" and "%last%" placeholders
-     *
-     * @var string
-     */
-    protected $nameFormat;
-
-    /**
      * @var \DateTime
      *
      * @ORM\Column(name="birthday", type="datetime", nullable=true)
@@ -515,47 +508,6 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface, Fu
     public function getGender()
     {
         return $this->gender;
-    }
-
-    /**
-     * Get full name format. Defaults to "%first% %last%".
-     *
-     * @return string
-     */
-    public function getNameFormat()
-    {
-        return $this->nameFormat ? $this->nameFormat : '%prefix% %first% %last% %suffix%';
-    }
-
-    /**
-     * Set new format for a full name display. Use %first% and %last% placeholders, for example: "%last%, %first%".
-     *
-     * @param  string $format New format string
-     * @return Contact
-     */
-    public function setNameFormat($format)
-    {
-        $this->nameFormat = $format;
-
-        return $this;
-    }
-
-    /**
-     * Return full contact name according to name format
-     *
-     * @see Contact::setNameFormat()
-     * @param  string|null $format [optional]
-     * @return string
-     */
-    public function getFullName($format = null)
-    {
-        return trim(
-            str_replace(
-                array('%prefix%', '%first%', '%last%', '%suffix%'),
-                array($this->getNamePrefix(), $this->getFirstName(), $this->getLastName(), $this->getNameSuffix()),
-                $format ? $format : $this->getNameFormat()
-            )
-        );
     }
 
     /**
@@ -1375,6 +1327,13 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface, Fu
      */
     public function __toString()
     {
-        return (string) $this->getFullName();
+        $name = $this->getNamePrefix() . ' '
+            . $this->getFirstName() . ' '
+            . $this->getMiddleName() . ' '
+            . $this->getLastName() . ' '
+            . $this->getNameSuffix();
+        $name = preg_replace('/ +/', ' ', $name);
+
+        return (string) trim($name);
     }
 }
