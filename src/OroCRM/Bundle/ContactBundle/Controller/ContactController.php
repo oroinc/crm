@@ -65,7 +65,7 @@ class ContactController extends Controller
     public function infoAction(Contact $contact)
     {
         /** @var \Oro\Bundle\EntityConfigBundle\Config\ConfigManager $configManager */
-        //$configManager  = $this->get('oro_entity_config.config_manager');
+        $configManager  = $this->get('oro_entity_config.config_manager');
 
         $extendProvider = $this->get('oro_entity_config.provider.extend');
         $entityProvider = $this->get('oro_entity_config.provider.entity');
@@ -85,22 +85,20 @@ class ContactController extends Controller
         $dynamicRow = array();
 
         foreach ($fields as $field) {
-            //$fieldName = $field->getId()->getFieldName();
-            //$value = $contact->{'get' . ucfirst(Inflector::camelize($fieldName))}();
+            $fieldName = $field->getId()->getFieldName();
+            $value = $contact->{'get' . ucfirst(Inflector::camelize($fieldName))}();
 
             /**
              * Prepare DateTime field type
              */
-            /*
             if ($value instanceof \DateTime) {
                 $configFormat = $this->get('oro_config.global')->get('oro_locale.date_format') ? : 'Y-m-d';
                 $value        = $value->format($configFormat);
-            }*/
+            }
 
             /**
              * Prepare Relation field type
              */
-            /*
             if ($value instanceof PersistentCollection) {
                 $collection     = $value;
                 $extendConfig   = $extendProvider->getConfigById($field->getId());
@@ -108,12 +106,12 @@ class ContactController extends Controller
 
                 /**
                  * generate link for related entities collection
-                 * /
+                 */
                 $route       = false;
                 $routeParams = false;
 
                 if (class_exists($extendConfig->get('target_entity'))) {
-                    /** @var EntityMetadata $metadata * /
+                    /** @var EntityMetadata $metadata */
                     $metadata = $configManager->getEntityMetadata($extendConfig->get('target_entity'));
                     if ($metadata && $metadata->routeView) {
                         $route       = $metadata->routeView;
@@ -147,11 +145,11 @@ class ContactController extends Controller
                         'title' => $item->{Inflector::camelize('get_' . $titleFieldName)}()
                     );
                 }
-            }*/
+            }
 
             $fieldName = $field->getId()->getFieldName();
             $dynamicRow[$entityProvider->getConfigById($field->getId())->get('label') ? : $fieldName]
-                = $contact->{'get' . ucfirst(Inflector::camelize($fieldName))}();
+                = $value; //$contact->{'get' . ucfirst(Inflector::camelize($fieldName))}();
         }
 
         return array(
