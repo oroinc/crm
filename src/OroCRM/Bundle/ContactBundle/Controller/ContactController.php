@@ -63,7 +63,8 @@ class ContactController extends Controller
      * @AclAncestor("orocrm_contact_view")
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * TODO: will be refactored in twig extension
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * TODO: will be refactored via twig extension
      */
     public function infoAction(Contact $contact)
     {
