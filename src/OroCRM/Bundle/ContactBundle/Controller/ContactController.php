@@ -177,6 +177,7 @@ class ContactController extends Controller
     {
         $query = $this->getRequest()->query->all();
         $query['to'] = $contact->getPrimaryEmail()->getEmail();
+        $query['gridId'] = 'contact_emails';
 
         return $this->forward(
             'OroEmailBundle:Email:create',
