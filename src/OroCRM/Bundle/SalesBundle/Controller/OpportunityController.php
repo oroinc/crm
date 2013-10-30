@@ -49,6 +49,9 @@ class OpportunityController extends Controller
      * @Route("/info/{id}", name="orocrm_sales_opportunity_info", requirements={"id"="\d+"})
      * @Template
      * @AclAncestor("orocrm_sales_opportunity_view")
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * TODO: will be refactored in twig extension
      */
     public function infoAction(Opportunity $entity)
     {

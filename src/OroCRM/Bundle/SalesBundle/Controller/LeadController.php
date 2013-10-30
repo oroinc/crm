@@ -52,6 +52,9 @@ class LeadController extends Controller
      * @Route("/info/{id}", name="orocrm_sales_lead_info", requirements={"id"="\d+"})
      * @Template
      * @AclAncestor("orocrm_sales_lead_view")
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * TODO: will be refactored in twig extension
      */
     public function infoAction(Lead $lead)
     {
