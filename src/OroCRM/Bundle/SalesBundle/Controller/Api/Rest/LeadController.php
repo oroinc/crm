@@ -47,6 +47,7 @@ class LeadController extends RestController implements ClassResourceInterface
             if ($addressEntity) {
                 $address = $this->getPreparedItem($addressEntity);
                 $address['countryIso2'] = $addressEntity->getCountry()->getIso2Code();
+                $address['countryIso3'] = $addressEntity->getCountry()->getIso3Code();
                 $address['regionCode'] = $addressEntity->getRegionCode();
             }
         }
