@@ -32,6 +32,8 @@ class SoapContactGroupApiTest extends WebTestCase
      */
     public function testCreateContactGroup()
     {
+        $this->markTestIncomplete('Verify WSDL scheme');
+
         $request = array(
             "label" => 'Group name_' . mt_rand(),
             "owner" => '1'

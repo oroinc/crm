@@ -152,7 +152,24 @@
 
         {% if dynamic|length %}
             {% for label, item in dynamic %}
+                {% if item is iterable %}
+                    {% set data = '' %}
+                    {% for value in item.values %}
+                        {% if value.link is defined and value.link != false  %}
+                            {% set data = data ~ '<a href="' ~ value.link ~ '">' ~ value.title ~ '</a>' %}
+                        {% else %}
+                            {% set data = data ~ value.title %}
+                        {% endif %}
+                        {% if not loop.last %}
+                            {% set data = data ~ ', ' %}
+                        {% endif %}
+                    {% endfor %}
+
+                    {% set item = data %}
+                {% endif %}
+
                 {{ _self.renderRow(label|trans, item) }}
+                {#{{ _self.renderRow(label|trans, item|dynamic) }}#}
             {% endfor %}
         {% endif %}
     </div>
