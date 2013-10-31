@@ -58,7 +58,6 @@ class OpportunityController extends Controller
     {
         /** @var \Oro\Bundle\EntityConfigBundle\Config\ConfigManager $configManager */
         $configManager  = $this->get('oro_entity_config.config_manager');
-
         $extendProvider = $this->get('oro_entity_config.provider.extend');
         $entityProvider = $this->get('oro_entity_config.provider.entity');
         $viewProvider   = $this->get('oro_entity_config.provider.view');
@@ -85,25 +84,19 @@ class OpportunityController extends Controller
             $fieldName = $field->getId()->getFieldName();
             $value = $entity->{'get' . ucfirst(Inflector::camelize($fieldName))}();
 
-            /**
-             * Prepare DateTime field type
-             */
+            /** Prepare DateTime field type */
             if ($value instanceof \DateTime) {
                 $configFormat = $this->get('oro_config.global')->get('oro_locale.date_format') ? : 'Y-m-d';
                 $value        = $value->format($configFormat);
             }
 
-            /**
-             * Prepare Relation field type
-             */
+            /** Prepare Relation field type */
             if ($value instanceof PersistentCollection) {
                 $collection     = $value;
                 $extendConfig   = $extendProvider->getConfigById($field->getId());
                 $titleFieldName = $extendConfig->get('target_title');
 
-                /**
-                 * generate link for related entities collection
-                 */
+                /** generate link for related entities collection */
                 $route       = false;
                 $routeParams = false;
 
