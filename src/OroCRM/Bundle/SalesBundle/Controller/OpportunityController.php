@@ -64,12 +64,18 @@ class OpportunityController extends Controller
         $viewProvider   = $this->get('oro_entity_config.provider.view');
 
         $fields = $extendProvider->filter(
-            function (ConfigInterface $config) use ($viewProvider) {
+            function (ConfigInterface $config) use ($viewProvider, $extendProvider) {
+                $extendConfig = $extendProvider->getConfigById($config->getId());
+
                 return
                     $config->is('owner', ExtendManager::OWNER_CUSTOM)
                     && !$config->is('state', ExtendManager::STATE_NEW)
                     && !$config->is('is_deleted')
-                    && $viewProvider->getConfigById($config->getId())->is('is_displayable');
+                    && $viewProvider->getConfigById($config->getId())->is('is_displayable')
+                    && !(
+                        in_array($extendConfig->getId()->getFieldType(), array('oneToMany', 'manyToOne', 'manyToMany'))
+                        && $extendProvider->getConfig($extendConfig->get('target_entity'))->is('is_deleted', true)
+                    );
             },
             get_class($entity)
         );
