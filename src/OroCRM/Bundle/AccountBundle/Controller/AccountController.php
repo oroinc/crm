@@ -132,15 +132,7 @@ class AccountController extends Controller
      */
     public function indexAction()
     {
-        /** @var $gridManager AccountDatagridManager */
-        $gridManager = $this->get('orocrm_account.account.datagrid_manager');
-        $datagridView = $gridManager->getDatagrid()->createView();
-
-        if ('json' == $this->getRequest()->getRequestFormat()) {
-            return $this->get('oro_grid.renderer')->renderResultsJsonResponse($datagridView);
-        }
-
-        return array('datagrid' => $datagridView);
+        return [];
     }
 
     /**

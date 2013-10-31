@@ -1,35 +1,141 @@
-parameters:
-    orocrm_account.account.datagrid_manager.class:        OroCRM\Bundle\AccountBundle\Datagrid\AccountDatagridManager
-    orocrm_account.contact.view_datagrid_manager.class:   OroCRM\Bundle\AccountBundle\Datagrid\AccountContactDatagridManager
-    orocrm_account.contact.update_datagrid_manager.class: OroCRM\Bundle\AccountBundle\Datagrid\AccountContactUpdateDatagridManager
-
-services:
-    orocrm_account.account.datagrid_manager:
-        class: %orocrm_account.account.datagrid_manager.class%
-        tags:
-            - name: oro_grid.datagrid.manager
-              datagrid_name: accounts
-              entity_name: %orocrm_account.account.entity.class%
-              entity_hint: account
-              flexible: true
-              route_name: orocrm_account_index
-
-    orocrm_account.contact.view_datagrid_manager:
-        class: %orocrm_account.contact.view_datagrid_manager.class%
-        tags:
-            - name: oro_grid.datagrid.manager
-              datagrid_name: account_contacts_view
-              entity_name: %orocrm_contact.entity.class%
-              query_entity_alias: contact
-              entity_hint: contact
-              route_name: orocrm_account_view
-
-    orocrm_account.contact.update_datagrid_manager:
-        class: %orocrm_account.contact.update_datagrid_manager.class%
-        tags:
-            - name: oro_grid.datagrid.manager
-              datagrid_name: account_contacts_update
-              entity_name: %orocrm_contact.entity.class%
-              query_entity_alias: contact
-              entity_hint: contact
-              route_name: orocrm_account_contact_select
+datagrid:
+    accounts-grid:
+        source:
+            type:           orm
+            acl_resource:   orocrm_account_view
+            query:
+                select:
+                    - a.id
+                    - a.name
+                    - a.created
+                    - a.updated
+                    - defaultContact.firstName as contactFirstName
+                    - defaultContact.lastName as contactLastName
+                    - defaultContactEmail.email as contactEmail
+                    - defaultContactPhone.phone as contactPhone
+                    - CONCAT(accountOwner.firstName, CONCAT(' ', accountOwner.lastName)) as ownerName
+                from:
+                    - { table: OroCRMAccountBundle:Account, alias: a }
+                join:
+                    left:
+                        - { join: a.defaultContact, alias: defaultContact }
+                        - { join: defaultContact.emails, alias: defaultContactEmail, conditionType: 'WITH', condition: 'defaultContactEmail.primary = true' }
+                        - { join: defaultContact.phones, alias: defaultContactPhone, conditionType: 'WITH', condition: 'defaultContactPhone.primary = true' }
+                        - { join: a.owner, alias: accountOwner }
+        properties:
+            id:
+                type:       field
+                data_name:  id
+            view_link:
+                type:       url
+                route:      orocrm_account_view
+                params:     [ id ]
+            update_link:
+                type:       url
+                route:      orocrm_account_update
+                params:     [ id ]
+            delete_link:
+                type:       url
+                route:      oro_api_delete_account
+                params:     [ id ]
+        columns:
+            name:
+                type:    field
+                label:   orocrm.account.datagrid.account_name
+            contactFirstName:
+                type:    field
+                label:   First Name
+            contactLastName:
+                type:    field
+                label:   Last Name
+            contactEmail:
+                type:    field
+                label:   Email
+            contactPhone:
+                type:    field
+                label:   Phone
+            ownerName:
+                type:    field
+                label:   Owner
+            created:
+                type:    field
+                label:   Created At
+                frontend_type: datetime
+            updated:
+                type:     field
+                label:    Updated At
+                frontend_type: datetime
+        sorters:
+            columns:
+                name:
+                    data_name: a.name
+                contactFirstName:
+                    data_name: contactFirstName
+                contactLastName:
+                    data_name: contactLastName
+                contactEmail:
+                    data_name: contactEmail
+                contactPhone:
+                    data_name: contactPhone
+                ownerName:
+                    data_name: ownerName
+                created:
+                    data_name: a.created
+                updated:
+                    data_name: a.updated
+        filters:
+            columns:
+                name:
+                    type:      string
+                    data_name: a.name
+                    label:     orocrm.account.datagrid.account_name
+                contactFirstName:
+                    type:      string
+                    data_name: contactFirstName
+                    label:     First Name
+                contactLastName:
+                    type:      string
+                    data_name: contactLastName
+                    label:     Last Name
+                contactEmail:
+                    type:      string
+                    data_name: contactEmail
+                    label:     Email
+                contactPhone:
+                    type:      string
+                    data_name: contactPhone
+                    label:     Phone
+                ownerName:
+                    type:      string
+                    data_name: ownerName
+                    label:     Owner
+                created:
+                    type:      datetime
+                    label:     Created At
+                    data_name: a.created
+                updated:
+                    type:      datetime
+                    label:     Updated At
+                    data_name: a.updated
+        actions:
+            view:
+                type:          navigate
+                acl_resource:  orocrm_account_view
+                label:         View
+                icon:          user
+                link:          view_link
+                rowClick:      true
+            update:
+                type:          navigate
+                acl_resource:  orocrm_account_update
+                label:         Update
+                icon:          edit
+                link:          update_link
+            delete:
+                type:          delete
+                acl_resource:  orocrm_account_remove
+                label:         Delete
+                icon:          trash
+                link:          delete_link
+        options:
+            entityHint: account
