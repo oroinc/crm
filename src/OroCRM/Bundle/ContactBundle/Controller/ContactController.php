@@ -13,6 +13,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 
@@ -237,6 +238,28 @@ class ContactController extends Controller
         }
 
         return array('datagrid' => $datagridView);
+    }
+
+    /**
+     * @Route(
+     *      "/{contactId}/email-create",
+     *      name="orocrm_contact_email_create",
+     *      requirements={"contactId"="\d+"}
+     * )
+     * @AclAncestor("oro_email_create")
+     * @ParamConverter("contact", options={"id" = "contactId"})
+     */
+    public function createEmailAction(Contact $contact)
+    {
+        $query = $this->getRequest()->query->all();
+        $query['to'] = $contact->getPrimaryEmail()->getEmail();
+        $query['gridName'] = 'contact_emails';
+
+        return $this->forward(
+            'OroEmailBundle:Email:create',
+            array(),
+            $query
+        );
     }
 
     /**
