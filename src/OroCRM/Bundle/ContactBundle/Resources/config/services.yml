@@ -20,6 +20,7 @@ parameters:
 
     orocrm_contact.social_url_formatter.class: OroCRM\Bundle\ContactBundle\Formatter\SocialUrlFormatter
     orocrm_contact.event_listener.contact_email_grid_listener.class: OroCRM\Bundle\ContactBundle\EventListener\ContactEmailGridListener
+    orocrm_contact.event_listener.contactgroup_contacts_grid_listener.class: OroCRM\Bundle\ContactBundle\EventListener\ContactGroupContactsListener
 
 services:
     orocrm_contact.form.contact:
@@ -188,5 +189,9 @@ services:
         arguments:
           - @service_container
           - @oro_email.datagrid_query_factory
+
+    orocrm_contact.event_listener.contactgroup_contacts_grid_listener:
+        class: %orocrm_contact.event_listener.contactgroup_contacts_grid_listener.class%
+        arguments: [ @oro_datagrid.datagrid.request_params ]
         tags:
-          - { name: kernel.event_listener, event: oro_grid.datgrid.build.after.contacts-email-grid, method: onBuildAfter }
+            - { name: kernel.event_listener, event: oro_datagrid.datgrid.build.after.contact-group-contacts-grid, method: onBuildAfter }

@@ -1,29 +1,30 @@
 {% extends 'OroUIBundle:actions:update.html.twig' %}
+{% import 'OroDataGridBundle::macros.html.twig' as dataGrid %}
 {% set title = form.vars.value.id ? form.vars.value.name|default('N/A') : 'New Contact Group'|trans %}
 {% if form.vars.value.id %}
     {% oro_title_set({params : {"%group.label%": form.vars.value.label} }) %}
 {% endif %}
 {% set audit_entity_class = 'OroCRM_Bundle_ContactBundle_Entity_Group' %}
-{% set gridId = 'contacts-grid' %}
+{% set gridName = 'contact-group-contacts-grid' %}
 {% set formAction = form.vars.value.id ? path('orocrm_contact_group_update', { id: form.vars.value.id }) : path('orocrm_contact_group_create') %}
-{% block head_script %}
-    {{ parent() }}
+{#{% block head_script %}#}
+    {#{{ parent() }}#}
 
-    {% set listenerParameters = {} %}
-    {% if showContactsGrid %}
-        {% set listenerParameters = {
-            'columnName': 'has_group',
-            'selectors': {
-                'included': '#groupAppendContacts',
-                'excluded': '#groupRemoveContacts'
-            }
-        }
-    %}
+    {#{% set listenerParameters = {} %}#}
+    {#{% if showContactsGrid %}#}
+        {#{% set listenerParameters = {#}
+            {#'columnName': 'has_group',#}
+            {#'selectors': {#}
+                {#'included': '#groupAppendContacts',#}
+                {#'excluded': '#groupRemoveContacts'#}
+            {#}#}
+        {#}#}
+    {#%}#}
 
-    {% placeholder prepare_grid with {'datagrid': datagrid, 'selector': '#' ~ gridId, 'parameters': listenerParameters} %}
+    {#{% placeholder prepare_grid with {'datagrid': datagrid, 'selector': '#' ~ gridId, 'parameters': listenerParameters} %}#}
 
-    {% endif %}
-{% endblock %}
+    {#{% endif %}#}
+{#{% endblock %}#}
 
 {% block navButtons %}
     {% if form.vars.value.id and resource_granted('orocrm_contact_group_delete') %}
@@ -78,6 +79,8 @@
         }]
     %}
     {% if showContactsGrid %}
+        {% set gridParams = form.vars.value.id ? {group: form.vars.value.id} : {} %}
+        {% set gridData = dataGrid.renderGrid(gridName, gridParams) %}
         {% set dataBlocks = dataBlocks|merge(
             [{
                 'title' : 'Contacts',
@@ -89,7 +92,7 @@
                         'data' : [
                             form_widget(form.appendContacts, {'id': 'groupAppendContacts'}),
                             form_widget(form.removeContacts, {'id': 'groupRemoveContacts'}),
-                            UI.gridBlock(gridId)
+                            gridData
                         ]
                     }
                 ]

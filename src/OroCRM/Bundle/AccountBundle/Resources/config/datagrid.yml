@@ -23,8 +23,7 @@ datagrid:
                         - { join: defaultContact.phones, alias: defaultContactPhone, conditionType: 'WITH', condition: 'defaultContactPhone.primary = true' }
                         - { join: a.owner, alias: accountOwner }
         properties:
-            id:
-                data_name:  id
+            id: ~
             view_link:
                 type:       url
                 route:      orocrm_account_view

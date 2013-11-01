@@ -1,78 +1,106 @@
-parameters:
-    orocrm_contact.contact.datagrid_manager.class:        OroCRM\Bundle\ContactBundle\Datagrid\ContactDatagridManager
-    orocrm_contact.group.datagrid_manager.class:          OroCRM\Bundle\ContactBundle\Datagrid\GroupDatagridManager
-    orocrm_contact.group_contact.datagrid_manager.class:  OroCRM\Bundle\ContactBundle\Datagrid\GroupContactDatagridManager
-    orocrm_contact.contact.view_datagrid_manager.class:   OroCRM\Bundle\ContactBundle\Datagrid\ContactAccountDatagridManager
-    orocrm_contact.account.update_datagrid_manager.class: OroCRM\Bundle\ContactBundle\Datagrid\ContactAccountUpdateDatagridManager
-    orocrm_contact.email.datagrid_manager.class:          OroCRM\Bundle\ContactBundle\Datagrid\ContactEmailDatagridManager
-    orocrm_contact.email.datagrid_query_factory.class:    OroCRM\Bundle\ContactBundle\Datagrid\ContactEmailQueryFactory
-
-services:
-    orocrm_contact.contact.datagrid_manager:
-        class: %orocrm_contact.contact.datagrid_manager.class%
-        tags:
-            - name: oro_grid.datagrid.manager
-              datagrid_name: contacts
-              entity_name: %orocrm_contact.entity.class%
-              query_entity_alias: contact
-              entity_hint: contact
-              route_name: orocrm_contact_index
-
-    orocrm_contact.group.datagrid_manager:
-        class: %orocrm_contact.group.datagrid_manager.class%
-        tags:
-            - name: oro_grid.datagrid.manager
-              datagrid_name: contact_groups
-              entity_name: OroCRM\Bundle\ContactBundle\Entity\Group
-              entity_hint: group
-              route_name: orocrm_contact_group_index
-
-    orocrm_contact.group_contact.datagrid_manager:
-        class: %orocrm_contact.group_contact.datagrid_manager.class%
-        tags:
-            - name: oro_grid.datagrid.manager
-              datagrid_name: contact_groupcontacts
-              entity_name: %orocrm_contact.entity.class%
-              query_entity_alias: contact
-              entity_hint: contact
-              route_name: orocrm_contact_group_contact_grid
-
-    orocrm_contact.account.view_datagrid_manager:
-        class: %orocrm_contact.contact.view_datagrid_manager.class%
-        tags:
-            - name: oro_grid.datagrid.manager
-              datagrid_name: contact_accounts_view
-              entity_name: %orocrm_account.account.entity.class%
-              query_entity_alias: account
-              entity_hint: account
-              flexible: true
-              route_name: orocrm_contact_view
-
-    orocrm_contact.account.update_datagrid_manager:
-        class: %orocrm_contact.account.update_datagrid_manager.class%
-        tags:
-            - name: oro_grid.datagrid.manager
-              datagrid_name: contact_accounts_update
-              entity_name: %orocrm_account.account.entity.class%
-              query_entity_alias: account
-              entity_hint: account
-              flexible: true
-              route_name: orocrm_contact_update
-
-    orocrm_contact.email.datagrid_manager:
-        class: %orocrm_contact.email.datagrid_manager.class%
-        tags:
-            - name: oro_grid.datagrid.manager
-              datagrid_name: contact_emails
-              entity_name: %oro_email.email.entity.class%
-              query_factory: orocrm_contact.email.datagrid_query_factory
-              entity_hint: email
-              route_name: orocrm_contact_view
-
-    orocrm_contact.email.datagrid_query_factory:
-        class: %orocrm_contact.email.datagrid_query_factory.class%
-        arguments:
-            - @doctrine
-            - %oro_email.email.entity.class%
-            - @oro_email.email.owner.provider.storage
-            - @oro_config.user
+datagrid:
+    # contact groups grid, shown on orocrm_contact_group_index
+    contact-groups-grid:
+        source:
+            type: orm
+            acl_resource: orocrm_contact_group_view
+            query:
+                select:
+                    - g.id
+                    - g.label
+                from:
+                  - { table: %orocrm_contact.group.entity.class%, alias: g }
+        columns:
+            label:
+                label: Label
+        properties:
+            id: ~
+            update_link:
+                type:       url
+                route:      orocrm_contact_group_update
+                params:     [ id ]
+            delete_link:
+                type:       url
+                route:      oro_api_delete_contactgroup
+                params:     [ id ]
+        sorters:
+            columns:
+                label:
+                    data_name: g.label
+        filters:
+            columns:
+                label:
+                    label:     Label
+                    data_name: g.label
+                    type:      string
+        actions:
+            update:
+                type:          navigate
+                acl_resource:  orocrm_contact_group_update
+                label:         Update
+                icon:          edit
+                link:          update_link
+                rowAction:     true
+            delete:
+                type:          delete
+                acl_resource:  orocrm_contact_group_delete
+                label:         Delete
+                icon:          trash
+                link:          delete_link
+        options:
+            entityHint: group
+    # contacts assigned to group, shown on orocrm_contact_group_update route
+    contact-group-contacts-grid:
+        source:
+            type: orm
+            acl_resource: orocrm_contact_view
+            query:
+                select:
+                    - c.id
+                    - c.firstName
+                    - c.lastName
+                    - >
+                      (CASE WHEN (:group IS NOT NULL) THEN
+                        CASE WHEN (:group MEMBER OF c.groups OR c.id IN (:data_in)) AND c.id NOT IN (:data_not_in)
+                        THEN true ELSE false END
+                      ELSE
+                        CASE WHEN c.id IN (:data_in) AND c.id NOT IN (:data_not_in)
+                        THEN true ELSE false END
+                      END) as hasGroup
+                from:
+                    - { table: %orocrm_contact.entity.class%, alias: c }
+        columns:
+            hasGroup:
+                label: Has group
+                editable: true
+                frontend_type: boolean
+            firstName:
+                label: orocrm.contact.datagrid.first_name
+            lastName: ~
+        filters:
+            columns:
+                hasGroup:
+                    filter_by_having: true
+                    data_name: hasGroup
+                    type:  boolean
+                    label: Has group
+                firstName:
+                    type: string
+                    data_name: c.firstName
+                    label: orocrm.contact.datagrid.first_name
+                lastName:
+                    type: string
+                    data_name: c.firstName
+                    label: orocrm.contact.datagrid.last_name
+        sorters:
+            columns:
+                hasGroup:
+                    data_name: hasGroup
+                firstName:
+                    data_name: c.firstName
+                lastName:
+                    data_name: c.lastName
+            default:
+                hasGroup: %oro_datagrid.extension.orm_sorter.class%::DIRECTION_DESC
+        options:
+            entityHint: contact

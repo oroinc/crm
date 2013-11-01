@@ -223,15 +223,7 @@ class ContactController extends Controller
      */
     public function indexAction()
     {
-        /** @var $gridManager ContactDatagridManager */
-        $gridManager  = $this->get('orocrm_contact.contact.datagrid_manager');
-        $datagridView = $gridManager->getDatagrid()->createView();
-
-        if ('json' == $this->getRequest()->getRequestFormat()) {
-            return $this->get('oro_grid.renderer')->renderResultsJsonResponse($datagridView);
-        }
-
-        return array('datagrid' => $datagridView);
+        return [];
     }
 
     /**
