@@ -124,7 +124,6 @@ class LeadController extends Controller
                 }
 
                 $value = array(
-                    'title'        => $titleFieldName,
                     'route'        => $route,
                     'route_params' => $routeParams,
                     'values'       => array()
@@ -132,10 +131,16 @@ class LeadController extends Controller
 
                 foreach ($collection as $item) {
                     $routeParams['id'] = $item->getId();
+
+                    $title = [];
+                    foreach ($titleFieldName as $fieldName) {
+                        $title[] = $item->{Inflector::camelize('get_' . $fieldName)}();
+                    }
+
                     $value['values'][] = array(
                         'id'    => $item->getId(),
                         'link'  => $route ? $this->generateUrl($route, $routeParams) : false,
-                        'title' => $item->{Inflector::camelize('get_' . $titleFieldName)}()
+                        'title' => implode(' ', $title)
                     );
                 }
             }
@@ -143,10 +148,6 @@ class LeadController extends Controller
             $fieldName = $field->getId()->getFieldName();
             $dynamicRow[$entityProvider->getConfigById($field->getId())->get('label') ? : $fieldName]
                        = $value; //$lead->{'get' . ucfirst(Inflector::camelize($fieldName))}();
-
-
-            //$label = $entityProvider->getConfigById($field->getId())->get('label') ? : $field->getId()->getFieldName();
-            //$dynamicRow[$label] = $lead->{'get' . ucfirst(Inflector::camelize($field->getId()->getFieldName()))}();
         }
 
         return array(
