@@ -2,16 +2,13 @@
 
 namespace OroCRM\Bundle\SalesBundle\Controller;
 
-use Doctrine\Common\Inflector\Inflector;
 use Doctrine\Common\Util\ClassUtils;
-
 use Doctrine\ORM\PersistentCollection;
-use Oro\Bundle\EntityConfigBundle\Metadata\EntityMetadata;
+use Doctrine\Common\Inflector\Inflector;
+
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBag;
 use Symfony\Component\HttpKernel\Exception\HttpException;
-
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -19,12 +16,11 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
-
+use Oro\Bundle\EntityConfigBundle\Metadata\EntityMetadata;
 use Oro\Bundle\EntityConfigBundle\Config\ConfigInterface;
 use Oro\Bundle\EntityExtendBundle\Extend\ExtendManager;
 
 use OroCRM\Bundle\SalesBundle\Entity\Lead;
-use OroCRM\Bundle\SalesBundle\Datagrid\LeadDatagridManager;
 
 /**
  * @Route("/lead")
@@ -85,7 +81,7 @@ class LeadController extends Controller
         $dynamicRow = array();
         foreach ($fields as $field) {
             $fieldName = $field->getId()->getFieldName();
-            $value = $lead->{'get' . ucfirst(Inflector::camelize($fieldName))}();
+            $value     = $lead->{'get' . ucfirst(Inflector::camelize($fieldName))}();
 
             /** Prepare DateTime field type */
             if ($value instanceof \DateTime) {
@@ -180,7 +176,7 @@ class LeadController extends Controller
      */
     public function createAction()
     {
-        $lead = new Lead();
+        $lead          = new Lead();
         $defaultStatus = $this->getDoctrine()->getManager()->find('OroCRMSalesBundle:LeadStatus', 'new');
         $lead->setStatus($defaultStatus);
 
@@ -197,7 +193,7 @@ class LeadController extends Controller
     {
         // TODO: refactor workflow functionality to allow custom transition buttons on forms,
         // TODO: should be done in scope of https://magecore.atlassian.net/browse/CRM-544
-        $lead = new Lead();
+        $lead          = new Lead();
         $defaultStatus = $this->getDoctrine()->getManager()->find('OroCRMSalesBundle:LeadStatus', 'new');
         $lead->setStatus($defaultStatus);
 
@@ -208,11 +204,11 @@ class LeadController extends Controller
             $jsonResponse = $this->forward(
                 'OroWorkflowBundle:Api/Rest/Workflow:start',
                 array(
-                    'entityClass' => ClassUtils::getClass($lead),
-                    'entityId' => $lead->getId(),
-                    'workflowName' => 'sales_lead',
+                    'entityClass'    => ClassUtils::getClass($lead),
+                    'entityId'       => $lead->getId(),
+                    'workflowName'   => 'sales_lead',
                     'transitionName' => 'qualify',
-                    '_format' => 'json',
+                    '_format'        => 'json',
                 )
             );
 
@@ -261,15 +257,7 @@ class LeadController extends Controller
      */
     public function indexAction()
     {
-        /** @var $gridManager LeadDatagridManager */
-        $gridManager  = $this->get('orocrm_sales.lead.datagrid_manager');
-        $datagridView = $gridManager->getDatagrid()->createView();
-
-        if ('json' == $this->getRequest()->getRequestFormat()) {
-            return $this->get('oro_grid.renderer')->renderResultsJsonResponse($datagridView);
-        }
-
-        return array('datagrid' => $datagridView);
+        return [];
     }
 
     /**
@@ -282,6 +270,7 @@ class LeadController extends Controller
 
     /**
      * @param Lead $entity
+     *
      * @return array
      */
     protected function update(Lead $entity)

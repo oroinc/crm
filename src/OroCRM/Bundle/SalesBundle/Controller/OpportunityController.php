@@ -8,7 +8,6 @@ use Doctrine\ORM\PersistentCollection;
 use Oro\Bundle\EntityConfigBundle\Metadata\EntityMetadata;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBag;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -21,7 +20,6 @@ use Oro\Bundle\EntityExtendBundle\Extend\ExtendManager;
 use Oro\Bundle\EntityConfigBundle\Config\ConfigInterface;
 
 use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
-use OroCRM\Bundle\SalesBundle\Datagrid\OpportunityDatagridManager;
 
 /**
  * @Route("/opportunity")
