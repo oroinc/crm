@@ -61,16 +61,8 @@
         }]
     %}
     {% if showContactsGrid %}
-        {% set listenerParameters = {
-                'columnName': 'hasGroup',
-                'selectors': {
-                    'included': '#groupAppendContacts',
-                    'excluded': '#groupRemoveContacts'
-                }
-            }
-        %}
         {% set gridParams = form.vars.value.id ? {group: form.vars.value.id} : {} %}
-        {% set gridData = dataGrid.renderGrid(gridName, gridParams, listenerParameters) %}
+        {% set gridData = dataGrid.renderGrid(gridName, gridParams) %}
         {% set dataBlocks = dataBlocks|merge(
             [{
                 'title' : 'Contacts',

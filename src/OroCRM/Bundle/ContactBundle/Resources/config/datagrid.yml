@@ -78,6 +78,8 @@ datagrid:
                 label: orocrm.contact.datagrid.first_name
             lastName:
                 label: orocrm.contact.datagrid.last_name
+        properties:
+            id: ~
         filters:
             columns:
                 hasGroup:
@@ -105,3 +107,11 @@ datagrid:
                 hasGroup: %oro_datagrid.extension.orm_sorter.class%::DIRECTION_DESC
         options:
             entityHint: contact
+            requireJSModules:
+              - oro/datagrid/column-form-listener
+            columnListener:
+                dataField: id
+                columnName: hasGroup
+                selectors:
+                    included: '#groupAppendContacts'
+                    excluded: '#groupRemoveContacts'
