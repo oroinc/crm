@@ -76,7 +76,8 @@ datagrid:
                 frontend_type: boolean
             firstName:
                 label: orocrm.contact.datagrid.first_name
-            lastName: ~
+            lastName:
+                label: orocrm.contact.datagrid.last_name
         filters:
             columns:
                 hasGroup:

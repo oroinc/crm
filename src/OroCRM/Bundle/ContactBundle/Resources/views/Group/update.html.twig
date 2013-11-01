@@ -7,24 +7,6 @@
 {% set audit_entity_class = 'OroCRM_Bundle_ContactBundle_Entity_Group' %}
 {% set gridName = 'contact-group-contacts-grid' %}
 {% set formAction = form.vars.value.id ? path('orocrm_contact_group_update', { id: form.vars.value.id }) : path('orocrm_contact_group_create') %}
-{#{% block head_script %}#}
-    {#{{ parent() }}#}
-
-    {#{% set listenerParameters = {} %}#}
-    {#{% if showContactsGrid %}#}
-        {#{% set listenerParameters = {#}
-            {#'columnName': 'has_group',#}
-            {#'selectors': {#}
-                {#'included': '#groupAppendContacts',#}
-                {#'excluded': '#groupRemoveContacts'#}
-            {#}#}
-        {#}#}
-    {#%}#}
-
-    {#{% placeholder prepare_grid with {'datagrid': datagrid, 'selector': '#' ~ gridId, 'parameters': listenerParameters} %}#}
-
-    {#{% endif %}#}
-{#{% endblock %}#}
 
 {% block navButtons %}
     {% if form.vars.value.id and resource_granted('orocrm_contact_group_delete') %}
@@ -79,8 +61,16 @@
         }]
     %}
     {% if showContactsGrid %}
+        {% set listenerParameters = {
+                'columnName': 'hasGroup',
+                'selectors': {
+                    'included': '#groupAppendContacts',
+                    'excluded': '#groupRemoveContacts'
+                }
+            }
+        %}
         {% set gridParams = form.vars.value.id ? {group: form.vars.value.id} : {} %}
-        {% set gridData = dataGrid.renderGrid(gridName, gridParams) %}
+        {% set gridData = dataGrid.renderGrid(gridName, gridParams, listenerParameters) %}
         {% set dataBlocks = dataBlocks|merge(
             [{
                 'title' : 'Contacts',
