@@ -18,6 +18,8 @@ use OroCRM\Bundle\SalesBundle\Model\ExtendOpportunity;
  * @ORM\HasLifecycleCallbacks()
  * @Oro\Loggable
  * @Config(
+ *  routeName="orocrm_sales_opportunity_index",
+ *  routeView="orocrm_sales_opportunity_view",
  *  defaultValues={
  *      "entity"={"label"="Opportunity", "plural_label"="Opportunities"},
  *      "ownership"={
