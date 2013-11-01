@@ -24,7 +24,6 @@ datagrid:
                         - { join: a.owner, alias: accountOwner }
         properties:
             id:
-                type:       field
                 data_name:  id
             view_link:
                 type:       url
@@ -40,29 +39,21 @@ datagrid:
                 params:     [ id ]
         columns:
             name:
-                type:    field
                 label:   orocrm.account.datagrid.account_name
             contactFirstName:
-                type:    field
                 label:   First Name
             contactLastName:
-                type:    field
                 label:   Last Name
             contactEmail:
-                type:    field
                 label:   Email
             contactPhone:
-                type:    field
                 label:   Phone
             ownerName:
-                type:    field
                 label:   Owner
             created:
-                type:    field
                 label:   Created At
                 frontend_type: datetime
             updated:
-                type:     field
                 label:    Updated At
                 frontend_type: datetime
         sorters:
@@ -124,7 +115,7 @@ datagrid:
                 label:         View
                 icon:          user
                 link:          view_link
-                rowClick:      true
+                rowAction:     true
             update:
                 type:          navigate
                 acl_resource:  orocrm_account_update
