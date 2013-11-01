@@ -78,34 +78,26 @@ datagrid:
                 name:
                     type:      string
                     data_name: a.name
-                    label:     orocrm.account.datagrid.account_name
                 contactFirstName:
                     type:      string
                     data_name: contactFirstName
-                    label:     First Name
                 contactLastName:
                     type:      string
                     data_name: contactLastName
-                    label:     Last Name
                 contactEmail:
                     type:      string
                     data_name: contactEmail
-                    label:     Email
                 contactPhone:
                     type:      string
                     data_name: contactPhone
-                    label:     Phone
                 ownerName:
                     type:      string
                     data_name: ownerName
-                    label:     Owner
                 created:
                     type:      datetime
-                    label:     Created At
                     data_name: a.created
                 updated:
                     type:      datetime
-                    label:     Updated At
                     data_name: a.updated
         actions:
             view:

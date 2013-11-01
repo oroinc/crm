@@ -198,15 +198,7 @@ class OpportunityController extends Controller
      */
     public function indexAction()
     {
-        /** @var OpportunityDatagridManager $datagridManager */
-        $datagridManager = $this->get('orocrm_sales.opportunity.datagrid_manager');
-        $datagridView    = $datagridManager->getDatagrid()->createView();
-
-        if ('json' == $this->getRequest()->getRequestFormat()) {
-            return $this->get('oro_grid.renderer')->renderResultsJsonResponse($datagridView);
-        }
-
-        return array('datagrid' => $datagridView);
+        return [];
     }
 
     /**
