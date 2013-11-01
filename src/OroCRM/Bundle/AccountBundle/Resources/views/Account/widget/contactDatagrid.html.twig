@@ -35,7 +35,7 @@
 
     <script type="text/javascript">
         {% set wid = app.request.get('_wid') %}
-        require(['jquery', 'oro/datagrid/callback-listener', 'oro/widget-manager', 'oro/multiple-entity/model'],
+        require(['jquery', 'oro/grid/callback-listener', 'oro/widget-manager', 'oro/multiple-entity/model'],
                 function($, CallbackListener, WidgetManager, MultipleEntityModel) {
                     var addedModels = {};
                     WidgetManager.getWidgetInstance({{ wid|json_encode|raw }}, function(widget) {
