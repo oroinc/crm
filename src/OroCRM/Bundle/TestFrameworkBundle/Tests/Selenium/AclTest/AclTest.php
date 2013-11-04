@@ -4,8 +4,9 @@ namespace OroCRM\Bundle\TestsBundle\Tests\Selenium;
 
 use Oro\Bundle\TestFrameworkBundle\Pages\Objects\Login;
 use Oro\Bundle\TestFrameworkBundle\Pages\Page;
+use Oro\Bundle\TestFrameworkBundle\Test\Selenium2TestCase;
 
-class AclTest extends \PHPUnit_Extensions_Selenium2TestCase
+class AclTest extends Selenium2TestCase
 {
     protected $coverageScriptUrl = PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_TESTS_URL_COVERAGE;
 
