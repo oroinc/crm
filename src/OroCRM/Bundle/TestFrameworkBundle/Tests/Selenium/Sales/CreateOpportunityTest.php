@@ -4,8 +4,9 @@ namespace OroCRM\Bundle\TestFrameworkBundle\Tests\Selenium\Sales;
 
 use Oro\Bundle\TestFrameworkBundle\Pages\Objects\Accounts;
 use Oro\Bundle\TestFrameworkBundle\Pages\Objects\Login;
+use Oro\Bundle\TestFrameworkBundle\Test\Selenium2TestCase;
 
-class CreateOpportunityTest extends \PHPUnit_Extensions_Selenium2TestCase
+class CreateOpportunityTest extends Selenium2TestCase
 {
     protected $coverageScriptUrl = PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_TESTS_URL_COVERAGE;
 
