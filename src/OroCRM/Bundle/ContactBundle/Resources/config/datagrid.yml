@@ -115,3 +115,24 @@ datagrid:
                 selectors:
                     included: '#groupAppendContacts'
                     excluded: '#groupRemoveContacts'
+    # contacts main grid show on  orocrm_contact_index route
+    contacts-grid:
+        source:
+            type: orm
+            acl_resource: orocrm_contact_view
+            query:
+                select:
+                    - c.id
+                from:
+                    - { table: %orocrm_contact.entity.class%, alias: c }
+                join:
+                    left:
+                        - { join: c.addresses, alias: address, conditionType: WITH, condition: 'address.primary = true' }
+                        - { join: c.emails, alias: email, conditionType: WITH, condition: 'email.primary = true' }
+                        - { join: c.phones, alias: phone, conditionType: WITH, condition: 'phone.primary = true' }
+                        - { join: c.groups, alias: contactGroup }
+                        - { join: c.source, alias: contactSource }
+                        - { join: address.country, alias: country }
+                        - { join: address.state, alias: region }
+        options:
+            entityHint: contact
