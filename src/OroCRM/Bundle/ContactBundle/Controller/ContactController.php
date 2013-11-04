@@ -13,6 +13,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 
@@ -134,7 +135,6 @@ class ContactController extends Controller
                 }
 
                 $value = array(
-                    'title'        => $titleFieldName,
                     'route'        => $route,
                     'route_params' => $routeParams,
                     'values'       => array()
@@ -142,10 +142,16 @@ class ContactController extends Controller
 
                 foreach ($collection as $item) {
                     $routeParams['id'] = $item->getId();
+
+                    $title = [];
+                    foreach ($titleFieldName as $fieldName) {
+                        $title[] = $item->{Inflector::camelize('get_' . $fieldName)}();
+                    }
+
                     $value['values'][] = array(
                         'id'    => $item->getId(),
                         'link'  => $route ? $this->generateUrl($route, $routeParams) : false,
-                        'title' => $item->{Inflector::camelize('get_' . $titleFieldName)}()
+                        'title' => implode(' ', $title)
                     );
                 }
             }
@@ -232,6 +238,30 @@ class ContactController extends Controller
         }
 
         return array('datagrid' => $datagridView);
+    }
+
+    /**
+     * @Route(
+     *      "/{contactId}/email-create",
+     *      name="orocrm_contact_email_create",
+     *      requirements={"contactId"="\d+"}
+     * )
+     * @AclAncestor("oro_email_create")
+     * @ParamConverter("contact", options={"id" = "contactId"})
+     */
+    public function createEmailAction(Contact $contact)
+    {
+        $query = $this->getRequest()->query->all();
+        if ($contact->getPrimaryEmail()) {
+            $query['to'] = $contact->getPrimaryEmail()->getEmail();
+        }
+        $query['gridName'] = 'contact_emails';
+
+        return $this->forward(
+            'OroEmailBundle:Email:create',
+            array(),
+            $query
+        );
     }
 
     /**
