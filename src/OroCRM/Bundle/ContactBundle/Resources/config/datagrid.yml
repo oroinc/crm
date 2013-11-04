@@ -117,12 +117,20 @@ datagrid:
                     excluded: '#groupRemoveContacts'
     # contacts main grid show on  orocrm_contact_index route
     contacts-grid:
+        extended_entity_name: %orocrm_contact.entity.class%
         source:
             type: orm
             acl_resource: orocrm_contact_view
             query:
                 select:
-                    - c.id
+                    # selects full entity because group labels should be taken from object
+                    - c
+                    - contactSource.label as contactSourceLabel
+                    - email.email as primaryEmail
+                    - phone.phone as primaryPhone
+                    - CONCAT(CASE WHEN address.stateText IS NOT NULL THEN address.stateText ELSE region.name END, '') as regionLabel
+                    - country.name as countryName
+                    - address.postalCode as addressPostalCode
                 from:
                     - { table: %orocrm_contact.entity.class%, alias: c }
                 join:
@@ -134,5 +142,71 @@ datagrid:
                         - { join: c.source, alias: contactSource }
                         - { join: address.country, alias: country }
                         - { join: address.state, alias: region }
+        columns:
+            firstName:
+                label: orocrm.contact.datagrid.first_name
+            lastName:
+                label: orocrm.contact.datagrid.last_name
+            primaryEmail:
+                label: orocrm.contact.datagrid.email
+            primaryPhone:
+                label: orocrm.contact.datagrid.phone
+            groupLabelsAsString:
+                label: orocrm.contact.datagrid.groups
+            contactSourceLabel:
+                label: orocrm.contact.datagrid.source
+            countryName:
+                label: orocrm.contact.datagrid.country
+            regionLabel:
+                label: orocrm.contact.datagrid.region
+            addressPostalCode:
+                label: orocrm.contact.datagrid.postal_code
+            createdAt:
+                label: orocrm.contact.datagrid.created_at
+                frontend_type: datetime
+            updatedAt:
+                label: orocrm.contact.datagrid.updated_at
+                frontend_type: datetime
+        properties:
+            id: ~
+            view_link:
+                type:       url
+                route:      orocrm_contact_view
+                params:     [ id ]
+            update_link:
+                type:       url
+                route:      orocrm_contact_update
+                params:     [ id ]
+            delete_link:
+                type:       url
+                route:      oro_api_delete_contact
+                params:     [ id ]
+        sorters:
+            columns:
+                firstName:
+                    data_name: c.firstName
+                lastName:
+                    data_name: c.lastName
+                primaryEmail:
+                    data_name: email.email
+                primaryPhone:
+                    data_name: phone.phone
+                groupLabelsAsString:
+                    data_name: contactGroup.label
+                contactSourceLabel:
+                    data_name: contactSource.label
+                countryName:
+                    data_name: country.name
+                regionLabel:
+                    data_name: regionLabel
+                addressPostalCode:
+                    data_name: address.postalCode
+                createdAt:
+                    data_name: c.createdAt
+                updatedAt:
+                    data_name: c.updatedAt
+            default:
+                firstName: %oro_datagrid.extension.orm_sorter.class%::DIRECTION_ASC
+                lastName:  %oro_datagrid.extension.orm_sorter.class%::DIRECTION_ASC
         options:
             entityHint: contact
