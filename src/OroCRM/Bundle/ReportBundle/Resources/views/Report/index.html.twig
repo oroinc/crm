@@ -1,7 +1,8 @@
 {% extends 'OroUIBundle:actions:index.html.twig' %}
 
 {% import 'OroUIBundle::macros.html.twig' as UI %}
-{% set gridId = 'accounts-grid' %}
+{% set gridName = ['orocrm_report', reportGroupName, reportName]|join('-') %}
+{% set params   = { reportGroupName: reportGroupName, reportName: reportName } %}
 
 {% block content %}
     {% set buttons = [] %}

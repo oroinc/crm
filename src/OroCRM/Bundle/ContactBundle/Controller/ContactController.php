@@ -4,28 +4,25 @@ namespace OroCRM\Bundle\ContactBundle\Controller;
 
 use Doctrine\Common\Inflector\Inflector;
 use Doctrine\ORM\PersistentCollection;
-use Oro\Bundle\EntityConfigBundle\Metadata\EntityMetadata;
+
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBag;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 
 use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
-use OroCRM\Bundle\ContactBundle\Entity\Contact;
-use OroCRM\Bundle\ContactBundle\Datagrid\ContactDatagridManager;
-use OroCRM\Bundle\ContactBundle\Datagrid\ContactAccountUpdateDatagridManager;
-use OroCRM\Bundle\AccountBundle\Entity\Account;
-use OroCRM\Bundle\ContactBundle\Datagrid\ContactEmailDatagridManager;
-
+use Oro\Bundle\EntityConfigBundle\Metadata\EntityMetadata;
 use Oro\Bundle\EntityConfigBundle\Config\ConfigInterface;
 use Oro\Bundle\EntityExtendBundle\Extend\ExtendManager;
+
+use OroCRM\Bundle\ContactBundle\Entity\Contact;
+use OroCRM\Bundle\AccountBundle\Entity\Account;
 
 class ContactController extends Controller
 {
@@ -42,19 +39,9 @@ class ContactController extends Controller
      */
     public function viewAction(Contact $contact)
     {
-        /** @var ContactEmailDatagridManager $manager */
-        $manager = $this->get('orocrm_contact.email.datagrid_manager');
-        $manager->setContact($contact);
-        $datagridView = $manager->getDatagrid()->createView();
-
-        if ('json' == $this->getRequest()->getRequestFormat()) {
-            return $this->get('oro_grid.renderer')->renderResultsJsonResponse($datagridView);
-        }
-
-        return array(
-            'entity'   => $contact,
-            'datagrid' => $datagridView,
-        );
+        return [
+            'entity' => $contact,
+        ];
     }
 
     /**
@@ -96,7 +83,7 @@ class ContactController extends Controller
 
         foreach ($fields as $field) {
             $fieldName = $field->getId()->getFieldName();
-            $value = $contact->{'get' . ucfirst(Inflector::camelize($fieldName))}();
+            $value     = $contact->{'get' . ucfirst(Inflector::camelize($fieldName))}();
 
             /** Prepare DateTime field type */
             if ($value instanceof \DateTime) {
@@ -158,7 +145,7 @@ class ContactController extends Controller
 
             $fieldName = $field->getId()->getFieldName();
             $dynamicRow[$entityProvider->getConfigById($field->getId())->get('label') ? : $fieldName]
-                = $value; //$contact->{'get' . ucfirst(Inflector::camelize($fieldName))}();
+                       = $value; //$contact->{'get' . ucfirst(Inflector::camelize($fieldName))}();
         }
 
         return array(
@@ -243,8 +230,8 @@ class ContactController extends Controller
      */
     public function createEmailAction(Contact $contact)
     {
-        $query = $this->getRequest()->query->all();
-        $query['to'] = $contact->getPrimaryEmail()->getEmail();
+        $query             = $this->getRequest()->query->all();
+        $query['to']       = $contact->getPrimaryEmail()->getEmail();
         $query['gridName'] = 'contact_emails';
 
         return $this->forward(
@@ -276,15 +263,6 @@ class ContactController extends Controller
             $entity = $this->getManager()->createEntity();
         }
 
-        /** @var $accountDatagridManager ContactAccountUpdateDatagridManager */
-        $accountDatagridManager = $this->get('orocrm_contact.account.update_datagrid_manager');
-        $accountDatagridManager->setContact($entity);
-        $datagridView = $accountDatagridManager->getDatagrid()->createView();
-
-        if ('json' == $this->getRequest()->getRequestFormat()) {
-            return $this->get('oro_grid.renderer')->renderResultsJsonResponse($datagridView);
-        }
-
         if ($this->get('orocrm_contact.form.handler.contact')->process($entity)) {
             $this->get('session')->getFlashBag()->add(
                 'success',
@@ -304,9 +282,8 @@ class ContactController extends Controller
         }
 
         return array(
-            'entity'   => $entity,
-            'form'     => $this->get('orocrm_contact.form.contact')->createView(),
-            'datagrid' => $datagridView,
+            'entity' => $entity,
+            'form'   => $this->get('orocrm_contact.form.contact')->createView(),
         );
     }
 }

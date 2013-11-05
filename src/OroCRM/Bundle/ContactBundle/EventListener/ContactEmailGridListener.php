@@ -4,29 +4,30 @@ namespace OroCRM\Bundle\ContactBundle\EventListener;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\QueryBuilder;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
-use Oro\Bundle\DataGridBundle\Datasource\Orm\OrmDatasource;
 use Oro\Bundle\DataGridBundle\Event\BuildAfter;
+use Oro\Bundle\DataGridBundle\Datagrid\RequestParameters;
+use Oro\Bundle\DataGridBundle\Datasource\Orm\OrmDatasource;
+
 use Oro\Bundle\EmailBundle\Datagrid\EmailQueryFactory;
 use Oro\Bundle\EmailBundle\Entity\Util\EmailUtil;
 
 class ContactEmailGridListener
 {
-    /** @var  EmailQueryFactory */
+    /** @var EmailQueryFactory */
     protected $queryFactory;
 
-    /** @var \Symfony\Component\HttpFoundation\Request  */
-    protected $request;
+    /** @var RequestParameters */
+    protected $requestParams;
 
     /** @var  EntityManager */
     protected $em;
 
-    public function __construct(ContainerInterface $container, EmailQueryFactory $factory)
+    public function __construct(RequestParameters $requestParams, EntityManager $em, EmailQueryFactory $factory)
     {
-        $this->request = $container->get('request');
-        $this->em      = $container->get('doctrine.orm.entity_manager');
-        $this->queryFactory = $factory;
+        $this->requestParams = $requestParams;
+        $this->em            = $em;
+        $this->queryFactory  = $factory;
     }
 
     /**
@@ -41,14 +42,14 @@ class ContactEmailGridListener
 
             $this->queryFactory->prepareQuery($queryBuilder);
 
-            if ($id = $this->request->get('contactId')) {
+            if ($id = $this->requestParams->get('contactId')) {
                 $contact = $this->em
                     ->getRepository('OroCRMContactBundle:Contact')
                     ->find($id);
 
                 $emails = $contact->getEmails();
             } else {
-                $emails = false;
+                $emails = [];
             }
 
             $emailAddresses = EmailUtil::extractEmailAddresses($emails);
@@ -59,7 +60,7 @@ class ContactEmailGridListener
 
     /**
      * @param QueryBuilder $queryBuilder
-     * @param $emailAddresses
+     * @param              $emailAddresses
      */
     protected function addRecipientsQuery(QueryBuilder $queryBuilder, $emailAddresses)
     {

@@ -23,7 +23,6 @@ class OroCRMReportExtension extends Extension
         $this->processConfiguration($configuration, $configs);
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
-        $loader->load('orm_filter_types.yml');
-        $loader->load('datagrid.yml');
+        $loader->load('filters.yml');
     }
 }

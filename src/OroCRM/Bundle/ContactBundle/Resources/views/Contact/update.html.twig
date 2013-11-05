@@ -1,29 +1,14 @@
 {% extends 'OroUIBundle:actions:update.html.twig' %}
+{% import 'OroDataGridBundle::macros.html.twig' as dataGrid %}
+
 {% form_theme form with ['OroAddressBundle:Include:fields.html.twig', 'OroFormBundle:Form:fields.html.twig', 'OroTagBundle:Form:fields.html.twig'] %}
 {% set format = oro_config_value('oro_crm_contact.name_format') %}
 {% set fullname = entity.fullname(format)|default('N/A') %}
 {% oro_title_set({params : {"%contact.name%": fullname} }) %}
 {% set audit_entity_class = 'OroCRM_Bundle_ContactBundle_Entity_Contact' %}
 {% set title = form.vars.value.id ? fullname ~ ' - ' ~ 'Update Contact'|trans : 'New Contact'|trans %}
-{% set gridId = 'accounts-grid' %}
+{% set gridName = 'contact-accounts-grid' %}
 {% set formAction = form.vars.value.id ? path('orocrm_contact_update', { 'id': form.vars.value.id }) : path('orocrm_contact_create')  %}
-{% block head_script %}
-    {{ parent() }}
-
-    {% block stylesheets %}
-        {{ form_stylesheet(form) }}
-    {% endblock %}
-
-    {% set listenerParameters = {
-        'columnName': 'has_contact',
-        'selectors': {
-            'included': '#appendAccounts',
-            'excluded': '#removeAccounts'
-        }
-    } %}
-
-    {% placeholder prepare_grid with {'datagrid': datagrid, 'selector': '#' ~ gridId, 'parameters': listenerParameters} %}
-{% endblock %}
 
 {% block navButtons %}
     {% if form.vars.value.id and resource_granted('orocrm_contact_delete') %}
@@ -144,7 +129,6 @@
         )
         %}
     {% endif %}
-
     {% set dataBlocks = dataBlocks|merge(
         [{
             'title' : 'Accounts'|trans,
@@ -156,7 +140,7 @@
                     'data' : [
                         form_widget(form.appendAccounts, {'id': 'appendAccounts'}),
                         form_widget(form.removeAccounts, {'id': 'removeAccounts'}),
-                        UI.gridBlock(gridId)
+                        dataGrid.renderGrid(gridName, { contact: form.vars.value.id })
                     ]
                 }
             ]

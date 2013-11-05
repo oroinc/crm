@@ -30,9 +30,8 @@ datagrid:
         filters:
             columns:
                 label:
-                    label:     Label
-                    data_name: g.label
                     type:      string
+                    data_name: g.label
         actions:
             update:
                 type:          navigate
@@ -86,15 +85,12 @@ datagrid:
                     filter_by_having: true
                     data_name: hasGroup
                     type:  boolean
-                    label: Has group
                 firstName:
                     type: string
                     data_name: c.firstName
-                    label: orocrm.contact.datagrid.first_name
                 lastName:
                     type: string
                     data_name: c.firstName
-                    label: orocrm.contact.datagrid.last_name
         sorters:
             columns:
                 hasGroup:
@@ -103,8 +99,7 @@ datagrid:
                     data_name: c.firstName
                 lastName:
                     data_name: c.lastName
-            default:
-                hasGroup: %oro_datagrid.extension.orm_sorter.class%::DIRECTION_DESC
+            default: { hasGroup: %oro_datagrid.extension.orm_sorter.class%::DIRECTION_DESC }
         options:
             entityHint: contact
             requireJSModules:
@@ -182,6 +177,7 @@ datagrid:
                 route:      oro_api_delete_contact
                 params:     [ id ]
         sorters:
+            multiple_sorting: true
             columns:
                 firstName:
                     data_name: c.firstName
@@ -208,5 +204,210 @@ datagrid:
             default:
                 firstName: %oro_datagrid.extension.orm_sorter.class%::DIRECTION_ASC
                 lastName:  %oro_datagrid.extension.orm_sorter.class%::DIRECTION_ASC
+        filters:
+            columns:
+                selectrow:
+                    type: selectrow
+                    label: orocrm.contact.datagrid.selected_rows
+                    data_name: c.id
+                firstName:
+                    type: string
+                    data_name: c.firstName
+                lastName:
+                    type: string
+                    data_name: c.lastName
+                primaryEmail:
+                    type: string
+                    data_name: email.email
+                primaryPhone:
+                    type: string
+                    data_name: phone.phone
+                groupLabelsAsString:
+                    type: entity
+                    data_name: contactGroup
+                    enabled: false
+                    options:
+                        field_options:
+                          class: OroCRMContactBundle:Group
+                          property: label
+                contactSourceLabel:
+                    type: entity
+                    data_name: contactSource
+                    enabled: false
+                    options:
+                        field_options:
+                          class: OroCRMContactBundle:Source
+                          property: label
+                countryName:
+                    type: entity
+                    data_name: address.country
+                    enabled: false
+                    options:
+                        field_options:
+                          class: OroAddressBundle:Country
+                          property: name
+                          query_builder: @orocrm_contact.contact.datagrid_helper->getCountryFilterQueryBuilder
+                regionLabel:
+                    type: string
+                    data_name: regionLabel
+                    enabled: false
+                addressPostalCode:
+                    type: string
+                    data_name: addressPostalCode
+                    enabled: false
+                createdAt:
+                    type:      datetime
+                    data_name: c.createdAt
+                updatedAt:
+                    type:      datetime
+                    data_name: c.updatedAt
+                    enabled: false
+        actions:
+            view:
+                type: navigate
+                acl_resource: orocrm_contact_view
+                label: orocrm.contact.datagrid.view
+                icon: user
+                link: view_link
+                rowAction: true
+            update:
+                type: navigate
+                acl_resource: orocrm_contact_update
+                label: orocrm.contact.datagrid.update
+                icon: edit
+                link: update_link
+            delete:
+                type: delete
+                acl_resource: orocrm_contact_delete
+                label: orocrm.contact.datagrid.delete
+                icon: trash
+                link: delete_link
+        mass_actions:
+            delete:
+                type: delete
+                entity_name: %orocrm_contact.entity.class%
+                data_identifier: c.id
+                acl_resource: orocrm_contact_delete
+                label: orocrm.contact.datagrid.delete
+                icon: trash
         options:
             entityHint: contact
+
+    # contact email datagrid
+    contacts-email-grid:
+        extend: email-grid
+        source:
+            query:
+                where:
+                    and:
+                        - a.email IN (:email_addresses)
+
+    # assigned accounts grid
+    contact-accounts-grid:
+        source:
+            type: orm
+            acl_resource: orocrm_contact_update
+            query:
+                select:
+                    - a.id
+                    - a.name
+                    - a.created
+                    - a.updated
+                    - defaultContact.firstName as contactFirstName
+                    - defaultContact.lastName as contactLastName
+                    - defaultContactEmail.email as contactEmail
+                    - defaultContactPhone.phone as contactPhone
+                    - CONCAT(accountOwner.firstName, CONCAT(' ', accountOwner.lastName)) as ownerName
+                    - >
+                      (CASE WHEN (:contact IS NOT NULL) THEN
+                        CASE WHEN (:contact MEMBER OF a.contacts OR a.id IN (:data_in)) AND a.id NOT IN (:data_not_in)
+                        THEN true ELSE false END
+                      ELSE
+                        CASE WHEN a.id IN (:data_in) AND a.id NOT IN (:data_not_in)
+                        THEN true ELSE false END
+                      END) as hasContact
+                from:
+                    - { table: OroCRMAccountBundle:Account, alias: a }
+                join:
+                    left:
+                        - { join: a.defaultContact, alias: defaultContact }
+                        - { join: defaultContact.emails, alias: defaultContactEmail, conditionType: 'WITH', condition: 'defaultContactEmail.primary = true' }
+                        - { join: defaultContact.phones, alias: defaultContactPhone, conditionType: 'WITH', condition: 'defaultContactPhone.primary = true' }
+                        - { join: a.owner, alias: accountOwner }
+        columns:
+            hasContact:
+                label:   Assigned
+                editable: true
+                frontend_type: boolean
+            name:
+                label:   orocrm.account.datagrid.account_name
+            contactFirstName:
+                label:   First Name
+            contactLastName:
+                label:   Last Name
+            contactEmail:
+                label:   Email
+            contactPhone:
+                label:   Phone
+            ownerName:
+                label:   Owner
+            created:
+                label:   Created At
+                frontend_type: datetime
+            updated:
+                label:    Updated At
+                frontend_type: datetime
+        sorters:
+            columns:
+                hasContact:        { data_name: hasContact }
+                name:              { data_name: a.name }
+                contactFirstName:  { data_name: contactFirstName }
+                contactLastName:   { data_name: contactLastName }
+                contactEmail:      { data_name: contactEmail }
+                contactPhone:      { data_name: contactPhone }
+                ownerName:         { data_name: ownerName }
+                created:           { data_name: a.created }
+                updated:           { data_name: a.updated }
+            default: { hasContact: %oro_datagrid.extension.orm_sorter.class%::DIRECTION_DESC }
+        filters:
+            columns:
+                hasContact:
+                    filter_by_having: true
+                    data_name: hasContact
+                    type:      boolean
+                name:
+                    type:      string
+                    data_name: a.name
+                contactFirstName:
+                    type:      string
+                    data_name: contactFirstName
+                contactLastName:
+                    type:      string
+                    data_name: contactLastName
+                contactEmail:
+                    type:      string
+                    data_name: contactEmail
+                contactPhone:
+                    type:      string
+                    data_name: contactPhone
+                ownerName:
+                    type:      string
+                    data_name: ownerName
+                created:
+                    type:      datetime
+                    data_name: a.created
+                updated:
+                    type:      datetime
+                    data_name: a.updated
+        properties:
+            id: ~
+        options:
+            entityHint: account
+            requireJSModules:
+              - oro/datagrid/column-form-listener
+            columnListener:
+                dataField: id
+                columnName: hasContact
+                selectors:
+                    included: '#appendAccounts'
+                    excluded: '#removeAccounts'

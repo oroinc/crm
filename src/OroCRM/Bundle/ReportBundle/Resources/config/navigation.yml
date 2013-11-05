@@ -89,4 +89,4 @@ oro_menu_config:
                                 won_by_period: ~
 
 oro_titles:
-    orocrm_report_index: %%reportName%% - Reports
+    orocrm_report_index: ~

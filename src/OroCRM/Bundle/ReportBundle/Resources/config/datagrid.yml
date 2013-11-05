@@ -1,57 +1,138 @@
-parameters:
-    orocrm_report.datagrid.accounts.life_time_value.class:  OroCRM\Bundle\ReportBundle\Datagrid\Accounts\LifeTimeValueManager
-    orocrm_report.datagrid.accounts.by_opportunities.class: OroCRM\Bundle\ReportBundle\Datagrid\Accounts\ByOpportunitiesManager
-    orocrm_report.datagrid.leads.by_date.class:             OroCRM\Bundle\ReportBundle\Datagrid\Leads\ByDateManager
-    orocrm_report.datagrid.opportunities.by_step.class:     OroCRM\Bundle\ReportBundle\Datagrid\Opportunities\ByStepManager
-    orocrm_report.datagrid.opportunities.won_by_period.class: OroCRM\Bundle\ReportBundle\Datagrid\Opportunities\WonByPeriodManager
+datagrid:
+    orocrm_report-accounts-life_time_value:
+        source:
+            type: orm
+            acl_resource: orocrm_reports
+            query:
+                select:
+                    - a.name
+                    - SUM( o.closeRevenue ) as value
+                from:
+                    - { table: OroCRMSalesBundle:Opportunity, alias: o }
+                join:
+                    inner:
+                        - { join: o.account, alias: a }
+                        - { join: o.status,  alias: s }
+                where:
+                    and:
+                        - s.name = 'won'
+                groupBy:  a.id
+        columns:
+            name:   { label: orocrm.report.datagrid.columns.account_name }
+            value:  { label: orocrm.report.datagrid.columns.total_value,  frontend_type: decimal }
+        sorters:
+            columns:
+                name:   { data_name: a.name }
+                value:  { data_name: value }
+        filters:
+            columns:
+                name:
+                    type: string
+                    data_name: a.name
+                value:
+                    type:             number
+                    data_name:        value
+                    filter_by_having: true
+                    options:
+                        data_type:    Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
+                closeDate:
+                    type:             date
+                    label:            orocrm.report.datagrid.columns.close_date
+                    data_name:        o.closeDate
+                createdAt:
+                    type:             date
+                    label:            orocrm.report.datagrid.columns.created_date
+                    data_name:        o.createdAt
+        options:
+            entityHint: report data
 
-services:
-    orocrm_report.datagrid.accounts.life_time_value:
-        class: %orocrm_report.datagrid.accounts.life_time_value.class%
-        arguments:
-            - @doctrine.orm.entity_manager
-        tags:
-            - name: oro_grid.datagrid.manager
-              datagrid_name: accounts-life_time_value
-              entity_hint:   report data
-              route_name:    orocrm_report_index
+    orocrm_report-accounts-by_opportunities:
+        source:
+            type: orm
+            acl_resource: orocrm_reports
+            query:
+                from:
+                    - { table: OroCRMSalesBundle:Opportunity, alias: o }
+                select:
+                    - a.id
+                    - a.name
+                    - SUM( (CASE WHEN (s.name='won') THEN 1 ELSE 0 END) ) as wonCount
+                    - SUM( (CASE WHEN (s.name='lost') THEN 1 ELSE 0 END) ) as lostCount
+                    - SUM( (CASE WHEN (s.name='in_progress') THEN 1 ELSE 0 END) ) as inProgressCount
+                    - COUNT(o.id) as totalOps
+                join:
+                    inner:
+                        - { join: o.account, alias: a }
+                        - { join: o.status, alias: s }
+                        - { join: o.closeReason, alias: cr }
+                groupBy:  a.id
+        columns:
+            name:             { label: orocrm.report.datagrid.columns.account_name }
+            wonCount:         { label: orocrm.report.datagrid.columns.wonCount }
+            lostCount:        { label: orocrm.report.datagrid.columns.lostCount }
+            inProgressCount:  { label: orocrm.report.datagrid.columns.inProgressCount }
+            totalOps:         { label: orocrm.report.datagrid.columns.totalOps }
+        sorters:
+            columns:
+                name:              { data_name: a.name }
+                wonCount:          { data_name: wonCount }
+                lostCount:         { data_name: lostCount }
+                inProgressCount:   { data_name: inProgressCount }
+                totalOps:          { data_name: totalOps }
+        filters:
+            columns:
+                name:
+                    type:        string
+                    data_name:   a.name
+                wonCount:
+                    type:        number
+                    data_name:   wonCount
+                    filter_by_having: true
+                lostCount:
+                    type:        number
+                    data_name:   lostCount
+                    filter_by_having: true
+                inProgressCount:
+                    type:        number
+                    data_name:   inProgressCount
+                    filter_by_having: true
+                totalOps:
+                    type:        number
+                    data_name:   totalOps
+                    filter_by_having: true
+                closeDate:
+                    type:        date
+                    label:       orocrm.report.datagrid.columns.close_date
+                    data_name:   o.closeDate
+                createdAt:
+                    type:        date
+                    label:       orocrm.report.datagrid.columns.created_date
+                    data_name:   o.createdAt
+        options:
+            entityHint: report data
 
-    orocrm_report.datagrid.accounts.by_opportunities:
-        class: %orocrm_report.datagrid.accounts.by_opportunities.class%
-        arguments:
-            - @doctrine.orm.entity_manager
-        tags:
-            - name: oro_grid.datagrid.manager
-              datagrid_name: accounts-by_opportunities
-              entity_hint:   report data
-              route_name:    orocrm_report_index
+    orocrm_report-leads-by_date:
+        source:
+            type: orm
+            acl_resource: orocrm_reports
+            query:
+                select:
+                    - COUNT(l.id) as leadsCount
+                    - SUBSTRING(l.createdAt, 1, 10) as createdDate
+                from:
+                    - { table: OroCRMSalesBundle:Lead, alias: l }
 
-    orocrm_report.datagrid.leads.by_date:
-        class: %orocrm_report.datagrid.leads.by_date.class%
-        arguments:
-            - @doctrine.orm.entity_manager
-        tags:
-            - name: oro_grid.datagrid.manager
-              datagrid_name: leads-by_date
-              entity_hint:   report data
-              route_name:    orocrm_report_index
-
-    orocrm_report.datagrid.opportunities.by_step:
-        class: %orocrm_report.datagrid.opportunities.by_step.class%
-        arguments:
-            - @doctrine.orm.entity_manager
-        tags:
-            - name: oro_grid.datagrid.manager
-              datagrid_name: opportunities-by_step
-              entity_hint:   report data
-              route_name:    orocrm_report_index
-
-    orocrm_report.datagrid.opportunities.won_by_period:
-        class: %orocrm_report.datagrid.opportunities.won_by_period.class%
-        arguments:
-            - @doctrine.orm.entity_manager
-        tags:
-            - name: oro_grid.datagrid.manager
-              datagrid_name: opportunities-won_by_period
-              entity_hint:   report data
-              route_name:    orocrm_report_index
+                groupBy: createdDate
+        columns:
+            createdDate:    { label: orocrm.report.datagrid.columns.created_date, frontend_type: date }
+            leadsCount:     { label: orocrm.report.datagrid.columns.leads_count }
+        sorters:
+            columns:
+                createdDate:   { data_name: createdDate }
+                leadsCount:    { data_name: leadsCount }
+        filters:
+            columns:
+                createdDate:   { type: date, data_name: createdDate }
+                leadsCount:    { type: number, data_name: leadsCount }
+        options:
+            entityHint: report data

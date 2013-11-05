@@ -5,7 +5,7 @@ parameters:
     orocrm_sales.lead.entity.class: OroCRM\Bundle\SalesBundle\Entity\Lead
     orocrm_sales.lead.manager.api.class: Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
 
-    orocrm_sales.lead.datagrid_helper.class: OroCRM\Bundle\SalesBundle\Datagrid\LeadDatagridHelper
+    orocrm_sales.lead.datagrid_helper.class: Oro\Bundle\AddressBundle\Datagrid\CountryDatagridHelper
 
 services:
     orocrm_sales.opportunity.manager.api:
