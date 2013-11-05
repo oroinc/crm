@@ -217,17 +217,18 @@ datagrid:
     account-contacts-update-grid:
         extend: base-account-contacts-grid
         source:
-            select:
-                - >
-                    (CASE WHEN (:account IS NOT NULL) THEN
-                      CASE WHEN (:account MEMBER OF a.accounts OR a.id IN (:data_in)) AND a.id NOT IN (:data_not_in)
-                      THEN true ELSE false END
-                    ELSE
-                      CASE WHEN a.id IN (:data_in) AND a.id NOT IN (:data_not_in)
-                      THEN true ELSE false END
-                    END) as hasAccount
+            query:
+                select:
+                    - >
+                        (CASE WHEN (:account IS NOT NULL) THEN
+                          CASE WHEN (:account MEMBER OF c.accounts OR c.id IN (:data_in)) AND c.id NOT IN (:data_not_in)
+                          THEN true ELSE false END
+                        ELSE
+                          CASE WHEN c.id IN (:data_in) AND c.id NOT IN (:data_not_in)
+                          THEN true ELSE false END
+                        END) as hasContact
         columns:
-            hasAccount:
+            hasContact:
                 label:   Assigned
                 editable: true
                 frontend_type: boolean
@@ -245,9 +246,55 @@ datagrid:
                 label: orocrm.contact.datagrid.region
             addressPostalCode:
                 label: orocrm.contact.datagrid.postal_code
+        properties:
+            id: ~
+        sorters:
+            columns:
+                hasContact: { data_name: hasContact }
+            default:
+                hasContact: DESC
         filters:
             columns:
-                hasAccount:
+                hasContact:
                     filter_by_having: true
                     data_name: hasContact
                     type:      boolean
+                firstName:
+                    type: string
+                    data_name: c.firstName
+                lastName:
+                    type: string
+                    data_name: c.lastName
+                primaryEmail:
+                    type: string
+                    data_name: email.email
+                primaryPhone:
+                    type: string
+                    data_name: phone.phone
+                countryName:
+                    type: entity
+                    data_name: address.country
+                    enabled: false
+                    options:
+                        field_options:
+                          class: OroAddressBundle:Country
+                          property: name
+                          query_builder: @orocrm_contact.contact.datagrid_helper->getCountryFilterQueryBuilder
+                regionLabel:
+                    type: string
+                    data_name: regionLabel
+                    enabled: false
+                addressPostalCode:
+                    type: string
+                    data_name: addressPostalCode
+                    enabled: false
+        options:
+            routerEnabled: false
+            requireJSModules:
+              - oro/datagrid/column-form-listener
+            columnListener:
+                dataField: id
+                columnName: hasContact
+                selectors:
+                    included: '#appendContacts'
+                    excluded: '#removeContacts'

@@ -2,25 +2,12 @@
     {% import 'OroDataGridBundle::macros.html.twig' as dataGrid %}
     {% set gridName = 'account-contacts-update-grid' %}
 
-    {% set listenerParameters = {
-    'columnName': 'has_account',
-    'selectors': {
-    'included': '#appendContacts',
-    'excluded': '#removeContacts'
-    }
+    {% set params = {
+        'account':     account,
+        'data_in':     app.request.get('added'),
+        'data_not_in': app.request.get('removed')
     } %}
-    {% set stateParameters = {
-    'parameters': {
-    'data_in': app.request.get('added'),
-    'data_not_in': app.request.get('removed')
-    }
-    } %}
-    {% placeholder prepare_grid with {
-    'datagrid': datagrid,
-    'selector': '#' ~ gridId,
-    'parameters': listenerParameters,
-    'state': stateParameters
-    } %}
+
 
     <style type="text/css">
         .grid-widget-content .grid,
@@ -30,14 +17,14 @@
     </style>
 
     {% block content %}
-        <div id="{{ gridId }}"></div>
+        {{ dataGrid.renderGrid(gridName, params) }}
         <input type="hidden" name="appendContacts" id="appendContacts" value="{{ app.request.get('added') }}" />
         <input type="hidden" name="removeContacts" id="removeContacts" value="{{ app.request.get('removed') }}" />
     {% endblock %}
 
     <script type="text/javascript">
         {% set wid = app.request.get('_wid') %}
-        require(['jquery', 'oro/grid/callback-listener', 'oro/widget-manager', 'oro/multiple-entity/model'],
+        require(['jquery', 'oro/datagrid/callback-listener', 'oro/widget-manager', 'oro/multiple-entity/model'],
                 function($, CallbackListener, WidgetManager, MultipleEntityModel) {
                     var addedModels = {};
                     WidgetManager.getWidgetInstance({{ wid|json_encode|raw }}, function(widget) {
@@ -63,9 +50,9 @@
                     $(function() {
                         /** @type {oro.datagrid.CallbackListener} */
                         new CallbackListener({
-                            datagridName: {{ datagrid.datagrid.name|json_encode|raw }},
+                            datagridName: {{ gridName|json_encode|raw }},
                             dataField: 'id',
-                            columnName: 'has_account',
+                            columnName: 'hasContact',
                             processCallback: function (value, model, listener) {
                                 var isActive = model.get(listener.columnName);
                                 var id = model.get('id');
@@ -73,15 +60,15 @@
                                     addedModels[id] = new MultipleEntityModel({
                                         'id': model.get('id'),
                                         'link': Routing.generate('orocrm_contact_info', {id: model.get('id')}),
-                                        'label': model.get('first_name') + ' ' + model.get('last_name'),
+                                        'label': model.get('firstName') + ' ' + model.get('lastName'),
                                         'extraData': [
                                             {
                                                 'label': 'Phone',
-                                                'value': model.get('phone')
+                                                'value': model.get('primaryPhone')
                                             },
                                             {
                                                 'label': 'Email',
-                                                'value': model.get('email')
+                                                'value': model.get('primaryEmail')
                                             }
                                         ]
                                     });

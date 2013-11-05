@@ -130,4 +130,21 @@ class AccountController extends Controller
             'form'     => $this->get('orocrm_account.form.account')->createView()
         );
     }
+
+    /**
+     * @Route(
+     *      "/contact/select/{id}",
+     *      name="orocrm_account_contact_select",
+     *      requirements={"id"="\d+"},
+     *      defaults={"id"=0}
+     * )
+     * @Template
+     * @AclAncestor("orocrm_contact_view")
+     */
+    public function contactDatagridAction(Account $entity = null)
+    {
+        return [
+            'account' => $entity ? $entity->getId() : $entity
+        ];
+    }
 }

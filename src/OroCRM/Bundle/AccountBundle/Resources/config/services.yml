@@ -13,7 +13,8 @@ parameters:
     orocrm_account.account.manager.api.class:  Oro\Bundle\SoapBundle\Entity\Manager\ApiFlexibleEntityManager
     orocrm_account.type.account.api.class: OroCRM\Bundle\AccountBundle\Form\Type\AccountApiType
 
-    orocrm_account.event_listener.account_contacts_view_listener.class: OroCRM\Bundle\AccountBundle\EventListener\AccountContactsViewGridListener
+    orocrm_account.event_listener.account_contacts_view_listener.class:    OroCRM\Bundle\AccountBundle\EventListener\AccountContactsViewGridListener
+    orocrm_account.event_listener.account_contacts_updagte_listener.class: Oro\Bundle\DataGridBundle\EventListener\BaseOrmRelationDatagridListener
 
 services:
     orocrm_account.account.manager.flexible:
@@ -147,3 +148,11 @@ services:
             - @oro_datagrid.datagrid.request_params
         tags:
             - { name: kernel.event_listener, event: oro_datagrid.datgrid.build.after.account-contacts-view-grid, method: onBuildAfter }
+
+    orocrm_account.event_listener.account_contacts_updagte_listener:
+        class: %orocrm_account.event_listener.account_contacts_updagte_listener.class%
+        arguments:
+           - 'account'
+           - @oro_datagrid.datagrid.request_params
+        tags:
+           - { name: kernel.event_listener, event: oro_datagrid.datgrid.build.after.account-contacts-update-grid, method: onBuildAfter }
