@@ -230,8 +230,10 @@ class ContactController extends Controller
      */
     public function createEmailAction(Contact $contact)
     {
-        $query             = $this->getRequest()->query->all();
-        $query['to']       = $contact->getPrimaryEmail()->getEmail();
+        $query = $this->getRequest()->query->all();
+        if ($contact->getPrimaryEmail()) {
+            $query['to'] = $contact->getPrimaryEmail()->getEmail();
+        }
         $query['gridName'] = 'contact_emails';
 
         return $this->forward(
