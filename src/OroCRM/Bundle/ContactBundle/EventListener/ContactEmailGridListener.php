@@ -38,7 +38,7 @@ class ContactEmailGridListener
         $datasource = $event->getDatagrid()->getDatasource();
         if ($datasource instanceof OrmDatasource) {
             /** @var QueryBuilder $query */
-            $queryBuilder = $datasource->getQuery();
+            $queryBuilder = $datasource->getQueryBuilder();
 
             $this->queryFactory->prepareQuery($queryBuilder);
 

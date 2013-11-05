@@ -13,6 +13,8 @@ parameters:
     orocrm_account.account.manager.api.class:  Oro\Bundle\SoapBundle\Entity\Manager\ApiFlexibleEntityManager
     orocrm_account.type.account.api.class: OroCRM\Bundle\AccountBundle\Form\Type\AccountApiType
 
+    orocrm_account.event_listener.account_contacts_view_listener.class: OroCRM\Bundle\AccountBundle\EventListener\AccountContactsViewGridListener
+
 services:
     orocrm_account.account.manager.flexible:
         class: %orocrm_account.account.manager.flexible.class%
@@ -138,3 +140,10 @@ services:
             - ["name"]
         tags:
             - { name: oro_form.autocomplete.search_handler, alias: accounts, acl_resource: orocrm_account_view }
+
+    orocrm_account.event_listener.account_contacts_view_listener:
+        class: %orocrm_account.event_listener.account_contacts_view_listener.class%
+        arguments:
+            - @oro_datagrid.datagrid.request_params
+        tags:
+            - { name: kernel.event_listener, event: oro_datagrid.datgrid.build.after.account-contacts-view-grid, method: onBuildAfter }

@@ -1,5 +1,7 @@
 <div class="widget-content grid-widget-content">
-    {% set gridId = "entity-grid-" ~ random() %}
+    {% import 'OroDataGridBundle::macros.html.twig' as dataGrid %}
+    {% set gridName = 'account-contacts-update-grid' %}
+
     {% set listenerParameters = {
     'columnName': 'has_account',
     'selectors': {
