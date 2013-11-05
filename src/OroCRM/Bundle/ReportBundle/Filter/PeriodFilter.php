@@ -23,4 +23,13 @@ class PeriodFilter extends ChoiceFilter
         }
         $qb->groupBy($data['value']);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function init($name, array $params)
+    {
+        $params[self::TYPE_KEY] = 'choice';
+        parent::init($name, $params);
+    }
 }

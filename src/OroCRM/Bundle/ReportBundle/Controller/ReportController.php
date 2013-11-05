@@ -5,7 +5,6 @@ namespace OroCRM\Bundle\ReportBundle\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
-use Symfony\Component\Yaml\Yaml;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
@@ -29,9 +28,18 @@ class ReportController extends Controller
      */
     public function indexAction($reportGroupName, $reportName)
     {
+        $gridName  = implode('-', ['orocrm_report', $reportGroupName, $reportName]);
+        $pageTitle = $this->get('oro_datagrid.datagrid.manager')->getConfigurationForGrid($gridName)['pageTitle'];
+
+        $this->get('oro_navigation.title_service')->setParams(array('%reportName%' => $pageTitle));
+
         return [
-            'reportGroupName' => $reportGroupName,
-            'reportName'      => $reportName
+            'pageTitle' => $pageTitle,
+            'gridName'  => $gridName,
+            'params'    => [
+                'reportGroupName' => $reportGroupName,
+                'reportName'      => $reportName
+            ]
         ];
     }
 }
