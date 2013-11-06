@@ -149,7 +149,6 @@ datagrid:
                         - { join: address.country, alias: country }
                         - { join: address.state, alias: region }
         sorters:
-            multiple_sorting: true
             columns:
                 firstName:
                     data_name: c.firstName
@@ -166,8 +165,7 @@ datagrid:
                 addressPostalCode:
                     data_name: address.postalCode
             default:
-                firstName: %oro_datagrid.extension.orm_sorter.class%::DIRECTION_ASC
-                lastName:  %oro_datagrid.extension.orm_sorter.class%::DIRECTION_ASC
+                lastName: ASC
         options:
             entityHint: contact
 
@@ -213,6 +211,8 @@ datagrid:
                     data_name: c.createdAt
                 updatedAt:
                     data_name: c.updatedAt
+            default:
+                firstName: ASC
 
     account-contacts-update-grid:
         extend: base-account-contacts-grid

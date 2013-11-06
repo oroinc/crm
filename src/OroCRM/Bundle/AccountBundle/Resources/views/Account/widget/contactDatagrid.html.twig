@@ -4,8 +4,8 @@
 
     {% set params = {
         'account':     account,
-        'data_in':     app.request.get('added'),
-        'data_not_in': app.request.get('removed')
+        'data_in':     app.request.get('added')|split(','),
+        'data_not_in': app.request.get('removed')|split(',')
     } %}
 
 
@@ -24,8 +24,8 @@
 
     <script type="text/javascript">
         {% set wid = app.request.get('_wid') %}
-        require(['jquery', 'oro/datagrid/callback-listener', 'oro/widget-manager', 'oro/multiple-entity/model'],
-                function($, CallbackListener, WidgetManager, MultipleEntityModel) {
+        require(['jquery', 'oro/datagrid/callback-listener', 'oro/widget-manager', 'oro/multiple-entity/model', 'oro/registry'],
+                function($, CallbackListener, WidgetManager, MultipleEntityModel, registry) {
                     var addedModels = {};
                     WidgetManager.getWidgetInstance({{ wid|json_encode|raw }}, function(widget) {
                         if (widget.options.type == 'dialog') {
@@ -43,6 +43,8 @@
                                 var appendedIds = addedVal.length ? addedVal.split(',') : [];
                                 var removedIds = removedVal.length ? removedVal.split(',') : [];
                                 widget.trigger('completeSelection', appendedIds, addedModels, removedIds);
+                                // remove datagrid when widget goes be removed
+                                registry.setElement('datagrid', {{ gridName|json_encode|raw }}, undefined);
                             });
                         });
                     });
