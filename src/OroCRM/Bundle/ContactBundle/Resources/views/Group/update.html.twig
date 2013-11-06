@@ -62,7 +62,7 @@
     %}
     {% if showContactsGrid %}
         {% set gridParams = form.vars.value.id ? {group: form.vars.value.id} : {} %}
-        {% set gridData = dataGrid.renderGrid(gridName, gridParams) %}
+        {% set gridData = dataGrid.renderGrid(gridName, gridParams, { cssClass: 'inner-grid' }) %}
         {% set dataBlocks = dataBlocks|merge(
             [{
                 'title' : 'Contacts',

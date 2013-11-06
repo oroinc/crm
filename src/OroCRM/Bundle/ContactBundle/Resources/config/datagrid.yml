@@ -177,7 +177,6 @@ datagrid:
                 route:      oro_api_delete_contact
                 params:     [ id ]
         sorters:
-            multiple_sorting: true
             columns:
                 firstName:
                     data_name: c.firstName

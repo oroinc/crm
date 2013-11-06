@@ -110,7 +110,7 @@
         {% set dataBlocks = dataBlocks|merge([{'title' : 'Additional Information'|trans, 'subblocks': additional}])%}
     {% endif %}
 
-    {% set dataBlocks = dataBlocks|merge([{'title' : 'Contacts', 'subblocks': [{'title' : null, 'data' : [dataGrid.renderGrid(gridName, {account: entity.id})], 'useSpan': false}] }])%}
+    {% set dataBlocks = dataBlocks|merge([{'title' : 'Contacts', 'subblocks': [{'title' : null, 'data' : [dataGrid.renderGrid(gridName, {account: entity.id}, { cssClass: 'inner-grid' })], 'useSpan': false}] }])%}
 
     {% set data =
         {
