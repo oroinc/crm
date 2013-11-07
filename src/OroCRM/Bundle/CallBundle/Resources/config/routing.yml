@@ -1,0 +1,5 @@
+orocrm_call_bundle:
+    resource: "@OroCRMCallBundle/Controller"
+    type:     annotation
+    prefix:   /call
+
