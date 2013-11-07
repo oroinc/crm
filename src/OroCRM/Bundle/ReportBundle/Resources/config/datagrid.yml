@@ -136,7 +136,7 @@ datagrid:
         filters:
             columns:
                 createdDate:   { type: date, data_name: createdDate }
-                leadsCount:    { type: number, data_name: leadsCount }
+                leadsCount:    { type: number, data_name: leadsCount, filter_by_having: true }
         options:
             entityHint: report data
 
