@@ -38,6 +38,7 @@ class ContactTypeTest extends \PHPUnit_Framework_TestCase
         $expectedFields = array(
             'namePrefix' => 'text',
             'firstName' => 'text',
+            'middleName' => 'text',
             'lastName' => 'text',
             'nameSuffix' => 'text',
             'gender' => 'oro_gender',

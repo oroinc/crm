@@ -44,8 +44,12 @@ class ContactDataConverter extends AbstractTableDataConverter implements QueryBu
         'Assigned To'          => 'assignedTo:fullName',
         // contact typed addresses (OroCRMContactBundle:ContactAddress)
         'Primary Address Label'       => 'addresses:0:label',
+        'Primary Address Organization' => 'addresses:0:organization',
+        'Primary Address Name Prefix'  => 'addresses:0:namePrefix',
         'Primary Address First Name'  => 'addresses:0:firstName',
+        'Primary Address Middle Name'  => 'addresses:0:middleName',
         'Primary Address Last Name'   => 'addresses:0:lastName',
+        'Primary Address Name Suffix'  => 'addresses:0:nameSuffix',
         'Primary Address Street'      => 'addresses:0:street',
         'Primary Address Street2'     => 'addresses:0:street2',
         'Primary Address City'        => 'addresses:0:city',
@@ -57,13 +61,29 @@ class ContactDataConverter extends AbstractTableDataConverter implements QueryBu
             self::FRONTEND_TO_BACKEND => array('Address (\d+) Label', 'addresses:$1:label'),
             self::BACKEND_TO_FRONTEND => array('addresses:(\d+):label', 'Address $1 Label'),
         ),
+        'Numeric Address Organization' => array(
+            self::FRONTEND_TO_BACKEND => array('Address (\d+) Organization', 'addresses:$1:organization'),
+            self::BACKEND_TO_FRONTEND => array('addresses:(\d+):organization', 'Address $1 Organization'),
+        ),
+        'Numeric Address Name Prefix' => array(
+            self::FRONTEND_TO_BACKEND => array('Address (\d+) Name Prefix', 'addresses:$1:namePrefix'),
+            self::BACKEND_TO_FRONTEND => array('addresses:(\d+):namePrefix', 'Address $1 Name Prefix'),
+        ),
         'Numeric Address First Name' => array(
             self::FRONTEND_TO_BACKEND => array('Address (\d+) First Name', 'addresses:$1:firstName'),
             self::BACKEND_TO_FRONTEND => array('addresses:(\d+):firstName', 'Address $1 First Name'),
         ),
+        'Numeric Address Middle Name' => array(
+            self::FRONTEND_TO_BACKEND => array('Address (\d+) Middle Name', 'addresses:$1:middleName'),
+            self::BACKEND_TO_FRONTEND => array('addresses:(\d+):middleName', 'Address $1 Middle Name'),
+        ),
         'Numeric Address Last Name' => array(
             self::FRONTEND_TO_BACKEND => array('Address (\d+) Last Name', 'addresses:$1:lastName'),
             self::BACKEND_TO_FRONTEND => array('addresses:(\d+):lastName', 'Address $1 Last Name'),
+        ),
+        'Numeric Address Name Suffix' => array(
+            self::FRONTEND_TO_BACKEND => array('Address (\d+) Name Suffix', 'addresses:$1:nameSuffix'),
+            self::BACKEND_TO_FRONTEND => array('addresses:(\d+):nameSuffix', 'Address $1 Name Suffix'),
         ),
         'Numeric Address Street' => array(
             self::FRONTEND_TO_BACKEND => array('Address (\d+) Street', 'addresses:$1:street'),

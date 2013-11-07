@@ -113,7 +113,7 @@ class ControllersTest extends WebTestCase
 
         $result = $this->client->getResponse();
         ToolsAPI::assertJsonResponse($result, 200, 'text/html; charset=UTF-8');
-        $this->assertContains("Contact_fname Contact_lname - Contacts - Customers", $crawler->html());
+        $this->assertRegExp("/Contact_fname\s+Contact_lname - Contacts - Customers/", $crawler->html());
     }
 
     public function testDelete()

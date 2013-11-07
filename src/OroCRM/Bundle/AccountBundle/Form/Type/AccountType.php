@@ -4,6 +4,7 @@ namespace OroCRM\Bundle\AccountBundle\Form\Type;
 
 use Doctrine\Common\Collections\Collection;
 
+use Oro\Bundle\LocaleBundle\Formatter\NameFormatter;
 use Symfony\Component\Routing\Router;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
@@ -22,10 +23,26 @@ class AccountType extends FlexibleType
      */
     protected $router;
 
-    public function __construct(FlexibleManager $flexibleManager, $valueFormAlias, Router $router)
-    {
+    /**
+     * @var NameFormatter
+     */
+    protected $nameFormatter;
+
+    /**
+     * @param FlexibleManager $flexibleManager
+     * @param string $valueFormAlias
+     * @param Router $router
+     * @param NameFormatter $nameFormatter
+     */
+    public function __construct(
+        FlexibleManager $flexibleManager,
+        $valueFormAlias,
+        Router $router,
+        NameFormatter $nameFormatter
+    ) {
         parent::__construct($flexibleManager, $valueFormAlias);
         $this->router = $router;
+        $this->nameFormatter = $nameFormatter;
     }
 
     /**
@@ -121,7 +138,7 @@ class AccountType extends FlexibleType
             $primaryEmail = $contact->getPrimaryEmail();
             $result[] = array(
                 'id' => $contact->getId(),
-                'label' => $contact->getFirstName() . ' ' . $contact->getLastName(),
+                'label' => $this->nameFormatter->format($contact),
                 'link' => $this->router->generate('orocrm_contact_info', array('id' => $contact->getId())),
                 'extraData' => array(
                     array('label' => 'Phone', 'value' => $primaryPhone ? $primaryPhone->getPhone() : null),
