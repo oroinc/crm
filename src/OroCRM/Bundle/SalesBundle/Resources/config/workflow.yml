@@ -261,7 +261,7 @@ workflows:
                             options:
                                 required: false
                         budget_amount:
-                            form_type: number # TODO: replace with valid money form type
+                            form_type: oro_money
                             options:
                                 required: false
                         probability:
@@ -293,7 +293,7 @@ workflows:
                                 property: 'label'
                                 empty_value: false
                         close_revenue:
-                            form_type: number # TODO: replace with valid money form type
+                            form_type: oro_money
                             options:
                                 required: true
                         close_date:

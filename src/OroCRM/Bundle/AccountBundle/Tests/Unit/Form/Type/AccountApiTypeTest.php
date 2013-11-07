@@ -24,8 +24,11 @@ class AccountApiTypeTest extends \PHPUnit_Framework_TestCase
         $router = $this->getMockBuilder('Symfony\Component\Routing\Router')
             ->disableOriginalConstructor()
             ->getMock();
+        $nameFormatter = $this->getMockBuilder('Oro\Bundle\LocaleBundle\Formatter\NameFormatter')
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->type = new AccountApiType($flexibleManager, 'account', $router);
+        $this->type = new AccountApiType($flexibleManager, 'account', $router, $nameFormatter);
     }
 
     public function testSetDefaultOptions()
