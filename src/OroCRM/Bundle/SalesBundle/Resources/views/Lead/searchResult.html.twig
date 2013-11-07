@@ -4,17 +4,15 @@
     * indexer_item - indexer item Oro\Bundle\SearchBundle\Query\Result\Item
 #}
 {% extends 'OroSearchBundle:Search:searchResultItem.html.twig' %}
-{% import 'OroLocaleBundle::macros.html.twig' as Locale %}
 
-{% set format = oro_config_value('oro_locale.name_format') %}
 {% set showImage = false %}
 
 {% set recordUrl = indexer_item.recordUrl %}
-{% set title = entity ? entity.__toString : indexer_item.recordTitle %}
+{% set title = entity ? entity|oro_format_name : indexer_item.recordTitle %}
 
 {% set entityType = 'Lead'|trans %}
 
 {% set entityInfo = [
-    {'title': 'Created', 'value': entity.createdAt ? Locale.time(entity.createdAt) : 'N/A'},
-    {'title': 'Updated', 'value': entity.updatedAt ? Locale.time(entity.updatedAt) : 'N/A'},
+    {'title': 'Created', 'value': entity.createdAt ? entity.createdAt|oro_format_datetime : 'N/A'},
+    {'title': 'Updated', 'value': entity.updatedAt ? entity.updatedAt|oro_format_datetime : 'N/A'},
 ] %}

@@ -1,6 +1,5 @@
 {% extends 'OroUIBundle:actions:update.html.twig' %}
 {% import 'OroDataGridBundle::macros.html.twig' as dataGrid %}
-{% set title = form.vars.value.id ? form.vars.value.name|default('N/A') : 'New Contact Group'|trans %}
 {% if form.vars.value.id %}
     {% oro_title_set({params : {"%group.label%": form.vars.value.label} }) %}
 {% endif %}

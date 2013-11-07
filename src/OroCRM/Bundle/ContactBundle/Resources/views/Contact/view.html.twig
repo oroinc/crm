@@ -4,8 +4,7 @@
 {% import 'OroEmailBundle::macros.html.twig' as Email %}
 {% import 'OroDataGridBundle::macros.html.twig' as dataGrid %}
 
-{% set format = oro_config_value('oro_crm_contact.name_format') %}
-{% set fullname = entity.fullname(format)|default('N/A'|trans) %}
+{% set fullname = entity|oro_format_name|default('N/A'|trans) %}
 {% oro_title_set({params : {"%contact.name%": fullname} }) %}
 {% set audit_entity_class = 'OroCRM_Bundle_ContactBundle_Entity_Contact' %}
 {% set gridName = 'contacts-email-grid' %}

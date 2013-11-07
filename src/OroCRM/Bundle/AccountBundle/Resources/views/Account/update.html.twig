@@ -1,7 +1,5 @@
 {% extends 'OroUIBundle:actions:update.html.twig' %}
 {% form_theme form with ['OroAddressBundle:Include:fields.html.twig', 'OroFormBundle:Form:fields.html.twig', 'OroTagBundle:Form:fields.html.twig'] %}
-{% set format = oro_config_value('oro_locale.name_format') %}
-{% set title = form.vars.value.id ? form.vars.value.fullname(format)|default('N/A') ~ ' - ' ~ 'Update Account'|trans : 'New Account'|trans %}
 {% oro_title_set({params : {"%account.name%": form.vars.value.name|default('N/A')} }) %}
 {% set audit_entity_class = 'OroCRM_Bundle_AccountBundle_Entity_Account' %}
 {% set formAction = form.vars.value.id ? path('orocrm_account_update', { 'id': form.vars.value.id }) : path('orocrm_account_create')  %}

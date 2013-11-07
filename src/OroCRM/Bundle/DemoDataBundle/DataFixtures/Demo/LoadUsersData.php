@@ -200,9 +200,9 @@ class LoadUsersData extends AbstractFlexibleFixture implements OrderedFixtureInt
 
         $user->setEmail($email);
         $user->setUsername($username);
-        $user->setFirstname($firstName);
+        $user->setFirstName($firstName);
         //$user->setMiddlename($middleName);
-        $user->setLastname($lastName);
+        $user->setLastName($lastName);
         $user->setBirthday($birthday);
         $user->setOwner($this->getReference('default_main_business'));
         $this->setFlexibleAttributeValue($this->userManager, $user, 'company', $company);

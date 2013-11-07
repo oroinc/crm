@@ -4,7 +4,6 @@
 {% oro_title_set({params : {"%lead.name%": entity.name} }) %}
 {% set audit_entity_class = 'OroCRM_Bundle_SalesBundle_Entity_Lead' %}
 
-{% set title = form.vars.value.id ? entity.name ~ ' - ' ~ 'Update Lead'|trans : 'New Lead'|trans %}
 {% set formAction = form.vars.value.id ? path('orocrm_sales_lead_update', { 'id': form.vars.value.id }) : path('orocrm_sales_lead_create')  %}
 
 {% block head_script %}
@@ -94,8 +93,11 @@
                     'title': 'Lead Information',
                     'data': [
                         form_row(form.name, {'label': 'Lead Name'}),
+                        form_row(form.namePrefix, {'label': 'Name prefix'}),
                         form_row(form.firstName, {'label': 'First name'}),
+                        form_row(form.middleName, {'label': 'Middle name'}),
                         form_row(form.lastName, {'label': 'Last name'}),
+                        form_row(form.nameSuffix, {'label': 'Name suffix'}),
                         form_row(form.contact, {'label': 'Contact'}),
                         form_row(form.jobTitle, {'label': 'Job Title'}),
 
