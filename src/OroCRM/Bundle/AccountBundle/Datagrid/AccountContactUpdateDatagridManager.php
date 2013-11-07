@@ -71,7 +71,7 @@ class AccountContactUpdateDatagridManager extends AccountContactDatagridManager
     protected function updateFieldsConfiguration(FieldDescriptionCollection $fieldsCollection)
     {
         // remove unused fields
-        foreach (array('groups', 'source', 'created', 'updated') as $fieldName) {
+        foreach (array('groups', 'source', 'createdAt', 'updatedAt') as $fieldName) {
             $fieldsCollection->remove($fieldName);
         }
     }

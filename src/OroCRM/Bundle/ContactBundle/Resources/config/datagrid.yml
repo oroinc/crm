@@ -45,7 +45,6 @@ services:
               entity_name: %orocrm_account.account.entity.class%
               query_entity_alias: account
               entity_hint: account
-              flexible: true
               route_name: orocrm_contact_view
 
     orocrm_contact.account.update_datagrid_manager:
@@ -56,7 +55,6 @@ services:
               entity_name: %orocrm_account.account.entity.class%
               query_entity_alias: account
               entity_hint: account
-              flexible: true
               route_name: orocrm_contact_update
 
     orocrm_contact.email.datagrid_manager:

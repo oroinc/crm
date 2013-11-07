@@ -8,11 +8,11 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 
+use OroCRM\Bundle\AccountBundle\Model\ExtendAccount;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 
 use Oro\Bundle\AddressBundle\Entity\Address;
 use Oro\Bundle\TagBundle\Entity\Taggable;
-use Oro\Bundle\FlexibleEntityBundle\Entity\Mapping\AbstractEntityFlexible;
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
@@ -20,7 +20,7 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\UserBundle\Entity\User;
 
 /**
- * @ORM\Entity(repositoryClass="Oro\Bundle\FlexibleEntityBundle\Entity\Repository\FlexibleEntityRepository")
+ * @ORM\Entity()
  * @ORM\Table(name="orocrm_account")
  * @ORM\HasLifecycleCallbacks()
  * @Oro\Loggable
@@ -39,7 +39,7 @@ use Oro\Bundle\UserBundle\Entity\User;
  *  }
  * )
  */
-class Account extends AbstractEntityFlexible implements Taggable
+class Account extends ExtendAccount implements Taggable
 {
     /**
      * @ORM\Id
@@ -103,14 +103,20 @@ class Account extends AbstractEntityFlexible implements Taggable
     protected $defaultContact;
 
     /**
-     * @var \Oro\Bundle\FlexibleEntityBundle\Model\AbstractFlexibleValue[]
+     * @var \DateTime
      *
-     * @ORM\OneToMany(
-     *  targetEntity="OroCRM\Bundle\AccountBundle\Entity\Value\AccountValue", mappedBy="entity",
-     *  cascade={"persist", "remove"}, orphanRemoval=true
-     * )
+     * @ORM\Column(type="datetime")
+     * @Soap\ComplexType("dateTime", nillable=true)
      */
-    protected $values;
+    protected $createdAt;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(type="datetime")
+     * @Soap\ComplexType("dateTime", nillable=true)
+     */
+    protected $updatedAt;
 
     /**
      * @var ArrayCollection $tags
@@ -119,7 +125,6 @@ class Account extends AbstractEntityFlexible implements Taggable
 
     public function __construct()
     {
-        parent::__construct();
         $this->contacts = new ArrayCollection();
     }
 
@@ -155,23 +160,45 @@ class Account extends AbstractEntityFlexible implements Taggable
     }
 
     /**
-     * Get account created date/time
+     * Get created date/time
      *
      * @return \DateTime
      */
     public function getCreatedAt()
     {
-        return $this->created;
+        return $this->createdAt;
     }
 
     /**
-     * Get account last update date/time
+     * @param \DateTime
+     * @return Account
+     */
+    public function setCreatedAt($created)
+    {
+        $this->createdAt = $created;
+
+        return $this;
+    }
+
+    /**
+     * Get last update date/time
      *
      * @return \DateTime
      */
     public function getUpdatedAt()
     {
-        return $this->updated;
+        return $this->updatedAt;
+    }
+
+    /**
+     * @param \DateTime
+     * @return Account
+     */
+    public function setUpdatedAt($updated)
+    {
+        $this->updatedAt = $updated;
+
+        return $this;
     }
 
     /**
@@ -274,7 +301,8 @@ class Account extends AbstractEntityFlexible implements Taggable
      */
     public function beforeSave()
     {
-        $this->created = new \DateTime('now', new \DateTimeZone('UTC'));
+        $this->createdAt = new \DateTime('now', new \DateTimeZone('UTC'));
+        $this->updatedAt = new \DateTime('now', new \DateTimeZone('UTC'));
     }
 
     /**
@@ -284,7 +312,7 @@ class Account extends AbstractEntityFlexible implements Taggable
      */
     public function doPreUpdate()
     {
-        $this->updated = new \DateTime('now', new \DateTimeZone('UTC'));
+        $this->updatedAt = new \DateTime('now', new \DateTimeZone('UTC'));
     }
 
     /**

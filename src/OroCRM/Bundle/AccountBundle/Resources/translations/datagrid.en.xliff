@@ -25,11 +25,11 @@
                 <source>Name</source>
                 <target>Name</target>
             </trans-unit>
-            <trans-unit id="orocrm_account.account.datagrid_manager.created">
+            <trans-unit id="orocrm_account.account.datagrid_manager.createdAt">
                 <source>Created At</source>
                 <target>Created At</target>
             </trans-unit>
-            <trans-unit id="orocrm_account.account.datagrid_manager.updated">
+            <trans-unit id="orocrm_account.account.datagrid_manager.updatedAt">
                 <source>Updated At</source>
                 <target>Updated At</target>
             </trans-unit>

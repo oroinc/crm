@@ -4,7 +4,7 @@ namespace OroCRM\Bundle\AccountBundle\Datagrid;
 
 use Doctrine\ORM\QueryBuilder;
 
-use Oro\Bundle\GridBundle\Datagrid\FlexibleDatagridManager;
+use Oro\Bundle\GridBundle\Datagrid\DatagridManager;
 use Oro\Bundle\GridBundle\Field\FieldDescription;
 use Oro\Bundle\GridBundle\Field\FieldDescriptionCollection;
 use Oro\Bundle\GridBundle\Field\FieldDescriptionInterface;
@@ -13,7 +13,7 @@ use Oro\Bundle\GridBundle\Action\ActionInterface;
 use Oro\Bundle\GridBundle\Property\UrlProperty;
 use Oro\Bundle\GridBundle\Datagrid\ProxyQueryInterface;
 
-class AccountDatagridManager extends FlexibleDatagridManager
+class AccountDatagridManager extends DatagridManager
 {
     /**
      * @var string
@@ -135,12 +135,12 @@ class AccountDatagridManager extends FlexibleDatagridManager
         $fieldsCollection->add($fieldContactName);
 
         $fieldCreated = new FieldDescription();
-        $fieldCreated->setName('created');
+        $fieldCreated->setName('createdAt');
         $fieldCreated->setOptions(
             array(
                 'type'        => FieldDescriptionInterface::TYPE_DATETIME,
                 'label'       => $this->translate('Created At'),
-                'field_name'  => 'created',
+                'field_name'  => 'createdAt',
                 'filter_type' => FilterInterface::TYPE_DATETIME,
                 'sortable'    => true,
                 'filterable'  => true,
@@ -150,12 +150,12 @@ class AccountDatagridManager extends FlexibleDatagridManager
         $fieldsCollection->add($fieldCreated);
 
         $fieldUpdated = new FieldDescription();
-        $fieldUpdated->setName('updated');
+        $fieldUpdated->setName('updatedAt');
         $fieldUpdated->setOptions(
             array(
                 'type'        => FieldDescriptionInterface::TYPE_DATETIME,
                 'label'       => $this->translate('Updated At'),
-                'field_name'  => 'updated',
+                'field_name'  => 'updatedAt',
                 'filter_type' => FilterInterface::TYPE_DATETIME,
                 'sortable'    => true,
                 'filterable'  => true,

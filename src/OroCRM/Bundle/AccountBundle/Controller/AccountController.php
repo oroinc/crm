@@ -5,7 +5,7 @@ namespace OroCRM\Bundle\AccountBundle\Controller;
 use Doctrine\Common\Util\ClassUtils;
 use Doctrine\ORM\Query;
 
-use Oro\Bundle\SoapBundle\Entity\Manager\ApiFlexibleEntityManager;
+use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -152,7 +152,7 @@ class AccountController extends Controller
     }
 
     /**
-     * @return ApiFlexibleEntityManager
+     * @return ApiEntityManager
      */
     protected function getManager()
     {
