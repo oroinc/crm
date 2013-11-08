@@ -4,8 +4,9 @@ namespace OroCRM\Bundle\TestFrameworkBundle\Tests\Selenium;
 
 use Oro\Bundle\TestFrameworkBundle\Pages\Objects\Login;
 use Oro\Bundle\TestFrameworkBundle\Pages\Objects\Search;
+use Oro\Bundle\TestFrameworkBundle\Test\Selenium2TestCase;
 
-class TagsAssignTest extends \PHPUnit_Extensions_Selenium2TestCase
+class TagsAssignTest extends Selenium2TestCase
 {
     protected $coverageScriptUrl = PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_TESTS_URL_COVERAGE;
 
@@ -121,8 +122,8 @@ class TagsAssignTest extends \PHPUnit_Extensions_Selenium2TestCase
             ->enable()
             ->setFirstpassword('123123q')
             ->setSecondpassword('123123q')
-            ->setFirstname('First_'.$username)
-            ->setLastname('Last_'.$username)
+            ->setFirstName('First_'.$username)
+            ->setLastName('Last_'.$username)
             ->setEmail($username.'@mail.com')
             ->setRoles(array('Manager'))
             ->verifyTag($tagname)

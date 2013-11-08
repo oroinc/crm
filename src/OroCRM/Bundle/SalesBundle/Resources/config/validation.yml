@@ -13,6 +13,9 @@ OroCRM\Bundle\SalesBundle\Entity\Opportunity:
         budgetAmount:
             - Range:
                 min: 0
+        closeRevenue:
+            - Range:
+                min: 0
 
 OroCRM\Bundle\SalesBundle\Entity\Lead:
     properties:

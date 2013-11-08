@@ -1,5 +1,4 @@
 {% import 'OroUIBundle::macros.html.twig' as macros %}
-{% import 'OroLocaleBundle::macros.html.twig' as Locale %}
 
 {# TODO: Move this to OroUIBundle::macros.html.twig #}
 {% macro renderRow(label, value) %}
@@ -20,9 +19,9 @@
         {{ _self.renderRow('Status'|trans, entity.status) }}
 
         {%- if resource_granted('orocrm_contact_view') and entity.contact -%}
-            {% set contactView = '<a href="' ~ path('orocrm_contact_view', {'id': entity.contact.id}) ~ '">' ~ entity.contact ~ '</a>' %}
+            {% set contactView = '<a href="' ~ path('orocrm_contact_view', {'id': entity.contact.id}) ~ '">' ~ entity.contact|oro_format_name ~ '</a>' %}
         {%- else -%}
-            {% set contactView = entity.contact ? entity.contact : '' %}
+            {% set contactView = entity.contact ? entity.contact|oro_format_name : '' %}
         {%- endif -%}
         {{ _self.renderRow('Contact'|trans, contactView) }}
 
@@ -33,11 +32,26 @@
         {%- endif -%}
         {{ _self.renderRow('Account'|trans, accountView) }}
 
-        {{ _self.renderRow('Probability'|trans, entity.probability|length ? (entity.probability * 100) ~ '%' : '') }}
-        {{ _self.renderRow('Budget amount'|trans, entity.budgetAmount|length ? entity.budgetAmount|number_format(2), '') }}
+        {{ _self.renderRow('Probability'|trans, entity.probability|length ? entity.probability|oro_format_percent : '') }}
+        {{ _self.renderRow('Budget amount'|trans, entity.budgetAmount|length ? entity.budgetAmount|oro_format_currency, '') }}
 
         {% if dynamic|length %}
             {% for label, item in dynamic %}
+                {% if item is iterable %}
+                    {% set data = '' %}
+                    {% for value in item.values %}
+                        {% if value.link is defined and value.link != false  %}
+                            {% set data = data ~ '<a href="' ~ value.link ~ '">' ~ value.title ~ '</a>' %}
+                        {% else %}
+                            {% set data = data ~ value.title %}
+                        {% endif %}
+                        {% if not loop.last %}
+                            {% set data = data ~ ', ' %}
+                        {% endif %}
+                    {% endfor %}
+
+                    {% set item = data %}
+                {% endif %}
                 {{ _self.renderRow(label|trans, item) }}
             {% endfor %}
         {% endif %}
@@ -46,7 +60,7 @@
         {{ _self.renderRow('Customer need'|trans, entity.customerNeed) }}
         {{ _self.renderRow('Proposed solution'|trans, entity.proposedSolution) }}
         {{ _self.renderRow('Close reason'|trans, entity.closeReason) }}
-        {{ _self.renderRow('Close revenue'|trans, entity.closeRevenue|length ? entity.closeRevenue|number_format(2), '') }}
-        {{ _self.renderRow('Close date'|trans, entity.closeDate ? Locale.date(entity.closeDate) : '') }}
+        {{ _self.renderRow('Close revenue'|trans, entity.closeRevenue|length ? entity.closeRevenue|oro_format_currency, '') }}
+        {{ _self.renderRow('Close date'|trans, entity.closeDate ? entity.closeDate|oro_format_date : '') }}
     </div>
 </div>
