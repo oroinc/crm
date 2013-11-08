@@ -99,7 +99,7 @@ class ContactSubscriberTest extends \PHPUnit_Framework_TestCase
     ) {
         $oldDate = new \DateTime('2012-12-12 12:12:12');
         $oldUser = new User();
-        $oldUser->setFirstname('oldUser');
+        $oldUser->setFirstName('oldUser');
         if ($entity instanceof Contact) {
             $entity->setUpdatedAt($oldDate);
             $entity->setUpdatedBy($oldUser);
@@ -110,7 +110,7 @@ class ContactSubscriberTest extends \PHPUnit_Framework_TestCase
         $newUser = null;
         if ($mockUser) {
             $newUser = new User();
-            $newUser->setFirstname('newUser');
+            $newUser->setFirstName('newUser');
         }
 
         $this->mockSecurityContext($mockToken, $mockUser, $newUser);

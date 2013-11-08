@@ -1,5 +1,4 @@
 {% import 'OroUIBundle::macros.html.twig' as macros %}
-{% import 'OroLocaleBundle::macros.html.twig' as Locale %}
 {% import 'OroTagBundle::macros.html.twig' as _tag %}
 
 {# TODO: Move this to OroUIBundle::macros.html.twig #}
@@ -205,7 +204,7 @@
             <div class="controls">
                 <div class="clearfix-oro">
                     <p class="control-label">
-                        {{ entity.birthday is empty ? 'N/A'|trans : Locale.date(entity.birthday) }}
+                        {{ entity.birthday is empty ? 'N/A'|trans : entity.birthday|oro_format_date }}
                         {% if entity.birthday is not empty %}
                             ({{ entity.birthday|age_string({'default': 'N/A'}) }})
                         {% endif %}

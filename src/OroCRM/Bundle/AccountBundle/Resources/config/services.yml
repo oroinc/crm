@@ -45,6 +45,7 @@ services:
         arguments:
 #            - "orocrm_account_value"
             - @router
+            - @oro_locale.formatter.name
         tags:
             - { name: form.type, alias: orocrm_account }
 
@@ -112,6 +113,7 @@ services:
 #            - @orocrm_account.account.manager.flexible
             - "orocrm_account_value"
             - @router
+            - @oro_locale.formatter.name
         tags:
             - { name: form.type, alias: account }
 

@@ -44,42 +44,38 @@
 {% endblock navButtons %}
 
 {% block pageHeader %}
-    {% set breadcrumbs = {
-        'entity': entity,
-        'indexPath': path('orocrm_account_index'), 'indexLabel': 'Accounts'|trans,
-        'entityTitle': entity.name(format)|default('N/A') }
-    %}
+    {% set breadcrumbs = {'entity': entity, 'indexPath': path('orocrm_account_index'), 'indexLabel': 'Accounts'|trans, 'entityTitle': entity.name(format)|default('N/A') } %}
     {{ parent() }}
 {% endblock pageHeader %}
 
 {% block content_data %}
     {% set id = 'navbarAccountsUpdate' %}
     {% set dataSubBlocks = [UI.attibuteRow('Account Name', entity.name)] %}
-
     {% if resource_granted('oro_tag_view_tag_cloud') %}
         {% set dataSubBlocks = dataSubBlocks|merge([UI.renderAttribute('Tags', _tag.renderView(entity))]) %}
     {% endif %}
 
-    {% set dataBlocks = [{
-        'title': 'General'|trans,
-        'class': 'active',
-        'subblocks': [{ 'title': 'Basic Information'|trans, 'data' : dataSubBlocks }]
-    }] %}
+    {% set dataBlocks =
+        [
+            {
+                'title': 'General'|trans,
+                'class': 'active',
+                'subblocks': [
+                    {
+                        'title': 'Basic Information'|trans,
+                        'data' : dataSubBlocks
+                    }
+                ]
+            }
+        ]
+    %}
 
     {% set accountAddresses = [] %}
-
     {%  if entity.billingAddress is not empty %}
-        {% set accountAddresses = accountAddresses|merge([{
-            'title': 'Billing Address'|trans,
-            'data': [addressView.renderAddress(entity.billingAddress)
-        ]}]) %}
+        {% set accountAddresses = accountAddresses|merge([{'title': 'Billing Address'|trans, 'data': [addressView.renderAddress(entity.billingAddress)]}]) %}
     {% endif %}
-
     {%  if entity.shippingAddress is not empty %}
-        {% set accountAddresses = accountAddresses|merge([{
-            'title': 'Shipping Address'|trans,
-            'data': [addressView.renderAddress(entity.shippingAddress)]
-        }]) %}
+        {% set accountAddresses = accountAddresses|merge([{'title': 'Shipping Address'|trans, 'data': [addressView.renderAddress(entity.shippingAddress)]}]) %}
     {% endif %}
 
     {% if (accountAddresses|length) %}
@@ -141,18 +137,16 @@
             'subblocks': additional_fields
         }] ) %}
     {% endif %}
-
     {#
         EntityExtend fields END
     #}
 
-    {% set dataBlocks = dataBlocks|merge([ {
-        'title' : 'Contacts',
-        'subblocks': [{ 'title' : null, 'data' : [UI.gridBlock(gridId)], 'useSpan': false }]
-    } ]) %}
+    {% set dataBlocks = dataBlocks|merge([{'title' : 'Contacts', 'subblocks': [{'title' : null, 'data' : [UI.gridBlock(gridId)], 'useSpan': false}] }])%}
 
-    {% set data = {
-        'dataBlocks': dataBlocks,
-    } %}
+    {% set data =
+        {
+            'dataBlocks': dataBlocks,
+        }
+    %}
     {{ parent() }}
 {% endblock content_data %}
