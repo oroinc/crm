@@ -103,7 +103,7 @@ datagrid:
         options:
             entityHint: contact
             requireJSModules:
-              - oro/datagrid/column-form-listener
+                - oro/datagrid/column-form-listener
             columnListener:
                 dataField: id
                 columnName: hasGroup
