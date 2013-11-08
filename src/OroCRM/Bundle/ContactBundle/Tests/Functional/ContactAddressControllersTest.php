@@ -56,6 +56,7 @@ class ContactAddressControllersTest extends WebTestCase
      */
     public function testCreateAddress()
     {
+        $this->markTestSkipped("BAP-1820");
         $this->client->request(
             'GET',
             $this->client->generate('orocrm_contact_index', array('_format' => 'json')),
@@ -152,6 +153,7 @@ class ContactAddressControllersTest extends WebTestCase
      */
     public function testUpdateAddress()
     {
+        $this->markTestSkipped("BAP-1820");
         $this->client->request(
             'GET',
             $this->client->generate('orocrm_contact_index', array('_format' => 'json')),

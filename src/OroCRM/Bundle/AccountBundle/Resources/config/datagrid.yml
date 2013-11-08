@@ -1,5 +1,7 @@
 datagrid:
     accounts-grid:
+        flexible_entity: OroCRMAccountBundle:Account
+
         source:
             type:           orm
             acl_resource:   orocrm_account_view

@@ -55,6 +55,7 @@ class ControllersGroupTest extends WebTestCase
      */
     public function testUpdate()
     {
+        $this->markTestSkipped("BAP-1820");
         $this->client->request(
             'GET',
             $this->client->generate('orocrm_contact_group_index', array('_format' =>'json')),
@@ -94,6 +95,7 @@ class ControllersGroupTest extends WebTestCase
      */
     public function testGrid()
     {
+        $this->markTestSkipped("BAP-1820");
         $this->client->request(
             'GET',
             $this->client->generate('orocrm_contact_group_index', array('_format' =>'json')),
@@ -127,6 +129,7 @@ class ControllersGroupTest extends WebTestCase
      */
     public function testDelete()
     {
+        $this->markTestSkipped("BAP-1820");
         $this->client->request(
             'GET',
             $this->client->generate('orocrm_contact_group_index', array('_format' =>'json')),
