@@ -20,16 +20,16 @@ class CallTest extends \PHPUnit_Framework_TestCase
     public function getSetDataProvider()
     {
         $now = new \DateTime('now');
-        $user = $this->getMockBuilder('Oro\Bundle\UserBundle\Entity\User');
-        $contact = $this->getMockBuilder('OroCRM\Bundle\ContactBundle\Entity\Contact');
-        $account = $this->getMockBuilder('OroCRM\Bundle\AccountBundle\Entity\Account');
-        $contactPhoneNumber = $this->getMockBuilder('OroCRM\Bundle\ContactBundle\Entity\ContactPhone');
-        $callStatus = $this->getMockBuilder('OroCRM\Bundle\CallBundle\Entity\CallStatus');
+        $user = $this->getMock('Oro\Bundle\UserBundle\Entity\User');
+        $contact = $this->getMock('OroCRM\Bundle\ContactBundle\Entity\Contact');
+        $account = $this->getMock('OroCRM\Bundle\AccountBundle\Entity\Account');
+        $contactPhoneNumber = $this->getMock('OroCRM\Bundle\ContactBundle\Entity\ContactPhone');
+        $callStatus = $this->getMock('OroCRM\Bundle\CallBundle\Entity\CallStatus');
 
         return array(
             'owner' => array('owner', $user, $user),            
-            'relatedContact' => array('contact', $contact, $contact),
-            'relatedAccount' => array('account ', $account , $account),
+            'relatedContact' => array('relatedContact', $contact, $contact),
+            'relatedAccount' => array('relatedAccount', $account , $account),
             'subject' => array('subject', 'test', 'test'),
             'phoneNumber' => array('phoneNumber', 'test', 'test'),
             'contactPhoneNumber' => array('contactPhoneNumber', $contactPhoneNumber, $contactPhoneNumber),
