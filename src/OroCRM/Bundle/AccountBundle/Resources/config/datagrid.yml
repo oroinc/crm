@@ -152,9 +152,9 @@ datagrid:
                         - { join: address.state, alias: region }
         sorters:
             columns:
-                firstName:
+                first_name:
                     data_name: c.firstName
-                lastName:
+                last_name:
                     data_name: c.lastName
                 primaryEmail:
                     data_name: email.email
@@ -179,10 +179,12 @@ datagrid:
                     and:
                         - :account MEMBER OF c.accounts
         columns:
-            firstName:
+            first_name:
                 label: orocrm.contact.datagrid.first_name
-            lastName:
+                data_name: firstName
+            last_name:
                 label: orocrm.contact.datagrid.last_name
+                data_name: lastName
             primaryEmail:
                 label: orocrm.contact.datagrid.email
             primaryPhone:
@@ -234,10 +236,12 @@ datagrid:
                 label:   Assigned
                 editable: true
                 frontend_type: boolean
-            firstName:
+            first_name:
                 label: orocrm.contact.datagrid.first_name
-            lastName:
+                data_name: firstName
+            last_name:
                 label: orocrm.contact.datagrid.last_name
+                data_name: lastName
             primaryEmail:
                 label: orocrm.contact.datagrid.email
             primaryPhone:
@@ -261,10 +265,10 @@ datagrid:
                     filter_by_having: true
                     data_name: hasContact
                     type:      boolean
-                firstName:
+                first_name:
                     type: string
                     data_name: c.firstName
-                lastName:
+                last_name:
                     type: string
                     data_name: c.lastName
                 primaryEmail:

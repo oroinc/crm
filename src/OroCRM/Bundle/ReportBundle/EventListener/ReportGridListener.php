@@ -68,4 +68,4 @@ class ReportGridListener
             $period
         );
     }
-} 
+}
