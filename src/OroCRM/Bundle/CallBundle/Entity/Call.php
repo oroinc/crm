@@ -33,14 +33,14 @@ class Call
     /**
      * @var Contact
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ContactBundle\Entity\Contact")
-     * @ORM\JoinColumn(name="related_contact_id", referencedColumnName="id", onDelete="SET NULL")
+     * @ORM\JoinColumn(name="related_contact_id", referencedColumnName="id", onDelete="SET NULL", nullable=true)
      */
     protected $relatedContact;
 
     /**
      * @var Account
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\AccountBundle\Entity\Account")
-     * @ORM\JoinColumn(name="related_account_id", referencedColumnName="id", onDelete="SET NULL")
+     * @ORM\JoinColumn(name="related_account_id", referencedColumnName="id", onDelete="SET NULL", nullable=true)
      */
     protected $relatedAccount;
 
@@ -91,7 +91,7 @@ class Call
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="duration", type="integer")
+     * @ORM\Column(name="duration", type="integer", nullable=true)
      */
     protected $duration;
 
@@ -102,6 +102,11 @@ class Call
      */
     protected $direction;
 
+
+    public function __construct()
+    {
+       $this->direction = false;
+    }
 
     /**
      * Get id

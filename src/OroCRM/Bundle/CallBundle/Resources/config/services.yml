@@ -1,7 +1,9 @@
 parameters:
-#    oro_crm_call.example.class: OroCRM\Bundle\CallBundle\Example
+    orocrm_call.type.call.class: OroCRM\Bundle\CallBundle\Form\Type\CallType
 
 services:
-#    oro_crm_call.example:
-#        class: %oro_crm_call.example.class%
-#        arguments: [@service_id, "plain_value", %parameter%]
+    orocrm_call.form.call:
+        class: Symfony\Component\Form\Form
+        factory_method: createNamed
+        factory_service: form.factory
+        arguments: ["orocrm_call", "orocrm_contact", null]
