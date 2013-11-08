@@ -42,7 +42,7 @@ class CreateOpportunityTest extends Selenium2TestCase
             ->setCustomerNeed('50')
             ->setProposedSolution('150')
             ->setCloseRevenue('200')
-            ->setCloseDate('9/26/13')
+            ->setCloseDate('Sep 26, 2013')
             ->setOwner('admin')
             ->save()
             ->assertMessage('Opportunity saved')

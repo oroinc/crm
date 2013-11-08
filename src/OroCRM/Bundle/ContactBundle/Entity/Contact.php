@@ -9,6 +9,7 @@ use Doctrine\Common\Collections\Collection;
 
 use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 
+use Oro\Bundle\LocaleBundle\Model\FullNameInterface;
 use Oro\Bundle\TagBundle\Entity\Taggable;
 use Oro\Bundle\AddressBundle\Entity\AddressType;
 use Oro\Bundle\EmailBundle\Entity\EmailOwnerInterface;
@@ -48,7 +49,7 @@ use OroCRM\Bundle\AccountBundle\Entity\Account;
  *  }
  * )
  */
-class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
+class Contact extends ExtendContact implements Taggable, EmailOwnerInterface, FullNameInterface
 {
     /**
      * @var int
@@ -72,7 +73,7 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
     /**
      * @var string
      *
-     * @ORM\Column(name="firstname", type="string", length=255)
+     * @ORM\Column(name="first_name", type="string", length=255)
      * @Soap\ComplexType("string")
      * @Oro\Versioned
      */
@@ -81,7 +82,16 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
     /**
      * @var string
      *
-     * @ORM\Column(name="lastname", type="string", length=255)
+     * @ORM\Column(name="middle_name", type="string", length=255, nullable=true)
+     * @Soap\ComplexType("string")
+     * @Oro\Versioned
+     */
+    protected $middleName;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="last_name", type="string", length=255)
      * @Soap\ComplexType("string")
      * @Oro\Versioned
      */
@@ -104,13 +114,6 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
      * @Oro\Versioned
      */
     protected $gender;
-
-    /**
-     * Set name formatting using "%first%" and "%last%" placeholders
-     *
-     * @var string
-     */
-    protected $nameFormat;
 
     /**
      * @var \DateTime
@@ -396,6 +399,25 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
     }
 
     /**
+     * @param string $namePrefix
+     * @return Contact
+     */
+    public function setNamePrefix($namePrefix)
+    {
+        $this->namePrefix = $namePrefix;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNamePrefix()
+    {
+        return $this->namePrefix;
+    }
+
+    /**
      * @param string $firstName
      * @return Contact
      */
@@ -415,6 +437,25 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
     }
 
     /**
+     * @return string
+     */
+    public function getMiddleName()
+    {
+        return $this->middleName;
+    }
+
+    /**
+     * @param string $middleName
+     * @return Contact
+     */
+    public function setMiddleName($middleName)
+    {
+        $this->middleName = $middleName;
+
+        return $this;
+    }
+
+    /**
      * @param string $lastName
      * @return Contact
      */
@@ -431,25 +472,6 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
     public function getLastName()
     {
         return $this->lastName;
-    }
-
-    /**
-     * @param string $namePrefix
-     * @return Contact
-     */
-    public function setNamePrefix($namePrefix)
-    {
-        $this->namePrefix = $namePrefix;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getNamePrefix()
-    {
-        return $this->namePrefix;
     }
 
     /**
@@ -488,47 +510,6 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
     public function getGender()
     {
         return $this->gender;
-    }
-
-    /**
-     * Get full name format. Defaults to "%first% %last%".
-     *
-     * @return string
-     */
-    public function getNameFormat()
-    {
-        return $this->nameFormat ? $this->nameFormat : '%prefix% %first% %last% %suffix%';
-    }
-
-    /**
-     * Set new format for a full name display. Use %first% and %last% placeholders, for example: "%last%, %first%".
-     *
-     * @param  string $format New format string
-     * @return Contact
-     */
-    public function setNameFormat($format)
-    {
-        $this->nameFormat = $format;
-
-        return $this;
-    }
-
-    /**
-     * Return full contact name according to name format
-     *
-     * @see Contact::setNameFormat()
-     * @param  string|null $format [optional]
-     * @return string
-     */
-    public function getFullname($format = null)
-    {
-        return trim(
-            str_replace(
-                array('%prefix%', '%first%', '%last%', '%suffix%'),
-                array($this->getNamePrefix(), $this->getFirstName(), $this->getLastName(), $this->getNameSuffix()),
-                $format ? $format : $this->getNameFormat()
-            )
-        );
     }
 
     /**
@@ -1348,6 +1329,13 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
      */
     public function __toString()
     {
-        return (string) $this->getFullname();
+        $name = $this->getNamePrefix() . ' '
+            . $this->getFirstName() . ' '
+            . $this->getMiddleName() . ' '
+            . $this->getLastName() . ' '
+            . $this->getNameSuffix();
+        $name = preg_replace('/ +/', ' ', $name);
+
+        return (string) trim($name);
     }
 }

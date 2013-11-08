@@ -232,9 +232,9 @@ class AddOrReplaceStrategyTest extends \PHPUnit_Framework_TestCase
      */
     public function getUserOrNull(User $user)
     {
-        if ($user->getFirstname() && $user->getLastname()) {
+        if ($user->getFirstName() && $user->getLastName()) {
             $existingUser = clone $user;
-            $existingUser->setUsername($user->getFirstname() . $user->getLastname());
+            $existingUser->setUsername($user->getFirstName() . $user->getLastName());
             return $existingUser;
         }
         return null;
@@ -345,11 +345,11 @@ class AddOrReplaceStrategyTest extends \PHPUnit_Framework_TestCase
             ->setLastName('last');
 
         $owner = new User();
-        $owner->setFirstname('owner first')
-            ->setLastname('owner last');
+        $owner->setFirstName('owner first')
+            ->setLastName('owner last');
         $assignedTo = new User();
-        $assignedTo->setFirstname('assignedTo first')
-            ->setLastname('assignedTo last');
+        $assignedTo->setFirstName('assignedTo first')
+            ->setLastName('assignedTo last');
         $firstAddress = new ContactAddress();
         $firstAddress->addType(new AddressType(AddressType::TYPE_BILLING))
             ->setCountry(new Country('US'))

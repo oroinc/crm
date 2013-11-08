@@ -44,6 +44,7 @@ class ContactType extends AbstractType
         $builder
             ->add('namePrefix', 'text', array('required' => false))
             ->add('firstName', 'text', array('required' => true))
+            ->add('middleName', 'text', array('required' => false))
             ->add('lastName', 'text', array('required' => true))
             ->add('nameSuffix', 'text', array('required' => false))
             ->add('gender', 'oro_gender', array('required' => false))
