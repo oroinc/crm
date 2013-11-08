@@ -1,65 +1,93 @@
 OroCRM\Bundle\AccountBundle\Entity\Account:
     fields:
         add_description:
-            type:           text
+            type:                 text
             configs:
                 entity:
-                    label:  Description
-            owner:          Custom
-            is_extend:      true
+                    label:        Description
+                datagrid:
+                    is_visible:   false
+            owner:                Custom
+            is_extend:            true
+
         add_phone:
-            type:           string
+            type:                 string
             configs:
                 entity:
-                    label:  Phone
-            owner:          Custom
-            is_extend:      true
+                    label:        Phone
+                datagrid:
+                    is_visible:   false
+            owner:                Custom
+            is_extend:            true
+
         add_email:
-            type:           string
+            type:                 string
             configs:
                 entity:
-                    label:  Email
-            owner:          Custom
-            is_extend:      true
+                    label:        Email
+                datagrid:
+                    is_visible:   false
+            owner:                Custom
+            is_extend:            true
+
         add_fax:
-            type:           string
+            type:                 string
             configs:
                 entity:
-                    label:  Fax
-            owner:          Custom
-            is_extend:      true
+                    label:        Fax
+                datagrid:
+                    is_visible:   false
+            owner:                Custom
+            is_extend:            true
+
         add_website:
-            type:           string
+            type:                 string
             configs:
                 entity:
-                    label:  Website
-            owner:          Custom
-            is_extend:      true
+                    label:        Website
+                datagrid:
+                    is_visible:   false
+            owner:                Custom
+            is_extend:            true
+
         add_employees:
-            type:           integer
+            type:                 integer
             configs:
                 entity:
-                    label:  Employees
-            owner:          Custom
-            is_extend:      true
+                    label:        Employees
+                datagrid:
+                    is_visible:   false
+            owner:                Custom
+            is_extend:            true
+
         add_ownership:
-            type:           string
+            type:                 string
             configs:
                 entity:
-                    label:  Ownership
-            owner:          Custom
-            is_extend:      true
+                    label:        Ownership
+                datagrid:
+                    is_visible:   false
+            owner:                Custom
+            is_extend:            true
+
         add_ticker_symbol:
-            type:           string
+            type:                 string
             configs:
                 entity:
-                    label:  Ticker Symbol
-            owner:          Custom
-            is_extend:      true
+                    label:        Ticker Symbol
+                datagrid:
+                    is_visible:   false
+
+            owner:                Custom
+            is_extend:            true
+
         add_rating:
-            type:           string
+            type:                 string
             configs:
                 entity:
-                    label:  Rating
-            owner:          Custom
-            is_extend:      true
+                    label:        Rating
+                datagrid:
+                    is_visible:   false
+
+            owner:                Custom
+            is_extend:            true
