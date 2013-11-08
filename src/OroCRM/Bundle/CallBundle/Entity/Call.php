@@ -91,7 +91,7 @@ class Call
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="duration", type="time")
+     * @ORM\Column(name="duration", type="integer")
      */
     protected $duration;
 
