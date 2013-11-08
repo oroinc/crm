@@ -1,91 +1,65 @@
 OroCRM\Bundle\AccountBundle\Entity\Account:
     fields:
-        description:
+        add_description:
             type:           text
-#            mode:           readonly
             configs:
                 entity:
                     label:  Description
-        phone:
-            type: string
-#            mode: readonly
+            owner:          Custom
+            is_extend:      true
+        add_phone:
+            type:           string
             configs:
                 entity:
                     label:  Phone
-#                form:
-#                    type:               text
-#                    options:
-#                        block:          other
-#                        required:       false
-#                        label:          'Phone'
-
-        email:
-            type: string
-#            mode: readonly
-        fax:
-            type: string
-#            mode: readonly
-        website:
-            type: string
-#            mode: readonly
-        employees:
-            type: integer
-#            mode: readonly
-        ownership:
-            type: string
-#            mode: readonly
-        ticker_symbol:
-            type: string
-#            mode: readonly
-        rating:
-            type: string
-#            mode: readonly
-
-#array(
-#    'code' => 'description',
-#    'label' => 'Description',
-#    'type' => 'oro_flexibleentity_textarea',
-#    'searchable' => true
-#),
-#array(
-#    'code'  => 'phone',
-#    'label' => 'Phone',
-#    'searchable' => true
-#),
-#array(
-#    'code'  => 'email',
-#    'type'  => 'oro_flexibleentity_email',
-#    'label' => 'Email',
-#    'searchable' => true
-#),
-#array(
-#    'code' => 'fax',
-#    'label' => 'Fax',
-#    'searchable' => true
-#),
-#array(
-#    'code' => 'website',
-#    'label' => 'Website',
-#    'type' => 'oro_flexibleentity_url',
-#    'searchable' => true
-#),
-#array(
-#    'code' => 'employees',
-#    'label' => 'Employees',
-#    'type' => 'oro_flexibleentity_integer_unsigned'
-#),
-#array(
-#    'code' => 'ownership',
-#    'label' => 'Ownership',
-#    'searchable' => true
-#),
-#array(
-#    'code' => 'ticker_symbol',
-#    'label' => 'Ticker Symbol',
-#    'type' => 'orocrm_account_ticker_symbol',
-#    'searchable' => true
-#),
-#array(
-#    'code' => 'rating',
-#    'label' => 'Rating',
-#),
+            owner:          Custom
+            is_extend:      true
+        add_email:
+            type:           string
+            configs:
+                entity:
+                    label:  Email
+            owner:          Custom
+            is_extend:      true
+        add_fax:
+            type:           string
+            configs:
+                entity:
+                    label:  Fax
+            owner:          Custom
+            is_extend:      true
+        add_website:
+            type:           string
+            configs:
+                entity:
+                    label:  Website
+            owner:          Custom
+            is_extend:      true
+        add_employees:
+            type:           integer
+            configs:
+                entity:
+                    label:  Employees
+            owner:          Custom
+            is_extend:      true
+        add_ownership:
+            type:           string
+            configs:
+                entity:
+                    label:  Ownership
+            owner:          Custom
+            is_extend:      true
+        add_ticker_symbol:
+            type:           string
+            configs:
+                entity:
+                    label:  Ticker Symbol
+            owner:          Custom
+            is_extend:      true
+        add_rating:
+            type:           string
+            configs:
+                entity:
+                    label:  Rating
+            owner:          Custom
+            is_extend:      true
