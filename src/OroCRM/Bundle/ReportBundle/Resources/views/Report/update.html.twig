@@ -1,2 +1,101 @@
 {% extends 'OroUIBundle:actions:update.html.twig' %}
 {% form_theme form with ['OroFormBundle:Form:fields.html.twig'] %}
+
+{% oro_title_set({params : {"%report.name%": entity.name} }) %}
+{% set formAction = form.vars.value.id ? path('orocrm_report_update', { 'id': form.vars.value.id }) : path('orocrm_report_create')  %}
+
+{% block head_script %}
+    {{ parent() }}
+
+    {% block stylesheets %}
+        {{ form_stylesheet(form) }}
+    {% endblock %}
+{% endblock %}
+
+{% block navButtons %}
+    {% if form.vars.value.id and resource_granted('orocrm_report_delete') %}
+        {{ UI.deleteButton({
+            'dataUrl': path('oro_api_delete_report', {'id': form.vars.value.id}),
+            'dataRedirect': path('orocrm_report_index'),
+            'aCss': 'no-hash remove-button',
+            'id': 'btn-remove-report',
+            'dataId': form.vars.value.id,
+            'dataMessage': 'Are you sure you want to delete this report?'|trans,
+            'successMessage': 'orocrm.report.controller.report.deleted.message'|trans,
+            'title': 'Delete report',
+            'label': 'Delete'
+        })
+        }}
+        {{ UI.buttonSeparator() }}
+    {% endif %}
+    {{ UI.button({'path' : path('orocrm_report_index'), 'title' : 'Cancel'|trans, 'label' : 'Cancel'|trans}) }}
+    {{ UI.saveAndStayButton('orocrm_report_update') }}
+    {{ UI.saveAndCloseButton() }}
+{% endblock %}
+
+{% block pageHeader %}
+    {% if form.vars.value.id %}
+        {% set breadcrumbs = {
+            'entity':      form.vars.value,
+            'indexPath':   path('orocrm_contact_index'),
+            'indexLabel': 'Reports'|trans,
+            'entityTitle': entity.name
+        }
+        %}
+        {{ parent() }}
+    {% else %}
+        {% include 'OroUIBundle::page_title_block.html.twig' %}
+    {% endif %}
+{% endblock pageHeader %}
+
+{% block content_data %}
+<div class="report-edit">
+    {% set id = 'report-profile' %}
+
+    {% set ownerDataBlock = {
+        'dataBlocks': [{
+            'subblocks': [{
+                'data': []
+            }]
+        }]
+    }
+    %}
+    {% set ownerDataBlock = oro_form_process(ownerDataBlock, form) %}
+
+    {% set dataBlocks = [{
+            'title': 'General'|trans,
+            'class': 'active',
+            'useSubBlockDivider': false,
+            'subblocks': [
+                {
+                    'title': 'Report Information'|trans,
+                    'spanClass': 'subblock',
+                    'data': [
+                        form_row(form.name, {'label': 'Name'|trans}),
+                        form_row(form.entity, {'label': 'Entity'|trans}),
+                        form_row(form.type, {'label': 'Type'|trans}),
+                        ownerDataBlock.dataBlocks[0].subblocks[0].data[0]
+                    ]
+                },
+                {
+                    'title': '',
+                    'spanClass': 'subblock-description',
+                    'data': [
+                        form_row(form.description, {'label': 'Description'|trans})
+                    ]
+                }
+            ]
+        }]
+    %}
+
+    {% set data =
+        {
+            'formErrors': form_errors(form)? form_errors(form) : null,
+            'dataBlocks': dataBlocks,
+        }
+    %}
+
+
+    {{ UI.scrollData(id, data, form) }}
+</div>
+{% endblock content_data %}

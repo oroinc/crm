@@ -10,6 +10,7 @@ use Symfony\Component\Yaml\Yaml;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
+use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use OroCRM\Bundle\ReportBundle\Datagrid\ReportGridManagerAbstract;
 
 class ReportController extends Controller
@@ -50,7 +51,7 @@ class ReportController extends Controller
         );
 
         $pageTitle = $definition['name'];
-        $this->get('oro_navigation.title_service')->setParams(array('%reportName%' => $pageTitle));
+        $this->get('oro_navigation.title_service')->setParams(array('%report.name%' => $pageTitle));
 
         $datagridView = $datagridManager->getDatagrid()->createView();
 
@@ -111,15 +112,41 @@ class ReportController extends Controller
         return array();
     }
 
+    /**
+     * @return ApiEntityManager
+     */
+    protected function getManager()
+    {
+        return $this->get('orocrm_report.report.manager');
+    }
+
     protected function update(Report $entity = null)
     {
         if (!$entity) {
-            //$entity = $this->getManager()->createEntity();
+            $entity = $this->getManager()->createEntity();
+        }
+
+        if ($this->get('orocrm_report.report.form.handler')->process($entity)) {
+            $this->get('session')->getFlashBag()->add(
+                'success',
+                $this->get('translator')->trans('orocrm.report.controller.report.saved.message')
+            );
+
+            return $this->get('oro_ui.router')->actionRedirect(
+                array(
+                    'route'      => 'orocrm_report_update',
+                    'parameters' => array('id' => $entity->getId()),
+                ),
+                array(
+                    'route'      => 'orocrm_report_index',
+                    'parameters' => array()
+                )
+            );
         }
 
         return array(
             'entity'   => $entity,
-            'form'     => $this->get('orocrm_report.form.report')->createView(),
+            'form'     => $this->get('orocrm_report.report.form')->createView(),
         );
     }
 }

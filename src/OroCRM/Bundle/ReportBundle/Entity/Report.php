@@ -9,6 +9,7 @@ use Oro\Bundle\OrganizationBundle\Entity\BusinessUnit;
 /**
  * @ORM\Entity
  * @ORM\Table(name="orocrm_report")
+ * @ORM\HasLifecycleCallbacks()
  * @Config(
  *  defaultValues={
  *      "entity"={"label"="Report", "plural_label"="Reports"},
@@ -50,10 +51,11 @@ class Report
     protected $description;
 
     /**
-     * @var string
+     * @var ReportType
      *
-     * @ORM\Column(name="type", type="string", length=100)
-     */
+     * @ORM\ManyToOne(targetEntity="ReportType")
+     * @ORM\JoinColumn(name="type", referencedColumnName="name")
+     **/
     protected $type;
 
     /**
@@ -76,6 +78,20 @@ class Report
      * @ORM\Column(name="definition", type="text")
      */
     protected $definition;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(type="datetime")
+     */
+    protected $createdAt;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(type="datetime")
+     */
+    protected $updatedAt;
 
     /**
      * Get id
@@ -136,7 +152,7 @@ class Report
     /**
      * Get report type
      *
-     * @return string
+     * @return ReportType
      */
     public function getType()
     {
@@ -146,7 +162,7 @@ class Report
     /**
      * Set report type
      *
-     * @param string $type
+     * @param ReportType $type
      * @return Report
      */
     public function setType($type)
@@ -193,12 +209,12 @@ class Report
     /**
      * Set a business unit owning this report
      *
-     * @param BusinessUnit $owner
+     * @param BusinessUnit $owningBusinessUnit
      * @return BusinessUnit
      */
-    public function setOwner($owner)
+    public function setOwner($owningBusinessUnit)
     {
-        $this->owner = $owner;
+        $this->owner = $owningBusinessUnit;
 
         return $this;
     }
@@ -224,5 +240,56 @@ class Report
         $this->definition = $definition;
 
         return $this;
+    }
+
+    /**
+     * Get created date/time
+     *
+     * @return \DateTime
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * Get last update date/time
+     *
+     * @return \DateTime
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
+    }
+
+    /**
+     * @param \DateTime $updated
+     * @return Report
+     */
+    public function setUpdatedAt($updated)
+    {
+        $this->updatedAt = $updated;
+
+        return $this;
+    }
+
+    /**
+     * Pre persist event listener
+     *
+     * @ORM\PrePersist
+     */
+    public function beforeSave()
+    {
+        $this->createdAt = new \DateTime('now', new \DateTimeZone('UTC'));
+    }
+
+    /**
+     * Pre update event listener
+     *
+     * @ORM\PreUpdate
+     */
+    public function beforeUpdate()
+    {
+        $this->updatedAt = new \DateTime('now', new \DateTimeZone('UTC'));
     }
 }
