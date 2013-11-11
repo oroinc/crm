@@ -258,12 +258,23 @@ class ContactTest extends \PHPUnit_Framework_TestCase
     public function testNames()
     {
         $contact = new Contact();
+        $contact->setNamePrefix('Mr.');
         $contact->setFirstName('First');
+        $contact->setMiddleName('Middle');
         $contact->setLastName('Last');
+        $contact->setNameSuffix('Sn.');
 
         $this->getFirstNameTest($contact);
         $this->toStringTest($contact);
-        $this->getFullNameTest($contact);
+    }
+
+    public function testToStringsPartial()
+    {
+        $contact = new Contact();
+        $contact->setFirstName('First');
+        $contact->setLastName('Last');
+
+        $this->assertEquals('First Last', $contact->__toString());
     }
 
     /**
@@ -279,19 +290,7 @@ class ContactTest extends \PHPUnit_Framework_TestCase
      */
     protected function toStringTest($contact)
     {
-        $this->assertEquals('First Last', $contact->__toString());
-    }
-
-    /**
-     * @param \OroCRM\Bundle\ContactBundle\Entity\Contact $contact
-     */
-    protected function getFullNameTest($contact)
-    {
-        $this->assertEquals($contact->getFullname(), sprintf('%s %s', 'First', 'Last'));
-
-        $contact->setNameFormat('%last%, %first%');
-
-        $this->assertEquals($contact->getFullname(), sprintf('%s, %s', 'Last', 'First'));
+        $this->assertEquals('Mr. First Middle Last Sn.', $contact->__toString());
     }
 
     public function testGetTags()
@@ -342,6 +341,7 @@ class ContactTest extends \PHPUnit_Framework_TestCase
         return array(
             'namePrefix' => array('namePrefix', 'test', 'test'),
             'firstName' => array('firstName', 'test', 'test'),
+            'middleName' => array('middleName', 'test', 'test'),
             'lastName' => array('lastName', 'test', 'test'),
             'nameSuffix' => array('nameSuffix', 'test', 'test'),
             'gender' => array('gender', 'male', 'male'),

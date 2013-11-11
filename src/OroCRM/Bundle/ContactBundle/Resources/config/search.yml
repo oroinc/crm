@@ -17,6 +17,10 @@ OroCRM\Bundle\ContactBundle\Entity\Contact:
             target_type:            text
             target_fields:          [firstName]
         -
+            name:                   middleName
+            target_type:            text
+            target_fields:          [middleName]
+        -
             name:                   lastName
             target_type:            text
             target_fields:          [lastName]

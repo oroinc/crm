@@ -1,11 +1,11 @@
 <?php
 
-namespace OroCRM\Bundle\TestsBundle\Tests\Selenium;
+namespace OroCRM\Bundle\TestFrameworkBundle\Tests\Selenium;
 
 use Oro\Bundle\TestFrameworkBundle\Pages\Objects\Login;
 use Oro\Bundle\TestFrameworkBundle\Test\Selenium2TestCase;
 
-class Test404 extends Selenium2TestCase
+class EntityTest extends Selenium2TestCase
 {
     protected $coverageScriptUrl = PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_TESTS_URL_COVERAGE;
 
@@ -22,15 +22,28 @@ class Test404 extends Selenium2TestCase
         $this->cookie()->clear();
     }
 
-    public function test404()
+    public function testEditExistEntity()
     {
+        $entityname = 'Contact';
+        $fieldname = 'Test_field' . mt_rand();
         $login = new Login($this);
         $login->setUsername(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_LOGIN)
             ->setPassword(PHPUNIT_TESTSUITE_EXTENSION_SELENIUM_PASS)
             ->submit()
-            ->openAclCheck()
-            ->assertAcl('404', '404 - Not Found')
-            ->assertElementPresent("//div[@class='pagination-centered popup-box-errors'][contains(., '404 Not Found')]");
-
+            ->openConfigEntities()
+            ->filterBy('Label', $entityname)
+            ->open(array($entityname))
+            ->createField()
+            ->setFieldName($fieldname)
+            ->setType('String')
+            ->proceed()
+            ->save()
+            ->assertMessage('Field saved')
+            ->updateSchema()
+            ->close()
+            ->openContacts()
+            ->add()
+            ->openConfigEntity(false)
+            ->checkEntityField($fieldname);
     }
 }

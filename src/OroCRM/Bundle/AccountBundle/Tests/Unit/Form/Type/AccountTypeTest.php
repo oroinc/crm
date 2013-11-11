@@ -21,6 +21,11 @@ class AccountTypeTest extends \PHPUnit_Framework_TestCase
      */
     protected $router;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $nameFormatter;
+
     protected function setUp()
     {
         $flexibleManager = $this->getMockBuilder('Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleManager')
@@ -29,8 +34,11 @@ class AccountTypeTest extends \PHPUnit_Framework_TestCase
         $this->router = $this->getMockBuilder('Symfony\Component\Routing\Router')
             ->disableOriginalConstructor()
             ->getMock();
+        $this->nameFormatter = $this->getMockBuilder('Oro\Bundle\LocaleBundle\Formatter\NameFormatter')
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->type = new AccountType($flexibleManager, 'orocrm_account', $this->router);
+        $this->type = new AccountType($flexibleManager, 'orocrm_account', $this->router, $this->nameFormatter);
     }
 
     public function testAddEntityFields()
@@ -115,12 +123,6 @@ class AccountTypeTest extends \PHPUnit_Framework_TestCase
         $contact->expects($this->any())
             ->method('getId')
             ->will($this->returnValue(1));
-        $contact->expects($this->once())
-            ->method('getFirstName')
-            ->will($this->returnValue('John'));
-        $contact->expects($this->once())
-            ->method('getLastName')
-            ->will($this->returnValue('Doe'));
         $phone = $this->getMockBuilder('OroCRM\Bundle\ContactBundle\Entity\ContactPhone')
             ->disableOriginalConstructor()
             ->getMock();
@@ -140,6 +142,11 @@ class AccountTypeTest extends \PHPUnit_Framework_TestCase
             ->method('getPrimaryEmail')
             ->will($this->returnValue($email));
         $contacts = new ArrayCollection(array($contact));
+
+        $this->nameFormatter->expects($this->once())
+            ->method('format')
+            ->with($contact)
+            ->will($this->returnValue('John Doe'));
 
         $account = $this->getMockBuilder('OroCRM\Bundle\AccountBundle\Entity\Account')
             ->disableOriginalConstructor()

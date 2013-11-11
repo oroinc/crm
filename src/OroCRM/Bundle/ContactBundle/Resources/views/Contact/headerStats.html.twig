@@ -1,22 +1,22 @@
 <li>
     {{ 'Created'|trans }}:
-    {{ entity.createdAt ? Locale.time(entity.createdAt) : 'N/A'|trans }}
+    {{ entity.createdAt ? entity.createdAt|oro_format_datetime : 'N/A'|trans }}
     {% if entity.createdBy %}
         {% if resource_granted('oro_user_user_view') %}
-         <a href="{{ path('oro_user_view', {'id': entity.createdBy.id}) }}">{{ entity.createdBy.fullname }}</a>
+         <a href="{{ path('oro_user_view', {'id': entity.createdBy.id}) }}">{{ entity.createdBy|oro_format_name }}</a>
         {% else %}
-            {{ entity.createdBy.fullname }}
+            {{ entity.createdBy|oro_format_name }}
         {% endif %}
     {% endif %}
 </li>
 <li>
     {{ 'Updated'|trans }}:
-    {{ entity.updatedAt ? Locale.time(entity.updatedAt) : 'N/A'|trans }}
+    {{ entity.updatedAt ? entity.updatedAt|oro_format_datetime : 'N/A'|trans }}
     {% if entity.updatedBy %}
         {% if resource_granted('oro_user_user_view') %}
-            <a href="{{ path('oro_user_view', {'id': entity.updatedBy.id}) }}">{{ entity.updatedBy.fullname }}</a>
+            <a href="{{ path('oro_user_view', {'id': entity.updatedBy.id}) }}">{{ entity.updatedBy|oro_format_name }}</a>
         {% else %}
-            {{ entity.updatedBy.fullname }}
+            {{ entity.updatedBy|oro_format_name }}
         {% endif %}
     {% endif %}
 </li>
