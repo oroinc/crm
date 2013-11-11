@@ -65,6 +65,9 @@ class ReportHandler
      */
     protected function onSuccess(Report $entity)
     {
+        // @todo: WILL BE IMPLEMENTED LATER
+        $entity->setDefinition('');
+
         $this->manager->persist($entity);
         $this->manager->flush();
     }

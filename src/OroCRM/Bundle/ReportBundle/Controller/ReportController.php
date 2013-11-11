@@ -15,55 +15,56 @@ use OroCRM\Bundle\ReportBundle\Datagrid\ReportGridManagerAbstract;
 
 class ReportController extends Controller
 {
-    /**
-     * @Route(
-     *      "/{reportGroupName}/{reportName}/{_format}",
-     *      name="orocrm_report_view",
-     *      requirements={"reportGroupName"="\w+", "reportName"="\w+", "_format"="html|json"},
-     *      defaults={"_format" = "html"}
-     * )
-     * @Template()
-     * @Acl(
-     *      id="orocrm_report_view",
-     *      type="entity",
-     *      permission="VIEW",
-     *      class="OroCRMReportBundle:Report"
-     * )
-     */
-    public function viewAction($reportGroupName, $reportName)
-    {
-        $input = Yaml::parse(file_get_contents(__DIR__ . '/../Resources/config/reports.yml'));
-        $gridServiceName = 'orocrm_report.datagrid.' . implode('.', array($reportGroupName, $reportName));
-        if (!$this->has($gridServiceName) || !isset($input['reports'][$reportGroupName][$reportName])) {
-            throw $this->createNotFoundException();
-        }
-
-        /** @var ReportGridManagerAbstract $datagridManager */
-        $datagridManager = $this->get($gridServiceName);
-
-        $definition = $input['reports'][$reportGroupName][$reportName];
-        $datagridManager->setReportDefinitionArray($definition);
-        $datagridManager->getRouteGenerator()->setRouteParameters(
-            array(
-                'reportGroupName' => $reportGroupName,
-                'reportName'      => $reportName
-            )
-        );
-
-        $pageTitle = $definition['name'];
-        $this->get('oro_navigation.title_service')->setParams(array('%report.name%' => $pageTitle));
-
-        $datagridView = $datagridManager->getDatagrid()->createView();
-
-        if ('json' == $this->getRequest()->getRequestFormat()) {
-            return $this->get('oro_grid.renderer')->renderResultsJsonResponse($datagridView);
-        }
-
-        return array(
-            'pageTitle' => $pageTitle,
-            'datagrid'  => $datagridView
-        );
-    }
+// @todo: EXISTING REPORTS NEED TO BE MOVED TO DATABASE
+//    /**
+//     * @Route(
+//     *      "/{reportGroupName}/{reportName}/{_format}",
+//     *      name="orocrm_report_view",
+//     *      requirements={"reportGroupName"="\w+", "reportName"="\w+", "_format"="html|json"},
+//     *      defaults={"_format" = "html"}
+//     * )
+//     * @Template()
+//     * @Acl(
+//     *      id="orocrm_report_view",
+//     *      type="entity",
+//     *      permission="VIEW",
+//     *      class="OroCRMReportBundle:Report"
+//     * )
+//     */
+//    public function viewAction($reportGroupName, $reportName)
+//    {
+//        $input = Yaml::parse(file_get_contents(__DIR__ . '/../Resources/config/reports.yml'));
+//        $gridServiceName = 'orocrm_report.datagrid.' . implode('.', array($reportGroupName, $reportName));
+//        if (!$this->has($gridServiceName) || !isset($input['reports'][$reportGroupName][$reportName])) {
+//            throw $this->createNotFoundException();
+//        }
+//
+//        /** @var ReportGridManagerAbstract $datagridManager */
+//        $datagridManager = $this->get($gridServiceName);
+//
+//        $definition = $input['reports'][$reportGroupName][$reportName];
+//        $datagridManager->setReportDefinitionArray($definition);
+//        $datagridManager->getRouteGenerator()->setRouteParameters(
+//            array(
+//                'reportGroupName' => $reportGroupName,
+//                'reportName'      => $reportName
+//            )
+//        );
+//
+//        $pageTitle = $definition['name'];
+//        $this->get('oro_navigation.title_service')->setParams(array('%report.name%' => $pageTitle));
+//
+//        $datagridView = $datagridManager->getDatagrid()->createView();
+//
+//        if ('json' == $this->getRequest()->getRequestFormat()) {
+//            return $this->get('oro_grid.renderer')->renderResultsJsonResponse($datagridView);
+//        }
+//
+//        return array(
+//            'pageTitle' => $pageTitle,
+//            'datagrid'  => $datagridView
+//        );
+//    }
 
     /**
      * @Route("/create", name="orocrm_report_create")
@@ -129,7 +130,7 @@ class ReportController extends Controller
         if ($this->get('orocrm_report.report.form.handler')->process($entity)) {
             $this->get('session')->getFlashBag()->add(
                 'success',
-                $this->get('translator')->trans('orocrm.report.controller.report.saved.message')
+                $this->get('translator')->trans('orocrm.report.controller.report.saved')
             );
 
             return $this->get('oro_ui.router')->actionRedirect(
@@ -139,6 +140,8 @@ class ReportController extends Controller
                 ),
                 array(
                     'route'      => 'orocrm_report_index',
+                    // @todo: WILL BE IMPLEMENTER LATER
+                    //'route'      => 'orocrm_report_view',
                     'parameters' => array()
                 )
             );

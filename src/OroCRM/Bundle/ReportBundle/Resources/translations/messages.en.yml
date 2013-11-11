@@ -18,10 +18,8 @@ orocrm:
             choose_report_type:    Choose a report type...
         controller:
             report:
-                saved:
-                    message:       Report saved
-                deleted:
-                    message:       Report deleted
+                saved:             Report saved
+                deleted:           Report deleted
 
 "Reports": Reports
 "Delete report": Delete report
