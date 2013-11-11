@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\AccountBundle\Tests\Functional\API;
 
+use Doctrine\ORM\EntityManager;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Bundle\TestFrameworkBundle\Test\ToolsAPI;
 use Oro\Bundle\TestFrameworkBundle\Test\Client;
@@ -15,9 +16,19 @@ class RestAccountApiTest extends WebTestCase
     /** @var Client */
     protected $client;
 
+    /**
+     * @var EntityManager
+     */
+    protected $entityManager;
+
     public function setUp()
     {
         $this->client = static::createClient(array(), ToolsAPI::generateWsseHeader());
+    }
+
+    public function tearDown()
+    {
+        unset($this->client);
     }
 
     public function testCreateAccount()
@@ -76,7 +87,9 @@ class RestAccountApiTest extends WebTestCase
             $request
         );
         $result = $this->client->getResponse();
+
         ToolsAPI::assertJsonResponse($result, 204);
+
         $this->client->request('GET', $this->client->generate('oro_api_get_account', array('id' => $account['id'])));
         $result = $this->client->getResponse();
         ToolsAPI::assertJsonResponse($result, 200);
@@ -84,7 +97,7 @@ class RestAccountApiTest extends WebTestCase
         $result = json_decode($result->getContent(), true);
         $this->assertEquals(
             $request['account']['name'],
-            $result['account']['name'],
+            $result['name'],
             'Account does not updated'
         );
     }
