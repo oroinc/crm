@@ -392,8 +392,10 @@ workflows:
                     @and:
                         - @equal: [$opportunity.status.name, 'in_progress']
                         - @and:
-                            - @greater_or_equal: [$probability, 0]
-                            - @less_or_equal: [$probability, 1]
+                            rules:
+                                - @greater_or_equal: [$probability, 0]
+                                - @less_or_equal: [$probability, 1]
+                            message: Probality must be between 0 and 100 percents.
                 post_actions: # update opportunity properties
                     - @assign_value:
                         - [$opportunity.contact, $contact]
