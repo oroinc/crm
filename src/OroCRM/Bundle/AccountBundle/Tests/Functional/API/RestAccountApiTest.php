@@ -26,8 +26,6 @@ class RestAccountApiTest extends WebTestCase
             "account" => array (
                 "name" => 'Account_name_' . mt_rand(),
                 "owner" => '1',
-                "add_website" => 'http://website.com',
-                "add_description" => 'Account description',
             )
         );
         $this->client->request('POST', $this->client->generate('oro_api_post_account'), $request);
@@ -71,7 +69,7 @@ class RestAccountApiTest extends WebTestCase
      */
     public function testUpdateAccount($account, $request)
     {
-        $request['account']['add_description'] .= "_Updated";
+        $request['account']['name'] .= "_Updated";
         $this->client->request(
             'PUT',
             $this->client->generate('oro_api_put_account', array('id' => $account['id'])),
@@ -83,12 +81,12 @@ class RestAccountApiTest extends WebTestCase
         $result = $this->client->getResponse();
         ToolsAPI::assertJsonResponse($result, 200);
 
-//        $result = json_decode($result->getContent(), true);
-//        $this->assertEquals(
-//            $request['account']['attributes']['description'],
-//            $result['attributes']['description']['value'],
-//            'Account does not updated'
-//        );
+        $result = json_decode($result->getContent(), true);
+        $this->assertEquals(
+            $request['account']['name'],
+            $result['account']['name'],
+            'Account does not updated'
+        );
     }
 
     /**
