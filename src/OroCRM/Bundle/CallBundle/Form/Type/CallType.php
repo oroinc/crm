@@ -15,9 +15,9 @@ class CallType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('owner', 'oro_user_user', array('required' => true))
-            ->add('relatedContact', 'orocrm_contact_select', array('required' => false))
-            ->add('relatedAccount', 'orocrm_account', array('required' => false))
+            // ->add('owner', 'oro_user_user', array('required' => true))
+            // ->add('relatedContact', 'orocrm_contact_select', array('required' => false))
+            // ->add('relatedAccount', 'orocrm_account', array('required' => false))
             ->add('subject', 'text', array('required' => true))
             ->add('phoneNumber', 'text', array('required' => false))
             ->add('contactPhoneNumber', null, array('required' => false))
@@ -26,6 +26,7 @@ class CallType extends AbstractType
             ->add('callStatus', null, array('required' => true))
             ->add('duration', 'integer', array('required' => false))
             ->add('direction', 'radio', array('required' => true))
+            ;
     }
 
     /**

@@ -32,14 +32,10 @@ class CallController extends Controller
      * @Route("/new", name="orocrm_call_new")
      * @Template
      */
-    public function newAction($id)
+    public function newAction()
     {
-        $em = $this->getDoctrine()->getManager();
-        $call = new Call();
-
         return array(
-            'form'     => $this->get('orocrm_call.form.call')->createView()
+            'form' => $this->get('orocrm_call.call.form')->createView()
         );
     }
 }
-
