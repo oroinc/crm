@@ -141,6 +141,17 @@ class Account extends ExtendAccount implements Taggable
     }
 
     /**
+     * @param int $id
+     * @return mixed
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    /**
      * {@inheritDoc}
      */
     public function getName()
