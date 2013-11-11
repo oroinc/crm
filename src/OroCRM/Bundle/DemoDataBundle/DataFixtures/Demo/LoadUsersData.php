@@ -12,7 +12,6 @@ use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Oro\Bundle\DataAuditBundle\Tests\Unit\Fixture\Repository\UserRepository;
 use Oro\Bundle\TagBundle\Entity\Tag;
 use Oro\Bundle\TagBundle\Entity\TagManager;
-use Oro\Bundle\FlexibleEntityBundle\Entity\Repository\FlexibleEntityRepository;
 
 use Oro\Bundle\UserBundle\Entity\UserManager;
 use Oro\Bundle\UserBundle\Entity\User;
@@ -35,7 +34,7 @@ class LoadUsersData extends AbstractFixture implements OrderedFixtureInterface, 
     /** @var  TagManager */
     protected $tagManager;
 
-    /** @var FlexibleEntityRepository */
+    /** @var EntityRepository */
     protected $roles;
 
     /** @var EntityRepository */

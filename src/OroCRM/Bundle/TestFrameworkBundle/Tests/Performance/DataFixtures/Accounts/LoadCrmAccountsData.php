@@ -12,11 +12,6 @@ use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\EntityManager;
 use Doctrine\Common\Collections\Collection;
 
-use Oro\Bundle\FlexibleEntityBundle\Model\FlexibleValueInterface;
-use Oro\Bundle\FlexibleEntityBundle\Model\AbstractFlexible;
-use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttribute;
-use Oro\Bundle\FlexibleEntityBundle\Entity\Repository\FlexibleEntityRepository;
-
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\UserBundle\Entity\UserManager;
@@ -48,7 +43,7 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
     protected $accountManager;
 
     /**
-     * @var FlexibleEntityRepository
+     * @var EntityRepository
      */
     protected $accountRepository;
 
@@ -112,14 +107,14 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
             $this->maxRecords = self::MAX_RECORDS;
         }
 
-        $this->accountManager = $container->get('orocrm_account.account.manager.flexible');
-        $this->accountRepository = $this->accountManager->getFlexibleRepository();
+        $this->accountManager = $container->get('orocrm_account.account.manager.api');
+        $this->accountRepository = $this->accountManager->getRepository();
 
         $this->contactManager = $container->get('doctrine.orm.entity_manager');
         $this->contactRepository = $this->contactManager->getRepository('OroCRMContactBundle:Contact');
 
         $this->userManager = $container->get('oro_user.manager');
-        $this->userRepository = $this->userManager->getFlexibleRepository();
+        $this->userRepository = $this->userManager->getRepository();
 
         $this->initSupportingEntities();
     }
@@ -142,17 +137,7 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
      */
     public function load(ObjectManager $manager)
     {
-        $this->loadAttributes();
         $this->loadAccounts();
-    }
-
-    /**
-     * Load attributes
-     *
-     * @return void
-     */
-    public function loadAttributes()
-    {
     }
 
     /**
@@ -231,13 +216,9 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
     private function createAccount(array $data)
     {
         /** @var $account Account */
-        $account = $this->accountManager->createFlexible();
+        $account = $this->accountManager->create();
 
         $account->setName($data['Username'] . $data['MiddleInitial'] . '_' . $data['Surname']);
-
-        $this->setFlexibleAttributeValue($this->accountRepository, $account, 'phone', $data['TelephoneNumber']);
-        $this->setFlexibleAttributeValue($this->accountRepository, $account, 'email', $data['EmailAddress']);
-        $this->setFlexibleAttributeValue($this->accountRepository, $account, 'website', $data['Domain']);
 
         $isoCode = $data['Country'];
         $country = array_filter(
@@ -342,58 +323,6 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
 
         $contact->addAddress($address);
         return $contact;
-    }
-
-    /**
-     * Sets a flexible attribute value
-     *
-     * @param FlexibleEntityRepository $repository
-     * @param AbstractFlexible $flexibleEntity
-     * @param string $attributeCode
-     * @param string $value
-     * @throws \LogicException
-     */
-    private function setFlexibleAttributeValue(
-        FlexibleEntityRepository $repository,
-        AbstractFlexible $flexibleEntity,
-        $attributeCode,
-        $value
-    ) {
-        if ($attribute = $this->findAttribute($repository, $attributeCode)) {
-            $this->getFlexibleValueForAttribute($flexibleEntity, $attribute)->setData($value);
-        } else {
-            throw new \LogicException(sprintf('Cannot set value, attribute "%s" is missing', $attributeCode));
-        }
-    }
-
-    /**
-     * Gets or creates a flexible value for attribute
-     *
-     * @param AbstractFlexible $flexibleEntity
-     * @param AbstractAttribute $attribute
-     * @return FlexibleValueInterface
-     */
-    private function getFlexibleValueForAttribute(AbstractFlexible $flexibleEntity, AbstractAttribute $attribute)
-    {
-        $flexibleValue = $flexibleEntity->getValue($attribute->getCode());
-
-        return $flexibleValue;
-    }
-
-    /**
-     * Finds an attribute
-     *
-     * @param FlexibleEntityRepository $repository
-     * @param string $attributeCode
-     * @return AbstractAttribute
-     */
-    private function findAttribute(FlexibleEntityRepository $repository, $attributeCode)
-    {
-        if (!isset($this->attributes[$repository->getClassName()][$attributeCode])) {
-            $this->attributes[$repository->getClassName()][$attributeCode] =
-                $repository->findAttributeByCode($attributeCode);
-        }
-        return $this->attributes[$repository->getClassName()][$attributeCode];
     }
 
     /**
