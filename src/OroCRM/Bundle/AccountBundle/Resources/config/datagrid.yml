@@ -1,34 +1,305 @@
-parameters:
-    orocrm_account.account.datagrid_manager.class:        OroCRM\Bundle\AccountBundle\Datagrid\AccountDatagridManager
-    orocrm_account.contact.view_datagrid_manager.class:   OroCRM\Bundle\AccountBundle\Datagrid\AccountContactDatagridManager
-    orocrm_account.contact.update_datagrid_manager.class: OroCRM\Bundle\AccountBundle\Datagrid\AccountContactUpdateDatagridManager
+datagrid:
+    accounts-grid:
+        extended_entity_name: %orocrm_account.account.entity.class%
+        source:
+            type:           orm
+            acl_resource:   orocrm_account_view
+            query:
+                select:
+                    - a.id
+                    - a.name
+                    - a.createdAt
+                    - a.updatedAt
+                    - defaultContact.firstName as contactFirstName
+                    - defaultContact.lastName as contactLastName
+                    - defaultContactEmail.email as contactEmail
+                    - defaultContactPhone.phone as contactPhone
+                    - CONCAT(accountOwner.firstName, CONCAT(' ', accountOwner.lastName)) as ownerName
+                from:
+                    - { table: %orocrm_account.account.entity.class%, alias: a }
+                join:
+                    left:
+                        - { join: a.defaultContact, alias: defaultContact }
+                        - { join: defaultContact.emails, alias: defaultContactEmail, conditionType: 'WITH', condition: 'defaultContactEmail.primary = true' }
+                        - { join: defaultContact.phones, alias: defaultContactPhone, conditionType: 'WITH', condition: 'defaultContactPhone.primary = true' }
+                        - { join: a.owner, alias: accountOwner }
+        properties:
+            id: ~
+            view_link:
+                type:       url
+                route:      orocrm_account_view
+                params:     [ id ]
+            update_link:
+                type:       url
+                route:      orocrm_account_update
+                params:     [ id ]
+            delete_link:
+                type:       url
+                route:      oro_api_delete_account
+                params:     [ id ]
+        columns:
+            name:
+                label:   orocrm.account.datagrid.account_name
+            contactFirstName:
+                label:   First Name
+            contactLastName:
+                label:   Last Name
+            contactEmail:
+                label:   Email
+            contactPhone:
+                label:   Phone
+            ownerName:
+                label:   Owner
+            created:
+                label:   Created At
+                frontend_type: datetime
+            updated:
+                label:    Updated At
+                frontend_type: datetime
+        sorters:
+            columns:
+                name:
+                    data_name: a.name
+                contactFirstName:
+                    data_name: contactFirstName
+                contactLastName:
+                    data_name: contactLastName
+                contactEmail:
+                    data_name: contactEmail
+                contactPhone:
+                    data_name: contactPhone
+                ownerName:
+                    data_name: ownerName
+                created:
+                    data_name: a.created
+                updated:
+                    data_name: a.updated
+        filters:
+            columns:
+                name:
+                    type:      string
+                    data_name: a.name
+                contactFirstName:
+                    type:      string
+                    data_name: contactFirstName
+                contactLastName:
+                    type:      string
+                    data_name: contactLastName
+                contactEmail:
+                    type:      string
+                    data_name: contactEmail
+                contactPhone:
+                    type:      string
+                    data_name: contactPhone
+                ownerName:
+                    type:      string
+                    data_name: ownerName
+                created:
+                    type:      datetime
+                    data_name: a.created
+                updated:
+                    type:      datetime
+                    data_name: a.updated
+        actions:
+            view:
+                type:          navigate
+                acl_resource:  orocrm_account_view
+                label:         View
+                icon:          user
+                link:          view_link
+                rowAction:     true
+            update:
+                type:          navigate
+                acl_resource:  orocrm_account_update
+                label:         Update
+                icon:          edit
+                link:          update_link
+            delete:
+                type:          delete
+                acl_resource:  orocrm_account_remove
+                label:         Delete
+                icon:          trash
+                link:          delete_link
+        options:
+            entityHint: account
 
-services:
-    orocrm_account.account.datagrid_manager:
-        class: %orocrm_account.account.datagrid_manager.class%
-        tags:
-            - name: oro_grid.datagrid.manager
-              datagrid_name: accounts
-              entity_name: %orocrm_account.account.entity.class%
-              entity_hint: account
-              route_name: orocrm_account_index
+    base-account-contacts-grid:
+        extended_entity_name: %orocrm_contact.entity.class%
+        source:
+            type: orm
+            acl_resource: orocrm_contact_view
+            query:
+                select:
+                    # selects full entity because group labels should be taken from object
+                    - c
+                    - contactSource.label as contactSourceLabel
+                    - email.email as primaryEmail
+                    - phone.phone as primaryPhone
+                    - CONCAT(CASE WHEN address.stateText IS NOT NULL THEN address.stateText ELSE region.name END, '') as regionLabel
+                    - country.name as countryName
+                    - address.postalCode as addressPostalCode
+                from:
+                    - { table: %orocrm_contact.entity.class%, alias: c }
+                join:
+                    left:
+                        - { join: c.addresses, alias: address, conditionType: WITH, condition: 'address.primary = true' }
+                        - { join: c.emails, alias: email, conditionType: WITH, condition: 'email.primary = true' }
+                        - { join: c.phones, alias: phone, conditionType: WITH, condition: 'phone.primary = true' }
+                        - { join: c.groups, alias: contactGroup }
+                        - { join: c.source, alias: contactSource }
+                        - { join: address.country, alias: country }
+                        - { join: address.state, alias: region }
+        sorters:
+            columns:
+                first_name:
+                    data_name: c.firstName
+                last_name:
+                    data_name: c.lastName
+                primaryEmail:
+                    data_name: email.email
+                primaryPhone:
+                    data_name: phone.phone
+                countryName:
+                    data_name: country.name
+                regionLabel:
+                    data_name: regionLabel
+                addressPostalCode:
+                    data_name: address.postalCode
+            default:
+                lastName: ASC
+        options:
+            entityHint: contact
 
-    orocrm_account.contact.view_datagrid_manager:
-        class: %orocrm_account.contact.view_datagrid_manager.class%
-        tags:
-            - name: oro_grid.datagrid.manager
-              datagrid_name: account_contacts_view
-              entity_name: %orocrm_contact.entity.class%
-              query_entity_alias: contact
-              entity_hint: contact
-              route_name: orocrm_account_view
+    account-contacts-view-grid:
+        extend: base-account-contacts-grid
+        source:
+            query:
+                where:
+                    and:
+                        - :account MEMBER OF c.accounts
+        columns:
+            first_name:
+                label: orocrm.contact.datagrid.first_name
+                data_name: firstName
+            last_name:
+                label: orocrm.contact.datagrid.last_name
+                data_name: lastName
+            primaryEmail:
+                label: orocrm.contact.datagrid.email
+            primaryPhone:
+                label: orocrm.contact.datagrid.phone
+            groupLabelsAsString:
+                label: orocrm.contact.datagrid.groups
+            contactSourceLabel:
+                label: orocrm.contact.datagrid.source
+            countryName:
+                label: orocrm.contact.datagrid.country
+            regionLabel:
+                label: orocrm.contact.datagrid.region
+            addressPostalCode:
+                label: orocrm.contact.datagrid.postal_code
+            createdAt:
+                label: orocrm.contact.datagrid.created_at
+                frontend_type: datetime
+            updatedAt:
+                label: orocrm.contact.datagrid.updated_at
+                frontend_type: datetime
+        sorters:
+            columns:
+                groupLabelsAsString:
+                    data_name: contactGroup.label
+                contactSourceLabel:
+                    data_name: contactSource.label
+                createdAt:
+                    data_name: c.createdAt
+                updatedAt:
+                    data_name: c.updatedAt
+            default:
+                firstName: ASC
 
-    orocrm_account.contact.update_datagrid_manager:
-        class: %orocrm_account.contact.update_datagrid_manager.class%
-        tags:
-            - name: oro_grid.datagrid.manager
-              datagrid_name: account_contacts_update
-              entity_name: %orocrm_contact.entity.class%
-              query_entity_alias: contact
-              entity_hint: contact
-              route_name: orocrm_account_contact_select
+    account-contacts-update-grid:
+        extend: base-account-contacts-grid
+        source:
+            query:
+                select:
+                    - >
+                        (CASE WHEN (:account IS NOT NULL) THEN
+                          CASE WHEN (:account MEMBER OF c.accounts OR c.id IN (:data_in)) AND c.id NOT IN (:data_not_in)
+                          THEN true ELSE false END
+                        ELSE
+                          CASE WHEN c.id IN (:data_in) AND c.id NOT IN (:data_not_in)
+                          THEN true ELSE false END
+                        END) as hasContact
+        columns:
+            hasContact:
+                label:   Assigned
+                editable: true
+                frontend_type: boolean
+            first_name:
+                label: orocrm.contact.datagrid.first_name
+                data_name: firstName
+            last_name:
+                label: orocrm.contact.datagrid.last_name
+                data_name: lastName
+            primaryEmail:
+                label: orocrm.contact.datagrid.email
+            primaryPhone:
+                label: orocrm.contact.datagrid.phone
+            countryName:
+                label: orocrm.contact.datagrid.country
+            regionLabel:
+                label: orocrm.contact.datagrid.region
+            addressPostalCode:
+                label: orocrm.contact.datagrid.postal_code
+        properties:
+            id: ~
+        sorters:
+            columns:
+                hasContact: { data_name: hasContact }
+            default:
+                hasContact: DESC
+        filters:
+            columns:
+                hasContact:
+                    filter_by_having: true
+                    data_name: hasContact
+                    type:      boolean
+                first_name:
+                    type: string
+                    data_name: c.firstName
+                last_name:
+                    type: string
+                    data_name: c.lastName
+                primaryEmail:
+                    type: string
+                    data_name: email.email
+                primaryPhone:
+                    type: string
+                    data_name: phone.phone
+                countryName:
+                    type: entity
+                    data_name: address.country
+                    enabled: false
+                    options:
+                        field_options:
+                          class: OroAddressBundle:Country
+                          property: name
+                          query_builder: @orocrm_contact.contact.datagrid_helper->getCountryFilterQueryBuilder
+                regionLabel:
+                    type: string
+                    data_name: regionLabel
+                    enabled: false
+                addressPostalCode:
+                    type: string
+                    data_name: addressPostalCode
+                    enabled: false
+        options:
+            routerEnabled: false
+            requireJSModules:
+              - oro/datagrid/column-form-listener
+            columnListener:
+                dataField: id
+                columnName: hasContact
+                selectors:
+                    included: '#appendContacts'
+                    excluded: '#removeContacts'

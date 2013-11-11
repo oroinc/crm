@@ -36,6 +36,7 @@ class ControllersTest extends WebTestCase
 
     public function testCreate()
     {
+        $this->markTestSkipped("BAP-1820");
         $crawler = $this->client->request('GET', $this->client->generate('orocrm_contact_create'));
         /** @var Form $form */
         $form = $crawler->selectButton('Save and Close')->form();
@@ -53,6 +54,7 @@ class ControllersTest extends WebTestCase
 
     public function testUpdate()
     {
+        $this->markTestSkipped("BAP-1820");
         $this->client->request(
             'GET',
             $this->client->generate('orocrm_contact_index', array('_format' =>'json')),
@@ -89,6 +91,7 @@ class ControllersTest extends WebTestCase
 
     public function testView()
     {
+        $this->markTestSkipped("BAP-1820");
         $this->client->request(
             'GET',
             $this->client->generate('orocrm_contact_index', array('_format' =>'json')),
@@ -118,6 +121,7 @@ class ControllersTest extends WebTestCase
 
     public function testDelete()
     {
+        $this->markTestSkipped("BAP-1820");
         $this->client->request(
             'GET',
             $this->client->generate('orocrm_contact_index', array('_format' =>'json')),

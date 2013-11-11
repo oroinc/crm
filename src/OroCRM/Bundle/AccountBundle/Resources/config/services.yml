@@ -78,3 +78,20 @@ services:
             - ["name"]
         tags:
             - { name: oro_form.autocomplete.search_handler, alias: accounts, acl_resource: orocrm_account_view }
+
+    orocrm_account.event_listener.account_contacts_view_listener:
+        class: %oro_datagrid.event_listener.base_orm_relation.class%
+        arguments:
+            - 'account'
+            - @oro_datagrid.datagrid.request_params
+            - false
+        tags:
+            - { name: kernel.event_listener, event: oro_datagrid.datgrid.build.after.account-contacts-view-grid, method: onBuildAfter }
+
+    orocrm_account.event_listener.account_contacts_updagte_listener:
+        class: %oro_datagrid.event_listener.base_orm_relation.class%
+        arguments:
+           - 'account'
+           - @oro_datagrid.datagrid.request_params
+        tags:
+           - { name: kernel.event_listener, event: oro_datagrid.datgrid.build.after.account-contacts-update-grid, method: onBuildAfter }
