@@ -1,0 +1,26 @@
+.report-edit .form-horizontal .subblock .control-group {
+    float: left;
+}
+.report-edit .form-horizontal .subblock-description {
+    clear: both;
+}
+.report-edit .form-horizontal .subblock-description textarea {
+    width: 99%;
+    height: 4em;
+}
+.report-edit .form-horizontal .control-group label.control-label {
+    width: auto;
+    margin-left: 15px;
+}
+.report-edit .form-horizontal .subblock h5+.control-group label.control-label,
+.report-edit .form-horizontal .control-group:first-child label.control-label{
+    width: 100px;
+    margin-left: 0;
+}
+.report-edit .form-horizontal .subblock-description .control-group .controls {
+    margin-left: 110px;
+}
+.report-edit .form-horizontal .subblock .control-group .controls {
+    margin-left: 10px;
+    float: left;
+}

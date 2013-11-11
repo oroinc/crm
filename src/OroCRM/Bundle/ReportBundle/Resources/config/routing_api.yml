@@ -1,0 +1,3 @@
+orocrm_report_api:
+    resource:     "@OroCRMReportBundle/Controller/Api/Rest/ReportController.php"
+    type:         rest

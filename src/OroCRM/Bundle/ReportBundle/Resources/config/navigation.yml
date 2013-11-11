@@ -6,6 +6,10 @@ oro_menu_config:
             extras:
                 position: 30
 
+        manage_reports:
+            label: 'Manage Reports'
+            route: 'orocrm_report_index'
+
         accounts_report_tab:
             label: 'Accounts'
             uri: '#'
@@ -26,7 +30,7 @@ oro_menu_config:
 
         accounts_life_time_value:
             label: 'Life time'
-            route: 'orocrm_report_index'
+            route: 'orocrm_report_view'
             routeParameters:
                 reportGroupName: accounts
                 reportName:      life_time_value
@@ -35,7 +39,7 @@ oro_menu_config:
 
         accounts_by_opportunities:
             label: 'By opportunities'
-            route: 'orocrm_report_index'
+            route: 'orocrm_report_view'
             routeParameters:
                 reportGroupName: accounts
                 reportName:      by_opportunities
@@ -44,7 +48,7 @@ oro_menu_config:
 
         leads_by_date:
             label: 'Leads by date'
-            route: 'orocrm_report_index'
+            route: 'orocrm_report_view'
             routeParameters:
                 reportGroupName: leads
                 reportName:      by_date
@@ -53,7 +57,7 @@ oro_menu_config:
 
         opportunities_by_step:
             label: 'Opportunities by step'
-            route: 'orocrm_report_index'
+            route: 'orocrm_report_view'
             routeParameters:
                 reportGroupName: opportunities
                 reportName:      by_step
@@ -62,7 +66,7 @@ oro_menu_config:
 
         won_by_period:
             label: 'Won opportunities by period'
-            route: 'orocrm_report_index'
+            route: 'orocrm_report_view'
             routeParameters:
                 reportGroupName: opportunities
                 reportName:      won_by_period
@@ -74,6 +78,7 @@ oro_menu_config:
             children:
                 reports_tab:
                     children:
+                        manage_reports: ~
                         accounts_report_tab:
                             children:
                                 accounts_life_time_value: ~
@@ -89,4 +94,7 @@ oro_menu_config:
                                 won_by_period: ~
 
 oro_titles:
-    orocrm_report_index: %%reportName%% - Reports
+    orocrm_contact_index: ~
+    orocrm_report_view:   %%report.name%%
+    orocrm_report_create: Create Report
+    orocrm_report_update: %%report.name%% - Edit

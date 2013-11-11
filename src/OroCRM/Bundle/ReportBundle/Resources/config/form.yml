@@ -1,0 +1,39 @@
+parameters:
+    orocrm_report.report.entity.class:                     OroCRM\Bundle\ReportBundle\Entity\Report
+    orocrm_report.report.form.type.class:                  OroCRM\Bundle\ReportBundle\Form\Type\ReportType
+    orocrm_report.report.form.handler.class:               OroCRM\Bundle\ReportBundle\Form\Handler\ReportHandler
+    orocrm_report.report.manager.api.class:                Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
+
+services:
+    orocrm_report.report.form.type:
+        class: %orocrm_report.report.form.type.class%
+        tags:
+            - { name: form.type, alias: orocrm_report }
+
+    orocrm_report.report.form:
+        class:           Symfony\Component\Form\Form
+        factory_method:  createNamed
+        factory_service: form.factory
+        arguments:
+            - "orocrm_report_form"
+            - "orocrm_report"
+
+    orocrm_report.report.form.handler:
+        class: %orocrm_report.report.form.handler.class%
+        scope: request
+        arguments:
+            - @orocrm_report.report.form
+            - @request
+            - @doctrine.orm.entity_manager
+
+    orocrm_report.report.manager:
+        class: %orocrm_report.report.manager.api.class%
+        arguments:
+            - %orocrm_report.report.entity.class%
+            - @doctrine.orm.entity_manager
+
+    orocrm_report.report.manager.api:
+        class: %orocrm_report.report.manager.api.class%
+        arguments:
+            - %orocrm_report.report.entity.class%
+            - @doctrine.orm.entity_manager

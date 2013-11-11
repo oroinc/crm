@@ -14,5 +14,13 @@ orocrm:
                 close_revenue:     Close Revenue
                 budget_amount:     Budget Amount
                 workflow:          Workflow
+        form:
+            choose_report_type:    Choose a report type...
+        controller:
+            report:
+                saved:             Report saved
+                deleted:           Report deleted
 
-
+"Reports": Reports
+"Delete report": Delete report
+"Are you sure you want to delete this report?": Are you sure you want to delete this report?
