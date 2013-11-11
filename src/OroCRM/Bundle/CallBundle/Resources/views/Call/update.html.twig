@@ -1,0 +1,59 @@
+{% extends 'OroUIBundle:actions:update.html.twig' %}
+
+{% set formAction = form.vars.value.id ? path('orocrm_call_update', { 'id': form.vars.value.id }) : path('orocrm_call_create')  %}
+
+{% block head_script %}
+    {{ parent() }}
+
+    {% block stylesheets %}
+        {{ form_stylesheet(form) }}
+    {% endblock %}
+{% endblock %}
+
+{% block content_data %}
+    {% set id = 'call-log' %}
+
+    {% set dataBlocks = [{
+            'title': 'Add call log'|trans,
+            'class': 'active',
+            'subblocks': [
+                {
+                    'title': 'Add call log'|trans,
+                    'data': [
+                        form_widget(form)
+                    ]
+                }
+            ]
+        }]
+    %}
+
+    {% set data =
+        {
+            'formErrors': form_errors(form)? form_errors(form) : null,
+            'dataBlocks': dataBlocks,
+        }
+    %}
+    {{ parent() }}
+{% endblock content_data %}
+
+
+{% block navButtons %}
+    {{ UI.button({'path' : path('orocrm_contact_index'), 'title' : 'Cancel'|trans, 'label' : 'Cancel'|trans}) }}
+    {{ UI.saveAndStayButton('orocrm_call_update') }}
+    {{ UI.saveAndCloseButton() }}
+{% endblock %}
+
+{% block pageHeader %}
+    {% if form.vars.value.id %}
+        {% set breadcrumbs = {
+            'entity':      form.vars.value,
+            'indexPath':   path('orocrm_account_index'),
+            'indexLabel': 'Accounts'|trans,
+            'entityTitle': form.vars.value.name|default('N/A')
+        }
+        %}
+        {{ parent() }}
+    {% else %}
+        {% include 'OroUIBundle::page_title_block.html.twig' %}
+    {% endif %}
+{% endblock pageHeader %}

@@ -29,13 +29,70 @@ class CallController extends Controller
     }
 
     /**
-     * @Route("/new", name="orocrm_call_new")
+     * @Route("/create", name="orocrm_call_create")
+     * @Template("OroCRMCallBundle:Call:update.html.twig")
+     */
+    public function createAction()
+    {
+        return $this->update();
+    }
+
+    /**
+     * Edit user form
+     *
+     * @Route("/update/{id}", name="orocrm_call_update", requirements={"id"="\d+"}, defaults={"id"=0})
      * @Template
      */
-    public function newAction()
+    public function updateAction(Call $entity = null)
     {
-        return array(
-            'form' => $this->get('orocrm_call.call.form')->createView()
-        );
+        return $this->update($entity);
     }
+
+    /**
+     * @param Call $entity
+     * @return array
+     */
+    protected function update(Call $entity = null)
+    {
+        if (!$entity) {
+            $user = $this->container->get('security.context')->getToken()->getUser();
+            $entity = new Call();
+            $entity->setOwner($user);
+
+            $contact   = null;
+            $contactId = $this->getRequest()->get('contactId');
+            if ($contactId) {
+                    $repository = $this->getDoctrine()->getRepository('OroCRMContactBundle:Contact');
+                    $contact = $repository->find($contactId);
+                if ($contact) {                
+                    $entity->setRelatedContact($contact);
+                    $entity->setContactPhoneNumber($contact->getPrimaryPhone());
+                } else {
+                    throw new NotFoundHttpException(sprintf('Contact with ID %s is not found', $contactId));
+                }
+            }        
+        }
+
+        if ($this->get('orocrm_call.call.form.handler')->process($entity)) {
+            $this->get('session')->getFlashBag()->add(
+                'success',
+                $this->get('translator')->trans('orocrm.call.controller.call.saved.message')
+            );
+
+            return $this->get('oro_ui.router')->actionRedirect(
+                array(
+                    'route' => 'orocrm_call_update',
+                    'parameters' => array('id' => $entity->getId()),
+                ),
+                array(
+                    'route' => 'orocrm_call_view',
+                    'parameters' => array('id' => $entity->getId())
+                )
+            );
+        }
+
+        return array(
+            'form'     => $this->get('orocrm_call.call.form')->createView()
+        );
+    }    
 }

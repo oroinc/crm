@@ -2,7 +2,7 @@
 
 namespace OroCRM\Bundle\CallBundle\Form\Handler;
 
-use OroCRM\Bundle\SalesBundle\Entity\Call;
+use OroCRM\Bundle\CallBundle\Entity\Call;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 

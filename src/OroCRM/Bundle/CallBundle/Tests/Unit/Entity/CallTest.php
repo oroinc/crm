@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Tests\Unit\Entity;
+namespace OroCRM\Bundle\CallBundle\Tests\Unit\Entity;
 
 use OroCRM\Bundle\CallBundle\Entity\Call;
 
@@ -37,7 +37,7 @@ class CallTest extends \PHPUnit_Framework_TestCase
             'callDateTime' => array('callDateTime', $now, $now),
             'callStatus' => array('callStatus', $callStatus, $callStatus),
             'duration' => array('duration', 1, 1),
-            'direction' => array('direction', true, true),
+            'isOutgoing' => array('isOutgoing', true, true),
         );
     }
 }

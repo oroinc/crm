@@ -9,7 +9,6 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="orocrm_call")
  * @ORM\Entity
- * @ORM\HasLifecycleCallbacks()
  */
 
 class Call
@@ -89,23 +88,24 @@ class Call
     protected $callStatus;
 
     /**
-     * @var \DateTime
+     * @var \Time
      *
-     * @ORM\Column(name="duration", type="integer", nullable=true)
+     * @ORM\Column(name="duration", type="time", nullable=true)
      */
     protected $duration;
 
     /**
      * @var boolean
      *
-     * @ORM\Column(name="direction", type="boolean")
+     * @ORM\Column(name="isOutgoing", type="boolean")
      */
-    protected $direction;
+    protected $isOutgoing;
 
 
     public function __construct()
     {
-       $this->direction = false;
+       $this->isOutgoing = true;
+       $this->callDateTime = new \DateTime('now', new \DateTimeZone('UTC'));
     }
 
     /**
@@ -213,7 +213,7 @@ class Call
     /**
      * Set duration
      *
-     * @param \DateTime $duration
+     * @param \Time $duration
      * @return Calls
      */
     public function setDuration($duration)
@@ -226,7 +226,7 @@ class Call
     /**
      * Get duration
      *
-     * @return \DateTime 
+     * @return \Time 
      */
     public function getDuration()
     {
@@ -234,26 +234,26 @@ class Call
     }
 
     /**
-     * Set direction
+     * Set isOutgoing
      *
-     * @param boolean $direction
+     * @param boolean $isOutgoing
      * @return Calls
      */
-    public function setDirection($direction)
+    public function setIsOutgoing($isOutgoing)
     {
-        $this->direction = $direction;
+        $this->isOutgoing = $isOutgoing;
     
         return $this;
     }
 
     /**
-     * Get direction
+     * Get isOutgoing
      *
      * @return boolean 
      */
-    public function getDirection()
+    public function getIsOutgoing()
     {
-        return $this->direction;
+        return $this->isOutgoing;
     }
 
     /**
@@ -370,14 +370,4 @@ class Call
     {
         return $this->callStatus;
     }
-
-    /**
-     * Pre update event handler
-     * @ORM\PreUpdate
-     */
-    public function beforeUpdate()
-    {
-        $this->callDateTime = new \DateTime('now', new \DateTimeZone('UTC'));
-    }
-
 }
