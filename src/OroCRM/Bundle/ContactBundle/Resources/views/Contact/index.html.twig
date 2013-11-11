@@ -1,6 +1,6 @@
 {% extends 'OroUIBundle:actions:index.html.twig' %}
 {% import 'OroUIBundle::macros.html.twig' as UI %}
-{% set gridId = 'contacts-grid' %}
+{% set gridName = 'contacts-grid' %}
 {% set pageTitle = 'Contacts' %}
 
 {% block navButtons %}
@@ -20,7 +20,7 @@
         importProcessor: 'orocrm_contact.import_validation',
         exportProcessor: 'orocrm_contact',
         imortTitle: 'Import Contacts'|trans,
-        dataGridName: datagrid.datagrid.name
+        dataGridName: gridName
     } %}
 
     {% if resource_granted('orocrm_contact_create') %}
