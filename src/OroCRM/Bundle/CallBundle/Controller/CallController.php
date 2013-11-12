@@ -29,12 +29,12 @@ class CallController extends Controller
     }
 
     /**
-     * @Route("/create", name="orocrm_call_create")
+     * @Route("/create/{contactId}", name="orocrm_call_create", requirements={"id"="\d+"}, defaults={"contactId"=0})
      * @Template("OroCRMCallBundle:Call:update.html.twig")
      */
-    public function createAction()
+    public function createForContactAction($contactId)
     {
-        return $this->update();
+        return $this->update(null, $contactId);
     }
 
     /**
@@ -52,18 +52,23 @@ class CallController extends Controller
      * @param Call $entity
      * @return array
      */
-    protected function update(Call $entity = null)
+    protected function update(Call $entity = null, $contactId = 0)
     {
         if (!$entity) {
             $user = $this->container->get('security.context')->getToken()->getUser();
             $entity = new Call();
             $entity->setOwner($user);
 
-            $contact   = null;
-            $contactId = $this->getRequest()->get('contactId');
+            $callStatus = $this->getDoctrine()->getRepository('OroCRMCallBundle:CallStatus')->findOneByStatus('completed');
+            $entity->setCallStatus($callStatus);
+
+            $contact = null;
+            if ($contactId == 0) {
+                $contactId = $this->getRequest()->get('contactId');
+            }
             if ($contactId) {
-                    $repository = $this->getDoctrine()->getRepository('OroCRMContactBundle:Contact');
-                    $contact = $repository->find($contactId);
+                $repository = $this->getDoctrine()->getRepository('OroCRMContactBundle:Contact');
+                $contact = $repository->find($contactId);
                 if ($contact) {                
                     $entity->setRelatedContact($contact);
                     $entity->setContactPhoneNumber($contact->getPrimaryPhone());

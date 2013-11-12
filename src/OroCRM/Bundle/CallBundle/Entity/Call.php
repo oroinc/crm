@@ -60,7 +60,7 @@ class Call
     /**
      * @var ContactPhone
      *
-     * @ORM\OneToOne(targetEntity="OroCRM\Bundle\ContactBundle\Entity\ContactPhone")
+     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ContactBundle\Entity\ContactPhone")
      * @ORM\JoinColumn(name="contact_phone_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $contactPhoneNumber;
@@ -82,7 +82,7 @@ class Call
     /**
      * @var string
      *
-     * @ORM\OneToOne(targetEntity="OroCRM\Bundle\CallBundle\Entity\CallStatus")
+     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\CallBundle\Entity\CallStatus")
      * @ORM\JoinColumn(name="call_status_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $callStatus;

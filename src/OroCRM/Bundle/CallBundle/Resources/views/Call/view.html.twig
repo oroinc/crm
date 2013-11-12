@@ -1,9 +1,14 @@
 <h3>Call</h3>
 {% if call is not null %}
-    {{call.subj}}
-    {{call.owner}}
-    {{call.status}}
-    {{call.direction}}
-    {{call.notes}}
-    {{call.callDateTime}}
+    <ul>
+        <li>{{call.owner}}</li>
+        <li>{{call.relatedContact}}</li>
+        <li>{{call.contactPhoneNumber}}</li>
+        <li>{{call.phoneNumber}}</li>
+        <li>{{call.subject}}</li>
+
+        <li>{{call.duration|date("H:i:s")}}</li>
+        <li>{{call.notes}}</li>
+        <li>{{call.callDateTime|date('d-m-Y H:i:s')}}</li>
+    </ul>
 {% endif %}

@@ -1,0 +1,60 @@
+
+{% form_theme form with ['OroFormBundle:Form:fields.html.twig'] %}
+{% import 'OroUIBundle::macros.html.twig' as UI %}
+
+{% block page_container %}
+    <div class="widget-content call-form">
+        {% if saved is defined and saved %}
+            <script type="text/javascript">
+                require(['underscore', 'oro/translator', 'oro/widget-manager', 'oro/messenger', 'oro/registry'],
+                        function(_, __, widgetManager, messenger, registry) {
+                            widgetManager.getWidgetInstance({{ app.request.get('_wid')|json_encode|raw }}, function(widget) {
+                                messenger.notificationFlashMessage('success', __('Call logged succesfully.'));
+                                widget.remove();
+                                {% if form.vars.value.gridName|length %}
+                                var grid = registry.getElement('datagrid', {{ form.vars.value.gridName|json_encode|raw }});
+                                if (!_.isUndefined(grid)) {
+                                    grid.getRefreshAction().execute();
+                                }
+                                {% endif %}
+                            });
+                        });
+            </script>
+        {% else %}
+            {{ JSFV(form) }}
+            {% if not form.vars.valid and form.vars.errors|length %}
+                <div class="alert alert-error">
+                    <div class="message">
+                        {{ form_errors(form) }}
+                    </div>
+                </div>
+            {% endif %}
+            <div class="form-container">
+                <form id="{{ form.vars.name }}" action="{{ path('orocrm_call_update') }}" method="post">
+                    <fieldset class="form">
+                        <div class="span6">
+                            {{ form_row(form.subject, {'label': 'Subject'|trans}) }}
+                            {{ form_row(form.notes, {'label': 'Notes'|trans}) }}
+                            {{ form_row(form.callDateTime, {'label': 'Call Date & Time'|trans}) }}
+                            {{ form_row(form.isOutgoing, {'label': 'Is Outgoing'|trans}) }}
+                            {{ form_row(form.callStatus, {'label': 'Call Status'|trans}) }}
+                        </div>
+                        <div class="span6">
+                            {{ form_row(form.owner, {'label': 'Owner'|trans}) }}
+                            {{ form_row(form.relatedAccount, {'label': 'Related To'|trans}) }}
+                            {{ form_row(form.relatedContact, {'label': 'Related Contact'|trans}) }}
+                            {{ form_row(form.contactPhoneNumber, {'label': 'Contact Phone Number'|trans}) }}
+                            {{ form_row(form.phoneNumber, {'label': 'Phone Number'|trans}) }}
+                            {{ form_row(form.duration, {'label': 'Duration'|trans}) }}
+                        </div>
+                        {{ form_rest(form) }}
+                        <div class="widget-actions form-actions" style="display: none;">
+                            <button class="btn" type="reset">{{ 'Cancel'|trans }}</button>
+                            <button class="btn btn-primary" type="submit">{{ 'Log'|trans }}</button>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}
