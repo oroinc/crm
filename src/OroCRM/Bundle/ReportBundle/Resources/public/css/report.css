@@ -1,26 +1,49 @@
-.report-edit .form-horizontal .subblock .control-group {
+.form-horizontal .report-general .control-group,
+.form-horizontal .report-columns .control-group,
+.form-horizontal .report-filters .control-group {
     float: left;
 }
-.report-edit .form-horizontal .subblock-description {
-    clear: both;
-}
-.report-edit .form-horizontal .subblock-description textarea {
-    width: 99%;
-    height: 4em;
-}
-.report-edit .form-horizontal .control-group label.control-label {
+.form-horizontal .report-general .control-group label.control-label,
+.form-horizontal .report-general-descr .control-group label.control-label,
+.form-horizontal .report-filters .control-group label.control-label,
+.form-horizontal .report-columns .control-group label.control-label {
     width: auto;
     margin-left: 15px;
 }
-.report-edit .form-horizontal .subblock h5+.control-group label.control-label,
-.report-edit .form-horizontal .control-group:first-child label.control-label{
+.form-horizontal .report-general .control-group .controls,
+.form-horizontal .report-columns .control-group .controls,
+.form-horizontal .report-filters .control-group .controls {
+    margin-left: 10px;
+    float: left;
+}
+.form-horizontal .report-general h5+.control-group label.control-label,
+.form-horizontal .report-general .control-group:first-child label.control-label,
+.form-horizontal .report-general-descr .control-group:first-child label.control-label {
     width: 100px;
     margin-left: 0;
 }
-.report-edit .form-horizontal .subblock-description .control-group .controls {
+.form-horizontal .report-general-descr {
+    clear: both;
+}
+.form-horizontal .report-general-descr textarea {
+    width: 99%;
+    height: 40px;
+}
+.form-horizontal .report-general-descr .control-group .controls {
     margin-left: 110px;
 }
-.report-edit .form-horizontal .subblock .control-group .controls {
-    margin-left: 10px;
-    float: left;
+.form-horizontal .report-columns .select2-container,
+.form-horizontal .report-filters .select2-container {
+    width: 150px !important;
+}
+.form-horizontal .report-columns input[type="text"] {
+    width: 150px;
+}
+.form-horizontal .report-columns select,
+.form-horizontal .report-columns .controls div.selector select {
+    width: 60px;
+}
+.form-horizontal .report-columns .btn-group,
+.form-horizontal .report-filters .btn-group {
+    margin-left: 20px;
 }

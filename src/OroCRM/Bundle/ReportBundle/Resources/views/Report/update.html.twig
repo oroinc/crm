@@ -49,7 +49,6 @@
 {% endblock pageHeader %}
 
 {% block content_data %}
-<div class="report-edit">
     {% set id = 'report-profile' %}
 
     {% set ownerDataBlock = {
@@ -69,7 +68,7 @@
             'subblocks': [
                 {
                     'title': 'Report Information'|trans,
-                    'spanClass': 'subblock',
+                    'spanClass': 'report-general',
                     'data': [
                         form_row(form.name, {'label': 'Name'|trans}),
                         form_row(form.entity, {'label': 'Entity'|trans}),
@@ -79,13 +78,51 @@
                 },
                 {
                     'title': '',
-                    'spanClass': 'subblock-description',
+                    'spanClass': 'report-general-descr',
                     'data': [
                         form_row(form.description, {'label': 'Description'|trans})
                     ]
                 }
             ]
         }]
+    %}
+
+    {% set dataBlocks = dataBlocks|merge(
+        [{
+            'title' : 'Designer'|trans,
+            'subblocks': [
+                {
+                    'title': 'Columns'|trans,
+                    'spanClass': 'report-columns span6',
+                    'data': [
+                        '<div class="add-column-form">',
+                        form_row(form.field.name, {'label': 'Column'|trans}),
+                        form_row(form.field.label, {'label': 'Label'|trans}),
+                        form_row(form.field.sorting, {'label': 'Sorting'|trans}),
+                        UI.clientButton({
+                            'aCss': 'no-hash btn-primary add-column-button',
+                            'title' : 'Add'|trans,
+                            'label' : 'Add'|trans
+                        }),
+                        '</div>',
+                        block('report_columns_data')
+                    ]
+                },
+                {
+                    'title': 'Filters'|trans,
+                    'spanClass': 'report-filters span6',
+                    'data': [
+                        form_row(form.filter.fieldName, {'label': 'Column'|trans}),
+                        UI.clientButton({
+                            'aCss': 'no-hash btn-primary add-filter-button',
+                            'title' : 'Add'|trans,
+                            'label' : 'Add'|trans
+                        })
+                    ]
+                },
+            ]
+        }]
+    )
     %}
 
     {% set data =
@@ -97,5 +134,55 @@
 
 
     {{ UI.scrollData(id, data, form) }}
-</div>
+
+    <script type="text/javascript">
+        require(['jquery', 'underscore', 'oro/query-designer'],
+        function($, _, QueryDesigner) {
+            var options = {
+                columnsOptions: {
+                    el: '.report-columns',
+                    containerSelector: '.column-container',
+                    itemTemplateSelector: '#template-report-column-row',
+                    itemFormSelector: '.add-column-form'
+                }
+            };
+            $(function() { new QueryDesigner(options).render(); });
+        });
+    </script>
 {% endblock content_data %}
+
+{% block report_columns_data %}
+    <div class="grid-container">
+        <table class="grid table-hover table table-bordered table-condensed" style="display: table;">
+            <thead>
+            <tr>
+                <th><span>{{ 'Column'|trans }}</span></th>
+                <th><span>{{ 'Label'|trans }}</span></th>
+                <th><span>{{ 'Sorting'|trans }}</span></th>
+                <th><span>{{ 'Actions'|trans }}</span></th>
+            </tr>
+            </thead>
+            <tbody class="column-container">
+            </tbody>
+        </table>
+    </div>
+
+    <script type="text/html" id="template-report-column-row">
+        <tr data-id="<%= id %>">
+            <td class="string-cell"><%- name %></td>
+            <td class="string-cell"><%- label %></td>
+            <td class="sorting-cell"><%- sorting %></td>
+            <td class="action-cell">
+            {{
+                UI.deleteButton({
+                    'aCss': 'no-hash remove-column-button',
+                    'dataMessage': 'Are you sure you want to delete this column?',
+                    'successMessage': 'Column deleted',
+                    'title': 'Delete column',
+                    'label': 'Delete'
+                })
+            }}
+            </td>
+        </tr>
+    </script>
+{% endblock report_columns_data %}

@@ -16,6 +16,9 @@ orocrm:
                 workflow:          Workflow
         form:
             choose_report_type:    Choose a report type...
+            choose_field_sorting:  None
+            field_sorting_asc:     Asc
+            field_sorting_desc:    Desc
         controller:
             report:
                 saved:             Report saved

@@ -67,6 +67,21 @@ class ReportController extends Controller
 //    }
 
     /**
+     * @Route("/view/{id}", name="orocrm_report_view", requirements={"id"="\d+"}, defaults={"id"=0})
+     * @Template
+     * @Acl(
+     *      id="orocrm_report_view",
+     *      type="entity",
+     *      permission="VIEW",
+     *      class="OroCRMReportBundle:Report"
+     * )
+     */
+    public function viewAction(Report $entity)
+    {
+        return array();
+    }
+
+    /**
      * @Route("/create", name="orocrm_report_create")
      * @Template("OroCRMReportBundle:Report:update.html.twig")
      * @Acl(

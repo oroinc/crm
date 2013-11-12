@@ -12,3 +12,10 @@ OroCRM\Bundle\ReportBundle\Entity\Report:
             - NotBlank:     ~
             - Length:
                 max: 255
+
+OroCRM\Bundle\ReportBundle\Form\Model\Field:
+    properties:
+        name:
+            - NotBlank:     ~
+        label:
+            - NotBlank:     ~

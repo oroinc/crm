@@ -26,7 +26,21 @@ class ReportType extends AbstractType
                     'empty_value' => 'orocrm.report.form.choose_report_type'
                 )
             )
-            ->add('description', 'textarea', array('required' => false));
+            ->add('description', 'textarea', array('required' => false))
+            ->add(
+                'field',
+                'orocrm_report_field',
+                array(
+                    'mapped' => false,
+                )
+            )
+            ->add(
+                'filter',
+                'orocrm_report_filter',
+                array(
+                    'mapped' => false,
+                )
+            );
     }
 
     /**

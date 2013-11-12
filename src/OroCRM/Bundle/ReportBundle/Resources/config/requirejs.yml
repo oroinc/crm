@@ -1,0 +1,8 @@
+config:
+    paths:
+        'oro/query-designer': 'bundles/orocrmreport/js/query-designer.js'
+        'oro/query-designer/column/collection': 'bundles/orocrmreport/js/query-designer/column/collection.js'
+        'oro/query-designer/column/model': 'bundles/orocrmreport/js/query-designer/column/model.js'
+        'oro/query-designer/column/view': 'bundles/orocrmreport/js/query-designer/column/view.js'
+        'oro/query-designer/column/form-view': 'bundles/orocrmreport/js/query-designer/column/form-view.js'
+        'oro/query-designer/column/list-view': 'bundles/orocrmreport/js/query-designer/column/list-view.js'

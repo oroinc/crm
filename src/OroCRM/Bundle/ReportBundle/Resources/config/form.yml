@@ -3,6 +3,8 @@ parameters:
     orocrm_report.report.form.type.class:                  OroCRM\Bundle\ReportBundle\Form\Type\ReportType
     orocrm_report.report.form.handler.class:               OroCRM\Bundle\ReportBundle\Form\Handler\ReportHandler
     orocrm_report.report.manager.api.class:                Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
+    orocrm_report.report_field.form.type.class:            OroCRM\Bundle\ReportBundle\Form\Type\FieldType
+    orocrm_report.report_filter.form.type.class:           OroCRM\Bundle\ReportBundle\Form\Type\FilterType
 
 services:
     orocrm_report.report.form.type:
@@ -37,3 +39,13 @@ services:
         arguments:
             - %orocrm_report.report.entity.class%
             - @doctrine.orm.entity_manager
+
+    orocrm_report.report_field.form.type:
+        class: %orocrm_report.report_field.form.type.class%
+        tags:
+            - { name: form.type, alias: orocrm_report_field }
+
+    orocrm_report.report_filter.form.type:
+        class: %orocrm_report.report_filter.form.type.class%
+        tags:
+            - { name: form.type, alias: orocrm_report_filter }
