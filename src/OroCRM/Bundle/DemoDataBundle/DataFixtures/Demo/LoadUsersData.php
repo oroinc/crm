@@ -1,19 +1,17 @@
 <?php
 namespace OroCRM\Bundle\DemoDataBundle\DataFixtures\Demo;
 
-use Oro\Bundle\TagBundle\Entity\Tag;
-use Oro\Bundle\TagBundle\Entity\TagManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
+use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\EntityManager;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 
-use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttributeOption;
-use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttribute;
-use Oro\Bundle\FlexibleEntityBundle\Entity\Repository\FlexibleEntityRepository;
+use Oro\Bundle\DataAuditBundle\Tests\Unit\Fixture\Repository\UserRepository;
+use Oro\Bundle\TagBundle\Entity\Tag;
+use Oro\Bundle\TagBundle\Entity\TagManager;
 
 use Oro\Bundle\UserBundle\Entity\UserManager;
 use Oro\Bundle\UserBundle\Entity\User;
@@ -22,27 +20,21 @@ use Oro\Bundle\UserBundle\Entity\User;
  * @SuppressWarnings(PHPMD.TooManyMethods)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class LoadUsersData extends AbstractFlexibleFixture implements OrderedFixtureInterface, ContainerAwareInterface
+class LoadUsersData extends AbstractFixture implements OrderedFixtureInterface, ContainerAwareInterface
 {
-    /**
-     * @var ContainerInterface
-     */
+    /** @var ContainerInterface */
     protected $container;
 
-    /**
-     * @var UserManager
-     */
+    /** @var UserManager */
     protected $userManager;
 
-    /**
-     * @var FlexibleEntityRepository
-     */
+    /** @var UserRepository */
     protected $userRepository;
 
     /** @var  TagManager */
     protected $tagManager;
 
-    /** @var FlexibleEntityRepository */
+    /** @var EntityRepository */
     protected $roles;
 
     /** @var EntityRepository */
@@ -56,7 +48,7 @@ class LoadUsersData extends AbstractFlexibleFixture implements OrderedFixtureInt
         $this->container = $container;
 
         $this->userManager = $container->get('oro_user.manager');
-        $this->userRepository = $this->userManager->getFlexibleRepository();
+        $this->userRepository = $this->userManager->getRepository();
         $this->tagManager = $container->get('oro_tag.tag.manager');
 
         $entityManager = $container->get('doctrine.orm.entity_manager');
@@ -70,57 +62,7 @@ class LoadUsersData extends AbstractFlexibleFixture implements OrderedFixtureInt
      */
     public function load(ObjectManager $manager)
     {
-        $this->loadAttributes();
         $this->loadUsers();
-    }
-
-    /**
-     * Load attributes
-     *
-     * @return void
-     */
-    public function loadAttributes()
-    {
-        $this->assertHasRequiredAttributes($this->userManager, array('company', 'gender'));
-
-        if (!$this->findAttribute($this->userManager, 'website')) {
-            $websiteAttribute = $this->createAttribute($this->userManager, 'oro_flexibleentity_url', 'website');
-            $this->persist($websiteAttribute);
-        }
-
-        if (!$this->findAttribute($this->userManager, 'hobby')) {
-            $hobbyAttribute = $this->createAttributeWithOptions(
-                $this->userManager,
-                'oro_flexibleentity_multiselect',
-                'hobby',
-                self::getHobbies()
-            );
-            $this->persist($hobbyAttribute);
-        }
-
-        $this->flush();
-    }
-
-    /**
-     * Asserts required attributes were created
-     *
-     * @param  EntityManager   $entityManager
-     * @param  string          $attributeCodes
-     * @throws \LogicException
-     */
-    private function assertHasRequiredAttributes($entityManager, $attributeCodes)
-    {
-        foreach ($attributeCodes as $attributeCode) {
-            if (!$this->findAttribute($entityManager, $attributeCode)) {
-                throw new \LogicException(
-                    sprintf(
-                        'Attribute "%s" is missing, please load "%s" fixture before',
-                        $attributeCode,
-                        'Acme\Bundle\DemoBundle\DataFixtures\ORM\LoadUserAttrData'
-                    )
-                );
-            }
-        }
     }
 
     /**
@@ -139,10 +81,6 @@ class LoadUsersData extends AbstractFlexibleFixture implements OrderedFixtureInt
             $birthday = $this->generateBirthday();
             $username = $this->generateUsername($firstName, $lastName);
             $email = $this->generateEmail($firstName, $lastName);
-            $company = $this->generateCompany();
-            $website = $this->generateWebsite($firstName, $lastName);
-            $gender = $this->generateGender();
-            $hobbies = $this->generateHobbies();
 
             $user = $this->createUser(
                 $username,
@@ -150,10 +88,6 @@ class LoadUsersData extends AbstractFlexibleFixture implements OrderedFixtureInt
                 $firstName,
                 $lastName,
                 $birthday,
-                $company,
-                $website,
-                $gender,
-                $hobbies,
                 $role
             );
 
@@ -176,27 +110,13 @@ class LoadUsersData extends AbstractFlexibleFixture implements OrderedFixtureInt
      * @param  string    $firstName
      * @param  string    $lastName
      * @param  \DateTime $birthday
-     * @param  string    $company
-     * @param  string    $website
-     * @param  string    $gender
-     * @param  array     $hobbies
      * @param  mixed     $role
      * @return User
      */
-    private function createUser(
-        $username,
-        $email,
-        $firstName,
-        $lastName,
-        $birthday,
-        $company,
-        $website,
-        $gender,
-        array $hobbies,
-        $role
-    ) {
+    private function createUser($username, $email, $firstName, $lastName, $birthday, $role)
+    {
         /** @var $user User */
-        $user = $this->userManager->createFlexible();
+        $user = $this->userManager->createUser();
 
         $user->setEmail($email);
         $user->setUsername($username);
@@ -205,51 +125,9 @@ class LoadUsersData extends AbstractFlexibleFixture implements OrderedFixtureInt
         $user->setLastName($lastName);
         $user->setBirthday($birthday);
         $user->setOwner($this->getReference('default_main_business'));
-        $this->setFlexibleAttributeValue($this->userManager, $user, 'company', $company);
-        $this->setFlexibleAttributeValueOption($this->userManager, $user, 'gender', $gender);
-        $this->setFlexibleAttributeValue($this->userManager, $user, 'website', $website);
-        $this->addFlexibleAttributeValueOptions($this->userManager, $user, 'hobby', $hobbies);
         $user->addRole($role);
 
         return $user;
-    }
-    /**
-     * Create an attribute with options
-     *
-     * @param  EntityManager     $entityManager
-     * @param  string            $attributeType
-     * @param  string            $attributeCode
-     * @param  array             $optionValues
-     * @return AbstractAttribute
-     */
-    private function createAttributeWithOptions(
-        $entityManager,
-        $attributeType,
-        $attributeCode,
-        array $optionValues
-    ) {
-        $attribute = $this->createAttribute($entityManager, $attributeType, $attributeCode);
-        foreach ($optionValues as $value) {
-            $attribute->addOption($this->createAttributeOptionWithValue($entityManager, $value));
-        }
-
-        return $attribute;
-    }
-
-    /**
-     * Create an attribute option with value
-     *
-     * @param  EntityManager           $entityManager
-     * @param  string                  $value
-     * @return AbstractAttributeOption
-     */
-    private function createAttributeOptionWithValue($entityManager, $value)
-    {
-        $option = $entityManager->createAttributeOption();
-        $optionValue = $entityManager->createAttributeOptionValue()->setValue($value);
-        $option->addOptionValue($optionValue);
-
-        return $option;
     }
 
     /**
@@ -332,19 +210,6 @@ class LoadUsersData extends AbstractFlexibleFixture implements OrderedFixtureInt
     }
 
     /**
-     * Generates a company name
-     *
-     * @return string
-     */
-    private function generateCompany()
-    {
-        $companyNames = $this->loadDictionary('company_names.txt');
-        $randomIndex = rand(0, count($companyNames) - 1);
-
-        return trim($companyNames[$randomIndex]);
-    }
-
-    /**
      * Generates a date of birth
      *
      * @return \DateTime
@@ -360,56 +225,6 @@ class LoadUsersData extends AbstractFlexibleFixture implements OrderedFixtureInt
 
         // Convert back to desired date format
         return new \DateTime(date('Y-m-d', $val), new \DateTimeZone('UTC'));
-    }
-
-    /**
-     * Generates a website
-     *
-     * @param  string $firstName
-     * @param  string $lastName
-     * @return string
-     */
-    private function generateWebsite($firstName, $lastName)
-    {
-        $domain = 'example.com';
-
-        return sprintf("http://%s%s.%s", strtolower($firstName), strtolower($lastName), $domain);
-    }
-
-    /**
-     * Generates a gender
-     *
-     * @return string
-     */
-    private function generateGender()
-    {
-        $genders = array('Male', 'Female');
-
-        return $genders[rand(0, 1)];
-    }
-
-    /**
-     * Generates hobbies
-     *
-     * @return string
-     */
-    private function generateHobbies()
-    {
-        $hobbies = self::getHobbies();
-        $randomCount = rand(1, count($hobbies));
-        shuffle($hobbies);
-
-        return array_slice($hobbies, 0, $randomCount);
-    }
-
-    /**
-     * Get array of hobbies
-     *
-     * @return array
-     */
-    private static function getHobbies()
-    {
-        return array('Sport', 'Cooking', 'Read', 'Coding!');
     }
 
     /**

@@ -1,12 +1,14 @@
 <?php
 
-namespace Oro\Bundle\FlexibleEntityBundle\Tests\Performance;
+namespace OroCRM\Bundle\TestFrameworkBundle\Tests\Performance;
+
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Bundle\FrameworkBundle\Console\Application;
+
+use Symfony\Component\HttpKernel\Kernel;
+use Symfony\Component\DependencyInjection\Container;
 
 use Oro\Bundle\TestFrameworkBundle\Test\ToolsAPI;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Symfony\Component\HttpKernel\Kernel;
-use Symfony\Bundle\FrameworkBundle\Console\Application;
-use Symfony\Component\DependencyInjection\Container;
 use Oro\Bundle\TestFrameworkBundle\Test\Client;
 
 class LoadTest extends WebTestCase

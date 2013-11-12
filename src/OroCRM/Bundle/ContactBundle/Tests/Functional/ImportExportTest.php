@@ -53,6 +53,8 @@ class ImportExportTest extends WebTestCase
      */
     public function testImportValidateAction($crawler)
     {
+        $this->markTestSkipped("BAP-1934");
+
         $path = $this->client
             ->getKernel()
             ->locateResource('@OroCRMContactBundle/Resources/public/import/contacts_sample.csv');

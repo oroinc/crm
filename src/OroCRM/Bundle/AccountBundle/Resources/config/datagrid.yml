@@ -1,7 +1,6 @@
 datagrid:
     accounts-grid:
-        flexible_entity: OroCRMAccountBundle:Account
-
+        extended_entity_name: %orocrm_account.account.entity.class%
         source:
             type:           orm
             acl_resource:   orocrm_account_view
@@ -9,15 +8,15 @@ datagrid:
                 select:
                     - a.id
                     - a.name
-                    - a.created
-                    - a.updated
+                    - a.createdAt
+                    - a.updatedAt
                     - defaultContact.firstName as contactFirstName
                     - defaultContact.lastName as contactLastName
                     - defaultContactEmail.email as contactEmail
                     - defaultContactPhone.phone as contactPhone
                     - CONCAT(accountOwner.firstName, CONCAT(' ', accountOwner.lastName)) as ownerName
                 from:
-                    - { table: OroCRMAccountBundle:Account, alias: a }
+                    - { table: %orocrm_account.account.entity.class%, alias: a }
                 join:
                     left:
                         - { join: a.defaultContact, alias: defaultContact }

@@ -75,19 +75,19 @@ class SoapAccountApiTest extends WebTestCase
         $accounts = ToolsAPI::classToArray($accounts);
         $result = false;
         foreach ($accounts as $account) {
-            $result = $account['attributes']['description'] == $request['attributes']['description'];
+            $result = $account['name'] == $request['name'];
             if ($result) {
                 $accountId = $account['id'];
                 break;
             }
         }
-        $request['attributes']['description'] .= '_Updated';
+        $request['name'] .= '_Updated';
         $result = $this->client->getSoap()->updateAccount($accountId, $request);
         $this->assertTrue($result);
         $account = $this->client->getSoap()->getAccount($accountId);
         $account = ToolsAPI::classToArray($account);
         $result = false;
-        if ($account['attributes']['description'] == $request['attributes']['description']) {
+        if ($account['name'] == $request['name']) {
             $result = true;
         }
         $this->assertTrue($result);
