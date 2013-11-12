@@ -24,8 +24,6 @@ class OroCRMReportExtension extends Extension
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
-        $loader->load('orm_filter_types.yml');
-        $loader->load('datagrid.yml');
         $loader->load('form.yml');
     }
 }
