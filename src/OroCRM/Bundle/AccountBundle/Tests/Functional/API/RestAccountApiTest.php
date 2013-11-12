@@ -22,7 +22,6 @@ class RestAccountApiTest extends WebTestCase
 
     public function testCreateAccount()
     {
-        $this->markTestSkipped("BAP-1934");
         $request = array(
             "account" => array (
                 "name" => 'Account_name_' . mt_rand(),

@@ -36,6 +36,8 @@ class ControllersTest extends WebTestCase
 
     public function testCreate()
     {
+        $this->markTestSkipped("BAP-1934");
+
         $crawler = $this->client->request('GET', $this->client->generate('orocrm_account_create'));
         /** @var Form $form */
         $form = $crawler->selectButton('Save and Close')->form();
