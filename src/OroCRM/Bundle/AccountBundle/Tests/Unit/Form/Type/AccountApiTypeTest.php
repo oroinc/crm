@@ -18,9 +18,6 @@ class AccountApiTypeTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $flexibleManager = $this->getMockBuilder('Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleManager')
-            ->disableOriginalConstructor()
-            ->getMock();
         $router = $this->getMockBuilder('Symfony\Component\Routing\Router')
             ->disableOriginalConstructor()
             ->getMock();
@@ -28,7 +25,7 @@ class AccountApiTypeTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->type = new AccountApiType($flexibleManager, 'account', $router, $nameFormatter);
+        $this->type = new AccountApiType($router, $nameFormatter);
     }
 
     public function testSetDefaultOptions()
@@ -54,31 +51,29 @@ class AccountApiTypeTest extends \PHPUnit_Framework_TestCase
         $builder = $this->getMockBuilder('Symfony\Component\Form\FormBuilder')
             ->disableOriginalConstructor()
             ->getMock();
-        $builder->expects($this->any(3))
+
+        $builder->expects($this->at(0))
             ->method('add')
+            ->with('name', 'text')
             ->will($this->returnSelf());
 
         $builder->expects($this->at(1))
             ->method('add')
-            ->with('name', 'text')
+            ->with('tags', 'oro_tag_select')
             ->will($this->returnSelf());
         $builder->expects($this->at(2))
             ->method('add')
-            ->with('tags', 'oro_tag_select')
+            ->with('default_contact', 'oro_entity_identifier')
             ->will($this->returnSelf());
         $builder->expects($this->at(3))
             ->method('add')
-            ->with('default_contact', 'oro_entity_identifier')
+            ->with('contacts', 'oro_multiple_entity')
             ->will($this->returnSelf());
         $builder->expects($this->at(4))
             ->method('add')
-            ->with('contacts', 'oro_multiple_entity')
-            ->will($this->returnSelf());
-        $builder->expects($this->at(5))
-            ->method('add')
             ->with('shippingAddress', 'oro_address')
             ->will($this->returnSelf());
-        $builder->expects($this->at(6))
+        $builder->expects($this->at(5))
             ->method('add')
             ->with('billingAddress', 'oro_address')
             ->will($this->returnSelf());
@@ -87,6 +82,6 @@ class AccountApiTypeTest extends \PHPUnit_Framework_TestCase
             ->method('addEventSubscriber')
             ->with($this->isInstanceOf('Symfony\Component\EventDispatcher\EventSubscriberInterface'));
 
-        $this->type->addEntityFields($builder);
+        $this->type->buildForm($builder, []);
     }
 }

@@ -22,16 +22,12 @@ class RestAccountApiTest extends WebTestCase
 
     public function testCreateAccount()
     {
+        $this->markTestSkipped("BAP-1934");
+
         $request = array(
             "account" => array (
                 "name" => 'Account_name_' . mt_rand(),
                 "owner" => '1',
-                "attributes" => array(
-                    "website" => 'http://website.com',
-                    "office_phone" => '123456789',
-                    "description" => 'Account description',
-                    "annual_revenue" => '100'
-                )
             )
         );
         $this->client->request('POST', $this->client->generate('oro_api_post_account'), $request);
@@ -75,21 +71,24 @@ class RestAccountApiTest extends WebTestCase
      */
     public function testUpdateAccount($account, $request)
     {
-        $request['account']['attributes']['description'] .= "_Updated";
+        $request['account']['name'] .= "_Updated";
         $this->client->request(
             'PUT',
             $this->client->generate('oro_api_put_account', array('id' => $account['id'])),
             $request
         );
         $result = $this->client->getResponse();
+
         ToolsAPI::assertJsonResponse($result, 204);
+
         $this->client->request('GET', $this->client->generate('oro_api_get_account', array('id' => $account['id'])));
         $result = $this->client->getResponse();
         ToolsAPI::assertJsonResponse($result, 200);
+
         $result = json_decode($result->getContent(), true);
         $this->assertEquals(
-            $request['account']['attributes']['description'],
-            $result['attributes']['description']['value'],
+            $request['account']['name'],
+            $result['name'],
             'Account does not updated'
         );
     }

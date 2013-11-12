@@ -119,6 +119,8 @@ class RestContactApiTest extends WebTestCase
      */
     public function testCreateContact()
     {
+        $this->markTestSkipped("BAP-1934");
+
         $account = $this->createAccount('first test account');
         $contactGroup = $this->getContactGroup();
         $contactGroupIds = $contactGroup ? array($contactGroup->getId()) : array();
