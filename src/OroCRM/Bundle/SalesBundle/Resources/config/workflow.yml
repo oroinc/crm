@@ -256,32 +256,13 @@ workflows:
                 order: 20
                 allowed_transitions:
                     - close
-                form_options:
-                    attribute_fields:
-                        contact:
-                            form_type: orocrm_contact_select
-                            options:
-                                required: false
-                        account:
-                            form_type: orocrm_account_select
-                            options:
-                                required: false
-                        budget_amount:
-                            form_type: oro_money
-                            options:
-                                required: false
-                        probability:
-                            form_type: percent
-                            options:
-                                required: false
-                        customer_need:
-                            form_type: text
-                            options:
-                                required: false
-                        proposed_solution:
-                            form_type: text
-                            options:
-                                required: false
+                view_attributes:
+                    - { attribute: contact, view_type: name }
+                    - { attribute: account, path: $account.name, view_type: string }
+                    - { attribute: budget_amount, view_type: currency }
+                    - { attribute: probability, view_type: percent }
+                    - { attribute: customer_need, view_type: string }
+                    - { attribute: proposed_solution, view_type: string }
             close:
                 label: 'Close'
                 template: 'OroCRMSalesBundle:Workflow:sales.html.twig'
@@ -289,23 +270,10 @@ workflows:
                 allowed_transitions:
                     - close_as_won
                     - close_as_lost
-                form_options:
-                    attribute_fields:
-                        close_reason:
-                            form_type: entity
-                            options:
-                                required: true
-                                class: OroCRMSalesBundle:OpportunityCloseReason
-                                property: 'label'
-                                empty_value: false
-                        close_revenue:
-                            form_type: oro_money
-                            options:
-                                required: true
-                        close_date:
-                            form_type: oro_date
-                            options:
-                                required: true
+                view_attributes:
+                    - { attribute: close_reason, view_type: string }
+                    - { attribute: close_revenue, view_type: currency }
+                    - { attribute: close_date, view_type: date }
         attributes:
             opportunity:
                 label: Opportunity
@@ -518,7 +486,6 @@ workflows:
                         - [$opportunity.probability, $probability]
                         - [$opportunity.customerNeed, $customer_need]
                         - [$opportunity.proposedSolution, $proposed_solution]
-                        - [$close_revenue, 0]
             close_as_won_definition:
                 conditions: # if opportunity.status = "in_progress", required data is entered and reason = "won"
                     @and:
