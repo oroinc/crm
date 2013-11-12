@@ -2,7 +2,9 @@
 
 namespace OroCRM\Bundle\IntegrationBundle\Provider\Magento;
 
-class MageCustomerConnector
+use OroCRM\Bundle\IntegrationBundle\Provider\AbstractConnector;
+
+class MageCustomerConnector extends AbstractConnector
 {
 
 }

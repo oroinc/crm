@@ -4,36 +4,37 @@ namespace OroCRM\Bundle\IntegrationBundle\Provider;
 
 abstract class AbstractConnector implements ConnectorInterface
 {
-    /** @var IntegrationTransportInterface */
+    /** @var TransportInterface */
     protected $transport;
 
     /** @var ChannelTypeInterface */
     protected $channel;
 
     /**
-     * @param IntegrationTransportInterface $transport
+     * @param TransportInterface $transport
      */
-    public function __construct(IntegrationTransportInterface $transport)
+    public function __construct(TransportInterface $transport)
     {
         $this->transport = $transport;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function connect()
     {
-        $this->transport->connect($this->channel->getSettings());
+        return $this->transport->init($this->channel->getSettings());
     }
 
     /**
-     * Used to get data from remote channel using transport
+     * Used to get/send data from/to remote channel using transport
      *
+     * @param string $action
+     * @param array $params
      * @return mixed
      */
-    abstract protected function fetch();
-
-    /**
-     * Used to push data to remote channel using transport
-     *
-     * @return mixed
-     */
-    abstract protected function send();
+    protected function call($action, $params = [])
+    {
+        return $this->transport->call($action, $params);
+    }
 }
