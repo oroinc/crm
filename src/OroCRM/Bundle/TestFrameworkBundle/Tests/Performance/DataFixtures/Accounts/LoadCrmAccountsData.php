@@ -3,27 +3,31 @@
 namespace OroCRM\Bundle\TestFrameworkBundle\Tests\DataFixtures;
 
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
+use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
-use Doctrine\ORM\EntityRepository;
+
 use Doctrine\ORM\EntityManager;
-use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\EntityRepository;
 
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
-use Oro\Bundle\UserBundle\Entity\UserManager;
+
 use Oro\Bundle\AddressBundle\Entity\Address;
 use Oro\Bundle\AddressBundle\Entity\Country;
 use Oro\Bundle\AddressBundle\Entity\Region;
+
+use OroCRM\Bundle\ContactBundle\Entity\ContactAddress;
 use OroCRM\Bundle\ContactBundle\Entity\ContactEmail;
 use OroCRM\Bundle\ContactBundle\Entity\ContactPhone;
-use OroCRM\Bundle\ContactBundle\Entity\ContactAddress;
-use OroCRM\Bundle\ContactBundle\Entity\Source;
 use OroCRM\Bundle\ContactBundle\Entity\Group;
+use OroCRM\Bundle\ContactBundle\Entity\Source;
+
 use Oro\Bundle\UserBundle\Entity\User;
+use Oro\Bundle\UserBundle\Entity\UserManager;
 
 class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInterface
 {
@@ -92,8 +96,6 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
      */
     protected $countries;
 
-    /** @var AbstractAttribute */
-    protected $attributes;
     /**
      * {@inheritDoc}
      */
@@ -107,8 +109,8 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
             $this->maxRecords = self::MAX_RECORDS;
         }
 
-        $this->accountManager = $container->get('orocrm_account.account.manager.api');
-        $this->accountRepository = $this->accountManager->getRepository();
+        $this->accountManager = $container->get('doctrine.orm.entity_manager');
+        $this->accountRepository = $this->accountManager->getRepository('OroCRMAccountBundle:Account');
 
         $this->contactManager = $container->get('doctrine.orm.entity_manager');
         $this->contactRepository = $this->contactManager->getRepository('OroCRMContactBundle:Contact');
@@ -216,7 +218,7 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
     private function createAccount(array $data)
     {
         /** @var $account Account */
-        $account = $this->accountManager->create();
+        $account = new Account();
 
         $account->setName($data['Username'] . $data['MiddleInitial'] . '_' . $data['Surname']);
 
@@ -333,7 +335,7 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
      */
     private function persist($manager, $object)
     {
-        $manager->getStorageManager()->persist($object);
+        $manager->persist($object);
     }
 
     /**
@@ -343,6 +345,6 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
      */
     private function flush($manager)
     {
-        $manager->getStorageManager()->flush();
+        $manager->flush();
     }
 }
