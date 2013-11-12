@@ -26,7 +26,7 @@ class DefaultController extends Controller
             ->setChannel($channel);
 
         $customerList = $customerConnector->getCustomersList();
-        $customerData = $customerConnector->getCustomerData($customerList[0]->customer_id, true);
+        $customerData = $customerConnector->getCustomerData($customerList[0]->customer_id, true, true);
 
         return [
             'name' => $name,
