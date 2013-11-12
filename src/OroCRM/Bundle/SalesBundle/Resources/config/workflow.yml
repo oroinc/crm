@@ -65,8 +65,11 @@ workflows:
                                 class: OroCRM\Bundle\ContactBundle\Entity\Contact
                                 attribute: $lead.contact
                                 data:
+                                    namePrefix: $lead.namePrefix
                                     firstName: $lead.firstName
+                                    middleName: $lead.middleName
                                     lastName: $lead.lastName
+                                    nameSuffix: $lead.nameSuffix
                                     jobTitle: $lead.jobTitle
                                     description: $lead.name
                             - @tree: # set Contact Address
@@ -85,8 +88,11 @@ workflows:
                                             country: $lead.address.country
                                             state: $lead.address.state
                                             stateText: $lead.address.stateText
+                                            namePrefix: $lead.namePrefix
                                             firstName: $lead.firstName
+                                            middleName: $lead.middleName
                                             lastName: $lead.lastName
+                                            nameSuffix: $lead.nameSuffix
                                             primary: true
                                     - @call_method: # add Address to Contact
                                         object: $lead.contact
@@ -344,6 +350,12 @@ workflows:
                 options:
                     class: DateTime
         transitions:
+            develop_start:
+                label: 'Develop qualified'
+                step_to: develop
+                is_start: true
+                is_hidden: true
+                transition_definition: develop_definition_start
             develop:
                 label: 'Develop'
                 step_to: develop
@@ -352,12 +364,55 @@ workflows:
                     icon: 'icon-play'
                     class: 'btn-primary'
                 transition_definition: develop_definition
+                form_options:
+                    attribute_fields:
+                        contact:
+                            form_type: orocrm_contact_select
+                            options:
+                                required: false
+                        account:
+                            form_type: orocrm_account_select
+                            options:
+                                required: false
+                        budget_amount:
+                            form_type: oro_money
+                            options:
+                                required: false
+                        probability:
+                            form_type: percent
+                            options:
+                                required: false
+                        customer_need:
+                            form_type: text
+                            options:
+                                required: false
+                        proposed_solution:
+                            form_type: text
+                            options:
+                                required: false
             close:
                 label: 'Close'
                 step_to: close
                 frontend_options:
                     icon: 'icon-play'
                 transition_definition: close_definition
+                form_options:
+                    attribute_fields:
+                        close_reason:
+                            form_type: entity
+                            options:
+                                required: true
+                                class: OroCRMSalesBundle:OpportunityCloseReason
+                                property: 'label'
+                                empty_value: false
+                        close_revenue:
+                            form_type: oro_money
+                            options:
+                                required: true
+                        close_date:
+                            form_type: oro_date
+                            options:
+                                required: true
             close_as_won:
                 label: 'Close as Won'
                 step_to: close
@@ -365,6 +420,23 @@ workflows:
                     icon: 'icon-ok-circle'
                     class: 'btn-success'
                 transition_definition: close_as_won_definition
+                form_options:
+                    attribute_fields:
+                        close_reason:
+                            form_type: entity
+                            options:
+                                required: true
+                                class: OroCRMSalesBundle:OpportunityCloseReason
+                                property: 'label'
+                                empty_value: false
+                        close_revenue:
+                            form_type: oro_money
+                            options:
+                                required: true
+                        close_date:
+                            form_type: oro_date
+                            options:
+                                required: true
             close_as_lost:
                 label: 'Close as Lost'
                 step_to: close
@@ -372,8 +444,50 @@ workflows:
                     icon: 'icon-remove-circle'
                     class: 'btn-danger'
                 transition_definition: close_as_lost_definition
+                form_options:
+                    attribute_fields:
+                        close_reason:
+                            form_type: entity
+                            options:
+                                required: true
+                                class: OroCRMSalesBundle:OpportunityCloseReason
+                                property: 'label'
+                                empty_value: false
+                        close_revenue:
+                            form_type: oro_money
+                            options:
+                                required: true
+                        close_date:
+                            form_type: oro_date
+                            options:
+                                required: true
         transition_definitions:
             develop_definition:
+                conditions: # if opportunity.status = "in_progress"
+                    @equal: [$opportunity.status.name, 'in_progress']
+                init_actions:
+                    - @assign_value:
+                        - [$contact, $opportunity.contact]
+                        - [$account, $opportunity.account]
+                        - [$budget_amount, $opportunity.budgetAmount]
+                        - [$customer_need, $opportunity.customerNeed]
+                        - [$proposed_solution, $opportunity.proposedSolution]
+                        - [$probability, $opportunity.probability]
+                        - [$close_reason, $opportunity.closeReason]
+                        - [$close_revenue, $opportunity.closeRevenue]
+                        - [$close_date, $opportunity.closeDate]
+                post_actions: # copy opportunity properties to attributes
+                    - @assign_value:
+                        - [$opportunity.contact, $contact]
+                        - [$opportunity.account, $account]
+                        - [$opportunity.budgetAmount, $budget_amount]
+                        - [$opportunity.customerNeed, $customer_need]
+                        - [$opportunity.proposedSolution, $proposed_solution]
+                        - [$opportunity.probability, $probability]
+                        - [$opportunity.closeReason, $close_reason]
+                        - [$opportunity.closeRevenue, $close_revenue]
+                        - [$opportunity.closeDate, $close_date]
+            develop_definition_start:
                 conditions: # if opportunity.status = "in_progress"
                     @equal: [$opportunity.status.name, 'in_progress']
                 post_actions: # copy opportunity properties to attributes
