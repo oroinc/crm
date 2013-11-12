@@ -310,8 +310,8 @@ datagrid:
                 select:
                     - a.id
                     - a.name
-                    - a.created
-                    - a.updated
+                    - a.createdAt
+                    - a.updatedAt
                     - defaultContact.firstName as contactFirstName
                     - defaultContact.lastName as contactLastName
                     - defaultContactEmail.email as contactEmail
@@ -350,10 +350,10 @@ datagrid:
                 label:   Phone
             ownerName:
                 label:   Owner
-            created:
+            createdAt:
                 label:   Created At
                 frontend_type: datetime
-            updated:
+            updatedAt:
                 label:    Updated At
                 frontend_type: datetime
         sorters:
@@ -365,8 +365,8 @@ datagrid:
                 contactEmail:      { data_name: contactEmail }
                 contactPhone:      { data_name: contactPhone }
                 ownerName:         { data_name: ownerName }
-                created:           { data_name: a.created }
-                updated:           { data_name: a.updated }
+                createdAt:         { data_name: a.createdAt }
+                updatedAt:         { data_name: a.updatedAt }
             default: { hasContact: %oro_datagrid.extension.orm_sorter.class%::DIRECTION_DESC }
         filters:
             columns:
@@ -392,12 +392,12 @@ datagrid:
                 ownerName:
                     type:      string
                     data_name: ownerName
-                created:
+                createdAt:
                     type:      datetime
-                    data_name: a.created
-                updated:
+                    data_name: a.createdAt
+                updatedAt:
                     type:      datetime
-                    data_name: a.updated
+                    data_name: a.updatedAt
         properties:
             id: ~
         options:
