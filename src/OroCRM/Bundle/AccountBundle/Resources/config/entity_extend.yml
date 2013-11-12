@@ -1,6 +1,6 @@
 OroCRM\Bundle\AccountBundle\Entity\Account:
     fields:
-        add_description:
+        extend_description:
             type:                 text
             configs:
                 entity:
@@ -10,7 +10,7 @@ OroCRM\Bundle\AccountBundle\Entity\Account:
             owner:                Custom
             is_extend:            true
 
-        add_phone:
+        extend_phone:
             type:                 string
             configs:
                 entity:
@@ -20,7 +20,7 @@ OroCRM\Bundle\AccountBundle\Entity\Account:
             owner:                Custom
             is_extend:            true
 
-        add_email:
+        extend_email:
             type:                 string
             configs:
                 entity:
@@ -30,7 +30,7 @@ OroCRM\Bundle\AccountBundle\Entity\Account:
             owner:                Custom
             is_extend:            true
 
-        add_fax:
+        extend_fax:
             type:                 string
             configs:
                 entity:
@@ -40,7 +40,7 @@ OroCRM\Bundle\AccountBundle\Entity\Account:
             owner:                Custom
             is_extend:            true
 
-        add_website:
+        extend_website:
             type:                 string
             configs:
                 entity:
@@ -50,7 +50,7 @@ OroCRM\Bundle\AccountBundle\Entity\Account:
             owner:                Custom
             is_extend:            true
 
-        add_employees:
+        extend_employees:
             type:                 integer
             configs:
                 entity:
@@ -60,7 +60,7 @@ OroCRM\Bundle\AccountBundle\Entity\Account:
             owner:                Custom
             is_extend:            true
 
-        add_ownership:
+        extend_ownership:
             type:                 string
             configs:
                 entity:
@@ -70,7 +70,7 @@ OroCRM\Bundle\AccountBundle\Entity\Account:
             owner:                Custom
             is_extend:            true
 
-        add_ticker_symbol:
+        extend_ticker_symbol:
             type:                 string
             configs:
                 entity:
@@ -81,7 +81,7 @@ OroCRM\Bundle\AccountBundle\Entity\Account:
             owner:                Custom
             is_extend:            true
 
-        add_rating:
+        extend_rating:
             type:                 string
             configs:
                 entity:
