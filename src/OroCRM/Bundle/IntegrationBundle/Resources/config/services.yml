@@ -1,3 +1,13 @@
 parameters:
+    oro_integration.mage.customer_connector.class: OroCRM\Bundle\IntegrationBundle\Provider\Magento\MageCustomerConnector
+    oro_integration.mage.soap_transport.class:     OroCRM\Bundle\IntegrationBundle\Provider\Magento\MageSoapTransport
 
 services:
+    oro_integration.mage.soap_transport:
+        class: %oro_integration.mage.soap_transport.class%
+
+    oro_integration.mage.customer_connector:
+        class: %oro_integration.mage.customer_connector.class%
+        arguments:
+          - @oro_integration.mage.soap_transport
+

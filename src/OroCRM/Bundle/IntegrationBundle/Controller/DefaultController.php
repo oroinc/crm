@@ -2,9 +2,12 @@
 
 namespace OroCRM\Bundle\IntegrationBundle\Controller;
 
+use OroCRM\Bundle\IntegrationBundle\Provider\ChannelTypeInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+
+use OroCRM\Bundle\IntegrationBundle\Provider\Magento\MageCustomerConnector;
 
 class DefaultController extends Controller
 {
@@ -14,6 +17,19 @@ class DefaultController extends Controller
      */
     public function indexAction($name)
     {
-        return array('name' => $name);
+        /** @var $item ChannelTypeInterface */
+        $channel = $this->getDoctrine()
+            ->getRepository('OroCRMIntegrationBundle:ChannelType')->findOneBy(['name' => $name]);
+
+        /** @var MageCustomerConnector $customerConnector */
+        $customerConnector = $this->get('oro_integration.mage.customer_connector')
+            ->setChannel($channel);
+
+        $customerData = $customerConnector->getCustomersList();
+
+        return [
+            'name' => $name,
+            'customerData' => $customerData,
+        ];
     }
 }

@@ -4,36 +4,65 @@ namespace OroCRM\Bundle\IntegrationBundle\Provider;
 
 abstract class AbstractConnector implements ConnectorInterface
 {
-    /** @var IntegrationTransportInterface */
+    /** @var TransportInterface */
     protected $transport;
 
     /** @var ChannelTypeInterface */
-    protected $channel;
+    protected $channel = null;
+
+    /** @var bool */
+    protected $isConnected = false;
 
     /**
-     * @param IntegrationTransportInterface $transport
+     * @param TransportInterface $transport
      */
-    public function __construct(IntegrationTransportInterface $transport)
+    public function __construct(TransportInterface $transport)
     {
         $this->transport = $transport;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function connect()
     {
-        $this->transport->connect($this->channel->getSettings());
+        if ($this->isConnected) {
+            return true;
+        }
+
+        if (is_null($this->channel)) {
+            throw new \Exception('There\'s no configured channel in connector');
+        }
+
+        $this->isConnected = $this->transport->init($this->channel->getSettings());
+
+        return $this->isConnected;
     }
 
     /**
-     * Used to get data from remote channel using transport
+     * Used to get/send data from/to remote channel using transport
      *
+     * @param string $action
+     * @param array $params
      * @return mixed
      */
-    abstract protected function fetch();
+    protected function call($action, $params = [])
+    {
+        if ($this->isConnected === false) {
+            $this->connect();
+        }
+
+        return $this->transport->call($action, $params);
+    }
 
     /**
-     * Used to push data to remote channel using transport
-     *
-     * @return mixed
+     * @param ChannelTypeInterface $channel
+     * @return $this
      */
-    abstract protected function send();
+    public function setChannel(ChannelTypeInterface $channel)
+    {
+        $this->channel = $channel;
+
+        return $this;
+    }
 }
