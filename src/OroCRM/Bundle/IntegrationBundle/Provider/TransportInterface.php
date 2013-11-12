@@ -9,4 +9,11 @@ interface TransportInterface
      * @return mixed
      */
     public function init(array $settings);
+
+    /**
+     * @param $action
+     * @param array $params
+     * @return mixed
+     */
+    public function call($action, $params = []);
 }

@@ -63,6 +63,10 @@ class ChannelType implements ChannelTypeInterface
      */
     public function getSettings()
     {
+        if (is_string($this->settings)) {
+            $this->settings = json_decode($this->settings, true);
+        }
+
         return $this->settings;
     }
 }

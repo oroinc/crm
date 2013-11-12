@@ -19,13 +19,13 @@ class DefaultController extends Controller
     {
         /** @var $item ChannelTypeInterface */
         $channel = $this->getDoctrine()
-            ->getRepository('OroCRMIntegrationBundle:ChannelType')->findBy(['name' => $name]);
+            ->getRepository('OroCRMIntegrationBundle:ChannelType')->findOneBy(['name' => $name]);
 
         /** @var MageCustomerConnector $customerConnector */
         $customerConnector = $this->get('oro_integration.mage.customer_connector')
             ->setChannel($channel);
 
-        $customerData = $customerConnector->getCustomerData();
+        $customerData = $customerConnector->getCustomersList();
 
         return [
             'name' => $name,

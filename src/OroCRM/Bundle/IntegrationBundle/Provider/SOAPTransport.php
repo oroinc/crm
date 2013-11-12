@@ -29,7 +29,7 @@ class SOAPTransport implements TransportInterface
      * @param $params
      * @return mixed
      */
-    protected function call($action, $params = [])
+    public function call($action, $params = [])
     {
         return $this->client->__soapCall($action, $params);
     }
