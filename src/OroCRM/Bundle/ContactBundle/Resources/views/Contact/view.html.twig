@@ -10,7 +10,7 @@
 {% set gridName = 'contacts-email-grid' %}
 
 {% block navButtons %}
-    {% if resource_granted('oro_call_create') or true %} // TODO [mkdotam] fix permission
+    {% if resource_granted('oro_call_create') or true %} {# TODO [mkdotam] fix permission #}
         {{ UI.clientButton({
         'dataUrl': path('orocrm_call_create', { 'contactId': entity.id }) ,
         'aCss': 'no-hash view-email-button',
