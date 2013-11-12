@@ -54,6 +54,8 @@ class CallController extends Controller
      */
     protected function update(Call $entity = null, $contactId = 0)
     {
+        $responseData['saved'] = false;
+
         if (!$entity) {
             $user = $this->container->get('security.context')->getToken()->getUser();
             $entity = new Call();
@@ -79,6 +81,8 @@ class CallController extends Controller
         }
 
         if ($this->get('orocrm_call.call.form.handler')->process($entity)) {
+            $responseData['saved'] = true;
+            /*
             $this->get('session')->getFlashBag()->add(
                 'success',
                 $this->get('translator')->trans('orocrm.call.controller.call.saved.message')
@@ -91,13 +95,13 @@ class CallController extends Controller
                 ),
                 array(
                     'route' => 'orocrm_call_view',
-                    'parameters' => array('id' => $entity->getId())
+                    'parameters' => array('id' => $entity->getId()),
                 )
             );
+            */
         }
 
-        return array(
-            'form'     => $this->get('orocrm_call.call.form')->createView()
-        );
+        $responseData['form'] = $this->get('orocrm_call.call.form')->createView();
+        return $responseData;
     }    
 }

@@ -11,12 +11,6 @@
                             widgetManager.getWidgetInstance({{ app.request.get('_wid')|json_encode|raw }}, function(widget) {
                                 messenger.notificationFlashMessage('success', __('Call logged succesfully.'));
                                 widget.remove();
-                                {% if form.vars.value.gridName|length %}
-                                var grid = registry.getElement('datagrid', {{ form.vars.value.gridName|json_encode|raw }});
-                                if (!_.isUndefined(grid)) {
-                                    grid.getRefreshAction().execute();
-                                }
-                                {% endif %}
                             });
                         });
             </script>
@@ -29,6 +23,14 @@
                     </div>
                 </div>
             {% endif %}
+
+            {#{% for flashMessage in app.session.flashbag.get('success') %}#}
+                    {#<div class="alert alert-success">#}
+                        {#<div class="message">#}
+                            {#{{ flashMessage }}#}
+                        {#</div>#}
+                    {#</div>#}
+            {#{% endfor %}#}
             <div class="form-container">
                 <form id="{{ form.vars.name }}" action="{{ path('orocrm_call_update') }}" method="post">
                     <fieldset class="form">
