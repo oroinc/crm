@@ -13,32 +13,18 @@ class SOAPTransport implements TransportInterface
     /** @var \SoapClient */
     protected $client;
 
-    /** @var string */
-    protected $sessionId;
-
-    /** @var string */
-    protected $lastError;
-
     /**
      * @param array $settings
      * @return bool|mixed
      */
     public function connect(array $settings)
     {
-        $wsdlUrl = $settings['wsdl_url'];
-        $apiKey = $settings['api_key'];
-        $apiUser = $settings['api_user'];
-
-        $this->client = new \SoapClient($wsdlUrl);
-
-        try {
-            $this->sessionId = $this->client->login($apiUser, $apiKey);
-        } catch (\Exception $e) {
-            $this->lastError = $e->getMessage();
-            return false;
+        if (!empty($settings['wsdl_url'])) {
+            $this->client = new \SoapClient($settings['wsdl_url']);
+            return true;
         }
 
-        return true;
+        return false;
     }
 
     /**
@@ -68,6 +54,6 @@ class SOAPTransport implements TransportInterface
      */
     protected function call($action, $params)
     {
-        return $this->client->call($this->sessionId, $action, $params);
+        return $this->client->__soapCall($action, $params);
     }
 }
