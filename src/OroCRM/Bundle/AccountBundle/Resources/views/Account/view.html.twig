@@ -2,12 +2,10 @@
 {% import 'OroUIBundle::macros.html.twig' as macros %}
 {% import 'OroTagBundle::macros.html.twig' as _tag %}
 {% import 'OroAddressBundle:Include:viewMacro.html.twig' as addressView %}
+{% import 'OroDataGridBundle::macros.html.twig' as dataGrid %}
 {% oro_title_set({params : {"%account.name%": entity.name|default('N/A')} }) %}
 {% set audit_entity_class = 'OroCRM_Bundle_AccountBundle_Entity_Account' %}
-{% set gridId = 'contacts-grid' %}
-{% block head_script %}
-    {% placeholder prepare_grid with {'datagrid': datagrid, 'selector': '#' ~ gridId} %}
-{% endblock %}
+{% set gridName = 'account-contacts-view-grid' %}
 
 {% block navButtons %}
     {% if resource_granted('orocrm_contact_create') %}
@@ -111,7 +109,7 @@
         {% set dataBlocks = dataBlocks|merge([{'title' : 'Additional Information'|trans, 'subblocks': additional}])%}
     {% endif %}
 
-    {% set dataBlocks = dataBlocks|merge([{'title' : 'Contacts', 'subblocks': [{'title' : null, 'data' : [UI.gridBlock(gridId)], 'useSpan': false}] }])%}
+    {% set dataBlocks = dataBlocks|merge([{'title' : 'Contacts', 'subblocks': [{'title' : null, 'data' : [dataGrid.renderGrid(gridName, {account: entity.id}, { cssClass: 'inner-grid' })], 'useSpan': false}] }])%}
 
     {% set data =
         {
