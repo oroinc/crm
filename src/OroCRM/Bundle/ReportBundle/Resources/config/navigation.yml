@@ -94,7 +94,7 @@ oro_menu_config:
                                 won_by_period: ~
 
 oro_titles:
-    orocrm_contact_index: ~
+    orocrm_report_index: ~
     orocrm_report_view:   %%report.name%%
     orocrm_report_create: Create Report
     orocrm_report_update: %%report.name%% - Edit

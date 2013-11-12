@@ -65,6 +65,7 @@ class OpportunityControllersTest extends WebTestCase
      */
     public function testUpdate($name)
     {
+        $this->markTestSkipped("BAP-1820");
         $this->client->request(
             'GET',
             $this->client->generate('orocrm_sales_opportunity_index', array('_format' =>'json')),
@@ -110,6 +111,7 @@ class OpportunityControllersTest extends WebTestCase
      */
     public function testView($name)
     {
+        $this->markTestSkipped("BAP-1820");
         $this->client->request(
             'GET',
             $this->client->generate('orocrm_sales_opportunity_index', array('_format' =>'json')),
@@ -145,6 +147,7 @@ class OpportunityControllersTest extends WebTestCase
      */
     public function testInfo($name)
     {
+        $this->markTestSkipped("BAP-1820");
         $this->client->request(
             'GET',
             $this->client->generate('orocrm_sales_opportunity_index', array('_format' =>'json')),
@@ -180,6 +183,7 @@ class OpportunityControllersTest extends WebTestCase
      */
     public function testDelete($name)
     {
+        $this->markTestSkipped("BAP-1820");
         $this->client->request(
             'GET',
             $this->client->generate('orocrm_sales_opportunity_index', array('_format' =>'json')),

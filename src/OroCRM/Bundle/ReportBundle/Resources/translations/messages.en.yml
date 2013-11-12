@@ -20,6 +20,10 @@ orocrm:
             report:
                 saved:             Report saved
                 deleted:           Report deleted
+                wonCount:          Number Won
+                lostCount:         Number Lost
+                inProgressCount:   Number In Progress
+                totalOps:          Total
 
 "Reports": Reports
 "Delete report": Delete report
