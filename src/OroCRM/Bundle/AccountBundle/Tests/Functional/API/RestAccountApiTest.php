@@ -2,7 +2,6 @@
 
 namespace OroCRM\Bundle\AccountBundle\Tests\Functional\API;
 
-use Doctrine\ORM\EntityManager;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Bundle\TestFrameworkBundle\Test\ToolsAPI;
 use Oro\Bundle\TestFrameworkBundle\Test\Client;
@@ -16,19 +15,9 @@ class RestAccountApiTest extends WebTestCase
     /** @var Client */
     protected $client;
 
-    /**
-     * @var EntityManager
-     */
-    protected $entityManager;
-
     public function setUp()
     {
         $this->client = static::createClient(array(), ToolsAPI::generateWsseHeader());
-    }
-
-    public function tearDown()
-    {
-        unset($this->client);
     }
 
     public function testCreateAccount()
