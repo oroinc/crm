@@ -8,7 +8,10 @@ abstract class AbstractConnector implements ConnectorInterface
     protected $transport;
 
     /** @var ChannelTypeInterface */
-    protected $channel;
+    protected $channel = null;
+
+    /** @var bool */
+    protected $isConnected = false;
 
     /**
      * @param TransportInterface $transport
@@ -23,7 +26,17 @@ abstract class AbstractConnector implements ConnectorInterface
      */
     public function connect()
     {
-        return $this->transport->init($this->channel->getSettings());
+        if ($this->isConnected) {
+            return true;
+        }
+
+        if (is_null($this->channel)) {
+            throw new \Exception('There\'s no configured channel in connector');
+        }
+
+        $this->isConnected = $this->transport->init($this->channel->getSettings());
+
+        return $this->isConnected;
     }
 
     /**
@@ -35,6 +48,21 @@ abstract class AbstractConnector implements ConnectorInterface
      */
     protected function call($action, $params = [])
     {
+        if ($this->isConnected === false) {
+            $this->connect();
+        }
+
         return $this->transport->call($action, $params);
+    }
+
+    /**
+     * @param ChannelTypeInterface $channel
+     * @return $this
+     */
+    public function setChannel(ChannelTypeInterface $channel)
+    {
+        $this->channel = $channel;
+
+        return $this;
     }
 }

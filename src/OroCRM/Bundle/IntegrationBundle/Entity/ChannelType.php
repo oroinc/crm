@@ -28,18 +28,15 @@ class ChannelType implements ChannelTypeInterface
      */
     protected $settings;
 
-    /** Init channel type */
-    public function init()
-    {
-        // TODO: Implement init() method.
-    }
-
     /**
      * @param mixed $name
+     * @return $this
      */
     public function setName($name)
     {
         $this->name = $name;
+
+        return $this;
     }
 
     /**
@@ -52,10 +49,13 @@ class ChannelType implements ChannelTypeInterface
 
     /**
      * @param mixed $settings
+     * @return $this
      */
     public function setSettings($settings)
     {
         $this->settings = $settings;
+
+        return $this;
     }
 
     /**

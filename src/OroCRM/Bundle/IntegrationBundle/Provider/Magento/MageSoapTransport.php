@@ -42,7 +42,7 @@ class MageSoapTransport extends SOAPTransport
      * @param $params
      * @return mixed
      */
-    protected function call($action, $params)
+    protected function call($action, $params = [])
     {
         return parent::call($action, [$this->sessionId, $params]);
     }
