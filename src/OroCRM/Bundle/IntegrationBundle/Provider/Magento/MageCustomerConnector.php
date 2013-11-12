@@ -14,16 +14,33 @@ class MageCustomerConnector extends AbstractConnector
      */
     public function getCustomersList($filters = [])
     {
-        $complexFilter = array(
-            'complex_filter' => array(
-                array(
-                    'key' => 'group_id',
-                    'value' => array('key' => 'in', 'value' => '1,3')
-                )
-            )
-        );
-
         return $this->call('customerCustomerList', $filters);
+    }
+
+    /**
+     * @param $id
+     * @param bool $isIncludeAddresses
+     * @param array $onlyAttributes
+     * @return mixed
+     */
+    public function getCustomerData($id, $isIncludeAddresses = false, $onlyAttributes = [])
+    {
+        $result = $this->call('customerCustomerInfo', [$id, $onlyAttributes]);
+
+        if ($isIncludeAddresses) {
+            $result->addresses = $this->getCustomerAddressData($id);
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param $customerId
+     * @return mixed
+     */
+    public function getCustomerAddressData($customerId)
+    {
+        return $this->call('customerAddressList', $customerId);
     }
 
     public function saveCustomerData()

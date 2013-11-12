@@ -25,11 +25,13 @@ class DefaultController extends Controller
         $customerConnector = $this->get('oro_integration.mage.customer_connector')
             ->setChannel($channel);
 
-        $customerData = $customerConnector->getCustomersList();
+        $customerList = $customerConnector->getCustomersList();
+        $customerData = $customerConnector->getCustomerData($customerList[0]->customer_id, true);
 
         return [
             'name' => $name,
             'customerData' => $customerData,
+            'customerList' => $customerList,
         ];
     }
 }
