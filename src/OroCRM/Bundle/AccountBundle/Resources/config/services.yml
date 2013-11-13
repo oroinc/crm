@@ -1,64 +1,29 @@
 parameters:
-    orocrm_account.account.manager.flexible.class: Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleManager
-    orocrm_account.account.entity.class: OroCRM\Bundle\AccountBundle\Entity\Account
-    orocrm_account.account.entity.value.class: OroCRM\Bundle\AccountBundle\Entity\Value\AccountValue
-    orocrm_account.type.account.class: OroCRM\Bundle\AccountBundle\Form\Type\AccountType
-    orocrm_account.type.account_value.class: OroCRM\Bundle\AccountBundle\Form\Type\AccountValueType
-    orocrm_account.handler.account.class: OroCRM\Bundle\AccountBundle\Form\Handler\AccountHandler
-    orocrm_account.attribute_type.account.class: OroCRM\Bundle\AccountBundle\AttributeType\AccountType
-    orocrm_account.attribute_type.ticker_symbol.class: OroCRM\Bundle\AccountBundle\AttributeType\TickerSymbolType
-    orocrm_account.form.type.account_select.class: OroCRM\Bundle\AccountBundle\Form\Type\AccountSelectType
-    orocrm_account.form.type.ticker_symbol.class: OroCRM\Bundle\AccountBundle\Form\Type\TickerSymbolType
+    orocrm_account.account.entity.class:            OroCRM\Bundle\AccountBundle\Entity\Account
+    orocrm_account.type.account.class:              OroCRM\Bundle\AccountBundle\Form\Type\AccountType
+    orocrm_account.handler.account.class:           OroCRM\Bundle\AccountBundle\Form\Handler\AccountHandler
+    orocrm_account.form.type.account_select.class:  OroCRM\Bundle\AccountBundle\Form\Type\AccountSelectType
 
-    orocrm_account.account.manager.api.class:  Oro\Bundle\SoapBundle\Entity\Manager\ApiFlexibleEntityManager
-    orocrm_account.type.account.api.class: OroCRM\Bundle\AccountBundle\Form\Type\AccountApiType
+    orocrm_account.account.manager.api.class:       Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
+    orocrm_account.type.account.api.class:          OroCRM\Bundle\AccountBundle\Form\Type\AccountApiType
 
 services:
-    orocrm_account.account.manager.flexible:
-        class: %orocrm_account.account.manager.flexible.class%
-        arguments:
-            - %orocrm_account.account.entity.class%
-            - %oro_flexibleentity.flexible_config%
-            - @doctrine.orm.entity_manager
-            - @event_dispatcher
-            - @oro_flexibleentity.attributetype.factory
-        calls:
-            - [ addAttributeType, ['oro_flexibleentity_text'] ]
-            - [ addAttributeType, ['oro_flexibleentity_integer_unsigned'] ]
-            - [ addAttributeType, ['oro_flexibleentity_textarea'] ]
-            - [ addAttributeType, ['oro_flexibleentity_url'] ]
-            - [ addAttributeType, ['oro_flexibleentity_email'] ]
-            - [ addAttributeType, ['oro_address'] ]
-            - [ addAttributeType, ['orocrm_account_ticker_symbol'] ]
-        tags:
-            - { name: oro_flexibleentity_manager, entity: %orocrm_account.account.entity.class%}
-
     orocrm_account.form.account:
-        class: Symfony\Component\Form\Form
+        class:                                      Symfony\Component\Form\Form
         factory_method: createNamed
         factory_service: form.factory
         arguments: ["orocrm_account_form", "orocrm_account", null]
 
     orocrm_account.form.type.account:
-        class: %orocrm_account.type.account.class%
+        class:                                      %orocrm_account.type.account.class%
         arguments:
-            - @orocrm_account.account.manager.flexible
-            - "orocrm_account_value"
             - @router
             - @oro_locale.formatter.name
         tags:
             - { name: form.type, alias: orocrm_account }
 
-    orocrm_account.form.type.account_value:
-        class: %orocrm_account.type.account_value.class%
-        arguments:
-            - @orocrm_account.account.manager.flexible
-            - @oro_flexibleentity.value_form.value_subscriber
-        tags:
-            - { name: form.type, alias: orocrm_account_value }
-
     orocrm_account.form.handler.account:
-        class: %orocrm_account.handler.account.class%
+        class:                                      %orocrm_account.handler.account.class%
         scope: request
         arguments:
             - @orocrm_account.form.account
@@ -69,62 +34,35 @@ services:
 
     # Form type
     orocrm_account.form.type.account_select:
-        class: %orocrm_account.form.type.account_select.class%
+        class:                                      %orocrm_account.form.type.account_select.class%
         arguments:
             - @doctrine.orm.entity_manager
         tags:
             - { name: form.type, alias: orocrm_account_select }
 
-    orocrm_account.form.type.ticker_symbol:
-        class: %orocrm_account.form.type.ticker_symbol.class%
-        tags:
-            - { name: form.type, alias: oro_ticker_symbol }
-
-    # Flexible attribute
-    orocrm_account.attribute_type.account:
-        class: %orocrm_account.attribute_type.account.class%
-        arguments:
-            - "account"
-            - "orocrm_account_select"
-            - @oro_flexibleentity.validator.attribute_constraint_guesser
-        tags:
-            - { name: oro_flexibleentity.attributetype, alias: orocrm_account_attribute_account }
-
-    orocrm_account.attribute_type.ticker_symbol:
-        class: %orocrm_account.attribute_type.ticker_symbol.class%
-        arguments:
-            - "varchar"
-            - "oro_ticker_symbol"
-            - @oro_flexibleentity.validator.attribute_constraint_guesser
-        tags:
-            - { name: oro_flexibleentity.attributetype, alias: orocrm_account_ticker_symbol }
-
     # Account API
     orocrm_account.account.manager.api:
-        class: %orocrm_account.account.manager.api.class%
+        class:                                      %orocrm_account.account.manager.api.class%
         arguments:
             - %orocrm_account.account.entity.class%
             - @doctrine.orm.entity_manager
-            - @orocrm_account.account.manager.flexible
 
     orocrm_account.form.type.account.api:
-        class: %orocrm_account.type.account.api.class%
+        class:                                      %orocrm_account.type.account.api.class%
         arguments:
-            - @orocrm_account.account.manager.flexible
-            - "orocrm_account_value"
             - @router
             - @oro_locale.formatter.name
         tags:
             - { name: form.type, alias: account }
 
     orocrm_account.form.account.api:
-        class: Symfony\Component\Form\Form
+        class:                                      Symfony\Component\Form\Form
         factory_method: createNamed
         factory_service: form.factory
         arguments: ["account", "account", null]
 
     orocrm_account.form.handler.account.api:
-        class: %orocrm_account.handler.account.class%
+        class:                                      %orocrm_account.handler.account.class%
         scope: request
         arguments:
             - @orocrm_account.form.account.api

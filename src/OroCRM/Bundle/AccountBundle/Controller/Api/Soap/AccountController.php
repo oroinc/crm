@@ -5,11 +5,11 @@ namespace OroCRM\Bundle\AccountBundle\Controller\Api\Soap;
 use Symfony\Component\Form\FormInterface;
 use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 
-use Oro\Bundle\SoapBundle\Controller\Api\Soap\FlexibleSoapController;
-use Oro\Bundle\SoapBundle\Entity\Manager\ApiFlexibleEntityManager;
+use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
+use Oro\Bundle\SoapBundle\Controller\Api\Soap\SoapController;
 use Oro\Bundle\SoapBundle\Form\Handler\ApiFormHandler;
 
-class AccountController extends FlexibleSoapController
+class AccountController extends SoapController
 {
     /**
      * @Soap\Method("getAccounts")
@@ -64,7 +64,7 @@ class AccountController extends FlexibleSoapController
     }
 
     /**
-     * @return ApiFlexibleEntityManager
+     * @return ApiEntityManager
      */
     public function getManager()
     {

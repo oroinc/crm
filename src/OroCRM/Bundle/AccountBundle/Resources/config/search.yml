@@ -1,7 +1,6 @@
 OroCRM\Bundle\AccountBundle\Entity\Account:
     alias: orocrm_account
     label: Accounts
-    flexible_manager: orocrm_account.account.manager.flexible
     title_fields: [name]
     route:
         name: orocrm_account_view

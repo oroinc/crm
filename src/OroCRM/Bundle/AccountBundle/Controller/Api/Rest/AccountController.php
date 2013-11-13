@@ -2,25 +2,28 @@
 
 namespace OroCRM\Bundle\AccountBundle\Controller\Api\Rest;
 
+use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\Response;
+
+use Nelmio\ApiDocBundle\Annotation\ApiDoc;
+
 use FOS\RestBundle\Controller\Annotations\NamePrefix;
 use FOS\RestBundle\Controller\Annotations\RouteResource;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
-use Nelmio\ApiDocBundle\Annotation\ApiDoc;
+use FOS\RestBundle\Routing\ClassResourceInterface;
+
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 
-use Symfony\Component\Form\FormInterface;
-use Symfony\Component\HttpFoundation\Response;
-use FOS\RestBundle\Routing\ClassResourceInterface;
 use Oro\Bundle\SoapBundle\Form\Handler\ApiFormHandler;
-use Oro\Bundle\SoapBundle\Controller\Api\Rest\FlexibleRestController;
-use Oro\Bundle\SoapBundle\Entity\Manager\ApiFlexibleEntityManager;
+use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
 
 /**
  * @RouteResource("account")
  * @NamePrefix("oro_api_")
  */
-class AccountController extends FlexibleRestController implements ClassResourceInterface
+class AccountController extends RestController implements ClassResourceInterface
 {
     /**
      * REST GET list
@@ -112,7 +115,7 @@ class AccountController extends FlexibleRestController implements ClassResourceI
     /**
      * Get entity Manager
      *
-     * @return ApiFlexibleEntityManager
+     * @return ApiEntityManager
      */
     public function getManager()
     {
