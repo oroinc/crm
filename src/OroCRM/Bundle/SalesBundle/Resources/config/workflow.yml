@@ -60,7 +60,7 @@ workflows:
                     - @tree: # create Contact entity
                         conditions: # if contact not specified
                             @empty: $lead.contact
-                        post_actions:
+                        actions:
                             - @create_entity: # create Contact based on Lead
                                 class: OroCRM\Bundle\ContactBundle\Entity\Contact
                                 attribute: $lead.contact
@@ -147,7 +147,7 @@ workflows:
                         name: sales_flow_b2b
                         attribute: $.result.workflowItem
                         entity: $.result.opportunity
-                        transition: develop
+                        transition: qualify
                     - @redirect_to_workflow: # redirect to workflow item edit page
                         [$.result.workflowItem]
             cancel_definition: # if lead.status = "new"
@@ -250,16 +250,16 @@ workflows:
         enabled: true
         type: wizard
         steps:
-            develop:
-                label: 'Develop'
+            qualify:
+                label: 'Qualify'
                 template: 'OroCRMSalesBundle:Workflow:sales.html.twig'
                 order: 10
                 allowed_transitions:
-                    - qualify
+                    - develop
                 view_attributes:
                     - { attribute: contact, view_type: orocrm_contact }
-            qualify:
-                label: 'Qualify'
+            develop:
+                label: 'Develop'
                 template: 'OroCRMSalesBundle:Workflow:sales.html.twig'
                 order: 10
                 allowed_transitions:
@@ -268,8 +268,8 @@ workflows:
                 view_attributes:
                     - { attribute: contact, view_type: orocrm_contact }
                     - { attribute: account, view_type: orocrm_account }
-                    - { attribute: budget_amount, view_type: currency }
                     - { attribute: probability, view_type: percent }
+                    - { attribute: budget_amount, view_type: currency }
                     - { attribute: customer_need, view_type: string }
                     - { attribute: proposed_solution, view_type: string }
             close:
@@ -282,65 +282,66 @@ workflows:
                     - { attribute: close_date, view_type: date }
         attributes:
             opportunity:
-                label: Opportunity
+                label: 'Opportunity'
                 type: entity
                 options:
                     class: OroCRM\Bundle\SalesBundle\Entity\Opportunity
                     managed_entity: true
                     multiple: false
             contact:
-                label: Contact
+                label: 'Contact'
                 type: entity
                 options:
                     class: OroCRM\Bundle\ContactBundle\Entity\Contact
             account:
-                label: Account
+                label: 'Account'
                 type: entity
                 options:
                     class: OroCRM\Bundle\AccountBundle\Entity\Account
-            budget_amount:
-                label: Budget
-                type: float
+
             probability:
-                label: Probability
+                label: 'Probability'
                 type: float
+            budget_amount:
+                  label: 'Budget amount'
+                  type: float
             customer_need:
-                label: Customer Need
+                label: 'Customer Need'
                 type: string
             proposed_solution:
-                label: Proposed Solution
+                label: 'Proposed Solution'
                 type: string
             close_reason_name: # auxiliary attribute to find close reason by its name
-                label: Close reason name
+                label: 'Close reason'
                 type: string
             close_reason:
-                label: Close reason
+                label: 'Close reason'
                 type: entity
                 options:
                     class: OroCRM\Bundle\SalesBundle\Entity\OpportunityCloseReason
             close_revenue:
-                label: Close revenue
+                label: 'Close revenue'
                 type: float
             close_date:
-                label: Close date
+                label: 'Close date'
                 type: object
                 options:
                     class: DateTime
         transitions:
-            develop:
-                label: 'Develop'
-                step_to: develop
-                is_start: true
-                is_hidden: true
-                transition_definition: develop_definition
             qualify:
                 label: 'Qualify'
                 step_to: qualify
                 is_start: true
+                is_hidden: true
+                transition_definition: qualify_definition
+            develop:
+                label: 'Develop'
+                step_to: develop
+                is_start: true
                 frontend_options:
                     icon: 'icon-play'
                     class: 'btn-primary'
-                transition_definition: qualify_definition
+                transition_definition: develop_definition
                 form_options:
                     attribute_fields:
                         contact:
@@ -410,7 +411,7 @@ workflows:
                             options:
                                 required: true
         transition_definitions:
-            develop_definition:
+            qualify_definition:
                 conditions: # if opportunity.status = "in_progress"
                     @equal: [$opportunity.status.name, 'in_progress']
                 post_actions: # copy opportunity properties to attributes
@@ -424,7 +425,7 @@ workflows:
                         - [$close_reason, $opportunity.closeReason]
                         - [$close_revenue, $opportunity.closeRevenue]
                         - [$close_date, $opportunity.closeDate]
-            qualify_definition:
+            develop_definition:
                 init_actions:
                     - @assign_value:
                         - [$contact, $opportunity.contact]
@@ -437,9 +438,15 @@ workflows:
                         - [$close_revenue, $opportunity.closeRevenue]
                         - [$close_date, $opportunity.closeDate]
                 conditions: # if opportunity.status = "in_progress"
-                    @equal:
-                        message: 'Opportunity must be in status "In progress"'
-                        rules: [$opportunity.status.name, 'in_progress']
+                    @and:
+                        - @equal:
+                            message: 'Opportunity must be in status "In progress"'
+                            rules: [$opportunity.status.name, 'in_progress']
+                        - @and:
+                            message: 'Probality must be between 0 and 100 percents'
+                            rules:
+                                - @greater_or_equal: [$probability, 0]
+                                - @less_or_equal: [$probability, 1]
                 post_actions: # copy opportunity properties to attributes
                     - @assign_value:
                         - [$opportunity.contact, $contact]
@@ -461,11 +468,6 @@ workflows:
                                 rules: [$opportunity.status.name, 'in_progress']
                             - @not_empty: $close_date
                             - @not_empty: $close_revenue
-                            - @and:
-                                message: 'Probality must be between 0 and 100 percents'
-                                rules:
-                                    - @greater_or_equal: [$probability, 0]
-                                    - @less_or_equal: [$probability, 1]
                 post_actions: # update opportunity properties, set opportunity.status = "won"
                     - @find_entity:
                         class: OroCRM\Bundle\SalesBundle\Entity\OpportunityStatus
@@ -497,11 +499,6 @@ workflows:
                             - @not_empty: $close_date
                             - @not_empty: $close_revenue
                             - @not_empty: $close_reason_name
-                            - @and:
-                                message: 'Probality must be between 0 and 100 percents'
-                                rules:
-                                    - @greater_or_equal: [$probability, 0]
-                                    - @less_or_equal: [$probability, 1]
                 post_actions: # update opportunity properties, set opportunity.status = "lost"
                     - @find_entity:
                         class: OroCRM\Bundle\SalesBundle\Entity\OpportunityStatus
