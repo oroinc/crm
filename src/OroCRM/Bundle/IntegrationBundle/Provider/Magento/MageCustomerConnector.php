@@ -4,13 +4,10 @@ namespace OroCRM\Bundle\IntegrationBundle\Provider\Magento;
 
 use OroCRM\Bundle\IntegrationBundle\Provider\AbstractConnector;
 
-class MageCustomerConnector extends AbstractConnector
+class MageCustomerConnector extends AbstractConnector implements MagentoCustomerConnectorInterface
 {
     /**
-     * Get customer list
-     *
-     * @param array $filters
-     * @return array
+     * {@inheritdoc}
      */
     public function getCustomersList($filters = [])
     {
@@ -18,11 +15,7 @@ class MageCustomerConnector extends AbstractConnector
     }
 
     /**
-     * @param $id
-     * @param bool $isAddressesIncluded
-     * @param bool $isGroupsIncluded
-     * @param array $onlyAttributes
-     * @return mixed
+     * {@inheritdoc}
      */
     public function getCustomerData($id, $isAddressesIncluded = false, $isGroupsIncluded = false, $onlyAttributes = [])
     {
@@ -41,8 +34,7 @@ class MageCustomerConnector extends AbstractConnector
     }
 
     /**
-     * @param $customerId
-     * @return mixed
+     * {@inheritdoc}
      */
     public function getCustomerAddressData($customerId)
     {
@@ -50,11 +42,7 @@ class MageCustomerConnector extends AbstractConnector
     }
 
     /**
-     * Return customer groups assoc array
-     * with magento group ids as keys and codes as values
-     *
-     * @param null $groupId if specified, only data for this group will be returned
-     * @return mixed
+     * {@inheritdoc}
      */
     public function getCustomerGroups($groupId = null)
     {
@@ -74,12 +62,18 @@ class MageCustomerConnector extends AbstractConnector
         return  $result;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function saveCustomerData()
     {
         // TODO: implement create/update customer data
         return [];
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function saveCustomerAddress()
     {
         // TODO: implement create/update customer address

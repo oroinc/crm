@@ -7,7 +7,7 @@ use OroCRM\Bundle\IntegrationBundle\Provider\SOAPTransport;
 /**
  * Magento SOAP transport
  * used to fetch and pull data to/from Magento instance
- * with sessionId param
+ * with sessionId param using SOAP requests
  *
  * @package OroCRM\Bundle\IntegrationBundle\Provider\Magento
  */
