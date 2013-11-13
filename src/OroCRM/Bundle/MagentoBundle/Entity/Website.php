@@ -5,7 +5,7 @@ namespace OroCRM\Bundle\MagentoBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Class MagentoWebsite
+ * Class Website
  *
  * @package OroCRM\Bundle\OroCRMMagentoBundle\Entity
  * @ORM\Entity
@@ -14,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
  *  uniqueConstraints={@ORM\UniqueConstraint(name="unq_website_code", columns={"website_code"})}
  * )
  */
-class MagentoWebsite
+class Website
 {
     /**
      * @var integer

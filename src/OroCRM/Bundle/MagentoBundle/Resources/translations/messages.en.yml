@@ -1,0 +1,6 @@
+orocrm:
+    magento:
+        datagrid:
+            actions:
+                view:
+                    label: View

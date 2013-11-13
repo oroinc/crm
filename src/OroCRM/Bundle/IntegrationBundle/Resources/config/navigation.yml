@@ -1,0 +1,14 @@
+oro_menu_config:
+    items:
+        channels_submenu:
+            label: 'Channels'
+            uri: '#'
+            extras:
+                position: 50
+
+    tree:
+        application_menu:
+            children:
+                customers_tab:
+                    children:
+                        channels_submenu: ~

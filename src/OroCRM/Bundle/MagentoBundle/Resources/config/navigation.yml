@@ -1,0 +1,21 @@
+oro_menu_config:
+    items:
+        magento_customers_list:
+            label: 'Magento'
+            route: 'orocrm_magento_customer_index'
+            extras:
+                routes: ['/^orocrm_magento_customer_(index|view)+$/']
+                description: List of customers from "Magento channel"
+
+    tree:
+        application_menu:
+            children:
+                customers_tab:
+                    children:
+                        channels_submenu:
+                            children:
+                                magento_customers_list: ~
+
+oro_titles:
+    orocrm_magento_customer_index: ~
+    orocrm_magento_customer_view:  %%customer.name%%

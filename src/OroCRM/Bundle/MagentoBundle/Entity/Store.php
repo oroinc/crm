@@ -5,7 +5,7 @@ namespace OroCRM\Bundle\MagentoBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Class MagentoStore
+ * Class Store
  *
  * @package OroCRM\Bundle\OroCRMMagentoBundle\Entity
  * @ORM\Entity
@@ -17,7 +17,7 @@ use Doctrine\ORM\Mapping as ORM;
  *  uniqueConstraints={@ORM\UniqueConstraint(name="unq_code", columns={"store_code"})}
  * )
  */
-class MagentoStore
+class Store
 {
     /**
      * @var integer
@@ -43,9 +43,9 @@ class MagentoStore
     protected $name;
 
     /**
-     * @var MagentoWebsite
+     * @var Website
      *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\MagentoWebsite")
+     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\Website", cascade="PERSIST")
      * @ORM\JoinColumn(name="website_id", referencedColumnName="id", onDelete="cascade", nullable=false)
      */
     protected $website;
@@ -99,11 +99,11 @@ class MagentoStore
     }
 
     /**
-     * @param MagentoWebsite $website
+     * @param Website $website
      *
      * @return $this
      */
-    public function setWebsite(MagentoWebsite $website)
+    public function setWebsite(Website $website)
     {
         $this->website = $website;
 
@@ -111,7 +111,7 @@ class MagentoStore
     }
 
     /**
-     * @return \OroCRM\Bundle\MagentoBundle\Entity\MagentoWebsite
+     * @return Website
      */
     public function getWebsite()
     {

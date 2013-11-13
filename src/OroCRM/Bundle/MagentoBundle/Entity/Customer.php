@@ -10,7 +10,7 @@ use Oro\Bundle\LocaleBundle\Model\FullNameInterface;
 use Oro\Bundle\BusinessEntitiesBundle\Entity\BaseCustomerEntity;
 
 /**
- * Class MagentoCustomer
+ * Class Customer
  *
  * @package OroCRM\Bundle\OroCRMMagentoBundle\Entity
  * @ORM\Entity
@@ -19,7 +19,7 @@ use Oro\Bundle\BusinessEntitiesBundle\Entity\BaseCustomerEntity;
  *  routeName="orocrm_magento_customer_index",
  *  routeView="orocrm_magento_customer_view",
  *  defaultValues={
- *      "entity"={"label"="Customer", "plural_label"="Customers"},
+ *      "entity"={"label"="Magento Customer", "plural_label"="Magento Customers"},
  *      "ownership"={
  *          "owner_type"="USER",
  *          "owner_field_name"="owner",
@@ -32,7 +32,7 @@ use Oro\Bundle\BusinessEntitiesBundle\Entity\BaseCustomerEntity;
  *  }
  * )
  */
-class MagentoCustomer extends BaseCustomerEntity implements FullNameInterface
+class Customer extends BaseCustomerEntity implements FullNameInterface
 {
     /**
      * @var \DateTime $createdAt
@@ -49,25 +49,25 @@ class MagentoCustomer extends BaseCustomerEntity implements FullNameInterface
     protected $updatedAt;
 
     /**
-     * @var MagentoWebsite
+     * @var Website
      *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\MagentoWebsite")
+     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\Website", cascade="PERSIST")
      * @ORM\JoinColumn(name="website_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $website;
 
     /**
-     * @var MagentoStore
+     * @var Store
      *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\MagentoStore")
+     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\Store", cascade="PERSIST")
      * @ORM\JoinColumn(name="store_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $store;
 
     /**
-     * @var MagentoCustomerGroup
+     * @var CustomerGroup
      *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\MagentoCustomerGroup")
+     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\CustomerGroup", cascade="PERSIST")
      * @ORM\JoinColumn(name="customer_group_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $group;
@@ -113,11 +113,11 @@ class MagentoCustomer extends BaseCustomerEntity implements FullNameInterface
     }
 
     /**
-     * @param MagentoWebsite $website
+     * @param Website $website
      *
      * @return $this
      */
-    public function setWebsite($website)
+    public function setWebsite(Website $website)
     {
         $this->website = $website;
 
@@ -125,7 +125,7 @@ class MagentoCustomer extends BaseCustomerEntity implements FullNameInterface
     }
 
     /**
-     * @return MagentoWebsite
+     * @return Website
      */
     public function getWebsite()
     {
@@ -133,11 +133,11 @@ class MagentoCustomer extends BaseCustomerEntity implements FullNameInterface
     }
 
     /**
-     * @param MagentoStore $store
+     * @param Store $store
      *
      * @return $this
      */
-    public function setStore(MagentoStore $store)
+    public function setStore(Store $store)
     {
         $this->store = $store;
 
@@ -145,7 +145,7 @@ class MagentoCustomer extends BaseCustomerEntity implements FullNameInterface
     }
 
     /**
-     * @return MagentoStore
+     * @return Store
      */
     public function getStore()
     {
@@ -153,11 +153,11 @@ class MagentoCustomer extends BaseCustomerEntity implements FullNameInterface
     }
 
     /**
-     * @param MagentoCustomerGroup $group
+     * @param CustomerGroup $group
      *
      * @return $this
      */
-    public function setGroup(MagentoCustomerGroup $group)
+    public function setGroup(CustomerGroup $group)
     {
         $this->group = $group;
 
@@ -165,7 +165,7 @@ class MagentoCustomer extends BaseCustomerEntity implements FullNameInterface
     }
 
     /**
-     * @return MagentoCustomerGroup
+     * @return CustomerGroup
      */
     public function getGroup()
     {
