@@ -23,6 +23,10 @@ parameters:
 
     orocrm_contact.contact.datagrid_helper.class: Oro\Bundle\AddressBundle\Datagrid\CountryDatagridHelper
 
+    orocrm_contact.type.contact_phone.class:             OroCRM\Bundle\ContactBundle\Form\Type\ContactPhoneType
+    orocrm_contact.form.type.contact_phone_select.class: OroCRM\Bundle\ContactBundle\Form\Type\ContactPhoneSelectType
+    orocrm_contact.form.listener.contact_phone.class:    OroCRM\Bundle\ContactBundle\Form\EventListener\ContactPhoneSubscriber
+
 services:
     orocrm_contact.form.contact:
         class: Symfony\Component\Form\Form
@@ -211,3 +215,23 @@ services:
 
     orocrm_contact.contact.datagrid_helper:
         class: %orocrm_contact.contact.datagrid_helper.class%
+
+    orocrm_contact.form.type.contact_phone:
+        class: %orocrm_contact.type.contact_phone.class%
+        arguments:
+            - %orocrm_contact.type.contact.class%
+        tags:
+            - { name: form.type, alias: orocrm_contact_phone }
+
+    orocrm_contact.form.type.contact_phone_select:
+        class: %orocrm_contact.form.type.contact_phone_select.class%
+        arguments:
+            - @orocrm_contact.form.listener.contact_phone
+        tags:
+            - { name: form.type, alias: orocrm_contact_with_phone_select }
+
+    orocrm_contact.form.listener.contact_phone:
+        class: %orocrm_contact.form.listener.contact_phone.class%
+        arguments:
+            - @doctrine.orm.entity_manager
+            - @form.factory
