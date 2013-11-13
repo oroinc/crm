@@ -1,5 +1,4 @@
 <?php
-
 namespace OroCRM\Bundle\ContactBundle\Form\EventListener;
 
 use Symfony\Component\Form\FormEvent;
@@ -9,7 +8,6 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
-use OroCRM\Bundle\ContactBundle\Entity\ContactPhone;
 use OroCRM\Bundle\ContactBundle\Entity\Repository\ContactPhoneRepository;
 
 class ContactPhoneSubscriber implements EventSubscriberInterface
@@ -76,7 +74,7 @@ class ContactPhoneSubscriber implements EventSubscriberInterface
                 $config = array();
             }
 
-            $config['contactPhoneNumber'] = $phones;
+            $config['contact'] = $contact;
             $config['query_builder'] = $this->getPhoneClosure($contact);
 
             if (array_key_exists('auto_initialize', $config)) {
