@@ -144,7 +144,7 @@ workflows:
                         identifier: 'in_progress'
                         attribute: $.result.opportunity.status
                     - @start_workflow: # start workflow and create workflow item
-                        name: sales
+                        name: sales_flow_b2b
                         attribute: $.result.workflowItem
                         entity: $.result.opportunity
                         transition: develop
@@ -244,18 +244,27 @@ workflows:
                         identifier: 'in_progress'
                         attribute: $opportunity.status
 
-    # Sales Workflow
-    sales:
-        label: 'Sales Flow'
+    # B2B Sales Workflow
+    sales_flow_b2b:
+        label: 'B2B Sales Flow'
         enabled: true
         type: wizard
         steps:
             develop:
                 label: 'Develop'
                 template: 'OroCRMSalesBundle:Workflow:sales.html.twig'
-                order: 20
+                order: 10
                 allowed_transitions:
-                    - close
+                    - qualify
+                view_attributes:
+                    - { attribute: contact, view_type: orocrm_contact }
+            qualify:
+                label: 'Qualify'
+                template: 'OroCRMSalesBundle:Workflow:sales.html.twig'
+                order: 10
+                allowed_transitions:
+                    - close_as_won
+                    - close_as_lost
                 view_attributes:
                     - { attribute: contact, view_type: orocrm_contact }
                     - { attribute: account, view_type: orocrm_account }
@@ -267,9 +276,6 @@ workflows:
                 label: 'Close'
                 template: 'OroCRMSalesBundle:Workflow:sales.html.twig'
                 order: 30
-                allowed_transitions:
-                    - close_as_won
-                    - close_as_lost
                 view_attributes:
                     - { attribute: close_reason, view_type: string }
                     - { attribute: close_revenue, view_type: currency }
@@ -304,6 +310,9 @@ workflows:
             proposed_solution:
                 label: Proposed Solution
                 type: string
+            close_reason_name: # auxiliary attribute to find close reason by its name
+                label: Close reason name
+                type: string
             close_reason:
                 label: Close reason
                 type: entity
@@ -318,20 +327,20 @@ workflows:
                 options:
                     class: DateTime
         transitions:
-            develop_start:
-                label: 'Develop qualified'
-                step_to: develop
-                is_start: true
-                is_hidden: true
-                transition_definition: develop_definition_start
             develop:
                 label: 'Develop'
                 step_to: develop
                 is_start: true
+                is_hidden: true
+                transition_definition: develop_definition
+            qualify:
+                label: 'Qualify'
+                step_to: qualify
+                is_start: true
                 frontend_options:
                     icon: 'icon-play'
                     class: 'btn-primary'
-                transition_definition: develop_definition
+                transition_definition: qualify_definition
                 form_options:
                     attribute_fields:
                         contact:
@@ -358,29 +367,6 @@ workflows:
                             form_type: text
                             options:
                                 required: false
-            close:
-                label: 'Close'
-                step_to: close
-                frontend_options:
-                    icon: 'icon-play'
-                transition_definition: close_definition
-                form_options:
-                    attribute_fields:
-                        close_reason:
-                            form_type: entity
-                            options:
-                                required: true
-                                class: OroCRMSalesBundle:OpportunityCloseReason
-                                property: 'label'
-                                empty_value: false
-                        close_revenue:
-                            form_type: oro_money
-                            options:
-                                required: true
-                        close_date:
-                            form_type: oro_date
-                            options:
-                                required: true
             close_as_won:
                 label: 'Close as Won'
                 step_to: close
@@ -390,13 +376,6 @@ workflows:
                 transition_definition: close_as_won_definition
                 form_options:
                     attribute_fields:
-                        close_reason:
-                            form_type: entity
-                            options:
-                                required: true
-                                class: OroCRMSalesBundle:OpportunityCloseReason
-                                property: 'label'
-                                empty_value: false
                         close_revenue:
                             form_type: oro_money
                             options:
@@ -414,13 +393,14 @@ workflows:
                 transition_definition: close_as_lost_definition
                 form_options:
                     attribute_fields:
-                        close_reason:
-                            form_type: entity
+                        close_reason_name:
+                            form_type: choice
                             options:
                                 required: true
-                                class: OroCRMSalesBundle:OpportunityCloseReason
-                                property: 'label'
                                 empty_value: false
+                                choices:
+                                    outsold: 'Outsold'
+                                    cancelled: 'Cancelled'
                         close_revenue:
                             form_type: oro_money
                             options:
@@ -433,6 +413,18 @@ workflows:
             develop_definition:
                 conditions: # if opportunity.status = "in_progress"
                     @equal: [$opportunity.status.name, 'in_progress']
+                post_actions: # copy opportunity properties to attributes
+                    - @assign_value:
+                        - [$contact, $opportunity.contact]
+                        - [$account, $opportunity.account]
+                        - [$budget_amount, $opportunity.budgetAmount]
+                        - [$customer_need, $opportunity.customerNeed]
+                        - [$proposed_solution, $opportunity.proposedSolution]
+                        - [$probability, $opportunity.probability]
+                        - [$close_reason, $opportunity.closeReason]
+                        - [$close_revenue, $opportunity.closeRevenue]
+                        - [$close_date, $opportunity.closeDate]
+            qualify_definition:
                 init_actions:
                     - @assign_value:
                         - [$contact, $opportunity.contact]
@@ -444,6 +436,10 @@ workflows:
                         - [$close_reason, $opportunity.closeReason]
                         - [$close_revenue, $opportunity.closeRevenue]
                         - [$close_date, $opportunity.closeDate]
+                conditions: # if opportunity.status = "in_progress"
+                    @equal:
+                        message: 'Opportunity must be in status "In progress"'
+                        rules: [$opportunity.status.name, 'in_progress']
                 post_actions: # copy opportunity properties to attributes
                     - @assign_value:
                         - [$opportunity.contact, $contact]
@@ -455,59 +451,36 @@ workflows:
                         - [$opportunity.closeReason, $close_reason]
                         - [$opportunity.closeRevenue, $close_revenue]
                         - [$opportunity.closeDate, $close_date]
-            develop_definition_start:
-                conditions: # if opportunity.status = "in_progress"
-                    @equal: [$opportunity.status.name, 'in_progress']
-                post_actions: # copy opportunity properties to attributes
-                    - @assign_value:
-                        - [$contact, $opportunity.contact]
-                        - [$account, $opportunity.account]
-                        - [$budget_amount, $opportunity.budgetAmount]
-                        - [$customer_need, $opportunity.customerNeed]
-                        - [$proposed_solution, $opportunity.proposedSolution]
-                        - [$probability, $opportunity.probability]
-                        - [$close_reason, $opportunity.closeReason]
-                        - [$close_revenue, $opportunity.closeRevenue]
-                        - [$close_date, $opportunity.closeDate]
-            close_definition:
-                conditions: # if opportunity.status = "in_progress"
-                    @and:
-                        - @equal: [$opportunity.status.name, 'in_progress']
-                        - @and:
-                            rules:
-                                - @greater_or_equal: [$probability, 0]
-                                - @less_or_equal: [$probability, 1]
-                            message: Probality must be between 0 and 100 percents.
-                post_actions: # update opportunity properties
-                    - @assign_value:
-                        - [$opportunity.contact, $contact]
-                        - [$opportunity.account, $account]
-                        - [$opportunity.budgetAmount, $budget_amount]
-                        - [$opportunity.probability, $probability]
-                        - [$opportunity.customerNeed, $customer_need]
-                        - [$opportunity.proposedSolution, $proposed_solution]
             close_as_won_definition:
                 conditions: # if opportunity.status = "in_progress", required data is entered and reason = "won"
                     @and:
-                        - @equal: [$opportunity.status.name, 'in_progress']
-                        - @not_empty: $close_date
-                        - @not_empty: $close_revenue
-                        - @not_empty: $close_reason
-                        - @and:
-                            - @greater_or_equal: [$probability, 0]
-                            - @less_or_equal: [$probability, 1]
-                        - @equal: [$close_reason.name, 'won']
+                        message: 'All required fields must be filled'
+                        rules:
+                            - @equal:
+                                message: 'Opportunity must be in status "In progress"'
+                                rules: [$opportunity.status.name, 'in_progress']
+                            - @not_empty: $close_date
+                            - @not_empty: $close_revenue
+                            - @and:
+                                message: 'Probality must be between 0 and 100 percents'
+                                rules:
+                                    - @greater_or_equal: [$probability, 0]
+                                    - @less_or_equal: [$probability, 1]
                 post_actions: # update opportunity properties, set opportunity.status = "won"
+                    - @find_entity:
+                        class: OroCRM\Bundle\SalesBundle\Entity\OpportunityStatus
+                        identifier: 'won'
+                        attribute: $opportunity.status
+                    - @find_entity:
+                        class: OroCRM\Bundle\SalesBundle\Entity\OpportunityCloseReason
+                        identifier: 'won'
+                        attribute: $close_reason
                     - @assign_value:
                         - [$probability, 1]
                         - [$opportunity.closeDate, $close_date]
                         - [$opportunity.closeRevenue, $close_revenue]
                         - [$opportunity.closeReason, $close_reason]
                         - [$opportunity.probability, $probability]
-                    - @find_entity:
-                        class: OroCRM\Bundle\SalesBundle\Entity\OpportunityStatus
-                        identifier: 'won'
-                        attribute: $opportunity.status
                     - @close_workflow: ~
                     - @redirect:
                         route: orocrm_sales_opportunity_view
@@ -516,27 +489,34 @@ workflows:
             close_as_lost_definition:
                 conditions: # opportunity.status = "in_progress", required data is entered and reason = "cancelled"
                     @and:
-                        - @equal: [$opportunity.status.name, 'in_progress']
-                        - @not_empty: $close_date
-                        - @not_empty: $close_revenue
-                        - @not_empty: $close_reason
-                        - @and:
-                            - @greater_or_equal: [$probability, 0]
-                            - @less_or_equal: [$probability, 1]
-                        - @or:
-                            - @equal: [$close_reason.name, 'cancelled']
-                            - @equal: [$close_reason.name, 'outsold']
+                        message: 'All required fields must be filled'
+                        rules:
+                            - @equal:
+                                message: 'Opportunity must be in status "In progress"'
+                                rules: [$opportunity.status.name, 'in_progress']
+                            - @not_empty: $close_date
+                            - @not_empty: $close_revenue
+                            - @not_empty: $close_reason_name
+                            - @and:
+                                message: 'Probality must be between 0 and 100 percents'
+                                rules:
+                                    - @greater_or_equal: [$probability, 0]
+                                    - @less_or_equal: [$probability, 1]
                 post_actions: # update opportunity properties, set opportunity.status = "lost"
+                    - @find_entity:
+                        class: OroCRM\Bundle\SalesBundle\Entity\OpportunityStatus
+                        identifier: 'lost'
+                        attribute: $opportunity.status
+                    - @find_entity:
+                        class: OroCRM\Bundle\SalesBundle\Entity\OpportunityCloseReason
+                        identifier: $close_reason_name
+                        attribute: $close_reason
                     - @assign_value:
                         - [$probability, 0]
                         - [$opportunity.closeDate, $close_date]
                         - [$opportunity.closeRevenue, $close_revenue]
                         - [$opportunity.closeReason, $close_reason]
                         - [$opportunity.probability, $probability]
-                    - @find_entity:
-                        class: OroCRM\Bundle\SalesBundle\Entity\OpportunityStatus
-                        identifier: 'lost'
-                        attribute: $opportunity.status
                     - @close_workflow: ~
                     - @redirect:
                         route: orocrm_sales_opportunity_view
