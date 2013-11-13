@@ -1,0 +1,4 @@
+oro_crm_magento_bundle:
+    resource:     "@OroCRMMagentoBundle/Controller"
+    type:         annotation
+    prefix:       /magento
