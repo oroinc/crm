@@ -1,0 +1,19 @@
+parameters:
+    orocrm_magento.mage.customer_connector.class: OroCRM\Bundle\MagentoBundle\Provider\CustomerConnector
+    orocrm_magento.mage.soap_transport.class:     OroCRM\Bundle\MagentoBundle\Provider\MageSoapTransport
+    orocrm_magento.mage.db_transport.class:       OroCRM\Bundle\MagentoBundle\Provider\MageDBTransport
+
+services:
+    orocrm_magento.mage.soap_transport:
+        class: %orocrm_magento.mage.soap_transport.class%
+
+    orocrm_magento.mage.db_transport:
+        class: %orocrm_magento.mage.db_transport.class%
+        arguments:
+          - @doctrine.dbal.connection_factory
+
+    orocrm_magento.mage.customer_connector:
+        class: %orocrm_magento.mage.customer_connector.class%
+        arguments:
+          - @oro_integration.mage.soap_transport
+

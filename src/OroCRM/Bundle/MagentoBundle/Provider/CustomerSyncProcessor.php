@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\IntegrationBundle\Provider\Magento;
+namespace OroCRM\Bundle\MagentoBundle\Provider;
 
 use Doctrine\ORM\EntityManager;
 

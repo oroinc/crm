@@ -1,8 +1,8 @@
 <?php
 
-namespace OroCRM\Bundle\IntegrationBundle\Provider\Magento;
+namespace OroCRM\Bundle\MagentoBundle\Provider;
 
-interface MagentoCustomerConnectorInterface
+interface CustomerConnectorInterface
 {
     /**
      * Get customer list

@@ -1,11 +1,12 @@
 <?php
 
-namespace OroCRM\Bundle\IntegrationBundle\Provider\Magento;
+namespace OroCRM\Bundle\MagentoBundle\Provider;
 
-use OroCRM\Bundle\IntegrationBundle\Provider\AbstractConnector;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 
-class MageCustomerConnector extends AbstractConnector implements MagentoCustomerConnectorInterface
+use OroCRM\Bundle\IntegrationBundle\Provider\AbstractConnector;
+
+class CustomerConnector extends AbstractConnector implements CustomerConnectorInterface
 {
     const DEFAULT_SYNC_RANGE = '1 week';
     /**
