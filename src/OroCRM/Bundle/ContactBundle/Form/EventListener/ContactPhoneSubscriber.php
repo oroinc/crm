@@ -78,7 +78,7 @@ class ContactPhoneSubscriber implements EventSubscriberInterface
             $config['query_builder'] = $this->getPhoneClosure($contact);
 
             if (array_key_exists('auto_initialize', $config)) {
-                $config['auto_initialize'] = true;
+                $config['auto_initialize'] = false;
             }
 
             $form->add(
