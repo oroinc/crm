@@ -225,6 +225,7 @@ workflows:
                         class: OroCRM\Bundle\SalesBundle\Entity\OpportunityStatus
                         identifier: 'won'
                         attribute: $opportunity.status
+                    - @assign_value: [$opportunity.probability, 1]
             close_as_lost_definition:
                 conditions: # if opportunity.status = "in_progress"
                     @equal: [$opportunity.status.name, 'in_progress']
@@ -233,6 +234,7 @@ workflows:
                         class: OroCRM\Bundle\SalesBundle\Entity\OpportunityStatus
                         identifier: 'lost'
                         attribute: $opportunity.status
+                    - @assign_value: [$opportunity.probability, 0]
             reopen_definition:
                 conditions: # if opportunity.status = "won" or opportunity.status = "lost"
                     @or:
