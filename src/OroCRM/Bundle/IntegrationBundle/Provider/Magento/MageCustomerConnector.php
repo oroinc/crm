@@ -44,7 +44,7 @@ class MageCustomerConnector extends AbstractConnector implements MagentoCustomer
         };
 
         $startDate = $lastSyncDate;
-        $endDate = $lastSyncDate->add();      // should be taken from channel config data too
+        $endDate = $lastSyncDate->add($syncRange);
         do {
             $hasData = true;
 
