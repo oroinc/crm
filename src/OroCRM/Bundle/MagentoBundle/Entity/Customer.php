@@ -92,6 +92,13 @@ class Customer extends BaseCustomerEntity implements FullNameInterface
     protected $account;
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(type="integer", options={"unsigned"=true})
+     */
+    protected $originalId;
+
+    /**
      * @param \DateTime $createdAt
      *
      * @return $this
@@ -229,5 +236,25 @@ class Customer extends BaseCustomerEntity implements FullNameInterface
     public function getAccount()
     {
         return $this->account;
+    }
+
+    /**
+     * @param int $originalId
+     *
+     * @return $this
+     */
+    public function setOriginalId($originalId)
+    {
+        $this->originalId = $originalId;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getOriginalId()
+    {
+        return $this->originalId;
     }
 }
