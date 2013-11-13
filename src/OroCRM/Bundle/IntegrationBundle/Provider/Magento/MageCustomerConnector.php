@@ -9,6 +9,39 @@ class MageCustomerConnector extends AbstractConnector implements MagentoCustomer
     /**
      * {@inheritdoc}
      */
+    public function sync($oneWay = self::SYNC_DIRECTION_PULL, $params = [])
+    {
+        $channelSettings = $this->channel->getSettings();
+
+        $startDate = ''; // initial start date should be taken from channel config data
+        $endDate = '';   // should be taken from channel config data too
+
+        $filters = array(array(
+            'complex_filter' => array(
+                array(
+                    'key' => 'created_at',
+                    'value' => array(
+                        'key' => 'gteq',
+                        'value' => $startDate . ' 00:00:00'
+                    ),
+                ),
+                array(
+                    'key' => 'created_at',
+                    'value' => array(
+                        'key' => 'lt',
+                        'value' => $endDate . ' 00:00:00'
+                    ),
+                ),
+            )
+        ));
+
+        $batchData = $this->getCustomersList($filters);
+        $this->processSyncBatch($batchData);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getCustomersList($filters = [])
     {
         return $this->call('customerCustomerList', $filters);
@@ -60,6 +93,14 @@ class MageCustomerConnector extends AbstractConnector implements MagentoCustomer
         }
 
         return  $result;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getStoresData()
+    {
+        return $this->call('storeList');
     }
 
     /**
