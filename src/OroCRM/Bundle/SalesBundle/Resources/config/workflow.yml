@@ -75,7 +75,7 @@ workflows:
                             - @tree: # set Contact Address
                                 conditions: # if lead has address
                                     @not_empty: $lead.address
-                                post_actions:
+                                actions:
                                     - @create_entity: # create Contact Address based on Lead address
                                         class: OroCRM\Bundle\ContactBundle\Entity\ContactAddress
                                         attribute: $.result.address
@@ -103,7 +103,7 @@ workflows:
                             - @tree: # set Contact Email
                                 conditions: # if lead has email
                                     @not_empty: $lead.email
-                                post_actions:
+                                actions:
                                     - @create_entity: # create Contact Address based on Lead address
                                         class: OroCRM\Bundle\ContactBundle\Entity\ContactEmail
                                         attribute: $.result.email
@@ -120,7 +120,7 @@ workflows:
                             - @tree: # set Contact Phone
                                 conditions: # if lead has phone
                                     @not_empty: $lead.phoneNumber
-                                post_actions:
+                                actions:
                                     - @create_entity: # create Contact Address based on Lead address
                                         class: OroCRM\Bundle\ContactBundle\Entity\ContactPhone
                                         attribute: $.result.phone
