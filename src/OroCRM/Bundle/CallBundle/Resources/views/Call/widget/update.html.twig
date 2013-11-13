@@ -9,7 +9,7 @@
                 require(['underscore', 'oro/translator', 'oro/widget-manager', 'oro/messenger', 'oro/registry'],
                         function(_, __, widgetManager, messenger, registry) {
                             widgetManager.getWidgetInstance({{ app.request.get('_wid')|json_encode|raw }}, function(widget) {
-                                messenger.notificationFlashMessage('success', __('Call logged succesfully.'));
+                                messenger.notificationFlashMessage('success', __('Call logged succsesfully.'));
                                 widget.remove();
                             });
                         });
@@ -45,7 +45,7 @@
 
                         </div>
                         {{ form_rest(form) }}
-                        <div class="widget-actions form-actions" style="display: none;">
+                        <div class="widget-actions form-actions">
                             <button class="btn" type="reset">{{ 'Cancel'|trans }}</button>
                             <button class="btn btn-primary" type="submit">{{ 'Log'|trans }}</button>
                         </div>

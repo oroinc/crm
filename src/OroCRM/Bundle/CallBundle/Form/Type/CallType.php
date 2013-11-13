@@ -16,17 +16,16 @@ class CallType extends AbstractType
     {
         $builder
             ->add('owner', null, array('required' => true))
-            ->add('relatedAccount', 'orocrm_account_select', array('required' => false))            
+            ->add('relatedAccount', 'orocrm_account_select', array('required' => false))
             ->add('subject', 'text', array('required' => true))
             ->add('relatedContact', 'orocrm_contact_select', array('required' => false))
             ->add('contactPhoneNumber', null, array('required' => false))
-            ->add('phoneNumber', 'text', array('required' => false))            
-            ->add('notes', 'text', array('required' => false))
+            ->add('phoneNumber', 'text', array('required' => false))
+            ->add('notes', 'textarea', array('required' => false))
             ->add('callDateTime', 'oro_datetime', array('required' => true))
-            ->add('callStatus', null, array('required' => true))
+            ->add('callStatus', 'hidden', array('required' => true))
             ->add('duration', 'time', array('required' => false, 'widget' => 'single_text'))
-            ->add('isOutgoing', 'checkbox', array('required' => true))
-            ;
+            ->add('isOutgoing', 'checkbox', array('required' => true));
     }
 
     /**

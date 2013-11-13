@@ -61,7 +61,7 @@ class Call
      * @var ContactPhone
      *
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ContactBundle\Entity\ContactPhone")
-     * @ORM\JoinColumn(name="contact_phone_id", referencedColumnName="id", onDelete="SET NULL")
+     * @ORM\JoinColumn(name="contact_phone_id", referencedColumnName="id", onDelete="SET NULL", nullable=true)
      */
     protected $contactPhoneNumber;
 

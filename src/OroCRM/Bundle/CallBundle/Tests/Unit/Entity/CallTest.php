@@ -27,7 +27,7 @@ class CallTest extends \PHPUnit_Framework_TestCase
         $callStatus = $this->getMock('OroCRM\Bundle\CallBundle\Entity\CallStatus');
 
         return array(
-            'owner' => array('owner', $user, $user),            
+            'owner' => array('owner', $user, $user),
             'relatedContact' => array('relatedContact', $contact, $contact),
             'relatedAccount' => array('relatedAccount', $account , $account),
             'subject' => array('subject', 'test', 'test'),

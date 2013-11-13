@@ -13,7 +13,6 @@ use Symfony\Component\HttpFoundation\Session\Flash\FlashBag;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
-
 class CallController extends Controller
 {
     /**
@@ -61,7 +60,10 @@ class CallController extends Controller
             $entity = new Call();
             $entity->setOwner($user);
 
-            $callStatus = $this->getDoctrine()->getRepository('OroCRMCallBundle:CallStatus')->findOneByStatus('completed');
+            $callStatus = $this->getDoctrine()
+                               ->getRepository('OroCRMCallBundle:CallStatus')
+                               ->findOneByStatus('completed');
+
             $entity->setCallStatus($callStatus);
 
             $contact = null;
@@ -71,13 +73,13 @@ class CallController extends Controller
             if ($contactId) {
                 $repository = $this->getDoctrine()->getRepository('OroCRMContactBundle:Contact');
                 $contact = $repository->find($contactId);
-                if ($contact) {                
+                if ($contact) {
                     $entity->setRelatedContact($contact);
                     $entity->setContactPhoneNumber($contact->getPrimaryPhone());
                 } else {
                     throw new NotFoundHttpException(sprintf('Contact with ID %s is not found', $contactId));
                 }
-            }        
+            }
         }
 
         if ($this->get('orocrm_call.call.form.handler')->process($entity)) {
@@ -103,5 +105,5 @@ class CallController extends Controller
 
         $responseData['form'] = $this->get('orocrm_call.call.form')->createView();
         return $responseData;
-    }    
+    }
 }
