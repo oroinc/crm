@@ -13,6 +13,9 @@ abstract class AbstractConnector implements ConnectorInterface
     /** @var bool */
     protected $isConnected = false;
 
+    /** @var SyncProcessorInterface[] */
+    protected $processors;
+
     /**
      * @param TransportInterface $transport
      */
@@ -64,5 +67,29 @@ abstract class AbstractConnector implements ConnectorInterface
         $this->channel = $channel;
 
         return $this;
+    }
+
+    /**
+     * @param SyncProcessorInterface $processor
+     */
+    public function addSyncProcessor(SyncProcessorInterface $processor)
+    {
+        $this->processors[] = $processor;
+    }
+
+    /**
+     * Process batch in all registered sync processors
+     *
+     * @param mixed $batch
+     * @return bool
+     */
+    public function processSyncBatch($batch)
+    {
+        /** $processor SyncProcessorInterface */
+        foreach ($this->processors as $processor) {
+            $result = $processor->process($batch);
+        }
+
+        return defined($result) && $result;
     }
 }
