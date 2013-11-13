@@ -9,6 +9,9 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\LocaleBundle\Model\FullNameInterface;
 use Oro\Bundle\BusinessEntitiesBundle\Entity\BaseCustomerEntity;
 
+use OroCRM\Bundle\AccountBundle\Entity\Account;
+use OroCRM\Bundle\ContactBundle\Entity\Contact;
+
 /**
  * Class Customer
  *
@@ -71,6 +74,22 @@ class Customer extends BaseCustomerEntity implements FullNameInterface
      * @ORM\JoinColumn(name="customer_group_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $group;
+
+    /**
+     * @var Contact
+     *
+     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ContactBundle\Entity\Contact", cascade="PERSIST")
+     * @ORM\JoinColumn(name="contact_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    protected $contact;
+
+    /**
+     * @var Account
+     *
+     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\AccountBundle\Entity\Account", cascade="PERSIST")
+     * @ORM\JoinColumn(name="account_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    protected $account;
 
     /**
      * @param \DateTime $createdAt
@@ -170,5 +189,45 @@ class Customer extends BaseCustomerEntity implements FullNameInterface
     public function getGroup()
     {
         return $this->group;
+    }
+
+    /**
+     * @param Contact $contact
+     *
+     * @return $this
+     */
+    public function setContact(Contact $contact)
+    {
+        $this->contact = $contact;
+
+        return $this;
+    }
+
+    /**
+     * @return Contact
+     */
+    public function getContact()
+    {
+        return $this->contact;
+    }
+
+    /**
+     * @param Account $account
+     *
+     * @return $this
+     */
+    public function setAccount(Account $account)
+    {
+        $this->account = $account;
+
+        return $this;
+    }
+
+    /**
+     * @return Account
+     */
+    public function getAccount()
+    {
+        return $this->account;
     }
 }

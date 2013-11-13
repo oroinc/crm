@@ -36,6 +36,16 @@ class CustomerController extends Controller
      */
     public function viewAction(Customer $customer)
     {
-        return ['customer' => $customer];
+        return ['entity' => $customer];
+    }
+
+    /**
+     * @Route("/info/{id}", requirements={"id"="\d+"}))
+     * @AclAncestor("orocrm_magento_customer_view")
+     * @Template()
+     */
+    public function infoAction(Customer $customer)
+    {
+        return ['entity' => $customer];
     }
 }

@@ -1,0 +1,86 @@
+{% import 'OroUIBundle::macros.html.twig' as macros %}
+{% import 'OroTagBundle::macros.html.twig' as _tag %}
+
+{# TODO: Move this to OroUIBundle::macros.html.twig #}
+{% macro renderRow(label, value) %}
+    {% import 'OroUIBundle::macros.html.twig' as macros %}
+    {{ macros.renderAttribute(label, '<p class="control-label">' ~ value|default('N/A'|trans) ~ '</p>') }}
+{% endmacro %}
+
+<style>
+    .customer-info-widget {
+        min-height: 300px;
+    }
+</style>
+<div class="widget-content customer-info-widget form-horizontal box-content row-fluid">
+    <div class="span6">
+        {% set email = entity.email %}
+        {% if entity.email != null %}
+            {% set email = '<a href="mailto: ' ~ email ~ '" title="' ~ email ~ '">' ~ email ~ '</a>'%}
+        {% endif %}
+        {{ _self.renderRow('Email'|trans, email) }}
+        {{ _self.renderRow('Phone'|trans, entity.phone) }}
+        <div class="control-group">
+            <label class="control-label">{% trans %}Birthday{% endtrans %}</label>
+            <div class="controls">
+                <div class="clearfix-oro">
+                    <p class="control-label">
+                        {{ entity.birthday is empty ? 'N/A'|trans : entity.birthday|oro_format_date }}
+                        {% if entity.birthday is not empty %}
+                            ({{ entity.birthday|age_string({'default': 'N/A'}) }})
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        {{ _self.renderRow('Gender'|trans, oro_gender(entity.gender)) }}
+        {{ _self.renderRow('Tax/Vat'|trans, entity.vat) }}
+        {{ _self.renderRow('Description'|trans, entity.description) }}
+    </div>
+
+    <div class="span6">
+        {{ _self.renderRow('Website'|trans, entity.website.name) }}
+        {{ _self.renderRow('Store'|trans, entity.store.name) }}
+        {{ _self.renderRow('Customer Group'|trans, entity.group.name) }}
+
+        <div class="control-group">
+            <label class="control-label">{% trans %}Account{% endtrans %}</label>
+            <div class="controls">
+                <div class="clearfix-oro">
+                    <p class="control-label">
+                        {% if entity.account %}
+                            {% set accountViewGranted = resource_granted('orocrm_account_view') %}
+                            {%- if accountViewGranted -%}
+                                <a href="{{ path('orocrm_account_view', {'id': entity.account.id}) }}">{{ entity.account }}</a>
+                            {%- else -%}
+                                {{ entity.account }}
+                            {%- endif -%}
+                        {% else %}
+                            {% trans %}N/A{% endtrans %}
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label">{% trans %}Contact{% endtrans %}</label>
+            <div class="controls">
+                <div class="clearfix-oro">
+                    <p class="control-label">
+                        {% if entity.contact %}
+                            {% set contactViewGranted = resource_granted('orocrm_contact_view') %}
+                            {%- if contactViewGranted -%}
+                                <a href="{{ path('orocrm_contact_view', {'id': entity.contact.id}) }}">{{ entity.contact }}</a>
+                            {%- else -%}
+                                {{ entity.contact }}
+                            {%- endif -%}
+                        {% else %}
+                            {% trans %}N/A{% endtrans %}
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
