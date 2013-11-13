@@ -257,8 +257,8 @@ workflows:
                 allowed_transitions:
                     - close
                 view_attributes:
-                    - { attribute: contact, view_type: name }
-                    - { attribute: account, path: $account.name, view_type: string }
+                    - { attribute: contact, view_type: orocrm_contact }
+                    - { attribute: account, view_type: orocrm_account }
                     - { attribute: budget_amount, view_type: currency }
                     - { attribute: probability, view_type: percent }
                     - { attribute: customer_need, view_type: string }
