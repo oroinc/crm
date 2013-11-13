@@ -381,10 +381,14 @@ workflows:
                             form_type: oro_money
                             options:
                                 required: true
+                                constraints:
+                                    - NotBlank: ~
                         close_date:
                             form_type: oro_date
                             options:
                                 required: true
+                                constraints:
+                                    - NotBlank: ~
             close_as_lost:
                 label: 'Close as Lost'
                 step_to: close
@@ -402,14 +406,20 @@ workflows:
                                 choices:
                                     outsold: 'Outsold'
                                     cancelled: 'Cancelled'
+                                constraints:
+                                    - NotBlank: ~
                         close_revenue:
                             form_type: oro_money
                             options:
                                 required: true
+                                constraints:
+                                    - NotBlank: ~
                         close_date:
                             form_type: oro_date
                             options:
                                 required: true
+                                constraints:
+                                    - NotBlank: ~
         transition_definitions:
             qualify_definition:
                 conditions: # if opportunity.status = "in_progress"
