@@ -90,6 +90,6 @@ abstract class AbstractConnector implements ConnectorInterface
             $result = $processor->process($batch);
         }
 
-        return defined($result) && $result;
+        return !empty($result);
     }
 }
