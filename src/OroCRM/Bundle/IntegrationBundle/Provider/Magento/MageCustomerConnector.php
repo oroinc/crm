@@ -3,9 +3,11 @@
 namespace OroCRM\Bundle\IntegrationBundle\Provider\Magento;
 
 use OroCRM\Bundle\IntegrationBundle\Provider\AbstractConnector;
+use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 
 class MageCustomerConnector extends AbstractConnector implements MagentoCustomerConnectorInterface
 {
+    const DEFAULT_SYNC_RANGE = '1 week';
     /**
      * {@inheritdoc}
      */
@@ -13,30 +15,53 @@ class MageCustomerConnector extends AbstractConnector implements MagentoCustomer
     {
         $channelSettings = $this->channel->getSettings();
 
-        $startDate = ''; // initial start date should be taken from channel config data
-        $endDate = '';   // should be taken from channel config data too
+        $lastSyncDate = isset($channelSettings['last_sync_date']) ? $channelSettings['last_sync_date'] : null;
+        if (empty($lastSyncDate)) {
+            throw new InvalidConfigurationException('Last (starting) sync date can\'t be empty');
+        }
+        $lastSyncDate = new \DateTime($lastSyncDate);
 
-        $filters = array(array(
-            'complex_filter' => array(
-                array(
-                    'key' => 'created_at',
-                    'value' => array(
-                        'key' => 'gteq',
-                        'value' => $startDate . ' 00:00:00'
-                    ),
-                ),
-                array(
-                    'key' => 'created_at',
-                    'value' => array(
-                        'key' => 'lt',
-                        'value' => $endDate . ' 00:00:00'
-                    ),
-                ),
-            )
-        ));
+        $syncRange = isset($channelSettings['sync_range']) ? $channelSettings['sync_range'] : null;
+        if (empty($syncRange)) {
+            throw new InvalidConfigurationException('Sync range can\'t be empty');
+        }
+        $syncRange = \DateInterval::createFromDateString($syncRange);
 
-        $batchData = $this->getCustomersList($filters);
-        $this->processSyncBatch($batchData);
+        $filters = function ($startDate, $endDate) {
+            return [
+                ['complex_filter' => [
+                        [
+                            'key'   => 'created_at',
+                            'value' => ['key'   => 'gteq', 'value' => $startDate],
+                        ],
+                        [
+                            'key'   => 'created_at',
+                            'value' => ['key'   => 'lt', 'value' => $endDate],
+                        ],
+                    ]
+                ]
+            ];
+        };
+
+        $startDate = $lastSyncDate;
+        $endDate = $lastSyncDate->add();      // should be taken from channel config data too
+        do {
+            $hasData = true;
+
+            // TODO: implement bi-directional sync
+
+            $batchData = $this->getCustomersList($filters($startDate, $endDate));
+
+            if (!empty($batchData)) {
+                $this->processSyncBatch($batchData);
+            } else {
+                $hasData = false;
+            }
+
+            // move date range, from end to start, allow new customers to be imported first
+            $endDate = $startDate;
+
+        } while ($hasData);
     }
 
     /**
