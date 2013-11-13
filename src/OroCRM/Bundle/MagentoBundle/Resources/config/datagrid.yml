@@ -5,16 +5,95 @@ datagrid:
             acl_resource: orocrm_magento_customer_view
             query:
                 select:
-                    - c
+                    - c.id
+                    - c.firstName
+                    - c.lastName
+                    - c.email
+                    - c.phone
+                    - c.createdAt
+                    - c.updatedAt
+                    - cg.name as groupName
+                    - cw.name as websiteName
                 from:
                     - { table: OroCRMMagentoBundle:Customer , alias: c }
+                join:
+                    left:
+                        - { join: c.group, alias: cg }
+                        - { join: c.website, alias: cw }
+        columns:
+            firstName:
+                label: orocrm.magento.datagrid.columns.first_name
+            lastName:
+                label: orocrm.magento.datagrid.columns.last_name
+            email:
+                label: orocrm.magento.datagrid.columns.email
+            phone:
+                label: orocrm.magento.datagrid.columns.phone
+            groupName:
+                label: orocrm.magento.datagrid.columns.group
+            websiteName:
+                label: orocrm.magento.datagrid.columns.website
+            createdAt:
+                label: orocrm.magento.datagrid.columns.created_at
+                frontend_type: datetime
+            updatedAt:
+                label: orocrm.magento.datagrid.columns.updated_at
+                frontend_type: datetime
         properties:
             id: ~
             view_link:
                 type: url
                 route: orocrm_magento_customer_view
                 params: [ id ]
-
+        sorters:
+            columns:
+                firstName:   { data_name: c.firstName }
+                lastName:    { data_name: c.lastName }
+                email:       { data_name: c.email }
+                phone:       { data_name: c.phone }
+                groupName:   { data_name: cg.name }
+                websiteName: { data_name: cw.name }
+                createdAt:   { data_name: c.createdAt }
+                updatedAt:   { data_name: c.updatedAt }
+            default:
+                lastName:  ASC
+                firstName: ASC
+        filters:
+            columns:
+                firstName:
+                    type: string
+                    data_name: c.firstName
+                lastName:
+                    type: string
+                    data_name: c.lastName
+                email:
+                    type: string
+                    data_name: c.email
+                phone:
+                    type: string
+                    data_name: c.phone
+                groupName:
+                    type: entity
+                    data_name: cg
+                    options:
+                        field_options:
+                          class: OroCRMMagentoBundle:CustomerGroup
+                          property: name
+                websiteName:
+                    type: entity
+                    data_name: cw
+                    options:
+                        field_options:
+                          class: OroCRMMagentoBundle:Website
+                          property: name
+                createdAt:
+                    type:      datetime
+                    data_name: c.createdAt
+                    enabled: false
+                updatedAt:
+                    type:      datetime
+                    data_name: c.updatedAt
+                    enabled: false
         actions:
             view:
                 type:         navigate
@@ -23,6 +102,5 @@ datagrid:
                 icon:         user
                 acl_recource: orocrm_magento_customer_view
                 rowAction:    true
-
         options:
             entityHint: customer
