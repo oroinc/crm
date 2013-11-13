@@ -43,6 +43,10 @@
 .form-horizontal .report-columns .controls div.selector select {
     width: 60px;
 }
+.report-columns .grid .sorting-column,
+.report-columns .grid .sorting-cell {
+    width: 100px;
+}
 .form-horizontal .report-columns .btn-group,
 .form-horizontal .report-filters .btn-group {
     margin-left: 20px;

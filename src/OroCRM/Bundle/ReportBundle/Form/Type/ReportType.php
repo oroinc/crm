@@ -27,6 +27,7 @@ class ReportType extends AbstractType
                 )
             )
             ->add('description', 'textarea', array('required' => false))
+            ->add('definition', 'hidden', array('required' => false))
             ->add(
                 'field',
                 'orocrm_report_field',
