@@ -1,0 +1,2 @@
+parameters:
+    orocrm_call.call.entity.class: OroCRM\Bundle\CallBundle\Entity\Call

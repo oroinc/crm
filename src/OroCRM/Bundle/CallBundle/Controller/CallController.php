@@ -106,4 +106,13 @@ class CallController extends Controller
         $responseData['form'] = $this->get('orocrm_call.call.form')->createView();
         return $responseData;
     }
+
+    /**
+     * @Route(name="orocrm_call_index")
+     * @Template
+     */
+    public function indexAction()
+    {
+        return array();
+    }
 }

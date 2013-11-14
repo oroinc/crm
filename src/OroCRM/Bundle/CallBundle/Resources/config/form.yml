@@ -1,10 +1,8 @@
 parameters:
-
     orocrm_call.call.form.type.class: OroCRM\Bundle\CallBundle\Form\Type\CallType
     orocrm_call.call.form.handler.class: OroCRM\Bundle\CallBundle\Form\Handler\CallHandler
 
 services:
-
     orocrm_call.call.form.type:
         class: %orocrm_call.call.form.type.class%
         tags:

@@ -1,0 +1,27 @@
+oro_menu_config:
+    items:
+        call_list:
+            label: 'Calls'
+            route: orocrm_call_index
+            extras:
+                routes: ['orocrm_call_*']
+                description: List of calls
+        shortcut_call_list:
+            label: Show calls list
+            route: orocrm_call_index
+            extras:
+                description: List of calls
+
+    tree:
+        application_menu:
+            children:
+                customers_tab:
+                    children:
+                        call_list: ~
+        shortcuts:
+            children:
+                # shortcut_new_call: ~
+                shortcut_call_list: ~
+
+oro_titles:
+    orocrm_call_index: Calls
