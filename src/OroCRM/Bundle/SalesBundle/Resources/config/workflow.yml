@@ -405,6 +405,7 @@ workflows:
                                     - NotBlank: ~
             close_as_lost:
                 label: 'Close as Lost'
+                message: 'Warning! You are going to close this opportunity as lost.'
                 step_to: close
                 frontend_options:
                     icon: 'icon-remove-circle'
@@ -430,7 +431,9 @@ workflows:
                                     - NotBlank: ~
             requalify:
                 label: 'Requalify'
+                message: 'Performing this transition will reset some data.'
                 step_to: qualify
+                is_unavailable_hidden: true
                 frontend_options:
                     icon: 'icon-backward'
                     class: 'btn-primary'
@@ -438,6 +441,7 @@ workflows:
             edit:
                 label: 'Edit'
                 step_to: qualify
+                is_unavailable_hidden: true
                 frontend_options:
                     icon: 'icon-pencil'
                     class: 'btn-success'
