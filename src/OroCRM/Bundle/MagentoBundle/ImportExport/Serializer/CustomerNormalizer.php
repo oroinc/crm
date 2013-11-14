@@ -28,6 +28,11 @@ class CustomerNormalizer implements NormalizerInterface, DenormalizerInterface
         'addresses',
     );
 
+    const STORES_TYPE    = 'ArrayCollection<OroCRM\Bundle\MagentoBundle\Entity\Store>';
+    const WEBSITES_TYPE  = 'ArrayCollection<OroCRM\Bundle\MagentoBundle\Entity\Website>';
+    const GROUPS_TYPE    = 'ArrayCollection<OroCRM\Bundle\MagentoBundle\Entity\CustomerGroup>';
+    const ADDRESSES_TYPE = 'ArrayCollection<OroCRM\Bundle\ContactBundle\Entity\ContactAddress>';
+
     /**
      * For exporting customers
      *
@@ -124,73 +129,23 @@ class CustomerNormalizer implements NormalizerInterface, DenormalizerInterface
     {
         $this->setNotEmptyValues(
             $object,
-            array(
-                array(
-                    'name' => 'birthday',
-                    'value' => $this->denormalizeObject(
-                            $data,
-                            'birthday',
-                            'DateTime',
-                            $format,
-                            array_merge($context, array('type' => 'date'))
-                        )
-                ),
-                array(
-                    'name' => 'source',
-                    'value' => $this->denormalizeObject($data, 'source', static::SOURCE_TYPE, $format, $context)
-                ),
-                array(
-                    'name' => 'method',
-                    'value' => $this->denormalizeObject($data, 'method', static::METHOD_TYPE, $format, $context)
-                ),
-                array(
-                    'name' => 'owner',
-                    'value' => $this->denormalizeObject(
-                            $data,
-                            'owner',
-                            static::USER_TYPE,
-                            $format,
-                            array_merge($context, array('mode' => 'short'))
-                        )
-                ),
-                array(
-                    'name' => 'assignedTo',
-                    'value' => $this->denormalizeObject(
-                            $data,
-                            'assignedTo',
-                            static::USER_TYPE,
-                            $format,
-                            array_merge($context, array('mode' => 'short'))
-                        )
-                ),
-                array(
-                    'setter' => 'resetEmails',
-                    'value' => $this->denormalizeObject($data, 'emails', static::EMAILS_TYPE, $format, $context)
-                ),
-                array(
-                    'setter' => 'resetPhones',
-                    'value' => $this->denormalizeObject($data, 'phones', static::PHONES_TYPE, $format, $context)
-                ),
-                array(
-                    'adder' => 'addGroup',
-                    'value' => $this->denormalizeObject($data, 'groups', static::GROUPS_TYPE, $format, $context)
-                ),
-                array(
-                    'adder' => 'addAccount',
-                    'value' => $this->denormalizeObject(
-                            $data,
-                            'accounts',
-                            static::ACCOUNTS_TYPE,
-                            $format,
-                            array_merge($context, array('mode' => 'short'))
-                        )
-                ),
-                array(
-                    'adder' => 'addAddress',
-                    'value' => $this->denormalizeObject($data, 'addresses', static::ADDRESSES_TYPE, $format, $context)
-                ),
-            )
+            [
+                [
+                    'name' => 'store',
+                    'value' => $this->denormalizeObject($data, 'store', static::STORES_TYPE, $format, $context)
+                ],
+                [
+                    'name' => 'website',
+                    'value' => $this->denormalizeObject($data, 'website', static::WEBSITES_TYPE, $format, $context)
+                ],
+                [
+                    'name' => 'group',
+                    'value' => $this->denormalizeObject($data, 'group', static::GROUPS_TYPE, $format, $context)
+                ],
+            ]
         );
+
+        // TODO: normalize and set addresses to contact and bill/ship addr to account
     }
 
     /**
@@ -252,8 +207,6 @@ class CustomerNormalizer implements NormalizerInterface, DenormalizerInterface
             return new CustomerGroup();
         }
     }
-
-    protected function initAddressesCollection
 
     /**
      * Used in export
