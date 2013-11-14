@@ -72,7 +72,8 @@ class LoadDemoMagentoData extends AbstractFixture implements OrderedFixtureInter
                 ->setVat($vat)
                 ->setGroup($group)
                 ->setCreatedAt(new \DateTime('now'))
-                ->setUpdatedAt(new \DateTime('now'));
+                ->setUpdatedAt(new \DateTime('now'))
+                ->setOriginalId($i + 1);
             $om->persist($customer);
         }
     }
