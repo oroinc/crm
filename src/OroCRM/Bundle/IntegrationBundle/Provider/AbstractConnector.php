@@ -29,10 +29,6 @@ abstract class AbstractConnector implements ConnectorInterface
      */
     public function connect()
     {
-        if ($this->isConnected) {
-            return true;
-        }
-
         if (is_null($this->channel)) {
             throw new \Exception('There\'s no configured channel in connector');
         }

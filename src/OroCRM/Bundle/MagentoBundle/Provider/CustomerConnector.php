@@ -70,7 +70,7 @@ class CustomerConnector extends AbstractConnector implements CustomerConnectorIn
      */
     public function getCustomersList($filters = [])
     {
-        return $this->call('customerCustomerList', $filters);
+        return $this->call(CustomerConnectorInterface::ACTION_CUSTOMER_LIST, $filters);
     }
 
     /**
@@ -78,7 +78,7 @@ class CustomerConnector extends AbstractConnector implements CustomerConnectorIn
      */
     public function getCustomerData($id, $isAddressesIncluded = false, $isGroupsIncluded = false, $onlyAttributes = [])
     {
-        $result = $this->call('customerCustomerInfo', [$id, $onlyAttributes]);
+        $result = $this->call(CustomerConnectorInterface::ACTION_CUSTOMER_INFO, [$id, $onlyAttributes]);
 
         if ($isAddressesIncluded) {
             $result->addresses = $this->getCustomerAddressData($id);
@@ -97,7 +97,7 @@ class CustomerConnector extends AbstractConnector implements CustomerConnectorIn
      */
     public function getCustomerAddressData($customerId)
     {
-        return $this->call('customerAddressList', $customerId);
+        return $this->call(CustomerConnectorInterface::ACTION_ADDRESS_LIST, $customerId);
     }
 
     /**
@@ -105,7 +105,7 @@ class CustomerConnector extends AbstractConnector implements CustomerConnectorIn
      */
     public function getCustomerGroups($groupId = null)
     {
-        $result = $this->call('customerGroupList');
+        $result = $this->call(CustomerConnectorInterface::ACTION_GROUP_LIST);
 
         $groups = [];
         foreach ($result as $item) {
@@ -126,7 +126,7 @@ class CustomerConnector extends AbstractConnector implements CustomerConnectorIn
      */
     public function getStoresData()
     {
-        return $this->call('storeList');
+        return $this->call(CustomerConnectorInterface::ACTION_STORE_LIST);
     }
 
     /**

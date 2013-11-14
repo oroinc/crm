@@ -11,7 +11,7 @@ interface TransportInterface
     public function init(array $settings);
 
     /**
-     * @param $action
+     * @param string $action
      * @param array $params
      * @return mixed
      */

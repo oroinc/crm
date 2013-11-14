@@ -11,8 +11,7 @@ class SOAPTransport implements TransportInterface
     protected $client;
 
     /**
-     * @param array $settings
-     * @return bool|mixed
+     * {@inheritdoc}
      */
     public function init(array $settings)
     {
@@ -25,9 +24,7 @@ class SOAPTransport implements TransportInterface
     }
 
     /**
-     * @param $action
-     * @param $params
-     * @return mixed
+     * {@inheritdoc}
      */
     public function call($action, $params = [])
     {
