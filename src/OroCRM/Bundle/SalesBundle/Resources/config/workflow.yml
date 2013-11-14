@@ -422,14 +422,6 @@ workflows:
                                     cancelled: 'Cancelled'
                                 constraints:
                                     - NotBlank: ~
-                        close_revenue:
-                            form_type: oro_money
-                            options:
-                                required: true
-                                constraints:
-                                    - NotBlank: ~
-                                    - Range:
-                                        min: 0
                         close_date:
                             form_type: oro_date
                             options:
@@ -546,14 +538,8 @@ workflows:
                             message: 'Close date must be set'
                             parameters: $close_date
                         - @not_empty:
-                            message: 'Close revenue must be set'
-                            parameters: $close_revenue
-                        - @not_empty:
                             message: 'Close reason must be set'
                             parameters: $close_reason_name
-                        - @greater_or_equal:
-                            message: 'Close revenue must be greater or equal to 0'
-                            parameters: [$close_revenue, 0]
                 post_actions: # update opportunity properties, set opportunity.status = "lost"
                     - @find_entity:
                         class: OroCRM\Bundle\SalesBundle\Entity\OpportunityStatus
@@ -565,6 +551,7 @@ workflows:
                         attribute: $close_reason
                     - @assign_value:
                         - [$probability, 0]
+                        - [$close_revenue, 0]
                         - [$opportunity.closeDate, $close_date]
                         - [$opportunity.closeRevenue, $close_revenue]
                         - [$opportunity.closeReason, $close_reason]
@@ -585,9 +572,13 @@ workflows:
                         - [$budget_amount, ~]
                         - [$probability, ~]
                         - [$close_reason, ~]
+                        - [$close_date, ~]
+                        - [$close_revenue, ~]
                         - [$opportunity.budgetAmount, $budget_amount]
                         - [$opportunity.probability, $probability]
                         - [$opportunity.closeReason, $close_reason]
+                        - [$opportunity.closeDate, $close_date]
+                        - [$opportunity.closeRevenue, $close_revenue]
             edit_definition:
                 conditions:
                     @equal: [$opportunity.status.name, 'won']
