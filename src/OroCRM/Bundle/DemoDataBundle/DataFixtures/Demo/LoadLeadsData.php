@@ -102,7 +102,7 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
                     $this->transit(
                         $this->workflowManager,
                         $salesFlow,
-                        'close',
+                        'develop',
                         array(
                             'budget_amount' => rand(10, 10000),
                             'customer_need' => rand(10, 10000),
@@ -111,29 +111,24 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
                         )
                     );
                     if ((bool) rand(0, 1)) {
-                        $reason = $this->em->find('OroCRMSalesBundle:OpportunityCloseReason', 'won');
                         $this->transit(
                             $this->workflowManager,
                             $salesFlow,
                             'close_as_won',
                             array(
-                                'close_reason' => $reason,
                                 'close_revenue' => rand(100, 1000),
                                 'close_date' => new \DateTime('now'),
-                                'probability' => 1
                             )
                         );
                     } elseif ((bool) rand(0, 1)) {
-                        $reason = $this->em->find('OroCRMSalesBundle:OpportunityCloseReason', 'cancelled');
                         $this->transit(
                             $this->workflowManager,
                             $salesFlow,
                             'close_as_lost',
                             array(
-                                'close_reason' => $reason,
+                                'close_reason_name' => 'cancelled',
                                 'close_revenue' => rand(100, 1000),
                                 'close_date' => new \DateTime('now'),
-                                'probability' => 0.0
                             )
                         );
                     }
@@ -214,15 +209,15 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
     /**
      * @param WorkflowManager $workflowManager
      * @param WorkflowItem    $workflowItem
-     * @param string          $step
+     * @param string          $transition
      * @param array           $data
      */
-    protected function transit($workflowManager, $workflowItem, $step, array $data)
+    protected function transit($workflowManager, $workflowItem, $transition, array $data)
     {
         foreach ($data as $key => $value) {
             $workflowItem->getData()->set($key, $value);
         }
-        $workflowManager->transit($workflowItem, $step);
+        $workflowManager->transit($workflowItem, $transition);
     }
 
     /**
