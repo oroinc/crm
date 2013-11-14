@@ -1,0 +1,7 @@
+{% block orocrm_contactphone_updater_js %}
+    <script type="text/template" id="contactphone-chooser-template">
+        <% _.each(contactphones, function(p, i) { %>
+            <option value="<%= p.get('id') %>"><%= p.get('phone') %></option>
+        <% }); %>
+    </script>
+{% endblock orocrm_contactphone_updater_js %}

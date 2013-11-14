@@ -1,5 +1,7 @@
 {% extends 'OroUIBundle:actions:update.html.twig' %}
 
+{% form_theme form with ['OroCRMCallBundle:Include:fields.html.twig'] %}
+
 {% set formAction = form.vars.value.id ? path('orocrm_call_update', { 'id': form.vars.value.id }) : path('orocrm_call_create')  %}
 
 {% block head_script %}
@@ -11,14 +13,15 @@
 {% endblock %}
 
 {% block content_data %}
+
     {% set id = 'call-log' %}
 
     {% set dataBlocks = [{
-            'title': 'Add call log'|trans,
+            'title': 'Add a call log'|trans,
             'class': 'active',
             'subblocks': [
                 {
-                    'title': 'Add call log'|trans,
+                    'title': 'Add a call log'|trans,
                     'data': [
                         form_widget(form)
                     ]
@@ -47,8 +50,8 @@
     {% if form.vars.value.id %}
         {% set breadcrumbs = {
             'entity':      form.vars.value,
-            'indexPath':   path('orocrm_account_index'),
-            'indexLabel': 'Accounts'|trans,
+            'indexPath':   path('orocrm_call_index'),
+            'indexLabel': 'Calls'|trans,
             'entityTitle': form.vars.value.name|default('N/A')
         }
         %}
