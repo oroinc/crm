@@ -1,0 +1,22 @@
+connector:
+    name: oro_magento_customers
+    jobs:
+        import_from_soap:
+            title: "Entity Import from Magento SOAP API"
+            type: import_validation
+            steps:
+                import_validation:
+                    title:     import_validation
+                    reader:    oro_importexport.reader.csv
+                    processor: oro_importexport.processor.import_validation_delegate
+                    writer:    oro_importexport.writer.doctrine_clear
+
+        entity_import_from_csv:
+            title: "Entity Import from CSV"
+            type: import
+            steps:
+                import:
+                    title:     import
+                    reader:    oro_importexport.reader.csv
+                    processor: oro_importexport.processor.import_delegate
+                    writer:    oro_importexport.writer.entity

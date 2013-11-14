@@ -15,4 +15,5 @@ use Oro\Bundle\BusinessEntitiesBundle\Entity\BaseCustomerGroupEntity;
  */
 class CustomerGroup extends BaseCustomerGroupEntity
 {
+    public fun
 }
