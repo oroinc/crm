@@ -67,7 +67,7 @@ class ContactPhoneType extends AbstractType
      */
     public function getParent()
     {
-        return 'genemu_jqueryselect2_translatable_entity';
+        return 'entity';
     }
 
     /**
