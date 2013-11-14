@@ -3,9 +3,14 @@
 namespace OroCRM\Bundle\CallBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Oro\Bundle\UserBundle\Entity\User;
+use OroCRM\Bundle\ContactBundle\Entity\Contact;
+use OroCRM\Bundle\AccountBundle\Entity\Account;
+use OroCRM\Bundle\ContactBundle\Entity\ContactPhone;
+use OroCRM\Bundle\CallBundle\Entity\CallStatus;
 
 /**
- * Calls
+ * Call
  *
  * @ORM\Table(name="orocrm_call")
  * @ORM\Entity
@@ -104,8 +109,8 @@ class Call
 
     public function __construct()
     {
-       $this->isOutgoing = true;
-       $this->callDateTime = new \DateTime('now', new \DateTimeZone('UTC'));
+        $this->isOutgoing = true;
+        $this->callDateTime = new \DateTime('now', new \DateTimeZone('UTC'));
     }
 
     /**
@@ -122,7 +127,7 @@ class Call
      * Set subject
      *
      * @param string $subject
-     * @return Calls
+     * @return Call
      */
     public function setSubject($subject)
     {
@@ -145,7 +150,7 @@ class Call
      * Set phoneNumber
      *
      * @param string $phoneNumber
-     * @return Calls
+     * @return Call
      */
     public function setPhoneNumber($phoneNumber)
     {
@@ -168,7 +173,7 @@ class Call
      * Set notes
      *
      * @param string $notes
-     * @return Calls
+     * @return Call
      */
     public function setNotes($notes)
     {
@@ -191,7 +196,7 @@ class Call
      * Set callDateTime
      *
      * @param \DateTime $callDateTime
-     * @return Calls
+     * @return Call
      */
     public function setCallDateTime($callDateTime)
     {
@@ -214,7 +219,7 @@ class Call
      * Set duration
      *
      * @param \Time $duration
-     * @return Calls
+     * @return Call
      */
     public function setDuration($duration)
     {
@@ -237,7 +242,7 @@ class Call
      * Set isOutgoing
      *
      * @param boolean $isOutgoing
-     * @return Calls
+     * @return Call
      */
     public function setIsOutgoing($isOutgoing)
     {
@@ -259,10 +264,10 @@ class Call
     /**
      * Set owner
      *
-     * @param \Oro\Bundle\UserBundle\Entity\User $owner
-     * @return Calls
+     * @param User $owner
+     * @return Call
      */
-    public function setOwner(\Oro\Bundle\UserBundle\Entity\User $owner = null)
+    public function setOwner(User $owner = null)
     {
         $this->owner = $owner;
     
@@ -272,7 +277,7 @@ class Call
     /**
      * Get owner
      *
-     * @return \Oro\Bundle\UserBundle\Entity\User 
+     * @return User
      */
     public function getOwner()
     {
@@ -282,10 +287,10 @@ class Call
     /**
      * Set relatedContact
      *
-     * @param \OroCRM\Bundle\ContactBundle\Entity|Contact $relatedContact
-     * @return Calls
+     * @param Contact $relatedContact
+     * @return Call
      */
-    public function setRelatedContact(\OroCRM\Bundle\ContactBundle\Entity\Contact $relatedContact = null)
+    public function setRelatedContact(Contact $relatedContact = null)
     {
         $this->relatedContact = $relatedContact;
     
@@ -295,7 +300,7 @@ class Call
     /**
      * Get relatedContact
      *
-     * @return \OroCRM\Bundle\ContactBundle\Entity|Contact 
+     * @return Contact
      */
     public function getRelatedContact()
     {
@@ -305,10 +310,10 @@ class Call
     /**
      * Set relatedAccount
      *
-     * @param \OroCRM\Bundle\AccountBundle\Entity\Account $relatedAccount
-     * @return Calls
+     * @param Account $relatedAccount
+     * @return Call
      */
-    public function setRelatedAccount(\OroCRM\Bundle\AccountBundle\Entity\Account $relatedAccount = null)
+    public function setRelatedAccount(Account $relatedAccount = null)
     {
         $this->relatedAccount = $relatedAccount;
     
@@ -318,7 +323,7 @@ class Call
     /**
      * Get relatedAccount
      *
-     * @return \OroCRM\Bundle\AccountBundle\Entity\Account 
+     * @return Account
      */
     public function getRelatedAccount()
     {
@@ -328,10 +333,10 @@ class Call
     /**
      * Set contactPhoneNumber
      *
-     * @param \OroCRM\Bundle\ContactBundle\Entity\ContactPhone $contactPhoneNumber
-     * @return Calls
+     * @param ContactPhone $contactPhoneNumber
+     * @return Call
      */
-    public function setContactPhoneNumber(\OroCRM\Bundle\ContactBundle\Entity\ContactPhone $contactPhoneNumber = null)
+    public function setContactPhoneNumber(ContactPhone $contactPhoneNumber = null)
     {
         $this->contactPhoneNumber = $contactPhoneNumber;
     
@@ -341,7 +346,7 @@ class Call
     /**
      * Get contactPhoneNumber
      *
-     * @return \OroCRM\Bundle\ContactBundle\Entity\ContactPhone 
+     * @return ContactPhone
      */
     public function getContactPhoneNumber()
     {
@@ -351,10 +356,10 @@ class Call
     /**
      * Set callStatus
      *
-     * @param \OroCRM\Bundle\CallBundle\Entity\CallStatus $callStatus
-     * @return Calls
+     * @param CallStatus $callStatus
+     * @return Call
      */
-    public function setCallStatus(\OroCRM\Bundle\CallBundle\Entity\CallStatus $callStatus = null)
+    public function setCallStatus(CallStatus $callStatus = null)
     {
         $this->callStatus = $callStatus;
     
@@ -364,7 +369,7 @@ class Call
     /**
      * Get callStatus
      *
-     * @return \OroCRM\Bundle\CallBundle\Entity\CallStatus 
+     * @return CallStatus
      */
     public function getCallStatus()
     {
