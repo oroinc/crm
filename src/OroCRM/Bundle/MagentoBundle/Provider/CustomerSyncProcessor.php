@@ -47,5 +47,4 @@ class CustomerSyncProcessor implements SyncProcessorInterface
 
         return $customer;
     }
-
 }
