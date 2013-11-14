@@ -109,9 +109,9 @@ class ContactPhoneController extends RestController implements ClassResourceInte
      */
     protected function getPreparedItem($entity)
     {
-        $result['owner'] = $entity->getOwner();
+        $result['owner'] = (string)$entity->getOwner();
         $result['phone'] = $entity->getPhone();
-        $result['primary'] = $entity->getPrimary();
+        $result['primary'] = $entity->isPrimary();
         
         return $result;
     }
