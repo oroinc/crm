@@ -19,7 +19,7 @@ class ContactPhoneRepository extends EntityRepository
     {
         return $this->createQueryBuilder('p')
             ->where('p.owner = :contact')
-            ->orderBy('p.primary', 'ASC')
+            ->orderBy('p.primary', 'DESC')
             ->setParameter('contact', $contact);
     }
 
