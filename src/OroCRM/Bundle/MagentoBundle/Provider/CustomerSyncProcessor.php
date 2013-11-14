@@ -4,7 +4,7 @@ namespace OroCRM\Bundle\MagentoBundle\Provider;
 
 use Doctrine\ORM\EntityManager;
 
-use OroCRM\Bundle\IntegrationBundle\Provider\SyncProcessorInterface;
+use Oro\Bundle\IntegrationBundle\Provider\SyncProcessorInterface;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 
 class CustomerSyncProcessor implements SyncProcessorInterface

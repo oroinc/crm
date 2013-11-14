@@ -4,7 +4,7 @@ namespace OroCRM\Bundle\MagentoBundle\Provider;
 
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 
-use OroCRM\Bundle\IntegrationBundle\Provider\AbstractConnector;
+use Oro\Bundle\IntegrationBundle\Provider\AbstractConnector;
 
 class CustomerConnector extends AbstractConnector implements CustomerConnectorInterface
 {

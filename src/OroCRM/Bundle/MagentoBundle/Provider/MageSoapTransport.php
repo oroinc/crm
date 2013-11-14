@@ -2,14 +2,14 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Provider;
 
-use OroCRM\Bundle\IntegrationBundle\Provider\SOAPTransport;
+use Oro\Bundle\IntegrationBundle\Provider\SOAPTransport;
 
 /**
  * Magento SOAP transport
  * used to fetch and pull data to/from Magento instance
  * with sessionId param using SOAP requests
  *
- * @package OroCRM\Bundle\IntegrationBundle\Provider\Magento
+ * @package Oro\Bundle\IntegrationBundle\Provider\Magento
  */
 class MageSoapTransport extends SOAPTransport
 {

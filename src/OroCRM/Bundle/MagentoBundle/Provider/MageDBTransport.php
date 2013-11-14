@@ -5,14 +5,14 @@ namespace OroCRM\Bundle\MagentoBundle\Provider;
 use Doctrine\Bundle\DoctrineBundle\ConnectionFactory;
 use Doctrine\DBAL\Connection;
 
-use OroCRM\Bundle\IntegrationBundle\Provider\TransportInterface;
+use Oro\Bundle\IntegrationBundle\Provider\TransportInterface;
 
 /**
  * Magento DB transport
  * used to fetch and pull data to/from Magento instance
  * with sessionId param using direct DB access
  *
- * @package OroCRM\Bundle\IntegrationBundle\Provider\Magento
+ * @package Oro\Bundle\IntegrationBundle\Provider\Magento
  */
 class MageDBTransport implements TransportInterface
 {
