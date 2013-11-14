@@ -9,6 +9,7 @@ use Oro\Bundle\IntegrationBundle\Provider\AbstractConnector;
 class CustomerConnector extends AbstractConnector implements CustomerConnectorInterface
 {
     const DEFAULT_SYNC_RANGE = '1 week';
+
     /**
      * {@inheritdoc}
      */
@@ -16,17 +17,17 @@ class CustomerConnector extends AbstractConnector implements CustomerConnectorIn
     {
         $channelSettings = $this->channel->getSettings();
 
-        $lastSyncDate = isset($channelSettings['last_sync_date']) ? $channelSettings['last_sync_date'] : null;
-        if (empty($lastSyncDate)) {
+        if (empty($channelSettings['last_sync_date'])) {
             throw new InvalidConfigurationException('Last (starting) sync date can\'t be empty');
+        } else {
+            $lastSyncDate = new \DateTime($channelSettings['last_sync_date']);
         }
-        $lastSyncDate = new \DateTime($lastSyncDate);
 
-        $syncRange = isset($channelSettings['sync_range']) ? $channelSettings['sync_range'] : null;
-        if (empty($syncRange)) {
+        if (empty($channelSettings['sync_range'])) {
             throw new InvalidConfigurationException('Sync range can\'t be empty');
+        } else {
+            $syncRange = \DateInterval::createFromDateString($channelSettings['sync_range']);
         }
-        $syncRange = \DateInterval::createFromDateString($syncRange);
 
         $filters = function ($startDate, $endDate) {
             return [
@@ -70,7 +71,7 @@ class CustomerConnector extends AbstractConnector implements CustomerConnectorIn
      */
     public function getCustomersList($filters = [])
     {
-        return $this->call('customerCustomerList', $filters);
+        return $this->call(CustomerConnectorInterface::ACTION_CUSTOMER_LIST, $filters);
     }
 
     /**
@@ -78,7 +79,7 @@ class CustomerConnector extends AbstractConnector implements CustomerConnectorIn
      */
     public function getCustomerData($id, $isAddressesIncluded = false, $isGroupsIncluded = false, $onlyAttributes = [])
     {
-        $result = $this->call('customerCustomerInfo', [$id, $onlyAttributes]);
+        $result = $this->call(CustomerConnectorInterface::ACTION_CUSTOMER_INFO, [$id, $onlyAttributes]);
 
         if ($isAddressesIncluded) {
             $result->addresses = $this->getCustomerAddressData($id);
@@ -97,7 +98,7 @@ class CustomerConnector extends AbstractConnector implements CustomerConnectorIn
      */
     public function getCustomerAddressData($customerId)
     {
-        return $this->call('customerAddressList', $customerId);
+        return $this->call(CustomerConnectorInterface::ACTION_ADDRESS_LIST, $customerId);
     }
 
     /**
@@ -105,7 +106,7 @@ class CustomerConnector extends AbstractConnector implements CustomerConnectorIn
      */
     public function getCustomerGroups($groupId = null)
     {
-        $result = $this->call('customerGroupList');
+        $result = $this->call(CustomerConnectorInterface::ACTION_GROUP_LIST);
 
         $groups = [];
         foreach ($result as $item) {
@@ -126,7 +127,7 @@ class CustomerConnector extends AbstractConnector implements CustomerConnectorIn
      */
     public function getStoresData()
     {
-        return $this->call('storeList');
+        return $this->call(CustomerConnectorInterface::ACTION_STORE_LIST);
     }
 
     /**

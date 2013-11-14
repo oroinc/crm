@@ -4,6 +4,12 @@ namespace OroCRM\Bundle\MagentoBundle\Provider;
 
 interface CustomerConnectorInterface
 {
+    const ACTION_CUSTOMER_LIST = 'customerCustomerList';
+    const ACTION_CUSTOMER_INFO = 'customerCustomerInfo';
+    const ACTION_ADDRESS_LIST  = 'customerAddressList';
+    const ACTION_GROUP_LIST    = 'customerGroupList';
+    const ACTION_STORE_LIST    = 'storeList';
+
     /**
      * Get customer list
      *

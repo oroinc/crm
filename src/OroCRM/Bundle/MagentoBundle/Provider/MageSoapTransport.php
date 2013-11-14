@@ -9,7 +9,7 @@ use Oro\Bundle\IntegrationBundle\Provider\SOAPTransport;
  * used to fetch and pull data to/from Magento instance
  * with sessionId param using SOAP requests
  *
- * @package Oro\Bundle\IntegrationBundle\Provider\Magento
+ * @package OroCRM\Bundle\MagentoBundle
  */
 class MageSoapTransport extends SOAPTransport
 {
@@ -17,10 +17,7 @@ class MageSoapTransport extends SOAPTransport
     protected $sessionId;
 
     /**
-     * Init transport and retrieve sessionId for use in subsequent requests
-     *
-     * @param array $settings
-     * @return bool|mixed
+     * {@inheritdoc}
      */
     public function init(array $settings)
     {
@@ -38,9 +35,7 @@ class MageSoapTransport extends SOAPTransport
     }
 
     /**
-     * @param $action
-     * @param $params
-     * @return mixed
+     * {@inheritdoc}
      */
     public function call($action, $params = [])
     {
