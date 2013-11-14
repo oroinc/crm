@@ -9,6 +9,7 @@ use OroCRM\Bundle\IntegrationBundle\Provider\AbstractConnector;
 class CustomerConnector extends AbstractConnector implements CustomerConnectorInterface
 {
     const DEFAULT_SYNC_RANGE = '1 week';
+
     /**
      * {@inheritdoc}
      */
@@ -16,17 +17,17 @@ class CustomerConnector extends AbstractConnector implements CustomerConnectorIn
     {
         $channelSettings = $this->channel->getSettings();
 
-        $lastSyncDate = isset($channelSettings['last_sync_date']) ? $channelSettings['last_sync_date'] : null;
-        if (empty($lastSyncDate)) {
+        if (empty($channelSettings['last_sync_date'])) {
             throw new InvalidConfigurationException('Last (starting) sync date can\'t be empty');
+        } else {
+            $lastSyncDate = new \DateTime($channelSettings['last_sync_date']);
         }
-        $lastSyncDate = new \DateTime($lastSyncDate);
 
-        $syncRange = isset($channelSettings['sync_range']) ? $channelSettings['sync_range'] : null;
-        if (empty($syncRange)) {
+        if (empty($channelSettings['sync_range'])) {
             throw new InvalidConfigurationException('Sync range can\'t be empty');
+        } else {
+            $syncRange = \DateInterval::createFromDateString($channelSettings['sync_range']);
         }
-        $syncRange = \DateInterval::createFromDateString($syncRange);
 
         $filters = function ($startDate, $endDate) {
             return [
