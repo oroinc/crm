@@ -28,20 +28,8 @@ class ReportType extends AbstractType
             )
             ->add('description', 'textarea', array('required' => false))
             ->add('definition', 'hidden', array('required' => false))
-            ->add(
-                'field',
-                'orocrm_report_field',
-                array(
-                    'mapped' => false,
-                )
-            )
-            ->add(
-                'filter',
-                'orocrm_report_filter',
-                array(
-                    'mapped' => false,
-                )
-            );
+            ->add('column', 'oro_query_designer_column', array('mapped' => false))
+            ->add('filter', 'oro_query_designer_filter', array('mapped' => false));
     }
 
     /**

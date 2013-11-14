@@ -1,5 +1,6 @@
 {% extends 'OroUIBundle:actions:update.html.twig' %}
 {% form_theme form with ['OroFormBundle:Form:fields.html.twig'] %}
+{% import 'OroQueryDesignerBundle::macros.html.twig' as QD %}
 
 {% oro_title_set({params : {"%report.name%": entity.name} }) %}
 {% set formAction = form.vars.value.id ? path('orocrm_report_update', { 'id': form.vars.value.id }) : path('orocrm_report_create')  %}
@@ -96,36 +97,16 @@
                     'title': 'Columns'|trans,
                     'spanClass': 'report-columns span6',
                     'data': [
-                        '<div class="column-form">',
-                        form_row(form.field.name, {'label': 'Column'|trans}),
-                        form_row(form.field.label, {'label': 'Label'|trans}),
-                        form_row(form.field.sorting, {'label': 'Sorting'|trans}),
-                        UI.clientButton({
-                            'visible': false,
-                            'aCss': 'no-hash cancel-button',
-                            'title' : 'Cancel'|trans,
-                            'label' : 'Cancel'|trans
-                        }),
-                        UI.clientButton({
-                            'visible': false,
-                            'aCss': 'no-hash btn-success save-button',
-                            'title' : 'Save'|trans,
-                            'label' : 'Save'|trans
-                        }),
-                        UI.clientButton({
-                            'aCss': 'no-hash btn-primary add-button',
-                            'title' : 'Add'|trans,
-                            'label' : 'Add'|trans
-                        }),
-                        '</div>',
-                        block('report_columns_data')
+                        QD.query_designer_column_form(form.column, {'id': 'report-column-form'}),
+                        QD.query_designer_column_list(),
+                        QD.query_designer_column_template('report-column-row')
                     ]
                 },
                 {
                     'title': 'Filters'|trans,
                     'spanClass': 'report-filters span6',
                     'data': [
-                        form_row(form.filter.fieldName, {'label': 'Column'|trans}),
+                        form_row(form.filter.columnName, {'label': 'Column'|trans}),
                         UI.clientButton({
                             'aCss': 'no-hash btn-primary add-filter-button',
                             'title' : 'Add'|trans,
@@ -149,52 +130,47 @@
     {{ UI.scrollData(id, data, form) }}
 
     <script type="text/javascript">
-        require(['jquery', 'underscore', 'oro/query-designer'],
-        function($, _, QueryDesigner) {
-            var options = {
-                storageSelector: '#orocrm_report_form_definition',
-                columnsOptions: {
-                    el: '.report-columns',
-                    containerSelector: '.column-container',
-                    itemTemplateSelector: '#template-column-row',
-                    itemFormSelector: '.column-form'
-                }
-            };
-            $(function() { new QueryDesigner(options).render(); });
+        require(['jquery', 'underscore', 'oro/translator', 'oro/query-designer', 'oro/delete-confirmation'],
+        function($, _, __, QueryDesigner, DeleteConfirmation) {
+            $(function() {
+                var entityChoice = $('#orocrm_report_form_entity');
+
+                var options = {
+                    entity: entityChoice.val(),
+                    storageElementSelector: '#orocrm_report_form_definition',
+                    columnsOptions: {
+                        el: '.report-columns',
+                        itemTemplateSelector: '#report-column-row',
+                        itemFormSelector: '#report-column-form'
+                    }
+                };
+                var designer = new QueryDesigner(options);
+                designer.render();
+
+                entityChoice.on('change', function (e) {
+                    if (!_.isUndefined(e.removed)) {
+                        var prevVal = e.removed.id || '';
+                        var newVal = e.val;
+                        if (designer.hasData()) {
+                            var confirm = new DeleteConfirmation({
+                                title: __('Change Entity Confirmation'),
+                                okText: __('Yes, I Agree'),
+                                content: __('Are you sure you want to change entity?')
+                            });
+                            confirm.on('ok', function () {
+                                designer.changeEntity(newVal);
+                            });
+                            confirm.on('cancel', function () {
+                                entityChoice.val(prevVal);
+                                entityChoice.trigger('change');
+                            });
+                            confirm.open();
+                        } else {
+                            designer.changeEntity(newVal);
+                        }
+                    }
+                });
+            });
         });
     </script>
 {% endblock content_data %}
-
-{% block report_columns_data %}
-    <div class="grid-container">
-        <table class="grid table-hover table table-bordered table-condensed" style="display: table;">
-            <thead>
-            <tr>
-                <th><span>{{ 'Column'|trans }}</span></th>
-                <th><span>{{ 'Label'|trans }}</span></th>
-                <th class="sorting-column"><span>{{ 'Sorting'|trans }}</span></th>
-                <th class="action-column"><span>{{ 'Actions'|trans }}</span></th>
-            </tr>
-            </thead>
-            <tbody class="column-container">
-            </tbody>
-        </table>
-    </div>
-
-    <script type="text/html" id="template-column-row">
-        <tr data-id="<%= id %>">
-            <td class="string-cell"><%- name %></td>
-            <td class="string-cell"><%- label %></td>
-            <td class="sorting-cell"><%- sorting %></td>
-            <td class="action-cell">
-                <a href="javascript: void(0);" class="action no-hash edit-button"
-                   title="{{ 'Edit column'|trans }}"
-                ><i class="icon-edit hide-text"></i></a>
-                <a href="javascript: void(0);" class="action no-hash delete-button"
-                   data-message="{{ 'Are you sure you want to delete this column?'|trans }}"
-                   title="{{ 'Delete column'|trans }}"
-                ><i class="icon-trash hide-text"></i></a>
-            </td>
-        </tr>
-    </script>
-{% endblock report_columns_data %}
