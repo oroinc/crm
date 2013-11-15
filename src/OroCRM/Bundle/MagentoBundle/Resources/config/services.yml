@@ -3,6 +3,8 @@ parameters:
     orocrm_magento.mage.soap_transport.class:     OroCRM\Bundle\MagentoBundle\Provider\MageSoapTransport
     orocrm_magento.mage.db_transport.class:       OroCRM\Bundle\MagentoBundle\Provider\MageDBTransport
 
+    orocrm_magento.provider.channel_type.class:   OroCRM\Bundle\MagentoBundle\Provider\MageChannelType
+
 services:
     orocrm_magento.mage.soap_transport:
         class: %orocrm_magento.mage.soap_transport.class%
@@ -10,10 +12,14 @@ services:
     orocrm_magento.mage.db_transport:
         class: %orocrm_magento.mage.db_transport.class%
         arguments:
-          - @doctrine.dbal.connection_factory
+            - @doctrine.dbal.connection_factory
 
     orocrm_magento.mage.customer_connector:
         class: %orocrm_magento.mage.customer_connector.class%
         arguments:
-          - @oro_integration.mage.soap_transport
+            - @oro_integration.mage.soap_transport
 
+    orocrm_magento.provider.channel_type:
+        class: %orocrm_magento.provider.channel_type.class%
+        tags:
+            - { name: oro_integration.channel, type: magento }

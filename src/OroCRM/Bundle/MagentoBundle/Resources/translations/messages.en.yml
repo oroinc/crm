@@ -13,3 +13,5 @@ orocrm:
                 website:    Website
                 created_at: Created At
                 updated_at: Updated At
+        channel_type:
+            label:  Magento
