@@ -84,28 +84,10 @@ class CustomerNormalizer implements NormalizerInterface, DenormalizerInterface
         foreach ($data as $key => $value) {
             $fieldKey = isset($this->importFieldsMap[$key]) ? $this->importFieldsMap[$key] : $key;
             $mappedData[$fieldKey] = $value;
-
-//            switch ($key) {
-//                case 'store_id':
-//                case 'website_id':
-//                case 'group_id':
-//                    $id = $value;
-//                    $value = $this->initRelatedObject($key);
-//                    $value->setId($id)
-//                          ->setName($data[str_replace('_id', '', $key)])
-//                          ->setCode(strtolower(str_replace(' ', '', $key)));
-//                    break;
-//                case 'addresses':
-//                    break;
-//                default:
-//                    $fields[$fieldKey] = $value;
-//                    break;
-//            }
         }
 
         $this->setScalarFieldsValues($resultObject, $mappedData);
         $this->setObjectFieldsValues($resultObject, $mappedData);
-
 
         return $resultObject;
     }
@@ -144,6 +126,8 @@ class CustomerNormalizer implements NormalizerInterface, DenormalizerInterface
                 ],
             ]
         );
+
+        $addresses = $this->denormalizeObject($data, 'addresses', static::ADDRESSES_TYPE, $format, $context);
 
         // TODO: normalize and set addresses to contact and bill/ship addr to account
     }
