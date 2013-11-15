@@ -36,7 +36,6 @@ class ControllersTest extends WebTestCase
 
     public function testCreate()
     {
-        $this->markTestSkipped("BAP-1820");
         $crawler = $this->client->request('GET', $this->client->generate('orocrm_contact_create'));
         /** @var Form $form */
         $form = $crawler->selectButton('Save and Close')->form();
@@ -54,32 +53,30 @@ class ControllersTest extends WebTestCase
 
     public function testUpdate()
     {
-        $this->markTestSkipped("BAP-1820");
-        $this->client->request(
-            'GET',
-            $this->client->generate('orocrm_contact_index', array('_format' =>'json')),
+        $result = ToolsAPI::getEntityGrid(
+            $this->client,
+            'contacts-grid',
             array(
-                'contacts[_filter][first_name][value]' => 'Contact_fname',
-                'contacts[_pager][_per_page]' => '10',
-                'contacts[_sort_by][first_name]' => 'ASC',
-                'contacts[_sort_by][last_name]' => 'ASC',
+                'contacts-grids[_filter][name][value]' => 'Contact_fname',
+                'contacts-grids[_pager][_page]' => '1',
+                'contacts-grids[_pager][_per_page]' => '10',
+                'contacts-grids[_sort_by][name]' => 'ASC',
             )
         );
 
-        $result = $this->client->getResponse();
         ToolsAPI::assertJsonResponse($result, 200);
 
         $result = ToolsAPI::jsonToArray($result->getContent());
         $result = reset($result['data']);
-
+        $id = $result['id'];
         $crawler = $this->client->request(
             'GET',
-            $this->client->generate('orocrm_contact_update', array('id' => $result['id']))
+            $this->client->generate('orocrm_contact_update', array('id' => $id))
         );
         /** @var Form $form */
         $form = $crawler->selectButton('Save and Close')->form();
-        $form['orocrm_contact_form[firstName]'] = 'Contact_fname';
-        $form['orocrm_contact_form[lastName]'] = 'Contact_lname';
+        $form['orocrm_contact_form[firstName]'] = 'Contact_fname_updated';
+        $form['orocrm_contact_form[lastName]'] = 'Contact_lname_updated';
 
         $this->client->followRedirects(true);
         $crawler = $this->client->submit($form);
@@ -87,64 +84,46 @@ class ControllersTest extends WebTestCase
         $result = $this->client->getResponse();
         ToolsAPI::assertJsonResponse($result, 200, 'text/html; charset=UTF-8');
         $this->assertContains("Contact saved", $crawler->html());
+
+        return $id;
     }
 
-    public function testView()
+    /**
+     * @depends testUpdate
+     * @param $id
+     */
+    public function testView($id)
     {
-        $this->markTestSkipped("BAP-1820");
-        $this->client->request(
-            'GET',
-            $this->client->generate('orocrm_contact_index', array('_format' =>'json')),
-            array(
-                'contacts[_filter][first_name][value]' => 'Contact_fname',
-                'contacts[_pager][_per_page]' => '10',
-                'contacts[_sort_by][first_name]' => 'ASC',
-                'contacts[_sort_by][last_name]' => 'ASC',
-            )
-        );
-
-        $result = $this->client->getResponse();
-        ToolsAPI::assertJsonResponse($result, 200);
-
-        $result = ToolsAPI::jsonToArray($result->getContent());
-        $result = reset($result['data']);
-
         $crawler = $this->client->request(
             'GET',
-            $this->client->generate('orocrm_contact_view', array('id' => $result['id']))
+            $this->client->generate('orocrm_contact_view', array('id' => $id))
         );
 
         $result = $this->client->getResponse();
         ToolsAPI::assertJsonResponse($result, 200, 'text/html; charset=UTF-8');
-        $this->assertRegExp("/Contact_fname\s+Contact_lname - Contacts - Customers/", $crawler->html());
+        $this->assertRegExp("/Contact_fname_updated\s+Contact_lname_updated - Contacts - Customers/", $crawler->html());
     }
 
-    public function testDelete()
+    /**
+     * @depends testUpdate
+     * @param $id
+     */
+    public function testDelete($id)
     {
-        $this->markTestSkipped("BAP-1820");
-        $this->client->request(
-            'GET',
-            $this->client->generate('orocrm_contact_index', array('_format' =>'json')),
-            array(
-                'contacts[_filter][first_name][value]' => 'Contact_fname',
-                'contacts[_pager][_per_page]' => '10',
-                'contacts[_sort_by][first_name]' => 'ASC',
-                'contacts[_sort_by][last_name]' => 'ASC',
-            )
-        );
-
-        $result = $this->client->getResponse();
-        ToolsAPI::assertJsonResponse($result, 200);
-
-        $result = ToolsAPI::jsonToArray($result->getContent());
-        $result = reset($result['data']);
-
         $this->client->request(
             'DELETE',
-            $this->client->generate('oro_api_delete_contact', array('id' => $result['id']))
+            $this->client->generate('oro_api_delete_contact', array('id' => $id))
         );
 
         $result = $this->client->getResponse();
         ToolsAPI::assertJsonResponse($result, 204);
+
+        $this->client->request(
+            'GET',
+            $this->client->generate('orocrm_contact_view', array('id' => $id))
+        );
+
+        $result = $this->client->getResponse();
+        ToolsAPI::assertJsonResponse($result, 404, 'text/html; charset=UTF-8');
     }
 }

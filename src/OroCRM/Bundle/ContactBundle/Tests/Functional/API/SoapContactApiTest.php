@@ -46,7 +46,7 @@ class SoapContactApiTest extends WebTestCase
      */
     public function testCreateContact($request)
     {
-        $this->markTestIncomplete('Should be fixed in scope of BAP-1383');
+        //$this->markTestIncomplete('Should be fixed in scope of BAP-1383');
 
         $result = $this->client->getSoap()->createContact($request);
         $this->assertInternalType('int', $result);
@@ -77,6 +77,7 @@ class SoapContactApiTest extends WebTestCase
         // test getContact
         $contact = $this->client->getSoap()->getContact($contactId);
         $contact = ToolsAPI::classToArray($contact);
+
         $this->assertNotEmpty($contact);
         $this->assertArrayHasKey('firstName', $contact);
         $this->assertEquals($request['firstName'], $contact['firstName']);
@@ -84,14 +85,8 @@ class SoapContactApiTest extends WebTestCase
         // get getContacts
         $contacts = $this->client->getSoap()->getContacts(1, 1000);
         $contacts = ToolsAPI::classToArray($contacts);
-        $contactFound = false;
-        foreach ($contacts as $contact) {
-            if ($contact['id'] == $contactId) {
-                $contactFound = true;
-                break;
-            }
-        }
-        $this->assertTrue($contactFound);
+        $contactFound = array_filter($contacts, function($a) use($contactId) { return $a['id'] == $contactId; });
+        $this->assertNotEmpty($contactFound);
     }
 
     /**
