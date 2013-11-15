@@ -8,6 +8,7 @@ use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\ContactBundle\Entity\ContactPhone;
 use OroCRM\Bundle\CallBundle\Entity\CallStatus;
+use OroCRM\Bundle\CallBundle\Entity\CallDirection;
 
 /**
  * Call
@@ -93,24 +94,25 @@ class Call
     protected $callStatus;
 
     /**
-     * @var \Time
+     * @var \DateTime
      *
      * @ORM\Column(name="duration", type="time", nullable=true)
      */
     protected $duration;
 
     /**
-     * @var boolean
+     * @var \CallDirection
      *
-     * @ORM\Column(name="isOutgoing", type="boolean")
+     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\CallBundle\Entity\CallDirection")
+     * @ORM\JoinColumn(name="call_direction_id", referencedColumnName="id", onDelete="SET NULL")
      */
-    protected $isOutgoing;
+    protected $direction;
 
 
     public function __construct()
     {
-        $this->isOutgoing = true;
         $this->callDateTime = new \DateTime('now', new \DateTimeZone('UTC'));
+        $this->duration = new \DateTime('00:00:00');
     }
 
     /**
@@ -218,7 +220,7 @@ class Call
     /**
      * Set duration
      *
-     * @param \Time $duration
+     * @param \DateTime $duration
      * @return Call
      */
     public function setDuration($duration)
@@ -231,7 +233,7 @@ class Call
     /**
      * Get duration
      *
-     * @return \Time 
+     * @return \DateTime 
      */
     public function getDuration()
     {
@@ -239,26 +241,26 @@ class Call
     }
 
     /**
-     * Set isOutgoing
+     * Set direction
      *
-     * @param boolean $isOutgoing
+     * @param boolean $direction
      * @return Call
      */
-    public function setIsOutgoing($isOutgoing)
+    public function setDirection($direction)
     {
-        $this->isOutgoing = $isOutgoing;
+        $this->direction = $direction;
     
         return $this;
     }
 
     /**
-     * Get isOutgoing
+     * Get direction
      *
      * @return boolean 
      */
-    public function getIsOutgoing()
+    public function getDirection()
     {
-        return $this->isOutgoing;
+        return $this->direction;
     }
 
     /**

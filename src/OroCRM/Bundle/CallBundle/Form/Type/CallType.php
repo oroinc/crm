@@ -55,9 +55,9 @@ class CallType extends AbstractType
             ->add('phoneNumber', 'hidden')
             ->add('notes', 'textarea', array('required' => false))
             ->add('callDateTime', 'oro_datetime', array('required' => true))
-            ->add('callStatus', null, array('required' => true))
-            ->add('duration', 'time', array('required' => false, 'widget' => 'single_text'))
-            ->add('isOutgoing', 'checkbox', array('required' => true));
+            ->add('callStatus', 'hidden', array('property_path' => 'callStatus.id'))
+            ->add('duration', 'time', array('required' => false, 'widget' => 'single_text', 'with_seconds' => true))
+            ->add('direction', null, array('required'  => true));
     }
 
     /**

@@ -64,7 +64,12 @@ class CallController extends Controller
                                ->getRepository('OroCRMCallBundle:CallStatus')
                                ->findOneByStatus('completed');
 
+            $callDirection = $this->getDoctrine()
+                               ->getRepository('OroCRMCallBundle:CallDirection')
+                               ->findOneByDirection('outgoing');
+
             $entity->setCallStatus($callStatus);
+            $entity->setDirection($callDirection);
 
             $contact = null;
             if ($contactId == 0) {
