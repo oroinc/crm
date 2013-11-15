@@ -10,10 +10,25 @@ use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormEvent;
 
+use Doctrine\Common\Persistence\ObjectManager;
+
 use OroCRM\Bundle\ContactBundle\Entity\Repository\ContactPhoneRepository;
+use OroCRM\Bundle\ContactBundle\Entity\Contact;
 
 class CallType extends AbstractType
 {
+    private $om;
+
+    /**
+     * Constructor.
+     *
+     * @param ObjectManager $om
+     */
+    public function __construct(ObjectManager $om)
+    {
+        $this->om = $om;
+    }
+
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
@@ -30,6 +45,7 @@ class CallType extends AbstractType
                     if (null !== $contact) {
                         $formOptions = array(
                             'class' => 'OroCRMContactBundle:ContactPhone',
+                            'property_path' => 'contactPhoneNumber',
                             'property' => 'phone',
                             'query_builder' => function(ContactPhoneRepository $er) use ($contact) {
                                     return $er->getContactPhoneQueryBuilder($contact);
@@ -42,9 +58,35 @@ class CallType extends AbstractType
                 } else {
                         $form->add('contactPhoneNumber', 'hidden');
                         $form->add('phoneNumber', 'text');
+                }        
+        });
+
+        $builder->addEventListener( FormEvents::PRE_SUBMIT, 
+            function(FormEvent $event) {
+                $form = $event->getForm();
+                $data = $event->getData();
+
+                if ($data['relatedContact']) {
+                    $contact = $this->om
+                                    ->getRepository('OroCRMContactBundle:Contact')
+                                    ->find($data['relatedContact']);
+
+                    $options = $form->get('contactPhoneNumber')->getConfig()->getOptions();
+                    $options = array(
+                                'class' => 'OroCRMContactBundle:ContactPhone',
+                                'property' => 'phone',
+                                'query_builder' => function(ContactPhoneRepository $er) use ($contact) {
+                                        return $er->getContactPhoneQueryBuilder($contact);
+                                    },
+                                );
+                    $form->add('contactPhoneNumber', 'entity', $options);
+                    $form->add('phoneNumber', 'hidden');
+                } else {
+                    $form->add('contactPhoneNumber', 'hidden');
+                    $form->add('phoneNumber', 'text');
                 }
-                
-            });
+                $event->setData($data);
+        });
 
         $builder
             ->add('owner', null, array('required' => true))
@@ -55,7 +97,7 @@ class CallType extends AbstractType
             ->add('phoneNumber', 'hidden')
             ->add('notes', 'textarea', array('required' => false))
             ->add('callDateTime', 'oro_datetime', array('required' => true))
-            ->add('callStatus', 'hidden', array('property_path' => 'callStatus.id'))
+            ->add('callStatus', 'hidden', array('property_path' => 'callStatus.status'))
             ->add('duration', 'time', array('required' => false, 'widget' => 'single_text', 'with_seconds' => true))
             ->add('direction', null, array('required'  => true));
     }
