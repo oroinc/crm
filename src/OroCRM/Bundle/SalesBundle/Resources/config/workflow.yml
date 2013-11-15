@@ -405,7 +405,6 @@ workflows:
                                     - NotBlank: ~
             close_as_lost:
                 label: 'Close as Lost'
-                message: 'Warning! You are going to close this opportunity as lost.'
                 step_to: close
                 frontend_options:
                     icon: 'icon-remove-circle'
