@@ -12,7 +12,7 @@ function(Backbone) {
         defaults: {
             id: '',
             owner: '',
-            phone: ''
+            phone: '',
             primary: ''
         }
     });
