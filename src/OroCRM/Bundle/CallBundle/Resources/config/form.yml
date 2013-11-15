@@ -1,12 +1,20 @@
 parameters:
     orocrm_call.call.form.type.class: OroCRM\Bundle\CallBundle\Form\Type\CallType
     orocrm_call.call.form.handler.class: OroCRM\Bundle\CallBundle\Form\Handler\CallHandler
+    orocrm_call.call.form.subscriber.class: OroCRM\Bundle\CallBundle\Form\EventListener\ContactPhoneSubscriber
 
 services:
+    orocrm_call.call.form.subscriber:
+        class: %orocrm_call.call.form.subscriber.class%
+        arguments:
+            - @doctrine.orm.entity_manager
+        tags:
+            - { name: form.type, alias: orocrm_call_form_subscriber }
+
     orocrm_call.call.form.type:
         class: %orocrm_call.call.form.type.class%
         arguments:
-            - @doctrine.orm.entity_manager
+            - @orocrm_call.call.form.subscriber
         tags:
             - { name: form.type, alias: orocrm_call_form }
 
