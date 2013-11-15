@@ -3,6 +3,7 @@ parameters:
     orocrm_magento.mage.customer_connector.class: OroCRM\Bundle\MagentoBundle\Provider\CustomerConnector
     orocrm_magento.mage.soap_transport.class:     OroCRM\Bundle\MagentoBundle\Provider\MageSoapTransport
     orocrm_magento.mage.db_transport.class:       OroCRM\Bundle\MagentoBundle\Provider\MageDBTransport
+    orocrm_magento.mage.customer_sync_processor.class: OroCRM\Bundle\MagentoBundle\Provider\CustomerSyncProcessor
 
     orocrm_magento.importexport.normalizer.customer.class: OroCRM\Bundle\MagentoBundle\ImportExport\Serializer\CustomerNormalizer
     orocrm_magento.import_strategy.customer.add_or_update.class: OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\AddOrUpdateCustomer
@@ -20,6 +21,14 @@ services:
         class: %orocrm_magento.mage.customer_connector.class%
         arguments:
           - @orocrm_magento.mage.soap_transport
+
+    # customer sync processor
+    orocrm_magento.customer_sync.processor:
+        class: %orocrm_magento.mage.customer_sync_processor.class%
+        arguments:
+          - @doctrine.orm.entity_manager
+          - @oro_importexport.processor.registry
+          - @oro_importexport.job_executor
 
     # customer normalizer/denormalizer
     orocrm_magento.importexport.normalizer.customer:

@@ -1,8 +1,8 @@
 connector:
     name: oro_magento_customers
     jobs:
-        import_from_soap:
-            title: "Entity Import from Magento SOAP API"
+        entity_import_validation:
+            title: "Entity Import Validation from Magento SOAP API"
             type: import_validation
             steps:
                 import_validation:
@@ -12,7 +12,7 @@ connector:
                     writer:    oro_importexport.writer.doctrine_clear
 
         entity_import_from_csv:
-            title: "Entity Import from CSV"
+            title: "Entity Import Validation from Magento SOAP API"
             type: import
             steps:
                 import:
