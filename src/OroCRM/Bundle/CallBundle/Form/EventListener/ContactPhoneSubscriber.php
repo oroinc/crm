@@ -12,7 +12,7 @@ use OroCRM\Bundle\ContactBundle\Entity\Contact;
 
 class ContactPhoneSubscriber implements EventSubscriberInterface
 {
-   /**
+    /**
     * ObjectManager $om
     */
     private $om;
@@ -27,7 +27,7 @@ class ContactPhoneSubscriber implements EventSubscriberInterface
         $this->om = $om;
     }
 
-   /**
+    /**
      * {@inheritdoc}
      */
     public static function getSubscribedEvents()
@@ -53,18 +53,18 @@ class ContactPhoneSubscriber implements EventSubscriberInterface
                     'class' => 'OroCRMContactBundle:ContactPhone',
                     'property_path' => 'contactPhoneNumber',
                     'property' => 'phone',
-                    'query_builder' => function(ContactPhoneRepository $er) use ($contact) {
+                    'query_builder' => function (ContactPhoneRepository $er) use ($contact) {
                             return $er->getContactPhoneQueryBuilder($contact);
-                        },
+                    },
                     );
                 $form->add('contactPhoneNumber', 'entity', $formOptions);
                 $form->add('phoneNumber', 'hidden');
-            } 
+            }
 
         } else {
                 $form->add('contactPhoneNumber', 'hidden');
                 $form->add('phoneNumber', 'text');
-        }                
+        }
     }
 
     /**
@@ -84,9 +84,9 @@ class ContactPhoneSubscriber implements EventSubscriberInterface
             $options = array(
                         'class' => 'OroCRMContactBundle:ContactPhone',
                         'property' => 'phone',
-                        'query_builder' => function(ContactPhoneRepository $er) use ($contact) {
+                        'query_builder' => function (ContactPhoneRepository $er) use ($contact) {
                                 return $er->getContactPhoneQueryBuilder($contact);
-                            },
+                        },
                         );
             $form->add('contactPhoneNumber', 'entity', $options);
             $form->add('phoneNumber', 'hidden');
@@ -94,6 +94,6 @@ class ContactPhoneSubscriber implements EventSubscriberInterface
             $form->add('contactPhoneNumber', 'hidden');
             $form->add('phoneNumber', 'text');
         }
-        $event->setData($data);   
+        $event->setData($data);
     }
 }
