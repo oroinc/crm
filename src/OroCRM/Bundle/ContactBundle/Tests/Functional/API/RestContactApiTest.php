@@ -128,7 +128,6 @@ class RestContactApiTest extends WebTestCase
             'contact' => array (
                 'firstName'   => 'Contact_fname_' . mt_rand(),
                 'lastName'    => 'Contact_lname',
-                'namePrefix'  => 'Contact name prefix',
                 'description' => 'Contact description',
                 'source'      => 'other',
                 'owner'       => '1',
@@ -142,7 +141,7 @@ class RestContactApiTest extends WebTestCase
         $result = $this->client->getResponse();
         ToolsAPI::assertJsonResponse($result, 201);
 
-        $contact = json_decode($result->getContent(), true);
+        $contact = ToolsAPI::jsonToArray($result->getContent());
         $this->assertArrayHasKey('id', $contact);
         $this->assertNotEmpty($contact['id']);
 
@@ -158,17 +157,14 @@ class RestContactApiTest extends WebTestCase
     {
         $this->client->request('GET', $this->client->generate('oro_api_get_contacts'));
         $result = $this->client->getResponse();
-        $entities = json_decode($result->getContent(), true);
+        $entities = ToolsAPI::jsonToArray($result->getContent());
         $this->assertNotEmpty($entities);
 
-        $requiredContact = null;
-        foreach ($entities as $entity) {
-            if ($entity['firstName'] == $request['contact']['firstName']) {
-                $requiredContact = $entity;
-                break;
-            }
-        }
-        $this->assertNotNull($requiredContact);
+        $contactName = $request['contact']['firstName'];
+        $requiredContact =array_filter($entities, function($a) use($contactName) { return $a['firstName'] == $contactName;} );
+
+        $this->assertNotEmpty($requiredContact);
+        $requiredContact = reset($requiredContact);
 
         $this->client->request(
             'GET',
@@ -177,7 +173,7 @@ class RestContactApiTest extends WebTestCase
         $result = $this->client->getResponse();
         ToolsAPI::assertJsonResponse($result, 200);
 
-        $selectedContact = json_decode($result->getContent(), true);
+        $selectedContact = ToolsAPI::jsonToArray($result->getContent());
         $this->assertEquals($requiredContact, $selectedContact);
 
         // assert addresses
@@ -231,7 +227,7 @@ class RestContactApiTest extends WebTestCase
         $result = $this->client->getResponse();
         ToolsAPI::assertJsonResponse($result, 200);
 
-        $contact = json_decode($result->getContent(), true);
+        $contact = ToolsAPI::jsonToArray($result->getContent());
         $this->assertEquals($request['contact']['firstName'], $contact['firstName'], 'Contact was not updated');
 
         // assert address

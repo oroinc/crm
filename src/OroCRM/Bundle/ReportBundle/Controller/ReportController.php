@@ -13,7 +13,7 @@ class ReportController extends Controller
 {
     /**
      * @Route(
-     *      "/{reportGroupName}/{reportName}/{_format}",
+     *      "/{reportGroupName}/{reportName}",
      *      name="orocrm_report_index",
      *      requirements={"reportGroupName"="\w+", "reportName"="\w+", "_format"="html|json"},
      *      defaults={"_format" = "html"}

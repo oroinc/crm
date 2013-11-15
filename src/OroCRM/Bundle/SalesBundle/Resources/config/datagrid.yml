@@ -1,5 +1,5 @@
 datagrid:
-    sales-opportunity-datgrid:
+    sales-opportunity-grid:
         extended_entity_name: %orocrm_sales.opportunity.class%
         options:
             entityHint: opportunities
@@ -111,7 +111,7 @@ datagrid:
                 label:         orocrm.sales.opportunity.datagrid.delete
                 icon:          trash
                 link:          delete_link
-    sales-lead-datagrid:
+    sales-lead-grid:
         extended_entity_name: %orocrm_sales.lead.entity.class%
         options:
             entityHint: leads
