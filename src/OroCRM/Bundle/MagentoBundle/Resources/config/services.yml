@@ -9,14 +9,11 @@ parameters:
     orocrm_magento.import_strategy.customer.add_or_update.class: OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\AddOrUpdateCustomer
     orocrm_magento.import.reader.magento_api.class:              OroCRM\Bundle\MagentoBundle\ImportExport\Reader\CustomerApiReader
 
+    orocrm_magento.provider.channel_type.class:   OroCRM\Bundle\MagentoBundle\Provider\MageChannelType
+
 services:
     orocrm_magento.mage.soap_transport:
         class: %orocrm_magento.mage.soap_transport.class%
-
-    orocrm_magento.mage.db_transport:
-        class: %orocrm_magento.mage.db_transport.class%
-        arguments:
-          - @doctrine.dbal.connection_factory
 
     orocrm_magento.mage.customer_connector:
         class: %orocrm_magento.mage.customer_connector.class%
@@ -55,3 +52,8 @@ services:
         arguments:
             - @oro_importexport.context_registry
             - @orocrm_magento.mage.customer_connector
+
+    orocrm_magento.provider.channel_type:
+        class: %orocrm_magento.provider.channel_type.class%
+        tags:
+            - { name: oro_integration.channel, type: magento }
