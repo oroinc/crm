@@ -103,4 +103,18 @@ class CallController extends Controller
     {
         return array();
     }
+
+    /**
+     * @Route("/widget", name="orocrm_call_widget_calls")
+     * @Template
+     *
+     * @param Request $request
+     * @return array
+     */
+    public function callsAction(Request $request)
+    {
+        return array(
+            'datagridParameters' => $request->query->all()
+        );
+    }
 }

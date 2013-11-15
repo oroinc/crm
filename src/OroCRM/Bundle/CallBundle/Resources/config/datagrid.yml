@@ -60,3 +60,52 @@ datagrid:
                     data_name: call.callDateTime
             default:
                 dateTime: DESC
+        options:
+            entityHint: calls
+
+    widget-calls-grid:
+        source:
+            type: orm
+            acl_resource: orocrm_call
+            query:
+                select:
+                    - CONCAT(contact.firstName, CONCAT(' ', contact.lastName)) as contactName
+                    - account.name as accountName
+                    - call.subject
+                    - CONCAT(CASE WHEN call.phoneNumber IS NOT NULL THEN call.phoneNumber ELSE contactPhone.phone END, '') as phone
+                    - call.callDateTime as dateTime
+                from:
+                    - { table: %orocrm_call.call.entity.class%, alias: call }
+                join:
+                    left:
+                        - { join: call.relatedContact, alias: contact }
+                        - { join: call.contactPhoneNumber, alias: contactPhone }
+                        - { join: call.relatedAccount, alias: account }
+        columns:
+            contactName:
+                label: orocrm.call.datagrid.contact_name
+            accountName:
+                label: orocrm.call.datagrid.account_name
+            subject:
+                label: orocrm.call.datagrid.subject
+            phone:
+                label: orocrm.call.datagrid.phone
+            dateTime:
+                label: orocrm.call.datagrid.date_time
+                frontend_type: datetime
+        sorters:
+            columns:
+                contactName:
+                    data_name: contactName
+                accountName:
+                    data_name: account.name
+                subject:
+                    data_name: call.subject
+                phone:
+                    data_name: phone
+                dateTime:
+                    data_name: call.callDateTime
+            default:
+                dateTime: DESC
+        options:
+            entityHint: calls

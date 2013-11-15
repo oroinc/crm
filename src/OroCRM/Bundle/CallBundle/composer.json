@@ -1,0 +1,28 @@
+{
+    "name": "orocrm/call-bundle",
+    "type": "symfony-bundle",
+    "description": "Oro CRM Calls",
+    "keywords": ["CRM", "Call"],
+    "homepage": "https://github.com/orocrm/CallBundle",
+    "license": "MIT",
+    "require": {
+        "php": ">=5.4",
+        "symfony/symfony": "2.3.*",
+        "friendsofsymfony/rest-bundle": "0.11.*",
+        "nelmio/api-doc-bundle": "dev-master",
+
+        "oro/ui-bundle": "dev-master",
+        "oro/user-bundle": "dev-master",
+        "orocrm/contact-bundle": "dev-master"
+    },
+    "autoload": {
+        "psr-0": { "": "src/" }
+    },
+    "target-dir": "OroCRM/Bundle/CallBundle",
+    "minimum-stability": "dev",
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0-dev"
+        }
+    }
+}

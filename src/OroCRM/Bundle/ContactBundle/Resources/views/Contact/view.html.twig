@@ -10,14 +10,14 @@
 {% set gridName = 'contacts-email-grid' %}
 
 {% block navButtons %}
-    {% if resource_granted('oro_call_create') or true %} {# TODO [mkdotam] fix permission #}
+    {% if resource_granted('orocrm_call') %}
         {{ UI.clientButton({
-        'dataUrl': path('orocrm_call_create', { 'contactId': entity.id }) ,
-        'aCss': 'no-hash view-email-button',
-        'iCss': 'icon-phone',
-        'dataId': entity.id,
-        'title' : 'Log a call'|trans,
-        'label' : 'Log a call'|trans
+            'dataUrl': path('orocrm_call_create', { 'contactId': entity.id }) ,
+            'aCss': 'no-hash log-call-button',
+            'iCss': 'icon-phone',
+            'dataId': entity.id,
+            'title' : 'Log a call'|trans,
+            'label' : 'Log a call'|trans
         }) }}
     {% endif %}
     {% if resource_granted('oro_email_create') %}
@@ -52,6 +52,42 @@
             })
         }}
     {% endif %}
+
+    {# Open dialog to log a call #}
+    <script type="text/javascript">
+        require(['jquery', 'underscore', 'oro/dialog-widget', 'oro/widget-manager'],
+        function($, _, DialogWidget, WidgetManager) {
+            'use strict';
+            $(function () {
+                $(document).on('click', '.log-call-button', function (e) {
+                    var url = $(this).attr('data-url');
+                    if (_.isUndefined(url)) {
+                        url = $(this).attr('href');
+                    }
+                    var widget = new DialogWidget({
+                        url: url,
+                        dialogOptions: {
+                            allowMaximize: true,
+                            allowMinimize: true,
+                            dblclick: 'maximize',
+                            maximizedHeightDecreaseBy: 'minimize-bar',
+                            width: 1000,
+                            title: $(this).attr('title')
+                        }
+                    });
+                    widget.render();
+
+                    // reload widget wil list of contact calls
+                    widget.on('contactCallLogged', function() {
+                        WidgetManager.getWidgetInstanceByAlias('contact_calls', function(contactCallsWidget) {
+                            contactCallsWidget.loadContent();
+                        });
+                    });
+                    e.preventDefault();
+                });
+            });
+        });
+    </script>
 {% endblock navButtons %}
 
 {% block pageHeader %}
@@ -111,6 +147,23 @@
                             {{ Email.renderJs() }}
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+    {% if resource_granted('orocrm_call') %}
+        <div class="contact-info-col-set well-small dark-bg">
+            <div class="row-fluid well-small-bottom clearfix">
+                <div class="contact-info-row">
+                    {{
+                        oro_widget_render({
+                            'widgetType': 'block',
+                            'url': path('orocrm_call_widget_calls', {contactId: entity.id}),
+                            'title': 'Calls'|trans,
+                            'alias': 'contact_calls'
+                        })
+                    }}
                 </div>
             </div>
         </div>
