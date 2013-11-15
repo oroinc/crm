@@ -13,8 +13,8 @@ use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 
 class CustomerSyncProcessor implements SyncProcessorInterface
 {
-    const JOB_VALIDATE_IMPORT = 'entity_import_validation';
-    const JOB_IMPORT  = 'entity_import';
+    const JOB_VALIDATE_IMPORT = 'mage_customer_import_validation';
+    const JOB_IMPORT  = 'mage_customer_import';
 
     /** @var EntityManager */
     protected $em;
@@ -53,9 +53,9 @@ class CustomerSyncProcessor implements SyncProcessorInterface
         // TODO: decide if we need to use it
         $result = $this->processValidation($entityName, $processorAlias);
 var_dump($result);
+die();
         $result = $this->processImport($entityName, $processorAlias);
 var_dump($result);
-die();
     }
 
     /** sample */
