@@ -5,7 +5,7 @@ namespace OroCRM\Bundle\MagentoBundle\ImportExport\Reader;
 use Oro\Bundle\ImportExportBundle\Context\ContextRegistry;
 use Oro\Bundle\ImportExportBundle\Reader\AbstractReader;
 use Oro\Bundle\ImportExportBundle\Reader\ReaderInterface;
-use OroCRM\Bundle\MagentoBundle\Provider\CustomerConnectorInterface;
+use Oro\Bundle\IntegrationBundle\Provider\ConnectorInterface;
 
 class CustomerApiReader extends AbstractReader implements ReaderInterface
 {
@@ -14,9 +14,9 @@ class CustomerApiReader extends AbstractReader implements ReaderInterface
 
     /**
      * @param ContextRegistry $contextRegistry
-     * @param CustomerConnectorInterface $customerConnector
+     * @param ConnectorInterface $customerConnector
      */
-    public function __construct(ContextRegistry $contextRegistry, CustomerConnectorInterface $customerConnector)
+    public function __construct(ContextRegistry $contextRegistry, ConnectorInterface $customerConnector)
     {
         $this->contextRegistry = $contextRegistry;
         $this->customerConnector = $customerConnector;
@@ -28,9 +28,13 @@ class CustomerApiReader extends AbstractReader implements ReaderInterface
     public function read()
     {
         // read peace of data
+        $data = $this->customerConnector->read();
+
+        if (empty($data)) {
+            return null; // no data anymore
+        }
 
         // advance to the next one
 
-        return null; // no data anymore
     }
 }

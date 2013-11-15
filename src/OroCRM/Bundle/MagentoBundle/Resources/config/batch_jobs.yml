@@ -17,6 +17,6 @@ connector:
             steps:
                 import:
                     title:     import
-                    reader:    oro_importexport.reader.csv
+                    reader:    orocrm_magento.import.reader.magento_api
                     processor: oro_importexport.processor.import_delegate
                     writer:    oro_importexport.writer.entity

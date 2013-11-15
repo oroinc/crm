@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Provider;
 
+use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 
 use Oro\Bundle\IntegrationBundle\Provider\AbstractConnector;
@@ -10,60 +11,28 @@ class CustomerConnector extends AbstractConnector implements CustomerConnectorIn
 {
     const DEFAULT_SYNC_RANGE = '1 week';
 
+    /** @var \DateTime */
+    protected $lastSyncDate;
+
+    /** @var \DateInterval */
+    protected $syncRange;
+
+    /** @var \Closure */
+    protected $filters;
+
     /**
      * {@inheritdoc}
      */
-    public function sync($oneWay = self::SYNC_DIRECTION_PULL, $params = [])
+    public function read()
     {
         $channelSettings = $this->channel->getSettings();
+        $startDate = $this->lastSyncDate;
+        $endDate = $this->lastSyncDate->add($this->syncRange);
 
-        if (empty($channelSettings['last_sync_date'])) {
-            throw new InvalidConfigurationException('Last (starting) sync date can\'t be empty');
-        } else {
-            $lastSyncDate = new \DateTime($channelSettings['last_sync_date']);
-        }
+        $data = $this->getCustomersList($this->filters($startDate, $endDate));
 
-        if (empty($channelSettings['sync_range'])) {
-            throw new InvalidConfigurationException('Sync range can\'t be empty');
-        } else {
-            $syncRange = \DateInterval::createFromDateString($channelSettings['sync_range']);
-        }
-
-        $filters = function ($startDate, $endDate) {
-            return [
-                ['complex_filter' => [
-                        [
-                            'key'   => 'created_at',
-                            'value' => ['key'   => 'gteq', 'value' => $startDate],
-                        ],
-                        [
-                            'key'   => 'created_at',
-                            'value' => ['key'   => 'lt', 'value' => $endDate],
-                        ],
-                    ]
-                ]
-            ];
-        };
-
-        $startDate = $lastSyncDate;
-        $endDate = $lastSyncDate->add($syncRange);
-        do {
-            $hasData = true;
-
-            // TODO: implement bi-directional sync
-
-            $batchData = $this->getCustomersList($filters($startDate, $endDate));
-
-            if (!empty($batchData)) {
-                $this->processSyncBatch($batchData);
-            } else {
-                $hasData = false;
-            }
-
-            // move date range, from end to start, allow new customers to be imported first
-            $endDate = $startDate;
-
-        } while ($hasData);
+        // move date range, from end to start, allow new customers to be imported first
+        $endDate = $startDate;
     }
 
     /**
@@ -145,5 +114,58 @@ class CustomerConnector extends AbstractConnector implements CustomerConnectorIn
     public function saveCustomerAddress()
     {
         // TODO: implement create/update customer address
+    }
+
+    /**
+     * @param Channel $channel
+     * @throws \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
+     * @return $this
+     */
+    public function setChannel(Channel $channel)
+    {
+        $channelSettings = $channel->getSettings();
+
+        if (empty($channelSettings['last_sync_date'])) {
+            throw new InvalidConfigurationException('Last (starting) sync date can\'t be empty');
+        } else {
+            $this->lastSyncDate = new \DateTime($channelSettings['last_sync_date']);
+        }
+
+        if (empty($channelSettings['sync_range'])) {
+            throw new InvalidConfigurationException('Sync range can\'t be empty');
+        } else {
+            $this->syncRange = \DateInterval::createFromDateString($channelSettings['sync_range']);
+        }
+
+        return parent::setChannel($channel);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function connect()
+    {
+        $this->filters = function ($startDate, $endDate) {
+            return [
+                ['complex_filter' => [
+                    [
+                        'key'   => 'created_at',
+                        'value' => ['key'   => 'gteq', 'value' => $startDate],
+                    ],
+                    [
+                        'key'   => 'created_at',
+                        'value' => ['key'   => 'lt', 'value' => $endDate],
+                    ],
+                ]
+                ]
+            ];
+        };
+
+        return parent::connect();
+    }
+
+    protected function calculateBatchBoundaries()
+    {
+
     }
 }
