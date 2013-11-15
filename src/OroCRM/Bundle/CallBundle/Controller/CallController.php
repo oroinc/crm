@@ -5,7 +5,7 @@ namespace OroCRM\Bundle\CallBundle\Controller;
 use OroCRM\Bundle\CallBundle\Entity\Call;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBag;
@@ -89,23 +89,6 @@ class CallController extends Controller
 
         if ($this->get('orocrm_call.call.form.handler')->process($entity)) {
             $responseData['saved'] = true;
-            /*
-            $this->get('session')->getFlashBag()->add(
-                'success',
-                $this->get('translator')->trans('orocrm.call.controller.call.saved.message')
-            );
-
-            return $this->get('oro_ui.router')->actionRedirect(
-                array(
-                    'route' => 'orocrm_call_update',
-                    'parameters' => array('id' => $entity->getId()),
-                ),
-                array(
-                    'route' => 'orocrm_call_view',
-                    'parameters' => array('id' => $entity->getId()),
-                )
-            );
-            */
         }
 
         $responseData['form'] = $this->get('orocrm_call.call.form')->createView();
