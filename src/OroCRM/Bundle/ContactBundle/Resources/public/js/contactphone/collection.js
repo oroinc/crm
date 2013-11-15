@@ -1,6 +1,6 @@
 /* global define */
 define(['backbone', 'routing', 'orocrm/contactphone/model'],
-function(Backbone, routing, RegionModel) {
+function(Backbone, routing, ContactPhoneModel) {
     'use strict';
 
     /**
@@ -10,8 +10,8 @@ function(Backbone, routing, RegionModel) {
      */
     return Backbone.Collection.extend({
         route: 'oro_api_get_contact_phones',
-        url: null,
-        model: RegionModel,
+        url: routing.generate('oro_api_get_contact_phones', {contact: 1}),
+        model: ContactPhoneModel,
 
         /**
          * Constructor
@@ -26,7 +26,7 @@ function(Backbone, routing, RegionModel) {
          * @param id {string}
          */
         setContactId: function (id) {
-            this.url = routing.generate(this.route, {contact: id});
+            this.url = routing.generate(this.route, {contact: contactId});
         }
     });
 });
