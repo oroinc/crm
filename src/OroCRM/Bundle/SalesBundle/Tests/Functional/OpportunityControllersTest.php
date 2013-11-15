@@ -65,24 +65,22 @@ class OpportunityControllersTest extends WebTestCase
      */
     public function testUpdate($name)
     {
-        $this->markTestSkipped("BAP-1820");
-        $this->client->request(
-            'GET',
-            $this->client->generate('orocrm_sales_opportunity_index', array('_format' =>'json')),
+        $result = ToolsAPI::getEntityGrid(
+            $this->client,
+            'sales-opportunity-grid',
             array(
-                'opportunity[_filter][name][type]=3' => '3',
-                'opportunity[_filter][name][value]' => $name,
-                'opportunity[_pager][_page]' => '1',
-                'opportunity[_pager][_per_page]' => '10',
+                'sales-opportunity-grid[_filter][name][type]=3' => '3',
+                'sales-opportunity-grid[_filter][name][value]' => $name,
+                'sales-opportunity-grid[_pager][_page]' => '1',
+                'sales-opportunity-grid[_pager][_per_page]' => '10'
             )
         );
 
-        $result = $this->client->getResponse();
         ToolsAPI::assertJsonResponse($result, 200);
 
         $result = ToolsAPI::jsonToArray($result->getContent());
         $result = reset($result['data']);
-
+        $returnValue = $result;
         $crawler = $this->client->request(
             'GET',
             $this->client->generate('orocrm_sales_opportunity_update', array('id' => $result['id']))
@@ -100,76 +98,41 @@ class OpportunityControllersTest extends WebTestCase
         ToolsAPI::assertJsonResponse($result, 200, 'text/html; charset=UTF-8');
         $this->assertContains("Opportunity saved", $crawler->html());
 
-        return $name;
+        $returnValue['name'] = $name;
+        return $returnValue;
     }
 
     /**
-     * @param $name
+     * @param $returnValue
      * @depends testUpdate
      *
      * @return string
      */
-    public function testView($name)
+    public function testView($returnValue)
     {
-        $this->markTestSkipped("BAP-1820");
-        $this->client->request(
-            'GET',
-            $this->client->generate('orocrm_sales_opportunity_index', array('_format' =>'json')),
-            array(
-                'opportunity[_filter][name][type]=3' => '3',
-                'opportunity[_filter][name][value]' => $name,
-                'opportunity[_pager][_page]' => '1',
-                'opportunity[_pager][_per_page]' => '10',
-            )
-        );
-
-        $result = $this->client->getResponse();
-        ToolsAPI::assertJsonResponse($result, 200);
-
-        $result = ToolsAPI::jsonToArray($result->getContent());
-        $result = reset($result['data']);
-
         $crawler = $this->client->request(
             'GET',
-            $this->client->generate('orocrm_sales_opportunity_view', array('id' => $result['id']))
+            $this->client->generate('orocrm_sales_opportunity_view', array('id' => $returnValue['id']))
         );
 
         $result = $this->client->getResponse();
         ToolsAPI::assertJsonResponse($result, 200, 'text/html; charset=UTF-8');
-        $this->assertContains("{$name} - Opportunities - Sales", $crawler->html());
+        $this->assertContains("{$returnValue['name']} - Opportunities - Sales", $crawler->html());
     }
 
     /**
-     * @param $name
+     * @param $returnValue
      * @depends testUpdate
      *
      * @return string
      */
-    public function testInfo($name)
+    public function testInfo($returnValue)
     {
-        $this->markTestSkipped("BAP-1820");
-        $this->client->request(
-            'GET',
-            $this->client->generate('orocrm_sales_opportunity_index', array('_format' =>'json')),
-            array(
-                'opportunity[_filter][name][type]=3' => '3',
-                'opportunity[_filter][name][value]' => $name,
-                'opportunity[_pager][_page]' => '1',
-                'opportunity[_pager][_per_page]' => '10',
-            )
-        );
-
-        $result = $this->client->getResponse();
-        ToolsAPI::assertJsonResponse($result, 200);
-
-        $result = ToolsAPI::jsonToArray($result->getContent());
-        $expectedResult = reset($result['data']);
-
         $crawler = $this->client->request(
             'GET',
             $this->client->generate(
                 'orocrm_sales_opportunity_info',
-                array('id' => $expectedResult['id'], '_widgetContainer' => 'block')
+                array('id' => $returnValue['id'], '_widgetContainer' => 'block')
             )
         );
 
@@ -178,35 +141,24 @@ class OpportunityControllersTest extends WebTestCase
     }
 
     /**
-     * @param $name
+     * @param $returnValue
      * @depends testUpdate
      */
-    public function testDelete($name)
+    public function testDelete($returnValue)
     {
-        $this->markTestSkipped("BAP-1820");
-        $this->client->request(
-            'GET',
-            $this->client->generate('orocrm_sales_opportunity_index', array('_format' =>'json')),
-            array(
-                'opportunity[_filter][name][type]=3' => '3',
-                'opportunity[_filter][name][value]' => $name,
-                'opportunity[_pager][_page]' => '1',
-                'opportunity[_pager][_per_page]' => '10',
-            )
-        );
-
-        $result = $this->client->getResponse();
-        ToolsAPI::assertJsonResponse($result, 200);
-
-        $result = ToolsAPI::jsonToArray($result->getContent());
-        $result = reset($result['data']);
-
         $this->client->request(
             'DELETE',
-            $this->client->generate('oro_api_delete_opportunity', array('id' => $result['id']))
+            $this->client->generate('oro_api_delete_opportunity', array('id' => $returnValue['id']))
         );
 
         $result = $this->client->getResponse();
         ToolsAPI::assertJsonResponse($result, 204);
+
+        $this->client->request(
+            'GET',
+            $this->client->generate('orocrm_sales_opportunity_view', array('id' => $returnValue['id']))
+        );
+        $result = $this->client->getResponse();
+        ToolsAPI::assertJsonResponse($result, 404, 'text/html; charset=UTF-8');
     }
 }

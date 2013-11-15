@@ -7,5 +7,7 @@ orocrm_account_api_account:
     resource:     "@OroCRMAccountBundle/Controller/Api/Rest/AccountController.php"
     type:         rest
     prefix:       api/rest/{version}/
+    requirements:
+        version:  latest|v1
     defaults:
         version:  latest
