@@ -1,6 +1,6 @@
 {% extends 'OroUIBundle:actions:update.html.twig' %}
 
-{% form_theme form with ['OroCRMCallBundle:Include:fields.html.twig'] %}
+{% form_theme form with ['OroCRMContactBundle:Include:fields.html.twig'] %}
 
 {% set formAction = form.vars.value.id ? path('orocrm_call_update', { 'id': form.vars.value.id }) : path('orocrm_call_create')  %}
 

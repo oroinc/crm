@@ -221,7 +221,7 @@ services:
         arguments:
             - %orocrm_contact.type.contact.class%
         tags:
-            - { name: form.type, alias: orocrm_contact_phone }
+            - { name: form.type, alias: orocrm_contactphone }
 
     orocrm_contact.form.type.contact_phone_select:
         class: %orocrm_contact.form.type.contact_phone_select.class%

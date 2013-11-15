@@ -1,4 +1,4 @@
-{% block oro_contact_widget %}
+{% block orocrm_contactphone_widget %}
     {# // check if block was not included yet #}
     {% set _block = block('orocrm_contactphone_updater_js') %}
     {% if (_block is empty) %}
@@ -6,25 +6,18 @@
         {{ block('orocrm_contactphone_updater_js')|raw }}
     {% endif %}
 
-    {% if contact_field is not defined or contact_field is empty %}
-        {% set contact_field = "#" ~ id|replace({'_contact_phone': '_contact'}) %}
-    {% endif %}
-
-    {% if contact_phone_text_field is not defined or contact_phone_text_field is empty %}
-        {% set contact_phone_text_field = "#" ~ id ~ "_text" %}
-    {% endif %}
-
     {{ form_widget(form) }}
 
     <script type="text/javascript">
         require(['jquery', 'orocrm/contactphone/view', 'orocrm/contactphone/collection'],
-        function($, ContactPhoneView, ContactPhoneViewCollection){
+        function($, ContactPhoneView, ContactPhoneCollection){
             $(function() {
-                new ContactPhoneViewView({
+                /** @type orocrm.contactphone.View */
+                new ContactPhoneView({
                     el: $('{{ contact }}'),
                     target: $('#{{ id }}'),
                     simpleEl: $('{{ phoneNumber }}'),
-                    collection: new ContactPhoneViewCollection(),
+                    collection: new ContactPhoneCollection(),
                     showSelect: {{ (choices is not empty)|json_encode }}
                 });
             });
@@ -50,4 +43,4 @@
             }
         {% endif %}
     </style>
-{% endblock oro_contact_widget %}
+{% endblock orocrm_contactphone_widget %}
