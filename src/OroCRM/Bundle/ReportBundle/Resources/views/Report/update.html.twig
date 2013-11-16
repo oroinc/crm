@@ -130,8 +130,8 @@
     {{ UI.scrollData(id, data, form) }}
 
     <script type="text/javascript">
-        require(['jquery', 'underscore', 'oro/translator', 'oro/query-designer', 'oro/delete-confirmation'],
-        function($, _, __, QueryDesigner, DeleteConfirmation) {
+        require(['jquery', 'underscore', 'oro/translator', 'routing', 'oro/query-designer', 'oro/delete-confirmation'],
+        function($, _, __, routing, QueryDesigner, DeleteConfirmation) {
             $(function() {
                 var entityChoice = $('#orocrm_report_form_entity');
 
