@@ -26,3 +26,6 @@
 .form-horizontal .report-general-descr .control-group .controls {
     margin-left: 110px;
 }
+.report-designer {
+    position: relative;
+}

@@ -81,8 +81,7 @@
                     'title': '',
                     'spanClass': 'report-general-descr',
                     'data': [
-                        form_row(form.description, {'label': 'Description'|trans}),
-                        form_widget(form.definition)
+                        form_row(form.description, {'label': 'Description'|trans})
                     ]
                 }
             ]
@@ -92,6 +91,7 @@
     {% set dataBlocks = dataBlocks|merge(
         [{
             'title' : 'Designer'|trans,
+            'contentClass': 'report-designer',
             'subblocks': [
                 {
                     'title': 'Columns'|trans,
@@ -123,25 +123,35 @@
         {
             'formErrors': form_errors(form)? form_errors(form) : null,
             'dataBlocks': dataBlocks,
+            'hiddenData': form_widget(form.definition)
         }
     %}
 
-
     {{ UI.scrollData(id, data, form) }}
+
+    {{ QD.query_designer_entity_template('report-entity-template') }}
 
     <script type="text/javascript">
         require(['jquery', 'underscore', 'oro/translator', 'routing', 'oro/query-designer', 'oro/delete-confirmation'],
         function($, _, __, routing, QueryDesigner, DeleteConfirmation) {
             $(function() {
+                var entities = {{ entities|json_encode|raw }};
                 var entityChoice = $('#orocrm_report_form_entity');
 
+                var findEntity = function (entityName) {
+                    return _.findWhere(entities, {name: entityName});
+                };
+
                 var options = {
-                    entity: entityChoice.val(),
+                    el: '.report-designer',
+                    entityName: entityChoice.val(),
                     storageElementSelector: '#orocrm_report_form_definition',
                     columnsOptions: {
                         el: '.report-columns',
                         itemTemplateSelector: '#report-column-row',
-                        itemFormSelector: '#report-column-form'
+                        itemFormSelector: '#report-column-form',
+                        entityTemplateSelector: '#report-entity-template',
+                        findEntity: findEntity
                     }
                 };
                 var designer = new QueryDesigner(options);
@@ -151,7 +161,7 @@
                     if (!_.isUndefined(e.removed)) {
                         var prevVal = e.removed.id || '';
                         var newVal = e.val;
-                        if (designer.hasData()) {
+                        if (!designer.isEmpty()) {
                             var confirm = new DeleteConfirmation({
                                 title: __('Change Entity Confirmation'),
                                 okText: __('Yes, I Agree'),

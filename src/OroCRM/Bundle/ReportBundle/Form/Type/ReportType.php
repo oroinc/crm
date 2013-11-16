@@ -15,7 +15,7 @@ class ReportType extends AbstractType
     {
         $builder
             ->add('name', 'text', array('required' => true))
-            ->add('entity', 'oro_entity_choice', array('required' => true))
+            ->add('entity', 'orocrm_report_entity_choice', array('required' => true))
             ->add(
                 'type',
                 'entity',
@@ -28,8 +28,16 @@ class ReportType extends AbstractType
             )
             ->add('description', 'textarea', array('required' => false))
             ->add('definition', 'hidden', array('required' => false))
-            ->add('column', 'oro_query_designer_column', array('mapped' => false))
-            ->add('filter', 'oro_query_designer_filter', array('mapped' => false));
+            ->add(
+                'column',
+                'oro_query_designer_column',
+                array('mapped' => false, 'column_choice_type' => 'orocrm_report_entity_field_choice')
+            )
+            ->add(
+                'filter',
+                'oro_query_designer_filter',
+                array('mapped' => false, 'column_choice_type' => 'orocrm_report_entity_field_choice')
+            );
     }
 
     /**

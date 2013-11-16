@@ -73,7 +73,7 @@ class ReportController extends Controller
      */
     public function createAction()
     {
-        return $this->update(null);
+        return $this->update(new Report());
     }
 
     /**
@@ -108,21 +108,9 @@ class ReportController extends Controller
         return array();
     }
 
-    /**
-     * @return ApiEntityManager
-     */
-    protected function getManager()
+    protected function update(Report $entity)
     {
-        return $this->get('orocrm_report.report.manager');
-    }
-
-    protected function update(Report $entity = null)
-    {
-        if (!$entity) {
-            $entity = $this->getManager()->createEntity();
-        }
-
-        if ($this->get('orocrm_report.report.form.handler')->process($entity)) {
+        if ($this->get('orocrm_report.form.handler.report')->process($entity)) {
             $this->get('session')->getFlashBag()->add(
                 'success',
                 $this->get('translator')->trans('orocrm.report.controller.report.saved')
@@ -145,6 +133,7 @@ class ReportController extends Controller
         return array(
             'entity'   => $entity,
             'form'     => $this->get('orocrm_report.report.form')->createView(),
+            'entities' => $this->get('orocrm_report.entity_provider')->getEntities()
         );
     }
 }

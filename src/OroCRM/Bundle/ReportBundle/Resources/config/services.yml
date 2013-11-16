@@ -20,3 +20,9 @@ services:
                 name:   kernel.event_listener
                 event:  oro_datagrid.datgrid.build.before.orocrm_report-opportunities-won_by_period
                 method: onBuildBefore
+
+    orocrm_report.entity_provider:
+        alias: oro_entity.entity_provider
+
+    orocrm_report.entity_field_provider:
+        alias: oro_entity.entity_field_provider
