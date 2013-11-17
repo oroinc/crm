@@ -12,7 +12,7 @@ services:
         tags:
             - { name: form.type, alias: orocrm_report }
 
-    orocrm_report.report.form:
+    orocrm_report.form.report:
         class:           Symfony\Component\Form\Form
         factory_method:  createNamed
         factory_service: form.factory
@@ -24,7 +24,7 @@ services:
         class: %orocrm_report.form.handler.report.class%
         scope: request
         arguments:
-            - @orocrm_report.report.form
+            - @orocrm_report.form.report
             - @request
             - @doctrine.orm.entity_manager
 
@@ -45,5 +45,6 @@ services:
         class: %orocrm_report.form.type.entity_field_choice.class%
         arguments:
             - @orocrm_report.entity_field_provider
+            - @translator
         tags:
             - { name: form.type, alias: orocrm_report_entity_field_choice }

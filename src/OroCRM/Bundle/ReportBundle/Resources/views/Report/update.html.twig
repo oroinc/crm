@@ -151,6 +151,8 @@
                         itemTemplateSelector: '#report-column-row',
                         itemFormSelector: '#report-column-form',
                         columnChainTemplateSelector: '#report-column-chain-template',
+                        fieldsLabel: {{ 'oro.entity.form.entity_fields'|trans|json_encode|raw }},
+                        relatedLabel: {{ 'oro.entity.form.entity_related'|trans|json_encode|raw }},
                         findEntity: findEntity
                     }
                 };
