@@ -129,7 +129,7 @@
 
     {{ UI.scrollData(id, data, form) }}
 
-    {{ QD.query_designer_entity_template('report-entity-template') }}
+    {{ QD.query_designer_column_chain_template('report-column-chain-template') }}
 
     <script type="text/javascript">
         require(['jquery', 'underscore', 'oro/translator', 'routing', 'oro/query-designer', 'oro/delete-confirmation'],
@@ -150,7 +150,7 @@
                         el: '.report-columns',
                         itemTemplateSelector: '#report-column-row',
                         itemFormSelector: '#report-column-form',
-                        entityTemplateSelector: '#report-entity-template',
+                        columnChainTemplateSelector: '#report-column-chain-template',
                         findEntity: findEntity
                     }
                 };
