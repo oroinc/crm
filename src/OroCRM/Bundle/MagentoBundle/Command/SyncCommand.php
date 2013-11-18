@@ -36,10 +36,9 @@ class SyncCommand extends ContainerAwareCommand
     {
         $output->writeln($this->getDescription());
 
-        $someData = [];
-
-        $processor = $this->getContainer()->get(self::CUSTOMER_SYNC_PROCESSOR);
-        $processor->process($someData);
+        $this->getContainer()
+            ->get(self::CUSTOMER_SYNC_PROCESSOR)
+            ->process();
 
         $output->writeln('Completed');
     }

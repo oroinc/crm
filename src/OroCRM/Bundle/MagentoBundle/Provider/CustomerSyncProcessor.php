@@ -7,6 +7,8 @@ use Doctrine\ORM\EntityManager;
 use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
 use Oro\Bundle\ImportExportBundle\Job\JobExecutor;
 use Oro\Bundle\ImportExportBundle\Processor\ProcessorRegistry;
+use Oro\Bundle\IntegrationBundle\Entity\Channel;
+use Oro\Bundle\IntegrationBundle\Provider\ChannelTypeInterface;
 use Oro\Bundle\IntegrationBundle\Provider\SyncProcessorInterface;
 
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
@@ -15,6 +17,7 @@ class CustomerSyncProcessor implements SyncProcessorInterface
 {
     const JOB_VALIDATE_IMPORT = 'mage_customer_import_validation';
     const JOB_IMPORT  = 'mage_customer_import';
+    const ENTITY_NAME = 'OroCRM\Bundle\MagentoBundle\Entity\Customer';
 
     /** @var EntityManager */
     protected $em;
@@ -25,58 +28,75 @@ class CustomerSyncProcessor implements SyncProcessorInterface
     /** @var JobExecutor */
     protected $jobExecutor;
 
+    /** @var CustomerConnector */
+    protected $customerConnector;
+
     /**
      * @param EntityManager $em
      * @param ProcessorRegistry $processorRegistry
      * @param JobExecutor $jobExecutor
+     * @param CustomerConnector $connector
      */
     public function __construct(
         EntityManager $em,
         ProcessorRegistry $processorRegistry,
-        JobExecutor $jobExecutor
+        JobExecutor $jobExecutor,
+        CustomerConnector $connector
     ) {
         $this->em = $em;
         $this->processorRegistry = $processorRegistry;
         $this->jobExecutor = $jobExecutor;
+        $this->customerConnector = $connector;
     }
 
-    public function process($batchData)
+    protected function init()
     {
-        $entityName = 'OroCRM\Bundle\MagentoBundle\Entity\Customer';
+        // TODO: change this hardcoded value
+        /** @var $item ChannelTypeInterface */
+        /*
+        $name = 'magento';
+        $channel = $this->em
+            ->getRepository('OroIntegrationBundle:ChannelType')
+            ->findOneBy(['name' => $name]);
+        */
+        $now = new \DateTime('now', new \DateTimeZone('UTC'));
+        $channel = new Channel();
+        $channel->setSettings(
+            [
+                'last_sync_date' => $now->sub(\DateInterval::createFromDateString('1 month')),
+                'sync_range'     => '1 week',
+                'api_user'       => 'admin',
+                'api_key'        => '123admin',
+                'wsdl_url'       => 'http://mage.dev.lxc/index.php/api/v2_soap/?wsdl=1',
+            ]
+        );
 
+        // initialized connector used by CustomerApiReader
+        $this->customerConnector->setChannel($channel);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function process()
+    {
+        $this->init();
+
+        // get processor
+        // TODO: refactor this logic
         $processorAliases = $this->processorRegistry->getProcessorAliasesByEntity(
             ProcessorRegistry::TYPE_IMPORT,
-            $entityName
+            self::ENTITY_NAME
         );
         $processorAlias = reset($processorAliases);
 
         // TODO: decide if we need to use it
-        $result = $this->processValidation($entityName, $processorAlias);
+        $result = $this->processValidation(self::ENTITY_NAME, $processorAlias);
 var_dump($result);
 die();
-        $result = $this->processImport($entityName, $processorAlias);
+        $result = $this->processImport(self::ENTITY_NAME, $processorAlias);
 var_dump($result);
-    }
-
-    /** sample */
-    public function indexAction($name)
-    {
-        /** @var $item ChannelTypeInterface */
-        $channel = $this->getDoctrine()
-            ->getRepository('OroCRMIntegrationBundle:ChannelType')->findOneBy(['name' => $name]);
-
-        /** @var MageCustomerConnector $customerConnector */
-        $customerConnector = $this->get('oro_integration.mage.customer_connector')
-            ->setChannel($channel);
-
-        $customerList = $customerConnector->getCustomersList();
-        $customerData = $customerConnector->getCustomerData($customerList[0]->customer_id, true, true);
-
-        return [
-            'name' => $name,
-            'customerData' => $customerData,
-            'customerList' => $customerList,
-        ];
+die();
     }
 
     /**

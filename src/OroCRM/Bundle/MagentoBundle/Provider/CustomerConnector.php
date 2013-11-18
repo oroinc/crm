@@ -2,9 +2,9 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Provider;
 
-use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 
+use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\IntegrationBundle\Provider\AbstractConnector;
 
 class CustomerConnector extends AbstractConnector implements CustomerConnectorInterface
@@ -17,22 +17,38 @@ class CustomerConnector extends AbstractConnector implements CustomerConnectorIn
     /** @var \DateInterval */
     protected $syncRange;
 
-    /** @var \Closure */
-    protected $filters;
-
     /**
      * {@inheritdoc}
      */
     public function read()
     {
         $channelSettings = $this->channel->getSettings();
+
         $startDate = $this->lastSyncDate;
         $endDate = $this->lastSyncDate->add($this->syncRange);
 
-        $data = $this->getCustomersList($this->filters($startDate, $endDate));
+        $filters = function ($startDate, $endDate) {
+            return [
+                ['complex_filter' => [
+                    [
+                        'key'   => 'created_at',
+                        'value' => ['key'   => 'gteq', 'value' => $startDate],
+                    ],
+                    [
+                        'key'   => 'created_at',
+                        'value' => ['key'   => 'lt', 'value' => $endDate],
+                    ],
+                ]
+                ]
+            ];
+        };
+
+        $data = $this->getCustomersList($filters($startDate, $endDate));
 
         // move date range, from end to start, allow new customers to be imported first
         $endDate = $startDate;
+
+        return $data;
     }
 
     /**
@@ -124,44 +140,23 @@ class CustomerConnector extends AbstractConnector implements CustomerConnectorIn
     public function setChannel(Channel $channel)
     {
         $channelSettings = $channel->getSettings();
-
         if (empty($channelSettings['last_sync_date'])) {
-            throw new InvalidConfigurationException('Last (starting) sync date can\'t be empty');
+            throw new InvalidConfigurationException('Last sync date can\'t be empty');
+        } elseif ($channelSettings['last_sync_date'] instanceof \DateTime) {
+                $this->lastSyncDate = $channelSettings['last_sync_date'];
         } else {
             $this->lastSyncDate = new \DateTime($channelSettings['last_sync_date']);
         }
 
         if (empty($channelSettings['sync_range'])) {
-            throw new InvalidConfigurationException('Sync range can\'t be empty');
+            $channelSettings['sync_range'] = self::DEFAULT_SYNC_RANGE;
+        } elseif ($channelSettings['sync_range'] instanceof \DateInterval) {
+            $this->syncRange = $channelSettings['sync_range'];
         } else {
             $this->syncRange = \DateInterval::createFromDateString($channelSettings['sync_range']);
         }
 
         return parent::setChannel($channel);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function connect()
-    {
-        $this->filters = function ($startDate, $endDate) {
-            return [
-                ['complex_filter' => [
-                    [
-                        'key'   => 'created_at',
-                        'value' => ['key'   => 'gteq', 'value' => $startDate],
-                    ],
-                    [
-                        'key'   => 'created_at',
-                        'value' => ['key'   => 'lt', 'value' => $endDate],
-                    ],
-                ]
-                ]
-            ];
-        };
-
-        return parent::connect();
     }
 
     protected function calculateBatchBoundaries()

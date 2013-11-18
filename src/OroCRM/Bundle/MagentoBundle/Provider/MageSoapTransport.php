@@ -3,6 +3,7 @@
 namespace OroCRM\Bundle\MagentoBundle\Provider;
 
 use Oro\Bundle\IntegrationBundle\Provider\SOAPTransport;
+use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 
 /**
  * Magento SOAP transport
@@ -21,6 +22,12 @@ class MageSoapTransport extends SOAPTransport
      */
     public function init(array $settings)
     {
+        if (empty($settings['api_key']) || empty($settings['api_user'])) {
+            throw new InvalidConfigurationException(
+                "Magento SOAP transport require 'api_key' and 'api_user' settings to be defined."
+            );
+        }
+
         $apiKey = $settings['api_key'];
         $apiUser = $settings['api_user'];
 

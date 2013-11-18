@@ -7,9 +7,11 @@ use Oro\Bundle\ImportExportBundle\Reader\AbstractReader;
 use Oro\Bundle\ImportExportBundle\Reader\ReaderInterface;
 use Oro\Bundle\IntegrationBundle\Provider\ConnectorInterface;
 
+use OroCRM\Bundle\MagentoBundle\Provider\CustomerConnector;
+
 class CustomerApiReader extends AbstractReader implements ReaderInterface
 {
-    /** @var CustomerConnectorInterface */
+    /** @var CustomerConnector */
     protected $customerConnector;
 
     /**
@@ -33,8 +35,9 @@ class CustomerApiReader extends AbstractReader implements ReaderInterface
         if (empty($data)) {
             return null; // no data anymore
         }
+        var_dump($data);
 
-        // advance to the next one
-
+        // customer connector knows how to advance
+        // batch counter/boundaries to the next ones
     }
 }

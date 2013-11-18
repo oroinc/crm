@@ -27,6 +27,7 @@ services:
           - @doctrine.orm.entity_manager
           - @oro_importexport.processor.registry
           - @oro_importexport.job_executor
+          - @orocrm_magento.mage.customer_connector
 
     # customer normalizer/denormalizer
     orocrm_magento.importexport.normalizer.customer:
