@@ -78,32 +78,41 @@ function(_, Backbone) {
          */
         selectionChanged: function(e) {
             var contactId = $(e.currentTarget).val();
-            this.collection.setContactId(contactId);
-            this.collection.fetch();
+            console.log(contactId);
+            if (contactId) {
+                this.collection.setContactId(contactId);
+                this.collection.fetch();
+            } else {
+                this.showPlain();
+            }
         },
 
         render: function() {
-            this.uniform = $('#uniform-' + this.target[0].id);
 
             if (this.collection.models.length > 0) {
+                this.showOptions();
+            } else {                
+                this.showPlain();
+            }
+        },
+        
+        showPlain: function() {
+                this.target.hide();
+                this.target.val('');
+                this.displaySelect2(false);                
+                $('#uniform-' + this.target[0].id).hide();
+                this.$simpleEl.show();            
+        },
+
+        showOptions: function() {
                 this.target.show();
                 this.displaySelect2(true);
-                this.uniform.show();
-
+                $('#uniform-' + this.target[0].id).show();
                 this.target.val('').trigger('change');
                 this.target.find('option[value!=""]').remove();
                 this.target.append(_.template(this.template, {contactphones: this.collection.models}));
-
                 this.$simpleEl.hide();
                 this.$simpleEl.val('');
-
-            } else {                
-                this.target.hide();
-                this.target.val('');
-                this.displaySelect2(false);
-                this.uniform.hide();
-                this.$simpleEl.show();
-            }
         }
     });
 });
