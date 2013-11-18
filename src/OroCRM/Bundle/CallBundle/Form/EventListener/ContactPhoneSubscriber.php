@@ -58,14 +58,13 @@ class ContactPhoneSubscriber implements EventSubscriberInterface
             if (null !== $contact) {
                 $formOptions['query_builder'] = function (ContactPhoneRepository $er) use ($contact) {
                             return $er->getContactPhoneQueryBuilder($contact);
-                    };
+                };
             }
-
         } else {
             $formOptions['attr'] = array('class' => 'hide');
 
         }
-        $form->add('contactPhoneNumber', 'entity', $formOptions);        
+        $form->add('contactPhoneNumber', 'entity', $formOptions);
     }
 
     /**
