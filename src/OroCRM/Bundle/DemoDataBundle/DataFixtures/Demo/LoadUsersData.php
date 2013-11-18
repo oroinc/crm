@@ -125,6 +125,7 @@ class LoadUsersData extends AbstractFixture implements OrderedFixtureInterface, 
         $user->setLastName($lastName);
         $user->setBirthday($birthday);
         $user->setOwner($this->getReference('default_main_business'));
+        $user->addBusinessUnit($this->getReference('default_main_business'));
         $user->addRole($role);
 
         return $user;
