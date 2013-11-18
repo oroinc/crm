@@ -26,22 +26,22 @@
         <div class="form-container">
             <form id="{{ form.vars.name }}" action="{{ path('orocrm_call_update') }}" method="post">
                 <fieldset class="form">
-                    <div class="span6">
+                    <div class="span5">
+                        {{ form_row(form.owner, {'label': 'Owner'|trans}) }}
                         {{ form_row(form.subject, {'label': 'Subject'|trans}) }}
                         {{ form_row(form.notes, {'label': 'Notes'|trans}) }}
                         {{ form_row(form.callDateTime, {'label': 'Call Date & Time'|trans}) }}
-                        {{ form_row(form.direction, {'label': 'Direction'|trans}) }}
-                        {{ form_row(form.callStatus, {'label': 'Call Status'|trans}) }}
-                        {{ form_row(form.duration, {'label': 'Duration'|trans}) }}
 
                     </div>
-                    <div class="span6">
+                    <div class="span5">
 
-                        {{ form_row(form.owner, {'label': 'Owner'|trans}) }}
                         {{ form_row(form.relatedAccount, {'label': 'Related To'|trans}) }}
-                        {{ form_row(form.relatedContact, {'label': 'Related Contact'|trans}) }}
-                        {{ form_row(form.contactPhoneNumber, {'label': 'Phone Number'|trans }) }}
+                        {{ form_row(form.relatedContact, {'label': 'Related Contact'|trans, 'attr' : {'class' : 'input-large'} }) }}
+                        {{ form_row(form.contactPhoneNumber, {'label': 'Phone Number'|trans, 'attr' : {'class' : 'input-large'} }) }}
                         {{ form_row(form.phoneNumber, {'label': 'Phone Number'|trans}) }}
+                        {{ form_row(form.direction, {'label': 'Direction'|trans}) }}
+                        {{ form_row(form.duration, {'label': 'Duration'|trans}) }}
+                        {{ form_row(form.callStatus) }}
 
                     </div>
                     {{ form_rest(form) }}

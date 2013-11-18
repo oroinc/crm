@@ -53,17 +53,18 @@ class ContactPhoneSubscriber implements EventSubscriberInterface
                     'class' => 'OroCRMContactBundle:ContactPhone',
                     'property_path' => 'contactPhoneNumber',
                     'property' => 'phone',
+                    'required' => false,
                     'query_builder' => function (ContactPhoneRepository $er) use ($contact) {
                             return $er->getContactPhoneQueryBuilder($contact);
                     },
                     );
                 $form->add('contactPhoneNumber', 'entity', $formOptions);
-                $form->add('phoneNumber', 'hidden');
+                $form->add('phoneNumber', 'text', array('required' => false));
             }
 
         } else {
-                $form->add('contactPhoneNumber', 'hidden');
-                $form->add('phoneNumber', 'text');
+                $form->add('contactPhoneNumber', 'hidden', array('required' => false));
+                $form->add('phoneNumber', 'text', array('required' => false));
         }
     }
 
@@ -84,15 +85,16 @@ class ContactPhoneSubscriber implements EventSubscriberInterface
             $options = array(
                         'class' => 'OroCRMContactBundle:ContactPhone',
                         'property' => 'phone',
+                        'required' => false,
                         'query_builder' => function (ContactPhoneRepository $er) use ($contact) {
                                 return $er->getContactPhoneQueryBuilder($contact);
                         },
                         );
             $form->add('contactPhoneNumber', 'entity', $options);
-            $form->add('phoneNumber', 'hidden');
+            $form->add('phoneNumber', 'text', array('required' => false));
         } else {
             $form->add('contactPhoneNumber', 'hidden');
-            $form->add('phoneNumber', 'text');
+            $form->add('phoneNumber', 'text', array('required' => false));
         }
         $event->setData($data);
     }
