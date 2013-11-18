@@ -1,0 +1,93 @@
+OroCRM\Bundle\AccountBundle\Entity\Account:
+    fields:
+        extend_description:
+            type:                 text
+            configs:
+                entity:
+                    label:        Description
+                datagrid:
+                    is_visible:   false
+            owner:                Custom
+            is_extend:            true
+
+        extend_phone:
+            type:                 string
+            configs:
+                entity:
+                    label:        Phone
+                datagrid:
+                    is_visible:   false
+            owner:                Custom
+            is_extend:            true
+
+        extend_email:
+            type:                 string
+            configs:
+                entity:
+                    label:        Email
+                datagrid:
+                    is_visible:   false
+            owner:                Custom
+            is_extend:            true
+
+        extend_fax:
+            type:                 string
+            configs:
+                entity:
+                    label:        Fax
+                datagrid:
+                    is_visible:   false
+            owner:                Custom
+            is_extend:            true
+
+        extend_website:
+            type:                 string
+            configs:
+                entity:
+                    label:        Website
+                datagrid:
+                    is_visible:   false
+            owner:                Custom
+            is_extend:            true
+
+        extend_employees:
+            type:                 integer
+            configs:
+                entity:
+                    label:        Employees
+                datagrid:
+                    is_visible:   false
+            owner:                Custom
+            is_extend:            true
+
+        extend_ownership:
+            type:                 string
+            configs:
+                entity:
+                    label:        Ownership
+                datagrid:
+                    is_visible:   false
+            owner:                Custom
+            is_extend:            true
+
+        extend_ticker_symbol:
+            type:                 string
+            configs:
+                entity:
+                    label:        Ticker Symbol
+                datagrid:
+                    is_visible:   false
+
+            owner:                Custom
+            is_extend:            true
+
+        extend_rating:
+            type:                 string
+            configs:
+                entity:
+                    label:        Rating
+                datagrid:
+                    is_visible:   false
+
+            owner:                Custom
+            is_extend:            true

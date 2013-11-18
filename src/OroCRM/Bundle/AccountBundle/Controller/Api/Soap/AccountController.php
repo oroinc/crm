@@ -5,11 +5,11 @@ namespace OroCRM\Bundle\AccountBundle\Controller\Api\Soap;
 use Symfony\Component\Form\FormInterface;
 use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 
-use Oro\Bundle\SoapBundle\Controller\Api\Soap\FlexibleSoapController;
-use Oro\Bundle\SoapBundle\Entity\Manager\ApiFlexibleEntityManager;
+use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
+use Oro\Bundle\SoapBundle\Controller\Api\Soap\SoapController;
 use Oro\Bundle\SoapBundle\Form\Handler\ApiFormHandler;
 
-class AccountController extends FlexibleSoapController
+class AccountController extends SoapController
 {
     /**
      * @Soap\Method("getAccounts")
@@ -34,7 +34,7 @@ class AccountController extends FlexibleSoapController
 
     /**
      * @Soap\Method("createAccount")
-     * @Soap\Param("account", phpType = "OroCRM\Bundle\AccountBundle\Entity\AccountSoap")
+     * @Soap\Param("account", phpType = "OroCRM\Bundle\AccountBundle\Entity\Account")
      * @Soap\Result(phpType = "int")
      */
     public function createAction($account)
@@ -45,7 +45,7 @@ class AccountController extends FlexibleSoapController
     /**
      * @Soap\Method("updateAccount")
      * @Soap\Param("id", phpType = "int")
-     * @Soap\Param("account", phpType = "OroCRM\Bundle\AccountBundle\Entity\AccountSoap")
+     * @Soap\Param("account", phpType = "OroCRM\Bundle\AccountBundle\Entity\Account")
      * @Soap\Result(phpType = "boolean")
      */
     public function updateAction($id, $account)
@@ -64,7 +64,7 @@ class AccountController extends FlexibleSoapController
     }
 
     /**
-     * @return ApiFlexibleEntityManager
+     * @return ApiEntityManager
      */
     public function getManager()
     {

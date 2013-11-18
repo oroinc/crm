@@ -11,9 +11,9 @@ class AccountApiType extends AccountType
     /**
      * {@inheritdoc}
      */
-    public function addEntityFields(FormBuilderInterface $builder)
+    public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        parent::addEntityFields($builder);
+        parent::buildForm($builder, $options);
         $builder->addEventSubscriber(new PatchSubscriber());
     }
 
@@ -24,7 +24,7 @@ class AccountApiType extends AccountType
     {
         $resolver->setDefaults(
             array(
-                'data_class'           => $this->flexibleClass,
+                'data_class'           => 'OroCRM\Bundle\AccountBundle\Entity\Account',
                 'intention'            => 'account',
                 'extra_fields_message' => 'This form should not contain extra fields: "{{ extra_fields }}"',
                 'csrf_protection'      => false,

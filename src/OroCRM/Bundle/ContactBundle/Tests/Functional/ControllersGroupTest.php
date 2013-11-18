@@ -55,25 +55,23 @@ class ControllersGroupTest extends WebTestCase
      */
     public function testUpdate()
     {
-        $this->markTestSkipped("BAP-1820");
-        $this->client->request(
-            'GET',
-            $this->client->generate('orocrm_contact_group_index', array('_format' =>'json')),
+        $result = ToolsAPI::getEntityGrid(
+            $this->client,
+            'contact-groups-grid',
             array(
-                'contact_groups[_filter][label][value]' => 'Contact Group Label',
-                'contact_groups[_filter][label][type]' => '1',
-                'contacts[_pager][_per_page]' => '10',
-                'contacts[_sort_by][first_name]' => 'ASC',
-                'contacts[_sort_by][last_name]' => 'ASC',
+                'contact-groups-grid[_filter][label][value]' => 'Contact Group Label',
+                'contact-groups-grid[_filter][label][type]' => '1',
+                'contact-groups-grid[_pager][_per_page]' => '10',
+                'contact-groups-grid[_sort_by][first_name]' => 'ASC',
+                'contact-groups-grid[_sort_by][last_name]' => 'ASC',
             )
         );
 
-        $result = $this->client->getResponse();
         ToolsAPI::assertJsonResponse($result, 200);
 
         $result = ToolsAPI::jsonToArray($result->getContent());
         $result = reset($result['data']);
-
+        $id = $result['id'];
         $crawler = $this->client->request(
             'GET',
             $this->client->generate('orocrm_contact_group_update', array('id' => $result['id']))
@@ -88,69 +86,18 @@ class ControllersGroupTest extends WebTestCase
         $result = $this->client->getResponse();
         ToolsAPI::assertJsonResponse($result, 200, '');
         $this->assertContains("Group saved", $crawler->html());
-    }
 
-    /**
-     * @depends testCreate
-     */
-    public function testGrid()
-    {
-        $this->markTestSkipped("BAP-1820");
-        $this->client->request(
-            'GET',
-            $this->client->generate('orocrm_contact_group_index', array('_format' =>'json')),
-            array(
-                'contact_groups[_filter][label][value]' => 'Contact Group Label',
-                'contact_groups[_filter][label][type]' => '1',
-                'contacts[_pager][_per_page]' => '10',
-                'contacts[_sort_by][first_name]' => 'ASC',
-                'contacts[_sort_by][last_name]' => 'ASC',
-            )
-        );
-
-        $result = $this->client->getResponse();
-        ToolsAPI::assertJsonResponse($result, 200);
-
-        $result = ToolsAPI::jsonToArray($result->getContent());
-        $result = reset($result['data']);
-
-        $this->client->request(
-            'GET',
-            $this->client->generate('orocrm_contact_group_contact_grid', array('id' => $result['id']))
-        );
-        $result = $this->client->getResponse();
-        ToolsAPI::assertJsonResponse($result, 200);
-        $result = ToolsAPI::jsonToArray($result);
-        $this->assertEquals(0, $result['options']['TotalRecords']);
+        return $id;
     }
 
     /**
      * @depends testUpdate
      */
-    public function testDelete()
+    public function testDelete($id)
     {
-        $this->markTestSkipped("BAP-1820");
-        $this->client->request(
-            'GET',
-            $this->client->generate('orocrm_contact_group_index', array('_format' =>'json')),
-            array(
-                'contact_groups[_filter][label][value]' => 'Contact Group Label Updated',
-                'contact_groups[_filter][label][type]' => '1',
-                'contacts[_pager][_per_page]' => '10',
-                'contacts[_sort_by][first_name]' => 'ASC',
-                'contacts[_sort_by][last_name]' => 'ASC',
-            )
-        );
-
-        $result = $this->client->getResponse();
-        ToolsAPI::assertJsonResponse($result, 200);
-
-        $result = ToolsAPI::jsonToArray($result->getContent());
-        $result = reset($result['data']);
-
         $this->client->request(
             'DELETE',
-            $this->client->generate('oro_api_delete_contactgroup', array('id' => $result['id']))
+            $this->client->generate('oro_api_delete_contactgroup', array('id' => $id))
         );
 
         $result = $this->client->getResponse();

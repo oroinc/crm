@@ -16,11 +16,7 @@ class AccountSelectTypeTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $flexibleManager = $this->getMockBuilder('Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleManager')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->type = new AccountSelectType($flexibleManager, 'orocrm_account_select');
+        $this->type = new AccountSelectType('orocrm_account_select');
     }
 
     public function testName()

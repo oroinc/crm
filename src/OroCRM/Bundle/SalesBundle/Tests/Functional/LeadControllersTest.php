@@ -91,26 +91,24 @@ class LeadControllersTest extends WebTestCase
      */
     public function testUpdate($name)
     {
-        $this->markTestSkipped("BAP-1820");
-        $this->client->request(
-            'GET',
-            $this->client->generate('orocrm_sales_lead_index', array('_format' =>'json')),
+        $result = ToolsAPI::getEntityGrid(
+            $this->client,
+            'sales-lead-grid',
             array(
-                'leads[_filter][name][type]=3' => '3',
-                'leads[_filter][name][value]' => $name,
-                'leads[_pager][_page]' => '1',
-                'leads[_pager][_per_page]' => '10',
-                'leads[_sort_by][first_name]' => 'ASC',
-                'leads[_sort_by][last_name]' => 'ASC',
+                'sales-lead-grid[_filter][name][type]=3' => '3',
+                'sales-lead-grid[_filter][name][value]' => $name,
+                'sales-lead-grid[_pager][_page]' => '1',
+                'sales-lead-grid[_pager][_per_page]' => '10',
+                'sales-lead-grid[_sort_by][first_name]' => 'ASC',
+                'sales-lead-grid[_sort_by][last_name]' => 'ASC',
             )
         );
 
-        $result = $this->client->getResponse();
         ToolsAPI::assertJsonResponse($result, 200);
 
         $result = ToolsAPI::jsonToArray($result->getContent());
         $result = reset($result['data']);
-
+        $returnValue = $result;
         $crawler = $this->client->request(
             'GET',
             $this->client->generate('orocrm_sales_lead_update', array('id' => $result['id']))
@@ -128,124 +126,70 @@ class LeadControllersTest extends WebTestCase
         ToolsAPI::assertJsonResponse($result, 200, 'text/html; charset=UTF-8');
         $this->assertContains("Lead saved", $crawler->html());
 
-        return $name;
+        $returnValue['name'] = $name;
+        return $returnValue;
     }
 
     /**
-     * @param $name
+     * @param $returnValue
      * @depends testUpdate
      *
      * @return string
      */
-    public function testView($name)
+    public function testView($returnValue)
     {
-        $this->markTestSkipped("BAP-1820");
-
-        $this->client->request(
-            'GET',
-            $this->client->generate('orocrm_sales_lead_index', array('_format' =>'json')),
-            array(
-                'leads[_filter][name][type]=3' => '3',
-                'leads[_filter][name][value]' => $name,
-                'leads[_pager][_page]' => '1',
-                'leads[_pager][_per_page]' => '10',
-                'leads[_sort_by][first_name]' => 'ASC',
-                'leads[_sort_by][last_name]' => 'ASC',
-            )
-        );
-
-        $result = $this->client->getResponse();
-        ToolsAPI::assertJsonResponse($result, 200);
-
-        $result = ToolsAPI::jsonToArray($result->getContent());
-        $result = reset($result['data']);
-
         $crawler = $this->client->request(
             'GET',
-            $this->client->generate('orocrm_sales_lead_view', array('id' => $result['id']))
+            $this->client->generate('orocrm_sales_lead_view', array('id' => $returnValue['id']))
         );
 
         $result = $this->client->getResponse();
         ToolsAPI::assertJsonResponse($result, 200, 'text/html; charset=UTF-8');
-        $this->assertContains("{$name} - Leads - Sales", $crawler->html());
+        $this->assertContains("{$returnValue['name']} - Leads - Sales", $crawler->html());
     }
 
     /**
-     * @param $name
+     * @param $returnValue
      * @depends testUpdate
      *
      * @return string
      */
-    public function testInfo($name)
+    public function testInfo($returnValue)
     {
-        $this->markTestSkipped("BAP-1820");
-
-        $this->client->request(
-            'GET',
-            $this->client->generate('orocrm_sales_lead_index', array('_format' =>'json')),
-            array(
-                'leads[_filter][name][type]=3' => '3',
-                'leads[_filter][name][value]' => $name,
-                'leads[_pager][_page]' => '1',
-                'leads[_pager][_per_page]' => '10',
-                'leads[_sort_by][first_name]' => 'ASC',
-                'leads[_sort_by][last_name]' => 'ASC',
-            )
-        );
-
-        $result = $this->client->getResponse();
-        ToolsAPI::assertJsonResponse($result, 200);
-
-        $result = ToolsAPI::jsonToArray($result->getContent());
-        $expectedResult = reset($result['data']);
-
         $crawler = $this->client->request(
             'GET',
             $this->client->generate(
                 'orocrm_sales_lead_info',
-                array('id' => $expectedResult['id'], '_widgetContainer' => 'block')
+                array('id' => $returnValue['id'], '_widgetContainer' => 'block')
             )
         );
 
         $result = $this->client->getResponse();
         ToolsAPI::assertJsonResponse($result, 200, 'text/html; charset=UTF-8');
-        $this->assertContains($expectedResult['first_name'], $crawler->html());
-        $this->assertContains($expectedResult['last_name'], $crawler->html());
+        $this->assertContains($returnValue['firstName'], $crawler->html());
+        $this->assertContains($returnValue['lastName'], $crawler->html());
     }
 
     /**
-     * @param $name
+     * @param $returnValue
      * @depends testUpdate
      */
-    public function testDelete($name)
+    public function testDelete($returnValue)
     {
-        $this->markTestSkipped("BAP-1820");
-
-        $this->client->request(
-            'GET',
-            $this->client->generate('orocrm_sales_lead_index', array('_format' =>'json')),
-            array(
-                'leads[_filter][name][type]=3' => '3',
-                'leads[_filter][name][value]' => $name,
-                'leads[_pager][_page]' => '1',
-                'leads[_pager][_per_page]' => '10',
-                'leads[_sort_by][first_name]' => 'ASC',
-                'leads[_sort_by][last_name]' => 'ASC',
-            )
-        );
-
-        $result = $this->client->getResponse();
-        ToolsAPI::assertJsonResponse($result, 200);
-
-        $result = ToolsAPI::jsonToArray($result->getContent());
-        $result = reset($result['data']);
-
         $this->client->request(
             'DELETE',
-            $this->client->generate('oro_api_delete_lead', array('id' => $result['id']))
+            $this->client->generate('oro_api_delete_lead', array('id' => $returnValue['id']))
         );
 
         $result = $this->client->getResponse();
         ToolsAPI::assertJsonResponse($result, 204);
+
+        $this->client->request(
+            'GET',
+            $this->client->generate('orocrm_sales_lead_view', array('id' => $returnValue['id']))
+        );
+
+        $result = $this->client->getResponse();
+        ToolsAPI::assertJsonResponse($result, 404, 'text/html; charset=UTF-8');
     }
 }

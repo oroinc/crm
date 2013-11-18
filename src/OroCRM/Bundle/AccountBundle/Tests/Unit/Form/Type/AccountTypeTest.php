@@ -28,9 +28,6 @@ class AccountTypeTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $flexibleManager = $this->getMockBuilder('Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleManager')
-            ->disableOriginalConstructor()
-            ->getMock();
         $this->router = $this->getMockBuilder('Symfony\Component\Routing\Router')
             ->disableOriginalConstructor()
             ->getMock();
@@ -38,7 +35,7 @@ class AccountTypeTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->type = new AccountType($flexibleManager, 'orocrm_account', $this->router, $this->nameFormatter);
+        $this->type = new AccountType($this->router, $this->nameFormatter);
     }
 
     public function testAddEntityFields()
@@ -46,49 +43,33 @@ class AccountTypeTest extends \PHPUnit_Framework_TestCase
         $builder = $this->getMockBuilder('Symfony\Component\Form\FormBuilder')
             ->disableOriginalConstructor()
             ->getMock();
-        $builder->expects($this->any(3))
-            ->method('add')
-            ->will($this->returnSelf());
 
-        $builder->expects($this->at(1))
+        $builder->expects($this->at(0))
             ->method('add')
             ->with('name', 'text')
             ->will($this->returnSelf());
-        $builder->expects($this->at(2))
+        $builder->expects($this->at(1))
             ->method('add')
             ->with('tags', 'oro_tag_select')
             ->will($this->returnSelf());
-        $builder->expects($this->at(3))
+        $builder->expects($this->at(2))
             ->method('add')
             ->with('default_contact', 'oro_entity_identifier')
             ->will($this->returnSelf());
-        $builder->expects($this->at(4))
+        $builder->expects($this->at(3))
             ->method('add')
             ->with('contacts', 'oro_multiple_entity')
             ->will($this->returnSelf());
-        $builder->expects($this->at(5))
+        $builder->expects($this->at(4))
             ->method('add')
             ->with('shippingAddress', 'oro_address')
             ->will($this->returnSelf());
-        $builder->expects($this->at(6))
+        $builder->expects($this->at(5))
             ->method('add')
             ->with('billingAddress', 'oro_address')
             ->will($this->returnSelf());
 
-        $this->type->addEntityFields($builder);
-    }
-
-    public function testAddDynamicAttributesFields()
-    {
-        /** @var FormBuilderInterface $builder */
-        $builder = $this->getMockBuilder('Symfony\Component\Form\FormBuilder')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $builder->expects($this->once())
-            ->method('add')
-            ->with('values', 'collection');
-        $this->type->addDynamicAttributesFields($builder, array());
+        $this->type->buildForm($builder, []);
     }
 
     public function testSetDefaultOptions()

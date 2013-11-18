@@ -1,27 +1,31 @@
 <?php
 namespace OroCRM\Bundle\DemoDataBundle\DataFixtures\Demo;
 
-use Oro\Bundle\TagBundle\Entity\Tag;
-use Oro\Bundle\TagBundle\Entity\TagManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityRepository;
+
+use Doctrine\Common\DataFixtures\AbstractFixture;
+
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
-use Doctrine\ORM\EntityRepository;
 use Doctrine\Common\Collections\Collection;
 
-use Oro\Bundle\FlexibleEntityBundle\Entity\Repository\FlexibleEntityRepository;
-
-use OroCRM\Bundle\AccountBundle\Entity\Account;
-use Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleManager;
-use Oro\Bundle\UserBundle\Entity\UserManager;
 use Oro\Bundle\AddressBundle\Entity\Address;
 use Oro\Bundle\AddressBundle\Entity\Country;
 use Oro\Bundle\AddressBundle\Entity\Region;
+
+use Oro\Bundle\UserBundle\Entity\UserManager;
 use Oro\Bundle\UserBundle\Entity\User;
 
-class LoadAccountData extends AbstractFlexibleFixture implements ContainerAwareInterface, OrderedFixtureInterface
+use Oro\Bundle\TagBundle\Entity\Tag;
+use Oro\Bundle\TagBundle\Entity\TagManager;
+
+use OroCRM\Bundle\AccountBundle\Entity\Account;
+
+class LoadAccountData extends AbstractFixture implements ContainerAwareInterface, OrderedFixtureInterface
 {
 
     /**
@@ -30,12 +34,12 @@ class LoadAccountData extends AbstractFlexibleFixture implements ContainerAwareI
     protected $container;
 
     /**
-     * @var FlexibleManager
+     * @var EntityManager
      */
     protected $accountManager;
 
     /**
-     * @var FlexibleEntityRepository
+     * @var EntityRepository
      */
     protected $accountRepository;
 
@@ -77,7 +81,7 @@ class LoadAccountData extends AbstractFlexibleFixture implements ContainerAwareI
     {
         $this->container = $container;
 
-        $this->accountManager = $container->get('orocrm_account.account.manager.flexible');
+        $this->accountManager = $container->get('doctrine.orm.entity_manager');
         $this->userManager = $container->get('oro_user.manager');
         $this->tagManager = $container->get('oro_tag.tag.manager');
     }
@@ -143,13 +147,9 @@ class LoadAccountData extends AbstractFlexibleFixture implements ContainerAwareI
     private function createAccount(array $data)
     {
         /** @var $account Account */
-        $account = $this->accountManager->createFlexible();
+        $account = new Account();
 
         $account->setName($data['Company']);
-
-        $this->setFlexibleAttributeValue($this->accountManager, $account, 'phone', $data['TelephoneNumber']);
-        $this->setFlexibleAttributeValue($this->accountManager, $account, 'email', $data['EmailAddress']);
-        $this->setFlexibleAttributeValue($this->accountManager, $account, 'website', $data['Domain']);
 
         $isoCode = $data['Country'];
         $country = array_filter(
@@ -199,7 +199,7 @@ class LoadAccountData extends AbstractFlexibleFixture implements ContainerAwareI
      */
     private function persist($manager, $object)
     {
-        $manager->getStorageManager()->persist($object);
+        $manager->persist($object);
     }
 
     /**
@@ -209,7 +209,7 @@ class LoadAccountData extends AbstractFlexibleFixture implements ContainerAwareI
      */
     private function flush($manager)
     {
-        $manager->getStorageManager()->flush();
+        $manager->flush();
     }
 
     public function getOrder()
