@@ -21,8 +21,10 @@ class SyncCommand extends ContainerAwareCommand
      */
     public function configure()
     {
-        $this->setName('orocrm:magento:sync');
-        $this->setDescription('Sync magento entities (currently only import customers)');
+        $this
+            ->setName('orocrm:magento:sync')
+            ->setDescription('Sync magento entities (currently only import customers)')
+            ->addArgument('channelId', null, 'Channel identification name', false);
     }
 
     /**
@@ -36,9 +38,11 @@ class SyncCommand extends ContainerAwareCommand
     {
         $output->writeln($this->getDescription());
 
+        $channelId = '';
+
         $this->getContainer()
             ->get(self::CUSTOMER_SYNC_PROCESSOR)
-            ->process();
+            ->process($channelId);
 
         $output->writeln('Completed');
     }

@@ -7,13 +7,14 @@ use Doctrine\ORM\EntityManager;
 use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
 use Oro\Bundle\ImportExportBundle\Job\JobExecutor;
 use Oro\Bundle\ImportExportBundle\Processor\ProcessorRegistry;
-use Oro\Bundle\IntegrationBundle\Entity\Channel;
+use Oro\Bundle\IntegrationBundle\Entity\Connector;
 use Oro\Bundle\IntegrationBundle\Provider\ChannelTypeInterface;
+use Oro\Bundle\IntegrationBundle\Provider\ConnectorInterface;
 use Oro\Bundle\IntegrationBundle\Provider\SyncProcessorInterface;
 
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 
-class CustomerSyncProcessor implements SyncProcessorInterface
+class SyncProcessor implements SyncProcessorInterface
 {
     const JOB_VALIDATE_IMPORT = 'mage_customer_import_validation';
     const JOB_IMPORT  = 'mage_customer_import';
@@ -28,59 +29,60 @@ class CustomerSyncProcessor implements SyncProcessorInterface
     /** @var JobExecutor */
     protected $jobExecutor;
 
-    /** @var CustomerConnector */
-    protected $customerConnector;
+    /** @var ConnectorInterface */
+    protected $connector;
 
     /**
      * @param EntityManager $em
      * @param ProcessorRegistry $processorRegistry
      * @param JobExecutor $jobExecutor
-     * @param CustomerConnector $connector
      */
     public function __construct(
         EntityManager $em,
         ProcessorRegistry $processorRegistry,
-        JobExecutor $jobExecutor,
-        CustomerConnector $connector
+        JobExecutor $jobExecutor
     ) {
         $this->em = $em;
         $this->processorRegistry = $processorRegistry;
         $this->jobExecutor = $jobExecutor;
-        $this->customerConnector = $connector;
     }
 
-    protected function init()
+    /**
+     * @param string $channelName
+     */
+    protected function init($channelName)
     {
-        // TODO: change this hardcoded value
         /** @var $item ChannelTypeInterface */
-        /*
-        $name = 'magento';
         $channel = $this->em
-            ->getRepository('OroIntegrationBundle:ChannelType')
-            ->findOneBy(['name' => $name]);
-        */
-        $now = new \DateTime('now', new \DateTimeZone('UTC'));
-        $channel = new Channel();
-        $channel->setSettings(
-            [
-                'last_sync_date' => $now->sub(\DateInterval::createFromDateString('1 month')),
-                'sync_range'     => '1 week',
-                'api_user'       => 'api_user',
-                'api_key'        => 'api_user',
-                'wsdl_url'       => 'http://mage.dev.lxc/index.php/api/v2_soap/?wsdl=1',
-            ]
-        );
+            ->getRepository('OroIntegrationBundle:Channel')
+            ->findOneBy(['name' => $channelName]);
 
-        // initialized connector used by CustomerApiReader
-        $this->customerConnector->setChannel($channel);
+        /** @var Connector $connector */
+        $connectors = $channel->getConnectors();
+
+        // TODO: some logic to select connector from container and configure it
+        /** @var ConnectorInterface $connector */
+        $this->connector = $connectors->get(0);
+
+        /*
+        $now = new \DateTime('now', new \DateTimeZone('UTC'));
+        $settings = [
+            'last_sync_date' => $now->sub(\DateInterval::createFromDateString('1 month')),
+            'sync_range'     => '1 week',
+            'api_user'       => 'api_user',
+            'api_key'        => 'api_user',
+            'wsdl_url'       => 'http://mage.dev.lxc/index.php/api/v2_soap/?wsdl=1',
+        ];
+        */
     }
 
     /**
      * {@inheritdoc}
      */
-    public function process()
+    public function process($channelName)
     {
-        $this->init();
+        // TODO: do we need this here at all? NO!!
+        $this->init($channelName);
 
         // get processor
         // TODO: refactor this logic

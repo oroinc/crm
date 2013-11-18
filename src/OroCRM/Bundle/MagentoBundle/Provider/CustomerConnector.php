@@ -22,8 +22,6 @@ class CustomerConnector extends AbstractConnector implements CustomerConnectorIn
      */
     public function read()
     {
-        $channelSettings = $this->channel->getSettings();
-
         $startDate = $this->lastSyncDate;
         $endDate = $this->lastSyncDate->add($this->syncRange);
 
@@ -157,10 +155,5 @@ class CustomerConnector extends AbstractConnector implements CustomerConnectorIn
         }
 
         return parent::setChannel($channel);
-    }
-
-    protected function calculateBatchBoundaries()
-    {
-
     }
 }

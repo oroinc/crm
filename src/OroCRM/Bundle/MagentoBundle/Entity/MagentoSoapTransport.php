@@ -4,6 +4,8 @@ namespace OroCRM\Bundle\MagentoBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
+
 use Oro\Bundle\IntegrationBundle\Entity\Transport;
 
 /**
@@ -120,5 +122,19 @@ class MagentoSoapTransport extends Transport
     public function getSyncStartDate()
     {
         return $this->syncStartDate;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSettingsBag()
+    {
+        return new ParameterBag(
+            [
+                'api_user' => $this->getApiUser(),
+                'api_key'  => $this->getApiKey(),
+                'wsdl_url' => $this->getWsdlUrl(),
+            ]
+        );
     }
 }
