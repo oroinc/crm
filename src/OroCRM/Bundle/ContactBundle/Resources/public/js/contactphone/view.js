@@ -26,12 +26,13 @@ function(_, Backbone) {
             this.$simpleEl = $(options.simpleEl);
 
             this.target.closest('.controls').append(this.$simpleEl);
-            this.uniform = $('#uniform-' + this.target[0].id);
-            this.$simpleEl.attr('type', 'text');
-
+            
             this.showSelect = options.showSelect;
-
             this.template = $('#contactphone-chooser-template').html();
+
+            if (!this.showSelect) {
+                this.$simpleEl.attr('type', 'text');
+            }
 
             this.displaySelect2(this.showSelect);
             this.target.on('select2-init', _.bind(function() {
@@ -79,12 +80,12 @@ function(_, Backbone) {
         },
 
         render: function() {
+            this.uniform = $('#uniform-' + this.target[0].id);
+
             if (this.collection.models.length > 0) {
                 this.target.show();
                 this.displaySelect2(true);
-
                 this.uniform.show();
-                $('#uniform-' + this.target[0].id).show();
 
                 this.target.val('').trigger('change');
                 this.target.find('option[value!=""]').remove();
@@ -98,7 +99,6 @@ function(_, Backbone) {
                 this.target.val('');
                 this.displaySelect2(false);
                 this.uniform.hide();
-                $('#uniform-' + this.target[0].id).hide();
                 this.$simpleEl.show();
             }
         }

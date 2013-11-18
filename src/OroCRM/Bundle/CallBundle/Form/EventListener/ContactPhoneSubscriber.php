@@ -46,26 +46,26 @@ class ContactPhoneSubscriber implements EventSubscriberInterface
         $form = $event->getForm();
         $data = $event->getData();
 
+        $formOptions = array(
+            'class' => 'OroCRMContactBundle:ContactPhone',
+            'property_path' => 'contactPhoneNumber',
+            'property' => 'phone',
+            'label' => 'Phone Number',
+            'required' => false);
+
         if (null !== $data) {
             $contact = $data->getRelatedContact();
             if (null !== $contact) {
-                $formOptions = array(
-                    'class' => 'OroCRMContactBundle:ContactPhone',
-                    'property_path' => 'contactPhoneNumber',
-                    'property' => 'phone',
-                    'required' => false,
-                    'query_builder' => function (ContactPhoneRepository $er) use ($contact) {
+                $formOptions['query_builder'] = function (ContactPhoneRepository $er) use ($contact) {
                             return $er->getContactPhoneQueryBuilder($contact);
-                    },
-                    );
-                $form->add('contactPhoneNumber', 'entity', $formOptions);
-                $form->add('phoneNumber', 'text', array('required' => false));
+                    };
             }
 
         } else {
-                $form->add('contactPhoneNumber', 'hidden', array('required' => false));
-                $form->add('phoneNumber', 'text', array('required' => false));
+            $formOptions['attr'] = array('class' => 'hide');
+
         }
+        $form->add('contactPhoneNumber', 'entity', $formOptions);        
     }
 
     /**

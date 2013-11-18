@@ -38,7 +38,7 @@ class CallType extends AbstractType
             ->add('owner', null, array('required' => true))
             ->add('relatedAccount', 'orocrm_account_select', array('required' => false))
             ->add('subject', 'text', array('required' => true))
-            ->add('relatedContact', 'orocrm_contact_select', array('required' => false))
+            ->add('relatedContact', null, array('required' => false))
             ->add('contactPhoneNumber', null, array('required' => false))
             ->add('phoneNumber', 'hidden', array('required' => false))
             ->add('notes', 'textarea', array('required' => false))

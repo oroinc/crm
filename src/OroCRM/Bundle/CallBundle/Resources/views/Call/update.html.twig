@@ -35,6 +35,8 @@
         }
     %}
 
+    {% set showSelect = (form.vars.value.relatedContact is null) ? 0 : 1 %}
+
     <script type="text/template" id="contactphone-chooser-template">
         <% _.each(contactphones, function(p, i) { %>
             <option value="<%= p.get('id') %>"><%= p.get('phone') %></option>
@@ -51,7 +53,7 @@
                     target: $('#orocrm_call_call_form_contactPhoneNumber'),
                     simpleEl: $('#orocrm_call_call_form_phoneNumber'),
                     collection: new ContactPhoneCollection(),
-                    showSelect: false
+                    showSelect: {{ showSelect }}
                 });
             });
         });            
