@@ -3,5 +3,6 @@
         <% _.each(contactphones, function(p, i) { %>
             <option value="<%= p.get('id') %>"><%= p.get('phone') %></option>
         <% }); %>
+            <option value="-1">{% trans %}Other{% endtrans %}...</option>
     </script>
 {% endblock orocrm_contactphone_updater_js %}

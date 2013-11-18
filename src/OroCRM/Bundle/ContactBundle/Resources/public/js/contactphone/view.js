@@ -29,9 +29,12 @@ function(_, Backbone) {
             
             this.showSelect = options.showSelect;
             this.template = $('#contactphone-chooser-template').html();
+            this.$simpleEl.attr('type', 'text');
 
             if (!this.showSelect) {
-                this.$simpleEl.attr('type', 'text');
+                this.$simpleEl.show();
+            } else {
+                this.$simpleEl.hide();
             }
 
             this.displaySelect2(this.showSelect);
@@ -94,7 +97,7 @@ function(_, Backbone) {
                 this.$simpleEl.hide();
                 this.$simpleEl.val('');
 
-            } else {
+            } else {                
                 this.target.hide();
                 this.target.val('');
                 this.displaySelect2(false);

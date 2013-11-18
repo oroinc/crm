@@ -52,5 +52,27 @@
                 </fieldset>
             </form>
         </div>
+
+        {% set _block = block('orocrm_contactphone_updater_js') %}
+        {% if (_block is empty) %}
+            {% include 'OroCRMContactBundle:Include:javascript.html.twig' %}
+            {{ block('orocrm_contactphone_updater_js')|raw }}
+        {% endif %}
+
+        {% set showSelect = (form.vars.value.relatedContact is null) ? 0 : 1 %}
+        <script type="text/javascript">
+            require(['jquery', 'orocrm/contactphone/view', 'orocrm/contactphone/collection'],
+            function($, ContactPhoneView, ContactPhoneCollection){
+                $(function() {
+                    new ContactPhoneView({
+                        el: $('#orocrm_call_call_form_relatedContact'),
+                        target: $('#orocrm_call_call_form_contactPhoneNumber'),
+                        simpleEl: $('#orocrm_call_call_form_phoneNumber'),
+                        collection: new ContactPhoneCollection(),
+                        showSelect: {{ showSelect }}
+                    });
+                });
+            });            
+        </script>        
     {% endif %}
 </div>
