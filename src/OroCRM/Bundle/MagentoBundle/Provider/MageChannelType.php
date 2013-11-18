@@ -8,6 +8,6 @@ class MageChannelType implements ChannelTypeInterface
 {
     public function getLabel()
     {
-        return 'orocrm_magento.channel_type.label';
+        return 'orocrm.magento.channel_type.label';
     }
 }
