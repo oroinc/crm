@@ -23,11 +23,6 @@ use OroCRM\Bundle\ContactBundle\Entity\Contact;
  *  routeView="orocrm_magento_customer_view",
  *  defaultValues={
  *      "entity"={"label"="Magento Customer", "plural_label"="Magento Customers"},
- *      "ownership"={
- *          "owner_type"="USER",
- *          "owner_field_name"="owner",
- *          "owner_column_name"="user_owner_id"
- *      },
  *      "security"={
  *          "type"="ACL",
  *          "group_name"=""

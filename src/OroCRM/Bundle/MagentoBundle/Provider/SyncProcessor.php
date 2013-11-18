@@ -65,8 +65,8 @@ class CustomerSyncProcessor implements SyncProcessorInterface
             [
                 'last_sync_date' => $now->sub(\DateInterval::createFromDateString('1 month')),
                 'sync_range'     => '1 week',
-                'api_user'       => 'admin',
-                'api_key'        => '123admin',
+                'api_user'       => 'api_user',
+                'api_key'        => 'api_user',
                 'wsdl_url'       => 'http://mage.dev.lxc/index.php/api/v2_soap/?wsdl=1',
             ]
         );
