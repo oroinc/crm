@@ -17,7 +17,6 @@ class SoapAccountApiTest extends WebTestCase
 
     public function setUp()
     {
-        $this->markTestSkipped('BAP-717');
         $this->client = static::createClient(array(), ToolsAPI::generateWsseHeader());
         $this->client->soap(
             "http://localhost/api/soap",
@@ -29,22 +28,25 @@ class SoapAccountApiTest extends WebTestCase
     }
 
     /**
-     * @param $request
-     * @param $response
-     * @dataProvider requestsApi
      * @return array
      */
-    public function testCreateAccount($request, $response)
+    public function testCreateAccount()
     {
-        $result = $this->client->getSoap()->createAccount($request);
-        ToolsAPI::assertEqualsResponse($response, $result, $this->client->getSoap()->__getLastResponse());
+        $request = array (
+            "name" => 'Account_name_' . mt_rand(),
+            //'group' => null,
+            "owner" => '1',
+        );
 
+        $result = $this->client->getSoap()->createAccount($request);
+        $this->assertTrue((bool) $result, $this->client->getSoap()->__getLastResponse());
+
+        $request['id'] = $result;
         return $request;
     }
 
     /**
      * @param $request
-     * @dataProvider requestsApi
      * @depends testCreateAccount
      * @return array
      */
@@ -52,72 +54,47 @@ class SoapAccountApiTest extends WebTestCase
     {
         $accounts = $this->client->getSoap()->getAccounts(1, 1000);
         $accounts = ToolsAPI::classToArray($accounts);
-        $result = false;
-        foreach ($accounts as $account) {
-            $result = $account['name'] == $request['name'];
-            if ($result) {
-                break;
-            }
+        $accountName = $request['name'];
+        $account = $accounts['item'];
+        if (isset($account[0])) {
+            $account = array_filter($account, function($a) use ($accountName) { return $a['name'] == $accountName; });
+            $account = reset($account);
         }
-        $this->assertTrue($result);
+
+        $this->assertEquals($request['name'], $account['name']);
+        $this->assertEquals($request['id'], $account['id']);
     }
 
     /**
      * @param $request
-     * @param $response
-     * @dataProvider requestsApi
      * @depends testCreateAccount
-     * @return $accountId
      */
-    public function testUpdateAccount($request, $response)
+    public function testUpdateAccount($request)
     {
-        $accounts = $this->client->getSoap()->getAccounts(1, 1000);
-        $accounts = ToolsAPI::classToArray($accounts);
-        $result = false;
-        foreach ($accounts as $account) {
-            $result = $account['name'] == $request['name'];
-            if ($result) {
-                $accountId = $account['id'];
-                break;
-            }
-        }
-        $request['name'] .= '_Updated';
-        $result = $this->client->getSoap()->updateAccount($accountId, $request);
+        $accountUpdate = $request;
+        unset($accountUpdate['id']);
+        $accountUpdate['name'] .= '_Updated';
+        $result = $this->client->getSoap()->updateAccount($request['id'], $accountUpdate);
         $this->assertTrue($result);
-        $account = $this->client->getSoap()->getAccount($accountId);
+        $account = $this->client->getSoap()->getAccount($request['id']);
         $account = ToolsAPI::classToArray($account);
-        $result = false;
-        if ($account['name'] == $request['name']) {
-            $result = true;
-        }
-        $this->assertTrue($result);
 
-        return $accountId;
+        $this->assertEquals($accountUpdate['name'], $account['name']);
+
+        return $request;
     }
 
     /**
      * @param $request
-     * @param $response
-     * @dataProvider requestsApi
      * @depends testUpdateAccount
      * @throws \Exception|\SoapFault
      */
-    public function testDeleteAccount($request, $response)
+    public function testDeleteAccount($request)
     {
-        $accounts = $this->client->getSoap()->getAccounts(1, 1000);
-        $accounts = ToolsAPI::classToArray($accounts);
-        $result = false;
-        foreach ($accounts as $account) {
-            $result = $account['name'] == $request['name']. '_Updated';
-            if ($result) {
-                $accountId = $account['id'];
-                break;
-            }
-        }
-        $result = $this->client->getSoap()->deleteAccount($accountId);
+        $result = $this->client->getSoap()->deleteAccount($request['id']);
         $this->assertTrue($result);
         try {
-            $this->client->getSoap()->getAccount($accountId);
+            $this->client->getSoap()->getAccount($request['id']);
         } catch (\SoapFault $e) {
             if ($e->faultcode != 'NOT_FOUND') {
                 throw $e;

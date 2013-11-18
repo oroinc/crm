@@ -56,24 +56,22 @@ class ContactAddressControllersTest extends WebTestCase
      */
     public function testCreateAddress()
     {
-        $this->markTestSkipped("BAP-1820");
-        $this->client->request(
-            'GET',
-            $this->client->generate('orocrm_contact_index', array('_format' => 'json')),
+        $result = ToolsAPI::getEntityGrid(
+            $this->client,
+            'contacts-grid',
             array(
-                'contacts[_filter][first_name][value]' => 'Contact_fname',
-                'contacts[_pager][_per_page]' => '10',
-                'contacts[_sort_by][first_name]' => 'ASC',
-                'contacts[_sort_by][last_name]' => 'ASC',
+                'contacts-grids[_filter][name][value]' => 'Contact_fname',
+                'contacts-grids[_pager][_page]' => '1',
+                'contacts-grids[_pager][_per_page]' => '10',
+                'contacts-grids[_sort_by][name]' => 'ASC',
             )
         );
 
-        $result = $this->client->getResponse();
         ToolsAPI::assertJsonResponse($result, 200);
 
         $result = ToolsAPI::jsonToArray($result->getContent());
         $result = reset($result['data']);
-
+        $id = $result['id'];
         $crawler = $this->client->request(
             'GET',
             $this->client->generate(
@@ -123,56 +121,24 @@ class ContactAddressControllersTest extends WebTestCase
 
         $this->client->request(
             'GET',
-            $this->client->generate('orocrm_contact_index', array('_format' => 'json')),
-            array(
-                'contacts[_filter][first_name][value]' => 'Contact_fname',
-                'contacts[_pager][_per_page]' => '10',
-                'contacts[_sort_by][first_name]' => 'ASC',
-                'contacts[_sort_by][last_name]' => 'ASC',
-            )
-        );
-
-        $result = $this->client->getResponse();
-        ToolsAPI::assertJsonResponse($result, 200);
-
-        $result = ToolsAPI::jsonToArray($result->getContent());
-        $result = reset($result['data']);
-
-        $this->client->request(
-            'GET',
-            $this->client->generate('oro_api_get_contact_address_primary', array('contactId' => $result['id']))
+            $this->client->generate('oro_api_get_contact_address_primary', array('contactId' => $id))
         );
 
         $result = $this->client->getResponse();
         $result = ToolsAPI::jsonToArray($result->getContent());
         $this->assertEquals('Badakhshan', $result['state']);
+
+        return $id;
     }
 
     /**
      * @depends testCreateAddress
      */
-    public function testUpdateAddress()
+    public function testUpdateAddress($id)
     {
-        $this->markTestSkipped("BAP-1820");
         $this->client->request(
             'GET',
-            $this->client->generate('orocrm_contact_index', array('_format' => 'json')),
-            array(
-                'contacts[_filter][first_name][value]' => 'Contact_fname',
-                'contacts[_pager][_per_page]' => '10',
-                'contacts[_sort_by][first_name]' => 'ASC',
-                'contacts[_sort_by][last_name]' => 'ASC',
-            )
-        );
-
-        $contact = $this->client->getResponse();
-        ToolsAPI::assertJsonResponse($contact, 200);
-        $contact = ToolsAPI::jsonToArray($contact->getContent());
-        $contact = reset($contact['data']);
-
-        $this->client->request(
-            'GET',
-            $this->client->generate('oro_api_get_contact_address_primary', array('contactId' => $contact['id']))
+            $this->client->generate('oro_api_get_contact_address_primary', array('contactId' => $id))
         );
 
         $address = $this->client->getResponse();
@@ -182,7 +148,7 @@ class ContactAddressControllersTest extends WebTestCase
             'GET',
             $this->client->generate(
                 'orocrm_contact_address_update',
-                array('contactId' => $contact['id'], 'id' => $address['id'], '_widgetContainer' => 'dialog')
+                array('contactId' => $id, 'id' => $address['id'], '_widgetContainer' => 'dialog')
             )
         );
 
@@ -223,24 +189,7 @@ class ContactAddressControllersTest extends WebTestCase
 
         $this->client->request(
             'GET',
-            $this->client->generate('orocrm_contact_index', array('_format' => 'json')),
-            array(
-                'contacts[_filter][first_name][value]' => 'Contact_fname',
-                'contacts[_pager][_per_page]' => '10',
-                'contacts[_sort_by][first_name]' => 'ASC',
-                'contacts[_sort_by][last_name]' => 'ASC',
-            )
-        );
-
-        $result = $this->client->getResponse();
-        ToolsAPI::assertJsonResponse($result, 200);
-
-        $result = ToolsAPI::jsonToArray($result->getContent());
-        $result = reset($result['data']);
-
-        $this->client->request(
-            'GET',
-            $this->client->generate('oro_api_get_contact_address_primary', array('contactId' => $result['id']))
+            $this->client->generate('oro_api_get_contact_address_primary', array('contactId' => $id))
         );
 
         $result = $this->client->getResponse();

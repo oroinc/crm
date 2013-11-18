@@ -36,8 +36,6 @@ class ControllersTest extends WebTestCase
 
     public function testCreate()
     {
-        $this->markTestSkipped("BAP-1934");
-
         $crawler = $this->client->request('GET', $this->client->generate('orocrm_account_create'));
         /** @var Form $form */
         $form = $crawler->selectButton('Save and Close')->form();
@@ -52,34 +50,35 @@ class ControllersTest extends WebTestCase
         $this->assertContains("Account saved", $crawler->html());
     }
 
+    /**
+     * @depends testCreate
+     */
     public function testUpdate()
     {
-        $this->markTestSkipped("BAP-1820");
-        $this->client->request(
-            'GET',
-            $this->client->generate('orocrm_account_index', array('_format' =>'json')),
+        $result = ToolsAPI::getEntityGrid(
+            $this->client,
+            'accounts-grid',
             array(
-                'accounts[_filter][name][type]=1' => '1',
-                'accounts[_filter][name][value]' => 'Account_name',
-                'accounts[_pager][_page]' => '1',
-                'accounts[_pager][_per_page]' => '10',
-                'accounts[_sort_by][name]' => 'ASC',
+                'accounts-grids[_filter][name][type]=1' => '1',
+                'accounts-grids[_filter][name][value]' => 'Account_name',
+                'accounts-grids[_pager][_page]' => '1',
+                'accounts-grids[_pager][_per_page]' => '10',
+                'accounts-grids[_sort_by][name]' => 'ASC',
             )
         );
 
-        $result = $this->client->getResponse();
         ToolsAPI::assertJsonResponse($result, 200);
 
         $result = ToolsAPI::jsonToArray($result->getContent());
         $result = reset($result['data']);
-
+        $id = $result['id'];
         $crawler = $this->client->request(
             'GET',
             $this->client->generate('orocrm_account_update', array('id' => $result['id']))
         );
         /** @var Form $form */
         $form = $crawler->selectButton('Save and Close')->form();
-        $form['orocrm_account_form[name]'] = 'Account_name';
+        $form['orocrm_account_form[name]'] = 'Account_name_update';
 
         $this->client->followRedirects(true);
         $crawler = $this->client->submit($form);
@@ -87,66 +86,44 @@ class ControllersTest extends WebTestCase
         $result = $this->client->getResponse();
         ToolsAPI::assertJsonResponse($result, 200, 'text/html; charset=UTF-8');
         $this->assertContains("Account saved", $crawler->html());
+
+        return $id;
     }
 
-    public function testView()
+    /**
+     * @depends testUpdate
+     */
+    public function testView($id)
     {
-        $this->markTestSkipped("BAP-1820");
-        $this->client->request(
-            'GET',
-            $this->client->generate('orocrm_account_index', array('_format' =>'json')),
-            array(
-                'accounts[_filter][name][type]=1' => '1',
-                'accounts[_filter][name][value]' => 'Account_name',
-                'accounts[_pager][_page]' => '1',
-                'accounts[_pager][_per_page]' => '10',
-                'accounts[_sort_by][name]' => 'ASC',
-            )
-        );
-
-        $result = $this->client->getResponse();
-        ToolsAPI::assertJsonResponse($result, 200);
-
-        $result = ToolsAPI::jsonToArray($result->getContent());
-        $result = reset($result['data']);
-
         $crawler = $this->client->request(
             'GET',
-            $this->client->generate('orocrm_account_view', array('id' => $result['id']))
+            $this->client->generate('orocrm_account_view', array('id' => $id))
         );
 
         $result = $this->client->getResponse();
         ToolsAPI::assertJsonResponse($result, 200, 'text/html; charset=UTF-8');
-        $this->assertContains("Account_name - Accounts - Customers", $crawler->html());
+        $this->assertContains("Account_name_update - Accounts - Customers", $crawler->html());
     }
 
-    public function testDelete()
+    /**
+     * @depends testUpdate
+     */
+    public function testDelete($id)
     {
-        $this->markTestSkipped("BAP-1820");
-        $this->client->request(
-            'GET',
-            $this->client->generate('orocrm_account_index', array('_format' =>'json')),
-            array(
-                'accounts[_filter][name][type]=1' => '1',
-                'accounts[_filter][name][value]' => 'Account_name',
-                'accounts[_pager][_page]' => '1',
-                'accounts[_pager][_per_page]' => '10',
-                'accounts[_sort_by][name]' => 'ASC',
-            )
-        );
-
-        $result = $this->client->getResponse();
-        ToolsAPI::assertJsonResponse($result, 200);
-
-        $result = ToolsAPI::jsonToArray($result->getContent());
-        $result = reset($result['data']);
-
         $this->client->request(
             'DELETE',
-            $this->client->generate('oro_api_delete_account', array('id' => $result['id']))
+            $this->client->generate('oro_api_delete_account', array('id' => $id))
         );
 
         $result = $this->client->getResponse();
         ToolsAPI::assertJsonResponse($result, 204);
+
+        $this->client->request(
+            'GET',
+            $this->client->generate('orocrm_account_view', array('id' => $id))
+        );
+
+        $result = $this->client->getResponse();
+        ToolsAPI::assertJsonResponse($result, 404, 'text/html; charset=UTF-8');
     }
 }

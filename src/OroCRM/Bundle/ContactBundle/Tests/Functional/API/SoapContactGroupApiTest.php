@@ -32,7 +32,7 @@ class SoapContactGroupApiTest extends WebTestCase
      */
     public function testCreateContactGroup()
     {
-        $this->markTestIncomplete('Verify WSDL scheme');
+        //$this->markTestIncomplete('Verify WSDL scheme');
 
         $request = array(
             "label" => 'Group name_' . mt_rand(),
@@ -53,18 +53,11 @@ class SoapContactGroupApiTest extends WebTestCase
     {
         $groups = $this->client->getSoap()->getContactGroups(1, 1000);
         $groups = ToolsAPI::classToArray($groups);
-        $result = false;
-        foreach ($groups as $group) {
-            foreach ($group as $groupDetails) {
-                $result = $groupDetails['label'] == $request['label'];
-                if ($result) {
-                    break;
-                }
-            }
-        }
-        $this->assertTrue($result);
+        $groupLabel = $request['label'];
+        $group = array_filter($groups['item'], function($a) use($groupLabel) { return $a['label'] == $groupLabel; });
+        $this->assertNotEmpty($group);
 
-        return $groupDetails;
+        return reset($group);
     }
 
     /**
@@ -80,11 +73,7 @@ class SoapContactGroupApiTest extends WebTestCase
         $this->assertTrue($result);
         $group = $this->client->getSoap()->getContactGroup($group['id']);
         $group = ToolsAPI::classToArray($group);
-        $result = false;
-        if ($group['label'] == $request['label']) {
-            $result = true;
-        }
-        $this->assertTrue($result);
+        $this->assertEquals($request['label'], $group['label']);
     }
 
     /**

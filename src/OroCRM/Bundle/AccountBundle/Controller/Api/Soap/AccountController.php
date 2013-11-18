@@ -34,7 +34,7 @@ class AccountController extends SoapController
 
     /**
      * @Soap\Method("createAccount")
-     * @Soap\Param("account", phpType = "OroCRM\Bundle\AccountBundle\Entity\AccountSoap")
+     * @Soap\Param("account", phpType = "OroCRM\Bundle\AccountBundle\Entity\Account")
      * @Soap\Result(phpType = "int")
      */
     public function createAction($account)
@@ -45,7 +45,7 @@ class AccountController extends SoapController
     /**
      * @Soap\Method("updateAccount")
      * @Soap\Param("id", phpType = "int")
-     * @Soap\Param("account", phpType = "OroCRM\Bundle\AccountBundle\Entity\AccountSoap")
+     * @Soap\Param("account", phpType = "OroCRM\Bundle\AccountBundle\Entity\Account")
      * @Soap\Result(phpType = "boolean")
      */
     public function updateAction($id, $account)
