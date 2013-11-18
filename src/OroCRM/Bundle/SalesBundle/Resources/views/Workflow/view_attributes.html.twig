@@ -1,0 +1,18 @@
+{% extends "OroWorkflowBundle:WorkflowStep:view_attributes.html.twig" %}
+
+{% block orocrm_contact_workflow_view_attribute_value %}
+    {% set parentOutput = block('name_workflow_view_attribute_value') %}
+    {% if value is not empty %}
+        <a href="{{ path('orocrm_contact_view', {'id': value.id})  }}">{{ parentOutput }}</a>
+    {% else %}
+        {{ parentOutput }}
+    {% endif %}
+{% endblock %}
+
+{% block orocrm_account_workflow_view_attribute_value %}
+    {% if value is not empty %}
+        <a href="{{ path('orocrm_account_view', {'id': value.id})  }}">{{ value.name }}</a>
+    {% else %}
+        N/A
+    {% endif %}
+{% endblock %}
