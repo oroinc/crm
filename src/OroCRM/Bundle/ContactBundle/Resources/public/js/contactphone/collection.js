@@ -10,14 +10,13 @@ function(Backbone, routing, ContactPhoneModel) {
      */
     return Backbone.Collection.extend({
         route: 'oro_api_get_contact_phones',
-        url: routing.generate('oro_api_get_contact_phones', {contact: 1}),
+        url: null,
         model: ContactPhoneModel,
 
         /**
          * Constructor
          */
         initialize: function () {
-            this.url = routing.generate(this.route);
         },
 
         /**
@@ -25,8 +24,8 @@ function(Backbone, routing, ContactPhoneModel) {
          *
          * @param id {string}
          */
-        setContactId: function (id) {
-            this.url = routing.generate(this.route, {contact: contactId});
+        setContactId: function (contactId) {
+            this.url = routing.generate(this.route, {contactId: contactId});
         }
     });
 });

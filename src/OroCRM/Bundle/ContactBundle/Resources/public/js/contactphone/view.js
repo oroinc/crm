@@ -22,8 +22,6 @@ function(_, Backbone) {
          */
         initialize: function(options) {
             
-            console.log(options);
-
             this.target = $(options.target);
             this.$simpleEl = $(options.simpleEl);
 
@@ -75,7 +73,6 @@ function(_, Backbone) {
          * @param e {Object}
          */
         selectionChanged: function(e) {
-            console.log(e);
             var contactId = $(e.currentTarget).val();
             this.collection.setContactId(contactId);
             this.collection.fetch();
@@ -85,7 +82,9 @@ function(_, Backbone) {
             if (this.collection.models.length > 0) {
                 this.target.show();
                 this.displaySelect2(true);
+
                 this.uniform.show();
+                $('#uniform-' + this.target[0].id).show();
 
                 this.target.val('').trigger('change');
                 this.target.find('option[value!=""]').remove();
@@ -93,11 +92,13 @@ function(_, Backbone) {
 
                 this.$simpleEl.hide();
                 this.$simpleEl.val('');
+
             } else {
                 this.target.hide();
                 this.target.val('');
                 this.displaySelect2(false);
                 this.uniform.hide();
+                $('#uniform-' + this.target[0].id).hide();
                 this.$simpleEl.show();
             }
         }
