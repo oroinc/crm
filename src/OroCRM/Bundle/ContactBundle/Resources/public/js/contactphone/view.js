@@ -26,6 +26,12 @@ function(_, Backbone) {
             this.$simpleEl = $(options.simpleEl);
 
             this.target.closest('.controls').append(this.$simpleEl);
+
+            this.target.on('change', _.bind(function(e) {
+                if ($(e.target.selectedOptions).val() == -1) {
+                    this.showPlain();    
+                }
+            }, this));
             
             this.showSelect = options.showSelect;
             this.template = $('#contactphone-chooser-template').html();

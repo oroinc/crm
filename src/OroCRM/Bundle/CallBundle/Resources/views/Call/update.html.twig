@@ -60,10 +60,9 @@
     {{ parent() }}
 {% endblock content_data %}
 
-
-{% block navButtons %}
+{% block navButtons %}    
     {{ UI.button({'path' : path('orocrm_contact_index'), 'title' : 'Cancel'|trans, 'label' : 'Cancel'|trans}) }}
-    {{ UI.saveAndStayButton('orocrm_call_update') }}
+    {{ UI.saveAndStayButton('orocrm_call_create') }}
     {{ UI.saveAndCloseButton() }}
 {% endblock %}
 

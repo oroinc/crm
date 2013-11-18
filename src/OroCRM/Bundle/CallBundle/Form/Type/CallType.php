@@ -35,17 +35,17 @@ class CallType extends AbstractType
         $builder->addEventSubscriber($this->contactPhoneSubscriber);
 
         $builder
-            ->add('owner', null, array('required' => true))
+            ->add('owner', 'entity', array('class' => 'Oro\Bundle\UserBundle\Entity\User', 'required' => true))
             ->add('relatedAccount', 'orocrm_account_select', array('required' => false))
             ->add('subject', 'text', array('required' => true))
-            ->add('relatedContact', null, array('required' => false))
-            ->add('contactPhoneNumber', null, array('required' => false))
+            ->add('relatedContact', 'orocrm_contact_select', array('required' => false))
+            ->add('contactPhoneNumber', 'entity', array('class' => 'OroCRM\Bundle\ContactBundle\Entity\ContactPhone', 'required' => false))
             ->add('phoneNumber', 'hidden', array('required' => false))
             ->add('notes', 'textarea', array('required' => false))
             ->add('callDateTime', 'oro_datetime', array('required' => true))
             ->add('callStatus', 'hidden', array('property_path' => 'callStatus.status'))
             ->add('duration', 'time', array('required' => false, 'widget' => 'single_text', 'with_seconds' => true))
-            ->add('direction', null, array('required'  => true));
+            ->add('direction', 'entity', array('class' => 'OroCRM\Bundle\CallBundle\Entity\CallDirection', 'required'  => true));
     }
 
     /**

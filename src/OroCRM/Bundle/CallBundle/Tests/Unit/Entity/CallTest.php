@@ -25,6 +25,7 @@ class CallTest extends \PHPUnit_Framework_TestCase
         $account = $this->getMock('OroCRM\Bundle\AccountBundle\Entity\Account');
         $contactPhoneNumber = $this->getMock('OroCRM\Bundle\ContactBundle\Entity\ContactPhone');
         $callStatus = $this->getMock('OroCRM\Bundle\CallBundle\Entity\CallStatus');
+        $callDirection = $this->getMock('OroCRM\Bundle\CallBundle\Entity\CallDirection');
 
         return array(
             'owner' => array('owner', $user, $user),
@@ -37,7 +38,7 @@ class CallTest extends \PHPUnit_Framework_TestCase
             'callDateTime' => array('callDateTime', $now, $now),
             'callStatus' => array('callStatus', $callStatus, $callStatus),
             'duration' => array('duration', 1, 1),
-            'isOutgoing' => array('isOutgoing', true, true),
+            'direction' => array('direction', $callDirection, $callDirection),
         );
     }
 }
