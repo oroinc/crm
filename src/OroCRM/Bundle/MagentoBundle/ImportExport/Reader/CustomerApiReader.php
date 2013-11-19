@@ -2,14 +2,17 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Reader;
 
+use Oro\Bundle\BatchBundle\Step\StepExecutionAwareInterface;
+use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
 use Oro\Bundle\ImportExportBundle\Context\ContextRegistry;
 use Oro\Bundle\ImportExportBundle\Reader\AbstractReader;
 use Oro\Bundle\ImportExportBundle\Reader\ReaderInterface;
+use Oro\Bundle\IntegrationBundle\Entity\Connector as ConnectorEntity;
 use Oro\Bundle\IntegrationBundle\Provider\ConnectorInterface;
 
 use OroCRM\Bundle\MagentoBundle\Provider\CustomerConnector;
 
-class CustomerApiReader extends AbstractReader implements ReaderInterface
+class CustomerApiReader extends AbstractReader implements ReaderInterface, StepExecutionAwareInterface
 {
     /** @var CustomerConnector */
     protected $customerConnector;
@@ -20,8 +23,33 @@ class CustomerApiReader extends AbstractReader implements ReaderInterface
      */
     public function __construct(ContextRegistry $contextRegistry, ConnectorInterface $customerConnector)
     {
-        $this->contextRegistry = $contextRegistry;
+        parent::__construct($contextRegistry);
+
         $this->customerConnector = $customerConnector;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function initializeFromContext(ContextInterface $context)
+    {
+        $channelName = $context->getOption('channelName');
+
+        /** @var ConnectorEntity $connector */
+        $connectorEntity = $context->getOption('connector');
+
+        $this->customerConnector->setConnectorEntity($connectorEntity);
+
+        /*
+        $now = new \DateTime('now', new \DateTimeZone('UTC'));
+        $settings = [
+            'last_sync_date' => $now->sub(\DateInterval::createFromDateString('1 month')),
+            'sync_range'     => '1 week',
+            'api_user'       => 'api_user',
+            'api_key'        => 'api_user',
+            'wsdl_url'       => 'http://mage.dev.lxc/index.php/api/v2_soap/?wsdl=1',
+        ];
+        */
     }
 
     /**

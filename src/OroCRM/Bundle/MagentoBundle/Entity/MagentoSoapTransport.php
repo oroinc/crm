@@ -45,6 +45,13 @@ class MagentoSoapTransport extends Transport
     protected $syncStartDate;
 
     /**
+     * @var \DateInterval
+     *
+     * @ORM\Column(type="string", length=50)
+     */
+    protected $syncRange;
+
+    /**
      * @param string $wsdlUrl
      *
      * @return $this
@@ -122,6 +129,25 @@ class MagentoSoapTransport extends Transport
     public function getSyncStartDate()
     {
         return $this->syncStartDate;
+    }
+
+    /**
+     * @param \DateInterval $syncRange
+     * @return $this
+     */
+    public function setSyncRange($syncRange)
+    {
+        $this->syncRange = $syncRange;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateInterval
+     */
+    public function getSyncRange()
+    {
+        return $this->syncRange;
     }
 
     /**
