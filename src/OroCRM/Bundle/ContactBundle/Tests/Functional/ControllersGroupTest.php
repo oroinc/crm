@@ -60,10 +60,6 @@ class ControllersGroupTest extends WebTestCase
             'contact-groups-grid',
             array(
                 'contact-groups-grid[_filter][label][value]' => 'Contact Group Label',
-                'contact-groups-grid[_filter][label][type]' => '1',
-                'contact-groups-grid[_pager][_per_page]' => '10',
-                'contact-groups-grid[_sort_by][first_name]' => 'ASC',
-                'contact-groups-grid[_sort_by][last_name]' => 'ASC',
             )
         );
 

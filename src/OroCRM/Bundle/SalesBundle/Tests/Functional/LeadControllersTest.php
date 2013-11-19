@@ -95,12 +95,7 @@ class LeadControllersTest extends WebTestCase
             $this->client,
             'sales-lead-grid',
             array(
-                'sales-lead-grid[_filter][name][type]=3' => '3',
-                'sales-lead-grid[_filter][name][value]' => $name,
-                'sales-lead-grid[_pager][_page]' => '1',
-                'sales-lead-grid[_pager][_per_page]' => '10',
-                'sales-lead-grid[_sort_by][first_name]' => 'ASC',
-                'sales-lead-grid[_sort_by][last_name]' => 'ASC',
+                'sales-lead-grid[_filter][firstName][value]' => $name,
             )
         );
 
