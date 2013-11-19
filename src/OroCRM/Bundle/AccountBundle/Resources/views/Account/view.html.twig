@@ -5,7 +5,6 @@
 {% import 'OroDataGridBundle::macros.html.twig' as dataGrid %}
 {% oro_title_set({params : {"%account.name%": entity.name|default('N/A')} }) %}
 {% set audit_entity_class = 'OroCRM_Bundle_AccountBundle_Entity_Account' %}
-{% set gridName = 'account-contacts-view-grid' %}
 
 {% block navButtons %}
     {% if resource_granted('orocrm_contact_create') %}
@@ -138,12 +137,29 @@
         EntityExtend fields END
     #}
 
-    {% set dataBlocks = dataBlocks|merge([{'title' : 'Contacts', 'subblocks': [{'title' : null, 'data' : [dataGrid.renderGrid(gridName, {account: entity.id}, { cssClass: 'inner-grid' })], 'useSpan': false}] }])%}
+    {% set dataBlocks = dataBlocks|merge([{
+        'title' : 'Contacts',
+        'subblocks': [
+            {
+                'title' : null,
+                'data' : [dataGrid.renderGrid('account-contacts-view-grid', {account: entity.id}, { cssClass: 'inner-grid' })],
+                'useSpan': false
+            }
+        ]
+    }]) %}
 
-    {% set data =
-        {
-            'dataBlocks': dataBlocks,
-        }
-    %}
+    {# TODO: Replace block with widget including https://magecore.atlassian.net/browse/CRM-609 #}
+    {% set dataBlocks = dataBlocks|merge([{
+        'title' : 'Calls',
+        'subblocks': [
+            {
+                'title' : null,
+                'data' : [dataGrid.renderGrid('widget-calls-grid', {accountId: entity.id}, { cssClass: 'inner-grid' })],
+                'useSpan': false
+            }
+        ]
+    }]) %}
+
+    {% set data = {'dataBlocks': dataBlocks} %}
     {{ parent() }}
 {% endblock content_data %}

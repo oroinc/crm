@@ -54,5 +54,13 @@ class CallListener
                 ->andWhere('call.relatedContact = :contact')
                 ->setParameter('contact', $contact);
         }
+
+        $accountId = $this->requestParameters->get('accountId', null);
+        if ($accountId) {
+            $account = $this->entityManager->find('OroCRMAccountBundle:Account', $accountId);
+            $queryBuilder
+                ->andWhere('(call.relatedAccount = :account OR :account MEMBER OF contact.accounts)')
+                ->setParameter('account', $account);
+        }
     }
 }
