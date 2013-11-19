@@ -41,9 +41,6 @@ class CustomerApiReader extends AbstractReader implements ReaderInterface, StepE
 
         /** @var ConnectorEntity $connector */
         $connectorEntity = $context->getOption('connector');
-
-        var_dump($connectorEntity->getTransport()); die();
-
         $this->customerConnector->setConnectorEntity($connectorEntity);
     }
 
@@ -58,7 +55,10 @@ class CustomerApiReader extends AbstractReader implements ReaderInterface, StepE
         if (empty($data)) {
             return null; // no data anymore
         }
-        var_dump($data);
+
+        $context = $this->getContext();
+        $context->incrementReadCount();
+        $context->incrementReadOffset();
 
         // customer connector knows how to advance
         // batch counter/boundaries to the next ones
@@ -67,6 +67,6 @@ class CustomerApiReader extends AbstractReader implements ReaderInterface, StepE
             $this->loggerClosure("Reading item...");
         }
 
-        die();
+        return $data;
     }
 }

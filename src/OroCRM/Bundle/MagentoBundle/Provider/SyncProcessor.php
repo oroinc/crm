@@ -74,7 +74,7 @@ class SyncProcessor implements SyncProcessorInterface
                 'processorAlias' => $processorAlias,
                 'entityName'     => self::ENTITY_NAME,
                 'channelName'    => $channelName,
-                'logger'         => $this->loggingClosure,
+                //'logger'         => $this->loggingClosure,
             ],
         ];
 
@@ -182,6 +182,9 @@ class SyncProcessor implements SyncProcessorInterface
     {
         $context = func_get_args();
 
-        $this->loggingClosure($context);
+        if (is_callable($this->loggingClosure)) {
+            $closure = $this->loggingClosure;
+            $closure($context);
+        }
     }
 }

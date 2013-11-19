@@ -37,6 +37,8 @@ services:
 
     orocrm_magento.import.strategy.customer.add_or_update:
         class: %orocrm_magento.import_strategy.customer.add_or_update.class%
+        arguments:
+            - @oro_importexport.strategy.import.helper
 
     # import processor
     orocrm_magento.importexport.processor.import_customer:

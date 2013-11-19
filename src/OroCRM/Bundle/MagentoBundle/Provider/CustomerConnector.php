@@ -23,7 +23,11 @@ class CustomerConnector extends AbstractConnector implements CustomerConnectorIn
     public function read()
     {
         $startDate = $this->lastSyncDate;
-        $endDate = $this->lastSyncDate->add($this->syncRange);
+        $endDate = clone $this->lastSyncDate;
+        $endDate = $endDate->add($this->syncRange);
+
+        // TODO: remove
+        var_dump([$startDate->format('Y-m-d'), $endDate->format('Y-m-d')]);
 
         $filters = function ($startDate, $endDate) {
             return [
@@ -43,8 +47,7 @@ class CustomerConnector extends AbstractConnector implements CustomerConnectorIn
 
         $data = $this->getCustomersList($filters($startDate, $endDate));
 
-        // move date range, from end to start, allow new customers to be imported first
-        $endDate = $startDate;
+        $this->lastSyncDate = $endDate;
 
         return $data;
     }
@@ -139,7 +142,6 @@ class CustomerConnector extends AbstractConnector implements CustomerConnectorIn
             ->getSettingsBag()
             ->all();
 
-
         if (empty($settings['last_sync_date'])) {
             throw new InvalidConfigurationException('Last sync date can\'t be empty');
         } elseif ($settings['last_sync_date'] instanceof \DateTime) {
@@ -152,9 +154,9 @@ class CustomerConnector extends AbstractConnector implements CustomerConnectorIn
             $settings['sync_range'] = self::DEFAULT_SYNC_RANGE;
         } elseif ($settings['sync_range'] instanceof \DateInterval) {
             $this->syncRange = $settings['sync_range'];
-        } else {
-            $this->syncRange = \DateInterval::createFromDateString($settings['sync_range']);
         }
+
+        $this->syncRange = \DateInterval::createFromDateString($settings['sync_range']);
 
         return parent::setConnectorEntity($connector);
     }

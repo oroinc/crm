@@ -89,6 +89,7 @@ class CustomerNormalizer implements NormalizerInterface, DenormalizerInterface
         $this->setScalarFieldsValues($resultObject, $mappedData);
         $this->setObjectFieldsValues($resultObject, $mappedData);
 
+var_dump($resultObject); die();
         return $resultObject;
     }
 
