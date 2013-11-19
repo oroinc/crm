@@ -76,9 +76,8 @@ class CustomerNormalizer implements NormalizerInterface, DenormalizerInterface
      */
     public function denormalize($data, $class, $format = null, array $context = array())
     {
-        $data = is_array($data) ? $data : array();
+        $data = is_array($data) ? $data : [];
         $resultObject = new Customer();
-
 
         $mappedData = [];
         foreach ($data as $key => $value) {
@@ -87,9 +86,9 @@ class CustomerNormalizer implements NormalizerInterface, DenormalizerInterface
         }
 
         $this->setScalarFieldsValues($resultObject, $mappedData);
+        var_dump($resultObject); die();
         $this->setObjectFieldsValues($resultObject, $mappedData);
 
-var_dump($resultObject); die();
         return $resultObject;
     }
 
@@ -99,6 +98,13 @@ var_dump($resultObject); die();
      */
     protected function setScalarFieldsValues(Customer $object, array $data)
     {
+        foreach (['created_at', 'updated_at'] as $itemName) {
+            if (isset($data[$itemName]) && is_string($data[$itemName])) {
+                $timezone = new \DateTimeZone('UTC');
+                $data[$itemName] = new \DateTime($data[$itemName], $timezone);
+            }
+        }
+
         $object->fillFromArray($data);
     }
 

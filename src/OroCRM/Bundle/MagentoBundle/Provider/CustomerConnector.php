@@ -17,37 +17,85 @@ class CustomerConnector extends AbstractConnector implements CustomerConnectorIn
     /** @var \DateInterval */
     protected $syncRange;
 
+    /** @var array */
+    protected $customerIdsBuffer = [];
+
+    /** @var int */
+    protected $batchSize;
+
+    /**
+     * @param $startDate
+     * @param $endDate
+     * @param string $format
+     * @return array
+     */
+    protected function getBatchFilter(\DateTime $startDate, \DateTime $endDate, $format = 'Y-m-d H:i:s')
+    {
+        return [
+            'complex_filter' => [
+                [
+                    'key'   => 'created_at',
+                    'value' => [
+                        'key'   => 'from',
+                        'value' => $startDate->format($format),
+                    ],
+                ],
+                [
+                    'key'   => 'created_at',
+                    'value' => [
+                        'key'   => 'to',
+                        'value' => $endDate->format($format),
+                    ],
+                ],
+            ]
+        ];
+    }
+
     /**
      * {@inheritdoc}
      */
     public function read()
     {
-        $startDate = $this->lastSyncDate;
-        $endDate = clone $this->lastSyncDate;
-        $endDate = $endDate->add($this->syncRange);
+        if (empty($this->customerIdsBuffer)) {
+            do {
+                $now = new \DateTime('now', new \DateTimeZone('UTC'));
+                $startDate = $this->lastSyncDate;
+                $endDate = clone $this->lastSyncDate;
+                $endDate = $endDate->add($this->syncRange);
 
-        // TODO: remove
-        var_dump([$startDate->format('Y-m-d'), $endDate->format('Y-m-d')]);
+                // TODO: remove / log
+                echo sprintf(
+                    '[%s] Looking for entities from %s to %s ... ',
+                    $now->format('d-m-Y H:i:s'),
+                    $startDate->format('d-m-Y'),
+                    $endDate->format('d-m-Y')
+                );
 
-        $filters = function ($startDate, $endDate) {
-            return [
-                ['complex_filter' => [
-                    [
-                        'key'   => 'created_at',
-                        'value' => ['key'   => 'gteq', 'value' => $startDate],
-                    ],
-                    [
-                        'key'   => 'created_at',
-                        'value' => ['key'   => 'lt', 'value' => $endDate],
-                    ],
-                ]
-                ]
-            ];
-        };
+                $this->customerIdsBuffer = $this->getCustomersList(
+                    $this->getBatchFilter($startDate, $endDate),
+                    $this->batchSize,
+                    true
+                );
 
-        $data = $this->getCustomersList($filters($startDate, $endDate));
+                // TODO: remove / log
+                echo sprintf('found %d customers', count($this->customerIdsBuffer)) . "\n";
 
-        $this->lastSyncDate = $endDate;
+                $this->lastSyncDate = $endDate;
+            } while (empty($this->customerIdsBuffer) && $endDate <= $now);
+        }
+
+        // keep going till endDate >= NOW
+        if (!empty($this->customerIdsBuffer)) {
+            $customerId = array_shift($this->customerIdsBuffer);
+
+            // TODO: log
+            var_dump($now->format('d-m-Y H:i:s') . " loading customer $customerId");
+
+            $data = $this->getCustomerData($customerId, true, true);
+        } else {
+            // no more data
+            $data = null;
+        }
 
         return $data;
     }
@@ -55,9 +103,24 @@ class CustomerConnector extends AbstractConnector implements CustomerConnectorIn
     /**
      * {@inheritdoc}
      */
-    public function getCustomersList($filters = [])
+    public function getCustomersList($filters = [], $batchSize = null, $idOnly = false)
     {
-        return $this->call(CustomerConnectorInterface::ACTION_CUSTOMER_LIST, $filters);
+        $result = $this->call(CustomerConnectorInterface::ACTION_CUSTOMER_LIST, $filters);
+
+        if ($idOnly) {
+            $result = array_map(
+                function ($item) {
+                    return is_object($item) ? $item->customer_id : $item['customer_id'];
+                },
+                $result
+            );
+        }
+
+        if ((int)$batchSize > 0) {
+            $result = array_slice($result, 0, $batchSize);
+        }
+
+        return $result;
     }
 
     /**
@@ -68,15 +131,15 @@ class CustomerConnector extends AbstractConnector implements CustomerConnectorIn
         $result = $this->call(CustomerConnectorInterface::ACTION_CUSTOMER_INFO, [$id, $onlyAttributes]);
 
         if ($isAddressesIncluded) {
-            $result->addresses = $this->getCustomerAddressData($id);
+            $result->addresses = (array) $this->getCustomerAddressData($id);
         }
 
         if ($isGroupsIncluded) {
-            $result->groups = $this->getCustomerGroups($result->group_id);
+            $result->groups = (array) $this->getCustomerGroups($result->group_id);
             $result->group_name = $result->groups[$result->group_id];
         }
 
-        return $result;
+        return (array)$result;
     }
 
     /**
@@ -157,6 +220,10 @@ class CustomerConnector extends AbstractConnector implements CustomerConnectorIn
         }
 
         $this->syncRange = \DateInterval::createFromDateString($settings['sync_range']);
+
+        if (!empty($settings['batch_size'])) {
+            $this->batchSize = $settings['batch_size'];
+        }
 
         return parent::setConnectorEntity($connector);
     }
