@@ -47,6 +47,21 @@ class ReportController extends Controller
 //    }
 
     /**
+     * @Route("/view/{id}", name="orocrm_report_view", requirements={"id"="\d+"}, defaults={"id"=0})
+     * @Template
+     * @Acl(
+     *      id="orocrm_report_view",
+     *      type="entity",
+     *      permission="VIEW",
+     *      class="OroCRMReportBundle:Report"
+     * )
+     */
+    public function viewAction(Report $entity)
+    {
+        return array();
+    }
+
+    /**
      * @Route("/create", name="orocrm_report_create")
      * @Template("OroCRMReportBundle:Report:update.html.twig")
      * @Acl(
@@ -58,7 +73,7 @@ class ReportController extends Controller
      */
     public function createAction()
     {
-        return $this->update(null);
+        return $this->update(new Report());
     }
 
     /**
@@ -93,21 +108,9 @@ class ReportController extends Controller
         return array();
     }
 
-    /**
-     * @return ApiEntityManager
-     */
-    protected function getManager()
+    protected function update(Report $entity)
     {
-        return $this->get('orocrm_report.report.manager');
-    }
-
-    protected function update(Report $entity = null)
-    {
-        if (!$entity) {
-            $entity = $this->getManager()->createEntity();
-        }
-
-        if ($this->get('orocrm_report.report.form.handler')->process($entity)) {
+        if ($this->get('orocrm_report.form.handler.report')->process($entity)) {
             $this->get('session')->getFlashBag()->add(
                 'success',
                 $this->get('translator')->trans('orocrm.report.controller.report.saved')
@@ -129,7 +132,8 @@ class ReportController extends Controller
 
         return array(
             'entity'   => $entity,
-            'form'     => $this->get('orocrm_report.report.form')->createView(),
+            'form'     => $this->get('orocrm_report.form.report')->createView(),
+            'entities' => $this->get('orocrm_report.entity_provider')->getEntities()
         );
     }
 }
