@@ -33,7 +33,7 @@ class CallController extends Controller
      */
     public function createForContactAjaxAction()
     {
-        return $this->update(null, $contactId, false);
+        return $this->update(null, 0, false);
     }
 
     /**
