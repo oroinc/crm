@@ -33,7 +33,7 @@ class CallController extends Controller
      */
     public function createForContactAjaxAction()
     {
-        return $this->update(null, 0, false);
+        return $this->update(null, $contactId, false);
     }
 
     /**
@@ -98,14 +98,12 @@ class CallController extends Controller
                 );
                 return $this->get('oro_ui.router')->actionRedirect(
                     array(
-                        'route'      => 'orocrm_contact_view',
-                        'parameters' => array('id' => $entity->getRelatedContact()->getId())
+                        'route'      => 'orocrm_call_index'
                     ),
                     array(
-                        'route'      => 'orocrm_contact_view',
-                        'parameters' => array('id' => $entity->getRelatedContact()->getId())
+                        'route'      => 'orocrm_call_index'
                     )
-                );
+                );     
             }
             $saved = true;
         }
