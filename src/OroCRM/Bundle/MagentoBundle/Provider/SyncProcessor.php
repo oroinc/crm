@@ -11,8 +11,6 @@ use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\IntegrationBundle\Entity\Connector as ConnectorEntity;
 use Oro\Bundle\IntegrationBundle\Provider\SyncProcessorInterface;
 
-use OroCRM\Bundle\MagentoBundle\Entity\Customer;
-
 class SyncProcessor implements SyncProcessorInterface
 {
     const JOB_VALIDATE_IMPORT = 'mage_customer_import_validation';
@@ -27,6 +25,9 @@ class SyncProcessor implements SyncProcessorInterface
 
     /** @var JobExecutor */
     protected $jobExecutor;
+
+    /** @var \Closure */
+    protected $loggingClosure;
 
     /**
      * @param EntityManager $em
@@ -44,46 +45,22 @@ class SyncProcessor implements SyncProcessorInterface
     }
 
     /**
-     * @param string $channelName
-     * @throws \Exception
-     */
-    protected function init($channelName)
-    {
-        /*
-        $now = new \DateTime('now', new \DateTimeZone('UTC'));
-        $settings = [
-            'last_sync_date' => $now->sub(\DateInterval::createFromDateString('1 month')),
-            'sync_range'     => '1 week',
-            'api_user'       => 'api_user',
-            'api_key'        => 'api_user',
-            'wsdl_url'       => 'http://mage.dev.lxc/index.php/api/v2_soap/?wsdl=1',
-        ];
-        */
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function process($channelName, $force = false)
     {
-        $channel = $this->getChannelByName($channelName);
-
-        /** @var ConnectorEntity[] $connectors */
-        $connectors = $channel->getConnectors();
-
-        /** @var ConnectorEntity $connector */
-        foreach ($connectors as $connector) {
-
-        }
-
-
-        // get processor
         $processorAliases = $this->processorRegistry->getProcessorAliasesByEntity(
             ProcessorRegistry::TYPE_IMPORT,
             self::ENTITY_NAME
         );
+
+        $channel = $this->getChannelByName($channelName);
         $processorAlias = reset($processorAliases);
 
+        /** @var ConnectorEntity[] $connectors */
+        $connectors = $channel->getConnectors();
+
+        // TODO: get job name from connector settings
         if ($force) {
             $mode = ProcessorRegistry::TYPE_IMPORT;
             $jobName = self::JOB_IMPORT;
@@ -97,17 +74,19 @@ class SyncProcessor implements SyncProcessorInterface
                 'processorAlias' => $processorAlias,
                 'entityName'     => self::ENTITY_NAME,
                 'channelName'    => $channelName,
-                'connector'      => $this->connector,
+                'logger'         => $this->loggingClosure,
             ],
         ];
 
-        if ($force) {
-            $result = $this->processImport($mode, $jobName, self::$configuration);
-        } else {
-            $result = $this->processValidation($configuration);
-        }
+        /** @var ConnectorEntity $connector */
+        foreach ($connectors as $connector) {
+            $configuration[$mode]['connector'] = $connector;
+            // TODO: get job name from connector settings
+            //$jobName = $connector->getJobName();
 
-        var_dump($result);
+            $result = $this->processImport($mode, $jobName, $configuration);
+            $this->log($result);
+        }
     }
 
     /**
@@ -183,5 +162,26 @@ class SyncProcessor implements SyncProcessorInterface
         }
 
         return $channel;
+    }
+
+    /**
+     * @param callable $closure
+     * @return $this
+     */
+    public function setLogClosure(\Closure $closure)
+    {
+        $this->loggingClosure = $closure;
+
+        return $this;
+    }
+
+    /**
+     * @return callable
+     */
+    public function log()
+    {
+        $context = func_get_args();
+
+        $this->loggingClosure($context);
     }
 }

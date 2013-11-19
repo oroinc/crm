@@ -160,6 +160,8 @@ class MagentoSoapTransport extends Transport
                 'api_user' => $this->getApiUser(),
                 'api_key'  => $this->getApiKey(),
                 'wsdl_url' => $this->getWsdlUrl(),
+                'sync_range'     => $this->getSyncRange(),
+                'last_sync_date' => $this->getSyncStartDate(),
             ]
         );
     }

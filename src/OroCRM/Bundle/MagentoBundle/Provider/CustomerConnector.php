@@ -4,7 +4,7 @@ namespace OroCRM\Bundle\MagentoBundle\Provider;
 
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 
-use Oro\Bundle\IntegrationBundle\Entity\Channel;
+use Oro\Bundle\IntegrationBundle\Entity\Connector;
 use Oro\Bundle\IntegrationBundle\Provider\AbstractConnector;
 
 class CustomerConnector extends AbstractConnector implements CustomerConnectorInterface
@@ -131,29 +131,31 @@ class CustomerConnector extends AbstractConnector implements CustomerConnectorIn
     }
 
     /**
-     * @param Channel $channel
-     * @throws \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @return $this
+     * {@inheritdoc}
      */
-    public function setChannel(Channel $channel)
+    public function setConnectorEntity(Connector $connector)
     {
-        $channelSettings = $channel->getSettings();
-        if (empty($channelSettings['last_sync_date'])) {
+        $settings = $connector->getTransport()
+            ->getSettingsBag()
+            ->all();
+
+
+        if (empty($settings['last_sync_date'])) {
             throw new InvalidConfigurationException('Last sync date can\'t be empty');
-        } elseif ($channelSettings['last_sync_date'] instanceof \DateTime) {
-                $this->lastSyncDate = $channelSettings['last_sync_date'];
+        } elseif ($settings['last_sync_date'] instanceof \DateTime) {
+                $this->lastSyncDate = $settings['last_sync_date'];
         } else {
-            $this->lastSyncDate = new \DateTime($channelSettings['last_sync_date']);
+            $this->lastSyncDate = new \DateTime($settings['last_sync_date']);
         }
 
-        if (empty($channelSettings['sync_range'])) {
-            $channelSettings['sync_range'] = self::DEFAULT_SYNC_RANGE;
-        } elseif ($channelSettings['sync_range'] instanceof \DateInterval) {
-            $this->syncRange = $channelSettings['sync_range'];
+        if (empty($settings['sync_range'])) {
+            $settings['sync_range'] = self::DEFAULT_SYNC_RANGE;
+        } elseif ($settings['sync_range'] instanceof \DateInterval) {
+            $this->syncRange = $settings['sync_range'];
         } else {
-            $this->syncRange = \DateInterval::createFromDateString($channelSettings['sync_range']);
+            $this->syncRange = \DateInterval::createFromDateString($settings['sync_range']);
         }
 
-        return parent::setChannel($channel);
+        return parent::setConnectorEntity($connector);
     }
 }

@@ -44,8 +44,13 @@ class SyncCommand extends ContainerAwareCommand
         $channelId = $input->getArgument('channelId');
         $force = $input->getOption('force');
 
+        $closure = function ($context) use ($output) {
+            $output->writeln(var_export($context, true));
+        };
+
         $this->getContainer()
             ->get(self::CUSTOMER_SYNC_PROCESSOR)
+            ->setLogClosure($closure)
             ->process($channelId, $force);
 
         $output->writeln('Completed');

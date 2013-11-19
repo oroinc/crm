@@ -17,6 +17,9 @@ class CustomerApiReader extends AbstractReader implements ReaderInterface, StepE
     /** @var CustomerConnector */
     protected $customerConnector;
 
+    /** @var \Closure */
+    protected $loggerClosure;
+
     /**
      * @param ContextRegistry $contextRegistry
      * @param ConnectorInterface $customerConnector
@@ -34,22 +37,14 @@ class CustomerApiReader extends AbstractReader implements ReaderInterface, StepE
     protected function initializeFromContext(ContextInterface $context)
     {
         $channelName = $context->getOption('channelName');
+        $this->loggerClosure = $context->getOption('logger');
 
         /** @var ConnectorEntity $connector */
         $connectorEntity = $context->getOption('connector');
 
-        $this->customerConnector->setConnectorEntity($connectorEntity);
+        var_dump($connectorEntity->getTransport()); die();
 
-        /*
-        $now = new \DateTime('now', new \DateTimeZone('UTC'));
-        $settings = [
-            'last_sync_date' => $now->sub(\DateInterval::createFromDateString('1 month')),
-            'sync_range'     => '1 week',
-            'api_user'       => 'api_user',
-            'api_key'        => 'api_user',
-            'wsdl_url'       => 'http://mage.dev.lxc/index.php/api/v2_soap/?wsdl=1',
-        ];
-        */
+        $this->customerConnector->setConnectorEntity($connectorEntity);
     }
 
     /**
@@ -67,5 +62,11 @@ class CustomerApiReader extends AbstractReader implements ReaderInterface, StepE
 
         // customer connector knows how to advance
         // batch counter/boundaries to the next ones
+
+        if (is_callable($this->loggerClosure)) {
+            $this->loggerClosure("Reading item...");
+        }
+
+        die();
     }
 }
