@@ -59,7 +59,7 @@ class ControllersTest extends WebTestCase
             $this->client,
             'accounts-grid',
             array(
-                'accounts-grid[_filter][contactFirstName][value]' => 'Account_name',
+                'accounts-grid[_filter][name][value]' => 'Account_name',
             )
         );
 

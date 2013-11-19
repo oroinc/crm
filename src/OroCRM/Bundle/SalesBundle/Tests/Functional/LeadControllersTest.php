@@ -95,7 +95,7 @@ class LeadControllersTest extends WebTestCase
             $this->client,
             'sales-lead-grid',
             array(
-                'sales-lead-grid[_filter][firstName][value]' => $name,
+                'sales-lead-grid[_filter][name][value]' => $name,
             )
         );
 
