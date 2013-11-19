@@ -3,10 +3,5 @@ request:
     name: Account name %str%
     groups: ~
     owner: 1
-    attributes:
-        website: http://web-site.com
-        office_phone: 123456789
-        description: Contact description
-        annual_revenue: 100
 response:
     return: true

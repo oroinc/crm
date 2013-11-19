@@ -27,13 +27,14 @@ class ControllersTest extends WebTestCase
     /**
      * Simple controllers test
      *
-     * @param $group
+     * @param $gridName
      * @param $report
+     * @param $group
+     * @param $reportName
      * @dataProvider reportsProvider
      */
-    public function testIndex($group, $report)
+    public function testIndex($gridName, $report, $group, $reportName)
     {
-        $this->markTestSkipped("BAP-1820");
         $this->client->request(
             'GET',
             $this->client->generate(
@@ -41,22 +42,47 @@ class ControllersTest extends WebTestCase
                 array(
                     'reportGroupName' => $group,
                     'reportName' => $report,
-                    '_format'    => 'json'
+                    //'_format'    => 'json'
                 )
             )
         );
+
         $result = $this->client->getResponse();
+        ToolsAPI::assertJsonResponse($result, 200, "text/html; charset=UTF-8");
+        $this->assertContains($reportName, $result->getContent());
+    }
+
+    /**
+     * Simple controllers test
+     *
+     * @param $gridName
+     * @param $report
+     * @param $group
+     * @dataProvider reportsProvider
+     */
+    public function testGrid($gridName, $report, $group)
+    {
+        $reportName = $gridName . '-' . $report;
+        $result = ToolsAPI::getEntityGrid(
+            $this->client,
+            $reportName,
+            array(
+                "{$reportName}[reportGroupName]" => $group,
+                "{$reportName}[reportName]" => $report
+            )
+        );
+
         ToolsAPI::assertJsonResponse($result, 200);
     }
 
     public function reportsProvider()
     {
         return array(
-            'life_time_value' => array('accounts', 'life_time_value'),
-            'by_opportunities' => array('accounts', 'by_opportunities'),
-            'by_step' => array('opportunities', 'by_step'),
-            'won_by_period' => array('opportunities', 'won_by_period'),
-            'by_date' => array('leads', 'by_date'),
+            'life_time_value' => array('orocrm_report-accounts', 'life_time_value', 'accounts', 'Account life time value'),
+            'by_opportunities' => array('orocrm_report-accounts', 'by_opportunities', 'accounts', 'Accounts by opportunities'),
+            'by_step' => array('orocrm_report-opportunities', 'by_step', 'opportunities', 'Opportunities by step'),
+            'won_by_period' => array('orocrm_report-opportunities', 'won_by_period', 'opportunities', 'Won opportunities by date period'),
+            'by_date' => array('orocrm_report-leads', 'by_date', 'leads', 'Number leads by date'),
         );
     }
 }

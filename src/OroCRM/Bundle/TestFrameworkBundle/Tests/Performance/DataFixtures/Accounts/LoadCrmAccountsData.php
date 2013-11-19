@@ -3,32 +3,31 @@
 namespace OroCRM\Bundle\TestFrameworkBundle\Tests\DataFixtures;
 
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
+use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
-use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\EntityManager;
-use Doctrine\Common\Collections\Collection;
 
-use Oro\Bundle\FlexibleEntityBundle\Model\FlexibleValueInterface;
-use Oro\Bundle\FlexibleEntityBundle\Model\AbstractFlexible;
-use Oro\Bundle\FlexibleEntityBundle\Model\AbstractAttribute;
-use Oro\Bundle\FlexibleEntityBundle\Entity\Repository\FlexibleEntityRepository;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityRepository;
 
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
-use Oro\Bundle\UserBundle\Entity\UserManager;
+
 use Oro\Bundle\AddressBundle\Entity\Address;
 use Oro\Bundle\AddressBundle\Entity\Country;
 use Oro\Bundle\AddressBundle\Entity\Region;
+
+use OroCRM\Bundle\ContactBundle\Entity\ContactAddress;
 use OroCRM\Bundle\ContactBundle\Entity\ContactEmail;
 use OroCRM\Bundle\ContactBundle\Entity\ContactPhone;
-use OroCRM\Bundle\ContactBundle\Entity\ContactAddress;
-use OroCRM\Bundle\ContactBundle\Entity\Source;
 use OroCRM\Bundle\ContactBundle\Entity\Group;
+use OroCRM\Bundle\ContactBundle\Entity\Source;
+
 use Oro\Bundle\UserBundle\Entity\User;
+use Oro\Bundle\UserBundle\Entity\UserManager;
 
 class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInterface
 {
@@ -48,7 +47,7 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
     protected $accountManager;
 
     /**
-     * @var FlexibleEntityRepository
+     * @var EntityRepository
      */
     protected $accountRepository;
 
@@ -97,8 +96,6 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
      */
     protected $countries;
 
-    /** @var AbstractAttribute */
-    protected $attributes;
     /**
      * {@inheritDoc}
      */
@@ -112,14 +109,14 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
             $this->maxRecords = self::MAX_RECORDS;
         }
 
-        $this->accountManager = $container->get('orocrm_account.account.manager.flexible');
-        $this->accountRepository = $this->accountManager->getFlexibleRepository();
+        $this->accountManager = $container->get('doctrine.orm.entity_manager');
+        $this->accountRepository = $this->accountManager->getRepository('OroCRMAccountBundle:Account');
 
         $this->contactManager = $container->get('doctrine.orm.entity_manager');
         $this->contactRepository = $this->contactManager->getRepository('OroCRMContactBundle:Contact');
 
         $this->userManager = $container->get('oro_user.manager');
-        $this->userRepository = $this->userManager->getFlexibleRepository();
+        $this->userRepository = $this->userManager->getRepository();
 
         $this->initSupportingEntities();
     }
@@ -142,17 +139,7 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
      */
     public function load(ObjectManager $manager)
     {
-        $this->loadAttributes();
         $this->loadAccounts();
-    }
-
-    /**
-     * Load attributes
-     *
-     * @return void
-     */
-    public function loadAttributes()
-    {
     }
 
     /**
@@ -231,13 +218,9 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
     private function createAccount(array $data)
     {
         /** @var $account Account */
-        $account = $this->accountManager->createFlexible();
+        $account = new Account();
 
         $account->setName($data['Username'] . $data['MiddleInitial'] . '_' . $data['Surname']);
-
-        $this->setFlexibleAttributeValue($this->accountRepository, $account, 'phone', $data['TelephoneNumber']);
-        $this->setFlexibleAttributeValue($this->accountRepository, $account, 'email', $data['EmailAddress']);
-        $this->setFlexibleAttributeValue($this->accountRepository, $account, 'website', $data['Domain']);
 
         $isoCode = $data['Country'];
         $country = array_filter(
@@ -345,58 +328,6 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
     }
 
     /**
-     * Sets a flexible attribute value
-     *
-     * @param FlexibleEntityRepository $repository
-     * @param AbstractFlexible $flexibleEntity
-     * @param string $attributeCode
-     * @param string $value
-     * @throws \LogicException
-     */
-    private function setFlexibleAttributeValue(
-        FlexibleEntityRepository $repository,
-        AbstractFlexible $flexibleEntity,
-        $attributeCode,
-        $value
-    ) {
-        if ($attribute = $this->findAttribute($repository, $attributeCode)) {
-            $this->getFlexibleValueForAttribute($flexibleEntity, $attribute)->setData($value);
-        } else {
-            throw new \LogicException(sprintf('Cannot set value, attribute "%s" is missing', $attributeCode));
-        }
-    }
-
-    /**
-     * Gets or creates a flexible value for attribute
-     *
-     * @param AbstractFlexible $flexibleEntity
-     * @param AbstractAttribute $attribute
-     * @return FlexibleValueInterface
-     */
-    private function getFlexibleValueForAttribute(AbstractFlexible $flexibleEntity, AbstractAttribute $attribute)
-    {
-        $flexibleValue = $flexibleEntity->getValue($attribute->getCode());
-
-        return $flexibleValue;
-    }
-
-    /**
-     * Finds an attribute
-     *
-     * @param FlexibleEntityRepository $repository
-     * @param string $attributeCode
-     * @return AbstractAttribute
-     */
-    private function findAttribute(FlexibleEntityRepository $repository, $attributeCode)
-    {
-        if (!isset($this->attributes[$repository->getClassName()][$attributeCode])) {
-            $this->attributes[$repository->getClassName()][$attributeCode] =
-                $repository->findAttributeByCode($attributeCode);
-        }
-        return $this->attributes[$repository->getClassName()][$attributeCode];
-    }
-
-    /**
      * Persist object
      *
      * @param mixed $manager
@@ -404,7 +335,7 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
      */
     private function persist($manager, $object)
     {
-        $manager->getStorageManager()->persist($object);
+        $manager->persist($object);
     }
 
     /**
@@ -414,6 +345,6 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
      */
     private function flush($manager)
     {
-        $manager->getStorageManager()->flush();
+        $manager->flush();
     }
 }

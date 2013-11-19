@@ -4,19 +4,20 @@ namespace OroCRM\Bundle\AccountBundle\Form\Type;
 
 use Doctrine\Common\Collections\Collection;
 
-use Oro\Bundle\LocaleBundle\Formatter\NameFormatter;
 use Symfony\Component\Routing\Router;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+
+use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-use Oro\Bundle\FlexibleEntityBundle\Form\Type\FlexibleType;
-use Oro\Bundle\FlexibleEntityBundle\Manager\FlexibleManager;
+use Oro\Bundle\LocaleBundle\Formatter\NameFormatter;
+
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 
-class AccountType extends FlexibleType
+class AccountType extends AbstractType
 {
     /**
      * @var Router
@@ -29,30 +30,17 @@ class AccountType extends FlexibleType
     protected $nameFormatter;
 
     /**
-     * @param FlexibleManager $flexibleManager
-     * @param string $valueFormAlias
      * @param Router $router
      * @param NameFormatter $nameFormatter
      */
-    public function __construct(
-        FlexibleManager $flexibleManager,
-        $valueFormAlias,
-        Router $router,
-        NameFormatter $nameFormatter
-    ) {
-        parent::__construct($flexibleManager, $valueFormAlias);
+    public function __construct(Router $router, NameFormatter $nameFormatter)
+    {
         $this->router = $router;
         $this->nameFormatter = $nameFormatter;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function addEntityFields(FormBuilderInterface $builder)
+    public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        // add default flexible fields
-        parent::addEntityFields($builder);
-
         // name
         $builder->add(
             'name',
@@ -151,37 +139,13 @@ class AccountType extends FlexibleType
     }
 
     /**
-     * Add entity fields to form builder
-     *
-     * @param FormBuilderInterface $builder
-     * @param array $options
-     */
-    public function addDynamicAttributesFields(FormBuilderInterface $builder, array $options)
-    {
-        $builder->add(
-            'values',
-            'collection',
-            array(
-                'type'         => $this->valueFormAlias,
-                'allow_add'    => true,
-                'allow_delete' => true,
-                'by_reference' => false,
-                'attr'          => array(
-                    'data-col'  => 2,
-                ),
-                'cascade_validation' => true
-            )
-        );
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(
             array(
-                'data_class' => $this->flexibleClass,
+                'data_class' => 'OroCRM\Bundle\AccountBundle\Entity\Account',
                 'intention' => 'account',
                 'extra_fields_message' => 'This form should not contain extra fields: "{{ extra_fields }}"',
                 'cascade_validation' => true
