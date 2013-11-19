@@ -50,6 +50,7 @@ class ContactPhoneSubscriber implements EventSubscriberInterface
             'class' => 'OroCRMContactBundle:ContactPhone',
             'property_path' => 'contactPhoneNumber',
             'property' => 'phone',
+            'empty_value' => '...',
             'label' => 'Phone Number',
             'required' => false);
 

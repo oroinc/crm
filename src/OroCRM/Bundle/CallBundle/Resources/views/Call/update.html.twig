@@ -21,7 +21,18 @@
                 {
                     'title': 'Add a call log'|trans,
                     'data': [
-                        form_widget(form)
+                        form_row(form.owner, {'label': 'Owner'|trans}),
+                        form_row(form.subject, {'label': 'Subject'|trans}),
+                        form_row(form.notes, {'label': 'Notes'|trans}),
+                        form_row(form.callDateTime, {'label': 'Call Date & Time'|trans}),
+                        form_row(form.relatedAccount, {'label': 'Related To'|trans}),
+                        form_row(form.relatedContact, {'label': 'Related Contact'|trans}),
+                        form_row(form.contactPhoneNumber, {'label': 'Phone Number'|trans}),
+                        form_row(form.phoneNumber, {'label': 'Phone Number'|trans}),
+                        form_row(form.direction, {'label': 'Direction'|trans}),
+                        form_row(form.duration, {'label': 'Duration'|trans}),
+                        form_row(form.callStatus),
+                        form_rest(form)
                     ]
                 }
             ]
@@ -34,12 +45,6 @@
             'dataBlocks': dataBlocks,
         }
     %}
-
-    {% set _block = block('orocrm_contactphone_updater_js') %}
-    {% if (_block is empty) %}
-        {% include 'OroCRMContactBundle:Include:javascript.html.twig' %}
-        {{ block('orocrm_contactphone_updater_js')|raw }}
-    {% endif %}
 
     {% set showSelect = (form.vars.value.relatedContact is null) ? 0 : 1 %}
     <script type="text/javascript">

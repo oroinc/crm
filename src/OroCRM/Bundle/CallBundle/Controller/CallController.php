@@ -100,12 +100,12 @@ class CallController extends Controller
                     array(
                         'route'      => 'orocrm_contact_view',
                         'parameters' => array('id' => $entity->getRelatedContact()->getId())
-                    ),                
+                    ),
                     array(
                         'route'      => 'orocrm_contact_view',
                         'parameters' => array('id' => $entity->getRelatedContact()->getId())
                     )
-                );     
+                );
             }
             $saved = true;
         }

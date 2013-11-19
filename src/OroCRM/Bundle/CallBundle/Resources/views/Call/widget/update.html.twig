@@ -36,8 +36,8 @@
                     <div class="span6">
 
                         {{ form_row(form.relatedAccount, {'label': 'Related To'|trans}) }}
-                        {{ form_row(form.relatedContact, {'label': 'Related Contact'|trans, 'attr' : {'class' : 'input-large'} }) }}
-                        {{ form_row(form.contactPhoneNumber, {'label': 'Phone Number'|trans, 'attr' : {'class' : 'input-large'} }) }}
+                        {{ form_row(form.relatedContact, {'label': 'Related Contact'|trans}) }}
+                        {{ form_row(form.contactPhoneNumber, {'label': 'Phone Number'|trans}) }}
                         {{ form_row(form.phoneNumber, {'label': 'Phone Number'|trans}) }}
                         {{ form_row(form.direction, {'label': 'Direction'|trans}) }}
                         {{ form_row(form.duration, {'label': 'Duration'|trans}) }}
@@ -52,12 +52,6 @@
                 </fieldset>
             </form>
         </div>
-
-        {% set _block = block('orocrm_contactphone_updater_js') %}
-        {% if (_block is empty) %}
-            {% include 'OroCRMContactBundle:Include:javascript.html.twig' %}
-            {{ block('orocrm_contactphone_updater_js')|raw }}
-        {% endif %}
 
         {% set showSelect = (form.vars.value.relatedContact is null) ? 0 : 1 %}
         <script type="text/javascript">

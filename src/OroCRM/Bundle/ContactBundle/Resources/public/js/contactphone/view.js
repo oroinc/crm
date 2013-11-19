@@ -11,10 +11,41 @@ function(_, Backbone) {
      * @extends Backbone.View
      */
     return Backbone.View.extend({
+
+        /**
+         * List of events
+         *
+         * @property
+         */        
         events: {
             'change': 'selectionChanged'
         },
 
+        /**
+         * Select element of contact's phones numbers.
+         *
+         * @property
+         */
+        phonesList: null,
+
+        /**
+         * Input field for phone number
+         *
+         * @property
+         */
+        phonePlain: null,
+
+        /**
+         * Phone list template
+         *
+         * @property
+         */
+        phonesListTemplate: _.template(
+            '<% _.each(contactphones, function(p, i) { %>' + 
+                '<option <% if (p.get("primary")) { %> selected="selected" <% } %> value=<%= p.get("id") %>><%= p.get("phone") %></option>' +
+            '<% }); %>' +
+                '<option value="">...</option>'
+        ),         
         /**
          * Constructor
          *
@@ -22,30 +53,27 @@ function(_, Backbone) {
          */
         initialize: function(options) {
             
-            this.target = $(options.target);
-            this.$simpleEl = $(options.simpleEl);
+            this.phonesList = $(options.target);
+            this.phonePlain = $(options.simpleEl);
 
-            this.target.closest('.controls').append(this.$simpleEl);
-
-            this.target.on('change', _.bind(function(e) {
-                if ($(e.target.selectedOptions).val() == -1) {
-                    this.showPlain();    
-                }
+            this.phonesList.closest('.controls').append(this.phonePlain);
+            this.phonesList.on('change', _.bind(function(e) {
+                if ($(e.target.selectedOptions).val() == "") {
+                    this.showPlain(false);
+                } 
             }, this));
             
-            this.showSelect = options.showSelect;
-            this.template = $('#contactphone-chooser-template').html();
-            this.$simpleEl.attr('type', 'text');
+            this.phonePlain.attr('type', 'text');
 
-            if (!this.showSelect) {
-                this.$simpleEl.show();
+            if (!options.showSelect) {
+                this.phonePlain.show();
             } else {
-                this.$simpleEl.hide();
+                this.phonePlain.hide();
             }
 
-            this.displaySelect2(this.showSelect);
-            this.target.on('select2-init', _.bind(function() {
-                this.displaySelect2(this.showSelect);
+            this.displaySelect2(options.showSelect);
+            this.phonesList.on('select2-init', _.bind(function() {
+                this.displaySelect2(options.showSelect);
             }, this));
 
             this.listenTo(this.collection, 'reset', this.render);
@@ -58,22 +86,9 @@ function(_, Backbone) {
          */
         displaySelect2: function(display) {
             if (display) {
-                this.target.select2('container').show();
+                this.phonesList.select2('container').show();
             } else {
-                this.target.select2('container').hide();
-            }
-        },
-
-        getInputLabel: function(el) {
-            return el.parent().parent().find('label');
-        },
-
-        /**
-         * Trigger change event
-         */
-        sync: function() {
-            if (this.target.val() == '' && this.$el.val() != '') {
-                this.$el.trigger('change');
+                this.phonesList.select2('container').hide();
             }
         },
 
@@ -89,36 +104,45 @@ function(_, Backbone) {
                 this.collection.setContactId(contactId);
                 this.collection.fetch();
             } else {
-                this.showPlain();
+                this.showPlain(true);
             }
         },
 
+        /**
+         * Render list and or input field
+         */
         render: function() {
-
             if (this.collection.models.length > 0) {
                 this.showOptions();
             } else {                
-                this.showPlain();
+                this.showPlain(true);
             }
         },
         
-        showPlain: function() {
-                this.target.hide();
-                this.target.val('');
+        /**
+         * Show plain phone input field
+         */        
+        showPlain: function(hide) {
+            if (hide) {
+                this.phonesList.hide();
                 this.displaySelect2(false);                
-                $('#uniform-' + this.target[0].id).hide();
-                this.$simpleEl.show();            
+                $('#uniform-' + this.phonesList[0].id).hide();                
+            }
+                this.phonePlain.show();            
         },
 
+        /**
+         * Show phone seleciton dropdown
+         */
         showOptions: function() {
-                this.target.show();
+                this.phonesList.show();
                 this.displaySelect2(true);
-                $('#uniform-' + this.target[0].id).show();
-                this.target.val('').trigger('change');
-                this.target.find('option[value!=""]').remove();
-                this.target.append(_.template(this.template, {contactphones: this.collection.models}));
-                this.$simpleEl.hide();
-                this.$simpleEl.val('');
+                $('#uniform-' + this.phonesList[0].id).show();
+                this.phonesList.find('option[value!=""]').remove();
+                this.phonesList.append(this.phonesListTemplate({contactphones: this.collection.models}));
+                this.phonesList.trigger('change');
+                this.phonePlain.hide();
+                this.phonePlain.val('');
         }
     });
 });
