@@ -43,8 +43,7 @@ function(_, Backbone) {
         phonesListTemplate: _.template(
             '<% _.each(contactphones, function(p, i) { %>' + 
                 '<option <% if (p.get("primary")) { %> selected="selected" <% } %> value=<%= p.get("id") %>><%= p.get("phone") %></option>' +
-            '<% }); %>' +
-                '<option value="">...</option>'
+            '<% }); %>'
         ),         
         /**
          * Constructor
@@ -63,12 +62,11 @@ function(_, Backbone) {
                 } 
             }, this));
             
-            this.phonePlain.attr('type', 'text');
-
             if (!options.showSelect) {
-                this.phonePlain.show();
+                this.showPlain(true);
             } else {
                 this.phonePlain.hide();
+                this.phonePlain.val('');
             }
 
             this.displaySelect2(options.showSelect);
@@ -113,7 +111,7 @@ function(_, Backbone) {
          */
         render: function() {
             if (this.collection.models.length > 0) {
-                this.showOptions();
+                this.showPhoneOptions();
             } else {                
                 this.showPlain(true);
             }
@@ -134,7 +132,7 @@ function(_, Backbone) {
         /**
          * Show phone seleciton dropdown
          */
-        showOptions: function() {
+        showPhoneOptions: function() {
                 this.phonesList.show();
                 this.displaySelect2(true);
                 $('#uniform-' + this.phonesList[0].id).show();

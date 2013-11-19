@@ -38,7 +38,7 @@
                         {{ form_row(form.relatedAccount, {'label': 'Related To'|trans}) }}
                         {{ form_row(form.relatedContact, {'label': 'Related Contact'|trans}) }}
                         {{ form_row(form.contactPhoneNumber, {'label': 'Phone Number'|trans}) }}
-                        {{ form_row(form.phoneNumber, {'label': 'Phone Number'|trans}) }}
+                        {{ form_widget(form.phoneNumber, {'label': 'Phone Number'|trans}) }}
                         {{ form_row(form.direction, {'label': 'Direction'|trans}) }}
                         {{ form_row(form.duration, {'label': 'Duration'|trans}) }}
                         {{ form_row(form.callStatus) }}
