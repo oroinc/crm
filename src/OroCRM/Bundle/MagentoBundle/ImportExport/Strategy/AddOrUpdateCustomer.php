@@ -37,18 +37,16 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
      */
     public function process($entity)
     {
-        var_dump($entity);
-        die(__CLASS__);
-
         $entity = $this->findAndReplaceEntity($entity);
 
         // update all related entities
         $this
-            ->updateAddresses($entity)
-            ->updateAccounts($entity);
+            ->updateAccount($entity)
+            ->updateContact($entity)
+            ->updateAddresses($entity);
 
         // update owner for addresses, emails and phones
-        //$this->updateRelatedEntitiesOwner($entity);
+        $this->updateRelatedEntitiesOwner($entity);
 
         // validate and update context - increment counter or add validation error
         $entity = $this->validateAndUpdateContext($entity);
@@ -65,8 +63,6 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
         $existingEntity = $this->getEntityOrNull($entity, self::ENTITY_NAME);
 
         if ($existingEntity) {
-            // TODO: empty related entities
-            //$existingEntity->setAccount(null);
             $this->strategyHelper->importEntity($existingEntity, $entity);
             $entity = $existingEntity;
         } else {
@@ -108,11 +104,10 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
     protected function getEntityOrNull(Customer $entity, $entityClass)
     {
         $existingEntity = null;
-        $entityId = $entity->getId();
         $originalId = $entity->getOriginalId();
 
-        if ($entityId) {
-            $existingEntity = $this->getEntityRepository($entityClass)->find($entityId);
+        if ($originalId) {
+            $existingEntity = $this->getEntityRepository($entityClass)->findOneBy(['originalId' => $originalId]);
         }
 
         return $existingEntity ?: null;
@@ -124,7 +119,7 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
      */
     protected function getEntityRepository($entityName)
     {
-        return $this->em->getRepository($entityName);
+        return $this->strategyHelper->getEntityManager($entityName)->getRepository($entityName);
     }
 
     /**
@@ -148,7 +143,25 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
      * @param Customer $entity
      * @return $this
      */
-    public function updateAccounts(Customer $entity)
+    public function updateAccount(Customer $entity)
+    {
+        return $this;
+    }
+
+    /**
+     * @param Customer $entity
+     * @return $this
+     */
+    public function updateContact(Customer $entity)
+    {
+        return $this;
+    }
+
+    /**
+     * @param Customer $entity
+     * @return $this
+     */
+    public function updateRelatedEntitiesOwner(Customer $entity)
     {
         return $this;
     }

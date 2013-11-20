@@ -216,10 +216,11 @@ class CustomerNormalizer implements NormalizerInterface, DenormalizerInterface, 
 
     /**
      * @param $data
+     * @return array
      */
     protected function formatContactData($data)
     {
-        $data['contact'] = [];
+        $contact = [];
 
         $contactData = $this->convertToCamelCase($data);
         $contactFieldNames = [
@@ -235,29 +236,26 @@ class CustomerNormalizer implements NormalizerInterface, DenormalizerInterface, 
 
         // format contact data
         foreach ($contactFieldNames as $fieldName) {
-            $data['contact'][$fieldName] = empty($contactData[$fieldName]) ? null : $contactData[$fieldName];
+            $contact[$fieldName] = empty($contactData[$fieldName]) ? null : $contactData[$fieldName];
         }
 
         // format contact addresses data
-        foreach ($data['contact']['addresses'] as $key => $address) {
-            $data['contact']['addresses'][$key] = array_merge(
-                $data['contact']['addresses'][$key],
-                $data['contact']
-            );
+        foreach ($contact['addresses'] as $key => $address) {
+            $contact['addresses'][$key] = array_merge($contact['addresses'][$key], $contact);
 
             // TODO: make sure this works after CRM-185
             // TODO: test this after we'll have Magento region db in place
-            $data['contact']['addresses'][$key]['postalCode'] = $data['contact']['addresses'][$key]['postcode'];
-            $data['contact']['addresses'][$key]['country']    = $data['contact']['addresses'][$key]['country_id'];
-            $data['contact']['addresses'][$key]['regionText'] = $data['contact']['addresses'][$key]['region'];
-            $data['contact']['addresses'][$key]['region']     = $data['contact']['addresses'][$key]['region_id'];
+            $contact['addresses'][$key]['postalCode'] = $contact['addresses'][$key]['postcode'];
+            $contact['addresses'][$key]['country']    = $contact['addresses'][$key]['country_id'];
+            $contact['addresses'][$key]['regionText'] = $contact['addresses'][$key]['region'];
+            $contact['addresses'][$key]['region']     = $contact['addresses'][$key]['region_id'];
 
             // TODO: make sure datetime normalized and set correctly to object
-            $data['contact']['addresses'][$key]['created']     = $data['contact']['addresses'][$key]['created_at'];
-            $data['contact']['addresses'][$key]['updated']     = $data['contact']['addresses'][$key]['updated_at'];
+            $contact['addresses'][$key]['created']     = $contact['addresses'][$key]['created_at'];
+            $contact['addresses'][$key]['updated']     = $contact['addresses'][$key]['updated_at'];
         }
 
-        return $data;
+        return $contact;
     }
 
     /**

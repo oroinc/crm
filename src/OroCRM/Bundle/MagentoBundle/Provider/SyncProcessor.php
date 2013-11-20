@@ -13,6 +13,7 @@ use Oro\Bundle\IntegrationBundle\Provider\SyncProcessorInterface;
 
 class SyncProcessor implements SyncProcessorInterface
 {
+    const DEFAUT_BATCH_SIZE   = 1;
     const JOB_VALIDATE_IMPORT = 'mage_customer_import_validation';
     const JOB_IMPORT          = 'mage_customer_import';
     const ENTITY_NAME         = 'OroCRM\Bundle\MagentoBundle\Entity\Customer';
@@ -74,6 +75,7 @@ class SyncProcessor implements SyncProcessorInterface
                 'processorAlias' => $processorAlias,
                 'entityName'     => self::ENTITY_NAME,
                 'channelName'    => $channelName,
+                'batchSize'      => self::DEFAUT_BATCH_SIZE,
                 //'logger'         => $this->loggingClosure,
             ],
         ];

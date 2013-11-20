@@ -57,31 +57,34 @@ class CustomerConnector extends AbstractConnector implements CustomerConnectorIn
     public function read()
     {
         if (empty($this->customerIdsBuffer)) {
-            do {
-                $now = new \DateTime('now', new \DateTimeZone('UTC'));
-                $startDate = $this->lastSyncDate;
-                $endDate = clone $this->lastSyncDate;
-                $endDate = $endDate->add($this->syncRange);
+            $now = new \DateTime('now', new \DateTimeZone('UTC'));
+            $startDate = $this->lastSyncDate;
+            $endDate = clone $this->lastSyncDate;
+            $endDate = $endDate->add($this->syncRange);
 
-                // TODO: remove / log
-                echo sprintf(
-                    '[%s] Looking for entities from %s to %s ... ',
-                    $now->format('d-m-Y H:i:s'),
-                    $startDate->format('d-m-Y'),
-                    $endDate->format('d-m-Y')
-                );
+            // TODO: remove / log
+            echo sprintf(
+                '[%s] Looking for entities from %s to %s ... ',
+                $now->format('d-m-Y H:i:s'),
+                $startDate->format('d-m-Y'),
+                $endDate->format('d-m-Y')
+            );
 
-                $this->customerIdsBuffer = $this->getCustomersList(
-                    $this->getBatchFilter($startDate, $endDate),
-                    $this->batchSize,
-                    true
-                );
+            $this->customerIdsBuffer = $this->getCustomersList(
+                $this->getBatchFilter($startDate, $endDate),
+                $this->batchSize,
+                true
+            );
 
-                // TODO: remove / log
-                echo sprintf('found %d customers', count($this->customerIdsBuffer)) . "\n";
+            // TODO: remove / log
+            echo sprintf('found %d customers', count($this->customerIdsBuffer)) . "\n";
 
-                $this->lastSyncDate = $endDate;
-            } while (empty($this->customerIdsBuffer) && $endDate <= $now);
+            $this->lastSyncDate = $endDate;
+        }
+
+        // no more data to look for
+        if (empty($this->customerIdsBuffer) && $endDate >= $now) {
+            return null;
         }
 
         // keep going till endDate >= NOW
@@ -93,8 +96,8 @@ class CustomerConnector extends AbstractConnector implements CustomerConnectorIn
 
             $data = $this->getCustomerData($customerId, true, true);
         } else {
-            // no more data
-            $data = null;
+            // empty record, nothing found but keep going
+            $data = false;
         }
 
         return $data;
