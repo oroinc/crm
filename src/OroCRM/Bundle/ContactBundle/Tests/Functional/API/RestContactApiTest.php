@@ -161,7 +161,12 @@ class RestContactApiTest extends WebTestCase
         $this->assertNotEmpty($entities);
 
         $contactName = $request['contact']['firstName'];
-        $requiredContact =array_filter($entities, function($a) use($contactName) { return $a['firstName'] == $contactName;} );
+        $requiredContact = array_filter(
+            $entities,
+            function ($a) use ($contactName) {
+                return $a['firstName'] == $contactName;
+            }
+        );
 
         $this->assertNotEmpty($requiredContact);
         $requiredContact = reset($requiredContact);
