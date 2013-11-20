@@ -5,12 +5,14 @@ namespace OroCRM\Bundle\MagentoBundle\ImportExport\Serializer;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
+use OroCRM\Bundle\MagentoBundle\Entity\CustomerGroup;
 use OroCRM\Bundle\MagentoBundle\Entity\Website;
+use OroCRM\Bundle\MagentoBundle\Entity\Store;
 
-class WebsiteNormalizer implements NormalizerInterface, DenormalizerInterface
+class RelationNormalizer implements NormalizerInterface, DenormalizerInterface
 {
     /**
-     * @param Website $object
+     * @param Store|Website|CustomerGroup $object
      * @param mixed $format
      * @param array $context
      * @return array
@@ -25,13 +27,18 @@ class WebsiteNormalizer implements NormalizerInterface, DenormalizerInterface
      * @param string $class
      * @param mixed $format
      * @param array $context
-     * @return Website
+     * @return Store|Website
      */
     public function denormalize($data, $class, $format = null, array $context = array())
     {
-        /** @var Website $result */
+        /** @var Store|Website|CustomerGroup $result */
         $result = new $class();
         $result->setId($data);
+
+        if (!empty($context['data']['group_name']) && $class == CustomerNormalizer::GROUPS_TYPE) {
+            $result->setName($context['data']['group_name']);
+        }
+
         return $result;
     }
 
@@ -40,7 +47,7 @@ class WebsiteNormalizer implements NormalizerInterface, DenormalizerInterface
      */
     public function supportsNormalization($data, $format = null)
     {
-        return $data instanceof Website;
+        return $data instanceof Store || $data instanceof Website;
     }
 
     /**
@@ -48,7 +55,12 @@ class WebsiteNormalizer implements NormalizerInterface, DenormalizerInterface
      */
     public function supportsDenormalization($data, $type, $format = null)
     {
-        var_dump([$data, $type]);
-        return is_int($data) && class_exists($type);
+        $supportedEntities = [
+            CustomerNormalizer::STORE_TYPE,
+            CustomerNormalizer::WEBSITE_TYPE,
+            CustomerNormalizer::GROUPS_TYPE
+        ];
+
+        return is_int($data) && class_exists($type) && in_array($type, $supportedEntities);
     }
 }

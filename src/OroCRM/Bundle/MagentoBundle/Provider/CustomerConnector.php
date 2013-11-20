@@ -131,7 +131,10 @@ class CustomerConnector extends AbstractConnector implements CustomerConnectorIn
         $result = $this->call(CustomerConnectorInterface::ACTION_CUSTOMER_INFO, [$id, $onlyAttributes]);
 
         if ($isAddressesIncluded) {
-            $result->addresses = (array) $this->getCustomerAddressData($id);
+            $result->addresses = $this->getCustomerAddressData($id);
+            foreach ($result->addresses as $key => $val) {
+                $result->addresses[$key] = (array) $val;
+            }
         }
 
         if ($isGroupsIncluded) {

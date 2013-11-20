@@ -109,6 +109,8 @@ class AddOrUpdateCustomer implements StrategyInterface, ContextAwareInterface
     {
         $existingEntity = null;
         $entityId = $entity->getId();
+        $originalId = $entity->getOriginalId();
+
         if ($entityId) {
             $existingEntity = $this->getEntityRepository($entityClass)->find($entityId);
         }

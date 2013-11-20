@@ -2,6 +2,10 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Serializer;
 
+use OroCRM\Bundle\AccountBundle\Entity\Account;
+use OroCRM\Bundle\AccountBundle\ImportExport\Serializer\Normalizer\AccountNormalizer;
+use OroCRM\Bundle\ContactBundle\Entity\Contact;
+use OroCRM\Bundle\ContactBundle\ImportExport\Serializer\Normalizer\ContactNormalizer;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\Exception\InvalidArgumentException;
@@ -31,8 +35,8 @@ class CustomerNormalizer implements NormalizerInterface, DenormalizerInterface, 
         'addresses',
     );
 
-    const STORE_TYPE    = 'OroCRM\Bundle\MagentoBundle\Entity\Store';
-    const WEBSITE_TYPE  = 'OroCRM\Bundle\MagentoBundle\Entity\Website';
+    const STORE_TYPE     = 'OroCRM\Bundle\MagentoBundle\Entity\Store';
+    const WEBSITE_TYPE   = 'OroCRM\Bundle\MagentoBundle\Entity\Website';
     const GROUPS_TYPE    = 'OroCRM\Bundle\MagentoBundle\Entity\CustomerGroup';
     const ADDRESSES_TYPE = 'ArrayCollection<OroCRM\Bundle\ContactBundle\Entity\ContactAddress>';
 
@@ -107,10 +111,8 @@ class CustomerNormalizer implements NormalizerInterface, DenormalizerInterface, 
             $mappedData[$fieldKey] = $value;
         }
 
-        var_dump($data);
         $this->setScalarFieldsValues($resultObject, $mappedData);
         $this->setObjectFieldsValues($resultObject, $mappedData);
-        var_dump($resultObject); die();
 
         return $resultObject;
     }
@@ -128,7 +130,39 @@ class CustomerNormalizer implements NormalizerInterface, DenormalizerInterface, 
             }
         }
 
-        $object->fillFromArray($data);
+        $data = $this->convertToCamelCase($data);
+        foreach ($data as $itemName => $item) {
+            $method = 'set' . ucfirst($itemName);
+
+            if (method_exists($object, $method)) {
+                $object->$method($item);
+            }
+        }
+    }
+
+    /**
+     * Convert assoc array with 'sample_key' keys notation
+     * to camel case 'sampleKey'
+     *
+     * @param array $data
+     * @return array
+     */
+    protected function convertToCamelCase($data)
+    {
+        $result = [];
+        foreach ($data as $itemName => $item) {
+            $fieldName = preg_replace_callback(
+                '/_([a-z])/',
+                function ($string) {
+                    return strtoupper($string[1]);
+                },
+                $itemName
+            );
+
+            $result[$fieldName] = $item;
+        }
+
+        return $result;
     }
 
     /**
@@ -139,25 +173,91 @@ class CustomerNormalizer implements NormalizerInterface, DenormalizerInterface, 
      */
     protected function setObjectFieldsValues(Customer $object, array $data, $format = null, array $context = array())
     {
-        $values =             [
-            [
-                'name' => 'store',
-                'value' => $this->denormalizeObject($data, 'store_id', static::STORE_TYPE, $format, $context)
-            ],
-            [
-                'name' => 'website',
-                'value' => $this->denormalizeObject($data, 'website_id', static::WEBSITE_TYPE, $format, $context)
-            ],
-        ];
+        // format contact data
+        $data['contact'] = $this->formatContactData($data);
 
-        $this->setNotEmptyValues(
-            $object,
-            $values
+        // format account data
+        $data['account'] = $data['contact']['firstName'] . ' ' . $data['contact']['lastName'];
+
+        /** @var Contact $contact */
+        $contact = $this->denormalizeObject($data, 'contact', ContactNormalizer::CONTACT_TYPE, $format, $context);
+
+        /** @var Account $account */
+        $account = $this->denormalizeObject(
+            $data,
+            'account',
+            AccountNormalizer::ACCOUNT_TYPE,
+            $format,
+            array_merge($context, ['mode' => AccountNormalizer::SHORT_MODE])
         );
 
-        //$addresses = $this->denormalizeObject($data, 'addresses', static::ADDRESSES_TYPE, $format, $context);
+        /** @var Website $website */
+        $website = $this->denormalizeObject($data, 'website_id', static::WEBSITE_TYPE, $format, $context);
 
-        // TODO: normalize and set addresses to contact and bill/ship addr to account
+        /** @var Store $store */
+        $store = $this->denormalizeObject($data, 'store_id', static::STORE_TYPE, $format, $context);
+        $store->setWebsite($website);
+
+        $object
+            ->setWebsite($website)
+            ->setStore($store)
+            ->setGroup(
+                $this->denormalizeObject(
+                    $data,
+                    'group_id',
+                    static::GROUPS_TYPE,
+                    $format,
+                    array_merge($context, ['data' => $data])
+                )
+            )
+            ->setContact($contact)
+            ->setAccount($account);
+    }
+
+    /**
+     * @param $data
+     */
+    protected function formatContactData($data)
+    {
+        $data['contact'] = [];
+
+        $contactData = $this->convertToCamelCase($data);
+        $contactFieldNames = [
+            'firstName',
+            'lastName',
+            'middleName',
+            'namePrefix',
+            'nameSuffix',
+            'gender',
+            'addresses',
+            'birthday'
+        ];
+
+        // format contact data
+        foreach ($contactFieldNames as $fieldName) {
+            $data['contact'][$fieldName] = empty($contactData[$fieldName]) ? null : $contactData[$fieldName];
+        }
+
+        // format contact addresses data
+        foreach ($data['contact']['addresses'] as $key => $address) {
+            $data['contact']['addresses'][$key] = array_merge(
+                $data['contact']['addresses'][$key],
+                $data['contact']
+            );
+
+            // TODO: make sure this works after CRM-185
+            // TODO: test this after we'll have Magento region db in place
+            $data['contact']['addresses'][$key]['postalCode'] = $data['contact']['addresses'][$key]['postcode'];
+            $data['contact']['addresses'][$key]['country']    = $data['contact']['addresses'][$key]['country_id'];
+            $data['contact']['addresses'][$key]['regionText'] = $data['contact']['addresses'][$key]['region'];
+            $data['contact']['addresses'][$key]['region']     = $data['contact']['addresses'][$key]['region_id'];
+
+            // TODO: make sure datetime normalized and set correctly to object
+            $data['contact']['addresses'][$key]['created']     = $data['contact']['addresses'][$key]['created_at'];
+            $data['contact']['addresses'][$key]['updated']     = $data['contact']['addresses'][$key]['updated_at'];
+        }
+
+        return $data;
     }
 
     /**
@@ -176,32 +276,6 @@ class CustomerNormalizer implements NormalizerInterface, DenormalizerInterface, 
 
         }
         return $result;
-    }
-
-    /**
-     * @param Customer $object
-     * @param array $valuesData
-     */
-    protected function setNotEmptyValues(Customer $object, array $valuesData)
-    {
-        foreach ($valuesData as $data) {
-            $value = $data['value'];
-            if (!$value) {
-                continue;
-            }
-            if (isset($data['name'])) {
-                $setter = 'set' . ucfirst($data['name']);
-                $object->$setter($value);
-            } elseif (isset($data['setter'])) {
-                $setter = $data['setter'];
-                $object->$setter($value);
-            } elseif (is_array($value) || $value instanceof \Traversable) {
-                $adder = $data['adder'];
-                foreach ($value as $element) {
-                    $object->$adder($element);
-                }
-            }
-        }
     }
 
     protected function initRelatedObject($type)
