@@ -497,6 +497,10 @@ workflows:
                         - [$opportunity.closeRevenue, $close_revenue]
                         - [$opportunity.closeDate, $close_date]
             close_as_won_definition:
+                init_actions:
+                    - @create_object:
+                        class: '\DateTime'
+                        attribute: $close_date
                 conditions: # if opportunity.status = "in_progress", required data is entered and reason = "won"
                     @and:
                         - @equal:
@@ -532,6 +536,10 @@ workflows:
                         route_parameters:
                             id: $opportunity.id
             close_as_lost_definition:
+                init_actions:
+                    - @create_object:
+                        class: '\DateTime'
+                        attribute: $close_date
                 conditions: # opportunity.status = "in_progress", required data is entered and reason = "cancelled"
                     @and:
                         - @equal:
