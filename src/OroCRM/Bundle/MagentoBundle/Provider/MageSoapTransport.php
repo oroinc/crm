@@ -2,10 +2,11 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Provider;
 
-use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\HttpFoundation\ParameterBag;
+use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 
 use Oro\Bundle\IntegrationBundle\Provider\SOAPTransport;
+use Oro\Bundle\IntegrationBundle\Provider\TransportTypeInterface;
 
 /**
  * Magento SOAP transport
@@ -14,7 +15,7 @@ use Oro\Bundle\IntegrationBundle\Provider\SOAPTransport;
  *
  * @package OroCRM\Bundle\MagentoBundle
  */
-class MageSoapTransport extends SOAPTransport
+class MageSoapTransport extends SOAPTransport implements TransportTypeInterface
 {
     /** @var string */
     protected $sessionId;
@@ -50,5 +51,29 @@ class MageSoapTransport extends SOAPTransport
     public function call($action, $params = [])
     {
         return parent::call($action, [$this->sessionId, $params]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getLabel()
+    {
+        return 'orocrm.magento.transport.soap.label';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSettingsFormType()
+    {
+        return 'orocrm_magento_soap_transport_setting_form_type';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSettingsEntityFQCN()
+    {
+        return 'OroCRM\\Bundle\\MagentoBundle\\Entity\\MagentoSoapTransport';
     }
 }

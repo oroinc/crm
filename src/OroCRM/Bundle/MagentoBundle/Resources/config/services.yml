@@ -9,11 +9,14 @@ parameters:
     orocrm_magento.import_strategy.customer.add_or_update.class: OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\AddOrUpdateCustomer
     orocrm_magento.import.reader.magento_api.class:              OroCRM\Bundle\MagentoBundle\ImportExport\Reader\CustomerApiReader
 
-    orocrm_magento.provider.channel_type.class:   OroCRM\Bundle\MagentoBundle\Provider\MageChannelType
+    orocrm_magento.provider.channel_type.class:                  OroCRM\Bundle\MagentoBundle\Provider\MageChannelType
+    orocrm_magento.form.type.soap_transport_setting.class:       OroCRM\Bundle\MagentoBundle\Form\Type\SoapTransportSettingFormType
 
 services:
     orocrm_magento.mage.soap_transport:
         class: %orocrm_magento.mage.soap_transport.class%
+        tags:
+            - { name: oro_integration.transport, type: magento_soap, channel_type: magento }
 
     orocrm_magento.mage.customer_connector:
         class: %orocrm_magento.mage.customer_connector.class%
@@ -58,3 +61,10 @@ services:
         class: %orocrm_magento.provider.channel_type.class%
         tags:
             - { name: oro_integration.channel, type: magento }
+
+    orocrm_magento.form.type.soap_transport_setting:
+        class: %orocrm_magento.form.type.soap_transport_setting.class%
+        arguments:
+            - @orocrm_magento.mage.soap_transport
+        tags:
+            - { name: form.type, alias: orocrm_magento_soap_transport_setting_form_type }
