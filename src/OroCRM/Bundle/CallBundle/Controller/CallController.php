@@ -103,7 +103,7 @@ class CallController extends Controller
                     array(
                         'route'      => 'orocrm_call_index'
                     )
-                );     
+                );
             }
             $saved = true;
         }

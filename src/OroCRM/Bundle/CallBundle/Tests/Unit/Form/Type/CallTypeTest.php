@@ -2,23 +2,25 @@
 
 namespace OroCRM\Bundle\CallBundle\Tests\Unit\Form\Type;
 
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Form\Test\FormIntegrationTestCase;
 
 use OroCRM\Bundle\CallBundle\Form\Type\CallType;
 
-class CallTypeTest extends \PHPUnit_Framework_TestCase
+class CallTypeTest extends FormIntegrationTestCase
 {
     /**
      * @var CallType
      */
-    protected $type;
+    protected $formType;
 
     protected function setUp()
     {
-        $contactPhoneSubscriber = $this->getMockBuilder(
-            'OroCRM\Bundle\CallBundle\Form\EventListener\ContactPhoneSubscriber'
-        )->disableOriginalConstructor()->getMock();
+        parent::setUp();
+
+        $contactPhoneSubscriber = $this->getMockBuilder('OroCRM\Bundle\CallBundle\Form\EventListener\ContactPhoneSubscriber')
+                                       ->disableOriginalConstructor()
+                                       ->getMock();
+
         $this->type = new CallType($contactPhoneSubscriber);
     }
 
@@ -44,7 +46,7 @@ class CallTypeTest extends \PHPUnit_Framework_TestCase
             'subject' => 'text',
             'relatedContact' => 'orocrm_contact_select',
             'contactPhoneNumber' => 'entity',
-            'phoneNumber' => 'hidden',
+            'phoneNumber' => 'text',
             'notes' => 'textarea',
             'callDateTime' => 'oro_datetime',
             'callStatus' => 'hidden',
@@ -56,7 +58,7 @@ class CallTypeTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $counter = 0;
+        $counter = 1;
         foreach ($expectedFields as $fieldName => $formType) {
             $builder->expects($this->at($counter))
                 ->method('add')
@@ -64,7 +66,7 @@ class CallTypeTest extends \PHPUnit_Framework_TestCase
                 ->will($this->returnSelf());
             $counter++;
         }
-
         $this->type->buildForm($builder, array());
+
     }
 }
